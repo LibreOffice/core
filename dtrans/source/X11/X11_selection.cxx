@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-14 11:14:52 $
+ *  last change: $Author: pl $ $Date: 2002-07-31 16:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -767,7 +767,7 @@ bool SelectionManager::requestOwnership( Atom selection )
 
 // ------------------------------------------------------------------------
 
-void SelectionManager::convertTypeToNative( const OUString& rType, Atom selection, int& rFormat, ::std::list< Atom >& rConversions )
+void SelectionManager::convertTypeToNative( const OUString& rType, Atom selection, int& rFormat, ::std::list< Atom >& rConversions, bool bPushFront )
 {
     NativeTypeEntry* pTab = selection == m_nXdndSelection ? aXdndConversionTab : aNativeConversionTab;
     int nTabEntries = selection == m_nXdndSelection
@@ -783,12 +783,18 @@ void SelectionManager::convertTypeToNative( const OUString& rType, Atom selectio
             if( ! pTab[i].nAtom )
                 pTab[i].nAtom = getAtom( OStringToOUString( pTab[i].pNativeType, RTL_TEXTENCODING_ISO_8859_1 ) );
             rFormat = pTab[i].nFormat;
-            rConversions.push_back( pTab[i].nAtom );
+            if( bPushFront )
+                rConversions.push_front( pTab[i].nAtom );
+            else
+                rConversions.push_back( pTab[i].nAtom );
         }
     }
     if( ! rFormat )
         rFormat = 8; // byte buffer
-    rConversions.push_back( getAtom( rType ) );
+    if( bPushFront )
+        rConversions.push_front( getAtom( rType ) );
+    else
+        rConversions.push_back( getAtom( rType ) );
 };
 
 // ------------------------------------------------------------------------
@@ -924,6 +930,11 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
     }
     const Sequence< DataFlavor >& rTypes( it->second->m_aTypes );
     const Sequence< Atom >& rNativeTypes( it->second->m_aNativeTypes );
+#ifdef DEBUG
+    fprintf( stderr, "getPasteData( \"%s\", \"%s\" )\n",
+             OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
+             OUStringToOString( rType, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+#endif
 
     if( rType.equalsAsciiL( "text/plain;charset=utf-16", 25 ) )
     {
@@ -1101,6 +1112,10 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
         Atom* pNativeTypes = aNativeTypes.getArray();
         while( nAtoms-- )
         {
+#ifdef DEBUG
+            if( *pAtoms && *pAtoms < 0x01000000 )
+                fprintf( stderr, "native type: %s\n", OUStringToOString( getString( *pAtoms ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+#endif
             if( *pAtoms == m_nCOMPOUNDAtom )
                 bHaveText = bHaveCompound = true;
             else if( *pAtoms && *pAtoms < 0x01000000 )
@@ -1111,6 +1126,12 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                 sal_Int32 nIndex = 0;
                 if( pFlavors->MimeType.getToken( 0, ';', nIndex ).equalsAsciiL( "text/plain", 10 ) )
                 {
+                    // omit text/plain;charset=unicode since it is not well defined
+                    if( pFlavors->MimeType.getToken( 0, ';', nIndex ).compareToAscii( "charset=unicode" ) == 0 )
+                    {
+                        pAtoms++;
+                        continue;
+                    }
                     bHaveText = true;
                     if( pFlavors->MimeType.getToken( 0, ';', nIndex ).compareToAscii( "charset=utf-16" ) == 0 )
                     {
@@ -1123,6 +1144,8 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
             }
             pAtoms++;
         }
+        if( (pFlavors - rTypes.getArray()) < rTypes.getLength() )
+            rTypes.realloc(pFlavors - rTypes.getArray());
         bSuccess = rTypes.getLength() ? true : false;
         if( bHaveText && ! bHaveUTF16 )
         {
@@ -1167,7 +1190,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
     }
 
 #ifdef DEBUG
-    if( selection != m_nCLIPBOARDAtom )
+//    if( selection != m_nCLIPBOARDAtom )
     {
         fprintf( stderr, "SelectionManager::getPasteDataTypes( %s ) = %s\n", OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), bSuccess ? "true" : "false" );
         for( int i = 0; i < rTypes.getLength(); i++ )
@@ -1219,21 +1242,25 @@ void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                 ::std::list< Atom > aConversions;
                 int i, nFormat;
                 int nFlavors = aFlavors.getLength();
+                const DataFlavor* pFlavors = aFlavors.getConstArray();
+                bool bHaveText = false;
                 for( i = 0; i < nFlavors; i++ )
-                    convertTypeToNative( aFlavors.getConstArray()[i].MimeType, rRequest.selection, nFormat, aConversions );
-                bool bHaveUTF16 = false;
-                ::std::list< Atom >::const_iterator it;
-                for( it = aConversions.begin(); it != aConversions.end() && ! bHaveUTF16; ++it )
-                    if( *it == m_nUTF16Atom )
-                        bHaveUTF16 = true;
-                if( bHaveUTF16 )
                 {
-                    convertTypeToNative( OUString::createFromAscii( "text/plain;charset=utf-8" ), rRequest.selection, nFormat, aConversions );
-                    aConversions.push_back( m_nCOMPOUNDAtom );
+                    if( pFlavors[i].MimeType.compareToAscii( "text/plain", 10 ) == 0)
+                        bHaveText = true;
+                    else
+                        convertTypeToNative( pFlavors[i].MimeType, rRequest.selection, nFormat, aConversions );
+                }
+                if( bHaveText )
+                {
+                    aConversions.push_front( XA_STRING );
+                    aConversions.push_front( m_nCOMPOUNDAtom );
+                    convertTypeToNative( OUString::createFromAscii( "text/plain;charset=utf-8" ), rRequest.selection, nFormat, aConversions, true );
                 }
 
                 int nTypes = aConversions.size();
                 Atom* pTypes = (Atom*)alloca( nTypes * sizeof( Atom ) );
+                std::list< Atom >::const_iterator it;
                 for( i = 0, it = aConversions.begin(); i < nTypes; i++, ++it )
                     pTypes[i] = *it;
                 XChangeProperty( m_pDisplay, rRequest.requestor, rRequest.property,

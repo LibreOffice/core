@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-12 12:22:07 $
+ *  last change: $Author: pl $ $Date: 2002-07-31 16:53:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,7 +472,7 @@ namespace x11 {
         // type conversion
         // note: convertTypeToNative does NOT clear the list, so you can append
         // multiple types to the same list
-        void convertTypeToNative( const ::rtl::OUString& rType, Atom selection, int& rFormat, ::std::list< Atom >& rConversions );
+        void convertTypeToNative( const ::rtl::OUString& rType, Atom selection, int& rFormat, ::std::list< Atom >& rConversions, bool bPushFront = false );
         ::rtl::OUString convertTypeFromNative( Atom nType, Atom selection, int& rFormat );
 
         // methods for transferable
