@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:41:52 $
+ *  last change: $Author: oj $ $Date: 2001-08-06 07:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,17 +137,23 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nType = 0;
-    try
+    if(!m_bUseODBC2Types)
     {
-        nType = getNumColAttrib(column,SQL_DESC_TYPE);
-        if(nType == SQL_UNKNOWN_TYPE)
-            nType = getNumColAttrib(column,SQL_DESC_CONCISE_TYPE );
-        nType = OTools::MapOdbcType2Jdbc(nType);
+        try
+        {
+            nType = getNumColAttrib(column,SQL_DESC_TYPE);
+            if(nType == SQL_UNKNOWN_TYPE)
+                nType = getNumColAttrib(column,SQL_DESC_CONCISE_TYPE );
+            nType = OTools::MapOdbcType2Jdbc(nType);
+        }
+        catch(SQLException& ) // in this case we have an odbc 2.0 driver
+        {
+            m_bUseODBC2Types = sal_True;
+            nType = OTools::MapOdbcType2Jdbc(getNumColAttrib(column,SQL_DESC_CONCISE_TYPE ));
+        }
     }
-    catch(SQLException& ) // in this case we have an odbc 2.0 driver
-    {
+    else
         nType = OTools::MapOdbcType2Jdbc(getNumColAttrib(column,SQL_DESC_CONCISE_TYPE ));
-    }
 
 
     return nType;

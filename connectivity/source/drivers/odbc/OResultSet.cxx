@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:41:52 $
+ *  last change: $Author: oj $ $Date: 2001-08-06 07:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,12 @@
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include "connectivity/dbtools.hxx"
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
 #endif
 
 using namespace ::comphelper;
@@ -217,10 +223,12 @@ void OResultSet::allocBuffer()
 
     m_aBindVector.reserve(nLen+1);
     m_aBindVector.push_back(NULL); // the first is reserved for the bookmark
+    m_aRow.resize(nLen+1);
 
     for(sal_Int32 i = 1;i<=nLen;++i)
     {
-        switch (xMeta->getColumnType(i))
+        m_aRow[i].setTypeKind( xMeta->getColumnType(i) );
+        switch (m_aRow[i].getTypeKind())
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
@@ -273,8 +281,6 @@ void OResultSet::allocBuffer()
         }
     }
     m_aLengthVector.resize(nLen + 1);
-//  if(_bAllocRow)
-//      m_aRow.resize(nLen + 1);
 }
 // -------------------------------------------------------------------------
 void OResultSet::releaseBuffer()
@@ -398,49 +404,40 @@ Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 col
     // TODO use getBytes instead of
     return NULL;
 }
-
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+// -----------------------------------------------------------------------------
+const ORowSetValue& OResultSet::getValue(sal_Int32 _nColumnIndex,SQLSMALLINT _nType,void* _pValue,SQLINTEGER _rSize)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    columnIndex = mapColumn(columnIndex);
+    _nColumnIndex = mapColumn(_nColumnIndex);
 
     if(m_bFetchData)
     {
-        if(columnIndex > m_nLastColumnPos)
-            fillRow(columnIndex);
-        return m_aRow[columnIndex];
+        if(_nColumnIndex > m_nLastColumnPos)
+            fillRow(_nColumnIndex);
+        return m_aRow[_nColumnIndex];
     }
+    else
+        OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,_nColumnIndex,_nType,m_bWasNull,**this,_pValue,_rSize);
 
-
+    return m_aEmptyValue;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
     sal_Int8 nVal(0);
-    OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_BIT,m_bWasNull,**this,&nVal,sizeof nVal);
-    return nVal;
+    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_BIT,&nVal,sizeof sal_Int8);
+    return (&aValue == &m_aEmptyValue) ? (sal_Bool)nVal : (sal_Bool)aValue;
 }
 // -------------------------------------------------------------------------
 
 sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    sal_Int8 nRet = 0;
-    columnIndex = mapColumn(columnIndex);
-
-    if(m_bFetchData)
-    {
-        if(columnIndex > m_nLastColumnPos)
-            fillRow(columnIndex);
-
-        nRet = m_aRow[columnIndex];
-    }
-    else
-        OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_CHAR,m_bWasNull,**this,&nRet,sizeof nRet);
-    return nRet;
+    sal_Int8 nRet(0);
+    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_CHAR,&nRet,sizeof sal_Int8);
+    return (&aValue == &m_aEmptyValue) ? nRet : (sal_Int8)aValue;
 }
 // -------------------------------------------------------------------------
 
@@ -480,105 +477,48 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
         case DataType::VARCHAR:
         case DataType::LONGVARCHAR:
             {
-                ::rtl::OUString aRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nType,m_bWasNull,**this,m_nTextEncoding);
+                ::rtl::OUString aRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,(SWORD)nType,m_bWasNull,**this,m_nTextEncoding);
                 return Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),sizeof(sal_Unicode)*aRet.getLength());
             }
             break;
     }
-    return OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nType,m_bWasNull,**this);
+    return OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,(SWORD)nType,m_bWasNull,**this);
 }
 // -------------------------------------------------------------------------
 
 Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    DATE_STRUCT aDate;
+    aDate.day   = 0;
+    aDate.month = 0;
+    aDate.year  = 0;
 
-
-    Date nRet;
-    columnIndex = mapColumn(columnIndex);
-    if(m_bFetchData)
-    {
-        if(columnIndex > m_nLastColumnPos)
-            fillRow(columnIndex);
-
-        nRet = m_aRow[columnIndex];
-    }
-    else
-    {
-
-        DATE_STRUCT aDate;
-        aDate.day = 0;
-        aDate.month = 0;
-        aDate.year = 0;
-        OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_DATE,m_bWasNull,**this,&aDate,sizeof aDate);
-        nRet = Date(aDate.day,aDate.month,aDate.year);
-    }
-    return nRet;
+    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_DATE,&aDate,sizeof DATE_STRUCT);
+    return (&aValue == &m_aEmptyValue)  ? Date(aDate.day,aDate.month,aDate.year) : (Date)aValue;
 }
 // -------------------------------------------------------------------------
 
 double SAL_CALL OResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    double nRet = 0;
-    columnIndex = mapColumn(columnIndex);
-    if(m_bFetchData)
-    {
-        if(columnIndex > m_nLastColumnPos)
-            fillRow(columnIndex);
-
-        nRet = m_aRow[columnIndex];
-
-    }
-    else
-        OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_DOUBLE,m_bWasNull,**this,&nRet,sizeof nRet);
-    return nRet;
+    double nRet(0);
+    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_DOUBLE,&nRet,sizeof nRet);
+    return (&aValue == &m_aEmptyValue) ? nRet : (double)aValue;
 }
 // -------------------------------------------------------------------------
 
 float SAL_CALL OResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    float nVal(0);
-    columnIndex = mapColumn(columnIndex);
-    if(m_bFetchData)
-    {
-        if(columnIndex > m_nLastColumnPos)
-            fillRow(columnIndex);
-
-        nVal = m_aRow[columnIndex];
-
-    }
-    else
-        OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_FLOAT,m_bWasNull,**this,&nVal,sizeof nVal);
-    return nVal;
+    float nRet(0);
+    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_FLOAT,&nRet,sizeof nRet);
+    return (&aValue == &m_aEmptyValue) ? nRet : (float)aValue;
 }
 // -------------------------------------------------------------------------
 
 sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
-    sal_Int32 nRet=0;
-    if(m_bFetchData)
-    {
-        if(columnIndex > m_nLastColumnPos)
-            fillRow(columnIndex);
-        nRet = m_aRow[columnIndex];
-    }
-    else
-        OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_LONG,m_bWasNull,**this,&nRet,sizeof nRet);
-
-    return nRet;
+    sal_Int32 nRet(0);
+    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_LONG,&nRet,sizeof nRet);
+    return (&aValue == &m_aEmptyValue) ? nRet : (sal_Int32)aValue;
 }
 // -------------------------------------------------------------------------
 
@@ -598,11 +538,6 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
 
 sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
     return sal_Int64();
 }
 // -------------------------------------------------------------------------
@@ -620,11 +555,6 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLEx
 // -------------------------------------------------------------------------
 Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
     return NULL;
 }
 
@@ -632,32 +562,17 @@ Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) throw
 
 Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
     return NULL;
 }
 // -------------------------------------------------------------------------
 Reference< XBlob > SAL_CALL OResultSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
     return NULL;
 }
 // -------------------------------------------------------------------------
 
 Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
     return NULL;
 }
 // -------------------------------------------------------------------------
@@ -669,29 +584,16 @@ Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< ::co
 
 
     columnIndex = mapColumn(columnIndex);
-    return Any();
+    fillRow(columnIndex);
+    return m_aRow[columnIndex].makeAny();
 }
 // -------------------------------------------------------------------------
 
 sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    sal_Int16 nRet=0;
-    columnIndex = mapColumn(columnIndex);
-    if(m_bFetchData)
-    {
-        if(columnIndex > m_nLastColumnPos)
-            fillRow(columnIndex);
-
-        nRet = m_aRow[columnIndex];
-
-    }
-    else
-        OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_SHORT,m_bWasNull,**this,&nRet,sizeof nRet);
-    return nRet;
+    sal_Int16 nRet(0);
+    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_SHORT,&nRet,sizeof sal_Int16);
+    return (&aValue == &m_aEmptyValue) ? nRet : (sal_Int16)aValue;
 }
 // -------------------------------------------------------------------------
 
@@ -705,11 +607,7 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
     columnIndex = mapColumn(columnIndex);
     ::rtl::OUString nRet;
     if(m_bFetchData)
-    {
-        if(columnIndex > m_nLastColumnPos)
-            fillRow(columnIndex);
-        nRet = m_aRow[columnIndex];
-    }
+        nRet = getValue(columnIndex,0,NULL,0);
     else
         nRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,(SWORD)getMetaData()->getColumnType(columnIndex),m_bWasNull,**this,m_nTextEncoding);
     return nRet;
@@ -718,53 +616,22 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
 
 Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    Time nRet;
-    columnIndex = mapColumn(columnIndex);
-    if(m_bFetchData)
-    {
-        if(columnIndex > m_nLastColumnPos)
-            fillRow(columnIndex);
-        nRet = m_aRow[columnIndex];
-    }
-    else
-    {
-        TIME_STRUCT aTime={0,0,0};
-        OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_TIME,m_bWasNull,**this,&aTime,sizeof aTime);
-        nRet = Time(0,aTime.second,aTime.minute,aTime.hour);
-    }
-    return nRet;
+    TIME_STRUCT aTime={0,0,0};
+    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_TIME,&aTime,sizeof TIME_STRUCT);
+    return (&aValue == &m_aEmptyValue) ? Time(0,aTime.second,aTime.minute,aTime.hour) : (Time)aValue;
 }
 // -------------------------------------------------------------------------
 
 
 DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    DateTime nRet;
-    columnIndex = mapColumn(columnIndex);
-    if(m_bFetchData)
-    {
-        if(columnIndex > m_nLastColumnPos)
-            fillRow(columnIndex);
-
-        nRet = m_aRow[columnIndex];
-        //  return nRet;
-    }
-    else
-    {
-        TIMESTAMP_STRUCT aTime={0,0,0,0,0,0,0};
-        OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_TIMESTAMP,m_bWasNull,**this,&aTime,sizeof aTime);
-        nRet = DateTime(aTime.fraction*1000,aTime.second,aTime.minute,aTime.hour,aTime.day,aTime.month,aTime.year);
-    }
-    return nRet;
+    TIMESTAMP_STRUCT aTime={0,0,0,0,0,0,0};
+    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_TIMESTAMP,&aTime,sizeof TIMESTAMP_STRUCT);
+    return (&aValue == &m_aEmptyValue)
+            ?
+            DateTime(aTime.fraction*1000,aTime.second,aTime.minute,aTime.hour,aTime.day,aTime.month,aTime.year)
+            :
+            (DateTime)aValue;
 }
 // -------------------------------------------------------------------------
 
@@ -1077,7 +944,28 @@ void SAL_CALL OResultSet::moveToCurrentRow(  ) throw(SQLException, RuntimeExcept
     m_nLastColumnPos = 0;
 }
 // -------------------------------------------------------------------------
+void OResultSet::updateValue(sal_Int32 columnIndex,SQLSMALLINT _nType,void* _pValue) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
+
+    columnIndex = mapColumn(columnIndex);
+    void* pData = (void*)m_aBindVector[columnIndex];
+    OTools::bindValue(  m_pStatement->getOwnConnection(),
+                        m_aStatementHandle,
+                        columnIndex,
+                        _nType,
+                        0,
+                        0,
+                        _pValue,
+                        pData,
+                        &m_aLengthVector[columnIndex],
+                        **this,
+                        m_nTextEncoding,
+                        m_pStatement->getOwnConnection()->useOldDateFormat());
+}
+// -----------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1091,161 +979,85 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
 
 void SAL_CALL OResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
-    void* pData = (void*)m_aBindVector[columnIndex];
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_BIT,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
+    updateValue(columnIndex,SQL_BIT,&x);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(SQLException, RuntimeException)
 {
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    columnIndex = mapColumn(columnIndex);
-    void* pData = (void*)m_aBindVector[columnIndex];
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_CHAR,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
+    updateValue(columnIndex,SQL_CHAR,&x);
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
-    void* pData = (void*)m_aBindVector[columnIndex];
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_TINYINT,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
+    updateValue(columnIndex,SQL_TINYINT,&x);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(SQLException, RuntimeException)
 {
-
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    columnIndex = mapColumn(columnIndex);
-    void* pData = (void*)m_aBindVector[columnIndex];
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_INTEGER,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
+    updateValue(columnIndex,SQL_INTEGER,&x);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
-    throw RuntimeException();
+    throw SQLException();
 }
 // -----------------------------------------------------------------------
 void SAL_CALL OResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
-    void* pData = (void*)m_aBindVector[columnIndex];
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_REAL,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
+    updateValue(columnIndex,SQL_REAL,&x);
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
-    void* pData = (void*)m_aBindVector[columnIndex];
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_DOUBLE,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
+    updateValue(columnIndex,SQL_DOUBLE,&x);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
-    void* pData = (void*)m_aBindVector[columnIndex];
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_VARCHAR,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
+    updateValue(columnIndex,SQL_VARCHAR,(void*)&x);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
-    void* pData = (void*)m_aBindVector[columnIndex];
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_BINARY,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
+    updateValue(columnIndex,SQL_BINARY,(void*)&x);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const Date& x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
-    void* pData = (void*)m_aBindVector[columnIndex];
     DATE_STRUCT aVal = OTools::DateToOdbcDate(x);
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_DATE,0,0,&aVal,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
+    updateValue(columnIndex,SQL_DATE,&aVal);
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const Time& x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
-    void* pData = (void*)m_aBindVector[columnIndex];
     TIME_STRUCT aVal = OTools::TimeToOdbcTime(x);
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_TIME,0,0,&aVal,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
+    updateValue(columnIndex,SQL_TIME,&aVal);
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const DateTime& x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
-    void* pData = (void*)m_aBindVector[columnIndex];
     TIMESTAMP_STRUCT aVal = OTools::DateTimeToTimestamp(x);
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_TIMESTAMP,0,0,&aVal,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
+    updateValue(columnIndex,SQL_TIMESTAMP,&aVal);
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Reference< XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    if(!x.is())
+        ::dbtools::throwFunctionSequenceException(*this);
 
-
-    columnIndex = mapColumn(columnIndex);
+    Sequence<sal_Int8> aSeq;
+    x->readSomeBytes(aSeq,length);
+    updateBytes(columnIndex,aSeq);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Reference< XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
+    updateBinaryStream(columnIndex,x,length);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
@@ -1261,108 +1073,15 @@ void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
-//      switch(x.getValueTypeClass())
-//      {
-//          case TypeClass_VOID:
-//              args[0].l = NULL;
-//              break;
-//
-//          case TypeClass_BOOLEAN:
-//              {
-//                  sal_Bool f;
-//                  x >>= f;
-//                  updateBoolean(columnIndex,f);
-//              }
-//              break;
-//          case TypeClass_BYTE:
-//              {
-//                  sal_Int8 f;
-//                  x >>= f;
-//                  updateByte(columnIndex,f);
-//              }
-//              break;
-//          case TypeClass_SHORT:
-//          case TypeClass_UNSIGNED_SHORT:
-//              {
-//                  sal_Int16 f;
-//                  x >>= f;
-//                  updateShort(columnIndex,f);
-//              }
-//              break;
-//          case TypeClass_LONG:
-//          case TypeClass_UNSIGNED_LONG:
-//              {
-//                  sal_Int32 f;
-//                  x >>= f;
-//                  updateInt(columnIndex,f);
-//              }
-//              break;
-//          case TypeClass_HYPER:
-//          case TypeClass_UNSIGNED_HYPER:
-//              {
-//                  sal_Int64 f;
-//                  x >>= f;
-//                  updateLong(columnIndex,f);
-//              }
-//              break;
-//          case TypeClass_FLOAT:
-//              {
-//                  float f;
-//                  x >>= f;
-//                  updateFloat(columnIndex,f);
-//              }
-//              break;
-//          case TypeClass_DOUBLE:
-//              updateDouble(columnIndex,::comphelper::getDouble(x));
-//              break;
-//          case TypeClass_CHAR:
-//          case TypeClass_STRING:
-//              updateString(columnIndex,::comphelper::getString(x));
-//              break;
-//          case TypeClass_ENUM:
-//          default:
-//              OSL_ENSURE(0,"UNKOWN TYPE for OResultSet::updateObject");
-//      }
-//      return;
-//      // Parameter konvertieren
-//      // temporaere Variable initialisieren
-//      char * cSignature = "(ILjava/lang/Object;)V";
-//      char * cMethodName = "updateObject";
-//      // Java-Call absetzen
-//  }
+    if (!::dbtools::implUpdateObject(this, columnIndex, x))
+        throw SQLException();
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 scale ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    columnIndex = mapColumn(columnIndex);
-    OSL_ENSURE(0,"OResultSet::updateNumericObject: NYI");
-//  SDBThreadAttach t;
-//  if( t.pEnv )
-//  {
-//      jvalue args[1];
-//      // Parameter konvertieren
-//      args[0].l =
-//      // temporaere Variable initialisieren
-//      char * cSignature = "(I;Ljava/lang/Object;I)V";
-//      char * cMethodName = "updateObject";
-//      // Java-Call absetzen
-//      jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
-//      if( mID ){
-//          t.pEnv->CallVoidMethod( object, mID,columnIndex,args[0].l,scale);
-            //  ThrowSQLException(t.pEnv,*this);
-//          t.pEnv->DeleteLocalRef((jobject)args[0].l);
-//      }
-//  }
+    if (!::dbtools::implUpdateObject(this, columnIndex, x))
+        throw SQLException();
 }
 // -------------------------------------------------------------------------
 // XRowLocate
@@ -1657,18 +1376,14 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
         m_aRow[_nToColumn].setBound(sal_True);
     }
     m_bFetchData = sal_False;
-    Reference< XResultSetMetaData > xMeta = getMetaData();
 
-    sal_Int32                               nColumn     = m_nLastColumnPos + 1;
-    ::std::vector< ORowSetValue >::iterator pColumn     = m_aRow.begin() + nColumn;
-    ::std::vector< ORowSetValue >::iterator pColumnEnd  = m_aRow.begin() + _nToColumn + 1;
+    sal_Int32           nColumn     = m_nLastColumnPos + 1;
+    TDataRow::iterator pColumn      = m_aRow.begin() + nColumn;
+    TDataRow::iterator pColumnEnd   = m_aRow.begin() + _nToColumn + 1;
 
-    sal_Int32 nDataType;
     for (; pColumn < pColumnEnd; ++nColumn, ++pColumn)
     {
-        nDataType = xMeta->getColumnType(nColumn);
-
-        switch (nDataType)
+        switch (pColumn->getTypeKind())
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
@@ -1718,7 +1433,7 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
                 *pColumn = getBytes(nColumn);
                 break;
         }
-        pColumn->setTypeKind(nDataType);
+
         if(wasNull())
             pColumn->setNull();
     }

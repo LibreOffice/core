@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:41:52 $
+ *  last change: $Author: oj $ $Date: 2001-08-06 07:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1009,6 +1009,8 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const ::rtl::OUS
     }
     if(aCOL.getLength())
         pCOL = aCOL.getStr();
+    else
+        pCOL = SQL_ALL_TABLE_TYPES;
 
     SQLRETURN nRetcode = N3SQLTables(m_aStatementHandle,
                             (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && aPKQ.getLength()) ? SQL_NTS : 0,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:41:51 $
+ *  last change: $Author: oj $ $Date: 2001-08-06 07:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,10 +147,14 @@ namespace connectivity
                             public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
         protected:
+            // used top hold the information about the value and the datatype to save calls to metadata
+            typedef ::std::vector<ORowSetValue>         TDataRow;
+
             TVoidVector                                 m_aBindVector;
             ::std::vector<sal_Int32>                    m_aLengthVector;
             ::std::vector<sal_Int32>                    m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
-            ::std::vector< ORowSetValue>                m_aRow; // only used when SQLGetData can't be called in any order
+            TDataRow                                    m_aRow; // only used when SQLGetData can't be called in any order
+            ORowSetValue                                m_aEmptyValue;  // needed for the getValue method when no prefetch is used
             SQLHANDLE                                   m_aStatementHandle;
             SQLHANDLE                                   m_aConnectionHandle;
             OStatement_Base*                            m_pStatement;
@@ -183,6 +187,8 @@ namespace connectivity
             void fillRow(sal_Int32 _nToColumn);
             void allocBuffer();
             void releaseBuffer();
+            void updateValue(sal_Int32 columnIndex,SQLSMALLINT _nType,void* _pValue) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            const ORowSetValue& getValue(sal_Int32 _nColumnIndex,SQLSMALLINT _nType,void* _pValue,SQLINTEGER _rSize);
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-26 11:31:18 $
+ *  last change: $Author: oj $ $Date: 2001-08-06 07:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,16 +135,15 @@ namespace connectivity
             sal_Bool                                                                        m_bPrepared;
 
             void FreeParams();
-                        void putParamData (sal_Int32 index) throw(::com::sun::star::sdbc::SQLException);
-                        void setChar(sal_Int32 parameterIndex,sal_Int32 SQLtype,sal_Int32 scale,const ::rtl::OUString& x) throw(::com::sun::star::sdbc::SQLException);
-                        void setBinary(sal_Int32 parameterIndex,sal_Int32 SQLtype,const ::com::sun::star::uno::Sequence< sal_Int8 >& x) throw(::com::sun::star::sdbc::SQLException);
-                        void setStream (sal_Int32 ParameterIndex,const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& x,
+            void putParamData (sal_Int32 index) throw(::com::sun::star::sdbc::SQLException);
+            void setStream (sal_Int32 ParameterIndex,const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& x,
                                                         sal_Int32 length,sal_Int32 SQLtype,sal_Int32 streamType) throw(::com::sun::star::sdbc::SQLException);
             sal_Int32 getParamLength (  sal_Int32 index);
             sal_Int8* getLengthBuf (sal_Int32 index);
             sal_Int8* getDataBuf (sal_Int32 index);
             sal_Int8* allocBindBuf (    sal_Int32 index,    sal_Int32 bufLen);
-                        void initBoundParam () throw(::com::sun::star::sdbc::SQLException);
+            void initBoundParam () throw(::com::sun::star::sdbc::SQLException);
+            void setParameter(sal_Int32 parameterIndex,sal_Int32 _nType,sal_Int32 _nSize,void* _pData);
 
             sal_Int32 getPrecision ( sal_Int32 sqlType);
 

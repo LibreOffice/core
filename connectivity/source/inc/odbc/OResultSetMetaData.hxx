@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:41:51 $
+ *  last change: $Author: oj $ $Date: 2001-08-06 07:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,14 +95,25 @@ namespace connectivity
             SQLHANDLE       m_aStatementHandle;
             OConnection*    m_pConnection;
             sal_Int32       m_nColCount;
+            sal_Bool        m_bUseODBC2Types;
 
             ::rtl::OUString getCharColAttrib(sal_Int32 column,sal_Int32 ident) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             sal_Int32 getNumColAttrib(sal_Int32 column,sal_Int32 ident) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            OResultSetMetaData(OConnection* _pConnection, SQLHANDLE _pStmt ) : m_pConnection(_pConnection),m_aStatementHandle( _pStmt ),m_nColCount(-1){}
+            OResultSetMetaData(OConnection* _pConnection, SQLHANDLE _pStmt )
+                : m_pConnection(_pConnection)
+                ,m_aStatementHandle( _pStmt )
+                ,m_nColCount(-1)
+                ,m_bUseODBC2Types(sal_False)
+            {}
             OResultSetMetaData(OConnection* _pConnection, SQLHANDLE _pStmt ,const ::std::vector<sal_Int32> & _vMapping)
-                    : m_pConnection(_pConnection),m_aStatementHandle( _pStmt ),m_vMapping(_vMapping),m_nColCount(_vMapping.size()-1){}
+                    : m_pConnection(_pConnection)
+                    ,m_aStatementHandle( _pStmt )
+                    ,m_vMapping(_vMapping)
+                    ,m_nColCount(_vMapping.size()-1)
+                    ,m_bUseODBC2Types(sal_False)
+            {}
             virtual ~OResultSetMetaData();
 
 
