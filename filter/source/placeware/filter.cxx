@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-25 12:22:26 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ using ::rtl::OUString;
 using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::io::XOutputStream;
+using ::com::sun::star::task::XStatusIndicator;
 
 namespace pwp {
 
@@ -137,6 +138,7 @@ sal_Bool SAL_CALL PlaceWareExportFilter::filter( const ::com::sun::star::uno::Se
     OUString sFileName, sURL;
     Reference < XInterface > xInteractionHandler;
     Reference < XOutputStream > xOutputStream;
+    Reference < XStatusIndicator > xStatusIndicator;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "OutputStream" ) ) )
@@ -151,6 +153,10 @@ sal_Bool SAL_CALL PlaceWareExportFilter::filter( const ::com::sun::star::uno::Se
         {
             pValue[i].Value >>= xInteractionHandler;
         }
+        else if ( pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "StatusIndicator" ) ) )
+        {
+            pValue[i].Value >>= xStatusIndicator;
+        }
     }
     if ( !xOutputStream.is() )
     {
@@ -159,7 +165,7 @@ sal_Bool SAL_CALL PlaceWareExportFilter::filter( const ::com::sun::star::uno::Se
     }
 
     PlaceWareExporter aExporter( mxMSF );
-    return aExporter.doExport( mxDoc, xOutputStream, sURL, xInteractionHandler );
+    return aExporter.doExport( mxDoc, xOutputStream, sURL, xInteractionHandler, xStatusIndicator );
 }
 
 // -----------------------------------------------------------------------------
