@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.88 $
+#   $Revision: 1.89 $
 #
-#   last change: $Author: kz $ $Date: 2005-03-01 19:00:14 $
+#   last change: $Author: vg $ $Date: 2005-03-10 13:03:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,6 +98,8 @@ UNOIDLDBFILES= \
     $(UCR)$/cssddnd.db \
     $(UCR)$/cssdocument.db \
     $(UCR)$/cssdrawing.db \
+    $(UCR)$/cssgeometry.db \
+    $(UCR)$/cssrendering.db \
     $(UCR)$/cssembed.db \
     $(UCR)$/cssfcontrol.db \
     $(UCR)$/cssform.db \
@@ -161,8 +163,6 @@ UNOIDLDBFILES= \
     $(UCR)$/cssgallery.db \
     $(UCR)$/cssxsd.db \
     $(UCR)$/dcssform.db \
-    $(UCR)$/dcssgeometry.db \
-    $(UCR)$/dcssrendering.db \
     $(UCR)$/xsec-security.db \
     $(UCR)$/xsec-crypto.db \
     $(UCR)$/xsec-csax.db \
