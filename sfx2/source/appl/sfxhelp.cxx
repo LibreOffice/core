@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: pb $ $Date: 2004-10-26 10:15:01 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,8 +602,34 @@ String  SfxHelp::CreateHelpURL_Impl( const String& aCommandURL, const String& rM
     String aHelpURL;
     sal_Bool bHasAnchor = sal_False;
     String aAnchor;
+
+    String aModuleName( rModuleName );
+    if ( aModuleName.Len() == 0 )
+    {
+        // no active module (quicklaunch?) -> detect default module
+        SvtModuleOptions aModOpt;
+        if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+            aModuleName = DEFINE_CONST_UNICODE("swriter");
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+            aModuleName = DEFINE_CONST_UNICODE("scalc");
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+            aModuleName = DEFINE_CONST_UNICODE("simpress");
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+            aModuleName = DEFINE_CONST_UNICODE("sdraw");
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
+            aModuleName = DEFINE_CONST_UNICODE("smath");
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCHART ) )
+            aModuleName = DEFINE_CONST_UNICODE("schart");
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SBASIC ) )
+            aModuleName = DEFINE_CONST_UNICODE("sbasic");
+        else
+        {
+            DBG_ERRORFILE( "no installed module found" );
+        }
+    }
+
     aHelpURL = String::CreateFromAscii("vnd.sun.star.help://");
-    aHelpURL += rModuleName;
+    aHelpURL += aModuleName;
 
     if ( !aCommandURL.Len() )
         aHelpURL += String::CreateFromAscii("/start");
@@ -690,10 +716,16 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
     String          aHelpURL(rURL    );
     INetURLObject   aParser (aHelpURL);
     ::rtl::OUString sKeyword;
-    if ( aParser.GetProtocol() != INET_PROT_VND_SUN_STAR_HELP )
+    INetProtocol nProtocol = aParser.GetProtocol();
+    if ( nProtocol != INET_PROT_VND_SUN_STAR_HELP )
     {
-        aHelpURL  = CreateHelpURL_Impl( 0, GetHelpModuleName_Impl( 0 ) );
-        sKeyword = ::rtl::OUString( rURL );
+        if ( nProtocol == INET_PROT_UNO )
+            aHelpURL = CreateHelpURL_Impl( rURL, GetHelpModuleName_Impl( 0 ) );
+        else
+        {
+            aHelpURL  = CreateHelpURL_Impl( 0, GetHelpModuleName_Impl( 0 ) );
+            sKeyword = ::rtl::OUString( rURL );
+        }
     }
 
     Reference < XFrame > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
@@ -858,6 +890,8 @@ XubString SfxHelp::GetHelpText( const String& aCommandURL, const Window* pWindow
                     aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "swriter" ));
                 else if ( aFactoryShortName.equalsAscii( "sglobal" ))
                     aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "swriter" ));
+                else if ( aFactoryShortName.equalsAscii( "dbapp" ))
+                    aFactoryShortName = aDefaultModule;
                 else if ( aFactoryShortName.equalsAscii( "dbquery" ))
                     aFactoryShortName = aDefaultModule;
                 else if ( aFactoryShortName.equalsAscii( "dbrelation" ))
