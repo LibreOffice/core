@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:27:20 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
         readCommonProperties(_rxInStream);
 
     // Nach dem Lesen die Defaultwerte anzeigen
-    if (m_aControlSource.getLength())
+    if ( getControlSource().getLength() )
     {
         // (not if we don't have a control source - the "State" property acts like it is persistent, then
         resetNoBroadcast();
@@ -605,9 +605,9 @@ void OComboBoxModel::loadData()
                 Reference<XIndexAccess> xFieldsByIndex(xFieldsByName, UNO_QUERY);
 
                 ::rtl::OUString aFieldName;
-                if (xFieldsByName.is() && xFieldsByName->hasByName(m_aControlSource))
+                if ( xFieldsByName.is() && xFieldsByName->hasByName( getControlSource() ) )
                 {
-                    aFieldName = m_aControlSource;
+                    aFieldName = getControlSource();
                 }
                 else
                 {
@@ -635,10 +635,10 @@ void OComboBoxModel::loadData()
                     DBG_ASSERT(xSupplyFields.is(), "OComboBoxModel::loadData : invalid query composer !");
 
                     Reference< XNameAccess > xFieldNames = xSupplyFields->getColumns();
-                    if (xFieldNames->hasByName(m_aControlSource))
+                    if ( xFieldNames->hasByName( getControlSource() ) )
                     {
                         Reference< XPropertySet > xComposerFieldAsSet;
-                        xFieldNames->getByName(m_aControlSource) >>= xComposerFieldAsSet;
+                        xFieldNames->getByName( getControlSource() ) >>= xComposerFieldAsSet;
                         if (hasProperty(PROPERTY_FIELDSOURCE, xComposerFieldAsSet))
                             xComposerFieldAsSet->getPropertyValue(PROPERTY_FIELDSOURCE) >>= aFieldName;
                     }
@@ -868,7 +868,7 @@ sal_Bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
 
     if ( bModified )
     {
-        if (!aNewValue.getLength() && !m_bRequired && m_bEmptyIsNull)
+        if (!aNewValue.getLength() && !isRequired() && m_bEmptyIsNull)
             m_xColumnUpdate->updateNull();
         else
         {
