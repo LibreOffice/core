@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:04:39 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 15:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@ namespace scripting_util
 
         if(!xRef.is())
         {
-            OSL_TRACE( Msg );
             throw ::com::sun::star::uno::RuntimeException(OUSTR(Msg), ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >());
         }
     }
