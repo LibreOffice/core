@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recfloat.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:16:12 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ FloatingWindow SID_RECORDING_FLOATWINDOW
     Text[ czech ] = "Zaznamenat makro";
     Text[ hebrew ] = "‮רישום מקרו‬";
     Text[ catalan ] = "Record Macro";
-    Text[ portuguese_brazilian ] = "Record Macro";
+    Text[ portuguese_brazilian ] = "Gravar Macro";
     Text[ thai ] = "Record Macro";
     Text[ hindi ] = "Record Macro";
     Text[ slovak ] = "Nahrať Makro";
@@ -139,7 +139,7 @@ String STR_MACRO_LOSS
     Text[ czech ] = "Opravdu chcete přerušit nahrávání? Veškeré doposud zaznamenané kroky budou ztraceny.";
     Text[ hebrew ] = "‮האם אכן לבטל את הרישום? כל צעד שנרשם עד כה יאובד.‬";
     Text[ catalan ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
-    Text[ portuguese_brazilian ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
+    Text[ portuguese_brazilian ] = "Deseja realmente cancelar a grava��o? Todos os passos gravados at� este ponto estar�o perdidos.";
     Text[ thai ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
     Text[ hindi ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
     Text[ slovak ] = "Určite chcete zrušiť nahrávanie? Všetky nahrané kroky budú stratené.";
@@ -170,11 +170,13 @@ String STR_CANCEL_RECORDING
     Text[ czech ] = "Zrušit nahrávání";
     Text[ hebrew ] = "‮ביטול רישום‬";
     Text[ catalan ] = "Cancel Recording";
-    Text[ portuguese_brazilian ] = "Cancel Recording";
+    Text[ portuguese_brazilian ] = "Cancelar grava��o";
     Text[ thai ] = "Cancel Recording";
     Text[ hindi ] = "Cancel Recording";
     Text[ slovak ] = "Zrušiť nahrávanie";
 };
+
+
 
 
 
