@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-09 18:09:26 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,15 +66,12 @@
 #include <vos/ref.hxx>
 
 class SfxPoolItem;
-class SvxAutoCorrect;
 
 class GlobalEditData
 {
 private:
     SfxPoolItem**   ppDefItems;
     OutputDevice*   pStdRefDevice;
-
-    Link            aGetAutoCorrectHdl;
 
     vos::ORef<SvxForbiddenCharactersTable>  xForbiddenCharsTable;
 
@@ -84,9 +81,6 @@ public:
 
     SfxPoolItem**   GetDefItems();
     OutputDevice*   GetStdRefDevice();
-
-    void            SetGetAutoCorrectHdl( const Link& rHdl ) { aGetAutoCorrectHdl = rHdl; }
-    SvxAutoCorrect* GetAutoCorrect() const { return (SvxAutoCorrect*) aGetAutoCorrectHdl.Call( NULL ); }
 
     vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable();
     void            SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
