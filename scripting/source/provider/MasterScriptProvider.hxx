@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 14:17:04 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 23:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ public:
 private:
     bool  isValid();
     const css::uno::Sequence< ::rtl::OUString >& getProviderNames();
-    ::rtl::OUString  getLanguageFromURI(const ::rtl::OUString& scriptURI );
+
     ProviderCache* providerCache();
     /* to obtain other services if needed */
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
