@@ -2,9 +2,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-06 14:58:42 $
+#   last change: $Author: rt $ $Date: 2004-07-29 16:11:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,8 +102,6 @@ The following parameter are needed:
 -packagelist : file, containing a list of module gids (opt., non-Windows only)
 -copyproject : is set for projects that are only used for copying (optional)
 -languagepack : do create a languagepack, no product pack (optional)
--winshipdrive : update pack drive for Windows (optional)
--unixshipdrive : update pack drive for non-Windows (optional)
 -log : Logging all available information (optional)
 -debug : Collecting debug information
 
@@ -184,8 +182,6 @@ sub getparameter
         elsif ($param eq "-packagelist") { $installer::globals::packagelist = shift(@ARGV); }
         elsif ($param eq "-copyproject") { $installer::globals::is_copy_only_project = 1; }
         elsif ($param eq "-languagepack") { $installer::globals::languagepack = 1; }
-        elsif ($param eq "-winshipdrive") { $installer::globals::winshipdrive = shift(@ARGV); }
-        elsif ($param eq "-unixshipdrive") { $installer::globals::unixshipdrive = shift(@ARGV); }
         elsif ($param eq "-addchildprojects") { $installer::globals::addchildprojects = 1; }
         else
         {
@@ -547,8 +543,6 @@ sub outputparameter
     }
     if ( $installer::globals::is_copy_only_project ) { push(@output, "This is a copy only project!\n"); }
     if ( $installer::globals::languagepack ) { push(@output, "Creating language pack!\n"); }
-    if ((!($installer::globals::winshipdrive eq "")) && ($installer::globals::iswindowsbuild)) { push(@output, "Ship drive: $installer::globals::winshipdrive\n"); }
-    if ((!($installer::globals::unixshipdrive eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "Ship drive: $installer::globals::unixshipdrive\n"); }
     push(@output, "########################################################\n");
 
     # output into shell and into logfile

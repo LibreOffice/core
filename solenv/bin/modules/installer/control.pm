@@ -2,9 +2,9 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-06 14:56:05 $
+#   last change: $Author: rt $ $Date: 2004-07-29 16:11:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -375,10 +375,9 @@ sub determine_ship_directory
 {
     my ($languagesref) = @_;
 
-    my $shipdrive = "";
+    if (!( $ENV{'SHIPDRIVE'} )) { installer::exiter::exit_program("ERROR: SHIPDRIVE must be set for updater!", "determine_ship_directory"); }
 
-    if ( $installer::globals::iswin ) { $shipdrive = $installer::globals::winshipdrive; }
-    else { $shipdrive = $installer::globals::unixshipdrive; }
+    my $shipdrive = $ENV{'SHIPDRIVE'};
 
     my $destdir = $shipdrive . $installer::globals::separator . "install" . $installer::globals::separator .
                 $installer::globals::compiler . $installer::globals::productextension . $installer::globals::separator .
@@ -409,17 +408,11 @@ sub check_updatepack
             $infoline = "Environment variable CWS_WORK_STAMP not set\n";
             push(@installer::globals::globallogfileinfo, $infoline);
 
-            # testing if $winshipdrive or $installer::globals::unixshipdrive exists
-            # testing the write access to $installer::globals::winshipdrive or $installer::globals::unixshipdrive
-
-            if ( $installer::globals::iswin ) { $shipdrive = $installer::globals::winshipdrive; }
-            else { $shipdrive = $installer::globals::unixshipdrive; }
-
-            if ( ! $shipdrive eq "" )
+            if ( $ENV{'SHIPDRIVE'} )    # the environment variable SHIPDRIVE must be set (set only in CWS)
             {
+                $shipdrive = $ENV{'SHIPDRIVE'};
                 $infoline = "Ship drive defined: $shipdrive\n";
                 push(@installer::globals::globallogfileinfo, $infoline);
-
 
                 if ( -d $shipdrive )
                 {

@@ -2,8 +2,8 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.8 $
-#   last change: $Author: rt $ $Date: 2004-07-23 15:10:29 $
+#   $Revision: 1.9 $
+#   last change: $Author: rt $ $Date: 2004-07-29 16:11:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -164,8 +164,6 @@ BEGIN
     $number_of_cabfiles = 3;    # only for $fix_number_of_cab_files = 1
 
     $updatepack = 0;
-    $winshipdrive = "";
-    $unixshipdrive = "";
 
     @environmentvariables = ( "SOLARVERSION", "GUI", "COMMON_OUTDIR", "ENV_ROOT", "WORK_STAMP", "OUTPATH", "LOCAL_OUT", "LOCAL_COMMON_OUT" );
     @packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
