@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:11 $
+ *  last change: $Author: bm $ $Date: 2001-08-06 16:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,9 +159,12 @@
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #endif
 
+#include    "MultiPropertySetHandler.hxx"
+
 using namespace rtl;
 using namespace com::sun::star;
 using namespace ::xmloff::token;
+using namespace com::sun::star::uno;
 
 
 // ========================================
@@ -1258,6 +1261,7 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
         bHasZAxisMajorGrid = sal_False,
         bHasZAxisMinorGrid = sal_False;
 
+#if 0
     uno::Reference< beans::XPropertySet > xProp( xDiagram, uno::UNO_QUERY );
     if( xProp.is())
     {
@@ -1349,6 +1353,69 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             DBG_WARNING( "Required property not found in ChartDocument" );
         }
     }
+#else
+    MultiPropertySetHandler aDiagramProperties (xDiagram);
+
+    //  Check for supported services and then the properties provided by this service.
+    Reference<lang::XServiceInfo> xServiceInfo (xDiagram, UNO_QUERY);
+    if (xServiceInfo.is())
+    {
+        if (xServiceInfo->supportsService(
+            rtl::OUString::createFromAscii ("com.sun.star.chart.ChartAxisXSupplier")))
+        {
+            aDiagramProperties.Add (
+                OUString(RTL_CONSTASCII_USTRINGPARAM("HasXAxis")), bHasXAxis);
+        }
+        if (xServiceInfo->supportsService(
+            rtl::OUString::createFromAscii ("com.sun.star.chart.ChartAxisYSupplier")))
+        {
+            aDiagramProperties.Add (
+                OUString(RTL_CONSTASCII_USTRINGPARAM("HasYAxis")), bHasXAxis);
+        }
+        if (xServiceInfo->supportsService(
+            rtl::OUString::createFromAscii ("com.sun.star.chart.ChartAxisZSupplier")))
+        {
+            aDiagramProperties.Add (
+                OUString(RTL_CONSTASCII_USTRINGPARAM("HasZAxis")), bHasXAxis);
+        }
+        if (xServiceInfo->supportsService(
+            rtl::OUString::createFromAscii ("com.sun.star.chart.ChartTwoAxisSupplier")))
+        {
+            aDiagramProperties.Add (
+                OUString(RTL_CONSTASCII_USTRINGPARAM("HasSecondaryXAxis")), bHasSecondaryXAxis);
+        }
+        if (xServiceInfo->supportsService(
+            rtl::OUString::createFromAscii ("com.sun.star.chart.ChartTwoAxisYSupplier")))
+        {
+            aDiagramProperties.Add (
+                OUString(RTL_CONSTASCII_USTRINGPARAM("HasSecondaryYAxis")), bHasSecondaryYAxis);
+        }
+    }
+
+    aDiagramProperties.Add (
+        OUString (RTL_CONSTASCII_USTRINGPARAM ("HasXAxisTitle")), bHasXAxisTitle);
+    aDiagramProperties.Add (
+        OUString (RTL_CONSTASCII_USTRINGPARAM ("HasYAxisTitle")), bHasYAxisTitle);
+    aDiagramProperties.Add (
+        OUString (RTL_CONSTASCII_USTRINGPARAM ("HasZAxisTitle")), bHasZAxisTitle);
+
+    aDiagramProperties.Add (
+        OUString (RTL_CONSTASCII_USTRINGPARAM ("HasXAxisGrid")), bHasXAxisMajorGrid);
+    aDiagramProperties.Add (
+        OUString (RTL_CONSTASCII_USTRINGPARAM ("HasYAxisGrid")), bHasYAxisMajorGrid);
+    aDiagramProperties.Add (
+        OUString (RTL_CONSTASCII_USTRINGPARAM ("HasZAxisGrid")), bHasZAxisMajorGrid);
+
+    aDiagramProperties.Add (
+        OUString (RTL_CONSTASCII_USTRINGPARAM ("HasXAxisHelpGrid")), bHasXAxisMinorGrid);
+    aDiagramProperties.Add (
+        OUString (RTL_CONSTASCII_USTRINGPARAM ("HasYAxisHelpGrid")), bHasYAxisMinorGrid);
+    aDiagramProperties.Add (
+        OUString (RTL_CONSTASCII_USTRINGPARAM ("HasZAxisHelpGrid")), bHasZAxisMinorGrid);
+
+    if ( ! aDiagramProperties.GetProperties ())
+        DBG_WARNING ("Required properties not found in Chart diagram");
+#endif
 
     SvXMLElementExport* pAxis = NULL;
 
