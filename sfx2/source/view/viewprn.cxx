@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2000-11-22 17:52:19 $
+ *  last change: $Author: mba $ $Date: 2001-06-27 16:23:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,19 +639,33 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         // falls der nicht zuvor eingestellt wurde
         if ( !pPrinter )
             pPrinter = GetPrinter(TRUE);
+
         //! ??? pPrn->SetJobSetup(pSh->GetJob());
         // . . . gfs. Druckerschacht umschalten
         //! ??? if( nPaperBin != USE_DEFAULT_PAPERBIN )
         //! ???     pPrn->SetPaperBin(nPaperBin);
 
             // Drucker nicht vorhanden? (bei SID_PRINTDOC wurde schon gefragt)
-            if ( SID_PRINTDOCDIRECT == nId &&
-                 !pPrinter->IsOriginal() && bWarn &&
-                 !UseStandardPrinter_Impl( NULL, pPrinter ) )
+        if ( SID_PRINTDOCDIRECT == nId )
+        {
+            if ( !pPrinter->IsOriginal() && bWarn && !UseStandardPrinter_Impl( NULL, pPrinter ) )
             {
                 rReq.SetReturnValue(SfxBoolItem(0,FALSE));
                 return;
             }
+
+            if( pPrinter->GetName() != Printer::GetDefaultPrinterName() )
+            {
+                Printer* pDefPrinter = new Printer();
+                String aTmp( SfxResId( STR_PRINTER_NOTDEFAULT ) );
+                aTmp.SearchAndReplace( String::CreateFromAscii("$1"), pPrinter->GetName() );
+                aTmp.SearchAndReplace( String::CreateFromAscii("$2"), pDefPrinter->GetName() );
+                QueryBox aBox( GetWindow(), WB_YES_NO, aTmp );
+                if( RET_OK == aBox.Execute() )
+                    pPrinter->SetPrinterProps( pPrinter );
+                delete pDefPrinter;
+            }
+        }
 
         if( bCollate )
             pPrinter->SetCopyCount(1);
@@ -670,25 +684,12 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 #endif
         pPrinter->SetPageQueueSize( aPages.Len() ? (int) aPages.ToInt32() : 1 );
 
-#ifdef OS2
-        HACK(die PrintThreadPrio erstmal nur fuer OS/2)
-        String aPrio( pIniMgr->Get(SFX_KEY_PRINTTHREADPRIO) );
-        if ( aPrio.Len() && aPrio.IsNumeric() )
-        Sysdepen::SetPrintThreadPrio( (USHORT) aPrio );
-        String aMeta( pIniMgr->Get(SFX_KEY_METAFILEPRINT) );
-        if ( aMeta.Len() && aMeta.IsNumeric() )
-        Sysdepen::EnableMetafilePrint( 0 != USHORT(aMeta) );
-#endif
         SfxObjectShell *pObjSh = GetObjectShell();
         SfxDocumentInfo *pInfo = &pObjSh->GetDocInfo();
         SfxStamp aOldStamp = pInfo->GetPrinted();
         // Abfrage, ob die Benutzerdaten
         // f"ur die Eigenschaften verwendet werden sollen
-#if SUPD<613//MUSTINI
-        String aUserName = pIniMgr->GetUserFullName();
-#else
         String aUserName = SvtUserOptions().GetFullName();
-#endif
 
         if ( !pInfo->IsUseUserData() )
             aUserName.Erase();

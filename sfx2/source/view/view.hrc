@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-18 16:05:38 $
+ *  last change: $Author: mba $ $Date: 2001-06-27 16:23:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 
 #define STR_NODEFPRINTER                    (RID_SFX_VIEW_START+ 0)
 #define STR_PRINTER_NOTAVAIL                (RID_SFX_VIEW_START+ 1)
+#define STR_PRINTER_NOTDEFAULT              (RID_SFX_VIEW_START+ 2)
 
 #define STR_PRINT_OPTIONS                   (RID_SFX_VIEW_START+ 6)
 #define STR_PRINT_OPTIONS_TITLE             (RID_SFX_VIEW_START+ 7)
