@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbinsert.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ class ScTbxInsertCtrl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    ScTbxInsertCtrl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind );
+    ScTbxInsertCtrl( USHORT nSlotId, USHORT nId, ToolBox& rBox );
     ~ScTbxInsertCtrl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
@@ -96,7 +96,7 @@ public:
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
-
+/*
 class ScTbxInsertPopup : public SfxPopupWindow
 {
     SfxToolBoxManager   aTbx;
@@ -120,7 +120,7 @@ public:
     virtual SfxPopupWindow* Clone() const;
     void StartSelection();
 };
-
+*/
 
 
 #endif
