@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metric.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hdu $ $Date: 2004-07-20 09:48:34 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,14 +366,14 @@ int ImplFontCharMap::CountCharsInRange( sal_uInt32 cMin, sal_uInt32 cMax ) const
 
     // find and adjust range and char count for cMin
     int nRangeMin = ImplFindRangeIndex( cMin );
-    if( (nRangeMin & 1) != 0 )
+    if( nRangeMin & 1 )
         ++nRangeMin;
     else if( cMin > mpRangeCodes[ nRangeMin ] )
         nCount -= cMin - mpRangeCodes[ nRangeMin ];
 
     // find and adjust range and char count for cMax
     int nRangeMax = ImplFindRangeIndex( cMax );
-    if( (nRangeMin & 1) != 0 )
+    if( nRangeMax & 1 )
         --nRangeMax;
     else
         nCount -= mpRangeCodes[ nRangeMax+1 ] - cMax - 1;
@@ -408,9 +408,9 @@ sal_uInt32 ImplFontCharMap::GetNextChar( sal_uInt32 cChar ) const
     if( cChar >= GetLastChar() )
         return GetLastChar();
 
-    int nRange = ImplFindRangeIndex( cChar );
-    if( nRange & 1 )                        // outside a range?
-        return mpRangeCodes[ nRange + 1 ];  // => first in next range
+    int nRange = ImplFindRangeIndex( cChar + 1 );
+    if( nRange & 1 )                       // outside of range?
+        return mpRangeCodes[ nRange + 1 ]; // => first in next range
     return (cChar + 1);
 }
 
@@ -423,11 +423,9 @@ sal_uInt32 ImplFontCharMap::GetPrevChar( sal_uInt32 cChar ) const
     if( cChar > GetLastChar() )
         return GetLastChar();
 
-    int nRange = ImplFindRangeIndex( cChar );
+    int nRange = ImplFindRangeIndex( cChar - 1 );
     if( nRange & 1 )                            // outside a range?
         return (mpRangeCodes[ nRange ] - 1);    // => last in prev range
-    else if( cChar == mpRangeCodes[ nRange ] )  // first in prev range?
-        return (mpRangeCodes[ nRange-1 ] - 1);  // => last in prev range
     return (cChar - 1);
 }
 
@@ -443,10 +441,11 @@ int ImplFontCharMap::GetIndexFromChar( sal_uInt32 cChar ) const
         sal_uInt32 cFirst = *(pRange++);
         sal_uInt32 cLast  = *(pRange++);
         if( cChar >= cLast )
-            break;
-        if( cChar >= cFirst )
+            nCharIndex += cLast - cFirst;
+        else if( cChar >= cFirst )
             return nCharIndex + (cChar - cFirst);
-        nCharIndex += cLast - cFirst;
+        else
+            break;
     }
 
     return -1;
