@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:38:08 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3126,10 +3126,10 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
             xOldStorageHolder = pImp->m_xDocStorage;
             pImp->m_xDocStorage = xStorage;
             bSendNotification = sal_True;
-        }
 
-        if ( IsEnableSetModified() )
-            SetModified( sal_False );
+            if ( IsEnableSetModified() )
+                SetModified( sal_False );
+        }
     }
 
     if ( bSendNotification )
