@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Commands.xcs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 11:57:24 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,15 @@
                     <desc>A localized text that describes the command or identifier. Can be used as a label inside a menu or as short tool tip help.</desc>
                 </info>
             </prop>
+            <prop oor:name="ContextLabel" oor:type="xs:string" oor:localized="true">
+                <info>
+                    <desc xml:lang="en-US">A localized text that describes the identifier of a command in a structured menu.  </desc>
+                </info>
+            </prop>
             <prop oor:name="Properties" oor:type="xs:int">
                 <info>
                     <desc xml:lang="en-US">
-                    Additional information about a single command. 
+                    Additional information about a single command.
                     Bit 0 = Command has an image.
                     Bit 1 = Image must be mirrored  (CTL/vertical text).
                     Bit 2 = Image must be rotated (CTL/vertical text).
