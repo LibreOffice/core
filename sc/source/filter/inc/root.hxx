@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:02:35 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,6 @@ class SvNumberFormatter;
 class ScRangeName;
 
 class NameBuffer;
-class RangeNameBuffer;
 class RangeNameBufferWK3;
 class ShrfmlaBuffer;
 class ExtNameBuff;
@@ -97,6 +96,8 @@ class ExcExternDup;
 class ScExtDocOptions;
 
 class XclImpPivotCacheList;
+class XclImpAutoFilterBuffer;
+class _ScRangeListTabs;
 
 class XclExpChTrTabId;
 class XclExpUserBViewList;
@@ -127,7 +128,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     BiffTyp             eHauptDateiTyp;         // grobe Klassifizierung
     ExtSheetBuffer*     pExtSheetBuff;
     NameBuffer*         pTabNameBuff;
-    RangeNameBuffer*    pRNameBuff;
     ShrfmlaBuffer*      pShrfmlaBuff;
     ExtNameBuff*        pExtNameBuff;
     ExcelToSc*          pFmlaConverter;
@@ -136,12 +136,14 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
 
     BOOL                bCellCut;               // bei Ueberlauf max. Cols / Rows
     BOOL                bBreakSharedFormula;    // SharedFormula bei Export aufbrechen?
-    BOOL                bDefaultPage;           // Landscape etc. nicht gesetzt
     BOOL                bChartTab;              // Tabelle mit einem einzigen Chart
 
     // Biff8
     SvStorage*              pPivotCacheStorage;
     XclImpPivotCacheList*   pImpPivotCacheList;     // pivot caches for import
+    XclImpAutoFilterBuffer* pAutoFilterBuffer;      // ranges for autofilter and advanced filter
+    _ScRangeListTabs*       pPrintRanges;
+    _ScRangeListTabs*       pPrintTitles;
 
     // Erweiterungen fuer Export
     XclExpChTrTabId*        pTabId;             // pointer to rec list, do not destroy
@@ -161,9 +163,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     XclPivotCacheList*  pPivotCacheList;
 
     BOOL                bWriteVBAStorage;
-
-    SfxStyleSheet*      pStyleSheet;
-    SfxItemSet*         pStyleSheetItemSet;
 
 //  const SvxURLField*  pLastHlink;             // last found hyperlink
     XclExpHyperlink*    pLastHlink;
