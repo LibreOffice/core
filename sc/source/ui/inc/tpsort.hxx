@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpsort.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-18 09:16:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,10 @@
 #include "global.hxx"
 #endif
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 //------------------------------------------------------------------------
 
 #define SC_MAXFIELDS    200
@@ -146,10 +150,10 @@ private:
     ScSortDlg*          pDlg;
     ScViewData*         pViewData;
     const ScSortParam&  rSortData;
-    USHORT              nFieldArr[SC_MAXFIELDS];
+    SCCOLROW            nFieldArr[SC_MAXFIELDS];
     USHORT              nFieldCount;
-    USHORT              nFirstCol;
-    USHORT              nFirstRow;
+    SCCOL               nFirstCol;
+    SCROW               nFirstRow;
     BOOL                bHasHeader;
     BOOL                bSortByRows;
 
@@ -163,7 +167,7 @@ private:
     void    DisableField    ( USHORT nField );
     void    EnableField     ( USHORT nField );
     void    FillFieldLists  ();
-    USHORT  GetFieldSelPos  ( USHORT nField );
+    USHORT  GetFieldSelPos  ( SCCOLROW nField );
 
     // Handler ------------------------
     DECL_LINK( SelectHdl, ListBox * );
