@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:05:28 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ void OViewContainer::appendObject( const Reference< XPropertySet >& descriptor )
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE VIEW ");
         ::rtl::OUString sComposedName = ::dbtools::composeTableName(m_xMetaData,descriptor,sal_True,::dbtools::eInTableDefinitions);
         if(!sComposedName.getLength())
-            ::dbtools::throwFunctionSequenceException(*this);
+            ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
 
         aSql += sComposedName + ::rtl::OUString::createFromAscii(" AS ");
         ::rtl::OUString sCommand;
@@ -269,7 +269,7 @@ void OViewContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementN
         }
 
         if(!sComposedName.getLength())
-            ::dbtools::throwFunctionSequenceException(*this);
+            ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
 
         ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP VIEW ");
         aSql += sComposedName;
