@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnexpectedEOFException.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ module com {  module sun {  module star {  module io {
 /** is thrown when the <code>EOF/code> is reached during reading a datatype
     (<code>long</code>, <code>string</code>, etc.).
  */
-exception UnexpectedEOFException: com::sun::star::io::IOException
+published exception UnexpectedEOFException: com::sun::star::io::IOException
 {
 };
 
