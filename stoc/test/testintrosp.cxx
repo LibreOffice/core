@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testintrosp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-11-08 09:36:19 $
+ *  last change: $Author: pluby $ $Date: 2001-02-12 03:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1598,7 +1598,11 @@ int __cdecl main( int argc, char * argv[] )
 #ifdef SAL_W32
         libName = OUString::createFromAscii("corefl.dll");
 #else
+#ifdef MACOSX
+        libName = OUString::createFromAscii("libcorefl.dylib.framework");
+#else
         libName = OUString::createFromAscii("libcorefl.so");
+#endif
 #endif
 //          ORealDynamicLoader::computeLibraryName( OUString::createFromAscii("corefl"), libName);
         xImplReg->registerImplementation(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
@@ -1610,7 +1614,11 @@ int __cdecl main( int argc, char * argv[] )
 #ifdef SAL_W32
         libName = OUString::createFromAscii("insp.dll");
 #else
+#ifdef MACOSX
+        libName = OUString::createFromAscii("libinsp.dylib.framework");
+#else
         libName = OUString::createFromAscii("libinsp.so");
+#endif
 #endif
 //          ORealDynamicLoader::computeLibraryName( OUString::createFromAscii("insp"), libName);
         xImplReg->registerImplementation(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),

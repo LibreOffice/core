@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testiadapter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-10-06 14:25:14 $
+ *  last change: $Author: pluby $ $Date: 2001-02-12 03:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1001,7 +1001,11 @@ static sal_Bool test_invocation( const Reference< XMultiServiceFactory > & xMgr 
 
 #ifdef UNX
 #define REG_PREFIX      "lib"
+#ifdef MACOSX
+#define DLL_POSTFIX     ".dylib.framework"
+#else
 #define DLL_POSTFIX     ".so"
+#endif
 #else
 #define REG_PREFIX      ""
 #define DLL_POSTFIX     ".dll"

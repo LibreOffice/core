@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcorefl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:35 $
+ *  last change: $Author: pluby $ $Date: 2001-02-12 03:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,7 +388,11 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
 #ifdef UNX
 #define REG_PREFIX      "lib"
+#ifdef MACOSX
+#define DLL_POSTFIX     ".dylib.framework"
+#else
 #define DLL_POSTFIX     ".so"
+#endif
 #else
 #define REG_PREFIX      ""
 #define DLL_POSTFIX     ".dll"

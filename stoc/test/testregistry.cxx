@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testregistry.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-11-08 09:36:19 $
+ *  last change: $Author: pluby $ $Date: 2001-02-12 03:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,11 @@ void test_SimpleRegistry()
 #ifdef SAL_W32
     OUString dllName( OUString::createFromAscii("simreg.dll") );
 #else
+#ifdef MACOSX
+    OUString dllName( OUString::createFromAscii("libsimreg.dylib.framework") );
+#else
     OUString dllName( OUString::createFromAscii("libsimreg.so") );
+#endif
 #endif
 
     if (pModule->load(dllName))
