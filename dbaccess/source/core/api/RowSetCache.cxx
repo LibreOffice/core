@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:19:01 $
+ *  last change: $Author: oj $ $Date: 2000-12-14 11:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -914,7 +914,7 @@ sal_Bool ORowSetCache::fillMatrix(sal_Int32 _nNewStartPos,sal_Int32 _nNewEndPos)
         {
             if(!aIter->isValid())
                 *aIter = new connectivity::ORowVector< ORowSetValue >(m_xMetaData->getColumnCount());
-            m_pCacheSet->fillValueRow(*aIter,m_nPosition+i);
+            m_pCacheSet->fillValueRow(*aIter,i);
         }
         else
         {   // there are no more rows found so we can fetch some before start
@@ -983,9 +983,10 @@ sal_Bool ORowSetCache::moveWindow()
             if(nNewStartPos < 1)
             {
                 bCheck = m_pCacheSet->first();
-                m_nStartPos = 0;
-                aEnd = m_pMatrix->begin() + (sal_Int32)(m_nFetchSize*0.5);
+                //  aEnd = m_pMatrix->begin() + (sal_Int32)(m_nFetchSize*0.5);
+                aEnd = m_pMatrix->begin() + nNewEndPos - m_nStartPos - nNewStartPos;
                 aIter = aEnd;
+                m_nStartPos = 0;
             }
             else
             {
@@ -1019,8 +1020,7 @@ sal_Bool ORowSetCache::moveWindow()
             {
                 m_nStartPos = 0;
 
-                if(!m_pCacheSet->isBeforeFirst())
-                    m_pCacheSet->beforeFirst();
+                m_pCacheSet->beforeFirst();
 
                 sal_Bool bCheck;
                 ORowSetMatrix::iterator aIter = m_pMatrix->begin();
@@ -1030,7 +1030,7 @@ sal_Bool ORowSetCache::moveWindow()
                     {
                         if(!aIter->isValid())
                             *aIter = new connectivity::ORowVector< ORowSetValue >(m_xMetaData->getColumnCount());
-                        m_pCacheSet->fillValueRow(*aIter,i);
+                        m_pCacheSet->fillValueRow(*aIter,i+1);
                     }
                     else
                         *aIter = NULL;
@@ -1555,6 +1555,9 @@ void SAL_CALL ORowSetCache::clearWarnings(  ) throw(SQLException, RuntimeExcepti
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.17  2000/12/12 12:19:01  oj
+    #80933# change flush of attributes
+
     Revision 1.16  2000/12/06 09:55:44  oj
     #80219# correted deleterow(s) and remeber position
 
