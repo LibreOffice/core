@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:57:34 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,7 +517,12 @@ namespace abp
             case STATE_SELECT_ABTYPE:
 
                 if  ( needAdminInvokationPage() )
+                {
+                    // ........................................................
+                    // create the new data source
+                    implCreateDataSource( );
                     return STATE_INVOKE_ADMIN_DIALOG;
+                }
                 // _NO_ break !!!
 
             case STATE_INVOKE_ADMIN_DIALOG:
