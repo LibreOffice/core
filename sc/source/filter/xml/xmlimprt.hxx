@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-26 12:08:42 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,6 +782,7 @@ class ScXMLImport: public SvXMLImport
     sal_Bool                bLoadDoc;   // Load doc or styles only
     sal_Bool                bRemoveLastChar;
     sal_Bool                bNullDateSetted;
+    sal_Bool                bSelfImportingXMLSet;
     sal_uInt32              nRangeOverflowType;
 
 
@@ -968,6 +969,8 @@ public:
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::xml::sax::XDocumentHandler
+    virtual void SAL_CALL startDocument(void)
+        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL endDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
 
