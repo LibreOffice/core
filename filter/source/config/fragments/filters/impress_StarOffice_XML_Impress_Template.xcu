@@ -1,15 +1,10 @@
     <node oor:name="impress_StarOffice_XML_Impress_Template" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH OWN ALIEN</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value>CXMLV</value></prop>
         <prop oor:name="FileFormatVersion"><value>6200</value></prop>
         <prop oor:name="Type"><value>impress_StarOffice_XML_Impress_Template</value></prop>
-        <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
-        <prop oor:name="UIComponent"/>
-        <prop oor:name="UserData"><value>CXMLV</value></prop>
-        <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
-        <prop oor:name="UIName">
-            <value xml:lang="de">%productname% %formatversion% Präsentationsvorlage</value>
-            <value xml:lang="en-US">%productname% %formatversion% Presentation Template</value>
-            <value xml:lang="x-translate">%productname% %formatversion% Presentation Template</value>
-        </prop>
-        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH OWN ALIEN</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
     </node>
