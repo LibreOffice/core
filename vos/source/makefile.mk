@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pluby $ $Date: 2000-12-14 07:35:19 $
+#   last change: $Author: pluby $ $Date: 2001-02-10 21:32:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,6 +98,12 @@ SLOFILES=       $(SLO)$/acceptor.obj    \
                 $(SLO)$/xception.obj	\
                 $(SLO)$/evtque.obj
 
+# NETBSD: somewhere we have to instantiate the static data members.
+# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+SLOFILES+=$(SLO)$/staticmb.obj
+.ENDIF
 
 # $(SLO)$/evtque.obj
 
@@ -132,6 +138,13 @@ OBJFILES=       $(OBJ)$/acceptor.obj    \
                 $(OBJ)$/dynload.obj		\
                 $(OBJ)$/xception.obj	\
                 $(OBJ)$/evtque.obj
+
+# NETBSD: somewhere we have to instantiate the static data members.
+# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+OBJFILES+=$(OBJ)$/staticmb.obj
+.ENDIF
 
 # $(SLO)$/evtque.obj
 .ENDIF
