@@ -92,9 +92,10 @@ OUString getMsgString( USHORT nId, char const * aFallBackMsg )
 
 /// @attention Must be called (directly or indirectly) from within a catch block
 static
-bool showFallbackMsg( OUString const & sFallbackMsg )
+bool showFallbackMsg( OUString const & sFallbackMsg,
+                     const rtl::OUString& aMessage)
 {
-    rtl::OUStringBuffer sMsg( CreateErrorMessageForCurrentConfigurationException() );
+    rtl::OUStringBuffer sMsg(aMessage);
 
     sMsg.appendAscii("\n").append( sFallbackMsg );
 
@@ -114,7 +115,8 @@ bool showFallbackMsg( OUString const & sFallbackMsg )
 
 /// @attention Must be called (directly or indirectly) from within a catch block
 static
-void showOfflineFallbackMsg( ConfigurationProvider & rxOfflineProvider )
+void showOfflineFallbackMsg( ConfigurationProvider & rxOfflineProvider,
+                            const rtl::OUString& aMessage)
 {
     OSL_PRECOND( rxOfflineProvider.is(), "Reporting fallback to provider that could not be created" );
 
@@ -125,21 +127,22 @@ void showOfflineFallbackMsg( ConfigurationProvider & rxOfflineProvider )
         "The changes you have made to your personal settings will be stored locally and "
         "synchronized the next time you start StarOffice.") );
 
-    if (! showFallbackMsg( aFallbackMsg.makeStringAndClear() ) )
+    if (! showFallbackMsg( aFallbackMsg.makeStringAndClear(), aMessage ) )
         rxOfflineProvider.clear();
 }
 // ----------------------------------------------------------------------------
 
 /// @attention Must be called (directly or indirectly) from within a catch block
 static
-void showLocalFallbackMsg( ConfigurationProvider & rxLocalProvider )
+void showLocalFallbackMsg( ConfigurationProvider & rxLocalProvider,
+                            const rtl::OUString& aMessage)
 {
     OSL_PRECOND( rxLocalProvider.is(), "Reporting fallback to provider that could not be created" );
 
     rtl::OUString aFallbackMsg( getMsgString(STR_CONFIG_WARN_LOCAL_FALLBACK,
         "StarOffice will continue the startup using your locally stored personal settings.") );
 
-    if (! showFallbackMsg( aFallbackMsg ) )
+    if (! showFallbackMsg( aFallbackMsg, aMessage ) )
         rxLocalProvider.clear();
 }
 // ----------------------------------------------------------------------------
@@ -302,7 +305,56 @@ sal_Bool tryCreateLocalConfiguration( ConfigurationProvider & rxProvider )
     return tryCreateConfigurationWithContext( rxProvider, wrapContext(aEntries, arraysize( aEntries )) );
 }
 // ----------------------------------------------------------------------------
+/// @attention this method must be called from a catch statement!
+static void handleGeneralException(ConfigurationProvider& xProvider,
+                                   uno::Exception& aException,
+                                   const rtl::OUString& aMessage)
+{
+    aException.Message = aMessage ;
+    if (tryCreateLocalConfiguration(xProvider))
+    {
+        showLocalFallbackMsg(xProvider, aMessage) ;
+    }
+    else { throw ; }
+}
+// ----------------------------------------------------------------------------
+/// @attention this method must be called from a catch statement!
+static void handleAccessException(ConfigurationProvider& xProvider,
+                                  uno::Exception& aException,
+                                  const rtl::OUString& aMessage)
+{
+    aException.Message = aMessage ;
+    if (tryCreateOfflineConfiguration(xProvider))
+    {
+        showOfflineFallbackMsg(xProvider, aMessage) ;
+    }
+    else if (tryCreateLocalConfiguration(xProvider))
+    {
+        showLocalFallbackMsg(xProvider, aMessage) ;
+    }
+    else { throw ; }
+}
+// ----------------------------------------------------------------------------
+/// @attention this method must be called from a catch statement!
+static void handleConnectException(ConfigurationProvider& xProvider,
+                                   uno::Exception& aException,
+                                   const rtl::OUString& aMessage)
+{
+    handleAccessException(xProvider, aException, aMessage) ;
+}
+// ----------------------------------------------------------------------------
 
+/**
+  [cm122549]
+  Ok, I know it looks ugly to have the whole list of exceptions being
+  caught here in one go, when we have only three different kinds of
+  behaviour for them. The problem is that there is apparently a bug in
+  Windows which, if we try to do another throw later to refine our
+  understanding of the exception, will actually delete the exception
+  object twice. Which is not nice, especially when considering what
+  store in those exceptions. Hence the catchfest here once and for
+  all to be able to generate all the different messages.
+  */
 uno::Reference< lang::XMultiServiceFactory > CreateApplicationConfigurationProvider( )
 {
     uno::Reference< lang::XMultiServiceFactory > xProvider;
@@ -311,92 +363,60 @@ uno::Reference< lang::XMultiServiceFactory > CreateApplicationConfigurationProvi
     {
         xProvider = createDefaultConfigurationProvider( );
     }
-    catch (backend::CannotConnectException & )
+    catch (configuration::InvalidBootstrapFileException & exception)
     {
-        if ( tryCreateOfflineConfiguration(xProvider) )
-            showOfflineFallbackMsg( xProvider );
-
-        else if ( tryCreateLocalConfiguration(xProvider) )
-            showLocalFallbackMsg( xProvider );
-
-        else
-            throw;
+        handleGeneralException(xProvider, exception,
+                getMsgString( STR_CONFIG_ERR_SETTINGS_INCOMPLETE,
+                            "The startup settings for accessing the central configuration are incomplete. "));
     }
-    catch (backend::BackendAccessException & )
+    catch (backend::InvalidAuthenticationMechanismException & exception)
     {
-        if ( tryCreateOfflineConfiguration(xProvider) )
-            showOfflineFallbackMsg( xProvider );
-
-        else if ( tryCreateLocalConfiguration(xProvider) )
-            showLocalFallbackMsg( xProvider );
-
-        else
-            throw;
+        handleGeneralException(xProvider, exception,
+                getMsgString( STR_CONFIG_ERR_MECHANISM_INVALID,
+                            "The specified authentication method to access the central configuration is not supported. "));
     }
-    catch (uno::Exception & )
+    catch (backend::AuthenticationFailedException & exception)
     {
-        if ( tryCreateLocalConfiguration(xProvider) )
-            showLocalFallbackMsg( xProvider );
-
-        else
-            throw;
-    }
-
-    return xProvider;
-}
-// ----------------------------------------------------------------------------
-OUString CreateErrorMessageForCurrentConfigurationException()
-{
-    try
-    {
-        throw;
-    }
-    catch (configuration::InvalidBootstrapFileException & )
-    {
-        return getMsgString( STR_CONFIG_ERR_SETTINGS_INCOMPLETE,
-                            "The startup settings for accessing the central configuration are incomplete. ");
-    }
-    catch (backend::InvalidAuthenticationMechanismException & )
-    {
-        return getMsgString( STR_CONFIG_ERR_MECHANISM_INVALID,
-                            "The specified authentication method to access the central configuration is not supported. ");
-    }
-    catch (backend::AuthenticationFailedException & )
-    {
-        return getMsgString( STR_CONFIG_ERR_LOGIN_FAILED,
+        handleGeneralException(xProvider, exception,
+                getMsgString( STR_CONFIG_ERR_LOGIN_FAILED,
                             "Your login to the central configuration was not successful. "
-                            "Either the user name or password is invalid. ");
+                            "Either the user name or password is invalid. "));
     }
-    catch (backend::CannotConnectException & )
+    catch (backend::CannotConnectException & exception)
     {
-        return getMsgString( STR_CONFIG_ERR_CANNOT_CONNECT,
-                            "A connection to the central configuration could not be established. ");
+        handleConnectException(xProvider, exception,
+                getMsgString( STR_CONFIG_ERR_CANNOT_CONNECT,
+                            "A connection to the central configuration could not be established. "));
     }
-    catch (backend::InsufficientAccessRightsException & )
+    catch (backend::InsufficientAccessRightsException & exception)
     {
-        return getMsgString( STR_CONFIG_ERR_RIGHTS_MISSING,
-                            "You cannot access the central configuration because of missing access rights. ");
+        handleAccessException(xProvider, exception,
+                getMsgString( STR_CONFIG_ERR_RIGHTS_MISSING,
+                            "You cannot access the central configuration because of missing access rights. "));
     }
-    catch (backend::BackendAccessException & )
+    catch (backend::BackendAccessException & exception)
     {
-        return getMsgString( STR_CONFIG_ERR_ACCESS_GENERAL,
-                            "A general access error occurred while accessing your central configuration.");
+        handleAccessException(xProvider, exception,
+                getMsgString( STR_CONFIG_ERR_ACCESS_GENERAL,
+                            "A general access error occurred while accessing your central configuration."));
     }
-    catch (backend::BackendSetupException & )
+    catch (backend::BackendSetupException & exception)
     {
-        return getMsgString( STR_CONFIG_ERR_CANNOT_CONNECT,
-                            "A connection to the central configuration could not be established. ");
+        handleGeneralException(xProvider, exception,
+                getMsgString( STR_CONFIG_ERR_CANNOT_CONNECT,
+                            "A connection to the central configuration could not be established. "));
     }
-    catch (configuration::CannotLoadConfigurationException & )
+    catch (configuration::CannotLoadConfigurationException & exception)
     {
-        return getMsgString( STR_CONFIG_ERR_CANNOT_CONNECT,
-                            "A connection to the central configuration could not be established. ");
+        handleGeneralException(xProvider,  exception,
+                getMsgString( STR_CONFIG_ERR_CANNOT_CONNECT,
+                            "A connection to the central configuration could not be established. "));
     }
-    catch (uno::Exception & )
+    catch (uno::Exception & exception)
     {
-        return getMsgString( STR_CONFIG_ERR_ACCESS_GENERAL,
-                            "A general error occurred while accessing your central configuration.");
+        handleGeneralException(xProvider, exception,
+                getMsgString( STR_CONFIG_ERR_ACCESS_GENERAL,
+                            "A general error occurred while accessing your central configuration."));
     }
+    return xProvider ;
 }
-
-// ----------------------------------------------------------------------------

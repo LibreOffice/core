@@ -10,6 +10,8 @@
 #endif
 
 /** creates a ConfigurationProvider instance
+Important: exceptions thrown from that method will contain a readily
+displayable message.
 
     @return
         The default configuration provider for the application or<br/>
@@ -29,16 +31,5 @@
 extern
 com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
     CreateApplicationConfigurationProvider( );
-
-/** returns an error message for the exception currently being processed
-
-    <p>Can deal with the exceptions that can occur during configuration creation.</p>
-
-    @attention Must be called from within a catch block !
-    @attention Must be called only once from a given catch block.
-    @attention After calling this, the exception can't be rethrown any more.
-*/
-extern
-rtl::OUString CreateErrorMessageForCurrentConfigurationException();
 
 #endif
