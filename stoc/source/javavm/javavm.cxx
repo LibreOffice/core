@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: jl $ $Date: 2002-10-31 17:01:38 $
+ *  last change: $Author: jl $ $Date: 2002-11-12 16:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -994,6 +994,14 @@ static void getINetPropsFromConfig(JVM * pjvm,
     xConfRegistry_simple->close();
 }
 
+/* When the setup is started from an installation (not the first installation)
+and Java is used then this function fails, because the ConfigurationRegistry service
+is not available to the setup. That is, the javarc cannot be read and values from
+environment variables are used to initialize the JavaVM service. The javaldx, therefore,
+must not use the javarc either. Otherwise the LD_LIBRARY_PATH (set by javaldx) would be
+for a different java as the one the runtime lib is from. The runtime lib is set in
+the setup (environment variable OO_JAVA_PROPERTIES).
+*/
 static void getJavaPropsFromConfig(JVM * pjvm,
                                    const Reference<XMultiComponentFactory> & xSMgr,
                                    const Reference<XComponentContext> &xCtx) throw(Exception)
