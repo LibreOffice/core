@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscerror.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 13:58:44 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 /****************** D E F I N I T I O N S ********************************/
 /******************* R e t u r n   E r r o r s         *******************/
-#define ERR_OK              0xFFFF
+#define ERR_OK              0xFFFFFFFF
 
 #define ERR_ERROR           0x0100
 #define ERR_UNKNOWN_METHOD  0x0101  // Return
@@ -132,13 +132,13 @@
 #define ERR_WARNINGEND      0x2000
 
 class ERRTYPE {
-    USHORT  nError;
+    sal_uInt32  nError;
 public:
     ERRTYPE()                { nError = ERR_OK; }
-    ERRTYPE( USHORT nErr )   { nError = nErr; }
+    ERRTYPE( sal_uInt32 nErr )   { nError = nErr; }
     ERRTYPE( const ERRTYPE & rErr ) { nError = rErr.nError; };
     ERRTYPE& operator = ( const ERRTYPE & rError );
-    operator  USHORT() const { return( nError ); }
+    operator  sal_uInt32() const { return( nError ); }
     BOOL IsError() const     { return( nError <= ERR_ERROREND ); }
     BOOL IsOk() const        { return( !IsError() ); }
     BOOL IsWarning() const   {
@@ -161,7 +161,7 @@ class RscError
     void ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
                       const RscId & aId );
 public:
-    USHORT  nErrors;// Anzahl der Fehler
+    sal_uInt32  nErrors;// Anzahl der Fehler
                     RscError(){
                         fListing = NULL;
                         nErrors = 0;
