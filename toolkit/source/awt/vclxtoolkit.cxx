@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:20:13 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,9 @@
 #endif
 #ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
+#endif
+#ifndef _SV_DOCKINGAREA_HXX
+#include <vcl/dockingarea.hxx>
 #endif
 #ifndef _SV_DOCKWIN_HXX
 #include <vcl/dockwin.hxx>
@@ -369,6 +372,7 @@ static ComponentInfo __FAR_DATA aComponentInfos [] =
     { "datebox",            WINDOW_DATEBOX },
     { "datefield",          WINDOW_DATEFIELD },
     { "dialog",             WINDOW_DIALOG },
+    { "dockingarea",        WINDOW_DOCKINGAREA },
     { "dockingwindow",      WINDOW_DOCKINGWINDOW },
     { "edit",               WINDOW_EDIT },
     { "errorbox",           WINDOW_ERRORBOX },
@@ -870,6 +874,9 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 static_cast<DateField*>(pNewWindow)->EnableEmptyFieldValue( TRUE );
                 *ppNewComp = new VCLXDateField;
                 ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(DateField*)pNewWindow );
+            break;
+            case WINDOW_DOCKINGAREA:
+                pNewWindow = new DockingAreaWindow( pParent );
             break;
             case WINDOW_EDIT:
                 pNewWindow = new Edit( pParent, nWinBits );
