@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 11:50:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,6 +346,14 @@ TabPage RID_SVXPAGE_BORDER
         Hide = TRUE;
         Text [ de ] = "Mit dem nächsten Absatz verschmelzen" ;
         Text [ en-US ] = "~Merge with next paragraph" ;
+    };
+    CheckBox  CB_MERGEADJACENTBORDERS
+    {
+        Pos = MAP_APPFONT ( 12 , 173 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Hide = TRUE;
+        Text = "Be~nachbarte Linienstile zusammenführen" ;
+        Text [ english_us ] = "~Merge adjacent line styles" ;
     };
 
 
