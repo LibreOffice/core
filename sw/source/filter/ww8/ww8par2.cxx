@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-22 14:24:58 $
+ *  last change: $Author: cmc $ $Date: 2002-05-29 11:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1113,7 +1113,7 @@ void WW8TabBandDesc::ReadDef( BOOL bVer67, const BYTE* pS )
 
     short nFileCols = nLen / ( bVer67 ? 10 : 20 );  // wirklich abgespeichert
 
-    if( !pTCs )
+    if (!pTCs && nCols)
     {
         // lege leere TCs an
         pTCs = new WW8_TCell[nCols];
@@ -1892,13 +1892,16 @@ void WW8TabDesc::CalcDefaults()
                 nAddCols--;
             }
         }
+
+        ASSERT(i,"no columns in row ?");
+
         /*
         #96345#
         If the last cell was "false" then there is no valid cell following it,
         so the default mapping forward wont't work. So map it (and
         contigious invalid cells backwards to the last valid cell instead.
         */
-        if (pR->bExist[i-1] == FALSE)
+        if (i && pR->bExist[i-1] == FALSE)
         {
             USHORT k=i-1;
             while (k && pR->bExist[k] == FALSE)
