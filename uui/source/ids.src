@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:04:10 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 18:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  Miscellaneous Resources
 //
-// $Author: hr $ $Date: 2000-09-18 17:04:10 $ $Revision: 1.1.1.1 $
+// $Author: kz $ $Date: 2000-10-27 18:11:45 $ $Revision: 1.2 $
 //============================================================================
 
 #ifndef UUI_IDS_HRC
@@ -84,7 +84,7 @@ String RID_KEEP_PASSWORD
     Text[ french ] = "Se rappeler du ~mot de passe jusqu'à la fin de la session";
     Text[ greek ] = "Áğï~ìíçìüíåõóç êùäéêïı İùò ôï ôİëïò ôçò åöáñìïãŞò";
     Text[ italian ] = "An~nota password fino alla fine dell'applicazione";
-    Text[ japanese ] = "Êß½Ü°ÄŞ‚Í±ÌßØ¹°¼®İI—¹‚Ü‚Å‹L‰¯‚µ‚Ä‚¨‚­";
+    Text[ japanese ] = "Êß½Ü°ÄŞ‚Í±ÌßØ¹°¼®İI—¹‚Ü‚Å‹L‰¯‚µ‚Ä‚¨‚­(~R)";
     Text[ korean ] = "¼¼¼ÇÀ» Á¾·áÇÒ ¶§±îÁö ÆĞ½º¿öµå ±â¾ï";
     Text[ polish ] = "Zapamiêtaj has³o do koñca aplikacji";
     Text[ portuguese ] = "~Lembrar senha até terminar a aplicação";
@@ -112,10 +112,10 @@ String RID_SAVE_PASSWORD
     Text[ italian ] = "Salva pa~ssword ";
     Text[ japanese ] = "Êß½Ü°ÄŞ‚Ì’·Šú•Û‘¶(~S)";
     Text[ korean ] = "ÆĞ½º¿öµå ¿µ±¸ ÀúÀå";
-    Text[ polish ] = "Zapisz has³o";
+    Text[ polish ] = "Zapisz has³o na sta³e";
     Text[ portuguese ] = "~Guardar senha";
     Text[ portuguese_brazilian ] = "Passwort ~speichern";
-    Text[ russian ] = "Ñîõğàíèòü ïàğîëü";
+    Text[ russian ] = "Çàïîìíèòü ïàğîëü";
     Text[ spanish ] = "~Guardar contraseña";
     Text[ swedish ] = "~Spara lösenord permanent";
     Text[ turkish ] = "~Save password";
