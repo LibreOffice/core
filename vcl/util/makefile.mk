@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obr $ $Date: 2001-02-14 08:32:01 $
+#   last change: $Author: hdu $ $Date: 2001-02-15 16:52:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -190,10 +190,7 @@ LIB1FILES+= $(SLB)$/ex.lib
 .ENDIF
 
 .IF "$(remote)" != ""
-LIB1FILES+= \
-            $(SLB)$/remote.lib	\
-            $(SLB)$/glyphs.lib
-
+    LIB1FILES+= $(SLB)$/remote.lib
 .IF "$(COM)"=="GCC"
 LIB1OBJFILES=$(SLO)$/salmain.obj
 .ENDIF
@@ -205,9 +202,17 @@ LIB1FILES+= \
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
-.IF "$(PSPRINT)"!=""
-SHL1STDLIBS=-lpsp$(VERSION)$(DLLPOSTFIX)
+.IF "$(PSPRINT)" != ""
+    SHL1STDLIBS=-lpsp$(VERSION)$(DLLPOSTFIX)
 .ENDIF
+.IF "$(USE_XRENDER)" != ""
+    SHL1STDLIBS+=-lXrender
+.ENDIF
+.ENDIF
+
+.IF "$(USE_BUILTIN_RASTERIZER)"!=""
+    LIB1FILES +=	$(SLB)$/glyphs.lib
+    SHL1STDLIBS+=	$(FREETYPELIB)
 .ENDIF
 
 SHL1TARGET= vcl$(VERSION)$(DLLPOSTFIX)
@@ -224,9 +229,7 @@ SHL1STDLIBS+=\
             $(COMPHELPERLIB)
 
 .IF "$(remote)" != ""
-SHL1STDLIBS+=\
-            $(UNOLIB)            \
-            $(FREETYPELIB)
+SHL1STDLIBS+=	$(UNOLIB)
 .ENDIF
 
 .IF "$(GUI)"!="MAC"
