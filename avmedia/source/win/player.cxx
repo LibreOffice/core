@@ -2,9 +2,9 @@
  *
  *  $RCSfile: player.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date:
+ *  last change: $Author: rt $ $Date:
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ bool Player::create( const ::rtl::OUString& rURL )
                 mpEV = NULL;
         }
 
-        if( SUCCEEDED( hR = mpGB->RenderFile( rURL, NULL ) ) &
+        if( SUCCEEDED( hR = mpGB->RenderFile( rURL, NULL ) ) &&
             SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaControl, (void**) &mpMC ) ) &&
             SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaEventEx, (void**) &mpME ) ) &&
             SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaSeeking, (void**) &mpMS ) ) &&
@@ -283,7 +283,14 @@ void SAL_CALL Player::setMediaTime( double fTime )
     throw (uno::RuntimeException)
 {
     if( mpMP  )
+    {
+        const bool bPlaying = isPlaying();
+
         mpMP->put_CurrentPosition( fTime );
+
+        if( !bPlaying && mpMC )
+            mpMC->StopWhenReady();
+    }
 }
 
 // ------------------------------------------------------------------------------
