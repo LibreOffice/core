@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmaddressblockpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-29 09:31:02 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1415,33 +1415,8 @@ void AddressMultiLineEdit::SetText( const String& rStr )
   -----------------------------------------------------------------------*/
 void AddressMultiLineEdit::Modified()
 {
-    ExtTextEngine* pTextEngine = GetTextEngine();
-    ULONG  nParaCount = pTextEngine->GetParagraphCount();
-    for(ULONG nPara = 0; nPara < nParaCount; ++nPara)
-    {
-        String sPara = pTextEngine->GetText( nPara );
-        if(sPara.Len() && sPara.GetChar(sPara.Len() - 1) != ' ')
-        {
-            //remove the text attributes to prevent expansion of the last one
-            pTextEngine->RemoveAttribs( nPara );
-
-            TextPaM aPaM(nPara, sPara.Len());
-            pTextEngine->ReplaceText(TextSelection( aPaM ), String(' '));
-            //restore the attributes
-            TextAttribProtect aProtectAttr;
-            USHORT nIndex = 0;
-            while(true)
-            {
-                USHORT nStart = sPara.Search( '<', nIndex );
-                USHORT nEnd = sPara.Search( '>', nStart );
-                nIndex = nEnd;
-                if(nStart != STRING_NOTFOUND && nEnd != STRING_NOTFOUND)
-                    pTextEngine->SetAttrib( aProtectAttr, nPara, nStart, nEnd + 1, FALSE );
-                else
-                    break;
-            }
-        }
-    }
+    //restore the attributes
+    SetText( GetAddress() );
 }
 
 /*-- 25.06.2004 12:32:41---------------------------------------------------
@@ -1450,35 +1425,22 @@ void AddressMultiLineEdit::Modified()
   -----------------------------------------------------------------------*/
 void AddressMultiLineEdit::InsertNewEntry( const String& rStr )
 {
-    ExtTextEngine* pTextEngine = GetTextEngine();
     ExtTextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
-    TextPaM aInsertPos(rSelection.GetStart());
-    const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( aInsertPos, TEXTATTR_PROTECTED );
-    TextAttribProtect aProtectAttr;
-    bool bIsKeyword = (rStr.Len() > 2 && rStr.GetChar(0) == '<' && rStr.GetChar(rStr.Len() - 1) == '>');
-    ULONG nPara = aInsertPos.GetPara();
-    if(pBeginAttrib)
-    {
-        USHORT nStart = pBeginAttrib->GetStart();
-        USHORT nEnd = pBeginAttrib->GetEnd();
-        //remove the attribute to prevent expansion
-        pTextEngine->RemoveAttrib( nPara, *pBeginAttrib );
-        pTextEngine->ReplaceText( aInsertPos, rStr );
-        //insert attribute if it's a keyword
-        if(bIsKeyword)
-            pTextEngine->SetAttrib( aProtectAttr, nPara, aInsertPos.GetIndex(), aInsertPos.GetIndex() + rStr.Len());
+    ULONG nPara = rSelection.GetStart().GetPara();
+    USHORT nIndex = rSelection.GetStart().GetIndex();
+    InsertNewEntryAtPosition( rStr, nPara, nIndex );
+}
 
-        //re-insert the attribute
-        pTextEngine->SetAttrib( aProtectAttr, nPara, nStart + rStr.Len(), nEnd + rStr.Len());
-    }
-    else
-    {
-        pTextEngine->ReplaceText( aInsertPos, rStr );
-        if(bIsKeyword)
-            pTextEngine->SetAttrib( aProtectAttr, nPara, aInsertPos.GetIndex(), aInsertPos.GetIndex() + rStr.Len());
+void AddressMultiLineEdit::InsertNewEntryAtPosition( const String& rStr, ULONG nPara, USHORT nIndex )
+{
+    ExtTextEngine* pTextEngine = GetTextEngine();
+    TextPaM aInsertPos( nPara, nIndex );
 
-    }
+    pTextEngine->ReplaceText( aInsertPos, rStr );
+
+    //restore the attributes
+    SetText( GetAddress() );
 }
 /*-- 25.06.2004 12:32:41---------------------------------------------------
 
@@ -1490,12 +1452,15 @@ void AddressMultiLineEdit::RemoveCurrentEntry()
     const TextSelection& rSelection = pTextView->GetSelection();
     const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
     const TextCharAttrib* pEndAttrib = pTextEngine->FindCharAttrib( rSelection.GetEnd(), TEXTATTR_PROTECTED );
-    if(pBeginAttrib && pBeginAttrib == pEndAttrib)
+    if(pBeginAttrib &&
+            (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
+                            && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
     {
         ULONG nPara = rSelection.GetStart().GetPara();
         TextSelection aEntrySel(TextPaM( nPara, pBeginAttrib->GetStart()), TextPaM(nPara, pBeginAttrib->GetEnd()));
-        pTextEngine->RemoveAttrib( nPara, *pBeginAttrib );
         pTextEngine->ReplaceText(aEntrySel, String());
+        //restore the attributes
+        SetText( GetAddress() );
     }
 }
 /*-- 25.06.2004 12:32:41---------------------------------------------------
@@ -1526,9 +1491,14 @@ void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
                 {
                     //go left to find a predecessor or simple text
                     --nIndex;
-                    pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
-                    if(pBeginAttrib)
-                        nIndex = pBeginAttrib->GetStart();
+                    String sPara = pTextEngine->GetText( nPara );
+                    xub_StrLen nSearchIndex = sPara.SearchBackward( '>', nIndex+1 );
+                    if( nSearchIndex != STRING_NOTFOUND && nSearchIndex == nIndex )
+                    {
+                        nSearchIndex = sPara.SearchBackward( '<', nIndex );
+                        if( nSearchIndex != STRING_NOTFOUND )
+                            nIndex = nSearchIndex;
+                    }
                 }
             break;
             case MOVE_ITEM_RIGHT:
@@ -1538,7 +1508,7 @@ void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
                 pEndAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
                 if(pEndAttrib && pEndAttrib->GetEnd() >= nIndex)
                 {
-                    nIndex = pBeginAttrib->GetEnd() + 1;
+                    nIndex = pEndAttrib->GetEnd();
                 }
             }
             break;
@@ -1551,7 +1521,6 @@ void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
                 nIndex = 0;
             break;
         }
-        TextPaM aInsertPos(nPara, nIndex);
         //add a new paragraph if there is none yet
         if(nPara >= pTextEngine->GetParagraphCount())
         {
@@ -1559,10 +1528,7 @@ void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
             TextPaM aTemp(nPara - 1, pTextEngine->GetTextLen( nPara - 1 ));
             pTextEngine->ReplaceText( aTemp, String('\n'));
         }
-        pTextEngine->ReplaceText( aInsertPos, sCurrentItem );
-        TextAttribProtect aProtectAttr;
-        //re-insert the attribute
-        pTextEngine->SetAttrib( aProtectAttr, nPara, nIndex, nIndex + sCurrentItem.Len());
+        InsertNewEntryAtPosition( sCurrentItem, nPara, nIndex );
     }
 }
 /*-- 25.06.2004 12:32:41---------------------------------------------------
