@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-22 13:38:46 $
+ *  last change: $Author: mt $ $Date: 2004-07-23 09:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,9 +124,8 @@ IMPL_LINK( MacroSecurity, OkBtnHdl, void*, EMTYARG )
     return 0;
 }
 
-MacroSecurity::MacroSecurity( Window* _pParent, cssu::Reference< lang::XMultiServiceFactory >& rxMSF, cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment )
+MacroSecurity::MacroSecurity( Window* _pParent, cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment )
     :TabDialog          ( _pParent, XMLSEC_RES( RID_XMLSECTP_MACROSEC ) )
-    ,maSignatureHelper  ( rxMSF )
     ,maTabCtrl          ( this, ResId( 1 ) )
     ,maOkBtn            ( this, ResId( BTN_OK ) )
     ,maCancelBtn        ( this, ResId( BTN_CANCEL ) )
@@ -263,16 +262,15 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMTYARG )
     {
         USHORT nSelected = USHORT( sal_Int32( maTrustCertLB.FirstSelected()->GetUserData() ) );
         const SignatureInformation& rInfo = mpDlg->maCurrentSignatureInformations[ nSelected ];
-        uno::Reference< dcss::security::XCertificate > xCert = mpDlg->maSignatureHelper.GetSecurityEnvironment()->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
+        uno::Reference< dcss::security::XCertificate > xCert = mpDlg->mxSecurityEnvironment->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
 
         // If we don't get it, create it from signature data:
         if ( !xCert.is() )
-            xCert = mpDlg->maSignatureHelper.GetSecurityEnvironment()->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
+            xCert = mpDlg->mxSecurityEnvironment->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
 
         DBG_ASSERT( xCert.is(), "*MacroSecurityTrustedSourcesTP::ViewCertPBHdl(): Certificate not found and can't be created!" );
 
-        uno::Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv = mpDlg->maSignatureHelper.GetSecurityEnvironment();
-        CertificateViewer aViewer( this, xSecEnv, xCert );
+        CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, xCert );
         aViewer.Execute();
     }
     return 0;

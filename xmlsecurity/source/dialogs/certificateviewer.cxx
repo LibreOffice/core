@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-22 15:37:38 $
+ *  last change: $Author: mt $ $Date: 2004-07-23 09:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,8 @@ namespace
 
 CertificateViewer::CertificateViewer(
         Window* _pParent,
-        cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment,
-        cssu::Reference< dcss::security::XCertificate >& _rXCert )
+        const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment,
+        const cssu::Reference< dcss::security::XCertificate >& _rXCert )
     :TabDialog      ( _pParent, XMLSEC_RES( RID_XMLSECDLG_CERTVIEWER ) )
     ,maTabCtrl      ( this, ResId( 1 ) )
     ,maOkBtn        ( this, ResId( BTN_OK ) )

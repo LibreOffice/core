@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seinitializer_nssimpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-23 08:34:25 $
+ *  last change: $Author: mt $ $Date: 2004-07-23 09:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,10 +241,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
             pDefaultCertDir = new rtl::OString;
             rtl::OUString ouCertDir;
             if ( getMozillaCurrentProfile(ouCertDir) )
-            {
                 *pDefaultCertDir = rtl::OString(ouCertDir, ouCertDir.getLength(), RTL_TEXTENCODING_ASCII_US);
-                DBG_ERROR( pDefaultCertDir->getStr() );
-            }
         }
         sCertDir = *pDefaultCertDir;
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: mmi $ $Date: 2004-07-23 03:00:42 $
+#   last change: $Author: mt $ $Date: 2004-07-23 09:58:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -160,7 +160,8 @@ SHL4TARGET=$(TARGET)
 SHL4LIBS=\
                 $(SLB)$/helper.lib      \
                 $(SLB)$/dialogs.lib     \
-                $(SLB)$/component.lib
+                $(SLB)$/component.lib   \
+                $(SLB)$/xs_comm.lib
 SHL4STDLIBS=\
                 $(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
@@ -177,13 +178,14 @@ SHL4STDLIBS=\
                 $(SFXLIB)			\
                 $(XMLOFFLIB)		\
                 $(SVXLIB)
-                
+
+#MT: Remove ixml2 and xs_comm (above) by cerating service for base encodings
 .IF "$(GUI)"=="WNT"
-SHL4STDLIBS+= "xmlsec.lib" "xsec_xmlsec.lib"
+SHL4STDLIBS+= "ixml2.lib" "xmlsec.lib" "xsec_xmlsec.lib"
 .ELSE
-SHL4STDLIBS+= "-lxmlsec" "-lxsec_xmlsec"
+SHL4STDLIBS+= "-lxml2" "-lxmlsec" "-lxsec_xmlsec"
 .ENDIF
-                
+        
         
 SHL4VERSIONMAP = xmlsecurity.map
 SHL4DEPN=

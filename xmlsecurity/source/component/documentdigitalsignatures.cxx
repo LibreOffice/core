@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-23 09:44:07 $
+ *  last change: $Author: mt $ $Date: 2004-07-23 09:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 
 #include <documentdigitalsignatures.hxx>
 #include <xmlsecurity/digitalsignaturesdialog.hxx>
+#include <xmlsecurity/certificateviewer.hxx>
 #include <xmlsecurity/macrosecurity.hxx>
 #include <xmlsecurity/baseencoding.hxx>
 #include <../dialogs/resourcemanager.hxx>
@@ -159,13 +160,7 @@ com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInf
     if ( aStreamHelper.xSignatureStream.is() )
     {
         uno::Reference< io::XInputStream > xInputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
-        bool bVerifyOK = aSignatureHelper.ReadAndVerifySignature( xInputStream );
-
-        if ( bVerifyOK )
-        {
-            // SignatureInformations aInformations = aSignatureHelper.GetSignatureInformations();
-            // ...
-        }
+        aSignatureHelper.ReadAndVerifySignature( xInputStream );
     }
 
     aStreamHelper.Clear();
@@ -215,10 +210,19 @@ com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInf
 
 void DocumentDigitalSignatures::manageTrustedSources(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    cssu::Reference< css::lang::XMultiServiceFactory >          xMSF;
-    cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >  xSecurityEnvironment;
-    MacroSecurity   aDlg( NULL, xMSF, xSecurityEnvironment );
+    XMLSignatureHelper aSignatureHelper( mxMSF );
+    aSignatureHelper.Init( rtl::OUString() );
+    MacroSecurity aDlg( NULL, aSignatureHelper.GetSecurityEnvironment() );
     aDlg.Execute();
+}
+
+void DocumentDigitalSignatures::ShowCertificate( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& _Certificate ) throw (::com::sun::star::uno::RuntimeException)
+{
+    XMLSignatureHelper aSignatureHelper( mxMSF );
+    aSignatureHelper.Init( rtl::OUString() );
+    CertificateViewer aViewer( NULL, aSignatureHelper.GetSecurityEnvironment(), _Certificate );
+    aViewer.Execute();
+
 }
 
 ::sal_Bool DocumentDigitalSignatures::isAuthorTrusted( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& Author ) throw (::com::sun::star::uno::RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-22 13:41:57 $
+ *  last change: $Author: mt $ $Date: 2004-07-23 09:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,6 @@ private:
     HelpButton          maHelpBtn;
     PushButton          maResetBtn;
 
-    XMLSignatureHelper                                          maSignatureHelper;
     cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >  mxSecurityEnvironment;
     SignatureInformations                                       maCurrentSignatureInformations;
     SvtSecurityOptions                                          maSecOptions;
@@ -123,9 +122,7 @@ private:
 
     DECL_LINK(          OkBtnHdl, void* );
 public:
-    MacroSecurity( Window* pParent,
-                    cssu::Reference< css::lang::XMultiServiceFactory >& rxMSF,
-                    cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment );
+    MacroSecurity( Window* pParent, cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment );
     virtual             ~MacroSecurity();
 
     inline void     EnableReset( bool _bEnable = true );
