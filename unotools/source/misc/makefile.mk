@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pluby $ $Date: 2000-10-07 22:17:37 $
+#   last change: $Author: pl $ $Date: 2000-10-27 15:18:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings common for the whole project -----
 
 #UNOTYPES=
+UNOTYPES+= com.sun.star.util.XAtomServer
 #.INCLUDE : $(PRJINC)$/unotools$/unotools.mk
 
 # --- Settings ----------------------------------
@@ -79,10 +80,10 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Types -------------------------------------
 
 
-#UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-#UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
+UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 
-#UNOUCROUT=$(OUT)$/inc
+UNOUCROUT=$(OUT)$/inc
 #INCPRE+=$(UNOUCROUT)
 
 # --- Types -------------------------------------
@@ -94,7 +95,6 @@ ENABLE_EXCEPTIONS=TRUE
 #	com.sun.star.awt.FontStrikeout			\
 #	com.sun.star.awt.FontSlant				\
 
-
 # --- Files -------------------------------------
 
 SLOFILES=	$(SLO)$/types.obj         \
@@ -103,7 +103,8 @@ SLOFILES=	$(SLO)$/types.obj         \
         $(SLO)$/guarding.obj      \
         $(SLO)$/sequence.obj      \
         $(SLO)$/querydeep.obj     \
-        $(SLO)$/regpathhelper.obj
+        $(SLO)$/regpathhelper.obj	\
+        $(SLO)$/atom.obj
 
 # --- Targets ----------------------------------
 
