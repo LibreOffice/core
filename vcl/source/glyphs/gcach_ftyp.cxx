@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.36 $
- *  last change: $Author: hdu $ $Date: 2001-05-14 08:38:03 $
+ *  $Revision: 1.37 $
+ *  last change: $Author: jbu $ $Date: 2001-05-14 09:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,9 +162,9 @@ void FreetypeManager::AddFontFile( const rtl::OString& rNormalizedName,
 
 // -----------------------------------------------------------------------
 
-long FreetypeManager::AddFontDir( const String& rNormalizedName )
+long FreetypeManager::AddFontDir( const String& rUrlName )
 {
-    osl::Directory aDir( rNormalizedName );
+    osl::Directory aDir( rUrlName );
     osl::FileBase::RC rcOSL = aDir.open();
     if( rcOSL != osl::FileBase::E_None )
         return 0;
@@ -175,11 +175,20 @@ long FreetypeManager::AddFontDir( const String& rNormalizedName )
     rtl_TextEncoding theEncoding = osl_getThreadTextEncoding();
     while( (rcOSL = aDir.getNextItem( aDirItem, 20 )) == osl::FileBase::E_None )
     {
+#ifdef TF_FILEURL
+        osl::FileStatus aFileStatus( FileStatusMask_FileURL );
+#else
         osl::FileStatus aFileStatus( FileStatusMask_NativePath );
-
+#endif
         rcOSL = aDirItem.getFileStatus( aFileStatus );
+#ifdef TF_FILEURL
+        ::rtl::OUString aUSytemPath;
+        OSL_VERIFY(
+            ::osl::FileBase::getSystemPathFromFileURL( aFileStatus.getFileURL(), aUSytemPath ) == osl_File_E_None);
+#else
         ::rtl::OUString aUFileName = aFileStatus.getNativePath();
-        ::rtl::OString aCFileName = rtl::OUStringToOString( aUFileName, theEncoding );
+#endif
+        ::rtl::OString aCFileName = rtl::OUStringToOString( aUSytemPath, theEncoding );
         const char* pszFontFileName = aCFileName.getStr();
 
         FT_FaceRec_* aFaceFT = NULL;

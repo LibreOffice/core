@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hdu $ $Date: 2001-04-24 17:43:18 $
+ *  last change: $Author: jbu $ $Date: 2001-05-14 09:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ public:
                                 FreetypeManager();
                                 ~FreetypeManager();
 
-    long                        AddFontDir( const String& rNormalizedName );
+    long                        AddFontDir( const String& rUrlName );
     void                        AddFontFile( const rtl::OString& rNormalizedName,
                                     int nFaceNum, int nFontId, const ImplFontData* );
     long                        FetchFontList( ImplDevFontList* ) const;
