@@ -96,14 +96,14 @@
                   http://www.nextgeneration.dk/gnu/make.zip</a>. It is not recommended to use the Cygwin
                   make, because it does not work well.
             </dl>
-            <p>The SDK provides a configure script (Unix and WindowsNT/2000/XP) that asks for relevant 
+            <p>The SDK provides a configure script (Unix and Windows2000/XP) that asks for relevant 
                directories (SDK, StarOffice, GNU make, Java, C++). After completing the
-               configure script a new script will be created (WindowsNT//2000/XP and UNIX) to set the 
+               configure script a new script will be created (Windows2000/XP and UNIX) to set the 
                necessary environment variables for using the SDK and the required tools. 
             </p>
             <ul>
               <li><b>configure</b>&nbsp;&nbsp;-> for Unix
-              <li><b>configureWindowsNT.bat</b></a>&nbsp;&nbsp;-> for WindowsNT/2000/XP
+              <li><b>configureWindows.bat</b></a>&nbsp;&nbsp;-> for Windows2000/XP or newer versions
             </ul>
             <p>Other versions of the operating system Windows should use the batch program 
 	        <b>&lt;OO_SDK_HOME&gt;setsdkenv_windows.bat</b> directly and adopt it to their local 
@@ -117,11 +117,11 @@
                  <tr> 
                    <td widht=35%><b>OFFICE_HOME</b></td>
                    <td widht=65%>path to an existing StarOffice&#153 or OpenOffice.org installation, e.g.  
-                       &quot;/usr/local/StarOffice6.0&quot;</td>
+                       &quot;/usr/local/StarOffice8&quot;</td>
                  </tr>
                  <tr> 
                    <td widht=35%><b>OO_SDK_HOME</b></td>
-                   <td widht=65%>path to the SDK root directory, e.g. &quot;/usr/local/StarOffice6.0SDK&quot;</td>
+                   <td widht=65%>path to the SDK root directory, e.g. &quot;/usr/local/StarOffice8_SDK&quot;</td>
                  </tr>
                  <tr> 
                    <td widht=35%><b>OO_SDK_JAVA_HOME</b></td>
@@ -146,9 +146,13 @@
                  </tr>
                </table>
             </p>
-            <p>If you do not want to use the script to set your working environment, you must set the 
-	        appropriate environment variables by yourself. The script sets the following environment 
-		 variables:
+
+	     <p>You have to run the <b>setsdkenv_XXX</b> script every time you want to use the 
+	       configured SDK environment. The settings are local for the current shell under Windows
+              or the new started shell under UNIX.</p>
+            <p><b>NOTE:</b> If you do not want to use the script to set your working environment, you 
+	        must set the appropriate environment variables by yourself. The script sets the following 
+		 environment variables:
             </p>
             <p><b>Environment variables for UNIX</b></p>
             <p><b>Solaris</b></p>	    
