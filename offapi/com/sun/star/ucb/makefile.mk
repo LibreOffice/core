@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+#   last change: $Author: kso $ $Date: 2000-11-29 14:05:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,8 @@ IDLFILES=\
     ConnectionMode.idl\
     Content.idl\
     ContentAction.idl\
+    ContentCreationError.idl\
+    ContentCreationException.idl\
     ContentEvent.idl\
     ContentInfo.idl\
     ContentInfoAttribute.idl\
