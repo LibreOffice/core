@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bc $ $Date: 2002-08-21 15:39:51 $
+ *  last change: $Author: bc $ $Date: 2002-08-30 16:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ public class Dataimport extends ReportWizard{
         }
         }
     setLayoutSectionsInvisible(CurReportDocument.TextSectionsSupplier, GroupFieldCount);
-//  breakLinksofTextSections(CurReportDocument.ReportTextDocument);
+    CurReportDocument.breakLinkofTextSections();
     }
     catch( com.sun.star.uno.Exception exception ){
         exception.printStackTrace(System.out);
@@ -559,21 +559,4 @@ public class Dataimport extends ReportWizard{
         exception.printStackTrace(System.out);
      return null;
     }}
-
-
-/*    public static void breakLinkofTextSections(XTextDocument xTextDocument){
-    try{
-    Object oTextSection;
-    com.sun.star.text.SectionFileLink oSectionLink = new com.sun.star.text.SectionFileLink();
-    oSectionLink.FileURL = "";
-    for (int i =0; i < iSectionCount; i++){
-        oTextSection = xAllTextSections.getByIndex(i);
-        tools.setUNOPropertyValue(oTextSection, "FileLink", oSectionLink);
-        tools.setUNOPropertyValue(oTextSection, "LinkRegion", "");
-    }
-     }
-     catch( com.sun.star.uno.Exception exception ){
-        exception.printStackTrace(System.out);
-     }} */
-
 }

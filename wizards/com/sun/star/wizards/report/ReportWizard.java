@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: bc $ $Date: 2002-08-29 15:31:05 $
+ *  last change: $Author: bc $ $Date: 2002-08-30 16:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,12 +481,12 @@ public class ReportWizard {
             break;
 
         case SOCONTENTLST:
-            CurReportDocument.ReportTextDocument.lockControllers();
+//          CurReportDocument.ReportTextDocument.lockControllers();
             iPos = xContentListBox.getSelectedItemPos();
             CurReportDocument.loadSectionsfromTemplate(CurReportPaths.ContentFiles[0][iPos]);
             CurReportDocument.loadStyleTemplates(CurReportPaths.ContentFiles[0][iPos], "LoadTextStyles");
             CurReportDocument.setTableColumnSeparators();
-            CurReportDocument.ReportTextDocument.unlockControllers();
+//          CurReportDocument.ReportTextDocument.unlockControllers();
             CurReportDocument.selectFirstPage();
             break;
 
@@ -1317,6 +1317,7 @@ public class ReportWizard {
         bCloseDocument = true;
         CurReportDocument.ProgressBar.end();
         short RetValue = CurUNODialog.executeDialog(xMSF, CurReportDocument.Frame.getComponentWindow().getPosSize());
+        boolean bdisposeDialog = true;
         switch (RetValue){
         case 0:     // via Cancelbutton or via sourceCode with "endExecute"
             if (bCloseDocument == true){
@@ -1326,13 +1327,14 @@ public class ReportWizard {
             }
             if ((buseTemplate == true) || (bcreateTemplate == false)){
             if (CurReportDocument.checkReportLayoutMode(CurReportDocument.CurDBMetaData.GroupFieldNames)){
+                CurUNODialog.xComponent.dispose();
+                bdisposeDialog = false;
                 Dataimport CurDataimport = new Dataimport();
                 CurUNOProgressDialog = CurDataimport.showProgressDisplay(xMSF, CurReportDocument, false);  // CurReportDocument.Frame.getComponentWindow().getPosSize().Width);
                 if (CurReportDocument.CurDBMetaData.executeCommand(xMSF, CurReportDocument.Frame, sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot)){
                 CurDataimport.insertDatabaseDatatoReportDocument(xMSF, CurReportDocument, CurUNOProgressDialog);
                 }
                 CurUNOProgressDialog.xComponent.dispose();
-                return;
             }
             if (bcreateTemplate == false){
                 boolean bDocisStored = tools.storeDocument(xMSF, CurReportDocument.Component, StorePath, "swriter: StarOffice XML (Writer)",
@@ -1345,6 +1347,7 @@ public class ReportWizard {
         case 1:
             break;
         }
+        if (bdisposeDialog == true)
         CurUNODialog.xComponent.dispose();
     }
     else{
