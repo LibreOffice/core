@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-27 09:44:26 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 11:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,7 +321,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>                m_xGeneric;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>               m_xMoveOperations;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate>              m_xBookmarkOperations;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>            m_xColumnsSupplier;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>        m_xColumnsSupplier;
 
 public:
     // Construction/Destruction
@@ -330,6 +330,11 @@ public:
     CursorWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, sal_Bool bUseCloned = sal_False);
         // bei bUseCloned == sal_True wird der Cursor ueber das XCloneable-Interface (dass er besitzen muss) gedoubled und
         // erst dann benutzt
+
+    friend bool operator==(const CursorWrapper& lhs, const CursorWrapper& rhs)
+    {
+        return lhs.m_xGeneric.get() == rhs.m_xGeneric.get();
+    }
 
     sal_Bool is() const { return m_xMoveOperations.is(); }
     sal_Bool Is() const { return m_xMoveOperations.is(); }
