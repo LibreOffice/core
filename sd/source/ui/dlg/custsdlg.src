@@ -2,9 +2,9 @@
  *
  *  $RCSfile: custsdlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:42:34 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text [ english_us ] = "~New..." ;
         Text [ portuguese_brazilian ] = "~Novo..." ;
         Text [ swedish ] = "~Ny..." ;
-        Text [ danish ] = "Ny..." ;
+        Text [ danish ] = "~Ny(t)..." ;
         Text [ italian ] = "~Nuovo..." ;
         Text [ spanish ] = "~Nuevo..." ;
         Text [ french ] = "~Nouveau..." ;
@@ -107,6 +107,8 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ hebrew ] = "‮חדש...‬";
         Text[ hindi ] = "~नया...";
         Text[ slovak ] = "~Nové...";
+        Text[ hungarian ] = "Ú~j...";
+        Text[ slovenian ] = "~Nov...";
     };
     PushButton BTN_EDIT
     {
@@ -119,7 +121,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text [ english_us ] = "~Edit..." ;
         Text [ portuguese_brazilian ] = "~Editar..." ;
         Text [ swedish ] = "R~edigera..." ;
-        Text [ danish ] = "Rediger..." ;
+        Text [ danish ] = "~Rediger..." ;
         Text [ italian ] = "~Modifica..." ;
         Text [ spanish ] = "E~ditar..." ;
         Text [ french ] = "�diter..." ;
@@ -141,6 +143,8 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ hebrew ] = "‮עריכה...‬";
         Text[ hindi ] = "~संपादन...";
         Text[ slovak ] = "~Upraviť...";
+        Text[ hungarian ] = "S~zerkesztés...";
+        Text[ slovenian ] = "~Uredi...";
     };
     PushButton BTN_REMOVE
     {
@@ -153,7 +157,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text [ english_us ] = "~Delete" ;
         Text [ portuguese_brazilian ] = "E~xcluir" ;
         Text [ swedish ] = "~Radera" ;
-        Text [ danish ] = "Slet" ;
+        Text [ danish ] = "~Slet" ;
         Text [ italian ] = "~Elimina" ;
         Text [ spanish ] = "~Borrar" ;
         Text [ french ] = "Supprimer" ;
@@ -175,6 +179,8 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
         Text[ slovak ] = "~Zmazať";
+        Text[ hungarian ] = "~Törlés";
+        Text[ slovenian ] = "~Izbriši";
     };
     PushButton BTN_COPY
     {
@@ -187,7 +193,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text [ english_us ] = "Cop~y" ;
         Text [ portuguese_brazilian ] = "~Copiar" ;
         Text [ swedish ] = "~Kopiera" ;
-        Text [ danish ] = "Kopier" ;
+        Text [ danish ] = "K~opier" ;
         Text [ italian ] = "~Copia" ;
         Text [ spanish ] = "Copiar" ;
         Text [ french ] = "Co~pier" ;
@@ -209,6 +215,8 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ hebrew ] = "‮העתקה‬";
         Text[ hindi ] = "~प्रतिलिपि";
         Text[ slovak ] = "~Kopírovať";
+        Text[ hungarian ] = "~Másolás";
+        Text[ slovenian ] = "~Kopiraj";
     };
     HelpButton BTN_HELP
     {
@@ -227,7 +235,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text [ english_us ] = "~Start" ;
         Text [ portuguese_brazilian ] = "~Iniciar" ;
         Text [ swedish ] = "S~tarta" ;
-        Text [ danish ] = "Start" ;
+        Text [ danish ] = "~Start" ;
         Text [ italian ] = "~Avvia" ;
         Text [ spanish ] = "~Inicio" ;
         Text [ french ] = "~Lancer" ;
@@ -249,6 +257,8 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ hebrew ] = "S~tarten";
         Text[ hindi ] = "~प्रारंभ";
         Text[ slovak ] = "~Spustiť";
+        Text[ hungarian ] = "~Indítás";
+        Text[ slovenian ] = "~Začetna";
     };
     OKButton BTN_OK
     {
@@ -262,7 +272,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text [ english_us ] = "~Close" ;
         Text [ portuguese_brazilian ] = "~Fechar" ;
         Text [ swedish ] = "~St�ng" ;
-        Text [ danish ] = "Luk" ;
+        Text [ danish ] = "~Luk" ;
         Text [ italian ] = "C~hiudi" ;
         Text [ spanish ] = "~Cerrar" ;
         Text [ french ] = "Fermer" ;
@@ -284,6 +294,8 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "~बन्द करो";
         Text[ slovak ] = "~Zavrieť";
+        Text[ hungarian ] = "~Bezárás";
+        Text[ slovenian ] = "~Zapri";
     };
     ListBox LB_CUSTOMSHOWS
     {
@@ -302,7 +314,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text [ english_us ] = "~Use Custom Slide Show" ;
         Text [ portuguese_brazilian ] = "Usar Apres~enta��o de Slides Personalizada" ;
         Text [ swedish ] = "Anv�nd ~individuell bildsk�rmspresentation" ;
-        Text [ danish ] = "Brug individuel pr�sentation" ;
+        Text [ danish ] = "~Anvend brugerdefineret pr�sentation" ;
         Text [ italian ] = "Usa presentaz~ione su schermo personalizzata" ;
         Text [ spanish ] = "Utilizar presentaci�n personalizada" ;
         Text [ french ] = "~Utiliser la pr�sentation � l'�cran personnalis�e" ;
@@ -325,11 +337,13 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ hebrew ] = "~Individuelle Bildschirmpräsentation benutzen";
         Text[ hindi ] = "कस्टम स्लइ~ड दिखाव का उपयोग करो";
         Text[ slovak ] = "Po~užiť vlastnú prezentáciu";
+        Text[ hungarian ] = "S~aját diavetítés használata";
+        Text[ slovenian ] = "~Uporabi diaprojekcijo po meri";
     };
     Text [ english_us ] = "Custom Slide Shows" ;
     Text [ portuguese_brazilian ] = "Apresenta��es de Slides Personalizadas" ;
     Text [ swedish ] = "Individuella bildsk�rmspresentationer" ;
-    Text [ danish ] = "Individuel pr�sentation" ;
+    Text [ danish ] = "Brugerdefinerede pr�sentationer" ;
     Text [ italian ] = "Presentazioni su schermo personalizzate" ;
     Text [ spanish ] = "Presentaci�n personalizada" ;
     Text [ french ] = "Pr�sentations � l'�cran personnalis�es" ;
@@ -352,6 +366,8 @@ ModalDialog DLG_CUSTOMSHOW
     Text[ hebrew ] = "Individuelle Bildschirmpräsentationen";
     Text[ hindi ] = "स्लइड प्रस्तुति को व्यवस्था करो";
     Text[ slovak ] = "Vlastná prezentácia";
+    Text[ hungarian ] = "Egyéni diavetítések";
+    Text[ slovenian ] = "Diaprojekcije po meri";
 };
 ModalDialog DLG_DEFINE_CUSTOMSHOW
 {
@@ -414,6 +430,8 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text[ hebrew ] = "Name";
         Text[ hindi ] = "नाम्";
         Text[ slovak ] = "Názov";
+        Text[ hungarian ] = "Név";
+        Text[ slovenian ] = "Ime";
     };
     Edit EDT_NAME
     {
@@ -462,7 +480,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text [ english_us ] = "Existing slides" ;
         Text [ portuguese_brazilian ] = "Slides existentes" ;
         Text [ swedish ] = "Presentationens sidor" ;
-        Text [ danish ] = "Pr�sentationens sider" ;
+        Text [ danish ] = "Eksisterende dias" ;
         Text [ italian ] = "Pagine della presentazione" ;
         Text [ spanish ] = "Diapositivas existentes" ;
         Text [ french ] = "Pages de la pr�sentation" ;
@@ -485,6 +503,8 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text[ hebrew ] = "Seiten der Präsentation";
         Text[ hindi ] = "अस्तित्व में रहनेवाला स्लइडस";
         Text[ slovak ] = "Existujúce snímky";
+        Text[ hungarian ] = "Létező diák";
+        Text[ slovenian ] = "Obstoječi diapozitivi";
     };
     FixedText FT_CUSTOM_PAGES
     {
@@ -496,7 +516,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text [ english_us ] = "Selected slides" ;
         Text [ portuguese_brazilian ] = "Slides selecionados" ;
         Text [ swedish ] = "Individuell presentation" ;
-        Text [ danish ] = "Individuel pr�sentation" ;
+        Text [ danish ] = "Valgte dias" ;
         Text [ italian ] = "Presentazione personalizzata" ;
         Text [ spanish ] = "Diapositivas seleccionadas" ;
         Text [ french ] = "Pr�sentation personnalis�e" ;
@@ -518,11 +538,13 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text[ hebrew ] = "Individuelle Präsentation";
         Text[ hindi ] = "चुने हुए स्लइडस";
         Text[ slovak ] = "Vybrané snímky";
+        Text[ hungarian ] = "Kijelölt diák";
+        Text[ slovenian ] = "Izbrani diapozitivi";
     };
     Text [ english_us ] = "Define Custom Slide Show" ;
     Text [ portuguese_brazilian ] = "Definir Apresenta��o de Slides Personalizada" ;
     Text [ swedish ] = "Definiera individuell bildsk�rmspresentation" ;
-    Text [ danish ] = "Definer individuel pr�sentation" ;
+    Text [ danish ] = "Definer brugerdefineret pr�sentation" ;
     Text [ italian ] = "Definisci presentazione su schermo personalizzata" ;
     Text [ spanish ] = "Definir presentaci�n personalizada" ;
     Text [ french ] = "D�finir une pr�sentation � l'�cran personnalis�e" ;
@@ -545,7 +567,10 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     Text[ hebrew ] = "Individuelle Bildschirmpräsentation definieren";
     Text[ hindi ] = "कस्टम स्लइड दिखाव को परिभाषा दो";
     Text[ slovak ] = "Definovať vlastnú prezentáciu";
+    Text[ hungarian ] = "Egyéni diavetítés meghatározása";
+    Text[ slovenian ] = "Določi diaprojekcijo po meri";
 };
+
 
 
 
