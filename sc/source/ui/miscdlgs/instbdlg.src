@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Size = MAP_APPFONT ( 206 , 139 ) ;
         Text = "Tabelle" ;
         Text [ ENGLISH ] = "Table" ;
-        Text [ english_us ] = "Create sheet" ;
+        Text [ english_us ] = "Create" ;
         Text [ portuguese_brazilian ] = "Tabelle" ;
         Text [ swedish ] = "Tabell" ;
         Text [ danish ] = "Ark" ;
@@ -352,7 +352,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_simplified ] = "ÊıÄ¿(~O)";
         Text[ russian ] = "×èñëî ëèñòîâ";
         Text[ polish ] = "Iloœæ";
-        Text[ japanese ] = "•\\”(~O)";
+        Text[ japanese ] = "•\\‚Ì”(~O)";
         Text[ chinese_traditional ] = "¼Æ¥Ø(~O)";
         Text[ arabic ] = "ÇáÚÏÏ";
         Text[ greek ] = "Áñé~èìüò";
