@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-20 15:03:08 $
+ *  last change: $Author: ama $ $Date: 2001-11-29 15:55:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1187,19 +1187,32 @@ void MA_FASTCALL lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
     ::SwAlignRect( rRect, pGlobalShell );
 }
 
+#ifdef VERTICAL_LAYOUT
+void MA_FASTCALL lcl_ExtendLeftAndRight( SwRect &rRect, const SwFrm *pFrm,
+                          const SwBorderAttrs &rAttrs, SwRectFn& rRectFn )
+#else
 void MA_FASTCALL lcl_ExtendLeftAndRight( SwRect &rRect, const SwFrm *pFrm,
                                             const SwBorderAttrs &rAttrs )
+#endif
 {
     //In der Hoehe aufbohren wenn TopLine bzw. BottomLine entfallen.
     if ( rAttrs.GetBox().GetTop() && !rAttrs.GetTopLine( pFrm ) )
     {
         const SwFrm *pPre = pFrm->GetPrev();
+#ifdef VERTICAL_LAYOUT
+        (rRect.*rRectFn->fnSetTop)( (pPre->*rRectFn->fnGetLimit)() );
+#else
         rRect.Top( pPre->Frm().Top() + pPre->Prt().Bottom() );
+#endif
     }
     if ( rAttrs.GetBox().GetBottom() && !rAttrs.GetBottomLine( pFrm ) )
     {
         const SwFrm *pNxt = pFrm->GetNext();
+#ifdef VERTICAL_LAYOUT
+        (rRect.*rRectFn->fnSetBottom)( (pNxt->*rRectFn->fnGetPrtTop)() );
+#else
         rRect.Bottom( pNxt->Frm().Top() + pNxt->Prt().Top() );
+#endif
     }
 }
 
@@ -2192,6 +2205,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     SvxShadowLocation eLoc = rShadow.GetLocation();
 
 #ifdef VERTICAL_LAYOUT
+    SWRECTFN( this )
     if( IsVertical() )
     {
         switch( eLoc )
@@ -2217,7 +2231,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                 if ( bBottom )
                     aOut.Bottom( aOut.Bottom() - nHeight );
                 if ( bCnt && (!bTop || !bBottom) )
-                    ::lcl_ExtendLeftAndRight( aOut, this, rAttrs );
+                    ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
                 aRegion.Insert( aOut, aRegion.Count() );
 
                 rOutRect.Right ( rOutRect.Right() - nWidth );
@@ -2235,7 +2249,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                 if ( bTop )
                     aOut.Top( aOut.Top() + nHeight );
                 if ( bCnt && (!bBottom || !bTop) )
-                    ::lcl_ExtendLeftAndRight( aOut, this, rAttrs );
+                    ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
                 aRegion.Insert( aOut, aRegion.Count() );
 
                 rOutRect.Left( rOutRect.Left() + nWidth );
@@ -2253,7 +2267,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                 if ( bTop )
                     aOut.Top( aOut.Top() + nHeight );
                 if ( bCnt && (!bBottom || bTop) )
-                    ::lcl_ExtendLeftAndRight( aOut, this, rAttrs );
+                    ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
                 aRegion.Insert( aOut, aRegion.Count() );
 
                 rOutRect.Right( rOutRect.Right() - nWidth );
@@ -2271,7 +2285,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                 if ( bBottom )
                     aOut.Bottom( aOut.Bottom() - nHeight );
                 if ( bCnt && (!bTop || !bBottom) )
-                    ::lcl_ExtendLeftAndRight( aOut, this, rAttrs );
+                    ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
                 aRegion.Insert( aOut, aRegion.Count() );
 
                 rOutRect.Left( rOutRect.Left() + nWidth );
@@ -2341,6 +2355,168 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
 |*
 |*************************************************************************/
 
+#ifdef VERTICAL_LAYOUT
+void MA_FASTCALL lcl_SubTopBottom( SwRect &rRect, const SvxBoxItem &rBox,
+            const SwBorderAttrs &rAttrs, const SwFrm *pFrm, SwRectFn& rRectFn )
+{
+    const BOOL bCnt = pFrm->IsCntntFrm();
+    if ( rBox.GetTop() && rBox.GetTop()->GetInWidth() &&
+         (!bCnt || rAttrs.GetTopLine( pFrm )) )
+    {
+        const long nDist = ::lcl_MinHeightDist( rBox.GetTop()->GetDistance() ) +
+                           ::lcl_AlignHeight( rBox.GetTop()->GetOutWidth() );
+        (rRect.*rRectFn->fnSubTop)( -nDist );
+    }
+
+    if ( rBox.GetBottom() && rBox.GetBottom()->GetInWidth() &&
+         (!bCnt || rAttrs.GetBottomLine( pFrm)))
+    {
+        const long nDist = ::lcl_MinHeightDist( rBox.GetBottom()->GetDistance())
+                           +::lcl_AlignHeight( rBox.GetBottom()->GetOutWidth());
+        (rRect.*rRectFn->fnAddBottom)( -nDist );
+    }
+}
+
+void MA_FASTCALL lcl_SubLeftRight( SwRect &rRect, const SvxBoxItem &rBox,
+                                   SwRectFn& rRectFn )
+{
+    if ( rBox.GetLeft() && rBox.GetLeft()->GetInWidth() )
+    {
+        const long nDist = ::lcl_MinWidthDist( rBox.GetLeft()->GetDistance() )
+                           + ::lcl_AlignWidth( rBox.GetLeft()->GetOutWidth() );
+        (rRect.*rRectFn->fnSubLeft)( -nDist );
+    }
+
+    if ( rBox.GetRight() && rBox.GetRight()->GetInWidth() )
+    {
+        const long nDist = ::lcl_MinWidthDist( rBox.GetRight()->GetDistance() )
+                           + ::lcl_AlignWidth( rBox.GetRight()->GetOutWidth() );
+        (rRect.*rRectFn->fnAddRight)( -nDist );
+    }
+}
+
+void MA_FASTCALL lcl_PaintLeftLine( const SwFrm *pFrm, const SwPageFrm *pPage,
+                           const SwRect &rOutRect, const SwRect &rRect,
+                           const SwBorderAttrs &rAttrs, SwRectFn& rRectFn )
+{
+    const SvxBoxItem &rBox = rAttrs.GetBox();
+    const SvxBorderLine *pLeft = rBox.GetLeft();
+
+    if ( !pLeft )
+        return;
+
+    SwRect aRect( rOutRect );
+    (aRect.*rRectFn->fnAddRight)( ::lcl_AlignWidth( pLeft->GetOutWidth() ) -
+                              (aRect.*rRectFn->fnGetWidth)() );
+
+    const BOOL bCnt = pFrm->IsCntntFrm();
+
+    if ( bCnt )
+        ::lcl_ExtendLeftAndRight( aRect, pFrm, rAttrs, rRectFn );
+
+    if ( !pLeft->GetInWidth() )
+        ::lcl_SubTopBottom( aRect, rBox, rAttrs, pFrm, rRectFn );
+
+    pFrm->PaintBorderLine( rRect, aRect, pPage, &pLeft->GetColor() );
+
+    if ( pLeft->GetInWidth() )
+    {
+        const long nDist = ::lcl_MinWidthDist( pLeft->GetDistance() );
+        long nWidth = ::lcl_AlignWidth( pLeft->GetInWidth() );
+        (aRect.*rRectFn->fnAddRight)( nDist + nWidth );
+        (aRect.*rRectFn->fnSubLeft)( nWidth - (aRect.*rRectFn->fnGetWidth)() );
+        ::lcl_SubTopBottom( aRect, rBox, rAttrs, pFrm, rRectFn );
+        pFrm->PaintBorderLine( rRect, aRect, pPage, &pLeft->GetColor() );
+    }
+}
+
+void MA_FASTCALL lcl_PaintRightLine( const SwFrm *pFrm, const SwPageFrm *pPage,
+                            const SwRect &rOutRect, const SwRect &rRect,
+                            const SwBorderAttrs &rAttrs, SwRectFn& rRectFn )
+{
+    const SvxBoxItem &rBox = rAttrs.GetBox();
+    const SvxBorderLine *pRight = rBox.GetRight();
+
+    if ( !pRight )
+        return;
+
+    SwRect aRect( rOutRect );
+    (aRect.*rRectFn->fnSubLeft)( ::lcl_AlignWidth( pRight->GetOutWidth() ) -
+                              (aRect.*rRectFn->fnGetWidth)() );
+
+    const BOOL bCnt = pFrm->IsCntntFrm();
+
+    if ( bCnt )
+        ::lcl_ExtendLeftAndRight( aRect, pFrm, rAttrs, rRectFn );
+
+    if ( !pRight->GetInWidth() )
+        ::lcl_SubTopBottom( aRect, rBox, rAttrs, pFrm, rRectFn );
+
+    pFrm->PaintBorderLine( rRect, aRect, pPage, &pRight->GetColor() );
+
+    if ( pRight->GetInWidth() )
+    {
+        const long nDist = ::lcl_MinWidthDist( pRight->GetDistance() );
+        long nWidth = ::lcl_AlignWidth( pRight->GetInWidth() );
+        (aRect.*rRectFn->fnSubLeft)( nDist + nWidth );
+        (aRect.*rRectFn->fnAddRight)( nWidth - (aRect.*rRectFn->fnGetWidth)() );
+        ::lcl_SubTopBottom( aRect, rBox, rAttrs, pFrm, rRectFn );
+        pFrm->PaintBorderLine( rRect, aRect, pPage, &pRight->GetColor() );
+    }
+}
+
+void MA_FASTCALL lcl_PaintTopLine( const SwFrm *pFrm, const SwPageFrm *pPage,
+                          const SwRect &rOutRect, const SwRect &rRect,
+                          const SwBorderAttrs &rAttrs, SwRectFn& rRectFn )
+{
+    const SvxBoxItem &rBox = rAttrs.GetBox();
+    const SvxBorderLine *pTop = rBox.GetTop();
+
+    if ( !pTop )
+        return;
+
+    SwRect aRect( rOutRect );
+    (aRect.*rRectFn->fnAddBottom)( ::lcl_AlignHeight( pTop->GetOutWidth() ) -
+                                   (aRect.*rRectFn->fnGetHeight)() );
+    pFrm->PaintBorderLine( rRect, aRect, pPage, &pTop->GetColor() );
+
+    if ( pTop->GetInWidth() )
+    {
+        const long nDist = ::lcl_MinHeightDist( pTop->GetDistance() );
+        long nHeight = ::lcl_AlignHeight( pTop->GetInWidth() );
+        (aRect.*rRectFn->fnAddBottom)( nDist + nHeight );
+        (aRect.*rRectFn->fnSubTop)( nHeight - (aRect.*rRectFn->fnGetHeight)() );
+        ::lcl_SubLeftRight( aRect, rBox, rRectFn );
+        pFrm->PaintBorderLine( rRect, aRect, pPage, &pTop->GetColor() );
+    }
+}
+
+void MA_FASTCALL lcl_PaintBottomLine( const SwFrm *pFrm, const SwPageFrm *pPage,
+                             const SwRect &rOutRect, const SwRect &rRect,
+                             const SwBorderAttrs &rAttrs, SwRectFn& rRectFn )
+{
+    const SvxBoxItem &rBox = rAttrs.GetBox();
+    const SvxBorderLine *pBottom = rBox.GetBottom();
+
+    if ( !pBottom )
+        return;
+
+    SwRect aRect( rOutRect );
+    (aRect.*rRectFn->fnSubTop)( ::lcl_AlignHeight( pBottom->GetOutWidth() ) -
+                                (aRect.*rRectFn->fnGetHeight)() );
+    pFrm->PaintBorderLine( rRect, aRect, pPage, &pBottom->GetColor() );
+
+    if ( pBottom->GetInWidth() )
+    {
+        const long nDist = ::lcl_MinHeightDist( pBottom->GetDistance() );
+        long nHeight = ::lcl_AlignHeight( pBottom->GetInWidth()  );
+        (aRect.*rRectFn->fnSubTop)( nDist + nHeight );
+        (aRect.*rRectFn->fnAddBottom)( nHeight -(aRect.*rRectFn->fnGetHeight)() );
+        ::lcl_SubLeftRight( aRect, rBox, rRectFn );
+        pFrm->PaintBorderLine( rRect, aRect, pPage, &pBottom->GetColor() );
+    }
+}
+#else
 void MA_FASTCALL lcl_SubTopBottom( SwRect &rRect, const SvxBoxItem &rBox,
                           const SwBorderAttrs &rAttrs, const SwFrm *pFrm )
 {
@@ -2494,6 +2670,7 @@ void MA_FASTCALL lcl_PaintBottomLine( const SwFrm *pFrm, const SwPageFrm *pPage,
         pFrm->PaintBorderLine( rRect, aRect, pPage, &pBottom->GetColor() );
     }
 }
+#endif
 
 /*************************************************************************
 |*
@@ -2539,12 +2716,22 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
             PaintShadow( rRect, aRect, pPage, rAttrs );
         if ( bLine )
         {
+#ifdef VERTICAL_LAYOUT
+            SWRECTFN( this )
+            ::lcl_PaintLeftLine  ( this, pPage, aRect, rRect, rAttrs, fnRect );
+            ::lcl_PaintRightLine ( this, pPage, aRect, rRect, rAttrs, fnRect );
+            if ( !IsCntntFrm() || rAttrs.GetTopLine( this ) )
+                ::lcl_PaintTopLine( this, pPage, aRect, rRect, rAttrs, fnRect );
+            if ( !IsCntntFrm() || rAttrs.GetBottomLine( this ) )
+                ::lcl_PaintBottomLine(this, pPage, aRect, rRect, rAttrs,fnRect);
+#else
             ::lcl_PaintLeftLine  ( this, pPage, aRect, rRect, rAttrs );
             ::lcl_PaintRightLine ( this, pPage, aRect, rRect, rAttrs );
             if ( !IsCntntFrm() || rAttrs.GetTopLine( this ) )
                 ::lcl_PaintTopLine( this, pPage, aRect, rRect, rAttrs );
             if ( !IsCntntFrm() || rAttrs.GetBottomLine( this ) )
                 ::lcl_PaintBottomLine( this, pPage, aRect, rRect, rAttrs );
+#endif
         }
         rAttrs.SetGetCacheLine( FALSE );
     }
