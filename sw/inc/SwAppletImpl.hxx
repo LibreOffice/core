@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAppletImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 11:58:39 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,11 @@
 #define SWHTML_OPTTYPE_PARAM 2
 #define SWHTML_OPTTYPE_SIZE 3
 
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
+
+
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
@@ -77,27 +82,18 @@
 #ifndef _FRMHTML_HXX //autogen
 #include <sfx2/frmhtml.hxx>
 #endif
-#ifndef _FRAMEOBJ_HXX //autogen
-#include <sfx2/frameobj.hxx>
-#endif
 #ifndef _FRMHTMLW_HXX //autogen
 #include <sfx2/frmhtmlw.hxx>
 #endif
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
-#ifndef _APPLET_HXX //autogen
-#include <so3/applet.hxx>
-#endif
-#ifndef _PLUGIN_HXX //autogen
-#include <so3/plugin.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
+
+#include <svtools/ownlist.hxx>
 
 class SfxItemSet;
 
@@ -109,7 +105,7 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_O_object, "OBJECT" );
 
 class SwApplet_Impl
 {
-    SvAppletObjectRef xApplet;      // das aktuelle Applet
+    com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xApplet;
     SvCommandList     aCommandList; // und die szugehorige Command-List
     SfxItemSet        aItemSet;
     String            sAlt;
@@ -126,7 +122,7 @@ public:
     void AppendParam( const String& rName, const String& rValue );
 #endif
     void FinishApplet();
-    SvAppletObject* GetApplet() { return &xApplet; }
+    com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetApplet() { return xApplet; }
     SfxItemSet& GetItemSet() { return aItemSet; }
     const String& GetAltText() { return sAlt; }
     void          SetAltText( const String& rAlt ) {sAlt = rAlt;}
