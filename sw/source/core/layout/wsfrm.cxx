@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-19 14:30:34 $
+ *  last change: $Author: ama $ $Date: 2002-06-21 13:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,8 @@ void SwFrm::CheckDir( UINT16 nDir, BOOL bVert, BOOL bOnlyBiDi, BOOL bBrowse )
     if( FRMDIR_ENVIRONMENT == nDir || ( bVert && bOnlyBiDi ) )
     {
         bDerivedVert = 1;
-        bDerivedR2L = 1;
+        if( FRMDIR_ENVIRONMENT == nDir )
+            bDerivedR2L = 1;
         SetDirFlags( bVert );
     }
     else if( bVert )
