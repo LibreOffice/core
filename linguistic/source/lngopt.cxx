@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngopt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-02 15:39:32 $
+ *  last change: $Author: os $ $Date: 2001-04-03 11:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,9 +381,9 @@ static SfxItemPropertyMap aLinguProps[] =
             &::getCppuType( (sal_Int16*)0 ),    0, 0 },
     { MAP_CHAR_LEN(UPN_DEFAULT_LOCALE),             WID_DEFAULT_LOCALE,
             &::getCppuType( (Locale* )0),       0, 0 },
-    { MAP_CHAR_LEN(UPN_DEFAULT_LOCALE_CJK),         WID_DEFAULT_LOCALE,
+    { MAP_CHAR_LEN(UPN_DEFAULT_LOCALE_CJK),         WID_DEFAULT_LOCALE_CJK,
             &::getCppuType( (Locale* )0),       0, 0 },
-    { MAP_CHAR_LEN(UPN_DEFAULT_LOCALE_CTL),         WID_DEFAULT_LOCALE,
+    { MAP_CHAR_LEN(UPN_DEFAULT_LOCALE_CTL),         WID_DEFAULT_LOCALE_CTL,
             &::getCppuType( (Locale* )0),       0, 0 },
     { MAP_CHAR_LEN(UPN_HYPH_MIN_LEADING),           WID_HYPH_MIN_LEADING,
             &::getCppuType( (sal_Int16*)0 ),    0, 0 },
