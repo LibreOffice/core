@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ControlLock.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:27:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -97,7 +97,7 @@ class LockControlModels extends ComponentTreeTraversal
         {   // indeed it has ....
             String sDataField = (String)xCompProps.getPropertyValue( "DataField" );
             if ( sDataField.equals( m_sDataField ) )
-            {   // we found a control model which is bount to what we're looking for
+            {   // we found a control model which is bound to what we're looking for
                 xCompProps.setPropertyValue( "ReadOnly", m_aLockIt );
             }
         }
