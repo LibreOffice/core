@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-30 20:34:41 $
+ *  last change: $Author: obo $ $Date: 2001-06-05 22:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,10 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ ENGLISH ] = "Groups" ;
         Text[ english_us ] = "Groups";
         Text[ portuguese ] = "Groups";
-        Text[ russian ] = "Groups";
+        Text[ russian ] = "Ãðóïïû";
         Text[ greek ] = "Groups";
         Text[ dutch ] = "Groups";
-        Text[ french ] = "Groups";
+        Text[ french ] = "Groupes";
         Text[ spanish ] = "Grupos";
         Text[ finnish ] = "Groups";
         Text[ italian ] = "Groups";
@@ -86,7 +86,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ swedish ] = "Grupper";
         Text[ polish ] = "Grupy";
         Text[ portuguese_brazilian ] = "Groups";
-        Text[ japanese ] = "Groups";
+        Text[ japanese ] = "¸ÞÙ°Ìß";
         Text[ korean ] = "Groups";
         Text[ chinese_simplified ] = "Ð¡×é";
         Text[ chinese_traditional ] = "¸s²Õ";
