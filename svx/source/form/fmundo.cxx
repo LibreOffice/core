@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:29:53 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,13 @@
 #include "fmundo.hxx"
 #endif
 
+/** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
 #include <com/sun/star/form/XFormController.hpp>
 #endif
@@ -80,6 +86,7 @@
 #ifndef _COM_SUN_STAR_FORM_BINDING_XBINDABLEVALUE_HPP_
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #endif
+/** === end UNO includes === **/
 
 #ifndef _FM_FMMODEL_HXX
 #include "fmmodel.hxx"
@@ -184,6 +191,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
 using namespace ::svxform;
 
@@ -274,14 +282,14 @@ void FmXUndoEnvironment::ModeChanged()
         for (i = 0; i < nCount; i++)
         {
             Reference< XInterface >  xInt(((FmFormPage*)rModel.GetPage(i))->GetForms());
-            AlterPropertyListening(xInt);
+            TogglePropertyListening(xInt);
         }
 
         nCount = rModel.GetMasterPageCount();
         for (i = 0; i < nCount; i++)
         {
             Reference< XInterface >  xInt(((FmFormPage*)rModel.GetMasterPage(i))->GetForms());
-            AlterPropertyListening(xInt);
+            TogglePropertyListening(xInt);
         }
 
         if (!bReadOnly)
@@ -660,9 +668,15 @@ void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt) thr
     OSL_ENSURE(xIface.is(), "FmXUndoEnvironment::elementInserted: invalid container notification!");
     AddElement(xIface);
 
-    if (!IsLocked() && rModel.GetObjectShell())
+    implSetModified();
+}
+
+//------------------------------------------------------------------------------
+void FmXUndoEnvironment::implSetModified()
+{
+    if ( !IsLocked() && rModel.GetObjectShell() )
     {
-        rModel.GetObjectShell()->SetModified(sal_True);
+        rModel.GetObjectShell()->SetModified( sal_True );
     }
 }
 
@@ -678,10 +692,7 @@ void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt) thr
     evt.Element >>= xIface;
     AddElement(xIface);
 
-    if (!IsLocked() && rModel.GetObjectShell())
-    {
-        rModel.GetObjectShell()->SetModified(sal_True);
-    }
+    implSetModified();
 }
 
 //------------------------------------------------------------------------------
@@ -693,10 +704,13 @@ void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt) thro
     OSL_ENSURE(xIface.is(), "FmXUndoEnvironment::elementRemoved: invalid container notification!");
     RemoveElement(xIface);
 
-    if (!IsLocked() && rModel.GetObjectShell())
-    {
-        rModel.GetObjectShell()->SetModified(sal_True);
-    }
+    implSetModified();
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL FmXUndoEnvironment::modified( const EventObject& aEvent ) throw (RuntimeException)
+{
+    implSetModified();
 }
 
 //------------------------------------------------------------------------------
@@ -718,7 +732,7 @@ void FmXUndoEnvironment::RemoveForms(const Reference< XNameContainer > & rForms)
 }
 
 //------------------------------------------------------------------------------
-void FmXUndoEnvironment::AlterPropertyListening(const Reference< XInterface > & Element)
+void FmXUndoEnvironment::TogglePropertyListening(const Reference< XInterface > & Element)
 {
     // am Container horchen
     Reference< XIndexContainer >  xContainer(Element, UNO_QUERY);
@@ -729,7 +743,7 @@ void FmXUndoEnvironment::AlterPropertyListening(const Reference< XInterface > & 
         for (sal_uInt32 i = 0; i < nCount; i++)
         {
             xContainer->getByIndex(i) >>= xIface;
-            AlterPropertyListening(xIface);
+            TogglePropertyListening(xIface);
         }
     }
 
@@ -737,92 +751,118 @@ void FmXUndoEnvironment::AlterPropertyListening(const Reference< XInterface > & 
     if (xSet.is())
     {
         if (!bReadOnly)
-            xSet->addPropertyChangeListener(::rtl::OUString(), (XPropertyChangeListener*)this);
+            xSet->addPropertyChangeListener( ::rtl::OUString(), this );
         else
-            xSet->removePropertyChangeListener(::rtl::OUString(), (XPropertyChangeListener*)this);
+            xSet->removePropertyChangeListener( ::rtl::OUString(), this );
     }
 }
 
 
 //------------------------------------------------------------------------------
-void FmXUndoEnvironment::AddElement(const Reference< XInterface > & Element)
+void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _rxContainer, bool _bStartListening ) SAL_THROW(())
+{
+    OSL_PRECOND( _rxContainer.is(), "FmXUndoEnvironment::switchListening: invalid container!" );
+    if ( !_rxContainer.is() )
+        return;
+
+    try
+    {
+        // if it's an EventAttacherManager, then we need to listen for
+        // script events
+        Reference< XEventAttacherManager > xManager( _rxContainer, UNO_QUERY );
+        if ( xManager.is() )
+            if ( _bStartListening )
+                xManager->addScriptListener( this );
+            else
+                xManager->removeScriptListener( this );
+
+        // also handle all children of this element
+        sal_uInt32 nCount = _rxContainer->getCount();
+        Reference< XInterface > xInterface;
+        for ( sal_uInt32 i = 0; i < nCount; ++i )
+        {
+            _rxContainer->getByIndex( i ) >>= xInterface;
+            if ( _bStartListening )
+                AddElement( xInterface );
+            else
+                RemoveElement( xInterface );
+        }
+
+        // be notified of any changes in the container elements
+        Reference< XContainer > xSimpleContainer( _rxContainer, UNO_QUERY );
+        OSL_ENSURE( xSimpleContainer.is(), "FmXUndoEnvironment::switchListening: how are we expected to be notified of changes in the container?" );
+        if ( xSimpleContainer.is() )
+            if ( _bStartListening )
+                xSimpleContainer->addContainerListener( this );
+            else
+                xSimpleContainer->removeContainerListener( this );
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "FmXUndoEnvironment::switchListening: caught an exception!" );
+    }
+}
+
+//------------------------------------------------------------------------------
+void FmXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObject, bool _bStartListening ) SAL_THROW(())
+{
+    OSL_PRECOND( _rxObject.is(), "FmXUndoEnvironment::switchListening: how should I listen at a NULL object?" );
+
+    try
+    {
+        if ( !bReadOnly )
+        {
+            Reference< XPropertySet > xProps( _rxObject, UNO_QUERY );
+            if ( xProps.is() )
+                if ( _bStartListening )
+                    xProps->addPropertyChangeListener( ::rtl::OUString(), this );
+                else
+                    xProps->removePropertyChangeListener( ::rtl::OUString(), this );
+        }
+
+        Reference< XModifyBroadcaster > xBroadcaster( _rxObject, UNO_QUERY );
+        if ( xBroadcaster.is() )
+            if ( _bStartListening )
+                xBroadcaster->addModifyListener( this );
+            else
+                xBroadcaster->removeModifyListener( this );
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "FmXUndoEnvironment::switchListening: caught an exception!" );
+    }
+}
+
+//------------------------------------------------------------------------------
+void FmXUndoEnvironment::AddElement(const Reference< XInterface >& _rxElement )
 {
     // am Container horchen
-    Reference< XIndexContainer >  xContainer(Element, UNO_QUERY);
-    if (xContainer.is())
-    {
-        // Wenn der Container ein EventAttachManager ist, mussen wir uns
-        // auch noch als ScriptListener anmelden.
-        Reference< XEventAttacherManager >  xEAManager(Element, UNO_QUERY);
-        if( xEAManager.is() )
-            xEAManager->addScriptListener( (XScriptListener*)this );
+    Reference< XIndexContainer > xContainer( _rxElement, UNO_QUERY );
+    if ( xContainer.is() )
+        switchListening( xContainer, true );
 
-        sal_uInt32 nCount = xContainer->getCount();
-        Reference< XInterface >  xIface;
-        for (sal_uInt32 i = 0; i < nCount; i++)
-        {
-            xContainer->getByIndex(i) >>= xIface;
-            AddElement(xIface);
-        }
-
-        Reference< XContainer >  xCont(Element, UNO_QUERY);
-        if (xCont.is())
-            xCont->addContainerListener((XContainerListener*)this);
-    }
-
-    if (!bReadOnly)
-    {
-        // auf Properties horchen
-        Reference< XPropertySet >  xSet(Element, UNO_QUERY);
-        if (xSet.is())
-            xSet->addPropertyChangeListener(::rtl::OUString(), (XPropertyChangeListener*)this);
-    }
+    switchListening( _rxElement, true );
 }
 
 //------------------------------------------------------------------------------
-void FmXUndoEnvironment::RemoveElement(const Reference< XInterface > & Element)
+void FmXUndoEnvironment::RemoveElement(const Reference< XInterface >& _rxElement)
 {
+    switchListening( _rxElement, false );
+
     if (!bReadOnly)
     {
-        // Verbindung zu PropertySet aufheben
-        Reference< XPropertySet >  xSet(Element, UNO_QUERY);
-        if (xSet.is())
-        {
-            xSet->removePropertyChangeListener(::rtl::OUString(), (XPropertyChangeListener*)this);
-
-            Reference< XForm >  xForm(xSet, UNO_QUERY);
-            if (xForm.is())
-            {
-                // reset the ActiveConnection if the form is to be removed. This will (should) free the resources
-                // associated with this connection
-                // 86299 - 05/02/2001 - frank.schoenheit@germany.sun.com
-                xSet->setPropertyValue(FM_PROP_ACTIVE_CONNECTION, Any());
-            }
-        }
+        // reset the ActiveConnection if the form is to be removed. This will (should) free the resources
+        // associated with this connection
+        // 86299 - 05/02/2001 - frank.schoenheit@germany.sun.com
+        Reference< XForm > xForm( _rxElement, UNO_QUERY );
+        Reference< XPropertySet > xFormProperties( xForm, UNO_QUERY );
+        if ( xFormProperties.is() )
+            xFormProperties->setPropertyValue( FM_PROP_ACTIVE_CONNECTION, Any() );
     }
 
-    // Verbindung zu Kindern aufheben
-    Reference< XIndexContainer >  xContainer(Element, UNO_QUERY);
-    if (xContainer.is())
-    {
-        Reference< XContainer >  xCont(Element, UNO_QUERY);
-        if (xCont.is())
-            xCont->removeContainerListener((XContainerListener*)this);
-
-        // Wenn der Container ein EventAttachManager ist, mussen wir uns
-        // auch noch als ScriptListener anmelden.
-        Reference< XEventAttacherManager >  xEAManager(Element, UNO_QUERY);
-        if( xEAManager.is() )
-            xEAManager->removeScriptListener( (XScriptListener*)this );
-
-        sal_uInt32 nCount = xContainer->getCount();
-        Reference< XInterface >  xIface;
-        for (sal_uInt32 i = 0; i < nCount; i++)
-        {
-            xContainer->getByIndex(i) >>= xIface;
-            RemoveElement(xIface);
-        }
-    }
+    Reference< XIndexContainer > xContainer( _rxElement, UNO_QUERY );
+    if ( xContainer.is() )
+        switchListening( xContainer, false );
 }
 
 
@@ -839,29 +879,6 @@ void FmXUndoEnvironment::firing_Impl( const ScriptEvent& evt, Any *pSyncRet )
     {
         Reference< XInterface >  xThis;
         evt.Helper >>= xThis;
-
-//      if (evt.Helper.getValueType() == ::getCppuType((const Reference< XFormController>*)0))
-//      {
-//          Reference< XFormController >  xController;
-//          evt.Helper >>= xController;
-//          xThis = Reference< XInterface > (xController, UNO_QUERY);
-//      }
-//      else if (evt.Helper.getValueType() == ::getCppuType((const Reference< XPropertySet>*)0))
-//
-//      {
-//          Reference< XPropertySet >  xSet;
-//          evt.Helper >>= xSet;
-//          Reference< XForm > xForm(xSet, UNO_QUERY);
-//
-//          xThis = Reference< XInterface > (xSet, UNO_QUERY);
-//      }
-//      else if( evt.Helper.getValueType() == ::getCppuType((const Reference< XControl>*)0) )
-//
-//      {
-//          Reference< XControl >  xControl;
-//          evt.Helper >>= xControl;
-//          xThis = Reference< XInterface > (xControl, UNO_QUERY);
-//      }
 
         aGuard.clear();
         if (xThis.is())
