@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:25:12 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 09:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2320,9 +2320,9 @@ Window* StatementCommand::GetNextRecoverWin()
         pControl = GetNextOverlap( pBase );
         if ( pControl && pControl->IsVisible() && !IsFirstDocFrame( pControl ) && !IsIMEWin( pControl ) )
         {
-            Window *pDock = GetWinByRT( pControl, WINDOW_TOOLBOX, FALSE );
-            if ( pDock && pDock->GET_REAL_PARENT() == pControl )
-                return pDock;
+            Window* pTB = pControl->GetChild( 0 );
+            if ( pControl->GetChildCount() == 1 && pTB->GetType() == WINDOW_TOOLBOX )
+                return pTB;
             else
                 return pControl;
         }
@@ -2547,7 +2547,7 @@ BOOL StatementCommand::Execute()
                         {
                             if ( (((DockingWindow*)pControl)->GetStyle() | ((DockingWindow*)pControl)->GetFloatStyle()) & WB_CLOSEABLE )
                             {
-                                REPORT_WIN_CLOSEDc(pControl, "DockingWindow");
+                                REPORT_WIN_CLOSED(pControl, TypeString(pControl->GetType()));
                                 SET_WINP_CLOSING(pControl);
                                 ((DockingWindow*)pControl)->Close();
 
