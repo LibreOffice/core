@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettings.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:29:38 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:16:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,14 @@
 #include <com/sun/star/document/Settings.idl>
 #endif
 
+#ifndef __com_sun_star_text_PrintSettings_idl__
+#include <com/sun/star/text/PrintSettings.idl>
+#endif
+
+//#ifndef __com_sun_star_text_PrintPreviewSettings_idl__
+#include <com/sun/star/text/PrintPreviewSettings.idl>
+//#endif
+
 //=============================================================================
 
 module com { module sun { module star { module text {
@@ -80,6 +88,10 @@ module com { module sun { module star { module text {
 service DocumentSettings
 {
     service com::sun::star::document::Settings;
+
+    [optional] service com::sun::star::text::PrintSettings;
+
+    [optional] service com::sun::star::text::PrintPreviewSettings;
 
     //-------------------------------------------------------------------------
     /** gives access to the properties implemented by this service.
