@@ -24,6 +24,7 @@ T4_WRITER = \
     writer_StarWriter_50 \
     writer_StarWriter_50_VorlageTemplate \
     writer_StarWriter_DOS \
+    writer_WordPerfect_Document \
     writer_Text \
     writer_Text_encoded \
     writer_JustSystem_Ichitaro_10 \
@@ -61,6 +62,7 @@ F4_WRITER = \
     StarWriter_5_0 \
     StarWriter_5_0_Vorlage_Template \
     StarWriter_DOS \
+    WordPerfect \
     Text \
     Text__encoded_ \
     writer_JustSystem_Ichitaro_10 \
