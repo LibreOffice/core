@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hdu $ $Date: 2001-02-28 08:29:31 $
+ *  last change: $Author: hdu $ $Date: 2001-03-02 14:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,7 +368,7 @@ Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
         aGlyphId = nGlyphIndex;
         const ULONG nBytes = maRawBitmap.mnScanlineSize * maRawBitmap.mnHeight;
         (*pXRenderAddGlyphs)( mpDisplay, aGlyphSet, &aGlyphId, &aGlyphInfo, 1,
-            maRawBitmap.mpBits,  nBytes );
+            (char*)maRawBitmap.mpBits,  nBytes );
 
         mnBytesUsed += nBytes;
         rGlyphData.SetExtended( XRENDER_KIND, (void*)aGlyphId );
