@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:31:42 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,36 +63,9 @@
 
 String EXPORT_DIALOG_TITLE
 {
-    Text = " Optionen" ;
-    Text [ ENGLISH ] = " options" ;
-    Text [ english_us ] = " Options" ;
-    Text [ italian ] = " Opzioni" ;
-    Text [ spanish ] = "  Opciones" ;
-    Text [ french ] = " Options" ;
-    Text [ dutch ] = "Opties" ;
-    Text [ swedish ] = " -alternativ" ;
-    Text [ danish ] = " Indstillinger" ;
-    Text [ portuguese_brazilian ] = " Opções" ;
-    Text [ portuguese ] = " Opções" ;
-    Text[ chinese_simplified ] = " é€‰é¡¹";
-    Text[ russian ] = "  Ïàğàìåòğû";
-    Text[ polish ] = " Opcje";
-    Text[ japanese ] = " ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-    Text[ chinese_traditional ] = " é¸é …";
-    Text[ arabic ] = " ÇáÎíÇÑÇÊ";
-    Text[ greek ] = " Åğéëïãİò";
-    Text[ korean ] = " ì˜µì…˜";
-    Text[ turkish ] = " Seçenekler";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Opcions";
-    Text[ finnish ] = " Asetukset";
-    Text[ thai ] = " à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
-    Text[ czech ] = " Volby";
-    Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬";
-    Text[ hindi ] = " à¤µà¤¿à¤•à¤²à¥à¤ª";
-    Text[ slovak ] = " VoÄ¾by";
-    Text[ hungarian ] = "BeÃ¡llÃ­tÃ¡sok";
-    Text[ slovenian ] = " MoÅ¾nosti";
+    Text [ de ] = " Optionen" ;
+    Text [ en-US ] = " Options" ;
+    Text [ x-comment ] = " ";
 };
 
 String KEY_MODE
