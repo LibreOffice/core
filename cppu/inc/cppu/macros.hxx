@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:51 $
+ *  last change: $Author: obr $ $Date: 2000-11-01 11:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,12 +78,15 @@
 #       pragma warning( disable: 4290 )
 #       define  CPPU_CLBN_TMP   UNO_LB_MSCI
 #       define  CPPU_CLBN_NS_TMP UNO_LB_MSCI_NAMESPACE
+#       define  CPPU_DLL_POSTFIX "MSC"
 #   elif(_MSC_VER < 1200)  // MSVC 5.0
 #       define  CPPU_CLBN_TMP   UNO_LB_MSCI
 #       define  CPPU_CLBN_NS_TMP UNO_LB_MSCI_NAMESPACE
+#       define  CPPU_DLL_POSTFIX "MSC"
 #   elif(_MSC_VER < 1300)  // MSVC 6.0
 #       define  CPPU_CLBN_TMP   UNO_LB_MSCI
 #       define  CPPU_CLBN_NS_TMP UNO_LB_MSCI_NAMESPACE
+#       define  CPPU_DLL_POSTFIX "MSC"
 #   else
 #     define CPPU_COMPILER_ERROR "msc version must be between 4.2 and 6.x"
 #   endif
@@ -104,6 +107,7 @@
 #   elif( __SUNPRO_CC < 0x600 )
 #       define  CPPU_CLBN_TMP   UNO_LB_SUNPRO5
 #       define  CPPU_CLBN_NS_TMP UNO_LB_SUNPRO5_NAMESPACE
+#       define  CPPU_DLL_POSTFIX "C50"
 #   else
 #       define CPPU_COMPILER_ERROR "sunpro cc version must be 5.x"
 #   endif
@@ -117,9 +121,11 @@
 #   elif ( __GNUC__ == 2 && __GNUC_MINOR__ == 91 )
 #       define  CPPU_CLBN_TMP   UNO_LB_GCC2
 #       define  CPPU_CLBN_NS_TMP UNO_LB_GCC2_NAMESPACE
+#       define  CPPU_DLL_POSTFIX "GCC"
 #   elif ( __GNUC__ == 2 && __GNUC_MINOR__ == 95 )
 #       define  CPPU_CLBN_TMP   UNO_LB_GCC2
 #       define  CPPU_CLBN_NS_TMP UNO_LB_GCC2_NAMESPACE
+#       define  CPPU_DLL_POSTFIX "GCC"
 #  else
 #       define CPPU_COMPILER_ERROR "gcc unknown version"
 #   endif
@@ -154,7 +160,13 @@
 #define CPPU_CURRENT_LANGUAGE_BINDING_NAME  CPPU_CLBN_TMP
 #define CPPU_CURRENT_NAMESPACE CPPU_CLBN_NS_TMP
 
-#endif  // _USR_MACROS_HXX_
+#ifdef SAL_DLLPREFIX
+#define CPPU_LIBRARY(name) SAL_DLLPREFIX name CPPU_DLL_POSTFIX SAL_DLLEXTENSION
+#else
+#define CPPU_LIBRARY(name) name CPPU_DLL_POSTFIX SAL_DLLEXTENSION
+#endif
+
+#endif  // _CPPU_MACROS_HXX_
 
 
 
