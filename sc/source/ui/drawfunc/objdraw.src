@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-07 22:32:17 $
+ *  last change: $Author: rt $ $Date: 2001-12-14 17:06:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@
         Text[ chinese_simplified ] = "εΌζ ·(~S)";\
         Text[ russian ] = "Ρςθλό";\
         Text[ polish ] = "Styl";\
-        Text[ japanese ] = "ο½½οΎ€ο½²οΎ™(~S)";\
+        Text[ japanese ] = "γ‚Ήγ‚Ώγ‚¤γƒ«(~S)";\
         Text[ chinese_traditional ] = "ζ¨£εΌ(~S)";\
         Text[ arabic ] = "δγΨ";\
         Text[ greek ] = "Στυ~λ";\
@@ -382,7 +382,7 @@
         Text[ chinese_simplified ] = "ζ–‡ε­—(~X)...";\
         Text[ russian ] = "~Òεκρς...";\
         Text[ polish ] = "~Tekst...";\
-        Text[ japanese ] = "οΎƒο½·ο½½οΎ„(~X)...";\
+        Text[ japanese ] = "γƒ†γ‚­γ‚Ήγƒ(~X)...";\
         Text[ chinese_traditional ] = "ζ–‡ε­—(~X)...";\
         Text[ arabic ] = "~δΥ...";\
         Text[ greek ] = "~Κείμενο...";\
@@ -415,7 +415,7 @@
         Text[ chinese_simplified ] = "εδ»¶ε¤§ε°(~O)";\
         Text[ russian ] = "Θρυξδνϋι πΰημεπ";\
         Text[ polish ] = "Rozmiar oryginalny";\
-        Text[ japanese ] = "ο½µοΎο½ΌοΎοΎ…οΎ™ο½»ο½²ο½½οΎ(~O)";\
+        Text[ japanese ] = "γ‚ªγƒªγ‚Έγƒγƒ«γ‚µγ‚¤γ‚Ί(~O)";\
         Text[ chinese_traditional ] = "εδ»¶ε¤§ε°(~O)";\
         Text[ arabic ] = "ΗαΝΜγ ΗαΓΥαν";\
         Text[ greek ] = "Αρχικό μέ~γεθος";\
@@ -438,14 +438,14 @@
         Text[ greek ] = "~Name Object...";\
         Text[ dutch ] = "~Name Object...";\
         Text[ french ] = "~Nommer l'objet...";\
-        Text[ spanish ] = "~Name Object...";\
+        Text[ spanish ] = "~Nombrar objeto...";\
         Text[ finnish ] = "~Name Object...";\
         Text[ italian ] = "~Nome oggetto...";\
         Text[ danish ] = "~Name Object...";\
         Text[ swedish ] = "Namnge ob~jekt...";\
         Text[ polish ] = "~Name Object...";\
         Text[ portuguese_brazilian ] = "~Name Object...";\
-        Text[ japanese ] = "ο½µοΎοΎο½ΌοΎο½ªο½ΈοΎ„γ«εε‰γ‚’δ»γ‘γ‚‹...";\
+        Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ«εε‰γ‚’δ»γ‘γ‚‹...";\
         Text[ korean ] = "~Name Object...";\
         Text[ chinese_simplified ] = "ε‘½εε―Ήθ±΅...";\
         Text[ chinese_traditional ] = "ε‘½εη‰©δ»¶...";\
@@ -697,7 +697,7 @@
                     Text[ chinese_simplified ] = "ε¨ι΅µιΆδΈ(~A)";\
                     Text[ russian ] = "~Κ ρςπΰνθφε";\
                     Text[ polish ] = "~Na stronie";\
-                    Text[ japanese ] = "οΎοΎο½°ο½ΌοΎγ«(~A)";\
+                    Text[ japanese ] = "γƒγƒΌγ‚Έγ«(~A)";\
                     Text[ chinese_traditional ] = "ε¨ι ιΆδΈ(~A)";\
                     Text[ arabic ] = "Ϊαμ Ηα~ΥέΝΙ";\
                     Text[ greek ] = "~Στη σελίδα";\
@@ -725,7 +725,7 @@
                     Text[ chinese_simplified ] = "ε¨ε•ε…ƒζ ΌδΈ(~C)";\
                     Text[ russian ] = "Κ ÿχεικε";\
                     Text[ polish ] = "Przy komσrce";\
-                    Text[ japanese ] = "ο½ΎοΎ™γ«(~C)";\
+                    Text[ japanese ] = "γ‚»γƒ«γ«(~C)";\
                     Text[ chinese_traditional ] = "ε¨ε„²ε­ζ ΌδΈ(~C)";\
                     Text[ arabic ] = "ΞανΙ";\
                     Text[ greek ] = "Στο ~κελί";\
@@ -744,7 +744,7 @@
         Text[ chinese_simplified ] = "ι”ε®(~C)";\
         Text[ russian ] = "~Οπθβÿηκΰ";\
         Text[ polish ] = "~Zakotwiczenie";\
-        Text[ japanese ] = "ο½±οΎο½¶ο½°(~C)";\
+        Text[ japanese ] = "γ‚Άγƒ³γ‚«γƒΌ(~C)";\
         Text[ chinese_traditional ] = "ι–ε®(~C)";\
         Text[ arabic ] = "~ΕΡΣΗΑ";\
         Text[ greek ] = "Αγκύρ~ωση";\
@@ -844,7 +844,7 @@ String RID_DRAW_OBJECTBAR
     Text[ chinese_simplified ] = "η»ε›Ύε―Ήθ±΅ζ ";
     Text[ russian ] = "Οΰνελό γπΰτθχερκθυ ξαϊεκςξβ";
     Text[ polish ] = "Pasek obiektσw graficznych";
-    Text[ japanese ] = "ε›³ε½Άζη”»ο½µοΎοΎο½ΌοΎο½ªο½ΈοΎ„οΎοΎο½°";
+    Text[ japanese ] = "ε›³ε½Άζη”»γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγƒγƒΌ";
     Text[ chinese_traditional ] = "ηΉªε–η‰©δ»¶ε—";
     Text[ arabic ] = "ΤΡνΨ ΗαίΗΖδΗΚ ΗαΡΣζγνΙ";
     Text[ greek ] = "Γραμμή σχεδίασης αντικειμένων";
@@ -1018,7 +1018,7 @@ String RID_TEXT_TOOLBOX
     Text[ chinese_simplified ] = "ζ–‡ε­—ε―Ήθ±΅ζ ";
     Text[ russian ] = "Οΰνελό ξαϊεκςξβ ςεκρςΰ";
     Text[ polish ] = "Pasek obiektσw tekstowych";
-    Text[ japanese ] = "οΎƒο½·ο½½οΎ„ο½µοΎοΎο½ΌοΎο½ªο½ΈοΎ„οΎοΎο½°";
+    Text[ japanese ] = "γƒ†γ‚­γ‚Ήγƒγ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγƒγƒΌ";
     Text[ chinese_traditional ] = "ζ–‡ε­—η‰©δ»¶ε—";
     Text[ arabic ] = "ΤΡνΨ ίΗΖδΗΚ ΗαδΥ";
     Text[ greek ] = "Γραμμή αντικειμένων κειμένου";
@@ -1207,7 +1207,7 @@ String RID_GRAPHIC_OBJECTBAR
     Text[ swedish ] = "Grafikobjektlist";
     Text[ polish ] = "Pasek obiektσw graficznych";
     Text[ portuguese_brazilian ] = "Toolbar for graphic objects";
-    Text[ japanese ] = "ε›³ο½µοΎοΎο½ΌοΎο½ªο½ΈοΎ„οΎοΎο½°";
+    Text[ japanese ] = "ε›³γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγƒγƒΌ";
     Text[ korean ] = "κ·Έλν”½ κ°μ²΄ λª¨μ";
     Text[ chinese_simplified ] = "ε›Ύε½Άε―Ήθ±΅ζ ";
     Text[ chinese_traditional ] = "ε–ε½Άη‰©δ»¶ε—";
@@ -1468,7 +1468,7 @@ String RID_POPUP_DRAW
     Text[ chinese_simplified ] = "η»ε›ΎεΌΉε‡ΊεΌθε•";
     Text[ russian ] = "Βρολϋβΰώωεε μενώ δλÿ γπΰτθχερκθυ ξαϊεκςξβ";
     Text[ polish ] = "Menu podrκczne obiektσw graficznych";
-    Text[ japanese ] = "ε›³ε½Άζη”»ο½µοΎοΎο½ΌοΎο½ªο½ΈοΎ„γ®οΎοΎο½―οΎοΎο½±ο½―οΎοΎοΎ’οΎ†ο½­ο½°";
+    Text[ japanese ] = "ε›³ε½Άζη”»γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ®γƒγƒƒγƒ—γ‚Άγƒƒγƒ—γƒ΅γƒ‹γƒ¥γƒΌ";
     Text[ chinese_traditional ] = "ηΉªε–εΏ«ι΅―εθƒ½θ΅¨";
     Text[ arabic ] = "ήΗΖγΙ γδΘΛήΙ ααίΗΖδΗΚ ΗαΡΣζγνΙ";
     Text[ greek ] = "Αναδυόμενο μενού για αντικείμενα σχεδίασης";
@@ -1624,7 +1624,7 @@ Menu RID_POPUP_CHART
             Text[ chinese_simplified ] = "ζ›΄ζ”Ήζ•°ζ®εΊε(~M)...";
                                                 Text[ russian ] = "Θημενθςό ξαλΰρςό δΰννϋυ...";
                                                 Text[ polish ] = "Zmieρ obszar danych..";
-                                                Text[ japanese ] = "οΎƒοΎο½°οΎ€η―„ε›²γ®ε¤‰ζ›΄(~M)...";
+                                                Text[ japanese ] = "γƒ‡γƒΌγ‚Ώη―„ε›²γ®ε¤‰ζ›΄(~M)...";
                                                 Text[ chinese_traditional ] = "δΏ®ζ”Ήθ³‡ζ–™ε€ε(~M)...";
                                                 Text[ arabic ] = "...ΚΪΟνα δΨΗή ΗαΘνΗδΗΚ";
                                                 Text[ greek ] = "Αλλαγή περιοχής ~δεδομένων...";
@@ -1662,7 +1662,7 @@ String RID_POPUP_DRAWTEXT
     Text[ chinese_simplified ] = "ζ–‡ε­—ε―Ήθ±΅η„εΌΉε‡ΊεΌθε•";
                                         Text[ russian ] = "Βρολϋβΰώωεε μενώ δλÿ ξαϊεκςξβ ςεκρςΰ";
                                         Text[ polish ] = "Menu podrκczne dla obiektσw tekstowych";
-                                        Text[ japanese ] = "οΎƒο½·ο½½οΎ„ο½µοΎοΎο½ΌοΎο½ªο½ΈοΎ„γ®οΎοΎο½―οΎοΎο½±ο½―οΎοΎοΎ’οΎ†ο½­ο½°";
+                                        Text[ japanese ] = "γƒ†γ‚­γ‚Ήγƒγ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ®γƒγƒƒγƒ—γ‚Άγƒƒγƒ—γƒ΅γƒ‹γƒ¥γƒΌ";
                                         Text[ chinese_traditional ] = "ζ–‡ε­—η‰©δ»¶εΏ«ι΅―εθƒ½θ΅¨";
                                         Text[ arabic ] = "ήΗΖγΙ γδΘΛήΙ ααίΗΖδΗΚ ΗαδΥνΙ";
                                         Text[ greek ] = "Αναδυόμενο μενού για αντκείμενα κειμένου";
@@ -1696,6 +1696,7 @@ Menu RID_POPUP_DRAWTEXT
         MN_DRWTXT
     };
 };
+
 
 
 
