@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2001-05-18 16:08:49 $
+ *  last change: $Author: cmc $ $Date: 2001-06-06 13:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2662,8 +2662,7 @@ int MathType::HandlePile(int &rSetAlign,int nLevel,BYTE nSelector,
 int MathType::HandleMatrix(int nLevel,BYTE nSelector,
     BYTE nVariation)
 {
-    BYTE nH_just,nV_just;
-    int nRows,nCols;
+    BYTE nH_just,nV_just,nRows,nCols;
     //if (xfLMOVE(nTag))
     *pS >> nVAlign;
     *pS >> nH_just;
