@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 08:38:04 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 12:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1198,7 +1198,7 @@ BOOL SwSetExpField::QueryValue( uno::Any& rAny, const String& rProperty ) const
         rAny <<= OUString( sFormula );
     }
     else if( rProperty.EqualsAscii( UNO_NAME_VALUE ))
-        rAny <<= (Double)GetValue();
+        rAny <<= (double)GetValue();
     else if( rProperty.EqualsAscii( UNO_NAME_SUB_TYPE ))
     {
         sal_Int16 nRet = 0;

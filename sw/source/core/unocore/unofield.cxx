@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2001-03-13 10:43:01 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 12:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
                 //TODO: UNO_NAME_VARIABLE_NAME gibt es das wirklich?
                 {SW_PROP_NAME(UNO_NAME_SEQUENCE_VALUE), FIELD_PROP_USHORT1, &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE,  0},
                 {SW_PROP_NAME(UNO_NAME_SUB_TYPE),           FIELD_PROP_SUBTYPE, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_VALUE),          FIELD_PROP_DOUBLE,  &::getCppuType((const Double*)0),   PROPERTY_NONE,  0},
+                {SW_PROP_NAME(UNO_NAME_VALUE),          FIELD_PROP_DOUBLE,  &::getCppuType((const double*)0),   PROPERTY_NONE,  0},
                 {SW_PROP_NAME(UNO_NAME_VARIABLE_NAME),  FIELD_PROP_PAR1,    &::getCppuType((const OUString*)0),   PropertyAttribute::READONLY, 0},
                 {0,0,0,0}
             };
@@ -343,7 +343,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
                 {SW_PROP_NAME(UNO_NAME_IS_SHOW_FORMULA), FIELD_PROP_BOOL2,  &::getBooleanCppuType(), PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT),  FIELD_PROP_FORMAT,  &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_SUB_TYPE),           FIELD_PROP_SUBTYPE, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_VALUE),          FIELD_PROP_DOUBLE,  &::getCppuType((const Double*)0), PropertyAttribute::READONLY,  0},
+                {SW_PROP_NAME(UNO_NAME_VALUE),          FIELD_PROP_DOUBLE,  &::getCppuType((const double*)0), PropertyAttribute::READONLY,  0},
                 {SW_PROP_NAME(UNO_NAME_VARIABLE_SUBTYPE),   FIELD_PROP_USHORT1, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
                 {0,0,0,0}
             };
@@ -674,7 +674,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             static SfxItemPropertyMap aDocInfoDateTimePropMap           [] =
             {
                 {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATE_TIME_VALUE),        FIELD_PROP_DOUBLE,  &::getCppuType((const Double*)0), PropertyAttribute::READONLY,  0},
+                {SW_PROP_NAME(UNO_NAME_DATE_TIME_VALUE),        FIELD_PROP_DOUBLE,  &::getCppuType((const double*)0), PropertyAttribute::READONLY,  0},
                 {SW_PROP_NAME(UNO_NAME_IS_DATE),    FIELD_PROP_BOOL2,   &::getBooleanCppuType()  , PROPERTY_NONE,0},
                 {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT),FIELD_PROP_FORMAT,    &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   &::getBooleanCppuType()  , PROPERTY_NONE,   0},
@@ -688,7 +688,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             static SfxItemPropertyMap aDocInfoEditTimePropMap           [] =
             {
                 {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATE_TIME_VALUE),        FIELD_PROP_DOUBLE,  &::getCppuType((const Double*)0), PropertyAttribute::READONLY,  0},
+                {SW_PROP_NAME(UNO_NAME_DATE_TIME_VALUE),        FIELD_PROP_DOUBLE,  &::getCppuType((const double*)0), PropertyAttribute::READONLY,  0},
                 {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT),FIELD_PROP_FORMAT,    &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   &::getBooleanCppuType()  , PROPERTY_NONE,   0},
                 {0,0,0,0}
@@ -764,7 +764,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
 #endif
                 {SW_PROP_NAME(UNO_NAME_IS_EXPRESSION),      0,  &::getBooleanCppuType(), PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_NAME),               0,  &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
-                {SW_PROP_NAME(UNO_NAME_VALUE),          0,  &::getCppuType((const Double*)0), PROPERTY_NONE,    0},
+                {SW_PROP_NAME(UNO_NAME_VALUE),          0,  &::getCppuType((const double*)0), PROPERTY_NONE,    0},
                 {SW_PROP_NAME(UNO_NAME_CONTENT),            0,  &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
                 {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
                 {0,0,0,0}
@@ -1209,9 +1209,9 @@ void SwXFieldMaster::setPropertyValue(const OUString& rPropertyName, const uno::
             }
             else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_VALUE ))
             {
-                if(aValue.getValueType() != ::getCppuType((const Double*)0))
+                if(aValue.getValueType() != ::getCppuType((const double*)0))
                     throw IllegalArgumentException();
-                fParam1 = *(Double*)aValue.getValue();
+                fParam1 = *(double*)aValue.getValue();
             }
             else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_IS_EXPRESSION ))
             {
@@ -1628,7 +1628,7 @@ struct SwFieldProperties_Impl
     sal_Bool        bBool2;
     sal_Bool        bBool3;
     Date            aDate;
-    Double          fDouble;
+    double          fDouble;
     util::DateTime* pDateTime;
     Sequence<PropertyValue> aPropSeq;
 
@@ -2512,9 +2512,9 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
             break;
             case FIELD_PROP_DOUBLE:
             {
-                if(aValue.getValueType() != ::getCppuType((const Double*)0))
+                if(aValue.getValueType() != ::getCppuType((const double*)0))
                     throw IllegalArgumentException();
-                m_pProps->fDouble = *(Double*)aValue.getValue();
+                m_pProps->fDouble = *(double*)aValue.getValue();
             }
             break;
             case FIELD_PROP_DATE_TIME :

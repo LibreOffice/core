@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrfld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 12:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,7 +392,7 @@ BOOL SwUserFieldType::QueryValue( uno::Any& rAny, const String& rProperty ) cons
 {
     if(rProperty.EqualsAscii(UNO_NAME_VALUE))
     {
-        rAny <<= (Double) nValue;
+        rAny <<= (double) nValue;
     }
     else if(rProperty.EqualsAscii(UNO_NAME_CONTENT))
     {
@@ -416,7 +416,7 @@ BOOL SwUserFieldType::PutValue( const uno::Any& rAny, const String& rProperty )
 {
     if(rProperty.EqualsAscii(UNO_NAME_VALUE))
     {
-        Double fVal;
+        double fVal;
         rAny >>= fVal;
         nValue = fVal;
 
