@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-19 13:29:54 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,6 @@ public:
     void   AddName( const String&, const String&, const String&, BOOL bOnlyTxt = FALSE );
     virtual void   AddName( const String&, const String&, BOOL bOnlyTxt = FALSE );
     void GeneratePackageName ( const String& rShort, String& rPackageName );
-    void   SetCurrentText( const String& rText );
     virtual ~SwXMLTextBlocks();
     //virtual BOOL   IsOld() const;
     virtual ULONG Delete( USHORT );
@@ -145,7 +144,6 @@ public:
     ULONG GetBlockText( const String& rShort, String& rText );
     ULONG PutBlockText( const String& rShort, const String& rName, const String& rText,  const String& rPackageName );
     void MakeBlockText( const String& rText );
-    void AddTextNode( const String& rText );
 
 };
 
