@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:42:30 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:52:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1086,26 +1086,26 @@ BOOL SwTableOptionsTabPage::FillItemSet( SfxItemSet& rSet )
         bRet = TRUE;
     }
 
-    USHORT nInsTblFlags = 0;
+    SwInsertTableOptions aInsOpts( 0, 0 );
 
     if (aHeaderCB.IsChecked())
-        nInsTblFlags |= HEADLINE;
+        aInsOpts.mnInsMode |= tabopts::HEADLINE;
 
-    if (aRepeatHeaderCB.IsEnabled() && aRepeatHeaderCB.IsChecked())
-        nInsTblFlags |= HEADLINE_REPEAT;
+    if (aRepeatHeaderCB.IsEnabled() )
+        aInsOpts.mnRowsToRepeat = aRepeatHeaderCB.IsChecked()? 1 : 0;
 
     if (!aDontSplitCB.IsChecked())
-        nInsTblFlags |= SPLIT_LAYOUT;
+        aInsOpts.mnInsMode |= tabopts::SPLIT_LAYOUT;
 
     if (aBorderCB.IsChecked())
-        nInsTblFlags |= DEFAULT_BORDER;
+        aInsOpts.mnInsMode |= tabopts::DEFAULT_BORDER;
 
     if (aHeaderCB.GetSavedValue() != aHeaderCB.GetState() ||
         aRepeatHeaderCB.GetSavedValue() != aRepeatHeaderCB.GetState() ||
         aDontSplitCB.GetSavedValue() != aDontSplitCB.GetState() ||
         aBorderCB.GetSavedValue() != aBorderCB.GetState())
     {
-        pModOpt->SetInsTblFlags(bHTMLMode, nInsTblFlags);
+        pModOpt->SetInsTblFlags(bHTMLMode, aInsOpts);
     }
 
     if (aNumFormattingCB.GetSavedValue() != aNumFormattingCB.GetState())
@@ -1204,12 +1204,13 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet& rSet)
         aDontSplitCB.Hide();
     }
 
-    USHORT nInsTblFlags = pModOpt->GetInsTblFlags(bHTMLMode);
+    SwInsertTableOptions aInsOpts = pModOpt->GetInsTblFlags(bHTMLMode);
+    USHORT nInsTblFlags = aInsOpts.mnInsMode;
 
-    aHeaderCB.Check(nInsTblFlags & HEADLINE);
-    aRepeatHeaderCB.Check(nInsTblFlags & REPEAT);
-    aDontSplitCB.Check(!(nInsTblFlags & SPLIT_LAYOUT));
-    aBorderCB.Check(nInsTblFlags & DEFAULT_BORDER);
+    aHeaderCB.Check(nInsTblFlags & tabopts::HEADLINE);
+    aRepeatHeaderCB.Check(aInsOpts.mnRowsToRepeat > 0);
+    aDontSplitCB.Check(!(nInsTblFlags & tabopts::SPLIT_LAYOUT));
+    aBorderCB.Check(nInsTblFlags & tabopts::DEFAULT_BORDER);
 
     aNumFormattingCB.Check(pModOpt->IsInsTblFormatNum(bHTMLMode));
     aNumFmtFormattingCB.Check(pModOpt->IsInsTblChangeNumFormat(bHTMLMode));
