@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Labels.xcs,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-24 13:12:12 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 				<desc xml:lang="th">Contains the properties used for a label.</desc>
 				<desc xml:lang="hi-IN">Contains the properties used for a label.</desc>
 				<desc xml:lang="x-comment">Contains the properties used for a label.</desc>
+				<desc xml:lang="hu">Contains the properties used for a label.</desc>
+				<desc xml:lang="sk">Contains the properties used for a label.</desc>
+				<desc xml:lang="sl">Contains the properties used for a label.</desc>
 			</info>
 			<prop oor:name="Name" oor:type="xs:string">
 				<!--Label: Type Description: Name of the format-->
@@ -122,6 +125,9 @@
 					<desc xml:lang="th">Contains the descriptive name for the label format.</desc>
 					<desc xml:lang="hi-IN">Contains the descriptive name for the label format.</desc>
 					<desc xml:lang="x-comment">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="hu">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="sk">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="sl">Contains the descriptive name for the label format.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Measure" oor:type="xs:string">
@@ -152,6 +158,9 @@
 					<desc xml:lang="th">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
 					<desc xml:lang="hi-IN">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
 					<desc xml:lang="x-comment">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="hu">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="sk">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="sl">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
 				</info>
 			</prop>
 		</group>
@@ -182,6 +191,9 @@
 				<desc xml:lang="th">Specifies a set of labels of a manufacturer.</desc>
 				<desc xml:lang="hi-IN">Specifies a set of labels of a manufacturer.</desc>
 				<desc xml:lang="x-comment">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="hu">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="sk">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="sl">Specifies a set of labels of a manufacturer.</desc>
 			</info>
 		</set>
 	</templates>
@@ -213,6 +225,9 @@
 					<desc xml:lang="th">Contains the list of label manufacturers.</desc>
 					<desc xml:lang="hi-IN">Contains the list of label manufacturers.</desc>
 					<desc xml:lang="x-comment">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="hu">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="sk">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="sl">Contains the list of label manufacturers.</desc>
 				<label xml:lang="en-US">Available Manufacturers</label>
 				<label xml:lang="el">Available Manufacturers</label>
 				<label xml:lang="nl">Available Manufacturers</label>
@@ -238,10 +253,14 @@
 				<label xml:lang="th">Available Manufacturers</label>
 				<label xml:lang="hi-IN">Available Manufacturers</label>
 				<label xml:lang="x-comment">Available Manufacturers</label>
+				<label xml:lang="hu">Available Manufacturers</label>
+				<label xml:lang="sk">Available Manufacturers</label>
+				<label xml:lang="sl">Available Manufacturers</label>
 			</info>
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 
