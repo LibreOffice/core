@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acc_socket.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:55 $
+ *  last change: $Author: jbu $ $Date: 2001-08-27 09:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,22 +371,40 @@ namespace io_acceptor {
 
     void SocketAcceptor::init()
     {
-        m_addr.setPort( m_nPort );
-        m_addr.setHostname( m_sSocketName.pData );
+        if( ! m_addr.setPort( m_nPort ) )
+        {
+            OUStringBuffer message( 128 );
+            message.appendAscii( "acc_socket.cxx:SocketAcceptor::init - error - invalid tcp/ip port " );
+            message.append( (sal_Int32) m_nPort );
+            throw ConnectionSetupException(
+                message.makeStringAndClear() , Reference< XInterface> () );
+        }
+        if( ! m_addr.setHostname( m_sSocketName.pData ) )
+        {
+            OUStringBuffer message( 128 );
+            message.appendAscii( "acc_socket.cxx:SocketAcceptor::init - error - invalid host " );
+            message.append( m_sSocketName );
+            throw ConnectionSetupException(
+                message.makeStringAndClear(), Reference< XInterface > () );
+        }
         m_socket.setOption( osl_Socket_OptionReuseAddr, 1);
 
         if(! m_socket.bind(m_addr) )
         {
+            OUStringBuffer message( 128 );
+            message.appendAscii( "acc_socket.cxx:SocketAcceptor::init - error - couldn't bind on " );
+            message.append( m_sSocketName ).appendAscii( ":" ).append((sal_Int32)m_nPort);
             throw ConnectionSetupException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("acc_socket.cxx:SocketAcceptor::init - error - couldn't bind")),
+                message.makeStringAndClear(),
                 Reference<XInterface>());
         }
 
         if(! m_socket.listen() )
         {
-            throw ConnectionSetupException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("acc_socket.cxx:SocketAcceptor::init - error - can not listen")),
-                Reference<XInterface>());
+            OUStringBuffer message( 128 );
+            message.appendAscii( "acc_socket.cxx:SocketAcceptor::init - error - can't listen on " );
+            message.append( m_sSocketName ).appendAscii( ":" ).append( (sal_Int32) m_nPort);
+            throw ConnectionSetupException( message.makeStringAndClear(),Reference<XInterface>() );
         }
     }
 
