@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-02-19 10:27:11 $
+ *  last change: $Author: dvo $ $Date: 2001-02-21 20:48:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,4 +751,50 @@ Any SwXRubyPortion::getPropertyValue( const OUString& rPropertyName )
     else
         aRet = SwXTextPortion::getPropertyValue(rPropertyName);
     return aRet;
+}
+/* -----------------------------21.02.01 12:24:30,5---------------------------
+
+ ---------------------------------------------------------------------------*/
+beans::PropertyState SwXRubyPortion::getPropertyState(const OUString& rPropertyName)
+            throw( beans::UnknownPropertyException, uno::RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    beans::PropertyState eRet = beans::PropertyState_DEFAULT_VALUE;
+    SwUnoCrsr* pUnoCrsr = GetCrsr();
+    if(pUnoCrsr)
+    {
+        if(GetTextPortionType() == PORTION_RUBY_START &&
+           !rPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("Ruby") ))
+            eRet = beans::PropertyState_DIRECT_VALUE;
+        else
+            eRet = SwXTextCursor::GetPropertyState(*pUnoCrsr, GetPropSet(), rPropertyName);
+    }
+    else
+        throw RuntimeException();
+    return eRet;
+}
+/* -----------------------------21.02.01 12:24:30,5---------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Sequence< beans::PropertyState > SwXRubyPortion::getPropertyStates(
+        const uno::Sequence< OUString >& PropertyNames)
+        throw( beans::UnknownPropertyException, uno::RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    SwUnoCrsr* pUnoCrsr = GetCrsr();
+    if(!pUnoCrsr)
+        throw RuntimeException();
+    uno::Sequence< beans::PropertyState > aRetSequence;
+    aRetSequence = SwXTextCursor::GetPropertyStates(*pUnoCrsr, GetPropSet(), PropertyNames);
+    if(GetTextPortionType() == PORTION_RUBY_START)
+    {
+        const OUString* pNames = PropertyNames.getConstArray();
+        beans::PropertyState* pStates = aRetSequence.getArray();
+        for(sal_Int32 i = 0; i < aRetSequence.getLength(); i++)
+        {
+            if (0 == pNames[i].compareToAscii(RTL_CONSTASCII_STRINGPARAM("Ruby")))
+                pStates[i] = beans::PropertyState_DIRECT_VALUE;
+        }
+    }
+    return aRetSequence;
 }
