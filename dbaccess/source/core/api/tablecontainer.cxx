@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 07:14:49 $
+ *  last change: $Author: oj $ $Date: 2001-04-20 13:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
+#endif
+#ifndef _DBA_CORE_TABLEDECORATOR_HXX_
+#include "TableDeco.hxx"
 #endif
 
 using namespace dbaccess;
@@ -468,14 +471,7 @@ Reference< XNamed > OTableContainer::createObject(const ::rtl::OUString& _rName)
     }
 
     if(xProp.is())
-        return new ODBTable(aTableConfig,
-                            m_xMetaData,
-                            xSup,
-                            sCatalog,
-                            sSchema,
-                            sTable,
-                            ::comphelper::getString(xProp->getPropertyValue(PROPERTY_TYPE)),
-                            ::comphelper::getString(xProp->getPropertyValue(PROPERTY_DESCRIPTION)));
+        return new ODBTableDecorator(aTableConfig,m_xMetaData,xSup);
     else
     {
         Any aCatalog;
@@ -495,7 +491,6 @@ Reference< XNamed > OTableContainer::createObject(const ::rtl::OUString& _rName)
         ::comphelper::disposeComponent(xRes);
         return new ODBTable(aTableConfig,
                             m_xMetaData,
-                            xSup,
                             sCatalog,
                             sSchema,
                             sTable,
@@ -512,9 +507,12 @@ Reference< XPropertySet > OTableContainer::createEmptyObject()
     Reference<XColumnsSupplier > xMasterColumnsSup;
     Reference<XDataDescriptorFactory> xDataFactory(m_xMasterTables,UNO_QUERY);
     if(xDataFactory.is())
+    {
         xMasterColumnsSup = Reference<XColumnsSupplier >(xDataFactory->createDataDescriptor(),UNO_QUERY);
-
-    xRet = new ODBTable(m_xMetaData,xMasterColumnsSup);
+        xRet = new ODBTableDecorator(m_xMetaData,xMasterColumnsSup);
+    }
+    else
+        xRet = new ODBTable(m_xMetaData);
     return xRet;
 }
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-06 08:58:10 $
+ *  last change: $Author: oj $ $Date: 2001-04-20 13:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,13 +694,11 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OColumns::createEmptyObject()
 {
-    OSL_ENSURE(sal_False, "Are not filled this way!");
-    //  connectivity::sdbcx::OColumn* pRet = new OTableColumnDescriptor(isCaseSensitive());
-    OTableColumnDescriptor* pRet = new OTableColumnDescriptor();
-    Reference< XPropertySet > xRet = pRet;
-    return xRet;
+    if (m_pColFactoryImpl)
+        return m_pColFactoryImpl->createEmptyObject();
+    else
+        return Reference< XPropertySet >();
 }
-// -------------------------------------------------------------------------
 // -------------------------------------------------------------------------
 Any SAL_CALL OColumns::queryInterface( const Type & rType ) throw(RuntimeException)
 {
@@ -873,6 +871,7 @@ void SAL_CALL OColumns::dropByIndex( sal_Int32 index ) throw(SQLException, Index
 
     dropByName(m_aElements[index]->first);
 }
+
 /*
 
 //============================================================

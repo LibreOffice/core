@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: oj $ $Date: 2001-03-29 07:07:13 $
+#   last change: $Author: oj $ $Date: 2001-04-20 13:09:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
+        $(SLO)$/TableDeco.obj			\
         $(SLO)$/RowSetCacheIterator.obj	\
         $(SLO)$/RowSet.obj				\
         $(SLO)$/column.obj				\

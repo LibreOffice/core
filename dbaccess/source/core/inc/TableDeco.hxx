@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: table.hxx,v $
+ *  $RCSfile: TableDeco.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 13:09:12 $
+ *  last change: $Author: oj $ $Date: 2001-04-20 13:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _DBA_CORE_TABLE_HXX_
-#define _DBA_CORE_TABLE_HXX_
+#ifndef _DBA_CORE_TABLEDECORATOR_HXX_
+#define _DBA_CORE_TABLEDECORATOR_HXX_
 
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -89,9 +89,14 @@
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
-
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
-#include <cppuhelper/compbase7.hxx>
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
+#ifndef _CPPUHELPER_COMPBASE4_HXX_
+#include <cppuhelper/compbase4.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
@@ -105,68 +110,81 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
 #endif
-#ifndef _CONNECTIVITY_SDBCX_TABLE_HXX_
-#include <connectivity/sdbcx/VTable.hxx>
-#endif
 #ifndef _DBA_CORE_CONFIGURATIONFLUSHABLE_HXX_
 #include "configurationflushable.hxx"
 #endif
 
 namespace dbaccess
 {
+    typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::sdbcx::XColumnsSupplier,
+                                                ::com::sun::star::sdbcx::XKeysSupplier,
+                                                ::com::sun::star::container::XNamed,
+                                                ::com::sun::star::lang::XServiceInfo> OTableDescriptor_BASE;
 
-    typedef ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection > OWeakConnection;
+    typedef ::cppu::ImplHelper5<                ::com::sun::star::sdbcx::XDataDescriptorFactory,
+                                                ::com::sun::star::sdbcx::XIndexesSupplier,
+                                                ::com::sun::star::sdbcx::XRename,
+                                                ::com::sun::star::sdbcx::XAlterTable,
+                                                ::com::sun::star::lang::XUnoTunnel> OTable_BASE;
     //==========================================================================
     //= OTables
     //==========================================================================
-    class ODBTable;
-    typedef ::comphelper::OIdPropertyArrayUsageHelper< ODBTable >   ODBTable_PROP;
-    typedef connectivity::sdbcx::OTable                             OTable_Base;
+    class ODBTableDecorator;
+    typedef ::comphelper::OPropertyArrayUsageHelper< ODBTableDecorator >    ODBTableDecorator_PROP;
 
-    class ODBTable  :public ODataSettings_Base
-                    ,public ODBTable_PROP
-                    ,public OTable_Base
-                    ,public OConfigurationFlushable
-                    ,public IColumnFactory
+    class ODBTableDecorator :public comphelper::OBaseMutex
+                            ,public ODataSettings //ODataSettings_Base
+                            ,public OConfigurationFlushable
+                            ,public OTable_BASE
+                            ,public OTableDescriptor_BASE
+                            ,public IColumnFactory
+                            ,public ODBTableDecorator_PROP
     {
+        void fillPrivileges() const;
     protected:
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >   m_xTable;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xDriverColumns;
-
     // <properties>
         sal_Int32                                                                       m_nPrivileges;
     // </properties>
-
-        void refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys);
-        void refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys);
-
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
-        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-        // OConfigurationFlushable
-        virtual void flush_NoBroadcast_NoCommit();
+        ::connectivity::sdbcx::OCollection*                                             m_pColumns;
 
         // IColumnFactory
         virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
+
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
+        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+        // OConfigurationFlushable
+        virtual void flush_NoBroadcast_NoCommit();
+
+        // OPropertySetHelper
+        virtual sal_Bool SAL_CALL convertFastPropertyValue(
+                            ::com::sun::star::uno::Any & rConvertedValue,
+                            ::com::sun::star::uno::Any & rOldValue,
+                            sal_Int32 nHandle,
+                            const ::com::sun::star::uno::Any& rValue )
+                                throw (::com::sun::star::lang::IllegalArgumentException);
+        virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+                                sal_Int32 nHandle,
+                                const ::com::sun::star::uno::Any& rValue
+                                                 )
+                                                 throw (::com::sun::star::uno::Exception);
     public:
         /** constructs a wrapper supporting the com.sun.star.sdb.Table service.<BR>
             @param          _rxConn         the connection the table belongs to
             @param          _rxTable        the table from the driver can be null
-            @param          _rCatalog       the name of the catalog the table belongs to. May be empty.
-            @param          _rSchema        the name of the schema the table belongs to. May be empty.
-            @param          _rName          the name of the table
-            @param          _rType          the type of the table, as supplied by the driver
-            @param          _rDesc          the description of the table, as supplied by the driver
         */
-        ODBTable(const OConfigurationNode& _rTableConfig,
+        ODBTableDecorator(const OConfigurationNode& _rTableConfig,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConn,
-                const ::rtl::OUString& _rCatalog, const ::rtl::OUString& _rSchema, const ::rtl::OUString& _rName,
-                const ::rtl::OUString& _rType, const ::rtl::OUString& _rDesc)
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable)
             throw(::com::sun::star::sdbc::SQLException);
 
-        ODBTable(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConn)
-                throw(::com::sun::star::sdbc::SQLException);
-        virtual ~ODBTable();
+        ODBTableDecorator(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConn,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxNewTable)
+            throw(::com::sun::star::sdbc::SQLException);
+        virtual ~ODBTableDecorator();
 
         // ODescriptor
         virtual void construct();
@@ -175,12 +193,7 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
         //XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
-    // com::sun::star::lang::XTypeProvider
-        //  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
-
-    // com::sun::star::uno::XInterface
-        //  virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException);
 
     // OComponentHelper
         virtual void SAL_CALL disposing(void);
@@ -188,12 +201,11 @@ namespace dbaccess
     // ::com::sun::star::lang::XServiceInfo
         DECLARE_SERVICE_INFO();
         // XInterface
-        DECLARE_CTY_DEFAULTS(OTable_Base);
+        DECLARE_CTY_DEFAULTS(OTableDescriptor_BASE);
 
-    // com::sun::star::beans::XPropertySet
-        //  virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
 
+        // XPropertySet
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
     // ::com::sun::star::sdbcx::XRename,
         virtual void SAL_CALL rename( const ::rtl::OUString& _rNewName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 
@@ -203,17 +215,25 @@ namespace dbaccess
 
         // XNamed
         virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException)
+        {
+        }
         // com::sun::star::lang::XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() const { return m_xMetaData; }
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() const { return m_xMetaData->getConnection(); }
 
-        virtual void refreshColumns();
-        virtual void refreshKeys();
-        virtual void refreshIndexes();
+        // XColumnsSupplier
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getColumns(  ) throw (::com::sun::star::uno::RuntimeException);
+        // XKeysSupplier
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getKeys(  ) throw (::com::sun::star::uno::RuntimeException);
+        // XIndexesSupplier
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getIndexes(  ) throw (::com::sun::star::uno::RuntimeException);
+        // XDataDescriptorFactory
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException);
     };
 }
-#endif // _DBA_CORE_TABLE_HXX_
+#endif // _DBA_CORE_TABLEDECORATOR_HXX_
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
+ *  last change: $Author: oj $ $Date: 2001-04-20 13:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,10 @@ protected:
 
 // IColumnFactory
     virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject()
+    {
+        return NULL;
+    }
     virtual void readColumnSettings(const OConfigurationNode& _rConfigLocation);
 
 protected:

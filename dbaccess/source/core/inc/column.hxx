@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-06 08:56:46 $
+ *  last change: $Author: oj $ $Date: 2001-04-20 13:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,7 @@ namespace dbaccess
     {
     public:
         virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const = 0;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject() = 0;
     };
 
     //============================================================
