@@ -67,7 +67,7 @@ import org.openoffice.xmerge.util.IntArrayList;
 import org.openoffice.xmerge.converter.xml.sxc.SpreadsheetEncoder;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.Workbook;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
 
 /**
  *  This class is used by {@link

@@ -53,7 +53,7 @@
  *
  ************************************************************************/
 
-package org.openoffice.xmerge.converter.xml.sxc.pexcel.Records;
+package org.openoffice.xmerge.converter.xml.sxc.pexcel.records;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -61,7 +61,7 @@ import java.io.IOException;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.PocketExcelBiffConstants;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.PocketExcelBiffConstants;
 
 /**
  *  This class describes the beginning of file. It is the

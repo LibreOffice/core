@@ -68,7 +68,7 @@ import org.openoffice.xmerge.DocumentMerger;
 import org.openoffice.xmerge.ConverterCapabilities;
 import org.openoffice.xmerge.converter.xml.sxc.DocumentMergerImpl;
 import org.openoffice.xmerge.converter.xml.sxc.SxcPluginFactory;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.Workbook;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
 import org.openoffice.xmerge.util.registry.ConverterInfo;
 
 /**

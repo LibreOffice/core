@@ -48,88 +48,73 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Michael Hayes (mhayes@openoffice.org) and Martin Maher
  *
  *
  ************************************************************************/
 
-package org.openoffice.xmerge.converter.xml.sxc.pexcel.records;
+package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
 
-import java.io.DataInputStream;
-import java.io.OutputStream;
-import java.io.InputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
-import org.openoffice.xmerge.util.Debug;
-import org.openoffice.xmerge.util.EndianConverter;
+import java.util.Vector;
+import java.util.Enumeration;
 
 /**
- * Represents the codepage for the document. There is a number of unknown
- * fields which are hardcoded at construction
+ * This Helper class provides a simplified interface to conversion between PocketXL formula representation
+ * and Calc formula representation.<p>
+ * The class is used by {@link org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.Formula}
  */
-public class CodePage implements BIFFRecord {
+public class FormulaHelper {
+    private static FormulaParser parser;
+    private static FormulaCompiler compiler;
+    private static TokenEncoder encoder;
+    private static TokenDecoder decoder;
 
-    private byte[] codepage = new byte[2];
-    private byte[] unknown1 = new byte[2];
-    private byte[] unknown2 = new byte[2];
-    private byte unknown3;
-
-    /**
-     * Constructs a pocket Excel Codepage
-     */
-    public CodePage() {
-        codepage    = new byte[] {(byte)0xE4, (byte)0x04};
-        unknown1    = new byte[] {(byte)0x8C, (byte)0x01};
-        unknown2    = new byte[] {(byte)0x00, (byte)0x01};
-        unknown3    = 0x00;
+    static {
+        parser   = new FormulaParser();
+        compiler = new FormulaCompiler();
+        encoder = new TokenEncoder();
+        decoder  = new TokenDecoder();
     }
 
     /**
-     * Constructs a pocket Excel Codepage from the<code>InputStream</code>
+     * Convertes a string representation of a calc formula into an array of PocketXL bytes
+     * @param   formula The Formula String (e.g. 1+SUM(A1,B1))
      *
-     * @param   is InputStream containing a Pocket Excel Data file.
-     */
-    public CodePage(InputStream is) throws IOException {
-        read(is);
-    }
-
-     /**
-     * Get the hex code for this particular <code>BIFFRecord</code>
+     * @throws  UnsupportedFunctionException    Thrown if a function in the formula is nto supported by Pocket Excel
+     * @throws  FormulaParsingException Thrown when the formula is not well formed
      *
-     * @return the hex code for <code>BoundSheet</code>
      */
-    public short getBiffType() {
-        return PocketExcelBiffConstants.CODEPAGE;
+    public byte[] convertCalcToPXL(String formula) throws UnsupportedFunctionException, FormulaParsingException {
+        Vector parseTokens = parser.parse(formula);
+        Vector rpnTokens = compiler.infix2RPN(parseTokens);
+
+        ByteArrayOutputStream bytes = null;
+        try {
+            bytes = new ByteArrayOutputStream();
+            for (Enumeration e = rpnTokens.elements(); e.hasMoreElements();) {
+                bytes.write(encoder.getByte((Token)e.nextElement()));
+            }
+        } catch (IOException e) {
+        }
+
+        return bytes.toByteArray();
     }
 
-    public int read(InputStream input) throws IOException {
+    /**
+     * Converts a PocketXL byte array into a Calc function string
+     * @param   formula A byte array that contains the PocketXL bytes for a formula
+     *
+     */
+    public String convertPXLToCalc(byte[] formula) {
+        Vector parseTokens = decoder.getTokenVector(formula);
+        Vector infixTokens = compiler.RPN2Infix(parseTokens);
 
-        int numOfBytesRead  = input.read(codepage);
-        numOfBytesRead      += input.read(unknown1);
-        numOfBytesRead      += input.read(unknown2);
-        // numOfBytesRead       += input.read(unknown3);
-        unknown3            = (byte) input.read();
-        numOfBytesRead++;
-
-        Debug.log(Debug.TRACE,"\tcodepage : "+ EndianConverter.readShort(codepage) +
-                            " unknown1 : " + EndianConverter.readShort(unknown1) +
-                            " unknown2 : " + EndianConverter.readShort(unknown2) +
-                            " unknown3 : " + unknown3);
-
-        return numOfBytesRead;
+        StringBuffer buff = new StringBuffer();
+        for (Enumeration e = infixTokens.elements();e.hasMoreElements();) {
+            buff.append(((Token)e.nextElement()).toString());
+        }
+        return buff.toString();
     }
-
-    public void write(OutputStream output) throws IOException {
-
-        output.write(getBiffType());
-        output.write(codepage);
-        output.write(unknown1);
-        output.write(unknown2);
-        output.write(unknown3);
-
-        Debug.log(Debug.TRACE,"Writing CodePage record");
-
-
-    }
-
 }

@@ -44,7 +44,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
+ *  Copyright: 2001 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -53,72 +53,19 @@
  *
  ************************************************************************/
 
-package org.openoffice.xmerge.converter.xml.sxc.pexcel.records;
 
-import java.io.DataInputStream;
-import java.io.OutputStream;
-import java.io.InputStream;
-import java.io.IOException;
+package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
 
-import org.openoffice.xmerge.util.Debug;
-import org.openoffice.xmerge.util.EndianConverter;
+public interface ParseToken
+{
+        public boolean isOperand();
+        public boolean isOperator();
+        public int getTokenType();
 
-/**
- * Represents a BIFF record defiuning the default row height
- */
-public class DefRowHeight implements BIFFRecord {
-
-    private byte[] unknown1 = new byte[2];
-    private byte[] unknown2 = new byte[2];
-
-    /**
-      * Constructs a pocket Excel Document from the
-      * <code>InputStream</code> and assigns it the document name passed in
-      *
-      * @param  is InputStream containing a Pocket Excel Data file.
-      */
-    public DefRowHeight() {
-        unknown1 = new byte[] {(byte)0x00, (byte)0x00};
-        unknown2 = new byte[] {(byte)0xFF, (byte)0x00};
-    }
-
-    /**
-      * Constructs a DefRowHeight from the <code>InputStream</code>
-      *
-      * @param  is InputStream containing a Pocket Excel Data file.
-      */
-    public DefRowHeight(InputStream is) throws IOException {
-        read(is);
-    }
-
-    /**
-     * Get the hex code for this particular <code>BIFFRecord</code>
-     *
-     * @return the hex code for <code>DefRowHeight</code>
-     */
-    public short getBiffType() {
-        return PocketExcelBiffConstants.DEFAULT_ROW_HEIGHT;
-    }
-
-    public int read(InputStream input) throws IOException {
-
-        int numOfBytesRead  = input.read(unknown1);
-        numOfBytesRead      += input.read(unknown2);
-
-        Debug.log(Debug.TRACE,"\tunknown1 : "+ EndianConverter.readShort(unknown1) +
-                            " unknown2 : " + EndianConverter.readShort(unknown2));
-        return numOfBytesRead;
-    }
-
-    public void write(OutputStream output) throws IOException {
-
-        output.write(getBiffType());
-        output.write(unknown1);
-        output.write(unknown2);
-
-        Debug.log(Debug.TRACE,"Writing DefRowHeight record");
-
-
-    }
+        //GENERIC TOKENS (MOSTLY UNUSED
+    public static final int TOKEN_OPERATOR          = 1;
+    public static final int TOKEN_OPERAND           = 2;
+    public static final int TOKEN_FUNCTION_FIXED    = 3;
+    public static final int TOKEN_FUNCTION_VARIABLE = 4;
 
 }

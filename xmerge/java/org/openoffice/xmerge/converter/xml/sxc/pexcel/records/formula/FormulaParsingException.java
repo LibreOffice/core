@@ -1,5 +1,7 @@
 /************************************************************************
  *
+ *  EndianConverter.java
+ *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -44,7 +46,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
+ *  Copyright: 2001 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -53,72 +55,22 @@
  *
  ************************************************************************/
 
-package org.openoffice.xmerge.converter.xml.sxc.pexcel.records;
 
-import java.io.DataInputStream;
-import java.io.OutputStream;
-import java.io.InputStream;
-import java.io.IOException;
+package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
+
+/*
+ * If the formula failed to be parsed properly this exception will be thrown
+ *
+ * Martin Maher
+ */
+
+import java.io.*;
 
 import org.openoffice.xmerge.util.Debug;
-import org.openoffice.xmerge.util.EndianConverter;
 
-/**
- * Represents a BIFF record defiuning the default row height
- */
-public class DefRowHeight implements BIFFRecord {
+public class FormulaParsingException extends Exception {
 
-    private byte[] unknown1 = new byte[2];
-    private byte[] unknown2 = new byte[2];
-
-    /**
-      * Constructs a pocket Excel Document from the
-      * <code>InputStream</code> and assigns it the document name passed in
-      *
-      * @param  is InputStream containing a Pocket Excel Data file.
-      */
-    public DefRowHeight() {
-        unknown1 = new byte[] {(byte)0x00, (byte)0x00};
-        unknown2 = new byte[] {(byte)0xFF, (byte)0x00};
-    }
-
-    /**
-      * Constructs a DefRowHeight from the <code>InputStream</code>
-      *
-      * @param  is InputStream containing a Pocket Excel Data file.
-      */
-    public DefRowHeight(InputStream is) throws IOException {
-        read(is);
-    }
-
-    /**
-     * Get the hex code for this particular <code>BIFFRecord</code>
-     *
-     * @return the hex code for <code>DefRowHeight</code>
-     */
-    public short getBiffType() {
-        return PocketExcelBiffConstants.DEFAULT_ROW_HEIGHT;
-    }
-
-    public int read(InputStream input) throws IOException {
-
-        int numOfBytesRead  = input.read(unknown1);
-        numOfBytesRead      += input.read(unknown2);
-
-        Debug.log(Debug.TRACE,"\tunknown1 : "+ EndianConverter.readShort(unknown1) +
-                            " unknown2 : " + EndianConverter.readShort(unknown2));
-        return numOfBytesRead;
-    }
-
-    public void write(OutputStream output) throws IOException {
-
-        output.write(getBiffType());
-        output.write(unknown1);
-        output.write(unknown2);
-
-        Debug.log(Debug.TRACE,"Writing DefRowHeight record");
-
-
-    }
-
-}
+     public FormulaParsingException(String message) {
+         super(message);
+     }
+ }

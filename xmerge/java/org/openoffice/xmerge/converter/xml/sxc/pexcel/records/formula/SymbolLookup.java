@@ -1,5 +1,7 @@
 /************************************************************************
  *
+ *  SymbolLookup.java
+ *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -44,7 +46,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
+ *  Copyright: 2001 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -53,72 +55,40 @@
  *
  ************************************************************************/
 
-package org.openoffice.xmerge.converter.xml.sxc.pexcel.records;
 
-import java.io.DataInputStream;
-import java.io.OutputStream;
-import java.io.InputStream;
-import java.io.IOException;
-
-import org.openoffice.xmerge.util.Debug;
-import org.openoffice.xmerge.util.EndianConverter;
+package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
 
 /**
- * Represents a BIFF record defiuning the default row height
+ * This interface defines the attributes of a lookup table for this plugin.
+ * Symbols will generally be either operators (_, -, *, etc) or funtion names.
  */
-public class DefRowHeight implements BIFFRecord {
-
-    private byte[] unknown1 = new byte[2];
-    private byte[] unknown2 = new byte[2];
-
+public interface SymbolLookup {
     /**
-      * Constructs a pocket Excel Document from the
-      * <code>InputStream</code> and assigns it the document name passed in
-      *
-      * @param  is InputStream containing a Pocket Excel Data file.
-      */
-    public DefRowHeight() {
-        unknown1 = new byte[] {(byte)0x00, (byte)0x00};
-        unknown2 = new byte[] {(byte)0xFF, (byte)0x00};
-    }
-
-    /**
-      * Constructs a DefRowHeight from the <code>InputStream</code>
-      *
-      * @param  is InputStream containing a Pocket Excel Data file.
-      */
-    public DefRowHeight(InputStream is) throws IOException {
-        read(is);
-    }
-
-    /**
-     * Get the hex code for this particular <code>BIFFRecord</code>
-     *
-     * @return the hex code for <code>DefRowHeight</code>
+     * Perform lookup table specific initialization. This would typically entail loading values into
+     * the lookup table. It is best to optimize this process so that data is loaded statically and shared
+     * across all instances of the lookup table.
      */
-    public short getBiffType() {
-        return PocketExcelBiffConstants.DEFAULT_ROW_HEIGHT;
-    }
+    public void initialize();
 
-    public int read(InputStream input) throws IOException {
+    /**
+     * Associate a symbol with a  numeric value in the lookup table
+     * @param symbol    The symbol that will act as the key in the lookup table
+     * @param value     The value to be associated with a given symbol
+     */
+    public void addEntry(String symbol, int value);
 
-        int numOfBytesRead  = input.read(unknown1);
-        numOfBytesRead      += input.read(unknown2);
+    /**
+     * Retrieve the symbol associated with a given identifier
+     * @param   id  The identfier for which we need to retieve the symbol string
+     * @return  The string associated with this identifier in the lookup table.
+     */
+    public String getStringFromID(int id);
 
-        Debug.log(Debug.TRACE,"\tunknown1 : "+ EndianConverter.readShort(unknown1) +
-                            " unknown2 : " + EndianConverter.readShort(unknown2));
-        return numOfBytesRead;
-    }
-
-    public void write(OutputStream output) throws IOException {
-
-        output.write(getBiffType());
-        output.write(unknown1);
-        output.write(unknown2);
-
-        Debug.log(Debug.TRACE,"Writing DefRowHeight record");
-
-
-    }
-
+    /**
+     * Retrieve the identifier associated with a given symbol
+     * @param   symbol  The symbol for which we need to retieve the identifier
+     * @throws UnsupportedFunctionException Thown when the symbol is not found in the lookup table
+     * @return  The identifier associated with this string in the lookup table.
+     */
+    public int getIDFromString(String symbol) throws UnsupportedFunctionException;
 }

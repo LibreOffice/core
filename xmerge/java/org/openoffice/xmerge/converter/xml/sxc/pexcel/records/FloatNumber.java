@@ -53,7 +53,7 @@
  *
  ************************************************************************/
 
-package org.openoffice.xmerge.converter.xml.sxc.pexcel.Records;
+package org.openoffice.xmerge.converter.xml.sxc.pexcel.records;
 
 import java.io.DataInputStream;
 import java.io.OutputStream;

@@ -64,7 +64,7 @@ import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.converter.xml.sxc.SpreadsheetDecoder;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentDeserializer;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelDecoder;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.Workbook;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
 
 
 /**

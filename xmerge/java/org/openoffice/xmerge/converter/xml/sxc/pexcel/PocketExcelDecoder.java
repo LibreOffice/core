@@ -72,12 +72,12 @@ import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentDeserializer;
 import org.openoffice.xmerge.converter.xml.sxc.SpreadsheetDecoder;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.Worksheet;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.Formula;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.LabelCell;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.CellValue;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.FloatNumber;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.Workbook;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Worksheet;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Formula;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.LabelCell;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.CellValue;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.FloatNumber;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
 
 /**
  *  This class is used by {@link

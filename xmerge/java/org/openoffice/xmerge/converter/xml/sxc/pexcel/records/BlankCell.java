@@ -53,7 +53,7 @@
  *
  ************************************************************************/
 
-package org.openoffice.xmerge.converter.xml.sxc.pexcel.Records;
+package org.openoffice.xmerge.converter.xml.sxc.pexcel.records;
 
 import java.io.DataInputStream;
 import java.io.OutputStream;
@@ -62,7 +62,7 @@ import java.io.IOException;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.Records.PocketExcelBiffConstants;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.PocketExcelBiffConstants;
 
 /**
  * Represents a BIFF Record that describes a blank cell
