@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 11:07:29 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 15:02:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -164,9 +164,10 @@ APP1STDLIBS+= -lXm
 
 .IF "$(GUI)" == "UNX"
 .IF "$(OS)" == "LINUX"
-
 APP1STDLIBS+= -lXext -lX11 -lSM -lICE
-
+.ENDIF
+.IF "$(OS)"=="MACOSX"
+APP1STDLIBS+= -lapp -lsample
 .ENDIF
 .ENDIF
 
@@ -204,8 +205,13 @@ APP3STDLIBS= \
             $(SJLIB) \
             $(SO2LIB)
 .IF "$(GUI)"=="UNX"
+.IF "$(OS)"=="MACOSX"
+APP3STDLIBS+= \
+            $(VOSLIB) $(SALLIB) $(LIBSTLPORT)
+.ELSE
 APP3STDLIBS+= \
             $(VOSLIB) $(SALLIB)
+.ENDIF
 .ENDIF
 
 APP3LIBS= \
