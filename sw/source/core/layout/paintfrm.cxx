@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:20:15 $
+ *  last change: $Author: rt $ $Date: 2003-05-27 16:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1314,21 +1314,25 @@ void MA_FASTCALL lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
     ::SwAlignRect( rRect, pGlobalShell );
 }
 
-void MA_FASTCALL lcl_ExtendLeftAndRight( SwRect&              rRect,
-                                         const SwFrm*         pFrm,
-                                         const SwBorderAttrs& rAttrs,
-                                         const SwRectFn&      rRectFn )
+void MA_FASTCALL lcl_ExtendLeftAndRight( SwRect&                _rRect,
+                                         const SwFrm&           _rFrm,
+                                         const SwBorderAttrs&   _rAttrs,
+                                         const SwRectFn&        _rRectFn )
 {
-    //In der Hoehe aufbohren wenn TopLine bzw. BottomLine entfallen.
-    if ( rAttrs.GetBox().GetTop() && !rAttrs.GetTopLine( pFrm ) )
+    // OD 21.05.2003 #108789# - extend left/right border/shadow rectangle to
+    // bottom of previous frame/to top of next frame, if border/shadow is joined
+    // with previous/next frame.
+    //if ( rAttrs.GetBox().GetTop() && !rAttrs.GetTopLine( pFrm ) )
+    if ( _rAttrs.JoinedWithPrev( _rFrm ) )
     {
-        const SwFrm *pPre = pFrm->GetPrev();
-        (rRect.*rRectFn->fnSetTop)( (pPre->*rRectFn->fnGetPrtBottom)() );
+        const SwFrm* pPrevFrm = _rFrm.GetPrev();
+        (_rRect.*_rRectFn->fnSetTop)( (pPrevFrm->*_rRectFn->fnGetPrtBottom)() );
     }
-    if ( rAttrs.GetBox().GetBottom() && !rAttrs.GetBottomLine( pFrm ) )
+    //if ( rAttrs.GetBox().GetBottom() && !rAttrs.GetBottomLine( pFrm ) )
+    if ( _rAttrs.JoinedWithNext( _rFrm ) )
     {
-        const SwFrm *pNxt = pFrm->GetNext();
-        (rRect.*rRectFn->fnSetBottom)( (pNxt->*rRectFn->fnGetPrtTop)() );
+        const SwFrm* pNextFrm = _rFrm.GetNext();
+        (_rRect.*_rRectFn->fnSetBottom)( (pNextFrm->*_rRectFn->fnGetPrtTop)() );
     }
 }
 
@@ -2931,7 +2935,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                     if ( bBottom )
                         aOut.Bottom( aOut.Bottom() - nHeight );
                     if ( bCnt && (!bTop || !bBottom) )
-                        ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
+                        ::lcl_ExtendLeftAndRight( aOut, *(this), rAttrs, fnRect );
                     aRegion.Insert( aOut, aRegion.Count() );
                 }
 
@@ -2959,7 +2963,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                     if ( bTop )
                         aOut.Top( aOut.Top() + nHeight );
                     if ( bCnt && (!bBottom || !bTop) )
-                        ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
+                        ::lcl_ExtendLeftAndRight( aOut, *(this), rAttrs, fnRect );
                     aRegion.Insert( aOut, aRegion.Count() );
                 }
 
@@ -2987,7 +2991,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                     if ( bTop )
                         aOut.Top( aOut.Top() + nHeight );
                     if ( bCnt && (!bBottom || bTop) )
-                        ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
+                        ::lcl_ExtendLeftAndRight( aOut, *(this), rAttrs, fnRect );
                     aRegion.Insert( aOut, aRegion.Count() );
                 }
 
@@ -3015,7 +3019,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                     if ( bBottom )
                         aOut.Bottom( aOut.Bottom() - nHeight );
                     if ( bCnt && (!bTop || !bBottom) )
-                        ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
+                        ::lcl_ExtendLeftAndRight( aOut, *(this), rAttrs, fnRect );
                     aRegion.Insert( aOut, aRegion.Count() );
                 }
 
@@ -3223,7 +3227,7 @@ void MA_FASTCALL lcl_PaintLeftLine( const SwFrm*         pFrm,
     const BOOL bCnt = pFrm->IsCntntFrm();
 
     if ( bCnt )
-        ::lcl_ExtendLeftAndRight( aRect, pFrm, rAttrs, rRectFn );
+        ::lcl_ExtendLeftAndRight( aRect, *(pFrm), rAttrs, rRectFn );
 
     // OD 06.05.2003 #107169# - adjustments for printer output device
     if ( bPrtOutputDev )
@@ -3314,7 +3318,7 @@ void MA_FASTCALL lcl_PaintRightLine( const SwFrm*           pFrm,
     const BOOL bCnt = pFrm->IsCntntFrm();
 
     if ( bCnt )
-        ::lcl_ExtendLeftAndRight( aRect, pFrm, rAttrs, rRectFn );
+        ::lcl_ExtendLeftAndRight( aRect, *(pFrm), rAttrs, rRectFn );
 
     // OD 06.05.2003 #107169# - adjustments for printer output device
     if ( bPrtOutputDev )
