@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $
+ *  last change: $Author: sj $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,16 +477,24 @@ SvStorageRef SvXMLEmbeddedObjectHelper::ImplGetObjectStorage(
 String SvXMLEmbeddedObjectHelper::ImplGetUniqueName( SvStorage* pStg,
                                               const sal_Char* p ) const
 {
+    String aP( ByteString( p ), RTL_TEXTENCODING_UTF8 );
     String aName;
-    sal_Char cBuf[ 32 ];
-
-    static ULONG nId = (ULONG) cBuf;
-
+    static ULONG nId = (ULONG)&aP;
     nId++;
     for( ;; )
     {
-        sprintf( cBuf, "%s%08lX", p, nId );
-        aName.AssignAscii( cBuf );
+        aName = aP;
+        sal_Int32 nBitsLeft = 32;
+        while( nBitsLeft )
+        {
+            sal_uInt32 nNumb = ( nId << ( 32 - nBitsLeft ) ) >> 28;
+            if ( nNumb > 9 )
+                nNumb += 'A' - 10;
+            else
+                nNumb += '0';
+            aName+=(sal_Unicode)((sal_Char)nNumb);
+            nBitsLeft -= 4;
+        }
         if( !pStg->IsContained( aName ) )
             break;
         nId++;
