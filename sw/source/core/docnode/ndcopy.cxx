@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:44:11 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -777,6 +777,27 @@ BOOL SwDoc::Copy( SwPaM& rPam, SwPosition& rPos ) const
 // Kopieren eines Bereiches im oder in ein anderes Dokument !
 // Die Position darf nicht im Bereich liegen !!
 
+BOOL lcl_MarksWholeNode(const SwPaM & rPam)
+{
+    BOOL bResult = FALSE;
+    const SwPosition * pStt = rPam.Start(), * pEnd = rPam.End();
+
+    if (NULL != pStt && NULL != pEnd)
+    {
+        SwTxtNode * pSttNd = pStt->nNode.GetNode().GetTxtNode();
+        SwTxtNode * pEndNd = pEnd->nNode.GetNode().GetTxtNode();
+
+        if (NULL != pSttNd && NULL != pEndNd &&
+            pStt->nContent.GetIndex() == 0 &&
+            pEnd->nContent.GetIndex() == pEndNd->Len())
+        {
+            bResult = TRUE;
+        }
+    }
+
+    return bResult;
+}
+
 BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                     BOOL bMakeNewFrms, SwPaM* pCpyRange ) const
 {
@@ -827,6 +848,9 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                         ( !bOneNode && !rPos.nContent.GetIndex() ));
     BOOL bCopyBookmarks = TRUE;
     BOOL bStartIsTxtNode = 0 != pSttNd;
+
+    const SwNumRule * pNumRuleToPropagate =
+        pDoc->SearchNumRule(rPos, FALSE, TRUE, 0);
 
     // Block, damit aus diesem gesprungen werden kann !!
     do {
@@ -937,10 +961,13 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
 
                         /* #107213# If only a part of one paragraph is copied
                            restore the numrule at the destination. */
-                        if (SFX_ITEM_SET == aState)
-                            pDestNd->SwCntntNode::SetAttr(aNumRuleItem);
-                        else
-                            pDestNd->ResetAttr(RES_PARATR_NUMRULE);
+                        if (! lcl_MarksWholeNode(rPam))
+                        {
+                            if (SFX_ITEM_SET == aState)
+                                pDestNd->SwCntntNode::SetAttr(aNumRuleItem);
+                            else
+                                pDestNd->ResetAttr(RES_PARATR_NUMRULE);
+                        }
                     }
 
                     break;
@@ -1046,10 +1073,13 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                 {
                     /* #107213# If only a part of one paragraph is copied
                        restore the numrule at the destination. */
-                    if (SFX_ITEM_SET == aState)
-                        pDestNd->SwCntntNode::SetAttr(aNumRuleItem);
-                    else
-                        pDestNd->ResetAttr(RES_PARATR_NUMRULE);
+                    if ( ! lcl_MarksWholeNode(rPam))
+                    {
+                        if (SFX_ITEM_SET == aState)
+                            pDestNd->SwCntntNode::SetAttr(aNumRuleItem);
+                        else
+                            pDestNd->ResetAttr(RES_PARATR_NUMRULE);
+                    }
                 }
             }
         }
@@ -1121,6 +1151,10 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
         *pCpyRange->GetPoint() = *aCpyPam.GetPoint();
         *pCpyRange->GetMark() = *aCpyPam.GetMark();
     }
+
+    if (pNumRuleToPropagate)
+        pDoc->ReplaceNumRule(aCpyPam, *pNumRuleToPropagate);
+
     pDoc->SetRedlineMode_intern( eOld );
     pDoc->SetModified();
 
