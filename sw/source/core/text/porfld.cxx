@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-17 16:06:29 $
+ *  last change: $Author: fme $ $Date: 2001-06-14 08:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,6 +455,10 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
         // Unbedingt nach Format!
         SetLen( nFollow );
 
+        // 7634 mit ASSERT: bad ascent
+        if( pFnt && nTmpLen )
+            SetAscent( rInf.GetAscent() );
+
         if( nRest )
         {
             // aExpand ist noch nicht gekuerzt worden, der neue Ofst
@@ -497,17 +501,20 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
                 nNextOffset += nNextOfst;
                 pFld->SetNextOffset( nNextOffset );
                 rInf.SetRest( pFld );
-                if( nScriptChg && rInf.HasScriptSpace() )
+                if( ! bFull && nScriptChg && rInf.HasScriptSpace() )
                 {
                     USHORT nDist = pFld->GetFont()->GetHeight()/5;
                     if( nDist )
-                        new SwKernPortion( *this, nDist );
+                    {
+                        // does the kerning portion still fit into the line?
+                        if ( rInf.X() + Width() + nDist <= rInf.Width() )
+                            new SwKernPortion( *this, nDist );
+                        else
+                            bFull = sal_True;
+                    }
                 }
             }
         }
-        // 7634 mit ASSERT: bad ascent
-        if( pFnt && nTmpLen )
-            SetAscent( rInf.GetAscent() );
     }
 
     if( bEOL && rInf.GetLast() && !rInf.GetUnderFlow() )
