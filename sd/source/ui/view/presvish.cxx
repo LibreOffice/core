@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-03 14:39:07 $
+ *  last change: $Author: ka $ $Date: 2001-08-07 15:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include "presvish.hxx"
 #include "fuslshow.hxx"
 #include "sdattr.hxx"
+#include "sdpage.hxx"
 #include "drawdoc.hxx"
 #include "drawview.hxx"
 #include "app.hrc"
@@ -126,12 +127,14 @@ SdPresViewShell::~SdPresViewShell()
 
 // -----------------------------------------------------------------------------
 
-void SdPresViewShell::CreateFullScreenShow( SdDrawDocument* pDoc, SfxRequest& rReq )
+void SdPresViewShell::CreateFullScreenShow( SdViewShell* pOriginShell, SfxRequest& rReq )
 {
     SFX_REQUEST_ARG( rReq, pAlwaysOnTop, SfxBoolItem, ATTR_PRESENT_ALWAYS_ON_TOP, FALSE );
 
-    WorkWindow* pWorkWindow = new WorkWindow( NULL, WB_HIDE );
-    BOOL        bAlwaysOnTop = ( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) && pAlwaysOnTop ) ? pAlwaysOnTop->GetValue() : pDoc->GetPresAlwaysOnTop();
+    WorkWindow*     pWorkWindow = new WorkWindow( NULL, WB_HIDE );
+    SdDrawDocument* pDoc = pOriginShell->GetDoc();
+    SdPage*         pActualPage = pOriginShell->GetActualPage();
+    BOOL            bAlwaysOnTop = ( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) && pAlwaysOnTop ) ? pAlwaysOnTop->GetValue() : pDoc->GetPresAlwaysOnTop();
 
     pWorkWindow->StartPresentationMode( TRUE, bAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0 );
     SfxTopFrame* pNewFrame = SfxTopFrame::Create( pDoc->GetDocSh(), pWorkWindow, 4, TRUE );
@@ -141,6 +144,8 @@ void SdPresViewShell::CreateFullScreenShow( SdDrawDocument* pDoc, SfxRequest& rR
     SfxUInt16Item       aId( SID_CONFIGITEMID, SID_NAVIGATOR );
     SfxBoolItem         aShowItem( SID_SHOWPOPUPS, FALSE );
 
+    pShell->SwitchPage( ( pActualPage->GetPageNum() - 1 ) / 2 );
+    pShell->WriteFrameViewData();
     pShell->GetViewFrame()->GetDispatcher()->Execute( SID_SHOWPOPUPS, SFX_CALLMODE_SYNCHRON, &aShowItem, &aId, 0L );
     pShell->GetViewFrame()->Show();
     pShell->pFuSlideShow = new FuSlideShow( pShell, pShell->pWindow, pShell->pDrView, pShell->pDoc, rReq );

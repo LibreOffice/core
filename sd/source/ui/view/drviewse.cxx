@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-07 13:36:07 $
+ *  last change: $Author: ka $ $Date: 2001-08-07 15:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,7 +584,7 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
                 const BOOL bFullScreen = ( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) && pFullScreen ) ? pFullScreen->GetValue() : pDoc->GetPresFullScreen();
 
                 if( bFullScreen )
-                    SdPresViewShell::CreateFullScreenShow( pDoc, rReq );
+                    SdPresViewShell::CreateFullScreenShow( this, rReq );
                 else
                 {
                     pFuSlideShow = new FuSlideShow( this, pWindow, pDrView, pDoc, rReq );

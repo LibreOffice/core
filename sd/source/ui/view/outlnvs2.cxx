@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-03 14:38:25 $
+ *  last change: $Author: ka $ $Date: 2001-08-07 15:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,10 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
             const BOOL bFullScreen = pFullScreen ? pFullScreen->GetValue() : pDoc->GetPresFullScreen();
 
             if( bFullScreen )
-                SdPresViewShell::CreateFullScreenShow( pDoc, rReq );
+            {
+                SdPresViewShell::CreateFullScreenShow( this, rReq );
+                Cancel();
+            }
             else
             {
                 pFrameView->SetPresentationViewShellId( SID_VIEWSHELL2 );
