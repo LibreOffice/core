@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 10:08:12 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,8 @@
 #include <svtools/extendedsecurityoptions.hxx>
 #include <svtools/docpasswdrequest.hxx>
 
+#include <vos/mutex.hxx>
+
 #pragma hdrstop
 
 #include "app.hxx"
@@ -179,7 +181,6 @@
 #include "docfile.hxx"
 #include "docinf.hxx"
 #include "fcontnr.hxx"
-#include "loadenv.hxx"
 #include "new.hxx"
 #include "objitem.hxx"
 #include "objsh.hxx"
@@ -606,13 +607,15 @@ SfxMedium* SfxApplication::InsertDocumentDialog
                 GetFilterMatcher().GetFilter4FilterName( aFilter ), pSet );
 
         pMedium->UseInteractionHandler(TRUE);
-        LoadEnvironment_ImplRef xLoader = new LoadEnvironment_Impl( pMedium );
+
         SfxFilterMatcher aMatcher( rFact );
-        xLoader->SetFilterMatcher( &aMatcher );
-        xLoader->Start();
-        while( xLoader->GetState() != LoadEnvironment_Impl::DONE  )
-            Application::Yield();
-        pMedium = xLoader->GetMedium();
+        const SfxFilter* pFilter=0;
+        sal_uInt32 nError = aMatcher.DetectFilter( *pMedium, &pFilter, FALSE );
+        if ( nError == ERRCODE_NONE && pFilter )
+            pMedium->SetFilter( pFilter );
+        else
+            DELETEZ( pMedium );
+
         if( pMedium && CheckPasswd_Impl( 0, SFX_APP()->GetPool(), pMedium ) == ERRCODE_ABORT )
             pMedium = NULL;
     }
@@ -646,13 +649,15 @@ SfxMediumList* SfxApplication::InsertDocumentsDialog
                     GetFilterMatcher().GetFilter4FilterName( aFilter ), pSet );
 
             pMedium->UseInteractionHandler(TRUE);
-            LoadEnvironment_ImplRef xLoader = new LoadEnvironment_Impl( pMedium );
+
             SfxFilterMatcher aMatcher( rFact );
-            xLoader->SetFilterMatcher( &aMatcher );
-            xLoader->Start();
-            while( xLoader->GetState() != LoadEnvironment_Impl::DONE  )
-                Application::Yield();
-            pMedium = xLoader->GetMedium();
+            const SfxFilter* pFilter=0;
+            sal_uInt32 nError = aMatcher.DetectFilter( *pMedium, &pFilter, FALSE );
+            if ( nError == ERRCODE_NONE && pFilter )
+                pMedium->SetFilter( pFilter );
+            else
+                DELETEZ( pMedium );
+
             if( pMedium && CheckPasswd_Impl( 0, GetPool(), pMedium ) != ERRCODE_ABORT )
             {
                 pMediumList->Insert( pMedium );
