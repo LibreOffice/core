@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:29:43 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDocTokenMap[] =
     { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES          },
     { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,      XML_TOK_DOC_MASTERSTYLES        },
     { XML_NAMESPACE_OFFICE, XML_META,               XML_TOK_DOC_META                },
-    { XML_NAMESPACE_OFFICE, XML_SCRIPT,             XML_TOK_DOC_SCRIPTS             },
+    { XML_NAMESPACE_OFFICE, XML_SCRIPTS,            XML_TOK_DOC_SCRIPTS             },
     { XML_NAMESPACE_OFFICE, XML_BODY,               XML_TOK_DOC_BODY                },
     { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS            },
     XML_TOKEN_MAP_END
