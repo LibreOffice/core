@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svx.sdi,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:16:32 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -12652,8 +12652,36 @@ SfxVoidItem FontworkGalleryFloater SID_FONTWORK_GALLERY_FLOATER
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem FontworkShapeFloater SID_FONTWORK_SHAPE_FLOATER
-()
+SfxBoolItem FontworkShapeTypes SID_FONTWORK_SHAPE_TYPES
+(SfxStringItem FontworkShapeTypes SID_FONTWORK_SHAPE_TYPES)
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxStringItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
+
+//--------------------------------------------------------------------------
+SfxStringItem FontworkShapeType SID_FONTWORK_SHAPE_TYPE
+
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -12665,41 +12693,16 @@ SfxVoidItem FontworkShapeFloater SID_FONTWORK_SHAPE_FLOATER
     Container = FALSE,
     Asynchron;
 
-    /* status: */
-    SlotType = SfxBoolItem
-
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_DRAWING;
 ]
 
 //--------------------------------------------------------------------------
 SfxBoolItem FontworkSameLetterHeights SID_FONTWORK_SAME_LETTER_HEIGHTS
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DRAWING;
-]
-
-//--------------------------------------------------------------------------
-SfxBoolItem FontworkVerticalText SID_FONTWORK_VERTICAL_TEXT
 
 [
     /* flags: */
@@ -12830,6 +12833,31 @@ SfxInt32Item FontworkCharacterSpacing SID_FONTWORK_CHARACTER_SPACING
     MenuConfig = FALSE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
+    GroupId = GID_DRAWING;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem FontworkCharacterSpacingDialog SID_FONTWORK_CHARACTER_SPACING_DIALOG
+(SfxInt32Item FontworkCharacterSpacing SID_FONTWORK_CHARACTER_SPACING)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Synchron;
+
+    /* status: */
+    SlotType = SfxInt32Item
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_DRAWING;
 ]
 
@@ -13223,6 +13251,195 @@ SfxVoidItem SbaBrwInsert SID_SBA_BRW_INSERT
 ]
 
 //--------------------------------------------------------------------------
+SfxBoolItem BasicShapes SID_DRAWTBX_CS_BASIC
+(SfxStringItem BasicShapes SID_DRAWTBX_CS_BASIC)
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxStringItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
+
+//--------------------------------------------------------------------------
+SfxBoolItem SymbolShapes SID_DRAWTBX_CS_SYMBOL
+(SfxStringItem SymbolShapes SID_DRAWTBX_CS_SYMBOL)
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxStringItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
+
+//--------------------------------------------------------------------------
+SfxBoolItem ArrowShapes SID_DRAWTBX_CS_ARROW
+(SfxStringItem ArrowShapes SID_DRAWTBX_CS_ARROW)
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxStringItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
+
+//--------------------------------------------------------------------------
+SfxBoolItem FlowChartShapes SID_DRAWTBX_CS_FLOWCHART
+(SfxStringItem FlowChartShapes SID_DRAWTBX_CS_FLOWCHART)
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxStringItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
+
+//--------------------------------------------------------------------------
+SfxBoolItem CalloutShapes SID_DRAWTBX_CS_CALLOUT
+(SfxStringItem CalloutShapes SID_DRAWTBX_CS_CALLOUT)
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxStringItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
+
+//--------------------------------------------------------------------------
+SfxBoolItem StarShapes SID_DRAWTBX_CS_STAR
+(SfxStringItem StarShapes SID_DRAWTBX_CS_STAR)
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxStringItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
+
+//--------------------------------------------------------------------------
+SfxStringItem CustomShape SID_DRAW_CS_ID
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_DRAWING;
+]
+
 SvxDashListItem DashListState SID_DASH_LIST
 [
     /* flags: */
