@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 11:19:17 $
+ *  last change: $Author: jl $ $Date: 2001-03-19 17:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
