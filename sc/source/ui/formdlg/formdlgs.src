@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:10:48 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 07:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ TabPage RID_SCTAB_FUNCTION
             };
         };
         QuickHelpText [ english_us ] = "Apply Function" ;
-        QuickHelpText [ portuguese_brazilian ] = "Funktion übernehmen" ;
+        QuickHelpText [ portuguese_brazilian ] = "Funktion ?ernehmen" ;
         QuickHelpText [ swedish ] = "Överta funktion" ;
         QuickHelpText [ danish ] = "Anvend funktion" ;
         QuickHelpText [ italian ] = "Applica funzione" ;
@@ -94,7 +94,7 @@ TabPage RID_SCTAB_FUNCTION
         QuickHelpText [ portuguese ] = "Aplicar função" ;
     QuickHelpText[ russian ] = "Ïğèìåíèòü ôóíêöèş";
         QuickHelpText[ polish ] = "Zastosuj funkcjê";
-        QuickHelpText[ japanese ] = "ŠÖ”‚Ì“K—p";
+        QuickHelpText[ japanese ] = "ŠÖ”‚Ì“K—p!";
         QuickHelpText[ chinese_simplified ] = "½ÓÊÜº¯Êı";
         QuickHelpText[ chinese_traditional ] = "±µ¦¬¨ç¼Æ";
         QuickHelpText[ arabic ] = "ÊØÈíŞ ÇáÏÇáÉ";
@@ -548,7 +548,7 @@ TabPage RID_SCTAB_FUNCTION
         Text [ ENGLISH ] = "~Function" ;
         Text [ norwegian ] = "~Function" ;
         Text [ italian ] = "~Funzione" ;
-        Text [ portuguese_brazilian ] = "~Função" ;
+        Text [ portuguese_brazilian ] = "~Fun??o" ;
         Text [ portuguese ] = "~Função" ;
         Text [ finnish ] = "~Toiminto" ;
         Text [ danish ] = "Funktion" ;
@@ -872,7 +872,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ portuguese ] = "Resultado de função" ;
         Text[ chinese_simplified ] = "µ¥Ïî¼ÆËã½á¹û";
         Text[ russian ] = "Ïğîìåæóòî÷íûé èòîã";
-        Text[ polish ] = "Suma poœrednia";
+        Text[ polish ] = "Suma po?rednia";
         Text[ japanese ] = "”®‚ÌŒ‹‰Ê";
         Text[ chinese_traditional ] = "³æ¶µ­pºâµ²ªG";
         Text[ arabic ] = "ÇáäÊíÌÉ ÇáÌÒÆíÉ";
@@ -967,7 +967,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Maximize" ;
-        QuickHelpText [ portuguese_brazilian ] = "Verkleinern/Vergrößern" ;
+        QuickHelpText [ portuguese_brazilian ] = "Verkleinern/Vergr?ern" ;
         QuickHelpText [ swedish ] = "Förstora" ;
         QuickHelpText [ danish ] = "Forstør" ;
         QuickHelpText [ italian ] = "Zoom avanti" ;
@@ -977,7 +977,7 @@ ModelessDialog RID_SCDLG_FORMULA
         QuickHelpText [ portuguese ] = "Aproximar" ;
     QuickHelpText[ russian ] = "Óâåëè÷èòü";
         QuickHelpText[ polish ] = "Powiêksz";
-        QuickHelpText[ japanese ] = "Šg‘å";
+        QuickHelpText[ japanese ] = "Šg‘å!";
         QuickHelpText[ chinese_simplified ] = "×î´ó»¯";
         QuickHelpText[ chinese_traditional ] = "©ñ¤j";
         QuickHelpText[ arabic ] = "ÊßÈíÑ";
@@ -1032,7 +1032,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ ENGLISH ] = "<< ~Backward" ;
         Text [ norwegian ] = "<< ~Backward" ;
         Text [ italian ] = "<< Indietro" ;
-        Text [ portuguese_brazilian ] = "<< ~Para Trás" ;
+        Text [ portuguese_brazilian ] = "<< ~Para Tr?s" ;
         Text [ portuguese ] = "<<~Anterior" ;
         Text [ finnish ] = "<< ~Takaisin" ;
         Text [ danish ] = "<< Tilbage" ;
@@ -1095,7 +1095,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ ENGLISH ] = "Function Auto-Pilot" ;
         Text [ norwegian ] = "Function Auto-Pilot" ;
         Text [ italian ] = "Pilota automatico di funzione" ;
-        Text [ portuguese_brazilian ] = "Função Piloto Automático  -  Paso 1 de 2" ;
+        Text [ portuguese_brazilian ] = "Fun??o Piloto Autom?tico  -  Paso 1 de 2" ;
         Text [ portuguese ] = "Função AutoPiloto" ;
         Text [ finnish ] = "Automaattinen ohjaus: Toiminnot" ;
         Text [ danish ] = "FunktionsAutoPilot" ;
@@ -1121,7 +1121,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ ENGLISH ] = "Function Auto-Pilot  -" ;
         Text [ norwegian ] = "Function Auto-Pilot  -" ;
         Text [ italian ] = "Pilota automatico di funzione" ;
-        Text [ portuguese_brazilian ] = "Função Piloto Automático  -  Paso 2 de 2" ;
+        Text [ portuguese_brazilian ] = "Fun??o Piloto Autom?tico  -  Paso 2 de 2" ;
         Text [ portuguese ] = "Função AutoPiloto  -" ;
         Text [ finnish ] = "Automaattinen ohjaus: Toiminnot  -" ;
         Text [ danish ] = "FunktionsAutoPilot  -" ;
