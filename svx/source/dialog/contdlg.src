@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:32:07 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ czech ] = "Použít";
                 Text[ hebrew ] = "‮יישום‬";
                 Text[ hindi ] = "लागू करो";
+                Text[ slovak ] = "Použiť";
             };
             ToolBoxItem
             {
@@ -154,6 +155,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ czech ] = "Pracovní plocha";
                 Text[ hebrew ] = "Arbeitsbereich";
                 Text[ hindi ] = "कार्यस्थान";
+                Text[ slovak ] = "Pracovný priestor";
             };
             ToolBoxItem
             {
@@ -192,6 +194,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ czech ] = "Vybrat";
                 Text[ hebrew ] = "‮בחירה‬l";
                 Text[ hindi ] = "चुनो";
+                Text[ slovak ] = "Vybrať";
             };
             ToolBoxItem
             {
@@ -226,6 +229,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ czech ] = "Obdélník";
                 Text[ hebrew ] = "‮צרובע‬";
                 Text[ hindi ] = "आयत";
+                Text[ slovak ] = "Obdĺžnik";
             };
             ToolBoxItem
             {
@@ -260,6 +264,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ czech ] = "Elipsa";
                 Text[ hebrew ] = "‮מעגל‬";
                 Text[ hindi ] = "दीर्घवृत्त";
+                Text[ slovak ] = "Elipsa";
             };
             ToolBoxItem
             {
@@ -294,6 +299,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ czech ] = "Mnohoúhelník";
                 Text[ hebrew ] = "‮פוליגונים‬";
                 Text[ hindi ] = "बहुभुज क्षेत्र";
+                Text[ slovak ] = "Mnohouholník";
             };
             /*
             ToolBoxItem
@@ -348,6 +354,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ czech ] = "Upravit body";
                 Text[ hebrew ] = "‮עריכת נקודות‬";
                 Text[ hindi ] = "बिन्दुओं का संपादन";
+                Text[ slovak ] = "Upraviť body";
             };
             ToolBoxItem
             {
@@ -383,6 +390,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ czech ] = "Přesunout body";
                 Text[ hebrew ] = "‮הזזת נקודות‬";
                 Text[ hindi ] = "बिन्दुओं का स्थान परिवर्तन करो";
+                Text[ slovak ] = "Presunúť body";
             };
             ToolBoxItem
             {
@@ -418,6 +426,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ czech ] = "Vložit body";
                 Text[ hebrew ] = "‮הוספת נקודות‬";
                 Text[ hindi ] = "बिन्दुओं को जोड़ो";
+                Text[ slovak ] = "Vložiť body";
             };
             ToolBoxItem
             {
@@ -451,6 +460,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ czech ] = "Odstranit body";
                 Text[ hebrew ] = "‮מחיקת נקודות‬";
                 Text[ hindi ] = "बिन्दुओं को मिटाओ";
+                Text[ slovak ] = "Odstrániť body";
             };
             ToolBoxItem
             {
@@ -487,6 +497,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ czech ] = "Automatické obrysy";
                 Text[ hebrew ] = "AutoKontur";
                 Text[ hindi ] = "स्वचालित परिवेश";
+                Text[ slovak ] = "Automatické obrysy";
             };
             ToolBoxItem
             {
@@ -525,6 +536,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ czech ] = "Zpět ";
                 Text[ hebrew ] = "‮ביטול פעולה‬";
                 Text[ hindi ] = "अनावृत्ति ";
+                Text[ slovak ] = "Späť ";
             };
             ToolBoxItem
             {
@@ -559,6 +571,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ czech ] = "Znovu ";
                 Text[ hebrew ] = "‮שחזור פעולה‬";
                 Text[ hindi ] = "फिर से करो ";
+                Text[ slovak ] = "Znova ";
             };
             ToolBoxItem
             {
@@ -592,6 +605,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ czech ] = "Kapátko";
                 Text[ hebrew ] = "Pipette";
                 Text[ hindi ] = "अइड्रापर";
+                Text[ slovak ] = "Kvapkadlo";
             };
         };
     };
@@ -613,7 +627,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
         QuickHelpText [ english_us ] = "Color Tolerance" ;
         CustomUnitText [ portuguese ] = "%" ;
         QuickHelpText [ portuguese ] = "Toler�ncia de cor" ;
-        CustomUnitText [ portuguese_brazilian ] = "%" ;
+        CustomUnitText [ portuguese_brazilian ] = "-" ;
         QuickHelpText [ portuguese_brazilian ] = "Farbtoleranz" ;
         CustomUnitText [ swedish ] = "%" ;
         QuickHelpText [ swedish ] = "F�rgtolerans" ;
@@ -659,6 +673,8 @@ FloatingWindow RID_SVXDLG_CONTOUR
         CustomUnitText[ hindi ] = "%";
         QuickHelpText[ thai ] = "Color Tolerance";
         QuickHelpText[ hindi ] = "रंग सहनशीलता";
+        CustomUnitText[ slovak ] = "%";
+        QuickHelpText[ slovak ] = "Farebná tolerancia";
     };
     Control CTL_CONTOUR
     {
@@ -724,6 +740,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
     Text[ czech ] = "Editor obrysů";
     Text[ hebrew ] = "Kontur-Editor";
     Text[ hindi ] = "परिवेश संपादक";
+    Text[ slovak ] = "Editor obrysov";
 };
 /******************************************************************************/
 String STR_CONTOURDLG_MODIFY
@@ -755,6 +772,7 @@ String STR_CONTOURDLG_MODIFY
     Text[ czech ] = "Obrys byl změněn.\nPřejete si uložit změny?";
     Text[ hebrew ] = "Die Kontur wurde geändert.\nSollen die Änderungen übernommen werden?";
     Text[ hindi ] = "परिवेश को परिवर्तन किया गया है ।\nआप परिवर्तनों को संचित करना चाहते है?";
+    Text[ slovak ] = "Obrys bol zmenený.\nPrajete si uložiť zmeny?";
 };
 String STR_CONTOURDLG_NEWPIPETTE
 {
@@ -785,6 +803,7 @@ String STR_CONTOURDLG_NEWPIPETTE
     Text[ czech ] = "Přejete si vytvořit nový obrys?";
     Text[ hebrew ] = "Möchten Sie eine neue Kontur erzeugen?";
     Text[ hindi ] = "आप नया परिवेश को उत्पन्न करना चाहते है?";
+    Text[ slovak ] = "Prajete si vytvoriť nový obrys?";
 };
 String STR_CONTOURDLG_WORKPLACE
 {
@@ -815,6 +834,7 @@ String STR_CONTOURDLG_WORKPLACE
     Text[ czech ] = "Nastavení nové pracovní plochy způsobí\nvymazání obrysu. Opravdu chcete pokračovat?";
     Text[ hebrew ] = "Das Setzen eines neuen Arbeitsbereiches\nführt zu einem Löschen der Kontur.\nMöchten sie wirklich fortfahren?";
     Text[ hindi ] = "नया कार्यस्थान को सेट्ट करने से\nपरिवेश मिट सकता है ।\nआप सचमुच आगे बढना चाहते है?";
+    Text[ slovak ] = "Nastavenie novej pracovnej plochy spôsobí\nvymazanie obrysu.\nNaozaj chcete pokračovať?";
 };
 String STR_CONTOURDLG_LINKED
 {
@@ -846,8 +866,11 @@ String STR_CONTOURDLG_LINKED
     Text[ czech ] = "Tento obrázek je propojen s dokumentem. Přejete si rozpojit obrázek, abyste jej mohli upravit?";
     Text[ hebrew ] = "Diese Grafik ist mit dem Dokument verknüpft. Möchten Sie die Verknüpfung aufheben, um die Grafik zu bearbeiten?";
     Text[ hindi ] = "इस सुचित्र वस्तु को लेखपत्र केलिए लिंक किया है । उसको संपादन करने केलिए आप सुचित्र का लिंक हटाना चाहते है?";
+    Text[ slovak ] = "Tento obrázok je prepojený s dokumentom. Prajete si odpojiť obrázok, aby ste ho mohli upraviť?";
 };
 /******************************************************************************/
+
+
 
 
 
