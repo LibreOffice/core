@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-03-16 16:34:11 $
+ *  last change: $Author: gh $ $Date: 2001-03-23 09:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,13 +224,22 @@ static String ImplMakeConfigName( const XubString* pFileName,
     ::rtl::OUString aFileName;
     ::rtl::OUString aPathName;
     if ( pFileName )
+    {
+#ifdef UNX
+        aFileName = ::rtl::OUString::createFromAscii( "." );
+        aFileName += *pFileName;
+        aFileName += ::rtl::OUString::createFromAscii( "rc" );
+#else
         aFileName = *pFileName;
+        aFileName += ::rtl::OUString::createFromAscii( ".ini" );
+#endif
+    }
     else
     {
 #ifdef UNX
-        aFileName = String::CreateFromAscii( ".sversionrc" );
+        aFileName = ::rtl::OUString::createFromAscii( ".sversionrc" );
 #else
-        aFileName = String::CreateFromAscii( "sversion.ini" );
+        aFileName = ::rtl::OUString::createFromAscii( "sversion.ini" );
 #endif
     }
 
