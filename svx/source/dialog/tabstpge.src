@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:30:27 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 07:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ italian ] = "A ~sinistra" ;
         Text [ portuguese_brazilian ] = "~Esquerda" ;
         Text [ portuguese ] = "~Esquerda" ;
-        Text [ finnish ] = "~Vasemmalle" ;
+        Text [ finnish ] = "~Vasen" ;
         Text [ danish ] = "Venstre" ;
         Text [ french ] = "~À gauche" ;
         Text [ swedish ] = "~Vänster" ;
@@ -200,7 +200,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ italian ] = "~Centrata" ;
         Text [ portuguese_brazilian ] = "C~entro" ;
         Text [ portuguese ] = "~Centrado" ;
-        Text [ finnish ] = "~Keski" ;
+        Text [ finnish ] = "~Keskitetty" ;
         Text [ danish ] = "Centreret" ;
         Text [ french ] = "~Centré" ;
         Text [ swedish ] = "C~entrerat" ;
@@ -304,7 +304,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ italian ] = "Tipo" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ portuguese ] = "Tipo" ;
-        Text [ finnish ] = "Laji" ;
+        Text [ finnish ] = "Tyyppi" ;
         Text [ danish ] = "Type" ;
         Text [ french ] = "Ca~ractères" ;
         Text [ swedish ] = "Typ" ;
@@ -333,7 +333,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ italian ] = "~Nessuno" ;
         Text [ portuguese_brazilian ] = "N~enhum" ;
         Text [ portuguese ] = "N~enhum" ;
-        Text [ finnish ] = "~Ei ole" ;
+        Text [ finnish ] = "~Ei mitään" ;
         Text [ danish ] = "Ingen" ;
         Text [ french ] = "A~ucun(e)" ;
         Text [ swedish ] = "~Inga" ;
@@ -381,7 +381,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ italian ] = "C~arattere" ;
         Text [ portuguese_brazilian ] = "Ca~racter" ;
         Text [ portuguese ] = "Ca~racteres" ;
-        Text [ finnish ] = "Me~rkki" ;
+        Text [ finnish ] = "Merkki" ;
         Text [ danish ] = "Tegn" ;
         Text [ french ] = "C~aractères" ;
         Text [ swedish ] = "Tec~ken" ;
@@ -475,7 +475,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ italian ] = "~Elimina tutti" ;
         Text [ portuguese_brazilian ] = "Apag~ar tudo" ;
         Text [ portuguese ] = "Eli~minar tudo" ;
-        Text [ finnish ] = "Po~ista kaikki" ;
+        Text [ finnish ] = "~Poista kaikki" ;
         Text [ danish ] = "Slet alle" ;
         Text [ french ] = "Supprimer ~tout" ;
         Text [ swedish ] = "Radera ~alla" ;
