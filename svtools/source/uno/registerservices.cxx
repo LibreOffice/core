@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-11 13:03:52 $
+ *  last change: $Author: fs $ $Date: 2002-08-27 15:31:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,12 +86,6 @@
 #ifndef _PRODUCE_HXX
 #include "imgprod.hxx"
 #endif
-#ifndef INCLUDED_SVT_FILEPICKER_HXX
-#include "filepicker.hxx"
-#endif
-#ifndef INCLUDED_SVT_FOLDERPICKER_HXX
-#include "folderpicker.hxx"
-#endif
 
 #ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
@@ -128,6 +122,8 @@ DECLARE_CREATEINSTANCE( SvNumberFormatsSupplierServiceObject )
 DECLARE_CREATEINSTANCE( ImageProducer )
 DECLARE_CREATEINSTANCE_NAMESPACE( svt, OAddressBookSourceDialogUno )
 DECLARE_CREATEINSTANCE( SvFilterOptionsDialog )
+DECLARE_CREATEINSTANCE_NAMESPACE( svt, SvtFolderPicker )
+DECLARE_CREATEINSTANCE_NAMESPACE( svt, SvtFilePicker )
 
 IMPL_CREATEINSTANCE( ImageProducer );
 
@@ -327,7 +323,7 @@ void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* 
             aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FilePicker" );
             xFactory = ::cppu::createSingleFactory( xServiceManager,
                                                     ::rtl::OUString::createFromAscii( sImplementationName ),
-                                                    SvtFilePicker::impl_createInstance,
+                                                    ::svt::SvtFilePicker_CreateInstance,
                                                     aServiceNames );
         }
         else if ( rtl_str_compare( sImplementationName, "com.sun.star.svtools.FolderPicker") == 0 )
@@ -336,7 +332,7 @@ void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* 
             aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FolderPicker" );
             xFactory = ::cppu::createSingleFactory( xServiceManager,
                                                     ::rtl::OUString::createFromAscii( sImplementationName ),
-                                                    SvtFolderPicker::impl_createInstance,
+                                                    ::svt::SvtFolderPicker_CreateInstance,
                                                     aServiceNames );
         }
         else if ( rtl_str_compare( sImplementationName, "com.sun.star.svtools.SvFilterOptionsDialog") == 0 )
