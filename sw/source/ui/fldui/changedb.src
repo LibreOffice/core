@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ ModalDialog DLG_CHANGE_DB
         Text [ italian ] = "In questo dialogo si possono scambiare database ai quali si accede tramite campi di database. Si può effettuare una modifica per volta. Nell'elenco di sinistra è possibile una selezione multipla." ;
         Text [ spanish ] = "En este diálogo puede intercambiar por otras las bases de datos a las que acceda a través de los campos. Se puede realizar solo un cambio por fase de trabajo. En la lista izquierda es posible hacer una selección múltiple." ;
         Text [ french ] = "Cette boîte de dialogue vous permet d'échanger les bases de données auxquelles vous accédez dans vos documents par des champs de formulaire. Vous pouvez exécuter une seule modification par saisie. La liste de gauche permet une sélection multiple." ;
-        Text [ dutch ] = "In deze dialoog kunt u gegevensbestanden waarop u in uw document via de speciale velden betrekking neemt, door andere gegevensbestanden vervangen. In de linker lijst is een meervoudige keuze mogelijk." ;
+        Text [ dutch ] = "In deze dialoog kunt u een database waarop de databasevelden in uw document betrekking hebben vervangen door een andere database. In de linker lijst is ook een meervoudige keuze mogelijk." ;
         Text [ swedish ] = "I denna dialog kan man byta ut de databaser, som kan nås via databasfältet i Ditt dokument, mot andra databaser. Man kan bara göra en ändring åt gången. I den vänstra listen finns möjlighet till multipel markering." ;
         Text [ danish ] = "I denne dialog kan du udskifte databaser, som du har adgang til via databasefelter. Du kan kun udføre en ændring ad gangen. I listen til venstre er der mulighed for multimarkering." ;
         Text [ portuguese_brazilian ] = "In diesem Dialog können Sie Datenbanken, auf die Sie in Ihrem Dokument über Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie können nur eine Änderung pro Arbeitsgang durchführen. In der linken Liste ist Mehrfachselektion möglich." ;
@@ -107,7 +107,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ japanese ] = "‚±‚ÌÀŞ²±Û¸Ş‚Å‚ÍÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚ğ’Ê‚µ‚ÄAÄŞ·­ÒİÄ‚É±¸¾½‚·‚éÃŞ°ÀÍŞ°½‚ğ‘¼‚ÌÃŞ°ÀÍŞ°½‚ÆŒğŠ·‚Å‚«‚Ü‚·Bˆê“x‚É1‚Â‚Ì•ÏX‚µ‚©‚Å‚«‚Ü‚¹‚ñB¶‚ÌØ½Ä‚Å‚Í•¡”‘I‘ğ‚ª‰Â”\\‚Å‚·B";
         Text[ chinese_traditional ] = "¦b³o­Ó¹ï¸Ü¤è¶ô¤º±z¯à°÷¨Ï¥Î¤@­Ó¨ä¥L¸ê®Æ®w¨Ó¥N´À±z·í«e½s¿èªº¤å¥ó©Ò¨Ï¥Îªº¸ê®Æ®w¡C±z¨C¦¸¥u¯à§@¤@¦¸ÅÜ§ó¡C±z¯à°÷¦b¥ªÄæ¤º§@¦h­«¿ï¾Ü¡C";
         Text[ arabic ] = "İí ãÑÈÚ ÇáÍæÇÑ åĞÇ¡ íãßäß ÇÓÊÈÏÇá ŞæÇÚÏ ÇáÈíÇäÇÊ¡ ÇáÊí ÊÕá ÅáíåÇ İí ãÓÊäÏß ÈæÇÓØÉ ÍŞæá ŞæÇÚÏ ÇáÈíÇäÇÊ¡ ÈÃÎÑì. áÇÍÙ Ãäå íãßäß Úãá ÊÛííÑ æÇÍÏ İŞØ ßá ãÑÉ. íãßä Úãá ÃßËÑ ãä ÊÍÏíÏ İí ÇáŞÇÆãÉ ÇáíÓÑì.";
-        Text[ dutch ] = "In deze dialoog kunt u gegevensbestanden waarop u in uw document via de speciale velden betrekking neemt, door andere gegevensbestanden vervangen. In de linker lijst is een meervoudige keuze mogelijk.";
+        Text[ dutch ] = "In deze dialoog kunt u een database waarop de databasevelden in uw document betrekking hebben vervangen door een andere database. In de linker lijst is ook een meervoudige keuze mogelijk.";
         Text[ chinese_simplified ] = "ÔÚÕâ¸ö¶Ô»°¿òÄÚÄúÄÜ¹»Ê¹ÓÃÒ»¸öÆäËûÊı¾İ¿âÀ´´úÌæÄúµ±Ç°±à¼­µÄÎÄµµËùÊ¹ÓÃµÄÊı¾İ¿â¡£Ã¿´ÎÄúÖ»ÄÜ×öÒ»Ïî¸ü¸Ä¡£ÔÚ×ó·½µÄÁĞµ¥ÄÚÄú¿ÉÒÔ½øĞĞ¶àÖØÑ¡Ôñ¡£";
         Text[ greek ] = "Óå áõôüí ôïí äéÜëïãï ìğïñåßôå íá áíôáëëÜîåôå ôéò âÜóåéò äåäïìİíùí, ôéò ïğïßåò ÷ñçóéìïğïéåßôå ãéá ôï İããñáöï óáò ìİóù ôùí ğåäßùí âÜóåùí äåäïìİíùí, ìå Üëëåò âÜóåéò äåäïìİíùí. Åğéôñİğåôáé ìüíï ìéá áëëáãŞ áíÜ åñãÜóéìç çìİñá. Óôï áñéóôåñü ôìŞìá ìğïñïıí íá ãßíïõí ğïëëáëİò åğéëïãİò.";
         Text[ korean ] = "ÀÌ ´ëÈ­»óÀÚ¿¡¼­,´ç½ÅÀº ¹®¼­¿¡¼­ µ¥ÀÌÅÍº£ÀÌ½º¿¡ Á¢±ÙÇÏ°Å³ª ±³È¯ÇÏ´Â µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¸¦ »ç¿ëÇÏ½Ç¼ö ÀÖ½À´Ï´Ù.ÇÑ¹ø¿¡ ÇÑ¹ø º¯°æÀÌ ¸¸µé¾î  Áı´Ï´Ù. ¿ŞÂÊÀÇ ¸®½ºÆ® »ó¿¡¼­, ´ÙÁß ¼±ÅÃÀÌ °¡´ÉÇÕ´Ï´Ù.";
@@ -125,7 +125,7 @@ ModalDialog DLG_CHANGE_DB
         Text [ italian ] = "Database utilizzati" ;
         Text [ spanish ] = "Bases de datos utilizadas" ;
         Text [ french ] = "Bases de données utilisées" ;
-        Text [ dutch ] = "Gebruikte gegevensbestanden" ;
+        Text [ dutch ] = "Gebruikte databases" ;
         Text [ swedish ] = "Använda databaser" ;
         Text [ danish ] = "Anvendte databaser" ;
         Text [ portuguese_brazilian ] = "Verwendete Datenbanken" ;
@@ -136,7 +136,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ japanese ] = "g—p‚³‚ê‚½ÃŞ°ÀÍŞ°½";
         Text[ chinese_traditional ] = "©Ò¨Ï¥Îªº¸ê®Æ®w";
         Text[ arabic ] = "ŞæÇÚÏ ÇáÈíÇäÇÊ ŞíÏ ÇáÇÓÊÎÏÇã";
-        Text[ dutch ] = "Gebruikte gegevensbestanden";
+        Text[ dutch ] = "Gebruikte databases";
         Text[ chinese_simplified ] = "Ê¹ÓÃµÄÊı¾İ¿â";
         Text[ greek ] = "×ñçóéìïğïéçìİíåò âÜóåéò äåäïìİíùí";
         Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º°¡ »ç¿ëÁß ÀÔ´Ï´Ù.";
@@ -155,7 +155,7 @@ ModalDialog DLG_CHANGE_DB
         Text [ italian ] = "Database disponibili" ;
         Text [ spanish ] = "Bases de datos diponibles" ;
         Text [ french ] = "Bases de données disponibles" ;
-        Text [ dutch ] = "Beschikbare gegevensbestanden" ;
+        Text [ dutch ] = "Beschikbare databases" ;
         Text [ swedish ] = "Tillgängliga databaser" ;
         Text [ danish ] = "Tilgængelige databaser" ;
         Text [ portuguese_brazilian ] = "Verfügbare Datenbanken" ;
@@ -166,7 +166,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ japanese ] = "g—p‚Å‚«‚éÃŞ°ÀÍŞ°½";
         Text[ chinese_traditional ] = "²{¦sªº¸ê®Æ®w";
         Text[ arabic ] = "ŞæÇÚÏ ÇáÈíÇäÇÊ ÇáãÊÇÍÉ";
-        Text[ dutch ] = "Beschikbare gegevensbestanden";
+        Text[ dutch ] = "Beschikbare databases";
         Text[ chinese_simplified ] = "¿ÉÊ¹ÓÃµÄÊı¾İ¿â";
         Text[ greek ] = "Äéáèİóéìåò âÜóåéò äåäïìİíùí";
         Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º »ç¿ë°¡´É";
