@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-14 12:46:18 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@
           <value xml:lang="ca">DocBook</value>
           <value xml:lang="th">DocBook</value>
           <value xml:lang="cs">DocBook</value>
+          <value xml:lang="sk">DocBook</value>
           <value xml:lang="he">DocBook</value>
           <value xml:lang="hi-IN">DocBook</value>
       </prop>
@@ -2009,6 +2010,7 @@
           <value xml:lang="ca">AportisDoc (Palm)</value>
           <value xml:lang="th">AportisDoc (Palm)</value>
           <value xml:lang="cs">AportisDoc (Palm)</value>
+          <value xml:lang="sk">AportisDoc (Palm)</value>
           <value xml:lang="he">AportisDoc (Palm)</value>
           <value xml:lang="hi-IN">AportisDoc (Palm)</value>
       </prop>
@@ -2046,6 +2048,7 @@
           <value xml:lang="ca">Flat XML File</value>
           <value xml:lang="th">Flat XML File</value>
           <value xml:lang="cs">Flat XML</value>
+          <value xml:lang="sk">Flat XML</value>
           <value xml:lang="he">‮Xml שטוח‬</value>
           <value xml:lang="hi-IN">Flat XML</value>
       </prop>
@@ -2083,6 +2086,7 @@
           <value xml:lang="ca">XHTML File</value>
           <value xml:lang="th">XHTML File</value>
           <value xml:lang="cs">XHTML</value>
+          <value xml:lang="sk">XHTML</value>
           <value xml:lang="he">XHTML</value>
           <value xml:lang="hi-IN">XHTML</value>
       </prop>
@@ -2120,6 +2124,7 @@
           <value xml:lang="ca">DocBook</value>
           <value xml:lang="th">DocBook</value>
           <value xml:lang="cs">DocBook</value>
+          <value xml:lang="sk">DocBook</value>
           <value xml:lang="he">DocBook</value>
           <value xml:lang="hi-IN">DocBook</value>
       </prop>
@@ -2181,6 +2186,7 @@
           <value xml:lang="ca">PocketWord File</value>
           <value xml:lang="th">PocketWord File</value>
           <value xml:lang="cs">Pocket Word</value>
+          <value xml:lang="sk">Pocket Word</value>
           <value xml:lang="he">Pocket Word</value>
           <value xml:lang="hi-IN">Pocket Word</value>
       </prop>
@@ -2237,7 +2243,8 @@
           <value xml:lang="tr">HTML Belgesi (%productname% Draw)</value>
           <value xml:lang="ar">Web Page</value>
           <value xml:lang="th">เว็บเพจ</value>
-          <value xml:lang="cs">HTML Document (%productname% Draw)</value>
+          <value xml:lang="cs">HTML dokument (%productname% Draw)</value>
+          <value xml:lang="sk">HTML dokument (%productname% Draw)</value>
           <value xml:lang="he">‮מסמך HTML (%productname% Draw)‬</value>
           <value xml:lang="ca">HTML Document (%productname% Draw)</value>
           <value xml:lang="pt-BR">HTML Document (%productname% Draw)</value>
@@ -2274,7 +2281,8 @@
           <value xml:lang="tr">HTML Belgesi (%productname% Impress)</value>
           <value xml:lang="ar">Web Page</value>
           <value xml:lang="th">เว็บเพจ</value>
-          <value xml:lang="cs">HTML Document (%productname% Impress)</value>
+          <value xml:lang="cs">HTML dokument (%productname% Impress)</value>
+          <value xml:lang="sk">HTML dokument (%productname% Impress)</value>
           <value xml:lang="he">‮מסמך HTML (%productname% Impress)‬</value>
           <value xml:lang="ca">HTML Document (%productname% Impress)</value>
           <value xml:lang="pt-BR">HTML Document (%productname% Impress)</value>
@@ -2511,7 +2519,8 @@
           <value xml:lang="ar">HTML Document (%productname% Writer)</value>
           <value xml:lang="ca">HTML Document (%productname% Writer)</value>
           <value xml:lang="th">HTML Document (%productname% Writer)</value>
-          <value xml:lang="cs">HTML Document (%productname% Writer)</value>
+          <value xml:lang="cs">HTML dokument (%productname% Writer)</value>
+          <value xml:lang="sk">HTML dokument (%productname% Writer)</value>
           <value xml:lang="he">‮מסמך HTML (%productname% Writer)‬</value>
           <value xml:lang="hi-IN">HTML Document (%productname% Writer)</value>
       </prop>
@@ -2593,6 +2602,7 @@
           <value xml:lang="sv">Ichitaro 8/9/10/11</value>
           <value xml:lang="th">Ichitaro 8/9/10/11</value>
           <value xml:lang="cs">Ichitaro 8/9/10/11</value>
+          <value xml:lang="sk">Ichitaro 8/9/10/11</value>
           <value xml:lang="he">Ichitaro 8/9/10/11</value>
           <value xml:lang="hi-IN">Ichitaro 8/9/10/11</value>
       </prop>
@@ -2629,7 +2639,8 @@
         <value xml:lang="ar">Ichitaro 8/9/10/11 Template</value>
         <value xml:lang="ca">Ichitaro 8/9/10/11 Template</value>
         <value xml:lang="th">Ichitaro 8/9/10/11 Template</value>
-          <value xml:lang="cs">Ichitaro 8/9/10/11 Template</value>
+          <value xml:lang="cs">Šablona Ichitaro 8/9/10/11</value>
+          <value xml:lang="sk">Šablóna Ichitaro 8/9/10/11</value>
           <value xml:lang="he">‮תבנית Ichitaro 8/9/10/11‬</value>
           <value xml:lang="hi-IN">Ichitaro 8/9/10/11 Template</value>
       </prop>
@@ -3634,7 +3645,8 @@
           <value xml:lang="ar">HTML WebQuery (StarOffice  Calc)</value>
           <value xml:lang="ca">Web Page Query (%productname% Calc)</value>
           <value xml:lang="th">แบบสอบถามเว็บเพจ (%productname% Calc)</value>
-          <value xml:lang="cs">Web Page Query (%productname% Calc)</value>
+          <value xml:lang="cs">Webový dotaz (%productname% Calc)</value>
+          <value xml:lang="sk">Webový dotaz (%productname% Calc)</value>
           <value xml:lang="he">‮שאילתת ךף אינטרנט (%productname% Calc)‬</value>
           <value xml:lang="hi-IN">Web Page Query (%productname% Calc)</value>
       </prop>
@@ -3671,7 +3683,8 @@
         <value xml:lang="ar">Calc 6.0 Vorlage</value>
         <value xml:lang="ca">%productname% %formatversion% Spreadsheet Template</value>
         <value xml:lang="th">แม่แบบกระดาษคำนวณ %productname% %formatversion% </value>
-        <value xml:lang="cs">%productname% %formatversion% Spreadsheet Template</value>
+        <value xml:lang="cs">Šablona sešitu %productname% %formatversion%</value>
+        <value xml:lang="sk">Šablóna zošitu %productname% %formatversion%</value>
         <value xml:lang="he">‮תבנית גליון עבודה %productname% %formatversion%‬</value>
         <value xml:lang="hi-IN">%productname% %formatversion% Spreadsheet Template</value>
       </prop>
@@ -3741,7 +3754,8 @@
         <value xml:lang="ar">Draw 6.0 قالب</value>
         <value xml:lang="ca">%productname% %formatversion% Drawing Template</value>
         <value xml:lang="th">แม่แบบวาดรูป %productname% %formatversion%  </value>
-        <value xml:lang="cs">%productname% %formatversion% Drawing Template</value>
+        <value xml:lang="cs">Šablona kresby %productname% %formatversion%</value>
+        <value xml:lang="sk">Šablóna kresby %productname% %formatversion%</value>
         <value xml:lang="he">‮תבנית סרטוט %productname% %formatversion%‬</value>
         <value xml:lang="hi-IN">%productname% %formatversion% Drawing Template</value>
       </prop>
@@ -3921,7 +3935,8 @@
         <value xml:lang="ar">Draw 6.0 (Impress)</value>
         <value xml:lang="ca">%productname% %formatversion% Drawing (%productname% Impress)</value>
         <value xml:lang="th">โปรแกรมวาดรูป %productname% %formatversion%  (%productname% Impress)</value>
-        <value xml:lang="cs">%productname% %formatversion% Drawing (%productname% Impress)</value>
+        <value xml:lang="cs">Kresba %productname% %formatversion% (%productname% Impress)</value>
+        <value xml:lang="sk">Kresba %productname% %formatversion% (%productname% Impress)</value>
         <value xml:lang="he">‮ציור %productname% %formatversion% (%productname% Impress)‬</value>
         <value xml:lang="hi-IN">%productname% %formatversion% Drawing (%productname% Impress)</value>
       </prop>
@@ -3958,7 +3973,8 @@
         <value xml:lang="ar">Impress 6.0 قالب</value>
         <value xml:lang="ca">%productname% %formatversion% Presentation Template</value>
         <value xml:lang="th">แม่แบบการนำเสนอ %productname% %formatversion%  </value>
-        <value xml:lang="cs">%productname% %formatversion% Presentation Template</value>
+        <value xml:lang="cs">Šablona prezentace %productname% %formatversion%</value>
+        <value xml:lang="sk">Šablóna prezentácie %productname% %formatversion%</value>
         <value xml:lang="he">‮תבנית מצגת %productname% %formatversion%‬</value>
         <value xml:lang="hi-IN">%productname% %formatversion% Presentation Template</value>
       </prop>
@@ -4413,7 +4429,8 @@
           <value xml:lang="ar">HTML (StarOffice  Calc)</value>
           <value xml:lang="ca">HTML Document (%productname% Calc)</value>
           <value xml:lang="th">HTML Document (%productname% Calc)</value>
-          <value xml:lang="cs">HTML Document (%productname% Calc)</value>
+          <value xml:lang="cs">HTML dokument (%productname% Calc)</value>
+          <value xml:lang="sk">HTML dokument (%productname% Calc)</value>
           <value xml:lang="he">‮מסמך HTML (%productname% Calc)‬</value>
           <value xml:lang="hi-IN">HTML Document (%productname% Calc)</value>
       </prop>
@@ -4472,7 +4489,8 @@
         <value xml:lang="ar">MS Excel 4.0 قالب</value>
         <value xml:lang="ca">Microsoft Excel 4.0 Template</value>
         <value xml:lang="th">Microsoft Excel 4.0 Template</value>
-          <value xml:lang="cs">Microsoft Excel 4.0 Template</value>
+          <value xml:lang="cs">Šablona Microsoft Excel 4.0</value>
+          <value xml:lang="sk">Šablóna Microsoft Excel 4.0</value>
           <value xml:lang="he">‮תבנית Microsoft Excel 4.0‬</value>
           <value xml:lang="hi-IN">Microsoft Excel 4.0 Template</value>
       </prop>
@@ -4520,7 +4538,8 @@
         <value xml:lang="ar">MS Excel 5.0 قالب</value>
         <value xml:lang="ca">Microsoft Excel 5.0 Template</value>
         <value xml:lang="th">Microsoft Excel 5.0 Template</value>
-          <value xml:lang="cs">Microsoft Excel 5.0 Template</value>
+          <value xml:lang="cs">Šablona Microsoft Excel 5.0</value>
+          <value xml:lang="sk">Šablóna Microsoft Excel 5.0</value>
           <value xml:lang="he">‮תבנית Microsoft Excel 5.0‬</value>
           <value xml:lang="hi-IN">Microsoft Excel 5.0 Template</value>
       </prop>
@@ -4568,7 +4587,8 @@
         <value xml:lang="ar">MS Excel 95 قالب</value>
         <value xml:lang="ca">Microsoft Excel 95 Template</value>
         <value xml:lang="th">Microsoft Excel 95 Template</value>
-          <value xml:lang="cs">Microsoft Excel 95 Template</value>
+          <value xml:lang="cs">Šablona Microsoft Excel 95</value>
+          <value xml:lang="sk">Šablóna Microsoft Excel 95</value>
           <value xml:lang="he">‮תבנית Microsoft Excel 95‬</value>
           <value xml:lang="hi-IN">Microsoft Excel 95 Template</value>
       </prop>
@@ -4616,7 +4636,8 @@
         <value xml:lang="ar">MS Excel 97/2000 قالب</value>
         <value xml:lang="ca">Microsoft Excel 97/2000/XP Template</value>
         <value xml:lang="th">Microsoft Excel 97/2000/XP Template</value>
-          <value xml:lang="cs">Microsoft Excel 97/2000/XP Template</value>
+          <value xml:lang="cs">Šablona Microsoft Excel 97/2000/XP</value>
+          <value xml:lang="sk">Šablóna Microsoft Excel 97/2000/XP</value>
           <value xml:lang="he">‮תבנית Microsoft Excel 97/2000/XP‬</value>
           <value xml:lang="hi-IN">Microsoft Excel 97/2000/XP Template</value>
       </prop>
@@ -4697,7 +4718,8 @@
         <value xml:lang="ar">StarCalc 3.0 قالب</value>
         <value xml:lang="ca">Plantilla de l&apos;StarCalc 3.0</value>
         <value xml:lang="th">StarCalc 3.0 Template</value>
-          <value xml:lang="cs">StarCalc 3.0 Template</value>
+          <value xml:lang="cs">Šablona StarCalc 3.0</value>
+          <value xml:lang="sk">Šablóna StarCalc 3.0</value>
           <value xml:lang="he">‮תבנית StarCalc 3.0‬</value>
           <value xml:lang="hi-IN">StarCalc 3.0 Template</value>
       </prop>
@@ -4745,7 +4767,8 @@
         <value xml:lang="ar">StarCalc 4.0 قالب</value>
         <value xml:lang="ca">Plantilla de l&apos;StarCalc 4.0</value>
         <value xml:lang="th">StarCalc 4.0 Template</value>
-          <value xml:lang="cs">StarCalc 4.0 Template</value>
+          <value xml:lang="cs">Šablona StarCalc 4.0</value>
+          <value xml:lang="sk">Šablóna StarCalc 4.0</value>
           <value xml:lang="he">‮תבנית StarCalc 4.0‬</value>
           <value xml:lang="hi-IN">StarCalc 4.0 Template</value>
       </prop>
@@ -4793,7 +4816,8 @@
         <value xml:lang="ar">StarCalc 5.0 قالب</value>
         <value xml:lang="ca">Plantilla de l&apos;StarCalc 5.0</value>
         <value xml:lang="th">StarCalc 5.0 Template</value>
-          <value xml:lang="cs">StarCalc 5.0 Template</value>
+          <value xml:lang="cs">Šablona StarCalc 5.0</value>
+          <value xml:lang="sk">Šablóna StarCalc 5.0</value>
           <value xml:lang="he">‮תבנית StarCalc 5.0‬</value>
           <value xml:lang="hi-IN">StarCalc 5.0 Template</value>
       </prop>
@@ -4830,7 +4854,8 @@
         <value xml:lang="ar">Calc 6.0</value>
         <value xml:lang="ca">%productname% %formatversion% Spreadsheet</value>
         <value xml:lang="th">%productname% %formatversion% Spreadsheet</value>
-        <value xml:lang="cs">%productname% %formatversion% Spreadsheet</value>
+        <value xml:lang="cs">Sešit %productname% %formatversion%</value>
+        <value xml:lang="sk">Zošit %productname% %formatversion%</value>
         <value xml:lang="he">‮גליון עבודה %productname% %formatversion%‬</value>
         <value xml:lang="hi-IN">%productname% %formatversion% Spreadsheet</value>
       </prop>
@@ -4868,6 +4893,7 @@
         <value xml:lang="ca">Text CSV</value>
         <value xml:lang="th">Text CSV</value>
           <value xml:lang="cs">Text CSV</value>
+          <value xml:lang="sk">Text CSV</value>
           <value xml:lang="he">‮טקסט CSV‬</value>
           <value xml:lang="hi-IN">Text CSV</value>
       </prop>
@@ -4948,7 +4974,8 @@
         <value xml:lang="ar">%productname% %formatversion% Chart</value>
         <value xml:lang="ca">%productname% %formatversion% Chart</value>
         <value xml:lang="th">%productname% %formatversion% Chart</value>
-        <value xml:lang="cs">%productname% %formatversion% Chart</value>
+        <value xml:lang="cs">Graf %productname% %formatversion%</value>
+        <value xml:lang="sk">Graf %productname% %formatversion%</value>
         <value xml:lang="he">‮תרשים %productname% %formatversion%‬</value>
         <value xml:lang="hi-IN">%productname% %formatversion% Chart</value>
       </prop>
@@ -5194,7 +5221,8 @@
         <value xml:lang="ar">StarDraw 3.0 قالب</value>
         <value xml:lang="ca">Plantilla de l&apos;StarDraw 3.0</value>
         <value xml:lang="th">แม่แบบ StarDraw 3.0 </value>
-          <value xml:lang="cs">StarDraw 3.0 Template</value>
+          <value xml:lang="cs">Šablona StarDraw 3.0</value>
+          <value xml:lang="sk">Šablóna StarDraw 3.0</value>
           <value xml:lang="he">‮תבנית StarDraw 3.0‬</value>
           <value xml:lang="hi-IN">StarDraw 3.0 Template</value>
       </prop>
@@ -5242,7 +5270,8 @@
         <value xml:lang="ar">StarDraw 5.0 قالب</value>
         <value xml:lang="ca">Plantilla de l&apos;StarDraw 5.0</value>
         <value xml:lang="th">แม่แบบ StarDraw 5.0 </value>
-          <value xml:lang="cs">StarDraw 5.0 Template</value>
+          <value xml:lang="cs">Šablona StarDraw 5.0</value>
+          <value xml:lang="sk">Šablóna StarDraw 5.0</value>
           <value xml:lang="he">‮תבנית StarDraw 5.0‬</value>
           <value xml:lang="hi-IN">StarDraw 5.0 Template</value>
       </prop>
@@ -5279,7 +5308,8 @@
         <value xml:lang="ar">%productname% %formatversion% Drawing</value>
         <value xml:lang="ca">%productname% %formatversion% Drawing</value>
         <value xml:lang="th">%productname% %formatversion% Drawing</value>
-        <value xml:lang="cs">%productname% %formatversion% Drawing</value>
+        <value xml:lang="cs">Kresba %productname% %formatversion%</value>
+        <value xml:lang="sk">Kresba %productname% %formatversion%</value>
         <value xml:lang="he">‮סרטוט %productname% %formatversion%‬</value>
         <value xml:lang="hi-IN">%productname% %formatversion% Drawing</value>
       </prop>
@@ -5415,7 +5445,8 @@
         <value xml:lang="ar">MS PowerPoint 97/2000 قالب</value>
         <value xml:lang="ca">Microsoft PowerPoint 97/2000/XP Template</value>
         <value xml:lang="th">Microsoft PowerPoint 97/2000/XP Template</value>
-          <value xml:lang="cs">Microsoft PowerPoint 97/2000/XP Template</value>
+          <value xml:lang="cs">Šablona Microsoft PowerPoint 97/2000/XP</value>
+          <value xml:lang="sk">Šablóna Microsoft PowerPoint 97/2000/XP</value>
           <value xml:lang="he">‮תבנית Microsoft PowerPoint 97/2000/XP‬</value>
           <value xml:lang="hi-IN">Microsoft PowerPoint 97/2000/XP Template</value>
       </prop>
@@ -5463,7 +5494,8 @@
         <value xml:lang="ar">StarDraw 3.0 قالب (StarOffice Impress)</value>
         <value xml:lang="ca">StarDraw 3.0 Template (%productname% Impress)</value>
         <value xml:lang="th">แม่แบบ StarDraw 3.0(%PRODUCTNAME Impress)</value>
-          <value xml:lang="cs">StarDraw 3.0 Template (%productname% Impress)</value>
+          <value xml:lang="cs">Šablona StarDraw 3.0 (%productname% Impress)</value>
+          <value xml:lang="sk">Šablóna StarDraw 3.0 (%productname% Impress)</value>
           <value xml:lang="he">‮תבנית StarDraw 3.0 (%productname% Impress)‬</value>
           <value xml:lang="hi-IN">StarDraw 3.0 Template (%productname% Impress)</value>
       </prop>
@@ -5511,7 +5543,8 @@
         <value xml:lang="ar">StarDraw 5.0 قالب (StarOffice Impress)</value>
         <value xml:lang="ca">StarDraw 5.0 Template (%productname% Impress)</value>
         <value xml:lang="th">แม่แบบ StarDraw 5.0  (%PRODUCTNAME Impress)</value>
-          <value xml:lang="cs">StarDraw 5.0 Template (%productname% Impress)</value>
+          <value xml:lang="cs">Šablona StarDraw 5.0 (%productname% Impress)</value>
+          <value xml:lang="sk">Šablóna StarDraw 5.0 (%productname% Impress)</value>
           <value xml:lang="he">‮תבנית StarDraw 5.0 (%productname% Impress)‬</value>
           <value xml:lang="hi-IN">StarDraw 5.0 Template (%productname% Impress)</value>
       </prop>
@@ -5559,7 +5592,8 @@
         <value xml:lang="ar">StarImpress 4.0 قالب</value>
         <value xml:lang="ca">Plantilla de l&apos;StarImpress 4.0</value>
         <value xml:lang="th">แม่แบบ StarImpress 4.0 </value>
-          <value xml:lang="cs">StarImpress 4.0 Template</value>
+          <value xml:lang="cs">Šablona StarImpress 4.0</value>
+          <value xml:lang="sk">Šablóna StarImpress 4.0</value>
           <value xml:lang="he">‮תבנית StarImpress 4.0‬</value>
           <value xml:lang="hi-IN">StarImpress 4.0 Template</value>
       </prop>
@@ -5607,7 +5641,8 @@
         <value xml:lang="ar">StarOffice Impress (مضغوط)</value>
         <value xml:lang="ca">StarImpress 5.0 Packed</value>
         <value xml:lang="th">StarImpress 5.0 Packed</value>
-          <value xml:lang="cs">StarImpress 5.0 Packed</value>
+          <value xml:lang="cs">StarImpress 5.0 komprimovaný</value>
+          <value xml:lang="sk">StarImpress 5.0 Skomprimovaný</value>
           <value xml:lang="he">‮דחוס StarImpress 5.0‬</value>
           <value xml:lang="hi-IN">StarImpress 5.0 Packed</value>
       </prop>
@@ -5644,7 +5679,8 @@
         <value xml:lang="ar">StarImpress 5.0 قالب</value>
         <value xml:lang="ca">Plantilla de l&apos;StarImpress 5.0</value>
         <value xml:lang="th">แม่แบบ StarImpress 5.0 </value>
-          <value xml:lang="cs">StarImpress 5.0 Template</value>
+          <value xml:lang="cs">Šablona StarImpress 5.0</value>
+          <value xml:lang="sk">Šablóna StarImpress 5.0</value>
           <value xml:lang="he">‮תבנית StarImpress 5.0‬</value>
           <value xml:lang="hi-IN">StarImpress 5.0 Template</value>
       </prop>
@@ -5681,7 +5717,8 @@
         <value xml:lang="ar">%productname% %formatversion% Prنsentation</value>
         <value xml:lang="ca">%productname% %formatversion% Presentation</value>
         <value xml:lang="th">%productname% %formatversion% Presentation</value>
-        <value xml:lang="cs">%productname% %formatversion% Presentation</value>
+        <value xml:lang="cs">Prezentace %productname% %formatversion%</value>
+        <value xml:lang="sk">Prezentácia %productname% %formatversion%</value>
         <value xml:lang="he">‮מצגת %productname% %formatversion%‬</value>
         <value xml:lang="hi-IN">%productname% %formatversion% Presentation</value>
       </prop>
@@ -5784,7 +5821,8 @@
         <value xml:lang="ar">%productname% %formatversion% Formula</value>
         <value xml:lang="ca">%productname% %formatversion% Formula</value>
         <value xml:lang="th">%productname% %formatversion% Formula</value>
-        <value xml:lang="cs">%productname% %formatversion% Formula</value>
+        <value xml:lang="cs">Vzorec %productname% %formatversion%</value>
+        <value xml:lang="sk">Vzorec %productname% %formatversion%</value>
         <value xml:lang="he">‮נוסחה %productname% %formatversion%‬</value>
         <value xml:lang="hi-IN">%productname% %formatversion% Formula</value>
       </prop>
@@ -5932,6 +5970,7 @@
         <value xml:lang="ca">StarWriter 3.0 </value>
         <value xml:lang="th">StarWriter 3.0 </value>
           <value xml:lang="cs">StarWriter 3.0 </value>
+          <value xml:lang="sk">StarWriter 3.0 </value>
           <value xml:lang="he">StarWriter 3.0 </value>
           <value xml:lang="hi-IN">StarWriter 3.0 </value>
       </prop>
@@ -5969,6 +6008,7 @@
         <value xml:lang="ca">StarWriter 4.0 </value>
         <value xml:lang="th">StarWriter 4.0 </value>
           <value xml:lang="cs">StarWriter 4.0 </value>
+          <value xml:lang="sk">StarWriter 4.0 </value>
           <value xml:lang="he">StarWriter 4.0 </value>
           <value xml:lang="hi-IN">StarWriter 4.0 </value>
       </prop>
@@ -6005,7 +6045,8 @@
         <value xml:lang="ar">StarWriter 4.0 مستند شامل</value>
         <value xml:lang="ca">Document mestre de l&apos;StarWriter 4.0</value>
         <value xml:lang="th">เอกสารต้นฉบับ StarWriter 4.0 </value>
-          <value xml:lang="cs">StarWriter 4.0 Master Document</value>
+          <value xml:lang="cs">Hlavní dokument StarWriter 4.0</value>
+          <value xml:lang="sk">Hlavný dokument StarWriter 4.0</value>
           <value xml:lang="he">‮מסמך אב StarWriter 4.0‬</value>
           <value xml:lang="hi-IN">StarWriter 4.0 Master Document</value>
       </prop>
@@ -6043,6 +6084,7 @@
         <value xml:lang="ca">StarWriter 5.0 </value>
         <value xml:lang="th">StarWriter 5.0 </value>
           <value xml:lang="cs">StarWriter 5.0 </value>
+          <value xml:lang="sk">StarWriter 5.0 </value>
           <value xml:lang="he">‮StarWriter 5.0 ‬</value>
           <value xml:lang="hi-IN">StarWriter 5.0 </value>
       </prop>
@@ -6079,7 +6121,8 @@
         <value xml:lang="ar">StarWriter 5.0 مستند شامل</value>
         <value xml:lang="ca">Document mestre de l&apos;StarWriter 5.0</value>
         <value xml:lang="th">เอกสารต้นฉบับ StarWriter 5.0 </value>
-          <value xml:lang="cs">StarWriter 5.0 Master Document</value>
+          <value xml:lang="cs">Hlavní dokument StarWriter 5.0</value>
+          <value xml:lang="sk">Hlavný dokument StarWriter 5.0</value>
           <value xml:lang="he">‮מסמך אב StarWriter 5.0‬</value>
           <value xml:lang="hi-IN">StarWriter 5.0 Master Document</value>
       </prop>
@@ -6116,7 +6159,8 @@
         <value xml:lang="ar">Text (encoded)</value>
         <value xml:lang="ca">Text Encoded (%productname% Master Document)</value>
         <value xml:lang="th">Text Encoded (%productname% Master Document)</value>
-          <value xml:lang="cs">Text Encoded (%productname% Master Document)</value>
+          <value xml:lang="cs">Kódovaný text (Hlavní dokument %productname%)</value>
+          <value xml:lang="sk">Kódovaný text (Hlavní dokument %productname%)</value>
           <value xml:lang="he">‮טקסט מקודד (מסמכי אב %productname%)‬</value>
           <value xml:lang="hi-IN">Text Encoded (%productname% Master Document)</value>
       </prop>
@@ -6153,7 +6197,8 @@
           <value xml:lang="ar">مستند HTML</value>
           <value xml:lang="ca">Document HTML</value>
           <value xml:lang="th">เอกสาร HTML </value>
-          <value xml:lang="cs">HTML Document</value>
+          <value xml:lang="cs">HTML dokument</value>
+          <value xml:lang="sk">HTML dokument</value>
           <value xml:lang="he">‮מסמך LMTH‬</value>
           <value xml:lang="hi-IN">HTML Document</value>
       </prop>
@@ -6223,7 +6268,8 @@
         <value xml:lang="ar">StarWriter/Web 4.0 قالب</value>
         <value xml:lang="ca">Plantilla de l&apos;StarWriter/Web 4.0</value>
         <value xml:lang="th">แม่แบบ StarWriter/Web 4.0 </value>
-          <value xml:lang="cs">StarWriter/Web 4.0 Template</value>
+          <value xml:lang="cs">Šablona StarWriter/Web 4.0</value>
+          <value xml:lang="sk">Šablóna StarWriter/Web 4.0</value>
           <value xml:lang="he">‮תבנית StarWriter/Web 4.0‬</value>
           <value xml:lang="hi-IN">StarWriter/Web 4.0 Template</value>
       </prop>
@@ -6260,7 +6306,8 @@
         <value xml:lang="ar">StarWriter/Web 5.0 قالب</value>
         <value xml:lang="ca">Plantilla de l&apos;StarWriter/Web 5.0</value>
         <value xml:lang="th">แม่แบบ StarWriter/Web 5.0 </value>
-          <value xml:lang="cs">StarWriter/Web 5.0 Template</value>
+          <value xml:lang="cs">Šablona StarWriter/Web 5.0</value>
+          <value xml:lang="sk">Šablóna StarWriter/Web 5.0</value>
           <value xml:lang="he">‮תבנית StarWriter/Web 5.0‬</value>
           <value xml:lang="hi-IN">StarWriter/Web 5.0 Template</value>
       </prop>
@@ -6298,6 +6345,7 @@
         <value xml:lang="ca">Text (%productname% Writer/Web)</value>
         <value xml:lang="th">Text (%productname% Writer/Web)</value>
           <value xml:lang="cs">Text (%productname% Writer/Web)</value>
+          <value xml:lang="sk">Text (%productname% Writer/Web)</value>
           <value xml:lang="he">‮טקסט (%productname% Writer/Web)‬</value>
           <value xml:lang="hi-IN">Text (%productname% Writer/Web)</value>
       </prop>
@@ -6334,7 +6382,8 @@
         <value xml:lang="ar">Text (encoded)</value>
         <value xml:lang="ca">Text Encoded (%productname% Writer/Web)</value>
         <value xml:lang="th">Text Encoded (%productname% Writer/Web)</value>
-          <value xml:lang="cs">Text Encoded (%productname% Writer/Web)</value>
+          <value xml:lang="cs">Kódovaný text (%productname% Writer/Web)</value>
+          <value xml:lang="sk">Kódovaný text (%productname% Writer/Web)</value>
           <value xml:lang="he">‮טקסט מקודד (%productname% Writer/Web)‬</value>
           <value xml:lang="hi-IN">Text Encoded (%productname% Writer/Web)</value>
       </prop>
@@ -6503,7 +6552,8 @@
         <value xml:lang="ar">MS Word 95 قالب</value>
         <value xml:lang="ca">Microsoft Word 95 Template</value>
         <value xml:lang="th">Microsoft Word 95 Template</value>
-          <value xml:lang="cs">Microsoft Word 95 Template</value>
+          <value xml:lang="cs">Šablona Microsoft Word 95</value>
+          <value xml:lang="sk">Šablóna Microsoft Word 95</value>
           <value xml:lang="he">‮תבנית Microsoft Word 95‬</value>
           <value xml:lang="hi-IN">Microsoft Word 95 Template</value>
       </prop>
@@ -6551,7 +6601,8 @@
         <value xml:lang="ar">MS Word 97/2000 قالب</value>
         <value xml:lang="ca">Microsoft Word 97/2000/XP Template</value>
         <value xml:lang="th">Microsoft Word 97/2000/XP Template</value>
-          <value xml:lang="cs">Microsoft Word 97/2000/XP Template</value>
+          <value xml:lang="cs">Šablona Microsoft Word 97/2000/XP</value>
+          <value xml:lang="sk">Šablóna Microsoft Word 97/2000/XP</value>
           <value xml:lang="he">‮תבנית Microsoft Word 97/2000/XP‬</value>
           <value xml:lang="hi-IN">Microsoft Word 97/2000/XP Template</value>
       </prop>
@@ -6599,7 +6650,8 @@
         <value xml:lang="ar">%productname% %formatversion% Text Document</value>
         <value xml:lang="ca">%productname% %formatversion% Text Document</value>
         <value xml:lang="th">เอกสารข้อความ %productname%  (ต้นฉบับเอกสาร %productname% )</value>
-        <value xml:lang="cs">%productname% %formatversion% Text Document</value>
+        <value xml:lang="cs">Textový dokument %productname% %formatversion%</value>
+        <value xml:lang="sk">Textový dokument %productname% %formatversion%</value>
         <value xml:lang="he">‮מסמך טקסט %productname% %formatversion%‬</value>
         <value xml:lang="hi-IN">%productname% %formatversion% Text Document</value>
       </prop>
@@ -6669,7 +6721,8 @@
         <value xml:lang="ar">StarWriter 3.0 قالب</value>
         <value xml:lang="ca">Plantilla de l&apos;StarWriter 3.0</value>
         <value xml:lang="th">แม่แบบ StarWriter 3.0 </value>
-          <value xml:lang="cs">StarWriter 3.0 Template</value>
+          <value xml:lang="cs">Šablona StarWriter 3.0</value>
+          <value xml:lang="sk">Šablóna StarWriter 3.0</value>
           <value xml:lang="he">‮תבנית StarWriter 3.0‬</value>
           <value xml:lang="hi-IN">StarWriter 3.0 Template</value>
       </prop>
@@ -6717,7 +6770,8 @@
         <value xml:lang="ar">StarWriter 4.0 قالب</value>
         <value xml:lang="ca">Plantilla de l&apos;StarWriter 4.0</value>
         <value xml:lang="th">แม่แบบ StarWriter 4.0 </value>
-          <value xml:lang="cs">StarWriter 4.0 Template</value>
+          <value xml:lang="cs">Šablona StarWriter 4.0</value>
+          <value xml:lang="sk">Šablóna StarWriter 4.0</value>
           <value xml:lang="he">‮תבנית StarWriter 4.0‬</value>
           <value xml:lang="hi-IN">StarWriter 4.0 Template</value>
       </prop>
@@ -6765,7 +6819,8 @@
         <value xml:lang="ar">StarWriter 5.0 قالب</value>
         <value xml:lang="ca">Plantilla de l&apos;StarWriter 5.0</value>
         <value xml:lang="th">แม่แบบ StarWriter 5.0 </value>
-          <value xml:lang="cs">StarWriter 5.0 Template</value>
+          <value xml:lang="cs">Šablona StarWriter 5.0</value>
+          <value xml:lang="sk">Šablóna StarWriter 5.0</value>
           <value xml:lang="he">‮תבנית StarWriter 5.0‬</value>
           <value xml:lang="hi-IN">StarWriter 5.0 Template</value>
       </prop>
@@ -6814,6 +6869,7 @@
         <value xml:lang="ca">Text</value>
         <value xml:lang="th">ข้อความ</value>
           <value xml:lang="cs">Text</value>
+          <value xml:lang="sk">Text</value>
           <value xml:lang="he">‮טקסט‬</value>
           <value xml:lang="hi-IN">Text</value>
       </prop>
@@ -6850,7 +6906,8 @@
         <value xml:lang="ar">Text (encoded)</value>
         <value xml:lang="ca">Text Encoded</value>
         <value xml:lang="th">Text Encoded</value>
-          <value xml:lang="cs">Text Encoded</value>
+          <value xml:lang="cs">Kódovaný text</value>
+          <value xml:lang="sk">Kódovaný text</value>
           <value xml:lang="he">‮טקסט מקודד‬</value>
           <value xml:lang="hi-IN">Text Encoded</value>
       </prop>
@@ -6997,7 +7054,8 @@
         <value xml:lang="ar">Writer 6.0 قالب</value>
         <value xml:lang="ca">%productname% %formatversion% Text Document Template</value>
         <value xml:lang="th">แม่แบบเอกสารข้อความ %productname% %formatversion% </value>
-        <value xml:lang="cs">%productname% %formatversion% Text Document Template</value>
+        <value xml:lang="cs">Šablona textového dokumentu %productname% %formatversion%</value>
+        <value xml:lang="sk">Šablóna textového dokumentu %productname% %formatversion%</value>
         <value xml:lang="he">‮תבנית מסמך טקסט %productname% %formatversion%‬</value>
         <value xml:lang="hi-IN">%productname% %formatversion% Text Document Template</value>
       </prop>
@@ -7034,7 +7092,8 @@
         <value xml:lang="ar">Writer 6.0</value>
         <value xml:lang="ca">%productname% %formatversion% Text Document </value>
         <value xml:lang="th">เอกสารข้อความ %productname%  (ต้นฉบับเอกสาร %productname% )</value>
-        <value xml:lang="cs">%productname% %formatversion% Text Document </value>
+        <value xml:lang="cs">Textový dokument %productname% %formatversion% </value>
+        <value xml:lang="sk">Textový dokument %productname% %formatversion% </value>
         <value xml:lang="he">‮מסמך טקסט %productname% %formatversion%‬</value>
         <value xml:lang="hi-IN">%productname% %formatversion% Text Document </value>
       </prop>
@@ -7071,7 +7130,8 @@
         <value xml:lang="ar">Writer 6.0 مستند شامل</value>
         <value xml:lang="ca">%productname% %formatversion% Master Document</value>
         <value xml:lang="th">ต้นฉบับเอกสาร %productname% %formatversion% </value>
-        <value xml:lang="cs">%productname% %formatversion% Master Document</value>
+        <value xml:lang="cs">Hlavní dokument %productname% %formatversion%</value>
+        <value xml:lang="sk">Hlavný dokument %productname% %formatversion%</value>
         <value xml:lang="he">‮מסמך אב %productname% %formatversion%‬</value>
         <value xml:lang="hi-IN">%productname% %formatversion% Master Document</value>
       </prop>
@@ -7119,7 +7179,8 @@
         <value xml:lang="ar">Writer 6.0</value>
         <value xml:lang="ca">%productname% Text Document (%productname% Writer/Web)</value>
         <value xml:lang="th">%productname% Text Document (%productname% Writer/Web)</value>
-          <value xml:lang="cs">%productname% Text Document (%productname% Writer/Web)</value>
+          <value xml:lang="cs">Textový dokument %productname% (%productname% Writer/Web)</value>
+          <value xml:lang="sk">Textový dokument %productname% (%productname% Writer/Web)</value>
         <value xml:lang="he">‮מסמך טקסט %productname% %formatversion% (%productname% Writer/Web)‬</value>
           <value xml:lang="hi-IN">%productname% Text Document (%productname% Writer/Web)</value>
       </prop>
@@ -7156,7 +7217,8 @@
           <value xml:lang="ar">Writer/Web 6.0 قالب</value>
         <value xml:lang="ca">%productname% %formatversion% HTML Template</value>
         <value xml:lang="th">%productname% %formatversion% HTML Template</value>
-        <value xml:lang="cs">%productname% %formatversion% HTML Template</value>
+        <value xml:lang="cs">HTML šablona %productname% %formatversion%</value>
+        <value xml:lang="sk">HTML šablóna %productname% %formatversion%</value>
         <value xml:lang="he">‮תבנית %productname% %formatversion% HTML‬</value>
         <value xml:lang="hi-IN">%productname% %formatversion% HTML Template</value>
       </prop>
