@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-05 08:13:10 $
+ *  last change: $Author: obr $ $Date: 2002-02-06 13:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,9 @@
 #ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_BRIDGE_XACCESSIBLENATIVEFRAMEMAP_HPP_
+#include <drafts/com/sun/star/accessibility/bridge/XAccessibleNativeFrameMap.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_XDISPLAYCONNECTION_HPP_
 #include <com/sun/star/awt/XDisplayConnection.hpp>
 #endif
@@ -186,6 +189,7 @@
 #include <unowrap.hxx>
 #include <dndlcon.hxx>
 #include <dndevdis.hxx>
+#include <frameacc.hxx>
 
 #pragma hdrstop
 
@@ -194,6 +198,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
+using namespace ::drafts::com::sun::star::accessibility::bridge;
 
 // =======================================================================
 
@@ -643,6 +648,41 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
         mpFrameData->mbSysObjFocus      = FALSE;
         mpFrameData->maPaintTimer.SetTimeout( 30 );
         mpFrameData->maPaintTimer.SetTimeoutHdl( LINK( this, Window, ImplHandlePaintHdl ) );
+
+#if defined WNT
+        // FIXME: determine if accessibility should be enabled
+        if( NULL != getenv("SAL_ACCESSIBILITY_ENABLED" ) )
+        {
+            // instanciate access bridge service
+            if(!pSVData->mxAccessBridge.is())
+            {
+                try
+                {
+                    Reference< XMultiServiceFactory > xFactory(vcl::unohelper::GetMultiServiceFactory());
+
+                    if(xFactory.is())
+                    {
+                        pSVData->mxAccessBridge = Reference< XAccessibleNativeFrameMap >( xFactory->createInstance(
+                            OUString::createFromAscii( "drafts.com.sun.star.accessibility.bridge.AccessBridge" ) ), UNO_QUERY );
+                    }
+                }
+
+                catch(::com::sun::star::uno::Exception exception)
+                {
+                    // FIXME: error handling
+                }
+            }
+
+            // register proxy accessible for the new native frame window
+            if(pSVData->mxAccessBridge.is())
+            {
+                const SystemEnvData * pEnvData = GetSystemData();
+
+                if(pEnvData)
+                    pSVData->mxAccessBridge->registerAccessibleNativeFrame( makeAny((sal_uInt32) pEnvData->hWnd), new FrameAccessibleImpl(this));
+            }
+        }
+#endif
     }
 
     // init data
@@ -3932,6 +3972,20 @@ Window::~Window()
     {
         try
         {
+#if defined WNT
+            const SystemEnvData * pEnvData = GetSystemData();
+            ImplSVData* pSVData = ImplGetSVData();
+
+            // revoke native frame from access bridge
+            if(pEnvData && pSVData)
+            {
+                if( pSVData->mxAccessBridge.is() )
+                {
+                    pSVData->mxAccessBridge->revokeAccessibleNativeFrame(makeAny((sal_uInt32) pEnvData->hWnd));
+                }
+            }
+#endif
+
             // deregister drop target listener
             if( mpFrameData->mxDropTargetListener.is() )
             {

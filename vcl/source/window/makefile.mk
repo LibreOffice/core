@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.5 $
+#	$Revision: 1.6 $
 #
-#	last change: $Author: pl $ $Date: 2001-09-13 14:39:43 $
+#	last change: $Author: obr $ $Date: 2002-02-06 13:05:37 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -106,7 +106,8 @@ SLOFILES=	$(SLO)$/accel.obj		\
             $(SLO)$/wrkwin.obj		\
             $(SLO)$/scrwnd.obj		\
             $(SLO)$/dndevdis.obj	\
-            $(SLO)$/dndlcon.obj
+            $(SLO)$/dndlcon.obj     \
+            $(SLO)$/frameacc.obj
 
 .IF "$(remote)"!=""
 EXCEPTIONSFILES=					\
