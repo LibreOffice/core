@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: nf $ $Date: 2002-04-04 13:42:04 $
+ *  last change: $Author: as $ $Date: 2002-04-25 12:46:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #endif
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
+#endif
+#ifndef _UTL_BOOTSTRAP_HXX
+#include <unotools/bootstrap.hxx>
 #endif
 
 #include <unotools/ucbhelper.hxx>
@@ -795,23 +798,29 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
 SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Common/Path/Current") )
 {
     ConfigManager* pCfgMgr = ConfigManager::GetConfigManager();
-    Any aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::OFFICEINSTALL );
-    OUString aTmp;
-    OUString aOfficePath;
-    if ( aAny >>= aOfficePath )
-    {
-        // "OFFICEINSTALL" is the physical path name of the office installation directory
-        // it is always on the machine where the office program is running and it is
-        // stored as an osl compatible file URL
-        // convert and make sure that it is correctly encoded
-        // ( shouldn't it be converted already after conversion ?! )
-        FileBase::getFileURLFromSystemPath( aOfficePath, aTmp );
-        INetURLObject aObj( aTmp );
-        m_aInstPath = aObj.GetMainURL(INetURLObject::NO_DECODE);
-    }
-    else
-        DBG_ERRORFILE( "wrong any type" );
+    Any aAny;
+    ::rtl::OUString aOfficePath;
+    ::rtl::OUString aUserPath;
+    ::rtl::OUString aTmp;
 
+    // Get inspath and userpath from bootstrap mechanism in every case as file URL
+    ::utl::Bootstrap::PathStatus aState;
+    ::rtl::OUString              sVal  ;
+
+    aState = Bootstrap::locateBaseInstallation(sVal);
+    if(aState==::utl::Bootstrap::PATH_EXISTS)
+        m_aInstPath = sVal;
+    else
+        DBG_ERRORFILE( "bootstrap code has no value for instpath");
+
+    aState = Bootstrap::locateUserData(sVal);
+    if(aState==::utl::Bootstrap::PATH_EXISTS)
+        m_aUserPath = sVal;
+    else
+        DBG_ERRORFILE( "bootstrap code has no value for userpath");
+
+    // get insturl and userurl from configuration (xml files)
+    // But if they doesn't exist (e.g. is true for fat office!) use instpath and userpath instead of this.
     aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::OFFICEINSTALLURL );
     if ( !aAny.hasValue() || ( aAny >>= aOfficePath ) )
     {
@@ -821,17 +830,6 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
             m_aInstURL = aOfficePath;
         else
             m_aInstURL = m_aInstPath;
-    }
-    else
-        DBG_ERRORFILE( "wrong any type" );
-
-    aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::INSTALLPATH );
-    OUString aUserPath;
-    if ( aAny >>= aUserPath )
-    {
-        FileBase::getFileURLFromSystemPath( aUserPath, aTmp );
-        INetURLObject aObj( aTmp );
-        m_aUserPath = aObj.GetMainURL(INetURLObject::NO_DECODE);
     }
     else
         DBG_ERRORFILE( "wrong any type" );
