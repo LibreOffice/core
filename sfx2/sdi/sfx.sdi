@@ -6562,8 +6562,6 @@ SfxBoolItem ReadOnly SID_DOC_READONLY
 //--------------------------------------------------------------------------
 SfxBoolItem Recording SID_RECORDMACRO
 [
-    SfxVoidItem StopRecording();
-
     /* flags: */
     AutoUpdate = TRUE,
     Cachable = Cachable,
@@ -6577,7 +6575,53 @@ SfxBoolItem Recording SID_RECORDMACRO
     NoRecord;
     Synchron;
 
-    Readonly = TRUE,
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_MACRO;
+]
+
+SfxVoidItem StopRecording SID_STOP_RECORDING
+( SfxBoolItem DontRecord FN_PARAM_1 )
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    NoRecord;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_MACRO;
+]
+
+SfxVoidItem SetRecordingWindowVisible SID_RECORDING_FLOATWINDOW
+( SfxBoolItem State SID_RECORDING_FLOATWINDOW )
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    NoRecord;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,

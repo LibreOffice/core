@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appreg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mh $ $Date: 2001-07-23 11:52:40 $
+ *  last change: $Author: mba $ $Date: 2002-07-18 07:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #include "mailchildwin.hxx"
 #include "partwnd.hxx"
 #include "sfxsids.hrc"
+#include "recfloat.hxx"
 
 //===================================================================
 
@@ -101,22 +102,14 @@ void SfxApplication::Registrations_Impl()
     SfxTopViewFrame::RegisterInterface();
     SfxObjectShell::RegisterInterface();
     SfxViewShell::RegisterInterface();
-//    SfxFrameSetObjectShell::RegisterInterface();
-//    SfxFrameSetViewShell::RegisterInterface();
-//    SfxFrameSetView_Impl::RegisterInterface();
-//    SfxFrameSetSourceView_Impl::RegisterInterface();
 
     // ChildWindows
+    SfxRecordingFloatWrapper_Impl::RegisterChildWindow();
     SfxNavigatorWrapper::RegisterChildWindow();
     SfxToolboxCustomWindow::RegisterChildWindow();
     SfxMailChildWinWrapper_Impl::RegisterChildWindow();
     SfxMailChildWinWrapper_Impl::RegisterChildWindow();
     SfxPartChildWnd_Impl::RegisterChildWindow();
-
-/*! (pb) no help at this time
-    SfxHelpPIWrapper::RegisterChildWindow();
-    SfxHelpTipsWrapper::RegisterChildWindow();
-*/
     SfxTemplateDialogWrapper::RegisterChildWindow(TRUE);
 
     // Controller
@@ -135,7 +128,6 @@ void SfxApplication::Registrations_Impl()
     SfxMenuControl::RegisterControl(SID_REPEAT);
     SfxMenuControl::RegisterControl(SID_MAIL_SENDDOC);
     SfxAppMenuControl_Impl::RegisterControl( SID_NEWDOCDIRECT );
-    SfxAppMenuControl_Impl::RegisterControl( SID_BOOKMARKS );
     SfxAppMenuControl_Impl::RegisterControl( SID_AUTOPILOTMENU );
     SfxToolBoxControl::RegisterControl(SID_UNDO);
     SfxToolBoxControl::RegisterControl(SID_REDO);
@@ -143,12 +135,8 @@ void SfxApplication::Registrations_Impl()
     SfxURLToolBoxControl_Impl::RegisterControl(SID_OPENURL);
     SfxCancelToolBoxControl_Impl::RegisterControl(SID_BROWSE_STOP);
     SfxAppToolBoxControl_Impl::RegisterControl( SID_NEWDOCDIRECT );
-    SfxAppToolBoxControl_Impl::RegisterControl( SID_BOOKMARKS );
     SfxAppToolBoxControl_Impl::RegisterControl( SID_AUTOPILOTMENU );
     SfxDragToolBoxControl_Impl::RegisterControl( SID_TOPDOC );
-    SfxFrameEditToolBoxControl_Impl::RegisterControl(SID_FRAME_NAME);
-    SfxFrameEditToolBoxControl_Impl::RegisterControl(SID_FRAME_CONTENT);
-    SfxFrameSpacingControl_Impl::RegisterControl(SID_FRAMESPACING);
     SfxHistoryToolBoxControl_Impl::RegisterControl( SID_BROWSE_FORWARD );
     SfxHistoryToolBoxControl_Impl::RegisterControl( SID_BROWSE_BACKWARD );
     SfxReloadToolBoxControl_Impl::RegisterControl( SID_RELOAD );
