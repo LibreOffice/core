@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:06:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 14:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -895,10 +895,15 @@ JNI_info const * JNI_info::get_jni_info( JNIEnv * jni_env )
 }
 
 //##################################################################################################
+extern "C"
+{
+
 JNIEXPORT void JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1info_1holder_finalize__J(
     JNIEnv * jni_env, jobject jo_holder, jlong jni_info_handle )
     SAL_THROW_EXTERN_C()
 {
     ::jni_uno::JNI_info * jni_info = reinterpret_cast< ::jni_uno::JNI_info * >( jni_info_handle );
     jni_info->destroy( jni_env );
+}
+
 }
