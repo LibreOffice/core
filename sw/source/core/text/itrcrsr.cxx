@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-12 12:39:47 $
+ *  last change: $Author: fme $ $Date: 2001-04-12 12:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,6 +334,10 @@ sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const xub_StrLen nOfst,
  * void SwTxtCursor::_GetCharRect(..)
  * internal function, called by SwTxtCursor::GetCharRect() to calculate
  * the relative character position in the current line.
+ * pOrig referes to x and y coordinates, width and height of the cursor
+ * pCMS is used for restricting the cursor, if there are different font
+ * heights in one line ( first value = offset to y of pOrig, second
+ * value = real height of (shortened) cursor
  *************************************************************************/
 
 void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
@@ -580,10 +584,24 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             if ( pCMS && pCMS->bRealHeight )
                             {
                                 pCMS->aRealHeight.Y() = -pCMS->aRealHeight.Y();
+                                // result for rotated multi portion is not
+                                // correct for reverse (270 degree) portions
                                 if( ((SwMultiPortion*)pPor)->IsRevers() )
-                                    pCMS->aRealHeight.X() =
-                                         pOrig->Width() - pCMS->aRealHeight.X()
-                                       + pCMS->aRealHeight.Y();
+                                {
+                                    if ( SvxParaVertAlignItem::AUTOMATIC ==
+                                         GetLineInfo().GetVertAlign() )
+                                        // if vertical alignment is set to auto,
+                                        // we switch from base line alignment
+                                        // to centered alignment
+                                        pCMS->aRealHeight.X() =
+                                            ( pOrig->Width() +
+                                              pCMS->aRealHeight.Y() ) / 2;
+                                    else
+                                        pCMS->aRealHeight.X() =
+                                            ( pOrig->Width() -
+                                              pCMS->aRealHeight.X() +
+                                              pCMS->aRealHeight.Y() );
+                                }
                             }
                         }
                         else

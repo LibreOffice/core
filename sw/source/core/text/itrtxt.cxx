@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-12 07:47:48 $
+ *  last change: $Author: fme $ $Date: 2001-04-12 12:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,7 +439,8 @@ const SwLineLayout *SwTxtCursor::CharCrsrToLine( const xub_StrLen nPos )
 
 USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
                                     const USHORT nPorHeight,
-                                    const USHORT nPorAscent ) const
+                                    const USHORT nPorAscent,
+                                    const sal_Bool bAutoToCentered ) const
 {
     USHORT nOfst = rLine.GetRealHeight() - rLine.Height();
 
@@ -454,8 +455,16 @@ USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
         case SvxParaVertAlignItem::BOTTOM :
             nOfst += rLine.Height() - nPorHeight + nPorAscent;
             break;
-        default:
+        case SvxParaVertAlignItem::AUTOMATIC :
+            if ( bAutoToCentered )
+            {
+                nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
+                break;
+            }
+        case SvxParaVertAlignItem::BASELINE :
+            // base line
             nOfst += rLine.GetAscent();
+            break;
     }
 
     return nOfst;

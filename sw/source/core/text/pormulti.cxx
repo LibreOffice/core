@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-12 12:42:14 $
+ *  last change: $Author: fme $ $Date: 2001-04-12 12:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1358,7 +1358,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         if( rMulti.HasRotation() )
         {
             if( rMulti.IsRevers() )
-                GetInfo().X( nOfst - AdjustBaseLine( *pLay, *pPor ) );
+                GetInfo().X( nOfst - AdjustBaseLine( *pLay, *pPor, sal_True ) );
             else
                 GetInfo().X( nOfst + AdjustBaseLine( *pLay, *pPor ) );
         }
