@@ -68,7 +68,9 @@ import org.openoffice.xmerge.DocumentDeserializer;
 import org.openoffice.xmerge.DocumentSerializer;
 import org.openoffice.xmerge.DocumentDeserializerFactory;
 import org.openoffice.xmerge.DocumentSerializerFactory;
-
+import org.openoffice.xmerge.DocumentMerger;
+import org.openoffice.xmerge.DocumentMergerFactory;
+import org.openoffice.xmerge.ConverterCapabilities;
 
 import org.openoffice.xmerge.util.registry.ConverterInfo;
 
@@ -82,7 +84,8 @@ import org.openoffice.xmerge.converter.xml.sxw.SxwPluginFactory;
  * @version 1.1
  */
 public final class PluginFactoryImpl extends SxwPluginFactory
-    implements DocumentDeserializerFactory, DocumentSerializerFactory {
+    implements DocumentDeserializerFactory, DocumentSerializerFactory,
+               DocumentMergerFactory{
 
    /**
     *  <p>Constructor that caches the <code>ConvertInfo</code> that
@@ -93,6 +96,10 @@ public final class PluginFactoryImpl extends SxwPluginFactory
     public PluginFactoryImpl (ConverterInfo ci) {
         super(ci);
     }
+
+    /** ConverterCapabilities object for this type of conversion. */
+    private final static ConverterCapabilities converterCap =
+        new ConverterCapabilitiesImpl();
 
 
     /**
@@ -168,4 +175,21 @@ public final class PluginFactoryImpl extends SxwPluginFactory
         pwd.read(is);
         return pwd;
     }
+
+     /**
+     *  Returns an instance of <code>DocumentMergerImpl</code>,
+     *  which is an implementation of the <code>DocumentMerger</code>
+     *  interface.
+     *
+     *  @param  doc  <code>Document</code> to merge.
+     *
+     *  @return  A DocumentMergerImpl object.
+     */
+    public DocumentMerger createDocumentMerger(Document doc) {
+    ConverterCapabilities cc = converterCap;
+        DocumentMergerImpl merger = new DocumentMergerImpl(doc, cc);
+        return merger;
+
+    }
+
 }
