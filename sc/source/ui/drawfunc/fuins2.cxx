@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:26:55 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -669,7 +669,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
                         // Positionieren 1/2 Spalte rechts
                         // und 1 1/2 Zeilen unterhalb des Starts
                         ScDocument* pScDoc = pData->GetDocument();
-                        ULONG x = 0, y = 0;
+                        long x = 0, y = 0;
                         SCCOL i;
                         for( i = 0; i <= nC1; i++ )
                             x += pScDoc->GetColWidth( i, nT0 );
@@ -693,8 +693,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
                             }
                         }
                         // Das ganze von Twips nach 1/100 mm
-                        x = (ULONG) ((double) x * HMM_PER_TWIPS);
-                        y = (ULONG) ((double) y * HMM_PER_TWIPS);
+                        x = (long) ((double) x * HMM_PER_TWIPS);
+                        y = (long) ((double) y * HMM_PER_TWIPS);
                         if ( pScDoc->IsNegativePage( nT0 ) )
                             x = -x;
                         aStart = Point( x, y );
