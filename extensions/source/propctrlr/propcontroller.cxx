@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:10:13 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -742,7 +742,7 @@ namespace pcr
                 // properties
                 bool bIsActuatingProperty = ( m_pPropertyInfo->getPropertyUIFlags( nPropertyId ) & PROP_FLAG_ACTUATING ) != 0;
                 if ( bIsActuatingProperty )
-                    updateDependentProperties( nPropertyId, aNewValue, aOldValue );
+                    actuatingPropertyChanged( nPropertyId, aNewValue, aOldValue, false );
             }
         }
     }
