@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessiblePageHeader.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pjunck $
+ *  last change: $Author: kz $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,8 +105,8 @@ import com.sun.star.util.XURLTransformer;
  *
  * Object implements the following interfaces :
  * <ul>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleComponent</code></li>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleContext</code></li>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleComponent</code></li>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleContext</code></li>
  * </ul> <p>
  *
  * @see com.sun.star.accessibility.XAccessibleComponent
