@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FNoException.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:15:31 $
+ *  last change: $Author: oj $ $Date: 2002-07-04 06:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ OKeyValue* OResultSet::GetOrderbyKeyValue(OValueRow _rRow)
 {
     UINT32 nBookmarkValue = Abs((sal_Int32)(*_rRow)[0]);
 
-    OKeyValue* pKeyValue = new OKeyValue((UINT32)nBookmarkValue);
+    OKeyValue* pKeyValue = OKeyValue::createKeyValue((UINT32)nBookmarkValue);
 
     ::std::vector<sal_Int32>::iterator aIter = m_aOrderbyColumnNumber.begin();
     for (;aIter != m_aOrderbyColumnNumber.end(); ++aIter)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FCatalog.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 13:17:59 $
+ *  last change: $Author: oj $ $Date: 2002-07-04 06:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,6 @@ Sequence< Type > SAL_CALL OFileCatalog::getTypes(  ) throw(RuntimeException)
     aOwnTypes.reserve(aTypes.getLength());
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();
-    sal_Int32 i=0;
     for(;pBegin != pEnd;++pBegin)
     {
         if(!(*pBegin == ::getCppuType((const Reference<XGroupsSupplier>*)0) ||
@@ -153,7 +152,15 @@ Sequence< Type > SAL_CALL OFileCatalog::getTypes(  ) throw(RuntimeException)
             aOwnTypes.push_back(*pBegin);
         }
     }
-    return Sequence< Type >(aOwnTypes.begin(),aOwnTypes.size());
+    //  return Sequence< Type >(aOwnTypes.begin(),aOwnTypes.size());
+    Sequence< Type > aRet(aOwnTypes.size());
+    sal_Int32 i=0;
+    for (::std::vector<Type>::iterator aIter = aOwnTypes.begin(); aOwnTypes.end(); ++aIter,++i)
+    {
+        aRet[i] = *aIter;
+    }
+
+    return aRet;//Sequence< Type >(aOwnTypes.begin(),aOwnTypes.size());
 }
 // -----------------------------------------------------------------------------
 

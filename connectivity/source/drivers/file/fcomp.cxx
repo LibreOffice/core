@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:08:38 $
+ *  last change: $Author: oj $ $Date: 2002-07-04 06:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,43 +508,15 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
             pOperand = new OOperandConst(*pODBCNode->getChild(1), sDateTime);
             if(SQL_ISTOKEN(pODBCNodeChild,D))
             {
-                ::rtl::OUString sDate = sDateTime.copy(0,4);
-                sal_uInt16 nYear    = sDate.toInt32();
-                sDate = sDateTime.copy(5,2);
-                sal_uInt16 nMonth   = sDate.toInt32();
-                sDate = sDateTime.copy(8,2);
-                sal_uInt16 nDay     = sDate.toInt32();
-
-                pOperand->setValue(::dbtools::DBTypeConversion::toDouble(Date(nDay,nMonth,nYear)));
+                pOperand->setValue(::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(sDateTime)));
             }
             else if(SQL_ISTOKEN(pODBCNodeChild,T))
             {
-                ::rtl::OUString sDate = sDateTime.copy(0,2);
-                sal_uInt16 nHour    = sDate.toInt32();
-                sDate = sDateTime.copy(3,2);
-                sal_uInt16 nMin = sDate.toInt32();
-                sDate = sDateTime.copy(6,2);
-                sal_uInt16 nSec     = sDate.toInt32();
-
-                pOperand->setValue(::dbtools::DBTypeConversion::toDouble(Time(0,nSec,nMin,nHour)));
+                pOperand->setValue(::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(sDateTime)));
             }
             else if(SQL_ISTOKEN(pODBCNodeChild,TS))
             {
-                ::rtl::OUString sDate = sDateTime.copy(0,4);
-                sal_uInt16 nYear    = sDate.toInt32();
-                sDate = sDateTime.copy(5,2);
-                sal_uInt16 nMonth   = sDate.toInt32();
-                sDate = sDateTime.copy(8,2);
-                sal_uInt16 nDay     = sDate.toInt32();
-
-                sDate = sDateTime.copy(11,2);
-                sal_uInt16 nHour    = sDate.toInt32();
-                sDate = sDateTime.copy(14,2);
-                sal_uInt16 nMin = sDate.toInt32();
-                sDate = sDateTime.copy(17,2);
-                sal_uInt16 nSec     = sDate.toInt32();
-
-                pOperand->setValue(::dbtools::DBTypeConversion::toDouble(DateTime(0,nSec,nMin,nHour,nDay,nMonth,nYear)));
+                pOperand->setValue(::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(sDateTime)));
             }
 
 
