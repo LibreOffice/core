@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:12:37 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1724,7 +1724,7 @@ void OJoinTableView::modified()
     OJoinController* pController = m_pView->getController();
     pController->setModified( sal_True );
     pController->InvalidateFeature(ID_BROWSER_ADDTABLE);
-    pController->InvalidateFeature(ID_RELATION_ADD_RELATION);
+    pController->InvalidateFeature(SID_RELATION_ADD_RELATION);
 }
 // -----------------------------------------------------------------------------
 void OJoinTableView::addConnection(OTableConnection* _pConnection,sal_Bool _bAddData)
