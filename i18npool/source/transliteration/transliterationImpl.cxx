@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationImpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:09:08 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,18 +74,14 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <tools/string.hxx>
-
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 
-using namespace drafts::com::sun::star::i18n;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace rtl;
 using namespace com::sun::star::container;
-using namespace drafts::com::sun::star::i18n;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
