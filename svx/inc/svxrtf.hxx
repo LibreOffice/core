@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 12:05:06 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:53:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,8 @@ struct RTFPlainAttrMapIds
             nCharScaleX,
             nHorzVert,
             nRuby,
-            nRelief
+            nRelief,
+            nHidden
             ;
     RTFPlainAttrMapIds( const SfxItemPool& rPool );
 };
