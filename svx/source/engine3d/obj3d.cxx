@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-10 10:09:51 $
+ *  last change: $Author: aw $ $Date: 2001-07-11 08:23:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4096,9 +4096,10 @@ void E3dCompoundObject::CreateSegment(
                 Volume3D aNewSize(aLocalFront.GetPolySize());
 
                 // Skalierung feststellen (nur X,Y)
-                Vector3D aScaleVec(aOldSize.GetWidth() / aNewSize.GetWidth(),
-                    aOldSize.GetHeight() / aNewSize.GetHeight(),
-                    1.0);
+                Vector3D aScaleVec(
+                    (aNewSize.GetWidth() != 0.0) ? aOldSize.GetWidth() / aNewSize.GetWidth() : 1.0,
+                    (aNewSize.GetHeight() != 0.0) ? aOldSize.GetHeight() / aNewSize.GetHeight() : 1.0,
+                    (aNewSize.GetDepth() != 0.0) ? aOldSize.GetDepth() / aNewSize.GetDepth() : 1.0);
 
                 // Transformation bilden
                 Matrix4D aTransMat;
@@ -4112,9 +4113,10 @@ void E3dCompoundObject::CreateSegment(
                 aNewSize = aLocalFront.GetPolySize();
 
                 // Translation feststellen
-                Vector3D aTransVec(aOldSize.MinVec().X() - aNewSize.MinVec().X(),
+                Vector3D aTransVec(
+                    aOldSize.MinVec().X() - aNewSize.MinVec().X(),
                     aOldSize.MinVec().Y() - aNewSize.MinVec().Y(),
-                    0.0);
+                    aOldSize.MinVec().Z() - aNewSize.MinVec().Z());
 
                 // Transformation bilden
                 aTransMat.Identity();
@@ -4123,6 +4125,9 @@ void E3dCompoundObject::CreateSegment(
                 // aeusseres und inneres Polygon skalieren
                 aLocalFront.Transform(aTransMat);
                 aOuterFront.Transform(aTransMat);
+
+                // move aLocalFront again, scale and translate has moved it back
+                GrowPoly(aLocalFront, aNormalsOuterFront, -fDiagLen);
             }
             else
             {
@@ -4200,9 +4205,10 @@ void E3dCompoundObject::CreateSegment(
                 Volume3D aNewSize(aLocalBack.GetPolySize());
 
                 // Skalierung feststellen (nur X,Y)
-                Vector3D aScaleVec(aOldSize.GetWidth() / aNewSize.GetWidth(),
-                    aOldSize.GetHeight() / aNewSize.GetHeight(),
-                    1.0);
+                Vector3D aScaleVec(
+                    (aNewSize.GetWidth() != 0.0) ? aOldSize.GetWidth() / aNewSize.GetWidth() : 1.0,
+                    (aNewSize.GetHeight() != 0.0) ? aOldSize.GetHeight() / aNewSize.GetHeight() : 1.0,
+                    (aNewSize.GetDepth() != 0.0) ? aOldSize.GetDepth() / aNewSize.GetDepth() : 1.0);
 
                 // Transformation bilden
                 Matrix4D aTransMat;
@@ -4216,9 +4222,10 @@ void E3dCompoundObject::CreateSegment(
                 aNewSize = aLocalBack.GetPolySize();
 
                 // Translation feststellen
-                Vector3D aTransVec(aOldSize.MinVec().X() - aNewSize.MinVec().X(),
+                Vector3D aTransVec(
+                    aOldSize.MinVec().X() - aNewSize.MinVec().X(),
                     aOldSize.MinVec().Y() - aNewSize.MinVec().Y(),
-                    0.0);
+                    aOldSize.MinVec().Z() - aNewSize.MinVec().Z());
 
                 // Transformation bilden
                 aTransMat.Identity();
@@ -4227,6 +4234,9 @@ void E3dCompoundObject::CreateSegment(
                 // aeusseres und inneres Polygon skalieren
                 aLocalBack.Transform(aTransMat);
                 aOuterBack.Transform(aTransMat);
+
+                // move aLocalBack again, scale and translate has moved it back
+                GrowPoly(aLocalBack, aNormalsOuterBack, -fDiagLen);
             }
             else
             {
