@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 09:17:35 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2517,10 +2517,13 @@ long SalX11Display::Dispatch( XEvent *pEvent )
             }
             break;
         case MappingNotify:
-            if( MappingKeyboard == pEvent->xmapping.request )
+            if( MappingKeyboard == pEvent->xmapping.request ||
+                MappingModifier == pEvent->xmapping.request )
+            {
                 XRefreshKeyboardMapping( &pEvent->xmapping );
-            else if( MappingModifier == pEvent->xmapping.request )
-                ModifierMapping();
+                if( MappingModifier == pEvent->xmapping.request )
+                    ModifierMapping();
+            }
             break;
 
         default:
