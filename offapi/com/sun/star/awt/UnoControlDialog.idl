@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlDialog.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:42 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,6 @@
 #ifndef __com_sun_star_awt_UnoControlDialog_idl__
 #define __com_sun_star_awt_UnoControlDialog_idl__
 
-#ifndef __com_sun_star_awt_UnoControl_idl__
-#include <com/sun/star/awt/UnoControl.idl>
-#endif
-
 #ifndef __com_sun_star_awt_UnoControlContainer_idl__
 #include <com/sun/star/awt/UnoControlContainer.idl>
 #endif
@@ -77,28 +73,23 @@
 #include <com/sun/star/awt/XDialog.idl>
 #endif
 
+
 //=============================================================================
 
  module com {  module sun {  module star {  module awt {
 
 //=============================================================================
 
-/** specifies that <type scope="com::sun::star::awt">UnoControlDialog</type> implements an dialog for controls
-    based on <type>UnoControl</type>.
+/** specifies a dialog control.
  */
 service UnoControlDialog
 {
-    // DocMerge: empty anyway
-    service com::sun::star::awt::UnoControl;
-
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControlContainer;
 
-    // DocMerge: empty anyway
     interface com::sun::star::awt::XTopWindow;
 
-    // DocMerge: empty anyway
     interface com::sun::star::awt::XDialog;
+
 };
 
 //=============================================================================
