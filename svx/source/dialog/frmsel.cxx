@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-02-06 10:03:10 $
+ *  last change: $Author: os $ $Date: 2002-02-13 14:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,11 @@
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 
 #include "frmsel.hxx"
+#include <frmsel.hrc>
+#ifndef _SVX_DIALOGS_HRC
+#include <dialogs.hrc>
+#endif
+#include "dialmgr.hxx"
 #include "linelink.hxx"
 
 #ifndef _SVX_BOXITEM_HXX //autogen
@@ -84,6 +89,9 @@
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
+#endif
+#ifndef _TOOLS_RESARY_HXX
+#include <tools/resary.hxx>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessible.hpp>
@@ -159,6 +167,7 @@ struct SvxFrameSelector_Impl
 
     uno::Reference< XAccessible >  GetChildAccessible(
         SvxFrameSelector& rFrameSel, SvxFrameSelectorLine eWhich);
+    const Rectangle&           GetLineSpot(SvxFrameSelectorLine eWhich) const;
 };
 // class SvxFrameSelectorAccessible_Impl ------------------------------------------------
 
@@ -168,17 +177,20 @@ class SvxFrameSelectorAccessible_Impl :
                 ::drafts::com::sun::star::accessibility::XAccessibleContext,
                 ::drafts::com::sun::star::accessibility::XAccessibleComponent,
                 ::com::sun::star::lang::XServiceInfo
-                >
+                >,
+    public Resource
 {
     SvxFrameSelector*   pFrameSel;
     ::osl::Mutex aFocusMutex;
     ::osl::Mutex aPropertyMutex;
 
-    sal_Bool                bIsChild;
     SvxFrameSelectorLine    eWhichChild;
 
     ::cppu::OInterfaceContainerHelper aFocusListeners;
     ::cppu::OInterfaceContainerHelper aPropertyListeners;
+
+    ResStringArray      aNameArray;
+    ResStringArray      aDescriptionArray;
 
     void IsValid() throw (::com::sun::star::uno::RuntimeException);
 public:
@@ -231,12 +243,15 @@ public:
   -----------------------------------------------------------------------*/
 SvxFrameSelectorAccessible_Impl::SvxFrameSelectorAccessible_Impl(
         SvxFrameSelector& rSelector, SvxFrameSelectorLine eChild) :
+    Resource(SVX_RES( RID_SVXSTR_BORDER_CONTROL)),
+    aNameArray(         ResId(ARR_TEXTS       )),
+    aDescriptionArray(  ResId(ARR_DESCRIPTIONS)),
     pFrameSel(&rSelector),
     aFocusListeners(aFocusMutex),
     aPropertyListeners(aPropertyMutex),
-    bIsChild(eChild > 0),
     eWhichChild(eChild)
 {
+    FreeResource();
 }
 /*-- 04.02.2002 14:11:55---------------------------------------------------
 
@@ -259,7 +274,9 @@ sal_Int32 SvxFrameSelectorAccessible_Impl::getAccessibleChildCount(  ) throw (un
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     IsValid();
-    return bIsChild ? 0 : pFrameSel->pImpl->eSel == SVX_FRMSELTYPE_TABLE ? 6 : 4;
+    return eWhichChild != SVX_FRMSELLINE_NONE ?
+                0 :
+                    pFrameSel->pImpl->eSel == SVX_FRMSELTYPE_TABLE ? 6 : 4;
 }
 /*-- 04.02.2002 14:11:56---------------------------------------------------
 
@@ -280,7 +297,7 @@ uno::Reference< XAccessible > SvxFrameSelectorAccessible_Impl::getAccessibleChil
                     xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_HOR);
         break;
         case 5: if(pFrameSel->pImpl->eSel == SVX_FRMSELTYPE_TABLE)
-            xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_LEFT);
+            xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_VER);
         break;
     }
     if(!xRet.is())
@@ -295,7 +312,12 @@ uno::Reference< XAccessible > SvxFrameSelectorAccessible_Impl::getAccessiblePare
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     IsValid();
-    return pFrameSel->GetParent()->GetAccessible( sal_True );
+    uno::Reference< XAccessible > xRet;
+    if(eWhichChild == SVX_FRMSELLINE_NONE)
+        xRet = pFrameSel->GetParent()->GetAccessible( sal_True );
+    else
+        xRet = pFrameSel->CreateAccessible();
+    return xRet;
 }
 /*-- 04.02.2002 14:11:56---------------------------------------------------
 
@@ -305,11 +327,16 @@ sal_Int32 SvxFrameSelectorAccessible_Impl::getAccessibleIndexInParent(  )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     IsValid();
-    Window* pTabPage = pFrameSel->GetParent();
-    USHORT nChildren = pTabPage->GetChildCount();
-    for(USHORT nIdx = 0; nIdx < nChildren; nIdx++)
-        if(pTabPage->GetChild( nIdx ) == pFrameSel)
-            break;
+    if(eWhichChild == SVX_FRMSELLINE_NONE)
+    {
+        Window* pTabPage = pFrameSel->GetParent();
+        USHORT nChildren = pTabPage->GetChildCount();
+        for(USHORT nIdx = 0; nIdx < nChildren; nIdx++)
+            if(pTabPage->GetChild( nIdx ) == pFrameSel)
+                break;
+    }
+    else
+        return nIdx = eWhichChild - 1;
     return nIdx;
 }
 /*-- 04.02.2002 14:11:57---------------------------------------------------
@@ -327,7 +354,7 @@ sal_Int16 SvxFrameSelectorAccessible_Impl::getAccessibleRole(  ) throw (uno::Run
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     IsValid();
-    return pFrameSel->GetText();
+    return aDescriptionArray.GetString(eWhichChild);
 }
 /*-- 04.02.2002 14:11:57---------------------------------------------------
 
@@ -337,7 +364,7 @@ sal_Int16 SvxFrameSelectorAccessible_Impl::getAccessibleRole(  ) throw (uno::Run
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     IsValid();
-    return pFrameSel->GetText();
+    return aNameArray.GetString(eWhichChild);
 }
 /*-- 04.02.2002 14:11:57---------------------------------------------------
 
@@ -380,12 +407,14 @@ uno::Reference< XAccessibleStateSet > SvxFrameSelectorAccessible_Impl::getAccess
         if(pFrameSel->IsEnabled())
             pStateSetHelper->AddState(AccessibleStateType::ENABLED);
 
-        if(pFrameSel->HasFocus())
+        sal_Bool bIsParent = eWhichChild == SVX_FRMSELLINE_NONE;
+        if(pFrameSel->HasFocus() &&
+            (bIsParent || pFrameSel->GetLine(eWhichChild).IsSelected()))
         {
             pStateSetHelper->AddState(AccessibleStateType::ACTIVE);
             pStateSetHelper->AddState(AccessibleStateType::FOCUSED);
             pStateSetHelper->AddState(AccessibleStateType::SELECTED);
-        };
+        }
     }
     return xRet;
 }
@@ -445,21 +474,16 @@ uno::Reference< XAccessible > SvxFrameSelectorAccessible_Impl::getAccessibleAt(
     IsValid();
     Point aPoint(aPt.X, aPt.Y);
     uno::Reference< XAccessible > xRet;
-    //aPoint is relative to the frame selector
-    if(pFrameSel->pImpl->aSpotLeft.IsInside( aPoint ))
-        xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_LEFT);
-    else if(pFrameSel->pImpl->aSpotRight.IsInside( aPoint ))
-        xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_RIGHT);
-    else if(pFrameSel->pImpl->aSpotTop.IsInside( aPoint ))
-        xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_TOP);
-    else if(pFrameSel->pImpl->aSpotBottom.IsInside( aPoint ))
-        xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_BOTTOM);
-    else if(pFrameSel->pImpl->eSel == SVX_FRMSELTYPE_TABLE)
+    SvxFrameSelectorLine eEnd = pFrameSel->pImpl->eSel == SVX_FRMSELTYPE_TABLE ?
+        SVX_FRMSELLINE_VER : SVX_FRMSELLINE_BOTTOM;
+    for(sal_Int16 nWhich = SVX_FRMSELLINE_LEFT; nWhich <= eEnd; nWhich++)
     {
-        if(pFrameSel->pImpl->aSpotHor.IsInside( aPoint ))
-            xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_HOR);
-        else if(pFrameSel->pImpl->aSpotVer.IsInside( aPoint ) )
-            xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, SVX_FRMSELLINE_VER);
+        const Rectangle aSpot = pFrameSel->pImpl->GetLineSpot((SvxFrameSelectorLine) nWhich);
+        if(aSpot.IsInside( aPoint ))
+        {
+            xRet = pFrameSel->pImpl->GetChildAccessible(*pFrameSel, (SvxFrameSelectorLine) nWhich);
+            break;
+        }
     }
     return xRet;
 }
@@ -470,8 +494,19 @@ awt::Rectangle SvxFrameSelectorAccessible_Impl::getBounds(  ) throw (uno::Runtim
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     IsValid();
-    Size aSz = pFrameSel->GetSizePixel();
-    Point aPos = pFrameSel->GetPosPixel();
+    Size aSz;
+    Point aPos;
+    switch(eWhichChild)
+    {
+        case SVX_FRMSELLINE_NONE:
+            aSz = pFrameSel->GetSizePixel();
+            aPos = pFrameSel->GetPosPixel();
+        break;
+        default:
+            const Rectangle aSpot = pFrameSel->pImpl->GetLineSpot(eWhichChild);
+            aPos = aSpot.TopLeft();
+            aSz = aSpot.GetSize();
+    }
     awt::Rectangle aRet;
     aRet.X = aPos.X();
     aRet.Y = aPos.Y();
@@ -486,7 +521,16 @@ awt::Point SvxFrameSelectorAccessible_Impl::getLocation(  ) throw (uno::RuntimeE
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     IsValid();
-    Point aPos = pFrameSel->GetPosPixel();
+    Point aPos;
+    switch(eWhichChild)
+    {
+        case SVX_FRMSELLINE_NONE:
+            aPos = pFrameSel->GetPosPixel();
+        break;
+        default:
+            const SvxFrameLine& rLine = pFrameSel->GetLine(eWhichChild);
+            aPos = rLine.GetStartPos();
+    }
     awt::Point aRet(aPos.X(), aPos.Y());
     return aRet;
 }
@@ -497,7 +541,16 @@ awt::Point SvxFrameSelectorAccessible_Impl::getLocationOnScreen(  ) throw (uno::
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     IsValid();
-    Point aPos = pFrameSel->GetPosPixel();
+    Point aPos;
+    switch(eWhichChild)
+    {
+        case SVX_FRMSELLINE_NONE:
+            aPos = pFrameSel->GetPosPixel();
+        break;
+        default:
+            const SvxFrameLine& rLine = pFrameSel->GetLine(eWhichChild);
+            aPos = rLine.GetStartPos();
+    }
     aPos = pFrameSel->OutputToAbsoluteScreenPixel( aPos );
     awt::Point aRet(aPos.X(), aPos.Y());
     return aRet;
@@ -509,7 +562,19 @@ awt::Size SvxFrameSelectorAccessible_Impl::getSize(  ) throw (uno::RuntimeExcept
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     IsValid();
-    Size aSz = pFrameSel->GetSizePixel();
+    Size aSz;
+    switch(eWhichChild)
+    {
+        case SVX_FRMSELLINE_NONE:
+            aSz = pFrameSel->GetSizePixel();
+        break;
+        default:
+            const SvxFrameLine& rLine = pFrameSel->GetLine(eWhichChild);
+            Point aPos = rLine.GetStartPos();
+            Point aEndPos = rLine.GetEndPos();
+            aSz.Width() = aPos.X() - aEndPos.X();
+            aSz.Height() = aPos.Y() - aEndPos.Y();
+    }
     awt::Size aRet(aSz.Width(), aSz.Height());
     return awt::Size();
 }
@@ -1950,5 +2015,22 @@ uno::Reference< XAccessible >
         xChildren[eWhich -1] = pChildren[eWhich -1] =
             new SvxFrameSelectorAccessible_Impl(rFrmSel, eWhich);
     return pChildren[eWhich -1];
+}
+/* -----------------------------13.02.2002 13:28------------------------------
+
+ ---------------------------------------------------------------------------*/
+const Rectangle& SvxFrameSelector_Impl::GetLineSpot(SvxFrameSelectorLine eWhich) const
+{
+    const Rectangle* pRet = 0;
+    switch(eWhich)
+    {
+        case SVX_FRMSELLINE_LEFT    : pRet = &aSpotLeft;      break;
+        case SVX_FRMSELLINE_RIGHT   : pRet = &aSpotRight;     break;
+        case SVX_FRMSELLINE_TOP     : pRet = &aSpotTop;       break;
+        case SVX_FRMSELLINE_BOTTOM  : pRet = &aSpotBottom;    break;
+        case SVX_FRMSELLINE_HOR     : pRet = &aSpotHor;       break;
+        case SVX_FRMSELLINE_VER     : pRet = &aSpotVer;       break;
+    };
+    return *pRet;
 }
 
