@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.86 $
+#   $Revision: 1.87 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 14:57:55 $
+#   last change: $Author: obo $ $Date: 2004-11-17 14:59:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -315,6 +315,7 @@ SHL4OBJS=       \
                 $(SLO)$/addonstoolbarmanager.obj    \
                 $(SLO)$/toolbarsmenucontroller.obj  \
                 $(SLO)$/toolbarcontrollerfactory.obj\
+                $(SLO)$/statusbarcontrollerfactory.obj\
           $(SLO)$/moduleimagemanager.obj      \
           $(SLO)$/imagemanager.obj            \
                 $(SLO)$/graphicnameaccess.obj       \
