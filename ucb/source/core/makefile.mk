@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: sb $ $Date: 2000-11-09 13:29:52 $
+#   last change: $Author: sb $ $Date: 2000-12-04 17:35:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,6 @@ SLOFILES=\
     $(SLO)$/identify.obj \
     $(SLO)$/ucb.obj \
     $(SLO)$/ucbcfg.obj \
-    $(SLO)$/ucbdistributor.obj \
     $(SLO)$/ucbserv.obj \
     $(SLO)$/ucbstore.obj \
     $(SLO)$/ucbprops.obj \
