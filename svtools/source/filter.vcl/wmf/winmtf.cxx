@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sj $ $Date: 2001-11-13 11:00:50 $
+ *  last change: $Author: sj $ $Date: 2001-11-28 16:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,17 +385,16 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
         double fX2, fX = rPt.X();
         double fY2, fY = rPt.Y();
 
-        fX -= mnWinOrgX;
-        fY -= mnWinOrgY;
-        fX /= mnWinExtX;
-        fY /= mnWinExtY;
         fX2 = fX * maXForm.eM11 + fY * maXForm.eM21 + maXForm.eDx;
         fY2 = fX * maXForm.eM12 + fY * maXForm.eM22 + maXForm.eDy;
+        fX2 -= mnWinOrgX;
+        fY2 -= mnWinOrgY;
+        fX2 /= mnWinExtX;
+        fY2 /= mnWinExtY;
         fX2 *= mnDevWidth;
         fY2 *= mnDevHeight;
         fX2 += mnDevOrgX;
         fY2 += mnDevOrgY;
-
         return Point( FRound( fX2 ), FRound( fY2 ) );
     }
     else

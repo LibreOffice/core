@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-19 16:12:40 $
+ *  last change: $Author: sj $ $Date: 2001-11-28 16:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,8 @@
 #define EMR_EXTCREATEPEN                95
 #define EMR_POLYTEXTOUTA                96
 #define EMR_POLYTEXTOUTW                97
+
+// WINDOWS VERSION >= 0x400
 #define EMR_SETICMMODE                  98
 #define EMR_CREATECOLORSPACE            99
 #define EMR_SETCOLORSPACE              100
@@ -167,6 +169,25 @@
 #define EMR_GLSRECORD                  102
 #define EMR_GLSBOUNDEDRECORD           103
 #define EMR_PIXELFORMAT                104
+
+// WINDOWS VERSION >= 0x500
+#define EMR_DRAWESCAPE                 105
+#define EMR_EXTESCAPE                  106
+#define EMR_STARTDOC                   107
+#define EMR_SMALLTEXTOUT               108
+#define EMR_FORCEUFIMAPPING            109
+#define EMR_NAMEDESCAPE                110
+#define EMR_COLORCORRECTPALETTE        111
+#define EMR_SETICMPROFILEA             112
+#define EMR_SETICMPROFILEW             113
+#define EMR_ALPHABLEND                 114
+#define EMR_ALPHADIBBLEND              115
+#define EMR_TRANSPARENTBLT             116
+#define EMR_TRANSPARENTDIB             117
+#define EMR_GRADIENTFILL               118
+#define EMR_SETLINKEDUFIS              119
+#define EMR_SETTEXTJUSTIFICATION       120
+
 
 //-----------------------------------------------------------------------------------
 
@@ -1008,33 +1029,50 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             case EMR_WIDENPATH :                WinMtfAssertHandler( "WidenPath" );                 break;
             case EMR_POLYDRAW :                 WinMtfAssertHandler( "Polydraw" );                  break;
             case EMR_SETARCDIRECTION :          WinMtfAssertHandler( "SetArcDirection" );           break;
-            case EMR_SETMITERLIMIT :            WinMtfAssertHandler( "SetMiterLimit" );             break;
             case EMR_SETPALETTEENTRIES :        WinMtfAssertHandler( "SetPaletteEntries" );         break;
             case EMR_RESIZEPALETTE :            WinMtfAssertHandler( "ResizePalette" );             break;
             case EMR_EXTFLOODFILL :             WinMtfAssertHandler( "ExtFloodFill" );              break;
             case EMR_ANGLEARC :                 WinMtfAssertHandler( "AngleArc" );                  break;
             case EMR_SETMAPPERFLAGS :           WinMtfAssertHandler( "SetMapperFlags" );            break;
             case EMR_SETCOLORADJUSTMENT :       WinMtfAssertHandler( "SetColorAdjustment" );        break;
-            case EMR_SETMETARGN :               WinMtfAssertHandler( "SetMetArgn" );                break;
-            case EMR_SETBRUSHORGEX :            WinMtfAssertHandler( "SetBrushOrgEx" );             break;
             case EMR_POLYDRAW16 :               WinMtfAssertHandler( "PolyDraw16" );                break;
-            case EMR_CREATEMONOBRUSH :          WinMtfAssertHandler( "CreateMonoBrush" );           break;
             case EMR_CREATEDIBPATTERNBRUSHPT :  WinMtfAssertHandler( "CreateDibPatternBrushPt" );   break;
-            case EMR_EXTCREATEPEN :             WinMtfAssertHandler( "ExtCreatePen" );              break;
             case EMR_POLYTEXTOUTA :             WinMtfAssertHandler( "PolyTextOutA" );              break;
             case EMR_POLYTEXTOUTW :             WinMtfAssertHandler( "PolyTextOutW" );              break;
-            case EMR_SETICMMODE :               WinMtfAssertHandler( "SetICMMode" );                break;
             case EMR_CREATECOLORSPACE :         WinMtfAssertHandler( "CreateColorSpace" );          break;
             case EMR_SETCOLORSPACE :            WinMtfAssertHandler( "SetColorSpace" );             break;
             case EMR_DELETECOLORSPACE :         WinMtfAssertHandler( "DeleteColorSpace" );          break;
             case EMR_GLSRECORD :                WinMtfAssertHandler( "GlsRecord" );                 break;
             case EMR_GLSBOUNDEDRECORD :         WinMtfAssertHandler( "GlsBoundRecord" );            break;
             case EMR_PIXELFORMAT :              WinMtfAssertHandler( "PixelFormat" );               break;
+            case EMR_DRAWESCAPE :               WinMtfAssertHandler( "DrawEscape" );                break;
+            case EMR_EXTESCAPE :                WinMtfAssertHandler( "ExtEscape" );                 break;
+            case EMR_STARTDOC :                 WinMtfAssertHandler( "StartDoc" );                  break;
+            case EMR_SMALLTEXTOUT :             WinMtfAssertHandler( "SmallTextOut" );              break;
+            case EMR_FORCEUFIMAPPING :          WinMtfAssertHandler( "ForceUFIMapping" );           break;
+            case EMR_NAMEDESCAPE :              WinMtfAssertHandler( "NamedEscape" );               break;
+            case EMR_COLORCORRECTPALETTE :      WinMtfAssertHandler( "ColorCorrectPalette" );       break;
+            case EMR_SETICMPROFILEA :           WinMtfAssertHandler( "SetICMProfileA" );            break;
+            case EMR_SETICMPROFILEW :           WinMtfAssertHandler( "SetICMProfileW" );            break;
+            case EMR_ALPHABLEND :               WinMtfAssertHandler( "Alphablend" );                break;
+            case EMR_TRANSPARENTBLT :           WinMtfAssertHandler( "TransparenBlt" );             break;
+            case EMR_TRANSPARENTDIB :           WinMtfAssertHandler( "TransparenDib" );             break;
+            case EMR_GRADIENTFILL :             WinMtfAssertHandler( "GradientFill" );              break;
+            case EMR_SETLINKEDUFIS :            WinMtfAssertHandler( "SetLinkedUFIS" );             break;
 
+            case EMR_SETICMMODE :               WinMtfAssertHandler( "SetICMMode", 0 );             break;
+            case EMR_CREATEMONOBRUSH :          WinMtfAssertHandler( "CreateMonoBrush", 0 );        break;
+            case EMR_EXTCREATEPEN :             WinMtfAssertHandler( "ExtCreatePen", 0 );           break;
+            case EMR_SETBRUSHORGEX :            WinMtfAssertHandler( "SetBrushOrgEx", 0 );          break;
+            case EMR_SETMETARGN :               WinMtfAssertHandler( "SetMetArgn", 0 );             break;
+            case EMR_SETMITERLIMIT :            WinMtfAssertHandler( "SetMiterLimit", 0 );          break;
             case EMR_EXCLUDECLIPRECT :          WinMtfAssertHandler( "ExcludeClipRect", 0 );        break;
             case EMR_REALIZEPALETTE :           WinMtfAssertHandler( "RealizePalette", 0 );         break;
             case EMR_SELECTPALETTE :            WinMtfAssertHandler( "SelectPalette", 0 );          break;
             case EMR_CREATEPALETTE :            WinMtfAssertHandler( "CreatePalette", 0 );          break;
+            case EMR_ALPHADIBBLEND :            WinMtfAssertHandler( "AlphaDibBlend", 0 );          break;
+            case EMR_SETTEXTJUSTIFICATION :     WinMtfAssertHandler( "SetTextJustification", 0 );   break;
+
             case EMR_GDICOMMENT :
             case EMR_SETVIEWPORTEXTEX :
             case EMR_SETVIEWPORTORGEX :
