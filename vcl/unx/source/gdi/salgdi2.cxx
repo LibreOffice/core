@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 14:31:08 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,14 +72,14 @@
 #ifndef _SV_SALDISP_HXX
 #include <saldisp.hxx>
 #endif
-#ifndef _SV_SALBMP_HXX
-#include <salbmp.hxx>
+#ifndef _SV_SALBMP_H
+#include <salbmp.h>
 #endif
 #ifndef _SV_SALBTYPE_HXX
 #include <salbtype.hxx>
 #endif
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#ifndef _SV_SALGDI_H
+#include <salgdi.h>
 #endif
 
 
@@ -113,7 +113,7 @@ static void sal_PrintImage( char *s, XImage*p )
 #if (OSL_DEBUG_LEVEL > 1) && defined SALGDI2_TESTTRANS
 #define DBG_TESTTRANS( _def_drawable )                              \
 {                                                                   \
-    XCopyArea( pXDisp, _def_drawable, aDrawable, _GetCopyGC(),      \
+    XCopyArea( pXDisp, _def_drawable, aDrawable, GetCopyGC(),       \
                0, 0,                                                \
                pPosAry->mnDestWidth, pPosAry->mnDestHeight,         \
                0, 0 );                                              \
@@ -122,9 +122,9 @@ static void sal_PrintImage( char *s, XImage*p )
 #define DBG_TESTTRANS( _def_drawable )
 #endif // (OSL_DEBUG_LEVEL > 1) && defined SALGDI2_TESTTRANS
 
-// -=-= SalGraphicsData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// -=-= X11SalGraphics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-GC SalGraphicsData::CreateGC( Drawable hDrawable, unsigned long nMask )
+GC X11SalGraphics::CreateGC( Drawable hDrawable, unsigned long nMask )
 {
     XGCValues values;
 
@@ -141,7 +141,7 @@ GC SalGraphicsData::CreateGC( Drawable hDrawable, unsigned long nMask )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-inline GC SalGraphicsData::GetMonoGC( Pixmap hPixmap )
+inline GC X11SalGraphics::GetMonoGC( Pixmap hPixmap )
 {
     if( !pMonoGC_ )
         pMonoGC_ = CreateGC( hPixmap );
@@ -156,7 +156,7 @@ inline GC SalGraphicsData::GetMonoGC( Pixmap hPixmap )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-inline GC SalGraphicsData::GetCopyGC()
+inline GC X11SalGraphics::GetCopyGC()
 {
     if( bXORMode_ ) return GetInvertGC();
 
@@ -172,7 +172,7 @@ inline GC SalGraphicsData::GetCopyGC()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-GC SalGraphicsData::GetInvertGC()
+GC X11SalGraphics::GetInvertGC()
 {
     if( !pInvertGC_ )
         pInvertGC_ = CreateGC( GetDrawable(),
@@ -190,7 +190,7 @@ GC SalGraphicsData::GetInvertGC()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-GC SalGraphicsData::GetInvert50GC()
+GC X11SalGraphics::GetInvert50GC()
 {
     if( !pInvert50GC_ )
     {
@@ -238,7 +238,7 @@ GC SalGraphicsData::GetInvert50GC()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-inline GC SalGraphicsData::GetStippleGC()
+inline GC X11SalGraphics::GetStippleGC()
 {
     if( !pStippleGC_ )
         pStippleGC_ = CreateGC( GetDrawable(),
@@ -257,7 +257,7 @@ inline GC SalGraphicsData::GetStippleGC()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-int SalGraphicsData::Clip( XLIB_Region   pRegion,
+int X11SalGraphics::Clip( XLIB_Region   pRegion,
                                  int          &nX,
                                  int          &nY,
                                  unsigned int &nDX,
@@ -295,7 +295,7 @@ int SalGraphicsData::Clip( XLIB_Region   pRegion,
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-int SalGraphicsData::Clip( int          &nX,
+int X11SalGraphics::Clip( int          &nX,
                                  int          &nY,
                                  unsigned int &nDX,
                                  unsigned int &nDY,
@@ -337,7 +337,7 @@ int SalGraphicsData::Clip( int          &nX,
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-GC SalGraphicsData::SetMask( int           &nX,
+GC X11SalGraphics::SetMask( int           &nX,
                                    int           &nY,
                                    unsigned int &nDX,
                                    unsigned int &nDY,
@@ -367,7 +367,7 @@ GC SalGraphicsData::SetMask( int           &nX,
     if( !hPixmap )
     {
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
-        fprintf( stderr, "SalGraphicsData::SetMask !hPixmap\n" );
+        fprintf( stderr, "X11SalGraphics::SetMask !hPixmap\n" );
 #endif
         return NULL;
     }
@@ -602,12 +602,14 @@ SalPrinterBmp::GetPixelIdx (sal_uInt32 nRow, sal_uInt32 nColumn) const
 
 // -=-= SalGraphics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalGraphics::CopyBits( const SalTwoRect *pPosAry,
-                                  SalGraphics      *pSrcGraphics,
-                                  const OutputDevice *pOutDev, const OutputDevice *pSrcOutDev)
+void X11SalGraphics::copyBits( const SalTwoRect *pPosAry,
+                                  SalGraphics      *pSSrcGraphics )
 {
+    X11SalGraphics* pSrcGraphics = pSSrcGraphics
+        ? static_cast<X11SalGraphics*>(pSSrcGraphics)
+        : this;
 #ifndef _USE_PRINT_EXTENSION_
-    if (maGraphicsData.m_pPrinterGfx != NULL)
+    if (m_pPrinterGfx != NULL)
     {
         DBG_ERROR( "Error: PrinterGfx::CopyBits() not implemented" );
     }
@@ -624,23 +626,26 @@ void SalGraphics::CopyBits( const SalTwoRect *pPosAry,
         }
 
         int n;
-        if( !pSrcGraphics )
+        if( pSrcGraphics == this )
         {
-            pSrcGraphics = this;
             n = 2;
         }
-        else if( pSrcGraphics->_IsWindow() )
+        else if( pSrcGraphics->bWindow_ )
+        {
             // window or compatible virtual device
-            if( pSrcGraphics->_GetDisplay() == _GetDisplay() )
+            if( pSrcGraphics->GetDisplay() == GetDisplay() )
                 n = 2; // same Display
             else
                 n = 1; // printer or other display
-        else if( pSrcGraphics->_IsVirtualDevice() )
+        }
+        else if( pSrcGraphics->bVirDev_ )
+        {
             // printer compatible virtual device
-            if( _IsPrinter() )
+            if( bPrinter_ )
                 n = 2; // printer or compatible virtual device == same display
             else
                 n = 1; // window or compatible virtual device
+        }
         else
             n = 0;
 
@@ -648,45 +653,45 @@ void SalGraphics::CopyBits( const SalTwoRect *pPosAry,
             && pPosAry->mnSrcWidth  == pPosAry->mnDestWidth
             && pPosAry->mnSrcHeight == pPosAry->mnDestHeight )
         {
-            if( _IsXORMode()
-                && !pSrcGraphics->_IsVirtualDevice()
-                && (_GetDisplay()->GetProperties() & PROPERTY_BUG_XCopyArea_GXxor) )
+            if( bXORMode_
+                && !pSrcGraphics->bVirDev_
+                && (GetDisplay()->GetProperties() & PROPERTY_BUG_XCopyArea_GXxor) )
             {
-                Pixmap hPixmap = XCreatePixmap( _GetXDisplay(),
-                                                pSrcGraphics->_GetDrawable(),       // source
+                Pixmap hPixmap = XCreatePixmap( GetXDisplay(),
+                                                pSrcGraphics->GetDrawable(),        // source
                                                 pPosAry->mnSrcWidth, pPosAry->mnSrcHeight,
                                                 pSrcGraphics->GetBitCount() );
-                XCopyArea( _GetXDisplay(),
-                           pSrcGraphics->_GetDrawable(),        // source
+                XCopyArea( GetXDisplay(),
+                           pSrcGraphics->GetDrawable(),     // source
                            hPixmap,                             // destination
-                           _GetDisplay()->GetCopyGC(),          // no clipping
+                           GetDisplay()->GetCopyGC(),           // no clipping
                            pPosAry->mnSrcX,     pPosAry->mnSrcY,
                            pPosAry->mnSrcWidth, pPosAry->mnSrcHeight,
                            0,                   0 );            // destination
-                XCopyArea( _GetXDisplay(),
+                XCopyArea( GetXDisplay(),
                            hPixmap,                             // source
-                           _GetDrawable(),                      // destination
-                           maGraphicsData.GetInvertGC(),        // destination clipping
+                           GetDrawable(),                       // destination
+                           GetInvertGC(),       // destination clipping
                            0,                   0,              // source
                            pPosAry->mnSrcWidth, pPosAry->mnSrcHeight,
                            pPosAry->mnDestX,    pPosAry->mnDestY );
-                XFreePixmap( _GetXDisplay(), hPixmap );
+                XFreePixmap( GetXDisplay(), hPixmap );
             }
             else
-                XCopyArea( _GetXDisplay(),
-                           pSrcGraphics->_GetDrawable(),        // source
-                           _GetDrawable(),                      // destination
-                           maGraphicsData.GetCopyGC(),          // destination clipping
+                XCopyArea( GetXDisplay(),
+                           pSrcGraphics->GetDrawable(),     // source
+                           GetDrawable(),                       // destination
+                           GetCopyGC(),         // destination clipping
                            pPosAry->mnSrcX,     pPosAry->mnSrcY,
                            pPosAry->mnSrcWidth, pPosAry->mnSrcHeight,
                            pPosAry->mnDestX,    pPosAry->mnDestY );
         }
         else if( n )
         {
-            SalBitmap *pDDB = pSrcGraphics->GetBitmap( pPosAry->mnSrcX,
+            SalBitmap *pDDB = pSrcGraphics->getBitmap( pPosAry->mnSrcX,
                                                        pPosAry->mnSrcY,
                                                        pPosAry->mnSrcWidth,
-                                                       pPosAry->mnSrcHeight, pSrcOutDev );
+                                                       pPosAry->mnSrcHeight );
 
             if( !pDDB )
             {
@@ -697,12 +702,12 @@ void SalGraphics::CopyBits( const SalTwoRect *pPosAry,
             SalTwoRect aPosAry( *pPosAry );
 
             aPosAry.mnSrcX = 0, aPosAry.mnSrcY = 0;
-            DrawBitmap( &aPosAry, *pDDB, pOutDev );
+            drawBitmap( &aPosAry, *pDDB );
 
             delete pDDB;
         }
         else
-            stderr0( "SalGraphics::CopyBits from Printer not yet implemented\n" );
+            stderr0( "X11SalGraphics::CopyBits from Printer not yet implemented\n" );
 
 #ifndef _USE_PRINT_EXTENSION_
     }
@@ -711,13 +716,13 @@ void SalGraphics::CopyBits( const SalTwoRect *pPosAry,
 
 // --------------------------------------------------------------------------
 
-void SalGraphics::CopyArea ( long nDestX,    long nDestY,
+void X11SalGraphics::copyArea ( long nDestX,    long nDestY,
                                    long nSrcX,     long nSrcY,
                                    long nSrcWidth, long nSrcHeight,
-                                   USHORT nFlags, const OutputDevice *pOutDev )
+                                   USHORT nFlags )
 {
 #ifndef _USE_PRINT_EXTENSION_
-    if (maGraphicsData.m_pPrinterGfx != NULL)
+    if (m_pPrinterGfx != NULL)
     {
         DBG_ERROR( "Error: PrinterGfx::CopyArea() not implemented" );
     }
@@ -737,7 +742,7 @@ void SalGraphics::CopyArea ( long nDestX,    long nDestY,
         aPosAry.mnSrcWidth  = nSrcWidth;
         aPosAry.mnSrcHeight = nSrcHeight;
 
-        SalGraphics::CopyBits ( &aPosAry, 0, pOutDev, pOutDev );
+        copyBits ( &aPosAry, 0 );
 
 #ifndef _USE_PRINT_EXTENSION_
     }
@@ -745,10 +750,10 @@ void SalGraphics::CopyArea ( long nDestX,    long nDestY,
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap, const OutputDevice* )
+void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap )
 {
 #ifndef _USE_PRINT_EXTENSION_
-    if (maGraphicsData.m_pPrinterGfx != NULL)
+    if (m_pPrinterGfx != NULL)
     {
         Rectangle aSrc (Point(pPosAry->mnSrcX, pPosAry->mnSrcY),
                         Size(pPosAry->mnSrcWidth, pPosAry->mnSrcHeight));
@@ -758,7 +763,7 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
         BitmapBuffer* pBuffer= const_cast<SalBitmap&>(rSalBitmap).AcquireBuffer(sal_True);
 
         SalPrinterBmp aBmp (pBuffer);
-        maGraphicsData.m_pPrinterGfx->DrawBitmap (aDst, aSrc, aBmp);
+        m_pPrinterGfx->DrawBitmap (aDst, aSrc, aBmp);
 
         const_cast<SalBitmap&>(rSalBitmap).ReleaseBuffer (pBuffer, sal_True);
     }
@@ -766,12 +771,12 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
     {
 #endif
 
-        SalDisplay*         pSalDisp = maGraphicsData.GetDisplay();
+        SalDisplay*         pSalDisp = GetDisplay();
         Display*            pXDisp = pSalDisp->GetDisplay();
-        const Drawable      aDrawable( maGraphicsData.GetDrawable() );
+        const Drawable      aDrawable( GetDrawable() );
         const SalColormap&  rColMap = pSalDisp->GetColormap();
-        const long          nDepth = maGraphicsData.GetDisplay()->GetVisual()->GetDepth();
-        GC                  aGC( maGraphicsData.GetCopyGC() );
+        const long          nDepth = GetDisplay()->GetVisual()->GetDepth();
+        GC                  aGC( GetCopyGC() );
         XGCValues           aOldVal, aNewVal;
         int                 nValues = GCForeground | GCBackground;
 
@@ -780,11 +785,7 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
         aNewVal.foreground = rColMap.GetWhitePixel(), aNewVal.background = rColMap.GetBlackPixel();
         XChangeGC( pXDisp, aGC, nValues, &aNewVal );
 
-#if defined(_USE_PRINT_EXTENSION_)
-        rSalBitmap.ImplDraw( pSalDisp, aDrawable, nDepth, *pPosAry,  aGC );
-#else
-        rSalBitmap.ImplDraw( aDrawable, nDepth, *pPosAry, aGC );
-#endif
+        static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aDrawable, nDepth, *pPosAry, aGC );
 
         XChangeGC( pXDisp, aGC, nValues, &aOldVal );
         XFlush( pXDisp );
@@ -796,11 +797,12 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,
-                                    const SalBitmap& rTransBitmap, const OutputDevice *pOutDev )
+void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
+                                 const SalBitmap& rSalBitmap,
+                                 const SalBitmap& rTransBitmap )
 {
 #ifndef _USE_PRINT_EXTENSION_
-    if (maGraphicsData.m_pPrinterGfx != NULL)
+    if (m_pPrinterGfx != NULL)
     {
         DBG_ERROR("Error: no PrinterGfx::DrawBitmap() for transparent bitmap");
     }
@@ -808,11 +810,11 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
     {
 #endif
 
-        DBG_ASSERT( !_IsPrinter(), "Drawing of transparent bitmaps on printer devices is strictly forbidden" );
+        DBG_ASSERT( !bPrinter_, "Drawing of transparent bitmaps on printer devices is strictly forbidden" );
 
-        SalDisplay*     pSalDisp = maGraphicsData.GetDisplay();
+        SalDisplay*     pSalDisp = GetDisplay();
         Display*        pXDisp = pSalDisp->GetDisplay();
-        Drawable        aDrawable( maGraphicsData.GetDrawable() );
+        Drawable        aDrawable( GetDrawable() );
         const USHORT    nDepth = pSalDisp->GetVisual()->GetDepth();
         Pixmap          aFG( XCreatePixmap( pXDisp, aDrawable, pPosAry->mnDestWidth,
                                             pPosAry->mnDestHeight, nDepth ) );
@@ -831,11 +833,7 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
             // draw paint bitmap in pixmap #1
             aValues.function = GXcopy, aValues.foreground = nWhite, aValues.background = nBlack;
             aTmpGC = XCreateGC( pXDisp, aFG, nValues, &aValues );
-#ifdef _USE_PRINT_EXTENSION_
-            rSalBitmap.ImplDraw( pSalDisp, aFG, nDepth, aTmpRect, aTmpGC );
-#else
-            rSalBitmap.ImplDraw( aFG, nDepth, aTmpRect, aTmpGC );
-#endif
+            static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aFG, nDepth, aTmpRect, aTmpGC );
             DBG_TESTTRANS( aFG );
 
             // draw background in pixmap #2
@@ -848,25 +846,17 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
             // mask out paint bitmap in pixmap #1 (transparent areas 0)
             aValues.function = GXand, aValues.foreground = 0x00000000, aValues.background = 0xffffffff;
             XChangeGC( pXDisp, aTmpGC, nValues, &aValues );
-#ifdef _USE_PRINT_EXTENSION_
-            rTransBitmap.ImplDraw( pSalDisp, aFG, 1, aTmpRect, aTmpGC );
-#else
-            rTransBitmap.ImplDraw( aFG, 1, aTmpRect, aTmpGC );
-#endif
+            static_cast<const X11SalBitmap&>(rTransBitmap).ImplDraw( aFG, 1, aTmpRect, aTmpGC );
 
             DBG_TESTTRANS( aFG );
 
             // #105055# For XOR mode, keep background behind bitmap intact
-            if( !maGraphicsData.bXORMode_ )
+            if( !bXORMode_ )
             {
                 // mask out background in pixmap #2 (nontransparent areas 0)
                 aValues.function = GXand, aValues.foreground = 0xffffffff, aValues.background = 0x00000000;
                 XChangeGC( pXDisp, aTmpGC, nValues, &aValues );
-#ifdef _USE_PRINT_EXTENSION_
-                rTransBitmap.ImplDraw( pSalDisp, aBG, 1, aTmpRect, aTmpGC );
-#else
-                rTransBitmap.ImplDraw( aBG, 1, aTmpRect, aTmpGC );
-#endif
+                static_cast<const X11SalBitmap&>(rTransBitmap).ImplDraw( aBG, 1, aTmpRect, aTmpGC );
 
                 DBG_TESTTRANS( aBG );
             }
@@ -881,23 +871,23 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
             DBG_TESTTRANS( aBG );
 
             // #105055# Disable XOR temporarily
-            BOOL bOldXORMode( maGraphicsData.bXORMode_ );
-            maGraphicsData.bXORMode_ = FALSE;
+            BOOL bOldXORMode( bXORMode_ );
+            bXORMode_ = FALSE;
 
             // copy pixmap #2 (result) to background
-            XCopyArea( pXDisp, aBG, aDrawable, maGraphicsData.GetCopyGC(),
+            XCopyArea( pXDisp, aBG, aDrawable, GetCopyGC(),
                        0, 0,
                        pPosAry->mnDestWidth, pPosAry->mnDestHeight,
                        pPosAry->mnDestX, pPosAry->mnDestY );
             DBG_TESTTRANS( aBG );
 
-            maGraphicsData.bXORMode_ = bOldXORMode;
+            bXORMode_ = bOldXORMode;
 
             XFreeGC( pXDisp, aTmpGC );
             XFlush( pXDisp );
         }
         else
-            DrawBitmap( pPosAry, rSalBitmap, pOutDev );
+            drawBitmap( pPosAry, rSalBitmap );
 
         if( aFG )
             XFreePixmap( pXDisp, aFG );
@@ -911,11 +901,12 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,
-                              SalColor nTransparentColor, const OutputDevice* )
+void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
+                                 const SalBitmap& rSalBitmap,
+                                 SalColor nTransparentColor )
 {
 #ifndef _USE_PRINT_EXTENSION_
-    if (maGraphicsData.m_pPrinterGfx != NULL)
+    if (m_pPrinterGfx != NULL)
     {
         DBG_ERROR("Error: no PrinterGfx::DrawBitmap() for transparent color");
     }
@@ -931,11 +922,12 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalGraphics::DrawMask( const SalTwoRect* pPosAry, const SalBitmap &rSalBitmap,
-                                  SalColor nMaskColor, const OutputDevice *pOutDev )
+void X11SalGraphics::drawMask( const SalTwoRect* pPosAry,
+                               const SalBitmap &rSalBitmap,
+                               SalColor nMaskColor )
 {
 #ifndef _USE_PRINT_EXTENSION_
-    if (maGraphicsData.m_pPrinterGfx != NULL)
+    if (m_pPrinterGfx != NULL)
     {
         DBG_ERROR("Error: PrinterGfx::DrawMask() not implemented");
     }
@@ -943,9 +935,9 @@ void SalGraphics::DrawMask( const SalTwoRect* pPosAry, const SalBitmap &rSalBitm
     {
 #endif
 
-        SalDisplay* pSalDisp = maGraphicsData.GetDisplay();
+        SalDisplay* pSalDisp = GetDisplay();
         Display*    pXDisp = pSalDisp->GetDisplay();
-        Drawable    aDrawable( maGraphicsData.GetDrawable() );
+        Drawable    aDrawable( GetDrawable() );
         Pixmap      aStipple( XCreatePixmap( pXDisp, aDrawable,
                                              pPosAry->mnDestWidth,
                                              pPosAry->mnDestHeight, 1 ) );
@@ -960,21 +952,17 @@ void SalGraphics::DrawMask( const SalTwoRect* pPosAry, const SalBitmap &rSalBitm
             aValues.function = GXcopyInverted;
             aValues.foreground = 1, aValues.background = 0;
             aTmpGC = XCreateGC( pXDisp, aStipple, GCFunction | GCForeground | GCBackground, &aValues );
-#ifdef _USE_PRINT_EXTENSION_
-            rSalBitmap.ImplDraw( pSalDisp, aStipple, 1, aTwoRect, aTmpGC );
-#else
-            rSalBitmap.ImplDraw( aStipple, 1, aTwoRect, aTmpGC );
-#endif
+            static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aStipple, 1, aTwoRect, aTmpGC );
 
             XFreeGC( pXDisp, aTmpGC );
 
             // Set stipple and draw rectangle
-            GC  aStippleGC( maGraphicsData.GetStippleGC() );
+            GC  aStippleGC( GetStippleGC() );
             int nX = pPosAry->mnDestX, nY = pPosAry->mnDestY;
 
             XSetStipple( pXDisp, aStippleGC, aStipple );
             XSetTSOrigin( pXDisp, aStippleGC, nX, nY );
-            XSetForeground( pXDisp, aStippleGC, _GetPixel( nMaskColor ) );
+            XSetForeground( pXDisp, aStippleGC, GetPixel( nMaskColor ) );
             XFillRectangle( pXDisp, aDrawable, aStippleGC,
                             nX, nY,
                             pPosAry->mnDestWidth, pPosAry->mnDestHeight );
@@ -982,7 +970,7 @@ void SalGraphics::DrawMask( const SalTwoRect* pPosAry, const SalBitmap &rSalBitm
             XFlush( pXDisp );
         }
         else
-            DrawBitmap( pPosAry, rSalBitmap, pOutDev );
+            drawBitmap( pPosAry, rSalBitmap );
 
 #ifndef _USE_PRINT_EXTENSION_
     }
@@ -990,10 +978,10 @@ void SalGraphics::DrawMask( const SalTwoRect* pPosAry, const SalBitmap &rSalBitm
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-SalBitmap *SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY, const OutputDevice* )
+SalBitmap *X11SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
 {
 #ifndef _USE_PRINT_EXTENSION_
-    if (maGraphicsData.m_pPrinterGfx != NULL)
+    if (m_pPrinterGfx != NULL)
     {
         DBG_WARNING ("Warning: PrinterGfx::GetBitmap() not implemented");
         return NULL;
@@ -1002,10 +990,10 @@ SalBitmap *SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY, const O
     {
 #endif
 
-        if( _IsPrinter() && !_IsVirtualDevice() )
+        if( bPrinter_ && !bVirDev_ )
             return NULL;
 
-        if( _IsWindow() && !_IsVirtualDevice() )
+        if( bWindow_ && !bVirDev_ )
         {
             // normalize
             if( nDX < 0 )
@@ -1021,10 +1009,10 @@ SalBitmap *SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY, const O
 
             XWindowAttributes aAttrib;
 
-            XGetWindowAttributes( _GetXDisplay(), _GetDrawable(), &aAttrib );
+            XGetWindowAttributes( GetXDisplay(), GetDrawable(), &aAttrib );
             if( aAttrib.map_state != IsViewable )
             {
-                stderr0( "SalGraphics::GetBitmap drawable not viewable\n" );
+                stderr0( "X11SalGraphics::GetBitmap drawable not viewable\n" );
                 return NULL;
             }
 
@@ -1047,23 +1035,19 @@ SalBitmap *SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY, const O
             // nun alles ok ?
             if( nDX <= 0 || nDY <= 0 )
             {
-                stderr0( "SalGraphics::GetBitmap zero sized bitmap after clipping\n" );
+                stderr0( "X11SalGraphics::GetBitmap zero sized bitmap after clipping\n" );
                 return NULL;
             }
         }
 
-        SalBitmap*  pSalBitmap = new SalBitmap;
-        USHORT      nBitCount = GetBitCount();
+        X11SalBitmap*   pSalBitmap = new X11SalBitmap;
+        USHORT          nBitCount = GetBitCount();
 
-        if( &_GetDisplay()->GetColormap() != &_GetColormap() )
+        if( &GetDisplay()->GetColormap() != &GetColormap() )
             nBitCount = 1;
 
 
-#if defined(_USE_PRINT_EXTENSION_)
-        pSalBitmap->ImplCreateFromDrawable( _GetDisplay(), _GetDrawable(), nBitCount, nX, nY, nDX, nDY );
-#else
-        pSalBitmap->ImplCreateFromDrawable( _GetDrawable(), nBitCount, nX, nY, nDX, nDY );
-#endif
+        pSalBitmap->ImplCreateFromDrawable( GetDrawable(), nBitCount, nX, nY, nDX, nDY );
         return pSalBitmap;
 
 #ifndef _USE_PRINT_EXTENSION_
@@ -1072,10 +1056,10 @@ SalBitmap *SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY, const O
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-SalColor SalGraphics::GetPixel( long nX, long nY, const OutputDevice* )
+SalColor X11SalGraphics::getPixel( long nX, long nY )
 {
 #ifndef _USE_PRINT_EXTENSION_
-    if (maGraphicsData.m_pPrinterGfx != NULL)
+    if (m_pPrinterGfx != NULL)
     {
         DBG_ERROR ("Warning: PrinterGfx::GetPixel() not implemented");
         return 0;
@@ -1084,27 +1068,27 @@ SalColor SalGraphics::GetPixel( long nX, long nY, const OutputDevice* )
     {
 #endif
 
-        if( _IsWindow() && !_IsVirtualDevice() )
+        if( bWindow_ && !bVirDev_ )
         {
             XWindowAttributes aAttrib;
 
-            XGetWindowAttributes( _GetXDisplay(), _GetDrawable(), &aAttrib );
+            XGetWindowAttributes( GetXDisplay(), GetDrawable(), &aAttrib );
             if( aAttrib.map_state != IsViewable )
             {
-                stderr0( "SalGraphics::GetPixel drawable not viewable\n" );
+                stderr0( "X11SalGraphics::GetPixel drawable not viewable\n" );
                 return 0;
             }
         }
 
-        XImage *pXImage = XGetImage( _GetXDisplay(),
-                                     _GetDrawable(),
+        XImage *pXImage = XGetImage( GetXDisplay(),
+                                     GetDrawable(),
                                      nX, nY,
                                      1,  1,
                                      AllPlanes,
                                      ZPixmap );
         if( !pXImage )
         {
-            stderr0( "SalGraphics::GetPixel !XGetImage()\n" );
+            stderr0( "X11SalGraphics::GetPixel !XGetImage()\n" );
             return 0;
         }
 
@@ -1113,7 +1097,7 @@ SalColor SalGraphics::GetPixel( long nX, long nY, const OutputDevice* )
         aXColor.pixel = XGetPixel( pXImage, 0, 0 );
         XDestroyImage( pXImage );
 
-        return _GetColormap().GetColor( aXColor.pixel );
+        return GetColormap().GetColor( aXColor.pixel );
 
 #ifndef _USE_PRINT_EXTENSION_
     }
@@ -1121,14 +1105,14 @@ SalColor SalGraphics::GetPixel( long nX, long nY, const OutputDevice* )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalGraphics::Invert( long      nX,
+void X11SalGraphics::invert( long       nX,
                                 long        nY,
                                 long        nDX,
                                 long        nDY,
-                                SalInvert   nFlags, const OutputDevice* )
+                                SalInvert   nFlags )
 {
 #ifndef _USE_PRINT_EXTENSION_
-    if (maGraphicsData.m_pPrinterGfx != NULL)
+    if (m_pPrinterGfx != NULL)
     {
         DBG_ERROR ("Warning: PrinterGfx::Invert() not implemented");
     }
@@ -1136,24 +1120,24 @@ void SalGraphics::Invert( long      nX,
     {
 #endif
 
-        SalDisplay *pDisp = _GetDisplay();
+        SalDisplay *pDisp = GetDisplay();
 
         GC pGC;
         if( SAL_INVERT_50 & nFlags )
         {
-            pGC = maGraphicsData.GetInvert50GC();
-            XFillRectangle( _GetXDisplay(), _GetDrawable(), pGC, nX, nY, nDX, nDY );
+            pGC = GetInvert50GC();
+            XFillRectangle( GetXDisplay(), GetDrawable(), pGC, nX, nY, nDX, nDY );
         }
         else
             if ( SAL_INVERT_TRACKFRAME & nFlags )
             {
-                pGC = maGraphicsData.GetTrackingGC();
-                XDrawRectangle( _GetXDisplay(), _GetDrawable(),  pGC, nX, nY, nDX, nDY );
+                pGC = GetTrackingGC();
+                XDrawRectangle( GetXDisplay(), GetDrawable(),  pGC, nX, nY, nDX, nDY );
             }
             else
             {
-                pGC = maGraphicsData.GetInvertGC();
-                XFillRectangle( _GetXDisplay(), _GetDrawable(),  pGC, nX, nY, nDX, nDY );
+                pGC = GetInvertGC();
+                XFillRectangle( GetXDisplay(), GetDrawable(),  pGC, nX, nY, nDX, nDY );
             }
 
 #ifndef _USE_PRINT_EXTENSION_
