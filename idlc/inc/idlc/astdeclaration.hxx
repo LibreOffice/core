@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astdeclaration.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:40:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,11 @@ enum NodeType
     NT_parameter,           // Denotes an op. parameter
     NT_union,               // Denotes a union
     NT_union_branch,        // Denotes a union branch
-    NT_struct,              // Denotes a structure
+    NT_struct,              // Denotes either a plain struct type, or a
+                            // polymorphic struct type template
+    NT_type_parameter,      // Denotes a type parameter of a polymorphic struct
+                            // type template
+    NT_instantiated_struct, // Denotes an instantiated polymorphic struct type
     NT_member,              // Denotes a member in structure, exception
     NT_enum,                // Denotes an enumeration
     NT_enum_val,            // Denotes an enum. value
@@ -106,7 +110,7 @@ class AstDeclaration
 {
 public:
     // Constructors
-    AstDeclaration(const NodeType type, const ::rtl::OString& name, AstScope* pScope);
+    AstDeclaration(NodeType type, const ::rtl::OString& name, AstScope* pScope);
     virtual ~AstDeclaration();
 
     // Data access
@@ -150,8 +154,11 @@ public:
     void markAsAdded()
         { m_bIsAdded = sal_True; }
 
-    sal_Bool isType() const;
+    virtual bool isType() const;
+
     sal_Bool hasAncestor(AstDeclaration* pDecl);
+
+    bool isPublished() const { return m_bPublished; }
 
     virtual sal_Bool dump(RegistryKey& rKey);
 protected:
@@ -163,6 +170,7 @@ protected:
     sal_Bool            m_bImported;        // imported ?
     sal_Bool            m_bIsAdded;         // mark declaration as added in scope
     sal_Bool            m_bInMainFile;      // defined in main file
+    bool                m_bPublished;
     sal_Int32           m_lineNumber;       // line number defined in
     ::rtl::OString      m_fileName;         // fileName defined in
     ::rtl::OUString     m_documentation;    // fileName defined in
