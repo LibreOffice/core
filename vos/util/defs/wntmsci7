@@ -755,3 +755,15 @@
 ?referenced@?$ORefObj@PAUoslSocketImpl@@@vos@@UBAJXZ
 ?release@?$ORefObj@PAUoslSocketImpl@@@vos@@UAAJXZ
 ?resolveHostname@OSocketAddr@vos@@SAPAUoslSocketAddrImpl@@ABVOUString@rtl@@@Z
+??0?$_Slist_iterator@PAVEvent@@U?$_Nonconst_traits@PAVEvent@@@_STL@@@_STL@@QAE@ABU01@@Z
+??0?$_Slist_iterator@PAVIEventHandler@vos@@U?$_Nonconst_traits@PAVIEventHandler@vos@@@_STL@@@_STL@@QAE@ABU01@@Z
+??0?$_Slist_iterator@PAVIEventQueueListener@vos@@U?$_Nonconst_traits@PAVIEventQueueListener@vos@@@_STL@@@_STL@@QAE@ABU01@@Z
+?find@_STL@@YA?AU?$_Slist_iterator@PAVEvent@@U?$_Nonconst_traits@PAVEvent@@@_STL@@@1@U21@0ABQAVEvent@@@Z
+?find@_STL@@YA?AU?$_Slist_iterator@PAVEvent@@U?$_Nonconst_traits@PAVEvent@@@_STL@@@1@U21@0ABQAVEvent@@Uinput_iterator_tag@1@@Z
+?find@_STL@@YA?AU?$_Slist_iterator@PAVIEventHandler@vos@@U?$_Nonconst_traits@PAVIEventHandler@vos@@@_STL@@@1@U21@0ABQAVIEventHandler@vos@@@Z
+?find@_STL@@YA?AU?$_Slist_iterator@PAVIEventHandler@vos@@U?$_Nonconst_traits@PAVIEventHandler@vos@@@_STL@@@1@U21@0ABQAVIEventHandler@vos@@Uinput_iterator_tag@1@@Z
+?find@_STL@@YA?AU?$_Slist_iterator@PAVIEventQueueListener@vos@@U?$_Nonconst_traits@PAVIEventQueueListener@vos@@@_STL@@@1@U21@0ABQAVIEventQueueListener@vos@@@Z
+?find@_STL@@YA?AU?$_Slist_iterator@PAVIEventQueueListener@vos@@U?$_Nonconst_traits@PAVIEventQueueListener@vos@@@_STL@@@1@U21@0ABQAVIEventQueueListener@vos@@Uinput_iterator_tag@1@@Z
+??0?$_List_iterator@V?$ORef@VIExecutable@vos@@@vos@@U?$_Nonconst_traits@V?$ORef@VIExecutable@vos@@@vos@@@_STL@@@_STL@@QAE@ABU01@@Z
+?distance@_STL@@YAXU?$_List_iterator@V?$ORef@VIExecutable@vos@@@vos@@U?$_Const_traits@V?$ORef@VIExecutable@vos@@@vos@@@_STL@@@1@0AAI@Z
+??0?$_List_iterator@PAUOReactorCallbackContext@vos@@U?$_Nonconst_traits@PAUOReactorCallbackContext@vos@@@_STL@@@_STL@@QAE@ABU01@@Z
