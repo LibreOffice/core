@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-19 10:17:07 $
+ *  last change: $Author: mba $ $Date: 2001-11-02 16:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,7 +681,14 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         BOOL bBigSize = ( (const SfxBoolItem*)pItem )->GetValue();
         aMiscOptions.SetSymbolSet( bBigSize ? SFX_SYMBOLS_LARGE : SFX_SYMBOLS_SMALL );
-        DBG_ERROR("Update missing ?!");
+        SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
+        while ( pViewFrame )
+        {
+            // update all "final" dispatchers
+            if ( !pViewFrame->GetActiveChildFrame_Impl() )
+                pViewFrame->GetDispatcher()->Update_Impl(sal_True);
+            pViewFrame = SfxViewFrame::GetNext(*pViewFrame);
+        }
     }
 
     // Backup
