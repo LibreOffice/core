@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:02 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2936,18 +2936,13 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     nTextStart = 0;
                                     nTextLen = aText.Len();
 
-                                    if ( pOutDev != GetRefDevice() )
-                                    {
-                                        pTmpDXArray = new long[ aText.Len() ];
-                                        pDXArray = pTmpDXArray;
-                                        Font aOldFont( GetRefDevice()->GetFont() );
-                                        aTmpFont.SetPhysFont( GetRefDevice() );
-                                        aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.Len(), pTmpDXArray );
-                                        if ( aStatus.DoRestoreFont() )
-                                            GetRefDevice()->SetFont( aOldFont );
-                                    }
-                                    else
-                                        pDXArray = 0;
+                                    pTmpDXArray = new long[ aText.Len() ];
+                                    pDXArray = pTmpDXArray;
+                                    Font aOldFont( GetRefDevice()->GetFont() );
+                                    aTmpFont.SetPhysFont( GetRefDevice() );
+                                    aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.Len(), pTmpDXArray );
+                                    if ( aStatus.DoRestoreFont() )
+                                        GetRefDevice()->SetFont( aOldFont );
 
                                     // add a meta file comment if we record to a metafile
                                     GDIMetaFile* pMtf = pOutDev->GetConnectMetaFile();
