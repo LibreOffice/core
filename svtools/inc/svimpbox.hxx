@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-23 11:44:08 $
+ *  last change: $Author: pb $ $Date: 2002-06-12 07:52:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,11 @@
 #ifndef _SELENG_HXX
 #include <vcl/seleng.hxx>
 #endif
-
 #ifndef _SCRBAR_HXX
 #include <vcl/scrbar.hxx>
+#endif
+#ifndef _VCL_VCLEVENT_HXX
+#include <vcl/vclevent.hxx>
 #endif
 
 class SvTreeListBox;
@@ -137,6 +139,8 @@ private:
     ScrollBar           aVerSBar;
     ScrollBar           aHorSBar;
     ScrollBarBox        aScrBarBox;
+
+    VclEventListeners   maEventListeners;
 
     // Node Bitmaps
     enum ImageType
@@ -349,6 +353,10 @@ public:
     void                ShowFocusRect( const SvLBoxEntry* pEntry );
     void                SetTabBar( TabBar* pTabBar );
     void                CancelPendingEdit();
+
+    void                CallEventListeners( ULONG nEvent, void* pData = NULL );
+    void                AddEventListener( const Link& rEventListener );
+    void                RemoveEventListener( const Link& rEventListener );
 };
 
 inline Image& SvImpLBox::implGetImageLocation( const ImageType _eType, BmpColorMode _eMode )
