@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:22:22 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 #ifndef _SVX_FMSHIMP_HXX
 #define _SVX_FMSHIMP_HXX
 
-#ifndef _COM_SUN_STAR_SDBC_XROWSETLISTENER_HPP_
-#include <com/sun/star/sdbc/XRowSetListener.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
@@ -142,9 +139,6 @@
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
 #endif
-#ifndef SVX_DBTOOLSCLIENT_HXX
-#include "dbtoolsclient.hxx"
-#endif
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
 #endif
@@ -189,8 +183,8 @@
 #ifndef _COMPHELPER_CONTAINER_HXX_
 #include <comphelper/container.hxx>
 #endif
-#ifndef _FM_IMPLEMENTATION_IDS_HXX_
-#include "fmimplids.hxx"
+#ifndef _CPPUHELPER_COMPBASE4_HXX_
+#include <cppuhelper/compbase4.hxx>
 #endif
 #ifndef _CPPUHELPER_COMPBASE6_HXX_
 #include <cppuhelper/compbase6.hxx>
@@ -200,6 +194,9 @@
 #endif
 #ifndef SVX_DBTOOLSCLIENT_HXX
 #include "dbtoolsclient.hxx"
+#endif
+#ifndef SVX_FORMCONTROLLING_HXX
+#include "formcontrolling.hxx"
 #endif
 
 #include <queue>
@@ -225,40 +222,6 @@ DECLARE_STL_VECTOR( ::com::sun::star::uno::Reference< ::com::sun::star::form::XF
 
 #define FORMS_UNLOAD        0x0001      // unload
 #define FORMS_ASYNC         0x0002      // do this async
-
-//==============================================================================
-// FmFormNavigationDispatcher - a dispatcher responsible for a form navigation slot
-//==============================================================================
-
-class FmFormNavigationDispatcher : public FmSlotDispatch
-{
-    ::com::sun::star::frame::FeatureStateEvent  m_aNonActiveState;  // the state to report to the listeners if we're inactive
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>       m_xCursor;          // the cursor we're responsible for
-    sal_Bool                m_bActive;          // forward the StateChanged as statusChanged to our listeners ?
-    UniString               m_sAccessPath;      // the access path of m_xCursor (redundant but more performant)
-
-public:
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>       getForm() const { return m_xCursor; }
-    UniString               getFormAccessPath() const { return m_sAccessPath; }
-
-public:
-    FmFormNavigationDispatcher(const  ::com::sun::star::util::URL& _rUrl, sal_Int16 _nSlotId, SfxBindings& _rBindings, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm, const UniString& _rAccessPath);
-
-    void SetActive(sal_Bool bEnable);
-    sal_Bool IsActive() const  { return m_bActive; }
-
-    // set a specific state which will be broadcasted to the listeners (no matter if we are active or not)
-    void SetStatus(SfxItemState eState, const SfxPoolItem* pState);
-
-    // XComponent
-    virtual void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
-
-protected:
-    // SfxControllerItem
-    virtual void StateChanged(USHORT nSID, SfxItemState eState, const SfxPoolItem* pState);
-
-    virtual void NotifyState(SfxItemState eState, const SfxPoolItem* pState, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener>& rListener = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener>());
-};
 
 //==============================================================================
 // a class iterating through all fields of a form which are bound to a field
@@ -305,12 +268,11 @@ struct FmLoadAction
 
 //========================================================================
 class SfxViewFrame;
-typedef ::cppu::WeakComponentImplHelper6<   ::com::sun::star::sdbc::XRowSetListener,
-                                            ::com::sun::star::beans::XPropertyChangeListener,
-                                            ::com::sun::star::util::XModifyListener,
-                                            ::com::sun::star::container::XContainerListener,
-                                            ::com::sun::star::view::XSelectionChangeListener,
-                                            ::com::sun::star::form::XFormControllerListener> FmXFormShell_BD_BASE;
+typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::beans::XPropertyChangeListener
+                                        ,   ::com::sun::star::container::XContainerListener
+                                        ,   ::com::sun::star::view::XSelectionChangeListener
+                                        ,   ::com::sun::star::form::XFormControllerListener
+                                        >   FmXFormShell_BD_BASE;
 
 //========================================================================
 class FmXFormShell_Base_Disambiguation : public FmXFormShell_BD_BASE
@@ -326,8 +288,8 @@ typedef ::utl::ConfigItem                   FmXFormShell_CFGBASE;
 
 class FmXFormShell  :public FmXFormShell_BASE
                     ,public FmXFormShell_CFGBASE
-                    ,public FmDispatchInterceptor
                     ,public ::svxform::OStaticDataAccessTools
+                    ,public ::svx::IControllerFeatureInvalidation
 {
     friend class FmFormShell;
     friend class FmFormView;
@@ -342,22 +304,16 @@ class FmXFormShell  :public FmXFormShell_BASE
         // We enable a permanent cursor for the grid we found a searched text, it's disabled in the next "found" event.
     FmFormArray         m_arrSearchContexts;
 
-        // some typedefs :
-    // all dispatchers belonging to a form
-    DECLARE_STL_VECTOR(FmFormNavigationDispatcher*, SingleFormDispatchers);
-
-    // a map from a form access path (like "1/4/2") to the dispatchers array for this form
-    DECLARE_STL_USTRINGACCESS_MAP(SingleFormDispatchers, FormsDispatchers);
-    FormsDispatchers        m_aNavigationDispatcher;
-
-    ::form::OImplementationIdsRef   m_aHoldImplIdHelper;
-
     SvUShorts   m_arrInvalidSlots;
     SvBytes     m_arrInvalidSlots_Flags;
         // we explicitly switch off the propbrw before leaving the design mode
         // this flag tells us if we have to switch it on again when reentering
 
-    DECLARE_STL_USTRINGACCESS_MAP(CursorActionDescription, CursorActions);
+    typedef ::std::map<
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >,
+            CursorActionDescription,
+            ::comphelper::OInterfaceCompare< ::com::sun::star::sdbc::XResultSet >
+        >   CursorActions;
     CursorActions   m_aCursorActions;
         // all actions on async cursors
 
@@ -383,12 +339,14 @@ class FmXFormShell  :public FmXFormShell_BASE
 
     FmFormShell*    m_pShell;
 
+    ::svx::ControllerFeatures   m_aActiveControllerFeatures;
+    ::svx::ControllerFeatures   m_aNavControllerFeatures;
+
     // aktuelle Form, Controller
     // nur im alive mode verfuegbar
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>  m_xActiveController;
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>  m_xNavigationController;
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>            m_xActiveForm;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer> m_xParser;
 
     // Aktueller container einer Page
     // nur im designmode verfuegbar
@@ -415,7 +373,6 @@ class FmXFormShell  :public FmXFormShell_BASE
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>      m_xExtViewTriggerController;    // the nav controller at the time the external display was triggered
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           m_xExternalDisplayedForm;       // the form which the external view is based on
 
-    FmXDispatchInterceptorImpl*     m_pMainFrameInterceptor;
     FmXDispatchInterceptorImpl*     m_pExternalViewInterceptor;
 
     sal_Int16       m_nLockSlotInvalidation;
@@ -426,7 +383,6 @@ class FmXFormShell  :public FmXFormShell_BASE
 
     sal_Bool        m_bUseWizards : 1;
 
-    sal_Bool        m_bActiveModified   : 1;    // Controller modifiziert
     sal_Bool        m_bDatabaseBar      : 1;    // Gibt es eine Datenbankleiste
     sal_Bool        m_bInActivate       : 1;    // Wird ein Controller aktiviert
     sal_Bool        m_bSetFocus         : 1;    // Darf der Focus umgesetzt werden
@@ -437,6 +393,8 @@ class FmXFormShell  :public FmXFormShell_BASE
 
 public:
     FmXFormShell(FmFormShell* _pShell, SfxViewFrame* _pViewFrame);
+
+protected:
     ~FmXFormShell();
 
     // UNO Anbindung
@@ -459,19 +417,6 @@ public:
 // ::com::sun::star::beans::XPropertyChangeListener
     virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException );
 
-// ::com::sun::star::sdbc::XRowSetListener
-    virtual void SAL_CALL cursorMoved(const ::com::sun::star::lang::EventObject& event) throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL rowChanged(const ::com::sun::star::lang::EventObject& event) throw( ::com::sun::star::uno::RuntimeException ) { }
-    virtual void SAL_CALL rowSetChanged(const ::com::sun::star::lang::EventObject& event) throw( ::com::sun::star::uno::RuntimeException ) { }
-
-// ::com::sun::star::util::XModifyListener    -> modify setzen
-    virtual void SAL_CALL modified(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException );
-
-// ::com::sun::star::frame::XDispatchProviderInterceptor
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch> interceptedQueryDispatch(sal_uInt16 _nId,
-        const  ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::osl::Mutex* getInterceptorMutex() { return &m_aAsyncSafety; }
-
 // ::com::sun::star::form::XFormControllerListener
     virtual void SAL_CALL formActivated(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL formDeactivated(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException );
@@ -479,13 +424,16 @@ public:
 // OComponentHelper
     virtual void SAL_CALL disposing();
 
+public:
     void EnableTrackProperties( sal_Bool bEnable) { m_bTrackProperties = bEnable; }
     sal_Bool IsTrackPropertiesEnabled() {return m_bTrackProperties;}
 
-public:
     // activation handling
             void        viewActivated( FmFormView* _pCurrentView, sal_Bool _bSyncAction = sal_False );
             void        viewDeactivated( FmFormView* _pCurrentView, sal_Bool _bDeactivateController = sal_True );
+
+    // IControllerFeatureInvalidation
+    virtual void invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatures );
 
     void ExecuteTabOrderDialog(         // execute SID_FM_TAB_DIALOG
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >& _rxForForm
@@ -519,30 +467,18 @@ protected:
     void CollectFormContexts(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xStartingPoint, const UniString& strCurrentLevelPrefix, UniString& strNames);
         // sammelt in strNames die Namen aller Formulare, fuegt die entsprechenden XFormRefs in m_arrSearchContexts ein
 
-    static sal_Bool CanMoveRight(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xControllerModel);
-    static sal_Bool CanMoveLeft(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xControllerModel);
-    static sal_Bool SaveModified(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate>& _xCursor, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xSet, sal_Bool& _rRecordInserted);
-    static sal_Bool MoveRight(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate>& _xCursor);
-    static sal_Bool MoveLeft(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate>& _xCursor);
-
 public:
-    static sal_Bool CanMoveRight(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& xController);
-    static sal_Bool CanMoveLeft(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& xController);
-    static sal_Bool MoveRight(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& xController);
-    static sal_Bool MoveLeft(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& xController);
-    static sal_Bool CommitCurrent(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& _xController);
-    static sal_Bool IsModified(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& xController);
-    static void ResetCurrent(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& _xController);
-           void ResetAll(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& _xForm);
-    static sal_Bool SaveModified(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& xController, sal_Bool bCommit = sal_True);
-
     // methode fuer nicht designmode (alive mode)
     void setActiveController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& _xController, sal_Bool _bNoSaveOldContent = sal_False );
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& getActiveController() const {return m_xActiveController;}
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& getActiveInternalController() const { return m_xActiveController == m_xExternalViewController ? m_xExtViewTriggerController : m_xActiveController; }
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& getActiveForm() const {return m_xActiveForm;}
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& getNavController() const {return m_xNavigationController;}
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer> getParser() const { return m_xParser; }
+
+    inline const ::svx::ControllerFeatures& getActiveControllerFeatures() const
+        { return m_aActiveControllerFeatures; }
+    inline const ::svx::ControllerFeatures& getNavControllerFeatures() const
+        { return m_aNavControllerFeatures.isAssigned() ? m_aNavControllerFeatures : m_aActiveControllerFeatures; }
 
     // nur im design mode verwenden, aktuell selektiertes Formular oder Control
     void    setCurForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& xF);
@@ -555,12 +491,8 @@ public:
     const   ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& getSelObject() const {return m_xSelObject;}
 
     sal_Bool hasForms() const {return m_xForms.is() && m_xForms->getCount() != 0;}
-    sal_Bool isActiveModified() const {return m_bActiveModified;}
     sal_Bool hasDatabaseBar() const {return m_bDatabaseBar;}
     sal_Bool canNavigate() const    {return m_xNavigationController.is();}
-    sal_Bool isParsable() const     {return m_xParser.is() && m_xParser->getQuery().getLength();}
-    sal_Bool hasFilter() const      { return isParsable() &&
-                                        (m_xParser->getFilter().getLength() || m_xParser->getOrder().getLength()); }
 
     void ShowProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& rxObject, sal_Bool bShow=sal_True );
     sal_Bool IsPropBrwOpen() const;
@@ -595,12 +527,6 @@ public:
         // verkapptes ConvertControlTo
 
 private:
-    static sal_Bool SaveModified(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& xController,
-                                ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate>& xCursor,
-                                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xSet,
-                                sal_Bool& rRecordInserted);
-
-
     DECL_LINK(OnFoundData, FmFoundRecordInformation*);
     DECL_LINK(OnCanceledNotFound, FmFoundRecordInformation*);
     DECL_LINK(OnSearchContextRequest, FmSearchContext*);
@@ -633,27 +559,28 @@ private:
     virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
     void implAdjustConfigCache();
 
+    // helpers for slot handling
+    /** execute the given form slot
+        <p>Warning. Only a small set of slots implemented currently.</p>
+        @param _nSlot
+            the slot to execute
+        @param _rxForm
+            the form for which the slot is to be executed
+        @param _rxController
+            the controller to use for committing modified controls. Will not
+            be used if <NULL/>
+    */
+    void    ExecuteFormSlot(
+                sal_Int32 _nSlot,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >& _rxController
+            );
+
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
             getControlContainerForView();
 
     // ---------------------------------------------------
     // asyncronous cursor actions/navigation slot handling
-
-    void ActivateDispatchers(const UniString& sNavFormAccess, sal_Bool bActivate);
-        // (de)activate all dispatchers belonging to the form with the given access path
-    DECL_LINK(OnExecuteNavSlot, FmFormNavigationDispatcher*);
-
-    UniString GetAccessPathFromForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm, const UniString& rAssumedPagePrefix = UniString()) const;
-        // return the access path of the given form (if rAssumedPagePrefix the current page's id is taken as page prefix)
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer> GetPageForms(const UniString sPageId) const;
-        // return the forms collection of the page with the given id
-    UniString GetPageId(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm) const;
-        // get the id of the page to which's forms collection _xForms belongs
-
-    sal_Bool    PathsInterfere(const UniString& _rPathLeft, const UniString& _rPathRight) const;
-
-    void UpdateFormDispatcher(FmFormNavigationDispatcher* _pDisp);
-    void UpdateAllFormDispatchers(const UniString& _rPath);
 
     void setControlLocks();     // lock all controls of the active controller
     void restoreControlLocks(); // restore the lock state of all controls of the active controller
@@ -667,7 +594,6 @@ private:
 
     sal_Bool HasPendingCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& _xController) const;
     sal_Bool HasPendingCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm) const;
-    sal_Bool HasPendingCursorAction(const UniString& _rAccessPath) const;
 
     DECL_LINK(OnCursorActionDone, FmCursorActionThread*);
     DECL_LINK(OnCursorActionDoneMainThread, FmCursorActionThread*);
@@ -739,7 +665,6 @@ class FmCursorActionThread : public ::vos::OThread
 
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           m_xDataSource;              // the cursor which we work with
-    UniString                   m_sAccessPath;
 
 private:
 
@@ -781,13 +706,12 @@ private:
 
 public:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> getDataSource() const { return m_xDataSource; }
-    UniString getAccessPath() const { return m_sAccessPath; }
 
 private:
     sal_Bool Terminated() { ::osl::MutexGuard aGuard(m_aAccessSafety); return m_bTerminated; }
 
 public:
-    FmCursorActionThread(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDataSource, const UniString& _rStopperCaption, const UniString& _rPath);
+    FmCursorActionThread(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDataSource, const UniString& _rStopperCaption);
     virtual ~FmCursorActionThread() {}
 
     // control of self-deletion
@@ -829,8 +753,7 @@ protected:
 class classname : public FmCursorActionThread           \
 {                                                       \
 public:                                                 \
-    classname(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDataSource,        \
-            const UniString& _rPath);                       \
+    classname(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDataSource); \
 protected:                                              \
     virtual void RunImpl();                             \
 };                                                      \
@@ -840,9 +763,8 @@ protected:                                              \
 
 #define IMPL_CURSOR_ACTION_THREAD(classname, caption, action)   \
                                                                 \
-classname::classname(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDataSource,         \
-        const UniString& _rPath)                                    \
-    :FmCursorActionThread(_xDataSource, caption, _rPath)        \
+classname::classname(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDataSource) \
+    :FmCursorActionThread(_xDataSource, caption)                \
 {                                                               \
 }                                                               \
                                                                 \
