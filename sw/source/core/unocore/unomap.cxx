@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-03 14:45:51 $
+ *  last change: $Author: mtg $ $Date: 2001-04-03 16:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,7 +744,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 static SfxItemPropertyMap aCharAndParaMap_Impl[] =
                 {
                     COMPLETE_TEXT_CURSOR_MAP
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aCharAndParaMap_Impl;
             }
@@ -756,7 +756,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     COMMON_CRSR_PARA_PROPERTIES
                     TABSTOPS_MAP_ENTRY
                     COMMON_TEXT_CONTENT_PROPERTIES
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aParagraphMap_Impl;
             }
@@ -803,7 +803,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE),  RES_CHRATR_ROTATE,      &::getBooleanCppuType(),    PROPERTY_NONE,        MID_FITTOLINE  },
                     { SW_PROP_NAME(UNO_NAME_CHAR_SCALE_WIDTH            ),  RES_CHRATR_SCALEW,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE,         0 },
                     { SW_PROP_NAME(UNO_NAME_CHAR_RELIEF            ),       RES_CHRATR_RELIEF,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE,      MID_RELIEF },
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aCharStyleMap;
             }
@@ -904,7 +904,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE),  RES_CHRATR_ROTATE,      &::getBooleanCppuType(),    PROPERTY_NONE,        MID_FITTOLINE  },
                     { SW_PROP_NAME(UNO_NAME_CHAR_SCALE_WIDTH            ),  RES_CHRATR_SCALEW,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE,         0 },
                     { SW_PROP_NAME(UNO_NAME_CHAR_RELIEF            ),       RES_CHRATR_RELIEF,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE,      MID_RELIEF },
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aParaStyleMap;
             }
@@ -975,7 +975,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_IS_PHYSICAL),                  FN_UNO_IS_PHYSICAL,    &::getBooleanCppuType(), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NAME(UNO_NAME_IS_AUTO_UPDATE),            FN_UNO_IS_AUTO_UPDATE, &::getBooleanCppuType(), PROPERTY_NONE, 0},
                     { SW_PROP_NAME(UNO_NAME_DISPLAY_NAME),              FN_UNO_DISPLAY_NAME, &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aFrameStyleMap;
             }
@@ -1081,7 +1081,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_FOOTNOTE_LINE_ADJUST),          FN_PARAM_FTN_INFO,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE ,     MID_LINE_ADJUST     },
                     { SW_PROP_NAME(UNO_NAME_FOOTNOTE_LINE_TEXT_DISTANCE),   FN_PARAM_FTN_INFO,      &::getCppuType((const sal_Int32*)0),    PROPERTY_NONE ,     MID_LINE_TEXT_DIST   |CONVERT_TWIPS },
                     { SW_PROP_NAME(UNO_NAME_FOOTNOTE_LINE_DISTANCE),        FN_PARAM_FTN_INFO,      &::getCppuType((const sal_Int32*)0),    PROPERTY_NONE ,     MID_LINE_FOOTNOTE_DIST|CONVERT_TWIPS},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aPageStyleMap;
             }
@@ -1093,7 +1093,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_NUMBERING_RULES),       FN_UNO_NUM_RULES,   &::getCppuType((uno::Reference<container::XIndexReplace>*)0), PROPERTY_NONE, CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_IS_PHYSICAL),           FN_UNO_IS_PHYSICAL,       &::getBooleanCppuType(), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NAME(UNO_NAME_DISPLAY_NAME),          FN_UNO_DISPLAY_NAME, &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aNumStyleMap;
             }
@@ -1135,7 +1135,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),       RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_TEXT_SECTION),              FN_UNO_TEXT_SECTION,    &::getCppuType((uno::Reference<text::XTextSection>*)0), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
                     _REDLINE_NODE_PROPERTIES
-                    {0,0}
+                    {0,0,0,0,0}
                 };
 
                 aMapArr[nPropertyId] = aTablePropertyMap_Impl;
@@ -1163,7 +1163,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),       RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_TEXT_SECTION),              FN_UNO_TEXT_SECTION,    &::getCppuType((uno::Reference<text::XTextSection>*)0), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
                     { SW_PROP_NAME(UNO_NAME_IS_PROTECTED),              RES_PROTECT,            &::getBooleanCppuType(), 0, MID_PROTECT_CONTENT},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aCellMap_Impl;
             }
@@ -1234,7 +1234,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_SUFFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_END_BRACKET},
                     { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIS),             RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_EMPHASIS},
                     { SW_PROP_NAME(UNO_NAME_CHAR_RELIEF            ),       RES_CHRATR_RELIEF,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE,      MID_RELIEF },
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aRangePropertyMap_Impl;
             }
@@ -1279,7 +1279,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_PASSWORD),                  WID_SECT_PASSWORD,      &::getCppuType((const ::com::sun::star::uno::Sequence<sal_Int8>*)0), PROPERTY_NONE, 0 },
                     COMMON_TEXT_CONTENT_PROPERTIES
                     _REDLINE_NODE_PROPERTIES
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aSectionPropertyMap_Impl;
             }
@@ -1300,7 +1300,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_SEARCH_SIMILARITY_REMOVE  ),    WID_SIMILARITY_REMOVE,  &::getCppuType((const sal_Int16*)0)  ,  PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_SEARCH_STYLES             ),    WID_STYLES,             &::getBooleanCppuType()  ,      PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_SEARCH_WORDS                  ),    WID_WORDS,              &::getBooleanCppuType()  ,      PROPERTY_NONE,     0},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aSearchPropertyMap_Impl;
             }
@@ -1323,7 +1323,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { MAP_CHAR_LEN("FrameWidthAbsolute"),           RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, MID_FRMSIZE_WIDTH|CONVERT_TWIPS          },
                     { MAP_CHAR_LEN("FrameWidthPercent"),                RES_FRM_SIZE,           &::getCppuType((const sal_Int8*)0),         PROPERTY_NONE, MID_FRMSIZE_REL_WIDTH    },
                     { SW_PROP_NAME(UNO_NAME_SIZE_TYPE),                 RES_FRM_SIZE,           &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,   MID_FRMSIZE_SIZE_TYPE  },
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aFramePropertyMap_Impl;
             }
@@ -1354,7 +1354,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_GRAPHIC_IS_INVERTED),       RES_GRFATR_INVERT,       &::getBooleanCppuType(),   0,   0},
                     { SW_PROP_NAME(UNO_NAME_TRANSPARENCY),  RES_GRFATR_TRANSPARENCY, &::getCppuType((sal_Int16*)0), 0,   0},
                     { SW_PROP_NAME(UNO_NAME_GRAPHIC_COLOR_MODE),    RES_GRFATR_DRAWMODE,     &::getCppuType((drawing::ColorMode*)0),        0,   0},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aGraphicPropertyMap_Impl;
             }
@@ -1364,7 +1364,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 static SfxItemPropertyMap aEmbeddedPropertyMap_Impl[] =
                 {
                     COMMON_FRAME_PROPERTIES
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aEmbeddedPropertyMap_Impl;
             }
@@ -1392,7 +1392,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_VERT_ORIENT_POSITION),  RES_VERT_ORIENT,        &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID ,MID_VERTORIENT_POSITION|CONVERT_TWIPS   },
                     { SW_PROP_NAME(UNO_NAME_VERT_ORIENT_RELATION),  RES_VERT_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID ,MID_VERTORIENT_RELATION },
                     { SW_PROP_NAME(UNO_NAME_TEXT_RANGE),                FN_TEXT_RANGE,          &::getCppuType((uno::Reference<text::XTextRange>*)0),       PROPERTY_NONE, 0},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aShapeMap_Impl;
             }
@@ -1406,7 +1406,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_SECONDARY_KEY),   WID_SECONDARY_KEY,    &::getCppuType((const OUString*)0)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_IS_MAIN_ENTRY),   WID_MAIN_ENTRY,       &::getBooleanCppuType()  ,      PROPERTY_NONE,     0},
                     COMMON_TEXT_CONTENT_PROPERTIES
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aIdxMarkMap_Impl;
             }
@@ -1418,7 +1418,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_ALTERNATIVE_TEXT),WID_ALT_TEXT,         &::getCppuType((const OUString*)0)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_LEVEL        ),   WID_LEVEL        ,    &::getCppuType((const sal_Int16*)0)  ,      PROPERTY_NONE,     0},
                     COMMON_TEXT_CONTENT_PROPERTIES
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aCntntMarkMap_Impl;
             }
@@ -1430,7 +1430,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_ALTERNATIVE_TEXT),WID_ALT_TEXT,         &::getCppuType((const OUString*)0)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_USER_INDEX_NAME), WID_USER_IDX_NAME,    &::getCppuType((const OUString*)0)  ,       PROPERTY_NONE,     0},
                     COMMON_TEXT_CONTENT_PROPERTIES
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aUserMarkMap_Impl;
             }
@@ -1470,7 +1470,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX_MARKS),      WID_INDEX_MARKS, &::getCppuType((Sequence< Reference< XDocumentIndexMark > >*)0),           PropertyAttribute::READONLY ,0       },
 #endif
                     { SW_PROP_NAME(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, &::getBooleanCppuType(), PROPERTY_NONE, 0},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTOXIndexMap_Impl;
             }
@@ -1514,7 +1514,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
 #else
                     { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX_MARKS),      WID_INDEX_MARKS, &::getCppuType((Sequence< Reference< XDocumentIndexMark > >*)0),           PropertyAttribute::READONLY ,0       },
 #endif
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTOXContentMap_Impl;
             }
@@ -1559,7 +1559,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX_MARKS),  WID_INDEX_MARKS, &::getCppuType((Sequence< Reference< XDocumentIndexMark> >*)0),            PropertyAttribute::READONLY ,0       },
 #endif
                     { SW_PROP_NAME(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, &::getBooleanCppuType(), PROPERTY_NONE, 0},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTOXUserMap_Impl;
             }
@@ -1584,7 +1584,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { MAP_CHAR_LEN("ParaStyleHeading"),     WID_PARA_HEAD,  &::getCppuType((const OUString*)0)  , 0,     0},
                     { MAP_CHAR_LEN("ParaStyleLevel1"),  WID_PARA_LEV1,  &::getCppuType((const OUString*)0)  , 0,     0},
                     { SW_PROP_NAME(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, &::getBooleanCppuType(), PROPERTY_NONE, 0},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTOXTablesMap_Impl;
             }
@@ -1612,7 +1612,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { MAP_CHAR_LEN("ParaStyleHeading"),     WID_PARA_HEAD,  &::getCppuType((const OUString*)0)  , 0,     0},
                     { MAP_CHAR_LEN("ParaStyleLevel1"),  WID_PARA_LEV1,  &::getCppuType((const OUString*)0)  , 0,     0},
                     { SW_PROP_NAME(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, &::getBooleanCppuType(), PROPERTY_NONE, 0},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTOXObjectsMap_Impl;
             }
@@ -1638,7 +1638,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { MAP_CHAR_LEN("ParaStyleHeading"),     WID_PARA_HEAD,  &::getCppuType((const OUString*)0)  , 0,     0},
                     { MAP_CHAR_LEN("ParaStyleLevel1"),  WID_PARA_LEV1,  &::getCppuType((const OUString*)0)  , 0,     0},
                     { SW_PROP_NAME(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, &::getBooleanCppuType(), PROPERTY_NONE, 0},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTOXIllustrationsMap_Impl;
             }
@@ -1663,7 +1663,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_SIZE_TYPE),                 RES_FRM_SIZE,           &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,   MID_FRMSIZE_SIZE_TYPE  },
                 //  { SW_PROP_NAME(UNO_NAME_HEIGHT),                    RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS         },
                 //  { SW_PROP_NAME(UNO_NAME_SHADOW_FORMAT),             RES_SHADOW,             &::getCppuType((const table::ShadowFormat*)0),  PROPERTY_NONE, CONVERT_TWIPS},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTableRowPropertyMap_Impl;
             }
@@ -1734,7 +1734,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_SUFFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_END_BRACKET},
                     { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIS),             RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_EMPHASIS},
                     { SW_PROP_NAME(UNO_NAME_CHAR_RELIEF            ),       RES_CHRATR_RELIEF,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE,      MID_RELIEF },
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTableCursorPropertyMap_Impl;
             }
@@ -1745,7 +1745,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 {
                     { SW_PROP_NAME(UNO_LINK_DISPLAY_NAME),  FN_PARAM_LINK_DISPLAY_NAME,     &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0xff},
                     COMMON_TEXT_CONTENT_PROPERTIES
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aBookmarkPropertyMap_Impl;
             }
@@ -1756,7 +1756,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 {
                     COMPLETE_TEXT_CURSOR_MAP
                     COMMON_TEXT_CONTENT_PROPERTIES
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
 
                 aMapArr[nPropertyId] = aParagraphExtensionsMap_Impl;
@@ -1777,7 +1777,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { MAP_CHAR_LEN("ParaStyleHeading"),     WID_PARA_HEAD,  &::getCppuType((const OUString*)0)  , 0,     0},
                     { MAP_CHAR_LEN("ParaStyleLevel1"),  WID_PARA_LEV1,  &::getCppuType((const OUString*)0)  , 0,     0},
                     { SW_PROP_NAME(UNO_NAME_LEVEL_FORMAT                      ), WID_LEVEL_FORMAT                        ,  &::getCppuType((uno::Reference<container::XIndexReplace>*)0)  , PROPERTY_NONE,0},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aBibliographyMap_Impl;
             }
@@ -1811,6 +1811,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_IS_KERN_ASIAN_PUNCTUATION),     WID_DOC_IS_KERN_ASIAN_PUNCTUATION,      &::getBooleanCppuType(),    PROPERTY_NONE,   0},
                     { SW_PROP_NAME(UNO_NAME_CHARACTER_COMPRESSION_TYPE),    WID_DOC_CHARACTER_COMPRESSION_TYPE, &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,   0},
                     { SW_PROP_NAME(UNO_NAME_TWO_DIGIT_YEAR),                WID_DOC_TWO_DIGIT_YEAR, &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,   0},
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aDocMap_Impl;
             }
@@ -1821,7 +1822,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 {
                     { SW_PROP_NAME(UNO_LINK_DISPLAY_BITMAP),            0,  &::getCppuType((const uno::Reference<awt::XBitmap>*)0), PropertyAttribute::READONLY, 0xff},
                     { SW_PROP_NAME(UNO_LINK_DISPLAY_NAME),          0,  &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0xff},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aLinkTargetMap_Impl;
             }
@@ -1832,7 +1833,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 {
                     { SW_PROP_NAME(UNO_NAME_FILE_PATH),     WID_GROUP_PATH,     &::getCppuType((const OUString*)0), PROPERTY_NONE,   PropertyAttribute::READONLY},
                     { SW_PROP_NAME(UNO_NAME_TITLE),         WID_GROUP_TITLE, &::getCppuType((const OUString*)0),    PROPERTY_NONE,   0},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aAutoTextGroupMap_Impl;
             }
@@ -1891,7 +1892,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     {SW_PROP_NAME(UNO_NAME_SOLID_MARK_HANDLES       ),WID_VIEWSET_SOLID_MARK_HANDLES      , &::getBooleanCppuType(),PROPERTY_NONE, 0},
                     {SW_PROP_NAME(UNO_NAME_ZOOM_TYPE                 ),WID_VIEWSET_ZOOM_TYPE            , &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
                     {SW_PROP_NAME(UNO_NAME_ZOOM_VALUE               ),WID_VIEWSET_ZOOM              , &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aViewSettingsMap_Impl;
             }
@@ -1907,7 +1908,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     {SW_PROP_NAME(UNO_NAME_IS_START),           FN_UNO_IS_START, &::getBooleanCppuType(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
                     _REDLINE_PROPERTIES
                     {SW_PROP_NAME(UNO_NAME_TEXT_PORTION_TYPE),  FN_UNO_TEXT_PORTION_TYPE, &::getCppuType((OUString*)0),                        PropertyAttribute::READONLY, 0},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTextPortionExtensionMap_Impl;
             }
@@ -1918,7 +1919,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 {
                     {SW_PROP_NAME(UNO_NAME_REFERENCE_ID),   0, &::getCppuType((const sal_Int16*)0),PropertyAttribute::READONLY|PropertyAttribute::MAYBEVOID,    0},
                     COMMON_TEXT_CONTENT_PROPERTIES
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aFootnoteMap_Impl;
             }
@@ -1932,7 +1933,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     {SW_PROP_NAME(UNO_NAME_SEPARATOR_LINE_RELATIVE_HEIGHT),     WID_TXTCOL_LINE_REL_HGT, &::getCppuType((const sal_Int32*)0),PROPERTY_NONE, 0},
                     {SW_PROP_NAME(UNO_NAME_SEPARATOR_LINE_VERTIVAL_ALIGNMENT),  WID_TXTCOL_LINE_ALIGN, &::getCppuType((style::VerticalAlignment*)0),PROPERTY_NONE,  0},
                     {SW_PROP_NAME(UNO_NAME_SEPARATOR_LINE_IS_ON),               WID_TXTCOL_LINE_IS_ON, &::getCppuType((const sal_Int32*)0),PROPERTY_NONE,   0},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTextColumns_Impl;
             }
@@ -1944,7 +1945,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     _REDLINE_PROPERTIES
                     {SW_PROP_NAME(UNO_NAME_REDLINE_START), 0, &::getCppuType((Reference<XInterface>*)0),    PropertyAttribute::READONLY,    0},
                     {SW_PROP_NAME(UNO_NAME_REDLINE_END  ), 0, &::getCppuType((Reference<XInterface>*)0),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aRedlineMap_Impl;
             }
@@ -1968,7 +1969,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_FONT_FAMILY_COMPLEX),      RES_CHRATR_CTL_FONT,    &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },
                     { SW_PROP_NAME(UNO_NAME_CHAR_FONT_CHAR_SET_COMPLEX),    RES_CHRATR_CTL_FONT,    &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },
                     { SW_PROP_NAME(UNO_NAME_CHAR_FONT_PITCH_COMPLEX),       RES_CHRATR_CTL_FONT,    &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },
-                    {0,0,0,0}
+                    {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTextDefaultMap_Impl;
             }
