@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:43 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,12 +252,12 @@ public:
 
 struct _FndPara
 {
-    _FndBox* pFndBox;
-    _FndLine* pFndLine;
     const SwSelBoxes& rBoxes;
+    _FndLine* pFndLine;
+    _FndBox* pFndBox;
 
     _FndPara( const SwSelBoxes& rBxs, _FndBox* pFB )
-        : rBoxes( rBxs ), pFndBox( pFB ) {}
+        : rBoxes(rBxs), pFndLine(0), pFndBox(pFB) {}
     _FndPara( const _FndPara& rPara, _FndBox* pFB )
         : rBoxes(rPara.rBoxes), pFndLine(rPara.pFndLine), pFndBox(pFB) {}
     _FndPara( const _FndPara& rPara, _FndLine* pFL )
