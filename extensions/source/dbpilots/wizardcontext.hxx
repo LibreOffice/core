@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardcontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
 
 //.........................................................................
 namespace dbp
@@ -121,9 +124,9 @@ namespace dbp
         // the tables or queries of the data source the form is bound to (if any)
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                     xObjectContainer;
-        // the column container of the object the form is bound to (table, query or SQL statement)
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-                    xFields;
+        // the column types container of the object the form is bound to (table, query or SQL statement)
+        DECLARE_STL_USTRINGACCESS_MAP(sal_Int32,TNameTypeMap);
+        TNameTypeMap aTypes;
         // the column names of the object the form is bound to (table, query or SQL statement)
         ::com::sun::star::uno::Sequence< ::rtl::OUString >
                     aFieldNames;
