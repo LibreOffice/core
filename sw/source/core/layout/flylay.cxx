@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-12 14:45:02 $
+ *  last change: $Author: ama $ $Date: 2001-12-12 16:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,7 +900,11 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                     if ( pBody->GetPrev() )
                         pBody->GetPrev()->Calc();
                     pBody->Calc();
+#ifdef VERTICAL_LAYOUT
+                    (rRect.*fnRect->fnSetTop)((pBody->*fnRect->fnGetPrtTop)());
+#else
                     rRect.Top( pBody->Frm().Top() + pBody->Prt().Top() );
+#endif
 
                     //Den Bottom setzen wir auf den unteren Rand der letzten Seite.
                     pPg = ((SwRootFrm*)pUp)->GetLastPage();
@@ -913,7 +917,12 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                         if ( pBody->GetPrev() )
                             pBody->GetPrev()->Calc();
                         pBody->Calc();
+#ifdef VERTICAL_LAYOUT
+                        (rRect.*fnRect->fnSetBottom)(
+                                           (pBody->*fnRect->fnGetPrtBottom)() );
+#else
                         rRect.Bottom( pBody->Frm().Top() + pBody->Prt().Bottom());
+#endif
                         if( pFly->GetFmt()->GetDoc()->IsBrowseMode() )
                         {
                             // Hier wird folgende Situation abgefangen: Im Browse-
@@ -931,9 +940,15 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                                 if ( pBody->GetPrev() )
                                     pBody->GetPrev()->Calc();
                                 pBody->Calc();
+#ifdef VERTICAL_LAYOUT
+                                SwTwips nBot=(pBody->*fnRect->fnGetPrtBottom)();
+                                if( (rRect.*fnRect->fnBottomDist)( nBot ) > 0 )
+                                    (rRect.*fnRect->fnSetBottom)( nBot );
+#else
                                 SwTwips nBot = pBody->Frm().Top() + pBody->Prt().Bottom();
                                 if( rRect.Bottom() < nBot )
                                     rRect.Bottom( nBot );
+#endif
                             }
                         }
                     }
@@ -1061,8 +1076,8 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             if( bMove )
             {
 #ifdef VERTICAL_LAYOUT
-                nTop = (*fnRect->fnYDiff)(
-                        ((SwFlyInCntFrm*)pFly)->GetRefPoint().Y(), nHeight );
+                nTop = (*fnRect->fnYInc)(
+                        ((SwFlyInCntFrm*)pFly)->GetRefPoint().Y(), -nHeight );
                 long nWidth = (pFly->Frm().*fnRect->fnGetWidth)();
                 (rRect.*fnRect->fnSetLeftAndWidth)(
                             ((SwFlyInCntFrm*)pFly)->GetRefPoint().X(), nWidth );
@@ -1070,8 +1085,8 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             }
             else
             {
-                nTop = (*fnRect->fnYDiff)( (pFly->Frm().*fnRect->fnGetBottom)(),
-                                            nHeight -rUL.GetLower() );
+                nTop = (*fnRect->fnYInc)( (pFly->Frm().*fnRect->fnGetBottom)(),
+                                           rUL.GetLower() - nHeight );
                 nHeight = 2*nHeight - (pFly->Frm().*fnRect->fnGetHeight)()
                           - rUL.GetLower() - rUL.GetUpper();
             }
@@ -1122,15 +1137,15 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             if( bMove )
             {
 #ifdef VERTICAL_LAYOUT
-                nTop = (*fnRect->fnYDiff)(pSdrObj->GetAnchorPos().Y(), nHeight);
+                nTop = (*fnRect->fnYInc)(pSdrObj->GetAnchorPos().Y(), -nHeight);
                 long nWidth = (aSnapRect.*fnRect->fnGetWidth)();
                 (rRect.*fnRect->fnSetLeftAndWidth)(
                             pSdrObj->GetAnchorPos().X(), nWidth );
             }
             else
             {
-                nTop = (*fnRect->fnYDiff)( aSnapRect.Top(), nHeight
-                                           - rUL.GetLower() - nTmpH );
+                nTop = (*fnRect->fnYInc)( aSnapRect.Top(),
+                                          rUL.GetLower() + nTmpH - nHeight );
                 nTmpH = bVert ? pSdrObj->GetBoundRect().GetWidth() :
                                 pSdrObj->GetBoundRect().GetHeight();
             }
