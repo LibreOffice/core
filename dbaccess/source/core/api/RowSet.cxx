@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 14:46:11 $
+ *  last change: $Author: oj $ $Date: 2000-11-10 14:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1724,7 +1724,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                                                                             this,
                                                                             i,
                                                                             aDescription,
-                                                                            m_pCache->getIterator(),
+                                                                            m_aCurrentRow,
                                                                             m_pCache->getEnd());
                         aColumns.push_back(pColumn);
                         pColumn->setName(*pBegin);
@@ -2407,7 +2407,7 @@ ORowSetClone::ORowSetClone(ORowSet& rParent)
                                                             this,
                                                             i,
                                                             aDescription,
-                                                            m_pCache->getIterator(),
+                                                            m_aCurrentRow,
                                                             m_pCache->getEnd());
         aColumns.push_back(pColumn);
         pColumn->setName(*pBegin);
