@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmhelp.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 14:10:40 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 11:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@
 #define HID_PROP_ECHO_CHAR                      (HID_FORMS_START +  91)
 #define HID_PROP_EMPTY_IS_NULL                  (HID_FORMS_START +  92)
 #define HID_PROP_DECIMAL_ACCURACY               (HID_FORMS_START +  93)
-#define HID_PROP_DATE_SHOW_CENTURY              (HID_FORMS_START +  94)
+    // FREE
 #define HID_PROP_DEFAULT_BUTTON                 (HID_FORMS_START +  95)
 #define HID_PROP_HIDDEN_VALUE                   (HID_FORMS_START +  96)
 #define HID_PROP_TRISTATE                       (HID_FORMS_START +  97)

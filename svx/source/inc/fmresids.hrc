@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmresids.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:38:57 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 11:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,7 @@
 #define RID_STR_ECHO_CHAR                           (RID_FORMS_START +169)
 #define RID_STR_EMPTY_IS_NULL                       (RID_FORMS_START +170)
 #define RID_STR_DECIMAL_ACCURACY                    (RID_FORMS_START +171)
-#define RID_STR_DATE_SHOW_CENTURY                   (RID_FORMS_START +172)
+    // FREE
 #define RID_STR_BORDER_TYPE                         (RID_FORMS_START +173)
 #define RID_STR_ENUM_CHECKED                        (RID_FORMS_START +174)
 #define RID_STR_DEFAULT_BUTTON                      (RID_FORMS_START +175)

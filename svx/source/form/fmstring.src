@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:24:01 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 11:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4496,32 +4496,6 @@ String RID_STR_DECIMAL_ACCURACY
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Decimales";
     Text[ finnish ] = "Desimaalitarkkuus";
-};
-String RID_STR_DATE_SHOW_CENTURY
-{
-    Text = "Jahrhundert zeigen" ;
-    Text [ English ] = "Show Century" ;
-    Text [ portuguese ] = "Mostrar século" ;
-    Text [ english_us ] = "Show Century" ;
-    Text [ portuguese_brazilian ] = "Jahrhundert zeigen" ;
-    Text [ swedish ] = "Visa århundrade" ;
-    Text [ danish ] = "Vis århundrede" ;
-    Text [ italian ] = "Mostra secolo" ;
-    Text [ spanish ] = "Mostrar siglo" ;
-    Text [ french ] = "Afficher le siècle" ;
-    Text [ dutch ] = "Eeuw weergeven" ;
-    Text[ chinese_simplified ] = "ÏÔÊ¾4Î»ÊıÄê·İ";
-    Text[ russian ] = "Ïîêàçàòü âåê";
-    Text[ polish ] = "Poka¿ stulecie";
-    Text[ japanese ] = "¼—ï4Œ…•\\¦";
-    Text[ chinese_traditional ] = "Åã¥Ü4¦ì¼Æ¦~¥÷";
-    Text[ greek ] = "ÅìöÜíéóç áéşíá";
-    Text[ korean ] = "¼¼±â Ç¥½Ã";
-    Text[ arabic ] = "ÅÙåÇÑ ÇáŞÑä";
-    Text[ turkish ] = "Yüzyılı görüntüle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Mostrar siglo";
-    Text[ finnish ] = "Näytä vuosisata";
 };
 String RID_STR_DEFAULT_BUTTON
 {

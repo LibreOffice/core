@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmprop.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-11 11:46:31 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 11:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,6 @@ const FmPropertyInfo* FmPropertyInfoService::getPropertyInfo()
             FmPropertyInfo(FM_PROP_DATEMIN,             FM_ATTR_DATEMIN,            sal_True,  ::rtl::OUString(SVX_RES(RID_STR_DATEMIN)),           nPos++, HID_PROP_DATEMIN) ,
             FmPropertyInfo(FM_PROP_DATEMAX,             FM_ATTR_DATEMAX,            sal_True,  ::rtl::OUString(SVX_RES(RID_STR_DATEMAX)),           nPos++, HID_PROP_DATEMAX) ,
             FmPropertyInfo(FM_PROP_DATEFORMAT,          FM_ATTR_DATEFORMAT,         sal_True,  ::rtl::OUString(SVX_RES(RID_STR_DATEFORMAT)),        nPos++, HID_PROP_DATEFORMAT) ,
-            FmPropertyInfo(FM_PROP_DATE_SHOW_CENTURY,   FM_ATTR_DATE_SHOW_CENTURY,  sal_True,  ::rtl::OUString(SVX_RES(RID_STR_DATE_SHOW_CENTURY)), nPos++, HID_PROP_DATE_SHOW_CENTURY ),
             FmPropertyInfo(FM_PROP_DEFAULT_DATE,        FM_ATTR_DEFAULT_DATE,       sal_True,  ::rtl::OUString(SVX_RES(RID_STR_DEFAULTVALUE)),      nPos++, HID_PROP_DEFAULT_DATE ),
 
             FmPropertyInfo(FM_PROP_TIME,                FM_ATTR_TIME,               sal_True,  ::rtl::OUString(),                                   nPos++, 0) ,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 14:12:30 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 11:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,6 @@ hidspecial HID_PROP_TAG                     { HelpID = HID_PROP_TAG; };
 hidspecial HID_PROP_ECHO_CHAR               { HelpID = HID_PROP_ECHO_CHAR; };
 hidspecial HID_PROP_EMPTY_IS_NULL           { HelpID = HID_PROP_EMPTY_IS_NULL; };
 hidspecial HID_PROP_DECIMAL_ACCURACY        { HelpID = HID_PROP_DECIMAL_ACCURACY; };
-hidspecial HID_PROP_DATE_SHOW_CENTURY       { HelpID = HID_PROP_DATE_SHOW_CENTURY; };
 hidspecial HID_PROP_DEFAULT_BUTTON          { HelpID = HID_PROP_DEFAULT_BUTTON; };
 hidspecial HID_PROP_HIDDEN_VALUE            { HelpID = HID_PROP_HIDDEN_VALUE; };
 hidspecial HID_PROP_TRISTATE                { HelpID =HID_PROP_TRISTATE;    };
