@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.9 2000-10-24 11:21:33 mib Exp $
+	$Id: table.mod,v 1.10 2000-10-26 09:02:30 dr Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -96,7 +96,7 @@
 	table:visibility (visible | collapse | filter) "visible"
 >
 <!ENTITY % text-wo-table "(text:h|text:p|text:ordered-list|text:unordered-list|%shapes;|chart:chart)*">
-<!ENTITY % cell-content "(office:annotation?,(table:subtable|%text-wo-table;))">
+<!ENTITY % cell-content "(table:cell-range-source?,office:annotation?,(table:subtable|%text-wo-table;))">
 <!ELEMENT table:table-cell %cell-content;>
 <!ELEMENT table:covered-table-cell %cell-content;>
 <!ATTLIST table:table-cell
@@ -204,6 +204,17 @@
 	table:label-cell-range-address %cell-range-address; #REQUIRED
 	table:data-cell-range-address %cell-range-address; #REQUIRED
 	table:orientation (column|row) #REQUIRED
+>
+<!ELEMENT table:cell-range-source EMPTY>
+<!ATTLIST table:cell-range-source
+	table:name %string; #REQUIRED
+	xlink:type (simple) #FIXED "simple"
+	xlink:actuate (onRequest) #FIXED "onRequest"
+	xlink:href %uriReference; #REQUIRED
+	table:filter-name %string; #REQUIRED
+	table:filter-options %string; #REQUIRED
+	table:last-column-spanned %positiveInteger; #REQUIRED
+	table:last-row-spanned %positiveInteger; #REQUIRED
 >
 <!ELEMENT office:annotation (%cString;)>
 <!ATTLIST office:annotation
