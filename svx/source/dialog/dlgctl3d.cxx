@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctl3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:19:41 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ void Svx3DPreviewControl::Resize()
 \************************************************************************/
 void Svx3DPreviewControl::Paint( const Rectangle& rRect )
 {
-    p3DView->InitRedraw( this, Region( rRect ) );
+    p3DView->CompleteRedraw( this, Region( rRect ) );
 }
 
 /*************************************************************************
