@@ -35,18 +35,10 @@ public class IdeUpdater extends Thread {
     private boolean isNetbeansPath = false;
 
 
-    public IdeUpdater(String installPath, JLabel statusLabel,JProgressBar pBar) {
+    public IdeUpdater(String installPath, JLabel statusLabel, JProgressBar pBar) {
 
-    File jeditLauncher = new File( installPath + File.separator + "jedit.jar" );
-    File netbeansLauncher = null;
-
-    String opSys =System.getProperty("os.name");
-    if (opSys.indexOf("Windows") != -1) {
-        netbeansLauncher = new File( installPath + "bin" );
-    }
-    else {
-        netbeansLauncher = new File( installPath + "bin" );
-    }
+    File jeditLauncher = new File( installPath + "jedit.jar" );
+    File netbeansLauncher = new File( installPath + "bin" );
 
     if( netbeansLauncher.isDirectory() ) {
         isNetbeansPath = true;

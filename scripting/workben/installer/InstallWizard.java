@@ -19,7 +19,7 @@ import java.net.*;
 import java.io.*;
 
 public class InstallWizard extends javax.swing.JFrame implements ActionListener {
-
+/*
     private static class ShutdownHook extends Thread {
         public void run()
     {
@@ -28,7 +28,7 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
                 // Check for and backup any config.xml files
                 // Check for and backup any StarBasic macro files
                 // Check for and backup ProtocolHandler
-                /*
+                
                 if (!InstallWizard.isPatchedTypes())
         {
                     File backup = new File(InstUtil.getTmpDir(), "TypeDetection.xml");
@@ -47,7 +47,7 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
                     File destination = new File(InstallWizard.getJavaPath());
                     //InstUtil.copy(backup, destination); //Restore typedetection.xml
         }
-                 */
+                 
                 //System.out.println( "ShutdownHook" );
             }
 
@@ -59,10 +59,10 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
         Runtime rt=Runtime.getRuntime();
         rt.addShutdownHook(new ShutdownHook());
     }
-    
+*/  
     /** Creates new form InstallWizard */
     public InstallWizard() {
-        super("Scripting Framework Installer (prototype)");
+        super("Office Scripting Framework Installer - Early Developer Release");
     //setBackground(Color.WHITE);
     setBackground(new Color(0,0,0));
     locations = new ArrayList();
@@ -73,7 +73,7 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     setSize(windowWidth,windowHeight);
     setBounds((center.x-windowWidth/2)-115,(center.y-windowWidth/2)-100, windowWidth,windowHeight);
     initComponents();
-    setResizable(false);        
+    setResizable(false);
     }
 
     /** This method is called from within the constructor to
@@ -111,7 +111,7 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
         //navigation.add(navNext, gridBagConstraints1);
         //navigation.add(navBack, gridBagConstraints1);
         //navigation.add(navCancel, gridBagConstraints1);
-        
+    
         getContentPane().add(navigation, java.awt.BorderLayout.SOUTH);
         screens.setLayout(new java.awt.CardLayout());
         screens.add(WELCOME, new Welcome(this));
@@ -119,24 +119,34 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
         screens.add(VERSIONS, version);
     _final = new Final(this);
         screens.add(FINAL, _final);
-
-    idewelcome = new IdeWelcome(this);
+    
+    boolean hasIDEInstallation = (InstUtil.hasNetbeansInstallation() || InstUtil.hasJeditInstallation()) ;
+    
+    if( hasIDEInstallation )
+    {
+        idewelcome = new IdeWelcome(this);
         screens.add(IDEWELCOME, idewelcome);
         ideversion = new IdeVersion(this);
         screens.add(IDEVERSIONS, ideversion);
-    idefinal = new IdeFinal(this);
+        idefinal = new IdeFinal(this);
         screens.add(IDEFINAL, idefinal);
-        
+    }
         getContentPane().add(screens, java.awt.BorderLayout.CENTER);
 
     navNext.addActionListener(this);
     navNext.addActionListener(version);
     navNext.addActionListener(_final);
-    navNext.addActionListener(ideversion);
-    navNext.addActionListener(idefinal);    
+    
+    if( hasIDEInstallation )
+    {
+        navNext.addActionListener(ideversion);
+        navNext.addActionListener(idefinal);
+    }
+    
     navCancel.addActionListener(this);
     navBack.addActionListener(this);
-        
+    
+
     URL url = this.getClass().getResource("sidebar.jpg");
     JLabel sideBar = new JLabel();
     sideBar.setIcon(new ImageIcon(url));
@@ -261,12 +271,12 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JButton navCancel;
     private javax.swing.JPanel  screens;
 
-    private Version version;
-    private Final _final;
-    private IdeVersion ideversion;
-    private IdeFinal idefinal;
-    private IdeWelcome idewelcome;
-    private static ArrayList locations;
+    private Version version = null;
+    private Final _final  = null;
+    private IdeVersion ideversion = null;
+    private IdeFinal idefinal = null;
+    private IdeWelcome idewelcome = null;
+    private static ArrayList locations = null;
 
     public static String VERSIONS = "VERSIONS";
     public static String WELCOME  = "WELCOME";

@@ -58,36 +58,18 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
         }
         if(jeditProps!=null)
         {
-        for( int j = 0; j < jeditProps.size(); j++ ) {
-            for( int v = 0; v < versions.length; v++ ) {
-                String key = versions[v];
-                String path = null;
-                if ((path = jeditProps.getProperty(key)) != null) {
-                    //System.out.println( "j="+j+" v="+v + " jEdit " + " key=" + key + " path=" + path );
-                    ideProps.put(key, path);
+            for( int j = 0; j < jeditProps.size(); j++ ) {
+                for( int v = 0; v < versions.length; v++ ) {
+                    String key = versions[v];
+                    String path = null;
+                    if ((path = jeditProps.getProperty(key)) != null) {
+                        //System.out.println( "j="+j+" v="+v + " jEdit " + " key=" + key + " path=" + path );
+                        ideProps.put(key, path);
+                    }
                 }
             }
         }
-        }
         props = ideProps;
-
-        /*
-        int len = versions.length;
-        for (int i = 0; i < len; i++) {
-            System.out.println( i + "start for" );
-            String key = versions[i];
-            String path = null;
-            if ((path = netbeansProps.getProperty(key)) != null) {
-                System.out.println( i + " Netbeans " + " key=" + key + " path=" + path );
-                //props.put(key, path);
-            }
-            else if ((path = jeditProps.getProperty(key)) != null) {
-                System.out.println( i + " jEdit " + " key=" + key + " path=" + path );
-                //props.put(key, path);
-            }
-            System.out.println( i + "end for" );
-        }
-        */
     }
         catch (IOException eIO) {
             //Message about no installed versions found
@@ -100,11 +82,13 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
         }
 
         tableModel = new MyTableModelIDE (props, versions);
+    /*
     if (tableModel.getRowCount() == 0)
     {
             JOptionPane.showMessageDialog(this, "No compatible IDEs were found.", "Invalid versions", JOptionPane.ERROR_MESSAGE);
             //wizard.exitForm(null);
     }
+    */
 
         tableModel.addTableModelListener(this);
         JTable tableVersions = new JTable(tableModel) {

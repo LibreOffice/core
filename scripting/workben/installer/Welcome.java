@@ -58,6 +58,9 @@ public class Welcome extends javax.swing.JPanel implements ActionListener {
     offInstallPth = userDir.substring( 0, programPosition );
     
     try {
+        System.out.println("All diagnostic output is being redirected to SFrameworkInstall.log");
+        System.out.println("Location: "+ offInstallPth + "program" + File.separator + "SFrameworkInstall.log");
+        
         LogStream log = new LogStream( "SFrameworkInstall.log" );
                 System.setErr(log);
         
@@ -120,44 +123,28 @@ public class Welcome extends javax.swing.JPanel implements ActionListener {
 
 
     boolean versionMatch = false;
+    
     for( int i = 0; i < versions.length; i++ ) {
         String key = versions[i];
         String progPath = ( String )props.getProperty( key );
-        if ( progPath != null ){
-            String os = System.getProperty("os.name");
-    
-            if (os.indexOf("Windows") != -1) {
-                progPath = progPath  +  System.getProperty("file.separator") + "program";
-            }
-            else
-            {
-                progPath = progPath  +  "program";              
-            }
+        if ( progPath != null ){    
+            progPath = progPath  + File.separator + "program";
             
-            File tmpFile = new File(progPath+ "oostubversion.txt");
+            File tmpFile = new File(progPath + File.separator + "oostubversion.txt");
             try{
             tmpFile.createNewFile();
             
-            //System.out.println(new File(userDir).toURL().toString());
-            //System.out.println("versionMatch: progPath " + progPath + " userDir " + userDir + " iMatch " + iMatch);
-            if( new File(userDir+ "oostubversion.txt").exists())
-            {
-                versionMatch = true;
-                break;
-            }
+                if( new File(userDir + File.separator + "oostubversion.txt").exists())
+                {
+                    versionMatch = true;
+                    break;  
+                }
             }
             catch( IOException e)
             {
                 // Fail silently
             }
-            tmpFile.delete();
-            
-            /*
-                        URL url = new URL("file://" + parts[1].trim());
-            String opSys =System.getProperty("os.name");
-            if (opSys.indexOf("Windows")!=-1){
-                System.out.println( "InstUtil URLDecoder path: " + URLDecoder.decode( url.getPath() ) );            
-            */
+            tmpFile.delete();           
         }
     }   
     return versionMatch;

@@ -10,67 +10,12 @@ import javax.swing.*;
 import java.net.*;
 
 public class InstUtil {
-    public static boolean createTmpDir() {
-        String sysTemp = System.getProperty("java.io.tmpdir");
-        if (tmpDir == null) {
-            tmpDir = new File(sysTemp + File.separator + "xmergeinst");
-            if (tmpDir.exists())
-                return true;
-        }
-        
-        return tmpDir.mkdir();
-    }
-    
-    public static File getTmpDir() {
-        return tmpDir;
-    }
-    
-    public static void removeTmpDir() {
-        if ((tmpDir != null) && (tmpDir.exists())) {
-            File types = new File(tmpDir, "TypeDetection.xml");
-            if (types.exists()) 
-            {
-                if (types.delete())
-                {
-                    //System.out.println("Success:type");;
-                }
-            }
-            File java = new File(tmpDir, "Java.xml");
-            if (java.exists()) java.delete();
-            File rdb = new File(tmpDir, "applicat.rdb");
-            if (rdb.exists()) rdb.delete();
-            tmpDir.delete();
-            tmpDir = null;
-        }
-    }
-    
-    public static boolean copy(File inputFile, File outputFile) {
-        try {
-            FileInputStream in = new FileInputStream(inputFile);
-            FileOutputStream out = new FileOutputStream(outputFile);
-            byte buffer[] = new byte[4096];
-            int c;
-            
-            while ((c = in.read(buffer)) != -1) {
-                //out.write(buffer, 0, c);
-                out.write(buffer, 0, c);
-            }
-            
-            in.close();
-            out.close();
-        } catch (IOException eIO) {
-            return false;
-        }
-        
-        return true;
-    }
     
     public static File buildSversionLocation() throws IOException {
         File theFile = null;
         StringBuffer str = new StringBuffer();
-        String sep = System.getProperty("file.separator");
         str.append(System.getProperty("user.home"));
-        str.append(sep);
+        str.append(File.separator);
         StringBuffer thePath = new StringBuffer(str.toString());
         
         String os = System.getProperty("os.name");
@@ -80,7 +25,7 @@ public class InstUtil {
 
             if (!bSVersionInHomeDir) {
                 thePath.append("Application Data");
-                thePath.append(sep);
+                thePath.append(File.separator);
             } 
             theFile = findVersionFile(new File(thePath.toString()));
         } else if (os.indexOf("SunOS") != -1) {
@@ -99,7 +44,6 @@ public class InstUtil {
         {
             throw new IOException("Could not locate the OpenOffice settings file.\nAre you sure StarOffice is installed on your system?");
         }
-    System.out.println("buildSversionLocation: os " + os + " thePath " + thePath + " theFile " + theFile);
         return theFile;
     }
 
@@ -108,9 +52,8 @@ public class InstUtil {
     public static boolean hasNetbeansInstallation() {
     File theFile = null;
     StringBuffer str = new StringBuffer();
-        String sep = System.getProperty("file.separator");
         str.append(System.getProperty("user.home"));
-        str.append(sep);
+        str.append(File.separator);
     StringBuffer thePath = new StringBuffer(str.toString());    
     thePath.append(".netbeans");
     theFile = new File(thePath.toString());
@@ -122,9 +65,8 @@ public class InstUtil {
     public static boolean hasJeditInstallation() {
     File theFile = null;
     StringBuffer str = new StringBuffer();
-        String sep = System.getProperty("file.separator");
         str.append(System.getProperty("user.home"));
-        str.append(sep);
+        str.append(File.separator);
     StringBuffer thePath = new StringBuffer(str.toString());    
     thePath.append(".jedit");
     theFile = new File(thePath.toString());
@@ -139,9 +81,8 @@ public class InstUtil {
     Properties results = new Properties();
         
     StringBuffer str = new StringBuffer();
-        String sep = System.getProperty("file.separator");
         str.append(System.getProperty("user.home"));
-        str.append(sep);
+        str.append(File.separator);
     StringBuffer thePath = new StringBuffer(str.toString());
         
         String os = System.getProperty("os.name");
@@ -160,9 +101,9 @@ public class InstUtil {
 
     if ( thePath.toString().indexOf( ".netbeans" ) == -1 )
         return null;
-    else if ( new File( thePath.append( sep+"3.4"+sep ).toString() ).isDirectory() ) {
+    else if ( new File( thePath.append( File.separator+"3.4"+File.separator ).toString() ).isDirectory() ) {
         System.out.println( "Found NetBeans 3.4 on user home Directory " + thePath );
-        File netbeansLogFile = new File( thePath.toString() + sep + "system" + sep + "ide.log" );
+        File netbeansLogFile = new File( thePath.toString() + File.separator + "system" + File.separator + "ide.log" );
         if( netbeansLogFile.exists() ) {
             String installPath = getNetbeansInstallation( netbeansLogFile );
             File f = new File(installPath);
@@ -191,33 +132,18 @@ public class InstUtil {
     Properties results = new Properties();
         
     StringBuffer str = new StringBuffer();
-        String sep = System.getProperty("file.separator");
         str.append(System.getProperty("user.home"));
-        str.append(sep);
+        str.append(File.separator);
     StringBuffer thePath = new StringBuffer(str.toString());
         
         String os = System.getProperty("os.name");
         thePath.append(".jedit");
     //System.out.println( ".jedit path " + thePath );
     
-    /*
-    if (os.indexOf("Windows") != -1) {
-        //theFile = findVersionFile(new File(str.toString()));
-        thePath.append(".jedit");
-        //theFile = new File(thePath.toString());
-        } else if (os.indexOf("SunOS") != -1) {
-        thePath.append(".jedit");
-        //theFile = new File(thePath.toString());
-        } else if (os.indexOf("Linux") != -1) {
-        thePath.append(".jedit");
-        //theFile = new File(thePath.toString());
-    }
-    */
-
-    File jeditLogFile = new File( thePath.toString() + sep + "activity.log" );
+    File jeditLogFile = new File( thePath.toString() + File.separator + "activity.log" );
     if( jeditLogFile.exists() ) {
         String[] jeditDetails = getJeditInstallation( jeditLogFile );
-        System.out.println( "installPath (line 229) " + jeditDetails[0] );
+        System.out.println( "getJeditLocation ) " + jeditDetails[0] );
         File f = new File(jeditDetails[0]);
         results.put("jEdit "+jeditDetails[1], jeditDetails[0]);
         System.out.println( "jeditDetails[0] is " + jeditDetails[0]);
@@ -281,7 +207,7 @@ public class InstUtil {
         for (String s = reader.readLine(); s != null; s = reader.readLine()) {
         s.trim();
         if( s.indexOf( "jEdit home directory is" ) != -1 ) {
-            int pathStart = s.indexOf( "is /" ) + 3;
+            int pathStart = new String( "[message] jEdit: jEdit home directory is " ).length();
             //System.out.println( "pathStart " + pathStart );
             installPath = s.substring( pathStart, s.length() ) +File.separator;
             System.out.println( "installPath 1" + installPath );
@@ -387,7 +313,6 @@ public class InstUtil {
                         URL url = new URL("file://" + parts[1].trim());
             String opSys =System.getProperty("os.name");
             if (opSys.indexOf("Windows")!=-1){
-                System.out.println( "InstUtil URLDecoder path: " + URLDecoder.decode( url.getPath() ) );
                 String windowsPath = URLDecoder.decode( url.getPath() );
                 boolean firstSlash = true;
                 while( windowsPath.indexOf("/") != -1 ) {
@@ -404,7 +329,6 @@ public class InstUtil {
                 }
                 int lastSlash = windowsPath.lastIndexOf("\\");
                 windowsPath = windowsPath.substring( 0, lastSlash );
-                System.out.println( "InstUtil URLDecoder windowsPath " + windowsPath );
                 results.put( parts[0].trim(), windowsPath );
             }
             else {
