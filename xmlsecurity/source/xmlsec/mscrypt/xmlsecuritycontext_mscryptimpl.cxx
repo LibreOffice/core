@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsecuritycontext_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,11 @@ using ::rtl::OUString ;
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 
-XMLSecurityContext_MSCryptImpl :: XMLSecurityContext_MSCryptImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_pKeysMngr( NULL ) , m_xServiceManager( aFactory ) , m_xSecurityEnvironment( NULL ) {
+XMLSecurityContext_MSCryptImpl :: XMLSecurityContext_MSCryptImpl( const Reference< XMultiServiceFactory >& aFactory )
+    ://m_pKeysMngr( NULL ) ,
+     m_xServiceManager( aFactory ),
+     m_xSecurityEnvironment( NULL )
+{
     //Init xmlsec library
     if( xmlSecInit() < 0 ) {
         throw RuntimeException() ;
@@ -114,15 +118,65 @@ XMLSecurityContext_MSCryptImpl :: XMLSecurityContext_MSCryptImpl( const Referenc
 }
 
 XMLSecurityContext_MSCryptImpl :: ~XMLSecurityContext_MSCryptImpl() {
-    if( m_pKeysMngr != NULL ) {
-        xmlSecKeysMngrDestroy( m_pKeysMngr ) ;
-    }
-
     xmlDisableStreamInputCallbacks() ;
     xmlSecCryptoShutdown() ;
     xmlSecShutdown() ;
 }
 
+//i39448 : new methods
+sal_Int32 SAL_CALL XMLSecurityContext_MSCryptImpl::addSecurityEnvironment(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >& aSecurityEnvironment)
+    throw (::com::sun::star::security::SecurityInfrastructureException, ::com::sun::star::uno::RuntimeException)
+{
+    if( !aSecurityEnvironment.is() )
+    {
+        throw RuntimeException() ;
+    }
+
+    m_xSecurityEnvironment = aSecurityEnvironment;
+
+    return 0;
+}
+
+
+sal_Int32 SAL_CALL XMLSecurityContext_MSCryptImpl::getSecurityEnvironmentNumber(  )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    return 1;
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL
+    XMLSecurityContext_MSCryptImpl::getSecurityEnvironmentByIndex( sal_Int32 index )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    if (index == 0)
+    {
+        return m_xSecurityEnvironment;
+    }
+    else
+        throw RuntimeException() ;
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > SAL_CALL
+    XMLSecurityContext_MSCryptImpl::getSecurityEnvironment(  )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    return m_xSecurityEnvironment;
+}
+
+sal_Int32 SAL_CALL XMLSecurityContext_MSCryptImpl::getDefaultSecurityEnvironmentIndex(  )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    return 0;
+}
+
+void SAL_CALL XMLSecurityContext_MSCryptImpl::setDefaultSecurityEnvironmentIndex( sal_Int32 nDefaultEnvIndex )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    //dummy
+}
+
+#if 0
 /* XXMLSecurityContext */
 void SAL_CALL XMLSecurityContext_MSCryptImpl :: setSecurityEnvironment( const Reference< XSecurityEnvironment >& aSecurityEnvironment ) throw( com::sun::star::security::SecurityInfrastructureException ) {
     HCERTSTORE hkeyStore ;
@@ -240,6 +294,7 @@ Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContext_MSCryptImpl :: get
 {
     return  m_xSecurityEnvironment ;
 }
+#endif
 
 /* XInitialization */
 void SAL_CALL XMLSecurityContext_MSCryptImpl :: initialize( const Sequence< Any >& aArguments ) throw( Exception, RuntimeException ) {
@@ -291,6 +346,7 @@ Reference< XSingleServiceFactory > XMLSecurityContext_MSCryptImpl :: impl_create
     return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
 }
 
+#if 0
 /* XUnoTunnel */
 sal_Int64 SAL_CALL XMLSecurityContext_MSCryptImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier )
 throw (RuntimeException)
@@ -328,4 +384,5 @@ XMLSecurityContext_MSCryptImpl* XMLSecurityContext_MSCryptImpl :: getImplementat
 xmlSecKeysMngrPtr XMLSecurityContext_MSCryptImpl :: keysManager() throw( Exception, RuntimeException ) {
     return m_pKeysMngr ;
 }
+#endif
 

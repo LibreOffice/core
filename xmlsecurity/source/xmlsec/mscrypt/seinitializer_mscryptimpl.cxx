@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seinitializer_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:21 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
             return NULL;
         }
 
-        xSecCtx->setSecurityEnvironment( xSecEnv ) ;
+        xSecCtx->setDefaultSecurityEnvironmentIndex(xSecCtx->addSecurityEnvironment( xSecEnv )) ;
         return xSecCtx;
     }
     catch( cssu::Exception& )
