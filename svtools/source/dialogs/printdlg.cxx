@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-04 16:39:56 $
+ *  last change: $Author: obo $ $Date: 2002-07-09 09:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,7 +409,7 @@ IMPL_LINK( PrintDialog, ImplBrowseHdl, void*, EMPTYARG )
             xInit->initialize( aServiceType );
 
 #ifdef UNX
-            if( ! Application::IsRemote() )
+            if( ! Application::IsRemoteServer() )
                 // sensible only for Unix local
             {
                 // add PostScript and PDF
