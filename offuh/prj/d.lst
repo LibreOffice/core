@@ -23,6 +23,8 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\document
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\drawing
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\embed
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\form
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\form\binding
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\form\validation
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\formula
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\frame
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\i18n
@@ -136,6 +138,10 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider
 ..\%__SRC%\inc\com\sun\star\embed\*.hpp %_DEST%\inc%_EXT%\com\sun\star\embed\*.hpp
 ..\%__SRC%\inc\com\sun\star\form\*.hdl %_DEST%\inc%_EXT%\com\sun\star\form\*.hdl
 ..\%__SRC%\inc\com\sun\star\form\*.hpp %_DEST%\inc%_EXT%\com\sun\star\form\*.hpp
+..\%__SRC%\inc\com\sun\star\form\binding\*.hdl %_DEST%\inc%_EXT%\com\sun\star\form\binding\*.hdl
+..\%__SRC%\inc\com\sun\star\form\binding\*.hpp %_DEST%\inc%_EXT%\com\sun\star\form\binding\*.hpp
+..\%__SRC%\inc\com\sun\star\form\validation\*.hdl %_DEST%\inc%_EXT%\com\sun\star\form\validation\*.hdl
+..\%__SRC%\inc\com\sun\star\form\validation\*.hpp %_DEST%\inc%_EXT%\com\sun\star\form\validation\*.hpp
 ..\%__SRC%\inc\com\sun\star\formula\*.hdl %_DEST%\inc%_EXT%\com\sun\star\formula\*.hdl
 ..\%__SRC%\inc\com\sun\star\formula\*.hpp %_DEST%\inc%_EXT%\com\sun\star\formula\*.hpp
 ..\%__SRC%\inc\com\sun\star\frame\*.hdl %_DEST%\inc%_EXT%\com\sun\star\frame\*.hdl
