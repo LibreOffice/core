@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: gt $ $Date: 2002-06-11 08:03:53 $
+ *  last change: $Author: dr $ $Date: 2002-07-23 10:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,10 +174,10 @@ SvxNumberPreviewImpl::~SvxNumberPreviewImpl()
 #************************************************************************/
 
 void SvxNumberPreviewImpl::NotifyChange( const String& rPrevStr,
-                                         const Color& rColor )
+                                         const Color* pColor )
 {
     aPrevStr = rPrevStr;
-    aPrevCol = rColor;
+    aPrevCol = pColor ? *pColor : GetSettings().GetStyleSettings().GetWindowTextColor();
     Invalidate();
     Update();
 }
@@ -504,8 +504,6 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     USHORT                      nFmtLbSelPos    = 0;
     LanguageType                eLangType       = LANGUAGE_DONTKNOW;
     SvxDelStrgs                 aFmtEntryList;
-    String                      aPrevString;
-    Color                       aPrevColor;
     SvxNumberValueType          eValType        = SVX_VALUE_TYPE_UNDEFINED;
     double                      nValDouble      = 0;
     String                      aValString;
@@ -638,8 +636,10 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
 
     FillCurrencyBox();
 
+    String aPrevString;
+    Color* pDummy = NULL;
     pNumFmtShell->GetInitSettings( nCatLbSelPos, eLangType, nFmtLbSelPos,
-                                   aFmtEntryList, aPrevString, aPrevColor );
+                                   aFmtEntryList, aPrevString, pDummy );
 
     aLbCurrency.SelectEntryPos((USHORT)pNumFmtShell->GetCurrencySymbol());
 
@@ -720,7 +720,7 @@ void SvxNumberFormatTabPage::Obstructing()
     aEdLeadZeroes   .SetText( String() );
     aBtnNegRed      .Check( FALSE );
     aBtnThousand    .Check( FALSE );
-    aWndPreview     .NotifyChange( String(), Color() );
+    aWndPreview     .NotifyChange( String() );
 
     aLbCategory     .SelectEntryPos( 0 );
     aEdFormat       .SetText( String() );
@@ -944,11 +944,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( SvxDelStrgs& rEntries )
     String*     pEntry;
     String      aTmpString;
     String      aTmpCatString;
-    String      aPreviewString;
-    Color       aPreviewColor;
     Font        aFont=aLbCategory.GetFont();
-    Font        a2Font;
-    Font        a3Font;
     double      nVal=0;
     BOOL        bFLAG=FALSE;
     USHORT      i = 0;
@@ -983,7 +979,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( SvxDelStrgs& rEntries )
                                 {
                                     aTmpString=*pEntry;
                                     aPrivCat=pNumFmtShell->GetCategory4Entry(0);
-                                    aLbFormat.InsertFontEntry(aTmpString,aFont);
+                                    aLbFormat.InsertFontEntry( aTmpString, aFont );
                                 }
                                 break;
 
@@ -998,10 +994,10 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( SvxDelStrgs& rEntries )
             aPrivCat=pNumFmtShell->GetCategory4Entry(i);
             if(aPrivCat!=CAT_TEXT)
             {
-                aPreviewString=GetExpColorString(&aPreviewColor, *pEntry,aPrivCat);
-                a2Font=aLbFormat.GetFont();
-                a2Font.SetColor(aPreviewColor);
-                aLbFormat.InsertFontEntry(aPreviewString,a2Font); //@21.10.97
+                Color* pPreviewColor = NULL;
+                String aPreviewString( GetExpColorString( pPreviewColor, *pEntry, aPrivCat ) );
+                Font aEntryFont( aLbFormat.GetFont() );
+                aLbFormat.InsertFontEntry( aPreviewString, aEntryFont, pPreviewColor );
             }
             else
             {
@@ -1187,8 +1183,6 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
 {
     SvxDelStrgs aEntryList;
     short       nFmtLbSelPos = 0;
-    String      aPreviewString;
-    Color       aPreviewColor;
     short       nTmpCatPos;
 
     if(bOneAreaFlag)
@@ -1254,11 +1248,7 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
                     aFtComment.SetText(aLbCategory.GetEntry(1));
                 }
             }
-
-            pNumFmtShell->FormatChanged( (USHORT)nFmtLbSelPos,
-                                         aPreviewString,
-                                         aPreviewColor );
-            aWndPreview.NotifyChange( aPreviewString, aPreviewColor );
+            ChangePreviewText( (USHORT)nFmtLbSelPos );
         }
 
     }
@@ -1286,7 +1276,7 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
         if ( bUpdateEdit )
         {
             aEdFormat.SetText( String() );
-            aWndPreview.NotifyChange( String(), aPreviewColor );
+            aWndPreview.NotifyChange( String() );
         }
     }
 }
@@ -1382,8 +1372,6 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         USHORT  nSelPos = (USHORT) aLbFormat.GetSelectEntryPos();
         String  aFormat = aLbFormat.GetSelectEntry();
         String  aComment;
-        String  aPreviewString;
-        Color   aPreviewColor;
         SvxDelStrgs aEntryList;
 
         short       nFmtLbSelPos = nSelPos;
@@ -1402,11 +1390,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         {
             if(!aEdFormat.HasFocus()) aEdFormat.SetText( aFormat );
             aFtComment.SetText(aComment);
-            pNumFmtShell->FormatChanged( nSelPos,
-                                         aPreviewString,
-                                         aPreviewColor );
-
-            aWndPreview.NotifyChange( aPreviewString, aPreviewColor );
+            ChangePreviewText( nSelPos );
         }
 
         REMOVE_DONTKNOW() // ggF. UI-Enable
@@ -1536,9 +1520,6 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, ImageButton*, pIB)
                 if ( bAdded && (nFmtLbSelPos != SELPOS_NONE) )
                 {
                     // Alles klar
-                    String  aPreviewString;
-                    Color   aPreviewColor;
-
                     if(bOneAreaFlag)                  //@@ ???
                         SetCategory(0);
                     else
@@ -1561,11 +1542,7 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, ImageButton*, pIB)
                     //aEdComment.SetText(String()); //@@ ???
                     aEdComment.SetText(aLbCategory.GetEntry(1));    //String fuer Benutzerdefiniert
                                                                     //holen
-
-                    pNumFmtShell->FormatChanged( (USHORT)nFmtLbSelPos,
-                                                 aPreviewString,
-                                                 aPreviewColor );
-                    aWndPreview.NotifyChange( aPreviewString, aPreviewColor );
+                    ChangePreviewText( (USHORT)nFmtLbSelPos );
                 }
             }
         }
@@ -1579,8 +1556,6 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, ImageButton*, pIB)
     }
     else if(pIB==&aIbRemove)
     {
-        String      aPreviewString;
-        Color       aPreviewColor;
         String      aFormat = aEdFormat.GetText();
         SvxDelStrgs aEntryList;
         USHORT      nCatLbSelPos = 0;
@@ -1610,10 +1585,7 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, ImageButton*, pIB)
 
                 aLbFormat.SelectEntryPos( (USHORT)nFmtLbSelPos );
                 aEdFormat.SetText( aFormat );
-                pNumFmtShell->FormatChanged( (USHORT)nFmtLbSelPos,
-                                             aPreviewString,
-                                             aPreviewColor );
-                aWndPreview.NotifyChange( aPreviewString, aPreviewColor );
+                ChangePreviewText( (USHORT)nFmtLbSelPos );
             }
             else
             {
@@ -1663,8 +1635,6 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, ImageButton*, pIB)
 IMPL_LINK( SvxNumberFormatTabPage, EditHdl_Impl, Edit*, pEdFormat )
 {
     ULONG nCurKey = NUMKEY_UNDEFINED;
-    String  aPreviewString;                                             //@ 22.09.97
-    Color   aPreviewColor;
 
     if ( aEdFormat.GetText().Len() == 0 )
     {
@@ -1677,11 +1647,7 @@ IMPL_LINK( SvxNumberFormatTabPage, EditHdl_Impl, Edit*, pEdFormat )
     {
         String aFormat = aEdFormat.GetText();
         //aFtComment.SetText(String());
-
-        pNumFmtShell->MakePreviewString(aFormat,aPreviewString,         //@ 22.09.97
-                                        aPreviewColor);
-
-        aWndPreview.NotifyChange( aPreviewString, aPreviewColor );
+        MakePreviewText( aFormat );
 
         if ( pNumFmtShell->FindEntry( aFormat, &nCurKey ) )
         {
@@ -1746,8 +1712,6 @@ IMPL_LINK( SvxNumberFormatTabPage, OptHdl_Impl, void *, pOptCtrl )
         || ((CheckBox*)    pOptCtrl == &aBtnNegRed)
         || ((CheckBox*)    pOptCtrl == &aBtnThousand) )
     {
-        String        aPreviewString;
-        Color         aPreviewColor;
         String        aFormat;
         BOOL          bThousand     =    aBtnThousand.IsEnabled()
                                       && aBtnThousand.IsChecked();
@@ -1767,12 +1731,7 @@ IMPL_LINK( SvxNumberFormatTabPage, OptHdl_Impl, void *, pOptCtrl )
 
         aEdFormat.SetText( aFormat );
         //aFtComment.SetText(String());
-
-        pNumFmtShell->MakePreviewString( aFormat,
-                                         aPreviewString,
-                                         aPreviewColor );
-
-        aWndPreview.NotifyChange( aPreviewString, aPreviewColor );
+        MakePreviewText( aFormat );
 
         if ( pNumFmtShell->FindEntry( aFormat ) )
         {
@@ -1847,17 +1806,10 @@ IMPL_LINK( SvxNumberFormatTabPage, LostFocusHdl_Impl, Edit *, pEd)
 #*
 #************************************************************************/
 
-String SvxNumberFormatTabPage::GetExpColorString(Color *aPreviewColor,
-                                                     String aFormatStr,
-                                                     short      nTmpCatPos)
+String SvxNumberFormatTabPage::GetExpColorString(
+        Color*& rpPreviewColor, const String& rFormatStr, short nTmpCatPos)
 {
-    Color       aTmpCol;
-    String      aPreviewString;
-    String      aTmpString;
-    double      nVal=0;
-
-    aTmpString=aFormatStr;
-
+    double nVal = 0;
     switch (nTmpCatPos)
     {
         case CAT_CURRENCY:      nVal=SVX_NUMVAL_CURRENCY; break;
@@ -1880,12 +1832,25 @@ String SvxNumberFormatTabPage::GetExpColorString(Color *aPreviewColor,
         default:                nVal=0;break;
     }
 
-    pNumFmtShell->MakePrevStringFromVal( aTmpString,                //@ 19.09.97
-                                         aPreviewString,
-                                         aTmpCol,nVal );
-
-    *aPreviewColor=aTmpCol;
+    String aPreviewString;
+    pNumFmtShell->MakePrevStringFromVal( rFormatStr, aPreviewString, rpPreviewColor, nVal );
     return aPreviewString;
+}
+
+void SvxNumberFormatTabPage::MakePreviewText( const String& rFormat )
+{
+    String aPreviewString;
+    Color* pPreviewColor = NULL;
+    pNumFmtShell->MakePreviewString( rFormat, aPreviewString, pPreviewColor );
+    aWndPreview.NotifyChange( aPreviewString, pPreviewColor );
+}
+
+void SvxNumberFormatTabPage::ChangePreviewText( USHORT nPos )
+{
+    String aPreviewString;
+    Color* pPreviewColor = NULL;
+    pNumFmtShell->FormatChanged( nPos, aPreviewString, pPreviewColor );
+    aWndPreview.NotifyChange( aPreviewString, pPreviewColor );
 }
 
 long SvxNumberFormatTabPage::PreNotify( NotifyEvent& rNEvt )

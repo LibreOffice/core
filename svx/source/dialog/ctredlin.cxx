@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-17 17:33:27 $
+ *  last change: $Author: dr $ $Date: 2002-07-23 10:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@
 #include <dialmgr.hxx>
 #include "ctredlin.hrc"
 #include "ctredlin.hxx"
-#include "fontlb.hxx"
 #include "helpid.hrc"
 
 //============================================================================

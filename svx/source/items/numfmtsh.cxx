@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2002-03-14 12:46:02 $
+ *  last change: $Author: dr $ $Date: 2002-07-23 10:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,10 @@
 
 #ifndef _SVX_LANGTAB_HXX //autogen
 #include <langtab.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 #include "numfmtsh.hxx"
@@ -265,7 +269,7 @@ void SvxNumberFormatShell::LanguageChanged( LanguageType eLangType,
 
 void SvxNumberFormatShell::FormatChanged( sal_uInt16  nFmtLbPos,
                                           String& rPreviewStr,
-                                          Color&  rFontColor )
+                                          Color*& rpFontColor )
 {
     //nCurFormatKey = pCurFmtTable->GetKey( pCurFmtTable->GetObject( nFmtLbPos ) );
 
@@ -275,7 +279,7 @@ void SvxNumberFormatShell::FormatChanged( sal_uInt16  nFmtLbPos,
 
         if(nCurFormatKey!=NUMBERFORMAT_ENTRY_NOT_FOUND)
         {
-            GetPreviewString_Impl( rPreviewStr, rFontColor );
+            GetPreviewString_Impl( rPreviewStr, rpFontColor );
         }
         else if(nCurCategory==NUMBERFORMAT_CURRENCY)
         {
@@ -283,7 +287,7 @@ void SvxNumberFormatShell::FormatChanged( sal_uInt16  nFmtLbPos,
             {
                 //nCurFormatKey=nFmtLbPos;
                 MakePrevStringFromVal(*aCurrencyFormatList[nFmtLbPos],
-                                    rPreviewStr,rFontColor,nValNum);
+                                    rPreviewStr,rpFontColor,nValNum);
             }
         }
     }
@@ -486,9 +490,9 @@ void SvxNumberFormatShell::GetOptions( const String&    rFormat,
 
 void SvxNumberFormatShell::MakePreviewString( const String& rFormatStr,
                                               String&       rPreviewStr,
-                                              Color&        rFontColor )
+                                              Color*&       rpFontColor )
 {
-    Color* pColor = NULL;
+    rpFontColor = NULL;
 
     ULONG nExistingFormat = pFormatter->GetEntryKey( rFormatStr, eCurLanguage );
     if ( nExistingFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
@@ -496,7 +500,7 @@ void SvxNumberFormatShell::MakePreviewString( const String& rFormatStr,
         //  real preview - not implemented in NumberFormatter for text formats
 
         pFormatter->GetPreviewString( rFormatStr, nValNum, rPreviewStr,
-                                      &pColor, eCurLanguage );
+                                      &rpFontColor, eCurLanguage );
     }
     else
     {
@@ -507,16 +511,11 @@ void SvxNumberFormatShell::MakePreviewString( const String& rFormatStr,
                             ( aValStr.Len() && ( pFormatter->GetType(nExistingFormat) & NUMBERFORMAT_TEXT ) ) );
         if ( bUseText )
             pFormatter->GetOutputString( aValStr, nExistingFormat,
-                                         rPreviewStr, &pColor );
+                                         rPreviewStr, &rpFontColor );
         else
             pFormatter->GetOutputString( nValNum, nExistingFormat,
-                                         rPreviewStr, &pColor );
+                                         rPreviewStr, &rpFontColor );
     }
-
-    if ( pColor )
-        rFontColor = *pColor;
-    else
-        rFontColor = Color( COL_BLACK );
 }
 
 // -----------------------------------------------------------------------
@@ -577,12 +576,13 @@ sal_Bool SvxNumberFormatShell::FindEntry( const String& rFmtString, sal_uInt32* 
 
 // -----------------------------------------------------------------------
 
-void SvxNumberFormatShell::GetInitSettings( sal_uInt16&       nCatLbPos,
-                                            LanguageType& rLangType,
-                                            sal_uInt16&       nFmtLbSelPos,
-                                            SvStrings&    rFmtEntries,
-                                            String&       rPrevString,
-                                            Color&        rPrevColor )
+void SvxNumberFormatShell::GetInitSettings(
+        sal_uInt16&     nCatLbPos,
+        LanguageType&   rLangType,
+        sal_uInt16&     nFmtLbSelPos,
+        SvStrings&      rFmtEntries,
+        String&         rPrevString,
+        Color*&         rpPrevColor )
 {
     // -------------------------------------------------------------------
     // Vorbedingung: Zahlenformatierer gefunden
@@ -612,7 +612,7 @@ void SvxNumberFormatShell::GetInitSettings( sal_uInt16&       nCatLbPos,
     DBG_ASSERT( nSelPos != SELPOS_NONE, "Leere Formatliste!" );
 
     nFmtLbSelPos = (nSelPos != SELPOS_NONE) ? (sal_uInt16)nSelPos : 0;
-    GetPreviewString_Impl( rPrevString, rPrevColor );
+    GetPreviewString_Impl( rPrevString, rpPrevColor );
 }
 
 // -----------------------------------------------------------------------
@@ -737,7 +737,6 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( SvStrings& rList,short nS
     String          aNewFormNInfo;
     String          aPrevString;
     String          a2PrevString;
-    Color           aColor;
 
     short           nMyCat      = SELPOS_NONE;
     short           nIq=0;
@@ -784,7 +783,6 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( SvStrings& rList,short n
     String          aNewFormNInfo;
     String          aPrevString;
     String          a2PrevString;
-    Color           aColor;
 
     short           nMyCat      = SELPOS_NONE;
     short           nIq=0;
@@ -869,7 +867,6 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( SvStrings& rList,short nS
     String          aNewFormNInfo;
     String          aPrevString;
     String          a2PrevString;
-    Color           aColor;
 
     nCurCurrencyEntryPos=0;
 
@@ -965,7 +962,6 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
     String          aNewFormNInfo;
     String          aPrevString;
     String          a2PrevString;
-    Color           aColor;
     short           nMyCat = SELPOS_NONE;
     short           nIq=0;
 
@@ -1155,8 +1151,6 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( SvStrings& rList, sal_uInt16 
     String          aNewFormNInfo;
     String          aPrevString;
     String          a2PrevString;
-    Color           aColor;
-
 
     short           nMyCat      = SELPOS_NONE;
     short           nIq=0;
@@ -1204,26 +1198,18 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( SvStrings& rList, sal_uInt16 
 
 // -----------------------------------------------------------------------
 
-void SvxNumberFormatShell::GetPreviewString_Impl( String& rString,
-                                                  Color& rColor )
+void SvxNumberFormatShell::GetPreviewString_Impl( String& rString, Color*& rpColor )
 {
-    Color* pColor = NULL;
+    rpColor = NULL;
 
     //  #50441# if a string was set in addition to the value, use it for text formats
     BOOL bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
                         ( aValStr.Len() && ( pFormatter->GetType(nCurFormatKey) & NUMBERFORMAT_TEXT ) ) );
 
     if ( bUseText )
-        pFormatter->GetOutputString( aValStr, nCurFormatKey,
-                                     rString, &pColor );
+        pFormatter->GetOutputString( aValStr, nCurFormatKey, rString, &rpColor );
     else
-        pFormatter->GetOutputString( nValNum, nCurFormatKey,
-                                     rString, &pColor );
-
-    if ( pColor )
-        rColor = *pColor;
-    else
-        rColor = Color( COL_BLACK );
+        pFormatter->GetOutputString( nValNum, nCurFormatKey, rString, &rpColor );
 }
 
 // -----------------------------------------------------------------------
@@ -1311,20 +1297,16 @@ void SvxNumberFormatShell::CategoryToPos_Impl( short nCategory, sal_uInt16& rPos
 #*
 #************************************************************************/
 
-void SvxNumberFormatShell::MakePrevStringFromVal( const String& rFormatStr,
-                                                String& rPreviewStr,
-                                                Color&  rFontColor,
-                                                double  nValue)
+void SvxNumberFormatShell::MakePrevStringFromVal(
+        const String& rFormatStr,
+        String& rPreviewStr,
+        Color*& rpFontColor,
+        double  nValue)
 {
-    Color* pColor = NULL;
-
-    pFormatter->GetPreviewString( rFormatStr, nValue, rPreviewStr,
-                                  &pColor, eCurLanguage );
-    if ( pColor )
-        rFontColor = *pColor;
-    else
-        rFontColor = Color( COL_BLACK );
+    rpFontColor = NULL;
+    pFormatter->GetPreviewString( rFormatStr, nValue, rPreviewStr, &rpFontColor, eCurLanguage );
 }
+
 /*************************************************************************
 #*  Member:     GetComment4Entry                            Datum:30.10.97
 #*------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontlb.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: dr $ $Date: 2002-07-23 10:50:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,395 +59,140 @@
  *
  ************************************************************************/
 
-#ifndef _SV_IMAGE_HXX //autogen
-#include <vcl/image.hxx>
+#ifndef SVX_FONTLB_HXX
+#include "fontlb.hxx"
 #endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 #pragma hdrstop
 
-#include "fontlb.hxx"
+// ============================================================================
 
-DBG_NAME(SvLBoxFontString);
+DBG_NAME( SvLBoxFontString );
 
-/*************************************************************************
-#* Funktionen der in die SvxFontListBox eingefuegten Items
-#************************************************************************/
-
-
-/*************************************************************************
-#*  Member:     SvLBoxFontString                            Datum:23.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvLBoxFontString
-#*
-#*  Funktion:   Konstruktor der Klasse SvLBoxFontString
-#*
-#*  Input:      Box- Entry,Flags, Text fuer Anzeige, Schrift
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
-SvLBoxFontString::SvLBoxFontString( SvLBoxEntry*pEntry,USHORT nFlags,const XubString& rStr,
-                                    const Font& aFont)
-
-: SvLBoxString( pEntry, nFlags, rStr )
+SvLBoxFontString::SvLBoxFontString() :
+    SvLBoxString()
 {
-    DBG_CTOR(SvLBoxFontString,0);
-    aPrivatFont=aFont;
-    SetText( pEntry, rStr );
+    DBG_CTOR( SvLBoxFontString, 0 );
 }
 
-/*************************************************************************
-#*  Member:     SvLBoxFontString                            Datum:23.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvLBoxFontString
-#*
-#*  Funktion:   Default Konstruktor der Klasse SvLBoxFontString
-#*
-#*  Input:      ---
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
-SvLBoxFontString::SvLBoxFontString()
-: SvLBoxString()
+SvLBoxFontString::SvLBoxFontString(
+        SvLBoxEntry* pEntry, sal_uInt16 nFlags, const XubString& rString,
+        const Font& rFont, const Color* pColor ) :
+    SvLBoxString( pEntry, nFlags, rString ),
+    maFont( rFont ),
+    mbUseColor( pColor != NULL )
 {
-    DBG_CTOR(SvLBoxFontString,0);
+    DBG_CTOR( SvLBoxFontString, 0 );
+    SetText( pEntry, rString );
+    if( pColor )
+        maFont.SetColor( *pColor );
 }
-
-/*************************************************************************
-#*  Member:     ~SvLBoxFontString                           Datum:23.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvLBoxFontString
-#*
-#*  Funktion:   Destruktor der Klasse SvLBoxFontString
-#*
-#*  Input:      ---
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
 
 SvLBoxFontString::~SvLBoxFontString()
 {
-    DBG_DTOR(SvLBoxFontString,0);
+    DBG_DTOR( SvLBoxFontString, 0 );
 }
 
-
-/*************************************************************************
-#*  Member:     SvLBoxFontString                            Datum:23.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvLBoxFontString
-#*
-#*  Funktion:   Erzeugt einen neuen SvLBoxFontString
-#*
-#*  Input:      ---
-#*
-#*  Output:     SvLBoxFontString
-#*
-#************************************************************************/
 
 SvLBoxItem* SvLBoxFontString::Create() const
 {
-    DBG_CHKTHIS(SvLBoxFontString,0);
+    DBG_CHKTHIS( SvLBoxFontString, 0 );
     return new SvLBoxFontString;
 }
 
-
-
-/*************************************************************************
-#*  Member:     SvLBoxFontString                            Datum:23.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvLBoxFontString
-#*
-#*  Funktion:   Zeichenroutine des SvLBoxFontString. Gezeichnet wird
-#*              der entsprechende Text mit der eingestellten Schriftart
-#*              im Ausgabe- Device.
-#*
-#*  Input:      Position, Ausgabe- Device, Flag fuer Selection,
-#*              Zeiger auf den Eintrag
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
-void SvLBoxFontString::Paint( const Point& rPos, SvLBox& rDev,
-                             USHORT nFlags, SvLBoxEntry* pEntry )
+void SvLBoxFontString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry )
 {
-    Font aFont=rDev.GetFont();
-    Font a2Font=aPrivatFont;
-    Color aColor;
-    if(nFlags & SVLISTENTRYFLAG_SELECTED)
+    DBG_CHKTHIS( SvLBoxFontString, 0 );
+    Font aOldFont( rDev.GetFont() );
+    Font aNewFont( maFont );
+    bool bSel = (nFlags & SVLISTENTRYFLAG_SELECTED) != 0;
+//  if( !mbUseColor )               // selection gets font color, if available
+    if( !mbUseColor || bSel )       // selection always gets highlight color
     {
-        aColor=a2Font.GetColor();
-        aColor.SetRed(~aColor.GetRed());
-        aColor.SetGreen(~aColor.GetGreen());
-        aColor.SetBlue(~aColor.GetBlue());
-        a2Font.SetColor(aColor);
-        rDev.SetFont(a2Font);
-    }
-    else
-    {
-        rDev.SetFont(aPrivatFont);
-    }
-    SvLBoxString::Paint(rPos,rDev,nFlags,pEntry );
-    rDev.SetFont(aFont);
-}
-
-
-/*************************************************************************
-#*  Member:     SvLBoxFontString                            Datum:23.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvLBoxFontString
-#*
-#*  Funktion:   Ermittelt und stellt die Ausgabegroesse in der View ein.
-#*
-#*  Input:      Zeiger auf die View, Eintrag, Anzeigedaten
-#*
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
-void SvLBoxFontString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
-    SvViewDataItem* pViewData)
-{
-    DBG_CHKTHIS(SvLBoxFontString,0);
-    Font aFont= pView->GetFont();
-    pView->SetFont(aPrivatFont);
-    SvLBoxString::InitViewData(pView,pEntry,pViewData);
-    pView->SetFont(aFont);
-}
-
-/*************************************************************************
-#* Listbox mit Schrifteinstellung
-#************************************************************************/
-
-
-/*************************************************************************
-#*  Member:     SvxFontListBox                          Datum:20.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxFontListBox
-#*
-#*  Funktion:   Konstruktor der Klasse SvxFontListBox. Die Klasse dient
-#*              der Darstellung von Strings in der entsprechenden
-#*              Schriftart.
-#*
-#*  Input:      Parent-Window, WinBits, min. Winkel, max. Winkel
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
-SvxFontListBox::SvxFontListBox(Window* pParent,const ResId& aResID)
-:SvTabListBox(pParent,aResID)
-{
-    pPrivatVDev=new VirtualDevice;
-    aStandardFont=GetFont();
-    Size aWinSize=GetOutputSizePixel();
-    bSettingFont=FALSE;
-    aStandardFont.SetTransparent(TRUE);
-    aStandardFont.SetColor(Color(COL_BLUE));
-    if(pPrivatVDev!=NULL)
-    {
-        pPrivatVDev->SetOutputSizePixel(aWinSize);
-        pPrivatVDev->SetFont(aStandardFont);
-    }
-    Color aCol=GetBackground().GetColor();
-    aStandardFont.SetColor(aCol);
-    SetFont(aStandardFont);
-    aEntryFont=aStandardFont;
-}
-
-/*************************************************************************
-#*  Member:     SvxFontListBox                              Datum:20.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxFontListBox
-#*
-#*  Funktion:   Destruktor der Klasse SvxFontListBox. Gibt den
-#*              Speicher, der fuer das VDevice angelegt wurde,
-#*              wieder frei.
-#*
-#*  Input:      ---
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
-SvxFontListBox::~SvxFontListBox()
-{
-    delete pPrivatVDev;
-}
-
-
-/*************************************************************************
-#*  Member:     InsertFontEntry                             Datum:20.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxColorTabListBox
-#*
-#*  Funktion:   Erzeugt aus dem uebergebenen String eine Bitmap
-#*              und fuegt diese Bitmap in die ListBox ein.
-#*
-#*  Input:      String, Font, Position
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
-void SvxFontListBox::InsertFontEntry( const String& rString,Font aActorFont)
-{
-    Point aPos(0,0);
-    bSettingFont=TRUE;
-    aEntryFont=aActorFont;
-    InsertEntry( rString);
-}
-
-/*************************************************************************
-#*  Member:     SelectEntryPos                              Datum:20.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxFontListBox
-#*
-#*  Funktion:   Schaltet an der Position nPos, die Selektion
-#*              an oder aus.
-#*
-#*  Input:      Position, Selektion: An/Aus
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
-void SvxFontListBox::SelectEntryPos( USHORT nPos, BOOL bSelect)
-{
-    SvLBoxEntry* pEntry=GetEntry(nPos);
-    if(pEntry!=NULL)
-    {
-        Select( pEntry,bSelect);
-        ShowEntry(pEntry );
-    }
-}
-
-/*************************************************************************
-#*  Member:     GetSelectEntryPos                           Datum:20.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxFontListBox
-#*
-#*  Funktion:   Liefert die Position der ersten Selektion
-#*              zurück.
-#*
-#*  Input:      ---
-#*
-#*  Output:     Position
-#*
-#************************************************************************/
-
-ULONG  SvxFontListBox::GetSelectEntryPos()
-{
-    SvLBoxEntry*    pSvLBoxEntry=FirstSelected();
-    ULONG nSel=LIST_APPEND;
-
-    if(pSvLBoxEntry!=NULL)
-    {
-        nSel=GetModel()->GetAbsPos( pSvLBoxEntry );
+        const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
+        aNewFont.SetColor( bSel ? rSett.GetHighlightTextColor() : rSett.GetFieldTextColor() );
     }
 
-    return nSel;
+    rDev.SetFont( aNewFont );
+    SvLBoxString::Paint( rPos, rDev, nFlags, pEntry );
+    rDev.SetFont( aOldFont );
 }
 
-/*************************************************************************
-#*  Member:     GetSelectEntry                              Datum:20.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxFontListBox
-#*
-#*  Funktion:   Liefert den ersten Eintrag der Selektion
-#*              zurück.
-#*
-#*  Input:      ---
-#*
-#*  Output:     Position
-#*
-#************************************************************************/
-
-XubString  SvxFontListBox::GetSelectEntry()
+void SvLBoxFontString::InitViewData( SvLBox* pView, SvLBoxEntry* pEntry, SvViewDataItem* pViewData )
 {
-    return GetEntryText(GetSelectEntryPos());
+    DBG_CHKTHIS( SvLBoxFontString, 0 );
+    Font aOldFont( pView->GetFont() );
+    pView->SetFont( maFont );
+    SvLBoxString::InitViewData( pView, pEntry, pViewData);
+    pView->SetFont( aOldFont );
 }
 
 
-/*************************************************************************
-#*  Member:     SetNoSelection                          Datum:20.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxFontListBox
-#*
-#*  Funktion:   Hebt eine bestehende Selektierung auf.
-#*
-#*  Input:      ---
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
+// ============================================================================
+
+SvxFontListBox::SvxFontListBox( Window* pParent, const ResId& rResId ) :
+    SvTabListBox( pParent, rResId ),
+    maStdFont( GetFont() ),
+    mbUseFont( false )
+{
+    maStdFont.SetTransparent( TRUE );
+    maEntryFont = maStdFont;
+}
+
+void SvxFontListBox::InsertFontEntry( const String& rString, const Font& rFont, const Color* pColor )
+{
+    mbUseFont = true;           // InitEntry() will use maEntryFont
+    maEntryFont = rFont;        // font to use in InitEntry() over InsertEntry()
+    mpEntryColor = pColor;      // color to use in InitEntry() over InsertEntry()
+    InsertEntry( rString );
+    mbUseFont = false;
+}
+
+void SvxFontListBox::SelectEntryPos( sal_uInt16 nPos, bool bSelect )
+{
+    SvLBoxEntry* pEntry = GetEntry( nPos );
+    if( pEntry )
+    {
+        Select( pEntry, bSelect );
+        ShowEntry( pEntry );
+    }
+}
 
 void SvxFontListBox::SetNoSelection()
 {
-    SelectAll( FALSE,TRUE );
+    SelectAll( FALSE, TRUE );
 }
 
-
-/*************************************************************************
-#*  Member:     SvxFontListBox                              Datum:20.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxFontListBox
-#*
-#*  Funktion:   Ueberladene Funktion der TreeListBox. Fuegt einen
-#*              neuen SvLBoxFontString ein.
-#*
-#*  Input:      ---
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
-void SvxFontListBox::InitEntry( SvLBoxEntry* pEntry, const XubString& aStr,
-                               const Image& aCollEntryBmp, const Image& aExpEntryBmp)
+sal_uInt32 SvxFontListBox::GetSelectEntryPos() const
 {
-    if(bSettingFont==TRUE)
+    SvLBoxEntry* pSvLBoxEntry = FirstSelected();
+    return pSvLBoxEntry ? GetModel()->GetAbsPos( pSvLBoxEntry ) : LIST_ENTRY_NOTFOUND;
+}
+
+XubString SvxFontListBox::GetSelectEntry() const
+{
+    return GetEntryText( GetSelectEntryPos() );
+}
+
+void SvxFontListBox::InitEntry(
+        SvLBoxEntry* pEntry, const XubString& rEntryText,
+        const Image& rCollImg, const Image& rExpImg )
+{
+    if( mbUseFont )
     {
-        bSettingFont=FALSE;
-
-        SvLBoxButton* pButton;
-        SvLBoxFontString* pString;
-        SvLBoxContextBmp* pContextBmp;
-
         if( nTreeFlags & TREEFLAG_CHKBTN )
-        {
-            pButton= new SvLBoxButton( pEntry,0,pCheckButtonData );
-            pEntry->AddItem( pButton );
-        }
-
-        pContextBmp= new SvLBoxContextBmp( pEntry,0, aCollEntryBmp,aExpEntryBmp,
-                                         SVLISTENTRYFLAG_EXPANDED);
-        pEntry->AddItem( pContextBmp );
-
-        pString = new SvLBoxFontString( pEntry, 0, aStr,aEntryFont);
-        pEntry->AddItem( pString );
+            pEntry->AddItem( new SvLBoxButton( pEntry, 0, pCheckButtonData ) );
+        pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, rCollImg, rExpImg, SVLISTENTRYFLAG_EXPANDED ) );
+        pEntry->AddItem( new SvLBoxFontString( pEntry, 0, rEntryText, maEntryFont, mpEntryColor ) );
     }
     else
-    {
-        SvTreeListBox::InitEntry( pEntry, aStr, aCollEntryBmp, aExpEntryBmp);
-    }
+        SvTreeListBox::InitEntry( pEntry, rEntryText, rCollImg, rExpImg );
 }
 
+
+// ============================================================================
 

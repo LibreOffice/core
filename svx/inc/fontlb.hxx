@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontlb.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:56 $
+ *  last change: $Author: dr $ $Date: 2002-07-23 10:47:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,61 +62,91 @@
 #ifndef SVX_FONTLB_HXX
 #define SVX_FONTLB_HXX
 
-#ifndef _SVTABBX_HXX //autogen
+#ifndef _SVTABBOX_HXX
 #include <svtools/svtabbx.hxx>
 #endif
-
-#ifndef _SV_VIRDEV_HXX //autogen
+#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
 #endif
 
 
-// Klasse fuer die Darstellung von schriftabhaengigen Strings
+// ============================================================================
+
+/** A list box string item which stores its text and font. */
 class SvLBoxFontString : public SvLBoxString
 {
-    private:
-
-    Font            aPrivatFont;
+private:
+    Font                        maFont;     /// The font used by this item.
+    bool                        mbUseColor; /// true = use font color, false = default listbox color.
 
 public:
-                    SvLBoxFontString( SvLBoxEntry*,USHORT nFlags,const XubString& rStr,
-                                    const Font& aFont);
-                    SvLBoxFontString();
-                    ~SvLBoxFontString();
+                                SvLBoxFontString();
+                                SvLBoxFontString(
+                                    SvLBoxEntry* pEntry,
+                                    sal_uInt16 nFlags,
+                                    const XubString& rString,
+                                    const Font& rFont,
+                                    const Color* pColor = NULL );
+
+    virtual                     ~SvLBoxFontString();
+
+    /** Creates a new empty list box item. */
+    virtual SvLBoxItem*         Create() const;
 
     void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
-    void            Paint( const Point&, SvLBox& rDev, USHORT nFlags,SvLBoxEntry* );
-    SvLBoxItem*     Create() const;
+
+    /** Paints this entry to the specified position, using the own font settings. */
+    void                        Paint(
+                                    const Point& rPos,
+                                    SvLBox& rDev,
+                                    sal_uInt16 nFlags,
+                                    SvLBoxEntry* pEntry );
 };
 
-// Listbox mit schriftabhaengiger Darstellung
 
+// ============================================================================
+
+/** A list box supporting formatted string entries. */
 class SvxFontListBox : public SvTabListBox
 {
-    private:
+private:
+    Font                        maStdFont;      /// Used for entries without specific font.
 
-        VirtualDevice   *pPrivatVDev;
-        Font            aStandardFont;
-        Font            aEntryFont;
-        BOOL            bSettingFont;
+    // The following members are used to store additional parameters for InitEntry().
+    Font                        maEntryFont;    /// Current entry font used in InitEntry().
+    const Color*                mpEntryColor;   /// Current entry color used in InitEntry().
+    bool                        mbUseFont;      /// true = Use maEntryFont/mpEntryColor in InitEntry().
 
-    protected:
+public:
+                                SvxFontListBox( Window* pParent, const ResId& rResId );
 
-        virtual void    InitEntry(SvLBoxEntry*, const XubString&,const Image&,const Image&);
+    /** Inserts a list entry and sets the font used for this entry.
+        @param pColor  The font color. NULL = use default listbox text color. */
+    void                        InsertFontEntry(
+                                    const String& rString, const Font& rFont, const Color* pColor = NULL );
 
-    public:
+    /** Selects/deselects an entry specified by its position in the list box. */
+    void                        SelectEntryPos( sal_uInt16 nPos, bool bSelect = true );
+    /** Removes a selection. */
+    void                        SetNoSelection();
 
-        SvxFontListBox(Window* pParent,const ResId& aResID);
-        ~SvxFontListBox();
+    /** Returns the position of the entry currently selected or LIST_ENTRY_NOTFOUND. */
+    sal_uInt32                  GetSelectEntryPos() const;
+    /** Returns the text of the selected entry or an empty string. */
+    XubString                   GetSelectEntry() const;
 
-        void    InsertFontEntry( const String& rString, Font aActorFont);
-
-        void        SelectEntryPos( USHORT nPos, BOOL bSelect=TRUE);
-        ULONG       GetSelectEntryPos();
-        XubString   GetSelectEntry();
-        void        SetNoSelection();
-
+protected:
+    /** Initializes a new SvLBoxFontString entry.
+        @descr  Uses current value of maEntryFont to set the entry font (if mbUseFont is true). */
+    virtual void                InitEntry(
+                                    SvLBoxEntry* pEntry,
+                                    const XubString& rEntryText,
+                                    const Image& rCollImg,
+                                    const Image& rExpImg );
 };
 
 
+// ============================================================================
+
 #endif
+
