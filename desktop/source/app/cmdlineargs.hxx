@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:39:27 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,7 @@ class CommandLineArgs
         // Special analyzed states (does not match directly to a command line parameter!)
         sal_Bool                IsPrinting() const;
         sal_Bool                IsEmpty() const;
+        sal_Bool                IsEmptyOrAcceptOnly() const;
 
     private:
         struct GroupDefinition
@@ -225,6 +226,7 @@ class CommandLineArgs
         rtl::OUString           m_aStrParams[ CMD_STRINGPARAM_COUNT ];      // Stores string parameters
         sal_Bool                m_aStrSetParams[ CMD_STRINGPARAM_COUNT ];   // Stores if string parameters are provided on cmdline
         sal_Bool                m_bEmpty;                                   // indicates an empty command line
+        sal_Int16               m_nArgumentCount;                           // Number of Args
         mutable ::osl::Mutex    m_aMutex;
 
         // static definition for groups where only one member can be true
