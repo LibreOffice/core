@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:51:32 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ String SCSTR_APPLICATION
     Text[ polish ] = "%PRODUCTNAME Calc 6.0";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME Calc 4.0";
     Text[ japanese ] = "%PRODUCTNAME Calc 6.0";
-    Text[ korean ] = "StarCalc 5.0";
+    Text[ korean ] = "%PRODUCTNAME Calc 6.0";
     Text[ chinese_simplified ] = "%PRODUCTNAME Calc 6.0";
     Text[ chinese_traditional ] = "%PRODUCTNAME Calc 6.0";
     Text[ turkish ] = "StarCalc 5.0";
@@ -200,7 +200,7 @@ String SCSTR_LONG_SCDOC_NAME
     Text[ polish ] = "%PRODUCTNAME 6.0 - Arkusz kalkulacyjny";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Tabelle";
     Text[ japanese ] = "%PRODUCTNAME 6.0 •\\vZ";
-    Text[ korean ] = "%PRODUCTNAME 5.0 ½ΊΗΑ·Ήµε½ΓΖ®";
+    Text[ korean ] = "%PRODUCTNAME 6.0 ½ΊΗΑ·Ήµε½ΓΖ®";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Ή¤Χχ±ν";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 ¤u§@ªν";
     Text[ turkish ] = "%PRODUCTNAME 5.0 tablosu";
@@ -232,7 +232,7 @@ String SCSTR_50_LONG_DOCNAME
     Text[ turkish ] = "%PRODUCTNAME 5.0 tablosu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 5.0 Hoja de cαlculo";
-    Text[ finnish ] = "%PRODUCTNAME 5.0 Tabelle";
+    Text[ finnish ] = "%PRODUCTNAME 5.0 -laskentataulukko";
 };
 String SCSTR_40_LONG_DOCNAME
 {
@@ -254,7 +254,7 @@ String SCSTR_40_LONG_DOCNAME
     Text[ chinese_traditional ] = "%PRODUCTNAME 4.0 ¤u§@ªν";
     Text[ arabic ] = "ΜΟζα %PRODUCTNAME 4.0";
     Text[ greek ] = "%PRODUCTNAME 4.0 - Πίνακας";
-    Text[ korean ] = "PRODUCTNAME 4.0½ΊΗΑ·Ήµε½ΓΖ®";
+    Text[ korean ] = "PRODUCTNAME 4.0 ½ΊΗΑ·Ήµε½ΓΖ®";
     Text[ turkish ] = "StarCalc 4.0 tablosu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 4.0 Hoja de cαlculo";
@@ -2058,7 +2058,7 @@ String SCSTR_CLIP_STRING
     Text[ chinese_traditional ] = "¥Ό®ζ¦΅ªΊ¤ε¦r";
     Text[ arabic ] = "δΥ ΫνΡ γδΣή";
     Text[ greek ] = "Μη μορφοποιημένο κείμενο";
-    Text[ korean ] = "ΖχΈΛµΗΑφΎΚΐΊ ΕΨ½ΊΖ®";
+    Text[ korean ] = "ΖχΈΛµΗΑφ ΎΚΐΊ ΕΨ½ΊΖ®";
     Text[ turkish ] = "Formatlanmamύώ metin";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto no formateado";
@@ -2523,7 +2523,7 @@ String SCSTR_CLPBRD_CLEAR
     Text[ chinese_traditional ] = "¦b°Ε¶KΓ―¤Ί―d¦s¤j¶qΈκ®Ζ΅C\n±z­nΕύ¨δ¥LªΊΐ³¥Ξµ{§Η¤]¨Ο¥Ξ³o¨ΗΈκ®Ζ΅H";
     Text[ arabic ] = "αήΟ ήγΚ ΘΝέΩ ίγνΗΚ ίΘνΡΙ γδ ΗαΘνΗδΗΚ έν ΗαΝΗέΩΙ.\nεα ΚΡνΟ ζΦΪ γΝΚζνΗΚ ΗαΝΗέΩΙ ΚΝΚ ΚΥΡέ ΚΨΘνήΗΚ ΓΞΡμΏ";
     Text[ greek ] = "Έχετε αποθηκεύσει μεγάλη ποσότητα δεδομένων στο πρόχειρο.\nΘέλετε τα δεδομένα αυτά να είναι διαθέσιμα και για άλλες εφαρμογές;";
-    Text[ korean ] = "»ηΏλΐΪ΄Β΅΅Ε¬Έ³ΊΈµεΏ΅ ΈΉΐΊ ·®ΐΗ µ¥ΐΜΕΝΈ¦ ΐϊΐεΗΟΏ΄½ΐ΄Ο΄Ω .\nΕ¬Έ³ΊΈµεΐΗ ³»Ώλΐ» ΄ΩΈ¥ ΐΐΏλΗΑ·Ξ±Χ·¥Ώ΅Ό­µµ »ηΏλ°΅΄ΙΗΟ°Τ ΗΟ°Ϊ½ΐ΄Ο±ξ?";
+    Text[ korean ] = "»ηΏλΐΪ΄Β Ε¬Έ³ΊΈµεΏ΅ ΈΉΐΊ ΎηΐΗ µ¥ΐΜΕΝΈ¦ ΐϊΐεΗΟΏ΄½ΐ΄Ο΄Ω.\nΕ¬Έ³ΊΈµεΐΗ ³»Ώλΐ» ΄ΩΈ¥ ΐΐΏλΗΑ·Ξ±Χ·¥Ώ΅Ό­µµ »ηΏλ°΅΄ΙΗΟ°Τ ΗΟ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "Panoya bόyόk miktarda veri aktardύnύz.\nPano iηeriπini baώka uygulamalarda kullanmak istiyor musunuz?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ha copiado una gran cantidad de datos en el portapapeles.\nΏDesea que el contenido del portapapeles estι disponible para otras aplicaciones?";
@@ -2907,7 +2907,7 @@ String SCSTR_FORMULA_AUTOCORRECTION
     Text[ chinese_traditional ] = "%PRODUCTNAME Calc µo²{Ώι¤JªΊ¤½¦΅§t¦³¤@­ΣΏω»~΅C\n±z±µ¨ό¤U­±ªΊ­Χ§ο«ΨΔ³΅H\n\n";
     Text[ arabic ] = "%PRODUCTNAME Calc ζΜΟ ΞΨΓ έν ΗαΥνΫΙ ΗαΚν ήγΚ ΘΕΟΞΗαεΗ.\nεα ΚΡνΟ ήΘζα ΗαΚΥΝνΝ ΗαγρήΚΡΝ ΓΟδΗεΏ\n\n";
     Text[ greek ] = "Το %PRODUCTNAME Calc εντόπισε ένα σφάλμα στον τύπο που εισάγατε.\nΘέλετε να γίνει η αποδοχή της προτεινόμενης διόρθωσης που αναφέρεται παρακάτω;\n\n";
-    Text[ korean ] = "%PRODUCTNAME Calc°΅ ΐΤ·ΒµΘ Όφ½ΔΏ΅Ό­ Ώΐ·ωΈ¦ Γ£ΎΖ³Β½ΐ΄Ο΄Ω.\n΄Ωΐ½°ϊ°°ΐΊ Α¦ΎΘµΘ ΌφΑ¤ΐ» ΉήΎΖµιΐΜ½Γ°Ϊ½ΐ΄Ο±ξ ?\n\n";
+    Text[ korean ] = "%PRODUCTNAME Calc°΅, ΐΤ·ΒµΘ Όφ½ΔΏ΅Ό­ Ώΐ·ωΈ¦ Γ£ΎΖ³Β½ΐ΄Ο΄Ω.\n΄Ωΐ½°ϊ °°ΐΊ Α¦ΎΘµΘ ΌφΑ¤ΐ» ΉήΎΖµιΐΜ½Γ°Ϊ½ΐ΄Ο±ξ?\n\n";
     Text[ turkish ] = "%PRODUCTNAME Calc, girilen formόlde bir hata buldu.\nAώaπύda φnerilen dόzeltmeyi kabul etmek istiyor musunuz?\n\n";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME Calc encontrσ un error en la fσrmula dada.\nΏDesea aceptar la correcciσn sugerida abajo?\n\n";
