@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:57:32 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,24 +380,24 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         if (nSlotId == SID_INSERT_DIAGRAM)
         {
             aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                          SvGlobalName(SO3_SCH_CLASSID_60), aStor);
+                          SvGlobalName(SO3_SCH_CLASSID), aStor);
         }
         else if (nSlotId == SID_ATTR_TABLE)
         {
             aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                          SvGlobalName(SO3_SC_CLASSID_60), aStor);
+                          SvGlobalName(SO3_SC_CLASSID), aStor);
         }
 #ifdef STARIMAGE_AVAILABLE
         else if (nSlotId == SID_INSERT_IMAGE)
         {
             aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                          SvGlobalName(SO3_SIM_CLASSID_60), aStor);
+                          SvGlobalName(SO3_SIM_CLASSID), aStor);
         }
 #endif
         else if (nSlotId == SID_INSERT_MATH)
         {
             aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                          SvGlobalName(SO3_SM_CLASSID_60), aStor);
+                          SvGlobalName(SO3_SM_CLASSID), aStor);
         }
 
         if ( aIPObj.Is() )
@@ -477,19 +477,7 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
             if ( pNameItem )
             {
                 SvGlobalName aName = pNameItem->GetValue();
-                const SotFactory* pFact = SvFactory::Find( aName );
-                if ( pFact )
-                {
-                    SvStorageRef aStor = new SvStorage( aEmptyStr );
-                    aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( aName,aStor );
-                }
-                else
-                {
-                    SvStorageRef aStor = new SvStorage( FALSE, aEmptyStr );
-                    String aFileName;
-                    BOOL bOk;
-                    aIPObj = SvOutPlaceObject::InsertObject( NULL, &aStor, bOk, aName, aFileName );
-                }
+                aIPObj = SvInPlaceObject::CreateObject( aName );
             }
             else
             {
@@ -544,7 +532,7 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                 if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
                 {
                     // create plugin, initialize, etc.
-                    SvFactory * pPlugIn = SvFactory::GetDefaultPlugInFactory();
+                    SvFactory *pPlugIn = (SvFactory*) SvPlugInObject::ClassFactory();
                     SvStorageRef aStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
                     SvPlugInObjectRef xObj = &pPlugIn->CreateAndInit( *pPlugIn, aStor );
                     xObj->SetPlugInMode( (USHORT)PLUGIN_EMBEDED );
