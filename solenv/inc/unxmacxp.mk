@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-23 17:59:20 $
+#   last change: $Author: mh $ $Date: 2002-04-23 20:49:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,6 +60,9 @@
 #
 #*************************************************************************
 
+# DARWIN_VERSION holds the Darwin version in the format: 000000. For example,
+# if the Darwin version is 1.3.7, DARWIN_VERSION will be set to 010307.
+DARWIN_VERSION=$(shell -/bin/sh -c "uname -r | sed 's/\./ /g' | xargs printf %2.2i%2.2i%2.2i")  
 
 # mk file for unxmacxp
 ASM=
@@ -69,24 +72,6 @@ LINKOUTPUT_FILTER=
 
 # _PTHREADS is needed for the stl
 CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY -DSTLPORT_VERSION=400 -D_USE_NAMESPACE=1
-
-# Workaround for Mac OS X duplicate symbol plugin bug
-.IF "$(SYMBOLPREFIX)"==""
-SYMBOLPREFIX=$(TARGET)
-.ENDIF
-.IF "$(SYMBOLPREFIX)"!=""
-CDEFS+=-Dcomponent_getImplementationEnvironment=lib$(SYMBOLPREFIX)component_getImplementationEnvironment \
-  -Dcomponent_writeInfo=lib$(SYMBOLPREFIX)component_writeInfo \
-  -Dcomponent_getFactory=lib$(SYMBOLPREFIX)component_getFactory \
-  -Dcomponent_getDescriptionFunc=lib$(SYMBOLPREFIX)component_getDescriptionFunc \
-  -Duno_initEnvironment=lib$(SYMBOLPREFIX)uno_initEnvironment \
-  -Duno_ext_getMapping=lib$(SYMBOLPREFIX)uno_ext_getMapping
-.ENDIF
-.IF "$(PRJNAME)"=="registry"
-CDEFS+=-DinitRegistry_Api=lib$(REGLIB:s/-l//)initRegistry_Api \
-  -DinitRegistryTypeReader_Api=lib$(REGLIB:s/-l//)initRegistryTypeReader_Api \
-  -DinitRegistryTypeWriter_Api=lib$(REGLIB:s/-l//)initRegistryTypeWriter_Api
-.ENDIF
 
 # Name of library where static data members are initialized
 STATICLIBNAME=static$(DLLPOSTFIX)
@@ -102,14 +87,14 @@ CC=cc
 cc=cc
 objc=cc
 CFLAGS=-c $(INCLUDE)
-CFLAGSCC=-pipe -traditional-cpp
+CFLAGSCC=-pipe -traditional-cpp -fno-common
 
 OBJCFLAGS=-no-precomp
 
 CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
-CFLAGSCXX=-pipe -fno-for-scope -fpermissive -fno-operator-names -fno-coalesce
+CFLAGSCXX=-pipe -fno-for-scope -fpermissive -fno-operator-names -fno-coalesce -fno-common
 
 CFLAGSOBJGUIST=-fPIC
 CFLAGSOBJCUIST=-fPIC
@@ -135,21 +120,35 @@ CFLAGSNOOPT=
 .ENDIF
 CFLAGSOUTOBJ=-o
 
-SOLARVERSHLLIBS=$(shell -/bin/sh -c "ls $(SOLARLIBDIR)$/*$(DLLPOST) $(LB)$/*$(DLLPOST) $(MISC)$/*$(DLLPOST) 2>/dev/null | grep -E -v 'lib\w+static'")
+# GrP needed in vcl/unx
+CDEFS+=           -DNO_AUDIO -DPRINTER_DUMMY
+
+SOLARVERSHLLIBS=$(shell -/bin/sh -c "ls $(SOLARLIBDIR)$/*$(DLLPOST) $(SOLARLIBDIR)$/*$(DLLPOST).[0-9] $(LB)$/*$(DLLPOST) $(LB)$/*$(DLLPOST).[0-9] $(MISC)$/*$(DLLPOST) $(MISC)$/*$(DLLPOST).[0-9] 2>/dev/null | grep -E -v 'lib\w+static' | grep -v cppuhelper")
 .IF "$(STLPORT4)"!=""
-SOLARVERSHLLIBS+=$(shell -/bin/sh -c "ls $(STLPORT4)$/lib$/*$(DLLPOST) 2>/dev/null")
+SOLARVERSHLLIBS+=$(shell -/bin/sh -c "ls $(STLPORT4)$/lib$/*$(DLLPOST) $(STLPORT4)$/lib$/*$(DLLPOST).[0-9] 2>/dev/null")
+.ENDIF
+# GrP mega-hack! no cppuhelper for cppuhelper
+.IF "$(PRJNAME)"!="cppuhelper"
+SOLARVERSHLLIBS+=$(shell -/bin/sh -c "ls $(SOLARLIBDIR)$/*$(DLLPOST) $(SOLARLIBDIR)$/*$(DLLPOST).[0-9] $(LB)$/*$(DLLPOST) $(LB)$/*$(DLLPOST).[0-9] $(MISC)$/*$(DLLPOST) $(MISC)$/*$(DLLPOST).[0-9] 2>/dev/null | grep -E -v 'lib\w+static' | grep cppuhelper")
 .ENDIF
 
+# GrP remove -U options (can't use for two-level)
 LINK=cc
-LINKFLAGS=-dynamic -framework System -framework CoreFoundation -lcc_dynamic -lstdc++ \
+LINKFLAGS=-dynamic  -framework System -framework CoreFoundation -lcc_dynamic -lstdc++ \
   $(foreach,i,$(SOLARVERSHLLIBS) -dylib_file @executable_path$/$(i:f):$i) \
   -L$(MISC)
-LINKFLAGSAPPGUI=-Wl,-u,__objcInit
-LINKFLAGSSHLGUI=-dynamiclib -install_name '@executable_path$/$(@:f)' \
-  -Wl,-U,___progname -Wl,-U,_environ
+LINKFLAGSAPPGUI=
+.IF "$(UNIXVERSIONNAMES)"!=""
+LINKFLAGSSHLGUI=-dynamiclib -install_name '@executable_path$/$(@:f:b:b)'
+.ELSE
+LINKFLAGSSHLGUI=-dynamiclib -install_name '@executable_path$/$(@:f)'
+.ENDIF
 LINKFLAGSAPPCUI=-Wl,-u,__objcInit
-LINKFLAGSSHLCUI=-dynamiclib -install_name '@executable_path$/$(@:f)' \
-  -Wl,-U,___progname -Wl,-U,_environ
+.IF "$(UNIXVERSIONNAMES)"!=""
+LINKFLAGSSHLCUI=-dynamiclib -install_name '@executable_path$/$(@:f:b:b)'
+.ELSE
+LINKFLAGSSHLCUI=-dynamiclib -install_name '@executable_path$/$(@:f)'
+.ENDIF
 LINKFLAGSTACK=
 LINKFLAGSPROF=
 LINKFLAGSDEBUG=-g
