@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbptypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:28 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@ namespace dbp
     DECLARE_STL_VECTOR( String, StringArray );
     DECLARE_STL_STDKEY_SET( String, StringBag );
     DECLARE_STL_STDKEY_MAP( sal_uInt32, String, MapInt2String );
-    DECLARE_STL_VECTOR( sal_uInt16, UInt16Array );
 
 //.........................................................................
 }   // namespace dbp
