@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: th $ $Date: 2001-07-02 21:51:17 $
+ *  last change: $Author: th $ $Date: 2001-07-06 13:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1037,9 +1037,9 @@ static char const aImplSubsSansUnicode[] = "andalesansui;arialunicodems;lucidaun
 static char const aImplSubsSans[] = "albany;arial;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussansl;nimbussans";
 static char const aImplSubsSerif[] = "thorndale;timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;garamond;garamondmt;palatino";
 static char const aImplSubsFixed[] = "cumberland;couriernew;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol";
-static char const aImplSubsStarSymbol[] = "starsymbol;starbats;wingdings;zapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl";
-static char const aImplSubsDingBats[] = "starsymbol;zapfdingbats;monotypesorts";
-static char const aImplSubsSymbol[] = "starsymbol;symbol;standardsymbols;standardsymbolsl";
+static char const aImplSubsStarSymbol[] = "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl";
+static char const aImplSubsDingBats[] = "starsymbol;zapfdingbats;monotypesorts;opensymbol";
+static char const aImplSubsSymbol[] = "starsymbol;symbol;standardsymbols;standardsymbolsl;opensymbol";
 
 static char const aImplSubsAndaleSans[] = "andalesans;verdana;trebuchetms";
 static char const aImplSubsSansNarrow[] = "arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed";
@@ -1408,6 +1408,8 @@ static ImplFontNameAttr const aImplFontNameList[] =
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
 {   "onyx",                 "losangeles", aImplSubsSansNarrow, aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_SPECIAL },
+{   "opensymbol",           "starsymbol", aImplSubsSansUnicode, aImplSubsStarSymbol, NULL, aImplMSSubsArialUnicodeMS, NULL, NULL,
+                            WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "outlook",              aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "palacescript",         aImplSubsPalaceScript, aImplSubsZapfChancery, aImplSubsComic, NULL, NULL, NULL, aImplHTMLSubsCursive,
@@ -1496,7 +1498,7 @@ static ImplFontNameAttr const aImplFontNameList[] =
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "starmath",             aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "starsymbol",           aImplSubsSansUnicode, aImplSubsStarSymbol, NULL, NULL, aImplMSSubsArialUnicodeMS, NULL, NULL,
+{   "starsymbol",           "opensymbol", aImplSubsSansUnicode, aImplSubsStarSymbol, NULL, aImplMSSubsArialUnicodeMS, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "symbol",               aImplSubsSymbol, aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
@@ -1779,7 +1781,7 @@ static char const aImplDefSansUI[] = "Interface User;WarpSans;Geneva;Tahoma;MS S
 static char const aImplDefSans[] = "Albany;Arial;Helvetica;Lucida;Geneva;Helmet;SansSerif";
 static char const aImplDefSerif[] = "Thorndale;Times New Roman;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif";
 static char const aImplDefFixed[] = "Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced";
-static char const aImplDefSymbol[] = "StarSymbol;Andale Sans UI;Arial Unicode MS;StarBats;Zapf Dingbats;WingDings;Symbol";
+static char const aImplDefSymbol[] = "StarSymbol;OpenSymbol;Andale Sans UI;Arial Unicode MS;StarBats;Zapf Dingbats;WingDings;Symbol";
 static char const aImplDef_CJK_JP_Mincho[] = "HG Mincho Light J;MS Mincho;HG Mincho J;HG Mincho L;HG Mincho;Mincho;MS PMincho";
 static char const aImplDef_CJK_JP_Gothic[] = "HG Mincho Light J;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS PGothic";
 static char const aImplDef_CJK_JP_UIGothic[] = "Andale Sans UI;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS PGothic";
@@ -2212,7 +2214,11 @@ static StringCompare ImplCompareFontDataWithoutSize( const ImplFontData* pEntry1
     else if ( pEntry1->meItalic > pEntry2->meItalic )
         return COMPARE_GREATER;
 
-    return pEntry1->maStyleName.CompareTo( pEntry2->maStyleName );
+    StringCompare eCompare = pEntry1->maName.CompareTo( pEntry2->maName );
+    if ( eCompare == COMPARE_EQUAL )
+        eCompare = pEntry1->maStyleName.CompareTo( pEntry2->maStyleName );
+
+    return eCompare;
 }
 
 // -----------------------------------------------------------------------
@@ -3233,6 +3239,10 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
             nMatch = 0;
             nHeightMatch = 0;
             nWidthMatch = 0;
+
+            if ( (rName == pCurFontData->maName) ||
+                 rName.EqualsIgnoreCaseAscii( pCurFontData->maName ) )
+                nMatch += 240000;
 
             if ( pCompareStyleName &&
                  pCurFontData->maStyleName.EqualsIgnoreCaseAscii( pCompareStyleName ) )
