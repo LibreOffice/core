@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cunooptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-17 16:15:48 $
+ *  last change: $Author: jsc $ $Date: 2001-04-23 13:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,7 @@ sal_Bool CunoOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                     m_options["-U"] = OString("");
                     break;
+/*
                 case 'L':
                     if (av[i][2] != '\0')
                     {
@@ -234,6 +235,7 @@ sal_Bool CunoOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                     }
                     m_options["-L"] = OString("");
                     break;
+*/
                 case 'C':
                     if (av[i][2] != '\0')
                     {
@@ -338,8 +340,9 @@ OString CunoOptions::prepareHelp()
     help += "                 Example: 'com.sun.star.uno.XInterface' is a valid type.\n";
     help += "    -B<name>   = name specifies the base node. All types are searched under this\n";
     help += "                 node. Default is the root '/' of the registry files.\n";
-    help += "    -L         = getCppuType function with a known leak.\n";
-    help += "    -C         = getCppuType function keeps comprehensive type information.\n";
+    help += "    -U         = activate the generating of a getCppuType_<name> function.\n";
+//  help += "    -L         = getCppuType function with a known leak.\n";
+    help += "    -C         = getCppuType_<name> function keeps comprehensive type information.\n";
     help += "    -G         = generate only target files which does not exists.\n";
     help += "    -Gc        = generate only target files which content will be changed.\n";
     help += prepareVersion();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cunotype.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-20 13:58:54 $
+ *  last change: $Author: jsc $ $Date: 2001-04-23 13:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2696,7 +2696,7 @@ sal_Bool ModuleType::dumpDeclaration(FileStream& o)
 
             o << "static const ";
             dumpType(o, fieldType);
-            o << " " << fieldName << " = ";
+            o << " " << m_name << "_" << fieldName << " = ";
             dumpConstantValue(o, i);
             o << ";\n";
         }
