@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:57:09 $
+ *  last change: $Author: nn $ $Date: 2000-09-29 11:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,6 @@
 #include <com/sun/star/sheet/CellFlags.hpp>
 #include <com/sun/star/sheet/FormulaResult.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
 #include "autoform.hxx"
@@ -4657,18 +4656,7 @@ void SAL_CALL ScCellObj::insertControlCharacter( const uno::Reference<text::XTex
                                     throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-
-//  GetUnoText().insertControlCharacter(xRange, nControlCharacter, bAbsorb);
-
-    //! Diese Aenderung stattdessen in unotext.cxx:
-
-    if ( nControlCharacter == text::ControlCharacter::PARAGRAPH_BREAK )
-    {
-        String aText( (sal_Unicode)13 );    // '\r' geht auf'm Mac nicht
-        insertString( xRange, aText, bAbsorb );
-    }
-    else
-        throw lang::IllegalArgumentException();
+    GetUnoText().insertControlCharacter(xRange, nControlCharacter, bAbsorb);
 }
 
 void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRange >& xRange,
