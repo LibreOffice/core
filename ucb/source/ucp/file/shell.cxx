@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-04 11:01:07 $
+ *  last change: $Author: abi $ $Date: 2001-07-04 14:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,82 +990,61 @@ shell::move( sal_Int32 CommandId,
              const sal_Int32 NameClash )
     throw()
 {
+    osl::FileBase::RC nError;
     rtl::OUString dstUnqPath( dstUnqPathIn );
 
     if( dstUnqPath == srcUnqPath )    // Nothing left to be done
         return;
 
-
-    // Determine, whether we are moving a file or a folder
-
-    osl::DirectoryItem aItem;
-    osl::FileStatus aStatus( FileStatusMask_Type );
-    osl::FileBase::RC err = osl::DirectoryItem::get( srcUnqPath,aItem );
-
-    if( err != osl::FileBase::E_None )
+    switch( NameClash )
     {
-        installError( CommandId,
-                      TASKHANDLING_TRANSFER_BY_MOVE_SOURCE,
-                      err );
-        return;
-    }
-
-    err = aItem.getFileStatus( aStatus );
-    if( err != osl::FileBase::E_None )
-    {
-        installError( CommandId,
-                      TASKHANDLING_TRANSFER_BY_MOVE_SOURCESTAT,
-                      err );
-        return;
-    }
-
-    sal_Bool isDocument;
-    if( aStatus.isValid( FileStatusMask_Type ) )
-        isDocument = aStatus.getFileType() == osl::FileStatus::Regular;
-    else
-    {
-        installError( CommandId,
-                      TASKHANDLING_TRANSFER_BY_MOVE_FILETYPE,
-                      err );
-        return;
-    }
-
-
-    err = osl_File_move( srcUnqPath,dstUnqPath,true );
-
-    if( err == osl::FileBase::E_EXIST )
-    {
-        switch( NameClash )
+        case NameClash::KEEP:
         {
-            case NameClash::KEEP:
-                return;
-                break;
-            case NameClash::OVERWRITE:
+            nError = osl_File_move( srcUnqPath,dstUnqPath,true );
+            if( nError != osl::FileBase::E_None && nError != osl::FileBase::E_EXIST )
             {
-                sal_Int32 IsWhat = isDocument ? -1 : 1;
-//              don't call shell::remove because that function will send a deleted hint
-//              for dstUnqPath which isn't right. dstUnqPath will exist again after the
-//              call to osl::File::move. call osl::File::remove() instead.
-//              remove( CommandId,dstUnqPath,IsWhat );
-                osl::File::remove( dstUnqPath );
-                err = osl_File_move( srcUnqPath,dstUnqPath );
+                installError( CommandId,
+                              TASKHANDLING_KEEPERROR_FOR_MOVE,
+                              nError );
+                return;
             }
             break;
-            case NameClash::RENAME:
+        }
+        case NameClash::OVERWRITE:
+        {
+//           don't call shell::remove because that function will send a deleted hint
+//           for dstUnqPath which isn't right. dstUnqPath will exist again after the
+//           call to osl::File::move. call osl::File::remove() instead.
+//           remove( CommandId,dstUnqPath,IsWhat );
+            osl::File::remove( dstUnqPath );    // Will do nothing if file does not exist
+            nError = osl_File_move( srcUnqPath,dstUnqPath );
+            if( nError != osl::FileBase::E_None )
+            {
+                installError( CommandId,
+                              TASKHANDLING_OVERWRITE_FOR_MOVE,
+                              nError );
+                return;
+            }
+            break;
+        }
+        case NameClash::RENAME:
+        {
+            rtl::OUString newDstUnqPath;
+            nError = osl_File_move( srcUnqPath,dstUnqPath,true );
+            if( nError == osl::FileBase::E_EXIST )
             {
                 // "invent" a new valid title.
 
                 sal_Int32 nPos = -1;
                 sal_Int32 nLastDot = dstUnqPath.lastIndexOf( '.' );
                 sal_Int32 nLastSlash = dstUnqPath.lastIndexOf( '/' );
-                if ( ( nLastSlash < nLastDot ) // dot is part of last(!) path segment
-                     && ( nLastSlash != ( nLastDot - 1 ) ) ) // file name does not start with a dot
-                       nPos = nLastDot;
+                if( ( nLastSlash < nLastDot )                  // dot is part of last(!) path segment
+                    && ( nLastSlash != ( nLastDot - 1 ) ) )    // file name does not start with a dot
+                    nPos = nLastDot;
                 else
-                       nPos = dstUnqPath.getLength();
+                    nPos = dstUnqPath.getLength();
 
                 sal_Int32 nTry = 0;
-                rtl::OUString newDstUnqPath;
 
                 do
                 {
@@ -1076,33 +1055,78 @@ shell::move( sal_Int32 CommandId,
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
 
-                    err = osl_File_move( srcUnqPath,newDstUnqPath,true );
+                    nError = osl_File_move( srcUnqPath,newDstUnqPath,true );
                 }
-                while ( ( err == osl::FileBase::E_EXIST ) && ( nTry < 10000 ) );
-
-                if ( err )
-                {
-                    VOS_ENSURE( sal_False,
-                                "shell::move - Unable to resolve name clash" );
-                    throw CommandAbortedException();
-                }
-                else
-                    dstUnqPath = newDstUnqPath;
-
-                break;
+                while( ( nError == osl::FileBase::E_EXIST ) && ( nTry < 10000 ) );
             }
-            case NameClash::ERROR:
-                break;
-            default:
-                break;
+
+            if( nError == osl::FileBase::E_EXIST )
+            {
+                installError( CommandId,
+                              TASKHANDLING_RENAME_FOR_MOVE );
+                return;
+            }
+            else if( nError != osl::FileBase::E_None )
+            {
+                installError( CommandId,
+                              TASKHANDLING_RENAMEMOVE_FOR_MOVE,
+                              nError );
+                return;
+            }
+            else
+                dstUnqPath = newDstUnqPath;
+
+            break;
         }
+        case NameClash::ERROR:
+        {
+            nError = osl_File_move( srcUnqPath,dstUnqPath,true );
+            if( nError == osl::FileBase::E_EXIST )
+            {
+                installError( CommandId,
+                              TASKHANDLING_NAMECLASH_FOR_MOVE );
+                return;
+            }
+            else if( nError != osl::FileBase::E_None )
+            {
+                installError( CommandId,
+                              TASKHANDLING_NAMECLASHMOVE_FOR_MOVE,
+                              nError );
+                return;
+            }
+            break;
+        }
+        case NameClash::ASK:
+        default:
+            installError( CommandId,
+                          TASKHANDLING_NAMECLASHSUPPORT_FOR_MOVE );
+            return;
+            break;
     }
 
-    if( err )
-        throw CommandAbortedException();
+    // Determine, whether we have moved a file or a folder
+    osl::DirectoryItem aItem;
+    nError = osl::DirectoryItem::get( dstUnqPath,aItem );
+    if( nError != osl::FileBase::E_None )
+    {
+        installError( CommandId,
+                      TASKHANDLING_TRANSFER_BY_MOVE_SOURCE,
+                      nError );
+        return;
+    }
+    osl::FileStatus aStatus( FileStatusMask_Type );
+    nError = aItem.getFileStatus( aStatus );
+    if( nError != osl::FileBase::E_None || ! aStatus.isValid( FileStatusMask_Type ) )
+    {
+        installError( CommandId,
+                      TASKHANDLING_TRANSFER_BY_MOVE_SOURCESTAT,
+                      nError );
+        return;
+    }
+    sal_Bool isDocument = ( aStatus.getFileType() == osl::FileStatus::Regular );
 
 
-    copyPersistentSet( srcUnqPath,dstUnqPath, !isDocument );
+    copyPersistentSet( srcUnqPath,dstUnqPath,!isDocument );
 
     rtl::OUString aDstParent = getParentName( dstUnqPath );
     rtl::OUString aDstTitle  = getTitle( dstUnqPath );
@@ -1114,8 +1138,8 @@ shell::move( sal_Int32 CommandId,
     if(  aDstParent != aSrcParent )
         notifyContentRemoved( getContentEventListeners( aSrcParent ),srcUnqPath );
 
-    notifyContentExchanged( getContentExchangedEventListeners( srcUnqPath,dstUnqPath, !isDocument ) );
-    erasePersistentSet( srcUnqPath, !isDocument );
+    notifyContentExchanged( getContentExchangedEventListeners( srcUnqPath,dstUnqPath,!isDocument ) );
+    erasePersistentSet( srcUnqPath,!isDocument );
 }
 
 
@@ -1136,44 +1160,69 @@ shell::copy(
     const rtl::OUString srcUnqPath,
     const rtl::OUString dstUnqPathIn,
     sal_Int32 NameClash )
-    throw()   // throw( CommandAbortedException )
+    throw()
 {
+    osl::FileBase::RC nError;
     rtl::OUString dstUnqPath( dstUnqPathIn );
 
     if( dstUnqPath == srcUnqPath )    // Nothing left to be done
         return;
 
-    // Moving file or folder ?
+    // Copying file or folder ?
     osl::DirectoryItem aItem;
-    osl::FileBase::RC err = osl::DirectoryItem::get( srcUnqPath,aItem );
-    if( err )
-        throw CommandAbortedException();
-
+    nError = osl::DirectoryItem::get( srcUnqPath,aItem );
+    if( nError != osl::FileBase::E_None )
+    {
+        installError( CommandId,
+                      TASKHANDLING_TRANSFER_BY_COPY_SOURCE,
+                      nError );
+        return;
+    }
     osl::FileStatus aStatus( FileStatusMask_Type );
-    aItem.getFileStatus( aStatus );
-
-    sal_Bool isDocument;
-    if( aStatus.isValid( FileStatusMask_Type ) )
-        isDocument = aStatus.getFileType() == osl::FileStatus::Regular;
-
+    nError = aItem.getFileStatus( aStatus );
+    if( nError != osl::FileBase::E_None || ! aStatus.isValid( FileStatusMask_Type ) )
+    {
+        installError( CommandId,
+                      TASKHANDLING_TRANSFER_BY_COPY_SOURCESTAT,
+                      nError );
+        return;
+    }
+    sal_Bool isDocument = ( aStatus.getFileType() == osl::FileStatus::Regular );
     sal_Int32 IsWhat = isDocument ? -1 : 1;
 
-    err = copy_recursive( srcUnqPath,dstUnqPath,IsWhat,true );
-
-    if( err == osl::FileBase::E_EXIST )
+    switch( NameClash )
     {
-        switch( NameClash )
+        case NameClash::KEEP:
         {
-            case NameClash::KEEP:
-                return;
-                break;
-            case NameClash::OVERWRITE:
+            nError = copy_recursive( srcUnqPath,dstUnqPath,IsWhat,true );
+            if( nError != osl::FileBase::E_None && nError != osl::FileBase::E_EXIST )
             {
-                remove( CommandId,dstUnqPath,IsWhat );
-                err = copy_recursive( srcUnqPath,dstUnqPath,IsWhat,false );
+                installError( CommandId,
+                              TASKHANDLING_KEEPERROR_FOR_COPY,
+                              nError );
+                return;
             }
             break;
-            case NameClash::RENAME:
+        }
+        case NameClash::OVERWRITE:
+        {
+            remove( CommandId,dstUnqPath,IsWhat );
+            nError = copy_recursive( srcUnqPath,dstUnqPath,IsWhat,false );
+            if( nError != osl::FileBase::E_None )
+            {
+                installError( CommandId,
+                              TASKHANDLING_OVERWRITE_FOR_COPY,
+                              nError );
+                return;
+            }
+            break;
+        }
+        case NameClash::RENAME:
+        {
+            rtl::OUString newDstUnqPath;
+            nError = copy_recursive( srcUnqPath,dstUnqPath,IsWhat,true );
+
+            if( nError == osl::FileBase::E_EXIST )
             {
                 // "invent" a new valid title.
 
@@ -1182,12 +1231,11 @@ shell::copy(
                 sal_Int32 nLastSlash = dstUnqPath.lastIndexOf( '/' );
                 if ( ( nLastSlash < nLastDot ) // dot is part of last(!) path segment
                      && ( nLastSlash != ( nLastDot - 1 ) ) ) // file name does not start with a dot
-                       nPos = nLastDot;
+                    nPos = nLastDot;
                 else
-                       nPos = dstUnqPath.getLength();
+                    nPos = dstUnqPath.getLength();
 
                 sal_Int32 nTry = 0;
-                rtl::OUString newDstUnqPath;
 
                 do
                 {
@@ -1198,30 +1246,57 @@ shell::copy(
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
 
-                    err = copy_recursive( srcUnqPath, newDstUnqPath, IsWhat,true );
+                    nError = copy_recursive( srcUnqPath,newDstUnqPath,IsWhat,true );
                 }
-                while ( ( err == osl::FileBase::E_EXIST ) && ( nTry < 10000 ) );
-
-                if ( err )
-                {
-                    VOS_ENSURE( sal_False,
-                                "shell::copy - Unable to resolve name clash" );
-                    throw CommandAbortedException();
-                }
-                else
-                    dstUnqPath = newDstUnqPath;
-
-                break;
+                while( ( nError == osl::FileBase::E_EXIST ) && ( nTry < 10000 ) );
             }
-            case NameClash::ERROR:
-                break;
-            default:
-                break;
+
+            if( nError == osl::FileBase::E_EXIST )
+            {
+                installError( CommandId,
+                              TASKHANDLING_RENAME_FOR_COPY );
+                return;
+            }
+            else if( nError != osl::FileBase::E_None )
+            {
+                installError( CommandId,
+                              TASKHANDLING_RENAMEMOVE_FOR_COPY,
+                              nError );
+                return;
+            }
+            else
+                dstUnqPath = newDstUnqPath;
+
+            break;
+        }
+        case NameClash::ERROR:
+        {
+            nError = copy_recursive( srcUnqPath,dstUnqPath,IsWhat,true );
+
+            if( nError == osl::FileBase::E_EXIST )
+            {
+                installError( CommandId,
+                              TASKHANDLING_NAMECLASH_FOR_COPY );
+                return;
+            }
+            else if( nError != osl::FileBase::E_None )
+            {
+                installError( CommandId,
+                              TASKHANDLING_NAMECLASHMOVE_FOR_COPY,
+                              nError );
+                return;
+            }
+            break;
+        }
+        case NameClash::ASK:
+        default:
+        {
+            installError( CommandId,
+                          TASKHANDLING_NAMECLASHSUPPORT_FOR_COPY );
+            return;
+            break;
         }
     }
-
-    if( err )
-        throw CommandAbortedException();
 
     copyPersistentSet( srcUnqPath,dstUnqPath, !isDocument );
     notifyInsert( getContentEventListeners( getParentName( dstUnqPath ) ),dstUnqPath );

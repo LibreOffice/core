@@ -41,6 +41,9 @@
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFERURLEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_UNSUPPORTEDNAMECLASHEXCEPTION_HPP_
+#include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
+#endif
 
 
 using namespace ucbhelper;
@@ -427,18 +430,6 @@ namespace fileaccess {
                 break;
             }
 
-            case TASKHANDLING_TRANSFER_INVALIDSCHEME:
-                aAny <<= InteractiveBadTransferURLException();
-                cancelCommandExecution( aAny,xEnv );
-                break;
-
-            case TASKHANDLING_TRANSFER_BY_MOVE_SOURCE:
-                break;
-            case TASKHANDLING_TRANSFER_BY_MOVE_SOURCESTAT:
-                break;
-            case TASKHANDLING_TRANSFER_BY_MOVE_FILETYPE:
-                break;
-
             case TASKHANDLING_FILESIZE_FOR_WRITE:
             {
                 switch( minorCode )
@@ -562,10 +553,88 @@ namespace fileaccess {
                 break;
             }
 
+            case TASKHANDLING_TRANSFER_MOUNTPOINTS:
+                ioErrorCode = IOErrorCode_NOT_EXISTING;
+                cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+                break;
+
+            case TASKHANDLING_TRANSFER_BY_COPY_SOURCE:
+            case TASKHANDLING_TRANSFER_BY_COPY_SOURCESTAT:
+            case TASKHANDLING_TRANSFER_BY_MOVE_SOURCE:
+            case TASKHANDLING_TRANSFER_BY_MOVE_SOURCESTAT:
+            case TASKHANDLING_TRANSFER_DESTFILETYPE:
             case TASKHANDLING_FILETYPE_FOR_REMOVE:
             case TASKHANDLING_DIRECTORYEXHAUSTED_FOR_REMOVE:
+            case TASKHANDLING_TRANSFER_INVALIDURL:
                 ioErrorCode = IOErrorCode_GENERAL;
                 cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+                break;
+
+            case TASKHANDLING_TRANSFER_ACCESSINGROOT:
+                ioErrorCode = IOErrorCode_WRITE_PROTECTED;
+                cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+                break;
+
+            case TASKHANDLING_TRANSFER_INVALIDSCHEME:
+                aAny <<= InteractiveBadTransferURLException();
+                cancelCommandExecution( aAny,xEnv );
+                break;
+
+            case TASKHANDLING_OVERWRITE_FOR_MOVE:
+            case TASKHANDLING_OVERWRITE_FOR_COPY:
+            case TASKHANDLING_NAMECLASHMOVE_FOR_MOVE:
+            case TASKHANDLING_NAMECLASHMOVE_FOR_COPY:
+            case TASKHANDLING_KEEPERROR_FOR_MOVE:
+            case TASKHANDLING_KEEPERROR_FOR_COPY:
+            case TASKHANDLING_RENAME_FOR_MOVE:
+            case TASKHANDLING_RENAME_FOR_COPY:
+            case TASKHANDLING_RENAMEMOVE_FOR_MOVE:
+            case TASKHANDLING_RENAMEMOVE_FOR_COPY:
+            {
+                switch( minorCode )
+                {
+                    case FileBase::E_EXIST:
+                        ioErrorCode = IOErrorCode_ALREADY_EXISTING;
+                        break;
+                    case FileBase::E_INVAL:         // the format of the parameters was not valid<br>
+                        ioErrorCode = IOErrorCode_INVALID_PARAMETER;
+                        break;
+                    case FileBase::E_NOMEM:         // not enough memory for allocating structures <br>
+                        ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
+                        break;
+                    case FileBase::E_ACCES:         // Permission denied<br>
+                        ioErrorCode = IOErrorCode_ACCESS_DENIED;
+                        break;
+                    case FileBase::E_PERM:          // Operation not permitted<br>
+                        ioErrorCode = IOErrorCode_NOT_SUPPORTED;
+                        break;
+                    case FileBase::E_NAMETOOLONG:   // File name too long<br>
+                        ioErrorCode = IOErrorCode_NAME_TOO_LONG;
+                        break;
+                    case FileBase::E_NOENT:         // No such file or directory<br>
+                        ioErrorCode = IOErrorCode_NOT_EXISTING;
+                        break;
+                    case FileBase::E_ROFS:          // Read-only file system<p>
+                        ioErrorCode = IOErrorCode_NOT_EXISTING;
+                        break;
+                    default:
+                        ioErrorCode = IOErrorCode_GENERAL;
+                        break;
+                }
+                cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+                break;
+            }
+
+            case TASKHANDLING_NAMECLASH_FOR_COPY:
+            case TASKHANDLING_NAMECLASH_FOR_MOVE:
+                aAny <<= NameClashException();
+                cancelCommandExecution( aAny,xEnv );
+                break;
+
+            case TASKHANDLING_NAMECLASHSUPPORT_FOR_MOVE:
+            case TASKHANDLING_NAMECLASHSUPPORT_FOR_COPY:
+                aAny <<= UnsupportedNameClashException();
+                cancelCommandExecution( aAny,xEnv );
                 break;
 
             case TASKHANDLER_NO_ERROR:

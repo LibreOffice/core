@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-04 11:01:07 $
+ *  last change: $Author: abi $ $Date: 2001-07-04 14:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,7 @@ namespace fileaccess {
               const rtl::OUString srcUnqPath,   // Full file(folder)-path
               const rtl::OUString dstUnqPath,   // Path to the destination-directory
               const sal_Int32 NameClash )
-            throw(); // throw( com::sun::star::ucb::CommandAbortedException );
+            throw();
 
         /**
          *  Copies the content belonging to fileURL srcUnqPath to fileURL dstUnqPath ( files and directories )
@@ -426,7 +426,7 @@ namespace fileaccess {
               const rtl::OUString srcUnqPath,
               const rtl::OUString dstUnqPath,
               sal_Int32 NameClash )
-            throw(); // throw( com::sun::star::ucb::CommandAbortedException );
+            throw();
 
 #define RemoveFolder   1
 #define RemoveFile    -1

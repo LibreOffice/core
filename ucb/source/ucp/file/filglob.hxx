@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filglob.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-03 13:59:41 $
+ *  last change: $Author: abi $ $Date: 2001-07-04 14:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,12 +115,27 @@ namespace fileaccess {
     extern rtl::OUString getTitle( const rtl::OUString& aPath );
 
     // returns the url without last part as parentname
+    // In case aFileName is root ( file:/// ) root is returned
+
     extern rtl::OUString getParentName( const rtl::OUString& aFileName );
 
+    /**
+     *  special copy:
+     *  On test = true, the implementation determines whether the
+     *  destination exists and returns the appropriate errorcode E_EXIST.
+     *  osl::File::copy copies unchecked.
+     */
 
     extern osl::FileBase::RC osl_File_copy( const rtl::OUString& strPath,
                                             const rtl::OUString& strDestPath,
                                             sal_Bool test = false );
+
+    /**
+     *  special move:
+     *  On test = true, the implementation determines whether the
+     *  destination exists and returns the appropriate errorcode E_EXIST.
+     *  osl::File::move moves unchecked
+     */
 
     extern osl::FileBase::RC osl_File_move( const rtl::OUString& strPath,
                                             const rtl::OUString& strDestPath,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-04 11:01:07 $
+ *  last change: $Author: abi $ $Date: 2001-07-04 14:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1067,19 +1067,22 @@ BaseContent::deleteContent( sal_Int32 nMyCommandIdentifier,
 void SAL_CALL
 BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
                        const TransferInfo& aTransferInfo )
-    throw( CommandAbortedException )
+    throw()
 {
-
     if( m_nState & Deleted )
         return;
 
-    // Never write access to root
+    // Never write access to virtual root in case of access restrictions
 #ifdef TF_FILEURL
     if( m_pMyShell->m_bFaked && m_aUncPath.compareToAscii( "file:///" ) == 0 )
 #else
-        if( m_pMyShell->m_bFaked && m_aUncPath.compareToAscii( "//./" ) == 0 )
+    if( m_pMyShell->m_bFaked && m_aUncPath.compareToAscii( "//./" ) == 0 )
 #endif
-            throw CommandAbortedException();
+    {
+        m_pMyShell->installError( nMyCommandIdentifier,
+                                  TASKHANDLING_TRANSFER_ACCESSINGROOT );
+        return;
+    }
 
 
     if( aTransferInfo.SourceURL.compareToAscii( "file:",5 ) != 0 )
@@ -1089,29 +1092,30 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
         return;
     }
 
-    sal_Unicode slash = '/';
     rtl::OUString srcUnc;
-    sal_Bool err = m_pMyShell->getUnqFromUrl( aTransferInfo.SourceURL,srcUnc );
-    if( err )
-        throw CommandAbortedException();
+    if( m_pMyShell->getUnqFromUrl( aTransferInfo.SourceURL,srcUnc ) )
+    {
+        m_pMyShell->installError( nMyCommandIdentifier,
+                                  TASKHANDLING_TRANSFER_INVALIDURL );
+        return;
+    }
 
     rtl::OUString srcUncPath;
-    sal_Bool mounted = m_pMyShell->checkMountPoint( srcUnc,srcUncPath );
+    if( ! m_pMyShell->checkMountPoint( srcUnc,srcUncPath ) )
+    {
+        m_pMyShell->installError( nMyCommandIdentifier,
+                                  TASKHANDLING_TRANSFER_MOUNTPOINTS );
+        return;
+    }
 
-    if( ! mounted )
-        throw CommandAbortedException();
-
+    // Determine the new title !
     rtl::OUString NewTitle;
     if( aTransferInfo.NewTitle.getLength() )
         NewTitle = aTransferInfo.NewTitle;
     else
-    {
-        sal_Int32 lastSlash = srcUncPath.lastIndexOf( slash );
-        NewTitle = srcUncPath.copy( lastSlash+1 );
-    }
+        NewTitle = srcUncPath.copy( 1 + srcUncPath.lastIndexOf( sal_Unicode('/') ) );
 
-
-    // Who am I ?
+    // Is destination a document or a folder ?
     Sequence< beans::Property > seq(1);
     seq[0] = beans::Property( rtl::OUString::createFromAscii("IsDocument"),
                               -1,
@@ -1120,16 +1124,20 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
     Reference< sdbc::XRow > xRow = getPropertyValues( nMyCommandIdentifier,seq );
     sal_Bool IsDocument = xRow->getBoolean( 1 );
     if( xRow->wasNull() )
-        throw CommandAbortedException();
-
+    {   // Destination file type could not be determined
+        m_pMyShell->installError( nMyCommandIdentifier,
+                                  TASKHANDLING_TRANSFER_DESTFILETYPE );
+        return;
+    }
 
     rtl::OUString dstUncPath;
-
-    if( IsDocument ) {
-        sal_Int32 lastSlash = m_aUncPath.lastIndexOf( slash );
+    if( IsDocument )
+    {   // as sibling
+        sal_Int32 lastSlash = m_aUncPath.lastIndexOf( sal_Unicode('/') );
         dstUncPath = m_aUncPath.copy(0,lastSlash );
     }
     else
+        // as child
         dstUncPath = m_aUncPath;
 
     dstUncPath += ( rtl::OUString::createFromAscii( "/" ) + NewTitle );

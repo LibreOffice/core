@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-03 13:59:41 $
+ *  last change: $Author: abi $ $Date: 2001-07-04 14:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,7 @@ namespace fileaccess {
         void SAL_CALL
         transfer( sal_Int32 nMyCommandIdentifier,
                   const com::sun::star::ucb::TransferInfo& aTransferInfo )
-            throw( com::sun::star::ucb::CommandAbortedException );
+            throw();
 
         void SAL_CALL
         insert( sal_Int32 nMyCommandIdentifier,
