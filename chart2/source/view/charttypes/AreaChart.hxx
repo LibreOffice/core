@@ -40,10 +40,6 @@ public:
     //-------------------------------------------------------------------------
     // MinimumAndMaximumSupplier
     //-------------------------------------------------------------------------
-    virtual double getMinimumX();
-    virtual double getMaximumX();
-    virtual double getMinimumYInRange( double fMinimumX, double fMaximumX );
-    virtual double getMaximumYInRange( double fMinimumX, double fMaximumX );
     virtual double getMaximumZ();
 
     //-------------------------------------------------------------------------
@@ -62,8 +58,6 @@ private: //methods
 
 private: //member
     AreaPositionHelper*                 m_pPosHelper;
-
-    bool                                m_bCategoryXAxis;//true->xvalues are indices (this would not be necessary if series for category chart wouldn't have x-values)
 
     bool                                m_bArea;//false -> line or symbol only
     bool                                m_bLine;
