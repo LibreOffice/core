@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:59 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,16 +141,6 @@
 // (0x00E5) CELLMERGING =======================================================
 
 #define EXC_MERGE_MAXCOUNT          1024
-
-// (0x007D) COLINFO ===========================================================
-
-// flags
-#define EXC_COL_HIDDEN              0x0001
-#define EXC_COL_COLLAPSED           0x1000
-
-// outline
-#define EXC_COL_LEVELFLAGS(nOL)     ((nOL & 0x0007) << 8)
-#define EXC_COL_GETLEVEL(nFlag)     ((nFlag & 0x0700) >> 8)
 
 // (0x0208) ROW ===============================================================
 
