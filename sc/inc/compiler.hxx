@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:33:51 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,17 @@
 #ifndef SC_COMPILER_HXX
 #define SC_COMPILER_HXX
 
-#include <string.h>     // memcpy(), please don't use memory.h (WKC, was it some MAC weirdness?)
+#ifndef INCLUDED_STRING_H
+#include <string.h>
+#define INCLUDED_STRING_H
+#endif
 
 #ifndef _SVMEMPOOL_HXX
 #include <tools/mempool.hxx>
+#endif
+
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
 #endif
 
 #ifndef SC_SCGLOB_HXX
@@ -89,7 +96,11 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+
+#ifndef INCLUDED_HASH_MAP
 #include <hash_map>
+#define INCLUDED_HASH_MAP
+#endif
 
 //-----------------------------------------------
 
@@ -453,6 +464,6 @@ private:
     };
 };
 
-extern String* GetScCompilerpSymbolTableNative(); //CHINA001
+SC_DLLPUBLIC String* GetScCompilerpSymbolTableNative(); //CHINA001
 
 #endif
