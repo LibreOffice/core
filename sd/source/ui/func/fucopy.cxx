@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucopy.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:00:18 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:46:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,9 @@
 #ifndef SD_VIEW_HXX
 #include "View.hxx"
 #endif
-#ifndef SD_COPY_DLG_HXX
-#include "copydlg.hxx"
-#endif
+//CHINA001 #ifndef SD_COPY_DLG_HXX
+//CHINA001 #include "copydlg.hxx"
+//CHINA001 #endif
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 
@@ -110,7 +110,8 @@
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
-
+#include "sdabstdlg.hxx" //CHINA001
+#include "copydlg.hrc" //CHINA001
 namespace sd {
 
 TYPEINIT1( FuCopy, FuPoor );
@@ -164,7 +165,11 @@ FuCopy::FuCopy (
                 }
             }
 
-            CopyDlg*  pDlg = new CopyDlg( NULL, aSet, pDoc->GetColorTable(), pView );
+            //CHINA001 CopyDlg*  pDlg = new CopyDlg( NULL, aSet, pDoc->GetColorTable(), pView );
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+            AbstractCopyDlg* pDlg = pFact->CreateCopyDlg(ResId( DLG_COPY ), NULL, aSet, pDoc->GetColorTable(), pView );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             USHORT      nResult = pDlg->Execute();
 
             switch( nResult )

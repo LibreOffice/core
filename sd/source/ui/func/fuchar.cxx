@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuchar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:56:48 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #include <sfx2/request.hxx>
 #endif
 
-#include "dlg_char.hxx"
+//CHINA001 #include "dlg_char.hxx"
 #ifndef SD_VIEW_HXX
 #include "View.hxx"
 #endif
@@ -93,7 +93,8 @@
 #include "ViewShell.hxx"
 #endif
 #include "DrawDocShell.hxx"
-
+#include "sdabstdlg.hxx" //CHINA001
+#include "dlg_char.hrc" //CHINA001
 namespace sd {
 
 TYPEINIT1( FuChar, FuPoor );
@@ -123,8 +124,11 @@ FuChar::FuChar (
                                 EE_ITEMS_START, EE_ITEMS_END );
         aNewAttr.Put( aEditAttr, FALSE );
 
-        SdCharDlg* pDlg = new SdCharDlg( NULL, &aNewAttr, pDoc->GetDocSh() );
-
+        //CHINA001 SdCharDlg* pDlg = new SdCharDlg( NULL, &aNewAttr, pDoc->GetDocSh() );
+        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+        DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+        SfxAbstractTabDialog* pDlg = pFact->CreateSdTabDialog(ResId( TAB_CHAR ), NULL, &aNewAttr, pDoc->GetDocSh() );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         USHORT nResult = pDlg->Execute();
 
         switch( nResult )
