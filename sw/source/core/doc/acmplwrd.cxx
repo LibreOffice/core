@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acmplwrd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:47:54 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 09:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,16 +348,20 @@ SwAutoCompleteWord::~SwAutoCompleteWord()
 
 BOOL SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
 {
+    String aNewWord(rWord);
+    aNewWord.EraseAllChars( CH_TXTATR_INWORD );
+    aNewWord.EraseAllChars( CH_TXTATR_BREAKWORD );
+
     pImpl->AddDocument(rDoc);
     BOOL bRet = FALSE;
-     xub_StrLen nWrdLen = rWord.Len();
-    while( nWrdLen && '.' == rWord.GetChar( nWrdLen-1 ))
+    xub_StrLen nWrdLen = aNewWord.Len();
+    while( nWrdLen && '.' == aNewWord.GetChar( nWrdLen-1 ))
         --nWrdLen;
 
     if( !bLockWordLst && nWrdLen >= nMinWrdLen )
     {
         SwAutoCompleteString* pAutoString;
-        StringPtr pNew = pAutoString = new SwAutoCompleteString( rWord, 0, nWrdLen );
+        StringPtr pNew = pAutoString = new SwAutoCompleteString( aNewWord, 0, nWrdLen );
         pAutoString->AddDocument(rDoc);
         USHORT nInsPos;
         if( aWordLst.Insert( pNew, nInsPos ) )
