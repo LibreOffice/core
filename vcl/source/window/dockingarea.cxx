@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockingarea.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 09:12:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,7 @@ void DockingAreaWindow::Paint( const Rectangle& rRect )
         }
         aControlValue.setOptionalVal( (void *)(&aToolbarValue) );
         ControlState        nState = CTRL_STATE_ENABLED;
+
         if( !ImplGetSVData()->maNWFData.mbDockingAreaSeparateTB )
         {
             // draw a single toolbar background covering the whole docking area
@@ -213,10 +214,29 @@ void DockingAreaWindow::Paint( const Rectangle& rRect )
 
             DrawNativeControl( CTRL_TOOLBAR, IsHorizontal() ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
                                aCtrlRegion, nState, aControlValue, rtl::OUString() );
+
+            // each toolbar gets a thin border to better recognize its borders on the homogeneous docking area
+            int nChildren = GetChildCount();
+            for( int n = 0; n < nChildren; n++ )
+            {
+                Window* pChild = GetChild( n );
+                Point aPos = pChild->GetPosPixel();
+                Size aSize = pChild->GetSizePixel();
+                Rectangle aRect( aPos, aSize );
+
+                SetLineColor( GetSettings().GetStyleSettings().GetLightColor() );
+                DrawLine( aRect.TopLeft(), aRect.TopRight() );
+                DrawLine( aRect.TopLeft(), aRect.BottomLeft() );
+
+                SetLineColor( GetSettings().GetStyleSettings().GetSeparatorColor() );
+                DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
+                DrawLine( aRect.TopRight(), aRect.BottomRight() );
+            }
         }
         else
         {
-            // draw multiple toolbar backgrounds, i.e., one for each toolbar line
+            // create map to find toolbar lines
+            Size aOutSz = GetOutputSizePixel();
             std::map< int, int > ranges;
             int nChildren = GetChildCount();
             for( int n = 0; n < nChildren; n++ )
@@ -229,7 +249,9 @@ void DockingAreaWindow::Paint( const Rectangle& rRect )
                 else
                     ranges[ aPos.X() ] = aSize.Width();
             }
-            Size aOutSz = GetOutputSizePixel();
+
+
+            // draw multiple toolbar backgrounds, i.e., one for each toolbar line
             for( std::map<int,int>::const_iterator it = ranges.begin(); it != ranges.end(); ++it )
             {
                 Rectangle aTBRect;
