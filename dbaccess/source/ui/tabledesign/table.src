@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:28:09 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1573,7 +1573,7 @@ PushButton PB_FORMAT
     Text[ japanese ] = "...";
     Text[ korean ] = "...";
     Text[ chinese_simplified ] = "...";
-    Text[ chinese_traditional ] = "...";
+    Text[ chinese_traditional ] = "~...";
     Text[ turkish ] = "...";
     Text[ arabic ] = "...";
     Text[ catalan ] = "...";
@@ -1819,7 +1819,7 @@ String STR_TABLEDESIGN_DATASOURCE_DELETED
     Text[ french ] = "Impossible d'adapter le filtre de table : la source de données a été supprimée.";
     Text[ spanish ] = "No se pudo ajustar el filtro de tablas porque se eliminó la fuente de datos.";
     Text[ finnish ] = "The table filter could not be saved because the datasource was deleted before.";
-    Text[ italian ] = "The table filter could not be saved because the datasource was deleted before.";
+    Text[ italian ] = "Impossibile salvare il filtro della tabella poiché la sorgente dati è stata eliminata.";
     Text[ danish ] = "The table filter could not be saved because the datasource was deleted before.";
     Text[ swedish ] = "Det gick inte att anpassa tabellfiltret eftersom datakällan har raderats.";
     Text[ polish ] = "Dopasowanie filtra tabeli nie jest mo¿liwe, poniewa¿ usuniêto Ÿród³o danych.";
@@ -1827,7 +1827,7 @@ String STR_TABLEDESIGN_DATASOURCE_DELETED
     Text[ japanese ] = "ÃŞ°À¿°½‚ªíœ‚³‚ê‚Ä‚µ‚Ü‚Á‚Ä‚¢‚é‚½‚ß‚ÉAÃ°ÌŞÙÌ¨ÙÀ‚ğ“K‡‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ korean ] = "The table filter could not be saved because the datasource was deleted before.";
     Text[ chinese_simplified ] = "The table filter could not be saved because the datasource was deleted before.";
-    Text[ chinese_traditional ] = "The table filter could not be saved because the datasource was deleted before.";
+    Text[ chinese_traditional ] = "µLªk½Õ¾ãªí®æ¿z¿ï¡A¦]?¸ê®Æ·½¤w¸g³Q§R°£¡C";
     Text[ turkish ] = "The table filter could not be saved because the datasource was deleted before.";
     Text[ arabic ] = "The table filter could not be saved because the datasource was deleted before.";
     Text[ catalan ] = "The table filter could not be saved because the datasource was deleted before.";
@@ -2217,11 +2217,12 @@ String STR_TABLEDESIGN_ALTER_ERROR
     Text[ japanese ] = "—ñ \"\\$column\\$\" ‚Í•ÏX‚Å‚«‚Ü‚¹‚ñBíœ‚·‚é‚©‚í‚è‚ÉV‚µ‚­İ’è‚µ‚½‘®‚ğ“Y•t‚µ‚Ü‚·‚©B";
     Text[ korean ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
     Text[ chinese_simplified ] = "ÎŞ·¨¸ü¸ÄÁĞ \"\\$column\\$\" ¡£ÒªÖØĞÂÉè¶¨Õâ¸öÁĞµÄ¸ñÊ½?";
-    Text[ chinese_traditional ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
+    Text[ chinese_traditional ] = "µLªkÅÜ§óÄæ \"\\$column\\$\" ¡C­n§R°£¥¦¦A­«·s³]©w®æ¦¡¡H";
     Text[ turkish ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
     Text[ arabic ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
     Text[ catalan ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
 };
+
 
 
 
