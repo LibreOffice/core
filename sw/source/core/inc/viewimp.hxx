@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-06-20 11:12:34 $
+ *  last change: $Author: mib $ $Date: 2002-02-20 18:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ class SwRegionRects;
 class ExtOutputDevice;
 class SdrPaintInfoRec;
 struct SdrPaintProcRec;
+class SwAccessibleMap;
 
 class SwViewImp
 {
@@ -111,6 +112,9 @@ class SwViewImp
                                  //Wird vom SwLayAction-CTor ein- und vom DTor
                                  //ausgetragen.
     SwLayIdle     *pIdleAct;     //Analog zur SwLayAction fuer SwLayIdle.
+
+    SwAccessibleMap *pAccMap;       // Accessible Wrappers
+
 
     AutoTimer     aScrollTimer;  //Fuer das Aufraeumen nach dem Scrollen.
 
@@ -154,6 +158,7 @@ class SwViewImp
 
     void PaintFlyChilds( SwFlyFrm *pFly, ExtOutputDevice& rOut,
                          const SdrPaintInfoRec& rInfoRec );
+    SwAccessibleMap *CreateAccessibleMap();
 
 public:
     SwViewImp( ViewShell * );
@@ -233,6 +238,11 @@ public:
 
     void    SetRestoreActions(USHORT nSet){nRestoreActions = nSet;}
     USHORT  GetRestoreActions() const{return nRestoreActions;}
+
+    inline sal_Bool IsAccessible() const { return pAccMap != 0; }
+    void UpdateAccessible();
+    inline SwAccessibleMap *GetAccessibleMapPtr() { return pAccMap; }
+    SwAccessibleMap &GetAccessibleMap();
 };
 
 //Kann auf dem Stack angelegt werden, wenn etwas ausgegeben oder
@@ -263,6 +273,13 @@ inline const SwPageFrm *SwViewImp::GetFirstVisPage() const
     return pFirstVisPage;
 }
 
+inline SwAccessibleMap& SwViewImp::GetAccessibleMap()
+{
+    if( !pAccMap )
+        CreateAccessibleMap();
+
+    return *pAccMap;
+}
 
 
 #endif //_VIEWIMP_HXX

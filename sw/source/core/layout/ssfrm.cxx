@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-14 10:52:18 $
+ *  last change: $Author: mib $ $Date: 2002-02-20 18:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,10 +131,17 @@
 #ifndef _FMTCLDS_HXX //autogen
 #include <fmtclds.hxx>
 #endif
-#ifdef ACCESSIBLE_LAYOUT
 #ifndef _ACCMAP_HXX
 #include <accmap.hxx>
 #endif
+#ifndef _VIEWSH_HXX
+#include <viewsh.hxx>
+#endif
+#ifndef _VIEWIMP_HXX
+#include <viewimp.hxx>
+#endif
+#ifndef _FRMSH_HXX
+#include <frmsh.hxx>
 #endif
 
 #ifdef VERTICAL_LAYOUT
@@ -376,9 +383,19 @@ void SwFrm::CheckDirChange()
 
 SwFrm::~SwFrm()
 {
-#ifdef ACCESSIBLE_LAYOUT
-    aAccMap.DisposeFrm( this );
-#endif
+    ViewShell *pVSh = GetShell();
+    ASSERT( pVSh || (!pVSh && FindRootFrm()),
+            "no shell: accessible object might get invalid" );
+    if( pVSh )
+    {
+        ViewShell *pTmp = pVSh;
+        do
+        {
+            if( pTmp->Imp()->IsAccessible() )
+                pTmp->Imp()->GetAccessibleMap().DisposeFrm( this );
+            pTmp = (ViewShell*)pTmp->GetNext();
+        } while ( pTmp != pVSh );
+    }
 
     if( pDrawObjs )
     {

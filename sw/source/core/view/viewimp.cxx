@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:29 $
+ *  last change: $Author: mib $ $Date: 2002-02-20 18:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _SVDPAGE_HXX //autogen
 #include <svx/svdpage.hxx>
 #endif
+#ifndef _ACCMAP_HXX
+#include <accmap.hxx>
+#endif
 
 /*************************************************************************
 |*
@@ -160,6 +163,7 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
     pSdrPageView( 0 ),
     pDrawView( 0 ),
     nRestoreActions( 0 )
+    ,pAccMap( 0 )
 {
     bResetXorVisibility = bShowHdlPaint =
     bResetHdlHiddenPaint = bScrolled =
@@ -182,6 +186,8 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
 
 SwViewImp::~SwViewImp()
 {
+    delete pAccMap;
+
     //JP 29.03.96: nach ShowPage muss auch HidePage gemacht werden!!!
     if( pDrawView )
          pDrawView->HidePage( pSdrPageView );
@@ -367,112 +373,21 @@ Color SwViewImp::GetRetoucheColor() const
     return aRet;
 }
 
-/************************************************************************
+void SwViewImp::UpdateAccessible()
+{
+    // We require a layout and an XModel to be accessible.
+    SwDoc *pDoc = GetShell()->GetDoc();
+    Window *pWin = GetShell()->GetWin();
+    ASSERT( pDoc->GetRootFrm(), "no layout, no access" );
+    ASSERT( pWin, "no window, no access" );
 
-      $Log: not supported by cvs2svn $
-      Revision 1.96  2000/09/18 16:04:37  willem.vandorp
-      OpenOffice header added.
+    if( IsAccessible() && pDoc->GetRootFrm() && pWin )
+        GetAccessibleMap().GetDocumentView();
+}
 
-      Revision 1.95  2000/07/17 10:31:08  ama
-      Opt: Smarter scrolling for RVP
-
-      Revision 1.94  2000/05/09 11:35:43  ama
-      Unicode changes
-
-      Revision 1.93  2000/04/27 07:37:23  os
-      UNICODE
-
-      Revision 1.92  2000/03/03 15:17:22  os
-      StarView remainders removed
-
-      Revision 1.91  2000/02/11 14:36:08  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.90  1999/09/22 12:37:10  os
-      big handles
-
-      Revision 1.89  1999/09/06 13:19:00  aw
-      changes due to support of new handles
-
-
-      Rev 1.85   13 Aug 1999 15:11:32   MA
-   adoption to new markers, but still inkomplete
-
-      Rev 1.84   08 Apr 1999 12:36:28   MA
-   #64467# Complete und Retouche ggf. zuruecksetzen
-
-      Rev 1.83   30 Mar 1999 17:11:30   AW
-   #41275# changed handling of Snap-functionality
-
-      Rev 1.82   16 Jul 1998 18:55:36   AMA
-   Fix #50348#51949#: Controls bei virtuellen Outputdevice extra painten
-
-      Rev 1.81   07 Jul 1998 13:23:02   OS
-   alle Actions fuer layoutabhaengige UNO-Operationen kurzfristig aufheben
-
-      Rev 1.80   24 Jun 1998 18:45:22   MA
-   DataChanged fuer ScrollBar und Retouche, Retouche ganz umgestellt
-
-      Rev 1.79   03 Jun 1998 09:25:20   MA
-   #50392# Handles und Xor aufgeraeumt
-
-      Rev 1.78   27 Apr 1998 15:09:12   MA
-   ein paar sv2vcl
-
-      Rev 1.77   28 Jan 1998 13:40:52   MA
-   ueberfluessiges Hell-Paint vom Text entfernt
-
-      Rev 1.76   28 Nov 1997 09:08:46   MA
-   includes
-
-      Rev 1.75   03 Nov 1997 13:07:30   MA
-   precomp entfernt
-
-      Rev 1.74   21 Oct 1997 14:10:24   MA
-   #44844# VirDev zu klein
-
-      Rev 1.73   13 Oct 1997 10:30:18   MA
-   Umbau/Vereinfachung Paint
-
-      Rev 1.72   15 Aug 1997 12:24:06   OS
-   charatr/frmatr/txtatr aufgeteilt
-
-      Rev 1.71   12 Aug 1997 15:08:52   MH
-   chg: header
-
-      Rev 1.70   07 Jul 1997 16:33:42   OS
-   SnapSize auch im Init auf den gleichen Wert wie SetGridFine setzen #41380#
-
-      Rev 1.69   11 Jun 1997 12:58:40   MH
-   add: include Win16
-
-      Rev 1.68   04 Apr 1997 17:37:12   NF
-   includes
-
-      Rev 1.67   25 Mar 1997 14:46:28   MA
-   Smooth
-
-      Rev 1.66   23 Mar 1997 13:08:42   MA
-   new: bPainInScroll
-
-      Rev 1.65   25 Feb 1997 09:10:54   MA
-   chg: Option fuer SolidHdl
-
-      Rev 1.64   25 Feb 1997 08:45:44   MA
-   chg: SolidHdl ueberm Berg
-
-      Rev 1.63   19 Feb 1997 11:04:04   MA
-   chg: neue huebsche Handles
-
-      Rev 1.62   05 Feb 1997 09:17:14   MA
-   fix: Refresh, virtuelles Device hinreichend gross einstellen
-
-      Rev 1.61   23 Jan 1997 14:21:42   OM
-   Klickverhalten von polygonen geaendert
-
-      Rev 1.60   16 Jan 1997 17:34:34   MA
-   chg: Paint oder nicht sagt uns jetzt SwFlyFrm::IsPaint
-
-*************************************************************************/
-
-
+SwAccessibleMap *SwViewImp::CreateAccessibleMap()
+{
+    ASSERT( !pAccMap, "accessible map exists" )
+    pAccMap = new SwAccessibleMap( GetShell() );
+    return pAccMap;
+}

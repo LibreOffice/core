@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-18 14:54:53 $
+ *  last change: $Author: mib $ $Date: 2002-02-20 18:14:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,10 +175,6 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
                     bChainMode      : 1, //Rahmen verbinden
                     bWasShdwCrsr    : 1, //ShadowCrsr war im MouseButtonDown an
                     bLockInput      : 1; //Lock waehrend die Rechenleiste aktiv ist
-#ifdef ACCESSIBLE_LAYOUT
-    BOOL            bHasAccessible  : 1;
-#endif
-
 
     void            LeaveArea(const Point &);
     void            JustifyAreaTimer();
@@ -290,10 +286,7 @@ public:
     const SwView &GetView() const { return rView; }
           SwView &GetView()       { return rView; }
 
-#ifdef ACCESSIBLE_LAYOUT
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
-    void UpdateAccessible();
-#endif
 
     // Tipfenster loeschen
     static void ClearTip();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-21 09:46:44 $
+ *  last change: $Author: mib $ $Date: 2002-02-20 18:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,9 @@
 #endif
 #ifndef _NDINDEX_HXX
 #include <ndindex.hxx>
+#endif
+#ifndef _ACCMAP_HXX
+#include <accmap.hxx>
 #endif
 
 #ifndef _STATSTR_HRC
@@ -1105,6 +1108,10 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
     Imp()->bPaintInScroll = TRUE;
     GetWin()->Update();
     Imp()->bPaintInScroll = FALSE;
+
+    if( Imp()->IsAccessible() )
+        Imp()->UpdateAccessible();
+
 }
 
 /******************************************************************************
@@ -2157,5 +2164,21 @@ BOOL ViewShell::IsNewLayout() const
     return GetLayout()->IsNewLayout();
 }
 
+::com::sun::star::uno::Reference<
+    ::drafts::com::sun::star::accessibility::XAccessible > ViewShell::CreateAccessible()
+{
+    using namespace ::com::sun::star::uno;
+    using namespace ::drafts::com::sun::star::accessibility;
+    Reference< XAccessible > xAcc;
 
+    SwDoc *pDoc = GetDoc();
 
+    // We require a layout and an XModel to be accessible.
+    ASSERT( pDoc->GetRootFrm(), "no layout, no access" );
+    ASSERT( GetWin(), "no window, no access" );
+
+    if( pDoc->GetRootFrm() && GetWin() )
+        xAcc = Imp()->GetAccessibleMap().GetDocumentView();
+
+    return xAcc;
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-14 10:52:18 $
+ *  last change: $Author: mib $ $Date: 2002-02-20 18:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,10 +159,8 @@
 #ifndef _LAYCACHE_HXX
 #include <laycache.hxx>
 #endif
-#ifdef ACCESSIBLE_LAYOUT
 #ifndef _ACCMAP_HXX
 #include <accmap.hxx>
-#endif
 #endif
 
 #include "mdiexp.hxx"
@@ -309,9 +307,17 @@ SwFrmNotify::~SwFrmNotify()
     if ( bAbsP || bPrtP || bFrmS || bPrtS )
 #endif
     {
-#ifdef ACCESSIBLE_LAYOUT
-        aAccMap.MoveFrm( pFrm, aFrm );
-#endif
+        ViewShell *pVSh  = pFrm->GetShell();
+        if( pVSh )
+        {
+            ViewShell *pTmp = pVSh;
+            do
+            {
+                if( pTmp->Imp()->IsAccessible() )
+                    pTmp->Imp()->GetAccessibleMap().MoveFrm( pFrm, aFrm );
+                pTmp = (ViewShell*)pTmp->GetNext();
+            } while ( pTmp != pVSh );
+        }
 
         //Auch die Flys wollen etwas von den Veraenderungen mitbekommen,
         //FlyInCnts brauchen hier nicht benachrichtigt werden.
