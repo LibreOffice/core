@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:30:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,6 @@
 #endif
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _IPOBJ_HXX
-#include <so3/ipobj.hxx>
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -195,6 +192,8 @@
 #endif
 #include <itrpaint.hxx>
 #include <stack>
+
+#include <tools/globname.hxx>
 
 //
 // Some global data structures
