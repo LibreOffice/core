@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:15:52 $
+ *  last change: $Author: kz $ $Date: 2001-07-27 20:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1778,7 +1778,7 @@ String IDS_CONTINUE {
     TEXT[ greek ] = "Continue";
     TEXT[ dutch ] = "Volgende";
     TEXT[ french ] = "Suivant";
-    TEXT[ spanish ] = "Avanzar";
+    TEXT[ spanish ] = "Continuar";
     TEXT[ italian ] = "Continue";
     TEXT[ danish ] = "Continue";
     TEXT[ swedish ] = "Continue";
@@ -4406,4 +4406,5 @@ FloatingWindow LOAD_CONF {
     Text[ catalan ] = "Leyendo archivos de configuración";
     Text[ finnish ] = "Luetaan kokoonpanotiedostoja";
 };
+
 
