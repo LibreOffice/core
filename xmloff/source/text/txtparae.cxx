@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-18 11:59:42 $
+ *  last change: $Author: mib $ $Date: 2001-01-19 08:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1657,12 +1657,8 @@ void XMLTextParagraphExport::exportTextFrame(
         Reference< XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
         Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
-        if( xPropState.is() &&
-            xPropSetInfo->hasPropertyByName( sHyperLinkURL ) &&
-            PropertyState_DIRECT_VALUE ==
-                                xPropState->getPropertyState( sHyperLinkURL ) )
+        if( addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo ) )
         {
-            addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                                       sXML_a, sal_False, sal_False );
             _exportTextFrame( xPropSet, xPropSetInfo, bProgress );
@@ -1857,12 +1853,8 @@ void XMLTextParagraphExport::exportTextGraphic(
         Reference< XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
         Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
-        if( xPropState.is() &&
-            xPropSetInfo->hasPropertyByName( sHyperLinkURL ) &&
-            PropertyState_DIRECT_VALUE ==
-                                xPropState->getPropertyState( sHyperLinkURL ) )
+        if( addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo ) )
         {
-            addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                                       sXML_a, sal_False, sal_False );
             _exportTextGraphic( xPropSet, xPropSetInfo );
@@ -1976,12 +1968,8 @@ void XMLTextParagraphExport::exportTextEmbedded(
         Reference< XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
         Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
-        if( xPropState.is() &&
-            xPropSetInfo->hasPropertyByName( sHyperLinkURL ) &&
-            PropertyState_DIRECT_VALUE ==
-                                xPropState->getPropertyState( sHyperLinkURL ) )
+        if( addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo ) )
         {
-            addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                                       sXML_a, sal_False, sal_False );
             _exportTextEmbedded( xPropSet, xPropSetInfo );
@@ -2020,27 +2008,35 @@ void XMLTextParagraphExport::_exportTextRange(
     }
 }
 
-void XMLTextParagraphExport::addHyperlinkAttributes(
+sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
         const Reference < XPropertySet > & rPropSet,
         const Reference < XPropertyState > & rPropState,
         const Reference < XPropertySetInfo > & rPropSetInfo )
 {
-    GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK,
-                                   sXML_type, sXML_simple );
+    sal_Bool bExport = sal_False;
+    Any aAny;
+    OUString sHRef, sName, sTargetFrame, sUStyleName, sVStyleName;
+    sal_Bool bServerMap = sal_False;
 
-    OUString sTmp;
-    Any aAny = rPropSet->getPropertyValue( sHyperLinkURL );
-    aAny >>= sTmp;
-    GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_href, sTmp );
+    if( rPropSetInfo->hasPropertyByName( sHyperLinkURL ) &&
+        ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
+                    rPropState->getPropertyState( sHyperLinkURL ) ) )
+    {
+        aAny= rPropSet->getPropertyValue( sHyperLinkURL );
+        aAny >>= sHRef;
+
+        if( sHRef.getLength() > 0 )
+            bExport = sal_True;
+    }
 
     if( rPropSetInfo->hasPropertyByName( sHyperLinkName ) &&
         ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
                     rPropState->getPropertyState( sHyperLinkName ) ) )
     {
         aAny = rPropSet->getPropertyValue( sHyperLinkName );
-        aAny >>= sTmp;
-        GetExport().AddAttribute( XML_NAMESPACE_OFFICE, sXML_name,
-                                  sTmp );
+        aAny >>= sName;
+        if( sName.getLength() > 0 )
+            bExport = sal_True;
     }
 
     if( rPropSetInfo->hasPropertyByName( sHyperLinkTarget ) &&
@@ -2048,17 +2044,9 @@ void XMLTextParagraphExport::addHyperlinkAttributes(
                     rPropState->getPropertyState( sHyperLinkTarget ) ) )
     {
         aAny = rPropSet->getPropertyValue( sHyperLinkTarget );
-        aAny >>= sTmp;
-        if( sTmp.getLength() )
-        {
-            GetExport().AddAttribute( XML_NAMESPACE_OFFICE,
-                                      sXML_target_frame_name, sTmp );
-            const sal_Char *pStr =
-                sTmp.equalsAsciiL( "_blank", sizeof("_blank")-1 )
-                    ? sXML_new : sXML_replace;
-            GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK,
-                                      sXML_show, pStr );
-        }
+        aAny >>= sTargetFrame;
+        if( sTargetFrame.getLength() )
+            bExport = sal_True;
     }
 
     if( rPropSetInfo->hasPropertyByName( sServerMap ) &&
@@ -2066,10 +2054,9 @@ void XMLTextParagraphExport::addHyperlinkAttributes(
                     rPropState->getPropertyState( sServerMap ) ) )
     {
         aAny = rPropSet->getPropertyValue( sServerMap );
-        if( *(sal_Bool *)aAny.getValue() )
-            GetExport().AddAttributeASCII( XML_NAMESPACE_OFFICE,
-                                           sXML_server_map,
-                                             sXML_true );
+        bServerMap = *(sal_Bool *)aAny.getValue();
+        if( bServerMap  )
+            bExport = sal_True;
     }
 
     if( rPropSetInfo->hasPropertyByName( sUnvisitedCharStyleName ) &&
@@ -2077,10 +2064,9 @@ void XMLTextParagraphExport::addHyperlinkAttributes(
             rPropState->getPropertyState( sUnvisitedCharStyleName ) ) )
     {
         aAny = rPropSet->getPropertyValue( sUnvisitedCharStyleName );
-        aAny >>= sTmp;
-        if( sTmp.getLength() )
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-                                      sXML_style_name, sTmp );
+        aAny >>= sUStyleName;
+        if( sUStyleName.getLength() )
+            bExport = sal_True;
     }
 
     if( rPropSetInfo->hasPropertyByName( sVisitedCharStyleName ) &&
@@ -2088,11 +2074,46 @@ void XMLTextParagraphExport::addHyperlinkAttributes(
             rPropState->getPropertyState( sVisitedCharStyleName ) ) )
     {
         aAny = rPropSet->getPropertyValue( sVisitedCharStyleName );
-        aAny >>= sTmp;
-        if( sTmp.getLength() )
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-                                      sXML_visited_style_name, sTmp );
+        aAny >>= sVStyleName;
+        if( sVStyleName.getLength() )
+            bExport = sal_True;
     }
+
+    if( bExport )
+    {
+        GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type,
+                                       sXML_simple );
+        GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_href, sHRef );
+
+        if( sName.getLength() > 0 )
+            GetExport().AddAttribute( XML_NAMESPACE_OFFICE, sXML_name, sName );
+
+        if( sTargetFrame.getLength() )
+        {
+            GetExport().AddAttribute( XML_NAMESPACE_OFFICE,
+                                      sXML_target_frame_name, sTargetFrame );
+            const sal_Char *pStr =
+                sTargetFrame.equalsAsciiL( "_blank", sizeof("_blank")-1 )
+                    ? sXML_new : sXML_replace;
+            GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK,
+                                      sXML_show, pStr );
+        }
+
+        if( bServerMap  )
+            GetExport().AddAttributeASCII( XML_NAMESPACE_OFFICE,
+                                           sXML_server_map,
+                                             sXML_true );
+
+        if( sUStyleName.getLength() )
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                      sXML_style_name, sUStyleName );
+
+        if( sVStyleName.getLength() )
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                      sXML_visited_style_name, sVStyleName );
+    }
+
+    return bExport;
 }
 
 void XMLTextParagraphExport::exportTextRange(
