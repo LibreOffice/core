@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-24 14:27:11 $
+ *  last change: $Author: cl $ $Date: 2001-07-25 10:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@
 #ifndef _COMPHELPER_PROPERTSETINFO_HXX_
 #include <comphelper/propertysetinfo.hxx>
 #endif
+#ifndef _SFXECODE_HXX
+#include <svtools/sfxecode.hxx>
+#endif
 
 #include "sdresid.hxx"
 #include "glob.hrc"
@@ -244,6 +247,8 @@ sal_Bool SdXMLFilter::Import()
 
     sal_Bool    bRet = sal_False;
 
+    SvStorage* pStorage = mrMedium.GetStorage();
+
     do
     {
         SdDrawDocument* pDoc = mrDocShell.GetDoc();
@@ -255,10 +260,10 @@ sal_Bool SdXMLFilter::Import()
         UINT16                      nStyleFamilyMask = 0;
         sal_Bool                    bLoadDoc = TRUE;
 
+        sal_Bool bEncrypted = sal_False;
+
         try
         {
-            SvStorage* pStorage = mrMedium.GetStorage();
-
             uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
             uno::Reference< document::XGraphicObjectResolver >  xGrfResolver;
 
@@ -329,6 +334,7 @@ sal_Bool SdXMLFilter::Import()
             }
 
             XML_SERVICEMAP* pServices;
+
             for( pServices = aServices; pServices->mpService; pServices++ )
             {
                 xml::sax::InputSource                   aParserInput;
@@ -353,7 +359,7 @@ sal_Bool SdXMLFilter::Import()
                     if( xIStm.Is() )
                     {
                         xIStm->SetVersion( pStorage->GetVersion() );
-                        xIStm->SetKey( pStorage->GetKey() );
+//                      xIStm->SetKey( pStorage->GetKey() );
                         xIStm->SetBufferSize( 16 * 1024 );
                         aParserInput.aInputStream = new utl::OInputStreamWrapper( *xIStm );
                     }
@@ -362,6 +368,10 @@ sal_Bool SdXMLFilter::Import()
                         DBG_ERROR( "could not open Content stream" );
                         break;
                     }
+
+                    uno::Any aAny;
+                    bEncrypted = xIStm->GetProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ), aAny ) && aAny.getValueType() == ::getBooleanCppuType() && *(sal_Bool *)aAny.getValue();
+
                 }
                 else
                 {
@@ -383,6 +393,8 @@ sal_Bool SdXMLFilter::Import()
 
                     xSource->setOutputStream( uno::Reference< io::XOutputStream >( xPipe, uno::UNO_QUERY ) );
                     aParserInput.aInputStream = uno::Reference< io::XInputStream >( xPipe, uno::UNO_QUERY );
+
+                    bEncrypted = sal_False;
                 }
 
                 if( aParserInput.aInputStream.is() )
@@ -424,12 +436,24 @@ sal_Bool SdXMLFilter::Import()
         }
         catch( uno::Exception e )
         {
-    #ifdef DEBUG
-            ByteString aError( "uno Exception caught while importing:\n" );
-            aError += ByteString( String( e.Message), RTL_TEXTENCODING_ASCII_US );
-            DBG_ERROR( aError.GetBuffer() );
-    #endif
+            if ( bEncrypted )
+            {
+                //  any format or parse error in an encrypted document
+                //  is treated as a wrong password.
+
+                if ( pStorage )
+                    pStorage->SetError( ERRCODE_SFX_WRONGPASSWORD );
+            }
+#ifdef DEBUG
+            else
+            {
+                ByteString aError( "uno Exception caught while importing:\n" );
+                aError += ByteString( String( e.Message), RTL_TEXTENCODING_ASCII_US );
+                DBG_ERROR( aError.GetBuffer() );
+            }
+#endif
         }
+
 
         if( pGraphicHelper )
             SvXMLGraphicHelper::Destroy( pGraphicHelper );
@@ -588,7 +612,7 @@ sal_Bool SdXMLFilter::Export()
                     const OUString sDocName( OUString::createFromAscii( pServices->mpStream ) );
                     xDocStream = pStorage->OpenStream( sDocName, STREAM_WRITE | STREAM_SHARE_DENYWRITE );
                     xDocStream->SetVersion( pStorage->GetVersion() );
-                    xDocStream->SetKey( pStorage->GetKey() );
+//                  xDocStream->SetKey( pStorage->GetKey() );
                     xDocStream->SetBufferSize( 16*1024 );
                     xDocOut = new utl::OOutputStreamWrapper( *xDocStream );
 
