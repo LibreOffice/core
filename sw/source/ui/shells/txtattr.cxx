@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 13:21:12 $
+ *  last change: $Author: jp $ $Date: 2000-11-23 20:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 
 #pragma hdrstop
 
-#include "hintids.hxx"
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
 
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -102,6 +104,9 @@
 #endif
 #ifndef _SVX_HTMLMODE_HXX //autogen
 #include <svx/htmlmode.hxx>
+#endif
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
 #endif
 
 
@@ -140,9 +145,6 @@
 #endif
 #ifndef _FMTCOL_HXX
 #include <fmtcol.hxx>
-#endif
-#ifndef _SCRPMTCH_HXX
-#include <scrpmtch.hxx>
 #endif
 
 #ifndef _CMDID_H
@@ -272,15 +274,16 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
     int bGrow = FALSE;
     SwWrtShell& rWrtSh = GetShell();
     SwTxtFmtColl* pColl = 0;
+
     // nur gesetzt, wenn gesamter Absatz selektiert ist und AutoUpdateFmt gesetzt ist
-    if(rWrtSh.HasSelection() &&
-            rWrtSh.IsSelFullPara())
+    if( rWrtSh.HasSelection() && rWrtSh.IsSelFullPara() )
     {
         pColl = rWrtSh.GetCurTxtFmtColl();
         if(pColl && !pColl->IsAutoUpdateFmt())
             pColl = 0;
     }
-    USHORT nWhich = GetPool().GetWhich(nSlot);
+    SfxItemPool& rPool = GetPool();
+    USHORT nWhich = rPool.GetWhich(nSlot);
     switch ( nSlot )
     {
         case FN_TXTATR_INET:
@@ -312,16 +315,19 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             // kein break !!
         case FN_SHRINK_FONT_SIZE:
         {
-            GetLatinAsianComplexAttr aAttrs( RES_CHRATR_FONTSIZE, rWrtSh );
-            SfxItemSet* pSet = (SfxItemSet*)aAttrs.GetItemSet(
-                                                    rWrtSh.GetScriptType());
-            if( pSet )
-            {
-                SfxItemIter aIter( *pSet );
-                const SfxPoolItem* pItem = aIter.GetCurItem();
-                while( TRUE )
+            SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONTHEIGHT, rPool );
+            rWrtSh.GetAttr( aSetItem.GetItemSet() );
+            SfxItemSet aAttrSet( rPool, aSetItem.GetItemSet().GetRanges() );
+
+            const SfxPoolItem* pI;
+            static const USHORT aScrTypes[] = {
+                SCRIPTTYPE_LATIN, SCRIPTTYPE_ASIAN, SCRIPTTYPE_COMPLEX, 0 };
+            USHORT nScriptType = rWrtSh.GetScriptType();
+            for( const USHORT* pScrpTyp = aScrTypes; *pScrpTyp; ++pScrpTyp )
+                if( ( nScriptType & *pScrpTyp ) &&
+                    0 != ( pI = aSetItem.GetItemOfScript( *pScrpTyp )))
                 {
-                    SvxFontHeightItem aSize( *(const SvxFontHeightItem*)pItem);
+                    SvxFontHeightItem aSize( *(const SvxFontHeightItem*)pI );
                     SwTwips lSize = (SwTwips) aSize.GetHeight();
 
                     if (bGrow)
@@ -339,18 +345,15 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
                             lSize = 4;
                     }
                     aSize.SetHeight( lSize );
-                    pSet->Put( aSize );
-
-                    if( aIter.IsAtEnd() )
-                        break;
-                    pItem = aIter.NextItem();
+                    aAttrSet.Put( aSize );
                 }
-
-                if( pColl )
-                    pColl->SetAttr( *pSet );
-                else
-                    rWrtSh.SetAttr( *pSet );
-            }
+                if( aAttrSet.Count() )
+                {
+                    if( pColl )
+                        pColl->SetAttr( aAttrSet );
+                    else
+                        rWrtSh.SetAttr( aAttrSet );
+                }
         }
         break;
 
@@ -665,8 +668,10 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             case FN_GROW_FONT_SIZE:
             case FN_SHRINK_FONT_SIZE:
             {
-                GetLatinAsianComplexAttr aAttrs( RES_CHRATR_FONTSIZE );
-                if( !aAttrs.GetItemSet( rSh.GetScriptType(), aCoreSet ))
+                SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONTHEIGHT,
+                                            *rSet.GetPool() );
+                aSetItem.GetItemSet().Put( aCoreSet, FALSE );
+                if( !aSetItem.GetItemOfScript( rSh.GetScriptType() ))
                     rSet.DisableItem( nSlot );
                 nSlot = 0;
             }
@@ -751,6 +756,9 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/11/13 13:21:12  jp
+    support CJK attributes
+
     Revision 1.1.1.1  2000/09/18 17:14:47  hr
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 13:19:55 $
+ *  last change: $Author: jp $ $Date: 2000-11-23 20:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,9 @@
 #ifndef _SVX_BORDER_HXX
 #include <svx/border.hxx>
 #endif
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
+#endif
 
 #ifndef _FMTURL_HXX //autogen
 #include <fmturl.hxx>
@@ -268,9 +271,6 @@
 #endif
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
-#endif
-#ifndef _SCRPMTCH_HXX
-#include <scrpmtch.hxx>
 #endif
 
 #ifndef _CMDID_H
@@ -1840,42 +1840,29 @@ SwBaseShell::~SwBaseShell()
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void SwBaseShell::ExecTxtCtrl(SfxRequest& rReq)
+void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
 
     if( pArgs)
     {
         SwWrtShell &rSh = GetShell();
-        USHORT nWhich = pArgs->GetPool()->GetWhich( rReq.GetSlot() );
-        GetLatinAsianComplexAttr* pGetAttr = 0;
+        SvxScriptSetItem* pSSetItem = 0;
+        USHORT nWhich = rReq.GetSlot();
         switch( nWhich )
         {
-        case RES_CHRATR_FONT:
-        case RES_CHRATR_FONTSIZE:
-        case RES_CHRATR_POSTURE:
-        case RES_CHRATR_WEIGHT:
-        case RES_CHRATR_LANGUAGE:
-            pGetAttr = new GetLatinAsianComplexAttr( nWhich, rSh );
-            SfxItemSet* pSet = (SfxItemSet*)pGetAttr->GetItemSet(
-                                                    rSh.GetScriptType() );
-            if( pSet )
+        case SID_ATTR_CHAR_FONT:
+        case SID_ATTR_CHAR_FONTHEIGHT:
+        case SID_ATTR_CHAR_POSTURE:
+        case SID_ATTR_CHAR_WEIGHT:
             {
-                SfxPoolItem* pNew = pArgs->Get( nWhich ).Clone();
-                SfxItemIter aIter( *pSet );
-                const SfxPoolItem* pItem = aIter.GetCurItem();
-                while( TRUE )
-                {
-                    pNew->SetWhich( pItem->Which() );
-                    pSet->Put( *pNew );
-
-                    if( aIter.IsAtEnd() )
-                        break;
-                    pItem = aIter.NextItem();
-                }
-                delete pNew;
+                SfxItemPool& rPool = rSh.GetAttrPool();
+                pSSetItem = new SvxScriptSetItem( nWhich, rPool );
+                nWhich = rPool.GetWhich( nWhich );
+                pSSetItem->PutItemForScriptType( rSh.GetScriptType(),
+                                                pArgs->Get( nWhich ));
+                pArgs = &pSSetItem->GetItemSet();
             }
-            pArgs = pSet;
             break;
         }
 
@@ -1889,9 +1876,8 @@ void SwBaseShell::ExecTxtCtrl(SfxRequest& rReq)
                 rSh.AutoUpdatePara( pColl, *pArgs );
             else
                 rSh.SetAttr( *pArgs );
-
-            delete pGetAttr;
         }
+        delete pSSetItem;
     }
 }
 
@@ -1908,60 +1894,48 @@ void SwBaseShell::GetTxtCtrlState( SfxItemSet& rSet )
 void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
 {
     SwWrtShell &rSh = GetShell();
-    rSh.GetAttr( rSet );
-
-    USHORT nWhich = rSet.GetWhichByPos( 0 );
-    switch( nWhich )
+    BOOL bFirst = TRUE;
+    SfxItemSet* pFntCoreSet = 0;
+    USHORT nScriptType;
+    SfxWhichIter aIter( rSet );
+    USHORT nWhich = aIter.FirstWhich();
+    while( nWhich )
     {
-    case RES_CHRATR_FONT:
-    case RES_CHRATR_FONTSIZE:
-    case RES_CHRATR_POSTURE:
-    case RES_CHRATR_WEIGHT:
-    case RES_CHRATR_LANGUAGE:
+        switch( nWhich )
         {
-            GetLatinAsianComplexAttr aGetAttr( nWhich, rSh );
-            const SfxItemSet* pSet = aGetAttr.GetItemSet(
-                                                rSh.GetScriptType(), rSet );
-            if( pSet )
+        case RES_CHRATR_FONT:
+        case RES_CHRATR_FONTSIZE:
+        case RES_CHRATR_WEIGHT:
+        case RES_CHRATR_POSTURE:
             {
-                SfxItemIter aIter( *pSet );
-                const SfxPoolItem* pItem = aIter.GetCurItem();
-                SfxPoolItem* pSetItem = 0;
-                while( (SfxPoolItem*)-1 != pSetItem )
+                if( !pFntCoreSet )
                 {
-                    if( !pSetItem )
-                    {
-                        pSetItem = pItem->Clone();
-                        pSetItem->SetWhich( nWhich );
-                    }
-                    else
-                    {
-                        SfxPoolItem* pCmp = pItem->Clone();
-                        pCmp->SetWhich( nWhich );
-                        if( *pSetItem != *pCmp )
-                        {
-                            delete pSetItem;
-                            pSetItem = (SfxPoolItem*)-1;
-                        }
-                        delete pCmp;
-                    }
-                    if( aIter.IsAtEnd() )
-                        break;
-                    pItem = aIter.NextItem();
+                    pFntCoreSet = new SfxItemSet( *rSet.GetPool(),
+                                    RES_CHRATR_BEGIN, RES_CHRATR_END-1 );
+                    rSh.GetAttr( *pFntCoreSet );
+                    nScriptType = rSh.GetScriptType();
                 }
+                SfxItemPool& rPool = *rSet.GetPool();
+                SvxScriptSetItem aSetItem( rPool.GetSlotId( nWhich ), rPool );
+                aSetItem.GetItemSet().Put( *pFntCoreSet, FALSE );
+                const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
+                if( pI )
+                    rSet.Put( *pI, nWhich );
+                else
+                    rSet.InvalidateItem( nWhich );
+            }
+            break;
 
-                if( (SfxPoolItem*)-1 != pSetItem && 0 != pSetItem )
-                {
-                    rSet.Put( *pSetItem );
-                    delete pSetItem;
-                }
+        default:
+            if( bFirst )
+            {
+                rSh.GetAttr( rSet );
+                bFirst = FALSE;
             }
         }
-        break;
-
-    default:
-        ASSERT( !this, "wrong Which Id in the set" );
+        nWhich = aIter.NextWhich();
     }
+    delete pFntCoreSet;
 }
 
 /*--------------------------------------------------------------------
@@ -2533,6 +2507,9 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/11/13 13:19:55  jp
+    new method GetTextFontCtrl
+
     Revision 1.1.1.1  2000/09/18 17:14:46  hr
     initial import
 
