@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-20 09:37:43 $
+ *  last change: $Author: mba $ $Date: 2001-09-10 14:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ class CommandLineArgs
 
         sal_Bool            m_bMinimized;
         sal_Bool            m_bInvisible;
-        sal_Bool            m_bEmbedding;
+        sal_Bool            m_bNoRestore;
         sal_Bool            m_bBean;
         sal_Bool            m_bPlugin;
         sal_Bool            m_bServer;
@@ -109,7 +109,7 @@ class CommandLineArgs
 
         sal_Bool        IsMinimized(){ return m_bMinimized; }
         sal_Bool        IsInvisible(){ return m_bInvisible; }
-        sal_Bool        IsEmbedding(){ return m_bEmbedding; }
+        sal_Bool        IsNoRestore(){ return m_bNoRestore; }
         sal_Bool        IsBean(){ return m_bBean; }
         sal_Bool        IsPlugin(){ return m_bPlugin; }
         sal_Bool        IsServer(){ return m_bServer; }

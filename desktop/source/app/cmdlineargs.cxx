@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-30 15:28:51 $
+ *  last change: $Author: mba $ $Date: 2001-09-10 14:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,9 +213,9 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         m_bInvisible = sal_True;
         return sal_True;
     }
-    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-embedding" )) == sal_True )
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-norestore" )) == sal_True )
     {
-        m_bEmbedding = sal_True;
+        m_bNoRestore = sal_True;
         return sal_True;
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-bean" )) == sal_True )
@@ -291,7 +291,7 @@ void CommandLineArgs::ResetParamValues()
 {
     m_bMinimized            = sal_False;
     m_bInvisible            = sal_False;
-    m_bEmbedding            = sal_False;
+    m_bNoRestore            = sal_False;
     m_bBean                 = sal_False;
     m_bPlugin               = sal_False;
     m_bHeadless             = sal_False;

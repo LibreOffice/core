@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-07 10:14:51 $
+ *  last change: $Author: mba $ $Date: 2001-09-10 14:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,6 +698,7 @@ USHORT Desktop::Exception(USHORT nError)
 
     bInException = TRUE;
     BOOL bRecovery = FALSE;
+    CommandLineArgs* pArgs = GetCommandLineArgs();
 
     // save all modified documents
     if( Application::IsInExecute() )
@@ -781,7 +782,7 @@ USHORT Desktop::Exception(USHORT nError)
             }
         }
 
-        if ( ( nError & EXC_MAJORTYPE ) != EXC_DISPLAY && ( nError & EXC_MAJORTYPE ) != EXC_REMOTE )
+        if ( !pArgs->IsNoRestore() && ( nError & EXC_MAJORTYPE ) != EXC_DISPLAY && ( nError & EXC_MAJORTYPE ) != EXC_REMOTE )
             WarningBox( NULL, DesktopResId(STR_RECOVER_PREPARED) ).Execute();
     }
 
@@ -820,6 +821,9 @@ USHORT Desktop::Exception(USHORT nError)
 
         default:
         {
+            if ( pArgs->IsNoRestore() )
+                exit( 333 );
+
             if( bRecovery && !pPluginAcceptThread && !Application::IsRemoteServer() )
             {
                 OfficeIPCThread::DisableOfficeIPCThread();
@@ -1155,7 +1159,7 @@ void Desktop::OpenClients()
     CommandLineArgs* pArgs = GetCommandLineArgs();
     SvtInternalOptions  aInternalOptions;
 
-    if ( !pArgs->IsServer() && !aInternalOptions.IsRecoveryListEmpty() )
+    if ( !pArgs->IsServer() && !pArgs->IsNoRestore() && !aInternalOptions.IsRecoveryListEmpty() )
     {
         // crash recovery
         sal_Bool bUserCancel = sal_False;
@@ -1517,7 +1521,6 @@ void Desktop::OpenStartupScreen()
          !pCmdLine->IsInvisible() &&
          !pCmdLine->IsQuickstart() &&
          !pCmdLine->IsMinimized() &&
-         !pCmdLine->IsEmbedding() &&
          !pCmdLine->IsTerminateAfterInit() &&
          !pCmdLine->GetPrintList( aTmpString ) )
     {
