@@ -1,0 +1,109 @@
+/*************************************************************************
+ *
+ *  $RCSfile: UICategoryDescription.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:49:54 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ui_UICategoryDescription_idl__
+#define __com_sun_star_ui_UICategoryDescription_idl__
+
+#ifndef __com_sun_star_container_XNameAccess_idl__
+#include <com/sun/star/container/XNameAccess.idl>
+#endif
+
+module com {  module sun {  module star {  module ui {
+
+//=============================================================================
+
+/** a service which provides information about user interface command
+    categories.
+
+    <p>
+    OpenOffice.org has an amount of commands that can be used by user
+    interface elements. Every command is member of a single category.
+    Categories makes it easier to handle to huge amount of commands
+    provided by OpenOffice.org. This service is normally used by UI
+    implementations which provides all commands to a user.
+    </p>
+*/
+
+//=============================================================================
+
+service UICategoryDescription
+{
+    /** provides access to user interface command categories of the installed
+        modules.
+
+        <p>
+        To access the user interface command categories of a module, a unique
+        module specifier must be provided to
+        <member scope="com::sun::star::container">XNameAccess::getByName()</member>
+        function. The module specifier can be retrieved from the
+        <type scope="drafts::com::sun::star::frame">ModuleManager</type>
+        service. The interface provides references to
+        <type scope="drafts::com::sun:star::ui">ModuleUICommandDescription</type>.
+        </p>
+
+        @see drafts::com::sun::star::frame::ModuleManager
+    */
+
+    interface com::sun::star::container::XNameAccess;
+};
+
+}; }; }; }; // com.sun.star.ui
+
+#endif
