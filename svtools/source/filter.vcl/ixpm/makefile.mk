@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: thb $ $Date: 2001-08-14 13:49:41 $
+#   last change: $Author: nf $ $Date: 2002-01-15 14:20:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 PRJ=..$/..$/..
 
-PRJNAME=VCL
+PRJNAME=svtools
 TARGET=ixpm
 DEPTARGET=vixpm
 VERSION=$(UPD)
