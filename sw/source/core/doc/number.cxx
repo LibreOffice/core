@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-11 17:21:38 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,4 +844,69 @@ void SwNumRule::SetNumAdjust(SvxAdjust eNumAdjust)
 {
     for (int i = 0; i < MAXLEVEL; i++)
         aFmts[i]->SetNumAdjust(eNumAdjust);
+}
+
+// #i23725#, #i23726#
+void SwNumRule::Indent(short nAmount, int nLevel, int nReferenceLevel,
+                       BOOL bRelative, BOOL bFirstLine, BOOL bCheckGtZero)
+{
+    int nStartLevel = 0;
+    int nEndLevel = MAXLEVEL - 1;
+    BOOL bGotInvalid = FALSE;
+
+    if (nLevel >= 0)
+        nStartLevel = nEndLevel = nLevel;
+
+    int i;
+    short nRealAmount =  nAmount;
+
+    if (! bRelative)
+    {
+        if (bFirstLine)
+        {
+            if (nReferenceLevel >= 0)
+                nAmount -= Get(nReferenceLevel).GetFirstLineOffset();
+            else
+                nAmount -= Get(nStartLevel).GetFirstLineOffset();
+        }
+
+        BOOL bFirst = TRUE;
+
+        if (nReferenceLevel >= 0)
+            nRealAmount = nAmount - Get(nReferenceLevel).GetAbsLSpace();
+        else
+            for (i = nStartLevel; i < nEndLevel + 1; i++)
+            {
+                short nTmp = nAmount - Get(i).GetAbsLSpace();
+
+                if (bFirst || nTmp > nRealAmount)
+                {
+                    nRealAmount = nTmp;
+                    bFirst = FALSE;
+                }
+            }
+    }
+
+    if (nRealAmount < 0)
+        for (i = nStartLevel; i < nEndLevel + 1; i++)
+            if (Get(i).GetAbsLSpace() + nRealAmount < 0)
+                nRealAmount = -Get(i).GetAbsLSpace();
+
+    for (i = nStartLevel; i < nEndLevel + 1; i++)
+    {
+        short nNew = Get(i).GetAbsLSpace() + nRealAmount;
+
+        if (bCheckGtZero && nNew < 0)
+            nNew = 0;
+
+        SwNumFmt aTmpNumFmt(Get(i));
+        aTmpNumFmt.SetAbsLSpace(nNew);
+
+        Set(i, aTmpNumFmt);
+
+        bGotInvalid = TRUE;
+    }
+
+    if (bGotInvalid)
+        SetInvalidRule(bGotInvalid);
 }
