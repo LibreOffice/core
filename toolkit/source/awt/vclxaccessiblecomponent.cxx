@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-06 15:17:54 $
+ *  last change: $Author: tbe $ $Date: 2002-11-20 16:56:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER3( VCLXAccessibleComponent, AccessibleExtendedCom
 
 ::rtl::OUString VCLXAccessibleComponent::getImplementationName() throw (uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleExtendedComponent" );
+    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleWindow" );
 }
 
 sal_Bool VCLXAccessibleComponent::supportsService( const ::rtl::OUString& rServiceName ) throw (uno::RuntimeException)
@@ -201,10 +201,8 @@ sal_Bool VCLXAccessibleComponent::supportsService( const ::rtl::OUString& rServi
 
 uno::Sequence< ::rtl::OUString > VCLXAccessibleComponent::getSupportedServiceNames() throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aNames(3);
-    aNames[0] = ::rtl::OUString::createFromAscii( "drafts.com.sun.star.accessibility.AccessibleContext" );
-    aNames[1] = ::rtl::OUString::createFromAscii( "drafts.com.sun.star.accessibility.AccessibleComponent" );
-    aNames[2] = ::rtl::OUString::createFromAscii( "drafts.com.sun.star.accessibility.AccessibleExtendedComponent" );
+    uno::Sequence< ::rtl::OUString > aNames(1);
+    aNames[0] = ::rtl::OUString::createFromAscii( "drafts.com.sun.star.awt.AccessibleWindow" );
     return aNames;
 }
 
