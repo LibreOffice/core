@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdiface.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 08:06:53 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
 #include <com/sun/star/reflection/XMethodParameter.hpp>
 #include <com/sun/star/reflection/XParameter.hpp>
+#include "com/sun/star/uno/RuntimeException.hpp"
 
 #ifndef _STOC_RDBTDP_BASE_HXX
 #include "base.hxx"
@@ -377,6 +378,18 @@ Reference<XTypeDescription > InterfaceAttributeImpl::getType()
 //##################################################################################################
 //##################################################################################################
 
+void InterfaceTypeDescriptionImpl::checkInterfaceType(
+    Reference< XTypeDescription > const & type)
+{
+    if (resolveTypedefs(type)->getTypeClass() != TypeClass_INTERFACE) {
+        throw RuntimeException(
+            OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "Interface base is not an interface type")),
+            static_cast< OWeakObject * >(this));
+    }
+}
+
 namespace {
 
 class BaseOffset {
@@ -402,10 +415,11 @@ BaseOffset::BaseOffset(Reference< XInterfaceTypeDescription2 > const & desc) {
 void BaseOffset::calculateBases(
     Reference< XInterfaceTypeDescription2 > const & desc)
 {
-    Sequence< Reference < XInterfaceTypeDescription2 > > bases(
-        desc->getBaseTypes());
+    Sequence< Reference < XTypeDescription > > bases(desc->getBaseTypes());
     for (sal_Int32 i = 0; i < bases.getLength(); ++i) {
-        calculate(bases[i]);
+        calculate(
+            Reference< XInterfaceTypeDescription2 >(
+                resolveTypedefs(bases[i]), UNO_QUERY_THROW));
     }
 }
 
@@ -459,10 +473,8 @@ OUString InterfaceTypeDescriptionImpl::getName()
 Reference< XTypeDescription > InterfaceTypeDescriptionImpl::getBaseType()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    Sequence< Reference< XInterfaceTypeDescription2 > > aBaseTypes(
-        getBaseTypes());
-    return aBaseTypes.getLength() >= 1
-        ? Reference< XTypeDescription >(aBaseTypes[0], UNO_QUERY) : 0;
+    Sequence< Reference< XTypeDescription > > aBaseTypes(getBaseTypes());
+    return aBaseTypes.getLength() >= 1 ? aBaseTypes[0] : 0;
 }
 //__________________________________________________________________________________________________
 Uik SAL_CALL InterfaceTypeDescriptionImpl::getUik()
@@ -552,62 +564,54 @@ Sequence< Reference< XInterfaceMemberTypeDescription > > InterfaceTypeDescriptio
     return _members;
 }
 
-Sequence< Reference< XInterfaceTypeDescription2 > >
+Sequence< Reference< XTypeDescription > >
 InterfaceTypeDescriptionImpl::getBaseTypes() throw (RuntimeException) {
     MutexGuard guard(getMutex());
     if (_xBaseTDs.getLength() == 0 && _aBaseTypes.getLength() != 0) {
-        bool success = true;
-        Sequence< Reference< XInterfaceTypeDescription2 > > tds(
-            _aBaseTypes.getLength());
-        try {
-            for (sal_Int32 i = 0; i < _aBaseTypes.getLength(); ++i) {
-                if (!(_xTDMgr->getByHierarchicalName(_aBaseTypes[i])
-                      >>= tds[i]))
-                {
-                    success = false;
-                    break;
-                }
+        Sequence< Reference< XTypeDescription > > tds(_aBaseTypes.getLength());
+        for (sal_Int32 i = 0; i < _aBaseTypes.getLength(); ++i) {
+            try {
+                _xTDMgr->getByHierarchicalName(_aBaseTypes[i]) >>= tds[i];
+            } catch (NoSuchElementException & e) {
+                throw RuntimeException(
+                    (OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.container.NoSuchElementException: "))
+                     + e.Message),
+                    static_cast< OWeakObject * >(this));
             }
-        } catch (NoSuchElementException &) {
-            success = false;
+            OSL_ASSERT(tds[i].is());
+            checkInterfaceType(tds[i]);
         }
-        if (success) {
-            _xBaseTDs = tds;
-        } else {
-            // Never try again, if TDs were not found:
-            _aBaseTypes.realloc(0);
-        }
+        _xBaseTDs = tds;
     }
     return _xBaseTDs;
 }
 
-Sequence< Reference< XInterfaceTypeDescription2 > >
+Sequence< Reference< XTypeDescription > >
 InterfaceTypeDescriptionImpl::getOptionalBaseTypes() throw (RuntimeException) {
     MutexGuard guard(getMutex());
     if (_xOptionalBaseTDs.getLength() == 0
         && _aOptionalBaseTypes.getLength() != 0)
     {
-        bool success = true;
-        Sequence< Reference< XInterfaceTypeDescription2 > > tds(
+        Sequence< Reference< XTypeDescription > > tds(
             _aOptionalBaseTypes.getLength());
-        try {
-            for (sal_Int32 i = 0; i < _aOptionalBaseTypes.getLength(); ++i) {
-                if (!(_xTDMgr->getByHierarchicalName(_aOptionalBaseTypes[i])
-                      >>= tds[i]))
-                {
-                    success = false;
-                    break;
-                }
+        for (sal_Int32 i = 0; i < _aOptionalBaseTypes.getLength(); ++i) {
+            try {
+                _xTDMgr->getByHierarchicalName(_aOptionalBaseTypes[i])
+                    >>= tds[i];
+            } catch (NoSuchElementException & e) {
+                throw RuntimeException(
+                    (OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.container.NoSuchElementException: "))
+                     + e.Message),
+                    static_cast< OWeakObject * >(this));
             }
-        } catch (NoSuchElementException &) {
-            success = false;
+            OSL_ASSERT(tds[i].is());
+            checkInterfaceType(tds[i]);
         }
-        if (success) {
-            _xOptionalBaseTDs = tds;
-        } else {
-            // Never try again, if TDs were not found:
-            _aOptionalBaseTypes.realloc(0);
-        }
+        _xOptionalBaseTDs = tds;
     }
     return _xOptionalBaseTDs;
 }
