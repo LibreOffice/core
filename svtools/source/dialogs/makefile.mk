@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: fs $ $Date: 2000-11-24 12:32:02 $
+#   last change: $Author: fs $ $Date: 2001-02-15 14:09:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,12 +78,16 @@ SRCFILES=		filedlg2.src	\
                 printdlg.src	\
                 colrdlg.src		\
                 logindlg.src	\
-                addresstemplate.src
+                addresstemplate.src	\
+                wizardmachine.src
 
-EXCEPTIONSFILES=	$(SLO)$/addresstemplate.obj
+
+EXCEPTIONSFILES=	$(SLO)$/addresstemplate.obj	\
+                    $(SLO)$/wizardmachine.obj
 
 
-SLOFILES=		$(SLO)$/addresstemplate.obj 	\
+SLOFILES=		$(SLO)$/wizardmachine.obj 	\
+                $(SLO)$/addresstemplate.obj 	\
                 $(SLO)$/filedlg.obj 	\
                 $(SLO)$/filedlg2.obj	\
                 $(SLO)$/prnsetup.obj	\
