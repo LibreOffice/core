@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-30 08:49:19 $
+ *  last change: $Author: ama $ $Date: 2001-08-30 10:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2505,13 +2505,6 @@ void SwFtnContFrm::PaintLine( const SwRect& rRect,
 |*  Letzte Aenderung    MA 28. Mar. 94
 |*
 |*************************************************************************/
-
-#ifdef VERTICAL_LAYOUT
-#define V_WIDTH SSize().*pDir1Sz
-#define V_HEIGHT SSize().*pDir2Sz
-#define V_X Pos().*pDir1Pt
-#define V_Y Pos().*pDir2Pt
-#endif
 
 void SwLayoutFrm::PaintColLines( const SwRect &rRect, const SwFmtCol &rFmtCol,
                                  const SwPageFrm *pPage ) const

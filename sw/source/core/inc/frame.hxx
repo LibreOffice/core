@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-24 09:03:16 $
+ *  last change: $Author: ama $ $Date: 2001-08-30 10:20:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,20 @@ struct SwCrsrMoveState;
 #define FRMC_TXT         14
 #define FRMC_NOTXT       15
 
+#define FRM_NEIGHBOUR   0x2004
+#define FRM_NOTE_VERT   0x5a60
+
+#define V_WIDTH SSize().*pDir1Sz
+#define V_HEIGHT SSize().*pDir2Sz
+#define V_X Pos().*pDir1Pt
+#define V_Y Pos().*pDir2Pt
+
 #else
+
+#define V_WIDTH SSize().*pWidth
+#define V_HEIGHT SSize().*pHeight
+#define V_X Pos().*pX
+#define V_Y Pos().*pY
 
 #define FRMC_ROOT        0x0001
 #define FRMC_PAGE        0x0002
