@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmprop.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-04 16:39:17 $
+ *  last change: $Author: fs $ $Date: 2001-01-10 13:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,7 +341,7 @@ const FmPropertyInfo* FmPropertyInfoService::getPropertyInfo()
             FmPropertyInfo(FM_PROP_DATASOURCE,          FM_ATTR_DATASOURCE,         sal_True,  ::rtl::OUString(SVX_RES(RID_STR_DATASOURCE)),            nPos++, HID_PROP_DATASOURCE) ,
             FmPropertyInfo(FM_PROP_COMMAND,             FM_ATTR_COMMAND,            sal_False, ::rtl::OUString(SVX_RES(RID_STR_CURSORSOURCE)),      nPos++, HID_PROP_CURSORSOURCE),
             FmPropertyInfo(FM_PROP_COMMANDTYPE,         FM_ATTR_COMMANDTYPE,        sal_False, ::rtl::OUString(SVX_RES(RID_STR_CURSORSOURCETYPE)),  nPos++, HID_PROP_CURSORSOURCETYPE),
-            FmPropertyInfo(FM_PROP_ESCAPE_PROCESSING,   FM_ATTR_ESCAPE_PROCESSING,  sal_False, ::rtl::OUString(SVX_RES(RID_STR_ESCAPE_PROCESSING)), nPos++, 0),
+            FmPropertyInfo(FM_PROP_ESCAPE_PROCESSING,   FM_ATTR_ESCAPE_PROCESSING,  sal_False, ::rtl::OUString(SVX_RES(RID_STR_ESCAPE_PROCESSING)), nPos++, HID_PROP_ESCAPE_PROCESSING),
             FmPropertyInfo(FM_PROP_FILTER_CRITERIA,     FM_ATTR_FILTER_CRITERIA,    sal_False,  ::rtl::OUString(SVX_RES(RID_STR_FILTER_CRITERIA)),  nPos++, HID_PROP_FILTER_CRITERIA ),
             FmPropertyInfo(FM_PROP_SORT,                FM_ATTR_SORT,               sal_False,  ::rtl::OUString(SVX_RES(RID_STR_SORT_CRITERIA)),            nPos++, HID_PROP_SORT_CRITERIA) ,
             FmPropertyInfo(FM_PROP_INSERTONLY,          FM_ATTR_INSERTONLY,         sal_False,  ::rtl::OUString(SVX_RES(RID_STR_DATAENTRY)),            nPos++, HID_PROP_DATAENTRY) ,
