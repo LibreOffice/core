@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:21:33 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -463,14 +462,15 @@ void XclImpEscherTxo::ApplyTextOnSdrObj( SdrObject& rSdrObj ) const
         }
 
         // horizontal text alignment (#i12188# not stored in Escher stream, but in TXO)
-        SdrTextHorzAdjust eSdrHorAlign = SDRTEXTHORZADJUST_LEFT;
+        // #i37794# always default to "full width" regardless of alignment.
+        SdrTextHorzAdjust eSdrHorAlign = SDRTEXTHORZADJUST_BLOCK;
         SvxAdjust eEEHorAlign = SVX_ADJUST_LEFT;
         switch( meHorAlign )
         {
-            case xlTxoHAlignLeft:       eSdrHorAlign = SDRTEXTHORZADJUST_LEFT;      eEEHorAlign = SVX_ADJUST_LEFT;      break;
-            case xlTxoHAlignCenter:     eSdrHorAlign = SDRTEXTHORZADJUST_CENTER;    eEEHorAlign = SVX_ADJUST_CENTER;    break;
-            case xlTxoHAlignRight:      eSdrHorAlign = SDRTEXTHORZADJUST_RIGHT;     eEEHorAlign = SVX_ADJUST_RIGHT;     break;
-            case xlTxoHAlignJustify:    eSdrHorAlign = SDRTEXTHORZADJUST_BLOCK;     eEEHorAlign = SVX_ADJUST_BLOCK;     break;
+            case xlTxoHAlignLeft:      eEEHorAlign = SVX_ADJUST_LEFT;     break;
+            case xlTxoHAlignCenter:    eEEHorAlign = SVX_ADJUST_CENTER;   break;
+            case xlTxoHAlignRight:     eEEHorAlign = SVX_ADJUST_RIGHT;    break;
+            case xlTxoHAlignJustify:   eEEHorAlign = SVX_ADJUST_BLOCK;    break;
         }
         pTextObj->SetMergedItem( SdrTextHorzAdjustItem( eSdrHorAlign ) );
         pTextObj->SetMergedItem( SvxAdjustItem( eEEHorAlign, EE_PARA_JUST ) );
@@ -1864,16 +1864,13 @@ void XclImpObjectManager::UpdateConnectorRules( const DffObjData& rObjData, SdrO
         }
         else
         {
-            /*  #i12638# Strictly speaking the test '!pRule->pAObj' should not
-                be necessary. But for connectors to hierarchial organization
-                charts it does prevent overwriting the connector data. This is
-                also true for pBObj below. */
-            if( !pRule->pAObj && (rObjData.nShapeId == pRule->nShapeA) )
+            // #i37900# - remove fix for #i12638#
+            if( rObjData.nShapeId == pRule->nShapeA )
             {
                 pRule->pAObj = &rSdrObj;
                 pRule->nSpFlagsA = rObjData.nSpFlags;
             }
-            if( !pRule->pBObj && (rObjData.nShapeId == pRule->nShapeB) )
+            if( rObjData.nShapeId == pRule->nShapeB )
             {
                 pRule->pBObj = &rSdrObj;
                 pRule->nSpFlagsB = rObjData.nSpFlags;
