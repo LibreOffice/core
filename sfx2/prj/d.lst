@@ -112,7 +112,6 @@ hedabu: ..\inc\objsh.hxx %_DEST%\inc%_EXT%\sfx2\objsh.hxx
 hedabu: ..\inc\printer.hxx %_DEST%\inc%_EXT%\sfx2\printer.hxx
 hedabu: ..\inc\progress.hxx %_DEST%\inc%_EXT%\sfx2\progress.hxx
 hedabu: ..\inc\request.hxx %_DEST%\inc%_EXT%\sfx2\request.hxx
-hedabu: ..\inc\saveopt.hxx %_DEST%\inc%_EXT%\sfx2\saveopt.hxx
 hedabu: ..\inc\sfx.hrc %_DEST%\inc%_EXT%\sfx2\sfx.hrc
 hedabu: ..\inc\sfxdefs.hxx %_DEST%\inc%_EXT%\sfx2\sfxdefs.hxx
 hedabu: ..\inc\sfxdir.hxx %_DEST%\inc%_EXT%\sfx2\sfxdir.hxx
