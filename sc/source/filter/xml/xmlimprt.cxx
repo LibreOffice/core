@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-18 13:36:17 $
+ *  last change: $Author: sab $ $Date: 2001-05-23 11:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1478,7 +1478,9 @@ ScXMLImport::ScXMLImport(const sal_uInt16 nImportFlag) :
     sLocale(RTL_CONSTASCII_USTRINGPARAM(SC_LOCALE)),
     sCellStyle(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)),
     sStandardFormat(RTL_CONSTASCII_USTRINGPARAM(SC_STANDARDFORMAT)),
-    sType(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE))
+    sType(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)),
+    bNullDateSetted(sal_False),
+    pNumberFormatAttributesExportHelper(NULL)
 
 //  pParaItemMapper( 0 ),
 {
@@ -1865,35 +1867,6 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
     }
 }
 
-sal_Int16 ScXMLImport::GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard)
-{
-    uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier = GetNumberFormatsSupplier();
-    if (xNumberFormatsSupplier.is())
-    {
-        uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
-        if (xNumberFormats.is())
-        {
-            try
-            {
-                uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
-                uno::Any aIsStandardFormat = xNumberPropertySet->getPropertyValue(sStandardFormat);
-                aIsStandardFormat >>= bIsStandard;
-                uno::Any aNumberFormat = xNumberPropertySet->getPropertyValue(sType);
-                sal_Int16 nNumberFormat;
-                if ( aNumberFormat >>= nNumberFormat )
-                {
-                    return nNumberFormat;
-                }
-            }
-            catch ( uno::Exception& )
-            {
-                DBG_ERROR("Numberformat not found");
-            }
-        }
-    }
-    return 0;
-}
-
 sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUString& rCurrency)
 {
     uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier = GetNumberFormatsSupplier();
@@ -1952,11 +1925,15 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties, con
                     if ( aKey >>= nKey )
                     {
                         sal_Bool bIsStandard;
-                        sal_Int32 nCurrentCellType(GetCellType(nKey, bIsStandard) & ~util::NumberFormat::DEFINED);
+                        rtl::OUString sCurrentCurrency;
+                        sal_Int32 nCurrentCellType(
+                            GetNumberFormatAttributesExportHelper()->GetCellType(
+                                nKey, sCurrentCurrency, bIsStandard) & ~util::NumberFormat::DEFINED);
                         if ((nCellType != nCurrentCellType) && !(nCellType == util::NumberFormat::NUMBER &&
                             ((nCurrentCellType == util::NumberFormat::SCIENTIFIC) ||
                             (nCurrentCellType == util::NumberFormat::FRACTION) ||
-                            (nCurrentCellType == 0))))
+                            (nCurrentCellType == 0))) && !((nCellType == util::NumberFormat::DATETIME) &&
+                            (nCurrentCellType == util::NumberFormat::DATE)))
                         {
                             try
                             {
@@ -1991,18 +1968,14 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties, con
                         }
                         else
                         {
-                            if ((nCellType == util::NumberFormat::CURRENCY) && rCurrency.getLength())
+                            if ((nCellType == util::NumberFormat::CURRENCY) && rCurrency.getLength() && sCurrentCurrency.getLength())
                             {
-                                rtl::OUString sNewCurrencySymbol;
-                                if (XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(nKey, sNewCurrencySymbol, xNumberFormatsSupplier))
+                                if (!sCurrentCurrency.equals(rCurrency))
                                 {
-                                    if (!sNewCurrencySymbol.equals(rCurrency))
-                                    {
-                                        nKey = SetCurrencySymbol(nKey, rCurrency);
-                                        uno::Any aAny;
-                                        aAny <<= nKey;
-                                        rProperties->setPropertyValue( sNumberFormat, aAny);
-                                    }
+                                    nKey = SetCurrencySymbol(nKey, rCurrency);
+                                    uno::Any aAny;
+                                    aAny <<= nKey;
+                                    rProperties->setPropertyValue( sNumberFormat, aAny);
                                 }
                             }
                         }
@@ -2042,3 +2015,19 @@ void ScXMLImport::SetStyleToRange(const ScRange& rRange, const rtl::OUString& rS
         }
     }
 }
+
+sal_Bool ScXMLImport::SetNullDateOnUnitConverter()
+{
+    if (!bNullDateSetted)
+        bNullDateSetted = GetMM100UnitConverter().setNullDate(GetModel());
+    DBG_ASSERT(bNullDateSetted, "could not set the null date");
+    return bNullDateSetted;
+}
+
+XMLNumberFormatAttributesExportHelper* ScXMLImport::GetNumberFormatAttributesExportHelper()
+{
+    if (!pNumberFormatAttributesExportHelper)
+        pNumberFormatAttributesExportHelper = new XMLNumberFormatAttributesExportHelper(GetNumberFormatsSupplier());
+    return pNumberFormatAttributesExportHelper;
+}
+
