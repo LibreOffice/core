@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:31:32 $
+#   last change: $Author: jbu $ $Date: 2002-02-18 11:38:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,7 +69,10 @@ TARGET  = juh
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/version.mk
 
-JARCLASSDIRS	= com$/sun$/star$/comp$/helper
+JARCLASSDIRS	= \
+    com$/sun$/star$/comp$/helper \
+    com$/sun$/star$/lib$/uno$/adapter
+
 JARTARGET		= $(TARGET).jar
 JARCOMPRESS		= TRUE
 
