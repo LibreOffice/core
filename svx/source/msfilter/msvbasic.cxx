@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,11 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
         return 0;
     }
 
+    static const sal_uInt8 aOffice2003LE[] =
+    {
+        0x76, 0x00, 0x00, 0x01, 0x00, 0xFF
+    };
+
     static const sal_uInt8 aOfficeXPLE[] =
     {
         0x73, 0x00, 0x00, 0x01, 0x00, 0xFF
@@ -243,7 +248,12 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     xVBAProject->Read( aProduct, sizeof(aProduct) );
 
     bool bIsUnicode;
-    if (!(memcmp(aProduct, aOfficeXPLE, sizeof(aProduct))))
+    if (!(memcmp(aProduct, aOffice2003LE, sizeof(aProduct))))
+    {
+        xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+        bIsUnicode = true;
+    }
+    else if (!(memcmp(aProduct, aOfficeXPLE, sizeof(aProduct))))
     {
         xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
         bIsUnicode = true;
@@ -386,7 +396,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
 
 #ifdef __BIGENDIAN
             for( j = 0; j < nLen / 2; ++j, ++pBuf )
-                *pBuf = SWAPLONG( *pBuf );
+                *pBuf = SWAPSHORT( *pBuf );
 #endif // ifdef __BIGENDIAN
         }
         else
