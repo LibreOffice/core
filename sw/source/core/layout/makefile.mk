@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-20 16:50:22 $
+#   last change: $Author: hr $ $Date: 2004-02-02 18:22:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ CDEFS+=-DDEBUG
 
 SLOFILES =  \
         $(SLO)$/atrfrm.obj \
+                $(SLO)$/anchoredobjectposition.obj \
         $(SLO)$/calcmove.obj \
         $(SLO)$/colfrm.obj \
         $(SLO)$/findfrm.obj \
