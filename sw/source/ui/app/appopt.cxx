@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-06-11 08:39:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,8 +401,8 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     SwModuleOptions* pMCfg = GetModuleConfig();
 
     const SfxPoolItem* pItem;
-    SfxBindings &rBnd = pAppView ? pAppView->GetViewFrame()->GetBindings()
-                                 : SfxViewFrame::Current()->GetBindings();
+    SfxBindings *pBindings = pAppView ? &pAppView->GetViewFrame()->GetBindings()
+                                 : NULL;
 
     /*---------------------------------------------------------------------
             Seite Dokumentansicht auswerten
@@ -420,13 +420,17 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
                     !aViewOpt.IsLineBreak( TRUE ) && pDocDispItem->bManualBreak )
             {
                 aViewOpt.SetViewMetaChars(TRUE);
-                rBnd.Invalidate(FN_VIEW_META_CHARS);
+                if(pBindings)
+                    pBindings->Invalidate(FN_VIEW_META_CHARS);
             }
 
         }
         pDocDispItem->FillViewOptions( aViewOpt );
-        rBnd.Invalidate(FN_VIEW_GRAPHIC);
-        rBnd.Invalidate(FN_VIEW_HIDDEN_PARA);
+        if(pBindings)
+        {
+            pBindings->Invalidate(FN_VIEW_GRAPHIC);
+            pBindings->Invalidate(FN_VIEW_HIDDEN_PARA);
+        }
     }
 
     /*---------------------------------------------------------------------
@@ -518,8 +522,11 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
         if( aViewOpt.GetDivisionY() != nDiv  )
             aViewOpt.SetDivisionY( nDiv  );
 
-        rBnd.Invalidate(SID_GRID_VISIBLE);
-        rBnd.Invalidate(SID_GRID_USE);
+        if(pBindings)
+        {
+            pBindings->Invalidate(SID_GRID_VISIBLE);
+            pBindings->Invalidate(SID_GRID_USE);
+        }
     }
 
     //--------------------------------------------------------------------------
@@ -545,7 +552,8 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
                         FN_PARAM_SHADOWCURSOR, FALSE, &pItem ))
     {
         ((SwShadowCursorItem*)pItem)->FillViewOptions( aViewOpt );
-        rBnd.Invalidate(FN_SHADOWCURSOR);
+        if(pBindings)
+            pBindings->Invalidate(FN_SHADOWCURSOR);
     }
 
     if( SFX_ITEM_SET == rSet.GetItemState(
