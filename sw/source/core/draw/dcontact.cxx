@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:02:08 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,11 +439,6 @@ void SwContact::_MoveObjToLayer( const bool _bToVisible,
 // -------------------------------------------------------------------------
 // OD 2004-01-16 #110582# - some virtual helper methods for information
 // about the object (Writer fly frame resp. drawing object)
-
-const SwNodeIndex& SwContact::GetCntntAnchorNode() const
-{
-    return GetCntntAnchor().nNode;
-}
 
 const SwIndex& SwContact::GetCntntAnchorIndex() const
 {
@@ -1883,18 +1878,6 @@ TYPEINIT1(SwDrawVirtObj,SdrVirtObj);
 SwDrawVirtObj::SwDrawVirtObj( SdrObject&        _rNewObj,
                               SwDrawContact&    _rDrawContact )
     : SdrVirtObj( _rNewObj ),
-      // OD 2004-03-29 #i26791# - init new member <maAnchoredDrawObj>
-      maAnchoredDrawObj(),
-      mrDrawContact( _rDrawContact )
-{
-    // OD 2004-03-29 #i26791#
-    maAnchoredDrawObj.SetDrawObj( *this );
-}
-
-SwDrawVirtObj::SwDrawVirtObj( SdrObject&        _rNewObj,
-                              const Point&      _rAnchorPos,
-                              SwDrawContact&    _rDrawContact )
-    : SdrVirtObj( _rNewObj, _rAnchorPos ),
       // OD 2004-03-29 #i26791# - init new member <maAnchoredDrawObj>
       maAnchoredDrawObj(),
       mrDrawContact( _rDrawContact )
