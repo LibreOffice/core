@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-28 11:08:38 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,7 +388,7 @@ BOOL ScViewFunctionSet::SetCursorAtCell( short nPosX, short nPosY, BOOL bScroll 
 
         USHORT nStartX, nStartY, nEndX, nEndY;      // Block
         USHORT nDummy;
-        pViewData->GetSimpleArea( nStartX, nStartY, nDummy, nEndX, nEndY, nDummy, FALSE );
+        pViewData->GetSimpleArea( nStartX, nStartY, nDummy, nEndX, nEndY, nDummy );
 
         if (pViewData->GetRefType() != SC_REFTYPE_FILL)
         {
@@ -548,7 +548,7 @@ BOOL ScViewFunctionSet::SetCursorAtCell( short nPosX, short nPosY, BOOL bScroll 
         {
             USHORT nStartX, nStartY, nEndX, nEndY;      // Block
             USHORT nDummy;
-            pViewData->GetSimpleArea( nStartX, nStartY, nDummy, nEndX, nEndY, nDummy, FALSE );
+            pViewData->GetSimpleArea( nStartX, nStartY, nDummy, nEndX, nEndY, nDummy );
 
             if (pViewData->GetRefType() != SC_REFTYPE_FILL)
             {
