@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SocketConnection.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:52 $
+ *  last change: $Author: kr $ $Date: 2000-10-30 11:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ import com.sun.star.connection.XConnectionBroadcaster;
  * and is uses by the <code>SocketConnector</code> and the <code>SocketAcceptor</code>.
  * This class is not part of the provided <code>api</code>.
  * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:52 $
+ * @version     $Revision: 1.2 $ $ $Date: 2000-10-30 11:39:35 $
  * @author      Kay Ramme
  * @see         com.sun.star.comp.connections.SocketAcceptor
  * @see         com.sun.star.comp.connections.SocketConnector
@@ -173,19 +173,22 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
             notifyListeners_open();
         }
 
-        int read_bytes = 0;
+        String errMessage = null;
 
+        int read_bytes = 0;
         bytes[0] = new byte[nBytesToRead];
 
         try {
+            int count = 0;
+
             do {
-                int count = _inputStream.read(bytes[0], read_bytes, nBytesToRead - read_bytes);
+                count = _inputStream.read(bytes[0], read_bytes, nBytesToRead - read_bytes);
                 if(count == -1)
-                    throw new com.sun.star.io.IOException("EOF reached - " + getDescription());
+                    errMessage = "EOF reached - " + getDescription();
 
                 read_bytes += count;
             }
-            while(read_bytes >= 0 && read_bytes < nBytesToRead);
+            while(read_bytes >= 0 && read_bytes < nBytesToRead && count >= 0);
         }
         catch(IOException ioException) {
             if(DEBUG) {
@@ -193,7 +196,11 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
                 ioException.printStackTrace();
             }
 
-            com.sun.star.io.IOException unoIOException = new com.sun.star.io.IOException(ioException.toString());
+            errMessage = ioException.toString();
+        }
+
+        if(errMessage != null) {
+            com.sun.star.io.IOException unoIOException = new com.sun.star.io.IOException(errMessage);
             notifyListeners_error(unoIOException);
 
             throw unoIOException;
