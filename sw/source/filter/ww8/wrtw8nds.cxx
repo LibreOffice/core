@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-02 09:59:45 $
+ *  last change: $Author: cmc $ $Date: 2001-11-08 13:30:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
+#endif
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
 #endif
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
@@ -277,8 +280,9 @@ WW8_SwAttrIter::WW8_SwAttrIter( SwWW8Writer& rWr, const SwTxtNode& rTxtNd )
     // Attributwechsel an Pos 0 wird ignoriert, da davon ausgegangen
     // wird, dass am Absatzanfang sowieso die Attribute neu ausgegeben
     // werden.
-    eNdChrSet = ((SvxFontItem&)rNd.SwCntntNode::GetAttr(
-                                        RES_CHRATR_FONT )).GetCharSet();
+    eNdChrSet =
+        ((SvxFontItem&)rNd.SwCntntNode::GetAttr(RES_CHRATR_FONT)).GetCharSet();
+    eNdChrSet = GetExtendedTextEncoding(eNdChrSet);
 
     if( pBreakIt->xBreak.is() )
         nScript = pBreakIt->xBreak->getScriptType( rTxtNd.GetTxt(), 0);
@@ -422,6 +426,7 @@ void WW8_SwAttrIter::SetCharSet( const SwTxtAttr& rAttr, BOOL bStart )
         if( bStart )
         {
             nPos = aChrSetArr.Count();
+            eChrSet = GetExtendedTextEncoding(eChrSet);
             aChrSetArr.Insert( eChrSet, nPos );
             aTxtAtrArr.Insert( p, nPos );
         }
