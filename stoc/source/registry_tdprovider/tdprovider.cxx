@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdprovider.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:36:44 $
+ *  last change: $Author: dbo $ $Date: 2001-05-10 14:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
-#ifndef _CPPUHELPER_COMPONENT_HXX_
-#include <cppuhelper/component.hxx>
+#ifndef _CPPUHELPER_COMPBASE2_HXX_
+#include <cppuhelper/compbase2.hxx>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -94,6 +94,9 @@
 
 #include "base.hxx"
 
+#define SERVICENAME "com.sun.star.reflection.TypeDescriptionProvider"
+#define IMPLNAME    "com.sun.star.comp.stoc.RegistryTypeDescriptionProvider"
+
 using namespace com::sun::star::beans;
 using namespace com::sun::star::registry;
 
@@ -101,11 +104,7 @@ using namespace com::sun::star::registry;
 namespace stoc_rdbtdp
 {
 
-#define SERVICENAME "com.sun.star.reflection.TypeDescriptionProvider"
-#define IMPLNAME    "com.sun.star.comp.stoc.RegistryTypeDescriptionProvider"
-
-//  typedef list< Reference< XSimpleRegistry > > RegistryList;
-typedef list< Reference< XRegistryKey > > RegistryKeyList;
+typedef ::std::list< Reference< XRegistryKey > > RegistryKeyList;
 
 //--------------------------------------------------------------------------------------------------
 inline static Sequence< OUString > getSupportedServiceNames()
@@ -114,143 +113,82 @@ inline static Sequence< OUString > getSupportedServiceNames()
     return Sequence< OUString >( &aName, 1 );
 }
 
+struct MutexHolder
+{
+    Mutex _aComponentMutex;
+};
 //==================================================================================================
 class ProviderImpl
-    : public OComponentHelper
-    , public XServiceInfo
-    , public XHierarchicalNameAccess
+    : public MutexHolder
+    , public WeakComponentImplHelper2< XServiceInfo, XHierarchicalNameAccess >
 {
-    Mutex                               _aComponentMutex;
-    Reference< XMultiServiceFactory >   _xSMgr;
-    Reference< XHierarchicalNameAccess > _xTDMgr;
+    Reference< XComponentContext >              _xContext;
+    Reference< XHierarchicalNameAccess >        _xTDMgr;
 
-    Mutex                               _aListsMutex;
-//      RegistryList                        _aOpenRegistries;
-    RegistryKeyList                     _aBaseKeys;
-    RegistryTypeReaderLoader            _aLoader;
+    RegistryKeyList                             _aBaseKeys;
+    RegistryTypeReaderLoader                    _aLoader;
+
+protected:
+    virtual void SAL_CALL disposing();
 
 public:
-    ProviderImpl( const Reference< XMultiServiceFactory > & xMgr );
+    ProviderImpl( const Reference< XComponentContext > & xContext );
     virtual ~ProviderImpl();
-
-    // XInterface
-    virtual Any SAL_CALL queryInterface( const Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire() throw();
-    virtual void SAL_CALL release() throw();
-
-    // some XComponent part from OComponentHelper
-    virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
-    // XTypeProvider
-    virtual Sequence< Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
-
     // XHierarchicalNameAccess
     virtual Any SAL_CALL getByHierarchicalName( const OUString & rName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasByHierarchicalName( const OUString & rName ) throw(::com::sun::star::uno::RuntimeException);
 };
 //__________________________________________________________________________________________________
-ProviderImpl::ProviderImpl( const Reference< XMultiServiceFactory > & xSMgr )
-    : OComponentHelper( _aComponentMutex )
-    , _xSMgr( xSMgr )
-    , _xTDMgr( _xSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager") ) ), UNO_QUERY )
+ProviderImpl::ProviderImpl( const Reference< XComponentContext > & xContext )
+    : WeakComponentImplHelper2< XServiceInfo, XHierarchicalNameAccess >( _aComponentMutex )
+    , _xContext( xContext )
 {
-    OSL_ENSURE( _xTDMgr.is(), "### cannot get service instance \"com.sun.star.reflection.TypeDescriptionManager\"!" );
+    xContext->getValueByName(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager") ) ) >>= _xTDMgr;
+    OSL_ENSURE( _xTDMgr.is(), "### cannot get single instance \"TypeDescriptionManager\" from context!" );
+
+    // registries to read from
+    Sequence< Reference< XSimpleRegistry > > registries;
+    _xContext->getValueByName( OUString( RTL_CONSTASCII_USTRINGPARAM(
+        IMPLNAME ".Registries") ) ) >>= registries;
+
+    Reference< XSimpleRegistry > const * pRegistries = registries.getConstArray();
+    for ( sal_Int32 nPos = registries.getLength(); nPos--; )
+    {
+        Reference< XSimpleRegistry > const & xRegistry = pRegistries[ nPos ];
+        if (xRegistry.is() && xRegistry->isValid())
+        {
+            Reference< XRegistryKey > xKey( xRegistry->getRootKey()->openKey(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("/UCR") ) ) );
+            if (xKey.is() && xKey->isValid())
+            {
+                _aBaseKeys.push_back( xKey );
+            }
+        }
+    }
 }
 //__________________________________________________________________________________________________
 ProviderImpl::~ProviderImpl()
 {
 }
+//__________________________________________________________________________________________________
+void ProviderImpl::disposing()
+{
+    _xTDMgr.clear();
+    _xContext.clear();
 
-// XInterface
-//__________________________________________________________________________________________________
-Any ProviderImpl::queryInterface( const Type & rType )
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    Any aRet( cppu::queryInterface(
-        rType,
-        static_cast< XHierarchicalNameAccess * >( this ),
-        static_cast< XServiceInfo * >( this ) ) );
-
-    return (aRet.hasValue() ? aRet : OComponentHelper::queryInterface( rType ));
-}
-//__________________________________________________________________________________________________
-void ProviderImpl::acquire() throw()
-{
-    OComponentHelper::acquire();
-}
-//__________________________________________________________________________________________________
-void ProviderImpl::release() throw()
-{
-    OComponentHelper::release();
-}
-
-// XTypeProvider
-//__________________________________________________________________________________________________
-Sequence< Type > ProviderImpl::getTypes()
-    throw (::com::sun::star::uno::RuntimeException)
-{
-    static OTypeCollection * s_pTypes = 0;
-    if (! s_pTypes)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! s_pTypes)
-        {
-            static OTypeCollection s_aTypes(
-                ::getCppuType( (const Reference< XServiceInfo > *)0 ),
-                ::getCppuType( (const Reference< XHierarchicalNameAccess > *)0 ),
-                OComponentHelper::getTypes() );
-            s_pTypes = &s_aTypes;
-        }
-    }
-    return s_pTypes->getTypes();
-}
-//__________________________________________________________________________________________________
-Sequence< sal_Int8 > ProviderImpl::getImplementationId()
-    throw (::com::sun::star::uno::RuntimeException)
-{
-    static OImplementationId * s_pId = 0;
-    if (! s_pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! s_pId)
-        {
-            static OImplementationId s_aId;
-            s_pId = &s_aId;
-        }
-    }
-    return s_pId->getImplementationId();
-}
-
-// XComponent
-//__________________________________________________________________________________________________
-void ProviderImpl::dispose()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    OComponentHelper::dispose();
-
-    MutexGuard aGuard( _aListsMutex );
     for ( RegistryKeyList::const_iterator iPos( _aBaseKeys.begin() );
           iPos != _aBaseKeys.end(); ++iPos )
     {
         (*iPos)->closeKey();
     }
     _aBaseKeys.clear();
-//      for ( RegistryList::const_iterator iRPos( _aOpenRegistries.begin() );
-//            iRPos != _aOpenRegistries.end(); ++iRPos )
-//      {
-//          (*iRPos)->close();
-//      }
-//      _aOpenRegistries.clear();
-
-    MutexGuard aGuard2( _aComponentMutex );
-    _xTDMgr.clear();
-    _xSMgr.clear();
 }
 
 // XServiceInfo
@@ -289,32 +227,6 @@ Any SAL_CALL ProviderImpl::getByHierarchicalName( const OUString & rName )
 
     if (_aLoader.isLoaded()) // dll is loaded?
     {
-        MutexGuard aGuard( _aListsMutex );
-        if (! _aBaseKeys.size())
-        {
-            // DBO TODO:
-            // listen for registry changes
-
-            // reading from service manager registry for all typelib data
-            Reference< XPropertySet > xProps( _xSMgr, UNO_QUERY );
-            if (xProps.is())
-            {
-                Any aReg( xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Registry") ) ) );
-                if (aReg.hasValue() && aReg.getValueTypeClass() == TypeClass_INTERFACE)
-                {
-                    Reference< XSimpleRegistry > xSource(
-                        *(const Reference< XInterface > *)aReg.getValue(), UNO_QUERY );
-                    if (xSource->isValid())
-                    {
-                        Reference< XRegistryKey > xKey( xSource->getRootKey()->openKey(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM("/UCR") ) ) );
-                        if (xKey.is())
-                            _aBaseKeys.push_back( xKey );
-                    }
-                }
-            }
-        }
-
         // read from registry
         OUString aKey( rName.replace( '.', '/' ) );
         for ( RegistryKeyList::const_iterator iPos( _aBaseKeys.begin() );
@@ -327,10 +239,8 @@ Any SAL_CALL ProviderImpl::getByHierarchicalName( const OUString & rName )
                 if (xKey->getValueType() == RegistryValueType_BINARY)
                 {
                     Sequence< sal_Int8 > aBytes( xKey->getBinaryValue() );
-                    RegistryTypeReader aReader( _aLoader,
-                                                (const sal_uInt8 *)aBytes.getConstArray(),
-                                                aBytes.getLength(),
-                                                sal_False );
+                    RegistryTypeReader aReader(
+                        _aLoader, (const sal_uInt8 *)aBytes.getConstArray(), aBytes.getLength(), sal_False );
 
                     OUString aName( aReader.getTypeName().replace( '/', '.' ) );
 
@@ -452,10 +362,11 @@ sal_Bool ProviderImpl::hasByHierarchicalName( const OUString & rName )
 }
 
 //==================================================================================================
-static Reference< XInterface > SAL_CALL ProviderImpl_create( const Reference< XMultiServiceFactory > & xMgr )
+static Reference< XInterface > SAL_CALL ProviderImpl_create(
+    Reference< XComponentContext > const & xContext )
     throw(::com::sun::star::uno::Exception)
 {
-    return Reference< XInterface >( *new ProviderImpl( xMgr ) );
+    return Reference< XInterface >( *new ProviderImpl( xContext ) );
 }
 
 }
@@ -489,7 +400,9 @@ sal_Bool SAL_CALL component_writeInfo(
             const Sequence< OUString > & rSNL = stoc_rdbtdp::getSupportedServiceNames();
             const OUString * pArray = rSNL.getConstArray();
             for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
+            {
                 xNewKey->createKey( pArray[nPos] );
+            }
 
             return sal_True;
         }
@@ -508,10 +421,9 @@ void * SAL_CALL component_getFactory(
 
     if (pServiceManager && rtl_str_compare( pImplName, IMPLNAME ) == 0)
     {
-        Reference< XSingleServiceFactory > xFactory( createOneInstanceFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) ),
+        Reference< XInterface > xFactory( createSingleComponentFactory(
             stoc_rdbtdp::ProviderImpl_create,
+            OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) ),
             stoc_rdbtdp::getSupportedServiceNames() ) );
 
         if (xFactory.is())
