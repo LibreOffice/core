@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2004-04-02 11:01:40 $
+#   last change: $Author: hr $ $Date: 2004-04-13 11:24:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,6 +60,7 @@
 #
 #*************************************************************************
 PRJ=..$/..
+PRJINC=..$/inc
 
 PRJNAME=pcr
 TARGET=pcr
@@ -178,6 +179,7 @@ SLOFILES=			$(SLO)$/controlfontdialog.obj	\
                     $(SLO)$/unourl.obj   \
                     $(SLO)$/formlinkdialog.obj   \
                     $(SLO)$/listselectiondlg.obj   \
+                    $(SLO)$/pushbuttonnavigation.obj   \
 
 
 SRS1NAME=$(TARGET)
@@ -191,7 +193,10 @@ RESLIB1NAME=pcr
 RESLIB1SRSFILES= $(SRS)$/pcr.srs
 #RESLIB1DEPN= pcr.src pcr.hrc
 
-IMGLST_SRS=$(SRS)$/pcr.srs
+RESLIB1NAME=$(TARGET)
+RESLIB1SRSFILES= $(SRS)$/$(TARGET).srs
+
+IMGLST_SRS=$(SRS)$/$(TARGET).srs
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1VERSIONMAP= $(TARGET).map
@@ -221,3 +226,4 @@ DEF1NAME=		$(SHL1TARGET)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
