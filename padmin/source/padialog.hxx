@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:50:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,8 @@ namespace padmin {
         void ConfigureDevice();
         void RenameDevice();
         void PrintTestPage();
+
+        virtual long Notify( NotifyEvent& rEv );
 
         String getSelectedDevice();
     public:
