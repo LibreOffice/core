@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-09 15:53:20 $
+ *  last change: $Author: bm $ $Date: 2000-12-15 17:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@ private:
     SchXMLImportHelper& mrImportHelper;
     com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > mxDiagram;
     std::vector< SchXMLAxis > maAxes;
-    rtl::OUString msAutoStyleName;
     com::sun::star::uno::Sequence< com::sun::star::chart::ChartSeriesAddress >& mrSeriesAddresses;
     rtl::OUString& mrCategoriesAddress;
     sal_Int32 mnDomainOffset;
@@ -104,7 +103,6 @@ public:
     virtual ~SchXMLPlotAreaContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
-    virtual void EndElement();
     virtual SvXMLImportContext* CreateChildContext(
         USHORT nPrefix,
         const rtl::OUString& rLocalName,
