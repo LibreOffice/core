@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-03 14:41:05 $
+ *  last change: $Author: ka $ $Date: 2001-08-21 15:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 // - SdTransferable -
 // ------------------
 
-SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, SdView* pWorkView ) :
+SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, SdView* pWorkView, BOOL bInitOnGetData ) :
     pObjDesc( NULL ),
     pSourceDoc( pSrcDoc ),
     pSdViewIntern( pWorkView ),
@@ -181,7 +181,8 @@ SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, SdView* pWorkView ) :
     pGraphic( NULL ),
     pImageMap( NULL )
 {
-    CreateData();
+    if( !bInitOnGetData )
+        CreateData();
 }
 
 // -----------------------------------------------------------------------------
@@ -189,6 +190,8 @@ SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, SdView* pWorkView ) :
 SdTransferable::~SdTransferable()
 {
     Application::GetSolarMutex().acquire();
+
+    ObjectReleased();
 
     if( bOwnView )
         delete pSdViewIntern;
@@ -385,9 +388,6 @@ void SdTransferable::CreateData()
 
 void SdTransferable::AddSupportedFormats()
 {
-    if( !pSdViewIntern )
-        CreateData();
-
     if( pOLEDataHelper )
     {
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
@@ -601,6 +601,9 @@ void SdTransferable::ObjectReleased()
 
     if( this == SD_MOD()->pTransferDrag )
         SD_MOD()->pTransferDrag = NULL;
+
+    if( pSdViewIntern == SD_MOD()->pSelectionView )
+        SD_MOD()->pSelectionView = NULL;
 }
 
 // -----------------------------------------------------------------------------

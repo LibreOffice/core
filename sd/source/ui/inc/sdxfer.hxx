@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-02 10:12:59 $
+ *  last change: $Author: ka $ $Date: 2001-08-21 15:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ protected:
 
 public:
 
-                                    SdTransferable( SdDrawDocument* pSrcDoc, SdView* pWorkView = NULL );
+                                    SdTransferable( SdDrawDocument* pSrcDoc, SdView* pWorkView, BOOL bInitOnGetData );
                                     ~SdTransferable();
 
     void                            SetDocShell( const SvEmbeddedObjectRef& rRef ) { aDocShellRef = rRef; }

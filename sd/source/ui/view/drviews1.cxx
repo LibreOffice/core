@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-16 09:36:32 $
+ *  last change: $Author: ka $ $Date: 2001-08-21 15:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,8 @@ void __EXPORT SdDrawViewShell::Activate(BOOL bIsMDIActivate)
         GetViewFrame()->GetDispatcher()->Execute(
             SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L);
     }
+
+    pDrView->UpdateSelectionClipboard( FALSE );
 }
 
 /*************************************************************************
@@ -353,6 +355,8 @@ void SdDrawViewShell::SelectionHasChanged()
 
     if( SFX_APP()->GetHelpPI() )
         SetHelpIdBySelection();
+
+    pDrView->UpdateSelectionClipboard( FALSE );
 }
 
 

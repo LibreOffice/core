@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-09 14:52:49 $
+ *  last change: $Author: ka $ $Date: 2001-08-21 15:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,64 +165,13 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
                     mpNavigatorDragDocShell( pNavigatorDragDocShell ) {}
 };
 
-/*************************************************************************
-|*
-|* DataObject fuer Drag&Drop erzeugen
-|*
-\************************************************************************/
+// -----------------------------------------------------------------------------
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SdView::CreateDataObject( SdView* pWorkView, Window& rWindow,
-                                                                                                            const Point& rDragPos )
-{
-    SdTransferable* pTransferable = new SdTransferable( pDoc, pWorkView );
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
-
-    SD_MOD()->pTransferDrag = pTransferable;
-
-    TransferableObjectDescriptor    aObjDesc;
-    String                          aDisplayName;
-    SdrOle2Obj*                     pSdrOleObj = NULL;
-
-    if( aMark.GetMarkCount() == 1 )
-    {
-        SdrObject* pObj = aMark.GetMark( 0 )->GetObj();
-
-        if( pObj && pObj->ISA( SdrOle2Obj ) && ( (SdrOle2Obj*) pObj )->GetObjRef().Is() )
-            pSdrOleObj = (SdrOle2Obj*) pObj;
-    }
-
-    if( pDocSh )
-        aDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
-
-    if( pSdrOleObj )
-        pSdrOleObj->GetObjRef()->FillTransferableObjectDescriptor( aObjDesc );
-    else
-        pDocSh->FillTransferableObjectDescriptor( aObjDesc );
-
-    aObjDesc.maSize = GetAllMarkedRect().GetSize();
-    aObjDesc.maDragStartPos = rDragPos;
-    aObjDesc.maDisplayName = aDisplayName;
-    aObjDesc.mbCanLink = FALSE;
-
-    pTransferable->SetStartPos( rDragPos );
-    pTransferable->SetObjectDescriptor( aObjDesc );
-    pTransferable->StartDrag( &rWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
-
-    return xRet;
-}
-
-
-/*************************************************************************
-|*
-|* DataObject fuers Clipboard erzeugen
-|*
-\************************************************************************/
-
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SdView::CreateDataObject()
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SdView::CreateClipboardDataObject( SdView* pWorkView, Window& rWindow )
 {
     // since SdTransferable::CopyToClipboard is called, this
     // dynamically created object ist destroyed automatically
-    SdTransferable* pTransferable = new SdTransferable( pDoc );
+    SdTransferable* pTransferable = new SdTransferable( pDoc, NULL, FALSE );
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
 
     SD_MOD()->pTransferClip = pTransferable;
@@ -267,12 +216,92 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     return xRet;
 }
 
+// -----------------------------------------------------------------------------
 
-/*************************************************************************
-|*
-|* Cut object to clipboard
-|*
-\************************************************************************/
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SdView::CreateDragDataObject( SdView* pWorkView, Window& rWindow, const Point& rDragPos )
+{
+    SdTransferable* pTransferable = new SdTransferable( pDoc, pWorkView, FALSE );
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
+
+    SD_MOD()->pTransferDrag = pTransferable;
+
+    TransferableObjectDescriptor    aObjDesc;
+    String                          aDisplayName;
+    SdrOle2Obj*                     pSdrOleObj = NULL;
+
+    if( aMark.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = aMark.GetMark( 0 )->GetObj();
+
+        if( pObj && pObj->ISA( SdrOle2Obj ) && ( (SdrOle2Obj*) pObj )->GetObjRef().Is() )
+            pSdrOleObj = (SdrOle2Obj*) pObj;
+    }
+
+    if( pDocSh )
+        aDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+
+    if( pSdrOleObj )
+        pSdrOleObj->GetObjRef()->FillTransferableObjectDescriptor( aObjDesc );
+    else
+        pDocSh->FillTransferableObjectDescriptor( aObjDesc );
+
+    aObjDesc.maSize = GetAllMarkedRect().GetSize();
+    aObjDesc.maDragStartPos = rDragPos;
+    aObjDesc.maDisplayName = aDisplayName;
+    aObjDesc.mbCanLink = FALSE;
+
+    pTransferable->SetStartPos( rDragPos );
+    pTransferable->SetObjectDescriptor( aObjDesc );
+    pTransferable->StartDrag( &rWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
+
+    return xRet;
+}
+
+// -----------------------------------------------------------------------------
+
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SdView::CreateSelectionDataObject( SdView* pWorkView, Window& rWindow )
+{
+    SdTransferable*                 pTransferable = new SdTransferable( pDoc, pWorkView, TRUE );
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRet( pTransferable );
+    TransferableObjectDescriptor    aObjDesc;
+    const Rectangle                 aMarkRect( GetAllMarkedRect() );
+    String                          aDisplayName;
+
+    if( pDocSh )
+    {
+        aDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+        pDocSh->FillTransferableObjectDescriptor( aObjDesc );
+    }
+
+    aObjDesc.maSize = aMarkRect.GetSize();
+
+    pTransferable->SetStartPos( aMarkRect.TopLeft() );
+    pTransferable->SetObjectDescriptor( aObjDesc );
+    pTransferable->CopyToSelection( &rWindow );
+
+    return xRet;
+}
+
+// -----------------------------------------------------------------------------
+
+void SdView::UpdateSelectionClipboard( BOOL bForceDeselect )
+{
+    if( pViewSh && pViewSh->GetActiveWindow() )
+    {
+        if( !bForceDeselect && GetMarkList().GetMarkCount() )
+        {
+            CreateSelectionDataObject( this, *pViewSh->GetActiveWindow() );
+            SD_MOD()->pSelectionView = this;
+        }
+        else if( SD_MOD()->pSelectionView == this )
+        {
+            TransferableHelper::ClearSelection( pViewSh->GetActiveWindow() );
+            SD_MOD()->pSelectionView = NULL;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
 
 void __EXPORT SdView::DoCut(Window* pWindow)
 {
@@ -291,11 +320,7 @@ void __EXPORT SdView::DoCut(Window* pWindow)
     }
 }
 
-/*************************************************************************
-|*
-|* Copy object to clipboard
-|*
-\************************************************************************/
+// -----------------------------------------------------------------------------
 
 void __EXPORT SdView::DoCopy(Window* pWindow)
 {
@@ -306,15 +331,11 @@ void __EXPORT SdView::DoCopy(Window* pWindow)
     else if( HasMarkedObj() )
     {
         BrkAction();
-        CreateDataObject();
+        CreateClipboardDataObject( this, *pWindow );
     }
 }
 
-/*************************************************************************
-|*
-|* Paste object from clipboard
-|*
-\************************************************************************/
+// -----------------------------------------------------------------------------
 
 void __EXPORT SdView::DoPaste( Window* pWindow )
 {
@@ -449,11 +470,7 @@ void __EXPORT SdView::DoPaste( Window* pWindow )
     }
 }
 
-/*************************************************************************
-|*
-|* DragServer starten
-|*
-\************************************************************************/
+// -----------------------------------------------------------------------------
 
 BOOL SdView::BeginDrag(Window* pWindow, Point aStartPos)
 {
@@ -480,17 +497,13 @@ BOOL SdView::BeginDrag(Window* pWindow, Point aStartPos)
         aStr += sal_Unicode(' ');
         aStr += pDragSrcMarkList->GetMarkDescription();
         BegUndo(aStr);
-        CreateDataObject( this, *pWindow, aStartPos );
+        CreateDragDataObject( this, *pWindow, aStartPos );
     }
 
     return bRet;
 }
 
-/*************************************************************************
-|*
-|* DragFinished
-|*
-\************************************************************************/
+// -----------------------------------------------------------------------------
 
 void SdView::DragFinished( sal_Int8 nDropAction )
 {
@@ -537,11 +550,7 @@ void SdView::DragFinished( sal_Int8 nDropAction )
     delete pDragSrcMarkList, pDragSrcMarkList = NULL;
 }
 
-/*************************************************************************
-|*
-|* AcceptDrop
-|*
-\************************************************************************/
+// -----------------------------------------------------------------------------
 
 sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                              SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer )
@@ -666,11 +675,7 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTar
     return nRet;
 }
 
-/*************************************************************************
-|*
-|* ExecuteDrop
-|*
-\************************************************************************/
+// -----------------------------------------------------------------------------
 
 sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                               SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer )

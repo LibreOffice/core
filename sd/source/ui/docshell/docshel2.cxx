@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-02 10:18:18 $
+ *  last change: $Author: ka $ $Date: 2001-08-21 15:21:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,12 +289,6 @@ FrameView* __EXPORT SdDrawDocShell::GetFrameView()
 
 Size __EXPORT SdDrawDocShell::GetFirstPageSize()
 {
-/*
-    DBG_ASSERT(pDoc, "kein Dokument");
-    SdPage* pPage = pDoc->GetSdPage(0, PK_STANDARD);
-    DBG_ASSERT (pPage, "keine erste Seite gefunden");
-    return pPage->GetSize();
-*/
     return SfxObjectShell::GetFirstPageSize();
 }
 
@@ -309,57 +303,6 @@ void __EXPORT SdDrawDocShell::UIActivate( BOOL bActive )
     bUIActive = bActive;
     SfxInPlaceObject::UIActivate( bActive );
 }
-
-/*
-SvDataMemberObjectRef __EXPORT SdDrawDocShell::CreateSnapshot()
-{
-    VirtualDevice* pVDev = new VirtualDevice( *Application::GetDefaultDevice() );
-    MapMode aMap = pVDev->GetMapMode();
-    aMap.SetMapUnit( pDoc->GetScaleUnit() );
-    aMap.SetScaleX( pDoc->GetScaleFraction() );
-    aMap.SetScaleY( pDoc->GetScaleFraction() );
-    pVDev->SetMapMode(aMap);
-
-    SdView* pSdViewIntern = new SdView(pDoc, pVDev);
-    pSdViewIntern->SetMarkHdlHidden(TRUE);
-
-    ULONG nPageNum = 0;
-
-    if (pDoc->GetPageCount() > 1)
-    {
-        // Mehr als eine Seite (default fuer Clipboard), daher die erste
-        // Standard-Seite nehmen
-        nPageNum = 1;
-    }
-
-    SdrPageView* pPageView = pSdViewIntern->ShowPagePgNum( (USHORT) nPageNum, Point() );
-    ((SdrMarkView*)pSdViewIntern)->MarkAll(pPageView);
-    Rectangle aVisArea = pSdViewIntern->GetAllMarkedRect();
-
-    SdrPage* pPage = pDoc->GetPage( (USHORT) nPageNum);
-    pPage->SetSize( aVisArea.GetSize() );
-
-    ULONG nObjCount = pPage->GetObjCount();
-    SdrObject* pObj = NULL;
-    Point aOrigin = aVisArea.TopLeft();
-    Size aVector( -aOrigin.X(), -aOrigin.Y() );
-
-    for (ULONG nObj = 0; nObj < nObjCount; nObj++)
-    {
-        // Das BoundingRect aller Objekte wird auf (0, 0) positioniert
-        pObj = pPage->GetObj(nObj);
-        pObj->NbcMove(aVector);
-    }
-
-    pSdViewIntern->CreateDataObject();
-    delete pSdViewIntern;
-    delete pVDev;
-
-    // Dummy DataObject aufbauen und uebergeben
-    SvDataObjectRef xDataObject;
-    return SvDataMemberObjectRef( (SvObject*) &xDataObject );
-}
-*/
 
 /*************************************************************************
 |*

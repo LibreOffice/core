@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-20 10:56:24 $
+ *  last change: $Author: ka $ $Date: 2001-08-21 15:17:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ class SdTransferable;
 class SdDrawDocShell;
 class SvNumberFormatter;
 class SfxErrorHandler;
+class SdView;
 
 // ----------------------
 // - SdOptionStreamMode -
@@ -142,6 +143,7 @@ public:
 
     SdTransferable*         pTransferClip;
     SdTransferable*         pTransferDrag;
+    SdView*                 pSelectionView;
 
     void                    Execute(SfxRequest& rReq);
     void                    GetState(SfxItemSet&);
