@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-15 12:36:09 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 13:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,8 +372,8 @@ BOOL CreateDir( const INetURLObject& rURL )
             aProps.getArray()[ 0 ] = OUString::createFromAscii( "Title" );
             aValues.getArray()[ 0 ] = uno::makeAny( OUString( aNewFolderURL.GetName() ) );
 
-            bRet = aParent.insertNewContent( OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" ),
-                                             aProps, aValues, Content( aNewFolderURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv ) );
+        Content aContent( aNewFolderURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
+        bRet = aParent.insertNewContent( OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" ), aProps, aValues, aContent );
         }
         catch( const ContentCreationException& )
         {
