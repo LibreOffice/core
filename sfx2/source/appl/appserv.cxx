@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:44:16 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,8 +163,8 @@
 #include <svtools/helpopt.hxx>
 #include <tools/shl.hxx>
 
-#include <drafts/com/sun/star/script/provider/XScriptProviderFactory.hpp>
-#include <drafts/com/sun/star/script/provider/ScriptFrameworkErrorException.hpp>
+#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <com/sun/star/script/provider/ScriptFrameworkErrorException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #ifndef GCC
@@ -228,7 +228,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
-using namespace ::drafts::com::sun::star::script;
+using namespace ::com::sun::star::script;
 
 #define SFX_KEY_MULTIQUICKSEARCH    "ExplorerMultiQuickSearch"
 
@@ -956,7 +956,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
                             Reference< provider::XScriptProviderFactory > xFac(
                                 xCtx->getValueByName(
-                                    ::rtl::OUString::createFromAscii( "/singletons/drafts.com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY_THROW );
+                                    ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY_THROW );
 
                             Any aContext;
 
