@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodispatch.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:23:42 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,12 @@
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
+#ifndef _SFXFRAME_HXX
+#include <sfx2/frame.hxx>
+#endif
+#ifndef _SFXDISPATCH_HXX
+#include <sfx2/dispatch.hxx>
+#endif
 #ifndef _UNODISPATCH_HXX
 #include <unodispatch.hxx>
 #endif
@@ -89,6 +95,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #endif
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
@@ -312,7 +319,12 @@ void SwXDispatch::dispatch(
     }
     else if(!aURL.Complete.compareToAscii(cURLFormLetter))
     {
-        pNewDBMgr->ExecuteFormLetter(rSh, aArgs);
+        SfxUsrAnyItem aDBProperties(FN_PARAM_DATABASE_PROPERTIES, ::makeAny(aArgs));
+        m_pView->GetViewFrame()->GetDispatcher()->Execute(
+            FN_MAILMERGE_WIZARD,
+            SFX_CALLMODE_ASYNCHRON,
+            &aDBProperties, 0);
+//      pNewDBMgr->ExecuteFormLetter(rSh, aArgs);
     }
     else if(!aURL.Complete.compareToAscii(cURLDocumentDataSource))
     {
