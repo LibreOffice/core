@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:47:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,12 +904,12 @@ XclExpChTrInsert::XclExpChTrInsert(
     if( nOpCode & EXC_CHTR_OP_COLFLAG )
     {
         aRange.aStart.SetRow( 0 );
-        aRange.aEnd.SetRow( rRootData.nRowMax );
+        aRange.aEnd.SetRow( static_cast<SCROW>(rRootData.nRowMax) );
     }
     else
     {
         aRange.aStart.SetCol( 0 );
-        aRange.aEnd.SetCol( rRootData.nColMax );
+        aRange.aEnd.SetCol( static_cast<SCCOL>(rRootData.nColMax) );
     }
 
     if( nOpCode & EXC_CHTR_OP_DELFLAG )
@@ -961,7 +961,7 @@ XclExpChTrInsertTab::XclExpChTrInsertTab(
         const XclExpChTrTabIdBuffer& rTabIdBuffer ) :
     XclExpChTrAction( rAction, rRootData, rTabIdBuffer, EXC_CHTR_OP_INSTAB ),
     ExcRoot( &rRootData ),
-    nTab( (sal_uInt16) rAction.GetBigRange().aStart.Tab() )
+    nTab( (SCTAB) rAction.GetBigRange().aStart.Tab() )
 {
     nLength = 0x0000021C;
     bForceInfo = sal_True;
@@ -1006,12 +1006,12 @@ XclExpChTrMoveRange::XclExpChTrMoveRange(
     aSourceRange = aDestRange;
     sal_Int32 nDCols, nDRows, nDTabs;
     rAction.GetDelta( nDCols, nDRows, nDTabs );
-    aSourceRange.aStart.IncRow( (USHORT) -nDRows );
-    aSourceRange.aStart.IncCol( (USHORT) -nDCols );
-    aSourceRange.aStart.IncTab( (USHORT) -nDTabs );
-    aSourceRange.aEnd.IncRow( (USHORT) -nDRows );
-    aSourceRange.aEnd.IncCol( (USHORT) -nDCols );
-    aSourceRange.aEnd.IncTab( (USHORT) -nDTabs );
+    aSourceRange.aStart.IncRow( (SCROW) -nDRows );
+    aSourceRange.aStart.IncCol( (SCCOL) -nDCols );
+    aSourceRange.aStart.IncTab( (SCTAB) -nDTabs );
+    aSourceRange.aEnd.IncRow( (SCROW) -nDRows );
+    aSourceRange.aEnd.IncCol( (SCCOL) -nDCols );
+    aSourceRange.aEnd.IncTab( (SCTAB) -nDTabs );
     AddDependentContents( rAction, rRootData, rChangeTrack );
 }
 
@@ -1145,7 +1145,7 @@ XclExpChangeTrack::XclExpChangeTrack( RootData* pRootData ) :
     {
         if( pScAction->GetType() == SC_CAT_INSERT_TABS )
         {
-            sal_uInt16 nScTab = (sal_uInt16) pScAction->GetBigRange().aStart.Tab();
+            SCTAB nScTab = static_cast< SCTAB >( pScAction->GetBigRange().aStart.Tab() );
             pTabIdBuffer->InitFill( pExcRoot->pER->GetTabInfo().GetXclTab( nScTab ) );
         }
     }
@@ -1216,7 +1216,7 @@ sal_Bool XclExpChangeTrack::CreateTempChangeTrack()
         return sal_False;
 
     // adjust table count
-    USHORT nOrigCount = pExcRoot->pDoc->GetTableCount();
+    SCTAB nOrigCount = pExcRoot->pDoc->GetTableCount();
     String sTabName;
     for( sal_Int32 nIndex = 0; nIndex < nOrigCount; nIndex++ )
     {
