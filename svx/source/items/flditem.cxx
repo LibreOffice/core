@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:24:40 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,22 +317,25 @@ String SvxDateField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType e
     if ( eType == SVXDATETYPE_FIX )
         aDate.SetDate( nFixDate );
 
-    SvxDateFormat eTmpFormat = eFormat;
+    return GetFormatted( aDate, eFormat, rFormatter, eLang );
+}
 
-    if ( eTmpFormat == SVXDATEFORMAT_SYSTEM )
+String SvxDateField::GetFormatted( Date& aDate, SvxDateFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLang )
+{
+    if ( eFormat == SVXDATEFORMAT_SYSTEM )
     {
         DBG_ERROR( "SVXDATEFORMAT_SYSTEM nicht implementiert!" );
-        eTmpFormat = SVXDATEFORMAT_STDSMALL;
+        eFormat = SVXDATEFORMAT_STDSMALL;
     }
-    else if ( eTmpFormat == SVXDATEFORMAT_APPDEFAULT )
+    else if ( eFormat == SVXDATEFORMAT_APPDEFAULT )
     {
         DBG_ERROR( "SVXDATEFORMAT_APPDEFAULT: Woher nehmen?" );
-        eTmpFormat = SVXDATEFORMAT_STDSMALL;
+        eFormat = SVXDATEFORMAT_STDSMALL;
     }
 
     ULONG nFormatKey;
 
-    switch( eTmpFormat )
+    switch( eFormat )
     {
         case SVXDATEFORMAT_STDSMALL:
             // short
@@ -779,24 +782,26 @@ String SvxExtTimeField::GetFormatted( SvNumberFormatter& rFormatter, LanguageTyp
     Time aTime; // current time
     if ( eType == SVXTIMETYPE_FIX )
         aTime.SetTime( nFixTime );
+    return GetFormatted( aTime, eFormat, rFormatter, eLang );
+}
 
-    SvxTimeFormat eTmpFormat = eFormat;
-
-    switch( eTmpFormat )
+String SvxExtTimeField::GetFormatted( Time& aTime, SvxTimeFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLang )
+{
+    switch( eFormat )
     {
         case SVXTIMEFORMAT_SYSTEM :
             DBG_ERROR( "SVXTIMEFORMAT_SYSTEM: not implemented" );
-            eTmpFormat = SVXTIMEFORMAT_STANDARD;
+            eFormat = SVXTIMEFORMAT_STANDARD;
         break;
         case SVXTIMEFORMAT_APPDEFAULT :
             DBG_ERROR( "SVXTIMEFORMAT_APPDEFAULT: not implemented" );
-            eTmpFormat = SVXTIMEFORMAT_STANDARD;
+            eFormat = SVXTIMEFORMAT_STANDARD;
         break;
     }
 
     ULONG nFormatKey;
 
-    switch( eTmpFormat )
+    switch( eFormat )
     {
         case SVXTIMEFORMAT_12_HM:
             nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HHMMAMPM, eLang );
@@ -1184,5 +1189,95 @@ SvClassManager& SvxFieldItem::GetClassManager()
     }
 
     return *pClassMgr;
+}
+
+///////////////////////////////////////////////////////////////////////
+
+SV_IMPL_PERSIST1( SvxHeaderField, SvxFieldData );
+
+SvxFieldData* __EXPORT SvxHeaderField::Clone() const
+{
+    return new SvxHeaderField;      // leer
+}
+
+int __EXPORT SvxHeaderField::operator==( const SvxFieldData& rCmp ) const
+{
+    return ( rCmp.Type() == TYPE(SvxHeaderField) );
+}
+
+void __EXPORT SvxHeaderField::Load( SvPersistStream & rStm )
+{
+}
+
+void __EXPORT SvxHeaderField::Save( SvPersistStream & rStm )
+{
+}
+
+///////////////////////////////////////////////////////////////////////
+
+SV_IMPL_PERSIST1( SvxFooterField, SvxFieldData );
+
+SvxFieldData* __EXPORT SvxFooterField::Clone() const
+{
+    return new SvxFooterField;      // leer
+}
+
+int __EXPORT SvxFooterField::operator==( const SvxFieldData& rCmp ) const
+{
+    return ( rCmp.Type() == TYPE(SvxFooterField) );
+}
+
+void __EXPORT SvxFooterField::Load( SvPersistStream & rStm )
+{
+}
+
+void __EXPORT SvxFooterField::Save( SvPersistStream & rStm )
+{
+}
+
+///////////////////////////////////////////////////////////////////////
+
+SV_IMPL_PERSIST1( SvxDateTimeField, SvxFieldData );
+
+SvxFieldData* __EXPORT SvxDateTimeField::Clone() const
+{
+    return new SvxDateTimeField;        // leer
+}
+
+int __EXPORT SvxDateTimeField::operator==( const SvxFieldData& rCmp ) const
+{
+    return ( rCmp.Type() == TYPE(SvxDateTimeField) );
+}
+
+void __EXPORT SvxDateTimeField::Load( SvPersistStream & rStm )
+{
+}
+
+void __EXPORT SvxDateTimeField::Save( SvPersistStream & rStm )
+{
+}
+
+String SvxDateTimeField::GetFormatted( Date& rDate, Time& rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage )
+{
+    String aRet;
+
+    SvxDateFormat eDateFormat = (SvxDateFormat)(eFormat & 0x0f);
+
+    if(eDateFormat)
+    {
+        aRet = SvxDateField::GetFormatted( rDate, eDateFormat, rFormatter, eLanguage );
+    }
+
+    SvxTimeFormat eTimeFormat = (SvxTimeFormat)((eFormat >> 4) & 0x0f);
+
+    if(eTimeFormat)
+    {
+        if(aRet.Len())
+            aRet += sal_Unicode(' ');
+
+        aRet += SvxExtTimeField::GetFormatted( rTime, eTimeFormat, rFormatter, eLanguage );
+    }
+
+    return aRet;
 }
 
