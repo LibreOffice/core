@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldoctp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:01:07 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,50 +141,16 @@ SvxHyperlinkDocTp::~SvxHyperlinkDocTp ()
 void SvxHyperlinkDocTp::FillDlgFields ( String& aStrURL )
 {
     INetURLObject aURL ( aStrURL );
-    String aStrScheme;
 
-    // set protocoll-radiobuttons
-    INetProtocol aProtocol = aURL.GetProtocol();
-    switch ( aProtocol )
-    {
-        case INET_PROT_FILE :
-        case INET_PROT_VND_SUN_STAR_WFS :
-            aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM ( sFileScheme ) );
-            break;
-        case INET_PROT_POP3 :
-            aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM ( INET_POP3_SCHEME ) );
-            break;
-        case INET_PROT_IMAP :
-            aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM ( INET_IMAP_SCHEME ) );
-            break;
-        case INET_PROT_OUT :
-            aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM ( INET_OUT_SCHEME ) );
-            break;
-        default :
-            if ( aStrURL.SearchAscii( sNewsSRVScheme ) == 0 )
-                aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM ( sNewsSRVScheme ) );
-            else if( aStrURL.SearchAscii( sHash ) == 0 )
-                aStrScheme.AssignAscii( RTL_CONSTASCII_STRINGPARAM ( sFileScheme ) );
-    }
+    String aStrMark;
+    xub_StrLen nPos = aStrURL.SearchAscii( sHash );
+    // path
+    maCbbPath.SetText ( aStrURL.Copy( 0, ( nPos == STRING_NOTFOUND ? aStrURL.Len() : nPos ) ) );
 
-    if ( aStrScheme != aEmptyStr )
-    {
-        String aStrMark;
-
-        xub_StrLen nPos = aStrURL.SearchAscii( sHash );
-        // path
-        maCbbPath.SetText ( aStrURL.Copy( 0, ( nPos == STRING_NOTFOUND ? aStrURL.Len() : nPos ) ) );
-
-        // set target in document at editfield
-        if ( nPos != STRING_NOTFOUND && nPos<aStrURL.Len()-1 )
-            aStrMark = aStrURL.Copy( nPos+1, aStrURL.Len() );
-         maEdTarget.SetText ( aStrMark );
-    }
-    else
-    {
-        maCbbPath.SetText ( aEmptyStr );
-        maEdTarget.SetText ( aEmptyStr );
-    }
+    // set target in document at editfield
+    if ( nPos != STRING_NOTFOUND && nPos<aStrURL.Len()-1 )
+        aStrMark = aStrURL.Copy( nPos+1, aStrURL.Len() );
+     maEdTarget.SetText ( aStrMark );
 
     ModifiedPathHdl_Impl ( NULL );
 }
@@ -211,30 +177,16 @@ String SvxHyperlinkDocTp::GetCurrentURL ()
         else
             utl::LocalFileHelper::ConvertSystemPathToURL( aStrPath, aBaseURL, aStrURL );
 
-        if ( aStrMark != aEmptyStr )
-        {
-            aStrURL.AppendAscii( "#" );
-            aStrURL += aStrMark;
-        }
-
-        // if there is a empty string, the url will be the html-scheme
-        // but its better to show only the file-scheme
-
-        if ( aStrURL.SearchAscii( sHTTPScheme ) == 0 )
-        {
-            aStrURL.Erase( 0, UniString::CreateFromAscii(
-                           RTL_CONSTASCII_STRINGPARAM ( sHTTPScheme ) ).Len() );
-            String aStrTmp( aStrURL );
-            aStrURL.AssignAscii( sHTTPScheme );
-            aStrURL += aStrTmp;
-        }
+        //#105788# always create a URL even if it is not valid
+        if( aStrURL == aEmptyStr )
+            aStrURL = aStrPath;
     }
-    else
-        if( aStrMark != aEmptyStr )
-        {
-            aStrURL.AssignAscii( sHash );
-            aStrURL += aStrMark;
-        }
+
+    if( aStrMark != aEmptyStr )
+    {
+        aStrURL.AssignAscii( sHash );
+        aStrURL += aStrMark;
+    }
 
     return aStrURL;
 }
