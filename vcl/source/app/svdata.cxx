@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:31:03 $
+ *  last change: $Author: vg $ $Date: 2003-05-02 15:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,7 +400,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
                     pSVData->mxAccessBridge = Reference< XAccessibleTopWindowMap >(
                         xFactory->createInstanceWithArguments(
-                            OUString::createFromAscii( "drafts.com.sun.star.accessibility.bridge.AccessBridge" ),
+                            OUString::createFromAscii( "com.sun.star.accessibility.AccessBridge" ),
                             arguments
                         ), UNO_QUERY );
                 }
@@ -408,7 +408,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
                 {
                     pSVData->mxAccessBridge = Reference< XAccessibleTopWindowMap >(
                         xFactory->createInstanceWithArguments(
-                            OUString::createFromAscii( "drafts.com.sun.star.accessibility.bridge.AccessBridge" ),
+                            OUString::createFromAscii( "com.sun.star.accessibility.AccessBridge" ),
                             arguments
                         ), UNO_QUERY );
                 }
