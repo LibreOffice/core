@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:21:15 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1278,6 +1278,19 @@ SfxDocumentUserPage::SfxDocumentUserPage( Window* pParent,
 
 {
     FreeResource();
+    //increase button width in case of long labels
+    Size aButtonSize = aEditLabelBtn.GetOutputSizePixel();
+    sal_Int32 nTextWidth = aEditLabelBtn.GetTextWidth(aEditLabelBtn.GetText());
+    //add some additional space
+    sal_Int32 nDiff = nTextWidth + 4 - aButtonSize.Width();
+    if( nDiff > 0)
+    {
+        Point aPos(aEditLabelBtn.GetPosPixel());
+        aPos.X() -= nDiff;
+        aButtonSize.Width() += nDiff;
+        aEditLabelBtn.SetPosSizePixel(aPos, aButtonSize);
+    }
+
     aEditLabelBtn.SetClickHdl( LINK( this, SfxDocumentUserPage, EditLabelHdl ) );
 }
 
