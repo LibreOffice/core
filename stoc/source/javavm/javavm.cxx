@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kr $ $Date: 2001-07-19 07:44:04 $
+ *  last change: $Author: jl $ $Date: 2001-09-25 06:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,21 +670,40 @@ namespace stoc_javavm {
             sigaction( SIGFPE, &act, NULL);
 
 #endif
+            //determine number of options
+            // number= 1 (classpath) + number of elements of JDK1_1InitArgs::properties
+            sal_uInt16 cprops=0;
+            if(vm_args.properties != 0)
+                while( vm_args.properties[cprops++] != 0);
+            else
+                cprops=1;
+
 
             JavaVMInitArgs vm_args2;
-            JavaVMOption options[1];
+            JavaVMOption * options= new JavaVMOption[cprops];
+
 
             OString _path(vm_args.classpath);
             OString _prepath( "-Djava.class.path=");
             OString _allpath= _prepath + _path;
             options[0].optionString= (char*)_allpath.getStr();
             options[0].extraInfo= NULL;
+
+
+            for( sal_uInt16 x= 1; x< cprops; x++)
+            {
+                OString sProp( OString("-D") + OString(vm_args.properties[ x-1]));
+                options[x].optionString= (char*)sProp.getStr();
+                options[x].extraInfo= NULL;
+            }
             vm_args2.version= 0x00010002;
             vm_args2.options= options;
-            vm_args2.nOptions= 1;
+            vm_args2.nOptions= cprops;
             vm_args2.ignoreUnrecognized= JNI_TRUE;
 
             err= pCreateJavaVM(&pJavaVM, &pJNIEnv, &vm_args2);
+
+            delete [] options;
         }
         if(err) {
             OUString message(RTL_CONSTASCII_USTRINGPARAM("JavaVirtualMachine_Impl::createJavaVM - can not create vm, cause of err:"));
