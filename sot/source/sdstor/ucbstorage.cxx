@@ -182,7 +182,7 @@ public:
     String                      m_aOriginalContentType;
     ::ucb::Content*             m_pContent;     // the content that provides the storage elements
     ::utl::TempFile*            m_pTempFile;    // temporary file, only for storages on stream
-    SvStream*                   m_pSource;      // origonal stream, only for storages on a stream
+    SvStream*                   m_pSource;      // original stream, only for storages on a stream
     SvStream*                   m_pStream;      // the corresponding editable stream, only for storage on a stream
     StreamMode                  m_nMode;        // open mode ( read/write/trunc/nocreate/sharing )
     BOOL                        m_bModified;    // only modified elements will be sent to the original content
@@ -819,6 +819,10 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, BOOL 
     , m_bCommited( FALSE )
     , m_aClassId( SvGlobalName() )
 {
+    // opening in direct mode is too fuzzy because the data is transferred to the stream in the Commit() call,
+    // which will be called in the storages' dtor
+    DBG_ASSERT( !bDirect, "Storage on a stream must not be opened in direct mode!" );
+
     // UCBStorages work on a content, so a temporary file for a content must be created, even if the stream is only
     // accessed readonly
     // the root storage opens the package; create the special package URL for the package content
@@ -827,10 +831,12 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, BOOL 
     m_aURL = aTemp;
 
     // copy data into the temporary file
-    m_pStream = m_pTempFile->GetStream( STREAM_STD_READWRITE );
+    m_pStream = ::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READWRITE );
     rStream >> *m_pStream;
     m_pStream->Flush();
-    m_pStream->Seek(0);
+    DELETEZ( m_pStream );
+
+    // close stream and let content access the file
     m_pSource->Seek(0);
 
     // check opening mode
@@ -1122,13 +1128,13 @@ sal_Int16 UCBStorage_Impl::Commit()
                     aType <<= (rtl::OUString) m_aContentType;
                     m_pContent->setPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ), aType );
 
-                    DELETEZ( m_pSource );
                     Any aAny;
                     m_pContent->executeCommand( ::rtl::OUString::createFromAscii("flush"), aAny );
-                    if ( m_pStream && m_pSource )
+                    if ( m_pSource != 0 )
                     {
+                        m_pStream = ::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READ );
                         *m_pStream >> *m_pSource;
-                        m_pStream->Seek(0);
+                        DELETEZ( m_pStream );
                         m_pSource->Seek(0);
                     }
                 }
@@ -1812,7 +1818,7 @@ const SvStream* UCBStorage::GetSvStream() const
 {
     // this would cause a complete download of the file
     // as it looks, this method is NOT used inside of SOT, only exported by class SotStorage - but for what ???
-    return pImp->m_pStream;
+    return pImp->m_pSource;
 }
 
 BOOL UCBStorage::Equals( const BaseStorage& rStorage ) const
