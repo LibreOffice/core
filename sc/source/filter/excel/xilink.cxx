@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 13:49:47 $
+ *  last change: $Author: kz $ $Date: 2004-04-23 13:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,7 +559,7 @@ XclImpExtName::XclImpExtName( XclImpStream& rStrm, bool bAddIn )
 
 void XclImpExtName::CreateDdeData( ScDocument& rDoc, const String& rApplic, const String& rTopic ) const
 {
-    ScMatrixRef pResults = mpDdeMatrix.get() ? mpDdeMatrix->CreateScMatrix() : NULL;
+    ScMatrixRef pResults = mpDdeMatrix.get() ? mpDdeMatrix->CreateScMatrix() : (ScMatrixRef)NULL;
     rDoc.CreateDdeLink( rApplic, rTopic, maName, SC_DDE_DEFAULT, pResults );
 }
 
