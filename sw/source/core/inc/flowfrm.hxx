@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2002-09-13 12:08:28 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@ class SwFlowFrm
     //PrepareMake darf Locken/Unlocken (Robustheit)
     friend inline void PrepareLock  ( SwFlowFrm * );
     friend inline void PrepareUnlock( SwFlowFrm * );
+    friend inline void TableSplitRecalcLock( SwFlowFrm * );
+    friend inline void TableSplitRecalcUnlock( SwFlowFrm * );
 
     //TblSel darf das Follow-Bit zuruecksetzen.
     friend inline void UnsetFollow( SwFlowFrm *pFlow );
@@ -173,8 +175,6 @@ public:
            SwFlowFrm *GetFollow()          { return pFollow;   }
            BOOL       IsAnFollow( const SwFlowFrm *pFlow ) const;
     inline void       SetFollow( SwFlowFrm *pNew ) { pFollow = pNew; }
-                 SwFlowFrm *FindMaster();
-    inline const SwFlowFrm *FindMaster() const;
 
     sal_Bool IsJoinLocked() const { return bLockJoin; }
     sal_Bool IsAnyJoinLocked() const { return bLockJoin || HasLockedFollow(); }
@@ -208,10 +208,6 @@ public:
     static const SwFlowFrm *CastFlowFrm( const SwFrm *pFrm );
 };
 
-inline const SwFlowFrm *SwFlowFrm::FindMaster() const
-{
-    return ((SwFlowFrm*)this)->FindMaster();
-}
 inline BOOL SwFlowFrm::IsFwdMoveAllowed()
 {
     return rThis.GetIndPrev() != 0;
