@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:07:33 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:22:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,10 +185,10 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ swedish ] = "~Markering";
         Text[ polish ] = "Selekcja";
         Text[ portuguese_brazilian ] = "S~ele��o";
-        Text[ japanese ] = "選択した部分";
-        Text[ korean ] = "선택";
-        Text[ chinese_simplified ] = "选择";
-        Text[ chinese_traditional ] = "選擇";
+        Text[ japanese ] = "選択した部分(~S)";
+        Text[ korean ] = "선택(~S)";
+        Text[ chinese_simplified ] = "选择(~S)";
+        Text[ chinese_traditional ] = "選擇(~S)";
         Text[ turkish ] = "~Se�ilen aral�k";
         Text[ arabic ] = "�������";
         Text[ catalan ] = "Selecci�";
@@ -222,7 +222,7 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ danish ] = "Komprimering";
         Text[ swedish ] = "Komprimering";
         Text[ polish ] = "Kompresja";
-        Text[ portuguese_brazilian ] = "Compression";
+        Text[ portuguese_brazilian ] = "Compress�o";
         Text[ japanese ] = "圧縮";
         Text[ korean ] = "압축";
         Text[ chinese_simplified ] = "压缩";
@@ -254,11 +254,11 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ danish ] = "S~creen optimized (smallest file size)";
         Text[ swedish ] = "Optimerad f�r ~bildsk�rm (minsta filstorlek)";
         Text[ polish ] = "S~creen optimized (smallest file size)";
-        Text[ portuguese_brazilian ] = "S~creen optimized (smallest file size)";
-        Text[ japanese ] = "画面用に最適化する (最小ファイルサイズ)";
-        Text[ korean ] = "화면용으로 최적화(최소 파일 크기)";
-        Text[ chinese_simplified ] = "优化屏幕显示(最小的文件大小)";
-        Text[ chinese_traditional ] = "優化屏幕顯示(最小的檔案大小)";
+        Text[ portuguese_brazilian ] = "~Otimizado para a tela (menor tamanho de arquivo)";
+        Text[ japanese ] = "画面用に最適化する (最小ファイルサイズ)(~C)";
+        Text[ korean ] = "화면용으로 최적화(최소 파일 크기)(~C)";
+        Text[ chinese_simplified ] = "优化屏幕显示(最小的文件大小)(~C)";
+        Text[ chinese_traditional ] = "優化屏幕顯示(最小的檔案大小)(~C)";
         Text[ turkish ] = "En uygun ~ekran (en k���k dosya boyutu)";
         Text[ arabic ] = "S~creen optimized (smallest file size)";
         Text[ catalan ] = "S~creen optimized (smallest file size)";
@@ -286,11 +286,11 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ danish ] = "~Print optimized";
         Text[ swedish ] = "Optimerad f�r ~utskrift";
         Text[ polish ] = "~Print optimized";
-        Text[ portuguese_brazilian ] = "~Print optimized";
-        Text[ japanese ] = "印刷用に最適化する";
-        Text[ korean ] = "인쇄용으로 최적화";
-        Text[ chinese_simplified ] = "优化打印效果";
-        Text[ chinese_traditional ] = "優化列印效果";
+        Text[ portuguese_brazilian ] = "Otimizado para im~pressoras";
+        Text[ japanese ] = "印刷用に最適化する(~P)";
+        Text[ korean ] = "인쇄용으로 최적화(~P)";
+        Text[ chinese_simplified ] = "优化打印效果(~P)";
+        Text[ chinese_traditional ] = "優化列印效果(~P)";
         Text[ turkish ] = "~En uygun �ekilde yazd�r";
         Text[ arabic ] = "~Print optimized";
         Text[ catalan ] = "~Print optimized";
@@ -318,11 +318,11 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ danish ] = "Pr~ess optimized";
         Text[ swedish ] = "Optimerad f�r tr~yck";
         Text[ polish ] = "Pr~ess optimized";
-        Text[ portuguese_brazilian ] = "Pr~ess optimized";
-        Text[ japanese ] = "印刷準備用に最適化する";
-        Text[ korean ] = "인쇄 단계용으로 최적화";
-        Text[ chinese_simplified ] = "优化新闻印刷";
-        Text[ chinese_traditional ] = "優化新聞印刷";
+        Text[ portuguese_brazilian ] = "Otimizado para ~Gr�ficas";
+        Text[ japanese ] = "印刷準備用に最適化する(~E)";
+        Text[ korean ] = "인쇄 단계용으로 최적화(~E)";
+        Text[ chinese_simplified ] = "优化新闻印刷(~E)";
+        Text[ chinese_traditional ] = "優化新聞印刷(~E)";
         Text[ turkish ] = "Pr~ess optimized";
         Text[ arabic ] = "Pr~ess optimized";
         Text[ catalan ] = "Pr~ess optimized";
@@ -352,11 +352,11 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ danish ] = "E~xport";
         Text[ swedish ] = "E~xportera";
         Text[ polish ] = "E~xport";
-        Text[ portuguese_brazilian ] = "E~xport";
-        Text[ japanese ] = "エクスポート";
-        Text[ korean ] = "내보내기";
-        Text[ chinese_simplified ] = "输出";
-        Text[ chinese_traditional ] = "匯出";
+        Text[ portuguese_brazilian ] = "E~xportar";
+        Text[ japanese ] = "エクスポート(~X)";
+        Text[ korean ] = "내보내기(~X)";
+        Text[ chinese_simplified ] = "输出(~X)";
+        Text[ chinese_traditional ] = "匯出(~X)";
         Text[ turkish ] = "~D��a Aktar";
         Text[ arabic ] = "E~xport";
         Text[ catalan ] = "E~xport";
@@ -392,7 +392,7 @@ ModalDialog RID_PDF_EXPORT_DLG
     Text[ danish ] = "PDF Options";
     Text[ swedish ] = "PDF-alternativ";
     Text[ polish ] = "PDF Options";
-    Text[ portuguese_brazilian ] = "PDF Options";
+    Text[ portuguese_brazilian ] = "Op��es do PDF";
     Text[ japanese ] = "PDF オプション";
     Text[ korean ] = "PDF 옵션";
     Text[ chinese_simplified ] = "PDF 选项";
@@ -406,6 +406,7 @@ ModalDialog RID_PDF_EXPORT_DLG
     Text[ hindi ] = "PDF Options";
     Text[ slovak ] = "PDF voľby";
 };
+
 
 
 
