@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:47:26 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,12 @@
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/sdbcx/VColumn.hxx"
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
 
 //.........................................................................
 namespace dbtools
@@ -118,6 +124,7 @@ namespace dbtools
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
+    using namespace ::com::sun::star::frame;
     using namespace connectivity;
     using namespace comphelper;
 
@@ -145,6 +152,12 @@ namespace dbtools
     xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_PRECISION))          >>= nPrecision;
     xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCALE))              >>= nScale;
     xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))    >>= bIsAutoIncrement;
+
+    // check if the user enter a specific string to create autoincrement values
+    ::rtl::OUString sAutoIncrementValue;
+    Reference<XPropertySetInfo> xPropInfo = xColProp->getPropertySetInfo();
+    if ( xPropInfo.is() && xPropInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) )
+        xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) >>= sAutoIncrementValue;
     // look if we have to use precisions
     sal_Bool bUseLiteral = sal_False;
     ::rtl::OUString sPreFix,sPostFix;
@@ -171,6 +184,12 @@ namespace dbtools
                 }
             }
         }
+    }
+
+    sal_Int32 nIndex = 0;
+    if ( sAutoIncrementValue.getLength() && (nIndex = sTypeName.indexOf(sAutoIncrementValue)) != -1 )
+    {
+        sTypeName = sTypeName.replaceAt(nIndex,sTypeName.getLength() - nIndex,::rtl::OUString());
     }
 
 
@@ -210,20 +229,10 @@ namespace dbtools
     if(::comphelper::getINT32(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
         aSql += ::rtl::OUString::createFromAscii(" NOT NULL");
 
-    if ( bIsAutoIncrement )
+    if ( bIsAutoIncrement && sAutoIncrementValue.getLength())
     {
-        // check if the user enter a specific string to create autoincrement values
-        Reference<XPropertySetInfo> xPropInfo = xColProp->getPropertySetInfo();
-        if ( xPropInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) )
-        {
-            ::rtl::OUString sAutoIncrementValue;
-            xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) >>= sAutoIncrementValue;
-            if ( sAutoIncrementValue.getLength() )
-            {
-                aSql += ::rtl::OUString::createFromAscii(" ");
-                aSql += sAutoIncrementValue;
-            }
-        }
+        aSql += ::rtl::OUString::createFromAscii(" ");
+        aSql += sAutoIncrementValue;
     }
 
     return aSql;
@@ -459,7 +468,9 @@ namespace
                         const ::rtl::OUString sQuote = xMetaData->getIdentifierQuoteString();
                         ::rtl::OUString sQuotedName  = ::dbtools::quoteName(sQuote,_rName);
                         ::rtl::OUString sComposedName;
-                        ::dbtools::composeTableName(xMetaData,getString(_aCatalog),_aSchema,_aTable,sComposedName,sal_True,::dbtools::eInDataManipulation);
+                        sal_Bool bUseCatalogInSelect = isDataSourcePropertyEnabled(_xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
+                        sal_Bool bUseSchemaInSelect = isDataSourcePropertyEnabled(_xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
+                        ::dbtools::composeTableName(xMetaData,getString(_aCatalog),_aSchema,_aTable,sComposedName,sal_True,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
 
                         ColumnInformationMap aInfo(_bCase);
                         collectColumnInformation(_xConnection,sComposedName,sQuotedName,aInfo);
@@ -519,6 +530,19 @@ namespace
 
         return xProp;
     }
+    //------------------------------------------------------------------
+    Reference< XModel> lcl_getXModel(const Reference< XInterface>& _xIface)
+    {
+        Reference< XInterface > xParent = _xIface;
+        Reference< XModel > xModel(xParent,UNO_QUERY);;
+        while( xParent.is() && !xModel.is() )
+        {
+            Reference<XChild> xChild(xParent,UNO_QUERY);
+            xParent.set(xChild.is() ? xChild->getParent() : NULL,UNO_QUERY);
+            xModel.set(xParent,UNO_QUERY);
+        }
+        return xModel;
+    }
 }
 // -----------------------------------------------------------------------------
 Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable,
@@ -568,19 +592,53 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
 ::rtl::OUString composeTableName(const Reference<XDatabaseMetaData>& _xMetaData,
                                  const Reference<XPropertySet>& _xTable,
                                  sal_Bool _bQuote,
-                                 EComposeRule _eComposeRule)
+                                 EComposeRule _eComposeRule
+                                 , sal_Bool _bUseCatalogInSelect
+                                , sal_Bool _bUseSchemaInSelect)
 {
-    ::rtl::OUString aCatalog;
-    ::rtl::OUString aSchema;
-    ::rtl::OUString aTable;
-    ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-    _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)) >>= aCatalog;
-    _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))  >>= aSchema;
-    _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))        >>= aTable;
-
     ::rtl::OUString aComposedName;
-    dbtools::composeTableName(_xMetaData,aCatalog,aSchema,aTable,aComposedName,_bQuote,_eComposeRule);
+    ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
+    Reference< XPropertySetInfo > xInfo = _xTable->getPropertySetInfo();
+    if (    xInfo.is()
+        &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))
+        &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))
+        &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_NAME)) )
+    {
+
+        ::rtl::OUString aCatalog;
+        ::rtl::OUString aSchema;
+        ::rtl::OUString aTable;
+        _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)) >>= aCatalog;
+        _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))  >>= aSchema;
+        _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))        >>= aTable;
+
+        dbtools::composeTableName(_xMetaData,aCatalog,aSchema,aTable,aComposedName,_bQuote,_eComposeRule,_bUseCatalogInSelect,_bUseSchemaInSelect);
+    }
     return aComposedName;
+}
+// -----------------------------------------------------------------------------
+sal_Bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp,const ::rtl::OUString& _sProperty,sal_Bool _bDefault)
+{
+    sal_Bool bEnabled = _bDefault;
+    try
+    {
+        Reference< XPropertySet> xProp(findDataSource(_xProp),UNO_QUERY);
+        if ( xProp.is() )
+        {
+            Sequence< PropertyValue > aInfo;
+            xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Info"))) >>= aInfo;
+            const PropertyValue* pValue =::std::find_if(aInfo.getConstArray(),
+                                                aInfo.getConstArray() + aInfo.getLength(),
+                                                ::std::bind2nd(TPropertyValueEqualFunctor(),_sProperty));
+            if ( pValue && pValue != (aInfo.getConstArray() + aInfo.getLength()) )
+                pValue->Value >>= bEnabled;
+        }
+    }
+    catch(SQLException&)
+    {
+        OSL_ASSERT(!"isDataSourcePropertyEnabled");
+    }
+    return bEnabled;
 }
 // -----------------------------------------------------------------------------
 Reference< XTablesSupplier> getDataDefinitionByURLAndConnection(
@@ -761,6 +819,45 @@ void collectColumnInformation(const Reference< XConnection>& _xConnection,
     {
         OSL_ENSURE(0,"Exception catched!");
     }
+}
+// -----------------------------------------------------------------------------
+Reference< XConnection > getActiveConnectionFromParent(const Reference< XInterface >& _xChild)
+{
+    Reference< XConnection >  xConnection;
+    try
+    {
+        Reference< XModel > xModel = lcl_getXModel(_xChild);
+
+        if ( xModel.is() )
+        {
+            Sequence< PropertyValue > aArgs = xModel->getArgs();
+            const PropertyValue* pIter = aArgs.getConstArray();
+            const PropertyValue* pEnd  = pIter + aArgs.getLength();
+            for(;pIter != pEnd;++pIter)
+            {
+                if ( pIter->Name.equalsAscii("ComponentData") )
+                {
+                    Sequence<PropertyValue> aDocumentContext;
+                    pIter->Value >>= aDocumentContext;
+                    const PropertyValue* pContextIter = aDocumentContext.getConstArray();
+                    const PropertyValue* pContextEnd  = pContextIter + aDocumentContext.getLength();
+                    for(;pContextIter != pContextEnd;++pContextIter)
+                    {
+                        if ( pContextIter->Name.equalsAscii("ActiveConnection") && (pContextIter->Value >>= xConnection) && xConnection.is() )
+                        {
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    catch(Exception&)
+    {
+        // not intereseted in
+    }
+    return xConnection;
 }
 //.........................................................................
 }   // namespace dbtools
