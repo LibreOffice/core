@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:17 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:22:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,11 +148,15 @@ public:
 //==================================================================
 class FmUndoContainerAction: public SdrUndoAction
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer> xContainer;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>        xElement;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>        xOwnElement;    // Object das der Action gehoert
-    sal_Int32               nIndex;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor > aEvts;  // events des Objects
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >
+                    m_xContainer;   // container which the action applies to
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+                    m_xElement;     // object not owned by the action
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+                    m_xOwnElement;  // object owned by the action
+    sal_Int32       m_nIndex;       // index of the object within it's container
+    ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >
+                    m_aEvents;      // events of the object
 
 public:
     enum Action
@@ -162,18 +166,22 @@ public:
     };
 
 private:
-    Action              eAction;
+    Action              m_eAction;
 
 public:
     FmUndoContainerAction(FmFormModel& rMod,
                           Action _eAction,
-                          const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& xCont,
-                          const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xElem,
+                          const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& xCont,
+                          const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xElem,
                           sal_Int32 nIdx = -1);
     ~FmUndoContainerAction();
 
     virtual void Undo();
     virtual void Redo();
+
+protected:
+    void    implReInsert( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
+    void    implReRemove( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
 };
 
 //==================================================================
