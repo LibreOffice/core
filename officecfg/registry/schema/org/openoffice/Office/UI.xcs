@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcs,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:27:23 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,14 +60,15 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="UI" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="UI" oor:package="org.openoffice.Office" xml:lang="en-US">
+	<info>
 		<author>OS</author>
 	</info>
 	<templates>
 		<group oor:name="FilterClass">
 			<info>
 				<author>FS</author>
-				<desc >Describes a class of filters. Filter classes (for example, &apos;Text documents&apos;) appear as a single filter to the user.</desc>
+				<desc>Describes a class of filters. Filter classes (for example, &apos;Text documents&apos;) appear as a single filter to the user.</desc>
 			</info>
 			<prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true" oor:nillable="false">
 				<info>
@@ -606,13 +607,49 @@
 				</info>
 			</set>
 		</group>
+		<group oor:name="FilePicker">
+			<info>
+				<author>FS</author>
+				<desc>Specifies various settings for the internal file/folder picker dialog.</desc>
+			</info>
+			<prop oor:name="FillAsynchronously" oor:type="xs:boolean">
+				<info>
+					<desc>Specifies whether the dialog should fill its view asynchronously. Asnychronous filling allows the user to cancel blocking operations, which may be usefull for instance for mounted, but dead NFS devices.</desc>
+				</info>
+				<value>true</value>
+			</prop>
+			<group oor:name="Timeout">
+				<info>
+					<desc>Specifies the timeouts to be used when the file view is to be filled asynchronously.
+These settings are not evaluated if the FillAsynchronously property is false.</desc>
+				</info>
+				<prop oor:name="Min" oor:type="xs:int">
+					<info>
+						<desc>Specifies the minimum timeout in milliseconds. When the file view is filled, the dialog will wait at least this time before the user is allowed to cancel the operation.</desc>
+					</info>
+					<constraints>
+						<minInclusive oor:value="1000">
+							<info>
+								<desc>The minimum timeout value is 1 second.</desc>
+							</info>
+						</minInclusive>
+					</constraints>
+					<value>1000</value>
+				</prop>
+				<prop oor:name="Max" oor:type="xs:int">
+					<info>
+						<desc>Specifies the maximum timeout in milliseconds. When the file view is being filled, and its content could not be completely obtained within the time frame given here, the operation is cancelled automatically.</desc>
+					</info>
+					<constraints>
+						<minInclusive oor:value="5000">
+							<info>
+								<desc>The maximum timeout value should be at least 5 mseconds.</desc>
+							</info>
+						</minInclusive>
+					</constraints>
+					<value>30000</value>
+				</prop>
+			</group>
+		</group>
 	</component>
 </oor:component-schema>
-
-
-
-
-
-
-
-
