@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:56:26 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,9 +365,9 @@ TabDialog DLG_MULTI_TOX
         Text[ polish ] = "Wyœwietl podgl¹d";
         Text[ portuguese_brazilian ] = "Show ~preview";
         Text[ japanese ] = "ÌßÚËŞ­°‚Ì•\\¦(~W)";
-        Text[ korean ] = "¹Ì¸®º¸±â ³ªÅ¸³»±â";
-        Text[ chinese_simplified ] = "ÏÔÊ¾Ô¤ÀÀ(~P)";
-        Text[ chinese_traditional ] = "Åã¥Ü¹wÄı(~P)";
+        Text[ korean ] = "¹Ì¸®º¸±â ³ªÅ¸³»±â(~W)";
+        Text[ chinese_simplified ] = "ÏÔÊ¾Ô¤ÀÀ(~W)";
+        Text[ chinese_traditional ] = "Åã¥Ü¹wÄı(~W)";
         Text[ arabic ] = "ÅÙåÇÑ ÇáãÚÇíäÉ";
         Text[ turkish ] = "Önizlemeyi görüntüle";
     };
@@ -973,10 +973,10 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Ytterligare ~mallar";
         Text[ polish ] = "Inne style";
         Text[ portuguese_brazilian ] = "additional styles";
-        Text[ japanese ] = "‚»‚Ì‘¼‚Ì½À²Ù";
-        Text[ korean ] = "±âÅ¸ À¯Çü";
-        Text[ chinese_simplified ] = "ÆäËüÑùÊ½";
-        Text[ chinese_traditional ] = "¨ä¥L¼Ë¦¡";
+        Text[ japanese ] = "‚»‚Ì‘¼‚Ì½À²Ù(~A)";
+        Text[ korean ] = "±âÅ¸ À¯Çü(~A)";
+        Text[ chinese_simplified ] = "ÆäËüÑùÊ½(~A)";
+        Text[ chinese_traditional ] = "¨ä¥L¼Ë¦¡(~A)";
         Text[ arabic ] = "ÃäãÇØ ÅÖÇİíÉ";
         Text[ turkish ] = "Diğer biçimler";
         Text[ language_user1 ] = " ";
@@ -1030,10 +1030,10 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Förteckningsm~arkeringar";
         Text[ polish ] = "Zaz~naczanie indeksów";
         Text[ portuguese_brazilian ] = "Index entries";
-        Text[ japanese ] = "‘I‘ğ€–Ú";
-        Text[ korean ] = "»öÀÎ ¸¶Å©";
-        Text[ chinese_simplified ] = "±ê¼ÇÄ¿Â¼ÌõÄ¿";
-        Text[ chinese_traditional ] = "¥Ø¿ı¼Ğ°O";
+        Text[ japanese ] = "‘I‘ğ€–Ú(~X)";
+        Text[ korean ] = "»öÀÎ ¸¶Å©(~X)";
+        Text[ chinese_simplified ] = "±ê¼ÇÄ¿Â¼ÌõÄ¿(~X)";
+        Text[ chinese_traditional ] = "¥Ø¿ı¼Ğ°O(~X)";
         Text[ arabic ] = "ÊÍÏíÏÇÊ ÇáİåÑÓ";
         Text[ turkish ] = "Dizin ~işaretleri";
     };
@@ -1350,10 +1350,10 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Kombinera med ~f eller ff";
         Text[ polish ] = "Streœæ za pomoc¹ s lub ss";
         Text[ portuguese_brazilian ] = "Combine identical entries with ~pp.";
-        Text[ japanese ] = "‘±‚«Íß°¼Ş‚ğ p ‚Ü‚½‚Í pp ‚Å•\\¦";
-        Text[ korean ] = "p ¶Ç´Âpp µ¿ÀÏÇ×¸ñÀ» ÇÏ³ª·Î ¹­À½(~P)";
+        Text[ japanese ] = "‘±‚«Íß°¼Ş‚ğ ~p ‚Ü‚½‚Í pp ‚Å•\\¦";
+        Text[ korean ] = "~p ¶Ç´Âpp µ¿ÀÏÇ×¸ñÀ» ÇÏ³ª·Î ¹­À½";
         Text[ chinese_simplified ] = "ºÏ²¢´ø f »ò ff µÄÌõÄ¿(~P)";
-        Text[ chinese_traditional ] = "¦X¨Ö¥Î ~f ©Î ff";
+        Text[ chinese_traditional ] = "¦X¨Ö¥Î f ©Î ff(~P)";
         Text[ arabic ] = "ÊáÎíÕ ÈÇÓÊÎÏÇã p.  Ãæ  pp";
         Text[ turkish ] = "Sonraki ~sayfa ya da sayfalar ile birleştir";
     };
@@ -1424,7 +1424,7 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Scrivi le voci maiusc~ole";
         Text[ danish ] = "Skriv elementer automatisk med stort";
         Text[ swedish ] = "Skriv ~automatiskt poster med stor bokstav";
-        Text[ polish ] = "Wpisy autom. zapisywa~æ wielkimi literami";
+        Text[ polish ] = "Zaczynaj wpisy autom. od wielkiej litery";
         Text[ portuguese_brazilian ] = "Capitalize entries";
         Text[ japanese ] = "Œê“ª‚ğ©“®“I‚É‘å•¶š‚É‚·‚é";
         Text[ korean ] = "ÀÔ·Â»çÇ×¡¡ÀÚµ¿À¸·Î¡¡´ë¹®ÀÚ";
@@ -1538,7 +1538,7 @@ TabPage TP_TOX_SELECT
                     Text[ portuguese_brazilian ] = "New...";
                     Text[ japanese ] = "V‹Kì¬(~N)...";
                     Text[ korean ] = "»õ·Î(~N)...";
-                    Text[ chinese_simplified ] = "ĞÂ½¨...";
+                    Text[ chinese_simplified ] = "ĞÂ½¨(~N)...";
                     Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~N)...";
                     Text[ arabic ] = "ÌÏíÏ...";
                     Text[ turkish ] = "Yeni...";
@@ -1562,7 +1562,7 @@ TabPage TP_TOX_SELECT
                     Text[ portuguese_brazilian ] = "Edit...";
                     Text[ japanese ] = "•ÒW(~E)...";
                     Text[ korean ] = "ÆíÁı(~E)...";
-                    Text[ chinese_simplified ] = "±à¼­...";
+                    Text[ chinese_simplified ] = "±à¼­(~E)...";
                     Text[ chinese_traditional ] = "½s¿è(~E)...";
                     Text[ arabic ] = "ÊÍÑíÑ...";
                     Text[ turkish ] = "Düzenle...";
@@ -1581,10 +1581,10 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "~Fil";
         Text[ polish ] = "~Plik";
         Text[ portuguese_brazilian ] = "File";
-        Text[ japanese ] = "Ì§²Ù";
+        Text[ japanese ] = "Ì§²Ù(~F)";
         Text[ korean ] = "ÆÄÀÏ(~F)";
-        Text[ chinese_simplified ] = "ÎÄ¼ş";
-        Text[ chinese_traditional ] = "ÀÉ®×";
+        Text[ chinese_simplified ] = "ÎÄ¼ş(~F)";
+        Text[ chinese_traditional ] = "ÀÉ®×(~F)";
         Text[ arabic ] = "ãáİ";
         Text[ turkish ] = "Dosya";
     };
@@ -1632,7 +1632,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Textramar";
         Text[ polish ] = "Ramki tekstu";
         Text[ portuguese_brazilian ] = "Text frames";
-        Text[ japanese ] = "Ã·½Ä˜g";
+        Text[ japanese ] = "Ã·½Ä˜g(~X)";
         Text[ korean ] = "ÅØ½ºÆ® ÇÁ·¹ÀÓ(~X)";
         Text[ chinese_simplified ] = "ÎÄ±¾¿ò(~X)";
         Text[ chinese_traditional ] = "¤å¦r¤è¶ô(~X)";
@@ -2003,7 +2003,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Parenteser";
         Text[ polish ] = "Nawiasy";
         Text[ portuguese_brazilian ] = "Brackets";
-        Text[ japanese ] = "Š‡ŒÊ(~B)";
+        Text[ japanese ] = "‚©‚Á‚±(~B)";
         Text[ korean ] = "°ıÈ£(~B)";
         Text[ chinese_simplified ] = "À¨ºÅ(~B)";
         Text[ chinese_traditional ] = "¬A¸¹(~B)";
@@ -2609,10 +2609,10 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "~Alla nivåer";
         Text[ polish ] = "Wszystkie poziomy";
         Text[ portuguese_brazilian ] = "All levels";
-        Text[ japanese ] = "‚·‚×‚Ä‚ÌÚÍŞÙ";
+        Text[ japanese ] = "‚·‚×‚Ä‚ÌÚÍŞÙ(~A)";
         Text[ korean ] = "¸ğµç ¼öÁØ(~A)";
-        Text[ chinese_simplified ] = "ËùÓĞµÈ¼¶";
-        Text[ chinese_traditional ] = "©Ò¦³ªº¯Å";
+        Text[ chinese_simplified ] = "ËùÓĞµÈ¼¶(~A)";
+        Text[ chinese_traditional ] = "©Ò¦³ªº¯Å(~A)";
         Text[ arabic ] = "ßá ÇáãÓÊæíÇÊ";
         Text[ turkish ] = "Tüm düzeyler";
     };
@@ -2686,10 +2686,10 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "~Kapitelinfo";
         Text[ polish ] = "Informacja o rozdziale";
         Text[ portuguese_brazilian ] = "Chapter info";
-        Text[ japanese ] = "Í‚Ìî•ñ";
+        Text[ japanese ] = "Í‚Ìî•ñ(~C)";
         Text[ korean ] = "Àå Á¤º¸(~C)";
-        Text[ chinese_simplified ] = "ÕÂ½ÚĞÅÏ¢";
-        Text[ chinese_traditional ] = "³¹¸`¸ê°T";
+        Text[ chinese_simplified ] = "ÕÂ½ÚĞÅÏ¢(~C)";
+        Text[ chinese_traditional ] = "³¹¸`¸ê°T(~C)";
         Text[ arabic ] = "ãÚáæãÇÊ ÇáİÕá";
         Text[ turkish ] = "Bölüm bilgileri";
         Text[ language_user1 ] = " ";
@@ -2764,7 +2764,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "H~yperlänk";
         Text[ polish ] = "Hiper³¹cze";
         Text[ portuguese_brazilian ] = "Hyperlink";
-        Text[ japanese ] = "Ê²Êß°Øİ¸";
+        Text[ japanese ] = "Ê²Êß°Øİ¸(~H)";
         Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©(~H)";
         Text[ chinese_simplified ] = "³¬Á´½Ó(~H)";
         Text[ chinese_traditional ] = "¶W³sµ²(~H)";
@@ -3145,10 +3145,10 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "Vid högermarginalen";
         Text[ polish ] = "Z prawej krawêdzi";
         Text[ portuguese_brazilian ] = "Right border";
-        Text[ japanese ] = "Íß°¼Ş‰E’[‚Ö";
+        Text[ japanese ] = "Íß°¼Ş‰E’[‚Ö(~O)";
         Text[ korean ] = "¿À¸¥ÂÊ ¿©¹é(~O)";
-        Text[ chinese_simplified ] = "ÓÒ±ß¿Õ°×";
-        Text[ chinese_traditional ] = "¦b¥kÃäªÅ¥Õ¤W";
+        Text[ chinese_simplified ] = "ÓÒ±ß¿Õ°×(~O)";
+        Text[ chinese_traditional ] = "¦b¥kÃäªÅ¥Õ¤W(~O)";
         Text[ arabic ] = "Úáì ÇáåÇãÔ ÇáÃíãä";
         Text[ turkish ] = "Sağ kenar";
         Text[ language_user1 ] = " ";
@@ -3197,10 +3197,10 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "Tabbarnas p~osition relativ till indraget från styckeformatmallen";
         Text[ polish ] = "Pozycja relatywna do wciêcia ze stylu akapitu";
         Text[ portuguese_brazilian ] = "Position relativ to the paragraph style indent";
-        Text[ japanese ] = "ÀÌŞˆÊ’u‚Í’i—½À²Ù‚Ì²İÃŞİÄ‚©‚ç";
-        Text[ korean ] = "´Ü¶ôÀ¯ÇüÀÇ Ã¹¹®Àå µé¿©¾²±â¿¡ °ü·ÃµÈ ÅÇ À§Ä¡";
-        Text[ chinese_simplified ] = "µ÷ÕûÖÆ±í·ûºÍ¶ÎÂäÑùÊ½Ëõ½øµÄÎ»ÖÃ";
-        Text[ chinese_traditional ] = "»sªí²Å¦ì¸m©M¬q¸¨¼Ë¦¡ªºÁY±Æ«O«ù¬Û¹ï¦ì¸m";
+        Text[ japanese ] = "ÀÌŞˆÊ’u‚Í’i—½À²Ù‚Ì²İÃŞİÄ‚©‚ç(~V)";
+        Text[ korean ] = "´Ü¶ôÀ¯ÇüÀÇ Ã¹¹®Àå µé¿©¾²±â¿¡ °ü·ÃµÈ ÅÇ À§Ä¡(~V)";
+        Text[ chinese_simplified ] = "µ÷ÕûÖÆ±í·ûºÍ¶ÎÂäÑùÊ½Ëõ½øµÄÎ»ÖÃ(~V)";
+        Text[ chinese_traditional ] = "»sªí²Å¦ì¸m©M¬q¸¨¼Ë¦¡ªºÁY±Æ«O«ù¬Û¹ï¦ì¸m(~V)";
         Text[ arabic ] = "ãæÖÚ ÚáÇãÇÊ ÇáÌÏæáÉ äÓÈÉ áÅÒÇÍÉ äãØ ÇáİŞÑÉ";
         Text[ turkish ] = "Paragraf biçimi girintisine göre orantılı sekme konumu";
         Text[ language_user1 ] = " ";
@@ -3800,7 +3800,7 @@ TabPage TP_TOX_STYLES
         Text[ chinese_traditional ] = "¬q¸¨¼Ë¦¡(~S)";
         Text[ arabic ] = "ÃäãÇØ İŞÑÉ";
         Text[ greek ] = "Ğñüôõğ~á ğáñáãñÜöïõ";
-        Text[ korean ] = "´Ü¶ô À¯Çü";
+        Text[ korean ] = "´Ü¶ô À¯Çü(~S)";
         Text[ turkish ] = "Paragraf şablonları";
         Text[ language_user1 ] = " ";
     };
