@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnSearch.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 // DocMerge from idl: constants com::sun::star::sdbc::ColumnSearch
 /** indicates in which way a column can be used in the WHERE search.
  */
-constants ColumnSearch
+published constants ColumnSearch
 {
     //-------------------------------------------------------------------------
 
