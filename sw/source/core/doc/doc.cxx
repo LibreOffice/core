@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:17:22 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:51:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@
 #ifndef _TXTFLD_HXX //autogen
 #include <txtfld.hxx>
 #endif
+#ifndef _DBFLD_HXX
+#include <dbfld.hxx>
+#endif
 #ifndef _TXTINET_HXX //autogen
 #include <txtinet.hxx>
 #endif
@@ -227,6 +230,7 @@
 #include <statstr.hrc>          // StatLine-String
 #endif
 
+#include <vector>
 // -> #111827#
 #ifndef _SFXITEMITER_HXX
 #include <svtools/itemiter.hxx>
@@ -1135,6 +1139,65 @@ BOOL SwDoc::RemoveInvisibleContent()
         SetModified();
     EndUndo( UIUNDO_DELETE_INVISIBLECNTNT );
     return bRet;
+}
+/*-- 11.06.2004 08:34:04---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+BOOL SwDoc::ConvertFieldsToText()
+{
+    BOOL bRet = FALSE;
+    StartUndo( UIUNDO_REPLACE );
+
+    const SwFldTypes* pFldTypes = GetFldTypes();
+    sal_uInt16 nCount = pFldTypes->Count();
+    //go backward, field types are removed
+    for(sal_uInt16 nType = nCount;  nType > 0;  --nType)
+    {
+        const SwFieldType *pCurType = pFldTypes->GetObject(nType - 1);
+        SwClientIter aIter( *(SwFieldType*)pCurType );
+        const SwFmtFld* pCurFldFmt = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+        ::std::vector<const SwFmtFld*> aFieldFmts;
+        while (pCurFldFmt)
+        {
+            aFieldFmts.push_back(pCurFldFmt);
+            pCurFldFmt = (SwFmtFld*)aIter.Next();
+        }
+        ::std::vector<const SwFmtFld*>::iterator aBegin = aFieldFmts.begin();
+        ::std::vector<const SwFmtFld*>::iterator aEnd = aFieldFmts.end();
+        while(aBegin != aEnd)
+        {
+            const SwTxtFld *pTxtFld = (*aBegin)->GetTxtFld();
+            // skip fields that are currently not in the document
+            // e.g. fields in undo or redo array
+            BOOL bSkip = !pTxtFld ||
+                         !pTxtFld->GetpTxtNode()->GetNodes().IsDocNodes() ||
+                         IsInHeaderFooter(SwNodeIndex(*pTxtFld->GetpTxtNode(), 0));
+
+            if (!bSkip)
+            {
+                const SwFmtFld& rFmtFld = pTxtFld->GetFld();
+                const SwField*  pField = rFmtFld.GetFld();
+                String sText = pField->GetCntnt();
+                //database fields should not convert their command into text
+                if( RES_DBFLD == pCurType->Which() && !static_cast<const SwDBField*>(pField)->IsInitialized())
+                    sText.Erase();
+
+                //now remove the field and insert the string
+                SwPaM aPam(*pTxtFld->GetpTxtNode(), *pTxtFld->GetStart());
+                aPam.SetMark();
+                aPam.Move();
+                DeleteAndJoin(aPam);
+                Insert( aPam, sText );
+            }
+            ++aBegin;
+        }
+    }
+
+    if( bRet )
+        SetModified();
+    EndUndo( UIUNDO_REPLACE );
+    return bRet;
+
 }
 
     // embedded alle lokalen Links (Bereiche/Grafiken)
