@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-06 15:44:43 $
+ *  last change: $Author: jp $ $Date: 2001-02-01 14:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3812,7 +3812,7 @@ SfxItemPresentation SvxEmphasisMarkItem::GetPresentation
             {
                 sal_uInt16 nVal = GetValue();
                 rText = SVX_RESSTR( RID_SVXITEMS_EMPHASIS_BEGIN_STYLE +
-                                        EMPHASISMARK_STYLE & nVal );
+                                        ( EMPHASISMARK_STYLE & nVal ));
                 USHORT nId = ( EMPHASISMARK_POS_ABOVE & nVal )
                                 ? RID_SVXITEMS_EMPHASIS_ABOVE_POS
                                 : ( EMPHASISMARK_POS_BELOW & nVal )
