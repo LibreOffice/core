@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewmdi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-04-09 09:46:35 $
+ *  last change: $Author: os $ $Date: 2001-04-27 10:49:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,10 @@
 #include "ribbar.hrc"
 #include "helpid.h"
 
+#if SUPD<631
+#define SVX_ZOOM_PAGEWIDTH_NOBORDER 4
+#endif
+
 USHORT          SwView::nMoveType = NID_PGE;
 BYTE            SwView::nActMark = 0;
 
@@ -154,12 +158,12 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
             aPageSize.Width() -=
                 ( rLRSpace.GetLeft() + rLRSpace.GetRight() + nLeftOfst * 2 );
         }
-        else
+        else if(SVX_ZOOM_PAGEWIDTH_NOBORDER != eZoomType)
         {
             aPageSize.Width() += nOf;
             aPageSize.Height() += nOf;
         }
-        lLeftMargin = SVX_ZOOM_PAGEWIDTH != eZoomType ?
+        lLeftMargin = SVX_ZOOM_PAGEWIDTH != eZoomType && SVX_ZOOM_PAGEWIDTH_NOBORDER != eZoomType ?
             long(rLRSpace.GetLeft()) + DOCUMENTBORDER + nLeftOfst : 0L;
 
         const MapMode aTmpMap( MAP_TWIP );
@@ -727,6 +731,9 @@ void SwView::SetImageButtonColor(Color& rColor)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/04/09 09:46:35  os
+    #85859# some option dialog errors fixed
+
     Revision 1.2  2000/09/28 15:24:06  os
     use of configuration service in view options
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-13 10:53:31 $
+ *  last change: $Author: os $ $Date: 2001-04-27 10:49:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@
 
 //Das SetVisArea der DocShell darf nicht vom InnerResizePixel gerufen werden.
 //Unsere Einstellungen muessen aber stattfinden.
+#if SUPD<631
+#define SVX_ZOOM_PAGEWIDTH_NOBORDER 4
+#endif
+
 static BOOL bProtectDocShellVisArea = FALSE;
 
 static USHORT nPgNum = 0;
@@ -115,16 +119,16 @@ inline BOOL SwView::IsDocumentBorder()
 {
     return GetDocShell()->GetProtocol().IsInPlaceActive() ||
            GetDocShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
-           pWrtShell->IsBrowseMode();
+           pWrtShell->IsBrowseMode() ||
+           SVX_ZOOM_PAGEWIDTH_NOBORDER == (SvxZoomType)pWrtShell->GetViewOptions()->GetZoomType();
 }
-
 inline long GetLeftMargin( SwView &rView )
 {
     BOOL bWeb = 0 != PTR_CAST(SwWebView, &rView);
-    SvxZoomType eType = (SvxZoomType)SW_MOD()->GetUsrPref(bWeb)->GetZoomType();
+    SvxZoomType eType = (SvxZoomType)rView.GetWrtShell().GetViewOptions()->GetZoomType();
     long lRet = rView.GetWrtShell().GetAnyCurRect(RECT_PAGE_PRT).Left();
     return eType == SVX_ZOOM_PERCENT   ? lRet + DOCUMENTBORDER :
-           eType == SVX_ZOOM_PAGEWIDTH ? 0 :
+           eType == SVX_ZOOM_PAGEWIDTH || eType == SVX_ZOOM_PAGEWIDTH_NOBORDER ? 0 :
                                          lRet + DOCUMENTBORDER + nLeftOfst;
 }
 

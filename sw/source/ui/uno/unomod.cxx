@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-04-17 11:44:03 $
+ *  last change: $Author: os $ $Date: 2001-04-27 10:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,6 +524,15 @@ void SwXViewSettings::setPropertyValue(const OUString& rPropertyName,
                     case /*DocumentZoomType_BY_VALUE    */  3:
                         eZoom = SVX_ZOOM_PERCENT;
                     break;
+#if SUPD<631
+                    case 4:
+                        eZoom = (SvxZoomType)4;
+                    break;
+#else
+                    case /*DocumentZoomType_PAGE_WIDTH_EXACT */ 4:
+                        eZoom = SVX_ZOOM_PAGEWIDTH_NOBORDER;
+                    break;
+#endif
                 }
                 if(eZoom < USHRT_MAX)
                 {
@@ -546,12 +555,12 @@ void SwXViewSettings::setPropertyValue(const OUString& rPropertyName,
     }
     else
         throw beans::UnknownPropertyException();
+
     if(bApplyZoom && pView)
     {
-        pView->SetZoom( (SvxZoomType)aVOpt.GetZoomType(), aVOpt.GetZoom(), sal_True );
+            pView->SetZoom( (SvxZoomType)aVOpt.GetZoomType(), aVOpt.GetZoom(), sal_True );
     }
-    else if(bApply)
-        SW_MOD()->ApplyUsrPref(aVOpt, pView, pView ? VIEWOPT_DEST_VIEW_ONLY : bWeb ? VIEWOPT_DEST_WEB : VIEWOPT_DEST_TEXT );
+    SW_MOD()->ApplyUsrPref(aVOpt, pView, pView ? VIEWOPT_DEST_VIEW_ONLY : bWeb ? VIEWOPT_DEST_WEB : VIEWOPT_DEST_TEXT );
 
 }
 /*-- 18.12.98 11:01:12---------------------------------------------------
@@ -692,6 +701,9 @@ Sequence< OUString > SwXViewSettings::getSupportedServiceNames(void) throw( Runt
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/04/17 11:44:03  os
+    #84807# SwXModule and SwXAutoTextContainer correctly registered
+
     Revision 1.3  2001/04/03 14:55:05  mtg
     #78699# add support for paper from setup and fax name
 
