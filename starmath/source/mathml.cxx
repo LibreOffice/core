@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:52:05 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,6 +703,8 @@ void SmXMLImport::endDocument(void)
 
         bSuccess = sal_True;
     }
+
+    SvXMLImport::endDocument();
 }
 
 /// export through an XML exporter component (output stream version)
