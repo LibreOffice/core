@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-07-11 08:20:42 $
+ *  last change: $Author: os $ $Date: 2001-07-17 12:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,18 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-
+#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
+#include <com/sun/star/sdb/XCompletedConnection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
+#include <com/sun/star/container/XContainerListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
+#include <com/sun/star/container/XContainer.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
@@ -115,6 +126,12 @@
 #ifndef _DBTREE_HXX
 #include <dbtree.hxx>
 #endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 #ifndef _HELPID_H
 #include <helpid.h>
@@ -130,17 +147,170 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::sdb;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
+using namespace com::sun::star::task;
 using namespace com::sun::star::beans;
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
-// STATIC DATA -----------------------------------------------------------
+/* -----------------------------17.07.01 13:10--------------------------------
 
+ ---------------------------------------------------------------------------*/
+struct SwConnectionData
+{
+    OUString                sSourceName;
+    Reference<XDataSource>  xSource;
+    Reference<XConnection>  xConnection;
+};
 
+typedef SwConnectionData* SwConnectionDataPtr;
+SV_DECL_PTRARR_DEL( SwConnectionArr, SwConnectionDataPtr, 32, 32 )
+SV_IMPL_PTRARR( SwConnectionArr, SwConnectionDataPtr )
+/* -----------------------------17.07.01 13:24--------------------------------
+
+ ---------------------------------------------------------------------------*/
+class SwDBTreeList_Impl : public cppu::WeakImplHelper1 < XContainerListener >
+{
+    Reference< XNameAccess > xDBContext;
+    SwConnectionArr aConnections;
+    public:
+        SwDBTreeList_Impl(){}
+        ~SwDBTreeList_Impl();
+
+    virtual void SAL_CALL elementInserted( const ContainerEvent& Event ) throw (RuntimeException);
+    virtual void SAL_CALL elementRemoved( const ContainerEvent& Event ) throw (RuntimeException);
+    virtual void SAL_CALL elementReplaced( const ContainerEvent& Event ) throw (RuntimeException);
+    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
+
+    BOOL                        HasContext();
+    Reference< XNameAccess >    GetContext() {return xDBContext;}
+    Reference<XConnection>      GetConnection(const rtl::OUString& rSourceName);
+};
+/* -----------------------------17.07.01 13:24--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwDBTreeList_Impl::~SwDBTreeList_Impl()
+{
+    for(USHORT i = 0; i < aConnections.Count(); i++)
+    {
+        SwConnectionDataPtr pPtr = aConnections[i];
+        Reference<XComponent> xComp(pPtr->xConnection, UNO_QUERY);
+        if(xComp.is())
+            xComp->dispose();
+    }
+    Reference<XContainer> xContainer(xDBContext, UNO_QUERY);
+    if(xContainer.is())
+    {
+        m_refCount++;
+        xContainer->removeContainerListener( this );
+        m_refCount--;
+    }
+}
+/* -----------------------------17.07.01 13:24--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwDBTreeList_Impl::elementInserted( const ContainerEvent&  ) throw (RuntimeException)
+{
+    // information not needed
+}
+/* -----------------------------17.07.01 13:24--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent ) throw (RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    OUString sSource;
+    rEvent.Accessor >>= sSource;
+    for(USHORT i = 0; i < aConnections.Count(); i++)
+    {
+        SwConnectionDataPtr pPtr = aConnections[i];
+        if(pPtr->sSourceName == sSource)
+        {
+            SwConnectionDataPtr pPtr = aConnections[i];
+            Reference<XComponent> xComp(pPtr->xConnection, UNO_QUERY);
+            if(xComp.is())
+                xComp->dispose();
+            aConnections.DeleteAndDestroy(i);
+            break;
+        }
+    }
+}
+/* -----------------------------17.07.01 13:24--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwDBTreeList_Impl::disposing( const EventObject&  ) throw (RuntimeException)
+{
+    xDBContext = 0;
+}
+/* -----------------------------17.07.01 13:24--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwDBTreeList_Impl::elementReplaced( const ContainerEvent& rEvent ) throw (RuntimeException)
+{
+    elementRemoved(rEvent);
+}
+/* -----------------------------17.07.01 13:24--------------------------------
+
+ ---------------------------------------------------------------------------*/
+BOOL SwDBTreeList_Impl::HasContext()
+{
+    if(!xDBContext.is())
+    {
+        Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+        if( xMgr.is() )
+        {
+            Reference<XInterface> xInstance = xMgr->createInstance(
+                        C2U( "com.sun.star.sdb.DatabaseContext" ));
+            xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
+            Reference<XContainer> xContainer(xDBContext, UNO_QUERY);
+            if(xContainer.is())
+                xContainer->addContainerListener( this );
+        }
+        DBG_ASSERT(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available")
+    }
+    return xDBContext.is();
+}
+/* -----------------------------17.07.01 13:24--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const rtl::OUString& rSourceName)
+{
+    Reference<XConnection>  xRet;
+    for(USHORT i = 0; i < aConnections.Count(); i++)
+    {
+        SwConnectionDataPtr pPtr = aConnections[i];
+        if(pPtr->sSourceName == rSourceName)
+        {
+            xRet = pPtr->xConnection;
+            break;
+        }
+    }
+    if(!xRet.is() && xDBContext.is())
+    {
+        SwConnectionDataPtr pPtr = new SwConnectionData();
+        pPtr->sSourceName = rSourceName;
+        Reference<XConnection> xConnection;
+        try
+        {
+            Any aDBSource = xDBContext->getByName(rSourceName);
+            Reference<XCompletedConnection> xComplConnection;
+            aDBSource >>= xComplConnection;
+            pPtr->xSource = Reference<XDataSource>(xComplConnection, UNO_QUERY);
+
+            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+            Reference< XInteractionHandler > xHandler(
+                xMgr->createInstance( C2U( "com.sun.star.sdb.InteractionHandler" )), UNO_QUERY);
+            pPtr->xConnection = xComplConnection->connectWithCompletion( xHandler );
+            xRet = pPtr->xConnection;
+        }
+        catch(Exception&)
+        {
+        }
+        aConnections.Insert(pPtr, aConnections.Count());
+    }
+    return xRet;
+}
 /*------------------------------------------------------------------------
  Beschreibung:
 ------------------------------------------------------------------------*/
-
-
 SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId, const String& rDefDBName, const BOOL bShowCol):
 
     SvTreeListBox   (pParent, rResId),
@@ -153,17 +323,9 @@ SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId, const String& r
 
     sDefDBName      (rDefDBName),
     bShowColumns    (bShowCol),
+    pImpl(new SwDBTreeList_Impl),
     bInitialized    (FALSE)
 {
-    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    if( xMgr.is() )
-    {
-        Reference<XInterface> xInstance = xMgr->createInstance(
-                    C2U( "com.sun.star.sdb.DatabaseContext" ));
-        xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
-    }
-    DBG_ASSERT(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available")
-
     SetHelpId(HID_DB_SELECTION_TLB);
 
     if (IsVisible())
@@ -173,10 +335,9 @@ SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId, const String& r
 /*------------------------------------------------------------------------
  Beschreibung:
 ------------------------------------------------------------------------*/
-
-
 SwDBTreeList::~SwDBTreeList()
 {
+    delete pImpl;
 }
 
 /*------------------------------------------------------------------------
@@ -186,7 +347,7 @@ SwDBTreeList::~SwDBTreeList()
 
 void SwDBTreeList::InitTreeList()
 {
-    if(!xDBContext.is())
+    if(!pImpl->HasContext())
         return;
     SetSelectionMode(SINGLE_SELECTION);
     SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
@@ -199,7 +360,7 @@ void SwDBTreeList::InitTreeList()
 
     GetModel()->SetCompareHdl(LINK(this, SwDBTreeList, DBCompare));
 
-    Sequence<OUString> aDBNames = xDBContext->getElementNames();
+    Sequence<OUString> aDBNames = pImpl->GetContext()->getElementNames();
     const OUString* pDBNames = aDBNames.getConstArray();
     long nCount = aDBNames.getLength();
 
@@ -268,18 +429,10 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
             String sSourceName = GetEntryText(GetParent(pParent));
             String sTableName = GetEntryText(pParent);
 
-            if(!xDBContext->hasByName(sSourceName))
+            if(!pImpl->GetContext()->hasByName(sSourceName))
                 return;
-            Any aDBSource = xDBContext->getByName(sSourceName);
-            Reference<XDataSource>* pxSource = (Reference<XDataSource>*)aDBSource.getValue();
+            Reference<XConnection> xConnection = pImpl->GetConnection(sSourceName);
             BOOL bTable = pParent->GetUserData() == 0;
-            Reference<XConnection> xConnection;
-            try
-            {
-                OUString sDummy;
-                xConnection = (*pxSource)->getConnection(sDummy, sDummy);
-            }
-            catch(...) {}
             Reference<XColumnsSupplier> xColsSupplier;
             if(bTable)
             {
@@ -333,19 +486,9 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
         else    // Tabellennamen
         {
             String sSourceName = GetEntryText(pParent);
-            if(!xDBContext->hasByName(sSourceName))
+            if(!pImpl->GetContext()->hasByName(sSourceName))
                 return;
-            Any aDBSource = xDBContext->getByName(sSourceName);
-            Reference<XDataSource>* pxSource = (Reference<XDataSource>*)aDBSource.getValue();
-
-            Reference<XConnection> xConnection;
-            try
-            {
-                OUString sDummy;
-                xConnection = (*pxSource)->getConnection(sDummy, sDummy);
-            }
-            catch(...) {}
-//          SbaDatabaseRef pConnection = pSbaObject->GetDatabase(sDBName, TRUE);
+            Reference<XConnection> xConnection = pImpl->GetConnection(sSourceName);
             if (xConnection.is())
             {
                 Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);

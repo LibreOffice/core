@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-07 14:50:09 $
+ *  last change: $Author: os $ $Date: 2001-07-17 12:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ namespace com{namespace sun{namespace star{namespace container{
 #ifndef _SWUNODEF_HXX
 #include <swunodef.hxx>
 #endif
-
+class SwDBTreeList_Impl;
 class SwDBTreeList : public SvTreeListBox
 {
     Bitmap          aRootOpened;
@@ -91,7 +91,8 @@ class SwDBTreeList : public SvTreeListBox
     BOOL            bInitialized;
     BOOL            bShowColumns;
 
-    STAR_REFERENCE( container::XNameAccess ) xDBContext;
+    SwDBTreeList_Impl* pImpl;
+
     DECL_LINK( DBCompare, SvSortData* );
 
     void            InitTreeList();
