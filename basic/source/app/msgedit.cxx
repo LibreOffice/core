@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:50:42 $
+ *  last change: $Author: rt $ $Date: 2004-12-10 17:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -926,11 +926,10 @@ void TTLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
 {
     TTFeatures aFeatures = ((TTTreeListBox*)&rDev)->GetFeatures( pEntry );
 
+    Font aOldFont( rDev.GetFont());
+    Font aFont( aOldFont );
     if ( aFeatures != HasNothing )
     {
-        Font aOldFont( rDev.GetFont());
-        Font aFont( aOldFont );
-
         if ( ( aFeatures & HasError ) != 0  || ( aFeatures & HasWarning ) != 0 )
         {
             Color aCol;
@@ -947,6 +946,8 @@ void TTLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
             {
                 aFont.SetFillColor( aCol );
                 aFont.SetTransparent( FALSE );
+                Color aCol( COL_BLACK );
+                aFont.SetColor( aCol );
             }
         }
         else    // so its HasAssertion or HasQAError
@@ -973,16 +974,27 @@ void TTLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
                     rDev.DrawWallpaper( aRect, aAssertionWP );
                 else    // HasQAError
                     rDev.DrawWallpaper( aRect, aQAErrorWP );
+
+                Color aCol( COL_BLACK );
+                aFont.SetColor( aCol );
             }
 
 //          virtual void    NotifyScrolling( long nLines );
         }
         rDev.SetFont( aFont );
         rDev.DrawText( rPos, GetText() );
-        rDev.SetFont( aOldFont );
     }
     else
+    {
+        if( !rDev.IsSelected(pEntry) )
+        {
+            Color aCol( COL_BLACK );
+            aFont.SetColor( aCol );
+        }
+        rDev.SetFont( aFont );
         SvLBoxString::Paint( rPos, rDev, nFlags, pEntry );
+    }
+    rDev.SetFont( aOldFont );
 }
 
 
