@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-23 12:03:28 $
+ *  last change: $Author: sj $ $Date: 2001-08-28 16:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4735,6 +4735,7 @@ PPTStyleSheet::~PPTStyleSheet()
 PPTParaPropSet::PPTParaPropSet() :
     pParaSet( new ImplPPTParaPropSet )
 {
+    pParaSet->nBuStart = 1;
 }
 
 PPTParaPropSet::PPTParaPropSet( PPTParaPropSet& rParaPropSet )
