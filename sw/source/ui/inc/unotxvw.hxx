@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:41:10 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _SFX_SFXBASECONTROLLER_HXX_
 #include <sfx2/sfxbasecontroller.hxx>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXTVIEWCURSOR_HPP_
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #endif
@@ -118,7 +121,6 @@
 #endif
 
 class SwView;
-class SvEmbeddedObjectRef;
 
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener > * XSelectionChangeListenerPtr;
 SV_DECL_PTRARR_DEL( SelectionChangeListenerArr, XSelectionChangeListenerPtr, 4, 4 );
@@ -198,7 +200,7 @@ public:
     void                    Invalidate();
 
     // temporary document used for PDF export of selections/multi-selections
-    SfxObjectShellRef       BuildTmpSelectionDoc( SvEmbeddedObjectRef &rRef );
+    SfxObjectShellRef       BuildTmpSelectionDoc( SfxObjectShellRef& );
 };
 
 /* -----------------17.09.98 12:52-------------------
