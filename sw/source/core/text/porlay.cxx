@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:36:37 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,12 @@
 #ifndef _REDLINE_HXX
 #include <redline.hxx>      // SwRedline
 #endif
+
+// --> FME 2004-06-08 #i12836# enhanced pdf export
+#ifndef _SECTION_HXX
+#include <section.hxx>
+#endif
+// <--
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n::ScriptType;
@@ -1985,3 +1991,17 @@ void SwTxtNode::CalcHiddenCharFlags() const
     // Update of the flags is done inside GetBoundsOfHiddenRange()
     SwScriptInfo::GetBoundsOfHiddenRange( *this, 0, nStartPos, nEndPos );
 }
+
+// --> FME 2004-06-08 #i12836# enhanced pdf export
+bool SwTxtNode::IsHidden() const
+{
+    if ( HasHiddenParaField() || HasHiddenCharAttribute( true ) )
+        return true;
+
+    const SwSectionNode* pSectNd = FindSectionNode();
+    if ( pSectNd && pSectNd->GetSection().IsHiddenFlag() )
+        return true;
+
+    return false;
+}
+// <--
