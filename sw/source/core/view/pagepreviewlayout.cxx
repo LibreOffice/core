@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagepreviewlayout.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:42:43 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,10 @@ void SwPagePreviewLayout::_Clear()
     maPaintedPrevwDocRect.Bottom() = 0;
     mnSelectedPageNum = 0;
     _ClearPrevwPageData();
+
+    // OD 07.11.2003 #i22014#
+    mbInPaint = false;
+    mbNewLayoutDuringPaint = false;
 }
 
 void SwPagePreviewLayout::_ClearPrevwLayoutSizes()
@@ -536,6 +540,11 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
     // determine preview pages - visible pages with needed data for paint and
     // accessible pages with needed data.
     _CalcPreviewPages();
+    // OD 07.11.2003 #i22014# - indicate new layout, if print preview is in paint
+    if ( mbInPaint )
+    {
+        mbNewLayoutDuringPaint = true;
+    }
 
     // validate paint data
     mbPaintInfoValid = true;
@@ -1106,7 +1115,20 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
             return false;
     }
 
+    // OD 17.11.2003 #i22014# - no paint, if <superfluous> flag is set at layout
+    if ( mrLayoutRootFrm.IsSuperfluous() )
+    {
+        return true;
+    }
+
     // environment and parameter ok
+
+    // OD 07.11.2003 #i22014#
+    if ( mbInPaint )
+    {
+        return false;
+    }
+    mbInPaint = true;
 
     OutputDevice* pOutputDev = mrParentViewShell.GetOut();
 
@@ -1204,23 +1226,40 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
                 Rectangle aPaintRect = pOutputDev->PixelToLogic( aPxPaintRect );
                 mrParentViewShell.Paint( aPaintRect );
             }
+            // OD 07.11.2003 #i22014# - stop painting, because new print
+            // preview layout is created during paint.
+            if ( mbNewLayoutDuringPaint )
+            {
+                break;
+            }
+
             if ( (*aPageIter)->pPage->GetPhyPageNum() == mnSelectedPageNum )
             {
                 _PaintSelectMarkAtPage( (*aPageIter) );
             }
+
         }
     }
 
-    // update at accessiblilty interface
-    mrParentViewShell.Imp()->UpdateAccessiblePreview(
-                    maPrevwPages,
-                    aMapMode.GetScaleX(),
-                    mrLayoutRootFrm.GetPageByPageNum( mnSelectedPageNum ),
-                    maWinSize );
+    // OD 17.11.2003 #i22014# - no update of accessible preview, if a new
+    // print preview layout is created during paint.
+    if ( !mbNewLayoutDuringPaint )
+    {
+        // update at accessiblilty interface
+        mrParentViewShell.Imp()->UpdateAccessiblePreview(
+                        maPrevwPages,
+                        aMapMode.GetScaleX(),
+                        mrLayoutRootFrm.GetPageByPageNum( mnSelectedPageNum ),
+                        maWinSize );
+    }
 
     delete pEmptyPgFont;
     pOutputDev->SetMapMode( aSavedMapMode );
     mrParentViewShell.aVisArea.Clear();
+
+    // OD 07.11.2003 #i22014#
+    mbInPaint = false;
+    mbNewLayoutDuringPaint = false;
 
     return true;
 }
