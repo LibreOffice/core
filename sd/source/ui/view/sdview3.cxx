@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: aw $ $Date: 2002-09-20 15:47:05 $
+ *  last change: $Author: aw $ $Date: 2002-10-10 17:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,7 +614,8 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
 
             pWorkPage->SetRectsDirty();
 
-            Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
+            // #104148# Use SnapRect, not BoundRect
+            Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
 
             aDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
             aDropPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
@@ -744,7 +745,8 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
 
                 if( pOwnData )
                 {
-                    Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
+                    // #104148# Use SnapRect, not BoundRect
+                    Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
 
                     aDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
                     aDropPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
@@ -804,7 +806,8 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
 
                     if( pOwnData )
                     {
-                        Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
+                        // #104148# Use SnapRect, not BoundRect
+                        Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
 
                         aDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
                         aDropPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
@@ -955,7 +958,8 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
 
                 pWorkPage->SetRectsDirty();
 
-                Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
+                // #104148# Use SnapRect, not BoundRect
+                Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
 
                 aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
                 aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
@@ -988,7 +992,8 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
 
                 pWorkPage->SetRectsDirty();
 
-                Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
+                // #104148# Use SnapRect, not BoundRect
+                Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
 
                 aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
                 aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
@@ -1019,7 +1024,8 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
 
                 pWorkPage->SetRectsDirty();
 
-                Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
+                // #104148# Use SnapRect, not BoundRect
+                Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
 
                 aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
                 aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
