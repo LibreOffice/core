@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobQueue.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:52 $
+ *  last change: $Author: kr $ $Date: 2000-09-28 11:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ import com.sun.star.uno.UnoRuntime;
  * (put by <code>putjob</code>) into the async queue, which is only
  * known by the sync queue.
  * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:52 $
+ * @version     $Revision: 1.2 $ $ $Date: 2000-09-28 11:32:50 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
  * @see         com.sun.star.lib.uno.environments.remote.Job
@@ -297,7 +297,7 @@ public class JobQueue {
                 while(_async_jobQueue._worker_thread != null && _async_jobQueue._active) {
 //                  while(_async_jobQueue._worker_thread != null || _async_jobQueue._head != null) {
 //                  while(_async_jobQueue._todo > 0) {
-                    if(DEBUG) ;System.err.println("waiting for async:" + _async_jobQueue._head + " " +  _async_jobQueue._worker_thread);
+                    if(DEBUG) System.err.println("waiting for async:" + _async_jobQueue._head + " " +  _async_jobQueue._worker_thread);
                     _async_jobQueue.wait(10);
                 }
             }
@@ -394,7 +394,7 @@ public class JobQueue {
      * @param  waitTime   the maximum amount of time to wait for a job (0 means wait infinitly)
      * @param  disposeId  a dispose id
      */
-    synchronized Object enter(int waitTime, Object disposeId) throws Exception {
+    Object enter(int waitTime, Object disposeId) throws Exception {
         if(DEBUG) System.err.println("#####" + getClass().getName() + ".enter: " + _threadId);
 
         boolean quit = false;
