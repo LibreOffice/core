@@ -2,9 +2,9 @@
  *
  *  $RCSfile: child_process_id.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 09:14:09 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 16:27:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #include <stdio.h>
 
+#ifndef _SAL_MAIN_H_
+#include "sal/main.h"
+#endif
+
 #ifndef _RTL_PROCESS_H_
 #include <rtl/process.h>
 #endif
@@ -89,11 +93,8 @@ void printUuid( sal_uInt8 *pNode )
 }
 
 // ----------------------------------- Main -----------------------------------
-#if (defined UNX) || (defined OS2)
-int main( int argc, char *argv[] )
-#else
-int _cdecl main( int argc, char* argv[] )
-#endif
+
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     //printf("# %s is called.\n", argv[0]);
     sal_uInt8 pTargetUUID[16];
