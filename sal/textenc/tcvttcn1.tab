@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvttcn1.tab,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:29 $
+ *  last change: $Author: sb $ $Date: 2002-02-25 15:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1289,6 +1289,7 @@ static sal_uInt16 const aImplDBCSToUniTab_BIG5_C6[] =
 
 /* This table only used for BIG5, because on other systems these */
 /* chars are end user defined characters */
+/* SB: This is nonstandard, and has effects on generate/big5hkscs2001.pl. */
 
 static sal_uInt16 const aImplDBCSToUniTab_BIG5ONLY_C6[] =
 {
@@ -1324,6 +1325,7 @@ static sal_uInt16 const aImplDBCSToUniTab_BIG5ONLY_C6[] =
 
 /* This table only used for BIG5, because on other systems these */
 /* chars are end user defined characters */
+/* SB: This is nonstandard, and has effects on generate/big5hkscs2001.pl. */
 
 static sal_uInt16 const aImplDBCSToUniTab_BIG5ONLY_C7[] =
 {

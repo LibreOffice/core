@@ -3,9 +3,9 @@
 #
 #   $RCSfile: big5hkscs2001.pl,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: sb $ $Date: 2002-01-15 17:04:04 $
+#   last change: $Author: sb $ $Date: 2002-02-25 15:07:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,6 +63,8 @@
 # The following file must be available in a ./input subdir:
 
 # <http://www.info.gov.hk/digital21/eng/hkscs/download/big5-iso.txt>
+
+$surrogates = 0; # set to 1 to allow mappings to Unicode beyond Plane 0
 
 $id = "Big5Hkscs2001";
 
@@ -125,74 +127,202 @@ sub printSpaces
     return $output;
 }
 
-$ignored = 0;
+sub addMapping
+{
+    my $utf32 = $_[0];
+    my $big5 = $_[1];
+    my $comp = $_[2];
+
+    $uni_plane = $utf32 >> 16;
+    $uni_page = ($utf32 >> 8) & 0xFF;
+    $uni_index = $utf32 & 0xFF;
+
+    if (!defined($uni_plane_used[$uni_plane])
+        || !defined($uni_page_used[$uni_plane][$uni_page])
+        || !defined($uni_map[$uni_plane][$uni_page][$uni_index]))
+    {
+        $uni_map[$uni_plane][$uni_page][$uni_index] = $big5;
+        $uni_plane_used[$uni_plane] = 1;
+        $uni_page_used[$uni_plane][$uni_page] = 1;
+        if ($comp != -1)
+        {
+            ++$compat[$comp];
+        }
+    }
+    else
+    {
+        $big5_1 = $uni_map[$uni_plane][$uni_page][$uni_index];
+        print "WARNING!  Mapping ", printUtf32($utf32), " to ",
+              printBig5($big5_1), ", NOT ", ($comp ? "compat " : ""),
+              printBig5($big5), "\n";
+    }
+}
+
+# The following are mapped by the underlying RTL_TEXTENCODING_BIG5 to some
+# nonstandard Unicode points, so they are explicitly mentioned here to map
+# to the standard Unicode PUA points.  (In the other direction, the unofficial
+# mappings from Unicode to RTL_TEXTENCODING_BIG5 C6A1--C7FE are harmless,
+# since all Unicode characters involved are already covered by the official
+# Big5-HKSCS mappings.)
+$big5_map[0xC6][0xCF] = 0xF6E0; addMapping(0xF6E0, 0xC6CF, -1);
+$big5_map[0xC6][0xD3] = 0xF6E4; addMapping(0xF6E4, 0xC6D3, -1);
+$big5_map[0xC6][0xD5] = 0xF6E6; addMapping(0xF6E6, 0xC6D5, -1);
+$big5_map[0xC6][0xD7] = 0xF6E8; addMapping(0xF6E8, 0xC6D7, -1);
+$big5_map[0xC6][0xDE] = 0xF6EF; addMapping(0xF6EF, 0xC6DE, -1);
+$big5_map[0xC6][0xDF] = 0xF6F0; addMapping(0xF6F0, 0xC6DF, -1);
+
+# The following implements the mapping of Big5-HKSCS compatibility points
+# (GCCS characters unified with other HKSCS characters) to Unicode.  In the
+# other direction, characters from Unicode's PUA will map to these Big5-HKSCS
+# compatibility points.  (See the first list in <http://www.info.gov.hk/
+# digital21/eng/hkscs/download/big5cmp.txt>.)
+$big5_map[0x8E][0x69] = 0x7BB8;
+$big5_map[0x8E][0x6F] = 0x7C06;
+$big5_map[0x8E][0x7E] = 0x7CCE;
+$big5_map[0x8E][0xAB] = 0x7DD2;
+$big5_map[0x8E][0xB4] = 0x7E1D;
+$big5_map[0x8E][0xCD] = 0x8005;
+$big5_map[0x8E][0xD0] = 0x8028;
+$big5_map[0x8F][0x57] = 0x83C1;
+$big5_map[0x8F][0x69] = 0x84A8;
+$big5_map[0x8F][0x6E] = 0x840F;
+$big5_map[0x8F][0xCB] = 0x89A6;
+$big5_map[0x8F][0xCC] = 0x89A9;
+$big5_map[0x8F][0xFE] = 0x8D77;
+$big5_map[0x90][0x6D] = 0x90FD;
+$big5_map[0x90][0x7A] = 0x92B9;
+$big5_map[0x90][0xDC] = 0x975C;
+$big5_map[0x90][0xF1] = 0x97FF;
+$big5_map[0x91][0xBF] = 0x9F16;
+$big5_map[0x92][0x44] = 0x8503;
+$big5_map[0x92][0xAF] = 0x5159;
+$big5_map[0x92][0xB0] = 0x515B;
+$big5_map[0x92][0xB1] = 0x515D;
+$big5_map[0x92][0xB2] = 0x515E;
+$big5_map[0x92][0xC8] = 0x936E;
+$big5_map[0x92][0xD1] = 0x7479;
+$big5_map[0x94][0x47] = 0x6D67;
+$big5_map[0x94][0xCA] = 0x799B;
+$big5_map[0x95][0xD9] = 0x9097;
+$big5_map[0x96][0x44] = 0x975D;
+$big5_map[0x96][0xED] = 0x701E;
+$big5_map[0x96][0xFC] = 0x5B28;
+$big5_map[0x9B][0x76] = 0x7201;
+$big5_map[0x9B][0x78] = 0x77D7;
+$big5_map[0x9B][0x7B] = 0x7E87;
+$big5_map[0x9B][0xC6] = 0x99D6;
+$big5_map[0x9B][0xDE] = 0x91D4;
+$big5_map[0x9B][0xEC] = 0x60DE;
+$big5_map[0x9B][0xF6] = 0x6FB6;
+$big5_map[0x9C][0x42] = 0x8F36;
+$big5_map[0x9C][0x53] = 0x4FBB;
+$big5_map[0x9C][0x62] = 0x71DF;
+$big5_map[0x9C][0x68] = 0x9104;
+$big5_map[0x9C][0x6B] = 0x9DF0;
+$big5_map[0x9C][0x77] = 0x83CF;
+$big5_map[0x9C][0xBC] = 0x5C10;
+$big5_map[0x9C][0xBD] = 0x79E3;
+$big5_map[0x9C][0xD0] = 0x5A67;
+$big5_map[0x9D][0x57] = 0x8F0B;
+$big5_map[0x9D][0x5A] = 0x7B51;
+$big5_map[0x9D][0xC4] = 0x62D0;
+$big5_map[0x9E][0xA9] = 0x6062;
+$big5_map[0x9E][0xEF] = 0x75F9;
+$big5_map[0x9E][0xFD] = 0x6C4A;
+$big5_map[0x9F][0x60] = 0x9B2E;
+$big5_map[0x9F][0x66] = 0x9F17;
+$big5_map[0x9F][0xCB] = 0x50ED;
+$big5_map[0x9F][0xD8] = 0x5F0C;
+$big5_map[0xA0][0x63] = 0x880F;
+$big5_map[0xA0][0x77] = 0x62CE;
+$big5_map[0xA0][0xD5] = 0x7468;
+$big5_map[0xA0][0xDF] = 0x7162;
+$big5_map[0xA0][0xE4] = 0x7250;
+$big5_map[0xFA][0x5F] = 0x5029;
+$big5_map[0xFA][0x66] = 0x507D;
+$big5_map[0xFA][0xBD] = 0x5305;
+$big5_map[0xFA][0xC5] = 0x5344;
+$big5_map[0xFA][0xD5] = 0x537F;
+$big5_map[0xFB][0x48] = 0x5605;
+$big5_map[0xFB][0xB8] = 0x5A77;
+$big5_map[0xFB][0xF3] = 0x5E75;
+$big5_map[0xFB][0xF9] = 0x5ED0;
+$big5_map[0xFC][0x4F] = 0x5F58;
+$big5_map[0xFC][0x6C] = 0x60A4;
+$big5_map[0xFC][0xB9] = 0x6490;
+$big5_map[0xFC][0xE2] = 0x6674;
+$big5_map[0xFC][0xF1] = 0x675E;
+$big5_map[0xFD][0xB7] = 0x6C9C;
+$big5_map[0xFD][0xB8] = 0x6E1D;
+$big5_map[0xFD][0xBB] = 0x6E2F;
+$big5_map[0xFD][0xF1] = 0x716E;
+$big5_map[0xFE][0x52] = 0x732A;
+$big5_map[0xFE][0x6F] = 0x745C;
+$big5_map[0xFE][0xAA] = 0x74E9;
+$big5_map[0xFE][0xDD] = 0x7809;
+
+$pua = 0;
+$compat[0] = 0; # 1993
+$compat[1] = 0; # 2000
+$compat[2] = 0; # 2001
 
 $filename = "big5-iso.txt";
 open IN, ("input/" . $filename) or die "Cannot read " . $filename;
 while (<IN>)
 {
-    if (/^([0-9A-F]+) +[0-9A-F]+ +[0-9A-F]+ +([0-9A-F]+)$/)
+    if (/^([0-9A-F]+) +([0-9A-F]+) +([0-9A-F]+) +([0-9A-F]+)$/)
     {
         $big5 = oct("0x" . $1);
-        $utf32 = oct("0x" . $2);
+        $utf32_1993 = oct("0x" . $2);
+        $utf32_2000 = oct("0x" . $3);
+        $utf32_2001 = oct("0x" . $4);
         isValidBig5($big5)
             or die "Bad Big5 char " . printBig5($big5);
-        isValidUtf32($utf32)
-            or die "Bad UTF32 char " . printUtf32($utf32);
+        isValidUtf32($utf32_1993)
+            or die "Bad UTF32 char " . printUtf32($utf32_2000);
+        isValidUtf32($utf32_2000)
+            or die "Bad UTF32 char " . printUtf32($utf32_2000);
+        isValidUtf32($utf32_2001)
+            or die "Bad UTF32 char " . printUtf32($utf32_2001);
+
+        $utf32 = $surrogates ? $utf32_2001 : $utf32_2000;
         if ($utf32 >= 0xE000 && $utf32 <= 0xF8FF)
         {
-            print "Mapping to PUA ", printUtf32($utf32), " ignored\n";
-            ++$ignored;
+            ++$pua;
         }
-        elsif (defined($big5_map[$big5]))
+
+        $big5_row = $big5 >> 8;
+        $big5_column = $big5 & 0xFF;
+        if (defined($big5_map[$big5_row][$big5_column]))
         {
             die "Bad Big5 mapping " . printBig5($big5);
         }
-        else
+        $big5_map[$big5_row][$big5_column] = $utf32;
+
+        addMapping($utf32, $big5, -1);
+
+        if ($utf32_2001 != $utf32)
         {
-            $big5_row = $big5 >> 8;
-            $big5_column = $big5 & 0xFF;
-            $big5_map[$big5_row][$big5_column] = $utf32;
+            addMapping($utf32_2001, $big5, 2);
+        }
+        if ($utf32_2000 != $utf32 && $utf32_2000 != $utf32_2001)
+        {
+            addMapping($utf32_2000, $big5, 1);
+        }
+        if ($utf32_1993 != $utf32 && $utf32_1993 != $utf32_2000
+            && $utf32_1993 != $utf32_2001)
+        {
+            addMapping($utf32_1993, $big5, 0);
         }
     }
 }
 close IN;
 
-print $ignored, " mappings to PUA ignored\n";
+print $pua, " mappings to PUA\n";
+print $compat[0], " 1993 compatibility mappings\n" if ($compat[0] != 0);
+print $compat[1], " 2000 compatibility mappings\n" if ($compat[1] != 0);
+print $compat[2], " 2001 compatibility mappings\n" if ($compat[2] != 0);
 
-for ($big5_row = 0; $big5_row <= 255; ++$big5_row)
-{
-    for ($big5_column = 0; $big5_column <= 255; ++$big5_column)
-    {
-        if (defined($big5_map[$big5_row][$big5_column]))
-        {
-            $utf32 = $big5_map[$big5_row][$big5_column];
-            $uni_plane = $utf32 >> 16;
-            $uni_page = ($utf32 >> 8) & 0xFF;
-            $uni_index = $utf32 & 0xFF;
-            if (!defined($uni_plane_used[$uni_plane])
-                || !defined($uni_page_used[$uni_plane][$uni_page])
-                || !defined($uni_map[$uni_plane][$uni_page][$uni_index]))
-            {
-                $uni_map[$uni_plane][$uni_page][$uni_index]
-                    = ($big5_row << 8) | $big5_column;
-                $uni_plane_used[$uni_plane] = 1;
-                $uni_page_used[$uni_plane][$uni_page] = 1;
-            }
-            else
-            {
-                $big5_1 = $uni_map[$uni_plane][$uni_page][$uni_index];
-                print "WARNING!  Mapping ",
-                      printUtf32($utf32),
-                      " to ",
-                      printBig5($big5_1),
-                      ", NOT ",
-                      printBig5(($big5_row << 8) | $big5_column),
-                      "\n";
-            }
-        }
-    }
-}
 if (defined($uni_plane_used[0]) && defined($uni_page_used[0][0]))
 {
     for ($utf32 = 0; $utf32 <= 0x7F; ++$utf32)

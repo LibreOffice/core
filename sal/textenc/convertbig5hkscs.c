@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convertbig5hkscs.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2002-01-15 17:02:45 $
+ *  last change: $Author: sb $ $Date: 2002-02-25 15:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,66 @@ sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
                             nUnicode = 0xFFFF;
                         OSL_VERIFY(!ImplIsHighSurrogate(nUnicode));
                     }
+                }
+                if (nUnicode == 0xFFFF)
+                {
+                    ImplDBCSEUDCData const * p
+                        = ((ImplBig5HkscsConverterData const *) pData)->
+                              m_pEudcData;
+                    sal_uInt32 nCount
+                        = ((ImplBig5HkscsConverterData const *) pData)->
+                              m_nEudcCount;
+                    sal_uInt32 i;
+                    for (i = 0; i < nCount; ++i)
+                    {
+                        if (nRow >= p->mnLeadStart && nRow <= p->mnLeadEnd)
+                        {
+                            if (nChar < p->mnTrail1Start)
+                                break;
+                            if (nChar <= p->mnTrail1End)
+                            {
+                                nUnicode
+                                    = p->mnUniStart
+                                          + (nRow - p->mnLeadStart)
+                                                * p->mnTrailRangeCount
+                                          + (nChar - p->mnTrail1Start);
+                                break;
+                            }
+                            if (p->mnTrailCount < 2
+                                || nChar < p->mnTrail2Start)
+                                break;
+                            if (nChar <= p->mnTrail2End)
+                            {
+                                nUnicode
+                                    = p->mnUniStart
+                                          + (nRow - p->mnLeadStart)
+                                                * p->mnTrailRangeCount
+                                          + (nChar - p->mnTrail2Start)
+                                          + (p->mnTrail1End - p->mnTrail1Start
+                                                 + 1);
+                                break;
+                            }
+                            if (p->mnTrailCount < 3
+                                || nChar < p->mnTrail3Start)
+                                break;
+                            if (nChar <= p->mnTrail3End)
+                            {
+                                nUnicode
+                                    = p->mnUniStart
+                                          + (nRow - p->mnLeadStart)
+                                                * p->mnTrailRangeCount
+                                          + (nChar - p->mnTrail3Start)
+                                          + (p->mnTrail1End - p->mnTrail1Start
+                                                 + 1)
+                                          + (p->mnTrail2End - p->mnTrail2Start
+                                                 + 1);
+                                break;
+                            }
+                            break;
+                        }
+                        ++p;
+                    }
+                    OSL_VERIFY(!ImplIsHighSurrogate(nUnicode));
                 }
                 if (nUnicode == 0xFFFF)
                     goto bad_input;
@@ -366,6 +426,43 @@ sal_Size ImplConvertUnicodeToBig5Hkscs(ImplTextConverterData const * pData,
                         && nIndex2 <= pBig5Data[nIndex1].mnLowEnd)
                         nBytes = pBig5Data[nIndex1].
                                      mpToUniTrailTab[nIndex2 - nFirst];
+                }
+            }
+            if (nBytes == 0)
+            {
+                ImplDBCSEUDCData const * p
+                    = ((ImplBig5HkscsConverterData const *) pData)->
+                          m_pEudcData;
+                sal_uInt32 nCount
+                    = ((ImplBig5HkscsConverterData const *) pData)->
+                          m_nEudcCount;
+                sal_uInt32 i;
+                for (i = 0; i < nCount; ++i) {
+                    if (nChar >= p->mnUniStart && nChar <= p->mnUniEnd)
+                    {
+                        sal_uInt32 nIndex = nChar - p->mnUniStart;
+                        sal_uInt32 nLeadOff = nIndex / p->mnTrailRangeCount;
+                        sal_uInt32 nTrailOff = nIndex % p->mnTrailRangeCount;
+                        sal_uInt32 nSize;
+                        nBytes = (p->mnLeadStart + nLeadOff) << 8;
+                        nSize = p->mnTrail1End - p->mnTrail1Start + 1;
+                        if (nTrailOff < nSize)
+                        {
+                            nBytes |= p->mnTrail1Start + nTrailOff;
+                            break;
+                        }
+                        nTrailOff -= nSize;
+                        nSize = p->mnTrail2End - p->mnTrail2Start + 1;
+                        if (nTrailOff < nSize)
+                        {
+                            nBytes |= p->mnTrail2Start + nTrailOff;
+                            break;
+                        }
+                        nTrailOff -= nSize;
+                        nBytes |= p->mnTrail3Start + nTrailOff;
+                        break;
+                    }
+                    ++p;
                 }
             }
             if (nBytes == 0)

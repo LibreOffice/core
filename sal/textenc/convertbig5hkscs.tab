@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convertbig5hkscs.tab,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2002-01-15 17:02:45 $
+ *  last change: $Author: sb $ $Date: 2002-02-25 15:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,9 @@ static ImplBig5HkscsConverterData const aImplBig5HkscsConvertData
         aImplUnicodeToBig5Hkscs2001Data,
         aImplUnicodeToBig5Hkscs2001PageOffsets,
         aImplUnicodeToBig5Hkscs2001PlaneOffsets,
-        aBIG5DBCSHighTab }; /* from tcvttcn6.tab */
+        aBIG5DBCSHighTab, /* from tcvttcn6.tab */
+        aImplMS950DBCSEUDCTab, /* from tcvttcn6.tab */
+        DBCS_EUDC_MS950_COUNT }; /* from tcvttcn6.tab */
 
 static ImplTextEncodingData const aImplBig5HkscsTextEncodingData
     = { { &aImplBig5HkscsConvertData,

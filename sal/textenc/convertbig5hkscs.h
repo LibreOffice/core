@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convertbig5hkscs.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2002-01-15 17:02:45 $
+ *  last change: $Author: sb $ $Date: 2002-02-25 15:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@ typedef struct
     sal_Int32 const * m_pUnicodeToBig5Hkscs2001PageOffsets;
     sal_Int32 const * m_pUnicodeToBig5Hkscs2001PlaneOffsets;
     ImplUniToDBCSHighTab const * m_pUnicodeToBig5Data;
+    ImplDBCSEUDCData const * m_pEudcData;
+    int m_nEudcCount;
 } ImplBig5HkscsConverterData;
 
 void * ImplCreateBig5HkscsToUnicodeContext(void) SAL_THROW_EXTERN_C();
