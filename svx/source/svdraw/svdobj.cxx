@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-10 08:13:01 $
+ *  last change: $Author: cl $ $Date: 2002-09-16 15:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2606,6 +2606,7 @@ void SdrObject::operator=(const SdrObject& rObj)
     bSizProt=rObj.bSizProt;
     bMovProt=rObj.bMovProt;
     bNoPrint=rObj.bNoPrint;
+    bMarkProt=rObj.bMarkProt;
     //EmptyPresObj wird nicht kopiert: nun doch! (25-07-1995, Joe)
     bEmptyPresObj =rObj.bEmptyPresObj;
     //NotVisibleAsMaster wird nicht kopiert: nun doch! (25-07-1995, Joe)
