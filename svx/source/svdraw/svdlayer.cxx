@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdlayer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:55:13 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:56:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,52 +268,52 @@ FASTBOOL SdrLayer::operator==(const SdrLayer& rCmpLayer) const
         && aName.Equals(rCmpLayer.aName));
 }
 
-SvStream& operator>>(SvStream& rIn, SdrLayer& rLayer)
-{
-    if(rIn.GetError())
-        return rIn;
+//BFS01SvStream& operator>>(SvStream& rIn, SdrLayer& rLayer)
+//BFS01{
+//BFS01 if(rIn.GetError())
+//BFS01     return rIn;
+//BFS01
+//BFS01 SdrIOHeader aHead(rIn, STREAM_READ);
+//BFS01
+//BFS01 rIn >> rLayer.nID;
+//BFS01
+//BFS01 // UNICODE: rIn >> rLayer.aName;
+//BFS01 rIn.ReadByteString(rLayer.aName);
+//BFS01
+//BFS01 if(aHead.GetVersion() >= 1)
+//BFS01 {
+//BFS01     // Das Standardlayerflag kam direkt nach der Betalieferung dazu
+//BFS01     rIn >> rLayer.nType;
+//BFS01
+//BFS01     if(rLayer.nType == 1)
+//BFS01     {
+//BFS01         rLayer.aName = ImpGetResStr(STR_StandardLayerName);
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 if(aHead.GetVersion() <= 12)
+//BFS01 {
+//BFS01     // nType war lange Zeit nicht initiallisiert!
+//BFS01     if(rLayer.nType > 1)
+//BFS01         rLayer.nType = 0;
+//BFS01 }
+//BFS01
+//BFS01 return rIn;
+//BFS01}
 
-    SdrIOHeader aHead(rIn, STREAM_READ);
-
-    rIn >> rLayer.nID;
-
-    // UNICODE: rIn >> rLayer.aName;
-    rIn.ReadByteString(rLayer.aName);
-
-    if(aHead.GetVersion() >= 1)
-    {
-        // Das Standardlayerflag kam direkt nach der Betalieferung dazu
-        rIn >> rLayer.nType;
-
-        if(rLayer.nType == 1)
-        {
-            rLayer.aName = ImpGetResStr(STR_StandardLayerName);
-        }
-    }
-
-    if(aHead.GetVersion() <= 12)
-    {
-        // nType war lange Zeit nicht initiallisiert!
-        if(rLayer.nType > 1)
-            rLayer.nType = 0;
-    }
-
-    return rIn;
-}
-
-SvStream& operator<<(SvStream& rOut, const SdrLayer& rLayer)
-{
-    SdrIOHeader aHead(rOut, STREAM_WRITE, SdrIOLayrID);
-
-    rOut << rLayer.nID;
-
-    // UNICODE: rOut << rLayer.aName;
-    rOut.WriteByteString(rLayer.aName);
-
-    rOut << rLayer.nType;
-
-    return rOut;
-}
+//BFS01SvStream& operator<<(SvStream& rOut, const SdrLayer& rLayer)
+//BFS01{
+//BFS01 SdrIOHeader aHead(rOut, STREAM_WRITE, SdrIOLayrID);
+//BFS01
+//BFS01 rOut << rLayer.nID;
+//BFS01
+//BFS01 // UNICODE: rOut << rLayer.aName;
+//BFS01 rOut.WriteByteString(rLayer.aName);
+//BFS01
+//BFS01 rOut << rLayer.nType;
+//BFS01
+//BFS01 return rOut;
+//BFS01}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // SdrLayerSet
