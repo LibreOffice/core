@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:24:26 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 14:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
 #ifndef _PORFLY_HXX
 #define _PORFLY_HXX
 
-// OD 29.07.2003 #110978#
-#ifndef _ANCHOREDOBJECTPOSITION_HXX
-#include <anchoredobjectposition.hxx>
+// OD 28.10.2003 #113049#
+#ifndef _ASCHARANCHOREDOBJECTPOSITION_HXX
+#include <ascharanchoredobjectposition.hxx>
 #endif
 
 #include "porglue.hxx"
