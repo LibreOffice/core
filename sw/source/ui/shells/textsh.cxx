@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:49:13 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,9 @@
 #ifndef _SWERROR_H
 #include <swerror.h>
 #endif
+#ifndef _SW_APPLET_IMPL_HXX
+#include <SwAppletImpl.hxx>
+#endif
 
 #define SwTextShell
 #define Paragraph
@@ -416,7 +419,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 xObj->SetURL( *pURL );
                 SvPlugInObject* pObj = &xObj;
                 SvInPlaceObjectRef *pxIns = new SvInPlaceObjectRef(pObj);
-                rSh.Insert( pxIns, 0, TRUE, nSlot);
+                rSh.Insert( pxIns, 0, TRUE, nSlot, &rReq);
             }
         }
     }
@@ -424,7 +427,6 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case SID_INSERT_OBJECT:
     case SID_INSERT_PLUGIN:
     case SID_INSERT_APPLET:
-    case SID_INSERT_FLOATINGFRAME:
     {
         SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, sal_False );
         SvGlobalName *pName = NULL;
@@ -435,11 +437,99 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             pName = &aName;
         }
 
-        DBG_ASSERT( !pNameItem || nSlot == SID_INSERT_OBJECT, "Superfluous argument!" );
-        rSh.Insert( (SvInPlaceObjectRef*)0, pName, TRUE, nSlot);
+        SFX_REQUEST_ARG( rReq, pClassItem,          SfxStringItem, FN_PARAM_1, sal_False );
+        SFX_REQUEST_ARG( rReq, pClassLocationItem,  SfxStringItem, FN_PARAM_2, sal_False );
+        SFX_REQUEST_ARG( rReq, pCommandsItem,       SfxStringItem, FN_PARAM_3, sal_False );
+        if((SID_INSERT_APPLET == nSlot || SID_INSERT_PLUGIN)
+                && (pClassItem || pClassLocationItem || pCommandsItem))
+        {
+            String sClass;
+            String sClassLocation;
+            if(pClassItem)
+                sClass = pClassItem->GetValue();
+            if(pClassLocationItem)
+                sClassLocation = pClassLocationItem->GetValue();
+            SvCommandList aCommandList;
+            if(pCommandsItem)
+            {
+                USHORT nTemp;
+                aCommandList.AppendCommands( pCommandsItem->GetValue(), &nTemp );
+            }
+
+            SvInPlaceObjectRef xIPObj;
+            if(SID_INSERT_APPLET == nSlot)
+            {
+                SwApplet_Impl aApplImpl( rSh.GetAttrPool(),
+                                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
+                aApplImpl.CreateApplet(sClass, aEmptyStr, FALSE, sClassLocation);
+                aApplImpl.FinishApplet();
+                xIPObj = aApplImpl.GetApplet();
+                SvAppletObjectRef xApplet ( xIPObj );
+                if(aCommandList.Count() && xApplet.Is())
+                    xApplet->SetCommandList( aCommandList );
+            }
+            else
+            {
+                SvStorageRef pStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE);
+                SvFactory *pPlugInFactory = SvFactory::GetDefaultPlugInFactory();
+                SvPlugInObjectRef xPlugin = &pPlugInFactory->CreateAndInit( *pPlugInFactory, pStor );
+                xIPObj = xPlugin;
+                xPlugin->EnableSetModified( FALSE );
+                xPlugin->SetPlugInMode( (USHORT)PLUGIN_EMBEDED );
+                if( sClassLocation.Len() )
+                    xPlugin->SetURL( URIHelper::SmartRelToAbs(sClassLocation) );
+                if(aCommandList.Count())
+                    xPlugin->SetCommandList( aCommandList );
+                xPlugin->EnableSetModified ( TRUE );
+            }
+            if(xIPObj.Is())
+                rSh.InsertOle( xIPObj );
+        }
+        else
+        {
+            DBG_ASSERT( !pNameItem || nSlot == SID_INSERT_OBJECT, "Superfluous argument!" );
+            rSh.Insert( (SvInPlaceObjectRef*)0, pName, TRUE, nSlot, &rReq);
+            rReq.Done();
+        }
         break;
     }
+    case SID_INSERT_FLOATINGFRAME:
+    {
+        SFX_REQUEST_ARG( rReq, pNameItem,   SfxStringItem, FN_PARAM_1, sal_False );
+        SFX_REQUEST_ARG( rReq, pURLItem,    SfxStringItem, FN_PARAM_2, sal_False );
+        SFX_REQUEST_ARG( rReq, pMarginItem, SvxSizeItem, FN_PARAM_3, sal_False );
+        SFX_REQUEST_ARG( rReq, pScrollingItem, SfxByteItem, FN_PARAM_4, sal_False );
+        SFX_REQUEST_ARG( rReq, pBorderItem, SfxBoolItem, FN_PARAM_5, sal_False );
 
+        if(pURLItem) // URL is a _must_
+        {
+            SfxFrameDescriptor aFrameDesc(0);
+            aFrameDesc.SetURL(pURLItem->GetValue());
+            if(pNameItem)
+                aFrameDesc.SetName(pNameItem->GetValue());
+            if(pMarginItem)
+                aFrameDesc.SetMargin(pMarginItem->GetSize());
+            if(pScrollingItem && pScrollingItem->GetValue() <= ScrollingAuto)
+                aFrameDesc.SetScrollingMode((ScrollingMode)pScrollingItem->GetValue());
+            if(pBorderItem)
+                aFrameDesc.SetFrameBorder(pBorderItem->GetValue());
+            SvStorageRef pStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
+            SfxFrameObjectRef xFrame = new SfxFrameObject();
+            xFrame->DoInitNew( pStor );
+
+            xFrame->EnableSetModified( FALSE );
+            xFrame->SetFrameDescriptor( &aFrameDesc );
+            xFrame->EnableSetModified( TRUE );
+            SvInPlaceObjectRef xIP(xFrame);
+            rSh.InsertOle( xIP );
+        }
+        else
+        {
+            rSh.Insert( (SvInPlaceObjectRef*)0, 0, TRUE, nSlot, &rReq);
+            rReq.Done();
+        }
+    }
+    break;
     case SID_INSERT_DIAGRAM:
         {
             SvtModuleOptions aMOpt;
@@ -465,7 +555,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 }
                 else
                 {
-                    rSh.Insert( 0, SCH_MOD()->pSchChartDocShellFactory );
+                    rSh.Insert( 0, SCH_MOD()->pSchChartDocShellFactory, TRUE, 0, &rReq );
                 }
                 SvInPlaceObjectRef xOLE = rSh.GetOLEObj();
                 if(pItem && xOLE.Is())
@@ -487,7 +577,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
     case FN_INSERT_SMA:
         {
-            rSh.Insert( 0, SM_MOD()->pSmDocShellFactory );
+            rSh.Insert( 0, SM_MOD()->pSmDocShellFactory, TRUE, 0, &rReq );
         }
         break;
 
