@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-31 09:53:14 $
+ *  last change: $Author: fs $ $Date: 2002-09-24 11:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3367,9 +3367,26 @@ long DbGridControl::PreNotify(NotifyEvent& rEvt)
         case EVENT_KEYINPUT:
         {
             const KeyEvent* pKeyEvent = rEvt.GetKeyEvent();
-            if (!pKeyEvent->GetKeyCode().IsShift() &&
-                !pKeyEvent->GetKeyCode().IsMod1() &&
-                pKeyEvent->GetKeyCode().GetCode() == KEY_ESCAPE)
+
+            sal_uInt16 nCode = pKeyEvent->GetKeyCode().GetCode();
+            sal_Bool   bShift = pKeyEvent->GetKeyCode().IsShift();
+            sal_Bool   bCtrl = pKeyEvent->GetKeyCode().IsMod1();
+            sal_Bool   bAlt = pKeyEvent->GetKeyCode().IsMod2();
+            if ( ( KEY_TAB == nCode ) && bCtrl && !bAlt )
+            {
+                // Ctrl-Tab is used to step out of the control, without traveling to the
+                // remaining cells first
+                // -> build a new key event without the Ctrl-key, and let the very base class handle it
+                KeyCode aNewCode( KEY_TAB, bShift, sal_False, sal_False );
+                KeyEvent aNewEvent( pKeyEvent->GetCharCode(), aNewCode );
+
+                // call the Control - our direct base class will interpret this in a way we do not want (and do
+                // a cell traveling)
+                Control::KeyInput( aNewEvent );
+                return 1;
+            }
+
+            if ( !bShift && !bCtrl && ( KEY_ESCAPE == nCode ) )
             {
                 if (IsModified())
                 {
@@ -3377,9 +3394,7 @@ long DbGridControl::PreNotify(NotifyEvent& rEvt)
                     return 1;
                 }
             }
-            else if (pKeyEvent->GetKeyCode().GetCode() == KEY_DELETE && // Delete rows
-                    !pKeyEvent->GetKeyCode().IsShift() &&
-                    !pKeyEvent->GetKeyCode().IsMod1())
+            else if ( ( KEY_DELETE == nCode ) && !bShift && !bCtrl )    // delete rows
             {
                 if ((m_nOptions & OPT_DELETE) && GetSelectRowCount())
                 {
