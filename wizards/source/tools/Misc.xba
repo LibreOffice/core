@@ -177,14 +177,13 @@ End Function
 
 &apos; Gets a special configured PathSetting
 Function GetPathSettings(sPathType as String,  Optional bshowall as Boolean, Optional ListIndex as integer) as String
-Dim oSettings, oPathSettings as Object
+Dim oPathSettings as Object
 Dim sPath as String
 Dim PathList() as String
 Dim MaxIndex as Integer
 Dim oUcb as Object
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
-	oSettings = createUnoService(&quot;com.sun.star.frame.Settings&quot;)
-	oPathSettings = oSettings.getByName(&quot;PathSettings&quot;)
+	oPathSettings = createUnoService(&quot;com.sun.star.util.PathSettings&quot;)
   	If Not IsMissing(bShowall) Then
 		If bShowAll Then
 			ShowPropertyValues(oPathSettings)
