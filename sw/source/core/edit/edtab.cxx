@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtab.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:03:47 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,10 +149,10 @@
 
 extern void ClearFEShellTabCols();
 
-const SwTable& SwEditShell::InsertTable( USHORT nRows, USHORT nCols,
-                                        SwHoriOrient eAdj,
-                                        USHORT nInsTblFlags,
-                                        const SwTableAutoFmt* pTAFmt )
+const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts,
+                                         USHORT nRows, USHORT nCols,
+                                         SwHoriOrient eAdj,
+                                         const SwTableAutoFmt* pTAFmt )
 {
     StartAllAction();
     SwPosition* pPos = GetCrsr()->GetPoint();
@@ -167,8 +167,9 @@ const SwTable& SwEditShell::InsertTable( USHORT nRows, USHORT nCols,
     /* #109161# If called from a shell the adjust item is propagated
         from pPos to the new content nodes in the table.
      */
-    const SwTable *pTable = GetDoc()->InsertTable( *pPos, nRows, nCols,
-                                                   eAdj, nInsTblFlags, pTAFmt,
+    const SwTable *pTable = GetDoc()->InsertTable( rInsTblOpts, *pPos,
+                                                   nRows, nCols,
+                                                   eAdj, pTAFmt,
                                                    0, TRUE );
     if( bEndUndo )
         EndUndo( UNDO_END );
@@ -177,17 +178,18 @@ const SwTable& SwEditShell::InsertTable( USHORT nRows, USHORT nCols,
     return *pTable;
 }
 
-BOOL SwEditShell::TextToTable( sal_Unicode cCh, SwHoriOrient eAdj,
-                                USHORT nInsTblFlags,
-                                const SwTableAutoFmt* pTAFmt )
+BOOL SwEditShell::TextToTable( const SwInsertTableOptions& rInsTblOpts,
+                               sal_Unicode cCh,
+                               SwHoriOrient eAdj,
+                               const SwTableAutoFmt* pTAFmt )
 {
     SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
     BOOL bRet = FALSE;
     StartAllAction();
     FOREACHPAM_START(this)
         if( PCURCRSR->HasMark() )
-            bRet |= 0 != GetDoc()->TextToTable( *PCURCRSR, cCh, eAdj,
-                                                nInsTblFlags, pTAFmt );
+            bRet |= 0 != GetDoc()->TextToTable( rInsTblOpts, *PCURCRSR, cCh,
+                                                eAdj, pTAFmt );
     FOREACHPAM_END()
     EndAllAction();
     return bRet;
@@ -268,11 +270,10 @@ FASTBOOL SwEditShell::IsTextToTableAvailable() const
     return bOnlyText;
 }
 
-
-void SwEditShell::InsertDDETable( SwDDEFieldType* pDDEType,
-                                            USHORT nRows, USHORT nCols,
-                                            SwHoriOrient eAdj,
-                                            USHORT nInsTblFlags )
+void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTblOpts,
+                                  SwDDEFieldType* pDDEType,
+                                  USHORT nRows, USHORT nCols,
+                                  SwHoriOrient eAdj )
 {
     SwPosition* pPos = GetCrsr()->GetPoint();
 
@@ -288,8 +289,11 @@ void SwEditShell::InsertDDETable( SwDDEFieldType* pDDEType,
         GetDoc()->SplitNode( *pPos );
     }
 
-    SwTable* pTbl = (SwTable*)GetDoc()->InsertTable( *pPos, nRows, nCols, eAdj,
-                                                    nInsTblFlags|DEFAULT_BORDER );
+    const SwInsertTableOptions aInsTblOpts( rInsTblOpts.mnInsMode | tabopts::DEFAULT_BORDER,
+                                            rInsTblOpts.mnRowsToRepeat );
+    SwTable* pTbl = (SwTable*)GetDoc()->InsertTable( aInsTblOpts, *pPos,
+                                                     nRows, nCols, eAdj );
+
     SwTableNode* pTblNode = (SwTableNode*)pTbl->GetTabSortBoxes()[ 0 ]->
                                                 GetSttNd()->FindTableNode();
     SwDDETable* pDDETbl = new SwDDETable( *pTbl, pDDEType );
