@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-05 12:19:25 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,6 +518,43 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
         _rxColumn->setPropertyValue(PROPERTY_DEFAULTVALUE,makeAny(_pFieldDesc->GetDefaultValue()));
 }
 // -----------------------------------------------------------------------------
+::rtl::OUString createDefaultName(const Reference< XDatabaseMetaData>& _xMetaData,const Reference<XNameAccess>& _xTables,const ::rtl::OUString& _sName)
+{
+    OSL_ENSURE(_xMetaData.is(),"No MetaData!");
+    ::rtl::OUString sDefaultName = _sName;
+    try
+    {
+        ::rtl::OUString sCatalog,sSchema,sCompsedName;
+        if(_xMetaData->supportsCatalogsInTableDefinitions())
+        {
+            try
+            {
+                Reference<XResultSet> xRes = _xMetaData->getCatalogs();
+                Reference<XRow> xRow(xRes,UNO_QUERY);
+                ::rtl::OUString sCatalog;
+                while(xRes.is() && xRes->next())
+                {
+                    sCatalog = xRow->getString(1);
+                    if(!xRow->wasNull())
+                        break;
+                }
+            }
+            catch(const SQLException&)
+            {
+            }
+        }
+        if(_xMetaData->supportsSchemasInTableDefinitions())
+        {
+            sSchema = _xMetaData->getUserName();
+        }
+        ::dbtools::composeTableName(_xMetaData,sCatalog,sSchema,_sName,sCompsedName,sal_False);
+        sDefaultName = ::dbtools::createUniqueName(_xTables,sCompsedName);
+    }
+    catch(const SQLException&)
+    {
+    }
+    return sDefaultName;
+}
 
 // .........................................................................
 }

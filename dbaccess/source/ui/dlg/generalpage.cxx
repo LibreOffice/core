@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-12 13:54:20 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,8 +335,7 @@ namespace dbaui
     void OGeneralPage::previousMessage()
     {
         SPECIAL_MESSAGE eSwitchPrevious = m_eLastMessage;
-        m_eLastMessage = smNone;
-        switchMessage(eSwitchPrevious);
+        switchMessage(smNone);
     }
 
     //-------------------------------------------------------------------------
@@ -1011,10 +1010,10 @@ namespace dbaui
             {
                 static ::rtl::OUString sAddressBookTypes[]=
                 {
-                    ::rtl::OUString::createFromAscii("sdbc:address:outlook:"),
-                    ::rtl::OUString::createFromAscii("sdbc:address:outlookexp:"),
-                    ::rtl::OUString::createFromAscii("sdbc:address:ldap:"),
-                    ::rtl::OUString::createFromAscii("sdbc:address:mozilla:")
+                    ::rtl::OUString::createFromAscii("sdbc:address:outlook"),
+                    ::rtl::OUString::createFromAscii("sdbc:address:outlookexp"),
+                    ::rtl::OUString::createFromAscii("sdbc:address:ldap"),
+                    ::rtl::OUString::createFromAscii("sdbc:address:mozilla")
                 };
                 static String sAddressBookTypesTrans[]=
                 {
@@ -1178,6 +1177,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/07/12 13:54:20  oj
+ *  #89456# check if old type is already ldap
+ *
  *  Revision 1.12  2001/07/09 11:45:43  oj
  *  #89383# ask for directory not displaydir
  *
