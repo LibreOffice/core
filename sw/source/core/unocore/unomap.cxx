@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.169 $
+ *  $Revision: 1.170 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:57:59 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
         { SW_PROP_NMID(UNO_NAME_CELL), FN_UNO_CELL,         CPPU_E2T(CPPUTYPE_REFCELL),         PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },                     \
         { SW_PROP_NMID(UNO_NAME_TEXT_FRAME), FN_UNO_TEXT_FRAME,     CPPU_E2T(CPPUTYPE_REFTEXTFRAME),        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },                     \
         { SW_PROP_NMID(UNO_NAME_TEXT_SECTION), FN_UNO_TEXT_SECTION, CPPU_E2T(CPPUTYPE_REFTEXTSECTION),  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },                    \
-        { SW_PROP_NMID(UNO_NAME_PARA_CHAPTER_NUMBERING_LEVEL), FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL,CPPU_E2T(CPPUTYPE_INT8),   PropertyAttribute::READONLY, 0},                                                     \
+        { SW_PROP_NMID(UNO_NAME_PARA_CHAPTER_NUMBERING_LEVEL), FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL,CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE, 0},                                                     \
         { SW_PROP_NMID(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME), FN_UNO_PARA_CONDITIONAL_STYLE_NAME, CPPU_E2T(CPPUTYPE_OUSTRING),      PropertyAttribute::READONLY, 0},                                                     \
         { SW_PROP_NMID(UNO_NAME_PARA_IS_NUMBERING_RESTART), FN_NUMBER_NEWSTART,     CPPU_E2T(CPPUTYPE_BOOLEAN),     PropertyAttribute::MAYBEVOID, 0 },
 
@@ -686,6 +686,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_CATEGORY), FN_UNO_CATEGORY, CPPU_E2T(CPPUTYPE_INT16),           PROPERTY_NONE , 0 },
                     { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
                     { SW_PROP_NMID(UNO_NAME_PARA_IS_CONNECT_BORDER), RES_PARATR_CONNECT_BORDER, CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::MAYBEVOID, 0},
+                    { SW_PROP_NMID(UNO_NAME_DEFAULT_OUTLINE_LEVEL), FN_UNO_DEFAULT_OUTLINE_LEVEL, CPPU_E2T(CPPUTYPE_INT8), PropertyAttribute::MAYBEVOID, 0},
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aParaStyleMap;
