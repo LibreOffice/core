@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hdu $ $Date: 2002-06-18 09:52:26 $
+#   last change: $Author: hr $ $Date: 2002-08-27 18:09:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,13 +68,11 @@ PDBTARGET=vcl
 GUIBASE=aqua
 .ENDIF
 
-.IF "$(OS)" != "MACOSX"
 .IF "$(remote)" != ""
 USE_BUILTIN_RASTERIZER=true
 .ENDIF
 .IF "$(GUI)" == "UNX"
 USE_BUILTIN_RASTERIZER=true
-.ENDIF
 .ENDIF
 
 .IF "$(USE_BUILTIN_RASTERIZER)" != ""
