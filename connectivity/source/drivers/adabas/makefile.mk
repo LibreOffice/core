@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: oj $ $Date: 2001-05-15 08:18:12 $
+#   last change: $Author: vg $ $Date: 2001-05-16 14:43:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,7 +124,7 @@ SHL1STDLIBS=\
     $(COMPHELPERLIB)
 
 .IF "$(ODBCBASELIB)" == ""
-SHL1STDLIBS+= iodbcbase.lib
+SHL1STDLIBS+=$(ODBCBASELIB)
 .ENDIF
 
 SHL1DEPN=
