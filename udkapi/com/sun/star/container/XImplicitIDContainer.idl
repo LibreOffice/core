@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XImplicitIDContainer.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-12-11 13:34:07 $
+ *  last change: $Author: mi $ $Date: 2003-01-21 13:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,11 @@ interface XImplicitIDContainer: com::sun::star::container::XImplicitIDReplace
 }; }; }; };
 
 /*=============================================================================
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1  2001/06/08 10:07:25  mi
+    interfaces for collections+containers with implicit identifiers
+
 
 =============================================================================*/
 #endif

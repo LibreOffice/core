@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: dbo $ $Date: 2002-01-11 10:01:12 $
+#   last change: $Author: mi $ $Date: 2003-01-21 13:17:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,7 +69,7 @@ PRJ=..$/..$/..$/..
 
 PRJNAME=udkapi
 
-TARGET=csssec
+TARGET=cssunosec
 PACKAGE=com$/sun$/star$/security
 
 # --- Settings -----------------------------------------------------
@@ -78,18 +78,14 @@ PACKAGE=com$/sun$/star$/security
 # ------------------------------------------------------------------------
 
 IDLFILES= \
-    AllPermission.idl			\
-    RuntimePermission.idl			\
-    Policy.idl				\
-    XPolicy.idl				\
-    AccessController.idl			\
-    XAccessController.idl			\
-    XAccessControlContext.idl		\
-    XAction.idl				\
+    AccessController.idl \
+    XAccessController.idl \
+    XAccessControlContext.idl \
+    XPrivilegedAction.idl \
+    Permission.idl \
     AccessControlException.idl
 
 # ------------------------------------------------------------------
 
 .INCLUDE :  target.mk
 .INCLUDE :  $(PRJ)$/util$/target.pmk
-
