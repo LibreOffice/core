@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:24:40 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,35 @@
 #endif
 #ifndef _SVTREEBOX_HXX //autogen
 #include <svtools/svtreebx.hxx>
+#endif
+
+//
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
+#include <com/sun/star/container/XIndexContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
+#include <drafts/com/sun/star/ui/XUIConfigurationManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
+#include <com/sun/star/frame/XStorable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSINGLECOMPONENTFACTORY_HPP_
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #endif
 
 #define _SVSTDARR_USHORTS
@@ -183,27 +212,32 @@ private:
     String                      aHelpText;
     String                      aStr;
     String                      aCommand;
+    String                      aHelpURL;
     BOOL                        bConfigure;
+    BOOL                        bStrEdited;
 
 public:
     SfxMenuConfigEntry( USHORT nInitId, const String& rInitStr,
                         const String& rHelpText, BOOL bPopup = FALSE );
-    SfxMenuConfigEntry() : nId( 0 ), bPopUp( FALSE ), bConfigure( TRUE ) {}
+    SfxMenuConfigEntry() : nId( 0 ), bPopUp( FALSE ), bConfigure( TRUE ), bStrEdited( FALSE ) {}
     ~SfxMenuConfigEntry();
 
     USHORT                      GetId() const { return nId; }
     void                        SetId( USHORT nNew );
     void                        SetCommand( const String& rCmd ) { aCommand = rCmd; }
     const String&               GetName() const { return aStr; }
-    void                        SetName( const String& rStr ) { aStr = rStr; }
+    void                        SetName( const String& rStr ) { aStr = rStr; bStrEdited = TRUE; }
     const String&               GetHelpText() const { return aHelpText; }
     void                        SetHelpText( const String& rStr ) { aHelpText = rStr; }
+    const String&               GetHelpURL() const { return aHelpURL; }
+    void                        SetHelpURL( const String& rStr ) { aHelpURL = rStr; }
     void                        SetPopup( BOOL bOn = TRUE ) { bPopUp = bOn; }
     void                        SetConfigurable( BOOL bOn = TRUE ) { bConfigure = bOn; }
     BOOL                        IsBinding() const { return nId != 0 && !bPopUp; }
     BOOL                        IsSeparator() const { return nId == 0; }
     BOOL                        IsPopup() const { return bPopUp; }
     BOOL                        IsConfigurable() const { return bConfigure; }
+    BOOL                        HasChangedName() const { return bStrEdited; }
     const String&               GetCommand() const { return aCommand; }
 };
 
@@ -214,12 +248,22 @@ SV_DECL_PTRARR_DEL(SfxMenuConfigEntryArr, SfxMenuConfigEntry *, 16, 16)
 class SfxMenuConfigPage;
 class SfxMenuCfgTabListBox_Impl : public SvTabListBox
 {
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xComponentContext;
+    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > m_aSeparatorSeq;
     SfxMenuConfigPage*          pPage;
     SfxMenuConfigEntryArr       aMenuArr;
     Timer                       aTimer;
     SfxMenuConfigEntry*         pCurEntry;
+    rtl::OUString               m_aDescriptorCommandURL;
+    rtl::OUString               m_aDescriptorType;
+    rtl::OUString               m_aDescriptorLabel;
+    rtl::OUString               m_aDescriptorHelpURL;
+    rtl::OUString               m_aDescriptorContainer;
 
     DECL_LINK(                  TimerHdl, Timer* );
+
+    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& GetSeparator();
+    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > ConvertSfxMenuConfigEntry( SfxMenuConfigEntry* pEntry );
 
 public :
                                 SfxMenuCfgTabListBox_Impl( Window *pParent, const ResId& rResId );
@@ -235,7 +279,7 @@ public :
     virtual void                MouseMove( const MouseEvent& rMEvt );
     virtual sal_Int8            AcceptDrop( const AcceptDropEvent& rEvt );
     virtual BOOL                NotifyMoving(SvLBoxEntry*, SvLBoxEntry*, SvLBoxEntry*&, ULONG& );
-    void                        Apply( SfxMenuManager* pMgr, SvLBoxEntry *pParent = NULL );
+    void                        Apply( com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& rNewMenuBar, com::sun::star::uno::Reference< com::sun::star::lang::XSingleComponentFactory >& rFactory, SvLBoxEntry *pParent = NULL );
 };
 
 // class SfxMenuConfigPage -----------------------------------------------
@@ -245,7 +289,7 @@ class SfxMenuConfigPage : public SfxTabPage
 private:
     SfxMenuCfgTabListBox_Impl       aEntriesBox;
     const SfxMacroInfoItem*         m_pMacroInfoItem;
-    FixedLine                        aMenuGroup;
+    FixedLine                       aMenuGroup;
     PushButton                      aNewButton;
     PushButton                      aNewPopupButton;
     PushButton                      aChangeButton;
@@ -261,10 +305,20 @@ private:
     PushButton                      aSaveButton;
     PushButton                      aResetButton;
 
-    SfxMenuManager*             pMgr;
+    ::com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIConfigurationManager > m_xDocCfgMgr;
+    ::com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIConfigurationManager > m_xModuleCfgMgr;
+    ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
+    ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame > m_xFrame;
+    ::com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > m_xMenuBarSettings;
+    ::com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > m_xCommandToLabelMap;
+    String                          m_aMenuResourceURL;
+    sal_Bool                        m_bDocConfig;
+    sal_Bool                        m_bDocReadOnly;
 
-    BOOL                        bModified;
-    BOOL                        bDefault;
+//  SfxMenuManager*             pMgr;
+
+    BOOL                        m_bModified;
+    BOOL                        m_bDefault;
 
     DECL_LINK(                  MoveHdl, Button * );
     DECL_LINK(                  NewHdl, Button * );
@@ -278,6 +332,15 @@ private:
     String                      MakeEntry( const SfxMenuConfigEntry &rEntry ) const;
     String                      Trim( const String &rStr ) const;
 
+    sal_Bool                    GetMenuItemData( const ::com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& rItemContainer,
+                                                 sal_Int32 nIndex,
+                                                 rtl::OUString& rCommandURL,
+                                                 rtl::OUString& rHelpURL,
+                                                 rtl::OUString& rLabel,
+                                                 sal_uInt16& rType,
+                                                 ::com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xPopupMenu );
+
+    void                        FillEntriesBox( const ::com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xMenuBarSettings, SfxMenuCfgTabListBox_Impl& aEntriesBox, SvLBoxEntry *pParentEntry );
     void                        Init();
     void                        ResetConfig();
 
@@ -293,9 +356,9 @@ public:
 
     virtual BOOL                FillItemSet( SfxItemSet& );
     virtual void                Reset( const SfxItemSet& );
-    void                        Apply( SfxMenuManager*, BOOL );
-    void                        SetModified( BOOL bSet ) { bModified = bSet; }
-    void                        SetDefault( BOOL bSet ) { bDefault = bSet; }
+    void                        Apply( BOOL );
+    void                        SetModified( BOOL bSet ) { m_bModified = bSet; }
+    void                        SetDefault( BOOL bSet ) { m_bDefault = bSet; }
 
     void                        SelectMacro(const SfxMacroInfoItem*);
 };
