@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:01 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:06:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2590,7 +2590,7 @@ IMPL_LINK( SvxNumOptionsTabPage, SameLevelHdl_Impl, CheckBox *, pBox )
     for(USHORT i = 0; i < pActNum->GetLevelCount(); i++)
     {
         SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
-        if(aNumFmt.GetNumberingType() < SVX_NUM_NUMBER_NONE)
+        if(aNumFmt.GetNumberingType() != SVX_NUM_NUMBER_NONE)
         {
             bRepaint = TRUE;
             break;
