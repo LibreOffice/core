@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: as $ $Date: 2001-05-23 05:56:20 $
+#   last change: $Author: cd $ $Date: 2001-05-23 07:11:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,8 @@ LIB1OBJFILES=	$(SLO)$/menuconfiguration.obj		\
                 $(SLO)$/imageproducer.obj			\
                 $(SLO)$/menudocumenthandler.obj		\
                 $(SLO)$/bmkmenu.obj
+                $(SLO)$/saxnamespacefilter.obj		\
+                $(SLO)$/xmlnamespaces.obj
 
 # --- services library ----------------------------------------------------
 
