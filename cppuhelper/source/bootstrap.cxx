@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 11:44:33 $
+ *  last change: $Author: dbo $ $Date: 2002-04-26 17:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,6 +318,13 @@ static Reference< registry::XSimpleRegistry > nestRegistries(
         OUString rdb_name = (index == -1) ? csl_rdbs : csl_rdbs.copy(0, index);
         csl_rdbs = (index == -1) ? OUString() : csl_rdbs.copy(index + 1);
 
+        if (! rdb_name.getLength())
+            continue;
+
+        bool optional = ('?' == rdb_name[ 0 ]);
+        if (optional)
+            rdb_name = rdb_name.copy( 1 );
+
         try
         {
             Reference<registry::XSimpleRegistry> simpleRegistry(
@@ -346,9 +353,12 @@ static Reference< registry::XSimpleRegistry > nestRegistries(
         }
         catch(registry::InvalidRegistryException & invalidRegistryException)
         {
-            // if a registry was explicitly given, the exception shall fly
-            if( ! bFallenBack )
-                throw;
+            if (! optional)
+            {
+                // if a registry was explicitly given, the exception shall fly
+                if( ! bFallenBack )
+                    throw;
+            }
 
 #ifdef DEBUG
             OString rdb_name_tmp = OUStringToOString(
