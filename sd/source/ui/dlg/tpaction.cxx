@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:19:54 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 15:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,10 @@
 
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
+#endif
+
+#ifndef _SV_MNEMONIC_HXX
+#include <vcl/mnemonic.hxx>
 #endif
 
 #ifndef SVTOOLS_URIHELPER_HXX
@@ -336,7 +340,7 @@ void SdTPAction::Construct()
         bOLEAction = TRUE;
 
         aVerbVector.push_back( 0 );
-        aLbOLEAction.InsertEntry( String( SdResId( STR_EDIT_OBJ ) ).EraseAllChars('~') );
+        aLbOLEAction.InsertEntry( MnemonicGenerator::EraseAllMnemonicChars( String( SdResId( STR_EDIT_OBJ ) ) ) );
     }
     else if( pOleObj )
     {
@@ -353,7 +357,7 @@ void SdTPAction::Construct()
                 {
                     String aTmp( rVerb.GetName() );
                     aVerbVector.push_back( rVerb.GetId() );
-                    aLbOLEAction.InsertEntry( aTmp.EraseAllChars('~') );
+                    aLbOLEAction.InsertEntry( MnemonicGenerator::EraseAllMnemonicChars( aTmp ) );
                 }
             }
         }
