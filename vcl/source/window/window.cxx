@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.182 $
+ *  $Revision: 1.183 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:23:57 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3025,12 +3025,14 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             bCopyBits = TRUE;
     }
 
+    BOOL bnXRecycled = FALSE; // avoid duplicate mirroring in RTL case
     if ( nFlags & WINDOW_POSSIZE_WIDTH )
     {
         if(!( nFlags & WINDOW_POSSIZE_X ))
         {
             nX = mnX;
             nFlags |= WINDOW_POSSIZE_X;
+            bnXRecycled = TRUE; // we're using a mnX which was already mirrored in RTL case
         }
 
         if ( nWidth < 0 )
@@ -3065,14 +3067,13 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         {
             mpGraphics->mirror( aPtDev.X(), this );
 
-            if( IsRTLEnabled() )
+            // #106948# always mirror our pos if our parent is not mirroring, even
+            // if we are also not mirroring
+            // --- RTL --- check if parent is in different coordinates
+            if( !bnXRecycled && mpParent && !mpParent->mbFrame && mpParent->ImplHasMirroredGraphics() && !mpParent->IsRTLEnabled() )
             {
-                // --- RTL --- check if parent is in different coordinates
-                if( mpParent && !mpParent->mbFrame && mpParent->ImplHasMirroredGraphics() && !mpParent->IsRTLEnabled() )
-                {
-                    // --- RTL --- (re-mirror at parent window)
-                    nX = mpParent->mnOutWidth - mnOutWidth - nX;
-                }
+                // --- RTL --- (re-mirror at parent window)
+                nX = mpParent->mnOutWidth - mnOutWidth - nX;
             }
         }
         if ( mnAbsScreenX != aPtDev.X() || nX != mnX )
@@ -6531,6 +6532,44 @@ Point Window::ScreenToOutputPixel( const Point& rPos ) const
 {
     // relative to top level parent
     return Point( rPos.X()-mnOutOffX, rPos.Y()-mnOutOffY );
+}
+
+// -----------------------------------------------------------------------
+
+long Window::ImplGetUnmirroredOutOffX()
+{
+    // revert mnOutOffX changes that were potentially made in ImplPosSizeWindow
+    long offx = mnOutOffX;
+    if( ImplHasMirroredGraphics() )
+    {
+        if( mpParent && !mpParent->mbFrame && mpParent->ImplHasMirroredGraphics() && !mpParent->IsRTLEnabled() )
+        {
+            if ( !ImplIsOverlapWindow() )
+                offx -= mpParent->mnOutOffX;
+
+            offx = mpParent->mnOutWidth - mnOutWidth - offx;
+
+            if ( !ImplIsOverlapWindow() )
+                offx += mpParent->mnOutOffX;
+
+        }
+    }
+    return offx;
+}
+
+// normalized screen pixel are independent of mirroring
+Point Window::OutputToNormalizedScreenPixel( const Point& rPos ) const
+{
+    // relative to top level parent
+    long offx = ((Window*) this)->ImplGetUnmirroredOutOffX();
+    return Point( rPos.X()+offx, rPos.Y()+mnOutOffY );
+}
+
+Point Window::NormalizedScreenToOutputPixel( const Point& rPos ) const
+{
+    // relative to top level parent
+    long offx = ((Window*) this)->ImplGetUnmirroredOutOffX();
+    return Point( rPos.X()-offx, rPos.Y()-mnOutOffY );
 }
 
 // -----------------------------------------------------------------------
