@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 06:25:18 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 07:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,9 @@
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_SDBC_XRESULTSETUPDATE_HPP_
+#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
+#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -262,6 +264,9 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+#ifndef DBAUI_TOKENWRITER_HXX
+#include "TokenWriter.hxx"
+#endif
 
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
@@ -275,6 +280,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::form;
 using namespace ::dbaui;
+using namespace ::dbtools;
 using namespace ::svx;
 using namespace ::svt;
 
@@ -1046,6 +1052,7 @@ SbaGridControl::SbaGridControl(Reference< XMultiServiceFactory > _rM,
     ,m_bSelecting(sal_False)
     ,m_pMasterListener(NULL)
     ,m_bActivatingForDrop(sal_False)
+    ,m_nAsyncDropEvent(0)
 {
     DBG_CTOR(SbaGridControl ,NULL);
 }
@@ -1054,6 +1061,8 @@ SbaGridControl::SbaGridControl(Reference< XMultiServiceFactory > _rM,
 SbaGridControl::~SbaGridControl()
 {
     DBG_DTOR(SbaGridControl ,NULL);
+    if (m_nAsyncDropEvent)
+        Application::RemoveUserEvent(m_nAsyncDropEvent);
 }
 
 //---------------------------------------------------------------------------------------
@@ -1659,9 +1668,9 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
         {
             switch (_aType.mnSotId)
             {
-                case SOT_FORMAT_RTF:                    // RTF data descriptions
-                case SOT_FORMATSTR_ID_HTML:             // HTML data descriptions
-                case SOT_FORMATSTR_ID_HTML_SIMPLE:      // HTML data descriptions
+//              case SOT_FORMAT_RTF:                    // RTF data descriptions
+//              case SOT_FORMATSTR_ID_HTML:             // HTML data descriptions
+//              case SOT_FORMATSTR_ID_HTML_SIMPLE:      // HTML data descriptions
                 case SOT_FORMATSTR_ID_DBACCESS_TABLE:   // table descriptor
                 case SOT_FORMATSTR_ID_DBACCESS_QUERY:   // query descriptor
                 case SOT_FORMATSTR_ID_DBACCESS_COMMAND: // SQL command
@@ -1757,9 +1766,12 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
 
     } while (sal_False);
 
-//  DataFlavorExVector& _rFlavors = GetDataFlavorExVector();
-//  if(::std::find_if(_rFlavors.begin(),_rFlavors.end(),SbaGridControlPrec(sal_True)) != _rFlavors.end())
-//      nAction = DND_ACTION_COPY;
+    if(nAction != DND_ACTION_COPY && GetEmptyRow().Is())
+    {
+        const DataFlavorExVector& _rFlavors = GetDataFlavors();
+        if(::std::find_if(_rFlavors.begin(),_rFlavors.end(),SbaGridControlPrec(sal_True)) != _rFlavors.end())
+            nAction = DND_ACTION_COPY;
+    }
 
 /*
     // check formats
@@ -1830,88 +1842,20 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
         return DND_ACTION_COPY;
     }
 
-/*
-    //////////////////////////////////////////////////////////////////////
-    // DataExch-String holen
-    SotDataObjectRef xDataObj = ((DropEvent&)rEvt).GetData();
-    const SvDataTypeList& rTypeList = xDataObj->GetTypeList();
-    // the last known format
-    sal_uInt32 nSbaDataExchangeFormat = Exchange::RegisterFormatName(String::CreateFromAscii(SBA_DATAEXCHANGE_FORMAT));
-    if( !rTypeList.Get(nSbaDataExchangeFormat) )
-        return sal_False;
-
-    SvData aData(nSbaDataExchangeFormat);
-    xDataObj->GetData(&aData);
-    String sDataExchStr;
-    if (!aData.GetData(sDataExchStr))
-        return sal_False;
-
-    if (!sDataExchStr.Len())
-        return sal_False;
-
-    // Formerly we just casted the xDataObj-ptr to SbaExplorerExchObj*. Unfortunally this isn't
-    // valid anymore (it also seems to be very bad style to me)
-    // Now xDataObj is an SfxExchangeObject, so we have to try other approches ....
-    // FS - 69292 - 20.10.99
-
-//  SbaExplorerExchObj* pDataExchObj = NULL;
-//  // so first we try our new internal format which we created for this situation
-//  SvData aExplorerExchangeTransfer(Exchange::RegisterFormatName(String::CreateFromAscii(SBA_DATATYPE_INTERNAL_EXPLOREREXCHANGE)));
-//  if (xDataObj->GetData(&aExplorerExchangeTransfer))
-//  {
-//      DBG_ASSERT(aExplorerExchangeTransfer.GetMemorySize() == sizeof(pDataExchObj), "SbaGridControl::Drop : somebody gave me invalida data !");
-//      void* pDestination = &pDataExchObj;
-//      aExplorerExchangeTransfer.GetData(&pDestination);
-//  }
-//
-//  // next try for a SfxExchangeObject
-//  // (this is already somewhat dirty : we need a hard cast below ...)
-//  if (!pDataExchObj)
-//  {
-//      SfxExchangeObjectRef aSfxExchange = SfxExchangeObject::PasteDragServer((DropEvent&)rEvt);
-//      if (&aSfxExchange == &xDataObj)
-//      {
-//          // loop through all objects
-//          for (sal_uInt32 i=0; i<aSfxExchange->Count(); ++i)
-//          {
-//              if (aSfxExchange->GetObject(i)->HasFormat(SvDataType(nSbaDataExchangeFormat)))
-//              {
-//                  pDataExchObj = (SbaExplorerExchObj*)aSfxExchange->GetObject(i);
-//                  break;
-//              }
-//          }
-//          DBG_ASSERT(pDataExchObj, "SbaGridControl::Drop : invalid SfxExchangeObject !?");
-//              // if the SfxExchangeObject itself has the format, at least one of it children should, too
-//      }
-//  }
-//
-//  // last : the (real dirty :) old behaviuor : a hard cast
-//  if (!pDataExchObj)
-//      pDataExchObj = (SbaExplorerExchObj*)&xDataObj;
-//
-//  // first we need to translate the ::com::sun::star::form::DataSelectionType into a DBObject
-//  sal_Int32 nDataType;
-//  try
-//  {
-//      nDataType = ::comphelper::getINT32(xDataSource->getPropertyValue(PROPERTY_COMMANDTYPE));
-//  }
-//  catch(Exception&)
-//  {
-//      DBG_ERROR("SbaGridControl::Drop : could not collect essential data source attributes !");
-//      return sal_False;
-//  }
-
-
-//  if (pDataExchObj->QueryInsertObject(eObj))
-//  {
-//      if (pDataExchObj->GetData(getDataSource()))
-//          refresh();
-//          // if the GetData would work with our own cursor, not with a newly created one, UpdateDataSource(sal_True) would be
-//          // suffient (me thinks)
-//      return sal_True;
-//  }
-    return sal_False;
-*/
+    if(GetEmptyRow().Is())
+    {
+        const DataFlavorExVector& _rFlavors = GetDataFlavors();
+        DataFlavorExVector::const_iterator aFind = ::std::find_if(_rFlavors.begin(),_rFlavors.end(),SbaGridControlPrec(sal_True));
+        if( aFind != _rFlavors.end())
+        {
+            TransferableDataHelper aDropped( rEvt.maDropEvent.Transferable );
+            m_aDataDescriptor = ODataAccessObjectTransferable::extractObjectDescriptor(aDropped);
+            if (m_nAsyncDropEvent)
+                Application::RemoveUserEvent(m_nAsyncDropEvent);
+            m_nAsyncDropEvent = Application::PostUserEvent(LINK(this, SbaGridControl, AsynchDropEvent));
+            return DND_ACTION_COPY;
+        }
+    }
 
     return DND_ACTION_NONE;
 }
@@ -1941,6 +1885,43 @@ Reference< XPropertySet >  SbaGridControl::getDataSource() const
 
     return xReturn;
 }
+// -----------------------------------------------------------------------------
+IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, EMPTY_ARG)
+{
+    m_nAsyncDropEvent = 0;
+
+    Reference< XPropertySet >  xDataSource = getDataSource();
+    if (xDataSource.is())
+    {
+        Reference< XResultSetUpdate > xResultSetUpdate(xDataSource,UNO_QUERY);
+        ORowSetImportExport* pImExport = new ORowSetImportExport(this,xResultSetUpdate,m_aDataDescriptor,getServiceManager());
+        Reference<XEventListener> xHolder = pImExport;
+        pImExport->initialize();
+        Hide();
+        try
+        {
+            if(!pImExport->Read())
+            {
+                String sError = String(ModuleRes(STR_NO_COLUMNNAME_MATCHING));
+                throwGenericSQLException(sError,NULL);
+            }
+            Show();
+        }
+        catch(const SQLException& e)
+        {
+            Show();
+            ::dbaui::showError(::dbtools::SQLExceptionInfo(e),this,getServiceManager());
+        }
+        catch(const Exception& )
+        {
+            OSL_ENSURE(0,"Exception catched!");
+        }
+    }
+    m_aDataDescriptor.clear();
+
+    return 0L;
+}
+
 
 
 

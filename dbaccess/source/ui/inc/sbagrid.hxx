@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-13 14:14:47 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 07:55:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef _SBA_MULTIPLEX_HXX
 #include "sbamultiplex.hxx"
 #endif
+#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
+#include <svx/dataaccessdescriptor.hxx>
+#endif
 
 class SvNumberFormatter;
 
@@ -120,7 +123,6 @@ namespace dbaui
     {
         DECLARE_STL_MAP(::com::sun::star::util::URL, SbaXStatusMultiplexer*, SbaURLCompare,StatusMultiplexerArray);
         StatusMultiplexerArray      m_aStatusMultiplexer;
-        //  ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_MultiServiceFacatory;
 
     public:
         SbaXGridControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
@@ -266,13 +268,15 @@ namespace dbaui
 
     // Attributes
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >        m_xComposer;    // for DnD we need a composed query ...
+        ::svx::ODataAccessDescriptor                                                    m_aDataDescriptor;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    m_xComposer;    // for DnD we need a composed query ...
         long        m_nCurrentSelectedColumn;   // this is the column model (not the view) posisition ...
         SbaGridListener*    m_pMasterListener;
-        sal_uInt16  m_nLastColId;
-        sal_uInt16  m_nLastRowId;
+        sal_Int32           m_nAsyncDropEvent;
+        sal_uInt16          m_nLastColId;
+        sal_uInt16          m_nLastRowId;
 
-        sal_uInt16  m_nCurrentActionColId;
+        sal_uInt16          m_nCurrentActionColId;
             // ui actions (e.g. a context menu) may be performed on columns which aren't the current one
             // and aren't selected, so we have to track this column id
 
@@ -347,6 +351,8 @@ namespace dbaui
         void SetColAttrs(sal_uInt16 nColId);
 
         SvNumberFormatter* GetDatasourceFormatter();
+
+        DECL_LINK(AsynchDropEvent, void*);
 
     private:
         sal_Bool    IsReadOnlyDB() const;

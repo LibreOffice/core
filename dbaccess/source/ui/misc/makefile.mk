@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2001-09-18 13:47:57 $
+#   last change: $Author: oj $ $Date: 2001-10-02 07:55:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,6 +97,7 @@ EXCEPTIONSFILES=	\
         $(SLO)$/querydesignaccess.obj		\
         $(SLO)$/DExport.obj					\
         $(SLO)$/uiservices.obj				\
+        $(SLO)$/RowSetDrop.obj				\
         $(SLO)$/moduledbu.obj
 
 

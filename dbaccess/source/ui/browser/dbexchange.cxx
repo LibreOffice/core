@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-02 15:25:55 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 07:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,11 +111,10 @@ namespace dbaui
         ,m_pHtml(NULL)
         ,m_pRtf(NULL)
     {
-        Sequence< PropertyValue > aProps = getDescriptor().createPropertyValueSequence();
-        m_pHtml = new OHTMLImportExport(aProps, _rxORB, _rxFormatter);
+        m_pHtml = new OHTMLImportExport(getDescriptor(), _rxORB, _rxFormatter);
         m_xHtml = m_pHtml;
 
-        m_pRtf = new ORTFImportExport(aProps, _rxORB, _rxFormatter);
+        m_pRtf = new ORTFImportExport(getDescriptor(), _rxORB, _rxFormatter);
         m_xRtf = m_pRtf;
     }
 

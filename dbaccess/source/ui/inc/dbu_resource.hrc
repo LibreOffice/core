@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:24:37 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 07:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,6 +452,9 @@
 #define STR_HINT_READONLY_CONNECTION        RID_STRING_START + 189
 #define STR_HINT_CONNECTION_NOT_CAPABLE     RID_STRING_START + 190
 #define STR_OBJECT_ALREADY_EXISTS           RID_STRING_START + 191
+#define STR_NO_COLUMNNAME_MATCHING          RID_STRING_START + 192
+#define STR_ERROR_OCCURED_WHILE_COPYING     RID_STRING_START + 193
+
 
 //========================================================================
 // untyped resources
@@ -466,6 +469,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.62  2001/09/25 13:24:37  oj
+ *  #91719# implementing the XRename handling
+ *
  *  Revision 1.61  2001/08/28 08:19:41  fs
  *  #91573# STR_HINT_READONLY_CONNECTION / STR_HINT_CONNECTION_NOT_CAPABL
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 06:25:15 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 07:55:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,7 @@ void showError(const SQLExceptionInfo& _rInfo,Window* _pParent,const Reference< 
 
     return vRet;
 }
+// -----------------------------------------------------------------------------
 
 const OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                                sal_Int32 _nType,
@@ -425,6 +426,7 @@ const OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
 
     return pTypeInfo;
 }
+// -----------------------------------------------------------------------------
 void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
                     const String& _rsTypeNames,
                     OTypeInfoMap& _rTypeInfoMap,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-27 20:24:49 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 07:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,6 +360,19 @@ String STR_OBJECT_ALREADY_EXISTS
 {
     Text = "Der Name # existiert bereits." ;
     Text [ ENGLISH ] = "The name # already exists." ;
+};
+
+
+String STR_NO_COLUMNNAME_MATCHING
+{
+    Text = "Es konnten keine übereinstimmenden Spaltennamen gefunden werden!" ;
+    Text [ ENGLISH ] = "No matching column names found." ;
+};
+
+String STR_ERROR_OCCURED_WHILE_COPYING
+{
+    Text = "Es ist ein Fehler aufgetreten! Wollen Sie den Kopiervorgang fortsetzen?" ;
+    Text [ ENGLISH ] = "A error occured. Would you like to continue the copying?" ;
 };
 
 

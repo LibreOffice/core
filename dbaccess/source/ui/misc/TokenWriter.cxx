@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-05 12:46:55 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 07:55:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@
 
 using namespace dbaui;
 using namespace dbtools;
+using namespace svx;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -167,7 +168,7 @@ const static char __FAR_DATA sFontSize[]        = "font-size: ";
 
 DBG_NAME(ODatabaseImportExport);
 //======================================================================
-ODatabaseImportExport::ODatabaseImportExport(const Sequence< PropertyValue >& _aSeq,
+ODatabaseImportExport::ODatabaseImportExport(const ODataAccessDescriptor& _aDataDescriptor,
                                              const Reference< XMultiServiceFactory >& _rM,
                                              const Reference< XNumberFormatter >& _rxNumberF,
                                              const String& rExchange)
@@ -182,19 +183,14 @@ ODatabaseImportExport::ODatabaseImportExport(const Sequence< PropertyValue >& _a
     DBG_CTOR(ODatabaseImportExport,NULL);
     osl_incrementInterlockedCount( &m_refCount );
     // get the information we need
-    const PropertyValue* pBegin = _aSeq.getConstArray();
-    const PropertyValue* pEnd   = pBegin + _aSeq.getLength();
-    for(;pBegin != pEnd;++pBegin)
-    {
-        if (0 == pBegin->Name.compareToAscii(PROPERTY_DATASOURCENAME))
-            pBegin->Value >>= m_sDataSourceName;
-        else if (0 == pBegin->Name.compareToAscii(PROPERTY_COMMANDTYPE))
-            pBegin->Value >>= m_nCommandType;
-        else if (0 == pBegin->Name.compareToAscii(PROPERTY_COMMAND))
-            pBegin->Value >>= m_sName;
-        else if (0 == pBegin->Name.compareToAscii(PROPERTY_ACTIVECONNECTION))
-            pBegin->Value >>= m_xConnection;
-    }
+    _aDataDescriptor[daDataSource]  >>= m_sDataSourceName;
+    _aDataDescriptor[daCommandType] >>= m_nCommandType;
+    _aDataDescriptor[daCommand]     >>= m_sName;
+    // some additonal information
+    if(_aDataDescriptor.has(daConnection))
+        _aDataDescriptor[daConnection]  >>= m_xConnection;
+    if(_aDataDescriptor.has(daSelection))
+        _aDataDescriptor[daSelection]   >>= m_aSelection;
 
     xub_StrLen nCount = rExchange.GetTokenCount(char(11));
     if( nCount > SBA_FORMAT_SELECTION_COUNT && rExchange.GetToken(4).Len())
@@ -618,11 +614,11 @@ const char __FAR_DATA OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t
 #define lcl_OUT_COMMENT( comment )  ((*m_pStream) << sMyBegComment, OUT_STR( comment ) << sMyEndComment << sNewLine)
 
 //-------------------------------------------------------------------
-OHTMLImportExport::OHTMLImportExport(const Sequence< PropertyValue >& _aSeq,
+OHTMLImportExport::OHTMLImportExport(const ODataAccessDescriptor& _aDataDescriptor,
                                      const Reference< XMultiServiceFactory >& _rM,
                                      const Reference< XNumberFormatter >& _rxNumberF,
                                      const String& rExchange)
-        : ODatabaseImportExport(_aSeq,_rM,_rxNumberF,rExchange)
+        : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange)
     ,m_nIndent(0)
 #if DBG_UTIL
     ,m_bCheckFont(FALSE)
