@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:51:28 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,21 @@ void lcl_PrintHeader( Printer* pPrinter, USHORT nPages, USHORT nCurPage, const S
     pPrinter->SetFont( aOldFont );
     pPrinter->SetFillColor( aOldFillColor );
 }
+/* -----------------13.11.2003 16:24-----------------
 
+ --------------------------------------------------*/
+rtl_TextEncoding lcl_GetStreamCharSet(rtl_TextEncoding eLoadEncoding)
+{
+    rtl_TextEncoding eRet = eLoadEncoding;
+    if(RTL_TEXTENCODING_DONTKNOW == eRet)
+    {
+        OfaHtmlOptions* pHtmlOptions = OFF_APP()->GetHtmlOptions();
+        const sal_Char *pCharSet =
+            rtl_getBestMimeCharsetFromTextEncoding( pHtmlOptions->GetTextEncoding() );
+        eRet = rtl_getTextEncodingFromMimeCharset( pCharSet );
+    }
+    return eRet;
+}
 /*-----------------18.11.96 08.21-------------------
 
 --------------------------------------------------*/
@@ -459,7 +473,9 @@ SwSrcView::~SwSrcView()
 --------------------------------------------------*/
 void SwSrcView::SaveContentTo(SfxMedium& rMed)
 {
-    aEditWin.Write( *rMed.GetInStream());//, EE_FORMAT_TEXT);
+    SvStream* pInStream = rMed.GetInStream();
+    pInStream->SetStreamCharSet(lcl_GetStreamCharSet(eLoadEncoding));
+    aEditWin.Write( *pInStream);//, EE_FORMAT_TEXT);
 }
 
 /*--------------------------------------------------------------------
@@ -504,17 +520,8 @@ SwDocShell*     SwSrcView::GetDocShell()
 void SwSrcView::SaveContent(const String& rTmpFile)
 {
     SfxMedium aMedium( rTmpFile,    STREAM_WRITE, TRUE);
-    rtl_TextEncoding eDestEnc = eLoadEncoding;
-
-    if(RTL_TEXTENCODING_DONTKNOW == eDestEnc)
-    {
-        const sal_Char *pCharSet =
-            rtl_getBestMimeCharsetFromTextEncoding( gsl_getSystemTextEncoding() );
-        eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
-    }
-
     SvStream* pOutStream = aMedium.GetOutStream();
-    pOutStream->SetStreamCharSet( eDestEnc );
+    pOutStream->SetStreamCharSet( lcl_GetStreamCharSet(eLoadEncoding) );
     aEditWin.Write(*pOutStream);//, EE_FORMAT_TEXT);
     aMedium.Commit();
 }
@@ -565,7 +572,9 @@ void SwSrcView::Execute(SfxRequest& rReq)
                     }
                 }
 #endif
-                aEditWin.Write( *aMedium.GetOutStream() );
+                SvStream* pOutStream = aMedium.GetOutStream();
+                pOutStream->SetStreamCharSet(lcl_GetStreamCharSet(eLoadEncoding));
+                aEditWin.Write( *pOutStream );
                 aMedium.Commit();
             }
         }
@@ -587,6 +596,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
                 SvStream* pOutStream = pMed->GetOutStream();
                 pOutStream->Seek(0);
                 pOutStream->SetStreamSize(0);
+                pOutStream->SetStreamCharSet(lcl_GetStreamCharSet(eLoadEncoding));
                 aEditWin.Write( *pOutStream );
                 pMed->CloseOutStream();
                 pMed->Commit();
