@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-17 13:12:23 $
+#   last change: $Author: hjs $ $Date: 2001-10-19 12:38:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,7 +124,7 @@ OUTDIR2INC= \
 
 .IF "$(GUI)"=="WNT"
 $(MISC)$/so_custom_patch :  $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
-    +win32_custom.bat $(OUT) $(TARFILE_NAME) ms && $(TOUCH) $@
+    +win32_custom.bat $(PACKAGE_DIR) $(TARFILE_NAME) ms && $(TOUCH) $@
     
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(MISC)$/so_custom_patch
 .ENDIF          # "$(GUI)"=="WNT"
