@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 07:42:40 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,6 +369,199 @@ SbxObject* createUserTypeImpl( const String& rClassName )
     return pRetObj;
 }
 
+TYPEINIT1(SbClassModuleObject,SbModule)
+
+SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
+    : SbModule( pClassModule->GetName() )
+    , mpClassModule( pClassModule )
+{
+    aOUSource = pClassModule->aOUSource;
+    aComment = pClassModule->aComment;
+    pImage = pClassModule->pImage;
+    pBreaks = pClassModule->pBreaks;
+
+    // Allow search only internally
+    ResetFlag( SBX_GBLSEARCH );
+
+    // Copy the methods from original class module
+    SbxArray* pClassMethods = pClassModule->GetMethods();
+    UINT32 nMethodCount = pClassMethods->Count32();
+    UINT32 i;
+    for( i = 0 ; i < nMethodCount ; i++ )
+    {
+        SbxVariable* pVar = pClassMethods->Get32( i );
+        SbMethod* pMethod = PTR_CAST( SbMethod, pVar );
+        if( pMethod )
+        {
+            USHORT nFlags = pMethod->GetFlags();
+            pMethod->SetFlag( SBX_NO_BROADCAST );
+            SbMethod* pNewMethod = new SbMethod( *pMethod );
+            pNewMethod->ResetFlag( SBX_NO_BROADCAST );
+            pMethod->SetFlags( nFlags );
+            pNewMethod->pMod = this;
+            pNewMethod->SetParent( this );
+            pMethods->PutDirect( pNewMethod, i );
+            StartListening( pNewMethod->GetBroadcaster(), TRUE );
+        }
+    }
+
+    // Copy the properties from original class module
+    SbxArray* pClassProps = pClassModule->GetProperties();
+    UINT32 nPropertyCount = pClassProps->Count32();
+    for( i = 0 ; i < nPropertyCount ; i++ )
+    {
+        SbxVariable* pVar = pClassProps->Get32( i );
+        SbProcedureProperty* pProcedureProp = PTR_CAST( SbProcedureProperty, pVar );
+        if( pProcedureProp )
+        {
+            USHORT nFlags = pProcedureProp->GetFlags();
+            pProcedureProp->SetFlag( SBX_NO_BROADCAST );
+            SbProcedureProperty* pNewProp = new SbProcedureProperty
+                ( pProcedureProp->GetName(), pProcedureProp->GetType() );
+                // ( pProcedureProp->GetName(), pProcedureProp->GetType(), this );
+            pNewProp->ResetFlag( SBX_NO_BROADCAST );
+            pProcedureProp->SetFlags( nFlags );
+            pProps->PutDirect( pNewProp, i );
+            StartListening( pNewProp->GetBroadcaster(), TRUE );
+        }
+        else
+        {
+            SbxProperty* pProp = PTR_CAST( SbxProperty, pVar );
+            if( pProp )
+            {
+                USHORT nFlags = pProp->GetFlags();
+                pProp->SetFlag( SBX_NO_BROADCAST );
+                SbxProperty* pNewProp = new SbxProperty( *pProp );
+                pNewProp->ResetFlag( SBX_NO_BROADCAST );
+                pNewProp->SetParent( this );
+                pProps->PutDirect( pNewProp, i );
+                pProp->SetFlags( nFlags );
+            }
+        }
+    }
+}
+
+SbClassModuleObject::~SbClassModuleObject()
+{
+    // Must be deleted by base class dtor because this data
+    // is not owned by the SbClassModuleObject object
+    pImage = NULL;
+    pBreaks = NULL;
+}
+
+void SbClassModuleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
+                           const SfxHint& rHint, const TypeId& rHintType )
+{
+    bool bDone = false;
+
+    const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
+    if( pHint )
+    {
+        SbxVariable* pVar = pHint->GetVar();
+        SbProcedureProperty* pProcProperty = PTR_CAST( SbProcedureProperty, pVar );
+        if( pProcProperty )
+        {
+            bDone = true;
+
+            if( pHint->GetId() == SBX_HINT_DATAWANTED )
+            {
+                String aProcName;
+                aProcName.AppendAscii( "Property Get " );
+                aProcName += pProcProperty->GetName();
+
+                SbxVariable* pMeth = Find( aProcName, SbxCLASS_METHOD );
+                if( pMeth )
+                {
+                    SbxValues aVals;
+                    aVals.eType = SbxVARIANT;
+                    pMeth->Get( aVals );
+                    pVar->Put( aVals );
+                }
+            }
+            else if( pHint->GetId() == SBX_HINT_DATACHANGED )
+            {
+                SbxVariable* pMeth = NULL;
+
+                bool bSet = pProcProperty->isSet();
+                if( bSet )
+                {
+                    pProcProperty->setSet( false );
+
+                    String aProcName;
+                    aProcName.AppendAscii( "Property Set " );
+                    aProcName += pProcProperty->GetName();
+                    pMeth = Find( aProcName, SbxCLASS_METHOD );
+                }
+                if( !pMeth )    // Let
+                {
+                    String aProcName;
+                    aProcName.AppendAscii( "Property Let " );
+                    aProcName += pProcProperty->GetName();
+                    pMeth = Find( aProcName, SbxCLASS_METHOD );
+                }
+
+                if( pMeth )
+                {
+                    // Setup parameters
+                    SbxArrayRef xArray = new SbxArray;
+                    xArray->Put( pMeth, 0 );    // Method as parameter 0
+                    xArray->Put( pVar, 1 );
+                    pMeth->SetParameters( xArray );
+
+                    SbxValues aVals;
+                    pMeth->Get( aVals );
+                    pMeth->SetParameters( NULL );
+                }
+            }
+        }
+    }
+
+    if( !bDone )
+        SbModule::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+}
+
+SbxVariable* SbClassModuleObject::Find( const XubString& rName, SbxClassType t )
+{
+    SbxVariable* pRes = SbxObject::Find( rName, t );
+    return pRes;
+}
+
+SbClassFactory::SbClassFactory( void )
+{
+    String aDummyName;
+    xClassModules = new SbxObject( aDummyName );
+}
+
+void SbClassFactory::AddClassModule( SbModule* pClassModule )
+{
+    SbxObject* pParent = pClassModule->GetParent();
+    xClassModules->Insert( pClassModule );
+    pClassModule->SetParent( pParent );
+}
+
+void SbClassFactory::RemoveClassModule( SbModule* pClassModule )
+{
+    xClassModules->Remove( pClassModule );
+}
+
+SbxBase* SbClassFactory::Create( UINT16 nSbxId, UINT32 )
+{
+    // Not supported
+    return NULL;
+}
+
+SbxObject* SbClassFactory::CreateObject( const String& rClassName )
+{
+    SbxVariable* pVar = xClassModules->Find( rClassName, SbxCLASS_DONTCARE );
+    SbxObject* pRet = NULL;
+    if( pVar )
+    {
+        SbModule* pMod = (SbModule*)pVar;
+        pRet = new SbClassModuleObject( pMod );
+    }
+    return pRet;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -388,6 +581,8 @@ StarBASIC::StarBASIC( StarBASIC* p )
         AddFactory( pUNOFAC );
         pTYPEFAC = new SbTypeFactory;
         AddFactory( pTYPEFAC );
+        pCLASSFAC = new SbClassFactory;
+        AddFactory( pCLASSFAC );
         pOLEFAC = new SbOLEFactory;
         AddFactory( pOLEFAC );
     }
