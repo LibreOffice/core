@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:10:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 10:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,6 @@
 #include "vcl/wintypes.hxx"
 #include "vcl/msgbox.hxx"
 #include "svtools/svtools.hrc"
-#include "com/sun/star/lang/XUnoTunnel.hpp"
 #include "com/sun/star/container/XChild.hpp"
 #include "com/sun/star/ui/dialogs/XFilePicker.hpp"
 #include "com/sun/star/ui/dialogs/XFilterManager.hpp"
@@ -144,20 +143,6 @@ DialogImpl::~DialogImpl()
         pParent = VCLUnoHelper::GetWindow(xParent);
     ::rtl::Reference<DialogImpl> that( new DialogImpl( pParent, xContext ) );
 
-    // XUnoTunnel: hack to set application solar mutex from within gui
-    // xxx todo: remove when PL has inserted res mgr mutex in tools:
-    Reference<lang::XUnoTunnel> xUnoTunnel( that->m_xPkgMgrFac, UNO_QUERY );
-    if (xUnoTunnel.is())
-    {
-        char const ar [] = "ResMgrMutexPointer";
-        ::vos::IMutex ** ppmutex = reinterpret_cast< ::vos::IMutex ** >(
-            xUnoTunnel->getSomething(
-                Sequence<sal_Int8>( reinterpret_cast<sal_Int8 const *>(ar),
-                                    ARLEN(ar) - 1 ) ) );
-        if (ppmutex != 0)
-            *ppmutex = &Application::GetSolarMutex();
-    }
-
     // xxx todo: set icon:
 //     that->SetIcon( ICON_PACKAGE_MANAGER );
 
@@ -166,8 +151,7 @@ DialogImpl::~DialogImpl()
         new FixedText( that.get(), getResId(RID_FT_PACKAGES) ) );
 
     // selection box: header bar + treelistbox:
-    that->m_selectionBox.reset(
-        new Control( that.get(), WB_BORDER | WB_TABSTOP ) );
+    that->m_selectionBox.reset( new SelectionBoxControl( that.get() ) );
     that->m_treelb.reset(
         new TreeListBoxImpl( that->m_selectionBox.get(), that.get() ) );
     that->m_headerBar.reset(
@@ -331,9 +315,9 @@ DialogImpl::~DialogImpl()
     that->m_headerBar->Show();
     that->m_treelb->Show();
     that->m_bottomLine->Show();
-    that->m_treelb->GrabFocus();
 
     // default selection:
+    that->m_treelb->GrabFocus();
     SvLBoxEntry * defEntry = that->m_treelb->GetEntry(
         defaultView.equalsIgnoreAsciiCaseAsciiL(
             RTL_CONSTASCII_STRINGPARAM("shared") ) ? 1 : 0 );
@@ -516,7 +500,7 @@ void DialogImpl::updateButtonStates(
     m_disableButton->Enable( bDisable );
     m_enableButton->Enable( bEnable );
     m_exportButton->Enable( bExport );
-    SvLBoxEntry * currEntry = m_treelb->GetCurEntry();
+    SvLBoxEntry * currEntry = m_treelb->getCurrentSingleSelectedEntry();
     m_addButton->Enable(
         allowModification &&
         (currEntry != 0 &&
@@ -527,7 +511,7 @@ void DialogImpl::updateButtonStates(
 
 //______________________________________________________________________________
 Sequence< Reference<deployment::XPackage> >
-DialogImpl::TreeListBoxImpl::getSelectedPackages( bool onlyFirstLevel )
+DialogImpl::TreeListBoxImpl::getSelectedPackages( bool onlyFirstLevel ) const
 {
     ::std::vector< Reference<deployment::XPackage> > ret;
 
@@ -559,7 +543,8 @@ struct StrAllFiles : public rtl::StaticWithInit<const OUString, StrAllFiles> {
 void DialogImpl::clickAdd( USHORT )
 {
     OSL_ASSERT( m_treelb->getSelectedPackages().getLength() == 0 );
-    OUString context( m_treelb->getContext(m_treelb->GetCurEntry()) );
+    OUString context( m_treelb->getContext(
+                          m_treelb->getCurrentSingleSelectedEntry() ) );
     OSL_ASSERT( context.getLength() > 0 );
     if (context.getLength() == 0)
         return;
@@ -912,7 +897,6 @@ namespace {
 struct DeploymentGuiResMgr :
         public rtl::StaticWithInit< ResMgr *, DeploymentGuiResMgr > {
     ResMgr * operator () () {
-        const ::vos::OGuard guard( Application::GetSolarMutex() );
         return ResMgr::CreateResMgr( "deploymentgui" LIBRARY_SOLARUPD() );
     }
 };
