@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrm.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 09:51:35 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,11 @@ class SwVirtFlyDrawObj;
 class SwSpzFrmFmts;
 class SwAttrSetChg;
 class PolyPolygon;
+// OD 01.08.2003 #110978#
+namespace objectpositioning
+{
+    class SwAnchoredObjectPosition;
+}
 
 #include <orntenum.hxx>
 
@@ -94,6 +99,9 @@ class SwFlyFrm : public SwLayoutFrm
     friend void Notify( SwFlyFrm *, SwPageFrm *pOld, const SwRect &rOld );
     //darf die Pos berechnen (lassen)
     friend void lcl_MakeFlyPosition( SwFlyFrm *pFly );
+
+    // OD 01.08.2003 #110978# - access for calculation of position
+    friend class objectpositioning::SwAnchoredObjectPosition;
 
     void InitDrawObj( BOOL bNotify );   //Wird von den CToren gerufen.
     void FinitDrawObj();                //Wird vom CTor gerufen.
