@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMenuProxy.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 /** Allows to execute dispatch for a menu item
     and handles listeners for changes in menu items.
  */
-interface XMenuProxy: com::sun::star::lang::XComponent
+published interface XMenuProxy: com::sun::star::lang::XComponent
 {
     //-------------------------------------------------------------------------
 
