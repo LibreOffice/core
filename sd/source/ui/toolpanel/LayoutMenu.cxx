@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LayoutMenu.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-26 12:48:00 $
+ *  last change: $Author: obo $ $Date: 2005-01-28 16:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,8 +444,7 @@ void LayoutMenu::Execute (SfxRequest& rRequest)
 
         case SID_INSERTPAGE:
             // Because we can not attach arguments to this slot we have to
-            // forward this request manually to the main view shell can not
-            // rely on the SFX to do it for us.
+            // forward this request manually to the main view shell.
             InsertPageWithLayout (GetSelectedAutoLayout());
             break;
     }
