@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnostics.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-16 11:44:29 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 #define JFW_TRACE0(m)  ((void) 0)
 #endif
 
-#if OSL_DEBUG_LEVEL >= 0
+#if OSL_DEBUG_LEVEL >= 1
 #define JFW_TRACE1(m)  jfw_trace(m)
 #else
 #define JFW_TRACE1(m)  ((void) 0)
