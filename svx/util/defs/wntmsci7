@@ -19273,3 +19273,5 @@ _real@8@400d8ca0000000000000
 ?Execute@SvxOpenGraphicDialog@@QAEKXZ
 ?GetGraphic@SvxOpenGraphicDialog@@QBEKAAVGraphic@@@Z
 ?_resize@SrchAttrItemList@@IAEXI@Z
+?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx853816427@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?getColumnPropertyFromPeer@?%O:\SRX643\src\svx\source\fmcomp\fmgridcl.cxx3029626411@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
