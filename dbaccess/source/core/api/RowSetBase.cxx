@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 11:02:35 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1046,7 +1046,7 @@ void ORowSetBase::setCurrentRow(sal_Bool _bMoved,const ORowSetRow& _rOldValues,:
 
     // TODO: can this be done before the notifications?
     if(!(m_bBeforeFirst || m_bAfterLast) && !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd())
-        m_aOldRow->setRow(*m_aCurrentRow);
+        m_aOldRow->setRow(new ORowSetValueVector(m_aCurrentRow->getBody()));
 
     if ( _bMoved )
         // - cursorMoved
