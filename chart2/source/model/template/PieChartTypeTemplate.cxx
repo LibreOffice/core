@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PieChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-21 14:20:13 $
+ *  last change: $Author: bm $ $Date: 2003-11-26 10:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,18 @@ Reference< chart2::XDataSeriesTreeParent > PieChartTypeTemplate::createDataSerie
     Reference< chart2::XDataSeriesTreeNode > aCategoryNode(
         createScaleGroup( true, true, rCoordSys, 0, chart2::StackMode_STACKED ));
 
+    Reference< chart2::XDataSeriesTreeNode > aFirstCatNode( aCategoryNode );
+
+    // 'z-axis' group for 3d-charts
+    if( getDimension() == 3 )
+    {
+        Reference< chart2::XDataSeriesTreeNode > aDepthNode(
+            createScaleGroup( true, true, rCoordSys, 2, getZStackMode() ));
+        // add value node to category node
+        attachNodeToNode( aDepthNode, aCategoryNode );
+        aFirstCatNode.set( aDepthNode );
+    }
+
     // 'y-axis' group
     Reference< chart2::XDataSeriesTreeNode > aValueNode(
         createScaleGroup( false, true, rCoordSys, 1, getYStackMode() ));
@@ -378,7 +390,7 @@ Reference< chart2::XDataSeriesTreeParent > PieChartTypeTemplate::createDataSerie
     attachNodeToNode( aCategoryNode, aValueNode );
 
     // add category node to chart type node
-    attachNodeToNode( aChartTypeNode, aCategoryNode );
+    attachNodeToNode( aChartTypeNode, aFirstCatNode );
 
     return aRoot;
 }
