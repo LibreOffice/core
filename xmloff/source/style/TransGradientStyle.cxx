@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransGradientStyle.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: cl $ $Date: 2000-10-10 11:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ enum SvXMLTokenMapAttrs
     XML_TOK_GRADIENT_CY,
     XML_TOK_GRADIENT_START,
     XML_TOK_GRADIENT_END,
-    XML_TOK_GRADIENT_ANGEL,
+    XML_TOK_GRADIENT_ANGLE,
     XML_TOK_GRADIENT_BORDER,
     XML_TOK_TABSTOP_END=XML_TOK_UNKNOWN
 };
@@ -127,7 +127,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTrGradientAttrTokenMap[] =
     { XML_NAMESPACE_DRAW, sXML_cy, XML_TOK_GRADIENT_CY },
     { XML_NAMESPACE_DRAW, sXML_start_transparency, XML_TOK_GRADIENT_START },
     { XML_NAMESPACE_DRAW, sXML_end_transparency, XML_TOK_GRADIENT_END },
-    { XML_NAMESPACE_DRAW, sXML_gradient_angel, XML_TOK_GRADIENT_ANGEL },
+    { XML_NAMESPACE_DRAW, sXML_gradient_angle, XML_TOK_GRADIENT_ANGLE },
     { XML_NAMESPACE_DRAW, sXML_gradient_border, XML_TOK_GRADIENT_BORDER },
     XML_TOKEN_MAP_END
 };
@@ -235,7 +235,7 @@ sal_Bool XMLTransGradientStyle::ImpExportXML( const ::com::sun::star::uno::Refer
             {
                 rUnitConverter.convertNumber( aOut, sal_Int32( aGradient.Angle ) );
                 aStrValue = aOut.makeStringAndClear();
-                AddAttribute( XML_NAMESPACE_DRAW, sXML_gradient_angel, aStrValue );
+                AddAttribute( XML_NAMESPACE_DRAW, sXML_gradient_angle, aStrValue );
             }
 
             // Border
@@ -329,7 +329,7 @@ sal_Bool XMLTransGradientStyle::ImpImportXML( const SvXMLUnitConverter& rUnitCon
                 aGradient.EndColor = (sal_Int32)( aColor.GetColor() );
             }
             break;
-        case XML_TOK_GRADIENT_ANGEL:
+        case XML_TOK_GRADIENT_ANGLE:
             {
                 sal_Int32 nValue;
                 rUnitConverter.convertNumber( nValue, rStrValue, 0, 360 );

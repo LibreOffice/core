@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GradientStyle.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: cl $ $Date: 2000-10-10 11:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ enum SvXMLTokenMapAttrs
     XML_TOK_GRADIENT_ENDCOLOR,
     XML_TOK_GRADIENT_STARTINT,
     XML_TOK_GRADIENT_ENDINT,
-    XML_TOK_GRADIENT_ANGEL,
+    XML_TOK_GRADIENT_ANGLE,
     XML_TOK_GRADIENT_BORDER,
     XML_TOK_TABSTOP_END=XML_TOK_UNKNOWN
 };
@@ -131,7 +131,7 @@ static __FAR_DATA SvXMLTokenMapEntry aGradientAttrTokenMap[] =
     { XML_NAMESPACE_DRAW, sXML_end_color, XML_TOK_GRADIENT_ENDCOLOR },
     { XML_NAMESPACE_DRAW, sXML_start_intensity, XML_TOK_GRADIENT_STARTINT },
     { XML_NAMESPACE_DRAW, sXML_end_intensity, XML_TOK_GRADIENT_ENDINT },
-    { XML_NAMESPACE_DRAW, sXML_gradient_angel, XML_TOK_GRADIENT_ANGEL },
+    { XML_NAMESPACE_DRAW, sXML_gradient_angle, XML_TOK_GRADIENT_ANGLE },
     { XML_NAMESPACE_DRAW, sXML_gradient_border, XML_TOK_GRADIENT_BORDER },
     XML_TOKEN_MAP_END
 };
@@ -247,7 +247,7 @@ sal_Bool XMLGradientStyle::ImpExportXML( const ::com::sun::star::uno::Reference<
             {
                 rUnitConverter.convertNumber( aOut, sal_Int32( aGradient.Angle ) );
                 aStrValue = aOut.makeStringAndClear();
-                AddAttribute( XML_NAMESPACE_DRAW, sXML_gradient_angel, aStrValue );
+                AddAttribute( XML_NAMESPACE_DRAW, sXML_gradient_angle, aStrValue );
             }
 
             // Border
@@ -344,7 +344,7 @@ sal_Bool XMLGradientStyle::ImpImportXML( const SvXMLUnitConverter& rUnitConverte
             rUnitConverter.convertPercent( nTmpValue, rStrValue );
             aGradient.EndIntensity = nTmpValue;
             break;
-        case XML_TOK_GRADIENT_ANGEL:
+        case XML_TOK_GRADIENT_ANGLE:
             {
                 sal_Int32 nValue;
                 rUnitConverter.convertNumber( nValue, rStrValue, 0, 360 );
