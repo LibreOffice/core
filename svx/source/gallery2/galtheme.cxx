@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ka $ $Date: 2001-12-18 15:58:56 $
+ *  last change: $Author: ka $ $Date: 2002-12-04 16:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,11 +557,13 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
                 // Hier muss noch etwas eingebaut werden,
                 // das Files auf den ensprechenden Eintrag matched
                 // Grafiken als Grafik-Objekte in die Gallery aufnehmen
-#ifndef MAC
-                if( pEntry->aURL.GetExtension().CompareIgnoreCaseToAscii( "wav" ) != COMPARE_EQUAL )
-#else
-                if( TRUE )
-#endif
+                if( pEntry->eObjKind == SGA_OBJ_SOUND )
+                {
+                    SgaObjectSound aObjSound( aURL );
+                    if( !InsertObject( aObjSound ) )
+                        pEntry->bDummy = TRUE;
+                }
+                else
                 {
                     aGraphic.Clear();
 
@@ -583,13 +585,6 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
                     }
                     else
                         pEntry->bDummy = TRUE; // Loesch-Flag setzen
-                }
-                // restliche Sachen als Sound-Objekte aufnehmen
-                else
-                {
-                    SgaObjectSound aObjSound( aURL );
-                    if( !InsertObject( aObjSound ) )
-                        pEntry->bDummy = TRUE;
                 }
             }
             else
