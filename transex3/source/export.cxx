@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:38:56 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1784,8 +1784,8 @@ BOOL Export::PrepareTextToMerge( ByteString &rText, USHORT nTyp,
 /*****************************************************************************/
 {
     // position to merge in:
-    USHORT nStart;
-    USHORT nEnd;
+    USHORT nStart = 0;
+    USHORT nEnd = 0;
     ByteString sOldId = pResData->sId;
     ByteString sOldGId = pResData->sGId;
     ByteString sOldTyp = pResData->sResTyp;
