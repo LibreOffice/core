@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-19 15:03:26 $
+ *  last change: $Author: dl $ $Date: 2001-06-25 13:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,9 @@
 #include <svtools/saveopt.hxx>
 #endif
 #include <comphelper/extract.hxx>
+#ifndef _XCEPTION_HXX_
+#include <vos/xception.hxx>
+#endif
 
 #include "eetext.hxx"
 
@@ -310,7 +313,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
 #endif // !SVX_LIGHT
 
 #ifndef SVX_LIGHT
-    try
+    TRY
     {
         uno::Reference< beans::XPropertySet > xProp( SvxGetLinguPropertySet() );
         if ( xProp.is() )
@@ -342,10 +345,11 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
             aAny >>= bHideSpell;
         }
     }
-    catch(...)
+    CATCH_ALL()
     {
         DBG_ERROR("Error in LinguProperties");
     }
+    END_CATCH
 
     mpInternational = new International(eLanguage);
     String aLanguage, aCountry, aEmpty;
