@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reffld.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2002-06-18 14:14:23 $
+ *  last change: $Author: os $ $Date: 2002-08-22 14:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,8 +448,12 @@ void SwGetRefField::UpdateField()
                 // alle Sonderzeichen entfernen (durch Blanks ersetzen):
                 if( sTxt.Len() )
                     for( sal_Unicode* p = sTxt.GetBufferAccess(); *p; ++p )
+                    {
                         if( *p < 0x20 )
                             *p = 0x20;
+                        else if(*p == 0x2011 || *p == 0xad)
+                            *p = '-';
+                    }
             }
         }
         break;
