@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pl,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-06-30 16:02:17 $
+#   last change: $Author: kz $ $Date: 2003-08-27 16:48:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -159,10 +159,6 @@ if (-d "$StartDir") {
     print "check setting files: ";
     if (-d "$StartDir/settings") {
     if (! -e "$StartDir/settings/settings.mk") {
-        print "-";
-        $return++;
-    }
-    if (! -e "$StartDir/settings/dk.mk") {
         print "-";
         $return++;
     }
