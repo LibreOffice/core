@@ -2,9 +2,9 @@
  *
  *  $RCSfile: visiturl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-31 11:07:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ void SwURLStateChanged::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     // angegeben ist. Dann muss der Doc. Name davor gesetzt werden!
 BOOL SwDoc::IsVisitedURL( const String& rURL ) const
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     static long nTmp = 0;
     ++nTmp;
 #endif
