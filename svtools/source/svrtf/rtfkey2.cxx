@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkey2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 17:54:11 $
+ *  last change: $Author: jp $ $Date: 2001-02-16 09:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1059,6 +1059,7 @@ sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ACCNONE,   "\\accnone" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ACCDOT,    "\\accdot" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ACCCOMMA,  "\\acccomma" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_TWOINONE,  "\\twoinone" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_HORZVERT,  "\\horzvert" );
 
 // SWG spezifische Attribute
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_GRFALIGNV, "\\grfalignv" );

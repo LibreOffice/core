@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkeywd.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 17:54:11 $
+ *  last change: $Author: jp $ $Date: 2001-02-16 09:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1070,6 +1070,7 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ACCNONE,   "\\accnone" 
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ACCDOT,    "\\accdot" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ACCCOMMA,  "\\acccomma" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_TWOINONE,  "\\twoinone" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_HORZVERT,  "\\horzvert" );
 
 // SWG spezifische Attribute
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_GRFALIGNV, "\\grfalignv" );
@@ -1137,11 +1138,14 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_SOUTLVL, "\\soutlvl" );
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtfkeywd.hxx,v 1.3 2000-11-16 17:54:11 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtfkeywd.hxx,v 1.4 2001-02-16 09:27:42 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/16 17:54:11  jp
+      new tokens for twoline/underline color
+
       Revision 1.2  2000/11/10 11:23:04  jp
       new Tokens for the CJK-Version
 

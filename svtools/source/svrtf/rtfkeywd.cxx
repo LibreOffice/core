@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkeywd.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 17:54:11 $
+ *  last change: $Author: jp $ $Date: 2001-02-16 09:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1080,6 +1080,7 @@ sRTF_ACCNONE,       RTF_ACCNONE,
 sRTF_ACCDOT,        RTF_ACCDOT,
 sRTF_ACCCOMMA,      RTF_ACCCOMMA,
 sRTF_TWOINONE,      RTF_TWOINONE,
+sRTF_HORZVERT,      RTF_HORZVERT,
 
 // SWG spezifische Attribute
 sRTF_GRFALIGNV,     RTF_GRF_ALIGNV,
