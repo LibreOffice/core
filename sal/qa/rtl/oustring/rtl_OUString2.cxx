@@ -9,10 +9,49 @@
 #include "stringhelper.hxx"
 #include "valueequal.hxx"
 
+inline void printOUString( ::rtl::OUString const & _suStr )
+{
+    rtl::OString aString;
+
+    t_print( "OUString: " );
+    aString = ::rtl::OUStringToOString( _suStr, RTL_TEXTENCODING_ASCII_US );
+    t_print( "'%s'\n", aString.getStr( ) );
+}
+
 namespace rtl_OUString
 {
 
+    class ctors_rtl_uString : public CppUnit::TestFixture
+    {
 
+    public:
+        /// test of OUString(rtl_uString*)
+        void ctors_001()
+            {
+                rtl::OUString *pStr = new rtl::OUString( rtl::OUString::createFromAscii("a String") );
+
+                rtl::OUString aStrToTest(pStr->pData);
+                delete pStr;
+
+                // maybe here should we do something with current memory
+                char* pBuffer = (char*) malloc(2 * 8);
+                memset(pBuffer, 0, 2 * 8);
+                free(pBuffer);
+
+                sal_Bool bResult = aStrToTest.equals(rtl::OUString::createFromAscii("a String"));
+                CPPUNIT_ASSERT_MESSAGE("String must not be empty",  bResult == sal_True);
+            }
+
+        // Change the following lines only, if you add, remove or rename
+        // member functions of the current class,
+        // because these macros are need by auto register mechanism.
+
+        CPPUNIT_TEST_SUITE(ctors_rtl_uString);
+        CPPUNIT_TEST(ctors_001);
+        CPPUNIT_TEST_SUITE_END();
+    };
+
+// -----------------------------------------------------------------------------
 class valueOf : public CppUnit::TestFixture
 {
     void valueOf_float_test_impl(float _nValue)
@@ -21,7 +60,7 @@ class valueOf : public CppUnit::TestFixture
             suValue = rtl::OUString::valueOf( _nValue );
             rtl::OString sValue;
             sValue <<= suValue;
-            t_print("nFloat := %.9f  sValue := %s\n", _nValue, sValue.getStr());
+            t_print(T_VERBOSE, "nFloat := %.9f  sValue := %s\n", _nValue, sValue.getStr());
 
             float nValueATOF = atof( sValue.getStr() );
 
@@ -101,7 +140,7 @@ private:
             suValue = rtl::OUString::valueOf( _nValue );
             rtl::OString sValue;
             sValue <<= suValue;
-            t_print("nDouble := %.20f  sValue := %s\n", _nValue, sValue.getStr());
+            t_print(T_VERBOSE, "nDouble := %.20f  sValue := %s\n", _nValue, sValue.getStr());
 
             double nValueATOF = atof( sValue.getStr() );
 
@@ -659,315 +698,126 @@ public:
 
     CPPUNIT_TEST_SUITE_END();
 }; // class lastIndexOf
-// -----------------------------------------------------------------------------
-// - valueOf (tests)
-// -----------------------------------------------------------------------------
 
-//LLA: this is old test code, maybe we can use it later, so first let it in.
 
-// LLA: old code: class valueOf : public CppUnit::TestFixture
-// LLA: old code: {
-// LLA: old code: public:
-// LLA: old code:     // initialise your test code values here.
-// LLA: old code:     void setUp()
-// LLA: old code:     {
-// LLA: old code:     }
-// LLA: old code:
-// LLA: old code:     void tearDown()
-// LLA: old code:     {
-// LLA: old code:     }
-// LLA: old code:
-// LLA: old code:     template <class T>
-// LLA: old code:     void checkATOFPrecision()
-// LLA: old code:         {
-// LLA: old code:             int nCount = 1;
-// LLA: old code:             sal_Int32 nAdd = 1;
-// LLA: old code:             T nValue = 3;
-// LLA: old code:             rtl::OString sValue("3.");
-// LLA: old code:             while (nCount < 25)
-// LLA: old code:             {
-// LLA: old code:                 sValue += rtl::OString::valueOf( nAdd );
-// LLA: old code:                 T nATOFValue = atof(sValue.getStr());
-// LLA: old code:
-// LLA: old code:                 T nAddValue = pow(10.0, -nCount) * nAdd;
-// LLA: old code:                 nValue = nValue + nAddValue;
-// LLA: old code:
-// LLA: old code:                 T nATOFDelta = fabs(nValue - nATOFValue);
-// LLA: old code:
-// LLA: old code:
-// LLA: old code:                 // rtl::OUString suOUStringValue = rtl::OUString::valueOf( nValue );
-// LLA: old code:                 // double nOUStringValue = suOUStringValue.toDouble();
-// LLA: old code:
-// LLA: old code:                 // double nOUStringDelta = fabs(nATOFValue - nOUStringDelta);
-// LLA: old code:                 // t_print("Value: %.20f   DeltaATOF: %e   DeltaOUStr: %e   String: %s   \n", nValue, nATOFDelta, nOUStringDelta, sValue.getStr());
-// LLA: old code:                 t_print("Value: %.20lf   DeltaATOF: %e   String: %s   \n", nValue, nATOFDelta, sValue.getStr());
-// LLA: old code:
-// LLA: old code:                 // we wan'na use digits between 1 and 9
-// LLA: old code:                 nAdd ++;
-// LLA: old code:                 if (nAdd >= 10) nAdd = 1;
-// LLA: old code:
-// LLA: old code:                 nCount++;
-// LLA: old code:             }
-// LLA: old code:         }
-// LLA: old code:
-// LLA: old code:     // insert your test code here.
-// LLA: old code:     void valueOf_double_001()
-// LLA: old code:     {
-// LLA: old code:         // this is demonstration code
-// LLA: old code:         // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
-// LLA: old code:
-// LLA: old code:         rtl::OString sValue("3.0");
-// LLA: old code:         double nValue = atof(sValue.getStr());
-// LLA: old code:
-// LLA: old code:         // check here, how many precisions are in.
-// LLA: old code:         rtl::OUString suStr;
-// LLA: old code:         suStr = rtl::OUString::valueOf( nValue );
-// LLA: old code:
-// LLA: old code:         // LLA: Due to the fact, that we can't handle values in strings right
-// LLA: old code:         // we have to convert it back to double values
-// LLA: old code:
-// LLA: old code:         rtl::OString sStr;
-// LLA: old code:         sStr <<= suStr;
-// LLA: old code:         double nValue2 = sStr.toDouble();
-// LLA: old code:
-// LLA: old code:         t_print("OUString::valueOf(3.0) = %s\n", sStr.getStr());
-// LLA: old code:         double nDelta = fabs(nValue - nValue2);
-// LLA: old code:         t_print("nDelta = %f\n", nDelta);
-// LLA: old code:         bool bCondition = true;
-// LLA: old code:         CPPUNIT_ASSERT_MESSAGE("valueOf(double(3.0)) failed.", bCondition);
-// LLA: old code:     }
-// LLA: old code:
-// LLA: old code:     void valueOf_double_002();
-// LLA: old code:     // {
-// LLA: old code:     //     CPPUNIT_ASSERT_STUB();
-// LLA: old code:     // }
-// LLA: old code: private:
-// LLA: old code:     void double_equal(double x, double y)
-// LLA: old code:         {
-// LLA: old code:             // due to the fact that this check looks only if both values are equal
-// LLA: old code:             // we only need to look on one value
-// LLA: old code:
-// LLA: old code:             // LLA: 4 stellen hinter dem komma
-// LLA: old code:             sal_Int32 nPrecOfN = -4 + sal_Int32( log10(x) );
-// LLA: old code:
-// LLA: old code:             t_print("prec: %d\n", nPrecOfN);
-// LLA: old code:             double nPrec = pow(10, nPrecOfN) * 1;
-// LLA: old code:
-// LLA: old code:             t_print("prec: %.25f\n", nPrec);
-// LLA: old code:
-// LLA: old code:             double nDelta = fabs( x - y);
-// LLA: old code:             if (nDelta > nPrec)
-// LLA: old code:             {
-// LLA: old code:                 t_print("values are not equal! ndelta:%.20f\n", nDelta);
-// LLA: old code:             }
-// LLA: old code:             else
-// LLA: old code:             {
-// LLA: old code:                 t_print("values are equal.     ndelta:%.20f\n", nDelta);
-// LLA: old code:             }
-// LLA: old code:         }
-// LLA: old code:
-// LLA: old code:     void valueOf_double_004()
-// LLA: old code:     {
-// LLA: old code:         // CPPUNIT_ASSERT_STUB();
-// LLA: old code:         // double n;
-// LLA: old code:         // n = log10(100);
-// LLA: old code:         // t_print("log10(100) %f\n", n);
-// LLA: old code:         // n = log10(10);
-// LLA: old code:         // t_print("log10(10) %f\n", n);
-// LLA: old code:         // n = log10(1);
-// LLA: old code:         // t_print("log10(1) %f\n", n);
-// LLA: old code:         //
-// LLA: old code:         // n = log10(0.1);
-// LLA: old code:         // t_print("log10(0.1) %f\n", n);
-// LLA: old code:         // n = log10(0.01);
-// LLA: old code:         // t_print("log10(0.01) %f\n", n);
-// LLA: old code:         // n = log10(0.001);
-// LLA: old code:         // t_print("log10(0.001) %f\n", n);
-// LLA: old code:
-// LLA: old code:         double_equal(1,1);
-// LLA: old code:         double_equal(3.1415926, 3.1415);
-// LLA: old code:         double_equal(10,10);
-// LLA: old code:         double_equal(100,100);
-// LLA: old code:         double_equal(1000,1000);
-// LLA: old code:         double_equal(10000,10000);
-// LLA: old code:         double_equal(100000,100000);
-// LLA: old code:         double_equal(1000000,1000000);
-// LLA: old code:         double_equal(10000000,10000000);
-// LLA: old code:         double_equal(100000000,100000000);
-// LLA: old code:     }
-// LLA: old code:
-// LLA: old code:     void doubleequal_prec(double _x, double _y, double _prec)
-// LLA: old code:         {
-// LLA: old code:             double nDelta = fabs(_x - _y);
-// LLA: old code:             if (nDelta > _prec)
-// LLA: old code:             {
-// LLA: old code:                 t_print("x and y are not equal, delta:%.19f prec:%.19f\n", nDelta, _prec);
-// LLA: old code:             }
-// LLA: old code:             else
-// LLA: old code:             {
-// LLA: old code:                 t_print("x and y are equal.     delta:%.19f prec:%.19f\n", nDelta, _prec);
-// LLA: old code:             }
-// LLA: old code:         }
-// LLA: old code:
-// LLA: old code:     void valueOf_double(double _nFactor)
-// LLA: old code:     {
-// LLA: old code:         double x = _nFactor *  1.001;
-// LLA: old code:         double y = _nFactor *  1.002;
-// LLA: old code:         doubleequal_prec(x, y, _nFactor * 0.001);
-// LLA: old code:
-// LLA: old code:         x = _nFactor *  1.0001;
-// LLA: old code:         y = _nFactor *  1.0002;
-// LLA: old code:         doubleequal_prec(x, y, 0.0001);
-// LLA: old code:
-// LLA: old code:         x = _nFactor *  1.00001;
-// LLA: old code:         y = _nFactor *  1.00002;
-// LLA: old code:         doubleequal_prec(x, y, 0.00001);
-// LLA: old code:
-// LLA: old code:         x = _nFactor *  1.000001;
-// LLA: old code:         y = _nFactor *  1.000002;
-// LLA: old code:         doubleequal_prec(x, y, 0.000001);
-// LLA: old code:
-// LLA: old code:         x = _nFactor *  1.0000001;
-// LLA: old code:         y = _nFactor *  1.0000002;
-// LLA: old code:         doubleequal_prec(x, y, 0.0000001);
-// LLA: old code:
-// LLA: old code:         x = _nFactor *  1.00000001;
-// LLA: old code:         y = _nFactor *  1.00000002;
-// LLA: old code:         doubleequal_prec(x, y, 0.00000001);
-// LLA: old code:
-// LLA: old code:         x = _nFactor *  1.000000001;
-// LLA: old code:         y = _nFactor *  1.000000002;
-// LLA: old code:         doubleequal_prec(x, y, 0.000000001);
-// LLA: old code:
-// LLA: old code:         x = _nFactor *  1.0000000001;
-// LLA: old code:         y = _nFactor *  1.0000000002;
-// LLA: old code:         doubleequal_prec(x, y, 0.0000000001);
-// LLA: old code:
-// LLA: old code:         x = _nFactor *  1.00000000001;
-// LLA: old code:         y = _nFactor *  1.00000000002;
-// LLA: old code:         doubleequal_prec(x, y, 0.00000000001);
-// LLA: old code:
-// LLA: old code:         x = _nFactor *  1.000000000001;
-// LLA: old code:         y = _nFactor *  1.000000000002;
-// LLA: old code:         doubleequal_prec(x, y, 0.000000000001);
-// LLA: old code:
-// LLA: old code:         x = _nFactor *  1.0000000000001;
-// LLA: old code:         y = _nFactor *  1.0000000000002;
-// LLA: old code:         doubleequal_prec(x, y, 0.0000000000001);
-// LLA: old code:
-// LLA: old code:         x = _nFactor *  1.00000000000001;
-// LLA: old code:         y = _nFactor *  1.00000000000002;
-// LLA: old code:         doubleequal_prec(x, y, 0.00000000000001);
-// LLA: old code:
-// LLA: old code:         x = _nFactor *  1.000000000000001;
-// LLA: old code:         y = _nFactor *  1.000000000000002;
-// LLA: old code:         doubleequal_prec(x, y, 0.000000000000001);
-// LLA: old code:
-// LLA: old code:         // this is out of double precision
-// LLA: old code:         x = _nFactor *  1.0000000000000001;
-// LLA: old code:         y = _nFactor *  1.0000000000000002;
-// LLA: old code:         doubleequal_prec(x, y, 0.0000000000000001);
-// LLA: old code:
-// LLA: old code:         x = _nFactor *  1.00000000000000001;
-// LLA: old code:         y = _nFactor *  1.00000000000000002;
-// LLA: old code:         doubleequal_prec(x, y, 0.00000000000000001);
-// LLA: old code:
-// LLA: old code:         x = _nFactor *  1.000000000000000001;
-// LLA: old code:         y = _nFactor *  1.000000000000000002;
-// LLA: old code:         doubleequal_prec(x, y, 0.000000000000000001);
-// LLA: old code:
-// LLA: old code:         t_print("---------- \n");
-// LLA: old code:         // CPPUNIT_ASSERT_STUB();
-// LLA: old code:     }
-// LLA: old code:
-// LLA: old code:     void valueOf_double_003()
-// LLA: old code:         {
-// LLA: old code:
-// LLA: old code:             // valueOf_double(1);
-// LLA: old code:             // valueOf_double(10);
-// LLA: old code:             // valueOf_double(100);
-// LLA: old code:             // valueOf_double(1000);
-// LLA: old code:             // valueOf_double(10000);
-// LLA: old code:             // valueOf_double(100000);
-// LLA: old code:             // valueOf_double(1000000);
-// LLA: old code:             // valueOf_double(10000000);
-// LLA: old code:             // valueOf_double(100000000);
-// LLA: old code:             double n = log10(1);
-// LLA: old code:             t_print("log10 (1) = %f \n", n);
-// LLA: old code:             n = log10(10);
-// LLA: old code:             t_print("log10 (10) = %f \n", n);
-// LLA: old code:             n = log10(100);
-// LLA: old code:             t_print("log10 (100) = %f \n", n);
-// LLA: old code:             n = log10(1000);
-// LLA: old code:             t_print("log10 (1000) = %f \n", n);
-// LLA: old code:             n = log10(30000);
-// LLA: old code:             t_print("log10 (30000) = %f \n", n);
-// LLA: old code:
-// LLA: old code:         }
-// LLA: old code:
-// LLA: old code:     // void valueOf_double_004()
-// LLA: old code:     // {
-// LLA: old code:     //     CPPUNIT_ASSERT_STUB();
-// LLA: old code:     // }
-// LLA: old code:
-// LLA: old code:     void valueOf_double_005()
-// LLA: old code:     {
-// LLA: old code:         CPPUNIT_ASSERT_STUB();
-// LLA: old code:     }
-// LLA: old code:
-// LLA: old code:     void valueOf_double_006()
-// LLA: old code:     {
-// LLA: old code:         CPPUNIT_ASSERT_STUB();
-// LLA: old code:     }
-// LLA: old code:
-// LLA: old code:     void valueOf_double_007()
-// LLA: old code:     {
-// LLA: old code:         CPPUNIT_ASSERT_STUB();
-// LLA: old code:     }
-// LLA: old code:
-// LLA: old code:     // Change the following lines only, if you add, remove or rename
-// LLA: old code:     // member functions of the current class,
-// LLA: old code:     // because these macros are need by auto register mechanism.
-// LLA: old code:
-// LLA: old code:     CPPUNIT_TEST_SUITE(valueOf);
-// LLA: old code: //    CPPUNIT_TEST(checkATOFPrecision<float>);
-// LLA: old code: //    CPPUNIT_TEST(checkATOFPrecision<double>);
-// LLA: old code: //    CPPUNIT_TEST(checkATOFPrecision<long double>);
-// LLA: old code: //    CPPUNIT_TEST(valueOf_double_001);
-// LLA: old code: //    CPPUNIT_TEST(valueOf_double_002);
-// LLA: old code: // LLA:    CPPUNIT_TEST(valueOf_double_003);
-// LLA: old code:     CPPUNIT_TEST(valueOf_double_004);
-// LLA: old code:     CPPUNIT_TEST(valueOf_double_005);
-// LLA: old code:     CPPUNIT_TEST(valueOf_double_006);
-// LLA: old code:     CPPUNIT_TEST(valueOf_double_007);
-// LLA: old code:     CPPUNIT_TEST_SUITE_END();
-// LLA: old code: }; // class valueOf
+// -----------------------------------------------------------------------------
+// - getToken (tests)
+// -----------------------------------------------------------------------------
+class getToken : public CppUnit::TestFixture
+{
+
+public:
+
+    // initialise your test code values here.
+    void setUp()
+        {
+        }
+
+    void tearDown()
+        {
+        }
+
+    // -----------------------------------------------------------------------------
+
+    void getToken_000()
+        {
+            rtl::OUString suTokenStr;
+
+            sal_Int32 nIndex = 0;
+            do
+            {
+                rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
+            }
+            while ( nIndex >= 0 );
+            t_print("Index %d\n", nIndex);
+            // should not GPF
+        }
+
+    void getToken_001()
+        {
+            rtl::OUString suTokenStr = rtl::OUString::createFromAscii("a;b");
+
+            sal_Int32 nIndex = 0;
+
+            rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", suToken.equals(rtl::OUString::createFromAscii("a")) == sal_True);
+
+            /* rtl::OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", suToken.equals(rtl::OUString::createFromAscii("b")) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
+        }
+
+    void getToken_002()
+        {
+            rtl::OUString suTokenStr = rtl::OUString::createFromAscii("a;b.c");
+
+            sal_Int32 nIndex = 0;
+
+            rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", suToken.equals(rtl::OUString::createFromAscii("a")) == sal_True);
+
+            /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", suToken.equals(rtl::OUString::createFromAscii("b")) == sal_True);
+
+            /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'c'", suToken.equals(rtl::OUString::createFromAscii("c")) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
+        }
+
+    void getToken_003()
+        {
+            rtl::OUString suTokenStr = rtl::OUString::createFromAscii("a;;b");
+
+            sal_Int32 nIndex = 0;
+
+            rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", suToken.equals(rtl::OUString::createFromAscii("a")) == sal_True);
+
+            /* rtl::OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
+            CPPUNIT_ASSERT_MESSAGE("Token should be empty", suToken.getLength() == 0);
+
+            /* rtl::OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", suToken.equals(rtl::OUString::createFromAscii("b")) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
+        }
+
+    void getToken_004()
+        {
+            rtl::OUString suTokenStr = rtl::OUString::createFromAscii("longer.then.ever.");
+
+            sal_Int32 nIndex = 0;
+
+            rtl::OUString suToken = suTokenStr.getToken( 0, '.', nIndex );
+            CPPUNIT_ASSERT_MESSAGE("Token should be 'longer'", suToken.equals(rtl::OUString::createFromAscii("longer")) == sal_True);
+
+            /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
+            CPPUNIT_ASSERT_MESSAGE("Token should be 'then'", suToken.equals(rtl::OUString::createFromAscii("then")) == sal_True);
+
+            /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
+            CPPUNIT_ASSERT_MESSAGE("Token should be 'ever'", suToken.equals(rtl::OUString::createFromAscii("ever")) == sal_True);
+
+            /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
+            CPPUNIT_ASSERT_MESSAGE("Token should be empty", suToken.getLength() == 0);
+
+            CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
+        }
+
+
+    CPPUNIT_TEST_SUITE(getToken);
+    CPPUNIT_TEST(getToken_000);
+    CPPUNIT_TEST(getToken_001);
+    CPPUNIT_TEST(getToken_002);
+    CPPUNIT_TEST(getToken_003);
+    CPPUNIT_TEST(getToken_004);
+    CPPUNIT_TEST_SUITE_END();
+}; // class getToken
 
 // -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::valueOf, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::toDouble, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::lastIndexOf, "rtl_OUString");
 
-
-// LLA: old code:     // insert your test code here.
-// LLA: old code:     void valueOf::valueOf_double_002()
-// LLA: old code:     {
-// LLA: old code:         // this is demonstration code
-// LLA: old code:         // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
-// LLA: old code:
-// LLA: old code:         rtl::OString sValue("3.0");
-// LLA: old code:         double nValue = atof(sValue.getStr());
-// LLA: old code:
-// LLA: old code:         // check here, how many precisions are in.
-// LLA: old code:         rtl::OUString suStr;
-// LLA: old code:         suStr = rtl::OUString::valueOf( nValue );
-// LLA: old code:
-// LLA: old code:         rtl::OString sStr;
-// LLA: old code:         sStr <<= suStr;
-// LLA: old code:         t_print("valueOf(3.0) = %s\n", sStr.getStr());
-// LLA: old code:         bool bCondition = false;
-// LLA: old code:         CPPUNIT_ASSERT_MESSAGE("valueOf(double(3.0)) failed.", bCondition);
-// LLA: old code:     }
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::getToken, "rtl_OUString");
 
 } // namespace rtl_OUString
 
