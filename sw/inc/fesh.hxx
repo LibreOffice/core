@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:02:55 $
+ *  last change: $Author: rt $ $Date: 2004-09-24 16:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,6 +703,7 @@ public:
 
     USHORT GetRowsToRepeat() const;
     void SetRowsToRepeat( USHORT nNumOfRows );
+    USHORT GetVirtPageNum( const BOOL bCalcFrm = TRUE );
     //returns the number of table rows currently selected
     //if the selection start at the top of the table
     USHORT    GetRowSelectionFromTop() const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:35:46 $
+ *  last change: $Author: rt $ $Date: 2004-09-24 16:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,6 +464,14 @@ USHORT SwFEShell::GetPhyPageNum()
     SwFrm *pFrm = GetCurrFrm();
     if ( pFrm )
         return pFrm->GetPhyPageNum();
+    return 0;
+}
+
+USHORT SwFEShell::GetVirtPageNum( const BOOL bCalcFrm )
+{
+    SwFrm *pFrm = GetCurrFrm( bCalcFrm );
+    if ( pFrm )
+        return pFrm->GetVirtPageNum();
     return 0;
 }
 
