@@ -45,23 +45,23 @@
         osl_sendToSocket;
 
 #    2) in StreamSocket class:
-        osl_readSocket;
-        osl_writeSocket;
-        osl_receiveSocket;
-        osl_sendSocket;
+#        osl_readSocket;
+#        osl_writeSocket;
+#        osl_receiveSocket;
+#        osl_sendSocket;
 
 #    3) in Socket class:
         osl_isExceptionPending;
         osl_shutdownSocket;
 
 #    4) in Pipe class:
-        osl_acceptPipe;
+#        osl_acceptPipe;
 
 #    5) in StreamPipe class:
-        osl_readPipe;
-        osl_writePipe;
-        osl_receivePipe;
-        osl_sendPipe;
+#        osl_readPipe;
+#        osl_writePipe;
+#        osl_receivePipe;
+#        osl_sendPipe;
 
 #C. unreachable functions
 #    (*)in .map file but does not appear in.hxx header file thus unreachable,
