@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-02 07:23:38 $
+ *  last change: $Author: as $ $Date: 2001-10-09 09:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,12 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PropertyValue_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
+#include <com/sun/star/util/XFlushable.hpp>
 #endif
 
 #ifndef _STDLIB_H
@@ -156,6 +162,7 @@
 #include <vcl/toolbox.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include "viewfrm.hxx"
 #include "sfxhelp.hxx"
@@ -295,6 +302,7 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
     SvtInetOptions aInetOptions;
     SvtSecurityOptions  aSecurityOptions;
     SvtMiscOptions aMiscOptions;
+
     while ( *pRanges )
     {
         for(USHORT nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
@@ -470,10 +478,46 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                 {
                     if ( IsPlugin() )
                     {
-                        // currently no settings available, use a default
-                        if( rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_INET_PROXY_TYPE ),
-                                (UINT16) 1 )))
+                        UINT16 nType = 1; // default is "use browser settings"!
+                        String sName    ; // set it only for type=2! otherwise=defaults!
+                        INT32  nPort = 0;
+                        // Use propertyset of remote(!) login dialog service to get right informations ....
+                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xRemoteProxyConfig( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_OUSTRING("com.sun.star.comp.framework.LoginDialog")), ::com::sun::star::uno::UNO_QUERY );
+                        if( xRemoteProxyConfig.is() == sal_True )
+                        {
+                            ::com::sun::star::uno::Any aPropValue = xRemoteProxyConfig->getPropertyValue( DEFINE_CONST_OUSTRING("UseProxy") );
+                            ::rtl::OUString sProxyType;
+                            aPropValue >>= sProxyType;
+                            if( sProxyType.compareToAscii("none")==0 )
+                                nType = 0;
+                            else
+                            if( sProxyType.compareToAscii("browser")==0 )
+                                nType = 1;
+                            else
+                            if( sProxyType.compareToAscii("custom")==0 )
+                            {
+                                nType = 2;
+                                aPropValue = xRemoteProxyConfig->getPropertyValue( DEFINE_CONST_OUSTRING("SecurityProxy") );
+                                ::rtl::OUString sProxyValues;
+                                aPropValue >>= sProxyValues;
+
+                                if( sProxyValues.indexOf( (sal_Unicode)':' ) > 0 )
+                                {
+                                    sal_Int32 nToken = 0;
+                                    sName = sProxyValues.getToken( 0, (sal_Unicode)':', nToken );
+                                    if( nToken != -1 )
+                                        nPort = sProxyValues.getToken( 0, (sal_Unicode)':', nToken ).toInt32();
+                                }
+                            }
+                        }
+                        if(
+                            ( rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_INET_PROXY_TYPE      ), nType )))    &&
+                            ( rSet.Put( SfxStringItem ( rPool.GetWhich( SID_INET_HTTP_PROXY_NAME ), sName )))    &&
+                            ( rSet.Put( SfxInt32Item  ( rPool.GetWhich( SID_INET_HTTP_PROXY_PORT ), nPort )))
+                          )
+                        {
                             bRet = TRUE;
+                        }
                     }
                     else if( rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_INET_PROXY_TYPE ),
                                 (UINT16)aInetOptions.GetProxyType() )))
@@ -484,9 +528,11 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                 {
                     if ( IsPlugin() )
                     {
-                        // currently no settings available, use a default
-                        if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_HTTP_PROXY_NAME ), String() ) ) )
-                            bRet = TRUE;
+                        // This value is neccessary for SID_INET_PROXY_TYPE=2 only!
+                        // So we do nothing here! No defaults (otherwise we overwrite real values!)
+                        // no right values (they are superflous then) ...
+                        // We set it for SID_INET_PROXY_TYPE queries only!!!
+                        bRet = TRUE;
                     }
                     else if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_HTTP_PROXY_NAME ),
                             aInetOptions.GetProxyHttpName() )))
@@ -496,9 +542,11 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_INET_HTTP_PROXY_PORT :
                     if ( IsPlugin() )
                     {
-                        // currently no settings available, use a default
-                        if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_HTTP_PROXY_PORT ), String() ) ) )
-                            bRet = TRUE;
+                        // This value is neccessary for SID_INET_PROXY_TYPE=2 only!
+                        // So we do nothing here! No defaults (otherwise we overwrite real values!)
+                        // no right values (they are superflous then) ...
+                        // We set it for SID_INET_PROXY_TYPE queries only!!!
+                        bRet = TRUE;
                     }
                     else if ( rSet.Put( SfxInt32Item( rPool.GetWhich(SID_INET_HTTP_PROXY_PORT ),
                             aInetOptions.GetProxyHttpPort() )))
@@ -829,7 +877,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 
     if ( IsPlugin() )
     {
-        sal_Int16 nMode = 0;
+        sal_Int32 nMode = 0;
         String aServerName;
         String aPortNumber;
         if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_PROXY_TYPE), TRUE, &pItem))
@@ -855,51 +903,29 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
                 nMode = 0;
         }
 
-        // assemble URL
-        String aURL = String::CreateFromAscii("vnd.sun.star.cmd.plugin:ProxySettings?mode=");
-
-        // add mode ( 0 = no proxy, 1 = browser settings, 2 = manual settings )
-        aURL.Append( String::CreateFromInt32( nMode ) );
-
-        // for manual settings: add server and port
-        if ( nMode == 2 )
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xRemoteProxyConfig( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_OUSTRING("com.sun.star.comp.framework.LoginDialog")), ::com::sun::star::uno::UNO_QUERY );
+        if( xRemoteProxyConfig.is() == sal_True )
         {
-            aURL.AppendAscii("&server=");
-            aURL += aServerName;
-            aURL.AppendAscii("&port=");
-            aURL += aPortNumber;
-        }
+            ::com::sun::star::uno::Any aPropValue;
+            if( nMode==0 )  aPropValue <<= DEFINE_CONST_OUSTRING("none");
+            else
+            if( nMode==1 )  aPropValue <<= DEFINE_CONST_OUSTRING("browser");
+            else
+            if( nMode==2 )  aPropValue <<= DEFINE_CONST_OUSTRING("custom");
 
-        // get the desktop object ...
-        Reference < ::com::sun::star::frame::XFramesSupplier > xDesktop =
-                Reference < ::com::sun::star::frame::XFramesSupplier >( ::comphelper::getProcessServiceFactory()->createInstance(
-                DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-
-        // ... and its active task
-        // dispatching must be done through the task, because only the task ( = PluginFrame ) has a connection to the plugin
-        Reference < ::com::sun::star::frame::XFrame > xFrame( xDesktop->getActiveFrame() );
-        if ( xFrame.is() )
-        {
-            // parse URL
-            URL aTargetURL;
-            aTargetURL.Complete = aURL;
-            Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
-            xTrans->parseStrict( aTargetURL );
-
-            // get provider interface from the frame
-            Reference < ::com::sun::star::frame::XDispatchProvider > xProv( xFrame, UNO_QUERY );
-            Reference < ::com::sun::star::frame::XDispatch > xDisp;
-            if ( xProv.is() )
-                xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-            if ( xDisp.is() )
+            xRemoteProxyConfig->setPropertyValue( DEFINE_CONST_OUSTRING("UseProxy"), aPropValue );
+            if( nMode == 2 )
             {
-                Sequence<PropertyValue> aArgs(1);
-                PropertyValue* pArg = aArgs.getArray();
-                pArg[0].Name = rtl::OUString::createFromAscii("Referer");
-                pArg[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
-                xDisp->dispatch( aTargetURL, aArgs );
+                ::rtl::OUStringBuffer sProxyValue;
+                sProxyValue.append     ( aServerName );
+                sProxyValue.appendAscii( ":"         );
+                sProxyValue.append     ( aPortNumber );
+                aPropValue <<= sProxyValue.makeStringAndClear();
+                xRemoteProxyConfig->setPropertyValue( DEFINE_CONST_OUSTRING("SecurityProxy"), aPropValue );
             }
+            ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushable > xFlush( xRemoteProxyConfig, ::com::sun::star::uno::UNO_QUERY );
+            if( xFlush.is() == sal_True )
+                xFlush->flush();
         }
     }
     else
