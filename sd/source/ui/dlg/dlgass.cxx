@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-24 12:43:15 $
+ *  last change: $Author: rt $ $Date: 2005-03-31 13:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,15 +174,15 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
 #include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
+#ifndef _COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
 #include <com/sun/star/ui/XImageManager.hpp>
 #endif
 
