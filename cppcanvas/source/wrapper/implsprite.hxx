@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implsprite.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 17:00:29 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@
 #include <cppcanvas/sprite.hxx>
 #endif
 
+#include <implspritecanvas.hxx>
+
 
 namespace cppcanvas
 {
@@ -91,17 +93,20 @@ namespace cppcanvas
             ImplSprite( const ::com::sun::star::uno::Reference<
                                   ::drafts::com::sun::star::rendering::XSpriteCanvas >&     rParentCanvas,
                         const ::com::sun::star::uno::Reference<
-                                  ::drafts::com::sun::star::rendering::XSprite >&       rSprite );
+                                  ::drafts::com::sun::star::rendering::XSprite >&       rSprite,
+                        const ImplSpriteCanvas::TransformationArbiterSharedPtr&         rTransformArbiter );
             ImplSprite( const ::com::sun::star::uno::Reference<
                                   ::drafts::com::sun::star::rendering::XSpriteCanvas >&     rParentCanvas,
                         const ::com::sun::star::uno::Reference<
-                                  ::drafts::com::sun::star::rendering::XAnimatedSprite >& rSprite );
+                                  ::drafts::com::sun::star::rendering::XAnimatedSprite >& rSprite,
+                        const ImplSpriteCanvas::TransformationArbiterSharedPtr&         rTransformArbiter );
             virtual ~ImplSprite();
 
             virtual void setAlpha( const double& rAlpha );
             virtual void movePixel( const ::basegfx::B2DPoint& rNewPos );
             virtual void move( const ::basegfx::B2DPoint& rNewPos );
             virtual void transform( const ::basegfx::B2DHomMatrix& rMatrix );
+            virtual void setClipPixel( const ::basegfx::B2DPolyPolygon& rClipPoly );
             virtual void setClip( const ::basegfx::B2DPolyPolygon& rClipPoly );
 
             virtual void show();
@@ -119,9 +124,10 @@ namespace cppcanvas
             ImplSprite(const ImplSprite&);
             ImplSprite& operator=( const ImplSprite& );
 
-            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XGraphicDevice >   mxGraphicDevice;
+            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XGraphicDevice >         mxGraphicDevice;
             const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XSprite >          mxSprite;
             const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XAnimatedSprite >  mxAnimatedSprite;
+            ImplSpriteCanvas::TransformationArbiterSharedPtr                                                mpTransformArbiter;
         };
     }
 }
