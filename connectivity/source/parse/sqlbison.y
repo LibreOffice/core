@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.7 2000-11-09 10:29:49 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.8 2000-11-29 10:41:38 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2000-11-09 10:29:49 $ $Revision: 1.7 $
+//	$Author: oj $ $Date: 2000-11-29 10:41:38 $ $Revision: 1.8 $
 //
 // Description:
 //
@@ -3294,8 +3294,9 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
 			// get the field type
 			m_xField->getPropertyValue(FIELD_STR_TYPE) >>= nType;
 		}
-		catch ( ... )
+		catch(Exception&)
 		{
+			OSL_ENSHURE(0,"OSQLParser::predicateTree throws an Exception!");
 		}
 
 		if (m_nFormatKey && m_xFormatter.is())
@@ -3629,8 +3630,9 @@ sal_uInt32 OSQLParser::RuleID(OSQLParseNode::Rule eRule)
 				return aValue;
 			}
 		}
-		catch(...)
+		catch(Exception&)
 		{
+			OSL_ENSHURE(0,"OSQLParser::stringToDouble throws an Exception!");
 		}
 	}
 	return aValue;
@@ -3667,8 +3669,9 @@ sal_Int16 OSQLParser::buildNode_STR_NUM(OSQLParseNode*& pAppend,OSQLParseNode*& 
 										m_nFormatKey, rtl::OUString::createFromAscii("Decimals"));
 			aValue >>= nScale;
 		}
-		catch ( ... )
+		catch(Exception&)
 		{
+			OSL_ENSHURE(0,"OSQLParser::buildNode_STR_NUM throws an Exception!");
 		}
 
 		pComp->append(new OSQLInternalNode(stringToDouble(pLiteral->getTokenValue(),nScale),SQL_NODE_STRING));
@@ -3761,7 +3764,7 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode*& pAppend, OSQLParseNode*& pLi
 			aValue >>= nType;
 		}
 	}
-	catch ( ... )
+	catch(Exception&)
 	{
 		return nErg;
 	}
@@ -3795,8 +3798,9 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode*& pAppend, OSQLParseNode*& pLi
 															m_nFormatKey, rtl::OUString::createFromAscii("Decimals"));
 								aValue >>= nScale;
 							}
-							catch ( ... )
+							catch(Exception&)
 							{
+								OSL_ENSHURE(0,"OSQLParser::SQL_NODE_APPROXNUM throws an Exception!");
 							}
 
 							pAppend->append(new OSQLInternalNode(stringToDouble(pLiteral->getTokenValue(),nScale),SQL_NODE_STRING));
@@ -3875,7 +3879,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 				aValue >>= nType;
 			}
 		}
-		catch ( ... )
+		catch(Exception&)
 		{
 			return nErg;
 		}
@@ -3916,7 +3920,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 									double fValue = m_xFormatter->convertStringToNumber(m_nFormatKey, pLiteral->getTokenValue().getStr());
 									nErg = buildNode_Date(fValue, nType, pAppend,pLiteral,pCompare);
 								}
-								catch ( ... )
+								catch(Exception&)
 								{
 									try
 									{
@@ -3936,7 +3940,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 										}
 
 									}
-									catch ( ... )
+									catch(Exception&)
 									{
 										nErg = -1;
 										m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_DATE_COMPARE);
@@ -3965,7 +3969,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 									double fValue = m_xFormatter->convertStringToNumber(m_nFormatKey, pLiteral->getTokenValue().getStr());
 									nErg = buildNode_Date(fValue, nType, pAppend,pLiteral,pCompare);
 								}
-								catch ( ... )
+								catch(Exception&)
 								{
 									try
 									{
@@ -3984,7 +3988,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 											m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_DATE_COMPARE);
 										}
 									}
-									catch ( ... )
+									catch(Exception&)
 									{
 										nErg = -1;
 										m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_DATE_COMPARE);
