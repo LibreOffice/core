@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-04 09:14:57 $
+ *  last change: $Author: ab $ $Date: 2001-07-02 12:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,14 +154,12 @@ struct LibraryImport
 {
     friend class LibrariesElement;
 
-    LibDescriptor*& mrpLibs;
-    sal_Int32& mrnLibCount;
+    LibDescriptorArray* mpLibArray;
 
 public:
-    inline LibraryImport( LibDescriptor*& rpLibs, sal_Int32& rnLibCount )
+    inline LibraryImport( LibDescriptorArray* pLibArray )
         SAL_THROW( () )
-        : mrpLibs( rpLibs )
-        , mrnLibCount( rnLibCount ) {}
+        : mpLibArray( pLibArray ) {}
     virtual ~LibraryImport()
         SAL_THROW( () );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_import.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-04 09:14:57 $
+ *  last change: $Author: ab $ $Date: 2001-07-02 12:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,13 +265,13 @@ Reference< xml::XImportContext > LibrariesElement::createChildContext(
 void LibrariesElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    sal_Int32 nLibCount = _pImport->mrnLibCount = (sal_Int32)mLibDescriptors.size();
-    _pImport->mrpLibs = new LibDescriptor[ nLibCount ];
+    sal_Int32 nLibCount = _pImport->mpLibArray->mnLibCount = (sal_Int32)mLibDescriptors.size();
+    _pImport->mpLibArray->mpLibs = new LibDescriptor[ nLibCount ];
 
     for( sal_Int32 i = 0 ; i < nLibCount ; i++ )
     {
         const LibDescriptor& rLib = mLibDescriptors[i];
-        _pImport->mrpLibs[i] = rLib;
+        _pImport->mpLibArray->mpLibs[i] = rLib;
     }
 }
 
@@ -323,8 +323,8 @@ void LibraryElement::endElement()
 
 //##################################################################################################
 
-SAL_DLLEXPORT Reference< xml::sax::XDocumentHandler > SAL_CALL importLibraryContainer(
-    LibDescriptor*& rpLibs, sal_Int32& rnLibCount )
+SAL_DLLEXPORT Reference< ::com::sun::star::xml::sax::XDocumentHandler >
+SAL_CALL importLibraryContainer( LibDescriptorArray* pLibArray )
         SAL_THROW( (Exception) )
 {
     NameSpaceUid arNamespaceUids[] = {
@@ -335,8 +335,23 @@ SAL_DLLEXPORT Reference< xml::sax::XDocumentHandler > SAL_CALL importLibraryCont
     return ::xmlscript::createDocumentHandler(
         arNamespaceUids, sizeof(arNamespaceUids) / sizeof(NameSpaceUid),
         -1 /* unknown namespace id */,
-        static_cast< xml::XImporter * >( new LibraryImport( rpLibs, rnLibCount ) ) );
+        static_cast< xml::XImporter * >( new LibraryImport( pLibArray ) ) );
 }
+
+
+//##################################################################################################
+
+LibDescriptorArray::LibDescriptorArray( sal_Int32 nLibCount )
+{
+    mnLibCount = nLibCount;
+    mpLibs = new LibDescriptor[ mnLibCount ];
+}
+
+LibDescriptorArray::~LibDescriptorArray()
+{
+    delete[] mpLibs;
+}
+
 
 
 };

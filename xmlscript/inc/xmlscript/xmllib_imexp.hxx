@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_imexp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:07 $
+ *  last change: $Author: ab $ $Date: 2001-07-02 12:00:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,15 +95,26 @@ struct LibDescriptor
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aElementNames;
 };
 
+struct LibDescriptorArray
+{
+    LibDescriptor* mpLibs;
+    sal_Int32 mnLibCount;
+
+    LibDescriptorArray( void ) { mpLibs = NULL; }
+    LibDescriptorArray( sal_Int32 nLibCount );
+
+    ~LibDescriptorArray();
+
+};
+
 SAL_DLLEXPORT void
 SAL_CALL exportLibraryContainer(
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
-    LibDescriptor* pLibs, sal_Int32 nLibCount )
+    const LibDescriptorArray* pLibArray )
         SAL_THROW( (::com::sun::star::uno::Exception) );
 
 SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
-SAL_CALL importLibraryContainer(
-    LibDescriptor*& rpLibs, sal_Int32& rnLibCount )
+SAL_CALL importLibraryContainer( LibDescriptorArray* pLibArray )
         SAL_THROW( (::com::sun::star::uno::Exception) );
 
 //==================================================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_export.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-22 14:05:53 $
+ *  last change: $Author: ab $ $Date: 2001-07-02 12:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ namespace xmlscript
 SAL_DLLEXPORT void
 SAL_CALL exportLibraryContainer(
     Reference< xml::sax::XExtendedDocumentHandler > const & xOut,
-    LibDescriptor* pLibs, sal_Int32 nLibCount )
+    const LibDescriptorArray* pLibArray )
         SAL_THROW( (Exception) )
 {
     xOut->startDocument();
@@ -103,9 +103,10 @@ SAL_CALL exportLibraryContainer(
 
     OUString aTrueStr ( RTL_CONSTASCII_USTRINGPARAM("true") );
     OUString aFalseStr( RTL_CONSTASCII_USTRINGPARAM("false") );
+    int nLibCount = pLibArray->mnLibCount;
     for( sal_Int32 i = 0 ; i < nLibCount ; i++ )
     {
-        LibDescriptor& rLib = pLibs[i];
+        LibDescriptor& rLib = pLibArray->mpLibs[i];
 
         OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":library") );
         XMLElement* pLibElement = new XMLElement( aLibraryName );
