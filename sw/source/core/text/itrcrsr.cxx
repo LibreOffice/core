@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:14:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1444,7 +1444,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             {
                 if( pPor->IsFtnNumPortion())
                     ((SwCrsrMoveState*)pCMS)->bFtnNoInfo = sal_True;
-                else if (pPor->IsNumberPortion()) // #i23726#
+                else if (pPor->InNumberGrp() ) // #i23726#
                 {
                     ((SwCrsrMoveState*)pCMS)->nInNumPostionOffset = nX;
                     ((SwCrsrMoveState*)pCMS)->bInNumPortion = sal_True;
