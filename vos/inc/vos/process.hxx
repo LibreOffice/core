@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-05-10 10:51:00 $
+ *  last change: $Author: obr $ $Date: 2001-06-08 13:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,21 +258,10 @@ public:
     */
     TProcessError SAL_CALL join();
 
-    /** provide a socket as ioresource for the child process.
-        The child has to call OStartUpInfo::acceptIOResources() if any
-        ioresources are provided by calling this method, otherwise execute()
-        will not return.
-        This method should only be called before execute().
-        @see OStartupInfo::acceptIOResource
-    */
-    void SAL_CALL provideIOResource(oslSocket Socket, TDescriptorFlags Flags = TFlags_Wait);
-
 protected:
     const ::rtl::OUString m_strImageName;
     const ::rtl::OUString m_strDirectory;
 
-    oslIOResource*     m_IoResources;
-    sal_Int32          m_NoResources;
     oslProcess         m_Process;
 };
 
@@ -305,16 +294,6 @@ public:
     */
     ~OStartupInfo();
 
-    /** get one ioresource from the parent process.
-        The recieved socket has been opened by the parent process and will be
-        duplicated for the calling process, wich has full read-write access to
-        this socket.
-        @param rSocket [out] returns the recieved socket.
-        @return True, if the parent process provides resources for the caller, otherwise no return.
-        @see OProcess::provideIOResource
-    */
-    sal_Bool SAL_CALL acceptIOResource(OSocket& rSocket);
-
     /** @return the number of command line arguments.
      */
     sal_uInt32 SAL_CALL getCommandArgCount();
@@ -335,10 +314,6 @@ public:
         @return eNONE, if the variable exist in the enviroment, otherwise False.
     */
     TStartupError SAL_CALL getEnvironment(const ::rtl::OUString& strVar, ::rtl::OUString& strValue);
-
-protected:
-    oslIOResource* m_IoResources;
-    sal_Int32              m_NoResources;
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 15:25:50 $
+ *  last change: $Author: obr $ $Date: 2001-06-08 13:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,8 +259,6 @@ VOS_IMPLEMENT_CLASSINFO(
 OProcess::OProcess( ) :
     m_strImageName( ),
     m_strDirectory(),
-    m_IoResources(0),
-    m_NoResources(0),
     m_Process(0)
 {
 }
@@ -269,8 +267,6 @@ OProcess::OProcess( ) :
 OProcess::OProcess( const rtl::OUString& strImageName ) :
     m_strImageName( strImageName ),
     m_strDirectory(),
-    m_IoResources(0),
-    m_NoResources(0),
     m_Process(0)
 {
     // empty
@@ -280,8 +276,6 @@ OProcess::OProcess( const rtl::OUString& strImageName ) :
 OProcess::OProcess(const rtl::OUString& strImageName, const rtl::OUString& strWorkingDirectory) :
     m_strImageName( strImageName ),
     m_strDirectory( strWorkingDirectory ),
-    m_IoResources(0),
-    m_NoResources(0),
     m_Process(0)
 {
     // empty
@@ -291,8 +285,6 @@ OProcess::OProcess(const rtl::OUString& strImageName, const rtl::OUString& strWo
 OProcess::~OProcess()
 {
     osl_freeProcessHandle(m_Process);
-
-    delete m_IoResources;
 }
 
 OProcess* OProcess::getProcess(TProcessIdentifier Identifier)
@@ -316,9 +308,6 @@ OProcess::TProcessError OProcess::execute(TProcessOption Options,
                                           const OArgumentList& aArgumentList,
                                           const OEnvironment&  aEnvironment )
 {
-    if (m_IoResources)
-        m_IoResources[m_NoResources].Type = osl_Process_TypeNone;
-
     return ((TProcessError)osl_executeProcess(m_strImageName.pData,
                                               aArgumentList.m_aVec,
                                               aArgumentList.n_Args,
@@ -327,7 +316,6 @@ OProcess::TProcessError OProcess::execute(TProcessOption Options,
                                               m_strDirectory.pData,
                                               aEnvironment.m_aVec,
                                               aEnvironment.n_Vars,
-                                              m_IoResources,
                                               &m_Process));
 }
 
@@ -337,9 +325,6 @@ OProcess::TProcessError OProcess::execute( TProcessOption Options,
                                            const OArgumentList& aArgumentList,
                                            const OEnvironment&  aEnvironment )
 {
-    if (m_IoResources)
-        m_IoResources[m_NoResources].Type = osl_Process_TypeNone;
-
     return ((TProcessError)osl_executeProcess(m_strImageName.pData,
                                               aArgumentList.m_aVec,
                                               aArgumentList.n_Args,
@@ -348,7 +333,6 @@ OProcess::TProcessError OProcess::execute( TProcessOption Options,
                                               m_strDirectory.pData,
                                               aEnvironment.m_aVec,
                                               aEnvironment.n_Vars,
-                                              m_IoResources,
                                               &m_Process));
 }
 
@@ -374,25 +358,6 @@ OProcess::TProcessError OProcess::join()
 }
 
 
-void OProcess::provideIOResource(oslSocket Socket, TDescriptorFlags Flags)
-{
-    if (! m_IoResources)
-    {
-        m_IoResources= new oslIOResource[MAX_RESOURCES + 1];
-        m_NoResources = 0;
-    }
-
-    VOS_ASSERT(m_IoResources != 0);
-    VOS_ASSERT(m_NoResources < MAX_RESOURCES);
-
-    m_IoResources[m_NoResources].Type  = osl_Process_TypeSocket;
-    m_IoResources[m_NoResources].Flags = (oslDescriptorFlag)Flags;
-    m_IoResources[m_NoResources].Descriptor.Socket = Socket;
-
-    m_NoResources++;
-}
-
-
 /*
 OProcess::TProcessError OProcess::searchPath(const sal_Char* Name, sal_Char *Buffer, sal_uInt32 Max,
                                              const sal_Char* Path, sal_Char Separator)
@@ -409,21 +374,12 @@ VOS_IMPLEMENT_CLASSINFO(
     VOS_NAMESPACE(OStartupInfo, vos),
     VOS_NAMESPACE(OObject, vos), 0);
 
-OStartupInfo::OStartupInfo() :
-    m_IoResources(0),
-    m_NoResources(0)
+OStartupInfo::OStartupInfo()
 {
 }
 
 OStartupInfo::~OStartupInfo()
 {
-    delete m_IoResources;
-}
-
-sal_Bool OStartupInfo::acceptIOResource(OSocket& rSocket)
-{
-    // jbu : functionality removed from vos
-    return sal_False;
 }
 
 OStartupInfo::TStartupError OStartupInfo::getExecutableFile( rtl::OUString& strImageName )
