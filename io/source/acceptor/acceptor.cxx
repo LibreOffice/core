@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceptor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-01-08 09:40:11 $
+ *  last change: $Author: jbu $ $Date: 2001-01-08 10:30:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,8 +247,10 @@ namespace io_acceptor
             TokenContainer container( sConnectionDescription );
             if( ! container.getTokenCount() )
             {
-                throw ConnectionSetupException( OUString( RTL_CONSTASCII_USTRINGPARAM( "empty connection string" ) ),
-                                                Reference< XInterface > () );
+                throw IllegalArgumentException(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "empty connection string" ) ),
+                    Reference< XInterface > (),
+                    0 );
             }
 
             if( 0 == container.getToken(0).compareToAscii("pipe") )
