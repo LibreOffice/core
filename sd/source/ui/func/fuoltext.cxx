@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuoltext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-24 14:04:41 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include "fuoltext.hxx"
+
 #ifndef _OUTLINER_HXX
 #include <svx/outliner.hxx>
 #endif
@@ -83,13 +85,23 @@
 
 #include <svx/svxids.hrc>
 #include "app.hrc"
-#include "fuoltext.hxx"
-#include "outlview.hxx"
-#include "sdwindow.hxx"
-#include "docshell.hxx"
-#include "viewshel.hxx"
+#ifndef SD_OUTLINE_VIEW_HXX
+#include "OutlineView.hxx"
+#endif
+#ifndef SD_WINDOW_SHELL_HXX
+#include "Window.hxx"
+#endif
+#include "DrawDocShell.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
 
 #include <stdio.h>          // Fuer SlotFilter-Listing
+
+namespace sd {
 
 static USHORT SidArray[] = {
                 SID_STYLE_FAMILY2,
@@ -135,8 +147,8 @@ TYPEINIT1( FuOutlineText, FuOutline );
 |*
 \************************************************************************/
 
-FuOutlineText::FuOutlineText(SdViewShell* pViewShell, SdWindow* pWindow,
-                             SdView* pView, SdDrawDocument* pDoc,
+FuOutlineText::FuOutlineText(ViewShell* pViewShell, ::sd::Window* pWindow,
+                             ::sd::View* pView, SdDrawDocument* pDoc,
                              SfxRequest& rReq)
        : FuOutline(pViewShell, pWindow, pView, pDoc, rReq)
 {
@@ -319,12 +331,36 @@ BOOL FuOutlineText::KeyInput(const KeyEvent& rKEvt)
     {
         pWindow->GrabFocus();
 
+        SdPage* pCurrentPage = pOutlineViewShell->GetActualPage();
         bReturn = pOutlineView->GetViewByWindow(pWindow)->PostKeyEvent(rKEvt);
 
         if (bReturn)
         {
             // Attributierung der akt. Textstelle kann jetzt anders sein
             pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
+
+            bool bUpdatePreview = true;
+            switch (rKEvt.GetKeyCode().GetCode())
+            {
+                // When just the cursor has been moved the preview
+                // only changes when it moved to entries of another
+                // page.  To prevent unnecessary updates we check this
+                // here.  This is an early rejection test, so missing
+                // a key is not a problem.
+                case KEY_UP:
+                case KEY_DOWN:
+                case KEY_LEFT:
+                case KEY_RIGHT:
+                case KEY_HOME:
+                case KEY_END:
+                case KEY_PAGEUP:
+                case KEY_PAGEDOWN:
+                    bUpdatePreview =
+                        (pCurrentPage != pOutlineViewShell->GetActualPage());
+            }
+            if (bUpdatePreview)
+                pOutlineViewShell->UpdatePreview (
+                    pOutlineViewShell->GetActualPage());
         }
         else
         {
@@ -393,3 +429,4 @@ void FuOutlineText::DoPaste()
 
 
 
+} // end of namespace sd
