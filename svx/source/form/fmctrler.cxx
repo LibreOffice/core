@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:31:12 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,6 +561,7 @@ void FmXFormController::setCurrentFilterPosition(sal_Int32 nPos)
         if (nPos != -1)
         {
             // set the text for all filters
+            OSL_ENSURE(m_aFilters.size() > m_nCurrentFilterPosition && m_nCurrentFilterPosition >= 0,"m_nCurrentFilterPosition too big");
             FmFilterRow& rRow = m_aFilters[m_nCurrentFilterPosition];
             for (FmFilterRow::const_iterator iter2 = rRow.begin();
                  iter2 != rRow.end(); iter2++)
@@ -610,7 +611,7 @@ void FmXFormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) c
                 ::rtl::OUString aQuote( xMetaData->getIdentifierQuoteString() );
 
                     // now add the filter rows
-                for (FmFilterRows::const_iterator i = m_aFilters.begin(); i != m_aFilters.end(); i++)
+                for (FmFilterRows::const_iterator i = m_aFilters.begin(); i != m_aFilters.end(); ++i)
                 {
                     ::rtl::OUString aTest, aErrorMsg, aCriteria;
                     const FmFilterRow& rRow = *i;
@@ -687,6 +688,7 @@ void FmXFormController::fillProperties(
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXFormController::hasElements(void) throw( RuntimeException )
 {
+::osl::MutexGuard aGuard( m_aMutex );
     return !m_aChilds.empty();
 }
 
@@ -709,12 +711,14 @@ Reference< ::com::sun::star::container::XEnumeration > SAL_CALL  FmXFormControll
 //------------------------------------------------------------------------------
 sal_Int32 SAL_CALL FmXFormController::getCount(void) throw( RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
     return m_aChilds.size();
 }
 
 //------------------------------------------------------------------------------
 Any SAL_CALL FmXFormController::getByIndex(sal_Int32 Index) throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
     if (Index < 0 ||
         Index >= (sal_Int32)m_aChilds.size())
         throw ::com::sun::star::lang::IndexOutOfBoundsException();
@@ -752,6 +756,7 @@ void FmXFormController::addChild(FmXFormController* pChild)
 void SAL_CALL FmXFormController::disposing(const ::com::sun::star::lang::EventObject& e) throw( RuntimeException )
 {
     // Ist der Container disposed worden
+    ::osl::MutexGuard aGuard( m_aMutex );
     Reference< ::com::sun::star::awt::XControlContainer >  xContainer(e.Source, UNO_QUERY);
     if (xContainer.is())
     {
@@ -787,6 +792,7 @@ void FmXFormController::disposing(void)
     m_aRowSetApproveListeners.disposeAndClear(aEvt);
     m_aParameterListeners.disposeAndClear(aEvt);
 
+    removeBoundFieldListener();
     stopFiltering();
 
     m_aFilters.clear();
@@ -844,37 +850,57 @@ void FmXFormController::disposing(void)
 void SAL_CALL FmXFormController::propertyChange(const PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException )
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
-    sal_Bool bModifiedChanged = (evt.PropertyName == FM_PROP_ISMODIFIED);
-    sal_Bool bNewChanged = (evt.PropertyName == FM_PROP_ISNEW);
-    if (bModifiedChanged || bNewChanged)
+    if ( evt.PropertyName == FM_PROP_BOUNDFIELD )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        if (bModifiedChanged)
-            m_bCurrentRecordModified = ::comphelper::getBOOL(evt.NewValue);
-        else
-            m_bCurrentRecordNew = ::comphelper::getBOOL(evt.NewValue);
-
-        // toggle the locking
-        if (m_bLocked != determineLockState())
+        Reference<XPropertySet> xOldBound;
+        evt.OldValue >>= xOldBound;
+        if ( !xOldBound.is() && evt.NewValue.hasValue() )
         {
-            m_bLocked = !m_bLocked;
-            setLocks();
-            if (isListeningForChanges())
-                startListening();
+            Reference< ::com::sun::star::awt::XControlModel > xControlModel(evt.Source,UNO_QUERY);
+            Reference< ::com::sun::star::awt::XControl > xControl = findControl(m_aControls,xControlModel,sal_False,sal_False);
+            if ( xControl.is() )
+            {
+                startControlListening(xControl);
+                Reference<XPropertySet> xProp(xControlModel,UNO_QUERY);
+                if ( xProp.is() )
+                    xProp->removePropertyChangeListener(FM_PROP_BOUNDFIELD, this);
+            }
+        }
+    }
+    else
+    {
+        sal_Bool bModifiedChanged = (evt.PropertyName == FM_PROP_ISMODIFIED);
+        sal_Bool bNewChanged = (evt.PropertyName == FM_PROP_ISNEW);
+        if (bModifiedChanged || bNewChanged)
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+            if (bModifiedChanged)
+                m_bCurrentRecordModified = ::comphelper::getBOOL(evt.NewValue);
             else
-                stopListening();
-        }
+                m_bCurrentRecordNew = ::comphelper::getBOOL(evt.NewValue);
 
-        if (bNewChanged && m_pView)
-        {
-            if (m_nToggleEvent)
-                Application::RemoveUserEvent( m_nToggleEvent );
-            m_nToggleEvent = Application::PostUserEvent( LINK(this, FmXFormController,
-                                                    OnToggleAutoFields) );
-        }
+            // toggle the locking
+            if (m_bLocked != determineLockState())
+            {
+                m_bLocked = !m_bLocked;
+                setLocks();
+                if (isListeningForChanges())
+                    startListening();
+                else
+                    stopListening();
+            }
 
-        if (!m_bCurrentRecordModified)
-            m_bModified = sal_False;
+            if (bNewChanged && m_pView)
+            {
+                if (m_nToggleEvent)
+                    Application::RemoveUserEvent( m_nToggleEvent );
+                m_nToggleEvent = Application::PostUserEvent( LINK(this, FmXFormController,
+                                                        OnToggleAutoFields) );
+            }
+
+            if (!m_bCurrentRecordModified)
+                m_bModified = sal_False;
+        }
     }
 }
 
@@ -1024,18 +1050,22 @@ void SAL_CALL FmXFormController::textChanged(const ::com::sun::star::awt::TextEv
         ::rtl::OUString aText = xText->getText();
 
         // Suchen der aktuellen Row
-        FmFilterRow& rRow = m_aFilters[m_nCurrentFilterPosition];
-
-        // do we have a new filter
-        if (aText.getLength())
-            rRow[xText] = aText;
-        else
+        OSL_ENSURE(m_aFilters.size() < m_nCurrentFilterPosition && m_nCurrentFilterPosition >= 0,"m_nCurrentFilterPosition too big");
+        if ( m_nCurrentFilterPosition >= 0 && m_nCurrentFilterPosition < m_aFilters.size() )
         {
-            // do we have the control in the row
-            FmFilterRow::iterator iter = rRow.find(xText);
-            // erase the entry out of the row
-            if (iter != rRow.end())
-                rRow.erase(iter);
+            FmFilterRow& rRow = m_aFilters[m_nCurrentFilterPosition];
+
+            // do we have a new filter
+            if (aText.getLength())
+                rRow[xText] = aText;
+            else
+            {
+                // do we have the control in the row
+                FmFilterRow::iterator iter = rRow.find(xText);
+                // erase the entry out of the row
+                if (iter != rRow.end())
+                    rRow.erase(iter);
+            }
         }
     }
     else if (!m_bModified)
@@ -1519,6 +1549,7 @@ void FmXFormController::setContainer(const Reference< ::com::sun::star::awt::XCo
 //------------------------------------------------------------------------------
 Reference< ::com::sun::star::awt::XControlContainer >  FmXFormController::getContainer() throw( ::com::sun::star::uno::RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     DBG_ASSERT(m_xTabController.is(), "FmXFormController::getContainer : invalid aggregate !");
     if (!m_xTabController.is())
@@ -1667,6 +1698,8 @@ void FmXFormController::startControlListening(const Reference< ::com::sun::star:
             Reference< XPropertySet >  xField;
             xSet->getPropertyValue(FM_PROP_BOUNDFIELD) >>= xField;
             bModifyListening = (xField.is());
+            if ( !bModifyListening )
+                xSet->addPropertyChangeListener( FM_PROP_BOUNDFIELD, this );
         }
     }
 
@@ -1802,7 +1835,7 @@ void FmXFormController::stopListening()
 
 
 //------------------------------------------------------------------------------
-Reference< ::com::sun::star::awt::XControl >  FmXFormController::findControl(Sequence< Reference< ::com::sun::star::awt::XControl > >& rCtrls, const Reference< ::com::sun::star::awt::XControlModel > & xCtrlModel ,sal_Bool _bRemove) const
+Reference< ::com::sun::star::awt::XControl >  FmXFormController::findControl(Sequence< Reference< ::com::sun::star::awt::XControl > >& rCtrls, const Reference< ::com::sun::star::awt::XControlModel > & xCtrlModel ,sal_Bool _bRemove,sal_Bool _bOverWrite) const
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     DBG_ASSERT( xCtrlModel.is(), "findControl - welches ?!" );
@@ -1821,7 +1854,7 @@ Reference< ::com::sun::star::awt::XControl >  FmXFormController::findControl(Seq
                 Reference< ::com::sun::star::awt::XControl >  xCtrl( pCtrls[i] );
                 if ( _bRemove )
                     ::comphelper::removeElementAt(rCtrls, i);
-                else
+                else if ( _bOverWrite )
                     pCtrls[i] = Reference< ::com::sun::star::awt::XControl >();
                 return xCtrl;
             }
@@ -2035,6 +2068,7 @@ void FmXFormController::unloaded(const ::com::sun::star::lang::EventObject& rEve
 void FmXFormController::reloading(const ::com::sun::star::lang::EventObject& aEvent) throw( RuntimeException )
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+    ::osl::MutexGuard aGuard( m_aMutex );
     // do the same like in unloading
     // just one exception toggle the auto values
     if (m_nToggleEvent)
@@ -2074,6 +2108,9 @@ void FmXFormController::unload() throw( RuntimeException )
     if (m_bCurrentRecordNew && m_pView)
         toggleAutoFields(sal_False);
 
+    // remove bound field listing again
+    removeBoundFieldListener();
+
     if (m_bDBConnection && isListeningForChanges())
         stopListening();
 
@@ -2085,7 +2122,17 @@ void FmXFormController::unload() throw( RuntimeException )
     m_bCanInsert = m_bCanUpdate = m_bCycle = sal_False;
     m_bCurrentRecordModified = m_bCurrentRecordNew = m_bLocked = sal_False;
 }
-
+// -----------------------------------------------------------------------------
+void FmXFormController::removeBoundFieldListener()
+{
+    const Reference< ::com::sun::star::awt::XControl > * pControls = m_aControls.getConstArray();
+    for (sal_Int32 i = 0; i < m_aControls.getLength(); ++i,++pControls )
+    {
+        Reference<XPropertySet> xProp(*pControls,UNO_QUERY);
+        if ( xProp.is() )
+            xProp->removePropertyChangeListener(FM_PROP_BOUNDFIELD, this);
+    }
+}
 //------------------------------------------------------------------------------
 void FmXFormController::startFormListening( const Reference< XPropertySet >& _rxForm, sal_Bool _bPropertiesOnly )
 {
@@ -2303,18 +2350,21 @@ void FmXFormController::activateLast() throw( ::com::sun::star::uno::RuntimeExce
 //------------------------------------------------------------------------------
 Reference< XControl> SAL_CALL FmXFormController::getCurrentControl(void) throw( ::com::sun::star::uno::RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
     return m_xCurrentControl;
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::addActivateListener(const Reference< XFormControllerListener > & l) throw( ::com::sun::star::uno::RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     m_aActivateListeners.addInterface(l);
 }
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::removeActivateListener(const Reference< XFormControllerListener > & l) throw( ::com::sun::star::uno::RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     m_aActivateListeners.removeInterface(l);
 }
@@ -2669,11 +2719,15 @@ void FmXFormController::startFiltering()
         stopFormListening( xSet, sal_True );
 
     // set the text for all filters
-    FmFilterRow& rRow = m_aFilters[m_nCurrentFilterPosition];
-    for (FmFilterRow::const_iterator iter2 = rRow.begin();
-         iter2 != rRow.end(); iter2++)
+    OSL_ENSURE(m_aFilters.size() > m_nCurrentFilterPosition && m_nCurrentFilterPosition >= 0,"m_nCurrentFilterPosition too big");
+    if ( m_nCurrentFilterPosition >= 0 && m_nCurrentFilterPosition < m_aFilters.size() )
     {
-        (*iter2).first->setText((*iter2).second);
+        FmFilterRow& rRow = m_aFilters[m_nCurrentFilterPosition];
+        for (FmFilterRow::const_iterator iter2 = rRow.begin();
+            iter2 != rRow.end(); iter2++)
+        {
+            (*iter2).first->setText((*iter2).second);
+        }
     }
 
     // lock all controls which are not used for filtering
@@ -2807,6 +2861,8 @@ void FmXFormController::stopFiltering()
 //------------------------------------------------------------------------------
 void FmXFormController::setMode(const ::rtl::OUString& Mode) throw( ::com::sun::star::lang::NoSupportException, RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     if (!supportsMode(Mode))
         throw ::com::sun::star::lang::NoSupportException();
@@ -2822,15 +2878,18 @@ void FmXFormController::setMode(const ::rtl::OUString& Mode) throw( ::com::sun::
         stopFiltering();
 
     for (FmFormControllers::const_iterator i = m_aChilds.begin();
-        i != m_aChilds.end(); i++)
+        i != m_aChilds.end(); ++i)
     {
-        Reference< ::com::sun::star::util::XModeSelector > (*i, UNO_QUERY)->setMode(Mode);
+        Reference< ::com::sun::star::util::XModeSelector > xMode(*i, UNO_QUERY);
+        if ( xMode.is() )
+            xMode->setMode(Mode);
     }
 }
 
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL FmXFormController::getMode(void) throw( RuntimeException )
 {
+::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     return m_aMode;
 }
@@ -2887,6 +2946,7 @@ Window* FmXFormController::getDialogParentWindow()
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXFormController::approveRowChange(const ::com::sun::star::sdb::RowChangeEvent& aEvent) throw( RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
     sal_Bool bValid = sal_True;
@@ -2990,6 +3050,7 @@ sal_Bool SAL_CALL FmXFormController::approveRowChange(const ::com::sun::star::sd
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXFormController::approveCursorMove(const ::com::sun::star::lang::EventObject& event) throw( RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
     if (aIter.hasMoreElements())
@@ -3005,6 +3066,7 @@ sal_Bool SAL_CALL FmXFormController::approveCursorMove(const ::com::sun::star::l
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXFormController::approveRowSetChange(const ::com::sun::star::lang::EventObject& event) throw( RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
     if (aIter.hasMoreElements())
@@ -3021,6 +3083,7 @@ sal_Bool SAL_CALL FmXFormController::approveRowSetChange(const ::com::sun::star:
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::addRowSetApproveListener(const Reference< ::com::sun::star::sdb::XRowSetApproveListener > & _rxListener) throw( RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     m_aRowSetApproveListeners.addInterface(_rxListener);
 }
@@ -3028,6 +3091,7 @@ void SAL_CALL FmXFormController::addRowSetApproveListener(const Reference< ::com
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::removeRowSetApproveListener(const Reference< ::com::sun::star::sdb::XRowSetApproveListener > & _rxListener) throw( RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     m_aRowSetApproveListeners.removeInterface(_rxListener);
 }
@@ -3036,6 +3100,7 @@ void SAL_CALL FmXFormController::removeRowSetApproveListener(const Reference< ::
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::errorOccured(const ::com::sun::star::sdb::SQLErrorEvent& aEvent) throw( RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     if (m_pView)
     {   // we're working for a FormView
@@ -3062,6 +3127,7 @@ void SAL_CALL FmXFormController::errorOccured(const ::com::sun::star::sdb::SQLEr
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::addSQLErrorListener(const Reference< ::com::sun::star::sdb::XSQLErrorListener > & aListener) throw( RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     m_aErrorListeners.addInterface(aListener);
 }
@@ -3069,6 +3135,7 @@ void SAL_CALL FmXFormController::addSQLErrorListener(const Reference< ::com::sun
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormController::removeSQLErrorListener(const Reference< ::com::sun::star::sdb::XSQLErrorListener > & aListener) throw( RuntimeException )
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     m_aErrorListeners.removeInterface(aListener);
 }
