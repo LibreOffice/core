@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hdu $ $Date: 2000-12-07 16:07:36 $
+ *  last change: $Author: th $ $Date: 2001-03-09 15:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,50 +446,94 @@ FontList::~FontList()
 
 // -----------------------------------------------------------------------
 
+const XubString& FontList::GetStyleName( FontWeight eWeight, FontItalic eItalic ) const
+{
+    if ( eWeight > WEIGHT_BOLD )
+    {
+        if ( eItalic > ITALIC_NONE )
+            return maBlackItalic;
+        else
+            return maBlack;
+    }
+    else if ( eWeight > WEIGHT_MEDIUM )
+    {
+        if ( eItalic > ITALIC_NONE )
+            return maBoldItalic;
+        else
+            return maBold;
+    }
+    else if ( eWeight > WEIGHT_LIGHT )
+    {
+        if ( eItalic > ITALIC_NONE )
+            return maNormalItalic;
+        else
+            return maNormal;
+    }
+    else if ( eWeight != WEIGHT_DONTKNOW )
+    {
+        if ( eItalic > ITALIC_NONE )
+            return maLightItalic;
+        else
+            return maLight;
+    }
+    else
+    {
+        if ( eItalic > ITALIC_NONE )
+            return maNormalItalic;
+        else
+            return maNormal;
+    }
+}
+
+// -----------------------------------------------------------------------
+
 XubString FontList::GetStyleName( const FontInfo& rInfo ) const
 {
-    XubString aStyleName = rInfo.GetStyleName();
+    XubString   aStyleName = rInfo.GetStyleName();
+    FontWeight  eWeight = rInfo.GetWeight();
+    FontItalic  eItalic = rInfo.GetItalic();
 
     // Nur wenn kein StyleName gesetzt ist, geben wir einen syntetischen
     // Namen zurueck
     if ( !aStyleName.Len() )
+        aStyleName = GetStyleName( eWeight, eItalic );
+    else
     {
-        FontWeight eWeight = rInfo.GetWeight();
-        FontItalic eItalic = rInfo.GetItalic();
-        if ( eWeight > WEIGHT_BOLD )
+        // Translate StyleName to localized name
+        XubString aCompareStyleName = aStyleName;
+        aCompareStyleName.ToLowerAscii();
+        aCompareStyleName.EraseAllChars( ' ' );
+        if ( aCompareStyleName.EqualsAscii( "bold" ) )
+            aStyleName = maBold;
+        else if ( aCompareStyleName.EqualsAscii( "bolditalic" ) )
+            aStyleName = maBoldItalic;
+        else if ( aCompareStyleName.EqualsAscii( "italic" ) )
+            aStyleName = maNormalItalic;
+        else if ( aCompareStyleName.EqualsAscii( "standard" ) )
+            aStyleName = maNormal;
+        else if ( aCompareStyleName.EqualsAscii( "regular" ) )
+            aStyleName = maNormal;
+        else if ( aCompareStyleName.EqualsAscii( "medium" ) )
+            aStyleName = maNormal;
+        else if ( aCompareStyleName.EqualsAscii( "light" ) )
+            aStyleName = maLight;
+        else if ( aCompareStyleName.EqualsAscii( "lightitalic" ) )
+            aStyleName = maLightItalic;
+        else if ( aCompareStyleName.EqualsAscii( "black" ) )
+            aStyleName = maBlack;
+        else if ( aCompareStyleName.EqualsAscii( "blackitalic" ) )
+            aStyleName = maBlackItalic;
+
+        // fix up StyleName, because the PS Printer driver from
+        // W2000 returns wrong StyleNames (e.g. Bold instead of Bold Italic
+        // for Helvetica)
+        if ( eItalic > ITALIC_NONE )
         {
-            if ( eItalic > ITALIC_NONE )
-                aStyleName = maBlackItalic;
-            else
-                aStyleName = maBlack;
-        }
-        else if ( eWeight > WEIGHT_MEDIUM )
-        {
-            if ( eItalic > ITALIC_NONE )
-                aStyleName = maBoldItalic;
-            else
-                aStyleName = maBold;
-        }
-        else if ( eWeight > WEIGHT_LIGHT )
-        {
-            if ( eItalic > ITALIC_NONE )
-                aStyleName = maNormalItalic;
-            else
-                aStyleName = maNormal;
-        }
-        else if ( eWeight != WEIGHT_DONTKNOW )
-        {
-            if ( eItalic > ITALIC_NONE )
-                aStyleName = maLightItalic;
-            else
-                aStyleName = maLight;
-        }
-        else
-        {
-            if ( eItalic > ITALIC_NONE )
-                aStyleName = maNormalItalic;
-            else
-                aStyleName = maNormal;
+            if ( (aStyleName == maNormal) ||
+                 (aStyleName == maBold) ||
+                 (aStyleName == maLight) ||
+                 (aStyleName == maBlack) )
+                aStyleName = GetStyleName( eWeight, eItalic );
         }
     }
 
@@ -595,7 +639,6 @@ XubString FontList::GetFontMapText( const FontInfo& rInfo ) const
             }
             */
 
-
             if ( !maMapBoth.Len() )
                 ((FontList*)this)->maMapBoth = XubString( SvtResId( STR_SVT_FONTMAP_BOTH ) );
             return maMapBoth;
@@ -625,9 +668,10 @@ FontInfo FontList::Get( const XubString& rName, const XubString& rStyleName ) co
     {
         ImplFontListFontInfo* pSearchInfo = pData->mpFirst;
         pFontNameInfo = pSearchInfo;
+        pSearchInfo = pData->mpFirst;
         while ( pSearchInfo )
         {
-            if ( rStyleName == GetStyleName( *pSearchInfo ) )
+            if ( rStyleName.EqualsIgnoreCaseAscii( GetStyleName( *pSearchInfo ) ) )
             {
                 pFontInfo = pSearchInfo;
                 break;
@@ -639,16 +683,11 @@ FontInfo FontList::Get( const XubString& rName, const XubString& rStyleName ) co
 
     // Konnten die Daten nicht gefunden werden, dann muessen bestimmte
     // Attribute nachgebildet werden
+    FontInfo aInfo;
     if ( !pFontInfo )
     {
-        FontInfo aInfo;
-
-        // Falls der Fontname stimmt, uebernehmen wir soviel wie moeglich
         if ( pFontNameInfo )
             aInfo = *pFontNameInfo;
-        else
-            aInfo.SetName( rName );
-        aInfo.SetStyleName( rStyleName );
 
         if ( rStyleName == maNormal )
         {
@@ -695,11 +734,15 @@ FontInfo FontList::Get( const XubString& rName, const XubString& rStyleName ) co
             aInfo.SetItalic( ITALIC_NONE );
             aInfo.SetWeight( WEIGHT_DONTKNOW );
         }
-
-        return aInfo;
     }
     else
-        return *pFontInfo;
+        aInfo = *pFontInfo;
+
+    // set Fontname to keep FontAlias
+    aInfo.SetName( rName );
+    aInfo.SetStyleName( rStyleName );
+
+    return aInfo;
 }
 
 // -----------------------------------------------------------------------
@@ -729,25 +772,26 @@ FontInfo FontList::Get( const XubString& rName,
 
     // Konnten die Daten nicht gefunden werden, dann muessen bestimmte
     // Attribute nachgebildet werden
+    FontInfo aInfo;
     if ( !pFontInfo )
     {
-        FontInfo aInfo;
-
         // Falls der Fontname stimmt, uebernehmen wir soviel wie moeglich
         if ( pFontNameInfo )
         {
             aInfo = *pFontNameInfo;
             aInfo.SetStyleName( XubString() );
         }
-        else
-            aInfo.SetName( rName );
 
         aInfo.SetWeight( eWeight );
         aInfo.SetItalic( eItalic );
-        return aInfo;
     }
     else
-        return *pFontInfo;
+        aInfo = *pFontInfo;
+
+    // set Fontname to keep FontAlias
+    aInfo.SetName( rName );
+
+    return aInfo;
 }
 
 // -----------------------------------------------------------------------
@@ -868,15 +912,15 @@ const long* FontList::GetStdSizeAry()
 // - FontSizeNames & FsizeNameItem -
 // ---------------------------------
 
-struct FsizeNameItem
+struct ImplFSNameItem
 {
-    int     mnSize;
-    char*   mszUtf8Name;
+    long        mnSize;
+    const char* mszUtf8Name;
 };
 
 //------------------------------------------------------------------------
 
-static FsizeNameItem aSimplifiedChinese[] =
+static ImplFSNameItem aImplSimplifiedChinese[] =
 {
     {  50, "\xe5\x85\xab\xe5\x8f\xb7" },
     {  55, "\xe4\xb8\x83\xe5\x8f\xb7" },
@@ -893,12 +937,12 @@ static FsizeNameItem aSimplifiedChinese[] =
     { 240, "\xe5\xb0\x8f\xe4\xb8\x80" },
     { 260, "\xe4\xb8\x80\xe5\x8f\xb7" },
     { 360, "\xe5\xb0\x8f\xe5\x88\x9d" },
-    { 420, "\xef\xbb\xbf\xe5\x88\x9d\xe5\x8f\xb7" }
+    { 420, "\xe5\x88\x9d\xe5\x8f\xb7" }
 };
 
 // -----------------------------------------------------------------------
 
-static FsizeNameItem aTraditionalChinese[] =
+static ImplFSNameItem aImplTraditionalChinese[] =
 {
     {  50, "\xe5\x85\xab\xe8\x99\x9f" },
     {  55, "\xe4\xb8\x83\xe8\x99\x9f" },
@@ -915,35 +959,38 @@ static FsizeNameItem aTraditionalChinese[] =
     { 240, "\xe5\xb0\x8f\xe4\xb8\x80" },
     { 260, "\xe4\xb8\x80\xe8\x99\x9f" },
     { 360, "\xe5\xb0\x8f\xe5\x88\x9d" },
-    { 420, "\xef\xbb\xbf\xe5\x88\x9d\xe8\x99\x9f" }
+    { 420, "\xe5\x88\x9d\xe8\x99\x9f" }
 };
 
 //------------------------------------------------------------------------
 
-bool FontSizeNames::bPreferName = false;
-
-FontSizeNames::FontSizeNames()
+FontSizeNames::FontSizeNames( LanguageType eLanguage )
 {
-    switch( Application::GetSettings().GetInternational().GetLanguage() )
+    if ( eLanguage == LANGUAGE_DONTKNOW )
+        eLanguage = Application::GetSettings().GetInternational().GetLanguage();
+    if ( eLanguage == LANGUAGE_SYSTEM )
+        eLanguage = ::GetSystemLanguage();
+
+    switch( eLanguage )
     {
-    case LANGUAGE_CHINESE:
-    case LANGUAGE_CHINESE_SIMPLIFIED:
-        mpArray = aSimplifiedChinese;
-        mnElem = sizeof(aSimplifiedChinese) / sizeof(aSimplifiedChinese[0]);
-        break;
+        case LANGUAGE_CHINESE:
+        case LANGUAGE_CHINESE_SIMPLIFIED:
+            mpArray = aImplSimplifiedChinese;
+            mnElem = sizeof(aImplSimplifiedChinese) / sizeof(aImplSimplifiedChinese[0]);
+            break;
 
-    case LANGUAGE_CHINESE_HONGKONG:
-    case LANGUAGE_CHINESE_SINGAPORE:
-    case LANGUAGE_CHINESE_MACAU:
-    case LANGUAGE_CHINESE_TRADITIONAL:
-        mpArray = aTraditionalChinese;
-        mnElem = sizeof(aTraditionalChinese) / sizeof(aTraditionalChinese[0]);
-        break;
+        case LANGUAGE_CHINESE_HONGKONG:
+        case LANGUAGE_CHINESE_SINGAPORE:
+        case LANGUAGE_CHINESE_MACAU:
+        case LANGUAGE_CHINESE_TRADITIONAL:
+            mpArray = aImplTraditionalChinese;
+            mnElem = sizeof(aImplTraditionalChinese) / sizeof(aImplTraditionalChinese[0]);
+            break;
 
-    default:
-        mpArray = NULL;
-        mnElem = 0;
-        break;
+        default:
+            mpArray = NULL;
+            mnElem = 0;
+            break;
     };
 }
 
@@ -951,47 +998,57 @@ FontSizeNames::FontSizeNames()
 
 long FontSizeNames::Name2Size( const String& rName ) const
 {
-    // linear search is sufficient for this rare case
-    for( long i = mnElem; --i >= 0; )
-        if( rName == String( mpArray[i].mszUtf8Name, RTL_TEXTENCODING_UTF8 ) )
-            return mpArray[i].mnSize;
+    if ( mnElem )
+    {
+        ByteString aName( rName, RTL_TEXTENCODING_UTF8 );
+
+        // linear search is sufficient for this rare case
+        for( long i = mnElem; --i >= 0; )
+            if ( aName == mpArray[i].mszUtf8Name )
+                return mpArray[i].mnSize;
+    }
+
     return 0;
 }
 
 //------------------------------------------------------------------------
 
-const char* FontSizeNames::Size2UtfName( long nValue ) const
+String FontSizeNames::Size2Name( long nValue ) const
 {
+    String aStr;
+
     // binary search
     for( long lower = 0, upper = mnElem - 1; lower <= upper; )
     {
         long mid = (upper + lower) >> 1;
-        if( nValue == mpArray[mid].mnSize )
-            return mpArray[mid].mszUtf8Name;
-        else if( nValue < mpArray[mid].mnSize )
+        if ( nValue == mpArray[mid].mnSize )
+            return String( mpArray[mid].mszUtf8Name, RTL_TEXTENCODING_UTF8 );
+        else if ( nValue < mpArray[mid].mnSize )
             upper = mid - 1;
-        else if( nValue > mpArray[mid].mnSize )
+        else if ( nValue > mpArray[mid].mnSize )
             lower = mid + 1;
     }
-    return NULL;
+
+    return aStr;
 }
 
 //------------------------------------------------------------------------
 
-const char*  FontSizeNames::GetIndexName( long nIndex ) const
+String FontSizeNames::GetIndexName( ULONG nIndex ) const
 {
-    if( nIndex >= mnElem )
-        return NULL;
-    return mpArray[ nIndex ].mszUtf8Name;
+    String aStr;
+
+    if ( nIndex < mnElem )
+        aStr = String( mpArray[nIndex].mszUtf8Name, RTL_TEXTENCODING_UTF8 );
+
+    return aStr;
 }
 
 //------------------------------------------------------------------------
 
-long FontSizeNames::GetIndexSize( long nIndex ) const
+long FontSizeNames::GetIndexSize( ULONG nIndex ) const
 {
-    if( nIndex >= mnElem )
+    if ( nIndex >= mnElem )
         return 0;
-    return mpArray[ nIndex ].mnSize;
+    return mpArray[nIndex].mnSize;
 }
-
-// =======================================================================
