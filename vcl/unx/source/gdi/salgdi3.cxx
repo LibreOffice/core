@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cp $ $Date: 2001-04-09 20:01:27 $
+ *  last change: $Author: cd $ $Date: 2001-04-10 08:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1104,6 +1104,10 @@ bool SalGraphicsData::DrawServerAAForcedString( int nX, int nY,
         if( nYmax >= aXRect.y+aXRect.height )   nYmax = aXRect.y + aXRect.height - 1;
     }
 
+    if( nXmin>nXmax)
+        return false;
+    if( nYmin>nYmax)
+        return false;
     XImage* const pImg = XGetImage( pDisplay, hDrawable_,
         nXmin, nYmin, (nXmax-nXmin+1), (nYmax-nYmin+1), ~0, ZPixmap );
     if( pImg == NULL )
