@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:28:52 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 09:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,10 +275,10 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 
 
-#define FN_REDLINE_PROTECT           (FN_EDIT2 + 23) /* Redlining password */
+//#define FN_REDLINE_PROTECT           (FN_EDIT2 + 23) /* Redlining password */     ->moved to SVX
 #define FN_UPDATE_ALL_LINKS          (FN_EDIT2 + 24) /* alle Links updaten */
 
-#define FN_REDLINE_ON                (FN_EDIT2 + 25) /* Redlining anschalten */
+//#define FN_REDLINE_ON              (FN_EDIT2 + 25) /* Redlining anschalten */     -> moved to SVX
 #define FN_REDLINE_SHOW              (FN_EDIT2 + 26) /* Redlining anzeigen */
 #define FN_REDLINE_COMMENT           (FN_EDIT2 + 27) /* Redlining kommentieren */
 
