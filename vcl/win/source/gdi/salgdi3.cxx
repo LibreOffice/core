@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 09:04:29 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -708,7 +708,7 @@ static HFONT ImplSelectFontW( HDC hDC, LOGFONTW& rLogFont, HFONT* pNewFont )
     if ( !GetTextMetricsW( hDC, &aWinMetric ) )
     {
         // font doesn't work => try a replacement
-        lstrcpyW( rLogFont.lfFaceName, L"Courier New" );
+        lstrcpynW( rLogFont.lfFaceName, L"Courier New", 11 );
         rLogFont.lfPitchAndFamily = FIXED_PITCH;
         HFONT hNewFont2 = CreateFontIndirectW( &rLogFont );
         SelectFont( hDC, hNewFont2 );
@@ -731,7 +731,7 @@ static HFONT ImplSelectFontA( HDC hDC, LOGFONTA& rLogFont, HFONT* pNewFont )
     // when the font doesn't work try a replacement
     if ( !GetTextMetricsA( hDC, &aWinMetric ) )
     {
-        strcpy( rLogFont.lfFaceName, "Courier New" );
+        strncpy( rLogFont.lfFaceName, "Courier New", 11 );
         rLogFont.lfPitchAndFamily = FIXED_PITCH;
         HFONT hNewFont2 = CreateFontIndirectA( &rLogFont );
         SelectFont( hDC, hNewFont2 );
@@ -763,7 +763,7 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
               !pFont->mpFontData || (pFont->mpFontData->mnHeight != pFont->mnHeight)) &&
              !bImplSalCourierScalable && bImplSalCourierNew &&
              (ImplSalWICompareAscii( aLogFont.lfFaceName, "Courier" ) == 0) )
-            lstrcpyW( aLogFont.lfFaceName, L"Courier New" );
+            lstrcpynW( aLogFont.lfFaceName, L"Courier New", 11 );
 
         hOldFont = ImplSelectFontW( mhDC, aLogFont, &hNewFont );
     }
@@ -820,7 +820,7 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
               !pFont->mpFontData || (pFont->mpFontData->mnHeight != pFont->mnHeight)) &&
              !bImplSalCourierScalable && bImplSalCourierNew &&
              (stricmp( mpLogFont->lfFaceName, "Courier" ) == 0) )
-            strcpy( mpLogFont->lfFaceName, "Courier New" );
+            strncpy( mpLogFont->lfFaceName, "Courier New", 11 );
 
         hOldFont = ImplSelectFontA( mhDC, *mpLogFont, &hNewFont );
     }
@@ -1357,7 +1357,7 @@ int CALLBACK SalEnumFontsProcExA( const ENUMLOGFONTEXA* pLogFont,
                 pInfo->mbCourier = FALSE;
             XubString aName( ImplSalGetUniString( pLogFont->elfLogFont.lfFaceName ) );
             pInfo->mpName = &aName;
-            strcpy( pInfo->mpLogFontA->lfFaceName, pLogFont->elfLogFont.lfFaceName );
+            strncpy( pInfo->mpLogFontA->lfFaceName, pLogFont->elfLogFont.lfFaceName, LF_FACESIZE );
             pInfo->mpLogFontA->lfCharSet = pLogFont->elfLogFont.lfCharSet;
             EnumFontFamiliesExA( pInfo->mhDC, pInfo->mpLogFontA, (FONTENUMPROCA)SalEnumFontsProcExA,
                                  (LPARAM)(void*)pInfo, 0 );
@@ -1551,7 +1551,9 @@ bool ImplAddTempFont( SalData& rSalData, const String& rFontFileURL )
         char aResourceName[512];
         int nMaxLen = sizeof(aResourceName)/sizeof(*aResourceName) - 16;
         int nLen = ::GetTempPathA( nMaxLen, aResourceName );
-        ::strcpy( aResourceName + nLen, aFileName );
+        ::strncpy( aResourceName + nLen, aFileName, sizeof( aResourceName )- nLen );
+        // security: end buffer in any case
+        aResourceName[ 511 ] = 0;
         ::DeleteFileA( aResourceName );
 
         rtl_TextEncoding theEncoding = osl_getThreadTextEncoding();
