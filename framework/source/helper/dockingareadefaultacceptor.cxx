@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockingareadefaultacceptor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:46:44 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,11 +141,11 @@ DockingAreaDefaultAcceptor::~DockingAreaDefaultAcceptor()
 DEFINE_XINTERFACE_2(    DockingAreaDefaultAcceptor                                              ,
                         OWeakObject                                                             ,
                         DIRECT_INTERFACE(XTypeProvider                                      )   ,
-                        DIRECT_INTERFACE(::drafts::com::sun::star::ui::XDockingAreaAcceptor )   )
+                        DIRECT_INTERFACE(::com::sun::star::ui::XDockingAreaAcceptor )   )
 
 DEFINE_XTYPEPROVIDER_2( DockingAreaDefaultAcceptor                          ,
                         XTypeProvider                                       ,
-                        ::drafts::com::sun::star::ui::XDockingAreaAcceptor  )
+                        ::com::sun::star::ui::XDockingAreaAcceptor  )
 
 //*****************************************************************************************************************
 //  XDockingAreaAcceptor
