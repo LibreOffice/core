@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:59:09 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 10:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,9 @@
 #ifndef _NDGRF_HXX
 #define _NDGRF_HXX
 
-
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
 #ifndef _LNKBASE_HXX //autogen
 #include <sfx2/lnkbase.hxx>
 #endif
@@ -82,6 +84,7 @@ class SvStorage;
 // --------------------
 class SwGrfNode: public SwNoTxtNode
 {
+    friend long GrfNodeChanged( void*, void* );
     friend class SwNodes;
     friend class SwGrfFrm;
 
@@ -124,12 +127,10 @@ class SwGrfNode: public SwNoTxtNode
     BOOL HasStreamName() const { return aGrfObj.HasUserData(); }
     BOOL GetStreamStorageNames( String& rStrmName, String& rStgName ) const;
     void DelStreamName();
-
     DECL_LINK( SwapGraphic, GraphicObject* );
 
 public:
     virtual ~SwGrfNode();
-
     const Graphic&          GetGrf() const      { return aGrfObj.GetGraphic(); }
     const GraphicObject&    GetGrfObj() const   { return aGrfObj; }
           GraphicObject&    GetGrfObj()         { return aGrfObj; }
@@ -166,13 +167,14 @@ public:
         // steht in ndcopy.cxx
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
-        // erneutes Einlesen, falls Graphic nicht Ok ist. Die
-        // aktuelle wird durch die neue ersetzt.
+
+    // erneutes Einlesen, falls Graphic nicht Ok ist. Die
+    // aktuelle wird durch die neue ersetzt.
     BOOL ReRead( const String& rGrfName, const String& rFltName,
-                  const Graphic* pGraphic = 0,
-                  const GraphicObject* pGrfObj = 0,
-                  BOOL bModify = TRUE );
-        // Laden der Grafik unmittelbar vor der Anzeige
+                 const Graphic* pGraphic = 0,
+                 const GraphicObject* pGrfObj = 0,
+                 BOOL bModify = TRUE );
+    // Laden der Grafik unmittelbar vor der Anzeige
     short SwapIn( BOOL bWaitForData = FALSE );
         // Entfernen der Grafik, um Speicher freizugeben
     short SwapOut();
