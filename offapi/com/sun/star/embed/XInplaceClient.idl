@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInplaceClient.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 18:05:53 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:39:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 
 #ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XDispatchProvider_idl__
+#include <com/sun/star/frame/XDispatchProvider.idl>
 #endif
 
 #ifndef __drafts_com_sun_star_frame_XLayoutManager_idl__
@@ -155,33 +159,6 @@ interface XInplaceClient: com::sun::star::uno::XInterface
     void deactivatedUI()
         raises( ::com::sun::star::embed::WrongStateException );
 
-
-    //------------------------------------------------------------------------
-    /** allows to retrieve top window represented by reference to
-        <type scope="com::sun::star::awt">XWindow</type>.
-
-        @return
-            reference to object representing the topmost container window
-
-        @throws com::sun::star::embed::WrongStateException
-            the object is in unexpected state to make such request
-     */
-    ::com::sun::star::awt::XWindow getTopWindow()
-        raises( ::com::sun::star::embed::WrongStateException );
-
-    //------------------------------------------------------------------------
-    /** allows to retrieve component window represented by reference to
-        <type scope="com::sun::star::awt">XWindow</type>.
-
-        @return
-            reference to object representing the container document window
-
-        @throws com::sun::star::embed::WrongStateException
-            the object is in unexpected state to make such request
-     */
-    ::com::sun::star::awt::XWindow getDocumentWindow()
-        raises( ::com::sun::star::embed::WrongStateException );
-
     //------------------------------------------------------------------------
     /** allows to retrieve the
         <type scope="com::sun::star::frame">LayoutManager</type> of the
@@ -199,16 +176,16 @@ interface XInplaceClient: com::sun::star::uno::XInterface
         raises( ::com::sun::star::embed::WrongStateException );
 
     //------------------------------------------------------------------------
-    /** allows to retrieve the container's inplace menubar part.
+    /** allows to retrieve the container's dispatch provider.
 
         @return
             reference to object implementing the
-            <type scope="com::sun::star::container">XIndexAccess</type>
+            <type scope="com::sun::star::frame">XDispatchProvider</type>
 
         @throws com::sun::star::embed::WrongStateException
             the object is in unexpected state to make such request
      */
-    ::com::sun::star::container::XIndexAccess getInplaceMenu()
+    ::com::sun::star::frame::XDispatchProvider getInplaceDispatchProvider()
         raises( ::com::sun::star::embed::WrongStateException );
 
     //------------------------------------------------------------------------
