@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 23:15:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #endif
 
 #include <com/sun/star/lang/XComponent.hpp>
+#include "com/sun/star/uno/RuntimeException.hpp"
 
 using namespace ::osl;
 using namespace ::rtl;
