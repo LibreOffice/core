@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitems.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *  last change: $Author: os $ $Date: 2001-03-22 09:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,18 +103,9 @@ SwDocDisplayItem::SwDocDisplayItem( USHORT nWhich ) :
     bSoftHyphen         =
     bHiddenText         =
     bManualBreak        =
-    bIndexEntry         =
-    bIndexBackground    =
-    bFootnoteBackground =
-    bField              =
-    bTable              =
-    bGraphic            =
-    bDrawing            =
-    bFieldName          =
-    bNotes              =
     bShowHiddenPara     = FALSE;
-};
 
+};
 
 /*------------OS 12.01.95 -------------------------------------------
     Item fuer Einstellungsdialog, Seite Dokumentansicht
@@ -140,18 +131,7 @@ SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt, USHORT nWhich ) :
     bSoftHyphen         = rVOpt.IsSoftHyph();
     bHiddenText         = rVOpt.IsHidden();
     bManualBreak        = rVOpt.IsLineBreak(TRUE);
-    bIndexEntry         = rVOpt.IsTox();
-    bIndexBackground    = rVOpt.IsIndexBackground();
-    bFootnoteBackground = rVOpt.IsFootNote();
-    bField              = rVOpt.IsField();
-    bTable              = rVOpt.IsTable();
-    bGraphic            = rVOpt.IsGraphic();
-    bDrawing            = rVOpt.IsDraw() && rVOpt.IsControl();
-    bFieldName          = rVOpt.IsFldName();
-    bNotes              = rVOpt.IsPostIts();
     bShowHiddenPara     = rVOpt.IsShowHiddenPara();
-
-    aIndexBackgrndCol = rVOpt.GetIndexBackgrndColor();
 
 }
 /*--------------------------------------------------------------------
@@ -180,17 +160,7 @@ int SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
               bSoftHyphen           == rItem.bSoftHyphen         &&
               bHiddenText           == rItem.bHiddenText         &&
               bManualBreak          == rItem.bManualBreak        &&
-              bIndexEntry           == rItem.bIndexEntry         &&
-              bIndexBackground      == rItem.bIndexBackground    &&
-              bFootnoteBackground   == rItem.bFootnoteBackground &&
-              bField                == rItem.bField              &&
-              bTable                == rItem.bTable              &&
-              bGraphic              == rItem.bGraphic            &&
-              bDrawing              == rItem.bDrawing            &&
-              bFieldName            == rItem.bFieldName          &&
-              bNotes                == rItem.bNotes              &&
-              bShowHiddenPara       == rItem.bShowHiddenPara     &&
-              aIndexBackgrndCol     == rItem.aIndexBackgrndCol  );
+              bShowHiddenPara       == rItem.bShowHiddenPara );
 }
 
 
@@ -208,25 +178,12 @@ void  SwDocDisplayItem::operator=( const SwDocDisplayItem& rDocDisplayItem)
     bSoftHyphen         = rDocDisplayItem.bSoftHyphen           ;
     bHiddenText         = rDocDisplayItem.bHiddenText           ;
     bManualBreak        = rDocDisplayItem.bManualBreak          ;
-    bIndexEntry         = rDocDisplayItem.bIndexEntry           ;
-    bIndexBackground    = rDocDisplayItem.bIndexBackground      ;
-    bFootnoteBackground = rDocDisplayItem.bFootnoteBackground   ;
-    bField              = rDocDisplayItem.bField                ;
-    bTable              = rDocDisplayItem.bTable                ;
-    bGraphic            = rDocDisplayItem.bGraphic              ;
-    bDrawing            = rDocDisplayItem.bDrawing              ;
-    bFieldName          = rDocDisplayItem.bFieldName            ;
-    bNotes              = rDocDisplayItem.bNotes                ;
     bShowHiddenPara     = rDocDisplayItem.bShowHiddenPara       ;
-    aIndexBackgrndCol   = rDocDisplayItem.aIndexBackgrndCol     ;
-
 }
 
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
-
 void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
 {
     rVOpt.SetParagraph  (bParagraphEnd      );
@@ -236,27 +193,13 @@ void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetSoftHyph   (bSoftHyphen        );
     rVOpt.SetHidden     (bHiddenText        );
     rVOpt.SetLineBreak  (bManualBreak       );
-    rVOpt.SetTox        (bIndexEntry        );
-    rVOpt.SetFootNote   (bFootnoteBackground);
-    rVOpt.SetIndexBackground(bIndexBackground);
-    rVOpt.SetField      (bField             );
-    rVOpt.SetTable      (bTable             );
-    rVOpt.SetGraphic    (bGraphic           );
-    rVOpt.SetDraw       (bDrawing           );
-    rVOpt.SetControl    (bDrawing           );
-    rVOpt.SetFldName    (bFieldName         );
-    rVOpt.SetPostIts    (bNotes             );
     rVOpt.SetShowHiddenPara(bShowHiddenPara );
-
-    rVOpt.SetIndexBackgrndColor(aIndexBackgrndCol);
 }
 
 
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
-
 SwElemItem::SwElemItem( USHORT nWhich ) :
     SfxPoolItem(nWhich)
 {
@@ -268,10 +211,18 @@ SwElemItem::SwElemItem( USHORT nWhich ) :
     bSectionBounds =
     bCrosshair     =
     bBounds        =
-    bStatusLine    =
     bHandles       =
     bBigHandles     =
-    bSmoothScroll  = FALSE;
+    bSmoothScroll  =
+    bIndexEntry         =
+    bIndexBackground    =
+    bFootnoteBackground =
+    bField              =
+    bTable              =
+    bGraphic            =
+    bDrawing            =
+    bFieldName          =
+    bNotes              = FALSE;
 }
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -300,8 +251,15 @@ SwElemItem::SwElemItem(const SwViewOption& rVOpt, USHORT nWhich) :
     bHandles        = rVOpt.IsSolidMarkHdl();
     bBigHandles     = rVOpt.IsBigMarkHdl();
     bSmoothScroll   = rVOpt.IsSmoothScroll();
-
-//  bStatusLine
+    bIndexEntry         = rVOpt.IsTox();
+    bIndexBackground    = rVOpt.IsIndexBackground();
+    bFootnoteBackground = rVOpt.IsFootNote();
+    bField              = rVOpt.IsField();
+    bTable              = rVOpt.IsTable();
+    bGraphic            = rVOpt.IsGraphic();
+    bDrawing            = rVOpt.IsDraw() && rVOpt.IsControl();
+    bFieldName          = rVOpt.IsFldName();
+    bNotes              = rVOpt.IsPostIts();
 
 }
 
@@ -332,10 +290,18 @@ int SwElemItem::operator==( const SfxPoolItem& rAttr ) const
                 bSectionBounds  == rItem.bSectionBounds &&
                 bCrosshair      == rItem.bCrosshair     &&
                 bBounds         == rItem.bBounds        &&
-                bStatusLine     == rItem.bStatusLine    &&
                 bHandles        == rItem.bHandles       &&
                 bBigHandles     == rItem.bBigHandles    &&
-                bSmoothScroll   == rItem.bSmoothScroll );
+                bSmoothScroll   == rItem.bSmoothScroll  &&
+                bIndexEntry           == rItem.bIndexEntry         &&
+                bIndexBackground      == rItem.bIndexBackground    &&
+                bFootnoteBackground   == rItem.bFootnoteBackground &&
+                bField                == rItem.bField              &&
+                bTable                == rItem.bTable              &&
+                bGraphic              == rItem.bGraphic            &&
+                bDrawing              == rItem.bDrawing            &&
+                bFieldName            == rItem.bFieldName          &&
+                bNotes                == rItem.bNotes             );
 }
 
 /*-----------------31.08.96 14.13-------------------
@@ -353,10 +319,18 @@ void  SwElemItem::operator=( const SwElemItem& rElemItem)
     bSectionBounds  = rElemItem.  bSectionBounds    ;
     bCrosshair      = rElemItem.  bCrosshair        ;
     bBounds         = rElemItem.  bBounds           ;
-    bStatusLine     = rElemItem.  bStatusLine       ;
     bHandles        = rElemItem.  bHandles          ;
     bBigHandles     = rElemItem.  bBigHandles       ;
     bSmoothScroll   = rElemItem.  bSmoothScroll     ;
+    bIndexEntry         = rElemItem.bIndexEntry           ;
+    bIndexBackground    = rElemItem.bIndexBackground      ;
+    bFootnoteBackground = rElemItem.bFootnoteBackground   ;
+    bField              = rElemItem.bField                ;
+    bTable              = rElemItem.bTable                ;
+    bGraphic            = rElemItem.bGraphic              ;
+    bDrawing            = rElemItem.bDrawing              ;
+    bFieldName          = rElemItem.bFieldName            ;
+    bNotes              = rElemItem.bNotes                ;
 }
 
 /*--------------------------------------------------------------------
@@ -376,7 +350,16 @@ void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetSolidMarkHdl(bHandles    );
     rVOpt.SetBigMarkHdl(bBigHandles );
     rVOpt.SetSmoothScroll(bSmoothScroll);
-//  bStatusLine
+    rVOpt.SetTox        (bIndexEntry        );
+    rVOpt.SetFootNote   (bFootnoteBackground);
+    rVOpt.SetIndexBackground(bIndexBackground);
+    rVOpt.SetField      (bField             );
+    rVOpt.SetTable      (bTable             );
+    rVOpt.SetGraphic    (bGraphic           );
+    rVOpt.SetDraw       (bDrawing           );
+    rVOpt.SetControl    (bDrawing           );
+    rVOpt.SetFldName    (bFieldName         );
+    rVOpt.SetPostIts    (bNotes             );
 }
 
 
@@ -608,6 +591,9 @@ int SwTestItem::operator==( const SfxPoolItem& rAttr ) const
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:32  hr
+    initial import
+
     Revision 1.80  2000/09/18 16:05:15  willem.vandorp
     OpenOffice header added.
 

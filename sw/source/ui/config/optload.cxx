@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 11:12:46 $
+ *  last change: $Author: os $ $Date: 2001-03-22 09:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,14 +69,18 @@
 #include <tools/shl.hxx>
 #endif
 
-#ifndef _SWTYPES_HXX //autogen
+#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
-
-#ifndef _UIITEMS_HXX //autogen
+#ifndef _HELPID_H
+#include <helpid.h>
+#endif
+#ifndef _UIITEMS_HXX
 #include <uiitems.hxx>
 #endif
-
+#ifndef _MODCFG_HXX
+#include <modcfg.hxx>
+#endif
 #include "swmodule.hxx"
 #include "usrpref.hxx"
 #include "wrtsh.hxx"
@@ -91,32 +95,97 @@
 #ifndef _FLDUPDE_HXX
 #include <fldupde.hxx>
 #endif
+#ifndef _SVX_DLGUTIL_HXX
+#include <svx/dlgutil.hxx>
+#endif
+#ifndef _SVX_HTMLMODE_HXX
+#include <svx/htmlmode.hxx>
+#endif
+#ifndef _SVX_SVXIDS_HRC
+#include <svx/svxids.hrc>
+#endif
+#ifndef _FLDMGR_HXX
+#include <fldmgr.hxx>
+#endif
+#ifndef _POOLFMT_HXX
+#include <poolfmt.hxx>
+#endif
+#ifndef _EXPFLD_HXX //autogen
+#include <expfld.hxx>
+#endif
+#ifndef _INSDLG_HXX //autogen
+#include <so3/insdlg.hxx>
+#endif
+#ifndef _OUTPLACE_HXX //autogen
+#include <so3/outplace.hxx>
+#endif
+#ifndef _SWDOCSH_HXX //autogen
+#include <docsh.hxx>
+#endif
 
 /* -----------------22.10.98 15:12-------------------
  *
  * --------------------------------------------------*/
-
 SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, SW_RES(TP_OPTLOAD_PAGE), rSet),
+    aUpdateGB   (this, ResId(GB_UPDATE    )),
+    aLinkFT     (this, ResId(FT_LINK    )),
     aAlwaysRB   (this, ResId(RB_ALWAYS  )),
     aRequestRB  (this, ResId(RB_REQUEST )),
     aNeverRB    (this, ResId(RB_NEVER   )),
-    aLinkDocOnlyCB  (this, ResId(CB_LINK_DOCONLY )),
-    aLinkGB     (this, ResId(GB_LINK    )),
+    aFieldFT    (this, ResId(FT_FIELD   )),
     aAutoUpdateFields(this, ResId(CB_AUTO_UPDATE_FIELDS )),
     aAutoUpdateCharts(this, ResId(CB_AUTO_UPDATE_CHARTS )),
-    aFldDocOnlyCB  (this, ResId(CB_FLD_DOCONLY )),
-    aFldGB      (this, ResId(GB_FIELD   )),
+    aCaptionGB      (this, ResId(GB_CAPTION         )),
+    aCaptionCB      (this, ResId(CB_CAPTION         )),
+    aCaptionFT      (this, ResId(TXT_OPTIONS        )),
+    aCaptionPB      (this, ResId(PB_OPTIONS         )),
+    aSettingsGB   ( this,   SW_RES( GB_SETTINGS   ) ),
+    aMetricLB     ( this,   SW_RES( LB_METRIC   ) ),
+    aMetricFT     ( this,   SW_RES( FT_METRIC   ) ),
+    aTabFT        ( this,   SW_RES( FT_TAB      ) ),
+    aTabMF        ( this,   SW_RES( MF_TAB      ) ),
     aMergeDistCB(this, ResId(CB_MERGE_PARA_DIST )),
     aMergeDistPageStartCB(this, ResId(CB_MERGE_PARA_DIST_PAGESTART  )),
     aCompatGB   (this, ResId(GB_COMPAT  )),
-
     pWrtShell   (0),
-    nOldLinkMode(MANUAL)
+    aMetricArr    ( SW_RES( ST_METRIC ) ),
+    nLastTab(0),
+    nOldLinkMode(MANUAL),
+    bHTMLMode(FALSE)
 {
     FreeResource();
 
+    for ( USHORT i = 0; i < aMetricArr.Count(); ++i )
+    {
+        String sMetric = aMetricArr.GetStringByPos( i );
+        FieldUnit eFUnit = (FieldUnit)aMetricArr.GetValue( i );
+
+        switch ( eFUnit )
+        {
+            case FUNIT_MM:
+            case FUNIT_CM:
+            case FUNIT_POINT:
+            case FUNIT_PICA:
+            case FUNIT_INCH:
+            {
+                // nur diese Metriken benutzen
+                USHORT nPos = aMetricLB.InsertEntry( sMetric );
+                aMetricLB.SetEntryData( nPos, (void*)(long)eFUnit );
+            }
+        }
+    }
+    aMetricLB.SetSelectHdl(LINK(this, SwLoadOptPage, MetricHdl));
+
+    const SfxPoolItem* pItem;
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, FALSE, &pItem )
+        && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
+    {
+        aTabFT.Hide();
+        aTabMF.Hide();
+    }
     aAutoUpdateFields.SetClickHdl(LINK(this, SwLoadOptPage, UpdateHdl));
+    aCaptionPB.SetClickHdl(LINK(this, SwLoadOptPage, CaptionHdl));
 }
 
 /*-----------------18.01.97 12.43-------------------
@@ -153,8 +222,6 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
 {
     BOOL bRet = FALSE;
     SwModule* pMod = SW_MOD();
-    BOOL bFldDocOnly = aFldDocOnlyCB.IsChecked();
-    BOOL bLinkDocOnly = aLinkDocOnlyCB.IsChecked();
 
     USHORT nNewLinkMode;
     if (aNeverRB.IsChecked())
@@ -167,31 +234,23 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     USHORT nFldFlags = aAutoUpdateFields.IsChecked() ?
         aAutoUpdateCharts.IsChecked() ? AUTOUPD_FIELD_AND_CHARTS : AUTOUPD_FIELD_ONLY : AUTOUPD_OFF;
 
-    if(pWrtShell)
-        pMod->ApplyLinkFieldToDocMode(bFldDocOnly, bLinkDocOnly);
-
     if(aAutoUpdateFields.IsChecked() != aAutoUpdateFields.GetSavedValue() ||
             aAutoUpdateCharts.IsChecked() != aAutoUpdateCharts.GetSavedValue())
     {
-        if (!bFldDocOnly || !pWrtShell)
-            pMod->ApplyFldUpdateFlags(nFldFlags);
+        pMod->ApplyFldUpdateFlags(nFldFlags);
         if(pWrtShell)
         {
-            USHORT nSet = bFldDocOnly ? nFldFlags : AUTOUPD_GLOBALSETTING;
-            pWrtShell->SetFldUpdateFlags(nSet);
+            pWrtShell->SetFldUpdateFlags(nFldFlags);
             pWrtShell->SetModified();
         }
     }
 
     if (nNewLinkMode != nOldLinkMode)
     {
-        if (!bLinkDocOnly || !pWrtShell)
-            pMod->ApplyLinkMode(nNewLinkMode);
-
+        pMod->ApplyLinkMode(nNewLinkMode);
         if (pWrtShell)
         {
-            USHORT nSet = bLinkDocOnly ? nNewLinkMode : (USHORT)GLOBALSETTING;
-            pWrtShell->SetLinkUpdMode( nSet );
+            pWrtShell->SetLinkUpdMode( nNewLinkMode );
             pWrtShell->SetModified();
         }
 
@@ -207,12 +266,41 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
         }
 
     }
+    const USHORT nMPos = aMetricLB.GetSelectEntryPos();
+    if ( nMPos != aMetricLB.GetSavedValue() )
+    {
+        // Doppel-Cast fuer VA3.0
+        USHORT nFieldUnit = (USHORT)(long)aMetricLB.GetEntryData( nMPos );
+        rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, (UINT16)nFieldUnit ) );
+        bRet = TRUE;
+    }
+
+    if(aTabMF.IsVisible() && aTabMF.GetText() != aTabMF.GetSavedValue())
+    {
+        rSet.Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
+                    (USHORT)aTabMF.Denormalize(aTabMF.GetValue(FUNIT_TWIP))));
+        bRet = TRUE;
+    }
+
+    SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+
+    if (aCaptionCB.GetSavedValue() != aCaptionCB.GetState())
+    {
+        pModOpt->SetInsWithCaption(bHTMLMode, aCaptionCB.IsChecked());
+        bRet = TRUE;
+    }
+
     return bRet;
 }
 /*-----------------18.01.97 12.42-------------------
 
 --------------------------------------------------*/
-
+inline lcl_MoveWin(Window& rWin, long nDiff)
+{
+    Point aPos(rWin.GetPosPixel());
+    aPos.Y() -= nDiff;
+    rWin.SetPosPixel(aPos);
+}
 void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
 {
     const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref(FALSE);
@@ -221,10 +309,8 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
     if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_WRTSHELL, FALSE, &pItem))
         pWrtShell = (SwWrtShell*)((const SwPtrItem*)pItem)->GetValue();
 
-    USHORT nFldFlags = AUTOUPD_GLOBALSETTING;
+    sal_Int32 nFldFlags = AUTOUPD_GLOBALSETTING;
     nOldLinkMode = GLOBALSETTING;
-    BOOL bFldDocOnly = pUsrPref->IsUpdateFieldsToCurrDoc() ;
-    BOOL bLinkDocOnly = pUsrPref->IsUpdateLinksToCurrDoc();
     if (pWrtShell)
     {
         nFldFlags = pWrtShell->GetFldUpdateFlags(TRUE);
@@ -237,15 +323,7 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
     }
     else
     {
-        bLinkDocOnly = FALSE;
-        bFldDocOnly = FALSE;
-    }
-    if(nOldLinkMode == GLOBALSETTING)
-    {
         nOldLinkMode = pUsrPref->GetUpdateLinkMode();
-    }
-    if(nFldFlags == AUTOUPD_GLOBALSETTING)
-    {
         nFldFlags = pUsrPref->GetFldUpdateFlags();
     }
 
@@ -253,10 +331,6 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
     aAutoUpdateCharts.Check(nFldFlags == AUTOUPD_FIELD_AND_CHARTS);
     aAutoUpdateCharts.Enable(nFldFlags != AUTOUPD_OFF);
 
-    aLinkDocOnlyCB.Enable(pWrtShell != 0);
-    aLinkDocOnlyCB.Check(bLinkDocOnly);
-    aFldDocOnlyCB.Enable(pWrtShell != 0);
-    aFldDocOnlyCB.Check(bFldDocOnly);
     aMergeDistCB.Enable(pWrtShell != 0);
     aMergeDistPageStartCB.Enable(pWrtShell != 0);
     aCompatGB.Enable(pWrtShell != 0);
@@ -270,55 +344,551 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
 
     aAutoUpdateFields.SaveValue();
     aAutoUpdateCharts.SaveValue();
+    aMetricLB.SetNoSelection();
+    if ( rSet.GetItemState( SID_ATTR_METRIC ) >= SFX_ITEM_AVAILABLE )
+    {
+        const SfxUInt16Item& rItem = (SfxUInt16Item&)rSet.Get( SID_ATTR_METRIC );
+        FieldUnit eFieldUnit = (FieldUnit)rItem.GetValue();
+
+        for ( USHORT i = 0; i < aMetricLB.GetEntryCount(); ++i )
+        {
+            if ( (int)aMetricLB.GetEntryData( i ) == (int)eFieldUnit )
+            {
+                aMetricLB.SelectEntryPos( i );
+                break;
+            }
+        }
+        ::SetFieldUnit(aTabMF, eFieldUnit);
+    }
+    aMetricLB.SaveValue();
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_DEFTABSTOP, FALSE, &pItem))
+    {
+        nLastTab = ((SfxUInt16Item*)pItem)->GetValue();
+        aTabMF.SetValue(aTabMF.Normalize(nLastTab), FUNIT_TWIP);
+    }
+    aTabMF.SaveValue();
+
+    const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+    aCaptionCB.Check(pModOpt->IsInsWithCaption(bHTMLMode));
+    aCaptionCB.SaveValue();
+
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, FALSE, &pItem))
+    {
+        bHTMLMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
+    }
+
+    //hide some controls in HTML
+    if(bHTMLMode)
+    {
+        aCaptionGB.Hide();
+        aCaptionCB.Hide();
+        aCaptionFT.Hide();
+        aCaptionPB.Hide();
+
+        long nDiff = aSettingsGB.GetPosPixel().Y() - aCaptionGB.GetPosPixel().Y();
+        lcl_MoveWin(aSettingsGB, nDiff);
+        lcl_MoveWin(aMetricFT, nDiff);
+        lcl_MoveWin(aMetricLB, nDiff);
+        lcl_MoveWin(aTabFT, nDiff);
+        lcl_MoveWin(aTabMF, nDiff);
+        lcl_MoveWin(aCompatGB, nDiff);
+        lcl_MoveWin(aMergeDistCB, nDiff);
+        lcl_MoveWin(aMergeDistPageStartCB, nDiff);
+    }
+}
+/*-----------------13.01.97 14.44-------------------
+    Metric des Deftabstops umschalten
+--------------------------------------------------*/
+
+IMPL_LINK(SwLoadOptPage, MetricHdl, ListBox*, EMPTYARG)
+{
+    const USHORT nMPos = aMetricLB.GetSelectEntryPos();
+    if(nMPos != USHRT_MAX)
+    {
+        // Doppel-Cast fuer VA3.0
+        FieldUnit eFieldUnit = (FieldUnit)(long)aMetricLB.GetEntryData( nMPos );
+        BOOL bModified = aTabMF.IsModified();
+        long nVal = bModified ?
+            aTabMF.Denormalize( aTabMF.GetValue( FUNIT_TWIP ) ) :
+                nLastTab;
+        ::SetFieldUnit( aTabMF, eFieldUnit );
+        aTabMF.SetValue( aTabMF.Normalize( nVal ), FUNIT_TWIP );
+        if(!bModified)
+            aTabMF.ClearModifyFlag();
+    }
+
+    return 0;
+}
+/*********************************************************************/
+/*                                                                   */
+/*********************************************************************/
+
+IMPL_LINK(SwLoadOptPage, CaptionHdl, PushButton*, EMPTYARG)
+{
+    SwCaptionOptDlg aDlg(this, GetItemSet());
+    aDlg.Execute();
+
+    return 0;
 }
 
 /*--------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2000/09/28 15:23:17  os
-    use of configuration service in view options
-
-    Revision 1.1.1.1  2000/09/18 17:14:33  hr
-    initial import
-
-    Revision 1.12  2000/09/18 16:05:17  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.11  1999/10/01 06:04:24  os
-    enable new compatibility button
-
-    Revision 1.10  1999/09/30 09:59:56  os
-    new compatibility option
-
-    Revision 1.9  1999/09/30 09:45:35  os
-    new compatibility option
-
-    Revision 1.8  1999/03/15 15:22:58  OS
-    #63171# Fieldpdate und LinkMode in getrennten Gruppen
-
-
-      Rev 1.7   15 Mar 1999 16:22:58   OS
-   #63171# Fieldpdate und LinkMode in getrennten Gruppen
-
-      Rev 1.6   11 Mar 1999 23:56:38   JP
-   Task #63171#: Optionen fuer Feld-/LinkUpdate Doc oder Modul lokal
-
-      Rev 1.5   09 Feb 1999 15:19:10   OS
-   #61404# Optionen fuer Felder/Charts aktualisieren
-
-      Rev 1.4   07 Jan 1999 15:04:24   OS
-   #60625# Absatzabstaende addieren
-
-      Rev 1.3   03 Dec 1998 11:24:54   OM
-   #58216# Verknuepfungsoptionen nur fuer aktuelles Dok
-
-      Rev 1.2   30 Nov 1998 17:30:12   OM
-   #59770# Tabellenoptionen: Ueberschrift nur auf erster Seite
-
-      Rev 1.1   23 Nov 1998 16:13:42   OM
-   #58216# Verknuepfungsoptionen pro Dokument
-
-      Rev 1.0   20 Nov 1998 17:03:42   OM
-   Initial revision.
-
+    Beschreibung:
  --------------------------------------------------------------------*/
+
+SwCaptionOptDlg::SwCaptionOptDlg(Window* pParent, const SfxItemSet& rSet) :
+    SfxSingleTabDialog(pParent, rSet, 0)
+{
+    // TabPage erzeugen
+    SwCaptionOptPage* pPage = (SwCaptionOptPage*) SwCaptionOptPage::Create(this, rSet);
+    SetTabPage(pPage);
+}
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
+SwCaptionOptDlg::~SwCaptionOptDlg()
+{
+}
+/* -----------------22.10.98 15:12-------------------
+ *
+ * --------------------------------------------------*/
+
+SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
+    : SfxTabPage(pParent, SW_RES(TP_OPTCAPTION_PAGE), rSet),
+    aCheckLB        (this, SW_RES(CLB_OBJECTS   )),
+    aSampleText     (this, SW_RES(TXT_SAMPLE    )),
+    aCategoryText   (this, SW_RES(TXT_CATEGORY  )),
+    aCategoryBox    (this, SW_RES(BOX_CATEGORY  )),
+    aFormatText     (this, SW_RES(TXT_FORMAT    )),
+    aFormatBox      (this, SW_RES(BOX_FORMAT    )),
+    aTextText       (this, SW_RES(TXT_TEXT      )),
+    aTextEdit       (this, SW_RES(EDT_TEXT      )),
+    aPosText        (this, SW_RES(TXT_POS       )),
+    aPosBox         (this, SW_RES(BOX_POS       )),
+    aFtLevel        (this, SW_RES(FT_LEVEL      )),
+    aLbLevel        (this, SW_RES(LB_LEVEL      )),
+    aFtDelim        (this, SW_RES(FT_SEPARATOR  )),
+    aEdDelim        (this, SW_RES(ED_SEPARATOR  )),
+    aSettingsGroup  (this, SW_RES(GRP_SETTINGS  )),
+
+    sSWTable        (SW_RES(STR_TABLE           )),
+    sSWFrame        (SW_RES(STR_FRAME           )),
+    sSWGraphic      (SW_RES(STR_GRAPHIC         )),
+    sOLE            (SW_RES(STR_OLE             )),
+
+    sBegin          (SW_RESSTR(STR_BEGINNING            )),
+    sEnd            (SW_RESSTR(STR_END                  )),
+    sAbove          (SW_RESSTR(STR_ABOVE                )),
+    sBelow          (SW_RESSTR(STR_CP_BELOW             )),
+
+    pMgr            (new SwFldMgr()),
+    bHTMLMode(FALSE)
+{
+    GetDocPoolNm( RES_POOLCOLL_LABEL_ABB, sIllustration );
+    GetDocPoolNm( RES_POOLCOLL_LABEL_TABLE, sTable );
+    GetDocPoolNm( RES_POOLCOLL_LABEL_FRAME, sText );
+
+    USHORT i, nCount;
+    SwWrtShell *pSh = ::GetActiveWrtShell();
+
+    // aFormatBox
+    USHORT nSelFmt = SVX_NUM_ARABIC;
+    if (pSh)
+    {
+        nCount = pMgr->GetFldTypeCount();
+        SwFieldType* pFldType;
+        for ( i = nCount; i; )
+            if( ( pFldType = pMgr->GetFldType(USHRT_MAX, --i))->GetName() ==
+                aCategoryBox.GetText() )
+            {
+                nSelFmt = (USHORT)((SwSetExpFieldType*)pFldType)->GetSeqFormat();
+                break;
+            }
+    }
+
+
+    nCount = pMgr->GetFormatCount(TYP_SEQFLD, FALSE);
+    for ( i = 0; i < nCount; ++i )
+    {
+        aFormatBox.InsertEntry( pMgr->GetFormatStr(TYP_SEQFLD, i) );
+        USHORT nFmtId = pMgr->GetFormatId(TYP_SEQFLD, i);
+        aFormatBox.SetEntryData( i, (void*)nFmtId );
+        if( nFmtId == nSelFmt )
+            aFormatBox.SelectEntryPos( i );
+    }
+
+    for (i = 0; i < MAXLEVEL; i++)
+        aLbLevel.InsertEntry(String::CreateFromInt32(i + 1));
+
+    sal_Unicode cDelim = '.', nLvl = MAXLEVEL;
+
+    if (pSh)
+    {
+        SwSetExpFieldType* pFldType = (SwSetExpFieldType*)pMgr->GetFldType(
+                                            RES_SETEXPFLD, aCategoryBox.GetText() );
+        if( pFldType )
+        {
+            cDelim = pFldType->GetDelimiter();
+            nLvl = pFldType->GetOutlineLvl();
+        }
+    }
+
+    aLbLevel.SelectEntryPos( nLvl < MAXLEVEL ? nLvl + 1 : 0 );
+    aEdDelim.SetText( cDelim );
+
+    aCheckLB.SetHelpId(HID_OPTCAPTION_CLB);
+
+    FreeResource();
+
+    Link aLk = LINK( this, SwCaptionOptPage, ModifyHdl );
+    aCategoryBox.SetModifyHdl( aLk );
+    aTextEdit   .SetModifyHdl( aLk );
+
+    aLk = LINK(this, SwCaptionOptPage, SelectHdl);
+    aCategoryBox.SetSelectHdl( aLk );
+    aFormatBox  .SetSelectHdl( aLk );
+
+    aCheckLB.SetSelectHdl( LINK(this, SwCaptionOptPage, ShowEntryHdl) );
+    aCheckLB.SetDeselectHdl( LINK(this, SwCaptionOptPage, SaveEntryHdl) );
+}
+
+/*-----------------18.01.97 12.43-------------------
+
+--------------------------------------------------*/
+
+SwCaptionOptPage::~SwCaptionOptPage()
+{
+    DelUserData();
+    delete pMgr;
+}
+
+/*-----------------18.01.97 12.43-------------------
+
+--------------------------------------------------*/
+
+SfxTabPage* SwCaptionOptPage::Create( Window* pParent,
+                                const SfxItemSet& rAttrSet )
+{
+    return new SwCaptionOptPage(pParent, rAttrSet );
+}
+
+/*-----------------18.01.97 12.42-------------------
+
+--------------------------------------------------*/
+
+BOOL SwCaptionOptPage::FillItemSet( SfxItemSet& rSet )
+{
+    BOOL bRet = FALSE;
+    SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+
+    SaveEntry(aCheckLB.FirstSelected());    // Aktuellen Eintrag uebernehmen
+
+    SvLBoxEntry* pEntry = aCheckLB.First();
+
+    while (pEntry)
+    {
+        InsCaptionOpt* pData = (InsCaptionOpt*)pEntry->GetUserData();
+        bRet |= pModOpt->SetCapOption(bHTMLMode, pData);
+        pEntry = aCheckLB.Next(pEntry);
+    }
+
+    return bRet;
+}
+
+/*-----------------18.01.97 12.42-------------------
+
+--------------------------------------------------*/
+
+void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
+{
+    const SfxPoolItem* pItem;
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, FALSE, &pItem))
+    {
+        bHTMLMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
+    }
+
+    USHORT nPos = 0;
+
+    DelUserData();
+    aCheckLB.GetModel()->Clear();   // Alle Eintraege entfernen
+
+    aCheckLB.InsertEntry(sSWTable);     SetOptions(nPos++, TABLE_CAP);
+    aCheckLB.InsertEntry(sSWFrame);     SetOptions(nPos++, FRAME_CAP);
+    aCheckLB.InsertEntry(sSWGraphic);   SetOptions(nPos++, GRAPHIC_CAP);
+
+    SvObjectServerList aObjS;
+    aObjS.FillInsertObjects();
+    aObjS.Remove(*SwDocShell::ClassFactory());  // Writer-Id wieder entfernen
+
+    for (ULONG i = 0; i < aObjS.Count(); i++)
+    {
+        const SvGlobalName &rOleId = aObjS[i].GetClassName();
+        const String *pClassName = &aObjS[i].GetHumanName();
+        if (rOleId == *SvOutPlaceObject::ClassFactory())
+            pClassName = &sOLE;
+        aCheckLB.InsertEntry(*pClassName);
+        SetOptions(nPos++, OLE_CAP, &rOleId);
+    }
+
+    ModifyHdl();
+}
+
+/*-----------------18.01.97 12.42-------------------
+
+--------------------------------------------------*/
+
+void SwCaptionOptPage::SetOptions(const USHORT nPos, const SwCapObjType eType, const SvGlobalName *pOleId)
+{
+    SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+    const InsCaptionOpt* pOpt = pModOpt->GetCapOption(bHTMLMode, eType, pOleId);
+
+    if (pOpt)
+    {
+        aCheckLB.SetEntryData(nPos, new InsCaptionOpt(*pOpt));
+        aCheckLB.CheckEntryPos(nPos, pOpt->UseCaption());
+    }
+    else
+        aCheckLB.SetEntryData(nPos, new InsCaptionOpt(eType, pOleId));
+}
+
+/*-----------------18.01.97 12.42-------------------
+
+--------------------------------------------------*/
+
+void SwCaptionOptPage::DelUserData()
+{
+    SvLBoxEntry* pEntry = aCheckLB.First();
+
+    while (pEntry)
+    {
+        delete (InsCaptionOpt*)pEntry->GetUserData();
+        pEntry->SetUserData(0);
+        pEntry = aCheckLB.Next(pEntry);
+    }
+}
+
+/* -----------------26.10.98 11:06-------------------
+ *
+ * --------------------------------------------------*/
+
+IMPL_LINK( SwCaptionOptPage, ShowEntryHdl, SvxCheckListBox *, EMPTYARG )
+{
+    SvLBoxEntry* pSelEntry = aCheckLB.FirstSelected();
+
+    if (pSelEntry)
+    {
+        SwWrtShell *pSh = ::GetActiveWrtShell();
+
+        InsCaptionOpt* pOpt = (InsCaptionOpt*)pSelEntry->GetUserData();
+
+        aCategoryBox.Clear();
+        if (pSh)
+        {
+            USHORT nCount = pMgr->GetFldTypeCount();
+
+            for (USHORT i = 0; i < nCount; i++)
+            {
+                SwFieldType *pType = pMgr->GetFldType( USHRT_MAX, i );
+                if( pType->Which() == RES_SETEXPFLD &&
+                    ((SwSetExpFieldType *) pType)->GetType() & GSE_SEQ )
+                    aCategoryBox.InsertEntry(SwBoxEntry(pType->GetName(), i));
+            }
+        }
+        else
+        {
+            aCategoryBox.InsertEntry(SwBoxEntry(sIllustration, 0));
+            aCategoryBox.InsertEntry(SwBoxEntry(sTable, 1));
+            aCategoryBox.InsertEntry(SwBoxEntry(sText, 2));
+        }
+
+        aCategoryBox.SetText(pOpt->GetCategory());
+        if (pOpt->GetCategory().Len() &&
+            aCategoryBox.GetEntryPos(pOpt->GetCategory()) == COMBOBOX_ENTRY_NOTFOUND)
+            aCategoryBox.InsertEntry(pOpt->GetCategory());
+        if (!aCategoryBox.GetText().Len())
+        {
+            USHORT nPos = 0;
+            switch(pOpt->GetObjType())
+            {
+                case OLE_CAP:
+                case GRAPHIC_CAP:       nPos = 0;   break;
+                case TABLE_CAP:         nPos = 1;   break;
+                case FRAME_CAP:         nPos = 2;   break;
+            }
+            aCategoryBox.SetText(aCategoryBox.GetEntry(nPos).aName);
+        }
+
+        for (USHORT i = 0; i < aFormatBox.GetEntryCount(); i++)
+        {
+            if (pOpt->GetNumType() == (USHORT)(ULONG)aFormatBox.GetEntryData(i))
+            {
+                aFormatBox.SelectEntryPos(i);
+                break;
+            }
+        }
+        aTextEdit.SetText(pOpt->GetCaption());
+
+        aPosBox.Clear();
+        switch (pOpt->GetObjType())
+        {
+            case GRAPHIC_CAP:
+            case TABLE_CAP:
+            case OLE_CAP:
+                aPosBox.InsertEntry(sAbove);
+                aPosBox.InsertEntry(sBelow);
+                break;
+            case FRAME_CAP:
+                aPosBox.InsertEntry(sBegin);
+                aPosBox.InsertEntry(sEnd);
+                break;
+        }
+        aPosBox.SelectEntryPos(pOpt->GetPos());
+        aPosBox.Enable(pOpt->GetObjType() != GRAPHIC_CAP);
+
+        aPosBox.SelectEntryPos(pOpt->GetPos());
+        aLbLevel.SelectEntryPos(pOpt->GetLevel());
+        aEdDelim.SetText(pOpt->GetSeparator());
+    }
+
+    ModifyHdl();
+
+    return 0;
+}
+
+/* -----------------26.10.98 11:06-------------------
+ *
+ * --------------------------------------------------*/
+
+IMPL_LINK( SwCaptionOptPage, SaveEntryHdl, SvxCheckListBox *, EMPTYARG )
+{
+    SvLBoxEntry* pEntry = aCheckLB.GetHdlEntry();
+
+    if (pEntry)     // Alles speichern
+        SaveEntry(pEntry);
+
+    return 0;
+}
+
+/* -----------------05.11.98 16:23-------------------
+ *
+ * --------------------------------------------------*/
+
+void SwCaptionOptPage::SaveEntry(SvLBoxEntry* pEntry)
+{
+    if (pEntry)
+    {
+        InsCaptionOpt* pOpt = (InsCaptionOpt*)pEntry->GetUserData();
+
+        pOpt->UseCaption() = aCheckLB.IsChecked(aCheckLB.GetModel()->GetAbsPos(pEntry));
+        String aName( aCategoryBox.GetText() );
+        aName.EraseLeadingChars (' ');
+        aName.EraseTrailingChars(' ');
+        pOpt->SetCategory(aName);
+        pOpt->SetNumType((USHORT)(ULONG)aFormatBox.GetEntryData(aFormatBox.GetSelectEntryPos()));
+        pOpt->SetCaption(aTextEdit.GetText());
+        pOpt->SetPos(aPosBox.GetSelectEntryPos());
+        pOpt->SetLevel(aLbLevel.GetSelectEntryPos());
+        pOpt->SetSeparator(aEdDelim.GetText().GetChar(0));
+    }
+}
+
+/* -----------------26.10.98 11:06-------------------
+ *
+ * --------------------------------------------------*/
+
+IMPL_LINK( SwCaptionOptPage, ModifyHdl, Edit *, EMPTYARG )
+{
+    String sFldTypeName = aCategoryBox.GetText();
+/*
+    SwFieldType* pType = sFldTypeName.Len() ? pMgr->GetFldType(RES_SETEXPFLD, sFldTypeName) : 0;
+
+    ((SfxSingleTabDialog*)GetParent())->GetOKButton()->Enable( (!pType || ((SwSetExpFieldType*)pType)->GetType() == GSE_SEQ)
+                                    && sFldTypeName.Len() != 0 );
+*/
+    SfxSingleTabDialog *pDlg = (SfxSingleTabDialog *)GetParent();
+    PushButton *pBtn = pDlg->GetOKButton();
+    if (pBtn)
+        pBtn->Enable(sFldTypeName.Len() != 0);
+
+    DrawSample();
+    return 0;
+}
+
+/* -----------------26.10.98 10:58-------------------
+ *
+ * --------------------------------------------------*/
+
+IMPL_LINK_INLINE_START( SwCaptionOptPage, SelectHdl, ListBox *, pBox )
+{
+    DrawSample();
+    return 0;
+}
+IMPL_LINK_INLINE_END( SwCaptionOptPage, SelectHdl, ListBox *, EMPTYARG )
+
+/* -----------------26.10.98 10:58-------------------
+ *
+ * --------------------------------------------------*/
+
+void SwCaptionOptPage::DrawSample()
+{
+    String aStr;
+
+    // Nummer
+    USHORT nNumFmt = (USHORT)(ULONG)aFormatBox.GetEntryData(
+                                    aFormatBox.GetSelectEntryPos() );
+    if( SVX_NUM_NUMBER_NONE != nNumFmt )
+    {
+        // Kategorie
+        aStr += aCategoryBox.GetText();
+        aStr += ' ';
+
+        SwWrtShell *pSh = ::GetActiveWrtShell();
+        String sFldTypeName( aCategoryBox.GetText() );
+        if (pSh)
+        {
+            SwSetExpFieldType* pFldType = (SwSetExpFieldType*)pMgr->GetFldType(
+                                            RES_SETEXPFLD, sFldTypeName );
+            if( pFldType && pFldType->GetOutlineLvl() < MAXLEVEL )
+            {
+                BYTE nLvl = pFldType->GetOutlineLvl();
+                SwNodeNum aNum( nLvl );
+                for( BYTE i = 0; i <= nLvl; ++i )
+                    *(aNum.GetLevelVal() + i) = 1;
+
+                String sNumber( pSh->GetOutlineNumRule()->MakeNumString(
+                                                        aNum, FALSE ));
+                if( sNumber.Len() )
+                    (aStr += sNumber) += pFldType->GetDelimiter();
+            }
+        }
+
+        switch( nNumFmt )
+        {
+            case SVX_NUM_CHARS_UPPER_LETTER:    aStr += 'A'; break;
+            case SVX_NUM_CHARS_UPPER_LETTER_N:  aStr += 'A'; break;
+            case SVX_NUM_CHARS_LOWER_LETTER:    aStr += 'a'; break;
+            case SVX_NUM_CHARS_LOWER_LETTER_N:  aStr += 'a'; break;
+            case SVX_NUM_ROMAN_UPPER:           aStr += 'I'; break;
+            case SVX_NUM_ROMAN_LOWER:           aStr += 'i'; break;
+            //case ARABIC:
+            default:                    aStr += '1'; break;
+        }
+    }
+
+    aStr += aTextEdit.GetText();
+    aSampleText.SetText(aStr);
+}
+
+/*------------------------------------------------------------------------
+ Beschreibung:  ComboBox ohne Spaces
+------------------------------------------------------------------------*/
+
+void CaptionComboBox::KeyInput(const KeyEvent& rEvt)
+{
+    if( rEvt.GetKeyCode().GetCode() != KEY_SPACE )
+        SwComboBox::KeyInput(rEvt);
+}
+
+
+

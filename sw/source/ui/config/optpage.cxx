@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-26 13:43:00 $
+ *  last change: $Author: os $ $Date: 2001-03-22 09:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,23 +206,27 @@
 SwContentOptPage::SwContentOptPage( Window* pParent,
                                       const SfxItemSet& rCoreSet ) :
     SfxTabPage( pParent, SW_RES( TP_CONTENT_OPT ), rCoreSet ),
+    aLineGB       ( this,   SW_RES( GB_LINE     ) ),
+    aTxtbegCB     ( this,   SW_RES( CB_TXTBEG   ) ),
+    aTblbegCB     ( this,   SW_RES( CB_TABBEG   ) ),
+    aSectBoundsCB( this,    SW_RES( CB_SECT_BOUNDS ) ),
+    aCrossCB      ( this,   SW_RES( CB_CROSS     ) ),
+    aSolidHandleCB( this,   SW_RES( CB_HANDLE   ) ),
+    aBigHandleCB  ( this,   SW_RES( CB_BIGHANDLE) ),
+    aWindowGB     ( this,   SW_RES( GB_WINDOW   ) ),
+    aHScrollBox   ( this,   SW_RES( CB_HSCROLL   ) ),
+    aVScrollBox   ( this,   SW_RES( CB_VSCROLL   ) ),
+    aHRulerCBox   ( this,   SW_RES( CB_HRULER   ) ),
+    aHMetric      ( this,   SW_RES( LB_HMETRIC    ) ),
+    aVRulerCBox   ( this,   SW_RES( CB_VRULER    ) ),
+    aVMetric      ( this,   SW_RES( LB_VMETRIC    ) ),
+    aSmoothCBox   ( this,   SW_RES( CB_SMOOTH_SCROLL    ) ),
     aDispBox      ( this,   SW_RES( GB_DISP     ) ),
     aGrfCB        ( this,   SW_RES( CB_GRF          ) ),
     aTblCB        ( this,   SW_RES( CB_TBL      ) ),
     aDrwCB        ( this,   SW_RES( CB_DRWFAST   ) ),
     aFldNameCB    ( this,   SW_RES( CB_FIELD    ) ),
     aPostItCB     ( this,   SW_RES( CB_POSTIT   ) ),
-
-    aUnprintBox   ( this,   SW_RES( GB_NOPRINT  ) ),
-    aParaCB       ( this,   SW_RES( CB_PARA      ) ),
-    aSHyphCB      ( this,   SW_RES( CB_SHYPH        ) ),
-    aSpacesCB     ( this,   SW_RES( CB_SPACE    ) ),
-    aHSpacesCB    ( this,   SW_RES( CB_HSPACE   ) ),
-    aTabCB        ( this,   SW_RES( CB_TAB      ) ),
-    aBreakCB      ( this,   SW_RES( CB_BREAK        ) ),
-    aHiddenCB     ( this,   SW_RES( CB_HIDDEN   ) ),
-    aHiddenParaCB ( this,   SW_RES( CB_HIDDEN_PARA ) ),
-
     aBackBox      ( this,   SW_RES( GB_BACK     ) ),
     aIdxEntryCB   ( this,   SW_RES( CB_IDX_ENTRY     ) ),
     aIdxBackCB   ( this,    SW_RES( CB_INDEX     ) ),
@@ -237,15 +241,9 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
         aFootBackCB .Hide();
         aIdxEntryCB .Hide();
         aIdxBackCB.Hide();
-        aTabCB      .Hide();
-        aHiddenCB   .Hide();
-        aHiddenParaCB.Hide();
         aFldBackCB.SetPosPixel(aIdxEntryCB.GetPosPixel());
-        aBreakCB.SetPosPixel(aTabCB.GetPosPixel());
     }
 }
-
-#undef _INIT
 
 /*-----------------31.08.96 13.58-------------------
 
@@ -274,29 +272,32 @@ SfxTabPage* SwContentOptPage::Create( Window* pParent,
 
 void SwContentOptPage::Reset(const SfxItemSet& rSet)
 {
-    const SwDocDisplayItem* pDocDisplayAttr = 0;
+    const SwElemItem* pElemAttr = 0;
 
-    rSet.GetItemState( FN_PARAM_DOCDISP, FALSE,
-                                    (const SfxPoolItem**)&pDocDisplayAttr );
-    if(pDocDisplayAttr)
+    rSet.GetItemState( FN_PARAM_ELEM , FALSE,
+                                    (const SfxPoolItem**)&pElemAttr );
+    if(pElemAttr)
     {
-        aParaCB     .Check  (pDocDisplayAttr->bParagraphEnd         );
-        aTabCB      .Check  (pDocDisplayAttr->bTab                  );
-        aSpacesCB   .Check  (pDocDisplayAttr->bSpace                );
-        aHSpacesCB  .Check  (pDocDisplayAttr->bNonbreakingSpace     );
-        aSHyphCB    .Check  (pDocDisplayAttr->bSoftHyphen           );
-        aHiddenCB   .Check  (pDocDisplayAttr->bHiddenText           );
-        aHiddenParaCB.Check (pDocDisplayAttr->bShowHiddenPara       );
-        aBreakCB    .Check  (pDocDisplayAttr->bManualBreak          );
-        aIdxEntryCB .Check  (pDocDisplayAttr->bIndexEntry           );
-        aIdxBackCB.Check    (pDocDisplayAttr->bIndexBackground      );
-        aFootBackCB .Check  (pDocDisplayAttr->bFootnoteBackground   );
-        aFldBackCB  .Check  (pDocDisplayAttr->bField                );
-        aTblCB      .Check  (pDocDisplayAttr->bTable                );
-        aGrfCB      .Check  (pDocDisplayAttr->bGraphic              );
-        aDrwCB      .Check  (pDocDisplayAttr->bDrawing              );
-        aFldNameCB  .Check  (pDocDisplayAttr->bFieldName            );
-        aPostItCB   .Check  (pDocDisplayAttr->bNotes                );
+        aIdxEntryCB .Check  (pElemAttr->bIndexEntry           );
+        aIdxBackCB.Check    (pElemAttr->bIndexBackground      );
+        aFootBackCB .Check  (pElemAttr->bFootnoteBackground   );
+        aFldBackCB  .Check  (pElemAttr->bField                );
+        aTblCB      .Check  (pElemAttr->bTable                );
+        aGrfCB      .Check  (pElemAttr->bGraphic              );
+        aDrwCB      .Check  (pElemAttr->bDrawing              );
+        aFldNameCB  .Check  (pElemAttr->bFieldName            );
+        aPostItCB   .Check  (pElemAttr->bNotes                );
+        aTxtbegCB  .Check( pElemAttr->bBounds           );
+        aTblbegCB  .Check( pElemAttr->bTableBounds      );
+        aSectBoundsCB.Check( pElemAttr->bSectionBounds  );
+        aCrossCB   .Check( pElemAttr->bCrosshair        );
+        aSolidHandleCB.Check( !pElemAttr->bHandles          );
+        aBigHandleCB.Check(pElemAttr->bBigHandles       );
+        aHScrollBox.Check( pElemAttr->bHorzScrollbar     );
+        aVScrollBox.Check( pElemAttr->bVertScrollbar     );
+        aHRulerCBox.Check( pElemAttr->bHorzRuler         );
+        aVRulerCBox.Check( pElemAttr->bVertRuler         );
+        aSmoothCBox.Check( pElemAttr->bSmoothScroll      );
 //                                            bHtmlMode
     }
 
@@ -309,196 +310,21 @@ void SwContentOptPage::Reset(const SfxItemSet& rSet)
 
 BOOL SwContentOptPage::FillItemSet(SfxItemSet& rSet)
 {
-    const SwDocDisplayItem* pOldAttr = (const SwDocDisplayItem*)
-                        GetOldItem(GetItemSet(), FN_PARAM_DOCDISP);
-
-    SwDocDisplayItem aDisp;
-    if(pOldAttr)
-        aDisp = *pOldAttr;
-    aDisp.bParagraphEnd         = aParaCB       .IsChecked();
-    aDisp.bTab                  = aTabCB        .IsChecked();
-    aDisp.bSpace                = aSpacesCB     .IsChecked();
-    aDisp.bNonbreakingSpace     = aHSpacesCB    .IsChecked();
-    aDisp.bSoftHyphen           = aSHyphCB      .IsChecked();
-    aDisp.bHiddenText           = aHiddenCB     .IsChecked();
-    aDisp.bShowHiddenPara       = aHiddenParaCB .IsChecked();
-    aDisp.bManualBreak          = aBreakCB      .IsChecked();
-    aDisp.bIndexEntry           = aIdxEntryCB   .IsChecked();
-    aDisp.bIndexBackground      = aIdxBackCB    .IsChecked();
-    aDisp.bFootnoteBackground   = aFootBackCB   .IsChecked();
-    aDisp.bField                = aFldBackCB    .IsChecked();
-    aDisp.bTable                = aTblCB        .IsChecked();
-    aDisp.bGraphic              = aGrfCB        .IsChecked();
-    aDisp.bDrawing              = aDrwCB        .IsChecked();
-    aDisp.bFieldName            = aFldNameCB    .IsChecked();
-    aDisp.bNotes                = aPostItCB     .IsChecked();
-
-
-    BOOL bRet = !pOldAttr || aDisp != *pOldAttr;
-    if(bRet)
-        bRet = 0 != rSet.Put(aDisp);
-    return bRet;
-}
-
-/*-----------------31.08.96 10.30-------------------
- TabPage Anzeige/Layout
---------------------------------------------------*/
-
-
-// -----------------------------------------------------------------------
-
-
-SwLayoutOptPage::SwLayoutOptPage( Window* pParent,
-                                      const SfxItemSet& rCoreSet ) :
-    SfxTabPage( pParent, SW_RES( TP_LAYOUT_OPT ), rCoreSet ),
-    aLineGB       ( this,   SW_RES( GB_LINE     ) ),
-    aTxtbegCB     ( this,   SW_RES( CB_TXTBEG   ) ),
-    aTblbegCB     ( this,   SW_RES( CB_TABBEG   ) ),
-    aSectBoundsCB( this,    SW_RES( CB_SECT_BOUNDS ) ),
-    aCrossCB      ( this,   SW_RES( CB_CROSS     ) ),
-    aSolidHandleCB( this,   SW_RES( CB_HANDLE   ) ),
-    aBigHandleCB  ( this,   SW_RES( CB_BIGHANDLE) ),
-    aWindowGB     ( this,   SW_RES( GB_WINDOW   ) ),
-    aHScrollBox   ( this,   SW_RES( CB_HSCROLL   ) ),
-    aVScrollBox   ( this,   SW_RES( CB_VSCROLL   ) ),
-    aHRulerCBox   ( this,   SW_RES( CB_HRULER   ) ),
-    aVRulerCBox   ( this,   SW_RES( CB_VRULER    ) ),
-    aSmoothCBox   ( this,   SW_RES( CB_SMOOTH_SCROLL    ) ),
-    aMetricLB     ( this,   SW_RES( LB_METRIC   ) ),
-    aMetricGB     ( this,   SW_RES( GB_METRIC   ) ),
-    aTabGB        ( this,   SW_RES( GB_TAB      ) ),
-    aTabMF        ( this,   SW_RES( MF_TAB      ) ),
-    aMetricArr    ( SW_RES( ST_METRIC ) ),
-    nLastTab(0)
-{
-    FreeResource();
-    for ( USHORT i = 0; i < aMetricArr.Count(); ++i )
-    {
-        String sMetric = aMetricArr.GetStringByPos( i );
-        FieldUnit eFUnit = (FieldUnit)aMetricArr.GetValue( i );
-
-        switch ( eFUnit )
-        {
-            case FUNIT_MM:
-            case FUNIT_CM:
-            case FUNIT_POINT:
-            case FUNIT_PICA:
-            case FUNIT_INCH:
-            {
-                // nur diese Metriken benutzen
-                USHORT nPos = aMetricLB.InsertEntry( sMetric );
-                aMetricLB.SetEntryData( nPos, (void*)(long)eFUnit );
-            }
-        }
-    }
-    aMetricLB.SetSelectHdl(LINK(this, SwLayoutOptPage, MetricHdl));
-    const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_HTML_MODE, FALSE, &pItem )
-        && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
-    {
-        aTabGB.Hide();
-        aTabMF.Hide();
-    }
-
-}
-
-#undef _INIT
-
-/*-----------------31.08.96 13.58-------------------
-
---------------------------------------------------*/
-
-SwLayoutOptPage::~SwLayoutOptPage()
-{
-}
-
-/*-----------------31.08.96 13.58-------------------
-
---------------------------------------------------*/
-
-
-SfxTabPage* SwLayoutOptPage::Create( Window* pParent,
-                                const SfxItemSet& rAttrSet)
-{
-    return new SwLayoutOptPage(pParent, rAttrSet);
-}
-
-/*-----------------31.08.96 13.58-------------------
-
---------------------------------------------------*/
-
-
-void SwLayoutOptPage::Reset(const SfxItemSet& rSet)
-{
-    const SwElemItem* pElemAttr = 0;
-
-    rSet.GetItemState( FN_PARAM_ELEM , FALSE,
-                                    (const SfxPoolItem**)&pElemAttr );
-    if(pElemAttr)
-    {
-        aTxtbegCB  .Check( pElemAttr->bBounds           );
-        aTblbegCB  .Check( pElemAttr->bTableBounds      );
-        aSectBoundsCB.Check( pElemAttr->bSectionBounds  );
-        aCrossCB   .Check( pElemAttr->bCrosshair        );
-        aSolidHandleCB.Check( !pElemAttr->bHandles          );
-        aBigHandleCB.Check(pElemAttr->bBigHandles       );
-        aHScrollBox.Check( pElemAttr->bHorzScrollbar     );
-        aVScrollBox.Check( pElemAttr->bVertScrollbar     );
-        aHRulerCBox.Check( pElemAttr->bHorzRuler         );
-        aVRulerCBox.Check( pElemAttr->bVertRuler         );
-        aSmoothCBox.Check( pElemAttr->bSmoothScroll      );
-    }
-
-
-    aMetricLB.SetNoSelection();
-    if ( rSet.GetItemState( SID_ATTR_METRIC ) >= SFX_ITEM_AVAILABLE )
-    {
-        const SfxUInt16Item& rItem = (SfxUInt16Item&)rSet.Get( SID_ATTR_METRIC );
-        FieldUnit eFieldUnit = (FieldUnit)rItem.GetValue();
-
-        for ( USHORT i = 0; i < aMetricLB.GetEntryCount(); ++i )
-        {
-            if ( (int)aMetricLB.GetEntryData( i ) == (int)eFieldUnit )
-            {
-                aMetricLB.SelectEntryPos( i );
-                break;
-            }
-        }
-        ::SetFieldUnit(aTabMF, eFieldUnit);
-    }
-    aMetricLB.SaveValue();
-
-    const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_DEFTABSTOP, FALSE, &pItem))
-    {
-        nLastTab = ((SfxUInt16Item*)pItem)->GetValue();
-        aTabMF.SetValue(aTabMF.Normalize(nLastTab), FUNIT_TWIP);
-    }
-    // in FrameDocs koennen Scrollbars nicht sinnvoll eingestellt werden
-    if(SFX_ITEM_SET == rSet.GetItemState(FN_VIEW_IN_FRAME, FALSE, &pItem) &&
-        ((const SfxBoolItem*)pItem)->GetValue())
-    {
-        aHScrollBox.Enable(FALSE);
-        aVScrollBox.Enable(FALSE);
-    }
-    aTabMF.SaveValue();
-
-}
-
-/*-----------------31.08.96 13.58-------------------
-
---------------------------------------------------*/
-
-
-BOOL SwLayoutOptPage::FillItemSet(SfxItemSet& rSet)
-{
     const SwElemItem*   pOldAttr = (const SwElemItem*)
                         GetOldItem(GetItemSet(), FN_PARAM_ELEM);
 
     SwElemItem aElem;
     if(pOldAttr)
         aElem = *pOldAttr;
-
+    aElem.bIndexEntry           = aIdxEntryCB   .IsChecked();
+    aElem.bIndexBackground      = aIdxBackCB    .IsChecked();
+    aElem.bFootnoteBackground   = aFootBackCB   .IsChecked();
+    aElem.bField                = aFldBackCB    .IsChecked();
+    aElem.bTable                = aTblCB        .IsChecked();
+    aElem.bGraphic              = aGrfCB        .IsChecked();
+    aElem.bDrawing              = aDrwCB        .IsChecked();
+    aElem.bFieldName            = aFldNameCB    .IsChecked();
+    aElem.bNotes                = aPostItCB     .IsChecked();
     aElem.bBounds        = aTxtbegCB  .IsChecked();
     aElem.bTableBounds   = aTblbegCB  .IsChecked();
     aElem.bSectionBounds = aSectBoundsCB.IsChecked();
@@ -511,58 +337,15 @@ BOOL SwLayoutOptPage::FillItemSet(SfxItemSet& rSet)
     aElem.bVertRuler     = aVRulerCBox.IsChecked();
     aElem.bSmoothScroll  = aSmoothCBox.IsChecked();
 
+
     BOOL bRet = !pOldAttr || aElem != *pOldAttr;
     if(bRet)
         bRet = 0 != rSet.Put(aElem);
-
-    const USHORT nMPos = aMetricLB.GetSelectEntryPos();
-    if ( nMPos != aMetricLB.GetSavedValue() )
-    {
-        // Doppel-Cast fuer VA3.0
-        USHORT nFieldUnit = (USHORT)(long)aMetricLB.GetEntryData( nMPos );
-        bRet |= 0 != rSet.Put( SfxUInt16Item( SID_ATTR_METRIC,
-                                     (UINT16)nFieldUnit ) );
-    }
-
-    if(aTabMF.IsVisible() && aTabMF.GetText() != aTabMF.GetSavedValue())
-        bRet |= 0 != rSet.Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
-                    (USHORT)aTabMF.Denormalize(aTabMF.GetValue(FUNIT_TWIP))));
-
     return bRet;
 }
-
-/*-----------------13.01.97 14.44-------------------
-    Metric des Deftabstops umschalten
---------------------------------------------------*/
-
-IMPL_LINK(SwLayoutOptPage, MetricHdl, ListBox*, EMPTYARG)
-{
-    const USHORT nMPos = aMetricLB.GetSelectEntryPos();
-    if(nMPos != USHRT_MAX)
-    {
-        // Doppel-Cast fuer VA3.0
-        FieldUnit eFieldUnit = (FieldUnit)(long)aMetricLB.GetEntryData( nMPos );
-        BOOL bModified = aTabMF.IsModified();
-        long nVal = bModified ?
-            aTabMF.Denormalize( aTabMF.GetValue( FUNIT_TWIP ) ) :
-                nLastTab;
-        ::SetFieldUnit( aTabMF, eFieldUnit );
-        aTabMF.SetValue( aTabMF.Normalize( nVal ), FUNIT_TWIP );
-        if(!bModified)
-            aTabMF.ClearModifyFlag();
-    }
-
-    return 0;
-}
-
 /*----------------- OS 27.01.95  -----------------------
  TabPage Drucker Zusatzeinstellungen
 -------------------------------------------------------*/
-
-
-// -----------------------------------------------------------------------
-
-
 SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
                                       const SfxItemSet& rCoreSet) :
     SfxTabPage( pParent, SW_RES( TP_OPTPRINT_PAGE ), rCoreSet),
@@ -1072,35 +855,48 @@ IMPL_LINK( SwStdFontTabPage, ModifyHdl, ComboBox*, pBox )
     return 0;
 }
 
-#undef _INIT
-
 /*-----------------18.01.97 12.14-------------------
     Optionen Tabelle
 --------------------------------------------------*/
 
 SwTableOptionsTabPage::SwTableOptionsTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, SW_RES(TP_OPTTABLE_PAGE), rSet),
+    aHeaderCB       (this, ResId(CB_HEADER          )),
+    aRepeatHeaderCB (this, ResId(CB_REPEAT_HEADER   )),
+    aDontSplitCB    (this, ResId(CB_DONT_SPLIT      )),
+    aBorderCB       (this, ResId(CB_BORDER          )),
+    aNumFormattingCB(this, ResId(CB_NUMFORMATTING   )),
+    aNumFmtFormattingCB(this, ResId(CB_NUMFMT_FORMATTING    )),
+    aNumAlignmentCB (this, ResId(CB_NUMALIGNMENT    )),
+    aTableGB        (this, ResId(GB_TABLE           )),
+    aTableInsertGB  (this, ResId(GB_TABLE_INSERT    )),
     aMoveGB(        this, ResId(GB_MOVE     )),
+    aMoveFT(        this, ResId(FT_MOVE     )),
     aRowMoveFT(     this, ResId(FT_ROWMOVE  )),
     aRowMoveMF(     this, ResId(MF_ROWMOVE  )),
     aColMoveFT(     this, ResId(FT_COLMOVE  )),
     aColMoveMF(     this, ResId(MF_COLMOVE  )),
-    aInsertGB(      this, ResId(GB_INSERT   )),
+    aInsertFT(      this, ResId(FT_INSERT   )),
     aRowInsertFT(   this, ResId(FT_ROWINSERT)),
     aRowInsertMF(   this, ResId(MF_ROWINSERT)),
     aColInsertFT(   this, ResId(FT_COLINSERT)),
     aColInsertMF(   this, ResId(MF_COLINSERT)),
-    aHandlingGB(    this, ResId(GB_HANDLING )),
+    aHandlingFT(    this, ResId(FT_HANDLING )),
     aFixRB(         this, ResId(RB_FIX      )),
     aFixFT(         this, ResId(FT_FIX      )),
     aFixPropRB(     this, ResId(RB_FIXPROP  )),
     aFixPropFT(     this, ResId(FT_FIXPROP  )),
     aVarRB(         this, ResId(RB_VAR      )),
     aVarFT(         this, ResId(FT_VAR      )),
-    aDescFT(        this, ResId(FT_DESC     )),
-    pWrtShell(0)
+    pWrtShell(0),
+    bHTMLMode(FALSE)
 {
     FreeResource();
+
+    Link aLnk(LINK(this, SwTableOptionsTabPage, CheckBoxHdl));
+    aNumFormattingCB.SetClickHdl(aLnk);
+    aNumFmtFormattingCB.SetClickHdl(aLnk);
+    aHeaderCB.SetClickHdl(aLnk);
 }
 
 /*-----------------18.01.97 12.43-------------------
@@ -1168,12 +964,51 @@ BOOL SwTableOptionsTabPage::FillItemSet( SfxItemSet& rSet )
         bRet = TRUE;
     }
 
+    USHORT nInsTblFlags = 0;
+
+    if (aHeaderCB.IsChecked())
+        nInsTblFlags |= HEADLINE;
+
+    if (aRepeatHeaderCB.IsEnabled() && aRepeatHeaderCB.IsChecked())
+        nInsTblFlags |= HEADLINE_REPEAT;
+
+    if (!aDontSplitCB.IsChecked())
+        nInsTblFlags |= SPLIT_LAYOUT;
+
+    if (aBorderCB.IsChecked())
+        nInsTblFlags |= DEFAULT_BORDER;
+
+    if (aHeaderCB.GetSavedValue() != aHeaderCB.GetState() ||
+        aRepeatHeaderCB.GetSavedValue() != aRepeatHeaderCB.GetState() ||
+        aDontSplitCB.GetSavedValue() != aDontSplitCB.GetState() ||
+        aBorderCB.GetSavedValue() != aBorderCB.GetState())
+    {
+        pModOpt->SetInsTblFlags(bHTMLMode, nInsTblFlags);
+    }
+
+    if (aNumFormattingCB.GetSavedValue() != aNumFormattingCB.GetState())
+    {
+        pModOpt->SetInsTblFormatNum(bHTMLMode, aNumFormattingCB.IsChecked());
+        bRet = TRUE;
+    }
+
+    if (aNumFmtFormattingCB.GetSavedValue() != aNumFmtFormattingCB.GetState())
+    {
+        pModOpt->SetInsTblChangeNumFormat(bHTMLMode, aNumFmtFormattingCB.IsChecked());
+        bRet = TRUE;
+    }
+
+    if (aNumAlignmentCB.GetSavedValue() != aNumAlignmentCB.GetState())
+    {
+        pModOpt->SetInsTblAlignNum(bHTMLMode, aNumAlignmentCB.IsChecked());
+        bRet = TRUE;
+    }
+
     return bRet;
 }
 /*-----------------18.01.97 12.42-------------------
 
 --------------------------------------------------*/
-
 void SwTableOptionsTabPage::Reset( const SfxItemSet& rSet)
 {
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
@@ -1198,6 +1033,85 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet& rSet)
         case TBLFIX_CHGPROP:    aFixPropRB.Check(); break;
         case TBLVAR_CHGABS:     aVarRB.Check(); break;
     }
+    const SfxPoolItem* pItem;
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, FALSE, &pItem))
+    {
+        bHTMLMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
+    }
+
+    //bestimmte Controls fuer HTML verstecken
+    if(bHTMLMode)
+    {
+/*        Point aPos(aCaptionGB.GetPosPixel());
+        long nYDiff = aTableGB.GetPosPixel().Y() - aPos.Y();
+        aTableGB.SetPosPixel(aPos);
+
+        aPos = aHeaderCB.GetPosPixel();
+        aPos.Y() -= nYDiff;
+        aHeaderCB.SetPosPixel(aPos);
+
+        aPos = aRepeatHeaderCB.GetPosPixel();
+        aPos.Y() -= nYDiff;
+        aRepeatHeaderCB.SetPosPixel(aPos);
+
+        aPos = aDontSplitCB.GetPosPixel(); // hier muss eine Luecke geschlossen werden
+        aPos.Y() -= nYDiff;
+        aBorderCB.SetPosPixel(aPos);
+
+        aPos = aTableInsertGB.GetPosPixel();
+        aPos.Y() -= nYDiff;
+        aTableInsertGB.SetPosPixel(aPos);
+
+        aPos = aNumFormattingCB.GetPosPixel();
+        aPos.Y() -= nYDiff;
+        aNumFormattingCB.SetPosPixel(aPos);
+
+        aPos = aNumFmtFormattingCB.GetPosPixel();
+        aPos.Y() -= nYDiff;
+        aNumFmtFormattingCB.SetPosPixel(aPos);
+
+        aPos = aNumAlignmentCB.GetPosPixel();
+        aPos.Y() -= nYDiff;
+        aNumAlignmentCB.SetPosPixel(aPos);
+
+        aCaptionGB.Hide();
+        aCaptionCB.Hide();
+        aCaptionFT.Hide();
+        aCaptionPB.Hide();
+*/
+        aDontSplitCB.Hide();
+    }
+
+    USHORT nInsTblFlags = pModOpt->GetInsTblFlags(bHTMLMode);
+
+    aHeaderCB.Check(nInsTblFlags & HEADLINE);
+    aRepeatHeaderCB.Check(nInsTblFlags & REPEAT);
+    aDontSplitCB.Check(!(nInsTblFlags & SPLIT_LAYOUT));
+    aBorderCB.Check(nInsTblFlags & DEFAULT_BORDER);
+
+    aNumFormattingCB.Check(pModOpt->IsInsTblFormatNum(bHTMLMode));
+    aNumFmtFormattingCB.Check(pModOpt->IsInsTblChangeNumFormat(bHTMLMode));
+    aNumAlignmentCB.Check(pModOpt->IsInsTblAlignNum(bHTMLMode));
+
+    aHeaderCB.SaveValue();
+    aRepeatHeaderCB.SaveValue();
+    aDontSplitCB.SaveValue();
+    aBorderCB.SaveValue();
+    aNumFormattingCB.SaveValue();
+    aNumFmtFormattingCB.SaveValue();
+    aNumAlignmentCB.SaveValue();
+
+    CheckBoxHdl(0);
+}
+/*-----------------18.01.97 12.42-------------------
+
+--------------------------------------------------*/
+IMPL_LINK(SwTableOptionsTabPage, CheckBoxHdl, CheckBox*, EMPTYARG)
+{
+    aNumFmtFormattingCB.Enable(aNumFormattingCB.IsChecked());
+    aNumAlignmentCB.Enable(aNumFormattingCB.IsChecked());
+    aRepeatHeaderCB.Enable(aHeaderCB.IsChecked());
+    return 0;
 }
 /*-----------------19.04.97 13:20-------------------
 
@@ -1357,7 +1271,16 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
     aColorFT( this, SW_RES( FT_SHDWCRSCOLOR )),
     aColorLB( this, SW_RES( LB_SHDWCRSCOLOR )),
     aCrsrOptGB   ( this, SW_RES( GB_CRSR_OPT)),
-    aCrsrInProtCB( this, SW_RES( CB_ALLOW_IN_PROT ))
+    aCrsrInProtCB( this, SW_RES( CB_ALLOW_IN_PROT )),
+    aUnprintBox   ( this,   SW_RES( GB_NOPRINT  ) ),
+    aParaCB       ( this,   SW_RES( CB_PARA      ) ),
+    aSHyphCB      ( this,   SW_RES( CB_SHYPH        ) ),
+    aSpacesCB     ( this,   SW_RES( CB_SPACE    ) ),
+    aHSpacesCB    ( this,   SW_RES( CB_HSPACE   ) ),
+    aTabCB        ( this,   SW_RES( CB_TAB      ) ),
+    aBreakCB      ( this,   SW_RES( CB_BREAK        ) ),
+    aHiddenCB     ( this,   SW_RES( CB_HIDDEN   ) ),
+    aHiddenParaCB ( this,   SW_RES( CB_HIDDEN_PARA ) )
 {
     FreeResource();
 
@@ -1392,6 +1315,15 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
     }
     aColorLB.SetUpdateMode( TRUE );
     aColorLB.SelectEntry( sColor );
+
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, FALSE, &pItem )
+        && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
+    {
+        aTabCB      .Hide();
+        aHiddenCB   .Hide();
+        aHiddenParaCB.Hide();
+        aBreakCB.SetPosPixel(aTabCB.GetPosPixel());
+    }
 }
 
 SwShdwCrsrOptionsTabPage::~SwShdwCrsrOptionsTabPage()
@@ -1436,6 +1368,26 @@ BOOL SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
         bRet |= TRUE;
     }
 
+    const SwDocDisplayItem* pOldAttr = (const SwDocDisplayItem*)
+                        GetOldItem(GetItemSet(), FN_PARAM_DOCDISP);
+
+    SwDocDisplayItem aDisp;
+    if(pOldAttr)
+        aDisp = *pOldAttr;
+    //
+    aDisp.bParagraphEnd         = aParaCB       .IsChecked();
+    aDisp.bTab                  = aTabCB        .IsChecked();
+    aDisp.bSpace                = aSpacesCB     .IsChecked();
+    aDisp.bNonbreakingSpace     = aHSpacesCB    .IsChecked();
+    aDisp.bSoftHyphen           = aSHyphCB      .IsChecked();
+    aDisp.bHiddenText           = aHiddenCB     .IsChecked();
+    aDisp.bShowHiddenPara       = aHiddenParaCB .IsChecked();
+    aDisp.bManualBreak          = aBreakCB      .IsChecked();
+
+    bRet |= (!pOldAttr || aDisp != *pOldAttr);
+    if(bRet)
+        bRet = 0 != rSet.Put(aDisp);
+
     return bRet;
 }
 
@@ -1460,6 +1412,22 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet& rSet )
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_CRSR_IN_PROTECTED, FALSE, &pItem ))
         aCrsrInProtCB.Check(((const SfxBoolItem*)pItem)->GetValue());
     aCrsrInProtCB.SaveValue();
+
+    const SwDocDisplayItem* pDocDisplayAttr = 0;
+
+    rSet.GetItemState( FN_PARAM_DOCDISP, FALSE,
+                                    (const SfxPoolItem**)&pDocDisplayAttr );
+    if(pDocDisplayAttr)
+    {
+        aParaCB     .Check  (pDocDisplayAttr->bParagraphEnd         );
+        aTabCB      .Check  (pDocDisplayAttr->bTab                  );
+        aSpacesCB   .Check  (pDocDisplayAttr->bSpace                );
+        aHSpacesCB  .Check  (pDocDisplayAttr->bNonbreakingSpace     );
+        aSHyphCB    .Check  (pDocDisplayAttr->bSoftHyphen           );
+        aHiddenCB   .Check  (pDocDisplayAttr->bHiddenText           );
+        aHiddenParaCB.Check (pDocDisplayAttr->bShowHiddenPara       );
+        aBreakCB    .Check  (pDocDisplayAttr->bManualBreak          );
+    }
 }
 
 /*-----------------31.10.97 17:55-------------------
@@ -1673,22 +1641,22 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )
     : SfxTabPage(pParent, SW_RES(TP_REDLINE_OPT), rSet),
 
-    aInsertRB           ( this, SW_RES( RB_INSERT )),
-    aDeletedRB          ( this, SW_RES( RB_DELETED )),
-    aChangedRB          ( this, SW_RES( RB_CHANGED )),
-
-    aInsertFT           ( this, SW_RES( FT_TE_ATTRIB )),
-    aInsertLB           ( this, SW_RES( LB_TE_ATTRIB )),
-    aDeletedLB          ( this, SW_RES( LB_TL_ATTRIB )),
-    aChangedLB          ( this, SW_RES( LB_TC_ATTRIB )),
-
-    aInsertColorFT      ( this, SW_RES( FT_TE_COL )),
-    aInsertColorLB      ( this, SW_RES( LB_TE_COL )),
-    aDeletedColorLB     ( this, SW_RES( LB_TL_COL )),
-    aChangedColorLB     ( this, SW_RES( LB_TC_COL )),
-
-    aAttribPreviewWN    ( this, SW_RES( WIN_TE )),
-    aInsertGB           ( this, SW_RES( GB_TE )),
+    aInsertGB(          this, SW_RES( GB_TE )),
+    aInsertFT(          this, SW_RES( FT_INS_ATTR     )),
+    aInsertLB(          this, SW_RES( LB_INS_ATTR     )),
+    aInsertColorFT(     this, SW_RES( FT_INS_COL      )),
+    aInsertColorLB(     this, SW_RES( LB_INS_COL      )),
+    aInsertedPreviewWN( this, SW_RES( WIN_INS         )),
+    aDeletedFT(         this, SW_RES( FT_DEL_ATTR     )),
+    aDeletedLB(         this, SW_RES( LB_DEL_ATTR     )),
+    aDeletedColorFT(    this, SW_RES( FT_DEL_COL      )),
+    aDeletedColorLB(    this, SW_RES( LB_DEL_COL      )),
+    aDeletedPreviewWN(  this, SW_RES( WIN_DEL         )),
+    aChangedFT(         this, SW_RES( FT_CHG_ATTR     )),
+    aChangedLB(         this, SW_RES( LB_CHG_ATTR     )),
+    aChangedColorFT(    this, SW_RES( FT_CHG_COL      )),
+    aChangedColorLB(    this, SW_RES( LB_CHG_COL      )),
+    aChangedPreviewWN(  this, SW_RES( WIN_CHG         )),
 
     aMarkPosFT          ( this, SW_RES( FT_MARKPOS )),
     aMarkPosLB          ( this, SW_RES( LB_MARKPOS )),
@@ -1702,12 +1670,14 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
 {
     FreeResource();
 
-    Link aLk = LINK(this, SwRedlineOptionsTabPage, RadioHdl);
-    aInsertRB.SetClickHdl( aLk );
-    aDeletedRB.SetClickHdl( aLk );
-    aChangedRB.SetClickHdl( aLk );
+    for(USHORT i = 0; i < aInsertLB.GetEntryCount(); i++)
+    {
+        String sEntry(aInsertLB.GetEntry(i));
+        aDeletedLB.InsertEntry(sEntry);
+        aChangedLB.InsertEntry(sEntry);
+    };
 
-    aLk = LINK(this, SwRedlineOptionsTabPage, AttribHdl);
+    Link aLk = LINK(this, SwRedlineOptionsTabPage, AttribHdl);
     aInsertLB.SetSelectHdl( aLk );
     aDeletedLB.SetSelectHdl( aLk );
     aChangedLB.SetSelectHdl( aLk );
@@ -1721,28 +1691,22 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
     aMarkPosLB.SetSelectHdl( aLk );
     aMarkColorLB.SetSelectHdl( aLk );
 }
-
 /*-----------------------------------------------------------------------
     Beschreibung:
  -----------------------------------------------------------------------*/
-
 SwRedlineOptionsTabPage::~SwRedlineOptionsTabPage()
 {
 }
-
 /*-----------------------------------------------------------------------
     Beschreibung:
  -----------------------------------------------------------------------*/
-
 SfxTabPage* SwRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new SwRedlineOptionsTabPage( pParent, rSet );
 }
-
 /*-----------------------------------------------------------------------
     Beschreibung:
  -----------------------------------------------------------------------*/
-
 BOOL SwRedlineOptionsTabPage::FillItemSet( SfxItemSet& rSet )
 {
     CharAttr *pAttr;
@@ -1883,7 +1847,9 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet& rSet )
     const AuthorCharAttr &rChangedAttr = pOpt->GetFormatAuthorAttr();
 
     // Preview initialisieren
-    InitFontStyle(aAttribPreviewWN);
+    InitFontStyle(aInsertedPreviewWN);
+    InitFontStyle(aDeletedPreviewWN);
+    InitFontStyle(aChangedPreviewWN);
 
     // Farblistboxen initialisieren
     String sColor;
@@ -2017,15 +1983,24 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet& rSet )
 
 IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox *, pLB )
 {
-    SvxFontPrevWindow *pPrev = &aAttribPreviewWN;
+    SvxFontPrevWindow *pPrev = 0;
     ColorListBox *pColorLB;
 
     if (pLB == &aInsertLB)
+    {
         pColorLB = &aInsertColorLB;
+        pPrev = &aInsertedPreviewWN;
+    }
     else if (pLB == &aDeletedLB)
+    {
         pColorLB = &aDeletedColorLB;
+        pPrev = &aDeletedPreviewWN;
+    }
     else
+    {
         pColorLB = &aChangedColorLB;
+        pPrev = &aChangedPreviewWN;
+    }
 
     SvxFont& rFont = pPrev->GetFont();
     rFont.SetWeight(WEIGHT_NORMAL);
@@ -2106,15 +2081,24 @@ IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox *, pLB )
 
 IMPL_LINK( SwRedlineOptionsTabPage, ColorHdl, ColorListBox *, pColorLB )
 {
-    SvxFontPrevWindow *pPrev = &aAttribPreviewWN;
+    SvxFontPrevWindow *pPrev = 0;
     ListBox *pLB;
 
     if (pColorLB == &aInsertColorLB)
+    {
         pLB = &aInsertLB;
+        pPrev = &aInsertedPreviewWN;
+    }
     else if (pColorLB == &aDeletedColorLB)
+    {
         pLB = &aDeletedLB;
+        pPrev = &aDeletedPreviewWN;
+    }
     else
+    {
         pLB = &aChangedLB;
+        pPrev = &aChangedPreviewWN;
+    }
 
     SvxFont& rFont = pPrev->GetFont();
     USHORT nPos = pLB->GetSelectEntryPos();
@@ -2170,40 +2154,6 @@ IMPL_LINK( SwRedlineOptionsTabPage, ChangedMaskPrevHdl, ListBox *, pLB )
     aMarkPreviewWN.SetColor(aMarkColorLB.GetSelectEntryColor().GetColor());
 
     aMarkPreviewWN.Invalidate();
-
-    return 0;
-}
-
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
-
-IMPL_LINK( SwRedlineOptionsTabPage, RadioHdl, RadioButton *, pRB )
-{
-    BOOL bInsert = FALSE, bDeleted = FALSE, bChanged = FALSE;
-
-    if (pRB == &aInsertRB)
-    {
-        AttribHdl(&aInsertLB);
-        bInsert = TRUE;
-    }
-    else if (pRB == &aDeletedRB)
-    {
-        AttribHdl(&aDeletedLB);
-        bDeleted = TRUE;
-    }
-    else if (pRB == &aChangedRB)
-    {
-        AttribHdl(&aChangedLB);
-        bChanged = TRUE;
-    }
-
-    aInsertLB.Show(bInsert);
-    aInsertColorLB.Show(bInsert);
-    aDeletedLB.Show(bDeleted);
-    aDeletedColorLB.Show(bDeleted);
-    aChangedLB.Show(bChanged);
-    aChangedColorLB.Show(bChanged);
 
     return 0;
 }
@@ -2273,7 +2223,7 @@ SwTestTabPage::SwTestTabPage( Window* pParent,
     bAttrModified( FALSE )
 {
     lcl_SetPosSize(*this,       Point(0,0), Size(260 , 135));
-    lcl_SetPosSize(aTestGBox,   Point(6,2), Size(209,126));
+    lcl_SetPosSize(aTestGBox,   Point(6,2), Size(209,8));
     lcl_SetPosSize(aTest1CBox  ,    Point(12 , 14), Size(74 , 10));
     lcl_SetPosSize(aTest2CBox  ,    Point(12 , 27), Size(74 , 10));
     lcl_SetPosSize(aTest3CBox  ,    Point(12 , 40), Size(74 , 10));
@@ -2393,9 +2343,6 @@ IMPL_LINK_INLINE_START( SwTestTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
     return 0;
 }
 IMPL_LINK_INLINE_END( SwTestTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
-
-
-#undef _INIT
 #endif
 
 

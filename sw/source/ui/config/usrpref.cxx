@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-02-28 11:51:43 $
+ *  last change: $Author: os $ $Date: 2001-03-22 09:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,7 @@ SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
     aGridConfig(bWeb, *this),
     aCursorConfig(*this),
     pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : 0),
-    bFldUpdateInCurrDoc(sal_False),
     nFldUpdateFlags(0),
-    bLinkUpdateInCurrDoc(sal_False),
     nLinkUpdateMode(0)
 {
     aContentConfig.Load();
@@ -165,13 +163,11 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames()
             "NonprintingCharacter/HiddenParagraph", // 16
             "Update/Link",                          // 17
             "Update/Field",                         // 18
-            "Update/Chart",                         // 19
-            "Update/LinkDocument",                  // 20
-            "Update/FieldChartDocument"             // 21
+            "Update/Chart"                         // 19
 
 
     };
-    const int nCount = bWeb ? 11 : 22;
+    const int nCount = bWeb ? 11 : 20;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -238,8 +234,6 @@ void SwContentViewConfig::Commit()
             case 17: pValues[nProp] <<= rParent.GetUpdateLinkMode();    break;// "Update/Link",
             case 18: bVal = rParent.IsUpdateFields(); break;// "Update/Field",
             case 19: bVal = rParent.IsUpdateCharts(); break;// "Update/Chart"
-            case 20: bVal = rParent.IsUpdateFieldsToCurrDoc(); break; //LinkDocument
-            case 21: bVal = rParent.IsUpdateLinksToCurrDoc(); break; //FieldChartDocument
         }
         if(nProp != 17)
             pValues[nProp].setValue(&bVal, ::getBooleanCppuType());
@@ -290,8 +284,6 @@ void SwContentViewConfig::Load()
                     break;// "Update/Link",
                     case 18: rParent.SetUpdateFields(bSet); break;// "Update/Field",
                     case 19: rParent.SetUpdateCharts(bSet); break;// "Update/Chart"
-                    case 20: rParent.SetUpdateFieldsToCurrDoc(bSet); break; //LinkDocument
-                    case 21: rParent.SetUpdateLinksToCurrDoc(bSet); break; //FieldChartDocument
                 }
             }
         }

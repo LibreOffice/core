@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: os $ $Date: 2001-02-21 12:06:20 $
+#   last change: $Author: os $ $Date: 2001-03-22 09:30:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,6 @@ CXXFILES = \
         dbconfig.cxx \
         fontcfg.cxx \
         modcfg.cxx \
-        optins.cxx \
         optload.cxx \
         optpage.cxx \
         prtopt.cxx \
@@ -97,7 +96,6 @@ CXXFILES = \
 
 SRCFILES =	\
         optdlg.src \
-        optins.src \
         optload.src \
         redlopt.src
 
@@ -108,7 +106,6 @@ SLOFILES =	\
         $(SLO)$/dbconfig.obj \
         $(SLO)$/fontcfg.obj \
         $(SLO)$/modcfg.obj \
-        $(SLO)$/optins.obj \
         $(SLO)$/optload.obj \
         $(SLO)$/optpage.obj \
         $(SLO)$/prtopt.obj \
