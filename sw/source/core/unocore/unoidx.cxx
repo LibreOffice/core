@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2001-02-15 13:46:37 $
+ *  last change: $Author: mtg $ $Date: 2001-03-02 11:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1419,11 +1419,6 @@ void SwXDocumentIndexMark::attachToRange(const Reference< text::XTextRange > & x
                             break;
                         }
                     }
-                    if(!pTOXType)
-                    {
-                        SwTOXType aUserType(TOX_USER, sUserIndexName);
-                        pTOXType = pDoc->InsertTOXType(aUserType);
-                    }
                 }
             }
             break;
@@ -1436,29 +1431,29 @@ void SwXDocumentIndexMark::attachToRange(const Reference< text::XTextRange > & x
         SwUnoInternalPaM aPam(*pDoc);
         //das muss jetzt sal_True liefern
         SwXTextRange::XTextRangeToSwPaM(aPam, xTextRange);
-        SwTOXMark* pMark = new SwTOXMark(pTOXType);
+        SwTOXMark aMark (pTOXType);
         if(sAltText.Len())
-            pMark->SetAlternativeText(sAltText);
+            aMark.SetAlternativeText(sAltText);
         switch(eType)
         {
             case TOX_INDEX:
                 if(sPrimaryKey.Len())
-                    pMark->SetPrimaryKey(sPrimaryKey);
+                    aMark.SetPrimaryKey(sPrimaryKey);
                 if(sSecondaryKey.Len())
-                    pMark->SetSecondaryKey(sSecondaryKey);
+                    aMark.SetSecondaryKey(sSecondaryKey);
             break;
             case TOX_CONTENT:
                 if(USHRT_MAX != nLevel)
-                    pMark->SetLevel(nLevel);
+                    aMark.SetLevel(nLevel);
             break;
         }
         UnoActionContext aAction(pDoc);
         sal_Bool bMark = *aPam.GetPoint() != *aPam.GetMark();
         // Marks ohne Alternativtext ohne selektierten Text koennen nicht eingefuegt werden,
         // deshalb hier ein Leerzeichen - ob das die ideale Loesung ist?
-        if(!bMark && !pMark->GetAlternativeText().Len())
-            pMark->SetAlternativeText(String::CreateFromAscii(" "));
-        pDoc->Insert(aPam, *pMark, SETATTR_DONTEXPAND);
+        if(!bMark && !aMark.GetAlternativeText().Len())
+            aMark.SetAlternativeText(String::CreateFromAscii(" "));
+        pDoc->Insert(aPam, aMark, SETATTR_DONTEXPAND);
         if(bMark && *aPam.GetPoint() > *aPam.GetMark())
             aPam.Exchange();
         SwUnoCrsr* pCrsr = pDoc->CreateUnoCrsr( *aPam.Start() );
