@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetmsg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:07 $
+ *  last change: $Author: th $ $Date: 2001-05-10 13:36:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,6 @@
 #include <sal/types.h>
 #endif
 
-#ifndef _RTL_CHAR_H_
-#include <rtl/char.h>
-#endif
-
 #ifndef _DATETIME_HXX
 #include <datetime.hxx>
 #endif
@@ -81,6 +77,26 @@
 #endif
 
 #include <stdio.h>
+
+//=======================================================================
+
+inline sal_Bool ascii_isDigit( sal_Unicode ch )
+{
+    return ((ch >= 0x0030) && (ch <= 0x0039));
+}
+
+inline sal_Bool ascii_isLetter( sal_Unicode ch )
+{
+    return (( (ch >= 0x0041) && (ch <= 0x005A)) || ((ch >= 0x0061) && (ch <= 0x007A)));
+}
+
+inline sal_Unicode ascii_toLowerCase( sal_Unicode ch )
+{
+    if ( (ch >= 0x0041) && (ch <= 0x005A) )
+        return ch + 0x20;
+    else
+        return ch;
+}
 
 /*=======================================================================
  *
@@ -419,7 +435,7 @@ BOOL INetRFC822Message::GenerateDateField (
 static USHORT ParseNumber (const ByteString& rStr, USHORT& nIndex)
 {
     USHORT n = nIndex;
-    while ((n < rStr.Len()) && rtl_char_isDigit(rStr.GetChar(n))) n++;
+    while ((n < rStr.Len()) && ascii_isDigit(rStr.GetChar(n))) n++;
 
     ByteString aNum (rStr.Copy (nIndex, (n - nIndex)));
     nIndex = n;
@@ -430,7 +446,7 @@ static USHORT ParseNumber (const ByteString& rStr, USHORT& nIndex)
 static USHORT ParseMonth (const ByteString& rStr, USHORT& nIndex)
 {
     USHORT n = nIndex;
-    while ((n < rStr.Len()) && rtl_char_isLetter(rStr.GetChar(n))) n++;
+    while ((n < rStr.Len()) && ascii_isLetter(rStr.GetChar(n))) n++;
 
     ByteString aMonth (rStr.Copy (nIndex, 3));
     nIndex = n;
@@ -459,7 +475,7 @@ BOOL INetRFC822Message::ParseDateField (
 
         while (
             (nIndex < rDateField.Len()) &&
-            (rtl_char_isLetter (rDateField.GetChar(nIndex)) ||
+            (ascii_isLetter (rDateField.GetChar(nIndex)) ||
              (rDateField.GetChar(nIndex) == ',')     ))
             nIndex++;
 
@@ -467,7 +483,7 @@ BOOL INetRFC822Message::ParseDateField (
                (rDateField.GetChar(nIndex) == ' '))
             nIndex++;
 
-        if (rtl_char_isLetter (rDateField.GetChar(nIndex)))
+        if (ascii_isLetter (rDateField.GetChar(nIndex)))
         {
             // Format: ctime().
             if ((rDateField.Len() - nIndex) < 20) return FALSE;
@@ -572,7 +588,7 @@ ULONG INetRFC822Message::SetHeaderField (
                 eState = INETMSG_RFC822_CHECK;
                 eOkState = INETMSG_RFC822_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'b':
                         check = "cc";
@@ -638,7 +654,7 @@ ULONG INetRFC822Message::SetHeaderField (
                 eState = INETMSG_RFC822_CHECK;
                 eOkState = INETMSG_RFC822_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'f':
                         check = "erences";
@@ -666,7 +682,7 @@ ULONG INetRFC822Message::SetHeaderField (
                 eState = INETMSG_RFC822_CHECK;
                 eOkState = INETMSG_RFC822_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'p':
                         check = "ath";
@@ -689,7 +705,7 @@ ULONG INetRFC822Message::SetHeaderField (
                 eState = INETMSG_RFC822_CHECK;
                 eOkState = INETMSG_RFC822_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'm':
                         check = "ailer";
@@ -714,7 +730,7 @@ ULONG INetRFC822Message::SetHeaderField (
                 eState = INETMSG_RFC822_CHECK;
                 eOkState = INETMSG_RFC822_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'c':
                         check = "";
@@ -737,7 +753,7 @@ ULONG INetRFC822Message::SetHeaderField (
                 eState = INETMSG_RFC822_CHECK;
                 eOkState = INETMSG_RFC822_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'e':
                         check = "nder";
@@ -760,7 +776,7 @@ ULONG INetRFC822Message::SetHeaderField (
                 if (*check)
                 {
                     while (*pData && *check &&
-                           (rtl_char_toLowerCase (*pData) == *check))
+                           (ascii_toLowerCase (*pData) == *check))
                     {
                         pData++;
                         check++;
@@ -1102,7 +1118,7 @@ ULONG INetMIMEMessage::SetHeaderField (
                 eState = INETMSG_MIME_CHECK;
                 eOkState = INETMSG_MIME_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'c':
                         check = "ontent-";
@@ -1125,7 +1141,7 @@ ULONG INetMIMEMessage::SetHeaderField (
                 eState = INETMSG_MIME_CHECK;
                 eOkState = INETMSG_MIME_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'd':
                         eState = INETMSG_MIME_TOKEN_CONTENT_D;
@@ -1151,7 +1167,7 @@ ULONG INetMIMEMessage::SetHeaderField (
                 eState = INETMSG_MIME_CHECK;
                 eOkState = INETMSG_MIME_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'e':
                         check = "scription";
@@ -1174,7 +1190,7 @@ ULONG INetMIMEMessage::SetHeaderField (
                 eState = INETMSG_MIME_CHECK;
                 eOkState = INETMSG_MIME_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'r':
                         check = "ansfer-encoding";
@@ -1197,7 +1213,7 @@ ULONG INetMIMEMessage::SetHeaderField (
                 if (*check)
                 {
                     while (*pData && *check &&
-                           (rtl_char_toLowerCase (*pData) == *check))
+                           (ascii_toLowerCase (*pData) == *check))
                     {
                         pData++;
                         check++;
@@ -1744,7 +1760,7 @@ ULONG INetNewsMessage::SetHeaderField (
                 eState = INETMSG_NEWS_CHECK;
                 eOkState = INETMSG_NEWS_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'a':
                         check = "pproved";
@@ -1811,7 +1827,7 @@ ULONG INetNewsMessage::SetHeaderField (
                 eState = INETMSG_NEWS_CHECK;
                 eOkState = INETMSG_NEWS_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'r':
                         check = "ef";
@@ -1834,7 +1850,7 @@ ULONG INetNewsMessage::SetHeaderField (
                 if (*check)
                 {
                     while (*pData && *check &&
-                           (rtl_char_toLowerCase (*pData) == *check))
+                           (ascii_toLowerCase (*pData) == *check))
                     {
                         pData++;
                         check++;
@@ -2139,7 +2155,7 @@ ULONG INetHTTPMessage::SetHeaderField (
                 eState = INETMSG_HTTP_CHECK;
                 eOkState = INETMSG_HTTP_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                         case 'a':
                             eState = INETMSG_HTTP_LETTER_A;
@@ -2220,7 +2236,7 @@ ULONG INetHTTPMessage::SetHeaderField (
                 eState = INETMSG_HTTP_CHECK;
                 eOkState = INETMSG_HTTP_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'c':
                         if (INetMIME::equalIgnoreCase (
@@ -2274,7 +2290,7 @@ ULONG INetHTTPMessage::SetHeaderField (
                 eState = INETMSG_HTTP_CHECK;
                 eOkState = INETMSG_HTTP_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'a':
                         check = "che-control";
@@ -2282,11 +2298,11 @@ ULONG INetHTTPMessage::SetHeaderField (
                         break;
 
                     case 'o':
-                        if (rtl_char_toLowerCase (*(pData + 1)) == 'n')
+                        if (ascii_toLowerCase (*(pData + 1)) == 'n')
                         {
                             eState = INETMSG_HTTP_TOKEN_CON;
                         }
-                        else if (rtl_char_toLowerCase (*(pData + 1)) == 'o')
+                        else if (ascii_toLowerCase (*(pData + 1)) == 'o')
                         {
                             check = "kie";
                             nIdx = INETMSG_HTTP_COOKIE;
@@ -2309,7 +2325,7 @@ ULONG INetHTTPMessage::SetHeaderField (
                 eState = INETMSG_HTTP_CHECK;
                 eOkState = INETMSG_HTTP_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'a':
                         check = "st-modified";
@@ -2337,10 +2353,10 @@ ULONG INetHTTPMessage::SetHeaderField (
                 eState = INETMSG_HTTP_CHECK;
                 eOkState = INETMSG_HTTP_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'r':
-                        switch (rtl_char_toLowerCase (*(pData + 1)))
+                        switch (ascii_toLowerCase (*(pData + 1)))
                         {
                             case 'a':
                                 check = "gma";
@@ -2375,7 +2391,7 @@ ULONG INetHTTPMessage::SetHeaderField (
                 eState = INETMSG_HTTP_CHECK;
                 eOkState = INETMSG_HTTP_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'a':
                         check = "nge";
@@ -2383,7 +2399,7 @@ ULONG INetHTTPMessage::SetHeaderField (
                         break;
 
                     case 'e':
-                        switch (rtl_char_toLowerCase (*(pData + 1)))
+                        switch (ascii_toLowerCase (*(pData + 1)))
                         {
                             case 'f':
                                 check = "erer";
@@ -2413,7 +2429,7 @@ ULONG INetHTTPMessage::SetHeaderField (
                 eState = INETMSG_HTTP_CHECK;
                 eOkState = INETMSG_HTTP_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'i':
                         check = "tle";
@@ -2436,7 +2452,7 @@ ULONG INetHTTPMessage::SetHeaderField (
                 eState = INETMSG_HTTP_CHECK;
                 eOkState = INETMSG_HTTP_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'n':
                         check = "less";
@@ -2469,7 +2485,7 @@ ULONG INetHTTPMessage::SetHeaderField (
                 eState = INETMSG_HTTP_CHECK;
                 eOkState = INETMSG_HTTP_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'n':
                         check = "ection";
@@ -2492,7 +2508,7 @@ ULONG INetHTTPMessage::SetHeaderField (
                 eState = INETMSG_HTTP_CHECK;
                 eOkState = INETMSG_HTTP_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'e':
                         check = "ncoding";
@@ -2500,7 +2516,7 @@ ULONG INetHTTPMessage::SetHeaderField (
                         break;
 
                     case 'l':
-                        switch (rtl_char_toLowerCase (*(pData + 1)))
+                        switch (ascii_toLowerCase (*(pData + 1)))
                         {
                             case 'a':
                                 check = "nguage";
@@ -2545,7 +2561,7 @@ ULONG INetHTTPMessage::SetHeaderField (
                 eState = INETMSG_HTTP_CHECK;
                 eOkState = INETMSG_HTTP_OK;
 
-                switch (rtl_char_toLowerCase (*pData))
+                switch (ascii_toLowerCase (*pData))
                 {
                     case 'e':
                         check = "nticate";
@@ -2568,7 +2584,7 @@ ULONG INetHTTPMessage::SetHeaderField (
                 if (*check)
                 {
                     while (*pData && *check &&
-                           (rtl_char_toLowerCase (*pData) == *check))
+                           (ascii_toLowerCase (*pData) == *check))
                     {
                         pData++;
                         check++;
