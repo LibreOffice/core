@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 17:57:45 $
+#   last change: $Author: hr $ $Date: 2003-08-07 15:23:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,8 @@ UNOTYPES=	com.sun.star.uno.XWeak						\
             com.sun.star.util.logging.XLogger			\
             com.sun.star.util.logging.LogLevel			\
             com.sun.star.util.XTextSearch				\
-            com.sun.star.util.SearchResult
+            com.sun.star.util.SearchResult				\
+            com.sun.star.xml.sax.XDocumentHandler
 
 
 # --- Files -------------------------------------
