@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:28:43 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6304,7 +6304,7 @@ void WW8Dop::SetCompatabilityOptions(UINT32 a32Bit)
     fNoLeading                  = ( a32Bit &  0x00080000 ) >> 19 ;
     fMWSmallCaps                = ( a32Bit &  0x00200000 ) >> 21 ;
 
-    fUsePrinterMetrics          = ( a32Bit &  0x00200000 ) >> 31 ;
+    fUsePrinterMetrics          = ( a32Bit &  0x80000000 ) >> 31 ;
 }
 
 UINT32 WW8Dop::GetCompatabilityOptions() const
