@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,7 +617,7 @@ ModalDialog RID_SCDLG_ASCII
         TabStop = TRUE ;
         Text [ english_us ] = "Compressed ~display" ;
         Text [ portuguese_brazilian ] = "Fel~dtrenner zusammenfassen" ;
-        Text [ swedish ] = "Sammanfatta f~ältdelare" ;
+        Text [ swedish ] = "Sammanfatta f~ältavgränsare" ;
         Text [ danish ] = "Kombiner feltseparatorer" ;
         Text [ italian ] = "Raggruppa i separatori di campo" ;
         Text [ spanish ] = "Reagrupar los ~separadores de campo" ;
