@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-15 16:26:50 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 14:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -962,10 +962,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
         if( bUpdateDocStat )
         {
             SwDocStat aStat( pDoc->GetDocStat() );
-            ViewShell *pTmpVSh = 0;
-            pDoc->GetEditShell( &pTmpVSh );
-            USHORT nPages = pTmpVSh ? pTmpVSh->GetNumPages() : 1;
-            pDoc->UpdateDocStat( aStat, nPages );
+            pDoc->UpdateDocStat( aStat );
         }
     }
 
@@ -5240,6 +5237,9 @@ void _HTMLAttr::InsertPrev( _HTMLAttr *pPrv )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/15 16:26:50  hr
+      #65293# includes
+
       Revision 1.3  2000/11/13 10:42:42  jp
       must changes: use Search from SvtPathOptions
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:27:31 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 14:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1897,7 +1897,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         {
             SwDocStat aStat(pDocShell->GetDoc()->GetDocStat());
             if(aStat.bModified)
-                pDocShell->GetDoc()->UpdateDocStat( aStat, 1 );
+                pDocShell->GetDoc()->UpdateDocStat( aStat );
             sal_Int32 nValue;
             switch(pMap->nWID)
             {
