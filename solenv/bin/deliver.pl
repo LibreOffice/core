@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.74 $
+#   $Revision: 1.75 $
 #
-#   last change: $Author: vg $ $Date: 2004-10-22 09:05:31 $
+#   last change: $Author: pjunck $ $Date: 2004-11-03 08:57:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.74 $ ';
+$id_str = ' $Revision: 1.75 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -267,7 +267,9 @@ sub do_linklib
 
     foreach $lib (@globbed_files) {
         $lib = basename($lib);
-        if ( $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)\.(\d+)(\.(\d+))?$/ ) {
+        if ( $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)\.(\d+)(\.(\d+))?$/
+             || $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)$/ )
+        {
            push(@{$globbed_hash{$1}}, $lib);
         }
         else {
@@ -278,33 +280,49 @@ sub do_linklib
     foreach $lib_base ( sort keys %globbed_hash ) {
         $lib = get_latest_patchlevel(@{$globbed_hash{$lib_base}});
 
-        $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)\.(\d+)(\.(\d+))?$/;
-        $lib_major = "$lib_base.$3";
+        if ( $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)\.(\d+)(\.(\d+))?$/ )
+        {
+            $lib_major = "$lib_base.$3";
+            $long = 1;
+        }
+        else
+        {
+            # $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)$/;
+            $long = 0;
+        }
 
         if ( $opt_check ) {
             if ( $opt_delete ) {
-                print "REMOVE: $to_dir/$lib_major\n";
+                print "REMOVE: $to_dir/$lib_major\n" if $long;
                 print "REMOVE: $to_dir/$lib_base\n";
             }
             else {
-                print "LINKLIB: $to_dir/$lib -> $to_dir/$lib_major\n";
+                print "LINKLIB: $to_dir/$lib -> $to_dir/$lib_major\n" if $long;
                 print "LINKLIB: $to_dir/$lib -> $to_dir/$lib_base\n";
             }
         }
         else {
             if ( $opt_delete ) {
-                print "REMOVE: $to_dir/$lib_major\n";
+                print "REMOVE: $to_dir/$lib_major\n" if $long;
                 print "REMOVE: $to_dir/$lib_base\n";
-                unlink "$to_dir/$lib_major";
+                unlink "$to_dir/$lib_major" if $long;
                 unlink "$to_dir/$lib_base";
                 if ( $opt_zip ) {
-                    push_on_ziplist("$to_dir/$lib_major");
+                    push_on_ziplist("$to_dir/$lib_major") if $long;
                     push_on_ziplist("$to_dir/$lib_base");
                 }
                 return;
             }
             my $symlib;
-            my @symlibs = ("$to_dir/$lib_major", "$to_dir/$lib_base");
+            my @symlibs;
+            if ($long)
+            {
+                @symlibs = ("$to_dir/$lib_major", "$to_dir/$lib_base");
+            }
+            else
+            {
+                @symlibs = ("$to_dir/$lib_base");
+            }
             # remove old symlinks
             unlink(@symlibs);
             foreach $symlib (@symlibs) {
