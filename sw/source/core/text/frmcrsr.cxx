@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:25:41 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1445,15 +1445,15 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
         pFnt = new SwFont( *aFontAccess.Get()->GetFont() );
         pFnt->ChkMagic( pSh, pFnt->GetActual() );
     }
-    OutputDevice *pOut = pSh->GetOut();
+    OutputDevice* pOut = pSh->GetOut();
     if ( !GetTxtNode()->GetDoc()->IsBrowseMode() ||
             ( pSh->GetViewOptions()->IsPrtFormat() ) )
         pOut = &GetTxtNode()->GetDoc()->GetRefDev();
 
     pFnt->SetFntChg( sal_True );
-    pFnt->ChgPhysFnt( pSh, pOut );
+    pFnt->ChgPhysFnt( pSh, *pOut );
 
-    SwTwips nLineHeight = pFnt->GetHeight( pSh, pOut );
+    SwTwips nLineHeight = pFnt->GetHeight( pSh, *pOut );
 
     if( nLineHeight )
     {
