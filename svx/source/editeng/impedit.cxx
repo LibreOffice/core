@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cdt $ $Date: 2002-04-29 11:39:40 $
+ *  last change: $Author: cdt $ $Date: 2002-04-29 15:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1433,7 +1433,7 @@ void ImpEditView::HideDDCursor()
     if ( pDragAndDropInfo && pDragAndDropInfo->bVisCursor )
     {
         GetWindow()->DrawOutDev( pDragAndDropInfo->aCurSavedCursor.TopLeft(), pDragAndDropInfo->aCurSavedCursor.GetSize(),
-                            Point(0,0), pDragAndDropInfo->aCurSavedCursor.GetSize(), pDragAndDropInfo->aBackground );
+                            Point(0,0), pDragAndDropInfo->aCurSavedCursor.GetSize(),*pDragAndDropInfo->pBackground );
         pDragAndDropInfo->bVisCursor = sal_False;
     }
 }
@@ -1455,20 +1455,26 @@ void ImpEditView::ShowDDCursor( const Rectangle& rRect )
         aSaveRec.Bottom() += 1;
 
         Size aNewSzPx( aSaveRec.GetSize() );
-        Size aCurSzPx( pDragAndDropInfo->aBackground.GetOutputSizePixel() );
+        if ( !pDragAndDropInfo->pBackground )
+        {
+            pDragAndDropInfo->pBackground = new VirtualDevice( *GetWindow() );
+            MapMode aMapMode( GetWindow()->GetMapMode() );
+            aMapMode.SetOrigin( Point( 0, 0 ) );
+            pDragAndDropInfo->pBackground->SetMapMode( aMapMode );
+
+        }
+        Size aCurSzPx( pDragAndDropInfo->pBackground->GetOutputSizePixel() );
         if ( ( aCurSzPx.Width() < aNewSzPx.Width() ) ||( aCurSzPx.Height() < aNewSzPx.Height() ) )
         {
-            sal_Bool bDone = pDragAndDropInfo->aBackground.SetOutputSizePixel( aNewSzPx );
+            sal_Bool bDone = pDragAndDropInfo->pBackground->SetOutputSizePixel( aNewSzPx );
             DBG_ASSERT( bDone, "Virtuelles Device kaputt?" );
         }
 
+
         aSaveRec = GetWindow()->PixelToLogic( aSaveRec );
 
-        MapMode aMapMode( GetWindow()->GetMapMode() );
-        aMapMode.SetOrigin( Point( 0, 0 ) );
-        pDragAndDropInfo->aBackground.SetMapMode( aMapMode );
-        pDragAndDropInfo->aBackground.DrawOutDev( Point(0,0), aSaveRec.GetSize(),
-                            aSaveRec.TopLeft(), aSaveRec.GetSize(), *GetWindow() );
+        pDragAndDropInfo->pBackground->DrawOutDev( Point(0,0), aSaveRec.GetSize(),
+                                    aSaveRec.TopLeft(), aSaveRec.GetSize(), *GetWindow() );
         pDragAndDropInfo->aCurSavedCursor = aSaveRec;
 
         // Cursor malen...
@@ -1494,7 +1500,7 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
 
     if ( GetEditSelection().HasRange() && bClickedInSelection )
     {
-        pDragAndDropInfo = new DragAndDropInfo( *GetWindow() );
+        pDragAndDropInfo = new DragAndDropInfo();
     }
     else
     {
@@ -1504,7 +1510,7 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
         const SvxFieldItem* pField = GetField( aMousePos, &nPara, &nPos );
         if ( pField )
         {
-            pDragAndDropInfo = new DragAndDropInfo( *GetWindow() );
+            pDragAndDropInfo = new DragAndDropInfo();
             pDragAndDropInfo->pField = pField;
             ContentNode* pNode = pEditEngine->pImpEditEngine->GetEditDoc().GetObject( nPara );
             aCopySel = EditSelection( EditPaM( pNode, nPos ), EditPaM( pNode, nPos+1 ) );
@@ -1516,7 +1522,7 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
         }
         else if ( IsBulletArea( aMousePos, &nPara ) )
         {
-            pDragAndDropInfo = new DragAndDropInfo( *GetWindow() );
+            pDragAndDropInfo = new DragAndDropInfo();
             pDragAndDropInfo->bOutlinerMode = TRUE;
             EditPaM aStartPaM( pEditEngine->pImpEditEngine->GetEditDoc().GetObject( nPara ), 0 );
             EditPaM aEndPaM( aStartPaM );
@@ -1548,9 +1554,6 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
         aSz = GetWindow()->PixelToLogic( aSz );
         pDragAndDropInfo->nSensibleRange = (sal_uInt16) aSz.Width();
         pDragAndDropInfo->nCursorWidth = (sal_uInt16) aSz.Width() / 2;
-        MapMode aMapMode( GetWindow()->GetMapMode() );
-        aMapMode.SetOrigin( Point( 0, 0 ) );
-        pDragAndDropInfo->aBackground.SetMapMode( aMapMode );
         pDragAndDropInfo->aBeginDragSel = pEditEngine->pImpEditEngine->CreateESel( aCopySel );
 
         uno::Reference< datatransfer::XTransferable > xData = pEditEngine->pImpEditEngine->CreateTransferable( aCopySel );
@@ -1725,7 +1728,7 @@ void ImpEditView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTarg
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
 
     if ( !pDragAndDropInfo )
-        pDragAndDropInfo = new DragAndDropInfo( *GetWindow() );
+        pDragAndDropInfo = new DragAndDropInfo( );
 
     pDragAndDropInfo->bHasValidData = sal_True; // !!!!!!!!
     dragOver( rDTDEE );
@@ -1747,13 +1750,6 @@ void ImpEditView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTarge
 void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
-
-    // #96637# it can happen that dragOver is called without a preceding dragEnter()
-    if ( !pDragAndDropInfo )
-    {
-        pDragAndDropInfo = new DragAndDropInfo( *GetWindow() );
-        pDragAndDropInfo->bHasValidData = sal_True; // !!!!!!!!
-    }
 
     Point aMousePos( rDTDE.LocationX, rDTDE.LocationY );
     aMousePos = GetWindow()->PixelToLogic( aMousePos );

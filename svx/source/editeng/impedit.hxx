@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: mt $ $Date: 2002-04-26 10:16:41 $
+ *  last change: $Author: cdt $ $Date: 2002-04-29 14:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ struct DragAndDropInfo
     EditPaM             aDropDest;
     USHORT              nOutlinerDropDest;
     ESelection          aDropSel;
-    VirtualDevice       aBackground;
+    VirtualDevice*      pBackground;
     const SvxFieldItem* pField;
     sal_Bool            bVisCursor              : 1;
     sal_Bool            bDroppedInMe            : 1;
@@ -172,9 +172,9 @@ struct DragAndDropInfo
     sal_Bool            bOutlinerMode           : 1;
     sal_Bool            bDragAccepted           : 1;
 
-    DragAndDropInfo( const OutputDevice& rOutDev4VirtDev) :
-            aBackground( rOutDev4VirtDev )  {
-            bVisCursor = sal_False; bDroppedInMe = sal_False; bStarterOfDD = sal_False;
+    DragAndDropInfo()
+    {
+            pBackground = NULL; bVisCursor = sal_False; bDroppedInMe = sal_False; bStarterOfDD = sal_False;
             bHasValidData = sal_False; bUndoAction = sal_False; bOutlinerMode = sal_False;
             nSensibleRange = 0; nCursorWidth = 0; pField = 0; nOutlinerDropDest = 0; bDragAccepted = sal_False;
     }
