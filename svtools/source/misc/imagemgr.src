@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2001-12-10 22:12:06 $
+ *  last change: $Author: obo $ $Date: 2001-12-14 18:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ String STR_DESCRIPTION_SOURCEFILE
     Text [ chinese_simplified ] = "源文本";
     Text [ russian ] = "�������� ���";
     Text [ polish ] = "Kod �r�d�owy";
-    Text [ japanese ] = "ｿｰｽｺｰﾄﾞ";
+    Text [ japanese ] = "ソースコード";
     Text [ chinese_traditional ] = "原始檔";
     Text [ arabic ] = "������� ��������";
     Text[ dutch ] = "Broncode";
@@ -210,7 +210,7 @@ String STR_DESCRIPTION_BOOKMARKFILE
     Text [ chinese_simplified ] = "书签文件";
     Text [ russian ] = "���� ��������";
     Text [ polish ] = "Plik zak�adek";
-    Text [ japanese ] = "ﾌﾞｯｸﾏｰｸﾌｧｲﾙ";
+    Text [ japanese ] = "ブックマークファイル";
     Text [ chinese_traditional ] = "書籤檔案";
     Text [ arabic ] = "��� �������� ��������";
     Text[ dutch ] = "Bookmark-bestand";
@@ -264,7 +264,7 @@ String STR_DESCRIPTION_CFGFILE
     Text [ chinese_simplified ] = "配置文件";
     Text [ russian ] = "���� ������������";
     Text [ polish ] = "Plik konfiguracyjny";
-    Text [ japanese ] = "環境設定ﾌｧｲﾙ";
+    Text [ japanese ] = "環境設定ファイル";
     Text [ chinese_traditional ] = "配置檔案";
     Text [ arabic ] = "��� �������";
     Text[ dutch ] = "Configuratiebestand";
@@ -291,7 +291,7 @@ String STR_DESCRIPTION_APPLICATION
     Text [ chinese_simplified ] = "应用程序";
     Text [ russian ] = "����������";
     Text [ polish ] = "Aplikacja";
-    Text [ japanese ] = "ｱﾌﾟﾘｹｰｼｮﾝ";
+    Text [ japanese ] = "アプリケーション";
     Text [ chinese_traditional ] = "應用程式";
     Text [ arabic ] = "�����";
     Text[ dutch ] = "Applicatie";
@@ -318,7 +318,7 @@ String STR_DESCRIPTION_DATABASE_TABLE
     Text [ chinese_simplified ] = "数据库表格";
     Text [ russian ] = "������� ���� ������";
     Text [ polish ] = "Tabela bazy danych";
-    Text [ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽﾃｰﾌﾞﾙ";
+    Text [ japanese ] = "データベーステーブル";
     Text [ chinese_traditional ] = "資料庫表格";
     Text [ arabic ] = "���� ����� ������";
     Text[ dutch ] = "Databasetabel";
@@ -345,7 +345,7 @@ String STR_DESCRIPTION_SYSFILE
     Text [ chinese_simplified ] = "系统文件";
     Text [ russian ] = "��������� ����";
     Text [ polish ] = "Plik systemowy";
-    Text [ japanese ] = "ｼｽﾃﾑﾌｧｲﾙ";
+    Text [ japanese ] = "システムファイル";
     Text [ chinese_traditional ] = "系統檔案";
     Text [ arabic ] = "��� ������";
     Text[ dutch ] = "Systeembestand";
@@ -372,7 +372,7 @@ String STR_DESCRIPTION_WORD_DOC
     Text [ chinese_simplified ] = "MS Word 文档";
     Text [ russian ] = "�������� MS Word";
     Text [ polish ] = "MS Word - Dokument";
-    Text [ japanese ] = "Microsoft Word ﾄﾞｷｭﾒﾝﾄ";
+    Text [ japanese ] = "Microsoft Word ドキュメント";
     Text [ chinese_traditional ] = "MS Word 文件";
     Text [ arabic ] = "MS Word �����";
     Text[ dutch ] = "MS Word document";
@@ -399,7 +399,7 @@ String STR_DESCRIPTION_HELP_DOC
     Text [ chinese_simplified ] = "帮助文件";
     Text [ russian ] = "���� �������";
     Text [ polish ] = "Plik pomocy";
-    Text [ japanese ] = "ﾍﾙﾌﾟﾌｧｲﾙ";
+    Text [ japanese ] = "ヘルプファイル";
     Text [ chinese_traditional ] = "說明檔案";
     Text [ arabic ] = "��� ��������";
     Text[ dutch ] = "Help-bestand";
@@ -426,7 +426,7 @@ String STR_DESCRIPTION_HTMLFILE
     Text [ chinese_simplified ] = "国际互联网文档";
     Text [ russian ] = "�������� ���������";
     Text [ polish ] = "Dokument Internetu";
-    Text [ japanese ] = "ｲﾝﾀｰﾈｯﾄﾄﾞｷｭﾒﾝﾄ";
+    Text [ japanese ] = "インターネットドキュメント";
     Text [ chinese_traditional ] = "Internet 文件";
     Text [ arabic ] = "����� ������";
     Text[ dutch ] = "Internet-document";
@@ -453,7 +453,7 @@ String STR_DESCRIPTION_ARCHIVFILE
     Text [ chinese_simplified ] = "档案文件";
     Text [ russian ] = "���� ������";
     Text [ polish ] = "Plik archiwalny";
-    Text [ japanese ] = "ｱｰｶｲﾌﾞﾌｧｲﾙ";
+    Text [ japanese ] = "アーカイブファイル";
     Text [ chinese_traditional ] = "備用檔案";
     Text [ arabic ] = "��� �������";
     Text[ dutch ] = "Archiefbestand";
@@ -480,7 +480,7 @@ String STR_DESCRIPTION_LOGFILE
     Text [ chinese_simplified ] = "记录文件";
     Text [ russian ] = "���� ���������";
     Text [ polish ] = "Plik protoko�u";
-    Text [ japanese ] = "ﾌﾟﾛﾄｺﾙﾌｧｲﾙ";
+    Text [ japanese ] = "プロトコルファイル";
     Text [ chinese_traditional ] = "記錄檔案";
     Text [ arabic ] = "��� ����������";
     Text[ dutch ] = "Protocolbestand";
@@ -534,7 +534,7 @@ String STR_DESCRIPTION_SCHART_DOC
     Text [ chinese_simplified ] = "%PRODUCTNAME 图表";
     Text [ russian ] = "��������� %PRODUCTNAME";
     Text [ polish ] = "%PRODUCTNAME - Wykres";
-    Text [ japanese ] = "%PRODUCTNAME ｸﾞﾗﾌ";
+    Text [ japanese ] = "%PRODUCTNAME グラフ";
     Text [ chinese_traditional ] = "%PRODUCTNAME 圖表";
     Text [ arabic ] = "�������� %PRODUCTNAME ���";
     Text[ dutch ] = "%PRODUCTNAME diagram";
@@ -615,7 +615,7 @@ String STR_DESCRIPTION_SIMPRESS_DOC
     Text [ chinese_simplified ] = "%PRODUCTNAME 演示文稿";
     Text [ russian ] = "����������� � %PRODUCTNAME";
     Text [ polish ] = "%PRODUCTNAME - Prezentacja";
-    Text [ japanese ] = "%PRODUCTNAME ﾌﾟﾚｾﾞﾝﾃｰｼｮﾝ";
+    Text [ japanese ] = "%PRODUCTNAME プレゼンテーション";
     Text [ chinese_traditional ] = "%PRODUCTNAME 簡報";
     Text [ arabic ] = "�������� %PRODUCTNAME ���";
     Text[ dutch ] = "%PRODUCTNAME presentatie";
@@ -669,7 +669,7 @@ String STR_DESCRIPTION_GLOBALDOC
     Text [ chinese_simplified ] = "%PRODUCTNAME 文本 主控文档";
     Text [ russian ] = "������� ��������� �������� %PRODUCTNAME";
     Text [ polish ] = "%PRODUCTNAME - Dokument g��wny";
-    Text [ japanese ] = "%PRODUCTNAME 文書ﾏｽﾀｰﾄﾞｷｭﾒﾝﾄ";
+    Text [ japanese ] = "%PRODUCTNAME 文書マスタードキュメント";
     Text [ chinese_traditional ] = "%PRODUCTNAME 文字 主控文件";
     Text [ arabic ] = "(%PRODUCTNAME text) ����� ����";
     Text[ dutch ] = "%PRODUCTNAME tekst master-document";
@@ -696,7 +696,7 @@ String STR_DESCRIPTION_SIMAGE_DOC
     Text [ chinese_simplified ] = "%PRODUCTNAME 图像";
     Text [ russian ] = "������� %PRODUCTNAME";
     Text [ polish ] = "%PRODUCTNAME - Obraz";
-    Text [ japanese ] = "%PRODUCTNAME ｲﾒｰｼﾞ";
+    Text [ japanese ] = "%PRODUCTNAME イメージ";
     Text [ chinese_traditional ] = "%PRODUCTNAME 影像";
     Text [ arabic ] = "%PRODUCTNAME ����";
     Text[ dutch ] = "%PRODUCTNAME afbeelding";
@@ -723,7 +723,7 @@ String STR_DESCRIPTION_TEXTFILE
     Text [ chinese_simplified ] = "文本文件";
     Text [ russian ] = "��������� ����";
     Text [ polish ] = "Plik tekstowy";
-    Text [ japanese ] = "ﾃｷｽﾄﾌｧｲﾙ";
+    Text [ japanese ] = "テキストファイル";
     Text [ chinese_traditional ] = "文字檔案";
     Text [ arabic ] = "��� ��";
     Text[ dutch ] = "Tekstbestand";
@@ -750,7 +750,7 @@ String STR_DESCRIPTION_LINK
     Text [ chinese_simplified ] = "链接";
     Text [ russian ] = "������";
     Text [ polish ] = "��cze";
-    Text [ japanese ] = "ﾘﾝｸ";
+    Text [ japanese ] = "リンク";
     Text [ chinese_traditional ] = "捷徑";
     Text [ arabic ] = "������";
     Text[ dutch ] = "Koppeling";
@@ -777,7 +777,7 @@ String STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC
     Text [ chinese_simplified ] = "%PRODUCTNAME 样式";
     Text [ russian ] = "������ %PRODUCTNAME";
     Text [ polish ] = "%PRODUCTNAME - Szablon";
-    Text [ japanese ] = "%PRODUCTNAME ﾃﾝﾌﾟﾚｰﾄ";
+    Text [ japanese ] = "%PRODUCTNAME テンプレート";
     Text [ chinese_traditional ] = "%PRODUCTNAME 樣式";
     Text [ arabic ] = "����%PRODUCTNAME ";
     Text[ dutch ] = "%PRODUCTNAME sjabloon";
@@ -804,7 +804,7 @@ String STR_DESCRIPTION_EXCEL_DOC
     Text [ chinese_simplified ] = "MS Excel 文档";
     Text [ russian ] = "�������� MS Excel";
     Text [ polish ] = "MS Excel - Dokument";
-    Text [ japanese ] = "Microsoft Excel ﾄﾞｷｭﾒﾝﾄ";
+    Text [ japanese ] = "Microsoft Excel ドキュメント";
     Text [ chinese_traditional ] = "MS Excel 文件";
     Text [ arabic ] = "MS Excel �����";
     Text[ dutch ] = "MS Excel document";
@@ -831,7 +831,7 @@ String STR_DESCRIPTION_EXCEL_TEMPLATE_DOC
     Text [ chinese_simplified ] = "MS Excel 模板";
     Text [ russian ] = "������ MS Excel";
     Text [ polish ] = "MS Excel - Szablon";
-    Text [ japanese ] = "Microsoft Excel ﾃﾝﾌﾟﾚｰﾄ";
+    Text [ japanese ] = "Microsoft Excel テンプレート";
     Text [ chinese_traditional ] = "MS Excel 範本";
     Text [ arabic ] = "����MS Excel ";
     Text[ dutch ] = "MS Excel sjabloon";
@@ -858,7 +858,7 @@ String STR_DESCRIPTION_BATCHFILE
     Text[ chinese_simplified ] = "批文件";
     Text[ russian ] = "�������� ����";
     Text[ polish ] = "Plik wsadowy";
-    Text[ japanese ] = "ﾊﾞｯﾁﾌｧｲﾙ";
+    Text[ japanese ] = "バッチファイル";
     Text[ chinese_traditional ] = "批檔案";
     Text[ arabic ] = "��� ������ �����";
     Text[ dutch ] = "Batch-bestand";
@@ -885,7 +885,7 @@ String STR_DESCRIPTION_FILE
     Text [ chinese_simplified ] = "文件";
     Text [ russian ] = "����";
     Text [ polish ] = "Plik";
-    Text [ japanese ] = "ﾌｧｲﾙ";
+    Text [ japanese ] = "ファイル";
     Text [ chinese_traditional ] = "檔案";
     Text [ arabic ] = "���";
     Text[ dutch ] = "Bestand";
@@ -912,7 +912,7 @@ String STR_DESCRIPTION_FOLDER
     Text [ chinese_simplified ] = "文件夹";
     Text [ russian ] = "�����";
     Text [ polish ] = "Folder";
-    Text [ japanese ] = "ﾌｫﾙﾀﾞ";
+    Text [ japanese ] = "フォルダ";
     Text [ chinese_traditional ] = "資料夾";
     Text [ arabic ] = "����";
     Text[ dutch ] = "Map";
@@ -939,7 +939,7 @@ String STR_DESCRIPTION_FACTORY_WRITER
     Text[ swedish ] = "Textdokument";
     Text[ polish ] = "Dokument tekstowy";
     Text[ portuguese_brazilian ] = "Text Document";
-    Text[ japanese ] = "文書ﾄﾞｷｭﾒﾝﾄ";
+    Text[ japanese ] = "文書ドキュメント";
     Text[ korean ] = "텍스트 문서";
     Text[ chinese_simplified ] = "文本文档";
     Text[ chinese_traditional ] = "文字文件";
@@ -964,7 +964,7 @@ String STR_DESCRIPTION_FACTORY_CALC
     Text[ swedish ] = "Tabelldokument";
     Text[ polish ] = "Arkusz kalkulacyjny";
     Text[ portuguese_brazilian ] = "Spreadsheet";
-    Text[ japanese ] = "表計算ﾄﾞｷｭﾒﾝﾄ";
+    Text[ japanese ] = "表計算ドキュメント";
     Text[ korean ] = "스프레드시트 문서";
     Text[ chinese_simplified ] = "工作表文档";
     Text[ chinese_traditional ] = "工作表文件";
@@ -989,7 +989,7 @@ String STR_DESCRIPTION_FACTORY_IMPRESS
     Text[ swedish ] = "Presentation";
     Text[ polish ] = "Prezentacja";
     Text[ portuguese_brazilian ] = "Presentation";
-    Text[ japanese ] = "ﾌﾟﾚｾﾞﾝﾃｰｼｮﾝ";
+    Text[ japanese ] = "プレゼンテーション";
     Text[ korean ] = "프리젠테이션";
     Text[ chinese_simplified ] = "演示文稿";
     Text[ chinese_traditional ] = "簡報";
@@ -1039,7 +1039,7 @@ String STR_DESCRIPTION_FACTORY_WRITERWEB
     Text[ swedish ] = "HTML-dokument";
     Text[ polish ] = "Dokument HTML";
     Text[ portuguese_brazilian ] = "HTML Document";
-    Text[ japanese ] = "HTML 形式ﾄﾞｷｭﾒﾝﾄ";
+    Text[ japanese ] = "HTML 形式ドキュメント";
     Text[ korean ] = "HTML 문서";
     Text[ chinese_simplified ] = "HTML 文档";
     Text[ chinese_traditional ] = "HTML 文件";
@@ -1064,7 +1064,7 @@ String STR_DESCRIPTION_FACTORY_GLOBALDOC
     Text[ swedish ] = "Samlingsdokument";
     Text[ polish ] = "Dokument g��wny";
     Text[ portuguese_brazilian ] = "Master Document";
-    Text[ japanese ] = "ﾏｽﾀｰﾄﾞｷｭﾒﾝﾄ";
+    Text[ japanese ] = "マスタードキュメント";
     Text[ korean ] = "마스터 문서";
     Text[ chinese_simplified ] = "主控文档";
     Text[ chinese_traditional ] = "主控文件";
@@ -1113,7 +1113,7 @@ String STR_DESCRIPTION_CALC_TEMPLATE
     Text[ swedish ] = "%PRODUCTNAME 6.0 tabelldokument mall";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon arkusza kalkulacyjnego";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Tabledocument Template";
-    Text[ japanese ] = "%productname% 6.0 表計算ﾄﾞｷｭﾒﾝﾄ ﾃﾝﾌﾟﾚｰﾄ";
+    Text[ japanese ] = "%productname% 6.0 表計算ドキュメント テンプレート";
     Text[ korean ] = "%PRODUCTNAME 6.0 스프레드시트 템플릿";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 工作表文档样式";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 工作表文件樣式";
@@ -1137,7 +1137,7 @@ String STR_DESCRIPTION_DRAW_TEMPLATE
     Text[ swedish ] = "%PRODUCTNAME 6.0 teckningsmall";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon rysunku";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Drawing Template";
-    Text[ japanese ] = "%PRODUCTNAME 6.0 図形描画ﾃﾝﾌﾟﾚｰﾄ";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 図形描画テンプレート";
     Text[ korean ] = "%PRODUCTNAME 6.0 그리기 템플릿";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 绘图样式";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 繪圖樣式";
@@ -1161,7 +1161,7 @@ String STR_DESCRIPTION_IMPRESS_TEMPLATE
     Text[ swedish ] = "%PRODUCTNAME 6.0 presentationsmall";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon prezentacji";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Presentation Template";
-    Text[ japanese ] = "%PRODUCTNAME 6.0 ﾌﾟﾚｾﾞﾝﾃｰｼｮﾝ ﾃﾝﾌﾟﾚｰﾄ";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 プレゼンテーション テンプレート";
     Text[ korean ] = "%PRODUCTNAME 6.0 프리젠테이션 템플릿";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 演示文稿样式";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 簡報樣式";
@@ -1185,7 +1185,7 @@ String STR_DESCRIPTION_WRITER_TEMPLATE
     Text[ swedish ] = "%PRODUCTNAME 6.0 textdokument mall";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon dokumentu tekstowego";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Textdocument Template";
-    Text[ japanese ] = "%productname% 6.0 文書ﾄﾞｷｭﾒﾝﾄ ﾃﾝﾌﾟﾚｰﾄ";
+    Text[ japanese ] = "%productname% 6.0 文書ドキュメント テンプレート";
     Text[ korean ] = "%PRODUCTNAME 6.0 텍스트 문서 템플릿";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 文本文档样式";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 文字文件樣式";
@@ -1204,12 +1204,12 @@ String STR_DESCRIPTION_LOCALE_VOLUME
     Text[ french ] = "Unit� locale";
     Text[ spanish ] = "Unidad local";
     Text[ finnish ] = "Local drive";
-    Text[ italian ] = "Local drive";
+    Text[ italian ] = "Drive locale";
     Text[ danish ] = "Local drive";
     Text[ swedish ] = "Lokal enhet";
     Text[ polish ] = "Local drive";
     Text[ portuguese_brazilian ] = "Local drive";
-    Text[ japanese ] = "ﾛｰｶﾙのﾄﾞﾗｲﾌﾞ";
+    Text[ japanese ] = "ローカルのドライブ";
     Text[ korean ] = "Local drive";
     Text[ chinese_simplified ] = "局部驱动器";
     Text[ chinese_traditional ] = "本機磁碟";
@@ -1220,20 +1220,20 @@ String STR_DESCRIPTION_LOCALE_VOLUME
 String STR_DESCRIPTION_FLOPPY_VOLUME
 {
     Text = "Diskettenlaufwerk" ;
-    Text [ english_us ] = "Floppy disk" ;
+    Text [ english_us ] = "Disk drive" ;
     Text[ portuguese ] = "Floppy disk";
     Text[ russian ] = "Floppy disk";
     Text[ greek ] = "Floppy disk";
     Text[ dutch ] = "Floppy disk";
     Text[ french ] = "Unit� disquette";
-    Text[ spanish ] = "Floppy disk";
+    Text[ spanish ] = "Unidad de disco";
     Text[ finnish ] = "Floppy disk";
     Text[ italian ] = "Floppy disk";
     Text[ danish ] = "Floppy disk";
     Text[ swedish ] = "Diskettenhet";
     Text[ polish ] = "Floppy disk";
     Text[ portuguese_brazilian ] = "Floppy disk";
-    Text[ japanese ] = "ﾌﾛｯﾋﾟｰﾃﾞｨｽｸ";
+    Text[ japanese ] = "フロッピーディスク";
     Text[ korean ] = "Floppy disk";
     Text[ chinese_simplified ] = "软盘";
     Text[ chinese_traditional ] = "軟碟機";
@@ -1252,12 +1252,12 @@ String STR_DESCRIPTION_CDROM_VOLUME
     Text[ french ] = "Unit� CD-ROM";
     Text[ spanish ] = "Unidad de CD ROM ";
     Text[ finnish ] = "CD-ROM drive";
-    Text[ italian ] = "CD-ROM drive";
+    Text[ italian ] = "Drive CD-ROM";
     Text[ danish ] = "CD-ROM drive";
     Text[ swedish ] = "Cd-romenhet";
     Text[ polish ] = "CD-ROM drive";
     Text[ portuguese_brazilian ] = "CD-ROM drive";
-    Text[ japanese ] = "CD-ROM ﾄﾞﾗｲﾌﾞ";
+    Text[ japanese ] = "CD-ROM ドライブ";
     Text[ korean ] = "CD-ROM drive";
     Text[ chinese_simplified ] = "光盘驱动器";
     Text[ chinese_traditional ] = "光碟機";
@@ -1281,7 +1281,7 @@ String STR_DESCRIPTION_REMOTE_VOLUME
     Text[ swedish ] = "N�tverkskoppling";
     Text[ polish ] = "Network connection";
     Text[ portuguese_brazilian ] = "Network connection";
-    Text[ japanese ] = "ﾈｯﾄﾜｰｸの接続";
+    Text[ japanese ] = "ネットワークの接続";
     Text[ korean ] = "Network connection";
     Text[ chinese_simplified ] = "网络连接";
     Text[ chinese_traditional ] = "網路連線";
@@ -1298,18 +1298,18 @@ String STR_DESCRIPTION_POWERPOINT
     Text[ russian ] = "MS PowerPoint Document";
     Text[ greek ] = "MS PowerPoint Document";
     Text[ dutch ] = "MS PowerPoint Document";
-    Text[ french ] = "MS PowerPoint Document";
-    Text[ spanish ] = "MS PowerPoint Document";
+    Text[ french ] = "Document MS PowerPoint";
+    Text[ spanish ] = "Documento MS PowerPoint ";
     Text[ finnish ] = "MS PowerPoint Document";
-    Text[ italian ] = "MS PowerPoint Document";
+    Text[ italian ] = "Documento MS PowerPoint";
     Text[ danish ] = "MS PowerPoint Document";
-    Text[ swedish ] = "MS PowerPoint Document";
+    Text[ swedish ] = "MS PowerPoint-dokument";
     Text[ polish ] = "MS PowerPoint Document";
     Text[ portuguese_brazilian ] = "MS PowerPoint Document";
-    Text[ japanese ] = "MS PowerPoint Document";
+    Text[ japanese ] = "MS PowerPoint ドキュメント";
     Text[ korean ] = "MS PowerPoint Document";
-    Text[ chinese_simplified ] = "MS PowerPoint Document";
-    Text[ chinese_traditional ] = "MS PowerPoint Document";
+    Text[ chinese_simplified ] = "Microsoft PowerPoint 文档";
+    Text[ chinese_traditional ] = "Microsoft PowerPoint 文件";
     Text[ turkish ] = "MS PowerPoint Document";
     Text[ arabic ] = "MS PowerPoint Document";
     Text[ catalan ] = "MS PowerPoint Document";
@@ -1324,18 +1324,18 @@ String STR_DESCRIPTION_POWERPOINT_TEMPLATE
     Text[ russian ] = "MS PowerPoint Template";
     Text[ greek ] = "MS PowerPoint Template";
     Text[ dutch ] = "MS PowerPoint Template";
-    Text[ french ] = "MS PowerPoint Template";
-    Text[ spanish ] = "MS PowerPoint Template";
+    Text[ french ] = "Mod�le MS PowerPoint";
+    Text[ spanish ] = "Plantilla MS PowerPoint ";
     Text[ finnish ] = "MS PowerPoint Template";
-    Text[ italian ] = "MS PowerPoint Template";
+    Text[ italian ] = "Modello MS PowerPoint";
     Text[ danish ] = "MS PowerPoint Template";
-    Text[ swedish ] = "MS PowerPoint Template";
+    Text[ swedish ] = "MS PowerPoint-mall";
     Text[ polish ] = "MS PowerPoint Template";
     Text[ portuguese_brazilian ] = "MS PowerPoint Template";
-    Text[ japanese ] = "MS PowerPoint Template";
+    Text[ japanese ] = "MS PowerPoint テンプレート";
     Text[ korean ] = "MS PowerPoint Template";
-    Text[ chinese_simplified ] = "MS PowerPoint Template";
-    Text[ chinese_traditional ] = "MS PowerPoint Template";
+    Text[ chinese_simplified ] = "Microsoft PowerPoint 模板";
+    Text[ chinese_traditional ] = "Microsoft PowerPoint Template";
     Text[ turkish ] = "MS PowerPoint Template";
     Text[ arabic ] = "MS PowerPoint Template";
     Text[ catalan ] = "MS PowerPoint Template";
@@ -1350,21 +1350,22 @@ String STR_DESCRIPTION_POWERPOINT_SHOW
     Text[ russian ] = "MS PowerPoint Show";
     Text[ greek ] = "MS PowerPoint Show";
     Text[ dutch ] = "MS PowerPoint Show";
-    Text[ french ] = "MS PowerPoint Show";
+    Text[ french ] = "Diaporama MS PowerPoint";
     Text[ spanish ] = "MS PowerPoint Show";
     Text[ finnish ] = "MS PowerPoint Show";
     Text[ italian ] = "MS PowerPoint Show";
     Text[ danish ] = "MS PowerPoint Show";
-    Text[ swedish ] = "MS PowerPoint Show";
+    Text[ swedish ] = "MS PowerPoint-bildspel";
     Text[ polish ] = "MS PowerPoint Show";
     Text[ portuguese_brazilian ] = "MS PowerPoint Show";
-    Text[ japanese ] = "MS PowerPoint Show";
+    Text[ japanese ] = "MS PowerPoint ショー";
     Text[ korean ] = "MS PowerPoint Show";
-    Text[ chinese_simplified ] = "MS PowerPoint Show";
-    Text[ chinese_traditional ] = "MS PowerPoint Show";
+    Text[ chinese_simplified ] = "Microsoft PowerPoint Show";
+    Text[ chinese_traditional ] = "Microsoft PowerPoint Show";
     Text[ turkish ] = "MS PowerPoint Show";
     Text[ arabic ] = "MS PowerPoint Show";
     Text[ catalan ] = "MS PowerPoint Show";
 };
+
 
 
