@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:00:06 $
+ *  last change: $Author: kz $ $Date: 2000-11-24 16:40:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText [ ITALIAN ] = "Punti" ;
         CustomUnitText [ DUTCH ] = "Punten" ;
         CustomUnitText [ PORTUGUESE_BRAZILIAN ] = "Pontos" ;
-        CustomUnitText [ SWEDISH ] = "punkter" ;
+        CustomUnitText [ SWEDISH ] = " punkter" ;
         CustomUnitText [ PORTUGUESE ] = "Pontos" ;
         SpinSize = 1 ;
         CustomUnitText[ chinese_simplified ] = "µã";
@@ -309,7 +309,7 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText [ ITALIAN ] = "Punti" ;
         CustomUnitText [ DUTCH ] = "Punten" ;
         CustomUnitText [ PORTUGUESE_BRAZILIAN ] = "Pontos" ;
-        CustomUnitText [ SWEDISH ] = "punkter" ;
+        CustomUnitText [ SWEDISH ] = " punkter" ;
         CustomUnitText [ PORTUGUESE ] = "Pontos" ;
         SpinSize = 1 ;
         CustomUnitText[ chinese_simplified ] = "µã";
