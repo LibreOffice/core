@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpstat.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-10 20:28:30 $
+ *  last change: $Author: kz $ $Date: 2001-08-14 15:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,7 @@ TabPage RID_SCPAGE_STAT
         Text[ finnish ] = "Asiakirja: ";
     };
 };
+
 
 
 
