@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: bm $ $Date: 2001-08-14 13:09:38 $
+ *  last change: $Author: bm $ $Date: 2001-08-16 13:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,11 @@ void XMLChartExportPropertyMapper::ContextFilter(
                 bCheckAuto = sal_True;
                 aAutoPropName = ::rtl::OUString::createFromAscii( "AutoOrigin" );
                 break;
+
+            // the following property is deprecated
+            // elemet-item symbol-image is used now
+            case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
+                property->mnIndex = -1;
         }
 
         if( bCheckAuto )

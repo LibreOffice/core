@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bm $ $Date: 2001-08-14 13:09:20 $
+ *  last change: $Author: bm $ $Date: 2001-08-16 13:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,9 +211,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_SPECIAL( "TextRotation", TEXT, XML_ROTATION_ANGLE, XML_TYPE_NUMBER, TEXT_ROTATION ),    // convert 1/100th degrees to degrees
 
     // for compatability to pre 6.0beta documents
-    { "SymbolBitmapURL", 15, XML_NAMESPACE_CHART,
-      ::xmloff::token::XML_SYMBOL_IMAGE_NAME, XML_TYPE_STRING | MID_FLAG_SPECIAL_ITEM_IMPORT,
-      XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME },
+    MAP_SPECIAL( "SymbolBitmapURL", CHART, XML_SYMBOL_IMAGE_NAME, XML_TYPE_STRING, SYMBOL_IMAGE_NAME ),
 
     MAP_ENTRY_END
 };
