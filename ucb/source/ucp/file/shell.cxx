@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hro $ $Date: 2001-02-20 09:02:45 $
+ *  last change: $Author: hro $ $Date: 2001-02-22 09:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#ifndef __SGI_STL_STACK
+#include <stl/stack>
+#endif
 #ifndef _VOS_DIAGNOSE_H_
 #include <vos/diagnose.hxx>
 #endif
@@ -3463,22 +3466,27 @@ static sal_Bool SAL_CALL makeAbsolutePath( const rtl::OUString& aRelPath, rtl::O
     sal_Int32   nTokens = aRelPath.getTokenCount( '/' );
     sal_Int32   iToken = 0;
 
+    std::vector< rtl::OUString >    aTokenStack;
+
     for ( iToken = 1; iToken < nTokens; iToken++ )
     {
         rtl::OUString   aToken = aRelPath.getToken( iToken, '/' );
 
         if ( aToken.compareTo( rtl::OUString::createFromAscii( ".." ) ) == 0 )
-        {
-            // ignore
-        }
+            aTokenStack.pop_back();
         else
-        {
-            aAbsPath += rtl::OUString::createFromAscii( "/" );
-            aAbsPath += aToken;
-        }
+            aTokenStack.push_back( aToken );
     }
 
-    aAbsPath = aRelPath;
+
+    std::vector< rtl::OUString >::iterator it;
+    aAbsPath = rtl::OUString();
+
+    for ( it = aTokenStack.begin(); it != aTokenStack.end(); it++ )
+    {
+        aAbsPath += rtl::OUString::createFromAscii( "/" );
+        aAbsPath += *it;
+    }
 
     return sal_True;
 }
