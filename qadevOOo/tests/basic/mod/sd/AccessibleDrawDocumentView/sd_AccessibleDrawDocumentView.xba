@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sd_AccessibleDrawDocumentView.xba,v $ 
 '*
-'*  $Revision: 1.3 $ 
+'*  $Revision: 1.4 $ 
 '*
-'*  last change:$Date: 2003-03-26 14:54:16 $ 
+'*  last change:$Date: 2003-05-27 12:13:56 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -96,7 +96,7 @@ On Error Goto ErrHndl
     oShape = toolkittools.addShapeToDrawDoc(oDP2,1000,2000,"Rectangle")
     oWin = utils.at_getCurrentWindow(oDoc)
     xRoot = utils.at_getAccessibleObject(oWin)
-    oSearchedContext = utils.at_getAccessibleObjectForRole(xRoot,100)
+    oSearchedContext = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.DOCUMENT)
     oObj = oSearchedContext
 
 Exit Sub
@@ -105,7 +105,7 @@ ErrHndl:
 End Sub
 
 Sub DisposeObj()
-    oDoc.dispose()
+    utils.closeObject(oDoc)
 End Sub
 
 Sub fireEvent()
