@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.157 $
+ *  $Revision: 1.158 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 10:02:49 $
+ *  last change: $Author: obo $ $Date: 2003-11-12 17:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4972,8 +4972,13 @@ void OutputDevice::SetFont( const Font& rNewFont )
 
     if ( !maFont.IsSameInstance( aFont ) )
     {
-        if ( maFont.GetColor() != aFont.GetColor() )
+        // Optimization MT/HDU: COL_TRANSPARENT means SetFont should ignore the font color,
+        // because SetTextColor() is used for this.
+        if ( ( aFont.GetColor() != COL_TRANSPARENT ) && ( maFont.GetColor() != aFont.GetColor() ) )
+        {
+            maTextColor = aFont.GetColor();
             mbInitTextColor = TRUE;
+        }
         maFont      = aFont;
         mbNewFont   = TRUE;
     }
@@ -5044,9 +5049,9 @@ void OutputDevice::SetTextColor( const Color& rColor )
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextColorAction( aColor ) );
 
-    if ( maFont.GetColor() != aColor )
+    if ( maTextColor != aColor )
     {
-        maFont.SetColor( aColor );
+        maTextColor = aColor;
         mbInitTextColor = TRUE;
     }
 }
