@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.ll,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 13:07:49 $
+ *  last change: $Author: jsc $ $Date: 2001-05-18 15:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,7 @@ readonly		return IDL_READONLY;
 removable 		return IDL_REMOVEABLE;
 service			return IDL_SERVICE;
 sequence		return IDL_SEQUENCE;
+singleton		return IDL_SINGLETON;
 struct			return IDL_STRUCT;
 switch			return IDL_SWITCH;
 transient 		return IDL_TRANSIENT;

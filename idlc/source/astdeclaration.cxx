@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astdeclaration.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 16:29:19 $
+ *  last change: $Author: jsc $ $Date: 2001-05-18 15:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@ sal_Bool AstDeclaration::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoad
                     case NT_union:
                     case NT_typedef:
                     case NT_service:
+                    case NT_singleton:
                         bRet = pDecl->dump(rKey, pLoader);
                 }
             }

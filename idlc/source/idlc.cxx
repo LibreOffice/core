@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlc.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:30:43 $
+ *  last change: $Author: jsc $ $Date: 2001-05-18 15:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ AstDeclaration* SAL_CALL scopeAsDecl(AstScope* pScope)
     switch( pScope->getScopeNodeType() )
     {
         case NT_service:
+        case NT_singleton:
             return (AstService*)(pScope);
         case NT_module:
         case NT_root:
@@ -137,6 +138,7 @@ AstScope* SAL_CALL declAsScope(AstDeclaration* pDecl)
         case NT_interface:
             return (AstInterface*)(pDecl);
         case NT_service:
+        case NT_singleton:
             return (AstService*)(pDecl);
         case NT_module:
         case NT_root:

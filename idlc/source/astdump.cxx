@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astdump.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-11 07:24:23 $
+ *  last change: $Author: jsc $ $Date: 2001-05-18 15:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,98 +232,18 @@ sal_Bool AstService::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
         return sal_False;
     }
 
-    sal_uInt16 nProperties = 0;
-    sal_uInt16 nIfaceMember = 0;
-    sal_uInt16 nServMember = 0;
-    sal_uInt16 nNeeds = 0;
-    sal_uInt16 nObserves = 0;
-    if ( nMembers() > 0 )
+    if ( getNodeType() == NT_singleton )
     {
         DeclList::iterator iter = getIteratorBegin();
-        DeclList::iterator end = getIteratorEnd();
-        while ( iter != end )
-        {
-            switch ( (*iter)->getNodeType() )
-            {
-                case NT_property:
-                    nProperties++;
-                    break;
-                case NT_interface_member:
-                    nIfaceMember++;
-                    break;
-                case NT_service_member:
-                    nServMember++;
-                    break;
-                case NT_observes:
-                    nObserves++;
-                    break;
-                case NT_needs:
-                    nNeeds++;
-                    break;
-            }
-            ++iter;
-        }
-    }
-    sal_uInt16 nReferences = nIfaceMember + nServMember + nObserves + nNeeds;
+        OString tmp((*iter)->getRelativName());
 
-    RegistryTypeWriter aBlob(pLoader->getApi(), RT_TYPE_SERVICE,
-                             OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
-                             OUString(), nProperties, 0, nReferences);
+        RegistryTypeWriter aBlob(pLoader->getApi(), RT_TYPE_SINGLETON,
+                                 OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
+                                 OStringToOUString((*iter)->getRelativName(), RTL_TEXTENCODING_UTF8),
+                                 0, 0, 0);
 
-    aBlob.setDoku( getDocumentation() );
-    aBlob.setFileName( OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8));
-
-    if ( nProperties || nReferences )
-    {
-        DeclList::iterator iter = getIteratorBegin();
-        DeclList::iterator end = getIteratorEnd();
-        AstDeclaration* pDecl = NULL;
-        sal_uInt16  propertyIndex = 0;
-        sal_uInt16  referenceIndex = 0;
-        while ( iter != end )
-        {
-            pDecl = *iter;
-            switch ( pDecl->getNodeType() )
-            {
-            case NT_property:
-                ((AstAttribute*)pDecl)->dumpBlob(aBlob, propertyIndex++);
-                break;
-            case NT_interface_member:
-            {
-                AstInterfaceMember* pIfaceMember = (AstInterfaceMember*)pDecl;
-                sal_uInt16 access = (pIfaceMember->isOptional() ? RT_ACCESS_OPTIONAL : RT_ACCESS_INVALID);
-                aBlob.setReferenceData(referenceIndex++,
-                           OStringToOUString( pIfaceMember->getRealInterface()->getRelativName(), RTL_TEXTENCODING_UTF8),
-                           RT_REF_SUPPORTS, pIfaceMember->getDocumentation(), access);
-            }
-                break;
-            case NT_service_member:
-            {
-                AstServiceMember* pServMember = (AstServiceMember*)pDecl;
-                aBlob.setReferenceData(referenceIndex++,
-                           OStringToOUString( pServMember->getRealService()->getRelativName(), RTL_TEXTENCODING_UTF8),
-                           RT_REF_EXPORTS, pServMember->getDocumentation());
-            }
-                break;
-            case NT_observes:
-            {
-                AstObserves* pObserves = (AstObserves*)pDecl;
-                aBlob.setReferenceData(referenceIndex++,
-                           OStringToOUString( pObserves->getRealInterface()->getRelativName(), RTL_TEXTENCODING_UTF8),
-                           RT_REF_OBSERVES, pObserves->getDocumentation());
-            }
-                break;
-            case NT_needs:
-            {
-                AstNeeds* pNeeds = (AstNeeds*)pDecl;
-                aBlob.setReferenceData(referenceIndex++,
-                           OStringToOUString( pNeeds->getRealService()->getRelativName(), RTL_TEXTENCODING_UTF8),
-                           RT_REF_NEEDS, pNeeds->getDocumentation());
-            }
-                break;
-            }
-            ++iter;
-        }
+        aBlob.setDoku( getDocumentation() );
+        aBlob.setFileName( OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8));
 
         const sal_uInt8* pBlob = aBlob.getBlop();
         sal_uInt32       aBlobSize = aBlob.getBlopSize();
@@ -336,8 +256,114 @@ sal_Bool AstService::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
                     getFullName(), localKey.getRegistryName());
             return sal_False;
         }
-    }
+    } else
+    {
+        sal_uInt16 nProperties = 0;
+        sal_uInt16 nIfaceMember = 0;
+        sal_uInt16 nServMember = 0;
+        sal_uInt16 nNeeds = 0;
+        sal_uInt16 nObserves = 0;
+        if ( nMembers() > 0 )
+        {
+            DeclList::iterator iter = getIteratorBegin();
+            DeclList::iterator end = getIteratorEnd();
+            while ( iter != end )
+            {
+                switch ( (*iter)->getNodeType() )
+                {
+                    case NT_property:
+                        nProperties++;
+                        break;
+                    case NT_interface_member:
+                        nIfaceMember++;
+                        break;
+                    case NT_service_member:
+                        nServMember++;
+                        break;
+                    case NT_observes:
+                        nObserves++;
+                        break;
+                    case NT_needs:
+                        nNeeds++;
+                        break;
+                }
+                ++iter;
+            }
+        }
+        sal_uInt16 nReferences = nIfaceMember + nServMember + nObserves + nNeeds;
 
+        RegistryTypeWriter aBlob(pLoader->getApi(), RT_TYPE_SERVICE,
+                                 OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
+                                 OUString(), nProperties, 0, nReferences);
+
+        aBlob.setDoku( getDocumentation() );
+        aBlob.setFileName( OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8));
+
+        if ( nProperties || nReferences )
+        {
+            DeclList::iterator iter = getIteratorBegin();
+            DeclList::iterator end = getIteratorEnd();
+            AstDeclaration* pDecl = NULL;
+            sal_uInt16  propertyIndex = 0;
+            sal_uInt16  referenceIndex = 0;
+            while ( iter != end )
+            {
+                pDecl = *iter;
+                switch ( pDecl->getNodeType() )
+                {
+                case NT_property:
+                    ((AstAttribute*)pDecl)->dumpBlob(aBlob, propertyIndex++);
+                    break;
+                case NT_interface_member:
+                {
+                    AstInterfaceMember* pIfaceMember = (AstInterfaceMember*)pDecl;
+                    sal_uInt16 access = (pIfaceMember->isOptional() ? RT_ACCESS_OPTIONAL : RT_ACCESS_INVALID);
+                    aBlob.setReferenceData(referenceIndex++,
+                               OStringToOUString( pIfaceMember->getRealInterface()->getRelativName(), RTL_TEXTENCODING_UTF8),
+                               RT_REF_SUPPORTS, pIfaceMember->getDocumentation(), access);
+                }
+                    break;
+                case NT_service_member:
+                {
+                    AstServiceMember* pServMember = (AstServiceMember*)pDecl;
+                    aBlob.setReferenceData(referenceIndex++,
+                               OStringToOUString( pServMember->getRealService()->getRelativName(), RTL_TEXTENCODING_UTF8),
+                               RT_REF_EXPORTS, pServMember->getDocumentation());
+                }
+                    break;
+                case NT_observes:
+                {
+                    AstObserves* pObserves = (AstObserves*)pDecl;
+                    aBlob.setReferenceData(referenceIndex++,
+                               OStringToOUString( pObserves->getRealInterface()->getRelativName(), RTL_TEXTENCODING_UTF8),
+                               RT_REF_OBSERVES, pObserves->getDocumentation());
+                }
+                    break;
+                case NT_needs:
+                {
+                    AstNeeds* pNeeds = (AstNeeds*)pDecl;
+                    aBlob.setReferenceData(referenceIndex++,
+                               OStringToOUString( pNeeds->getRealService()->getRelativName(), RTL_TEXTENCODING_UTF8),
+                               RT_REF_NEEDS, pNeeds->getDocumentation());
+                }
+                    break;
+                }
+                ++iter;
+            }
+
+            const sal_uInt8* pBlob = aBlob.getBlop();
+            sal_uInt32       aBlobSize = aBlob.getBlopSize();
+
+            if (localKey.setValue(OUString(), RG_VALUETYPE_BINARY,
+                                    (RegValue)pBlob, aBlobSize))
+            {
+                fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
+                        idlc()->getOptions()->getProgramName().getStr(),
+                        getFullName(), localKey.getRegistryName());
+                return sal_False;
+            }
+        }
+    }
     return sal_True;
 }
 

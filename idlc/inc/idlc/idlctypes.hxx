@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlctypes.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: jsc $ $Date: 2001-05-18 15:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ enum ParseState
     PS_ExceptionDeclSeen,   // Seen complete exception declaration
     PS_InterfaceDeclSeen,   // Seen complete interface declaration
     PS_ServiceDeclSeen,     // Seen complete service declaration
+    PS_SingletonDeclSeen,   // Seen complete singleton declaration
     PS_ModuleDeclSeen,      // Seen complete module declaration
     PS_AttributeDeclSeen,   // Seen complete attribute declaration
     PS_PropertyDeclSeen,    // Seen complete property declaration
@@ -158,6 +159,13 @@ enum ParseState
     PS_ServiceMemberSeen,   // Seen a service member
     PS_ServiceIFHeadSeen,   // Seen an interface member header
     PS_ServiceSHeadSeen,    // Seen an service member header
+
+    PS_SingletonSeen,       // Seen a SINGLETON keyword
+    PS_SingletonIDSeen,     // Seen the singleton ID
+    PS_SingletonSqSeen,     // '{' seen for singleton
+    PS_SingletonQsSeen,     // '}' seen for singleton
+    PS_SingletonBodySeen,   // Seen complete singleton body
+    PS_SingletonMemberSeen, // Seen a singleton member
 
     PS_ModuleSeen,          // Seen a MODULE keyword
     PS_ModuleIDSeen,        // Seen the module ID

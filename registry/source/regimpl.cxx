@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 19:48:22 $
+ *  last change: $Author: jsc $ $Date: 2001-05-18 15:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,9 @@ static sal_Bool dumpType(RegistryTypeReader& reader, const OString& sIndent)
                 break;
             case RT_TYPE_SERVICE:
                 fprintf(stdout, "type: 'service'\n");
+                break;
+            case RT_TYPE_SINGLETON:
+                fprintf(stdout, "type: 'singleton'\n");
                 break;
             case RT_TYPE_CONSTANTS:
                 fprintf(stdout, "type: 'constants'\n");

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astdeclaration.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: jsc $ $Date: 2001-05-18 15:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,8 @@ enum NodeType
     NT_array,               // Denotes an IDL array
     NT_sequence,            // Denotes an IDL sequence
     NT_typedef,             // Denotes a typedef
-    NT_predefined           // Denotes a predefined type
+    NT_predefined,          // Denotes a predefined type
+    NT_singleton            // Denotes a singleton
 };
 
 class AstDeclaration

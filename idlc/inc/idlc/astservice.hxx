@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astservice.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: jsc $ $Date: 2001-05-18 15:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@ public:
     AstService(const ::rtl::OString& name, AstScope* pScope)
         : AstDeclaration(NT_service, name, pScope)
         , AstScope(NT_service)
+        {}
+    AstService(const NodeType type, const ::rtl::OString& name, AstScope* pScope)
+        : AstDeclaration(type, name, pScope)
+        , AstScope(type)
         {}
     virtual ~AstService() {}
 
