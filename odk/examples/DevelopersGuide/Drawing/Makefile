@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:24:14 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:23:26 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -72,11 +72,7 @@ JAVAFILES  = \
 
 CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
 
-SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)/jurt.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/ridl.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/sandbox.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/juh.jar\
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
 
 
@@ -89,7 +85,7 @@ include $(SETTINGS)/stdtarget.mk
 
 $(CLASSFILES) : $(JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
 
 DrawingExamples : $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
@@ -120,7 +116,7 @@ DrawingExamples : $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_COMP_CLASS)/%.class
-	java -classpath "$(SDK_CLASSPATH)" $(basename $@)
+	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@)
 
 DrawViewDemo.run :
 	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" DrawViewDemo SimplePresentation.sxi 
