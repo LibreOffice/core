@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mvtabdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-23 10:52:56 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #define SC_MVTABDLG_HXX
 
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _SV_DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
 #endif
@@ -88,7 +92,7 @@ public:
                     ~ScMoveTableDlg();
 
     USHORT  GetSelectedDocument     () const;
-    USHORT  GetSelectedTable        () const;
+    SCTAB   GetSelectedTable        () const;
     BOOL    GetCopyTable            () const;
     void    SetCopyTable            (BOOL bFlag=TRUE);
     void    EnableCopyTable         (BOOL bFlag=TRUE);
@@ -104,7 +108,7 @@ private:
     HelpButton      aBtnHelp;
 
     USHORT          nDocument;
-    USHORT          nTable;
+    SCTAB           nTable;
     BOOL            bCopyTable;
     //--------------------------------------
     void    Init            ();
