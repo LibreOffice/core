@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condition.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:30:37 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,15 @@ ConditionModifier::~ConditionModifier()
  *              ConditionWaiter                                   *
  *                                                                *
  ******************************************************************/
+
+ConditionWaiter::timedout::timedout() {}
+
+ConditionWaiter::timedout::timedout(timedout const &) {}
+
+ConditionWaiter::timedout::~timedout() {}
+
+ConditionWaiter::timedout &
+ConditionWaiter::timedout::operator =(timedout const &) { return *this; }
 
 ConditionWaiter::ConditionWaiter(Condition& aCond)
     : m_aCond(aCond)
