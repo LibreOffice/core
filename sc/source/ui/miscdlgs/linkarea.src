@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 06:12:38 $
+ *  last change: $Author: rt $ $Date: 2001-05-17 07:55:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ italian ] = "External Data Source Location";
         Text[ danish ] = "External Data Source Location";
         Text[ swedish ] = "~URL fˆr extern datak‰lla";
-        Text[ polish ] = "Adres URL zewnÍtrznego ürÛd≥a danych";
+        Text[ polish ] = "Adres URL zewnÍtrznego ?rÛd≥a danych";
         Text[ portuguese_brazilian ] = "External Data Source Location";
         Text[ japanese ] = "äOïî√ﬁ∞¿ø∞ΩÇÃ URL";
         Text[ korean ] = "External Data Source Location";
@@ -143,7 +143,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ italian ] = "(Insert a local file location or an URL from a web site here)";
         Text[ danish ] = "(Insert a local file location or an URL from a web site here)";
         Text[ swedish ] = "(K‰lldokumentets URL i det lokala filsystemet eller pÂ Internet)";
-        Text[ polish ] = "(Adres URL dokumentu ürÛd≥owego w lokalnym systemie plikÛw lub w Internecie)";
+        Text[ polish ] = "(Adres URL dokumentu ?rÛd≥owego w lokalnym systemie plikÛw lub w Internecie)";
         Text[ portuguese_brazilian ] = "(Insert a local file location or an URL from a web site here)";
         Text[ japanese ] = "(€∞∂ŸÇÃÃß≤ŸºΩ√—ÅAÇ†ÇÈÇ¢ÇÕ≤›¿∞»ØƒÇ…Ç†ÇÈø∞Ωƒﬁ∑≠“›ƒÇÃ URL)";
         Text[ korean ] = "(Insert a local file location or an URL from a web site here)";
@@ -252,7 +252,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ turkish ] = "seconds";
         Text[ arabic ] = "seconds";
         Text[ catalan ] = "seconds";
-        Text[ finnish ] = "Sekunden";
+        Text[ finnish ] = "sekuntia";
     };
     Text[ english_us ] = "External Data Source";
     Text[ portuguese ] = "Fonte de dados externa";
@@ -264,7 +264,7 @@ ModalDialog RID_SCDLG_LINKAREA
     Text[ italian ] = "External Data Source";
     Text[ danish ] = "External Data Source";
     Text[ swedish ] = "Extern datak‰lla";
-    Text[ polish ] = "ZewnÍtrzne ürÛd≥o danych";
+    Text[ polish ] = "ZewnÍtrzne ?rÛd≥o danych";
     Text[ portuguese_brazilian ] = "External Data Source";
     Text[ japanese ] = "äOïî√ﬁ∞¿ø∞Ω";
     Text[ korean ] = "External Data Source";
@@ -273,6 +273,6 @@ ModalDialog RID_SCDLG_LINKAREA
     Text[ turkish ] = "External Data Source";
     Text[ arabic ] = "External Data Source";
     Text[ catalan ] = "External Data Source";
-    Text[ finnish ] = "Externe Datenquelle";
+    Text[ finnish ] = "Ulkoinen l‰hde";
 };
 
