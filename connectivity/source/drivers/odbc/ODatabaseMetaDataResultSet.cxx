@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-02 16:19:05 $
+ *  last change: $Author: fs $ $Date: 2001-03-08 14:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1249,7 +1249,7 @@ void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const ::rtl:
                             (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && aPKQ.getLength()) ? SQL_NTS : 0,
                             (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
                             (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
-                            unique,
+                            unique ? SQL_INDEX_UNIQUE : SQL_INDEX_ALL,
                             approximate);
     OTools::ThrowException(nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
