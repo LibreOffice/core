@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfexporter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-22 14:22:38 $
+ *  last change: $Author: rt $ $Date: 2002-11-28 16:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@
 #include <svtools/wmf.hxx>
 #endif
 #ifndef _FILTER_HXX
-#include <svtools/Filter.hxx>
+#include <svtools/filter.hxx>
 #endif
 
 #include "swfexporter.hxx"
