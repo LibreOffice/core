@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:22:58 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include <tools/debug.hxx>
 #endif
 #ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
+//#include <tools/intn.hxx>
 #endif
 #ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
