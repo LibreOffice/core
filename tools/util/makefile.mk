@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 15:17:53 $
+#   last change: $Author: hr $ $Date: 2004-05-10 14:40:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -197,7 +197,7 @@ SHL1TARGET=     tl$(VERSION)$(DLLPOSTFIX)
 SHL1LIBS=       $(LIB1TARGET)
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 SHL1IMPLIB=     itools
-SHL1STDLIBS+=   $(SALLIB) $(VOSLIB)
+SHL1STDLIBS+=   $(SALLIB) $(VOSLIB) $(BASEGFXLIB)
 
 .IF "$(WITH_LIBART)"=="YES"
 SHL1STDLIBS+=   $(LIBART_LIBS)
