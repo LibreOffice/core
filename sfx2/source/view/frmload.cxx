@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-09 17:55:09 $
+ *  last change: $Author: mba $ $Date: 2001-03-14 12:41:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,54 +397,127 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
 
 ::rtl::OUString SAL_CALL SfxFrameLoader::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lDescriptor ) throw( ::com::sun::star::uno::RuntimeException )
 {
-    // Extract URL from given descriptor.
+    // This method faces different combinations of filter or type names.
+    // It can detect all types for that an internal filter is known, even if the preselected filter is an external one.
+    // Internal filters may have "old" names that must be retrieved from a table using a static method in class SfxFilterContainer, or it may have
+    // a "new name that follows the rules for filter names that can be used as configuration keys.
+
     String aURL;
     ::rtl::OUString sTemp;
-    rtl::OUString aTypeName;
-    String aPreselectedFilterName;
+    rtl::OUString aTypeName;            // a name describing the type ( from MediaDescriptor )
+    String aPreselectedFilterName;      // a name describing the filter to use ( from MediaDescriptor )
+    const SfxFilter* pFilter = NULL, *pExternalFilter = NULL;
 
     sal_uInt32 nPropertyCount = lDescriptor.getLength();
     sal_Int32 nIndexOfFilterName = nPropertyCount;
     for( sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
+        // extract properties
         if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FileName")) )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
         }
-        if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName")) )
+        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName")) )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aTypeName = sTemp;
-            aFilterName = SfxFilterContainer::ConvertToOldFilterName( aTypeName );
         }
-        if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")) )
+        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")) )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aPreselectedFilterName = sTemp;
+
+            // if the preselected filter name is not correct, it must be erased after detection
+            // remember index of property to get access to it later
             nIndexOfFilterName = nProperty;
         }
     }
 
-    // If url protocol = "private:factory/*" ... there is no document to detect!
-    // That will create a new one. We can break detection.
+    // detect using SfxFilter names
+    // can't detect filter for external filters, so set the "dont" flag accordingly
+    SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED | SFX_FILTER_STARONEFILTER;
+    SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
+
+    if ( aPreselectedFilterName.Len() )
+    {
+        // supported formats for filter names:
+        //   (1) old with factory: "swriter: Writer 6.0"        ( from SFX based UI or API )
+        //   (2) new with factory: "swriter: New_Filter_XYZ"    ( from SFX based UI )
+        //   (3) new ( only name): "New_Filter_XYZ"             ( from not SFX based UI or API )
+        //   (4) old ( only name): "Writer_60"                  ( from not SFX based UI or API )
+        String aOldFilterName = SfxFilterContainer::ConvertToOldFilterName( aPreselectedFilterName );
+        if ( aOldFilterName.Len() )
+            // the preselected filter name is convertable into an old filter name, case (4)
+            pFilter = rMatcher.GetFilter( aOldFilterName );
+        else
+        {
+            // the preselected filter name itself may be valid SFX filter name, case (1) or (2)
+            pFilter = rMatcher.GetFilter( aPreselectedFilterName );
+            if ( !pFilter )
+                // the preselected filter name is a new filter name from the configuration, case (3)
+                pFilter = rMatcher.GetFilter4FilterName( aPreselectedFilterName );
+        }
+
+        if ( pFilter )
+        {
+            // if only a filter name is given but the shallow detection was not successful,
+            // get the type name from the filter
+            if ( !aTypeName.getLength() )
+                aTypeName = pFilter->GetTypeName();
+
+            if ( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER )
+            {
+                // external filters can't be detected with this service ( only their type may be used )
+                pExternalFilter = pFilter;
+                pFilter = NULL;
+            }
+        }
+        else
+        {
+            // the preselected filter does not belong to a valid type, so forget it
+            aPreselectedFilterName.Erase();
+        }
+    }
+
+    if ( !pFilter && aTypeName.getLength() )
+    {
+        // now try the type from the shallow detection or extracted from the preselected filter ( though the filter itself
+        // was not valid! )
+        String aOldFilterName = SfxFilterContainer::ConvertToOldFilterName( aTypeName );
+        if ( aOldFilterName.Len() )
+            // the given type is convertable into an old filter name; filters with old names are never external ones
+            pFilter = rMatcher.GetFilter( aOldFilterName );
+        else
+            // "new" type name; look for a filter registered for the desired type that is not an external one
+            pFilter = rMatcher.GetFilter4EA( aTypeName, nMust, nDont );
+    }
+
     String aPrefix = String::CreateFromAscii( "private:factory/" );
     if( aURL.Match( aPrefix ) == aPrefix.Len() )
     {
-        // Convert old to new filter name.
-        aFilterName = aTypeName;
+        // private:factory URLs are used to create new documents, so nothing must be detected
+        // use the result of the shallow detection
+        if ( pFilter )
+            aFilterName = pFilter->GetName();
+        else
+            DBG_ERROR( "Illegal type for factory URL!" );
+        return aTypeName;
     }
-    else if ( !aFilterName.Len() && !aPreselectedFilterName.Len() && aTypeName.getLength() )
+    else if ( !pFilter && aTypeName.getLength() )
     {
-        // generic detector will not be called for new types except when this type does not support deep detection
+        // the detection is called for an unknown type that does not support deep detection
+        // ( otherwise its own detection service and not this generic one should have been called ! )
         // in this case it is correct to use the result of the shallow detection ( if there is any )
+        // if no shallow detection has been done or it gave no result ( aTypeName is empty ),
+        // we must try a deep detection for all possible SFX filters ( see below )
         return aTypeName;
     }
     else
     {
-        SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
+        // try a SFX filter detection
         SfxErrorContext aCtx( ERRCTX_SFX_OPENDOC, aURL );
-        const SfxFilter* pNew = NULL;
+        const SfxFilter* pOldFilter = pFilter;
 
         SfxApplication* pApp = SFX_APP();
         SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );
@@ -458,100 +531,88 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         else
             aMedium.GetInStream();
 
-        // Access to Medium was successful ?
-        const SfxFilter* pFilter = NULL;
         if ( aMedium.GetErrorCode() == ERRCODE_NONE )
         {
-        /*      String aMime;
-                aMedium.GetMIMEAndRedirect( aMime );
-                if( aMime.Len() )
-                    pFilter = rMatcher.GetFilter4Mime( aMime );
-        */
-            // can't detect filter for external filters!
-            SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED | SFX_FILTER_STARONEFILTER;
+            // check the filter detected so far ( if any )
             ErrCode nErr = ERRCODE_ABORT;
-            const SfxFilter* pOldFilter = NULL;
-            if ( aPreselectedFilterName.Len() )
+            if ( pFilter )
             {
-                // first check the preselected filter
-                pOldFilter = pFilter = rMatcher.GetFilter( aPreselectedFilterName );
-                if ( pFilter )
+                // type or filter name matched to a valid filter name detectable with this service
+                SfxFilterFlags nFlags = pFilter->GetFilterFlags();
+                if ( ( nFlags & nMust ) == nMust && ( nFlags & nDont ) == 0 )
                 {
-                    SfxFilterFlags nFlags = pFilter->GetFilterFlags();
-                    if ( ( nFlags & nMust ) == nMust && ( nFlags & nDont ) == 0 )
-                    {
-                        pSet->Put( SfxStringItem( SID_FILTER_NAME, aPreselectedFilterName ) );
-                        nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
-                    }
-                    else
-                        // filterflags not suitable
+                    pSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
+                    nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter, nMust, nDont );
+                    if ( pOldFilter == pFilter && nErr != ERRCODE_NONE )
                         pFilter = NULL;
                 }
+                else
+                    // filterflags not suitable
+                    pFilter = NULL;
 
                 if ( !pFilter )
-                    // preselected filter doesn't fit, erase filter name from media descriptor
-                    lDescriptor[nIndexOfFilterName].Value <<= ::rtl::OUString();
-            }
-
-            if ( !pFilter )
-            {
-                // preselected filter was not set or was bullshit
-                if( !aFilterName.Len() && aTypeName.getLength() )
-                    // preselected type name may be a new internal filter ( name is not in the conversion table )
-                    // or an external type name that may also be identical with an external filter name
-                    aFilterName = aTypeName;
-
-                // next try the detected type
-                if ( aTypeName.getLength() )
                 {
-                    pOldFilter = pFilter = rMatcher.GetFilter( aFilterName );
-                    if ( !pFilter || ( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
-                        // external types or filters can't be detected with this service
-                        return aTypeName;
-
-                    if ( pFilter )
+                    // the filter exists, but deep detection regrets it ( or filter flags don't match )
+                    if ( aPreselectedFilterName.Len() )
                     {
-                        SfxFilterFlags nFlags = pFilter->GetFilterFlags();
-                        if ( ( nFlags & nMust ) == nMust && ( nFlags & nDont ) == 0 )
+                        // the filter we just tried was the preselected filter
+                        // it doesn't fit, so erase the filter name from media descriptor
+                        lDescriptor[nIndexOfFilterName].Value <<= ::rtl::OUString();
+
+                        // try the typename instead ( if any )
+                        if ( aTypeName.getLength() )
                         {
-                            pSet->Put( SfxStringItem( SID_FILTER_NAME, aFilterName ) );
-                            nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
+                            String aOldFilterName = SfxFilterContainer::ConvertToOldFilterName( aTypeName );
+                            if ( aOldFilterName.Len() )
+                                // the given type is convertable into an old filter name
+                                pFilter = rMatcher.GetFilter( aOldFilterName );
+                            else
+                                // new types detected by this service could be found by searching for a filter with this type name
+                                pFilter = rMatcher.GetFilter4EA( aTypeName, nMust, nDont );
+
+                            if ( pFilter == pOldFilter )
+                                // filter was already checked
+                                pFilter = NULL;
+                            else
+                                pOldFilter = pFilter;
+
+                            if ( pFilter )
+                            {
+                                // here we must not check for filterflag STARONE_FILTER because we did it already in GetFilter4EA
+                                // and in the other case ( name could be converted to old filter name ) it is sure that the
+                                // filter is an internal one
+                                SfxFilterFlags nFlags = pFilter->GetFilterFlags();
+                                if ( ( nFlags & nMust ) == nMust && ( nFlags & nDont ) == 0 )
+                                {
+                                    pSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
+                                    nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
+                                    if ( pOldFilter == pFilter && nErr != ERRCODE_NONE )
+                                        pFilter = NULL;
+                                }
+                                else
+                                    // filterflags not suitable
+                                    pFilter = NULL;
+                            }
                         }
-                        else
-                            // filterflags not suitable
-                            pFilter = NULL;
                     }
                 }
             }
 
             // No error while reading from medium ?
-            if ( aMedium.GetErrorCode() == ERRCODE_NONE )
+            if ( !pFilter && aMedium.GetErrorCode() == ERRCODE_NONE )
             {
-                if ( ( !pFilter || ( pOldFilter == pFilter && nErr != ERRCODE_NONE ) ) && bIsStorage )
+                // no filter found until now
+                if ( bIsStorage )
                 {
                     // try simplest file lookup: clipboard format in storage
-                    pFilter = NULL;
                     SvStorageRef aStor = aMedium.GetStorage();
-                    SfxFilterFlags nFlags = SFX_FILTER_IMPORT | SFX_FILTER_PREFERED;
                     if ( aStor.Is() )
-                    {
-                        pFilter = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat(), nFlags );
-                        if ( !pFilter || ( (pFilter)->GetFilterFlags() & nMust ) != nMust || ( (pFilter)->GetFilterFlags() & nDont ) != 0 )
-                            pFilter = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat() );
-                    }
-//                    if ( pFilter )
-//                        nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
+                        pFilter = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat(), nMust, nDont );
                 }
 
-                // No error while reading from medium ?
-                if ( aMedium.GetErrorCode() == ERRCODE_NONE )
-                {
-                    if ( !pFilter || pOldFilter == pFilter && nErr != ERRCODE_NONE )
-                    {
-                        pFilter = NULL;
-                        nErr = rMatcher.GetFilter4Content( aMedium, &pFilter );
-                    }
-                }
+                // no filter found : try everything possible
+                if ( !pFilter && aMedium.GetErrorCode() == ERRCODE_NONE )
+                    nErr = rMatcher.GetFilter4Content( aMedium, &pFilter, nMust, nDont );
             }
 
             if ( aMedium.GetErrorCode() != ERRCODE_NONE )
@@ -562,29 +623,23 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
             }
         }
 
-        if ( !pFilter )
-            aFilterName.Erase();
+        if ( pFilter )
+        {
+            aTypeName = pFilter->GetTypeName();
+            if ( pExternalFilter && pExternalFilter->GetTypeName() == pFilter->GetTypeName() )
+                // internally detected type is OK, if external filter was preselected for this type, it's OK
+                aFilterName = pExternalFilter->GetName();
+            else
+                aFilterName = pFilter->GetName();
+            if ( nIndexOfFilterName )
+                // convert to format with factory ( makes load more easy to implement )
+                lDescriptor[nIndexOfFilterName].Value <<= ::rtl::OUString( aFilterName );
+        }
         else
-            aFilterName = SfxFilterContainer::ConvertToNewFilterName( pFilter->GetName() );
-    }
-
-    if ( aFilterName.Len() )
-    {
-        ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
-        ::com::sun::star::uno::Reference < ::com::sun::star::container::XNameAccess > xFilters (
-                xMan->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.FilterFactory" ) ), ::com::sun::star::uno::UNO_QUERY );
-
-            ::com::sun::star::uno::Any aAny = xFilters->getByName( aFilterName );
-            ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aProps;
-            if ( aAny >>= aProps )
-            {
-                // evaluate properties : get document service name
-                const ::com::sun::star::beans::PropertyValue* pProps = aProps.getConstArray();
-                ::rtl::OUString aTmp;
-                aAny = aProps[0].Value;
-                if ( aAny >>= aTmp )
-                    aTypeName = aTmp;
-            }
+        {
+            aFilterName.Erase();
+            aTypeName = ::rtl::OUString();
+        }
     }
 
     return aTypeName;
