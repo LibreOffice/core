@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:16:40 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1255,27 +1255,27 @@ BOOL SdDrawDocument::InsertBookmarkAsObject(
             pList = pExchangeList;
         }
 
-        if( pList )
-        {
-            for (USHORT nPos = 0; nPos < pList->Count(); nPos++)
-            {
-                /******************************************************************
-                * Namen der Bookmarks aus Liste holen
-                ******************************************************************/
-                String aBMName (*(String*) pList->GetObject(nPos));
-
-                SdrObject* pObj = GetObj(aBMName);
-
-                if (pObj)
-                {
-                    // Objekt gefunden
-                    if (bLink && pObj->ISA(SdrObjGroup))
-                    {
-                        ( (SdrObjGroup*) pObj)->SetGroupLink(aBookmarkName, aBMName);
-                    }
-                }
-            }
-        }
+//BFS02     if( pList )
+//BFS02     {
+//BFS02         for (USHORT nPos = 0; nPos < pList->Count(); nPos++)
+//BFS02         {
+//BFS02             /******************************************************************
+//BFS02             * Namen der Bookmarks aus Liste holen
+//BFS02             ******************************************************************/
+//BFS02             String aBMName (*(String*) pList->GetObject(nPos));
+//BFS02
+//BFS02             SdrObject* pObj = GetObj(aBMName);
+//BFS02
+//BFS02             if (pObj)
+//BFS02             {
+//BFS02                 // Objekt gefunden
+//BFS02                 if (bLink && pObj->ISA(SdrObjGroup))
+//BFS02                 {
+//BFS02                     ( (SdrObjGroup*) pObj)->SetGroupLink(aBookmarkName, aBMName);
+//BFS02                 }
+//BFS02             }
+//BFS02         }
+//BFS02     }
     }
 
     delete pBMView;
