@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hdu $ $Date: 2001-03-05 17:36:46 $
+ *  last change: $Author: kz $ $Date: 2001-03-08 15:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 
 // include ---------------------------------------------------------------
+
+#include <cstdio>
 
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
