@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSeekable.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:45:32 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 14:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,13 +96,16 @@ interface XSeekable: com::sun::star::uno::XInterface
         <p> This method changes the seek pointer so subsequent reads and writes can take place at a different
         location in the stream object. It is an error to seek before the beginning of the stream or after the
         end of the stream. </p>
+
+        @throws com::sun::star::lang::IllegalArgumentException in case location is negative or greater than <member>XSeekable::getLength</member>.
      */
     void seek( [in] hyper location )
         raises( com::sun::star::lang::IllegalArgumentException, com::sun::star::io::IOException );
 
 
     // DocMerge from xml: method com::sun::star::io::XSeekable::getPosition
-    /** @returns
+    /** returns the current offset of the stream.
+       @returns
              the current offset in this stream.
      */
     hyper getPosition()
@@ -110,7 +113,8 @@ interface XSeekable: com::sun::star::uno::XInterface
 
 
     // DocMerge from xml: method com::sun::star::io::XSeekable::getLength
-    /** @returns
+    /** returns the length of the stream.
+       @returns
             the length of the storage medium on which the stream works.
      */
     hyper getLength()
