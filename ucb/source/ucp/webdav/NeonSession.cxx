@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-08 10:04:35 $
+ *  last change: $Author: mba $ $Date: 2001-09-14 13:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,7 +553,11 @@ bool getDataFromInputStream( const uno::Reference< io::XInputStream > & xStream,
                 sal_Int32 nRead = xStream->readBytes( rData, nSize );
 
                 if ( nRead == nSize )
+                {
+                    rData.realloc( nSize + 1 );
+                    rData[ nSize ] = sal_Int8( 0 );
                     return true;
+                }
             }
             catch ( io::NotConnectedException const & )
             {
@@ -591,7 +595,8 @@ bool getDataFromInputStream( const uno::Reference< io::XInputStream > & xStream,
                     nRead = xStream->readSomeBytes( aBuffer, 65536 );
                 }
 
-                rData.realloc( nPos );
+                rData.realloc( nPos + 1 );
+                rData[ nPos ] = sal_Int8( 0 );
                 return true;
             }
             catch ( io::NotConnectedException const & )
