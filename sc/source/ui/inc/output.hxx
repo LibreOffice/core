@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:00 $
+ *  last change: $Author: nn $ $Date: 2001-05-08 19:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,8 @@ class ScOutputData
 friend class ScDrawStringsVars;
 private:
     OutputDevice* pDev;         // Device
-    OutputDevice* pRefDevice;   // Drucker bei Preview
+    OutputDevice* pRefDevice;   // printer if used for preview
+    OutputDevice* pFmtDevice;   // reference for text formatting
     RowInfo* pRowInfo;          // Info-Block
     USHORT nArrCount;           // belegte Zeilen im Info-Block
     ScDocument* pDoc;           // Dokument
@@ -192,7 +193,8 @@ public:
 
                     ~ScOutputData();
 
-    void    SetRefDevice( OutputDevice* pRDev ) { pRefDevice = pRDev; }
+    void    SetRefDevice( OutputDevice* pRDev ) { pRefDevice = pFmtDevice = pRDev; }
+    void    SetFmtDevice( OutputDevice* pRDev ) { pFmtDevice = pRDev; }
     void    SetEditObject( SdrObject* pObj )    { pEditObj = pObj; }
     void    SetViewShell( ScTabViewShell* pSh ) { pViewShell = pSh; }
 
@@ -219,9 +221,8 @@ public:
     void    DrawExtraShadow(BOOL bLeft, BOOL bTop, BOOL bRight, BOOL bBottom);
     void    DrawFrame();
 
-                    // im logischen MapMode !
-                    //! Scale-Parameter koennen raus (immer 1.0) !!!!
-    void    DrawEdit(BOOL bPixelToLogic, double nScaleX=1.0, double nScaleY=1.0);
+                    // with logic MapMode set!
+    void    DrawEdit(BOOL bPixelToLogic);
 
     void    FindRotated();
     void    DrawRotatedFrame();                     // Pixel
