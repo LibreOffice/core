@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddefld.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:29:49 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #define _DDEFLD_HXX
 
 #ifndef _LNKBASE_HXX //autogen
-#include <so3/lnkbase.hxx>
+#include <sfx2/lnkbase.hxx>
 #endif
 
 #ifndef INCLUDED_SWDLLAPI_H
@@ -84,7 +84,7 @@ class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType
     String aName;
     String aExpansion;
 
-    ::so3::SvBaseLinkRef refLink;
+    ::sfx2::SvBaseLinkRef refLink;
     SwDoc* pDoc;
 
     USHORT nRefCnt;
@@ -95,7 +95,7 @@ class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType
 
 public:
     SwDDEFieldType( const String& rName, const String& rCmd,
-                    USHORT = so3::LINKUPDATE_ONCALL );
+                    USHORT = sfx2::LINKUPDATE_ONCALL );
     ~SwDDEFieldType();
 
     const String& GetExpansion() const          { return aExpansion; }
@@ -121,8 +121,8 @@ public:
     void UpdateNow()                { refLink->Update(); }
     void Disconnect()               { refLink->Disconnect(); }
 
-    const ::so3::SvBaseLink& GetBaseLink() const    { return *refLink; }
-          ::so3::SvBaseLink& GetBaseLink()          { return *refLink; }
+    const ::sfx2::SvBaseLink& GetBaseLink() const    { return *refLink; }
+          ::sfx2::SvBaseLink& GetBaseLink()          { return *refLink; }
 
     const SwDoc* GetDoc() const     { return pDoc; }
           SwDoc* GetDoc()           { return pDoc; }
