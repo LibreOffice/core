@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nf $ $Date: 2001-02-13 12:28:24 $
+ *  last change: $Author: nf $ $Date: 2001-02-13 15:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,6 +610,20 @@ Star::~Star()
 }
 
 /*****************************************************************************/
+BOOL Star::NeedsUpdate()
+/*****************************************************************************/
+{
+    for ( ULONG i = 0; i < aLoadedFilesList.Count(); i++ ) {
+        DirEntry aEntry( *aLoadedFilesList.GetObject( i ));
+        FileStat aStat( aEntry );
+
+        if (( aStat.DateModified() > aDate ) || ( aStat.TimeModified() > aTime ))
+            return TRUE;
+    }
+    return FALSE;
+}
+
+/*****************************************************************************/
 void Star::Read( String &rFileName )
 /*****************************************************************************/
 {
@@ -623,7 +637,8 @@ void Star::Read( String &rFileName )
 
     while( aFileList.Count()) {
         SimpleConfig aSolarConfig( *aFileList.GetObject(( ULONG ) 0 ));
-        delete aFileList.Remove(( ULONG ) 0 );
+        aLoadedFilesList.Insert( aFileList.GetObject(( ULONG ) 0 ), LIST_APPEND );
+        aFileList.Remove(( ULONG ) 0 );
 
         while (( aString = aSolarConfig.GetNext()) != "" )
             InsertToken (( char * ) aString.GetBuffer());
@@ -642,6 +657,9 @@ void Star::Read( SolarFileList *pSolarFiles )
         SimpleConfig aSolarConfig( *pSolarFiles->GetObject(( ULONG ) 0 ));
         while (( aString = aSolarConfig.GetNext()) != "" )
             InsertToken (( char * ) aString.GetBuffer());
+
+        aLoadedFilesList.Insert( new String( *pSolarFiles->GetObject(( ULONG ) 0 )),
+            LIST_APPEND );
     }
 
     Expand_Impl();
@@ -1018,7 +1036,8 @@ USHORT StarWriter::Read( String aFileName, BOOL bReadComments, USHORT nMode  )
 
     while( aFileList.Count()) {
         SimpleConfig aSolarConfig( *aFileList.GetObject(( ULONG ) 0 ));
-        delete aFileList.Remove(( ULONG ) 0 );
+        aLoadedFilesList.Insert( aFileList.GetObject(( ULONG ) 0 ), LIST_APPEND );
+        aFileList.Remove(( ULONG ) 0 );
 
         while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
             InsertTokenLine ( aString );
@@ -1044,6 +1063,9 @@ USHORT StarWriter::Read( SolarFileList *pSolarFiles, BOOL bReadComments )
         SimpleConfig aSolarConfig( *pSolarFiles->GetObject(( ULONG ) 0 ));
         while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
             InsertTokenLine ( aString );
+
+        aLoadedFilesList.Insert( new String( *pSolarFiles->GetObject(( ULONG ) 0 )),
+            LIST_APPEND );
     }
 
     Expand_Impl();
