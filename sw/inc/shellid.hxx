@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellid.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,5 +102,7 @@
 #define SW_WEBOLESHELL          (SFX_INTERFACE_SW_START + 28)
 #define SW_WEBDRAWBASESHELL     (SFX_INTERFACE_SW_START + 29)
 #define SW_WEBDRAWFORMSHELL     (SFX_INTERFACE_SW_START + 30)
+
+#define SW_MEDIASHELL           (SFX_INTERFACE_SW_START + 31)
 
 #endif // _UIPARAM_HXX
