@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-13 11:53:13 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 11:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARYLISTEVENTLISTENER_HPP_
-#include <com/sun/star/linguistic/XDictionaryListEventListener.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARYLISTEVENTLISTENER_HPP_
+#include <com/sun/star/linguistic2/XDictionaryListEventListener.hpp>
 #endif
 #ifndef _VCL_FLDUNIT_HXX
 #include <vcl/fldunit.hxx>
@@ -146,8 +146,10 @@ class SwModule: public SwModuleDummy , public SfxListener
     SvStringsDtor*      pAuthorNames;
 
     // DictionaryList listener to trigger spellchecking or hyphenation
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XDictionaryListEventListener >  xDicListEvtListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::scanner::XScannerManager >                  m_xScannerManager;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XDictionaryListEventListener >   xDicListEvtListener;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::scanner::XScannerManager >                    m_xScannerManager;
 
     sal_Bool                bAuthorInitialised : 1;
     sal_Bool                bEmbeddedLoadSave : 1;
@@ -277,20 +279,30 @@ public:
     void    CheckSpellChanges( sal_Bool bOnlineSpelling,
                     sal_Bool bIsSpellWrongAgain, sal_Bool bIsSpellAllAgain );
 
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XDictionaryListEventListener >   GetDicListEvtListener();
-    inline void SetDicListEvtListener(::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XDictionaryListEventListener >  xLstnr);
+    inline ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XDictionaryListEventListener >
+            GetDicListEvtListener();
+    inline void SetDicListEvtListener(
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::linguistic2::XDictionaryListEventListener > & xLstnr);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::scanner::XScannerManager >  GetScannerManager() const {return m_xScannerManager;}
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::scanner::XScannerManager >
+            GetScannerManager() const {return m_xScannerManager;}
 
 };
 
 
-inline ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XDictionaryListEventListener >   SwModule::GetDicListEvtListener()
+inline ::com::sun::star::uno::Reference<
+    ::com::sun::star::linguistic2::XDictionaryListEventListener >
+        SwModule::GetDicListEvtListener()
 {
     return xDicListEvtListener;
 }
 
-inline void SwModule::SetDicListEvtListener(::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XDictionaryListEventListener >  xLstnr)
+inline void SwModule::SetDicListEvtListener(
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XDictionaryListEventListener > & xLstnr)
 {
     xDicListEvtListener = xLstnr;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlelstnr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:25 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 11:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,10 @@
 #include <cppuhelper/weak.hxx>
 
 #ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARYLIST_HPP_
-#include <com/sun/star/linguistic/XDictionaryList.hpp>
+#include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARYLISTEVENTLISTENER_HPP_
-#include <com/sun/star/linguistic/XDictionaryListEventListener.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARYLISTEVENTLISTENER_HPP_
+#include <com/sun/star/linguistic2/XDictionaryListEventListener.hpp>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx> // helper for implementations
@@ -76,29 +76,39 @@
 
 ///////////////////////////////////////////////////////////////////////////
 // SwDicListEvtListener
-// is a ::com::sun::star::linguistic::XDictionaryListEventListener that triggers spellchecking
+// is a XDictionaryListEventListener that triggers spellchecking
 // and hyphenation (yet to be implemented) when relevant changes to the
 // dictionaries of the dictionary list were made.
 //
 
 class SwDicListEvtListener : public cppu::WeakImplHelper1
 <
-    ::com::sun::star::linguistic::XDictionaryListEventListener
+    ::com::sun::star::linguistic2::XDictionaryListEventListener
 >
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XDictionaryList >   xDicList;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XDictionaryList >    xDicList;
 
     // disallow use of copy-constructor and assignment operator
     SwDicListEvtListener(const SwDicListEvtListener &);
     SwDicListEvtListener & operator = (const SwDicListEvtListener &);
 
 public:
-    SwDicListEvtListener( const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XDictionaryList >  &rxDicList );
+    SwDicListEvtListener(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::linguistic2::XDictionaryList >  &rxDicList );
     virtual ~SwDicListEvtListener();
 
-    // ::com::sun::star::linguistic::XDictionaryListEventListener
-    virtual void    SAL_CALL processDictionaryListEvent(const ::com::sun::star::linguistic::DictionaryListEvent& aDicListEvent) throw( ::com::sun::star::uno::RuntimeException );
+    // XEventListener
+    virtual void SAL_CALL disposing(
+            const ::com::sun::star::lang::EventObject& rSource )
+        throw(::com::sun::star::uno::RuntimeException);
+
+    // XDictionaryListEventListener
+    virtual void    SAL_CALL processDictionaryListEvent(
+            const ::com::sun::star::linguistic2::DictionaryListEvent& aDicListEvent)
+        throw( ::com::sun::star::uno::RuntimeException );
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-25 14:32:01 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 11:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,11 @@
 #include <itabenum.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLCHECKER1_HPP_
-#include <com/sun/star/linguistic/XSpellChecker1.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XHYPHENATEDWORD_HPP_
-#include <com/sun/star/linguistic/XHyphenatedWord.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XHYPHENATEDWORD_HPP_
+#include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #endif
 
 class SwExtTextInput;
@@ -653,13 +653,15 @@ public:
     const SwLayouter* GetLayouter() const { return pLayouter; }
     void SetLayouter( SwLayouter* pNew )  { pLayouter = pNew; }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-            Spell(SwPaM&, ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic::XSpellChecker1 > &,
-                    sal_uInt16* pPageCnt, sal_uInt16* pPageSt ) const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XHyphenatedWord >
-        Hyphenate( SwPaM *pPam, const Point &rCrsrPos,
-                       sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::XInterface >
+            Spell( SwPaM&, ::com::sun::star::uno::Reference<
+                            ::com::sun::star::linguistic2::XSpellChecker1 > &,
+                   sal_uInt16* pPageCnt, sal_uInt16* pPageSt ) const;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XHyphenatedWord >
+            Hyphenate( SwPaM *pPam, const Point &rCrsrPos,
+                         sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
 
     const SwBookmarks& GetBookmarks() const { return *pBookmarkTbl; }
     SwBookmark* MakeBookmark( const SwPaM& rPaM, const KeyCode&,

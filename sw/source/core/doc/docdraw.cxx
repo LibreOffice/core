@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 11:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,7 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::linguistic2;
 
 
 SV_IMPL_VARARR_SORT( _ZSortFlys, _ZSortFly )
@@ -490,7 +491,7 @@ void SwDoc::InitDrawModel()
 
     pDrawModel->InsertPage( pDrawModel->AllocPage( FALSE ) );
     SdrOutliner& rOutliner = pDrawModel->GetDrawOutliner();
-    uno::Reference< linguistic::XSpellChecker1> xSpell = OFF_APP()->GetSpellChecker();
+    uno::Reference< XSpellChecker1 > xSpell = ::GetSpellChecker();
     rOutliner.SetSpeller( xSpell );
     rOutliner.SetHyphenator( ::GetHyphenator() );
     const SfxPoolItem& rItem = GetDefault(RES_CHRATR_LANGUAGE);

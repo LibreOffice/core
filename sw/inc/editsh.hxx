@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 11:53:57 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 11:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #ifndef _ITABENUM_HXX
 #include <itabenum.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLALTERNATIVES_HPP_
-#include <com/sun/star/linguistic/XSpellAlternatives.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLALTERNATIVES_HPP_
+#include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #endif
 
 class PolyPolygon;
@@ -706,7 +706,8 @@ public:
     // Is hyphenation active somewhere else?
     BOOL HasHyphIter() const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic::XSpellAlternatives>
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::linguistic2::XSpellAlternatives >
             GetCorrection( const Point* pPt );
 
     void SetLinguRange( SwDocPositions eStart, SwDocPositions eEnde );

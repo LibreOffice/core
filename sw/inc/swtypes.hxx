@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-26 11:40:48 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 11:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 //#define SW_FILEFORMAT_40 SOFFICE_FILEFORMAT_40
 
 namespace com{namespace sun{namespace star{
-    namespace linguistic{
+    namespace linguistic2{
         class XDictionaryList;
         class XSpellChecker1;
         class XHyphenator;
@@ -227,16 +227,14 @@ extern ResMgr* pSwResMgr;           // steht in swapp0.cxx
 #define DDE_AVAILABLE
 #endif
 
-// SpellChecker, Hyphenator kommen aus der OFA.
-//
 ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic::XSpellChecker1 >  GetSpellChecker();
+    ::com::sun::star::linguistic2::XSpellChecker1 > GetSpellChecker();
 ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic::XHyphenator >     GetHyphenator();
+    ::com::sun::star::linguistic2::XHyphenator >    GetHyphenator();
 ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic::XThesaurus >      GetThesaurus();
+    ::com::sun::star::linguistic2::XThesaurus >     GetThesaurus();
 ::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic::XDictionaryList > GetDictionaryList();
+    ::com::sun::star::linguistic2::XDictionaryList >    GetDictionaryList();
 ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet >         GetLinguPropertySet();
 

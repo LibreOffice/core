@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 15:31:11 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 11:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::linguistic2;
 using namespace ::rtl;
 //using namespace ::utl;
 
@@ -1610,7 +1611,7 @@ sal_Bool SwDoc::Delete( SwPaM & rPam )
 
 
 uno::Reference< uno::XInterface >  SwDoc::Spell( SwPaM& rPaM,
-                    uno::Reference< linguistic::XSpellChecker1 >  &xSpeller,
+                    uno::Reference< XSpellChecker1 >  &xSpeller,
                     sal_uInt16* pPageCnt, sal_uInt16* pPageSt ) const
 {
     SwPosition* pSttPos = rPaM.Start(), *pEndPos = rPaM.End();
@@ -1829,7 +1830,7 @@ sal_Bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
     return sal_True;
 }
 
-uno::Reference< linguistic::XHyphenatedWord >  SwDoc::Hyphenate(
+uno::Reference< XHyphenatedWord >  SwDoc::Hyphenate(
                             SwPaM *pPam, const Point &rCrsrPos,
                              sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 {

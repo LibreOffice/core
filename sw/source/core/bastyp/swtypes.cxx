@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 14:29:22 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 11:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,17 +84,17 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLCHECKER1_HPP_
-#include <com/sun/star/linguistic/XSpellChecker1.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XHYPHENATOR_HPP_
-#include <com/sun/star/linguistic/XHyphenator.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XHYPHENATOR_HPP_
+#include <com/sun/star/linguistic2/XHyphenator.hpp>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XTHESAURUS_HPP_
-#include <com/sun/star/linguistic/XThesaurus.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
+#include <com/sun/star/linguistic2/XThesaurus.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -162,6 +162,7 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::linguistic2;
 using namespace ::comphelper;
 
 #ifndef PROFILE
@@ -226,22 +227,22 @@ Size GetGraphicSizeTwip( const Graphic& rGraphic, OutputDevice* pOutDev )
 }
 
 
-uno::Reference< linguistic::XSpellChecker1 >  GetSpellChecker()
+uno::Reference< XSpellChecker1 >  GetSpellChecker()
 {
     return LinguMgr::GetSpellChecker();
 }
 
-uno::Reference< linguistic::XHyphenator >  GetHyphenator()
+uno::Reference< XHyphenator >  GetHyphenator()
 {
     return LinguMgr::GetHyphenator();
 }
 
-uno::Reference< linguistic::XThesaurus >  GetThesaurus()
+uno::Reference< XThesaurus >  GetThesaurus()
 {
     return LinguMgr::GetThesaurus();
 }
 
-uno::Reference< linguistic::XDictionaryList >  GetDictionaryList()
+uno::Reference< XDictionaryList >  GetDictionaryList()
 {
     return LinguMgr::GetDictionaryList();
 }

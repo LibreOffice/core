@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edlingu.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 12:01:56 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 11:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,11 @@
 #ifndef S2U
 #define S2U(rString) rtl::OUString::createFromAscii(rString)
 #endif
+
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::linguistic2;
 
 /*************************************************************************
  *                     class SwLinguIter
@@ -185,7 +189,7 @@ public:
 
 class SwSpellIter : public SwLinguIter
 {
-    uno::Reference< linguistic::XSpellChecker1 >    xSpeller;
+    uno::Reference< XSpellChecker1 >    xSpeller;
 public:
     SwSpellIter() {}
 
@@ -514,7 +518,7 @@ uno::Reference< uno::XInterface >
         return 0;
 
     const sal_Bool bAuto = IsAuto();
-     uno::Reference< linguistic::XHyphenatedWord >  xHyphWord;
+     uno::Reference< XHyphenatedWord >  xHyphWord;
     sal_uInt16 nRet;
     sal_Bool bGoOn = sal_False;
     do {
@@ -907,10 +911,10 @@ void SwEditShell::HyphIgnore()
  *************************************************************************/
 
 
-uno::Reference< linguistic::XSpellAlternatives >
+uno::Reference< XSpellAlternatives >
     SwEditShell::GetCorrection( const Point* pPt )
 {
-     uno::Reference< linguistic::XSpellAlternatives >  xSpellAlt;
+     uno::Reference< XSpellAlternatives >  xSpellAlt;
 
     if( IsTableMode() )
         return NULL;
@@ -934,14 +938,14 @@ uno::Reference< linguistic::XSpellAlternatives >
 
             sal_Bool bSpell = sal_True;
 
-            uno::Reference< linguistic::XSpellChecker1 >  xSpell(
-                                            OFF_APP()->GetSpellChecker() );
+            uno::Reference< XSpellChecker1 >  xSpell( ::GetSpellChecker() );
             if( xSpell.is() )
             {
                 LanguageType eActLang = (LanguageType)pNode->GetLang(
                                                             nBegin, nLen );
                 if( xSpell->hasLanguage( eActLang ))
-                    xSpellAlt = xSpell->spell( aWord, eActLang );
+                    xSpellAlt = xSpell->spell( aWord, eActLang,
+                                               Sequence< PropertyValue >() );
             }
 
             if ( xSpellAlt.is() )
