@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dfa.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:03:35 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Datum 1";
         Text[ hebrew ] = "Datum 1";
         Text[ hindi ] = "दिनांक 1";
+        Text[ slovak ] = "Dátum 1";
     };
     String DFA_PAR_DATE2_NAME // Name of Date2 Parameter
     {
@@ -124,6 +125,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Datum 2";
         Text[ hebrew ] = "Datum 2";
         Text[ hindi ] = "दिनांक 2";
+        Text[ slovak ] = "Dátum 2";
     };
     String DFA_PAR_MODE_NAME // Name of Mode Parameter
     {
@@ -155,6 +157,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Režim";
         Text[ hebrew ] = "Art";
         Text[ hindi ] = "प्रकार";
+        Text[ slovak ] = "Režim";
     };
 
     String DFA_PAR_DATE_NAME // Name of Date Parameter
@@ -187,6 +190,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Datum";
         Text[ hebrew ] = "‮תאריף‬";
         Text[ hindi ] = "दिनांक";
+        Text[ slovak ] = "Dátum";
     };
 
     String DFA_PAR_DATE_DESC // Description of Date Parameter
@@ -219,6 +223,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Číslo vnitřně reprezentující datum";
         Text[ hebrew ] = "Interne Zahl des Datums";
         Text[ hindi ] = "दिनांक का भीतरी संख्या";
+        Text[ slovak ] = "Číslo vnútorne reprezentujúce dátum";
     };
 
 /*-=======================================================================*/
@@ -252,6 +257,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Týdny";
         Text[ hebrew ] = "Wochen";
         Text[ hindi ] = "सप्ताह";
+        Text[ slovak ] = "Týždne";
     };
     String DFA_WEEK_DESC // Description
     {
@@ -283,6 +289,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Vrátí rozdíl v týdnech mezi dvěma daty";
         Text[ hebrew ] = "Bestimmt die Wochendifferenz zweier Daten";
         Text[ hindi ] = "दो दिनांकों के बीच का अंतर को सप्ताह में वापस करता है";
+        Text[ slovak ] = "Vráti rozdiel v týždňoch medzi dvoma dátumami";
     };
     String DFA_WEEK_PAR1_DESC // Description of Parameter 1
     {
@@ -315,6 +322,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Koncové datum pro výpočet rozdílu mezi dvěma daty v týdnech";
         Text[ hebrew ] = "Jüngeres Datum für die Wochendifferenz";
         Text[ hindi ] = "अंतर को सप्ताह में गणना करने केलिए अंतिम दिनांक";
+        Text[ slovak ] = "Koncový dátum pre výpočet rozdielu v týždňoch";
     };
     String DFA_WEEK_PAR2_DESC // Description of Parameter 2
     {
@@ -346,6 +354,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Počáteční datum pro výpočet rozdílu mezi dvěma daty v týdnech";
         Text[ hebrew ] = "Älteres Datum für die Wochendifferenz";
         Text[ hindi ] = "अंतर को सप्ताह में गणना करने केलिए प्रारंभ दिनांक";
+        Text[ slovak ] = "Počiatočný dátum pre výpočet rozdielu v týždňoch";
     };
     String DFA_WEEK_PAR3_DESC // Description of Parameter 3
     {
@@ -377,6 +386,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Typ rozdílového výpočtu: mód=0 určuje interval, mód=1 určuje kalendářní týdny";
         Text[ hebrew ] = "Art der Differenzbildung Art=0 heißt Intervall, Art=1 heißt in Kalenderwochen";
         Text[ hindi ] = "अंतर को गणना करने का वर्ग: प्रकार=0 का अर्थ अंतराल है, प्रकार=1 का अर्थ केलन्डर सप्ताह है";
+        Text[ slovak ] = "Typ výpočtu rozdielu: mode=0 znamená interval, mode=1 znamená kalendárne týždne";
     };
 
 /*-=======================================================================*/
@@ -411,6 +421,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Měsíce";
         Text[ hebrew ] = "Monate";
         Text[ hindi ] = "मास";
+        Text[ slovak ] = "Mesiace";
     };
     String DFA_MONTHS_DESC // Description
     {
@@ -442,6 +453,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Určí počet měsíců mezi dvěma daty";
         Text[ hebrew ] = "Bestimmt die Monatsdifferenz zweier Daten";
         Text[ hindi ] = "दो दिनांकों के बीच का अंतर को मास में निर्धार करता है";
+        Text[ slovak ] = "Vráti počet mesiacov medzi dvoma dátumami";
     };
     String DFA_MONTHS_PAR1_DESC // Description of Parameter 1
     {
@@ -473,6 +485,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Koncové datum pro výpočet rozdílu mezi dvěma daty v měsících";
         Text[ hebrew ] = "Jüngeres Datum für die Monatsdifferenz";
         Text[ hindi ] = "अंतर को मास में गणना करने केलिए अंतिम दिनांक";
+        Text[ slovak ] = "Koncový dátum pre výpočet rozdielu v mesiacoch";
     };
     String DFA_MONTHS_PAR2_DESC // Description of Parameter 2
     {
@@ -504,6 +517,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Počáteční datum pro výpočet rozdílu mezi dvěma daty v měsících";
         Text[ hebrew ] = "Älteres Datum für die Monatsdifferenz";
         Text[ hindi ] = "अंतर को मास में गणना करने केलिए प्रारंभ दिनांक";
+        Text[ slovak ] = "Počiatočný dátum pre výpočet rozdielu v týždňoch";
     };
     String DFA_MONTHS_PAR3_DESC // Description of Parameter 2
     {
@@ -535,6 +549,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Typ rozdílového výpočtu: mód=0 určuje interval, mód=1 určuje kalendářní měsíce";
         Text[ hebrew ] = "Art der Differenzbildung Art=0 heißt Intervall, Art=1 heißt in Kalendermonaten";
         Text[ hindi ] = "अंतर को गणना करने का वर्ग: प्रकार=0 का अर्थ अंतराल है, प्रकार=1 का अर्थ केलन्डर मास है";
+        Text[ slovak ] = "Typ výpočtu rozdielu: mode=0 znamená interval, mode=1 znamená kalendárne mesiace";
     };
 
 /*-=======================================================================*/
@@ -569,6 +584,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Roky";
         Text[ hebrew ] = "Jahre";
         Text[ hindi ] = "वर्ष";
+        Text[ slovak ] = "Roky";
     };
     String DFA_YEARS_DESC // Description
     {
@@ -600,6 +616,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Vrátí rozdíl mezi dvěma daty v letech";
         Text[ hebrew ] = "Bestimmt die Jahresdifferenz zweier Daten";
         Text[ hindi ] = "दो दिनांकों के बीच का अंतर को वर्ष में वापस करता है";
+        Text[ slovak ] = "Vráti počet v rokoch medzi dvoma dátumami";
     };
     String DFA_YEARS_PAR1_DESC // Description of Parameter 1
     {
@@ -631,6 +648,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Koncové datum pro výpočet rozdílu mezi dvěma daty v letech";
         Text[ hebrew ] = "Jüngeres Datum für die Jahresdifferenz";
         Text[ hindi ] = "अंतर को वर्ष में गणना करने केलिए अंतिम दिनांक";
+        Text[ slovak ] = "Koncový dátum pre výpočet rozdielu v rokoch";
     };
     String DFA_YEARS_PAR2_DESC // Description of Parameter 2
     {
@@ -662,6 +680,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Počáteční datum pro výpočet rozdílu mezi dvěma daty v letech";
         Text[ hebrew ] = "Älteres Datum für die Jahresdifferenz";
         Text[ hindi ] = "अंतर को वर्ष में गणना करने केलिए प्रारंभ दिनांक";
+        Text[ slovak ] = "Počiatočný dátum pre výpočet rozdielu v rokoch";
     };
     String DFA_YEARS_PAR3_DESC // Description of Parameter 2
     {
@@ -693,6 +712,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Typ rozdílového výpočtu: mód=0 určuje interval, mód=1 určuje kalendářní roky.";
         Text[ hebrew ] = "Art der Differenzbildung Art=0 heißt Intervall, Art=1 heißt in Kalenderjahren";
         Text[ hindi ] = "अंतर को गणना करने का वर्ग: प्रकार=0 का अर्थ अंतराल है, प्रकार=1 का अर्थ केलन्डर वर्ष है";
+        Text[ slovak ] = "Typ výpočtu rozdielu: mode=0 znamená interval, mode=1 znamená kalendárne roky";
     };
 
 /*-=======================================================================*/
@@ -727,6 +747,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "IsLeapYear";
         Text[ hebrew ] = "IstSchaltJahr";
         Text[ hindi ] = "IsLeapYear";
+        Text[ slovak ] = "JePrestupnýRok";
     };
     String DFA_ISLEAPYEAR_DESC // Description
     {
@@ -758,6 +779,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Vrátí 1 (TRUE) pokud je použit přestupný rok, jinak je vráceno 0 (FALSE)";
         Text[ hebrew ] = "Liefert 1(WAHR) wenn das Jahr ein Schaltjahr ist sonst 0(FALSCH)";
         Text[ hindi ] = "अगर लीप वर्ष है तो वह 1 (TRUE) को वापस करता है, नहीं तो 0 (FALSE) को वापस करता है ";
+        Text[ slovak ] = "Vráti 1 (TRUE) ak je použitý prestupný rok, inak je vrátená 0 (FALSE)";
     };
 
 /*-=======================================================================*/
@@ -792,6 +814,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "DaysInMonth";
         Text[ hebrew ] = "TageImMonat";
         Text[ hindi ] = "DaysInMonth";
+        Text[ slovak ] = "DniVMesiaci";
     };
     String DFA_DAYSINMONTH_DESC // Description
     {
@@ -823,6 +846,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Vrátí počet dní v měsíci určeném zadaným datem";
         Text[ hebrew ] = "Bestimmt die Anzahl an Tagen im Monat zu einem Datum";
         Text[ hindi ] = "प्रविष्ट की हुयी दिनांक के अनुसार मास में रहनेवाला दिनों को वापस करता है";
+        Text[ slovak ] = "Vráti počet dní v mesiaci v súvislosti so zadaným dátumom";
     };
 
 /*-=======================================================================*/
@@ -857,6 +881,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "DaysInYear";
         Text[ hebrew ] = "TageImJahr";
         Text[ hindi ] = "DaysInYear";
+        Text[ slovak ] = "DniVRoku";
     };
     String DFA_DAYSINYEAR_DESC // Description
     {
@@ -888,6 +913,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Vrátí počet dní v roce určeném zadaným datem";
         Text[ hebrew ] = "Bestimmt die Anzahl an Tagen im Jahr zu einem Datum";
         Text[ hindi ] = "प्रविष्ट की हुयी दिनांक के अनुसार वर्ष में रहनेवाला दिनों को वापस करता है";
+        Text[ slovak ] = "Vráti počet dní v roku v súvislosti so zadaným dátumom";
     };
 
 /*-=======================================================================*/
@@ -922,6 +948,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "WeeksInYear";
         Text[ hebrew ] = "WochenImJahr";
         Text[ hindi ] = "WeeksInYear";
+        Text[ slovak ] = "TýždneVRoku";
     };
     String DFA_WEEKSINYEAR_DESC // Description
     {
@@ -953,9 +980,12 @@ Resource RID_SC_ADDIN_DFA
         Text[ czech ] = "Vrátí počet týdnů v roce určeném zadaným datem";
         Text[ hebrew ] = "Bestimmt die Anzahl an Wochen im Jahr zu einem Datum";
         Text[ hindi ] = "प्रविष्ट किया हुआ दिनांक के अनुसार वर्ष में रहनेवाला सप्ताह को वापस करता है";
+        Text[ slovak ] = "Vráti počet týždňov v roku v súvislosti so zadaným dátumom";
     };
 
 };
+
+
 
 
 
