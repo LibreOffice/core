@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase11.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:24:46 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,18 +91,18 @@ namespace cppu
                 11 +1, sal_False, sal_False,
                 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                 {
-                    { Ifc1::static_type, ((sal_Int32)(Ifc1 *) (Impl *) 16) - 16 },
-                    { Ifc2::static_type, ((sal_Int32)(Ifc2 *) (Impl *) 16) - 16 },
-                    { Ifc3::static_type, ((sal_Int32)(Ifc3 *) (Impl *) 16) - 16 },
-                    { Ifc4::static_type, ((sal_Int32)(Ifc4 *) (Impl *) 16) - 16 },
-                    { Ifc5::static_type, ((sal_Int32)(Ifc5 *) (Impl *) 16) - 16 },
-                    { Ifc6::static_type, ((sal_Int32)(Ifc6 *) (Impl *) 16) - 16 },
-                    { Ifc7::static_type, ((sal_Int32)(Ifc7 *) (Impl *) 16) - 16 },
-                    { Ifc8::static_type, ((sal_Int32)(Ifc8 *) (Impl *) 16) - 16 },
-                    { Ifc9::static_type, ((sal_Int32)(Ifc9 *) (Impl *) 16) - 16 },
-                    { Ifc10::static_type, ((sal_Int32)(Ifc10 *) (Impl *) 16) - 16 },
-                    { Ifc11::static_type, ((sal_Int32)(Ifc11 *) (Impl *) 16) - 16 },
-                    { ::com::sun::star::lang::XTypeProvider::static_type, ((sal_Int32)(::com::sun::star::lang::XTypeProvider *) (Impl *) 16) - 16 }
+                    { { Ifc1::static_type }, ((sal_Int32)(Ifc1 *) (Impl *) 16) - 16 },
+                    { { Ifc2::static_type }, ((sal_Int32)(Ifc2 *) (Impl *) 16) - 16 },
+                    { { Ifc3::static_type }, ((sal_Int32)(Ifc3 *) (Impl *) 16) - 16 },
+                    { { Ifc4::static_type }, ((sal_Int32)(Ifc4 *) (Impl *) 16) - 16 },
+                    { { Ifc5::static_type }, ((sal_Int32)(Ifc5 *) (Impl *) 16) - 16 },
+                    { { Ifc6::static_type }, ((sal_Int32)(Ifc6 *) (Impl *) 16) - 16 },
+                    { { Ifc7::static_type }, ((sal_Int32)(Ifc7 *) (Impl *) 16) - 16 },
+                    { { Ifc8::static_type }, ((sal_Int32)(Ifc8 *) (Impl *) 16) - 16 },
+                    { { Ifc9::static_type }, ((sal_Int32)(Ifc9 *) (Impl *) 16) - 16 },
+                    { { Ifc10::static_type }, ((sal_Int32)(Ifc10 *) (Impl *) 16) - 16 },
+                    { { Ifc11::static_type }, ((sal_Int32)(Ifc11 *) (Impl *) 16) - 16 },
+                    { { ::com::sun::star::lang::XTypeProvider::static_type }, ((sal_Int32)(::com::sun::star::lang::XTypeProvider *) (Impl *) 16) - 16 }
                 }
             };
             return reinterpret_cast< class_data * >(&s_cd);
