@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 14:24:37 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2370,5 +2370,14 @@ void ViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibility
         if(pOpt->IsReadonly())
             pOpt->SetSelectionInReadonly(rAccessibilityOptions.IsSelectionInReadonly());
     }
+}
+
+ShellResource* ViewShell::GetShellRes()
+{
+    return pShellRes;
+}
+void ViewShell::SetCareWin( Window* pNew )
+{
+    pCareWindow = pNew;
 }
 
