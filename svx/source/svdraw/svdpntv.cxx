@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:00:36 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,12 +246,7 @@ FrameAnimator::FrameAnimator(SdrView& rNewView):
 
 void FrameAnimator::Start() const
 {
-    if (!Application::IsRemoteServer())
-    {
-          // Die Animation ist in der Remote-Version zu langsam.
-          // Daher nur in der Nicht-Remote-Version Animation starten
-          ((FrameAnimator*)this)->aTim.Start();
-    }
+    ((FrameAnimator*)this)->aTim.Start();
 }
 
 void FrameAnimator::Stop() const
