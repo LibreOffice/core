@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-24 20:10:11 $
+ *  last change: $Author: kz $ $Date: 2002-05-06 07:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,7 +278,7 @@ TabDialog DLG_FRM_STD
                 Text[ chinese_traditional ] = "æ¬„";
                 Text[ arabic ] = "ÃÚãÏÉ";
                 Text[ greek ] = "ÓôŞëåò";
-                Text[ korean ] = "ì—´";
+                Text[ korean ] = "ë‹¨";
                 Text[ turkish ] = "Sütun";
                 Text[ catalan ] = "Columnas";
             };
@@ -873,7 +873,7 @@ TabPage TP_FRM_STD
         Text [ french ] = "Largeur" ;
         Text [ swedish ] = "~Bredd" ;
         Text [ dutch ] = "B~reedte" ;
-        Text [ spanish ] = "A~ncho" ;
+        Text [ spanish ] = "Ancho" ;
         Text [ english_us ] = "~Width" ;
         Text[ chinese_simplified ] = "å®½åº¦(~W)";
         Text[ russian ] = "Øèğèíà";
@@ -1021,7 +1021,7 @@ TabPage TP_FRM_STD
         Text[ french ] = "Proportionnel";
         Text[ spanish ] = "Igualar proporciones";
         Text[ finnish ] = "~Säilytä suhteet";
-        Text[ italian ] = "~Proporzionale";
+        Text[ italian ] = "Proporzionale";
         Text[ danish ] = "Proport.";
         Text[ swedish ] = "Anpassa ~proportioner";
         Text[ polish ] = "Prporcjonalnie";
@@ -1165,7 +1165,7 @@ TabPage TP_FRM_STD
         Text[ greek ] = "~Óôç ğáñÜãñáöï";
         Text[ dutch ] = "Aan ~alinea";
         Text[ french ] = "Au paragraphe";
-        Text[ spanish ] = "Al ~párrafo";
+        Text[ spanish ] = "Al párrafo";
         Text[ italian ] = "Al paragrafo";
         Text[ danish ] = "At paragraph";
         Text[ swedish ] = "Vid st~ycke";
@@ -1192,7 +1192,7 @@ TabPage TP_FRM_STD
         Text[ greek ] = "Óôï~í ÷áñáêôŞñá";
         Text[ dutch ] = "Aan ~teken";
         Text[ french ] = "Au caractère";
-        Text[ spanish ] = "Al cará~cter";
+        Text[ spanish ] = "Al carácter";
         Text[ italian ] = "Al carattere";
         Text[ danish ] = "At character";
         Text[ swedish ] = "Vid tec~ken";
@@ -1215,7 +1215,7 @@ TabPage TP_FRM_STD
         Text [ ENGLISH ] = "A~s character" ;
         Text [ english_us ] = "~As character" ;
         Text [ portuguese_brazilian ] = "als Zei~chen" ;
-        Text [ swedish ] = "Som tec~ken" ;
+        Text [ swedish ] = "Som te~cken" ;
         Text [ danish ] = "som tegn" ;
         Text [ italian ] = "Come carattere" ;
         Text [ spanish ] = "Como ~carácter" ;
@@ -1356,7 +1356,7 @@ TabPage TP_FRM_STD
         Text[ chinese_traditional ] = "é–“éš”(~Y)";
         Text[ arabic ] = "ÈãŞÏÇÑ";
         Text[ greek ] = "á~íÜ";
-        Text[ korean ] = "ì •ë„(~Y)";
+        Text[ korean ] = "ê°„ê²©(~Y)";
         Text[ turkish ] = "g~rnt.";
         Text[ catalan ] = "a";
     };
@@ -1400,7 +1400,7 @@ TabPage TP_FRM_STD
         Text[ chinese_traditional ] = "è‡³(~T)";
         Text[ arabic ] = "Åáì";
         Text[ greek ] = "ğñïò";
-        Text[ korean ] = "ë§ì¶œ ë°©í–¥(~T)";
+        Text[ korean ] = "ê¸°ì¤€(~T)";
         Text[ turkish ] = "Hedef";
         Text[ language_user1 ] = "\"zu\" muss ich hier weglassen weils es als Suffix im letzten Satzelement (Listbox) schon vorkommt.";
         Text[ catalan ] = "a";
@@ -1449,7 +1449,7 @@ TabPage TP_FRM_STD
         Text = "~Vertikal" ;
         Text [ ENGLISH ] = "~Vertical" ;
         Text [ norwegian ] = "~Vertikal" ;
-        Text [ italian ] = "~Verticale" ;
+        Text [ italian ] = "Verticale" ;
         Text [ portuguese_brazilian ] = "~Vertical" ;
         Text [ portuguese ] = "~Vertical" ;
         Text [ finnish ] = "~Pystytaso" ;
@@ -1491,7 +1491,7 @@ TabPage TP_FRM_STD
         Text [ finnish ] = "/" ;
         Text [ danish ] = "ved" ;
         Text [ french ] = "à" ;
-        Text [ swedish ] = "m~ed" ;
+        Text [ swedish ] = "me~d" ;
         Text [ dutch ] = "~om" ;
         Text [ spanish ] = "a" ;
         Text [ english_us ] = "by" ;
@@ -1502,7 +1502,7 @@ TabPage TP_FRM_STD
         Text[ chinese_traditional ] = "é–“éš”";
         Text[ arabic ] = "ÈãŞÏÇÑ";
         Text[ greek ] = "áíÜ";
-        Text[ korean ] = "ì— ì˜í•´";
+        Text[ korean ] = "ê°„ê²©";
         Text[ turkish ] = "gr~nt.";
         Text[ catalan ] = "a";
     };
@@ -1546,7 +1546,7 @@ TabPage TP_FRM_STD
         Text[ chinese_traditional ] = "è‡³(~O)";
         Text[ arabic ] = "Åáì";
         Text[ greek ] = "ğñïò";
-        Text[ korean ] = "ë§ì¶œ ë°©í–¥(~O)";
+        Text[ korean ] = "ê¸°ì¤€(~O)";
         Text[ turkish ] = "Hedef";
         Text[ language_user1 ] = "\"zu\" muss ich hier weglassen weils es als Suffix im letzten Satzelement (Listbox) schon vorkommt.";
         Text[ catalan ] = "a";
@@ -1724,7 +1724,7 @@ TabPage TP_GRF_EXT
         Text = "~vertikal" ;
         Text [ ENGLISH ] = "verti~cally" ;
         Text [ norwegian ] = "verti~cally" ;
-        Text [ italian ] = "~Verticale" ;
+        Text [ italian ] = "Verticale" ;
         Text [ portuguese_brazilian ] = "hori~zontalmente" ;
         Text [ portuguese ] = "~vertical" ;
         Text [ finnish ] = "~pystytaso" ;
@@ -1732,7 +1732,7 @@ TabPage TP_GRF_EXT
         Text [ french ] = "À la verticale" ;
         Text [ swedish ] = "~vertikalt" ;
         Text [ dutch ] = "verti~caal" ;
-        Text [ spanish ] = "~vertical" ;
+        Text [ spanish ] = "~Vertical" ;
         Text [ english_us ] = "~Vertically" ;
         Text[ chinese_simplified ] = "å‚ç›´æ–¹å‘(~V)";
         Text[ russian ] = "âåğòèêàëüíî";
@@ -1758,7 +1758,7 @@ TabPage TP_GRF_EXT
         Text[ greek ] = "ïñé~æüíôéá";
         Text[ dutch ] = "~horizontaal";
         Text[ french ] = "À l'horizontale";
-        Text[ spanish ] = "~horizontal";
+        Text[ spanish ] = "~Horizontal";
         Text[ italian ] = "~In orizzontale su";
         Text[ danish ] = "vandret";
         Text[ swedish ] = "h~orisontalt";
@@ -1841,7 +1841,7 @@ TabPage TP_GRF_EXT
         Text[ russian ] = "íà ÷åòíûõ ñòğàíèöàõ";
         Text[ greek ] = "óå äåîéİò óåëßäåò";
         Text[ dutch ] = "op o~neven pagina's";
-        Text[ french ] = "sur les pages de ~droite";
+        Text[ french ] = "sur les pages de droite";
         Text[ spanish ] = "en páginas derechas";
         Text[ italian ] = "Sulle pagine ~pari";
         Text[ danish ] = "på højre sider";
@@ -1933,7 +1933,7 @@ TabPage TP_FRM_URL
         Text [ English ] = "~URL" ;
         Text [ dutch ] = "~URL" ;
         Text [ english_us ] = "~URL" ;
-        Text [ italian ] = "~URL" ;
+        Text [ italian ] = "URL" ;
         Text [ spanish ] = "~URL" ;
         Text [ french ] = "URL" ;
         Text [ swedish ] = "~URL" ;
@@ -1969,7 +1969,7 @@ TabPage TP_FRM_URL
         Text [ english_us ] = "~Name" ;
         Text [ italian ] = "~Nome" ;
         Text [ spanish ] = "~Nombre" ;
-        Text [ french ] = "~Nom" ;
+        Text [ french ] = "Nom" ;
         Text [ dutch ] = "~Naam" ;
         Text [ swedish ] = "~Namn" ;
         Text [ danish ] = "Navn" ;
@@ -2099,7 +2099,7 @@ TabPage TP_FRM_URL
         Text[ french ] = "Image Map côté serveur";
         Text[ spanish ] = "Image map en la parte del ~servidor";
         Text[ finnish ] = "~Palvelinsivuston rakennekuva";
-        Text[ italian ] = "Image Map dalla parte del ~Server";
+        Text[ italian ] = "Image Map dalla parte del Server";
         Text[ danish ] = "Server";
         Text[ swedish ] = "Image map på ~serversidan";
         Text[ polish ] = "~Server Site Image Map";
@@ -2183,7 +2183,7 @@ TabPage TP_FRM_ADD
         Text [ english_us ] = "~Name" ;
         Text [ italian ] = "~Nome" ;
         Text [ spanish ] = "~Nombre" ;
-        Text [ french ] = "~Nom" ;
+        Text [ french ] = "Nom" ;
         Text [ dutch ] = "~Naam" ;
         Text [ swedish ] = "~Namn" ;
         Text [ danish ] = "Navn" ;
@@ -2252,9 +2252,9 @@ TabPage TP_FRM_ADD
         Text [ portuguese_brazilian ] = "~Vorg?nger" ;
         Text [ swedish ] = "Före~gående" ;
         Text [ danish ] = "Overordnet" ;
-        Text [ italian ] = "~Precedente" ;
+        Text [ italian ] = "Precedente" ;
         Text [ spanish ] = "~Anterior" ;
-        Text [ french ] = "~Précédent" ;
+        Text [ french ] = "Précédent" ;
         Text [ dutch ] = "~Vorganger" ;
         Text [ portuguese ] = "Ligação ~anterior" ;
         Text[ chinese_simplified ] = "ä¸Šä¸€ä¸ªé“¾æ¥(~P)";
@@ -2350,9 +2350,9 @@ TabPage TP_FRM_ADD
         Text [ portuguese_brazilian ] = "Prot~eger conte?o" ;
         Text [ swedish ] = "~Innehåll" ;
         Text [ danish ] = "Indhold" ;
-        Text [ italian ] = "~Contenuto" ;
+        Text [ italian ] = "Contenuto" ;
         Text [ spanish ] = "~Contenido" ;
-        Text [ french ] = "~Contenu" ;
+        Text [ french ] = "Contenu" ;
         Text [ dutch ] = "~Inhoud" ;
         Text [ portuguese ] = "~Conteúdo" ;
         Text[ chinese_simplified ] = "å†…å®¹(~C)";
@@ -2462,8 +2462,8 @@ TabPage TP_FRM_ADD
         Text [ swedish ] = "R~edigerbar i skrivskyddat dokument" ;
         Text [ danish ] = "Redigerbar i skrivebeskyttet dokument" ;
         Text [ italian ] = "Modificabile nel documento a sola lettura" ;
-        Text [ spanish ] = "Se puede editar en documentos de solo lectura" ;
-        Text [ french ] = "À é~diter dans le document en mode Lecture seule" ;
+        Text [ spanish ] = "Se puede editar en documentos de sólo lectura" ;
+        Text [ french ] = "À éditer dans le document en mode Lecture seule" ;
         Text [ dutch ] = "~Editeerbaar in schrijfbeveiligd document" ;
         Text [ portuguese ] = "~Editável em documento só de leitura" ;
         Text[ chinese_simplified ] = "å¯ç¼–è¾‘é˜²æ”¹å†™çš„æ–‡æ¡£(~E)";
