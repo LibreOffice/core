@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-03 18:02:20 $
+ *  last change: $Author: hjs $ $Date: 2000-11-03 18:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #ifndef _SV_MULTISEL_HXX
 #include <tools/multisel.hxx>
 #endif
+#include <string>
 #include <algorithm>
 
 #if SUPD<558
