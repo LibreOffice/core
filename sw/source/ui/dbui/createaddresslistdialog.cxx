@@ -2,9 +2,9 @@
  *
  *  $RCSfile: createaddresslistdialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-29 09:30:25 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
@@ -496,7 +495,8 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
             OUString sMiddle(sTempMiddle);
 
             String sLine;
-            BOOL bRead = pStream->ReadUniStringLine( sLine );
+            BOOL bRead = pStream->ReadUniOrByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
+
             if(bRead)
             {
                 //header line
@@ -514,7 +514,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                     }
                 }
             }
-            while(pStream->ReadUniStringLine( sLine ))
+            while(pStream->ReadUniOrByteStringLine( sLine, RTL_TEXTENCODING_UTF8 ))
             {
                 ::std::vector<OUString> aNewData;
                 //analyze data line
@@ -705,7 +705,8 @@ IMPL_LINK(SwCreateAddressListDialog, OkHdl_Impl, PushButton*, pButton)
         }
         //remove tab and quote
         sLine = sLine.copy( 0, sLine.getLength() - 2 );
-        pStream->WriteUniStringLine( sLine );
+        pStream->WriteUnicodeOrByteText( sLine, RTL_TEXTENCODING_UTF8 );
+        endl(*pStream);
 
         ::std::vector< ::std::vector< OUString > >::iterator aDataIter;
         for( aDataIter = m_pCSVData->aDBData.begin(); aDataIter != m_pCSVData->aDBData.end(); ++aDataIter)
@@ -719,7 +720,8 @@ IMPL_LINK(SwCreateAddressListDialog, OkHdl_Impl, PushButton*, pButton)
             }
             //remove tab and quote
             sLine = sLine.copy( 0, sLine.getLength() - 2 );
-            pStream->WriteUniStringLine( sLine );
+            pStream->WriteUnicodeOrByteText( sLine, RTL_TEXTENCODING_UTF8 );
+            endl(*pStream);
         }
         aMedium.Commit();
         EndDialog(RET_OK);
