@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kr $ $Date: 2001-10-05 08:00:21 $
+ *  last change: $Author: kr $ $Date: 2001-10-11 12:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,9 @@ static void getFromList(NameValueList *pNameValueList, rtl_uString **ppValue, rt
 static sal_Bool getValue(NameValueList *pNameValueList, rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault)
 {
     static const OUString sysUserConfig(RTL_CONSTASCII_USTRINGPARAM("SYSUSERCONFIG"));
-    static const OUString sysUserHome(RTL_CONSTASCII_USTRINGPARAM("SYSUSERHOME"));
+    static const OUString sysUserHome  (RTL_CONSTASCII_USTRINGPARAM("SYSUSERHOME"));
+    static const OUString sysBinDir    (RTL_CONSTASCII_USTRINGPARAM("SYSBINDIR"));
+
     sal_Bool result = sal_True;
 
     // we have build ins:
@@ -243,6 +245,9 @@ static sal_Bool getValue(NameValueList *pNameValueList, rtl_uString * pName, rtl
         osl_getHomeDir(security, ppValue);
         osl_freeSecurityHandle(security);
     }
+    else if(!rtl_ustr_compare_WithLength(pName->buffer, pName->length, sysBinDir.pData->buffer, sysBinDir.pData->length))
+        osl_getProcessWorkingDir(ppValue);
+
     else
     {
         getFromCommandLineArgs(ppValue, pName);
