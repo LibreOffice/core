@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 12:47:03 $
+ *  last change: $Author: dvo $ $Date: 2001-01-15 13:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::xml::sax;
 
 
@@ -279,6 +280,8 @@ const sal_Char sAPI_get_reference[]             = "GetReference";
 const sal_Char sAPI_sheet_name[]                = "SheetName";
 const sal_Char sAPI_url[]                       = "URL";
 const sal_Char sAPI_bibliography[]              = "Bibliography";
+const sal_Char sAPI_annotation[]                = "Annotation";
+const sal_Char sAPI_script[]                    = "Script";
 
 // property names
 const sal_Char sAPI_is_fixed[]          = "IsFixed";
@@ -326,6 +329,9 @@ const sal_Char sAPI_dde_command_element[] = "DDECommandElement";
 // sAPI_url: also used as service name
 const sal_Char sAPI_target_frame[]      = "TargetFrame";
 const sal_Char sAPI_representation[]    = "Representation";
+const sal_Char sAPI_date[]              = "Date";
+const sal_Char sAPI_url_content[]       = "URLContent";
+const sal_Char sAPI_script_type[]       = "ScriptType";
 
 const sal_Char sAPI_true[] = "TRUE";
 
@@ -381,6 +387,12 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
     { XML_NAMESPACE_XLINK, sXML_href, XML_TOK_TEXTFIELD_HREF },
     { XML_NAMESPACE_OFFICE, sXML_target_frame_name,
       XML_TOK_TEXTFIELD_TARGET_FRAME },
+    { XML_NAMESPACE_TEXT, sXML_date, XML_TOK_TEXTFIELD_DATE },
+    { XML_NAMESPACE_TEXT, sXML_author, XML_TOK_TEXTFIELD_AUTHOR },
+    { XML_NAMESPACE_TEXT, sXML_script, XML_TOK_TEXTFIELD_SCRIPT },
+    { XML_NAMESPACE_TEXT, sXML_annotation, XML_TOK_TEXTFIELD_ANNOTATION },
+    { XML_NAMESPACE_TEXT, sXML_href, XML_TOK_TEXTFIELD_THREF },
+    { XML_NAMESPACE_TEXT, sXML_language, XML_TOK_TEXTFIELD_LANGUAGE },
 
     XML_TOKEN_MAP_END
 };
@@ -751,6 +763,16 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
         case XML_TOK_TEXT_BIBLIOGRAPHY_MARK:
             pContext = new XMLBibliographyFieldImportContext( rImport, rHlp,
                                                               nPrefix, rName );
+            break;
+
+        case XML_TOK_TEXT_ANNOTATION:
+            pContext = new XMLAnnotationImportContext( rImport, rHlp,
+                                                       nPrefix, rName);
+            break;
+
+        case XML_TOK_TEXT_SCRIPT:
+            pContext = new XMLScriptImportContext( rImport, rHlp,
+                                                   nPrefix, rName);
             break;
 
         default:
@@ -3363,4 +3385,201 @@ const sal_Char* XMLBibliographyFieldImportContext::MapBibliographyFieldName(
     }
 
     return pName;
+}
+
+//
+// XMLStringBufferImportContext
+//
+
+
+TYPEINIT1(XMLStringBufferImportContext, SvXMLImportContext);
+
+XMLStringBufferImportContext::XMLStringBufferImportContext(
+    SvXMLImport& rImport,
+    sal_uInt16 nPrefix,
+    const OUString& sLocalName,
+    OUStringBuffer& rBuffer) :
+    SvXMLImportContext(rImport, nPrefix, sLocalName),
+    rTextBuffer(rBuffer)
+{
+}
+
+XMLStringBufferImportContext::~XMLStringBufferImportContext()
+{
+}
+
+SvXMLImportContext *XMLStringBufferImportContext::CreateChildContext(
+    USHORT nPrefix,
+    const OUString& rLocalName,
+    const Reference<XAttributeList> & xAttrList)
+{
+    return new XMLStringBufferImportContext(GetImport(), nPrefix,
+                                            rLocalName, rTextBuffer);
+}
+
+void XMLStringBufferImportContext::Characters(
+    const OUString& rChars )
+{
+    rTextBuffer.append(rChars);
+}
+
+void XMLStringBufferImportContext::EndElement()
+{
+    // add return for paragraph elements
+    if ( (XML_NAMESPACE_TEXT == GetPrefix()) &&
+         (GetLocalName().equalsAsciiL(sXML_p, sizeof(sXML_p)-1)) )
+    {
+        rTextBuffer.append(sal_Unicode(0x0a));
+    }
+}
+
+
+
+//
+// Annotation Field
+//
+
+TYPEINIT1(XMLAnnotationImportContext, XMLTextFieldImportContext);
+
+XMLAnnotationImportContext::XMLAnnotationImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_uInt16 nPrfx,
+    const OUString& sLocalName) :
+        XMLTextFieldImportContext(rImport, rHlp, sAPI_annotation,
+                                  nPrfx, sLocalName),
+        sPropertyAuthor(RTL_CONSTASCII_USTRINGPARAM(sAPI_author)),
+        sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content)),
+        sPropertyDate(RTL_CONSTASCII_USTRINGPARAM(sAPI_date)),
+        bDateOK(sal_False),
+        bAuthorOK(sal_False)
+{
+}
+
+void XMLAnnotationImportContext::ProcessAttribute(
+    sal_uInt16 nAttrToken,
+    const OUString& sAttrValue )
+{
+    switch (nAttrToken)
+    {
+        case XML_TOK_TEXTFIELD_DATE:
+        {
+            DateTime aDateTime;
+            if (SvXMLUnitConverter::convertDateTime(aDateTime, sAttrValue))
+            {
+                aDate.Year = aDateTime.Year;
+                aDate.Month = aDateTime.Month;
+                aDate.Day = aDateTime.Day;
+                bDateOK = sal_True;
+            }
+            break;
+        }
+
+        case XML_TOK_TEXTFIELD_AUTHOR:
+            sAuthor = sAttrValue;
+            bAuthorOK = sal_True;
+            break;
+
+        default:
+            // ignore
+            break;
+    }
+
+    bValid = bDateOK && bAuthorOK;
+}
+
+SvXMLImportContext* XMLAnnotationImportContext::CreateChildContext(
+    USHORT nPrefix,
+    const OUString& rLocalName,
+    const Reference<XAttributeList >& xAttrList )
+{
+    return new XMLStringBufferImportContext(GetImport(), nPrefix,
+                                            rLocalName, aTextBuffer);
+}
+
+void XMLAnnotationImportContext::PrepareField(
+    const Reference<XPropertySet> & xPropertySet)
+{
+    Any aAny;
+
+    aAny <<= sAuthor;
+    xPropertySet->setPropertyValue(sPropertyAuthor, aAny);
+
+    aAny <<= aDate;
+    xPropertySet->setPropertyValue(sPropertyDate, aAny);
+
+    // delete last paragraph mark (if necessary)
+    OUString sBuffer = aTextBuffer.makeStringAndClear();
+    if (sal_Char(0x0a) == sBuffer.getStr()[sBuffer.getLength()-1])
+    {
+        sBuffer = sBuffer.copy(0, sBuffer.getLength()-1);
+    }
+
+    aAny <<= sBuffer;
+    xPropertySet->setPropertyValue(sPropertyContent, aAny);
+}
+
+
+
+//
+// script field
+//
+
+TYPEINIT1(XMLScriptImportContext, XMLTextFieldImportContext);
+
+XMLScriptImportContext::XMLScriptImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_uInt16 nPrfx,
+    const OUString& sLocalName) :
+        XMLTextFieldImportContext(rImport, rHlp, sAPI_script,
+                                  nPrfx, sLocalName),
+        sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content)),
+        sPropertyScriptType(RTL_CONSTASCII_USTRINGPARAM(sAPI_script_type)),
+        sPropertyURLContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_url_content)),
+        bContentOK(sal_False),
+        bUrlContent(sal_False),
+        bScriptTypeOK(sal_False)
+{
+}
+
+void XMLScriptImportContext::ProcessAttribute(
+    sal_uInt16 nAttrToken,
+    const OUString& sAttrValue )
+{
+    switch (nAttrToken)
+    {
+        case XML_TOK_TEXTFIELD_THREF:
+        case XML_TOK_TEXTFIELD_SCRIPT:
+            sContent = sAttrValue;
+            bUrlContent = (nAttrToken == XML_TOK_TEXTFIELD_THREF);
+            bContentOK = sal_True;
+            break;
+
+        case XML_TOK_TEXTFIELD_LANGUAGE:
+            sScriptType = sAttrValue;
+            bScriptTypeOK = sal_True;
+            break;
+
+        default:
+            // ignore
+            break;
+    }
+
+    bValid = bContentOK && bScriptTypeOK;
+}
+
+void XMLScriptImportContext::PrepareField(
+    const Reference<XPropertySet> & xPropertySet)
+{
+    Any aAny;
+
+    aAny <<= sContent;
+    xPropertySet->setPropertyValue(sPropertyContent, aAny);
+
+    aAny.setValue(&bUrlContent, ::getBooleanCppuType());
+    xPropertySet->setPropertyValue(sPropertyURLContent, aAny);
+
+    aAny <<= sScriptType;
+    xPropertySet->setPropertyValue(sPropertyScriptType, aAny);
 }

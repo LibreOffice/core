@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-11 19:10:43 $
+ *  last change: $Author: dvo $ $Date: 2001-01-15 13:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,8 @@ class SvXMLExport;
 class SvXMLNumFmtExport;
 
 namespace com { namespace sun { namespace star { namespace util {
-struct DateTime;
+    struct DateTime;
+    struct Date;
 }}}}
 
 /// field IDs,
@@ -280,6 +281,11 @@ protected:
         const sal_Char* pValue,         /// attribute value
         const sal_Char* pDefault);      /// attribute default
 
+    /// export a string as a sequence of paragraphs
+    void ProcessParagraphSequence(
+        /// string containing the paragraphs
+        const ::rtl::OUString& sParagraphSequence);
+
     /// export a numbering format (numeric, roman, alphabetic, etc.)
     void ProcessNumberingType(
         sal_Int16 nNumberingType);      /// numbering type key
@@ -321,6 +327,11 @@ protected:
         const sal_Char* sXMLName,   /// name of attribute
         const ::com::sun::star::util::DateTime& rTime,      /// date/time value
         sal_Bool bIsDate );             /// export as date (rather than date/time)?
+
+    /// export date according to ISO 8601
+    void ProcessDate(
+        const sal_Char* sXMLName,   /// name of attribute
+        const ::com::sun::star::util::Date& rTime);     /// date value
 
     /// export all attributes for bibliography data fields
     void ProcessBibliographyData(
@@ -432,6 +443,10 @@ private:
     const ::rtl::OUString sPropertyURL;
     const ::rtl::OUString sPropertyTargetFrame;
     const ::rtl::OUString sPropertyFields;
+    const ::rtl::OUString sPropertyScriptType;
+    const ::rtl::OUString sPropertyURLContent;
+    const ::rtl::OUString sPropertyAuthor;
+    const ::rtl::OUString sPropertyDate;
 
     const ::rtl::OUString sEmpty;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-12 18:30:35 $
+ *  last change: $Author: dvo $ $Date: 2001-01-15 13:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,6 @@
  *  export of all text fields
  */
 
-#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
-#include <com/sun/star/util/DateTime.hpp>
-#endif
-
 #ifndef _XMLOFF_TXTFLDE_HXX
 #include "txtflde.hxx"
 #endif
@@ -102,6 +98,14 @@
 
 #ifndef XMLOFF_NUMEHELP_HXX
 #include "numehelp.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
+#include <com/sun/star/util/Date.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
@@ -364,6 +368,8 @@ inline sal_Int8 const GetInt8Property(const OUString&,
                                       const Reference<XPropertySet> &);
 inline DateTime const GetDateTimeProperty( const OUString& sPropName,
                                            const Reference<XPropertySet> & xPropSet);
+inline Date const GetDateProperty( const OUString& sPropName,
+                                   const Reference<XPropertySet> & xPropSet);
 
 
 
@@ -435,7 +441,11 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp )
           RTL_CONSTASCII_USTRINGPARAM("DependentTextFields")),
       sPropertyURL(RTL_CONSTASCII_USTRINGPARAM("URL")),
       sPropertyTargetFrame(RTL_CONSTASCII_USTRINGPARAM("TargetFrame")),
-      sPropertyFields(RTL_CONSTASCII_USTRINGPARAM("Fields"))
+      sPropertyFields(RTL_CONSTASCII_USTRINGPARAM("Fields")),
+      sPropertyScriptType(RTL_CONSTASCII_USTRINGPARAM("ScriptType")),
+      sPropertyURLContent(RTL_CONSTASCII_USTRINGPARAM("URLContent")),
+      sPropertyAuthor(RTL_CONSTASCII_USTRINGPARAM("Author")),
+      sPropertyDate(RTL_CONSTASCII_USTRINGPARAM("Date"))
 {
 }
 
@@ -1228,6 +1238,8 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
                       GetStringProperty(sPropertyDataTableName, xPropSet));
         ProcessString(sXML_condition,
                       GetStringProperty(sPropertyCondition, xPropSet));
+        DBG_ASSERT(sPresentation.equals(sEmpty),
+                   "Unexpected presentation for database next field");
         ExportElement(sXML_database_next);
         break;
 
@@ -1240,6 +1252,8 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
                       GetStringProperty(sPropertyCondition, xPropSet));
         ProcessInteger(sXML_row_number,
                        GetIntProperty(sPropertySetNumber, xPropSet));
+        DBG_ASSERT(sPresentation.equals(sEmpty),
+                   "Unexpected presentation for database select field");
         ExportElement(sXML_database_select);
         break;
 
@@ -1356,6 +1370,8 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
     case FIELD_ID_HIDDEN_PARAGRAPH:
         ProcessString(sXML_condition,
                       GetStringProperty(sPropertyCondition, xPropSet));
+        DBG_ASSERT(sPresentation.equals(sEmpty),
+                   "Unexpected presentation for hidden paragraph field");
         ExportElement(sXML_hidden_paragraph);
         break;
 
@@ -1398,6 +1414,8 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
                        GetBoolProperty(sPropertyOn, xPropSet), sal_True);
         ProcessInteger(sXML_page_adjust,
                        GetInt16Property(sPropertyOffset, xPropSet), 0);
+        DBG_ASSERT(sPresentation.equals(sEmpty),
+                   "Unexpected presentation page variable field");
         ExportElement(sXML_page_variable_set);
         break;
 
@@ -1507,10 +1525,37 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
     }
 
     case FIELD_ID_SCRIPT:
-    case FIELD_ID_ANNOTATION:
-        // TODO: implement these fields!!!
-        GetExport().GetDocHandler()->characters(sPresentation);
+        ProcessString(sXML_language,
+                      GetStringProperty(sPropertyScriptType, xPropSet));
+        DBG_ASSERT(sPresentation.equals(sEmpty),
+                   "Unexpected presentation for script field");
+        if (GetBoolProperty(sPropertyURLContent, xPropSet))
+        {
+            ProcessString(sXML_href,
+                          GetStringProperty(sPropertyContent, xPropSet));
+            ExportElement(sXML_script);
+        }
+        else
+        {
+            ExportElement(sXML_script,
+                          GetStringProperty(sPropertyContent, xPropSet));
+        }
         break;
+
+    case FIELD_ID_ANNOTATION:
+    {
+        ProcessString(sXML_author,
+                      GetStringProperty(sPropertyAuthor, xPropSet));
+        ProcessDate(sXML_date,
+                    GetDateProperty(sPropertyDate, xPropSet));
+        DBG_ASSERT(sPresentation.equals(sEmpty),
+                   "Unexpected presentation for annotation field");
+        SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_TEXT,
+                                 sXML_annotation, sal_False, sal_True);
+        ProcessParagraphSequence(
+            GetStringProperty(sPropertyContent, xPropSet));
+        break;
+    }
 
     case FIELD_ID_UNKNOWN:
     default:
@@ -2013,6 +2058,22 @@ void XMLTextFieldExport::ProcessString(
 }
 
 
+/// export a string as a sequence of paragraphs
+void XMLTextFieldExport::ProcessParagraphSequence(
+    const ::rtl::OUString& sParagraphSequence)
+{
+    // iterate over all string-pieces separated by return (0x0a) and
+    // put each inside a paragraph element.
+    SvXMLTokenEnumerator aEnumerator(sParagraphSequence, sal_Char(0x0a));
+    OUString aSubString;
+    while (aEnumerator.getNextToken(aSubString))
+    {
+        SvXMLElementExport aParagraph(
+            GetExport(), XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
+        GetExport().GetDocHandler()->characters(aSubString);
+    }
+}
+
 // export an integer attribute
 void XMLTextFieldExport::ProcessInteger(const sal_Char* pXmlName,
                                         sal_Int32 nNum)
@@ -2122,6 +2183,20 @@ void XMLTextFieldExport::ProcessDateTime(const sal_Char* sXMLName,
     ProcessString(sXMLName, aBuffer.makeStringAndClear());
 }
 
+/// export date according to ISO 8601
+void XMLTextFieldExport::ProcessDate(
+    const sal_Char* sXMLName,
+    const ::com::sun::star::util::Date& rDate)
+{
+    // the easiest way: delegate to ProcessDateTime (as date)
+    DateTime aDateTime;
+    aDateTime.Day = rDate.Day;
+    aDateTime.Month = rDate.Month;
+    aDateTime.Year = rDate.Year;
+    ProcessDateTime(sXMLName, aDateTime, sal_True);
+}
+
+
 /// export a date, time, or duration
 void XMLTextFieldExport::ProcessDateTime(const sal_Char* sXMLName,
                                          sal_Int32 nMinutes,
@@ -2136,6 +2211,7 @@ void XMLTextFieldExport::ProcessDateTime(const sal_Char* sXMLName,
                         bIsDate, bIsDuration, bOmitDurationIfZero);
     }
 }
+
 
 SvXMLEnumMapEntry __READONLY_DATA aBibliographyDataTypeMap[] =
 {
@@ -2870,7 +2946,7 @@ inline Double const GetDoubleProperty(
     const Reference<XPropertySet> & xPropSet)
 {
     Any aAny = xPropSet->getPropertyValue(sPropName);
-    Double fDouble;
+    Double fDouble = 0.0;
     aAny >>= fDouble;
     return fDouble;
 }
@@ -2890,7 +2966,7 @@ inline sal_Int32 const GetIntProperty(
     const Reference<XPropertySet> & xPropSet)
 {
     Any aAny = xPropSet->getPropertyValue(sPropName);
-    sal_Int32 nInt;
+    sal_Int32 nInt = 0;
     aAny >>= nInt;
     return nInt;
 }
@@ -2900,7 +2976,7 @@ inline sal_Int16 const GetInt16Property(
     const Reference<XPropertySet> & xPropSet)
 {
     Any aAny = xPropSet->getPropertyValue(sPropName);
-    sal_Int16 nInt;
+    sal_Int16 nInt = 0;
     aAny >>= nInt;
     return nInt;
 }
@@ -2910,7 +2986,7 @@ inline sal_Int8 const GetInt8Property(
     const Reference<XPropertySet> & xPropSet)
 {
     Any aAny = xPropSet->getPropertyValue(sPropName);
-    sal_Int8 nInt;
+    sal_Int8 nInt = 0;
     aAny >>= nInt;
     return nInt;
 }
@@ -2923,4 +2999,14 @@ inline DateTime const GetDateTimeProperty(
     DateTime aTime;
     aAny >>= aTime;
     return aTime;
+}
+
+inline Date const GetDateProperty(
+    const OUString& sPropName,
+    const Reference<XPropertySet> & xPropSet)
+{
+    Any aAny = xPropSet->getPropertyValue(sPropName);
+    Date aDate;
+    aAny >>= aDate;
+    return aDate;
 }

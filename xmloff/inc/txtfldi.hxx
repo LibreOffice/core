@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 12:47:04 $
+ *  last change: $Author: dvo $ $Date: 2001-01-15 13:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
+#include <com/sun/star/util/Date.hpp>
 #endif
 
 #ifndef _XMLOFF_XMLICTXT_HXX
@@ -162,6 +166,13 @@ enum XMLTextFieldAttrTokens
 
     XML_TOK_TEXTFIELD_HREF,
     XML_TOK_TEXTFIELD_TARGET_FRAME,
+
+    XML_TOK_TEXTFIELD_DATE,
+    XML_TOK_TEXTFIELD_AUTHOR,
+    XML_TOK_TEXTFIELD_SCRIPT,
+    XML_TOK_TEXTFIELD_ANNOTATION,
+    XML_TOK_TEXTFIELD_THREF,        // text:href (as opposed to xlink:href)
+    XML_TOK_TEXTFIELD_LANGUAGE,
 
     XML_TOK_TEXTFIELD_UNKNOWN
 };
@@ -1323,6 +1334,117 @@ protected:
 
     static const sal_Char* MapBibliographyFieldName(::rtl::OUString sName);
 
+};
+
+
+/**
+ * Import all text into a string buffer.  Paragraph elements (<text:p>)
+ * are recognized and cause a return character (0x0a) to be added.
+ */
+class XMLStringBufferImportContext : public SvXMLImportContext
+{
+    ::rtl::OUStringBuffer& rTextBuffer;
+
+public:
+
+    TYPEINFO();
+
+    XMLStringBufferImportContext(
+        SvXMLImport& rImport,
+        sal_uInt16 nPrefix,
+        const ::rtl::OUString& sLocalName,
+        ::rtl::OUStringBuffer& rBuffer);
+
+    virtual ~XMLStringBufferImportContext();
+
+    virtual SvXMLImportContext *CreateChildContext(
+        USHORT nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
+    virtual void Characters(
+        const ::rtl::OUString& rChars );
+
+    virtual void EndElement();
+};
+
+
+/** Import an annotation field (<text:annotation>) */
+class XMLAnnotationImportContext : public XMLTextFieldImportContext
+{
+    const ::rtl::OUString sPropertyAuthor;
+    const ::rtl::OUString sPropertyContent;
+    const ::rtl::OUString sPropertyDate;
+
+    ::rtl::OUString sAuthor;
+    ::rtl::OUStringBuffer aTextBuffer;
+    ::com::sun::star::util::Date aDate;
+
+    sal_Bool bAuthorOK;
+    sal_Bool bDateOK;
+
+public:
+
+    TYPEINFO();
+
+    XMLAnnotationImportContext(SvXMLImport& rImport,
+                               XMLTextImportHelper& rHlp,
+                               sal_uInt16 nPrfx,
+                               const ::rtl::OUString& sLocalName);
+
+protected:
+
+    /// process attributes
+    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+                                   const ::rtl::OUString& sAttrValue );
+
+    /// set properties
+    virtual void PrepareField(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+
+    virtual SvXMLImportContext *CreateChildContext(
+        USHORT nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference<
+                ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+};
+
+
+/** Import a script field (<text:script>) */
+class XMLScriptImportContext : public XMLTextFieldImportContext
+{
+    const ::rtl::OUString sPropertyScriptType;
+    const ::rtl::OUString sPropertyURLContent;
+    const ::rtl::OUString sPropertyContent;
+
+    ::rtl::OUString sContent;
+    ::rtl::OUString sScriptType;
+
+    sal_Bool bContentOK;
+    sal_Bool bScriptTypeOK;
+    sal_Bool bUrlContent;
+
+public:
+
+    TYPEINFO();
+
+    XMLScriptImportContext(SvXMLImport& rImport,
+                           XMLTextImportHelper& rHlp,
+                           sal_uInt16 nPrfx,
+                           const ::rtl::OUString& sLocalName);
+
+protected:
+
+    /// process attributes
+    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+                                   const ::rtl::OUString& sAttrValue );
+
+    /// set properties
+    virtual void PrepareField(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
 
 

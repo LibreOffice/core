@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-15 11:28:36 $
+ *  last change: $Author: dvo $ $Date: 2001-01-15 13:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,6 +387,8 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_endnote_ref, XML_TOK_TEXT_ENDNOTE_REF },
     { XML_NAMESPACE_TEXT, sXML_bibliography_mark,
       XML_TOK_TEXT_BIBLIOGRAPHY_MARK },
+    { XML_NAMESPACE_TEXT, sXML_annotation, XML_TOK_TEXT_ANNOTATION },
+    { XML_NAMESPACE_TEXT, sXML_script, XML_TOK_TEXT_SCRIPT },
 
     // Calc fields
     { XML_NAMESPACE_TEXT, sXML_sheet_name, XML_TOK_TEXT_SHEET_NAME },
