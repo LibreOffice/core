@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-02 17:22:16 $
+ *  last change: $Author: cmc $ $Date: 2002-12-03 15:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2321,7 +2321,7 @@ bool WW8FlyPara::operator==(const WW8FlyPara& rSrc) const
 
 // Read fuer normalen Text
 
-bool WW8FlyPara::Read(const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap)
+void WW8FlyPara::Read(const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap)
 {
     sal_uInt8 nOrigSp29 = nSp29;
     if (pSprm29)
@@ -2363,10 +2363,6 @@ bool WW8FlyPara::Read(const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap)
     if( ::lcl_ReadBorders( bVer67, brc, pPap ))     // Umrandung
         bBorderLines = ::lcl_IsBorder( bVer67, brc );
 
-    // alles 0 heisst
-    if (!nOrigSp29 && !nSp27 && !nLeMgn && !nRiMgn && !nSp37)
-        return false;                               // Apo ist nicht vorhanden
-
     /*
      #i8798#
      Appears that with no dyaAbs set then the actual vert anchoring set is
@@ -2378,20 +2374,16 @@ bool WW8FlyPara::Read(const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap)
         nSp29 = (nOrigSp29 & 0xCF) | 0x20;
     else
         nSp29 = nOrigSp29;
-
-    return true;
 }
 
-bool WW8FlyPara::ReadFull(const BYTE* pSprm29, SwWW8ImplReader* pIo)
+void WW8FlyPara::ReadFull(const BYTE* pSprm29, SwWW8ImplReader* pIo)
 {
     WW8PLCFMan* pPlcxMan = pIo->pPlcxMan;
     WW8PLCFx_Cp_FKP* pPap = pPlcxMan->GetPapPLCF();
 
-    bool bOk = Read(pSprm29, pPap); // Lies Apo-Parameter
+    Read(pSprm29, pPap);    // Lies Apo-Parameter
 
     do{             // Block zum rausspringen
-        if( !bOk )                      // schiefgegangen
-            break;
         if( nSp45 != 0 /* || nSp28 != 0 */ )
             break;                      // bGrafApo nur bei Hoehe automatisch
         if( pIo->pWwFib->fComplex )
@@ -2442,12 +2434,11 @@ bool WW8FlyPara::ReadFull(const BYTE* pSprm29, SwWW8ImplReader* pIo)
         pPlcxMan->GetPap()->Restore( aSave );
         pIoStrm->Seek( nPos );
     }while( 0 );                                    // Block zum rausspringen
-    return bOk;
 }
 
 
 // Read fuer Apo-Defs in Styledefs
-bool WW8FlyPara::Read(const BYTE* pSprm29, WW8RStyle* pStyle)
+void WW8FlyPara::Read(const BYTE* pSprm29, WW8RStyle* pStyle)
 {
     sal_uInt8 nOrigSp29 = 0;
     if (pSprm29)
@@ -2500,11 +2491,14 @@ bool WW8FlyPara::Read(const BYTE* pSprm29, WW8RStyle* pStyle)
         nSp29 = (nOrigSp29 & 0xCF) | 0x20;
     else
         nSp29 = nOrigSp29;
+}
 
+bool WW8FlyPara::IsEmpty() const
+{
     WW8FlyPara aEmpty(bVer67);
     if (aEmpty == *this)
-        return false;
-    return true;
+        return true;
+    return false;
 }
 
 WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
@@ -2941,16 +2935,15 @@ bool SwWW8ImplReader::StartApo(const BYTE* pSprm29,
 
     // APO-Parameter ermitteln und Test auf bGrafApo
     if (pSprm29 || pNowStyleApo)
-    {
-        bool bOk = pWFlyPara->ReadFull( pSprm29, this );
-        if (!bOk && !pNowStyleApo)
-        {
-            DELETEZ( pWFlyPara );
-            return false;
-        }
-    }
+        pWFlyPara->ReadFull( pSprm29, this );
 
     pWFlyPara->ApplyTabPos(pTabPos);
+
+    if (pWFlyPara->IsEmpty())
+    {
+        delete pWFlyPara, pWFlyPara = 0;
+        return false;
+    }
 
     pSFlyPara = new WW8SwFlyPara( *pPaM, *this, *pWFlyPara, nPgLeft,
         (nPgWidth - nPgRight - nPgLeft), nIniFlyDx, nIniFlyDy );
@@ -5172,7 +5165,8 @@ void SwWW8ImplReader::Read_ApoPPC( USHORT, const BYTE* pData, short )
         SwWW8StyInf& rSI = pCollA[nAktColl];
         WW8FlyPara* pFly = rSI.pWWFly ? rSI.pWWFly : new WW8FlyPara(bVer67);
         pCollA[nAktColl].pWWFly = pFly;
-        if (!pFly->Read(pData, pStyles))        // Lese Style-Apo-Parameter
+        pFly->Read(pData, pStyles);
+        if (pFly->IsEmpty())
             delete pCollA[nAktColl].pWWFly, pCollA[nAktColl].pWWFly = 0;
     }
 }

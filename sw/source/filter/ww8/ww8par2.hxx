@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-27 12:10:14 $
+ *  last change: $Author: cmc $ $Date: 2002-12-03 15:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,10 +119,11 @@ struct WW8FlyPara
 
     WW8FlyPara(bool bIsVer67, const WW8FlyPara* pSrc = 0);
     bool operator==(const WW8FlyPara& rSrc) const;
-    bool Read(const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap);
-    bool ReadFull(const BYTE* pSprm29, SwWW8ImplReader* pIo);
-    bool Read(const BYTE* pSprm29, WW8RStyle* pStyle);
+    void Read(const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap);
+    void ReadFull(const BYTE* pSprm29, SwWW8ImplReader* pIo);
+    void Read(const BYTE* pSprm29, WW8RStyle* pStyle);
     void ApplyTabPos(WW8_TablePos *pTabPos);
+    bool IsEmpty() const;
 };
 
 struct WW8SwFlyPara
