@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvasbitmap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:10:39 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 11:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,11 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XBITMAPCANVAS_HPP_
-#include <drafts/com/sun/star/rendering/XBitmapCanvas.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XBITMAPCANVAS_HPP_
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XINTEGERBITMAP_HPP_
-#include <drafts/com/sun/star/rendering/XIntegerBitmap.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XINTEGERBITMAP_HPP_
+#include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #endif
 
 #ifndef _SV_VIRDEV_HXX
@@ -97,8 +97,8 @@
 
 namespace vclcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper3< ::drafts::com::sun::star::rendering::XBitmapCanvas,
-                                               ::drafts::com::sun::star::rendering::XIntegerBitmap,
+    typedef ::cppu::WeakComponentImplHelper3< ::com::sun::star::rendering::XBitmapCanvas,
+                                               ::com::sun::star::rendering::XIntegerBitmap,
                                                 ::com::sun::star::lang::XServiceInfo >                                  CanvasBitmapBase_Base;
     typedef ::canvas::internal::BitmapCanvasBase< CanvasBitmapBase_Base, CanvasBitmapHelper, tools::LocalGuard >    CanvasBitmap_Base;
 
