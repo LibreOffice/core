@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLTableContext.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: bm $ $Date: 2001-04-10 10:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,11 @@ private:
                            sal_Int32& nRows, sal_Int32& nColumns );
 
 public:
+    /// The data for the ChartDocument is applied linearly
+    static void SchXMLTableHelper::applyTableSimple(
+        const SchXMLTable& rTable,
+        com::sun::star::uno::Reference< com::sun::star::chart::XChartDocument > xChartDoc );
+
     /** The data for the ChartDocument is applied by reading the
         table, the addresses of series, the addresses of labels,
         the cell-range-address for the categories

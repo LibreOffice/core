@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLTableContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-26 15:38:45 $
+ *  last change: $Author: bm $ $Date: 2001-04-10 10:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,6 +445,63 @@ void SchXMLTableCellContext::EndElement()
 }
 
 // ========================================
+
+// just interpret the table in a linear way with no references used
+// (this is just a workaround for clipboard handling in EA2)
+void SchXMLTableHelper::applyTableSimple(
+    const SchXMLTable& rTable,
+    uno::Reference< chart::XChartDocument > xChartDoc )
+{
+    // interpret table like this:
+    //
+    //  series ----+---\
+    //             |   |
+    //  categories |   |
+    //        |    |   |
+    //        V    V   V
+    //        A    B   C  ...
+    //   1         x   x        <--- labels
+    //   2    x    0   0
+    //   3    x    0   0
+    //  ...
+    if( xChartDoc.is())
+    {
+        uno::Reference< chart::XChartDataArray > xData( xChartDoc->getData(), uno::UNO_QUERY );
+        if( xData.is())
+        {
+            sal_Int32 nRowCount = rTable.aData.size();
+            sal_Int32 nColumnCount = 0;
+            sal_Int32 nCol = 0, nRow = 0;
+            if( nRowCount )
+                nColumnCount = rTable.aData[ 0 ].size();
+
+            uno::Sequence< ::rtl::OUString > aCategories( nRowCount - 1 );
+            uno::Sequence< ::rtl::OUString > aLabels( nColumnCount - 1 );
+            uno::Sequence< uno::Sequence< double > > aData( nRowCount - 1 );
+            for( nRow = 0; nRow < nRowCount - 1; nRow++ )
+                aData[ nRow ].realloc( nColumnCount - 1 );
+
+            // set labels
+            ::std::vector< ::std::vector< SchXMLCell > >::const_iterator iRow = rTable.aData.begin();
+            for( nCol = 1; nCol < nColumnCount; nCol++ )
+            {
+                aLabels[ nCol - 1 ] = (*iRow)[ nCol ].aString;
+            }
+            xData->setColumnDescriptions( aLabels );
+
+            for( ++iRow; iRow != rTable.aData.end(); iRow++, nRow++ )
+            {
+                aCategories[ nRow ] = (*iRow)[ 0 ].aString;
+                for( nCol = 1; nCol < nColumnCount; nCol++ )
+                    aData[ nRow ][ nCol - 1 ] = (*iRow)[ nCol ].fValue;
+            }
+            xData->setRowDescriptions( aCategories );
+            xData->setData( aData );
+        }
+    }
+}
+
+// ----------------------------------------
 
 void SchXMLTableHelper::applyTable(
     const SchXMLTable& rTable,

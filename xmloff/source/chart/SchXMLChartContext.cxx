@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-29 16:21:08 $
+ *  last change: $Author: bm $ $Date: 2001-04-10 10:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,7 +445,8 @@ void SchXMLChartContext::EndElement()
     if( mbHasOwnTable )
     {
         // apply data read in table sub-element to chart
-        SchXMLTableHelper::applyTable( maTable, maSeriesAddresses, msCategoriesAddress, xDoc );
+//          SchXMLTableHelper::applyTable( maTable, maSeriesAddresses, msCategoriesAddress, xDoc );
+          SchXMLTableHelper::applyTableSimple( maTable, xDoc );
     }
     else
     {
