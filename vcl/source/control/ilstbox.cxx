@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-14 10:15:16 $
+ *  last change: $Author: mt $ $Date: 2002-08-23 14:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1252,6 +1252,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
         }
     }
 }
+
 
 // -----------------------------------------------------------------------
 
@@ -2613,6 +2614,8 @@ ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( Window* pParent ) :
     mnDDLineCount = 0;
     mbAutoWidth = FALSE;
 
+    mnPopupModeStartSaveSelection = LISTBOX_ENTRY_NOTFOUND;
+
     EnableSaveBackground();
 }
 
@@ -2747,13 +2750,15 @@ void ImplListBoxFloatingWindow::StartFloat( BOOL bStartTracking )
         SetSizePixel( aFloatSz );
         mpImplLB->SetSizePixel( GetOutputSizePixel() );
 
+        USHORT nPos = mpImplLB->GetEntryList()->GetSelectEntryPos( 0 );
+        mnPopupModeStartSaveSelection = nPos;
+
         Size aSz = GetParent()->GetSizePixel();
         Point aPos = GetParent()->GetPosPixel();
         aPos = GetParent()->GetParent()->OutputToScreenPixel( aPos );
         Rectangle aRect( aPos, aSz );
         StartPopupMode( aRect, FLOATWIN_POPUPMODE_DOWN );
 
-        USHORT nPos = mpImplLB->GetEntryList()->GetSelectEntryPos( 0 );
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
             mpImplLB->SetTopEntry( nPos );
 

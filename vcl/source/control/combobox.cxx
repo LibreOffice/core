@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-08 16:01:30 $
+ *  last change: $Author: mt $ $Date: 2002-08-23 14:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,9 @@ IMPL_LINK( ComboBox, ImplClickBtnHdl, void*, EMPTYARG )
 
 IMPL_LINK( ComboBox, ImplPopupModeEndHdl, void*, p )
 {
+    if( mpFloatWin->IsPopupModeCanceled() )
+        mpImplLB->SelectEntry( mpFloatWin->GetPopupModeStartSaveSelection(), TRUE );
+
     mpBtn->SetPressed( FALSE );
     ImplCallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
     return 0;
