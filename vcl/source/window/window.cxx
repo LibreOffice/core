@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.164 $
+ *  $Revision: 1.165 $
  *
- *  last change: $Author: ssa $ $Date: 2002-12-12 13:13:51 $
+ *  last change: $Author: cd $ $Date: 2002-12-13 07:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,7 +467,23 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
         }
     }
 
+    // Detect if images in menus are allowed or not
+    {
+        sal_Bool bTmp, bUseImagesInMenus = sal_True;
+        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
+            vcl::unohelper::GetMultiServiceFactory(),
+            OUString::createFromAscii( "org.openoffice.Office.Common/View/Menu" ) );    // note: case sensisitive !
+        if ( aNode.isValid() )
+        {
+            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString::createFromAscii( "ShowIconsInMenues" ) );
+            if( aValue >>= bTmp )
+                bUseImagesInMenus = bTmp;
+        }
 
+        StyleSettings aStyleSettings = rSettings.GetStyleSettings();
+        aStyleSettings.SetUseImagesInMenus( bUseImagesInMenus );
+        rSettings.SetStyleSettings( aStyleSettings );
+    }
 
 #ifdef DBG_UTIL
     // Evt. AppFont auf Fett schalten, damit man feststellen kann,
