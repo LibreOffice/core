@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tra $ $Date: 2002-11-11 15:01:15 $
+ *  last change: $Author: hro $ $Date: 2002-12-12 11:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,15 @@
 
 #pragma warning( disable : 4786 ) // identifier was truncated to 'number'
                                    // characters in the debug information
+
+/*
+    Enable APIs that are only available for 98/Me/2K/XP.
+    Actually we need PM_QS_SENDMESSAGE
+*/
+#ifdef WINVER
+#undef WINVER
+#define WINVER 0x0500
+#endif
 
 #define UNICODE
 
