@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-16 12:48:28 $
+ *  last change: $Author: cmc $ $Date: 2001-06-15 14:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,11 @@
 #include <msvbasic.hxx>
 #endif
 
+/*
+A few urls which may in the future be of some use
+http://www.virusbtn.com/vb2000/Programme/papers/bontchev.pdf
+*/
+
 /* class VBA_Impl:
  * The VBA class provides a set of methods to handle Visual Basic For
  * Applications streams, the constructor is given the root ole2 stream
@@ -85,106 +90,71 @@
  * cmc
  * */
 
-BYTE VBA_Impl::ReadPString(SvStorageStreamRef &xVBAProject)
+void VBA_Impl::SkipTrickyMac(SvStorageStreamRef &xVBAProject)
 {
-    UINT16 nIdLen;
-    int i=0;
-    BYTE nType = 0, nOut;
+    //For no particularly good reason that I can see this occurs on
+    //occasion in macintosh xls documents, it looks like an object id
+    xVBAProject->SeekRel(2);
+    UINT32 nIdA;
+    UINT16 nIdB,nIdC;
+    *xVBAProject >> nIdA >> nIdB >> nIdC;
 
+    static const BYTE aKnownChunk[] =
+    {
+        0x85, 0x2E, 0x02, 0x60, 0x8C, 0x4D, 0x0B, 0xB4
+    };
+    BYTE aSeq[8];
+    xVBAProject->Read( aSeq, sizeof(aSeq) );
+    xVBAProject->SeekRel(2);
+
+    if (!(
+        nIdA == 0x0D452EE1 && nIdB == 0xE08F && nIdC == 0x101A &&
+        (0 == memcmp( aSeq, aKnownChunk, sizeof(aSeq)))
+       ))
+    {
+        xVBAProject->SeekRel(-20);
+    }
+}
+
+
+BYTE VBA_Impl::ReadPString(SvStorageStreamRef &xVBAProject, BOOL bIsUnicode)
+{
+    UINT16 nIdLen, nOut16;
+    BYTE nType = 0, nOut8;
+
+    SkipTrickyMac(xVBAProject);
     *xVBAProject >> nIdLen;
 
-    if (nIdLen < 6)
+    if (nIdLen < 6) //Error recovery
     {
         xVBAProject->SeekRel(-2);
     }
     else
-        for(i=0; i < nIdLen / 2; i++)
+        for(UINT16 i=0; i < nIdLen / (bIsUnicode ? 2 : 1); i++)
         {
-            *xVBAProject >> nOut;
-            xVBAProject->SeekRel(1);
+            if (bIsUnicode)
+                *xVBAProject >> nOut16;
+            else
+            {
+                *xVBAProject >> nOut8;
+                nOut16 = nOut8;
+            }
             if (i==2)
             {
-                nType = nOut;
-                if ((nType != 'G') && (nType != 'C'))
-                    nType = 0;
+                if ((nOut16 == 'G') || (nOut16 == 'H') || (nOut16 == 'C') ||
+                    nOut16 == 'D')
+                {
+                    nType = static_cast<BYTE>(nOut16);
+                }
                 if ( nType == 0)
                 {
-                    xVBAProject->SeekRel(-8);
+                    xVBAProject->SeekRel(-8);   //Error recovery
                     break;
                 }
             }
         }
-
     return nType;
 }
-
-static BOOL lcl_CheckArray( SvStream &rStrm, const BYTE* pArr, USHORT nLen )
-{
-    BYTE* pMem = new BYTE[ nLen ];
-
-    rStrm.Read( pMem, nLen );
-    BOOL bRet = 0 == memcmp( pMem, pArr, nLen );
-    delete pMem;
-    return bRet;
-}
-
-void VBA_Impl::ConfirmFixedOctect(SvStorageStreamRef &xVBAProject)
-{
-    static const BYTE coTest[8] =
-    {
-        0x06, 0x02, 0x01, 0x00, 0x08, 0x02, 0x00, 0x00
-    };
-
-    if( !lcl_CheckArray( *xVBAProject, coTest, sizeof( coTest ) ))
-        DBG_WARNING("Found a different octect, please report");
-}
-
-void VBA_Impl::Confirm12Zeros(SvStorageStreamRef &xVBAProject)
-{
-    static const BYTE coTest[12]={0};
-    if( !lcl_CheckArray( *xVBAProject, coTest, sizeof( coTest ) ))
-        DBG_WARNING("Found a Non Zero block, please report");
-}
-
-void VBA_Impl::ConfirmHalfWayMarker(SvStorageStreamRef &xVBAProject)
-{
-    static const BYTE coTest[12]={0,0,0,0,0,0,0,0,0,0,1,0};
-    if( !lcl_CheckArray( *xVBAProject, coTest, sizeof( coTest ) ))
-        DBG_WARNING("Found a different halfway marker, please report");
-}
-
-void VBA_Impl::ConfirmFixedMiddle(SvStorageStreamRef &xVBAProject)
-{
-    static const BYTE coTest[20] =
-    {
-        0x00, 0x00, 0xe1, 0x2e, 0x45, 0x0d, 0x8f, 0xe0,
-        0x1a, 0x10, 0x85, 0x2e, 0x02, 0x60, 0x8c, 0x4d,
-        0x0b, 0xb4, 0x00, 0x00
-    };
-    if( !lcl_CheckArray( *xVBAProject, coTest, sizeof( coTest ) ))
-    {
-        DBG_WARNING("Found a different middle marker, please report");
-        xVBAProject->SeekRel( - sizeof( coTest ));
-    }
-}
-
-void VBA_Impl::ConfirmFixedMiddle2(SvStorageStreamRef &xVBAProject)
-{
-    static const BYTE coTest[20] =
-    {
-        0x00, 0x00, 0x2e, 0xc9, 0x27, 0x8e, 0x64, 0x12,
-        0x1c, 0x10, 0x8a, 0x2f, 0x04, 0x02, 0x24, 0x00,
-        0x9c, 0x02, 0x00, 0x00
-    };
-
-
-    if( !lcl_CheckArray( *xVBAProject, coTest, sizeof( coTest ) ))
-    {
-        DBG_WARNING("Found a different middle2 marker, please report");
-        xVBAProject->SeekRel( - sizeof( coTest ));
-    }
-}
-
 
 void VBA_Impl::Output( int nLen, const BYTE *pData )
 {
@@ -193,7 +163,7 @@ void VBA_Impl::Output( int nLen, const BYTE *pData )
     string and WordBasic is not, so each overlarge module must be split
     */
     String sTemp((const sal_Char *)pData, (xub_StrLen)nLen,
-        RTL_TEXTENCODING_MS_1252);
+        eCharSet);
     int nTmp = sTemp.GetTokenCount('\x0D');
     int nIndex = aVBAStrings.GetSize()-1;
     if (aVBAStrings.Get(nIndex)->Len() +
@@ -223,142 +193,148 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     if( !xVBAProject.Is() || SVSTREAM_OK != xVBAProject->GetError() )
     {
         DBG_WARNING("Not able to find vba project, cannot find macros");
-        return(0);
+        return 0;
     }
-    xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
-    static const BYTE coHeader[30] =
+    static const BYTE aKnownId[] = {0xCC, 0x61};
+    BYTE aId[2];
+    xVBAProject->Read( aId, sizeof(aId) );
+    if (memcmp( aId, aKnownId, sizeof(aId)))
     {
-        0xcc, 0x61, 0x5e, 0x00, 0x00, 0x01, 0x00, 0xff,
-        0x07, 0x04, 0x00, 0x00, 0x09, 0x04, 0x00, 0x00,
-        0xe4, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x01, 0x00
-    };
+        DBG_WARNING("unrecognized VBA macro project type");
+        return 0;
+    }
 
-    if( !lcl_CheckArray( *xVBAProject, coHeader, sizeof( coHeader ) ))
-        DBG_WARNING("Warning VBA header is different, please report");
+    static const BYTE aOffice2000LE[]   = {0x6D, 0x00, 0x00, 0x01, 0x00, 0xFF};
+    static const BYTE aOffice98BE[]     = {0x60, 0x00, 0x00, 0x0E, 0x00, 0xFF};
+    static const BYTE aOffice97LE[]     = {0x5E, 0x00, 0x00, 0x01, 0x00, 0xFF};
+    BYTE aProduct[6];
+    xVBAProject->Read( aProduct, sizeof(aProduct) );
 
-    UINT16 nValue, nSValue;
-    *xVBAProject >> nValue >> nSValue;
+    BOOL bIsUnicode;
+    if (!(memcmp(aProduct, aOffice2000LE, sizeof(aProduct))))
+    {
+        xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+        bIsUnicode=TRUE;
+    }
+    else if (!(memcmp(aProduct, aOffice98BE, sizeof(aProduct))))
+    {
+        xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+        bIsUnicode=FALSE;
+        eCharSet = RTL_TEXTENCODING_APPLE_ROMAN;
+    }
+    else if (!(memcmp(aProduct, aOffice97LE, sizeof(aProduct))))
+    {
+        xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+        bIsUnicode=TRUE;
+    }
+    else
+    {
+        DBG_WARNING("unrecognized VBA macro version");
+        return 0;
+    }
 
-    //*pOut << "Trigger value 1 is " << nValue << endl;
-    if( nSValue != 0x02 )
+    UINT32 nLidA;  //Language identifiers
+    UINT32 nLidB;
+    UINT16 nUnknownA;
+    UINT16 nLenA;
+    UINT32 nUnknownB;
+    UINT32 nUnknownC;
+    UINT16 nLenB;
+    UINT16 nLenC;
+    UINT16 nLenD;
+
+    *xVBAProject >> nLidA >> nLidB >> nUnknownA >> nLenA >> nUnknownB;
+    *xVBAProject >> nUnknownC >> nLenB >> nLenC >> nLenD;
+
+    if (nLenD != 0x02)
+    {
         DBG_WARNING("Warning VBA number is different, please report");
+        return 0;
+    }
 
-    //*pOut << "Other strings after the middle are..." << endl;
-    //There appears to be almost any number of strings acceptable
-    //most begin with */G , and sometimes with
-    //*/C. Those with G always have a trailer of 12 bytes, those
-    //with C come in pairs, the first with no trailer, and the
-    //second with one of 12 bytes. The following code attemts
-    //to read these strings and ends when it reaches a sequence of
-    //bytes which fails a test to be a valid string. So this
-    //while loop here is the particular piece of code which is
-    //very suspect and likely to be the cause of any crashes and
-    //problems.
-    int nCount=0;
-    BYTE nType;
-    while ((nType = ReadPString(xVBAProject)) != 0)
+    /*
+    There appears to be a number of strings, the total of nLenB and nLenC,
+    most begin with *G , but sometimes with *C. If a string begins with C, it
+    is really two (counts as one for the nI index), one right after the other.
+    Each string then has a 12 bytes suffix
+    */
+    for (UINT16 nI = 0; nI < nLenB + nLenC; nI++)
     {
-        //*pOut << endl;
-        //*pOut << "testcharacter is " << testc << endl;
-        switch (nType)
+        BYTE nType;
+        nType = ReadPString(xVBAProject,bIsUnicode);
+        if (nType == 'C' || nType == 'D')
         {
-            case 'C':
-                nCount++;
-                if (nCount == 2)
-                {
-                    Confirm12Zeros(xVBAProject);
-                    nCount=0;
-                }
-                break;
-            default:
-  //            case 'G':
-                Confirm12Zeros(xVBAProject);
-                break;
+            nType = ReadPString(xVBAProject,bIsUnicode);
+            DBG_ASSERT( nType == 'C' || nType == 'D',
+                "VBA: This must be a 'C' or 'D' string!" );
+            if (nType != 'C' && nType != 'D')
+                return 0;
         }
+        DBG_ASSERT( nType, "VBA: Bad String in VBA Project, panic!!" );
+        if (!nType)
+            return 0;
+        xVBAProject->SeekRel(12);
     }
 
-    //appears to be a fixed 20 byte sequence here, and then the strings
-    //continue
-    ConfirmFixedMiddle(xVBAProject);
+    SkipTrickyMac(xVBAProject);
 
-    nCount=0;
+    INT16 nInt16s;
+    *xVBAProject >> nInt16s;
+    DBG_ASSERT( nInt16s, "VBA: Bad String in VBA Project, panic!!" );
+    if (!nInt16s)
+        return 0;
 
-    while ((nType = ReadPString(xVBAProject)) != 0)
+    xVBAProject->SeekRel(2*nInt16s);
+
+    INT16 nInt32s;
+    *xVBAProject >> nInt32s;
+    DBG_ASSERT( nInt32s, "VBA: Bad String in VBA Project, panic!!" );
+    if (!nInt32s)
+        return 0;
+    xVBAProject->SeekRel(4*nInt32s);
+
+    xVBAProject->SeekRel(2);
+    for(int k=0;k<3;k++)
     {
-        //*pOut << endl;
-        //*pOut << "testcharacter is " << testc << endl;
-        switch (nType)
-        {
-            case 'C':
-                nCount++;
-                if (nCount == 2)
-                {
-                    Confirm12Zeros(xVBAProject);
-                    nCount=0;
-                }
-                break;
-            default:
-//          case 'G':
-                Confirm12Zeros(xVBAProject);
-                break;
-        }
+        UINT16 nLen;
+        *xVBAProject >> nLen;
+        if (nLen != 0xFFFF)
+            xVBAProject->SeekRel(nLen);
     }
-
-    //there *may* be another different 20byte fixed string
-    ConfirmFixedMiddle2(xVBAProject);
-
-    //*pOut << "testc is " << testc << endl;
-    //*pOut << "position is " << xVBAProject->Tell() << endl;
-
-    UINT16 nModules;
-    *xVBAProject >> nModules;
-
-    //begin section, this section isn't really 100% correct
-    //*pOut << nModules << hex << " vba modules" << endl;
-    xVBAProject->SeekRel(2*nModules);
-    xVBAProject->SeekRel(4);
-    //*pOut << "position is " << xVBAProject->Tell() << endl;
-    ConfirmFixedOctect(xVBAProject);
-
-    UINT16 nJunkSize;
-    *xVBAProject >> nJunkSize;
-    while(nJunkSize != 0xFFFF)
-    {
-        xVBAProject->Read(&nJunkSize,2); // usually 18 02, sometimes 1e 02
-        //but sometimes its a run of numbers until 0xffff, gagh!!!
-        //*pOut << "position is " << xVBAProject->Tell() << "len is "
-        //  << nJunkSize << endl;
-    }
-
-    UINT16 nFTest;
-    *xVBAProject >> nFTest;
-    if (nFTest != 0xFFFF)
-        xVBAProject->SeekRel(nFTest);
-    *xVBAProject >> nFTest;
-    if (nFTest != 0xFFFF)
-        xVBAProject->SeekRel(nFTest);
-
-    xVBAProject->SeekRel(100);
-    //*pOut << "position is " << xVBAProject->Tell() << endl;
-    //end section
+    xVBAProject->SeekRel(100); //Seems fixed len
 
     *xVBAProject >> nOffsets;
+    DBG_ASSERT( nOffsets != 0xFFFF, "VBA: Bad nOffsets, panic!!" );
+    if (nOffsets == 0xFFFF)
+        return 0;
     pOffsets = new VBAOffset_Impl[ nOffsets ];
+
     int i, j;
     for( i=0; i < nOffsets; i++)
     {
         UINT16 nLen;
         *xVBAProject >> nLen;
 
-        sal_Unicode* pBuf = pOffsets[i].sName.AllocBuffer( nLen / 2 );
-        xVBAProject->Read( (sal_Char*)pBuf, nLen  );
+        if (bIsUnicode)
+        {
+            sal_Unicode* pBuf = pOffsets[i].sName.AllocBuffer( nLen / 2 );
+            xVBAProject->Read( (sal_Char*)pBuf, nLen  );
 
 #ifdef __BIGENDIAN
-        for( j = 0; j < nLen / 2; ++j, ++pBuf )
-            *pBuf = SWAPLONG( *pBuf );
+            for( j = 0; j < nLen / 2; ++j, ++pBuf )
+                *pBuf = SWAPLONG( *pBuf );
 #endif // ifdef __BIGENDIAN
+        }
+        else
+        {
+            ByteString aByteStr;
+            sal_Char*  pByteData = aByteStr.AllocBuffer( nLen );
+            sal_Size nWasRead = xVBAProject->Read( pByteData, nLen );
+            if( nWasRead != nLen )
+                aByteStr.ReleaseBufferAccess();
+            pOffsets[i].sName += String( aByteStr, eCharSet);
+        }
 
         *xVBAProject >> nLen;
         xVBAProject->SeekRel( nLen );
@@ -373,29 +349,14 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
         }
         else
             xVBAProject->SeekRel( nLen+2 );
-        //
-        /* I have a theory that maybe you read a 16bit len, and
-         * if it has 0x02 for the second byte then it is a special
-         * token of its own that affects nothing else, otherwise
-         * it is a len of the following data. C. I must test this
-         * theory later.
-         */
-        //end section
-
-        //begin section, another problem area
-        /*
-        The various 0xFFFF seems to be makers that a particular
-        field is empty, though without having enough example of
-        what the fields are its difficult to determine where
-        they appear in the records
-        */
 
         *xVBAProject >> nLen;
+        DBG_ASSERT( nLen == 0xFFFF, "VBA: Bad field in VBA Project, panic!!" );
         if ( nLen != 0xFFFF)
-            xVBAProject->SeekRel( nLen );
+            return 0;
 
         xVBAProject->SeekRel(6);
-        USHORT nOctects;
+        UINT16 nOctects;
         *xVBAProject >> nOctects;
         for(j=0;j<nOctects;j++)
             xVBAProject->SeekRel(8);
@@ -404,7 +365,6 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
         //end section
 
         *xVBAProject >> pOffsets[i].nOffset;
-        //*pOut << pOffsets[i].pName.GetStr() << " at 0x" << hex << pOffsets[i].nOffset << endl;
         xVBAProject->SeekRel(2);
     }
 
@@ -469,15 +429,25 @@ const StringArray &VBA_Impl::Decompress(UINT16 nIndex, int *pOverflow)
          */
         if (bCommented)
         {
-            for(int i=0;i<aVBAStrings.GetSize();i++)
+            String sTempStringa;
+            String sTempStringb;
+            if (eCharSet == RTL_TEXTENCODING_MS_1252)
             {
-                String sTempStringa(
-                    RTL_CONSTASCII_STRINGPARAM("\x0D\x0A"),
-                    RTL_TEXTENCODING_MS_1252);
-                String sTempStringb(
-                    RTL_CONSTASCII_STRINGPARAM("\x0D\x0A"),
-                    RTL_TEXTENCODING_MS_1252);
-                sTempStringb+=sComment;
+                sTempStringa = String( RTL_CONSTASCII_STRINGPARAM("\x0D\x0A"),
+                    eCharSet);
+                sTempStringb = String( RTL_CONSTASCII_STRINGPARAM("\x0D\x0A"),
+                    eCharSet);
+            }
+            else
+            {
+                sTempStringa = String( RTL_CONSTASCII_STRINGPARAM("\x0D"),
+                    eCharSet);
+                sTempStringb = String( RTL_CONSTASCII_STRINGPARAM("\x0D"),
+                    eCharSet);
+            }
+            sTempStringb+=sComment;
+            for(ULONG i=0;i<aVBAStrings.GetSize();i++)
+            {
                 aVBAStrings.Get(i)->SearchAndReplaceAll(
                     sTempStringa,sTempStringb);
                 aVBAStrings.Get(i)->Insert(sComment,0);

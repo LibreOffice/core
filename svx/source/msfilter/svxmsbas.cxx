@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:22 $
+ *  last change: $Author: cmc $ $Date: 2001-06-15 14:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                 //const String &sBasicModule = aVBA.GetStreamName( i);
                 const String sBasicModule(sByteBasic,
                     RTL_TEXTENCODING_ASCII_US);
-                for(INT32 j=0;j<aDecompressed.GetSize();j++)
+                for(ULONG j=0;j<aDecompressed.GetSize();j++)
                     {
                     String sModule(sBasicModule);
                     if (j>0)
@@ -177,14 +177,15 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                         xub_StrLen nBegin, nEnd;
                         static const sal_Char sAttribute[] = "Attribute";
 
+                        String *pStr = aDecompressed.Get(j);
                         while( STRING_NOTFOUND != (nBegin =
-                                aDecompressed.Get(j)->SearchAscii(sAttribute)))
+                                pStr->SearchAscii(sAttribute)))
                         {
-                            nEnd = aDecompressed.Get(j)->Search('\n',nBegin);
-                            nBegin = aDecompressed.Get(j)->SearchBackward('\n',nBegin);
+                            nEnd = pStr->Search('\x0D',nBegin);
+                            nBegin = pStr->SearchBackward('\x0D',nBegin);
                             if( STRING_NOTFOUND == nBegin )
                                 nBegin=0;
-                            aDecompressed.Get(j)->Erase(nBegin,nEnd-nBegin+1);
+                            pStr->Erase(nBegin,nEnd-nBegin+1);
                         }
                     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-16 16:14:31 $
+ *  last change: $Author: cmc $ $Date: 2001-06-15 14:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ const uno::Reference< container::XIndexContainer >&
 
             // Das Formular bekommt einen Namen wie "WW-Standard[n]" und
             // wird in jedem Fall neu angelegt.
-            UniString sName( sWW8_form, RTL_TEXTENCODING_ASCII_US );
+            UniString sName( sWW8_form, RTL_TEXTENCODING_MS_1252 );
             sal_uInt16 n = 0;
 
             while( xNameCont->hasByName( sName ) )
@@ -444,7 +444,7 @@ sal_Bool OCX_CommandButton::Import(
 
     if (pCaption)
     {
-        UniString sTmp(pCaption,RTL_TEXTENCODING_ASCII_US);
+        UniString sTmp(pCaption,RTL_TEXTENCODING_MS_1252);
         OUString sStr = sTmp;
         aTmp.setValue(&sStr,getCppuType((OUString *)0));
         xPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
@@ -506,7 +506,7 @@ sal_Bool OCX_CommandButton::WriteContents(SvStorageStreamRef &rContents,
         *rContents << nCaptionLen;
         Align(rContents,4,TRUE);
         String aTmpStr(*pStr);
-        ByteString sByte(aTmpStr,RTL_TEXTENCODING_ASCII_US);
+        ByteString sByte(aTmpStr,RTL_TEXTENCODING_MS_1252);
         rContents->Write(sByte.GetBuffer(),sByte.Len());
     }
 
@@ -735,7 +735,7 @@ sal_Bool OCX_OptionButton::Import(
 
     if (pCaption)
     {
-        UniString sTmp(pCaption,RTL_TEXTENCODING_ASCII_US);
+        UniString sTmp(pCaption,RTL_TEXTENCODING_MS_1252);
         OUString sStr = sTmp;
         aTmp.setValue(&sStr,getCppuType((OUString *)0));
         xPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
@@ -802,7 +802,7 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
         nCaptionLen |= 0x80000000;
         *rContents << nCaptionLen;
         pBlockFlags[2] |= 0x80;
-        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_ASCII_US);
+        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_MS_1252);
     }
 
     Align(rContents,4,TRUE);
@@ -987,7 +987,7 @@ sal_Bool OCX_TextBox::Import(
 
     if (pValue)
     {
-        UniString sTmp(pValue,RTL_TEXTENCODING_ASCII_US);
+        UniString sTmp(pValue,RTL_TEXTENCODING_MS_1252);
         OUString sStr = sTmp;
         aTmp.setValue(&sStr,getCppuType((OUString *)0));
         xPropSet->setPropertyValue( WW8_ASCII2STR("DefaultText"), aTmp);
@@ -1091,7 +1091,7 @@ sal_Bool OCX_TextBox::WriteContents(SvStorageStreamRef &rContents,
         nValueLen |= 0x80000000;
         *rContents << nValueLen;
         pBlockFlags[2] |= 0x40;
-        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_ASCII_US);
+        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_MS_1252);
     }
 
     Align(rContents,4,TRUE);
@@ -1245,7 +1245,7 @@ sal_Bool OCX_FieldControl::WriteContents(SvStorageStreamRef &rContents,
         nValueLen |= 0x80000000;
         *rContents << nValueLen;
         pBlockFlags[2] |= 0x40;
-        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_ASCII_US);
+        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_MS_1252);
     }
 #endif
 
@@ -1383,7 +1383,7 @@ sal_Bool OCX_ToggleButton::Import(
 
     if (pCaption)
     {
-        UniString sTmp(pCaption,RTL_TEXTENCODING_ASCII_US);
+        UniString sTmp(pCaption,RTL_TEXTENCODING_MS_1252);
         OUString sStr = sTmp;
         aTmp.setValue(&sStr,getCppuType((OUString *)0));
         xPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
@@ -1439,7 +1439,7 @@ sal_Bool OCX_Label::Import(
 
     if (pCaption)
     {
-        UniString sTmp(pCaption,RTL_TEXTENCODING_ASCII_US);
+        UniString sTmp(pCaption,RTL_TEXTENCODING_MS_1252);
         OUString sStr = sTmp;
         aTmp.setValue(&sStr,getCppuType((OUString *)0));
         xPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
@@ -1493,7 +1493,7 @@ sal_Bool OCX_ComboBox::Import(
 
     if (pValue)
         {
-            UniString sTmp(pValue,RTL_TEXTENCODING_ASCII_US);
+            UniString sTmp(pValue,RTL_TEXTENCODING_MS_1252);
             OUString sStr = sTmp;
             aTmp.setValue(&sStr,getCppuType((OUString *)0));
             xPropSet->setPropertyValue( WW8_ASCII2STR("DefaultText"), aTmp);
@@ -1592,7 +1592,7 @@ sal_Bool OCX_ComboBox::WriteContents(SvStorageStreamRef &rContents,
     if (nValueLen)
     {
         Align(rContents,4,TRUE);
-        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_ASCII_US);
+        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_MS_1252);
         nValueLen |= 0x80000000;
         *rContents << nValueLen;
         pBlockFlags[2] |= 0x40;
@@ -1727,7 +1727,7 @@ sal_Bool OCX_ListBox::Import(
 #if 0       //Don't delete this for now until I figure out if I can make this
     if (pValue)
         {
-            UniString sTmp(pValue,RTL_TEXTENCODING_ASCII_US);
+            UniString sTmp(pValue,RTL_TEXTENCODING_MS_1252);
             OUString sStr = sTmp;
             aTmp.setValue(&sStr,getCppuType((OUString *)0));
             xPropSet->setPropertyValue( WW8_ASCII2STR("DefaultText"), aTmp);
@@ -1812,7 +1812,7 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
     ByteString sByte;
     if (nValueLen)
     {
-        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_ASCII_US);
+        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_MS_1252);
         nValueLen |= 0x80000000;
         *rContents << nValueLen;
         pBlockFlags[2] |= 0x40;
@@ -2361,7 +2361,7 @@ sal_Bool OCX_Label::WriteContents(SvStorageStreamRef &rContents,
         nCaptionLen |= 0x80000000;
         *rContents << nCaptionLen;
         pBlockFlags[0] |= 0x08;
-        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_ASCII_US);
+        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_MS_1252);
     }
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Border"));
@@ -2791,7 +2791,7 @@ sal_Bool OCX_CheckBox::Import(
 
     if (pCaption)
     {
-        UniString sTmp(pCaption,RTL_TEXTENCODING_ASCII_US);
+        UniString sTmp(pCaption,RTL_TEXTENCODING_MS_1252);
         OUString sStr = sTmp;
         aTmp.setValue(&sStr,getCppuType((OUString *)0));
         xPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
@@ -2862,7 +2862,7 @@ sal_Bool OCX_CheckBox::WriteContents(SvStorageStreamRef &rContents,
         nCaptionLen |= 0x80000000;
         *rContents << nCaptionLen;
         pBlockFlags[2] |= 0x80;
-        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_ASCII_US);
+        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_MS_1252);
     }
 
     Align(rContents,4,TRUE);
@@ -3016,7 +3016,7 @@ void OCX_FontData::Import(uno::Reference< beans::XPropertySet > &rPropSet)
     uno::Any aTmp;
     if (pFontName)
     {
-        UniString sTmp(pFontName,RTL_TEXTENCODING_ASCII_US);
+        UniString sTmp(pFontName,RTL_TEXTENCODING_MS_1252);
         OUString sStr = sTmp;
         aTmp.setValue(&sStr,getCppuType((OUString *)0));
         rPropSet->setPropertyValue( WW8_ASCII2STR("FontName"), aTmp);
@@ -3052,7 +3052,7 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
         OUString *pStr = (OUString *)aTmp.getValue();
         nFontNameLen = pStr->getLength();
         if (nFontNameLen)
-            sByte = ByteString(String(*pStr),RTL_TEXTENCODING_ASCII_US);
+            sByte = ByteString(String(*pStr),RTL_TEXTENCODING_MS_1252);
     }
     if (!nFontNameLen)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:22 $
+ *  last change: $Author: cmc $ $Date: 2001-06-15 14:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,15 +99,16 @@ class VBA_Impl
 {
 public:
         VBA_Impl( SvStorage &rIn, BOOL bCmmntd = TRUE )
-            : xStor(&rIn), pOffsets(0), nOffsets(0),
-            bCommented(bCmmntd),aVBAStrings(0),nLines(0),
-            sComment(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Rem ")))
+            : xStor(&rIn), pOffsets(0), nOffsets(0), bCommented(bCmmntd),
+            aVBAStrings(0), nLines(0), sComment(String::CreateFromAscii(
+                RTL_CONSTASCII_STRINGPARAM("Rem "))),
+            eCharSet(RTL_TEXTENCODING_MS_1252)
             {}
         ~VBA_Impl()
             {
             if (nOffsets)
                 delete [] pOffsets;
-            for(int i=0;i<aVBAStrings.GetSize();i++)
+            for(ULONG i=0;i<aVBAStrings.GetSize();i++)
                 delete aVBAStrings.Get(i);
             }
         //0 for failure, 1 for success
@@ -115,10 +116,10 @@ public:
         const StringArray & Decompress(UINT16 nIndex, int *pOverflow=0);
         UINT16 GetNoStreams() const { return nOffsets; }
         const String &GetStreamName( UINT16 nIndex ) const
-            {
-                DBG_ASSERT( nIndex < nOffsets, "Index out of range" );
-                return pOffsets[ nIndex ].sName;
-            }
+        {
+            DBG_ASSERT( nIndex < nOffsets, "Index out of range" );
+            return pOffsets[ nIndex ].sName;
+        }
         virtual void Output(int len,const BYTE *data);
 private:
         struct VBAOffset_Impl
@@ -134,18 +135,15 @@ private:
         VBAOffset_Impl *pOffsets;
         UINT16 nOffsets;
         BYTE aHistory[ WINDOWLEN ];
+        rtl_TextEncoding eCharSet;
         BOOL bCommented;
         int nLines;
 
         //0 for failure, anything else for success
         int ReadVBAProject(const SvStorageRef &rxVBAStorage);
         int DecompressVBA(int index, SvStorageStreamRef &rxVBAStream);
-        void Confirm12Zeros(SvStorageStreamRef &xVBAProject);
-        void ConfirmHalfWayMarker(SvStorageStreamRef &xVBAProject);
-        void ConfirmFixedMiddle(SvStorageStreamRef &xVBAProject);
-        void ConfirmFixedMiddle2(SvStorageStreamRef &xVBAProject);
-        void ConfirmFixedOctect(SvStorageStreamRef &xVBAProject);
-        BYTE ReadPString(SvStorageStreamRef &xVBAProject);
+        BYTE ReadPString(SvStorageStreamRef &xVBAProject, BOOL bIsUnicode);
+        void SkipTrickyMac(SvStorageStreamRef &xVBAProject);
 };
 
 
