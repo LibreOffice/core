@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier_asian.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-25 04:53:14 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 16:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifndef _I18N_INDEXENTRYSUPPLIER_CJK_HXX_
 #define _I18N_INDEXENTRYSUPPLIER_CJK_HXX_
 
-#include <indexentrysupplier_default.hxx>
+#include <indexentrysupplier_common.hxx>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -70,9 +70,9 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //  class IndexEntrySupplier_CJK
 //  ----------------------------------------------------
 
-class IndexEntrySupplier_CJK : public IndexEntrySupplier_Unicode {
+class IndexEntrySupplier_CJK : public IndexEntrySupplier_Common {
 public:
-    IndexEntrySupplier_CJK( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF ) : IndexEntrySupplier_Unicode(rxMSF) {
+    IndexEntrySupplier_CJK( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF ) : IndexEntrySupplier_Common(rxMSF) {
         implementationName = "com.sun.star.i18n.IndexEntrySupplier_CJK";
     };
 
@@ -80,11 +80,6 @@ public:
         const sal_uInt16 idx1[], const sal_uInt16 idx2[]) throw (com::sun::star::uno::RuntimeException);
     virtual rtl::OUString SAL_CALL getIndexString( const sal_Unicode ch,
         const sal_uInt16 idx1[], const sal_Unicode idx2[]) throw (com::sun::star::uno::RuntimeException);
-    virtual sal_Int16 SAL_CALL compareIndexKey( const rtl::OUString& IndexEntry1,
-        const rtl::OUString& PhoneticEntry1, const com::sun::star::lang::Locale& rLocale1,
-        const rtl::OUString& IndexEntry2, const ::rtl::OUString& PhoneticEntry2,
-        const com::sun::star::lang::Locale& rLocale2 )
-        throw (com::sun::star::uno::RuntimeException);
 };
 
 #define INDEXENTRYSUPPLIER_CJK( algorithm ) \
@@ -92,10 +87,13 @@ class IndexEntrySupplier_##algorithm : public IndexEntrySupplier_CJK {\
 public:\
     IndexEntrySupplier_##algorithm (const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF) : IndexEntrySupplier_CJK (rxMSF) {\
         implementationName = "com.sun.star.i18n.IndexEntrySupplier_"#algorithm;\
-        usePhonetic = sal_False;\
     };\
     virtual rtl::OUString SAL_CALL getIndexCharacter( const rtl::OUString& rIndexEntry,\
-        const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rSortAlgorithm ) throw (com::sun::star::uno::RuntimeException);\
+        const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rSortAlgorithm ) \
+        throw (com::sun::star::uno::RuntimeException);\
+    virtual rtl::OUString SAL_CALL getIndexKey( const rtl::OUString& IndexEntry, \
+        const rtl::OUString& PhoneticEntry, const com::sun::star::lang::Locale& rLocale )\
+        throw (com::sun::star::uno::RuntimeException);\
 };
 
 #define INDEXENTRYSUPPLIER_PHONETIC( algorithm ) \
@@ -103,7 +101,6 @@ class IndexEntrySupplier_##algorithm : public IndexEntrySupplier_CJK {\
 public:\
     IndexEntrySupplier_##algorithm (const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF) : IndexEntrySupplier_CJK (rxMSF) {\
         implementationName = "com.sun.star.i18n.IndexEntrySupplier_"#algorithm;\
-        usePhonetic = sal_True;\
     };\
     virtual rtl::OUString SAL_CALL getIndexCharacter( const rtl::OUString& rIndexEntry,\
         const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rSortAlgorithm ) \
