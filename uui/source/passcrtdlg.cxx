@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passcrtdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-31 11:08:37 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,6 @@
 #include <passcrtdlg.hxx>
 #endif
 
-#define MAX_PASSWORD_LEN    ( (sal_uInt16) 16 )
-
 // PasswordCreateDialog---------------------------------------------------
 
 // -----------------------------------------------------------------------
@@ -133,7 +131,5 @@ PasswordCreateDialog::PasswordCreateDialog
     aEDPasswordCrt.SetModifyHdl( LINK( this, PasswordCreateDialog, EditHdl_Impl ) );
 
     aOKBtn.Enable( sal_False );
-    aEDPasswordCrt.SetMaxTextLen( MAX_PASSWORD_LEN );
-    aEDPasswordRepeat.SetMaxTextLen( MAX_PASSWORD_LEN );
 };
 
