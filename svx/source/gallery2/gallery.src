@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-14 18:04:51 $
+ *  last change: $Author: ka $ $Date: 2001-06-27 10:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,6 +690,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     };
     Window WND_BRSPRV
     {
+        HelpId = HID_GALLERY_PREVIEW;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 184 , 91 ) ;
         Size = MAP_APPFONT ( 70 , 88 ) ;
