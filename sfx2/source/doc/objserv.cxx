@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-23 11:47:28 $
+ *  last change: $Author: mav $ $Date: 2002-04-23 14:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,6 +379,7 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             }
 
             sfx2::FileDialogHelper aFileDlg( aDialogMode, aDialogFlags );
+            aFileDlg.CreateMatcher( GetFactory() );
 
             // fill in filter list
             for ( pFilter = aIter.First(); pFilter; pFilter = aIter.Next() )

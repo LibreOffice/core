@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-23 12:25:25 $
+ *  last change: $Author: mav $ $Date: 2002-04-23 14:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,6 +360,7 @@ public:
     OUString                getRealFilter() const;
 
     ErrCode                 getGraphic( Graphic& rGraphic ) const;
+    void                    createMatcher( const SfxObjectFactory& rFactory );
 };
 
 // ------------------------------------------------------------------------
@@ -1512,6 +1513,13 @@ void FileDialogHelper_Impl::setFilter( const OUString& rFilter )
 }
 
 // ------------------------------------------------------------------------
+void FileDialogHelper_Impl::createMatcher( const SfxObjectFactory& rFactory )
+{
+    mpMatcher = new SfxFilterMatcher( rFactory.GetFilterContainer() );
+    mbDeleteMatcher = sal_True;
+}
+
+// ------------------------------------------------------------------------
 void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
                                         const SfxObjectFactory& rFactory )
 {
@@ -1950,6 +1958,12 @@ FileDialogHelper::~FileDialogHelper()
 {
     mpImp->dispose();
     mxImp.clear();
+}
+
+// ------------------------------------------------------------------------
+void FileDialogHelper::CreateMatcher( const SfxObjectFactory& rFactory )
+{
+    mpImp->createMatcher( rFactory );
 }
 
 // ------------------------------------------------------------------------
