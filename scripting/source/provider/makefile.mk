@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dfoster $ $Date: 2002-09-20 14:33:24 $
+#   last change: $Author: npower $ $Date: 2003-07-07 14:23:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,24 +80,6 @@ SLOFILES=\
         $(SLO)$/ScriptingContext.obj\
         $(SLO)$/FunctionImpl.obj\
         $(SLO)$/FunctionProvider.obj\
-
-SHL1TARGET=	$(TARGET)
-
-SHL1STDLIBS= \
-        $(CPPULIB)		\
-        $(CPPUHELPERLIB)	\
-        $(SALLIB)
-
-# If you want our own way of debug uncomment this flag...
-# ENVCFLAGS= -DDEBUG
-
-SHL1DEPN=
-SHL1IMPLIB=	i$(TARGET)
-SHL1LIBS=	$(SLB)$/$(TARGET).lib
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=	$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
 
