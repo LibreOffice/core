@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-14 09:47:00 $
+ *  last change: $Author: ama $ $Date: 2001-04-26 10:36:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -940,26 +940,39 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
         }
         else
         {
+            const SwFrm *pUp = pFly->GetAnchor()->GetUpper();
+            pUp->Calc();
+            while( pUp->IsColumnFrm() || pUp->IsSctFrm() || pUp->IsColBodyFrm())
+                pUp = pUp->GetUpper();
+            rRect = pUp->Frm();
+            if( !pUp->IsBodyFrm() )
+            {
+                rRect += pUp->Prt().Pos();
+                rRect.SSize( pUp->Prt().SSize() );
+                if ( pUp->IsCellFrm() )
+                {
+                    const SwFrm *pTab = pUp->FindTabFrm();
+                    long nBottom = pTab->GetUpper()->Frm().Top() +
+                                   pTab->GetUpper()->Prt().Bottom();
+                    rRect.Bottom( nBottom );
+                }
+            }
+            rRect.Height( (rRect.Height()*9)/10 );
+            const SwFmt *pFmt = ((SwContact*)GetUserCall(pSdrObj))->GetFmt();
+            const SvxULSpaceItem &rUL = pFmt->GetULSpace();
             if( bMove )
             {
-                const SwFmt *pFmt = ((SwContact*)GetUserCall(pSdrObj))
-                                        ->GetFmt();
-                const SvxULSpaceItem &rUL = pFmt->GetULSpace();
-                const SwRect &rTmp = pFly->Frm();
-                long nTmpH = rUL.GetLower() + rUL.GetUpper() + rTmp.Height();
-                rRect.Width( rTmp.Width() );
-                rRect.Height( rTmp.Height() + nTmpH - 1 );
+                rRect.Width( pFly->Frm().Width() );
                 rRect.Pos( ((SwFlyInCntFrm*)pFly)->GetRefPoint().X(),
-                    ((SwFlyInCntFrm*)pFly)->GetRefPoint().Y() - nTmpH + 1 );
+                    ((SwFlyInCntFrm*)pFly)->GetRefPoint().Y() -rRect.Height() );
+                rRect.Height( 2*rRect.Height() -rUL.GetLower() -rUL.GetUpper());
             }
             else
             {
-                //Sizeable ist er bis zur Grosse der PrtArea
-                // des Uppers seines Ankers.
-                const SwFrm *pUp = pFly->GetAnchor()->GetUpper();
-                pUp->Calc();
-                rRect  = pUp->Prt();
-                rRect += pUp->Frm().Pos();
+                rRect.Pos().Y() = pFly->Frm().Top() + pFly->Frm().Height()
+                    + rUL.GetLower() - rRect.Height();
+                rRect.Height( 2*rRect.Height() - pFly->Frm().Height()
+                              - rUL.GetLower() - rUL.GetUpper() );
             }
         }
     }
@@ -970,32 +983,34 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
         const SwFmtAnchor &rAnch = pFmt->GetAnchor();
         if ( FLY_IN_CNTNT == rAnch.GetAnchorId() )
         {
+            const SwFrm *pFrm = pC->GetAnchor();
+            if( !pFrm )
+            {
+                ((SwDrawContact*)pC)->ConnectToLayout();
+                pFrm = pC->GetAnchor();
+            }
+            const SwFrm *pUp = pFrm->GetUpper();
+            pUp->Calc();
+            rRect = pUp->Prt();
+            rRect += pUp->Frm().Pos();
+            rRect.Height( (rRect.Height()*9)/10 );
+            const SvxULSpaceItem &rUL = pFmt->GetULSpace();
+            SwRect aSnapRect( pSdrObj->GetSnapRect() );
+            long nTmpH = 0;
             if( bMove )
             {
-                //Verschiebbar ist das Teil nur vertikal um seinen Ankerpunkt herum.
-                SwRect aSnapRect( pSdrObj->GetSnapRect() );
-                const SvxULSpaceItem &rUL = pFmt->GetULSpace();
-                long nTmpH = pSdrObj->GetBoundRect().GetHeight()+rUL.GetLower()+rUL.GetUpper();
                 rRect.Width( aSnapRect.Width() );
-                rRect.Height( aSnapRect.Height() + nTmpH - 1 );
                 rRect.Pos( pSdrObj->GetAnchorPos().X(),
-                           pSdrObj->GetAnchorPos().Y() - nTmpH + 1 );
+                           pSdrObj->GetAnchorPos().Y() - rRect.Height() );
             }
             else
             {
-                //Sizeable ist er bis zur Grosse der PrtArea des Uppers
-                //seines Ankers.
-                const SwFrm *pFrm = pC->GetAnchor();
-                if( !pFrm )
-                {
-                    ((SwDrawContact*)pC)->ConnectToLayout();
-                    pFrm = pC->GetAnchor();
-                }
-                const SwFrm *pUp = pFrm->GetUpper();
-                pUp->Calc();
-                rRect = pUp->Prt();
-                rRect += pUp->Frm().Pos();
+                nTmpH = pSdrObj->GetBoundRect().GetHeight();
+                rRect.Pos().Y() = aSnapRect.Top() + nTmpH
+                                  + rUL.GetLower() - rRect.Height();
             }
+            rRect.Height( 2*rRect.Height() - nTmpH
+                          - rUL.GetLower() - rUL.GetUpper() );
         }
         else
             bRet = FALSE;
