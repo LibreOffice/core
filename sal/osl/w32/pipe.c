@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:28:30 $
+ *  last change: $Author: dic $ $Date: 2001-03-09 18:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,6 +561,9 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
     {
         if (IS_NT)
         {
+            /* free instance should be available first */
+            WaitNamedPipeW(path->buffer, NMPWAIT_WAIT_FOREVER);
+
             /* first try to open system pipe */
             if ((pPipeImpl->m_File = CreateFileW(
                     path->buffer,
