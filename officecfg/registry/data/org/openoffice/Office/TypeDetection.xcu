@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-29 13:28:54 $
+ *  last change: $Author: as $ $Date: 2002-06-03 10:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1857,7 +1857,7 @@
     </node>
     <node oor:name="writer_web_HTML" oor:op="replace">
       <prop oor:name="UIName">
-        <value xml:lang="en-US">Webseite</value>
+        <value xml:lang="en-US">HTML Document</value>
       </prop>
       <prop oor:name="Data">
         <value>0,text/html,,private:factory/swriter/web*,html;htm,0,</value>
@@ -2219,30 +2219,10 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">Webseite (%productname% Writer)</value>
-        <value xml:lang="x-translate">Webseite (%productname% Writer)</value>
-        <value xml:lang="x-comment">Webseite (%productname% Writer)</value>
-        <value xml:lang="en-US">Web Page (%productname% Writer)</value>
-        <value xml:lang="pt">Página Web (%productname% Writer)</value>
-        <value xml:lang="ru">Web-страница (%productname% Writer)</value>
-        <value xml:lang="el">Webseite (%productname% Writer)</value>
-        <value xml:lang="nl">Webpagina (%productname% Writer)</value>
-        <value xml:lang="fr">Page Web (%productname% Writer)</value>
-        <value xml:lang="es">Página web (%productname% Writer)</value>
-        <value xml:lang="fi">Webseite (%productname% Writer)</value>
-        <value xml:lang="it">Pagina Web (%productname% Writer)</value>
-        <value xml:lang="da">Webseite (%productname% Writer)</value>
-        <value xml:lang="sv">Webbsida (%productname% Writer)</value>
-        <value xml:lang="pl">Strona WWW (%productname% Writer)</value>
-        <value xml:lang="pt-BR">Webseite (%productname% Writer)</value>
-        <value xml:lang="ja">Webページ (%productname% Writer)</value>
-        <value xml:lang="ko">웹페이지 (%productname% Writer)</value>
-        <value xml:lang="zh-CN">网页(%productname% Writer)</value>
-        <value xml:lang="zh-TW">網頁(%productname% Writer)</value>
-        <value xml:lang="tr">Webseite (%productname% Writer)</value>
-        <value xml:lang="ar">Webseite (%productname% Writer)</value>
-        <value xml:lang="ca">Webseite (%productname% Writer)</value>
-        <value xml:lang="th">Web Page (%productname% Writer)</value>
+        <value xml:lang="de">HTML-Dokument (%productname% Writer)</value>
+        <value xml:lang="x-translate">HTML-Document (%productname% Writer)</value>
+        <value xml:lang="x-comment">HTML-Document (%productname% Writer)</value>
+        <value xml:lang="en-US">HTML-Document (%productname% Writer)</value>
       </prop>
       <prop oor:name="Data">
         <value>24,writer_web_HTML,com.sun.star.text.TextDocument,,16451,HTML,0,,</value>
@@ -3328,30 +3308,10 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">Webseiten-Abfrage (%productname% Calc)</value>
-        <value xml:lang="x-translate">Webseiten-Abfrage (%productname% Calc)</value>
-        <value xml:lang="x-comment">Webseiten-Abfrage (%productname% Calc)</value>
-        <value xml:lang="en-US">Web Page Query (%productname% Calc)</value>
-        <value xml:lang="pt">Consulta de páginas Web (StarOffice  Calc)</value>
-        <value xml:lang="ru">Запрос Web-страницы (%productname% Calc)</value>
-        <value xml:lang="el">HTML WebQuery (StarOffice  Calc)</value>
-        <value xml:lang="nl">Webpagina-query (%productname% Calc)</value>
-        <value xml:lang="fr">Requête pages Web (%productname% Calc)</value>
-        <value xml:lang="es">Consulta de páginas web (%productname% Calc)</value>
-        <value xml:lang="fi">HTML WebQuery (StarOffice Calc)</value>
-        <value xml:lang="it">Ricerca pagina Web (%productname% Calc)</value>
-        <value xml:lang="da">HTML WebQuery (StarOffice  Calc)</value>
-        <value xml:lang="sv">Webbsidessökning (%productname% Calc)</value>
-        <value xml:lang="pl">Kwerenda stron WWW (%productname% Calc)</value>
-        <value xml:lang="pt-BR">HTML WebQuery (StarOffice  Calc)</value>
-        <value xml:lang="ja">Webページのクエリー (%productname% Calc)</value>
-        <value xml:lang="ko">웹페이지 질의 (%productname% Calc)</value>
-        <value xml:lang="zh-CN">网页查询 (%productname% Calc)</value>
-        <value xml:lang="zh-TW">網頁查詢 (%productname% Calc)</value>
-        <value xml:lang="tr">HTML WebQuery (StarOffice  Calc)</value>
-        <value xml:lang="ar">HTML WebQuery (StarOffice  Calc)</value>
-        <value xml:lang="ca">HTML WebQuery (StarOffice  Calc)</value>
-        <value xml:lang="th">แบบสอบถามเว็บเพจ (%productname% Calc)</value>
+        <value xml:lang="de">HTML-Abfrage (%productname% Calc)</value>
+        <value xml:lang="x-translate">HTML-Query (%productname% Calc)</value>
+        <value xml:lang="x-comment">HTML-Query (%productname% Calc)</value>
+        <value xml:lang="en-US">HTML-Query (%productname% Calc)</value>
       </prop>
       <prop oor:name="Data">
         <value>0,writer_web_HTML,com.sun.star.sheet.SpreadsheetDocument,,65,,0,,</value>
@@ -4092,30 +4052,10 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">Webseite (%productname% Calc)</value>
-        <value xml:lang="x-translate">Webseite (%productname% Calc)</value>
-        <value xml:lang="x-comment">Webseite (%productname% Calc)</value>
-        <value xml:lang="en-US">Web Page (%productname% Calc)</value>
-        <value xml:lang="pt">Página Web (%productname% Calc)</value>
-        <value xml:lang="ru">Web-страница (%productname% Calc)</value>
-        <value xml:lang="el">HTML (StarOffice  Calc)</value>
-        <value xml:lang="nl">Webpagina (%productname% Calc)</value>
-        <value xml:lang="fr">Page Web (%productname% Calc)</value>
-        <value xml:lang="es">Página web (%productname% Calc)</value>
-        <value xml:lang="fi">HTML (StarOffice  Calc)</value>
-        <value xml:lang="it">Pagina Web (%productname% Calc)</value>
-        <value xml:lang="da">HTML (StarOffice  Calc)</value>
-        <value xml:lang="sv">Webbsida (%productname% Calc)</value>
-        <value xml:lang="pl">Strona WWW (%productname% Calc)</value>
-        <value xml:lang="pt-BR">HTML (StarOffice  Calc)</value>
-        <value xml:lang="ja">Webページ (%productname% Calc)</value>
-        <value xml:lang="ko">웹페이지 (%productname% Calc)</value>
-        <value xml:lang="zh-CN">网页 (%productname% Calc)</value>
-        <value xml:lang="zh-TW">網頁 (%productname% Calc)</value>
-        <value xml:lang="tr">HTML (StarOffice  Calc)</value>
-        <value xml:lang="ar">HTML (StarOffice  Calc)</value>
-        <value xml:lang="ca">HTML (StarOffice  Calc)</value>
-        <value xml:lang="th">Web Page (%productname% Calc)</value>
+        <value xml:lang="de">HTML-Dokument (%productname% Calc)</value>
+        <value xml:lang="x-translate">HTML-Document (%productname% Calc)</value>
+        <value xml:lang="x-comment">HTML-Document (%productname% Calc)</value>
+        <value xml:lang="en-US">HTML-Document (%productname% Calc)</value>
       </prop>
       <prop oor:name="Data">
         <value>23,writer_web_HTML,com.sun.star.sheet.SpreadsheetDocument,,67,,0,,</value>
@@ -5715,30 +5655,10 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">Webseite</value>
-        <value xml:lang="x-translate">Webseite</value>
-        <value xml:lang="x-comment">Webseite</value>
-        <value xml:lang="en-US">Web Page</value>
-        <value xml:lang="pt">Página Web</value>
-        <value xml:lang="ru">Web-страница</value>
-        <value xml:lang="el">Webseite</value>
-        <value xml:lang="nl">Webpagina</value>
-        <value xml:lang="fr">Page Web</value>
-        <value xml:lang="es">Página web</value>
-        <value xml:lang="fi">Webseite</value>
-        <value xml:lang="it">Pagina Web</value>
-        <value xml:lang="da">Webseite</value>
-        <value xml:lang="sv">Webbsida</value>
-        <value xml:lang="pl">Strona WWW</value>
-        <value xml:lang="pt-BR">Webseite</value>
-        <value xml:lang="ja">Webページ</value>
-        <value xml:lang="ko">웹페이지</value>
-        <value xml:lang="zh-CN">网页</value>
-        <value xml:lang="zh-TW">網頁</value>
-        <value xml:lang="tr">Webseite</value>
-        <value xml:lang="ar">Webseite</value>
-        <value xml:lang="ca">Webseite</value>
-        <value xml:lang="th">Web Page</value>
+        <value xml:lang="de">HTML-Dokument</value>
+        <value xml:lang="x-translate">HTML-Document</value>
+        <value xml:lang="x-comment">HTML-Document</value>
+        <value xml:lang="en-US">HTML-Document</value>
       </prop>
       <prop oor:name="Data">
         <value>1,writer_web_HTML,com.sun.star.text.WebDocument,,268452099,HTML,0,,</value>
@@ -6667,30 +6587,10 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">%productname% 6.0 Webseiten - Vorlage</value>
-        <value xml:lang="x-translate">%productname% 6.0 Webseiten - Vorlage</value>
-        <value xml:lang="x-comment">%productname% 6.0 Webseiten - Vorlage</value>
-        <value xml:lang="en-US">%productname% 6.0 Web Pages - Template</value>
-        <value xml:lang="pt">%productname% 6.0 Modelo de páginas Web</value>
-        <value xml:lang="ru">%productname% 6.0 Шаблон Web-страниц</value>
-        <value xml:lang="el">Writer/Web 6.0 Πρότυπο</value>
-        <value xml:lang="nl">%productname% 6.0 Sjabloon voor webpagina's</value>
-        <value xml:lang="fr">%productname% 6.0 Pages Web - Modèle</value>
-        <value xml:lang="es">%productname% 6.0 Plantilla de páginas web</value>
-        <value xml:lang="fi">Writer/Web 6.0 -mallipohja</value>
-        <value xml:lang="it">%productname% 6.0 Pagina Web - Modello</value>
-        <value xml:lang="da">Writer/Web 6.0 Vorlage</value>
-        <value xml:lang="sv">%productname% 6.0 webbsidor - mall</value>
-        <value xml:lang="pl">%productname% 6.0 - Szablon stron WWW</value>
-        <value xml:lang="pt-BR">Writer/Web 6.0 Vorlage</value>
-        <value xml:lang="ja">%productname% 6.0 Webページ テンプレート</value>
-        <value xml:lang="ko">%productname% 6.0 웹페이지 - 템플릿</value>
-        <value xml:lang="zh-CN">%productname% 6.0 万维网网页样式</value>
-        <value xml:lang="zh-TW">%productname% 6.0 網頁樣式</value>
-        <value xml:lang="tr">Writer/Web 6.0 Vorlage</value>
-        <value xml:lang="ar">Writer/Web 6.0 قالب</value>
-        <value xml:lang="ca">Writer/Web 6.0 Vorlage</value>
-        <value xml:lang="th">เว็บเพจ %productname% 6.0  - แม่แบบ</value>
+        <value xml:lang="de">%productname% 6.0 HTML-Vorlage</value>
+        <value xml:lang="x-translate">%productname% 6.0 HTML-Template</value>
+        <value xml:lang="x-comment">%productname% 6.0 HTML-Template</value>
+        <value xml:lang="en-US">%productname% 6.0 HTML-Template</value>
       </prop>
       <prop oor:name="Data">
         <value>2,writer_web_StarOffice_XML_Writer_Web_Template,com.sun.star.text.WebDocument,,55,CXMLVWEB,6200,,</value>
