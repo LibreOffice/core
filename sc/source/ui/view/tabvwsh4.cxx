@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:30:55 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1627,16 +1627,21 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
     pFormShell->SetRepeatTarget( &aTarget );
     SetHelpId( HID_SCSHELL_TABVWSH );
 
-    if ( bFirstView )
-    {   // erste View?
-
-        //  Tabellen anhaengen? (nicht bei OLE)
-        if ( pDocSh->IsEmpty() &&
-                pDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+    if ( bFirstView )   // first view?
+    {
+        pDoc->SetDocVisible( TRUE );        // used when creating new sheets
+        if ( pDocSh->IsEmpty() )
         {
-            USHORT nInitTabCount = 3;                           //! konfigurierbar !!!
-            for (USHORT i=1; i<nInitTabCount; i++)
-                pDoc->MakeTable(i);
+            // set first sheet's RTL flag (following will already be initialized because of SetDocVisible)
+            pDoc->SetLayoutRTL( 0, ScGlobal::IsSystemRTL() );
+
+            // append additional sheets (not for OLE object)
+            if ( pDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+            {
+                USHORT nInitTabCount = 3;                           //! konfigurierbar !!!
+                for (USHORT i=1; i<nInitTabCount; i++)
+                    pDoc->MakeTable(i);
+            }
 
             pDocSh->ResetEmpty();           // #i6232# make sure this is done only once
         }
