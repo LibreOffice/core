@@ -2,7 +2,7 @@
     shell SfxMDIFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2002-05-27 13:49:05 $ $Revision: 1.6 $
+    $Author: mba $ $Date: 2002-08-29 12:06:18 $ $Revision: 1.7 $
     $Logfile:   T:/sfx2/sdi/mdislots.sdv  $ $Workfile:   MDISLOTS.SDI  $
 =========================================================================*/
 
@@ -13,7 +13,7 @@ interface Task : Object
 ]
 {
     //-----------------------------------------------------------------
-    SfxVoidItem CloseActiveWindow SID_CLOSEWIN ()
+    SID_CLOSEWIN
     [
             ExecMethod = Exec_Impl ;
             StateMethod = State_Impl ;
@@ -31,21 +31,21 @@ interface Task : Object
         StateMethod = State_Impl ;
     ]
     //---------------------------------------------------------------------
-    SfxBoolItem Tile SID_TILEDOCKWINS // ole(no) api(final/play/rec)
+    SID_TILEDOCKWINS // ole(no) api(final/play/rec)
     [
         ExecMethod = Exec_Impl ;
         StateMethod = State_Impl ;
     ]
 
     //---------------------------------------------------------------------
-    SfxBoolItem ArrangeHorizontal SID_HORIZONTALDOCKWINS // ole(no) api(final/play/rec)
+    SID_HORIZONTALDOCKWINS // ole(no) api(final/play/rec)
     [
         ExecMethod = Exec_Impl ;
         StateMethod = State_Impl ;
     ]
 
     //---------------------------------------------------------------------
-    SfxBoolItem ArrangeVertical SID_VERTICALDOCKWINS // ole(no) api(final/play/rec)
+    SID_VERTICALDOCKWINS // ole(no) api(final/play/rec)
     [
         ExecMethod = Exec_Impl ;
         StateMethod = State_Impl ;
