@@ -612,6 +612,8 @@ void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogic
                             , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
                             , const uno::Reference< drawing::XShapes >& xTarget )
 {
+    if(m_nDimension!=2)
+        return;
     // error bars
     uno::Reference< beans::XPropertySet > xPointProp( rVDataSeries.getPropertiesOfPoint( nPointIndex ));
     uno::Reference< beans::XPropertySet > xErrorBarProp;
@@ -631,6 +633,8 @@ void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogic
 void VSeriesPlotter::createRegressionCurvesShapes( const VDataSeries& rVDataSeries
                             , const uno::Reference< drawing::XShapes >& xTarget )
 {
+    if(m_nDimension!=2)
+        return;
     uno::Reference< XRegressionCurveContainer > xRegressionContainer(
                 rVDataSeries.getModel(), uno::UNO_QUERY );
     if(!xRegressionContainer.is())
