@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _DataSource.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:40 $
+ *  last change:$Date: 2003-09-08 10:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
 
 package ifc.sdb;
 
-import com.sun.star.beans.PropertyValue;
 import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
+
+import com.sun.star.beans.PropertyValue;
 
 /**
  * Testing <code>com.sun.star.sdb.DataSource</code>
