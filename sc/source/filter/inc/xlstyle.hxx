@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:20:44 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,11 @@ const sal_uInt16 EXC_XF8_MERGE              = 0x0020;
 
 const sal_uInt8 EXC_XF8_STACKED             = 0xFF;     /// Special rotation angle.
 
+// Diagonal Border Line Styles
+const sal_uInt32 EXC_XF_DIAGONAL_TR_TO_BL   = 0x40000000;   /// Top Right to Bottom Left.
+const sal_uInt32 EXC_XF_DIAGONAL_BL_TO_TR   = 0x80000000;   /// Bottom Left to Top Right.
+const sal_uInt32 EXC_XF_DIAGONAL_BOTH       = 0xC0000000;   /// Both.
+
 /** Horizontal alignment of cell contents. */
 enum XclHorAlign
 {
@@ -249,8 +254,10 @@ const sal_uInt16 EXC_COLOR_BIFF2_BLACK      = 0;
 const sal_uInt16 EXC_COLOR_BIFF2_WHITE      = 1;
 
 const sal_uInt16 EXC_COLOR_USEROFFSET       = 8;        ///First user defined color.
-const sal_uInt16 EXC_COLOR_WINDOWTEXT       = 64;       /// System window text color.
-const sal_uInt16 EXC_COLOR_WINDOWBACK       = 65;       /// System window background color.
+const sal_uInt16 EXC_COLOR_WINDOWTEXT3      = 24;       /// System window text color (BIFF3-BIFF4).
+const sal_uInt16 EXC_COLOR_WINDOWBACK3      = 25;       /// System window background color (BIFF3-BIFF4).
+const sal_uInt16 EXC_COLOR_WINDOWTEXT       = 64;       /// System window text color (>=BIFF5).
+const sal_uInt16 EXC_COLOR_WINDOWBACK       = 65;       /// System window background color (>=BIFF5).
 const sal_uInt16 EXC_COLOR_FONTAUTO         = 0x7FFF;   /// Font auto color (system window text color).
 
 // (0x0293) STYLE -------------------------------------------------------------
@@ -516,25 +523,6 @@ protected:
     bool                        mbAlignUsed;        /// true = alignment used.
     bool                        mbBorderUsed;       /// true = border data used.
     bool                        mbAreaUsed;         /// true = area data used.
-};
-
-
-// Page format ================================================================
-
-/** The type of a margin value. */
-enum XclMarginType
-{
-    xlLeftMargin,
-    xlRightMargin,
-    xlTopMargin,
-    xlBottomMargin
-};
-
-/** Orientation for page breaks. */
-enum XclPBOrientation
-{
-    xlPBHorizontal,
-    xlPBVertical
 };
 
 
