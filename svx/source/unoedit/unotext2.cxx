@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-14 15:55:42 $
+ *  last change: $Author: vg $ $Date: 2001-10-17 09:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,12 +203,12 @@ uno::Any SAL_CALL SvxUnoTextContent::queryInterface( const uno::Type & rType ) t
     return OWeakAggObject::queryInterface(rType);
 }
 
-void SAL_CALL SvxUnoTextContent::acquire() throw( uno::RuntimeException )
+void SAL_CALL SvxUnoTextContent::acquire() throw( )
 {
     OWeakAggObject::acquire();
 }
 
-void SAL_CALL SvxUnoTextContent::release() throw( uno::RuntimeException )
+void SAL_CALL SvxUnoTextContent::release() throw( )
 {
     OWeakAggObject::release();
 }
@@ -522,12 +522,12 @@ uno::Any SAL_CALL SvxUnoTextCursor::queryInterface( const uno::Type & rType )
     return OWeakAggObject::queryInterface(rType);
 }
 
-void SAL_CALL SvxUnoTextCursor::acquire() throw(uno::RuntimeException)
+void SAL_CALL SvxUnoTextCursor::acquire() throw ( )
 {
     OWeakAggObject::acquire();
 }
 
-void SAL_CALL SvxUnoTextCursor::release() throw(uno::RuntimeException)
+void SAL_CALL SvxUnoTextCursor::release() throw ( )
 {
     OWeakAggObject::release();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: thb $ $Date: 2001-09-20 07:55:29 $
+ *  last change: $Author: vg $ $Date: 2001-10-17 09:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,12 +612,12 @@ uno::Any SAL_CALL SvxUnoTextField::queryInterface( const uno::Type & rType )
     return OComponentHelper::queryInterface(rType);
 }
 
-void SAL_CALL SvxUnoTextField::acquire() throw(uno::RuntimeException)
+void SAL_CALL SvxUnoTextField::acquire() throw( )
 {
     OComponentHelper::acquire();
 }
 
-void SAL_CALL SvxUnoTextField::release() throw(uno::RuntimeException)
+void SAL_CALL SvxUnoTextField::release() throw( )
 {
     OComponentHelper::release();
 }
