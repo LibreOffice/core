@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: ka $ $Date: 2002-04-18 15:45:43 $
+#   last change: $Author: ka $ $Date: 2002-04-29 10:35:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ AUTOSEG=true
 CXXFILES = $(PRJ)$/util$/sd.cxx \
         inspage.cxx \
         inspagob.cxx \
+        ins_paste.obj \
         present.cxx \
         dlgctrls.cxx \
         dlgchar.cxx \
@@ -125,6 +126,7 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
 
 SRCFILES =\
     ins_page.src\
+    ins_paste.src\
     inspagob.src\
     present.src\
     dlg_char.src\
@@ -157,6 +159,7 @@ SRCFILES =\
 SLOFILES =  \
         $(SLO)$/inspage.obj \
         $(SLO)$/inspagob.obj \
+        $(SLO)$/ins_paste.obj \
         $(SLO)$/present.obj  \
         $(SLO)$/dlgctrls.obj \
         $(SLO)$/dlgchar.obj \

@@ -1,0 +1,180 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ins_paste.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: ka $ $Date: 2002-04-29 10:34:49 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "ins_paste.hrc"
+
+ModalDialog DLG_INSERT_PASTE
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 148 , 90 ) ;
+    Moveable = TRUE ;
+    Text = "Dias einf¸gen" ;
+    Text [ ENGLISH ] = "Insert slides" ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 92 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 92 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 92 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+
+    FixedLine FL_POSITION
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Text = "Position" ;
+        Text[ ENGLISH ] = "Position" ;
+        Text[ english_us ] = "Position";
+        Text[ portuguese ] = "PosiÁ„o";
+        Text[ russian ] = "œÓÎÓÊÂÌËÂ";
+        Text[ greek ] = "start_num";
+        Text[ dutch ] = "Positie";
+        Text[ french ] = "Position";
+        Text[ spanish ] = "PosiciÛn";
+        Text[ finnish ] = "Sijainti";
+        Text[ italian ] = "Posizione";
+        Text[ danish ] = "Stilling";
+        Text[ swedish ] = "Position";
+        Text[ polish ] = "Pozycja";
+        Text[ portuguese_brazilian ] = "Position";
+        Text[ japanese ] = "‰ΩçÁΩÆ";
+        Text[ korean ] = "ÏúÑÏπò";
+        Text[ chinese_simplified ] = "‰ΩçÁΩÆ";
+        Text[ chinese_traditional ] = "‰ΩçÁΩÆ";
+        Text[ turkish ] = "›˛ unvan˝";
+        Text[ arabic ] = "Start_num";
+        Text[ catalan ] = "Position";
+    };
+    RadioButton RB_BEFORE
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 80, 10 ) ;
+        Text = "da~vor" ;
+        Text [ ENGLISH ] = "~before" ;
+        Text [ norwegian ] = "~f¯r" ;
+        Text [ italian ] = "Davanti" ;
+        Text [ portuguese_brazilian ] = "~antes" ;
+        Text [ portuguese ] = "‡ ~frente" ;
+        Text [ finnish ] = "~Ennen" ;
+        Text [ danish ] = "foran" ;
+        Text [ french ] = "A~vant" ;
+        Text [ swedish ] = "~framfˆr" ;
+        Text [ dutch ] = "~ervoor" ;
+        Text [ spanish ] = "De~lante" ;
+        Text [ english_us ] = "~Before" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "‰πãÂâç(~B)";
+        Text[ russian ] = "ÔÂÂ‰";
+        Text[ polish ] = "prze~d";
+        Text[ japanese ] = "Ââç(~B)";
+        Text[ chinese_traditional ] = "‰πãÂâç(~B)";
+        Text[ arabic ] = "ﬁ»·";
+        Text[ greek ] = "–ÒÈÌ ·¸";
+        Text[ korean ] = "Ïù¥Ï†Ñ(~B)";
+        Text[ turkish ] = "ˆn~¸ne";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "De~lante";
+    };
+    RadioButton RB_AFTER
+    {
+        Pos = MAP_APPFONT ( 12, 27 ) ;
+        Size = MAP_APPFONT ( 80, 10 ) ;
+        Text = "da~hinter" ;
+        Text [ ENGLISH ] = "~behind" ;
+        Text [ norwegian ] = "~bak" ;
+        Text [ italian ] = "~Dietro" ;
+        Text [ portuguese_brazilian ] = "~atr?s" ;
+        Text [ portuguese ] = "~atr·s" ;
+        Text [ finnish ] = "~J‰lkeen" ;
+        Text [ danish ] = "efter" ;
+        Text [ french ] = "~AprËs" ;
+        Text [ swedish ] = "~bakom" ;
+        Text [ dutch ] = "e~rachter" ;
+        Text [ spanish ] = "de~tr·s" ;
+        Text [ english_us ] = "A~fter" ;
+        TabStop = TRUE ;
+        Check = TRUE ;
+        Text[ chinese_simplified ] = "‰πãÂêé(~F)";
+        Text[ russian ] = "ÔÓÒÎÂ";
+        Text[ polish ] = "za";
+        Text[ japanese ] = "Âæå(~F)";
+        Text[ chinese_traditional ] = "‰πãÂæå(~F)";
+        Text[ arabic ] = "»⁄œ";
+        Text[ greek ] = "ÏÂÙ‹ ·¸";
+        Text[ korean ] = "Ïù¥ÌõÑ(~F)";
+        Text[ turkish ] = "ar~kas˝na";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "de~tr·s";
+    };
+};
