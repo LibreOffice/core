@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-27 16:43:08 $
+ *  last change: $Author: pb $ $Date: 2002-05-30 13:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ class Menu;
 class ComboBox;
 class FormatterBase;
 class SpinField;
-
+class ToolBox;
 
 static double ImplCalcLongValue( double nValue, sal_uInt16 nDigits )
 {
@@ -1125,6 +1125,21 @@ public:
     void                SetIndexInParent( sal_Int32 nIndexInParent ) { m_nIndexInParent = nIndexInParent; }
 };
 
+//  ----------------------------------------------------
+//  class VCLXToolBox
+//  ----------------------------------------------------
+class VCLXToolBox : public VCLXWindow
+{
+private:
+
+protected:
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >
+                        CreateAccessibleContext();
+
+public:
+                        VCLXToolBox();
+                        ~VCLXToolBox();
+};
 
 #endif // _TOOLKIT_AWT_VCLXWINDOWS_HXX_
 
