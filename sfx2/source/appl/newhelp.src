@@ -35,9 +35,9 @@ Window WIN_HELP_INDEX
                 Text [ ENGLISH ] = "Contents" ;
                 Text[ english_us ] = "Contents";
                 Text[ portuguese ] = "Contents";
-                Text[ russian ] = "Contents";
+                Text[ russian ] = "Ρξδεπζθμξε";
                 Text[ greek ] = "Περιεχόμενα";
-                Text[ dutch ] = "Contents";
+                Text[ dutch ] = "Inhoud";
                 Text[ french ] = "Contenus";
                 Text[ spanish ] = "Contenidos";
                 Text[ italian ] = "Contenuti";
@@ -60,7 +60,7 @@ Window WIN_HELP_INDEX
                 Text [ ENGLISH ] = "Index" ;
                 Text[ english_us ] = "Index";
                 Text[ portuguese ] = "Index";
-                Text[ russian ] = "Index";
+                Text[ russian ] = "Θνδεκρ";
                 Text[ greek ] = "Ευρετήριο";
                 Text[ dutch ] = "Index";
                 Text[ french ] = "Index";
@@ -85,9 +85,9 @@ Window WIN_HELP_INDEX
                 Text [ ENGLISH ] = "Search" ;
                 Text[ english_us ] = "Find";
                 Text[ portuguese ] = "Search";
-                Text[ russian ] = "Search";
+                Text[ russian ] = "Οξθρκ";
                 Text[ greek ] = "Αναζήτηση";
-                Text[ dutch ] = "Search";
+                Text[ dutch ] = "Zoeken";
                 Text[ french ] = "Recherche";
                 Text[ spanish ] = "Buscar";
                 Text[ italian ] = "Cerca";
