@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-22 17:20:11 $
+ *  last change: $Author: os $ $Date: 2002-02-07 14:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #endif
 #ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
+#endif
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -265,8 +268,8 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     aRegisterCB         ( this, ResId( CB_REGISTER ) ),
     aRegisterFT         ( this, ResId( FT_REGISTER ) ),
     aRegisterLB         ( this, ResId( LB_REGISTER ) ),
-    aTextFlowBox        ( this, ResId( LB_TEXT_FLOW ) ),
     aTextFlowLbl        ( this, ResId( FT_TEXT_FLOW ) ),
+    aTextFlowBox        ( this, ResId( LB_TEXT_FLOW ) ),
 
     aInsideText         (       ResId( STR_INSIDE ) ),
     aOutsideText        (       ResId( STR_OUTSIDE ) ),
@@ -283,6 +286,12 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
 
+    SvtCJKOptions aCJKOptions;
+    if(!aCJKOptions.IsAsianTypographyEnabled())
+    {
+        aTextFlowLbl.Show(FALSE);
+        aTextFlowBox.Show(FALSE);
+    }
     Init_Impl();
 
     FieldUnit eFUnit = GetModuleFieldUnit( &rAttr );

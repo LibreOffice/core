@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-21 17:59:04 $
+ *  last change: $Author: os $ $Date: 2002-02-07 14:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,18 +332,18 @@ TabPage RID_SVXPAGE_PAGE
         Hide = TRUE ;
         StringList =
         {
-            < "Horizontal von links" ; 0; > ;
-//          < "Horizontal von rechts" ; 1; > ;
-            < "Vertikal von rechts" ; 2; > ;
-//          < "Vertikal von links" ; 3; > ;
+            < "Links-nach-rechts (horizontal)" ; 0; > ;
+            < "Rechts-nach-links (horizontal)" ; 1; > ;
+            < "Rechts-nach-links (vertical)" ; 2; > ;
+            < "Links-nach-rechts (vertical)" ; 3; > ;
 //          < "Wie die Umgebung" ; 4; > ;
         };
         StringList [ ENGLISH ] =
         {
-            < "Horizontal from left" ; 0; > ;
-//          < "Horizontal from right" ; 1; > ;
-            < "Vertical from right" ; 2; > ;
-//          < "Vertical from left" ; 3; > ;
+            < "Left-to-right (horizontal)" ; 0; > ;
+            < "Right-to-left (horizontal)" ; 1; > ;
+            < "Right-to-left (vertical)" ; 2; > ;
+            < "Left-to-right (vertical)" ; 3; > ;
 //          < "Like the environment" ; 4; > ;
         };
     };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-02 10:19:28 $
+ *  last change: $Author: os $ $Date: 2002-02-07 14:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-// include ---------------------------------------------------------------
+#pragma hdrstop
 
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
@@ -73,7 +73,6 @@
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
 #endif
-#pragma hdrstop
 
 #define ITEMID_LINESPACING  0
 #define ITEMID_ADJUST       0
@@ -89,7 +88,14 @@
 #define ITEMID_FMTKEEP      0
 #define ITEMID_PARAVERTALIGN 0
 #define _SVX_PARAGRPH_CXX   0
+#define ITEMID_PARAGRID     0
 
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
+#endif
+#ifndef _SVX_PGRDITEM_HXX
+#include <pgrditem.hxx>
+#endif
 #include "dialogs.hrc"
 #include "paragrph.hrc"
 #include "paragrph.hxx"
@@ -1043,8 +1049,11 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSe
     aLastLineFT             ( this, ResId( FT_LASTLINE ) ),
     aLastLineLB             ( this, ResId( LB_LASTLINE ) ),
     aExpandCB               ( this, ResId( CB_EXPAND ) ),
+    aSnapToGridCB           ( this, ResId( CB_SNAP ) ),
     aExampleWin             ( this, ResId( WN_EXAMPLE ) ),
+
     aVertAlignFL            ( this, ResId( FL_VERTALIGN ) ),
+    aVertAlignFT            ( this, ResId( FT_VERTALIGN ) ),
     aVertAlignLB            ( this, ResId( LB_VERTALIGN ) )
 {
     FreeResource();
@@ -1160,6 +1169,11 @@ BOOL SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
             rOutSet.Put( aAdj );
         }
     }
+    if(aSnapToGridCB.IsChecked() != aSnapToGridCB.GetSavedValue())
+    {
+        rOutSet.Put(SvxParaGridItem(aSnapToGridCB.IsChecked(), SID_ATTR_PARA_SNAPTOGRID));
+        bModified = TRUE;
+    }
     if(aVertAlignLB.GetSavedValue() != aVertAlignLB.GetSelectEntryPos())
     {
         USHORT nWhich = GetWhich( SID_PARA_VERTALIGN );
@@ -1226,6 +1240,14 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet& rSet )
         aExpandCB.Hide();
         if(!(nHtmlMode & HTMLMODE_FULL_STYLES|HTMLMODE_FIRSTLINE) )
             aJustify.Disable();
+        aSnapToGridCB.Show(FALSE);
+    }
+    nWhich = GetWhich(SID_ATTR_PARA_SNAPTOGRID);
+    eItemState = rSet.GetItemState( nWhich );
+    if ( eItemState >= SFX_ITEM_AVAILABLE )
+    {
+        const SvxParaGridItem& rSnap = (const SvxParaGridItem&)rSet.Get( nWhich );
+        aSnapToGridCB.Check(rSnap.GetValue());
     }
 
     nWhich = GetWhich( SID_PARA_VERTALIGN );
@@ -1235,11 +1257,13 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet& rSet )
     {
         aVertAlignLB.Show();
         aVertAlignFL.Show();
+        aVertAlignFT.Show();
 
         const SvxParaVertAlignItem& rAlign = (const SvxParaVertAlignItem&)rSet.Get( nWhich );
         aVertAlignLB.SelectEntryPos(rAlign.GetValue());
     }
 
+    aSnapToGridCB.SaveValue();
     aVertAlignLB.SaveValue();
     aLeft.SaveValue();
     aRight.SaveValue();
@@ -1303,6 +1327,9 @@ void SvxParaAlignTabPage::EnableJustifyExt()
     aLastLineFT.Show();
     aLastLineLB.Show();
     aExpandCB  .Show();
+    SvtCJKOptions aCJKOptions;
+    if(aCJKOptions.IsAsianTypographyEnabled())
+        aSnapToGridCB.Show();
 
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:16:45 $
+ *  last change: $Author: os $ $Date: 2002-02-07 15:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,31 +145,9 @@ TabPage RID_SVXPAGE_HEADER
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
-        Text = "~Linker Rand" ;
-        Text [ ENGLISH ] = "~Left Margin" ;
-        Text [ norwegian ] = "~Left Margin" ;
-        Text [ italian ] = "Margine sinistro" ;
-        Text [ portuguese_brazilian ] = "~Cabe?alho da Margem Esquerda" ;
-        Text [ portuguese ] = "Margem ~esquerda" ;
-        Text [ finnish ] = "~Vasen marginaali" ;
-        Text [ danish ] = "Venstre margen" ;
-        Text [ french ] = "Marge ~gauche" ;
-        Text [ swedish ] = "Vänstermargina~l" ;
-        Text [ dutch ] = "~Linker marge" ;
-        Text [ spanish ] = "Margen ~izquierdo" ;
-        Text [ english_us ] = "~Left margin" ;
+        Text = "~Rand vor Text" ;
+        Text [ ENGLISH ] = "~Margin before text" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "å·¦æ–¹é¡µè¾¹è·(~L)";
-        Text[ russian ] = "Ïîëå ñëåâà";
-        Text[ polish ] = "Lewy margines";
-        Text[ japanese ] = "å·¦ä½™ç™½(~L)";
-        Text[ chinese_traditional ] = "å·¦é‚Šæ¡†(~L)";
-        Text[ arabic ] = "ÇáåÇãÔ ÇáÃíÓÑ";
-        Text[ greek ] = "Áñéóôåñü ğåñéèşñéï";
-        Text[ korean ] = "ì™¼ìª½ ì—¬ë°±(~L)";
-        Text[ turkish ] = "S~ol kenar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Margen ~izquierdo";
     };
     MetricField ED_LMARGIN
     {
@@ -190,31 +168,9 @@ TabPage RID_SVXPAGE_HEADER
     {
         Pos = MAP_APPFONT ( 12 , 64 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
-        Text = "~Rechter Rand" ;
-        Text [ ENGLISH ] = "R~ight Margin" ;
-        Text [ norwegian ] = "R~ight Margin" ;
-        Text [ italian ] = "~Margine destro" ;
-        Text [ portuguese_brazilian ] = "Margem Direita Cabe?alho" ;
-        Text [ portuguese ] = "Margem ~direita" ;
-        Text [ finnish ] = "~Oikea marginaali" ;
-        Text [ danish ] = "Højre margen" ;
-        Text [ french ] = "Marge ~droite" ;
-        Text [ swedish ] = "Höge~rmarginal" ;
-        Text [ dutch ] = "~Rechter marge" ;
-        Text [ spanish ] = "Margen ~derecho" ;
-        Text [ english_us ] = "R~ight margin" ;
+        Text = "R~and hinter Text" ;
+        Text [ ENGLISH ] = "M~argin after text" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "å³æ–¹é¡µè¾¹è·(~I)";
-        Text[ russian ] = "Ïîëå ñïğàâà";
-        Text[ polish ] = "Prawy margines";
-        Text[ japanese ] = "å³ä½™ç™½(~I)";
-        Text[ chinese_traditional ] = "å³é‚Šæ¡†(~I)";
-        Text[ arabic ] = "ÇáåÇãÔ ÇáÃíãä";
-        Text[ greek ] = "Äåîéü ğåñéèşñéï";
-        Text[ korean ] = "ì˜¤ë¥¸ìª½ ì—¬ë°±(~I)";
-        Text[ turkish ] = "~Sağ kenar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Margen ~derecho";
     };
     MetricField ED_RMARGIN
     {

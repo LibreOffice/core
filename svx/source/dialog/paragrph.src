@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 22:23:00 $
+ *  last change: $Author: os $ $Date: 2002-02-07 14:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -868,60 +868,16 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 161 , 10 ) ;
-        Text = "Lin~ks" ;
-        Text [ ENGLISH ] = "Le~ft" ;
-        Text [ norwegian ] = "Ve~nstre" ;
-        Text [ italian ] = "Sinistro" ;
-        Text [ portuguese_brazilian ] = "Esq~uerda" ;
-        Text [ portuguese ] = "Esq~uerda" ;
-        Text [ finnish ] = "~Vasen:" ;
-        Text [ danish ] = "Venstre" ;
-        Text [ french ] = "¿ gauche" ;
-        Text [ swedish ] = "~V‰nster" ;
-        Text [ dutch ] = "L~inks" ;
-        Text [ spanish ] = "I~zquierda" ;
-        Text [ english_us ] = "~Left" ;
         Group = TRUE ;
-        Text[ chinese_simplified ] = "ÂêëÂ∑¶(~L)";
-        Text[ russian ] = "—ÎÂ‚‡";
-        Text[ polish ] = "Do ~lewej";
-        Text[ japanese ] = "Â∑¶ÊèÉ„Åà(~L)";
-        Text[ chinese_traditional ] = "ÂêëÂ∑¶(~L)";
-        Text[ arabic ] = "Ì”«—";
-        Text[ greek ] = "¡ÒÈÛÙÂÒ‹";
-        Text[ korean ] = "ÏôºÏ™Ω ÎßûÏ∂§(~L)";
-        Text[ turkish ] = "So~l";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "I~zquierda";
+        Text = "~Am Anfang des Textes" ;
+        Text [ ENGLISH ] = "At beginning o~f text" ;
     };
     RadioButton BTN_RIGHTALIGN
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 161 , 10 ) ;
-        Text = "Rech~ts" ;
-        Text [ ENGLISH ] = "Righ~t" ;
-        Text [ norwegian ] = "H¯yr~e" ;
-        Text [ italian ] = "Destro" ;
-        Text [ portuguese_brazilian ] = "Dire~ita" ;
-        Text [ portuguese ] = "~Direita" ;
-        Text [ finnish ] = "~Oikea" ;
-        Text [ danish ] = "H¯jre" ;
-        Text [ french ] = "¿ droite" ;
-        Text [ swedish ] = "Hˆge~r" ;
-        Text [ dutch ] = "Re~chts" ;
-        Text [ spanish ] = "Derecha" ;
-        Text [ english_us ] = "Righ~t" ;
-        Text[ chinese_simplified ] = "ÂêëÂè≥(~T)";
-        Text[ russian ] = "—Ô‡‚‡";
-        Text[ polish ] = "Do pra~wej";
-        Text[ japanese ] = "Âè≥ÊèÉ„Åà(~T)";
-        Text[ chinese_traditional ] = "ÂêëÂè≥(~T)";
-        Text[ arabic ] = "Ì„Ì‰";
-        Text[ greek ] = "ƒÂÓÈ‹";
-        Text[ korean ] = "Ïò§Î•∏Ï™Ω(~T)";
-        Text[ turkish ] = "Sa~";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Derecha";
+        Text = "Am Ende des ~Textes" ;
+        Text [ ENGLISH ] = "At ~end of text" ;
     };
     RadioButton BTN_CENTERALIGN
     {
@@ -1018,142 +974,16 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Hide = TRUE ;
         StringList =
         {
-            < "Links" ; Default ; > ;
+            < "Am Anfang des Textes" ; Default ; > ;
             < "Zentriert" ; Default ; > ;
             < "Blocksatz" ; Default ; > ;
         };
         StringList [ ENGLISH ] =
         {
-            < "Links" ; Default ; > ;
+            < "At beginning of text" ; Default ; > ;
             < "Zentriert" ; Default ; > ;
             < "Blocksatz" ; Default ; > ;
         };
-        stringlist [ english_us ] =
-        {
-            < "Left" ; Default ; > ;
-            < "Centered" ; Default ; > ;
-            < "Justified" ; Default ; > ;
-        };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "Links" ; Default ; > ;
-            < "Zentriert" ; Default ; > ;
-            < "Blocksatz" ; Default ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "V‰nster" ; Default ; > ;
-            < "Centrerat" ; Default ; > ;
-            < "Marginaljusterad" ; Default ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "Venstre" ; Default ; > ;
-            < "Centreret" ; Default ; > ;
-            < "Lige margener" ; Default ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "Sinistra" ; Default ; > ;
-            < "Centrato" ; Default ; > ;
-            < "Giustificato" ; Default ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "Izquierda" ; Default ; > ;
-            < "Centrado" ; Default ; > ;
-            < "Justificada" ; Default ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "¿ gauche" ; Default ; > ;
-            < "CentrÈ" ; Default ; > ;
-            < "JustifiÈ" ; Default ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "Links" ; Default ; > ;
-            < "Gecentreerd" ; Default ; > ;
-            < "Uitgelijnd" ; Default ; > ;
-        };
-        stringlist [ portuguese ] =
-        {
-            < "Esquerda" ; Default ; > ;
-            < "Centrado" ; Default ; > ;
-            < "Justificado" ; Default ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "ÂêëÂ∑¶" ; Default ; > ;
-        < "Â±Ö‰∏≠" ; Default ; > ;
-        < "Â∑¶Âè≥ÂØπÈΩê" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "—ÎÂ‚‡" ; Default ; > ;
-        < "œÓ ˆÂÌÚÛ" ; Default ; > ;
-        < "œÓ ¯ËËÌÂ" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "Do lewej" ; Default ; > ;
-        < "Do úrodka" ; Default ; > ;
-        < "Do lewej i prawej" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "Â∑¶ÊèÉ„Åà" ; Default ; > ;
-        < "‰∏≠Â§ÆÊèÉ„Åà" ; Default ; > ;
-        < "ÂùáÁ≠âÂâ≤‰ªò" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "ÂêëÂ∑¶" ; Default ; > ;
-        < "ÁΩÆ‰∏≠" ; Default ; > ;
-        < "Â∑¶Âè≥Â∞çÈΩä" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "Ì”«—" ; Default ; > ;
-        < " Ê”Ìÿ" ; Default ; > ;
-        < "÷»ÿ" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "¡ÒÈÛÙÂÒ‹" ; Default ; > ;
-        < " ÂÌÙÒ·ÒÈÛÏ›Ì·" ; Default ; > ;
-        < "–ÎﬁÒÁÚ ÛÙÔﬂ˜ÈÛÁ" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "ÏôºÏ™Ω" ; Default ; > ;
-        < "Í∞ÄÏö¥Îç∞" ; Default ; > ;
-        < "ÏñëÏ™Ω ÎßûÏ∂§" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "Sol" ; Default ; > ;
-        < "Ortala" ; Default ; > ;
-        < "›ki yana yasla" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
-            < "Izquierda" ; Default ; > ;
-        < "Centrado" ; Default ; > ;
-        < "Justificada" ; Default ; > ;
-    };
-    StringList [ finnish ] =
-    {
-            < "Vasen" ; Default ; > ;
-        < "Keskitetty" ; Default ; > ;
-        < "Tasattu" ; Default ; > ;
-    };
     };
     CheckBox CB_EXPAND
     {
@@ -1184,6 +1014,14 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ catalan ] = "E~xpandir una palabra";
         Text[ finnish ] = "~Laajenna yksitt‰inen sana";
     };
+    CheckBox CB_SNAP
+    {
+        Pos = MAP_APPFONT ( 20 , 100 ) ;
+        Size = MAP_APPFONT ( 153 , 10 ) ;
+        Hide = TRUE ;
+        Text = "Am Textraster ausrichten (wenn aktiviert)" ;
+        Text [ ENGLISH ] = "~Snap to text grid (if active)" ;
+    };
     Window WN_EXAMPLE
     {
         Border = TRUE ;
@@ -1194,34 +1032,22 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     {
         Pos = MAP_APPFONT ( 6 , 146 ) ;
         Size = MAP_APPFONT ( 173 , 8 ) ;
-        Text = "Vertikale Textausrichtung" ;
-        Text [ ENGLISH ] = "Vertical text alignment" ;
+        Text = "Text-an-Text" ;
+        Text [ ENGLISH ] = "Text-to-text" ;
         Hide = TRUE;
-        Text[ english_us ] = "Vertical text alignment";
-        Text[ portuguese ] = "Alinhamento vertical do texto";
-        Text[ russian ] = "¬˚‡‚ÌË‚‡ÌËÂ ÚÂÍÒÚ‡ ÔÓ ‚ÂÚËÍ‡ÎË";
-        Text[ greek ] = "Vertical text alignment";
-        Text[ dutch ] = "Verticale uitlijning";
-        Text[ french ] = "Alignement vertical du texte";
-        Text[ spanish ] = "AlineaciÛn vertical del texto";
-        Text[ italian ] = "Allineamento verticale testo";
-        Text[ danish ] = "Vertical text alignment";
-        Text[ swedish ] = "Vertikal textjustering";
-        Text[ polish ] = "WyrÛwnanie tekstu w pionie";
-        Text[ portuguese_brazilian ] = "Vertical text alignment";
-        Text[ japanese ] = "Á∏¶Êõ∏„Åç";
-        Text[ korean ] = "ÌÖçÏä§Ìä∏ ÏÑ∏Î°ú ÎßûÏ∂§";
-        Text[ chinese_simplified ] = "Áõ¥ÂºèÊñáÂ≠óÊñπÂêë";
-        Text[ chinese_traditional ] = "Áõ¥ÂºèÊñáÂ≠óÂ∞çÈΩä";
-        Text[ turkish ] = "Vertical text alignment";
-        Text[ arabic ] = "Vertical text alignment";
-        Text[ catalan ] = "Vertical text alignment";
-        Text[ finnish ] = "Tekstin tasaus pystysuunnassa";
+    };
+    FixedText FT_VERTALIGN
+    {
+        Pos = MAP_APPFONT ( 12 , 159 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Hide = TRUE;
+        Text = "~Ausrichtung" ;
+        Text [ ENGLISH ] = "~Alignment" ;
     };
     ListBox LB_VERTALIGN
     {
-        Pos = MAP_APPFONT ( 12 , 157 ) ;
-        Size = MAP_APPFONT ( 100 , 50 ) ;
+        Pos = MAP_APPFONT ( 105 , 157 ) ;
+        Size = MAP_APPFONT ( 70 , 50 ) ;
         DropDown = TRUE ;
         Hide = TRUE ;
         StringList =
