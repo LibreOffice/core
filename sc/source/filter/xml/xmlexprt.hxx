@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-01 14:08:43 $
+ *  last change: $Author: dr $ $Date: 2000-11-02 16:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,21 +519,6 @@ class ScXMLExport : public SvXMLExport
     sal_Bool IsAnnotationEqual(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell1,
                                 const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell2);
     sal_Bool IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell2);
-
-    // core implementation
-    void GetStringFromAddress(const ScAddress& rAddress, rtl::OUString& rString) const;
-    void GetStringFromRange(const ScRange& aRange, rtl::OUString& rString) const;
-    void AddStringFromRange(const ScRange& aRange, rtl::OUString& rString) const;
-    void GetStringFromRangeList(const ScRangeList* pRangeList, rtl::OUString& rString) const;
-
-    void GetStringFromArea(const ScArea& aArea, rtl::OUString& rString) const;
-    void AddStringFromArea(const ScArea& aArea, rtl::OUString& rString) const;
-
-    void GetStringFromRange(const com::sun::star::table::CellRangeAddress& aRange, rtl::OUString& rString) const;
-    void AddStringFromRange(const com::sun::star::table::CellRangeAddress& aRange, rtl::OUString& rString) const;
-
-    void GetStringOfFunction(::com::sun::star::sheet::GeneralFunction eFunction, rtl::OUString& rString) const;
-    void GetStringOfFunction(ScSubTotalFunc eFunction, rtl::OUString& rString) const;   // core implementation
 
     void WriteScenario();   // core implementation
     void WriteTheLabelRanges(const com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument >& xSpreadDoc);

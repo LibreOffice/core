@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-02 10:44:29 $
+ *  last change: $Author: dr $ $Date: 2000-11-02 16:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,9 +150,16 @@
 #include "dociter.hxx"
 #include "patattr.hxx"
 #include "unonames.hxx"
-#include "XMLTableMasterPageExport.hxx"
 #include "olinetab.hxx"
 #include "rangeutl.hxx"
+
+#ifndef _SC_XMLCONVERTER_HXX
+#include "XMLConverter.hxx"
+#endif
+#ifndef _SC_XMLTABLEMASTERPAGEEXPORT_HXX
+#include "XMLTableMasterPageExport.hxx"
+#endif
+
 
 const sal_Int8 SC_MAXDIGITSCOUNT_TIME = 11;
 
@@ -3256,19 +3263,14 @@ sal_Bool ScXMLExport::GetCellStyleNameIndex(const ScMyCell& aCell, sal_Int32& nS
     return sal_False;
 }
 
-rtl::OUString ScXMLExport::GetPrintRanges()
+OUString ScXMLExport::GetPrintRanges()
 {
     rtl::OUString sPrintRanges;
     uno::Reference< sheet::XPrintAreas > xPrintAreas( xCurrentTable, uno::UNO_QUERY );
     if( xPrintAreas.is() )
     {
         uno::Sequence< table::CellRangeAddress > aRangeList( xPrintAreas->getPrintAreas() );
-        sal_Int32 nCount = aRangeList.getLength();
-        for( sal_Int32 i = 0; i < nCount; i++ )
-        {
-            const table::CellRangeAddress& rRange = aRangeList[ i ];
-            AddStringFromRange( rRange, sPrintRanges );
-        }
+        ScXMLConverter::GetStringFromRangeList( sPrintRanges, aRangeList, pDoc );
     }
     return sPrintRanges;
 }
@@ -3671,139 +3673,6 @@ sal_Bool ScXMLExport::IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell
     return bIsEqual;
 }
 
-
-void ScXMLExport::GetStringFromAddress(const ScAddress& rAddress, rtl::OUString& rString) const
-{
-    String sAddress;
-    rAddress.Format( sAddress, SCA_VALID | SCA_TAB_3D, pDoc );
-    rString = sAddress;
-}
-
-void ScXMLExport::GetStringFromRange(const ScRange& aRange, rtl::OUString& rString) const
-{
-    ScAddress aStartAddress( aRange.aStart );
-    ScAddress aEndAddress( aRange.aEnd );
-    String sStartAddress;
-    String sEndAddress;
-    aStartAddress.Format( sStartAddress, SCA_VALID | SCA_TAB_3D, pDoc );
-    aEndAddress.Format( sEndAddress, SCA_VALID | SCA_TAB_3D, pDoc );
-    rtl::OUString sOUStartAddress( sStartAddress );
-    sOUStartAddress += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":" ) );
-    rtl::OUString sOUEndAddress( sEndAddress );
-    sOUStartAddress += sOUEndAddress;
-    rString = sOUStartAddress;
-}
-
-void ScXMLExport::AddStringFromRange(const ScRange& aRange, rtl::OUString& rString) const
-{
-    rtl::OUString sRangeStr;
-    GetStringFromRange( aRange, sRangeStr );
-    if( sRangeStr.getLength() )
-    {
-        if( rString.getLength() )
-            rString += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
-        rString += sRangeStr;
-    }
-}
-
-void ScXMLExport::GetStringFromRangeList(const ScRangeList* pRangeList, rtl::OUString& rString) const
-{
-    rtl::OUString sRangeListStr;
-    if( pRangeList )
-    {
-        sal_Int32 nCount = pRangeList->Count();
-        for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
-        {
-            const ScRange* pRange = pRangeList->GetObject( nIndex );
-            if( pRange )
-                AddStringFromRange( *pRange, sRangeListStr );
-        }
-    }
-    rString = sRangeListStr;
-}
-
-
-void ScXMLExport::GetStringFromArea(const ScArea& aArea, rtl::OUString& rString) const
-{
-    ScRange aRange( aArea.nColStart, aArea.nRowStart, aArea.nTab, aArea.nColEnd, aArea.nRowEnd, aArea.nTab );
-    GetStringFromRange( aRange, rString );
-}
-
-void ScXMLExport::AddStringFromArea(const ScArea& aArea, rtl::OUString& rString) const
-{
-    ScRange aRange( aArea.nColStart, aArea.nRowStart, aArea.nTab, aArea.nColEnd, aArea.nRowEnd, aArea.nTab );
-    AddStringFromRange( aRange, rString );
-}
-
-
-void ScXMLExport::GetStringFromRange(const table::CellRangeAddress& aRange, rtl::OUString& rString) const
-{
-    ScAddress aStartAddress( aRange.StartColumn, aRange.StartRow, aRange.Sheet );
-    ScAddress aEndAddress( aRange.EndColumn, aRange.EndRow, aRange.Sheet );
-    String sStartAddress;
-    String sEndAddress;
-    aStartAddress.Format( sStartAddress, SCA_VALID | SCA_TAB_3D, pDoc );
-    aEndAddress.Format( sEndAddress, SCA_VALID | SCA_TAB_3D, pDoc );
-    rtl::OUString sOUStartAddress( sStartAddress );
-    sOUStartAddress += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":" ) );
-    rtl::OUString sOUEndAddress( sEndAddress );
-    sOUStartAddress += sOUEndAddress;
-    rString = sOUStartAddress;
-}
-
-void ScXMLExport::AddStringFromRange(const table::CellRangeAddress& aRange, rtl::OUString& rString) const
-{
-    rtl::OUString sRangeStr;
-    GetStringFromRange( aRange, sRangeStr );
-    if( sRangeStr.getLength() )
-    {
-        if( rString.getLength() )
-            rString += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
-        rString += sRangeStr;
-    }
-}
-
-
-void ScXMLExport::GetStringOfFunction(sheet::GeneralFunction nFunction, rtl::OUString& rString) const
-{
-    switch (nFunction)
-    {
-        case sheet::GeneralFunction_AUTO : rString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("auto")); break;
-        case sheet::GeneralFunction_AVERAGE : rString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("average")); break;
-        case sheet::GeneralFunction_COUNT : rString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("count")); break;
-        case sheet::GeneralFunction_COUNTNUMS : rString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("countnums")); break;
-        case sheet::GeneralFunction_MAX : rString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("max")); break;
-        case sheet::GeneralFunction_MIN : rString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("min")); break;
-        case sheet::GeneralFunction_NONE : rString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("none")); break;
-        case sheet::GeneralFunction_PRODUCT : rString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("product")); break;
-        case sheet::GeneralFunction_STDEV : rString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("stdev")); break;
-        case sheet::GeneralFunction_STDEVP : rString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("stdevp")); break;
-        case sheet::GeneralFunction_SUM : rString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sum")); break;
-        case sheet::GeneralFunction_VAR : rString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("var")); break;
-        case sheet::GeneralFunction_VARP : rString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("varp")); break;
-    }
-}
-
-// core implementation
-void ScXMLExport::GetStringOfFunction(ScSubTotalFunc eFunction, rtl::OUString& rString) const
-{
-    switch( eFunction )
-    {
-        case SUBTOTAL_FUNC_NONE:    GetStringOfFunction( sheet::GeneralFunction_AUTO, rString );        break;
-        case SUBTOTAL_FUNC_AVE:     GetStringOfFunction( sheet::GeneralFunction_AVERAGE, rString );     break;
-        case SUBTOTAL_FUNC_CNT:     GetStringOfFunction( sheet::GeneralFunction_COUNT, rString );       break;
-        case SUBTOTAL_FUNC_CNT2:    GetStringOfFunction( sheet::GeneralFunction_COUNTNUMS, rString );   break;
-        case SUBTOTAL_FUNC_MAX:     GetStringOfFunction( sheet::GeneralFunction_MAX, rString );         break;
-        case SUBTOTAL_FUNC_MIN:     GetStringOfFunction( sheet::GeneralFunction_MIN, rString );         break;
-        case SUBTOTAL_FUNC_PROD:    GetStringOfFunction( sheet::GeneralFunction_PRODUCT, rString );     break;
-        case SUBTOTAL_FUNC_STD:     GetStringOfFunction( sheet::GeneralFunction_STDEV, rString );       break;
-        case SUBTOTAL_FUNC_STDP:    GetStringOfFunction( sheet::GeneralFunction_STDEVP, rString );      break;
-        case SUBTOTAL_FUNC_SUM:     GetStringOfFunction( sheet::GeneralFunction_SUM, rString );         break;
-        case SUBTOTAL_FUNC_VAR:     GetStringOfFunction( sheet::GeneralFunction_VAR, rString );         break;
-        case SUBTOTAL_FUNC_VARP:    GetStringOfFunction( sheet::GeneralFunction_VARP, rString );        break;
-    }
-}
-
 // core implementation
 void ScXMLExport::WriteScenario()
 {
@@ -3828,7 +3697,7 @@ void ScXMLExport::WriteScenario()
         AddAttribute(XML_NAMESPACE_TABLE, sXML_is_active, aBuffer.makeStringAndClear());
         const ScRangeList* pRangeList = pDoc->GetScenarioRanges(nCurrentTable);
         rtl::OUString sRangeListStr;
-        GetStringFromRangeList(pRangeList, sRangeListStr);
+        ScXMLConverter::GetStringFromRangeList( sRangeListStr, pRangeList, pDoc );
         AddAttribute(XML_NAMESPACE_TABLE, sXML_scenario_ranges, sRangeListStr);
         if (sComment.Len())
             AddAttribute(XML_NAMESPACE_TABLE, sXML_comment, rtl::OUString(sComment));
@@ -3878,10 +3747,10 @@ void ScXMLExport::WriteLabelRanges( const uno::Reference< container::XIndexAcces
         {
             OUString sRangeStr;
             table::CellRangeAddress aCellRange( xRange->getLabelArea() );
-            GetStringFromRange( aCellRange, sRangeStr );
+            ScXMLConverter::GetStringFromRange( sRangeStr, aCellRange, pDoc );
             AddAttribute( XML_NAMESPACE_TABLE, sXML_label_cell_range_address, sRangeStr );
             aCellRange = xRange->getDataArea();
-            GetStringFromRange( aCellRange, sRangeStr );
+            ScXMLConverter::GetStringFromRange( sRangeStr, aCellRange, pDoc );
             AddAttribute( XML_NAMESPACE_TABLE, sXML_data_cell_range_address, sRangeStr );
             AddAttribute( XML_NAMESPACE_TABLE, sXML_orientation, OUString::createFromAscii( bColumn ? sXML_column : sXML_row ) );
             SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE, sXML_label_range, sal_True, sal_True );
@@ -4151,7 +4020,7 @@ void ScXMLExport::WriteFilterDescriptor(const uno::Reference <sheet::XSheetFilte
             if (pDBData->GetAdvancedQuerySource(aAdvSource))
             {
                 rtl::OUString sOUCellAddress;
-                GetStringFromRange(aAdvSource, sOUCellAddress);
+                ScXMLConverter::GetStringFromRange( sOUCellAddress, aAdvSource, pDoc );
                 AddAttribute(XML_NAMESPACE_TABLE, sXML_target_range_address, sOUCellAddress);
             }
 
@@ -4434,7 +4303,7 @@ void ScXMLExport::WriteSubTotalDescriptor(const com::sun::star::uno::Reference <
                     {
                         AddAttribute(XML_NAMESPACE_TABLE, sXML_field_number, rtl::OUString::valueOf(aSubTotalColumns[j].Column));
                         rtl::OUString sFunction;
-                        GetStringOfFunction(aSubTotalColumns[j].Function, sFunction);
+                        ScXMLConverter::GetStringFromFunction( sFunction, aSubTotalColumns[j].Function );
                         AddAttribute(XML_NAMESPACE_TABLE, sXML_function, sFunction);
                         SvXMLElementExport aElemSTF(*this, XML_NAMESPACE_TABLE, sXML_subtotal_field, sal_True, sal_True);
                         CheckAttrList();
@@ -4473,7 +4342,7 @@ void ScXMLExport::WriteDatabaseRanges(const com::sun::star::uno::Reference <com:
                             AddAttribute(XML_NAMESPACE_TABLE, sXML_name, sDatabaseRangeName);
                         table::CellRangeAddress aRangeAddress = xDatabaseRange->getDataArea();
                         rtl::OUString sOUAddress;
-                        GetStringFromRange(aRangeAddress, sOUAddress);
+                        ScXMLConverter::GetStringFromRange( sOUAddress, aRangeAddress, pDoc );
                         AddAttribute (XML_NAMESPACE_TABLE, sXML_target_range_address, sOUAddress);
                         ScDBCollection* pDBCollection = pDoc->GetDBCollection();
                         sal_uInt16 nIndex;
@@ -4657,7 +4526,7 @@ void ScXMLExport::WriteDPFilter(const ScQueryParam& aQueryParam)
                 ScRange aConditionRange(aQueryParam.nCol1, aQueryParam.nRow1, aQueryParam.nTab,
                     aQueryParam.nCol2, aQueryParam.nRow2, aQueryParam.nTab);
                 rtl::OUString sConditionRange;
-                GetStringFromRange(aConditionRange, sConditionRange);
+                ScXMLConverter::GetStringFromRange( sConditionRange, aConditionRange, pDoc );
                 AddAttribute(XML_NAMESPACE_TABLE, sXML_condition_source_range_address, sConditionRange);
             }
             if (!aQueryParam.bDuplicate)
@@ -4769,7 +4638,7 @@ void ScXMLExport::WriteDataPilots(const uno::Reference <sheet::XSpreadsheetDocum
                     {
                         ScRange aOutRange = (*pDPs)[i]->GetOutRange();
                         rtl::OUString sTargetRangeAddress;
-                        GetStringFromRange(aOutRange, sTargetRangeAddress);
+                        ScXMLConverter::GetStringFromRange( sTargetRangeAddress, aOutRange, pDoc );
                         ScDocAttrIterator aAttrItr(pDoc, aOutRange.aStart.Tab(),
                             aOutRange.aStart.Col(), aOutRange.aStart.Row(),
                             aOutRange.aEnd.Col(), aOutRange.aEnd.Row());
@@ -4821,7 +4690,7 @@ void ScXMLExport::WriteDataPilots(const uno::Reference <sheet::XSpreadsheetDocum
                         {
                             const ScSheetSourceDesc* pSheetSource = (*pDPs)[i]->GetSheetDesc();
                             rtl::OUString sCellRangeAddress;
-                            GetStringFromRange(pSheetSource->aSourceRange, sCellRangeAddress);
+                            ScXMLConverter::GetStringFromRange( sCellRangeAddress, pSheetSource->aSourceRange, pDoc );
                             AddAttribute(XML_NAMESPACE_TABLE, sXML_cell_range_address, sCellRangeAddress);
                             SvXMLElementExport aElemSCR(*this, XML_NAMESPACE_TABLE, sXML_source_cell_range, sal_True, sal_True);
                             CheckAttrList();
@@ -4901,7 +4770,7 @@ void ScXMLExport::WriteDataPilots(const uno::Reference <sheet::XSpreadsheetDocum
                                 AddAttribute(XML_NAMESPACE_TABLE, sXML_used_hierarchy, sBuffer.makeStringAndClear());
                             }
                             rtl::OUString sFunction;
-                            GetStringOfFunction((sheet::GeneralFunction)pDim->GetFunction(), sFunction);
+                            ScXMLConverter::GetStringFromFunction( sFunction, (sheet::GeneralFunction) pDim->GetFunction() );
                             AddAttribute(XML_NAMESPACE_TABLE, sXML_function, sFunction);
                             SvXMLElementExport aElemDPF(*this, XML_NAMESPACE_TABLE, sXML_data_pilot_field, sal_True, sal_True);
                             CheckAttrList();
@@ -4919,7 +4788,7 @@ void ScXMLExport::WriteDataPilots(const uno::Reference <sheet::XSpreadsheetDocum
                                     for (sal_Int32 nSubTotal = 0; nSubTotal < nSubTotalCount; nSubTotal++)
                                     {
                                         rtl::OUString sFunction;
-                                        GetStringOfFunction((sheet::GeneralFunction)pDim->GetSubTotalFunc(nSubTotal), sFunction);
+                                        ScXMLConverter::GetStringFromFunction( sFunction, (sheet::GeneralFunction)pDim->GetSubTotalFunc(nSubTotal) );
                                         AddAttribute(XML_NAMESPACE_TABLE, sXML_function, sFunction);
                                         SvXMLElementExport aElemST(*this, XML_NAMESPACE_TABLE, sXML_data_pilot_subtotal, sal_True, sal_True);
                                     }
@@ -4956,18 +4825,18 @@ void ScXMLExport::WriteConsolidation()
     const ScConsolidateParam* pCons = pDoc->GetConsolidateDlgData();
     if( pCons )
     {
-        OUString aStrData;
+        OUString sStrData;
 
-        GetStringOfFunction( pCons->eFunction, aStrData );
-        AddAttribute( XML_NAMESPACE_TABLE, sXML_function, aStrData );
+        ScXMLConverter::GetStringFromFunction( sStrData, pCons->eFunction );
+        AddAttribute( XML_NAMESPACE_TABLE, sXML_function, sStrData );
 
-        aStrData = OUString();
+        sStrData = OUString();
         for( sal_Int32 nIndex = 0; nIndex < pCons->nDataAreaCount; nIndex++ )
-            AddStringFromArea( *pCons->ppDataAreas[ nIndex ], aStrData );
-        AddAttribute( XML_NAMESPACE_TABLE, sXML_source_cell_range_addresses, aStrData );
+            ScXMLConverter::GetStringFromArea( sStrData, *pCons->ppDataAreas[ nIndex ], pDoc, sal_True );
+        AddAttribute( XML_NAMESPACE_TABLE, sXML_source_cell_range_addresses, sStrData );
 
-        GetStringFromAddress( ScAddress( pCons->nCol, pCons->nRow, pCons->nTab ), aStrData );
-        AddAttribute( XML_NAMESPACE_TABLE, sXML_target_cell_address, aStrData );
+        ScXMLConverter::GetStringFromAddress( sStrData, ScAddress( pCons->nCol, pCons->nRow, pCons->nTab ), pDoc );
+        AddAttribute( XML_NAMESPACE_TABLE, sXML_target_cell_address, sStrData );
 
         if( pCons->bByCol && !pCons->bByRow )
             AddAttributeASCII( XML_NAMESPACE_TABLE, sXML_use_label, sXML_column );
