@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-16 09:39:19 $
+ *  last change: $Author: od $ $Date: 2002-10-11 11:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1140,13 +1140,20 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                     const SwFmtSurround &rSur = pFmt->GetSurround();
                     const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
                         //Nur undurchsichtige und weiter oben liegende.
-                    if( ( SURROUND_THROUGHT == rSur.GetSurround() &&
-                          ( !rSur.IsAnchorOnly() ||
-                            GetMaster() == lcl_TheAnchor( pTmp ) ||
-                            ( FLY_AT_CNTNT != rAnchor.GetAnchorId() &&
-                              FLY_AUTO_CNTNT != rAnchor.GetAnchorId() ) ) &&
-                          pTmp->GetLayer() != nHellId &&
-                          nCurrOrd < pTmp->GetOrdNum() ) )
+                    /// OD 08.10.2002 #103898# - add condition
+                    /// <!(pFly->IsBackgroundTransparent() || pFly->IsShadowTransparent())>
+                    if( !( pFly->IsBackgroundTransparent()
+                           || pFly->IsShadowTransparent() ) &&
+                        SURROUND_THROUGHT == rSur.GetSurround() &&
+                        ( !rSur.IsAnchorOnly() ||
+                          GetMaster() == lcl_TheAnchor( pTmp ) ||
+                          ( FLY_AT_CNTNT != rAnchor.GetAnchorId() &&
+                              FLY_AUTO_CNTNT != rAnchor.GetAnchorId()
+                          )
+                        ) &&
+                        pTmp->GetLayer() != nHellId &&
+                        nCurrOrd < pTmp->GetOrdNum()
+                      )
                     {
                         //Ausser der Inhalt ist Transparent
                         const SwNoTxtFrm *pNoTxt =
