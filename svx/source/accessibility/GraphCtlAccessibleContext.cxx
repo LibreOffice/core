@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-19 11:19:51 $
+ *  last change: $Author: cl $ $Date: 2002-04-19 13:00:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,9 +187,11 @@ SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
         msDescription = SVX_RESSTR( RID_SVXSTR_GRAPHCTRL_ACC_DESCRIPTION );
     }
 
+/*
     maTreeInfo.SetSdrView( mpView );
     maTreeInfo.SetWindow( mpControl );
     maTreeInfo.SetViewForwarder( const_cast<SvxGraphCtrlAccessibleContext*>(this) );
+*/
 }
 
 //-----------------------------------------------------------------------------
@@ -932,8 +934,10 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& rBC, const SfxHint& 
                         // if we already have one, return it
                         AccessibleShape* pShape = (*iter).second;
 
+/* todo
                         if( NULL != pShape )
                             pShape->CommitChange( AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT, uno::Any(), uno::Any() );
+*/
                     }
                 }
                 break;
