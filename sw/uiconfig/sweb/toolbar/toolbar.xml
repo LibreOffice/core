@@ -2,29 +2,22 @@
 <!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
  <toolbar:toolbaritem xlink:href=".uno:InsertCtrl" toolbar:helpid="helpid:52822" toolbar:text="" toolbar:style="dropdown" />
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFieldCtrl" toolbar:helpid="helpid:52824" toolbar:text="" toolbar:style="dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:InsertObjCtrl" toolbar:helpid="helpid:52823" toolbar:text="" toolbar:style="dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:InsertDraw" toolbar:helpid="helpid:10244" toolbar:text="" toolbar:style="dropdown" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Text_Marquee" toolbar:helpid="10465" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:helpid="helpid:10593" toolbar:text="" toolbar:style="dropdown" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:EditGlossary" toolbar:helpid="helpid:20620" toolbar:text="" toolbar:style="dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:InsertCaptionDialog" toolbar:helpid="helpid:20310" toolbar:text="" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:InsertIndexesEntry" toolbar:helpid="helpid:20335" toolbar:text="" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:InsertReferenceField" toolbar:helpid="helpid:20313" toolbar:text="" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:ShadowCursor" toolbar:helpid="helpid:22204" toolbar:text="" />
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Spelling" toolbar:helpid="helpid:20622" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:helpid="helpid:12021" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:Hyphenate" toolbar:helpid="helpid:20605" toolbar:text="" toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:ThesaurusDialog" toolbar:helpid="helpid:20603" toolbar:text="" toolbar:visible="false" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SearchDialog" toolbar:helpid="helpid:5961" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser" toolbar:helpid="helpid:6660" toolbar:text="" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:helpid="helpid:10000" toolbar:text="" toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:ControlCodes" toolbar:helpid="helpid:20224" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:Fieldnames" toolbar:helpid="helpid:20226" toolbar:text="" toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:Graphic" toolbar:helpid="helpid:20213" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:BrowseView" toolbar:helpid="helpid:6313" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:PrintLayout" toolbar:helpid="helpid:20237" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:SourceView" toolbar:helpid="helpid:52825" toolbar:text="" />
 </toolbar:toolbar>
