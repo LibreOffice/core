@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-27 15:23:12 $
+ *  last change: $Author: cl $ $Date: 2001-06-27 16:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -806,6 +806,7 @@ SvXMLExportPropertyMapper* XMLShapeExport::CreateShapePropMapper(
         new XMLShapeExportPropertyMapper( xMapper,
                                           (XMLTextListAutoStylePool*)&rExport.GetTextParagraphExport()->GetListAutoStylePool(),
                                           rExport );
+    ((XMLShapeExportPropertyMapper*)pResult)->SetAutoStyles( sal_True );
     // chain text attributes
     return pResult;
 }
