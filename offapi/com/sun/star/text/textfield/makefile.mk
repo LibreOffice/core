@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: os $ $Date: 2001-12-21 10:51:41 $
+#   last change: $Author: os $ $Date: 2002-01-09 08:18:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,18 +73,43 @@ PACKAGE=com$/sun$/star$/text$/textfield
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    Annotation.idl\
     Author.idl\
     Bibliography.idl\
-    DateTime.idl\
+    Chapter.idl\
+    CharacterCount.idl\
+    CombinedCharacters.idl\
     ConditionalText.idl\
+    Database.idl\
+    DatabaseName.idl\
+    DatabaseNextSet.idl\
+    DatabaseNumberOfSet.idl\
+    DatabaseSetNumber.idl\
+    DateTime.idl\
+    EmbeddedObjectCount.idl\
+    ExtendedUser.idl\
+    FileName.idl\
+    GetExpression.idl\
+    GetReference.idl\
+    GraphicObjectCount.idl\
     HiddenParagraph.idl\
     HiddenText.idl\
     Input.idl\
     InputUser.idl\
-    GetReference.idl\
+    JumpEdit.idl\
+    Macro.idl\
+    PageCount.idl\
     PageNumber.idl\
+    ParagraphCount.idl\
+    ReferencePageGet.idl\
+    ReferencePageSet.idl\
+    Script.idl\
+    SetExpression.idl\
+    TableCount.idl\
     TableFormula.idl\
+    TemplateName.idl\
     User.idl\
+    WordCount.idl\
 
 # ------------------------------------------------------------------
 
