@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinstall.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 16:47:04 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:26:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,8 +275,7 @@ namespace desktop {
             // get configuration provider
             Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
 
-            LanguageType aUserLanguageType = LanguageSelection::getLanguageType();
-            OUString aUserLanguage = ConvertLanguageToIsoString(aUserLanguageType);
+            OUString aUserLanguage = LanguageSelection::getLanguageString();
 
             Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
                 theMSF->createInstance(sConfigSrvc), UNO_QUERY_THROW);
