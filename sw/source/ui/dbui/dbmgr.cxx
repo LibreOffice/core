@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2001-06-19 11:18:21 $
+ *  last change: $Author: os $ $Date: 2001-06-25 14:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1720,37 +1720,6 @@ sal_Bool SwNewDBMgr::ToRecordId(sal_Int32 nSet)
         pMergeData->CheckEndOfDB();
     }
     return bRet;
-}
-/* -----------------------------17.07.00 11:14--------------------------------
-
- ---------------------------------------------------------------------------*/
-BOOL    SwNewDBMgr::ShowInBeamer(const String& rDBName, const String& rTableName,
-                                            BYTE nType, const String& rStatement)
-{
-    SwView* pView = SW_MOD()->GetView();
-    SfxViewFrame* pFrame = pView->GetViewFrame();
-    Reference<XFrame> xFrame = pFrame->GetFrame()->GetFrameInterface();
-    Reference<XDispatchProvider> xDP(xFrame, UNO_QUERY);
-     util::URL aURL;
-    aURL.Complete = C2U(".component:DB/DataSourceBrowser");
-    Reference<XDispatch> xD = xDP->queryDispatch(aURL,
-                C2U("_beamer"),
-                 0x0C);
-    if (xD.is())
-    {
-        Sequence<PropertyValue> aProperties(3);
-        PropertyValue* pProperties = aProperties.getArray();
-        pProperties[0].Name = C2U("DataSourceName");
-        pProperties[0].Value <<= OUString(rDBName);
-        pProperties[1].Name = C2U("Command");
-        pProperties[1].Value <<= OUString(rTableName);
-        pProperties[2].Name = C2U("CommandType");
-        pProperties[2].Value <<= (sal_Int16)SW_DB_SELECT_QUERY == nType ? CommandType::QUERY : CommandType::TABLE;
-        xD->dispatch(aURL, aProperties);
-    }
-    else
-        DBG_ERROR("SwNewDBMgr::ShowInBeamer: no dispatcher for the database URL!");
-    return TRUE;
 }
 /* -----------------------------17.07.00 14:50--------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodispatch.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-03-13 13:10:03 $
+ *  last change: $Author: os $ $Date: 2001-06-25 14:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 #include "wrtsh.hxx"
 #include "dbmgr.hxx"
 
+#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
+#include <svx/dataaccessdescriptor.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #endif
@@ -98,6 +102,7 @@ const char* cURLStart           = ".uno:DataSourceBrowser/";
 const char* cURLFormLetter      = ".uno:DataSourceBrowser/FormLetter";
 const char* cURLInsertContent   = ".uno:DataSourceBrowser/InsertContent";//data into fields
 const char* cURLInsertColumns   = ".uno:DataSourceBrowser/InsertColumns";//data into text
+const char* cURLDocumentDataSource  = ".uno:DataSourceBrowser/DocumentDataSource";//current data source of the document
 
 /*-- 07.11.00 13:25:51---------------------------------------------------
 
@@ -140,7 +145,8 @@ Reference< XDispatch > SwXDispatchProviderInterceptor::queryDispatch(
     {
         if(!aURL.Complete.compareToAscii(cURLFormLetter) ||
             !aURL.Complete.compareToAscii(cURLInsertContent) ||
-                !aURL.Complete.compareToAscii(cURLInsertColumns))
+                !aURL.Complete.compareToAscii(cURLInsertColumns)||
+                    !aURL.Complete.compareToAscii(cURLDocumentDataSource))
         {
             if(!m_xDispatch.is())
                 m_xDispatch = new SwXDispatch(m_rView);
@@ -267,6 +273,10 @@ void SwXDispatch::dispatch(
     {
         pNewDBMgr->ExecuteFormLetter(rSh, aArgs);
     }
+    else if (aURL.Complete.compareToAscii(cURLDocumentDataSource))
+    {
+        OSL_ENSURE(sal_False, "SwXDispatch::dispatch: this URL is not to be dispatched!");
+    }
     else
         throw RuntimeException();
 
@@ -290,6 +300,22 @@ void SwXDispatch::addStatusListener(
     aEvent.IsEnabled = bEnable;
     aEvent.Source = *(cppu::OWeakObject*)this;
     aEvent.FeatureURL = aURL;
+
+    // one of the URLs requires a special state ....
+    if (!aURL.Complete.compareToAscii(cURLDocumentDataSource))
+    {
+        const SwDBData& rData = m_pView->GetWrtShell().GetDBDesc();
+
+        ::svx::ODataAccessDescriptor aDescriptor;
+        aDescriptor[::svx::daDataSource]    <<= rData.sDataSource;
+        aDescriptor[::svx::daCommand]       <<= rData.sCommand;
+        aDescriptor[::svx::daCommandType]   <<= rData.nCommandType;
+
+        aEvent.State <<= aDescriptor.createPropertyValueSequence();
+        aEvent.IsEnabled = rData.sDataSource.getLength() > 0;
+    }
+
+
     xControl->statusChanged( aEvent );
 
     StatusListenerList::iterator aListIter = m_aListenerList.begin();
@@ -353,7 +379,9 @@ void SwXDispatch::selectionChanged( const EventObject& aEvent ) throw(RuntimeExc
         {
             StatusStruct_Impl aStatus = *aListIter;
             aEvent.FeatureURL = aStatus.aURL;
-            aStatus.xListener->statusChanged( aEvent );
+            if (0 != aStatus.aURL.Complete.compareToAscii(cURLDocumentDataSource))
+                // the document's data source does not depend on the selection, so it's state does not change here
+                aStatus.xListener->statusChanged( aEvent );
         }
     }
 }
