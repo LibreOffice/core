@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-26 10:33:01 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,6 +594,7 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
  ---------------------------------------------------------------------------*/
 BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR1:
@@ -648,6 +649,7 @@ BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, BYTE nMId ) const
  ---------------------------------------------------------------------------*/
 BOOL    SwAuthorityFieldType::PutValue( const Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     sal_Bool bRet = TRUE;
     String sTmp;
     switch( nMId )
@@ -881,6 +883,7 @@ const char* aFieldNames[] =
  ---------------------------------------------------------------------------*/
 BOOL    SwAuthorityField::QueryValue( Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     if(!GetTyp())
         return FALSE;
     const SwAuthEntry* pAuthEntry = ((SwAuthorityFieldType*)GetTyp())->GetEntryByHandle(nHandle);
@@ -913,6 +916,7 @@ sal_Int16 lcl_Find(const OUString& rFieldName)
 //----------------------------------------------------------------------------
 BOOL    SwAuthorityField::PutValue( const Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     if(!GetTyp() || !((SwAuthorityFieldType*)GetTyp())->GetEntryByHandle(nHandle))
         return FALSE;
 

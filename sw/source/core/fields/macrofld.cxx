@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrofld.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-26 11:08:57 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,7 @@ String SwMacroField::GetPar2() const
 --------------------------------------------------*/
 BOOL SwMacroField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR1:
@@ -216,6 +217,7 @@ BOOL SwMacroField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 BOOL SwMacroField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
     String sTmp;
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR1:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2002-01-18 09:45:07 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,6 +381,7 @@ sal_uInt16 SwPageNumberField::GetSubType() const
 --------------------------------------------------*/
 BOOL SwPageNumberField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_FORMAT:
@@ -416,6 +417,7 @@ BOOL SwPageNumberField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
     BOOL bRet = TRUE;
     sal_Int16 nSet;
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_FORMAT:
@@ -515,6 +517,7 @@ SwField* SwAuthorField::Copy() const
 BOOL SwAuthorField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
     sal_Bool bVal;
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_BOOL1:
@@ -541,6 +544,7 @@ BOOL SwAuthorField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 --------------------------------------------------*/
 BOOL SwAuthorField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_BOOL1:
@@ -659,6 +663,7 @@ SwField* SwFileNameField::Copy() const
 --------------------------------------------------*/
 BOOL SwFileNameField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_FORMAT:
@@ -701,6 +706,7 @@ BOOL SwFileNameField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 --------------------------------------------------*/
 BOOL SwFileNameField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_FORMAT:
@@ -830,6 +836,7 @@ SwField* SwTemplNameField::Copy() const
 --------------------------------------------------*/
 BOOL SwTemplNameField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch ( nMId )
     {
     case FIELD_PROP_FORMAT:
@@ -858,6 +865,7 @@ BOOL SwTemplNameField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 --------------------------------------------------*/
 BOOL SwTemplNameField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     switch ( nMId )
     {
     case FIELD_PROP_FORMAT:
@@ -985,6 +993,7 @@ void SwDocStatField::ChangeExpansion( const SwFrm* pFrm )
 --------------------------------------------------*/
 BOOL SwDocStatField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch ( nMId )
     {
     case FIELD_PROP_USHORT2:
@@ -1001,6 +1010,7 @@ BOOL SwDocStatField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 BOOL SwDocStatField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
     BOOL bRet = FALSE;
+    nMId &= ~CONVERT_TWIPS;
     switch ( nMId )
     {
     case FIELD_PROP_USHORT2:
@@ -1256,6 +1266,7 @@ void SwDocInfoField::SetLanguage(sal_uInt16 nLng)
  ---------------------------------------------------------------------------*/
 BOOL SwDocInfoField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR1:
@@ -1303,6 +1314,7 @@ BOOL SwDocInfoField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 BOOL SwDocInfoField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
     sal_Int32 nValue;
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR1:
@@ -1602,6 +1614,7 @@ sal_uInt16 SwHiddenTxtField::GetSubType() const
 BOOL SwHiddenTxtField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
     const String* pOut = 0;
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR1:
@@ -1631,6 +1644,7 @@ BOOL SwHiddenTxtField::QueryValue( uno::Any& rAny, BYTE nMId ) const
  ---------------------------------------------------------------------------*/
 BOOL SwHiddenTxtField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR1:
@@ -1734,6 +1748,7 @@ SwField* SwHiddenParaField::Copy() const
 --------------------------------------------------*/
 BOOL SwHiddenParaField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch ( nMId )
     {
     case FIELD_PROP_PAR1:
@@ -1756,6 +1771,7 @@ BOOL SwHiddenParaField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 --------------------------------------------------*/
 BOOL SwHiddenParaField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     switch ( nMId )
     {
     case FIELD_PROP_PAR1:
@@ -1861,6 +1877,7 @@ String SwPostItField::GetPar2() const
 --------------------------------------------------*/
 BOOL SwPostItField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR1:
@@ -1888,6 +1905,7 @@ BOOL SwPostItField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 --------------------------------------------------*/
 BOOL SwPostItField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR1:
@@ -2006,6 +2024,7 @@ void SwExtUserField::SetSubType(sal_uInt16 nSub)
 --------------------------------------------------*/
 BOOL SwExtUserField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR1:
@@ -2034,6 +2053,7 @@ BOOL SwExtUserField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 --------------------------------------------------*/
 BOOL SwExtUserField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR1:
@@ -2126,6 +2146,7 @@ void SwRefPageSetField::SetPar2(const String& rStr)
 --------------------------------------------------*/
 BOOL SwRefPageSetField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_BOOL1:
@@ -2144,6 +2165,7 @@ BOOL SwRefPageSetField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 --------------------------------------------------*/
 BOOL SwRefPageSetField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_BOOL1:
@@ -2392,6 +2414,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
 --------------------------------------------------*/
 BOOL SwRefPageGetField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
         case FIELD_PROP_USHORT1:
@@ -2410,6 +2433,7 @@ BOOL SwRefPageGetField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 --------------------------------------------------*/
 BOOL SwRefPageGetField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
         case FIELD_PROP_USHORT1:
@@ -2527,6 +2551,7 @@ void SwJumpEditField::SetPar2(const String& rStr)
 --------------------------------------------------*/
 BOOL SwJumpEditField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_USHORT1:
@@ -2561,6 +2586,7 @@ BOOL SwJumpEditField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 --------------------------------------------------*/
 BOOL SwJumpEditField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_USHORT1:
@@ -2640,6 +2666,7 @@ void SwCombinedCharField::SetPar1(const String& rStr)
 BOOL SwCombinedCharField::QueryValue( com::sun::star::uno::Any& rAny,
                                         BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR1:
@@ -2654,6 +2681,7 @@ BOOL SwCombinedCharField::QueryValue( com::sun::star::uno::Any& rAny,
 BOOL SwCombinedCharField::PutValue( const com::sun::star::uno::Any& rAny,
                                         BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR1:

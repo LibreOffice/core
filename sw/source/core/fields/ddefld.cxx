@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddefld.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-26 11:08:57 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,6 +399,7 @@ void SwDDEFieldType::_RefCntChgd()
 BOOL SwDDEFieldType::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const
 {
     BYTE nPart = 0;
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR2:      nPart = 3; break;
@@ -423,6 +424,7 @@ BOOL SwDDEFieldType::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) con
 BOOL SwDDEFieldType::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId )
 {
     BYTE nPart = 0;
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR2:      nPart = 3; break;

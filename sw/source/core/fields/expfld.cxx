@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-26 11:08:57 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,6 +506,7 @@ void SwGetExpField::SetLanguage(USHORT nLng)
 --------------------------------------------------*/
 BOOL SwGetExpField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_DOUBLE:
@@ -545,6 +546,7 @@ BOOL SwGetExpField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 --------------------------------------------------*/
 BOOL SwGetExpField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     sal_Int32 nTmp;
     String sTmp;
     switch( nMId )
@@ -729,6 +731,7 @@ void SwSetExpFieldType::SetChapter( SwSetExpField& rFld, const SwNode& rNd )
  * --------------------------------------------------*/
 BOOL SwSetExpFieldType::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_SUBTYPE:
@@ -754,6 +757,7 @@ BOOL SwSetExpFieldType::QueryValue( uno::Any& rAny, BYTE nMId ) const
 
 BOOL SwSetExpFieldType::PutValue( const uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_SUBTYPE:
@@ -1136,6 +1140,7 @@ String SwInputField::Expand() const
 --------------------------------------------------*/
 BOOL SwInputField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR1:
@@ -1154,6 +1159,7 @@ BOOL SwInputField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 --------------------------------------------------*/
 BOOL SwInputField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR1:
@@ -1209,6 +1215,7 @@ void SwInputField::SetSubType(USHORT nSub)
 --------------------------------------------------*/
 BOOL SwSetExpField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_BOOL2:
@@ -1276,6 +1283,7 @@ BOOL SwSetExpField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 --------------------------------------------------*/
 BOOL SwSetExpField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     sal_Int32 nTmp32;
     sal_Int16 nTmp16;
     String sTmp;

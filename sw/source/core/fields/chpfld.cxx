@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chpfld.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:52:34 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,7 @@ void SwChapterField::ChangeExpansion( const SwFrm* pFrm,
 --------------------------------------------------*/
 BOOL SwChapterField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_BYTE1:
@@ -269,6 +270,7 @@ BOOL SwChapterField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) con
 BOOL SwChapterField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
 {
     BOOL bRet = TRUE;
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_BYTE1:

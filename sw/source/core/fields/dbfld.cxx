@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-10-30 09:05:23 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,7 @@ void SwDBFieldType::ReleaseRef()
  * --------------------------------------------------*/
 BOOL SwDBFieldType::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR2:
@@ -225,6 +226,7 @@ BOOL SwDBFieldType::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) cons
  * --------------------------------------------------*/
 BOOL SwDBFieldType::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR2:
@@ -508,6 +510,7 @@ void SwDBField::SetSubType(USHORT nType)
 --------------------------------------------------*/
 BOOL SwDBField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_BOOL1:
@@ -533,6 +536,7 @@ BOOL SwDBField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) const
 --------------------------------------------------*/
 BOOL SwDBField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_BOOL1:
@@ -603,6 +607,7 @@ String SwDBNameInfField::GetCntnt(BOOL bName) const
 --------------------------------------------------*/
 BOOL SwDBNameInfField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR1:
@@ -624,6 +629,7 @@ BOOL SwDBNameInfField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) c
 --------------------------------------------------*/
 BOOL SwDBNameInfField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR1:
@@ -715,6 +721,7 @@ void SwDBNextSetField::SetPar1(const String& rStr)
 --------------------------------------------------*/
 BOOL SwDBNextSetField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     BOOL bRet = TRUE;
     switch( nMId )
     {
@@ -731,6 +738,7 @@ BOOL SwDBNextSetField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 --------------------------------------------------*/
 BOOL SwDBNextSetField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     BOOL bRet = TRUE;
     switch( nMId )
     {
@@ -850,6 +858,7 @@ void SwDBNumSetField::SetPar2(const String& rStr)
 --------------------------------------------------*/
 BOOL SwDBNumSetField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     BOOL bRet = TRUE;
     switch( nMId )
     {
@@ -869,6 +878,7 @@ BOOL SwDBNumSetField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) co
 --------------------------------------------------*/
 BOOL    SwDBNumSetField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     BOOL bRet = TRUE;
     switch( nMId )
     {
@@ -1032,6 +1042,7 @@ SwField* SwDBSetNumberField::Copy() const
 BOOL SwDBSetNumberField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) const
 {
     BOOL bRet = TRUE;
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_USHORT1:
@@ -1051,6 +1062,7 @@ BOOL SwDBSetNumberField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId )
 BOOL SwDBSetNumberField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
 {
     BOOL bRet = TRUE;
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_USHORT1:

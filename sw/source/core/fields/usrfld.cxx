@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrfld.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-26 11:10:02 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,7 @@ void SwUserField::SetSubType(sal_uInt16 nSub)
 --------------------------------------------------*/
 BOOL SwUserField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_BOOL2:
@@ -213,6 +214,7 @@ BOOL SwUserField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 --------------------------------------------------*/
 sal_Bool SwUserField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_BOOL1:
@@ -400,6 +402,7 @@ void SwUserFieldType::CtrlSetContent( const String& rStr )
 --------------------------------------------------*/
 BOOL SwUserFieldType::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_DOUBLE:
@@ -424,6 +427,7 @@ BOOL SwUserFieldType::QueryValue( uno::Any& rAny, BYTE nMId ) const
 --------------------------------------------------*/
 BOOL SwUserFieldType::PutValue( const uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_DOUBLE:

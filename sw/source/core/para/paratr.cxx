@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paratr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:27:21 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,9 @@ sal_Bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     switch(nMemberId&~CONVERT_TWIPS)
     {
+        case MID_LINES : rVal <<= nLines; break;
+        case MID_CHARS : rVal <<= nChars; break;
+        case MID_DIST : rVal <<= (sal_Int16) TWIP_TO_MM100(nDistance); break;
         case MID_DROPCAP_FORMAT:
         {
              style::DropCapFormat aDrop;
@@ -282,6 +285,17 @@ sal_Bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     switch(nMemberId&~CONVERT_TWIPS)
     {
+        case MID_LINES : rVal >>= nLines; break;
+        case MID_CHARS : rVal >>= nChars; break;
+        case MID_DIST :
+        {
+            sal_Int16 nVal;
+            if ( rVal >>= nVal )
+                nDistance = (sal_Int16) MM100_TO_TWIP((sal_Int32)nVal);
+            else
+                return sal_False;
+            break;
+        }
         case MID_DROPCAP_FORMAT:
         {
             if(rVal.getValueType()  == ::getCppuType((const style::DropCapFormat*)0))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reffld.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2002-03-22 15:28:13 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,6 +569,7 @@ String SwGetRefField::GetPar2() const
 --------------------------------------------------*/
 BOOL SwGetRefField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_USHORT1:
@@ -639,6 +640,7 @@ BOOL SwGetRefField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 BOOL SwGetRefField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
     String sTmp;
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_USHORT1:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddat.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-26 11:08:57 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,7 @@ ULONG SwDateTimeField::GetTime(BOOL bUseOffset) const
 --------------------------------------------------*/
 BOOL SwDateTimeField::QueryValue( uno::Any& rVal, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_BOOL1:
@@ -348,6 +349,7 @@ BOOL SwDateTimeField::QueryValue( uno::Any& rVal, BYTE nMId ) const
 --------------------------------------------------*/
 BOOL SwDateTimeField::PutValue( const uno::Any& rVal, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     sal_Int32 nTmp;
     switch( nMId )
     {

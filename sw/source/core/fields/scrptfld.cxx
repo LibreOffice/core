@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrptfld.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-26 11:08:57 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ String SwScriptField::GetPar2() const
 --------------------------------------------------*/
 BOOL SwScriptField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR1:
@@ -163,6 +164,7 @@ BOOL SwScriptField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 --------------------------------------------------*/
 BOOL SwScriptField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
     case FIELD_PROP_PAR1:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblcalc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 11:45:14 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,7 @@ void SwTblField::SetPar2(const String& rStr)
 --------------------------------------------------*/
 BOOL SwTblField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
+    nMId &= ~CONVERT_TWIPS;
     BOOL bRet = TRUE;
     switch ( nMId )
     {
@@ -284,6 +285,7 @@ BOOL SwTblField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 --------------------------------------------------*/
 BOOL SwTblField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
+    nMId &= ~CONVERT_TWIPS;
     BOOL bRet = TRUE;
     String sTmp;
     switch ( nMId )

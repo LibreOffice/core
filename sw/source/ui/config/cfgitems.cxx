@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitems.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:57:39 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,6 +486,9 @@ int SwTestItem::operator==( const SfxPoolItem& rAttr ) const
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.5  2002/04/25 13:57:39  os
+    #97695# color configuration entries added/moved/removed
+
     Revision 1.4  2002/03/07 08:57:07  os
     #96678# enable right alignment of the vertical ruler
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfatr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2002-04-29 08:28:17 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ BOOL SwMirrorGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     sal_Bool bRet = sal_True,
          bVal;
     // Vertikal und Horizontal sind mal getauscht worden!
+    nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
         case MID_MIRROR_HORZ_EVEN_PAGES:
@@ -192,6 +193,7 @@ BOOL SwMirrorGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
     sal_Bool bRet = sal_True;
     sal_Bool bVal = *(sal_Bool*)rVal.getValue();
     // Vertikal und Horizontal sind mal getauscht worden!
+    nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
         case MID_MIRROR_HORZ_EVEN_PAGES:
