@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 18:16:53 $
+#   last change: $Author: rt $ $Date: 2004-11-26 19:47:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,7 @@ PROJECTPCH=sd
 PROJECTPCHSOURCE=$(PRJ)$/util$/sd
 PRJNAME=sd
 TARGET=core
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -83,46 +84,28 @@ SLOFILES = $(SLO)$/stlsheet.obj  \
            $(SLO)$/stlpool.obj	\
            $(SLO)$/drawdoc.obj \
            $(SLO)$/drawdoc2.obj \
+           $(SLO)$/drawdoc3.obj \
            $(SLO)$/drawdoc4.obj \
+           $(SLO)$/drawdoc_animations.obj\
            $(SLO)$/sdpage.obj \
+           $(SLO)$/sdpage2.obj	\
            $(SLO)$/sdattr.obj \
            $(SLO)$/sdobjfac.obj \
            $(SLO)$/anminfo.obj	\
            $(SLO)$/sdiocmpt.obj	\
-           $(SLO)$/sdpage2.obj	\
            $(SLO)$/typemap.obj	\
            $(SLO)$/pglink.obj   \
            $(SLO)$/cusshow.obj  \
-           $(SLO)$/drawdoc3.obj \
-           $(SLO)$/PageListWatcher.obj
+           $(SLO)$/PageListWatcher.obj  \
+           $(SLO)$/sdpage_animations.obj\
+           $(SLO)$/CustomAnimationPreset.obj\
+           $(SLO)$/CustomAnimationEffect.obj\
+           $(SLO)$/TransitionPreset.obj\
+           $(SLO)$/undoanim.obj
 
 EXCEPTIONSFILES= \
-           $(OBJ)$/drawdoc3.obj \
            $(SLO)$/drawdoc3.obj \
            $(SLO)$/drawdoc.obj
-
-.IF "$(SVXLIGHT)"!=""
-EXCEPTIONSFILES+= \
-           $(OBJ)$/drawdoc3.obj \
-           $(OBJ)$/sxl_drawdoc.obj
-.ENDIF          # "$(SVXLIGHT)"!=""
-
-SVXLIGHTOBJFILES = \
-           $(OBJ)$/stlsheet.obj  \
-           $(OBJ)$/stlpool.obj	\
-           $(OBJ)$/drawdoc.obj \
-           $(OBJ)$/drawdoc2.obj \
-           $(OBJ)$/drawdoc3.obj \
-           $(OBJ)$/drawdoc4.obj \
-           $(OBJ)$/sdpage.obj \
-           $(OBJ)$/sdattr.obj \
-           $(OBJ)$/sdobjfac.obj \
-           $(OBJ)$/anminfo.obj	\
-           $(OBJ)$/sdiocmpt.obj	\
-           $(OBJ)$/sdpage2.obj	\
-           $(OBJ)$/typemap.obj	\
-           $(OBJ)$/cusshow.obj  \
-           $(OBJ)$/PageListWatcher.obj
 
 # --- Tagets -------------------------------------------------------
 
