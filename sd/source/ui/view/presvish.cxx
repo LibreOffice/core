@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:00:43 $
+ *  last change: $Author: af $ $Date: 2004-08-02 16:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,8 +309,8 @@ void PresentationViewShell::FinishInitialization (
     GetActiveWindow()->GrabFocus();
 
     // Start the show.
-    GetSlideShow()->Activate();
     GetSlideShow()->StartShow();
+    Activate(TRUE);
 }
 
 
