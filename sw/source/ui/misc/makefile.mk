@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jp $ $Date: 2001-10-18 12:29:04 $
+#   last change: $Author: os $ $Date: 2002-02-07 15:17:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ CXXFILES = \
         numberingtypelistbox.cxx \
         outline.cxx \
         pgfnote.cxx \
+        pggrid.cxx \
         redlndlg.cxx \
         srtdlg.cxx
 
@@ -109,6 +110,7 @@ SRCFILES=\
     numberingtypelistbox.src \
     outline.src \
     pgfnote.src \
+    pggrid.src \
     redlndlg.src \
     srtdlg.src
 
@@ -127,6 +129,7 @@ SLOFILES =	\
         $(SLO)$/numberingtypelistbox.obj \
         $(SLO)$/outline.obj \
         $(SLO)$/pgfnote.obj \
+        $(SLO)$/pggrid.obj \
         $(SLO)$/redlndlg.obj \
         $(SLO)$/srtdlg.obj
 

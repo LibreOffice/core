@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 16:01:23 $
+ *  last change: $Author: os $ $Date: 2002-02-07 15:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,10 @@
 #include <viewopt.hxx>
 #endif
 #ifndef _PGFNOTE_HXX
-#include <pgfnote.hxx>      // der Dialog
+#include <pgfnote.hxx>
+#endif
+#ifndef _PGFGRID_HXX
+#include <pggrid.hxx>
 #endif
 #ifndef _TMPDLG_HXX
 #include <tmpdlg.hxx>       // der Dialog
@@ -382,6 +385,12 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
                 AddTabPage(TP_FOOTNOTE_PAGE,    String(SW_RES(STR_PAGE_FOOTNOTE)),
                                                 SwFootNotePage::Create,
                                                 SwFootNotePage::GetRanges );
+                AddTabPage(TP_TEXTGRID_PAGE,    String(SW_RES(STR_PAGE_TEXTGRID)),
+                                                SwTextGridPage::Create,
+                                                SwTextGridPage::GetRanges );
+                SvtCJKOptions aCJKOptions;
+                if(!aCJKOptions.IsAsianTypographyEnabled())
+                    RemoveTabPage(TP_TEXTGRID_PAGE);
             }
 
 

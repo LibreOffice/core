@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-10-31 12:31:16 $
+ *  last change: $Author: os $ $Date: 2002-02-07 15:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,7 @@
 #define HID_TP_PRIVATE_DATA         (HID_BASE + 479)
 #define HID_TP_BUSINESS_DATA        (HID_BASE + 480)
 #define HID_SECTION_FTNENDNOTES_PAGE (HID_BASE + 481)
-
+#define HID_TEXTGRID_PAGE           (HID_BASE + 482)
 
 // AutoPilot Help-IDs *********************************************************
 
@@ -898,7 +898,6 @@
 #define HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION   (HID_BASE + 2172 )
 #define HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE         (HID_BASE + 2173 )
 #define HID_SEND_HTML_CTRL_DUMMY                    (HID_BASE + 2174 )
-
 
 
 
