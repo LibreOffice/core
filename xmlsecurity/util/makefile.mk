@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2004-09-08 12:40:53 $
+#   last change: $Author: vg $ $Date: 2005-03-10 18:19:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,14 +129,14 @@ SHL2STDLIBS +=			\
     $(TOOLSLIB)			\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
-    $(XMLOFFLIB)        
+    $(XMLOFFLIB)
 
 .IF "$(CRYPTO_ENGINE)" == "mscrypto"
 SHL2STDLIBS+= $(MSCRYPTOLIBS)
 .ELSE
 SHL2STDLIBS+= $(NSSCRYPTOLIBS)
 .ENDIF
-    
+
 SHL2IMPLIB = $(SHL2TARGET)
 SHL2DEF = $(MISC)$/$(SHL2TARGET).def
 DEF2NAME = $(SHL2TARGET)
@@ -147,6 +147,7 @@ DEF2EXPORTFILE = exports_xsnss.dxp
 .ENDIF
 
 SRSFILELIST=	\
+                $(SRS)$/component.srs   \
                 $(SRS)$/dialogs.srs
 
 RESLIB1NAME=xmlsec
@@ -157,7 +158,7 @@ SHL4TARGET=$(TARGET)
 SHL4LIBS=\
                 $(SLB)$/helper.lib      \
                 $(SLB)$/dialogs.lib     \
-                $(SLB)$/component.lib   
+                $(SLB)$/component.lib
 
 SHL4OBJS=\
                 $(SLO)$/baseencoding.obj    \
@@ -182,7 +183,7 @@ SHL4STDLIBS=\
 
 #MT: Remove libxml2 and xs_comm (above) by cerating service for base encodings
 SHL4STDLIBS+= $(LIBXML2LIB) $(XMLSECLIB)
-                
+
 SHL4VERSIONMAP = xmlsecurity.map
 SHL4DEPN=
 SHL4IMPLIB=i$(TARGET)
