@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXBookmarks.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-01-05 20:03:25 $
+ *  last change:$Date: 2005-01-25 15:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ public class SwXBookmarks extends TestCase {
             xTextDoc = SOF.createTextDoc( null );
         } catch ( com.sun.star.uno.Exception e ) {
             e.printStackTrace( log );
-            throw new StatusException( "Couldn³t create document", e );
+            throw new StatusException( "Couldn't create document", e );
         }
     }
 
@@ -136,7 +136,7 @@ public class SwXBookmarks extends TestCase {
             SOF.insertTextContent( xTextDoc, (XTextContent) oObj );
         } catch( com.sun.star.uno.Exception e ) {
             e.printStackTrace( log );
-            throw new StatusException( "Couldn³t create Bookmark", e );
+            throw new StatusException( "Couldn't create Bookmark", e );
         }
 
         XBookmarksSupplier oBSupp = (XBookmarksSupplier)
