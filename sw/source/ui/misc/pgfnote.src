@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:12:46 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 07:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ italian ] = "Altezza massima come pagina" ;
         Text [ portuguese_brazilian ] = "Altura de página no m ximo" ;
         Text [ portuguese ] = "Não superior à área da página" ;
-        Text [ finnish ] = "Sivun korkeus" ;
+        Text [ finnish ] = "~Ei sivualuetta suurempi" ;
         Text [ danish ] = "Op til maksimal sidehøjde" ;
         Text [ french ] = "Hauteur maximale de la p~age" ;
         Text [ swedish ] = "Höjd maximalt som ~sida" ;
@@ -108,7 +108,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ italian ] = "Altezza massima nota a piè pagina" ;
         Text [ portuguese_brazilian ] = "Max. ~Height of Footnote" ;
         Text [ portuguese ] = "~Altura máxima da nota de rodapé" ;
-        Text [ finnish ] = "Max. ~Height of Footnote" ;
+        Text [ finnish ] = "~Alaviitteen korkeus enintään" ;
         Text [ danish ] = "Maks. højde fodnote" ;
         Text [ french ] = "Hauteur max. du ~pied de page" ;
         Text [ swedish ] = "Fotnotens ma~ximala höjd" ;
@@ -156,7 +156,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ italian ] = "~Distanza dal corpo del testo" ;
         Text [ portuguese_brazilian ] = "~Distância do Corpo do Texto" ;
         Text [ portuguese ] = "~Distância até corpo do texto" ;
-        Text [ finnish ] = "~Etäisyys runkotekstistä" ;
+        Text [ finnish ] = "Etäisyys tekstiin" ;
         Text [ danish ] = "Afstand til brødtekst" ;
         Text [ french ] = "~Écart du corps de texte" ;
         Text [ swedish ] = "~Avstånd till brödtext" ;
@@ -203,7 +203,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ italian ] = "Area note a piè pagina" ;
         Text [ portuguese_brazilian ] = "Faixa de nota de pé de página" ;
         Text [ portuguese ] = "Área da nota de rodapé" ;
-        Text [ finnish ] = "Alaviitealue" ;
+        Text [ finnish ] = "Fußnotenbereich" ;
         Text [ danish ] = "Fodnoteområde" ;
         Text [ french ] = "Plage note de bas de page" ;
         Text [ swedish ] = "Fotnotsområde" ;
@@ -249,6 +249,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Posición";
+        Text[ finnish ] = "~Sijainti";
     };
     ListBox DLB_LINEPOS
     {
@@ -296,9 +297,9 @@ TabPage TP_FOOTNOTE_PAGE
         };
         StringList [ finnish ] =
         {
-            < "Links" ; Default ; > ;
-            < "Zentriert" ; Default ; > ;
-            < "Rechts" ; Default ; > ;
+            < "Vasen" ; Default ; > ;
+            < "Keskitetty" ; Default ; > ;
+            < "Oikea" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -431,6 +432,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ turkish ] = "Çizgi kal.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Grosor";
+        Text[ finnish ] = "~Paino";
     };
     ListBox DLB_LINETYPE
     {
@@ -469,6 +471,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ turkish ] = "Uzunluk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Longitud";
+        Text[ finnish ] = "~Pituus";
     };
     MetricField ED_LINEWIDTH
     {
@@ -496,7 +499,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ italian ] = "Distanza dal contenuto delle note" ;
         Text [ portuguese_brazilian ] = "Distân~cia" ;
         Text [ portuguese ] = "E~spaçam. entre traço e texto" ;
-        Text [ finnish ] = "~Etäisyys" ;
+        Text [ finnish ] = "~Etäisyys alaviitteiden sisältöön" ;
         Text [ danish ] = "Afstand til fodnoteindholdet" ;
         Text [ french ] = "~Écart entre trait et texte" ;
         Text [ swedish ] = "Avstån~d till fotnotens innehåll" ;
@@ -543,7 +546,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ italian ] = "Linea di separazione" ;
         Text [ portuguese_brazilian ] = "Linha" ;
         Text [ portuguese ] = "Linha de separação" ;
-        Text [ finnish ] = "Viiva" ;
+        Text [ finnish ] = "Trennlinie" ;
         Text [ danish ] = "Skillelinje" ;
         Text [ french ] = "Trait de séparation" ;
         Text [ swedish ] = "Skiljelinje" ;
