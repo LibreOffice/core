@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-01-25 08:27:35 $
+ *  last change: $Author: pb $ $Date: 2001-06-07 07:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,12 @@
 #ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_CONTENTINFOATTRIBUTE_HPP_
+#include <com/sun/star/ucb/ContentInfoAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCONTENTCREATOR_HPP_
+#include <com/sun/star/ucb/XContentCreator.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_XDYNAMICRESULTSET_HPP_
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #endif
@@ -102,6 +108,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
 #endif
 
 #include <tools/wldcrd.hxx>
@@ -114,6 +123,8 @@
 #include <osl/file.hxx>
 
 using namespace ::ucb;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::uno;
@@ -167,7 +178,7 @@ sal_Bool UCBContentHelper::Transfer_Impl( const String& rSource, const String& r
     {
         bRet = sal_False;
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
         bRet = sal_False;
@@ -204,7 +215,7 @@ sal_Bool UCBContentHelper::IsDocument( const String& rContent )
     {
         DBG_WARNING( "IllegalIdentifierException" );
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -236,7 +247,7 @@ sal_Bool UCBContentHelper::IsFolder( const String& rContent )
     {
         DBG_WARNING( "IllegalIdentifierException" );
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -263,7 +274,7 @@ sal_Bool UCBContentHelper::GetTitle( const String& rContent, String& rTitle )
     {
         DBG_ERRORFILE( "CommandAbortedException" );
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -288,7 +299,7 @@ sal_Bool UCBContentHelper::Kill( const String& rContent )
         DBG_WARNING( "CommandAbortedException" );
         bRet = sal_False;
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
         bRet = sal_False;
@@ -351,7 +362,7 @@ Sequence < OUString > UCBContentHelper::GetFolderContents( const String& rFolder
         {
             // folder not exists?
         }
-        catch( Exception& )
+    catch( ::com::sun::star::uno::Exception& )
         {
             DBG_ERRORFILE( "createCursor: Any other exception" );
         }
@@ -373,13 +384,13 @@ Sequence < OUString > UCBContentHelper::GetFolderContents( const String& rFolder
             {
                 DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
             }
-            catch( ... )
+            catch( ::com::sun::star::uno::Exception& )
             {
                 DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
             }
         }
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "GetFolderContents: Any other exception" );
     }
@@ -428,7 +439,7 @@ Sequence < OUString > UCBContentHelper::GetResultSet( const String& rURL )
         {
             DBG_ERRORFILE( "createCursor: CommandAbortedException" );
         }
-        catch( ... )
+        catch( ::com::sun::star::uno::Exception& )
         {
             DBG_ERRORFILE( "createCursor: Any other exception" );
         }
@@ -459,13 +470,13 @@ Sequence < OUString > UCBContentHelper::GetResultSet( const String& rURL )
             {
                 DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
             }
-            catch( ... )
+            catch( ::com::sun::star::uno::Exception& )
             {
                 DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
             }
         }
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "GetResultSet: Any other exception" );
     }
@@ -504,6 +515,37 @@ sal_Bool UCBContentHelper::MoveTo( const String& rSource, const String& rDest, s
 
 // -----------------------------------------------------------------------
 
+sal_Bool UCBContentHelper::CanMakeFolder( const String& rFolder )
+{
+    try
+    {
+        Content aCnt( rFolder, Reference< XCommandEnvironment > () );
+        Reference< XContentCreator > xCreator = Reference< XContentCreator >( aCnt.get(), UNO_QUERY );
+        if ( !xCreator.is() )
+            return sal_False;
+
+        Sequence< ContentInfo > aInfo = xCreator->queryCreatableContentsInfo();
+        sal_Int32 nCount = aInfo.getLength();
+        if ( nCount == 0 )
+            return sal_False;
+
+        for ( sal_Int32 i = 0; i < nCount; ++i )
+        {
+            // Simply look for the first KIND_FOLDER...
+            const ContentInfo & rCurr = aInfo[i];
+            if ( rCurr.Attributes & ContentInfoAttribute::KIND_FOLDER )
+                return sal_True;
+        }
+    }
+    catch( ::com::sun::star::ucb::CommandAbortedException& ) {}
+    catch( RuntimeException& ) {}
+    catch( Exception& ) {}
+
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------
+
 sal_Bool UCBContentHelper::MakeFolder( const String& rFolder )
 {
     INetURLObject aURL( rFolder );
@@ -511,30 +553,77 @@ sal_Bool UCBContentHelper::MakeFolder( const String& rFolder )
     String aNewFolderURL = aURL.GetMainURL();
     String aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     aURL.removeSegment();
-    Sequence<OUString> aNames(2);
-    OUString* pNames = aNames.getArray();
-    pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
-    pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) );
-    Sequence<Any> aValues(2);
-    Any* pValues = aValues.getArray();
-    pValues[0] = makeAny( OUString( aTitle ) );
-    pValues[1] = makeAny( sal_Bool( sal_True ) );
-    Reference< ::com::sun::star::ucb::XCommandEnvironment > aCmdEnv;
-    sal_Bool bRet = sal_False;
+
     try
     {
-        Content aCnt( aURL.GetMainURL(), aCmdEnv );
-        Content aNewFolder( aNewFolderURL, aCmdEnv );
-        OUString aType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.staroffice.fsys-folder" ) );
-        bRet = aCnt.insertNewContent( aType, aNames, aValues, aNewFolder );
+        Content aCnt( aURL.GetMainURL(), Reference< XCommandEnvironment > () );
+        Reference< XContentCreator > xCreator = Reference< XContentCreator >( aCnt.get(), UNO_QUERY );
+        if ( !xCreator.is() )
+            return sal_False;
+
+        Sequence< ContentInfo > aInfo = xCreator->queryCreatableContentsInfo();
+        sal_Int32 nCount = aInfo.getLength();
+        if ( nCount == 0 )
+            return sal_False;
+
+        for ( sal_Int32 i = 0; i < nCount; ++i )
+        {
+            // Simply look for the first KIND_FOLDER...
+            const ContentInfo & rCurr = aInfo[i];
+            if ( rCurr.Attributes & ContentInfoAttribute::KIND_FOLDER )
+            {
+                // Make sure the only required bootstrap property is "Title",
+                const Sequence< Property > & rProps = rCurr.Properties;
+                if ( rProps.getLength() != 1 )
+                    continue;
+
+                if ( !rProps[ 0 ].Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+                    continue;
+
+                Sequence<OUString> aNames(1);
+                OUString* pNames = aNames.getArray();
+                pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
+                Sequence<Any> aValues(1);
+                Any* pValues = aValues.getArray();
+                pValues[0] = makeAny( OUString( aTitle ) );
+
+                Content aNewFolder;
+                if ( !aCnt.insertNewContent( rCurr.Type, aNames, aValues, aNewFolder ) )
+                    continue;
+
+                return sal_True;
+            }
+        }
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {
-        DBG_ERRORFILE( "CommandAbortedException" );
     }
-    catch( ... )
+    catch( RuntimeException& )
     {
-        DBG_ERRORFILE( "Any other exception" );
+    }
+    catch( Exception& )
+    {
+    }
+
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool UCBContentHelper::HasParentFolder( const String& rFolder )
+{
+    sal_Bool bRet = sal_False;
+    Content aCnt( rFolder, Reference< XCommandEnvironment > () );
+    Reference< XChild > xChild( aCnt.get(), UNO_QUERY );
+    if ( xChild.is() )
+    {
+        Reference< XContent > xParent( xChild->getParent(), UNO_QUERY );
+        if ( xParent.is() )
+        {
+            String aParentURL = String( xParent->getIdentifier()->getContentIdentifier() );
+            bRet = ( aParentURL.Len() > 0 && aParentURL != rFolder );
+        }
     }
 
     return bRet;
@@ -557,7 +646,7 @@ ULONG UCBContentHelper::GetSize( const String& rContent )
     {
         DBG_ERRORFILE( "CommandAbortedException" );
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
@@ -590,7 +679,7 @@ sal_Bool UCBContentHelper::IsYounger( const String& rIsYoung, const String& rIsO
     {
         DBG_ERRORFILE( "CommandAbortedException" );
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
