@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameLoader.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:14 $
+ *  last change: $Author: arellano $ $Date: 2001-04-24 00:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,8 @@
     <p>Concrete implementations of this service register for example
     for file name extensions or MIME types to load appropriate
     components. The components loaded are at least <type>Controller</type>.</p>
- */
+
+    <!-- Dennis: Please reword the above paragraph -->*/
 service FrameLoader
 {
     // DocMerge: empty anyway
@@ -94,6 +95,9 @@ service FrameLoader
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:14  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:20  hjs
     initial import
 
