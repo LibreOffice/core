@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:06:51 $
+ *  last change: $Author: rt $ $Date: 2000-12-01 08:15:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ swedish ] = "Kolumntilldelning";
             Text[ polish ] = "Przyporzπdkowanie kolumn";
             Text[ portuguese_brazilian ] = "Column assignment";
-            Text[ japanese ] = "óÒÇÃï™óﬁ(C)";
+            Text[ japanese ] = "óÒÇÃï™óﬁ";
             Text[ korean ] = "ø≠ πË¡§(C)";
             Text[ chinese_simplified ] = "±‡≈≈¡–(C)";
             Text[ chinese_traditional ] = "Ωs±∆ƒÊ(C)";
@@ -284,7 +284,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ swedish ] = "Datak‰lla";
             Text[ polish ] = "èrÛd≥o danych";
             Text[ portuguese_brazilian ] = "Data source";
-            Text[ japanese ] = "√ﬁ∞¿ø∞Ω(D)";
+            Text[ japanese ] = "√ﬁ∞¿ø∞Ω";
             Text[ korean ] = "µ•¿Ã≈Õ º“Ω∫(D)";
             Text[ chinese_simplified ] = " ˝æ›¿¥‘¥(D)";
             Text[ chinese_traditional ] = "∏ÍÆ∆∑Ω(D)";
