@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-27 11:21:02 $
+ *  last change: $Author: obr $ $Date: 2001-05-28 07:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@ extern "C" {
 #ifdef WIN32
 #define SAL_W32
 #define SAL_DLLEXTENSION ".dll"
+#define SAL_PRGEXTENSION ".exe"
+#define SAL_CONFIGFILE( name ) name ".ini"
+#define SAL_SYSCONFIGFILE( name ) name ".ini"
 
 /* No warning for: C++ Exception Specification ignored */
 #pragma warning( disable : 4290 )
@@ -97,17 +100,23 @@ extern "C" {
 #ifdef OS2
 #define SAL_OS2
 #define SAL_DLLEXTENSION ".dll"
+#define SAL_PRGEXTENSION ".exe"
+#define SAL_CONFIGFILE( name ) name ".ini"
+#define SAL_SYSCONFIGFILE( name ) name ".ini"
 #endif
 
 #ifdef MAC
 #define SAL_MAC
-#define SAL_DLLEXTENSION ".dll"
+/* don't know what to put in here */
 #endif
 
 #if defined(SOLARIS) || defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || defined(SCO) || defined(IRIX)
 #define SAL_UNX
 #define SAL_DLLEXTENSION ".so"
 #define SAL_DLLPREFIX "lib"
+#define SAL_PRGEXTENSION ".bin"
+#define SAL_CONFIGFILE( name ) name "rc"
+#define SAL_SYSCONFIGFILE( name ) "." name "rc"
 #endif
 
 #ifdef MACOSX
@@ -120,6 +129,9 @@ extern "C" {
 #define SAL_UNX
 #define SAL_DLLEXTENSION ".sl"
 #define SAL_DLLPREFIX "lib"
+#define SAL_PRGEXTENSION ".bin"
+#define SAL_CONFIGFILE( name ) name "rc"
+#define SAL_SYSCONFIGFILE( name ) "." name "rc"
 #endif
 
 #ifdef sun
