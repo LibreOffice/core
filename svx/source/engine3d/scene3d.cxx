@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-17 07:04:30 $
+ *  last change: $Author: aw $ $Date: 2001-08-15 15:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,7 +419,11 @@ void E3dScene::SetCamera(const Camera3D& rNewCamera)
     Vector3D aVRP = rCam.GetViewPoint();
     Vector3D aVPN = aVRP - rCam.GetVRP();
     Vector3D aVUV = rCam.GetVUV();
-    GetCameraSet().SetOrientation(aVRP, aVPN, aVUV);
+
+    // #91047# use SetViewportValues() to set VRP, VPN and VUV as vectors, too.
+    // Else these values would not be exported/imported correctly.
+    //GetCameraSet().SetOrientation(aVRP, aVPN, aVUV);
+    GetCameraSet().SetViewportValues(aVRP, aVPN, aVUV);
 
     // Perspektive setzen
     GetCameraSet().SetPerspective(rCam.GetProjection() == PR_PERSPECTIVE);
