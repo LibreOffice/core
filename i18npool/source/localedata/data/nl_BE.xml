@@ -239,7 +239,7 @@
 <CurrencyID>BF</CurrencyID>
 <CurrencySymbol>BF</CurrencySymbol>
 <BankSymbol>BEF</BankSymbol>
-<CurrencyName>Franc</CurrencyName>
+<CurrencyName>Belgische frank</CurrencyName>
 <DecimalPlaces>2</DecimalPlaces>
 </Currency>
 <Currency default="true" usedInCompatibleFormatCodes="false">
