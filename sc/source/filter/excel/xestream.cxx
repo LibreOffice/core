@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:35 $
+ *  last change: $Author: vg $ $Date: 2003-07-24 11:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ XclExpStream::XclExpStream( SvStream& rOutStrm, const XclExpRoot& rRoot, sal_uIn
 
 XclExpStream::~XclExpStream()
 {
+    mrStrm.Flush();
 }
 
 void XclExpStream::InitRecord( sal_uInt16 nRecId )
