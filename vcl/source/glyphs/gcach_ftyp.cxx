@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.57 $
- *  last change: $Author: hdu $ $Date: 2001-09-24 08:49:33 $
+ *  $Revision: 1.58 $
+ *  last change: $Author: hdu $ $Date: 2001-10-11 15:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1396,7 +1396,7 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPol
         return false;
 
     FT_Outline& rOutline = reinterpret_cast<FT_OutlineGlyphRec*>( aGlyphFT ) -> outline;
-    const long nMaxPoints = rOutline.n_points * 2;
+    const long nMaxPoints = 1 + rOutline.n_points * 3;
     const long nHeight = GetFontSelData().mnHeight;
     PolyArgs aPolyArg( rPolyPoly, nMaxPoints, nHeight );
 
