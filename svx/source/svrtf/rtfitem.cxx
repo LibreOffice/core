@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:51 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:48:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1131,11 +1131,13 @@ ATTR_SETEMPHASIS:
             case BRACELEFT:
                 {
                     // teste auf Swg-Interne Tokens
+                    bool bHandled = false;
                     short nSkip = 0;
-                    if( RTF_IGNOREFLAG != GetNextToken() )
+                    if( RTF_IGNOREFLAG != GetNextToken())
                         nSkip = -1;
                     else if( (nToken = GetNextToken() ) & RTF_SWGDEFS )
                     {
+                        bHandled = true;
                         switch( nToken )
                         {
                         case RTF_PGDSCNO:
@@ -1143,7 +1145,6 @@ ATTR_SETEMPHASIS:
                         case RTF_SOUTLVL:
                             UnknownAttrToken( nToken, pSet );
                             // ueberlese die schliessende Klammer
-                            GetNextToken();
                             break;
 
                         case RTF_SWG_ESCPROP:
@@ -1158,18 +1159,6 @@ ATTR_SETEMPHASIS:
                                 if( PLAINID->nEscapement )
                                     pSet->Put( SvxEscapementItem( nEsc, nProp,
                                                        PLAINID->nEscapement ));
-#if 0
-        /*
-        cmc: #i4727# I believe this is incorrect, other code that is counting
-        brackets so as to push/pop off the correct environment will have
-        pushed a new environment for the start { of this, but will not see the
-        } and so is out of sync for the rest of the document. If we actually
-        do want make this environment bleed into the surrounding environment
-        then we need to do it differently.
-        */
-                                // ueberlese die schliessende Klammer
-                                GetNextToken();
-#endif
                             }
                             break;
 
@@ -1197,7 +1186,6 @@ ATTR_SETEMPHASIS:
                                 }
                                 else
                                     SkipGroup();        // ans Ende der Gruppe
-                                GetNextToken();         // Klammer ueberlesen
                             }
                             break;
 
@@ -1234,11 +1222,11 @@ ATTR_SETEMPHASIS:
 
                                 if( bSkip )
                                     SkipGroup();        // ans Ende der Gruppe
-                                GetNextToken();         // Klammer ueberlesen
                             }
                             break;
 
                         default:
+                            bHandled = false;
                             if( (nToken & ~(0xff | RTF_SWGDEFS)) == RTF_TABSTOPDEF )
                             {
                                 nToken = SkipToken( -2 );
@@ -1253,13 +1241,28 @@ ATTR_SETEMPHASIS:
                                 nSkip = -2;
                             break;
                         }
+
+#if 1
+                        /*
+                        cmc: #i4727# / #i12713# Who owns this closing bracket?
+                        If we read the opening one, we must read this one, if
+                        other is counting the brackets so as to push/pop off
+                        the correct environment then we will have pushed a new
+                        environment for the start { of this, but will not see
+                        the } and so is out of sync for the rest of the
+                        document.
+                        */
+                        if (bHandled && !bFirstToken)
+                            GetNextToken();
+#endif
                     }
                     else
                         nSkip = -2;
 
                     if( nSkip )             // alles voellig unbekannt
                     {
-                        --nSkip;            // BRACELEFT: ist das naechste Token
+                        if (!bFirstToken)
+                            --nSkip;    // BRACELEFT: ist das naechste Token
                         SkipToken( nSkip );
                         bWeiter = FALSE;
                     }
