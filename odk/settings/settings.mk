@@ -257,9 +257,9 @@ PATH_SEPARATOR=:
 
 # -O is necessary for inlining (see gcc documentation)
 ifeq "$(DEBUG)" "yes"
-CC_FLAGS=-c -g -fpic
+CC_FLAGS=-c -g -fpic -fno-rtti
 else
-CC_FLAGS=-c -O -fpic
+CC_FLAGS=-c -O -fpic -fno-rtti
 endif
 
 ifeq "$(PROCTYPE)" "ppc"
