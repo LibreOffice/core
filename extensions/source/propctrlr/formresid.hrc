@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formresid.hrc,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:23:48 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,11 +152,11 @@
 #define RID_STR_LINECOUNT                   ( RID_FORMBROWSER_START +  90 )
 #define RID_STR_MULTILINE                   ( RID_FORMBROWSER_START +  91 )
 #define RID_STR_MULTISELECTION              ( RID_FORMBROWSER_START +  92 )
-    // free
+#define RID_STR_BUTTONTYPE                  ( RID_FORMBROWSER_START +  93 )
 #define RID_STR_HSCROLL                     ( RID_FORMBROWSER_START +  94 )
 #define RID_STR_VSCROLL                     ( RID_FORMBROWSER_START +  95 )
 #define RID_STR_SPIN                        ( RID_FORMBROWSER_START +  96 )
-#define RID_STR_BUTTONTYPE                  ( RID_FORMBROWSER_START +  97 )
+#define RID_STR_AUTOLINEBREAK               ( RID_FORMBROWSER_START +  97 )
 #define RID_STR_TARGET_URL                  ( RID_FORMBROWSER_START +  98 )
 #define RID_STR_TARGET_FRAME                ( RID_FORMBROWSER_START +  99 )
 #define RID_STR_SUBMIT_ACTION               ( RID_FORMBROWSER_START + 100 )
@@ -272,6 +272,7 @@
 #define RID_STR_SHOW_NAVIGATION             ( RID_FORMBROWSER_START + 210 )
 #define RID_STR_SHOW_RECORDACTIONS          ( RID_FORMBROWSER_START + 211 )
 #define RID_STR_SHOW_FILTERSORT             ( RID_FORMBROWSER_START + 212 )
+#define RID_STR_TEXTTYPE                    ( RID_FORMBROWSER_START + 213 )
 
 // -----------------------------------------------------------------------
 // - dialogs
@@ -297,6 +298,7 @@
 
 #define RID_RSC_ENUM_SCROLLBARS             ( RID_PROPCONTROLLER_START +  0 )
 #define RID_RSC_ENUM_COMMAND_TYPE           ( RID_PROPCONTROLLER_START +  1 )
+#define RID_RSC_ENUM_TEXTTYPE               ( RID_PROPCONTROLLER_START +  2 )
 
 // -----------------------------------------------------------------------
 // - ImageList - local ids
