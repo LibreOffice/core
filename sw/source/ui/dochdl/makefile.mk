@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 15:22:16 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:55:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=dochdl
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -75,14 +73,8 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        gloshdl.cxx \
-        selglos.cxx \
-        swdtflvr.cxx
-
-#        dataex.cxx \
-
-SRCFILES =  \
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
         dochdl.src \
         selglos.src
 
