@@ -72,6 +72,13 @@ V *:= 		# RCS suffix
 
 .ENDIF
 
+.IF "$(GUI)$(USE_SHELL)"=="WNT4nt"
+my4ver:=$(shell +echo %_4ver)
+.ENDIF			# "$(GUI)$(USE_SHELL)"=="WNT4nt"
+
+.IF "$(my4ver:s/.//:s/,//)" >= "400"
+   RMFLAGS          +=/E
+.ENDIF			# "$(my4ver:s/.//:s/,//)" >= "300"
 
 # Does not respect case of filenames.
 .DIRCACHERESPCASE := no
