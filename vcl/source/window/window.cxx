@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-14 16:24:54 $
+ *  last change: $Author: obr $ $Date: 2001-02-19 09:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,9 @@
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGET_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_XDISPLAYCONNECTION_HPP_
 #include <com/sun/star/awt/XDisplayConnection.hpp>
 #endif
@@ -179,6 +182,7 @@
 using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
 
 // =======================================================================
@@ -546,14 +550,22 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
 
         try {
 #ifdef REMOTE_APPSERVER
+            ImplSVData* pSVData = ImplGetSVData();
+
+            if ( pSVData->mxClientFactory.is() )
+            {
+                mpFrameData->mxClipboard = Reference< XClipboard >( pSVData->mxClientFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
+            }
 
             // FIXME: drag and drop for remote case
-    //  Reference< XMultiServiceFactory > xFactory;
 
 #else
             Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
             if ( xFactory.is() )
             {
+                // remember clipboard here
+                mpFrameData->mxClipboard = Reference< XClipboard > ( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
+
                 /*
                  * IMHO this belongs in the platform dependend part of vcl, but the vcl guys say it
                  * is better to implement it here to reduce dependencies on the other ports like Mac etc.
@@ -6723,4 +6735,28 @@ Reference< XDragGestureRecognizer > Window::GetDragGestureRecognizer()
 
     // this object is located in the same process, so there will be no runtime exception
     return Reference< XDragGestureRecognizer > ( mxDNDListenerContainer, UNO_QUERY );
+}
+
+// -----------------------------------------------------------------------
+
+Reference< XClipboard > Window::GetClipboard()
+{
+    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
+
+    if( mpFrameData )
+        return mpFrameData->mxClipboard;
+
+    return static_cast < XClipboard * > (0);
+}
+
+// -----------------------------------------------------------------------
+
+Reference< XClipboard > Window::GetSelection()
+{
+    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
+
+    if( mpFrameData )
+        return mpFrameData->mxSelection;
+
+    return static_cast < XClipboard * > (0);
 }
