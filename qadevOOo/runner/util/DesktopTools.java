@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DesktopTools.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:03 $
+ *  last change:$Date: 2004-01-05 18:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,38 +58,37 @@
  *
  *
  ************************************************************************/
-
 package util;
 
-// access the implementations via names
-import com.sun.star.uno.XInterface;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.frame.XComponentLoader;
+import com.sun.star.frame.XDesktop;
+import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 
-import com.sun.star.frame.XDesktop;
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.lang.XComponent;
+// access the implementations via names
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
+import com.sun.star.util.XModifiable;
+
 
 /**
  * contains helper methods for the Desktop
  */
-
 public class DesktopTools {
-
     /**
      * Queries the XComponentLoader
      *
      * @param xMSF the MultiServiceFactory
      * @return the gained XComponentLoader
     */
+    public static XComponentLoader getCLoader(XMultiServiceFactory xMSF) {
+        XDesktop oDesktop = (XDesktop) UnoRuntime.queryInterface(
+                                    XDesktop.class, createDesktop(xMSF));
 
-    public static XComponentLoader getCLoader( XMultiServiceFactory xMSF ) {
-        XDesktop oDesktop = ( XDesktop ) UnoRuntime.queryInterface(
-                                    XDesktop.class, createDesktop(xMSF) );
-
-        XComponentLoader oCLoader = ( XComponentLoader )
-            UnoRuntime.queryInterface( XComponentLoader.class, oDesktop );
+        XComponentLoader oCLoader = (XComponentLoader) UnoRuntime.queryInterface(
+                                            XComponentLoader.class, oDesktop);
 
         return oCLoader;
     } // finish getCLoader
@@ -100,16 +99,15 @@ public class DesktopTools {
      * @param xMSF the MultiServiceFactory
      * @return the gained Object
     */
+    public static Object createDesktop(XMultiServiceFactory xMSF) {
+        Object oInterface;
 
-    public static Object createDesktop( XMultiServiceFactory xMSF ) {
-            Object oInterface;
-            try {
-                oInterface = xMSF.createInstance( "com.sun.star.frame.Desktop" );
-            }
-            catch( com.sun.star.uno.Exception e ) {
-                throw new IllegalArgumentException(
-                                            "Desktop Service not available" );
+        try {
+            oInterface = xMSF.createInstance("com.sun.star.frame.Desktop");
+        } catch (com.sun.star.uno.Exception e) {
+            throw new IllegalArgumentException("Desktop Service not available");
         }
+
         return oInterface;
     } //finish createDesktop
 
@@ -119,17 +117,16 @@ public class DesktopTools {
      * @param xMSF the MultiServiceFactory
      * @return the XComponent Interface of the document
     */
+    public static XComponent openNewDoc(XMultiServiceFactory xMSF, String kind,
+                                        PropertyValue[] Args) {
+        XComponent oDoc = null;
 
-    public static XComponent openNewDoc( XMultiServiceFactory xMSF, String kind,
-                                                        PropertyValue[] Args ) {
-
-        XComponent oDoc = null ;
         try {
-            oDoc = getCLoader(xMSF).loadComponentFromURL(
-                                "private:factory/"+kind, "_blank", 0, Args );
-        }
-        catch (com.sun.star.uno.Exception e) {
-            throw new IllegalArgumentException( "Document could not be opened" );
+            oDoc = getCLoader(xMSF)
+                       .loadComponentFromURL("private:factory/" + kind,
+                                             "_blank", 0, Args);
+        } catch (com.sun.star.uno.Exception e) {
+            throw new IllegalArgumentException("Document could not be opened");
         }
 
         return oDoc;
@@ -141,19 +138,46 @@ public class DesktopTools {
      * @param xMSF the MultiServiceFactory
      * @return the XComponent Interface of the document
     */
+    public static XComponent loadDoc(XMultiServiceFactory xMSF, String url,
+                                     PropertyValue[] Args) {
+        XComponent oDoc = null;
 
-    public static XComponent loadDoc( XMultiServiceFactory xMSF, String url,
-                                                        PropertyValue[] Args ) {
-
-        XComponent oDoc = null ;
         try {
-            oDoc = getCLoader(xMSF).loadComponentFromURL( url, "_blank", 0, Args );
-        }
-        catch (com.sun.star.uno.Exception e) {
-            throw new IllegalArgumentException( "Document could not be loaded" );
+            oDoc = getCLoader(xMSF)
+                       .loadComponentFromURL(url, "_blank", 0, Args);
+        } catch (com.sun.star.uno.Exception e) {
+            throw new IllegalArgumentException("Document could not be loaded");
         }
 
         return oDoc;
     } //finish openNewDoc
 
+    /**
+     * closes a given document
+     * @param DocumentToClose
+     */
+    public static void closeDoc(XInterface DocumentToClose) {
+        String kd = System.getProperty("KeepDocument");
+        if (kd != null ) {
+            System.out.println("The property 'KeepDocument' is set and so the document won't be disposed");
+            return;
+        }
+        XModifiable modified = (XModifiable) UnoRuntime.queryInterface(
+                                       XModifiable.class, DocumentToClose);
+        XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                    XCloseable.class, DocumentToClose);
+
+        try {
+            modified.setModified(false);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            System.out.println("Couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            System.out.println("Couldn't close document");
+        } catch (java.lang.NullPointerException e) {
+            System.out.println("Couldn't close document");
+        } catch (com.sun.star.beans.PropertyVetoException e) {
+            System.out.println("Couldn't close document");
+        }
+    }
 }
