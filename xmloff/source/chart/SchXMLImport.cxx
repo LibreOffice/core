@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 17:48:54 $
+ *  last change: $Author: bm $ $Date: 2001-03-15 20:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,6 +390,39 @@ const SvXMLTokenMap& SchXMLImportHelper::GetSeriesAttrTokenMap()
 }
 
 // ----------------------------------------
+
+sal_Int32 SchXMLImportHelper::GetNumberOfSeries()
+{
+    if( mxChartDoc.is())
+    {
+        uno::Reference< chart::XChartDataArray > xData( mxChartDoc->getData(), uno::UNO_QUERY );
+        if( xData.is())
+        {
+            uno::Sequence< uno::Sequence< double > > xArray = xData->getData();
+
+            if( xArray.getLength())
+                return xArray[ 0 ].getLength();
+        }
+    }
+
+    return 0;
+}
+
+sal_Int32 SchXMLImportHelper::GetLengthOfSeries()
+{
+    if( mxChartDoc.is())
+    {
+        uno::Reference< chart::XChartDataArray > xData( mxChartDoc->getData(), uno::UNO_QUERY );
+        if( xData.is())
+        {
+            uno::Sequence< uno::Sequence< double > > xArray = xData->getData();
+
+            return xArray.getLength();
+        }
+    }
+
+    return 0;
+}
 
 // -1 means don't change
 void SchXMLImportHelper::ResizeChartData( sal_Int32 nSeries, sal_Int32 nDataPoints )
