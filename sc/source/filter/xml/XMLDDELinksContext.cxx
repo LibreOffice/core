@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDDELinksContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
+ *  last change: $Author: aw $ $Date: 2001-02-27 14:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,7 +476,7 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
             }
             else if (aLocalName.compareToAscii(sXML_value) == 0)
             {
-                GetScImport().GetMM100UnitConverter().convertNumber(fValue, sTempValue);
+                GetScImport().GetMM100UnitConverter().convertDouble(fValue, sTempValue);
                 bEmpty = sal_False;
                 bString2 = sal_False;
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
+ *  last change: $Author: aw $ $Date: 2001-02-27 14:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE:
                 {
-                    GetScImport().GetMM100UnitConverter().convertNumber(fValue, sValue);
+                    GetScImport().GetMM100UnitConverter().convertDouble(fValue, sValue);
                     bIsEmpty = sal_False;
                 }
                 break;

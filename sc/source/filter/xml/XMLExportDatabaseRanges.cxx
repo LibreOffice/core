@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDatabaseRanges.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-11 06:57:04 $
+ *  last change: $Author: aw $ $Date: 2001-02-27 14:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ void ScXMLExportDatabaseRanges::WriteCondition(const sheet::TableFilterField& aF
     {
         rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_data_type, sXML_number);
         rtl::OUStringBuffer sBuffer;
-        rExport.GetMM100UnitConverter().convertNumber(sBuffer, aFilterField.NumericValue);
+        rExport.GetMM100UnitConverter().convertDouble(sBuffer, aFilterField.NumericValue);
         rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_value, sBuffer.makeStringAndClear());
     }
     else

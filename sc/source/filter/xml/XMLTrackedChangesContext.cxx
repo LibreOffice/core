@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTrackedChangesContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
+ *  last change: $Author: aw $ $Date: 2001-02-27 14:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,7 +714,7 @@ ScXMLChangeCellContext::ScXMLChangeCellContext(  ScXMLImport& rImport,
             }
             else if (aLocalName.compareToAscii(sXML_value) == 0)
             {
-                SvXMLUnitConverter::convertNumber(fValue, sValue);
+                SvXMLUnitConverter::convertDouble(fValue, sValue);
                 bEmpty = sal_False;
             }
             else if (aLocalName.compareToAscii(sXML_date_value) == 0)

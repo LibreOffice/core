@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDDELinks.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
+ *  last change: $Author: aw $ $Date: 2001-02-27 14:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ void ScXMLExportDDELinks::WriteCell(const sal_Bool bEmpty, const sal_Bool bStrin
         else
         {
             rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_value_type, sXML_float);
-            rExport.GetMM100UnitConverter().convertNumber(sBuffer, fValue);
+            rExport.GetMM100UnitConverter().convertDouble(sBuffer, fValue);
             rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_value, sBuffer.makeStringAndClear());
         }
     if (nRepeat > 1)

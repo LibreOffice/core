@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLCalculationSettingsContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
+ *  last change: $Author: aw $ $Date: 2001-02-27 14:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ ScXMLIterationContext::ScXMLIterationContext( ScXMLImport& rImport,
             else if (aLocalName.compareToAscii(sXML_maximum_difference) == 0)
             {
                 double fDif;
-                GetScImport().GetMM100UnitConverter().convertNumber(fDif, sValue);
+                GetScImport().GetMM100UnitConverter().convertDouble(fDif, sValue);
                 pCalcSet->SetIterationEpsilon(fDif);
             }
         }
