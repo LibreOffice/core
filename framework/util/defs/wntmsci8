@@ -4270,3 +4270,16 @@ __CTA2?AVbad_alloc@std@@
 ?iquery@?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
 ?iquery@?$Reference@VXChangesBatch@util@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
 ?iquery@?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXMacroExpander@util@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXController@frame@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXServiceInfo@lang@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXBitmap@awt@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXIndexContainer@container@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXUnoTunnel@lang@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXExtendedDocumentHandler@sax@xml@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXActiveDataSource@io@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXDocumentHandler@sax@xml@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXInputStream@io@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXOutputStream@io@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXParser@sax@xml@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
