@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-22 15:04:00 $
+ *  last change: $Author: ama $ $Date: 2001-11-29 15:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2778,10 +2778,19 @@ SwTwips SwFtnBossFrm::GetVarSpace() const
     SwTwips nRet;
     if( pBody )
     {
+#ifdef VERTICAL_LAYOUT
+        SWRECTFN( this )
+        if( IsInSct() )
+        {
+            nRet = 0;
+            SwTwips nTmp = (*fnRect->fnYDiff)( (pBody->*fnRect->fnGetPrtTop)(),
+                                               (Frm().*fnRect->fnGetTop)() );
+#else
         if( IsInSct() )
         {
             nRet = 0;
             SwTwips nTmp = pBody->Frm().Top() + pBody->Prt().Top() -Frm().Top();
+#endif
             const SwSectionFrm* pSect = FindSctFrm();
             //  Endnotes in a ftncontainer causes a deadline:
             // the bottom of the last contentfrm
@@ -2803,8 +2812,14 @@ SwTwips SwFtnBossFrm::GetVarSpace() const
                             {
                                 while( pFrm->GetNext() )
                                     pFrm = pFrm->GetNext(); // last cntntfrm
+#ifdef VERTICAL_LAYOUT
+                                nTmp += (*fnRect->fnYDiff)(
+                                         (Frm().*fnRect->fnGetTop)(),
+                                         (pFrm->Frm().*fnRect->fnGetBottom)() );
+#else
                                 nTmp += Frm().Top() - pFrm->Frm().Top()
                                         - pFrm->Frm().Height();
+#endif
                             }
                             break;
                         }
@@ -2816,8 +2831,13 @@ SwTwips SwFtnBossFrm::GetVarSpace() const
                 nRet = nTmp;
         }
         else
+#ifdef VERTICAL_LAYOUT
+            nRet = - (pPg->Prt().*fnRect->fnGetHeight)()/5;
+        nRet += (pBody->Frm().*fnRect->fnGetHeight)();
+#else
             nRet = - pPg->Prt().Height()/5;
         nRet += pBody->Frm().Height();
+#endif
         if( nRet < 0 )
             nRet = 0;
     }
