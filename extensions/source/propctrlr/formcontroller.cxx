@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-13 16:27:08 $
+ *  last change: $Author: fs $ $Date: 2001-02-20 08:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -763,13 +763,23 @@ namespace pcr
         SfxSingleTabDialog* pDlg = new SfxSingleTabDialog(GetpApp()->GetAppWindow(), aCoreSet, 0);
         SvxNumberFormatTabPage* pPage = (SvxNumberFormatTabPage*) SvxNumberFormatTabPage::Create(pDlg, aCoreSet);
         const SfxPoolItem& rInfoItem = pPage->GetItemSet().Get(SID_ATTR_NUMBERFORMAT_INFO);
-        pPage->SetNumberFormatList((const SvxNumberInfoItem&)rInfoItem );
         pDlg->SetTabPage(pPage);
 
         if (RET_OK == pDlg->Execute())
         {
             const SfxItemSet* pResult = pDlg->GetOutputItemSet();
-            const SfxPoolItem* pItem;
+
+            const SfxPoolItem* pItem = pResult->GetItem( SID_ATTR_NUMBERFORMAT_INFO );
+            const SvxNumberInfoItem* pInfoItem = static_cast<const SvxNumberInfoItem*>(pItem);
+            if (pInfoItem && pInfoItem->GetDelCount())
+            {
+                const sal_uInt32* pDeletedKeys = pInfoItem->GetDelArray();
+
+                for (sal_uInt16 i=0; i< pInfoItem->GetDelCount(); ++i, ++pDeletedKeys)
+                    pFormatter->DeleteEntry(*pDeletedKeys);
+            }
+
+            pItem = NULL;
             if (SFX_ITEM_SET == pResult->GetItemState(SID_ATTR_NUMBERFORMAT_VALUE, sal_False, &pItem))
                 Commit(_rName, ::rtl::OUString::valueOf((sal_Int32)((SfxUInt32Item*)pItem)->GetValue()), pSupplier);
         }
@@ -2517,6 +2527,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/02/13 16:27:08  fs
+ *  #83848# no multiline input for 'DefaultText' of FileControl / #83655# -1 as minimum for MaxTextLength
+ *
  *  Revision 1.7  2001/02/06 10:21:19  fs
  *  #83527# set the minimum for the BoundField property to 1
  *
