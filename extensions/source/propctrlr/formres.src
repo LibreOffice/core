@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-06 10:36:52 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,7 @@ String RID_STR_PROPTITLE_GROUPBOX
     Text [ dutch ] = "Groepskader" ;
     Text[ chinese_simplified ] = "Ğ¡×é¿ò";
     Text[ russian ] = "Ğàìêà ãğóïïû";
-    Text[ polish ] = "Pole grupy";
+    Text[ polish ] = "Ramka grupuj¹ca";
     Text[ japanese ] = "¸ŞÙ°ÌßÎŞ¯¸½";
     Text[ chinese_traditional ] = "¸s²Õ¤è¶ô";
     Text[ greek ] = "Ğëáßóéï ïìáäïğïßçóçò";
@@ -730,7 +730,7 @@ String RID_STR_PROPTITLE_DBGRID
     Text[ japanese ] = "Ã°ÌŞÙºİÄÛ°Ù ";
     Text[ chinese_traditional ] = "ªí®æ±±¨î¶µ ";
     Text[ greek ] = "Ğåäßï åëİã÷ïõ ğßíáêá ";
-    Text[ korean ] = "Ç¥ ÄÁÆ®·Ñ ÇÊµå ";
+    Text[ korean ] = "Å×ÀÌºí ÄÁÆ®·Ñ ÇÊµå ";
     Text[ arabic ] = "ÚäÕÑ ÊÍßã ÎÇÕ ÈÇáÌÏÇæá";
     Text[ turkish ] = "Tablo komut öğesi ";
     Text[ language_user1 ] = " ";
@@ -886,7 +886,7 @@ String RID_STR_LINECOUNT
     Text[ japanese ] = "s”";
     Text[ chinese_traditional ] = "¦C¼Æ";
     Text[ greek ] = "Áñéèìüò ãñáììşí";
-    Text[ korean ] = "ÁÙÀÇ ¼ö";
+    Text[ korean ] = "¿­ÀÇ ¼ö";
     Text[ arabic ] = "ÚÏÏ ÇáÃÓØÑ";
     Text[ turkish ] = "Satır sayısı";
     Text[ language_user1 ] = " ";
@@ -908,7 +908,7 @@ String RID_STR_MAXTEXTLEN
     Text [ dutch ] = "Max. tekstlengte" ;
     Text[ chinese_simplified ] = "×î³¤µÄÎÄ×Ö";
     Text[ russian ] = "Ìàêñ. äëèíà òåêñòà";
-    Text[ polish ] = "Maks. d³ugo?æ tekstu";
+    Text[ polish ] = "Maks. d³ugoœæ tekstu";
     Text[ japanese ] = "Å‘å•¶š”";
     Text[ chinese_traditional ] = "³Ìªøªº¤å¦r";
     Text[ greek ] = "Ìİãéóôï ìŞêïò êåéìİíïõ";
@@ -1090,7 +1090,7 @@ String RID_STR_TARGET_FRAME
     Text [ dutch ] = "Kader" ;
     Text[ chinese_simplified ] = "Ä¿±ê¿ò";
     Text[ russian ] = "Êàäğ";
-    Text[ polish ] = "Frame";
+    Text[ polish ] = "Ramka";
     Text[ japanese ] = "ÌÚ°Ñ";
     Text[ chinese_traditional ] = "°T®Ø";
     Text[ greek ] = "Ğëáßóéï";
@@ -1350,7 +1350,7 @@ String RID_STR_DEFAULT_SELECT_SEQ
     Text [ dutch ] = "Standaardselectie" ;
     Text[ chinese_simplified ] = "±ê×¼Ñ¡Ôñ";
     Text[ russian ] = "Âûáîğ ïî óìîë÷àíèş";
-    Text[ polish ] = "Selekcja domy?lna";
+    Text[ polish ] = "Selekcja domyœlna";
     Text[ japanese ] = "•W€‘I‘ğ”ÍˆÍ";
     Text[ chinese_traditional ] = "¼Ğ·Ç¿ï¾Ü";
     Text[ greek ] = "ÅğéëïãŞ ğñïåğéëïãŞò";
@@ -1376,7 +1376,7 @@ String RID_STR_DEFAULT_BUTTON
     Text [ dutch ] = "Standaardknop" ;
     Text[ chinese_simplified ] = "±ê×¼°´Å¥";
     Text[ russian ] = "Ñòàíäàğòíàÿ êíîïêà";
-    Text[ polish ] = "Przycisk domy?lny";
+    Text[ polish ] = "Przycisk domyœlny";
     Text[ japanese ] = "•W€ÎŞÀİ";
     Text[ chinese_traditional ] = "¼Ğ·Ç«ö¶s";
     Text[ greek ] = "Ğåäßï åğéëïãŞò (ĞñïåğéëïãŞ)";
@@ -1457,7 +1457,7 @@ String RID_STR_ALIGN
     Text[ japanese ] = "”z’u";
     Text[ chinese_traditional ] = "¹ï»ô";
     Text[ greek ] = "Óôïß÷éóç";
-    Text[ korean ] = "¸ÂÃã";
+    Text[ korean ] = "¹è¿­";
     Text[ arabic ] = "ÇáãÍÇĞÇÉ";
     Text[ turkish ] = "Hizalama";
     Text[ language_user1 ] = " ";
@@ -1687,7 +1687,7 @@ String RID_STR_TABINDEX
     Text [ dutch ] = "Volgorde" ;
     Text[ chinese_simplified ] = "Ë³Ğò";
     Text[ russian ] = "Ïîğÿäîê";
-    Text[ polish ] = "Kolejno?æ";
+    Text[ polish ] = "Kolejnoœæ";
     Text[ japanese ] = "‡˜";
     Text[ chinese_traditional ] = "¶¶§Ç";
     Text[ greek ] = "ÄéÜôáîç";
@@ -1872,7 +1872,7 @@ String RID_STR_TABSTOP
     Text[ japanese ] = "ÀÌŞ½Ä¯Ìß";
     Text[ chinese_traditional ] = "»sªí²Å";
     Text[ greek ] = "Óôçëïèİôçò";
-    Text[ korean ] = "ÅÇ ÁßÁö";
+    Text[ korean ] = "ÅÇ½ºÅé";
     Text[ arabic ] = "ÚáÇãÉ ÌÏæáÉ";
     Text[ turkish ] = "Sekme durağı";
     Text[ language_user1 ] = " ";
@@ -1950,7 +1950,7 @@ String RID_STR_BOUNDCOLUMN
     Text[ japanese ] = "ŠÖ˜A‚ ‚éÌ¨°ÙÄŞ";
     Text[ chinese_traditional ] = "©T©wªºÄæ¦ì";
     Text[ greek ] = "Äåóìåõìİíï ğåäßï";
-    Text[ korean ] = "¹Ù¿îµå ¿­";
+    Text[ korean ] = "¹Ù¿îµå ÇÊµå";
     Text[ arabic ] = "ÍŞá ãÑÈæØ";
     Text[ turkish ] = "Bağlı alan";
     Text[ language_user1 ] = " ";
@@ -1972,7 +1972,7 @@ String RID_STR_LISTSOURCE
     Text [ dutch ] = "Lijstinhoud" ;
     Text[ chinese_simplified ] = "ÁĞ±íÄÚÈİ";
     Text[ russian ] = "Ñîäåğæèìîå ñïèñêà";
-    Text[ polish ] = "Zawarto?æ listy";
+    Text[ polish ] = "Zawartoœæ listy";
     Text[ japanese ] = "Ø½Ä‚Ì“à—e";
     Text[ chinese_traditional ] = "²M³æ¤º®e";
     Text[ greek ] = "Ğåñéå÷üìåíï ëßóôáò";
@@ -1998,7 +1998,7 @@ String RID_STR_LISTSOURCETYPE
     Text [ dutch ] = "Soort lijstinhoud" ;
     Text[ chinese_simplified ] = "ÁĞ±íÄÚÈİµÄÀàĞÍ";
     Text[ russian ] = "Òèï ñîäåğæèìîãî ñïèñêà";
-    Text[ polish ] = "Rodzaj zawarto?ci listy";
+    Text[ polish ] = "Rodzaj zawartoœci listy";
     Text[ japanese ] = "Ø½Ä“à—e‚Ìí—Ş";
     Text[ chinese_traditional ] = "²M³æ¤º®eªºÃş«¬";
     Text[ greek ] = "Ôığïò ôïõ ğåñéå÷ïìİíïõ ëßóôáò";
@@ -2023,7 +2023,7 @@ String RID_STR_CURSORSOURCE
     Text[ italian ] = "Contenuto";
     Text[ danish ] = "Datakilde";
     Text[ swedish ] = "Innehåll";
-    Text[ polish ] = "Zawarto?æ";
+    Text[ polish ] = "Zawartoœæ";
     Text[ portuguese_brazilian ] = "Datenquelle";
     Text[ japanese ] = "“à—e";
     Text[ korean ] = "³»¿ë";
@@ -2048,7 +2048,7 @@ String RID_STR_CURSORSOURCETYPE
     Text[ italian ] = "Tipo di contenuto";
     Text[ danish ] = "Datakildetype";
     Text[ swedish ] = "Typ av innehåll";
-    Text[ polish ] = "Rodzaj zawarto?ci";
+    Text[ polish ] = "Rodzaj zawartoœci";
     Text[ portuguese_brazilian ] = "Typ der Datenquelle";
     Text[ japanese ] = "“à—e‚Ìí—Ş";
     Text[ korean ] = "³»¿ë Á¾·ù";
@@ -2177,7 +2177,7 @@ String RID_STR_DATASOURCE
     Text[ italian ] = "Sorgente dati";
     Text[ danish ] = "Database";
     Text[ swedish ] = "Datakälla";
-    Text[ polish ] = "?ród³o danych";
+    Text[ polish ] = "ród³o danych";
     Text[ portuguese_brazilian ] = "Datenbank";
     Text[ japanese ] = "ÃŞ°ÀÍŞ°½";
     Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º";
@@ -2207,7 +2207,7 @@ String RID_STR_MASTERFIELDS
     Text[ japanese ] = "Øİ¸Œ³";
     Text[ chinese_traditional ] = "³sµ²¨ì";
     Text[ greek ] = "Óıíäåóç ôùí";
-    Text[ korean ] = "¿¬°á";
+    Text[ korean ] = "-À¸·ÎºÎÅÍ ¿¬°á";
     Text[ arabic ] = "ÑÈØ";
     Text[ turkish ] = "Bağlantı öğeleri";
     Text[ language_user1 ] = " ";
@@ -2233,7 +2233,7 @@ String RID_STR_SLAVEFIELDS
     Text[ japanese ] = "Øİ¸æ";
     Text[ chinese_traditional ] = "³sµ²¨ì";
     Text[ greek ] = "Óıíäåóç ìå";
-    Text[ korean ] = "ÇÏÀ§ ÇÊµå";
+    Text[ korean ] = "-À¸·Î ¿¬°á";
     Text[ arabic ] = "ÇÑÊÈÇØ ãÚ";
     Text[ turkish ] = "Alt alanlar";
     Text[ language_user1 ] = " ";
@@ -2255,7 +2255,7 @@ String RID_STR_VALUEMIN
     Text [ dutch ] = "Min. waarde" ;
     Text[ chinese_simplified ] = "×îĞ¡ÊıÖµ";
     Text[ russian ] = "Ìèí. çíà÷åíèå";
-    Text[ polish ] = "Min. warto?æ";
+    Text[ polish ] = "Min. wartoœæ";
     Text[ japanese ] = "Å¬’l";
     Text[ chinese_traditional ] = "³Ì¤p¼Æ­È";
     Text[ greek ] = "ÅëÜ÷éóôç ôéìŞ";
@@ -2281,7 +2281,7 @@ String RID_STR_VALUEMAX
     Text [ dutch ] = "Max. waarde" ;
     Text[ chinese_simplified ] = "×î´óÊıÖµ";
     Text[ russian ] = "Ìàêñ. çíà÷åíèå";
-    Text[ polish ] = "Maks. warto?æ";
+    Text[ polish ] = "Maks. wartoœæ";
     Text[ japanese ] = "Å‘å’l";
     Text[ chinese_traditional ] = "³Ì¤j¼Æ­È";
     Text[ greek ] = "Ìİãéóôç ôéìŞ";
@@ -2541,7 +2541,7 @@ String RID_STR_VALUE
     Text [ dutch ] = "Waarde" ;
     Text[ chinese_simplified ] = "ÊıÖµ";
     Text[ russian ] = "Çíà÷åíèå";
-    Text[ polish ] = "Warto?æ";
+    Text[ polish ] = "Wartoœæ";
     Text[ japanese ] = "’l";
     Text[ chinese_traditional ] = "¼Æ­È";
     Text[ greek ] = "ÔéìŞ";
@@ -2619,7 +2619,7 @@ String RID_STR_HEIGHT
     Text [ dutch ] = "Hoogte" ;
     Text[ chinese_simplified ] = "¸ß¶È";
     Text[ russian ] = "Âûñîòà";
-    Text[ polish ] = "Wysoko?æ";
+    Text[ polish ] = "Wysokoœæ";
     Text[ japanese ] = "‚‚³";
     Text[ chinese_traditional ] = "°ª«×";
     Text[ greek ] = "¾øïò";
@@ -2645,7 +2645,7 @@ String RID_STR_WIDTH
     Text [ dutch ] = "Breedte" ;
     Text[ chinese_simplified ] = "¿í¶È";
     Text[ russian ] = "Øèğèíà";
-    Text[ polish ] = "Szeroko?æ";
+    Text[ polish ] = "Szerokoœæ";
     Text[ japanese ] = "•";
     Text[ chinese_traditional ] = "¼e«×";
     Text[ greek ] = "ĞëÜôïò";
@@ -2697,7 +2697,7 @@ String RID_STR_ROWHEIGHT
     Text [ dutch ] = "Rijhoogte" ;
     Text[ chinese_simplified ] = "ĞĞ¸ß";
     Text[ russian ] = "Âûñîòà ñòğîê";
-    Text[ polish ] = "Wysoko?æ wierszy";
+    Text[ polish ] = "Wysokoœæ wierszy";
     Text[ japanese ] = "s‚Ì‚‚³";
     Text[ chinese_traditional ] = "¦C°ª";
     Text[ greek ] = "¾øïò ãñáììŞò";
@@ -2775,7 +2775,7 @@ String RID_STR_REFVALUE
     Text [ dutch ] = "Referentiewaarde" ;
     Text[ chinese_simplified ] = "ÒıÓÃÖµ";
     Text[ russian ] = "Çíà÷åíèå ññûëêè";
-    Text[ polish ] = "Warto?æ odwo³ania";
+    Text[ polish ] = "Wartoœæ odwo³ania";
     Text[ japanese ] = "QÆ’l";
     Text[ chinese_traditional ] = "°Ñ·Ó­È";
     Text[ greek ] = "ÔéìŞ áíáöïñÜò";
@@ -2905,7 +2905,7 @@ String RID_STR_DEFAULT_CHECKED
     Text [ dutch ] = "Standaardstatus" ;
     Text[ chinese_simplified ] = "±ê×¼×´Ì¬";
     Text[ russian ] = "Ñòàòóñ ïî óìîë÷àíèş";
-    Text[ polish ] = "Stan domy?lny";
+    Text[ polish ] = "Stan domyœlny";
     Text[ japanese ] = "•W€½Ã°À½";
     Text[ chinese_traditional ] = "¼Ğ·Çª¬ºA";
     Text[ greek ] = "Ğñïåğéëåãìİíç êáôÜóôáóç";
@@ -2957,7 +2957,7 @@ String RID_STR_DEFAULTVALUE
     Text [ dutch ] = "Standaardwaarde" ;
     Text[ chinese_simplified ] = "Ä¬ÈÏÖµ";
     Text[ russian ] = "Çíà÷åíèå ïî óìîë÷àíèş";
-    Text[ polish ] = "Warto?æ domy?lna";
+    Text[ polish ] = "Wartoœæ domyœlna";
     Text[ japanese ] = "•W€’l";
     Text[ chinese_traditional ] = "Àq»{­È";
     Text[ greek ] = "Ğñïåğéëåãìİíç ôéìŞ";
@@ -2983,7 +2983,7 @@ String RID_STR_SUBMIT_TARGET
     Text [ dutch ] = "Kader" ;
     Text[ chinese_simplified ] = "Ä¿±ê¿ò";
     Text[ russian ] = "Êàäğ";
-    Text[ polish ] = "Frame";
+    Text[ polish ] = "Ramka";
     Text[ japanese ] = "ÌÚ°Ñ";
     Text[ chinese_traditional ] = "°T®Ø";
     Text[ greek ] = "Ğëáßóéï";
@@ -3009,7 +3009,7 @@ String RID_STR_BORDER_TYPE
     Text [ dutch ] = "Zonder kader;3D-look;vlak" ;
     Text[ chinese_simplified ] = "ÎŞ¿ò;3Î¬ÏÔÊ¾;Æ½Ãæ";
     Text[ russian ] = "Áåç ğàìêè;3-Ì-Âèä;Ïëîñêèé";
-    Text[ polish ] = "Prze?roczysty;Ustawienie 3-W;P³aski";
+    Text[ polish ] = "PrzeŸroczysty;Ustawienie 3-W;P³aski";
     Text[ japanese ] = "˜g‚È‚µ;3D Ù¯¸;•½‚½‚¢";
     Text[ chinese_traditional ] = "µL®Ø¡F3D Åã¥Ü¡F¥­­±";
     Text[ greek ] = "×ùñßò ğëáßóéï;ÅìöÜíéóç 3Ä;Åğßğåäï";
@@ -3060,7 +3060,7 @@ String RID_STR_LISTSOURCE_TYPE
     Text [ dutch ] = "Waardenlijst;Tabel;Query;Sql;Sql [Native];Tabelvelden" ;
     Text[ chinese_simplified ] = "ÊıÖµÁĞµ¥;±í¸ñ;²éÑ¯;Sql;Sql [Native];¹¤×÷±í×Ö¶Î";
     Text[ russian ] = "Ñïèñîê çíà÷åíèé;Òàáëèöà;Çàïğîñ;Sql;Sql [Native];Ïîëÿ òàáëèöû";
-    Text[ polish ] = "Lista warto?ci;Tabela;Kwerenda;Sql;Sql [Native];Pola tabeli";
+    Text[ polish ] = "Lista wartoœci;Tabela;Kwerenda;Sql;Sql [Native];Pola tabeli";
     Text[ japanese ] = "’lØ½Ä;Ã°ÌŞÙ;¸´Ø°;Sql;Sql [Native];Ã°ÌŞÙÌ¨°ÙÄŞ";
     Text[ greek ] = "Ëßóôá ôéìşí;Ğßíáêáò;Åñşôçìá;Sql;Sql [Native];Ğåäßá ğéíÜêùí";
     Text[ korean ] = "°ª ¸ñ·Ï;Å×ÀÌºí;ÁúÀÇ;Sql;Sql [Native];Å×ÀÌºí ÇÊµå";
@@ -3085,7 +3085,7 @@ String RID_STR_ALIGNMENT
     Text [ dutch ] = "Links;Gecentreerd;Rechts" ;
     Text[ chinese_simplified ] = "Ïò×ó;¾ÓÖĞ;ÏòÓÒ";
     Text[ russian ] = "Ñëåâà;Ïî öåíòğó;Ñïğàâà";
-    Text[ polish ] = "Do lewej;Wy?rodkowany;Do prawej";
+    Text[ polish ] = "Do lewej;Wyœrodkowany;Do prawej";
     Text[ japanese ] = "¶‘µ‚¦;’†‰›‘µ‚¦;‰E‘µ‚¦";
     Text[ chinese_traditional ] = "¦V¥ª;¸m¤¤;¦V¥k";
     Text[ greek ] = "ÁñéóôåñÜ;Êİíôñï;ÄåîéÜ";
@@ -3194,7 +3194,7 @@ String RID_STR_DATEFORMAT_LIST
     Text [ french ] = "Standard (court);Standard (court AA);Standard (court AAAA);Standard (long);JJ.MM.AA;MM.JJ.AA;AA.MM.JJ;JJ.MM.AAAA;MM.JJ.AAAA;.AAAA.MM.JJ;AA-MM-JJ (DIN5008);AAAA-MM-JJ (DIN5008)" ;
     Text [ dutch ] = "Standaard (kort);Standaard (kort JJ);Standaard (kort JJJJ);Standaard (lang);TT.MM.JJ;MM.TT.JJ;JJ.MM.TT;TT.MM.JJJJ;MM.TT.JJJJ;JJJJ.MM.TT;JJ-MM-TT;JJJJ-MM-TT" ;
     Text[ chinese_simplified ] = "±ê×¼(ËõĞ´);±ê×¼(ËõĞ´ JJ);±ê×¼(ËõĞ´ JJJJ);±ê×¼ (ÍêÕû);TT.MM.JJ;MM.TT.JJ;JJ.MM.TT;TT.MM.JJJJ;MM.TT.JJJJ;JJJJ.MM.TT;JJ-MM-TT (DIN5008);JJJJ-MM-TT (DIN5008)";
-    Text[ russian ] = "Ñòàíäàğò (êğàòêèé);Ñòàíäàğò (êğàòêèé ÃÃ); (êğàòêèé ÃÃÃÃ);Ñòàíäàğò (ïîëíûé);ÄÄ.MM.ÃÃ;MM.ÄÄ.ÃÃ;ÃÃ.MM.ÄÄ;ÄÄ.ÌÌ.ÃÃÃÃ;ÃÃÃÃ.ÌÌ.ÄÄ;ÃÃ-ÌÌ-ÄÄ (DIN5008);ÃÃÃÃ-MM-ÄÄ (DIN";
+    Text[ russian ] = "Ñòàíäàğò (êğàòêèé);Ñòàíäàğò (êğàòêèé ÃÃ); (êğàòêèé ÃÃÃÃ);Ñòàíäàğò (ïîëíûé);ÄÄ.MM.ÃÃ;MM.ÄÄ.ÃÃ;ÃÃ.MM.ÄÄ;ÄÄ.ÌÌ.ÃÃÃÃ;ÃÃÃÃ.ÌÌ.ÄÄ;ÃÃ-ÌÌ-ÄÄ (DIN5008);ÃÃÃÃ-MM-ÄÄ (DIN5008)";
     Text[ polish ] = "Standard (krótko);Standard (krótko RR);Standard (krótko RRRR);Standard (d³ugo);DD.MM.RR;MM.DD.RR;RR.MM.DD;DD.MM.RRRR;MM.DD.RRRR;RRRR.MM.DD;RR-MM-DD (DIN5008);RRRR-MM-DD (DIN5008)";
     Text[ japanese ] = "•W€(’Z‚¢Œ`®);•W€(’Z‚¢Œ`® YY);•W€(’Z‚¢Œ`® YYYY);•W€(’·‚¢Œ`®j;DD.MM.YY;MM.DD.YY;YY.MM.DD;DD.MM.YYYY;MM.DD.YYYY;YYYY.MM.DD;YY-MM-DD (DIN5008);YYYY-MM-DD (DIN5008)";
     Text[ chinese_traditional ] = "¼Ğ·Ç(ÁY¼g);¼Ğ·Ç(ÁY¼g JJ);¼Ğ·Ç(ÁY¼g JJJJ);¼Ğ·Ç(§¹¾ã);TT.MM.JJ;MM.TT.JJ;JJ.MM.TT;TT.MM.JJJJ;MM.TT.JJJJ;JJJJ.MM.TT;JJ-MM-TT (DIN5008);JJJJ-MM-TT (DIN5008)";
@@ -3247,7 +3247,7 @@ String RID_STR_ENUM_CHECKED
     Text [ dutch ] = "Niet geselecteerd;Wel geselecteerd;Onbepaald" ;
     Text[ chinese_simplified ] = "Ã»ÓĞÑ¡Ôñ;ÒÑÑ¡Ôñ;Î´¶¨";
     Text[ russian ] = "Íå âûáğàíî;Âûáğàíî;Íåîïğåäåëåíî";
-    Text[ polish ] = "Niewybrany;Wybrany;Nieokre?lony";
+    Text[ polish ] = "Niewybrany;Wybrany;Nieokreœlony";
     Text[ japanese ] = "‘I‘ğ‚µ‚Ä‚¢‚È‚¢;‘I‘ğ‚µ‚½;w’è‚È‚µ";
     Text[ chinese_traditional ] = "¨S¦³¿ï¾Ü;¤w¿ï¾Ü;¥¼©w";
     Text[ greek ] = "Ìç åğéëåãìİíá;Åğéëåãìİíá;Ìç ïñéóìİíï";
@@ -3303,7 +3303,7 @@ String RID_STR_ENUM_NAVIGATION
     Text[ japanese ] = "‚¢‚¢‚¦;‚Í‚¢;ãˆÊ‚ÌÌ«°Ñ";
     Text[ chinese_traditional ] = "§_;¬O;¥Àªí³æ";
     Text[ greek ] = "¼÷é;Íáé;Áíşôåñç öüñìá";
-    Text[ korean ] = "¾Æ´Ï¿À;¿¹;»óÀ§ Æû";
+    Text[ korean ] = "¾Æ´Ï¿À;¿¹;»óÀ§ ¾ç½Ä";
     Text[ arabic ] = "áÇºäÚãºÇáÇÓÊãÇÑÉ ÇáÃÕá";
     Text[ turkish ] = "Hayır;Evet;Üst düzey form";
     Text[ language_user1 ] = " ";
@@ -3426,14 +3426,14 @@ String RID_STR_EVT_APPROVEROWCHANGE
     Text[ portuguese ] = "Antes de modificar registo de dados";
     Text[ russian ] = "Ïåğåä îïåğàöèåé çàïèñè";
     Text[ greek ] = "Ğñéí ôçí áëëáãŞ ôçò åããñáöŞò";
-    Text[ dutch ] = "Voor het veranderen van de record";
+    Text[ dutch ] = "Voor het editeren van de record";
     Text[ french ] = "Avant l'opération d'enregistrement";
     Text[ spanish ] = "Antes de la acción en el registro de datos";
     Text[ finnish ] = "Ennen tietueen muuttamista";
     Text[ italian ] = "Prima della modifica dei record di dati";
     Text[ danish ] = "Inden datapostændring";
     Text[ swedish ] = "Före datapoståtgärd";
-    Text[ polish ] = "Przed zmodyfikowaniem rekordów";
+    Text[ polish ] = "Przed operacj¹ rekordów";
     Text[ portuguese_brazilian ] = "Before row change";
     Text[ japanese ] = "Úº°ÄŞ‚Ì±¸¼®İÀs‘O";
     Text[ chinese_simplified ] = "ÔÚ¸ü¸ÄÊı¾İÌõÄ¿Ö®Ç°";
@@ -3451,14 +3451,14 @@ String RID_STR_EVT_ROWCHANGE
     Text[ portuguese ] = "Depois de modificar registo de dados";
     Text[ russian ] = "Ïîñëå îïåğàöèè çàïèñè";
     Text[ greek ] = "ÌåôÜ ôçí áëëáãŞ ôçò åããñáöŞò";
-    Text[ dutch ] = "Na het veranderen van de record";
+    Text[ dutch ] = "Na het editeren van de record";
     Text[ french ] = "Après l'opération d'enregistrement";
     Text[ spanish ] = "Después de la acción en el registro de datos";
     Text[ finnish ] = "Tietueen muuttamisen jälkeen";
     Text[ italian ] = "Dopo la modifica dei record di dati";
     Text[ danish ] = "Efter datapostændring";
     Text[ swedish ] = "Efter datapoståtgärd";
-    Text[ polish ] = "Po zmodyfikowaniu rekordów";
+    Text[ polish ] = "Po operacji rekordów";
     Text[ portuguese_brazilian ] = "After row change";
     Text[ japanese ] = "Úº°ÄŞ‚Ì±¸¼®İÀsŒã";
     Text[ chinese_simplified ] = "ÔÚ¸ü¸ÄÊı¾İÌõÄ¿Ö®ºó";
@@ -3483,7 +3483,7 @@ String RID_STR_EVT_CONFIRMDELETE
     Text [ dutch ] = "Wissen bevestigen" ;
     Text[ chinese_simplified ] = "È·¶¨É¾³ı";
     Text[ russian ] = "Ïîäòâåğäèòü óäàëåíèå";
-    Text[ polish ] = "Potwierd? usuniêcie";
+    Text[ polish ] = "PotwierdŸ usuniêcie";
     Text[ japanese ] = "íœ‚ÌŠm”F";
     Text[ chinese_traditional ] = "½T©w§R°£";
     Text[ greek ] = "Åğéâåâáßùóç äéáãñáöŞò";
@@ -3613,7 +3613,7 @@ String RID_STR_EVT_KEYTYPED
     Text [ dutch ] = "Met ingedrukte toets" ;
     Text[ chinese_simplified ] = "°´×¡°´¼ü";
     Text[ russian ] = "Íàæàòàÿ êëàâèøà ";
-    Text[ polish ] = "Wci?niêty klawisz";
+    Text[ polish ] = "Wciœniêty klawisz";
     Text[ japanese ] = "·°‚ğ‰Ÿ‚µ‚½";
     Text[ chinese_traditional ] = "«ö¦í«öÁä";
     Text[ greek ] = "ĞëŞêôñï ğéåóìİíï";
@@ -3741,7 +3741,7 @@ String RID_STR_EVT_MOUSEDRAGGED
     Text [ dutch ] = "Muisbeweging bij indrukken toets" ;
     Text[ chinese_simplified ] = "ÔÚ°´»÷Êó±ê¼üµÄÍ¬Ê±ÒÆ¶¯Êó±ê";
     Text[ russian ] = "Ïåğåìåùåíèå ìûøè ïğè íàæàòèè êëàâèøè";
-    Text[ polish ] = "Przesuwanie myszy z naci?niêtym przyciskiem";
+    Text[ polish ] = "Przesuwanie myszy z naciœniêtym przyciskiem";
     Text[ japanese ] = "·°‚ğ‰Ÿ‚µÏ³½‘€ì‚·‚é";
     Text[ chinese_traditional ] = "«ö¦í·Æ¹««öÁä²¾°Ê®É";
     Text[ greek ] = "Ìåôáêßíçóç ğïíôéêéïı ìå ğéåóìİíï ğëŞêôñï";
@@ -3845,7 +3845,7 @@ String RID_STR_EVT_MOUSEPRESSED
     Text [ dutch ] = "Muistoets ingedrukt" ;
     Text[ chinese_simplified ] = "°´×¡Êó±ê¼ü";
     Text[ russian ] = "Íàæàòàÿ êëàâèøà ìûøè";
-    Text[ polish ] = "Naci?niêty przycisk myszy";
+    Text[ polish ] = "Naciœniêty przycisk myszy";
     Text[ japanese ] = "Ï³½ÎŞÀİ‚ğ‰Ÿ‚µ‚½";
     Text[ chinese_traditional ] = "«ö¦í·Æ¹«Áä";
     Text[ greek ] = "ĞëŞêôñï ğïíôéêéïı ğéåóìİíï";
@@ -3952,7 +3952,7 @@ String RID_STR_EVT_RESETTED
     Text[ japanese ] = "Œ³‚É–ß‚µ‚½Œã";
     Text[ chinese_traditional ] = "­«³]¤§«á";
     Text[ greek ] = "ÌåôÜ ôçí åğáíáöïñÜ";
-    Text[ korean ] = "¿ø·¡´ë·Î ÇÑ ÈÄ¿¡";
+    Text[ korean ] = "¸®¼ÂÇÑ ÈÄ¿¡";
     Text[ arabic ] = "ÈÚÏ ÅÚÇÏÉ ÇáÊÚííä";
     Text[ turkish ] = "Geri almadan sonra";
     Text[ language_user1 ] = " ";
@@ -4277,7 +4277,7 @@ String RID_STR_STEP
     Text[ dutch ] = "Pagina (Stap)";
     Text[ french ] = "Page (Step)";
     Text[ spanish ] = "Página (Step)";
-    Text[ italian ] = "Step";
+    Text[ italian ] = "Pagina (Step)";
     Text[ danish ] = "Step";
     Text[ swedish ] = "Sida (steg)";
     Text[ polish ] = "Strona (Krok)";
@@ -4287,7 +4287,7 @@ String RID_STR_STEP
     Text[ chinese_simplified ] = "Ò³ (²½)";
     Text[ chinese_traditional ] = "­¶ (¨B)";
     Text[ turkish ] = "Step";
-    Text[ arabic ] = "ÎØæÉ";
+    Text[ arabic ] = "ÕİÍÉ (ÎØæÉ)";
     Text[ finnish ] = "Step";
     Text[ catalan ] = "Step";
 };
@@ -4358,7 +4358,7 @@ TabDialog RID_TABDLG_FONTDIALOG
                 Text [ finnish ] = "Fonttitehosteet" ;
                 Text [ danish ] = "Skrifteffekt" ;
                 Text [ french ] = "Effets de caractères" ;
-                Text [ swedish ] = "Teckensnittseffekt" ;
+                Text [ swedish ] = "Teckeneffekt" ;
                 Text [ dutch ] = "Schrifteffect" ;
                 Text [ spanish ] = "Efectos de fuente" ;
                 Text [ chinese_simplified ] = "×ÖÌåĞ§¹û";
@@ -4398,17 +4398,17 @@ String RID_STR_PROGRESSVALUE
     Text[ dutch ] = "Voortgangswaarde";
     Text[ french ] = "Valeur de progression";
     Text[ spanish ] = "Valor de progresión";
-    Text[ italian ] = "Progress value";
+    Text[ italian ] = "Valore di progressione";
     Text[ danish ] = "Progress value";
     Text[ swedish ] = "Framstegsvärde";
-    Text[ polish ] = "Warto?æ postêpu";
+    Text[ polish ] = "Wartoœæ postêpu";
     Text[ portuguese_brazilian ] = "Progress value";
     Text[ japanese ] = "is’l";
     Text[ korean ] = "Progress value";
     Text[ chinese_simplified ] = "½øÕ¹ÊıÖµ";
     Text[ chinese_traditional ] = "¶i®iªº¼Æ­È";
     Text[ turkish ] = "Progress value";
-    Text[ arabic ] = "Progress value";
+    Text[ arabic ] = "ŞíãÉ ÇáÊŞÏã";
     Text[ catalan ] = "Progress value";
     Text[ finnish ] = "Fortschrittswert";
 };
@@ -4423,17 +4423,17 @@ String RID_STR_PROGRESSVALUE_MIN
     Text[ dutch ] = "Min. voortgangswaarde";
     Text[ french ] = "Valeur de progression min.";
     Text[ spanish ] = "Valor mín. de progresión";
-    Text[ italian ] = "Progress value min.";
+    Text[ italian ] = "Valore min. progressione";
     Text[ danish ] = "Progress value min.";
     Text[ swedish ] = "Min. framstegsvärde";
-    Text[ polish ] = "Min. warto?æ postêpu";
+    Text[ polish ] = "Min. wartoœæ postêpu";
     Text[ portuguese_brazilian ] = "Progress value min.";
     Text[ japanese ] = "Å¬is’l";
     Text[ korean ] = "Progress value min.";
     Text[ chinese_simplified ] = "×îĞ¡µÄ½øÕ¹ÊıÖµ";
     Text[ chinese_traditional ] = "³Ì¤pªº¶i®i¼Æ­È";
     Text[ turkish ] = "Progress value min.";
-    Text[ arabic ] = "Progress value min.";
+    Text[ arabic ] = "ÃŞá ŞíãÉ ÊŞÏã";
     Text[ catalan ] = "Progress value min.";
     Text[ finnish ] = "Min. Fortschrittswert";
 };
@@ -4448,17 +4448,17 @@ String RID_STR_PROGRESSVALUE_MAX
     Text[ dutch ] = "Max. voortgangswaarde";
     Text[ french ] = "Veleur de progression max.";
     Text[ spanish ] = "Valor máx. de progresión";
-    Text[ italian ] = "Progress value max.";
+    Text[ italian ] = "Valore max. progressione";
     Text[ danish ] = "Progress value max.";
     Text[ swedish ] = "Max. framstegsvärde";
-    Text[ polish ] = "Maks. warto?æ postêpu";
+    Text[ polish ] = "Maks. wartoœæ postêpu";
     Text[ portuguese_brazilian ] = "Progress value max.";
     Text[ japanese ] = "Å‘åis’l";
     Text[ korean ] = "Progress value max.";
     Text[ chinese_simplified ] = "×î´óµÄ½øÕ¹ÊıÖµ";
     Text[ chinese_traditional ] = "³Ì¤jªº¶i®i¼Æ­È";
     Text[ turkish ] = "Progress value max.";
-    Text[ arabic ] = "Progress value max.";
+    Text[ arabic ] = "ÃßÈÑ ŞíãÉ ÊŞÏã";
     Text[ catalan ] = "Progress value max.";
     Text[ finnish ] = "Max. Fortschrittswert";
 };
@@ -4473,17 +4473,17 @@ String RID_STR_SCROLLVALUE
     Text[ dutch ] = "Scrollwaarde";
     Text[ french ] = "Valeur de défilement";
     Text[ spanish ] = "Valor ?";
-    Text[ italian ] = "Scroll value";
+    Text[ italian ] = "Valore scorrimento";
     Text[ danish ] = "Scroll value";
     Text[ swedish ] = "Rullningsvärde";
-    Text[ polish ] = "Warto?æ przewijania";
+    Text[ polish ] = "Wartoœæ przewijania";
     Text[ portuguese_brazilian ] = "Scroll value";
     Text[ japanese ] = "½¸Û°Ù’l";
     Text[ korean ] = "Scroll value";
     Text[ chinese_simplified ] = "¹ö¶¯ÊıÖµ";
     Text[ chinese_traditional ] = "±²°Ê­È";
     Text[ turkish ] = "Scroll value";
-    Text[ arabic ] = "Scroll value";
+    Text[ arabic ] = "ŞíãÉ ÇáÊãÑíÑ";
     Text[ catalan ] = "Scroll value";
     Text[ finnish ] = "Scrollwert";
 };
@@ -4498,17 +4498,17 @@ String RID_STR_SCROLLVALUE_MAX
     Text[ dutch ] = "Max. scrollwaarde";
     Text[ french ] = "Valeur de défilement max.";
     Text[ spanish ] = "Scroll value max.";
-    Text[ italian ] = "Scroll value max.";
+    Text[ italian ] = "Valori max. scorrimento";
     Text[ danish ] = "Scroll value max.";
     Text[ swedish ] = "Max. rullningsvärde";
-    Text[ polish ] = "Maks. warto?æ przewijania";
+    Text[ polish ] = "Maks. wartoœæ przewijania";
     Text[ portuguese_brazilian ] = "Scroll value max.";
     Text[ japanese ] = "Å‘å½¸Û°Ù’l";
     Text[ korean ] = "Scroll value max.";
     Text[ chinese_simplified ] = "×î´óµÄ¹ö¶¯ÊıÖµ";
     Text[ chinese_traditional ] = "³Ì¤jªº±²°Ê­È";
     Text[ turkish ] = "Scroll value max.";
-    Text[ arabic ] = "Scroll value max.";
+    Text[ arabic ] = "ÃßÈÑ ŞíãÉ ÊãÑíÑ";
     Text[ catalan ] = "Scroll value max.";
     Text[ finnish ] = "Max. Scrollwert";
 };
@@ -4523,10 +4523,10 @@ String RID_STR_LINEINCREMENT
     Text[ dutch ] = "Toename lijn";
     Text[ french ] = "Incrément de ligne";
     Text[ spanish ] = "Incremento de línea";
-    Text[ italian ] = "Line increment";
+    Text[ italian ] = "Incremento linea";
     Text[ danish ] = "Line increment";
     Text[ swedish ] = "Linjeinkrement";
-    Text[ polish ] = "Line increment";
+    Text[ polish ] = "Inkrement linii";
     Text[ portuguese_brazilian ] = "Line increment";
     Text[ japanese ] = "ü‘•ª";
     Text[ korean ] = "Line increment";
@@ -4548,17 +4548,17 @@ String RID_STR_BLOCKINCREMENT
     Text[ dutch ] = "Toename blok";
     Text[ french ] = "Incrément de bloc";
     Text[ spanish ] = "Incremento de bloque";
-    Text[ italian ] = "Block increment";
+    Text[ italian ] = "Incremento blocco";
     Text[ danish ] = "Block increment";
     Text[ swedish ] = "Blockinkrement";
-    Text[ polish ] = "Block increment";
+    Text[ polish ] = "Inkrement bloku";
     Text[ portuguese_brazilian ] = "Block increment";
     Text[ japanese ] = "ÌŞÛ¯¸‘•ª";
     Text[ korean ] = "Block increment";
-    Text[ chinese_simplified ] = "·½¿éµİÔö";
-    Text[ chinese_traditional ] = "¤è¶ô»¼¼W";
+    Text[ chinese_simplified ] = "¿éµİÔö";
+    Text[ chinese_traditional ] = "°Ï¬q»¼¼W";
     Text[ turkish ] = "Block increment";
-    Text[ arabic ] = "Block increment";
+    Text[ arabic ] = "ÒíÇÏÉ ÇáßÊáÉ";
     Text[ catalan ] = "Block increment";
     Text[ finnish ] = "Blockzunahme";
 };
@@ -4573,7 +4573,7 @@ String RID_STR_VISIBLESIZE
     Text[ dutch ] = "Zichtbare grootte";
     Text[ french ] = "Taille visible";
     Text[ spanish ] = "Tamaño visible";
-    Text[ italian ] = "Visible size";
+    Text[ italian ] = "Dimensioni visibili";
     Text[ danish ] = "Visible size";
     Text[ swedish ] = "Synlig storlek";
     Text[ polish ] = "Widoczny rozmiar";
@@ -4583,7 +4583,7 @@ String RID_STR_VISIBLESIZE
     Text[ chinese_simplified ] = "¿É¼ûµÄ´óĞ¡";
     Text[ chinese_traditional ] = "¥i¨£ªº¤j¤p";
     Text[ turkish ] = "Visible size";
-    Text[ arabic ] = "Visible size";
+    Text[ arabic ] = "ÇáÍÌã ÇáãÑÆí";
     Text[ catalan ] = "Visible size";
     Text[ finnish ] = "Sichtbare Größe";
 };
@@ -4598,7 +4598,7 @@ String RID_STR_ORIENTATION
     Text[ dutch ] = "Oriëntatie";
     Text[ french ] = "Orientation";
     Text[ spanish ] = "Orientación";
-    Text[ italian ] = "Orientation";
+    Text[ italian ] = "Orientamento";
     Text[ danish ] = "Orientation";
     Text[ swedish ] = "Orientering";
     Text[ polish ] = "Orientacja";
@@ -4608,9 +4608,9 @@ String RID_STR_ORIENTATION
     Text[ chinese_simplified ] = "·½Ïò";
     Text[ chinese_traditional ] = "¤è¦V";
     Text[ turkish ] = "Orientation";
-    Text[ arabic ] = "Orientation";
+    Text[ arabic ] = "ÇáÇÊÌÇå";
     Text[ catalan ] = "Orientation";
-    Text[ finnish ] = "Orientierung";
+    Text[ finnish ] = "Suunta";
 };
 String RID_STR_ENUM_ORIENTATION
 {
@@ -4623,7 +4623,7 @@ String RID_STR_ENUM_ORIENTATION
     Text[ dutch ] = "Horizontaal;Verticaal";
     Text[ french ] = "Horizontal;Vertical";
     Text[ spanish ] = "Horizontal;Vertical";
-    Text[ italian ] = "Horizontal;Vertical";
+    Text[ italian ] = "Orizzontale;Verticale";
     Text[ danish ] = "Horizontal;Vertical";
     Text[ swedish ] = "Horisontell;Vertikal";
     Text[ polish ] = "Pozioma;Pionowa";
@@ -4633,13 +4633,16 @@ String RID_STR_ENUM_ORIENTATION
     Text[ chinese_simplified ] = "Ë®Æ½;´¹Ö±";
     Text[ chinese_traditional ] = "¤ô¥­;««ª½";
     Text[ turkish ] = "Horizontal;Vertical";
-    Text[ arabic ] = "Horizontal;Vertical";
+    Text[ arabic ] = "ÃİŞí;ÑÃÓí";
     Text[ catalan ] = "Horizontal;Vertical";
     Text[ finnish ] = "Horizontal;Vertikal";
 };
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2001/06/06 10:36:52  fs
+ *  #86837# +RID_STR_ENUM_SIDE_ALIGN
+ *
  *  Revision 1.19  2001/05/16 15:45:14  kz
  *  Merge SRC632: 05/16/01 - 17:44:33 (NoBranch)
  *
@@ -4700,3 +4703,4 @@ String RID_STR_ENUM_ORIENTATION
  *
  *  Revision 1.0 08.01.01 14:53:11  fs
  ************************************************************************/
+
