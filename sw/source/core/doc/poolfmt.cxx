@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-24 08:14:09 $
+ *  last change: $Author: mtg $ $Date: 2001-10-24 17:21:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,9 @@
 #ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
 #endif
-
+#ifndef _GETMETRICVAL_HXX
+#include <GetMetricVal.hxx>
+#endif
 const USHORT PT_3   =  3 * 20;      //  3 pt
 const USHORT PT_6   =  6 * 20;      //  6 pt
 const USHORT PT_7   =  7 * 20;      //  6 pt
@@ -200,26 +202,6 @@ const USHORT PT_18  = 18 * 20;      // 18 pt
 const USHORT PT_22  = 22 * 20;      // 22 pt
 const USHORT PT_24  = 24 * 20;      // 22 pt
 
-#define CM_1  0         // 1 centimeter     or 1/2 inch
-#define CM_05 1         // 0.5 centimeter   or 1/4 inch
-#define CM_01 2         // 0.1 centimeter   or 1/20 inch
-
-inline USHORT GetMetricVal( int n )
-{
-#ifdef USE_MEASUREMENT
-    USHORT nVal = MEASURE_METRIC == GetAppLocaleData().getMeasurementSystemEnum()
-                    ? 567       // 1 cm
-                    : 770;      // 1/2 Inch
-#else
-    USHORT nVal = 567;      // 1 cm
-#endif
-
-    if( CM_01 == n )
-        nVal /= 10;
-    else if( CM_05 == n )
-        nVal /= 2;
-    return nVal;
-}
 
 //const USHORT HTML_PARSPACE = ((CM_05 * 7) / 10);
 #define HTML_PARSPACE   GetMetricVal( CM_05 )
