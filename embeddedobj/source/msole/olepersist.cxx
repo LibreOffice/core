@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:03:10 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,6 +539,8 @@ sal_Bool OleEmbeddedObject::SaveObject_Impl()
 //----------------------------------------------
 sal_Bool OleEmbeddedObject::OnShowWindow_Impl( sal_Bool bShow )
 {
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
+
     sal_Bool bResult = sal_False;
 
     OSL_ENSURE( m_nObjectState != -1, "The object has no persistence!\n" );
@@ -551,11 +553,13 @@ sal_Bool OleEmbeddedObject::OnShowWindow_Impl( sal_Bool bShow )
     if ( bShow && m_nObjectState == embed::EmbedStates::RUNNING )
     {
         m_nObjectState = embed::EmbedStates::ACTIVE;
+        aGuard.clear();
         StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
     }
     else if ( !bShow && m_nObjectState == embed::EmbedStates::ACTIVE )
     {
         m_nObjectState = embed::EmbedStates::RUNNING;
+        aGuard.clear();
         StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
     }
 
@@ -604,7 +608,7 @@ void OleEmbeddedObject::CreateOleComponentAndLoad_Impl( OleComponent* pOleCompon
         if ( !m_xObjectStream.is() )
             throw uno::RuntimeException();
 
-        CreateOleComponent_Impl( NULL );
+        CreateOleComponent_Impl( pOleComponent );
         // load object from the stream
         uno::Reference< io::XInputStream > xInStream = m_xObjectStream->getInputStream();
         if ( !xInStream.is() )
@@ -613,6 +617,24 @@ void OleEmbeddedObject::CreateOleComponentAndLoad_Impl( OleComponent* pOleCompon
         // after the loading the object can appear as a link
         // will be detected later by olecomponent
         m_pOleComponent->LoadEmbeddedObject( xInStream );
+    }
+#endif
+}
+
+//------------------------------------------------------
+void OleEmbeddedObject::CreateOleComponentFromClipboard_Impl( OleComponent* pOleComponent )
+{
+#ifdef WNT
+    if ( !m_pOleComponent )
+    {
+        if ( !m_xObjectStream.is() )
+            throw uno::RuntimeException();
+
+        CreateOleComponent_Impl( pOleComponent );
+
+        // after the loading the object can appear as a link
+        // will be detected later by olecomponent
+        m_pOleComponent->CreateObjectFromClipboard();
     }
 #endif
 }
@@ -845,7 +867,16 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
 #ifdef WNT
     if ( nEntryConnectionMode == embed::EntryInitModes::DEFAULT_INIT )
     {
-        if ( bElExists )
+        if ( m_bFromClipboard )
+        {
+            // the object should be initialized from clipboard
+            // inpossibility to initialize the object means error here
+            CreateOleComponentFromClipboard_Impl( NULL );
+            m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction
+            m_pOleComponent->RunObject();
+            m_nObjectState = embed::EmbedStates::RUNNING;
+        }
+        else if ( bElExists )
         {
             // load object from the stream
             // after the loading the object can appear as a link
@@ -996,7 +1027,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
                 uno::Exception,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -1047,7 +1078,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     m_bNewVisReplInStream = sal_False;
     m_xNewCachedVisRepl = uno::Reference< io::XStream >();
 
-
+    aGuard.clear();
     if ( bUseNew )
     {
         MakeEventListenerNotification_Impl( ::rtl::OUString::createFromAscii( "OnSaveAsDone" ) );
@@ -1114,7 +1145,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
     // ask container to store the object, the container has to make decision
     // to do so or not
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -1192,6 +1223,8 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
 
         m_bVisReplInStream = m_bStoreVisRepl;
     }
+
+    aGuard.clear();
 
     MakeEventListenerNotification_Impl( ::rtl::OUString::createFromAscii( "OnSaveDone" ) );
 
