@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:38:25 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,11 +551,11 @@ SwPageFrm* SwFrm::FindPageFrm()
             pRet = pRet->GetUpper();
         else if ( pRet->IsFlyFrm() )
         {
-            if ( ((SwFlyFrm*)pRet)->IsFlyFreeFrm() &&
-                 ((SwFlyFreeFrm*)pRet)->GetPage() )
-                pRet = ((SwFlyFreeFrm*)pRet)->GetPage();
+            // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
+            if ( static_cast<SwFlyFrm*>(pRet)->GetPageFrm() )
+                pRet = static_cast<SwFlyFrm*>(pRet)->GetPageFrm();
             else
-                pRet = ((SwFlyFrm*)pRet)->AnchorFrm();
+                pRet = static_cast<SwFlyFrm*>(pRet)->AnchorFrm();
         }
         else
             return 0;
@@ -576,10 +576,11 @@ SwFtnBossFrm* SwFrm::FindFtnBossFrm( BOOL bFootnotes )
             pRet = pRet->GetUpper();
         else if ( pRet->IsFlyFrm() )
         {
-            if ( ((SwFlyFrm*)pRet)->IsFlyFreeFrm() )
-                pRet = ((SwFlyFreeFrm*)pRet)->GetPage();
+            // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
+            if ( static_cast<SwFlyFrm*>(pRet)->GetPageFrm() )
+                pRet = static_cast<SwFlyFrm*>(pRet)->GetPageFrm();
             else
-                pRet = ((SwFlyFrm*)pRet)->AnchorFrm();
+                pRet = static_cast<SwFlyFrm*>(pRet)->AnchorFrm();
         }
         else
             return 0;
