@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQueryHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:55 $
+ *  last change: $Author: dkenny $ $Date: 2001-11-07 10:49:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,8 +473,8 @@ NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
             // Default value for PerferMailFormat is mime type text/plain.
         // Mapping for PreferMailFormat values to Mime-types.
             if (strcmp(name, "PreferMailFormat") == 0) {
-        nsCAutoString val_c;
-        val_c.AssignWithConversion(value);
+                nsCAutoString val_c;
+                val_c.AssignWithConversion(value);
                 if (strcmp((char *) val_c.get(), mozPreferMailFormatTypes[0]) == 0) {
                         // unknown, insert plain/text mime type
                         sValue = ::rtl::OUString::createFromAscii(PreferMailFormatTypes[0]);

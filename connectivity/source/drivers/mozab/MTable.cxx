@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MTable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 18:24:52 $
+ *  last change: $Author: dkenny $ $Date: 2001-11-07 10:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,18 +188,6 @@ sal_Int64 OTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Runtim
                 :
             OTable_TYPEDEF::getSomething(rId);
 }
-#ifdef DARREN_WORK
-// -----------------------------------------------------------------------------
-void SAL_CALL OTable::acquire() throw()
-{
-    OTable_TYPEDEF::acquire();
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OTable::release() throw()
-{
-    OTable_TYPEDEF::release();
-}
-#endif /* DARREN_WORK */
 // -----------------------------------------------------------------------------
 
 

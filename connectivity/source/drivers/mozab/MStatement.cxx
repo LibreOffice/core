@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MStatement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 18:45:09 $
+ *  last change: $Author: dkenny $ $Date: 2001-11-07 10:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,35 +276,6 @@ void OStatement_Base::parseSql( const ::rtl::OUString& sql )
             ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Driver requires a single table to be specified in query"),NULL);
 
         // at this moment we support only one table per select statement
-    #ifdef DARREN_WORK
-        Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xTabs.begin()->second,UNO_QUERY);
-        if(xTunnel.is())
-        {
-            if(m_pTable)
-                m_pTable->release();
-            m_pTable = (OFileTable*)xTunnel->getSomething(OFileTable::getUnoTunnelImplementationId());
-            if(m_pTable)
-                m_pTable->acquire();
-        }
-        OSL_ENSURE(m_pTable,"No table!");
-        m_xColNames     = m_pTable->getColumns();
-        Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
-        // set the binding of the resultrow
-        m_aRow          = new OValueVector(xNames->getCount());
-        (*m_aRow)[0].setBound(sal_True);
-        ::std::for_each(m_aRow->begin()+1,m_aRow->end(),TSetBound(sal_False));
-        // create teh column mapping
-        createColumnMapping();
-
-        m_pSQLAnalyzer  = createAnalyzer();
-
-        OSL_ENSURE(m_pTable,"We need a table object!");
-        Reference<XIndexesSupplier> xIndexSup(xTunnel,UNO_QUERY);
-        if(xIndexSup.is())
-            m_pSQLAnalyzer->setIndexes(xIndexSup->getIndexes());
-
-        anylizeSQL();
-    #else
         OSQLTables::const_iterator citer;
         for( citer = xTabs.begin(); citer != xTabs.end(); ++citer ) {
             OSL_TRACE("SELECT Table : %s\n", OUtoCStr(citer->first) );
@@ -323,7 +294,6 @@ void OStatement_Base::parseSql( const ::rtl::OUString& sql )
         createColumnMapping();
 
         analyseSQL();
-    #endif /* DARREN_WORK */
     }
     else
         ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Problem parsing SQL!"),NULL);

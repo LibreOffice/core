@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-31 17:24:23 $
+ *  last change: $Author: dkenny $ $Date: 2001-11-07 10:49:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,112 @@ namespace connectivity
         class  MQueryHelper;
         struct MQueryDirectory;
 
-        //class MQuery : public nsIAbDirectoryQueryResultListener
+        namespace MQueryOp {
+             typedef enum {
+                 Exists         = 0,
+                 DoesNotExist   = 1,
+                 Contains       = 2,
+                 DoesNotContain = 3,
+                 Is             = 4,
+                 IsNot          = 5,
+                 BeginsWith     = 6,
+                 EndsWith       = 7,
+                 SoundsLike     = 8,
+                 RegExp         = 9
+            } cond_type;
+        }
+
+        class MQueryExpressionBase {
+        public:
+            typedef enum {
+                Unknown,
+                StringExpr,
+                Expr
+            } node_type;
+
+        protected:
+            node_type   m_eNodeType;
+
+            MQueryExpressionBase() : m_eNodeType( Unknown ) {}
+            MQueryExpressionBase( node_type _eNodeType ) : m_eNodeType( _eNodeType ) {}
+
+        public:
+            sal_Bool   isUnknown( ) { return m_eNodeType == Unknown; }
+            sal_Bool   isStringExpr( ) { return m_eNodeType == StringExpr; }
+            sal_Bool   isExpr( ) { return m_eNodeType == Expr; }
+        };
+
+        class MQueryExpressionString : public MQueryExpressionBase {
+        protected:
+            ::rtl::OUString     m_aName;         // LHS
+            MQueryOp::cond_type m_aBooleanCondition;
+            ::rtl::OUString     m_aValue;        // RHS
+
+        public:
+
+            MQueryExpressionString( ::rtl::OUString&    lhs,
+                                    MQueryOp::cond_type cond,
+                                    ::rtl::OUString     rhs )
+                : MQueryExpressionBase( MQueryExpressionBase::StringExpr )
+                , m_aName( lhs )
+                , m_aBooleanCondition( cond )
+                , m_aValue( rhs )
+            {
+            }
+
+            MQueryExpressionString( ::rtl::OUString&    lhs,
+                                    MQueryOp::cond_type cond )
+                : MQueryExpressionBase( MQueryExpressionBase::StringExpr )
+                , m_aName( lhs )
+                , m_aBooleanCondition( cond )
+                , m_aValue( ::rtl::OUString() )
+            {
+            }
+
+            const ::rtl::OUString&    getName()  { return m_aName; }
+            const MQueryOp::cond_type getCond()  { return m_aBooleanCondition; }
+            const ::rtl::OUString&    getValue() { return m_aValue; }
+        };
+
+        class MQuery;
+
+        class MQueryExpression : public MQueryExpressionBase
+        {
+            friend MQuery;
+
+        public:
+            typedef ::std::vector< MQueryExpressionBase* > ExprVector;
+
+            typedef enum {
+                AND,
+                OR
+            } bool_cond;
+
+            void setExpressions( ExprVector& _exprVector )
+                            { m_aExprVector = _exprVector; }
+
+            // All expressions on a peer level use same condition operator
+            void setExpressionCondition( bool_cond _cond )
+                            { m_aExprCondType = _cond; }
+
+            ExprVector& getExpressions( )
+                            { return m_aExprVector; }
+
+            // All expressions on a peer level use same condition operator
+            bool_cond getExpressionCondition( )
+                            { return m_aExprCondType; }
+
+            MQueryExpression() : MQueryExpressionBase( MQueryExpressionBase::Expr ),
+                                 m_aExprCondType( OR )
+                            { m_aExprVector.clear(); }
+
+
+        protected:
+            ExprVector          m_aExprVector;
+            bool_cond           m_aExprCondType;
+
+        };
+
         class MQuery
         {
             /*
@@ -126,36 +231,21 @@ namespace connectivity
              * the default SQL operation is 'matchIs'.
              *
              */
-        public:
-             typedef enum {
-                 matchExists         = 0,
-                 matchDoesNotExist   = 1,
-                 matchContains       = 2,
-                 matchDoesNotContain = 3,
-                 matchIs             = 4,
-                 matchIsNot          = 5,
-                 matchBeginsWith     = 6,
-                 matchEndsWith       = 7,
-                 matchSoundsLike     = 8,
-                 matchRegExp         = 9
-            } eSqlOppr;
-
         private:
             MQueryDirectory                *m_aQueryDirectory;
             MQueryHelper                   *m_aQueryHelper;
         MNameMapper            *m_aNameMapper;
             ::std::vector< ::rtl::OUString> m_aAttributes;
             ::rtl::OUString                 m_aAddressbook;
-            ::std::vector< ::rtl::OUString> m_aMatchItems;
-            ::std::vector< ::rtl::OUString> m_aMatchValues;
             sal_Int32                       m_nMaxNrOfReturns;
             sal_Bool                        m_bQuerySubDirs;
-            ::std::vector<eSqlOppr>         m_aSqlOppr;
+            MQueryExpression                m_aExpr;
             ::std::map< ::rtl::OUString,
-                                    ::rtl::OUString>    m_aColumnAliasMap;
+                        ::rtl::OUString>    m_aColumnAliasMap;
             void construct();
         protected:
             ::osl::Mutex                    m_aMutex;
+
         public:
             /*
              * - Contains accessors to the members of this class.
@@ -163,18 +253,21 @@ namespace connectivity
              */
             void                            setAttributes( ::std::vector< ::rtl::OUString>&);
             const ::std::vector< ::rtl::OUString> &getAttributes(void) const;
+
             void                            setAddressbook( ::rtl::OUString&);
             ::rtl::OUString                 getAddressbook(void) const;
-            void                            setMatchItems( ::std::vector< ::rtl::OUString>&);
-            const ::std::vector< ::rtl::OUString> &getMatchItems(void) const;
-            void                            setMatchValues( ::std::vector< ::rtl::OUString>&);
-            const ::std::vector< ::rtl::OUString> &getMatchValues(void) const;
+
+            ::std::map< ::rtl::OUString,
+                        ::rtl::OUString>   &getColumnAliasMap() { return m_aColumnAliasMap; }
+
+            void                            setExpression( MQueryExpression &_expr );
+
             void                            setMaxNrOfReturns( const sal_Int32);
             sal_Int32                       getMaxNrOfReturns(void) const;
+
             void                            setQuerySubDirs( sal_Bool&);
             sal_Bool                        getQuerySubDirs(void) const;
-            void                            setSqlOppr( ::std::vector< eSqlOppr >&);
-            const ::std::vector< eSqlOppr >       &getSqlOppr(void) const;
+
             sal_Int32                       executeQuery(sal_Bool _bIsOutlookExpress, OConnection* _pCon);
 
             sal_Int32                       getRowCount( void );

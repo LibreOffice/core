@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-31 17:24:22 $
+ *  last change: $Author: dkenny $ $Date: 2001-11-07 10:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,12 +462,8 @@ sal_Bool OResultSet::fetchRow(sal_uInt32 rowIndex) throw(SQLException, RuntimeEx
     if ( validRow( rowIndex ) == sal_False )
         return sal_False;
 
-#ifndef DARREN_WORK
     (*m_aRow)[0] = (sal_Int32)rowIndex;
     for( sal_Int32 i = 1; i < xNames->getCount(); i++ ) {
-#else  /* DARREN_WORK */
-    for( sal_Int32 i = 1; i < xNames->getCount(); i++ ) {
-#endif /* DARREN_WORK */
         if ( (*m_aRow)[i].isBound() ) {
             OSL_TRACE("Row[%d] is Bound", i );
             xNames->getByIndex(i-1) >>= xTableColumn;
@@ -507,33 +503,6 @@ const ORowSetValue& OResultSet::getValue(sal_uInt32 rowIndex, sal_Int32 columnIn
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
 
-#ifdef DARREN_WORK
-    ORowSetValue value;
-    ::rtl::OUString sTableColumnName;
-    Reference<XPropertySet> xTableColumn;
-    Reference<XIndexAccess> xNames(m_xTableColumns,UNO_QUERY);
-    OSL_ENSURE( columnIndex < xNames->getCount(), "Invalid Column Index");
-
-    const ::rtl::OUString sPropertyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
-
-    OSL_TRACE("In/Out: OResultSet::getValue" );
-    OSL_ENSURE(m_xColumns.isValid(), "Need the Columns!!");
-
-    xNames->getByIndex(columnIndex) >>= xTableColumn;
-    OSL_ENSURE(xTableColumn.is(), "OResultSet::getValue: invalid table column!");
-    if (xTableColumn.is())
-        xTableColumn->getPropertyValue(sPropertyName) >>= sTableColumnName;
-    else
-        sTableColumnName = ::rtl::OUString();
-
-    //
-    // Everything in the addressbook is a string!
-    //
-    m_aQuery.getRowValue( value, rowIndex, sTableColumnName, DataType::VARCHAR );
-    OSL_TRACE("getValue : %s returned", OUtoCStr( value ) );
-    m_bWasNull = value.isNull();
-    return value;
-#endif /* DARREN_WORK */
 }
 // -------------------------------------------------------------------------
 
@@ -557,24 +526,6 @@ const ORowSetValue& OResultSet::getValue(sal_uInt32 rowIndex, sal_Int32 columnIn
     else
         return getValue( m_nRowPos, mapColumn( columnIndex ) );
 
-#ifdef DARREN_WORK
-    const ::rtl::OUString sPropertyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
-
-    ORowSetValue value;
-    ::rtl::OUString columnName;
-    ((m_xColumns.getBody())[columnIndex-1])->getPropertyValue( sPropertyName ) >>= columnName;
-    // If this query was sorted then we should have a valid KeySet, so use it
-    if ( m_pKeySet.isValid() ) {
-        OSL_TRACE( "%u <= %u", m_nRowPos, m_pKeySet->size());
-        OSL_ENSURE( m_nRowPos > 0 && m_nRowPos <= m_pKeySet->size(), "Invalid Row Position");
-        m_aQuery.getRowValue( value, (*m_pKeySet)[m_nRowPos-1], columnName, DataType::VARCHAR );
-    }
-    else
-        m_aQuery.getRowValue( value, m_nRowPos, columnName, DataType::VARCHAR );
-    OSL_TRACE("getString : %s returned", OUtoCStr( value ) );
-    m_bWasNull = sal_False;
-    return value;
-#endif /* DARREN_WORK */
 }
 // -------------------------------------------------------------------------
 
@@ -1127,15 +1078,6 @@ void OResultSet::getFastPropertyValue(
 {
     switch(nHandle)
     {
-#ifdef DARREN_WORK
-        case PROPERTY_ID_ISBOOKMARKABLE:
-        case PROPERTY_ID_CURSORNAME:
-        case PROPERTY_ID_RESULTSETCONCURRENCY:
-        case PROPERTY_ID_RESULTSETTYPE:
-        case PROPERTY_ID_FETCHDIRECTION:
-        case PROPERTY_ID_FETCHSIZE:
-            ;
-#else  /* DARREN_WORK */
         case PROPERTY_ID_ISBOOKMARKABLE:
             // rValue = bool2any(isBookmarkable());
             rValue = bool2any(m_nIsBookmarkable);
@@ -1155,7 +1097,6 @@ void OResultSet::getFastPropertyValue(
         case PROPERTY_ID_FETCHSIZE:
             rValue <<= m_nFetchSize;
             break;
-#endif /* DARREN_WORK */
     }
 }
 // -----------------------------------------------------------------------------
@@ -1184,106 +1125,6 @@ void OResultSet::initializeRow(OValueRow& _rRow,sal_Int32 _nColumnCount)
     }
 }
 
-// -----------------------------------------------------------------------------
-
-// -------------------------------------------------------------------------
-void OResultSet::fillColumns()
-{
-#ifdef DARREN_WORK
-
-    OSL_TRACE( "IN OResultSet::fillColumns()\n" );
-
-
-    ::rtl::OUString     aTypeName;
-
-    m_aAttributeStrings.clear();
-    m_aAttributeStrings.push_back( ::rtl::OUString::createFromAscii("card:URI") );
-
-    Reference< XDatabaseMetaData > xMtd = m_pConnection->getMetaData();
-    ::comphelper::UStringMixEqual aCase(xMtd->storesMixedCaseQuotedIdentifiers());
-
-    Reference< XResultSet > xRes = xMtd->getColumns( Any(),
-                                                       ::rtl::OUString(),
-                                                       m_Name,
-                                                       ::rtl::OUString::createFromAscii("%"));
-    Reference<XRow> xRow(xRes,UNO_QUERY);
-
-    // clear the whole vector stuff
-    if(!m_aColumns.isValid())
-        m_aColumns = new OSQLColumns();
-    else
-        m_aColumns->clear();
-
-    m_aTypes.clear();
-    m_aPrecisions.clear();
-    m_aScales.clear();
-    // reserve some space to speed up this think
-    m_aAttributeStrings.reserve(m_nNR_OF_FIELDS+1);
-    m_aColumns->reserve(m_nNR_OF_FIELDS);
-    m_aTypes.reserve(m_nNR_OF_FIELDS);
-    m_aPrecisions.reserve(m_nNR_OF_FIELDS);
-    m_aScales.reserve(m_nNR_OF_FIELDS);
-
-    for (sal_Int32 i = 1; i <= m_nNR_OF_FIELDS; i++)
-    {
-        ::rtl::OUString aColumnName;
-        sal_Int32 eType         = DataType::OTHER;
-        sal_Bool bCurrency      = sal_False;
-        sal_Int32 nPrecision    = 0;   //! ...
-        sal_Int32 nDecimals     = 0;    //! ...
-        sal_Int32 nNullable     = ColumnValue::NULLABLE;
-
-        if(xRes.is() && xRes->next())
-        {
-            aColumnName = xRow->getString(4);
-            eType       = xRow->getShort(5);
-            aTypeName   = xRow->getString(6);
-            nPrecision  = xRow->getInt(7);
-            nDecimals   = xRow->getInt(9);
-            nNullable   = xRow->getInt(11);
-        }
-        else
-        {
-            OSL_TRACE(0,"OResultSet::fillColumns: getColumns doesn't return a resultset!");
-        }
-        //  getColumnInfo( i, aColumnName, eType );
-
-        OSL_TRACE( "inserting string %s\n", OUtoCStr( aColumnName ) );
-        m_aAttributeStrings.push_back( aColumnName );
-
-        // check if the column name already exists
-        ::rtl::OUString aAlias = aColumnName;
-        OSQLColumns::const_iterator aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
-        sal_Int32 nExprCnt = 0;
-        while(aFind != m_aColumns->end())
-        {
-            (aAlias = aColumnName) += ::rtl::OUString::valueOf((sal_Int32)++nExprCnt);
-            aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
-        }
-
-        sdbcx::OColumn* pColumn = new sdbcx::OColumn( aAlias, aTypeName, ::rtl::OUString(),
-                                                nNullable, nPrecision, nDecimals,
-                                                eType, sal_False, sal_False, bCurrency,
-                                                aCase.isCaseSensitive() );
-        Reference< XPropertySet> xCol = pColumn;
-        m_aColumns->push_back(xCol);
-        m_aTypes.push_back(eType);
-        m_aPrecisions.push_back(nPrecision);
-        m_aScales.push_back(nDecimals);
-    }
-
-
-    OSL_TRACE( "\tOUT OResultSet::fillColumns()\n" );
-
-#endif /* DARREN_WORK */
-}
-
-// -------------------------------------------------------------------------
-#ifdef DARREN_WORK
-#if defined DEBUG || defined DBG_UTIL
-extern void printParseTree( const OSQLParseNode*  parseTree, rtl::OString tab );
-#endif
-#endif /* DARREN_WORK */
 // -------------------------------------------------------------------------
 void OResultSet::parseParameter( const OSQLParseNode* pNode, rtl::OUString& rMatchString )
 {
@@ -1315,29 +1156,27 @@ void OResultSet::parseParameter( const OSQLParseNode* pNode, rtl::OUString& rMat
     }
 }
 
-void OResultSet::analyseWhereClause( const OSQLParseNode*    parseTree,
-                ::std::vector< ::rtl::OUString >       &matchItems,
-                ::std::vector< MQuery::eSqlOppr > &matchOper,
-                ::std::vector< ::rtl::OUString >       &matchValues,
-                connectivity::OSQLParseTreeIterator& m_aSQLIterator)
+void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseTree,
+                                     MQueryExpression                     &queryExpression,
+                                     connectivity::OSQLParseTreeIterator& aSQLIterator)
 {
     ::rtl::OUString         columnName;
-    MQuery::eSqlOppr   op;
+    MQueryOp::cond_type     op;
     ::rtl::OUString         matchString;
 
     if ( parseTree == NULL )
         return;
 
-    if ( m_aSQLIterator.getParseTree() != NULL ) {
+    if ( aSQLIterator.getParseTree() != NULL ) {
         OSL_TRACE("FULL QUERY IS : \n" );
 #ifdef DARREN_WORK
 #if defined DEBUG || defined DBG_UTIL
-        printParseTree( m_aSQLIterator.getParseTree(), "XX " );
+        printParseTree( aSQLIterator.getParseTree(), "XX " );
 #endif
 #endif /* DARREN_WORK */
         OSL_TRACE("FULL QUERY IS : \n" );
 
-        ::vos::ORef<OSQLColumns> xColumns = m_aSQLIterator.getParameters();
+        ::vos::ORef<OSQLColumns> xColumns = aSQLIterator.getParameters();
         if(xColumns.isValid())
         {
             ::rtl::OUString aTabName,aColName,aParameterName,aParameterValue;
@@ -1370,12 +1209,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*    parseTree,
         OSL_TRACE("analyseSQL : Got WHERE clause\n");
         // Reset Parameter Counter
         resetParameters();
-        analyseWhereClause( parseTree->getChild( 1 ), matchItems, matchOper, matchValues, m_aSQLIterator);
-    }
-    else if ( SQL_ISRULE(parseTree,where_clause) )
-    {
-        OSL_TRACE("analyseSQL : Got WHERE clause\n");
-        analyseWhereClause( parseTree->getChild( 1 ), matchItems, matchOper, matchValues, m_aSQLIterator);
+        analyseWhereClause( parseTree->getChild( 1 ), queryExpression, aSQLIterator);
     }
     else if ( parseTree->count() == 3 &&                         // Handle ()'s
         SQL_ISPUNCTUATION(parseTree->getChild(0),"(") &&
@@ -1383,7 +1217,9 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*    parseTree,
     {
 
         OSL_TRACE("analyseSQL : Got Punctuation ()\n");
-        analyseWhereClause( parseTree->getChild( 1 ), matchItems, matchOper, matchValues,m_aSQLIterator );
+        MQueryExpression *subExpression = new MQueryExpression();
+        analyseWhereClause( parseTree->getChild( 1 ), *subExpression, aSQLIterator );
+        queryExpression.getExpressions().push_back( subExpression );
     }
     else if ((SQL_ISRULE(parseTree,search_condition) || (SQL_ISRULE(parseTree,boolean_term)))
              && parseTree->count() == 3)                   // Handle AND/OR
@@ -1392,8 +1228,18 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*    parseTree,
         OSL_TRACE("analyseSQL : Got AND/OR clause\n");
 
         // TODO - Need to take care or AND, for now match is always OR
-        analyseWhereClause( parseTree->getChild( 0 ), matchItems, matchOper, matchValues, m_aSQLIterator );
-        analyseWhereClause( parseTree->getChild( 2 ), matchItems, matchOper, matchValues, m_aSQLIterator );
+        analyseWhereClause( parseTree->getChild( 0 ), queryExpression, aSQLIterator );
+        analyseWhereClause( parseTree->getChild( 2 ), queryExpression, aSQLIterator );
+
+        if (SQL_ISTOKEN(parseTree->getChild(1),OR)) {         // OR-Operator
+            queryExpression.setExpressionCondition( MQueryExpression::OR );
+        }
+        else if (SQL_ISTOKEN(parseTree->getChild(1),AND)) {  // AND-Operator
+            queryExpression.setExpressionCondition( MQueryExpression::AND );
+        }
+        else {
+            OSL_ASSERT("analyseSQL: Error in Parse Tree");
+        }
     }
     else if (SQL_ISRULE(parseTree,comparison_predicate))
     {
@@ -1414,13 +1260,13 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*    parseTree,
 
         OSQLParseNode *pPrec = parseTree->getChild(1);
         if (pPrec->getNodeType() == SQL_NODE_EQUAL)
-            op = MQuery::matchIs;
+            op = MQueryOp::Is;
         else if (pPrec->getNodeType() == SQL_NODE_NOTEQUAL)
-            op = MQuery::matchIsNot;
+            op = MQueryOp::IsNot;
 
         ::rtl::OUString sTableRange;
         if(SQL_ISRULE(parseTree->getChild(0),column_ref))
-            m_aSQLIterator.getColumnRange(parseTree->getChild(0),columnName,sTableRange);
+            aSQLIterator.getColumnRange(parseTree->getChild(0),columnName,sTableRange);
         else if(parseTree->getChild(0)->isToken())
             columnName = parseTree->getChild(0)->getTokenValue();
 
@@ -1431,14 +1277,12 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*    parseTree,
             matchString = parseTree->getChild(2)->getTokenValue();
         }
 
-        if ( columnName.compareToAscii("0") ==0 && op == MQuery::matchIs &&
+        if ( columnName.compareToAscii("0") ==0 && op == MQueryOp::Is &&
              matchString.compareToAscii("1") == 0 ) {
             OSL_TRACE("Query always evaluates to FALSE");
             m_nIsAlwaysFalseQuery = sal_True;
         }
-        matchItems.push_back( columnName );
-        matchOper.push_back( op );
-        matchValues.push_back( matchString );
+        queryExpression.getExpressions().push_back( new MQueryExpressionString( columnName, op, matchString ));
     }
     else if (SQL_ISRULE(parseTree,like_predicate))
     {
@@ -1467,20 +1311,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*    parseTree,
               ( pAtom->getChild(0) && pAtom->getChild(0)->getNodeType() == SQL_NODE_STRING )
               ) )
         {
-#ifdef DARREN_WORK
-#if defined DEBUG || defined DBG_UTIL
-            printParseTree( pAtom, "AnalyseSQL " );
-#endif
-#endif /* DARREN_WORK */
             OSL_TRACE("analyseSQL : pAtom->count() = %d\n", pAtom->count() );
-#ifdef DBG_UTIL
-                for ( sal_uInt32 i = 0; i < pAtom->count(); ++i )
-                    OSL_TRACE("analyseSQL : pAtom (%d) : %d, %d  = %s\n", i,
-                            (sal_Int32)pAtom->getRuleID(),
-                            pAtom->getChild(i)->getNodeType(),
-                            OUtoCStr(pAtom->getChild(i)->getTokenValue()));
-#endif
-
 
             ::dbtools::throwGenericSQLException(
                     ::rtl::OUString::createFromAscii("Invalid Statement - Not a String"),NULL);
@@ -1492,7 +1323,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*    parseTree,
 
         ::rtl::OUString sTableRange;
         if(SQL_ISRULE(pColumn,column_ref))
-            m_aSQLIterator.getColumnRange(pColumn,columnName,sTableRange);
+            aSQLIterator.getColumnRange(pColumn,columnName,sTableRange);
 
         OSL_TRACE("ColumnName = %s\n", OUtoCStr( columnName ) );
 
@@ -1512,7 +1343,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*    parseTree,
         if ( matchString.equals( ::rtl::OUString::valueOf( WILDCARD ) ) )
         {
             // String containing only a '%' and nothing else
-            op = MQuery::matchExists;
+            op = MQueryOp::Exists;
             // Will be ignored for Exists case, but clear anyway.
             matchString = ::rtl::OUString::createFromAscii("");
         }
@@ -1521,9 +1352,9 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*    parseTree,
         {
             // Simple string , eg. "to match"
             if ( parseTree->count() == 5 )
-                op = MQuery::matchDoesNotContain;
+                op = MQueryOp::DoesNotContain;
             else
-                op = MQuery::matchContains;
+                op = MQueryOp::Contains;
         }
         else if (  matchString.indexOf ( WILDCARD ) == 0
                    && matchString.lastIndexOf ( WILDCARD ) == matchString.getLength() -1
@@ -1537,9 +1368,9 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*    parseTree,
             matchString = matchString.replaceAt( matchString.getLength() -1 , 1, rtl::OUString() );
 
             if ( parseTree->count() == 5 )
-                op = MQuery::matchDoesNotContain;
+                op = MQueryOp::DoesNotContain;
             else
-                op = MQuery::matchContains;
+                op = MQueryOp::Contains;
         }
         else if ( parseTree->count() == 5 )
         {
@@ -1557,19 +1388,19 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*    parseTree,
                 // One occurance of '%' - no '_' matches...
                 if ( matchString.indexOf ( WILDCARD ) == 0 )
                 {
-                    op = MQuery::matchEndsWith;
+                    op = MQueryOp::EndsWith;
                     matchString = matchString.replaceAt( 0, 1, rtl::OUString());
                 }
                 else if ( matchString.indexOf ( WILDCARD ) == matchString.getLength() -1 )
                 {
-                    op = MQuery::matchBeginsWith;
+                    op = MQueryOp::BeginsWith;
                     matchString = matchString.replaceAt( matchString.getLength() -1 , 1, rtl::OUString() );
                 }
                 else
                 {
                     sal_Int32 pos = matchString.indexOf ( WILDCARD );
                     matchString = matchString.replaceAt( pos, 1,::rtl::OUString::createFromAscii(".*") );
-                    op = MQuery::matchRegExp;
+                    op = MQueryOp::RegExp;
                 }
 
             }
@@ -1588,13 +1419,11 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*    parseTree,
                     matchString = matchString.replaceAt( pos, 1, ::rtl::OUString::createFromAscii(".") );
                 }
 
-                op = MQuery::matchRegExp;
+                op = MQueryOp::RegExp;
             }
         }
 
-        matchItems.push_back( columnName );
-        matchOper.push_back( op );
-        matchValues.push_back( matchString );
+        queryExpression.getExpressions().push_back( new MQueryExpressionString( columnName, op, matchString ));
     }
     else if (SQL_ISRULE(parseTree,test_for_null))
     {
@@ -1612,14 +1441,12 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*    parseTree,
                         ::rtl::OUString::createFromAscii("Statement too complex"),NULL);
         }
         else
-                op = MQuery::matchExists;
+                op = MQueryOp::Exists;
 
         ::rtl::OUString sTableRange;
-        m_aSQLIterator.getColumnRange(parseTree->getChild(0),columnName,sTableRange);
+        aSQLIterator.getColumnRange(parseTree->getChild(0),columnName,sTableRange);
 
-        matchItems.push_back( columnName );
-        matchOper.push_back( op );
-        matchValues.push_back( rtl::OUString() );
+        queryExpression.getExpressions().push_back( new MQueryExpressionString( columnName, op ));
     }
     else
     {
@@ -1639,9 +1466,7 @@ void OResultSet::fillRowData()
 
     OSL_ENSURE( m_pStatement, "Require a statement" );
 
-    ::std::vector< ::rtl::OUString >        matchItems;
-    ::std::vector< MQuery::eSqlOppr >  matchOper;
-    ::std::vector< ::rtl::OUString >        matchValues;
+    MQueryExpression queryExpression;
 
     OConnection* xConnection = static_cast<OConnection*>(m_pStatement->getConnection().get());
     m_xColumns = m_aSQLIterator.getSelectColumns();
@@ -1672,11 +1497,13 @@ void OResultSet::fillRowData()
 
         OSL_TRACE("\tHave a Where Clause\n");
 
-        analyseWhereClause( pParseTree, matchItems, matchOper, matchValues ,m_aSQLIterator);
+        analyseWhereClause( pParseTree, queryExpression, m_aSQLIterator);
     }
     else
     {
         OSL_TRACE("\tDon't have a Where Clause\n");
+
+        MQueryExpression::ExprVector    eVector;
 
         // LDAP does not allow a query without restriction, so we add a dummy
         // for FirstName
@@ -1684,19 +1511,11 @@ void OResultSet::fillRowData()
         // card:nsIAbCard.
         OSL_ENSURE(m_pStatement, "Cannot determine Parent Statement");
         if (xConnection->isLDAP())
-            matchItems.push_back( ::rtl::OUString::createFromAscii("FirstName") );
+            eVector.push_back( new MQueryExpressionString(::rtl::OUString::createFromAscii("FirstName"), MQueryOp::Exists) );
         else
-            matchItems.push_back( ::rtl::OUString::createFromAscii("card:nsIAbCard") );
+            eVector.push_back( new MQueryExpressionString(::rtl::OUString::createFromAscii("card:nsIAbCard"), MQueryOp::Exists) );
 
-        matchOper.push_back( MQuery::matchExists );
-        matchValues.push_back( ::rtl::OUString()  );
-
-//      matchItems.push_back( ::rtl::OUString::createFromAscii("DisplayName") );
-//      matchOper.push_back( MQuery::matchBeginsWith );
-//      matchValues.push_back( ::rtl::OUString::createFromAscii("Darren")  );
-//      matchItems.push_back( ::rtl::OUString::createFromAscii("PrimaryEmail") );
-//      matchOper.push_back( MQuery::matchBeginsWith );
-//      matchValues.push_back( ::rtl::OUString::createFromAscii("Darren")  );
+        queryExpression.setExpressions( eVector );
     }
 
     // If the query is a 0=1 then set Row count to 0 and return
@@ -1705,9 +1524,7 @@ void OResultSet::fillRowData()
         return;
     }
 
-    m_aQuery.setMatchItems( matchItems );
-    m_aQuery.setSqlOppr( matchOper );
-    m_aQuery.setMatchValues( matchValues );
+    m_aQuery.setExpression( queryExpression );
 
     // We need a unique id for caching mechanism so should fetch card:URI
     m_aQuery.setAttributes( m_aAttributeStrings );
@@ -2088,12 +1905,10 @@ sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-#ifndef DARREN_WORK
 void OResultSet::setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMapping)
 {
     m_aColMapping = _aColumnMapping;
     for ( sal_uInt32 i = 0; i < m_aColMapping.size(); i++ )
         OSL_TRACE("Set Mapped: %d -> %d", i, m_aColMapping[i] );
 }
-#endif /* DARREN_WORK */
 

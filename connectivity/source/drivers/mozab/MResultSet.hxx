@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 18:38:07 $
+ *  last change: $Author: dkenny $ $Date: 2001-11-07 10:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,14 +347,11 @@ protected:
             ::vos::ORef<connectivity::OSQLColumns>  m_xColumns; // this are the select columns
             ::vos::ORef<connectivity::OSQLColumns>  m_xParamColumns;
 
-            void fillColumns();
             void parseParameter( const OSQLParseNode* pNode, rtl::OUString& rMatchString );
             void fillRowData() throw( ::com::sun::star::sdbc::SQLException );
             void initializeRow(OValueRow& _rRow,sal_Int32 _nColumnCount);
-            void analyseWhereClause( const OSQLParseNode*    parseTree,
-                                     ::std::vector< ::rtl::OUString >       &matchItems,
-                                     ::std::vector< MQuery::eSqlOppr >      &matchOper,
-                                     ::std::vector< ::rtl::OUString >       &matchValues,
+            void analyseWhereClause( const OSQLParseNode*                 parseTree,
+                                     MQueryExpression                    &queryExpression,
                                      connectivity::OSQLParseTreeIterator& aSQLIterator);
 
             sal_Bool isCount() const;

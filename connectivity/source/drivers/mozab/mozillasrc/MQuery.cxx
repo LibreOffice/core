@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-31 17:24:23 $
+ *  last change: $Author: dkenny $ $Date: 2001-11-07 10:49:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,61 +213,6 @@ void MQuery::setAddressbook(::rtl::OUString &ab)
     return(m_aAddressbook);
 }
 // -------------------------------------------------------------------------
-void MQuery::setMatchItems(::std::vector< ::rtl::OUString> &mi)
-{
-    OSL_TRACE("IN MQuery::setMatchItems()\n");
-    ::osl::MutexGuard aGuard(m_aMutex);
-
-    ::std::vector< ::rtl::OUString>::iterator aIter = mi.begin();
-    ::std::map< ::rtl::OUString, ::rtl::OUString>::const_iterator aIterMap;
-
-    m_aMatchItems.clear();
-    m_aMatchItems.reserve(mi.size());
-    for(aIter; aIter != mi.end();++aIter)
-    {
-        aIterMap = m_aColumnAliasMap.find(*aIter);
-        if (aIterMap == m_aColumnAliasMap.end()) {
-            // Not found.
-            m_aMatchItems.push_back(*aIter);
-        }
-        else {
-            m_aMatchItems.push_back(aIterMap->second);
-        }
-    }
-    OSL_TRACE("\tOUT MQuery::setMatchItems()\n");
-
-    return;
-}
-// -------------------------------------------------------------------------
-const ::std::vector< ::rtl::OUString> &MQuery::getMatchItems() const
-{
-    OSL_TRACE("IN MQuery::getMatchItems()\n");
-
-    OSL_TRACE("\tOUT MQuery::getMatchItems()\n");
-
-    return(m_aMatchItems);
-}
-// -------------------------------------------------------------------------
-void MQuery::setMatchValues(::std::vector< ::rtl::OUString>& mv)
-{
-    OSL_TRACE("IN MQuery::setMatchValues()\n");
-    ::osl::MutexGuard aGuard(m_aMutex);
-    m_aMatchValues.clear();
-    m_aMatchValues = mv;
-    OSL_TRACE("\tOUT MQuery::setMatchValues()\n");
-
-    return;
-}
-// -------------------------------------------------------------------------
-const ::std::vector< ::rtl::OUString>& MQuery::getMatchValues( void ) const
-{
-    OSL_TRACE("IN MQuery::getMatchValues()\n");
-
-    OSL_TRACE("\tOUT MQuery::getMatchValue()\n");
-
-    return(m_aMatchValues);
-}
-// -------------------------------------------------------------------------
 void MQuery::setMaxNrOfReturns(const sal_Int32 mnr)
 {
     OSL_TRACE( "IN MQuery::setMaxNrOfReturns()\n" );
@@ -308,27 +253,136 @@ sal_Bool MQuery::getQuerySubDirs() const
     return(m_bQuerySubDirs);
 }
 // -------------------------------------------------------------------------
-void MQuery::setSqlOppr(::std::vector< MQuery::eSqlOppr > &so)
+void MQuery::setExpression( MQueryExpression &_expr )
 {
-    OSL_TRACE("IN MQuery::setSqlOppr()\n");
+    OSL_TRACE("IN MQuery::setExpression()\n");
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    m_aSqlOppr.clear();
-    m_aSqlOppr = so;
+    m_aExpr = _expr;
 
-    OSL_TRACE("\tOUT MQuery::setSqlOppr()\n");
-
-    return;
+    OSL_TRACE("\tOUT MQuery::setExpression()\n");
 }
 // -------------------------------------------------------------------------
-const ::std::vector< MQuery::eSqlOppr > &MQuery::getSqlOppr() const
+static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
+                                     nsIAbBooleanExpression* queryExpression )
 {
-    OSL_TRACE("IN MQuery::getSqlOppr()\n");
+    nsresult rv;        // Store return values.
+    // Array that holds all matchItems, to be passed to DoQuery().
+    nsCOMPtr<nsISupportsArray> matchItems;
+    NS_NewISupportsArray(getter_AddRefs(matchItems));
 
-    OSL_TRACE("\tOUT MQuery::getSqlOppr()\n");
+    // Add every individual boolString to matchItems array.
+    nsString matchValue;
+    // Initialise the matchItems container.
+    MQueryExpression::ExprVector::iterator    evIter;
+    for( evIter = _aExpr->getExpressions().begin();
+         evIter != _aExpr->getExpressions().end();
+         ++evIter )
+    {
+        if ( (*evIter)->isStringExpr() ) {
+            nsCOMPtr<nsIAbBooleanConditionString> boolString = do_CreateInstance (kBooleanConditionStringCID, &rv);
+            NS_ENSURE_SUCCESS( rv, rv );
 
-    return(m_aSqlOppr);
+            MQueryExpressionString* evStr = static_cast<MQueryExpressionString*> (*evIter);
+
+            // Set the 'name' property of the boolString.
+            // Check if it's an alias first...
+            rtl::OUString attrName;
+            ::std::map< ::rtl::OUString, ::rtl::OUString>::iterator aIterMap;
+            aIterMap = _aQuery->getColumnAliasMap().find(evStr->getName());
+            if (aIterMap == _aQuery->getColumnAliasMap().end()) {
+                // Not found.
+                attrName = evStr->getName();
+            } else {
+                attrName = aIterMap->second;
+            }
+            string aMiName = MTypeConverter::ouStringToStlString(attrName);
+            boolString->SetName(strdup(aMiName.c_str()));
+            OSL_TRACE("Name = %s ;", aMiName.c_str() );
+            // Set the 'matchType' property of the boolString. Check for equal length.
+            sal_Bool requiresValue = sal_True;
+            switch(evStr->getCond()) {
+                case MQueryOp::Exists:
+                    OSL_TRACE("MQueryOp::Exists; ");
+                    boolString->SetCondition(nsIAbBooleanConditionTypes::Exists);
+                    requiresValue = sal_False;
+                    break;
+                case MQueryOp::DoesNotExist:
+                    OSL_TRACE("MQueryOp::DoesNotExist; ");
+                    boolString->SetCondition(nsIAbBooleanConditionTypes::DoesNotExist);
+                    requiresValue = sal_False;
+                    break;
+                case MQueryOp::Contains:
+                    OSL_TRACE("MQueryOp::Contains; ");
+                    boolString->SetCondition(nsIAbBooleanConditionTypes::Contains);
+                    break;
+                case MQueryOp::DoesNotContain:
+                    OSL_TRACE("MQueryOp::DoesNotContain; ");
+                    boolString->SetCondition(nsIAbBooleanConditionTypes::DoesNotContain);
+                    break;
+                case MQueryOp::Is:
+                    OSL_TRACE("MQueryOp::Is; ");
+                    boolString->SetCondition(nsIAbBooleanConditionTypes::Is);
+                    break;
+                case MQueryOp::IsNot:
+                    OSL_TRACE("MQueryOp::IsNot; ");
+                    boolString->SetCondition(nsIAbBooleanConditionTypes::IsNot);
+                    break;
+                case MQueryOp::BeginsWith:
+                    OSL_TRACE("MQueryOp::BeginsWith; ");
+                    boolString->SetCondition(nsIAbBooleanConditionTypes::BeginsWith);
+                    break;
+                case MQueryOp::EndsWith:
+                    OSL_TRACE("MQueryOp::EndsWith; ");
+                    boolString->SetCondition(nsIAbBooleanConditionTypes::EndsWith);
+                    break;
+                case MQueryOp::SoundsLike:
+                    OSL_TRACE("MQueryOp::SoundsLike; ");
+                    boolString->SetCondition(nsIAbBooleanConditionTypes::SoundsLike);
+                    break;
+                case MQueryOp::RegExp:
+                    OSL_TRACE("MQueryOp::RegExp; ");
+                    boolString->SetCondition(nsIAbBooleanConditionTypes::RegExp);
+                    break;
+                default:
+                    OSL_TRACE("(default) MQueryOp::Is; ");
+                    boolString->SetCondition(nsIAbBooleanConditionTypes::Is);
+                    break;
+            }
+            // Set the 'matchValue' property of the boolString. Value returned in unicode.
+            if ( requiresValue )
+            {
+                OSL_TRACE("Value = %s \n", OUtoCStr( evStr->getValue() ) );
+                MTypeConverter::ouStringToNsString( evStr->getValue(), matchValue);
+                boolString->SetValue(matchValue.get ());
+            }
+            // Add the individual boolString to the container of matchItems.
+            matchItems->AppendElement(boolString);
+        }
+        else if ( (*evIter)->isExpr() ) {
+            nsCOMPtr< nsIAbBooleanExpression > subQueryExpr = do_CreateInstance( kBooleanExpressionCID , &rv);
+            NS_ENSURE_SUCCESS( rv, rv );
+            rv = generateExpression( _aQuery, static_cast< MQueryExpression* >(*evIter),
+                                     subQueryExpr );
+            NS_ENSURE_SUCCESS( rv, rv );
+            matchItems->AppendElement(subQueryExpr);
+        }
+        else {
+            // Should never see this...
+            OSL_ASSERT("Unknown Expression Type!");
+            return( NS_ERROR_UNEXPECTED );
+        }
+    }
+
+    queryExpression->SetExpressions(matchItems);
+    if ( _aExpr->getExpressionCondition() == MQueryExpression::AND )
+        queryExpression->SetOperation(nsIAbBooleanOperationTypes::AND);
+    else
+        queryExpression->SetOperation(nsIAbBooleanOperationTypes::OR);
+
+    return( NS_OK );
 }
+
 // -------------------------------------------------------------------------
 sal_Int32 MQuery::executeQuery(sal_Bool _bIsOutlookExpress, OConnection* _pCon)
 {
@@ -374,88 +428,10 @@ sal_Int32 MQuery::executeQuery(sal_Bool _bIsOutlookExpress, OConnection* _pCon)
         OSL_TRACE("Not using a Query Proxy, Query i/f supported by directory\n");
 #endif /* DEBUG */
 
-    // Array that holds all matchItems, to be passed to DoQuery().
-    nsCOMPtr<nsISupportsArray> matchItems;
-    NS_NewISupportsArray(getter_AddRefs(matchItems));
-
-    // Add every individual boolString to matchItems array.
-    ::std::vector< ::rtl::OUString>::iterator aIterMi = m_aMatchItems.begin();
-    ::std::vector< eSqlOppr >::iterator aIterOp = m_aSqlOppr.begin();
-    ::std::vector< ::rtl::OUString>::iterator aIterVal = m_aMatchValues.begin();
-    nsString matchValue;
-    // Initialise the matchItems container.
-    for(aIterMi; aIterMi != m_aMatchItems.end();++aIterMi, ++aIterOp, ++aIterVal)
-    {
-        nsCOMPtr<nsIAbBooleanConditionString> boolString = do_CreateInstance (kBooleanConditionStringCID, &rv);
-        NS_ENSURE_SUCCESS( rv, rv );
-        // Set the 'name' property of the boolString.
-        string aMiName = MTypeConverter::ouStringToStlString(*aIterMi);
-        boolString->SetName(strdup(aMiName.c_str()));
-        OSL_TRACE("Name = %s ;", aMiName.c_str() );
-        // Set the 'matchType' property of the boolString. Check for equal length.
-        if (aIterOp == m_aSqlOppr.end() && aIterMi != m_aMatchItems.end()) {
-            m_aSqlOppr.push_back(matchIs); // Add matchIs for non-set value.
-        }
-        switch(*aIterOp) {
-            case matchExists:
-                OSL_TRACE("matchExists; ");
-                boolString->SetCondition(nsIAbBooleanConditionTypes::Exists);
-                break;
-            case matchDoesNotExist:
-                OSL_TRACE("matchDoesNotExist; ");
-                boolString->SetCondition(nsIAbBooleanConditionTypes::DoesNotExist);
-                break;
-            case matchContains:
-                OSL_TRACE("matchContains; ");
-                boolString->SetCondition(nsIAbBooleanConditionTypes::Contains);
-                break;
-            case matchDoesNotContain:
-                OSL_TRACE("matchDoesNotContain; ");
-                boolString->SetCondition(nsIAbBooleanConditionTypes::DoesNotContain);
-                break;
-            case matchIs:
-                OSL_TRACE("matchIs; ");
-                boolString->SetCondition(nsIAbBooleanConditionTypes::Is);
-                break;
-            case matchIsNot:
-                OSL_TRACE("matchIsNot; ");
-                boolString->SetCondition(nsIAbBooleanConditionTypes::IsNot);
-                break;
-            case matchBeginsWith:
-                OSL_TRACE("matchBeginsWith; ");
-                boolString->SetCondition(nsIAbBooleanConditionTypes::BeginsWith);
-                break;
-            case matchEndsWith:
-                OSL_TRACE("matchEndsWith; ");
-                boolString->SetCondition(nsIAbBooleanConditionTypes::EndsWith);
-                break;
-            case matchSoundsLike:
-                OSL_TRACE("matchSoundsLike; ");
-                boolString->SetCondition(nsIAbBooleanConditionTypes::SoundsLike);
-                break;
-            case matchRegExp:
-                OSL_TRACE("matchRegExp; ");
-                boolString->SetCondition(nsIAbBooleanConditionTypes::RegExp);
-                break;
-            default:
-                OSL_TRACE("(default) matchIs; ");
-                boolString->SetCondition(nsIAbBooleanConditionTypes::Is);
-                break;
-        }
-        // Set the 'matchValue' property of the boolString. Value returned in unicode.
-        if ( (*aIterVal) )
-        {
-            OSL_TRACE("Value = %s \n", OUtoCStr( (*aIterVal) ) );
-            MTypeConverter::ouStringToNsString( (*aIterVal), matchValue);
-            boolString->SetValue(matchValue.ToNewUnicode ());
-        }
-        // Add the individual boolString to the container of matchItems.
-        matchItems->AppendElement(boolString);
-    }
     nsCOMPtr< nsIAbBooleanExpression > queryExpression = do_CreateInstance( kBooleanExpressionCID , &rv);
     NS_ENSURE_SUCCESS( rv, rv );
-    queryExpression->SetExpressions(matchItems);
-    queryExpression->SetOperation(nsIAbBooleanOperationTypes::OR);
+    rv = generateExpression( this, &m_aExpr, queryExpression );
+    NS_ENSURE_SUCCESS( rv, rv );
 
     // Add every atribute we're interested in to the return properties array.
     ::std::vector< ::rtl::OUString>::iterator aIterAttr = m_aAttributes.begin();
@@ -489,6 +465,10 @@ sal_Int32 MQuery::executeQuery(sal_Bool _bIsOutlookExpress, OConnection* _pCon)
     m_aQueryHelper->reset();
 
     rv = m_aQueryDirectory->directory->DoQuery(arguments, m_aQueryHelper, m_nMaxNrOfReturns, -1, &m_aQueryDirectory->contextId);
+
+    for ( sal_Int32 j = 0; returnProperties && returnProperties[j]; j++ ) {
+        free( returnProperties[j] );    // use free for mem allocated with strdup()
+    }
 
     if (NS_FAILED(rv))  {
         m_aQueryDirectory->contextId = -1;
@@ -552,7 +532,7 @@ sal_Bool
 MQuery::checkRowAvailable( sal_Int32 nDBRow )
   throw( ::com::sun::star::sdbc::SQLException )
 {
-    while( !queryComplete() && m_aQueryHelper->getRealCount() <= nDBRow )
+    while( !queryComplete() && m_aQueryHelper->getRealCount() <= (sal_uInt32)nDBRow )
         m_aQueryHelper->waitForRow( nDBRow );
 
     return( getRowCount() > nDBRow );
@@ -595,10 +575,10 @@ MQuery::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow, rtl::OUString& aDBC
     OSL_TRACE( "\tOUT MQuery::getRowValue()\n");
 }
 // -------------------------------------------------------------------------
+
 MNameMapper*
 MQuery::CreateNameMapper()
 {
     return( new MNameMapper() );
 }
-
 
