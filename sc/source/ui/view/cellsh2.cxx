@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 08:02:26 $
+ *  last change: $Author: nn $ $Date: 2002-07-19 12:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -907,7 +907,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                         if ( pDlg->Execute() == RET_OK )
                         {
-                            pTabViewShell->GotoDBArea( pDlg->GetSelectEntry() );
+                            String aName = pDlg->GetSelectEntry();
+                            pTabViewShell->GotoDBArea( aName );
+                            rReq.AppendItem( SfxStringItem( SID_SELECT_DB, aName ) );
                             rReq.Done();
                         }
 
