@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-03 12:59:32 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 18:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,8 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
     sal_Bool        bIsCaseSensitive;
     sal_Bool        bSkipDuplicates;
     sal_Bool        bFilterCopyOutputData;
+    sal_Bool        bTargetRangeAddress;
+    sal_Bool        bSourceCellRange;
 
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
@@ -164,7 +166,7 @@ public:
     void SetServiceSourceObject(const rtl::OUString& sValue) { sServiceSourceObject = sValue; }
     void SetServiceUsername(const rtl::OUString& sValue) { sServiceUsername = sValue; }
     void SetServicePassword(const rtl::OUString& sValue) { sServicePassword = sValue; }
-    void SetSourceCellRangeAddress(const ScRange& aValue) { aSourceCellRangeAddress = aValue; }
+    void SetSourceCellRangeAddress(const ScRange& aValue) { aSourceCellRangeAddress = aValue; bSourceCellRange = sal_True; }
     void SetSourceQueryParam(const ScQueryParam& aValue) { aSourceQueryParam = aValue; }
     void SetFilterUseRegularExpressions(const sal_Bool bValue) { bUseRegularExpression = bValue; }
     void SetFilterOutputPosition(const ScAddress& aValue) { aFilterOutputPosition = aValue; }

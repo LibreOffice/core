@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDetectiveContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-18 14:14:24 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 18:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,8 +201,10 @@ ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
             case XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_CELL_RANGE:
-                ScXMLConverter::GetRangeFromString( aDetectiveObj.aSourceRange, sValue, GetScImport().GetDocument() );
-                bValid = sal_True;
+            {
+                sal_Int32 nOffset(0);
+                bValid = ScXMLConverter::GetRangeFromString( aDetectiveObj.aSourceRange, sValue, GetScImport().GetDocument(), nOffset );
+            }
             break;
             case XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_DIRECTION:
                 aDetectiveObj.eObjType = ScXMLConverter::GetDetObjTypeFromString( sValue );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 18:35:16 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 18:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,10 +123,10 @@ public:
 // helper methods
     static sal_Int32    GetTokenCount(
                             const ::rtl::OUString& rString );
-    static sal_Int32    GetTokenByOffset(
+    static void         GetTokenByOffset(
                             ::rtl::OUString& rToken,
                             const ::rtl::OUString& rString,
-                            sal_Int32 nOffset,
+                            sal_Int32& nOffset,
                             sal_Unicode cQuote = '\'' );
 
     static void         AppendString(
@@ -137,37 +137,37 @@ public:
                             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel );
 
 // IMPORT: CellAddress / CellRange
-    static sal_Int32    GetAddressFromString(
+    static sal_Bool     GetAddressFromString(
                             ScAddress& rAddress,
                             const ::rtl::OUString& rAddressStr,
                             const ScDocument* pDocument,
-                            sal_Int32 nOffset = 0 );
-    static sal_Int32    GetRangeFromString(
+                            sal_Int32& nOffset );
+    static sal_Bool     GetRangeFromString(
                             ScRange& rRange,
                             const ::rtl::OUString& rRangeStr,
                             const ScDocument* pDocument,
-                            sal_Int32 nOffset = 0 );
+                            sal_Int32& nOffset );
     static void         GetRangeListFromString(
                             ScRangeList& rRangeList,
                             const ::rtl::OUString& rRangeListStr,
                             const ScDocument* pDocument );
 
-    static sal_Int32    GetAreaFromString(
+    static sal_Bool     GetAreaFromString(
                             ScArea& rArea,
                             const ::rtl::OUString& rRangeStr,
                             const ScDocument* pDocument,
-                            sal_Int32 nOffset = 0 );
+                            sal_Int32& nOffset );
 
-    static sal_Int32    GetAddressFromString(
+    static sal_Bool     GetAddressFromString(
                             ::com::sun::star::table::CellAddress& rAddress,
                             const ::rtl::OUString& rAddressStr,
                             const ScDocument* pDocument,
-                            sal_Int32 nOffset = 0 );
-    static sal_Int32    GetRangeFromString(
+                            sal_Int32& nOffset );
+    static sal_Bool     GetRangeFromString(
                             ::com::sun::star::table::CellRangeAddress& rRange,
                             const ::rtl::OUString& rRangeStr,
                             const ScDocument* pDocument,
-                            sal_Int32 nOffset = 0 );
+                            sal_Int32& nOffset );
     static void         GetRangeListFromString(
                             ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress >& rRangeSeq,
                             const ::rtl::OUString& rRangeListStr,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-03 12:59:32 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 18:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,8 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     bIsNative(sal_True),
     bIgnoreEmptyRows(sal_False),
     bIdentifyCategories(sal_False),
+    bTargetRangeAddress(sal_False),
+    bSourceCellRange(sal_False),
     pDoc(GetScImport().GetDocument()),
     pDPObject(NULL),
     pDPSave(NULL)
@@ -191,7 +193,8 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
             break;
             case XML_TOK_DATA_PILOT_TABLE_ATTR_TARGET_RANGE_ADDRESS :
             {
-                ScXMLConverter::GetRangeFromString( aTargetRangeAddress, sValue, pDoc );
+                sal_Int32 nOffset(0);
+                bTargetRangeAddress = ScXMLConverter::GetRangeFromString( aTargetRangeAddress, sValue, pDoc, nOffset );
             }
             break;
             case XML_TOK_DATA_PILOT_TABLE_ATTR_BUTTONS :
@@ -267,95 +270,104 @@ void ScXMLDataPilotTableContext::SetButtons()
     sal_Int32 nOffset = 0;
     while( nOffset >= 0 )
     {
-        nOffset = ScXMLConverter::GetTokenByOffset( sAddress, sButtons, nOffset );
+        ScXMLConverter::GetTokenByOffset( sAddress, sButtons, nOffset );
         if( nOffset >= 0 )
         {
             ScAddress aScAddress;
-            ScXMLConverter::GetAddressFromString( aScAddress, sAddress, pDoc );
-            ScMergeFlagAttr aAttr( SC_MF_BUTTON );
-            pDoc->ApplyAttr( aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), aAttr );
+            sal_Int32 nOffset(0);
+            if (ScXMLConverter::GetAddressFromString( aScAddress, sAddress, pDoc, nOffset ))
+            {
+                ScMergeFlagAttr aAttr( SC_MF_BUTTON );
+                pDoc->ApplyAttr( aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), aAttr );
+            }
         }
     }
 }
 
 void ScXMLDataPilotTableContext::EndElement()
 {
-    pDPObject->SetName(sDataPilotTableName);
-    pDPObject->SetTag(sApplicationData);
-    pDPObject->SetOutRange(aTargetRangeAddress);
-    switch (nSourceType)
+    if (bTargetRangeAddress)
     {
-        case SQL :
+        pDPObject->SetName(sDataPilotTableName);
+        pDPObject->SetTag(sApplicationData);
+        pDPObject->SetOutRange(aTargetRangeAddress);
+        switch (nSourceType)
         {
-            ScImportSourceDesc aImportDesc;
-            aImportDesc.aDBName = sDatabaseName;
-            aImportDesc.aObject = sSourceObject;
-            aImportDesc.nType = sheet::DataImportMode_SQL;
-            aImportDesc.bNative = bIsNative;
-            pDPObject->SetImportDesc(aImportDesc);
+            case SQL :
+            {
+                ScImportSourceDesc aImportDesc;
+                aImportDesc.aDBName = sDatabaseName;
+                aImportDesc.aObject = sSourceObject;
+                aImportDesc.nType = sheet::DataImportMode_SQL;
+                aImportDesc.bNative = bIsNative;
+                pDPObject->SetImportDesc(aImportDesc);
+            }
+            break;
+            case TABLE :
+            {
+                ScImportSourceDesc aImportDesc;
+                aImportDesc.aDBName = sDatabaseName;
+                aImportDesc.aObject = sSourceObject;
+                aImportDesc.nType = sheet::DataImportMode_TABLE;
+                pDPObject->SetImportDesc(aImportDesc);
+            }
+            break;
+            case QUERY :
+            {
+                ScImportSourceDesc aImportDesc;
+                aImportDesc.aDBName = sDatabaseName;
+                aImportDesc.aObject = sSourceObject;
+                aImportDesc.nType = sheet::DataImportMode_QUERY;
+                pDPObject->SetImportDesc(aImportDesc);
+            }
+            break;
+            case SERVICE :
+            {
+                ScDPServiceDesc aServiceDesk(sServiceName, sServiceSourceObject, sServiceSourceName,
+                                    sServiceUsername, sServicePassword);
+                pDPObject->SetServiceData(aServiceDesk);
+            }
+            break;
+            case CELLRANGE :
+            {
+                if (bSourceCellRange)
+                {
+                    ScSheetSourceDesc aSheetDesc;
+                    aSheetDesc.aSourceRange = aSourceCellRangeAddress;
+                    aSheetDesc.aQueryParam = aSourceQueryParam;
+                    pDPObject->SetSheetDesc(aSheetDesc);
+                }
+            }
+            break;
         }
-        break;
-        case TABLE :
+        if (sGrandTotal.compareToAscii(sXML_both) == 0)
         {
-            ScImportSourceDesc aImportDesc;
-            aImportDesc.aDBName = sDatabaseName;
-            aImportDesc.aObject = sSourceObject;
-            aImportDesc.nType = sheet::DataImportMode_TABLE;
-            pDPObject->SetImportDesc(aImportDesc);
+            pDPSave->SetRowGrand(sal_True);
+            pDPSave->SetColumnGrand(sal_True);
         }
-        break;
-        case QUERY :
+        else if (sGrandTotal.compareToAscii(sXML_row) == 0)
         {
-            ScImportSourceDesc aImportDesc;
-            aImportDesc.aDBName = sDatabaseName;
-            aImportDesc.aObject = sSourceObject;
-            aImportDesc.nType = sheet::DataImportMode_QUERY;
-            pDPObject->SetImportDesc(aImportDesc);
+            pDPSave->SetRowGrand(sal_True);
+            pDPSave->SetColumnGrand(sal_False);
         }
-        break;
-        case SERVICE :
+        else if (sGrandTotal.compareToAscii(sXML_column) == 0)
         {
-            ScDPServiceDesc aServiceDesk(sServiceName, sServiceSourceObject, sServiceSourceName,
-                                sServiceUsername, sServicePassword);
-            pDPObject->SetServiceData(aServiceDesk);
+            pDPSave->SetRowGrand(sal_False);
+            pDPSave->SetColumnGrand(sal_True);
         }
-        break;
-        case CELLRANGE :
+        else
         {
-            ScSheetSourceDesc aSheetDesc;
-            aSheetDesc.aSourceRange = aSourceCellRangeAddress;
-            aSheetDesc.aQueryParam = aSourceQueryParam;
-            pDPObject->SetSheetDesc(aSheetDesc);
+            pDPSave->SetRowGrand(sal_False);
+            pDPSave->SetColumnGrand(sal_False);
         }
-        break;
+        pDPSave->SetIgnoreEmptyRows(bIgnoreEmptyRows);
+        pDPSave->SetRepeatIfEmpty(bIdentifyCategories);
+        pDPObject->SetSaveData(*pDPSave);
+        ScDPCollection* pDPCollection = pDoc->GetDPCollection();
+        pDPObject->SetAlive(sal_True);
+        pDPCollection->Insert(pDPObject);
+        SetButtons();
     }
-    if (sGrandTotal.compareToAscii(sXML_both) == 0)
-    {
-        pDPSave->SetRowGrand(sal_True);
-        pDPSave->SetColumnGrand(sal_True);
-    }
-    else if (sGrandTotal.compareToAscii(sXML_row) == 0)
-    {
-        pDPSave->SetRowGrand(sal_True);
-        pDPSave->SetColumnGrand(sal_False);
-    }
-    else if (sGrandTotal.compareToAscii(sXML_column) == 0)
-    {
-        pDPSave->SetRowGrand(sal_False);
-        pDPSave->SetColumnGrand(sal_True);
-    }
-    else
-    {
-        pDPSave->SetRowGrand(sal_False);
-        pDPSave->SetColumnGrand(sal_False);
-    }
-    pDPSave->SetIgnoreEmptyRows(bIgnoreEmptyRows);
-    pDPSave->SetRepeatIfEmpty(bIdentifyCategories);
-    pDPObject->SetSaveData(*pDPSave);
-    ScDPCollection* pDPCollection = pDoc->GetDPCollection();
-    pDPObject->SetAlive(sal_True);
-    pDPCollection->Insert(pDPObject);
-    SetButtons();
 }
 
 ScXMLDPSourceSQLContext::ScXMLDPSourceSQLContext( ScXMLImport& rImport,
@@ -634,8 +646,9 @@ ScXMLSourceCellRangeContext::ScXMLSourceCellRangeContext( ScXMLImport& rImport,
             case XML_TOK_SOURCE_CELL_RANGE_ATTR_CELL_RANGE_ADDRESS :
             {
                 ScRange aSourceRangeAddress;
-                ScXMLConverter::GetRangeFromString( aSourceRangeAddress, sValue, GetScImport().GetDocument() );
-                pDataPilotTable->SetSourceCellRangeAddress(aSourceRangeAddress);
+                sal_Int32 nOffset(0);
+                if (ScXMLConverter::GetRangeFromString( aSourceRangeAddress, sValue, GetScImport().GetDocument(), nOffset ))
+                    pDataPilotTable->SetSourceCellRangeAddress(aSourceRangeAddress);
             }
             break;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConsolidationContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-02 16:51:44 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 18:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ private:
     ScAddress                   aTargetAddr;
     ScSubTotalFunc              eFunction;
     sal_Bool                    bLinkToSource;
+    sal_Bool                    bTargetAddr;
 
 protected:
     const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }

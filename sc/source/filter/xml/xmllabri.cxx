@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllabri.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-02 16:39:54 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 18:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,10 +195,12 @@ void ScXMLLabelRangeContext::EndElement()
         if( aAny >>= xLabelRanges )
         {
             table::CellRangeAddress aLabelRange;
-            ScXMLConverter::GetRangeFromString( aLabelRange, sLabelRangeStr, GetScImport().GetDocument() );
             table::CellRangeAddress aDataRange;
-            ScXMLConverter::GetRangeFromString( aDataRange, sDataRangeStr, GetScImport().GetDocument() );
-            xLabelRanges->addNew( aLabelRange, aDataRange );
+            sal_Int32 nOffset1(0);
+            sal_Int32 nOffset2(0);
+            if (ScXMLConverter::GetRangeFromString( aLabelRange, sLabelRangeStr, GetScImport().GetDocument(), nOffset1 ) &&
+                ScXMLConverter::GetRangeFromString( aDataRange, sDataRangeStr, GetScImport().GetDocument(), nOffset2 ))
+                xLabelRanges->addNew( aLabelRange, aDataRange );
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilti.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 18:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,15 +120,19 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
             case XML_TOK_FILTER_ATTR_TARGET_RANGE_ADDRESS :
             {
                 ScRange aScRange;
-                ScXMLConverter::GetRangeFromString( aScRange, sValue, pDoc );
-                ScUnoConversion::FillApiAddress( aOutputPosition, aScRange.aStart );
-                bCopyOutputData = sal_True;
+                sal_Int32 nOffset(0);
+                if (ScXMLConverter::GetRangeFromString( aScRange, sValue, pDoc, nOffset ))
+                {
+                    ScUnoConversion::FillApiAddress( aOutputPosition, aScRange.aStart );
+                    bCopyOutputData = sal_True;
+                }
             }
             break;
             case XML_TOK_FILTER_ATTR_CONDITION_SOURCE_RANGE_ADDRESS :
             {
-                ScXMLConverter::GetRangeFromString( aConditionSourceRangeAddress, sValue, pDoc );
-                bConditionSourceRange = sal_True;
+                sal_Int32 nOffset(0);
+                if (ScXMLConverter::GetRangeFromString( aConditionSourceRangeAddress, sValue, pDoc, nOffset ))
+                    bConditionSourceRange = sal_True;
             }
             break;
             case XML_TOK_FILTER_ATTR_CONDITION_SOURCE :
@@ -476,15 +480,19 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
             case XML_TOK_FILTER_ATTR_TARGET_RANGE_ADDRESS :
             {
                 ScRange aScRange;
-                ScXMLConverter::GetRangeFromString( aScRange, sValue, pDoc );
-                aOutputPosition = aScRange.aStart;
-                bCopyOutputData = sal_True;
+                sal_Int32 nOffset(0);
+                if (ScXMLConverter::GetRangeFromString( aScRange, sValue, pDoc, nOffset ))
+                {
+                    aOutputPosition = aScRange.aStart;
+                    bCopyOutputData = sal_True;
+                }
             }
             break;
             case XML_TOK_FILTER_ATTR_CONDITION_SOURCE_RANGE_ADDRESS :
             {
-                ScXMLConverter::GetRangeFromString( aConditionSourceRangeAddress, sValue, pDoc );
-                bConditionSourceRange = sal_True;
+                sal_Int32 nOffset(0);
+                if(ScXMLConverter::GetRangeFromString( aConditionSourceRangeAddress, sValue, pDoc, nOffset ))
+                    bConditionSourceRange = sal_True;
             }
             break;
             case XML_TOK_FILTER_ATTR_CONDITION_SOURCE :

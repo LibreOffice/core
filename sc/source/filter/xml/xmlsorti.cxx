@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsorti.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 18:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,9 +132,12 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
             case XML_TOK_SORT_ATTR_TARGET_RANGE_ADDRESS :
             {
                 ScRange aScRange;
-                ScXMLConverter::GetRangeFromString( aScRange, sValue, GetScImport().GetDocument() );
-                ScUnoConversion::FillApiAddress( aOutputPosition, aScRange.aStart );
-                bCopyOutputData = sal_True;
+                sal_Int32 nOffset(0);
+                if (ScXMLConverter::GetRangeFromString( aScRange, sValue, GetScImport().GetDocument(), nOffset ))
+                {
+                    ScUnoConversion::FillApiAddress( aOutputPosition, aScRange.aStart );
+                    bCopyOutputData = sal_True;
+                }
             }
             break;
             case XML_TOK_SORT_ATTR_CASE_SENSITIVE :

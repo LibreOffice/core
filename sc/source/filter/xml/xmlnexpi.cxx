@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnexpi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-03 16:34:37 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 18:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,11 +194,14 @@ void ScXMLNamedExpressionsContext::EndElement()
             rtl::OUString sTempContent;
             while (i != pNamedExpressions->end())
             {
-                ScXMLConverter::GetAddressFromString(
-                    aCellAddress, (*i)->sBaseCellAddress, GetScImport().GetDocument() );
-                sTempContent = (*i)->sContent;
-                ScXMLConverter::ParseFormula(sTempContent, (*i)->bIsExpression);
-                xNamedRanges->addNewByName((*i)->sName, sTempContent, aCellAddress, GetRangeType((*i)->sRangeType));
+                sal_Int32 nOffset(0);
+                if (ScXMLConverter::GetAddressFromString(
+                    aCellAddress, (*i)->sBaseCellAddress, GetScImport().GetDocument(), nOffset ))
+                {
+                    sTempContent = (*i)->sContent;
+                    ScXMLConverter::ParseFormula(sTempContent, (*i)->bIsExpression);
+                    xNamedRanges->addNewByName((*i)->sName, sTempContent, aCellAddress, GetRangeType((*i)->sRangeType));
+                }
                 delete *i;
                 i++;
             }

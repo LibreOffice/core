@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConsolidationContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-02 16:51:44 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 18:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,8 @@ ScXMLConsolidationContext::ScXMLConsolidationContext(
         const uno::Reference< xml::sax::XAttributeList >& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     eFunction( SUBTOTAL_FUNC_NONE ),
-    bLinkToSource( sal_False )
+    bLinkToSource( sal_False ),
+    bTargetAddr(sal_False)
 {
     if( !xAttrList.is() ) return;
 
@@ -127,9 +128,12 @@ ScXMLConsolidationContext::ScXMLConsolidationContext(
                 sSourceList = sValue;
             break;
             case XML_TOK_CONSOLIDATION_ATTR_TARGET_ADDRESS:
-                ScXMLConverter::GetAddressFromString(
-                    aTargetAddr, sValue, GetScImport().GetDocument() );
-            break;
+                {
+                    sal_Int32 nOffset(0);
+                    bTargetAddr = ScXMLConverter::GetAddressFromString(
+                        aTargetAddr, sValue, GetScImport().GetDocument(), nOffset );
+                }
+                break;
             case XML_TOK_CONSOLIDATION_ATTR_USE_LABEL:
                 sUseLabel = sValue;
             break;
@@ -154,38 +158,41 @@ SvXMLImportContext *ScXMLConsolidationContext::CreateChildContext(
 
 void ScXMLConsolidationContext::EndElement()
 {
-    ScConsolidateParam aConsParam;
-    aConsParam.nCol = aTargetAddr.Col();
-    aConsParam.nRow = aTargetAddr.Row();
-    aConsParam.nTab = aTargetAddr.Tab();
-    aConsParam.eFunction = eFunction;
-
-    USHORT nCount = (USHORT) Min( ScXMLConverter::GetTokenCount( sSourceList ), (sal_Int32)0xFFFF );
-    ScArea** ppAreas = nCount ? new ScArea*[ nCount ] : NULL;
-    if( ppAreas )
+    if (bTargetAddr)
     {
-        sal_Int32 nOffset = 0;
-        for( USHORT nIndex = 0; nIndex < nCount; nIndex++ )
+        ScConsolidateParam aConsParam;
+        aConsParam.nCol = aTargetAddr.Col();
+        aConsParam.nRow = aTargetAddr.Row();
+        aConsParam.nTab = aTargetAddr.Tab();
+        aConsParam.eFunction = eFunction;
+
+        USHORT nCount = (USHORT) Min( ScXMLConverter::GetTokenCount( sSourceList ), (sal_Int32)0xFFFF );
+        ScArea** ppAreas = nCount ? new ScArea*[ nCount ] : NULL;
+        if( ppAreas )
         {
-            ppAreas[ nIndex ] = new ScArea;
-            nOffset = ScXMLConverter::GetAreaFromString(
-                *ppAreas[ nIndex ], sSourceList, GetScImport().GetDocument(), nOffset );
+            sal_Int32 nOffset = 0;
+            for( USHORT nIndex = 0; nIndex < nCount; nIndex++ )
+            {
+                ppAreas[ nIndex ] = new ScArea;
+                nOffset = ScXMLConverter::GetAreaFromString(
+                    *ppAreas[ nIndex ], sSourceList, GetScImport().GetDocument(), nOffset );
+            }
+            aConsParam.SetAreas( ppAreas, nCount );
         }
-        aConsParam.SetAreas( ppAreas, nCount );
+
+        aConsParam.bByCol = aConsParam.bByRow = FALSE;
+        if( sUseLabel.compareToAscii( sXML_column ) == 0 )
+            aConsParam.bByCol = TRUE;
+        else if( sUseLabel.compareToAscii( sXML_row ) == 0 )
+            aConsParam.bByRow = TRUE;
+        else if( sUseLabel.compareToAscii( sXML_both ) == 0 )
+            aConsParam.bByCol = aConsParam.bByRow = TRUE;
+
+        aConsParam.bReferenceData = bLinkToSource;
+
+        ScDocument* pDoc = GetScImport().GetDocument();
+        if( pDoc )
+            pDoc->SetConsolidateDlgData( &aConsParam );
     }
-
-    aConsParam.bByCol = aConsParam.bByRow = FALSE;
-    if( sUseLabel.compareToAscii( sXML_column ) == 0 )
-        aConsParam.bByCol = TRUE;
-    else if( sUseLabel.compareToAscii( sXML_row ) == 0 )
-        aConsParam.bByRow = TRUE;
-    else if( sUseLabel.compareToAscii( sXML_both ) == 0 )
-        aConsParam.bByCol = aConsParam.bByRow = TRUE;
-
-    aConsParam.bReferenceData = bLinkToSource;
-
-    ScDocument* pDoc = GetScImport().GetDocument();
-    if( pDoc )
-        pDoc->SetConsolidateDlgData( &aConsParam );
 }
 
