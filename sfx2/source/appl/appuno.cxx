@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-09 11:54:45 $
+ *  last change: $Author: as $ $Date: 2001-03-05 07:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,9 +178,6 @@ using namespace ::rtl;
 #include "sfxuno.hxx"
 #include "appdata.hxx"
 #include "app.hxx"
-#if SUPD<613//MUSTINI
-#include "inimgr.hxx"
-#endif
 #include "sfxsids.hrc"
 #include "msg.hxx"
 #include "msgpool.hxx"
@@ -194,6 +191,7 @@ using namespace ::rtl;
 #include "sfxbasic.hxx"
 #include "objsh.hxx"
 #include "objuno.hxx"
+#include "filepicker.hxx"
 
 #define FRAMELOADER_SERVICENAME     "com.sun.star.frame.FrameLoader"
 
@@ -1250,6 +1248,22 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     xNewKey = xLoaderKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Pattern")) );
     xNewKey->setAsciiValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("macro:*" )) );
 
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += SfxFilePicker::impl_getStaticImplementationNameOpen();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.ui.FileOpen") );
+
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += SfxFilePicker::impl_getStaticImplementationNameSave();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.ui.FileSave") );
+
     return True;
 }
 
@@ -1279,6 +1293,14 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
         IF_NAME_CREATECOMPONENTFACTORY( SfxFrameLoader_Impl )
         IF_NAME_CREATECOMPONENTFACTORY( SfxMacroLoader )
         IF_NAME_CREATECOMPONENTFACTORY( SfxStandaloneDocumentInfoObject )
+        if ( SfxFilePicker::impl_getStaticImplementationNameOpen().equals( UNOOUSTRING::createFromAscii( pImplementationName ) ) )
+        {
+            xFactory = SfxFilePicker::impl_createFactoryOpen( xServiceManager );
+        }
+        if ( SfxFilePicker::impl_getStaticImplementationNameSave().equals( UNOOUSTRING::createFromAscii( pImplementationName ) ) )
+        {
+            xFactory = SfxFilePicker::impl_createFactorySave( xServiceManager );
+        }
 
         // Factory is valid - service was found.
         if ( xFactory.is() )

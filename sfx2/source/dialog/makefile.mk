@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mba $ $Date: 2000-10-23 12:09:43 $
+#   last change: $Author: as $ $Date: 2001-03-05 07:11:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,7 @@ SLOFILES =\
         $(SLO)$/dinfedt.obj			\
         $(SLO)$/dockwin.obj			\
         $(SLO)$/eventdlg.obj		\
+        $(SLO)$/filepicker.obj		\
         $(SLO)$/intro.obj			\
         $(SLO)$/macropg.obj			\
         $(SLO)$/mailchildwin.obj	\
@@ -109,10 +110,11 @@ SLOFILES =\
         $(SLO)$/templdlg.obj		\
         $(SLO)$/tplcitem.obj		\
         $(SLO)$/tplpitem.obj		\
-                $(SLO)$/partwnd.obj            \
+        $(SLO)$/partwnd.obj			\
         $(SLO)$/versdlg.obj
 
 EXCEPTIONSFILES=\
+        $(SLO)$/filepicker.obj		\
         $(SLO)$/maillistener.obj	\
         $(SLO)$/mailmodel.obj
 
