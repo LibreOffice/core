@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-30 13:37:11 $
+#   last change: $Author: rt $ $Date: 2004-11-09 15:08:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -136,7 +136,7 @@ CONFIGURE_ACTION=$(BACK_PATH)..$/..$/convert.bat
 .ENDIF
 .ELSE			# "$(USE_SHELL)"=="4nt"
 BUILD_ACTION_SEP=;
-CONFIGURE_ACTION=$(BACK_PATH)..$/..$/convert.sh
+CONFIGURE_ACTION=sh $(BACK_PATH)..$/..$/convert.sh
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 BUILD_DIR=source
 .IF "full_debug" == ""
