@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-27 14:03:30 $
+ *  last change: $Author: aw $ $Date: 2001-06-27 16:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,6 +546,10 @@ BOOL E3dView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, U
             const SdrPage* pSrcPg=rMod.GetPage(nPg);
             sal_uInt32 nObAnz(pSrcPg->GetObjCount());
 
+            // calculate offset for paste
+            Rectangle aR = pSrcPg->GetAllObjBoundRect();
+            Point aDist(aPos - aR.Center());
+
             // Unterobjekte von Szenen einfuegen
             for(sal_uInt32 nOb(0); nOb < nObAnz; nOb++)
             {
@@ -553,7 +557,7 @@ BOOL E3dView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, U
                 if(pSrcOb->ISA(E3dScene))
                 {
                     E3dScene* pSrcScene = (E3dScene*)pSrcOb;
-                    bDstInserted = ImpCloneAll3DObjectsToDestScene(pSrcScene, pDstScene);
+                    bDstInserted = ImpCloneAll3DObjectsToDestScene(pSrcScene, pDstScene, aDist);
                 }
             }
         }
@@ -578,7 +582,7 @@ BOOL E3dView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, U
 }
 
 // #83403# Service routine used from local Clone() and from SdrCreateView::EndCreateObj(...)
-BOOL E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene)
+BOOL E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene, Point aOffset)
 {
     BOOL bRetval(FALSE);
 
@@ -586,6 +590,11 @@ BOOL E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDs
     {
         B3dCamera& rCameraSetDst = pDstScene->GetCameraSet();
         B3dCamera& rCameraSetSrc = pSrcScene->GetCameraSet();
+
+        // get coor of source scene, take aOffset into account.
+        Rectangle aSrcRect = pSrcScene->GetSnapRect();
+        if(aOffset.X() != 0 || aOffset.Y() != 0)
+            aSrcRect.Move(aOffset.X(), aOffset.Y());
 
         for(sal_uInt32 i(0); i < pSrcScene->GetSubList()->GetObjCount(); i++)
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-27 14:01:41 $
+ *  last change: $Author: aw $ $Date: 2001-06-27 16:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -750,7 +750,7 @@ BOOL SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                     && pPVMerk->GetAktGroup()->ISA(E3dScene))
                 {
                     BOOL bDidInsert = ((E3dView*)this)->ImpCloneAll3DObjectsToDestScene(
-                        (E3dScene*)pObjMerk, (E3dScene*)pPVMerk->GetAktGroup());
+                        (E3dScene*)pObjMerk, (E3dScene*)pPVMerk->GetAktGroup(), Point(0, 0));
                     if(bDidInsert)
                     {
                         // delete object, it's content is cloned and inserted
