@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptInfoImpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dsherwin $ $Date: 2002-10-17 14:58:00 $
+ *  last change: $Author: dsherwin $ $Date: 2002-10-18 13:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 typedef ::std::pair< ::rtl::OUString, ::rtl::OUString > str_pair;
 typedef ::std::map< ::rtl::OUString, str_pair,
     ::std::equal_to< ::rtl::OUString > > strpair_map;
-typedef ::std::vector< str_pair > langdepprops_vec;
-typedef ::std::map< ::rtl::OUString, strpair_map,
+typedef ::std::vector< str_pair > props_vec;
+typedef ::std::map< ::rtl::OUString, ::std::pair< props_vec, strpair_map >,
     ::std::equal_to< ::rtl::OUString > > filesets_map;
 
 namespace scripting_impl
@@ -83,7 +83,8 @@ struct ScriptInfoImpl
 {
 
     inline ScriptInfoImpl::ScriptInfoImpl() SAL_THROW( () )
-       : language()
+       : parcelURI()
+       , language()
        , locales()
        , functionname()
        , logicalname()
@@ -92,13 +93,15 @@ struct ScriptInfoImpl
        {
        }
 
-   inline ScriptInfoImpl::ScriptInfoImpl( const ::rtl::OUString& __language,
+   inline ScriptInfoImpl::ScriptInfoImpl( const ::rtl::OUString __parcelURI,
+       const ::rtl::OUString& __language,
        const strpair_map& __locales,
        const ::rtl::OUString& __functionname,
        const ::rtl::OUString& __logicalname,
        const langdepprops_vec& __languagedepprops,
        const filesets_map& __filesets ) SAL_THROW( () )
-       : language( __language )
+       : parcelURI( __parcelURI )
+       , language( __language )
        , locales( __locales )
        , functionname( __functionname )
        , logicalname( __logicalname )
@@ -107,11 +110,12 @@ struct ScriptInfoImpl
    {
    }
 
+   ::rtl::OUString parcelURI;
    ::rtl::OUString language;
    strpair_map locales;
    ::rtl::OUString functionname;
    ::rtl::OUString logicalname;
-   langdepprops_vec languagedepprops;
+   props_vec languagedepprops;
    filesets_map filesets;
 
 };
