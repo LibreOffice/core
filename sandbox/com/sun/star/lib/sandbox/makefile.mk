@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kr $ $Date: 2001-02-06 12:28:22 $
+#   last change: $Author: kr $ $Date: 2001-02-15 10:17:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,6 @@ JAVAFILES=						    \
     CodeSource.java				    \
     Disposable.java				    \
     ExecutionContext.java			\
-    FilePermission.java			    \
     Holder.java					    \
     ImageProducerProxy.java		    \
     JarEntry.java					\
@@ -97,12 +96,10 @@ JAVAFILES=						    \
     ResourceImpl.java				\
     ResourceProxy.java				\
     ResourceViewer.java    		    \
-    RuntimePermission.java			\
     SandboxMessageHandler.java		\
     SandboxThreadGroup.java		    \
     SandboxSecurity.java			\
     SandboxSecurityException.java	\
-    SocketPermission.java			\
     WeakRef.java					\
     WeakTable.java					\
     WeakEntry.java					\
