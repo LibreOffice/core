@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:29:05 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,14 +82,14 @@ Menu MN_SPELL_POPUP
             Text [ danish ] = "Stavekont~rol" ;
             Text [ portuguese ] = "Or~tografia" ;
             Text [ portuguese_brazilian ] = "~Rechtschreibung" ;
-            Text[ chinese_simplified ] = "Õı×Ö·¨(~S)";
+            Text[ chinese_simplified ] = "Æ´Ğ´¼ì²é(~S)";
             Text[ russian ] = "Ïğàâ~îïèñàíèå";
             Text[ polish ] = "~Pisownia";
             Text[ japanese ] = "•¶ÍZ³(~S)";
             Text[ chinese_traditional ] = "«÷¦r(~S)";
             Text[ arabic ] = "~ÊÏŞíŞ ÅãáÇÆí";
             Text[ dutch ] = "~Spellingcontrole";
-            Text[ chinese_simplified ] = "Õı×Ö·¨(~S)";
+            Text[ chinese_simplified ] = "Æ´Ğ´¼ì²é(~S)";
             Text[ greek ] = "Ïñèïã~ñáößá";
             Text[ korean ] = "¸ÂÃã¹ı(~S)";
             Text[ turkish ] = "~Yazım kılavuzu";
