@@ -80,12 +80,14 @@ AreaPositionHelper::~AreaPositionHelper()
 
 double AreaPositionHelper::getTransformedDepth() const
 {
+    //return the depth for a logic 1
     double MinZ = getLogicMinZ();
     double MaxZ = getLogicMaxZ();
     if(m_aScales[2].Scaling.is())
         MinZ = m_aScales[2].Scaling->doScaling(MinZ);
     if(m_aScales[2].Scaling.is())
         MaxZ = m_aScales[2].Scaling->doScaling(MaxZ);
+
     return FIXED_SIZE_FOR_3D_CHART_VOLUME/(MaxZ-MinZ);
 }
 
@@ -160,6 +162,14 @@ AreaChart::AreaChart( sal_Int32 nDimension, sal_Bool bArea, sal_Bool bLine, sal_
 AreaChart::~AreaChart()
 {
     delete m_pPosHelper;
+}
+
+double AreaChart::getMaximumZ()
+{
+    if( 3!=m_nDimension )
+        return VSeriesPlotter::getMaximumZ();
+
+    return m_aXSlots.size();-0.5;
 }
 
 //-----------------------------------------------------------------
@@ -315,7 +325,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, m_xLogicTarget);
 
     m_pPosHelper->getTransformedClipRect();
-    SplineMode eSplineMode(NO_SPLINE);//@todo get from model
+    SplineMode eSplineMode(B_SPLINE);//@todo get from model
     drawing::PolyPolygonShape3D aPoly;
     if(CUBIC_SPLINE==eSplineMode)
     {
@@ -382,14 +392,14 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
     //return true if an area was created successfully
 
     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, m_xLogicTarget);
-    double zValue = m_pPosHelper->getLogicMinZ();
+    double zValue = pSeries->m_fLogicZPos - 0.5;
 
     drawing::PolyPolygonShape3D aPoly( *pSeriesPoly );
     //add second part to the polygon (grounding points or previous series points)
     if(!pPreviousSeriesPoly)
     {
-        double fMinX = pSeries->m_fMinX;
-        double fMaxX = pSeries->m_fMaxX;
+        double fMinX = pSeries->m_fLogicMinX;
+        double fMaxX = pSeries->m_fLogicMaxX;
         //clip to scale
         if(fMaxX<m_pPosHelper->getLogicMinX() || fMinX>m_pPosHelper->getLogicMaxX())
             return false;//no visible shape needed
@@ -417,7 +427,6 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
     {
         appendPoly( aPoly, *pPreviousSeriesPoly );
     }
-
     closePolygon(aPoly);
 
     //apply clipping
@@ -504,7 +513,7 @@ void AreaChart::createShapes()
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
     //update/create information for current group
-    double fLogicZ        = 0.0;//as defined
+    double fLogicZ        = -0.5;//as defined
     double fLogicBaseWidth = 1.0;//as defined
     double fLogicBaseDepth = fLogicBaseWidth;//Logic Depth and Width are identical by define ... (symmetry is not necessary anymore)
 
@@ -521,7 +530,7 @@ void AreaChart::createShapes()
 //=============================================================================
         //for the area chart there should be at most one x slot (no side by side stacking available)
         //attention different: xSlots are always interpreted as independent areas one behind the other: @todo this doesn't work why not???
-        for( ; aXSlotIter != aXSlotEnd; aXSlotIter++ )
+        for( sal_Int32 nZ=0; aXSlotIter != aXSlotEnd; aXSlotIter++, nZ++ )
         {
             ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
@@ -543,6 +552,9 @@ void AreaChart::createShapes()
             for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
             {
                 uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(*aSeriesIter, m_xLogicTarget);
+
+                fLogicZ = nZ;
+                (*aSeriesIter)->m_fLogicZPos = fLogicZ;
 
                 //set z order for series group shape
                 {
@@ -584,10 +596,10 @@ void AreaChart::createShapes()
                 //remind minimal and maximal x values for area 'grounding' points
                 //only for filled area
                 {
-                    double& rfMinX = (*aSeriesIter)->m_fMinX;
+                    double& rfMinX = (*aSeriesIter)->m_fLogicMinX;
                     if(!nIndex||fLogicX<rfMinX)
                         rfMinX=fLogicX;
-                    double& rfMaxX = (*aSeriesIter)->m_fMaxX;
+                    double& rfMaxX = (*aSeriesIter)->m_fLogicMaxX;
                     if(!nIndex||fLogicX>rfMaxX)
                         rfMaxX=fLogicX;
                 }
