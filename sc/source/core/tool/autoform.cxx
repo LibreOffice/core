@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoform.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-25 15:44:18 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,9 +117,13 @@ const USHORT AUTOFORMAT_DATA_ID_552 = 9902;
 const USHORT AUTOFORMAT_ID_641      = 10001;
 const USHORT AUTOFORMAT_DATA_ID_641 = 10002;
 
+// --- from 680/dr14 on: diagonal frame lines
+const USHORT AUTOFORMAT_ID_680DR14      = 10011;
+const USHORT AUTOFORMAT_DATA_ID_680DR14 = 10012;
+
 // aktuelle Version
-const USHORT AUTOFORMAT_ID          = AUTOFORMAT_ID_641;
-const USHORT AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_641;
+const USHORT AUTOFORMAT_ID          = AUTOFORMAT_ID_680DR14;
+const USHORT AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_680DR14;
 
 
 #ifdef READ_OLDVERS
@@ -144,6 +148,7 @@ public:
     USHORT nShadowedVersion;
     USHORT nColorVersion;
     USHORT nBoxVersion;
+    USHORT nLineVersion;
     USHORT nBrushVersion;
 
     USHORT nAdjustVersion;
@@ -174,6 +179,7 @@ ScAfVersions::ScAfVersions() :
     nShadowedVersion(0),
     nColorVersion(0),
     nBoxVersion(0),
+    nLineVersion(0),
     nBrushVersion(0),
     nAdjustVersion(0),
     nHorJustifyVersion(0),
@@ -199,6 +205,8 @@ void ScAfVersions::Load( SvStream& rStream, USHORT nVer )
     rStream >> nShadowedVersion;
     rStream >> nColorVersion;
     rStream >> nBoxVersion;
+    if ( nVer >= AUTOFORMAT_ID_680DR14 )
+        rStream >> nLineVersion;
     rStream >> nBrushVersion;
     rStream >> nAdjustVersion;
     rStream >> nHorJustifyVersion;
@@ -226,6 +234,7 @@ void ScAfVersions::Write(SvStream& rStream)
     rStream << SvxShadowedItem().GetVersion(SOFFICE_FILEFORMAT_40);
     rStream << SvxColorItem().GetVersion(SOFFICE_FILEFORMAT_40);
     rStream << SvxBoxItem().GetVersion(SOFFICE_FILEFORMAT_40);
+    rStream << SvxLineItem().GetVersion(SOFFICE_FILEFORMAT_40);
     rStream << SvxBrushItem().GetVersion(SOFFICE_FILEFORMAT_40);
 
     rStream << SvxAdjustItem().GetVersion(SOFFICE_FILEFORMAT_40);
@@ -252,6 +261,8 @@ ScAutoFormatDataField::ScAutoFormatDataField() :
     aCTLHeight( 240, 100, ATTR_CTL_FONT_HEIGHT ),
     aCTLWeight( WEIGHT_NORMAL, ATTR_CTL_FONT_WEIGHT ),
     aCTLPosture( ITALIC_NONE, ATTR_CTL_FONT_POSTURE ),
+    aTLBR( ATTR_BORDER_TLBR ),
+    aBLTR( ATTR_BORDER_BLTR ),
     aLinebreak( ATTR_LINEBREAK ),
     aRotateAngle( ATTR_ROTATE_VALUE ),
     aRotateMode( SVX_ROTATE_MODE_STANDARD, ATTR_ROTATE_MODE )
@@ -277,11 +288,13 @@ ScAutoFormatDataField::ScAutoFormatDataField( const ScAutoFormatDataField& rCopy
     aShadowed( rCopy.aShadowed ),
     aColor( rCopy.aColor ),
     aBox( rCopy.aBox ),
+    aTLBR( rCopy.aTLBR ),
+    aBLTR( rCopy.aBLTR ),
     aBackground( rCopy.aBackground ),
     aAdjust( rCopy.aAdjust ),
     aHorJustify( rCopy.aHorJustify ),
     aVerJustify( rCopy.aVerJustify ),
-    aOrientation( rCopy.aOrientation ),
+    aStacked( rCopy.aStacked ),
     aMargin( rCopy.aMargin ),
     aLinebreak( rCopy.aLinebreak ),
     aRotateAngle( rCopy.aRotateAngle ),
@@ -309,6 +322,7 @@ void ScAutoFormatDataField::SetAdjust( const SvxAdjustItem& rAdjust )
 BOOL ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersions, USHORT nVer )
 {
     SfxPoolItem* pNew;
+    SvxOrientationItem aOrientation;
 
     READ( aFont,        SvxFontItem,        rVersions.nFontVersion)
     READ( aHeight,      SvxFontHeightItem,  rVersions.nFontHeightVersion)
@@ -332,6 +346,14 @@ BOOL ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersio
     READ( aShadowed,    SvxShadowedItem,    rVersions.nShadowedVersion)
     READ( aColor,       SvxColorItem,       rVersions.nColorVersion)
     READ( aBox,         SvxBoxItem,         rVersions.nBoxVersion)
+
+    // --- from 680/dr14 on: diagonal frame lines
+    if( AUTOFORMAT_DATA_ID_680DR14 <= nVer )
+    {
+        READ( aTLBR, SvxLineItem, rVersions.nLineVersion)
+        READ( aBLTR, SvxLineItem, rVersions.nLineVersion)
+    }
+
     READ( aBackground,  SvxBrushItem,       rVersions.nBrushVersion)
 
     pNew = aAdjust.Create( rStream, rVersions.nAdjustVersion );
@@ -366,6 +388,9 @@ BOOL ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersio
     if( eSrcSet != eSysSet && aFont.GetCharSet() == eSrcSet )
         aFont.GetCharSet() = eSysSet;
 
+    aStacked.SetValue( aOrientation.IsStacked() );
+    aRotateAngle.SetValue( aOrientation.GetRotation( aRotateAngle.GetValue() ) );
+
     return (rStream.GetError() == 0);
 }
 
@@ -373,6 +398,7 @@ BOOL ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersio
 BOOL ScAutoFormatDataField::LoadOld( SvStream& rStream, const ScAfVersions& rVersions )
 {
     SfxPoolItem* pNew;
+    SvxOrientationItem aOrientation;
 
     aNumFormat.Load(rStream);
 
@@ -395,12 +421,17 @@ BOOL ScAutoFormatDataField::LoadOld( SvStream& rStream, const ScAfVersions& rVer
     READ( aBox,         SvxBoxItem,         rVersions.nBoxVersion)
     READ( aBackground,  SvxBrushItem,       rVersions.nBrushVersion)
 
+    aStacked.SetValue( aOrientation.IsStacked() );
+    aRotateAngle.SetValue( aOrientation.GetRotation( aRotateAngle.GetValue() ) );
+
     return (rStream.GetError() == 0);
 }
 #endif
 
 BOOL ScAutoFormatDataField::Save( SvStream& rStream )
 {
+    SvxOrientationItem aOrientation( aRotateAngle.GetValue(), aStacked.GetValue() );
+
     aFont.Store         ( rStream, aFont.GetVersion( SOFFICE_FILEFORMAT_40 ) );
     aHeight.Store       ( rStream, aHeight.GetVersion( SOFFICE_FILEFORMAT_40 ) );
     aWeight.Store       ( rStream, aWeight.GetVersion( SOFFICE_FILEFORMAT_40 ) );
@@ -421,6 +452,11 @@ BOOL ScAutoFormatDataField::Save( SvStream& rStream )
     aShadowed.Store     ( rStream, aShadowed.GetVersion( SOFFICE_FILEFORMAT_40 ) );
     aColor.Store        ( rStream, aColor.GetVersion( SOFFICE_FILEFORMAT_40 ) );
     aBox.Store          ( rStream, aBox.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+
+    // --- from 680/dr14 on: diagonal frame lines
+    aTLBR.Store         ( rStream, aTLBR.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+    aBLTR.Store         ( rStream, aBLTR.GetVersion( SOFFICE_FILEFORMAT_40 ) );
+
     aBackground.Store   ( rStream, aBackground.GetVersion( SOFFICE_FILEFORMAT_40 ) );
 
     aAdjust.Store       ( rStream, aAdjust.GetVersion( SOFFICE_FILEFORMAT_40 ) );
@@ -517,10 +553,12 @@ const SfxPoolItem* ScAutoFormatData::GetItem( USHORT nIndex, USHORT nWhich ) con
         case ATTR_FONT_SHADOWED:    return &rField.GetShadowed();
         case ATTR_FONT_COLOR:       return &rField.GetColor();
         case ATTR_BORDER:           return &rField.GetBox();
+        case ATTR_BORDER_TLBR:      return &rField.GetTLBR();
+        case ATTR_BORDER_BLTR:      return &rField.GetBLTR();
         case ATTR_BACKGROUND:       return &rField.GetBackground();
         case ATTR_HOR_JUSTIFY:      return &rField.GetHorJustify();
         case ATTR_VER_JUSTIFY:      return &rField.GetVerJustify();
-        case ATTR_ORIENTATION:      return &rField.GetOrientation();
+        case ATTR_STACKED:          return &rField.GetStacked();
         case ATTR_MARGIN:           return &rField.GetMargin();
         case ATTR_LINEBREAK:        return &rField.GetLinebreak();
         case ATTR_ROTATE_VALUE:     return &rField.GetRotateAngle();
@@ -552,10 +590,12 @@ void ScAutoFormatData::PutItem( USHORT nIndex, const SfxPoolItem& rItem )
         case ATTR_FONT_SHADOWED:    rField.SetShadowed( (const SvxShadowedItem&)rItem );      break;
         case ATTR_FONT_COLOR:       rField.SetColor( (const SvxColorItem&)rItem );            break;
         case ATTR_BORDER:           rField.SetBox( (const SvxBoxItem&)rItem );                break;
+        case ATTR_BORDER_TLBR:      rField.SetTLBR( (const SvxLineItem&)rItem );              break;
+        case ATTR_BORDER_BLTR:      rField.SetBLTR( (const SvxLineItem&)rItem );              break;
         case ATTR_BACKGROUND:       rField.SetBackground( (const SvxBrushItem&)rItem );       break;
         case ATTR_HOR_JUSTIFY:      rField.SetHorJustify( (const SvxHorJustifyItem&)rItem );  break;
         case ATTR_VER_JUSTIFY:      rField.SetVerJustify( (const SvxVerJustifyItem&)rItem );  break;
-        case ATTR_ORIENTATION:      rField.SetOrientation( (const SvxOrientationItem&)rItem );break;
+        case ATTR_STACKED:          rField.SetStacked( (const SfxBoolItem&)rItem );           break;
         case ATTR_MARGIN:           rField.SetMargin( (const SvxMarginItem&)rItem );          break;
         case ATTR_LINEBREAK:        rField.SetLinebreak( (const SfxBoolItem&)rItem );         break;
         case ATTR_ROTATE_VALUE:     rField.SetRotateAngle( (const SfxInt32Item&)rItem );      break;
@@ -617,7 +657,7 @@ BOOL ScAutoFormatData::IsEqualData( USHORT nIndex1, USHORT nIndex2 ) const
         bEqual = bEqual
             && (rField1.GetHorJustify()     == rField2.GetHorJustify())
             && (rField1.GetVerJustify()     == rField2.GetVerJustify())
-            && (rField1.GetOrientation()    == rField2.GetOrientation())
+            && (rField1.GetStacked()        == rField2.GetStacked())
             && (rField1.GetLinebreak()      == rField2.GetLinebreak())
             && (rField1.GetMargin()         == rField2.GetMargin())
             && (rField1.GetRotateAngle()    == rField2.GetRotateAngle())
@@ -626,7 +666,9 @@ BOOL ScAutoFormatData::IsEqualData( USHORT nIndex1, USHORT nIndex2 ) const
     if( bIncludeFrame )
     {
         bEqual = bEqual
-            && (rField1.GetBox()            == rField2.GetBox());
+            && (rField1.GetBox()            == rField2.GetBox())
+            && (rField1.GetTLBR()           == rField2.GetTLBR())
+            && (rField1.GetBLTR()           == rField2.GetBLTR());
     }
     if( bIncludeBackground )
     {
@@ -694,14 +736,18 @@ void ScAutoFormatData::FillToItemSet( USHORT nIndex, SfxItemSet& rItemSet, ScDoc
     {
         rItemSet.Put( rField.GetHorJustify() );
         rItemSet.Put( rField.GetVerJustify() );
-        rItemSet.Put( rField.GetOrientation() );
+        rItemSet.Put( rField.GetStacked() );
         rItemSet.Put( rField.GetLinebreak() );
         rItemSet.Put( rField.GetMargin() );
         rItemSet.Put( rField.GetRotateAngle() );
         rItemSet.Put( rField.GetRotateMode() );
     }
     if( bIncludeFrame )
+    {
         rItemSet.Put( rField.GetBox() );
+        rItemSet.Put( rField.GetTLBR() );
+        rItemSet.Put( rField.GetBLTR() );
+    }
     if( bIncludeBackground )
         rItemSet.Put( rField.GetBackground() );
 }
@@ -728,13 +774,15 @@ void ScAutoFormatData::GetFromItemSet( USHORT nIndex, const SfxItemSet& rItemSet
     rField.SetContour       ( (const SvxContourItem&)       rItemSet.Get( ATTR_FONT_CONTOUR ) );
     rField.SetShadowed      ( (const SvxShadowedItem&)      rItemSet.Get( ATTR_FONT_SHADOWED ) );
     rField.SetColor         ( (const SvxColorItem&)         rItemSet.Get( ATTR_FONT_COLOR ) );
+    rField.SetTLBR          ( (const SvxLineItem&)          rItemSet.Get( ATTR_BORDER_TLBR ) );
+    rField.SetBLTR          ( (const SvxLineItem&)          rItemSet.Get( ATTR_BORDER_BLTR ) );
     rField.SetHorJustify    ( (const SvxHorJustifyItem&)    rItemSet.Get( ATTR_HOR_JUSTIFY ) );
     rField.SetVerJustify    ( (const SvxVerJustifyItem&)    rItemSet.Get( ATTR_VER_JUSTIFY ) );
-    rField.SetOrientation   ( (const SvxOrientationItem&)   rItemSet.Get( ATTR_ORIENTATION ) );
+    rField.SetStacked       ( (const SfxBoolItem&)          rItemSet.Get( ATTR_STACKED ) );
     rField.SetLinebreak     ( (const SfxBoolItem&)          rItemSet.Get( ATTR_LINEBREAK ) );
     rField.SetMargin        ( (const SvxMarginItem&)        rItemSet.Get( ATTR_MARGIN ) );
     rField.SetBackground    ( (const SvxBrushItem&)         rItemSet.Get( ATTR_BACKGROUND ) );
-    rField.SetRotateAngle   ( (const SfxInt32Item&)           rItemSet.Get( ATTR_ROTATE_VALUE ) );
+    rField.SetRotateAngle   ( (const SfxInt32Item&)         rItemSet.Get( ATTR_ROTATE_VALUE ) );
     rField.SetRotateMode    ( (const SvxRotateModeItem&)    rItemSet.Get( ATTR_ROTATE_MODE ) );
 }
 
