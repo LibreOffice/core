@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:05:08 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -625,6 +625,8 @@ void XMLTextFrameContext_Impl::Create( sal_Bool bHRefOrBase64 )
         }
         case XML_TEXT_FRAME_PLUGIN:
         {
+            if(sHRef.getLength())
+                GetImport().GetAbsoluteReference(sHRef);
             xPropSet = GetImport().GetTextImport()
                             ->createAndInsertPlugin( sMimeType, sHRef,
                                                          nWidth, nHeight);
