@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:21:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,7 @@ static const String sInteractionHdl = String::CreateFromAscii( "InteractionHandl
 static const String sWindowState    = String::CreateFromAscii( "WindowState" );
 static const String sUCBContent     = String::CreateFromAscii( "UCBContent" );
 static const String sRepairPackage  = String::CreateFromAscii( "RepairPackage" );
+static const String sDocumentTitle  = String::CreateFromAscii( "DocumentTitle" );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -805,6 +806,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         if (bOK)
                            rSet.Put( SfxBoolItem( SID_REPAIRPACKAGE, bVal ) );
                      }
+                else if ( aName == sDocumentTitle )
+                     {
+                        ::rtl::OUString sVal;
+                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                        DBG_ASSERT( bOK, "invalid type or value for DocumentTitle" )
+                        if (bOK)
+                            rSet.Put( SfxStringItem( SID_DOCINFO_TITLE, sVal ) );
+                     }
 
             }
         }
@@ -969,6 +978,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_REPAIRPACKAGE ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_DOCINFO_TITLE ) == SFX_ITEM_SET )
+                nAdditional++;
 
             // consider additional arguments
             nProps += nAdditional;
@@ -1078,6 +1089,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_UPDATEDOCMODE )
                         continue;
                     if ( nId == SID_REPAIRPACKAGE )
+                        continue;
+                    if ( nId == SID_DOCINFO_TITLE )
                         continue;
 
                     // used only internally
@@ -1377,7 +1390,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 pValue[nProps].Name = sRepairPackage;
                 pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
-
+            if ( rSet.GetItemState( SID_DOCINFO_TITLE, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sDocumentTitle;
+                pValue[nProps++].Value <<= ( ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+            }
         }
     }
 
