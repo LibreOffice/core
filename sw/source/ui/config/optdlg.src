@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 11:01:16 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 18:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,7 +411,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_traditional ] = "±±¨î²Å";
         Text[ arabic ] = "ÃÍÑİ áÇ ÊõØÈÚ";
         Text[ greek ] = "Ìç åêôõğşóéìïé ÷áñáêôŞñåò";
-        Text[ korean ] = "ºñÀÎ¼â ¹®ÀÚ";
+        Text[ korean ] = "´Ü¶ô±âÈ£Ç¥½Ã";
         Text[ turkish ] = "Yazdırılmayan karakterler";
         Text[ language_user1 ] = " ";
     };
@@ -703,7 +703,7 @@ TabPage TP_LAYOUT_OPT
         Text[ chinese_traditional ] = "¤º¤åÃä¬É(~X)";
         Text[ arabic ] = "ÍÏæÏ ÇáäÕ";
         Text[ greek ] = "¼ñéá êåéìİíïõ";
-        Text[ korean ] = "ÅØ½ºÆ® °æ°è(~X)";
+        Text[ korean ] = "ÅØ½ºÆ® °æ°è¼±";
         Text[ turkish ] = "Metin sınırları";
         Text[ language_user1 ] = " ";
     };
