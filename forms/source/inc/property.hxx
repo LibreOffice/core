@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:58:15 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,25 @@ public:
 //------------------------------------------------------------------------------
 #define END_DESCRIBE_PROPERTIES()   \
     DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::fillProperties/getInfoHelper: forgot to adjust the count ?");  \
+
+//==============================================================================
+//------------------------------------------------------------------------------
+#define REGISTER_PROP_1( prop, member, attrib1 ) \
+    registerProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::attrib1, \
+        &member, ::getCppuType( &member ) );
+
+#define REGISTER_PROP_2( prop, member, attrib1, attrib2 ) \
+    registerProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::attrib1 | PropertyAttribute::attrib2, \
+        &member, ::getCppuType( &member ) );
+
+//------------------------------------------------------------------------------
+#define REGISTER_VOID_PROP_1( prop, memberAny, type, attrib1 ) \
+    registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::MAYBEVOID | PropertyAttribute::attrib1, \
+        &memberAny, ::getCppuType( static_cast< type* >( NULL ) ) );
+
+#define REGISTER_VOID_PROP_2( prop, memberAny, type, attrib1, attrib2 ) \
+    registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::MAYBEVOID | PropertyAttribute::attrib1 | PropertyAttribute::attrib2, \
+        &memberAny, ::getCppuType( static_cast< type* >( NULL ) ) );
 
 //.........................................................................
 }
