@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:26:50 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ greek ] = "Πρόγραμμα ανάγνωσης ιστοσελίδων WWW";
         QuickHelpText[ dutch ] = "WWW-browser";
         QuickHelpText[ french ] = "Browser WWW";
-        QuickHelpText[ spanish ] = "Browse";
+        QuickHelpText[ spanish ] = "Navegador";
         QuickHelpText[ italian ] = "Browser Web";
         QuickHelpText[ danish ] = "WWW-browser";
         QuickHelpText[ swedish ] = "WWW-browser";
@@ -346,7 +346,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
             MaskColor = STD_MASKCOLOR ;
         };
         QuickHelpText[ portuguese ] = "Destino no documento";
-        QuickHelpText[ russian ] = "Φελό";
+        QuickHelpText[ russian ] = "Φελό β δξκσμενςε";
         QuickHelpText[ greek ] = "Σημείο προορισμού στο έγγραφο";
         QuickHelpText[ dutch ] = "Doel in document";
         QuickHelpText[ french ] = "Cible ΰ l'intιrieur du document";
@@ -354,7 +354,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ italian ] = "Destinazione";
         QuickHelpText[ danish ] = "Mεl i dokumentet";
         QuickHelpText[ swedish ] = "Mεl i dokumentet";
-        QuickHelpText[ polish ] = "Cel";
+        QuickHelpText[ polish ] = "Cel w dokumencie";
         QuickHelpText[ portuguese_brazilian ] = "Target";
         QuickHelpText[ japanese ] = "Δή·­ÒέΔ‚Ι‚ ‚ιΐ°Ήή―Δ";
         QuickHelpText[ korean ] = "Target";
@@ -588,7 +588,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text [ ENGLISH ] = "~Caption" ;
         Text [ english_us ] = "Te~xt" ;
         Text[ portuguese ] = "Te~xto";
-        Text[ russian ] = "Σκΰηΰνθε";
+        Text[ russian ] = "Òεκρς";
         Text[ greek ] = "Κείμενο";
         Text [ dutch ] = "Aan~wijzing" ;
         Text [ french ] = "~Texte" ;
@@ -596,7 +596,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ italian ] = "Nota";
         Text[ danish ] = "Tekst";
         Text[ swedish ] = "Te~xt";
-        Text[ polish ] = "Wskazσwka";
+        Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "In~dication";
         Text[ japanese ] = "•¶—ρ(~K)";
         Text[ korean ] = "Βό°ν(~N)";
@@ -660,7 +660,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ greek ] = "Γεγονότα";
         QuickHelpText[ dutch ] = "Gebeurtenissen";
         QuickHelpText[ french ] = "Ιvιnements";
-        QuickHelpText[ spanish ] = "Script";
+        QuickHelpText[ spanish ] = "Acontecimientos";
         QuickHelpText[ italian ] = "Eventi";
         QuickHelpText[ danish ] = "Begivenheder";
         QuickHelpText[ swedish ] = "Hδndelser";
@@ -843,7 +843,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ greek ] = "Ατζέντα διευθύνσεων";
         QuickHelpText[ dutch ] = "Adresboek";
         QuickHelpText[ french ] = "Carnet d'adresses";
-        QuickHelpText[ spanish ] = "Adressbook";
+        QuickHelpText[ spanish ] = "Libreta de direcciones";
         QuickHelpText[ italian ] = "Rubrica";
         QuickHelpText[ danish ] = "Adressekartotek";
         QuickHelpText[ swedish ] = "Adressbok";
@@ -1063,7 +1063,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text [ ENGLISH ] = "~Caption" ;
         Text [ english_us ] = "Te~xt" ;
         Text[ portuguese ] = "Te~xto";
-        Text[ russian ] = "Σκΰηΰνθε";
+        Text[ russian ] = "Òεκρς";
         Text[ greek ] = "Κείμενο";
         Text [ dutch ] = "Te~kst" ;
         Text [ french ] = "~Texte" ;
@@ -1071,7 +1071,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ italian ] = "Nota";
         Text[ danish ] = "Tekst";
         Text[ swedish ] = "Te~xt";
-        Text[ polish ] = "Wskazσwka";
+        Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "In~dication";
         Text[ japanese ] = "•¶—ρ(~K)";
         Text[ korean ] = "Βό°ν(~N)";
@@ -1135,7 +1135,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ greek ] = "Γεγονότα";
         QuickHelpText[ dutch ] = "Gebeurtenissen";
         QuickHelpText[ french ] = "Ιvιnements";
-        QuickHelpText[ spanish ] = "Script";
+        QuickHelpText[ spanish ] = "Acontecimientos";
         QuickHelpText[ italian ] = "Eventi";
         QuickHelpText[ danish ] = "Begivenheder";
         QuickHelpText[ swedish ] = "Hδndelser";
@@ -1253,7 +1253,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ greek ] = "Άνοιγμα αρχείου";
         QuickHelpText[ dutch ] = "Bestand openen";
         QuickHelpText[ french ] = "Ouvrir un fichier";
-        QuickHelpText[ spanish ] = "Fileopen";
+        QuickHelpText[ spanish ] = "Abrir archivo";
         QuickHelpText[ italian ] = "Apri file";
         QuickHelpText[ danish ] = "Εbn fil";
         QuickHelpText[ swedish ] = "Φppna fil";
@@ -1613,7 +1613,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text [ ENGLISH ] = "~Caption" ;
         Text [ english_us ] = "Te~xt" ;
         Text[ portuguese ] = "Te~xto";
-        Text[ russian ] = "Σκΰηΰνθε";
+        Text[ russian ] = "Òεκρς";
         Text[ greek ] = "Κείμενο";
         Text [ dutch ] = "Te~kst" ;
         Text [ french ] = "~Texte" ;
@@ -1621,7 +1621,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ italian ] = "Nota";
         Text[ danish ] = "Tekst";
         Text[ swedish ] = "Te~xt";
-        Text[ polish ] = "Wskazσwka";
+        Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "In~dication";
         Text[ japanese ] = "•¶—ρ(~K)";
         Text[ korean ] = "Βό°ν(~N)";
@@ -1685,7 +1685,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ greek ] = "Γεγονότα";
         QuickHelpText[ dutch ] = "Gebeurtenissen";
         QuickHelpText[ french ] = "Ιvιnements";
-        QuickHelpText[ spanish ] = "Script";
+        QuickHelpText[ spanish ] = "Acontecimientos";
         QuickHelpText[ italian ] = "Eventi";
         QuickHelpText[ danish ] = "Begivenheder";
         QuickHelpText[ swedish ] = "Hδndelser";
@@ -1793,7 +1793,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ english_us ] = "Edit ~later";
         Text[ portuguese ] = "Edi~tar mais tarde";
         Text[ russian ] = "Οπΰβθςό οξηζε";
-        Text[ greek ] = "Επεξεργασία αργότερα";
+        Text[ greek ] = "Επεξεργα~σία αργότερα";
         Text[ dutch ] = "~Later bewerken";
         Text[ french ] = "Ιditer ~plus tard";
         Text[ spanish ] = "Edit~ar mαs tarde";
@@ -1894,7 +1894,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ greek ] = "Επιλογή διαδρομής";
         QuickHelpText[ dutch ] = "Pad selecteren";
         QuickHelpText[ french ] = "Sιlectionner le chemin";
-        QuickHelpText[ spanish ] = "Create";
+        QuickHelpText[ spanish ] = "Seleccionar ruta";
         QuickHelpText[ italian ] = "Seleziona percorso";
         QuickHelpText[ danish ] = "Vζlg sti";
         QuickHelpText[ swedish ] = "Vδlj ut sφkvδg";
@@ -2114,7 +2114,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text [ ENGLISH ] = "~Caption" ;
         Text [ english_us ] = "Te~xt" ;
         Text[ portuguese ] = "Te~xto";
-        Text[ russian ] = "Σκΰηΰνθε";
+        Text[ russian ] = "Òεκρς";
         Text[ greek ] = "Κείμενο";
         Text [ dutch ] = "Te~kst" ;
         Text [ french ] = "~Texte" ;
@@ -2122,7 +2122,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ italian ] = "Nota";
         Text[ danish ] = "Tekst";
         Text[ swedish ] = "Te~xt";
-        Text[ polish ] = "Wskazσwka";
+        Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "In~dication";
         Text[ japanese ] = "•¶—ρ(~K)";
         Text[ korean ] = "Βό°ν(~N)";
@@ -2186,7 +2186,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ greek ] = "Γεγονότα";
         QuickHelpText[ dutch ] = "Gebeurtenissen";
         QuickHelpText[ french ] = "Ιvιnements";
-        QuickHelpText[ spanish ] = "Script";
+        QuickHelpText[ spanish ] = "Acontecimientos";
         QuickHelpText[ italian ] = "Eventi";
         QuickHelpText[ danish ] = "Begivenheder";
         QuickHelpText[ swedish ] = "Hδndelser";
@@ -2332,7 +2332,7 @@ String RID_SVXSTR_HYPDLG_MACROACT2
 {
     Text = "Hyperlink auslφsen" ;
     Text [ ENGLISH ] = "Release hyperlink" ;
-    Text [ english_us ] = "Execute hyperlink" ;
+    Text [ english_us ] = "Trigger hyperlink" ;
     Text[ portuguese ] = "Executar hiperligaηγo";
     Text[ russian ] = "Βϋοξλνθςό γθοεπρρϋλκσ";
     Text[ greek ] = "Αποδέσμευση υπερ-σύνδεσης";
