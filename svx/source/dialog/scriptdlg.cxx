@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:15:52 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 13:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
                 childList.push_back( children[ n ] );
             }
             ::std::sort( childList.begin(), childList.end(), dialogSort1 );
-            for ( n = 0; n < childList.size(); n++ )
+            for ( n = 0; n < static_cast< sal_Int32 >( childList.size() ); n++ )
             {
                 BOOL app = false;
                 ::rtl::OUString uiName = childList[ n ]->getName();
@@ -310,7 +310,6 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
                                         app == true ? IMGID_APPICON : IMGID_DOCUMENT,
                                         0, true,
                                     std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries )), factoryURL );
-
             }
         }
 
@@ -319,7 +318,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
     OSL_TRACE("Leaving Init()");
 }
 
-Reference< XInterface  >
+Reference< browse::XBrowseNode >
 SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OUString& docName )
 {
     Reference< XInterface > xModel;
@@ -428,6 +427,7 @@ SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OU
 }
 
 Reference< browse::XBrowseNode >
+>>>>>>> 1.4
 SFTreeListBox::getLangNodeFromRootNode( Reference< browse::XBrowseNode >& rootNode, ::rtl::OUString& language )
 {
     OSL_TRACE("Entering getLangNodeFromRootNode");
@@ -465,7 +465,7 @@ void SFTreeListBox:: RequestSubEntries( SvLBoxEntry* pRootEntry, Reference< ::dr
     // sort the children
     // this may be fixed at the XBrowseNode impl at some stage
     ::std::sort( childList.begin(), childList.end(), dialogSort2 );
-    for ( n = 0; n < childList.size(); n++ )
+    for ( n = 0; n < static_cast< sal_Int32 >( childList.size() ); n++ )
     {
         if (  childList[ n ]->getType() !=  browse::BrowseNodeTypes::SCRIPT)
         {
@@ -613,7 +613,7 @@ void __EXPORT SFTreeListBox::ExpandedHdl()
 // InputDialog ------------------------------------------------------------
 // ----------------------------------------------------------------------------
 InputDialog::InputDialog(Window * pParent, USHORT nMode )
-    : ModalDialog( pParent, SVX_RES( RID_DLG_NEWLIB ) ),
+    : ModalDialog( pParent, SVX_RES( RID_SVX_MDLG_SCRIPTORG_NEWLIB ) ),
         aText( this, ResId( FT_NEWLIB ) ),
         aEdit( this, ResId( ED_LIBNAME ) ),
         aOKButton( this, ResId( PB_OK ) ),
@@ -684,16 +684,16 @@ SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, ResMgr* pBasResMgr, ::r
         aRenameButton(this, ResId( SF_PB_RENAME ) ),
         aDelButton( this, ResId( SF_PB_DEL ) ),
         aHelpButton( this, ResId( SF_PB_HELP ) ),
-        m_sLanguage( language ),
-        m_delErrStr( ResId( RID_SVXSTR_DELFAILED ) ),
-        m_delErrTitleStr( ResId( RID_SVXSTR_DELFAILED_TITLE ) ),
-        m_delQueryStr( ResId( RID_SVXSTR_DELQUERY ) ),
-        m_delQueryTitleStr( ResId( RID_SVXSTR_DELQUERY_TITLE ) ) ,
-        m_createErrStr( ResId ( RID_SVXSTR_CREATEFAILED ) ),
-        m_createDupStr( ResId ( RID_SVXSTR_CREATEFAILEDDUP ) ),
-        m_createErrTitleStr( ResId( RID_SVXSTR_CREATEFAILED_TITLE ) ),
-        m_renameErrStr( ResId ( RID_SVXSTR_RENAMEFAILED ) ),
-        m_renameErrTitleStr( ResId( RID_SVXSTR_RENAMEFAILED_TITLE ) )
+        m_sLanguage( language ) /*,
+        m_delErrStr( ResId( STR_DELFAILED ) ),
+        m_delErrTitleStr( ResId( STR_DELFAILED_TITLE ) ),
+        m_delQueryStr( ResId( STR_DELQUERY ) ),
+        m_delQueryTitleStr( ResId( STR_DELQUERY_TITLE ) ) ,
+        m_createErrStr( ResId ( STR_CREATEFAILED ) ),
+        m_createDupStr( ResId ( STR_CREATEFAILEDDUP ) ),
+        m_createErrTitleStr( ResId( STR_CREATEFAILED_TITLE ) ),
+        m_renameErrStr( ResId ( STR_RENAMEFAILED ) ),
+        m_renameErrTitleStr( ResId( STR_RENAMEFAILED_TITLE ) )*/
 {
     // must be a neater way to deal with the strings than as above
     // append the language to the dialog title
@@ -1143,10 +1143,10 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
                     if ( (aUserSuppliedName+extn).equals( childNodes[index]->getName() ) )
                     {
                         bValid = FALSE;
-                        String aError( m_createErrStr );
-                        aError.Append( m_createDupStr );
+                        String aError( SVX_RES( RID_SVXSTR_CREATEFAILED ) );
+                        aError.Append( SVX_RESSTR( RID_SVXSTR_CREATEFAILEDDUP ) );
                         ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
-                        aErrorBox.SetText( m_createErrTitleStr );
+                        aErrorBox.SetText( SVX_RESSTR( RID_SVXSTR_CREATEFAILED_TITLE ) );
                         aErrorBox.Execute();
                         xNewDlg->SetObjectName( aNewName );
                         break;
@@ -1228,9 +1228,9 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
     {
         OSL_TRACE("Create seemed to fail");
         //ISSUE L10N & message from exception?
-        String aError( m_createErrStr );
+        String aError( SVX_RES( RID_SVXSTR_CREATEFAILED ) );
         ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
-        aErrorBox.SetText( m_createErrTitleStr );
+        aErrorBox.SetText( SVX_RESSTR( RID_SVXSTR_CREATEFAILED_TITLE ) );
         aErrorBox.Execute();
     }
 }
@@ -1272,10 +1272,10 @@ void SvxScriptOrgDialog::renameEntry( SvLBoxEntry* pEntry )
                     if ( (aUserSuppliedName+extn).equals( childNodes[index]->getName() ) )
                     {
                         bValid = FALSE;
-                        String aError( m_createErrStr );
-                        aError.Append( m_createDupStr );
+                        String aError( SVX_RES( RID_SVXSTR_CREATEFAILED ) );
+                        aError.Append( SVX_RESSTR( RID_SVXSTR_CREATEFAILEDDUP ) );
                         ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
-                        aErrorBox.SetText( m_createErrTitleStr );
+                        aErrorBox.SetText( SVX_RESSTR( RID_SVXSTR_CREATEFAILED_TITLE ) );
                         aErrorBox.Execute();
                         xNewDlg->SetObjectName( aNewName );
                         break;
@@ -1324,9 +1324,9 @@ void SvxScriptOrgDialog::renameEntry( SvLBoxEntry* pEntry )
     {
         OSL_TRACE("Rename seemed to fail");
         //ISSUE L10N & message from exception?
-        String aError( m_renameErrStr );
+        String aError( SVX_RES( RID_SVXSTR_RENAMEFAILED ) );
         ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
-        aErrorBox.SetText( m_renameErrTitleStr );
+        aErrorBox.SetText( SVX_RESSTR( RID_SVXSTR_RENAMEFAILED_TITLE ) );
         aErrorBox.Execute();
     }
 }
@@ -1335,10 +1335,10 @@ void SvxScriptOrgDialog::deleteEntry( SvLBoxEntry* pEntry )
     sal_Bool result = sal_False;
     Reference< browse::XBrowseNode > node = getBrowseNode( pEntry );
     // ISSUE L10N string & can we centre list?
-    String aQuery( m_delQueryStr );
+    String aQuery( SVX_RES( RID_SVXSTR_DELQUERY ) );
     aQuery.Append( getListOfChildren( node, 0 ) );
     QueryBox aQueryBox( static_cast<Window*>(this), WB_YES_NO | WB_DEF_YES, aQuery );
-    aQueryBox.SetText( m_delQueryTitleStr );
+    aQueryBox.SetText( SVX_RESSTR( RID_SVXSTR_DELQUERY_TITLE ) );
     if ( aQueryBox.Execute() == RET_NO )
     {
         return;
@@ -1375,11 +1375,10 @@ void SvxScriptOrgDialog::deleteEntry( SvLBoxEntry* pEntry )
     {
         OSL_TRACE("Delete failed");
         //ISSUE L10N & message from exception?
-        ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, m_delErrStr );
-        aErrorBox.SetText( m_delErrTitleStr );
+        ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, SVX_RESSTR( RID_SVXSTR_DELFAILED ) );
+        aErrorBox.SetText( SVX_RESSTR( RID_SVXSTR_DELFAILED_TITLE ) );
         aErrorBox.Execute();
     }
-
 }
 
 BOOL SvxScriptOrgDialog::getBoolProperty( Reference< beans::XPropertySet >& xProps,
@@ -1393,7 +1392,7 @@ BOOL SvxScriptOrgDialog::getBoolProperty( Reference< beans::XPropertySet >& xPro
         xProps->getPropertyValue( propName ) >>= bTemp;
         result = ( bTemp == sal_True );
     }
-    catch ( Exception& e )
+    catch ( Exception& )
     {
         OSL_TRACE("caught exception getBoolProperty");
         return result;
