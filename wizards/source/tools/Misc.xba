@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Misc" script:language="StarBasic">REM  *****  BASIC  *****
 
 Const SBSHARE = 0
@@ -45,7 +45,7 @@ End Function
 Function ConnecttoDatabase(DSName as String, UserID as String, Password as String, Optional Propertylist(), Optional DriverProperties() as New com.sun.star.beans.PropertyValue)
 Dim oDBContext as Object
 Dim oDBSource as Object
-	On Local Error Goto NOCONNECTION
+&apos;	On Local Error Goto NOCONNECTION
 	oDBContext = CreateUnoService(&quot;com.sun.star.sdb.DatabaseContext&quot;)
 	If oDBContext.HasbyName(DSName) Then
 		oDBSource = oDBContext.GetByName(DSName)
@@ -650,8 +650,6 @@ Dim oArg() as new com.sun.star.beans.PropertyValue
 Dim oUrl as new com.sun.star.util.URL
 Dim oTrans as Object
 Dim oDisp as Object
-&apos;	oArg(0).Name = &quot;LibraryName&quot;
-&apos;	oArg(0).Value = sLibname
 	oTrans = createUNOService(&quot;com.sun.star.util.URLTransformer&quot;)
 	oUrl.Complete = &quot;slot:&quot; &amp; CStr(SlotID)
 	oTrans.parsestrict(oUrl)
@@ -683,4 +681,15 @@ Dim oLocale as New com.sun.star.lang.Locale
 	GetLocale = oLocale
 End Function					
 
-</script:module>
+
+Sub ToggleDesignMode(oDocument as Object)
+Dim aSwitchMode as new com.sun.star.util.URL
+	aSwitchMode.Complete = &quot;.uno:SwitchControlDesignMode&quot;
+	aTransformer = createUnoService(&quot;com.sun.star.util.URLTransformer&quot;)
+	aTransformer.parseStrict(aSwitchMode)
+	oFrame = oDocument.currentController.Frame
+	oDispatch = oFrame.queryDispatch(aSwitchMode, oFrame.Name, 63)
+	Dim aEmptyArgs() as com.sun.star.bean.PropertyValue
+	oDispatch.dispatch(aSwitchMode, aEmptyArgs())
+	Erase aSwitchMode
+End Sub</script:module>

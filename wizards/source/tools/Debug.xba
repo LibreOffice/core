@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Debug" script:language="StarBasic">REM  *****  BASIC  *****
 
 Sub WritedbgInfo(LocObject as Object)
@@ -85,7 +85,7 @@ Dim sValues as String
 	sValues = &quot;&quot;
 	For i = 0 To Ubound(oLocObject.PropertySetInfo.Properties)
 		Propname = oLocObject.PropertySetInfo.Properties(i).Name
-		sValues = sValues &amp; PropName &amp; chr(13) &apos;&quot; = &quot; &amp; oLocObject.GetPropertyValue(PropName) &amp; chr(13)
+		sValues = sValues &amp; PropName &amp; chr(13) &amp; &quot; = &quot; &amp; oLocObject.GetPropertyValue(PropName) &amp; chr(13)
 	Next i
 	Msgbox(sValues , 64, GetProductName())
 	Exit Sub

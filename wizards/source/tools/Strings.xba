@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Strings" script:language="StarBasic">Option Explicit
 Public sProductname as String
 
@@ -12,7 +12,6 @@ Dim i% ,n%
 	Next
 	ElimChar = BigString
 End Function
-
 
 
 &apos; Deletes out of a String &apos;BigString&apos; a possible Partstring &apos;CompString&apos;
@@ -29,7 +28,6 @@ Dim i%, CompLen%, BigLen%
 	Wend
 	DeleteStr = BigString
 End Function
-
 
 
 &apos; Finds a PartString, that is framed by the Strings &apos;Prestring&apos; and &apos;PostString&apos;
@@ -123,7 +121,6 @@ Dim StartUbound as Integer
 	ReDim Preserve LocList(i) as String
 	ArrayOutofString = LocList()
 End Function
-
 
 
 &apos; Deletes all fieldvalues in one-dimensional Array
@@ -411,5 +408,17 @@ On Local Error Goto No2ndDim
 		Next t
 	Next s 
 	BubbleSortList = SortList()             
+End Function
+
+
+Function GetValueoutofList(SearchValue, BigList(), iDim as Integer)
+Dim i as Integer
+Dim MaxIndex as Integer
+	MaxIndex = Ubound(BigList(),1)
+	For i = 0 To MaxIndex
+		If BigList(i,0) = SearchValue Then
+			GetValueOutOfList() = BigList(i,iDim)
+		End If
+	Next i
 End Function
 </script:module>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="ModuleControls" script:language="StarBasic">Option Explicit
 
 
@@ -150,4 +150,27 @@ Dim oDialog as Object
 	oDialog = CreateUnoDialog(oLib, DialogName)
 	LoadDialog() = oDialog
 End Function
-</script:module>
+
+
+Sub SwitchWizardDialogHeight(oDialog as Object)
+Dim oDialogModel  as Object
+Dim iDlgHeight as Integer
+Dim iYPos as Integer
+	oDialogModel = oDialog.Model
+	If oDialogModel.Height &gt; 100 Then
+		iDlgHeight = 26
+		oDialog.GetControl(&quot;imgTheme&quot;).Visible = False
+	Else
+		iDlgHeight = 210
+		oDialog.GetControl(&quot;imgTheme&quot;).Visible = True
+	End If
+	iYPos = iDlgHeight - 20
+	oDialogModel.cmdCancel.PositionY = iYPos
+	oDialogModel.cmdHelp.PositionY = iYPos
+&apos; Todo: Abfragen, ob in der Sequenze oDialogModel.GetControls()  auch ein cmdBack 
+&apos; vorhanden ist
+	oDialogModel.cmdBack.PositionY = iYPos
+	oDialogModel.cmdGoOn.PositionY = iYPos
+	oDialogModel.cmdSwitchHeight.PositionY = iYPos
+	oDialogModel.Height = iDlgHeight
+End Sub</script:module>
