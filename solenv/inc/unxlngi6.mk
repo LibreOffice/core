@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 08:37:46 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:52:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,7 @@ CFLAGS+=-Wuninitialized
 .IF "$(ENABLE_SYMBOLS)"=="SMALL"
 CFLAGSENABLESYMBOLS=-g1
 .ELSE
-CFLAGSENABLESYMBOLS=#-g # temporarily commented out, will be reenabled before Beta
+CFLAGSENABLESYMBOLS=-g # was temporarily commented out, reenabled before Beta
 
 .ENDIF
 

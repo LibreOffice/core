@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 09:18:53 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:52:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,7 @@ CFLAGSCC=-xCC -D__sparcv8plus
 CFLAGSCXX=-features=no%altspell -library=no%Cstd
 
 # flags to enable build with symbols; required for crashdump feature
-CFLAGSENABLESYMBOLS=#-g0 -xs # temporarily commented out, will be reenabled before Beta
+CFLAGSENABLESYMBOLS=-g0 -xs # was temporarily commented out, reenabled before Beta
 
 CFLAGSEXCEPTIONS=
 CFLAGS_NO_EXCEPTIONS=-noex
@@ -129,7 +129,7 @@ LINK=CC
 LINKFLAGSRUNPATH*=-R\''$$ORIGIN'\'
 LINKFLAGS=-w -mt -z combreloc -PIC -temp=/tmp $(LINKFLAGSRUNPATH) -norunpath -library=no%Cstd
 
-# -z text force fatal error if non PIC code is linked into shared library. Such code 
+# -z text force fatal error if non PIC code is linked into shared library. Such code
 #    would be expensive on startup
 CHECKFORPIC =-z text
 LINKFLAGSSHLGUI=$(CHECKFORPIC) -G
@@ -189,7 +189,7 @@ LIBSTLPORTST=$(STATIC) -lstlport_sunpro $(DYNAMIC)
 
 
 LIBMGR=CC
-LIBFLAGS=-xar -o 
+LIBFLAGS=-xar -o
 
 IMPLIB=
 IMPLIBFLAGS=
