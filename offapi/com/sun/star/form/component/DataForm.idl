@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataForm.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:24:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,8 @@
 
 module com { module sun { module star { module form {
 
-interface XReset;
-interface XDatabaseParameterBroadcaster;
+ published interface XReset;
+ published interface XDatabaseParameterBroadcaster;
 
 module component {
 //=============================================================================
@@ -107,7 +107,7 @@ module component {
     possibilities for configuring the data manipulation.</p>
 
 */
-service DataForm
+published service DataForm
 {
     service com::sun::star::sdb::RowSet;
     service com::sun::star::form::component::Form;
