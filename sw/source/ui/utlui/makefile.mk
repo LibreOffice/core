@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:57:54 $
+#   last change: $Author: rt $ $Date: 2004-05-03 13:56:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,6 +99,7 @@ SLOFILES =  \
         $(SLO)$/navicfg.obj \
         $(SLO)$/numfmtlb.obj \
         $(SLO)$/prcntfld.obj \
+        $(SLO)$/textcontrolcombo.obj \
         $(SLO)$/tmplctrl.obj \
         $(SLO)$/uitool.obj \
         $(SLO)$/uiitems.obj \
@@ -107,6 +108,7 @@ SLOFILES =  \
         $(SLO)$/shdwcrsr.obj \
         $(SLO)$/unotools.obj \
         $(SLO)$/zoomctrl.obj
+
 
 EXCEPTIONSFILES= \
         $(SLO)$/unotools.obj
