@@ -7,8 +7,6 @@ es	external\glibc		nmake	-	all	es_glibc NULL
 es	external\glibc\rtufiles	nmake	-	all	es_glibcrtu es_glibc NULL
 es	external\gpc		nmake	-	u	es_gpc NULL
 es      external\gpc            nmake   -       w       es_gpc NULL
-es	external\jpeg		nmake 	-	all	es_jpeg NULL
-es	external\jpeg\rtufiles	nmake	-	all	es_jpegrtu es_jpeg NULL
 es	external\npsdk		nmake	-	all	es_npsdk NULL
 es	external\npsdk\rtufiles	nmake	-	all	es_npsdkrtu es_npsdk NULL
 es	external\odbc		nmake	-	all	es_odbc NULL
