@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: jsc $ $Date: 2001-05-04 15:24:30 $
+#   last change: $Author: rt $ $Date: 2001-05-07 13:11:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -161,7 +161,7 @@ SWLIB=$(L)$/libswlib.x
 .ELSE				# "$(OS)"=="S390"
 
 GPC3RDLIB=-lgpc
-SALHELPERLIB=-lsalhelper$(COM)
+SALHELPERLIB=-lsalhelper$(UDK_MAJOR)$(COM)
 XMLSCRIPTLIB =-lxcr$(UPD)$(DLLPOSTFIX)
 COMPHELPERLIB=-lcomphelp2
 CONNECTIVITYLIB=-lconnectivity
@@ -188,8 +188,8 @@ STORELIB=-lstore
 SALLIB=-lsal
 .INCLUDE .IGNORE : connectivity$/version.mk
 ODBCLIB=-lodbc$(ODBC_MAJOR)
-SALTLSLIB=-lsaltls$(SAL_MAJOR)
-SALZIPLIB=-lsalzip$(SAL_MAJOR)
+SALTLSLIB=-lsaltls$(UDK_MAJOR)
+SALZIPLIB=-lsalzip$(UDK_MAJOR)
 RMCXTLIB=-lrmcxt
 BTSTRPLIB=-lbtstrp
 IOTXLIB=
