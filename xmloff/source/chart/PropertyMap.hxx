@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-13 16:08:23 $
+ *  last change: $Author: bm $ $Date: 2001-08-14 13:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@
 #define XML_SCH_CONTEXT_SPECIAL_SYMBOL_WIDTH        ( XML_SCH_CTF_START + 20 )
 #define XML_SCH_CONTEXT_SPECIAL_SYMBOL_HEIGHT       ( XML_SCH_CTF_START + 21 )
 #define XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME   ( XML_SCH_CTF_START + 22 )
+#define XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE        ( XML_SCH_CTF_START + 23 )
 
 #define MAP_ENTRY( a, ns, nm, t ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::##nm, t }
 #define MAP_CONTEXT( a, ns, nm, t, c ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::##nm, t, XML_SCH_CONTEXT_##c }
@@ -161,7 +162,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_ENTRY( "SymbolType", CHART, XML_SYMBOL, XML_TYPE_NUMBER ),
     MAP_SPECIAL( "SymbolSize", CHART, XML_SYMBOL_WIDTH, XML_TYPE_MEASURE | MID_FLAG_MERGE_PROPERTY, SYMBOL_WIDTH ),
     MAP_SPECIAL( "SymbolSize", CHART, XML_SYMBOL_HEIGHT, XML_TYPE_MEASURE | MID_FLAG_MERGE_PROPERTY, SYMBOL_HEIGHT ),
-    MAP_SPECIAL( "SymbolBitmapURL", CHART, XML_SYMBOL_IMAGE_NAME, XML_TYPE_STRING, SYMBOL_IMAGE_NAME ),
+    MAP_SPECIAL( "SymbolBitmapURL", STYLE, XML_SYMBOL_IMAGE, XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM, SYMBOL_IMAGE ),
     MAP_ENTRY( "Vertical", CHART, XML_VERTICAL, XML_TYPE_BOOL ),
     MAP_ENTRY( "NumberOfLines", CHART, XML_LINES_USED, XML_TYPE_NUMBER ),
     MAP_ENTRY( "StackedBarsConnected", CHART, XML_CONNECT_BARS, XML_TYPE_BOOL ),
@@ -208,6 +209,11 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
 
     // text properties for titles
     MAP_SPECIAL( "TextRotation", TEXT, XML_ROTATION_ANGLE, XML_TYPE_NUMBER, TEXT_ROTATION ),    // convert 1/100th degrees to degrees
+
+    // for compatability to pre 6.0beta documents
+    { "SymbolBitmapURL", 15, XML_NAMESPACE_CHART,
+      ::xmloff::token::XML_SYMBOL_IMAGE_NAME, XML_TYPE_STRING | MID_FLAG_SPECIAL_ITEM_IMPORT,
+      XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME },
 
     MAP_ENTRY_END
 };

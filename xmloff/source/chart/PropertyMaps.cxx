@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-10 13:37:45 $
+ *  last change: $Author: bm $ $Date: 2001-08-14 13:09:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,9 +298,47 @@ void XMLChartExportPropertyMapper::handleElementItem(
     const ::std::vector< XMLPropertyState > *pProperties,
     sal_uInt32 nIdx ) const
 {
-    // call parent
-    SvXMLExportPropertyMapper::handleElementItem( rHandler, rProperty,
-            rUnitConverter, rNamespaceMap, nFlags, pProperties, nIdx );
+    switch( getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex ))
+    {
+        case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE:
+            {
+                ::rtl::OUString aURLStr;
+                rProperty.maValue >>= aURLStr;
+
+                // export as XLink reference into the package
+                // if embedding is off
+                ::rtl::OUString sTempURL( mrExport.AddEmbeddedGraphicObject( aURLStr ));
+                if( sTempURL.getLength() )
+                {
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sTempURL );
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE,
+                                              XML_SIMPLE );
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE,
+                                              XML_ONLOAD );
+                }
+
+                {
+                    sal_uInt32 nPropIndex = rProperty.mnIndex;
+                    // this is the element that has to live until the next statement
+                    SvXMLElementExport aElem( mrExport,
+                                              getPropertySetMapper()->GetEntryNameSpace( nPropIndex ),
+                                              getPropertySetMapper()->GetEntryXMLName( nPropIndex ),
+                                              sal_True, sal_True );
+
+                    // export as Base64 embedded graphic
+                    // if embedding is on
+                    if( aURLStr.getLength())
+                        mrExport.AddEmbeddedGraphicObjectAsBase64( aURLStr );
+                }
+            }
+            break;
+
+        default:
+            // call parent
+            SvXMLExportPropertyMapper::handleElementItem( rHandler, rProperty,
+                                                          rUnitConverter, rNamespaceMap, nFlags, pProperties, nIdx );
+            break;
+    }
 }
 
 void XMLChartExportPropertyMapper::handleSpecialItem(
@@ -379,14 +417,6 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                                                    nContextId == XML_SCH_CONTEXT_SPECIAL_SYMBOL_WIDTH
                                                    ? aSize.Width
                                                    : aSize.Height );
-                }
-                break;
-
-            case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
-                {
-                    ::rtl::OUString aURLStr;
-                    rProperty.maValue >>= aURLStr;
-                    sValueBuffer.append( mrExport.AddEmbeddedGraphicObject( aURLStr ));
                 }
                 break;
 
@@ -529,9 +559,12 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
                     rProperty.maValue <<= aSize;
                 }
                 break;
+
+            // deprecated from 6.0 beta on
             case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
                 rProperty.maValue <<= mrImport.ResolveGraphicObjectURL( rValue, sal_False );
                 break;
+
             default:
                 bRet = sal_False;
                 break;
