@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-06 19:14:48 $
+ *  last change: $Author: nn $ $Date: 2001-04-10 07:54:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
             if (nSdrObjKind == OBJ_OLE2)
             {
                 bOleObj = TRUE;
+                // aOleData is initialized later
             }
 
             //
@@ -239,7 +240,12 @@ ScDrawTransferObj::~ScDrawTransferObj()
         pScMod->ResetDragObject();
     }
 
+    aOleData = TransferableDataHelper();        // clear before releasing the mutex
+    aDocShellRef.Clear();
+
     delete pModel;
+    aDrawPersistRef.Clear();                    // after the model
+
     delete pBookmark;
     delete pDragSourceView;
 
@@ -282,6 +288,24 @@ void ScDrawTransferObj::AddSupportedFormats()
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
         AddFormat( SOT_FORMAT_GDIMETAFILE );
+
+        if ( !aOleData.GetTransferable().is() )
+        {
+            SvInPlaceObjectRef xIPObj = GetSingleObject();
+            if ( xIPObj.Is() )
+                aOleData = TransferableDataHelper( xIPObj->CreateTransferableSnapshot() );
+        }
+        if ( aOleData.GetTransferable().is() )
+        {
+            //  get format list from object snapshot
+            //  (this must be after inserting the default formats!)
+
+            DataFlavorExVector              aVector( aOleData.GetDataFlavorExVector() );
+            DataFlavorExVector::iterator    aIter( aVector.begin() ), aEnd( aVector.end() );
+
+            while( aIter != aEnd )
+                AddFormat( *aIter++ );
+        }
     }
     else                        // any drawing objects
     {
@@ -298,9 +322,37 @@ void ScDrawTransferObj::AddSupportedFormats()
 
 sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
-    sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
-    sal_Bool    bOK = sal_False;
+    sal_Bool bOK = sal_False;
 
+    if ( bOleObj )
+    {
+        if ( !aOleData.GetTransferable().is() )
+        {
+            SvInPlaceObjectRef xIPObj = GetSingleObject();
+            if ( xIPObj.Is() )
+                aOleData = TransferableDataHelper( xIPObj->CreateTransferableSnapshot() );
+        }
+
+        if( aOleData.GetTransferable().is() && aOleData.HasFormat( rFlavor ) )
+        {
+            ULONG nOldSwapMode;
+
+            if( pModel )
+            {
+                nOldSwapMode = pModel->GetSwapGraphicsMode();
+                pModel->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_PURGE );
+            }
+
+            bOK = SetAny( aOleData.GetAny( rFlavor ), rFlavor );
+
+            if( pModel )
+                pModel->SetSwapGraphicsMode( nOldSwapMode );
+
+            return bOK;
+        }
+    }
+
+    sal_uInt32 nFormat = SotExchange::GetFormat( rFlavor );
     if( HasFormat( nFormat ) )
     {
         if ( nFormat == SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR || nFormat == SOT_FORMATSTR_ID_OBJECTDESCRIPTOR )
@@ -453,6 +505,11 @@ void ScDrawTransferObj::DragFinished( sal_Int8 nDropAction )
     DELETEZ( pDragSourceView );
 
     TransferableHelper::DragFinished( nDropAction );
+}
+
+void ScDrawTransferObj::SetDrawPersist( const SvEmbeddedObjectRef& rRef )
+{
+    aDrawPersistRef = rRef;
 }
 
 void lcl_InitMarks( SdrMarkView& rDest, const SdrMarkView& rSource, USHORT nTab )
