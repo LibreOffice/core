@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncolumn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 13:18:50 $
+ *  last change: $Author: fs $ $Date: 2001-04-06 08:58:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,7 @@ Sequence< ::rtl::OUString > OTableColumn::getSupportedServiceNames(  ) throw (Ru
 //= OColumnWrapper
 //============================================================
 //--------------------------------------------------------------------------
-OColumnWrapper::OColumnWrapper(const Reference< XPropertySet > & rCol, sal_Int32 nColTypeID)
+OColumnWrapper::OColumnWrapper(const Reference< XPropertySet > & rCol)
                :m_xAggregate(rCol)
                ,m_nColTypeID(-1)
 {
@@ -428,6 +428,8 @@ OColumnWrapper::OColumnWrapper(const Reference< XPropertySet > & rCol, sal_Int32
         m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_DESCRIPTION) ? HAS_DESCRIPTION : 0;
         m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE) ? HAS_DEFAULTVALUE : 0;
         m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_ISROWVERSION) ? HAS_ROWVERSION : 0;
+
+        m_xAggregate->getPropertyValue(PROPERTY_NAME) >>= m_sName;
     }
 }
 
