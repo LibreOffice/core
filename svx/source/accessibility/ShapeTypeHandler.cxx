@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeTypeHandler.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: af $ $Date: 2002-05-06 09:30:01 $
+ *  last change: $Author: af $ $Date: 2002-06-27 12:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,8 +179,6 @@ AccessibleShape*
             rShapeInfo,
             rShapeTreeInfo,
             maShapeTypeDescriptorList[nSlotId].mnShapeTypeId);
-    if (pShape != NULL)
-        pShape->Init();
     return pShape;
 }
 
