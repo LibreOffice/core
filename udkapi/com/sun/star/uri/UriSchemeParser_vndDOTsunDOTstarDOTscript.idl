@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UriSchemeParser_vndDOTsunDOTstarDOTscript.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-19 18:19:16 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@ module com { module sun { module star { module uri {
 /**
    parses textual representations of absolute &ldquo;vnd.sun.star.script&rdquo;
    URLs.
+
+   @since #i19971#
  */
 service UriSchemeParser_vndDOTsunDOTstarDOTscript {
     /**
