@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoadmin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:24:38 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,8 @@ void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
         {
             m_aInitialSelection = aProperty.Value;
         }
+        else
+            ODatabaseAdministrationDialogBase::implInitialize(_rValue);
     }
     else
         ODatabaseAdministrationDialogBase::implInitialize(_rValue);
