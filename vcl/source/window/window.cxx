@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.196 $
+ *  $Revision: 1.197 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:09:58 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,9 @@
 #include <unotools/confignode.hxx>
 #endif
 
+#ifndef _SV_GDIMTF_HXX
+#include <gdimtf.hxx>
+#endif
 
 
 using namespace rtl;
@@ -9032,3 +9035,79 @@ Reference< ::drafts::com::sun::star::rendering::XCanvas > Window::GetFullscreenC
     // no factory??? Empty reference, then.
     return mxCanvas;
 }
+
+void Window::ImplPaintToMetaFile( GDIMetaFile* pMtf )
+{
+    Push();
+
+    BOOL bRVisible = mbReallyVisible;
+    mbReallyVisible = TRUE;
+
+    BOOL bOutput = IsOutputEnabled();
+    EnableOutput( FALSE );
+
+    GDIMetaFile* pOldMtf = GetConnectMetaFile();
+    pMtf->WindEnd();
+    SetConnectMetaFile( pMtf );
+    Paint( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
+    SetConnectMetaFile( pOldMtf );
+    EnableOutput( bOutput );
+    mbReallyVisible = bRVisible;
+
+    for( Window* pChild = mpFirstChild; pChild; pChild = pChild->mpNext )
+    {
+        if( pChild->mpFrame == mpFrame && pChild->IsVisible() )
+        {
+            sal_Int32 nDeltaX = GetOutOffXPixel() - pChild->GetOutOffXPixel();
+            sal_Int32 nDeltaY = GetOutOffYPixel() - pChild->GetOutOffYPixel();
+            pMtf->Move( nDeltaX, nDeltaY );
+            pChild->ImplPaintToMetaFile( pMtf );
+            pMtf->Move( -nDeltaX, -nDeltaY );
+        }
+    }
+
+    for( Window* pOverlap = mpFirstOverlap; pOverlap; pOverlap = pOverlap->mpNext )
+    {
+        if( pOverlap->mpFrame == mpFrame && pOverlap->IsVisible() )
+        {
+            sal_Int32 nDeltaX = GetOutOffXPixel() - pOverlap->GetOutOffXPixel();
+            sal_Int32 nDeltaY = GetOutOffYPixel() - pOverlap->GetOutOffYPixel();
+            pMtf->Move( nDeltaX, nDeltaY );
+            pOverlap->ImplPaintToMetaFile( pMtf );
+            pMtf->Move( -nDeltaX, -nDeltaY );
+        }
+    }
+
+    Pop();
+}
+
+void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& rSize )
+{
+    GDIMetaFile aMF;
+    Point       aPos  = pDev->LogicToPixel( rPos );
+    Size        aSize = pDev->LogicToPixel( rSize );
+
+    if( ! mbVisible )
+    {
+        // trigger correct visibility flags for children
+        Show();
+        Hide();
+    }
+
+    BOOL bVisible = mbVisible;
+    mbVisible = TRUE;
+
+    ImplPaintToMetaFile( &aMF );
+
+    mbVisible = bVisible;
+
+    pDev->Push();
+    pDev->SetMapMode();
+
+    aMF.Move( aPos.X(), aPos.Y() );
+    aMF.WindStart();
+    aMF.Play( pDev );
+
+    pDev->Pop();
+}
+
