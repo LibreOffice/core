@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:08:58 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #ifndef _SV_BUTTON_HXX
 #include <button.hxx> // for Button::GetStandardText
 #endif
+#ifndef _SV_DOCKWIN_HXX
+#include <dockwin.hxx>  // for DockingManager
+#endif
 
 #ifndef _SV_SALIMESTATUS_HXX
 #include <salimestatus.hxx>
@@ -205,6 +208,9 @@ void ImplDeInitSVData()
     if( pSVData->mpSettingsConfigItem )
         delete pSVData->mpSettingsConfigItem;
 
+    if( pSVData->mpDockingManager )
+        delete pSVData->mpDockingManager;
+
     if( pSVData->maGDIData.mpDefFontConfig )
         delete pSVData->maGDIData.mpDefFontConfig;
     if( pSVData->maGDIData.mpFontSubstConfig )
@@ -288,6 +294,15 @@ ResMgr* ImplGetResMgr()
         }
     }
     return pSVData->mpResMgr;
+}
+
+DockingManager* ImplGetDockingManager()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if ( !pSVData->mpDockingManager )
+        pSVData->mpDockingManager = new DockingManager();
+
+    return pSVData->mpDockingManager;
 }
 
 class AccessBridgeCurrentContext: public cppu::WeakImplHelper1< com::sun::star::uno::XCurrentContext >
