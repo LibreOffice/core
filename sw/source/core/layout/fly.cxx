@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:29:45 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 14:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,9 +131,13 @@
 #ifndef _NDGRF_HXX
 #include <ndgrf.hxx>
 #endif
-// OD 31.07.2003 #110978#
-#ifndef _ANCHOREDOBJECTPOSITION_HXX
-#include <anchoredobjectposition.hxx>
+// OD 29.10.2003 #113049#
+#ifndef _TOLAYOUTANCHOREDOBJECTPOSITION_HXX
+#include <tolayoutanchoredobjectposition.hxx>
+#endif
+// OD 06.11.2003 #i22305#
+#ifndef _FMTFOLLOWTEXTFLOW_HXX
+#include <fmtfollowtextflow.hxx>
 #endif
 
 #include "doc.hxx"
@@ -1315,8 +1319,11 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
                         if ( pO->ISA(SwVirtFlyDrawObj) )
                         {
                             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                            if( pFly->IsFlyLayFrm() &&
-                                pFly->Frm().Top() != WEIT_WECH )
+                            // OD 06.11.2003 #i22305# - consider
+                            // only Writer fly frames, which follow the text flow.
+                            if ( pFly->IsFlyLayFrm() &&
+                                 pFly->Frm().Top() != WEIT_WECH &&
+                                 pFly->GetFmt()->GetFollowTextFlow().GetValue() )
                             {
                                 SwTwips nDist = -(pFly->Frm().*fnRect->
                                     fnBottomDist)( nTop );
@@ -1625,238 +1632,15 @@ void SwFlyFrm::MakeFlyPos()
     {
         bValidPos = TRUE;
 
-        // OD 07.08.2003 #110978# - use new class to position object
-        objectpositioning::SwAnchoredObjectPosition
-                aObjPositioning( objectpositioning::TO_LAYOUT, *GetVirtDrawObj() );
+        // OD 29.10.2003 #113049# - use new class to position object
+        GetAnchor()->Calc();
+        objectpositioning::SwToLayoutAnchoredObjectPosition
+                aObjPositioning( *GetVirtDrawObj() );
         aObjPositioning.CalcPosition();
 
         SWRECTFN( GetAnchor() );
         aFrm.Pos( aObjPositioning.GetRelPos() );
         aFrm.Pos() += (GetAnchor()->Frm().*fnRect->fnGetPos)();
-        /*
-        GetAnchor()->Calc();
-        SWRECTFN( GetAnchor() );
-            //Die Werte in den Attributen muessen ggf. upgedated werden,
-            //deshalb werden hier Attributinstanzen und Flags benoetigt.
-        SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
-        BOOL bFlyAtFly = FLY_AT_FLY == pFmt->GetAnchor().GetAnchorId();
-        SwFmtVertOrient aVert( pFmt->GetVertOrient() );
-        SwFmtHoriOrient aHori( pFmt->GetHoriOrient() );
-        const SvxLRSpaceItem &rLR = pFmt->GetLRSpace();
-        const SvxULSpaceItem &rUL = pFmt->GetULSpace();
-        FASTBOOL bVertChgd = FALSE,
-                 bHoriChgd = FALSE;
-
-        //Horizontale und vertikale Positionen werden getrennt berechnet.
-        //Sie koennen jeweils Fix oder Variabel (automatisch) sein.
-
-        //Erst die vertikale Position
-        BOOL bVertPrt = aVert.GetRelationOrient() == PRTAREA ||
-                        aVert.GetRelationOrient() == REL_PG_PRTAREA;
-        if ( aVert.GetVertOrient() == VERT_NONE )
-        {
-            SwTwips nYPos = aVert.GetPos();
-            if ( bVertPrt )
-            {
-                nYPos += (GetAnchor()->*fnRect->fnGetTopMargin)();
-                if( GetAnchor()->IsPageFrm() && !bVert )
-                {
-                    SwFrm* pPrtFrm = ((SwPageFrm*)GetAnchor())->Lower();
-                    if( pPrtFrm && pPrtFrm->IsHeaderFrm() )
-                        nYPos += (pPrtFrm->Frm().*fnRect->fnGetHeight)();
-                }
-            }
-            if( nYPos < 0 )
-#ifdef AMA_OUT_OF_FLY
-              if( !bFlyAtFly  )
-#endif
-                nYPos = 0;
-            if( bVert )
-            {
-                aRelPos.X() = bRev ? nYPos : -nYPos;
-                aRelPos.X() -= Frm().Width();
-            }
-            else
-                aRelPos.Y() = nYPos;
-        }
-        else
-        {   //Zuerst den Bezugsrahmen festlegen (PrtArea oder Frame)
-            SwTwips nRel, nAdd;
-            if ( bVertPrt )
-            {   nRel = (GetAnchor()->Prt().*fnRect->fnGetHeight)();
-                nAdd = (GetAnchor()->*fnRect->fnGetTopMargin)();
-                if( GetAnchor()->IsPageFrm() && !bVert )
-                {
-                    // Wenn wir am SeitenTextBereich ausgerichtet sind,
-                    // sollen Kopf- und Fusszeilen _nicht_ mit zaehlen.
-                    SwFrm* pPrtFrm = ((SwPageFrm*)GetAnchor())->Lower();
-                    while( pPrtFrm )
-                    {
-                        if( pPrtFrm->IsHeaderFrm() )
-                        {
-                            nRel -= pPrtFrm->Frm().Height();
-                            nAdd += pPrtFrm->Frm().Height();
-                        }
-                        else if( pPrtFrm->IsFooterFrm() )
-                            nRel -= pPrtFrm->Frm().Height();
-                        pPrtFrm = pPrtFrm->GetNext();
-                    }
-                }
-            }
-            else
-            {   nRel = (GetAnchor()->Frm().*fnRect->fnGetHeight)();
-                nAdd = 0;
-            }
-            // Bei rahmengebunden Rahmen wird nur vertikal unten oder zentriert
-            // ausgerichtet, wenn der Text durchlaeuft oder der Anker eine feste
-            // Hoehe besitzt.
-            SwTwips nRelPosY;
-            SwTwips nFrmHeight = (aFrm.*fnRect->fnGetHeight)();
-            if( bFlyAtFly && VERT_TOP != aVert.GetVertOrient() &&
-                SURROUND_THROUGHT != pFmt->GetSurround().GetSurround() &&
-                !GetAnchor()->HasFixSize() )
-                nRelPosY = bVert ? rLR.GetRight() : rUL.GetUpper();
-            else if ( aVert.GetVertOrient() == VERT_CENTER )
-                nRelPosY = (nRel / 2) - (nFrmHeight / 2);
-            else if ( aVert.GetVertOrient() == VERT_BOTTOM )
-                nRelPosY = nRel - ( nFrmHeight +
-                                   ( bVert ? rLR.GetLeft() : rUL.GetLower() ) );
-            else
-                nRelPosY = bVert ? rLR.GetRight() : rUL.GetUpper();
-            nRelPosY += nAdd;
-            if( bVert )
-                nRelPosY += nFrmHeight;
-
-            if ( aVert.GetPos() != nRelPosY )
-            {   aVert.SetPos( nRelPosY );
-                bVertChgd = TRUE;
-            }
-            if( bVert )
-            {
-                if( !bRev )
-                    nRelPosY = - nRelPosY;
-                aRelPos.X() = nRelPosY;
-            }
-            else
-                aRelPos.Y() = nRelPosY;
-        }
-
-        //Fuer die Hoehe der Seiten im Browser muessen wir etwas tricksen. Das
-        //Grow muessen wir auf den Body rufen; wegen ggf. eingeschalteter
-        //Kopfzeilen und weil die Seite sowieso eine fix-Hoehe hat.
-        if ( !bFlyAtFly && GetFmt()->GetDoc()->IsBrowseMode() &&
-             GetAnchor()->IsPageFrm() ) //Was sonst?
-        {
-            const long nAnchorBottom = GetAnchor()->Frm().Bottom();
-            const long nBottom = GetAnchor()->Frm().Top() + aRelPos.Y() + Frm().Height();
-            if ( nAnchorBottom < nBottom )
-            {
-                ((SwPageFrm*)GetAnchor())->FindBodyCont()->
-                                    Grow( nBottom - nAnchorBottom PHEIGHT );
-            }
-        }
-
-
-        //Jetzt die Horizontale Position
-        const BOOL bToggle = aHori.IsPosToggle()&&!FindPageFrm()->OnRightPage();
-        BOOL bTmpToggle = bToggle;
-        //und wieder erst der Bezugsrahmen
-        SwTwips nRel, nAdd;
-        SwHoriOrient eHOri = aHori.GetHoriOrient();
-        if( bToggle )
-        {
-            if( HORI_RIGHT == eHOri )
-                eHOri = HORI_LEFT;
-            else if( HORI_LEFT == eHOri )
-                eHOri = HORI_RIGHT;
-        }
-        switch ( aHori.GetRelationOrient() )
-        {
-            case PRTAREA:
-            case REL_PG_PRTAREA:
-            {
-                nRel = (GetAnchor()->Prt().*fnRect->fnGetWidth)();
-                nAdd = (GetAnchor()->*fnRect->fnGetLeftMargin)();
-                break;
-            }
-            case REL_PG_LEFT:
-            case REL_FRM_LEFT:
-                bTmpToggle = !bToggle;
-                // kein break;
-            case REL_PG_RIGHT:
-            case REL_FRM_RIGHT:
-            {
-                if ( bTmpToggle )    // linker Seitenrand
-                {
-                    nRel = (GetAnchor()->*fnRect->fnGetLeftMargin)();
-                    nAdd = 0;
-                }
-                else            // rechter Seitenrand
-                {
-                    nRel = (GetAnchor()->Frm().*fnRect->fnGetWidth)();
-                    nAdd = (GetAnchor()->Prt().*fnRect->fnGetRight)();
-                    nRel -= nAdd;
-                }
-                break;
-            }
-            default:
-            {
-                nRel = (GetAnchor()->Frm().*fnRect->fnGetWidth)();
-                nAdd = 0;
-                break;
-            }
-        }
-        SwTwips nFrmWidth = (Frm().*fnRect->fnGetWidth)();
-        if( bRev )
-        {
-            nFrmWidth = -nFrmWidth;
-            nRel = -nRel;
-            nAdd = -nAdd;
-        }
-        SwTwips nRelX;
-        if ( aHori.GetHoriOrient() == HORI_NONE )
-        {
-            if( bToggle ||
-                ( !aHori.IsPosToggle() && GetAnchor()->IsRightToLeft() ) )
-                nRelX = nRel - nFrmWidth - aHori.GetPos();
-            else
-                nRelX = aHori.GetPos();
-        }
-        else if ( HORI_CENTER == eHOri )
-            nRelX = (nRel / 2) - (nFrmWidth / 2);
-        else if ( HORI_RIGHT == eHOri )
-            nRelX = nRel - ( nFrmWidth +
-                                ( bVert ? rUL.GetLower() : rLR.GetRight() ) );
-        else
-            nRelX = bVert ? rUL.GetUpper() : rLR.GetLeft();
-        nRelX += nAdd;
-
-        if( ( nRelX < 0 ) != bRev )
-            nRelX = 0;
-        if( bVert )
-            aRelPos.Y() = nRelX;
-        else
-            aRelPos.X() = nRelX;
-        if ( HORI_NONE != aHori.GetHoriOrient() &&
-            aHori.GetPos() != nRelX )
-        {   aHori.SetPos( nRelX );
-            bHoriChgd = TRUE;
-        }
-
-        //Die Absolute Position ergibt sich aus der absoluten Position des
-        //Ankers plus der relativen Position.
-        aFrm.Pos( aRelPos );
-        aFrm.Pos() += (GetAnchor()->Frm().*fnRect->fnGetPos)();
-
-        //Und ggf. noch die aktuellen Werte im Format updaten, dabei darf
-        //zu diesem Zeitpunkt natuerlich kein Modify verschickt werden.
-        pFmt->LockModify();
-        if ( bVertChgd )
-            pFmt->SetAttr( aVert );
-        if ( bHoriChgd )
-            pFmt->SetAttr( aHori );
-        pFmt->UnlockModify();
-        */
     }
 }
 
