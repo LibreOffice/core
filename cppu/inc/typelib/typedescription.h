@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedescription.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 13:20:34 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 08:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,12 +352,16 @@ typedef struct _typelib_InterfaceMethodTypeDescription
     struct _typelib_InterfaceTypeDescription *  pInterface;
     /** the inherited direct base method (null for a method that is not
         inherited)
+
+        @since #i21150#
     */
     typelib_TypeDescriptionReference *          pBaseRef;
     /** if pBaseRef is null, the member position of this method within
         pInterface, not counting members inherited from bases; if pBaseRef is
         not null, the index of the direct base within pInterface from which this
         method is inherited
+
+        @since #i21150#
     */
     sal_Int32                                   nIndex;
 } typelib_InterfaceMethodTypeDescription;
@@ -383,14 +387,43 @@ typedef struct _typelib_InterfaceAttributeTypeDescription
     struct _typelib_InterfaceTypeDescription *  pInterface;
     /** the inherited direct base attribute (null for an attribute that is not
         inherited)
+
+        @since #i21150#
     */
     typelib_TypeDescriptionReference *          pBaseRef;
     /** if pBaseRef is null, the member position of this attribute within
         pInterface, not counting members inherited from bases; if pBaseRef is
         not null, the index of the direct base within pInterface from which this
         attribute is inherited
+
+        @since #i21150#
     */
     sal_Int32                                   nIndex;
+    /** number of getter exceptions
+
+        @since #i21150#
+    */
+    sal_Int32                                   nGetExceptions;
+    /** array of getter exception types
+
+        @since #i21150#
+    */
+    typelib_TypeDescriptionReference **         ppGetExceptions;
+    /** number of setter exceptions
+
+        @since #i21150#
+    */
+    sal_Int32                                   nSetExceptions;
+    /** array of setter exception types
+
+        @since #i21150#
+    */
+    typelib_TypeDescriptionReference **         ppSetExceptions;
+    /** determines whether attribute is bound
+
+        @since #i21150#
+    */
+    sal_Bool                                    bBound;
 } typelib_InterfaceAttributeTypeDescription;
 
 /// @HTML
@@ -429,7 +462,9 @@ typedef struct _typelib_InterfaceTypeDescription
     typelib_TypeDescription                     aBase;
 
     /** pointer to base type description, else 0
-        Obsolete, as it only supports single inheritance.
+
+        @deprecated
+        use nBaseTypes and ppBaseTypes instead
     */
     struct _typelib_InterfaceTypeDescription *  pBaseTypeDescription;
     /** unique identifier of interface
@@ -458,9 +493,13 @@ typedef struct _typelib_InterfaceTypeDescription
     */
     sal_Int32 *                                 pMapFunctionIndexToMemberIndex;
     /** number of base types
+
+        @since #i21150#
     */
     sal_Int32                                   nBaseTypes;
     /** array of base type descriptions
+
+        @since #i21150#
     */
     struct _typelib_InterfaceTypeDescription ** ppBaseTypes;
 } typelib_InterfaceTypeDescription;
@@ -607,6 +646,9 @@ void SAL_CALL typelib_typedescription_new(
     @param pBaseInterface base interface type, else 0
     @param nMembers number of members
     @param ppMembers members; attributes or methods
+
+    @deprecated
+    use typelib_typedescription_newMIInterface instead
 */
 void SAL_CALL typelib_typedescription_newInterface(
     typelib_InterfaceTypeDescription ** ppRet,
@@ -630,6 +672,8 @@ void SAL_CALL typelib_typedescription_newInterface(
     @param ppBaseInterface base interface types
     @param nMembers number of members
     @param ppMembers members; attributes or methods
+
+    @since #i21150#
 */
 void SAL_CALL typelib_typedescription_newMIInterface(
     typelib_InterfaceTypeDescription ** ppRet,
@@ -671,9 +715,14 @@ void SAL_CALL typelib_typedescription_newInterfaceMethod(
 
     @param ppRet inout attribute type description
     @param nAbsolutePosition position of this attribute including all members of base interfaces
-    @param pTypeName fully qualified name of attribute including interface name
+    @param pAttributeName fully qualified name of attribute including interface
+    name
     @param eAttributeTypeClass type class of attribute type
     @param pAttributeTypeName type name of attribute type
+    @param bReadOnly determines whether attribute is read-only
+
+    @deprecated
+    use typelib_typedescription_newExtendedInterfaceAttribute instead
 */
 void SAL_CALL typelib_typedescription_newInterfaceAttribute(
     typelib_InterfaceAttributeTypeDescription ** ppRet,
@@ -682,6 +731,35 @@ void SAL_CALL typelib_typedescription_newInterfaceAttribute(
     typelib_TypeClass eAttributeTypeClass,
     rtl_uString * pAttributeTypeName,
     sal_Bool bReadOnly )
+    SAL_THROW_EXTERN_C();
+
+/** Creates an extended interface attribute type description.
+
+    @param ppRet inout attribute type description
+    @param nAbsolutePosition position of this attribute including all members of
+    base interfaces
+    @param pAttributeName fully qualified name of attribute including interface
+    name
+    @param eAttributeTypeClass type class of attribute type
+    @param pAttributeTypeName type name of attribute type
+    @param bReadOnly determines whether attribute is read-only
+    @param bBound determines whether attribute is bound
+    @param nGetExceptions number of getter exceptions
+    @param ppGetExceptionNames type names of getter exceptions
+    @param nSetExceptions number of setter exceptions
+    @param ppSetExceptionNames type names of setter exceptions
+
+    @since #i21150#
+*/
+void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
+    typelib_InterfaceAttributeTypeDescription ** ppRet,
+    sal_Int32 nAbsolutePosition,
+    rtl_uString * pAttributeName,
+    typelib_TypeClass eAttributeTypeClass,
+    rtl_uString * pAttributeTypeName,
+    sal_Bool bReadOnly, sal_Bool bBound,
+    sal_Int32 nGetExceptions, rtl_uString ** ppGetExceptionNames,
+    sal_Int32 nSetExceptions, rtl_uString ** ppSetExceptionNames )
     SAL_THROW_EXTERN_C();
 
 /** Increments reference count of given type description.
@@ -991,6 +1069,8 @@ void SAL_CALL typelib_static_interface_type_init(
     @param pTypeName name of interface
     @param nBaseTypes number of base types
     @param ppBaseTypes base types
+
+    @since #i21150#
 */
 void SAL_CALL typelib_static_mi_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,
