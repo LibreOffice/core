@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sax_expat.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-22 13:33:28 $
+ *  last change: $Author: jbu $ $Date: 2002-05-15 16:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+#include <stdlib.h>
 #include <vector>
 
 #ifdef WIN32
@@ -81,8 +82,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#include <assert.h>
-
 #include "expat/xmlparse.h"
 
 using namespace ::rtl;
@@ -102,6 +101,8 @@ using namespace ::com::sun::star::io;
 
 namespace sax_expatwrap {
 
+// Useful macros for correct String conversion depending on the choosen expat-mode
+#ifdef XML_UNICODE
 OUString XmlNChar2OUString( const XML_Char *p , int nLen )
 {
     if( p ) {
@@ -133,13 +134,11 @@ OUString XmlChar2OUString( const XML_Char *p )
 }
 
 
-// Useful macros for correct String conversion depending on the choosen expat-mode
-#ifdef XML_UNICODE
 #define XML_CHAR_TO_OUSTRING(x) XmlChar2OUString(x)
 #define XML_CHAR_N_TO_USTRING(x,n) XmlNChar2OUString(x,n)
 #else
-#define XML_CHAR_TO_OUSTRING(x) OStringToOUString(OString(x), RTL_TEXTENCODING_UTF8)
-#define XML_CHAR_N_TO_OUSTRING(x,n) OStringToOUString(OString(x,n), RTL_TEXTENCODING_UTF8 )
+#define XML_CHAR_TO_OUSTRING(x) OUString(x , strlen( x ), RTL_TEXTENCODING_UTF8)
+#define XML_CHAR_N_TO_USTRING(x,n) OUString(x,n, RTL_TEXTENCODING_UTF8 )
 #endif
 
 
@@ -725,6 +724,10 @@ void SaxExpatParser_Impl::callbackStartElement( void *pvThis ,
                                                 const XML_Char *pwName ,
                                                 const XML_Char **awAttributes )
 {
+    // in case of two concurrent threads, there is only the danger of an leak,
+    // which is neglectable for one string
+    static OUString g_CDATA( RTL_CONSTASCII_USTRINGPARAM( "CDATA" ) );
+
     SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)pvThis);
 
     if( pImpl->rDocumentHandler.is() ) {
@@ -733,10 +736,10 @@ void SaxExpatParser_Impl::callbackStartElement( void *pvThis ,
         pImpl->pAttrList->clear();
 
         while( awAttributes[i] ) {
-            assert( awAttributes[i+1] );
+            OSL_ASSERT( awAttributes[i+1] );
             pImpl->pAttrList->addAttribute(
                 XML_CHAR_TO_OUSTRING( awAttributes[i] ) ,
-                OUString( RTL_CONSTASCII_USTRINGPARAM("CDATA") ) ,  // expat doesn't know types
+                g_CDATA ,  // expat doesn't know types
                 XML_CHAR_TO_OUSTRING( awAttributes[i+1] ) );
             i +=2;
         }
