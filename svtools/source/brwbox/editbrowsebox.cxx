@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:21:55 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 13:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,9 +156,9 @@ namespace svt
         }
     }
 
+    using namespace ::com::sun::star::uno;
     using namespace com::sun::star::accessibility::AccessibleEventId;
     using  com::sun::star::accessibility::XAccessible;
-    using ::com::sun::star::uno::Reference;
     //==================================================================
 
     #define HANDLE_ID   0
@@ -217,7 +217,7 @@ namespace svt
     void EditBrowseBox::Construct()
     {
         m_aImpl = ::std::auto_ptr<EditBrowseBoxImpl>(new EditBrowseBoxImpl());
-        m_aImpl->m_pFocusCell = NULL;
+        m_aImpl->m_pActiveCell = NULL;
         m_aImpl->m_bHiContrast = isHiContrast(&GetDataWindow());
 
         SetCompoundControl(sal_True);
@@ -676,7 +676,7 @@ namespace svt
                     sal_Bool   bShift = pKeyEvent->GetKeyCode().IsShift();
                     sal_Bool   bCtrl  = pKeyEvent->GetKeyCode().IsMod1();
                     sal_Bool   bAlt =   pKeyEvent->GetKeyCode().IsMod2();
-                    sal_Bool   bSelect= sal_False;
+                    sal_Bool   bLocalSelect=    sal_False;
                     sal_Bool   bNonEditOnly =   sal_False;
                     sal_uInt16 nId = BROWSER_NONE;
 
@@ -712,17 +712,17 @@ namespace svt
                                 break;
                             case KEY_RIGHT:         nId = BROWSER_CURSORRIGHT; break;
                             case KEY_LEFT:          nId = BROWSER_CURSORLEFT; break;
-                            case KEY_SPACE:         nId = BROWSER_SELECT; bNonEditOnly = bSelect = sal_True;break;
+                            case KEY_SPACE:         nId = BROWSER_SELECT; bNonEditOnly = bLocalSelect = sal_True;break;
                         }
 
                     if ( !bAlt && !bCtrl && bShift )
                         switch ( nCode )
                         {
-                            case KEY_DOWN:          nId = BROWSER_SELECTDOWN; bSelect = sal_True;break;
-                            case KEY_UP:            nId = BROWSER_SELECTUP; bSelect = sal_True;break;
-                            case KEY_HOME:          nId = BROWSER_SELECTHOME; bSelect = sal_True;break;
-                            case KEY_END:           nId = BROWSER_SELECTEND; bSelect = sal_True;break;
-                            case KEY_SPACE:         nId = BROWSER_SELECTCOLUMN; bSelect = sal_True; break;
+                            case KEY_DOWN:          nId = BROWSER_SELECTDOWN; bLocalSelect = sal_True;break;
+                            case KEY_UP:            nId = BROWSER_SELECTUP; bLocalSelect = sal_True;break;
+                            case KEY_HOME:          nId = BROWSER_SELECTHOME; bLocalSelect = sal_True;break;
+                            case KEY_END:           nId = BROWSER_SELECTEND; bLocalSelect = sal_True;break;
+                            case KEY_SPACE:         nId = BROWSER_SELECTCOLUMN; bLocalSelect = sal_True; break;
                             case KEY_TAB:
                                 if (IsTabAllowed(sal_False))
                                     nId = BROWSER_CURSORLEFT;
@@ -739,7 +739,7 @@ namespace svt
                             case KEY_PAGEUP:        nId = BROWSER_CURSORTOPOFFILE; break;
                             case KEY_HOME:          nId = BROWSER_CURSORTOPOFSCREEN; break;
                             case KEY_END:           nId = BROWSER_CURSORENDOFSCREEN; break;
-                            case KEY_SPACE:         nId = BROWSER_ENHANCESELECTION; bSelect = sal_True;break;
+                            case KEY_SPACE:         nId = BROWSER_ENHANCESELECTION; bLocalSelect = sal_True;break;
                         }
 
 
@@ -765,7 +765,7 @@ namespace svt
 
                         Dispatch(nId);
 
-                        if (bSelect && (GetSelectRowCount() || GetSelection() != NULL))
+                        if (bLocalSelect && (GetSelectRowCount() || GetSelection() != NULL))
                             DeactivateCell();
                         return 1;
                     }
@@ -1071,17 +1071,22 @@ namespace svt
                 aController->SetModifyHdl(LINK(this,EditBrowseBox,ModifyHdl));
                 EnableAndShow();
 
+                if ( isAccessibleAlive( ) )
+                    implCreateActiveAccessible();
+
                 // activate the cell only of the browser has the focus
                 if ( bHasFocus && bCellFocus )
-                {
-                    CreateAccessibleControl(0);
                     AsynchGetFocus();
-                }
             }
-            else if ( isAccessibleCreated() && HasFocus() )
-                commitTableEvent(ACTIVE_DESCENDANT_CHANGED,
-                                 com::sun::star::uno::makeAny(CreateAccessibleCell(nRow,nCol)),
-                                 com::sun::star::uno::Any());
+            else
+            {
+                // no controller -> we have a new "active descendant"
+                if ( isAccessibleAlive() && HasFocus() )
+                    commitTableEvent(ACTIVE_DESCENDANT_CHANGED,
+                        makeAny( CreateAccessibleCell( nRow, GetColumnPos( nCol ) ) ),
+                        Any()
+                    );
+            }
         }
     }
 
@@ -1090,11 +1095,11 @@ namespace svt
     {
         if (IsEditing())
         {
-            commitBrowseBoxEvent(CHILD,com::sun::star::uno::Any(),com::sun::star::uno::makeAny(m_aImpl->m_xActiveCell));
-            m_aImpl->disposeCell();
-
-            m_aImpl->m_pFocusCell  = NULL;
-            m_aImpl->m_xActiveCell = NULL;
+            if ( isAccessibleAlive() )
+            {
+                commitBrowseBoxEvent( CHILD, Any(), makeAny( m_aImpl->m_xActiveCell ) );
+                m_aImpl->clearActiveCell();
+            }
 
             aOldController = aController;
             aController.Clear();
@@ -1446,7 +1451,6 @@ namespace svt
     {
         return sal_True;
     }
-
 // .......................................................................
 }   // namespace svt
 // .......................................................................
