@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colfrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-23 14:31:45 $
+ *  last change: $Author: ama $ $Date: 2001-08-29 13:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,6 +378,12 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
         return;
     }
 
+    const SzPtr pDir =
+#ifdef VERTICAL_LAYOUT
+        IsVertical() ? pHeight :
+#endif
+        pWidth;
+
     //Ist ein Pointer da, oder sollen wir die Attribute einstellen,
     //so stellen wir auf jeden Fall die Spaltenbreiten ein. Andernfalls
     //checken wir, ob eine Einstellung notwendig ist.
@@ -387,11 +393,11 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
         if ( !bAdjustAttributes )
         {
             ;
-            long nAvail = Prt().Width();
+            long nAvail = Prt().SSize().*pDir;
             for ( SwLayoutFrm *pCol = (SwLayoutFrm*)Lower();
                   pCol;
                   pCol = (SwLayoutFrm*)pCol->GetNext() )
-                nAvail -= pCol->Frm().Width();
+                nAvail -= pCol->Frm().SSize().*pDir;
             if ( !nAvail )
                 return;
         }
@@ -400,7 +406,7 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
     //Sodele, jetzt koennen die Spalten bequem eingestellt werden.
     //Die Breiten werden mitgezaehlt, damit wir dem letzten den Rest geben
     //koennen.
-    SwTwips nAvail = Prt().Width();
+    SwTwips nAvail = Prt().SSize().*pDir;
     const BOOL bLine = pAttr->GetLineAdj() != COLADJ_NONE;
     USHORT nMin = 0;
     if ( bLine )
@@ -410,8 +416,13 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
     {
         const SwTwips nWidth = i == (pAttr->GetNumCols() - 1) ?
                                 nAvail :
-                                pAttr->CalcColWidth( i, USHORT(Prt().Width()) );
+                          pAttr->CalcColWidth( i, USHORT(Prt().SSize().*pDir) );
+#ifdef VERTICAL_LAYOUT
+        const Size aColSz = IsVertical() ? Size( Prt().Width(), nWidth ) :
+                                           Size( nWidth, Prt().Height() );
+#else
         const Size aColSz( nWidth, Prt().Height() );
+#endif
         pCol->ChgSize( aColSz );
 
         // Hierdurch werden die ColumnBodyFrms von Seitenspalten angepasst und

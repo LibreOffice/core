@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-29 10:38:42 $
+ *  last change: $Author: ama $ $Date: 2001-08-29 13:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,7 +514,7 @@ void SwFrm::MakePos()
         if ( !bUseUpper && pPrv )
         {   aFrm.Pos( pPrv->Frm().Pos() );
 #ifdef VERTICAL_LAYOUT
-            if( FRM_NEIGHBOUR & nMyType )
+            if( FRM_NEIGHBOUR & nMyType && !IsVertical() )
                 aFrm.Pos().X() += pPrv->Frm().Width();
             else if( IsVertical() && FRM_NOTE_VERT & nMyType )
                 aFrm.Pos().X() -= aFrm.Width();
@@ -536,7 +536,7 @@ void SwFrm::MakePos()
             if ( !bUseUpper && pPrv )
             {   aFrm.Pos( pPrv->Frm().Pos() );
 #ifdef VERTICAL_LAYOUT
-                if( FRM_NEIGHBOUR & nMyType )
+                if( FRM_NEIGHBOUR & nMyType && !IsVertical() )
                     aFrm.Pos().X() += pPrv->Frm().Width();
                 else if( IsVertical() && FRM_NOTE_VERT & nMyType )
                     aFrm.Pos().X() -= aFrm.Width();
@@ -758,7 +758,11 @@ void SwLayoutFrm::MakeAll()
 
         //uebernimmt im DTor die Benachrichtigung
     const SwLayNotify aNotify( this );
+#ifdef VERTICAL_LAYOUT
+    const SzPtr pFix = ( bVarHeight == IsVertical() ) ? pHeight : pWidth;
+#else
     const SzPtr pFix = pFIXSIZE;
+#endif
 
     SwBorderAttrAccess *pAccess = 0;
     const SwBorderAttrs*pAttrs = 0;
@@ -779,6 +783,36 @@ void SwLayoutFrm::MakeAll()
             }
             else
             {   //nicht ueber die auessere Kante des Upper hinausragen.
+#ifdef VERTICAL_LAYOUT
+                SwTwips nDeadLine;
+                SwTwips nBot;
+                if( pFix == pWidth )
+                {
+                    nDeadLine = GetUpper()->Frm().Top() +
+                        GetUpper()->Prt().Top() + GetUpper()->Prt().Height();
+                    nBot = Frm().Top() + Frm().Height();
+                    if ( nBot > nDeadLine )
+                        bValidSize = FALSE;
+                }
+                else
+                {
+                    nDeadLine = GetUpper()->Frm().Left()
+                                + GetUpper()->Prt().Left();
+                    nBot = Frm().Left();
+                    if( bVarHeight )
+                    {
+                        if( nBot < nDeadLine )
+                            bValidSize = FALSE;
+                    }
+                    else
+                    {
+                        nDeadLine += GetUpper()->Prt().Width();
+                        nBot += Frm().Width();
+                        if ( nBot > nDeadLine )
+                            bValidSize = FALSE;
+                    }
+                }
+#else
                 const SwTwips nDeadLine = GetUpper()->Frm().Pos().*pVARPOS +
                     (bVarHeight ?
                         GetUpper()->Prt().Top() + GetUpper()->Prt().Height() :
@@ -787,6 +821,7 @@ void SwLayoutFrm::MakeAll()
                     Frm().Top() + Frm().Height() : Frm().Left() + Frm().Width();
                 if ( nBot > nDeadLine )
                     bValidSize = FALSE;
+#endif
             }
         }
         if ( !bValidSize || !bValidPrtArea )

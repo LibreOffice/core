@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-29 10:47:32 $
+ *  last change: $Author: ama $ $Date: 2001-08-29 13:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,8 +435,24 @@ void SwFrm::ChgSize( const Size& aNewSize )
     if ( aNewSize == aOldSize )
         return;
 
+#ifdef VERTICAL_LAYOUT
+    SzPtr pVar;
+    SzPtr pFix;
+    SzPtr pChange = pVARSIZE;
+    if( GetUpper() && IsVertical() == bVarHeight )
+    {
+        pVar = pWidth;
+        pFix = pHeight;
+    }
+    else
+    {
+        pVar = pHeight;
+        pFix = pWidth;
+    }
+#else
     const SzPtr pVar = pVARSIZE;
     const SzPtr pFix = pFIXSIZE;
+#endif
 
     aFrm.SSize().*pFix = aNewSize.*pFix;
 
@@ -457,9 +473,15 @@ void SwFrm::ChgSize( const Size& aNewSize )
             else
             {
                 if ( nDiff > 0 )
+#ifdef VERTICAL_LAYOUT
+                    Grow( nDiff, pChange );
+                else
+                    Shrink( -nDiff, pChange );
+#else
                     Grow( nDiff, pVar );
                 else
                     Shrink( -nDiff, pVar );
+#endif
                 // Auch wenn das Grow/Shrink noch nicht die gewuenschte Breite eingestellt hat,
                 // wie z.B. beim Aufruf durch ChgColumns, um die Spaltenbreiten einzustellen,
                 // wird die Breite jetzt gesetzt.
