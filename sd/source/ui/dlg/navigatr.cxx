@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:19:29 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:47:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -766,17 +766,8 @@ long SdNavigatorWin::Notify(NotifyEvent& rNEvt)
                 ::sd::ViewShellBase* pBase =
                     ::sd::ViewShellBase::GetViewShellBase(
                         pBindings->GetDispatcher()->GetFrame());
-                ::sd::ViewShell* pViewShell = pBase->GetMainViewShell();
-
-                if (pViewShell != NULL)
-                {
-                    ::sd::Slideshow* pSlideShow = pViewShell->GetSlideShow();
-                    if (pSlideShow != NULL)
-                    {
-                        nOK = TRUE;
-                        pSlideShow->stopShow();
-                    }
-                }
+                if( pBase )
+                    pBase->StopPresentation();
             }
         }
     }
