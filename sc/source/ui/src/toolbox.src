@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-22 23:50:15 $
+ *  last change: $Author: rt $ $Date: 2001-12-14 17:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: rt $ $Date: 2001-11-22 23:50:15 $ $Revision: 1.33 $
+ // $Author: rt $ $Date: 2001-12-14 17:10:32 $ $Revision: 1.34 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -175,7 +175,7 @@ String SCSTR_QHELP_INPUTWND
     Text[ chinese_simplified ] = "θΎ“ε…¥θ΅";
     Text[ russian ] = "Ρςπξκΰ ββξδΰ";
     Text[ polish ] = "Wiersz wprowadzania";
-    Text[ japanese ] = "ζ•°εΌε…¥ε›οΎοΎο½―ο½Έο½½";
+    Text[ japanese ] = "ζ•°εΌε…¥ε›γƒγƒƒγ‚―γ‚Ή";
     Text[ chinese_traditional ] = "θΌΈε…¥ζ¬„";
     Text[ arabic ] = "ΣΨΡ ΗαΕΟΞΗα";
     Text[ greek ] = "Γραμμή εισαγωγής";
@@ -203,7 +203,7 @@ String SCSTR_QHELP_BTNCALC
     Text[ chinese_simplified ] = "ε‡½ζ•°θ‡ªε¨ε©η†";
     Text[ russian ] = "ΐβςξοθλξς τσνκφθι";
     Text[ polish ] = "AutoPilot funkcji";
-    Text[ japanese ] = "ι–Άζ•°ο½µο½°οΎ„οΎοΎο½²οΎ›ο½―οΎ„";
+    Text[ japanese ] = "ι–Άζ•°γ‚ªγƒΌγƒγƒ‘γ‚¤γƒ­γƒƒγƒ";
     Text[ chinese_traditional ] = "ε‡½ζ•Έθ‡ªε‹•ε©η†";
     Text[ arabic ] = "ΗαγΡΤΟ ΗαΒαν ααΟΗαΗΚ";
     Text[ greek ] = "Function Autopilot";
@@ -260,7 +260,7 @@ String SCSTR_QHELP_BTNCANCEL
     Text[ chinese_simplified ] = "θεΌƒ";
     Text[ russian ] = "Ξςμενΰ";
     Text[ polish ] = "Odrzuζ";
-    Text[ japanese ] = "ο½·ο½¬οΎο½ΎοΎ™";
+    Text[ japanese ] = "γ‚­γƒ£γƒ³γ‚»γƒ«";
     Text[ chinese_traditional ] = "ζ¨ζ£„";
     Text[ arabic ] = "ΡέΦ";
     Text[ greek ] = "Ακύρωση";
@@ -288,7 +288,7 @@ String SCSTR_QHELP_BTNSUM
     Text[ chinese_simplified ] = "ζ€»θ®΅";
     Text[ russian ] = "Ρσμμΰ";
     Text[ polish ] = "Suma";
-    Text[ japanese ] = "ο½µο½°οΎ„ Sum";
+    Text[ japanese ] = "γ‚ªγƒΌγƒ Sum";
     Text[ chinese_traditional ] = "ε°θ¨";
     Text[ arabic ] = "ΗαγΜγζΪ";
     Text[ greek ] = "Άθροισμα";
@@ -348,7 +348,7 @@ String RID_OBJECTBAR_APP
     Text[ chinese_simplified ] = "εθƒ½ζ ";
     Text[ russian ] = "Οΰνελό τσνκφθι";
     Text[ polish ] = "Pasek funkcji";
-    Text[ japanese ] = "οΎο½§οΎο½Έο½Όο½®οΎοΎοΎο½°";
+    Text[ japanese ] = "γƒ•γ‚΅γƒ³γ‚―γ‚·γƒ§γƒ³γƒγƒΌ";
     Text[ chinese_traditional ] = "ε·¥ε…·ε—";
     Text[ arabic ] = "ΤΡνΨ ΗαγεΗγ";
     Text[ greek ] = "Γραμμή λειτουργιών";
@@ -533,7 +533,7 @@ String RID_PLUGINTOOLBOX
     Text[ chinese_simplified ] = "η”¨δΊ Plug-ins η„εθƒ½ζ ";
     Text[ russian ] = "Οΰνελό τσνκφθι δλÿ Plug-Ins";
     Text[ polish ] = "Pasek funkcji wtyczek plug-in";
-    Text[ japanese ] = "οΎοΎοΎ—ο½ΈοΎο½²οΎγ®οΎο½§οΎο½Έο½Όο½®οΎοΎοΎο½°";
+    Text[ japanese ] = "γƒ—γƒ©γ‚°γ‚¤γƒ³γ®γƒ•γ‚΅γƒ³γ‚―γ‚·γƒ§γƒ³γƒγƒΌ";
     Text[ chinese_traditional ] = "ι©η”¨ζ–Ό Plug-ins η„ε·¥ε…·ε—";
     Text[ arabic ] = "ΤΡνΨ ζΩνέΙ Plug-Ins";
     Text[ greek ] = "Γραμμή λειτουργιών για συνδεόμενες υπομονάδες";
@@ -710,7 +710,7 @@ String RID_OBJECTBAR_FORMAT
     Text[ chinese_simplified ] = "ε·¥δ½θ΅¨ε―Ήθ±΅ζ ";
     Text[ russian ] = "Οΰνελό ξαϊεκςΰ λθρςΰ";
     Text[ polish ] = "Pasek obiektσw arkusza kalkulacyjnego.";
-    Text[ japanese ] = "θ΅¨ο½µοΎοΎο½ΌοΎο½ªο½ΈοΎ„οΎοΎο½°";
+    Text[ japanese ] = "θ΅¨γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγƒγƒΌ";
     Text[ chinese_traditional ] = "ε·¥δ½θ΅¨η‰©δ»¶ε—";
     Text[ arabic ] = "ΤΡνΨ ίΗΖδΗΚ ΗαΜΟΗζα";
     Text[ greek ] = "Γραμμή αντικειμένων πινάκων";
@@ -972,7 +972,7 @@ String RID_OBJECTBAR_PREVIEW
     Text[ chinese_simplified ] = "ι΅µιΆε―Ήθ±΅ζ ";
     Text[ russian ] = "Οΰνελό ξαϊεκςξβ οπξρμξςπΰ ρςπΰνθφϋ";
     Text[ polish ] = "Pasek obiektσw podglΉdu strony";
-    Text[ japanese ] = "οΎοΎοΎοΎ‹οΎο½­ο½°ο½µοΎοΎο½ΌοΎο½ªο½ΈοΎ„οΎοΎο½°";
+    Text[ japanese ] = "γƒ—γƒ¬γƒ“γƒ¥γƒΌγ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγƒγƒΌ";
     Text[ chinese_traditional ] = "ι ιΆζªΆθ¦–η‰©δ»¶ε—";
     Text[ arabic ] = "ΤΡνΨ ίΗΖδΗΚ γΪΗνδΙ ΗαΥέΝΙ";
     Text[ greek ] = "Γραμμή αντικειμένων προεπισκόπησης σελίδας";
@@ -1086,7 +1086,7 @@ String RID_OBJECTBAR_TOOLS
     Text[ chinese_simplified ] = "δΈ»ε·¥ε…·ζ ";
     Text[ russian ] = "Οΰνελό θνρςπσμενςξβ";
     Text[ polish ] = "Pasek narzκdziowy";
-    Text[ japanese ] = "ζ¨™ζΊ–οΎ‚ο½°οΎ™οΎοΎο½°";
+    Text[ japanese ] = "ζ¨™ζΊ–γƒ„γƒΌγƒ«γƒγƒΌ";
     Text[ chinese_traditional ] = "δΈ»ε·¥ε…·ε—";
     Text[ arabic ] = "ΤΡνΨ ΗαΓΟζΗΚ";
     Text[ greek ] = "Γραμμή εργαλείων";
@@ -1322,7 +1322,7 @@ FloatingWindow RID_TBXCTL_INSCELLS
     Text[ chinese_simplified ] = "ζ’ε…¥ε•ε…ƒζ Ό";
     Text[ russian ] = "Βρςΰβθςό ÿχεικθ";
     Text[ polish ] = "Wstaw komσrki";
-    Text[ japanese ] = "ο½ΎοΎ™γ®ζΏε…¥";
+    Text[ japanese ] = "γ‚»γƒ«γ®ζΏε…¥";
 
     ToolBox RID_TOOLBOX_INSCELLS
     {
@@ -1428,7 +1428,7 @@ FloatingWindow RID_TBXCTL_INSOBJ
     Text[ chinese_simplified ] = "ζ’ε…¥ε―Ήθ±΅";
     Text[ russian ] = "Βρςΰβθςό ξαϊεκς";
     Text[ polish ] = "Wstaw obiekt";
-    Text[ japanese ] = "ο½µοΎοΎο½ΌοΎο½ªο½ΈοΎ„γ®ζΏε…¥";
+    Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ®ζΏε…¥";
     Text[ chinese_traditional ] = "ζ’ε…¥η‰©δ»¶";
     Text[ arabic ] = "ΕΟΡΗΜ ίΗΖδ";
     Text[ greek ] = "Εισαγωγή αντικειμένου";
@@ -1759,6 +1759,7 @@ ImageList RID_OFFICEIMAGELIST_LC
     MaskColor = STD_MASKCOLOR ;
     OFFICE_IDLIST
 };
+
 
 
 
