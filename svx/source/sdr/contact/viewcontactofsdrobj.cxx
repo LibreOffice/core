@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:39:21 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -732,6 +732,12 @@ static sal_Bool bTestTheBitmapBufferedObjects(sal_False);
             }
 
             return bRetval;
+        }
+
+        // overload for acessing the SdrObject
+        SdrObject* ViewContactOfSdrObj::TryToGetSdrObject() const
+        {
+            return &GetSdrObject();
         }
     } // end of namespace contact
 } // end of namespace sdr
