@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-03 11:10:52 $
+ *  last change: $Author: jp $ $Date: 2001-05-18 15:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,12 +312,26 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 
         const SfxPoolItem* pItem;
         for( USHORT n = 0; n < 3; ++n )
-            if( SFX_ITEM_SET == pSet->GetItemState( aSavIds[n], FALSE, &pItem )
-                && ( RES_PARATR_NUMRULE != aSavIds[n] ||
-                     ((SwNumRuleItem*)pItem)->GetValue().Len() ))
+            if( SFX_ITEM_SET == pSet->GetItemState( aSavIds[ n ], FALSE, &pItem ))
             {
-                aSet.Put( *pItem );
-                pSet->ClearItem( aSavIds[n] );
+                BOOL bSave = FALSE;
+                switch( aSavIds[ n ] )
+                {
+                case RES_PAGEDESC:
+                    bSave = 0 != ((SwFmtPageDesc*)pItem)->GetPageDesc();
+                    break;
+                case RES_BREAK:
+                    bSave = SVX_BREAK_NONE != ((SvxFmtBreakItem*)pItem)->GetBreak();
+                    break;
+                case RES_PARATR_NUMRULE:
+                    bSave = 0 != ((SwNumRuleItem*)pItem)->GetValue().Len();
+                    break;
+                }
+                if( bSave )
+                {
+                    aSet.Put( *pItem );
+                    pSet->ClearItem( aSavIds[n] );
+                }
             }
 
         if( !bLocked )
@@ -542,7 +556,7 @@ void SwDoc::ResetAttr( const SwPaM &rRg, BOOL bTxtAttr,
     else if( !rRg.HasMark() )
     {
         aPara.bResetAll = FALSE;
-        ::lcl_RstAttr( aNodes[ pStt->nNode ], &aPara );
+        ::lcl_RstAttr( &pStt->nNode.GetNode(), &aPara );
         aPara.bResetAll = TRUE;
     }
 
