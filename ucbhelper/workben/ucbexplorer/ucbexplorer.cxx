@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbexplorer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-06 11:04:30 $
+ *  last change: $Author: kso $ $Date: 2002-03-12 09:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1193,10 +1193,22 @@ void MyApp::Main()
     // Create UCB.
     //////////////////////////////////////////////////////////////////////
 
+#if 1
+    // Init UCB (Read configuration from registry)
     Sequence< Any > aArgs( 2 );
     aArgs[ 0 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
     aArgs[ 1 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
     sal_Bool bSuccess = ::ucb::ContentBroker::initialize( xFac, aArgs );
+#else
+    // Init UCB (Use provided configuration data)
+    ::ucb::ContentProviderDataList aProviders;
+    aProviders.push_back(
+        ::ucb::ContentProviderData(
+            OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" ),
+            OUString::createFromAscii( "file" ),
+            OUString() ) );
+    sal_Bool bSuccess = ::ucb::ContentBroker::initialize( xFac, aProviders );
+#endif
 
     if ( !bSuccess )
     {
