@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:21:08 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:03:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3220,8 +3220,7 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
     // #111827#
     SwRewriter aRewriter;
 
-    aRewriter.AddRule(UNDO_ARG1, String(SW_RES(STR_CLIPBOARD)));
-    SwTrnsfrActionAndUndo aAction( &rShell, (USHORT)UNDO_INSERT, &aRewriter );
+    SwTrnsfrActionAndUndo aAction( &rShell, (USHORT)UNDO_PASTE_CLIPBOARD);
 
     //Selektierten Inhalt loeschen, nicht bei Tabellen-Selektion und
     //Tabelle im Clipboard
@@ -3363,8 +3362,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
 
     SwDoc * pDoc = rSrcSh.GetDoc();
 
-    if (0 != pDoc)
-        aRewriter.AddRule(UNDO_ARG1, rSrcSh.GetCrsrDescr());
+    aRewriter.AddRule(UNDO_ARG1, rSrcSh.GetSelDescr());
 
     if(rSrcSh.GetDoc() != rSh.GetDoc())
         rSrcSh.StartUndo( nUndoId, &aRewriter );
