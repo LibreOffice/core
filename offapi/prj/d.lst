@@ -41,7 +41,6 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\text
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\text\fieldmaster
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\text\textfield
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\ucb
-mkdir: %_DEST%\idl%_EXT%\com\sun\star\ui
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\util
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\view
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\xml
@@ -91,7 +90,6 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\xml\sax
 ..\com\sun\star\text\fieldmaster\*.idl %_DEST%\idl%_EXT%\com\sun\star\text\fieldmaster\*.idl
 ..\com\sun\star\text\textfield\*.idl %_DEST%\idl%_EXT%\com\sun\star\text\textfield\*.idl
 ..\com\sun\star\ucb\*.idl %_DEST%\idl%_EXT%\com\sun\star\ucb\*.idl
-..\com\sun\star\ui\*.idl %_DEST%\idl%_EXT%\com\sun\star\ui\*.idl
 ..\com\sun\star\util\*.idl %_DEST%\idl%_EXT%\com\sun\star\util\*.idl
 ..\com\sun\star\view\*.idl %_DEST%\idl%_EXT%\com\sun\star\view\*.idl
 ..\com\sun\star\xml\*.idl %_DEST%\idl%_EXT%\com\sun\star\xml\*.idl
