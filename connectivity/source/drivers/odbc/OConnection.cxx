@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-08 09:00:46 $
+ *  last change: $Author: oj $ $Date: 2001-11-23 15:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,9 +203,18 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
         OTools::GetInfo(this,m_aConnectionHandle,SQL_DATA_SOURCE_READ_ONLY,aVal,*this,getTextEncoding());
         bReadOnly = !aVal.compareToAscii("Y");
     }
-    catch(...)
+    catch(Exception&)
     {
         bReadOnly = sal_True;
+    }
+    try
+    {
+        ::rtl::OUString sVersion;
+        OTools::GetInfo(this,m_aConnectionHandle,SQL_DRIVER_ODBC_VER,sVersion,*this,getTextEncoding());
+        m_bUseOldDateFormat =  sVersion == ::rtl::OUString::createFromAscii("02.50") || sVersion == ::rtl::OUString::createFromAscii("02.00");
+    }
+    catch(Exception&)
+    {
     }
 
 #ifndef MAC
