@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envelp.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:56:09 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,16 +79,16 @@ String STR_DATABASE_NOT_OPENED
     Text [ dutch ] = "Database kon niet worden geopend." ;
     Text [ spanish ] = "No se pudo abrir la base de datos." ;
     Text [ english_us ] = "Database could not be opened." ;
-    Text[ chinese_simplified ] = "Ξή·¨΄ςΏªΚύΎέΏβ΅£";
+    Text[ chinese_simplified ] = "ζ— ζ³•ζ‰“εΌ€ζ•°ζ®εΊ“γ€‚";
     Text[ russian ] = "Ξςκπϋςό αΰησ δΰννϋυ νεβξημξζνξ.";
     Text[ polish ] = "Baza danych nie mog³a byζ otworzona.";
-    Text[ japanese ] = "Γή°ΐΝή°½‚πJ‚­‚±‚Ζ‚ª‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½";
-    Text[ chinese_traditional ] = "µLªk¶}±ÒΈκ®Ζ®w΅C";
+    Text[ japanese ] = "οΎƒοΎο½°οΎ€οΎοΎο½°ο½½γ‚’ι–‹γγ“γ¨γγ§γγΎγ›γ‚“γ§γ—γ";
+    Text[ chinese_traditional ] = "η„΅ζ³•ι–‹ε•θ³‡ζ–™εΊ«γ€‚";
     Text[ arabic ] = "ΚΪΠΡ έΚΝ ήΗΪΟΙ ΗαΘνΗδΗΚ.";
     Text[ dutch ] = "Database kon niet worden geopend.";
-    Text[ chinese_simplified ] = "Ξή·¨΄ςΏªΚύΎέΏβ΅£";
+    Text[ chinese_simplified ] = "ζ— ζ³•ζ‰“εΌ€ζ•°ζ®εΊ“γ€‚";
     Text[ greek ] = "Δεν ήταν δυνατόν να ανοιχτεί η βάση δεδομένων.";
-    Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½ΊΈ¦ Ώ­Αφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤λ¥Ό μ—΄μ§€γ€€λª»ν–μµλ‹λ‹¤.";
     Text[ turkish ] = "Veritabanύ aηύlamadύ.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No se pudo abrir la base de datos.";
@@ -108,16 +108,16 @@ String STR_NO_DRIVERS
     Text [ dutch ] = "Geen database-drivers geοnstalleerd." ;
     Text [ spanish ] = "No se han instalado controladores de bases de datos." ;
     Text [ english_us ] = "No database drivers installed." ;
-    Text[ chinese_simplified ] = "Γ»ΣΠ°²Χ°ΚύΎέΏβΗύ¶―³ΜΠς΅£";
+    Text[ chinese_simplified ] = "ζ²΅ζ‰ε®‰θ£…ζ•°ζ®εΊ“ι©±ε¨η¨‹εΊγ€‚";
     Text[ russian ] = "Δπΰιβεπ δλÿ αΰηϋ δΰννϋυ νε θνρςΰλθπξβΰν.";
     Text[ polish ] = "Nie zainstalowany sterownik bazy danych.";
-    Text[ japanese ] = "Γή°ΐΝή°½ΔήΧΚή‚ª²έ½Δ°Ω‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB";
-    Text[ chinese_traditional ] = "¨S¦³¦wΈΛΈκ®Ζ®wΕX°Κµ{¦΅΅C";
+    Text[ japanese ] = "οΎƒοΎο½°οΎ€οΎοΎο½°ο½½οΎ„οΎοΎ—οΎοΎγο½²οΎο½½οΎ„ο½°οΎ™γ•γ‚γ¦γ„γΎγ›γ‚“γ€‚";
+    Text[ chinese_traditional ] = "ζ²’ζ‰ε®‰θ£θ³‡ζ–™εΊ«ι©…ε‹•η¨‹εΌγ€‚";
     Text[ arabic ] = "αΗ νζΜΟ ΘΡΗγΜ ΚΤΫνα ήζΗΪΟ ΘνΗδΗΚ γΛΘΚε.";
     Text[ dutch ] = "Geen database-drivers geοnstalleerd.";
-    Text[ chinese_simplified ] = "Γ»ΣΠ°²Χ°ΚύΎέΏβΗύ¶―³ΜΠς΅£";
+    Text[ chinese_simplified ] = "ζ²΅ζ‰ε®‰θ£…ζ•°ζ®εΊ“ι©±ε¨η¨‹εΊγ€‚";
     Text[ greek ] = "Δεν έχει γίνει εγκατάσταση προγράμματος οδήγησης βάσης δεδομένων.";
-    Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½Ί µε¶σΐΜΉφ°΅ Ό³Δ΅µΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤ λ“λΌμ΄λ²„κ°€ μ„¤μΉλμ§€ μ•μ•μµλ‹λ‹¤.";
     Text[ turkish ] = "Kurulmuώ veritabanύ sόrόcόsό mevcut deπil.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No se han instalado controladores de bases de datos.";
@@ -137,16 +137,16 @@ String STR_BTN_NEW_DOC
     Text [ dutch ] = "~Nieuw document" ;
     Text [ spanish ] = "~Nuevo documento" ;
     Text [ english_us ] = "~New Document" ;
-    Text[ chinese_simplified ] = "ΠΒ½¨ΞΔµµ(~N)";
+    Text[ chinese_simplified ] = "ζ–°ε»Ίζ–‡ζ΅£(~N)";
     Text[ russian ] = "Νξβϋι δξκσμενς";
     Text[ polish ] = "Nowy dok.";
-    Text[ japanese ] = "VΔή·­ÒέΔ(~N)";
-    Text[ chinese_traditional ] = "¶}±Ò·sΐΙ(~N)";
+    Text[ japanese ] = "ζ–°οΎ„οΎο½·ο½­οΎ’οΎοΎ„(~N)";
+    Text[ chinese_traditional ] = "ι–‹ε•ζ–°ζª”(~N)";
     Text[ arabic ] = "γΣΚδΟ ΜΟνΟ";
     Text[ dutch ] = "~Nieuw document";
-    Text[ chinese_simplified ] = "ΠΒ½¨ΞΔµµ(~N)";
+    Text[ chinese_simplified ] = "ζ–°ε»Ίζ–‡ζ΅£(~N)";
     Text[ greek ] = "Δημιουργία εγγράφου";
-    Text[ korean ] = "»υ·ΞΏξ Ή®Ό­(~N)";
+    Text[ korean ] = "μƒλ΅μ΄ λ¬Έμ„(~N)";
     Text[ turkish ] = "~Yeni belge";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Nuevo documento";
@@ -167,14 +167,14 @@ String STR_BTN_NEWDOC
     Text[ swedish ] = "~Nytt dok.";
     Text[ polish ] = "Nowy dok.";
     Text[ portuguese_brazilian ] = "~New doc.";
-    Text[ japanese ] = "VΔή·­ÒέΔ(~N)";
-    Text[ chinese_simplified ] = "ΠΒ½¨ΞΔµµ(~N)";
-    Text[ chinese_traditional ] = "¶}±Ò·sΐΙ(~N)";
+    Text[ japanese ] = "ζ–°οΎ„οΎο½·ο½­οΎ’οΎοΎ„(~N)";
+    Text[ chinese_simplified ] = "ζ–°ε»Ίζ–‡ζ΅£(~N)";
+    Text[ chinese_traditional ] = "ι–‹ε•ζ–°ζª”(~N)";
     Text[ arabic ] = "γΣΚδΟ ΜΟνΟ";
     Text[ dutch ] = "~Nieuw doc.";
-    Text[ chinese_simplified ] = "ΠΒ½¨ΞΔµµ(~N)";
+    Text[ chinese_simplified ] = "ζ–°ε»Ίζ–‡ζ΅£(~N)";
     Text[ greek ] = "Δημιουργία εγγράφου";
-    Text[ korean ] = "»υ·ΞΏξ Ή®Ό­(~N)";
+    Text[ korean ] = "μƒλ΅μ΄ λ¬Έμ„(~N)";
     Text[ turkish ] = "~Yeni blg.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Nuevo doc.";
@@ -198,7 +198,7 @@ String STR_SENDER_TOKENS
     Text[ polish ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
     Text[ portuguese_brazilian ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
     Text[ japanese ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
-    Text[ korean ] = "ΘΈ»η;ΐΜΈ§;ΌΊ;ΑΦΌÒ;µµ½Γ;µµ;ΏμΖνΉψΘ£;±Ή°΅;";
+    Text[ korean ] = "νμ‚¬;μ΄λ¦„;μ„±;μ£Όμ†;λ„μ‹;λ„;μ°νΈλ²νΈ;κµ­κ°€;";
     Text[ chinese_simplified ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
     Text[ chinese_traditional ] = "COMPANY;CR;FIRSTNAME;;LASTNAME;CR;ADDRESS;CR;CITY;;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
     Text[ turkish ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
@@ -206,6 +206,7 @@ String STR_SENDER_TOKENS
     Text[ catalan ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;COUNTRY; ;POSTALCODE; ;CITY;CR;";
     Text[ finnish ] = "YRITYS;CR;ETUNIMI; ;SUKUNIMI;CR;OSOITE;CR;POSTITOIMIPAIKKA; ;OSAVALTIO; ;POSTINUMERO;CR;MAA;CR;";
 };
+
 
 
 
