@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainerwindow.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:42 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:01:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,6 @@ namespace dbaui
     class OQueryContainerWindow : public ODataView
     {
         OQueryViewSwitch*   m_pViewSwitch;
-        FixedLine*          m_pBeamerSeparator;
         OBeamer*            m_pBeamer;
         Splitter*           m_pSplitter;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xBeamer;
