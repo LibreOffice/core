@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygon.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:17:55 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:38:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,13 @@ public:
     {
         // complete initialization using copy
         maPolygons = rToBeCopied.maPolygons;
+    }
+
+    ImplB2DPolyPolygon(const ::basegfx::B2DPolygon& rToBeCopied)
+    :   mnRefCount(0)
+    {
+        // complete initialization using copy
+        maPolygons.push_back( rToBeCopied );
     }
 
     ~ImplB2DPolyPolygon()
@@ -247,6 +254,11 @@ namespace basegfx
     :   mpPolyPolygon(rPolyPolygon.mpPolyPolygon)
     {
         mpPolyPolygon->incRefCount();
+    }
+
+    B2DPolyPolygon::B2DPolyPolygon(const B2DPolygon& rPolygon)
+    :   mpPolyPolygon( new ImplB2DPolyPolygon(rPolygon) )
+    {
     }
 
     B2DPolyPolygon::~B2DPolyPolygon()
