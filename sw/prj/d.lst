@@ -10,6 +10,9 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\sglobal\menubar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\swriter\toolbar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\sweb\toolbar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\sglobal\toolbar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\swriter\statusbar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\sweb\statusbar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\sglobal\statusbar
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
@@ -29,3 +32,6 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\sglobal\toolbar
 ..\uiconfig\swriter\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\swriter\toolbar\*.xml
 ..\uiconfig\sweb\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\sweb\toolbar\*.xml
 ..\uiconfig\sglobal\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\sglobal\toolbar\*.xml
+..\uiconfig\swriter\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\swriter\statusbar\*.xml
+..\uiconfig\sweb\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\sweb\statusbar\*.xml
+..\uiconfig\sglobal\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\sglobal\statusbar\*.xml
