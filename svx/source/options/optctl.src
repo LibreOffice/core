@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optctl.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:42:42 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ czech ] = "Kontrola pořadí";
         Text[ hebrew ] = "Sequence checking";
         Text[ hindi ] = "Sequence checking";
+        Text[ slovak ] = "Preverenie sekvencie";
     };
     CheckBox CB_SEQUENCECHECKING
     {
@@ -133,6 +134,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ czech ] = "Povolit kontrolu pořadí";
         Text[ hebrew ] = "Se~quenzüberprüfung anwenden";
         Text[ hindi ] = "Use se~quence checking";
+        Text[ slovak ] = "Použiť preverenie se~kvencie";
     };
     FixedLine FL_CURSORCONTROL
     {
@@ -163,6 +165,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ czech ] = "Ovládání kurzoru";
         Text[ hebrew ] = "Cursor control";
         Text[ hindi ] = "Cursor control";
+        Text[ slovak ] = "Ovládací prvok kurzora";
     };
     FixedText FT_MOVEMENT
     {
@@ -193,6 +196,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ czech ] = "Pohyb";
         Text[ hebrew ] = "Movement";
         Text[ hindi ] = "Movement";
+        Text[ slovak ] = "Pohyb";
     };
     RadioButton RB_MOVEMENT_LOGICAL
     {
@@ -223,6 +227,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ czech ] = "Logický";
         Text[ hebrew ] = "Lo~gical";
         Text[ hindi ] = "Lo~gical";
+        Text[ slovak ] = "Lo~gické";
     };
     RadioButton RB_MOVEMENT_VISUAL
     {
@@ -253,6 +258,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ czech ] = "Vizuální";
         Text[ hebrew ] = "~Visual";
         Text[ hindi ] = "~Visual";
+        Text[ slovak ] = "~Vizuálne";
     };
     FixedLine FL_GENERAL
     {
@@ -283,6 +289,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ czech ] = "Obecné vlastnosti";
         Text[ hebrew ] = "‮אפשריות כלליות‬";
         Text[ hindi ] = "सामान्य विकल्प";
+        Text[ slovak ] = "Všeobecné voľby";
     };
     FixedText FT_NUMERALS
     {
@@ -313,6 +320,7 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ czech ] = "Číslice";
         Text[ hebrew ] = "~Numerals";
         Text[ hindi ] = "~Numerals";
+        Text[ slovak ] = "~Numerické";
     };
     ListBox LB_NUMERALS
     {
@@ -476,6 +484,12 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         < "हन्गेरियन" ; > ;
         < "सिस्टम" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Arabské" ; > ;
+        < "Hindi" ; > ;
+        < "Systémové" ; > ;
+    };
     };
     Text[ portuguese ] = "Complex Text Layout";
     Text[ russian ] = "Complex Text Layout";
@@ -500,7 +514,10 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
     Text[ czech ] = "Komplexní rozvržení textu";
     Text[ hebrew ] = "Complex Text Layout";
     Text[ hindi ] = "Complex Text Layout";
+    Text[ slovak ] = "Komplexné rozloženie textu";
 };
+
+
 
 
 
