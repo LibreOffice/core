@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transactionmanager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:25:06 $
+ *  last change: $Author: as $ $Date: 2001-08-20 13:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,22 @@
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
+#include <com/sun/star/uno/XInterface.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -433,7 +449,7 @@ class TransactionManager : public  ITransactionManager
                                                 {
                                                     // Help programmer to find out, why this exception is thrown!
                                                     LOG_ERROR( "TransactionManager...", "Owner instance not right initialized yet. Call was rejected! Normaly it's an algorithm error ... wrong usin of class!" )
-                                                    /*ATTENTION: temp. disabled - till all bad code positions are detected and changed! */
+                                                    //ATTENTION: temp. disabled - till all bad code positions are detected and changed! */
                                                     // throw css::uno::RuntimeException( DECLARE_ASCII("TransactionManager...\nOwner instance not right initialized yet. Call was rejected! Normaly it's an algorithm error ... wrong usin of class!\n" ), css::uno::Reference< css::uno::XInterface >() );
                                                 }
                                                 break;
