@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FactoryHelper.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-18 09:59:02 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 14:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ import com.sun.star.uno.Type;
  * This class has default implementations for <code>getServiceFactory</code>
  * and <code>writeRegistryServiceInfo</code>.
  * <p>
- * @version     $Revision: 1.6 $ $ $Date: 2002-09-18 09:59:02 $
+ * @version     $Revision: 1.7 $ $ $Date: 2003-04-24 14:03:21 $
  * @author      Kay Ramme
  * @see         com.sun.star.lang.XMultiServiceFactory
  * @see         com.sun.star.lang.XServiceInfo
@@ -94,6 +94,8 @@ import com.sun.star.uno.Type;
  * @since       UDK1.0
  */
 public class FactoryHelper {
+
+    private static final boolean DEBUG = false;
     // the factory
     static protected class Factory
         implements XSingleServiceFactory, XSingleComponentFactory, XServiceInfo,
@@ -109,7 +111,7 @@ public class FactoryHelper {
             }
         }
 
-        private static final boolean DEBUG = false;
+//        private static final boolean DEBUG = false;
 
         protected XMultiServiceFactory _xMultiServiceFactory;
         protected XRegistryKey         _xRegistryKey;
@@ -537,7 +539,7 @@ public class FactoryHelper {
     /**
      * Writes the registration data into the registry key
      * <p>
-     * @return  returns a factory
+     * @return  success
      * @param   implName      the name of the implementing class
      * @param   serviceName   the service name
      * @param   regKey        the given registry key
@@ -559,5 +561,38 @@ public class FactoryHelper {
 
         return result;
     }
+
+    /** Writes the registration data into the registry key.
+     * Several services are supported.
+     *
+     * @param impl_name name of implementation
+     * @param supported_services supported services of implementation
+     * @param xKey registry key to write to
+     * @return success
+    */
+    public static boolean writeRegistryServiceInfo(
+        String impl_name, String supported_services [], XRegistryKey xKey )
+    {
+          try
+        {
+            XRegistryKey xNewKey = xKey.createKey( "/" + impl_name + "/UNO/SERVICES" );
+            for ( int nPos = 0; nPos < supported_services.length; ++nPos )
+            {
+                xNewKey.createKey( supported_services[ nPos ] );
+            }
+            return true;
+          }
+          catch (com.sun.star.registry.InvalidRegistryException exc)
+        {
+            if (DEBUG)
+            {
+                System.err.println(
+                    "##### " + Factory.class.getName() + ".writeRegistryServiceInfo -- exc: " +
+                    exc.toString() );
+            }
+          }
+        return false;
+    }
+
 }
 
