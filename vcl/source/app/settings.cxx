@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2002-07-25 11:17:00 $
+ *  last change: $Author: hr $ $Date: 2002-08-06 10:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 #include <prex.h>
 #include <postx.h>
 #include <dtint.hxx>
+#include <stdio.h>
 #endif
 
 #pragma hdrstop
