@@ -15,14 +15,15 @@ mkdir: %_DEST%\inc%_EXT%\framework
 ..\dtd\image.dtd %_DEST%\bin%_EXT%\image.dtd
 
 ..\%__SRC%\lib\ifwe.lib %_DEST%\lib%_EXT%\ifwe.lib
-..\inc\helper\imageproducer.hxx %_DEST%\inc%_EXT%\framework\imageproducer.hxx
-..\inc\classes\menuconfiguration.hxx %_DEST%\inc%_EXT%\framework\menuconfiguration.hxx
-..\inc\classes\bmkmenu.hxx %_DEST%\inc%_EXT%\framework\bmkmenu.hxx
-..\inc\classes\toolboxconfiguration.hxx %_DEST%\inc%_EXT%\framework\toolboxconfiguration.hxx
-..\inc\classes\statusbarconfiguration.hxx %_DEST%\inc%_EXT%\framework\statusbarconfiguration.hxx
-..\inc\classes\eventsconfiguration.hxx %_DEST%\inc%_EXT%\framework\eventsconfiguration.hxx
-..\inc\classes\imagesconfiguration.hxx %_DEST%\inc%_EXT%\framework\imagesconfiguration.hxx
-..\inc\helper\actiontriggerhelper.hxx %_DEST%\inc%_EXT%\framework\actiontriggerhelper.hxx
-..\inc\dispatch\interaction.hxx %_DEST%\inc%_EXT%\framework\interaction.hxx
+hedabu: ..\inc\helper\imageproducer.hxx %_DEST%\inc%_EXT%\framework\imageproducer.hxx
+hedabu: ..\inc\classes\menuconfiguration.hxx %_DEST%\inc%_EXT%\framework\menuconfiguration.hxx
+hedabu: ..\inc\classes\bmkmenu.hxx %_DEST%\inc%_EXT%\framework\bmkmenu.hxx
+hedabu: ..\inc\classes\toolboxconfiguration.hxx %_DEST%\inc%_EXT%\framework\toolboxconfiguration.hxx
+hedabu: ..\inc\classes\statusbarconfiguration.hxx %_DEST%\inc%_EXT%\framework\statusbarconfiguration.hxx
+hedabu: ..\inc\classes\eventsconfiguration.hxx %_DEST%\inc%_EXT%\framework\eventsconfiguration.hxx
+hedabu: ..\inc\classes\imagesconfiguration.hxx %_DEST%\inc%_EXT%\framework\imagesconfiguration.hxx
+hedabu: ..\inc\helper\actiontriggerhelper.hxx %_DEST%\inc%_EXT%\framework\actiontriggerhelper.hxx
+hedabu: ..\inc\dispatch\interaction.hxx %_DEST%\inc%_EXT%\framework\interaction.hxx
+hedabu: ..\inc\classes\addonsoptions.hxx %_DEST%\inc%_EXT%\framework\addonsoptions.hxx
 
 ..\source\unotypes\fw?.xml %_DEST%\xml\*.xml
