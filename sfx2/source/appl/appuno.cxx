@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-22 11:29:38 $
+ *  last change: $Author: mba $ $Date: 2002-04-23 08:01:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,16 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
         // slot is a property
         const SfxType* pType = pSlot->GetType();
         SfxPoolItem* pItem = pType->CreateItem();
+        if ( !pItem )
+        {
+#ifdef DBG_UTIL
+            ByteString aStr( "No creator method for item: ");
+            aStr += ByteString::CreateFromInt32( nSlotId );
+            DBG_ERROR( aStr.GetBuffer() );
+#endif
+            return;
+        }
+
         pItem->SetWhich( nSlotId );
         USHORT nSubCount = pType->nAttribs;
         if ( nSubCount == 0 )
@@ -584,6 +594,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
 
                     if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC || nSlotId == SID_SAVETO )
                     {
+                        if ( nId == SID_DOCFRAME )
+                            break;
                         if ( nId == SID_PROGRESS_STATUSBAR_CONTROL )
                             break;
                         if ( nId == SID_VIEW_DATA )
