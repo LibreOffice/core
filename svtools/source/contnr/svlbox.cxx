@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:38 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 15:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #include "svlbox.hxx"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
 #ifndef _SV_SVAPP_HXX
@@ -98,7 +98,7 @@
 #include "svlbitm.hxx"
 #endif
 
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 // Drag&Drop
 static SvLBox* pDDSource = NULL;
@@ -1820,12 +1820,12 @@ Link SvLBox::GetDragFinishedHdl() const
 void SvLBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet ) const
 {
     rStateSet.AddState( AccessibleStateType::FOCUSABLE );
-    rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANT );
+    rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
 
     if ( IsEnabled() )
         rStateSet.AddState( AccessibleStateType::ENABLED );
     if ( GetSelectionMode() == MULTIPLE_SELECTION )
-        rStateSet.AddState( AccessibleStateType::MULTISELECTABLE );
+        rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
     if ( HasFocus() )
         rStateSet.AddState( AccessibleStateType::FOCUSED );
     if ( IsReallyVisible() )
