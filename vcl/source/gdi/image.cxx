@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-22 13:57:18 $
+ *  last change: $Author: cd $ $Date: 2002-11-28 14:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -987,9 +987,26 @@ void ImageList::AddImage( USHORT nId, const Image& rImage )
     DBG_ASSERT( !mpImplData || (rImage.GetSizePixel() == mpImplData->maImageSize),
                 "ImageList::AddImage(): Wrong Size" );
 
-    ImageType   eImageType = rImage.mpImplData->meType;
-    Size        aImageSize = rImage.GetSizePixel();
+    BOOL        bHasImage = ( rImage.mpImplData != 0 );
+    ImageType   eImageType  = IMAGETYPE_BITMAP;
+    Size        aImageSize;
     USHORT      nIndex;
+
+    if ( bHasImage )
+    {
+        eImageType = rImage.mpImplData->meType;
+        aImageSize = rImage.GetSizePixel();
+    }
+    else
+    {
+        if ( mpImplData )
+        {
+            eImageType = IMAGETYPE_BITMAP;
+            aImageSize = mpImplData->maImageSize;
+        }
+        else
+            return;
+    }
 
     if ( !mpImplData )
     {
@@ -1035,7 +1052,14 @@ void ImageList::AddImage( USHORT nId, const Image& rImage )
     switch ( eImageType )
     {
         case IMAGETYPE_BITMAP:
-            mpImplData->mpImageBitmap->Replace( nIndex, *((Bitmap*)rImage.mpImplData->mpData) );
+            if ( !bHasImage )
+            {
+                // Use empty b/w bitmap with correct size as empty image and black a transparent color
+                Bitmap aBitmap( aImageSize, 1 );
+                mpImplData->mpImageBitmap->Replace( nIndex, aBitmap, COL_BLACK );
+            }
+            else
+                mpImplData->mpImageBitmap->Replace( nIndex, *((Bitmap*)rImage.mpImplData->mpData) );
             break;
 
         case IMAGETYPE_IMAGE:
