@@ -3,9 +3,22 @@ dos: echo delivering license and readme-files...
 dos: echo =====================================================================
 mkdir: %_DEST%\bin%_EXT%\01
 mkdir: %_DEST%\bin%_EXT%\01\osl
+mkdir: %_DEST%\bin%_EXT%\49
+mkdir: %_DEST%\bin%_EXT%\49\osl
 mkdir: %_DEST%\pck%_EXT%
 ..\source\license\%GUI%\* %_DEST%\bin%_EXT%\01\osl\*
+..\source\license\%GUI%\LICENSE %_DEST%\bin%_EXT%\01\osl\LICENSE01
+..\source\license\%GUI%\license.html %_DEST%\bin%_EXT%\01\osl\LICENSE01.html
+..\source\license\%GUI%\* %_DEST%\bin%_EXT%\49\osl\*
+..\source\license\%GUI%\LICENSE %_DEST%\bin%_EXT%\49\osl\LICENSE01
+..\source\license\%GUI%\license.html %_DEST%\bin%_EXT%\49\osl\LICENSE01.html
 ..\source\readme\%OUTPATH%\* %_DEST%\bin%_EXT%\01\osl\*
 ..\source\readme\readme.html %_DEST%\bin%_EXT%\01\osl\readme.html
 ..\source\cinema\* %_DEST%\pck%_EXT%\*
+..\%__SRC%\misc\01\* %_DEST%\bin%_EXT%\01\osl\*
+..\%__SRC%\misc\01\readme01.txt %_DEST%\bin%_EXT%\01\osl\README01
+..\%__SRC%\misc\01\readme01.html %_DEST%\bin%_EXT%\01\osl\README01.html
+..\%__SRC%\misc\49\* %_DEST%\bin%_EXT%\49\osl\*
+..\%__SRC%\misc\49\readme49.txt %_DEST%\bin%_EXT%\49\osl\README49
+..\%__SRC%\misc\49\readme49.html %_DEST%\bin%_EXT%\49\osl\README49.html
 
