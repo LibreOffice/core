@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-29 09:43:35 $
+ *  last change: $Author: tl $ $Date: 2000-11-30 15:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,8 +335,8 @@ TabPage RID_SFXPAGE_LINGU
     };
     String STR_CAPITALIZATION
     {
-        Text = "Groß- Kleinschreibung prüfen" ;
-        Text[ ENGLISH ] = "Check capitalization words" ;
+        Text = "Groß-/Kleinschreibung prüfen" ;
+        Text[ ENGLISH ] = "Check capitalization of words" ;
     };
     String STR_SPELL_SPECIAL
     {
@@ -345,7 +345,7 @@ TabPage RID_SFXPAGE_LINGU
     };
     String STR_ALL_LANGUAGES
     {
-        Text = "In alle Sprachen prüfen" ;
+        Text = "In allen Sprachen prüfen" ;
         Text[ English ] = "Spell in all languages" ;
     };
     String STR_SPELL_AUTO
@@ -365,13 +365,13 @@ TabPage RID_SFXPAGE_LINGU
     };
     String STR_NUM_PRE_BREAK
     {
-        Text = "Zeichen vor Umbruch" ;
-        Text[ ENGLISH ] = "Characters before hyphenation" ;
+        Text = "Zeichen vor dem Umbruch: " ;
+        Text[ ENGLISH ] = "Characters before hyphenation: " ;
     };
     String STR_NUM_POST_BREAK
     {
-        Text = "Zeichen nach Umbruch" ;
-        Text[ ENGLISH ] = "Characters behind hyphenation" ;
+        Text = "Zeichen nach dem Umbruch: " ;
+        Text[ ENGLISH ] = "Characters behind hyphenation: " ;
     };
     String STR_HYPH_AUTO
     {
@@ -393,46 +393,6 @@ TabPage RID_SFXPAGE_LINGU
         File = "chkch.bmp" ;
     };
 };
-
-
-#ifdef NEVER
-TabPage RID_SFXPAGE_LINGU
-{
-    HelpId = HID_OPTIONS_LINGU ;
-    OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
-    SVLook = TRUE ;
-    Hide = TRUE ;
-    Text = "Linguistik" ;
-    NumericField ED_PREBREAK
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 125 , 67 ) ;
-        Size = MAP_APPFONT ( 10 , 12 ) ;
-        Left = TRUE ;
-        Minimum = 2 ;
-        Maximum = 9 ;
-        Last = 9 ;
-        SpinSize = 1 ;
-    };
-    NumericField ED_AFTERBREAK
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 125 , 80 ) ;
-        Size = MAP_APPFONT ( 10 , 12 ) ;
-        Left = TRUE ;
-        Minimum = 2 ;
-        Maximum = 9 ;
-        Last = 9 ;
-        SpinSize = 1 ;
-    };
-    String STR_WARNING
-    {
-        Text = "Sie können nicht mehr als 20 Wörterbücher auswählen." ;
-        Text [ ENGLISH ] = "Sorry, but you could not select more than 20 dictionarys." ;
-    };
-};
-#endif //OLD_IMPL
 // end: TabPage RID_SFXPAGE_LINGU
 
  // RID_SFXQB_DELDICT --------------------------------------------------------
