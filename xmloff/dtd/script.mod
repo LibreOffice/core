@@ -1,5 +1,5 @@
 <!--
-	$Id: script.mod,v 1.6 2001-02-06 14:08:20 dvo Exp $
+	$Id: script.mod,v 1.7 2001-08-09 13:22:49 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -69,11 +69,11 @@
 
 <!ENTITY % script-language "script:language %string; #REQUIRED">
 <!ENTITY % event-name "script:event-name %string; #REQUIRED">
-<!ENTITY % library "script:library %string; #REQUIRED">
+<!ENTITY % location "script:location (document|application) #REQUIRED">
 <!ENTITY % macro-name "script:macro-name %string; #REQUIRED">
 
 <!ELEMENT script:event (#PCDATA)>
 <!ATTLIST script:event %script-language;
                        %event-name;
-                       %library;
+                       %location;
 					   %macro-name;>

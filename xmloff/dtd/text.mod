@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.34 2001-06-20 06:08:35 mib Exp $
+	$Id: text.mod,v 1.35 2001-08-09 13:22:49 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -547,8 +547,8 @@
 <!ELEMENT text:get-page-variable (#PCDATA)>
 <!ATTLIST text:get-page-variable %numFormat;>
 
-<!ELEMENT text:execute-macro (#PCDATA)>
-<!ATTLIST text:execute-macro text:name %string; #REQUIRED>
+<!ELEMENT text:execute-macro (#PCDATA|office:events)* >
+<!ATTLIST text:execute-macro text:description %string; #IMPLIED>
 
 
 <!ELEMENT text:dde-connection-decls (text:dde-connection-decl)*>
