@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-10 16:25:07 $
+#   last change: $Author: tpf $ $Date: 2002-08-07 15:08:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,11 @@ $(MISC)$/registry$/res$/{$(alliso)}$/%.xcu :| %.xcu
     $(JAVA) -classpath $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(<:b).tmp $(@:d)$(<:b).xcu
     +$(RM) $(@:d)$(<:b).tmp
     
+# creating locale dependent resource bundles
+$(MISC)$/registry$/res$/{$(alliso)}$/%.properties :| %.xcs
+    -$(MKDIR) -p $(@:d)
+    java -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/resource.xsl $(@:d)$(<:b).properties locale={$(subst,$/$<, $(subst,$(MISC)$/registry$/res$/, $(subst,.properties,.xcs $@)))}
+
 #xxxxxxxxx
 # create old output format obsolete
 #$(MISC)$/instance$/%.xml : %.xcd
