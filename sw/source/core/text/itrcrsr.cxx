@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-30 11:28:41 $
+ *  last change: $Author: fme $ $Date: 2001-11-05 15:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -995,15 +995,17 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         }
     }
 
-    KSHORT nWidth30 = !nWidth && pPor->GetLen() && pPor->InToxRefOrFldGrp()
-        ? 30 : nWidth;
+    KSHORT nWidth30;
+    if ( pPor->IsPostItsPortion() )
+        nWidth30 = 30 + pPor->GetViewWidth( GetInfo() ) / 2;
+    else
+        nWidth30 = ! nWidth && pPor->GetLen() && pPor->InToxRefOrFldGrp() ?
+                     30 :
+                     nWidth;
 
     while(!(bLastPortion = (0 == pPor->GetPortion())) && nWidth30 < nX &&
         !pPor->IsBreakPortion() )
     {
-        if ( pPor->IsPostItsPortion() && pPor->GetViewWidth( GetInfo() )/2 > nX )
-            break;
-
         nX -= nWidth;
         nCurrStart += pPor->GetLen();
         bHolePortion = pPor->IsHolePortion();
@@ -1038,8 +1040,13 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 }
             }
         }
-        nWidth30 = !nWidth && pPor->GetLen() && ( pPor->InToxRefOrFldGrp() ||
-                    pPor->IsPostItsPortion() ) ? 30 : nWidth;
+
+        if ( pPor->IsPostItsPortion() )
+            nWidth30 = 30 + pPor->GetViewWidth( GetInfo() ) / 2;
+        else
+            nWidth30 = ! nWidth && pPor->GetLen() && pPor->InToxRefOrFldGrp() ?
+                         30 :
+                         nWidth;
         if( !pPor->IsFlyPortion() && !pPor->IsMarginPortion() )
             bLastHyph = pPor->InHyphGrp();
     }
@@ -1127,10 +1134,13 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                         nWidth - nHeight/2 <= nX )
                         ++nCurrStart;
                 }
-                else if( ( !pPor->IsFlyPortion() || ( pPor->GetPortion() &&
+                else if ( ( !pPor->IsFlyPortion() || ( pPor->GetPortion() &&
                     !pPor->GetPortion()->IsMarginPortion() &&
                     !pPor->GetPortion()->IsHolePortion() ) )
-                         && ( nWidth/2 < nX ) && !bFieldInfo
+                         && ( nWidth/2 < nX ) &&
+                         ( !bFieldInfo ||
+                            ( pPor->GetPortion() &&
+                              pPor->GetPortion()->IsPostItsPortion() ) )
                          && ( bRightAllowed || !bLastHyph ))
                     ++nCurrStart;
                 return nCurrStart;
@@ -1235,7 +1245,9 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 
                 nLength = aSizeInf.GetFont()->_GetCrsrOfst( aDrawInf );
 
-                if( bFieldInfo && nLength == pPor->GetLen() )
+                if( bFieldInfo && nLength == pPor->GetLen() &&
+                    ( ! pPor->GetPortion() ||
+                      ! pPor->GetPortion()->IsPostItsPortion() ) )
                     --nLength;
             }
             if( nOldProp )
