@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numvset.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:57 $
+ *  last change: $Author: os $ $Date: 2001-01-31 12:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,12 +69,30 @@
 #include <svtools/valueset.hxx>
 #endif
 #include <limits.h>
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+
+namespace com{namespace sun{ namespace star{
+    namespace container{
+        class XIndexAccess;
+    }
+    namespace beans{
+        struct PropertyValue;
+    }
+    namespace text{
+        class XNumberingFormatter;
+    }
+}}}
+
 class SvxBrushItem;
 class SvxNumRule;
-/*-----------------13.02.97 14.02-------------------
-
---------------------------------------------------*/
-
 struct SvxBmpItemInfo
 {
     SvxBrushItem*   pBrushItem;
@@ -91,6 +109,18 @@ class SvxNumValueSet : public ValueSet
     BOOL            bHTMLMode;
     Rectangle       aOrgRect;
     VirtualDevice*  pVDev;
+
+//  const SvxNumSettingsArr_Impl* pNumSettingsArr;
+    com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter> xFormatter;
+    com::sun::star::lang::Locale aLocale;
+
+    com::sun::star::uno::Sequence<
+        com::sun::star::uno::Sequence<
+            com::sun::star::beans::PropertyValue> > aNumSettings;
+
+    com::sun::star::uno::Sequence<
+        com::sun::star::uno::Reference<
+            com::sun::star::container::XIndexAccess> > aOutlineSettings;
     public:
         SvxNumValueSet( Window* pParent, const ResId& rResId, USHORT nType );
         ~SvxNumValueSet();
@@ -98,7 +128,19 @@ class SvxNumValueSet : public ValueSet
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
     void            SetHTMLMode(BOOL bSet) {bHTMLMode = bSet;}
+    void            SetNumberingSettings(
+        const com::sun::star::uno::Sequence<
+            com::sun::star::uno::Sequence<
+                com::sun::star::beans::PropertyValue> >& aNum,
+        com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter>& xFormatter,
+        const com::sun::star::lang::Locale& rLocale );
 
+    void            SetOutlineNumberingSettings(
+            com::sun::star::uno::Sequence<
+                com::sun::star::uno::Reference<
+                    com::sun::star::container::XIndexAccess> >& rOutline,
+            com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter>& xFormatter,
+            const com::sun::star::lang::Locale& rLocale);
 };
 
 /*-----------------13.02.97 09.32-------------------

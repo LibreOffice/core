@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:51:39 $
+ *  last change: $Author: os $ $Date: 2001-01-31 12:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,55 +193,6 @@ TabPage RID_SVXPAGE_PICK_NUM
         Pos = MAP_APPFONT ( 9 , 12 ) ;
         Size = MAP_APPFONT ( 242 , 117 ) ;
         TabStop = TRUE ;
-    };
-     // Die Formate der Numerierung enthalten:
-     // den NumType, Prefix, Postfix, vollstaendig 0/1 durch '|' getrennt
-     // und das fuenffach
-     // NumType:
-     // 0 -> A, B,C;
-     // 1 -> a, b, c;
-     // 2->I, II, III;
-     // 3->i, ii, iii;
-     // 4->1, 2, 3;
-     // 5->leer;
-     // 6->Bullet
-     // Die Formatstrings muessen mit den Formatbeispielen
-     // (STR_FULLNUMS_?) uebereinstimmen!!
-    String STR_NUMFMT_1 //
-    {
-        Text = "4||.|1|4||.|1|1||)|0|6|||61589|6|||61589" ;
-    };
-    String STR_NUMFMT_2
-    {
-        Text = "4||.|0|1||)|0|6|||61589|6|||61589|6|||61589" ;
-    };
-    String STR_NUMFMT_3
-    {
-        Text = "4||.|0|1|(|)|0|3||.|0|0||.|0|6||.|61589" ;
-    };
-    String STR_NUMFMT_4 //
-    {
-        Text = "4||.|0|4||.|0|4||.|0|4||.|0|4||.|0" ;
-    };
-    String STR_NUMFMT_5
-    {
-        Text = "2||.|0|0||.|0|3||.|0|1||)|0|6|||61589" ;
-    };
-    String STR_NUMFMT_6
-    {
-        Text = "0||.|0|2||.|0|1||.|0|3||.|0|6||.|61589" ;
-    };
-    String STR_NUMFMT_7
-    {
-        Text = "4|||1|4|||1|4|||1|4|||1|4|||1" ;
-    };
-    String STR_NUMFMT_8 //
-    {
-        Text = "6|||61487|6|||61488|6|||61485|6|||61589|6|||61589" ;
-    };
-    String STR_NUMFMT_7_HTML
-    {
-        Text = "2||.|0|2||.|0|2||.|0|2||.|0|2||.|0" ;
     };
 };
 /**************************************************************************/

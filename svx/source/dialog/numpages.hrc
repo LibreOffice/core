@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:10 $
+ *  last change: $Author: os $ $Date: 2001-01-31 12:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,15 +81,15 @@
 #define MN_DEL_BULLET   123
 
 #define STR_BULLET      200
-#define STR_NUMFMT_1    201
-#define STR_NUMFMT_2    202
-#define STR_NUMFMT_3    203
-#define STR_NUMFMT_4    204
-#define STR_NUMFMT_5    205
-#define STR_NUMFMT_6    206
-#define STR_NUMFMT_7    207
-#define STR_NUMFMT_8    208
-#define STR_NUMFMT_7_HTML    209
+//#define STR_NUMFMT_1  201
+//#define STR_NUMFMT_2    202
+//#define STR_NUMFMT_3    203
+//#define STR_NUMFMT_4    204
+//#define STR_NUMFMT_5    205
+//#define STR_NUMFMT_6    206
+//#define STR_NUMFMT_7    207
+//#define STR_NUMFMT_8    208
+//#define STR_NUMFMT_7_HTML    209
 
 #define LB_FORM         210
 #define ED_FORM         211

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-08 08:50:55 $
+ *  last change: $Author: os $ $Date: 2001-01-31 12:23:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,9 +134,45 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
+#ifndef _UNO_LINGU_HXX
+#include <unolingu.hxx>
+#endif
+#ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
+#include <com/sun/star/style/NumberingType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
+#include <com/sun/star/container/XIndexAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XDEFAULTNUMBERINGPROVIDER_HPP_
+#include <com/sun/star/text/XDefaultNumberingProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XNUMBERINGFORMATTER_HPP_
+#include <com/sun/star/text/XNumberingFormatter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #include <string>
 #include <algorithm>
+
+using namespace com::sun::star::uno;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::i18n;
+using namespace com::sun::star::text;
+using namespace com::sun::star::container;
+using namespace com::sun::star::style;
+using namespace rtl;
+#define C2U(cChar) OUString::createFromAscii(cChar)
+
+SV_IMPL_PTRARR(SvxNumSettingsArr_Impl,SvxNumSettings_ImplPtr);
 
 /*-----------------07.02.97 15.37-------------------
 
@@ -155,35 +191,46 @@
 #define MAX_BMP_HEIGHT              16
 
 static BOOL bLastRelative =         FALSE;
+static const sal_Char cNumberingType[] = "NumberingType";
+static const sal_Char cValue[] = "Value";
+static const sal_Char cParentNumbering[] = "ParentNumbering";
+static const sal_Char cPrefix[] = "Prefix";
+static const sal_Char cSuffix[] = "Suffix";
+static const sal_Char cBulletChar[] = "BulletChar";
+/* -----------------------------31.01.01 10:23--------------------------------
 
-/* -----------------27.10.98 15:40-------------------
- *
- * --------------------------------------------------*/
-static const sal_Char aSglPostPreFixes[] =
+ ---------------------------------------------------------------------------*/
+Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider()
 {
-    ' ', ')',
-    ' ', '.',
-    '(', ')',
-    ' ', '.',
-    ' ', ')',
-    ' ', ')',
-    '(', ')',
-    ' ', '.'
-};
-/* -----------------27.10.98 15:42-------------------
- *
- * --------------------------------------------------*/
-static const SvxExtNumType aSglNumTypes[] =
+    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+    Reference < XInterface > xI = xMSF->createInstance(
+        ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
+    Reference<XDefaultNumberingProvider> xRet(xI, UNO_QUERY);
+    DBG_ASSERT(xRet.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"")
+    return xRet;
+}
+/* -----------------------------31.01.01 11:40--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SvxNumSettings_ImplPtr lcl_CreateNumSettingsPtr(const Sequence<PropertyValue>& rLevelProps)
 {
-    SVX_NUM_ARABIC,                 // 1),2),3)...
-    SVX_NUM_ARABIC,                 // 1.,2.,3. ...
-    SVX_NUM_ARABIC,                 // (1),(2),(3)...
-    SVX_NUM_ROMAN_UPPER,            // I.,II. ...
-    SVX_NUM_CHARS_UPPER_LETTER,     // A),B)...
-    SVX_NUM_CHARS_LOWER_LETTER,     // a),b),c) ...
-    SVX_NUM_CHARS_LOWER_LETTER,     // (a),(b),(c),...
-    SVX_NUM_ROMAN_LOWER             // i.,ii.,...
-};
+    const PropertyValue* pValues = rLevelProps.getConstArray();
+    SvxNumSettings_ImplPtr pNew = new SvxNumSettings_Impl;
+    for(sal_Int32 j = 0; j < rLevelProps.getLength(); j++)
+    {
+        if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cNumberingType)))
+            pValues[j].Value >>= pNew->nNumberType;
+        else if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cPrefix)))
+            pValues[j].Value >>= pNew->sPrefix;
+        else if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cSuffix)))
+            pValues[j].Value >>= pNew->sSuffix;
+        else if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cParentNumbering)))
+            pValues[j].Value >>= pNew->nParentNumbering;
+        else if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cBulletChar)))
+            pValues[j].Value >>= pNew->sBulletChar;
+    }
+    return pNew;
+}
 /* -----------------28.10.98 08:32-------------------
  *
  * --------------------------------------------------*/
@@ -280,6 +327,34 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(Window* pParent,
     pExamplesVS->SetDoubleClickHdl(LINK(this, SvxSingleNumPickTabPage, DoubleClickHdl_Impl));
     pExamplesVS->SetHelpId(HID_VALUESET_SINGLENUM );
 
+    Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
+    if(xDefNum.is())
+    {
+        Sequence< Sequence< PropertyValue > > aNumberings;
+        LanguageType eLang = System::GetLanguage();
+        if(LANGUAGE_SYSTEM == eLang)
+            eLang = ::GetSystemLanguage();
+        Locale aLocale = SvxCreateLocale(eLang);
+        try
+        {
+            aNumberings =
+                xDefNum->getDefaultContinuousNumberingLevels( aLocale );
+
+            sal_Int32 nLength = aNumberings.getLength() > 8 ? 8 :aNumberings.getLength();
+
+            const Sequence<PropertyValue>* pValuesArr = aNumberings.getConstArray();
+            for(sal_Int32 i = 0; i < nLength; i++)
+            {
+                SvxNumSettings_ImplPtr pNew = lcl_CreateNumSettingsPtr(pValuesArr[i]);
+                aNumSettingsArr.Insert(pNew, aNumSettingsArr.Count());
+            }
+        }
+        catch(Exception&)
+        {
+        }
+        Reference<XNumberingFormatter> xFormat(xDefNum, UNO_QUERY);
+        pExamplesVS->SetNumberingSettings(aNumberings, xFormat, aLocale);
+    }
 }
 /*-----------------07.02.97 12.08-------------------
 
@@ -290,6 +365,7 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(Window* pParent,
     delete pActNum;
     delete pExamplesVS;
     delete pSaveNum;
+    aNumSettingsArr.DeleteAndDestroy(0, aNumSettingsArr.Count());
 }
 
 /*-----------------07.02.97 12.13-------------------
@@ -407,9 +483,13 @@ IMPL_LINK(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
         bPreset = FALSE;
         bModified = TRUE;
         USHORT nIdx = pExamplesVS->GetSelectItemId() - 1;
-        SvxExtNumType eNewType = aSglNumTypes[nIdx];
-        sal_Char cPrefix    = aSglPostPreFixes[2 * nIdx];
-        sal_Char cPostfix   = aSglPostPreFixes[2 * (nIdx) + 1];
+        DBG_ASSERT(aNumSettingsArr.Count() > nIdx, "wrong index")
+        if(aNumSettingsArr.Count() <= nIdx)
+            return 0;
+        SvxNumSettings_ImplPtr pSet = aNumSettingsArr.GetObject(nIdx);
+        SvxExtNumType eNewType = (SvxExtNumType)pSet->nNumberType;
+        const sal_Unicode   cPrefix = pSet->sPrefix.getLength() ? pSet->sPrefix.getStr()[0] : 0;
+        const sal_Unicode   cSuffix = pSet->sPrefix.getLength() ? pSet->sSuffix.getStr()[0] : 0;
 
         USHORT nMask = 1;
         for(USHORT i = 0; i < pActNum->GetLevelCount(); i++)
@@ -422,11 +502,11 @@ IMPL_LINK(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
                 if(cPrefix == ' ')
                     aFmt.SetPrefix( aEmptyStr );
                 else
-                    aFmt.SetPrefix( String( sal_Unicode( cPrefix ) ) );
-                if(cPostfix == ' ')
+                    aFmt.SetPrefix( String( cPrefix  ) );
+                if(cSuffix == ' ')
                     aFmt.SetSuffix( aEmptyStr );
                 else
-                    aFmt.SetSuffix( String( sal_Unicode( cPostfix ) ) );
+                    aFmt.SetSuffix( String( cSuffix ) );
                 aFmt.SetCharFmt(sNumCharFmtName);
                 pActNum->SetLevel(i, aFmt);
             }
@@ -642,14 +722,6 @@ SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_PICK_NUM ), rSet ),
     aValuesGB(      this, ResId(BG_VALUES) ),
     pExamplesVS(    new SvxNumValueSet(this, ResId(VS_VALUES), NUM_PAGETYPE_NUM )),
-    aNumFmt1(ResId(STR_NUMFMT_1)),
-    aNumFmt2(ResId(STR_NUMFMT_2)),
-    aNumFmt3(ResId(STR_NUMFMT_3)),
-    aNumFmt4(ResId(STR_NUMFMT_4)),
-    aNumFmt5(ResId(STR_NUMFMT_5)),
-    aNumFmt6(ResId(STR_NUMFMT_6)),
-    aNumFmt7(ResId(STR_NUMFMT_7)),
-    aNumFmt8(ResId(STR_NUMFMT_8)),
     pActNum(0),
     pSaveNum(0),
     nActNumLvl( USHRT_MAX ),
@@ -657,35 +729,7 @@ SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
     bPreset(FALSE),
     nNumItemId(SID_ATTR_NUMBERING_RULE)
 {
-    aNumArr[0] = &aNumFmt1;
-    aNumArr[1] = &aNumFmt2;
-    aNumArr[2] = &aNumFmt3;
-    aNumArr[3] = &aNumFmt4;
-    aNumArr[4] = &aNumFmt5;
-    aNumArr[5] = &aNumFmt6;
-    aNumArr[6] = &aNumFmt7;
-    aNumArr[7] = &aNumFmt8;
 
-#ifdef DBG_UTIL
-    for(USHORT dbg = 0; dbg < NUM_VALUSET_COUNT; dbg++)
-        DBG_ASSERT((NUMTYPE_MEMBER * 5) == aNumArr[dbg]->GetTokenCount('|'),
-                        "FormatString inkonsistent")
-#endif
-
-    SfxObjectShell* pShell;
-    const SfxPoolItem* pItem;
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_HTML_MODE, FALSE, &pItem )
-         || ( 0 != ( pShell = SfxObjectShell::Current()) &&
-              0 != ( pItem = pShell->GetItem( SID_HTML_MODE ) ) ) )
-    {
-        USHORT nHtmlMode = ((SfxUInt16Item*)pItem)->GetValue();
-        BOOL bHTMLMode = 0 != (nHtmlMode&HTMLMODE_ON);
-        if(bHTMLMode)
-        {
-            aNumFmt7 = String(ResId(STR_NUMFMT_7_HTML));
-            pExamplesVS->SetHTMLMode(TRUE);
-        }
-    }
     FreeResource();
 
     SetExchangeSupport();
@@ -694,6 +738,38 @@ SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
     pExamplesVS->SetDoubleClickHdl(LINK(this, SvxNumPickTabPage, DoubleClickHdl_Impl));
     pExamplesVS->SetHelpId(HID_VALUESET_NUM       );
 
+    Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
+    if(xDefNum.is())
+    {
+        Sequence<Reference<XIndexAccess> > aOutlineAccess;
+        LanguageType eLang = System::GetLanguage();
+        if(LANGUAGE_SYSTEM == eLang)
+            eLang = ::GetSystemLanguage();
+        Locale aLocale = SvxCreateLocale(eLang);
+        try
+        {
+            aOutlineAccess = xDefNum->getDefaultOutlineNumberings( aLocale );
+
+            for(sal_Int32 nItem = 0;
+                nItem < aOutlineAccess.getLength() && nItem < NUM_VALUSET_COUNT; nItem++)
+            {
+                Reference<XIndexAccess> xLevel = aOutlineAccess.getConstArray()[nItem];
+                for(sal_Int32 nLevel = 0; nLevel < xLevel->getCount() && nLevel < 5; nLevel++)
+                {
+                    Any aValueAny = xLevel->getByIndex(nLevel);
+                    Sequence<PropertyValue> aLevelProps;
+                    aValueAny >>= aLevelProps;
+                    SvxNumSettings_ImplPtr pNew = lcl_CreateNumSettingsPtr(aLevelProps);
+                    aNumSettingsArrays[nItem].Insert(pNew, aNumSettingsArrays[nItem].Count());
+                }
+            }
+        }
+        catch(Exception&)
+        {
+        }
+        Reference<XNumberingFormatter> xFormat(xDefNum, UNO_QUERY);
+        pExamplesVS->SetOutlineNumberingSettings(aOutlineAccess, xFormat, aLocale);
+    }
 }
 /*-----------------07.02.97 12.12-------------------
 
@@ -819,32 +895,35 @@ IMPL_LINK(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
         bPreset = FALSE;
         bModified = TRUE;
 
-        String* pNum = aNumArr[pExamplesVS->GetSelectItemId() - 1];
+        SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[pExamplesVS->GetSelectItemId() - 1];
+
         Font& rActBulletFont = lcl_GetDefaultBulletFont();
+        SvxNumSettings_ImplPtr pLevelSettings = 0;
         for(USHORT i = 0; i < pActNum->GetLevelCount(); i++)
         {
+            if(rItemArr.Count() > i)
+                pLevelSettings = rItemArr[i];
+            if(!pLevelSettings)
+                break;
             SvxNumberFormat aFmt(pActNum->GetLevel(i));
-            // Definitionen reichen nur bis fuenf, danach wird die Art beibehalten
-            USHORT nTokenPos = i > 4 ? 4 : i;
-            aFmt.SetNumType( (SvxExtNumType)(USHORT) pNum->GetToken(nTokenPos * NUMTYPE_MEMBER, '|').ToInt32() );
-            USHORT nUpperLevelOrChar = (USHORT)pNum->GetToken( nTokenPos * NUMTYPE_MEMBER + 3, '|' ).ToInt32();
+            aFmt.SetNumType( (SvxExtNumType)pLevelSettings->nNumberType );
+            USHORT nUpperLevelOrChar = (USHORT)pLevelSettings->nParentNumbering;
             if(aFmt.GetNumType() == SVX_NUM_CHAR_SPECIAL)
             {
                 aFmt.SetBulletFont(&rActBulletFont);
-                aFmt.SetBulletChar(nUpperLevelOrChar);
+                aFmt.SetBulletChar(pLevelSettings->sBulletChar.getLength() ? pLevelSettings->sBulletChar.getStr()[0] : 0);
                 aFmt.SetCharFmt(sBulletCharFmtName);
             }
             else
             {
-                aFmt.SetIncludeUpperLevels(1 == nUpperLevelOrChar ? pActNum->GetLevelCount() : 0);
+                aFmt.SetIncludeUpperLevels(0 != nUpperLevelOrChar ? pActNum->GetLevelCount() : 0);
                 aFmt.SetCharFmt(sNumCharFmtName);
             }
-            aFmt.SetPrefix(pNum->GetToken(nTokenPos * NUMTYPE_MEMBER + 1, '|'));
-            aFmt.SetSuffix(pNum->GetToken(nTokenPos * NUMTYPE_MEMBER + 2, '|'));
+            aFmt.SetPrefix(pLevelSettings->sPrefix);
+            aFmt.SetSuffix(pLevelSettings->sSuffix);
             pActNum->SetLevel(i, aFmt);
         }
     }
-
     return 0;
 }
 
@@ -871,8 +950,8 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         20, 30,
         25, 50,
         30, 70,
-        35, 90, // bis hierher nur Linien, danach die char-Positionen
-        10, 10,
+        35, 90, // up to here line positions
+        10, 10, // character positions
         15, 30,
         20, 50,
         25, 70,
@@ -930,6 +1009,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                         aOrgRect.TopLeft(), aRectSize,
                         *pVDev );
     // jetzt kommt der Text
+    const OUString sValue(C2U(cValue));
     if( NUM_PAGETYPE_SINGLENUM == nPageType ||
             NUM_PAGETYPE_BULLET == nPageType )
     {
@@ -947,20 +1027,22 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             }
             else
             {
-                SvxExtNumType eNumType = aSglNumTypes[nItemId - 1];
-                sal_Unicode cChar = aNumChar[(USHORT)eNumType];
-
-                sText = sal_Unicode( aSglPostPreFixes[2 * (nItemId -1)] );
-                if(eNumType == SVX_NUM_ROMAN_UPPER||
-                        eNumType == SVX_NUM_ROMAN_LOWER)
+                if(xFormatter.is() && aNumSettings.getLength() > nItemId - 1)
                 {
-
-                    for(USHORT j = 0; j <= i; j++)
-                        sText += cChar;
+                    Sequence<PropertyValue> aLevel = aNumSettings.getConstArray()[nItemId - 1];
+                    try
+                    {
+                        aLevel.realloc(aLevel.getLength() + 1);
+                        PropertyValue& rValue = aLevel.getArray()[aLevel.getLength() - 1];
+                        rValue.Name = sValue;
+                        rValue.Value <<= (sal_Int32)(i + 1);
+                        sText = xFormatter->makeNumberingString( aLevel, aLocale );
+                    }
+                    catch(Exception&)
+                    {
+                        DBG_ERROR("Exception in DefaultNumberingProvider::makeNumberingString")
+                    }
                 }
-                else
-                    sText += (sal_Unicode)(cChar + i);
-                sText += aSglPostPreFixes[2 * (nItemId - 1) + 1];
                 // knapp neben dem linken Rand beginnen
                 aStart.X() = aBLPos.X() + 2;
                 aStart.Y() -= pDev->GetTextHeight()/2;
@@ -970,37 +1052,88 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     }
     else if(NUM_PAGETYPE_NUM == nPageType )
     {
-        // Gliederungen werden komplett ins VDev gemalt,
-        // damit die Linien angepasst werden
+        // Outline numbering has to be painted into the virtual device
+        // to get correct lines
         pVDev->SetFillColor( Color( COL_WHITE ) );
         pVDev->DrawRect(aOrgRect);
         long nStartX = aOrgRect.TopLeft().X();
         long nStartY = aOrgRect.TopLeft().Y();
-        USHORT nResId = RID_STR_FULLNUMS_START + nItemId - 1;
-        String sFormat(SVX_RES(nResId));
-        if(bHTMLMode && RID_STR_FULLNUMS_7 == nResId)
-            sFormat = String(SVX_RES(RID_STR_FULLNUMS_7_HTML));
-        for( xub_StrLen i = 0; i < 5; i++)
-        {
-            long nTop = nStartY + nRectHeight * (aLinesArr[2 * i + 11])/100 ;
-            Point aLeft(nStartX + nRectWidth *  (aLinesArr[2 * i + 10])/ 100, nTop );
-            String sText = sFormat.GetToken(i,'|');
-            USHORT nText = (USHORT)sText.ToInt32();
-            if(nText > 1)
-            {
-                // jetzt kommt ein Bullet
-                sText = sal_Unicode(nText);
-                pVDev->SetFont(aRuleFont);
-            }
-            else
-                pVDev->SetFont(aFont);
-            aLeft.Y() -= (pDev->GetTextHeight()/2);
-            pVDev->DrawText(aLeft, sText);
 
-            long nLineTop = nStartY + nRectHeight * aLinesArr[2 * i + 1]/100 ;
-            Point aLineLeft(pDev->GetTextWidth(sText) + nStartX + nRectWidth * aLinesArr[2 * i] / 100, nLineTop );
-            Point aLineRight(nStartX + nRectWidth * 90 /100, nLineTop );
-            pVDev->DrawLine(aLineLeft,  aLineRight);
+        if(xFormatter.is() && aOutlineSettings.getLength() > nItemId - 1)
+        {
+            Reference<XIndexAccess> xLevel = aOutlineSettings.getArray()[nItemId - 1];
+            try
+            {
+                String sText;
+                for( xub_StrLen i = 0; i < xLevel->getCount() && i < 5; i++)
+                {
+                    long nTop = nStartY + nRectHeight * (aLinesArr[2 * i + 11])/100 ;
+                    Point aLeft(nStartX + nRectWidth *  (aLinesArr[2 * i + 10])/ 100, nTop );
+
+                    Any aLevelAny = xLevel->getByIndex(i);
+                    Sequence<PropertyValue> aLevel;
+                    aLevelAny >>= aLevel;
+                    aLevel.realloc(aLevel.getLength() + 1);
+                    PropertyValue& rValue = aLevel.getArray()[aLevel.getLength() - 1];
+                    rValue.Name = sValue;
+                    rValue.Value <<= (sal_Int32) 1;
+                    try
+                    {
+                        sText = xFormatter->makeNumberingString( aLevel, aLocale );
+                    }
+                    catch(Exception&)
+                    {
+                        DBG_ERROR("Exception in DefaultNumberingProvider::makeNumberingString")
+                    }
+
+                    static const sal_Char cBulletFontName[] = "BulletFontName";
+                    if(!sText.Len())
+                    {
+                        OUString sFontName;
+                        OUString sBulletChar;
+                        const PropertyValue* pValues = aLevel.getConstArray();
+                        sal_Int32 nNumberingType = 0;
+                        for(sal_Int32 nProperty = 0; nProperty < aLevel.getLength() - 1; nProperty++)
+                        {
+                            if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cNumberingType)))
+                                pValues[nProperty].Value >>= nNumberingType;
+                            else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cBulletFontName)))
+                                pValues[nProperty].Value >>= sFontName;
+                            else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cBulletChar)))
+                                pValues[nProperty].Value >>= sBulletChar;
+                        };
+                        if(nNumberingType == NumberingType::CHAR_SPECIAL)
+                        {
+                            sText = sBulletChar;
+                            pVDev->SetFont(aRuleFont);
+                        }
+                    }
+                    else
+                        pVDev->SetFont(aFont);
+                    aLeft.Y() -= (pDev->GetTextHeight()/2);
+                    pVDev->DrawText(aLeft, sText);
+
+                    long nLineTop = nStartY + nRectHeight * aLinesArr[2 * i + 1]/100 ;
+                    Point aLineLeft(pDev->GetTextWidth(sText) + nStartX + nRectWidth * aLinesArr[2 * i] / 100, nLineTop );
+                    Point aLineRight(nStartX + nRectWidth * 90 /100, nLineTop );
+                    pVDev->DrawLine(aLineLeft,  aLineRight);
+                }
+            }
+#ifdef DBG_UTIL
+            catch(Exception&)
+            {
+                static sal_Bool bAssert = FALSE;
+                if(!bAssert)
+                {
+                    DBG_ERROR("exception in ::UserDraw")
+                    bAssert = sal_True;
+                }
+            }
+#else
+            catch(Exception&)
+            {
+            }
+#endif
         }
         pDev->DrawOutDev(   aRect.TopLeft(), aRectSize,
                             aOrgRect.TopLeft(), aRectSize,
@@ -1024,11 +1157,10 @@ SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, USHORT nTy
     nPageType   ( nType ),
     bHTMLMode   ( FALSE ),
     aLineColor  ( COL_LIGHTGRAY )
-
 {
     SetColCount( 4 );
     SetStyle( GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
-    if ( nType != NUM_PAGETYPE_BMP )
+    if(NUM_PAGETYPE_BULLET == nType)
     {
         for ( USHORT i = 0; i < 8; i++ )
             InsertItem( i + 1, i );
@@ -1043,7 +1175,34 @@ SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, USHORT nTy
 {
     delete pVDev;
 }
+/* -----------------------------30.01.01 16:24--------------------------------
 
+ ---------------------------------------------------------------------------*/
+void SvxNumValueSet::SetNumberingSettings(
+    const Sequence<Sequence<PropertyValue> >& aNum,
+    Reference<XNumberingFormatter>& xFormat,
+    const Locale& rLocale   )
+{
+    aNumSettings = aNum;
+    xFormatter = xFormat;
+    aLocale = rLocale;
+    for ( USHORT i = 0; i < aNum.getLength() && i < 8; i++ )
+            InsertItem( i + 1, i );
+}
+/* -----------------------------31.01.01 09:50--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxNumValueSet::SetOutlineNumberingSettings(
+            Sequence<Reference<XIndexAccess> >& rOutline,
+            Reference<XNumberingFormatter>& xFormat,
+            const Locale& rLocale)
+{
+    aOutlineSettings = rOutline;
+    xFormatter = xFormat;
+    aLocale = rLocale;
+    for ( sal_uInt16 i = 0; i < aOutlineSettings.getLength() && i < 8; i++ )
+        InsertItem( i + 1, i );
+}
 /**************************************************************************/
 /*                                                                        */
 /*                                                                        */
