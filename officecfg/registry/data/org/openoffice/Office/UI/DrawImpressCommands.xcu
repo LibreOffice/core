@@ -136,7 +136,7 @@
             <node oor:name=".uno:Presentation" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Bildschirmpräsentation</value>
-                    <value xml:lang="en-US">Slide Sho~w</value>
+                    <value xml:lang="en-US">~Slide Show</value>
                     <value xml:lang="ar">العرض على الشاشة</value>
                     <value xml:lang="no">Slide Sho~w</value>
                     <value xml:lang="ca">~Presentació en pantalla</value>
@@ -1307,8 +1307,8 @@
             </node>
             <node oor:name=".uno:HelplinesVisible" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Fanglinien sichtbar</value>
-                    <value xml:lang="en-US">~Snap Lines Visible</value>
+                    <value xml:lang="de">Führungslinien sichtbar</value>
+                    <value xml:lang="en-US">~Display Guides</value>
                     <value xml:lang="ar">خطوط شبكة مرئية</value>
                     <value xml:lang="no">~Snap Lines Visible</value>
                     <value xml:lang="ca">Mostra les ~línies de captura</value>
@@ -1341,8 +1341,8 @@
             </node>
             <node oor:name=".uno:HelplinesFront" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Fanglini~en vorn</value>
-                    <value xml:lang="en-US">Snap Lines to Front</value>
+                    <value xml:lang="de">Führungslinien vorn</value>
+                    <value xml:lang="en-US">Guides to ~Front</value>
                     <value xml:lang="ar">خطوط الشبكة إلى الأمام</value>
                     <value xml:lang="no">Snap Lines to Front</value>
                     <value xml:lang="ca">Línies de captura al ~davant</value>
@@ -1407,7 +1407,7 @@
             <node oor:name=".uno:PreviewWindow" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Vorschau</value>
-                    <value xml:lang="en-US">~Preview</value>
+                    <value xml:lang="en-US">Pre~view</value>
                     <value xml:lang="ar">معاينة</value>
                     <value xml:lang="no">~Preview</value>
                     <value xml:lang="ca">~Previsualització</value>
@@ -1830,8 +1830,8 @@
             </node>
             <node oor:name=".uno:SlideMasterPage" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Zeichnung</value>
-                    <value xml:lang="en-US">~Drawing</value>
+                    <value xml:lang="de">Folien-Master</value>
+                    <value xml:lang="en-US">~Slide Master</value>
                     <value xml:lang="ar">رسم</value>
                     <value xml:lang="no">~Drawing</value>
                     <value xml:lang="ca">~Dibuix</value>
@@ -1861,8 +1861,8 @@
             </node>
             <node oor:name=".uno:HandoutMasterPage" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Handzettel</value>
-                    <value xml:lang="en-US">~Handout</value>
+                    <value xml:lang="de">Handout-Master</value>
+                    <value xml:lang="en-US">~Handout Master</value>
                     <value xml:lang="ar">نشرة</value>
                     <value xml:lang="no">~Handout</value>
                     <value xml:lang="ca">~Prospecte</value>
@@ -1892,8 +1892,8 @@
             </node>
             <node oor:name=".uno:NotesMasterPage" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Notizen</value>
-                    <value xml:lang="en-US">~Notes</value>
+                    <value xml:lang="de">Notizen-Master</value>
+                    <value xml:lang="en-US">~Notes Master</value>
                     <value xml:lang="ar">ملاحظات</value>
                     <value xml:lang="no">~Notes</value>
                     <value xml:lang="ca">~Notes</value>
@@ -1923,8 +1923,8 @@
             </node>
             <node oor:name=".uno:TitleMasterPage" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Titel</value>
-                    <value xml:lang="en-US">~Title</value>
+                    <value xml:lang="de">Titelfolien-Master</value>
+                    <value xml:lang="en-US">~Title Slide Master</value>
                     <value xml:lang="ar">عنوان</value>
                     <value xml:lang="no">~Title</value>
                     <value xml:lang="ca">~Títol</value>
@@ -2865,8 +2865,8 @@
             </node>
             <node oor:name=".uno:OutlineMode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Gliederungsansicht</value>
-                    <value xml:lang="en-US">~Outline View</value>
+                    <value xml:lang="de">~Gliederung</value>
+                    <value xml:lang="en-US">~Outline</value>
                     <value xml:lang="ar">عرض التقسيم</value>
                     <value xml:lang="no">~Outline View</value>
                     <value xml:lang="ca">Vista ~contorn</value>
@@ -2927,8 +2927,8 @@
             </node>
             <node oor:name=".uno:DiaMode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Diaansicht</value>
-                    <value xml:lang="en-US">~Slides View</value>
+                    <value xml:lang="de">Foliensortierung</value>
+                    <value xml:lang="en-US">Sli~de Sorter</value>
                     <value xml:lang="ar">عرض الشرائح</value>
                     <value xml:lang="no">~Slides View</value>
                     <value xml:lang="ca">Vista ~diapositives</value>
@@ -3515,8 +3515,8 @@
             </node>
             <node oor:name=".uno:ShowRuler" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Lineale</value>
-                    <value xml:lang="en-US">~Rulers</value>
+                    <value xml:lang="de">~Lineal</value>
+                    <value xml:lang="en-US">~Ruler</value>
                     <value xml:lang="ar">مساطر</value>
                     <value xml:lang="no">~Rulers</value>
                     <value xml:lang="ca">~Regles</value>
@@ -3642,8 +3642,8 @@
             </node>
             <node oor:name=".uno:PageMode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Se~ite</value>
-                    <value xml:lang="en-US">S~lide</value>
+                    <value xml:lang="de">Normal</value>
+                    <value xml:lang="en-US">~Normal</value>
                     <value xml:lang="ar">صفحة</value>
                     <value xml:lang="no">S~lide</value>
                     <value xml:lang="ca">~Diapositiva</value>
@@ -3674,7 +3674,7 @@
             <node oor:name=".uno:LayerMode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Ebene</value>
-                    <value xml:lang="en-US">La~yer</value>
+                    <value xml:lang="en-US">~Layer</value>
                     <value xml:lang="ar">طبقة</value>
                     <value xml:lang="no">La~yer</value>
                     <value xml:lang="ca">~Capa</value>
@@ -4109,8 +4109,8 @@
             </node>
             <node oor:name=".uno:NotesMode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Notizansicht</value>
-                    <value xml:lang="en-US">~Notes View</value>
+                    <value xml:lang="de">Notizenseite</value>
+                    <value xml:lang="en-US">Notes ~Page</value>
                     <value xml:lang="ar">عرض الملاحظات</value>
                     <value xml:lang="no">~Notes View</value>
                     <value xml:lang="ca">Vista ~notes</value>
@@ -4140,8 +4140,8 @@
             </node>
             <node oor:name=".uno:HandoutMode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Handzettelansicht</value>
-                    <value xml:lang="en-US">~Handout View</value>
+                    <value xml:lang="de">Handout-Seite</value>
+                    <value xml:lang="en-US">H~andout Page</value>
                     <value xml:lang="ar">عرض النشرة</value>
                     <value xml:lang="no">~Handout View</value>
                     <value xml:lang="ca">Vista del ~prospecte</value>
@@ -6902,7 +6902,7 @@
             <node oor:name=".uno:GridMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Raster</value>
-                    <value xml:lang="en-US">~Grid</value>
+                    <value xml:lang="en-US">Gr~id</value>
                     <value xml:lang="ar">~Grid</value>
                     <value xml:lang="no">~Grid</value>
                     <value xml:lang="ca">~Grid</value>
@@ -6994,8 +6994,8 @@
             </node>
             <node oor:name=".uno:DisplayQualityMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">An~zeigequalität</value>
-                    <value xml:lang="en-US">~Display Quality</value>
+                    <value xml:lang="de">Farbe/Graustufe</value>
+                    <value xml:lang="en-US">~Color/Grayscale</value>
                     <value xml:lang="ar">جودة العرض</value>
                     <value xml:lang="no">~Display Quality</value>
                     <value xml:lang="ca">~Visualitza la qualitat</value>
@@ -7149,8 +7149,8 @@
             </node>
             <node oor:name=".uno:SnapLinesMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Fanglini~en</value>
-                    <value xml:lang="en-US">~Snap Lines</value>
+                    <value xml:lang="de">Führungslinien</value>
+                    <value xml:lang="en-US">~Guides</value>
                     <value xml:lang="ar">~Snap Lines</value>
                     <value xml:lang="no">~Snap Lines</value>
                     <value xml:lang="ca">~Snap Lines</value>
@@ -7283,7 +7283,30 @@
                     <value xml:lang="en-US">Date and ~Time...</value>
                 </prop>
             </node>
-
+            <node oor:name=".uno:NormalMultiPaneGUI" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">~Normal</value>
+                    <value xml:lang="en-US">~Normal</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SlideSorterMultiPaneGUI" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">~Diatisch</value>
+                    <value xml:lang="en-US">~Slide Browser</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:LeftPaneChildWindow" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Foliensortierungsbereich</value>
+                    <value xml:lang="en-US">S~lide Sorter Panel</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:RightPaneChildWindow" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Aufgabenbereich</value>
+                    <value xml:lang="en-US">Tas~k Panel</value>
+                </prop>
+            </node>
         </node>
     </node>
 </oor:component-data>
