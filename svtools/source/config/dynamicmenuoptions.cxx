@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dynamicmenuoptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-05-10 09:53:43 $
+ *  last change: $Author: as $ $Date: 2001-05-10 10:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,7 +571,7 @@ Sequence< OUString > SvtDynamicMenuOptions_Impl::impl_GetPropertyNames( sal_uInt
     // 4 subkeys for every item!
     for( nItem=0; nItem<nWizardCount; ++nItem )
     {
-        sPosition  = lNewItems[nItem].copy( 1, lNewItems[nItem].getLength()-1 );
+        sPosition  = lWizardItems[nItem].copy( 1, lWizardItems[nItem].getLength()-1 );
         nPosition  = sPosition.toInt32();
         nPosition *= PROPERTYCOUNT;
 
