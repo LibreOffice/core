@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:11:03 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,7 +447,12 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                 }
 
                 pDoc->DelLayoutFmt( pFmt );
-//              i++;    // keinen auslassen
+
+                // --> FME 2004-10-06 #117913# DelLayoutFmt can also
+                // trigger the deletion of objects.
+                if( i > rTbl.Count() )
+                    i = rTbl.Count();
+                // <--
             }
         }
     }
@@ -1642,7 +1647,6 @@ sal_Bool SwDoc::Delete( SwPaM & rPam )
             }
         }
 
-        sal_uInt32 nEnde = pEnd->nNode.GetIndex();
         pCNd = pEnd->nNode.GetNode().GetCntntNode();
         if( pCNd )
         {
@@ -1654,18 +1658,20 @@ sal_Bool SwDoc::Delete( SwPaM & rPam )
                     SwIndex aIdx( pCNd, 0 );
                     ((SwTxtNode*)pCNd)->Erase( aIdx, pEnd->nContent.GetIndex() );
                 }
-                nEnde--;
             }
             else
             {
                 // damit beim Loeschen keine Indizies mehr angemeldet sind,
                 // wird hier der SwPaM aus dem Content entfernt !!
                 pEnd->nContent.Assign( 0, 0 );
-                nEnde--;
             }
         }
 
-        nEnde++;
+        // if the end is not a content node, delete it as well
+        sal_uInt32 nEnde = pEnd->nNode.GetIndex();
+        if( pCNd == NULL )
+            nEnde++;
+
         if( aSttIdx != nEnde )
         {
             // loesche jetzt die Nodes in das NodesArary
