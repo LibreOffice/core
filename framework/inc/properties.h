@@ -2,9 +2,9 @@
  *
  *  $RCSfile: properties.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:28:08 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,13 @@ namespace framework{
 //_______________________________________________
 /** properties for "StatusIndicatorFactory" class */
 
-#define STATUSINDICATORFACTORY_PROPNAME_ASCII_FRAME     "Frame"
-#define STATUSINDICATORFACTORY_PROPNAME_ASCII_WINDOW    "Window"
+#define STATUSINDICATORFACTORY_PROPNAME_ASCII_FRAME             "Frame"
+#define STATUSINDICATORFACTORY_PROPNAME_ASCII_WINDOW            "Window"
+#define STATUSINDICATORFACTORY_PROPNAME_ASCII_ALLOWPARENTSHOW   "AllowParentShow"
 
-#define STATUSINDICATORFACTORY_PROPNAME_FRAME           DECLARE_ASCII(STATUSINDICATORFACTORY_PROPNAME_ASCII_FRAME )
-#define STATUSINDICATORFACTORY_PROPNAME_WINDOW          DECLARE_ASCII(STATUSINDICATORFACTORY_PROPNAME_ASCII_WINDOW)
+#define STATUSINDICATORFACTORY_PROPNAME_FRAME                   DECLARE_ASCII(STATUSINDICATORFACTORY_PROPNAME_ASCII_FRAME          )
+#define STATUSINDICATORFACTORY_PROPNAME_WINDOW                  DECLARE_ASCII(STATUSINDICATORFACTORY_PROPNAME_ASCII_WINDOW         )
+#define STATUSINDICATORFACTORY_PROPNAME_ALLOWPARENTSHOW         DECLARE_ASCII(STATUSINDICATORFACTORY_PROPNAME_ASCII_ALLOWPARENTSHOW)
 
 //_______________________________________________
 /** properties for "Frame" class */
