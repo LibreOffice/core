@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mhu $ $Date: 2001-10-10 16:59:04 $
+ *  last change: $Author: cp $ $Date: 2002-01-25 18:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,7 @@ GetPitch( const char cSpacing )
 FontPitch
 ExtendedXlfd::GetSpacing() const
 {
-    if ( mnEncodings  > 0 )
+    if ( mnEncodings  > 1 )
         return PITCH_VARIABLE;
     if ( mnEncodings == 1 )
         return GetPitch( mpEncodingInfo[0].mcSpacing );
