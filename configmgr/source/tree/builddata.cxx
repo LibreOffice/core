@@ -2,9 +2,9 @@
  *
  *  $RCSfile: builddata.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:25:05 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,7 +612,7 @@ Offset TreeNodeBuilder::addNode(Name _aName, Flags::Field _aFlags, Type::Field _
     rInfo.flags = _aFlags;
     rInfo.type  = _aType;
 
-    OSL_ENSURE(0 <= m_parent && m_parent <= nNewOffset, "ERROR - TreeNodeBuilder: invalid parent");
+    OSL_ENSURE( m_parent <= nNewOffset, "ERROR - TreeNodeBuilder: invalid parent");
     OSL_ENSURE( (nNewOffset == 0) == (nNewOffset == m_parent), "ERROR - TreeNodeBuilder: node is own parent");
 
     rInfo.parent = nNewOffset - m_parent;
@@ -715,7 +715,7 @@ void TreeNodeBuilder::endGroup( Offset _nPos )
 
 void TreeNodeBuilder::addSet( Name _aName, Flags::Field _aFlags, Address _aElementType )
 {
-    Offset nNewIndex = addNode(_aName,_aFlags,Type::nodetype_set);
+    addNode(_aName,_aFlags,Type::nodetype_set);
 
     lastNode().set.elementType  = _aElementType;
     lastNode().set.elements     = 0;
@@ -730,7 +730,7 @@ void TreeNodeBuilder::addValue( Name _aName, Flags::Field _aFlags,
 {
     OSL_PRECOND(_aValueType == (_aValueType & Type::mask_valuetype), "TreeNodeBuilder: invalid value type");
 
-    Offset nNewIndex = addNode(_aName,_aFlags,Type::nodetype_value | _aValueType);
+    addNode(_aName,_aFlags,Type::nodetype_value | _aValueType);
 
     lastNode().value.value          = _aUserValue;
     lastNode().value.defaultValue   = _aDefaultValue;
