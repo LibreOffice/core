@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: th $ $Date: 2001-04-11 15:12:52 $
+ *  last change: $Author: th $ $Date: 2001-04-12 10:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1386,6 +1386,13 @@ ImplDevFontList::ImplDevFontList() :
 
 ImplDevFontList::~ImplDevFontList()
 {
+    ImplClear();
+}
+
+// -----------------------------------------------------------------------
+
+void ImplDevFontList::ImplClear()
+{
     // Alle Eintraege loeschen
     ImplDevFontListData* pEntry = First();
     while ( pEntry )
@@ -1399,11 +1406,20 @@ ImplDevFontList::~ImplDevFontList()
             delete pTempFontData;
         }
         while ( pFontData );
+
         // Entry loeschen
         delete pEntry;
 
         pEntry = Next();
     }
+}
+
+// -----------------------------------------------------------------------
+
+void ImplDevFontList::Clear()
+{
+    ImplClear();
+    List::Clear();
 }
 
 // -----------------------------------------------------------------------
@@ -1684,33 +1700,6 @@ ImplDevFontListData* ImplDevFontList::ImplFindFontFromToken( const char* pStr ) 
     else
         return NULL;
 }
-
-// -----------------------------------------------------------------------
-
-void ImplDevFontList::Clear()
-{
-    // Alle Eintraege loeschen
-    ImplDevFontListData* pEntry = First();
-    while ( pEntry )
-    {
-        // Liste der Font loeschen
-        ImplFontData* pFontData = pEntry->mpFirst;
-        do
-        {
-            ImplFontData* pTempFontData = pFontData;
-            pFontData = pFontData->mpNext;
-            delete pTempFontData;
-        }
-        while ( pFontData );
-        // Entry loeschen
-        delete pEntry;
-
-        pEntry = Next();
-    }
-
-    List::Clear();
-}
-
 // =======================================================================
 
 void ImplGetDevSizeList::Add( long nNewHeight )
