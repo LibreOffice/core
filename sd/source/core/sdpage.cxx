@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:08:17 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -643,6 +643,12 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
             break;
 
             case SDRUSERCALL_DELETE:
+                // Ignore the delete call.  This formerly was treated
+                // like SDRUSERCALL_REMOVED with the effect that a
+                // deleted object was inserted into the
+                // DeletedPresObjList which lead to a crash.
+                break;
+
             case SDRUSERCALL_REMOVED:
             {
                 if (!bMaster &&
@@ -744,6 +750,7 @@ void SdPage::CreateTitleAndLayout(BOOL bInit, BOOL bAPICall )
         pMasterPage->CreatePresObj(PRESOBJ_BACKGROUND, FALSE, aBackgroundRect, TRUE);
     }
 
+/*
     BOOL bDeletePresObjOnMaster = FALSE;
 
     if ((eAutoLayout == AUTOLAYOUT_NONE) && !bAPICall)
@@ -789,7 +796,7 @@ void SdPage::CreateTitleAndLayout(BOOL bInit, BOOL bAPICall )
 
         return;
     }
-
+*/
     if ( ePageKind == PK_HANDOUT && bInit )
     {
         /******************************************************************
@@ -894,7 +901,7 @@ void SdPage::CreateTitleAndLayout(BOOL bInit, BOOL bAPICall )
         }
     }
 
-    if ( !bDeletePresObjOnMaster )
+    if( ( (SdDrawDocument*) GetModel() )->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
     {
         if (!pMasterTitle && ePageKind != PK_HANDOUT)
         {
