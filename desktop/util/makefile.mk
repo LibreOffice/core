@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: rt $ $Date: 2003-12-01 11:45:25 $
+#   last change: $Author: obo $ $Date: 2003-12-03 11:33:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,7 @@ TARGETOBJS=   $(OBJ)$/app.obj					\
             $(OBJ)$/checkinstall.obj		\
             $(OBJ)$/cmdlinehelp.obj         \
             $(OBJ)$/langselect.obj          \
-            $(OBJ)$/userinstall.obj          
+            $(OBJ)$/userinstall.obj
 
 
 # --- Resourcen ----------------------------------------------------
@@ -173,8 +173,8 @@ APP1LINKRES=$(MISC)$/$(TARGET).res
 # create a manifest file with the same name as the
 #office executable file soffice.exe.manifest
 #$(BIN)$/$(TARGET).exe.manifest: template.manifest
-#+$(COPY) $< $@ 
-   
+#+$(COPY) $< $@
+
 .ENDIF # WNT
 
 .IF "$(GUI)" == "WNT"
@@ -261,24 +261,35 @@ APP5LINKRES=$(MISC)$/ooffice.res
 .ENDIF # WNT
 
 
+
+all: $(BIN)$/so ALLTAR
+
+.IF "$(GUI)" == "WNT"
+
+ALLTAR: $(BIN)$/$(TARGET).exe.manifest
+
+.ENDIF # WNT
+
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk
 
+.IF "$(APP1TARGETN)"!=""
 $(APP1TARGETN) : $(BIN)$/so
-    
+.ENDIF			# "$(APP1TARGETN)"!=""
+
 .IF "$(GUI)" == "WNT"
 ALLTAR: $(BIN)$/$(TARGET).exe.manifest
 .ENDIF # WNT
 
 $(BIN)$/soffice_oo$(EXECPOST) : $(APP5TARGETN)
     +$(COPY) $< $@
-    
+
 $(BIN)$/so$/soffice_so$(EXECPOST) : $(APP1TARGETN)
     +$(COPY) $< $@
 
-ALLTAR : $(BIN)$/so$/soffice_so$(EXECPOST) $(BIN)$/soffice_oo$(EXECPOST) 
-    
+ALLTAR : $(BIN)$/so$/soffice_so$(EXECPOST) $(BIN)$/soffice_oo$(EXECPOST)
+
 
 .IF "$(GUI)" == "WNT"
 
