@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 12:03:42 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,7 @@ BasicTreeListBox::BasicTreeListBox( Window* pParent, const ResId& rRes ) :
     SetNodeDefaultImages();
     SetSelectionMode( SINGLE_SELECTION );
     nMode = 0xFF;   // Alles
+    StartListening( *SFX_APP(), TRUE /* register only once */ );
 }
 
 
@@ -408,6 +409,24 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, SfxOb
                 ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
                 DBG_ERROR( aBStr.GetBuffer() );
             }
+        }
+    }
+}
+
+void __EXPORT BasicTreeListBox::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&, const SfxHint& rHint, const TypeId& )
+{
+    if ( rHint.IsA( TYPE( SfxEventHint ) ) )
+    {
+        switch ( ((SfxEventHint&)rHint).GetEventId() )
+        {
+            case SFX_EVENT_CREATEDOC:
+            case SFX_EVENT_OPENDOC:
+            case SFX_EVENT_SAVEASDOCDONE:
+            case SFX_EVENT_PREPARECLOSEDOC:
+            {
+                UpdateEntries();
+            }
+            break;
         }
     }
 }
