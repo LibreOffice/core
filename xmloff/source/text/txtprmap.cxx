@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:36:46 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     MP_E( "ParaLastLineAdjust", FO,     TEXT_ALIGN_LAST,    XML_TYPE_TEXT_ADJUSTLAST, 0 ),
     MP_E( "ParaExpandSingleWord",STYLE, JUSTIFY_SINGLE_WORD,XML_TYPE_BOOL, 0 ),
     // RES_PARATR_SPLIT
-    MP_E( "ParaSplit",          STYLE,  BREAK_INSIDE,       XML_TYPE_TEXT_SPLIT, 0 ),
+    MP_E( "ParaSplit",          FO,     KEEP_TOGETHER,      XML_TYPE_TEXT_SPLIT, 0 ),
     // RES_PARATR_ORPHANS
     MP_E( "ParaOrphans",            FO,     ORPHANS,            XML_TYPE_NUMBER8, 0 ),
     // RES_PARATR_WIDOWS
@@ -324,7 +324,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     MP_E( "ParaIsAutoFirstLineIndent",  STYLE, AUTO_TEXT_INDENT,    XML_TYPE_BOOL, 0 ),
     // RES_PAGEDESC
     MP_E( "PageDescName",           STYLE,  MASTER_PAGE_NAME,           MID_FLAG_SPECIAL_ITEM|XML_TYPE_STYLENAME, CTF_PAGEDESCNAME ),
-    MP_E( "PageNumberOffset",       STYLE,  PAGE_NUMBER,            XML_TYPE_NUMBER16, 0 ),
+    MP_E( "PageNumberOffset",       STYLE,  PAGE_NUMBER,            XML_TYPE_NUMBER16_NO_ZERO, 0 ),
     // RES_BREAK : TODO: does this work?
     MP_E( "BreakType",      FO, BREAK_BEFORE,       XML_TYPE_TEXT_BREAKBEFORE|MID_FLAG_MULTI_PROPERTY, 0 ),
     MP_E( "BreakType",      FO, BREAK_AFTER,        XML_TYPE_TEXT_BREAKAFTER, 0 ),
@@ -412,21 +412,29 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
 
     MP_E( "ParaIsConnectBorder", STYLE, JOIN_BORDER,  XML_TYPE_BOOL, 0 ),
 
+    MP_E( "DefaultOutlineLevel", STYLE, DEFAULT_OUTLINE_LEVEL, XML_TYPE_TEXT_NUMBER8_ONE_BASED, 0 ),
+
+    M_END()
+};
+
+
+XMLPropertyMapEntry aXMLAdditionalTextDefaultsMap[] =
+{
     // RES_ROW_SPLIT: only occurs in table rows, but we need to
     // read/write the default for this item
-    MP_ED( "IsSplitAllowed", FO, KEEP_TOGETHER, XML_TYPE_TEXT_NKEEP | MID_FLAG_NO_PROPERTY_IMPORT, CTF_KEEP_TOGETHER ),
+    MG_ED( "IsSplitAllowed", FO, KEEP_TOGETHER, XML_TYPE_PROP_TABLE_ROW | XML_TYPE_TEXT_NKEEP | MID_FLAG_NO_PROPERTY_IMPORT, CTF_KEEP_TOGETHER ),
 
     // RES_FOLLOW_TEXT_FLOW - DVO, OD 01.10.2003 #i18732#
-    MG_ED( "IsFollowingTextFlow", STYLE, FLOW_WITH_TEXT,      XML_TYPE_BOOL, 0 ),
+    MG_ED( "IsFollowingTextFlow", STYLE, FLOW_WITH_TEXT,      XML_TYPE_BOOL  | MID_FLAG_NO_PROPERTY_IMPORT, 0 ),
 
     // RES_COLLAPSING_BORDERS: only occurs in tables, but we need to
     // read/write the default for this item
-    MG_ED( "CollapsingBorders", TABLE, BORDER_MODEL, XML_TYPE_BORDER_MODEL | MID_FLAG_NO_PROPERTY_IMPORT, CTF_BORDER_MODEL ),
+    MG_ED( "CollapsingBorders", TABLE, BORDER_MODEL, XML_TYPE_PROP_TABLE | XML_TYPE_BORDER_MODEL | MID_FLAG_NO_PROPERTY_IMPORT, CTF_BORDER_MODEL ),
 
     // OD 2004-05-05 #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
-    MG_ED( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION, 0 ),
+    MG_ED( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION | MID_FLAG_NO_PROPERTY_IMPORT, 0 ),
 
-M_END()
+    M_END()
 };
 
 XMLPropertyMapEntry aXMLTextPropMap[] =
@@ -797,7 +805,7 @@ XMLPropertyMapEntry aXMLShapePropMap[] =
     MG_E( "HoriOrientRelation", STYLE,  HORIZONTAL_REL, XML_TYPE_TEXT_HORIZONTAL_REL_FRAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_SHAPE_HORIZONTALREL_FRAME ),
     // <--
     // OD 2004-05-05 #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
-    MG_E( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION, 0 ),
+    MG_ED( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION, 0 ),
     // UserDefinedAttributes is already contained in the map this one is
     // chained to.
 
@@ -893,6 +901,9 @@ XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
         break;
     case TEXT_PROP_MAP_RUBY:
         pMap = aXMLRubyPropMap;
+        break;
+    case TEXT_PROP_MAP_TEXT_ADDITIONAL_DEFAULTS:
+        pMap = aXMLAdditionalTextDefaultsMap;
         break;
     }
     DBG_ASSERT( pMap, "illegal map type" );
