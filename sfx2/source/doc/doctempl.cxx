@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-06 13:40:38 $
+ *  last change: $Author: mba $ $Date: 2001-12-17 14:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1699,18 +1699,28 @@ SfxDocumentTemplates::~SfxDocumentTemplates()
     pImp = NULL;
 }
 
-    //---------------------------------------------------------------------
-    //--- 05.12.01 17:49:58 -----------------------------------------------
-    void SfxDocumentTemplates::Update( sal_Bool _bSmart )
+void SfxDocumentTemplates::Update( sal_Bool _bSmart )
+{
+    if  (   !_bSmart                                                // don't be smart
+        ||  ::svt::TemplateFolderCache( sal_True ).needsUpdate()    // update is really necessary
+        )
     {
-        if  (   !_bSmart                                                // don't be smart
-            ||  ::svt::TemplateFolderCache( sal_True ).needsUpdate()    // update is really necessary
-            )
-        {
-            if ( pImp->Construct() )
-                pImp->Rescan();
-        }
+        if ( pImp->Construct() )
+            pImp->Rescan();
     }
+}
+
+void SfxDocumentTemplates::ReInitFromComponent()
+{
+    Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
+    if ( xTemplates.is() )
+    {
+        Reference < XContent > aRootContent = xTemplates->getContent();
+        Reference < XCommandEnvironment > aCmdEnv;
+        Content aTemplRoot( aRootContent, aCmdEnv );
+        pImp->CreateFromHierarchy( aTemplRoot );
+    }
+}
 
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------

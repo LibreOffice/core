@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-15 15:03:07 $
+ *  last change: $Author: mba $ $Date: 2001-12-17 14:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,10 +200,9 @@ void SfxAppData_Impl::UpdateApplicationSettings( sal_Bool bDontHide )
 SfxDocumentTemplates* SfxAppData_Impl::GetDocumentTemplates()
 {
     if ( !pTemplates )
-    {
         pTemplates = new SfxDocumentTemplates;
-    }
-
+    else
+        pTemplates->ReInitFromComponent();
     return pTemplates;
 }
 
