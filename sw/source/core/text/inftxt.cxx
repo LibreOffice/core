@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-06 13:14:20 $
+ *  last change: $Author: ama $ $Date: 2001-03-06 14:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,11 +495,11 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     {
         pOldCol = new Color( GetFont()->GetColor() );
         const Color* pCol = GetFont()->GetBackColor();
+        BOOL bBlack = TRUE;
         if( !pCol )
         {
             const SvxBrushItem* pItem;
             SwRect aOrigBackRect;
-            BOOL bBlack = TRUE;
             if( GetTxtFrm()->GetBackgroundBrush( pItem, pCol, aOrigBackRect,
                 FALSE ) && !pItem->GetColor().GetTransparency() )
                 pCol = &pItem->GetColor();
