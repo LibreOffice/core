@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-26 03:33:51 $
+#   last change: $Author: hr $ $Date: 2004-11-09 16:22:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,7 +71,7 @@ TARGET=uiinc
 
 # --- Files --------------------------------------------------------
 
-LOCALIZE_ME=swmn_tmpl.hrc swacc_tmpl.hrc toolbox_tmpl.hrc
+LOCALIZE_ME=swmn_tmpl.hrc toolbox_tmpl.hrc
 
 .INCLUDE :  target.mk
 
