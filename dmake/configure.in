@@ -97,8 +97,9 @@ AM_CONFIG_HEADER(config.h)
 
 AC_OUTPUT(Makefile unix/Makefile startup/Makefile startup/unix/Makefile \
 		startup/unix/linux/Makefile startup/unix/solaris/Makefile \
-		startup/unix/macosx/Makefile dmakeroot.h )
-###		startup/unix/macosx/Makefile startup/unix/cygwin/Makefile dmakeroot.h )
+		startup/unix/macosx/Makefile startup/unix/sysvr4/Makefile \
+		dmakeroot.h )
+###		startup/unix/cygwin/Makefile )
 
 dnl ******************************
 dnl *** output the whole stuff ***
