@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 13:44:49 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 14:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,11 +85,17 @@
 
 #define HID_DSADMIN_CONNURL_JDBCPAGE                (HID_DBACCESS_START + 14)
 
+#define HID_DLG_FILTERCRIT                          (HID_DBACCESS_START + 15)
+#define HID_DLG_ORDERCRIT                           (HID_DBACCESS_START + 16)
+
 #endif // _DBA_DBACCESS_HELPID_HRC_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/30 13:44:49  fs
+ *  initial checkin - help ids for the dbaccess project
+ *
  *
  *  Revision 1.0 30.10.00 14:03:48  fs
  ************************************************************************/
