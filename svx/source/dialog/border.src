@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: pb $ $Date: 2002-11-26 10:12:26 $
+ *  last change: $Author: rt $ $Date: 2002-12-05 10:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ spanish ] = "DisposiciÛn de lÌneas" ;
         Text [ english_us ] = "Line arrangement" ;
         Text[ chinese_simplified ] = "Á∫øÊù°ÊéíÂ∫è";
-        Text[ russian ] = "–‡ÒÔÓÎÓÊÂÌËÂ ÎËÌËË";
+        Text[ russian ] = "œÓÎÓÊÂÌËÂ ÎËÌËÈ";
         Text[ polish ] = "Rozmieszczenie linii";
         Text[ japanese ] = "Á∑ö„ÇíÂºï„Åè‰ΩçÁΩÆ";
         Text[ chinese_traditional ] = "Á∑öÊ¢ùÊéíÂ∫è";
@@ -121,7 +121,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ greek ] = "ƒÈ‹Ù·ÓÁ „Ò·ÏÏ˛Ì";
         Text[ korean ] = "Ïô∏Í≥ΩÏÑ† ÎØ∏Î¶¨Î≥¥Í∏∞";
         Text[ turkish ] = "«erÁeve";
-        Text[ language_user1 ] = "EM6April01: Found in Text doc under Format - Page - Borders tab.";
+        Text[ language_user1 ] = "EM6A; EM6April01: Found in Text doc under Format - Page - Borders tab.";
         Text[ catalan ] = "Marc";
         Text[ thai ] = "‡∏à‡∏±‡∏î‡πÄ‡∏£‡∏µ‡∏¢‡∏á‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î";
     };
@@ -331,7 +331,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ turkish ] = "~Sol";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Es~querra";
-        Text[ finnish ] = "~Vasen:";
+        Text[ finnish ] = "~Vasen";
         Text[ thai ] = "~‡∏ã‡πâ‡∏≤‡∏¢";
     };
     MetricField MF_LEFT
@@ -419,7 +419,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ turkish ] = "~‹st";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Su~perior";
-        Text[ finnish ] = "~Yl‰osa";
+        Text[ finnish ] = "~Yl‰reuna";
         Text[ thai ] = "~‡∏ö‡∏ô";
     };
     MetricField MF_TOP
@@ -462,7 +462,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ arabic ] = "√”›·";
         Text[ turkish ] = "Al~t";
         Text[ catalan ] = "In~ferior";
-        Text[ finnish ] = "~Alaosa";
+        Text[ finnish ] = "Alare~una";
         Text[ thai ] = "~‡∏•‡πà‡∏≤‡∏á";
     };
     MetricField MF_BOTTOM
@@ -517,9 +517,9 @@ TabPage RID_SVXPAGE_BORDER
         Text [ ENGLISH ] = "Distance to Content" ;
         Text[ english_us ] = "Spacing to contents";
         Text[ portuguese ] = "EspaÁo atÈ ao texto";
-        Text[ russian ] = "–‡ÒÒÚÓˇÌËÂ ÓÚ ÒÓ‰ÂÊËÏÓ„Ó";
+        Text[ russian ] = "ŒÚÒÚÛÔ˚ ‰Ó ÒÓ‰ÂÊËÏÓ„Ó";
         Text[ greek ] = "¡¸ÛÙ·ÛÁ ·¸ ÂÒÈÂ˜¸ÏÂÌ·";
-        Text[ dutch ] = "Afstand tot de inhoud";
+        Text[ dutch ] = "Afstand tot inhoud";
         Text[ french ] = "…cart avec le contenu";
         Text[ spanish ] = "Distancia al texto";
         Text[ italian ] = "Distanza dal contenuto";
@@ -535,7 +535,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Espaiat al contingut";
-        Text[ finnish ] = "V‰lit sis‰ltˆˆn";
+        Text[ finnish ] = "Et‰isyys sis‰llˆst‰";
         Text[ thai ] = "‡∏£‡∏∞‡∏¢‡∏∞‡∏´‡πà‡∏≤‡∏á‡∏ñ‡∏∂‡∏á‡πÄ‡∏ô‡∏∑‡πâ‡∏≠‡∏´‡∏≤";
     };
 
@@ -549,7 +549,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ italian ] = "Posizione" ;
         Text [ portuguese_brazilian ] = "~Posi??o" ;
         Text [ portuguese ] = "~PosiÁ„o" ;
-        Text [ finnish ] = "~Sijainti" ;
+        Text [ finnish ] = "S~ijainti" ;
         Text [ danish ] = "Placering" ;
         Text [ french ] = "Position" ;
         Text [ swedish ] = "~Position" ;
@@ -630,11 +630,11 @@ TabPage RID_SVXPAGE_BORDER
         Text [ italian ] = "Colore" ;
         Text [ portuguese_brazilian ] = "C~or" ;
         Text [ portuguese ] = "C~or" ;
-        Text [ finnish ] = "~V‰ri" ;
+        Text [ finnish ] = "V~‰ri" ;
         Text [ danish ] = "~Farve" ;
         Text [ french ] = "Couleur" ;
         Text [ swedish ] = "F‰~rg" ;
-        Text [ dutch ] = "K~leur" ;
+        Text [ dutch ] = "~Kleur" ;
         Text [ spanish ] = "Color" ;
         Text [ english_us ] = "C~olor" ;
         Text[ chinese_simplified ] = "È¢úËâ≤(~O)";
@@ -676,7 +676,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ spanish ] = "Sombra" ;
         Text [ english_us ] = "Shadow style" ;
         Text[ chinese_simplified ] = "Èò¥ÂΩ±";
-        Text[ russian ] = "“ÂÌ¸";
+        Text[ russian ] = "—ÚËÎ¸ ÚÂÌË";
         Text[ polish ] = "CieÒ";
         Text[ japanese ] = "ÂΩ±‰ªò„Åç";
         Text[ chinese_traditional ] = "Èô∞ÂΩ±";
@@ -746,76 +746,241 @@ String RID_SVXSTR_TABLE_PRESET_NONE
 {
     Text = "Keine Umrandung zeichnen" ;
     Text [ english_us ] = "Set No Borders" ;
+    Text[ portuguese ] = "Set No Borders";
+    Text[ russian ] = "Set No Borders";
+    Text[ spanish ] = "Set No Borders";
+    Text[ italian ] = "Set No Borders";
+    Text[ swedish ] = "Set No Borders";
+    Text[ polish ] = "Set No Borders";
+    Text[ portuguese_brazilian ] = "Set No Borders";
+    Text[ japanese ] = "Set No Borders";
+    Text[ korean ] = "Set No Borders";
+    Text[ turkish ] = "Set No Borders";
+    Text[ thai ] = "Set No Borders";
 };
 String RID_SVXSTR_TABLE_PRESET_ONLYOUTER
 {
     Text = "Nur ‰uﬂere Umrandung zeichnen" ;
     Text [ english_us ] = "Set Outer Border Only" ;
+    Text[ portuguese ] = "Set Outer Border Only";
+    Text[ russian ] = "Set Outer Border Only";
+    Text[ spanish ] = "Set Outer Border Only";
+    Text[ italian ] = "Set Outer Border Only";
+    Text[ swedish ] = "Set Outer Border Only";
+    Text[ polish ] = "Set Outer Border Only";
+    Text[ portuguese_brazilian ] = "Set Outer Border Only";
+    Text[ japanese ] = "Set Outer Border Only";
+    Text[ korean ] = "Set Outer Border Only";
+    Text[ turkish ] = "Set Outer Border Only";
+    Text[ thai ] = "Set Outer Border Only";
 };
 String RID_SVXSTR_TABLE_PRESET_OUTERHORI
 {
     Text = "ƒuﬂere Umrandung und horizontale Linien zeichnen" ;
     Text [ english_us ] = "Set Outer Border and Horizontal Lines" ;
+    Text[ portuguese ] = "Set Outer Border and Horizontal Lines";
+    Text[ russian ] = "Set Outer Border and Horizontal Lines";
+    Text[ spanish ] = "Set Outer Border and Horizontal Lines";
+    Text[ italian ] = "Set Outer Border and Horizontal Lines";
+    Text[ swedish ] = "Set Outer Border and Horizontal Lines";
+    Text[ polish ] = "Set Outer Border and Horizontal Lines";
+    Text[ portuguese_brazilian ] = "Set Outer Border and Horizontal Lines";
+    Text[ japanese ] = "Set Outer Border and Horizontal Lines";
+    Text[ korean ] = "Set Outer Border and Horizontal Lines";
+    Text[ turkish ] = "Set Outer Border and Horizontal Lines";
+    Text[ thai ] = "Set Outer Border and Horizontal Lines";
 };
 String RID_SVXSTR_TABLE_PRESET_OUTERALL
 {
     Text = "ƒuﬂere Umrandung und alle inneren Linien zeichnen" ;
     Text [ english_us ] = "Set Outer Border and All Inner Lines" ;
+    Text[ portuguese ] = "Set Outer Border and All Inner Lines";
+    Text[ russian ] = "Set Outer Border and All Inner Lines";
+    Text[ spanish ] = "Set Outer Border and All Inner Lines";
+    Text[ italian ] = "Set Outer Border and All Inner Lines";
+    Text[ swedish ] = "Set Outer Border and All Inner Lines";
+    Text[ polish ] = "Set Outer Border and All Inner Lines";
+    Text[ portuguese_brazilian ] = "Set Outer Border and All Inner Lines";
+    Text[ japanese ] = "Set Outer Border and All Inner Lines";
+    Text[ korean ] = "Set Outer Border and All Inner Lines";
+    Text[ turkish ] = "Set Outer Border and All Inner Lines";
+    Text[ thai ] = "Set Outer Border and All Inner Lines";
 };
 String RID_SVXSTR_TABLE_PRESET_OUTERINNER
 {
     Text = "ƒuﬂere Umrandung zeichnen ohne innere Linien zu ver‰ndern" ;
     Text [ english_us ] = "Set Outer Border Without Changing Inner Lines" ;
+    Text[ portuguese ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ russian ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ spanish ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ italian ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ swedish ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ polish ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ portuguese_brazilian ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ japanese ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ korean ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ turkish ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ thai ] = "Set Outer Border Without Changing Inner Lines";
 };
 String RID_SVXSTR_PARA_PRESET_NONE
 {
     Text = "Keine Umrandung zeichnen" ;
     Text [ english_us ] = "Set No Border" ;
+    Text[ portuguese ] = "Set No Border";
+    Text[ russian ] = "Set No Border";
+    Text[ spanish ] = "Set No Border";
+    Text[ italian ] = "Set No Border";
+    Text[ swedish ] = "Set No Border";
+    Text[ polish ] = "Set No Border";
+    Text[ portuguese_brazilian ] = "Set No Border";
+    Text[ japanese ] = "Set No Border";
+    Text[ korean ] = "Set No Border";
+    Text[ turkish ] = "Set No Border";
+    Text[ thai ] = "Set No Border";
 };
 String RID_SVXSTR_PARA_PRESET_ALL
 {
     Text = "Komplette Umrandung zeichnen" ;
     Text [ english_us ] = "Set All Four Borders" ;
+    Text[ portuguese ] = "Set All Four Borders";
+    Text[ russian ] = "Set All Four Borders";
+    Text[ spanish ] = "Set All Four Borders";
+    Text[ italian ] = "Set All Four Borders";
+    Text[ swedish ] = "Set All Four Borders";
+    Text[ polish ] = "Set All Four Borders";
+    Text[ portuguese_brazilian ] = "Set All Four Borders";
+    Text[ japanese ] = "Set All Four Borders";
+    Text[ korean ] = "Set All Four Borders";
+    Text[ turkish ] = "Set All Four Borders";
+    Text[ thai ] = "Set All Four Borders";
 };
 String RID_SVXSTR_PARA_PRESET_LEFTRIGHT
 {
     Text = "Nur rechten und linken Rand zeichnen" ;
     Text [ english_us ] = "Set Left and Right Borders Only" ;
+    Text[ portuguese ] = "Set Left and Right Borders Only";
+    Text[ russian ] = "Set Left and Right Borders Only";
+    Text[ spanish ] = "Set Left and Right Borders Only";
+    Text[ italian ] = "Set Left and Right Borders Only";
+    Text[ swedish ] = "Set Left and Right Borders Only";
+    Text[ polish ] = "Set Left and Right Borders Only";
+    Text[ portuguese_brazilian ] = "Set Left and Right Borders Only";
+    Text[ japanese ] = "Set Left and Right Borders Only";
+    Text[ korean ] = "Set Left and Right Borders Only";
+    Text[ turkish ] = "Set Left and Right Borders Only";
+    Text[ thai ] = "Set Left and Right Borders Only";
 };
 String RID_SVXSTR_PARA_PRESET_TOPBOTTOM
 {
     Text = "Nur oberen und unteren Rand zeichnen" ;
     Text [ english_us ] = "Set Top and Bottom Borders Only" ;
+    Text[ portuguese ] = "Set Top and Bottom Borders Only";
+    Text[ russian ] = "Set Top and Bottom Borders Only";
+    Text[ spanish ] = "Set Top and Bottom Borders Only";
+    Text[ italian ] = "Set Top and Bottom Borders Only";
+    Text[ swedish ] = "Set Top and Bottom Borders Only";
+    Text[ polish ] = "Set Top and Bottom Borders Only";
+    Text[ portuguese_brazilian ] = "Set Top and Bottom Borders Only";
+    Text[ japanese ] = "Set Top and Bottom Borders Only";
+    Text[ korean ] = "Set Top and Bottom Borders Only";
+    Text[ turkish ] = "Set Top and Bottom Borders Only";
+    Text[ thai ] = "Set Top and Bottom Borders Only";
 };
 String RID_SVXSTR_PARA_PRESET_ONLYLEFT
 {
     Text = "Nur linken Rand zeichnen" ;
     Text [ english_us ] = "Set Left Border Only" ;
+    Text[ portuguese ] = "Set Left Border Only";
+    Text[ russian ] = "Set Left Border Only";
+    Text[ spanish ] = "Set Left Border Only";
+    Text[ italian ] = "Set Left Border Only";
+    Text[ swedish ] = "Set Left Border Only";
+    Text[ polish ] = "Set Left Border Only";
+    Text[ portuguese_brazilian ] = "Set Left Border Only";
+    Text[ japanese ] = "Set Left Border Only";
+    Text[ korean ] = "Set Left Border Only";
+    Text[ turkish ] = "Set Left Border Only";
+    Text[ thai ] = "Set Left Border Only";
 };
 String RID_SVXSTR_SHADOW_STYLE_NONE
 {
     Text = "Kein Schatten" ;
     Text [ english_us ] = "No Shadow" ;
+    Text[ portuguese ] = "No Shadow";
+    Text[ russian ] = "No Shadow";
+    Text[ spanish ] = "No Shadow";
+    Text[ italian ] = "No Shadow";
+    Text[ swedish ] = "No Shadow";
+    Text[ polish ] = "No Shadow";
+    Text[ portuguese_brazilian ] = "No Shadow";
+    Text[ japanese ] = "No Shadow";
+    Text[ korean ] = "No Shadow";
+    Text[ turkish ] = "No Shadow";
+    Text[ thai ] = "No Shadow";
 };
 String RID_SVXSTR_SHADOW_STYLE_BOTTOMRIGHT
 {
     Text = "Schatten nach rechts unten werfen" ;
     Text [ english_us ] = "Cast Shadow to Bottom Right" ;
+    Text[ portuguese ] = "Cast Shadow to Bottom Right";
+    Text[ russian ] = "Cast Shadow to Bottom Right";
+    Text[ spanish ] = "Cast Shadow to Bottom Right";
+    Text[ italian ] = "Cast Shadow to Bottom Right";
+    Text[ swedish ] = "Cast Shadow to Bottom Right";
+    Text[ polish ] = "Cast Shadow to Bottom Right";
+    Text[ portuguese_brazilian ] = "Cast Shadow to Bottom Right";
+    Text[ japanese ] = "Cast Shadow to Bottom Right";
+    Text[ korean ] = "Cast Shadow to Bottom Right";
+    Text[ turkish ] = "Cast Shadow to Bottom Right";
+    Text[ thai ] = "Cast Shadow to Bottom Right";
 };
 String RID_SVXSTR_SHADOW_STYLE_TOPRIGHT
 {
     Text = "Schatten nach rechts oben werfen" ;
     Text [ english_us ] = "Cast Shadow to Top Right" ;
+    Text[ portuguese ] = "Cast Shadow to Top Right";
+    Text[ russian ] = "Cast Shadow to Top Right";
+    Text[ spanish ] = "Cast Shadow to Top Right";
+    Text[ italian ] = "Cast Shadow to Top Right";
+    Text[ swedish ] = "Cast Shadow to Top Right";
+    Text[ polish ] = "Cast Shadow to Top Right";
+    Text[ portuguese_brazilian ] = "Cast Shadow to Top Right";
+    Text[ japanese ] = "Cast Shadow to Top Right";
+    Text[ korean ] = "Cast Shadow to Top Right";
+    Text[ turkish ] = "Cast Shadow to Top Right";
+    Text[ thai ] = "Cast Shadow to Top Right";
 };
 String RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT
 {
     Text = "Schatten nach links unten werfen" ;
     Text [ english_us ] = "Cast Shadow to Bottom Left" ;
+    Text[ portuguese ] = "Cast Shadow to Bottom Left";
+    Text[ russian ] = "Cast Shadow to Bottom Left";
+    Text[ spanish ] = "Cast Shadow to Bottom Left";
+    Text[ italian ] = "Cast Shadow to Bottom Left";
+    Text[ swedish ] = "Cast Shadow to Bottom Left";
+    Text[ polish ] = "Cast Shadow to Bottom Left";
+    Text[ portuguese_brazilian ] = "Cast Shadow to Bottom Left";
+    Text[ japanese ] = "Cast Shadow to Bottom Left";
+    Text[ korean ] = "Cast Shadow to Bottom Left";
+    Text[ turkish ] = "Cast Shadow to Bottom Left";
+    Text[ thai ] = "Cast Shadow to Bottom Left";
 };
 String RID_SVXSTR_SHADOW_STYLE_TOPLEFT
 {
     Text = "Schatten nach links oben werfen" ;
     Text [ english_us ] = "Cast Shadow to Top Left" ;
+    Text[ portuguese ] = "Cast Shadow to Top Left";
+    Text[ russian ] = "Cast Shadow to Top Left";
+    Text[ spanish ] = "Cast Shadow to Top Left";
+    Text[ italian ] = "Cast Shadow to Top Left";
+    Text[ swedish ] = "Cast Shadow to Top Left";
+    Text[ polish ] = "Cast Shadow to Top Left";
+    Text[ portuguese_brazilian ] = "Cast Shadow to Top Left";
+    Text[ japanese ] = "Cast Shadow to Top Left";
+    Text[ korean ] = "Cast Shadow to Top Left";
+    Text[ turkish ] = "Cast Shadow to Top Left";
+    Text[ thai ] = "Cast Shadow to Top Left";
 };
 
 // **********************************************************************
