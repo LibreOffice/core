@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:40:01 $
+ *  last change: $Author: as $ $Date: 2001-06-11 12:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,8 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 
     // Set the new window.
     LOG_ASSERT2( m_xContainerWindow.is()==sal_True, "Frame::initialize()", "Leak detected! This state should never occure ..." )
-    implts_setContainerWindow( xWindow );
+    m_xContainerWindow = xWindow;
+
     // Now we can use our indicator factory helper to support XStatusIndicatorFactory interface.
     // We have a valid parent window for it!
     // Initialize helper.
@@ -555,6 +556,10 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
         OStatusIndicatorFactory* pIndicatorFactoryHelper = new OStatusIndicatorFactory( m_xFactory, m_xContainerWindow );
         m_xIndicatorFactoryHelper = css::uno::Reference< css::task::XStatusIndicatorFactory >( static_cast< ::cppu::OWeakObject* >( pIndicatorFactoryHelper ), css::uno::UNO_QUERY );
     }
+
+    // Start listening for events after setting it on helper class ...
+    // So superflous messages are filtered to NULL :-)
+    impl_startWindowListening( xWindow );
 
     // Change to working mode.
     m_aTransactionManager.setWorkingMode( E_WORK );
@@ -1303,6 +1308,10 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     aWriteLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
+    // First operation should be ... "stopp all listening for window events on our container window".
+    // We will die ... this events are superflous!
+    impl_stopWindowListening( m_xContainerWindow );
+
     // Send message to all listener and forget her references.
     LOG_DISPOSEEVENT( "Frame", m_sName )
     css::lang::EventObject aEvent( xThis );
@@ -1318,10 +1327,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     m_xIndicatorFactoryHelper = css::uno::Reference< css::task::XStatusIndicatorFactory >();
     implts_setComponent( css::uno::Reference< css::awt::XWindow >      () ,
                          css::uno::Reference< css::frame::XController >() );
-    if( m_xContainerWindow.is() == sal_True )
-    {
-        implts_setContainerWindow( css::uno::Reference< css::awt::XWindow >() );
-    }
+    impl_disposeContainerWindow( m_xContainerWindow );
 
     // Free references of our frame tree.
     // Force parent container to forget this frame too ...
@@ -1705,16 +1711,12 @@ void SAL_CALL Frame::disposing( const css::lang::EventObject& aEvent ) throw( cs
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ReadGuard aReadLock( m_aLock );
-    // Make snapshot of member.
-    css::uno::Reference< css::awt::XWindow > xContainerWindow = m_xContainerWindow;
-    aReadLock.unlock();
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Impl-method is threadsafe.
-    // This instance is forced to release references to the specified interfaces by event-source.
-    if( aEvent.Source == xContainerWindow )
+    WriteGuard aWriteLock( m_aLock );
+
+    if( aEvent.Source == m_xContainerWindow )
     {
-        implts_setContainerWindow( css::uno::Reference< css::awt::XWindow >() );
+        impl_stopWindowListening( m_xContainerWindow );
+        m_xContainerWindow = css::uno::Reference< css::awt::XWindow >();
     }
 }
 
@@ -1994,6 +1996,7 @@ sal_Bool Frame::impl_tryToChangeProperty(   const   ::rtl::OUString&    sPropert
 
     @onerror    -
 *//*-*****************************************************************************************************/
+/*
 void Frame::implts_setContainerWindow( const css::uno::Reference< css::awt::XWindow>& xNewWindow )
 {
     // Algorithm:
@@ -2004,11 +2007,11 @@ void Frame::implts_setContainerWindow( const css::uno::Reference< css::awt::XWin
     //  d)  Register new window as new listener.
     //  e)  Dispose old window and free his reference.
 
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    // UNSAFE AREA --------------------------------------------------------------------------------------------- //
     // Sometimes used by dispose() => soft exceptions!
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    // SAFE AREA ----------------------------------------------------------------------------------------------- //
     ReadGuard aReadLock( m_aLock );
 
     // a,b)
@@ -2021,7 +2024,7 @@ void Frame::implts_setContainerWindow( const css::uno::Reference< css::awt::XWin
     css::uno::Reference< css::awt::XTopWindowListener >  xThisAsTopWindowListener( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
 
     aReadLock.unlock();
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    // UNSAFE AREA --------------------------------------------------------------------------------------------- //
 
     // c)
     if( xOldWindow.is() == sal_True )
@@ -2061,6 +2064,40 @@ void Frame::implts_setContainerWindow( const css::uno::Reference< css::awt::XWin
         xOldWindow->setVisible( sal_False );
         xOldWindow->dispose();
         xOldWindow = css::uno::Reference< css::awt::XWindow >();
+    }
+}
+*/
+
+/*-****************************************************************************************************//**
+    @short      dispose old container window and forget his reference
+    @descr      Sometimes we must repair our "modal dialog parent mechanism" too!
+
+    @seealso    -
+
+    @param      "xWindow", reference to old container window to dispose it
+    @return     An empty reference.
+
+    @onerror    -
+    @threadsafe NO!
+*//*-*****************************************************************************************************/
+void Frame::impl_disposeContainerWindow( css::uno::Reference< css::awt::XWindow >& xWindow )
+{
+    if( xWindow.is() == sal_True )
+    {
+        // All VclComponents are XComponents; so call dispose before discarding
+        // a css::uno::Reference< XVclComponent >, because this frame is the owner of the window
+        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        if  (
+                ( pWindow                                !=  NULL     )   &&
+                ( Application::GetDefModalDialogParent() ==  pWindow  )
+            )
+        {
+            Application::SetDefModalDialogParent( NULL );
+        }
+
+        xWindow->setVisible( sal_False );
+        xWindow->dispose();
+        xWindow = css::uno::Reference< css::awt::XWindow >();
     }
 }
 
@@ -2387,6 +2424,61 @@ void Frame::impl_filterSpecialTargets( ::rtl::OUString& sTarget )
         )
     {
         sTarget = ::rtl::OUString();
+    }
+}
+
+/*-************************************************************************************************************//**
+    @short      helper to start/stop listeneing for window events on container window
+    @descr      If we get a new container window, we must set it on internal memeber ...
+                and stop listening at old one ... and start listening on new one!
+                But sometimes (in dispose() call!) it's neccessary to stop listeneing without starting
+                on new connections. So we split this functionality to make it easier at use.
+
+    @seealso    method initialize()
+    @seealso    method dispose()
+
+    @param      "xWindow", valid(!) reference to window, which send events
+    @return     -
+
+    @onerror    We do nothing!
+    @threadsafe no!
+*//*-*************************************************************************************************************/
+void Frame::impl_startWindowListening( const css::uno::Reference< css::awt::XWindow >& xWindow )
+{
+    if( xWindow.is() == sal_True )
+    {
+        css::uno::Reference< css::awt::XWindowListener >    xWindowListener     ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+        css::uno::Reference< css::awt::XFocusListener >     xFocusListener      ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+        css::uno::Reference< css::awt::XTopWindowListener > xTopWindowListener  ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+
+        xWindow->addWindowListener( xWindowListener);
+        xWindow->addFocusListener ( xFocusListener );
+
+        css::uno::Reference< css::awt::XTopWindow > xTopWindow( xWindow, css::uno::UNO_QUERY );
+        if( xTopWindow.is() == sal_True )
+        {
+            xTopWindow->addTopWindowListener( xTopWindowListener );
+        }
+    }
+}
+
+//*****************************************************************************************************************
+void Frame::impl_stopWindowListening( const css::uno::Reference< css::awt::XWindow >& xWindow )
+{
+    if( xWindow.is() == sal_True )
+    {
+        css::uno::Reference< css::awt::XWindowListener >    xWindowListener     ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+        css::uno::Reference< css::awt::XFocusListener >     xFocusListener      ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+        css::uno::Reference< css::awt::XTopWindowListener > xTopWindowListener  ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+
+        xWindow->removeWindowListener( xWindowListener);
+        xWindow->removeFocusListener ( xFocusListener );
+
+        css::uno::Reference< css::awt::XTopWindow > xTopWindow( xWindow, css::uno::UNO_QUERY );
+        if( xTopWindow.is() == sal_True )
+        {
+            xTopWindow->removeTopWindowListener( xTopWindowListener );
+        }
     }
 }
 

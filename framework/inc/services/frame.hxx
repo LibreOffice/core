@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:20:38 $
+ *  last change: $Author: as $ $Date: 2001-06-11 12:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,7 +448,7 @@ class Frame :   // interfaces
         *//*-*****************************************************************************************************/
 
         // threadsafe
-        void                                                    implts_setContainerWindow       ( const css::uno::Reference< css::awt::XWindow >&       xWindow          );
+//        void                                                  implts_setContainerWindow       ( const css::uno::Reference< css::awt::XWindow >&       xWindow          );
         void                                                    implts_setComponentWindow       ( const css::uno::Reference< css::awt::XWindow >&       xWindow          );
         sal_Bool                                                implts_setComponent             ( const css::uno::Reference< css::awt::XWindow >&       xComponentWindow ,
                                                                                                   const css::uno::Reference< css::frame::XController >& xController      );
@@ -458,6 +458,9 @@ class Frame :   // interfaces
         const ::rtl::OUString                                   implts_getTitleFromWindow       (                                                                        ) const;
 
         // non threadsafe
+        void                                                    impl_startWindowListening       ( const css::uno::Reference< css::awt::XWindow >&       xWindow          );
+        void                                                    impl_stopWindowListening        ( const css::uno::Reference< css::awt::XWindow >&       xWindow          );
+        void                                                    impl_disposeContainerWindow     (       css::uno::Reference< css::awt::XWindow >&       xWindow          );
         sal_Bool                                                impl_tryToChangeProperty        ( const ::rtl::OUString&                                sProperty        ,
                                                                                                   const css::uno::Any&                                  aValue           ,
                                                                                                         css::uno::Any&                                  aOldValue        ,
