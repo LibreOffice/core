@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:25:58 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1122,10 +1122,6 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         }
         break;
 
-        case SID_SW_AGENDA_WIZZARD :
-        case SID_SW_FAX_WIZZARD :
-        case SID_SW_LETTER_WIZZARD :
-        case SID_SW_MEMO_WIZZARD :
         case FN_LABEL :
         case FN_BUSINESS_CARD :
         {
@@ -1211,10 +1207,6 @@ void SfxApplication::OfaState_Impl(SfxItemSet &rSet)
 
     if( !aModuleOpt.IsWriter())
     {
-        rSet.DisableItem( SID_SW_AGENDA_WIZZARD );
-        rSet.DisableItem( SID_SW_FAX_WIZZARD );
-        rSet.DisableItem( SID_SW_LETTER_WIZZARD );
-        rSet.DisableItem( SID_SW_MEMO_WIZZARD );
         rSet.DisableItem( FN_LABEL );
         rSet.DisableItem( FN_BUSINESS_CARD );
     }
