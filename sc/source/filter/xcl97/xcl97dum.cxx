@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97dum.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:34 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,12 +135,6 @@ const BYTE ExcDummy8_UsesElfs::pMyData[] = {
 const ULONG ExcDummy8_UsesElfs::nMyLen = sizeof(ExcDummy8_UsesElfs::pMyData);
 
 
-// Country always Germany
-const BYTE ExcDummy8_Country::pMyData[] = {
-    0x8c, 0x00, 0x04, 0x00, 0x31, 0x00, 0x31, 0x00
-};
-const ULONG ExcDummy8_Country::nMyLen = sizeof(ExcDummy8_Country::pMyData);
-
 
 const BYTE ExcDummy8_02::pMyData[] = {
     0x5f, 0x00, 0x02, 0x00, 0x01, 0x00,                     // SAVERECALC
@@ -215,19 +209,6 @@ ULONG ExcDummy8_UsesElfs::GetLen() const
 
 
 const BYTE* ExcDummy8_UsesElfs::GetData() const
-{
-    return pMyData;
-}
-
-
-
-ULONG ExcDummy8_Country::GetLen() const
-{
-    return nMyLen;
-}
-
-
-const BYTE* ExcDummy8_Country::GetData() const
 {
     return pMyData;
 }
