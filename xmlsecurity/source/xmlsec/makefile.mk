@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-10-27 14:57:14 $
+#   last change: $Author: rt $ $Date: 2004-11-26 14:57:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ SLOFILES = \
     $(SLO)$/xmlelementwrapper_xmlsecimpl.obj \
     $(SLO)$/certificateextension_xmlsecimpl.obj \
     $(SLO)$/xmlstreamio.obj \
+    $(SLO)$/errorcallback.obj \
     $(SLO)$/xsec_xmlsec.obj
     
 # --- Targets ------------------------------------------------------
