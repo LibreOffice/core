@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-27 11:08:39 $
+ *  last change: $Author: gt $ $Date: 2002-06-05 10:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1560,7 +1560,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     };
     Image IMG_BROWSE_HC
     {
-        ImageBitmap = Bitmap { File = "browse_hc.bmp" ; };
+        ImageBitmap = Bitmap { File = "target_hc.bmp" ; };
         MaskColor = STD_MAGENTA_MASKCOLOR ;
     };
 
