@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:00:09 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
 #ifndef _SVMEMPOOL_HXX
 #include <tools/mempool.hxx>
 #endif
-#ifndef _ZFORLIST_HXX
-#include <svtools/zforlist.hxx>
-#endif
 
 #ifndef SC_RANGELST_HXX
 #include "rangelst.hxx"
@@ -97,13 +94,10 @@ and a container for XF indexes for every used cell in a sheet.
 
 /** Stores the default colors for the current BIFF version and the contents of
     a PALETTE record. */
-class XclImpPalette : public XclDefaultPalette, protected XclImpRoot
+class XclImpPalette : public XclDefaultPalette
 {
 public:
     explicit                    XclImpPalette( const XclImpRoot& rRoot );
-
-    /** Activates the default colors for the current BIFF version. */
-    void                        OnChangeBiff();
 
     /** Returns the RGB color data for a (non-zero-based) Excel palette entry.
         @descr  First looks for a color read from file, then looks for a default color.
@@ -247,45 +241,39 @@ private:
 // FORMAT record - number formats =============================================
 
 /** Stores all user defined number formats occured in the file. */
-class XclImpNumFmtBuffer : protected XclImpRoot, ScfNoCopy
+class XclImpNumFmtBuffer : public XclNumFmtBuffer, protected XclImpRoot
 {
 public:
     explicit                    XclImpNumFmtBuffer( const XclImpRoot& rRoot );
 
-    /** Returns the format key with the Excel index nNumFmt or standard key, if invalid index. */
-    sal_uInt32                  GetFormat( sal_uInt16 nNumFmt ) const;
-    /** Returns the core index of the current standard number format. */
-    inline sal_uInt32           GetStandardFormat() const { return mnStdFmt; }
-
     /** Reads a FORMAT record. */
     void                        ReadFormat( XclImpStream& rStrm );
+    /** Creates the number formats in the Calc document. */
+    void                        CreateScFormats();
+
+    /** Returns the format key with the Excel index nNumFmt or standard key, if invalid index. */
+    ULONG                       GetScFormat( sal_uInt16 nXclNumFmt ) const;
 
     /** Fills an Excel number format to the passed item set.
         @param rItemSet  The destination item set.
-        @param nNumFmt  The Excel number format index.
+        @param nXclNumFmt  The Excel number format index.
         @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
     void                        FillToItemSet(
-                                    SfxItemSet& rItemSet, sal_uInt16 nNumFmt,
+                                    SfxItemSet& rItemSet, sal_uInt16 nXclNumFmt,
                                     bool bSkipPoolDefs = false ) const;
     /** Fills a Calc number format to the passed item set.
         @param rItemSet  The destination item set.
         @param nScNumFmt  The Calc number formatter index of the format.
         @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
     void                        FillScFmtToItemSet(
-                                    SfxItemSet& rItemSet, sal_uInt32 nScNumFmt,
+                                    SfxItemSet& rItemSet, ULONG nScNumFmt,
                                     bool bSkipPoolDefs = false ) const;
 
 private:
-    /** Inserts the built-in number formats that Excel omits in BIFF5+. */
-    void                        InsertBuiltinFormats();
+    typedef ::std::map< sal_uInt16, ULONG > XclImpIndexMap;
 
-    /** Inserts a format key exactly at the given position.
-        @descr  The list will be extended, if it is too short, using the standard format key. */
-    void                        InsertKey( sal_uInt32 nIndex, sal_uInt32 nFormatKey );
-
-private:
-    ScfUInt32Vec                maKeyVec;       /// Array of SvNumberFomatter format keys.
-    sal_uInt32                  mnStdFmt;       /// Key for standard number format.
+    XclImpIndexMap              maIndexMap;     /// Maps Excel format indexes to Calc formats.
+    sal_uInt16                  mnNextXclIdx;   /// Index counter for BIFF2-BIFF4.
 };
 
 
