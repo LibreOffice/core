@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: mba $ $Date: 2001-09-10 13:29:02 $
+#   last change: $Author: hjs $ $Date: 2001-09-18 12:14:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,9 +76,6 @@ COMP5TYPELIST=		lgd
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.IF "$(COM)"=="ICC"
-LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
-.ENDIF
 
 # --- export library for sfx2 -------------------------------------------------
 
@@ -278,31 +275,6 @@ SHL5DEF=		$(MISC)$/$(SHL5TARGET).def
 DEF5NAME=		$(SHL5TARGET)
 
 DEF5EXPORTFILE=	exports.dxp
-
-# --- login applikation -------------------------------------------------------
-
-APP1TARGET= 	login
-
-APP1OBJS=		$(SLO)$/login.obj					\
-                $(SLO)$/servicemanager.obj			\
-                $(SLO)$/lockhelper.obj
-
-APP1STDLIBS=	$(CPPULIB)							\
-                $(CPPUHELPERLIB)					\
-                $(OSLLIB)							\
-                $(SALLIB)							\
-                $(VOSLIB)							\
-                $(TOOLSLIB) 						\
-                $(SVTOOLLIB)						\
-                $(TKLIB)							\
-                $(COMPHELPERLIB)					\
-                $(SVLIB)
-
-APP1DEPN=		$(SLO)$/servicemanager.obj
-
-.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
-APP1DEF=		$(MISC)$/login.def
-.ENDIF
 
 # --- Targets -----------------------------------------------------------------
 

@@ -9,3 +9,4 @@ fr	framework\source\services				nmake	-	all	fr_services fr_threadhelp fr_unotype
 fr	framework\source\register				nmake	-	all	fr_register fr_threadhelp fr_unotypes NULL
 fr	framework\source\application			nmake	-	all	fr_application fr_threadhelp fr_unotypes NULL
 fr	framework\util							nmake	-	all	fr_util fr_unotypes fr_threadhelp fr_classes fr_helper fr_dispatch fr_services fr_register fr_application NULL
+fr	framework\util\GUI						nmake	-	all	fr_guiapp fr_util NULL
