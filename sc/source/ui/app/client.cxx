@@ -2,9 +2,9 @@
  *
  *  $RCSfile: client.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-05 16:47:13 $
+ *  last change: $Author: nn $ $Date: 2001-10-04 19:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,8 +491,16 @@ void __EXPORT ScClient::ViewChanged( USHORT nAspect )
 
         if ( aLogicRect.GetSize() != aVisSize )
         {
-            aLogicRect.SetSize( aVisSize );
-            pDrawObj->SetLogicRect( aLogicRect );
+            if ( pObj->GetMiscStatus() & SVOBJ_MISCSTATUS_SERVERRESIZE )
+            {
+                //  SetLogicRect for an object with SERVERRESIZE flag would also change VisArea
+                DBG_ERROR("SERVERRESIZE object has differing sizes");
+            }
+            else
+            {
+                aLogicRect.SetSize( aVisSize );
+                pDrawObj->SetLogicRect( aLogicRect );
+            }
         }
     }
 }
