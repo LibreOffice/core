@@ -234,7 +234,7 @@ end sub
 Sub ExecuteEditDebug()
         
 	locations = Array ( &quot;User&quot;, &quot;Share&quot;, &quot;Document&quot;, &quot;Filesystem&quot; )
-	languages = Array ( &quot;BeanShell&quot;, &quot;Rhino&quot; )
+	languages = Array ( &quot;BeanShell&quot;, &quot;JavaScript&quot; )
 	dialogName = &quot;EditDebug&quot;
 	initialiseFileExtensions()  
 	bindingDialog = LoadDialog( &quot;ScriptBindingLibrary&quot;, &quot;EditDebug&quot; )
@@ -280,16 +280,17 @@ Sub initialiseNavigationComboArrays()
     
     langCount = 1
     for index = 0 to ubound(svrArray)
-    	iPos = inStr(svrArray(index), &quot;ScriptRuntimeFor&quot;)
-        iJava = inStr(svrArray(index), &quot;ScriptRuntimeForJava&quot;)
-        		
-        if 	(iJava = 0) and  (iPos &gt; 0) then
-	        lang = Mid(svrArray(index), iPos + Len(&quot;ScriptRuntimeFor&quot;)
+        iPos = inStr(svrArray(index), &quot;ScriptRuntimeFor&quot;)
 
-            &apos;Add to language vector
-            ReDim Preserve languages(langCount) as String
-            languages(langCount) = lang
-            langCount = langCount +1
+        if (iPos &gt; 0) then
+            lang = Mid(svrArray(index), iPos + Len(&quot;ScriptRuntimeFor&quot;)
+
+            if not (lang = &quot;Java&quot;) then
+                &apos;Add to language vector
+                ReDim Preserve languages(langCount) as String
+                languages(langCount) = lang
+                langCount = langCount + 1
+            endif
         endif  
     next index
     initialiseFileExtensions()

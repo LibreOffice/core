@@ -5,7 +5,7 @@
   <script language="Java">
     <locale lang="en">
       <displayname value="Scripting Framework Debugger" />
-      <description>Script that starts debuggers for Rhino and BeanShell
+      <description>Script that starts debuggers for JavaScript and BeanShell
       </description>
     </locale>
     <logicalname value="_$DebugRunner.Debug" />

@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-05-16 13:50:00 $
+#   last change: $Author: toconnor $ $Date: 2003-06-03 09:32:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -169,10 +169,10 @@
          basedir="${scriptingclasses}">
         <exclude name="${netbeans.dir}/**/.*/*"/>
         <exclude name="**/beanshell/*"/>
-        <exclude name="**/rhino/*"/>
+        <exclude name="**/javascript/*"/>
         <exclude name="**/security/*"/>
         <exclude name="BeanShellRuntimeComponentRegistration.class"/>
-        <exclude name="RhinoRuntimeComponentRegistration.class"/>
+        <exclude name="JavaScriptRuntimeComponentRegistration.class"/>
         <manifest>
             <attribute name="Built-By" value="Sun Microsystems"/>
             <attribute name="RegistrationClassName" value="ScriptRuntimeComponentRegistration"/>
@@ -191,15 +191,15 @@
         <include name="**/ScriptContext.class"/>
     </jar>
 
-    <jar jarfile="${jardir}/ScriptRuntimeForRhino.jar"
+    <jar jarfile="${jardir}/ScriptRuntimeForJavaScript.jar"
          basedir="${scriptingclasses}">
         <manifest>
             <attribute name="Built-By" value="Sun Microsystems"/>
             <attribute name="RegistrationClassName"
-                       value="RhinoRuntimeComponentRegistration"/>
+                       value="JavaScriptRuntimeComponentRegistration"/>
         </manifest>
-        <include name="RhinoRuntimeComponentRegistration.class"/>
-        <include name="**/ScriptRuntimeForRhino**.class"/>
+        <include name="JavaScriptRuntimeComponentRegistration.class"/>
+        <include name="**/ScriptRuntimeForJavaScript**.class"/>
         <include name="**/ScriptContext.class"/>
     </jar>
 

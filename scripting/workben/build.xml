@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: dfoster $ $Date: 2003-05-29 14:18:39 $
+#   last change: $Author: toconnor $ $Date: 2003-06-03 09:32:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,7 @@
 
   <!-- ==================== classpath setting ============================ -->
   <path id="idlclasspath">
-    <pathelement location="${solar.jar}/unoil.jar"/>
+    <pathelement location="${solar.jar}/unoil.jar"/> 
     <!-- <pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/>  -->
     <pathelement location="${solar.jar}/jurt.jar"/>
     <pathelement location="${solar.jar}/jut.jar"/>
@@ -87,10 +87,10 @@
     <pathelement location="${solar.jar}/java_uno.jar"/>
     <pathelement location="${solar.jar}/ridl.jar"/>
     <pathelement location="${solar.jar}/sandbox.jar"/>
-  </path>
+  </path> 
   <path id="scriptexampleclasspath">
-    <pathelement location="${solar.jar}/unoil.jar"/>
-    <!-- pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/ -->
+    <pathelement location="${solar.jar}/unoil.jar"/> 
+    <!-- pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/ --> 
     <pathelement location="${solar.jar}/jurt.jar"/>
     <pathelement location="${solar.jar}/jut.jar"/>
     <pathelement location="${solar.jar}/juh.jar"/>
@@ -98,14 +98,14 @@
     <pathelement location="${solar.jar}/ridl.jar"/>
     <pathelement location="${solar.jar}/sandbox.jar"/>
     <pathelement location="${out}/class/ScriptRuntimeForJava.jar"/>
-  </path>
+  </path> 
 
   <path id="debuggerclasspath">
     <pathelement location="${out}/class/ScriptRuntimeForJava.jar"/>
     <pathelement location="${solar.jar}/ridl.jar"/>
-    <pathelement location="${solar.jar}/unoil.jar"/>
-    <pathelement location="${out}/class/jsruntime/skip_registration/js.jar"/>
-    <pathelement location="${install.dir}/bsh-1.2b7.jar"/>
+    <pathelement location="${solar.jar}/unoil.jar"/> 
+    <pathelement location="${out}/class/jsruntime/skip_registration/js.jar"/> 
+    <pathelement location="${install.dir}/bsh-1.2b7.jar"/> 
   </path>
   <!-- ===================== Set up build conditionals ========================= -->
   <target name="product.test">
@@ -180,7 +180,7 @@
     </copy>
     <copy file="${prj}/examples/java/HighlightTextParcel.xml" tofile="${out}/class/examples/java/Highlight/parcel-descriptor.xml"/>
     <jar jarfile="${out}/class/examples/java/Highlight/Highlight.jar"
-        basedir="${out}/class/examples/java/Highlight"
+        basedir="${out}/class/examples/java/Highlight" 
         includes="**/*.java,**/*.class,**/*.xml"
         excludes="${out}/class/examples/java/Highlight/Highlight.jar">
         <manifest>
@@ -208,7 +208,7 @@
     </copy>
     <copy file="${prj}/examples/java/ScriptFrameWkHelperParcel.xml" tofile="${out}/class/examples/java/ScriptFrmwrkHelper/parcel-descriptor.xml"/>
     <jar jarfile="${out}/class/examples/java/ScriptFrmwrkHelper/ScriptFrmwrkHelper.jar"
-        basedir="${out}/class/examples/java/ScriptFrmwrkHelper"
+        basedir="${out}/class/examples/java/ScriptFrmwrkHelper" 
         includes="**/*.java,**/*.class,**/*.xml"
         excludes="${out}/class/examples/java/ScriptFrmwrkHelper/ScriptFrmwrkHelper.jar">
         <manifest>
@@ -227,7 +227,7 @@
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
     <copy file="${solar.bin}/ScriptFramework.rdb"
-        todir="${out}/class/sframework/"/>
+        todir="${out}/class/sframework/"/> 
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptFramework.jar"
@@ -246,7 +246,7 @@
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
     <copy file="${solar.bin}/ScriptFramework.rdb"
-        todir="${out}/class/sframework/"/>
+        todir="${out}/class/sframework/"/> 
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptFramework.jar"
@@ -265,7 +265,7 @@
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
     <copy file="${solar.bin}/ScriptFramework.rdb"
-        todir="${out}/class/sframework/"/>
+        todir="${out}/class/sframework/"/> 
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptFramework.jar"
@@ -284,7 +284,7 @@
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
     <copy file="${solar.bin}/ScriptFramework.rdb"
-        todir="${out}/class/sframework/"/>
+        todir="${out}/class/sframework/"/> 
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptFramework.jar"
@@ -303,7 +303,7 @@
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
     <copy file="${solar.bin}/ScriptFramework.rdb"
-        todir="${out}/class/sframework/"/>
+        todir="${out}/class/sframework/"/> 
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptFramework.jar"
@@ -335,9 +335,9 @@
     <mkdir dir="${out}/class/jsruntime/skip_registration"/>
     <mkdir dir="${out}/class/jsruntimetmp"/>
 
-    <copy file="${out}/class/ScriptRuntimeForRhino.jar"
+    <copy file="${out}/class/ScriptRuntimeForJavaScript.jar"
         todir="${out}/class/jsruntime/"/>
-    <copy file="installer/Scripting.Rhino.xcu"
+    <copy file="installer/Scripting.JavaScript.xcu"
         tofile="${out}/class/jsruntime/Scripting.xcu"/>
 
     <unzip src="${install.dir}/js.jar"
@@ -430,5 +430,5 @@
   <!-- ========================= All In One Build ======================= -->
   <target name="all" depends="clean,jar"/>
 
-
+ 
 </project>

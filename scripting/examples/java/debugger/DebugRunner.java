@@ -20,7 +20,7 @@ public class DebugRunner {
         OOScriptDebugger debugger;
         String path = "";
 
-        if (language.equals("Rhino")) {
+        if (language.equals("JavaScript")) {
             debugger = new OORhinoDebugger();
         }
         else if (language.equals("BeanShell")) {
