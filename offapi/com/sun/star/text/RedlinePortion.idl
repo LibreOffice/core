@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RedlinePortion.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2002-02-28 15:58:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ module com { module sun { module star { module text {
 the change tracking.
 
 */
-service RedlinePortion
+published service RedlinePortion
 {
     service com::sun::star::text::TextPortion;
     /** contains the name of the author of the change.*/
