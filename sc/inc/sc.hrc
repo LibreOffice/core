@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-03 09:47:47 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 07:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1516,6 +1516,10 @@
 // mask color for high contrast
 #define SC_HC_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }
 
+#define MID_1   1
+#define MID_2   2
+#define MID_3   3
+#define MID_4   4
 
 #endif
 
