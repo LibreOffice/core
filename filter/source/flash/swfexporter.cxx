@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfexporter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-29 09:17:32 $
+ *  last change: $Author: vg $ $Date: 2002-11-29 09:45:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,8 +400,8 @@ sal_uInt16 FlashExporter::exportBackgrounds( Reference< XDrawPage > xDrawPage, s
                 maPagesMap[nPage].mnObjectsID = -1;
                 return -1;
             }
-
-            sal_uInt16 ret = exportMasterPageObjects(nPage, xMasterPageTarget->getMasterPage());
+            Reference<XDrawPage> aTemp = xMasterPageTarget->getMasterPage();
+            sal_uInt16 ret = exportMasterPageObjects(nPage, aTemp);
             if (ret != nPage)
                 return ret;
         }
