@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-15 14:52:40 $
+#   last change: $Author: hr $ $Date: 2004-05-10 15:53:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,17 +82,18 @@ dummy:
 
 .ELSE		# "$(GUIBASE)"!="unx"
 
+.IF "$(ENABLE_GTK)" != ""
+
 CFLAGS+=`pkg-config --cflags gtk+-2.0`
 
 SLOFILES=\
             $(SLO)$/gtkframe.obj				\
             $(SLO)$/gtkobject.obj
+.ELSE # "$(ENABLE_GTK)" != ""
 
-.IF "$(WITH_LIBSN)"=="YES"
-CDEFS+=-DHAVE_LIBSN
-CFLAGS+=$(LIBSN_CFLAGS)
+dummy:
+    @echo GTK disabled - nothing to build
 .ENDIF
-
 .ENDIF		# "$(GUIBASE)"!="unx"
 
 # --- Targets ------------------------------------------------------
