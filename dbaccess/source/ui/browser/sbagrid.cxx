@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-28 15:42:10 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 08:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -980,9 +980,9 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rM
             rMenu.SetHelpId(ID_BROWSER_COLWIDTH, aNewItems.GetHelpId(ID_BROWSER_COLWIDTH));
             rMenu.InsertSeparator(nPos++);
 
-            rMenu.InsertItem(ID_BROWSER_COLUMNINFO, aNewItems.GetItemText(ID_BROWSER_COLUMNINFO), 0, nPos++);
-            rMenu.SetHelpId(ID_BROWSER_COLUMNINFO, aNewItems.GetHelpId(ID_BROWSER_COLUMNINFO));
-            rMenu.InsertSeparator(nPos++);
+//          rMenu.InsertItem(ID_BROWSER_COLUMNINFO, aNewItems.GetItemText(ID_BROWSER_COLUMNINFO), 0, nPos++);
+//          rMenu.SetHelpId(ID_BROWSER_COLUMNINFO, aNewItems.GetHelpId(ID_BROWSER_COLUMNINFO));
+//          rMenu.InsertSeparator(nPos++);
         }
     }
 }
