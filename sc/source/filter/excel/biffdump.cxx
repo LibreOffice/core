@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:43:57 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -758,9 +758,9 @@ UINT16 Biff8RecDumper::DumpXF( XclImpStream& rStrm, const sal_Char* pPre )
     ADDTEXT( "rotation=" );         __AddDec( t, nTmp );
     ADDTEXT( " (" );
     if( nTmp < 91 )
-        { __AddDec( t, nTmp ); ADDTEXT( "°" ); }
+        { __AddDec( t, nTmp ); ADDTEXT( "\xB0" ); }
     else if( nTmp < 181 )
-        { __AddDec( t, static_cast< sal_Int32 >( 90 - nTmp ) ); ADDTEXT( "°" ); }
+        { __AddDec( t, static_cast< sal_Int32 >( 90 - nTmp ) ); ADDTEXT( "\xB0" ); }
     else if( nTmp == EXC_ROT_STACKED )
         { ADDTEXT( "stacked" ); }
     else
@@ -3559,10 +3559,10 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDTEXT( " (" );
                 switch( nOrient )
                 {
-                    case 0:     ADDTEXT( "no-rot" );    break;
-                    case 1:     ADDTEXT( "stacked" );   break;
-                    case 2:     ADDTEXT( "90° ccw" );   break;
-                    case 3:     ADDTEXT( "90° cw" );    break;
+                    case 0:     ADDTEXT( "no-rot" );        break;
+                    case 1:     ADDTEXT( "stacked" );       break;
+                    case 2:     ADDTEXT( "90\xB0 ccw" );    break;
+                    case 3:     ADDTEXT( "90\xB0 cw" );     break;
                     default:    ADDTEXT( "!unknown!" );
                 }
                 ADDTEXT( ")" );
