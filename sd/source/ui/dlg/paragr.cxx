@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-08 13:19:21 $
+ *  last change: $Author: dl $ $Date: 2001-05-09 09:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,8 @@ SdParagraphDlg::SdParagraphDlg( Window* pParent, const SfxItemSet* pAttr ) :
     SvtCJKOptions aCJKOptions;
     if( aCJKOptions.IsAsianTypographyEnabled() )
         AddTabPage( RID_SVXPAGE_PARA_ASIAN, SvxAsianTabPage::Create,0);
+    else
+        RemoveTabPage( RID_SVXPAGE_PARA_ASIAN );
 
     AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH, SvxParaAlignTabPage::Create,0);
     AddTabPage( RID_SVXPAGE_TABULATOR, SvxTabulatorTabPage::Create, 0);
