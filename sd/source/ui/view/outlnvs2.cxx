@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:12:20 $
+ *  last change: $Author: ka $ $Date: 2000-11-13 09:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,7 +491,7 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
 
                 case SID_INSERT_FLD_AUTHOR:
                 {
-                    SvxAddressItem aAdrItem( *SFX_INIMANAGER() );
+                    SvxAddressItem aAdrItem;
                     pFieldItem = new SvxFieldItem( SvxAuthorField( aAdrItem ) );
                 }
                 break;

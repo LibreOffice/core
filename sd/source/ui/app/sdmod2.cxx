@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 16:45:32 $
+ *  last change: $Author: ka $ $Date: 2000-11-13 09:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,6 @@
 #include <sfx2/request.hxx>
 #endif
 
-#include <sfx2/inimgr.hxx>
 #include <svx/svdfield.hxx>
 
 #define ITEMID_SPELLCHECK   0
@@ -229,7 +228,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                 aAuthor = pAuthorField->GetFormatted();
             else
             {
-                SvxAddressItem aAdrItem( *SFX_INIMANAGER() );
+                SvxAddressItem aAdrItem;
                 SvxAuthorField aAuthorField( aAdrItem, pAuthorField->GetType(),
                                                 pAuthorField->GetFormat() );
                 aAuthor = aAuthorField.GetFormatted();
@@ -572,7 +571,7 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
     //!!! const weg-casten, da Store nicht-const:
     if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_ADDRESS, TRUE, &pItem ) )
     {
-        ((SfxAddressItem*)pItem)->Store( *SFX_INIMANAGER() );
+        ((SfxAddressItem*)pItem)->Store();
     }
 
     SdOptions* pOptions = GetSdOptions(eDocType);

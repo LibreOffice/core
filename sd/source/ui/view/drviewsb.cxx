@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:50:43 $
+ *  last change: $Author: ka $ $Date: 2000-11-13 09:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,7 +513,7 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
 
                 case SID_INSERT_FLD_AUTHOR:
                 {
-                    SvxAddressItem aAdrItem( *SFX_INIMANAGER() );
+                    SvxAddressItem aAdrItem;
                     pFieldItem = new SvxFieldItem( SvxAuthorField( aAdrItem ) );
                 }
                 break;
