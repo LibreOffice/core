@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:49:37 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,7 +652,8 @@ BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
                     aItemSet.Put( SdrTextAniCountItem( 1 ) );
                     aItemSet.Put( SdrTextAniAmountItem(
                                     (INT16)pWindow->PixelToLogic(Size(2,1)).Width()) );
-                    pObj->SetAttributes(aItemSet, FALSE);
+//-/                    pObj->SetAttributes(aItemSet, FALSE);
+                    pObj->SetItemSetAndBroadcast(aItemSet);
                 }
             }
             SetInEditMode();

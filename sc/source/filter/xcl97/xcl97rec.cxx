@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2000-10-26 11:24:14 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 11:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1502,9 +1502,12 @@ XclTxo::XclTxo( const SdrTextObj& rTextObj )
     if( pParaObj )
     {
         // alignment in graphic
-        SfxItemSet aItemSet( *rTextObj.GetItemPool(), SDRATTR_START, SDRATTR_END );
-        rTextObj.TakeAttributes( aItemSet, FALSE, FALSE );
-        switch ( ((const SdrTextHorzAdjustItem&) (aItemSet.Get( SDRATTR_TEXT_HORZADJUST ))).GetValue() )
+//-/        SfxItemSet aItemSet( *rTextObj.GetItemPool(), SDRATTR_START, SDRATTR_END );
+        const SfxItemSet& rItemSet = rTextObj.GetItemSet();
+//-/        rTextObj.TakeAttributes( aItemSet, FALSE, FALSE );
+
+//-/        switch ( ((const SdrTextHorzAdjustItem&) (aItemSet.Get( SDRATTR_TEXT_HORZADJUST ))).GetValue() )
+        switch ( ((const SdrTextHorzAdjustItem&) (rItemSet.Get( SDRATTR_TEXT_HORZADJUST ))).GetValue() )
         {
             case SDRTEXTHORZADJUST_LEFT :
                 nGrbit |= (1 << 1);
@@ -1519,7 +1522,9 @@ XclTxo::XclTxo( const SdrTextObj& rTextObj )
                 nGrbit |= (4 << 1);
             break;
         }
-        switch ( ((const SdrTextVertAdjustItem&) (aItemSet.Get( SDRATTR_TEXT_VERTADJUST ))).GetValue() )
+
+//-/        switch ( ((const SdrTextVertAdjustItem&) (aItemSet.Get( SDRATTR_TEXT_VERTADJUST ))).GetValue() )
+        switch ( ((const SdrTextVertAdjustItem&) (rItemSet.Get( SDRATTR_TEXT_VERTADJUST ))).GetValue() )
         {
             case SDRTEXTVERTADJUST_TOP :
                 nGrbit |= (1 << 4);
@@ -2869,7 +2874,6 @@ UINT16 XclHlink::GetLen() const
                     // 12 = cols/rows + flags
 }
 
-
 const BYTE      XclProtection::pMyData[] =
 {
     0x12, 0x00, 0x02, 0x00, 0x01, 0x00,         // PROTECT
@@ -2877,7 +2881,6 @@ const BYTE      XclProtection::pMyData[] =
     0x63, 0x00, 0x02, 0x00, 0x01, 0x00          // OBJPROTECT
 };
 const UINT16    XclProtection::nMyLen = sizeof( XclProtection::pMyData );
-
 
 UINT16 XclProtection::GetLen( void ) const
 {
