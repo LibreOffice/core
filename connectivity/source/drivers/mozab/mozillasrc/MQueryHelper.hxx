@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQueryHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-11-15 10:01:12 $
+ *  last change: $Author: jmarmion $ $Date: 2002-09-26 10:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ namespace connectivity
             MQueryHelperResultEntry();
             ~MQueryHelperResultEntry();
 
-            void insert( rtl::OUString &key, rtl::OUString &value );
+            void insert( const rtl::OUString &key, rtl::OUString &value );
             rtl::OUString getValue( const rtl::OUString &key ) const;
         };
 
@@ -123,6 +123,8 @@ namespace connectivity
             void            clearResultOrComplete();
             void            notifyResultOrComplete();
             sal_Bool        waitForResultOrComplete( ::rtl::OUString& _rError );
+            void            addCardAttributeAndValue(const ::rtl::OUString& sName, nsXPIDLString sValue,MQueryHelperResultEntry *resEntry);
+            void            getCardValues(nsIAbCard  *card);
 
         public:
 
