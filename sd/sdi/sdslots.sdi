@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdslots.sdi,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 15:21:25 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,6 @@ ModulePrefix( "Sd" )
         include "_docsh.sdi"
         include "docshell.sdi"
         include "drgrfob.sdi"
+        include "ViewShellBase.sdi"
 }
-
 
