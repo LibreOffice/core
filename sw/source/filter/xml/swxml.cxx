@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-22 15:59:43 $
+ *  last change: $Author: dvo $ $Date: 2001-03-23 16:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,8 +413,6 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
             &rDoc, *rPaM.GetPoint(), 0 );
     }
 
-    aOpt.ResetAllFmtsOnly();
-
     rDoc.AddLink(); // prevent deletion
     sal_uInt32 nRet = 0;
 
@@ -471,6 +469,8 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
             aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
             IsOrganizerMode() );
     }
+
+    aOpt.ResetAllFmtsOnly();
 
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
