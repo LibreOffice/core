@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:25:49 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@
 #include "ulspitem.hxx"
 #include "sizeitem.hxx"
 #include "frmdiritem.hxx"
-#include "bbdlg.hxx"
+//CHINA001 #include "bbdlg.hxx"
 #include "dlgutil.hxx"
 #include "dialmgr.hxx"
 #include "paperinf.hxx"
