@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2001-02-07 12:29:05 $
+ *  last change: $Author: svesik $ $Date: 2001-02-12 13:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,15 +111,15 @@
 #endif
 
 #ifndef __SGI_STL_HASH_MAP
-#include <stl/hash_map>
+#include <hash_map>
 #endif
 
 #ifndef __SGI_STL_VECTOR
-#include <stl/vector>
+#include <vector>
 #endif
 
 #ifndef __SGI_STL_ITERATOR
-#include <stl/iterator>
+#include <iterator>
 #endif
 
 //_________________________________________________________________________________________________________________
