@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: hdu $ $Date: 2002-10-10 10:41:16 $
+ *  last change: $Author: ssa $ $Date: 2002-10-11 13:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -944,8 +944,12 @@ static void ImplAddTokenFontNames( String& rName, const OUString& rFontNames )
 Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
                                    ULONG nFlags, const OutputDevice* pOutDev )
 {
+    #define FALLBACKFONT_UI_SANS "Andale Sans UI;Tahoma;Arial Unicode MS;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;Arial;MS Sans Serif;Helv;Times;Times New Roman;Interface System"
+    #define FALLBACKFONT_UI_SANS_ARABIC "Tahoma;Traditional Arabic;Simplified Arabic;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Interface User;Arial Unicode MS;Lucida Sans Unicode;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif"
+    #define FALLBACKFONT_UI_SANS_THAI "OONaksit;Tahoma;Lucidasans;Arial Unicode MS"
+
     Font            aFont;
-    String aSearch( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif" ) );
+    String aSearch( RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS ) );
 
     // optimize font list for some locales, as long as Andale Sans UI does not support them
     switch( eLang )
@@ -968,7 +972,10 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
         case LANGUAGE_ARABIC_BAHRAIN:
         case LANGUAGE_ARABIC_QATAR:
         case LANGUAGE_HEBREW:
-            aSearch = String( RTL_CONSTASCII_USTRINGPARAM( "Tahoma;Traditional Arabic;Simplified Arabic;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Interface User;Lucida Sans Unicode;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif" ) );
+            aSearch = String( RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_ARABIC ) );
+            break;
+        case LANGUAGE_THAI:
+            aSearch = String( RTL_CONSTASCII_USTRINGPARAM( FALLBACKFONT_UI_SANS_THAI ) );
             break;
 
         default:
