@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-29 10:56:09 $
+ *  last change: $Author: hr $ $Date: 2002-06-03 17:29:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,13 +605,7 @@ void SwRTFParser::ReadTable( int nToken )
     {
         //Associate this tablenode with this after position, replace an
         //old node association if necessary
-#if 0
-        ::std::pair<SwTableNode *, SwNodeIndex> aPair(pTableNode,
-            &(pPam->GetPoint()->nNode));
-        maTables.insert(aPair);
-#else
-        maTables[pTableNode] = &pPam->GetPoint()->nNode;
-#endif
+        maTables.insert(::std::map<SwTableNode *, SwNodeIndex *>::value_type(pTableNode, &(pPam->GetPoint()->nNode)));
     }
 
     ULONG nOldPos = pPam->GetPoint()->nNode.GetIndex();
@@ -780,6 +774,9 @@ void SwRTFParser::CheckInsNewTblLine()
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2002/05/29 10:56:09  cmc
+      #99290# I hate sunpro
+
       Revision 1.4  2002/05/29 10:12:06  cmc
       #99567# utility missing
 
