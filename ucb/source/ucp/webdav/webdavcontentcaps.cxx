@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontentcaps.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-27 08:57:37 $
+ *  last change: $Author: kso $ $Date: 2001-07-03 10:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,7 @@ uno::Sequence< beans::Property > Content::getProperties(
     try
     {
         std::vector< DAVResourceInfo > props;
-        m_aResAccess.PROPFIND( ZERO, props, xEnv );
+        m_xResAccess->PROPFIND( ZERO, props, xEnv );
 
         // Note: vector always contains exactly one resource info, because
         //       we used a depth of ZERO for PROPFIND.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-27 08:57:37 $
+ *  last change: $Author: kso $ $Date: 2001-07-03 10:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,27 +187,19 @@ DAVResourceAccess::DAVResourceAccess(
                 DAVSessionFactory* pSessionFactory,
                 const rtl::OUString & rURL )
     throw( DAVException )
-: m_xSMgr( rSMgr ),
+: m_aURL( rURL ),
+  m_xSMgr( rSMgr ),
   m_pSessionFactory( pSessionFactory )
 {
-    if ( !initialize( rURL ) )
-    {
-        NeonUri theUri( rURL );
-        throw DAVException( DAVException::DAV_SESSION_CREATE,
-                            theUri.makeConnectionEndPointString() );
-    }
 }
 
 //=========================================================================
 void DAVResourceAccess::setURL( const rtl::OUString & rNewURL )
     throw( DAVException )
 {
-    if ( !initialize( rNewURL ) )
-    {
-        NeonUri theUri( rNewURL );
-        throw DAVException( DAVException::DAV_SESSION_CREATE,
-                            theUri.makeConnectionEndPointString() );
-    }
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    m_aURL  = rNewURL;
+    m_aPath = rtl::OUString(); // Next initialize() will create new session.
 }
 
 //=========================================================================
@@ -216,6 +208,8 @@ void DAVResourceAccess::OPTIONS( DAVCapabilities & rCapabilities,
                                       ucb::XCommandEnvironment > & xEnv )
     throw( DAVException )
 {
+    initialize();
+
     sal_Bool bRetry;
     do
     {
@@ -242,6 +236,8 @@ void DAVResourceAccess::PROPFIND( const Depth nDepth,
                                   ucb::XCommandEnvironment > & xEnv )
     throw( DAVException )
 {
+    initialize();
+
     sal_Bool bRetry;
     do
     {
@@ -268,6 +264,8 @@ void DAVResourceAccess::PROPFIND( const Depth nDepth,
                                       ucb::XCommandEnvironment > & xEnv )
     throw( DAVException )
 {
+    initialize();
+
     sal_Bool bRetry;
     do
     {
@@ -292,6 +290,8 @@ void DAVResourceAccess::PROPPATCH( const std::vector< ProppatchValue >& rValues,
                                        ucb::XCommandEnvironment >& xEnv )
     throw( DAVException )
 {
+    initialize();
+
     sal_Bool bRetry;
     do
     {
@@ -315,6 +315,8 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
                 const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     throw( DAVException )
 {
+    initialize();
+
     uno::Reference< io::XInputStream > xStream;
     sal_Bool bRetry;
     do
@@ -342,6 +344,8 @@ void DAVResourceAccess::GET( uno::Reference< io::XOutputStream > & rStream,
                                       ucb::XCommandEnvironment > & xEnv )
     throw( DAVException )
 {
+    initialize();
+
     sal_Bool bRetry;
     do
     {
@@ -366,6 +370,8 @@ void DAVResourceAccess::PUT( const uno::Reference< io::XInputStream > & rStream,
                                      ucb::XCommandEnvironment > & xEnv )
     throw( DAVException )
 {
+    initialize();
+
     sal_Bool bRetry;
     do
     {
@@ -392,6 +398,8 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw ( DAVException )
 {
+    initialize();
+
     uno::Reference< io::XInputStream > xStream;
     sal_Bool bRetry;
     do
@@ -424,6 +432,8 @@ void DAVResourceAccess::POST(
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw ( DAVException )
 {
+    initialize();
+
     sal_Bool bRetry;
     do
     {
@@ -448,6 +458,8 @@ void DAVResourceAccess::MKCOL( const uno::Reference<
                                       ucb::XCommandEnvironment > & xEnv )
     throw( DAVException )
 {
+    initialize();
+
     sal_Bool bRetry;
     do
     {
@@ -474,6 +486,8 @@ void DAVResourceAccess::COPY( const ::rtl::OUString & rSourcePath,
                                           ucb::XCommandEnvironment > & xEnv )
     throw( DAVException )
 {
+    initialize();
+
     sal_Bool bRetry;
     do
     {
@@ -500,6 +514,8 @@ void DAVResourceAccess::MOVE( const ::rtl::OUString & rSourcePath,
                                           ucb::XCommandEnvironment > & xEnv )
     throw( DAVException )
 {
+    initialize();
+
     sal_Bool bRetry;
     do
     {
@@ -523,6 +539,8 @@ void DAVResourceAccess::DESTROY( const uno::Reference<
                                        ucb::XCommandEnvironment > & xEnv )
     throw( DAVException )
 {
+    initialize();
+
     sal_Bool bRetry;
     do
     {
@@ -547,6 +565,7 @@ void DAVResourceAccess::LOCK ( const ucb::Lock & rLock,
                                       ucb::XCommandEnvironment > & xEnv )
     throw( DAVException )
 {
+//    initialize();
     OSL_ENSURE( sal_False, "DAVResourceAccess::LOCK - NYI" );
 }
 
@@ -556,28 +575,39 @@ void DAVResourceAccess::UNLOCK ( const ucb::Lock & rLock,
                                        ucb::XCommandEnvironment > & xEnv )
     throw( DAVException )
 {
+//    initialize();
     OSL_ENSURE( sal_False, "DAVResourceAccess::UNLOCK - NYI" );
 }
 
 //=========================================================================
 // init dav session and path
-sal_Bool DAVResourceAccess::initialize( const rtl::OUString & rURL )
+void DAVResourceAccess::initialize()
     throw ( DAVException )
 {
-    NeonUri aURI( rURL );
+    if ( m_aPath.getLength() == 0 )
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        if ( m_aPath.getLength() == 0 )
+        {
+            NeonUri aURI( m_aURL );
+            m_aPath = aURI.GetPath();
+            if ( !m_aPath.getLength() )
+                throw DAVException( DAVException::DAV_INVALID_ARG );
 
-    m_aPath = aURI.GetPath();
-    if ( !m_aPath.getLength() )
-      {
-        OSL_ENSURE( sal_False, "DAVResourceAccess::initialize - Invalid URL " );
-        return sal_False;
-      }
-
-    // set the webdav session
-    m_xSession = m_pSessionFactory->createDAVSession( rURL, m_xSMgr );
-    m_xSession->setServerAuthListener( &webdavAuthListener );
-
-    return sal_True;
+            // set the webdav session
+            try
+            {
+                m_xSession
+                    = m_pSessionFactory->createDAVSession( m_aURL, m_xSMgr );
+                m_xSession->setServerAuthListener( &webdavAuthListener );
+            }
+            catch ( DAVException const & )
+            {
+                m_aPath = rtl::OUString();
+                throw;
+            }
+        }
+    }
 }
 
 //=========================================================================
@@ -588,8 +618,10 @@ sal_Bool DAVResourceAccess::handleException( DAVException & e )
         case DAVException::DAV_HTTP_REDIRECT:
             try
             {
-                // set new path and session
-                return initialize( e.getData() );
+                // set new URL and path.
+                setURL( e.getData() );
+                initialize();
+                return sal_True;
             }
             catch( DAVException const & )
             {

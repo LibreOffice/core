@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
+ *  last change: $Author: kso $ $Date: 2001-07-03 10:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef _WEBDAV_UCP_CONTENT_HXX
 #define _WEBDAV_UCP_CONTENT_HXX
 
+#include <memory>
 #include <list>
 
 #ifndef _RTL_REF_HXX_
@@ -119,7 +120,7 @@ class ContentProperties;
 class Content : public ::ucb::ContentImplHelper,
                 public com::sun::star::ucb::XContentCreator
 {
-      DAVResourceAccess m_aResAccess;
+    std::auto_ptr< DAVResourceAccess > m_xResAccess;
     rtl::OUString     m_aEscapedTitle;
     ContentProvider*  m_pProvider; // No need for a ref, base class holds object
       sal_Bool        m_bTransient;
@@ -269,7 +270,7 @@ public:
       // Non-interface methods.
       //////////////////////////////////////////////////////////////////////
 
-    DAVResourceAccess & getResourceAccess() { return m_aResAccess; }
+    DAVResourceAccess & getResourceAccess() { return *m_xResAccess; }
 
       // Called from resultset data supplier.
       static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >

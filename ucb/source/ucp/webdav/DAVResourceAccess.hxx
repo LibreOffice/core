@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-27 08:57:37 $
+ *  last change: $Author: kso $ $Date: 2001-07-03 10:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #include <rtl/ref.hxx>
 #endif
 
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
@@ -107,6 +111,8 @@ class DAVSessionFactory;
 
 class DAVResourceAccess
 {
+    osl::Mutex    m_aMutex;
+    rtl::OUString m_aURL;
     rtl::OUString m_aPath;
     rtl::Reference< DAVSession > m_xSession;
     DAVSessionFactory*           m_pSessionFactory;
@@ -237,7 +243,7 @@ public:
 
 private:
     sal_Bool handleException( DAVException & e );
-    sal_Bool initialize( const rtl::OUString & rURL )
+    void initialize()
         throw ( DAVException );
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-27 08:57:37 $
+ *  last change: $Author: kso $ $Date: 2001-07-03 10:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,8 +213,8 @@ Content::Content(
 {
     try
     {
-        m_aResAccess = DAVResourceAccess(
-            rxSMgr, pSessionFactory, Identifier->getContentIdentifier() );
+        m_xResAccess.reset( new DAVResourceAccess(
+            rxSMgr, pSessionFactory, Identifier->getContentIdentifier() ) );
     }
     catch ( DAVException const & )
     {
@@ -241,8 +241,8 @@ Content::Content(
 {
     try
     {
-        m_aResAccess = DAVResourceAccess(
-            rxSMgr, pSessionFactory, Identifier->getContentIdentifier() );
+        m_xResAccess.reset( new DAVResourceAccess(
+            rxSMgr, pSessionFactory, Identifier->getContentIdentifier() ) );
     }
     catch ( DAVException const & )
     {
@@ -552,7 +552,7 @@ uno::Any SAL_CALL Content::execute(
                 // PUSH: write data
                 try
                 {
-                    m_aResAccess.GET( xOut, Environment );
+                    m_xResAccess->GET( xOut, Environment );
                 }
                 catch ( DAVException const & e )
                 {
@@ -571,7 +571,7 @@ uno::Any SAL_CALL Content::execute(
                     try
                     {
                         uno::Reference< io::XInputStream > xIn
-                            = m_aResAccess.GET( Environment );
+                            = m_xResAccess->GET( Environment );
                         xDataSink->setInputStream( xIn );
                     }
                     catch ( DAVException const & e )
@@ -636,7 +636,7 @@ uno::Any SAL_CALL Content::execute(
 //      {
             try
             {
-                  m_aResAccess.DESTROY( Environment );
+                m_xResAccess->DESTROY( Environment );
             }
             catch ( DAVException const & e )
             {
@@ -702,10 +702,10 @@ uno::Any SAL_CALL Content::execute(
             try
             {
                 uno::Reference< io::XInputStream > xResult
-                    = m_aResAccess.POST( aArg.MediaType,
-                                         aArg.Referer,
-                                         aArg.Source,
-                                         Environment );
+                    = m_xResAccess->POST( aArg.MediaType,
+                                          aArg.Referer,
+                                          aArg.Source,
+                                          Environment );
                 xSink->setInputStream( xResult );
             }
             catch ( DAVException const & e )
@@ -722,11 +722,11 @@ uno::Any SAL_CALL Content::execute(
             {
                 try
                 {
-                    m_aResAccess.POST( aArg.MediaType,
-                                       aArg.Referer,
-                                       aArg.Source,
-                                       xResult,
-                                       Environment );
+                    m_xResAccess->POST( aArg.MediaType,
+                                        aArg.Referer,
+                                        aArg.Source,
+                                        xResult,
+                                        Environment );
                 }
                 catch ( DAVException const & e )
                 {
@@ -834,7 +834,7 @@ void SAL_CALL Content::addProperty( const rtl::OUString& Name,
     try
     {
         // Set property value at server.
-        m_aResAccess.PROPPATCH( aProppatchValues, xEnv );
+        m_xResAccess->PROPPATCH( aProppatchValues, xEnv );
 
         // Notify propertyset info change listeners.
         beans::PropertySetInfoChangeEvent evt(
@@ -849,7 +849,7 @@ void SAL_CALL Content::addProperty( const rtl::OUString& Name,
         try
         {
             DAVCapabilities caps;
-               m_aResAccess.OPTIONS( caps, xEnv );
+            m_xResAccess->OPTIONS( caps, xEnv );
 
             if ( caps.class1 )
             {
@@ -918,7 +918,7 @@ void SAL_CALL Content::removeProperty( const rtl::OUString& Name )
         aProppatchValues.push_back( aValue );
 
         // Remove property value from server.
-        m_aResAccess.PROPPATCH( aProppatchValues, xEnv );
+        m_xResAccess->PROPPATCH( aProppatchValues, xEnv );
 
         // Notify propertyset info change listeners.
         beans::PropertySetInfoChangeEvent evt(
@@ -933,7 +933,7 @@ void SAL_CALL Content::removeProperty( const rtl::OUString& Name )
         try
         {
             DAVCapabilities caps;
-               m_aResAccess.OPTIONS( caps, xEnv );
+            m_xResAccess->OPTIONS( caps, xEnv );
 
             if ( caps.class1 )
             {
@@ -1059,7 +1059,7 @@ Content::createNewContent( const star::ucb::ContentInfo& Info )
             return new ::webdav_ucp::Content( m_xSMgr,
                                               m_pProvider,
                                                 xId,
-                                                m_aResAccess.getSessionFactory(),
+                                              m_xResAccess->getSessionFactory(),
                                                 isCollection );
         }
         catch ( star::ucb::ContentCreationException & )
@@ -1532,7 +1532,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     {
         try
         {
-            m_aResAccess.PROPFIND( ZERO, aPropNames, resources, xEnv );
+            m_xResAccess->PROPFIND( ZERO, aPropNames, resources, xEnv );
         }
         catch ( DAVException const & )
         {
@@ -1705,7 +1705,7 @@ void Content::setPropertyValues(
                     try
                     {
                         DAVCapabilities caps;
-                        m_aResAccess.OPTIONS( caps, xEnv );
+                        m_xResAccess->OPTIONS( caps, xEnv );
                         bDAV = caps.class1;
                     }
                     catch ( DAVException const & )
@@ -1774,7 +1774,7 @@ void Content::setPropertyValues(
         try
         {
             // Set property values at server.
-            m_aResAccess.PROPPATCH( aProppatchValues, xEnv );
+            m_xResAccess->PROPPATCH( aProppatchValues, xEnv );
 
             std::vector< ProppatchValue >::const_iterator it
                 = aProppatchValues.begin();
@@ -1821,7 +1821,7 @@ void Content::setPropertyValues(
             NeonUri targetURI( xNewId->getContentIdentifier() );
             targetURI.SetScheme( rtl::OUString::createFromAscii( "http" ) );
 
-            m_aResAccess.MOVE(
+            m_xResAccess->MOVE(
                 sourceURI.GetPath(), targetURI.GetURI(), sal_False, xEnv );
             // @@@ Should check for resources that could not be moved
             //     (due to source access or target overwrite) and send
@@ -1836,7 +1836,7 @@ void Content::setPropertyValues(
             aGuard.clear();
             if ( exchangeIdentity( xNewId ) )
             {
-                m_aResAccess.setURL( aNewURL );
+                m_xResAccess->setURL( aNewURL );
 
 // DAV resources store all additional props on server!
 //              // Adapt Additional Core Properties.
@@ -2002,12 +2002,12 @@ void Content::insert(
 
         try
         {
-            m_aResAccess.setURL( aURL );
+            m_xResAccess->setURL( aURL );
 
             if ( m_bCollection )
-                m_aResAccess.MKCOL( Environment );
+                m_xResAccess->MKCOL( Environment );
             else
-                  m_aResAccess.PUT( xInputStream, Environment );
+                m_xResAccess->PUT( xInputStream, Environment );
           }
         catch ( DAVException const & e )
         {
@@ -2024,7 +2024,7 @@ void Content::insert(
                         // Destroy old resource.
                         try
                         {
-                            m_aResAccess.DESTROY( Environment );
+                            m_xResAccess->DESTROY( Environment );
                         }
                         catch ( DAVException const & e )
                         {
@@ -2082,7 +2082,7 @@ void Content::insert(
 
         try
         {
-            m_aResAccess.PUT( xInputStream, Environment );
+            m_xResAccess->PUT( xInputStream, Environment );
           }
         catch ( DAVException const & e )
         {
@@ -2177,7 +2177,7 @@ void Content::transfer(
             = new ::ucb::ContentIdentifier( m_xSMgr, aTargetURL );
 
         DAVResourceAccess aSourceAccess( m_xSMgr,
-                                         m_aResAccess.getSessionFactory(),
+                                         m_xResAccess->getSessionFactory(),
                                          sourceURI.GetURI() );
 
         if ( rArgs.MoveData == sal_True )
@@ -2414,7 +2414,7 @@ sal_Bool Content::isFolder(
         std::vector< DAVResource > resources;
         try
         {
-            m_aResAccess.PROPFIND( ZERO, aPropNames, resources, xEnv );
+            m_xResAccess->PROPFIND( ZERO, aPropNames, resources, xEnv );
         }
         catch ( DAVException const & )
         {
