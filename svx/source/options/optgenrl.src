@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-07 14:45:02 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:07:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -946,6 +946,7 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
     };
 
  // ********************************************************************** EOF
+
 
 
 
