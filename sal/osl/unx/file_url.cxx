@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_url.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2002-12-06 08:33:13 $
+ *  last change: $Author: rt $ $Date: 2002-12-09 13:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef __OSL_SYSTEM_H__
+#include "system.h"
+#endif
 
 #ifndef _LIMITS_H
 #include <limits.h>
