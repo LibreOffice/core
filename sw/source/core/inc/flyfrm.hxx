@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrm.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:28:03 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:15:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ public:
     virtual void Paint( const SwRect& ) const;
     virtual void ChgSize( const Size& aNewSize );
     virtual BOOL GetCrsrOfst( SwPosition *, Point&,
-                                const SwCrsrMoveState* = 0 ) const;
+                              SwCrsrMoveState* = 0 ) const;
 
     virtual void  CheckDirection( BOOL bVert );
     virtual void Cut();
