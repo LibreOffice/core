@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:27:20 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,24 +190,31 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     //
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
+    OSL_ENSURE( url.copy( 0, nLen ).equalsAscii( "sdbc:address" ), "OConnection::construct: invalid start of the URI - should never have survived XDriver::acceptsURL!" );
+
     ::rtl::OUString aAddrbookURI(url.copy(nLen+1));
     // Get Scheme
     nLen = aAddrbookURI.indexOf(':');
     ::rtl::OUString aAddrbookScheme;
+    ::rtl::OUString sAdditionalInfo;
     if ( nLen == -1 )
     {
         // There isn't any subschema: - but could be just subschema
-        if ( aAddrbookURI.getLength() > 0 ) {
+        if ( aAddrbookURI.getLength() > 0 )
+        {
             aAddrbookScheme= aAddrbookURI;
         }
-        else {
+        else
+        {
             OSL_TRACE( "No subschema given!!!\n");
             ::dbtools::throwGenericSQLException(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No subschema provided")),NULL);
         }
     }
-    else {
+    else
+    {
         aAddrbookScheme = aAddrbookURI.copy(0, nLen);
+        sAdditionalInfo = aAddrbookURI.copy( nLen + 1 );
     }
 
     OSL_TRACE("URI = %s\n", ((OUtoCStr(aAddrbookURI)) ? (OUtoCStr(aAddrbookURI)):("NULL")) );
@@ -241,6 +248,25 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 
         m_sMozillaURI = rtl::OUString::createFromAscii( MOZ_SCHEME_LDAP );
         m_eSDBCAddressType = SDBCAddress::LDAP;
+
+        if ( !m_sHostName.getLength() )
+        {
+            // see whether the URI contains a hostname/port
+            if ( sAdditionalInfo.getLength() )
+            {
+                sal_Int32 nPortSeparator = sAdditionalInfo.indexOf( ':' );
+                if ( nPortSeparator == -1 )
+                    m_sHostName = sAdditionalInfo;
+                else
+                {
+                    m_sHostName = sAdditionalInfo.copy( 0, nPortSeparator );
+                    nPortNumber = sAdditionalInfo.copy( nPortSeparator + 1 ).toInt32();
+                    OSL_ENSURE( nPortNumber != 0, "OConnection::construct: invalid LDAP port number in the URL!" );
+                    if ( nPortNumber == 0 )
+                        nPortNumber = -1;
+                }
+            }
+        }
 
         const PropertyValue* pInfo = info.getConstArray();
         const PropertyValue* pInfoEnd = pInfo + info.getLength();
