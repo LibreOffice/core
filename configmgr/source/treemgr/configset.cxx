@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:34:36 $
+ *  last change: $Author: jb $ $Date: 2001-06-21 12:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ Name ElementRef::getName() const
 {
     if (!isValid()) return Name();
 
-    return m_aTreeHolder->name( m_aTreeHolder->root() );
+    return m_aTreeHolder->getRootName();
 }
 //-----------------------------------------------------------------------------
 // class ElementTree

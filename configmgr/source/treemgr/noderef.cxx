@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:31:31 $
+ *  last change: $Author: jb $ $Date: 2001-06-21 12:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,9 +467,9 @@ Name Tree::getName(NodeRef const& aNode) const
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires valid tree" );
     OSL_PRECOND( !aNode.isValid() || isValidNode(aNode), "ERROR: Configuration: NodeRef does not match tree" );
 
-    if (!aNode.isValid()) return Name();
+    if (isEmpty()) return Name();
 
-    return aNode.m_pImpl->name();
+    return m_pImpl->getNodeName(aNode.m_nPos);
 }
 //-----------------------------------------------------------------------------
 // class ValueRef
@@ -713,10 +713,10 @@ Name Tree::getName(AnyNodeRef const& aNode) const
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires valid tree" );
     OSL_PRECOND( !aNode.isValid() || isValidNode(aNode), "ERROR: Configuration: NodeRef does not match tree" );
 
-    if (!aNode.isValid()) return Name();
+    if (isEmpty() || !aNode.isValid()) return Name();
 
     if (aNode.isNode())
-        return aNode.m_pUsedImpl->name();
+        return m_pImpl->getNodeName(aNode.m_nUsedPos);
 
     else
         return aNode.m_sNodeName;
@@ -1066,8 +1066,7 @@ Name Tree::getRootName() const
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     if (isEmpty()) return Name();
 
-    NodeOffset nRoot = m_pImpl->root();
-    return m_pImpl->name(nRoot);
+    return m_pImpl->getRootName();
 }
 //-----------------------------------------------------------------------------
 
@@ -1760,7 +1759,7 @@ void getAllChildrenHelper(NodeID const& aNode, SubNodeIDList& aList)
                 nOffset = pTreeImpl->findNextChild(nParent,nOffset))
             {
                 OSL_ASSERT( pTreeImpl->isValidNode(nOffset) );
-                aList.push_back( SubNodeID( aNode, pTreeImpl->name(nOffset)) );
+                aList.push_back( SubNodeID( aNode, pTreeImpl->getNodeName(nOffset)) );
             }
         }
     }

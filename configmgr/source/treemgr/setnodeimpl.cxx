@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:43:00 $
+ *  last change: $Author: jb $ $Date: 2001-06-21 12:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ namespace
         OSL_ENSURE(aTree->nodeCount(), "INTERNAL ERROR: Unexpected empty (!) tree constructed in set node");
         OSL_ENSURE(aTree->isValidNode(aTree->root()), "INTERNAL ERROR: Corrupt tree constructed in set node");
 
-        return aTree->name( aTree->root() );
+        return aTree->getRootName();
     }
     void CollectElementTrees::handle(ValueNode& rValue)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:31:31 $
+ *  last change: $Author: jb $ $Date: 2001-06-21 12:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ bool CommitHelper::prepareCommit(TreeChangeList& rChangeList)
         return false;
 
     // find the name and path of the change
-    Name aRootName(m_pTree->name(m_pTree->root()));
+    Name aRootName(m_pTree->getRootName());
     AbsolutePath aPath = m_pTree->getContextPath();
 
     OSL_ENSURE(aRootName.toString() == pTreeChange->getNodeName(), "ERROR in Commit: Change Name Mismatch");
@@ -160,7 +160,7 @@ void CommitHelper::finishCommit(TreeChangeList& rChangeList)
     OSL_ENSURE(m_pTree,"INTERNAL ERROR: Nothing to finish without a tree");
 
     // find the name and path of the change
-    Name aRootName(m_pTree->name(m_pTree->root()));
+    Name aRootName(m_pTree->getRootName());
     AbsolutePath aPath = m_pTree->getContextPath();
 
     OSL_ENSURE(rChangeList.pathToRoot.fullName() == aPath.toString(), "ERROR: FinishCommit cannot handle rebased changes trees");
@@ -175,7 +175,7 @@ void CommitHelper::revertCommit(TreeChangeList& rChangeList)
 {
     OSL_ENSURE(m_pTree,"INTERNAL ERROR: Nothing to finish without a tree");
 
-    Name aRootName(m_pTree->name(m_pTree->root()));
+    Name aRootName(m_pTree->getRootName());
     AbsolutePath aPath = m_pTree->getContextPath();
 
     OSL_ENSURE(rChangeList.pathToRoot.fullName() == aPath.toString(), "ERROR: cannot handle rebased changes trees");
@@ -190,7 +190,7 @@ void CommitHelper::failedCommit(TreeChangeList& rChangeList)
 {
     OSL_ENSURE(m_pTree,"INTERNAL ERROR: Nothing to finish without a tree");
 
-    Name aRootName(m_pTree->name(m_pTree->root()));
+    Name aRootName(m_pTree->getRootName());
     AbsolutePath aPath = m_pTree->getContextPath();
 
     OSL_ENSURE(rChangeList.pathToRoot.fullName() == aPath.toString(), "ERROR: cannot handle rebased changes trees");

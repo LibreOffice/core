@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:44:49 $
+ *  last change: $Author: jb $ $Date: 2001-06-21 12:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ namespace configmgr
             NodeImplHolder      m_pSpecificNode;
             NodeOffset          m_nParent;
 
+            friend class TreeImpl;        // can access the name
             friend class ElementTreeImpl; // can rename root nodes
         public:
             Node(NodeImplHolder const& aSpecificNodeImpl, Name const& aName, NodeOffset nParent);
@@ -168,7 +169,6 @@ namespace configmgr
             NodeOffset          parent()        const { return m_nParent; }
             NodeType::Enum      getNodeType()   const { return m_pSpecificNode->getType(); }
 
-            Name                name()          const { return m_aName; }
             Attributes          attributes()    const { return m_pSpecificNode->getAttributes(); }
 
         // change management
@@ -274,7 +274,11 @@ namespace configmgr
                 <p>PRE: <code>isValidNode(nNode)</code>
                 </p>
             */
-            Name            name(NodeOffset nNode) const;
+            Name            getNodeName(NodeOffset nNode) const;
+
+            /** gets the <type>Name</type> of the root node (i.e. of the tree)
+            */
+            Name            getRootName() const;
 
             /** gets the number of hierarchy levels from the root node to node <var>nNode</var>
                 in this tree
@@ -408,6 +412,7 @@ namespace configmgr
             virtual RootTreeImpl const* doCastToRootTree() const = 0;
             virtual ElementTreeImpl const* doCastToElementTree() const = 0;
 
+            Name    implGetOriginalName(NodeOffset nNode) const;
             virtual void doGetPathRoot(Path::Components& rPath) const = 0;
 
             mutable OTreeAccessor m_aOwnLock;

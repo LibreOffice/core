@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:44:49 $
+ *  last change: $Author: jb $ $Date: 2001-06-21 12:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,7 +473,7 @@ void TreeImpl::recoverFailedCommit(SubtreeChange& rRootChange)
 
 void TreeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& aExternalChange)
 {
-    OSL_PRECOND( name(root()).toString() == aExternalChange.getNodeName(), "Name of change does not match actual node" );
+    OSL_PRECOND( getRootName().toString() == aExternalChange.getNodeName(), "Name of change does not match actual node" );
 
     TreeDepth nDepth = getAvailableDepth();
 
@@ -484,7 +484,7 @@ void TreeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeCha
 void TreeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, NodeOffset nNode, SubtreeChange const& aExternalChange)
 {
     OSL_PRECOND( isValidNode(nNode), "ERROR: Valid node required for adjusting to changes" );
-    OSL_PRECOND( name(nNode).toString() == aExternalChange.getNodeName(), "Name of change does not match actual node" );
+    OSL_PRECOND( getNodeName(nNode).toString() == aExternalChange.getNodeName(), "Name of change does not match actual node" );
 
     TreeDepth nDepth = remainingDepth(getAvailableDepth(),depthTo(nNode));
 
@@ -531,7 +531,7 @@ void TreeImpl::doFinishCommit(SubtreeChange& rSubtreeChange, NodeOffset nNode)
     OSL_ASSERT(isValidNode(nNode));
     Node* pNode = node(nNode);
 
-    OSL_ENSURE(rSubtreeChange.getNodeName() == name(nNode).toString(), "ERROR: Change name does not match node");
+    OSL_ENSURE(rSubtreeChange.getNodeName() == getNodeName(nNode).toString(), "ERROR: Change name does not match node");
     if (pNode->isSetNode())
     {
         OSL_ENSURE(rSubtreeChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
@@ -555,7 +555,7 @@ void TreeImpl::doRevertCommit(SubtreeChange& rSubtreeChange, NodeOffset nNode)
     OSL_ASSERT(isValidNode(nNode));
     Node* pNode = node(nNode);
 
-    OSL_ENSURE(rSubtreeChange.getNodeName() == name(nNode).toString(), "ERROR: Change name does not match node");
+    OSL_ENSURE(rSubtreeChange.getNodeName() == getNodeName(nNode).toString(), "ERROR: Change name does not match node");
     if (pNode->isSetNode())
     {
         OSL_ENSURE(rSubtreeChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
@@ -579,7 +579,7 @@ void TreeImpl::doFailedCommit(SubtreeChange& rSubtreeChange, NodeOffset nNode)
     OSL_ASSERT(isValidNode(nNode));
     Node* pNode = node(nNode);
 
-    OSL_ENSURE(rSubtreeChange.getNodeName() == name(nNode).toString(), "ERROR: Change name does not match node");
+    OSL_ENSURE(rSubtreeChange.getNodeName() == getNodeName(nNode).toString(), "ERROR: Change name does not match node");
     if (pNode->isSetNode())
     {
         OSL_ENSURE(rSubtreeChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
@@ -603,7 +603,7 @@ void TreeImpl::doAdjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeC
     OSL_ASSERT(isValidNode(nNode));
     Node* pNode = node(nNode);
 
-    OSL_ENSURE(rSubtreeChange.getNodeName() == name(nNode).toString(), "ERROR: Change name does not match node");
+    OSL_ENSURE(rSubtreeChange.getNodeName() == getNodeName(nNode).toString(), "ERROR: Change name does not match node");
 
     if (pNode->isSetNode())
     {
@@ -757,10 +757,27 @@ NodeOffset TreeImpl::parent(NodeOffset nNode) const
     return node(nNode)->parent();
 }
 //-----------------------------------------------------------------------------
-
-Name TreeImpl::name(NodeOffset nNode) const
+inline // is private
+Name TreeImpl::implGetOriginalName(NodeOffset nNode) const
 {
-    return node(nNode)->name();
+    OSL_ASSERT(isValidNode(nNode));
+
+    return node(nNode)->m_aName;
+}
+//-----------------------------------------------------------------------------
+
+
+Name TreeImpl::getNodeName(NodeOffset nNode) const
+{
+    if (nNode == root()) return getRootName();
+
+    return implGetOriginalName(nNode);
+}
+//-----------------------------------------------------------------------------
+
+Name TreeImpl::getRootName() const
+{
+    return implGetOriginalName(root());
 }
 //-----------------------------------------------------------------------------
 
@@ -788,7 +805,7 @@ void TreeImpl::appendPathTo(NodeOffset nNode, Path::Components& rNames)
     for (; nNode != 0; nNode = parent(nNode) )
     {
         OSL_ENSURE( isValidNode(nNode), "ERROR: Configuration: node has invalid parent");
-        rNames.push_back( name(nNode) );
+        rNames.push_back( getNodeName(nNode) );
     }
     std::reverse(rNames.begin() + nStart, rNames.end());
 }
@@ -830,7 +847,7 @@ NodeOffset TreeImpl::findChild(NodeOffset nParent, Name const& aName) const
     NodeOffset const nAfterLast = nodeCount() + root();
     while (++nPos < nAfterLast)
     {
-        if(parent(nPos) == nParent && name(nPos) == aName)
+        if(parent(nPos) == nParent && getNodeName(nPos) == aName)
             return nPos;
     }
     return 0;
@@ -1022,7 +1039,7 @@ void ElementTreeImpl::attachTo(ISubtree& rOwningSet, Name const& aElementName)
 
     if (m_pOwnedNode)
     {
-        OSL_ENSURE(this->name(root()) == aElementName,"ElementTree: Attaching with unexpected element name");
+        OSL_ENSURE(this->getRootName() == aElementName,"ElementTree: Attaching with unexpected element name");
         m_pOwnedNode->setName(aElementName.toString());
 
         std::auto_ptr<INode> aNode(m_pOwnedNode);
@@ -1039,7 +1056,7 @@ void ElementTreeImpl::detachFrom(ISubtree& rOwningSet, Name const& aElementName)
     OSL_ENSURE(!m_pOwnedNode,"ERROR: Cannot detach a already owned node from a subtree");
     if (!m_pOwnedNode)
     {
-        OSL_ENSURE(this->name(root()) == aElementName,"ElementTree: Detaching with unexpected element name");
+        OSL_ENSURE(this->getRootName() == aElementName,"ElementTree: Detaching with unexpected element name");
         std::auto_ptr<INode> aNode( rOwningSet.removeChild(aElementName.toString()) );
         OSL_ENSURE(aNode.get(),"ERROR: Detached node not found in the given subtree");
 
@@ -1066,7 +1083,7 @@ void ElementTreeImpl::releaseTo(std::auto_ptr<INode>& rNewOwner)
     OSL_ENSURE(m_pOwnedNode,"ERROR: Cannot release a non-owned node");
     if (m_pOwnedNode)
     {
-        Name aNodeName = node(root())->name();
+        Name aNodeName = getRootName();
         m_pOwnedNode->setName( aNodeName.toString() );
     }
 

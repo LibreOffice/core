@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:35:59 $
+ *  last change: $Author: jb $ $Date: 2001-06-21 12:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,7 @@ void ValueChangeImpl::setTarget(TreeHolder const& aAffectedTree, NodeOffset nPar
     {
         OSL_ENSURE(false, "ValueChangeTarget is being set without a name");
         NodeChangeImpl::setAffected(aAffectedTree,aAffectedTree->parent(nParentNode));
-        m_aName = aAffectedTree->name(nParentNode);
+        m_aName = aAffectedTree->getNodeName(nParentNode);
     }
 }
 //-----------------------------------------------------------------------------
