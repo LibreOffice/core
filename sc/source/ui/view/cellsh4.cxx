@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-28 14:59:21 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,11 +239,13 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
     switch ( nSlotId )
     {
         case SID_NEXT_TABLE:
-            pTabViewShell->SelectNextTab( 1 );
+        case SID_NEXT_TABLE_SEL:
+            pTabViewShell->SelectNextTab( 1, (nSlotId == SID_NEXT_TABLE_SEL) );
             break;
 
         case SID_PREV_TABLE:
-            pTabViewShell->SelectNextTab( -1 );
+        case SID_PREV_TABLE_SEL:
+            pTabViewShell->SelectNextTab( -1, (nSlotId == SID_PREV_TABLE_SEL) );
             break;
 
         //  Cursorbewegungen in Bloecken gehen nicht von Basic aus,
