@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 10:35:58 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 14:39:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,13 @@
 #ifndef _SV_SALLAYOUT_HXX
 #include <sallayout.hxx>
 #endif
+#ifndef _SV_IMAGE_H
+#include <image.h>
+#endif
+#ifndef _SV_IMAGE_HXX
+#include <image.hxx>
+#endif
+
 #define BAND_MAX_SIZE 512000
 
 // =======================================================================
@@ -1104,6 +1111,95 @@ void OutputDevice::ImplDrawMask( const Point& rDestPt, const Size& rDestSize,
                 mpGraphics->DrawMask( &aPosAry, *pImpBmp->ImplGetSalBitmap(),
                                       ImplColorToSal( rMaskColor ), this );
 
+        }
+    }
+}
+
+// ------------------------------------------------------------------
+
+void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, USHORT nStyle )
+{
+    DBG_CHKOBJ( &rImage, Image, NULL );
+    DBG_ASSERT( GetOutDevType() != OUTDEV_PRINTER, "DrawImage(): Images can't be drawn on any mprinter" );
+
+    if( !rImage.mpImplData || ImplIsRecordLayout() )
+        return;
+
+    switch( rImage.mpImplData->meType )
+    {
+        case IMAGETYPE_BITMAP:
+            DrawBitmap( rPos, *static_cast< Bitmap* >( rImage.mpImplData->mpData ) );
+        break;
+
+        case IMAGETYPE_IMAGE:
+        {
+            ImplImageData* pData = static_cast< ImplImageData* >( rImage.mpImplData->mpData );
+
+            if( !pData->mpImageBitmap )
+            {
+                const Size aSize( pData->maBmpEx.GetSizePixel() );
+
+                pData->mpImageBitmap = new ImplImageBmp;
+                pData->mpImageBitmap->Create( pData->maBmpEx, aSize.Width(), aSize.Height(), 1 );
+            }
+
+            pData->mpImageBitmap->Draw( 0, this, rPos, nStyle );
+        }
+        break;
+
+        case IMAGETYPE_IMAGEREF:
+        {
+            ImplImageRefData* pData = static_cast< ImplImageRefData* >( rImage.mpImplData->mpData );
+            pData->mpImplData->mpImageBitmap->Draw( pData->mnIndex, this, rPos, nStyle );
+        }
+        break;
+
+        default:
+        break;
+    }
+}
+
+// ------------------------------------------------------------------
+
+void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
+                              const Image& rImage, USHORT nStyle )
+{
+    DBG_CHKOBJ( &rImage, Image, NULL );
+    DBG_ASSERT( GetOutDevType() != OUTDEV_PRINTER, "DrawImage(): Images can't be drawn on any mprinter" );
+
+    if( rImage.mpImplData && !ImplIsRecordLayout() )
+    {
+        switch( rImage.mpImplData->meType )
+        {
+            case IMAGETYPE_BITMAP:
+                DrawBitmap( rPos, rSize, *static_cast< Bitmap* >( rImage.mpImplData->mpData ) );
+            break;
+
+            case IMAGETYPE_IMAGE:
+            {
+                ImplImageData* pData = static_cast< ImplImageData* >( rImage.mpImplData->mpData );
+
+                if ( !pData->mpImageBitmap )
+                {
+                    const Size aSize( pData->maBmpEx.GetSizePixel() );
+
+                    pData->mpImageBitmap = new ImplImageBmp;
+                    pData->mpImageBitmap->Create( pData->maBmpEx, aSize.Width(), aSize.Height(), 1 );
+                }
+
+                pData->mpImageBitmap->Draw( 0, this, rPos, nStyle, &rSize );
+            }
+            break;
+
+            case IMAGETYPE_IMAGEREF:
+            {
+                ImplImageRefData* pData = static_cast< ImplImageRefData* >( rImage.mpImplData->mpData );
+                pData->mpImplData->mpImageBitmap->Draw( pData->mnIndex, this, rPos, nStyle, &rSize );
+            }
+            break;
+
+            default:
+            break;
         }
     }
 }
