@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-10 14:14:45 $
+ *  last change: $Author: jp $ $Date: 2001-04-25 15:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -916,14 +916,7 @@ void _InitCore()
             ::com::sun::star::lang::XMultiServiceFactory > xMSF =
                                     ::comphelper::getProcessServiceFactory();
     pAppCharClass = new CharClass( rLcl );
-
-    pAppLocaleData = new LocaleDataWrapper( xMSF, rLcl );
     pCalendarWrapper = new SwCalendarWrapper( xMSF );
-
-    pCollator = new CollatorWrapper( xMSF );
-    pCollator->loadDefaultCollator( rLcl, SW_COLLATOR_IGNORES );
-    pCaseCollator = new CollatorWrapper( xMSF );
-    pCaseCollator->loadDefaultCollator( rLcl, 0 );
 
     _FrmInit();
     _TextInit();
@@ -1010,8 +1003,19 @@ CharClass& GetAppCharClass()
 {
     return *pAppCharClass;
 }
+
 LocaleDataWrapper& GetAppLocaleData()
 {
+    if( !pAppLocaleData )
+    {
+        const ::com::sun::star::lang::Locale& rLcl = pBreakIt->GetLocale(
+                                            (LanguageType)GetAppLanguage() );
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
+                                    ::comphelper::getProcessServiceFactory();
+
+        pAppLocaleData = new LocaleDataWrapper( xMSF, rLcl );
+    }
     return *pAppLocaleData;
 }
 
@@ -1037,10 +1041,32 @@ ULONG GetAppLanguage()
 
 CollatorWrapper& GetAppCollator()
 {
+    if( !pCollator )
+    {
+        const ::com::sun::star::lang::Locale& rLcl = pBreakIt->GetLocale(
+                                            (LanguageType)GetAppLanguage() );
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
+                                    ::comphelper::getProcessServiceFactory();
+
+        pCollator = new CollatorWrapper( xMSF );
+        pCollator->loadDefaultCollator( rLcl, SW_COLLATOR_IGNORES );
+    }
     return *pCollator;
 }
 CollatorWrapper& GetAppCaseCollator()
 {
+    if( !pCaseCollator )
+    {
+        const ::com::sun::star::lang::Locale& rLcl = pBreakIt->GetLocale(
+                                            (LanguageType)GetAppLanguage() );
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
+                                    ::comphelper::getProcessServiceFactory();
+
+        pCaseCollator = new CollatorWrapper( xMSF );
+        pCaseCollator->loadDefaultCollator( rLcl, 0 );
+    }
     return *pCaseCollator;
 }
 
