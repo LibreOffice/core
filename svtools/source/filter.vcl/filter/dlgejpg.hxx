@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgejpg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:59 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 19:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,6 @@
 #include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/config.hxx>
 #include "stdctrl.hxx"
 #include <fltcall.hxx>
 
@@ -79,6 +78,7 @@
 |* Dialog zum Einstellen von Filteroptionen
 |*
 \************************************************************************/
+class FilterConfigItem;
 class DlgExportEJPG : public ModalDialog
 {
 private:
@@ -91,14 +91,13 @@ private:
     OKButton            aBtnOK;
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;
-
-    Config*             pConfig;
-    ResMgr*             pMgr;
+    FilterConfigItem*   pConfigItem;
 
     DECL_LINK( OK, void * );
 
 public:
             DlgExportEJPG( FltCallDialogParameter& rDlgPara );
+            ~DlgExportEJPG();
 };
 
 #endif // _DLGEJPG_HXX_

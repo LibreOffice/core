@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-22 17:36:04 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 19:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,6 @@ class FilterConfigCache
         String      GetImportFormatName( sal_uInt16 nFormat );
         String      GetImportFormatExtension( sal_uInt16 nFormat );
         String      GetImportFormatShortName( sal_uInt16 nFormat );
-        String      GetImportFormatType( sal_uInt16 nFormat );
         String      GetImportWildcard( sal_uInt16 nFormat );
 
         sal_Bool    IsImportInternalFilter( sal_uInt16 nFormat );
@@ -143,7 +142,6 @@ class FilterConfigCache
         String      GetExportFormatName( sal_uInt16 nFormat );
         String      GetExportFormatExtension( sal_uInt16 nFormat );
         String      GetExportFormatShortName( sal_uInt16 nFormat );
-        String      GetExportFormatType( sal_uInt16 nFormat );
         String      GetExportWildcard( sal_uInt16 nFormat );
 
         sal_Bool    IsExportInternalFilter( sal_uInt16 nFormat );

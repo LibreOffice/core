@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvmain.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-21 18:32:15 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 19:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -874,11 +874,6 @@ void CircType::Draw(OutputDevice& rOut)
 |*
 *************************************************************************/
 
-void BmapType::SetPaths(const INetURLObject rFltPath )
-{
-    aFltPath = rFltPath;
-}
-
 void BmapType::Draw(OutputDevice& rOut)
 {
     //ifstream aInp;
@@ -896,7 +891,6 @@ void BmapType::Draw(OutputDevice& rOut)
                 GraphicFilter aFlt;
                 Graphic aGrf;
                 USHORT nRet;
-                aFlt.SetFilterPath(aFltPath);
                 nRet=aFlt.ImportGraphic(aGrf,aFNam);
                 aGrf.Draw(&rOut,Point(Pos1.x,Pos1.y),Size(Pos2.x-Pos1.x,Pos2.y-Pos1.y));
             } break;
@@ -948,7 +942,7 @@ UINT32 GrupType::GetSubPtr()
 |*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
-void DrawObjkList( SvStream& rInp, OutputDevice& rOut, const INetURLObject& rFltPath )
+void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
 {
     ObjkType aObjk;
     USHORT nGrpCnt=0;
@@ -974,7 +968,6 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut, const INetURLObject& rFlt
                     BmapType aBmap;
                     rInp>>aBmap;
                     if (!rInp.GetError()) {
-                        aBmap.SetPaths( rFltPath );
                         aBmap.Draw(rOut);
                     }
                 } break;
@@ -1009,7 +1002,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut, const INetURLObject& rFlt
                     rInp>>aGrup;
                     if (!rInp.GetError()) {
                         rInp.Seek(rInp.Tell()+aGrup.Last); // Obj-Anhängsel
-                        if(aGrup.GetSubPtr()!=0L) nGrpCnt++;// DrawObjkList(rInp,rOut,rFltPath );
+                        if(aGrup.GetSubPtr()!=0L) nGrpCnt++;// DrawObjkList(rInp,rOut );
                     }
                 } break;
                 default: {
@@ -1064,7 +1057,7 @@ void SkipObjkList(SvStream& rInp)
 |*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
-BOOL SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf, const INetURLObject& rFltPath )
+BOOL SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
 {
     BOOL          bRet = FALSE;
     ObjkType      aObjk;
@@ -1098,12 +1091,12 @@ BOOL SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf, co
         Num--;
       }
       rInp>>aPage;
-      if(Num==1 && aPage.nList!=0L) DrawObjkList( rInp,*pOutDev,rFltPath );
+      if(Num==1 && aPage.nList!=0L) DrawObjkList( rInp,*pOutDev );
       rInp.Seek(nZchPos);
       nZchPos=rInp.Tell();
       rInp>>aPage;
     }
-    if (aPage.nList!=0L) DrawObjkList(rInp,*pOutDev,rFltPath );
+    if (aPage.nList!=0L) DrawObjkList(rInp,*pOutDev );
 
     rMtf.Stop();
     rMtf.WindStart();
@@ -1125,7 +1118,7 @@ BOOL SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf, co
 |*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
-BOOL SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath, const INetURLObject& rFltPath )
+BOOL SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
 {
 #ifdef DEBUG  // Recordgrößen checken. Neuer Compiler hat vielleichte anderes Allignment!
     if (sizeof(ObjTextType)!=ObjTextTypeSize)  return FALSE;
@@ -1153,7 +1146,7 @@ BOOL SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath, co
             rInp>>aEntr;
             nNext=aEntr.GetOffset();
             if (aEntr.Typ==aHead.Typ) {
-                bRet=SgfFilterSDrw( rInp,aHead,aEntr,rMtf,rFltPath );
+                bRet=SgfFilterSDrw( rInp,aHead,aEntr,rMtf );
             }
         } // while(nNext)
         if (bRdFlag) {

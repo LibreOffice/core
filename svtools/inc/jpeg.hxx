@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jpeg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:51 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 19:53:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,6 @@
 #ifndef _FLTCALL_HXX
 #include "fltcall.hxx"
 #endif
-
-class Config;
 
 #else // VCL
 
@@ -148,7 +146,6 @@ class JPEGWriter
     BYTE*               pBuffer;
     PFilterCallback     pCallback;
     void*               pCallerData;
-    Config*             pConfig;
     BOOL                bNative;
 
 public:
@@ -157,11 +154,10 @@ public:
 
 public:
 
-                        JPEGWriter( SvStream& rOStm, PFilterCallback pCallback,
-                                    void* pCallData, Config* pOptionsConfig );
+                        JPEGWriter( SvStream& rOStm, PFilterCallback pCallback, void* pCallData );
                         ~JPEGWriter() {};
 
-    BOOL                Write( const Graphic& rGraphic );
+    BOOL                Write( const Graphic& rGraphic, sal_Bool bIgnoreOptions );
 };
 
 #else // VCL
@@ -203,7 +199,6 @@ public:
 BOOL ImportJPEG( SvStream& rStream, Graphic& rGraphic, void* pCallerData );
 
 BOOL ExportJPEG( SvStream& rStream, const Graphic& rGraphic,
-                 PFilterCallback pCallback, void* pCallerData,
-                 Config* pOptionsConfig );
+                 PFilterCallback pCallback, void* pCallerData, sal_Bool bIgnoreOptions );
 
 #endif // _JPEG_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgejpg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:59 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 19:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,10 @@
 #include "dlgejpg.hxx"
 #include "dlgejpg.hrc"
 #include "strings.hrc"
+#include <FilterConfigItem.hxx>
 
-#define KEY_QUALITY     "JPG-EXPORT-QUALITY"
-#define KEY_GRAYSCALES  "JPG_EXPORT_COLORMODE"
+#define KEY_QUALITY     "Quality"
+#define KEY_GRAYSCALES  "ColorMode"
 
 /*************************************************************************
 |*
@@ -85,24 +86,21 @@ DlgExportEJPG::DlgExportEJPG( FltCallDialogParameter& rPara ) :
                 aGrpColors          ( this, ResId( GRP_COLORS ) ),
                 aBtnOK              ( this, ResId( BTN_OK ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
-                aBtnHelp            ( this, ResId( BTN_HELP ) ),
-                pConfig             ( rPara.pCfg ),
-                pMgr                ( rPara.pResMgr )
+                aBtnHelp            ( this, ResId( BTN_HELP ) )
 {
     FreeResource();
+    String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/JPG" ) );
+    pConfigItem = new FilterConfigItem( aFilterConfigPath );
 
-    // Config-Parameter lesen
-    ByteString  aStr( pConfig->ReadKey( KEY_QUALITY ) );
+    // reading filter options
+    sal_Int32 nQuality = pConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( KEY_QUALITY ) ), 75 );
+    sal_Int32 nColorMode = pConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( KEY_GRAYSCALES ) ), 0 );
+    aNumFldQuality.SetValue( nQuality );
 
-    if ( !aStr.Len() )
-        aNumFldQuality.SetValue( 75 );
+    if ( nColorMode  )
+        aRbGray.Check( sal_True );
     else
-        aNumFldQuality.SetValue( aStr.ToInt32() );
-
-    if ( pConfig->ReadKey( KEY_GRAYSCALES ).ToInt32() )
-        aRbGray.Check( TRUE );
-    else
-        aRbRGB.Check( TRUE );
+        aRbRGB.Check( sal_True );
 
     aBtnOK.SetClickHdl( LINK( this, DlgExportEJPG, OK ) );
 }
@@ -117,13 +115,15 @@ DlgExportEJPG::DlgExportEJPG( FltCallDialogParameter& rPara ) :
 IMPL_LINK( DlgExportEJPG, OK, void *, EMPTYARG )
 {
     // Config-Parameter schreiben
-    pConfig->WriteKey( KEY_QUALITY, ByteString::CreateFromInt32( (long)aNumFldQuality.GetValue() ) );
-    pConfig->WriteKey( KEY_GRAYSCALES, ByteString::CreateFromInt32( (sal_Int32)aRbGray.IsChecked() ) );
-
+    pConfigItem->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( KEY_QUALITY ) ), (sal_Int32)aNumFldQuality.GetValue() );
+    pConfigItem->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( KEY_GRAYSCALES ) ), aRbGray.IsChecked() ? 1 : 0 );
     EndDialog( RET_OK );
-
     return 0;
 }
 
+DlgExportEJPG::~DlgExportEJPG()
+{
+    delete pConfigItem;
+}
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-22 11:31:09 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 19:57:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,13 @@
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/tempfile.hxx>
 #include <vcl/salctype.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
+#include <osl/file.hxx>
 #include "filter.hxx"
 #include "FilterConfigCache.hxx"
+#include <FilterConfigItem.hxx>
 #include "fltcall.hxx"
 #include "wmf.hxx"
 #include "gifread.hxx"
@@ -94,6 +95,9 @@
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
+#endif
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
 #include <com/sun/star/uno/XInterface.hpp>
@@ -128,11 +132,11 @@
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
-#ifndef _UNOTOOLS_TEMPFILE_HXX
-#include <unotools/tempfile.hxx>
-#endif
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <pathoptions.hxx>
 #endif
 
 #if defined WIN || (defined OS2 && !defined ICC)
@@ -830,7 +834,7 @@ sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const String& rPath, SvStream& rS
 
 //--------------------------------------------------------------------------
 
-static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, const String& rFilterExt, Config* pOptions )
+static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& rConfigItem )
 {
     Graphic     aGraphic;
     ByteString  aResMgrName( "svt", 3 );
@@ -839,13 +843,9 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, const String& rFilt
     aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
     pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetAppInternational().GetLanguage() );
 
-    if ( ( rGraphic.GetType() != GRAPHIC_NONE ) && pOptions )
+    if ( rGraphic.GetType() != GRAPHIC_NONE )
     {
-        String      aStrMode( rFilterExt );
-        sal_Int32   nMode;
-        aStrMode += String( ResId( KEY_MODE, pResMgr ) );
-
-        nMode = pOptions->ReadKey( ByteString( aStrMode, RTL_TEXTENCODING_UTF8 ) ).ToInt32();
+        sal_Int32   nMode = rConfigItem.ReadInt32( String( ResId( KEY_MODE, pResMgr ) ), 0 );
 
         if( rGraphic.GetType() == GRAPHIC_BITMAP )
         {
@@ -855,9 +855,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, const String& rFilt
                 Bitmap      aBitmap( rGraphic.GetBitmap() );
                 MapMode     aMap( MAP_100TH_INCH );
 
-                String      aKey( rFilterExt );
-                aKey        += String( ResId( KEY_RES, pResMgr ) );
-                long        nDPI = pOptions->ReadKey( ByteString( aKey, RTL_TEXTENCODING_UTF8 ) ).ToInt32();
+                sal_Int32   nDPI = rConfigItem.ReadInt32( String( ResId( KEY_RES, pResMgr ) ), 75 );
                 Fraction    aFrac( 1, Min( Max( nDPI, 75L ), 600L ) );
 
                 aMap.SetScaleX( aFrac );
@@ -874,15 +872,11 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, const String& rFilt
             else if( nMode == 2 )
             {
                 Bitmap  aBitmap( rGraphic.GetBitmap() );
-                String  aKeyDX( rFilterExt );
-                aKeyDX  += String( ResId( KEY_SIZEX, pResMgr ) );
-                long    nDX = pOptions->ReadKey( ByteString( aKeyDX, RTL_TEXTENCODING_UTF8 ) ).ToInt32();
-                String  aKeyDY( rFilterExt );
-                aKeyDY  += String( ResId( KEY_SIZEY, pResMgr ) );
-                long    nDY = pOptions->ReadKey( ByteString( aKeyDY, RTL_TEXTENCODING_UTF8 ) ).ToInt32();
 
+                ::com::sun::star::awt::Size aDefaultSize( 10000, 10000 );
+                ::com::sun::star::awt::Size aSize = rConfigItem.ReadSize( String( ResId( KEY_SIZE, pResMgr ) ), aDefaultSize );
                 aBitmap.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
-                aBitmap.SetPrefSize( Size( nDX, nDY ) );
+                aBitmap.SetPrefSize( Size( aSize.Width, aSize.Height ) );
                 aGraphic = Graphic( aBitmap );
             }
             else
@@ -893,13 +887,9 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, const String& rFilt
             if( ( nMode == 1 ) || ( nMode == 2 ) )
             {
                 GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
-                String      aKeyDX( rFilterExt );
-                aKeyDX      += String( ResId( KEY_SIZEX, pResMgr ) );
-                long        nDX = pOptions->ReadKey( ByteString( aKeyDX, RTL_TEXTENCODING_UTF8 ) ).ToInt32();
-                String      aKeyDY( rFilterExt );
-                aKeyDY      += String( ResId( KEY_SIZEY, pResMgr ) );
-                long        nDY = pOptions->ReadKey( ByteString( aKeyDY, RTL_TEXTENCODING_UTF8 ) ).ToInt32();
-                Size        aNewSize( OutputDevice::LogicToLogic( Size( nDX, nDY ), MAP_100TH_MM, aMtf.GetPrefMapMode() ) );
+                ::com::sun::star::awt::Size aDefaultSize( 10000, 10000 );
+                ::com::sun::star::awt::Size aSize = rConfigItem.ReadSize( String( ResId( KEY_SIZE, pResMgr ) ), aDefaultSize );
+                Size aNewSize( OutputDevice::LogicToLogic( Size( aSize.Width, aSize.Height ), MAP_100TH_MM, aMtf.GetPrefMapMode() ) );
 
                 if( aNewSize.Width() && aNewSize.Height() )
                 {
@@ -907,7 +897,6 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, const String& rFilt
                     aMtf.Scale( Fraction( aNewSize.Width(), aPrefSize.Width() ),
                                 Fraction( aNewSize.Height(), aPrefSize.Height() ) );
                 }
-
                 aGraphic = Graphic( aMtf );
             }
             else
@@ -922,6 +911,17 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, const String& rFilt
     return aGraphic;
 }
 
+static String ImpCreateFullFilterPath( const String& rPath, const String& rFilterName )
+{
+    ::rtl::OUString aDest, aNormalizedPath;
+    ::osl::FileBase::normalizePath( rPath, aDest );
+    aDest += ::rtl::OUString( sal_Unicode( '/' ) );
+    aDest += ::rtl::OUString( rFilterName );
+    ::osl::FileBase::getSystemPathFromNormalizedPath( aDest, aNormalizedPath );
+    return String( aNormalizedPath );
+}
+
+
 // --------------------------
 // - ImpFilterLibCacheEntry -
 // --------------------------
@@ -931,7 +931,7 @@ class ImpFilterLibCache;
 struct ImpFilterLibCacheEntry
 {
     ImpFilterLibCacheEntry* mpNext;
-    ::vos::OModule                  maLibrary;
+    ::vos::OModule          maLibrary;
     String                  maFiltername;
     PFilterCall             mpfnImport;
     PFilterDlgCall          mpfnImportDlg;
@@ -984,21 +984,19 @@ class ImpFilterLibCache
 {
     ImpFilterLibCacheEntry* mpFirst;
     ImpFilterLibCacheEntry* mpLast;
-    ImpFilterLibCacheEntry* mpLastUsed;
 
 public:
                             ImpFilterLibCache();
                             ~ImpFilterLibCache();
 
-    ImpFilterLibCacheEntry* GetFilter( INetURLObject& rFilter, const String& rFiltername );
+    ImpFilterLibCacheEntry* GetFilter( const String& rFilterPath, const String& rFiltername );
 };
 
 // ------------------------------------------------------------------------
 
 ImpFilterLibCache::ImpFilterLibCache() :
     mpFirst     ( NULL ),
-    mpLast      ( NULL ),
-    mpLastUsed  ( NULL )
+    mpLast      ( NULL )
 {
 }
 
@@ -1017,39 +1015,36 @@ ImpFilterLibCache::~ImpFilterLibCache()
 
 // ------------------------------------------------------------------------
 
-ImpFilterLibCacheEntry* ImpFilterLibCache::GetFilter( INetURLObject& rFilter, const String& rFiltername )
+ImpFilterLibCacheEntry* ImpFilterLibCache::GetFilter( const String& rFilterPath, const String& rFilterName )
 {
-    if( mpLastUsed && ( *mpLastUsed == rFiltername ) )
-        return mpLastUsed;
-    else
+    ImpFilterLibCacheEntry* pEntry = mpFirst;
+
+    while( pEntry )
     {
-        ImpFilterLibCacheEntry* pEntry = mpFirst;
-
-        while( pEntry )
-        {
-            if( *pEntry == rFiltername )
-                break;
-            else
-                pEntry = pEntry->mpNext;
-        }
-
-        if( !pEntry )
-        {
-            String  aPhysicalName;
-            if ( ::utl::LocalFileHelper::ConvertURLToPhysicalName( rFilter.GetMainURL(), aPhysicalName ) )
-            {
-                pEntry = new ImpFilterLibCacheEntry( aPhysicalName, rFiltername );
-
-                if( !mpFirst )
-                    mpFirst = mpLast = pEntry;
-                else
-                    mpLast = mpLast->mpNext = pEntry;
-            }
-        }
-
-        mpLastUsed = pEntry;
-        return pEntry;
+        if( *pEntry == rFilterName )
+            break;
+        else
+            pEntry = pEntry->mpNext;
     }
+    if( !pEntry )
+    {
+        String aPhysicalName( ImpCreateFullFilterPath( rFilterPath, rFilterName ) );
+        pEntry = new ImpFilterLibCacheEntry( aPhysicalName, rFilterName );
+
+        if ( pEntry->maLibrary.isLoaded() )
+        {
+            if( !mpFirst )
+                mpFirst = mpLast = pEntry;
+            else
+                mpLast = mpLast->mpNext = pEntry;
+        }
+        else
+        {
+            delete pEntry;
+            pEntry = NULL;
+        }
+    }
+    return pEntry;
 };
 
 // ------------------------------------------------------------------------
@@ -1075,29 +1070,18 @@ GraphicFilter::~GraphicFilter()
 
     delete pErrorEx;
     delete pConfig;
-    delete pFilterPath;
-    delete pOptionsConfigPath;
-
-    if( pOptionsConfig )
-    {
-        pOptionsConfig->Flush();
-        delete pOptionsConfig;
-    }
 }
 
 // ------------------------------------------------------------------------
 
 void GraphicFilter::ImplInit()
 {
+    SvtPathOptions aPathOpt;
+    aFilterPath = aPathOpt.GetFilterPath();
     pErrorEx = new FilterErrorEx;
-    ::utl::TempFile aTempFile;
     pConfig = new FilterConfigCache();
-    pFilterPath = new String;
-    pOptionsConfigPath = new String;
-    pOptionsConfig = NULL;
-    bOptionsEnabled = FALSE;
     nPercent = 0;
-    bAbort = FALSE;
+    bAbort = sal_False;
 
     // first instance of GraphicFilter sets link
     if( !nFilterCount++ )
@@ -1116,67 +1100,6 @@ ULONG GraphicFilter::ImplSetError( ULONG nError, const SvStream* pStm )
     pErrorEx->nStreamError = pStm ? pStm->GetError() : ERRCODE_NONE;
     return nError;
 }
-
-// ------------------------------------------------------------------------
-
-
-void GraphicFilter::SetFilterPath( const INetURLObject& rPath )
-{
-    SetFilterPath( rPath.GetMainURL() );
-}
-
-// ------------------------------------------------------------------------
-
-void GraphicFilter::SetFilterPath( const String& rMultiPath )
-{
-    *pFilterPath = rMultiPath;
-}
-
-// ------------------------------------------------------------------------
-
-const String& GraphicFilter::GetFilterPath() const
-{
-    return *pFilterPath;
-}
-
-// ------------------------------------------------------------------------
-
-void GraphicFilter::SetOptionsConfigPath( const INetURLObject& rConfigPath )
-{
-    const String aNewPath( rConfigPath.GetMainURL() );
-
-    if( aNewPath != GetOptionsConfigPath() )
-    {
-        *pOptionsConfigPath = aNewPath;
-
-        if( pOptionsConfig )
-        {
-            pOptionsConfig->Flush();
-            delete pOptionsConfig;
-        }
-
-        if( aNewPath.Len() )
-        {
-            pOptionsConfig = new Config( aNewPath );
-            pOptionsConfig->SetGroup( OPT_FILTERSECTION );
-            bOptionsEnabled = TRUE;
-        }
-        else
-        {
-            pOptionsConfig = NULL;
-            bOptionsEnabled = FALSE;
-        }
-    }
-}
-
-// ------------------------------------------------------------------------
-
-const String& GraphicFilter::GetOptionsConfigPath() const
-{
-    DBG_ASSERT( pOptionsConfigPath, "GraphicFilter::GetOptionsConfigPath(): Missing OptionsConfigPath!" );
-    return *pOptionsConfigPath;
-}
-
 // ------------------------------------------------------------------------
 
 USHORT GraphicFilter::GetImportFormatCount()
@@ -1210,15 +1133,6 @@ String GraphicFilter::GetImportFormatName( USHORT nFormat )
 String GraphicFilter::GetImportFormatShortName( USHORT nFormat )
 {
     return pConfig->GetImportFormatShortName( nFormat );
-}
-
-// ------------------------------------------------------------------------
-
-String GraphicFilter::GetImportFormatType( USHORT nFormat )
-{
-    String aUpper( pConfig->GetImportFormatType( nFormat ) );
-    aUpper.ToUpperAscii();
-    return aUpper;
 }
 
 // ------------------------------------------------------------------------
@@ -1282,15 +1196,6 @@ String GraphicFilter::GetExportFormatName( USHORT nFormat )
 String GraphicFilter::GetExportFormatShortName( USHORT nFormat )
 {
     return pConfig->GetExportFormatShortName( nFormat );
-}
-
-// ------------------------------------------------------------------------
-
-String GraphicFilter::GetExportFormatType( USHORT nFormat )
-{
-    String aUpper( pConfig->GetExportFormatType( nFormat ) );
-    aUpper.ToUpperAscii();
-    return aUpper;
 }
 
 // ------------------------------------------------------------------------
@@ -1578,7 +1483,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
                         aStartFilterHdlLink.Call( this );
                         nPercent = 50;
                         aUpdatePercentHdlLink.Call( this );
-                        if( !SgfSDrwFilter( rIStream, aMtf, aFilterPath, aFilterPath ) )
+                        if( !SgfSDrwFilter( rIStream, aMtf, aFilterPath ) )
                             nStatus = GRFILTER_FILTERERROR;
                         else
                         {
@@ -1605,17 +1510,9 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
         ImpFilterLibCacheEntry* pFilter = NULL;
 
         // find first filter in filter pathes
-        xub_StrLen i, nTokenCount = pFilterPath->GetTokenCount( ';' );
-        for( i = 0; i < nTokenCount; i++ )
-        {
-            INetURLObject aFilterPath( pFilterPath->GetToken( i ) );
-            aFilterPath.Append( aFilterName );
-            if ( pFilter = aCache.GetFilter( aFilterPath, aFilterName ) )
-            {
-                if ( ImplDirEntryHelper::Exists( aFilterPath ) )
-                    break;
-            }
-        }
+        xub_StrLen i, nTokenCount = aFilterPath.GetTokenCount( ';' );
+        for( i = 0; ( i < nTokenCount ) && ( pFilter == NULL ); i++ )
+            pFilter = aCache.GetFilter( aFilterPath, aFilterName );
         if( !pFilter )
             nStatus = GRFILTER_FILTERERROR;
         else
@@ -1629,7 +1526,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
                 aStartFilterHdlLink.Call( this );
                 aUpdatePercentHdlLink.Call( this );
 
-                if( !(*pFunc)( rIStream, rGraphic, &ImpFilterCallback, &aCallbackData, GetOptionsConfig(), FALSE ) )
+                if( !(*pFunc)( rIStream, rGraphic, &ImpFilterCallback, &aCallbackData, NULL, sal_False ) )
                     nStatus = GRFILTER_FORMATERROR;
                 else
                 {
@@ -1692,7 +1589,8 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
 
 // ------------------------------------------------------------------------
 
-USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath, USHORT nFormat )
+USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
+                                            sal_uInt16 nFormat, sal_Bool bIgnoreOptions )
 {
     sal_uInt16  nRetValue = GRFILTER_FORMATERROR;
     DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::ExportGraphic() : ProtType == INET_PROT_NOT_VALID" );
@@ -1702,7 +1600,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObjec
     SvStream*   pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_WRITE | STREAM_TRUNC );
     if ( pStream )
     {
-        nRetValue = ExportGraphic( rGraphic, aMainUrl, *pStream, nFormat );
+        nRetValue = ExportGraphic( rGraphic, aMainUrl, *pStream, nFormat, bIgnoreOptions );
         delete pStream;
 
         if( ( GRFILTER_OK != nRetValue ) && !bAlreadyExists )
@@ -1714,7 +1612,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObjec
 // ------------------------------------------------------------------------
 
 USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPath,
-                                     SvStream& rOStm, USHORT nFormat )
+                                     SvStream& rOStm, sal_uInt16 nFormat, sal_Bool bIgnoreOptions )
 {
     USHORT nFormatCount = GetExportFormatCount();
 
@@ -1735,9 +1633,11 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
             }
         }
     }
-
     if( nFormat >= nFormatCount )
         return (USHORT) ImplSetError( GRFILTER_FORMATERROR );
+
+    FilterConfigItem* pConfigItem = NULL;
+    String aFilterName( pConfig->GetExportFilterName( nFormat ) );
 
     ImpFilterCallbackData aCallbackData;
     aCallbackData.pFilt=this;
@@ -1747,16 +1647,23 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
     aCallbackData.nFilePercentOfTotal=100;
     bAbort=FALSE;
 
-    String aFilterName( pConfig->GetExportFilterName( nFormat ) );
-
     nPercent=0;
     aStartFilterHdlLink.Call(this);
     aUpdatePercentHdlLink.Call(this);
 
     USHORT      nStatus = GRFILTER_OK;
     GraphicType eType;
-    Graphic     aGraphic( ImpGetScaledGraphic( rGraphic, pConfig->GetExportFormatExtension( nFormat ),
-                            GetOptionsConfig() ) );
+    Graphic     aGraphic( rGraphic );
+
+    if ( !bIgnoreOptions )
+    {
+        String aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/" ) );
+        String aFilterType( pConfig->GetExportFormatShortName( nFormat ) );
+        aFilterConfigPath.Append( aFilterType );
+        pConfigItem = new FilterConfigItem( aFilterConfigPath );
+
+        ImpGetScaledGraphic( rGraphic, *pConfigItem );
+    }
 
     eType = aGraphic.GetType();
 
@@ -1769,9 +1676,9 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
             VirtualDevice aVirDev;
 
             // Maximalen Speicherbedarf fuer das Bildes holen:
-            if( GetOptionsConfig() )
-                nMaxMem = (UINT32)GetOptionsConfig()->ReadKey( "VEC-TO-PIX-MAX-KB", "1024" ).ToInt32();
-            else
+//          if( GetOptionsConfig() )
+//              nMaxMem = (UINT32)GetOptionsConfig()->ReadKey( "VEC-TO-PIX-MAX-KB", "1024" ).ToInt32();
+//          else
                 nMaxMem = 1024;
 
             nMaxMem *= 1024; // In Bytes
@@ -1816,25 +1723,18 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
 
                 if( !rOStm.GetError() )
                 {
-                    Bitmap aBmp( aGraphic.GetBitmap() );
-
-                    if( GetOptionsConfig() )
+                    Bitmap      aBmp( aGraphic.GetBitmap() );
+                    if ( pConfigItem )
                     {
                         ResMgr*     pResMgr = CREATERESMGR( svt );
-                        UniString   aRLEKey( pConfig->GetExportFormatType( nFormat ) );
-
-                        aRLEKey     += UniString( ResId( KEY_RLE_CODING, pResMgr ) );
-                        ByteString  aRLEStr( GetOptionsConfig()->ReadKey( ByteString( aRLEKey, RTL_TEXTENCODING_UTF8 ) ) );
-
+                        sal_Bool    bRleCoding = pConfigItem->ReadBool( String( ResId( KEY_RLE_CODING, pResMgr ) ), sal_True );
                         // Wollen wir RLE-Kodiert speichern?
-                        aGraphic.GetBitmap().Write( rOStm, aRLEStr.CompareIgnoreCaseToAscii( "FALSE", 5 ) != COMPARE_EQUAL );
-
+                        aGraphic.GetBitmap().Write( rOStm, bRleCoding );
                         delete pResMgr;
                     }
                     else
                         rOStm << aBmp;
                 }
-
                 nPercent = 90;
                 aUpdatePercentHdlLink.Call( this );
 
@@ -1930,7 +1830,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
             {
                 if( !rOStm.GetError() )
                 {
-                    if( !ExportJPEG( rOStm, aGraphic, &ImpFilterCallback, &aCallbackData, GetOptionsConfig() ) )
+                    if( !ExportJPEG( rOStm, aGraphic, &ImpFilterCallback, &aCallbackData, bIgnoreOptions ) )
                         nStatus = GRFILTER_FORMATERROR;
                 }
 
@@ -1985,41 +1885,23 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
         }
         else
         {
-            INetURLObject   aFilterFilePath;
-            sal_Bool        bFound = sal_False;
+            xub_StrLen i, nTokenCount = aFilterPath.GetTokenCount( ';' );
+            for ( i = 0; i < nTokenCount; i++ )
+            {
+                String aPhysicalName( ImpCreateFullFilterPath( aFilterPath.GetToken( i ), aFilterName ) );
+                ::vos::OModule aLibrary( aPhysicalName );
 
-            xub_StrLen i, nTokenCount = pFilterPath->GetTokenCount( ';' );
-            for( i = 0; i < nTokenCount; i++ )
-            {
-                aFilterFilePath = INetURLObject( pFilterPath->GetToken( i ) );
-                aFilterFilePath.Append( aFilterName );
-                if( ImplDirEntryHelper::Exists( aFilterFilePath ) )
+                PFilterCall pFunc = (PFilterCall) aLibrary.getSymbol( UniString::CreateFromAscii( EXPORT_FUNCTION_NAME ) );
+                // Dialog in DLL ausfuehren
+                if( pFunc )
                 {
-                    bFound = sal_True;
-                    break;
-                }
-            }
-            if( !bFound )
-                nStatus = GRFILTER_FILTERERROR;
-            else
-            {
-                String aPhysicalName;
-                if ( ::utl::LocalFileHelper::ConvertURLToPhysicalName( aFilterFilePath.GetMainURL(), aPhysicalName ) )
-                {
-                    ::vos::OModule aLibrary( aPhysicalName );
-                    PFilterCall pFunc = (PFilterCall) aLibrary.getSymbol( UniString::CreateFromAscii( EXPORT_FUNCTION_NAME ) );
-                    if( pFunc )
+                    if( !rOStm.GetError() )
                     {
-                        if( !rOStm.GetError() )
-                        {
-                            if ( !(*pFunc)( rOStm, aGraphic, &ImpFilterCallback, &aCallbackData, GetOptionsConfig(), FALSE ) )
-                                nStatus = GRFILTER_FORMATERROR;
-                        }
-                        else
-                            nStatus = GRFILTER_IOERROR;
+                        if ( !(*pFunc)( rOStm, aGraphic, &ImpFilterCallback, &aCallbackData, pConfigItem, sal_False ) )
+                            nStatus = GRFILTER_FORMATERROR;
                     }
                     else
-                        nStatus = GRFILTER_FILTERERROR;
+                        nStatus = GRFILTER_IOERROR;
                 }
                 else
                     nStatus = GRFILTER_FILTERERROR;
@@ -2041,6 +1923,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
     }
 
     aEndFilterHdlLink.Call( this );
+    delete pConfigItem;
 
     return nStatus;
 }
@@ -2063,8 +1946,6 @@ BOOL GraphicFilter::HasImportDialog( USHORT nFormat )
 
 BOOL GraphicFilter::DoImportDialog( Window* pWindow, USHORT nFormat )
 {
-    DBG_ASSERT( GetOptionsConfig(),"GraphicFilter:: : no OptionsConfig" );
-
     String  aFilterName( pConfig->GetImportFilterName( nFormat ) );
     BOOL    bRet = FALSE;
 
@@ -2088,26 +1969,16 @@ BOOL GraphicFilter::DoImportDialog( Window* pWindow, USHORT nFormat )
         ImpFilterLibCacheEntry* pFilter = NULL;
 
         // find first filter in filter pathes
-        xub_StrLen i, nTokenCount = pFilterPath->GetTokenCount( ';' );
-        for( i = 0; i < nTokenCount; i++ )
-        {
-            INetURLObject aFilterPath( pFilterPath->GetToken( i ) );
-            aFilterPath.Append( aFilterName );
-            if ( pFilter = aCache.GetFilter( aFilterPath, aFilterName ) )
-            {
-                if ( ImplDirEntryHelper::Exists( aFilterPath ) )
-                    break;
-            }
-        }
-
+        xub_StrLen i, nTokenCount = aFilterPath.GetTokenCount( ';' );
+        for( i = 0; ( i < nTokenCount ) && ( pFilter == NULL ); i++ )
+            pFilter = aCache.GetFilter( aFilterPath.GetToken( i ), aFilterName );
         if( pFilter )
         {
             PFilterDlgCall pFunc = pFilter->GetImportDlgFunction();
-
             // Dialog in DLL ausfuehren
             if( pFunc )
             {
-                FltCallDialogParameter aFltCallDlgPara( pWindow, NULL, GetOptionsConfig(), FUNIT_MM );
+                FltCallDialogParameter aFltCallDlgPara( pWindow, NULL, FUNIT_MM );
                 bRet = (*pFunc)( aFltCallDlgPara );
             }
         }
@@ -2133,10 +2004,8 @@ BOOL GraphicFilter::DoExportDialog( Window* pWindow, USHORT nFormat )
 BOOL GraphicFilter::DoExportDialog( Window* pWindow, USHORT nFormat, FieldUnit eFieldUnit )
 {
     String  aFilterName( pConfig->GetExportFilterName( nFormat ) );
-    BOOL    bRet = FALSE;
 
-    if( GetOptionsConfig() )
-        GetOptionsConfig()->Update();
+    sal_Bool bRet = sal_False;
 
     if ( pConfig->IsExportInternalFilter( nFormat ) )
     {
@@ -2153,7 +2022,7 @@ BOOL GraphicFilter::DoExportDialog( Window* pWindow, USHORT nFormat, FieldUnit e
             aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
             pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetAppInternational().GetLanguage() );
 
-            FltCallDialogParameter aFltCallDlgPara( pWindow, pResMgr, GetOptionsConfig(), eFieldUnit );
+            FltCallDialogParameter aFltCallDlgPara( pWindow, pResMgr, eFieldUnit );
 
             // JPEG-Dialog
             if( aFilterName.EqualsIgnoreCaseAscii( EXP_JPEG ) )
@@ -2161,60 +2030,34 @@ BOOL GraphicFilter::DoExportDialog( Window* pWindow, USHORT nFormat, FieldUnit e
             // Fuer Bitmaps nehmen wir den Pixel-Dialog
             else if( !aFilterName.EqualsIgnoreCaseAscii( EXP_BMP ) )
             {
-                aFltCallDlgPara.aFilterExt = pConfig->GetExportFormatType( nFormat );
+                aFltCallDlgPara.aFilterExt = pConfig->GetExportFormatShortName( nFormat );
                 bRet = ( DlgExportVec( aFltCallDlgPara ).Execute() == RET_OK );
             }
             // Fuer Vektorformate nehmen wir den Vektor-Dialog
             else
             {
-                aFltCallDlgPara.aFilterExt = pConfig->GetExportFormatType( nFormat );
+                aFltCallDlgPara.aFilterExt = pConfig->GetExportFormatShortName( nFormat );
                 bRet = ( DlgExportPix( aFltCallDlgPara ).Execute() == RET_OK );
             }
-
-
             delete pResMgr;
         }
     }
     else    // ladbare Filter
     {
-        INetURLObject   aFilterFilePath;
-        sal_Bool        bFound = sal_False;
-
-        // find first filter in filter pathes
-        xub_StrLen i, nTokenCount = pFilterPath->GetTokenCount( ';' );
-        for( i = 0; i < nTokenCount; i++ )
+        xub_StrLen i, nTokenCount = aFilterPath.GetTokenCount( ';' );
+        for ( i = 0; i < nTokenCount; i++ )
         {
-            aFilterFilePath = INetURLObject( pFilterPath->GetToken( i ) );
-            aFilterFilePath.Append( aFilterName );
-
-            if( ImplDirEntryHelper::Exists( aFilterFilePath ) )
+            String aPhysicalName( ImpCreateFullFilterPath( aFilterPath.GetToken( i ), aFilterName ) );
+            ::vos::OModule aLibrary( aPhysicalName );
+            PFilterDlgCall  pFunc = (PFilterDlgCall) aLibrary.getSymbol( UniString( EXPDLG_FUNCTION_NAME, RTL_TEXTENCODING_UTF8 ) );
+            // Dialog in DLL ausfuehren
+            if( pFunc )
             {
-                bFound = sal_True;
-                break;
-            }
-        }
-
-        if( bFound )
-        {
-            String aPhysicalName;
-            if ( ::utl::LocalFileHelper::ConvertURLToPhysicalName( aFilterFilePath.GetMainURL(), aPhysicalName ) )
-            {
-                ::vos::OModule aLibrary( aPhysicalName );
-                PFilterDlgCall  pFunc = (PFilterDlgCall) aLibrary.getSymbol( UniString( EXPDLG_FUNCTION_NAME, RTL_TEXTENCODING_UTF8 ) );
-
-                // Dialog in DLL ausfuehren
-                if( pFunc )
-                {
-                    FltCallDialogParameter aFltCallDlgPara( pWindow, NULL, GetOptionsConfig(), eFieldUnit );
-                    bRet = (*pFunc)( aFltCallDlgPara );
-                }
+                FltCallDialogParameter aFltCallDlgPara( pWindow, NULL, eFieldUnit );
+                bRet = (*pFunc)( aFltCallDlgPara );
             }
         }
     }
-
-    if( bRet && GetOptionsConfig() )
-        GetOptionsConfig()->Flush();
-
     return bRet;
 }
 
@@ -2242,10 +2085,6 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
     {
         USHORT      nFormat = GRFILTER_FORMAT_DONTKNOW;
         ByteString  aShortName;
-        const BOOL  bOptions = AreOptionsEnabled();
-
-        EnableOptions( FALSE );
-
         switch( pData->mnFormat )
         {
             case( CVT_BMP ): aShortName = BMP_SHORTNAME; break;
@@ -2262,7 +2101,6 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
             default:
             break;
         }
-
         if( GRAPHIC_NONE == pData->maGraphic.GetType() || pData->maGraphic.GetContext() ) // Import
         {
             // Import
@@ -2273,11 +2111,8 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
         {
             // Export
             nFormat = GetExportFormatNumberForShortName( String( aShortName.GetBuffer(), RTL_TEXTENCODING_UTF8 ) );
-            nRet = ExportGraphic( pData->maGraphic, String(), pData->mrStm, nFormat ) == 0;
+            nRet = ExportGraphic( pData->maGraphic, String(), pData->mrStm, nFormat, sal_True ) == 0;
         }
-
-        EnableOptions( bOptions );
     }
-
     return nRet;
 }

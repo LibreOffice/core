@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-26 16:00:29 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 19:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,18 +352,14 @@ String FilterConfigCache::GetImportFormatName( sal_uInt16 nFormat )
     return aUIName;
 }
 
-String FilterConfigCache::GetImportFormatType( sal_uInt16 nFormat )
+String FilterConfigCache::GetImportFormatShortName( sal_uInt16 nFormat )
 {
     CacheVector::iterator aIter( aImport.begin() + nFormat );
     String aType;
     if ( aIter < aImport.end() )
         aType = aIter->sType;
+    aType.ToUpperAscii();
     return aType;
-}
-
-String FilterConfigCache::GetImportFormatShortName( sal_uInt16 nFormat )
-{
-    return GetImportFormatType( nFormat );
 }
 
 String FilterConfigCache::GetImportFormatExtension( sal_uInt16 nFormat )
@@ -378,7 +374,7 @@ String FilterConfigCache::GetImportFormatExtension( sal_uInt16 nFormat )
 String FilterConfigCache::GetImportWildcard( sal_uInt16 nFormat )
 {
     String aWildcard( UniString::CreateFromAscii( "*.", 2 ) );
-    aWildcard.Append( GetImportFormatType( nFormat ) );
+    aWildcard.Append( GetImportFormatShortName( nFormat ) );
     return aWildcard;
 }
 
@@ -441,18 +437,14 @@ String FilterConfigCache::GetExportFormatName( sal_uInt16 nFormat )
     return aUIName;
 }
 
-String FilterConfigCache::GetExportFormatType( sal_uInt16 nFormat )
+String FilterConfigCache::GetExportFormatShortName( sal_uInt16 nFormat )
 {
     CacheVector::iterator aIter( aExport.begin() + nFormat );
     String aType;
     if ( aIter < aExport.end() )
         aType = aIter->sType;
+    aType.ToUpperAscii();
     return aType;
-}
-
-String FilterConfigCache::GetExportFormatShortName( sal_uInt16 nFormat )
-{
-    return GetExportFormatType( nFormat );
 }
 
 String FilterConfigCache::GetExportFormatExtension( sal_uInt16 nFormat )
@@ -467,7 +459,7 @@ String FilterConfigCache::GetExportFormatExtension( sal_uInt16 nFormat )
 String FilterConfigCache::GetExportWildcard( sal_uInt16 nFormat )
 {
     String aWildcard( UniString::CreateFromAscii( "*.", 2 ) );
-    aWildcard.Append( GetExportFormatType( nFormat ) );
+    aWildcard.Append( GetExportFormatShortName( nFormat ) );
     return aWildcard;
 }
 

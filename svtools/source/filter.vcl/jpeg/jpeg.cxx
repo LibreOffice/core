@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jpeg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:00 $
+ *  last change: $Author: sj $ $Date: 2001-03-07 19:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,10 @@ extern "C"
 
 #define _JPEGPRIVATE
 
-#include <vcl/config.hxx>
 #include <tools/new.hxx>
 #include <vcl/bmpacc.hxx>
 #include "jpeg.hxx"
+#include "FilterConfigItem.hxx"
 
 // -----------
 // - Defines -
@@ -420,13 +420,12 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
 // - JPEGWriter -
 // --------------
 
-JPEGWriter::JPEGWriter( SvStream& rStm, PFilterCallback pClb, void* pData, Config* pCfg ) :
+JPEGWriter::JPEGWriter( SvStream& rStm, PFilterCallback pClb, void* pData ) :
         rOStm       ( rStm ),
         pAcc        ( NULL ),
         pBuffer     ( NULL ),
         pCallback   ( pClb ),
-        pCallerData ( pData ),
-        pConfig     ( pCfg )
+        pCallerData ( pData )
 {
 }
 
@@ -476,7 +475,7 @@ void* JPEGWriter::GetScanline( long nY )
 
 // ------------------------------------------------------------------------
 
-BOOL JPEGWriter::Write( const Graphic& rGraphic )
+BOOL JPEGWriter::Write( const Graphic& rGraphic, sal_Bool bIgnoreOptions )
 {
     BOOL bRet;
 
@@ -485,24 +484,24 @@ BOOL JPEGWriter::Write( const Graphic& rGraphic )
 
     if( pAcc )
     {
-//      MyCallbackHandler   aCbH;
-
-//      aCbH.pCallback = pCallback;
-//      aCbH.pCallerData = pCallerData;
-//      aCbH.nMinPercent = 0;
-//      aCbH.nMaxPercent = 99;
-
-        long nQuality = 75;
-
-        if( pConfig )
-            nQuality = Min( pConfig->ReadKey( "JPG-EXPORT-QUALITY", ByteString::CreateFromInt32(nQuality) ).ToInt32(), (INT32)100 );
-
+        sal_Int32 nQuality = 75;
+        if ( !bIgnoreOptions )
+        {
+            FilterConfigItem aConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/JPG" ) ) );
+            nQuality = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ), 75 );
+        }
         bNative = ( pAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_BGR );
 
         if( !bNative )
             pBuffer = new BYTE[ AlignedWidth4Bytes( pAcc->Width() * 24L ) ];
 
         bRet = (BOOL) WriteJPEG( this, &rOStm, pAcc->Width(), pAcc->Height(), nQuality, NULL );
+
+//      MyCallbackHandler   aCbH;
+//      aCbH.pCallback = pCallback;
+//      aCbH.pCallerData = pCallerData;
+//      aCbH.nMinPercent = 0;
+//      aCbH.nMaxPercent = 99;
 //      bRet = (BOOL) WriteJPEG( this, &rOStm, pAcc->Width(), pAcc->Height(), nQuality, &aCbH );
 
         delete[] pBuffer;
@@ -543,13 +542,6 @@ BOOL ImportJPEG( SvStream& rStm, Graphic& rGraphic, void* pCallerData )
     else
         rGraphic.SetContext( pJPEGReader );
 
-    const GraphicType eType = rGraphic.GetType();
-
-    if( eType != GRAPHIC_BITMAP )
-    {
-        ;
-    }
-
     return bRet;
 }
 
@@ -558,8 +550,8 @@ BOOL ImportJPEG( SvStream& rStm, Graphic& rGraphic, void* pCallerData )
 // --------------
 
 BOOL ExportJPEG( SvStream& rOStm, const Graphic& rGraphic,
-                 PFilterCallback pCallback, void* pCallerData, Config* pOptionsConfig )
+                    PFilterCallback pCallback, void* pCallerData, sal_Bool bIgnoreOptions )
 {
-    JPEGWriter aJPEGWriter( rOStm, pCallback, pCallerData, pOptionsConfig );
-    return aJPEGWriter.Write( rGraphic );
+    JPEGWriter aJPEGWriter( rOStm, pCallback, pCallerData );
+    return aJPEGWriter.Write( rGraphic, bIgnoreOptions );
 }
