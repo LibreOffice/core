@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:20:44 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 10:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #include "reffact.hxx"
 #include "viewdata.hxx"
 #include "document.hxx"
+#include "docsh.hxx"
 #include "scresid.hxx"
 
 #include "foptmgr.hxx"
@@ -324,6 +325,9 @@ void __EXPORT ScFilterDlg::Init( const SfxItemSet& rArgSet )
 
 BOOL __EXPORT ScFilterDlg::Close()
 {
+    if (pViewData)
+        pViewData->GetDocShell()->CancelAutoDBRange();
+
     return DoClose( ScFilterDlgWrapper::GetChildWindowId() );
 }
 
