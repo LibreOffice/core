@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:20:23 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2741,9 +2741,11 @@ SwContact* SwFrmFmt::FindContactObj()
 
 SdrObject* SwFrmFmt::FindSdrObject()
 {
-    SwClientIter aIter( *this );
-    SwClient* pFnd = aIter.First( TYPE( SwContact ) );
-    return pFnd ? ((SwContact*)pFnd)->GetMaster() : 0;
+    // --> OD 2005-01-06 #i30669# - use method <FindContactObj()> instead of
+    // duplicated code.
+    SwContact* pFoundContact = FindContactObj();
+    return pFoundContact ? pFoundContact->GetMaster() : 0;
+    // <--
 }
 
 SdrObject* SwFrmFmt::FindRealSdrObject()
