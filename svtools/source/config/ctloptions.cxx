@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctloptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 10:23:35 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,17 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SFXSMPLHINT_HXX
+#include <smplhint.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 #define ASCII_STR(s)    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
@@ -93,7 +103,7 @@ using namespace ::com::sun::star::uno;
 
 // SvtCJKOptions_Impl ----------------------------------------------------------
 
-class SvtCTLOptions_Impl : public utl::ConfigItem
+class SvtCTLOptions_Impl : public utl::ConfigItem, public SfxBroadcaster
 {
 private:
     static Sequence< rtl::OUString > m_aPropertyNames;
@@ -176,6 +186,7 @@ SvtCTLOptions_Impl::~SvtCTLOptions_Impl()
 void SvtCTLOptions_Impl::Notify( const Sequence< rtl::OUString >& aPropertyNames )
 {
     Load();
+    Broadcast(SfxSimpleHint(SFX_HINT_CTL_SETTINGS_CHANGED));
 }
 // -----------------------------------------------------------------------------
 void SvtCTLOptions_Impl::Commit()
@@ -190,7 +201,7 @@ void SvtCTLOptions_Impl::Commit()
     Any* pValues = aValues.getArray();
     sal_Int32 nRealCount = 0;
 
-    const Type& rType = ::getBooleanCppuType();
+    const uno::Type& rType = ::getBooleanCppuType();
 
     for ( int nProp = 0; nProp < nOrgCount; nProp++ )
     {
@@ -244,6 +255,8 @@ void SvtCTLOptions_Impl::Commit()
     aNames.realloc(nRealCount);
     aValues.realloc(nRealCount);
     PutProperties( aNames, aValues );
+    //broadcast changes
+    Broadcast(SfxSimpleHint(SFX_HINT_CTL_SETTINGS_CHANGED));
 }
 // -----------------------------------------------------------------------------
 void SvtCTLOptions_Impl::Load()
@@ -355,6 +368,7 @@ SvtCTLOptions::SvtCTLOptions( sal_Bool bDontLoad )
 
     ++nCTLRefCount;
     m_pImp = pCTLOptions;
+    StartListening( *m_pImp);
 }
 
 // -----------------------------------------------------------------------
@@ -421,5 +435,14 @@ sal_Bool SvtCTLOptions::IsReadOnly(EOption eOption) const
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->IsReadOnly(eOption);
 }
+/* -----------------30.04.2003 10:40-----------------
+
+ --------------------------------------------------*/
+void SvtCTLOptions::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    Broadcast( rHint );
+}
+
 // -----------------------------------------------------------------------------
 
