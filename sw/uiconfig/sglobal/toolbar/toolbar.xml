@@ -21,7 +21,7 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertReferenceField" toolbar:helpid="helpid:20313" toolbar:text="" toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:ShadowCursor" toolbar:helpid="helpid:22204" toolbar:text="" />
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Spelling" toolbar:helpid="helpid:20622" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:SpellDialog" toolbar:helpid="helpid:20622" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:helpid="helpid:12021" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:Hyphenate" toolbar:helpid="helpid:20605" toolbar:text="" toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:ThesaurusDialog" toolbar:helpid="helpid:20603" toolbar:text="" toolbar:visible="false" />
