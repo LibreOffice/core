@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:47:55 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5063,8 +5063,9 @@ SvxMSDffAutoShape::~SvxMSDffAutoShape()
 }
 
 SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvStream& rSt,
-                                        DffObjData& rData, Rectangle& rSnapRect, sal_Int32 nAngle ) :
+                                        DffObjData& rData, Rectangle& rSnapRect, sal_Int32 nAngle, MSFilterTracer* pT ) :
     eSpType             ( rData.eShapeType ),
+    pTracer             ( pT ),
     aSnapRect           ( rSnapRect ),
     nFix16Angle         ( nAngle ),
     nXRef               ( 0x80000000 ),
