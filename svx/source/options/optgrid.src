@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:16:59 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 17:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ chinese_simplified ] = "Í¬²½»¯ÖáÊıÖµ(~A)";
         Text[ russian ] = "Ñèíõğîíèçèğîâàòü îñè";
         Text[ polish ] = "Synchronizuj osie";
-        Text[ japanese ] = "²‚ğ“¯Šú‚·‚é(~A)";
+        Text[ japanese ] = "²‚ğ“¯Šú‚³‚¹‚é(~A)";
         Text[ chinese_traditional ] = "¶b¦P¨B¤Æ(~A)";
         Text[ arabic ] = "ÊÒÇãä ÇáãÍÇæÑ";
         Text[ greek ] = "Óõã÷ñïíéóìüò áîüíùí";
@@ -430,7 +430,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ chinese_simplified ] = "~X Öá";
         Text[ russian ] = "Îñü X";
         Text[ polish ] = "Oœ X";
-        Text[ japanese ] = "X²(~X)";
+        Text[ japanese ] = "~X²";
         Text[ chinese_traditional ] = "~X-¶b";
         Text[ arabic ] = "ÇáãÍæÑ Ó";
         Text[ greek ] = "¢îïíáò X";
@@ -537,7 +537,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ NORWEGIAN ] = "Snapgrid" ;
         Text [ DANISH ] = "Fanggitter" ;
         Text [ ENGLISH_US ] = "Snap grid" ;
-        Text [ SPANISH ] = "Cuadrícula fija" ;
+        Text [ SPANISH ] = "Cuadrícula de captura" ;
         Text [ FINNISH ] = "Kohdistusruudukko" ;
         Text [ FRENCH ] = "Grille de capture" ;
         Text [ ITALIAN ] = "Griglia" ;
