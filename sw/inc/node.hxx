@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 10:08:47 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 18:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ class SwPageDesc;
 class ViewShell;
 struct SwPosition;
 
-#ifdef MACOSX
+#if defined(MACOSX) && ( __GNUC__ < 3 )
 #define INLINE /* GrP revisit with gcc3 */
 #else
 #define INLINE inline
