@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:00:27 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,7 +565,8 @@ void SwRTFWriter::MakeHeader()
         }
 
         Strm() << sRTF_SECTD << sRTF_SBKNONE;
-        OutRTFPageDescription( rPageDesc, FALSE, FALSE );
+        OutRTFPageDescription( rPageDesc, FALSE, TRUE );    // Changed bCheckForFirstPage to TRUE so headers
+                                                            // following title page are correctly added - i13107
         if( pSttPgDsc )
         {
             bIgnoreNextPgBreak = TRUE;
@@ -1052,13 +1053,44 @@ void SwRTFWriter::OutRTFFlyFrms( const SwFlyFrmFmt& rFlyFrmFmt )
 void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
 {
     // hole das aktuelle Bookmark
-    const SwBookmark* pBookmark = USHRT_MAX != nBkmkTabPos ?
-                            pDoc->GetBookmarks()[ nBkmkTabPos ] : 0;
-    // Ausgabe von Bookmarks
-    while( USHRT_MAX != nBkmkTabPos &&
-        pBookmark->GetPos().nNode.GetIndex() ==
+    const SwBookmark* pBookmark;
+    const SwPosition* pStartPos;
+    const SwPosition* pEndPos;
+
+    if(USHRT_MAX != nBkmkTabPos)
+    {
+        pBookmark = pDoc->GetBookmarks()[ nBkmkTabPos ];
+
+        if(pBookmark)
+        {
+            if(pBookmark->GetOtherPos())    // this bookmark spans text
+            {
+                // the start and endpoints are different
+                SwPaM mPam(pBookmark->GetPos(), *pBookmark->GetOtherPos());
+                pStartPos = mPam.Start();
+                pEndPos = mPam.End();
+            }
+            else                            // this bookmark is a point
+            {
+                // so the start and endpoints are the same
+                pStartPos = pEndPos = &pBookmark->GetPos();
+            }
+        }
+        else
+        {
+            nBkmkTabPos = USHRT_MAX;
+        }
+    }
+    else    // no bookmark
+    {
+        pBookmark = 0;
+        pStartPos = pEndPos = 0;
+    }
+
+    if( USHRT_MAX != nBkmkTabPos &&
+        pStartPos->nNode.GetIndex() ==
             pCurPam->GetPoint()->nNode.GetIndex() &&
-        pBookmark->GetPos().nContent.GetIndex() == nCntntPos )
+        pStartPos->nContent.GetIndex() == nCntntPos )
     {
         // zur Zeit umspannt das SwBookmark keinen Bereich also kann
         // es hier vollstaendig ausgegeben werden.
@@ -1082,7 +1114,31 @@ void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
         OutComment( *this, sRTF_BKMKSTART ) << ' ';
         RTFOutFuncs::Out_String( Strm(), pBookmark->GetName(),
                                 DEF_ENCODING, bWriteHelpFmt ) << '}';
+    }
+    if( USHRT_MAX != nBkmkTabPos &&
+        pEndPos->nNode.GetIndex() ==
+            pCurPam->GetPoint()->nNode.GetIndex() &&
+        pEndPos->nContent.GetIndex() == nCntntPos )
+    {
+        // zur Zeit umspannt das SwBookmark keinen Bereich also kann
+        // es hier vollstaendig ausgegeben werden.
 
+        // erst die SWG spezifischen Daten:
+        if( pBookmark->GetShortName().Len() ||
+            pBookmark->GetKeyCode().GetCode() )
+        {
+            OutComment( *this, sRTF_BKMKKEY );
+            OutULong( ( pBookmark->GetKeyCode().GetCode() |
+                     pBookmark->GetKeyCode().GetModifier() ));
+            if( !pBookmark->GetShortName().Len() )
+                Strm() << "  " ;
+            else
+            {
+                Strm() << ' ';
+                OutRTF_AsByteString( *this, pBookmark->GetShortName() );
+            }
+            Strm() << '}';
+        }
         OutComment( *this, sRTF_BKMKEND ) << ' ';
         RTFOutFuncs::Out_String( Strm(), pBookmark->GetName(),
                                 DEF_ENCODING, bWriteHelpFmt ) << '}';
@@ -1092,6 +1148,7 @@ void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
         else
             pBookmark = pDoc->GetBookmarks()[ nBkmkTabPos ];
     }
+
 }
 
 
@@ -1224,13 +1281,70 @@ void SwRTFWriter::OutPageDesc()
     bOutPageDesc = bOutPageDescTbl = FALSE;
 }
 
+void SwRTFWriter::OutRTFBorder(const SvxBorderLine* aLine, const USHORT nSpace )
+{
+    // M.M. This function writes out border lines in RTF similar to what
+    // WW8_BRC SwWW8Writer::TranslateBorderLine does in the winword filter
+    // Eventually it would be nice if all this functionality was in the one place
+    int nDistance = aLine->GetDistance();
+    int nOutWidth = aLine->GetOutWidth();
+    int nInWidth = aLine->GetInWidth();
+    int nWidth = aLine->GetOutWidth();
+
+    if(nDistance == 0)  // Single Line
+        Strm() << sRTF_BRDRS;
+    else                // Double Line
+    {
+        if(nOutWidth == nInWidth)
+            Strm() << sRTF_BRDRDB;
+        else if (nOutWidth > nInWidth)
+            Strm() << sRTF_BRDRTNTHSG;
+        else if (nOutWidth < nInWidth)
+            Strm() << sRTF_BRDRTHTNSG;
+    }
+    Strm() << sRTF_BRDRW;
+    OutULong(nWidth);
+
+    Strm() << sRTF_BRSP;
+    OutULong(nSpace);
+}
+
+void SwRTFWriter::OutRTFBorders(SvxBoxItem aBox)
+{
+    const SvxBorderLine *pLine;
+    if((pLine = aBox.GetTop()))
+    {
+        Strm() << sRTF_PGBRDRT;
+        OutRTFBorder(pLine, aBox.GetDistance(BOX_LINE_TOP));
+    }
+
+    if((pLine = aBox.GetBottom()))
+    {
+        Strm() << sRTF_PGBRDRB;
+        OutRTFBorder(pLine, aBox.GetDistance(BOX_LINE_BOTTOM));
+    }
+
+    if((pLine = aBox.GetRight()))
+    {
+        Strm() << sRTF_PGBRDRR;
+        OutRTFBorder(pLine, aBox.GetDistance(BOX_LINE_LEFT));
+    }
+
+    if((pLine = aBox.GetLeft()))
+    {
+        Strm() << sRTF_PGBRDRL;
+        OutRTFBorder(pLine, aBox.GetDistance(BOX_LINE_RIGHT));
+    }
+}
+
 void SwRTFWriter::OutRTFPageDescription( const SwPageDesc& rPgDsc,
                                             BOOL bWriteReset,
                                             BOOL bCheckForFirstPage )
 {
     // jetzt noch den Teil fuer alle anderen Applikationen:
     const SwPageDesc *pSave = pAktPageDesc;
-    BOOL bOldOut = bOutPageDesc, bOldHDFT = bOutLeftHeadFoot;
+    bool bOldOut = bOutPageDesc;
+    bool bOldHDFT = bOutLeftHeadFoot;
 
     // falls es einen Follow gibt,
     pAktPageDesc = &rPgDsc;
@@ -1255,6 +1369,9 @@ void SwRTFWriter::OutRTFPageDescription( const SwPageDesc& rPgDsc,
 
     const SwFmt *pFmt = &pAktPageDesc->GetMaster(); //GetLeft();
     OutRTF_SwFmt( *this, *pFmt );
+
+    SvxBoxItem aBox = pFmt->GetAttrSet().GetBox();
+    OutRTFBorders(pFmt->GetAttrSet().GetBox());
 
     // falls es gesharte Heaer/Footer gibt, so gebe diese auch noch aus
     if( PD_MIRROR & pAktPageDesc->GetUseOn() &&
