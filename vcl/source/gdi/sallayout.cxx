@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:29:45 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 14:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,16 +131,17 @@ int GetVerticalFlags( sal_Unicode nChar )
 
 sal_Unicode GetVerticalChar( sal_Unicode nChar )
 {
-    int nVert = 0;
+    return 0; // #i14788# input method is responsible vertical char changes
 
+    int nVert = 0;
     switch( nChar )
     {
         // #104627# special treatment for some unicodes
         case 0x002C: nVert = 0x3001; break;
         case 0x002E: nVert = 0x3002; break;
-#if 0  // to few fonts have the compatibility forms, using
-       // them will then cause more trouble than good
-       // TODO: decide on a font specific basis
+#if 0   // to few fonts have the compatibility forms, using
+        // them will then cause more trouble than good
+        // TODO: decide on a font specific basis
         case 0x2018: nVert = 0xFE41; break;
         case 0x2019: nVert = 0xFE42; break;
         case 0x201C: nVert = 0xFE43; break;
