@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStatusBar.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 13:01:43 $
+ *  last change:$Date: 2004-01-05 20:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,18 +58,7 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
-
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.DesktopTools;
-import util.SOfficeFactory;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
@@ -83,6 +72,18 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.AccessibilityTools;
+import util.DesktopTools;
+import util.SOfficeFactory;
+
 
 /**
  * Test for object that implements the following interfaces :
@@ -117,7 +118,6 @@ import com.sun.star.uno.XInterface;
  * @see ifc.accessibility.XAccessibleAction
  */
 public class AccessibleStatusBar extends TestCase {
-
     XDesktop the_Desk;
     XTextDocument xTextDoc;
 
@@ -125,19 +125,21 @@ public class AccessibleStatusBar extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()));
+        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+                                                        DesktopTools.createDesktop(
+                                                                (XMultiServiceFactory) Param.getMSF()));
     }
 
     /**
      * Disposes the document, if exists, created in
      * <code>createTestEnvironment</code> method.
      */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
+    protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("disposing xTextDoc");
 
         if (xTextDoc != null) {
-            xTextDoc.dispose();
+            util.DesktopTools.closeDoc(xTextDoc);
+            ;
         }
     }
 
@@ -160,63 +162,69 @@ public class AccessibleStatusBar extends TestCase {
      * @see ifc.accessibility._XAccessibleEventBroadcaster
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      */
-    protected TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam,
+                                                    PrintWriter log) {
+        log.println("creating a test environment");
 
-        log.println( "creating a test environment" );
+        if (xTextDoc != null) {
+            util.DesktopTools.closeDoc(xTextDoc);
+        }
 
-        if (xTextDoc != null) xTextDoc.dispose();
+        ;
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                     (XMultiServiceFactory) tParam.getMSF());
 
         XInterface toolkit = null;
 
         try {
-            log.println( "creating a text document" );
+            log.println("creating a text document");
             xTextDoc = SOF.createTextDoc(null);
-            toolkit = (XInterface) ((XMultiServiceFactory)tParam.getMSF()).createInstance(
-                                        "com.sun.star.awt.Toolkit") ;
-        } catch ( com.sun.star.uno.Exception e ) {
+            toolkit = (XInterface) ((XMultiServiceFactory) tParam.getMSF()).createInstance(
+                              "com.sun.star.awt.Toolkit");
+        } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
 
-        XModel aModel = (XModel)
-                    UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+                                                           xTextDoc);
 
         XInterface oObj = null;
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)tParam.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow(
+                                  (XMultiServiceFactory) tParam.getMSF(),
+                                  aModel);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole(xRoot,
-            AccessibleRole.STATUS_BAR);
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.STATUS_BAR);
 
-        log.println("ImplementationName: "+ util.utils.getImplName(oObj));
+        log.println("ImplementationName: " + util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XExtendedToolkit tk = (XExtendedToolkit)
-                    UnoRuntime.queryInterface(XExtendedToolkit.class,toolkit);
+        final XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+                                            XExtendedToolkit.class, toolkit);
 
         tEnv.addObjRelation("EventProducer",
-            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
-                public void fireEvent() {
-                    XWindow xWin = (XWindow)UnoRuntime.queryInterface(XWindow.class,tk.getActiveTopWindow());
-                    Rectangle newPosSize = xWin.getPosSize();
-                    newPosSize.Width = newPosSize.Width - 20;
-                    newPosSize.Height = newPosSize.Height - 20;
-                    newPosSize.X = newPosSize.X + 20;
-                    newPosSize.Y = newPosSize.Y + 20;
-                    xWin.setPosSize(newPosSize.X, newPosSize.Y, newPosSize.Width,
-                                            newPosSize.Height, PosSize.POSSIZE);
-                }
-            });
+                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            public void fireEvent() {
+                XWindow xWin = (XWindow) UnoRuntime.queryInterface(
+                                       XWindow.class, tk.getActiveTopWindow());
+                Rectangle newPosSize = xWin.getPosSize();
+                newPosSize.Width = newPosSize.Width - 20;
+                newPosSize.Height = newPosSize.Height - 20;
+                newPosSize.X = newPosSize.X + 20;
+                newPosSize.Y = newPosSize.Y + 20;
+                xWin.setPosSize(newPosSize.X, newPosSize.Y, newPosSize.Width,
+                                newPosSize.Height, PosSize.POSSIZE);
+            }
+        });
 
         return tEnv;
     }
