@@ -1,0 +1,177 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ZipConstants.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mtg $ $Date: 2001-07-04 14:09:54 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): Martin Gallwey (gallwey@sun.com)
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_package_zip_ZipConstants_idl__
+#define __com_sun_star_package_zip_ZipConstants_idl__
+
+
+
+//=============================================================================
+
+module com {  module sun {  module star {   module packages {  module zip {
+
+//=============================================================================
+
+/** defines the constants used by the ZIP interfaces.
+ */
+constants ZipConstants
+{
+    /*Compression method for the deflate algorithm (the only one currently
+      supported).
+     */
+    const short DEFLATED = 8;
+    /* Compression level for no compression.
+     */
+    const short NO_COMPRESSION = 0;
+    /* Compression level for fastest compression
+     */
+    const short BEST_SPEED = 1;
+    /* Compression level for best compression
+     */
+    const short BEST_COMPRESSION = 9;
+    /* Default compression level.
+     */
+    const short DEFAULT_COMPRESSION = -1;
+    /* Compression strategy best used for data consisting mostly of small
+       values with a somewhat random distribution. Forces more Huffman
+       coding and less string matching.
+     */
+    const short FILTERED = 1;
+    /* Compression strategy for Huffman coding only.
+     */
+    const short HUFFMAN_ONLY = 2;
+    /* Default compression strategy
+     */
+    const short DEFAULT_STRATEGY = 0;
+    /* entry is uncompressed
+     */
+    const short STORED = 0;
+    /* entry is uncompressed
+     */
+    const short DEF_MEM_LEVEL = 8;
+
+    /* Header Signatures
+    */
+
+     const long LOCSIG  = 0x04034b50;       // "PK\003\004"
+     const long EXTSIG  = 0x08074b50;       // "PK\007\008"
+     const long CENSIG  = 0x02014b50;       // "PK\001\002"
+     const long ENDSIG  = 0x06054b50;       // "PK\005\006"
+     const long SPANSIG = 0x08074b50;       // "PK\007\008"
+
+    /* Header sizes in bytes (including signatures)
+     */
+     const short LOCHDR = 30;   // LOC header size
+     const short EXTHDR = 16;   // EXT header size
+     const short CENHDR = 46;   // CEN header size
+     const short ENDHDR = 22;   // END header size
+
+    /* Local file (LOC) header field offsets
+     */
+     const short LOCVER = 4;     // version needed to extract
+     const short LOCFLG = 6;     // general purpose bit flags
+     const short LOCHOW = 8;     // compression method
+     const short LOCTIM = 10;    // modification time
+     const short LOCCRC = 14;    // crc of uncompressed data
+     const short LOCSIZ = 18;    // compressed data size
+     const short LOCLEN = 22;    // uncompressed data size
+     const short LOCNAM = 26;    // filename length
+     const short LOCEXT = 28;    // extra field length
+
+    /* Extra local (EXT) header field offsets
+     */
+     const short EXTCRC = 4;     // crc of uncompressed data
+     const short EXTSIZ = 8;     // compressed size
+     const short EXTLEN = 12;    // uncompressed size
+
+    /* Central directory (CEN) header field offsets
+     */
+
+     const short CENVEM = 4;     // version made by
+     const short CENVER = 6;     // version needed to extract
+     const short CENFLG = 8;     // general purpose bit flags
+     const short CENHOW = 10;    // compression method
+     const short CENTIM = 12;    // modification time
+     const short CENDAT = 14;    // modification time
+     const short CENCRC = 16;    // crc of uncompressed data
+     const short CENSIZ = 20;    // compressed size
+     const short CENLEN = 24;    // uncompressed size
+     const short CENNAM = 28;    // length of filename
+     const short CENEXT = 30;    // length of extra field
+     const short CENCOM = 32;    // file comment length
+     const short CENDSK = 34;    // disk number start
+     const short CENATT = 36;    // internal file attributes
+     const short CENATX = 38;    // external file attributes
+     const short CENOFF = 42;    // offset of local header
+
+    /* End of central directory (END) header field offsets
+     */
+     const short ENDSUB = 8;     // number of entries on this disk
+     const short ENDTOT = 10;    // total number of entries
+     const short ENDSIZ = 12;    // central directory size
+     const short ENDOFF = 16;    // central directory offset
+     const short ENDCOM = 20;    // size of zip file comment
+
+};
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
