@@ -26,6 +26,7 @@ Dim i as Integer
 Dim n as Integer
 Dim a as Integer
 Dim s as Integer
+Dim t as Integer
 Dim sFileContent() as String
 Dim NewList(0,1) as String
 Dim Index as Integer
@@ -69,8 +70,12 @@ Dim bAssignFileName as Boolean
 						CurFileName = NewList(n,0)													
 						If NewList(n,1) = &quot;vor&quot; Then
 							CurFileContent = GetRealFileContent(oDocInfo, CurFileName)
+							t = SearchArrayforPartString(CurFileContent, XMLTemplateContentList())
+						 	bAssignFileName = (t &gt; -1)
+						 	If bAssignFileName Then
+						 		CurFileContent = XMLTemplateContentList(t)
+						 	End If
 							NewList(n,1) = CurFileContent
-							bAssignFileName = FieldInList(CurFileContent, XMLTemplateContentList()) 
 						End If
 						CurExtension = NewList(n,1)
 						If bAssignFileName Then
@@ -83,7 +88,7 @@ Dim bAssignFileName as Boolean
 							End If
 						End If
 					Next n
-					If a &lt; MaxIndex Then
+					If a &lt; MaxIndex And a &gt; -1 Then
 						ReDim Preserve NewList(a, 1) as String
 					End If
 					AddListtoFilesList(FilesList(), NewList(), NewContentList())
@@ -462,29 +467,19 @@ End Function
 
 
 Function SearchArrayforPartString(SearchString as String, LocList()) as Integer
-Dim i as integer
+Dim i as Integer
+Dim a as Integer
+Dim StringList() as String
 	For i = Lbound(LocList(),1) to Ubound(LocList(),1)
-		If Instr(1,LocList(i), SearchString) &lt;&gt; 0 Then
-			SearchArrayForPartString() = i
-			Exit Function
-		End if
-	Next
-	IndexinArray = -1
-End Function
-
-
-Function GetMimeTypeList(BigFiltername as STring)
-Dim sBigList() as String
-Dim sSmallList() as String
-Dim sMimeTypeList()
-Dim BigMaxIndex as Integer
-Dim n as Integer
-	sBigList() = ArrayoutofString(BigFilterName,&quot;|&quot;, BigMaxIndex)
-	For n = 0 To BigMaxIndex
-		sSmallList() = ArrayoutofString(sBigList(n),&quot;;&quot;)
-		sMimeTypeList() = AddListToList(sMimeTypeList(), sSmallList())
-	Next n
-	GetMimetypeList() = sMimeTypeList()
+		StringList() = ArrayoutofString(LocList(i), &quot;|&quot;)
+		For a = 0 To Ubound(StringList())
+			If (Instr(1, SearchString, StringList(a)) &lt;&gt; 0) Then
+				SearchArrayForPartString() = i
+				Exit Function
+			End If
+		Next a
+	Next i
+	SearchArrayForPartString() = -1	
 End Function
 
 
