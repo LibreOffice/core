@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intercept.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-10-27 13:00:39 $
+ *  last change: $Author: mav $ $Date: 2003-10-29 07:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > m_xSlaveDispatchProvider;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > m_xMasterDispatchProvider;
 
-    static ::com::sun::star::uno::Sequence<::rtl::OUString> m_aInterceptedURL;
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aInterceptedURL;
 
     cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;
     StatusChangeListenerContainer*    m_pStatCL;
