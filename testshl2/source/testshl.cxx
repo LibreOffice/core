@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testshl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-13 13:56:33 $
+ *  last change: $Author: lla $ $Date: 2003-01-20 11:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 
 #include <iostream>
 #include <vector>
-
+#include <memory> /* auto_ptr */
 #ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
 #endif
@@ -106,31 +106,48 @@ using namespace std;
 void setSignalFilename(GetOpt & opt);
 
 // -----------------------------------------------------------------------------
-
-Log initLog(GetOpt & _aOptions)
+std::auto_ptr<CppUnit::TestResult> initResult(GetOpt & _aOptions)
 {
-    rtl::OString logPath;
-    if (_aOptions.hasOpt("-logPath"))
+    std::auto_ptr<CppUnit::TestResult> pResult;
+    if (_aOptions.hasOpt("-mode"))
     {
-        logPath = _aOptions.getOpt("-logPath");
+        if (_aOptions.getOpt("-mode").equals("emacs") == sal_True)
+        {
+            pResult = std::auto_ptr<CppUnit::TestResult>(new CppUnit::emacsTestResult(_aOptions));
+        }
     }
     else
     {
-        logPath = FileHelper::getTempPath().c_str();
+        pResult = std::auto_ptr<CppUnit::TestResult>(new CppUnit::testshlTestResult(_aOptions));
     }
-    rtl::OString sLogFile(logPath);
-    sLogFile += "/testshl2.log";
-
-    Log log( FileHelper::convertPath( sLogFile ) );
-    if ( log.open() != osl::FileBase::E_None )
-    {
-        cerr << "could not open LogFile: " << log.getName().getStr() << endl;
-        exit(1);
-    }
-    return log;
+    return pResult;
 }
 
+// -----------------------------------------------------------------------------
 
+std::auto_ptr<Outputter> initOutputter(GetOpt & _aOptions)
+{
+    std::auto_ptr<Outputter> pOutputter;
+
+    if (_aOptions.hasOpt("-log"))
+    {
+        rtl::OString sLogFile = _aOptions.getOpt("-log");
+
+        Log* pLog = new Log( FileHelper::convertPath( sLogFile ) );
+        if ( pLog->open() != osl::FileBase::E_None )
+        {
+            cerr << "could not open LogFile: " << pLog->getName().getStr() << endl;
+            exit(1);
+        }
+        pOutputter = std::auto_ptr<Outputter>(new Outputter(pLog));
+    }
+    else
+    {
+        pOutputter = std::auto_ptr<Outputter>(new Outputter(cout));
+    }
+
+    return pOutputter;
+}
 
 // ----------------------------------- Main -----------------------------------
 #if (defined UNX) || (defined OS2)
@@ -142,7 +159,7 @@ int _cdecl main( int argc, char* argv[] )
     static char* optionSet[] = {
         "-boom,         stop near error position, exception only",
         "-mode=s,       the output mode, emacs, xml, old. Default is -mode old",
-        "-logPath=s,    destination path for logging",
+        "-log=s,        destination file for logging",
         "-noerrors,     shows all tests, but not it's errors.",
         "-onlyerrors,   shows only the failed test functions",
 /*      "-tc=s@,        name(s) of testcase(s) to generate", */
@@ -165,21 +182,13 @@ int _cdecl main( int argc, char* argv[] )
         exit(0);
     }
 
-    // get path for logging stuff..
-    rtl::OString logPth;
-    // ...if available
-    if ( opt.hasOpt( "-logPth" ))
-    {
-        logPth = opt.getOpt( "-logPth" );
-    }
-
     bool bLibrary = true;
     if (opt.getParams().empty())
     {
         // no library is given, but if a jobonly list is given, we should generate UNKNOWN errors.
         if (! opt.hasOpt("-jobonly"))
         {
-            std::cerr << "error: At least on library should given." << std::endl;
+            std::cerr << "error: At least a library or a job file should given." << std::endl;
             opt.showUsage();
             exit(0);
         }
@@ -207,33 +216,19 @@ int _cdecl main( int argc, char* argv[] )
     if (bLibrary)
         suLibraryName = rtl::OStringToOUString(opt.getFirstParam(), RTL_TEXTENCODING_ASCII_US );
 
-    // Log aLog = initLog(opt);
     AutomaticRegisterHelper aHelper(suLibraryName, opt /*, &aJobs*/);
 
+    // create a TestResult
+    std::auto_ptr<CppUnit::TestResult> pResult = initResult(opt);
+
+    // call all test functions
+    aHelper.CallAll(pResult.get());
+
     // create and open log
-    CppUnit::TestResult* pResult;
-    if (opt.hasOpt("-mode"))
-    {
-        if (opt.getOpt("-mode").equals("emacs") == sal_True)
-        {
-            pResult = new CppUnit::emacsTestResult(opt);
-        }
-    }
-    else
-    {
-        pResult = new CppUnit::testshlTestResult(opt);
-    }
+    std::auto_ptr<Outputter> pOutput = initOutputter(opt);
 
-    aHelper.CallAll(pResult);
-
-    Outputter aOutput(cout);
-    pResult->print(aOutput);
-    // aLog << *pResult;
-
-    // cout << (*pResult);
-    // cout << "Done." << std::endl;
-
-    delete pResult;
+    // give the output
+    pResult->print(*pOutput.get());
     return 0;
 }
 
@@ -259,3 +254,53 @@ int _cdecl main( int argc, char* argv[] )
 // - xml
 
 // Remove rtl_tres_state from SAL!
+// no longer need, because
+// the new tool use c_rtl_tres_state()
+
+
+// What is a good test?
+// init your data
+// ASSERT( check if a generated result is what you expect )
+//
+// that's all
+// really all, no
+// because who called this test.
+// so we envelop it into a function.
+// Same checks should envelop in a class
+// but the question is also here, who create this class and called all it's containing functions?
+// class
+// {
+// public:
+//   test function1
+//   test function2
+// };
+// Due to the fact, that there exist no official way to get a list of all functions at run time,
+// we have to register the functions by hand.
+// To cut down the overhead,
+// there exist some macros to help you to register your functions into an internal registry.
+// class
+// {
+// public:
+//   test function1
+//   test function2
+//   REGISTER(test functions)
+// };
+
+// all classes have also to register there exist also a macro
+// NAMED_REGISTER
+// that's all
+// too much?
+// Ok, due to the fact that much code here is recur, there exist a code generator which help you to generate the
+// code. You have to build a simple job list, which says, package.class.function for every entry.
+// For every line in the job list there will create a function with an assertion stub.
+// the code is compileable, you don't need to register the functions, because this code will also created for you.
+// ok, you also need an addition to a makefile.mk which the code generator also build for you.
+//
+// So your work is reduced to write down a job list, call the code generator with this job list.
+// If a makefile exist, there exist a makefile.new which contains the code to build the new generated stubs.
+// So you have to replace the assertion stub() by your test code.
+// Build your test library by calling dmake
+// call testshl2 with this library.
+// get info what works, what not.
+
+// By a human readable line by line info.
