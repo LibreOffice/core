@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-17 11:38:58 $
+ *  last change: $Author: mib $ $Date: 2001-04-24 11:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,8 @@ XML_CONSTASCII_ACTION( sXML_WS, " " );
 XML_CONSTASCII_ACTION( sXML_xml, "xml" );
 XML_CONSTASCII_ACTION( sXML_xmlns, "xmlns" );
 XML_CONSTASCII_ACTION( sXML_xml_pi, "version=\"1.0\" encoding=\"UTF-8\"" );
+XML_CONSTASCII_ACTION( sXML_xml_doctype_prefix, "<!DOCTYPE " );
+XML_CONSTASCII_ACTION( sXML_xml_doctype_suffix, " PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"office.dtd\">" );
 
 // namespace prefixes and names
 XML_CONSTASCII_ACTION( sXML_np_office, "office" );
