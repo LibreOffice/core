@@ -22,6 +22,7 @@ mkdir: %_DEST%\inc%_EXT%\cppunit\extensions
 ..\%__SRC%\bin\testshl2.exe    %_DEST%\bin%_EXT%\testshl2.exe
 ..\%__SRC%\bin\testshl2_timeout.exe    %_DEST%\bin%_EXT%\testshl2_timeout.exe
 ..\%__SRC%\bin\testshl2        %_DEST%\bin%_EXT%\testshl2
+..\%__SRC%\bin\testshl2_timeout    %_DEST%\bin%_EXT%\testshl2_timeout
 ..\%__SRC%\bin\versioninfo.exe %_DEST%\bin%_EXT%\versioninfo.exe
 ..\%__SRC%\bin\versioninfo     %_DEST%\bin%_EXT%\versioninfo
 
