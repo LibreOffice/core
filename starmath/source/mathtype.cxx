@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:31:41 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,7 +433,7 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
             pC = " rbrace ";
             break;
         case 0x007e:
-            pC = " sim ";
+            pC = " \"~\" ";
             break;
         case 0x2224:
             pC = " ndivides ";
