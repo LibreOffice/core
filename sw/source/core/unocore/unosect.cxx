@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-21 10:30:45 $
+ *  last change: $Author: os $ $Date: 2002-09-02 12:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -677,6 +677,8 @@ void SwXTextSection::setPropertyValues(
                             }
                             sSectLink.SetToken(2, so3::cTokenSeperator, sLink);
                             aSection.SetLinkFileName(sSectLink);
+                            if(sSectLink.Len() < 3)
+                                aSection.SetType(CONTENT_SECTION);
                         }
                     }
                     break;
