@@ -51,7 +51,7 @@
    Contributor(s): _______________________________________
    
  -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="w wx aml o dt fo v">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="w wx aml o dt  v">
     <xsl:template name="create-default-paragraph-styles">
         <xsl:variable name="default-paragraph-style" select="w:style[@w:default = 'on' and @w:type = 'paragraph']"/>
         <xsl:if test="$default-paragraph-style">
@@ -81,9 +81,9 @@
                     </xsl:choose>
                     <xsl:if test="$default-paragraph-style/w:rPr/w:sz">
                         <xsl:attribute name="fo:font-size">
-                            <xsl:value-of select="$default-paragraph-style/w:rPr/w:sz/@w:val div 2"/>pt</xsl:attribute>
+                            <xsl:value-of select="translate($default-paragraph-style/w:rPr/w:sz/@w:val,'Na','0') div 2"/>pt</xsl:attribute>
                         <xsl:attribute name="style:font-size-asian">
-                            <xsl:value-of select="$default-paragraph-style/w:rPr/w:sz/@w:val div 2"/>pt</xsl:attribute>
+                            <xsl:value-of select="translate($default-paragraph-style/w:rPr/w:sz/@w:val,'Na','0') div 2"/>pt</xsl:attribute>
                     </xsl:if>
                     <xsl:if test="$default-paragraph-style/w:rPr/w:sz-cs">
                         <xsl:attribute name="style:font-size-complex">
@@ -194,11 +194,11 @@
         <style:style style:family="paragraph" style:name="P{$paragraph-number}">
             <xsl:if test="w:pPr/w:pStyle">
                 <xsl:attribute name="style:parent-style-name">
-                    <xsl:value-of select="concat('w',translate(w:pPr/w:pStyle/@w:val,' ','_'))"/>
+                    <xsl:value-of select="concat('w',translate(w:pPr/w:pStyle/@w:val,' ~`!@#$%^*(&#x26;)+/,;?&lt;&gt;{}[]:','_'))"/>
                 </xsl:attribute>
             </xsl:if>
             <xsl:choose>
-                <xsl:when test="not($next-section-property/w:type/@w:val = 'continuous') and  generate-id($last-section-property[last()]/following::w:p[1]) = generate-id(.) and not(ancestor::w:sectPr)">
+                <xsl:when test="not($next-section-property/w:type/@w:val = 'continuous') and  generate-id($last-section-property[last()]/following::w:p[1]) = generate-id(.) and not(ancestor::w:sectPr or ancestor::w:tbl)">
                     <xsl:attribute name="style:master-page-name">Standard<xsl:value-of select="$section-property-number + 1"/>
                     </xsl:attribute>
                 </xsl:when>
@@ -218,11 +218,11 @@
             <style:style style:family="paragraph" style:name="P{$paragraph-number}page-break">
                 <xsl:if test="w:pPr/w:pStyle">
                     <xsl:attribute name="style:parent-style-name">
-                        <xsl:value-of select="concat('w',translate(w:pPr/w:pStyle/@w:val,' ','_'))"/>
+                        <xsl:value-of select="concat('w',translate(w:pPr/w:pStyle/@w:val,' ~`!@#$%^*(&#x26;)+/,;?&lt;&gt;{}[]:','_'))"/>
                     </xsl:attribute>
                 </xsl:if>
                 <xsl:choose>
-                    <xsl:when test="generate-id($last-section-property[last()]/following::w:p[1]) = generate-id(.) and not(ancestor::w:sectPr)">
+                    <xsl:when test="generate-id($last-section-property[last()]/following::w:p[1]) = generate-id(.) and not(ancestor::w:sectPr or ancestor::w:tbl)">
                         <xsl:attribute name="style:master-page-name">Standard<xsl:value-of select="$section-property-number + 1"/>
                         </xsl:attribute>
                     </xsl:when>
@@ -239,11 +239,11 @@
             <style:style style:family="paragraph" style:name="P{$paragraph-number}column-break">
                 <xsl:if test="w:pPr/w:pStyle">
                     <xsl:attribute name="style:parent-style-name">
-                        <xsl:value-of select="concat('w',translate(w:pPr/w:pStyle/@w:val,' ','_'))"/>
+                        <xsl:value-of select="concat('w',translate(w:pPr/w:pStyle/@w:val,' ~`!@#$%^*(&#x26;)+/,;?&lt;&gt;{}[]:','_'))"/>
                     </xsl:attribute>
                 </xsl:if>
                 <xsl:choose>
-                    <xsl:when test="generate-id($last-section-property[last()]/following::w:p[1]) = generate-id(.) and not(ancestor::w:sectPr)">
+                    <xsl:when test="generate-id($last-section-property[last()]/following::w:p[1]) = generate-id(.) and not(ancestor::w:sectPr or ancestor::w:tbl)">
                         <xsl:attribute name="style:master-page-name">Standard<xsl:value-of select="$section-property-number + 1"/>
                         </xsl:attribute>
                     </xsl:when>
@@ -500,33 +500,22 @@
                                 </xsl:attribute>
                             </xsl:otherwise>
                         </xsl:choose>
-                        <!--
-                        <xsl:if test="@w:leader">
-                            <xsl:attribute name="style:leader-char">
-                                <xsl:choose>
-                                    <xsl:when test="hyphen">-</xsl:when>
-                                    <xsl:when test="underscore">_</xsl:when>
-                                    <xsl:when test="dot">.</xsl:when>
-                                </xsl:choose>
-                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="@style:leader-char">
-                            <xsl:choose>
-                                <xsl:when test="@style:leader-char='-'">
-                                    <xsl:attribute name="w:leader">hyphen</xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="@style:leader-char='_'">
-                                    <xsl:attribute name="w:leader">underscore</xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="@style:leader-char='.'">
-                                    <xsl:attribute name="w:leader">dot</xsl:attribute>
-                                </xsl:when>
-                                <xsl:when test="@style:leader-char='·'">
-                                    <xsl:attribute name="w:leader">middle-dot</xsl:attribute>
-                                </xsl:when>
-                            </xsl:choose>
-                        </xsl:if>
-                        -->
+                        <!-- Detect leader chars in tabs (rp) -->
+                        <xsl:choose>
+                           <xsl:when test="@w:leader = 'hyphen'">
+                           	<xsl:attribute name="style:leader-style">solid</xsl:attribute>
+                           	<xsl:attribute name="style:leader-text">-</xsl:attribute>
+                           </xsl:when>
+                           <xsl:when test="@w:leader = 'underscore'">
+                           	<xsl:attribute name="style:leader-style">solid</xsl:attribute>
+                           	<xsl:attribute name="style:leader-text">_</xsl:attribute>
+                           </xsl:when>
+                           <xsl:when test="@w:leader = 'dot'">
+                            	<xsl:attribute name="style:leader-style">dotted</xsl:attribute>
+                           	<xsl:attribute name="style:leader-text">.</xsl:attribute>
+                           </xsl:when>
+                       </xsl:choose>
+                         <!-- end leader chars (rp) -->
                     </xsl:element>
                 </xsl:for-each>
             </xsl:element>
@@ -539,7 +528,7 @@
             <xsl:attribute name="style:family">text</xsl:attribute>
             <xsl:if test="w:rStyle">
                 <xsl:attribute name="style:parent-style-name">
-                    <xsl:value-of select="concat('w',translate(w:rStyle/@w:val,' ','_'))"/>
+                    <xsl:value-of select="concat('w',translate(w:rStyle/@w:val,' ~`!@#$%^*(&#x26;)+/,;?&lt;&gt;{}[]:','_'))"/>
                 </xsl:attribute>
             </xsl:if>
             <xsl:element name="style:text-properties">
@@ -657,9 +646,9 @@
         </xsl:if>
         <xsl:if test="w:sz">
             <xsl:attribute name="fo:font-size">
-                <xsl:value-of select="w:sz/@w:val div 2"/>pt</xsl:attribute>
+                <xsl:value-of select="translate(w:sz/@w:val,'Na','0') div 2"/>pt</xsl:attribute>
             <xsl:attribute name="style:font-size-asian">
-                <xsl:value-of select="w:sz/@w:val div 2"/>pt</xsl:attribute>
+                <xsl:value-of select="translate(w:sz/@w:val,'Na','0') div 2"/>pt</xsl:attribute>
         </xsl:if>
         <xsl:if test="w:sz-cs">
             <xsl:attribute name="style:font-size-complex">
@@ -773,10 +762,13 @@
                 <xsl:when test="w:em/@w:val = 'under-dot'">
                     <xsl:attribute name="style:text-emphasize">disc below</xsl:attribute>
                 </xsl:when>
-                <xsl:otherwise>
+                <xsl:when test="w:em/@w:val = 'dot' or w:em/@w:val = 'circle' ">
                     <xsl:attribute name="style:text-emphasize">
-                        <xsl:value-of select="concat( w:em/@w:val, ' below')"/>
+                        <xsl:value-of select=" concat(w:em/@w:val,' below') "/>
                     </xsl:attribute>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:attribute name="style:text-emphasize">none</xsl:attribute>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:if>
@@ -827,7 +819,8 @@
         <xsl:for-each select="$textruns-with-break">
             <xsl:variable name="break-position" select="position()"/>
             <xsl:call-template name="create-sub-paragraph">
-                <xsl:with-param name="textruns" select="following-sibling::w:r[not(w:br/@w:type='page' or w:br/@w:type='column') and (count(preceding::w:r[w:br/@w:type='page' or w:br/@w:type='column']) = $break-position)]"/>
+            <!-- added following-sibling::w:fldSimple | following-sibling::w:hlink | following-sibling::aml:annotation to enable these elements to be processed when there are breaks happen  G.Yang -->
+                <xsl:with-param name="textruns" select="following-sibling::w:r[not(w:br/@w:type='page' or w:br/@w:type='column') and (count(preceding::w:r[w:br/@w:type='page' or w:br/@w:type='column']) = $break-position)] | following-sibling::w:fldSimple[count(preceding::w:r[w:br/@w:type='page' or w:br/@w:type='column']) = $break-position] | following-sibling::w:hlink[count(preceding::w:r[w:br/@w:type='page' or w:br/@w:type='column']) = $break-position] | following-sibling::aml:annotation[count(preceding::w:r[w:br/@w:type='page' or w:br/@w:type='column']) = $break-position] "/>
                 <xsl:with-param name="textruns-with-break" select="current()"/>
             </xsl:call-template>
         </xsl:for-each>
@@ -927,12 +920,12 @@
         <xsl:choose>
             <xsl:when test="(preceding-sibling::w:r) or (w:rPr)">
                 <!-- add this condition to prevent from  printing the value of DATE, TIME, PRINTDATE, CREATEDATE, SAVEDATE, PAGE, NUMPAGES etc. fields  in-between w:fldchar begin and w:fldchar end   G.Yang.-->
-                <xsl:if test="not (preceding-sibling::w:r/w:instrText[substring(normalize-space(.),1,4) = 'DATE'  or substring(normalize-space(.),1,4) = 'TIME'  or  substring(normalize-space(.),1,9) = 'PRINTDATE'  or substring(normalize-space(.),1,10) = 'CREATEDATE'  or substring(normalize-space(.),1,8) = 'SAVEDATE' or substring(normalize-space(.),1,4) = 'PAGE' or substring(normalize-space(.),1,8) = 'NUMPAGES'  or substring(normalize-space(.),1,8) = 'NUMWORDS' or substring(normalize-space(.),1,8) = 'NUMCHARS' or substring(normalize-space(.),1,6) = 'REVNUM' or substring(normalize-space(.),1,7) = 'AUTONUM'  or  substring(normalize-space(.),1,10) = 'AUTONUMLGL' or substring(normalize-space(.),1,10) = 'AUTONUMOUT' or substring(normalize-space(.),1,3) = 'SEQ' or substring(normalize-space(.),1,6) = 'AUTHOR' or substring(normalize-space(.),1,5) = 'TITLE'  or substring(normalize-space(.),1,7) = 'SUBJECT'  or substring(normalize-space(.),1,8) = 'KEYWORDS' or substring(normalize-space(.),1,6) = 'FILLIN'  or substring(normalize-space(.),1,11) = 'DOCPROPERTY' or substring(normalize-space(.),1,10) = 'MERGEFIELD' or substring(normalize-space(.),1,8) = 'MERGEREC' or substring(normalize-space(.),1,4) = 'NEXT' or substring( normalize-space(.),1,9) = 'HYPERLINK' ][1]  and (following-sibling::w:r/w:fldChar[@w:fldCharType='end'] or (  not(preceding-sibling::w:r/w:fldChar[@w:fldCharType='end'] ) and parent::w:p/following-sibling::w:p/w:r/w:fldChar[@w:fldCharType='end'])) )">
+                <xsl:if test="not (preceding-sibling::w:r/w:instrText[substring(normalize-space(.),1,4) = 'DATE'  or substring(normalize-space(.),1,4) = 'TIME'  or  substring(normalize-space(.),1,9) = 'PRINTDATE'  or substring(normalize-space(.),1,10) = 'CREATEDATE'  or substring(normalize-space(.),1,8) = 'SAVEDATE' or substring(normalize-space(.),1,4) = 'PAGE' or substring(normalize-space(.),1,8) = 'NUMPAGES'  or substring(normalize-space(.),1,8) = 'NUMWORDS' or substring(normalize-space(.),1,8) = 'NUMCHARS' or substring(normalize-space(.),1,6) = 'REVNUM' or substring(normalize-space(.),1,7) = 'AUTONUM'  or  substring(normalize-space(.),1,10) = 'AUTONUMLGL' or substring(normalize-space(.),1,10) = 'AUTONUMOUT' or substring(normalize-space(.),1,3) = 'SEQ' or substring(normalize-space(.),1,6) = 'AUTHOR' or substring(normalize-space(.),1,5) = 'TITLE'  or substring(normalize-space(.),1,7) = 'SUBJECT'  or substring(normalize-space(.),1,8) = 'KEYWORDS' or substring(normalize-space(.),1,6) = 'FILLIN'  or substring(normalize-space(.),1,11) = 'DOCPROPERTY' or substring(normalize-space(.),1,10) = 'MERGEFIELD' or substring(normalize-space(.),1,8) = 'MERGEREC' or substring(normalize-space(.),1,4) = 'NEXT' or substring( normalize-space(.),1,9) = 'HYPERLINK' or substring( normalize-space(.),1,3) = 'REF' ][1]  and (following-sibling::w:r/w:fldChar[@w:fldCharType='end'] or (  not(preceding-sibling::w:r/w:fldChar[@w:fldCharType='end'] ) and parent::w:p/following-sibling::w:p/w:r/w:fldChar[@w:fldCharType='end'])) )">
                     <text:span>
                         <xsl:choose>
                             <xsl:when test="w:rPr/w:rStyle">
                                 <xsl:attribute name="text:style-name">
-                                    <xsl:value-of select="w:rPr/w:rStyle/@w:val"/>
+                                    <xsl:value-of select="concat('w', translate(w:rPr/w:rStyle/@w:val,' ~`!@#$%^*(&#x26;)+/,;?&lt;&gt;{}[]:','_'))"/>
                                 </xsl:attribute>
                             </xsl:when>
                             <xsl:when test="w:rPr">
@@ -949,7 +942,7 @@
             </xsl:when>
             <xsl:otherwise>
                 <!-- add this condition to prevent from printing the value of DATE, TIME, PRINTDATE, CREATEDATE, SAVEDATE, PAGE, NUMPAGES, etc. fields in-between w:fldchar begin and w:fldchar end  G.Yang.-->
-                <xsl:if test="not( preceding-sibling::w:r/w:instrText[substring(normalize-space(.),1,4) = 'DATE'  or substring(normalize-space(.),1,4) = 'TIME'  or  substring(normalize-space(.),1,9) = 'PRINTDATE'  or substring(normalize-space(.),1,10) = 'CREATEDATE'  or substring(normalize-space(.),1,8) = 'SAVEDATE' or substring(normalize-space(.),1,4) = 'PAGE' or substring(normalize-space(.),1,8) = 'NUMPAGES'  or substring(normalize-space(.),1,8) = 'NUMWORDS' or substring(normalize-space(.),1,8) = 'NUMCHARS' or substring(normalize-space(.),1,6) = 'REVNUM' or substring(normalize-space(.),1,7) = 'AUTONUM'  or  substring(normalize-space(.),1,10) = 'AUTONUMLGL' or substring(normalize-space(.),1,10) = 'AUTONUMOUT' or substring(normalize-space(.),1,3) = 'SEQ' or substring(normalize-space(.),1,6) = 'AUTHOR' or substring(normalize-space(.),1,5) = 'TITLE'  or substring(normalize-space(.),1,7) = 'SUBJECT'  or substring(normalize-space(.),1,8) = 'KEYWORDS' or substring(normalize-space(.),1,6) = 'FILLIN' or substring(normalize-space(.),1,11) = 'DOCPROPERTY' or substring(normalize-space(.),1,10) = 'MERGEFIELD' or substring(normalize-space(.),1,8) = 'MERGEREC' or substring(normalize-space(.),1,4) = 'NEXT' or substring( normalize-space(.),1,9) = 'HYPERLINK' ][1]  and (following-sibling::w:r/w:fldChar[@w:fldCharType='end'] or (  not(preceding-sibling::w:r/w:fldChar[@w:fldCharType='end'] ) and parent::w:p/following-sibling::w:p/w:r/w:fldChar[@w:fldCharType='end'])) )">
+                <xsl:if test="not( preceding-sibling::w:r/w:instrText[substring(normalize-space(.),1,4) = 'DATE'  or substring(normalize-space(.),1,4) = 'TIME'  or  substring(normalize-space(.),1,9) = 'PRINTDATE'  or substring(normalize-space(.),1,10) = 'CREATEDATE'  or substring(normalize-space(.),1,8) = 'SAVEDATE' or substring(normalize-space(.),1,4) = 'PAGE' or substring(normalize-space(.),1,8) = 'NUMPAGES'  or substring(normalize-space(.),1,8) = 'NUMWORDS' or substring(normalize-space(.),1,8) = 'NUMCHARS' or substring(normalize-space(.),1,6) = 'REVNUM' or substring(normalize-space(.),1,7) = 'AUTONUM'  or  substring(normalize-space(.),1,10) = 'AUTONUMLGL' or substring(normalize-space(.),1,10) = 'AUTONUMOUT' or substring(normalize-space(.),1,3) = 'SEQ' or substring(normalize-space(.),1,6) = 'AUTHOR' or substring(normalize-space(.),1,5) = 'TITLE'  or substring(normalize-space(.),1,7) = 'SUBJECT'  or substring(normalize-space(.),1,8) = 'KEYWORDS' or substring(normalize-space(.),1,6) = 'FILLIN' or substring(normalize-space(.),1,11) = 'DOCPROPERTY' or substring(normalize-space(.),1,10) = 'MERGEFIELD' or substring(normalize-space(.),1,8) = 'MERGEREC' or substring(normalize-space(.),1,4) = 'NEXT' or substring( normalize-space(.),1,9) = 'HYPERLINK' or substring( normalize-space(.),1,3) = 'REF' ][1]  and (following-sibling::w:r/w:fldChar[@w:fldCharType='end'] or (  not(preceding-sibling::w:r/w:fldChar[@w:fldCharType='end'] ) and parent::w:p/following-sibling::w:p/w:r/w:fldChar[@w:fldCharType='end'])) )">
                     <xsl:apply-templates select="w:t | w:pict | w:br | w:instrText | w:fldChar | w:tab | w:footnote | w:endnote | aml:annotation | w:hlink | w:footnote | w:endnote"/>
                 </xsl:if>
             </xsl:otherwise>
