@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-02 16:08:42 $
+ *  last change: $Author: sab $ $Date: 2000-12-07 10:51:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -885,6 +885,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                                     SvXMLStylesContext& rStyles ) :
     SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList ),
     pData( pNewData ),
+    aMyConditions(),
     nType( nNewType ),
     nFormatLang( LANGUAGE_SYSTEM ),
     bAutoOrder( FALSE ),
@@ -1034,12 +1035,15 @@ void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
 
         if (bHasMap)
         {
-            SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
-                XML_STYLE_FAMILY_DATA_STYLE, sMapName, sal_False);
-            if (pStyle)
+            for (sal_Int32 i = 0; i < aMyConditions.size(); i++)
             {
-                if ((pStyle->GetKey() > -1))
-                    AddCondition();
+                SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
+                    XML_STYLE_FAMILY_DATA_STYLE, aMyConditions[i].sMapName, sal_False);
+                if (pStyle)
+                {
+                    if ((pStyle->GetKey() > -1))
+                        AddCondition(i);
+                }
             }
         }
         aFormatCode.insert( 0, aConditions.makeStringAndClear() );
@@ -1334,10 +1338,10 @@ sal_Bool SvXMLNumFormatContext::ReplaceNfKeyword( sal_uInt16 nOld, sal_uInt16 nN
     return sal_False;       // not found
 }
 
-void SvXMLNumFormatContext::AddCondition( )
+void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
 {
-    rtl::OUString rApplyName = sMapName;
-    rtl::OUString rCondition = sCondition;
+    rtl::OUString rApplyName = aMyConditions[nIndex].sMapName;
+    rtl::OUString rCondition = aMyConditions[nIndex].sCondition;
     SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
     sal_uInt32 nKey = pData->GetKeyForName( rApplyName );
     OUString sValue = OUString::createFromAscii( "value()" );       //! define constant
@@ -1371,6 +1375,14 @@ void SvXMLNumFormatContext::AddCondition( )
 
         aConditions.append( (sal_Unicode) ';' );
     }
+}
+
+void SvXMLNumFormatContext::AddCondition( const rtl::OUString& rCondition, const rtl::OUString& rApplyName )
+{
+    MyCondition aCondition;
+    aCondition.sCondition = rCondition;
+    aCondition.sMapName = rApplyName;
+    aMyConditions.push_back(aCondition);
 }
 
 void SvXMLNumFormatContext::AddColor( const Color& rColor )
