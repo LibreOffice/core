@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-08 04:27:46 $
+ *  last change: $Author: pb $ $Date: 2001-05-08 07:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,6 +537,13 @@ sal_Bool SvtTemplateWindow::IsFileSelected() const
     return bRet;
 }
 
+void SvtTemplateWindow::OpenFile( sal_Bool bNotAsTemplate )
+{
+    String aURL = pFileWin->GetSelectedFile();
+    if ( aURL.Len() > 0 && !::utl::UCBContentHelper::IsFolder( aURL ) )
+        pFrameWin->OpenFile( aURL, sal_False, !bNotAsTemplate );
+}
+
 // class SvtDocumentTemplateDialog ---------------------------------------
 
 SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* pParent ) :
@@ -552,6 +559,10 @@ SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* pParent ) :
 
 {
     FreeResource();
+
+    Link aLink = LINK( this, SvtDocumentTemplateDialog, OKHdl_Impl );
+    aEditBtn.SetClickHdl( aLink );
+    aOKBtn.SetClickHdl( aLink );
 
     pWin = new SvtTemplateWindow( this );
     Size aSize = GetOutputSizePixel();
@@ -584,6 +595,16 @@ IMPL_LINK ( SvtDocumentTemplateDialog , SelectHdl_Impl, SvtTemplateWindow *, EMP
 IMPL_LINK ( SvtDocumentTemplateDialog , DoubleClickHdl_Impl, SvtTemplateWindow *, EMPTYARG )
 {
     EndDialog( RET_OK );
+    return 0;
+}
+
+IMPL_LINK ( SvtDocumentTemplateDialog , OKHdl_Impl, PushButton *, pBtn )
+{
+    if ( pWin->IsFileSelected() )
+    {
+        pWin->OpenFile( &aEditBtn == pBtn );
+        EndDialog( RET_OK );
+    }
     return 0;
 }
 
