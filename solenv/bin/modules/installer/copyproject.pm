@@ -2,9 +2,9 @@
 #
 #   $RCSfile: copyproject.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:15:15 $
+#   last change: $Author: rt $ $Date: 2004-07-06 14:56:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,10 +83,11 @@ sub copy_project
 
     installer::logger::include_header_into_logfile("Creating installation directory");
 
-    my $installdir = installer::systemactions::create_directories("install", $languagestringref);
-    my $numberedinprogressdir = installer::systemactions::make_numbered_dir("inprogress", $installdir);
-    my $current_install_number = installer::converter::get_number_from_directory($numberedinprogressdir);
-    my $installlogdir = installer::systemactions::create_directory_next_to_directory($numberedinprogressdir, "log");
+    my $current_install_number = "";
+
+    my $installdir = installer::worker::create_installation_directory($shipinstalldir, $languagestringref, \$current_install_number);
+
+    my $installlogdir = installer::systemactions::create_directory_next_to_directory($installdir, "log");
 
     # Copy files and ScpActions
 
@@ -99,7 +100,7 @@ sub copy_project
         my $onefile = ${$filesref}[$i];
 
         my $source = $onefile->{'sourcepath'};
-        my $destination = $numberedinprogressdir . $installer::globals::separator . $onefile->{'Name'};
+        my $destination = $installdir . $installer::globals::separator . $onefile->{'Name'};
 
         installer::systemactions::copy_one_file($source, $destination);
     }
@@ -111,40 +112,14 @@ sub copy_project
         my $onefile = ${$scpactionsref}[$i];
 
         my $source = $onefile->{'sourcepath'};
-        my $destination = $numberedinprogressdir . $installer::globals::separator . $onefile->{'Name'};
+        my $destination = $installdir . $installer::globals::separator . $onefile->{'Name'};
 
         installer::systemactions::copy_one_file($source, $destination);
     }
 
     # Analyzing the log file
 
-    print "... checking log file " . $loggingdir . $installer::globals::logfilename . "\n";
-
-    my $contains_error = installer::control::check_logfile(\@installer::globals::logfileinfo);
-
-    if ( $contains_error )
-    {
-        my $errordir = installer::systemactions::rename_string_in_directory($numberedinprogressdir, "inprogress", "with_error");
-        if ( $installer::globals::updatepack ) { installer::mail::send_fail_mail($allsettingsarrayref, $languagestringref, $errordir); }
-    }
-    else
-    {
-        my $destdir = installer::systemactions::rename_string_in_directory($numberedinprogressdir, "inprogress", "");
-
-        if ( $installer::globals::updatepack )
-        {
-            my $completeshipinstalldir = installer::worker::copy_install_sets_to_ship($destdir, $shipinstalldir);
-            installer::mail::send_success_mail($allsettingsarrayref, $languagestringref, $completeshipinstalldir);
-        }
-    }
-
-    my $numberedlogfilename = $installer::globals::logfilename . "_" . $current_install_number;
-
-    # Saving the logfile in the log file directory and additionally in a log directory in the install directory
-
-    print "... creating log file $numberedlogfilename \n";
-    installer::files::save_file($loggingdir . $numberedlogfilename, \@installer::globals::logfileinfo);
-    installer::files::save_file($installlogdir . $installer::globals::separator . $numberedlogfilename, \@installer::globals::logfileinfo);
+    installer::worker::analyze_and_save_logfile($loggingdir, $installdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
 
     # That's all
 
