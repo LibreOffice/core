@@ -16,6 +16,8 @@ OpenOffice
 			PACKAGEVERSION 1.9.{milestone}
 			PACKAGEREVISION 1
 			LICENSENAME LGPL, SISSL
+			OPENSOURCE 1
+			SUNDIR 0
 	    }
 				active			1
 				compression		5
