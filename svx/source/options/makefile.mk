@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: os $ $Date: 2001-03-20 10:33:29 $
+#   last change: $Author: os $ $Date: 2001-04-05 13:07:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -150,7 +150,8 @@ SLOFILES+=	\
 EXCEPTIONSFILES= \
         $(SLO)$/optasian.obj \
         $(SLO)$/optdict.obj \
-        $(SLO)$/optlingu.obj
+        $(SLO)$/optlingu.obj \
+        $(SLO)$/optsave.obj
 
 # --- Targets -------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:37:59 $
+ *  last change: $Author: os $ $Date: 2001-04-05 13:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_RELATIVE_INET
     {
-        Pos = MAP_APPFONT ( 12 , 96 ) ;
+        Pos = MAP_APPFONT ( 136 , 83 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
         Text = "im Int~ernet" ;
         Text [ English ] = "~Internet" ;
@@ -351,6 +351,60 @@ TabPage RID_SFXPAGE_SAVE
         Text[ greek ] = "ÛÙÔ Internet";
         Text[ korean ] = "¿Œ≈Õ≥›(~I)";
         Text[ turkish ] = "Internet";
+    };
+    FixedLine FL_FILTER
+    {
+        Pos = MAP_APPFONT ( 6 , 99 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Standard Dateiformat" ;
+        Text [ English ] = "Standard file format" ;
+    };
+    FixedText FT_APP
+    {
+        Pos = MAP_APPFONT ( 12 , 110 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Dokument" ;
+        Text [ English ] = "Document" ;
+    };
+    FixedText FT_FILTER
+    {
+        Pos = MAP_APPFONT ( 136 , 110 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Dateiformate" ;
+        Text [ English ] = "File formats" ;
+    };
+    ListBox LB_APP
+    {
+        Pos = MAP_APPFONT ( 12 , 121 ) ;
+        Size = MAP_APPFONT ( 108 , 58 ) ;
+        Border = TRUE;
+        StringList =
+        {
+            < "Textdokument" ;     APP_WRITER    ; > ;
+            < "HTML-Dokument" ;    APP_WRITER_WEB;  > ;
+            < "Tabellendokument" ; APP_CALC      ; > ;
+            < "Pr‰sentation" ;     APP_IMPRESS   ; > ;
+            < "Zeichnung" ;        APP_DRAW      ; > ;
+            < "Formel" ;           APP_MATH      ; > ;
+            < "Diagramm" ;         APP_CHART     ; > ;
+        };
+        StringList [English] =
+        {
+            < "Text document" ; APP_WRITER    ;> ;
+            < "HTML Document" ; APP_WRITER_WEB;> ;
+            < "Spreadsheet" ;   APP_CALC      ;> ;
+            < "Presentation" ;  APP_IMPRESS   ;> ;
+            < "Drawing" ;       APP_DRAW      ;> ;
+            < "Formula" ;       APP_MATH      ;> ;
+            < "Chart" ;         APP_CHART     ;> ;
+        };
+    };
+    ListBox LB_FILTER
+    {
+        Pos = MAP_APPFONT ( 136 , 121 ) ;
+        Size = MAP_APPFONT ( 108 , 58 ) ;
+        Border = TRUE;
+        Sort = TRUE;
     };
 };
 
