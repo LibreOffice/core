@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: lla $ $Date: 2001-03-23 09:37:50 $
+#   last change: $Author: lla $ $Date: 2001-03-23 12:44:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,6 +99,9 @@ SLOFILES=\
     $(SLO)$/updatetree.obj \
     $(SLO)$/namehelper.obj \
 
+#	$(SLO)$/binaryhandler.obj \
+#	$(SLO)$/binarywriter.obj \
+#	$(SLO)$/binaryreader.obj \
 
 # --- Targets ---
 
