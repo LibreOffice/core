@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-01 18:59:51 $
+ *  last change: $Author: mib $ $Date: 2000-12-02 10:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,7 @@ public:
 
     sal_Int32 GetLevel() const { return nLevel; }
     Sequence<beans::PropertyValue> GetProperties(
-            const SvI18NMap *pI18NMap=0 ) const;
+            const SvI18NMap *pI18NMap=0 );
 };
 
 SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
@@ -427,7 +427,7 @@ SvXMLImportContext *SvxXMLListLevelStyleContext_Impl::CreateChildContext(
 }
 
 Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
-        const SvI18NMap *pI18NMap ) const
+        const SvI18NMap *pI18NMap )
 {
     sal_Int16 eType;
 
@@ -530,11 +530,10 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
 
         if( bImage )
         {
-            String sURL( sImageURL );
-            INetURLObject::RelToAbs( sURL );
             pProps[nPos].Name =
                     OUString::createFromAscii( XML_UNO_NAME_NRULE_GRAPHICURL );
-            pProps[nPos++].Value <<= OUString(sURL);
+            pProps[nPos++].Value <<= GetImport().ResolveGraphicObjectURL( sImageURL,
+                                                                       sal_False );
 
             awt::Size aSize( nImageWidth, nImageHeight );
             pProps[nPos].Name =
@@ -939,7 +938,7 @@ void SvxXMLListStyleContext::FillUnoNumRule(
         sal_Int32 nLevels = rNumRule->getCount();
         for( sal_uInt16 i=0; i < nCount; i++ )
         {
-            const SvxXMLListLevelStyleContext_Impl *pLevelStyle =
+            SvxXMLListLevelStyleContext_Impl *pLevelStyle =
                 (*pLevelStyles)[i];
             sal_Int32 nLevel = pLevelStyle->GetLevel();
             if( nLevel >= 0 && nLevel < nLevels )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBackgroundImageContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-19 14:25:17 $
+ *  last change: $Author: mib $ $Date: 2000-12-02 10:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
     else if( GraphicLocation_NONE == ePos )
         ePos = GraphicLocation_TILED;
 
-    aProp.maValue <<= sURL;
+    aProp.maValue <<= GetImport().ResolveGraphicObjectURL( sURL, sal_False );
     aPosProp.maValue <<= ePos;
     aFilterProp.maValue <<= sFilter;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-01 11:14:43 $
+ *  last change: $Author: mib $ $Date: 2000-12-02 10:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,12 @@
 #include "xmlnumfi.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HDL_
-#include <com/sun/star/lang/ServiceNotRegisteredException.hdl>
+#ifndef _XMLOFF_PROGRESSBARHELPER_HXX
+#include "ProgressBarHelper.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
+#include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #endif
 
 using namespace ::rtl;
@@ -194,8 +198,6 @@ void SvXMLImport::_InitCtor()
                                sXML_n_table_old, XML_NAMESPACE_TABLE );
     pNamespaceMap->AddAtIndex( XML_OLD_NAMESPACE_META_IDX, sXML_np__meta_old,
                                sXML_n_meta_old, XML_NAMESPACE_META );
-
-    sPicturesPath = OUString( RTL_CONSTASCII_USTRINGPARAM( "#Pictures/" ) );
     sPackageProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
 }
 
@@ -610,7 +612,9 @@ const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
     return xDashHelper;
 }
 
-::rtl::OUString SvXMLImport::ResolveGraphicObjectURL( const ::rtl::OUString& rURL, sal_Bool bLoadOnDemand )
+::rtl::OUString SvXMLImport::ResolveGraphicObjectURL(
+                                    const ::rtl::OUString& rURL,
+                                    sal_Bool bLoadOnDemand )
 {
     ::rtl::OUString sRet;
 
