@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:07:36 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3452,7 +3452,7 @@ WarningBox MSG_MERGE_SOURCE_UNAVAILABLE
 WarningBox MSG_DATA_SOURCES_UNAVAILABLE
 {
     HelpId = HID_DATA_SOURCES_UNAVAILABLE;
-    Buttons = WB_OK;
+    Buttons = WB_OK_CANCEL;
     Message = "Es wurde noch keine Datenquelle eingerichtet. Sie benötigen eine Datenquelle, um Daten (z.B. Namen und Adressen aus einer Datenbank) an die Felder zu liefern.";
     Message[english_us] = "No data source has been set up yet. You need a data source, such as a database, to supply data (for example, names and addresses) for the fields.";
     Message[ portuguese ] = "There is no data source available.\nDo you want to establish a data source connnection?";
