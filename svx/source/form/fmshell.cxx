@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-08 07:10:56 $
+ *  last change: $Author: oj $ $Date: 2002-05-21 08:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,14 +569,17 @@ FmFormShell::FmFormShell( SfxViewShell* _pParent, FmFormView* pView )
 FmFormShell::~FmFormShell()
 {
     if (m_pFormView)
-    {
         GetImpl()->ResetForms();
+
+    m_pImpl->dispose();
+    m_pImpl->release();
+
+    if (m_pFormView)
+    {
         m_pFormView->SetFormShell(NULL);
         m_pFormView  = NULL;
     }
 
-    m_pImpl->dispose();
-    m_pImpl->release();
 
     // reset the model after disposing the shell !
     m_pFormModel = NULL;
