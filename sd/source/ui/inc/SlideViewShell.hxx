@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideViewShell.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:01:51 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,11 @@ public:
     virtual void    Command(const CommandEvent& rCEvt, ::sd::Window* pWin);
 
     virtual SdPage* GetActualPage();
+
+    /** @returns
+            current or selected page or 0.
+    */
+    virtual SdPage* getCurrentPage() const;
 
     /** Return a string that describes the currently selected pages.
     */
