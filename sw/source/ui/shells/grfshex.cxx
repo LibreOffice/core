@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfshex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-25 15:50:55 $
+ *  last change: $Author: mba $ $Date: 2002-07-01 09:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,12 +144,16 @@
 #include <poolfmt.hrc>
 #endif
 
+#include <sfx2/request.hxx>
+#include <svtools/stritem.hxx>
+
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 using namespace ::rtl;
 
-BOOL SwTextShell::InsertGraphicDlg()
+BOOL SwTextShell::InsertGraphicDlg( SfxRequest& rReq )
 {
 #ifndef ENABLE_PROP_WITHOUTLINK
 #define ENABLE_PROP_WITHOUTLINK 0x08
@@ -221,33 +225,66 @@ BOOL SwTextShell::InsertGraphicDlg()
         DBG_ERROR("control acces failed")
     }
 
-    if( ERRCODE_NONE == pFileDlg->Execute() )
+    if( rReq.GetArgs() || ERRCODE_NONE == pFileDlg->Execute() )
     {
-        SwWrtShell& rSh = GetShell();
-        rSh.StartAction();
-        rSh.StartUndo(UNDO_INSERT);
+        SFX_REQUEST_ARG( rReq, pName, SfxStringItem, SID_INSERT_GRAPHIC , sal_False );
+        SFX_REQUEST_ARG( rReq, pAsLink, SfxBoolItem, FN_PARAM_1 , sal_False );
+        SFX_REQUEST_ARG( rReq, pFilter, SfxStringItem, FN_PARAM_FILTER , sal_False );
+        SFX_REQUEST_ARG( rReq, pStyle, SfxStringItem, FN_PARAM_2 , sal_False );
+
+        String aFileName, aFilterName;
+        if ( pName )
+        {
+            aFileName = pName->GetValue();
+            if ( pFilter )
+                aFilterName = pFilter->GetValue();
+        }
+        else
+        {
+            aFileName = pFileDlg->GetPath();
+            aFilterName = pFileDlg->GetCurrentFilter();
+            rReq.AppendItem( SfxStringItem( SID_INSERT_GRAPHIC, aFileName ) );
+            rReq.AppendItem( SfxStringItem( FN_PARAM_FILTER, aFilterName ) );
+        }
+
         sal_Bool bAsLink;
-        if(nHtmlMode & HTMLMODE_ON)
+        if( nHtmlMode & HTMLMODE_ON )
             bAsLink = sal_True;
         else
         {
-            Any aVal = xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
-            DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found")
-            bAsLink = aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True;
-            Any aTemplateValue = xCtrlAcc->getValue(
-                ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
-                ListboxControlActions::GET_SELECTED_ITEM );
-            OUString sTmpl;
-            aTemplateValue >>= sTmpl;
-            sGraphicFormat = sTmpl;
+            if ( rReq.GetArgs() )
+            {
+                if ( pAsLink )
+                    bAsLink = pAsLink->GetValue();
+                if ( pStyle )
+                    sGraphicFormat = pStyle->GetValue();
+            }
+            else
+            {
+                Any aVal = xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
+                DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found")
+                bAsLink = aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True;
+                Any aTemplateValue = xCtrlAcc->getValue(
+                    ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
+                    ListboxControlActions::GET_SELECTED_ITEM );
+                OUString sTmpl;
+                aTemplateValue >>= sTmpl;
+                sGraphicFormat = sTmpl;
+                if ( sGraphicFormat.Len() )
+                    rReq.AppendItem( SfxStringItem( FN_PARAM_2, sGraphicFormat ) );
+                rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
+            }
         }
-        USHORT nError = InsertGraphic( pFileDlg->GetPath(), pFileDlg->GetCurrentFilter(),
-                                bAsLink, ::GetGrfFilter() );
+
+        SwWrtShell& rSh = GetShell();
+        rSh.StartAction();
+        rSh.StartUndo(UNDO_INSERT);
+
+        USHORT nError = InsertGraphic( aFileName, aFilterName, bAsLink, ::GetGrfFilter() );
 
         // Format ist ungleich Current Filter, jetzt mit auto. detection
         if( nError == GRFILTER_FORMATERROR )
-            nError = InsertGraphic( pFileDlg->GetPath(), aEmptyStr, bAsLink,
-                                    ::GetGrfFilter() );
+            nError = InsertGraphic( aFileName, aEmptyStr, bAsLink, ::GetGrfFilter() );
         if ( rSh.IsFrmSelected() )
         {
             SwFrmFmt* pFmt = pDoc->FindFrmFmtByName( sGraphicFormat );
@@ -282,8 +319,12 @@ BOOL SwTextShell::InsertGraphicDlg()
         if( nResId )
         {
             rSh.EndAction();
-            InfoBox aInfoBox( rVw.GetWindow(), SW_RESSTR( nResId ));
-            aInfoBox.Execute();
+            if( !rReq.GetArgs() )
+            {
+                InfoBox aInfoBox( rVw.GetWindow(), SW_RESSTR( nResId ));
+                aInfoBox.Execute();
+            }
+            rReq.Ignore();
         }
         else
         {
@@ -291,7 +332,9 @@ BOOL SwTextShell::InsertGraphicDlg()
             rSh.EndAction();
             bReturn = TRUE;
             rVw.AutoCaption( GRAPHIC_CAP );
+            rReq.Done();
         }
+
         rSh.EndUndo(UNDO_INSERT); // wegen moegl. Shellwechsel
     }
 
