@@ -725,11 +725,6 @@ End
 
 
 #ifdef SOLAR_JAVA
-#ifndef GCJ
-/*
-GCJ because com.sun.star.wizards.tutorial.creator.frame.Framework cannot be
-built with gcj
-*/
 UNO_JAR_FILE( gid_File_Jar_Report, report )
 UNO_JAR_FILE( gid_File_Jar_Table, table )
 UNO_JAR_FILE( gid_File_Jar_Letter, letter )
@@ -737,20 +732,12 @@ UNO_JAR_FILE( gid_File_Jar_Form, form )
 UNO_JAR_FILE( gid_File_Jar_Fax, fax )
 UNO_JAR_FILE( gid_File_Jar_Agenda, agenda )
 UNO_JAR_FILE( gid_File_Jar_Query, query )
-#endif
-#endif
-
-#ifdef SOLAR_JAVA
-#ifndef GCJ
-STD_JAR_FILE( gid_File_Jar_Hsqldb, hsqldb )
-STD_JAR_FILE( gid_File_Jar_Hsqldb_Sdbc, sdbc_hsqldb )
-#endif
-#endif
-
-#ifdef SOLAR_JAVA
-#ifndef GCJ
 UNO_JAR_FILE( gid_File_Jar_Web, web )
 #endif
+
+#ifdef SOLAR_JAVA
+STD_JAR_FILE( gid_File_Jar_Hsqldb, hsqldb )
+STD_JAR_FILE( gid_File_Jar_Hsqldb_Sdbc, sdbc_hsqldb )
 #endif
 
 #ifdef SOLAR_JAVA
@@ -1873,13 +1860,11 @@ File gid_File_Scripts_Beanshell
 End
 
 #ifdef SOLAR_JAVA
-#ifndef GCJ
 File gid_File_Scripts_Java
     Dir = gid_Dir_Share_Scripts;
     ARCHIVE_TXT_FILE_BODY;
     Name = "ScriptsJava.zip";
 End
-#endif
 #endif
 
 File gid_File_Scripts_Javascript
