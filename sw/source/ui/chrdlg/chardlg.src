@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:42 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ TabDialog DLG_CHAR
     Text [ ENGLISH ] = "Character" ;
     Text [ norwegian ] = "Character" ;
     Text [ italian ] = "Carattere" ;
-    Text [ portuguese_brazilian ] = "Caractere" ;
+    Text [ portuguese_brazilian ] = "Caracter" ;
     Text [ portuguese ] = "Caracteres" ;
     Text [ finnish ] = "Fontti" ;
     Text [ danish ] = "Tegn" ;
@@ -94,7 +94,7 @@ TabDialog DLG_CHAR
                 Text [ ENGLISH ] = "Character" ;
                 Text [ norwegian ] = "Character" ;
                 Text [ italian ] = "Carattere" ;
-                Text [ portuguese_brazilian ] = "Caractere" ;
+                Text [ portuguese_brazilian ] = "Fonte" ;
                 Text [ portuguese ] = "Tipo de letra" ;
                 Text [ finnish ] = "Fontti" ;
                 Text [ danish ] = "Skrifttype" ;
@@ -117,6 +117,9 @@ TabDialog DLG_CHAR
                 Text[ turkish ] = "Yaz�tipi";
                 Text[ catalan ] = "Tipus de lletra";
                 Text[ thai ] = "ตัวอักษร";
+                Text[ czech ] = "Písmo";
+                Text[ hebrew ] = "‮גופן‬";
+                Text[ hindi ] = "अक्षर";
             };
             PageItem
             {
@@ -125,7 +128,7 @@ TabDialog DLG_CHAR
                 Text [ ENGLISH ] = "Character Extension" ;
                 Text [ norwegian ] = "Character Extension" ;
                 Text [ italian ] = "Effetto carattere" ;
-                Text [ portuguese_brazilian ] = "Extens?o de Caracter" ;
+                Text [ portuguese_brazilian ] = "Efeitos da Fonte" ;
                 Text [ portuguese ] = "Efeitos do tipo de letra" ;
                 Text [ finnish ] = "Fonttitehosteet" ;
                 Text [ danish ] = "Skrifteffekt" ;
@@ -137,7 +140,7 @@ TabDialog DLG_CHAR
                 PageResID = TP_CHAR_EXT ;
                 Text[ chinese_simplified ] = "字体效果";
                 Text[ russian ] = "������� ������";
-                Text[ polish ] = "Efekty czcionek";
+                Text[ polish ] = "Efekty czcionki";
                 Text[ japanese ] = "フォント効果";
                 Text[ chinese_traditional ] = "字型效果";
                 Text[ arabic ] = "������� ������";
@@ -148,6 +151,9 @@ TabDialog DLG_CHAR
                 Text[ turkish ] = "Yaz�tipi efektleri";
                 Text[ catalan ] = "Efectes de lletra";
                 Text[ thai ] = "ลักษณะพิเศษของตัวอักษร";
+                Text[ czech ] = "Efekty pro písmo";
+                Text[ hebrew ] = "‮אפקטים לגופנים‬";
+                Text[ hindi ] = "अक्षर प्रभाव";
             };
             PageItem
             {
@@ -166,16 +172,19 @@ TabDialog DLG_CHAR
                 Text[ danish ] = "Position";
                 Text[ swedish ] = "Position";
                 Text[ polish ] = "Pozycja";
-                Text[ portuguese_brazilian ] = "Position";
+                Text[ portuguese_brazilian ] = "Posi��o";
                 Text[ japanese ] = "位置";
                 Text[ korean ] = "위치";
                 Text[ chinese_simplified ] = "位置";
                 Text[ chinese_traditional ] = "位置";
-                Text[ turkish ] = "Pozisyon";
+                Text[ turkish ] = "Konum";
                 Text[ arabic ] = "������";
                 Text[ catalan ] = "Posici�";
                 Text[ finnish ] = "Sijainti";
                 Text[ thai ] = "ตำแหน่ง";
+                Text[ czech ] = "Umístění";
+                Text[ hebrew ] = "‮מיקום‬";
+                Text[ hindi ] = "स्थान";
             };
             PageItem
             {
@@ -194,16 +203,19 @@ TabDialog DLG_CHAR
                 Text[ danish ] = "Asiatisk layout";
                 Text[ swedish ] = "Asiatisk layout";
                 Text[ polish ] = "Uk�ad azjatycki";
-                Text[ portuguese_brazilian ] = "Asian layout";
+                Text[ portuguese_brazilian ] = "Layout Asi�tico";
                 Text[ japanese ] = "日本語レイアウト";
                 Text[ korean ] = "한글 글자꼴";
                 Text[ chinese_simplified ] = "中日韩版式";
                 Text[ chinese_traditional ] = "中日韓版式";
-                Text[ turkish ] = "Asian layout";
+                Text[ turkish ] = "Asya G�r�n�m�";
                 Text[ arabic ] = "����� �����";
                 Text[ catalan ] = "Disseny asi�tic";
                 Text[ finnish ] = "Aasialainen asettelu";
                 Text[ thai ] = "เค้าโครงแบบเอเชีย";
+                Text[ czech ] = "Asijský formát";
+                Text[ hebrew ] = "Asiatisches Layout";
+                Text[ hindi ] = "ऐशियन अभिन्यास";
             };
             PageItem
             {
@@ -217,7 +229,7 @@ TabDialog DLG_CHAR
                 Text [ dutch ] = "Hyperlink" ;
                 Text [ swedish ] = "Hyperl�nk" ;
                 Text [ danish ] = "Hyperlink" ;
-                Text [ portuguese_brazilian ] = "Hyperlink" ;
+                Text [ portuguese_brazilian ] = "Hiperlink" ;
                 Text [ portuguese ] = "Hiperliga��o" ;
                 Text[ chinese_simplified ] = "超链接";
                 Text[ russian ] = "�����������";
@@ -229,10 +241,13 @@ TabDialog DLG_CHAR
                 Text[ chinese_simplified ] = "超链接";
                 Text[ greek ] = "����-�������";
                 Text[ korean ] = "하이퍼링크";
-                Text[ turkish ] = "Hyperlink";
+                Text[ turkish ] = "Hiperlink";
                 Text[ catalan ] = "Hiperenlla�";
                 Text[ finnish ] = "Hyperlinkki";
                 Text[ thai ] = "เชื่อมโยงหลายมิติ";
+                Text[ czech ] = "Hypertextový odkaz";
+                Text[ hebrew ] = "Hyperlink";
+                Text[ hindi ] = "हाइपरलिंक";
             };
             PageItem
             {
@@ -241,7 +256,7 @@ TabDialog DLG_CHAR
                 Text [ ENGLISH ] = "Background" ;
                 Text [ norwegian ] = "Background" ;
                 Text [ italian ] = "Sfondo" ;
-                Text [ portuguese_brazilian ] = "Fundo" ;
+                Text [ portuguese_brazilian ] = "Plano de Fundo" ;
                 Text [ portuguese ] = "Plano de fundo" ;
                 Text [ finnish ] = "Tausta" ;
                 Text [ danish ] = "Baggrund" ;
@@ -264,6 +279,9 @@ TabDialog DLG_CHAR
                 Text[ turkish ] = "Artalan";
                 Text[ catalan ] = "Fons";
                 Text[ thai ] = "พื้นหลัง";
+                Text[ czech ] = "Pozadí";
+                Text[ hebrew ] = "‮רקע‬";
+                Text[ hindi ] = "पृष्ठभाग";
             };
         };
     };
@@ -277,10 +295,13 @@ TabDialog DLG_CHAR
     Text[ dutch ] = "Teken";
     Text[ chinese_simplified ] = "字符";
     Text[ greek ] = "����������";
-    Text[ korean ] = "문자";
+    Text[ korean ] = "글꼴";
     Text[ turkish ] = "Karakter";
     Text[ catalan ] = "Car�cters";
     Text[ thai ] = "ตัวอักขระ";
+    Text[ czech ] = "Znak";
+    Text[ hebrew ] = "Zeichen";
+    Text[ hindi ] = "अक्षर";
 };
 TabDialog DLG_DRAWCHAR
 {
@@ -290,7 +311,7 @@ TabDialog DLG_DRAWCHAR
     Text [ ENGLISH ] = "Character" ;
     Text [ norwegian ] = "Character" ;
     Text [ italian ] = "Carattere" ;
-    Text [ portuguese_brazilian ] = "Caractere" ;
+    Text [ portuguese_brazilian ] = "Fonte" ;
     Text [ portuguese ] = "Tipo de letra" ;
     Text [ finnish ] = "Fontti" ;
     Text [ danish ] = "Skrifttype" ;
@@ -313,7 +334,7 @@ TabDialog DLG_DRAWCHAR
                 Text [ ENGLISH ] = "Character" ;
                 Text [ norwegian ] = "Character" ;
                 Text [ italian ] = "Carattere" ;
-                Text [ portuguese_brazilian ] = "Caractere" ;
+                Text [ portuguese_brazilian ] = "Fonte" ;
                 Text [ portuguese ] = "Tipo de letra" ;
                 Text [ finnish ] = "Fontti" ;
                 Text [ danish ] = "Skrifttype" ;
@@ -336,6 +357,9 @@ TabDialog DLG_DRAWCHAR
                 Text[ turkish ] = "Yaz�tipi";
                 Text[ catalan ] = "Tipus de lletra";
                 Text[ thai ] = "ตัวอักษร";
+                Text[ czech ] = "Písmo";
+                Text[ hebrew ] = "‮גופן‬";
+                Text[ hindi ] = "अक्षर";
             };
         };
     };
@@ -352,6 +376,9 @@ TabDialog DLG_DRAWCHAR
     Text[ turkish ] = "Yaz�tipi";
     Text[ catalan ] = "Tipus de lletra";
     Text[ thai ] = "ตัวอักษร";
+    Text[ czech ] = "Písmo";
+    Text[ hebrew ] = "‮גופן‬";
+    Text[ hindi ] = "अक्षर";
 };
 TabPage TP_CHAR_URL
 {
@@ -372,7 +399,7 @@ TabPage TP_CHAR_URL
         Text [ dutch ] = "Hyperlink" ;
         Text [ swedish ] = "Hyperl�nk" ;
         Text [ danish ] = "Hyperlink" ;
-        Text [ portuguese_brazilian ] = "Hyperlink" ;
+        Text [ portuguese_brazilian ] = "Hiperlink" ;
         Text [ portuguese ] = "Hiperliga��o" ;
         Text[ chinese_simplified ] = "超链接";
         Text[ russian ] = "�����������";
@@ -384,10 +411,13 @@ TabPage TP_CHAR_URL
         Text[ chinese_simplified ] = "超链接";
         Text[ greek ] = "����-�������";
         Text[ korean ] = "하이퍼링크";
-        Text[ turkish ] = "Hyperlink";
+        Text[ turkish ] = "Hiperlink";
         Text[ catalan ] = "Hiperenlla�";
         Text[ finnish ] = "Hyperlinkki";
         Text[ thai ] = "เชื่อมโยงหลายมิติ";
+        Text[ czech ] = "Hypertextový odkaz";
+        Text[ hebrew ] = "Hyperlink";
+        Text[ hindi ] = "हाइपरलिंक";
     };
     FixedText FT_URL
     {
@@ -402,11 +432,11 @@ TabPage TP_CHAR_URL
         Text [ dutch ] = "U~RL" ;
         Text [ swedish ] = "U~RL" ;
         Text [ danish ] = "URL" ;
-        Text [ portuguese_brazilian ] = "U~RL" ;
+        Text [ portuguese_brazilian ] = "~URL" ;
         Text [ portuguese ] = "U~RL" ;
         Text[ chinese_simplified ] = "~URL";
         Text[ russian ] = "U~RL";
-        Text[ polish ] = "URL";
+        Text[ polish ] = "Adres ~URL";
         Text[ japanese ] = "~URL";
         Text[ chinese_traditional ] = "~URL";
         Text[ arabic ] = "U~RL";
@@ -414,10 +444,13 @@ TabPage TP_CHAR_URL
         Text[ chinese_simplified ] = "~URL";
         Text[ greek ] = "URL";
         Text[ korean ] = "~URL";
-        Text[ turkish ] = "U~RL";
+        Text[ turkish ] = "~URL";
         Text[ catalan ] = "~URL";
         Text[ finnish ] = "~URL-osoite";
         Text[ thai ] = "~URL";
+        Text[ czech ] = "URL";
+        Text[ hebrew ] = "U~RL";
+        Text[ hindi ] = "~URL";
     };
     Edit ED_URL
     {
@@ -434,7 +467,7 @@ TabPage TP_CHAR_URL
         Text [ English ] = "~Browse..." ;
         TabStop = TRUE ;
         Text [ english_us ] = "~Browse..." ;
-        Text [ portuguese_brazilian ] = "Durch~suchen..." ;
+        Text [ portuguese_brazilian ] = "~Navegar..." ;
         Text [ swedish ] = "~V�lj ut..." ;
         Text [ danish ] = "Gennemse..." ;
         Text [ italian ] = "~Sfoglia..." ;
@@ -444,7 +477,7 @@ TabPage TP_CHAR_URL
         Text [ portuguese ] = "~Pesquisar..." ;
         Text[ chinese_simplified ] = "选择(~B)...";
         Text[ russian ] = "~�����...";
-        Text[ polish ] = "Przegl�daj...";
+        Text[ polish ] = "~Przegl�daj...";
         Text[ japanese ] = "選択(~B)...";
         Text[ chinese_traditional ] = "選擇(~B)...";
         Text[ arabic ] = "�������...";
@@ -456,6 +489,9 @@ TabPage TP_CHAR_URL
         Text[ catalan ] = "~Selecciona...";
         Text[ finnish ] = "~Selaa...";
         Text[ thai ] = "เ~รียกดู...";
+        Text[ czech ] = "Listovat...";
+        Text[ hebrew ] = "‮עיון...‬";
+        Text[ hindi ] = "~ब्रउज़...";
     };
     FixedText FT_TEXT
     {
@@ -473,17 +509,20 @@ TabPage TP_CHAR_URL
         Text[ italian ] = "Testo";
         Text[ danish ] = "Te~kst";
         Text[ swedish ] = "Te~xt";
-        Text[ polish ] = "Tekst";
-        Text[ portuguese_brazilian ] = "H~inweis";
+        Text[ polish ] = "Te~kst";
+        Text[ portuguese_brazilian ] = "Te~xto";
         Text[ japanese ] = "文字列(~X)";
         Text[ korean ] = "텍스트(~X)";
         Text[ chinese_simplified ] = "文字(~X)";
         Text[ chinese_traditional ] = "文字(~X)";
-        Text[ turkish ] = "B~ilgi";
+        Text[ turkish ] = "Metin";
         Text[ arabic ] = "��";
         Text[ catalan ] = "Te~xt";
         Text[ finnish ] = "Teks~ti";
         Text[ thai ] = "ข้อ~ความ";
+        Text[ czech ] = "Text";
+        Text[ hebrew ] = "‮טקסט‬";
+        Text[ hindi ] = "टे~क्स्ट्";
     };
     Edit ED_TEXT
     {
@@ -506,11 +545,11 @@ TabPage TP_CHAR_URL
         Text [ dutch ] = "~Naam" ;
         Text [ swedish ] = "~Namn" ;
         Text [ danish ] = "Navn" ;
-        Text [ portuguese_brazilian ] = "~Name" ;
+        Text [ portuguese_brazilian ] = "~Nome" ;
         Text [ portuguese ] = "~Nome" ;
         Text[ chinese_simplified ] = "名称(~N)";
         Text[ russian ] = "~���";
-        Text[ polish ] = "Nazwa";
+        Text[ polish ] = "~Nazwa";
         Text[ japanese ] = "名前(~N)";
         Text[ chinese_traditional ] = "名稱(~N)";
         Text[ arabic ] = "�����";
@@ -522,6 +561,9 @@ TabPage TP_CHAR_URL
         Text[ catalan ] = "~Nom";
         Text[ finnish ] = "~Nimi";
         Text[ thai ] = "~ชื่อ";
+        Text[ czech ] = "Název";
+        Text[ hebrew ] = "~Name";
+        Text[ hindi ] = "~नाम";
     };
     Edit ED_NAME
     {
@@ -538,17 +580,17 @@ TabPage TP_CHAR_URL
         Text = "~Frame" ;
         Text [ English ] = "Frame" ;
         Text [ english_us ] = "~Target frame" ;
-        Text [ portuguese_brazilian ] = "~Targetframe" ;
+        Text [ portuguese_brazilian ] = "~Frame de destino" ;
         Text [ swedish ] = "Ra~m" ;
         Text [ danish ] = "Frame" ;
         Text [ italian ] = "~Frame" ;
         Text [ spanish ] = "~Marco destino" ;
-        Text [ french ] = "~Frame" ;
+        Text [ french ] = "Cadre" ;
         Text [ dutch ] = "~Frame" ;
         Text [ portuguese ] = "~Frame" ;
         Text[ chinese_simplified ] = "框对象(~T)";
         Text[ russian ] = "~�����";
-        Text[ polish ] = "Frame";
+        Text[ polish ] = "Ramka ~docelowa";
         Text[ japanese ] = "フレーム(~T)";
         Text[ chinese_traditional ] = "訊框(~T)";
         Text[ arabic ] = "����";
@@ -556,10 +598,13 @@ TabPage TP_CHAR_URL
         Text[ chinese_simplified ] = "框对象(~T)";
         Text[ greek ] = "�������";
         Text[ korean ] = "프레임(~T)";
-        Text[ turkish ] = "~Frame";
+        Text[ turkish ] = "Hedef Yap�";
         Text[ catalan ] = "~Marc";
         Text[ finnish ] = "~Kohdekehys";
         Text[ thai ] = "กรอบเ~ป้าหมาย";
+        Text[ czech ] = "Cílový rámec";
+        Text[ hebrew ] = "~Frame";
+        Text[ hindi ] = "~लक्ष्य फ्रेम ";
     };
     ComboBox LB_TARGET
     {
@@ -583,12 +628,12 @@ TabPage TP_CHAR_URL
         Text [ dutch ] = "~Gebeurtenissen" ;
         Text [ swedish ] = "H�nd~elser..." ;
         Text [ danish ] = "Begivenheder..." ;
-        Text [ spanish ] = "~Acontecimientos..." ;
-        Text [ portuguese_brazilian ] = "~Ereignisse..." ;
+        Text [ spanish ] = "~Acciones..." ;
+        Text [ portuguese_brazilian ] = "~Eventos..." ;
         Text [ portuguese ] = "~Eventos..." ;
         Text[ chinese_simplified ] = "事件(~E)...";
         Text[ russian ] = "�������...";
-        Text[ polish ] = "Wy~darzenia...";
+        Text[ polish ] = "~Wydarzenia...";
         Text[ japanese ] = "イベント(~E)...";
         Text[ chinese_traditional ] = "動作(~E)...";
         Text[ arabic ] = "�����...";
@@ -600,6 +645,9 @@ TabPage TP_CHAR_URL
         Text[ catalan ] = "~Esdeveniments...";
         Text[ finnish ] = "Tapa~htumat...";
         Text[ thai ] = "เ~หตุการณ์...";
+        Text[ czech ] = "Události";
+        Text[ hebrew ] = "~Ereignisse...";
+        Text[ hindi ] = "~घटनें...";
     };
     FixedLine FL_STYLE
     {
@@ -614,11 +662,11 @@ TabPage TP_CHAR_URL
         Text [ french ] = "Styles de caract�res" ;
         Text [ swedish ] = "Teckenformatmallar" ;
         Text [ danish ] = "Tegntypografier" ;
-        Text [ portuguese_brazilian ] = "Zeichenvorlagen" ;
+        Text [ portuguese_brazilian ] = "Estilos de Caracter" ;
         Text [ portuguese ] = "Estilos de caracteres" ;
         Text[ chinese_simplified ] = "字符样式";
         Text[ russian ] = "����� ������ �����������";
-        Text[ polish ] = "Style znaku";
+        Text[ polish ] = "Style znak�w";
         Text[ japanese ] = "文字スタイル";
         Text[ chinese_traditional ] = "字元樣式";
         Text[ arabic ] = "����� ����";
@@ -626,10 +674,13 @@ TabPage TP_CHAR_URL
         Text[ chinese_simplified ] = "字符样式";
         Text[ greek ] = "���� ����������";
         Text[ korean ] = "문자 스타일";
-        Text[ turkish ] = "Karakter bi�imi";
+        Text[ turkish ] = "Karakter Bi�emleri";
         Text[ catalan ] = "Estils de car�cters";
         Text[ finnish ] = "Merkkityylit";
         Text[ thai ] = "ลักษณะตัวอักขระ";
+        Text[ czech ] = "Znakové styly";
+        Text[ hebrew ] = "Zeichenvorlagen";
+        Text[ hindi ] = "अक्षर शैलियाँ";
     };
     FixedText FT_VISITED
     {
@@ -644,11 +695,11 @@ TabPage TP_CHAR_URL
         Text [ french ] = "Lien ~visit�" ;
         Text [ swedish ] = "~Anv�nd l�nk" ;
         Text [ danish ] = "B~es�gt hyperlink" ;
-        Text [ portuguese_brazilian ] = "~Besuchte Links" ;
+        Text [ portuguese_brazilian ] = "Links ~visitados" ;
         Text [ portuguese ] = "Liga��o ~visitada" ;
         Text[ chinese_simplified ] = "已经访问过的链接(~V)";
         Text[ russian ] = "�������������";
-        Text[ polish ] = "Odwiedzone ��cze";
+        Text[ polish ] = "~Odwiedzone ��cza";
         Text[ japanese ] = "訪れたリンク(~V)";
         Text[ chinese_traditional ] = "訪問過的捷徑(~V)";
         Text[ arabic ] = "������ ��� ������";
@@ -660,6 +711,9 @@ TabPage TP_CHAR_URL
         Text[ catalan ] = "Enlla�os ~visitats";
         Text[ finnish ] = "A~vatut linkit";
         Text[ thai ] = "ตัวเชื่อมโยงที่มาสู่";
+        Text[ czech ] = "Navštívené odkazy";
+        Text[ hebrew ] = "~Besuchter Link";
+        Text[ hindi ] = "भें~ट की हुयी लिंक्स ";
     };
     ListBox LB_VISITED
     {
@@ -684,11 +738,11 @@ TabPage TP_CHAR_URL
         Text [ dutch ] = "N~iet-bezochte koppeling" ;
         Text [ swedish ] = "~Oanv�nd l�nk" ;
         Text [ danish ] = "Ube~s�gt hyperlink" ;
-        Text [ portuguese_brazilian ] = "~Unbesuchte Links" ;
+        Text [ portuguese_brazilian ] = "~Links n�o-visitados" ;
         Text [ portuguese ] = "~Liga��o n�o visitada" ;
         Text[ chinese_simplified ] = "尚未访问过的链接(~L)";
         Text[ russian ] = "���������������";
-        Text[ polish ] = "Nieodwiedzone ��cze";
+        Text[ polish ] = "Nieodwiedzone ��~cza";
         Text[ japanese ] = "訪れていないリンク(~L)";
         Text[ chinese_traditional ] = "未訪問過的捷徑(~L)";
         Text[ arabic ] = "������ �� ���� ������";
@@ -700,6 +754,9 @@ TabPage TP_CHAR_URL
         Text[ catalan ] = "Enlla�os no v~isitats";
         Text[ finnish ] = "Avaamattomat ~linkit";
         Text[ thai ] = "~ตัวเชื่อมโยงที่ไม่มาสู่";
+        Text[ czech ] = "Nenavštívené odkazy";
+        Text[ hebrew ] = "~Unbesuchter Link";
+        Text[ hindi ] = "भेंट ~न की हुयी लिंक्स ";
     };
     ListBox LB_NOT_VISITED
     {
@@ -712,6 +769,19 @@ TabPage TP_CHAR_URL
         Group = TRUE ;
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
