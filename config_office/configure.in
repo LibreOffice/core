@@ -186,12 +186,19 @@ dnl ===================================================================
 dnl Checks for compilers. 
 dnl ===================================================================
 if test "$_os" = "SunOS" -o "$_os" = "IRIX" -o "$_os" = "IRIX64" -o "$_os" = "OSF1"; then
-   CC=cc; export CC;
+   if test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
+      if test "$CC" != "gcc"; then
+           CC=cc; export CC;
+          CXX=CC; export CXX;
+      fi
+   else
+      CC=cc; export CC;
+   fi
 fi   
 if test "$_os" != "WINNT" && test -z "$with_gcc_home"; then
    AC_PROG_CC
 fi
-if test "$_os" = "Linux" -o "$_os" = "FreeBSD" -o "$_os" = "NetBSD" ; then
+if test "$_os" = "Linux" -o "$_os" = "FreeBSD" -o "$_os" = "NetBSD" -o \( \( "$_os" = "IRIX" -o "$_os" = "IRIX64" \) -a "$CC" = "gcc" \) ; then
    dnl ******************************************
    dnl Testing for GNU compiler and version...
    dnl ******************************************
@@ -453,7 +460,7 @@ dnl Testing for c++ compiler and version...
 dnl ***************************************
 
 AC_PROG_CXX
-if test "$_os" = "Linux" -o "$_os" = "FreeBSD" -o "$_os" = "NetBSD" ; then
+if test "$_os" = "Linux" -o "$_os" = "FreeBSD" -o "$_os" = "NetBSD" -o "$_os" = "IRIX" -o "$_os" = "IRIX64" ; then
    dnl Check whether the gnu gcc compiler is used.
    if test "$CC" = "gcc"; then
       AC_MSG_CHECKING([g++ Compiler])
@@ -493,10 +500,10 @@ if test "$_os" = "Darwin"; then
    fi 
 fi 
 if test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
-   CXX=CC; export CXX;
    dnl MIPSpro C++ compiler packaged with MIPSpro C compiler
    if test "$CC" = "cc"; then
-   AC_MSG_CHECKING([SGI MIPSpro C++ Compiler])
+      CXX=CC; export CXX;
+      AC_MSG_CHECKING([SGI MIPSpro C++ Compiler])
       if test "$CXX" != "CC"; then
          AC_MSG_WARN([SGI MIPSpro C++ was not found])
          AC_MSG_WARN([SGI MIPSpro C++ was not found]) >> warn
