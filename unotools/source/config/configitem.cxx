@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:04:51 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -787,14 +787,7 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
                         xTopNodeReplace->replaceByName(sProperty, pValues[i]);
                     }
                 }
-#ifdef DBG_UTIL
-                catch(Exception& rEx)
-                {
-                    lcl_CFG_DBG_EXCEPTION("Exception from PutProperties: ", rEx);
-                }
-#else
-                catch(Exception&){}
-#endif
+                CATCH_INFO("Exception from PutProperties: ");
             }
         }
         try
@@ -972,14 +965,7 @@ Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode, ConfigNameF
             }
 
         }
-#ifdef DBG_UTIL
-        catch(Exception& rEx)
-        {
-            lcl_CFG_DBG_EXCEPTION("Exception from GetNodeNames: ", rEx);
-        }
-#else
-        catch(Exception&){}
-#endif
+        CATCH_INFO("Exception from GetNodeNames: ");
     }
     return aRet;
 }
@@ -1104,7 +1090,7 @@ sal_Bool ConfigItem::SetSetProperties(
     const OUString& rNode, Sequence< PropertyValue > rValues)
 {
     ValueCounter_Impl aCounter(pImpl->nInValueChange);
-    sal_Bool bRet;
+    sal_Bool bRet = sal_True;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
     {
@@ -1366,7 +1352,7 @@ sal_Bool ConfigItem::getUniqueSetElementName( const ::rtl::OUString& _rSetNode, 
 sal_Bool ConfigItem::AddNode(const rtl::OUString& rNode, const rtl::OUString& rNewNode)
 {
     ValueCounter_Impl aCounter(pImpl->nInValueChange);
-    sal_Bool bRet;
+    sal_Bool bRet = sal_True;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
     {
