@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:23:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,7 +765,23 @@ enum SwPropNameIds
 /* 0677 */  UNO_NAME_STARTPOSITION_IN_HORI_L2R,
 /* 0678 */  UNO_NAME_ENDPOSITION_IN_HORI_L2R,
 // <--
-/* 0679 */  SW_PROPNAME_END
+// --> OS 2004-12-13 #30916#
+/* 0679 */  UNO_NAME_SUBJECT,
+/* 0680 */  UNO_NAME_ADDRESS_FROM_COLUMN,
+/* 0681 */  UNO_NAME_SEND_AS_HTML,
+/* 0682 */  UNO_NAME_SEND_AS_ATTACHMENT,
+/* 0683 */  UNO_NAME_MAIL_BODY,
+/* 0684 */  UNO_NAME_ATTACHMENT_NAME,
+/* 0685 */  UNO_NAME_ATTACHMENT_FILTER,
+/* 0686 */  UNO_NAME_PRINT_OPTIONS,
+/* 0687 */  UNO_NAME_SAVE_AS_SINGLE_FILE,
+/* 0688 */  UNO_NAME_SAVE_FILTER,
+/* 0689 */  UNO_NAME_COPIES_TO,
+/* 0890 */  UNO_NAME_BLIND_COPIES_TO,
+/* 0891 */  UNO_NAME_IN_SERVER_PASSWORD,
+/* 0892 */  UNO_NAME_OUT_SERVER_PASSWORD,
+// <--
+/* 0893 */  SW_PROPNAME_END
 };
 
 
