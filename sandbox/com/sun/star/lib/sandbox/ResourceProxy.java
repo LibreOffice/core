@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResourceProxy.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:28 $
+ *  last change: $Author: kr $ $Date: 2001-10-24 11:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,12 +208,18 @@ public class ResourceProxy implements Resource, Cachable {
     }
 
     public synchronized ImageProducer getImageProducer() {
+        Thread.currentThread().dumpStack();
+
         ImageProducer imageProducer = resource.getImageProducer();
 
-        imageProducer = new ImageProducerProxy(imageProducer);
 
-        Holder holder = (Holder)imageProducer;
-        holder.addCargo(this);
+        // This is due to a stupid bug in ImageConsumerQueue,
+        // which seems to be introduced in jdk1.3, which
+        // forbids me to use my own ImageProducer implementation.
+//          imageProducer = new ImageProducerProxy(imageProducer);
+
+//          Holder holder = (Holder)imageProducer;
+//          holder.addCargo(this);
 
         return imageProducer;
     }
