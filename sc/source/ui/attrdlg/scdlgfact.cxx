@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdlgfact.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 12:45:41 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#undef SC_DLLIMPLEMENTATION
+
 #include "scdlgfact.hxx"
 
 #include "sc.hrc" //CHINA001
@@ -102,6 +104,9 @@
 #include "tpstat.hxx" //add for ScDocStatPage
 #include "tpusrlst.hxx" //add for ScTpUserLists
 #include "tpview.hxx" //add for ScTpContentOptions
+
+// ause
+#include "editutil.hxx"
 
 IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl); //add for ScColOrRowDlg
 IMPL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl);//CHINA001 add for ScImportAsciiDlg
