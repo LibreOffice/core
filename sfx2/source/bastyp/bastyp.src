@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 20:43:52 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,7 +456,7 @@ Resource RID_DLSTATUS2
         Text[ dutch ] = "Verbinding met: $(HOST). Wacht op antwoord...";
         Text[ chinese_simplified ] = "Α¬½Σ£Ί$(HOST)΅£ΥύΤΪµΘΊς»ΨΣ¦...";
         Text[ greek ] = "Σύνδεση με: $(HOST). Περιμένοντας απάντηση...";
-        Text[ korean ] = "Ώ¬°α ΄λ»σ: $(HOST). ΘΈ΄δΐ» ±β΄ΩΈ®½Κ½ΓΏΐ...";
+        Text[ korean ] = "..Ώ΅ Ώ¬°α: $(HOST). ΐΐ΄δΐ» ±β΄ΩΈ®½Κ½ΓΏΐ...";
         Text[ turkish ] = "Baπlanύlan: $(HOST). Yanύt bekleniyor...";
         Text[ language_user1 ] = " ";
     };
@@ -508,7 +508,7 @@ Resource RID_DLSTATUS2
         Text[ dutch ] = "Geladen wordt: $(TARGET) Gelezen: $(BYTE)";
         Text[ chinese_simplified ] = "΄«µέ£Ί$(TARGET)ÒΡΎ­ΤΔ¶Α£Ί$(BYTE)";
         Text[ greek ] = "Μετάδοση: $(TARGET) Έγινε ανάγνωση: $(BYTE)";
-        Text[ korean ] = "ΐόΌΫ Αί: $(TARGET) ·ΞµεµΚ: $(BYTE)";
+        Text[ korean ] = "ΐόΌΫ Αί: $(TARGET) ΖΗµ¶: $(BYTE)";
         Text[ turkish ] = "Aktarύlan: $(TARGET) Okunan: $(BYTE)";
         Text[ language_user1 ] = " ";
     };
