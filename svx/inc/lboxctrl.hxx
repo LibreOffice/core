@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-12 15:52:23 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 #ifndef _SFXTBXCTRL_HXX
 #include <sfx2/tbxctrl.hxx>
 #endif
+#include <rtl/ustring.hxx>
+#include <vector>
 
 class ToolBox;
 class SvxPopupWindowListBox;
@@ -85,7 +87,7 @@ protected:
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxListBoxControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind );
+    SvxListBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     virtual ~SvxListBoxControl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
@@ -99,14 +101,17 @@ public:
 
 class SvxUndoRedoControl : public SvxListBoxControl
 {
+    std::vector< ::rtl::OUString > aUndoRedoList;
+
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxUndoRedoControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind )
-        : SvxListBoxControl( nId, rTbx, rBind )
-    {}
+    SvxUndoRedoControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
 
     virtual ~SvxUndoRedoControl();
+    virtual void StateChanged( USHORT nSID,
+                               SfxItemState eState,
+                               const SfxPoolItem* pState );
 
     virtual SfxPopupWindow*  CreatePopupWindow();
 };
