@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ios2met.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:06:28 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,6 +725,8 @@ void OS2METReader::SetPen( const Color& rColor, USHORT nLineWidth, PenStyle ePen
             aLineInfo.SetDashLen( nLineWidth << 2 );
             eLineStyle = LINE_DASH;
         break;
+        case PEN_SOLID:
+        break;  // -Wall not handled...
     }
     aLineInfo.SetStyle( eLineStyle );
 }
@@ -2134,6 +2136,7 @@ void OS2METReader::ReadDsc(USHORT nDscID, USHORT /*nDscLen*/)
                 b32=FALSE;
             else
             {
+                b32 = FALSE;   // -Wall added the case.
                 pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
                 ErrorCode=2;
             }
@@ -2814,8 +2817,9 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
 }
 
 //================== ein bischen Muell fuer Windows ==========================
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifdef WIN
 
