@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
+ *  last change: $Author: tbe $ $Date: 2001-06-20 09:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,10 +216,11 @@ void BasicIDEShell::Init()
 
     // Nicht 0, wird sonst beim naechsten Request nicht auf das entspr. Basic gesetzt.
     SetCurBasic( SFX_APP()->GetBasicManager()->GetStdLib(), FALSE );
-    UpdateWindows();
 
     IDE_DLL()->pShell = this;
     IDE_DLL()->GetExtraData()->ShellInCriticalSection() = FALSE;
+
+    UpdateWindows();
 }
 
 __EXPORT BasicIDEShell::~BasicIDEShell()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
+ *  last change: $Author: tbe $ $Date: 2001-06-20 09:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,12 @@ void BasicIDE::RenameDialog( SfxObjectShell* pShell, const String& rLibName, con
             USHORT nId = (USHORT)(pIDEShell->GetIDEWindowTable()).GetKey( pWin );
             DBG_ASSERT( nId, "No entry in Tabbar!" );
             if ( nId )
-                (pIDEShell->GetTabBar())->SetPageText( nId, rNewName );
+            {
+                BasicIDETabBar* pTabBar = (BasicIDETabBar*)pIDEShell->GetTabBar();
+                pTabBar->SetPageText( nId, rNewName );
+                pTabBar->Sort();
+                pTabBar->MakeVisible( pTabBar->GetCurPageId() );
+            }
         }
     }
 }

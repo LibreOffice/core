@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
+ *  last change: $Author: tbe $ $Date: 2001-06-20 09:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,6 +459,8 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             {
                 ModulWindow* pEditWin = (ModulWindow*)pWin;
                 pEditWin->RenameModule( rModName.GetValue() );
+                pTabBar->Sort();
+                pTabBar->MakeVisible( pTabBar->GetCurPageId() );
             }
             else
             {
@@ -469,7 +471,9 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                     USHORT nId = (USHORT)aIDEWindowTable.GetKey( pWin );
                     DBG_ASSERT( nId, "No entry in Tabbar!" );
                     if ( nId )
+                    {
                         pTabBar->SetPageText( nId, pViewWin->GetDialogName() );
+                    }
                 }
             }
             BasicIDE::MarkDocShellModified( pWin->GetBasic() );
@@ -616,7 +620,11 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                     USHORT nId = (USHORT)aIDEWindowTable.GetKey( pWin );
                     DBG_ASSERT( nId, "Kein Eintrag in der Tabbar!" );
                     if ( nId )
+                    {
                         pTabBar->SetPageText( nId, pSbxObject->GetName() );
+                        pTabBar->Sort();
+                        pTabBar->MakeVisible( pTabBar->GetCurPageId() );
+                    }
                 }
             }
             else if ( rSbxItem.GetType() == BASICIDE_TYPE_DIALOG )
@@ -726,6 +734,7 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             }
             DBG_ASSERT( pWin, "Fenster wurde nicht erzeugt!" );
             SetCurWindow( pWin, TRUE );
+            pTabBar->MakeVisible( pTabBar->GetCurPageId() );
         }
         break;
     }

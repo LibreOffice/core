@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
+ *  last change: $Author: tbe $ $Date: 2001-06-20 09:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@ DialogWindow* BasicIDEShell::CreateDlgWin( StarBASIC* pBasic, String aDlgName )
 
     pWin->GrabScrollBars( &aHScrollBar, &aVScrollBar );
     pTabBar->InsertPage( (USHORT)nKey, aDlgName );
+    pTabBar->Sort();
     if ( !pCurWin )
         SetCurWindow( pWin, FALSE, FALSE );
 

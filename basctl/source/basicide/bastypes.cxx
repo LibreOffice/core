@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
+ *  last change: $Author: tbe $ $Date: 2001-06-20 09:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,9 @@
  ************************************************************************/
 
 
+#include <vector>
+#include <algorithm>
+
 #include <ide_pch.hxx>
 
 #pragma hdrstop
@@ -71,11 +74,13 @@
 #include <bastypes.hxx>
 #include <bastype2.hxx>
 #include <baside2.hxx>  // Leider brauche ich teilweise pModulWindow...
+#include <baside3.hxx>
 #include <baside2.hrc>
 #include <svtools/textview.hxx>
 #include <svtools/texteng.hxx>
 #include <basobj.hxx>
 #include <sbxitem.hxx>
+#include <iderdll.hxx>
 
 #ifndef _SV_DRAG_HXX //autogen
 #include <vcl/drag.hxx>
@@ -725,6 +730,58 @@ void __EXPORT BasicIDETabBar::EndRenaming()
         {
             pDispatcher->Execute( SID_BASICIDE_NAMECHANGEDONTAB,
                                   SFX_CALLMODE_SYNCHRON, &aID, &aNewName, 0L );
+        }
+    }
+}
+
+
+void BasicIDETabBar::Sort()
+{
+    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    if ( pIDEShell )
+    {
+        IDEWindowTable& aIDEWindowTable = pIDEShell->GetIDEWindowTable();
+        TabBarSortHelper aTabBarSortHelper;
+        ::std::vector<TabBarSortHelper> aModuleList;
+        ::std::vector<TabBarSortHelper> aDialogList;
+        USHORT nPageCount = GetPageCount();
+
+        // create module and dialog lists for sorting
+        for (USHORT i = 0; i < nPageCount; i++)
+        {
+            USHORT nId = GetPageId( i );
+            aTabBarSortHelper.nPageId = nId;
+            aTabBarSortHelper.aPageText = GetPageText( nId );
+            IDEBaseWindow* pWin = aIDEWindowTable.Get( nId );
+
+            if ( pWin->IsA( TYPE( ModulWindow ) ) )
+            {
+                aModuleList.push_back( aTabBarSortHelper );
+            }
+            else if ( pWin->IsA( TYPE( DialogWindow ) ) )
+            {
+                aDialogList.push_back( aTabBarSortHelper );
+            }
+        }
+
+        // sort module and dialog lists by page text
+        ::std::sort( aModuleList.begin() , aModuleList.end() );
+        ::std::sort( aDialogList.begin() , aDialogList.end() );
+
+
+        USHORT nModules = aModuleList.size();
+        USHORT nDialogs = aDialogList.size();
+
+        // move module pages to new positions
+        for (i = 0; i < nModules; i++)
+        {
+            MovePage( aModuleList[i].nPageId , i );
+        }
+
+        // move dialog pages to new positions
+        for (i = 0; i < nDialogs; i++)
+        {
+            MovePage( aDialogList[i].nPageId , nModules + i );
         }
     }
 }
