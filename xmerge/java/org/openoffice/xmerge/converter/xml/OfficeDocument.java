@@ -525,6 +525,16 @@ public abstract class OfficeDocument
 
                 meth.invoke(doc, new Object [] { baos } );
             }
+         else if (domImpl.equals("org.apache.crimson.tree.XmlDocument"))
+        {
+         System.out.println("Using Crimson");
+         Class crimsonDoc = Class.forName("org.apache.crimson.tree.XmlDocument");
+         // The method is in the XMLDocument class itself, not a helper
+                meth = crimsonDoc.getMethod("write",
+                            new Class[] { Class.forName("java.io.OutputStream") } );
+
+                meth.invoke(doc, new Object [] { baos } );
+        }
             else if (domImpl.equals("org.apache.xerces.dom.DocumentImpl")
             || domImpl.equals("org.apache.xerces.dom.DeferredDocumentImpl")) {
                 System.out.println("Using Xerces");
