@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:11 $
+ *  last change: $Author: ab $ $Date: 2001-05-18 12:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,13 +331,23 @@ SbxBase* SbiRuntime::FindElementExtern( const String& rName )
         SbxInfo* pInfo = pMeth->GetInfo();
         if( pInfo && refParams )
         {
+            USHORT nParamCount = refParams->Count();
             USHORT j = 1;
             const SbxParamInfo* pParam = pInfo->GetParam( j );
             while( pParam )
             {
                 if( pParam->aName.EqualsIgnoreCaseAscii( rName ) )
                 {
-                    pElem = refParams->Get( j );
+                    if( j >= nParamCount )
+                    {
+                        // Parameter is missing
+                        pElem = new SbxVariable( SbxSTRING );
+                        pElem->PutString( String( RTL_CONSTASCII_USTRINGPARAM("<missing parameter>" ) ) );
+                    }
+                    else
+                    {
+                        pElem = refParams->Get( j );
+                    }
                     break;
                 }
                 pParam = pInfo->GetParam( ++j );
