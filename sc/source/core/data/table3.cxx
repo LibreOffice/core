@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:11:23 $
+ *  last change: $Author: obo $ $Date: 2004-09-08 15:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1121,6 +1121,20 @@ BOOL ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                 }
             }
         }
+        else if (rEntry.bQueryByString &&
+                (rEntry.eOp == SC_LESS || rEntry.eOp == SC_LESS_EQUAL) &&
+                (pCell ? pCell->HasValueData() :
+                 HasValueData( static_cast<SCCOL>(rEntry.nField), nRow)))
+        {
+            bOk = TRUE;
+        }
+        else if (!rEntry.bQueryByString &&
+                (rEntry.eOp == SC_GREATER || rEntry.eOp == SC_GREATER_EQUAL) &&
+                (pCell ? pCell->HasStringData() :
+                 HasStringData( static_cast<SCCOL>(rEntry.nField), nRow)))
+        {
+            bOk = TRUE;
+        }
 
         if (nPos == -1)
         {
@@ -1509,7 +1523,7 @@ BOOL ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
                 rQueryParam.GetEntry(nIndex).eConnect = SC_OR;
         }
     }
-    delete pFields;
+    delete [] pFields;
     return bValid;
 }
 
