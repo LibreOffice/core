@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgname.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 16:24:46 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include "dialogs.hrc"
 
 #include "dlgname.hxx"
+#include "defdlgname.hxx" //CHINA001
 #include "dlgname.hrc"
 #include "dialmgr.hxx"
 
