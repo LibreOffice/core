@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:45 $
+ *  last change: $Author: os $ $Date: 2000-11-14 15:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ class BibToolBar:   public ToolBox
 
     public:
 
-        BibToolBar(Window* pParent, WinBits nStyle = 0 );
+        BibToolBar(Window* pParent, WinBits nStyle = WB_3DLOOK );
         ~BibToolBar();
 
         void    SetXController(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &);

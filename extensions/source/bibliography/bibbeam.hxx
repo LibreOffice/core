@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibbeam.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *  last change: $Author: os $ $Date: 2000-11-14 15:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ protected:
 
 public:
 
-        BibGridwin(Window* pParent, WinBits nStyle = 0 );
+        BibGridwin(Window* pParent, WinBits nStyle = WB_3DLOOK );
         ~BibGridwin();
 
         void createGridWin(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & xDbForm);
@@ -138,26 +138,21 @@ class BibBeamer: public SplitWindow
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 xToolBarRef;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 xGridRef;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 xAlphaRef;
-
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              xToolBarWinRef;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              xGridWinRef;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              xAlphaWinRef;
 
         BibToolBar*             pToolBar;
         BibGridwin*             pGridWin;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener> xpGridWin;
-        DockingWindow*          pAlphaWin;
 
     protected:
 
         void                    createToolBar();
         void                    createGridWin();
-        void                    createAlphaWin();
 
     public:
 
-        BibBeamer(Window* pParent,BibDataManager* pDatMan, WinBits nStyle = 0 );
+        BibBeamer(Window* pParent,BibDataManager* pDatMan, WinBits nStyle = WB_3DLOOK );
         ~BibBeamer();
 
         void    SetXController(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &);

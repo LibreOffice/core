@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: os $ $Date: 2000-11-13 11:38:49 $
+#   last change: $Author: os $ $Date: 2000-11-14 15:10:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,6 +120,7 @@ SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1STDLIBS= \
         $(CPPULIB) 	 \
         $(CPPUHELPERLIB) 	 \
+        $(COMPHELPERLIB) 	 \
         $(VOSLIB) 	 \
         $(TOOLSLIB)  \
         $(SO2LIB)	\

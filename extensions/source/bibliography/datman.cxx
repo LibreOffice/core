@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 11:06:35 $
+ *  last change: $Author: os $ $Date: 2000-11-14 15:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::lang;
 using namespace ::rtl;
 using namespace ::ucb;
 
@@ -344,9 +345,7 @@ Reference< sdbc::XConnection >  getConnection(const Reference< XInterface > & xR
         xConn = Reference< sdbc::XConnection > (*(Reference< XInterface > *)xFormProps->getPropertyValue(C2U("ActiveConnection")).getValue(), UNO_QUERY);
         if (!xConn.is())
         {
-            OUString uTmp;
-            xFormProps->getPropertyValue(C2U("DataSourceName")) >>= uTmp;
-            xConn = getConnection(uTmp);
+            DBG_ERROR("no active connection")
         }
     }
 #ifdef DBG_UTIL
@@ -883,14 +882,19 @@ BibDataManager::BibDataManager(BibRegistry * pRegistry) :
 BibDataManager::~BibDataManager()
 {
     Reference< XLoadable >  xLoad(xForm, UNO_QUERY);
+    Reference< XPropertySet >  xPrSet(xForm, UNO_QUERY);
     Reference< lang::XComponent >  xComp(xForm, UNO_QUERY);
     if (xForm.is())
     {
+        Reference< lang::XComponent >  xConnection;
+        xPrSet->getPropertyValue(C2U("ActiveConnection")) >>= xConnection;
         RemoveMeAsUidListener();
         if (xLoad.is())
             xLoad->unload();
         if (xComp.is())
             xComp->dispose();
+        if(xConnection.is())
+            xConnection->dispose();
         xForm = NULL;
     }
 }
@@ -1010,8 +1014,7 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
         aDataSourceURL = rDesc.sDataSource;
         if(aPropertySet.is())
         {
-            Any aVal; aVal <<= rDesc.sDataSource;
-            aPropertySet->setPropertyValue(C2U("DataSourceName"), aVal);
+            Any aVal;
             aVal <<= (sal_Int32)sdbc::ResultSetType::SCROLL_INSENSITIVE;
             aPropertySet->setPropertyValue(C2U("ResultSetType"),aVal );
             aVal <<= (sal_Int32)sdbc::ResultSetConcurrency::READ_ONLY;
@@ -1022,6 +1025,9 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
             aPropertySet->setPropertyValue(C2U("FetchSize"), aVal);
 
             Reference< sdbc::XConnection >  xConnection = getConnection(rDesc.sDataSource);
+            aVal <<= xConnection;
+            aPropertySet->setPropertyValue(C2U("ActiveConnection"), aVal);
+
             Reference< sdbcx::XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
             Reference< XNameAccess >  xTables = xSupplyTables.is() ?
                                 xSupplyTables->getTables() : Reference< XNameAccess > ();
@@ -1308,10 +1314,16 @@ void BibDataManager::setActiveDataSource(const rtl::OUString& rURL)
     Reference< XPropertySet >  aPropertySet(xForm, UNO_QUERY );
     if(aPropertySet.is())
     {
-        Any aVal; aVal <<= rURL;
-        aPropertySet->setPropertyValue(C2U("DataSourceName"), aVal);
+        Reference< XComponent >  xOldConnection;
+        aPropertySet->getPropertyValue(C2U("ActiveConnection")) >>= xOldConnection;
+        if(xOldConnection.is())
+            xOldConnection->dispose();
+
+        Reference< sdbc::XConnection >  xConnection = getConnection(rURL);
+        Any aVal; aVal <<= xConnection;
+        aPropertySet->setPropertyValue(C2U("ActiveConnection"), aVal);
+
         Sequence<rtl::OUString> aTableNameSeq;
-        Reference< sdbc::XConnection >  xConnection = getConnection(xForm);
         Reference< sdbcx::XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
         if(xSupplyTables.is())
         {

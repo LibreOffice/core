@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibbeam.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 11:06:35 $
+ *  last change: $Author: os $ $Date: 2000-11-14 15:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,6 @@ using namespace ::com::sun::star::uno;
 #define PROPERTY_FRAME                      1
 #define ID_TOOLBAR                          1
 #define ID_GRIDWIN                          2
-#define ID_ALPHAWIN                         3
 
 rtl::OUString gGridModelCommand( OUString::createFromAscii(".uno:Bib/newGridModel"));
 
@@ -155,10 +154,9 @@ void BibGridwin::createGridWin(const uno::Reference< XControlModel > & xGModel)
                 aAny >>= aControlName;
 
                 xControl=uno::Reference< XControl > (xMgr->createInstance( aControlName ), UNO_QUERY );
+                DBG_ASSERT(xControl.is(), "no GridControl created")
                 if ( xControl.is() )
-                {
                     xControl->setModel( xGridModel);
-                }
             }
 
             if ( xControl.is() )
@@ -220,13 +218,12 @@ BibBeamer::BibBeamer(Window* pParent,BibDataManager* pDM, WinBits nStyle):
     SplitWindow(pParent,nStyle|WB_NOSPLITDRAW),
     pDatMan(pDM),
     pToolBar (NULL),
-    pGridWin (NULL),
-    pAlphaWin(NULL)
+    pGridWin (NULL)
 {
     createToolBar();
     createGridWin();
-    createAlphaWin();
     pDatMan->SetToolbar(pToolBar);
+    pGridWin->Show();
     pDatMan->SetGridWin(pGridWin);
 }
 
@@ -234,7 +231,6 @@ BibBeamer::~BibBeamer()
 {
     if ( xToolBarRef.is() ) xToolBarRef->dispose();
     if ( xGridRef.is() ) xGridRef->dispose();
-    if ( xAlphaRef.is() ) xAlphaRef->dispose();
 
 
     if(pToolBar)
@@ -255,7 +251,6 @@ BibBeamer::~BibBeamer()
         xpGridWin = 0;
     }
 
-    if(pAlphaWin) delete pAlphaWin;
 }
 
 void BibBeamer::createToolBar()
@@ -273,10 +268,6 @@ void BibBeamer::createGridWin()
 
 
     pGridWin->createGridWin(pDatMan->createGridModel());
-}
-
-void BibBeamer::createAlphaWin()
-{
 }
 
 void BibBeamer::SetXController(const uno::Reference< frame::XController > & xCtr)

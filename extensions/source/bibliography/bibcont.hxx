@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibcont.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *  last change: $Author: os $ $Date: 2000-11-14 15:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,14 +89,13 @@ class BibWindowContainer: public DockingWindow
         virtual void            Resize();
 
     public:
-        BibWindowContainer( Window* pParent,WinBits nStyle = 0);
-        BibWindowContainer( Window* pParent,Window* pChild, WinBits nStyle = 0 );
+        BibWindowContainer( Window* pParent,WinBits nStyle = WB_3DLOOK);
+        BibWindowContainer( Window* pParent,Window* pChild, WinBits nStyle = WB_3DLOOK);
         ~BibWindowContainer();
 
         Window*                 GetChild(){return pChild;}
         void                    SetChild(Window* pWin);
 };
-
 
 class BibBookContainer: public SplitWindow
 {
@@ -129,15 +128,9 @@ class BibBookContainer: public SplitWindow
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > GetBottomComponentInterface( sal_Bool bCreate = sal_True );
         void                    SetBottomComponentInterface( ::com::sun::star::awt::XWindowPeer* pIFace );
 
-//      VCLXWindow*             GetTopWindowPeer();
-//      void                    SetTopWindowPeer( VCLXWindow* pPeer );
-
-//      VCLXWindow*             GetBottomWindowPeer();
-//      void                    SetBottomWindowPeer( VCLXWindow* pPeer );
-
     public:
 
-        BibBookContainer(Window* pParent,BibDataManager*, WinBits nStyle = 0 );
+        BibBookContainer(Window* pParent,BibDataManager*, WinBits nStyle = WB_3DLOOK );
         ~BibBookContainer();
 
         DockingWindow*          GetTopWin() {return pTopWin;}
@@ -153,6 +146,5 @@ class BibBookContainer: public SplitWindow
         void                    createBottomFrame(Window* pWin);
 
 };
-
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 11:06:35 $
+ *  last change: $Author: os $ $Date: 2000-11-14 15:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@
 #include <com/sun/star/text/BibliographyDataField.hpp>
 #endif
 
+#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
+#include <toolkit/awt/vclxwindow.hxx>
+#endif
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
 #endif
@@ -200,11 +203,11 @@ class BibliographyLoader : public cppu::WeakImplHelper4
     frame::XFrameLoader
 >
 {
-    HdlBibModul                                     pBibMod;
-    Reference< XPropertyChangeListener >            xDatMan;
-    BibDataManager*                                 pDatMan;
-    Reference< container::XNameAccess >             xColumns;
-    Reference< XResultSet >                         xCursor;
+    HdlBibModul                                     m_pBibMod;
+    Reference< XPropertyChangeListener >            m_xDatMan;
+    BibDataManager*                                 m_pDatMan;
+    Reference< container::XNameAccess >             m_xColumns;
+    Reference< XResultSet >                         m_xCursor;
 
 private:
 
@@ -263,15 +266,15 @@ public:
 };
 
 BibliographyLoader::BibliographyLoader() :
-    pBibMod(0),
-    pDatMan(0)
+    m_pBibMod(0),
+    m_pDatMan(0)
 {
 }
 
 BibliographyLoader::~BibliographyLoader()
 {
-    if(pBibMod)
-        CloseBibModul(pBibMod);
+    if(m_pBibMod)
+        CloseBibModul(m_pBibMod);
 }
 
 
@@ -388,7 +391,7 @@ void BibliographyLoader::load(const Reference< frame::XFrame > & rFrame, const r
 {
     //!
 
-    pBibMod = OpenBibModul();
+    m_pBibMod = OpenBibModul();
 
     String aURLStr( rURL );
     String aPartName = aURLStr.GetToken( 1, '/' );
@@ -405,11 +408,11 @@ void BibliographyLoader::loadView(const Reference< frame::XFrame > & rFrame, con
         const Reference< frame::XLoadEventListener > & rListener)
 {
     //!
-    if(!pBibMod)
-        pBibMod = OpenBibModul();
+    if(!m_pBibMod)
+        m_pBibMod = OpenBibModul();
 
-    BibDataManager* pDatMan=(*pBibMod)->createDataManager();
-    xDatMan = pDatMan;
+    BibDataManager* pDatMan=(*m_pBibMod)->createDataManager();
+    m_xDatMan = m_pDatMan;
     BibDBDescriptor aBibDesc = BibModul::GetConfig()->GetBibliographyURL();
 
     Reference< form::XForm >  xForm = pDatMan->createDatabaseForm(aBibDesc);
@@ -417,15 +420,20 @@ void BibliographyLoader::loadView(const Reference< frame::XFrame > & rFrame, con
     if(xForm.is())
     {
         Reference< awt::XWindow >  aWindow = rFrame->getContainerWindow();
+        VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(aWindow);
+        pParentComponent->setVisible(sal_True);
 
         Window* pParent = VCLUnoHelper::GetWindow( aWindow );
 
         BibBookContainer *pMyWindow = new BibBookContainer( pParent, pDatMan );
+        pMyWindow->Show();
 
-        BibView* pView = new BibView(pMyWindow,pDatMan,WB_SECTION_STYLE);
+        BibView* pView = new BibView(pMyWindow,pDatMan,WB_SECTION_STYLE|WB_3DLOOK);
+        pView->Show();
         pDatMan->SetView(pView);
 
         BibBeamer* pBeamer=new BibBeamer( pMyWindow,pDatMan);
+        pBeamer->Show();
         pMyWindow->createTopFrame(pBeamer);
 
         pMyWindow->createBottomFrame(pView);
@@ -443,7 +451,7 @@ void BibliographyLoader::loadView(const Reference< frame::XFrame > & rFrame, con
 
         pDatMan->loadDatabase();
 
-        ResMgr* pResMgr = (*pBibMod)->GetResMgr();
+        ResMgr* pResMgr = (*m_pBibMod)->GetResMgr();
         INetURLObject aEntry( URIHelper::SmartRelToAbs(pResMgr->GetFileName()) );
         String aResFile = String::CreateFromAscii(".component:");
         ( aResFile += aEntry.GetName() ) += '/';
@@ -463,7 +471,7 @@ void BibliographyLoader::loadView(const Reference< frame::XFrame > & rFrame, con
             Reference< frame::XDispatchProvider >  xProv( rFrame, UNO_QUERY );
             if ( xProv.is() )
             {
-                Reference< frame::XDispatch >  aDisp = xProv->queryDispatch( aURL,  C2U("_tool:_menubar"), 0 );
+                Reference< frame::XDispatch >  aDisp = xProv->queryDispatch( aURL,  C2U("_tool:_menubar"), 12 );
                 if ( aDisp.is() )
                     aDisp->dispatch( aURL, Sequence<PropertyValue>() );
             }
@@ -482,21 +490,21 @@ void BibliographyLoader::loadView(const Reference< frame::XFrame > & rFrame, con
  --------------------------------------------------*/
 BibDataManager* BibliographyLoader::GetDataManager()const
 {
-    if(!pDatMan)
+    if(!m_pDatMan)
     {
-        if(!pBibMod)
-            ((BibliographyLoader*)this)->pBibMod = OpenBibModul();
-        ((BibliographyLoader*)this)->pDatMan = (*pBibMod)->createDataManager();
-        ((BibliographyLoader*)this)->xDatMan = pDatMan;
+        if(!m_pBibMod)
+            ((BibliographyLoader*)this)->m_pBibMod = OpenBibModul();
+        ((BibliographyLoader*)this)->m_pDatMan = (*m_pBibMod)->createDataManager();
+        ((BibliographyLoader*)this)->m_xDatMan = m_pDatMan;
     }
-    return pDatMan;
+    return m_pDatMan;
 }
 /* -----------------06.12.99 14:39-------------------
 
  --------------------------------------------------*/
 Reference< container::XNameAccess >  BibliographyLoader::GetDataColumns() const
 {
-    if (!xColumns.is())
+    if (!m_xColumns.is())
     {
         Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
         Reference< XRowSet >  xRowSet(xMgr->createInstance(C2U("com.sun.star.sdb.RowSet")), UNO_QUERY);
@@ -546,14 +554,14 @@ Reference< container::XNameAccess >  BibliographyLoader::GetDataColumns() const
             xRowSet = NULL;
         }
         else
-            ((BibliographyLoader*)this)->xCursor = xRowSet.get();
+            ((BibliographyLoader*)this)->m_xCursor = xRowSet.get();
 
-        Reference< sdbcx::XColumnsSupplier >  xSupplyCols(xCursor, UNO_QUERY);
+        Reference< sdbcx::XColumnsSupplier >  xSupplyCols(m_xCursor, UNO_QUERY);
         if (xSupplyCols.is())
-            ((BibliographyLoader*)this)->xColumns = xSupplyCols->getColumns();
+            ((BibliographyLoader*)this)->m_xColumns = xSupplyCols->getColumns();
     }
 
-    return xColumns;
+    return m_xColumns;
 }
 /* -----------------17.12.99 12:29-------------------
 
@@ -578,11 +586,11 @@ Reference< sdb::XColumn >  BibliographyLoader::GetIdentifierColumn() const
  --------------------------------------------------*/
 Reference< XResultSet >  BibliographyLoader::GetDataCursor() const
 {
-    if (!xCursor.is())
+    if (!m_xCursor.is())
         GetDataColumns();
-    if (xCursor.is())
-        xCursor->first();
-    return xCursor;
+    if (m_xCursor.is())
+        m_xCursor->first();
+    return m_xCursor;
 }
 
 /*-- 17.11.99 12:51:38---------------------------------------------------
