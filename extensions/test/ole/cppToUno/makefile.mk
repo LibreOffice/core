@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 09:27:10 $
+#   last change: $Author: rt $ $Date: 2004-08-20 12:35:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,15 +88,11 @@ UNOUCROUT=	$(OUT)$/inc
 INCPRE+=	$(OUT)$/inc -I$(ATL_INCLUDE)
 
 
+.IF "$(NETTOOLKIT)"==""
 UNOTYPES=	com.sun.star.lang.XMultiServiceFactory \
             com.sun.star.script.XInvocation			\
             oletest.XCallback
 
-
-
-.IF "$(depend)" != ""
-
-.ENDIF # depend
 
 APP1TARGET=	$(TARGET)
 APP1OBJS=	$(OBJ)$/testcppuno.obj
@@ -125,6 +121,6 @@ APP1STDLIBS += $(LIBCIMT)
 APP1DEF=	$(MISC)\$(APP1TARGET).def
 
 # --- Targets ---
-
+.ENDIF #"$(NETTOOLKIT)"==""
 .INCLUDE : target.mk
 
