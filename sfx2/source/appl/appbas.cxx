@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:20:09 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1058,7 +1058,7 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
 
                 sal_uInt16 nSystem = SYSTEM_ID;
                 if(nSystem < 10)
-                    sVersionString += 0x0030 ; // '0' = 30h
+                    sVersionString += '0';
                 sVersionString += String::CreateFromInt32( nSystem );
                 String sBuildVersion = lcl_GetVersionString(pAppData_Impl->pLabelResMgr);
                 sal_uInt16 nLen = sBuildVersion.Len();
