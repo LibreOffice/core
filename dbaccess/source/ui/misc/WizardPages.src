@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:08:08 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ String STR_WIZ_COLUMN_SELECT_TITEL
     Text[ japanese ] = "—ñ‚Ì“K—p";
     Text[ korean ] = "¿­ Àû¿ë";
     Text[ chinese_simplified ] = "Ì×ÓÃÁĞ";
-    Text[ chinese_traditional ] = "®M¥ÎÄæ";
+    Text[ chinese_traditional ] = "±Ä¥ÎÄæ";
     Text[ arabic ] = "ÊØÈíŞ ÇáÃÚãÏÉ";
     Text[ turkish ] = "Sütunları kullan";
     Text[ catalan ] = "Aceptar columnas";
@@ -269,10 +269,10 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text [ ENGLISH ]    = "Help" ;
         Text[ english_us ] = "~Help";
         Text[ portuguese ] = "~Ajuda";
-        Text[ russian ] = "Help";
+        Text[ russian ] = "Ñï~ğàâêà";
         Text[ greek ] = "Help";
         Text[ dutch ] = "~Help";
-        Text[ french ] = "Help";
+        Text[ french ] = "Aide";
         Text[ spanish ] = "Ay~uda";
         Text[ finnish ] = "Help";
         Text[ italian ] = "~?";
@@ -280,10 +280,10 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ swedish ] = "~Hjälp";
         Text[ polish ] = "Po~moc";
         Text[ portuguese_brazilian ] = "Help";
-        Text[ japanese ] = "ÍÙÌß";
-        Text[ korean ] = "Help";
-        Text[ chinese_simplified ] = "°ïÖú";
-        Text[ chinese_traditional ] = "»¡©ú";
+        Text[ japanese ] = "ÍÙÌß(~H)";
+        Text[ korean ] = "~Help";
+        Text[ chinese_simplified ] = "°ïÖú(~H)";
+        Text[ chinese_traditional ] = "»¡©ú(~H)";
         Text[ turkish ] = "Help";
         Text[ arabic ] = "Help";
         Text[ catalan ] = "Help";
@@ -363,7 +363,7 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ japanese ] = "Ÿ‚Ö(~N)>";
         Text[ korean ] = "´ÙÀ½(~N)";
         Text[ chinese_simplified ] = "¼ÌĞø (~N)>";
-        Text[ chinese_traditional ] = "Ä~Äò >";
+        Text[ chinese_traditional ] = "Ä~Äò (~N)>";
         Text[ arabic ] = "ÇáÊÇáí>";
         Text[ turkish ] = "Devam>";
         Text[ catalan ] = "~Siguiente>";
@@ -645,10 +645,10 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text [ English ]    = "Lines (ma~x)" ;
         Text[ english_us ] = "Lines (ma~x)";
         Text[ portuguese ] = "Linhas (max.)";
-        Text[ russian ] = "(ìàêñ.) ñòğîê:";
+        Text[ russian ] = "(ìàêñ.) ñòğîê";
         Text[ greek ] = "Ãñáììİò (ìåã.):";
         Text[ dutch ] = "(max.) ~regels";
-        Text[ french ] = "~Lignes (max.) :";
+        Text[ french ] = "Lignes (max.)";
         Text[ spanish ] = "~Líneas (máx.)";
         Text[ finnish ] = "(max.) ~Zeilen:";
         Text[ italian ] = "~Righe (max)";
@@ -657,7 +657,7 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ polish ] = "Wiersze (maks.)";
         Text[ portuguese_brazilian ] = "Tablename:";
         Text[ japanese ] = "Å‘ås”(~X)";
-        Text[ korean ] = "(ÃÖ´ë)~ÁÙ:";
+        Text[ korean ] = "(ÃÖ´ë)ÁÙ(~X):";
         Text[ chinese_simplified ] = "(×î¶àµÄ)ĞĞ(~X)";
         Text[ chinese_traditional ] = "(³Ì¦hªº)¦C(~X)";
         Text[ turkish ] = "Satırlar (azami):";
@@ -956,10 +956,10 @@ TabPage TAB_WIZ_COPYTABLE
         Text [ English ]    = "Tablename" ;
         Text[ english_us ] = "Ta~ble name";
         Text[ portuguese ] = "Nome da ta~bela";
-        Text[ russian ] = "Èìÿ òàáëèöû:";
+        Text[ russian ] = "Èìÿ òàáëèöû";
         Text[ greek ] = "¼íïìá ğßíáêá:";
         Text[ dutch ] = "~Tabelnaam";
-        Text[ french ] = "Nom de la ~table :";
+        Text[ french ] = "Nom de la table";
         Text[ spanish ] = "Nombre de la ta~bla";
         Text[ finnish ] = "~Tabellenname:";
         Text[ italian ] = "Nome ~tabella";
@@ -1158,10 +1158,10 @@ TabPage TAB_WIZ_COPYTABLE
         Text[ENGLISH]       = "Name";
         Text[ english_us ] = "Name";
         Text[ portuguese ] = "Nome";
-        Text[ russian ] = "Èìÿ:";
+        Text[ russian ] = "Èìÿ";
         Text[ greek ] = "¼íïìá:";
         Text[ dutch ] = "Naam";
-        Text[ french ] = "Nom :";
+        Text[ french ] = "Nom";
         Text[ spanish ] = "Nombre";
         Text[ finnish ] = "Nimi:";
         Text[ italian ] = "Nome";
@@ -1284,7 +1284,7 @@ String STR_DUPL_FIELDNAME
     Text[ chinese_traditional ] = "³o­Ó¦WºÙ\'$Name: not supported by cvs2svn $\'¤w¸g¦s¦b¡C\n½Ğ±z¿é¤J¤@­Ó·s¦WºÙ¡C";
     Text[ arabic ] = "ÇáÇÓã \'$Name: not supported by cvs2svn $\' ãæÌæÏ ãÓÈŞÇğ.\nÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÌÏíÏ.";
     Text[ greek ] = "Ôï üíïìá \'$Name: not supported by cvs2svn $\' õğÜñ÷åé Şäç.\nĞáñáêáëş åğéëİîôå Üëëï üíïìá.";
-    Text[ korean ] = "ÀÌ¸§\'$Name: not supported by cvs2svn $\'Àº ÀÌ¹Ì ÀÖ½À´Ï´Ù.\n»õ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À.";
+    Text[ korean ] = "ÀÌ¹Ì ÀÌ¸§ \'$Name: not supported by cvs2svn $\'ÀÌ(°¡) ÀÖ½À´Ï´Ù.\n»õ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "Ad \'$Name: not supported by cvs2svn $\' mevcut durumda.\nLütfen başka bir ad girin.";
     Text[ catalan ] = "El nombre \'$Name: not supported by cvs2svn $\' ya existe.\nEscriba otro nombre.";
     Text[ finnish ] = "Der Name \'$Name: not supported by cvs2svn $\' existiert bereits.\nBitte geben Sie einen neuen Namen an.";
@@ -1310,7 +1310,7 @@ ErrorBox ERROR_INVALID_TABLE_NAME
     Message[ chinese_traditional ] = "·í«e¨Ï¥Îªº¸ê®Æ®wµLªk±µ¨ü³o­ÓµL®ÄªºÅÜ§ó¦WºÙ¡C";
     Message[ arabic ] = "ıåĞÇ ÇÓã ÌÏæá ÛíÑ ÕÇáÍ İí ŞÇÚÏÉ ÇáÈíÇäÇÊ ÇáÍÇáíÉ.";
     Message[ greek ] = "Áõôü ôï üíïìá ôïõ ğßíáêá äåí åßíáé İãêõñï óôçí ôñİ÷ïõóá âÜóç äåäïìİíùí.";
-    Message[ korean ] = "ÀÌ°ÍÀº ÇöÀç µ¥ÀÌÅÍº£ÀÌ½º¿¡¼­ À¯È¿ÇÏÁö ¾ÊÀº Å×ÀÌºí ÀÌ¸§ÀÔ´Ï´Ù.";
+    Message[ korean ] = "ÇöÀç µ¥ÀÌÅÍº£ÀÌ½º¿¡¼­ À¯È¿ÇÏÁö ¾ÊÀº Å×ÀÌºí ÀÌ¸§ÀÔ´Ï´Ù.";
     Message[ turkish ] = "Bu veritabanında bu ad geçerli değil.";
     Message[ catalan ] = "Este nombre de tabla no es válido en la base de datos actual.";
     Message[ finnish ] = "In der aktuellen Datenbank ist dies kein gültiger Tabellenname.";
@@ -1341,6 +1341,7 @@ String STR_ERR_DUPL_TABLENAME
     Text[ catalan ] = "El nombre de tabla \'$name$\' ya existe.\nPuede escribir otro nombre\no adjuntar los datos a la tabla existente.";
     Text[ finnish ] = "Der Tabellenname \'$name$\' existiert bereits.\nSie können einen neuen Namen angeben\noder die Daten an die existierende Tabelle anhängen.";
 };
+
 
 
 
