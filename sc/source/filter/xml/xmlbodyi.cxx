@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-23 14:58:06 $
+ *  last change: $Author: sab $ $Date: 2001-01-24 15:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #ifndef _SC_XMLCALCULATIONSETTINGSCONTEXT_HXX
 #include "XMLCalculationSettingsContext.hxx"
 #endif
+#ifndef _SC_XMLTRACKEDCHANGESCONTEXT_HXX
+#include "XMLTrackedChangesContext.hxx"
+#endif
 
 #include <xmloff/xmltkmap.hxx>
 
@@ -173,6 +176,10 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
         break;
     case XML_TOK_BODY_DDE_LINKS:
         pContext = new ScXMLDDELinksContext ( GetScImport(), nPrefix, rLocalName,
+                                                        xAttrList );
+        break;
+    case XML_TOK_BODY_TRACKED_CHANGES:
+        pContext = new ScXMLTrackedChangesContext ( GetScImport(), nPrefix, rLocalName,
                                                         xAttrList );
         break;
     }

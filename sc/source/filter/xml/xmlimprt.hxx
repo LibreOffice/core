@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-22 17:10:39 $
+ *  last change: $Author: sab $ $Date: 2001-01-24 15:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,8 @@ enum ScXMLBodyTokens
     XML_TOK_BODY_DATABASE_RANGE,
     XML_TOK_BODY_DATA_PILOT_TABLES,
     XML_TOK_BODY_CONSOLIDATION,
-    XML_TOK_BODY_DDE_LINKS
+    XML_TOK_BODY_DDE_LINKS,
+    XML_TOK_BODY_TRACKED_CHANGES
 };
 
 enum ScXMLContentValidationsElemTokens
