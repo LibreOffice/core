@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcasthelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-23 11:04:56 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ namespace comphelper
     class OBaseMutex
     {
     protected:
-        ::osl::Mutex m_aMutex;
+        mutable ::osl::Mutex m_aMutex;
     };
 }
 #endif // _COMPHELPER_BROADCASTHELPER_HXX_
