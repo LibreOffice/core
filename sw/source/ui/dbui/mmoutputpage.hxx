@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmoutputpage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 10:58:10 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@
 
 class SwMailMergeWizard;
 class SfxPrinter;
+class SwSendMailDialog;
 
 namespace com{ namespace sun{ namespace star{
     namespace mail{
@@ -197,6 +198,7 @@ class SwMailMergeOutputPage : public svt::OWizardPage
 
 protected:
         virtual sal_Bool determineNextButtonState();
+        virtual void     ActivatePage();
 public:
         SwMailMergeOutputPage( SwMailMergeWizard* _pParent);
         ~SwMailMergeOutputPage();
@@ -222,7 +224,7 @@ struct SwMailDescriptor
 struct SwSendMailDialog_Impl;
 class MailProgressBar_Impl;
 class SwMailMergeConfigItem;
-class SW_DLLPUBLIC SwSendMailDialog : public SfxModalDialog
+class SW_DLLPUBLIC SwSendMailDialog : public ModelessDialog //SfxModalDialog
 {
     FixedLine               m_aStatusFL;
     FixedText               m_aStatusFT;
@@ -255,6 +257,7 @@ class SW_DLLPUBLIC SwSendMailDialog : public SfxModalDialog
     String                  m_sTerminateQuery;
 
     bool                    m_bCancel;
+    bool                    m_bDesctructionEnabled;
 
     ImageList               m_aImageList;
     ImageList               m_aImageListHC;
@@ -270,15 +273,22 @@ class SW_DLLPUBLIC SwSendMailDialog : public SfxModalDialog
     SW_DLLPRIVATE DECL_LINK( CloseHdl_Impl, PushButton* );
     SW_DLLPRIVATE DECL_STATIC_LINK( SwSendMailDialog, StartSendMails, SwSendMailDialog* );
     SW_DLLPRIVATE DECL_STATIC_LINK( SwSendMailDialog, StopSendMails, SwSendMailDialog* );
+    SW_DLLPRIVATE DECL_STATIC_LINK( SwSendMailDialog, RemoveThis, Timer* );
 
+    SW_DLLPRIVATE void        IterateMails();
     SW_DLLPRIVATE void        SendMails();
     SW_DLLPRIVATE void        UpdateTransferStatus();
+
+    virtual void        StateChanged( StateChangedType nStateChange );
+
 public:
     SwSendMailDialog( Window* pParent, SwMailMergeConfigItem& );
     ~SwSendMailDialog();
 
     void                AddDocument( SwMailDescriptor& rDesc );
-    virtual short       Execute();
+    void                SetDocumentCount( sal_Int32 nAllDocuments );
+    void                EnableDesctruction() {m_bDesctructionEnabled = true;}
+    void                Show();
 
     void                DocumentSent( ::com::sun::star::uno::Reference< ::com::sun::star::mail::XMailMessage>,
                                         bool bResult,
