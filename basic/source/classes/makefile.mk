@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-06 11:15:11 $
+#   last change: $Author: ab $ $Date: 2001-02-21 17:43:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,7 @@ SLOFILES=	\
     $(SLO)$/image.obj	\
     $(SLO)$/sbintern.obj	\
     $(SLO)$/sbunoobj.obj	\
+    $(SLO)$/eventatt.obj	\
     $(SLO)$/propacc.obj	\
     $(SLO)$/disas.obj
 
