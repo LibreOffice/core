@@ -2,9 +2,9 @@
  *
  *  $RCSfile: license.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-30 10:19:54 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:08:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,13 +577,15 @@ void LicenseDialog::EnableControls()
 
     if ( bEndReached )
     {
-        Point aPos( 0, aInfo3_1FT.GetPosPixel().Y() );
+        Point aPos( aInfo1FT.GetPosPixel().X(),
+                aInfo3_1FT.GetPosPixel().Y() );
         aArrow.SetPosPixel( aPos );
         aPBAccept.Enable();
     }
     else
     {
-        Point aPos( 0, aInfo2_1FT.GetPosPixel().Y() );
+        Point aPos( aInfo1FT.GetPosPixel().X(),
+                aInfo2_1FT.GetPosPixel().Y() );
         aArrow.SetPosPixel( aPos );
         aPBAccept.Disable();
     }
