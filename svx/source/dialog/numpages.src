@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-15 22:00:06 $
+ *  last change: $Author: dr $ $Date: 2001-06-22 16:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,9 +321,9 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     FixedText FT_LEVEL
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT (50 ,  8 ) ;
-        Text = "Ebene" ;
-        Text [ ENGLISH ] = "Level" ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "~Ebene" ;
+        Text [ ENGLISH ] = "Le~vel" ;
         Text [ norwegian ] = "Level" ;
         Text [ italian ] = "Livello" ;
         Text [ portuguese_brazilian ] = "NÌvel" ;
@@ -334,7 +334,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ swedish ] = "NivÂ" ;
         Text [ dutch ] = "Niveau" ;
         Text [ spanish ] = "Nivel" ;
-        Text [ english_us ] = "Level" ;
+        Text [ english_us ] = "Le~vel" ;
         Text[ chinese_simplified ] = "∑÷≤„";
         Text[ russian ] = "”Ó‚ÂÌ¸";
         Text[ polish ] = "Poziom";
@@ -387,9 +387,9 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     FixedText FT_FMT
     {
         Pos = MAP_APPFONT ( 50 , 27 ) ;
-        Size = MAP_APPFONT ( 50, 10 ) ;
+        Size = MAP_APPFONT ( 50, 8 ) ;
         Text = "~Nummerierung" ;
-        Text [ ENGLISH ] = "Numbering" ;
+        Text [ ENGLISH ] = "~Numbering" ;
         Text [ english_us ] = "~Numbering" ;
         Text [ swedish ] = "Numrering" ;
         Text [ danish ] = "Nummerering" ;
@@ -415,7 +415,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     ListBox LB_FMT
     {
         Pos = MAP_APPFONT ( 103 , 25 ) ;
-        Size = MAP_APPFONT ( 67 , 70 ) ;
+        Size = MAP_APPFONT ( 67 , 72 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
@@ -461,293 +461,293 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
             < "Linked graphics" ;           0x88/*SVX_NUM_BITMAP|0x80      */; > ;
             < "None" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
         };
-    StringList [ portuguese ] =
-    {
+        StringList [ portuguese ] =
+        {
             < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "Marca" ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "Imagem" ;                    8/*SVX_NUM_BITMAP              */; > ;
-        < "Imagem ligada" ;             0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < "Nenhuma" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
-    StringList [ russian ] =
-    {
+            < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "Marca" ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "Imagem" ;                    8/*SVX_NUM_BITMAP              */; > ;
+            < "Imagem ligada" ;             0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "Nenhuma" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
+        StringList [ russian ] =
+        {
             < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "–ËÒÛÌÓÍ" ;                   6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "√‡ÙËÍ‡" ;                   8/*SVX_NUM_BITMAP              */; > ;
-        < "œË‚ˇÁ‡ÌÌ‡ˇ „‡ÙËÍ‡" ;           0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < "·ÂÁ" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
-    StringList [ greek ] =
-    {
+            < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "–ËÒÛÌÓÍ" ;                   6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "√‡ÙËÍ‡" ;                   8/*SVX_NUM_BITMAP              */; > ;
+            < "œË‚ˇÁ‡ÌÌ‡ˇ „‡ÙËÍ‡" ;           0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "·ÂÁ" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
+        StringList [ greek ] =
+        {
             < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < " ÔıÍﬂ‰·" ;                   6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "√Ò·ˆÈÍ¸" ;                   8/*SVX_NUM_BITMAP              */; > ;
-        < "√Ò·ˆÈÍ¸ ÛıÌ‰Â‰ÂÏ›ÌÔ" ;           0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < " ·Ì›Ì·" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
-    StringList [ dutch ] =
-    {
+            < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < " ÔıÍﬂ‰·" ;                   6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "√Ò·ˆÈÍ¸" ;                   8/*SVX_NUM_BITMAP              */; > ;
+            < "√Ò·ˆÈÍ¸ ÛıÌ‰Â‰ÂÏ›ÌÔ" ;           0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < " ·Ì›Ì·" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
+        StringList [ dutch ] =
+        {
             < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "Bullet" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "Afbeelding" ;                    8/*SVX_NUM_BITMAP              */; > ;
-        < "Afbeelding gekoppeld" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < "Geen" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
-    StringList [ french ] =
-    {
+            < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "Bullet" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "Afbeelding" ;                    8/*SVX_NUM_BITMAP              */; > ;
+            < "Afbeelding gekoppeld" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "Geen" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
+        StringList [ french ] =
+        {
             < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "A, .., AA, .., AAA, ... " ;  9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "Puce" ;                  6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "Image" ;                     8/*SVX_NUM_BITMAP              */; > ;
-        < "Image liÈe" ;            0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < "Aucune" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
-    StringList [ spanish ] =
-    {
+            < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ... " ;  9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "Puce" ;                  6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "Image" ;                     8/*SVX_NUM_BITMAP              */; > ;
+            < "Image liÈe" ;            0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "Aucune" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
+        StringList [ spanish ] =
+        {
             < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "ViÒeta" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "Imagen" ;                    8/*SVX_NUM_BITMAP              */; > ;
-        < "Imagen vinculada" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < "Ninguna" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
-    StringList [ italian ] =
-    {
+            < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "ViÒeta" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "Imagen" ;                    8/*SVX_NUM_BITMAP              */; > ;
+            < "Imagen vinculada" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "Ninguna" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
+        StringList [ italian ] =
+        {
             < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "Punti" ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "Immagine" ;                  8/*SVX_NUM_BITMAP              */; > ;
-        < "Collega immagine" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < "Nessuno" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
-    StringList [ danish ] =
-    {
+            < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "Punti" ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "Immagine" ;                  8/*SVX_NUM_BITMAP              */; > ;
+            < "Collega immagine" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "Nessuno" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
+        StringList [ danish ] =
+        {
             < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "Punkttegn" ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "Grafik" ;                    8/*SVX_NUM_BITMAP              */; > ;
-        < "Grafik kÊdet" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < "Ingen" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
-    StringList [ swedish ] =
-    {
+            < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "Punkttegn" ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "Grafik" ;                    8/*SVX_NUM_BITMAP              */; > ;
+            < "Grafik kÊdet" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "Ingen" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
+        StringList [ swedish ] =
+        {
             < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "Punkt" ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "Grafik" ;                    8/*SVX_NUM_BITMAP              */; > ;
-        < "Grafik l‰nkad" ;             0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < "Ingen" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
-    StringList [ polish ] =
-    {
+            < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "Punkt" ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "Grafik" ;                    8/*SVX_NUM_BITMAP              */; > ;
+            < "Grafik l‰nkad" ;             0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "Ingen" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
+        StringList [ polish ] =
+        {
             < "1,2,3, ..." ;                4/*SVX_NUM_ARABIC              */; > ;
-        < "A,B,C, ..." ;                0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "a,b,c, ..." ;                1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "I,II,III, ..." ;         2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "i,ii,iii, ..." ;             3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "A, .., AA, ..,AAA, ..." ;    9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "Znaki wypunktowania" ;                   6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "Grafika" ;                   8/*SVX_NUM_BITMAP              */; > ;
-        < "Grafika po≥πczona" ;             0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < "Brak" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
+            < "A,B,C, ..." ;                0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a,b,c, ..." ;                1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I,II,III, ..." ;         2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i,ii,iii, ..." ;             3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, ..,AAA, ..." ;    9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "Znaki wypunktowania" ;                   6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "Grafika" ;                   8/*SVX_NUM_BITMAP              */; > ;
+            < "Grafika po≥πczona" ;             0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "Brak" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
             < "A, B, C, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-        < "a, b, c, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "I, II, III, ..." ;               1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "i, ii, iii, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "1, 2, 3, ..." ;          3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "Keine" ;     9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "Bullet" ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "Grafik" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "A, .., AA, .., AAA, ..." ;                   8/*SVX_NUM_BITMAP              */; > ;
-        < "a, .., aa, .., aaa, ..." ;           0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < "Keine" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
-    StringList [ japanese ] =
-    {
+            < "a, b, c, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "I, II, III, ..." ;               1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "i, ii, iii, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "1, 2, 3, ..." ;          3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "Keine" ;     9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "Bullet" ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "Grafik" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "A, .., AA, .., AAA, ..." ;                   8/*SVX_NUM_BITMAP              */; > ;
+            < "a, .., aa, .., aaa, ..." ;           0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "Keine" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
+        StringList [ japanese ] =
+        {
             < "1ÅA2ÅA3§ ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-        < "A§ B§ C§ ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "a§ b§ c§ ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "I§ II§ III§ ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "i§ ii§ iii§ ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "A§ ..§ AA§ ..§ AAA§ ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "a§ ..§ aa§ ..§ aaa§ ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "â”èèëÇ´" ;                  6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "ê}" ;                    8/*SVX_NUM_BITMAP              */; > ;
-        < "ê}Çÿ›∏Ç∑ÇÈ" ;           0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < "Ç»Çµ" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
-    StringList [ korean ] =
-    {
+            < "A§ B§ C§ ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a§ b§ c§ ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I§ II§ III§ ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i§ ii§ iii§ ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A§ ..§ AA§ ..§ AAA§ ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a§ ..§ aa§ ..§ aaa§ ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "â”èèëÇ´" ;                  6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "ê}" ;                    8/*SVX_NUM_BITMAP              */; > ;
+            < "ê}Çÿ›∏Ç∑ÇÈ" ;           0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "Ç»Çµ" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
+        StringList [ korean ] =
+        {
             < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "æ¯¿Ω" ;  9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "±€∏”∏Æ±‚»£" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "±◊∑°«»" ;                    8/*SVX_NUM_BITMAP              */; > ;
-        < "±◊∑°«»°°∏µ≈©µ " ;            0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < "æ¯¿Ω" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
+            < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "æ¯¿Ω" ;  9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "±€∏”∏Æ±‚»£" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "±◊∑°«»" ;                    8/*SVX_NUM_BITMAP              */; > ;
+            < "±◊∑°«»°°∏µ≈©µ " ;            0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "æ¯¿Ω" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
             < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "Õº–Œ±‡∫≈" ;                  6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "Õº–Œ" ;                  8/*SVX_NUM_BITMAP              */; > ;
-        < "¡¥Ω”Õº–Œ" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < "Œﬁ" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "Õº–Œ±‡∫≈" ;                  6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "Õº–Œ" ;                  8/*SVX_NUM_BITMAP              */; > ;
+            < "¡¥Ω”Õº–Œ" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "Œﬁ" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "∂µ•ÿΩs∏π" ;                  6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "πœßŒ" ;                  8/*SVX_NUM_BITMAP              */; > ;
-        < "≥sµ≤πœßŒ" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < "µL" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "∂µ•ÿΩs∏π" ;                  6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "πœßŒ" ;                  8/*SVX_NUM_BITMAP              */; > ;
+            < "≥sµ≤πœßŒ" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "µL" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
+        StringList [ arabic ] =
+        {
             < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "a, .., aa, .., aaa, ... " ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "⁄·«„…  ⁄œ«œ" ;                   6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "’Ê—…" ;                  8/*SVX_NUM_BITMAP              */; > ;
-        < "«·’Ê— «·„— »ÿ…" ;            0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < "»œÊ‰" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a, .., aa, .., aaa, ... " ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "⁄·«„…  ⁄œ«œ" ;                   6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "’Ê—…" ;                  8/*SVX_NUM_BITMAP              */; > ;
+            < "«·’Ê— «·„— »ÿ…" ;            0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "»œÊ‰" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "Madde i˛aretleri" ;                  6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "Grafik" ;                    8/*SVX_NUM_BITMAP              */; > ;
-        < "Grafik balant˝s˝ olu˛turuldu" ;             0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < "Yok" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
-    StringList [ language_user1 ] =
-    {
+            < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "Madde i˛aretleri" ;                  6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "Grafik" ;                    8/*SVX_NUM_BITMAP              */; > ;
+            < "Grafik balant˝s˝ olu˛turuldu" ;             0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "Yok" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
+        StringList [ language_user1 ] =
+        {
             < " " ;                 4/*SVX_NUM_ARABIC              */; > ;
-        < " " ;                 0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < " " ;                 1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < " " ;         2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < " " ;             3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < " " ;     9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < " " ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < " " ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < " " ;                     8/*SVX_NUM_BITMAP              */; > ;
-        < "This is found in a text doc under Format - Numbering/Bullets - Options - Format area - Numbering list box. EM10May00 - Grafik verkn¸pft - Grafik verkn¸pft" ;            0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < "Keine" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
-    StringList [ catalan ] =
-    {
+            < " " ;                 0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < " " ;                 1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < " " ;         2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < " " ;             3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < " " ;     9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < " " ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < " " ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < " " ;                     8/*SVX_NUM_BITMAP              */; > ;
+            < "This is found in a text doc under Format - Numbering/Bullets - Options - Format area - Numbering list box. EM10May00 - Grafik verkn¸pft - Grafik verkn¸pft" ;            0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "Keine" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
+        StringList [ catalan ] =
+        {
             < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "ViÒeta" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "Imagen" ;                    8/*SVX_NUM_BITMAP              */; > ;
-        < "Imagen vinculada" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < "Ninguna" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
-    StringList [ finnish ] =
-    {
+            < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "ViÒeta" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "Imagen" ;                    8/*SVX_NUM_BITMAP              */; > ;
+            < "Imagen vinculada" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "Ninguna" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
+        StringList [ finnish ] =
+        {
             < "1, 2, 3, ... " ;                 4/*SVX_NUM_ARABIC              */; > ;
-        < "A, B, C, ... " ;                 0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < "I, II, III, ... " ;          2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < "i, ii, iii, ... " ;          3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < "A, .., AA, .., AAA, ... " ;  9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "Luettelomerkki" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < "Kuvat" ;                     8/*SVX_NUM_BITMAP              */; > ;
-        < "Linkitetyt kuvat" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-        < "Ei mit‰‰n" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
+            < "A, B, C, ... " ;                 0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ... " ;          2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ... " ;          3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ... " ;  9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "Luettelomerkki" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "Kuvat" ;                     8/*SVX_NUM_BITMAP              */; > ;
+            < "Linkitetyt kuvat" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "Ei mit‰‰n" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
+        };
     };
     FixedText FT_PREFIX
     {
         Pos = MAP_APPFONT ( 50 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Davor" ;
-        Text [ ENGLISH ] = "Before" ;
+        Text [ ENGLISH ] = "~Before" ;
         Text [ norwegian ] = "F¯r" ;
         Text [ italian ] = "~Davanti" ;
         Text [ portuguese_brazilian ] = "Antes" ;
@@ -758,7 +758,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ swedish ] = "Fra~mfˆr" ;
         Text [ dutch ] = "~Ervoor" ;
         Text [ spanish ] = "~Delante" ;
-        Text [ english_us ] = "Before" ;
+        Text [ english_us ] = "~Before" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "±‡∫≈«∞";
         Text[ russian ] = "ƒÓ";
@@ -784,9 +784,9 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     FixedText FT_SUFFIX
     {
         Pos = MAP_APPFONT ( 50 , 59 ) ;
-        Size = MAP_APPFONT ( 50 ,10 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Dahin~ter" ;
-        Text [ ENGLISH ] = "Behind" ;
+        Text [ ENGLISH ] = "~After" ;
         Text [ norwegian ] = "Bak" ;
         Text [ italian ] = "~Dietro" ;
         Text [ portuguese_brazilian ] = "Atr?s" ;
@@ -797,7 +797,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ swedish ] = "Ba~kom" ;
         Text [ dutch ] = "E~rachter" ;
         Text [ spanish ] = "D~etr·s" ;
-        Text [ english_us ] = "After" ;
+        Text [ english_us ] = "~After" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "±‡∫≈∫Û";
         Text[ russian ] = "œÓÒÎÂ";
@@ -823,103 +823,103 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     FixedText FT_CHARFMT
     {
         Pos = MAP_APPFONT ( 50 , 75 ) ;
-        Size = MAP_APPFONT ( 50 ,10 ) ;
-        Text = "Zeichenv~orlage:" ;
-        Text [ ENGLISH ] = "Character style" ;
-        Text [ english_us ] = "~Character Style:" ;
-        Text [ swedish ] = "Teckenf~ormatmall:" ;
-        Text [ danish ] = "Tegntypografi:" ;
-        Text [ italian ] = "Modello di carattere:" ;
-        Text [ spanish ] = "Es~tilo de car·cter:" ;
-        Text [ french ] = "St~yle de caractËres :" ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "Zeichen~vorlage" ;
+        Text [ ENGLISH ] = "Character St~yle" ;
+        Text [ english_us ] = "Character St~yle" ;
+        Text [ swedish ] = "Teckenf~ormatmall" ;
+        Text [ danish ] = "Tegntypografi" ;
+        Text [ italian ] = "Modello di carattere" ;
+        Text [ spanish ] = "Es~tilo de car·cter" ;
+        Text [ french ] = "St~yle de caractËres" ;
         Text [ dutch ] = "~Tekenopmaakprofiel" ;
         Text [ portuguese_brazilian ] = "Zeichenv~orlage" ;
-        Text [ portuguese ] = "~Estilo de caracteres:" ;
-        Text[ chinese_simplified ] = "◊÷∑˚—˘ Ω(~C):";
-        Text[ russian ] = "—ÚËÎ¸ ÚÂÍÒÚ‡:";
-        Text[ polish ] = "Styl znaku:";
-        Text[ japanese ] = "ï∂éöΩ¿≤Ÿ(~C):";
+        Text [ portuguese ] = "~Estilo de caracteres" ;
+        Text[ chinese_simplified ] = "◊÷∑˚—˘ Ω(~C)";
+        Text[ russian ] = "—ÚËÎ¸ ÚÂÍÒÚ‡";
+        Text[ polish ] = "Styl znaku";
+        Text[ japanese ] = "ï∂éöΩ¿≤Ÿ(~C)";
         Text[ chinese_traditional ] = "¶r§∏ºÀ¶°(~C)°G";
-        Text[ arabic ] = "‰„ÿ «·√Õ—›:";
-        Text[ greek ] = "”ÙıÎ ˜·Ò·ÍÙﬁÒ˘Ì:";
-        Text[ korean ] = "πÆ¿⁄ ¿Ø«¸(~C):";
-        Text[ turkish ] = "Karakter ˛ablonu:";
+        Text[ arabic ] = "‰„ÿ «·√Õ—›";
+        Text[ greek ] = "”ÙıÎ ˜·Ò·ÍÙﬁÒ˘Ì";
+        Text[ korean ] = "πÆ¿⁄ ¿Ø«¸(~C)";
+        Text[ turkish ] = "Karakter ˛ablonu";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
-        Text[ catalan ] = "Es~tilo de car·cter:";
-        Text[ finnish ] = "~Merkistˆn tyyli:";
+        Text[ catalan ] = "Es~tilo de car·cter";
+        Text[ finnish ] = "~Merkistˆn tyyli";
     };
     ListBox LB_CHARFMT
     {
         TabStop = TRUE ;
         DropDown = TRUE ;
         Pos = MAP_APPFONT ( 103 , 73 ) ;
-        Size = MAP_APPFONT ( 67 , 50 ) ;
+        Size = MAP_APPFONT ( 67 , 72 ) ;
     };
     FixedText FT_BUL_COLOR
     {
         Pos = MAP_APPFONT ( 50 , 75 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~Farbe:" ;
-        Text [ ENGLISH ] = "~Color:" ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "~Farbe" ;
+        Text [ ENGLISH ] = "Co~lor" ;
         Hide = TRUE;
-        Text[ italian ] = "~Colore:";
-        Text[ portuguese_brazilian ] = "~Color:";
-        Text[ portuguese ] = "~Cor:";
-        Text[ danish ] = "Farve:";
-        Text[ french ] = "~Couleur :";
-        Text[ swedish ] = "~F‰rg:";
-        Text[ dutch ] = "~Kleur:";
-        Text[ spanish ] = "~Color:";
-        Text[ english_us ] = "Color:";
-        Text[ chinese_simplified ] = "—’…´:";
-        Text[ russian ] = "÷‚ÂÚ:";
-        Text[ polish ] = "Kolor:";
-        Text[ japanese ] = "êF:";
+        Text[ italian ] = "~Colore";
+        Text[ portuguese_brazilian ] = "~Color";
+        Text[ portuguese ] = "~Cor";
+        Text[ danish ] = "Farve";
+        Text[ french ] = "~Couleur";
+        Text[ swedish ] = "~F‰rg";
+        Text[ dutch ] = "~Kleur";
+        Text[ spanish ] = "~Color";
+        Text[ english_us ] = "Co~lor";
+        Text[ chinese_simplified ] = "—’…´";
+        Text[ russian ] = "÷‚ÂÚ";
+        Text[ polish ] = "Kolor";
+        Text[ japanese ] = "êF";
         Text[ chinese_traditional ] = "√C¶‚°G";
         Text[ arabic ] = ":«··Ê‰";
-        Text[ greek ] = "◊Ò˛Ï·:";
-        Text[ korean ] = "ªˆ:";
-        Text[ turkish ] = "Renk:";
+        Text[ greek ] = "◊Ò˛Ï·";
+        Text[ korean ] = "ªˆ";
+        Text[ turkish ] = "Renk";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Color:";
-        Text[ finnish ] = "V‰ri:";
+        Text[ catalan ] = "~Color";
+        Text[ finnish ] = "V‰ri";
     };
     ListBox LB_BUL_COLOR
     {
         TabStop = TRUE ;
         DropDown = TRUE ;
         Pos = MAP_APPFONT ( 103 , 73 ) ;
-        Size = MAP_APPFONT ( 67 , 50 ) ;
+        Size = MAP_APPFONT ( 67 , 100 ) ;
         Hide = TRUE;
     };
     FixedText FT_BUL_REL_SIZE
     {
         Pos = MAP_APPFONT ( 50 , 91 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~Relative Grˆﬂe:" ;
-        Text [ ENGLISH ] = "~Relatize size:" ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "~Relative Grˆﬂe" ;
+        Text [ ENGLISH ] = "R~elatize size" ;
         Hide = TRUE;
-        Text[ italian ] = "Dimensione relativa:";
-        Text[ portuguese_brazilian ] = "~Relatize size:";
-        Text[ portuguese ] = "~Tamanho relativo:";
-        Text[ danish ] = "Relativ st¯rrelse:";
-        Text[ french ] = "~Taille relative :";
-        Text[ swedish ] = "~Relativ storlek:";
-        Text[ dutch ] = "~Relatieve grootte:";
-        Text[ spanish ] = "~TamaÒo relativo:";
-        Text[ english_us ] = "~Relative size:";
-        Text[ chinese_simplified ] = "œ‡∂‘µƒ¥Û–°(~R):";
-        Text[ russian ] = "ŒÚÌÓÒËÚ. ‡ÁÏÂ:";
-        Text[ polish ] = "Rozmiar wzglÍdny:";
-        Text[ japanese ] = "î‰ärª≤Ωﬁ(~R):";
+        Text[ italian ] = "Dimensione relativa";
+        Text[ portuguese_brazilian ] = "~Relatize size";
+        Text[ portuguese ] = "~Tamanho relativo";
+        Text[ danish ] = "Relativ st¯rrelse";
+        Text[ french ] = "~Taille relative";
+        Text[ swedish ] = "~Relativ storlek";
+        Text[ dutch ] = "~Relatieve grootte";
+        Text[ spanish ] = "~TamaÒo relativo";
+        Text[ english_us ] = "R~elative size";
+        Text[ chinese_simplified ] = "œ‡∂‘µƒ¥Û–°(~R)";
+        Text[ russian ] = "ŒÚÌÓÒËÚ. ‡ÁÏÂ";
+        Text[ polish ] = "Rozmiar wzglÍdny";
+        Text[ japanese ] = "î‰ärª≤Ωﬁ(~R)";
         Text[ chinese_traditional ] = "¨€πÔ™∫§j§p(~R)°G";
         Text[ arabic ] = ":ÕÃ„ ‰”»Ì";
-        Text[ greek ] = "”˜ÂÙÈÍ¸ Ï›„ÂËÔÚ:";
-        Text[ korean ] = "ªÛ¥Î¿˚ ≈©±‚(~R):";
-        Text[ turkish ] = "Orant˝l˝ boyut:";
+        Text[ greek ] = "”˜ÂÙÈÍ¸ Ï›„ÂËÔÚ";
+        Text[ korean ] = "ªÛ¥Î¿˚ ≈©±‚(~R)";
+        Text[ turkish ] = "Orant˝l˝ boyut";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~TamaÒo relativo:";
-        Text[ finnish ] = "~Suhteellinen koko:";
+        Text[ catalan ] = "~TamaÒo relativo";
+        Text[ finnish ] = "~Suhteellinen koko";
     };
     MetricField MF_BUL_REL_SIZE
     {
@@ -940,9 +940,9 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     FixedText FT_ALL_LEVEL
     {
         Pos = MAP_APPFONT ( 50 , 91 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~Vollst‰ndig" ;
-        Text [ ENGLISH ] = "~Complete" ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "V~ollst‰ndig" ;
+        Text [ ENGLISH ] = "Sh~ow sublevels" ;
         Text [ norwegian ] = "~Fullstendig" ;
         Text [ italian ] = "~Completa" ;
         Text [ portuguese_brazilian ] = "~Completar" ;
@@ -953,7 +953,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ swedish ] = "F~ullst‰ndig" ;
         Text [ dutch ] = "~Volledig" ;
         Text [ spanish ] = "~Completo" ;
-        Text [ english_us ] = "Show sublevels" ;
+        Text [ english_us ] = "Sh~ow sublevels" ;
         Text[ chinese_simplified ] = "∞¸∫¨…œ“ªº∂±";
         Text[ russian ] = "œÓÎÌÓÒÚ¸˛";
         Text[ polish ] = "Pokaø wszystkie poziomy";
@@ -984,9 +984,9 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     FixedText FT_START
     {
         Pos = MAP_APPFONT ( 50 , 107 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~Beginn bei" ;
-        Text [ ENGLISH ] = "~Start at" ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "Be~ginn bei" ;
+        Text [ ENGLISH ] = "S~tart at" ;
         Text [ norwegian ] = "~Start pÂ" ;
         Text [ italian ] = "~Comincia con" ;
         Text [ portuguese_brazilian ] = "~Come?ar em" ;
@@ -997,7 +997,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ swedish ] = "~Bˆrja med" ;
         Text [ dutch ] = "~Begin met" ;
         Text [ spanish ] = "E~mpezar en" ;
-        Text [ english_us ] = "Start at" ;
+        Text [ english_us ] = "S~tart at" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "ø™ º±‡∫≈";
         Text[ russian ] = "Õ‡˜‡ÎÓ Ò";
@@ -1032,7 +1032,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Pos = MAP_APPFONT ( 50 , 119 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         Text = "~Symbol anzeigen" ;
-        Text [ English ] = "~Show symbol" ;
+        Text [ English ] = "Show sym~bol" ;
         Hide = TRUE;
         Text[ italian ] = "Mostra simbolo";
         Text[ portuguese_brazilian ] = "~Show symbol";
@@ -1042,7 +1042,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ swedish ] = "~Visa symbol";
         Text[ dutch ] = "~Symbool weergeven";
         Text[ spanish ] = "~Mostrar sÌmbolo";
-        Text[ english_us ] = "Show symbol";
+        Text[ english_us ] = "Show sym~bol";
         Text[ chinese_simplified ] = "œ‘ æÕº±Í";
         Text[ russian ] = "œÓÍ‡Á‡Ú¸ ÒËÏ‚ÓÎ";
         Text[ polish ] = "Pokaø symbol";
@@ -1059,11 +1059,10 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     FixedText FT_ALIGN
     {
         Pos = MAP_APPFONT ( 50 , 135 ) ;
-        Size = MAP_APPFONT ( 77 , 10 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Ausri~chtung" ;
-        Text [ ENGLISH ] = "Alignment" ;
-         //???
-        Text [ english_us ] = "~Alignment" ;
+        Text [ ENGLISH ] = "Al~ignment" ;
+        Text [ english_us ] = "Al~ignment" ;
         Hide = TRUE;
         Text[ italian ] = "Allineamento";
         Text[ portuguese_brazilian ] = "~Alignment";
@@ -1159,83 +1158,83 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
             < "Centrado" ; > ;
             < "Direita" ; > ;
         };
-    StringList [ chinese_simplified ] =
-    {
+        StringList [ chinese_simplified ] =
+        {
             < "◊Û" ; > ;
-        < "æ”÷–" ; > ;
-        < "”“" ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
+            < "æ”÷–" ; > ;
+            < "”“" ; > ;
+        };
+        StringList [ language_user1 ] =
+        {
             < " " ; > ;
-        < "Zentriert" ; > ;
-        < "Rechts" ; > ;
-    };
-    StringList [ russian ] =
-    {
+            < "Zentriert" ; > ;
+            < "Rechts" ; > ;
+        };
+        StringList [ russian ] =
+        {
             < "—ÎÂ‚‡" ; > ;
-        < "œÓ ˆÂÌÚÛ" ; > ;
-        < "—Ô‡‚‡" ; > ;
-    };
-    StringList [ polish ] =
-    {
+            < "œÓ ˆÂÌÚÛ" ; > ;
+            < "—Ô‡‚‡" ; > ;
+        };
+        StringList [ polish ] =
+        {
             < "Z lewej strony" ; > ;
-        < "Wyúrodkuj" ; > ;
-        < "Z prawej strony" ; > ;
-    };
-    StringList [ japanese ] =
-    {
+            < "Wyúrodkuj" ; > ;
+            < "Z prawej strony" ; > ;
+        };
+        StringList [ japanese ] =
+        {
             < "ç∂" ; > ;
-        < "íÜâõ" ; > ;
-        < "âEëµÇ¶" ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < "íÜâõ" ; > ;
+            < "âEëµÇ¶" ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "•™" ; > ;
-        < "∏m§§" ; > ;
-        < "•k" ; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < "∏m§§" ; > ;
+            < "•k" ; > ;
+        };
+        StringList [ arabic ] =
+        {
             < "Ì”«—" ; > ;
-        < " Ê”Ìÿ" ; > ;
-        < "Ì„Ì‰" ; > ;
-    };
-    StringList [ greek ] =
-    {
+            < " Ê”Ìÿ" ; > ;
+            < "Ì„Ì‰" ; > ;
+        };
+        StringList [ greek ] =
+        {
             < "¡ÒÈÛÙÂÒ‹" ; > ;
-        < " ÂÌÙÒ·ÒÈÛÏ›Ì·" ; > ;
-        < "ƒÂÓÈ‹" ; > ;
-    };
-    StringList [ korean ] =
-    {
+            < " ÂÌÙÒ·ÒÈÛÏ›Ì·" ; > ;
+            < "ƒÂÓÈ‹" ; > ;
+        };
+        StringList [ korean ] =
+        {
             < "øﬁ¬ " ; > ;
-        < "∞°øÓµ•" ; > ;
-        < "ø¿∏•¬ " ; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < "∞°øÓµ•" ; > ;
+            < "ø¿∏•¬ " ; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "Sol" ; > ;
-        < "Orta" ; > ;
-        < "Sa" ; > ;
-    };
-    StringList [ catalan ] =
-    {
+            < "Orta" ; > ;
+            < "Sa" ; > ;
+        };
+        StringList [ catalan ] =
+        {
             < "Izquierda" ; > ;
-        < "Centrado" ; > ;
-        < "Derecha" ; > ;
-    };
-    StringList [ finnish ] =
-    {
+            < "Centrado" ; > ;
+            < "Derecha" ; > ;
+        };
+        StringList [ finnish ] =
+        {
             < "Vasen" ; > ;
-        < "Keskitetty" ; > ;
-        < "Oikea" ; > ;
-    };
+            < "Keskitetty" ; > ;
+            < "Oikea" ; > ;
+        };
     };
     String STR_BULLET
     {
         Text = "Ze~ichen" ;
-        Text [ ENGLISH ] = "Character" ;
+        Text [ ENGLISH ] = "~Character" ;
         Text [ norwegian ] = "Character" ;
         Text [ italian ] = "Ca~rattere" ;
         Text [ portuguese_brazilian ] = "Caractere" ;
@@ -1246,7 +1245,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ swedish ] = "Te~cken" ;
         Text [ dutch ] = "~Teken" ;
         Text [ spanish ] = "C~ar·cter" ;
-        Text [ english_us ] = "Character" ;
+        Text [ english_us ] = "~Character" ;
         Text[ chinese_simplified ] = "◊÷∑˚";
         Text[ russian ] = "«Ì‡Í";
         Text[ polish ] = "Znak";
@@ -1271,7 +1270,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 50 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Grafik" ;
         Text [ English ] = "Graphic" ;
         Text [ english_us ] = "Graphics" ;
@@ -1344,7 +1343,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
                 };
             };
         };
-        Text [ english_us ] = "Select..." ;
+        Text [ english_us ] = "~Select..." ;
         Text [ portuguese_brazilian ] = "Aus~wahl..." ;
         Text [ swedish ] = "~Urval..." ;
         Text [ danish ] = "VÊlg..." ;
@@ -1370,10 +1369,10 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 50 , 61 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Breite" ;
         Text [ English ] = "~Width" ;
-        Text [ english_us ] = "Width" ;
+        Text [ english_us ] = "~Width" ;
         Text [ portuguese_brazilian ] = "~Breite" ;
         Text [ swedish ] = "~Bredd" ;
         Text [ danish ] = "Bredde" ;
@@ -1418,10 +1417,10 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 50 , 77 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~Hˆhe" ;
-        Text [ English ] = "Height" ;
-        Text [ english_us ] = "Height" ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "H~ˆhe" ;
+        Text [ English ] = "Hei~ght" ;
+        Text [ english_us ] = "Hei~ght" ;
         Text [ portuguese_brazilian ] = "~H?e" ;
         Text [ swedish ] = "~Hˆjd" ;
         Text [ danish ] = "H¯jde" ;
@@ -1468,8 +1467,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Pos = MAP_APPFONT ( 50 , 91 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Abg~leich" ;
-        Text [ English ] = "Fixed ratio" ;
-        Text [ english_us ] = "Keep ratio" ;
+        Text [ English ] = "~Keep ratio" ;
+        Text [ english_us ] = "~Keep ratio" ;
         Text [ portuguese_brazilian ] = "Abgleich" ;
         Text [ swedish ] = "~Synkronisering" ;
         Text [ danish ] = "Proportional" ;
@@ -1495,10 +1494,10 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 50 , 105 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "A~usrichtung" ;
-        Text [ English ] = "Orientation" ;
-        Text [ english_us ] = "Alignment" ;
+        Text [ English ] = "Align~ment" ;
+        Text [ english_us ] = "Align~ment" ;
         Text [ portuguese_brazilian ] = "Ausrichtung" ;
         Text [ swedish ] = "~Justering" ;
         Text [ danish ] = "Justering" ;
@@ -1524,7 +1523,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 103 , 103 ) ;
-        Size = MAP_APPFONT ( 67 , 50 ) ;
+        Size = MAP_APPFONT ( 67 , 72 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
@@ -1660,150 +1659,150 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
             < "Linha centrada" ; > ;
             < "Linha inferior" ; > ;
         };
-    StringList [ chinese_simplified ] =
-    {
+        StringList [ chinese_simplified ] =
+        {
             < "ª˘œﬂ…œ∑Ω" ; > ;
-        < "ª˘œﬂæ”÷–" ; > ;
-        < "ª˘œﬂœ¬∑Ω" ; > ;
-        < "◊÷∑˚…œ∑Ω" ; > ;
-        < "◊÷∑˚æ”÷–" ; > ;
-        < "◊÷∑˚œ¬∑Ω" ; > ;
-        < "––…œ∑Ω" ; > ;
-        < "–– æ”÷–" ; > ;
-        < "––œ¬∑Ω" ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
+            < "ª˘œﬂæ”÷–" ; > ;
+            < "ª˘œﬂœ¬∑Ω" ; > ;
+            < "◊÷∑˚…œ∑Ω" ; > ;
+            < "◊÷∑˚æ”÷–" ; > ;
+            < "◊÷∑˚œ¬∑Ω" ; > ;
+            < "––…œ∑Ω" ; > ;
+            < "–– æ”÷–" ; > ;
+            < "––œ¬∑Ω" ; > ;
+        };
+        StringList [ language_user1 ] =
+        {
             < "Basis oben" ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < "Zeichen oben" ; > ;
-        < "Zeichen zentriert" ; > ;
-        < "Zeichen unten" ; > ;
-        < "Zeile oben" ; > ;
-        < " " ; > ;
-        < " " ; > ;
-    };
-    StringList [ russian ] =
-    {
+            < " " ; > ;
+            < " " ; > ;
+            < "Zeichen oben" ; > ;
+            < "Zeichen zentriert" ; > ;
+            < "Zeichen unten" ; > ;
+            < "Zeile oben" ; > ;
+            < " " ; > ;
+            < " " ; > ;
+        };
+        StringList [ russian ] =
+        {
             < "ŒÒÌÓ‚Ì‡ˇ ÎËÌËˇ Ò‚ÂıÛ" ; > ;
-        < "ŒÒÌÓ‚Ì‡ˇ ÎËÌËˇ ‚ ˆÂÌÚÂ" ; > ;
-        < "ŒÒÌÓ‚Ì‡ˇ ÎËÌËˇ ÒÌËÁÛ" ; > ;
-        < "«Ì‡Í Ò‚ÂıÛ" ; > ;
-        < "«Ì‡Í ‚ ˆÂÌÚÂ" ; > ;
-        < "«Ì‡Í ÒÌËÁÛ" ; > ;
-        < "—ÚÓÍ‡ Ò‚ÂıÛ" ; > ;
-        < "—ÚÓÍ‡ ‚ ˆÂÌÚÂ" ; > ;
-        < "—ÚÓÍ‡ ÒÌËÁÛ" ; > ;
-    };
-    StringList [ polish ] =
-    {
+            < "ŒÒÌÓ‚Ì‡ˇ ÎËÌËˇ ‚ ˆÂÌÚÂ" ; > ;
+            < "ŒÒÌÓ‚Ì‡ˇ ÎËÌËˇ ÒÌËÁÛ" ; > ;
+            < "«Ì‡Í Ò‚ÂıÛ" ; > ;
+            < "«Ì‡Í ‚ ˆÂÌÚÂ" ; > ;
+            < "«Ì‡Í ÒÌËÁÛ" ; > ;
+            < "—ÚÓÍ‡ Ò‚ÂıÛ" ; > ;
+            < "—ÚÓÍ‡ ‚ ˆÂÌÚÂ" ; > ;
+            < "—ÚÓÍ‡ ÒÌËÁÛ" ; > ;
+        };
+        StringList [ polish ] =
+        {
             < "Linia odniesienia w gÛrze" ; > ;
-        < "Wyúrodkowana linia odniesienia" ; > ;
-        < "Linia odniesienia w dole" ; > ;
-        < "Znak w gÛrze" ; > ;
-        < "Wyúrodkuj znaki" ; > ;
-        < "Znak w dole" ; > ;
-        < "Wiersz w gÛrze" ; > ;
-        < "Wyúrodkuj wiersz" ; > ;
-        < "Wiersz w dole" ; > ;
-    };
-    StringList [ japanese ] =
-    {
+            < "Wyúrodkowana linia odniesienia" ; > ;
+            < "Linia odniesienia w dole" ; > ;
+            < "Znak w gÛrze" ; > ;
+            < "Wyúrodkuj znaki" ; > ;
+            < "Znak w dole" ; > ;
+            < "Wiersz w gÛrze" ; > ;
+            < "Wyúrodkuj wiersz" ; > ;
+            < "Wiersz w dole" ; > ;
+        };
+        StringList [ japanese ] =
+        {
             < "äÓê¸ÇÃè„" ; > ;
-        < "äÓê¸ÇÃíÜâõ" ; > ;
-        < "äÓê¸ÇÃâ∫" ; > ;
-        < "ï∂éöÇÃè„" ; > ;
-        < "ï∂éöÇÃíÜâõ" ; > ;
-        < "ï∂éöÇÃâ∫" ; > ;
-        < "çsÇÃè„" ; > ;
-        < "çsÇÃíÜâõ" ; > ;
-        < "çsÇÃâ∫" ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < "äÓê¸ÇÃíÜâõ" ; > ;
+            < "äÓê¸ÇÃâ∫" ; > ;
+            < "ï∂éöÇÃè„" ; > ;
+            < "ï∂éöÇÃíÜâõ" ; > ;
+            < "ï∂éöÇÃâ∫" ; > ;
+            < "çsÇÃè„" ; > ;
+            < "çsÇÃíÜâõ" ; > ;
+            < "çsÇÃâ∫" ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "∞ÚΩu§W§Ë" ; > ;
-        < "∞ÚΩu∏m§§" ; > ;
-        < "∞ÚΩu§U§Ë" ; > ;
-        < "¶r§∏§W§Ë" ; > ;
-        < "¶r§∏∏m§§" ; > ;
-        < "¶r§∏§U§Ë" ; > ;
-        < "¶Ê§W§Ë" ; > ;
-        < "¶Ê∏m§§" ; > ;
-        < "¶Ê§U§Ë" ; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < "∞ÚΩu∏m§§" ; > ;
+            < "∞ÚΩu§U§Ë" ; > ;
+            < "¶r§∏§W§Ë" ; > ;
+            < "¶r§∏∏m§§" ; > ;
+            < "¶r§∏§U§Ë" ; > ;
+            < "¶Ê§W§Ë" ; > ;
+            < "¶Ê∏m§§" ; > ;
+            < "¶Ê§U§Ë" ; > ;
+        };
+        StringList [ arabic ] =
+        {
             < "√⁄·Ï «·Œÿ «·ﬁ«⁄œÌ" ; > ;
-        < "Ê”ÿ «·Œÿ «·ﬁ«⁄œÌ" ; > ;
-        < "√”›· «·Œÿ «·ﬁ«⁄œÌ" ; > ;
-        < "√⁄·Ï «·Õ—›" ; > ;
-        < "Ê”ÿ «·Õ—›" ; > ;
-        < "√”›· «·Õ—›" ; > ;
-        < "√⁄·Ï «·”ÿ—" ; > ;
-        < "Ê”ÿ «·”ÿ—" ; > ;
-        < "√”›· «·”ÿ—" ; > ;
-    };
-    StringList [ greek ] =
-    {
+            < "Ê”ÿ «·Œÿ «·ﬁ«⁄œÌ" ; > ;
+            < "√”›· «·Œÿ «·ﬁ«⁄œÌ" ; > ;
+            < "√⁄·Ï «·Õ—›" ; > ;
+            < "Ê”ÿ «·Õ—›" ; > ;
+            < "√”›· «·Õ—›" ; > ;
+            < "√⁄·Ï «·”ÿ—" ; > ;
+            < "Ê”ÿ «·”ÿ—" ; > ;
+            < "√”›· «·”ÿ—" ; > ;
+        };
+        StringList [ greek ] =
+        {
             < "¬‹ÛÁ ‹Ì˘" ; > ;
-        < "¬‹ÛÁ ÍÂÌÙÒ·ÒÈÛÏ›Ì·" ; > ;
-        < "¬‹ÛÁ Í‹Ù˘" ; > ;
-        < "◊·Ò·ÍÙﬁÒ·Ú ‹Ì˘" ; > ;
-        < " ÂÌÙÒ·ÒÈÛÏ›ÌÔÈ ˜·Ò·ÍÙﬁÒÂÚ" ; > ;
-        < "◊·Ò·ÍÙﬁÒ·Ú Í‹Ù˘" ; > ;
-        < "√Ò·ÏÏﬁ ‹Ì˘" ; > ;
-        < "√Ò·ÏÏﬁ ÍÂÌÙÒ·ÒÈÛÏ›Ì·" ; > ;
-        < "√Ò·ÏÏﬁ Í‹Ù˘" ; > ;
-    };
-    StringList [ korean ] =
-    {
+            < "¬‹ÛÁ ÍÂÌÙÒ·ÒÈÛÏ›Ì·" ; > ;
+            < "¬‹ÛÁ Í‹Ù˘" ; > ;
+            < "◊·Ò·ÍÙﬁÒ·Ú ‹Ì˘" ; > ;
+            < " ÂÌÙÒ·ÒÈÛÏ›ÌÔÈ ˜·Ò·ÍÙﬁÒÂÚ" ; > ;
+            < "◊·Ò·ÍÙﬁÒ·Ú Í‹Ù˘" ; > ;
+            < "√Ò·ÏÏﬁ ‹Ì˘" ; > ;
+            < "√Ò·ÏÏﬁ ÍÂÌÙÒ·ÒÈÛÏ›Ì·" ; > ;
+            < "√Ò·ÏÏﬁ Í‹Ù˘" ; > ;
+        };
+        StringList [ korean ] =
+        {
             < "±‚¡ÿ£¨¿ß" ; > ;
-        < "±‚¡ÿ£¨∞°øÓµ•" ; > ;
-        < "±‚¡ÿ£¨æ∆∑°" ; > ;
-        < "πÆ¿⁄£¨¿ß" ; > ;
-        < "πÆ¿⁄£¨∞°øÓµ•" ; > ;
-        < "πÆ¿⁄£¨æ∆∑°" ; > ;
-        < "«‡£¨¿ß" ; > ;
-        < "«‡£¨∞°øÓµ•" ; > ;
-        < "«‡£¨æ∆∑°" ; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < "±‚¡ÿ£¨∞°øÓµ•" ; > ;
+            < "±‚¡ÿ£¨æ∆∑°" ; > ;
+            < "πÆ¿⁄£¨¿ß" ; > ;
+            < "πÆ¿⁄£¨∞°øÓµ•" ; > ;
+            < "πÆ¿⁄£¨æ∆∑°" ; > ;
+            < "«‡£¨¿ß" ; > ;
+            < "«‡£¨∞°øÓµ•" ; > ;
+            < "«‡£¨æ∆∑°" ; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "Taban ¸stte" ; > ;
-        < "Taban ortada" ; > ;
-        < "Taban altta" ; > ;
-        < "Karakter ¸stte" ; > ;
-        < "Karakter ortada" ; > ;
-        < "Karakter altta" ; > ;
-        < "Sat˝r ¸stte" ; > ;
-        < "Sat˝r ortada" ; > ;
-        < "Sat˝r altta" ; > ;
-    };
-    StringList [ catalan ] =
-    {
+            < "Taban ortada" ; > ;
+            < "Taban altta" ; > ;
+            < "Karakter ¸stte" ; > ;
+            < "Karakter ortada" ; > ;
+            < "Karakter altta" ; > ;
+            < "Sat˝r ¸stte" ; > ;
+            < "Sat˝r ortada" ; > ;
+            < "Sat˝r altta" ; > ;
+        };
+        StringList [ catalan ] =
+        {
             < "Encima de lÌnea de refefencia" ; > ;
-        < "Centro de lÌnea de referencia" ; > ;
-        < "Debajo de lÌnea de referencia" ; > ;
-        < "Car·cter arriba" ; > ;
-        < "Car·cter centrado" ; > ;
-        < "Car·cter abajo" ; > ;
-        < "LÌnea superior" ; > ;
-        < "LÌnea centro" ; > ;
-        < "LÌnea inferior" ; > ;
-    };
-    StringList [ finnish ] =
-    {
+            < "Centro de lÌnea de referencia" ; > ;
+            < "Debajo de lÌnea de referencia" ; > ;
+            < "Car·cter arriba" ; > ;
+            < "Car·cter centrado" ; > ;
+            < "Car·cter abajo" ; > ;
+            < "LÌnea superior" ; > ;
+            < "LÌnea centro" ; > ;
+            < "LÌnea inferior" ; > ;
+        };
+        StringList [ finnish ] =
+        {
             < "Perusviivan yl‰osa" ; > ;
-        < "Perusviivan keskipiste" ; > ;
-        < "Perusviivan alaosa" ; > ;
-        < "Merkin yl‰osa" ; > ;
-        < "Merkin keskipiste" ; > ;
-        < "Merkin alaosa" ; > ;
-        < "Rivin yl‰osa" ; > ;
-        < "Rivin keskipiste" ; > ;
-        < "Viivan alaosa" ; > ;
-    };
+            < "Perusviivan keskipiste" ; > ;
+            < "Perusviivan alaosa" ; > ;
+            < "Merkin yl‰osa" ; > ;
+            < "Merkin keskipiste" ; > ;
+            < "Merkin alaosa" ; > ;
+            < "Rivin yl‰osa" ; > ;
+            < "Rivin keskipiste" ; > ;
+            < "Viivan alaosa" ; > ;
+        };
     };
     FixedLine FL_SAME_LEVEL
     {
@@ -1835,11 +1834,11 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     CheckBox CB_SAME_LEVEL
     {
-        Pos = MAP_APPFONT ( 50 , 167 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text = "~Fortlaufende Nummerierung" ;
-        Text [ ENGLISH ] = "~Continuous numbering" ;
-        Text [ english_us ] = "~Consecutive numbering" ;
+        Pos = MAP_APPFONT ( 53 , 167 ) ;
+        Size = MAP_APPFONT ( 114 , 10 ) ;
+        Text = "~Fortlaufende Nu~mmerierung" ;
+        Text [ ENGLISH ] = "Continuous n~umbering" ;
+        Text [ english_us ] = "Consecutive n~umbering" ;
         Text [ portuguese_brazilian ] = "~Fortlaufende Numerierung" ;
         Text [ swedish ] = "~Fortlˆpande numrering" ;
         Text [ danish ] = "Fortl¯bende nummerering" ;
@@ -1864,7 +1863,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     Window WIN_PREVIEW
     {
         Pos = MAP_APPFONT ( 179 , 25 ) ;
-        Size = MAP_APPFONT ( 72 , 154 ) ;
+        Size = MAP_APPFONT ( 69 , 154 ) ;
+        Border = TRUE ;
     };
     String ST_POPUP_EMPTY_ENTRY
     {
@@ -1908,8 +1908,8 @@ TabPage RID_SVXPAGE_NUM_POSITION
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 50, 8 ) ;
-        Text = "Ebene" ;
-        Text [ ENGLISH ] = "Level" ;
+        Text = "~Ebene" ;
+        Text [ ENGLISH ] = "Le~vel" ;
         Text [ norwegian ] = "Level" ;
         Text [ italian ] = "Livello" ;
         Text [ portuguese_brazilian ] = "NÌvel" ;
@@ -1920,7 +1920,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ swedish ] = "NivÂ" ;
         Text [ dutch ] = "Niveau" ;
         Text [ spanish ] = "Nivel" ;
-        Text [ english_us ] = "Level" ;
+        Text [ english_us ] = "Le~vel" ;
         Text[ chinese_simplified ] = "∑÷≤„";
         Text[ russian ] = "”Ó‚ÂÌ¸";
         Text[ polish ] = "Poziom";
@@ -1976,9 +1976,8 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Pos = MAP_APPFONT ( 50 , 27 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text = "Ein~r¸ckung";
-//        Text = "Abstand Text <-> Rand" ;
-        Text [ ENGLISH ] = "Distance text <-> border" ;
-        Text [ english_us ] = "Indent" ;
+        Text [ ENGLISH ] = "~Indent" ;
+        Text [ english_us ] = "~Indent" ;
         Text [ swedish ] = "~Indrag" ;
         Text [ danish ] = "Indrykning" ;
         Text [ italian ] = "Rientro" ;
@@ -2002,7 +2001,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     CheckBox CB_RELATIVE
     {
-        Pos = MAP_APPFONT ( 201 , 27 ) ;
+        Pos = MAP_APPFONT ( 202 , 27 ) ;
         Size = MAP_APPFONT ( 49 , 10 ) ;
         Text = "Relati~v" ;
         Text [ ENGLISH ] = "Relati~ve" ;
@@ -2049,11 +2048,10 @@ TabPage RID_SVXPAGE_NUM_POSITION
     FixedText FT_INDENT
     {
         Pos = MAP_APPFONT ( 50 , 43 ) ;
-        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Size = MAP_APPFONT ( 105 , 8 ) ;
         Text = "Abstand zum Te~xt" ;
-//        Text = "Einr~¸ckung" ;
-        Text [ ENGLISH ] = "Indent" ;
-        Text [ english_us ] = "Spacing to text" ;
+        Text [ ENGLISH ] = "Spacing to te~xt" ;
+        Text [ english_us ] = "Spacing to te~xt" ;
         Text [ swedish ] = "AvstÂnd till te~xt" ;
         Text [ danish ] = "Afstand til tekst" ;
         Text [ italian ] = "Distanza dal testo" ;
@@ -2096,10 +2094,10 @@ TabPage RID_SVXPAGE_NUM_POSITION
     FixedText FT_NUMDIST
     {
         Pos = MAP_APPFONT ( 50 , 59 ) ;
-        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Size = MAP_APPFONT ( 105 , 8 ) ;
         Text = "~Mindestabstand Nummer <-> Text" ;
-        Text [ ENGLISH ] = "Distance text <-> numbering" ;
-        Text [ english_us ] = "Minimum space numbering <-> text" ;
+        Text [ ENGLISH ] = "~Minimum space numbering <-> text" ;
+        Text [ english_us ] = "~Minimum space numbering <-> text" ;
         Text [ swedish ] = "~MinimiavstÂnd nummer <-> text" ;
         Text [ danish ] = "Min. afstand nummer <-> tekst" ;
         Text [ italian ] = "Distanza minima numerazione <-> testo" ;
@@ -2142,10 +2140,9 @@ TabPage RID_SVXPAGE_NUM_POSITION
     FixedText FT_ALIGN
     {
         Pos = MAP_APPFONT ( 50 , 75 ) ;
-        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Size = MAP_APPFONT ( 105 , 8 ) ;
         Text = "Ausri~chtung der Nummerierung" ;
-        Text [ ENGLISH ] = "Alignment of the numbering" ;
-         //???
+        Text [ ENGLISH ] = "N~umbering alignment" ;
         Text [ english_us ] = "N~umbering alignment" ;
         Text [ swedish ] = "Justering av numrering" ;
         Text [ danish ] = "Justering af nummerering" ;
@@ -2240,86 +2237,86 @@ TabPage RID_SVXPAGE_NUM_POSITION
             < "Centrado" ; > ;
             < "Direita" ; > ;
         };
-    StringList [ chinese_simplified ] =
-    {
+        StringList [ chinese_simplified ] =
+        {
             < "◊Û" ; > ;
-        < "æ”÷–" ; > ;
-        < "”“" ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
+            < "æ”÷–" ; > ;
+            < "”“" ; > ;
+        };
+        StringList [ language_user1 ] =
+        {
             < "Links" ; > ;
-        < "Zentriert" ; > ;
-        < "Rechts" ; > ;
-    };
-    StringList [ russian ] =
-    {
+            < "Zentriert" ; > ;
+            < "Rechts" ; > ;
+        };
+        StringList [ russian ] =
+        {
             < "—ÎÂ‚‡" ; > ;
-        < "¬ ˆÂÌÚÂ" ; > ;
-        < "—Ô‡‚‡" ; > ;
-    };
-    StringList [ polish ] =
-    {
+            < "¬ ˆÂÌÚÂ" ; > ;
+            < "—Ô‡‚‡" ; > ;
+        };
+        StringList [ polish ] =
+        {
             < "Z lewej strony" ; > ;
-        < "Wyúrodkuj" ; > ;
-        < "Do prawej" ; > ;
-    };
-    StringList [ japanese ] =
-    {
+            < "Wyúrodkuj" ; > ;
+            < "Do prawej" ; > ;
+        };
+        StringList [ japanese ] =
+        {
             < "ç∂" ; > ;
-        < "íÜâõ" ; > ;
-        < "âE" ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < "íÜâõ" ; > ;
+            < "âE" ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "•™" ; > ;
-        < "∏m§§" ; > ;
-        < "•k" ; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < "∏m§§" ; > ;
+            < "•k" ; > ;
+        };
+        StringList [ arabic ] =
+        {
             < "Ì”«—" ; > ;
-        < " Ê”Ìÿ" ; > ;
-        < "Ì„Ì‰" ; > ;
-    };
-    StringList [ greek ] =
-    {
+            < " Ê”Ìÿ" ; > ;
+            < "Ì„Ì‰" ; > ;
+        };
+        StringList [ greek ] =
+        {
             < "¡ÒÈÛÙÂÒ‹" ; > ;
-        < " ÂÌÙÒ·ÒÈÛÏ›Ì·" ; > ;
-        < "ƒÂÓÈ‹" ; > ;
-    };
-    StringList [ korean ] =
-    {
+            < " ÂÌÙÒ·ÒÈÛÏ›Ì·" ; > ;
+            < "ƒÂÓÈ‹" ; > ;
+        };
+        StringList [ korean ] =
+        {
             < "øﬁ¬ " ; > ;
-        < "∞°øÓµ•" ; > ;
-        < "ø¿∏•¬ " ; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < "∞°øÓµ•" ; > ;
+            < "ø¿∏•¬ " ; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "Sol" ; > ;
-        < "Orta" ; > ;
-        < "Sa" ; > ;
-    };
-    StringList [ catalan ] =
-    {
+            < "Orta" ; > ;
+            < "Sa" ; > ;
+        };
+        StringList [ catalan ] =
+        {
             < "Izquierda" ; > ;
-        < "Centrado" ; > ;
-        < "Derecha" ; > ;
-    };
-    StringList [ finnish ] =
-    {
+            < "Centrado" ; > ;
+            < "Derecha" ; > ;
+        };
+        StringList [ finnish ] =
+        {
             < "Vasen" ; > ;
-        < "Keskitetty" ; > ;
-        < "Oikea" ; > ;
-    };
+            < "Keskitetty" ; > ;
+            < "Oikea" ; > ;
+        };
     };
     PushButton PB_STANDARD
     {
-        Pos = MAP_APPFONT ( 201 , 165 ) ;
+        Pos = MAP_APPFONT ( 198 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Standard" ;
-        Text [ ENGLISH ] = "~Standard" ;
-        Text [ english_us ] = "Default" ;
+        Text [ ENGLISH ] = "~Default" ;
+        Text [ english_us ] = "~Default" ;
         Text [ portuguese_brazilian ] = "~Standard" ;
         Text [ swedish ] = "S~tandard" ;
         Text [ danish ] = "Standard" ;
@@ -2343,8 +2340,9 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     Window WIN_PREVIEW
     {
-        Pos = MAP_APPFONT (   49 , 92 ) ;
-        Size = MAP_APPFONT ( 202 , 67 ) ;
+        Pos = MAP_APPFONT ( 49 , 92 ) ;
+        Size = MAP_APPFONT ( 199 , 67 ) ;
+        Border = TRUE ;
     };
 };
 

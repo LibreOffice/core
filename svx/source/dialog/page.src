@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-14 17:58:13 $
+ *  last change: $Author: dr $ $Date: 2001-06-22 16:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ TabPage RID_SVXPAGE_PAGE
     FixedLine FL_PAPER_SIZE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Size = MAP_APPFONT ( 164 , 8 ) ;
         Text = "Papierformat" ;
         Text [ ENGLISH ] = "Paper format" ;
         Text [ norwegian ] = "Papir format" ;
@@ -182,7 +182,7 @@ TabPage RID_SVXPAGE_PAGE
     };
     FixedText FT_PAPER_HEIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
         Text = "Höh~e" ;
         Text [ ENGLISH ] = "H~eight" ;
@@ -196,7 +196,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ swedish ] = "Höj~d" ;
         Text [ dutch ] = "H~oogte" ;
         Text [ spanish ] = "A~ltura" ;
-        Text [ english_us ] = "~Height" ;
+        Text [ english_us ] = "H~eight" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "¸ß¶È(~H)";
         Text[ russian ] = "Âûñîòà";
@@ -310,15 +310,15 @@ TabPage RID_SVXPAGE_PAGE
     };
     Window WN_BSP
     {
-        Pos = MAP_APPFONT ( 176 , 12 ) ;
-        Size = MAP_APPFONT ( 72 , 41 ) ;
+        Pos = MAP_APPFONT ( 176 , 6 ) ;
+        Size = MAP_APPFONT ( 75 , 46 ) ;
     };
     FixedText FT_PAPER_TRAY
     {
         Pos = MAP_APPFONT ( 113 , 74 ) ;
-        Size = MAP_APPFONT ( 44 , 10 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Papierzufuhr" ;
-        Text [ ENGLISH ] = "~Tray" ;
+        Text [ ENGLISH ] = "Paper ~tray" ;
         Left = TRUE ;
         Text[ english_us ] = "Paper ~tray";
         Text[ portuguese ] = "~Tabuleiro";
@@ -343,8 +343,8 @@ TabPage RID_SVXPAGE_PAGE
     };
     ListBox LB_PAPER_TRAY
     {
-        Pos = MAP_APPFONT ( 160 , 72 ) ;
-        Size = MAP_APPFONT ( 94 , 50 ) ;
+        Pos = MAP_APPFONT ( 165 , 72 ) ;
+        Size = MAP_APPFONT ( 83 , 50 ) ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
     };
@@ -378,7 +378,7 @@ TabPage RID_SVXPAGE_PAGE
     FixedText FT_LEFT_MARGIN
     {
         Pos = MAP_APPFONT ( 12 , 103 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~Links" ;
         Text [ ENGLISH ] = "~Left" ;
         Text [ norwegian ] = "~Left" ;
@@ -408,7 +408,7 @@ TabPage RID_SVXPAGE_PAGE
     MetricField ED_LEFT_MARGIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 101 ) ;
+        Pos = MAP_APPFONT ( 55 , 101 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -422,7 +422,7 @@ TabPage RID_SVXPAGE_PAGE
     FixedText FT_RIGHT_MARGIN
     {
         Pos = MAP_APPFONT ( 12 , 119 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~Rechts" ;
         Text [ ENGLISH ] = "Ri~ght" ;
         Text [ norwegian ] = "Hø~yre" ;
@@ -435,7 +435,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ swedish ] = "Hö~ger" ;
         Text [ dutch ] = "Re~chts" ;
         Text [ spanish ] = "~Derecha" ;
-        Text [ english_us ] = "~Right" ;
+        Text [ english_us ] = "Ri~ght" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "ÓÒ(~R)";
         Text[ russian ] = "Ñïðàâà";
@@ -452,7 +452,7 @@ TabPage RID_SVXPAGE_PAGE
     MetricField ED_RIGHT_MARGIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 117 ) ;
+        Pos = MAP_APPFONT ( 55 , 117 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -466,7 +466,7 @@ TabPage RID_SVXPAGE_PAGE
     FixedText FT_TOP_MARGIN
     {
         Pos = MAP_APPFONT ( 12 , 135 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~Oben" ;
         Text [ ENGLISH ] = "T~op" ;
         Text [ norwegian ] = "T~opp" ;
@@ -479,7 +479,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ swedish ] = "~Uppe" ;
         Text [ dutch ] = "~Boven" ;
         Text [ spanish ] = "~Arriba" ;
-        Text [ english_us ] = "~Top" ;
+        Text [ english_us ] = "T~op" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "ÉÏ(~T)";
         Text[ russian ] = "Ñâåðõó";
@@ -496,7 +496,7 @@ TabPage RID_SVXPAGE_PAGE
     MetricField ED_TOP_MARGIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 133 ) ;
+        Pos = MAP_APPFONT ( 55 , 133 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -510,7 +510,7 @@ TabPage RID_SVXPAGE_PAGE
     FixedText FT_BOTTOM_MARGIN
     {
         Pos = MAP_APPFONT ( 12 , 151 ) ;
-        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~Unten" ;
         Text [ ENGLISH ] = "~Bottom" ;
         Text [ norwegian ] = "~Bottom" ;
@@ -540,7 +540,7 @@ TabPage RID_SVXPAGE_PAGE
     MetricField ED_BOTTOM_MARGIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 149 ) ;
+        Pos = MAP_APPFONT ( 55 , 149 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -588,8 +588,8 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 113 , 103 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text = "Seitenlayout" ;
-        Text [ ENGLISH ] = "Page layout" ;
+        Text = "~Seitenlayout" ;
+        Text [ ENGLISH ] = "Page la~yout" ;
         Text [ norwegian ] = "Side oppsett" ;
         Text [ italian ] = "Layout di pagina" ;
         Text [ portuguese_brazilian ] = "Layout da p?gina" ;
@@ -600,7 +600,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ swedish ] = "Sidlayout" ;
         Text [ dutch ] = "Paginalay-out" ;
         Text [ spanish ] = "Diseño de página" ;
-        Text [ english_us ] = "Page layout" ;
+        Text [ english_us ] = "Page la~yout" ;
         Text[ chinese_simplified ] = "Ò³Ãæ°æÊ½";
         Text[ russian ] = "Ðàçìåòêà ñòðàíèöû";
         Text[ polish ] = "Uk³ad strony";
@@ -617,7 +617,7 @@ TabPage RID_SVXPAGE_PAGE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 165, 101 ) ;
-        Size = MAP_APPFONT ( 89 , 44 ) ;
+        Size = MAP_APPFONT ( 83 , 44 ) ;
         DropDown = TRUE ;
         StringList =
         {
@@ -712,81 +712,81 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ chinese_simplified ] =
         {
-                < "×óºÍÓÒ" ; Default ; > ;
+            < "×óºÍÓÒ" ; Default ; > ;
             < "·­×ªµÄ" ; Default ; > ;
             < "Ö»ÏòÓÒ" ; Default ; > ;
             < "Ö»Ïò×ó" ; Default ; > ;
         };
         StringList [ russian ] =
         {
-                < "Ñïðàâà è ñëåâà" ; Default ; > ;
+            < "Ñïðàâà è ñëåâà" ; Default ; > ;
             < "Îòðàæåíèå" ; Default ; > ;
             < "Òîëüêî ñïðàâà" ; Default ; > ;
             < "Òîëüêî ñëåâà" ; Default ; > ;
         };
         StringList [ polish ] =
         {
-                < "Z prawej i z lewej" ; Default ; > ;
+            < "Z prawej i z lewej" ; Default ; > ;
             < "Odbity" ; Default ; > ;
             < "Tylko z prawej" ; Default ; > ;
             < "Tylko z lewej" ; Default ; > ;
         };
         StringList [ japanese ] =
         {
-                < "¶‰E" ; Default ; > ;
+            < "¶‰E" ; Default ; > ;
             < "¶‰E‘ÎÌ" ; Default ; > ;
             < "‰E‚Ì‚Ý" ; Default ; > ;
             < "¶‚Ì‚Ý" ; Default ; > ;
         };
         StringList [ chinese_traditional ] =
         {
-                < "¥ª©M¥k" ; Default ; > ;
+            < "¥ª©M¥k" ; Default ; > ;
             < "Â½Âàªº" ; Default ; > ;
             < "¶È¦V¥k" ; Default ; > ;
             < "¶È¦V¥ª" ; Default ; > ;
         };
         StringList [ arabic ] =
         {
-                < "íãíä æíÓÇÑ" ; Default ; > ;
+            < "íãíä æíÓÇÑ" ; Default ; > ;
             < "ãäÚßÓ" ; Default ; > ;
             < "íãíä ÝÞØ" ; Default ; > ;
             < "íÓÇÑ ÝÞØ" ; Default ; > ;
         };
         StringList [ greek ] =
         {
-                < "ÄåîéÜ êáé áñéóôåñÜ" ; Default ; > ;
+            < "ÄåîéÜ êáé áñéóôåñÜ" ; Default ; > ;
             < "Ìå êáôüðôñéóç" ; Default ; > ;
             < "Ìüíï äåîéÜ" ; Default ; > ;
             < "Ìüíï áñéóôåñÜ" ; Default ; > ;
         };
         StringList [ korean ] =
         {
-                < "¿À¸¥ÂÊ°ú ¿ÞÂÊ" ; Default ; > ;
+            < "¿À¸¥ÂÊ°ú ¿ÞÂÊ" ; Default ; > ;
             < "´ëÄª" ; Default ; > ;
             < "¿À¸¥ÂÊ" ; Default ; > ;
             < "¿ÞÂÊ" ; Default ; > ;
         };
         StringList [ turkish ] =
         {
-                < "Tümü" ; Default ; > ;
+            < "Tümü" ; Default ; > ;
             < "Yansýt" ; Default ; > ;
             < "Sað" ; Default ; > ;
             < "Sol" ; Default ; > ;
         };
         StringList [ language_user1 ] =
         {
-                < " " ; Default ; > ;
+            < " " ; Default ; > ;
             < " " ; Default ; > ;
             < " " ; Default ; > ;
             < " " ; Default ; > ;
         };
-    StringList [ catalan ] =
-    {
+        StringList [ catalan ] =
+        {
             < "Todos" ; Default ; > ;
-        < "Reflejado" ; Default ; > ;
-        < "Derecha" ; Default ; > ;
-        < "Izquierda" ; Default ; > ;
-    };
+            < "Reflejado" ; Default ; > ;
+            < "Derecha" ; Default ; > ;
+            < "Izquierda" ; Default ; > ;
+        };
     };
     FixedText FT_NUMBER_FORMAT
     {
@@ -819,7 +819,7 @@ TabPage RID_SVXPAGE_PAGE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 165 , 117 ) ;
-        Size = MAP_APPFONT ( 89 , 64 ) ;
+        Size = MAP_APPFONT ( 83 , 64 ) ;
         DropDown = TRUE ;
         StringList =
         {
@@ -940,7 +940,7 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ chinese_simplified ] =
         {
-                < "A, B, C, ..." ; Default ; > ;
+            < "A, B, C, ..." ; Default ; > ;
             < "a, b, c, ..." ; Default ; > ;
             < "I, II, III, ..." ; Default ; > ;
             < "i, ii, iii, ..." ; Default ; > ;
@@ -949,7 +949,7 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ russian ] =
         {
-                < "A, B, C, ..." ; Default ; > ;
+            < "A, B, C, ..." ; Default ; > ;
             < "a, b, c, ..." ; Default ; > ;
             < "I, II, III, ..." ; Default ; > ;
             < "i, ii, iii, ..." ; Default ; > ;
@@ -958,7 +958,7 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ polish ] =
         {
-                < "A, B, C, ..." ; Default ; > ;
+            < "A, B, C, ..." ; Default ; > ;
             < "a, b, c, ..." ; Default ; > ;
             < "I, II, III, ..." ; Default ; > ;
             < "i, ii, iii, ..." ; Default ; > ;
@@ -967,7 +967,7 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ japanese ] =
         {
-                < "A, B, C, ..." ; Default ; > ;
+            < "A, B, C, ..." ; Default ; > ;
             < "a, b, c, ..." ; Default ; > ;
             < "I, II, III, ..." ; Default ; > ;
             < "i, ii, iii, ..." ; Default ; > ;
@@ -976,7 +976,7 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ chinese_traditional ] =
         {
-                < "A, B, C, ..." ; Default ; > ;
+            < "A, B, C, ..." ; Default ; > ;
             < "a, b, c, ..." ; Default ; > ;
             < "I, II, III, ..." ; Default ; > ;
             < "i, ii, iii, ..." ; Default ; > ;
@@ -985,7 +985,7 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ arabic ] =
         {
-                < "... ,A, B, C" ; Default ; > ;
+            < "... ,A, B, C" ; Default ; > ;
             < "... ,a, b, c" ; Default ; > ;
             < "... ,I, II, III" ; Default ; > ;
             < "... ,i, ii, iii" ; Default ; > ;
@@ -994,7 +994,7 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ greek ] =
         {
-                < "A, B, C, ..." ; Default ; > ;
+            < "A, B, C, ..." ; Default ; > ;
             < "a, b, c, ..." ; Default ; > ;
             < "I, II, III, ..." ; Default ; > ;
             < "i, ii, iii, ..." ; Default ; > ;
@@ -1003,7 +1003,7 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ korean ] =
         {
-                < "A, B, C, ..." ; Default ; > ;
+            < "A, B, C, ..." ; Default ; > ;
             < "a, b, c, ..." ; Default ; > ;
             < "I, II, III, ..." ; Default ; > ;
             < "i, ii, iii, ..." ; Default ; > ;
@@ -1012,7 +1012,7 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ turkish ] =
         {
-                < "A, B, C, ..." ; Default ; > ;
+            < "A, B, C, ..." ; Default ; > ;
             < "a, b, c, ..." ; Default ; > ;
             < "I, II, III, ..." ; Default ; > ;
             < "i, ii, iii, ..." ; Default ; > ;
@@ -1021,28 +1021,28 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ language_user1 ] =
         {
-                < " " ; Default ; > ;
+            < " " ; Default ; > ;
             < " " ; Default ; > ;
             < " " ; Default ; > ;
             < " " ; Default ; > ;
             < " " ; Default ; > ;
             < " " ; Default ; > ;
         };
-    StringList [ catalan ] =
-    {
+        StringList [ catalan ] =
+        {
             < "A, B, C, ..." ; Default ; > ;
-        < "a, b, c, ..." ; Default ; > ;
-        < "I, II, III, ..." ; Default ; > ;
-        < "i, ii, iii, ..." ; Default ; > ;
-        < "1, 2, 3, ..." ; Default ; > ;
-        < "Ninguno" ; Default ; > ;
-    };
+            < "a, b, c, ..." ; Default ; > ;
+            < "I, II, III, ..." ; Default ; > ;
+            < "i, ii, iii, ..." ; Default ; > ;
+            < "1, 2, 3, ..." ; Default ; > ;
+            < "Ninguno" ; Default ; > ;
+        };
     };
     FixedText FT_TBL_ALIGN
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 113 , 133 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "Tabellenausrichtung" ;
         Text [ ENGLISH ] = "Table alignment" ;
         Text[ english_us ] = "Table alignment";
@@ -1069,10 +1069,10 @@ TabPage RID_SVXPAGE_PAGE
     CheckBox CB_HORZ
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 165 , 133 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 175 , 133 ) ;
+        Size = MAP_APPFONT ( 73 , 10 ) ;
         Text = "Hor~izontal" ;
-        Text [ ENGLISH ] = "Hor~izontal" ;
+        Text [ ENGLISH ] = "Hori~zontal" ;
         Text [ norwegian ] = "Hor~izontal" ;
         Text [ italian ] = "~Orizzontale" ;
         Text [ portuguese_brazilian ] = "Hor~izontal" ;
@@ -1099,8 +1099,8 @@ TabPage RID_SVXPAGE_PAGE
     CheckBox CB_VERT
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 165 , 147) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 175 , 147 ) ;
+        Size = MAP_APPFONT ( 73 , 10 ) ;
         Text = "~Vertikal" ;
         Text [ ENGLISH ] = "~Vertical" ;
         Text [ norwegian ] = "~Vertikal" ;
@@ -1130,10 +1130,10 @@ TabPage RID_SVXPAGE_PAGE
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 113 , 133 ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
+        Size = MAP_APPFONT ( 135 , 10 ) ;
         Text = "Objekt ~an Seitenformat anpassen" ;
-        Text [ ENGLISH ] = "~Fit objects to page format" ;
-        Text[ english_us ] = "~Fit object to page format";
+        Text [ ENGLISH ] = "Fit ob~ject to page format" ;
+        Text[ english_us ] = "Fit ob~ject to page format";
         Text[ portuguese ] = "~Ajustar ao tamanho";
         Text[ russian ] = "Ñîãëàñîâàòü îáúåêò ñ ôîðìàòîì ñòðàíèöû";
         Text[ greek ] = "ÐñïóáñìïãÞ óå ìÝãåèïò";
@@ -1158,15 +1158,15 @@ TabPage RID_SVXPAGE_PAGE
     CheckBox CB_REGISTER
     {
         Pos = MAP_APPFONT ( 113 , 133 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Size = MAP_APPFONT ( 135 , 10 ) ;
         Hide = TRUE ;
-        Text = "Registerhaltigkeit" ;
-        Text [ ENGLISH ] = "Register-true" ;
+        Text = "Registerhaltig~keit" ;
+        Text [ ENGLISH ] = "Register-tr~ue" ;
         Text [ italian ] = "Conformità registro" ;
         Text [ spanish ] = "Conformidad registro" ;
         Text [ french ] = "Contrôle de repérage" ;
         Text [ dutch ] = "~Activeren" ;
-        Text [ english_us ] = "Register-true" ;
+        Text [ english_us ] = "Register-tr~ue" ;
         Text [ swedish ] = "Register" ;
         Text [ danish ] = "Aktiver" ;
         Text [ portuguese_brazilian ] = "Einsch~alten" ;
@@ -1187,9 +1187,9 @@ TabPage RID_SVXPAGE_PAGE
     FixedText FT_REGISTER
     {
         Pos = MAP_APPFONT ( 122 , 147 ) ;
-        Size = MAP_APPFONT ( 66 , 8 ) ;
+        Size = MAP_APPFONT ( 126 , 8 ) ;
         Text = "Referenzabsa~tzvorlage" ;
-        Text [ ENGLISH ] = "Reference style sheet" ;
+        Text [ ENGLISH ] = "Reference ~Style" ;
         Text [ english_us ] = "Reference ~Style" ;
         Text [ italian ] = "~Modello di paragr.di rifer." ;
         Text [ spanish ] = "Estilo de ~referencia" ;
@@ -1216,7 +1216,7 @@ TabPage RID_SVXPAGE_PAGE
     ListBox LB_REGISTER
     {
         Pos = MAP_APPFONT ( 122 , 157 ) ;
-        Size = MAP_APPFONT ( 132, 50 ) ;
+        Size = MAP_APPFONT ( 126 , 50 ) ;
         DropDown = TRUE ;
         Hide = TRUE ;
         Sort = TRUE ;

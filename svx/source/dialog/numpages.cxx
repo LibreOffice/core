@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-06-20 08:36:57 $
+ *  last change: $Author: dr $ $Date: 2001-06-22 16:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3076,6 +3076,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
     pVDev->SetOutputSize( aSize );
 
 
+    pVDev->SetLineColor();
     pVDev->SetFillColor( Color( COL_WHITE ) );
     pVDev->DrawRect(aRect);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagectrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-09 18:26:22 $
+ *  last change: $Author: dr $ $Date: 2001-06-22 16:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,14 +210,14 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const BOOL bSecond, const BOOL 
 {
     // Schatten
     Size aTempSize = aSize;
-    if ( aTempSize.Height() > aTempSize.Width() )
-        // Beim Hochformat die H"ohe etwas verkleinern, damit der Schatten passt.
-        aTempSize.Height() -= PixelToLogic( Size( 0, 2 ) ).Height();
-    Point aShadowPt( rOrg );
-    aShadowPt += PixelToLogic( Point( 2, 2 ) );
-    SetLineColor( Color( COL_GRAY ) );
-    SetFillColor( Color( COL_GRAY ) );
-    DrawRect( Rectangle( aShadowPt, aTempSize ) );
+//    if ( aTempSize.Height() > aTempSize.Width() )
+//        // Beim Hochformat die H"ohe etwas verkleinern, damit der Schatten passt.
+//        aTempSize.Height() -= PixelToLogic( Size( 0, 2 ) ).Height();
+//    Point aShadowPt( rOrg );
+//    aShadowPt += PixelToLogic( Point( 2, 2 ) );
+//    SetLineColor( Color( COL_GRAY ) );
+//    SetFillColor( Color( COL_GRAY ) );
+//    DrawRect( Rectangle( aShadowPt, aTempSize ) );
 
     // Seite
     SetLineColor( Color( COL_BLACK ) );

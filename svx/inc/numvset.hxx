@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numvset.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-01-31 12:22:37 $
+ *  last change: $Author: dr $ $Date: 2001-06-22 16:15:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,8 @@ class SvxNumberingPreview : public Window
     public:
         SvxNumberingPreview(Window* pParent, const ResId& rResId ) :
             Window(pParent, rResId),
-            pActNum(0),nPageWidth(0), pOutlineNames(0), bPosition(FALSE), nActLevel(USHRT_MAX) {}
+            pActNum(0),nPageWidth(0), pOutlineNames(0), bPosition(FALSE), nActLevel(USHRT_MAX)
+            { SetBorderStyle( WINDOW_BORDER_MONO ); }
 
         void    SetNumRule(const SvxNumRule* pNum)
                     {pActNum = pNum; Invalidate();};
