@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-11 16:16:04 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,12 +404,13 @@ struct WW8LFOLVL
     BYTE bFormat    :1;     // true if the formatting is overriden
 };
 
-
+typedef std::vector<sal_uInt8> levelsprms;
 
 // in den ListenInfos zu speichernde Daten ///////////////////////////////////
 //
 struct WW8LSTInfo   // sortiert nach nIdLst (in WW8 verwendete Listen-Id)
 {
+    std::vector<levelsprms> maParaSprms;
     WW8aIdSty   aIdSty;          // Style Id's for each level
     WW8aISet    aItemSet;        // Zeichenattribute aus GrpprlChpx
     WW8aCFmt    aCharFmt;        // Zeichen Style Pointer
@@ -435,6 +436,7 @@ struct WW8LSTInfo   // sortiert nach nIdLst (in WW8 verwendete Listen-Id)
 //
 struct WW8LFOInfo   // unsortiert, d.h. Reihenfolge genau wie im WW8 Stream
 {
+    std::vector<levelsprms> maParaSprms;
     SwNumRule* pNumRule;         // Zeiger auf entsprechende Listenvorlage im Writer
                                                      // entweder: Liste in LSTInfos oder eigene Liste
                                                      // (im Ctor erstmal die aus den LSTInfos merken)
@@ -520,7 +522,8 @@ void lcl_CopyGreaterEight(String &rDest, String &rSrc,
 
 bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     sal_uInt16 nLevelStyle, bool bSetStartNo,
-    std::deque<bool> &rNotReallyThere, sal_uInt16 nLevel)
+    std::deque<bool> &rNotReallyThere, sal_uInt16 nLevel,
+    levelsprms &rParaSprms)
 {
     sal_uInt8       aBits1;
     sal_uInt16      nStartNo    = 0;    // Start-Nr. fuer den Writer
@@ -577,6 +580,9 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         sal_uInt8* pSprm;
         if ((pSprm = GrpprlHasSprm(0x840F,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)))
         {
+            sal_uInt8 *pBegin = pSprm-2;
+            for(int i=0;i<4;++i)
+                rParaSprms.push_back(*pBegin++);
             short nDxaLeft = SVBT16ToShort( pSprm );
             aLVL.nDxaLeft = (0 < nDxaLeft) ? (sal_uInt16)nDxaLeft
                             : (sal_uInt16)(-nDxaLeft);
@@ -584,7 +590,12 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
 
         // "sprmPDxaLeft1" pap.dxaLeft1;dxa;word;
         if( (pSprm = GrpprlHasSprm(0x8411,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) )
+        {
+            sal_uInt8 *pBegin = pSprm-2;
+            for(int i=0;i<4;++i)
+                rParaSprms.push_back(*pBegin++);
             aLVL.nDxaLeft1 = SVBT16ToShort(  pSprm );
+        }
 
         // If there is a tab setting with a larger value, then use that.
         // Ideally we would allow tabs to be used in numbering fields and set
@@ -1068,12 +1079,14 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             sal_uInt16 nLvlCount=pListInfo->bSimpleList ? nMinLevel : nMaxLevel;
             std::deque<bool> aNotReallyThere;
             aNotReallyThere.resize(nMaxLevel);
+            pListInfo->maParaSprms.resize(nMaxLevel);
             for (nLevel = 0; nLevel < nLvlCount; ++nLevel)
             {
                 SwNumFmt aNumFmt( rMyNumRule.Get( nLevel ) );
                 // LVLF einlesen
                 bLVLOk = ReadLVL( aNumFmt, pListInfo->aItemSet[nLevel],
-                    pListInfo->aIdSty[nLevel], true, aNotReallyThere, nLevel);
+                    pListInfo->aIdSty[nLevel], true, aNotReallyThere, nLevel,
+                    pListInfo->maParaSprms[nLevel]);
                 if( !bLVLOk )
                     break;
                 // und in die rMyNumRule aufnehmen
@@ -1137,7 +1150,8 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 break;
 
             // die Parent NumRule der entsprechenden Liste ermitteln
-            if (WW8LSTInfo* pParentListInfo = GetLSTByListId(aLFO.nIdLst))
+            WW8LSTInfo* pParentListInfo = GetLSTByListId(aLFO.nIdLst);
+            if (pParentListInfo)
             {
                 // hier, im ersten Schritt, erst mal diese NumRule festhalten
                 aLFO.pNumRule = pParentListInfo->pNumRule;
@@ -1147,6 +1161,15 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             }
             // und rein ins Merk-Array mit dem Teil
             WW8LFOInfo* pLFOInfo = new WW8LFOInfo(aLFO);
+            if (pParentListInfo)
+            {
+                //Copy the basic paragraph properties for each level from the
+                //original list into the list format override levels.
+                int nMaxSize = pParentListInfo->maParaSprms.size();
+                pLFOInfo->maParaSprms.resize(nMaxSize);
+                for (int i = 0; i < nMaxSize; ++i)
+                    pLFOInfo->maParaSprms[i] = pParentListInfo->maParaSprms[i];
+            }
             pLFOInfos->Insert(pLFOInfo, pLFOInfos->Count());
             bOk = true;
         }
@@ -1212,6 +1235,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
 
                 std::deque<bool> aNotReallyThere;
                 aNotReallyThere.resize(WW8ListManager::nMaxLevel);
+                pLFOInfo->maParaSprms.resize(WW8ListManager::nMaxLevel);
 
                 for (sal_uInt8 nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
                 {
@@ -1264,9 +1288,10 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                             // falls bStartup true, hier den Startup-Level
                             // durch den im LVL vermerkten ersetzen LVLF
                             // einlesen
-                            bLVLOk= ReadLVL(aNumFmt, aItemSet[nLevel],
+                            bLVLOk = ReadLVL(aNumFmt, aItemSet[nLevel],
                                 pParentListInfo->aIdSty[nLevel],
-                                aLFOLVL.bStartAt, aNotReallyThere, nLevel);
+                                aLFOLVL.bStartAt, aNotReallyThere, nLevel,
+                                pLFOInfo->maParaSprms[nLevel]);
 
                             if( !bLVLOk )
                                 break;
@@ -1347,7 +1372,7 @@ WW8ListManager::~WW8ListManager()
 }
 
 SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
-    sal_uInt8 nLevel) const
+    sal_uInt8 nLevel, std::vector<sal_uInt8> &rParaSprms) const
 {
     sal_uInt16 nLFOInfos = pLFOInfos ? pLFOInfos->Count() : 0;
     if( nLFOInfos <= nLFOPosition )
@@ -1385,6 +1410,9 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
             pParentListInfo->bUsedInDoc = true;
         pLFOInfo->bLSTbUIDSet = true;
     }
+
+    if (pLFOInfo->maParaSprms.size() > nLevel)
+        rParaSprms = pLFOInfo->maParaSprms[nLevel];
 
     return pLFOInfo->pNumRule;
 }
@@ -1479,8 +1507,9 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
                     (WW8ListManager::nMaxLevel > nActLevel)
                    )
                 {
+                    std::vector<sal_uInt8> aParaSprms;
                     SwNumRule *pNmRule =
-                        pLstManager->GetNumRuleForActivation(nActLFO,nActLevel);
+                        pLstManager->GetNumRuleForActivation(nActLFO,nActLevel, aParaSprms);
                     if (pNmRule)
                         UseListIndent(rStyleInf, pNmRule->Get(nActLevel));
                 }
@@ -1504,7 +1533,9 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle)
              (WW8ListManager::nMaxLevel > nLevel)
            )
         {
-            pNmRule = pLstManager->GetNumRuleForActivation(nLFO, nLevel);
+            std::vector<sal_uInt8> aParaSprms;
+            pNmRule = pLstManager->GetNumRuleForActivation(nLFO, nLevel,
+                aParaSprms);
 
             if (pNmRule)
             {
@@ -1534,8 +1565,10 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
 
     if (pLstManager) // sind die Listendeklarationen gelesen?
     {
+        std::vector<sal_uInt8> aParaSprms;
         const SwNumRule* pRule = bSetAttr ?
-            pLstManager->GetNumRuleForActivation( nActLFO, nActLevel) : 0;
+            pLstManager->GetNumRuleForActivation( nActLFO, nActLevel,
+                aParaSprms) : 0;
 
         if( pRule || !bSetAttr )
         {
@@ -1548,6 +1581,28 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
             pTxtNode->SetNumLSpace(bSetAttr);
 
             pTxtNode->UpdateNum(SwNodeNum(nActLevel));
+
+            /*
+             Take the original paragraph sprms attached to this list level
+             formatting and apply them to the paragraph. I'm convinced that
+             this is exactly what word does.
+            */
+            if (short nLen = aParaSprms.size())
+            {
+                SfxItemSet* pOldAktItemSet = pAktItemSet;
+                sal_uInt8* pSprms1  = &aParaSprms[0];
+                SfxItemSet aListIndent(rDoc.GetAttrPool(),
+                    RES_LR_SPACE, RES_LR_SPACE);
+                SetAktItemSet(&aListIndent);
+                while (0 < nLen)
+                {
+                    sal_uInt16 nL1 = ImportSprm(pSprms1);
+                    nLen -= nL1;
+                    pSprms1 += nL1;
+                }
+                SetAktItemSet(pOldAktItemSet);
+                pTxtNode->SwCntntNode::SetAttr(aListIndent);
+            }
         }
     }
 }
