@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicObjectShape.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-14 17:29:07 $
+ *  last change: $Author: mi $ $Date: 2001-10-26 08:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,12 +108,12 @@ service GraphicObjectShape
     service com::sun::star::drawing::RotationDescriptor;
 
     //-------------------------------------------------------------------------
-    /** This is a url to the source bitmap for this graphic shape.
+    /** This is an url to the source bitmap for this graphic shape.
     */
     [property] string GraphicURL;
 
     //-------------------------------------------------------------------------
-    /** This is a url to the stream ('in document' or linked graphic) for this graphic shape.
+    /** This is an url to the stream ('in document' or linked graphic) for this graphic shape.
     */
     [property] string GraphicStreamURL;
 

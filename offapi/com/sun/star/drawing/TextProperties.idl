@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextProperties.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-16 15:16:57 $
+ *  last change: $Author: mi $ $Date: 2001-10-26 08:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@
 //=============================================================================
 
 
-/** This is a set of properties to describe the style for rendering a the
+/** This is a set of properties to describe the style for rendering the
     text area inside a shape.
  */
 service TextProperties
@@ -294,7 +294,7 @@ service TextProperties
 
     //-------------------------------------------------------------------------
 
-    /** If this value selects the writing mode for the text.
+    /** This value selects the writing mode for the text.
      */
     [property] ::com::sun::star::text::WritingMode TextWritingMode;
 };

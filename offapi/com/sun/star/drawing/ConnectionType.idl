@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionType.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:41 $
+ *  last change: $Author: mi $ $Date: 2001-10-26 08:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ enum ConnectionType
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::ConnectionType::TOP
-    /** the connection line leaves the connected object to the top,
+    /** the connection line leaves the connected object from the top,
      */
     TOP,
 
@@ -105,7 +105,7 @@ enum ConnectionType
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::ConnectionType::BOTTOM
-    /** the connection line leaves the connected object to the bottom,
+    /** the connection line leaves the connected object from the bottom,
      */
     BOTTOM,
 
@@ -125,6 +125,9 @@ enum ConnectionType
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:41  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:12  hjs
     initial import
 

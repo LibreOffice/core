@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicExportFilter.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-12 14:11:09 $
+ *  last change: $Author: mi $ $Date: 2001-10-26 08:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 
 //=============================================================================
 
-/** a component that supports this service lets you export pages, shapes or
+/** a component that supports this service lets you export pages, shapes, or
     groups of shapes from a DrawingDocument to a file in one of the file formats
     supported by the component.
 */

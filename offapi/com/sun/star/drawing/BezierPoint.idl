@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BezierPoint.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:41 $
+ *  last change: $Author: mi $ $Date: 2001-10-26 08:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,6 @@
 // DocMerge from xml: struct com::sun::star::drawing::BezierPoint
 /** This is a point on a bezier curve.
 
-
-
     <p>The two control points specify how the bezier curve
     goes through the given position.</p>
  */
@@ -110,6 +108,9 @@ struct BezierPoint
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:41  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:11  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PolyPolygonBezierDescriptor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:13:38 $
+ *  last change: $Author: mi $ $Date: 2001-10-26 08:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ service PolyPolygonBezierDescriptor
 
     //-------------------------------------------------------------------------
 
-    /** These are the untransformed bezier coords of this polygon.
+    /** These are the untransformed bezier coordinates of this polygon.
      */
     [property] com::sun::star::drawing::PolyPolygonBezierCoords Geometry;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineEndType.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:42 $
+ *  last change: $Author: mi $ $Date: 2001-10-26 08:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ enum LineEndType
     // DOCUMENTATION OMITTED FOR LineEndType::  NONE,
 
     // DocMerge from xml: value com::sun::star::drawing::LineEndType::NONE
-    /** the line hasn't a special end.
+    /** the line has no special end.
      */
     NONE,
 
@@ -86,7 +86,7 @@ enum LineEndType
     // DOCUMENTATION OMITTED FOR LineEndType::  ARROW,
 
     // DocMerge from xml: value com::sun::star::drawing::LineEndType::ARROW
-    /** the line use an arrow for the line end.
+    /** the line uses an arrow for the line end.
      */
     ARROW,
 
@@ -94,7 +94,7 @@ enum LineEndType
     // DOCUMENTATION OMITTED FOR LineEndType::  CIRCLE,
 
     // DocMerge from xml: value com::sun::star::drawing::LineEndType::CIRCLE
-    /** the line use an circle for the line end.
+    /** the line uses a circle for the line end.
      */
     CIRCLE,
 
@@ -102,7 +102,7 @@ enum LineEndType
     // DOCUMENTATION OMITTED FOR LineEndType::  SQUARE,
 
     // DocMerge from xml: value com::sun::star::drawing::LineEndType::SQUARE
-    /** the line use an square for the line end.
+    /** the line uses a square for the line end.
      */
     SQUARE,
 
@@ -123,6 +123,9 @@ enum LineEndType
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:42  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:13  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawPage.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:06 $
+ *  last change: $Author: mi $ $Date: 2001-10-26 08:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,9 @@
 
 // DocMerge from xml: service com::sun::star::drawing::DrawPage
 /** This service specifies a page for the actual draw pages to contain
-    the drawings.@see   GenericDrawPage
-        @see    DrawPages
+    the drawings.
+    @see    GenericDrawPage
+    @see    DrawPages
  */
 service DrawPage
 {
@@ -106,6 +107,9 @@ service DrawPage
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:06  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:42:41  mi
     moved from api
 
