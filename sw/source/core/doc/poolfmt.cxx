@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-03 17:18:48 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1686,7 +1686,12 @@ SwPageDesc* SwDoc::GetPageDescFromPool( USHORT nId, String* pDesc,
     else
     {
         BOOL bIsModified = IsModified();
+
+        BOOL bDoesUndo = DoesUndo();
+        DoUndo(FALSE);
         n = MakePageDesc( aNm, 0, bRegardLanguage );
+        DoUndo(bDoesUndo);
+
         pNewPgDsc = aPageDescs[ n ];
         pNewPgDsc->SetPoolFmtId( nId );
         if( !bIsModified )
