@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 11:36:45 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,7 +556,7 @@ void SwFrm::MakePos()
 
         pPrv = lcl_Prev( this, FALSE );
         USHORT nMyType = GetType();
-        SWRECTFN( this )
+        SWRECTFN( ( IsCellFrm() && GetUpper() ? GetUpper() : this  ) )
         if ( !bUseUpper && pPrv )
         {
             aFrm.Pos( pPrv->Frm().Pos() );
