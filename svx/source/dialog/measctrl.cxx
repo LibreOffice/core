@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-06 09:08:03 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,8 @@ SvxXMeasurePreview::SvxXMeasurePreview
     pModel = new SdrModel();
     pMeasureObj->SetModel( pModel );
 
-//-/    pMeasureObj->SetAttributes( rInAttrs, FALSE );
-//-/    SdrBroadcastItemChange aItemChange(*pMeasureObj);
-    pMeasureObj->SetItemSetAndBroadcast(rInAttrs);
-//-/    pMeasureObj->BroadcastItemChange(aItemChange);
+    //pMeasureObj->SetItemSetAndBroadcast(rInAttrs);
+    pMeasureObj->SetMergedItemSetAndBroadcast(rInAttrs);
 
     SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 
@@ -131,6 +129,15 @@ SvxXMeasurePreview::SvxXMeasurePreview
 SvxXMeasurePreview::~SvxXMeasurePreview()
 {
     delete pExtOutDev;
+
+    // #111111#
+    // No one is deleting the MeasureObj? This is not only an error but also
+    // a memory leak (!). Main problem is that this object is still listening to
+    // a StyleSheet of the model which was set. Thus, if You want to keep the obnject,
+    // set the modfel to 0L, if object is not needed (seems to be the case here),
+    // delete it.
+    delete pMeasureObj;
+
     delete pModel;
 }
 
@@ -144,7 +151,7 @@ void SvxXMeasurePreview::Paint( const Rectangle& rRect )
 {
     SdrPaintInfoRec aInfoRec;
 
-    pMeasureObj->Paint( *pExtOutDev, aInfoRec );
+    pMeasureObj->SingleObjectPainter( *pExtOutDev, aInfoRec ); // #110094#-17
 }
 
 /*************************************************************************
@@ -155,10 +162,8 @@ void SvxXMeasurePreview::Paint( const Rectangle& rRect )
 
 void SvxXMeasurePreview::SetAttributes( const SfxItemSet& rInAttrs )
 {
-//-/    pMeasureObj->SetAttributes( rInAttrs, FALSE );
-//-/    SdrBroadcastItemChange aItemChange(*pMeasureObj);
-    pMeasureObj->SetItemSetAndBroadcast(rInAttrs);
-//-/    pMeasureObj->BroadcastItemChange(aItemChange);
+    //pMeasureObj->SetItemSetAndBroadcast(rInAttrs);
+    pMeasureObj->SetMergedItemSetAndBroadcast(rInAttrs);
 
     Invalidate();
 }
