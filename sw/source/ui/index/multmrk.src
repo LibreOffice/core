@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multmrk.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:45:57 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:36:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ ModalDialog DLG_MULTMRK
         Text[ russian ] = "İëåìåíò";
         Text[ polish ] = "Wpis";
         Text[ japanese ] = "€–Ú";
-        Text[ chinese_traditional ] = "¶µ¥Ø";
+        Text[ chinese_traditional ] = "±ø¥Ø";
         Text[ arabic ] = "ÇáÅÏÎÇá";
         Text[ dutch ] = "Item";
         Text[ chinese_simplified ] = "ÌõÄ¿";
@@ -205,8 +205,8 @@ ModalDialog DLG_MULTMRK
     Text[ chinese_simplified ] = "Ä¿Â¼±ê¼Ç";
     Text[ russian ] = "Âûäåëåíèÿ óêàçàòåëÿ";
     Text[ polish ] = "Znaczniki indeksu";
-    Text[ japanese ] = "õˆø‘I‘ğ€–Ú";
-    Text[ chinese_traditional ] = "¯Á¤Ş¿ï¨ú";
+    Text[ japanese ] = "“o˜^€–Ú";
+    Text[ chinese_traditional ] = "¥Ø¿ı¼Ğ°O";
     Text[ arabic ] = "ÊÍÏíÏÇÊ ÇáİåÑÓ";
     Text[ dutch ] = "Indexmarkeringen";
     Text[ chinese_simplified ] = "Ä¿Â¼±ê¼Ç";
