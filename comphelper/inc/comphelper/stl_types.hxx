@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stl_types.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 09:19:25 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 10:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,21 @@ public:
     }
     sal_Bool isCaseSensitive() const {return m_bCaseSensitive;}
 };
+//------------------------------------------------------------------------
+class TStringMixEqualFunctor : public ::std::binary_function< ::rtl::OUString,::rtl::OUString,bool>
+{
+    sal_Bool m_bCaseSensitive;
 
+public:
+    TStringMixEqualFunctor(sal_Bool bCaseSensitive = sal_True)
+        :m_bCaseSensitive(bCaseSensitive)
+    {}
+    bool operator() (const ::rtl::OUString& lhs, const ::rtl::OUString& rhs) const
+    {
+        return m_bCaseSensitive ? lhs.equals( rhs ) : lhs.equalsIgnoreAsciiCase( rhs );
+    }
+    sal_Bool isCaseSensitive() const {return m_bCaseSensitive;}
+};
 //------------------------------------------------------------------------
 class UStringMixHash
 {
