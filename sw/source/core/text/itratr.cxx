@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:13:38 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1147,31 +1147,41 @@ USHORT SwTxtNode::GetWidthOfLeadingTabs() const
 {
     USHORT nRet = 0;
 
-    // Find the non-follow text frame:
-    SwClientIter aClientIter( (SwTxtNode&)*this );
-    SwClient* pLast = aClientIter.GoStart();
+    xub_StrLen nIdx = 0;
+    sal_Unicode cCh;
 
-    while( pLast )
+    while ( nIdx < GetTxt().Len() &&
+             ( '\t' == ( cCh = GetTxt().GetChar( nIdx ) ) ||
+                ' ' == cCh ) )
+        ++nIdx;
+
+    if ( nIdx > 0 )
     {
-        // Only consider master frames:
-        if ( pLast->ISA(SwTxtFrm) &&
-             !static_cast<SwTxtFrm*>(pLast)->IsFollow() )
-        {
-            const SwParaPortion* pPara =
-                static_cast<SwTxtFrm*>(pLast)->GetPara();
+        SwPosition aPos( *this );
+        aPos.nContent += nIdx;
 
-            if ( pPara )
+        // Find the non-follow text frame:
+        SwClientIter aClientIter( (SwTxtNode&)*this );
+        SwClient* pLast = aClientIter.GoStart();
+
+        while( pLast )
+        {
+            // Only consider master frames:
+            if ( pLast->ISA(SwTxtFrm) &&
+                 !static_cast<SwTxtFrm*>(pLast)->IsFollow() )
             {
-                const SwLinePortion* pFirst = pPara->GetFirstPortion();
-                while ( pFirst && pFirst->InTabGrp() )
-                {
-                    nRet += pFirst->Width();
-                    pFirst = pFirst->GetPortion();
-                }
+                const SwTxtFrm* pFrm = static_cast<SwTxtFrm*>(pLast);
+                SWRECTFN( pFrm )
+                SwRect aRect;
+                pFrm->GetCharRect( aRect, aPos );
+                nRet = (USHORT)
+                       ( pFrm->IsRightToLeft() ?
+                            (pFrm->*fnRect->fnGetPrtRight)() - (aRect.*fnRect->fnGetRight)() :
+                            (aRect.*fnRect->fnGetLeft)() - (pFrm->*fnRect->fnGetPrtLeft)() );
+                break;
             }
-            break;
+            pLast = ++aClientIter;
         }
-        pLast = ++aClientIter;
     }
 
     return nRet;
