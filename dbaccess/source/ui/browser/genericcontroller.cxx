@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-23 10:35:13 $
+ *  last change: $Author: fs $ $Date: 2001-01-26 14:15:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -796,16 +796,25 @@ sal_Bool SAL_CALL OGenericUnoController::supportsService(const ::rtl::OUString& 
 // -----------------------------------------------------------------------------
 Reference<XConnection> OGenericUnoController::connect(const ::rtl::OUString& _rsDataSourceName)
 {
+    Reference<XConnection> xConnection;
+
     Any aValue;
     try
     {
         aValue = m_xDatabaseContext->getByName(_rsDataSourceName);
     }
     catch(Exception&)
-    { }
+    {
+    }
 
     Reference<XPropertySet> xProp;
     aValue >>= xProp;
+    if (!xProp.is())
+    {
+        DBG_ERROR("OGenericUnoController::connect: coult not retrieve the data source!");
+        return xConnection;
+    }
+
     ::rtl::OUString sPwd, sUser;
     sal_Bool bPwdReq = sal_False;
     try
@@ -819,7 +828,6 @@ Reference<XConnection> OGenericUnoController::connect(const ::rtl::OUString& _rs
         DBG_ERROR("SbaTableQueryBrowser::OnExpandEntry: error while retrieving data source properties!");
     }
 
-    Reference<XConnection> xConnection;  // supports the service sdb::connection
     SQLExceptionInfo aInfo;
     try
     {
