@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 19:50:47 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 21:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -719,7 +719,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ dutch ] = "Consolideren naar" ;
         Text [ spanish ] = "Consolidar según" ;
         Text [ english_us ] = "Consolidate by" ;
-        Text[ chinese_simplified ] = "ºÏ²¢°´";
+        Text[ chinese_simplified ] = "ºÏ²¢°´ÕÕ";
         Text[ russian ] = "Êîíñîëèäèğîâàòü ïî";
         Text[ polish ] = "Konsoliduj wed³ug";
         Text[ japanese ] = "“‡‚ÌŠî€";
