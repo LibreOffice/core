@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filglob.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:26:41 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,7 +393,7 @@ namespace fileaccess {
         {
             rtl::OUString aToken (aRelPath.getToken( 0, '/', nIndex ));
 
-            if ( aToken.compareToAscii( ".." ) == 0 )
+            if ( aToken.compareToAscii( ".." ) == 0 && ! aTokenStack.empty())
                 aTokenStack.pop_back();
             else
                 aTokenStack.push_back( aToken );
@@ -660,6 +660,9 @@ namespace fileaccess {
                 case FileBase::E_AGAIN:
                     // Operation would block<br>
                     ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
+                    break;
+                case FileBase::E_TIMEDOUT:
+                    ioErrorCode = IOErrorCode_DEVICE_NOT_READY;
                     break;
                 case FileBase::E_NOLCK:  // No record locks available<br>
                 case FileBase::E_IO:     // I/O error<br>
