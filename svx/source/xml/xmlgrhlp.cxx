@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $
+ *  last change: $Author: mib $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,11 @@ sal_Bool SvXMLGraphicHelper::ImplGetStreamNames( const ::rtl::OUString& rURLStr,
 SvStorageRef SvXMLGraphicHelper::ImplGetGraphicStorage( const ::rtl::OUString& rStorageName )
 {
     if( !mxGraphicStorage.Is() || ( rStorageName != maCurStorageName ) )
-        mxGraphicStorage = mpRootStorage->OpenStorage( maCurStorageName = rStorageName, STREAM_READ | STREAM_WRITE );
+    {
+        if( mxGraphicStorage.Is() && GRAPHICHELPER_MODE_WRITE == meCreateMode )
+            mxGraphicStorage->Commit();
+        mxGraphicStorage = mpRootStorage->OpenUCBStorage( maCurStorageName = rStorageName, STREAM_READ | STREAM_WRITE );
+    }
 
     return mxGraphicStorage;
 }
@@ -210,6 +214,7 @@ void SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureStorag
                 else if( aGraphic.GetType() == GRAPHIC_GDIMETAFILE )
                     ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( *xStm );
             }
+            xStm->Commit();
         }
     }
 }
@@ -296,6 +301,14 @@ void SvXMLGraphicHelper::Flush()
                 ImplWriteGraphic( aPictureStorageName, aPictureStreamName );
         }
     }
+    if( GRAPHICHELPER_MODE_WRITE == meCreateMode )
+    {
+        SvStorageRef xStorage = ImplGetGraphicStorage(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(XML_GRAPHICSTORAGE_NAME) ) );
+        if( xStorage.Is() )
+            xStorage->Commit();
+    }
+
 }
 
 // -----------------------------------------------------------------------------
