@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dflyobj.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:55:48 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ public:
     SwFlyDrawObj();
     ~SwFlyDrawObj();
 
-    virtual sal_Bool DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
+    virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
 
     //Damit eine Instanz dieser Klasse beim laden erzeugt werden kann
     //(per Factory).
@@ -118,7 +118,7 @@ public:
 
     //Ueberladene Methoden der Basisklasse SdrVirtObj
     virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
-    virtual sal_Bool DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
+    virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
     virtual void     TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const;
 
     //Wir nehemen die Groessenbehandlung vollstaendig selbst in die Hand.
