@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multiplexer.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:11:17 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 11:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual void SAL_CALL acquire() throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL acquire() throw();
 
     /**_______________________________________________________________________________________________________
         @short      decrement refcount
@@ -295,7 +295,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual void SAL_CALL release() throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL release() throw();
 
     //________________________________________________________________________________________________________
     //  operator
