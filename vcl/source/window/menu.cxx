@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-12 15:49:23 $
+ *  last change: $Author: ssa $ $Date: 2002-07-17 09:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,6 +393,7 @@ private:
     USHORT          nScrollerHeight;
     USHORT          nFirstEntry;
     USHORT          nBorder;
+    USHORT          nPosInParent;
     BOOL            bInExecute;
 
     BOOL            bScrollMenu;
@@ -448,6 +449,10 @@ public:
 
     void            HighlightItem( USHORT nPos, BOOL bHighlight );
     void            ChangeHighlightItem( USHORT n, BOOL bStartPopupTimer );
+    USHORT          GetHighlightedItem() const { return nHighlightedItem; }
+
+    void            SetPosInParent( USHORT nPos ) { nPosInParent = nPos; }
+    USHORT          GetPosInParent() const { return nPosInParent; }
 
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
     BOOL            IsTopmostApplicationMenu();
@@ -517,7 +522,7 @@ public:
     void            KillActivePopup();
     PopupMenu*      GetActivePopup() const  { return pActivePopup; }
     void            PopupClosed( Menu* pMenu );
-
+    USHORT          GetHighlightedItem() const { return nHighlightedItem; }
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     void SetAutoPopup( BOOL bAuto ) { mbAutoPopup = bAuto; }
@@ -622,7 +627,7 @@ Menu::~Menu()
 {
     DBG_DTOR( Menu, NULL );
 
-    ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
+    ImplCallEventListeners( VCLEVENT_OBJECT_DYING, ITEMPOS_INVALID );
 
     // at the window free the reference to the accessible component
     if ( pWindow )
@@ -695,7 +700,7 @@ void Menu::ImplLoadRes( const ResId& rResId )
 void Menu::Activate()
 {
     bInCallback = TRUE;
-    ImplCallEventListeners( VCLEVENT_MENU_ACTIVATE );
+    ImplCallEventListeners( VCLEVENT_MENU_ACTIVATE, ITEMPOS_INVALID );
     if ( !aActivateHdl.Call( this ) )
     {
         Menu* pStartMenu = ImplGetStartMenu();
@@ -721,7 +726,7 @@ void Menu::Deactivate()
 
     bInCallback = TRUE;
     Menu* pStartMenu = ImplGetStartMenu();
-    ImplCallEventListeners( VCLEVENT_MENU_DEACTIVATE );
+    ImplCallEventListeners( VCLEVENT_MENU_DEACTIVATE, ITEMPOS_INVALID );
     if ( !aDeactivateHdl.Call( this ) )
     {
         if ( pStartMenu && ( pStartMenu != this ) )
@@ -773,7 +778,7 @@ void Menu::ImplSelect()
 
 void Menu::Select()
 {
-    ImplCallEventListeners( VCLEVENT_MENU_SELECT );
+    ImplCallEventListeners( VCLEVENT_MENU_SELECT, GetItemPos( GetCurItemId() ) );
     if ( !aSelectHdl.Call( this ) )
     {
         Menu* pStartMenu = ImplGetStartMenu();
@@ -789,9 +794,9 @@ void Menu::RequestHelp( const HelpEvent& rHEvt )
 {
 }
 
-void Menu::ImplCallEventListeners( ULONG nEvent )
+void Menu::ImplCallEventListeners( ULONG nEvent, USHORT nPos )
 {
-    VclMenuEvent aEvent( this, nEvent );
+    VclMenuEvent aEvent( this, nEvent, nPos );
 
     if ( !maEventListeners.empty() )
         maEventListeners.Call( &aEvent );
@@ -852,6 +857,7 @@ void Menu::InsertItem( USHORT nItemId, const XubString& rStr, MenuItemBits nItem
         if ( pWin->IsVisible() )
             pWin->Invalidate();
     }
+    ImplCallEventListeners( VCLEVENT_MENU_INSERTITEM, nPos );
 }
 
 void Menu::InsertItem( USHORT nItemId, const Image& rImage,
@@ -996,6 +1002,7 @@ void Menu::RemoveItem( USHORT nPos )
             pWin->Invalidate();
     }
     delete mpLayoutData, mpLayoutData = NULL;
+    ImplCallEventListeners( VCLEVENT_MENU_REMOVEITEM, nPos );
 }
 
 void ImplCopyItem( Menu* pThis, const Menu& rMenu, USHORT nPos, USHORT nNewPos,
@@ -1185,6 +1192,8 @@ void Menu::SetPopupMenu( USHORT nItemId, PopupMenu* pMenu )
 
     // Daten austauschen
     pData->pSubMenu = pMenu;
+
+    ImplCallEventListeners( VCLEVENT_MENU_SUBMENUCHANGED, nPos );
 }
 
 PopupMenu* Menu::GetPopupMenu( USHORT nItemId ) const
@@ -1342,7 +1351,7 @@ void Menu::EnableItem( USHORT nItemId, BOOL bEnable )
                 nX += pData->aSz.Width();
             }
         }
-        ImplCallEventListeners( VCLEVENT_MENU_ENABLE );
+        ImplCallEventListeners( bEnable ? VCLEVENT_MENU_ENABLE : VCLEVENT_MENU_DISABLE, nPos );
     }
 }
 
@@ -2024,7 +2033,7 @@ void Menu::ImplCallHighlight( USHORT nHighlightedItem )
     MenuItemData* pData = pItemList->GetDataFromPos( nHighlightedItem );
     if ( pData )
         nSelectedId = pData->nId;
-    ImplCallEventListeners( VCLEVENT_MENU_HIGHLIGHT );
+    ImplCallEventListeners( VCLEVENT_MENU_HIGHLIGHT, GetItemPos( GetCurItemId() ) );
     Highlight();
     nSelectedId = 0;
 }
@@ -2557,7 +2566,16 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
         bNativeFrameRegistered = pWin->registerAccessibleParent();
         // notify parent, needed for accessibility
         if( pSFrom )
-            pSFrom->ImplCallEventListeners( VCLEVENT_MENU_SELECT );
+        {
+            USHORT aPos;
+            if( pSFrom->bIsMenuBar )
+                aPos = ((MenuBarWindow *) pSFrom->pWindow)->GetHighlightedItem();
+            else
+                aPos = ((MenuFloatingWindow *) pSFrom->pWindow)->GetHighlightedItem();
+
+            pWin->SetPosInParent( aPos );  // store position to be sent in SUBMENUDEACTIVATE
+            pSFrom->ImplCallEventListeners( VCLEVENT_MENU_SUBMENUACTIVATE, aPos );
+        }
     }
     if ( bPreSelectFirst )
     {
@@ -2687,6 +2705,7 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nSt
     bScrollMenu         = FALSE;
     nHighlightedItem    = ITEMPOS_INVALID;
     nMBDownPos          = ITEMPOS_INVALID;
+    nPosInParent        = ITEMPOS_INVALID;
     nScrollerHeight     = 0;
 //    nStartY             = 0;
     nBorder             = EXTRASPACEY;
@@ -3006,8 +3025,9 @@ void MenuFloatingWindow::StopExecute( ULONG nFocusId )
     {
         KillActivePopup();
     }
+    // notify parent, needed for accessibility
     if( pMenu->pStartedFrom )
-        pMenu->pStartedFrom->ImplCallEventListeners( VCLEVENT_MENU_SELECT );
+        pMenu->pStartedFrom->ImplCallEventListeners( VCLEVENT_MENU_SUBMENUDEACTIVATE, nPosInParent );
 }
 
 void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
@@ -3264,7 +3284,10 @@ void MenuFloatingWindow::ChangeHighlightItem( USHORT n, BOOL bStartPopupTimer )
 //      KillActivePopup();
 
     if ( nHighlightedItem != ITEMPOS_INVALID )
+    {
         HighlightItem( nHighlightedItem, FALSE );
+        pMenu->ImplCallEventListeners( VCLEVENT_MENU_DEHIGHLIGHT, nHighlightedItem );
+    }
 
     nHighlightedItem = (USHORT)n;
     DBG_ASSERT( pMenu->ImplIsVisible( nHighlightedItem ) || nHighlightedItem == ITEMPOS_INVALID, "ChangeHighlightItem: Not visible!" );
@@ -3997,7 +4020,10 @@ void MenuBarWindow::ChangeHighlightItem( USHORT n, BOOL bSelectEntry, BOOL bAllo
     }
 
     if ( nHighlightedItem != ITEMPOS_INVALID )
+    {
         HighlightItem( nHighlightedItem, FALSE );
+        pMenu->ImplCallEventListeners( VCLEVENT_MENU_DEHIGHLIGHT, nHighlightedItem );
+    }
 
     nHighlightedItem = (USHORT)n;
     DBG_ASSERT( ( nHighlightedItem == ITEMPOS_INVALID ) || pMenu->ImplIsVisible( nHighlightedItem ), "ChangeHighlightItem: Not visible!" );
