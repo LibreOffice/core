@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-15 10:25:06 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-10-02 08:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,7 +341,8 @@ sal_Bool SAL_CALL SwAccessibleDocumentBase::contains(
 
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
-    Rectangle aPixBounds( pWin->GetWindowExtentsRelative( pWin->GetAccessibleParentWindow() ) );
+    Rectangle aPixBounds( pWin->GetWindowExtentsRelative( 0 ) );
+    aPixBounds.Move(-aPixBounds.Left(), -aPixBounds.Top());
 
     Point aPixPoint( aPoint.X, aPoint.Y );
     return aPixBounds.IsInside( aPixPoint );
