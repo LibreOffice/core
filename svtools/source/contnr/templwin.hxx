@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-06 12:49:42 $
+ *  last change: $Author: pb $ $Date: 2001-07-05 12:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@ public:
     String              GetSelectedIconText() const;
     String              GetIconText( const String& rURL ) const;
     String              GetTemplateRootURL() const { return aTemplateRootURL; }
+    void                InvalidateIconControl();
+    void                SetCursorPos( ULONG nPos );
+    void                SetFocus();
 };
 
 // class SvtFileViewWindow_Impl -----------------------------------------_
@@ -138,6 +141,7 @@ public:
     sal_Bool            HasPreviousLevel( String& rURL ) const;
     String              GetFolderTitle() const;
     String              GetFolderURL() const { return aFolderURL; }
+    void                SetFocus();
 };
 
 // class SvtFrameWindow_Impl ---------------------------------------------
@@ -212,6 +216,7 @@ private:
     Link                        aSelectHdl;
     Link                        aDoubleClickHdl;
     Link                        aNewFolderHdl;
+    Link                        aSendFocusHdl;
 
     Timer                       aSelectTimer;
     Timer                       aResetTimer;
@@ -233,6 +238,9 @@ private:
     void                AppendHistoryURL( const String& rURL );
     void                OpenHistory();
 
+protected:
+    virtual long        PreNotify( NotifyEvent& rNEvt );
+
 public:
     SvtTemplateWindow( Window* pParent );
     ~SvtTemplateWindow();
@@ -240,11 +248,14 @@ public:
     void                SetSelectHdl( const Link& rLink ) { aSelectHdl = rLink; }
     void                SetDoubleClickHdl( const Link& rLink ) { aDoubleClickHdl = rLink; }
     void                SetNewFolderHdl( const Link& rLink ) { aNewFolderHdl = rLink; }
+    void                SetSendFocusHdl( const Link& rLink ) { aSendFocusHdl = rLink; }
 
     sal_Bool            IsFileSelected() const;
     sal_Bool            IsTemplateFolderOpen() const { return pFileWin->IsTemplateFolder(); }
     void                OpenFile( sal_Bool bNotAsTemplate );
     String              GetFolderTitle() const;
+    void                SetFocus( sal_Bool bIconWin );
+    sal_Bool            HasIconWinFocus() const { return pIconWin->HasChildPathFocus(); }
 };
 
 #endif // _SVTOOLS_TEMPLWIN_HXX
