@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XToolbarControllerListener.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:23:37 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 18:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,10 @@
 /** is used to notify a toolbar controller about events
 
     @see com::sun::star::frame::ToolbarController
+
+    @since OOo 2.0.0
  */
-published interface XToolbarControllerListener : com::sun::star::uno::XInterface
+interface XToolbarControllerListener : com::sun::star::uno::XInterface
 {
     //=============================================================================
     /** gets called to notify a controller that a toolbar function has been selected.

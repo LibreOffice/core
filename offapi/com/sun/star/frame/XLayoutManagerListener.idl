@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLayoutManagerListener.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:23:17 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 18:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,50 +73,28 @@ module com {  module sun {  module star {  module frame {
 /** makes it possible to receive events from a layout manager.
 
     <p>Events are provided <strong>only</strong> for notification
-    purposes only.  Creation, destroying and the visibility will
-    be handled interally by the layout manager component, so that
-    GUI layout works properly regardless of whether a component
-    registers such a listener or not.</p>
+    purposes only.  All operations are handled interally by the
+    layout manager component, so that GUI layout works properly
+    regardless of whether a component registers such a listener
+    or not.</p>
 
-    @see ::drafts::com::sun::star::frame::LayoutManager
+    @see ::com::sun::star::frame::LayoutManager
+
+    @since OOo 2.0.0
  */
-published interface XLayoutManagerListener : com::sun::star::lang::XEventListener
+interface XLayoutManagerListener : com::sun::star::lang::XEventListener
 {
     //=============================================================================
-    /** is invoked when a user interface element has been created.
+    /** is invoked when a layout manager
 
-        @param aUIElementName
-            a unique resource URL that identifies the created user
-            interface element.
+        @param eLayoutEvent
+            identifies the layout event that has occured.
+
+        @param aInfo
+            provides additional information about the event. The type
+            of info depends on the event.
     */
-    void uiElementCreated( [in] string aUIElementName );
-
-    //=============================================================================
-    /** is invoked when a user interface element has been destroyed.
-
-        @param aUIElementName
-            a unique resource URL that identifies the destroyed user
-            interface element.
-    */
-    void uiElementDestroyed( [in] string aUIElementName );
-
-    //=============================================================================
-    /** is invoked when a user interface element has been shown.
-
-        @param aUIElementName
-            a unique resource URL that identifies the shown user
-            interface element.
-    */
-    void uiElementShown( [in] string aUIElementName );
-
-    //=============================================================================
-    /** is invoked when a user interface element has been hidden.
-
-        @param aUIElementName
-            a unique resource URL that identifies the hidden user
-            interface element.
-    */
-    void uiElementHidden( [in] string aUIElementName );
+    void layoutEvent( [in] short eLayoutEvent, [in] any aInfo );
 };
 
 }; }; }; };
