@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-01-26 17:46:28 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,10 +186,9 @@ SvNumberFormatterServiceObj::~SvNumberFormatterServiceObj()
         pSupplier->release();
 }
 
-uno::Reference<uno::XInterface> SAL_CALL SvNumberFormatterServiceObj_NewInstance(
-                    const uno::Reference<lang::XMultiServiceFactory>& rSMgr )
+com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvNumberFormatterServiceObj_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& )
 {
-    return (cppu::OWeakObject*) new SvNumberFormatterServiceObj();
+    return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* ) new SvNumberFormatterServiceObj );
 }
 
 // XNumberFormatter
@@ -448,7 +447,7 @@ util::color SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber(
 rtl::OUString SAL_CALL SvNumberFormatterServiceObj::getImplementationName()
                             throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii("SvNumberFormatterServiceObj");
+    return rtl::OUString::createFromAscii("com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject");
 }
 
 sal_Bool SAL_CALL SvNumberFormatterServiceObj::supportsService( const rtl::OUString& ServiceName )
