@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScStyleObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:14 $
+ *  last change:$Date: 2003-02-04 14:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
 * Test for object which is represented by service
 * <code>com.sun.star.style.Style</code>. <p>
@@ -153,8 +156,7 @@ public class ScStyleObj extends TestCase {
     * @see com.sun.star.style.Style
     * @see com.sun.star.style.XStyleFamiliesSupplier
     */
-    public TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
 
@@ -173,17 +175,22 @@ public class ScStyleObj extends TestCase {
         XNameAccess oStyleFamilyNameAccess = null;
         XStyle oStyle = null;
         try {
-            oStyleFamilyNameAccess = (XNameAccess)
-                oStyleFamiliesIndexAccess.getByIndex(0);
+            oStyleFamilyNameAccess = (XNameAccess) AnyConverter.toObject(
+                new Type(XNameAccess.class),
+                    oStyleFamiliesIndexAccess.getByIndex(0));
 
             XIndexAccess oStyleFamilyIndexAccess = (XIndexAccess)
                 UnoRuntime.queryInterface(XIndexAccess.class,
                 oStyleFamilyNameAccess);
-            oStyle = (XStyle)oStyleFamilyIndexAccess.getByIndex(0);
+            oStyle = (XStyle) AnyConverter.toObject(
+                new Type(XStyle.class),oStyleFamilyIndexAccess.getByIndex(0));
         } catch(com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get by index", e);
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get by index", e);
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get by index", e);
         }
@@ -235,8 +242,8 @@ public class ScStyleObj extends TestCase {
 
         XCell aCell = null;
         try {
-            XSpreadsheet oSheet = (XSpreadsheet) oIndexSheets.getByIndex(0);
-
+            XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
+                    new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
             log.println("Getting a cell from sheet") ;
             aCell = oSheet.getCellByPosition(2,3) ;
         } catch(com.sun.star.lang.WrappedTargetException e) {
@@ -245,7 +252,11 @@ public class ScStyleObj extends TestCase {
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get spreadsheet by index", e);
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get spreadsheet by index", e);
         }
+
         XPropertySet xProp = (XPropertySet)
             UnoRuntime.queryInterface(XPropertySet.class, aCell);
 
@@ -291,5 +302,3 @@ public class ScStyleObj extends TestCase {
         return (String[]) names.toArray(new String[names.size()]) ;
     }
 }    // finish class ScStyleObj
-
-
