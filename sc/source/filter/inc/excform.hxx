@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:59 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:01:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ public:
     virtual ConvErr     Convert( const ScTokenArray*&, UINT32 nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
 
     virtual ConvErr     Convert( _ScRangeListTabs&, UINT32 nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
+    virtual BOOL        GetAbsRefs( ScRangeList& rRangeList, UINT32 nLen );
 
     void                GetDummy( const ScTokenArray*& );
     const ScTokenArray* GetBoolErr( XclBoolError );
@@ -162,7 +163,7 @@ public:
 
     static inline BOOL  IsComplRowRange( const UINT16 nRow1, const UINT16 nRow2 );
 
-    BOOL                GetAbsRefs( ScRangeList& rRangeList, UINT32 nLen );
+    virtual BOOL        GetAbsRefs( ScRangeList& rRangeList, UINT32 nLen );
 };
 
 
