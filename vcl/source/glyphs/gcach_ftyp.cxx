@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.50 $
- *  last change: $Author: hdu $ $Date: 2001-07-11 14:58:56 $
+ *  $Revision: 1.51 $
+ *  last change: $Author: hdu $ $Date: 2001-07-11 15:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,10 +770,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
         rRawBitmap.mpBits = new unsigned char[ rRawBitmap.mnAllocated ];
     }
 
-    const unsigned char* pSrc = rBitmapFT.buffer;
-    unsigned char* pDest = rRawBitmap.mpBits;
-    for( int i = nNeededSize; --i >= 0; )
-        *(pDest++) = ~*(pSrc++);
+    memcpy( rRawBitmap.mpBits, rBitmapFT.buffer, nNeededSize );
 
     FT_Done_Glyph( aGlyphFT );
     return true;
