@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
+ *  last change: $Author: kso $ $Date: 2001-06-26 15:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,9 @@ void NeonSession::PROPFIND( const OUString &                inPath,
 void NeonSession::PROPFIND( const ::rtl::OUString &                 inPath,
                             const Depth                             inDepth,
                             std::vector< DAVResourceInfo >&         ioResInfo,
-                            const Reference< XCommandEnvironment >& inEnv )
+                            const com::sun::star::uno::Reference<
+                                com::sun::star::ucb::XCommandEnvironment >&
+                                    inEnv )
     throw( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( mMutex );
@@ -307,7 +309,9 @@ void NeonSession::PROPFIND( const ::rtl::OUString &                 inPath,
 // -------------------------------------------------------------------
 void NeonSession::PROPPATCH( const ::rtl::OUString &                 inPath,
                              const std::vector< ProppatchValue > &   inValues,
-                             const Reference< XCommandEnvironment >& inEnv )
+                             const com::sun::star::uno::Reference<
+                                com::sun::star::ucb::XCommandEnvironment >&
+                                    inEnv )
     throw( DAVException )
 {
     /* @@@ Which standard live properties can be set by the client?
@@ -429,9 +433,10 @@ void NeonSession::PROPPATCH( const ::rtl::OUString &                 inPath,
 // -------------------------------------------------------------------
 // GET
 // -------------------------------------------------------------------
-Reference< XInputStream > NeonSession::GET( const OUString & inPath,
-                            const com::sun::star::uno::Reference<
-                             com::sun::star::ucb::XCommandEnvironment >& inEnv )
+com::sun::star::uno::Reference< XInputStream >
+NeonSession::GET( const OUString & inPath,
+                  const com::sun::star::uno::Reference<
+                    com::sun::star::ucb::XCommandEnvironment >& inEnv )
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( mMutex );
@@ -452,7 +457,8 @@ Reference< XInputStream > NeonSession::GET( const OUString & inPath,
 // GET
 // -------------------------------------------------------------------
 void NeonSession::GET( const OUString &             inPath,
-                       Reference< XOutputStream > & ioOutputStream,
+                       com::sun::star::uno::Reference<
+                        XOutputStream > & ioOutputStream,
                        const com::sun::star::uno::Reference<
                         com::sun::star::ucb::XCommandEnvironment >& inEnv )
     throw ( DAVException )
@@ -473,7 +479,8 @@ void NeonSession::GET( const OUString &             inPath,
 // PUT
 // -------------------------------------------------------------------
 void NeonSession::PUT( const OUString &             inPath,
-                       const Reference< XInputStream > &    inInputStream,
+                       const com::sun::star::uno::Reference<
+                        XInputStream > &    inInputStream,
                        const com::sun::star::uno::Reference<
                         com::sun::star::ucb::XCommandEnvironment >& inEnv )
     throw ( DAVException )
@@ -784,9 +791,11 @@ void NeonSession::GETWriter( void *         inUserData,
     // neon calls this function with (inLen == 0)...
     if ( inLen > 0 )
     {
-        Reference< XOutputStream > * theOutputStreamPtr =
+        com::sun::star::uno::Reference<
+            XOutputStream > * theOutputStreamPtr =
                 static_cast< Reference< XOutputStream > * >( inUserData );
-        Reference< XOutputStream > theOutputStream = *theOutputStreamPtr;
+        com::sun::star::uno::Reference<
+            XOutputStream > theOutputStream = *theOutputStreamPtr;
 
         const Sequence< sal_Int8 > theSequence( ( sal_Int8 *) inBuf, inLen );
         theOutputStream->writeBytes( theSequence );
