@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: sb $ $Date: 2000-11-03 17:49:37 $
+#   last change: $Author: as $ $Date: 2000-11-06 09:46:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,8 @@ SLOFILES = \
     $(SLO)$/internaloptions.obj			\
     $(SLO)$/startoptions.obj			\
     $(SLO)$/historyoptions.obj \
-    $(SLO)$/inetoptions.obj
+    $(SLO)$/inetoptions.obj				\
+    $(SLO)$/menuoptions.obj
 
 # --- Targets ------------------------------------------------------
 

@@ -276,3 +276,4 @@ hedabu: ..\inc\internaloptions.hxx %_DEST%\inc%_EXT%\svtools\internaloptions.hxx
 hedabu: ..\inc\startoptions.hxx %_DEST%\inc%_EXT%\svtools\startoptions.hxx
 hedabu: ..\inc\historyoptions.hxx %_DEST%\inc%_EXT%\svtools\historyoptions.hxx
 hedabu: ..\inc\inetoptions.hxx %_DEST%\inc%_EXT%\svtools\inetoptions.hxx
+hedabu: ..\inc\menuoptions.hxx %_DEST%\inc%_EXT%\svtools\menuoptions.hxx
