@@ -13,6 +13,7 @@ DIRLIST = \
     $(DESTDIREXAMPLES)		 	\
     $(DESTDIRCPPEXAMPLES)		 	\
     $(DESTDIRCPPEXAMPLES)$/officeclient 	\
+    $(DESTDIRCPPEXAMPLES)$/DocumentLoader 	\
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter 	\
     $(DESTDIRJAVAEXAMPLES)		 	\
     $(DESTDIRJAVAEXAMPLES)$/draw		\
@@ -53,6 +54,11 @@ CPP_OFFICECLIENT= \
     $(DESTDIRCPPEXAMPLES)$/officeclient$/makefile.mk      		\
     $(DESTDIRCPPEXAMPLES)$/officeclient$/Makefile         		\
     $(DESTDIRCPPEXAMPLES)$/officeclient$/exports.dxp
+
+CPP_DOCUMENTLOADER= \
+    $(DESTDIRCPPEXAMPLES)$/DocumentLoader$/DocumentLoader.cxx 		\
+    $(DESTDIRCPPEXAMPLES)$/DocumentLoader$/README           		\
+    $(DESTDIRCPPEXAMPLES)$/DocumentLoader$/Makefile
 
 CPP_GENERICXMLFILTER= \
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/genericfilter.cxx 		\
@@ -235,6 +241,7 @@ OLE_EXAMPLES_DELPHI_INSERTTABLES= \
 
 EXAMPLESLIST= \
     $(CPP_OFFICECLIENT) \
+    $(CPP_DOCUMENTLOADER) \
     $(CPP_GENERICXMLFILTER) \
     $(JAVA_DRAW)        \
     $(JAVA_CALC)        \
