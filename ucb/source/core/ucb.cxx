@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucb.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-05 16:42:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-02 08:21:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Kai Sommerfeld ( kso@sun.com )
  *
  *
  ************************************************************************/
@@ -65,9 +65,6 @@
 
  *************************************************************************/
 
-#ifndef __HASH_SET__
-#include <stl/hash_set>
-#endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
@@ -76,6 +73,12 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_GLOBALTRANSFERCOMMANDARGUMENT_HPP_
+#include <com/sun/star/ucb/GlobalTransferCommandArgument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDINFO_HPP_
+#include <com/sun/star/ucb/XCommandInfo.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
 #include <com/sun/star/ucb/XContentProvider.hpp>
@@ -89,6 +92,9 @@
 
 #ifndef _IDENTIFY_HXX
 #include "identify.hxx"
+#endif
+#ifndef _UCBCMDS_HXX
+#include "ucbcmds.hxx"
 #endif
 
 #include "ucb.hxx"
@@ -107,37 +113,6 @@ using namespace com::sun::star::ucb;
 
 //=========================================================================
 //
-// ContentInfoMap_Impl.
-//
-//=========================================================================
-
-struct equalStr_Impl
-{
-    bool operator()( const ContentInfo& i1, const ContentInfo& i2 ) const
-      {
-        return !!( i1.Type == i2.Type );
-    }
-};
-
-struct hashStr_Impl
-{
-    size_t operator()( const ContentInfo& i ) const
-    {
-        return i.Type.hashCode();
-    }
-};
-
-//=========================================================================
-typedef std::hash_set
-<
-    ContentInfo,
-    hashStr_Impl,
-    equalStr_Impl
->
-ContentInfoMap_Impl;
-
-//=========================================================================
-//
 // UniversalContentBroker Implementation.
 //
 //=========================================================================
@@ -146,7 +121,8 @@ UniversalContentBroker::UniversalContentBroker(
     const Reference< com::sun::star::lang::XMultiServiceFactory >& rXSMgr )
 : m_xSMgr( rXSMgr ),
   m_pDisposeEventListeners( NULL ),
-  m_nInitCount( 0 ) //@@@ see initialize() method
+  m_nInitCount( 0 ), //@@@ see initialize() method
+  m_nCommandId( 0 )
 {
     VOS_ENSURE( m_xSMgr.is(),
                 "UniversalContentBroker ctor: No service manager" );
@@ -173,7 +149,7 @@ XINTERFACE_IMPL_8( UniversalContentBroker,
                    XContentProviderManager,
                    XContentProvider,
                    XContentIdentifierFactory,
-                   XContentCreator );
+                   XCommandProcessor );
 
 //=========================================================================
 //
@@ -189,7 +165,7 @@ XTYPEPROVIDER_IMPL_8( UniversalContentBroker,
                          XContentProviderManager,
                          XContentProvider,
                       XContentIdentifierFactory,
-                      XContentCreator );
+                      XCommandProcessor );
 
 //=========================================================================
 //
@@ -491,96 +467,83 @@ Reference< XContentIdentifier > SAL_CALL
 
 //=========================================================================
 //
-// XContentCreator methods.
+// XCommandProcessor methods.
 //
 //=========================================================================
 
 // virtual
-com::sun::star::uno::Sequence< ContentInfo > SAL_CALL
-        UniversalContentBroker::queryCreatableContentsInfo()
-    throw( com::sun::star::uno::RuntimeException )
+sal_Int32 SAL_CALL UniversalContentBroker::createCommandIdentifier()
+    throw( RuntimeException )
 {
-    //////////////////////////////////////////////////////////////////////
-    // Iterate over providers, query info there and merge results.
-    //////////////////////////////////////////////////////////////////////
+    osl::MutexGuard aGuard( m_aMutex );
 
-    ContentInfoMap_Impl aInfoMap;
-
-    osl::MutexGuard aGuard(m_aMutex);
-
-    ProviderMap_Impl::const_iterator end = m_aProviders.end();
-    for (ProviderMap_Impl::const_iterator it(m_aProviders.begin());
-         it != end; ++it)
-    {
-        Reference< XContentCreator >
-            xCreator( it->getValue().front().getResolvedProvider(), UNO_QUERY );
-        if ( xCreator.is() )
-        {
-            com::sun::star::uno::Sequence< ContentInfo > aInfo =
-                    xCreator->queryCreatableContentsInfo();
-            sal_uInt32 nCount = aInfo.getLength();
-            for ( sal_uInt32 n = 0; n < nCount; ++ n )
-            {
-                const ContentInfo& rInfo = aInfo[ n ];
-
-                // Avoid duplicates.
-                if ( aInfoMap.find( rInfo ) == aInfoMap.end() )
-                    aInfoMap.insert( rInfo );
-            }
-        }
-    }
-
-    // Put collected info into sequence.
-
-    sal_uInt32 nCount = aInfoMap.size();
-    com::sun::star::uno::Sequence< ContentInfo > aSeq( nCount );
-    ContentInfo* pInfo = aSeq.getArray();
-
-    ContentInfoMap_Impl::const_iterator iter = aInfoMap.begin();
-    for ( sal_uInt32 n = 0; n < nCount; n++, iter++ )
-        pInfo[ n ] = (*iter);
-
-    return aSeq;
+    // Just increase counter on every call to generate an identifier.
+    return ++m_nCommandId;
 }
 
 //=========================================================================
 // virtual
-Reference< XContent > SAL_CALL
-        UniversalContentBroker::createNewContent( const ContentInfo& Info )
-    throw( com::sun::star::uno::RuntimeException )
+Any SAL_CALL UniversalContentBroker::execute(
+                          const Command& aCommand,
+                          sal_Int32 CommandId,
+                          const Reference< XCommandEnvironment >& Environment )
+    throw( Exception, CommandAbortedException, RuntimeException )
 {
+    Any aRet;
+
     //////////////////////////////////////////////////////////////////////
-    // Find the matching content creator and delegate call.
+    // Note: Don't forget to adapt ucb_commands::CommandProcessorInfo
+    //       ctor in ucbcmds.cxx when adding new commands!
     //////////////////////////////////////////////////////////////////////
 
-    osl::MutexGuard aGuard(m_aMutex);
-
-    ProviderMap_Impl::const_iterator end = m_aProviders.end();
-    for (ProviderMap_Impl::const_iterator it(m_aProviders.begin()); it != end;
-         ++it)
+    if ( ( aCommand.Handle == GETCOMMANDINFO_HANDLE ) ||
+         ( aCommand.Name.compareToAscii( GETCOMMANDINFO_NAME ) == 0 ) )
     {
-        // Note: Active provider is always the first list element.
-        Reference< XContentCreator >
-            xCreator( it->getValue().front().getResolvedProvider(), UNO_QUERY );
-        if ( xCreator.is() )
+        //////////////////////////////////////////////////////////////////
+        // getCommandInfo
+        //////////////////////////////////////////////////////////////////
+
+        aRet <<= getCommandInfo();
+    }
+    else if ( ( aCommand.Handle == GLOBALTRANSFER_HANDLE ) ||
+              ( aCommand.Name.compareToAscii( GLOBALTRANSFER_NAME ) == 0 ) )
+    {
+        //////////////////////////////////////////////////////////////////
+        // globalTransfer
+        //////////////////////////////////////////////////////////////////
+
+        GlobalTransferCommandArgument aTransferArg;
+        if ( aCommand.Argument >>= aTransferArg )
         {
-            com::sun::star::uno::Sequence< ContentInfo > aInfo =
-                    xCreator->queryCreatableContentsInfo();
-            sal_uInt32 nCount = aInfo.getLength();
-            for ( sal_uInt32 n = 0; n < nCount; ++ n )
-            {
-                // Compare content types.
-                if ( aInfo[ n ].Type == Info.Type )
-                {
-                    // Found!
-                    return xCreator->createNewContent( Info );
-                }
-            }
+            globalTransfer( aTransferArg, Environment );
+        }
+        else
+        {
+            VOS_ENSURE( sal_False,
+                        "UniversalContentBroker::execute - invalid parameter!" );
+            throw CommandAbortedException();
         }
     }
+    else
+    {
+        //////////////////////////////////////////////////////////////////
+        // Unknown command
+        //////////////////////////////////////////////////////////////////
 
-    // No matching creator found.
-    return Reference< XContent >();
+        VOS_ENSURE( sal_False,
+                    "UniversalContentBroker::execute - unknown command!" );
+        throw CommandAbortedException();
+    }
+
+    return aRet;
+}
+
+//=========================================================================
+// virtual
+void SAL_CALL UniversalContentBroker::abort( sal_Int32 CommandId )
+    throw( RuntimeException )
+{
+    // @@@ Not implemeted ( yet).
 }
 
 //=========================================================================
