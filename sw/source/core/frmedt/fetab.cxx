@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:44:09 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,9 @@
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
-
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
 #ifndef _RULER_HXX
 #include <svtools/ruler.hxx>
 #endif
@@ -1006,7 +1008,26 @@ void SwFEShell::SetBoxBackground( const SvxBrushItem &rNew )
 
 BOOL SwFEShell::GetBoxBackground( SvxBrushItem &rToFill ) const
 {
-    return GetDoc()->GetBoxBackground( GetShellCursor( *this ), rToFill );
+    return GetDoc()->GetBoxAttr( GetShellCursor( *this ), rToFill );
+}
+
+/***********************************************************************
+#*  Class      :  SwFEShell
+#*  Methoden   :  SetBoxDirection(), GetBoxDirection()
+#*  Datum      :  FME 2004-02-03
+#*  Update     :  FME 2004-02-03
+#***********************************************************************/
+void SwFEShell::SetBoxDirection( const SvxFrameDirectionItem& rNew )
+{
+    SET_CURR_SHELL( this );
+    StartAllAction();
+    GetDoc()->SetBoxAttr( GetShellCursor( *this ), rNew );
+    EndAllActionAndCall();
+}
+
+BOOL SwFEShell::GetBoxDirection( SvxFrameDirectionItem&  rToFill ) const
+{
+    return GetDoc()->GetBoxAttr( GetShellCursor( *this ), rToFill );
 }
 
 /***********************************************************************
@@ -2121,6 +2142,7 @@ BOOL SwFEShell::IsTableRightToLeft() const
 
     return pFrm->ImplFindTabFrm()->IsRightToLeft();
 }
+
 /* -----------------------------22.08.2002 12:50------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -2131,4 +2153,18 @@ BOOL SwFEShell::IsMouseTableRightToLeft(const Point &rPt) const
     ASSERT( pTabFrm, "Table not found" );
     return pTabFrm ? pTabFrm->IsRightToLeft() : FALSE;
 }
+
+/* -----------------------------11.02.2004 12:50------------------------------
+
+ ---------------------------------------------------------------------------*/
+BOOL SwFEShell::IsTableVertical() const
+{
+    SwFrm *pFrm = GetCurrFrm();
+    if( !pFrm->IsInTab() )
+        return FALSE;
+
+    return pFrm->ImplFindTabFrm()->IsVertical();
+}
+
+
 
