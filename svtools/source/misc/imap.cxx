@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:44:08 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,32 +158,28 @@ UINT16 IMapObject::GetVersion() const
 |*
 \******************************************************************************/
 
-SvStream& operator<<( SvStream& rOStm, const IMapObject& rObj )
+void IMapObject::Write( SvStream& rOStm, const String& rBaseURL ) const
 {
     IMapCompat*             pCompat;
     const rtl_TextEncoding  eEncoding = gsl_getSystemTextEncoding();
 
-    rOStm << rObj.GetType();
-    rOStm << rObj.GetVersion();
+    rOStm << GetType();
+    rOStm << GetVersion();
     rOStm << ( (UINT16) eEncoding );
 
-    String sURL(INetURLObject::AbsToRel(rObj.aURL,
-        INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS));
-    ByteString aRelURL( sURL, eEncoding );
+    const ByteString aRelURL( String(URIHelper::simpleNormalizedMakeRelative( rBaseURL, aURL )), eEncoding );
     rOStm.WriteByteString( aRelURL );
-    rOStm.WriteByteString( ByteString( rObj.aDescription, eEncoding ) );
-    rOStm << rObj.bActive;
-    rOStm.WriteByteString( ByteString( rObj.aTarget, eEncoding ) );
+    rOStm.WriteByteString( ByteString( aDescription, eEncoding ) );
+    rOStm << bActive;
+    rOStm.WriteByteString( ByteString( aTarget, eEncoding ) );
 
     pCompat = new IMapCompat( rOStm, STREAM_WRITE );
 
-    rObj.WriteIMapObject( rOStm );
-    rObj.aEventList.Write( rOStm );                                 // V4
-    rOStm.WriteByteString( ByteString( rObj.aName, eEncoding ) );   // V5
+    WriteIMapObject( rOStm );
+    aEventList.Write( rOStm );                                 // V4
+    rOStm.WriteByteString( ByteString( aName, eEncoding ) );   // V5
 
     delete pCompat;
-
-    return rOStm;
 }
 
 
@@ -193,7 +189,7 @@ SvStream& operator<<( SvStream& rOStm, const IMapObject& rObj )
 |*
 \******************************************************************************/
 
-SvStream& operator>>( SvStream& rIStm, IMapObject& rObj )
+void IMapObject::Read( SvStream& rIStm, const String& rBaseURL )
 {
     IMapCompat*         pCompat;
     rtl_TextEncoding    nTextEncoding;
@@ -201,34 +197,32 @@ SvStream& operator>>( SvStream& rIStm, IMapObject& rObj )
 
     // Typ und Version ueberlesen wir
     rIStm.SeekRel( 2 );
-    rIStm >> rObj.nReadVersion;
+    rIStm >> nReadVersion;
     rIStm >> nTextEncoding;
-    rIStm.ReadByteString( aString ); rObj.aURL = String( aString.GetBuffer(), nTextEncoding );
-    rIStm.ReadByteString( aString ); rObj.aDescription = String( aString.GetBuffer(), nTextEncoding );
-    rIStm >> rObj.bActive;
-    rIStm.ReadByteString( aString ); rObj.aTarget = String( aString.GetBuffer(), nTextEncoding );
+    rIStm.ReadByteString( aString ); aURL = String( aString.GetBuffer(), nTextEncoding );
+    rIStm.ReadByteString( aString ); aDescription = String( aString.GetBuffer(), nTextEncoding );
+    rIStm >> bActive;
+    rIStm.ReadByteString( aString ); aTarget = String( aString.GetBuffer(), nTextEncoding );
 
     // URL absolut machen
-    rObj.aURL = URIHelper::SmartRelToAbs( rObj.aURL, FALSE, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS );
+    aURL = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), aURL, URIHelper::GetMaybeFileHdl(), true, false, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS );
     pCompat = new IMapCompat( rIStm, STREAM_READ );
 
-    rObj.ReadIMapObject( rIStm );
+    ReadIMapObject( rIStm );
 
     // ab Version 4 lesen wir eine EventListe
-    if ( rObj.nReadVersion >= 0x0004 )
+    if ( nReadVersion >= 0x0004 )
     {
-        rObj.aEventList.Read(rIStm);
+        aEventList.Read(rIStm);
 
         // ab Version 5 kann ein Objektname vorhanden sein
-        if ( rObj.nReadVersion >= 0x0005 )
+        if ( nReadVersion >= 0x0005 )
         {
-            rIStm.ReadByteString( aString ); rObj.aName = String( aString.GetBuffer(), nTextEncoding );
+            rIStm.ReadByteString( aString ); aName = String( aString.GetBuffer(), nTextEncoding );
         }
     }
 
     delete pCompat;
-
-    return rIStm;
 }
 
 
@@ -1271,7 +1265,7 @@ void ImageMap::Scale( const Fraction& rFracX, const Fraction& rFracY )
 |*
 \******************************************************************************/
 
-void ImageMap::ImpWriteImageMap( SvStream& rOStm ) const
+void ImageMap::ImpWriteImageMap( SvStream& rOStm, const String& rBaseURL ) const
 {
     IMapObject* pObj;
     USHORT      nCount = (USHORT) maList.Count();
@@ -1279,7 +1273,7 @@ void ImageMap::ImpWriteImageMap( SvStream& rOStm ) const
     for ( USHORT i = 0; i < nCount; i++ )
     {
         pObj = (IMapObject*) maList.GetObject( i );
-        rOStm << *pObj;
+        pObj->Write( rOStm, rBaseURL );
     }
 }
 
@@ -1290,7 +1284,7 @@ void ImageMap::ImpWriteImageMap( SvStream& rOStm ) const
 |*
 \******************************************************************************/
 
-void ImageMap::ImpReadImageMap( SvStream& rIStm, USHORT nCount )
+void ImageMap::ImpReadImageMap( SvStream& rIStm, USHORT nCount, const String& rBaseURL )
 {
     // neue Objekte einlesen
     for ( USHORT i = 0; i < nCount; i++ )
@@ -1305,7 +1299,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, USHORT nCount )
             case ( IMAP_OBJ_RECTANGLE ):
             {
                 IMapRectangleObject* pObj = new IMapRectangleObject;
-                rIStm >> *pObj;
+                pObj->Read( rIStm, rBaseURL );
                 maList.Insert( pObj, LIST_APPEND );
             }
             break;
@@ -1313,7 +1307,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, USHORT nCount )
             case ( IMAP_OBJ_CIRCLE ):
             {
                 IMapCircleObject* pObj = new IMapCircleObject;
-                rIStm >> *pObj;
+                pObj->Read( rIStm, rBaseURL );
                 maList.Insert( pObj, LIST_APPEND );
             }
             break;
@@ -1321,7 +1315,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, USHORT nCount )
             case ( IMAP_OBJ_POLYGON ):
             {
                 IMapPolygonObject* pObj = new IMapPolygonObject;
-                rIStm >> *pObj;
+                pObj->Read( rIStm, rBaseURL );
                 maList.Insert( pObj, LIST_APPEND );
             }
             break;
@@ -1339,20 +1333,20 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, USHORT nCount )
 |*
 \******************************************************************************/
 
-SvStream& operator<<( SvStream& rOStm, const ImageMap& rImageMap )
+void ImageMap::Write( SvStream& rOStm, const String& rBaseURL ) const
 {
     IMapCompat*             pCompat;
-    String                  aName( rImageMap.GetName() );
+    String                  aName( GetName() );
     String                  aDummy;
     USHORT                  nOldFormat = rOStm.GetNumberFormatInt();
-    UINT16                  nCount = (UINT16) rImageMap.GetIMapObjectCount();
+    UINT16                  nCount = (UINT16) GetIMapObjectCount();
     const rtl_TextEncoding  eEncoding = gsl_getSystemTextEncoding();
 
     rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
     // MagicCode schreiben
     rOStm << IMAPMAGIC;
-    rOStm << rImageMap.GetVersion();
+    rOStm << GetVersion();
     rOStm.WriteByteString( ByteString( aName, eEncoding ) );
     rOStm.WriteByteString( ByteString( aDummy, eEncoding ) );
     rOStm << nCount;
@@ -1364,11 +1358,9 @@ SvStream& operator<<( SvStream& rOStm, const ImageMap& rImageMap )
 
     delete pCompat;
 
-    rImageMap.ImpWriteImageMap( rOStm );
+    ImpWriteImageMap( rOStm, rBaseURL );
 
     rOStm.SetNumberFormatInt( nOldFormat );
-
-    return rOStm;
 }
 
 
@@ -1378,7 +1370,7 @@ SvStream& operator<<( SvStream& rOStm, const ImageMap& rImageMap )
 |*
 \******************************************************************************/
 
-SvStream& operator>>( SvStream& rIStm, ImageMap& rImageMap )
+void ImageMap::Read( SvStream& rIStm, const String& rBaseURL )
 {
     ByteString  aString;
     char        cMagic[6];
@@ -1393,12 +1385,12 @@ SvStream& operator>>( SvStream& rIStm, ImageMap& rImageMap )
         IMapCompat* pCompat;
 
         // alten Inhalt loeschen
-        rImageMap.ClearImageMap();
+        ClearImageMap();
 
         // Version ueberlesen wir
         rIStm.SeekRel( 2 );
 
-        rIStm.ReadByteString( aString ); rImageMap.aName = String( aString, gsl_getSystemTextEncoding() );
+        rIStm.ReadByteString( aString ); aName = String( aString, gsl_getSystemTextEncoding() );
         rIStm.ReadByteString( aString ); // Dummy
         rIStm >> nCount;
         rIStm.ReadByteString( aString ); // Dummy
@@ -1408,15 +1400,13 @@ SvStream& operator>>( SvStream& rIStm, ImageMap& rImageMap )
         // hier kann in neueren Versionen gelesen werden
 
         delete pCompat;
-        rImageMap.ImpReadImageMap( rIStm, nCount );
+        ImpReadImageMap( rIStm, nCount, rBaseURL );
 
     }
     else
         rIStm.SetError( SVSTREAM_GENERALERROR );
 
     rIStm.SetNumberFormatInt( nOldFormat );
-
-    return rIStm;
 }
 
 
