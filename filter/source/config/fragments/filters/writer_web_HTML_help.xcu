@@ -3,7 +3,7 @@
         <prop oor:name="Type"><value>writer_web_HTML_help</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.text.WebDocument</value></prop>
         <prop oor:name="UIComponent"/>
-        <prop oor:name="UserData"><value>HTML</value></prop>
+        <prop oor:name="UserData"><value>HTML_HELP</value></prop>
         <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
