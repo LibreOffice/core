@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-29 14:48:05 $
+ *  last change: $Author: oj $ $Date: 2002-12-02 14:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1731,6 +1731,9 @@ void SdDrawViewShell::InsertURLButton(const String& rURL, const String& rText,
             form::FormButtonType eButtonType = form::FormButtonType_URL;
             aTmp <<= eButtonType;
             xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" )), aTmp );
+            // #105638# OJ
+            aTmp <<= sal_True;
+            xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aTmp );
         }
     }
 
@@ -1765,6 +1768,9 @@ void SdDrawViewShell::InsertURLButton(const String& rURL, const String& rText,
         form::FormButtonType eButtonType = form::FormButtonType_URL;
         aTmp <<= eButtonType;
         xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" )), aTmp );
+        // #105638# OJ
+        aTmp <<= sal_True;
+        xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aTmp );
 
         Point aPos;
 
