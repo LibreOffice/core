@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animexp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-24 17:06:07 $
+ *  last change: $Author: cl $ $Date: 2002-03-21 09:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,7 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape )
 
                 mpImpl->maEffects.push_back( aEffect );
             }
-            else
+
             {
 
                 xProps->getPropertyValue( mpImpl->msEffect ) >>= eEffect;
