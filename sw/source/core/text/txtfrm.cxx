@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:53:10 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 08:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2485,7 +2485,7 @@ SwTwips lcl_CalcFlyBasePos( const SwTxtFrm& rFrm, SwRect aFlyRect,
         else
             break;
     }
-    while ( sal_True );
+    while ( (aFlyRect.*fnRect->fnGetWidth)() > 0 );
 
     return nRet;
 }
