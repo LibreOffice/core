@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:05:44 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,7 +567,7 @@ void CppuType::dumpLGetCppuType(FileStream& o)
 {
     OString typeName(m_typeName.replace('/', '_'));
 
-    o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
@@ -582,7 +582,7 @@ void CppuType::dumpLGetCppuType(FileStream& o)
     }
     inc();
 
-    o << indent() << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << indent() << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << indent() << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << indent() << "#endif\n\n";
 
@@ -630,7 +630,7 @@ void CppuType::dumpGetCppuType(FileStream& o)
         return;
     }
 
-    o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
@@ -639,7 +639,7 @@ void CppuType::dumpGetCppuType(FileStream& o)
     o << "* ) SAL_THROW( () )\n{\n";
     inc();
 
-    o << indent() << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << indent() << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << indent() << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << indent() << "#endif\n\n";
 
@@ -742,7 +742,7 @@ void CppuType::dumpCGetCppuType(FileStream& o)
 {
     OString typeName(m_typeName.replace('/', '_'));
 
-    o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << "static ::com::sun::star::uno::Type * pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
@@ -755,7 +755,7 @@ void CppuType::dumpCGetCppuType(FileStream& o)
     o << "* ) SAL_THROW( () )\n{\n";
     inc();
 
-    o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << indent() << "static ::com::sun::star::uno::Type * pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
@@ -770,7 +770,7 @@ void CppuType::dumpCGetCppuType(FileStream& o)
 
     if ( m_cppuTypeDynamic )
     {
-        o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n";
+        o << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n";
         o << indent() << "static ::com::sun::star::uno::Type aType_" << typeName << "( "
           << getTypeClass(m_typeName) << ", sTypeName );\n";
         o << indent() << "pType_" << typeName << " = &aType_" << typeName << ";\n";
@@ -859,7 +859,7 @@ void CppuType::dumpCGetCppuType(FileStream& o)
         o << indent() << "typelib_typedescription_release( pTD );\n"
           << indent() << "// End inline typedescription generation\n\n";
 
-        o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n";
+        o << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n";
         o << indent() << "static ::com::sun::star::uno::Type aType_" << typeName << "( "
           << getTypeClass(m_typeName) << ", sTypeName );\n";
         o << indent() << "pType_" << typeName << " = &aType_" << typeName << ";\n";
@@ -1882,7 +1882,7 @@ void InterfaceType::dumpGetCppuType(FileStream& o)
         return;
     }
 
-    o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
@@ -1891,7 +1891,7 @@ void InterfaceType::dumpGetCppuType(FileStream& o)
     o << "* ) SAL_THROW( () )\n{\n";
     inc();
 
-    o << indent() << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << indent() << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << indent() << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << indent() << "#endif\n\n";
 
@@ -1933,7 +1933,7 @@ void InterfaceType::dumpCGetCppuType(FileStream& o)
 {
     OString typeName(m_typeName.replace('/', '_'));
 
-    o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       <<  "static ::com::sun::star::uno::Type * pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
@@ -1946,7 +1946,7 @@ void InterfaceType::dumpCGetCppuType(FileStream& o)
     o << "* ) SAL_THROW( () )\n{\n";
     inc();
 
-    o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << indent() << "static ::com::sun::star::uno::Type * pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
@@ -1961,7 +1961,7 @@ void InterfaceType::dumpCGetCppuType(FileStream& o)
 
     if ( m_cppuTypeDynamic )
     {
-        o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n";
+        o << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n";
         o << indent() << "static ::com::sun::star::uno::Type aType_" << typeName << "( "
           << getTypeClass(m_typeName) << ", sTypeName );\n";
         o << indent() << "pType_" << typeName << " = &aType_" << typeName << ";\n";
@@ -2042,7 +2042,7 @@ void InterfaceType::dumpCGetCppuType(FileStream& o)
 //      else
 //          o << "\n";
 
-        o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n";
+        o << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n";
         o << indent() << "static ::com::sun::star::uno::Type aType_" << typeName << "( "
           << getTypeClass(m_typeName) << ", sTypeName );\n";
         o << indent() << "pType_" << typeName << " = &aType_" << typeName << ";\n";
@@ -3348,7 +3348,7 @@ void EnumType::dumpGetCppuType(FileStream& o)
         return;
     }
 
-    o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
@@ -3357,7 +3357,7 @@ void EnumType::dumpGetCppuType(FileStream& o)
     o << "* ) SAL_THROW( () )\n{\n";
     inc();
 
-    o << indent() << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << indent() << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << indent() << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << indent() << "#endif\n\n";
 
@@ -3383,7 +3383,7 @@ void EnumType::dumpCGetCppuType(FileStream& o)
 {
     OString typeName(m_typeName.replace('/', '_'));
 
-    o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       <<  "static ::com::sun::star::uno::Type * pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
@@ -3396,7 +3396,7 @@ void EnumType::dumpCGetCppuType(FileStream& o)
     o << "* ) SAL_THROW( () )\n{\n";
     inc();
 
-    o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << indent() << "static ::com::sun::star::uno::Type * pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
@@ -3411,7 +3411,7 @@ void EnumType::dumpCGetCppuType(FileStream& o)
 
     if ( m_cppuTypeDynamic )
     {
-        o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n";
+        o << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n";
         o << indent() << "static ::com::sun::star::uno::Type aType_" << typeName << "( "
           << getTypeClass(m_typeName) << ", sTypeName );\n";
         o << indent() << "pType_" << typeName << " = &aType_" << typeName << ";\n";
@@ -3460,7 +3460,7 @@ void EnumType::dumpCGetCppuType(FileStream& o)
         o << indent() << "typelib_typedescription_release( pTD );\n"
           << indent() << "// End inline typedescription generation\n\n";
 
-        o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n";
+        o << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n";
         o << indent() << "static ::com::sun::star::uno::Type aType_" << typeName << "( "
           << getTypeClass(m_typeName) << ", sTypeName );\n";
         o << indent() << "pType_" << typeName << " = &aType_" << typeName << ";\n";
@@ -3577,14 +3577,14 @@ void TypeDefType::dumpCGetCppuType(FileStream& o)
         return;
     }
 
-    o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       <<  "static ::com::sun::star::uno::Type * pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
     o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_" << typeName << "_Type( ) SAL_THROW( () )\n{\n";
     inc();
 
-    o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << indent() << "static ::com::sun::star::uno::Type * pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
@@ -3599,7 +3599,7 @@ void TypeDefType::dumpCGetCppuType(FileStream& o)
 
     if ( m_cppuTypeDynamic )
     {
-        o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n";
+        o << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n";
         o << indent() << "static ::com::sun::star::uno::Type aType_" << typeName << "( "
           << getTypeClass(m_typeName) << ", sTypeName );\n";
         o << indent() << "pType_" << typeName << " = &aType_" << typeName << ";\n";
@@ -3632,7 +3632,7 @@ void TypeDefType::dumpCGetCppuType(FileStream& o)
           << indent() << "typelib_typedescription_release( pTD );\n"
           << indent() << "// End inline typedescription generation\n\n";
 
-        o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n";
+        o << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n";
         o << indent() << "static ::com::sun::star::uno::Type aType_" << typeName << "( "
           << getTypeClass(m_typeName) << ", sTypeName );\n";
         o << indent() << "pType_" << typeName << " = &aType_" << typeName << ";\n";
@@ -3657,14 +3657,14 @@ void TypeDefType::dumpLGetCppuType(FileStream& o)
 /*
     OString typeName(m_typeName.replace('/', '_'));
 
-    o << "#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << "#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << "#endif\n\n";
 
     o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_" << typeName << "_Type( ) SAL_THROW( () )\n{\n";
     inc();
 
-    o << indent() << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || ((__GNUC__<3) && defined(__APPLE__)))\n"
+    o << indent() << "#if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))\n"
       << indent() << "static typelib_TypeDescriptionReference * s_pType_" << typeName << " = 0;\n"
       << indent() << "#endif\n\n";
 
