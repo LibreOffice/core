@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-21 20:49:26 $
+ *  last change: $Author: ab $ $Date: 2001-02-26 09:54:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,18 @@
 #include <com/sun/star/awt/FontWidth.hpp>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/xml/sax/XParser.hpp>
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
+
+#include <xmlscript/xml_helper.hxx>
 
 
 namespace xmlscript
@@ -1182,5 +1191,72 @@ SAL_DLLEXPORT void SAL_CALL exportDialogModel(
         xOut->endElement( aWindowName );
     }
 }
+
+
+//==================================================================================================
+SAL_DLLEXPORT void SAL_CALL exportDialogModelToByteSequence(
+    uno::Reference< container::XNameContainer > const & xDialogModel,
+    uno::Sequence< sal_Int8 >& aDestSequence )
+    throw (uno::Exception)
+{
+    Reference< lang::XMultiServiceFactory > xSMgr( comphelper::getProcessServiceFactory() );
+    if( !xSMgr.is() )
+        return;
+
+    Reference< xml::sax::XExtendedDocumentHandler >
+        xHandler( xSMgr->createInstance(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") ) ), UNO_QUERY );
+    OSL_ASSERT( xHandler.is() );
+    if (! xHandler.is())
+    {
+        OSL_ENSURE( 0, "### couln't create sax-writer component\n" );
+    }
+
+    Reference< io::XActiveDataSource > xSource( xHandler, UNO_QUERY );
+    xSource->setOutputStream( ::xmlscript::createOutputStream( (ByteSequence*)&aDestSequence ) );
+
+    xHandler->startDocument();
+
+    ::xmlscript::exportDialogModel(
+        xDialogModel,   Reference< xml::sax::XExtendedDocumentHandler >::query( xHandler ) );
+
+    xHandler->endDocument();
+}
+
+//==================================================================================================
+SAL_DLLEXPORT void SAL_CALL importDialogModelFromByteSequence(
+    uno::Reference< container::XNameContainer > const & xDialogModel,
+    uno::Sequence< sal_Int8 > const& aSourceSequence )
+    throw (uno::Exception)
+{
+    Reference< lang::XMultiServiceFactory > xSMgr( comphelper::getProcessServiceFactory() );
+    if( !xSMgr.is() )
+        return;
+
+    Reference< xml::sax::XParser > xParser( xSMgr->createInstance(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ) ), UNO_QUERY );
+    if (xParser.is())
+    {
+        //ErrorHandler * pHandler = new ErrorHandler();
+        //xParser->setErrorHandler( (xml::sax::XErrorHandler *)pHandler );
+        //xParser->setEntityResolver( (xml::sax::XEntityResolver *)pHandler );
+
+        OSL_ASSERT( xDialogModel.is() );
+        xParser->setDocumentHandler( ::xmlscript::importDialogModel( xDialogModel ) );
+
+
+        xml::sax::InputSource source;
+        source.aInputStream = ::xmlscript::createInputStream( *(ByteSequence*)&aSourceSequence );
+        source.sSystemId    = OUString::createFromAscii( "virtual file" );
+
+        // start parsing
+        xParser->parseStream( source );
+    }
+    else
+    {
+        OSL_ENSURE( 0, "### couln't create sax-parser component\n" );
+    }
+}
+
 
 };

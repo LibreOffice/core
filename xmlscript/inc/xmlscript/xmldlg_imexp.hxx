@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_imexp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-21 20:49:25 $
+ *  last change: $Author: ab $ $Date: 2001-02-26 09:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,15 @@
 #ifndef _XMLSCRIPT_XMLDLG_IMEXP_HXX_
 #define _XMLSCRIPT_XMLDLG_IMEXP_HXX_
 
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HXX_
 #include <com/sun/star/container/XNameContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HXX_
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
 
 namespace xmlscript
 {
@@ -87,4 +93,17 @@ SAL_CALL importDialogModel(
 
 };
 
+//==================================================================================================
+SAL_DLLEXPORT void SAL_CALL exportDialogModelToByteSequence(
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > const & xDialogModel,
+    ::com::sun::star::uno::Sequence< sal_Int8 >& aDestSequence )
+    throw (::com::sun::star::uno::Exception);
+
+//==================================================================================================
+SAL_DLLEXPORT void SAL_CALL importDialogModelFromByteSequence(
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > const & xDialogModel,
+    ::com::sun::star::uno::Sequence< sal_Int8 > const& aSourceSequence )
+    throw (::com::sun::star::uno::Exception);
+
 #endif
+
