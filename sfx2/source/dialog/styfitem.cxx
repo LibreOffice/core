@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styfitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-27 09:54:23 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,9 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "styfitem.hxx"
 
