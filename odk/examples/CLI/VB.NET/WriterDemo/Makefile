@@ -45,7 +45,7 @@ WriterDemo : $(WRITERDEMO_OUT)/WriterDemo.exe
 	@echo -------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
-	@echo make WriterDemo.run
+	@echo $(MAKE) WriterDemo.run
 	@echo -------------------------------------------------------------------------------
 
 %.run : $(WRITERDEMO_OUT)/%.exe
