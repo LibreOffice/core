@@ -67,6 +67,9 @@ Public Functions
     min(x1,x2)
     power(x,power(interger only), rounding-factor=100)
     sqrt(x, rounding-factor=100)
+    convert2radian(x,rounding-factor=100)
+    convert2degree(x,rounding-factor=100)
+    convert2fd(x,rounding-factor=100)
  -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:svg="http://www.w3.org/2000/svg" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:text="http://openoffice.org/2000/text" xmlns:style="http://openoffice.org/2000/style" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:office="http://openoffice.org/2000/office" exclude-result-prefixes="draw svg style office fo text">
     <xsl:variable name="pi" select="3.1416"/>
@@ -563,4 +566,50 @@ Sqrt-GetOneDigit
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+    <xsl:template name="convert2redian">
+        <xsl:param name="x" select="'0'"/>
+        <xsl:param name="rounding-factor" select="100"/>
+        <xsl:choose>
+            <xsl:when test="contains($x,'deg')">
+                <xsl:value-of select="round($rounding-factor * number(substring-before($x, 'deg') div 180 * $pi)) div $rounding-factor"/>
+            </xsl:when>
+            <xsl:when test="contains($x,'fd')">
+                <xsl:value-of select="round($rounding-factor * number(substring-before($x, 'fd') div 180 div 65536 * $pi)) div $rounding-factor"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="round($rounding-factor * number($x) div 180 * $pi) div $rounding-factor"/>
+            </xsl:otherwise>
+        </xsl:choose> 
+    </xsl:template>
+    <xsl:template name="convert2degree">
+        <xsl:param name="x" select="'0'"/>
+        <xsl:param name="rounding-factor" select="100"/>
+        <xsl:choose>
+            <xsl:when test="contains($x,'deg')">
+                <xsl:value-of select="round($rounding-factor * substring-before($x,'deg')) div $rounding-factor"/>
+            </xsl:when>
+            <xsl:when test="contains($x,'fd')">
+                <xsl:value-of select="round($rounding-factor * number(substring-before($x, 'fd')) div 65536 ) div $rounding-factor"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="round($rounding-factor * number($x) * 180 div $pi) div $rounding-factor"/>
+            </xsl:otherwise>
+        </xsl:choose> 
+    </xsl:template>
+    <xsl:template name="convert2fd">
+        <xsl:param name="x" select="'0'"/>
+        <xsl:param name="rounding-factor" select="100"/>
+        <xsl:choose>
+            <xsl:when test="contains($x,'deg')">
+                <xsl:value-of select="round($rounding-factor * number(substring-before($x, 'deg') * 65535)) div $rounding-factor"/>
+            </xsl:when>
+            <xsl:when test="contains($x,'fd')">
+                <xsl:value-of select="round($rounding-factor * number(substring-before($x, 'fd'))) div $rounding-factor"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="round($rounding-factor * number($x) * 180 div $pi * 65535) div $rounding-factor"/>
+            </xsl:otherwise>
+        </xsl:choose> 
+    </xsl:template>
+
 </xsl:stylesheet>
