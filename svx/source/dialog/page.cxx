@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-21 17:59:04 $
+ *  last change: $Author: jp $ $Date: 2002-01-22 17:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,7 +652,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
                                 ? ((SvxFrameDirectionItem*)pItem)->GetValue()
                                 : 0;
         for( nPos = aTextFlowBox.GetEntryCount(); nPos; )
-            if( (sal_uInt16)(long*)aTextFlowBox.GetEntryData( --nPos ) == nVal )
+            if( (sal_uInt16)(long)aTextFlowBox.GetEntryData( --nPos ) == nVal )
                 break;
         aTextFlowBox.SelectEntryPos( nPos );
         aTextFlowBox.SaveValue();
@@ -892,7 +892,7 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
         ( nPos = aTextFlowBox.GetSelectEntryPos() ) !=
                                             aTextFlowBox.GetSavedValue() )
     {
-        nPos = (sal_uInt16)(long*)aTextFlowBox.GetEntryData( nPos );
+        nPos = (sal_uInt16)(long)aTextFlowBox.GetEntryData( nPos );
         rSet.Put( SvxFrameDirectionItem( (SvxFrameDirection)nPos,
                                     GetWhich( SID_ATTR_FRAMEDIRECTION )));
         bModified = TRUE;
