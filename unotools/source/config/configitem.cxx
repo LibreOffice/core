@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2000-11-20 11:38:50 $
+ *  last change: $Author: os $ $Date: 2000-11-24 12:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,14 +477,14 @@ Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode)
     {
         try
         {
-            Reference<XNameContainer> xCont;
+            Reference<XNameAccess> xCont;
             if(rNode.getLength())
             {
                 Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
                 aNode >>= xCont;
             }
             else
-                xCont = Reference<XNameContainer> (xHierarchyAccess, UNO_QUERY);
+                xCont = Reference<XNameAccess> (xHierarchyAccess, UNO_QUERY);
             if(xCont.is())
             {
                 aRet = xCont->getElementNames();
@@ -528,11 +528,66 @@ sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
             Sequence< OUString > aNames = xCont->getElementNames();
             const OUString* pNames = aNames.getConstArray();
             Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
-            try
+            for(sal_Int32 i = 0; i < aNames.getLength(); i++)
             {
-                for(sal_Int32 i = 0; i < aNames.getLength(); i++)
+                try
                 {
                     xCont->removeByName(pNames[i]);
+                    xBatch->commitChanges();
+                }
+                catch(Exception& rEx)
+                {
+        #ifdef DBG_UTIL
+                    OString sMsg("Exception from commitChanges(): ");
+                    sMsg += OString(rEx.Message.getStr(),
+                        rEx.Message.getLength(),
+                         RTL_TEXTENCODING_ASCII_US);
+                    OSL_DEBUG_ONLY(sMsg.getStr());
+        #endif
+                }
+            }
+        }
+        catch(Exception& rEx)
+        {
+#ifdef DBG_UTIL
+            OString sMsg("Exception from GetNodeNames: ");
+                sMsg += OString(rEx.Message.getStr(),
+                    rEx.Message.getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+            OSL_DEBUG_ONLY(sMsg.getStr());
+#endif
+            bRet = sal_False;
+        }
+    }
+    return bRet;
+}
+/* -----------------------------24.11.00 10:58--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString >& rElements)
+{
+    sal_Bool bRet;
+    if(xHierarchyAccess.is())
+    {
+        const OUString* pElements = rElements.getConstArray();
+        try
+        {
+            Reference<XNameContainer> xCont;
+            if(rNode.getLength())
+            {
+                Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
+                aNode >>= xCont;
+            }
+            else
+                xCont = Reference<XNameContainer> (xHierarchyAccess, UNO_QUERY);
+            if(!xCont.is())
+                return sal_False;
+            Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
+            try
+            {
+                for(sal_Int32 nElement = 0; nElement < rElements.getLength(); nElement++)
+                {
+                    xCont->removeByName(pElements[nElement]);
                     xBatch->commitChanges();
                 }
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-20 11:37:46 $
+ *  last change: $Author: os $ $Date: 2000-11-24 12:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@ namespace utl
                                     GetNodeNames(const rtl::OUString& rNode);
             // remove all members of a set
             sal_Bool                ClearNodeSet(const rtl::OUString& rNode);
+            // remove selected members of a set
+            sal_Bool                ClearNodeElements(const rtl::OUString& rNode,
+                                        com::sun::star::uno::Sequence< rtl::OUString >& rElements);
             // change or add members to a set
             sal_Bool                SetSetProperties(const rtl::OUString& rNode, com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues);
             // remove, change or add members of a set
