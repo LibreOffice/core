@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: th $ $Date: 2000-12-01 16:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,6 +316,9 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
         nStyle |= WB_DIALOGCONTROL;
     nStyle |= WB_ROLLABLE;
 
+    // Now, all Dialogs are per default system windows !!!
+    nStyle |= WB_SYSTEMWINDOW;
+
     if ( !pParent )
     {
         pParent = Application::GetDefDialogParent();
@@ -344,6 +347,8 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
         }
     }
 
+/*
+    // Now, all Dialogs are per default system windows !!!
     if ( pParent && !(nSysWinMode & SYSTEMWINDOW_MODE_NOAUTOMODE) )
     {
         if ( !pParent->mpFrameWindow->IsVisible() )
@@ -358,6 +363,7 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
             }
         }
     }
+*/
 
     if ( !pParent || (nStyle & WB_SYSTEMWINDOW) ||
          (pParent->mpFrameData->mbNeedSysWindow && !(nSysWinMode & SYSTEMWINDOW_MODE_NOAUTOMODE)) ||
