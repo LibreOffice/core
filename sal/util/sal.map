@@ -367,16 +367,25 @@ UDK_2_0_0 {
         rtl_digest_createMD5;
         rtl_digest_createSHA;
         rtl_digest_createSHA1;
+        rtl_digest_createHMAC_MD5;
+        rtl_digest_createHMAC_SHA1;
         rtl_digest_destroy;
         rtl_digest_destroyMD2;
         rtl_digest_destroyMD5;
         rtl_digest_destroySHA;
         rtl_digest_destroySHA1;
+        rtl_digest_destroyHMAC_MD5;
+        rtl_digest_destroyHMAC_SHA1;
         rtl_digest_get;
         rtl_digest_getMD2;
         rtl_digest_getMD5;
         rtl_digest_getSHA;
         rtl_digest_getSHA1;
+        rtl_digest_getHMAC_MD5;
+        rtl_digest_getHMAC_SHA1;
+        rtl_digest_init;
+        rtl_digest_initHMAC_MD5;
+        rtl_digest_initHMAC_SHA1;
         rtl_digest_queryAlgorithm;
         rtl_digest_queryLength;
         rtl_digest_update;
@@ -384,23 +393,14 @@ UDK_2_0_0 {
         rtl_digest_updateMD5;
         rtl_digest_updateSHA;
         rtl_digest_updateSHA1;
+        rtl_digest_updateHMAC_MD5;
+        rtl_digest_updateHMAC_SHA1;
         rtl_digest_MD2;
         rtl_digest_MD5;
         rtl_digest_SHA;
         rtl_digest_SHA1;
-
-        rtl_digest_createHMAC_MD5;
-        rtl_digest_destroyHMAC_MD5;
-        rtl_digest_getHMAC_MD5;
-        rtl_digest_initHMAC_MD5;
-        rtl_digest_updateHMAC_MD5;
-
-        rtl_digest_createHMAC_SHA1;
-        rtl_digest_destroyHMAC_SHA1;
-        rtl_digest_getHMAC_SHA1;
-        rtl_digest_initHMAC_SHA1;
-        rtl_digest_updateHMAC_SHA1;
-
+        rtl_digest_HMAC_MD5;
+        rtl_digest_HMAC_SHA1;
         rtl_digest_PBKDF2;
 
         rtl_random_createPool;
