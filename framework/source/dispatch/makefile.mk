@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: as $ $Date: 2001-07-20 08:10:36 $
+#   last change: $Author: as $ $Date: 2001-12-19 13:18:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,8 @@ SLOFILES=			$(SLO)$/interceptionhelper.obj				\
                     $(SLO)$/menudispatcher.obj					\
                     $(SLO)$/helpagentdispatcher.obj				\
                     $(SLO)$/mailtodispatcher.obj				\
-                    $(SLO)$/soundhandler.obj
+                    $(SLO)$/soundhandler.obj					\
+                    $(SLO)$/interaction.obj
 
 # --- Targets ------------------------------------------------------
 
