@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2004-01-06 12:45:01 $
+#   last change: $Author: kz $ $Date: 2005-01-13 17:24:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,7 @@ TARGET=salgdi
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+.INCLUDE :	$(PRJ)$/util$/makefile2.pmk
 
 # --- Files --------------------------------------------------------
 
