@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txttab.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:10:25 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,11 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
     {
         // Wir muessen aufpassen, dass wir nicht endlos schleifen,
         // wenn die Breite kleiner ist, als ein Blank ...
-        if( rInf.GetIdx() == rInf.GetLineStart() )
+        if( rInf.GetIdx() == rInf.GetLineStart() &&
+            // --> FME 2005-01-19 #119175# TabStop should be forced to current
+            // line if there is a fly reducing the line width:
+            !rInf.GetFly() )
+            // <--
         {
             PrtWidth( rInf.Width() - rInf.X() );
             SetFixWidth( PrtWidth() );
