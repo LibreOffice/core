@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlpivot.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:48:45 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:50:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XLPIVOT_HXX
 #define SC_XLPIVOT_HXX
 
@@ -104,11 +102,11 @@ const sal_uInt16 EXC_PT_NOSTRING            = 0xFFFF;
 const sal_uInt16 EXC_PT_MAXSTRLEN           = 0xFFFE;
 
 // pivot cache fields
-const sal_uInt16 EXC_PC_MAXFIELDCOUNT       = 0xFFFE;
+const size_t EXC_PC_MAXFIELDCOUNT           = 0xFFFE;
 const sal_uInt16 EXC_PC_NOFIELD             = 0xFFFF;
 
 // pivot cache items
-const sal_uInt16 EXC_PC_MAXITEMCOUNT        = 32500;
+const size_t EXC_PC_MAXITEMCOUNT            = 32500;
 const sal_uInt16 EXC_PC_NOITEM              = 0xFFFF;
 
 // pivot table fields
