@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-02-20 08:53:54 $
+#   last change: $Author: obo $ $Date: 2004-03-15 14:52:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,11 +66,12 @@ PRJNAME=vcl
 TARGET=gtkapp
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
+# workaround for makedepend hang
+MKDEPENDSOLVER=
+
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
