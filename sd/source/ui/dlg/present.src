@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:54:54 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ italian ] = "Standard";
         Text[ danish ] = "Standard";
         Text[ swedish ] = "S~tandard";
-        Text[ polish ] = "Domy?lnie";
+        Text[ polish ] = "Domyœlnie";
         Text[ portuguese_brazilian ] = "Stan~dard";
         Text[ japanese ] = "•W€(~D)";
         Text[ chinese_simplified ] = "±ê×¼(~D)";
@@ -528,7 +528,7 @@ ModalDialog DLG_START_PRESENTATION
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ÏÔÊ¾Êó±ê(~V)";
         Text[ russian ] = "Ïîêàçàòü óêàçàòåëü ìûøè";
-        Text[ polish ] = "Wska?nik myszy widoczny";
+        Text[ polish ] = "WskaŸnik myszy widoczny";
         Text[ japanese ] = "Ï³½Îß²İÀ‚ª–Ú‚ÉŒ©‚¦‚é(~V)";
         Text[ chinese_traditional ] = "Åã¥Ü·Æ¹«¼Ğ(~V)";
         Text[ arabic ] = "ãÄÔÑ ÇáãÇæÓ ãÑÆí";
@@ -558,7 +558,7 @@ ModalDialog DLG_START_PRESENTATION
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "Êó±êÏÔÊ¾³É±ÊĞÍ(~P)";
         Text[ russian ] = "Óêàçàòåëü ìûøè â âèäå êàğàíäàøà";
-        Text[ polish ] = "Wska?nik myszy jako pióro";
+        Text[ polish ] = "WskaŸnik myszy jako pióro";
         Text[ japanese ] = "Ï³½Îß²İÀ‚ğÍßİ‚Æ‚µ‚Ä(~P)";
         Text[ chinese_traditional ] = "¹«¼ĞÅã¥Ü¦¨µ§«¬(~P)";
         Text[ arabic ] = "ãÄÔÑ ÇáãÇæÓ Úáì åíÆÉ Şáã";
@@ -615,7 +615,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ portuguese ] = "Permitir a~nimações" ;
         Text[ chinese_simplified ] = "ÔÊĞí¶¯»­(~A)";
         Text[ russian ] = "Äîïóñòèòü àíèìàöèè";
-        Text[ polish ] = "Dopu~?æ animacje";
+        Text[ polish ] = "Dopu~œæ animacje";
         Text[ japanese ] = "±ÆÒ°¼®İ‚ğg—p‰Â”\\‚É‚·‚é(~A)";
         Text[ chinese_traditional ] = "¤¹³\\°Êµe(~A)";
         Text[ arabic ] = "ÇáÓãÇÍ ÈÇáÍÑßÉ";
