@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-26 15:35:06 $
+ *  last change: $Author: cl $ $Date: 2001-06-27 14:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,7 +490,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
                     msBuffer.append( sal_Unicode('#') );
 
                 msBuffer.append( aStrBookmark );
-                rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, msBuffer.makeStringAndClear() );
+                rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, GetExport().GetRelativeReference(msBuffer.makeStringAndClear()) );
                 rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
                 rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show, sXML_new );
                 rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onRequest );
@@ -508,7 +508,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
             {
                 if( ( nFound & FOUND_SOUNDURL ) && aStrSoundURL.getLength() != 0 )
                 {
-                    rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, aStrSoundURL );
+                    rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, GetExport().GetRelativeReference(aStrSoundURL) );
                     rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
                     rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show, sXML_new );
                     rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onRequest );
@@ -987,7 +987,8 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
             OUString aStr;
 
             xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))) >>= aStr;
-            rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, aStr = rExport.AddEmbeddedGraphicObject( aStr ) );
+            aStr = GetExport().GetRelativeReference( rExport.AddEmbeddedGraphicObject( aStr ) );
+            rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, aStr );
 
             if( aStr.getLength() && aStr[ 0 ] == '#' )
             {
@@ -1353,7 +1354,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
             sURL = rExport.AddEmbeddedObject( sURL );
 
-            rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sURL );
+            rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, GetExport().GetRelativeReference(sURL) );
             rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
             rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show, sXML_embed );
             rExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onLoad );
@@ -1367,7 +1368,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
         xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("ThumbnailGraphicURL")) ) >>= aStr;
         if( aStr.getLength() )
         {
-            aStr = rExport.AddEmbeddedGraphicObject( aStr );
+            aStr = rExport.AddEmbeddedGraphicObject( GetExport().GetRelativeReference(aStr) );
             rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, aStr );
 
             aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_simple));
@@ -1484,7 +1485,7 @@ void XMLShapeExport::ImpExportFrameShape(
         // export frame url
         OUString aStr;
         xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "FrameURL" ) ) ) >>= aStr;
-        rExport.AddAttribute      ( XML_NAMESPACE_XLINK, sXML_href, aStr );
+        rExport.AddAttribute      ( XML_NAMESPACE_XLINK, sXML_href, GetExport().GetRelativeReference(aStr) );
         rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
         rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_show, sXML_embed );
         rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onLoad );
@@ -1514,7 +1515,7 @@ void XMLShapeExport::ImpExportAppletShape(
         // export frame url
         OUString aStr;
         xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AppletCodeBase" ) ) ) >>= aStr;
-        rExport.AddAttribute      ( XML_NAMESPACE_XLINK, sXML_href, aStr );
+        rExport.AddAttribute      ( XML_NAMESPACE_XLINK, sXML_href, GetExport().GetRelativeReference(aStr) );
         rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
         rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_show, sXML_embed );
         rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onLoad );
@@ -1565,7 +1566,7 @@ void XMLShapeExport::ImpExportPluginShape(
         // export plugin url
         OUString aStr;
         xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PluginURL" ) ) ) >>= aStr;
-        rExport.AddAttribute      ( XML_NAMESPACE_XLINK, sXML_href, aStr );
+        rExport.AddAttribute      ( XML_NAMESPACE_XLINK, sXML_href, GetExport().GetRelativeReference(aStr) );
         rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
         rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_show, sXML_embed );
         rExport.AddAttributeASCII ( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onLoad );
