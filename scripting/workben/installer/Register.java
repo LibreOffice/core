@@ -113,11 +113,11 @@ public class Register{
             //     return false;
             // }
             // updating ProtocolHandler
-            statusLabel.setText("Updating ProtocolHandler...");
+            /* statusLabel.setText("Updating ProtocolHandler...");
             if(!FileUpdater.updateProtocolHandler(path, statusLabel)) {
             statusLabel.setText("Updating ProtocolHandler failed, please view SFrameworkInstall.log");
             return false;
-        }
+        } */
 
             // updating StarBasic libraries
             statusLabel.setText("Updating StarBasic libraries...");
