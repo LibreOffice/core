@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: er $ $Date: 2002-09-24 18:19:23 $
+ *  last change: $Author: dr $ $Date: 2002-10-01 09:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <svx/editobj.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <svx/srchitem.hxx>
+#include <svx/langitem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
@@ -968,6 +969,33 @@ LanguageType ScGlobal::GetEditDefaultLanguage()
 
     return Application::GetSettings().GetLanguage();
 }
+
+//------------------------------------------------------------------------
+
+void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
+{
+    DBG_ASSERT( rSet.GetItemState( ATTR_LANGUAGE_FORMAT, FALSE ) == SFX_ITEM_DEFAULT,
+        "ScGlobal::AddLanguage - language already added");
+
+    const SfxPoolItem* pHardItem;
+    if ( rSet.GetItemState( ATTR_VALUE_FORMAT, FALSE, &pHardItem ) == SFX_ITEM_SET )
+    {
+        const SvNumberformat* pHardFormat = rFormatter.GetEntry(
+            ((const SfxUInt32Item*)pHardItem)->GetValue() );
+
+        ULONG nParentFmt = 0;   // pool default
+        const SfxItemSet* pParent = rSet.GetParent();
+        if ( pParent )
+            nParentFmt = ((const SfxUInt32Item&)pParent->Get( ATTR_VALUE_FORMAT )).GetValue();
+        const SvNumberformat* pParFormat = rFormatter.GetEntry( nParentFmt );
+
+        if ( pHardFormat && pParFormat &&
+                (pHardFormat->GetLanguage() != pParFormat->GetLanguage()) )
+            rSet.Put( SvxLanguageItem( pHardFormat->GetLanguage(), ATTR_LANGUAGE_FORMAT ) );
+    }
+}
+
+
 
 //===================================================================
 //  class ScFormulaUtil - statische Methoden

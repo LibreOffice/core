@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:25:17 $
+ *  last change: $Author: dr $ $Date: 2002-10-01 09:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,6 @@
 
 #include <svx/editeng.hxx>
 #include <svx/forbiddencharacterstable.hxx>
-#include <svx/langitem.hxx>
 #include <svx/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
@@ -708,32 +707,6 @@ List& ScDocument::GetLoadedSymbolStringCellsList()
 }
 
 
-void lcl_AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
-{
-    //  Sprache dann dazutueten, wenn ein Zahlformat mit einer anderen Sprache
-    //  als im Parent (incl. Default) hart eingestellt ist
-
-    DBG_ASSERT(rSet.GetItemState(ATTR_LANGUAGE_FORMAT,FALSE)==SFX_ITEM_DEFAULT,
-                "AddLanguage: Sprache ist schon da ?!??!");
-
-    const SfxPoolItem* pHardItem;
-    if ( rSet.GetItemState( ATTR_VALUE_FORMAT, FALSE, &pHardItem ) == SFX_ITEM_SET )
-    {
-        const SvNumberformat* pHardFormat = rFormatter.GetEntry(
-                            ((const SfxUInt32Item*)pHardItem)->GetValue() );
-
-        ULONG nParentFmt = 0;                           // 0 ist Pool-Default
-        const SfxItemSet* pParent = rSet.GetParent();
-        if (pParent)
-            nParentFmt = ((const SfxUInt32Item&)pParent->Get(ATTR_VALUE_FORMAT)).GetValue();
-        const SvNumberformat* pParFormat = rFormatter.GetEntry( nParentFmt );
-
-        if ( pHardFormat && pParFormat &&
-                pHardFormat->GetLanguage() != pParFormat->GetLanguage() )
-            rSet.Put( SvxLanguageItem( pHardFormat->GetLanguage(), ATTR_LANGUAGE_FORMAT ) );
-    }
-}
-
 BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
 {
     bLoadingDone = FALSE;
@@ -969,14 +942,14 @@ BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
             {
                 pPattern = (ScPatternAttr*)pPool->GetItem(ATTR_PATTERN, i);
                 if (pPattern)
-                    lcl_AddLanguage( pPattern->GetItemSet(), *pFormatter );
+                    ScGlobal::AddLanguage( pPattern->GetItemSet(), *pFormatter );
             }
 
             //  Vorlagen:
 
             SfxStyleSheetIterator aIter( xPoolHelper->GetStylePool(), SFX_STYLE_FAMILY_PARA );
             for ( SfxStyleSheetBase* pStyle = aIter.First(); pStyle; pStyle = aIter.Next() )
-                lcl_AddLanguage( pStyle->GetItemSet(), *pFormatter );
+                ScGlobal::AddLanguage( pStyle->GetItemSet(), *pFormatter );
         }
 
         // change FontItems in styles

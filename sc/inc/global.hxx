@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-14 12:19:59 $
+ *  last change: $Author: dr $ $Date: 2002-10-01 09:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,6 +660,10 @@ public:
 
     static LanguageType GetEditDefaultLanguage();   // for EditEngine::SetDefaultLanguage
     static BYTE GetDefaultScriptType();             // for all WEAK characters
+
+    /** Adds a language item to the item set, if the number format item contains
+        a language that differs from its parent's language. */
+    static void             AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter );
 };
 #endif
 
