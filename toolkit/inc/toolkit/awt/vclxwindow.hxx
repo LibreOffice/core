@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2002-02-07 15:56:10 $
+ *  last change: $Author: mt $ $Date: 2002-02-14 17:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,14 +84,11 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HDL_
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessible.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HDL_
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessibleContext.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECOMPONENT_HDL_
-#include <drafts/com/sun/star/accessibility/XAccessibleComponent.hpp>
 #endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
@@ -126,8 +123,6 @@ class VCLXWindow :  public ::com::sun::star::awt::XWindow,
                     public ::com::sun::star::awt::XLayoutConstrains,
                     public ::com::sun::star::awt::XView,
                     public ::drafts::com::sun::star::accessibility::XAccessible,
-                    public ::drafts::com::sun::star::accessibility::XAccessibleContext,
-                    public ::drafts::com::sun::star::accessibility::XAccessibleComponent,
                     public VCLXDevice
 {
 private:
@@ -144,7 +139,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer>  mxPointer;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> mxViewGraphics;
 
-    AccessibilityInfos*             mpAccessibilityInfos;
+    ::com::sun::star::uno::WeakReference< ::drafts::com::sun::star::accessibility::XAccessibleContext > mxAccessibleContext;
 
     ULONG                           nDummy1;
     ULONG                           nDummy2;
@@ -153,7 +148,8 @@ private:
 
     sal_Bool                        mbDisposing;
     sal_Bool                        mbDesignMode;
-    sal_Bool                        mbAccessible;
+    sal_Bool                        mbDummy1;
+    sal_Bool                        mbDummy2;
 
 
 protected:
@@ -170,7 +166,6 @@ public:
     virtual void    SetWindow( Window* pWindow );
     Window*         GetWindow() const                                   { return (Window*)GetOutputDevice(); }
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> GetViewGraphics() const { return mxViewGraphics; }
-    BOOL            IsAccessible() const { return mpAccessibilityInfos != NULL; }
 
     EventListenerMultiplexer&       GetEventListeners()     { return maEventListeners; }
     FocusListenerMultiplexer&       GetFocusListeners()     { return maFocusListeners; }
@@ -197,7 +192,7 @@ public:
     ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
 
-    // ::com::sun::star::lang::Component
+    // ::com::sun::star::lang::XComponent
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException);
@@ -253,54 +248,7 @@ public:
 
     // ::drafts::com::sun::star::accessibility::XAccessible
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
-
-    // ::drafts::com::sun::star::accessibility::XAccessibleContext
-    sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException);
-    sal_Int16 SAL_CALL getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException);
-    ::rtl::OUString SAL_CALL getAccessibleDescription(  ) throw (::com::sun::star::uno::RuntimeException);
-    ::rtl::OUString SAL_CALL getAccessibleName(  ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) throw (::drafts::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
-    void SAL_CALL addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL removePropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-
-    // ::drafts::com::sun::star::accessibility::XAccessibleComponent
-    sal_Bool SAL_CALL contains( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAt( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::awt::Rectangle SAL_CALL getBounds(  ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::awt::Point SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL isShowing(  ) throw (::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL isVisible(  ) throw (::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL isFocusTraversable(  ) throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding(  ) throw (::com::sun::star::uno::RuntimeException);
 };
-
-/* ----------------------------------------------------------
-  Accessibility only for the Window hierarchy!
-  Maybe derived classes must overwrite these Accessibility interfaces:
-
-    // XAccessibleContext:
-    sal_Int16 getAccessibleRole()
-    OUString getAccessibleDescription()
-    OUString getAccessibleName()    // Default is Window::GetText()
-    Reference< XAccessibleRelationSet > getAccessibleRelationSet()
-    Reference< XAccessibleStateSet > getAccessibleStateSet()
-    void addPropertyChangeListener( Reference< XPropertyChangeListener > )
-    void removePropertyChangeListener( Reference< XPropertyChangeListener > )
-
-// ::drafts::com::sun::star::accessibility::XAccessibleComponent
-    sal_Bool isFocusTraversable()
-    Any getAccessibleKeyBinding()
-
- ---------------------------------------------------------- */
-
-
 
 #endif // _TOOLKIT_AWT_VCLXWINDOW_HXX_
 
