@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-11-15 16:02:10 $
+ *  last change: $Author: tra $ $Date: 2002-02-21 14:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ public:
     void SAL_CALL dialogSizeChanged( );
 
 private:
-    void SAL_CALL notifyAllListener( CAsyncFilePickerEventNotifier::FilePickerEventListenerMethod_t pfncFPListener, ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
+    void SAL_CALL notifyAllListener( CAsyncEventNotifier::EventListenerMethod_t pfncFPListener, ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
 
 private:
     // prevent copy and assignment
@@ -306,7 +306,7 @@ private:
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;   // to instanciate own services
     std::auto_ptr< CWinFileOpenImpl  >                                               m_pImpl;
-    CAsyncFilePickerEventNotifier                                                    m_aAsyncEventNotifier;
+    CAsyncEventNotifier                                                              m_aAsyncEventNotifier;
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tra $ $Date: 2001-11-15 16:13:08 $
+ *  last change: $Author: tra $ $Date: 2002-02-21 14:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ CFilePicker::CFilePicker( const Reference< XMultiServiceFactory >& xServiceMgr )
         XCancellable,
         XEventListener,
         XServiceInfo >( m_rbHelperMtx ),
-    m_aAsyncEventNotifier( rBHelper )
+        m_aAsyncEventNotifier(rBHelper)
 {
     HINSTANCE hInstance = GetModuleHandleA( FILE_PICKER_DLL_NAME );
     OSL_POSTCOND( hInstance, "The name of the service dll must have changed" );
@@ -215,10 +215,8 @@ void SAL_CALL CFilePicker::disposing( const EventObject& aEvent ) throw(RuntimeE
 
 void SAL_CALL CFilePicker::fileSelectionChanged( FilePickerEvent aEvent )
 {
-    CAsyncFilePickerEventNotifier::FilePickerEventListenerMethod_t pfncFPListener = &XFilePickerListener::fileSelectionChanged;
-    aEvent.Source = Reference< XInterface > (
-        static_cast< XFilePickerNotifier* >(
-            const_cast< CFilePicker* >( this ) ) );
+    CAsyncEventNotifier::EventListenerMethod_t pfncFPListener = &XFilePickerListener::fileSelectionChanged;
+    aEvent.Source = Reference<XInterface>(static_cast<XFilePickerNotifier*>(this));
     notifyAllListener( pfncFPListener, aEvent );
 }
 
@@ -228,11 +226,39 @@ void SAL_CALL CFilePicker::fileSelectionChanged( FilePickerEvent aEvent )
 
 void SAL_CALL CFilePicker::directoryChanged( FilePickerEvent aEvent )
 {
-    CAsyncFilePickerEventNotifier::FilePickerEventListenerMethod_t pfncFPListener = &XFilePickerListener::directoryChanged;
-    aEvent.Source = Reference< XInterface > (
-        static_cast< XFilePickerNotifier* >(
-            const_cast< CFilePicker* >( this ) ) );
+    CAsyncEventNotifier::EventListenerMethod_t pfncFPListener = &XFilePickerListener::directoryChanged;
+    aEvent.Source = Reference<XInterface>(static_cast<XFilePickerNotifier*>(this));
     notifyAllListener( pfncFPListener, aEvent );
+}
+
+//-----------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------
+
+void SAL_CALL CFilePicker::controlStateChanged( FilePickerEvent aEvent )
+{
+    CAsyncEventNotifier::EventListenerMethod_t pfncFPListener = &XFilePickerListener::controlStateChanged;
+    aEvent.Source = Reference<XInterface>(static_cast<XFilePickerNotifier*>(this));
+    notifyAllListener( pfncFPListener, aEvent );
+}
+
+//-----------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------
+
+void SAL_CALL CFilePicker::dialogSizeChanged( )
+{
+    // not yet implemented
+}
+
+//-----------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------
+
+void SAL_CALL CFilePicker::notifyAllListener( CAsyncEventNotifier::EventListenerMethod_t pfncFPListener, FilePickerEvent aEvent )
+{
+    OSL_ASSERT(pfncFPListener);
+    m_aAsyncEventNotifier.notifyEvent(pfncFPListener, aEvent);
 }
 
 //-----------------------------------------------------------------------------------------
@@ -289,39 +315,6 @@ OUString SAL_CALL CFilePicker::helpRequested( FilePickerEvent aEvent ) const
     }
 
     return aHelpText;
-}
-
-//-----------------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------------
-
-void SAL_CALL CFilePicker::controlStateChanged( FilePickerEvent aEvent )
-{
-    CAsyncFilePickerEventNotifier::FilePickerEventListenerMethod_t pfncFPListener = &XFilePickerListener::controlStateChanged;
-    aEvent.Source = Reference< XInterface > (
-        static_cast< XFilePickerNotifier* >(
-            const_cast< CFilePicker* >( this ) ) );
-    notifyAllListener( pfncFPListener, aEvent );
-}
-
-//-----------------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------------
-
-void SAL_CALL CFilePicker::dialogSizeChanged( )
-{
-    // not yet implemented
-}
-
-//-----------------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------------
-
-void SAL_CALL CFilePicker::notifyAllListener( CAsyncFilePickerEventNotifier::FilePickerEventListenerMethod_t pfncFPListener, FilePickerEvent aEvent )
-{
-    OSL_ASSERT( pfncFPListener );
-
-    m_aAsyncEventNotifier.notifyEvent( pfncFPListener, aEvent );
 }
 
 //------------------------------------------------------------------------------------
@@ -445,13 +438,26 @@ Sequence< OUString > SAL_CALL CFilePicker::getFiles( ) throw(RuntimeException)
 
 sal_Int16 SAL_CALL CFilePicker::execute( ) throw(RuntimeException)
 {
-    OSL_ASSERT( 0 != m_pImpl.get( ) );
+    OSL_ASSERT(0 != m_pImpl.get());
 
-    // we should not block in this call else
-    // in the case of an event the client can't
-    // call another function an we run into a
-    // deadlock !!!!!
-    return m_pImpl->execute( );
+    sal_Int16 ret = 0;
+
+    if (m_aAsyncEventNotifier.start())
+    {
+        // we should not block in this call else
+        // in the case of an event the client can't
+        // call another function an we run into a
+        // deadlock !!!!!
+        ret = m_pImpl->execute( );
+
+        m_aAsyncEventNotifier.stop();
+    }
+    else
+    {
+        OSL_ENSURE(sal_False, "Could not start event notifier thread!");
+    }
+
+    return ret;
 }
 
 //------------------------------------------------------------------------------------
