@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxspinbutton.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 11:56:28 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 12:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void SAL_CALL VCLXSpinButton::setValue( sal_Int32 n ) throw (RuntimeException)
     {
-        lcl_setSpinButtonValue( GetMutex(), GetWindow(), SpinButton::SetValue, n );
+        lcl_setSpinButtonValue( GetMutex(), GetWindow(), &SpinButton::SetValue, n );
     }
 
     //--------------------------------------------------------------------
@@ -206,43 +206,43 @@ namespace toolkit
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL VCLXSpinButton::getValue(  ) throw (RuntimeException)
     {
-        return lcl_getSpinButtonValue( GetMutex(), GetWindow(), SpinButton::GetValue );
+        return lcl_getSpinButtonValue( GetMutex(), GetWindow(), &SpinButton::GetValue );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL VCLXSpinButton::setMinimum( sal_Int32 minValue ) throw (RuntimeException)
     {
-        lcl_setSpinButtonValue( GetMutex(), GetWindow(), SpinButton::SetRangeMin, minValue );
+        lcl_setSpinButtonValue( GetMutex(), GetWindow(), &SpinButton::SetRangeMin, minValue );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL VCLXSpinButton::setMaximum( sal_Int32 maxValue ) throw (RuntimeException)
     {
-        lcl_setSpinButtonValue( GetMutex(), GetWindow(), SpinButton::SetRangeMax, maxValue );
+        lcl_setSpinButtonValue( GetMutex(), GetWindow(), &SpinButton::SetRangeMax, maxValue );
     }
 
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL VCLXSpinButton::getMinimum(  ) throw (RuntimeException)
     {
-        return lcl_getSpinButtonValue( GetMutex(), GetWindow(), SpinButton::GetRangeMin );
+        return lcl_getSpinButtonValue( GetMutex(), GetWindow(), &SpinButton::GetRangeMin );
     }
 
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL VCLXSpinButton::getMaximum(  ) throw (RuntimeException)
     {
-        return lcl_getSpinButtonValue( GetMutex(), GetWindow(), SpinButton::GetRangeMax );
+        return lcl_getSpinButtonValue( GetMutex(), GetWindow(), &SpinButton::GetRangeMax );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL VCLXSpinButton::setSpinIncrement( sal_Int32 spinIncrement ) throw (RuntimeException)
     {
-        lcl_setSpinButtonValue( GetMutex(), GetWindow(), SpinButton::SetValueStep, spinIncrement );
+        lcl_setSpinButtonValue( GetMutex(), GetWindow(), &SpinButton::SetValueStep, spinIncrement );
     }
 
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL VCLXSpinButton::getSpinIncrement(  ) throw (RuntimeException)
     {
-        return lcl_getSpinButtonValue( GetMutex(), GetWindow(), SpinButton::GetValueStep );
+        return lcl_getSpinButtonValue( GetMutex(), GetWindow(), &SpinButton::GetValueStep );
     }
 
     //--------------------------------------------------------------------
