@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedata.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:35:00 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,13 @@ sal_Int16 ElementUpdate::updateFlags(sal_Int16 _nFlags) const
 }
 // -----------------------------------------------------------------------------
 
-NodeUpdate * ElementUpdate::asNodeUpdate(bool _bMerged)
+NodeUpdate * ElementUpdate::asNodeUpdate(bool )
+{
+    return NULL;
+}
+// -----------------------------------------------------------------------------
+
+PropertyUpdate  * ElementUpdate::asPropertyUpdate()
 {
     return NULL;
 }
@@ -168,12 +174,6 @@ ElementUpdateRef NodeUpdate::getPropertyByName  (OUString const & _aName) const
 }
 // -----------------------------------------------------------------------------
 
-void NodeUpdate::writeToLayer(backenduno::XLayerHandler * _pLayer)
-{
-    OSL_ASSERT(_pLayer);
-}
-// -----------------------------------------------------------------------------
-
 void NodeUpdate::writeChildrenToLayer(backenduno::XLayerHandler * _pLayer)
 {
     OSL_ASSERT(_pLayer);
@@ -194,7 +194,16 @@ NodeModification::NodeModification(NodeUpdate * _pParent, OUString const & _aNam
 
 void NodeModification::writeToLayer(backenduno::XLayerHandler * _pLayer)
 {
-    NodeUpdate::writeToLayer(_pLayer);
+    OSL_ASSERT(_pLayer);
+
+    if ( this->getOperation() == reset &&   // if we have an empty
+        !this->changedFlags() &&            // 'reset' node, that means
+        !this->hasChildren() )              // we need to write
+        return;                             // nothing
+
+    _pLayer->overrideNode( this->getName(), this->updateFlags() );
+    this->writeChildrenToLayer(_pLayer);
+    _pLayer->endNode();
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -223,7 +232,18 @@ bool NodeReplace::hasTemplate() const
 
 void NodeReplace::writeToLayer(backenduno::XLayerHandler * _pLayer)
 {
-    NodeUpdate::writeToLayer(_pLayer);
+    OSL_ASSERT(_pLayer);
+
+    if (this->hasTemplate())
+    {
+        backenduno::TemplateIdentifier aTemplate( m_aTemplateName, m_aTemplateComponent );
+        _pLayer->addOrReplaceNodeFromTemplate( this->getName(), aTemplate, this->updateFlags() );
+    }
+    else
+        _pLayer->addOrReplaceNode( this->getName(), this->updateFlags() );
+
+    this->writeChildrenToLayer(_pLayer);
+    _pLayer->endNode();
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -247,6 +267,12 @@ PropertyUpdate::PropertyUpdate(NodeUpdate * _pParent, OUString const & _aName, s
 , m_aValues()
 , m_aType(_aType)
 {}
+// -----------------------------------------------------------------------------
+
+PropertyUpdate  * PropertyUpdate::asPropertyUpdate()
+{
+    return this;
+}
 // -----------------------------------------------------------------------------
 
 bool PropertyUpdate::setValueFor(OUString const & _aLocale, uno::Any const & _aValueUpdate)
@@ -289,10 +315,39 @@ uno::Any PropertyUpdate::getValueFor(OUString const & _aLocale) const
 }
 // -----------------------------------------------------------------------------
 
+void PropertyUpdate::writeValueToLayer(backenduno::XLayerHandler * _pLayer, uno::Any const & _aValue)
+{
+    OSL_ASSERT(_pLayer);
+    _pLayer->setPropertyValue(_aValue);
+}
+// -----------------------------------------------------------------------------
+
+void PropertyUpdate::writeValueToLayerFor(backenduno::XLayerHandler * _pLayer, uno::Any const & _aValue, OUString const & _aLocale)
+{
+    OSL_ASSERT(_pLayer);
+    if (_aLocale == this->primarySlot())
+        this->writeValueToLayer(_pLayer,_aValue);
+
+    else
+        _pLayer->setPropertyValueForLocale(_aValue,_aLocale);
+}
+// -----------------------------------------------------------------------------
+
+void PropertyUpdate::writeValuesToLayer(backenduno::XLayerHandler * _pLayer)
+{
+    OSL_ASSERT(_pLayer);
+    for (Iterator itV = beginValues(); itV != endValues(); ++itV)
+        this->writeValueToLayerFor(_pLayer, itV->second, itV->first);
+}
+// -----------------------------------------------------------------------------
+
 void PropertyUpdate::writeToLayer(backenduno::XLayerHandler * _pLayer)
 {
     OSL_ASSERT(_pLayer);
 
+    _pLayer->overrideProperty( this->getName(), this->updateFlags(), this->m_aType );
+    this->writeValuesToLayer(_pLayer);
+    _pLayer->endProperty();
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------

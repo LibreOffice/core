@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedata.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:35:00 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,12 +144,15 @@ namespace configmgr
             ElementUpdate(NodeUpdate * _pParent, OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask);
 
         public:
-            virtual NodeUpdate * asNodeUpdate(bool _bMerged = false);
+            virtual NodeUpdate      * asNodeUpdate(bool _bMerged = false);
+            virtual PropertyUpdate  * asPropertyUpdate();
+
             virtual void writeToLayer(backenduno::XLayerHandler * _pLayer) = 0;
 
         public:
             NodeUpdate * getParent() const { return m_pParent; }
 
+            sal_Int16 changedFlags() const { return m_nFlagsMask; }
             sal_Int16 updateFlags(sal_Int16 _nFlags = 0) const;
 
         };
@@ -184,7 +187,8 @@ namespace configmgr
             Iterator beginProperties()  const { return m_aProperties.begin(); };
             Iterator endProperties()    const { return m_aProperties.end();   };
 
-            virtual void writeToLayer(backenduno::XLayerHandler * _pLayer) = 0; // default implementation
+            bool hasChildren() const { return !m_aNodes.empty() || !m_aProperties.empty(); }
+
             void writeChildrenToLayer(backenduno::XLayerHandler * _pLayer);
         private:
             ElementList m_aNodes;
@@ -245,6 +249,8 @@ namespace configmgr
 
             void clear();
 
+            uno::Type const & getValueType()    const { return m_aType; }
+
             bool hasValueFor(OUString const & _aLocale) const;
             bool hasValue() const { return hasValueFor(primarySlot()); }
 
@@ -255,9 +261,14 @@ namespace configmgr
             Iterator beginValues()  const { return m_aValues.begin(); }
             Iterator endValues()    const { return m_aValues.end(); }
 
+            void writeValueToLayerFor(backenduno::XLayerHandler * _pLayer, ValueUpdate const & _aValue, OUString const & _aLocale);
+            void writeValueToLayer(backenduno::XLayerHandler * _pLayer, ValueUpdate const & _aValue);
+            void writeValuesToLayer(backenduno::XLayerHandler * _pLayer);
             virtual void writeToLayer(backenduno::XLayerHandler * _pLayer);
         private:
             OUString primarySlot() const { return OUString(); }
+
+            virtual PropertyUpdate  * asPropertyUpdate();
         };
 // -----------------------------------------------------------------------------
 

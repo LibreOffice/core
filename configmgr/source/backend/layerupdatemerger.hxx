@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatemerger.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:35:00 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include "layerupdate.hxx"
 #endif
 
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
+
 #ifndef INCLUDED_STACK
 #include <stack>
 #define INCLUDED_STACK
@@ -85,6 +89,9 @@ namespace configmgr
         using rtl::OUString;
 // -----------------------------------------------------------------------------
         class NodeUpdate;
+        class PropertyUpdate;
+        typedef rtl::Reference<NodeUpdate>      NodeUpdateRef;
+        typedef rtl::Reference<PropertyUpdate>  PropertyUpdateRef;
 
         class LayerUpdateMerger : public BasicUpdateMerger
         {
@@ -152,12 +159,15 @@ namespace configmgr
                 addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
                     throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException);
 
+        // BasicUpdateMerger
+            virtual void flushUpdate();
         private:
             void malformedUpdate(sal_Char const * pMsg);
             void illegalUpdate(sal_Char const * pMsg);
         private:
             LayerUpdate                 m_aLayerUpdate;
             NodeUpdateRef               m_xCurrentNode;
+            PropertyUpdateRef           m_xCurrentProp;
         };
 // -----------------------------------------------------------------------------
     } // namespace xml

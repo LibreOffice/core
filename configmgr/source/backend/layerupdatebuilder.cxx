@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatebuilder.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:35:00 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ bool LayerUpdateBuilder::setContext(OUString const & _aContext)
 
     LayerUpdate & update = data();
     m_pCurrentNode = new NodeModification(NULL, _aContext, 0, 0, false);
-    update.m_xContextNode.set(m_pCurrentNode);
+    update.setContextNode(m_pCurrentNode);
 
     OSL_ENSURE(m_pCurrentProp == NULL, "LayerUpdateBuilder: Internal error: got a current property for a new context");
 

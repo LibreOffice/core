@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdate.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:35:00 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,11 @@
 #include <rtl/ustring.hxx>
 #endif
 
+#ifndef INCLUDED_VECTOR
+#include <vector>
+#define INCLUDED_VECTOR
+#endif
+
 namespace drafts {
 namespace com { namespace sun { namespace star { namespace configuration { namespace backend {
     class XLayerHandler;
@@ -95,8 +100,6 @@ namespace configmgr
 
         class LayerUpdate
         {
-            friend class LayerUpdateBuilder;
-            NodeUpdateRef m_xContextNode;
         public:
             typedef uno::Reference< backenduno::XLayerHandler > LayerWriter;
 
@@ -105,8 +108,19 @@ namespace configmgr
             ~LayerUpdate();
             LayerUpdate & operator =(LayerUpdate const & _aOther);
         public:
-            NodeUpdateRef   getContextNode() const;
-            OUString        getContextPath() const;
+            typedef std::vector<OUString> ContextPath;
+
+            NodeUpdateRef       getContextNode() const;
+            ContextPath const & getContextPath() const;
+
+        private:
+            friend class LayerUpdateBuilder;
+            void setContextNode(NodeUpdateRef const & _xContextNode);
+            void makeContextPath(OUString const & _aContextPath);
+
+        private:
+            ContextPath     m_aContextPath;
+            NodeUpdateRef   m_xContextNode;
         };
 // -----------------------------------------------------------------------------
 

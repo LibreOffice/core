@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicupdatemerger.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:35:00 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,14 @@
 
 #include "basicupdatemerger.hxx"
 
+#ifndef INCLUDED_ALGORITHM
+#include <algorithm>
+#define INCLUDED_ALGORITHM
+#endif
+#ifndef INCLUDED_ITERATOR
+#include <iterator>
+#define INCLUDED_ITERATOR
+#endif
 // -----------------------------------------------------------------------------
 
 namespace configmgr
@@ -104,7 +112,10 @@ void SAL_CALL BasicUpdateMerger::endLayer(  )
         throw (MalformedDataException, lang::IllegalAccessException, uno::RuntimeException)
 {
     if (m_nNesting > 0)
-        raiseMalformedDataException("UpdateMerger: Cannot end layer - layer still in progress");
+        raiseMalformedDataException("UpdateMerger: Cannot end layer - data handling still in progress");
+
+    if (!m_aSearchPath.empty())
+        this->flushContext();
 
     m_xResultHandler->endLayer();
 }
@@ -113,10 +124,10 @@ void SAL_CALL BasicUpdateMerger::endLayer(  )
 void SAL_CALL BasicUpdateMerger::overrideNode( const OUString& aName, sal_Int16 aAttributes )
         throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
-    if (!isSkipping())
+    if (isSkipping())
         m_xResultHandler->overrideNode(aName, aAttributes);
 
-    pushLevel();
+    pushLevel(aName);
 }
 // -----------------------------------------------------------------------------
 
@@ -126,7 +137,7 @@ void SAL_CALL BasicUpdateMerger::addOrReplaceNode( const OUString& aName, sal_In
     if (!isSkipping())
         m_xResultHandler->addOrReplaceNode(aName, aAttributes);
 
-    pushLevel();
+    pushLevel(aName);
 }
 // -----------------------------------------------------------------------------
 
@@ -136,7 +147,7 @@ void SAL_CALL BasicUpdateMerger::addOrReplaceNodeFromTemplate( const OUString& a
     if (!isSkipping())
         m_xResultHandler->addOrReplaceNodeFromTemplate(aName, aTemplate, aAttributes);
 
-    pushLevel();
+    pushLevel(aName);
 }
 // -----------------------------------------------------------------------------
 
@@ -164,7 +175,7 @@ void SAL_CALL BasicUpdateMerger::overrideProperty( const OUString& aName, sal_In
     if (!isSkipping())
         m_xResultHandler->overrideProperty(aName, aAttributes, aType);
 
-    pushLevel();
+    pushLevel( OUString() ); // do not match context path to property names
 }
 // -----------------------------------------------------------------------------
 
@@ -220,7 +231,7 @@ void BasicUpdateMerger::raiseMalformedDataException(sal_Char const * pMsg)
 
 void BasicUpdateMerger::startSkipping()
 {
-    OSL_PRECOND( ! isHandling(), "BasicUpdateMerger: starting to skip, while already forwarding data");
+    OSL_PRECOND( m_nNesting == 0, "BasicUpdateMerger: starting to skip, while already forwarding data");
     m_nNesting = 1;
     m_bSkipping = true;
     OSL_POSTCOND( isHandling(), "BasicUpdateMerger: isHandling() is broken");
@@ -229,30 +240,97 @@ void BasicUpdateMerger::startSkipping()
 // -----------------------------------------------------------------------------
 
 
-void BasicUpdateMerger::pushLevel()
+void BasicUpdateMerger::pushLevel(OUString const & _aContext)
 {
-    ++m_nNesting;
-    OSL_POSTCOND( isHandling(), "BasicUpdateMerger: level counting is broken");
+    if (m_nNesting > 0)
+    {
+        ++m_nNesting;
+        OSL_POSTCOND( isHandling(), "BasicUpdateMerger: level counting is broken" );
+    }
+    else if (m_nNesting < 0)
+    {
+        OSL_POSTCOND( isHandling(), "BasicUpdateMerger: level counting is broken" );
+    }
+    else if (m_aSearchPath.empty())
+    {
+        ++m_nNesting;
+        OSL_POSTCOND( isHandling(), "BasicUpdateMerger: level counting is broken" );
+    }
+    else if ( m_aSearchPath.back().equals(_aContext) ) // search path is reverse - see findContext()
+    {
+        OSL_ENSURE( m_nNesting == 0, "BasicUpdateMerger: level count while searching must be zero");
+
+        m_aSearchPath.pop_back();
+    }
+    else // start forwarding
+    {
+        m_nNesting = 1;
+        OSL_POSTCOND( isHandling(), "BasicUpdateMerger: level counting is broken" );
+        OSL_POSTCOND(!isSkipping(), "BasicUpdateMerger: skip flag set while searching " );
+    }
 }
 // -----------------------------------------------------------------------------
 
 void BasicUpdateMerger::popLevel()
 {
     OSL_PRECOND( isHandling(), "BasicUpdateMerger: ending a node that wasn't handled here");
-    if (m_nNesting != 0)
+    if (m_nNesting > 0)
+    {
         if (--m_nNesting == 0)
             m_bSkipping = false;
+    }
+    else if (m_nNesting == 0) // ending a context leve, but the context is not yet gone
+    {
+        flushContext();
+        leaveContext();
+    }
+    else
+    {
+        OSL_ENSURE( m_aSearchPath.empty(), "BasicUpdateMerger: Left an unfinished context" );
+    }
 }
 // -----------------------------------------------------------------------------
 
-
-void BasicUpdateMerger::findContext(OUString const & _aContext)
+void BasicUpdateMerger::findContext(ContextPath const & _aContext)
 {
+    // make the context a *reverse* copy of the context path
+    OSL_PRECOND( ! isHandling(), "BasicUpdateMerger: starting context search while still handling data");
+    m_aSearchPath.clear();
+    m_aSearchPath.reserve(_aContext.size());
+    std::copy( _aContext.rbegin(), _aContext.rend(), std::back_inserter(m_aSearchPath) );
 }
 // -----------------------------------------------------------------------------
 
 void BasicUpdateMerger::leaveContext()
 {
+    OSL_PRECOND( !isHandling(), "BasicUpdateMerger: ending the context while still handling data or seaching the context");
+
+    // force
+    m_nNesting = -1;
+
+    OSL_POSTCOND( ! isSkipping(), "BasicUpdateMerger: ending the context node while still skipping data");
+    OSL_POSTCOND( isHandling(), "BasicUpdateMerger: cannot mark context as being handled to the end.");
+}
+// -----------------------------------------------------------------------------
+
+void BasicUpdateMerger::flushContext()
+{
+    OSL_PRECOND( !m_aSearchPath.empty(), "BasicUpdateMerger: flushing a context that was already found");
+
+    ContextPath::size_type nNesting = m_aSearchPath.size();
+
+    while (!m_aSearchPath.empty())
+    {
+        m_xResultHandler->overrideNode(m_aSearchPath.back(), 0);
+        m_aSearchPath.pop_back();
+    }
+    this->flushUpdate();
+
+    while (nNesting > 0)
+    {
+        m_xResultHandler->endNode();
+        --nNesting;
+    }
 }
 // -----------------------------------------------------------------------------
 

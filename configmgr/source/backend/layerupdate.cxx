@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdate.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:35:00 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ LayerUpdate::LayerUpdate()
 
 LayerUpdate::LayerUpdate(LayerUpdate const & _aOther)
 : m_xContextNode(_aOther.m_xContextNode)
+, m_aContextPath(_aOther.m_aContextPath)
 {
 }
 // -----------------------------------------------------------------------------
@@ -99,17 +100,42 @@ LayerUpdate & LayerUpdate::operator =(LayerUpdate const & _aOther)
 }
 // -----------------------------------------------------------------------------
 
+void LayerUpdate::setContextNode(NodeUpdateRef const & _xContextNode)
+{
+    m_xContextNode = _xContextNode;
+    if (_xContextNode.is())
+        makeContextPath(_xContextNode->getName());
+
+    else
+        m_aContextPath.clear();
+}
+// -----------------------------------------------------------------------------
+
+void LayerUpdate::makeContextPath(OUString const & _aPath)
+{
+    using configuration::AbsolutePath;
+    AbsolutePath const aParsedPath = configuration::AbsolutePath::parse(_aPath);
+
+    m_aContextPath.clear();
+    m_aContextPath.reserve( aParsedPath.getDepth() );
+    for (AbsolutePath::Iterator it = aParsedPath.begin(); it != aParsedPath.end(); ++it)
+    {
+        m_aContextPath.push_back( it->getName().toString() );
+    }
+}
+// -----------------------------------------------------------------------------
+
 NodeUpdateRef   LayerUpdate::getContextNode() const
 {
     return m_xContextNode;
 }
 // -----------------------------------------------------------------------------
 
-OUString LayerUpdate::getContextPath() const
+LayerUpdate::ContextPath const & LayerUpdate::getContextPath() const
 {
     OSL_PRECOND( m_xContextNode.is(), "Cannot get context path without context node" );
 
-    return m_xContextNode->getName();
+    return m_aContextPath;
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatemerger.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:35:00 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,15 @@ LayerUpdateBuilder LayerUpdateMerger::getLayerUpdateBuilder()
 }
 // -----------------------------------------------------------------------------
 
+void LayerUpdateMerger::flushUpdate()
+{
+    OSL_ENSURE(!BasicUpdateMerger::isHandling(), "LayerUpdateMerger: Unexpected: flushing data, while base implementation is active");
+    OSL_ENSURE(m_xCurrentNode.is(),"LayerUpdateMerger: No data for flushing.");
+
+    if (m_xCurrentNode.is()) m_xCurrentNode->writeChildrenToLayer(getResultWriter().get());
+}
+// -----------------------------------------------------------------------------
+
 void SAL_CALL LayerUpdateMerger::startLayer(  )
         throw (MalformedDataException, uno::RuntimeException)
 {
@@ -137,6 +146,7 @@ void SAL_CALL LayerUpdateMerger::overrideNode( const OUString& aName, sal_Int16 
         OSL_ASSERT(BasicUpdateMerger::isHandling());
         return;
     }
+    m_xCurrentNode->removeNodeByName(aName);
 
     if (NodeUpdate * pNodeUpdate = xUpdate->asNodeUpdate(true))
     {
@@ -169,6 +179,7 @@ void SAL_CALL LayerUpdateMerger::addOrReplaceNode( const OUString& aName, sal_In
         OSL_ASSERT(BasicUpdateMerger::isHandling());
         return;
     }
+    m_xCurrentNode->removeNodeByName(aName);
 
     if (NodeUpdate * pNodeUpdate = xUpdate->asNodeUpdate(true))
     {
@@ -191,6 +202,28 @@ void SAL_CALL LayerUpdateMerger::addOrReplaceNodeFromTemplate( const OUString& a
         BasicUpdateMerger::addOrReplaceNodeFromTemplate(aName, aTemplate, aAttributes);
         return;
     }
+
+    OSL_ASSERT(m_xCurrentNode.is());
+
+    ElementUpdateRef xUpdate = m_xCurrentNode->getNodeByName(aName);
+    if (!xUpdate.is())
+    {
+        BasicUpdateMerger::addOrReplaceNodeFromTemplate(aName, aTemplate, aAttributes);
+        OSL_ASSERT(BasicUpdateMerger::isHandling());
+        return;
+    }
+    m_xCurrentNode->removeNodeByName(aName);
+
+    if (NodeUpdate * pNodeUpdate = xUpdate->asNodeUpdate(true))
+    {
+        getResultWriter()->addOrReplaceNodeFromTemplate(aName, aTemplate, pNodeUpdate->updateFlags(aAttributes));
+        m_xCurrentNode.set(pNodeUpdate);
+    }
+    else
+    {
+        xUpdate->writeToLayer(getResultWriter().get());
+        BasicUpdateMerger::startSkipping();
+    }
 }
 // -----------------------------------------------------------------------------
 
@@ -211,10 +244,8 @@ void SAL_CALL LayerUpdateMerger::endNode(  )
     NodeUpdateRef xParent( m_xCurrentNode->getParent() );
 
     if (xParent.is())
-    {
         getResultWriter()->endNode();
-        xParent->removeNodeByName(m_xCurrentNode->getName());
-    }
+
     else
         BasicUpdateMerger::leaveContext();
 
@@ -236,6 +267,8 @@ void SAL_CALL LayerUpdateMerger::dropNode( const OUString& aName )
     ElementUpdateRef xUpdate = m_xCurrentNode->getNodeByName(aName);
     if (xUpdate.is())
     {
+        m_xCurrentNode->removeNodeByName(aName);
+
         if (NodeUpdate * pNodeUpdate = xUpdate->asNodeUpdate())
         {
             if (pNodeUpdate-> getOperation() == NodeUpdate::replace)
@@ -262,6 +295,30 @@ void SAL_CALL LayerUpdateMerger::overrideProperty( const OUString& aName, sal_In
         BasicUpdateMerger::overrideProperty(aName, aAttributes, aType);
         return;
     }
+
+    OSL_ASSERT( m_xCurrentNode.is());
+
+    ElementUpdateRef xUpdate = m_xCurrentNode->getPropertyByName(aName);
+    if (!xUpdate.is())
+    {
+        BasicUpdateMerger::overrideProperty(aName, aAttributes, aType);
+        OSL_ASSERT(BasicUpdateMerger::isHandling());
+        return;
+    }
+
+    m_xCurrentNode->removePropertyByName(aName);
+
+    if (PropertyUpdate * pPropUpdate = xUpdate->asPropertyUpdate())
+    {
+        // TODO: validate type
+        getResultWriter()->overrideProperty(aName, pPropUpdate->updateFlags(aAttributes), aType);
+        m_xCurrentProp.set(pPropUpdate);
+    }
+    else
+    {
+        xUpdate->writeToLayer(getResultWriter().get());
+        BasicUpdateMerger::startSkipping();
+    }
 }
 // -----------------------------------------------------------------------------
 
@@ -273,6 +330,21 @@ void SAL_CALL LayerUpdateMerger::endProperty(  )
         BasicUpdateMerger::endProperty();
         return;
     }
+
+    OSL_ASSERT(m_xCurrentNode.is());
+
+    if (!m_xCurrentProp.is())
+    {
+        OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("LayerUpdateMerger: Invalid data: Ending property that wasn't started.") );
+        throw MalformedDataException( sMsg, *this );
+    }
+
+    // write unhandled so far values
+    m_xCurrentProp->writeValuesToLayer( getResultWriter().get() );
+
+    getResultWriter()->endNode();
+
+    m_xCurrentProp.clear();
 }
 // -----------------------------------------------------------------------------
 
@@ -306,6 +378,44 @@ void SAL_CALL LayerUpdateMerger::addProperty( const OUString& aName, sal_Int16 a
         BasicUpdateMerger::addProperty(aName, aAttributes, aType);
         return;
     }
+    OSL_ASSERT( m_xCurrentNode.is());
+
+    ElementUpdateRef xUpdate = m_xCurrentNode->getPropertyByName(aName);
+    if (!xUpdate.is())
+    {
+        BasicUpdateMerger::addProperty(aName, aAttributes, aType);
+        OSL_ASSERT(BasicUpdateMerger::isHandling());
+        return;
+    }
+
+    m_xCurrentNode->removePropertyByName(aName);
+
+    if (PropertyUpdate * pPropUpdate = xUpdate->asPropertyUpdate())
+    {
+        if (pPropUpdate->hasValue() && pPropUpdate->getValue().hasValue())
+        {
+            // TODO: validate value-type
+            uno::Any aNewValue = pPropUpdate->getValue();
+            OSL_ASSERT( aNewValue.hasValue() );
+
+            if (aNewValue.getValueType() != aType)
+                malformedUpdate("LayerUpdateMerger: cannot do type conversion while writing updates");
+
+            getResultWriter()->addPropertyWithValue(aName, pPropUpdate->updateFlags(aAttributes), aNewValue);
+        }
+        else
+        {
+            // TODO: validate type
+            if (pPropUpdate->getValueType() != aType && pPropUpdate->getValueType() != uno::Type())
+                malformedUpdate("LayerUpdateMerger: types for property update do not match");
+
+            getResultWriter()->addProperty(aName, pPropUpdate->updateFlags(aAttributes), aType);
+        }
+    }
+    else
+    {
+        xUpdate->writeToLayer(getResultWriter().get());
+    }
 }
 // -----------------------------------------------------------------------------
 
@@ -316,6 +426,47 @@ void SAL_CALL LayerUpdateMerger::addPropertyWithValue( const OUString& aName, sa
     {
         BasicUpdateMerger::addPropertyWithValue(aName, aAttributes, aValue);
         return;
+    }
+    OSL_ASSERT( m_xCurrentNode.is());
+
+    ElementUpdateRef xUpdate = m_xCurrentNode->getPropertyByName(aName);
+    if (!xUpdate.is())
+    {
+        BasicUpdateMerger::addPropertyWithValue(aName, aAttributes, aValue);
+        OSL_ASSERT(BasicUpdateMerger::isHandling());
+        return;
+    }
+
+    m_xCurrentNode->removePropertyByName(aName);
+
+    if (PropertyUpdate * pPropUpdate = xUpdate->asPropertyUpdate())
+    {
+        if (!pPropUpdate->hasValue())
+        {
+            getResultWriter()->addPropertyWithValue(aName, pPropUpdate->updateFlags(aAttributes), aValue);
+        }
+        else if (pPropUpdate->getValue().hasValue())
+        {
+            // TODO: validate value-type
+            uno::Any aNewValue = pPropUpdate->getValue();
+
+            if (aNewValue.getValueType() != aValue.getValueType())
+                malformedUpdate("LayerUpdateMerger: cannot do type conversion while writing updates");
+
+            getResultWriter()->addPropertyWithValue(aName, pPropUpdate->updateFlags(aAttributes), aNewValue);
+        }
+        else // setting to null
+        {
+            // TODO: validate type
+            if (pPropUpdate->getValueType() != aValue.getValueType() && pPropUpdate->getValueType() != uno::Type())
+                malformedUpdate("LayerUpdateMerger: types for property update do not match");
+
+            getResultWriter()->addProperty(aName, pPropUpdate->updateFlags(aAttributes), aValue.getValueType());
+        }
+    }
+    else
+    {
+        xUpdate->writeToLayer(getResultWriter().get());
     }
 }
 // -----------------------------------------------------------------------------

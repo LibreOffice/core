@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicupdatemerger.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:35:00 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,27 +153,30 @@ namespace configmgr
                 addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
                     throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException);
 
+        private:    // new override
+            /// write the whole update to the output
+            virtual void flushUpdate() = 0;
+
         protected:
-            bool isHandling() const { return m_nNesting != 0 || m_pContextPath; }
+            bool isHandling() const { return m_nNesting != 0 || !m_aSearchPath.empty(); }
             bool isSkipping() const { return m_bSkipping; }
             void startSkipping();
 
-            void findContext(OUString const & _aContext);
+            typedef std::vector<OUString> ContextPath;
+            void findContext(ContextPath const & _aContext);
             void leaveContext();
 
             ResultHandler getResultWriter() const { return m_xResultHandler; };
 
             void raiseMalformedDataException(sal_Char const * pMsg);
         private:
-            void pushLevel();
+            void pushLevel(OUString const & _aLevel);
             void popLevel();
 
+            void flushContext();
         private:
-            struct ContextPath;
-
-        private:
-            ResultHandler m_xResultHandler;
-            ContextPath * m_pContextPath;
+            ResultHandler   m_xResultHandler;
+            ContextPath     m_aSearchPath;
 
             sal_Int16   m_nNesting;
             bool        m_bSkipping;
