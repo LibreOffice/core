@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 09:58:18 $
+ *  last change: $Author: rt $ $Date: 2001-08-29 20:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,9 +370,9 @@ TabPage TP_HELP_SEARCH
         Text[ swedish ] = "Sök bara i r~ubriker";
         Text[ polish ] = "Przeszukaj tylko tytu³y";
         Text[ portuguese_brazilian ] = "~Search headings only";
-        Text[ japanese ] = "ï¾€ï½²ï¾„ï¾™ã®ã¿ã§æ¤œç´¢(~H)";
+        Text[ japanese ] = "ï¾€ï½²ï¾„ï¾™ã ã‘ã§æ¤œç´¢(~H)";
         Text[ korean ] = "ì œëª©ì—ì„œë§Œ ì°¾ê¸°(~H)";
-        Text[ chinese_simplified ] = "ä»…åœ¨æ ‡é¢˜èŒƒå›´å†…æœå¯»";
+        Text[ chinese_simplified ] = "ä»…åœ¨å¤§æ ‡é¢˜èŒƒå›´å†…æœå¯»";
         Text[ chinese_traditional ] = "åƒ…åœ¨å¤§æ¨™é¡Œç¯„åœå†…æœå°‹";
         Text[ turkish ] = "~Search headings only";
         Text[ arabic ] = "~Search headings only";
@@ -594,7 +594,7 @@ String STR_HELP_WINDOW_TITLE
 String STR_HELP_BUTTON_INDEX_ON
 {
     Text = "Navigationsbereich anzeigen";
-    Text [ english_us ] = "Show Navigation Area";
+    Text [ english_us ] = "Show Navigation Pane";
     Text[ portuguese ] = "Mostrar área de navegação";
     Text[ russian ] = "Ïîêàçàòü îáëàñòü íàâèãàöèè";
     Text[ greek ] = "ÅõñåôŞñéï";
@@ -618,7 +618,7 @@ String STR_HELP_BUTTON_INDEX_ON
 String STR_HELP_BUTTON_INDEX_OFF
 {
     Text = "Navigationsbereich ausschalten";
-    Text [ english_us ] = "Hide Navigation Area";
+    Text [ english_us ] = "Hide Navigation Pane";
     Text[ portuguese ] = "Desactivar área de navegação";
     Text[ russian ] = "Ñïğÿòàòü îáëàñòü íàâèãàöèè";
     Text[ greek ] = "Hide navigation area";
@@ -1070,6 +1070,7 @@ InfoBox RID_INFO_NOSEARCHRESULTS
     MESSAGE[ arabic ] = "No themes found.";
     MESSAGE[ catalan ] = "No themes found.";
 };
+
 
 
 
