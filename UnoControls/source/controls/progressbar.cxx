@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progressbar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-23 13:55:37 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 13:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ Any SAL_CALL ProgressBar::queryInterface( const Type& rType ) throw( RuntimeExce
 //  XInterface
 //____________________________________________________________________________________________________________
 
-void SAL_CALL ProgressBar::acquire() throw( RuntimeException )
+void SAL_CALL ProgressBar::acquire() throw()
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -177,7 +177,7 @@ void SAL_CALL ProgressBar::acquire() throw( RuntimeException )
 //  XInterface
 //____________________________________________________________________________________________________________
 
-void SAL_CALL ProgressBar::release() throw( RuntimeException )
+void SAL_CALL ProgressBar::release() throw()
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.

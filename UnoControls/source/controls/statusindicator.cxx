@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicator.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-08-10 12:04:17 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 13:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ Any SAL_CALL StatusIndicator::queryInterface( const Type& rType ) throw( Runtime
 //  XInterface
 //____________________________________________________________________________________________________________
 
-void SAL_CALL StatusIndicator::acquire() throw( RuntimeException )
+void SAL_CALL StatusIndicator::acquire() throw()
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -191,7 +191,7 @@ void SAL_CALL StatusIndicator::acquire() throw( RuntimeException )
 //  XInterface
 //____________________________________________________________________________________________________________
 
-void SAL_CALL StatusIndicator::release() throw( RuntimeException )
+void SAL_CALL StatusIndicator::release() throw()
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.

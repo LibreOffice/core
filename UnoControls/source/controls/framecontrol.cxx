@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontrol.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-11 16:41:51 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 13:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ Any SAL_CALL FrameControl::queryInterface( const Type& rType ) throw( RuntimeExc
 //  XInterface
 //____________________________________________________________________________________________________________
 
-void SAL_CALL FrameControl::acquire() throw( RuntimeException )
+void SAL_CALL FrameControl::acquire() throw()
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -183,7 +183,7 @@ void SAL_CALL FrameControl::acquire() throw( RuntimeException )
 //  XInterface
 //____________________________________________________________________________________________________________
 
-void SAL_CALL FrameControl::release() throw( RuntimeException )
+void SAL_CALL FrameControl::release() throw()
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.

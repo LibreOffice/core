@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnectionPointContainerHelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:11:17 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 13:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ Any SAL_CALL OConnectionPointContainerHelper::queryInterface( const Type& aType 
 //  XInterface
 //____________________________________________________________________________________________________________
 
-void SAL_CALL OConnectionPointContainerHelper::acquire() throw( RuntimeException )
+void SAL_CALL OConnectionPointContainerHelper::acquire() throw()
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -147,7 +147,7 @@ void SAL_CALL OConnectionPointContainerHelper::acquire() throw( RuntimeException
 //  XInterface
 //____________________________________________________________________________________________________________
 
-void SAL_CALL OConnectionPointContainerHelper::release() throw( RuntimeException )
+void SAL_CALL OConnectionPointContainerHelper::release() throw()
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
