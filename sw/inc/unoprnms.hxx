@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2000-11-02 15:03:38 $
+ *  last change: $Author: os $ $Date: 2000-11-08 12:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,6 +555,22 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_IS_ON;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_SKIP_HIDDEN_TEXT;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_SKIP_PROTECTED_TEXT;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_DOCUMENT_INDEX_MARKS;
+
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_IS_COLLECT_AT_TEXT_END  ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_IS_RESTART_NUMBERING    ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_RESTART_NUMBERING_AT    ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_IS_OWN_NUMBERING        ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_NUMBERING_TYPE          ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_NUMBERING_PREFIX        ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_NUMBERING_SUFFIX        ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_IS_COLLECT_AT_TEXT_END   ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_IS_RESTART_NUMBERING ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_RESTART_NUMBERING_AT ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_IS_OWN_NUMBERING     ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_NUMBERING_TYPE           ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_NUMBERING_PREFIX     ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_NUMBERING_SUFFIX         ;
+
 #endif
 
 

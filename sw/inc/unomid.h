@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomid.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-24 09:55:47 $
+ *  last change: $Author: os $ $Date: 2000-11-08 12:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,4 +121,14 @@
 
 #define MID_COLUMNS                             0
 #define MID_COLUMN_SEPARATOR_LINE               1
+
+//SwFmtFtnAtTxtEnd
+#define MID_COLLECT                             0
+#define MID_RESTART_NUM                         1
+#define MID_NUM_START_AT                        2
+#define MID_OWN_NUM                             3
+#define MID_NUM_TYPE                            4
+#define MID_PREFIX                              5
+#define MID_SUFFIX                              6
+
 #endif

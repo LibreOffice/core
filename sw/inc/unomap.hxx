@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-11-07 09:57:22 $
+ *  last change: $Author: os $ $Date: 2000-11-08 12:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,14 +128,14 @@
 #define WID_SEARCH_ALL           11
 
 //Sections
-#define WID_SECT_CONDITION      0
-#define WID_SECT_DDE_TYPE       1
-#define WID_SECT_DDE_FILE       2
-#define WID_SECT_DDE_ELEMENT    3
-#define WID_SECT_LINK           4
-#define WID_SECT_VISIBLE        5
-#define WID_SECT_PROTECTED      6
-#define WID_SECT_REGION         7
+#define WID_SECT_CONDITION   8000
+#define WID_SECT_DDE_TYPE    8001
+#define WID_SECT_DDE_FILE    8002
+#define WID_SECT_DDE_ELEMENT 8003
+#define WID_SECT_LINK        8004
+#define WID_SECT_VISIBLE     8005
+#define WID_SECT_PROTECTED   8006
+#define WID_SECT_REGION      8007
 
 //Verzeichnisse
 #define WID_PRIMARY_KEY                         1000
