@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:36:50 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:34:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1238,6 +1238,9 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
 
         if ( aIter != aModelData.GetMediaDescr().end() )
             aIter->second >>= aFilterName;
+        else
+            aModelData.GetMediaDescr()[::rtl::OUString::createFromAscii( "FilterName" )] <<= aFilterName;
+
         DBG_ASSERT( aFilterName.getLength(), "Illegal filter!" );
     }
     else
