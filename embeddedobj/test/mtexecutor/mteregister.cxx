@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mteregister.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-17 11:27:16 $
+ *  last change: $Author: mav $ $Date: 2003-12-18 10:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <cppuhelper/factory.hxx>
 #endif
 
-#include "MainThreadExecutor.hxx"
+#include "mainthreadexecutor.hxx"
 
 using namespace ::com::sun::star;
 
