@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedhlp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-13 14:10:32 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include <svtools/hint.hxx>
 #endif
 #ifndef _SV_GEN_HXX
-#include <vcl/gen.hxx>
+#include <tools/gen.hxx>
 #endif
 
 struct EENotify;
