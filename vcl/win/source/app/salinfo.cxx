@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinfo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:49 $
+ *  last change: $Author: th $ $Date: 2001-07-25 11:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,19 +59,16 @@
  *
  ************************************************************************/
 
-#ifdef ENABLEUNICODE
-
-#define VCL_NEED_BASETSD
-
-#include <tools/presys.h>
-#include <windows.h>
-#include <imagehlp.h>
-#include <tools/postsys.h>
-
-#include <salsys.hxx>
+#if 1
 
 /* !!! UNICODE !!! */
-XubString SalSystem::GetSummarySystemInfos( ULONG nFlags )
+/* !!! This code should be change from ByteString to
+   !!! UniString, currently we doesn't support this !!! */
+
+#include <tools/string.hxx>
+#include <salsys.hxx>
+
+String GetSalSummarySystemInfos( ULONG nFlags )
 {
     return XubString();
 }
@@ -443,7 +440,7 @@ String _OLD_GetStackInfo()
     return aTmpStack;
 }
 
-String SalSystem::GetSummarySystemInfos( ULONG nFlags)
+String GetSalSummarySystemInfos( ULONG nFlags )
 {
     SystemInfos aSysInfos;
     HANDLE nCurrentThreadPseudo = GetCurrentThread();
