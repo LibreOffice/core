@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 07:04:10 $
+ *  last change: $Author: fs $ $Date: 2001-06-25 16:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,29 +65,23 @@
 #ifndef _SFXTABDLG_HXX
 #include <sfx2/tabdlg.hxx>
 #endif
-#ifndef _SV_FIXED_HXX
-#include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
-#include <vcl/lstbox.hxx>
-#endif
 #ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
 #endif
-#ifndef _SV_BUTTON_HXX
-#include <vcl/imagebtn.hxx>
-#endif
-#ifndef _SV_GROUP_HXX
-#include <vcl/group.hxx>
-#endif
-#ifndef __SGI_STL_SET
-#include <set>
-#endif
+//#ifndef _SV_BUTTON_HXX
+//#include <vcl/imagebtn.hxx>
+//#endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
 #ifndef _DBAUI_DSNTYPES_HXX_
 #include "dsntypes.hxx"
+#endif
+#ifndef DBAUI_DATASOURCEMAP_HXX
+#include "datasourcemap.hxx"
+#endif
+#ifndef DBAUI_DATASOURCESELECTOR_HXX
+#include "datasourceselector.hxx"
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -117,374 +111,6 @@ namespace dbaui
 //.........................................................................
 
 class ODsnTypeCollection;
-
-//=========================================================================
-//= ODatasourceSelector
-//=========================================================================
-class ODatasourceMap
-{
-    struct DatasourceInfo
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                            xDatasource;
-        SfxItemSet*         pModifications;
-
-        DatasourceInfo() :pModifications (NULL) {  }
-        DatasourceInfo(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDS,
-                SfxItemSet* _pMods = NULL)
-            :xDatasource(_rxDS), pModifications(_pMods) { }
-    };
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                            m_xORB;                 /// service factory
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-                            m_xDatabaseContext;     /// database context we're working in
-
-    DECLARE_STL_USTRINGACCESS_MAP(DatasourceInfo, DatasourceInfos);
-    DatasourceInfos         m_aDatasources;         /// known infos about data sources
-
-    // deleted data sources, not necessarily with distinct names, that's why accessed via unique ids
-    DECLARE_STL_MAP(sal_Int32, DatasourceInfo, ::std::less< sal_Int32 >, MapInt2Info);
-    MapInt2Info             m_aDeletedDatasources;
-
-public:
-    /// iterating through all data sources
-    class Iterator;
-    friend class ODatasourceMap::Iterator;
-
-    /// encapsulates the infos about a data source for access from outside the class
-    class ODatasourceInfo;
-    friend class ODatasourceMap::ODatasourceInfo;
-
-    ODatasourceInfo operator[](const ::rtl::OUString _rName);
-
-    ODatasourceMap(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB);
-
-    // get the database context
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-                getContext() { return m_xDatabaseContext; }
-
-    /// first element for iterating through the datasources
-    Iterator    begin();
-    /// last element for iterating through the datasources
-    Iterator    end();
-
-    /// first element for iterating through the deleted datasources
-    Iterator    beginDeleted();
-    /// last element for iterating through the deleted datasources
-    Iterator    endDeleted();
-
-    /// check if the object contains a valid datasource enumeration
-    sal_Bool    isValid() const { return m_xDatabaseContext.is(); }
-    /// check if a datasource with the given name exists
-    sal_Bool    exists(const ::rtl::OUString& _rName) const;
-    /// return the number of datasources available
-    sal_Int32   size() const { return m_aDatasources.size(); }
-    /// clear the map (non-deleted <em>and</em> deleted items)
-    void        clear();
-    /// clear the map (deleted items only)
-    void        clearDeleted();
-
-    /// clear the modification items for a datasource
-    void        clearModifiedFlag(const ::rtl::OUString& _rName);
-
-    /** tell the map that a data source is scheduled to be deleted.
-        @return     id for accessing the deleted data source later. -1 if no free id existed or an error occured
-    */
-    sal_Int32   markDeleted(const ::rtl::OUString& _rName);
-
-    /** restores a datasource which has previously been marked as deleted.<p/>
-        @param      _nAccessId      the access id as got from <method>markDeleted</method>
-        @param      _rName          contains, upon return, the name of the datasource the access key refers to
-        @return     sal_True if the datasource was successfully restored, sal_False if it could not be restored
-                    because of a naming conflict (e.g. because another data source now has the name of the
-                    to-be-restored one).
-        @see    renamed
-        @see    markDeleted
-    */
-    sal_Bool    restoreDeleted(sal_Int32 _nAccessId, ::rtl::OUString& _rName);
-
-    /// remove an element from the map
-    void        deleted(const ::rtl::OUString& _rName);
-        // (should be an erase(const Iterator&), but this is way to general ...
-
-    /// update the infos for a data source with a given item set
-    void        update(const ::rtl::OUString& _rName, SfxItemSet& _rSet);
-    /** Tells the map that an entry has been renamed in a sense that it should be accessible under
-        a new name. This does not necesssarily mean that the data source has been renamed within
-        it's database context
-    */
-    void        renamed(const ::rtl::OUString& _rOldName, const ::rtl::OUString& _rNewName);
-
-    /** adjust the registration name if necessary<p/>
-        The real name of the data source (as indicated in the SfxItemSet for this ds) may be another
-        one than the name the ds is registered for. This method corrects this, the ds will become registered
-        under it's real name.
-        @param      _rName      the name the ds is registered for
-        @return                 the real name of the data source
-    */
-    ::rtl::OUString adjustRealName(const ::rtl::OUString& _rName);
-
-    /** create a new (floating) datasource<p/>
-        The ds is inserted it into the map under the given name and returned.<br/>
-        If no object could be created, nothing is inserted into the map.<br/>
-        The item pool and the item ranges are used to create the initial SfxItemSet for the new ds.
-    */
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                createNew(const ::rtl::OUString& _rName, SfxItemPool* _pPool, const USHORT* _pRanges);
-protected:
-    /** ensure that the DatabaseInfo for the named object is filled<p/>
-        This method allows us lazy access to the data sources: They're retrieved from the context
-        only if they're accessed by somebody.
-    */
-    void    ensureObject(const ::rtl::OUString& _rName);
-};
-
-//-------------------------------------------------------------------------
-//- ODatasourceMap::ODatasourceInfo
-//-------------------------------------------------------------------------
-class ODatasourceMap::ODatasourceInfo
-{
-    friend class ODatasourceMap;
-    friend class ODatasourceMap::Iterator;
-
-private:
-    ODatasourceMap*                             m_pOwner;
-    const ODatasourceMap::DatasourceInfo&       m_rInfoImpl;
-    ::rtl::OUString                             m_sName;
-    sal_Int32                                   m_nAccessKey;
-
-public:
-    ODatasourceInfo(const ODatasourceInfo& _rSource)
-        :m_pOwner(_rSource.m_pOwner), m_sName(_rSource.m_sName), m_rInfoImpl(_rSource.m_rInfoImpl), m_nAccessKey(_rSource.m_nAccessKey) { }
-
-    /// check if the datasource settings are modified
-    sal_Bool        isModified() const;
-    /// check if the datasource is to be created
-    sal_Bool        isNew() const;
-    /// get the name the datasource is registered under
-    ::rtl::OUString getName() const { return m_sName; }
-    /// get the original name of a datasource (may habe been renamed)
-    ::rtl::OUString getOriginalName() const;
-    /// get the real name of the datasource, which is the name which is in the item set
-    ::rtl::OUString getRealName() const;
-    /// check if the datasource should is about to be renamed (which means the original name does not equal the real name
-    sal_Bool        isRenamed() const { return !isNew() && !getRealName().equals(getOriginalName()); }
-    /// get the key used to acces the object in the data source map
-    sal_Int32       getAccessKey() const { return m_nAccessKey; }
-
-    /// return the datasource the object represents
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                    getDatasource() const;
-    /** return the modifications for the data source<p/>
-        The return value is non-NULL if and only if <method>isModified</method> returned sal_True
-    */
-    const SfxItemSet*
-                    getModifications() const { return m_rInfoImpl.pModifications; }
-
-    operator ::rtl::OUString() const { return getName(); }
-    operator String() const { return getName().getStr(); }
-
-    const ODatasourceInfo* const operator->() const { return this; }
-
-protected:
-    ODatasourceInfo(
-            ODatasourceMap* _pOwner, const ::rtl::OUString& _rName,
-            const ODatasourceMap::DatasourceInfo& _rSource, sal_Int32 _nAccessKey)
-        :m_pOwner(_pOwner), m_sName(_rName), m_rInfoImpl(_rSource), m_nAccessKey(_nAccessKey) { }
-};
-
-//-------------------------------------------------------------------------
-//- ODatasourceMap::Iterator
-//-------------------------------------------------------------------------
-class ODatasourceMap::Iterator
-{
-    friend class ODatasourceMap;
-protected:
-    ODatasourceMap*                                 m_pOwner;
-    ODatasourceMap::ConstDatasourceInfosIterator    m_aPos;
-    ODatasourceMap::ConstMapInt2InfoIterator        m_aPosDeleted;
-    sal_Bool                                        m_bLoopingDeleted;
-
-public:
-    Iterator(const Iterator& _rSource);
-
-    ODatasourceInfo operator->() const;
-    ODatasourceInfo operator*() const;
-
-    /// prefix increment
-    const Iterator& operator++();
-    /// postfix increment
-    const Iterator  operator++(int) { Iterator hold(*this); ++*this; return hold; }
-
-    /// prefix decrement
-    const Iterator& operator--();
-    /// postfix decrement
-    const Iterator  operator--(int) { Iterator hold(*this); --*this; return hold; }
-
-
-// compare two iterators
-    friend bool operator==(const Iterator& lhs, const Iterator& rhs)
-    {
-        if (lhs.m_bLoopingDeleted)
-            return lhs.m_aPosDeleted == rhs.m_aPosDeleted;
-        else
-            return lhs.m_aPos == rhs.m_aPos;
-    }
-
-    friend bool operator!=(const Iterator& lhs, const Iterator& rhs) { return !(lhs == rhs); }
-
-protected:
-    Iterator(ODatasourceMap* _pOwner, ODatasourceMap::ConstDatasourceInfosIterator _rPos);
-    Iterator(ODatasourceMap* _pOwner, ODatasourceMap::ConstMapInt2InfoIterator _rPos);
-
-protected:
-    ::rtl::OUString implGetName(const ODatasourceMap::DatasourceInfo& _rInfo) const;
-};
-
-//=========================================================================
-//= DatasourceState
-//=========================================================================
-enum DatasourceState
-{
-    CLEAN,
-    MODIFIED,
-    NEW,
-    DELETED
-};
-
-/** administrates the listbox for displaying the data sources</p>
-    The list may contain normal, modified, new and "deleted" entries. Excluding the deleted ones,
-    the entry names must be unique, that's why accessing entries which are not deleted is done by
-    specifying a name.<br/>
-    To access entries which are deleted, a special access key has to be supplied by the user of this class.
-    This key has to be unique, so it can be used for non-ambiguous access.
-*/
-//=========================================================================
-//= ODatasourceSelector
-//=========================================================================
-class ODatasourceSelector : public Window
-{
-protected:
-    PushButton  m_aNewDatasource;
-    ListBox     m_aDatasourceList;
-
-    Link    m_aNewHandler;
-    Link    m_aDeleteHandler;
-    Link    m_aRestoreHandler;
-
-    struct EntryData
-    {
-        DatasourceState     eState;     // state of the data source
-        sal_Int32           nAccessKey; // access key, relevant only if DELETED == eState
-
-        EntryData() :eState(CLEAN), nAccessKey(-1) { }
-        EntryData(DatasourceState _eState) :eState(_eState), nAccessKey(-1) { }
-    };
-
-protected:
-    /// set the state of a data source specified by position
-    void                setEntryState(sal_Int32 _nPos, DatasourceState _eState);
-    /// get the state of a data source specified by position
-    DatasourceState     getEntryState(sal_Int32 _nPos) const;
-    /// get the resource id for imgages to be used for the given data source state
-    sal_Int32           getImageId(DatasourceState _eState);
-    /** get the position of an entry given by name, excluding the entries marked as deleted
-        (with respect to these deleted entries the names are unique)
-    */
-    sal_Int32           getValidEntryPos(const String& _rName);
-    /// get the position of an (deleted) entry for a given access key
-    sal_Int32           getDeletedEntryPos(sal_Int32 _nAccessKey);
-
-    /// get the access key for a entry given by position
-    sal_Int32           getAccessKey(sal_Int32 _nPos) const;
-    /// set the access key for a entry given by position, to be used for entry which are in state DELETED only
-    void                setAccessKey(sal_Int32 _nPos, sal_Int32 _nAccessKey);
-
-    /// remove an entry (given by pos) from the list, auto-select the next one
-    void                implDeleted(sal_Int32 _nPos);
-
-public:
-    ODatasourceSelector(Window* _pParent, const ResId& _rResId);
-    ~ODatasourceSelector();
-
-    /// mark the given data source as modified
-    void        modified(const String& _sName);
-    /** tell the selector object that a data source has been renamed.
-        @param      _rOldName       the old entry name
-        @param      _rNewName       the new entry name
-        @param      _bIsNew         indicates whether or not the entry refers to a new datasource
-    */
-    void        renamed(const String& _rOldName, const String& _rNewName);
-
-    /** tell the selector that a data source is scheduled to be deleted.
-        @param  _rName          name of the entry. Must be an entry which's DatasourceState is not DELETED and not NEW
-        @param  _nAccessKey     Needed for accessing the entry after it has been marked as deleted
-    */
-    void        markDeleted(const String& _rName, sal_Int32 _nAccessKey);
-
-    /** restore an entry previously marked as deleted<p/>
-        After returning from this method, the access key used is invalid.
-        @param      _nAccessKey     the access key used in <method>markDeleted</method>
-        @param      _eState         the new state of the datasource. Must not be DELETED
-    */
-    void        restoreDeleted(sal_Int32 _nAccessKey, DatasourceState _eState);
-
-    /** tell the selector to really delete an entry from the list.
-        @param  _rName  name of the entry. Must be an entry which's DatasourceState is not DELETED
-    */
-    void        deleted(const String& _rName);
-
-    /** tell the selector to really delete an entry from the list.
-        @param  _nAccessKey     access key of the entry. Must be an entry which's DatasourceState is DELETED
-    */
-    void        deleted(sal_Int32 _nAccessKey);
-
-    /// insert the name of an existent data source
-    sal_Int32   insert(const String& _rName);
-
-    /// insert the name of a daza source which is newly created
-    void        insertNew(const String& _rName);
-
-    /** tell the selector that a data source has been flushed.<p/>
-        This means that the state a formerly modified or new entry changes to <em>clean</em>.
-    */
-    void        flushed(const String& _rName);
-
-    /// get the name of the currently selected data source
-    String      getSelected() const { return m_aDatasourceList.GetSelectEntry(); }
-
-    /// get the state of the currently selected data source
-    DatasourceState getSelectedState() const { return getEntryState(m_aDatasourceList.GetSelectEntryPos()); }
-    /// get the access key of the currently selected data source
-    sal_Int32       getSelectedAccessKey() const { return getAccessKey(m_aDatasourceList.GetSelectEntryPos()); }
-
-    /// number of entries in the datasource list
-    sal_Int32   count() const { return m_aDatasourceList.GetEntryCount(); }
-
-    /// select a data source by name, valid only for non-deleted data sources
-    void        select(const String& _rName);
-    /// select a data source by acces key
-    void        select(sal_Int32 _nAccessKey);
-
-    /// set a handler to be called whenever the selection changes
-    void        setSelectHandler(const Link& _rHdl) { m_aDatasourceList.SetSelectHdl(_rHdl); }
-
-    /// set a handler to be called if the user chooses to create a new data source
-    void        setNewHandler(const Link& _rHdl) { m_aNewHandler = _rHdl; }
-
-    /// set a handler to be called if the user chooses to delete a new data source
-    void        setDeleteHandler(const Link& _rHdl) { m_aDeleteHandler = _rHdl; }
-
-    /// set a handler to be called if the user chooses to restore a delete data source
-    void        setRestoreHandler(const Link& _rHdl) { m_aRestoreHandler = _rHdl; }
-
-protected:
-    virtual void    Resize();
-    virtual long    Notify(NotifyEvent& _rNEvt);
-
-    DECL_LINK(OnButtonPressed, Button*);
-};
 
 //=========================================================================
 //= ODbAdminDialog
@@ -686,6 +312,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2001/06/20 07:04:10  oj
+ *  #88434# new method to get the driver
+ *
  *  Revision 1.18  2001/05/29 13:11:51  oj
  *  #87149# addressbook ui impl
  *
