@@ -2,9 +2,9 @@
  *
  *  $RCSfile: auditsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:33:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,10 +146,10 @@ void ScAuditingShell::Execute( SfxRequest& rReq )
                     if ( pReqArgs->GetItemState( SID_RANGE_COL, TRUE, &pXItem ) == SFX_ITEM_SET
                       && pReqArgs->GetItemState( SID_RANGE_ROW, TRUE, &pYItem ) == SFX_ITEM_SET )
                     {
-                        DBG_ASSERT( pXItem->ISA(SfxInt16Item) && pYItem->ISA(SfxInt16Item),
+                        DBG_ASSERT( pXItem->ISA(SfxInt16Item) && pYItem->ISA(SfxInt32Item),
                                         "falsche Items" );
-                        short nCol = ((const SfxInt16Item*) pXItem)->GetValue();
-                        short nRow = ((const SfxInt16Item*) pYItem)->GetValue();
+                        SCsCOL nCol = static_cast<SCsCOL>(((const SfxInt16Item*) pXItem)->GetValue());
+                        SCsROW nRow = static_cast<SCsROW>(((const SfxInt32Item*) pYItem)->GetValue());
                         ScViewFunc* pView = pViewData->GetView();
                         pView->MoveCursorAbs( nCol, nRow, SC_FOLLOW_LINE, FALSE, FALSE );
                         switch ( nFunction )
