@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewCell.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 06:54:47 $
+ *  last change: $Author: sab $ $Date: 2002-03-22 16:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@ protected:
     virtual ~ScAccessiblePreviewCell();
 
 public:
+
+    virtual void SAL_CALL disposing();
 
     //=====  XAccessibleComponent  ============================================
 

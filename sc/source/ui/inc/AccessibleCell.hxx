@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-12 09:38:03 $
+ *  last change: $Author: sab $ $Date: 2002-03-22 16:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,9 +99,11 @@ public:
         ScAddress& rCellAddress,
         sal_Int32 nIndex,
         ScSplitPos eSplitPos);
+
 protected:
     virtual ~ScAccessibleCell();
 public:
+    virtual void SAL_CALL disposing();
 
     ///=====  XAccessibleComponent  ============================================
 
