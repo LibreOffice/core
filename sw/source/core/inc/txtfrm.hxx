@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:29:26 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ class SwTxtFrm: public SwCntntFrm
     sal_Bool _IsFtnNumFrm() const;
 
     // 6995: Formatinformationen auffrischen
-    sal_Bool FormatQuick();
+    sal_Bool FormatQuick( bool bForceQuickFormat );
 
     // Opt: Leere Absaetze formatieren
     sal_Bool FormatEmpty();
@@ -471,7 +471,12 @@ public:
     SwTxtFrm *FindQuoVadisFrm();
 
     // holt die Formatierug nach, wenn der Idle-Handler zugeschlagen hat.
-    SwTxtFrm *GetFormatted();
+    // --> FME 2004-10-29 #i29062# GetFormatted() can trigger a full formatting
+    // of the paragraph, causing other layout frames to become invalid. This
+    // has to be avoided during painting. Therefore we need to pass the
+    // information that we are currently in the paint process.
+    SwTxtFrm* GetFormatted( bool bForceQuickFormat = false );
+    // <--
 
     // wird demnaechst uebertragen
     inline void SetFtn( const sal_Bool bNew ) { bFtn = bNew; }
