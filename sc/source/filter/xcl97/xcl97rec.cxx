@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:11:36 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #endif
 #ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
+#endif
+#ifndef _SVX_WRITINGMODEITEM_HXX
+#include <svx/writingmodeitem.hxx>
 #endif
 
 #ifndef _SV_SVAPP_HXX
@@ -752,6 +755,12 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObje
 
         // vertical alignment
         SetVerAlign(lcl_GetVerAlignFromItemSet(rItemSet));
+
+        // orientation alignment
+        const SvxWritingModeItem& rItem = static_cast<const SvxWritingModeItem&>
+            (rItemSet.Get (SDRATTR_TEXTDIRECTION));
+        if (rItem.GetValue() == com::sun::star::text::WritingMode_TB_RL)
+            meRotation = xlTxoRot90cw;
     }
 }
 
