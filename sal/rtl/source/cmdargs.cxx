@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdargs.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-06-15 13:53:53 $
+ *  last change: $Author: kr $ $Date: 2001-08-30 11:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ extern "C"
         oslProcessError err = osl_Process_E_None;
         if( nArg < g_nCommandArgCount )
         {
-            OUString expandedArg = expandMacros(g_pCommandArgs[nArg]);
+            OUString expandedArg = expandMacros(NULL, g_pCommandArgs[nArg]);
 
             rtl_uString_assign( strCommandArg, expandedArg.pData );
          }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-17 08:55:02 $
+ *  last change: $Author: kr $ $Date: 2001-08-30 11:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@ namespace rtl
 {
     class Bootstrap
     {
+        void * _handle;
     public:
         /**
            @see rtl_bootstrap_setIniFileName
@@ -96,6 +97,22 @@ namespace rtl
             const ::rtl::OUString &sName,
             ::rtl::OUString &outValue,
             const ::rtl::OUString &aDefault );
+
+
+        inline Bootstrap();
+        inline Bootstrap(const OUString & iniName);
+        inline ~Bootstrap();
+
+        inline sal_Bool getFrom(const ::rtl::OUString &sName,
+                                ::rtl::OUString &outValue) const;
+
+
+        inline void getFrom(const ::rtl::OUString &sName,
+                            ::rtl::OUString &outValue,
+                            const ::rtl::OUString &aDefault) const;
+
+        inline void getIniName(::rtl::OUString & iniName) const;
+
     };
 
     //----------------------------------------------------------------------------
@@ -118,5 +135,44 @@ namespace rtl
     {
         rtl_bootstrap_get( sName.pData , &(outValue.pData) , sDefault.pData );
     }
+
+    inline Bootstrap::Bootstrap()
+    {
+        _handle = 0;
+    }
+
+    inline Bootstrap::Bootstrap(const OUString & iniName)
+    {
+        if(iniName.getLength())
+            _handle = rtl_bootstrap_args_open(iniName.pData);
+
+        else
+            _handle = 0;
+    }
+
+    inline Bootstrap::~Bootstrap()
+    {
+        rtl_bootstrap_args_close(_handle);
+    }
+
+
+    inline sal_Bool Bootstrap::getFrom(const ::rtl::OUString &sName,
+                                       ::rtl::OUString &outValue) const
+    {
+        return rtl_bootstrap_get_from_handle(_handle, sName.pData, &outValue.pData, 0);
+    }
+
+    inline void Bootstrap::getFrom(const ::rtl::OUString &sName,
+                                   ::rtl::OUString &outValue,
+                                   const ::rtl::OUString &aDefault) const
+    {
+        rtl_bootstrap_get_from_handle(_handle, sName.pData, &outValue.pData, aDefault.pData);
+    }
+
+    inline void Bootstrap::getIniName(::rtl::OUString & iniName) const
+    {
+        rtl_bootstrap_get_iniName_from_handle(_handle, &iniName.pData);
+    }
+
 }
 #endif

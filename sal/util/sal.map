@@ -456,6 +456,10 @@ UDK_3_0_0 {
 
         rtl_bootstrap_get;
         rtl_bootstrap_setIniFileName;
+        rtl_bootstrap_args_open;
+        rtl_bootstrap_args_close;
+        rtl_bootstrap_get_from_handle;
+        rtl_bootstrap_get_iniName_from_handle;
         rtl_getAppCommandArgCount;
         rtl_getAppCommandArg;
 
@@ -469,6 +473,8 @@ UDK_3_0_0 {
         rtl_removeUnloadingListener;
 
         rtl_logfile_trace;
+
+
     local:
         *;
 };

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: jbu $ $Date: 2001-08-17 12:52:47 $
+#   last change: $Author: kr $ $Date: 2001-08-30 11:51:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,9 +94,7 @@ APP1OBJS=	\
                 $(OBJ)$/testbyteseq.obj		\
                 $(OBJ)$/testuri.obj			\
                 $(OBJ)$/test.obj			\
-                $(OBJ)$/testlogfile.obj		\
-                $(OBJ)$/test_file.obj
-
+                $(OBJ)$/testlogfile.obj
 OBJFILES= \
     $(APP1OBJS) \
     $(APP2OBJS) 
@@ -114,25 +112,41 @@ ALL : ALLTAR \
       $(BIN)$/$(BOOTSTRAPSCRIPT) \
       $(BIN)$/$(BOOTSTRAPINI)    \
       $(BIN)$/bootstraptest.ini  \
-      $(BIN)$/testbootstrap.bin  \
-      $(BIN)$/testbootstrap.Bin  \
-      $(BIN)$/testbootstrap.Exe  
+      $(BIN)$/$(APP2TARGET).bin  \
+      $(BIN)$/$(APP2TARGET).Bin  \
+      $(BIN)$/$(APP2TARGET).Exe  \
+      $(BIN)$/bootstrap.pl  
+
 
 .IF "$(GUI)"=="UNX"
-ALL:  $(BIN)$/testbootstrap.exe
+ALL:  $(BIN)$/$(APP2TARGET).exe \
+      $(BIN)$/inirc
 
-$(BIN)$/testbootstrap.exe : $(APP2TARGETN)
+$(BIN)$/$(APP2TARGET).exe : $(APP2TARGETN)
     cp $(APP2TARGETN) $@
+
+$(BIN)$/inirc:
+        echo "MYBOOTSTRAPTESTVALUE=auxaux" > $@
+
+.ELSE
+
+ALL:  $(BIN)$/ini.ini
+
+$(BIN)$/ini.ini:
+        echo MYBOOTSTRAPTESTVALUE=auxaux > $@
 
 .ENDIF
 
-$(BIN)$/testbootstrap.bin : $(APP2TARGETN)
+$(BIN)$/bootstrap.pl:
+    cp bootstrap.pl $@
+
+$(BIN)$/$(APP2TARGET).bin : $(APP2TARGETN)
     cp $(APP2TARGETN) $@
 
-$(BIN)$/testbootstrap.Bin : $(APP2TARGETN)
+$(BIN)$/$(APP2TARGET).Bin : $(APP2TARGETN)
     cp $(APP2TARGETN) $@
 
-$(BIN)$/testbootstrap.Exe : $(APP2TARGETN)
+$(BIN)$/$(APP2TARGET).Exe : $(APP2TARGETN)
     cp $(APP2TARGETN) $@
 
 .ELSE
@@ -148,8 +162,8 @@ $(BIN)$/$(BOOTSTRAPSCRIPT) : $(BOOTSTRAPSCRIPT)
     chmod ug+x $@
 .ENDIF
 
-$(BIN)$/$(BOOTSTRAPINI) : testbootstrap.ini
-    $(MY_SCRIPTCAT) testbootstrap.ini > $@	
+$(BIN)$/$(BOOTSTRAPINI) : $(APP2TARGET).ini
+    $(MY_SCRIPTCAT) $(APP2TARGET).ini > $@	
 
 $(BIN)$/bootstraptest.ini : bootstraptest.ini
     $(MY_SCRIPTCAT) bootstraptest.ini > $@	

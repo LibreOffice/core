@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-26 10:01:41 $
+ *  last change: $Author: kr $ $Date: 2001-08-30 11:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <osl/file.h>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
+#include <osl/file.hxx>
 
 #include <rtl/bootstrap.h>
 #include <rtl/ustring.hxx>
@@ -86,15 +87,15 @@ struct rtl_bootstrap_NameValue
 
 typedef ::std::list< struct rtl_bootstrap_NameValue > NameValueList;
 
-static void getFromCommandLineArgs( rtl_uString **ppValue , rtl_uString *pName )
+static sal_Bool getFromCommandLineArgs( rtl_uString **ppValue , rtl_uString *pName )
 {
     static NameValueList *pNameValueList = 0;
     if( ! pNameValueList )
     {
         static NameValueList nameValueList;
-        sal_Int32 i = 0;
+
         sal_Int32 nArgCount = osl_getCommandArgCount();
-        for(  ; i < nArgCount && ! *ppValue ; i ++ )
+        for(sal_Int32 i = 0; i < nArgCount; ++ i)
         {
             rtl_uString *pArg = 0;
             osl_getCommandArg( i, &pArg );
@@ -128,6 +129,8 @@ static void getFromCommandLineArgs( rtl_uString **ppValue , rtl_uString *pName )
         pNameValueList = &nameValueList;
     }
 
+    sal_Bool found = sal_False;
+
     OUString name( pName );
     for( NameValueList::iterator ii = pNameValueList->begin() ;
          ii != pNameValueList->end() ;
@@ -136,9 +139,12 @@ static void getFromCommandLineArgs( rtl_uString **ppValue , rtl_uString *pName )
         if( (*ii).sName.equals(name) )
         {
             rtl_uString_assign( ppValue, (*ii).sValue.pData );
+            found = sal_True;
             break;
         }
     }
+
+    return found;
 }
 
 static ::rtl::OUString &getIniFileNameImpl()
@@ -146,58 +152,35 @@ static ::rtl::OUString &getIniFileNameImpl()
     static OUString *pStaticName = 0;
     if( ! pStaticName )
     {
-        rtl_uString *pFileName = 0;
-        ::rtl::OUString sVarName( RTL_CONSTASCII_USTRINGPARAM( "INIFILENAME"));
-        getFromCommandLineArgs( &pFileName , sVarName.pData );
-        if( !pFileName )
+        OUString fileName;
+
+        OUString sVarName(RTL_CONSTASCII_USTRINGPARAM("INIFILENAME"));
+        if(!getFromCommandLineArgs(&fileName.pData, sVarName.pData))
         {
-            rtl_uString *pExeName = 0;
-            osl_getExecutableFile( &pExeName );
+            osl_getExecutableFile(&fileName.pData);
 
-            sal_Int32 n = pExeName->length;
+            // get rid of a potential executable extension
+            OUString progExt = OUString::createFromAscii(".bin");
+            if(fileName.getLength() > progExt.getLength()
+            && fileName.copy(fileName.getLength() - progExt.getLength()).equalsIgnoreAsciiCase(progExt))
+                fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
 
-            if( n )
-            {
-                sal_Int32 nCapacity =
-                    rtl_uStringbuffer_newFromStringBuffer(
-                        &pFileName, pExeName->length + 4, pExeName );
+            progExt = OUString::createFromAscii(".exe");
+            if(fileName.getLength() > progExt.getLength()
+            && fileName.copy(fileName.getLength() - progExt.getLength()).equalsIgnoreAsciiCase(progExt))
+                fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
 
-                const sal_Char *pNewSuffix = SAL_CONFIGFILE("");
-                OUString sOldSuffix( RTL_CONSTASCII_USTRINGPARAM( ".exe" ) );
-
-                if(pFileName->length > sOldSuffix.getLength()
-                && 0 == rtl_ustr_compareIgnoreAsciiCase_WithLength(pFileName->buffer + n - sOldSuffix.getLength(),
-                                                                   sOldSuffix.getLength(),
-                                                                   sOldSuffix.pData->buffer,
-                                                                   sOldSuffix.getLength()))
-                    pFileName->length = pFileName->length - sOldSuffix.getLength();
-
-                sOldSuffix = OUString(RTL_CONSTASCII_USTRINGPARAM( ".bin" ) );
-                if(pFileName->length > sOldSuffix.getLength()
-                && 0 == rtl_ustr_compareIgnoreAsciiCase_WithLength(pFileName->buffer + n - sOldSuffix.getLength(),
-                                                                   sOldSuffix.getLength(),
-                                                                   sOldSuffix.pData->buffer,
-                                                                   sOldSuffix.getLength()))
-                    pFileName->length = pFileName->length - sOldSuffix.getLength();
-
-
-                rtl_uStringbuffer_insert_ascii(
-                    &pFileName,
-                    &nCapacity,
-                    pFileName->length,
-                    pNewSuffix,
-                    strlen(pNewSuffix) );
-            }
-            rtl_uString_release( pExeName );
+            // append config file suffix
+            fileName += OUString(RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE("")));
         }
 
         static OUString theFileName;
-        if( pFileName )
-            theFileName = pFileName;
+        if(fileName.getLength())
+            theFileName = fileName;
 
-        rtl_uString_release( pFileName );
         pStaticName = &theFileName;
     }
+
     return *pStaticName;
 }
 
@@ -208,66 +191,6 @@ static void getFileSize( oslFileHandle handle, sal_uInt64 *pSize )
                 osl_File_E_None == osl_setFilePos( handle, osl_Pos_End , 0 ) &&
                 osl_File_E_None == osl_getFilePos( handle, pSize ) &&
                 osl_File_E_None == osl_setFilePos( handle, osl_Pos_Absolut, nOldPos ) );
-}
-
-static void getFromIniFile( rtl_uString **ppValue, rtl_uString *pName )
-{
-    static NameValueList *pNameValueList = 0;
-
-    if( !pNameValueList )
-    {
-        static NameValueList nameValueList;
-        OUString &file = getIniFileNameImpl();
-        oslFileHandle handle;
-        if( file.getLength() &&
-            osl_File_E_None == osl_openFile( file.pData, &handle , osl_File_OpenFlag_Read ) )
-        {
-            ByteSequence seq;
-            sal_uInt64 nSize = 0;
-
-            getFileSize( handle, &nSize );
-            while( sal_True )
-            {
-                sal_uInt64 nPos;
-                if( osl_File_E_None != osl_getFilePos( handle, &nPos ) ||
-                    nPos >= nSize )
-                {
-                    break;
-                }
-                if(osl_File_E_None != osl_readLine( handle , (sal_Sequence ** ) &seq ))
-                {
-                    break;
-                }
-                OString line( (const sal_Char * ) seq.getConstArray() , seq.getLength() );
-                sal_Int32 nIndex = line.indexOf( '=' );
-                struct rtl_bootstrap_NameValue nameValue;
-                if( nIndex >= 1 && nIndex +1 < line.getLength())
-                {
-                    nameValue.sName =
-                        OStringToOUString(
-                            line.copy(0,nIndex).trim(), RTL_TEXTENCODING_ASCII_US );
-                    nameValue.sValue =
-                        OStringToOUString(
-                            line.copy(nIndex+1).trim(), RTL_TEXTENCODING_UTF8 );
-                    nameValueList.push_back( nameValue );
-                }
-            }
-            osl_closeFile( handle );
-        }
-        pNameValueList = &nameValueList;
-    }
-
-    OUString name( pName );
-    for( NameValueList::iterator ii = pNameValueList->begin() ;
-         ii != pNameValueList->end() ;
-         ++ii )
-    {
-        if( (*ii).sName.equals(name) )
-        {
-            rtl_uString_assign( ppValue, (*ii).sValue.pData );
-            break;
-        }
-    }
 }
 
 static void getFromEnvironment( rtl_uString **ppValue, rtl_uString *pName )
@@ -285,20 +208,13 @@ static void getFromEnvironment( rtl_uString **ppValue, rtl_uString *pName )
 }
 
 
-static void getFromDefault( rtl_uString **ppValue, rtl_uString *pName, rtl_uString *pDefault )
+static void getFromList(NameValueList *pNameValueList, rtl_uString **ppValue, rtl_uString *pName)
 {
-    static NameValueList *pNameValueList = 0;
+    OUString name(pName);
 
-    if( !pNameValueList )
-    {
-        static NameValueList nameValueList;
-        pNameValueList = &nameValueList;
-    }
-
-    OUString name( pName );
-    for( NameValueList::iterator ii = pNameValueList->begin() ;
-         ii != pNameValueList->end() ;
-         ++ii )
+    for(NameValueList::iterator ii = pNameValueList->begin();
+        ii != pNameValueList->end();
+        ++ii)
     {
         if( (*ii).sName.equals(name) )
         {
@@ -306,13 +222,9 @@ static void getFromDefault( rtl_uString **ppValue, rtl_uString *pName, rtl_uStri
             break;
         }
     }
-    if( ! *ppValue )
-    {
-        rtl_uString_assign( ppValue , pDefault );
-    }
 }
 
-static void getFlatArg(rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault)
+static void getValue(NameValueList *pNameValueList, rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault)
 {
     static const OUString sysUserConfig(RTL_CONSTASCII_USTRINGPARAM("SYSUSERCONFIG"));
     static const OUString sysUserHome(RTL_CONSTASCII_USTRINGPARAM("SYSUSERHOME"));
@@ -332,10 +244,10 @@ static void getFlatArg(rtl_uString * pName, rtl_uString ** ppValue, rtl_uString 
     }
     else
     {
-        getFromCommandLineArgs( ppValue, pName );
-        if( ! *ppValue )
+        getFromCommandLineArgs(ppValue, pName);
+        if(!*ppValue)
         {
-            getFromIniFile( ppValue, pName );
+            getFromList(pNameValueList, ppValue, pName);
             if( ! *ppValue )
             {
                 getFromEnvironment( ppValue, pName );
@@ -346,11 +258,151 @@ static void getFlatArg(rtl_uString * pName, rtl_uString ** ppValue, rtl_uString 
             }
         }
     }
+
+#ifdef DEBUG
+    OString sName = OUStringToOString(OUString(pName), RTL_TEXTENCODING_ASCII_US);
+    OString sValue;
+    if(*ppValue)
+        sValue = OUStringToOString(OUString(*ppValue), RTL_TEXTENCODING_ASCII_US);
+    OSL_TRACE("bootstrap.cxx::getValue - name:%s value:%s\n", sName.getStr(), sValue.getStr());
+#endif
 }
 
+typedef struct Bootstrap_Impl {
+    NameValueList _nameValueList;
+    OUString      _iniName;
+} Bootstrap_Impl;
+
+static void fillFromIniFile(Bootstrap_Impl * pBootstrap_Impl)
+{
+    OUString iniName = pBootstrap_Impl->_iniName;
+
+#ifdef DEBUG
+    OString sFile = OUStringToOString(iniName, RTL_TEXTENCODING_ASCII_US);
+    OSL_TRACE("bootstrap.cxx::fillFromIniFile - %s\n", sFile.getStr());
+#endif
+
+
+    oslFileHandle handle;
+    if(iniName.getLength()
+    && osl_File_E_None == osl_openFile(iniName.pData, &handle, osl_File_OpenFlag_Read))
+    {
+        ByteSequence seq;
+        sal_uInt64 nSize = 0;
+
+        getFileSize(handle, &nSize);
+        while( sal_True )
+        {
+            sal_uInt64 nPos;
+            if(osl_File_E_None != osl_getFilePos(handle, &nPos)
+            || nPos >= nSize)
+                break;
+
+            if(osl_File_E_None != osl_readLine(handle , (sal_Sequence ** ) &seq))
+                break;
+
+            OString line((const sal_Char *)seq.getConstArray(), seq.getLength());
+            sal_Int32 nIndex = line.indexOf('=');
+            struct rtl_bootstrap_NameValue nameValue;
+            if(nIndex >= 1 && nIndex +1 < line.getLength())
+            {
+                nameValue.sName = OStringToOUString(line.copy(0,nIndex).trim(),
+                                                    RTL_TEXTENCODING_ASCII_US);
+                nameValue.sValue = OStringToOUString(line.copy(nIndex+1).trim(),
+                                                     RTL_TEXTENCODING_UTF8);
+
+                OString name_tmp = OUStringToOString(nameValue.sName, RTL_TEXTENCODING_ASCII_US);
+                OString value_tmp = OUStringToOString(nameValue.sValue, RTL_TEXTENCODING_UTF8);
+                OSL_TRACE("bootstrap.cxx: pushing: name=%s value=%s\n", name_tmp.getStr(), value_tmp.getStr());
+
+                pBootstrap_Impl->_nameValueList.push_back(nameValue);
+            }
+        }
+        osl_closeFile(handle);
+    }
+#ifdef DEBUG
+    else
+    {
+        OString file_tmp = OUStringToOString(iniName, RTL_TEXTENCODING_ASCII_US);
+        OSL_TRACE("bootstrap.cxx: couldn't open file: %s", file_tmp.getStr());
+    }
+#endif
+}
 
 extern "C"
 {
+
+
+rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open(rtl_uString * pIniName)
+{
+    OUString workDir;
+    OUString iniName = OUString(pIniName);
+
+    osl_getProcessWorkingDir(&workDir.pData);
+    FileBase::getAbsoluteFileURL(workDir, iniName, iniName);
+
+    Bootstrap_Impl * pBootstrap_Impl = new Bootstrap_Impl;
+
+    pBootstrap_Impl->_iniName = iniName;
+    fillFromIniFile(pBootstrap_Impl);
+
+    return pBootstrap_Impl;
+}
+
+
+void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle)
+{
+    delete (Bootstrap_Impl *)handle;
+}
+
+sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(rtlBootstrapHandle handle, rtl_uString *pName, rtl_uString **ppValue, rtl_uString *pDefault)
+{
+    MutexGuard guard(Mutex::getGlobalMutex());
+
+    sal_Bool result = sal_False;
+    if(ppValue && pName)
+    {
+        if(handle) {
+            rtl_uString_release(*ppValue);
+            *ppValue = 0;
+
+            getValue(&((Bootstrap_Impl *)handle)->_nameValueList, pName, ppValue, pDefault);
+
+
+            if(*ppValue)
+            {
+                OUString result = expandMacros(&((Bootstrap_Impl *)handle)->_nameValueList, OUString(*ppValue));
+
+                rtl_uString_assign(ppValue, result.pData );
+            }
+
+            if(!*ppValue)
+                rtl_uString_new(ppValue);
+
+            else
+                result =  sal_True;
+        }
+        else
+            result = rtl_bootstrap_get(pName, ppValue, pDefault);
+    }
+
+
+    return result;
+}
+
+void SAL_CALL rtl_bootstrap_get_iniName_from_handle(rtlBootstrapHandle handle, rtl_uString ** ppIniName)
+{
+    if(ppIniName)
+        if(handle)
+            rtl_uString_assign(ppIniName, ((Bootstrap_Impl *)handle)->_iniName.pData);
+
+        else {
+            const OUString & iniName = getIniFileNameImpl();
+
+            rtl_uString_assign(ppIniName, iniName.pData);
+        }
+}
+
 void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pName )
 {
     MutexGuard guard( Mutex::getGlobalMutex() );
@@ -361,27 +413,20 @@ void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pName )
 sal_Bool SAL_CALL rtl_bootstrap_get( rtl_uString *pName, rtl_uString **ppValue , rtl_uString *pDefault )
 {
     MutexGuard guard( Mutex::getGlobalMutex() );
-    OSL_ASSERT( ppValue );
-    if( *ppValue )
+
+    static Bootstrap_Impl * pBootstrap_Impl = 0;
+
+    if(!pBootstrap_Impl)
     {
-        rtl_uString_release( *ppValue );
-        *ppValue = 0;
+        static Bootstrap_Impl bootstrap_Impl;
+
+        bootstrap_Impl._iniName = getIniFileNameImpl();
+        fillFromIniFile(&bootstrap_Impl);
+
+        pBootstrap_Impl = &bootstrap_Impl;
     }
 
-    getFlatArg(pName, ppValue, pDefault);
-
-    if(*ppValue) {
-         OUString result = expandMacros(OUString(*ppValue));
-
-        rtl_uString_assign(ppValue, result.pData );
-    }
-
-    if( ! *ppValue )
-    {
-        rtl_uString_new( ppValue );
-        return sal_False;
-    }
-    return sal_True;
+    return rtl_bootstrap_get_from_handle(pBootstrap_Impl, pName, ppValue, pDefault);
 }
 
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macro.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2001-06-15 13:53:53 $
+ *  last change: $Author: kr $ $Date: 2001-08-30 11:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef _RTL_MACRO_HXX
 #define _RTL_MACRO_HXX
 
+#include <rtl/bootstrap.h>
 #include <rtl/ustring.hxx>
 
 /*
@@ -70,7 +71,7 @@
     http://udk.openoffice.org/common/man/spec/uno_default_bootstrapping.html
   for details.
 */
-::rtl::OUString SAL_CALL expandMacros(const ::rtl::OUString & argstr);
+::rtl::OUString SAL_CALL expandMacros(rtlBootstrapHandle handle, const ::rtl::OUString & argstr);
 
 #endif
 
