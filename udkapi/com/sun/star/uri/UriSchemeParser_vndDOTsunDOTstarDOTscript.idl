@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UriSchemeParser_vndDOTsunDOTstarDOTscript.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:57:46 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ interface XUriSchemeParser;
    Rather, it should be used indirectly through the
    <type scope="com::sun::star::uri">UriReferenceFactory</type> service.</p>
 
-   @since #i19971#
+   @since OOo2.0.0
  */
 service UriSchemeParser_vndDOTsunDOTstarDOTscript: XUriSchemeParser {};
 
