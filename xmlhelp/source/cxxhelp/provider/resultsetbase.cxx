@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultsetbase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-16 14:53:27 $
+ *  last change: $Author: abi $ $Date: 2001-09-28 15:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,12 +481,75 @@ ResultSetBase::queryContent(
 
 
 
+class XPropertySetInfoImpl
+    : public cppu::OWeakObject,
+      public beans::XPropertySetInfo
+{
+public:
+
+    XPropertySetInfoImpl( const uno::Sequence< beans::Property >& aSeq )
+        : m_aSeq( aSeq )
+    {
+    }
+
+    void SAL_CALL acquire( void )
+        throw( uno::RuntimeException )
+    {
+        OWeakObject::acquire();
+    }
+
+
+    void SAL_CALL release( void )
+        throw( uno::RuntimeException )
+    {
+        OWeakObject::release();
+    }
+
+    uno::Any SAL_CALL queryInterface( const uno::Type& rType )
+        throw( uno::RuntimeException )
+    {
+        uno::Any aRet = cppu::queryInterface( rType,
+                                              SAL_STATIC_CAST( beans::XPropertySetInfo*, this ) );
+        return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+    }
+
+    uno::Sequence< beans::Property > SAL_CALL getProperties()
+        throw( uno::RuntimeException )
+    {
+        return m_aSeq;
+    }
+
+    beans::Property SAL_CALL getPropertyByName( const ::rtl::OUString& aName )
+        throw( beans::UnknownPropertyException,
+               uno::RuntimeException)
+    {
+        for( int i = 0; i < m_aSeq.getLength(); ++i )
+            if( aName == m_aSeq[i].Name )
+                return m_aSeq[i];
+        throw beans::UnknownPropertyException();
+    }
+
+    sal_Bool SAL_CALL hasPropertyByName( const ::rtl::OUString& Name )
+        throw( uno::RuntimeException )
+    {
+        for( int i = 0; i < m_aSeq.getLength(); ++i )
+            if( Name == m_aSeq[i].Name )
+                return true;
+        return false;
+    }
+
+private:
+
+    uno::Sequence< beans::Property > m_aSeq;
+};
+
+
+
 // XPropertySet
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 ResultSetBase::getPropertySetInfo()
     throw( uno::RuntimeException)
 {
-
     uno::Sequence< beans::Property > seq(2);
     seq[0].Name = rtl::OUString::createFromAscii( "RowCount" );
     seq[0].Handle = -1;
@@ -499,7 +562,7 @@ ResultSetBase::getPropertySetInfo()
     seq[1].Attributes = beans::PropertyAttribute::READONLY;
 
     //t
-    return uno::Reference< beans::XPropertySetInfo > ( 0 );
+    return uno::Reference< beans::XPropertySetInfo > ( new XPropertySetInfoImpl( seq ) );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: abi $ $Date: 2001-08-24 13:59:14 $
+ *  last change: $Author: abi $ $Date: 2001-09-28 15:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,31 +428,15 @@ Any SAL_CALL Content::execute( const Command& aCommand,
 
         Reference< XActiveDataSink > xActiveDataSink( aOpenCommand.Sink,UNO_QUERY );
         if( xActiveDataSink.is() )
-        {
-//              Reference< XInputStream > xInputStream;
-
-//              // Necessary to avoid closing the fileinputstream
-//              if( ! m_aURLParameter.isRoot() )
-//                  xInputStream = m_pDatabases->getFromURL( m_aURLParameter.get_url() );
-
-//              if( ! xInputStream.is() )
-//              {
-                m_aURLParameter.open( m_xSMgr,aCommand,CommandId,Environment,xActiveDataSink );
-//                  m_pDatabases->setFromURL( m_aURLParameter.get_url(),
-//                                            xActiveDataSink->getInputStream() );
-//              }
-//              else
-//                  xActiveDataSink->setInputStream( xInputStream );
-        }
+            m_aURLParameter.open( m_xSMgr,aCommand,CommandId,Environment,xActiveDataSink );
 
         Reference< XActiveDataStreamer > activeDataStreamer( aOpenCommand.Sink,UNO_QUERY );
         if( activeDataStreamer.is() )
             throw UnsupportedDataSinkException();
 
-        Reference< XOutputStream > outputStream( aOpenCommand.Sink,UNO_QUERY );
-        if( outputStream.is() )
-            throw UnsupportedDataSinkException();
-
+        Reference< XOutputStream > xOutputStream( aOpenCommand.Sink,UNO_QUERY );
+        if( xOutputStream.is() )
+            m_aURLParameter.open( m_xSMgr,aCommand,CommandId,Environment,xOutputStream );
 
         if( m_aURLParameter.isRoot() )
         {
@@ -585,6 +569,17 @@ Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rPrope
                 seq[1] = rtl::OUString::createFromAscii( "FullText" );
                 Any aAny;
                 aAny <<= seq;
+                xRow->appendObject( rProp,aAny );
+            }
+            else if( rProp.Name.compareToAscii( "Order" ) == 0 )
+            {
+                StaticModuleInformation *inf = m_pDatabases->getStaticInformationForModule(
+                    m_aURLParameter.get_module(),
+                    m_aURLParameter.get_language() );
+
+                Any aAny;
+                if( inf )
+                    aAny <<= sal_Int32( inf->get_order() );
                 xRow->appendObject( rProp,aAny );
             }
             else

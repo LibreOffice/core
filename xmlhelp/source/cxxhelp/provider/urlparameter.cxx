@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: abi $ $Date: 2001-09-04 11:58:35 $
+ *  last change: $Author: abi $ $Date: 2001-09-28 15:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef _DATABASES_HXX_
 #include <provider/databases.hxx>
 #endif
+#ifndef _RTL_URI_HXX_
+#include <rtl/uri.hxx>
+#endif
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #endif
@@ -126,6 +129,7 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #endif
+
 
 namespace chelp {
 
@@ -210,6 +214,8 @@ rtl::OString URLParameter::getByName( const char* par )
         val = get_language();
     else if( strcmp( par,"System" ) == 0 )
         val = get_system();
+    else if( strcmp( par,"HelpPrefix" ) == 0 )
+        val = get_prefix();
 
     return rtl::OString( val.getStr(),val.getLength(),RTL_TEXTENCODING_UTF8 );
 }
@@ -418,6 +424,9 @@ public:
 
     void addToBuffer( const char* buffer,int len );
 
+    sal_Int8* getData() const { return (sal_Int8*) buffer; }
+
+    sal_Int32 getLen() const { return sal_Int32( len ); }
 
 private:
 
@@ -428,7 +437,73 @@ private:
 };
 
 
-//  void doSomething();
+
+void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
+                         const Command& aCommand,
+                         sal_Int32 CommandId,
+                         const Reference< XCommandEnvironment >& Environment,
+                         const Reference< XOutputStream >& xDataSink )
+{
+    if( ! xDataSink.is() )
+        return;
+
+    if( isPicture() )
+    {
+        Reference< XInputStream > xStream;
+        Reference< XHierarchicalNameAccess > xNA =
+            m_pDatabases->jarFile( rtl::OUString::createFromAscii( "picture.jar" ),
+                                   get_language() );
+
+        rtl::OUString path = get_path();
+        if( xNA.is() )
+        {
+            try
+            {
+                Any aEntry = xNA->getByHierarchicalName( path );
+                Reference< XActiveDataSink > xSink;
+                if( ( aEntry >>= xSink ) && xSink.is() )
+                    xStream = xSink->getInputStream();
+            }
+            catch ( NoSuchElementException & )
+            {
+            }
+        }
+        if( xStream.is() )
+        {
+            sal_Int32 ret;
+            Sequence< sal_Int8 > aSeq( 4096 );
+            while( true )
+            {
+                try
+                {
+                    ret = xStream->readBytes( aSeq,4096 );
+                    xDataSink->writeBytes( aSeq );
+                    if( ret < 4096 )
+                        break;
+                }
+                catch( const Exception& )
+                {
+                    break;
+                }
+            }
+        }
+    }
+    else
+    {
+        // a standard document or else an active help text, plug in the new input stream
+        InputStreamTransformer* p = new InputStreamTransformer( this,m_pDatabases,isRoot() );
+        try
+        {
+            xDataSink->writeBytes( Sequence< sal_Int8 >( p->getData(),p->getLen() ) );
+        }
+        catch( const Exception& )
+        {
+        }
+        delete p;
+    }
+    xDataSink->closeOutput();
+}
+
 
 
 void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
@@ -475,7 +550,11 @@ void URLParameter::parse() throw( com::sun::star::ucb::IllegalIdentifierExceptio
     if( lstIdx != -1 )
         m_aExpr = m_aExpr.copy( 0,lstIdx );
 
-    if( ! scheme() || ! name( module() ) || ! query() || ! m_aLanguage.getLength() || ! m_aSystem.getLength() )
+    if( ! scheme() ||
+        ! name( module() ) ||
+        ! query() ||
+        ! m_aLanguage.getLength() ||
+        ! m_aSystem.getLength() )
         throw com::sun::star::ucb::IllegalIdentifierException();
 }
 
@@ -606,7 +685,9 @@ bool URLParameter::query()
         else if( parameter.compareToAscii( "System" ) == 0 )
             m_aSystem = value;
         else if( parameter.compareToAscii( "HelpPrefix" ) == 0 )
-            m_aPrefix = value;
+            m_aPrefix = rtl::Uri::decode( value,
+                                          rtl_UriDecodeWithCharset,
+                                          RTL_TEXTENCODING_UTF8 );
         else if( parameter.compareToAscii( "HitCount" ) == 0 )
             m_nHitCount = value.toInt32();
         else if( parameter.compareToAscii( "Active" ) == 0 )
@@ -709,8 +790,9 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 
         // Uses the implementation detail, that rtl::OString::getStr returns a zero terminated character-array
 
-        const char* parameter[13];
-        rtl::OString parString[12];
+        const char* parameter[29];
+        rtl::OString parString[28];
+        int last;
 
         parString[ 0] = "Program";
         parString[ 1] = urlParam->getByName( "Program" );
@@ -724,10 +806,32 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
         parString[ 9] = urlParam->getByName( "Language" );
         parString[10] = "System";
         parString[11] = urlParam->getByName( "System" );
+        parString[12] = "hp";
+        parString[13] = urlParam->getByName( "HelpPrefix" );
+        last = 14;
 
-        for( int i = 0; i < 12; ++i )
+        if( parString[13].getLength() )
+        {
+            parString[14] = "sm";
+            parString[15] = "vnd.sun.star.help%3A%2F%2F";
+            parString[16] = "qm";
+            parString[17] = "%3F";
+            parString[18] = "es";
+            parString[19] = "%3D";
+            parString[20] = "am";
+            parString[21] = "%26";
+            parString[22] = "cl";
+            parString[23] = "%3A";
+            parString[24] = "sl";
+            parString[25] = "%2F";
+            parString[26] = "hm";
+            parString[27] = "%23";
+            last = 28;
+        }
+
+        for( int i = 0; i < last; ++i )
             parameter[i] = parString[i].getStr();
-        parameter[12] = 0;
+        parameter[last] = 0;
 
 
         SablotHandle p;
@@ -744,8 +848,8 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 #define OFFSET 5
 #endif
         xslURLascii += rtl::OString( xslURL.getStr()+OFFSET,
-                         xslURL.getLength()-OFFSET,
-                         RTL_TEXTENCODING_UTF8 );
+                                     xslURL.getLength()-OFFSET,
+                                     RTL_TEXTENCODING_UTF8 );
 #undef OFFSET
         xslURLascii += "main_transform.xsl";
 
@@ -1071,63 +1175,6 @@ int schemehandlerclose( void *userData,
 }
 
 
-//  currently unused:
-
-//  class XActiveDataSinkImpl
-//      : public OWeakObject,
-//        public XActiveDataSink
-//  {
-//      virtual Any SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException )
-//      {
-//          Any aRet = ::cppu::queryInterface( rType,
-//                                             SAL_STATIC_CAST( XActiveDataSink*,this ) );
-
-//          return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-//      }
-
-//      virtual void SAL_CALL acquire( void ) throw( RuntimeException )
-//      {
-//          OWeakObject::acquire();
-//      }
-
-//      virtual void SAL_CALL release( void ) throw( RuntimeException )
-//      {
-//          OWeakObject::release();
-//      }
-
-//      virtual void SAL_CALL setInputStream( const Reference< XInputStream >& xInputStream )
-//      {
-//          m_xInputStream = xInputStream;
-//      }
-
-//      virtual Reference< XInputStream > SAL_CALL getInputStream()
-//      {
-//          return m_xInputStream;
-//      }
-
-
-//  private:
-
-//      Reference< XInputStream > m_xInputStream;
-//  };
 
 
 
-
-            // error handling is missing
-            // better not to open the file every time it is requested
-
-//              url =
-//                  m_pDatabases->getInstallPathAsURL()         +
-//                  rtl::OUString::createFromAscii( "custom.css" );
-
-//              rtl::OUString service = rtl::OUString::createFromAscii( "com.sun.star.ucb.UniversalContentBroker" );
-//              Reference< XContentProvider > provider( rxSMgr->createInstance( service ),UNO_QUERY );
-//              Reference< XContentIdentifierFactory > factory( provider,UNO_QUERY );
-//              Reference< XContentIdentifier > xIdentifier = factory->createContentIdentifier( url );
-//              Reference< XContent > xContent = provider->queryContent( xIdentifier );
-//              Reference< XCommandProcessor > processor( xContent,UNO_QUERY );
-
-//              processor->execute( aCommand,
-//                                  CommandId,
-//                                  Environment );

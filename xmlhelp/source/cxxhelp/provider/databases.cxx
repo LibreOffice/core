@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: abi $ $Date: 2001-09-04 11:58:35 $
+ *  last change: $Author: abi $ $Date: 2001-09-28 15:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
+#include "inputstream.hxx"
 
 
 using namespace chelp;
@@ -271,6 +272,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const rtl::OU
 
             const sal_Unicode* str = fileContent.getStr();
             rtl::OUString current,lang,program,startid,title,heading,fulltext;
+            rtl::OUString order = rtl::OUString::createFromAscii( "1" );
 
             for( sal_Int32 i = 0;i < fileContent.getLength();i++ )
             {
@@ -305,13 +307,17 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const rtl::OU
                         {
                             fulltext = current.copy( current.indexOf('=') + 1 );
                         }
+                        else if( current.compareToAscii( "Order",5 ) == 0 )
+                        {
+                            order = current.copy( current.indexOf('=') + 1 );
+                        }
                     }
                     pos = 0;
                 }
                 else
                     lineBuffer[ pos++ ] = ch;
             }
-            it->second = new StaticModuleInformation( title,startid,program,heading,fulltext );
+            it->second = new StaticModuleInformation( title,startid,program,heading,fulltext,order );
         }
     }
 
@@ -534,11 +540,10 @@ int KeywordInfo::Compare::operator()( const rtl::OUString& l,const rtl::OUString
         else
         {
             if( c1 == 0 )
-                return ( m_xCollator->compareSubstring( l,1+l1,l2,r,1+r1,r2 ) <= 0 ) ? 1 : 0;
+                return ( m_xCollator->compareSubstring( l,1+l1,l2,r,1+r1,r2 ) < 0 ) ? 1 : 0;
             else
                 return 1;
         }
-//          return ( m_xCollator->compareString( l,r ) <= 0 ) ? 1 : 0;
     }
     else
         return ( l <= r ) ? 1 : 0;
@@ -652,34 +657,14 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
 
 
 
-//  Reference< XInputStream > Databases::getFromURL( const rtl::OUString& url )
-//  {
-//      osl::MutexGuard aGuard( m_aMutex );
-
-//      Reference< XInputStream > xStream = m_aInputStreamTable[ url ];
-//      if( xStream.is() )
-//          m_aInputStreamTable[ url ] = Reference< XInputStream >( 0 );
-
-//      return xStream;
-//  }
-
-
-//  void Databases::setFromURL( const rtl::OUString& url,const Reference< XInputStream >& xStream  )
-//  {
-//      osl::MutexGuard aGuard( m_aMutex );
-
-//      m_aInputStreamTable[ url ] = xStream;
-//  }
-
-
-
 Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& jar,
                                                          const rtl::OUString& Language )
 {
     if( ! jar.getLength() ||
         ! Language.getLength() )
+    {
         return Reference< XHierarchicalNameAccess >( 0 );
-
+    }
     rtl::OUString key = lang(Language) + rtl::OUString::createFromAscii( "/" ) + jar;
 
     osl::MutexGuard aGuard( m_aMutex );
@@ -689,11 +674,23 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& ja
 
     if( ! it->second.is() )
     {
+        rtl::OUString zipFile;
         try
         {
-            rtl::OUString zipFile = getInstallPathAsURL() + key;
+            zipFile = getInstallPathAsURL() + key;
             Sequence< Any > aArguments( 1 );
-            aArguments[ 0 ] <<= zipFile;
+
+            XInputStream_impl* p = new XInputStream_impl( zipFile );
+            if( p->CtorSuccess() )
+            {
+                Reference< XInputStream > xInputStream( p );
+                aArguments[ 0 ] <<= xInputStream;
+            }
+            else
+            {
+                delete p;
+                aArguments[ 0 ] <<= zipFile;
+            }
 
             Reference< XInterface > xIfc
                 = m_xSMgr->createInstanceWithArguments(

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: abi $ $Date: 2001-06-13 16:26:35 $
+#   last change: $Author: abi $ $Date: 2001-09-28 15:01:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,6 +91,8 @@ SLOFILES=\
     $(SLO)$/resultsetforquery.obj  \
     $(SLO)$/contentcaps.obj        \
     $(SLO)$/urlparameter.obj       \
+    $(SLO)$/inputstream.obj        \
+    $(SLO)$/debughelper.obj  	   \
     $(SLO)$/databases.obj
 
 # --- Targets ----------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentcaps.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2001-08-21 13:26:25 $
+ *  last change: $Author: abi $ $Date: 2001-09-28 15:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ Sequence< Property > Content::getProperties( const Reference< XCommandEnvironmen
     bool isFile = m_aURLParameter.isFile();
 
     sal_Int32 num = withMediaType ? 7 : 6;
-    if( isModule ) num+=5;
+    if( isModule ) num+=6;
     if( isFile )   num++;
 
     Sequence< Property > props(num);
@@ -153,6 +153,12 @@ Sequence< Property > Content::getProperties( const Reference< XCommandEnvironmen
 
     if( isModule )
     {
+        props[idx++] =
+            Property( OUString( RTL_CONSTASCII_USTRINGPARAM( "Order" ) ),
+                      -1,
+                      getCppuType( static_cast< sal_Int32* >( 0 ) ),
+                      PropertyAttribute::BOUND  | PropertyAttribute::READONLY );
+
         props[idx++] =
             Property( OUString( RTL_CONSTASCII_USTRINGPARAM( "KeywordList" ) ),
                       -1,
