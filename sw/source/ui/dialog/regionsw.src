@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:45:04 $
+ *  last change: $Author: rt $ $Date: 2000-11-15 21:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,7 +536,7 @@ ModalDialog MD_EDIT_REGION
         Text [ danish ] = "Områder med adgangskodebeskyttelse" ;
         Text [ portuguese_brazilian ] = "Bereiche mit ~Paßwortschutz" ;
         Text [ portuguese ] = "Proteger com ~senha" ;
-        Text[ chinese_simplified ] = "Ê¹ÓÃ¿ÚÁî±£»¤µÄÇøÓò(~A)";
+        Text[ chinese_simplified ] = "Ê¹ÓÃÃÜÂë±£»¤µÄÇøÓò(~A)";
         Text[ russian ] = "Îáëàñòè, çàùèùåííûå ïàğîëåì";
         Text[ polish ] = "Obszary zabezpieczone has³em";
         Text[ japanese ] = "Êß½Ü°ÄŞ•ÛŒì•t‚«‚Ì”ÍˆÍ(~A)";
@@ -733,7 +733,7 @@ InfoBox REG_WRONG_PASSWORD
     Message [ danish ] = "Den indtastede adgangskode er forkert." ;
     Message [ portuguese ] = "A senha especificada está errada." ;
     Message [ portuguese_brazilian ] = "Es wurde ein falsches Passwort gesetzt" ;
-    Message[ chinese_simplified ] = "ÊäÈëµÄ¿ÚÁî´íÎó¡£";
+    Message[ chinese_simplified ] = "ÊäÈëµÄÃÜÂë´íÎó¡£";
     Message[ russian ] = "Ââåäåí íåïğàâèëüíûé ïàğîëü.";
     Message[ polish ] = "Zosta³o wpisane nieprawid³owe has³o.";
     Message[ japanese ] = "“ü—Í‚³‚ê‚½Êß½Ü°ÄŞ‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñB";
@@ -758,7 +758,7 @@ InfoBox REG_WRONG_PASSWD_REPEAT
     Message [ spanish ] = "No se ha definido la contraseña." ;
     Message [ french ] = "Vous n'avez pas saisi de mot de passe !" ;
     Message [ dutch ] = "Er werd geen wachtwoord gedefinieerd." ;
-    Message[ chinese_simplified ] = "»¹Î´Éè¶¨¿ÚÁî¡£";
+    Message[ chinese_simplified ] = "»¹Î´Éè¶¨ÃÜÂë¡£";
     Message[ russian ] = "Ïàğîëü íå óñòàíîâëåí.";
     Message[ polish ] = "Has³o nie zosta³o wpisane.";
     Message[ japanese ] = "Êß½Ü°ÄŞ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
