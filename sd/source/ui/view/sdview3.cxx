@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:35:02 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 #pragma hdrstop
 
 #include "View.hxx"
+
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDOBJECTCLIPBOARDCREATOR_HPP_
+#include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
@@ -177,6 +184,7 @@
 
 #include <sfx2/ipclient.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/stream.hxx>
 #include <vcl/cvtgrf.hxx>
 
@@ -856,7 +864,15 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                         xObj->setVisualAreaSize( aObjDesc.mnViewAspect, aSz );
                     }
 
-                    aSz = xObj->getVisualAreaSize( aObjDesc.mnViewAspect );
+                    try
+                    {
+                        aSz = xObj->getVisualAreaSize( aObjDesc.mnViewAspect );
+                    }
+                    catch( embed::NoVisualAreaSizeException& )
+                    {
+                        // if the size still was not set the default size will be set later
+                    }
+
                     Size aSize( aSz.Width, aSz.Height );
 
                     if( !aSize.Width() || !aSize.Height() )
@@ -907,65 +923,104 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
         uno::Reference < io::XInputStream > xStm;
         TransferableObjectDescriptor    aObjDesc;
 
-        //TODO/MBA: testing
-        if ( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE, aObjDesc ) &&
-             ( aDataHelper.GetInputStream( nFormat ? nFormat : SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStm ) ||
-               aDataHelper.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStm ) ) )
+        if ( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE, aObjDesc ) )
         {
+            uno::Reference < embed::XEmbeddedObject > xObj;
             ::rtl::OUString aName;
-            uno::Reference < embed::XEmbeddedObject > xObj = pDocSh->GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
 
-            MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( aObjDesc.mnViewAspect ) );
-            awt::Size aSz;
-            if( aObjDesc.maSize.Width() && aObjDesc.maSize.Height() )
+             if ( aDataHelper.GetInputStream( nFormat ? nFormat : SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStm ) ||
+                  aDataHelper.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStm ) )
             {
-                Size aTmp( OutputDevice::LogicToLogic( aObjDesc.maSize, MAP_100TH_MM, aMapUnit ) );
-                aSz.Width = aTmp.Width();
-                aSz.Height = aTmp.Height();
-                xObj->setVisualAreaSize( aObjDesc.mnViewAspect, aSz );
+                xObj = pDocSh->GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
+            }
+            else
+            {
+                try
+                {
+                    uno::Reference< embed::XStorage > xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
+                    uno::Reference < embed::XEmbedObjectClipboardCreator > xClipboardCreator(
+                        ::comphelper::getProcessServiceFactory()->createInstance(
+                               ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.MSOLEObjectSystemCreator")) ),
+                        uno::UNO_QUERY_THROW );
+
+                    embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
+                                                            xTmpStor,
+                                                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "DummyName" ) ),
+                                                            uno::Sequence< beans::PropertyValue >() );
+
+                    // TODO/LATER: in future InsertedObjectInfo will be used to get container related information
+                    // for example whether the object should be an iconified one
+                    xObj = aInfo.Object;
+                    if ( xObj.is() )
+                        pDocSh->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
+                }
+                catch( uno::Exception& )
+                {}
             }
 
-            aSz = xObj->getVisualAreaSize( aObjDesc.mnViewAspect );
-            Size aSize( aSz.Width, aSz.Height );
-
-            if( !aSize.Width() || !aSize.Height() )
+            if ( xObj.is() )
             {
-                aSize.Width()  = 14100;
-                aSize.Height() = 10000;
-                aSize = OutputDevice::LogicToLogic( Size(14100, 10000), MAP_100TH_MM, aMapUnit );
-                aSz.Width = aSize.Width();
-                aSz.Height = aSize.Height();
-                xObj->setVisualAreaSize( aObjDesc.mnViewAspect, aSz );
+                MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( aObjDesc.mnViewAspect ) );
+
+                awt::Size aSz;
+                try{
+                    aSz = xObj->getVisualAreaSize( aObjDesc.mnViewAspect );
+                }
+                catch( embed::NoVisualAreaSizeException& )
+                {
+                    // the default size will be set later
+                }
+
+                if( aObjDesc.maSize.Width() && aObjDesc.maSize.Height() )
+                {
+                    Size aTmp( OutputDevice::LogicToLogic( aObjDesc.maSize, MAP_100TH_MM, aMapUnit ) );
+                    if ( aSz.Width != aTmp.Width() || aSz.Height != aTmp.Height() )
+                    {
+                        aSz.Width = aTmp.Width();
+                        aSz.Height = aTmp.Height();
+                        xObj->setVisualAreaSize( aObjDesc.mnViewAspect, aSz );
+                    }
+                }
+
+                Size aSize( aSz.Width, aSz.Height );
+
+                if( !aSize.Width() || !aSize.Height() )
+                {
+                    aSize = OutputDevice::LogicToLogic( Size(14100, 10000), MAP_100TH_MM, aMapUnit );
+                    aSz.Width = aSize.Width();
+                    aSz.Height = aSize.Height();
+                    xObj->setVisualAreaSize( aObjDesc.mnViewAspect, aSz );
+                }
+
+                aSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MAP_100TH_MM );
+                Size aMaxSize( pDoc->GetMaxObjSize() );
+
+                aDropPos.X() -= Min( aSize.Width(), aMaxSize.Width() ) >> 1;
+                aDropPos.Y() -= Min( aSize.Height(), aMaxSize.Height() ) >> 1;
+
+                Rectangle       aRect( aDropPos, aSize );
+                SdrOle2Obj*     pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, aObjDesc.mnViewAspect ), aName, aRect );
+                SdrPageView*    pPV = GetPageViewPvNum( 0 );
+                ULONG           nOptions = SDRINSERT_SETDEFLAYER;
+
+                if (pViewSh!=NULL)
+                {
+                    OSL_ASSERT (pViewSh->GetViewShell()!=NULL);
+                    SfxInPlaceClient* pIpClient
+                        = pViewSh->GetViewShell()->GetIPClient();
+                    if (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive())
+                        nOptions |= SDRINSERT_DONTMARK;
+                }
+
+                InsertObject( pObj, *pPV, nOptions );
+
+                if( pImageMap )
+                    pObj->InsertUserData( new SdIMapInfo( *pImageMap ) );
+
+                bReturn = TRUE;
             }
-
-            aSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MAP_100TH_MM );
-            Size aMaxSize( pDoc->GetMaxObjSize() );
-
-            aDropPos.X() -= Min( aSize.Width(), aMaxSize.Width() ) >> 1;
-            aDropPos.Y() -= Min( aSize.Height(), aMaxSize.Height() ) >> 1;
-
-            Rectangle       aRect( aDropPos, aSize );
-            SdrOle2Obj*     pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, aObjDesc.mnViewAspect ), aName, aRect );
-            SdrPageView*    pPV = GetPageViewPvNum( 0 );
-            ULONG           nOptions = SDRINSERT_SETDEFLAYER;
-
-            if (pViewSh!=NULL)
-            {
-                OSL_ASSERT (pViewSh->GetViewShell()!=NULL);
-                SfxInPlaceClient* pIpClient
-                    = pViewSh->GetViewShell()->GetIPClient();
-                if (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive())
-                    nOptions |= SDRINSERT_DONTMARK;
-            }
-
-            InsertObject( pObj, *pPV, nOptions );
-
-            if( pImageMap )
-                pObj->InsertUserData( new SdIMapInfo( *pImageMap ) );
-
-            bReturn = TRUE;
         }
-            //TODO/LATER: if format is not available, create picture
+        //TODO/LATER: if format is not available, create picture
     }
     else if( ( !bLink || pPickObj ) && CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_SVXB ) )
     {
