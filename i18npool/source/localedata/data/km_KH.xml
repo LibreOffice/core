@@ -285,7 +285,7 @@
 <Month>
 <MonthID>feb</MonthID>
 <DefaultAbbrvName>២</DefaultAbbrvName>
-<DefaultFullName>កុម្ភះ</DefaultFullName>
+<DefaultFullName>កុម្ភៈ</DefaultFullName>
 </Month>
 <Month>
 <MonthID>mar</MonthID>
@@ -300,12 +300,12 @@
 <Month>
 <MonthID>may</MonthID>
 <DefaultAbbrvName>៥</DefaultAbbrvName>
-<DefaultFullName>ឌសភា</DefaultFullName>
+<DefaultFullName>ឧសភា</DefaultFullName>
 </Month>
 <Month>
 <MonthID>jun</MonthID>
 <DefaultAbbrvName>៦</DefaultAbbrvName>
-<DefaultFullName>មថុសា</DefaultFullName>
+<DefaultFullName>មិថុនា</DefaultFullName>
 </Month>
 <Month>
 <MonthID>jul</MonthID>
@@ -330,7 +330,7 @@
 <Month>
 <MonthID>nov</MonthID>
 <DefaultAbbrvName>១១</DefaultAbbrvName>
-<DefaultFullName>វីច្ឆិកា</DefaultFullName>
+<DefaultFullName>វិច្ឆិកា</DefaultFullName>
 </Month>
 <Month>
 <MonthID>dec</MonthID>
@@ -341,8 +341,8 @@
 <Eras>
 <Era>
 <EraID>bc</EraID>
-<DefaultAbbrvName>មុនគ.ស.</DefaultAbbrvName>
-<DefaultFullName>មុនគ្រិស្តសករាជ</DefaultFullName>
+<DefaultAbbrvName>មុន​គ.ស.</DefaultAbbrvName>
+<DefaultFullName>មុន​គ្រិស្តសករាជ</DefaultFullName>
 </Era>
 <Era>
 <EraID>ad</EraID>
