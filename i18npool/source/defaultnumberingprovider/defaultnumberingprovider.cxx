@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-11-12 16:03:00 $
+ *  last change: $Author: hr $ $Date: 2002-03-20 10:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,13 +112,13 @@ DefaultNumberingProvider::~DefaultNumberingProvider()
 Sequence< Reference<XIndexAccess> >
 DefaultNumberingProvider::getDefaultOutlineNumberings(const Locale& rLocale ) throw(RuntimeException)
 {
-     return LocaleData().getOutlineNumberingLevels( rLocale );
+     return i18n::LocaleData().getOutlineNumberingLevels( rLocale );
 }
 
 Sequence< Sequence<PropertyValue> >
 DefaultNumberingProvider::getDefaultContinuousNumberingLevels( const Locale& rLocale ) throw(RuntimeException)
 {
-     return LocaleData().getContinuousNumberingLevels( rLocale );
+     return i18n::LocaleData().getContinuousNumberingLevels( rLocale );
 }
 
 
