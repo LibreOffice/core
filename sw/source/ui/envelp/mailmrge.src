@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-09 20:48:58 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:30:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ ModalDialog DLG_MAILMERGE
         Text[ russian ] = "Âûäåëåííûå çàïèñè";
         Text[ polish ] = "Zaznaczone rekordy";
         Text[ japanese ] = "‘I‘ğ‚µ‚½Úº°ÄŞ(~S)";
-        Text[ chinese_traditional ] = "¿ï¨úªº¸ê®Æ¶µ¥Ø(~S)";
+        Text[ chinese_traditional ] = "¿ï¨úªº¸ê®Æ±ø¥Ø(~S)";
         Text[ arabic ] = "ÇáÓÌáÇÊ ÇáãÍÏÏÉ";
         Text[ greek ] = "Åğéëåãìİíåò åããñáöİò";
         Text[ korean ] = "¼±ÅÃÇ¥½ÃµÈ ·¹ÄÚµå";
@@ -240,7 +240,7 @@ ModalDialog DLG_MAILMERGE
         Text[ russian ] = "Çàïèñè äàííûõ";
         Text[ polish ] = "Rekordy";
         Text[ japanese ] = "Úº°ÄŞ";
-        Text[ chinese_traditional ] = "¸ê®Æ¶µ¥Ø";
+        Text[ chinese_traditional ] = "¸ê®Æ±ø¥Ø";
         Text[ arabic ] = "ÇáÓÌáÇÊ";
         Text[ greek ] = "Åããñáöİò";
         Text[ korean ] = "·¹ÄÚµå";
@@ -391,7 +391,7 @@ ModalDialog DLG_MAILMERGE
         Text [ dutch ] = "Bestandsnaam ontnemen aan" ;
         Text [ portuguese ] = "Gerar nome do ficheiro a partir de" ;
         Text[ chinese_simplified ] = "ÎÄ¼şÃûµÄÉú³É·½Ê½";
-        Text[ russian ] = "Èìÿ ôàéëà ñîçäàíî èç";
+        Text[ russian ] = "Ñîçäàòü èìÿ ôàéëà èç:";
         Text[ polish ] = "Generuj nazwê pliku z";
         Text[ japanese ] = "Ì§²Ù–¼‚Ìw’è‚Í";
         Text[ chinese_traditional ] = "ÀÉ®×¦W²£¥Í±q";
@@ -596,7 +596,7 @@ ModalDialog DLG_MAILMERGE
         Text[ russian ] = "Âëîæåíèÿ";
         Text[ polish ] = "Za³¹czniki";
         Text[ japanese ] = "“Y•t";
-        Text[ chinese_traditional ] = "´¡¤JÀÉ®×";
+        Text[ chinese_traditional ] = "ªş¥[ÀÉ®×";
         Text[ arabic ] = "ÅÑİÇŞÇÊ";
         Text[ greek ] = "Óõíçììİíá";
         Text[ korean ] = "Ã·ºÎ";
@@ -773,7 +773,7 @@ ModalDialog DLG_MAILMERGE
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     Text[ chinese_simplified ] = "ÓÊ¼şºÏ²¢";
-    Text[ russian ] = "Ñëèÿíèå";
+    Text[ russian ] = "Öèğêóëÿğíîå ïèñüìî";
     Text[ polish ] = "List seryjny";
     Text[ japanese ] = "·‚µ‚İˆóü";
     Text[ chinese_traditional ] = "¦X¨Ö¦C¦L";
