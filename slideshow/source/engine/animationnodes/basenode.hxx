@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basenode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:50:17 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,9 @@ namespace presentation
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::animations::XAnimationNode >& getXNode() const { return mxNode; }
 
+        protected:
+            SlideShowContext                                    maContext;
+
         private:
             typedef ::std::vector< AnimationNodeSharedPtr >     ListenerVector;
 
@@ -218,7 +221,6 @@ namespace presentation
             ::boost::shared_ptr< BaseContainerNode >            mpParent;
             ::boost::shared_ptr< BaseNode >                     mpSelf;
             const int*                                          mpStateTransitionTable;
-            SlideShowContext                                    maContext;
             const double                                        mnStartDelay;
             AnimationNode::NodeState                            meCurrState;
             const bool                                          mbIsMainSequenceRootNode;
