@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheaccess.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:18:29 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 11:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,7 +360,7 @@ data::TreeAddress CacheLoadingAccess::addComponentData( memory::UpdateAccessor& 
                                                        ) CFG_UNO_THROW_RTE()
 {
     osl::MutexGuard aGuard( this->m_aMutex );
-    CFG_TRACE_INFO("CacheLoadingAccess: Adding component data  for module '%s'",
+    CFG_TRACE_INFO("CacheLoadingAccess: Adding component data for module '%s' : %s",
                     OUSTRING2ASCII(_aComponentInstance.component().toString()),
                     _bIncludesDefaults ? "Data includes defaults." : "Data does not include defaults." );
 
