@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SOfficeFactory.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-03-26 14:53:55 $
+ *  last change:$Date: 2003-05-14 13:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,11 +112,11 @@ public class SOfficeFactory {
 
     public static SOfficeFactory getFactory( XMultiServiceFactory xMSF ) {
 
-        SOfficeFactory soFactory = (SOfficeFactory)lookup.get( "xMSF" );
+        SOfficeFactory soFactory = (SOfficeFactory)lookup.get(new Integer(xMSF.hashCode()).toString());
 
         if ( soFactory == null ) {
             soFactory = new SOfficeFactory( xMSF );
-            lookup.put( "xMSF", soFactory );
+            lookup.put( new Integer(xMSF.hashCode()).toString(), soFactory );
         }
 
         return soFactory;
