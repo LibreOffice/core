@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-17 15:27:33 $
+ *  last change: $Author: ssa $ $Date: 2002-05-30 12:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,10 @@ private:
 
 protected:
      DECL_LINK( WindowEventListener, VclSimpleEvent* );
+     DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
 
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual void    ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent );
     virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
 public:
