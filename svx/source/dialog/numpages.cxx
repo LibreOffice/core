@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2002-06-03 13:28:05 $
+ *  last change: $Author: os $ $Date: 2002-08-15 06:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1370,6 +1370,9 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
         pExamplesVS->InsertItem( i + 1, i);
         String* pGrfNm = (String*) aGrfNames.GetObject(i);
         *pGrfNm = URIHelper::SmartRelToAbs(*pGrfNm);
+        INetURLObject aObj(*pGrfNm);
+        if(aObj.GetProtocol() == INET_PROT_FILE)
+            *pGrfNm = aObj.PathToFileName();
         pExamplesVS->SetItemText( i + 1, *pGrfNm );
     }
     if(!aGrfNames.Count())
@@ -2721,7 +2724,10 @@ IMPL_LINK( SvxNumOptionsTabPage, PopupActivateHdl_Impl, Menu *, pMenu )
             for(USHORT i = 0; i < aGrfNames.Count(); i++)
             {
                 Graphic aGraphic;
-                const String* pGrfName = (const String*)aGrfNames.GetObject(i);
+                String sGrfName = *(const String*)aGrfNames.GetObject(i);
+                INetURLObject aObj(sGrfName);
+                if(aObj.GetProtocol() == INET_PROT_FILE)
+                    sGrfName = aObj.PathToFileName();
                 if(GalleryExplorer::GetGraphicObj( String::CreateFromAscii("Bullets"), i, &aGraphic))
                 {
                     Bitmap aBitmap(aGraphic.GetBitmap());
@@ -2736,13 +2742,14 @@ IMPL_LINK( SvxNumOptionsTabPage, PopupActivateHdl_Impl, Menu *, pMenu )
                         aBitmap.Scale(nScale, nScale);
                     }
                     Image aImage(aBitmap);
-                    pPopup->InsertItem(MN_GALLERY_ENTRY + i, *pGrfName, aImage );
+
+                    pPopup->InsertItem(MN_GALLERY_ENTRY + i, sGrfName, aImage );
                 }
                 else
                 {
                     Image aImage;
                     pPopup->InsertItem(
-                        MN_GALLERY_ENTRY + i, *pGrfName, aImage );
+                        MN_GALLERY_ENTRY + i, sGrfName, aImage );
                 }
             }
             GalleryExplorer::EndLocking(sBullets);
