@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdglob.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:00 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #endif
 
 #ifndef _RESID_HXX //autogen
-#include <vcl/resid.hxx>
+#include <tools/resid.hxx>
 #endif
 
 #ifndef _STRING_HXX
