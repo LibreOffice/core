@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-07 15:49:03 $
+#   last change: $Author: rt $ $Date: 2004-05-21 09:38:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,9 +73,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-IMGLST_SRS=$(SRS)$/form.srs
-BMP_IN=$(PRJ)$/win$/res
 
 SRS1NAME=form
 SRC1FILES= \
