@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-07 19:24:15 $
+ *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,12 @@
 
 using namespace rtl;
 using namespace com::sun::star;
-using namespace com::sun::star::package::ZipConstants;
+using namespace com::sun::star::packages::ZipConstants;
 
 /** This class is used to read entries from a zip file
  */
 ZipFile::ZipFile( uno::Reference < io::XInputStream > &xInput, sal_Bool bInitialise)
-    throw(io::IOException, package::ZipException, uno::RuntimeException)
+    throw(io::IOException, packages::ZipException, uno::RuntimeException)
 : xStream(xInput)
 , aGrabber(xInput)
 , aInflater (sal_True)
@@ -93,7 +93,7 @@ void ZipFile::updateFromManList(std::vector < ManifestEntry * > &rManList)
     // I'm not sure how evil this is in this case...
     for (;i < nSize ; i++)
     {
-        package::ZipEntry * pEntry = &rManList[i]->aEntry;
+        packages::ZipEntry * pEntry = &rManList[i]->aEntry;
         aEntries[pEntry->sName] = *pEntry;
     }
 }
@@ -130,7 +130,7 @@ sal_Int32 SAL_CALL ZipFile::getSize(  )
 uno::Type SAL_CALL ZipFile::getElementType(  )
     throw(uno::RuntimeException)
 {
-    return ::getCppuType((package::ZipEntry *) 0);
+    return ::getCppuType((packages::ZipEntry *) 0);
 }
 
 sal_Bool SAL_CALL ZipFile::hasElements(  )
@@ -166,8 +166,8 @@ sal_Bool SAL_CALL ZipFile::hasByName( const ::rtl::OUString& aName )
     return aEntries.count(aName);
 }
 
-uno::Reference< io::XInputStream > SAL_CALL ZipFile::getInputStream( const package::ZipEntry& rEntry )
-    throw(io::IOException, package::ZipException, uno::RuntimeException)
+uno::Reference< io::XInputStream > SAL_CALL ZipFile::getInputStream( const packages::ZipEntry& rEntry )
+    throw(io::IOException, packages::ZipException, uno::RuntimeException)
 {
     sal_Int64 nEnd = rEntry.nCompressedSize == 0 ? rEntry.nSize : rEntry.nCompressedSize;
     if (rEntry.nOffset <= 0)
@@ -179,8 +179,8 @@ uno::Reference< io::XInputStream > SAL_CALL ZipFile::getInputStream( const packa
     return xStreamRef;
 }
 
-sal_uInt32 SAL_CALL ZipFile::getHeader(const package::ZipEntry& rEntry)
-    throw(io::IOException, package::ZipException, uno::RuntimeException)
+sal_uInt32 SAL_CALL ZipFile::getHeader(const packages::ZipEntry& rEntry)
+    throw(io::IOException, packages::ZipException, uno::RuntimeException)
 {
     uno::Sequence < sal_Int8 > aSequence (4);
 
@@ -189,7 +189,7 @@ sal_uInt32 SAL_CALL ZipFile::getHeader(const package::ZipEntry& rEntry)
         if (rEntry.nOffset <= 0)
             readLOC(rEntry);
     }
-    catch (package::ZipException&)
+    catch (packages::ZipException&)
     {
         VOS_ENSURE(0, "Zip file bug!");
         return 0;
@@ -224,8 +224,8 @@ sal_uInt32 SAL_CALL ZipFile::getHeader(const package::ZipEntry& rEntry)
            | static_cast < sal_uInt8> (aSequence[3]& 0xFF) << 24));
 }
 
-uno::Reference< io::XInputStream > SAL_CALL ZipFile::getRawStream( const package::ZipEntry& rEntry )
-        throw(io::IOException, package::ZipException, uno::RuntimeException)
+uno::Reference< io::XInputStream > SAL_CALL ZipFile::getRawStream( const packages::ZipEntry& rEntry )
+        throw(io::IOException, packages::ZipException, uno::RuntimeException)
 {
     sal_Int64 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
 
@@ -237,8 +237,8 @@ uno::Reference< io::XInputStream > SAL_CALL ZipFile::getRawStream( const package
     return xStreamRef;
 }
 
-sal_Bool ZipFile::readLOC(const package::ZipEntry &rEntry)
-    throw(io::IOException, package::ZipException, uno::RuntimeException)
+sal_Bool ZipFile::readLOC(const packages::ZipEntry &rEntry)
+    throw(io::IOException, packages::ZipException, uno::RuntimeException)
 {
     sal_uInt32 nTestSig, nTime, nCRC, nSize, nCompressedSize;
     sal_uInt16 nVersion, nFlag, nHow, nNameLen, nExtraLen;
@@ -248,7 +248,7 @@ sal_Bool ZipFile::readLOC(const package::ZipEntry &rEntry)
     aGrabber >> nTestSig;
 
     if (nTestSig != LOCSIG)
-        throw package::ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid LOC header (bad signature") ), uno::Reference < uno::XInterface > () );
+        throw packages::ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid LOC header (bad signature") ), uno::Reference < uno::XInterface > () );
     aGrabber >> nVersion;
     aGrabber >> nFlag;
     aGrabber >> nHow;
@@ -258,13 +258,13 @@ sal_Bool ZipFile::readLOC(const package::ZipEntry &rEntry)
     aGrabber >> nSize;
     aGrabber >> nNameLen;
     aGrabber >> nExtraLen;
-    package::ZipEntry *pNonConstEntry = const_cast < package::ZipEntry* > (&rEntry);
+    packages::ZipEntry *pNonConstEntry = const_cast < packages::ZipEntry* > (&rEntry);
     pNonConstEntry->nOffset =  static_cast < sal_Int32 > (aGrabber.getPosition()) + nNameLen + nExtraLen;
     return sal_True;
 }
 
 sal_Int32 ZipFile::findEND( )
-    throw(io::IOException, package::ZipException, uno::RuntimeException)
+    throw(io::IOException, packages::ZipException, uno::RuntimeException)
 {
     sal_Int32 nLength=0, nPos=0;
     uno::Sequence < sal_Int8 > aByteSeq;
@@ -272,7 +272,7 @@ sal_Int32 ZipFile::findEND( )
 
     if (nLength == 0)
         return -1;
-        //throw (package::ZipException( OUString::createFromAscii("Trying to find Zip END signature in a zero length file!"), uno::Reference < uno::XInterface> () ));
+        //throw (packages::ZipException( OUString::createFromAscii("Trying to find Zip END signature in a zero length file!"), uno::Reference < uno::XInterface> () ));
 
     aGrabber.seek( nLength );
 
@@ -309,11 +309,11 @@ sal_Int32 ZipFile::findEND( )
             }
         }
     }
-    throw package::ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip END signature not found!") ), uno::Reference < uno::XInterface> () );
+    throw packages::ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip END signature not found!") ), uno::Reference < uno::XInterface> () );
 }
 
 sal_Int32 ZipFile::readCEN()
-    throw(io::IOException, package::ZipException, uno::RuntimeException)
+    throw(io::IOException, packages::ZipException, uno::RuntimeException)
 {
     sal_Int32 nEndPos, nLocPos;
     sal_Int16  nCount, nTotal;
@@ -328,23 +328,23 @@ sal_Int32 ZipFile::readCEN()
     aGrabber >> nCenOff;
 
     if (nTotal<0 || nTotal * CENHDR > nCenLen)
-        throw package::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "invalid END header (bad entry count)") ), uno::Reference < uno::XInterface > ());
+        throw packages::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "invalid END header (bad entry count)") ), uno::Reference < uno::XInterface > ());
 
     if (nTotal > ZIP_MAXENTRIES)
-        throw package::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "too many entries in ZIP File") ), uno::Reference < uno::XInterface > ());
+        throw packages::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "too many entries in ZIP File") ), uno::Reference < uno::XInterface > ());
 
     if (nCenLen < 0 || nCenLen > nEndPos)
-        throw package::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid END header (bad central directory size)") ), uno::Reference < uno::XInterface > ());
+        throw packages::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid END header (bad central directory size)") ), uno::Reference < uno::XInterface > ());
 
     nCenPos = nEndPos - nCenLen;
 
     if (nCenOff < 0 || nCenOff > nCenPos)
-        throw package::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid END header (bad central directory size)") ), uno::Reference < uno::XInterface > ());
+        throw packages::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid END header (bad central directory size)") ), uno::Reference < uno::XInterface > ());
 
     nLocPos = nCenPos - nCenOff;
     aGrabber.seek(nCenPos);
 
-    package::ZipEntry *pEntry = new package::ZipEntry;
+    packages::ZipEntry *pEntry = new packages::ZipEntry;
     for (nCount = 0 ; nCount < nTotal; nCount++)
     {
         sal_Int32 nTestSig, nCRC, nCompressedSize, nTime, nSize, nExtAttr, nOffset;
@@ -352,21 +352,21 @@ sal_Int32 ZipFile::readCEN()
         sal_Int16 nDisk, nIntAttr;
 
         if (aGrabber.getPosition() - nCenPos + CENHDR > nCenLen)
-            throw package::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid CEN header (bad header size check 1)") ), uno::Reference < uno::XInterface > ());
+            throw packages::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid CEN header (bad header size check 1)") ), uno::Reference < uno::XInterface > ());
 
         aGrabber >> nTestSig;
         if (nTestSig != CENSIG)
-            throw package::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid CEN header (bad signature)") ), uno::Reference < uno::XInterface > ());
+            throw packages::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid CEN header (bad signature)") ), uno::Reference < uno::XInterface > ());
 
         aGrabber >> nVerMade;
         aGrabber >> nVersion;
         if ((nVersion & 1) == 1)
-            throw package::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid CEN header (encrypted entry)") ), uno::Reference < uno::XInterface > ());
+            throw packages::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid CEN header (encrypted entry)") ), uno::Reference < uno::XInterface > ());
 
         aGrabber >> nFlag;
         aGrabber >> nHow;
         if (nHow != STORED && nHow != DEFLATED)
-            throw package::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid CEN header (bad compression method)") ), uno::Reference < uno::XInterface > ());
+            throw packages::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid CEN header (bad compression method)") ), uno::Reference < uno::XInterface > ());
 
         aGrabber >> nTime;
         aGrabber >> nCRC;
@@ -381,13 +381,13 @@ sal_Int32 ZipFile::readCEN()
         aGrabber >> nOffset;
 
         if (aGrabber.getPosition() - nCenPos + nNameLen + nExtraLen + nCommentLen > nCenLen)
-            throw package::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid CEN header (bad header size check 2)") ), uno::Reference < uno::XInterface > ());
+            throw packages::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Invalid CEN header (bad header size check 2)") ), uno::Reference < uno::XInterface > ());
 
         if (nNameLen > ZIP_MAXNAMELEN)
-            throw package::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "name length exceeds 512 bytes" ) ), uno::Reference < uno::XInterface > ());
+            throw packages::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "name length exceeds 512 bytes" ) ), uno::Reference < uno::XInterface > ());
 
         if (nExtraLen > ZIP_MAXEXTRA)
-            throw package::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "extra header info exceeds 256 bytes") ), uno::Reference < uno::XInterface > ());
+            throw packages::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "extra header info exceeds 256 bytes") ), uno::Reference < uno::XInterface > ());
 
         pEntry->nTime   = nTime;
         pEntry->nCrc    = nCRC;
@@ -419,7 +419,7 @@ sal_Int32 ZipFile::readCEN()
     delete pEntry;
 
     if (nCount != nTotal)
-        throw package::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Count != Total") ), uno::Reference < uno::XInterface > ());
+        throw packages::ZipException(OUString( RTL_CONSTASCII_USTRINGPARAM ( "Count != Total") ), uno::Reference < uno::XInterface > ());
 
     return nCenPos;
 }

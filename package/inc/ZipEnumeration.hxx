@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipEnumeration.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:35 $
+ *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ struct entryHashFunc
     }
 };
 #include <hash_map>
-typedef std::hash_map < rtl::OUString, com::sun::star::package::ZipEntry, entryHashFunc, entryEqFunc > EntryHash;
+typedef std::hash_map < rtl::OUString, com::sun::star::packages::ZipEntry, entryHashFunc, entryEqFunc > EntryHash;
 
 #ifndef _ZIP_FILE_HXX_
 #include "ZipFile.hxx"
@@ -108,11 +108,11 @@ public:
     virtual com::sun::star::uno::Any SAL_CALL nextElement() throw (::com::sun::star::uno::RuntimeException);
     virtual ~ZipEnumeration(void);
              ZipEnumeration( EntryHash &rNewEntryHash);
-             //ZipEnumeration( com::sun::star::uno::Reference < com::sun::star::uno::Sequence< com::sun::star::package::ZipEntry > >&xList);
+             //ZipEnumeration( com::sun::star::uno::Reference < com::sun::star::uno::Sequence< com::sun::star::packages::ZipEntry > >&xList);
 /*
              ZipEnumeration(const com::sun::star::uno::Sequence<
                                 com::sun::star::uno::Reference<
-                                com::sun::star::package::ZipEntry> > & seqEntries);
+                                com::sun::star::packages::ZipEntry> > & seqEntries);
     // XInterface
     virtual com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type & aType )
             throw( ::com::sun::star::uno::RuntimeException );

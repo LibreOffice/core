@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Deflater.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:39 $
+ *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <iostream.h>
 #include <string.h>
 
-using namespace com::sun::star::package::ZipConstants;
+using namespace com::sun::star::packages::ZipConstants;
 using namespace com::sun::star;
 
 /** Provides general purpose compression using the ZLIB compression

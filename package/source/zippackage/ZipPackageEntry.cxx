@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-07 10:51:26 $
+ *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #endif
 
 using namespace com::sun::star;
-using namespace com::sun::star::package::ZipConstants;
+using namespace com::sun::star::packages::ZipConstants;
 using namespace rtl;
 
 ZipPackageEntry::ZipPackageEntry (void)

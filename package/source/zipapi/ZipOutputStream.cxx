@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-07 16:09:44 $
+ *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 using namespace rtl;
 using namespace com::sun::star;
-using namespace com::sun::star::package::ZipConstants;
+using namespace com::sun::star::packages::ZipConstants;
 
 /** This class is used to write Zip files
  */
@@ -101,10 +101,10 @@ void SAL_CALL ZipOutputStream::setLevel( sal_Int32 nNewLevel )
 {
     aDeflater.setLevel( nNewLevel);
 }
-void SAL_CALL ZipOutputStream::putNextEntry( const package::ZipEntry& rEntry )
+void SAL_CALL ZipOutputStream::putNextEntry( const packages::ZipEntry& rEntry )
     throw(io::IOException, uno::RuntimeException)
 {
-    package::ZipEntry *pNonConstEntry = const_cast < package::ZipEntry* >(&rEntry);
+    packages::ZipEntry *pNonConstEntry = const_cast < packages::ZipEntry* >(&rEntry);
     if (pCurrentEntry != NULL)
         closeEntry();
     if (pNonConstEntry->nTime == -1)
@@ -135,7 +135,7 @@ void SAL_CALL ZipOutputStream::close(  )
 void SAL_CALL ZipOutputStream::closeEntry(  )
     throw(io::IOException, uno::RuntimeException)
 {
-    package::ZipEntry *pEntry = pCurrentEntry;
+    packages::ZipEntry *pEntry = pCurrentEntry;
     if (pEntry)
     {
         switch (pEntry->nMethod)
@@ -314,7 +314,7 @@ void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
     if (nCommentLength)
         aChucker.writeBytes(aSequence);
 }
-void ZipOutputStream::writeCEN( const package::ZipEntry &rEntry )
+void ZipOutputStream::writeCEN( const packages::ZipEntry &rEntry )
     throw(io::IOException, uno::RuntimeException)
 {
     sal_Int16 nNameLength       = static_cast < sal_Int16 > ( rEntry.sName.getLength() ) ,
@@ -381,7 +381,7 @@ void ZipOutputStream::writeCEN( const package::ZipEntry &rEntry )
         aChucker.writeBytes( aSequence );
     }
 }
-void ZipOutputStream::writeEXT( const package::ZipEntry &rEntry )
+void ZipOutputStream::writeEXT( const packages::ZipEntry &rEntry )
     throw(io::IOException, uno::RuntimeException)
 {
     aChucker << EXTSIG;
@@ -390,7 +390,7 @@ void ZipOutputStream::writeEXT( const package::ZipEntry &rEntry )
     aChucker << rEntry.nSize;
 }
 
-void ZipOutputStream::writeLOC( const package::ZipEntry &rEntry )
+void ZipOutputStream::writeLOC( const packages::ZipEntry &rEntry )
     throw(io::IOException, uno::RuntimeException)
 {
     sal_Int16 nNameLength = static_cast < sal_Int16 > (rEntry.sName.getLength());

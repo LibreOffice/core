@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-07 16:09:44 $
+ *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #endif
 
 #ifndef _COM_SUN_STAR_PACKAGE_ZIPENTRY_HPP_
-#include <com/sun/star/package/ZipEntry.hpp>
+#include <com/sun/star/packages/ZipEntry.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -176,7 +176,7 @@ public:
     ZipPackageFolder ( void );
     virtual ~ZipPackageFolder( void );
 
-    static void copyZipEntry( com::sun::star::package::ZipEntry &rDest, const com::sun::star::package::ZipEntry &rSource);
+    static void copyZipEntry( com::sun::star::packages::ZipEntry &rDest, const com::sun::star::packages::ZipEntry &rSource);
     // Recursive functions
     void  saveContents(rtl::OUString &rPath, std::vector < ManifestEntry * > &rManList, ZipOutputStream & rZipOut)
         throw(::com::sun::star::uno::RuntimeException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRC32.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:35 $
+ *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,10 @@
 #endif
 
 #ifndef _COM_SUN_STAR_PACKAGE_XCHECKSUM_HPP_
-#include <com/sun/star/package/XChecksum.hpp>
+#include <com/sun/star/packages/XChecksum.hpp>
 #endif
 
-class CRC32 : public cppu::WeakImplHelper1<com::sun::star::package::XChecksum>
+class CRC32 : public cppu::WeakImplHelper1<com::sun::star::packages::XChecksum>
 {
 private:
     sal_uInt32 nCRC;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-08 12:22:40 $
+ *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,9 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::util;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
-using namespace com::sun::star::package;
+using namespace com::sun::star::packages;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::package::ZipConstants;
+using namespace com::sun::star::packages::ZipConstants;
 
 ZipPackage::ZipPackage (Reference < XInputStream > &xNewInput,
                         const Reference < XMultiServiceFactory > &xNewFactory)
@@ -675,7 +675,7 @@ Sequence< ElementChange > SAL_CALL ZipPackage::getPendingChanges(  )
     return Sequence < ElementChange > ( NULL, 0 );
 }
 
-sal_Bool ZipPackage::isZipFile(com::sun::star::package::ZipEntry &rEntry)
+sal_Bool ZipPackage::isZipFile(ZipEntry &rEntry)
 {
     if (rEntry.nMethod == STORED)
     {
@@ -704,7 +704,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 Sequence< OUString > ZipPackage_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.package.Package" ) );
+    seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.comp.ZipPackage" ) );
     return seqNames;
 }
 
@@ -752,13 +752,13 @@ extern "C" void * SAL_CALL component_getFactory(
 {
     void * pRet = 0;
     // which implementation is demanded?
-    if (pServiceManager && !rtl_str_compare( pImplName, "com.sun.star.package.Package" ))
+    if (pServiceManager && !rtl_str_compare( pImplName, "com.sun.star.packages.comp.ZipPackage" ))
     {
-        OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.package.Package") );
+        OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.packages.comp.ZipPackage") );
         Reference< XSingleServiceFactory > xFactory(
            cppu::createSingleFactory( // helper function from cppuhelper lib
            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-           OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.package.Package") ),
+           OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.packages.comp.ZipPackage") ),
            ZipPackage_create, ZipPackage_getSupportedServiceNames() ) );
 
         if (xFactory.is())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipEnumeration.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:39 $
+ *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #endif
 
 #ifndef _COM_SUN_STAR_PACKAGE_ZIPCONSTANTS_HPP_
-#include <com/sun/star/package/ZipConstants.hpp>
+#include <com/sun/star/packages/ZipConstants.hpp>
 #endif
 
 #include <iostream.h>

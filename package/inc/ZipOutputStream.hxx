@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-07 16:09:44 $
+ *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 #endif
 
 #ifndef _COM_SUN_STAR_PACKAGE_XZIPOUTPUTSTREAM_HPP_
-#include <com/sun/star/package/XZipOutputStream.hpp>
+#include <com/sun/star/packages/XZipOutputStream.hpp>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
@@ -98,7 +98,7 @@
 #endif
 
 
-class ZipOutputStream : public cppu::WeakImplHelper1< com::sun::star::package::XZipOutputStream >
+class ZipOutputStream : public cppu::WeakImplHelper1< com::sun::star::packages::XZipOutputStream >
 {
 private:
     com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xStream;
@@ -107,11 +107,11 @@ private:
     ::rtl::OUString     sComment;
     sal_Int16           nMethod;
     sal_Int16           nLevel;
-    com::sun::star::package::ZipEntry           *pCurrentEntry;
+    com::sun::star::packages::ZipEntry          *pCurrentEntry;
     CRC32               aCRC;
     sal_Bool            bFinished;
     ByteChucker         aChucker;
-    ::std::vector < ::com::sun::star::package::ZipEntry* >          aZipList;
+    ::std::vector < ::com::sun::star::packages::ZipEntry* >         aZipList;
 
 public:
     ZipOutputStream( com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > &xOStream, sal_Int32 nNewBufferSize);
@@ -129,7 +129,7 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setLevel( sal_Int32 nNewLevel )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL putNextEntry( const ::com::sun::star::package::ZipEntry& rEntry )
+    virtual void SAL_CALL putNextEntry( const ::com::sun::star::packages::ZipEntry& rEntry )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL closeEntry(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
@@ -148,11 +148,11 @@ private:
     void doDeflate();
     void writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void writeCEN( const com::sun::star::package::ZipEntry &rEntry )
+    void writeCEN( const com::sun::star::packages::ZipEntry &rEntry )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void writeEXT( const com::sun::star::package::ZipEntry &rEntry )
+    void writeEXT( const com::sun::star::packages::ZipEntry &rEntry )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void writeLOC( const com::sun::star::package::ZipEntry &rEntry )
+    void writeLOC( const com::sun::star::packages::ZipEntry &rEntry )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
 };

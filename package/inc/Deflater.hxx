@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Deflater.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:35 $
+ *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #define _DEFLATER_HXX_
 
 #ifndef _COM_SUN_STAR_PACKAGE_XDEFLATER_HDL_
-#include <com/sun/star/package/XDeflater.hpp>
+#include <com/sun/star/packages/XDeflater.hpp>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
@@ -78,10 +78,10 @@
 #endif
 
 #ifndef _COM_SUN_STAR_PACKAGE_ZIPCONSTANTS_HPP_
-#include <com/sun/star/package/ZipConstants.hpp>
+#include <com/sun/star/packages/ZipConstants.hpp>
 #endif
 
-class Deflater : public cppu::WeakImplHelper1 < com::sun::star::package::XDeflater>
+class Deflater : public cppu::WeakImplHelper1 < com::sun::star::packages::XDeflater>
 {
 private:
     com::sun::star::uno::Sequence< sal_Int8 > sInBuffer;

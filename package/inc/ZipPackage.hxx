@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:35 $
+ *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,12 +150,12 @@ private:
     ZipFile          *pZipFile;
     ::ucb::Content   *pContent;
     sal_Bool         bContained;
-    ::com::sun::star::uno::Reference < com::sun::star::package::XZipFile > xZipFile;
+    ::com::sun::star::uno::Reference < com::sun::star::packages::XZipFile > xZipFile;
     ::com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xRootFolder;
     ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xContentStream;
     ::com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xContentSeek;
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xFactory;
-    sal_Bool isZipFile(com::sun::star::package::ZipEntry &rEntry);
+    sal_Bool isZipFile(com::sun::star::packages::ZipEntry &rEntry);
     void getZipFileContents();
     void destroyFolderTree( ::com::sun::star::uno::Reference < ::com::sun::star::lang::XUnoTunnel > xFolder );
     NameHash         aRecent;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-08 12:22:54 $
+ *  last change: $Author: mtg $ $Date: 2001-03-16 17:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #include "ZipPackageFolder.hxx"
 #endif
 
-using namespace com::sun::star::package::ZipConstants;
+using namespace com::sun::star::packages::ZipConstants;
 using namespace com::sun::star;
 using namespace cppu;
 using namespace rtl;
@@ -84,7 +84,7 @@ ZipPackageFolder::ZipPackageFolder (void)
 ZipPackageFolder::~ZipPackageFolder( void )
 {
 }
-void ZipPackageFolder::copyZipEntry( com::sun::star::package::ZipEntry &rDest, const com::sun::star::package::ZipEntry &rSource)
+void ZipPackageFolder::copyZipEntry( com::sun::star::packages::ZipEntry &rDest, const com::sun::star::packages::ZipEntry &rSource)
 {
       rDest.nVersion            = rSource.nVersion;
     rDest.nFlag             = rSource.nFlag;
@@ -413,7 +413,7 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
                         }
                         rZipOut.rawCloseEntry();
                     }
-                    catch (package::ZipException&)
+                    catch (packages::ZipException&)
                     {
                     }
                 }
