@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrop.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-22 12:59:59 $
+ *  last change: $Author: fme $ $Date: 2001-10-29 16:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,8 +374,11 @@ void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
         aClipRect.Intersection( rInf.GetPaintRect() );
     }
     SwSaveClip aClip( (OutputDevice*)rInf.GetOut() );
+#ifdef VERTICAL_LAYOUT
+    aClip.ChgClip( aClipRect, rInf.GetTxtFrm() );
+#else
     aClip.ChgClip( aClipRect );
-
+#endif
     // Das machen, was man sonst nur macht ...
     PaintTxt( rInf );
 
@@ -625,7 +628,11 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
         }
 
         // we do not allow a vertical font for the drop portion
+#ifdef VERTICAL_LAYOUT
+        pTmpFnt->SetVertical( 0, rInf.GetTxtFrm()->IsVertical() );
+#else
         pTmpFnt->SetVertical( 0 );
+#endif
 
         // find next attribute change / script change
         const xub_StrLen nIdx = nNextChg;
@@ -935,8 +942,21 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                 rFnt.SetProportion( nOldProp );
 
                 // shift aRect to have baseline 0
+#ifdef VERTICAL_LAYOUT
+                if ( rInf.GetTxtFrm()->IsVertical() )
+                {
+                    aRect.Right() += nAscent;
+                    aRect.Left() += nAscent;
+                }
+                else
+                {
+                    aRect.Top() -= nAscent;
+                    aRect.Bottom() -= nAscent;
+                }
+#else
                 aRect.Top() -= nAscent;
                 aRect.Bottom() -= nAscent;
+#endif
 
                 if ( bFirstGlyphRect )
                 {
@@ -954,8 +974,24 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
             // respect to a common baseline : 0
 
             // get descent and ascent from union
+#ifdef VERTICAL_LAYOUT
+            if ( rInf.GetTxtFrm()->IsVertical() )
+            {
+                nDescent = aCommonRect.Left();
+                nAscent = aCommonRect.Right();
+
+                if ( nDescent < 0 )
+                    nDescent = -nDescent;
+            }
+            else
+            {
+                nDescent = aCommonRect.Bottom();
+                nAscent = aCommonRect.Top();
+            }
+#else
             nDescent = aCommonRect.Bottom();
             nAscent = aCommonRect.Top();
+#endif
             if ( nAscent < 0 )
                 nAscent = -nAscent;
 
