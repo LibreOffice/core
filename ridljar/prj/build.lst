@@ -4,8 +4,9 @@ ri	ridljar									nmake	-	all	ri_genall NULL
 ri	ridljar\com\sun\star\lib\uno\typedesc	nmake	-	all	ri_typedesc ri_typeinfo ri_uno NULL
 ri	ridljar\com\sun\star\lib\uno\typeinfo	nmake	-	all	ri_typeinfo ri_genall NULL
 ri	ridljar\com\sun\star\uno				nmake	-	all	ri_uno ri_typeinfo NULL
+ri	ridljar\com\sun\star\util\logging		nmake	-	all	ri_log ri_typeinfo NULL
 ri	ridljar\com\sun\star\lang				nmake	-	all	ri_lang ri_uno NULL
-ri	ridljar\com\sun\star\security				nmake	-	all	ri_sec ri_uno NULL
+ri	ridljar\com\sun\star\security			nmake	-	all	ri_sec ri_uno NULL
 ri	ridljar\com\sun\star\reflection			nmake	-	all	ri_reflection ri_lang NULL
 ri	ridljar\com\sun\star\beans				nmake	-	all	ri_beans ri_container ri_reflection NULL
 ri	ridljar\com\sun\star\bridge				nmake	-	all	ri_bridge ri_connection ri_container NULL
@@ -23,4 +24,4 @@ ri	ridljar\com\sun\star\script				nmake	-	all	ri_script ri_beans ri_io NULL
 ri	ridljar\com\sun\star\test				nmake	-	all	ri_test ri_lang NULL
 ri	ridljar\com\sun\star\test\performance	nmake	-	all	ri_test_perf ri_test NULL
 ri	ridljar\com\sun\star\test\bridge		nmake	-	all	ri_test_bridge ri_test NULL
-ri	ridljar\util							nmake	-	all	ri_util ri_sec ri_bridge ri_corba_giop ri_corba_iiop ri_java ri_loader ri_script ri_test ri_typedesc ri_test_perf ri_test_bridge NULL
+ri	ridljar\util							nmake	-	all	ri_util ri_sec ri_bridge ri_corba_giop ri_corba_iiop ri_java ri_loader ri_script ri_test ri_typedesc ri_test_perf ri_test_bridge ri_log NULL
