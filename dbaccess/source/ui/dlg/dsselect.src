@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 07:46:50 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
     Text[ chinese_traditional ] = "Έκ®Ζ·½";
     Text[ arabic ] = "γΥΟΡ ΗαΘνΗδΗΚ";
     Text[ greek ] = "Προέλευση δεδομένων";
-    Text[ korean ] = "ΕΧΐΜΕΝ ΌÒ½Ί";
+    Text[ korean ] = "µ¥ΐΜΕΝ ΌÒ½Ί";
     Text[ turkish ] = "Veri kaynaπύ";
     Text[ language_user1 ] = " ";
 
@@ -202,7 +202,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ chinese_traditional ] = "§½³΅ªΊΈκ®Ζ·½";
         Text[ arabic ] = "γΥΗΟΡ ΘνΗδΗΚ γΝανΙ";
         Text[ greek ] = "τοπικές προελεύσεις δεδομένων";
-        Text[ korean ] = "·ΞΔΓ ΕΧΐΜΕΝ ΌÒ½Ί";
+        Text[ korean ] = "·ΞΔΓ µ¥ΐΜΕΝ ΌÒ½Ί";
         Text[ turkish ] = "Yerel veri kaynaklarύ";
     };
     String STR_COULDNOTLOAD_CONFIGLIB
@@ -233,6 +233,9 @@ ModalDialog DLG_DATASOURCE_SELECTION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2000/11/27 07:46:50  kz
+ *  Merge SRC614: 27.11.00 - 08:46:28 (NoBranch)
+ *
  *  Revision 1.5  2000/11/15 21:11:14  kz
  *  Merge SRC613: 11/15/00 - 22:10:44 (NoBranch)
  *
