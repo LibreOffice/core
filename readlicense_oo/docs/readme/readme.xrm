@@ -148,7 +148,7 @@
 			<Text id="a" xml:lang="he">Sehr geehrte Anwenderin, sehr geehrter Anwender,</Text>
 			<Text id="a" xml:lang="ca">Dear User</Text>
 			<Text id="a" xml:lang="hi-IN">Dear User</Text>
-		<Text id="empty" xml:lang="en-US"/><Text id="a" xml:lang="en-US">Dear User</Text>
+		<Text id="empty" xml:lang="en-US"/>
 		</Paragraph>
 		<Paragraph id="A6">
 			<Text id="a" xml:lang="en-US">This file contains important information about this program. Please read this information very carefully before starting work.</Text>
