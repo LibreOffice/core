@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelleng.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-22 18:26:36 $
+ *  last change: $Author: er $ $Date: 2001-06-25 14:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,9 @@
 #include <svx/editobj.hxx>
 #include <svx/editview.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/system.hxx>
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 #include "spelleng.hxx"
 #include "tabvwsh.hxx"
@@ -304,7 +306,7 @@ BOOL __EXPORT ScSpellingEngine::SpellNextDocument()
                 {
                     eLnge = (LanguageType) pLangIt->GetValue();
                     if ( eLnge == LANGUAGE_SYSTEM )
-                        eLnge = System::GetLanguage();          // Spelling nie mit SYSTEM
+                        eLnge = Application::GetSettings().GetLanguage();   // never use SYSTEM for spelling
                     if (eLnge != eOldLnge)
                     {
                         eOldLnge = eLnge;

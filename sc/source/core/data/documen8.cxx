@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-29 19:32:55 $
+ *  last change: $Author: er $ $Date: 2001-06-25 14:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@
 #include <unotools/transliterationwrapper.hxx>
 
 #include <vcl/msgbox.hxx>
-#include <vcl/system.hxx>
 
 #include "global.hxx"
 #include "table.hxx"
@@ -720,7 +719,7 @@ BOOL ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
             USHORT nCellLang = ((const SvxLanguageItem&)
                                     pPattern->GetItem(ATTR_FONT_LANGUAGE)).GetValue();
             if ( nCellLang == LANGUAGE_SYSTEM )
-                nCellLang = System::GetLanguage();          // never use SYSTEM for spelling
+                nCellLang = Application::GetSettings().GetLanguage();   // never use SYSTEM for spelling
             pEngine->SetDefaultLanguage( nCellLang );
 
             if ( eType == CELLTYPE_STRING )

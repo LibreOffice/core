@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewutil.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-26 19:24:33 $
+ *  last change: $Author: er $ $Date: 2001-06-25 14:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 #include <svtools/itempool.hxx>
 #include <svtools/itemset.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/system.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
 
@@ -132,7 +131,7 @@ USHORT ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
     else
         eLnge = LANGUAGE_ENGLISH_US;
     if ( eLnge == LANGUAGE_SYSTEM )
-        eLnge = System::GetLanguage();      // never use SYSTEM for spelling
+        eLnge = Application::GetSettings().GetLanguage();   // never use SYSTEM for spelling
 
     return eLnge;
 }

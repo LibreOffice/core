@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 10:03:31 $
+ *  last change: $Author: er $ $Date: 2001-06-25 14:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #include <tools/debug.hxx>
 #include <tools/isolang.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/system.hxx>
 #include <vos/xception.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/charclass.hxx>
@@ -535,9 +534,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
     if ( xAddIn.is() && xName.is() )
     {
         //  AddIns must use the language for which the office is installed
-        LanguageType eOfficeLang = Application::GetAppInternational().GetLanguage();
-        if ( eOfficeLang == LANGUAGE_SYSTEM )
-            eOfficeLang = System::GetLanguage();
+        LanguageType eOfficeLang = Application::GetSettings().GetUILanguage();
 
         String aLanguage, aCountry;
         ConvertLanguageToIsoNames( eOfficeLang, aLanguage, aCountry );

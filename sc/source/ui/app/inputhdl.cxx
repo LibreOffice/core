@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-06 09:13:51 $
+ *  last change: $Author: er $ $Date: 2001-06-25 14:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,6 @@
 #include <offmgr/app.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/sound.hxx>
-#include <vcl/system.hxx>
 
 #ifndef _SV_HELP_HXX //autogen
 #include <vcl/help.hxx>
@@ -477,7 +476,7 @@ void ScInputHandler::UpdateSpellSettings( BOOL bFromStartTab )
         else
             nLanguage = LANGUAGE_SYSTEM;
         if ( nLanguage == LANGUAGE_SYSTEM )
-            nLanguage = System::GetLanguage();          // never use SYSTEM for spelling
+            nLanguage = Application::GetSettings().GetLanguage();   // never use SYSTEM for spelling
         pEngine->SetDefaultLanguage( nLanguage );
 
         //  if called for changed options, update flags only if already editing

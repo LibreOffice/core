@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-12 11:38:41 $
+ *  last change: $Author: er $ $Date: 2001-06-25 14:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,9 +592,9 @@ void ScGlobal::Init()
     eLnge = LANGUAGE_SYSTEM;
 
     //! Wenn Sortierung etc. von der Sprache der installierten Offfice-Version
-    //! abhaengen sollen, hier "Application::GetAppInternational().GetLanguage()"
+    //! abhaengen sollen, hier "Application::GetSettings().GetUILanguage()"
     String aLanguage, aCountry;
-    ConvertLanguageToIsoNames( International::GetRealLanguage( eLnge ), aLanguage, aCountry );
+    ConvertLanguageToIsoNames( Application::GetSettings().GetLanguage(), aLanguage, aCountry );
     pLocale = new ::com::sun::star::lang::Locale( aLanguage, aCountry, EMPTY_STRING );
     pCharClass = new CharClass( ::comphelper::getProcessServiceFactory(), *pLocale );
     pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), *pLocale );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callform.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-15 13:19:27 $
+ *  last change: $Author: er $ $Date: 2001-06-25 14:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,6 @@
 
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
 #endif
 #ifndef _VOS_MODULE_HXX_
 #include <vos/module.hxx>
@@ -303,11 +300,7 @@ BOOL InitExternalFunc(const rtl::OUString& rModuleName)
             FARPROC fpSetLanguage = (FARPROC)pLib->getSymbol(LIBFUNCNAME(SETLANGUAGE));
             if ( fpSetLanguage )
             {
-                LanguageType eLanguage =
-                    Application::GetAppInternational().GetLanguage();
-                if ( (eLanguage == LANGUAGE_SYSTEM) ||
-                        (eLanguage == LANGUAGE_DONTKNOW) )
-                    eLanguage = System::GetLanguage();
+                LanguageType eLanguage = Application::GetSettings().GetUILanguage();
                 USHORT nLanguage = (USHORT) eLanguage;
                 (*((SetLanguagePtr)fpSetLanguage))( nLanguage );
             }

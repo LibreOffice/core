@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforauto.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:19 $
+ *  last change: $Author: er $ $Date: 2001-06-25 14:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,9 @@
 
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
-#include <vcl/system.hxx>
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 #include <tools/debug.hxx>
 
 #include "zforauto.hxx"
@@ -111,8 +113,8 @@ void ScNumFormatAbbrev::Load( SvStream& rStream )
     rStream >> nSysLang >> nLang;
     eLnge = (LanguageType) nLang;
     eSysLnge = (LanguageType) nSysLang;
-    if ( eSysLnge == LANGUAGE_SYSTEM )          // von alten Versionen
-        eSysLnge = System::GetLanguage();
+    if ( eSysLnge == LANGUAGE_SYSTEM )          // old versions did write it
+        eSysLnge = Application::GetSettings().GetLanguage();
 }
 
 void ScNumFormatAbbrev::Save( SvStream& rStream ) const
@@ -127,7 +129,7 @@ void ScNumFormatAbbrev::PutFormatIndex(ULONG nFormat,
     const SvNumberformat* pFormat = rFormatter.GetEntry(nFormat);
     if (pFormat)
     {
-        eSysLnge = System::GetLanguage();
+        eSysLnge = Application::GetSettings().GetLanguage();
         eLnge = pFormat->GetLanguage();
         sFormatstring = ((SvNumberformat*)pFormat)->GetFormatstring();
     }
@@ -146,11 +148,11 @@ ULONG ScNumFormatAbbrev::GetFormatIndex( SvNumberFormatter& rFormatter)
     if ( !sFormatstring.Len() )
         return rFormatter.GetStandardIndex( eLnge );
 
-    if ( eLnge == LANGUAGE_SYSTEM && eSysLnge != System::GetLanguage() )
+    if ( eLnge == LANGUAGE_SYSTEM && eSysLnge != Application::GetSettings().GetLanguage() )
     {
         ULONG nOrig = rFormatter.GetEntryKey( sFormatstring, eSysLnge );
         if ( nOrig != NUMBERFORMAT_ENTRY_NOT_FOUND )
-            return rFormatter.GetFormatForLanguageIfBuiltIn( nOrig, System::GetLanguage() );
+            return rFormatter.GetFormatForLanguageIfBuiltIn( nOrig, Application::GetSettings().GetLanguage() );
         else
             return rFormatter.GetStandardIndex( eLnge );    // geht nicht -> Standard
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-13 12:36:44 $
+ *  last change: $Author: er $ $Date: 2001-06-25 14:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -933,7 +933,7 @@ void ExcScenarioList::Apply( ScDocument& r )
 
 XclAddInNameTranslator::XclAddInNameTranslator( void ) : rAddInColl( *ScGlobal::GetAddInCollection() )
 {
-    eLng = ::GetpApp()->GetAppInternational().GetLanguage();
+    eLng = Application::GetSettings().GetUILanguage();
 }
 
 
