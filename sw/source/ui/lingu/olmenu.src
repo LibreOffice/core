@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 10:26:24 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ String STR_WORD
     Text [ spanish ] = "La palabra estα en" ;
     Text [ french ] = "Le mot est en " ;
     Text [ dutch ] = "Woord is " ;
-    Text[ chinese_simplified ] = "ε­—ζ― ";
+    Text[ chinese_simplified ] = "ε•θ―ζ― ";
     Text[ russian ] = "ίηϋκ ρλξβΰ: ";
     Text[ polish ] = "Wyraz jest ";
     Text[ japanese ] = "εθªγ― ";
@@ -247,7 +247,7 @@ String STR_WORD
     Text[ language_user1 ] = "EM June 2003: This string appears in front of any language. E.g. \"Word is German\", \"Word is French\", \"Word is Spanish\". This is in conjunction with Spellchecking: right click foreign word which is marked as misspelled to see entry on menu that opens.";
     Text[ arabic ] = "αΫΙ ΗαίαγΙ: ";
     Text[ dutch ] = "Woord is ";
-    Text[ chinese_simplified ] = "ε­—ζ― ";
+    Text[ chinese_simplified ] = "ε•θ―ζ― ";
     Text[ greek ] = "Η λέξη είναι ";
     Text[ korean ] = "λ‹¨μ–΄ ";
     Text[ turkish ] = "Sφzcόk: ";
