@@ -1,4 +1,4 @@
-vc	vcl	:	psprint rsc sot ucbhelper unotools NULL
+vc	vcl	:	psprint rsc sot ucbhelper unotools sysui NULL
 vc	vcl										usr1	-	all	vc_mkout NULL
 vc	vcl\source\unotypes						nmake	-	all	vc_unot NULL
 vc	vcl\source\ex							nmake	-	all	vc_ex vc_remo NULL
