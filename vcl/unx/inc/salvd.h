@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 17:49:48 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,36 +66,36 @@
 #ifndef _SALSTD_HXX
 #include <salstd.hxx>
 #endif
+#ifndef _SV_SALVD_HXX
+#include <salvd.hxx>
+#endif
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalDisplay;
-class SalGraphics;
-class SalVirtualDevice;
+class X11SalGraphics;
 
 // -=-= SalVirDevData -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-class SalVirDevData
+class X11SalVirtualDevice : public SalVirtualDevice
 {
-    friend  class           SalVirtualDevice;
+    SalDisplay      *pDisplay_;
+    X11SalGraphics  *pGraphics_;
 
-            SalDisplay     *pDisplay_;
-            SalGraphics    *pGraphics_;         // current frame graphics
 
-            Pixmap          hDrawable_;
+    Pixmap          hDrawable_;
 
-            int             nDX_;
-            int             nDY_;
-            USHORT          nDepth_;
-            BOOL            bGraphics_;         // is Graphics used
-
-    inline                  SalVirDevData();
-    inline                  ~SalVirDevData();
+    int             nDX_;
+    int             nDY_;
+    USHORT          nDepth_;
+    BOOL            bGraphics_;         // is Graphics used
 
 public:
-            BOOL            Init( SalDisplay *pDisplay,
-                                  long nDX, long nDY,
-                                  USHORT nBitCount );
-    inline  void            InitGraphics( SalVirtualDevice *pVD,
-                                          SalGraphics      *pGraphics );
+    X11SalVirtualDevice();
+    virtual ~X11SalVirtualDevice();
+
+    BOOL            Init( SalDisplay *pDisplay,
+                          long nDX, long nDY,
+                          USHORT nBitCount );
+    inline  void            InitGraphics( X11SalVirtualDevice *pVD );
 
     inline  Display        *GetXDisplay() const;
     inline  SalDisplay     *GetDisplay() const;
@@ -104,21 +104,26 @@ public:
     inline  USHORT          GetDepth() const { return nDepth_; }
     int                     GetWidth() const { return nDX_; }
     int                     GetHeight() const { return nDY_; }
+
+    virtual SalGraphics*    GetGraphics();
+    virtual void            ReleaseGraphics( SalGraphics* pGraphics );
+
+                            // Set new size, without saving the old contents
+    virtual BOOL            SetSize( long nNewDX, long nNewDY );
 };
 
 #ifdef _SV_SALDISP_HXX
 
-inline void SalVirDevData::InitGraphics( SalVirtualDevice *pVD,
-                                         SalGraphics      *pGraphics )
-{ pGraphics_->maGraphicsData.Init( pVD, pGraphics ); }
+inline void X11SalVirtualDevice::InitGraphics( X11SalVirtualDevice *pVD )
+{ pGraphics_->Init( pVD ); }
 
-inline Display *SalVirDevData::GetXDisplay() const
+inline Display *X11SalVirtualDevice::GetXDisplay() const
 { return pDisplay_->GetDisplay(); }
 
-inline SalDisplay *SalVirDevData::GetDisplay() const
+inline SalDisplay *X11SalVirtualDevice::GetDisplay() const
 { return pDisplay_; }
 
-inline BOOL SalVirDevData::IsDisplay() const
+inline BOOL X11SalVirtualDevice::IsDisplay() const
 { return pDisplay_->IsDisplay(); }
 
 #endif
