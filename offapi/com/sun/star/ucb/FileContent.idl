@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileContent.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-04-27 09:27:32 $
+ *  last change: $Author: kso $ $Date: 2001-04-27 11:07:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,10 @@ module com { module sun { module star { module ucb {
 
 //=============================================================================
 /** A File Content represents either a directory or a file in the local file
-    system. Exactly which of these two can be determined by requesting property
-    IsFolder or IsDocument.
+    system.
+
+    <p>Whether a content represents a folder or a file can be determined by
+    inspecting its property <b>IsFolder</b> or <b>IsDocument</b>.
 
     @see com::sun::star::ucb::FileContentProvider
 */
@@ -126,12 +128,13 @@ service FileContent
     /** This interface is implemented according to the specification of
         service <type>Content</type>.
 
-        <p>
-
-        An object representing a directory in the file system is able
+        <p>An object representing a directory in the file system is able
         to create a new object, which in turn can become the representation
         of a physical file/directory being contained in the initial directory.
         The precise way is the following:
+
+        <p>
+
         <ol>
         <li>
         Let the parent folder create a new content by calling
@@ -150,8 +153,8 @@ service FileContent
         Let the new object ( not the parent! ) execute the command "insert".
         This will create the corresponding physical file or directory.
         For files, you need to supply the implementation of
-        an <type scope="com::sun::star::io">XInputStream</type> with the command's parameters,
-        that provides access to the stream data.
+        an <type scope="com::sun::star::io">XInputStream</type> with the
+        command's parameters, that provides access to the stream data.
         </li>
         </ol>
 
@@ -197,13 +200,17 @@ service FileContent
         <b>Supported Properties</b>
         <ul>
         <li>
-        string ContentType ( read-only, either "application/vnd.sun.staroffice.fsys-folder" or "application/vnd.sun.staroffice.fsys-folder" )
+        string ContentType ( read-only, either
+        "application/vnd.sun.staroffice.fsys-folder" or
+        "application/vnd.sun.staroffice.fsys-file" )
         </li>
         <li>
-        boolean IsDocument ( read-only )
+        boolean IsDocument ( read-only, always <true/> for files, always
+        <false/> for directories )
         </li>
         <li>
-        boolean IsFolder ( read-only )
+        boolean IsFolder ( read-only ), always <false/> for files, always
+        <true/> for directories )
         </li>
         <li>
         <type scope="com::sun::star::util">DateTime</type> DateCreated ( read-only )
@@ -212,13 +219,13 @@ service FileContent
         <type scope="com::sun::star::util">DateTime</type> DateModified ( read-only )
         </li>
         <li>
-        boolean IsReadOnly
+        boolean IsReadOnly ( read-only attribute )
         </li>
         <li>
-        hyper Size
+        hyper Size ( file size )
         </li>
         <li>
-        string Title
+        string Title ( file name )
         </li>
         </ul>
 

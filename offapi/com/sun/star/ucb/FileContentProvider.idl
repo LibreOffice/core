@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileContentProvider.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-04-27 09:27:32 $
+ *  last change: $Author: kso $ $Date: 2001-04-27 11:07:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,25 +79,23 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** The File Content Provider (FCP) implements a Content Provider
-    for the Universal Content Broker (UCB). The served contents enable
-    access to the local file system.
-    In addition, it implements a XPropertySet giving two kinds of meta-information
-    about the environment of the FCP, namely property HostName containing the
-    name of the computer, and property <type>FileSystemNotation</type> determining which
-    system dependent notation the file system identifier follow.
-    The FCP is able to restrict access to the local file system to a number
+/** The File Content Provider (FCP) implements a <type>ContentProvider</type>
+    for the <Type>UniversalContentBroker</type> (UCB).
+
+    <p>The served contents enable access to the local file system.
+
+    <p>The FCP is able to restrict access to the local file system to a number
     of directories shown to the client under configurable aliasnames.
 
-    @see com::sun::star::ucb::UniversalContentBroker
-    @see com::sun::star::ucb::ContentProvider
     @see com::sun::star::ucb::Content
 */
 service FileContentProvider
 {
     //-------------------------------------------------------------------------
-    /** provides an object representing either a directory or a file in the local
-        file system. See <type>FileContent</type>.
+    /** provides an object representing either a directory or a file in the
+        local file system.
+
+        @see com::sun::star::ucb::FileContent
      */
 
     interface com::sun::star::ucb::XContentProvider;
@@ -110,25 +108,35 @@ service FileContentProvider
     interface com::sun::star::ucb::XContentIdentifierFactory;
 
     //-------------------------------------------------------------------------
-    /**
-       <p>
-       <b>Supported Properties</b>
-       <ul>
-       <li>
-       string HostName ( read-only )
-       </li>
-       <li>
-       long FileSystemNotation ( read-only, for allowed values <type>FileSystemNotation</type> )
-       </li>
-       </ul>
-       </p>
+    /** provides access to properties supported by the UCP.
+
+        <p> The supported properties give two kinds of meta-information about
+        the environment of the FCP, namely property <b>HostName</b> containing
+        the name of the computer, and property <b>FileSystemNotation</b>
+        determining which system dependent notation the file system identifier
+        follow.
+
+           <p>
+
+           <b>Supported Properties</b>
+           <ul>
+           <li>
+           string HostName ( read-only )
+           </li>
+           <li>
+           long FileSystemNotation ( read-only, the value is one of the
+        <type>FileSystemNotation</type> constants )
+           </li>
+           </ul>
+
+           </p>
     */
 
     interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
-    /** specifies methods to convert between (file) URLs and file paths in system
-        dependent notation
+    /** specifies methods to convert between (file) URLs and file paths in
+        system dependent notation
     */
 
     interface com::sun::star::ucb::XFileIdentifierConverter;
