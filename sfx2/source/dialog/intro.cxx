@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intro.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:30 $
+ *  last change: $Author: pb $ $Date: 2001-04-10 07:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,16 @@
 
 #include "intro.hxx"
 
+#include <tools/stream.hxx>
+#include <tools/urlobj.hxx>
+#include <svtools/pathoptions.hxx>
+#include <unotools/configmgr.hxx>
+#ifndef _COM_SUN_STAR_UNO_ANY_H_
+#include <com/sun/star/uno/Any.h>
+#endif
+
+#include "sfxuno.hxx"
+
 // -----------------------------------------------------------------------
 
 void IntroWindow_Impl::Init()
@@ -92,6 +102,19 @@ IntroWindow_Impl::IntroWindow_Impl( const Bitmap& rBmp ) :
 
 {
     Hide();
+
+    // load bitmap depends on productname ("StarOffice", "StarSuite",...)
+    ::com::sun::star::uno::Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+    rtl::OUString aTmp;
+    aRet >>= aTmp;
+    String aBmpFileName = aTmp;
+    aBmpFileName += String( DEFINE_CONST_UNICODE("_intro.bmp") );
+    INetURLObject aObj( SvtPathOptions().GetModulePath(), INET_PROT_FILE );
+    aObj.insertName( aBmpFileName );
+    SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
+    if ( !aStrm.GetError() )
+        aStrm >> aIntroBmp;
+
     Init();
 }
 
