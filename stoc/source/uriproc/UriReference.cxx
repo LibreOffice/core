@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UriReference.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-19 18:28:25 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include "rtl/string.h"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.hxx"
+#include "sal/types.h"
 
 namespace css = com::sun::star;
 using stoc::uriproc::UriReference;
@@ -74,11 +75,23 @@ UriReference::UriReference(
     rtl::OUString const & scheme, bool isHierarchical, bool hasAuthority,
     rtl::OUString const & authority, rtl::OUString const & path,
     bool hasQuery, rtl::OUString const & query):
+    m_scheme(scheme),
+    m_authority(authority),
+    m_path(path),
+    m_query(query),
+    m_isHierarchical(isHierarchical),
+    m_hasAuthority(hasAuthority),
+    m_hasQuery(hasQuery),
     m_hasFragment(false)
 {
-    initialize(scheme, isHierarchical, hasAuthority, authority, path, hasQuery,
-               query);
+    OSL_ASSERT(scheme.getLength() != 0 || isHierarchical);
+    OSL_ASSERT(!hasAuthority || isHierarchical);
+    OSL_ASSERT(authority.getLength() == 0 || hasAuthority);
+    OSL_ASSERT(!hasQuery || isHierarchical);
+    OSL_ASSERT(query.getLength() == 0 || hasQuery);
 }
+
+UriReference::~UriReference() {}
 
 rtl::OUString UriReference::getUriReference() throw (css::uno::RuntimeException)
 {
@@ -208,32 +221,6 @@ void UriReference::clearFragment() throw (css::uno::RuntimeException) {
     osl::MutexGuard g(m_mutex);
     m_hasFragment = false;
     m_fragment = rtl::OUString();
-}
-
-UriReference::UriReference():
-    m_isHierarchical(true), m_hasAuthority(false), m_hasQuery(false),
-    m_hasFragment(false)
-{}
-
-UriReference::~UriReference() {}
-
-void UriReference::initialize(
-    rtl::OUString const & scheme, bool isHierarchical, bool hasAuthority,
-    rtl::OUString const & authority, rtl::OUString const & path,
-    bool hasQuery, rtl::OUString const & query)
-{
-    OSL_ASSERT(scheme.getLength() != 0 || isHierarchical);
-    OSL_ASSERT(!hasAuthority || isHierarchical);
-    OSL_ASSERT(authority.getLength() == 0 || hasAuthority);
-    OSL_ASSERT(!hasQuery || isHierarchical);
-    OSL_ASSERT(query.getLength() == 0 || hasQuery);
-    m_scheme = scheme;
-    m_isHierarchical = isHierarchical;
-    m_hasAuthority = hasAuthority;
-    m_authority = authority;
-    m_path = path;
-    m_hasQuery = hasQuery;
-    m_query = query;
 }
 
 void UriReference::appendSchemeSpecificPart(rtl::OUStringBuffer & buffer) const
