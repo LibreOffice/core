@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servreg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-06-27 10:56:03 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,21 +160,30 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(   void * pServiceManager, void
     {
         try
         {
+            //deprecated
             Reference<XRegistryKey> xNewKey =
                 reinterpret_cast<XRegistryKey*>( pRegistryKey)->createKey(L"/com.sun.star.comp.ole.OleConverter2/UNO/SERVICES");
             xNewKey->createKey(L"com.sun.star.bridge.OleBridgeSupplier2");
 
+            xNewKey->createKey(L"com.sun.star.bridge.oleautomation.BridgeSupplier");
+
+            //deprecated
             xNewKey =
                 reinterpret_cast<XRegistryKey*>( pRegistryKey)->createKey(L"/com.sun.star.comp.ole.OleConverterVar1/UNO/SERVICES");
             xNewKey->createKey(L"com.sun.star.bridge.OleBridgeSupplierVar1");
 
+            //deprecated
             xNewKey =
                 reinterpret_cast<XRegistryKey*>( pRegistryKey)->createKey(L"/com.sun.star.comp.ole.OleClient/UNO/SERVICES");
             xNewKey->createKey(L"com.sun.star.bridge.OleObjectFactory");
 
+            xNewKey->createKey(L"com.sun.star.bridge.oleautomation.Factory");
+            //deprecated
             xNewKey =
                 reinterpret_cast<XRegistryKey*>( pRegistryKey)->createKey(L"/com.sun.star.comp.ole.OleServer/UNO/SERVICES");
             xNewKey->createKey(L"com.sun.star.bridge.OleApplicationRegistration");
+
+            xNewKey->createKey(L"com.sun.star.bridge.oleautomation.ApplicationRegistration");
 
             return sal_True;
         }
