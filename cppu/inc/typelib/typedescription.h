@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedescription.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:16:26 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,26 +393,36 @@ typedef struct _typelib_InterfaceAttributeTypeDescription
     sal_Int32                                   nIndex;
 } typelib_InterfaceAttributeTypeDescription;
 
+/// @HTML
 /** Type description of an interface.
 
-    Not all members are always initialized (not yet initialized members being
-    null); there are three levels:
-    - Minimally, only aBase, pBaseTypeDescription, aUik, nBaseTypes, and
-      ppBaseTypes are initialized; aBase.bComplete is false.  This only happens
-      when an interface type description is created with
-      typelib_static_mi_interface_type_init or
-      typelib_static_interface_type_init.
-    - At the next level, nMembers, ppMembers, nAllMembers, ppAllMembers are also
-      initialized; aBase.bComplete is still false.  This happens when an
-      interface type description is created with
-      typelib_typedescription_newMIInterface or
-      typelib_typedescription_newInterface.
-    - At the final level, pMapMemberIndexToFunctionIndex,
-      nMapFunctionIndexToMemberIndex, and pMapFunctionIndexToMemberIndex are
-      also initialized; aBase.bComplete is true.  This happens after a call to
-      typelib_typedescription_complete.
+    <p>Not all members are always initialized (not yet initialized members being
+    null); there are three levels:</p>
+    <ul>
+        <li>Minimally, only <code>aBase</code>,
+        <code>pBaseTypeDescription</code>, <code>aUik</code>,
+        <code>nBaseTypes</code>, and <code>ppBaseTypes</code> are initialized;
+        <code>aBase.bComplete</code> is false.  This only happens when an
+        interface type description is created with
+        <code>typelib_static_mi_interface_type_init</code> or
+        <code>typelib_static_interface_type_init</code>.</li>
+
+        <li>At the next level, <code>nMembers</code>, <code>ppMembers</code>,
+        <code>nAllMembers</code>, <code>ppAllMembers</code> are also
+        initialized; <code>aBase.bComplete</code> is still false.  This happens
+        when an interface type description is created with
+        <code>typelib_typedescription_newMIInterface</cocde> or
+        <code>typelib_typedescription_newInterface</code>.</li>
+
+        <li>At the final level, <code>pMapMemberIndexToFunctionIndex</code>,
+        <code>nMapFunctionIndexToMemberIndex</code>, and
+        <code>pMapFunctionIndexToMemberIndex</code> are also initialized;
+        <code>aBase.bComplete</code> is true.  This happens after a call to
+        <code>typelib_typedescription_complete</code>.</li>
+    </ul>
 */
 typedef struct _typelib_InterfaceTypeDescription
+/// @NOHTML
 {
     /** inherits all members of typelib_TypeDescription
     */
@@ -447,10 +457,10 @@ typedef struct _typelib_InterfaceTypeDescription
     /** array mapping function index to member index; size of arry is nMapFunctionIndexToMemberIndex
     */
     sal_Int32 *                                 pMapFunctionIndexToMemberIndex;
-    /* number of base types
+    /** number of base types
     */
     sal_Int32                                   nBaseTypes;
-    /* array of base type descriptions
+    /** array of base type descriptions
     */
     struct _typelib_InterfaceTypeDescription ** ppBaseTypes;
 } typelib_InterfaceTypeDescription;
