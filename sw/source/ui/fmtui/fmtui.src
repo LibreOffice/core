@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtui.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.1.1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:46:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ String STR_FMT_STD
     TEXT[ korean ] = "(¾øÀ½)";
     TEXT[ turkish ] = "(yok)";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "(ninguna)";
 };
 String STR_TEMPLATE_WILDCARD
 {
@@ -137,4 +138,5 @@ String STR_OVERWRITE
     TEXT[ korean ] = "\nÀÌ ¼­½ÄÆÄÀÏÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     TEXT[ turkish ] = "Bu þablonu silmek istediðinizden emin misiniz?";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "¿Desea realmente sobrescribir la plantilla?";
 };
