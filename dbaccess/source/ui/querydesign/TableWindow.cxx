@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-24 12:57:51 $
+ *  last change: $Author: fs $ $Date: 2002-06-11 07:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,7 +731,7 @@ long OTableWindow::PreNotify(NotifyEvent& rNEvt)
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
             const KeyCode& rCode = pKeyEvent->GetKeyCode();
-            if ( rCode.IsMod2() )
+            if ( rCode.IsMod1() )
             {
                 Point aStartPoint = GetPosPixel();
                 switch( rCode.GetCode() )
