@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.hrc,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 09:02:48 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 14:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,7 @@
 #define PROPERTY_ID_IS_FORM                 125
 #define PROPERTY_ID_HAVING_CLAUSE           126
 #define PROPERTY_ID_GROUP_BY                127
+#define PROPERTY_ID_EDIT_WIDTH              128
 
 //============================================================
 //= property names
@@ -352,6 +353,7 @@ DECLARE_CONSTASCII_USTRING(PROPERTY_OUTERJOINESCAPE);
 DECLARE_CONSTASCII_USTRING(PROPERTY_AS_TEMPLATE);
 DECLARE_CONSTASCII_USTRING(PROPERTY_HAVING_CLAUSE);
 DECLARE_CONSTASCII_USTRING(PROPERTY_GROUP_BY);
+DECLARE_CONSTASCII_USTRING(PROPERTY_EDIT_WIDTH);
 
 //============================================================
 //= service names
