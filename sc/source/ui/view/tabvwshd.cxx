@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-03 20:32:45 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/topfrm.hxx>
-#include <so3/ipenv.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 
@@ -119,16 +118,13 @@ Window* ScTabViewShell::GetDialogParent()
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     if ( pDocSh->IsOle() )
     {
-        SvInPlaceEnvironment* pEnv = pDocSh->GetIPEnv();
-        if (pEnv)
-            return pEnv->GetEditWin();
+        //TODO/LATER: how to GetEditWindow in embedded document?!
+        //It should be OK to return the VieShell Window!
+        return GetWindow();
+        //SvInPlaceEnvironment* pEnv = pDocSh->GetIPEnv();
+        //if (pEnv)
+        //    return pEnv->GetEditWin();
     }
-#if 0
-    else if ( !GetViewFrame()->ISA(SfxTopViewFrame) )           // z.B. PlugIn
-    {
-        return GetActiveWin();
-    }
-#endif
 
     return GetActiveWin();      // for normal views, too
 }
