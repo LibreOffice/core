@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:58:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:21:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,7 @@ awt::Size SAL_CALL SmGraphicAccessible::getSize()
             "mismatch of window parent and accessible parent" );
 
     Size aSz( pWin->GetSizePixel() );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     awt::Rectangle aRect( lcl_GetBounds( pWin ) );
     Size aSz2( aRect.Width, aRect.Height );
     DBG_ASSERT( aSz == aSz2, "mismatch in width" );
@@ -640,7 +640,7 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
                 aSize.Width()  = nNodeIndex > 0 ? pXAry[nNodeIndex] - pXAry[nNodeIndex - 1] : pXAry[nNodeIndex];
                 delete[] pXAry;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     Point aLP00( pWin->LogicToPixel( Point(0,0)) );
     Point aPL00( pWin->PixelToLogic( Point(0,0)) );
 #endif
@@ -697,7 +697,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
 //            Size  aSize( pNode->GetItalicSize() );
             aTLPos.X() -= 0;
             Size  aSize( pNode->GetSize() );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     Point aLP00( pWin->LogicToPixel( Point(0,0)) );
     Point aPL00( pWin->PixelToLogic( Point(0,0)) );
 #endif
@@ -1686,7 +1686,7 @@ awt::Size SAL_CALL SmEditAccessible::getSize(  )
             "mismatch of window parent and accessible parent" );
 
     Size aSz( pWin->GetSizePixel() );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     awt::Rectangle aRect( lcl_GetBounds( pWin ) );
     Size aSz2( aRect.Width, aRect.Height );
     DBG_ASSERT( aSz == aSz2, "mismatch in width" );
