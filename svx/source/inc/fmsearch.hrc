@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-18 07:43:06 $
+ *  last change: $Author: fme $ $Date: 2001-06-14 18:16:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,10 +85,10 @@
 #define PB_SEARCH               2
 #define PB_SOUNDSLIKESETTINGS   3
 
-#define GB_SEARCHFOR        1
-#define GB_WHERE            2
-#define GB_OPTIONS          3
-#define GB_STATE            4
+#define FL_SEARCHFOR            1
+#define FL_WHERE                        2
+#define FL_OPTIONS                      3
+#define FL_STATE                        4
 
 #define CB_USEFORMATTER     1
 #define CB_BACKWARD         2
