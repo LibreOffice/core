@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.22 2003-08-18 14:47:02 hjs Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.23 2003-09-04 08:29:38 obo Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: hjs $ $Date: 2003-08-18 14:47:02 $ $Revision: 1.22 $
+//	$Author: obo $ $Date: 2003-09-04 08:29:38 $ $Revision: 1.23 $
 //
 // Description:
 //
@@ -107,14 +107,19 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 %option never-interactive
 %%
 
+[Aa][Bb][Ss]									{SQL_NEW_KEYWORD(SQL_TOKEN_ABS); return SQL_TOKEN_ABS; }
+[Aa][Cc][Oo][Ss]								{SQL_NEW_KEYWORD(SQL_TOKEN_ACOS); return SQL_TOKEN_ACOS; }
 [Aa][Ll][Ll]									{SQL_NEW_KEYWORD(SQL_TOKEN_ALL); return SQL_TOKEN_ALL; }
 [Aa][Ll][Tt][Ee][Rr]							{SQL_NEW_KEYWORD(SQL_TOKEN_ALTER); return SQL_TOKEN_ALTER; }
 [Aa][Nn][Dd]									{SQL_NEW_KEYWORD(SQL_TOKEN_AND); return SQL_TOKEN_AND; }
 [Aa][Nn][Yy]									{SQL_NEW_KEYWORD(SQL_TOKEN_ANY); return SQL_TOKEN_ANY; }
 [Aa][Ss]										{SQL_NEW_KEYWORD(SQL_TOKEN_AS); return SQL_TOKEN_AS; }
 [Aa][Ss][Cc]									{SQL_NEW_KEYWORD(SQL_TOKEN_ASC); return SQL_TOKEN_ASC; }
-[Aa][Ss][Cc][Ii][Ii]							{SQL_NEW_KEYWORD(SQL_TOKEN_ASC); return SQL_TOKEN_ASCII; }
+[Aa][Ss][Cc][Ii][Ii]							{SQL_NEW_KEYWORD(SQL_TOKEN_ASCII); return SQL_TOKEN_ASCII; }
+[Aa][Ss][Ii][Nn]								{SQL_NEW_KEYWORD(SQL_TOKEN_ASIN); return SQL_TOKEN_ASIN; }
 [Aa][Tt]										{SQL_NEW_KEYWORD(SQL_TOKEN_AT); return SQL_TOKEN_AT; }
+[Aa][Tt][Aa][Nn]								{SQL_NEW_KEYWORD(SQL_TOKEN_ATAN); return SQL_TOKEN_ATAN; }
+[Aa][Tt][Aa][Nn]2								{SQL_NEW_KEYWORD(SQL_TOKEN_ATAN2); return SQL_TOKEN_ATAN2; }
 [Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Aa][Tt][Ii][Oo][Nn]   		{SQL_NEW_KEYWORD(SQL_TOKEN_AUTHORIZATION); return SQL_TOKEN_AUTHORIZATION; }
 [Aa][Vv][Gg]									{SQL_NEW_KEYWORD(SQL_TOKEN_AVG); return SQL_TOKEN_AVG; }
 
@@ -126,43 +131,59 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 
 [Cc][Aa][Ll][Ll]								{SQL_NEW_KEYWORD(SQL_TOKEN_CALL); return SQL_TOKEN_CALL; }
 [Cc][Aa][Ss][Tt]								{SQL_NEW_KEYWORD(SQL_TOKEN_CAST); return SQL_TOKEN_CAST; }
-[Cc][Hh][Aa][Rr]([Aa][Cc][Tt][Ee][Rr])?			{SQL_NEW_KEYWORD(SQL_TOKEN_CHARACTER); return SQL_TOKEN_CHARACTER; }
+[Cc][Hh][Aa][Rr]								{SQL_NEW_KEYWORD(SQL_TOKEN_CHAR); return SQL_TOKEN_CHAR; }
+[Cc][Hh][Aa][Rr][Aa][Cc][Tt][Ee][Rr]			{SQL_NEW_KEYWORD(SQL_TOKEN_CHARACTER); return SQL_TOKEN_CHARACTER; }
 [Cc][Hh][Aa][Rr]([Aa][Cc][Tt][Ee][Rr])?_[Ll][Ee][Nn][Gg][Tt][Hh]  		{SQL_NEW_KEYWORD(SQL_TOKEN_CHAR_LENGTH); return SQL_TOKEN_CHAR_LENGTH; }
 [Cc][Hh][Ee][Cc][Kk]							{SQL_NEW_KEYWORD(SQL_TOKEN_CHECK); return SQL_TOKEN_CHECK; }
+[Cc][Ee][Ii][Ll][Ii][Nn][Gg]					{SQL_NEW_KEYWORD(SQL_TOKEN_CEILING); return SQL_TOKEN_CEILING; }
 [Cc][Oo][Ll][Ll][Aa][Tt][Ee]					{SQL_NEW_KEYWORD(SQL_TOKEN_COLLATE); return SQL_TOKEN_COLLATE; }
 [Cc][Oo][Mm][Mm][Ii][Tt]						{SQL_NEW_KEYWORD(SQL_TOKEN_COMMIT); return SQL_TOKEN_COMMIT; }
+[Cc][Oo][Nn][Cc][Aa][Tt]						{SQL_NEW_KEYWORD(SQL_TOKEN_CONCAT); return SQL_TOKEN_CONCAT; }
 [Cc][Oo][Nn][Tt][Ii][Nn][Uu][Ee]				{SQL_NEW_KEYWORD(SQL_TOKEN_CONTINUE); return SQL_TOKEN_CONTINUE; }
 [Cc][Oo][Nn][Vv][Ee][Rr][Tt]					{SQL_NEW_KEYWORD(SQL_TOKEN_CONVERT); return SQL_TOKEN_CONVERT; }
+[Cc][Oo][Ss]									{SQL_NEW_KEYWORD(SQL_TOKEN_COS); return SQL_TOKEN_COS; }
+[Cc][Oo][Tt]									{SQL_NEW_KEYWORD(SQL_TOKEN_COT); return SQL_TOKEN_COT; }
 [Cc][Oo][Uu][Nn][Tt]							{SQL_NEW_KEYWORD(SQL_TOKEN_COUNT); return SQL_TOKEN_COUNT; }
 [Cc][Rr][Ee][Aa][Tt][Ee]						{SQL_NEW_KEYWORD(SQL_TOKEN_CREATE); return SQL_TOKEN_CREATE; }
 [Cc][Rr][Oo][Ss][Ss]							{SQL_NEW_KEYWORD(SQL_TOKEN_CROSS); return SQL_TOKEN_CROSS; }
 [Cc][Uu][Rr][Rr][Ee][Nn][Tt]					{SQL_NEW_KEYWORD(SQL_TOKEN_CURRENT); return SQL_TOKEN_CURRENT; }
 [Cc][Uu][Rr][Rr][Ee][Nn][Tt]_[Dd][Aa][Tt][Ee]	{SQL_NEW_KEYWORD(SQL_TOKEN_CURRENT_DATE); return SQL_TOKEN_CURRENT_DATE; }
+[Cc][Uu][Rr][Dd][Aa][Tt][Ee]					{SQL_NEW_KEYWORD(SQL_TOKEN_CURDATE); return SQL_TOKEN_CURDATE; }
 [Cc][Uu][Rr][Rr][Ee][Nn][Tt]_[Tt][Ii][Mm][Ee]	{SQL_NEW_KEYWORD(SQL_TOKEN_CURRENT_TIME); return SQL_TOKEN_CURRENT_TIME; }
+[Cc][Uu][Rr][Tt][Ii][Mm][Ee]					{SQL_NEW_KEYWORD(SQL_TOKEN_CURTIME); return SQL_TOKEN_CURTIME; }
 [Cc][Uu][Rr][Rr][Ee][Nn][Tt]_[Tt][Ii][Mm][Ee][Ss][Tt][Aa][Mm][Pp]	{SQL_NEW_KEYWORD(SQL_TOKEN_CURRENT_TIMESTAMP); return SQL_TOKEN_CURRENT_TIMESTAMP; }
 [Cc][Uu][Rr][Ss][Oo][Rr]						{SQL_NEW_KEYWORD(SQL_TOKEN_CURSOR); return SQL_TOKEN_CURSOR; }
 
 [Dd]											{SQL_NEW_KEYWORD(SQL_TOKEN_D); return SQL_TOKEN_D; }
 [Dd][Aa][Tt][Ee]								{SQL_NEW_KEYWORD(SQL_TOKEN_DATE); return SQL_TOKEN_DATE; }
 [Dd][Aa][Yy]									{SQL_NEW_KEYWORD(SQL_TOKEN_DAY); return SQL_TOKEN_DAY; }
+[Dd][Aa][Yy][Nn][Aa][Mm][Ee]					{SQL_NEW_KEYWORD(SQL_TOKEN_DAYNAME); return SQL_TOKEN_DAYNAME; }
+[Dd][Aa][Yy][Oo][Ff][Mm][Oo][Nn][Tt][Hh]		{SQL_NEW_KEYWORD(SQL_TOKEN_DAYOFMONTH); return SQL_TOKEN_DAYOFMONTH; }
+[Dd][Aa][Yy][Oo][Ff][Ww][Ee][Ee][Kk]			{SQL_NEW_KEYWORD(SQL_TOKEN_DAYOFWEEK); return SQL_TOKEN_DAYOFWEEK; }
+[Dd][Aa][Yy][Oo][Ff][Yy][Ee][Aa][Rr]			{SQL_NEW_KEYWORD(SQL_TOKEN_DAYOFYEAR); return SQL_TOKEN_DAYOFYEAR; }
 [Dd][Ee][Cc]									{SQL_NEW_KEYWORD(SQL_TOKEN_DEC); return SQL_TOKEN_DEC; }
 [Dd][Ee][Cc][Ii][Mm][Aa][Ll]					{SQL_NEW_KEYWORD(SQL_TOKEN_DECIMAL); return SQL_TOKEN_DECIMAL; }
 [Dd][Ee][Cc][Ll][Aa][Rr][Ee]					{SQL_NEW_KEYWORD(SQL_TOKEN_DECLARE); return SQL_TOKEN_DECLARE; }
 [Dd][Ee][Ff][Aa][Uu][Ll][Tt]					{SQL_NEW_KEYWORD(SQL_TOKEN_DEFAULT); return SQL_TOKEN_DEFAULT; }
+[Dd][Ee][Gg][Rr][Ee][Ee][Ss]					{SQL_NEW_KEYWORD(SQL_TOKEN_DEGREES); return SQL_TOKEN_DEGREES; }
 [Dd][Ee][Ll][Ee][Tt][Ee]						{SQL_NEW_KEYWORD(SQL_TOKEN_DELETE); return SQL_TOKEN_DELETE; }
 [Dd][Ee][Ss][Cc]								{SQL_NEW_KEYWORD(SQL_TOKEN_DESC); return SQL_TOKEN_DESC; }
+[Dd][Ii][Ff][Ff][Ee][Rr][Ee][Nn][Cc][Ee]		{SQL_NEW_KEYWORD(SQL_TOKEN_DIFFERENCE); return SQL_TOKEN_DIFFERENCE; }
 [Dd][Ii][Ss][Tt][Ii][Nn][Cc][Tt]				{SQL_NEW_KEYWORD(SQL_TOKEN_DISTINCT); return SQL_TOKEN_DISTINCT; }
+[Dd][Ii][Vv]									{SQL_NEW_KEYWORD(SQL_TOKEN_DIV); return SQL_TOKEN_DIV; }
 [Dd][Oo][Uu][Bb][Ll][Ee]						{SQL_NEW_KEYWORD(SQL_TOKEN_DOUBLE); return SQL_TOKEN_DOUBLE; }
 [Dd][Rr][Oo][Pp]								{SQL_NEW_KEYWORD(SQL_TOKEN_DROP); return SQL_TOKEN_DROP; }
 
 [Ee][Ss][Cc][Aa][Pp][Ee]						{SQL_NEW_KEYWORD(SQL_TOKEN_ESCAPE); return SQL_TOKEN_ESCAPE; }
 [Ee][Xx][Cc][Ee][Pp][Tt]						{SQL_NEW_KEYWORD(SQL_TOKEN_EXCEPT); return SQL_TOKEN_EXCEPT; }
 [Ee][Xx][Ii][Ss][Tt][Ss]						{SQL_NEW_KEYWORD(SQL_TOKEN_EXISTS); return SQL_TOKEN_EXISTS; }
+[Ee][Xx][Pp]									{SQL_NEW_KEYWORD(SQL_TOKEN_EXP); return SQL_TOKEN_EXP; }
 [Ee][Xx][Tt][Rr][Aa][Cc][Tt]					{SQL_NEW_KEYWORD(SQL_TOKEN_EXTRACT); return SQL_TOKEN_EXTRACT; }
 
 [Ff][Aa][Ll][Ss][Ee]							{SQL_NEW_KEYWORD(SQL_TOKEN_FALSE); return SQL_TOKEN_FALSE; }
 [Ff][Ee][Tt][Cc][Hh]							{SQL_NEW_KEYWORD(SQL_TOKEN_FETCH); return SQL_TOKEN_FETCH; }
 [Ff][Ll][Oo][Aa][Tt]							{SQL_NEW_KEYWORD(SQL_TOKEN_FLOAT); return SQL_TOKEN_FLOAT; }
+[Ff][Ll][Oo][Oo][Rr]							{SQL_NEW_KEYWORD(SQL_TOKEN_FLOOR); return SQL_TOKEN_FLOOR; }
 [Ff][Nn]										{SQL_NEW_KEYWORD(SQL_TOKEN_FN); return SQL_TOKEN_FN; }
 [Ff][Oo][Rr]									{SQL_NEW_KEYWORD(SQL_TOKEN_FOR); return SQL_TOKEN_FOR; }
 [Ff][Oo][Rr][Ee][Ii][Gg][Nn]					{SQL_NEW_KEYWORD(SQL_TOKEN_FOREIGN); return SQL_TOKEN_FOREIGN; }
@@ -188,24 +209,34 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 
 [Kk][Ee][Yy]									{SQL_NEW_KEYWORD(SQL_TOKEN_KEY); return SQL_TOKEN_KEY; }
 
+[Ll][Cc][Aa][Ss][Ee]							{SQL_NEW_KEYWORD(SQL_TOKEN_LCASE); return SQL_TOKEN_LCASE; }
 [Ll][Ee][Aa][Dd][Ii][Nn][Gg]					{SQL_NEW_KEYWORD(SQL_TOKEN_LEADING); return SQL_TOKEN_LEADING; }
 [Ll][Ee][Ff][Tt]								{SQL_NEW_KEYWORD(SQL_TOKEN_LEFT); return SQL_TOKEN_LEFT; }
+[Ll][Ee][Nn][Gg][Tt][Hh]						{SQL_NEW_KEYWORD(SQL_TOKEN_LENGTH); return SQL_TOKEN_LENGTH; }
 [Ll][Ii][Kk][Ee]								{SQL_NEW_KEYWORD(SQL_TOKEN_LIKE); return SQL_TOKEN_LIKE; }
 [Ll][Oo][Cc][Aa][Ll]							{SQL_NEW_KEYWORD(SQL_TOKEN_LOCAL); return SQL_TOKEN_LOCAL; }
+[Ll][Oo][Cc][Aa][Tt][Ee]						{SQL_NEW_KEYWORD(SQL_TOKEN_LOCATE); return SQL_TOKEN_LOCATE; }
+[Ll][Oo][Gg]									{SQL_NEW_KEYWORD(SQL_TOKEN_LOGF); return SQL_TOKEN_LOGF; }
+[Ll][Oo][Gg][Ff]								{SQL_NEW_KEYWORD(SQL_TOKEN_LOGF); return SQL_TOKEN_LOGF; }
+[Ll][Oo][Gg]10									{SQL_NEW_KEYWORD(SQL_TOKEN_LOG10); return SQL_TOKEN_LOG10; }
 [Ll][Oo][Ww][Ee][Rr]							{SQL_NEW_KEYWORD(SQL_TOKEN_LOWER); return SQL_TOKEN_LOWER; }
+[Ll][Tt][Rr][Ii][Mm]							{SQL_NEW_KEYWORD(SQL_TOKEN_LTRIM); return SQL_TOKEN_LTRIM; }
 
 [Mm][Aa][Xx]									{SQL_NEW_KEYWORD(SQL_TOKEN_MAX); return SQL_TOKEN_MAX; }
 [Mm][Ii][Nn]									{SQL_NEW_KEYWORD(SQL_TOKEN_MIN); return SQL_TOKEN_MIN; }
 [Mm][Ii][Nn][Uu][Tt][Ee]						{SQL_NEW_KEYWORD(SQL_TOKEN_MINUTE); return SQL_TOKEN_MINUTE; }
+[Mm][Oo][Dd]									{SQL_NEW_KEYWORD(SQL_TOKEN_MOD); return SQL_TOKEN_MOD; }
 [Mm][Oo][Nn][Tt][Hh]							{SQL_NEW_KEYWORD(SQL_TOKEN_MONTH); return SQL_TOKEN_MONTH; }
+[Mm][Oo][Nn][Tt][Hh][Nn][Aa][Mm][Ee]			{SQL_NEW_KEYWORD(SQL_TOKEN_MONTHNAME); return SQL_TOKEN_MONTHNAME; }
 
 [Nn][Aa][Tt][Uu][Rr][Aa][LL]					{SQL_NEW_KEYWORD(SQL_TOKEN_NATURAL); return SQL_TOKEN_NATURAL; }
 [Nn][Cc][Hh][Aa][Rr]							{SQL_NEW_KEYWORD(SQL_TOKEN_NCHAR); return SQL_TOKEN_NCHAR; }
 [Nn][Oo][Tt]									{SQL_NEW_KEYWORD(SQL_TOKEN_NOT); return SQL_TOKEN_NOT; }
+[Nn][Oo][Ww]									{SQL_NEW_KEYWORD(SQL_TOKEN_NOW); return SQL_TOKEN_NOW; }
 [Nn][Uu][Ll][Ll]								{SQL_NEW_KEYWORD(SQL_TOKEN_NULL); return SQL_TOKEN_NULL; }
 [Nn][Uu][Mm][Ee][Rr][Ii][Cc]					{SQL_NEW_KEYWORD(SQL_TOKEN_NUMERIC); return SQL_TOKEN_NUMERIC; }
 
-[Oo][Cc][Tt][Ee][Tt]_[Ll][Ee][Nn][Gg][Tt][Hh]	{SQL_NEW_KEYWORD(SQL_TOKEN_OCTECT_LENGTH); return SQL_TOKEN_OCTECT_LENGTH; }
+[Oo][Cc][Tt][Ee][Tt]_[Ll][Ee][Nn][Gg][Tt][Hh]	{SQL_NEW_KEYWORD(SQL_TOKEN_OCTET_LENGTH); return SQL_TOKEN_OCTET_LENGTH; }
 [Oo][Ff]										{SQL_NEW_KEYWORD(SQL_TOKEN_OF); return SQL_TOKEN_OF; }
 [Oo][Jj]										{SQL_NEW_KEYWORD(SQL_TOKEN_OJ); return SQL_TOKEN_OJ; }
 [Oo][Nn]										{SQL_NEW_KEYWORD(SQL_TOKEN_ON); return SQL_TOKEN_ON; }
@@ -214,41 +245,61 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 [Oo][Rr][Dd][Ee][Rr]							{SQL_NEW_KEYWORD(SQL_TOKEN_ORDER); return SQL_TOKEN_ORDER; }
 [Oo][Uu][Tt][Ee][Rr]							{SQL_NEW_KEYWORD(SQL_TOKEN_OUTER); return SQL_TOKEN_OUTER; }
 
+[Pp][Ii]										{SQL_NEW_KEYWORD(SQL_TOKEN_PI); return SQL_TOKEN_PI; }
 [Pp][Oo][Ss][Ii][Tt][Ii][Oo][Nn]	            {SQL_NEW_KEYWORD(SQL_TOKEN_POSITION); return SQL_TOKEN_POSITION; }
+[Pp][Oo][Ww][Ee][Rr]				            {SQL_NEW_KEYWORD(SQL_TOKEN_POWER); return SQL_TOKEN_POWER; }
 [Pp][Rr][Ee][Cc][Ii][Ss][Ii][Oo][Nn]            {SQL_NEW_KEYWORD(SQL_TOKEN_PRECISION); return SQL_TOKEN_PRECISION; }
 [Pp][Rr][Ii][Mm][Aa][Rr][Yy]					{SQL_NEW_KEYWORD(SQL_TOKEN_PRIMARY); return SQL_TOKEN_PRIMARY; }
 [Pp][Rr][Ii][Vv][Ii][Ll][Ee][Gg][Ee][Ss]        {SQL_NEW_KEYWORD(SQL_TOKEN_PRIVILEGES); return SQL_TOKEN_PRIVILEGES; }
 [Pp][Rr][Oo][Cc][Ee][Dd][Uu][Rr][Ee]            {SQL_NEW_KEYWORD(SQL_TOKEN_PROCEDURE); return SQL_TOKEN_PROCEDURE; }
 [Pp][Uu][Bb][Ll][Ii][Cc]						{SQL_NEW_KEYWORD(SQL_TOKEN_PUBLIC); return SQL_TOKEN_PUBLIC; }
 
+[Qq][Uu][Aa][Rr][Tt][Ee][Rr]					{SQL_NEW_KEYWORD(SQL_TOKEN_QUARTER); return SQL_TOKEN_QUARTER; }
+
+[Rr][Aa][Dd][Ii][Aa][Nn][Ss]					{SQL_NEW_KEYWORD(SQL_TOKEN_RADIANS); return SQL_TOKEN_RADIANS; }
+[Rr][Aa][Nn][Dd]								{SQL_NEW_KEYWORD(SQL_TOKEN_RAND); return SQL_TOKEN_RAND; }
 [Rr][Ee][Aa][Ll]								{SQL_NEW_KEYWORD(SQL_TOKEN_REAL); return SQL_TOKEN_REAL; }
 [Rr][Ee][Ff][Ee][Rr][Ee][Nn][Cc][Ee][Ss]        {SQL_NEW_KEYWORD(SQL_TOKEN_REFERENCES); return SQL_TOKEN_REFERENCES; }
+[Rr][Ee][Pp][Ee][Aa][Tt]				        {SQL_NEW_KEYWORD(SQL_TOKEN_REPEAT); return SQL_TOKEN_REPEAT; }
+[Rr][Ee][Pp][Ll][Aa][Cc][Ee]				    {SQL_NEW_KEYWORD(SQL_TOKEN_REPLACE); return SQL_TOKEN_REPLACE; }
 [Rr][Oo][Ll][Ll][Bb][Aa][Cc][Kk]                {SQL_NEW_KEYWORD(SQL_TOKEN_ROLLBACK); return SQL_TOKEN_ROLLBACK; }
+[Rr][Oo][Uu][Nn][Dd]			                {SQL_NEW_KEYWORD(SQL_TOKEN_ROUND); return SQL_TOKEN_ROUND; }
 [Rr][Ii][Gg][Hh][Tt]							{SQL_NEW_KEYWORD(SQL_TOKEN_RIGHT); return SQL_TOKEN_RIGHT; }
+[Rr][Tt][Rr][Ii][Mm]							{SQL_NEW_KEYWORD(SQL_TOKEN_RTRIM); return SQL_TOKEN_RTRIM; }
 
 [Ss][Cc][Hh][Ee][Mm][Aa]						{SQL_NEW_KEYWORD(SQL_TOKEN_SCHEMA); return SQL_TOKEN_SCHEMA; }
-[Ss][Ee][Cc][Ee][Oo][Nn][Dd]					{SQL_NEW_KEYWORD(SQL_TOKEN_SECOND); return SQL_TOKEN_SECOND; }
+[Ss][Ee][Cc][Oo][Nn][Dd]						{SQL_NEW_KEYWORD(SQL_TOKEN_SECOND); return SQL_TOKEN_SECOND; }
 [Ss][Ee][Ll][Ee][Cc][Tt]						{SQL_NEW_KEYWORD(SQL_TOKEN_SELECT); return SQL_TOKEN_SELECT; }
 [Ss][Ee][Tt]									{SQL_NEW_KEYWORD(SQL_TOKEN_SET); return SQL_TOKEN_SET; }
 [Ss][Ii][Zz][Ee]								{SQL_NEW_KEYWORD(SQL_TOKEN_SIZE); return SQL_TOKEN_SIZE; }
+[Ss][Ii][Gg][Nn]								{SQL_NEW_KEYWORD(SQL_TOKEN_SIGN); return SQL_TOKEN_SIGN; }
+[Ss][Ii][Nn]									{SQL_NEW_KEYWORD(SQL_TOKEN_SIN); return SQL_TOKEN_SIN; }
 [Ss][Mm][Aa][Ll][Ll][Ii][Nn][Tt]                {SQL_NEW_KEYWORD(SQL_TOKEN_SMALLINT); return SQL_TOKEN_SMALLINT; }
 [Ss][Oo][Mm][Ee]								{SQL_NEW_KEYWORD(SQL_TOKEN_SOME); return SQL_TOKEN_SOME; }
+[Ss][Oo][Uu][Nn][Dd][Ee][Xx]					{SQL_NEW_KEYWORD(SQL_TOKEN_SOUNDEX); return SQL_TOKEN_SOUNDEX; }
+[Ss][Pp][Aa][Cc][Ee]							{SQL_NEW_KEYWORD(SQL_TOKEN_SPACE); return SQL_TOKEN_SPACE; }
+[Ss][Qq][Rr][Tt]								{SQL_NEW_KEYWORD(SQL_TOKEN_SQRT); return SQL_TOKEN_SQRT; }
 [Ss][Uu][Bb][Ss][Tt][Rr][Ii][Nn][Gg]			{SQL_NEW_KEYWORD(SQL_TOKEN_SUBSTRING); return SQL_TOKEN_SUBSTRING; }
 [Ss][Uu][Mm]									{SQL_NEW_KEYWORD(SQL_TOKEN_SUM); return SQL_TOKEN_SUM; }
 
 [Tt]											{SQL_NEW_KEYWORD(SQL_TOKEN_T); return SQL_TOKEN_T; }
 [Tt][Aa][Bb][Ll][Ee]							{SQL_NEW_KEYWORD(SQL_TOKEN_TABLE); return SQL_TOKEN_TABLE; }
+[Tt][Aa][Nn]									{SQL_NEW_KEYWORD(SQL_TOKEN_TAN); return SQL_TOKEN_TAN; }
 [Tt][Ii][Mm][Ee]								{SQL_NEW_KEYWORD(SQL_TOKEN_TIME); return SQL_TOKEN_TIME; }
 [Tt][Ii][Mm][Ee][Ss][Tt][Aa][Mm][Pp]			{SQL_NEW_KEYWORD(SQL_TOKEN_TIMESTAMP); return SQL_TOKEN_TIMESTAMP; }
-[Tt][Ii][Mm][Ee][Zz][Oo][Nn][Ee]_[Hh][Oo][Uu][Rr]	{SQL_NEW_KEYWORD(SQL_TOKEN_TIMEZONE_HOUR); return SQL_TOKEN_TIMEZONE_HOUR; }
+[Tt][Ii][Mm][Ee][Ss][Tt][Aa][Mm][Pp][Aa][Dd][Dd]			{SQL_NEW_KEYWORD(SQL_TOKEN_TIMESTAMPADD); return SQL_TOKEN_TIMESTAMPADD; }
+[Tt][Ii][Mm][Ee][Ss][Tt][Aa][Mm][Pp][Dd][Ii][Ff][Ff]		{SQL_NEW_KEYWORD(SQL_TOKEN_TIMESTAMPDIFF); return SQL_TOKEN_TIMESTAMPDIFF; }
+[Tt][Ii][Mm][Ee][Zz][Oo][Nn][Ee]_[Hh][Oo][Uu][Rr]			{SQL_NEW_KEYWORD(SQL_TOKEN_TIMEZONE_HOUR); return SQL_TOKEN_TIMEZONE_HOUR; }
 [Tt][Ii][Mm][Ee][Zz][Oo][Nn][Ee]_[Mm][Ii][Nn][Uu][Tt][Ee]	{SQL_NEW_KEYWORD(SQL_TOKEN_TIMEZONE_MINUTE); return SQL_TOKEN_TIMEZONE_MINUTE; }
 [Tt][Oo]										{SQL_NEW_KEYWORD(SQL_TOKEN_TO); return SQL_TOKEN_TO; }
 [Tt][Rr][Aa][Ii][Ll][Ii][Nn][Gg]				{SQL_NEW_KEYWORD(SQL_TOKEN_TRAILING); return SQL_TOKEN_TRAILING; }
 [Tt][Rr][Aa][Nn][Ss][Ll][Aa][Tt][Ee]			{SQL_NEW_KEYWORD(SQL_TOKEN_TRANSLATE); return SQL_TOKEN_TRANSLATE; }
 [Tt][Rr][Ii][Mm]								{SQL_NEW_KEYWORD(SQL_TOKEN_TRIM); return SQL_TOKEN_TRIM; }
 [Tt][Rr][Uu][Ee]								{SQL_NEW_KEYWORD(SQL_TOKEN_TRUE); return SQL_TOKEN_TRUE; }
+[Tt][Rr][Uu][Nn][Cc][Aa][Tt][Ee]				{SQL_NEW_KEYWORD(SQL_TOKEN_TRUNCATE); return SQL_TOKEN_TRUNCATE; }
 [Tt][Ss]										{SQL_NEW_KEYWORD(SQL_TOKEN_TS); return SQL_TOKEN_TS; }
 
+[Uu][Cc][Aa][Ss][Ee]							{SQL_NEW_KEYWORD(SQL_TOKEN_UCASE); return SQL_TOKEN_UCASE; }
 [Uu][Nn][Ii][Oo][Nn]							{SQL_NEW_KEYWORD(SQL_TOKEN_UNION); return SQL_TOKEN_UNION; }
 [Uu][Nn][Ii][Qq][Uu][Ee]						{SQL_NEW_KEYWORD(SQL_TOKEN_UNIQUE); return SQL_TOKEN_UNIQUE; }
 [Uu][Nn][Kk][Nn][Oo][Ww][Nn]					{SQL_NEW_KEYWORD(SQL_TOKEN_UNKNOWN); return SQL_TOKEN_UNKNOWN; }
@@ -261,6 +312,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 [Vv][Aa][Ll][Uu][Ee][Ss]						{SQL_NEW_KEYWORD(SQL_TOKEN_VALUES); return SQL_TOKEN_VALUES; }
 [Vv][Ii][Ee][Ww]								{SQL_NEW_KEYWORD(SQL_TOKEN_VIEW); return SQL_TOKEN_VIEW; }
 
+[Ww][Ee][Ee][Kk]								{SQL_NEW_KEYWORD(SQL_TOKEN_WEEK); return SQL_TOKEN_WEEK; }
 [Ww][Hh][Ee][Rr][Ee]							{SQL_NEW_KEYWORD(SQL_TOKEN_WHERE); return SQL_TOKEN_WHERE; }
 [Ww][Ii][Tt][Hh]								{SQL_NEW_KEYWORD(SQL_TOKEN_WITH); return SQL_TOKEN_WITH; }
 [Ww][Oo][Rr][Kk]								{SQL_NEW_KEYWORD(SQL_TOKEN_WORK); return SQL_TOKEN_WORK; }
@@ -276,6 +328,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 ">="				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_GREATEQ);return GREATEQ;}
 "<>"				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_NOTEQUAL);return NOTEQUAL;}
 "!="				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_NOTEQUAL);return NOTEQUAL;}
+
 
 [-+*/:(),.;?{}]    { return SQLyytext[0]; }
 
@@ -311,10 +364,8 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 
 <PREDICATE_GER,PREDICATE_ENG>[0-9.,][A-Za-z0-9_.,%]* {return gatherNamePre(SQLyytext);}
 
-
 <SQL>\"	{ return gatherString('\"',0); }
 <SQL>`	{ return gatherString('`' ,0); }											 
-
 
 <PREDICATE_GER,PREDICATE_ENG,DATE>"["		{ return gatherString(']' ,0);}
 
@@ -329,14 +380,12 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 <STRING>"["					{ return gatherString(']' ,0); }
 <STRING>[^ ':["?"]*			{ return gatherNamePre(SQLyytext); }
 
-
 \n              {}
 
 [ \t\r]+        ;       
 
 "--".*$         ;       
 
-[^[:blank:][:space:][:cntrl:]\-\+\*\/:\(\)\,\\\.\;\?\{\}#\'\"´`´\[\]=]*			{return gatherNamePre( SQLyytext);}
 .				{YY_FATAL_ERROR("Invalid symbol"); return SQL_TOKEN_INVALIDSYMBOL;}
 
 %%
@@ -501,7 +550,6 @@ sal_Int32 gatherName(const sal_Char* text)
 			return SQL_TOKEN_NAME; 
 	}
 }
-
 /**
  Read SQL Name literal for predicate check
  Valid Names or internatioanl keywords:
