@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsersvc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-18 15:52:22 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,12 +119,12 @@ static inline void clear(OUString & _rs) { _rs = OUString(); }
 // -----------------------------------------------------------------------------
 template <class BackendInterface>
 ParserService<BackendInterface>::ParserService(CreationArg _xContext)
-: m_xServiceFactory(_xContext->getServiceManager(), uno::UNO_QUERY)
+: m_xContext(_xContext)
 , m_aInputSource()
 {
-    if (!m_xServiceFactory.is())
+    if (!m_xContext.is())
     {
-        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration Parser: Context has no service factory"));
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration Parser: NULL Context"));
         throw uno::RuntimeException(sMessage,NULL);
     }
 }
@@ -229,7 +229,9 @@ void ParserService<BackendInterface>::parse(uno::Reference< sax::XDocumentHandle
 
     rtl::OUString const k_sSaxParserService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"));
 
-    SaxParser xParser = SaxParser::query( m_xServiceFactory->createInstance(k_sSaxParserService) );
+    uno::Reference< lang::XMultiComponentFactory > xServiceFactory = m_xContext->getServiceManager();
+
+    SaxParser xParser = SaxParser::query( xServiceFactory->createInstanceWithContext(k_sSaxParserService,m_xContext) );
 
     if (!xParser.is())
     {
@@ -402,7 +404,7 @@ void SAL_CALL SchemaParserService::readSchema( uno::Reference< backenduno::XSche
     if (!aHandler.is())
         throw lang::NullPointerException(nullHandlerMessage("SchemaParserService::readSchema"),*this);
 
-    SaxHandler xHandler = new SchemaParser(this->getServiceFactory(),aHandler, SchemaParser::selectAll);
+    SaxHandler xHandler = new SchemaParser(this->getContext(),aHandler, SchemaParser::selectAll);
     this->parse( xHandler );
 }
 // -----------------------------------------------------------------------------
@@ -413,7 +415,7 @@ void SAL_CALL SchemaParserService::readComponent( uno::Reference< backenduno::XS
     if (!aHandler.is())
         throw lang::NullPointerException(nullHandlerMessage("SchemaParserService::readComponent"),*this);
 
-    SaxHandler xHandler = new SchemaParser(this->getServiceFactory(),aHandler, SchemaParser::selectComponent);
+    SaxHandler xHandler = new SchemaParser(this->getContext(),aHandler, SchemaParser::selectComponent);
     this->parse( xHandler );
 }
 // -----------------------------------------------------------------------------
@@ -424,7 +426,7 @@ void SAL_CALL SchemaParserService::readTemplates( uno::Reference< backenduno::XS
     if (!aHandler.is())
         throw lang::NullPointerException(nullHandlerMessage("SchemaParserService::readTemplates"),*this);
 
-    SaxHandler xHandler = new SchemaParser(this->getServiceFactory(),aHandler, SchemaParser::selectTemplates);
+    SaxHandler xHandler = new SchemaParser(this->getContext(),aHandler, SchemaParser::selectTemplates);
     this->parse( xHandler );
 }
 // -----------------------------------------------------------------------------
@@ -435,7 +437,7 @@ void SAL_CALL LayerParserService::readData( uno::Reference< backenduno::XLayerHa
     if (!aHandler.is())
         throw lang::NullPointerException(nullHandlerMessage("LayerParserService::readData"),*this);
 
-    SaxHandler xHandler = new LayerParser(this->getServiceFactory(),aHandler);
+    SaxHandler xHandler = new LayerParser(this->getContext(),aHandler);
     this->parse( xHandler );
 }
 // -----------------------------------------------------------------------------
