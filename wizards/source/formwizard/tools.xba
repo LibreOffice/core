@@ -104,14 +104,14 @@ Sub	ImportStyles()
 Dim CurIndex as Integer
 Dim sImportPath as String
 Dim bWithBackGraphic as Boolean
-&apos;	oDocument.LockControllers
+	oDocument.LockControllers
 	CurIndex = GetCurIndex(oDialogModel.lstStyles, Styles(), NumberofStyles,8)
 	sImportPath = Styles(8,CurIndex)
 	bWithBackGraphic = LoadNewStyles(oDocument, oDialogModel, CurIndex, sImportPath, Styles(), TexturePath)
 	ControlCaptionsToStandardLayout()
 	ToggleOptionButtons(oDialogModel, bWithBackGraphic)	
 	ConfigurePageStyle()	
-&apos;	oDocument.UnlockControllers
+	oDocument.UnlockControllers
 End Sub
 
 
@@ -177,26 +177,6 @@ Dim sReturn as String
 End Function
 
 
-Function AddListtoList(FirstArray(), SecondArray(), Optional StarIndex)
-Dim n as Integer
-Dim m as Integer
-Dim MaxIndex as Integer
-	MaxIndex = Ubound(FirstArray()) + Ubound(SecondArray()) + 1
-	If MaxIndex &gt; -1 Then
-		Dim ResultArray(MaxIndex)
-		For m = 0 To Ubound(FirstArray())
-			ResultArray(m) = FirstArray(m)
-		Next m
-		For n = 0 To Ubound(SecondArray())
-			ResultArray(m) = SecondArray(n)
-			m = m + 1
-		Next n
-		AddListToList() = ResultArray()
-	Else
-		Dim NullArray()
-		AddListToList() = NullArray()
-	End If
-End Function
 
 
 Function CountItemsInArray(BigArray(), SearchItem)

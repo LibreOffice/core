@@ -397,7 +397,9 @@ Dim aPoint as New com.sun.star.awt.Point
 Dim aSize as New com.sun.star.awt.Size
 Dim nWidth as Long
 	If bControlsareCreated Then
+		oDocument.LockControllers()
 		ShapesToNirwana()
+		oDocument.UnlockControllers()
 	End If
 	oGridModel = CreateUnoService(oModelService(cGridControl))
 	oGridModel.Name = &quot;Grid1&quot;

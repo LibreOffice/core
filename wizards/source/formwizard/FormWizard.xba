@@ -141,13 +141,16 @@ Dim SelCount as Integer
 	ToggleWindow(True)
 	oDialogModel.imgTheme.ImageURL = FormPath &amp; &quot;FormWizard_1.bmp&quot;
 	DlgFormDB.Execute()
+	DlgFormDB.Dispose
+	If Not IsNull(oDBConnection) Then
+		oDBConnection.Dispose()
+	End If
+	oDocument.Dispose
 	Exit Sub
 GlobalError:
 	MsgBox(sMsgErrMsg , 16, sMsgWizardName)
 	ToggleWindow(True)
-	DlgFormDB.Execute()
-	Reset
-	Stop
+	DlgFormDB.EndExecute()
 End Sub
 
 
@@ -186,12 +189,6 @@ End Sub
 
 Sub CancelFormWizard()
 	DlgFormDB.EndExecute()
-	DlgFormDB.Dispose()
-	oDocument.Dispose()
-	If Not IsNull(oDBConnection) Then
-		oDBConnection.Dispose()
-	End If
-	Stop
 End Sub
 
 
@@ -278,7 +275,6 @@ Dim oFilters() as Object
 	bDocIsStored = StoreDocument(oDocument, FilterNames(), &quot;Form_&quot; &amp; sDBName &amp; &quot;.&quot; &amp; TableName, WorkPath)
 	If bDocIsStored Then
 		DlgFormDB.EndExecute()
-		oDBConnection.Dispose
 	End If
 End Sub
 

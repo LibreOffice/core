@@ -107,14 +107,14 @@ Dim i as Integer
 		oGridshape.Dispose
 	End If
 	ToggleLayoutPage(False)
-&apos;	oDocument.LockControllers
 	Select Case CurArrangement
 		Case cTabled
 			PositionGridControl(MaxIndex)
 		Case Else
+			oDocument.LockControllers()
 			PositionControls(MaxIndex)
+			oDocument.UnlockControllers()
 	End Select
-&apos;	oDocument.UnlockControllers
 	ToggleLayoutPage(True)
 	oProgressbar.End
 	Exit Function
@@ -135,7 +135,6 @@ Dim oViewSettings as Object
 	oDocument.ApplyFormDesignMode = False
 	oController = oDocument.GetCurrentController
 	oViewSettings = oDocument.CurrentController.ViewSettings
-&apos;	oDocument.LockControllers
 	oViewSettings.ShowTableBoundaries = False
 &apos; Todo: Im Auge behalten, ob die Viewsettings auch mit abgespeichert werden
 	oViewSettings.ShowTextBoundaries = False
@@ -172,7 +171,7 @@ Dim oCurModel as Object
 	oModel = oEvent.Source.Model
 	SwitchBorderMode(Val(Right(oModel.Name,1)))	
 	ToggleLayoutPage(False)
-&apos;	oDocument.LockControllers
+	oDocument.LockControllers
 
 &apos; Todo: Auch unsichtbare Controls müssen eine neue Border bekommen
 &apos; Am besten wird hierbei das dynamische Array oDBShapeList() abgegriffen
@@ -188,7 +187,7 @@ Dim oCurModel as Object
 			Next i
 		End If
 	End If
-&apos;	oDocument.UnLockControllers
+	oDocument.UnlockControllers
 	ToggleLayoutPage(True)
 End Sub
 
@@ -200,14 +199,14 @@ Dim oModel as Object
 	oModel = oEvent.Source.Model
 	SwitchAlignMode(Val(Right(oModel.Name,1)))
 	ToggleLayoutPage(False)
-&apos;	oDocument.LockControllers()
+	oDocument.LockControllers()
 	If OldAlignMode &lt;&gt; CurAlignMode Then
 		For i = 0 To MaxIndex
 			oCurModel = oTCShapeList(i).GetControl
 			oCurModel.Align = CurAlignmode
 		Next i
 	End If
-&apos;	oDocument.UnlockControllers()
+	oDocument.UnlockControllers()
 	ToggleLayoutPage(True)
 End Sub
 
@@ -227,9 +226,6 @@ Dim oModel as Object
 			Case Else &apos; cColumnarTop,cLeftJustified, cTopJustified
 				ToggleAlignGroup(CurArrangement = cColumnarLeft)
 				ControlCaptionstoStandardLayout()
-&apos; Todo: geht das nicht eleganter?
-&apos;				ToggleDesignmode(oDocument)
-&apos;				ToggleDesignmode(oDocument)
 				oDBForm.Load
 		End Select
 		
