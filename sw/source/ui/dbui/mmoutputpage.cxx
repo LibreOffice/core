@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmoutputpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-07 17:37:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,12 @@
 #endif
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
+#endif
+#ifndef _SFXEVENT_HXX
+#include <sfx2/event.hxx>
+#endif
+#ifndef _SWEVENT_HXX
+#include <swevent.hxx>
 #endif
 #include <mmoutputpage.hrc>
 #include <dbui.hrc>
@@ -989,6 +995,8 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, pButton)
         pTargetView->SetPrinter(m_pDocumentPrinterCopy->Clone());
     }
 
+    SfxObjectShell* pObjSh = pTargetView->GetViewFrame()->GetObjectShell();
+    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, pObjSh));
     rSh.GetNewDBMgr()->SetMergeType( DBMGR_MERGE_DOCUMENTS );
     SfxDispatcher *pDis = pTargetView->GetViewFrame()->GetDispatcher();
     if(m_pTempPrinter)
@@ -1003,6 +1011,7 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, pButton)
         pDis->Execute(SID_PRINTDOCDIRECT,
                 SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD/*, &aMergeSilent, 0L*/);
     }
+    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, pObjSh));
 
     pTargetView->SetMailMergeConfigItem(0, 0, sal_False);
     m_pWizard->enableButtons(WZB_FINISH, sal_True);
