@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:57:51 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,7 +446,7 @@ TabDialog DLG_MULTI_TOX
     Text[ english_us ] = "Insert Index/Table";
     Text[ portuguese ] = "Inserir νndice";
     Text[ russian ] = "Βρςΰβθςό ξγλΰβλενθε/σκΰηΰςελό";
-    Text[ greek ] = "Προσθήκη ευρετηρίου";
+    Text[ greek ] = "Εισαγωγή ευρετηρίου";
     Text[ dutch ] = "Index invoegen";
     Text[ french ] = "Insertion d'index";
     Text[ spanish ] = "Insertar νndice";
@@ -463,7 +463,7 @@ TabDialog DLG_MULTI_TOX
     Text[ english_us ] = "Insert Index/Table";
     Text[ portuguese ] = "Inserir νndice";
     Text[ russian ] = "Βρςΰβθςό ξγλΰβλενθε/σκΰηΰςελό";
-    Text[ greek ] = "Προσθήκη ευρετηρίου";
+    Text[ greek ] = "Εισαγωγή ευρετηρίου";
     Text[ dutch ] = "Index invoegen";
     Text[ french ] = "Insertion d'index";
     Text[ spanish ] = "Insertar νndice";
@@ -1140,7 +1140,7 @@ TabPage TP_TOX_SELECT
         Text[ english_us ] = "Evaluate up to level";
         Text[ portuguese ] = "A~valiar atι nνvel";
         Text[ russian ] = "Βκλώχΰςό δξ σπξβνÿ";
-        Text[ greek ] = "Αποτίμηση επιπέδων";
+        Text[ greek ] = "Αξιολόγηση μέχρι το επίπεδο";
         Text[ dutch ] = "Aantal niveaus";
         Text[ french ] = "Ιvaluation jusqu'au niveau";
         Text[ spanish ] = "Evaluar hasta nivel";
@@ -1365,7 +1365,7 @@ TabPage TP_TOX_SELECT
         Text[ english_us ] = "Captions";
         Text[ portuguese ] = "~Legendas";
         Text[ russian ] = "Νΰηβΰνθÿ";
-        Text[ greek ] = "Επιγραφές";
+        Text[ greek ] = "Λεζάντες";
         Text[ dutch ] = "~Bijschriften";
         Text[ french ] = "Lιgendes";
         Text[ spanish ] = "Etiq~uetas";
@@ -1506,9 +1506,9 @@ TabPage TP_TOX_SELECT
     };
     StringList [ greek ] =
     {
-            < "Κείμενο αναφοράς" ; > ;
+            < "Κείμενο παραπομπής" ; > ;
         < "Κατηγορία και αριθμός" ; > ;
-        < "Κείμενο επιγραφής" ; > ;
+        < "Κείμενο λεζάντας" ; > ;
     };
     StringList [ dutch ] =
     {
@@ -1679,7 +1679,7 @@ TabPage TP_TOX_SELECT
         Text[ english_us ] = "Combine identical entries";
         Text[ portuguese ] = "Agrupar entradas ~idκnticas";
         Text[ russian ] = "Ξαϊεδθνÿςό ξδθνΰκξβϋε ύλεμενςϋ";
-        Text[ greek ] = "Συ~γκέντρωση ταυτόσημων εγγραφών";
+        Text[ greek ] = "Συ~γκέντρωση πανομοιότυπων εγγραφών";
         Text[ dutch ] = "~Samenvatten van identieke items";
         Text[ french ] = "Regrouper les entrιes ~identiques";
         Text[ spanish ] = "Com~binar entradas idιnticas";
@@ -2264,8 +2264,8 @@ TabPage TP_TOX_SELECT
         {
             < " " ;                 1;> ;
             < " " ;             2;> ;
-            < "TSM:; TSM: 23.10.00 En is correct D is wrong." ;                 8;> ;
-            < "TSM ; TSM 23.10.00 En is correct / D is wrong" ;     16;> ;
+            < "; TSM:; TSM: 23.10.00 En is correct D is wrong." ;               8;> ;
+            < "; TSM ; TSM 23.10.00 En is correct / D is wrong" ;   16;> ;
             < " ";  128;> ;
             };
         ItemList [ english_us ] =
@@ -2599,7 +2599,7 @@ TabPage TP_TOX_SELECT
         Text[ danish ] = "[Ingen]";
         Text[ swedish ] = "[ingen]";
         Text[ polish ] = "[Brak]";
-        Text[ portuguese_brazilian ] = "[Nenhum]";
+        Text[ portuguese_brazilian ] = "[none]";
         Text[ japanese ] = "[γªγ—]";
         Text[ korean ] = "[μ—†μ]";
         Text[ chinese_simplified ] = "[ζ— ]";
@@ -2882,7 +2882,7 @@ TabPage TP_TOX_ENTRY
         Text[ swedish ] = "~Struktur";
         Text[ polish ] = "Struktura";
         Text[ japanese ] = "~Structure";
-        Text[ korean ] = "κµ¬μ΅°";
+        Text[ korean ] = "κµ¬μ΅°(~S)";
         Text[ chinese_simplified ] = "η»“ζ„(~S)";
         Text[ chinese_traditional ] = "ηµζ§‹(~S)";
         Text[ turkish ] = "~Yapύ";
@@ -2891,7 +2891,7 @@ TabPage TP_TOX_ENTRY
         Text[ thai ] = "ΰΉ‚~ΰΈ„ΰΈ£ΰΈ‡ΰΈªΰΈ£ΰΉ‰ΰΈ²ΰΈ‡";
         Text[ czech ] = "Struktura";
         Text[ hebrew ] = "~Struktur";
-        Text[ portuguese_brazilian ] = "~Structure";
+        Text[ portuguese_brazilian ] = "E~strutura";
         Text[ hindi ] = "~Structure";
         Text[ slovak ] = "Ε truktΓΊ~ra";
     };
@@ -3063,7 +3063,7 @@ TabPage TP_TOX_ENTRY
             Text[ danish ] = "KI";
             Text[ swedish ] = "CI";
             Text[ polish ] = "IR";
-            Text[ portuguese_brazilian ] = "CI";
+            Text[ portuguese_brazilian ] = "IC";
             Text[ japanese ] = "CI";
             Text[ korean ] = "CI";
             Text[ chinese_simplified ] = "CI";
@@ -3500,9 +3500,9 @@ TabPage TP_TOX_ENTRY
         Text[ polish ] = "~Wszystkie poziomy";
         Text[ portuguese_brazilian ] = "Todos os ~nνveis";
         Text[ japanese ] = "γ™γΉγ¦(~A)";
-        Text[ korean ] = "λª¨λ“  μμ¤€";
-        Text[ chinese_simplified ] = "ε…¨ιƒ¨";
-        Text[ chinese_traditional ] = "ε…¨ιƒ¨";
+        Text[ korean ] = "λª¨λ“  μμ¤€(~A)";
+        Text[ chinese_simplified ] = "ε…¨ιƒ¨(~A)";
+        Text[ chinese_traditional ] = "ε…¨ιƒ¨(~A)";
         Text[ turkish ] = "~Tόm dόzeyler";
         Text[ arabic ] = "ία ΗαγΣΚζνΗΚ";
         Text[ catalan ] = "~Tots els nivells";
@@ -3569,7 +3569,7 @@ TabPage TP_TOX_ENTRY
         Text[ chinese_traditional ] = "ζΆη›®ζ–‡ε­—";
         Text[ arabic ] = "δΥ ΗαΕΟΞΗα";
         Text[ turkish ] = "Giriώ metni";
-        Text[ language_user1 ] = "nk: 07.04.03 I shortened this string because the button in dialog has not enough space for whole Japanese string. It stays \"Entry\" in Japanese.";
+        Text[ language_user1 ] = "; nk: 07.04.03 I shortened this string because the button in dialog has not enough space for whole Japanese string. It stays \"Entry\" in Japanese.";
         Text[ catalan ] = "Text d'entrada";
         Text[ finnish ] = "Merkintδteksti";
         Text[ thai ] = "ΰΈ£ΰΈ²ΰΈΆΰΈΰΈ²ΰΈ£ΰΈ‚ΰΉ‰ΰΈ­ΰΈ„ΰΈ§ΰΈ²ΰΈ΅";
@@ -3701,7 +3701,7 @@ TabPage TP_TOX_ENTRY
         Text[ chinese_traditional ] = "θ¶…ι€£ηµ(~Y)";
         Text[ arabic ] = "ΗΡΚΘΗΨ ΚΤΪΘν";
         Text[ turkish ] = "H~iperlink";
-        Text[ language_user1 ] = "nk: 07.04.03 I shorten this string because the button in dialog has not enough place for whole Japanese string. Japasese string here stays just \"Link\".  ";
+        Text[ language_user1 ] = "; nk: 07.04.03 I shorten this string because the button in dialog has not enough place for whole Japanese string. Japasese string here stays just \"Link\".  ";
         Text[ catalan ] = "~Hiperenllaη";
         Text[ finnish ] = "H~yperlinkki";
         Text[ thai ] = "ΰΉ€ΰΈΰΈ·ΰΉ~ΰΈ­ΰΈ΅ΰΉ‚ΰΈΆΰΈ‡ΰΈ«ΰΈ¥ΰΈ²ΰΈΆΰΈ΅ΰΈ΄ΰΈ•ΰΈ΄";
@@ -4022,9 +4022,9 @@ TabPage TP_TOX_ENTRY
     };
     StringList [ portuguese_brazilian ] =
     {
-            < "Somente intervalo numιrico" ; > ;
-        < "Somente descriηγo" ; > ;
-        < "Intervalo numιrico e descriηγo" ; > ;
+            < "Somente a seqόκncia" ; > ;
+        < "Somente a descriηγo" ; > ;
+        < "Seqόκncia e descriηγo" ; > ;
     };
     StringList [ japanese ] =
     {
@@ -4165,7 +4165,7 @@ TabPage TP_TOX_ENTRY
         Text[ english_us ] = "Align right";
         Text[ portuguese ] = "Alinhar ΰ direita";
         Text[ russian ] = "Ροπΰβΰ";
-        Text[ greek ] = "Στοίχιση δεξιά";
+        Text[ greek ] = "Στοίχιση δε~ξιά";
         Text[ dutch ] = "Rechtslijnend";
         Text[ french ] = "Aligner ΰ droite";
         Text[ spanish ] = "Alinear a la derecha";
@@ -4437,7 +4437,7 @@ TabPage TP_TOX_ENTRY
         Text[ english_us ] = "~Content";
         Text[ portuguese ] = "~Conteϊdo";
         Text[ russian ] = "Ρξδεπζθμξε";
-        Text[ greek ] = "Περιεχόμενα";
+        Text[ greek ] = "Περιεχόμενο";
         Text[ dutch ] = "~Inhoud";
         Text[ french ] = "le ~contenu";
         Text[ spanish ] = "C~ontenido";
@@ -5660,6 +5660,7 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ slovak ] = "UpraviΕ¥ sΓΊbor konkordanciΓ­Β­";
 };
 // -----------------------------------------------------------------------------
+
 
 
 
