@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 20:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2681,6 +2681,12 @@ Point SdrEdgeObj::GetTailPoint( BOOL bTail ) const
             return aOutRect.BottomRight();
     }
 
+}
+
+void SdrEdgeObj::SetTailPoint( BOOL bTail, const Point& rPt )
+{
+    ImpSetTailPoint( bTail, rPt );
+    SetChanged();
 }
 
 /** this method is used by the api to set a glue point for a connection

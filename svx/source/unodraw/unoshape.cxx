@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 14:00:58 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 19:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@
 #include "sxciaitm.hxx" // todo: remove
 #include "svdograf.hxx"
 #include "unoapi.hxx"
+#include "svdomeas.hxx"
 
 #include <tools/shl.hxx>    //
 #include "dialmgr.hxx"      // not nice, we need our own resources some day
@@ -1106,6 +1107,8 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
         case OWN_ATTR_EDGE_END_OBJ:
         case OWN_ATTR_GLUEID_HEAD:
         case OWN_ATTR_GLUEID_TAIL:
+        case OWN_ATTR_EDGE_START_POS:
+        case OWN_ATTR_EDGE_END_POS:
         {
             SdrEdgeObj* pEdgeObj = PTR_CAST(SdrEdgeObj,pObj);
             if(pEdgeObj)
@@ -1129,6 +1132,19 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                         break;
                     }
 
+                case OWN_ATTR_EDGE_START_POS:
+                case OWN_ATTR_EDGE_END_POS:
+                    {
+                        awt::Point aUnoPoint;
+                        if( rVal >>= aUnoPoint )
+                        {
+                            Point aPoint( aUnoPoint.X, aUnoPoint.Y );
+                            pEdgeObj->SetTailPoint( pMap->nWID == OWN_ATTR_EDGE_START_POS, aPoint );
+                            return;
+                        }
+                        break;
+                    }
+
                 case OWN_ATTR_GLUEID_HEAD:
                 case OWN_ATTR_GLUEID_TAIL:
                     {
@@ -1143,6 +1159,24 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
             }
             break;
         }
+        case OWN_ATTR_MEASURE_START_POS:
+        case OWN_ATTR_MEASURE_END_POS:
+        {
+            SdrMeasureObj* pMeasureObj = PTR_CAST(SdrMeasureObj,pObj);
+            if(pMeasureObj)
+            {
+                awt::Point aUnoPoint;
+                rVal >>= aUnoPoint;
+                Point aPoint( aUnoPoint.X, aUnoPoint.Y );
+
+                pMeasureObj->NbcSetPoint( aPoint, pMap->nWID == OWN_ATTR_MEASURE_START_POS ? 0 : 1 );
+                pMeasureObj->SendRepaintBroadcast();
+                pMeasureObj->SetChanged();
+                return;
+            }
+            break;
+        }
+
         case XATTR_FILLBITMAP:
         case XATTR_FILLGRADIENT:
         case XATTR_FILLHATCH:
@@ -1467,10 +1501,23 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                     case OWN_ATTR_GLUEID_HEAD:
                     case OWN_ATTR_GLUEID_TAIL:
                         {
-                            aAny <<= pEdgeObj->getGluePointIndex( pMap->nWID == OWN_ATTR_GLUEID_TAIL );
+                            aAny <<= pEdgeObj->getGluePointIndex( pMap->nWID == OWN_ATTR_GLUEID_HEAD );
                             break;
                         }
                     }
+                }
+                break;
+            }
+            case OWN_ATTR_MEASURE_START_POS:
+            case OWN_ATTR_MEASURE_END_POS:
+            {
+                SdrMeasureObj* pMeasureObj = PTR_CAST(SdrMeasureObj,pObj);
+                if(pMeasureObj)
+                {
+                    const Point& rPoint = pMeasureObj->GetPoint( pMap->nWID == OWN_ATTR_MEASURE_START_POS ? 0 : 1 );
+                    awt::Point aUnoPoint( rPoint.X(), rPoint.Y() );
+                    aAny <<= aUnoPoint;
+                    break;
                 }
                 break;
             }
