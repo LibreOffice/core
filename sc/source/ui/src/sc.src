@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:29 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // StarCalc Applikations Resource
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: hr $ $Date: 2003-03-26 18:06:29 $ $Revision: 1.15 $
+ // $Author: hr $ $Date: 2003-04-29 17:11:24 $ $Revision: 1.16 $
  // $Logfile:   T:/sc/source/ui/src/sc.srv  $ $Workfile:   sc.src  $
  //==================================================================
 
@@ -85,7 +85,7 @@ String RID_APPTITLE
     Text [ ENGLISH ] = "StarCalc 4.0" ;
     Text [ norwegian ] = "StarCalc 4.0" ;
     Text [ italian ] = "%PRODUCTNAME Calc" ;
-    Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc 3.1" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc" ;
     Text [ portuguese ] = "%PRODUCTNAME Calc" ;
     Text [ finnish ] = "%PRODUCTNAME Calc" ;
     Text [ danish ] = "%PRODUCTNAME Calc" ;
@@ -106,6 +106,9 @@ String RID_APPTITLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME Calc";
     Text[ thai ] = "%PRODUCTNAME Calc";
+    Text[ czech ] = "%PRODUCTNAME Calc";
+    Text[ hebrew ] = "%PRODUCTNAME Calc";
+    Text[ hindi ] = "%PRODUCTNAME गणना";
 };
 
  // About-Dialog --------------------------------------------------------------
@@ -153,6 +156,15 @@ Image RID_BMP_REFBTN2_H
 String 30001 { Text = "Dummy1" ; };
 String 30002 { Text = "Dummy2" ; };
 String 30006 { Text = "Dummy3" ; };
+
+
+
+
+
+
+
+
+
 
 
 
