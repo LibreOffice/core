@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-13 15:25:35 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:41:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,8 @@
 #include "fuslshow.hxx"
 #include "preview.hxx"
 #include "prevchld.hxx"
+
+using namespace ::com::sun::star;
 
 TYPEINIT1( SdDrawView, SdView );
 
@@ -867,7 +869,8 @@ void SdDrawView::PresPaint(const Region& rRegion)
 
 IMPL_LINK( SdDrawView, PaintProc, SdrPaintProcRec *, pRecord )
 {
-    SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(pRecord->pObj);
+    SdAnimationInfo*    pInfo = pDoc->GetAnimationInfo(pRecord->pObj);
+    const ULONG         nOldAntialiasing = pRecord->rOut.GetOutDev()->GetAntialiasing();
 
     if( !pRecord->pObj->IsEmptyPresObj() )
     {
@@ -901,8 +904,130 @@ IMPL_LINK( SdDrawView, PaintProc, SdrPaintProcRec *, pRecord )
             bDrawn = TRUE;
         else if( pInfo && pInfo->bIsShown )
         {
-            const BOOL bLive     = pFuSlideShow->IsLivePresentation();
-            const BOOL bDimmed = pInfo->bDimmed;
+            const BOOL      bLive = pFuSlideShow->IsLivePresentation();
+            const BOOL      bDimmed = pInfo->bDimmed;
+
+            // in case of a move effect we have to disable antialiasing
+            // (we don't want to use alpha masks for performance reasons)
+            switch( pInfo->eEffect )
+            {
+                case presentation::AnimationEffect_MOVE_FROM_LEFT:
+                case presentation::AnimationEffect_MOVE_FROM_UPPERLEFT:
+                case presentation::AnimationEffect_MOVE_FROM_TOP:
+                case presentation::AnimationEffect_MOVE_FROM_UPPERRIGHT:
+                case presentation::AnimationEffect_MOVE_FROM_RIGHT :
+                case presentation::AnimationEffect_MOVE_FROM_LOWERRIGHT:
+                case presentation::AnimationEffect_MOVE_FROM_BOTTOM:
+                case presentation::AnimationEffect_MOVE_FROM_LOWERLEFT:
+                case presentation::AnimationEffect_MOVE_SHORT_FROM_LEFT:
+                case presentation::AnimationEffect_MOVE_SHORT_FROM_UPPERLEFT:
+                case presentation::AnimationEffect_MOVE_SHORT_FROM_TOP:
+                case presentation::AnimationEffect_MOVE_SHORT_FROM_UPPERRIGHT:
+                case presentation::AnimationEffect_MOVE_SHORT_FROM_RIGHT:
+                case presentation::AnimationEffect_MOVE_SHORT_FROM_LOWERRIGHT:
+                case presentation::AnimationEffect_MOVE_SHORT_FROM_BOTTOM:
+                case presentation::AnimationEffect_MOVE_SHORT_FROM_LOWERLEFT:
+                case presentation::AnimationEffect_MOVE_TO_LEFT:
+                case presentation::AnimationEffect_MOVE_TO_UPPERLEFT:
+                case presentation::AnimationEffect_MOVE_TO_TOP:
+                case presentation::AnimationEffect_MOVE_TO_UPPERRIGHT:
+                case presentation::AnimationEffect_MOVE_TO_RIGHT :
+                case presentation::AnimationEffect_MOVE_TO_LOWERRIGHT:
+                case presentation::AnimationEffect_MOVE_TO_BOTTOM:
+                case presentation::AnimationEffect_MOVE_TO_LOWERLEFT:
+                case presentation::AnimationEffect_MOVE_SHORT_TO_LEFT:
+                case presentation::AnimationEffect_MOVE_SHORT_TO_UPPERLEFT:
+                case presentation::AnimationEffect_MOVE_SHORT_TO_TOP:
+                case presentation::AnimationEffect_MOVE_SHORT_TO_UPPERRIGHT:
+                case presentation::AnimationEffect_MOVE_SHORT_TO_RIGHT:
+                case presentation::AnimationEffect_MOVE_SHORT_TO_LOWERRIGHT:
+                case presentation::AnimationEffect_MOVE_SHORT_TO_BOTTOM:
+                case presentation::AnimationEffect_MOVE_SHORT_TO_LOWERLEFT:
+                case presentation::AnimationEffect_STRETCH_FROM_LEFT:
+                case presentation::AnimationEffect_STRETCH_FROM_UPPERLEFT:
+                case presentation::AnimationEffect_STRETCH_FROM_TOP:
+                case presentation::AnimationEffect_STRETCH_FROM_UPPERRIGHT:
+                case presentation::AnimationEffect_STRETCH_FROM_RIGHT:
+                case presentation::AnimationEffect_STRETCH_FROM_LOWERRIGHT:
+                case presentation::AnimationEffect_STRETCH_FROM_BOTTOM:
+                case presentation::AnimationEffect_STRETCH_FROM_LOWERLEFT:
+                case presentation::AnimationEffect_HORIZONTAL_STRETCH:
+                case presentation::AnimationEffect_VERTICAL_STRETCH:
+                case presentation::AnimationEffect_HORIZONTAL_ROTATE:
+                case presentation::AnimationEffect_VERTICAL_ROTATE:
+                case presentation::AnimationEffect_PATH:
+                case presentation::AnimationEffect_LASER_FROM_LEFT:
+                case presentation::AnimationEffect_LASER_FROM_UPPERLEFT:
+                case presentation::AnimationEffect_LASER_FROM_TOP:
+                case presentation::AnimationEffect_LASER_FROM_UPPERRIGHT:
+                case presentation::AnimationEffect_LASER_FROM_RIGHT:
+                case presentation::AnimationEffect_LASER_FROM_LOWERRIGHT:
+                case presentation::AnimationEffect_LASER_FROM_BOTTOM:
+                case presentation::AnimationEffect_LASER_FROM_LOWERLEFT:
+                {
+                    pRecord->rOut.GetOutDev()->SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
+                }
+            }
+
+            switch( pInfo->eTextEffect )
+            {
+                case presentation::AnimationEffect_MOVE_FROM_LEFT:
+                case presentation::AnimationEffect_MOVE_FROM_UPPERLEFT:
+                case presentation::AnimationEffect_MOVE_FROM_TOP:
+                case presentation::AnimationEffect_MOVE_FROM_UPPERRIGHT:
+                case presentation::AnimationEffect_MOVE_FROM_RIGHT :
+                case presentation::AnimationEffect_MOVE_FROM_LOWERRIGHT:
+                case presentation::AnimationEffect_MOVE_FROM_BOTTOM:
+                case presentation::AnimationEffect_MOVE_FROM_LOWERLEFT:
+                case presentation::AnimationEffect_MOVE_SHORT_FROM_LEFT:
+                case presentation::AnimationEffect_MOVE_SHORT_FROM_UPPERLEFT:
+                case presentation::AnimationEffect_MOVE_SHORT_FROM_TOP:
+                case presentation::AnimationEffect_MOVE_SHORT_FROM_UPPERRIGHT:
+                case presentation::AnimationEffect_MOVE_SHORT_FROM_RIGHT:
+                case presentation::AnimationEffect_MOVE_SHORT_FROM_LOWERRIGHT:
+                case presentation::AnimationEffect_MOVE_SHORT_FROM_BOTTOM:
+                case presentation::AnimationEffect_MOVE_SHORT_FROM_LOWERLEFT:
+                case presentation::AnimationEffect_MOVE_TO_LEFT:
+                case presentation::AnimationEffect_MOVE_TO_UPPERLEFT:
+                case presentation::AnimationEffect_MOVE_TO_TOP:
+                case presentation::AnimationEffect_MOVE_TO_UPPERRIGHT:
+                case presentation::AnimationEffect_MOVE_TO_RIGHT :
+                case presentation::AnimationEffect_MOVE_TO_LOWERRIGHT:
+                case presentation::AnimationEffect_MOVE_TO_BOTTOM:
+                case presentation::AnimationEffect_MOVE_TO_LOWERLEFT:
+                case presentation::AnimationEffect_MOVE_SHORT_TO_LEFT:
+                case presentation::AnimationEffect_MOVE_SHORT_TO_UPPERLEFT:
+                case presentation::AnimationEffect_MOVE_SHORT_TO_TOP:
+                case presentation::AnimationEffect_MOVE_SHORT_TO_UPPERRIGHT:
+                case presentation::AnimationEffect_MOVE_SHORT_TO_RIGHT:
+                case presentation::AnimationEffect_MOVE_SHORT_TO_LOWERRIGHT:
+                case presentation::AnimationEffect_MOVE_SHORT_TO_BOTTOM:
+                case presentation::AnimationEffect_MOVE_SHORT_TO_LOWERLEFT:
+                case presentation::AnimationEffect_STRETCH_FROM_LEFT:
+                case presentation::AnimationEffect_STRETCH_FROM_UPPERLEFT:
+                case presentation::AnimationEffect_STRETCH_FROM_TOP:
+                case presentation::AnimationEffect_STRETCH_FROM_UPPERRIGHT:
+                case presentation::AnimationEffect_STRETCH_FROM_RIGHT:
+                case presentation::AnimationEffect_STRETCH_FROM_LOWERRIGHT:
+                case presentation::AnimationEffect_STRETCH_FROM_BOTTOM:
+                case presentation::AnimationEffect_STRETCH_FROM_LOWERLEFT:
+                case presentation::AnimationEffect_HORIZONTAL_STRETCH:
+                case presentation::AnimationEffect_VERTICAL_STRETCH:
+                case presentation::AnimationEffect_HORIZONTAL_ROTATE:
+                case presentation::AnimationEffect_VERTICAL_ROTATE:
+                case presentation::AnimationEffect_PATH:
+                case presentation::AnimationEffect_LASER_FROM_LEFT:
+                case presentation::AnimationEffect_LASER_FROM_UPPERLEFT:
+                case presentation::AnimationEffect_LASER_FROM_TOP:
+                case presentation::AnimationEffect_LASER_FROM_UPPERRIGHT:
+                case presentation::AnimationEffect_LASER_FROM_RIGHT:
+                case presentation::AnimationEffect_LASER_FROM_LOWERRIGHT:
+                case presentation::AnimationEffect_LASER_FROM_BOTTOM:
+                case presentation::AnimationEffect_LASER_FROM_LOWERLEFT:
+                {
+                    pRecord->rOut.GetOutDev()->SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
+                }
+            }
 
             if( pRecord->pObj == pFuSlideShow->GetLayoutText() )
             {
@@ -985,6 +1110,7 @@ IMPL_LINK( SdDrawView, PaintProc, SdrPaintProcRec *, pRecord )
         }
     }
 
+    pRecord->rOut.GetOutDev()->SetAntialiasing( nOldAntialiasing );
 
     return 0;
 }
