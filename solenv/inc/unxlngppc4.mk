@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngppc4.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-02 11:34:01 $
+#   last change: $Author: hr $ $Date: 2004-09-09 11:17:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,8 +100,6 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
-# -fpermissive should be removed as soon as possible
-# CFLAGSCXX= -fsigned-char -pipe -fno-for-scope -fpermissive -frtti 
 CFLAGSCXX= -fsigned-char -pipe -frtti
 
 
