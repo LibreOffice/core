@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-18 14:16:49 $
+ *  last change: $Author: mba $ $Date: 2002-04-23 07:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,7 @@ BOOL IsItemHidden_Impl( USHORT nItemId, int bOleServer, int bMac )
 
 void SfxVirtualMenu::Construct_Impl()
 {
+    pImageControl = new SfxMenuImageControl_Impl( SID_IMAGE_ORIENTATION, *pBindings, this );
     pWindowMenu = NULL;
     pPickMenu = NULL;
     bIsActive = FALSE;
@@ -283,6 +284,7 @@ SfxVirtualMenu::~SfxVirtualMenu()
     DBG_MEMTEST();
     DBG_DTOR(SfxVirtualMenu, 0);
 
+    DELETEZ( pImageControl );
     SvtMenuOptions().RemoveListener( LINK( this, SfxVirtualMenu, SettingsChanged ) );
 
     if ( bIsActive )
@@ -580,7 +582,8 @@ IMPL_LINK( SfxVirtualMenu, SettingsChanged, void*, pVoid )
         }
     }
 
-    pImageControl->Update();
+    if ( pImageControl )
+        pImageControl->Update();
 
     return 0;
 }
@@ -613,7 +616,8 @@ void SfxVirtualMenu::UpdateImages()
             }
         }
 
-        pImageControl->Update();
+        if ( pImageControl )
+            pImageControl->Update();
     }
 }
 
