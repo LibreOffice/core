@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:52 $
+ *  last change: $Author: th $ $Date: 2001-08-24 14:42:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,9 @@ initialisiert werden muessen:
                                 RULER_BORDER_SNAP
                                 Hilfslinie / Fanglinie. Wenn dieser Style
                                 gesetzt wird, muss die Spaltenbreite 0 sein.
+                                RULER_BORDER_MARGIN
+                                Margin. Wenn dieser Style gesetzt wird,
+                                muss die Spaltenbreite 0 sein.
 
                                 Zu diesen Style's koennen folgende Style-
                                 Bits dazugeodert werden:
@@ -619,6 +622,7 @@ enum RulerExtra { RULER_EXTRA_DONTKNOW,
 #define RULER_BORDER_VARIABLE   ((USHORT)0x0004)
 #define RULER_BORDER_TABLE      ((USHORT)0x0008)
 #define RULER_BORDER_SNAP       ((USHORT)0x0010)
+#define RULER_BORDER_MARGIN     ((USHORT)0x0020)
 
 struct RulerBorder
 {
