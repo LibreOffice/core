@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2002-10-30 16:27:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 13:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,12 +195,12 @@ void BmpApp::Message( const String& rText, BYTE cExitCode )
 void BmpApp::ShowUsage()
 {
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "Usage:" ) ), EXIT_NOERROR );
-    Message( String( RTL_CONSTASCII_USTRINGPARAM( "    bmp srs_inputfile output_dir lang_dir -i input_dir [-i input_dir ][-f err_file]" ) ), EXIT_NOERROR );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "    bmp srs_inputfile output_dir lang_dir lang_num -i input_dir [-i input_dir ][-f err_file]" ) ), EXIT_NOERROR );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "Options:" ) ), EXIT_NOERROR );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "   -i ...        name of directory to be searched for input files [multiple occurence is possible]" ) ), EXIT_NOERROR );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "   -f            name of file, output should be written to" ) ), EXIT_NOERROR );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "Examples:" ) ), EXIT_NOERROR );
-    Message( String( RTL_CONSTASCII_USTRINGPARAM( "    bmp /home/test.srs /home/out enus -i /home/res -f /home/out/bmp.err" ) ), EXIT_NOERROR );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "    bmp /home/test.srs /home/out enus 01 -i /home/res -f /home/out/bmp.err" ) ), EXIT_NOERROR );
 }
 
 // -----------------------------------------------------------------------------
@@ -211,7 +211,7 @@ int BmpApp::Start( const ::std::vector< String >& rArgs )
 
     cExitCode = EXIT_NOERROR;
 
-    if( rArgs.size() >= 5 )
+    if( rArgs.size() >= 6 )
     {
         LangInfo                aLangInfo;
         USHORT                  nCurCmd = 0;
@@ -220,13 +220,14 @@ int BmpApp::Start( const ::std::vector< String >& rArgs )
         ByteString              aLangDir;
 
         aOutName = rArgs[ nCurCmd++ ];
+
         aLangDir = ByteString( rArgs[ nCurCmd++ ], RTL_TEXTENCODING_ASCII_US );
+        aLangInfo.mnLangNum = static_cast< sal_uInt16 >( rArgs[ nCurCmd++ ].ToInt32() );
+
+        memcpy( aLangInfo.maLangDir, aLangDir.GetBuffer(), aLangDir.Len() + 1 );
 
         GetCommandOption( rArgs, 'f', aOutputFileName );
         GetCommandOptions( rArgs, 'i', aInDirVector );
-
-        memcpy( aLangInfo.maLangDir, aLangDir.GetBuffer(), aLangDir.Len() + 1 );
-        aLangInfo.mnLangNum = (USHORT) DirEntry( aOutName ).GetName().ToInt32();
 
         Create( aSrsName, aInDirVector, aOutName, aLangInfo );
     }
