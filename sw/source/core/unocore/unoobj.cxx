@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:12:21 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1399,15 +1399,15 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
             pParamRight = pTmp;
         }
         // jetzt sind vier SwPositions da, zwei davon werden gebraucht, also welche?
-        if(aOwnRight < *pParamRight)
+        if(aOwnRight > *pParamRight)
             *pOwnCursor->GetPoint() = aOwnRight;
         else
             *pOwnCursor->GetPoint() = *pParamRight;
         pOwnCursor->SetMark();
         if(aOwnLeft < *pParamLeft)
-            *pOwnCursor->GetMark() = *pParamLeft;
-        else
             *pOwnCursor->GetMark() = aOwnLeft;
+        else
+            *pOwnCursor->GetMark() = *pParamLeft;
         delete pParamLeft;
         delete pParamRight;
     }
