@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.99 $
- *  last change: $Author: kz $ $Date: 2003-10-15 10:03:22 $
+ *  $Revision: 1.100 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:57:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,9 @@
  *
  ************************************************************************/
 
-#if defined(WIN32)
-#ifndef _SV_SVSYS_HXX
-
+#ifdef WNT
 #include <svsys.h>
 #undef CreateFont
-#endif
 #endif
 
 #include <gcach_ftyp.hxx>
@@ -72,7 +69,10 @@
 #include <outfont.hxx>
 #include <bitmap.hxx>
 #include <bmpacc.hxx>
-#include <poly.hxx>
+
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
+#endif
 
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
@@ -104,7 +104,7 @@
     #include <fcntl.h>
     #include <sys/stat.h>
     #include <sys/mman.h>
-#elif defined(WIN32)
+#elif defined(WNT)
     #include <io.h>
     #define strncasecmp strnicmp
 #endif
@@ -191,7 +191,7 @@ bool FtFontFile::Map()
         mpFileMap = (const unsigned char*)
             mmap( NULL, mnFileSize, PROT_READ, MAP_SHARED, nFile, 0 );
         close( nFile );
-#elif defined(WIN32)
+#elif defined(WNT)
         void* pFileDesc = ::CreateFile( pFileName, GENERIC_READ, FILE_SHARE_READ,
                         NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0 );
         if( pFileDesc == INVALID_HANDLE_VALUE)
@@ -231,7 +231,7 @@ void FtFontFile::Unmap()
 
 #if defined(UNX)
     munmap( (char*)mpFileMap, mnFileSize );
-#elif defined(WIN32)
+#elif defined(WNT)
     UnmapViewOfFile( (LPCVOID)mpFileMap );
 #else
     delete[] mpFileMap;
@@ -244,11 +244,12 @@ void FtFontFile::Unmap()
 
 FtFontInfo::FtFontInfo( const ImplFontData& rFontData,
     const ::rtl::OString& rNativeFileName, int nFaceNum, int nFontId, int nSynthetic )
-:   mpFontFile( FtFontFile::FindFontFile( rNativeFileName ) ),
+:
     maFontData( rFontData ),
+    mpFontFile( FtFontFile::FindFontFile( rNativeFileName ) ),
     mnFaceNum( nFaceNum ),
-    mnFontId( nFontId ),
     mnSynthetic( nSynthetic ),
+    mnFontId( nFontId ),
     maFaceFT( NULL ),
     mnRefCount( 0 )
 {
@@ -374,8 +375,7 @@ const unsigned char* FtFontInfo::GetTable( const char* pTag, ULONG* pLength ) co
 // =======================================================================
 
 FreetypeManager::FreetypeManager()
-:   mnNextFontId( 0x1000 ),
-    mnMaxFontId( 0 )
+:   mnMaxFontId( 0 ), mnNextFontId( 0x1000 )
 {
     FT_Error rcFT = FT_Init_FreeType( &aLibFT );
 
@@ -1325,34 +1325,6 @@ ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
 {
     int nRangeCount = 0;
 
-#if 0 && (FTVERSION >= 2102)
-    // TODO: enable new version when it is fast enough for big fonts
-    // TODO: implement Get_Next_Missing_Char() and use this
-    FT_UInt nGlyphIndex = 0;
-    sal_uInt32 aChar = FT_Get_First_Char( maFaceFT, &nGlyphIndex );
-    if( nGlyphIndex )
-        nRangeCount = 1;
-    if( pCodes )
-        *(pCodes++) = aChar;            // start of first range
-    for(;;)
-    {
-        sal_uInt32 bChar = FT_Get_Next_Char( maFaceFT, aChar, &nGlyphIndex );
-        if( !nGlyphIndex )
-            break;
-        if( bChar != aChar+1 )
-        {
-            ++nRangeCount;
-            if( pCodes )
-            {
-                *(pCodes++) = aChar+1;  // end of old range
-                *(pCodes++) = bChar;    // start of new range
-            }
-        }
-        aChar = bChar;
-    }
-    if( pCodes && nRangeCount )
-        *(pCodes++) = aChar+1;          // end of last range
-#else
     const unsigned char* pCmap = NULL;
     ULONG nLength = 0;
     if( FT_IS_SFNT( maFaceFT ) )
@@ -1420,8 +1392,6 @@ ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
                 *(pCodes++) = cCode;
         }
     }
-#endif
-
     return nRangeCount;
 }
 // -----------------------------------------------------------------------
