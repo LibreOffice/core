@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdevt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2000-11-06 20:33:25 $
+ *  last change: $Author: th $ $Date: 2000-11-06 21:09:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ CommandExtTextInputData::CommandExtTextInputData( const XubString& rText,
     mnCursorPos     = nCursorPos;
     mnDeltaStart    = nDeltaStart;
     mnOldTextLen    = nOldTextLen;
-    mnCursorFlags   = (BYTE)nCursorFlags;
+    mnCursorFlags   = nCursorFlags;
     mbOnlyCursor    = bOnlyCursor;
 }
 
