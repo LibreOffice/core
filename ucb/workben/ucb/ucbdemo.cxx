@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbdemo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-09 15:18:56 $
+ *  last change: $Author: sb $ $Date: 2000-11-10 10:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1195,11 +1195,7 @@ void UcbContent::open( const OUString & rName, const UniString& rInput,
                     if ( bPrint )
                     {
                         OUString aId( xContentAccess->
-#if SUPD >= 613
                                           queryContentIdentifierString() );
-#else // SUPD, 613
-                                          queryContentIdentfierString() );
-#endif // SUPD, 613
                         aText += UniString::CreateFromInt32( ++n );
                         aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(
                                                ") " ) );
