@@ -2,9 +2,9 @@
  *
  *  $RCSfile: native_share.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2003-04-07 09:40:43 $
+ *  last change: $Author: dbo $ $Date: 2003-04-11 17:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,18 +89,24 @@ inline ::rtl::OUString String_to_ustring( ::System::String * str )
     return ::rtl::OUString( chars, str->get_Length() );
 }
 
-//------------------------------------------------------------------------------
-::com::sun::star::uno::Mapping const & get_uno_to_cli();
-//------------------------------------------------------------------------------
-::com::sun::star::uno::Mapping const & get_cli_to_uno();
-
 template< typename T >
 inline ::System::Object * to_cli(
     ::com::sun::star::uno::Reference< T > const & x )
 {
+    ::com::sun::star::uno::Mapping mapping(
+        OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME), OUSTR(UNO_LB_CLI) );
+    OSL_ASSERT( mapping.is() );
+    if (! mapping.is())
+    {
+        throw ::com::sun::star::uno::RuntimeException(
+            OUSTR("cannot get mapping from C++ to CLI!"),
+            ::com::sun::star::uno::Reference<
+              ::com::sun::star::uno::XInterface >() );
+    }
+
     intptr_t intptr =
         reinterpret_cast< intptr_t >(
-            get_uno_to_cli().mapInterface( x.get(), ::getCppuType( &x ) ) );
+            mapping.mapInterface( x.get(), ::getCppuType( &x ) ) );
     ::System::Runtime::InteropServices::GCHandle handle(
         ::System::Runtime::InteropServices::GCHandle::op_Explicit( intptr ) );
     ::System::Object * ret = handle.get_Target();
@@ -112,7 +118,17 @@ template< typename T >
 inline void to_uno(
     ::com::sun::star::uno::Reference< T > * pRet, ::System::Object * x )
 {
-    ::com::sun::star::uno::Mapping const & mapping = get_cli_to_uno();
+    ::com::sun::star::uno::Mapping mapping(
+        OUSTR(UNO_LB_CLI), OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+    OSL_ASSERT( mapping.is() );
+    if (! mapping.is())
+    {
+        throw ::com::sun::star::uno::RuntimeException(
+            OUSTR("cannot get mapping from CLI to C++!"),
+            ::com::sun::star::uno::Reference<
+              ::com::sun::star::uno::XInterface >() );
+    }
+
     ::System::Runtime::InteropServices::GCHandle handle(
         ::System::Runtime::InteropServices::GCHandle::Alloc( x ) );
     T * ret = 0;
