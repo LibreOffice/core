@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-10 14:40:53 $
+ *  last change: $Author: fme $ $Date: 2001-04-18 12:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -984,8 +984,8 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     xub_StrLen nNextChg = Min( nNextAttr, rInf.GetTxt().Len() );
 
     // At the end of a multi-line part we've to break.
-    if( GetMulti() && nNextChg > GetMulti()->GetLen() )
-        nNextChg = GetMulti()->GetLen();
+    if( GetMulti() && nNextChg > rInf.GetIdx() + GetMulti()->GetLen() )
+        nNextChg = rInf.GetIdx() + GetMulti()->GetLen();
 
     nNextAttr = pScriptInfo->NextScriptChg( rInf.GetIdx() );
     if( nNextChg > nNextAttr )
