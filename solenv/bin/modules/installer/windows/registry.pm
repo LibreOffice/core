@@ -2,9 +2,9 @@
 #
 #   $RCSfile: registry.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:34:28 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:20:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -135,14 +135,22 @@ sub get_registry_identifier
 
 ##################################################################
 # Returning root value for registry table.
-# Return value 0: Using HKEY_CLASSES_ROOT, which is
-# HKEY_CURRENT_USER\Software\Classes for one user installation.
-# HKEY_LOCAL_MACHINE\Software\Classes for all user installation.
 ##################################################################
 
 sub get_registry_root
 {
-    return 0;   # always 0 !
+    my ($registry) = @_;
+
+    my $rootvalue = 0;  # Default: Parent is KKEY_CLASSES_ROOT
+    my $scproot = "";
+
+    if ( $registry->{'ParentID'} ) { $scproot = $registry->{'ParentID'}; }
+
+    if ( $scproot eq "PREDEFINED_HKEY_CLASSES_ROOT" ) { $rootvalue = 0; }
+
+    if ( $scproot eq "PREDEFINED_HKEY_LOCAL_MACHINE" ) { $rootvalue = -1; }
+
+    return $rootvalue;
 }
 
 ##############################################################
@@ -245,7 +253,7 @@ sub create_registry_table
             my %registry = ();
 
             $registry{'Registry'} = get_registry_identifier($oneregistry);
-            $registry{'Root'} = get_registry_root();
+            $registry{'Root'} = get_registry_root($oneregistry);
             $registry{'Key'} = get_registry_key($oneregistry);
             $registry{'Name'} = get_registry_name($oneregistry);
             $registry{'Value'} = get_registry_value($oneregistry);
