@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgdatasupplier.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-17 14:41:33 $
+ *  last change: $Author: kso $ $Date: 2000-11-20 09:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,6 @@ struct DataSupplier_Impl
     ResultList                        m_aResults;
     vos::ORef< Content >              m_xContent;
     Reference< XMultiServiceFactory > m_xSMgr;
-    // @@@ fill member!!!
     Reference< XEnumeration >         m_xFolderEnum;
       sal_Int32                       m_nOpenMode;
       sal_Bool                        m_bCountFinal;
@@ -147,7 +146,7 @@ struct DataSupplier_Impl
                        const vos::ORef< Content >& rContent,
                        sal_Int32 nOpenMode )
     : m_xContent( rContent ), m_xSMgr( rxSMgr ),
-//    m_aFolder( rxSMgr, rContent->getIdentifier()->getContentIdentifier() ),
+      m_xFolderEnum( rContent->getIterator() ),
       m_nOpenMode( nOpenMode ), m_bCountFinal( sal_False ) {}
     ~DataSupplier_Impl();
 };
