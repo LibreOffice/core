@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-18 17:35:27 $
+ *  last change: $Author: sab $ $Date: 2000-10-19 16:03:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,18 @@ static __FAR_DATA SvXMLTokenMapEntry aTableTokenMap[] =
     { XML_NAMESPACE_TABLE, sXML_table_rows,             XML_TOK_TABLE_ROWS          },
     { XML_NAMESPACE_TABLE, sXML_table_row,              XML_TOK_TABLE_ROW           },
     { XML_NAMESPACE_TABLE, sXML_scenario,               XML_TOK_TABLE_SCENARIO      },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aTableRowsElemTokenMap[] =
+{
+    { XML_NAMESPACE_TABLE, sXML_table_row,              XML_TOK_TABLE_ROWS_ROW          },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aTableColsElemTokenMap[] =
+{
+    { XML_NAMESPACE_TABLE, sXML_table_column,           XML_TOK_TABLE_COLS_COL          },
     XML_TOKEN_MAP_END
 };
 
@@ -748,6 +760,20 @@ const SvXMLTokenMap& ScXMLImport::GetTableElemTokenMap()
     return *pTableElemTokenMap;
 }
 
+const SvXMLTokenMap& ScXMLImport::GetTableRowsElemTokenMap()
+{
+    if( !pTableRowsElemTokenMap )
+        pTableRowsElemTokenMap = new SvXMLTokenMap( aTableRowsElemTokenMap );
+    return *pTableRowsElemTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetTableColsElemTokenMap()
+{
+    if( !pTableColsElemTokenMap )
+        pTableColsElemTokenMap = new SvXMLTokenMap( aTableColsElemTokenMap );
+    return *pTableColsElemTokenMap;
+}
+
 const SvXMLTokenMap& ScXMLImport::GetTableAttrTokenMap()
 {
     if( !pTableAttrTokenMap )
@@ -1084,6 +1110,8 @@ ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::fram
     pContentValidationErrorMessageAttrTokenMap( 0 ),
     pContentValidationErrorMacroAttrTokenMap( 0 ),
     pTableElemTokenMap( 0 ),
+    pTableRowsElemTokenMap( 0 ),
+    pTableColsElemTokenMap( 0 ),
     pTableAttrTokenMap( 0 ),
     pTableScenarioAttrTokenMap( 0 ),
     pTableColAttrTokenMap( 0 ),
@@ -1209,6 +1237,8 @@ ScXMLImport::~ScXMLImport()
     delete pContentValidationErrorMessageAttrTokenMap;
     delete pContentValidationErrorMacroAttrTokenMap;
     delete pTableElemTokenMap;
+    delete pTableRowsElemTokenMap;
+    delete pTableColsElemTokenMap;
     delete pTableAttrTokenMap;
     delete pTableScenarioAttrTokenMap;
     delete pTableColAttrTokenMap;

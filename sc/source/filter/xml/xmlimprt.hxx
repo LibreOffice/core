@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-18 17:35:27 $
+ *  last change: $Author: sab $ $Date: 2000-10-19 16:03:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,16 @@ enum ScXMLTableTokens
     XML_TOK_TABLE_ROWS,
     XML_TOK_TABLE_ROW,
     XML_TOK_TABLE_SCENARIO
+};
+
+enum ScXMLTableRowsTokens
+{
+    XML_TOK_TABLE_ROWS_ROW
+};
+
+enum ScXMLTableColsTokens
+{
+    XML_TOK_TABLE_COLS_COL
 };
 
 enum ScXMLTableAttrTokens
@@ -587,6 +597,8 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pContentValidationErrorMessageAttrTokenMap;
     SvXMLTokenMap           *pContentValidationErrorMacroAttrTokenMap;
     SvXMLTokenMap           *pTableElemTokenMap;
+    SvXMLTokenMap           *pTableRowsElemTokenMap;
+    SvXMLTokenMap           *pTableColsElemTokenMap;
     SvXMLTokenMap           *pTableScenarioAttrTokenMap;
     SvXMLTokenMap           *pTableAttrTokenMap;
     SvXMLTokenMap           *pTableColAttrTokenMap;
@@ -708,6 +720,8 @@ public:
     const SvXMLTokenMap& GetContentValidationErrorMessageAttrTokenMap();
     const SvXMLTokenMap& GetContentValidationErrorMacroAttrTokenMap();
     const SvXMLTokenMap& GetTableElemTokenMap();
+    const SvXMLTokenMap& GetTableRowsElemTokenMap();
+    const SvXMLTokenMap& GetTableColsElemTokenMap();
     const SvXMLTokenMap& GetTableAttrTokenMap();
     const SvXMLTokenMap& GetTableScenarioAttrTokenMap();
     const SvXMLTokenMap& GetTableColAttrTokenMap();

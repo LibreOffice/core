@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-12 07:37:01 $
+ *  last change: $Author: sab $ $Date: 2000-10-19 16:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,27 +153,25 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
     sal_Bool bHeader = sal_False;
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
-//  case XML_TOK_TABLE_HEADER_COLS:
-//      bHeader = TRUE;
-//  case XML_TOK_TABLE_COLS:
-//      pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
-//                                                 rLName, xAttrList,
-//                                                 this, bHeader );
-//      break;
+    case XML_TOK_TABLE_HEADER_COLS:
+        bHeader = sal_True;
+    case XML_TOK_TABLE_COLS:
+        pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
+                                                   rLName, xAttrList,
+                                                   bHeader );
+        break;
     case XML_TOK_TABLE_COL:
-//      if( IsInsertColPossible() )
             pContext = new ScXMLTableColContext( GetScImport(), nPrefix,
                                                       rLName, xAttrList );
         break;
-//  case XML_TOK_TABLE_HEADER_ROWS:
-//      bHeader = TRUE;
-//  case XML_TOK_TABLE_ROWS:
-//      pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
-//                                                 rLName, xAttrList,
-//                                                 this, bHeader );
-//      break;
+    case XML_TOK_TABLE_HEADER_ROWS:
+        bHeader = sal_True;
+    case XML_TOK_TABLE_ROWS:
+        pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
+                                                   rLName, xAttrList,
+                                                   bHeader );
+        break;
     case XML_TOK_TABLE_ROW:
-//      if( IsInsertRowPossible() )
             pContext = new ScXMLTableRowContext( GetScImport(), nPrefix,
                                                       rLName, xAttrList//,
                                                       //this
