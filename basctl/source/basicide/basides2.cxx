@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-25 09:10:51 $
+ *  last change: $Author: ab $ $Date: 2002-10-30 09:27:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,9 @@ void __EXPORT BasicIDEShell::ShowCursor( FASTBOOL bOn )
         ((ModulWindow*)pCurWin)->ShowCursor( (BOOL)bOn );
 }
 
+// Hack for #101048
+sal_Int32 getBasicIDEShellCount( void );
+
 // Nur wenn Basicfenster oben:
 void __EXPORT BasicIDEShell::ExecuteBasic( SfxRequest& rReq )
 {
@@ -340,6 +343,8 @@ void __EXPORT BasicIDEShell::ExecuteBasic( SfxRequest& rReq )
         return;
 
     pCurWin->ExecuteCommand( rReq );
-    CheckWindows();
+    sal_Int32 nCount = getBasicIDEShellCount();
+    if( nCount )
+        CheckWindows();
 }
 
