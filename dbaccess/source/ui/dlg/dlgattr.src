@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgattr.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:47:21 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 13:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ TabDialog DLG_ATTR
     Text [ italian ] = "Formattazione di campo" ;
     Text [ portuguese_brazilian ] = "Formato da Coluna" ;
     Text [ portuguese ] = "Formatar campo" ;
-    Text [ finnish ] = "Feldformatierung" ;
+    Text [ finnish ] = "Kentän muoto" ;
     Text [ danish ] = "Feltformatering" ;
     Text [ french ] = "Formatage de champ" ;
     Text [ swedish ] = "Fältformatering" ;
@@ -121,12 +121,12 @@ TabDialog DLG_ATTR
         Text [ italian ] = "~Indietro" ;
         Text [ portuguese_brazilian ] = "Desfazer" ;
         Text [ portuguese ] = "~Anterior" ;
-        Text [ finnish ] = "~Zur?ck" ;
-        Text [ danish ] = "Tilbage" ;
-        Text [ french ] = "~Précédent" ;
+        Text [ finnish ] = "Edellin~en" ;
+        Text [ danish ] = "~Tilbage" ;
+        Text [ french ] = "Précédent" ;
         Text [ swedish ] = "~Tillbaka" ;
         Text [ dutch ] = "~Ongedaan" ;
-        Text [ spanish ] = "~Regresar" ;
+        Text [ spanish ] = "Regresar" ;
         Text [ english_us ] = "Bac~k" ;
         Text[ chinese_simplified ] = "è¿”å›(~K)";
         Text[ russian ] = "Íàçàä";
@@ -137,7 +137,8 @@ TabDialog DLG_ATTR
         Text[ greek ] = "Ğßóù";
         Text[ korean ] = "ì´ì „(~K)";
         Text[ turkish ] = "Geri";
-        Text[ catalan ] = "~Regresar";
+        Text[ catalan ] = "Enre~re";
+        Text[ thai ] = "~à¸à¸¥à¸±à¸šà¹„à¸›";
     };
     String TP_ATTR_CHAR
     {
@@ -158,13 +159,14 @@ TabDialog DLG_ATTR
         Text[ chinese_simplified ] = "å­—ä½“";
         Text[ russian ] = "Øğèôò";
         Text[ polish ] = "Czcionka";
-        Text[ japanese ] = "ï¾Œï½«ï¾ï¾„";
+        Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆ";
         Text[ chinese_traditional ] = "å­—å‹";
         Text[ arabic ] = "ÎØ";
         Text[ greek ] = "ÃñáììáôïóåéñÜ";
         Text[ korean ] = "ê¸€ê¼´";
         Text[ turkish ] = "Yazıtipi";
-        Text[ catalan ] = "Fuente";
+        Text[ catalan ] = "Tipus de lletra";
+        Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
     };
     String TP_ATTR_NUMBER
     {
@@ -174,7 +176,7 @@ TabDialog DLG_ATTR
         Text [ italian ] = "Formato" ;
         Text [ portuguese_brazilian ] = "N?ero" ;
         Text [ portuguese ] = "Formato" ;
-        Text [ finnish ] = "Muotoile" ;
+        Text [ finnish ] = "Muoto" ;
         Text [ danish ] = "Format" ;
         Text [ french ] = "Format" ;
         Text [ swedish ] = "Format" ;
@@ -190,7 +192,8 @@ TabDialog DLG_ATTR
         Text[ greek ] = "ÌïñöŞ";
         Text[ korean ] = "ì„œì‹";
         Text[ turkish ] = "Renk formatı";
-        Text[ catalan ] = "Formato";
+        Text[ catalan ] = "Format";
+        Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸š";
     };
     String TP_ATTR_ALIGN
     {
@@ -216,7 +219,8 @@ TabDialog DLG_ATTR
         Text[ greek ] = "Óôïß÷éóç";
         Text[ korean ] = "ë°°ì—´";
         Text[ turkish ] = "Hizalama";
-        Text[ catalan ] = "Alineación";
+        Text[ catalan ] = "Alineament";
+        Text[ thai ] = "à¸à¸²à¸£à¸ˆà¸±à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
     };
     String ST_ROW
     {
@@ -234,25 +238,27 @@ TabDialog DLG_ATTR
         Text[ chinese_simplified ] = "è¡¨æ ¼æ ¼å¼";
         Text[ russian ] = "Ôîğìàò òàáëèöû";
         Text[ polish ] = "Formatowanie tabeli";
-        Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™ã®æ›¸å¼è¨­å®š";
+        Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã®æ›¸å¼è¨­å®š";
         Text[ chinese_traditional ] = "è¡¨æ ¼æ ¼å¼";
         Text[ arabic ] = "ÊäÓíŞ ÇáÌÏæá";
         Text[ greek ] = "Ìïñöïğïßçóç ğßíáêá";
-        Text[ korean ] = "í…Œì´ë¸” ì„œì‹";
+        Text[ korean ] = "ì‹œíŠ¸ ì„œì‹";
         Text[ turkish ] = "Tablo formatı";
-        Text[ catalan ] = "Formateado de tabla";
-        Text[ finnish ] = "Tabellenformatierung";
+        Text[ catalan ] = "Format de la taula";
+        Text[ finnish ] = "Taulukon muotoilu";
+        Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¸•à¸²à¸£à¸²à¸‡";
     };
     Text[ chinese_simplified ] = "å­—æ®µæ ¼å¼";
     Text[ russian ] = "Ôîğìàò ïîëÿ";
     Text[ polish ] = "Formatowanie pola";
-    Text[ japanese ] = "ï¾Œï½¨ï½°ï¾™ï¾„ï¾ã®æ›¸å¼è¨­å®š";
+    Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®æ›¸å¼è¨­å®š";
     Text[ chinese_traditional ] = "æ¬„ä½æ ¼å¼";
     Text[ arabic ] = "ÊäÓíŞ ÇáÍŞá";
     Text[ greek ] = "Ìïñöïğïßçóç ğåäßïõ";
     Text[ korean ] = "í•„ë“œ ì„œì‹";
     Text[ turkish ] = "Alan formatı";
-    Text[ catalan ] = "Formato de campo";
+    Text[ catalan ] = "Format del camp";
+    Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
 
 
