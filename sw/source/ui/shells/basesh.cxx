@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:54:25 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 #include <sot/factory.hxx>
@@ -163,9 +162,10 @@
 #ifndef _SVX_SIZEITEM_HXX //autogen
 #include <svx/sizeitem.hxx>
 #endif
-#ifndef _SVX_BORDER_HXX
-#include <svx/border.hxx>
-#endif
+//CHINA001 #ifndef _SVX_BORDER_HXX
+//CHINA001 #include <svx/border.hxx>
+//CHINA001 #endif
+#include <svx/flagsdef.hxx> //CHINA001
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
 #endif
@@ -206,12 +206,12 @@
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
 #endif
-#ifndef _CHANGEDB_HXX
-#include <changedb.hxx>
-#endif
-#ifndef _BOOKMARK_HXX
-#include <bookmark.hxx>
-#endif
+//CHINA001 #ifndef _CHANGEDB_HXX
+//CHINA001 #include <changedb.hxx>
+//CHINA001 #endif
+//CHINA001 #ifndef _BOOKMARK_HXX
+//CHINA001 #include <bookmark.hxx>
+//CHINA001 #endif
 #ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>
 #endif
@@ -245,12 +245,12 @@
 #ifndef _CONVERT_HXX
 #include <convert.hxx>
 #endif
-#ifndef _PATTERN_HXX
-#include <pattern.hxx>
-#endif
-#ifndef _UIBORDER_HXX
-#include <uiborder.hxx>
-#endif
+//CHINA001 #ifndef _PATTERN_HXX
+//CHINA001 #include <pattern.hxx>
+//CHINA001 #endif
+//CHINA001 #ifndef _UIBORDER_HXX
+//CHINA001 #include <uiborder.hxx>
+//CHINA001 #endif
 #ifndef _FMTCOL_HXX
 #include <fmtcol.hxx>
 #endif
@@ -291,6 +291,11 @@
 #ifndef _FMTINFMT_HXX
 #include <fmtinfmt.hxx>
 #endif
+
+#include "swabstdlg.hxx" //CHINA001
+#include "dialog.hrc" //CHINA001
+#include "fldui.hrc" //CHINA001
+#include "table.hrc" //CHINA001
 
 USHORT SwBaseShell::nFrameMode = FLY_DRAG_END;
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
@@ -950,7 +955,12 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             sal_Unicode cDelim = 0;
             SwInsertTableOptions aInsTblOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
             SwTableAutoFmt* pTAFmt = 0;
-            SwConvertTableDlg *pDlg = new SwConvertTableDlg( GetView() );
+            //CHINA001 SwConvertTableDlg *pDlg = new SwConvertTableDlg( GetView() );
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+            AbstractSwConvertTableDlg* pDlg = pFact->CreateSwConvertTableDlg( GetView(),ResId( DLG_CONV_TEXT_TABLE ));
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             if( RET_OK == pDlg->Execute() )
             {
                 pDlg->GetValues( cDelim, aInsTblOpts, pTAFmt );
@@ -2319,15 +2329,20 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                                RES_BOX              , RES_SHADOW,
                                SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                                0 );
-            SwBorderDlg* pDlg = 0;
-
+            //CHINA001 SwBorderDlg* pDlg = 0;
+            AbstractSfxSingleTabDialog * pDlg = 0;
             // Tabellenzelle(n) selektiert?
             if ( rSh.IsTableMode() )
             {
                 // Umrandungattribute Get/SetTabBorders() setzen
                 ::PrepareBoxInfo( aSet, rSh );
                 rSh.GetTabBorders( aSet );
-                pDlg = new SwBorderDlg( pMDI, aSet, SW_BORDER_MODE_TABLE );
+                //CHINA001 pDlg = new SwBorderDlg( pMDI, aSet, SW_BORDER_MODE_TABLE );
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+                pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_TABLE,ResId( RC_DLG_SWBORDERDLG ));
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetTabBorders( *pDlg->GetOutputItemSet() );
@@ -2340,7 +2355,12 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 SwFlyFrmAttrMgr aMgr( FALSE, &rSh, FRMMGR_TYPE_NONE );
                 aSet.Put( aMgr.GetAttrSet() );
 
-                pDlg = new SwBorderDlg( pMDI, aSet, SW_BORDER_MODE_FRAME );
+                //CHINA001 pDlg = new SwBorderDlg( pMDI, aSet, SW_BORDER_MODE_FRAME );
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+                pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_FRAME,ResId( RC_DLG_SWBORDERDLG ));
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if ( pDlg->Execute() == RET_OK )
                 {
                     aMgr.SetAttrSet( *pDlg->GetOutputItemSet() );
@@ -2354,7 +2374,12 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 rSh.GetAttr( aSet );
                 ::PrepareBoxInfo( aSet, rSh );
 
-                pDlg = new SwBorderDlg( pMDI, aSet, SW_BORDER_MODE_PARA );
+                //CHINA001 pDlg = new SwBorderDlg( pMDI, aSet, SW_BORDER_MODE_PARA );
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+                pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_PARA,ResId( RC_DLG_SWBORDERDLG ));
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetAttr( *pDlg->GetOutputItemSet() );
@@ -2369,7 +2394,11 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             SfxItemSet aSet( rSh.GetAttrPool(),
                              RES_BACKGROUND, RES_BACKGROUND );
 
-            SwBackgroundDlg* pDlg = 0;
+            //CHINA001 SwBackgroundDlg* pDlg = 0;
+            AbstractSfxSingleTabDialog * pDlg = 0;//CHINA001
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
 
             // Tabellenzelle(n) selektiert?
             if ( rSh.IsTableMode() )
@@ -2377,7 +2406,9 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 //Hintergrundattribute der Tabelle holen und in den Set packen
                 SvxBrushItem aBrush(RES_BACKGROUND);
                 rSh.GetBoxBackground( aBrush );
-                pDlg = new SwBackgroundDlg( pMDI, aSet );
+                //CHINA001 pDlg = new SwBackgroundDlg( pMDI, aSet );
+                pDlg = pFact->CreateSfxSingleTabDialog( pMDI, aSet,ResId( RC_SWDLG_BACKGROUND ));
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 aSet.Put( aBrush );
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2393,7 +2424,9 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
                 rSh.GetFlyFrmAttr( aSet );
 
-                pDlg = new SwBackgroundDlg( pMDI, aSet );
+                //CHINA001 pDlg = new SwBackgroundDlg( pMDI, aSet );
+                pDlg = pFact->CreateSfxSingleTabDialog( pMDI, aSet,ResId( RC_SWDLG_BACKGROUND ));
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetFlyFrmAttr((SfxItemSet &) *pDlg->GetOutputItemSet() );
@@ -2405,7 +2438,9 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 // Umrandungsattribute ganz normal ueber Shell setzen
                 rSh.GetAttr( aSet );
 
-                pDlg = new SwBackgroundDlg( pMDI, aSet );
+                //CHINA001 pDlg = new SwBackgroundDlg( pMDI, aSet );
+                pDlg = pFact->CreateSfxSingleTabDialog( pMDI, aSet,ResId( RC_SWDLG_BACKGROUND ));
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetAttr( *pDlg->GetOutputItemSet() );
@@ -2639,7 +2674,12 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
     {
         case FN_CHANGE_DBFIELD:
         {
-            SwChangeDBDlg *pDlg = new SwChangeDBDlg(GetView());
+            //CHINA001 SwChangeDBDlg *pDlg = new SwChangeDBDlg(GetView());
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+            VclAbstractDialog* pDlg = pFact->CreateSwChangeDBDlg(GetView(),ResId( DLG_CHANGE_DB ));
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             pDlg->Execute();
             delete pDlg;
         }
