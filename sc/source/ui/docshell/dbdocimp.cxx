@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:31:48 $
+ *  last change: $Author: nn $ $Date: 2001-06-05 14:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ BOOL ScDBDocFunc::DoImportUno( const ScAddress& rPos,
     aImParam.bImport = TRUE;
 
     uno::Reference<sdbc::XResultSet> xResSet;
-    uno::Sequence<sal_Int32> aSelection;
+    uno::Sequence<uno::Any> aSelection;
 
     rtl::OUString aStrVal;
     const beans::PropertyValue* pPropArray = aArgs.getConstArray();
@@ -206,8 +206,9 @@ BOOL ScDBDocFunc::DoImportUno( const ScAddress& rPos,
     long nSelLen = aSelection.getLength();
     for (i = 0; i < nSelLen; i++)
     {
-        long nEntry = aSelection[i];
-        aList.Insert( (void*)nEntry, LIST_APPEND );
+        sal_Int32 nEntry;
+        if ( aSelection[i] >>= nEntry )
+            aList.Insert( (void*)nEntry, LIST_APPEND );
     }
 
     BOOL bAddrInsert = FALSE;       //!???
