@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:15 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:55:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 #include <svx/editstat.hxx>
 #include <svx/escpitem.hxx>
 #include <svx/flditem.hxx>
-#include <vcl/system.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <svtools/inethist.hxx>
