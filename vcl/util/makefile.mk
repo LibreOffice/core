@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.53 $
+#   $Revision: 1.54 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-09 12:16:00 $
+#   last change: $Author: hr $ $Date: 2004-05-10 16:01:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -341,9 +341,11 @@ SHL3STDLIBS=\
             $(SALLIB)
 
 # gtk plugin
+.IF "$(ENABLE_GTK)" != ""
 LIB4TARGET=$(SLB)$/igtk_plug_
 LIB4FILES=\
             $(SLB)$/gtkapp.lib\
+            $(SLB)$/gtkgdi.lib\
             $(SLB)$/gtkwin.lib
 SHL4TARGET=vclplug_gtk$(UPD)$(DLLPOSTFIX)
 SHL4IMPLIB=igtk_plug_
@@ -352,6 +354,7 @@ SHL4LIBS=$(LIB4TARGET)
 SHL4STDLIBS=`pkg-config --libs gtk+-2.0 gthread-2.0`
 SHL4STDLIBS+=-l$(SHL2TARGET)
 SHL4STDLIBS+=$(SHL3STDLIBS) -lX11 -ldl
+.ENDIF # "$(ENABLE_GTK)" != ""
 
 .ENDIF # UNX
 
