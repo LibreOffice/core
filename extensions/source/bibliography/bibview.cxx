@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:15:16 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,14 +195,14 @@ namespace bib
         String sErrorString( m_pGeneralPage->GetErrorString() );
         if ( sErrorString.Len() )
         {
-            sal_Bool bExecute = sal_True;
+            sal_Bool bExecute = BibModul::GetConfig()->IsShowColumnAssignmentWarning();
             if(!m_pDatMan->HasActiveConnection())
             {
                 //no connection is available -> the data base has to be assigned
                 m_pDatMan->DispatchDBChangeDialog();
                 bExecute = sal_False;
             }
-            else if(BibModul::GetConfig()->IsShowColumnAssignmentWarning())
+            else if(bExecute)
             {
                 sErrorString += '\n';
                 sErrorString += String( BibResId( RID_MAP_QUESTION ) );
