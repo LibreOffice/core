@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcvali.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:48:12 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,7 +319,7 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
                 if (IsXMLToken(sValue, XML_FALSE))
                     bAllowEmptyCell = sal_False;
             break;
-            case XML_TOK_CONTENT_VALIDATION_SHOW_LIST:
+            case XML_TOK_CONTENT_VALIDATION_DISPLAY_LIST:
             {
                 if (IsXMLToken(sValue, XML_NO))
                 {
