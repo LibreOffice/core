@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:38:10 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 08:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,15 @@
 #endif
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
+#endif
+#ifndef _TXTATR_HXX
+#include <txtatr.hxx>
+#endif
+#ifndef _ACCHYPERLINK_HXX
+#include <acchyperlink.hxx>
+#endif
+#ifndef _ACCHYPERTEXTDATA_HXX
+#include <acchypertextdata.hxx>
 #endif
 
 #include <comphelper/accessibletexthelper.hxx>
@@ -616,6 +625,7 @@ SwAccessibleParagraph::SwAccessibleParagraph(
         const SwTxtFrm *pTxtFrm ) :
     SwAccessibleContext( pMap, AccessibleRole::PARAGRAPH, pTxtFrm ),
     pPortionData( NULL ),
+    pHyperTextData( NULL ),
     nOldCaretPos( -1 ),
     aSelectionHelper( *this )
 {
@@ -636,6 +646,7 @@ SwAccessibleParagraph::~SwAccessibleParagraph()
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     delete pPortionData;
+    delete pHyperTextData;
 }
 
 sal_Bool SwAccessibleParagraph::HasCursor()
@@ -665,6 +676,9 @@ void SwAccessibleParagraph::ClearPortionData()
 {
     delete pPortionData;
     pPortionData = NULL;
+
+    delete pHyperTextData;
+    pHyperTextData = 0;
 }
 
 
@@ -1075,7 +1089,7 @@ Any SwAccessibleParagraph::queryInterface( const Type& rType )
     Any aRet;
     if ( rType == ::getCppuType((Reference<XAccessibleText> *)0) )
     {
-        Reference<XAccessibleText> aAccText = this;
+        Reference<XAccessibleText> aAccText = (XAccessibleText *) *this; // resolve ambiguity
         aRet <<= aAccText;
     }
     else if ( rType == ::getCppuType((Reference<XAccessibleEditableText> *)0) )
@@ -1087,6 +1101,11 @@ Any SwAccessibleParagraph::queryInterface( const Type& rType )
     {
         Reference<XAccessibleSelection> aAccSel = this;
         aRet <<= aAccSel;
+    }
+    else if ( rType == ::getCppuType((Reference<XAccessibleHypertext> *)0) )
+    {
+        Reference<XAccessibleHypertext> aAccHyp = this;
+        aRet <<= aAccHyp;
     }
     else
     {
@@ -1102,11 +1121,12 @@ Sequence< Type > SAL_CALL SwAccessibleParagraph::getTypes() throw(RuntimeExcepti
     Sequence< Type > aTypes( SwAccessibleContext::getTypes() );
 
     sal_Int32 nIndex = aTypes.getLength();
-    aTypes.realloc( nIndex + 2 );
+    aTypes.realloc( nIndex + 3 );
 
     Type* pTypes = aTypes.getArray();
     pTypes[nIndex++] = ::getCppuType( static_cast< Reference< XAccessibleEditableText > * >( 0 ) );
-    pTypes[nIndex] = ::getCppuType( static_cast< Reference< XAccessibleSelection > * >( 0 ) );
+    pTypes[nIndex++] = ::getCppuType( static_cast< Reference< XAccessibleSelection > * >( 0 ) );
+    pTypes[nIndex] = ::getCppuType( static_cast< Reference< XAccessibleHypertext > * >( 0 ) );
 
     return aTypes;
 }
@@ -1135,7 +1155,7 @@ sal_Int32 SwAccessibleParagraph::getCaretPosition()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleText );
+    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     sal_Int32 nRet = GetCaretPos();
     {
@@ -1157,7 +1177,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::setCaretPosition( sal_Int32 nIndex )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleText );
+    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     // parameter checking
     sal_Int32 nLength = GetString().getLength();
@@ -1190,7 +1210,7 @@ sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleText );
+    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     OUString sText( GetString() );
 
@@ -1209,7 +1229,7 @@ Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
 {
 
     vos::OGuard aGuard(Application::GetSolarMutex());
-    CHECK_FOR_DEFUNC( XAccessibleText );
+    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     const OUString& rText = GetString();
 
@@ -1256,7 +1276,7 @@ com::sun::star::awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleText );
+    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
 
     /*  #i12332# The position after the string needs special treatment.
@@ -1319,7 +1339,7 @@ sal_Int32 SwAccessibleParagraph::getCharacterCount()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleText );
+    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     return GetString().getLength();
 }
@@ -1330,7 +1350,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const com::sun::star::awt::Poi
     vos::OGuard aGuard(Application::GetSolarMutex());
 
 
-    CHECK_FOR_DEFUNC( XAccessibleText );
+    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     // construct SwPosition (where GetCrsrOfst() will put the result into)
     SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
@@ -1382,7 +1402,7 @@ OUString SwAccessibleParagraph::getSelectedText()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleText );
+    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     sal_Int32 nStart, nEnd;
     sal_Bool bSelected = GetSelection( nStart, nEnd );
@@ -1394,7 +1414,7 @@ sal_Int32 SwAccessibleParagraph::getSelectionStart()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleText );
+    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     sal_Int32 nStart, nEnd;
     GetSelection( nStart, nEnd );
@@ -1406,7 +1426,7 @@ sal_Int32 SwAccessibleParagraph::getSelectionEnd()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleText );
+    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     sal_Int32 nStart, nEnd;
     GetSelection( nStart, nEnd );
@@ -1418,7 +1438,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleText );
+    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     // parameter checking
     sal_Int32 nLength = GetString().getLength();
@@ -1454,7 +1474,7 @@ OUString SwAccessibleParagraph::getText()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleText );
+    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     return GetString();
 }
@@ -1465,7 +1485,7 @@ OUString SwAccessibleParagraph::getTextRange(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleText );
+    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     OUString sText( GetString() );
 
@@ -1482,7 +1502,7 @@ OUString SwAccessibleParagraph::getTextRange(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleText );
+    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     ::com::sun::star::accessibility::TextSegment aResult;
     aResult.SegmentStart = -1;
@@ -1517,7 +1537,7 @@ OUString SwAccessibleParagraph::getTextRange(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleText );
+    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     const OUString rText = GetString();
 
@@ -1561,7 +1581,7 @@ OUString SwAccessibleParagraph::getTextRange(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleText );
+    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     ::com::sun::star::accessibility::TextSegment aResult;
     aResult.SegmentStart = -1;
@@ -1600,7 +1620,7 @@ OUString SwAccessibleParagraph::getTextRange(
 sal_Bool SwAccessibleParagraph::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    CHECK_FOR_DEFUNC( XAccessibleText );
+    CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     // select and copy (through dispatch mechanism)
@@ -1832,4 +1852,166 @@ void SwAccessibleParagraph::deselectAccessibleChild(
     CHECK_FOR_DEFUNC( XAccessibleSelection );
 
     aSelectionHelper.deselectAccessibleChild(nSelectedChildIndex);
+}
+
+//=====  XAccessibleHypertext  ============================================
+
+class SwHyperlinkIter_Impl
+{
+    const SwpHints *pHints;
+    xub_StrLen nStt;
+    xub_StrLen nEnd;
+    sal_uInt16 nPos;
+
+public:
+    SwHyperlinkIter_Impl( const SwTxtFrm *pTxtFrm );
+    const SwTxtAttr *next();
+    sal_uInt16 getCurrHintPos() const { return nPos-1; }
+
+    xub_StrLen startIdx() const { return nStt; }
+    xub_StrLen endIdx() const { return nEnd; }
+};
+
+SwHyperlinkIter_Impl::SwHyperlinkIter_Impl( const SwTxtFrm *pTxtFrm ) :
+    pHints( pTxtFrm->GetTxtNode()->GetpSwpHints() ),
+    nStt( pTxtFrm->GetOfst() ),
+    nPos( 0 )
+{
+    const SwTxtFrm *pFollFrm = pTxtFrm->GetFollow();
+    nEnd = pFollFrm ? pFollFrm->GetOfst() : pTxtFrm->GetTxtNode()->Len();
+}
+
+const SwTxtAttr *SwHyperlinkIter_Impl::next()
+{
+    const SwTxtAttr *pAttr = 0;
+    if( pHints )
+    {
+        while( !pAttr && nPos < pHints->Count() )
+        {
+            const SwTxtAttr *pHt = (*pHints)[nPos];
+            if( RES_TXTATR_INETFMT == pHt->Which() )
+            {
+                xub_StrLen nHtStt = *pHt->GetStart();
+                xub_StrLen nHtEnd = *pHt->GetAnyEnd();
+                if( nHtEnd > nHtStt &&
+                    ( (nHtStt >= nStt && nHtStt < nEnd) ||
+                      (nHtEnd > nStt && nHtEnd <= nEnd) ) )
+                {
+                    pAttr = pHt;
+                }
+            }
+            ++nPos;
+        }
+    }
+
+    return pAttr;
+};
+
+sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkCount()
+    throw (RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    CHECK_FOR_DEFUNC( XAccessibleHypertext );
+
+    sal_Int32 nCount = 0;
+    if( !IsEditableState() )
+    {
+        const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
+        SwHyperlinkIter_Impl aIter( pTxtFrm );
+        while( aIter.next() )
+            nCount++;
+    }
+
+    return nCount;
+}
+
+Reference< XAccessibleHyperlink > SAL_CALL
+    SwAccessibleParagraph::getHyperLink( sal_Int32 nLinkIndex )
+    throw (IndexOutOfBoundsException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    CHECK_FOR_DEFUNC( XAccessibleHypertext );
+
+    Reference< XAccessibleHyperlink > xRet;
+
+    if( !IsEditableState() )
+    {
+        const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
+        SwHyperlinkIter_Impl aHIter( pTxtFrm );
+        while( nLinkIndex-- )
+            aHIter.next();
+
+        const SwTxtAttr *pHt = aHIter.next();
+        if( pHt )
+        {
+            if( !pHyperTextData )
+                pHyperTextData = new SwAccessibleHyperTextData;
+            SwAccessibleHyperTextData::iterator aIter =
+                pHyperTextData ->find( pHt );
+            if( aIter != pHyperTextData->end() )
+            {
+                xRet = (*aIter).second;
+            }
+            if( !xRet.is() )
+            {
+                sal_Int32 nHStt= GetPortionData().GetAccessiblePosition(
+                                max( aHIter.startIdx(), *pHt->GetStart() ) );
+                sal_Int32 nHEnd= GetPortionData().GetAccessiblePosition(
+                                min( aHIter.endIdx(), *pHt->GetAnyEnd() ) );
+                xRet = new SwAccessibleHyperlink( aHIter.getCurrHintPos(),
+                                                  this, nHStt, nHEnd );
+                if( aIter != pHyperTextData->end() )
+                {
+                    (*aIter).second = xRet;
+                }
+                else
+                {
+                    SwAccessibleHyperTextData::value_type aEntry( pHt, xRet );
+                    pHyperTextData->insert( aEntry );
+                }
+            }
+        }
+    }
+
+    if( !xRet.is() )
+        throw IndexOutOfBoundsException();
+
+    return xRet;
+}
+
+sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharIndex )
+    throw (IndexOutOfBoundsException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    CHECK_FOR_DEFUNC( XAccessibleHypertext );
+
+    // parameter checking
+    sal_Int32 nLength = GetString().getLength();
+    if ( ! IsValidPosition( nCharIndex, nLength ) )
+    {
+        throw IndexOutOfBoundsException();
+    }
+
+    sal_Int32 nRet = -1;
+    if( !IsEditableState() )
+    {
+        const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
+        SwHyperlinkIter_Impl aHIter( pTxtFrm );
+
+        xub_StrLen nIdx = GetPortionData().GetModelPosition( nCharIndex );
+        sal_Int32 nPos = 0;
+        const SwTxtAttr *pHt = aHIter.next();
+        while( pHt && !(nIdx >= *pHt->GetStart() && nIdx < *pHt->GetAnyEnd()) )
+        {
+            pHt = aHIter.next();
+            nPos++;
+        }
+
+        if( pHt )
+            nRet = nPos;
+
+    }
+
+    return nRet;
 }
