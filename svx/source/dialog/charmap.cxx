@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,6 +358,20 @@ void SvxShowCharSet::Command( const CommandEvent& rCEvt )
         Control::Command( rCEvt );
 }
 
+// -----------------------------------------------------------------------------
+
+USHORT SvxShowCharSet::GetRowPos(USHORT _nPos) const
+{
+    return _nPos / COLUMN_COUNT ;
+}
+
+// -----------------------------------------------------------------------------
+
+USHORT SvxShowCharSet::GetColumnPos(USHORT _nPos) const
+{
+    return _nPos % COLUMN_COUNT ;
+}
+
 // -----------------------------------------------------------------------
 
 int SvxShowCharSet::FirstInView( void ) const
@@ -387,6 +401,7 @@ inline Point SvxShowCharSet::MapIndexToPixel( int nIndex ) const
     return Point( x, y );
 }
 // -----------------------------------------------------------------------------
+
 int SvxShowCharSet::PixelToMapIndex( const Point& point) const
 {
     int nBase = FirstInView();
@@ -499,6 +514,8 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
     Color aLightColor( rStyleSettings.GetLightColor() );
     Color aShadowColor( rStyleSettings.GetShadowColor() );
 
+    int nTextHeight = GetTextHeight();
+    Rectangle aBoundRect;
     for( i = n1; i <= n2; ++i )
     {
         Point pix = MapIndexToPixel( i );
@@ -508,19 +525,18 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
         sal_Unicode cChar = MapIndexToUnicode( maFontCharMap, i );
         String aCharStr( cChar );
         int nTextWidth = GetTextWidth(aCharStr);
-        int tx = x + ( nX - nTextWidth ) / 2;
-        int ty = y + ( nY - GetTextHeight() ) / 2;
+        int tx = x + (nX - nTextWidth + 1) / 2;
+        int ty = y + (nY - nTextHeight + 1) / 2;
         Point aPointTxTy( tx, ty );
 
         // adjust position before it gets out of bounds
-        Rectangle aBoundRect;
-        if( GetTextBoundRect( aBoundRect, aCharStr ) )
+        if( GetTextBoundRect( aBoundRect, aCharStr ) && !aBoundRect.IsEmpty() )
         {
-            // zero advance width glyphs gets centered to middle
+            // zero advance width => use ink width to center glyph
             if( !nTextWidth )
             {
-                aPointTxTy.X() = x - aBoundRect.Left();
-                aPointTxTy.X() += (nX - aBoundRect.GetWidth()) / 2;
+                aPointTxTy.X() = x - aBoundRect.Left()
+                               + (nX - aBoundRect.GetWidth() + 1) / 2;
             }
 
             aBoundRect += aPointTxTy;
@@ -528,16 +544,16 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
             // shift back vertically if needed
             int nYLDelta = aBoundRect.Top() - y;
             int nYHDelta = (y + nY) - aBoundRect.Bottom();
-            if( nYLDelta < 0 )
-                aPointTxTy.Y() -= nYLDelta;
+            if( nYLDelta <= 0 )
+                aPointTxTy.Y() -= nYLDelta - 1;
             else if( nYHDelta <= 0 )
                 aPointTxTy.Y() += nYHDelta - 1;
 
             // shift back horizontally if needed
             int nXLDelta = aBoundRect.Left() - x;
             int nXHDelta = (x + nX) - aBoundRect.Right();
-            if( nXLDelta < 0 )
-                aPointTxTy.X() -= nXLDelta;
+            if( nXLDelta <= 0 )
+                aPointTxTy.X() -= nXLDelta - 1;
             else if( nXHDelta <= 0 )
                 aPointTxTy.X() += nXHDelta - 1;
         }
@@ -849,6 +865,7 @@ sal_Int32 SvxShowCharSet::getMaxCharCount() const
 {
     return maFontCharMap.GetCharCount();
 }
+
 // class SvxShowText =====================================================
 
 SvxShowText::SvxShowText( Window* pParent, const ResId& rResId, BOOL bCenter )
@@ -870,35 +887,36 @@ void SvxShowText::Paint( const Rectangle& )
     const Size aSize = GetOutputSizePixel();
     Point aPoint( 2, mnY );
 
-    // adjust position before it gets out of bounds
+    // adjust position using ink boundary if possible
     Rectangle aBoundRect;
-    if( !GetTextBoundRect( aBoundRect, aText ) )
+    if( !GetTextBoundRect( aBoundRect, aText ) || aBoundRect.IsEmpty() )
         aPoint.X() = (aSize.Width() - GetTextWidth( aText )) / 2;
     else
     {
+        // adjust position before it gets out of bounds
         aBoundRect += aPoint;
 
         // shift back vertically if needed
         int nYLDelta = aBoundRect.Top();
         int nYHDelta = aSize.Height() - aBoundRect.Bottom();
-        if( nYLDelta < 0 )
-            aPoint.Y() -= nYLDelta;
+        if( nYLDelta <= 0 )
+            aPoint.Y() -= nYLDelta - 1;
         else if( nYHDelta <= 0 )
             aPoint.Y() += nYHDelta - 1;
 
         if( mbCenter )
         {
-            // move left point so that glyph is in middle of cell
-            aPoint.X() = -aBoundRect.Left();
-            aPoint.X() += (aSize.Width() - aBoundRect.GetWidth()) / 2;
+            // move glyph to middle of cell
+            aPoint.X() = -aBoundRect.Left()
+                       + (aSize.Width() - aBoundRect.GetWidth()) / 2;
         }
         else
         {
             // shift back horizontally if needed
             int nXLDelta = aBoundRect.Left();
             int nXHDelta = aSize.Width() - aBoundRect.Right();
-            if( nXLDelta < 0 )
-                aPoint.X() -= nXLDelta;
+            if( nXLDelta <= 0 )
+                aPoint.X() -= nXLDelta - 1;
             else if( nXHDelta <= 0 )
                 aPoint.X() += nXHDelta - 1;
         }
@@ -916,7 +934,7 @@ void SvxShowText::SetFont( const Font& rFont )
     Font aFont = rFont;
     aFont.SetWeight( WEIGHT_NORMAL );
     aFont.SetAlign( ALIGN_TOP );
-    aFont.SetSize( PixelToLogic( Size( 0, (nWinHeight*3)/4 ) ) );
+    aFont.SetSize( PixelToLogic( Size( 0, nWinHeight/2 ) ) );
     aFont.SetTransparent( TRUE );
     Control::SetFont( aFont );
     mnY = ( nWinHeight - GetTextHeight() ) / 2;
@@ -1158,17 +1176,19 @@ IMPL_LINK( SvxCharMapData, FontSelectHdl, ListBox *, EMPTYARG )
 
         // update subset listbox for new font's unicode subsets
         aSubsetLB.Clear();
-        const Subset* s = 0;
         // TODO: is it worth to improve the stupid linear search?
-        for( int i = 0; (s = pSubsetMap->GetSubsetByIndex( i)) != 0; ++i )
+        bool bFirst = true;
+        const Subset* s;
+        while( NULL != (s = pSubsetMap->GetNextSubset( bFirst ))  )
         {
-            USHORT nPos = aSubsetLB.InsertEntry( s->GetName());
+            USHORT nPos = aSubsetLB.InsertEntry( s->GetName() );
             aSubsetLB.SetEntryData( nPos, (void*)s );
-            // subset must live at least as long as the selected font !!!
-            if( i == 0)
-                aSubsetLB.SelectEntryPos( nPos);
+            // NOTE: subset must live at least as long as the selected font
+            if( bFirst )
+                aSubsetLB.SelectEntryPos( nPos );
+            bFirst = false;
         }
-        if( aSubsetLB.GetEntryCount() <= 1)
+        if( aSubsetLB.GetEntryCount() <= 1 )
             bNeedSubset = FALSE;
     }
 
@@ -1292,9 +1312,6 @@ IMPL_LINK( SvxCharMapData, DeleteHdl, PushButton *, EMPTYARG )
 // TODO: should be moved into Font Attributes stuff
 // we let it mature here though because it is currently the only use
 
-static const Subset** ppAllSubsets = NULL;
-static int nAllSubSetCount = 0;
-
 SubsetMap::SubsetMap( const FontCharMap* pFontCharMap )
 :   Resource( ResId( SVX_RES(RID_SUBSETMAP) ) )
 {
@@ -1303,160 +1320,158 @@ SubsetMap::SubsetMap( const FontCharMap* pFontCharMap )
     FreeResource();
 }
 
-SubsetMap::~SubsetMap()
+const Subset* SubsetMap::GetNextSubset( bool bFirst ) const
 {
-    delete[] maSubsets;
-}
-
-int SubsetMap::GetSubsetCount() const
-{
-    return mnSubsets;
-}
-
-const Subset* SubsetMap::GetSubsetByIndex( int nIndex ) const
-{
-    if( (nIndex >= 0) && (nIndex < mnSubsets))
-        return maSubsets[ nIndex ];
-    return NULL;
+    if( bFirst )
+        maSubsetIterator = maSubsets.begin();
+    if( maSubsetIterator == maSubsets.end() )
+        return NULL;
+    const Subset* s = &*(maSubsetIterator++);
+    return s;
 }
 
 const Subset* SubsetMap::GetSubsetByUnicode( sal_Unicode cChar ) const
 {
-    const Subset* s = NULL;
     // TODO: is it worth to avoid a linear search?
-    for( int i = 0; (s = GetSubsetByIndex( i)) != 0; ++i)
-        if( (cChar >= s->GetRangeMin()) && (cChar <= s->GetRangeMax()))
-            break;
-    return s;
+    for( const Subset* s = GetNextSubset( true ); s; s = GetNextSubset( false ) )
+        if( (s->GetRangeMin() <= cChar) && (cChar <= s->GetRangeMax()) )
+            return s;
+    return NULL;
 }
 
-inline Subset::Subset( sal_Unicode _min, sal_Unicode _max, int resId)
-:   mnRangeMin(_min), mnRangeMax(_max), maRangeName( ResId(resId) )
+inline Subset::Subset( sal_Unicode nMin, sal_Unicode nMax, int resId)
+:   mnRangeMin(nMin), mnRangeMax(nMax), maRangeName( ResId(resId) )
 {}
 
 void SubsetMap::InitList()
 {
-    if( !ppAllSubsets )
+    static SubsetList aAllSubsets;
+    static bool bInit = true;
+    if( bInit )
     {
-        ppAllSubsets = new const Subset*[ RID_SUBSET_COUNT];
-        const Subset** ppSubSet = ppAllSubsets;
+        bInit = false;
 
         // TODO: eventually merge or split unicode subranges
         //       a "native writer" should decide for his subsets
-        *(ppSubSet++) = new Subset( 0x0020, 0x007A, RID_SUBSETSTR_BASIC_LATIN);
-        *(ppSubSet++) = new Subset( 0x00A0, 0x00FF, RID_SUBSETSTR_LATIN_1);
-        *(ppSubSet++) = new Subset( 0x0100, 0x017F, RID_SUBSETSTR_LATIN_EXTENDED_A);
-        *(ppSubSet++) = new Subset( 0x0180, 0x024F, RID_SUBSETSTR_LATIN_EXTENDED_B);
-        *(ppSubSet++) = new Subset( 0x0250, 0x02AF, RID_SUBSETSTR_IPA_EXTENSIONS);
-        *(ppSubSet++) = new Subset( 0x02B0, 0x02FF, RID_SUBSETSTR_SPACING_MODIFIERS);
-        *(ppSubSet++) = new Subset( 0x0300, 0x036F, RID_SUBSETSTR_COMB_DIACRITICAL);
-        *(ppSubSet++) = new Subset( 0x0370, 0x03FF, RID_SUBSETSTR_BASIC_GREEK);
-    //  *(ppSubSet++) = new Subset( 0x03D0, 0x03F3, RID_SUBSETSTR_GREEK_SYMS_COPTIC);
-        *(ppSubSet++) = new Subset( 0x0400, 0x04FF, RID_SUBSETSTR_CYRILLIC);
-        *(ppSubSet++) = new Subset( 0x0530, 0x058F, RID_SUBSETSTR_ARMENIAN);
-        *(ppSubSet++) = new Subset( 0x0590, 0x05FF, RID_SUBSETSTR_BASIC_HEBREW);
-    //  *(ppSubSet++) = new Subset( 0x0591, 0x05C4, RID_SUBSETSTR_HEBREW_EXTENDED);
-        *(ppSubSet++) = new Subset( 0x0600, 0x06FF, RID_SUBSETSTR_BASIC_ARABIC);
-    //  *(ppSubSet++) = new Subset( 0x0660, 0x06FF, RID_SUBSETSTR_ARABIC_EXTENDED);
-        *(ppSubSet++) = new Subset( 0x0700, 0x074F, RID_SUBSETSTR_SYRIAC);
-        *(ppSubSet++) = new Subset( 0x0780, 0x07BF, RID_SUBSETSTR_THAANA);
-        *(ppSubSet++) = new Subset( 0x0900, 0x097F, RID_SUBSETSTR_DEVANAGARI);
-        *(ppSubSet++) = new Subset( 0x0980, 0x09FF, RID_SUBSETSTR_BENGALI);
-        *(ppSubSet++) = new Subset( 0x0A00, 0x0A7F, RID_SUBSETSTR_GURMUKHI);
-        *(ppSubSet++) = new Subset( 0x0A80, 0x0AFF, RID_SUBSETSTR_GUJARATI);
-        *(ppSubSet++) = new Subset( 0x0B00, 0x0B7F, RID_SUBSETSTR_ORIYA);
-        *(ppSubSet++) = new Subset( 0x0B80, 0x0BFF, RID_SUBSETSTR_TAMIL);
-        *(ppSubSet++) = new Subset( 0x0C00, 0x0C7F, RID_SUBSETSTR_TELUGU);
-        *(ppSubSet++) = new Subset( 0x0C80, 0x0CFF, RID_SUBSETSTR_KANNADA);
-        *(ppSubSet++) = new Subset( 0x0D00, 0x0D7F, RID_SUBSETSTR_MALAYALAM);
-        *(ppSubSet++) = new Subset( 0x0D80, 0x0DFF, RID_SUBSETSTR_SINHALA);
-        *(ppSubSet++) = new Subset( 0x0E00, 0x0E7F, RID_SUBSETSTR_THAI);
-        *(ppSubSet++) = new Subset( 0x0E80, 0x0EFF, RID_SUBSETSTR_LAO);
-        *(ppSubSet++) = new Subset( 0x0F00, 0x0FBF, RID_SUBSETSTR_TIBETAN);
-        *(ppSubSet++) = new Subset( 0x1000, 0x109F, RID_SUBSETSTR_MYANMAR);
-        *(ppSubSet++) = new Subset( 0x10A0, 0x10FF, RID_SUBSETSTR_BASIC_GEORGIAN);
-    //  *(ppSubSet++) = new Subset( 0x10A0, 0x10C5, RID_SUBSETSTR_GEORGIAN_EXTENDED);
+        aAllSubsets.push_back( Subset( 0x0020, 0x007F, RID_SUBSETSTR_BASIC_LATIN ) );
+        aAllSubsets.push_back( Subset( 0x0080, 0x00FF, RID_SUBSETSTR_LATIN_1 ) );
+        aAllSubsets.push_back( Subset( 0x0100, 0x017F, RID_SUBSETSTR_LATIN_EXTENDED_A ) );
+        aAllSubsets.push_back( Subset( 0x0180, 0x024F, RID_SUBSETSTR_LATIN_EXTENDED_B ) );
+        aAllSubsets.push_back( Subset( 0x0250, 0x02AF, RID_SUBSETSTR_IPA_EXTENSIONS ) );
+        aAllSubsets.push_back( Subset( 0x02B0, 0x02FF, RID_SUBSETSTR_SPACING_MODIFIERS ) );
+        aAllSubsets.push_back( Subset( 0x0300, 0x036F, RID_SUBSETSTR_COMB_DIACRITICAL ) );
+        aAllSubsets.push_back( Subset( 0x0370, 0x03FF, RID_SUBSETSTR_BASIC_GREEK ) );
+    //  aAllSubsets.push_back( Subset( 0x03D0, 0x03F3, RID_SUBSETSTR_GREEK_SYMS_COPTIC ) );
+        aAllSubsets.push_back( Subset( 0x0400, 0x04FF, RID_SUBSETSTR_CYRILLIC ) );
+        aAllSubsets.push_back( Subset( 0x0530, 0x058F, RID_SUBSETSTR_ARMENIAN ) );
+        aAllSubsets.push_back( Subset( 0x0590, 0x05FF, RID_SUBSETSTR_BASIC_HEBREW ) );
+    //  aAllSubsets.push_back( Subset( 0x0591, 0x05C4, RID_SUBSETSTR_HEBREW_EXTENDED ) );
+        aAllSubsets.push_back( Subset( 0x0600, 0x065F, RID_SUBSETSTR_BASIC_ARABIC ) );
+        aAllSubsets.push_back( Subset( 0x0660, 0x06FF, RID_SUBSETSTR_ARABIC_EXTENDED ) );
+        aAllSubsets.push_back( Subset( 0x0700, 0x074F, RID_SUBSETSTR_SYRIAC ) );
+        aAllSubsets.push_back( Subset( 0x0780, 0x07BF, RID_SUBSETSTR_THAANA ) );
+        aAllSubsets.push_back( Subset( 0x0900, 0x097F, RID_SUBSETSTR_DEVANAGARI ) );
+        aAllSubsets.push_back( Subset( 0x0980, 0x09FF, RID_SUBSETSTR_BENGALI ) );
+        aAllSubsets.push_back( Subset( 0x0A00, 0x0A7F, RID_SUBSETSTR_GURMUKHI ) );
+        aAllSubsets.push_back( Subset( 0x0A80, 0x0AFF, RID_SUBSETSTR_GUJARATI ) );
+        aAllSubsets.push_back( Subset( 0x0B00, 0x0B7F, RID_SUBSETSTR_ORIYA ) );
+        aAllSubsets.push_back( Subset( 0x0B80, 0x0BFF, RID_SUBSETSTR_TAMIL ) );
+        aAllSubsets.push_back( Subset( 0x0C00, 0x0C7F, RID_SUBSETSTR_TELUGU ) );
+        aAllSubsets.push_back( Subset( 0x0C80, 0x0CFF, RID_SUBSETSTR_KANNADA ) );
+        aAllSubsets.push_back( Subset( 0x0D00, 0x0D7F, RID_SUBSETSTR_MALAYALAM ) );
+        aAllSubsets.push_back( Subset( 0x0D80, 0x0DFF, RID_SUBSETSTR_SINHALA ) );
+        aAllSubsets.push_back( Subset( 0x0E00, 0x0E7F, RID_SUBSETSTR_THAI ) );
+        aAllSubsets.push_back( Subset( 0x0E80, 0x0EFF, RID_SUBSETSTR_LAO ) );
+        aAllSubsets.push_back( Subset( 0x0F00, 0x0FBF, RID_SUBSETSTR_TIBETAN ) );
+        aAllSubsets.push_back( Subset( 0x1000, 0x109F, RID_SUBSETSTR_MYANMAR ) );
+        aAllSubsets.push_back( Subset( 0x10A0, 0x10FF, RID_SUBSETSTR_BASIC_GEORGIAN ) );
+    //  aAllSubsets.push_back( Subset( 0x10A0, 0x10C5, RID_SUBSETSTR_GEORGIAN_EXTENDED ) );
+        aAllSubsets.push_back( Subset( 0x1100, 0x11FF, RID_SUBSETSTR_HANGUL_JAMO ) );
+        aAllSubsets.push_back( Subset( 0x1200, 0x137F, RID_SUBSETSTR_ETHIOPIC ) );
+        aAllSubsets.push_back( Subset( 0x13A0, 0x13FF, RID_SUBSETSTR_CHEROKEE ) );
+        aAllSubsets.push_back( Subset( 0x1400, 0x167F, RID_SUBSETSTR_CANADIAN_ABORIGINAL ) );
+        aAllSubsets.push_back( Subset( 0x1680, 0x169F, RID_SUBSETSTR_OGHAM ) );
+        aAllSubsets.push_back( Subset( 0x16A0, 0x16F0, RID_SUBSETSTR_RUNIC ) );
+        aAllSubsets.push_back( Subset( 0x1700, 0x171F, RID_SUBSETSTR_TAGALOG ) );
+        aAllSubsets.push_back( Subset( 0x1720, 0x173F, RID_SUBSETSTR_HANUNOO ) );
+        aAllSubsets.push_back( Subset( 0x1740, 0x175F, RID_SUBSETSTR_BUHID ) );
+        aAllSubsets.push_back( Subset( 0x1760, 0x177F, RID_SUBSETSTR_TAGBANWA ) );
+        aAllSubsets.push_back( Subset( 0x1780, 0x17FF, RID_SUBSETSTR_KHMER ) );
+        aAllSubsets.push_back( Subset( 0x1800, 0x18AF, RID_SUBSETSTR_MONGOLIAN ) );
+        aAllSubsets.push_back( Subset( 0x1E00, 0x1EFF, RID_SUBSETSTR_LATIN_EXTENDED_ADDS ) );
+        aAllSubsets.push_back( Subset( 0x1F00, 0x1FFF, RID_SUBSETSTR_GREEK_EXTENDED ) );
 
-        *(ppSubSet++) = new Subset( 0x1100, 0x11FF, RID_SUBSETSTR_HANGUL_JAMO);
-        *(ppSubSet++) = new Subset( 0x1200, 0x137F, RID_SUBSETSTR_ETHIOPIC);
-        *(ppSubSet++) = new Subset( 0x13A0, 0x13FF, RID_SUBSETSTR_CHEROKEE);
-        *(ppSubSet++) = new Subset( 0x1400, 0x167F, RID_SUBSETSTR_CANADIAN_ABORIGINAL);
-        *(ppSubSet++) = new Subset( 0x1680, 0x169F, RID_SUBSETSTR_OGHAM);
-        *(ppSubSet++) = new Subset( 0x16A0, 0x16F0, RID_SUBSETSTR_RUNIC);
+        aAllSubsets.push_back( Subset( 0x2000, 0x206F, RID_SUBSETSTR_GENERAL_PUNCTUATION ) );
+        aAllSubsets.push_back( Subset( 0x2070, 0x209F, RID_SUBSETSTR_SUB_SUPER_SCRIPTS ) );
+        aAllSubsets.push_back( Subset( 0x20A0, 0x20CF, RID_SUBSETSTR_CURRENCY_SYMBOLS ) );
+        aAllSubsets.push_back( Subset( 0x20D0, 0x20FF, RID_SUBSETSTR_COMB_DIACRITIC_SYMS ) );
+        aAllSubsets.push_back( Subset( 0x2100, 0x214F, RID_SUBSETSTR_LETTERLIKE_SYMBOLS ) );
+        aAllSubsets.push_back( Subset( 0x2150, 0x218F, RID_SUBSETSTR_NUMBER_FORMS ) );
+        aAllSubsets.push_back( Subset( 0x2190, 0x21FF, RID_SUBSETSTR_ARROWS ) );
+        aAllSubsets.push_back( Subset( 0x2200, 0x22FF, RID_SUBSETSTR_MATH_OPERATORS ) );
+        aAllSubsets.push_back( Subset( 0x2300, 0x23FF, RID_SUBSETSTR_MISC_TECHNICAL ) );
+        aAllSubsets.push_back( Subset( 0x2400, 0x243F, RID_SUBSETSTR_CONTROL_PICTURES ) );
+        aAllSubsets.push_back( Subset( 0x2440, 0x245F, RID_SUBSETSTR_OPTICAL_CHAR_REC ) );
+        aAllSubsets.push_back( Subset( 0x2460, 0x24FF, RID_SUBSETSTR_ENCLOSED_ALPHANUM ) );
+        aAllSubsets.push_back( Subset( 0x2500, 0x257F, RID_SUBSETSTR_BOX_DRAWING ) );
+        aAllSubsets.push_back( Subset( 0x2580, 0x259F, RID_SUBSETSTR_BLOCK_ELEMENTS ) );
+        aAllSubsets.push_back( Subset( 0x25A0, 0x25FF, RID_SUBSETSTR_GEOMETRIC_SHAPES ) );
+        aAllSubsets.push_back( Subset( 0x2600, 0x26FF, RID_SUBSETSTR_MISC_DINGBATS ) );
+        aAllSubsets.push_back( Subset( 0x2700, 0x27BF, RID_SUBSETSTR_DINGBATS ) );
 
-        *(ppSubSet++) = new Subset( 0x1780, 0x17FF, RID_SUBSETSTR_KHMER);
-        *(ppSubSet++) = new Subset( 0x1800, 0x18AF, RID_SUBSETSTR_MONGOLIAN);
-        *(ppSubSet++) = new Subset( 0x1E00, 0x1EFF, RID_SUBSETSTR_LATIN_EXTENDED_ADDS);
-        *(ppSubSet++) = new Subset( 0x1F00, 0x1FFF, RID_SUBSETSTR_GREEK_EXTENDED);
+        aAllSubsets.push_back( Subset( 0x27C0, 0x27FF, RID_SUBSETSTR_MISC_MATH_SYMS_A ) );
+        aAllSubsets.push_back( Subset( 0x27F0, 0x27FF, RID_SUBSETSTR_SUPPL_ARROWS_A ) );
+        aAllSubsets.push_back( Subset( 0x2800, 0x28FF, RID_SUBSETSTR_BRAILLE_PATTERNS ) );
+        aAllSubsets.push_back( Subset( 0x2900, 0x297F, RID_SUBSETSTR_SUPPL_ARROWS_B ) );
+        aAllSubsets.push_back( Subset( 0x2980, 0x29FF, RID_SUBSETSTR_MISC_MATH_SYMS_B ) );
+        aAllSubsets.push_back( Subset( 0x2E80, 0x2EFF, RID_SUBSETSTR_CJK_RADICAL_SUPPL ) );
+        aAllSubsets.push_back( Subset( 0x2F00, 0x2FDF, RID_SUBSETSTR_KANXI_RADICALS ) );
+        aAllSubsets.push_back( Subset( 0x2FF0, 0x2FFF, RID_SUBSETSTR_IDEO_DESC_CHARS ) );
 
-        *(ppSubSet++) = new Subset( 0x2000, 0x206F, RID_SUBSETSTR_GENERAL_PUNCTUATION);
-        *(ppSubSet++) = new Subset( 0x2070, 0x209F, RID_SUBSETSTR_SUB_SUPER_SCRIPTS);
-        *(ppSubSet++) = new Subset( 0x20A0, 0x20CF, RID_SUBSETSTR_CURRENCY_SYMBOLS);
-        *(ppSubSet++) = new Subset( 0x20D0, 0x20FF, RID_SUBSETSTR_COMB_DIACRITIC_SYMS);
-        *(ppSubSet++) = new Subset( 0x2100, 0x214F, RID_SUBSETSTR_LETTERLIKE_SYMBOLS);
-        *(ppSubSet++) = new Subset( 0x2150, 0x218F, RID_SUBSETSTR_NUMBER_FORMS);
-        *(ppSubSet++) = new Subset( 0x2190, 0x21FF, RID_SUBSETSTR_ARROWS);
-        *(ppSubSet++) = new Subset( 0x2200, 0x22FF, RID_SUBSETSTR_MATH_OPERATORS);
-        *(ppSubSet++) = new Subset( 0x2300, 0x23FF, RID_SUBSETSTR_MISC_TECHNICAL);
-        *(ppSubSet++) = new Subset( 0x2400, 0x243F, RID_SUBSETSTR_CONTROL_PICTURES);
-        *(ppSubSet++) = new Subset( 0x2440, 0x245F, RID_SUBSETSTR_OPTICAL_CHAR_REC);
-        *(ppSubSet++) = new Subset( 0x2460, 0x24FF, RID_SUBSETSTR_ENCLOSED_ALPHANUM);
-        *(ppSubSet++) = new Subset( 0x2500, 0x257F, RID_SUBSETSTR_BOX_DRAWING);
-        *(ppSubSet++) = new Subset( 0x2580, 0x259F, RID_SUBSETSTR_BLOCK_ELEMENTS);
-        *(ppSubSet++) = new Subset( 0x25A0, 0x25FF, RID_SUBSETSTR_GEOMETRIC_SHAPES);
-        *(ppSubSet++) = new Subset( 0x2600, 0x26FF, RID_SUBSETSTR_MISC_DINGBATS);
-        *(ppSubSet++) = new Subset( 0x2700, 0x27BF, RID_SUBSETSTR_DINGBATS);
+        aAllSubsets.push_back( Subset( 0x3000, 0x303F, RID_SUBSETSTR_CJK_SYMS_PUNCTUATION ) );
+        aAllSubsets.push_back( Subset( 0x3040, 0x309F, RID_SUBSETSTR_HIRAGANA ) );
+        aAllSubsets.push_back( Subset( 0x30A0, 0x30FF, RID_SUBSETSTR_KATAKANA ) );
+        aAllSubsets.push_back( Subset( 0x3100, 0x312F, RID_SUBSETSTR_BOPOMOFO ) );
+        aAllSubsets.push_back( Subset( 0x3130, 0x318F, RID_SUBSETSTR_HANGUL_COMPAT_JAMO ) );
+        aAllSubsets.push_back( Subset( 0x3190, 0x319F, RID_SUBSETSTR_KANBUN ) );
+        aAllSubsets.push_back( Subset( 0x31A0, 0x31BF, RID_SUBSETSTR_BOPOMOFO_EXTENDED ) );
+        aAllSubsets.push_back( Subset( 0x31C0, 0x31FF, RID_SUBSETSTR_KATAKANA_PHONETIC ) );
+        aAllSubsets.push_back( Subset( 0x3200, 0x32FF, RID_SUBSETSTR_ENCLOSED_CJK_LETTERS ) );
+        aAllSubsets.push_back( Subset( 0x3300, 0x33FF, RID_SUBSETSTR_CJK_COMPATIBILITY ) );
 
-        *(ppSubSet++) = new Subset( 0x3000, 0x303F, RID_SUBSETSTR_CJK_SYMS_PUNCTUATION);
-        *(ppSubSet++) = new Subset( 0x3040, 0x309F, RID_SUBSETSTR_HIRAGANA);
-        *(ppSubSet++) = new Subset( 0x30A0, 0x30FF, RID_SUBSETSTR_KATAKANA);
-        *(ppSubSet++) = new Subset( 0x3100, 0x312F, RID_SUBSETSTR_BOPOMOFO);
-        *(ppSubSet++) = new Subset( 0x3130, 0x318F, RID_SUBSETSTR_HANGUL_COMPAT_JAMO);
-        *(ppSubSet++) = new Subset( 0x3190, 0x31FF, RID_SUBSETSTR_CJK_MISC);
-        *(ppSubSet++) = new Subset( 0x3200, 0x32FF, RID_SUBSETSTR_ENCLOSED_CJK_LETTERS);
-        *(ppSubSet++) = new Subset( 0x3300, 0x33FF, RID_SUBSETSTR_CJK_COMPATIBILITY);
+        aAllSubsets.push_back( Subset( 0x3400, 0x4DFF, RID_SUBSETSTR_CJK_EXT_A_UNIFIED_IDGRAPH ) );
+        aAllSubsets.push_back( Subset( 0x4E00, 0x9FA5, RID_SUBSETSTR_CJK_UNIFIED_IDGRAPH ) );
+        aAllSubsets.push_back( Subset( 0xA000, 0xA4CF, RID_SUBSETSTR_YI ) );
+        aAllSubsets.push_back( Subset( 0xAC00, 0xB097, RID_SUBSETSTR_HANGUL_GA ) );
+        aAllSubsets.push_back( Subset( 0xB098, 0xB2E3, RID_SUBSETSTR_HANGUL_NA ) );
+        aAllSubsets.push_back( Subset( 0xB2E4, 0xB77B, RID_SUBSETSTR_HANGUL_DA ) );
+        aAllSubsets.push_back( Subset( 0xB77C, 0xB9C7, RID_SUBSETSTR_HANGUL_RA ) );
+        aAllSubsets.push_back( Subset( 0xB9C8, 0xBC13, RID_SUBSETSTR_HANGUL_MA ) );
+        aAllSubsets.push_back( Subset( 0xBC14, 0xC0AB, RID_SUBSETSTR_HANGUL_BA ) );
+        aAllSubsets.push_back( Subset( 0xC0AC, 0xC543, RID_SUBSETSTR_HANGUL_SA ) );
+        aAllSubsets.push_back( Subset( 0xC544, 0xC78F, RID_SUBSETSTR_HANGUL_AH ) );
+        aAllSubsets.push_back( Subset( 0xC790, 0xCC27, RID_SUBSETSTR_HANGUL_JA ) );
+        aAllSubsets.push_back( Subset( 0xCC28, 0xCE73, RID_SUBSETSTR_HANGUL_CHA ) );
+        aAllSubsets.push_back( Subset( 0xCE74, 0xD0BF, RID_SUBSETSTR_HANGUL_KA ) );
+        aAllSubsets.push_back( Subset( 0xD0C0, 0xD30B, RID_SUBSETSTR_HANGUL_TA ) );
+        aAllSubsets.push_back( Subset( 0xD30C, 0xD557, RID_SUBSETSTR_HANGUL_PA ) );
+        aAllSubsets.push_back( Subset( 0xD558, 0xD7A3, RID_SUBSETSTR_HANGUL_HA ) );
+    //  aAllSubsets.push_back( Subset( 0xAC00, 0xD7AF, RID_SUBSETSTR_HANGUL ) );
 
-        *(ppSubSet++) = new Subset( 0x3400, 0x4DFF, RID_SUBSETSTR_CJK_EXT_A_UNIFIED_IDGRAPH);
-        *(ppSubSet++) = new Subset( 0x4E00, 0x9FA5, RID_SUBSETSTR_CJK_UNIFIED_IDGRAPH);
-        *(ppSubSet++) = new Subset( 0xA000, 0xA4CF, RID_SUBSETSTR_YI);
-        *(ppSubSet++) = new Subset( 0xAC00, 0xB097, RID_SUBSETSTR_HANGUL_GA);
-        *(ppSubSet++) = new Subset( 0xB098, 0xB2E3, RID_SUBSETSTR_HANGUL_NA);
-        *(ppSubSet++) = new Subset( 0xB2E4, 0xB77B, RID_SUBSETSTR_HANGUL_DA);
-        *(ppSubSet++) = new Subset( 0xB77C, 0xB9C7, RID_SUBSETSTR_HANGUL_RA);
-        *(ppSubSet++) = new Subset( 0xB9C8, 0xBC13, RID_SUBSETSTR_HANGUL_MA);
-        *(ppSubSet++) = new Subset( 0xBC14, 0xC0AB, RID_SUBSETSTR_HANGUL_BA);
-        *(ppSubSet++) = new Subset( 0xC0AC, 0xC543, RID_SUBSETSTR_HANGUL_SA);
-        *(ppSubSet++) = new Subset( 0xC544, 0xC78F, RID_SUBSETSTR_HANGUL_AH);
-        *(ppSubSet++) = new Subset( 0xC790, 0xCC27, RID_SUBSETSTR_HANGUL_JA);
-        *(ppSubSet++) = new Subset( 0xCC28, 0xCE73, RID_SUBSETSTR_HANGUL_CHA);
-        *(ppSubSet++) = new Subset( 0xCE74, 0xD0BF, RID_SUBSETSTR_HANGUL_KA);
-        *(ppSubSet++) = new Subset( 0xD0C0, 0xD30B, RID_SUBSETSTR_HANGUL_TA);
-        *(ppSubSet++) = new Subset( 0xD30C, 0xD557, RID_SUBSETSTR_HANGUL_PA);
-        *(ppSubSet++) = new Subset( 0xD558, 0xD7A3, RID_SUBSETSTR_HANGUL_HA);
-    //  *(ppSubSet++) = new Subset( 0xAC00, 0xD7A3, RID_SUBSETSTR_HANGUL);
-
-    //  *(ppSubSet++) = new Subset( 0xD800, 0xDFFF, RID_SUBSETSTR_SURROGATE);
-        *(ppSubSet++) = new Subset( 0xE000, 0xF8FF, RID_SUBSETSTR_PRIVATE_USE_AREA);
-        *(ppSubSet++) = new Subset( 0xF900, 0xFAFF, RID_SUBSETSTR_CJK_COMPAT_IDGRAPHS);
-        *(ppSubSet++) = new Subset( 0xFB00, 0xFB4F, RID_SUBSETSTR_ALPHA_PRESENTATION);
-        *(ppSubSet++) = new Subset( 0xFB50, 0xFDFF, RID_SUBSETSTR_ARABIC_PRESENT_A);
-        *(ppSubSet++) = new Subset( 0xFE20, 0xFE2F, RID_SUBSETSTR_COMBINING_HALF_MARKS);
-        *(ppSubSet++) = new Subset( 0xFE30, 0xFE4F, RID_SUBSETSTR_CJK_COMPAT_FORMS);
-        *(ppSubSet++) = new Subset( 0xFE50, 0xFE6F, RID_SUBSETSTR_SMALL_FORM_VARIANTS);
-        *(ppSubSet++) = new Subset( 0xFE70, 0xFEFF, RID_SUBSETSTR_ARABIC_PRESENT_B);
-        *(ppSubSet++) = new Subset( 0xFF00, 0xFFEF, RID_SUBSETSTR_HALFW_FULLW_FORMS);
-        *(ppSubSet++) = new Subset( 0xFFF0, 0xFFFF, RID_SUBSETSTR_SPECIALS);
-
-        nAllSubSetCount = ppSubSet - ppAllSubsets;
-
-        DBG_ASSERT( (nAllSubSetCount < RID_SUBSET_COUNT), "RID_SUBSET_COUNT too small");
-        DBG_ASSERT( (2*nAllSubSetCount > RID_SUBSET_COUNT), "RID_SUBSET_COUNT way to big");
+    //  aAllSubsets.push_back( Subset( 0xD800, 0xDFFF, RID_SUBSETSTR_SURROGATE ) );
+        aAllSubsets.push_back( Subset( 0xE000, 0xF8FF, RID_SUBSETSTR_PRIVATE_USE_AREA ) );
+        aAllSubsets.push_back( Subset( 0xF900, 0xFAFF, RID_SUBSETSTR_CJK_COMPAT_IDGRAPHS ) );
+        aAllSubsets.push_back( Subset( 0xFB00, 0xFB4F, RID_SUBSETSTR_ALPHA_PRESENTATION ) );
+        aAllSubsets.push_back( Subset( 0xFB50, 0xFDFF, RID_SUBSETSTR_ARABIC_PRESENT_A ) );
+        aAllSubsets.push_back( Subset( 0xFE20, 0xFE2F, RID_SUBSETSTR_COMBINING_HALF_MARKS ) );
+        aAllSubsets.push_back( Subset( 0xFE30, 0xFE4F, RID_SUBSETSTR_CJK_COMPAT_FORMS ) );
+        aAllSubsets.push_back( Subset( 0xFE50, 0xFE6F, RID_SUBSETSTR_SMALL_FORM_VARIANTS ) );
+        aAllSubsets.push_back( Subset( 0xFE70, 0xFEFF, RID_SUBSETSTR_ARABIC_PRESENT_B ) );
+        aAllSubsets.push_back( Subset( 0xFF00, 0xFFEF, RID_SUBSETSTR_HALFW_FULLW_FORMS ) );
+        aAllSubsets.push_back( Subset( 0xFFF0, 0xFFFF, RID_SUBSETSTR_SPECIALS ) );
     }
 
-    mnSubsets = nAllSubSetCount;
-    maSubsets = new const Subset*[ mnSubsets ];
-    for( int i = 0; i < mnSubsets; ++i )
-        maSubsets[i] = ppAllSubsets[i];
+    maSubsets = aAllSubsets;
 }
 
 void SubsetMap::ApplyCharMap( const FontCharMap* pFontCharMap )
@@ -1464,46 +1479,32 @@ void SubsetMap::ApplyCharMap( const FontCharMap* pFontCharMap )
     if( !pFontCharMap )
         return;
 
-    int nSrc = 0;
-    int nDst = 0;
-    ULONG nIndex = 0;
-    const ULONG nRanges = pFontCharMap->GetRangeCount();
-    while( nSrc < mnSubsets )
+    const int nRangeCount = pFontCharMap->GetRangeCount();
+    sal_UCS4 cFirst, cLast = 0;
+    int nRangeIndex = 0;
+
+    // remove subsets that are not matched in any range
+    // assuming subsetlist and fontcharmap are sorted
+    SubsetList::iterator it = maSubsets.begin();
+    while( (nRangeIndex < nRangeCount) && (it != maSubsets.end()) )
     {
-        sal_UCS4 cFirst, cLast;
-        if( nIndex < nRanges )
-            pFontCharMap->GetRange( nIndex, cFirst, cLast );
-        else
-            cFirst = cLast = ~0;
+        const Subset& rSubset = *it;
 
-        const Subset* pS = maSubsets[ nSrc ];
-        if( cLast <= pS->GetRangeMin() )
-            if( nIndex < nRanges )
-                { ++nIndex; continue; }
-
-        if( cFirst > pS->GetRangeMax() )
-            maSubsets[ nSrc ] = NULL;
-        else if( nSrc != nDst )
+        if( cLast <= rSubset.GetRangeMin() )
         {
-            maSubsets[ nDst++ ] = maSubsets[ nSrc ];
-            maSubsets[ nSrc ] = NULL;
-        } else
-            ++nDst;
+            // range too small for this subset => advance to next range
+            pFontCharMap->GetRange( nRangeIndex++, cFirst, cLast );
+        }
+        else
+        {
+            SubsetList::iterator it_tmp = it++;
 
-        ++nSrc;
+            // subset too big for this range => remove subset
+            if( cFirst > rSubset.GetRangeMax()  )
+                maSubsets.erase( it_tmp );
+        }
     }
 
-    mnSubsets = nDst;
+    // remove subsets after highest cLast
+    maSubsets.erase( it, maSubsets.end() );
 }
-// -----------------------------------------------------------------------------
-USHORT SvxShowCharSet::GetRowPos(USHORT _nPos) const
-{
-    return _nPos / COLUMN_COUNT ;
-}
-// -----------------------------------------------------------------------------
-USHORT SvxShowCharSet::GetColumnPos(USHORT _nPos) const
-{
-    return _nPos % COLUMN_COUNT ;
-}
-// -----------------------------------------------------------------------------
-
