@@ -2,9 +2,9 @@
  *
  *  $RCSfile: emptyproperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:30:48 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,8 +132,8 @@ namespace sdr
             virtual SfxStyleSheet* GetStyleSheet() const;
 
             // pre/post-process saving
-            virtual void PreProcessSave();
-            virtual void PostProcessSave();
+            //BFS01virtual void PreProcessSave();
+            //BFS01virtual void PostProcessSave();
         };
     } // end of namespace properties
 } // end of namespace sdr
