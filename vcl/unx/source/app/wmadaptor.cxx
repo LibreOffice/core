@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-08 19:09:04 $
+ *  last change: $Author: pl $ $Date: 2001-08-09 19:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,9 @@ struct WMAdaptorProtocol
  */
 static const WMAdaptorProtocol aProtocolTab[] =
 {
-    { "_NET_WM_ICON_NAME", WMAdaptor::NET_WM_ICON_NAME },
+    { "_NET_CURRENT_DESKTOP", WMAdaptor::NET_CURRENT_DESKTOP },
     { "_NET_NUMBER_OF_DESKTOPS", WMAdaptor::NET_NUMBER_OF_DESKTOPS },
+    { "_NET_WM_ICON_NAME", WMAdaptor::NET_WM_ICON_NAME },
     { "_NET_WM_STATE", WMAdaptor::NET_WM_STATE },
     { "_NET_WM_STATE_MAXIMIZED_HORIZ", WMAdaptor::NET_WM_STATE_MAXIMIZED_HORZ }, // common bug in e.g. older kwin and sawfish implementations
     { "_NET_WM_STATE_MAXIMIZED_HORZ", WMAdaptor::NET_WM_STATE_MAXIMIZED_HORZ },
@@ -499,15 +500,85 @@ void WMAdaptor::setNetWMState( SalFrame* pFrame ) const
                              nStateAtoms
                              );
         }
-        if( ! ( pFrame->maFrameData.nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
+        if( pFrame->maFrameData.mbMaximizedHorz
+           && pFrame->maFrameData.mbMaximizedVert
+           && ! ( pFrame->maFrameData.nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
         {
-            // SetPosSize necessary to set width/height, min/max w/h
-            Rectangle aPosSize = m_aWMWorkAreas[0];
             /*
-             *  if( ! m_bEqualWorkAreas )
-             *  get current desktop here
+             *  for maximizing use NorthWestGravity (including decoration)
              */
+            XSizeHints  hints;
+            long        supplied;
+            bool bHint = false;
+            if( XGetWMNormalHints( m_pDisplay,
+                                   pFrame->maFrameData.GetShellWindow(),
+                                   &hints,
+                                   &supplied ) )
+            {
+                bHint = true;
+                hints.flags |= PWinGravity;
+                hints.win_gravity = NorthWestGravity;
+                XSetWMNormalHints( m_pDisplay,
+                                   pFrame->maFrameData.GetShellWindow(),
+                                   &hints );
+                XSync( m_pDisplay, False );
+            }
+
+            // SetPosSize necessary to set width/height, min/max w/h
+            sal_Int32 nCurrent = 0;
+            /*
+             *  get current desktop here if work areas have different size
+             *  (does this happen on any platform ?)
+             */
+            if( ! m_bEqualWorkAreas
+                && m_aWMAtoms[ NET_CURRENT_DESKTOP ]
+                )
+            {
+                Atom                aRealType   = None;
+                int                 nFormat     = 8;
+                unsigned long       nItems      = 0;
+                unsigned long       nBytesLeft  = 0;
+                unsigned char*  pProperty   = NULL;
+                if( XGetWindowProperty( m_pDisplay,
+                                        m_pSalDisplay->GetRootWindow(),
+                                        m_aWMAtoms[ NET_CURRENT_DESKTOP ],
+                                        0, 1,
+                                        False,
+                                        XA_CARDINAL,
+                                        &aRealType,
+                                        &nFormat,
+                                        &nItems,
+                                        &nBytesLeft,
+                                        &pProperty ) == 0
+                    )
+                {
+                    nCurrent = *(sal_Int32*)pProperty;
+                    XFree( pProperty );
+                }
+            }
+            Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
+            aPosSize = Rectangle( Point( aPosSize.Left() + pFrame->maFrameData.nLeft_,
+                                         aPosSize.Top()  + pFrame->maFrameData.nTop_ ),
+                                  Size( aPosSize.GetWidth()
+                                        - pFrame->maFrameData.nLeft_
+                                        - pFrame->maFrameData.nRight_,
+                                        aPosSize.GetHeight()
+                                        - pFrame->maFrameData.nTop_
+                                        - pFrame->maFrameData.nBottom_ )
+                                  );
             pFrame->maFrameData.SetPosSize( aPosSize );
+
+            /*
+             *  reset gravity hint to static gravity
+             *  (this should not move window according to ICCCM)
+             */
+            if( bHint && pFrame->maFrameData.nShowState_ != SHOWSTATE_UNKNOWN )
+            {
+                hints.win_gravity = StaticGravity;
+                XSetWMNormalHints( m_pDisplay,
+                                   pFrame->maFrameData.GetShellWindow(),
+                                   &hints );
+            }
         }
     }
 }
@@ -680,7 +751,11 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
         if( bHorizontal || bVertical )
         {
             const Size& aScreenSize( m_pSalDisplay->GetScreenSize() );
-            Rectangle aTarget( Point( 0, 0 ), aScreenSize );
+            Rectangle aTarget( Point( pFrame->maFrameData.nLeft_,
+                                      pFrame->maFrameData.nTop_ ),
+                               Size( aScreenSize.Width() - pFrame->maFrameData.nLeft_ - pFrame->maFrameData.nRight_,
+                                     aScreenSize.Height() - pFrame->maFrameData.nTop_ - pFrame->maFrameData.nBottom_ )
+                               );
             if( ! bHorizontal )
             {
                 aTarget.SetSize(
@@ -718,12 +793,19 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
 
             if( pFrame->maFrameData.bMapped_ )
             {
-                pFrame->Show( TRUE );
                 XSetInputFocus( m_pDisplay,
                                 pFrame->maFrameData.GetShellWindow(),
                                 RevertToNone,
                                 CurrentTime
                                 );
+            }
+            else if( ! pFrame->maFrameData.mpParent )
+            {
+                // this lets some window managers override
+                // user positioning style (e.g. fvwm2)
+                XSetTransientForHint( m_pDisplay,
+                                      pFrame->maFrameData.GetShellWindow(),
+                                      m_pSalDisplay->GetRootWindow() );
             }
             pFrame->maFrameData.SetPosSize( aTarget );
             pFrame->maFrameData.nWidth_     = aTarget.GetWidth();
@@ -735,7 +817,6 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
                 XRaiseWindow( m_pDisplay,
                               pFrame->maFrameData.GetStackingWindow()
                               );
-            pFrame->maFrameData.Call( SALEVENT_RESIZE, NULL );
         }
         else
         {

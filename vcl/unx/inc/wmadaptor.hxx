@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-08 19:09:03 $
+ *  last change: $Author: pl $ $Date: 2001-08-09 19:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ public:
         NET_WM_WINDOW_TYPE_NORMAL,
         NET_WM_WINDOW_TYPE_TOOLBAR,
         NET_NUMBER_OF_DESKTOPS,
+        NET_CURRENT_DESKTOP,
         NET_WORKAREA,
         WM_STATE,
         MOTIF_WM_HINTS,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-08 19:09:03 $
+ *  last change: $Author: pl $ $Date: 2001-08-09 19:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,10 @@ class SalFrameDelData
 };
 
 // -=-= SalFrameData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+#define SHOWSTATE_UNKNOWN       -1
+#define SHOWSTATE_MINIMIZED     0
+#define SHOWSTATE_NORMAL        1
+
 DECLARE_LIST( SalFrameList, SalFrame *);
 class SalFrameData
 {
@@ -168,7 +172,6 @@ class SalFrameData
             int             nHeight_;           // client height
             Rectangle       aPosSize_;          // Shells Pos&Size
             Rectangle       aRestoreFullScreen_;
-            Rectangle       aRestoreMaximize_;
             USHORT          nStyle_;
             BOOL            bAlwaysOnTop_;
             BOOL            bViewable_;

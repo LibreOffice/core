@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-08 19:09:04 $
+ *  last change: $Author: pl $ $Date: 2001-08-09 19:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,10 +135,6 @@
 using namespace vcl_sal;
 
 // -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#define SHOWSTATE_UNKNOWN       -1
-#define SHOWSTATE_MINIMIZED     0
-#define SHOWSTATE_NORMAL        1
-
 #define CLIENT_EVENTS           StructureNotifyMask \
                                 | SubstructureNotifyMask \
                                 | KeyPressMask \
@@ -434,7 +430,8 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
         XtSetArg( aArgs[nArgs], XtNwidth, w );                      nArgs++;
         XtSetArg( aArgs[nArgs], XtNheight, h );                     nArgs++;
         XtSetArg( aArgs[nArgs], XtNallowShellResize, True );        nArgs++;
-        XtSetArg( aArgs[nArgs], XtNwinGravity, StaticGravity );     nArgs++;
+        XtSetArg( aArgs[nArgs], XtNwinGravity, NorthWestGravity );  nArgs++;
+        XtSetArg( aArgs[nArgs], XtNwaitForWm, False );              nArgs++;
         if( mpParent )
         {
             XtSetArg( aArgs[nArgs], XtNsaveUnder, True );           nArgs++;
@@ -924,8 +921,6 @@ void SalFrame::GetClientSize( long &rWidth, long &rHeight )
 
     if( !rWidth || !rHeight )
     {
-        if( SHOWSTATE_UNKNOWN != maFrameData.nShowState_ ) abort();
-
         XWindowAttributes aAttrib;
 
         XGetWindowAttributes( _GetXDisplay(), maFrameData.GetShellWindow(), &aAttrib );
@@ -1096,9 +1091,9 @@ BOOL SalFrame::GetWindowState( SalFrameState* pState )
         pState->mnState = 0;
 
     Rectangle aPosSize;
-    if( !maFrameData.aRestoreMaximize_.IsEmpty() )
+    if( !maFrameData.aRestoreFullScreen_.IsEmpty() )
     {
-        aPosSize = maFrameData.aRestoreMaximize_;
+        aPosSize = maFrameData.aRestoreFullScreen_;
         pState->mnState |= SAL_FRAMESTATE_MAXIMIZED;
     }
     else
@@ -1138,8 +1133,6 @@ void SalFrameData::SetSize( const Size &rSize )
     values.height   = rSize.Height();
     if (values.width > 0 && values.height > 0)
     {
-        XResizeWindow( GetXDisplay(), GetShellWindow(), rSize.Width(), rSize.Height() );
-        XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, rSize.Width(), rSize.Height() );
         if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
         {
             Arg args[10];
@@ -1150,6 +1143,8 @@ void SalFrameData::SetSize( const Size &rSize )
             XtSetArg( args[n], XtNmaxHeight, rSize.Height() );  n++;
             XtSetValues( hShell_, args, n );
         }
+        XResizeWindow( GetXDisplay(), GetShellWindow(), rSize.Width(), rSize.Height() );
+        XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, rSize.Width(), rSize.Height() );
 
         if( ! ( nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) ) )
             MarkWindowAsGoodPositioned( XtWindow( hShell_ ) );
@@ -1203,7 +1198,6 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
     {
         Arg args[10];
         int n = 0;
-
         XtSetArg( args[n], XtNminWidth, values.width );     n++;
         XtSetArg( args[n], XtNminHeight, values.height );   n++;
         XtSetArg( args[n], XtNmaxWidth, values.width );     n++;
@@ -1239,109 +1233,13 @@ void SalFrameData::Minimize()
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrameData::Maximize()
 {
-    if( SHOWSTATE_UNKNOWN == nShowState_ )
-    {
-        stderr0( "SalFrameData::Maximize SHOWSTATE_UNKNOWN\n" );
-        return;
-    }
-
     if( SHOWSTATE_MINIMIZED == nShowState_ )
     {
         XtMapWidget( hShell_ );
         nShowState_ = SHOWSTATE_NORMAL;
     }
 
-    if( aRestoreMaximize_.IsEmpty() )
-        aRestoreMaximize_ = aPosSize_;
-
-    if( pDisplay_->GetProperties() & PROPERTY_SUPPORT_WM_Screen )
-    {
-        long w = nMaxWidth_
-                 ? nMaxWidth_
-                 : pDisplay_->GetScreenSize().Width()  - nLeft_ - nRight_;
-        long h = nMaxHeight_
-                 ? nMaxHeight_
-                 : pDisplay_->GetScreenSize().Height() - nTop_ - nBottom_;
-
-        SetPosSize( Rectangle( Point( nLeft_, nTop_), Size( w, h ) ) );
-    }
-    else
-    {
-        Display        *pDisplay    = GetXDisplay();
-        XLIB_Window     hRoot       = pDisplay_->GetRootWindow();
-        XLIB_Window     *Children, hDummy;
-        unsigned int    nChildren, n;
-
-        // simulate WM-Maximize: clip iconbars
-        int nW = pDisplay_->GetScreenSize().Width();
-        int nH = pDisplay_->GetScreenSize().Height();
-
-        XRectangle  aRect;
-        XLIB_Region pXRegA  = XCreateRegion();
-
-        aRect.x         = 0;
-        aRect.y         = 0;
-        aRect.width     = nW;
-        aRect.height    = nH;
-
-        XUnionRectWithRegion( &aRect, pXRegA, pXRegA );
-
-        XQueryTree( pDisplay,
-                    hRoot,
-                    &hRoot,
-                    &hDummy,
-                    &Children,
-                    &nChildren );
-
-        SalXLib *pXLib = GetSalData()->GetLib();
-        BOOL bOld = pXLib->GetIgnoreXErrors();
-
-        for( n = 0; n < nChildren; n++ )
-        {
-            XWindowAttributes aAttrib;
-
-            pXLib->SetIgnoreXErrors( TRUE ); // reset WasXError
-
-            XGetWindowAttributes( pDisplay, Children[n], &aAttrib );
-
-            aRect.x         = aAttrib.x;
-            aRect.y         = aAttrib.y;
-            aRect.width     = aAttrib.width;
-            aRect.height    = aAttrib.height;
-
-            if( !pXLib->WasXError()
-                && aAttrib.map_state == IsViewable
-                && (!aRect.x
-                    || !aRect.y
-                    || aRect.x + aRect.width  == nW
-                    || aRect.y + aRect.height == nH)
-                && aRect.width * aRect.height < (nW * nH) / 5 )
-            {
-                XLIB_Region pXRegB = XCreateRegion();
-
-                XUnionRectWithRegion( &aRect, pXRegB, pXRegB );
-                XSubtractRegion( pXRegA, pXRegB, pXRegA );
-
-                XDestroyRegion( pXRegB );
-            }
-        }
-
-        pXLib->SetIgnoreXErrors( bOld );
-
-        XClipBox( pXRegA, &aRect );
-
-        XDestroyRegion( pXRegA );
-
-        if( aRect.width * aRect.height > (nW * nH) / 2 )
-        {
-            Rectangle aPosSize( aRect.x + nLeft_,
-                                aRect.y + nTop_,
-                                aRect.x + aRect.width  - 1 - nRight_,
-                                aRect.y + aRect.height - 1 - nBottom_ );
-
-            SetPosSize( aPosSize );
-        }
-    }
+    pDisplay_->getWMAdaptor()->maximizeFrame( pFrame_, true, true );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1358,12 +1256,7 @@ void SalFrameData::Restore()
         XtMapWidget( hShell_ );
         nShowState_ = SHOWSTATE_NORMAL;
     }
-
-    if( !aRestoreMaximize_.IsEmpty() )
-    {
-        SetPosSize( aRestoreMaximize_ );
-        aRestoreMaximize_ = Rectangle();
-    }
+    pDisplay_->getWMAdaptor()->maximizeFrame( pFrame_, false, false );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -2379,6 +2272,12 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
                 nMaxHeight_ = hints.max_height;
                 DBG_ASSERT( nMaxWidth_ && nMaxHeight_, "!MaxWidth^!MaxHeight" )
             }
+            hints.flags |= PWinGravity;
+            hints.win_gravity = StaticGravity;
+            XSetWMNormalHints( pEvent->display,
+                               GetShellWindow(),
+                               &hints );
+            XSync( pEvent->display, False );
         }
     }
 
@@ -2389,34 +2288,6 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
                            0, 0,
                            &pEvent->x, &pEvent->y,
                            &hDummy );
-
-    if( nMaxWidth_ || nMaxHeight_ )
-    {
-        if( nMaxWidth_ != pEvent->width || nMaxHeight_ != pEvent->height )
-            aRestoreMaximize_ = Rectangle();
-        else if( aRestoreMaximize_.IsEmpty() )
-        {
-            stderr0( "SalFrameData::HandleSizeEvent zoomed\n" );
-            GetPosSize( aRestoreMaximize_ );
-        }
-    }
-    else
-    if( pEvent->x != nLeft_ || pEvent->y != nTop_ )
-        aRestoreMaximize_ = Rectangle();
-    else
-    {
-        Size aSize( pEvent->width  + nLeft_ + nRight_,
-                    pEvent->height + nTop_  + nBottom_ );
-
-        if( aSize != pDisplay_->GetScreenSize() )
-            aRestoreMaximize_ = Rectangle();
-        else
-        if( aRestoreMaximize_.IsEmpty() )
-        {
-            stderr0( "SalFrameData::HandleSizeEvent zoomed\n" );
-            GetPosSize( aRestoreMaximize_ );
-        }
-    }
 
     maResizeBuffer.SetPos( Point( pEvent->x, pEvent->y ) );
     maResizeBuffer.SetSize( Size( pEvent->width, pEvent->height ) );
@@ -2539,20 +2410,55 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
                                 &hDummy ) )
     {
         fprintf( stderr, "SalFramaData::HandleReparentEvent !XTranslateCoordinates\n" );
-        abort();
+        nLeft_ = nTop_ = 0;
     }
 
-    nRight_     = nLeft_; // ???
-    nBottom_    = nLeft_; // ???
-
-    // hack: maximize if vendor is XFREE (why? MB!), only remote client
+    /*
+     *  decorations are not symmetric,
+     *  so need real geometries here
+     *  (this will fail with virtual roots ?)
+     */
+    int xp, yp, x, y;
+    unsigned int wp, w, hp, h, bw, d;
+    XGetGeometry( GetXDisplay(),
+                  GetShellWindow(),
+                  &hRoot,
+                  &x, &y, &w, &h, &bw, &d );
+    XGetGeometry( GetXDisplay(),
+                  hWM_Parent,
+                  &hRoot,
+                  &xp, &yp, &wp, &hp, &bw, &d );
+    nRight_     = wp - w - nLeft_;
+    nBottom_    = hp - h - nTop_;
 
     if( (aPosSize_.IsEmpty() || WindowNeedGoodPosition( XtWindow( hShell_ ) ) )
         && pDisplay_->GetProperties() & PROPERTY_FEATURE_Maximize )
     {
         nShowState_ = SHOWSTATE_NORMAL;
+
+        XSizeHints  hints;
+        long        supplied;
+        if( XGetWMNormalHints( pEvent->display,
+                               pEvent->window,
+                               &hints,
+                               &supplied ) )
+        {
+            if( hints.flags & PMaxSize ) // supplied
+            {
+                nMaxWidth_  = hints.max_width;
+                nMaxHeight_ = hints.max_height;
+                DBG_ASSERT( nMaxWidth_ && nMaxHeight_, "!MaxWidth^!MaxHeight" )
+            }
+            hints.flags |= PWinGravity;
+            hints.win_gravity = StaticGravity;
+            XSetWMNormalHints( pEvent->display,
+                               GetShellWindow(),
+                               &hints );
+            XSync( pEvent->display, False );
+        }
+
         Maximize();
-        aRestoreMaximize_ = Rectangle(); // not a real maximize
+        aRestoreFullScreen_ = aPosSize_;
     }
     else
     {
