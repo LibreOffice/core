@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-07-10 17:33:08 $
+ *  last change: $Author: er $ $Date: 2001-08-03 13:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #define _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -123,6 +126,12 @@ public:
     sal_Bool equals(
         const String& rStr1, sal_Int32 nPos1, sal_Int32 nCount1, sal_Int32& nMatch1,
         const String& rStr2, sal_Int32 nPos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) const;
+
+    sal_Bool equals( const String& rStr1, const String& rStr2 ) const
+        {
+            sal_Int32 nMatch1, nMatch2;
+            return equals( rStr1, 0, rStr1.Len(), nMatch1, rStr2, 0, rStr2.Len(), nMatch2 );
+        }
 
     sal_Int32 compareSubstring(
         const String& rStr1, sal_Int32 nOff1, sal_Int32 nLen1,
