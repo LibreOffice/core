@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-06 17:25:14 $
+ *  last change: $Author: sj $ $Date: 2001-02-15 18:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,13 @@
 
 #define DFF_AUTOSHAPE_FLIP_V        1
 #define DFF_AUTOSHAPE_FLIP_H        2
+#define DFF_AUTOSHAPE_EXCH          4
 
 class SdrModel;
 class SfxItemSet;
+struct SvxMSDffVertPair;
 struct SvxMSDffCalculationData;
+struct SvxMSDffTextRectangles;
 class SvxMSDffAdjustmentHandle;
 class SvxMSDffAutoShape
 {
@@ -94,11 +97,12 @@ class SvxMSDffAutoShape
         sal_uInt32                  nNumElemVert;
         sal_uInt32                  nNumElemSeg;
 
-        sal_Int32*                  pVertData;
+        SvxMSDffVertPair*           pVertData;
         sal_uInt16*                 pSegData;
-        sal_Int32*                  pTextRectData;
-
         sal_uInt32                  nColorData;
+
+        sal_uInt32                  nTextRectData;
+        SvxMSDffTextRectangles*     pTextRectData;
         sal_uInt32                  nCalculationData;
         SvxMSDffCalculationData*    pCalculationData;
         sal_uInt32                  nAdjustmentHandles;
@@ -120,7 +124,7 @@ class SvxMSDffAutoShape
         sal_Int32                   Fix16ToAngle( sal_Int32 nAngle ) const;
         Color                       ImplGetColorData( const Color& rFillColor, sal_uInt32 nIndex );
         double                      ImplGetValue( sal_uInt16 nIndex, sal_uInt32& nGeometryFlags ) const;
-        sal_Int32                   GetValue( sal_uInt32 nDat, sal_Bool bScale = TRUE, sal_Bool bScaleHeight = TRUE ) const;
+        Point                       GetPoint( const SvxMSDffVertPair&, sal_Bool bScale = sal_True ) const;
 
     public :
 
