@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_docmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:33:49 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 09:41:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 /**************************************************************************
                                 TODO
  **************************************************************************
@@ -675,6 +674,11 @@ OfficeDocumentsManager::queryStorageTitle( const rtl::OUString & rDocId )
 bool OfficeDocumentsManager::isOfficeDocument(
         const uno::Reference< uno::XInterface > & xDoc )
 {
+    uno::Reference< document::XStorageBasedDocument >
+        xStorageBasedDoc( xDoc, uno::UNO_QUERY );
+    if ( !xStorageBasedDoc.is() )
+        return false;
+
     uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
     if ( xModel.is() )
     {
