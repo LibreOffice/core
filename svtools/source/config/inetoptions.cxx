@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 16:55:13 $
+ *  last change: $Author: abi $ $Date: 2002-12-11 10:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,15 +156,12 @@ class SvtInetOptions::Impl: public salhelper::ReferenceObject,
 public:
     enum Index
     {
-        INDEX_DNS_SERVER,
         INDEX_NO_PROXY,
         INDEX_PROXY_TYPE,
         INDEX_FTP_PROXY_NAME,
         INDEX_FTP_PROXY_PORT,
         INDEX_HTTP_PROXY_NAME,
-        INDEX_HTTP_PROXY_PORT,
-        INDEX_SOCKS_PROXY_NAME,
-        INDEX_SOCKS_PROXY_PORT
+        INDEX_HTTP_PROXY_PORT
     };
 
     Impl();
@@ -189,7 +186,7 @@ public:
             rListener);
 
 private:
-    enum { ENTRY_COUNT = INDEX_SOCKS_PROXY_PORT + 1 };
+    enum { ENTRY_COUNT = INDEX_HTTP_PROXY_PORT + 1 };
 
     struct Entry
     {
@@ -334,8 +331,6 @@ SvtInetOptions::Impl::notifyListeners(
 SvtInetOptions::Impl::Impl():
     ConfigItem(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Inet/Settings")))
 {
-    m_aEntries[INDEX_DNS_SERVER].m_aName
-        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetDNSServer"));
     m_aEntries[INDEX_NO_PROXY].m_aName
         = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetNoProxy"));
     m_aEntries[INDEX_PROXY_TYPE].m_aName
@@ -348,10 +343,6 @@ SvtInetOptions::Impl::Impl():
         = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyName"));
     m_aEntries[INDEX_HTTP_PROXY_PORT].m_aName
         = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyPort"));
-    m_aEntries[INDEX_SOCKS_PROXY_NAME].m_aName
-        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetSOCKSProxyName"));
-    m_aEntries[INDEX_SOCKS_PROXY_PORT].m_aName
-        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetSOCKSProxyPort"));
 
     star::uno::Sequence< rtl::OUString > aKeys(ENTRY_COUNT);
     for (sal_Int32 i = 0; i < ENTRY_COUNT; ++i)
@@ -538,17 +529,6 @@ SvtInetOptions::SvtInetOptions()
                                                            toInt32()),
                                 false);
                 m_pImpl->
-                    setProperty(Impl::INDEX_SOCKS_PROXY_NAME,
-                                star::uno::makeAny(
-                                    xProxySettings->getSocksProxyAddress()),
-                                false);
-                m_pImpl->
-                    setProperty(Impl::INDEX_SOCKS_PROXY_PORT,
-                                star::uno::makeAny(xProxySettings->
-                                                       getSocksProxyPort().
-                                                           toInt32()),
-                                false);
-                m_pImpl->
                     setProperty(Impl::INDEX_NO_PROXY,
                                 star::uno::makeAny(
                                     xProxySettings->getProxyBypassAddress()),
@@ -576,13 +556,6 @@ SvtInetOptions::~SvtInetOptions()
     osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
     if (m_pImpl->release() == 0)
         m_pImpl = 0;
-}
-
-//============================================================================
-rtl::OUString SvtInetOptions::GetDnsIpAddress() const
-{
-    return takeAny< rtl::OUString >(m_pImpl->
-                                        getProperty(Impl::INDEX_DNS_SERVER));
 }
 
 //============================================================================
@@ -627,31 +600,6 @@ sal_Int32 SvtInetOptions::GetProxyHttpPort() const
 {
     return takeAny< sal_Int32 >(m_pImpl->
                                     getProperty(Impl::INDEX_HTTP_PROXY_PORT));
-}
-
-//============================================================================
-rtl::OUString SvtInetOptions::GetProxySocksName() const
-{
-    return takeAny< rtl::OUString >(m_pImpl->
-                                        getProperty(
-                                            Impl::INDEX_SOCKS_PROXY_NAME));
-}
-
-//============================================================================
-sal_Int32 SvtInetOptions::GetProxySocksPort() const
-{
-    return takeAny< sal_Int32 >(m_pImpl->
-                                    getProperty(
-                                        Impl::INDEX_SOCKS_PROXY_PORT));
-}
-
-//============================================================================
-void SvtInetOptions::SetDnsIpAddress(rtl::OUString const & rValue,
-                                     bool bFlush)
-{
-    m_pImpl->setProperty(Impl::INDEX_DNS_SERVER,
-                         star::uno::makeAny(rValue),
-                         bFlush);
 }
 
 //============================================================================
@@ -703,75 +651,6 @@ void SvtInetOptions::SetProxyHttpPort(sal_Int32 nValue, bool bFlush)
     m_pImpl->setProperty(Impl::INDEX_HTTP_PROXY_PORT,
                          star::uno::makeAny(nValue),
                          bFlush);
-}
-
-//============================================================================
-void SvtInetOptions::SetProxySocksName(rtl::OUString const & rValue,
-                                       bool bFlush)
-{
-    m_pImpl->setProperty(Impl::INDEX_SOCKS_PROXY_NAME,
-                         star::uno::makeAny(rValue),
-                         bFlush);
-}
-
-//============================================================================
-void SvtInetOptions::SetProxySocksPort(sal_Int32 nValue, bool bFlush)
-{
-    m_pImpl->setProperty(Impl::INDEX_SOCKS_PROXY_PORT,
-                         star::uno::makeAny(nValue),
-                         bFlush);
-}
-
-//============================================================================
-sal_Bool SvtInetOptions::ShouldUseFtpProxy(const rtl::OUString &rUrl) const
-{
-    // Check URL.
-    INetURLObject aURL(rUrl);
-    if ( !(aURL.GetProtocol() == INET_PROT_FTP))
-        return sal_False;
-
-    ProxyType eType = (ProxyType) GetProxyType();
-
-    if ( eType == NONE )
-        return sal_False;
-
-    rtl::OUString aFtpProxy = GetProxyFtpName();
-
-    if ( ! aFtpProxy.getLength() )
-        return sal_False;
-
-    rtl::OUString aNoProxyList = GetProxyNoProxy();
-
-    if ( aNoProxyList.getLength() )
-    {
-        // Setup Endpoint.
-        rtl::OUString aEndpoint( aURL.GetHost() );
-
-        if ( !aEndpoint.getLength() )
-            return sal_False;
-
-        aEndpoint += rtl::OUString( ':' );
-
-        if ( aURL.HasPort() )
-            aEndpoint += rtl::OUString::valueOf( (sal_Int64) aURL.GetPort() );
-        else
-            aEndpoint += rtl::OUString::createFromAscii( "21" );
-
-        // Match NoProxyList.
-        sal_Int32 nIndex = 0;
-        do {
-            rtl::OUString aWildToken = aNoProxyList.getToken( 0, ';', nIndex );
-            if ( aWildToken.indexOf( ':', 0 ) == -1 )
-                aWildToken += rtl::OUString::createFromAscii( ":*" );
-
-            WildCard aWildCard( aWildToken );
-            if ( aWildCard.Matches( aEndpoint ) )
-                return sal_False;
-        }
-        while ( nIndex != -1 );
-    }
-
-    return sal_True;
 }
 
 //============================================================================
