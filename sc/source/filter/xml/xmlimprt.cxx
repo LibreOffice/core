@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-15 11:16:47 $
+ *  last change: $Author: sab $ $Date: 2001-10-22 10:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1948,7 +1948,10 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUStri
                         aBuffer.appendAscii("]");
                         UnlockSolarMutex();
                         sFormatString = aBuffer.makeStringAndClear();
-                        return xNumberFormats->addNew(sFormatString, aLocale);
+                        sal_Int32 nNewKey = xNumberFormats->queryKey(sFormatString, aLocale, sal_True);
+                        if (nNewKey == -1)
+                            nNewKey = xNumberFormats->addNew(sFormatString, aLocale);
+                        return nNewKey;
                     }
                 }
             }
@@ -2038,12 +2041,18 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
                             rProperties->setPropertyValue( sNumberFormat, aNumberFormatPropertyKey );
                         }
                     }
-                    else if (rCurrency.getLength())
+                    else if (rCurrency.getLength() && sCurrentBankCurrency.getLength())
                     {
-                        sal_Int32 nKey = SetCurrencySymbol(rNumberFormat, rCurrency);
-                        uno::Any aAny;
-                        aAny <<= nKey;
-                        rProperties->setPropertyValue( sNumberFormat, aAny);
+                        if (!sCurrentBankCurrency.equals(rCurrency))
+                        {
+                            if (!IsCurrencySymbol(rNumberFormat, rCurrency))
+                            {
+                                sal_Int32 nKey = SetCurrencySymbol(rNumberFormat, rCurrency);
+                                uno::Any aAny;
+                                aAny <<= nKey;
+                                rProperties->setPropertyValue( sNumberFormat, aAny);
+                            }
+                        }
                     }
                 }
             }
