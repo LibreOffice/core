@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: dbo $ $Date: 2002-07-31 13:14:51 $
+#   last change: $Author: hjs $ $Date: 2002-09-04 12:32:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -156,10 +156,10 @@ ALLTAR : $(UCR)$/applicat.db $(OUT)$/ucrdoc$/applicat_doc.db
 
 $(UCR)$/applicat.db : $(UCR)$/offapi.db $(SOLARBINDIR)$/udkapi.rdb
     +$(GNUCOPY) -f $(UCR)$/offapi.db $@
-    +regmerge $@ / $(SOLARBINDIR)$/udkapi.rdb
+    +$(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi.rdb
 $(OUT)$/ucrdoc$/applicat_doc.db : $(OUT)$/ucrdoc$/offapi_doc.db $(SOLARBINDIR)$/udkapi_doc.rdb
     +$(GNUCOPY) -f $(OUT)$/ucrdoc$/offapi_doc.db $@
-    +regmerge $@ / $(SOLARBINDIR)$/udkapi_doc.rdb
+    +$(GNUCOPY) $@ / $(SOLARBINDIR)$/udkapi_doc.rdb
 
 .ELSE
 ALL : ALLDEP
@@ -172,7 +172,7 @@ ALL : ALLDEP
 ALLTAR: $(REGISTRYCHECKFLAG)
 
 $(REGISTRYCHECKFLAG) : $(UNOIDLDBTARGET)
-    +regcompare -t -r1 $(REFERENCE_SO_60_RDB) -r2 $(UNOIDLDBTARGET)
-    +regcompare -t -r1 $(REFERENCE_SO_60_DOC_RDB) -r2 $(UNOIDLDBTARGET) && echo > $(REGISTRYCHECKFLAG)
+    +(REGCOMPARE) -t -r1 $(REFERENCE_SO_60_RDB) -r2 $(UNOIDLDBTARGET)
+    +(REGCOMPARE) -t -r1 $(REFERENCE_SO_60_DOC_RDB) -r2 $(UNOIDLDBTARGET) && echo > $(REGISTRYCHECKFLAG)
 
 .ENDIF
