@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdline.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2001-03-23 13:23:17 $
+ *  last change: $Author: mh $ $Date: 2001-09-28 14:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,6 @@ CommandLine::CommandLine( int           argc,
                           char *        argv[] )
     :   bIsOk(true)
 {
-    int nCountArg = 0;
     bool bDisplayUse = false;
 
     /* Check command line: */

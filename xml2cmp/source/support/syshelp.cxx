@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syshelp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: np $ $Date: 2001-07-10 11:02:30 $
+ *  last change: $Author: mh $ $Date: 2001-09-28 14:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,6 @@ GatherSubDirectories( List<Simstr> &    o_sSubDirectories,
     DIR * pDir = opendir( i_sParentdDirectory );
     dirent * pEntry = 0;
     struct stat     aEntryStatus;
-    char * sEnding;
 
     while ( ( pEntry = readdir(pDir) ) != 0 )
     {
