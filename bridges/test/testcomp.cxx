@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcomp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:07:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
