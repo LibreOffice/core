@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:15:46 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 17:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #include <svx/svdouno.hxx>
 #ifndef _SVX_EXTRUSION_BAR_HXX
 #include <svx/extrusionbar.hxx>
+#endif
+#ifndef _SVX_FONTWORK_BAR_HXX
+#include <svx/fontworkbar.hxx>
 #endif
 
 #include "drawsh.hxx"
@@ -294,6 +297,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
     }
 
     svx::ExtrusionBar::getState( pView, rSet );
+    svx::FontworkBar::getState( pView, rSet );
 }
 
 //
