@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcnitm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:14:07 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 13:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,11 +212,11 @@ BOOL SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
             {
                 delete pImpl;
                 pImpl = pNewImpl;
-                return FALSE;
             }
             else
             {
                 delete pNewImpl;
+                return FALSE;
             }
         }
         catch(...)
