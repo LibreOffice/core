@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-09 10:41:30 $
+ *  last change: $Author: mba $ $Date: 2000-10-11 15:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1230,7 +1230,6 @@ void SfxMedium::Transfer_Impl()
                 pImp->pTempFile->EnableKillingFile( sal_False );
                 delete pImp->pTempFile;
                 pImp->pTempFile = NULL;
-                bDownLoad = TRUE;
                 return;
             }
         }
@@ -1349,7 +1348,6 @@ void SfxMedium::GetMedium_Impl()
 {
     if ( !pInStream )
     {
-        DBG_ASSERT( bDownLoad, "Medium without DownloadFlag!" );
         pImp->bDownloadDone = sal_False;
         pImp->bStreamReady = sal_False;
 
@@ -1627,7 +1625,6 @@ SfxMedium::SfxMedium()
     pImp(new SfxMedium_Impl( this )),
     pFilter(0)
 {
-    bDownLoad = sal_True;
     Init_Impl();
 }
 //------------------------------------------------------------------
@@ -1657,8 +1654,6 @@ SfxMedium::SfxMedium( const SfxMedium& rMedium, sal_Bool bTemporary )
         if ( !SfxContentHelper::CopyTo( rMedium.GetName(), GetPhysicalName() ) )
             SetError( ERRCODE_IO_GENERAL );
     }
-
-    bDownLoad       = sal_True;
 
     if ( rMedium.pImp->pEaMgr )
         GetEaMgr();
@@ -1870,7 +1865,10 @@ void SfxMedium::ReOpen()
 SfxMedium::SfxMedium
 (
     const String &rName, StreamMode nOpenMode,  sal_Bool bDirectP,
-    sal_Bool bDownLoadP, const SfxFilter *pFlt, SfxItemSet *pInSet
+#if SUPD<609
+    sal_Bool bDownLoadP,
+#endif
+    const SfxFilter *pFlt, SfxItemSet *pInSet
 )
 :   IMPL_CTOR(),
     bRoot( sal_False ),
@@ -1882,7 +1880,6 @@ SfxMedium::SfxMedium
     aName = aLogicName = rName;
     nStorOpenMode = nOpenMode;
     bDirect = bDirectP;
-    bDownLoad = bDownLoadP;
     Init_Impl();
 }
 //------------------------------------------------------------------
@@ -1916,9 +1913,9 @@ SfxMedium::SfxMedium( SvStorage *pStorage, sal_Bool bRootP )
         pFilter = SfxObjectFactory::GetDefaultFactory().GetFilterContainer()->GetFilter( 0 );
     }
 
-    bDownLoad = sal_False;
     Init_Impl();
 }
+
 //------------------------------------------------------------------
 
 SfxMedium::~SfxMedium()
