@@ -2,9 +2,9 @@
  *
  *  $RCSfile: widorp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 11:26:17 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 14:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,12 @@ public:
 
     sal_Bool FindBreak( SwTxtFrm *pFrm, SwTxtMargin &rLine, sal_Bool bHasToFit );
     sal_Bool WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sal_Bool bTest );
-    sal_Bool IsBreakNow( SwTxtMargin &rLine )
-    {   return ( rLine.GetLineNr() > nOrphLines ) &&
-                 SwTxtFrmBreak::IsBreakNow( rLine ); }
+    // OD 2004-02-25 #i16128# - rename method to avoid confusion with base class
+    // method <SwTxtFrmBreak::IsBreakNow>, which isn't virtual.
+    sal_Bool IsBreakNowWidAndOrp( SwTxtMargin &rLine )
+    {
+        return ( rLine.GetLineNr() > nOrphLines ) && IsBreakNow( rLine );
+    }
 };
 
 
