@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:51:31 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ greek ] = "Στην περίπτωση που τα επιλεγμένα κελιά δεν περιέχουν τα δεδομένα που επιθυμείτε, επιλέξτε εσείς την σωστή περιοχή.\n\n Αν θέλετε να εμφανιστούν στο γραφικό σας και οι επιγραφές των στηλών και των γραμμών, τότε θα πρέπει να συμπεριληφθούν και αυτά τα δεδομένα στην περιοχή της επιλογής σας.";
         Text[ korean ] = "Ό±ΕΓΗ¥½ΓµΘ ΌΏΐΜ ΏψΗΟ΄Β µ¥ΐΜΕΝΈ¦ ΖχΗΤΗΟ°ν ΐΦΑφ ΎΚΐ» °ζΏμ, Αφ±έ ΏµΏªΐ» Ό±ΕΓΗ¥½ΓΗΟ½Κ½ΓΏΐ. \n\nΏ­ ³»Αφ Ηΰ ¶σΊ§ΐ» °΅Αψ ΌΏµιΐ» ±Χ·΅ΗΘΏ΅ ³ªΕΈ³»°νΐΪΗΟΈι ΐΜ ΌΏµιΐ» ΗΤ²² ΖχΗΤ½ΓΕ°½Κ½ΓΏΐ.";
         Text[ turkish ] = "Seηilen hόcreler, istenen verileri iηermiyorsa aralύπύ ώimdi seηin.\n\nGrafikte gφrόnmelerini istiyorsanύz, sόtun ya da satύr baώlύklarύnύ iηeren hόcreleri de seηin";
+        Text[ catalan ] = "En caso de que las celdas marcadas no contengan los datos deseados, marque ahora el αrea.\n\nIncluya las celdas con  los nombres de las columnas y filas si desea que estas aparezcan en su grαfico.";
     };
     FixedText FT_RANGE
     {
@@ -129,6 +130,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ greek ] = "Περιοχή";
         Text[ korean ] = "ΏµΏª(~A)";
         Text[ turkish ] = "~Aralύk";
+        Text[ catalan ] = "~Αrea";
     };
     Edit ED_RANGE
     {
@@ -164,6 +166,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ greek ] = "Πρώτη γραμμή ως επιγραφή";
         Text[ korean ] = "ΓΉΉψΒ° Ηΰΐ» ΔΈΌΗΐΈ·Ξ(~F)";
         Text[ turkish ] = "Baώlύklar ~birinci satύrda";
+        Text[ catalan ] = "Primera ~fila como etiqueta";
     };
     CheckBox CB_FIRST_COL
     {
@@ -193,6 +196,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ greek ] = "Πρώτη στήλη ως επιγραφή";
         Text[ korean ] = "ΓΉΉψΒ° Ώ­ΐ» ΔΈΌΗΐΈ·Ξ(~C)";
         Text[ turkish ] = "Baώlύklar ~birinci sόtunda";
+        Text[ catalan ] = "Primera c~olumna como etiqueta";
     };
     GroupBox GB_1
     {
@@ -220,6 +224,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ greek ] = "Επιλογή";
         Text[ korean ] = "Ό±ΕΓ";
         Text[ turkish ] = "Seηim";
+        Text[ catalan ] = "Selecciσn";
     };
     FixedText FT_HORZLINE
     {
@@ -269,6 +274,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ greek ] = "<< Πίσω";
         Text[ korean ] = "<<µΪ·Ξ)(~B)";
         Text[ turkish ] = "<< G~eri";
+        Text[ catalan ] = "<< ~Regresar";
     };
     PushButton BT_NEXT
     {
@@ -298,6 +304,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ greek ] = "Επόμενο >>";
         Text[ korean ] = "΄Ωΐ½ (~N) >>";
         Text[ turkish ] = "~έleri >>";
+        Text[ catalan ] = "~Siguiente >>";
     };
     PushButton BT_FINISH
     {
@@ -326,6 +333,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ greek ] = "Δημιουργία";
         Text[ korean ] = "ΈΈµι±β(~A)";
         Text[ turkish ] = "~Oluώtur";
+        Text[ catalan ] = "~Crear";
     };
     Text [ italian ] = "Formattazione automatica diagramma (1-4)" ;
     Text [ spanish ] = "AutoFormato diagrama (1-4)" ;
@@ -346,4 +354,5 @@ ModelessDialog DLG_INSERT_CHART
     Text[ greek ] = "ΑυτοΜορφή Διάγραμμα (1-4)";
     Text[ korean ] = "ΐΪµΏΌ­½Δ ΒχΖ® (1-4)";
     Text[ turkish ] = "Otomatik ώema formatlama (1-4)";
+    Text[ catalan ] = "AutoFormato diagrama (1-4)";
 };
