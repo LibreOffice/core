@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:07:29 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,7 +483,11 @@ void SwFlyAtCntFrm::MakeAll()
             // 'straightforward positioning process' for the frame due to fact
             // that it causes the complete content of its layout environment
             // to move forward.
-            bool bConsiderWrapInfluenceDueToEmptyEnvironment( false );
+            // --> OD 2005-01-14 #i40444# - extend usage of this boolean:
+            // apply temporarly the 'straightforward positioning process' for
+            // the frame due to the fact that the frame clears the area for
+            // the anchor frame, thus it has to move forward.
+            bool bConsiderWrapInfluenceDueToMovedFwdAnchor( false );
             // <--
             do {
                 SWRECTFN( this )
@@ -513,16 +517,11 @@ void SwFlyAtCntFrm::MakeAll()
                     GetAnchorFrmContainingAnchPos()->Calc();
                     // <--
                     // --> OD 2004-10-22 #i35911#
+                    // --> OD 2005-01-14 #i40444#
                     if ( GetAnchorFrm()->FindPageFrm()->GetPhyPageNum() >
                                                 GetPageFrm()->GetPhyPageNum() )
                     {
-                        const SwFrm* pTmpFrm = GetVertPosOrientFrm()->Lower();
-                        if ( !pTmpFrm ||
-                             ( pTmpFrm->IsTxtFrm() &&
-                               static_cast<const SwTxtFrm*>(pTmpFrm)->IsUndersized() ) )
-                        {
-                            bConsiderWrapInfluenceDueToEmptyEnvironment = true;
-                        }
+                        bConsiderWrapInfluenceDueToMovedFwdAnchor = true;
                     }
                     // <--
                 }
@@ -546,16 +545,16 @@ void SwFlyAtCntFrm::MakeAll()
                       // --> OD 2004-08-25 #i3317#
                       !bConsiderWrapInfluenceDueToOverlapPrevCol &&
                       // <--
-                      // --> OD 2004-10-22 #i35991#
-                      !bConsiderWrapInfluenceDueToEmptyEnvironment &&
+                      // --> OD 2005-01-14 #i40444#
+                      !bConsiderWrapInfluenceDueToMovedFwdAnchor &&
                       // <--
                       GetFmt()->GetDoc()->IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) );
 
             // --> OD 2004-08-25 #i3317# - instead of attribute change apply
             // temporarly the 'straightforward positioning process'.
             if ( bOsz || bConsiderWrapInfluenceDueToOverlapPrevCol ||
-                 // --> OD 2004-10-22 #i35991#
-                 bConsiderWrapInfluenceDueToEmptyEnvironment )
+                 // --> OD 2005-01-14 #i40444#
+                 bConsiderWrapInfluenceDueToMovedFwdAnchor )
                  // <--
             {
                 SetTmpConsiderWrapInfluence( true );
