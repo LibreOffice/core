@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-18 11:41:05 $
+ *  last change: $Author: pl $ $Date: 2002-07-30 07:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,7 +549,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
     initAtoms();
 
     // check for GnomeWM
-    if( m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ] )
+    if( m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ] && m_aWMAtoms[ WIN_PROTOCOLS ] )
     {
         XLIB_Window         aWMChild    = None;
         if( XGetWindowProperty( m_pDisplay,
