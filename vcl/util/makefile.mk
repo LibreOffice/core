@@ -1,10 +1,10 @@
-##*************************************************************************
+#*************************************************************************
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.60 $
+#   $Revision: 1.61 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-09 11:28:46 $
+#   last change: $Author: obo $ $Date: 2004-09-10 13:27:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -326,19 +326,7 @@ SHL2STDLIBS += -ldl -lnsl -lsocket
 SHL2STDLIBS+=$(LIBSN_LIBS)
 .ENDIF
 
-# Solaris
-.IF "$(OS)"=="SOLARIS"
 SHL2STDLIBS += -lXext -lSM -lICE -lX11
-# Others
-.ELSE           # "$(OS)"=="SOLARIS"
-.IF "$(USE_XINERAMA)" != "NO"
-.IF "$(XINERAMA_LINK)" == "dynamic"
-SHL2STDLIBS += -lXinerama
-.ELSE
-.ENDIF          # $(XINERAMA_LINK)
-.ENDIF          # $(USE_XINERAMA)
-SHL2STDLIBS += -Wl,-Bstatic -l
-.ENDIF          # "$(OS)"=="SOLARIS"
 
 .ENDIF          # "$(GUIBASE)"=="unx"
 
