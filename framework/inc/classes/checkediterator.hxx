@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checkediterator.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2001-07-23 10:06:10 $
+ *  last change: $Author: as $ $Date: 2002-07-29 08:22:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,8 @@ class CheckedIterator
         *//*-*****************************************************************************************************/
 
         inline CheckedIterator()
-                :   m_eEndState( E_UNKNOWN )
+                :   m_eEndState ( E_UNKNOWN )
+                ,   m_pContainer( NULL      )
         {
         }
 
@@ -219,6 +220,24 @@ class CheckedIterator
         {
             m_pContainer = NULL       ;
             m_eEndState  = E_AFTEREND ;
+        }
+
+        /*-****************************************************************************************************//**
+            @short      reset this iterator
+            @descr      It must be called on an already initialized iterator.
+                        Means the member m_pContainer must be valid. Otherwhise the reaction
+                        isn't defined.
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+        inline void reset()
+        {
+            m_eEndState  = E_UNKNOWN;
+            m_pContainer = NULL;
         }
 
         /*-****************************************************************************************************//**
