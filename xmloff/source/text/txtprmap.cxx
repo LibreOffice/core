@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:11:34 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:36:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,7 +737,7 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     // RES_GRFATR_CHANNELB
     MG_E( "AdjustBlue",     DRAW, BLUE,                 XML_TYPE_PERCENT16, 0 ),        // signed?
     // RES_GRFATR_GAMMA
-    MG_E( "Gamma",          DRAW, GAMMA,                XML_TYPE_DOUBLE, 0 ),           // signed?
+    MG_E( "Gamma",          DRAW, GAMMA,                XML_TYPE_DOUBLE_PERCENT, 0 ),           // signed?
     // RES_GRFATR_INVERT
     MG_E( "GraphicIsInverted", DRAW, COLOR_INVERSION,       XML_TYPE_BOOL, 0 ),
     // RES_GRFATR_TRANSPARENCY
