@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:13 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,15 +87,18 @@ TabPage TP_ENV_PRT
         Text[ danish ] = "Konvolutindryk";
         Text[ swedish ] = "Kuvertmatning";
         Text[ polish ] = "Orientacja koperty";
-        Text[ portuguese_brazilian ] = "Envelope orientation";
+        Text[ portuguese_brazilian ] = "Orienta��o do envelope";
         Text[ japanese ] = "封筒の向き";
         Text[ korean ] = "봉투 방향";
         Text[ chinese_simplified ] = "信封方向";
         Text[ chinese_traditional ] = "信封方向";
-        Text[ turkish ] = "Envelope orientation";
+        Text[ turkish ] = "Zarf metin y�n�";
         Text[ arabic ] = "Envelope orientation";
         Text[ catalan ] = "Orientaci� del sobre";
         Text[ thai ] = "วางแนวซองจดหมาย";
+        Text[ czech ] = "Orientace obálky";
+        Text[ hebrew ] = "Umschlageinzug";
+        Text[ hindi ] = "लिफाफा का अनुस्थापन";
     };
     ToolBox BOX_ALIGN
     {
@@ -148,7 +151,7 @@ TabPage TP_ENV_PRT
         Text [ FRENCH ] = "Imprimer � partir du haut" ;
         Text [ ITALIAN ] = "Stampa da sopra" ;
         Text [ DUTCH ] = "B~ovenkant bedrukken" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Imprimir parte superior" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Imprimir a partir cima" ;
         Text [ SWEDISH ] = "Skriv ut u~ppifr�n" ;
         Text [ PORTUGUESE ] = "Imprimir a partir de cima" ;
         TabStop = TRUE ;
@@ -156,7 +159,7 @@ TabPage TP_ENV_PRT
         Check = TRUE ;
         Text[ chinese_simplified ] = "从上方开始打印(~P)";
         Text[ russian ] = "��~������ ������";
-        Text[ polish ] = "Drukuj od g�ry";
+        Text[ polish ] = "~Drukuj od g�ry";
         Text[ japanese ] = "封筒の表を上にする(~P)";
         Text[ chinese_traditional ] = "從上方開始列印(~P)";
         Text[ arabic ] = "������� �� ����";
@@ -166,6 +169,9 @@ TabPage TP_ENV_PRT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Imprimeix des de la part superior";
         Text[ thai ] = "~พิมพ์จากด้านบน";
+        Text[ czech ] = "Tisk od horního okraje";
+        Text[ hebrew ] = "Von ~oben bedrucken";
+        Text[ hindi ] = "~ऊपर से छपाई";
     };
     RadioButton BTN_BOTTOM
     {
@@ -181,13 +187,13 @@ TabPage TP_ENV_PRT
         Text [ FRENCH ] = "Imprimer � partir du bas" ;
         Text [ ITALIAN ] = "Stampa da sotto" ;
         Text [ DUTCH ] = "~Onderkant bedrukken" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Imprimir parte inferior" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Imprimir a partir de ~baixo" ;
         Text [ SWEDISH ] = "Skriv ~ut nedifr�n" ;
         Text [ PORTUGUESE ] = "Imprimir a partir de baixo" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "从下方开始打印(~B)";
         Text[ russian ] = "�������� �����";
-        Text[ polish ] = "Drukuj od do�u";
+        Text[ polish ] = "Drukuj od do�~u";
         Text[ japanese ] = "封筒の表を下にする(~B)";
         Text[ chinese_traditional ] = "從下方開始列印(~B)";
         Text[ arabic ] = "������� �� ����";
@@ -197,6 +203,9 @@ TabPage TP_ENV_PRT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imprimeix des de la ~part inferior";
         Text[ thai ] = "พิมพ์จากด้าน~ล่าง";
+        Text[ czech ] = "Tisk od spodního okraje";
+        Text[ hebrew ] = "Von ~unten bedrucken";
+        Text[ hindi ] = "~नीचे से छपाई";
     };
     FixedText TXT_RIGHT
     {
@@ -212,13 +221,13 @@ TabPage TP_ENV_PRT
         Text [ FRENCH ] = "Vers la droite" ;
         Text [ ITALIAN ] = "Sposta a destra" ;
         Text [ DUTCH ] = "Naar re~chts" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Trocar ? direita" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Deslocar para a ~direita" ;
         Text [ SWEDISH ] = "�t h�ger" ;
         Text [ PORTUGUESE ] = "� direita" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "向右(~S)";
         Text[ russian ] = "�~���� ������";
-        Text[ polish ] = "Na prawo";
+        Text[ polish ] = "Przesu� w ~prawo";
         Text[ japanese ] = "右に(~S)";
         Text[ chinese_traditional ] = "向右(~S)";
         Text[ arabic ] = "��� ������";
@@ -228,6 +237,9 @@ TabPage TP_ENV_PRT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cap a la ~dreta";
         Text[ thai ] = "เ~ลื่อนทางขวา";
+        Text[ czech ] = "Posunout doprava";
+        Text[ hebrew ] = "Nach ~rechts";
+        Text[ hindi ] = "~दाहिनी ओर स्थान बदलो";
     };
     MetricField FLD_RIGHT
     {
@@ -260,13 +272,13 @@ TabPage TP_ENV_PRT
         Text [ FRENCH ] = "Vers le bas" ;
         Text [ ITALIAN ] = "Sposta in basso" ;
         Text [ DUTCH ] = "~Naar beneden" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Trocar abaixo" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Deslocar para ~baixo" ;
         Text [ SWEDISH ] = "~Ned�t" ;
         Text [ PORTUGUESE ] = "Para baixo" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "向下(~D)";
         Text[ russian ] = "����� ���~�";
-        Text[ polish ] = "W d�";
+        Text[ polish ] = "Pr~zesu� w d�";
         Text[ japanese ] = "下に(~D)";
         Text[ chinese_traditional ] = "向下(~D)";
         Text[ arabic ] = "��� ����";
@@ -276,6 +288,9 @@ TabPage TP_ENV_PRT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cap a a~vall";
         Text[ thai ] = "เลื่อน ~ลง";
+        Text[ czech ] = "Posunout dolů";
+        Text[ hebrew ] = "~Nach unten";
+        Text[ hindi ] = "~नीचे की ओर स्थान बदलो";
     };
     MetricField FLD_DOWN
     {
@@ -311,16 +326,19 @@ TabPage TP_ENV_PRT
         Text[ italian ] = "Stampante attuale";
         Text[ danish ] = "Aktuel printer";
         Text[ swedish ] = "Aktuell skrivare";
-        Text[ polish ] = "Aktualna drukarka";
-        Text[ portuguese_brazilian ] = "Current printer";
+        Text[ polish ] = "Bie��ca drukarka";
+        Text[ portuguese_brazilian ] = "Impressora atual";
         Text[ japanese ] = "現在のプリンタ";
         Text[ korean ] = "현재 프린터";
         Text[ chinese_simplified ] = "当前的打印机";
         Text[ chinese_traditional ] = "目前的印表機";
-        Text[ turkish ] = "Current printer";
+        Text[ turkish ] = "Y�r�rl�kteki yaz�c�";
         Text[ arabic ] = "Current printer";
         Text[ catalan ] = "Impressora activa";
         Text[ thai ] = "เครื่องพิมพ์ปัจจุบัน";
+        Text[ czech ] = "Aktuální tiskárna";
+        Text[ hebrew ] = "Aktueller Drucker";
+        Text[ hindi ] = "वर्तमान मुद्रक";
     };
     FixedText TXT_PRINTER
     {
@@ -352,6 +370,9 @@ TabPage TP_ENV_PRT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "- No hi ha cap impressora instal.lada -";
         Text[ thai ] = "- ไม่ได้ติดตั้งเครื่องพิมพ์ -";
+        Text[ czech ] = "- Není nainstalována tiskárna -";
+        Text[ hebrew ] = "- Kein Drucker installiert -";
+        Text[ hindi ] = "- कोई मुद्रक प्रतिष्ठापित नहीं -";
     };
     PushButton BTN_PRTSETUP
     {
@@ -367,7 +388,7 @@ TabPage TP_ENV_PRT
         Text [ dutch ] = "~Configureren..." ;
         Text [ swedish ] = "St�ll ~in..." ;
         Text [ danish ] = "In~dstil..." ;
-        Text [ portuguese_brazilian ] = "Einrichten..." ;
+        Text [ portuguese_brazilian ] = "Configurar..." ;
         Text [ portuguese ] = "~Configurar..." ;
         Text[ chinese_simplified ] = "设置...";
         Text[ russian ] = "����������...";
@@ -378,10 +399,13 @@ TabPage TP_ENV_PRT
         Text[ arabic ] = "...�����";
         Text[ greek ] = "~�����������...";
         Text[ korean ] = "설치...";
-        Text[ turkish ] = "Ayarlar...";
+        Text[ turkish ] = "Kurulum...";
         Text[ catalan ] = "Configura...";
         Text[ finnish ] = "Asennus...";
         Text[ thai ] = "ติดตั้ง...";
+        Text[ czech ] = "Nastavení...";
+        Text[ hebrew ] = "~Einrichten...";
+        Text[ hindi ] = "सेटप...";
     };
 };
  // Bitmaps ******************************************************************
@@ -482,6 +506,19 @@ Bitmap BMP_VER_RGHT_UPPER_H
 {
     File = "envvr_u_h.bmp" ;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
