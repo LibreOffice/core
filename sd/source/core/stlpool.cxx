@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:54:08 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:56:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,6 +684,8 @@ void SdStyleSheetPool::CopyGraphicSheets(SdStyleSheetPool& rSourcePool)
             if ( !Find( aName, SFX_STYLE_FAMILY_PARA ) )
             {
                 SfxStyleSheetBase& rNewSheet = Make( aName, SFX_STYLE_FAMILY_PARA );
+
+                rNewSheet.SetMask( pSheet->GetMask() );
 
                 // #91588# Also set parent relation for copied style sheets
                 String aParent( pSheet->GetParent() );
