@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:13:37 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1001,11 +1001,11 @@ namespace svt
         for (pColumnNames = aColumnNames.getConstArray(); pColumnNames != pEnd; ++pColumnNames)
             aColumnNameSet.insert(*pColumnNames);
 
-        const String* pInitialSelection = m_pImpl->aFieldAssignments.begin() + m_pImpl->nFieldScrollPos;
+        std::vector<String>::iterator aInitialSelection = m_pImpl->aFieldAssignments.begin() + m_pImpl->nFieldScrollPos;
 
         ListBox** pListbox = m_pImpl->pFields;
         String sSaveSelection;
-        for (sal_Int32 i=0; i<FIELD_CONTROLS_VISIBLE; ++i, ++pListbox, ++pInitialSelection)
+        for (sal_Int32 i=0; i<FIELD_CONTROLS_VISIBLE; ++i, ++pListbox, ++aInitialSelection)
         {
             sSaveSelection = (*pListbox)->GetSelectEntry();
 
@@ -1020,9 +1020,9 @@ namespace svt
             for (pColumnNames = aColumnNames.getConstArray(); pColumnNames != pEnd; ++pColumnNames)
                 (*pListbox)->InsertEntry(*pColumnNames);
 
-            if (pInitialSelection->Len() && (aColumnNameSet.end() != aColumnNameSet.find(*pInitialSelection)))
+            if (aInitialSelection->Len() && (aColumnNameSet.end() != aColumnNameSet.find(*aInitialSelection)))
                 // we can select the entry as specified in our field assignment array
-                (*pListbox)->SelectEntry(*pInitialSelection);
+                (*pListbox)->SelectEntry(*aInitialSelection);
             else
                 // try to restore the selection
                 if (aColumnNameSet.end() != aColumnNameSet.find(sSaveSelection))
