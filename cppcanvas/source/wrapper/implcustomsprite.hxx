@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implcustomsprite.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 17:00:03 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,8 @@
 #include <cppcanvas/customsprite.hxx>
 #endif
 
-#include "implsprite.hxx"
+#include <implsprite.hxx>
+#include <implspritecanvas.hxx>
 
 
 namespace cppcanvas
@@ -91,7 +92,8 @@ namespace cppcanvas
             ImplCustomSprite( const ::com::sun::star::uno::Reference<
                                       ::drafts::com::sun::star::rendering::XSpriteCanvas >&     rParentCanvas,
                               const ::com::sun::star::uno::Reference<
-                                      ::drafts::com::sun::star::rendering::XCustomSprite >&     rSprite );
+                                      ::drafts::com::sun::star::rendering::XCustomSprite >&     rSprite,
+                              const ImplSpriteCanvas::TransformationArbiterSharedPtr&       rTransformArbiter );
             virtual ~ImplCustomSprite();
 
             virtual CanvasSharedPtr getContentCanvas() const;
