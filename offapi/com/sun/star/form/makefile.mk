@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2000-11-13 17:17:10 $
+#   last change: $Author: fs $ $Date: 2002-08-29 15:01:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,7 @@ IDLFILES=\
     FormSubmitMethod.idl\
     ListSourceType.idl\
     NavigationBarMode.idl\
+    PropertyBrowserController.idl\
     TabulatorCycle.idl\
     XApproveActionBroadcaster.idl\
     XApproveActionListener.idl\
