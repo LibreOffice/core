@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-09-29 15:22:01 $
+ *  last change: $Author: cl $ $Date: 2000-10-10 14:50:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1257,7 +1257,10 @@ void SAL_CALL SdDrawPage::remove( const uno::Reference< drawing::XShape >& xShap
     {
         SdrObject* pObj = pShape->GetSdrObject();
         if( pObj )
+        {
             mpPage->GetPresObjList()->Remove((void*) pObj);
+            pObj->SetUserCall(NULL);
+        }
     }
 
     SdGenericDrawPage::remove( xShape );
