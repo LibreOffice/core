@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-08 13:42:08 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 12:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ class SwTxtFormatter : public SwTxtPainter
     SwLinePortion *NewPortion( SwTxtFormatInfo &rInf );
     SwTxtPortion  *NewTxtPortion( SwTxtFormatInfo &rInf );
     SwLinePortion *NewExtraPortion( SwTxtFormatInfo &rInf );
-    SwTabPortion *NewTabPortion( SwTxtFormatInfo &rInf ) const;
+    SwTabPortion *NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto ) const;
     SwNumberPortion *NewNumberPortion( SwTxtFormatInfo &rInf ) const;
     SwDropPortion *NewDropPortion( SwTxtFormatInfo &rInf );
     SwNumberPortion *NewFtnNumPortion( SwTxtFormatInfo &rInf ) const;
