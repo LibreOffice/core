@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-09-14 13:48:24 $
+ *  last change: $Author: ama $ $Date: 2001-10-11 14:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,21 +259,36 @@ void lcl_FillSvxColumn(const SwFmtCol& rCol,
                           long nDistance)
 {
     const SwColumns& rCols = rCol.GetColumns();
-
     USHORT nWidth = 0;
 
+    BOOL bOrtho = rCol.IsOrtho() && rCols.Count();
+    long nInnerWidth;
+    if( bOrtho )
+    {
+        nInnerWidth = nTotalWidth;
+        for ( USHORT i = 0; i < rCols.Count(); ++i )
+        {
+            SwColumn* pCol = rCols[i];
+            nInnerWidth -= pCol->GetLeft() + pCol->GetRight();
+        }
+        if( nInnerWidth < 0 )
+            nInnerWidth = 0;
+        else
+            nInnerWidth /= rCols.Count();
+    }
     for ( USHORT i = 0; i < rCols.Count(); ++i )
     {
         SwColumn* pCol = rCols[i];
         const USHORT nStart = USHORT(pCol->GetLeft() + nWidth + nDistance);
-        nWidth += rCol.CalcColWidth(i, nTotalWidth);
+        if( bOrtho )
+            nWidth += nInnerWidth + pCol->GetLeft() + pCol->GetRight();
+        else
+            nWidth += rCol.CalcColWidth(i, nTotalWidth);
         const USHORT nEnd = USHORT(nWidth - pCol->GetRight() + nDistance);
 
         SvxColumnDescription aColDesc(nStart, nEnd, TRUE);
         rColItem.Append(aColDesc);
     }
-
-    // ?? gleichverteilte Spalten
 }
 
 /*--------------------------------------------------------------------
