@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:29:55 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #endif
 #include <svtools/intitem.hxx>
 #include <svtools/itemset.hxx>
+#ifndef _SFXITEMPOOL_HXX
+#include <svtools/itempool.hxx>
+#endif
 #include <tools/urlobj.hxx>
 
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
@@ -92,6 +95,12 @@
 #ifndef _COM_SUN_STAR_FRAME_FRAMEACTION_HPP_
 #include <com/sun/star/frame/FrameAction.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_STATUS_ITEMSTATUS_HPP_
+#include <com/sun/star/frame/status/ItemStatus.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_STATUS_ITEMSTATE_HPP_
+#include <com/sun/star/frame/status/ItemState.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTSTATE_HPP_
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #endif
@@ -108,6 +117,9 @@
 #include "dispatch.hxx"
 #include "sfxsids.hrc"
 #include "request.hxx"
+#include "statcach.hxx"
+#include "msgpool.hxx"
+#include "objsh.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -336,8 +348,8 @@ void SAL_CALL SfxStatusDispatcher::dispatchWithNotification( const ::com::sun::s
 {
 }
 
-SFX_IMPL_XINTERFACE_1( SfxStatusDispatcher, OWeakObject, ::com::sun::star::frame::XNotifyingDispatch )
-SFX_IMPL_XTYPEPROVIDER_1( SfxStatusDispatcher, ::com::sun::star::frame::XNotifyingDispatch )
+SFX_IMPL_XINTERFACE_2( SfxStatusDispatcher, OWeakObject, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::frame::XDispatch )
+SFX_IMPL_XTYPEPROVIDER_2( SfxStatusDispatcher, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::frame::XDispatch )
 //IMPLNAME "com.sun.star.comp.sfx2.StatusDispatcher",
 
 SfxStatusDispatcher::SfxStatusDispatcher()
@@ -588,6 +600,12 @@ void SfxDispatchController_Impl::addParametersToArgs( const com::sun::star::util
     }
 }
 
+SfxMapUnit SfxDispatchController_Impl::GetCoreMetric( SfxItemPool& rPool, sal_uInt16 nSlot )
+{
+    USHORT nWhich = rPool.GetWhich( nSlot );
+    return rPool.GetMetric( nWhich );
+}
+
 void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util::URL& aURL,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener ) throw( ::com::sun::star::uno::RuntimeException )
@@ -649,11 +667,11 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         sal_Bool bSuccess = sal_False;
         sal_Bool bFailure = sal_False;
         const SfxPoolItem* pItem = NULL;
+        SfxShell* pShell( 0 );
         if ( pDispatcher->GetBindings() )
         {
             if ( !pDispatcher->IsLocked( GetId() ) )
             {
-                SfxShell *pShell = 0;
                 const SfxSlot *pSlot = 0;
                 if ( pDispatcher->GetShellAndSlot_Impl( GetId(), &pShell, &pSlot, sal_False,
                         SFX_CALLMODE_MODAL==(nCall&SFX_CALLMODE_MODAL), FALSE ) )
@@ -700,7 +718,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                 if ( pAppDispat )
                 {
                     const SfxPoolItem* pState=0;
-                    SfxItemState eState = pDispatcher->QueryState( GetId(), pState );
+                     SfxItemState eState = pDispatcher->QueryState( GetId(), pState );
                     StateChanged( GetId(), eState, pState );
                 }
             }
@@ -721,7 +739,19 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
 
             aEvent.Source = (::com::sun::star::frame::XDispatch*) pDispatch;
             if ( bSuccess && pItem && !pItem->ISA(SfxVoidItem) )
-                pItem->QueryValue( aEvent.Result );
+            {
+                // Retrieve metric from pool to have correct sub ID when calling QueryValue
+                SfxMapUnit eMapUnit( SFX_MAPUNIT_100TH_MM );
+                if ( pShell )
+                    eMapUnit = GetCoreMetric( pShell->GetPool(), GetId() );
+                else
+                    eMapUnit = GetCoreMetric( SFX_APP()->GetPool(), GetId() );
+
+                USHORT nSubId( 0 );
+                if ( eMapUnit == SFX_MAPUNIT_TWIP )
+                    nSubId |= CONVERT_TWIPS;
+                pItem->QueryValue( aEvent.Result, (BYTE)nSubId );
+            }
 
             rListener->dispatchFinished( aEvent );
         }
@@ -748,13 +778,19 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::st
         pBindings->LEAVEREGISTRATIONS();
     }
 
-    const SfxPoolItem *pItem = 0;
+    // Use alternative QueryState call to have a valid UNO representation of the state.
+    ::com::sun::star::uno::Any aState;
     if ( !pDispatcher && pBindings )
         pDispatcher = GetBindings().GetDispatcher_Impl();
-    SfxItemState eState = pDispatcher->QueryState( GetId(), pItem );
-    ::com::sun::star::uno::Any aState;
-    if ( pItem && !pItem->ISA(SfxVoidItem) )
-        pItem->QueryValue( aState );
+    SfxItemState eState = pDispatcher->QueryState( GetId(), aState );
+
+    if ( eState == SFX_ITEM_DONTCARE )
+    {
+        // Use special uno struct to transport don't care state
+        ::com::sun::star::frame::status::ItemStatus aItemStatus;
+        aItemStatus.State = ::com::sun::star::frame::status::ItemState::dont_care;
+        aState = makeAny( aItemStatus );
+    }
 
     ::com::sun::star::frame::FeatureStateEvent aEvent;
     aEvent.FeatureURL = aURL;
@@ -794,9 +830,33 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     ::cppu::OInterfaceContainerHelper* pContnr = pDispatch->GetListeners().getContainer ( aDispatchURL.Complete );
     if ( bNotify && pContnr )
     {
+        // Retrieve metric from pool to have correct sub ID when calling QueryValue
+        USHORT     nSubId( 0 );
+        SfxMapUnit eMapUnit( SFX_MAPUNIT_100TH_MM );
+        if ( pDispatcher && pBindings )
+        {
+            SfxStateCache *pCache = pBindings->GetStateCache( nSID );
+            if ( pCache )
+            {
+                const SfxSlotServer *pServer = pCache->GetSlotServer( *pDispatcher );
+                if ( pServer )
+                    eMapUnit = GetCoreMetric( pDispatcher->GetShell( pServer->GetShellLevel() )->GetPool(), nSID );
+            }
+        }
+
+        if ( eMapUnit == SFX_MAPUNIT_TWIP )
+            nSubId |= CONVERT_TWIPS;
+
         ::com::sun::star::uno::Any aState;
         if ( ( eState >= SFX_ITEM_AVAILABLE ) && pState && !pState->ISA(SfxVoidItem) )
-            pState->QueryValue( aState );
+            pState->QueryValue( aState, (BYTE)nSubId );
+        else if ( eState == SFX_ITEM_DONTCARE )
+        {
+            // Use special uno struct to transport don't care state
+            ::com::sun::star::frame::status::ItemStatus aItemStatus;
+            aItemStatus.State = ::com::sun::star::frame::status::ItemState::dont_care;
+            aState = makeAny( aItemStatus );
+        }
 
         ::com::sun::star::frame::FeatureStateEvent aEvent;
         aEvent.FeatureURL = aDispatchURL;
