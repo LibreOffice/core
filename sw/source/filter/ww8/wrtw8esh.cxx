@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:54:52 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,19 +529,27 @@ PlcDrawObj::~PlcDrawObj()
 {
 }
 
+//Its irritating to have to change the RTL frames position into LTR ones
+//so that word will have to place them in the right place. Doubly so that
+//the SO drawings and writer frames have different ideas themselves as to
+//how to be positioned when in RTL mode!
 bool RTLGraphicsHack(long &rLeft, long nWidth,
     SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, SwTwips nPageLeft,
-    SwTwips nPageRight, SwTwips nPageSize, bool bRTL)
+    SwTwips nPageRight, SwTwips nPageSize)
 {
     bool bRet = false;
-    if (bRTL && eHoriOri == HORI_NONE)
+    if (eHoriOri == HORI_NONE)
     {
         if (eHoriRel == REL_PG_FRAME)
         {
             rLeft = nPageSize - rLeft;
             bRet = true;
         }
-        else if ((eHoriRel == REL_PG_PRTAREA) || (eHoriRel == FRAME))
+        else if (
+                  (eHoriRel == REL_PG_PRTAREA) ||
+                  (eHoriRel == FRAME) ||
+                  (eHoriRel == PRTAREA)
+                )
         {
             rLeft = nPageSize - nPageLeft - nPageRight - rLeft;
             bRet = true;
@@ -552,14 +560,65 @@ bool RTLGraphicsHack(long &rLeft, long nWidth,
     return bRet;
 }
 
-bool SwWW8Writer::MiserableRTLGraphicsHack(long &rLeft,  long nWidth,
-    SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, bool bBiDi)
+bool RTLDrawingsHack(long &rLeft, long nWidth,
+    SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, SwTwips nPageLeft,
+    SwTwips nPageRight, SwTwips nPageSize)
 {
-    SwTwips nPageLeft, nPageRight, nPageSize;
-    nPageSize = CurrentPageWidth(nPageLeft, nPageRight);
+    bool bRet = false;
+    if (eHoriOri == HORI_NONE)
+    {
+        if (eHoriRel == REL_PG_FRAME)
+        {
+            rLeft = nPageSize + rLeft;
+            bRet = true;
+        }
+        else if (
+                  (eHoriRel == REL_PG_PRTAREA) ||
+                  (eHoriRel == FRAME) ||
+                  (eHoriRel == PRTAREA)
+                )
+        {
+            rLeft = nPageSize - nPageLeft - nPageRight + rLeft;
+            bRet = true;
+        }
+    }
+    return bRet;
+}
 
-    return RTLGraphicsHack(rLeft, nWidth,
-        eHoriOri, eHoriRel, nPageLeft, nPageRight, nPageSize, bBiDi);
+bool SwWW8Writer::MiserableRTLFrmFmtHack(long &rLeft, long &rRight,
+    const sw::Frame &rFrmFmt)
+{
+    //Require nasty bidi swap
+    if (FRMDIR_HORI_RIGHT_TOP != pDoc->GetTextDirection(rFrmFmt.GetPosition()))
+        return false;
+
+    long nWidth = rRight - rLeft;
+    SwTwips nPageLeft, nPageRight;
+    SwTwips nPageSize = CurrentPageWidth(nPageLeft, nPageRight);
+
+    const SwFmtHoriOrient& rHOr = rFrmFmt.GetFrmFmt().GetHoriOrient();
+
+    bool bRet = false;
+    sw::Frame::WriterSource eSource = rFrmFmt.GetWriterType();
+    if (eSource == sw::Frame::eDrawing || eSource == sw::Frame::eFormControl)
+    {
+        if (RTLDrawingsHack(rLeft, nWidth, rHOr.GetHoriOrient(),
+            rHOr.GetRelationOrient(), nPageLeft, nPageRight, nPageSize))
+        {
+            bRet = true;
+        }
+    }
+    else
+    {
+        if (RTLGraphicsHack(rLeft, nWidth, rHOr.GetHoriOrient(),
+            rHOr.GetRelationOrient(), nPageLeft, nPageRight, nPageSize))
+        {
+            bRet = true;
+        }
+    }
+    if (bRet)
+        rRight = rLeft + nWidth;
+    return bRet;
 }
 
 void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
@@ -575,9 +634,8 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
         WW8Fib& rFib = *rWrt.pFib;
         WW8_CP nCpOffs = GetCpOffset(rFib);
 
-        typedef std::vector<DrawObj>::const_iterator myiter;
-        myiter aEnd = maDrawObjs.end();
-        myiter aIter;
+        cDrawObjIter aEnd = maDrawObjs.end();
+        cDrawObjIter aIter;
 
         for (aIter = maDrawObjs.begin(); aIter < aEnd; ++aIter)
             SwWW8Writer::WriteLong(*rWrt.pTableStrm, aIter->mnCp - nCpOffs);
@@ -633,32 +691,20 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
             // spid
             SwWW8Writer::WriteLong(*rWrt.pTableStrm, aIter->mnShapeId);
 
-            //Nasty bidi swap
-            const SwPosition &rPos = rFrmFmt.GetPosition();
-            bool bBiDi =
-                (FRMDIR_HORI_RIGHT_TOP == rWrt.pDoc->GetTextDirection(rPos));
-
             sal_Int32 nLeft = aRect.Left() + aIter->mnThick;
             sal_Int32 nRight = aRect.Right() - aIter->mnThick;
 
-            if (RES_FLYFRMFMT == rFmt.Which())
-            {
-                long nWidth = nRight - nLeft;
-                if (rWrt.MiserableRTLGraphicsHack(nLeft, nWidth,
-                    rHOr.GetHoriOrient(), rHOr.GetRelationOrient(), bBiDi))
-                {
-                    nRight = nLeft + nWidth;
-                }
-            }
+            //Nasty swap for bidi if neccessary
+            rWrt.MiserableRTLFrmFmtHack(nLeft, nRight, rFrmFmt);
 
             //xaLeft/yaTop/xaRight/yaBottom - rel. to anchor
             //(most of) the border is outside the graphic is word, so
             //change dimensions to fit
             SwWW8Writer::WriteLong(*rWrt.pTableStrm, nLeft);
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm,aRect.Top() +
+            SwWW8Writer::WriteLong(*rWrt.pTableStrm, aRect.Top() +
                 aIter->mnThick);
             SwWW8Writer::WriteLong(*rWrt.pTableStrm, nRight);
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm,aRect.Bottom() -
+            SwWW8Writer::WriteLong(*rWrt.pTableStrm, aRect.Bottom() -
                 aIter->mnThick);
 
             //fHdr/bx/by/wr/wrk/fRcaSimple/fBelowText/fAnchorLock
@@ -772,16 +818,17 @@ bool PlcDrawObj::Append(SwWW8Writer& rWrt, WW8_CP nCp, const sw::Frame& rFmt,
 
     if (bRet)
     {
-        DrawObj aObj(rFmt, nCp, rNdTopLeft, rWrt.TrueFrameDirection(rFormat));
+        DrawObj aObj(rFmt, nCp, rNdTopLeft, rWrt.TrueFrameDirection(rFormat),
+            rWrt.GetHdFtIndex());
         maDrawObjs.push_back(aObj);
     }
     return bRet;
 }
 
-void PlcDrawObj::SetShapeDetails(DrawObj &rShape, UINT32 nId, INT32 nThick)
+void DrawObj::SetShapeDetails(UINT32 nId, INT32 nThick)
 {
-    rShape.mnShapeId = nId;
-    rShape.mnThick = nThick;
+    mnShapeId = nId;
+    mnThick = nThick;
 }
 
 bool WW8_WrPlcTxtBoxes::WriteTxt(SwWW8Writer& rWrt)
@@ -1982,49 +2029,58 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt)
         ULONG nSecondShapeId = pSdrObjs == rWrt.pSdrObjs ? GetShapeID() : 0;
 
         // write now all Writer-/DrawObjects
-        std::vector<DrawObj*> aSorted;
-        MakeZOrderArrAndFollowIds( pSdrObjs->GetObjArr(), aSorted );
+        DrawObjPointerVector aSorted;
+        MakeZOrderArrAndFollowIds(pSdrObjs->GetObjArr(), aSorted);
 
         ULONG nShapeId=0;
-        for( USHORT n = 0; n < aSortFmts.Count(); ++n )
+        DrawObjPointerIter aEnd = aSorted.end();
+        for (DrawObjPointerIter aIter = aSorted.begin(); aIter != aEnd; ++aIter)
         {
             INT32 nBorderThick=0;
-            const SwFrmFmt& rFmt = *(const SwFrmFmt*)aSortFmts[n];
-            if (RES_FLYFRMFMT == rFmt.Which())
-                nBorderThick = WriteFlyFrm(rFmt, nShapeId, maDirections[n]);
-            else if (rFmt.FindRealSdrObject()->GetObjInventor() ==
-                     FmFormInventor)
+            DrawObj *pObj = (*aIter);
+            ASSERT(pObj, "impossible");
+            if (!pObj)
+                continue;
+            const sw::Frame &rFrame = pObj->maCntnt;
+            const SwFrmFmt& rFmt = rFrame.GetFrmFmt();
+
+            switch (rFrame.GetWriterType())
             {
-                WriteOCXControl(rFmt,nShapeId=GetShapeID());
-            }
-            else
-            {
-                aWinwordAnchoring.SetAnchoring(rFmt, true);
-                if (const SdrObject* pObj = rFmt.FindRealSdrObject())
-                {
-                    bool bSwapInPage = false;
-                    if (!pObj->GetPage())
+                case sw::Frame::eTxtBox:
+                case sw::Frame::eOle:
+                case sw::Frame::eGraphic:
+                    nBorderThick = WriteFlyFrm(*pObj, nShapeId, aSorted);
+                    break;
+                case sw::Frame::eFormControl:
+                    WriteOCXControl(rFmt, nShapeId=GetShapeID());
+                    break;
+                case sw::Frame::eDrawing:
+                    aWinwordAnchoring.SetAnchoring(rFmt, true);
+                    if (const SdrObject* pObj = rFmt.FindRealSdrObject())
                     {
-                        if (SdrModel* pModel = rWrt.pDoc->GetDrawModel())
+                        bool bSwapInPage = false;
+                        if (!pObj->GetPage())
                         {
-                            if (SdrPage *pPage = pModel->GetPage(0))
+                            if (SdrModel* pModel = rWrt.pDoc->GetDrawModel())
                             {
-                                bSwapInPage = true;
-                                (const_cast<SdrObject*>(pObj))->SetPage(pPage);
+                                if (SdrPage *pPage = pModel->GetPage(0))
+                                {
+                                    bSwapInPage = true;
+                                    (const_cast<SdrObject*>(pObj))->SetPage(pPage);
+                                }
                             }
                         }
+
+                        nShapeId = AddSdrObject(*pObj);
+
+                        if (bSwapInPage)
+                            (const_cast<SdrObject*>(pObj))->SetPage(0);
                     }
-
-                    nShapeId = AddSdrObject(*pObj);
-
-                    if (bSwapInPage)
-                        (const_cast<SdrObject*>(pObj))->SetPage(0);
-                }
 #ifndef PRODUCT
-                else
-                    ASSERT( !this, "Where is the SDR-Object?" );
+                    else
+                        ASSERT( !this, "Where is the SDR-Object?" );
 #endif
-            }
+                }
 
             if( !nShapeId )
             {
@@ -2032,7 +2088,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt)
                 nShapeId = AddDummyShape( *pObj );
             }
 
-            pSdrObjs->SetShapeDetails(*(aSorted[n]), nShapeId, nBorderThick);
+            pObj->SetShapeDetails(nShapeId, nBorderThick);
         }
 
         EndSdrObjectPage();         // ???? Bugfix for 74724
@@ -2589,9 +2645,13 @@ void SwEscherEx::WriteFrmExtraData( const SwFrmFmt& rFmt )
     GetStream() << 1L;
 }
 
-INT32 SwEscherEx::WriteFlyFrm(const SwFrmFmt& rFmt, UINT32 &rShapeId,
-    short nDirection)
+INT32 SwEscherEx::WriteFlyFrm(const DrawObj &rObj, UINT32 &rShapeId,
+    DrawObjPointerVector &rPVec)
 {
+    const SwFrmFmt &rFmt = rObj.maCntnt.GetFrmFmt();
+    short nDirection = rObj.mnDirection;
+    unsigned int nHdFtIndex = rObj.mnHdFtIndex;
+
     // check for textflyframe and if it is the first in a Chain
     INT32 nBorderThick = 0;
     const SwNodeIndex* pNdIdx = rFmt.GetCntnt().GetCntntIdx();
@@ -2619,7 +2679,7 @@ INT32 SwEscherEx::WriteFlyFrm(const SwFrmFmt& rFmt, UINT32 &rShapeId,
                     pFmt = pPrev;
                 }
 
-                rShapeId = GetFlyShapeId( rFmt );
+                rShapeId = GetFlyShapeId(rFmt, rObj.mnHdFtIndex, rPVec);
                 if( !nOff )
                 {
                     void* p = (void*)pObj;
@@ -2639,7 +2699,8 @@ INT32 SwEscherEx::WriteFlyFrm(const SwFrmFmt& rFmt, UINT32 &rShapeId,
                     nTxtId = pTxtBxs->GetPos( p );
                     if( USHRT_MAX == nTxtId )
                     {
-                        UINT32 nPrevShapeId = GetFlyShapeId( *pFmt );
+                        UINT32 nPrevShapeId =
+                            GetFlyShapeId(*pFmt, rObj.mnHdFtIndex, rPVec);
                         pTxtBxs->Append( *pPrevObj, nPrevShapeId );
                         nTxtId = pTxtBxs->Count();
                     }
@@ -2649,29 +2710,51 @@ INT32 SwEscherEx::WriteFlyFrm(const SwFrmFmt& rFmt, UINT32 &rShapeId,
                 nTxtId *= 0x10000;
                 nTxtId += nOff;
 
-                nBorderThick = WriteTxtFlyFrame(rFmt, rShapeId, nTxtId,
-                    nDirection);
+                nBorderThick = WriteTxtFlyFrame(rObj, rShapeId, nTxtId, rPVec);
             }
         }
     }
     return nBorderThick;
 }
 
-INT32 SwEscherEx::WriteTxtFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId,
-    UINT32 nTxtBox, short nDirection)
+USHORT FindPos(const SwFrmFmt &rFmt, unsigned int nHdFtIndex,
+    DrawObjPointerVector &rPVec)
 {
+    DrawObjPointerIter aEnd = rPVec.end();
+    for (DrawObjPointerIter aIter = rPVec.begin(); aIter != aEnd; ++aIter)
+    {
+        const DrawObj *pObj = (*aIter);
+        ASSERT(pObj, "Impossible");
+        if (!pObj)
+            continue;
+        if (
+             nHdFtIndex == pObj->mnHdFtIndex &&
+             &rFmt == (&pObj->maCntnt.GetFrmFmt())
+           )
+        {
+            return aIter - rPVec.begin();
+        }
+    }
+    return USHRT_MAX;
+}
+
+INT32 SwEscherEx::WriteTxtFlyFrame(const DrawObj &rObj, UINT32 nShapeId,
+    UINT32 nTxtBox, DrawObjPointerVector &rPVec)
+{
+    const SwFrmFmt &rFmt = rObj.maCntnt.GetFrmFmt();
+    short nDirection = rObj.mnDirection;
+
     INT32 nBorderThick=0;
     OpenContainer( ESCHER_SpContainer );
 
     AddShape( ESCHER_ShpInst_TextBox, 0xa00, nShapeId );
     EscherPropertyContainer aPropOpt;
-    aPropOpt.AddOpt( ESCHER_Prop_lTxid, nTxtBox );
-    const VoidPtr pNext = rFmt.GetChain().GetNext();
-    if( pNext )
+    aPropOpt.AddOpt(ESCHER_Prop_lTxid, nTxtBox);
+    if (const SwFrmFmt *pNext = rFmt.GetChain().GetNext())
     {
-        USHORT nPos = aSortFmts.GetPos( pNext );
-        if( USHRT_MAX != nPos && aFollowShpIds[ nPos ] )
-            aPropOpt.AddOpt( ESCHER_Prop_hspNext, aFollowShpIds[ nPos ] );
+        USHORT nPos = FindPos(*pNext, rObj.mnHdFtIndex, rPVec);
+        if (USHRT_MAX != nPos && aFollowShpIds[nPos])
+            aPropOpt.AddOpt(ESCHER_Prop_hspNext, aFollowShpIds[nPos]);
     }
     nBorderThick = WriteFlyFrameAttr( rFmt, mso_sptTextBox, aPropOpt );
 
@@ -2793,62 +2876,50 @@ Graphic wwUtility::MakeSafeGDIMetaFile(SvInPlaceObjectRef xObj)
 void SwEscherEx::MakeZOrderArrAndFollowIds(
     std::vector<DrawObj>& rSrcArr, std::vector<DrawObj*>&rDstArr)
 {
-    if (aSortFmts.Count())
-        aSortFmts.Remove( 0, aSortFmts.Count() );
-
     USHORT n, nCnt = rSrcArr.size();
     SvULongsSort aSort( 255 < nCnt ? 255 : nCnt, 255 );
-    maDirections.clear();
-    maDirections.reserve(nCnt);
     rDstArr.clear();
     rDstArr.reserve(nCnt);
-    for( n = 0; n < nCnt; ++n )
+    for (n = 0; n < nCnt; ++n)
     {
         const SwFrmFmt &rFmt = rSrcArr[n].maCntnt.GetFrmFmt();
         ULONG nOrdNum = rWrt.GetSdrOrdNum(rFmt);
         USHORT nPos;
-        //returns what will be the index in aSortFmts of p as nPos
-        aSort.Insert( nOrdNum, nPos );
-        void* p = (void *)(&(rFmt));
-        aSortFmts.Insert( p, nPos );
-        maDirections.insert(maDirections.begin() + nPos,
-                rSrcArr[n].mnDirection);
+        //returns what will be the index in rDstArr of p as nPos
+        aSort.Insert(nOrdNum, nPos);
         DrawObj &rObj = rSrcArr[n];
         rDstArr.insert(rDstArr.begin() + nPos, &rObj);
-
     }
 
     if (aFollowShpIds.Count())
         aFollowShpIds.Remove(0, aFollowShpIds.Count());
 
-    ULONG nShapeId;
-    const SwFmtChain* pChain;
-    for( n = 0; n < nCnt; ++n )
+    for (n = 0; n < nCnt; ++n)
     {
-        const SwFrmFmt* pFmt = (const SwFrmFmt*)aSortFmts[ n ];
+        const SwFrmFmt &rFmt = rDstArr[n]->maCntnt.GetFrmFmt();
+        bool bNeedsShapeId = false;
 
-        if( RES_FLYFRMFMT == pFmt->Which() &&
-            ( ( pChain = &pFmt->GetChain())->GetPrev() ||
-                pChain->GetNext() ) )
+        if (RES_FLYFRMFMT == rFmt.Which())
         {
-            // the format needs a shapeid
-            nShapeId = GetShapeID();
+            const SwFmtChain &rChain = rFmt.GetChain();
+            if (rChain.GetPrev() || rChain.GetNext())
+                bNeedsShapeId = true;
         }
-        else
-            nShapeId = 0;
-        aFollowShpIds.Insert( nShapeId, n );
+
+        ULONG nShapeId = bNeedsShapeId ? GetShapeID() : 0;
+
+        aFollowShpIds.Insert(nShapeId, n);
     }
 }
 
-
-UINT32 SwEscherEx::GetFlyShapeId( const SwFrmFmt& rFmt )
+UINT32 SwEscherEx::GetFlyShapeId(const SwFrmFmt& rFmt,
+    unsigned int nHdFtIndex, DrawObjPointerVector &rpVec)
 {
-    const VoidPtr pFmt = (void*)&rFmt;
-    USHORT nPos = aSortFmts.GetPos( pFmt );
+    USHORT nPos = FindPos(rFmt, nHdFtIndex, rpVec);
     UINT32 nShapeId;
-    if( USHRT_MAX != nPos )
+    if (USHRT_MAX != nPos)
     {
-        if( 0 == ( nShapeId = aFollowShpIds[ nPos ] ))
+        if (0 == (nShapeId = aFollowShpIds[nPos]))
         {
             nShapeId = GetShapeID();
             aFollowShpIds[ nPos ] = nShapeId;
