@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Wall.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:31 $
+ *  last change: $Author: bm $ $Date: 2003-12-15 15:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,14 @@ namespace
 static const ::rtl::OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.Wall" ));
 
+void lcl_AddDefaultsToMap(
+    ::chart::helper::tPropertyValueMap & rOutMap )
+{
+    // override other defaults
+    rOutMap[ ::chart::LineProperties::PROP_LINE_STYLE ] =
+        uno::makeAny( drawing::LineStyle_NONE );
+}
+
 const uno::Sequence< Property > & lcl_GetPropertySequence()
 {
     static uno::Sequence< Property > aPropSeq;
@@ -186,6 +194,11 @@ uno::Any Wall::GetDefaultValue( sal_Int32 nHandle ) const
         FillProperties::AddDefaultsToMap(
             aStaticDefaults,
             /* bIncludeStyleProperties = */ true );
+
+        // initialize defaults
+        // Note: this should be last to override defaults of the previously
+        // added defaults
+        lcl_AddDefaultsToMap( aStaticDefaults );
     }
 
     helper::tPropertyValueMap::const_iterator aFound(
