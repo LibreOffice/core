@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:30:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,7 +615,7 @@ void _SfxMacroTabPage::FillMacroList()
         SvStringsDtor* pArr = (*mpImpl->fnGetRange)( this, String(SfxResId(STR_BASICNAME)) );
         if( pArr )
         {
-            mpImpl->pGroupLB->Init( pArr );
+//          mpImpl->pGroupLB->Init( pArr );
             delete pArr;
         }
     }
