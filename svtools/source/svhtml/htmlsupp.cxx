@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlsupp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:29:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ static HTMLOptionEnum __READONLY_DATA aScriptLangOptEnums[] =
     { 0,                    0                   }
 };
 
-BOOL HTMLParser::ParseScriptOptions( String& rLangString,
+BOOL HTMLParser::ParseScriptOptions( String& rLangString, const String& rBaseURL,
                                      HTMLScriptLanguage& rLang,
                                      String& rSrc,
                                      String& rLibrary,
@@ -118,9 +118,8 @@ BOOL HTMLParser::ParseScriptOptions( String& rLangString,
             break;
 
         case HTML_O_SRC:
-            rSrc = INetURLObject::RelToAbs( pOption->GetString() );
+            rSrc = INetURLObject::GetAbsURL( rBaseURL, pOption->GetString() );
             break;
-
         case HTML_O_SDLIBRARY:
             rLibrary = pOption->GetString();
             break;
