@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-11 13:42:22 $
+ *  last change: $Author: ama $ $Date: 2002-06-24 09:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1096,6 +1096,13 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                       SFX_ITEM_SET ==
                       rNewSet.GetItemState( RES_CHRATR_CTL_FONT, sal_False ) )
                 SET_SCRIPT_INVAL( 0 )
+            else if ( SFX_ITEM_SET ==
+                      rNewSet.GetItemState( RES_FRAMEDIR, sal_False ) )
+            {
+                SetDerivedR2L( sal_False );
+                CheckDirChange();
+            }
+
 
             if( nCount )
             {
@@ -1177,7 +1184,10 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             Prepare( PREP_CLEAR );
             bSetFldsDirty = sal_True;
             break;
-
+        case RES_FRAMEDIR :
+            SetDerivedR2L( sal_False );
+            CheckDirChange();
+            break;
         default:
         {
             Prepare( PREP_CLEAR );
