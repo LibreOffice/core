@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-06 11:17:27 $
+#   last change: $Author: hjs $ $Date: 2001-02-07 16:13:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -427,11 +427,11 @@ NOOPTTARGET=do_it_noopt
 .ENDIF
 
 .IF "$(EXCEPTIONSFILES)" != ""
-EXCEPTIONSTARGET=do_it_exeptions
+EXCEPTIONSTARGET=do_it_exceptions
 .ENDIF
 
 .IF "$(EXCEPTIONSNOOPTFILES)" != ""
-EXCEPTIONSNOOPTTARGET=do_it_exeptions_noopt
+EXCEPTIONSNOOPTTARGET=do_it_exceptions_noopt
 .ENDIF
 
 .IF "$(ADDOPTFILES)" != ""
@@ -2091,9 +2091,8 @@ TARGETDEPS+=$(ADDOPTTARGET)
 .ENDIF
 
 .IF "$(ADDOPT_FLAG)$(EXCEPTIONSNOOPT_FLAG)$(EXCEPTIONS_FLAG)$(NOOPT_FLAG)"==""
-.TARGET .SEQUENTIAL : $(TARGETDEPS) $(ALLTAR);
+.TARGETS .SEQUENTIAL :- $(TARGETDEPS) ALLTAR
 .ENDIF
-
 
 .IF "$(NO_REC_RES)"==""
 ALLTAR: \
@@ -2559,7 +2558,7 @@ $(NOOPTFILES):
 
 
 # ----------------------------------
-# - EXCEPTIONS - files mit exeptions -
+# - EXCEPTIONS - files mit exceptions -
 # ----------------------------------
 
 .IF "$(EXCEPTIONSTARGET)" != ""
@@ -2582,7 +2581,7 @@ $(EXCEPTIONSFILES):
 .ENDIF
 
 # ----------------------------------
-# - EXCEPTIONSNOOPT - files with exeptions, without optimisation -
+# - EXCEPTIONSNOOPT - files with exceptions, without optimisation -
 # ----------------------------------
 
 .IF "$(EXCEPTIONSNOOPTTARGET)" != ""
