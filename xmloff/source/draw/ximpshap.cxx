@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: bm $ $Date: 2001-07-02 13:23:43 $
+ *  last change: $Author: aw $ $Date: 2001-07-12 16:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1267,7 +1267,11 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
 
         // Add, set Style and properties from base shape
         AddShape(pService);
-        if( mxShapes.is() )
+
+        // #89344# test for mxShape.is() and not for mxShapes.is() to support
+        // shape import helper classes WITHOUT XShapes (member mxShapes). This
+        // is used by the writer.
+        if( mxShape.is() )
         {
             SetStyle();
             SetLayer();
