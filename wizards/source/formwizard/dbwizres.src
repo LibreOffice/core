@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: bc $ $Date: 2002-05-30 16:57:31 $
+ *  last change: $Author: bc $ $Date: 2002-06-07 09:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4249,68 +4249,6 @@ String RID_DB_REPORT_WIZARD_START + 24
     Text[ thai ] = "‡πÅ‡∏ô‡∏ß~‡∏ô‡∏≠‡∏ô";
 };
 
-String RID_DB_REPORT_WIZARD_START + 25
-{
-    Text = "Zweck des Reports";
-    Text [ english_us ] = "Purpose of the Reportdocument";
-};
-
-String RID_DB_REPORT_WIZARD_START + 26
-{
-    Text = "Report als Textdokumentvorlage ~speichern";
-    Text [ english_us ] = "save Report as Textdocument template";
-    Text[ portuguese ] = "~Estilo";
-    Text[ russian ] = "~—ÚËÎ¸";
-    Text[ dutch ] = "~Stijl";
-    Text[ french ] = "Style";
-    Text[ spanish ] = "~Estilo";
-    Text[ italian ] = "~Stile";
-    Text[ danish ] = "T~ype";
-    Text[ swedish ] = "~Stil";
-    Text[ polish ] = "~Styl";
-    Text[ portuguese_brazilian ] = "~Stil";
-    Text[ japanese ] = "„Çπ„Çø„Ç§„É´(~S)";
-    Text[ chinese_simplified ] = "ÂºèÊ†∑(~S)";
-    Text[ chinese_traditional ] = "È¢®Ê†º(~S)";
-    Text[ arabic ] = "~«·‰„ÿ";
-    Text[ dutch ] = "~Stijl";
-    Text[ chinese_simplified ] = "ÂºèÊ†∑(~S)";
-    Text[ greek ] = "~”ÙıÎ";
-    Text[ korean ] = "Ïú†Ìòï(~S)";
-    Text[ turkish ] = "~BiÁim";
-    Text[ catalan ] = "~Style";
-    Text[ finnish ] = "~Tyyli";
-    Text[ thai ] = "~‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞";
-};
-
-
-String RID_DB_REPORT_WIZARD_START + 27
-{
-    Text = "Report als Snapshot speichern";
-    Text [ english_us ] = "save Report as Snapshot";
-    Text[ portuguese ] = "~Estilo";
-    Text[ russian ] = "~—ÚËÎ¸";
-    Text[ dutch ] = "~Stijl";
-    Text[ french ] = "Style";
-    Text[ spanish ] = "~Estilo";
-    Text[ italian ] = "~Stile";
-    Text[ danish ] = "T~ype";
-    Text[ swedish ] = "~Stil";
-    Text[ polish ] = "~Styl";
-    Text[ portuguese_brazilian ] = "~Stil";
-    Text[ japanese ] = "„Çπ„Çø„Ç§„É´(~S)";
-    Text[ chinese_simplified ] = "ÂºèÊ†∑(~S)";
-    Text[ chinese_traditional ] = "È¢®Ê†º(~S)";
-    Text[ arabic ] = "~«·‰„ÿ";
-    Text[ dutch ] = "~Stijl";
-    Text[ chinese_simplified ] = "ÂºèÊ†∑(~S)";
-    Text[ greek ] = "~”ÙıÎ";
-    Text[ korean ] = "Ïú†Ìòï(~S)";
-    Text[ turkish ] = "~BiÁim";
-    Text[ catalan ] = "~Style";
-    Text[ finnish ] = "~Tyyli";
-    Text[ thai ] = "~‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞";
-};
 
 
 String RID_DB_REPORT_WIZARD_START + 28
