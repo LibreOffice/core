@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:03:29 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3749,13 +3749,16 @@ void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
                 {
                     const OUString sFormula ( RTL_CONSTASCII_USTRINGPARAM ( "Formula" ) );
                     const OUString sBasicLibraries ( RTL_CONSTASCII_USTRINGPARAM ( "BasicLibraries" ) );
+                    const OUString sRuntimeUID ( RTL_CONSTASCII_USTRINGPARAM ( "RuntimeUID" ) );
                     for (sal_Int32 i = 0; i < nCount; i++, pProps++)
                     {
-                        if (aProps[i].Name != sFormula &&
-                            aProps[i].Name != sBasicLibraries)
+                        const OUString &rPropName = aProps[i].Name;
+                        if (rPropName != sFormula &&
+                            rPropName != sBasicLibraries &&
+                            rPropName != sRuntimeUID)
                         {
-                            pProps->Name = aProps[i].Name;
-                            pProps->Value = xProps->getPropertyValue(aProps[i].Name);
+                            pProps->Name = rPropName;
+                            pProps->Value = xProps->getPropertyValue(rPropName);
                         }
                     }
                 }
