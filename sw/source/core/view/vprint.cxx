@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-11 14:08:23 $
+ *  last change: $Author: tl $ $Date: 2002-11-11 15:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1784,5 +1784,4 @@ void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
     }
 }
 
-/************************************************************************
 
