@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-08 09:34:18 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 14:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,7 @@ import java.util.Hashtable;
  * to the java runtime system, e.g. for delaying the need of a class,
  * so that it is possible to generate it on the fly.
  * <p>
- * @version     $Revision: 1.5 $ $ $Date: 2001-05-08 09:34:18 $
- * @author      Markus Meyer
- * @author      Kay Ramme
+ * @version     $Revision: 1.6 $ $ $Date: 2002-01-18 14:04:55 $
  * @since       UDK1.0
  */
 public class Type {
@@ -162,7 +160,7 @@ public class Type {
      * the given <code>class</code>.
      * <p>
      * @since       UDK3.0
-     * @param zClass   the class of this type
+     * @param zClass   the java class of this type
      */
     public Type(Class zClass) {
         _class = zClass;
@@ -217,7 +215,10 @@ public class Type {
      * the given type name.
      * <p>
      * @since       UDK3.0
-     * @param typeName   the name of this type
+     * @param typeName   the name of this type. For simple types
+     *                   (numbers,string,type,any), the typeclass is calculated,
+     *                   for complex types (structs,interfaces), the
+     *                   typeclass of this object is set to UNKNOWN
      */
     public Type(String typeName) {
         _typeClass = (TypeClass)__typeNameToTypeClass.get(typeName);
@@ -234,7 +235,12 @@ public class Type {
      * the given <code>TypeClass</code>.
      * <p>
      * @since       UDK3.0
-     * @param typeClass   the <code>TypeClass</code> of this type
+     * @param typeClass   the <code>TypeClass</code> of this type. Only typeclass for
+     *                    simple types is allowed.
+     *
+     * @throws IllegalArgumentException when the typeClass is not simple (e.g.
+               a struct or an interface. The Constructor cannot find out the
+               name of the type in this case.
      */
     public Type(TypeClass typeClass) throws IllegalArgumentException {
         if(__isTypeClassPrimitive(typeClass)) {
@@ -278,12 +284,12 @@ public class Type {
     }
 
     /**
-     * Gets the class.
+     * Gets the java class.
      * Returns <code>null</code> if this
      * type has not been constructed by <code>Class</code>.
      * <p>
      * @since       UDK1.0
-     * @return  the type name.
+     * @return  the type name. Maybe null.
      */
     public Class getZClass() {
         return _class;
@@ -295,7 +301,7 @@ public class Type {
      * type has not been constructed by <code>TypeClass</code>.
      * <p>
      * @since       UDK1.0
-     * @return  the type name.
+     * @return  the type class. May be TypeClass.UNKNOWN.
      */
     public TypeClass getTypeClass() {
         return _typeClass;

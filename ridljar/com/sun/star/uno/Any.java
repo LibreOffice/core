@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-08 09:34:18 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 14:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,21 @@ package com.sun.star.uno;
 
 /**
  * The UNO IDL type any is mapped to java type <code>java.lang.Object</code>.
- * In special cases it is necessary to have an explicit any.
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2001-05-08 09:34:18 $
- * @author      Kay Ramme
+ * In special cases it is necessary to have an explicit any to additionally transport
+ * an exact type. For instance if you want to pass an object reference via
+ * an interprocess connection using an any, you should use this class to add
+ * an explicit interface type, so the remote counterpart doesn't need to invoke
+ * a queryInterface).
+ * <p>
+ * @version     $Revision: 1.4 $ $ $Date: 2002-01-18 14:04:55 $
  * @since       UDK1.0
  */
 public class Any {
     /**
      * The type of the any.
      * <p>
-     * @see #getInterface
+     * @see #getType
      */
     protected Type  _type;
 
@@ -99,24 +103,28 @@ public class Any {
         _object = object;
     }
 
+    /** Constructs a new any with a given type and value
+        @param type the UNO type of the any.
+        @param object the value of the any.
+     */
     public Any(Type type, Object object) {
         _type   = type;
         _object = object;
     }
 
     /**
-     * Gets the type of the any.
+     * Gets the type of the value within the any.
      * <p>
-     * @return   the type of the any.
+     * @return   the type of the value within the any.
      */
     public Type getType() {
         return _type;
     }
 
     /**
-     * Gets the data of the any.
+     * Gets the value within the any.
      * <p>
-     * @return   the data of the any.
+     * @return   gets the value within the any.
      */
     public Object getObject() {
         return _object;

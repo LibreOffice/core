@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MappingException.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:54 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 14:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,7 @@ package com.sun.star.uno;
 /**
  * The mapping Exception.
  * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:54 $
- * @author      Kay Ramme
+ * @version     $Revision: 1.2 $ $ $Date: 2002-01-18 14:06:54 $
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.uno.IQueryInterface
  * @see         com.sun.star.uno.IBridge

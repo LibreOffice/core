@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Enum.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2000-11-08 15:39:30 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 14:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,10 @@ package com.sun.star.uno;
  * as java binding for the IDL type enum.
  * Each java mapped enum class provides static member of this class
  * which represents the enum values.
- * You cant create a object of this class or subclass direct, to
+ * You cannot create a object of this class or subclass direct, to
  * avoid enum values with integer values outside the defined range.
  * <p>
- * @version     $Revision: 1.1 $ $ $Date: 2000-11-08 15:39:30 $
- * @author      Markus Meyer
+ * @version     $Revision: 1.2 $ $ $Date: 2002-01-18 14:04:55 $
  * @since       UDK1.0
  */
 public abstract class Enum {
@@ -86,7 +85,7 @@ public abstract class Enum {
     }
 
     /**
-     * Get the integer value of an enum value.<BR>
+     * Get the integer value of an enum value.
      * <p>
      * @return   the integer value.
      */

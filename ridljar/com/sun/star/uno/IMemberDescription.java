@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IMemberDescription.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-26 11:43:05 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 14:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,10 @@ package com.sun.star.uno;
 
 /**
  * The <code>IMemberDescription</code> is the base interface
- * for members of UNO types <code>ITypeDescriptions</code>.
+ * for for the special subset of typedescriptions, which describe
+ * members of IDL structs or interfeces.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2001-10-26 11:43:05 $
- * @author      Kay Ramme
+ * @version     $Revision: 1.3 $ $ $Date: 2002-01-18 14:04:55 $
  * @since       UDK3.0
  */
 public interface IMemberDescription {
@@ -78,7 +78,7 @@ public interface IMemberDescription {
     String getName();
 
     /**
-     * Indicates if this member is unsigned.
+     * Indicates if this member is unsigned. (Not useful for IMethodDescription).
      * <p>
      * @return  the unsigned state
      */
@@ -100,9 +100,9 @@ public interface IMemberDescription {
 
     /**
      * Gives the relative index of this member in the declaring
-     * interface.
+     * interface or struct (including superclasses).
      * <p>
-     * @return  the realtive index of this member
+     * @return  the relative index of this member
      */
     int getIndex();
 }

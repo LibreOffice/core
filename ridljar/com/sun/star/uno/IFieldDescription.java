@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IFieldDescription.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-08 09:34:18 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 14:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,7 @@ import java.lang.reflect.Field;
  * The <code>IFieldDescription</code> describes non
  * method members.
  * <p>
- * @version     $Revision: 1.1 $ $ $Date: 2001-05-08 09:34:18 $
- * @author      Kay Ramme
+ * @version     $Revision: 1.2 $ $ $Date: 2002-01-18 14:04:55 $
  * @since       UDK3.0
  */
 public interface IFieldDescription extends IMemberDescription {

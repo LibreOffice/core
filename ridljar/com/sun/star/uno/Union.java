@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Union.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2000-11-08 15:39:31 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 14:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,10 @@ package com.sun.star.uno;
  * The Union class is the base class for all classes generated
  * as java binding for the IDL type union.
  * <p>
- * @version     $Revision: 1.1 $ $ $Date: 2000-11-08 15:39:31 $
- * @author      Markus Meyer
+ * Note: The idl type <code>union<code> is currently not fully
+ * integrated into the UNO framework, so don't use it.
+ *
+ * @version     $Revision: 1.2 $ $ $Date: 2002-01-18 14:04:55 $
  * @since       UDK1.0
  */
 public class Union {
