@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexcollection.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-16 16:22:20 $
+ *  last change: $Author: fs $ $Date: 2001-03-19 06:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,8 @@ namespace dbaui
                     ++aFieldLoop
                 )
             {
+                OSL_ENSURE(!xCols->hasByName(aFieldLoop->sFieldName), "OIndexCollection::commitNewIndex: double column name (need to prevent this outside)!");
+
                 Reference< XPropertySet > xColDescriptor = xColumnFactory->createDataDescriptor();
                 OSL_ENSURE(xColDescriptor.is(), "OIndexCollection::commitNewIndex: invalid column descriptor!");
                 if (xColDescriptor.is())
@@ -459,6 +461,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/03/16 16:22:20  fs
+ *  initial checkin - non-UNO index collection
+ *
  *
  *  Revision 1.0 07.03.01 15:09:42  fs
  ************************************************************************/
