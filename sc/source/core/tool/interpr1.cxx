@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:20:19 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifdef PCH
-#include "core_pch.hxx"
-#endif
-
-#pragma hdrstop
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -130,12 +124,17 @@ void ScInterpreter::ScIfJump()
                 SetIllegalArgument();
             else
             {
+                ScTokenRef xNew;
+                ScTokenMatrixMap::const_iterator aMapIter;
                 // DoubleError handled by JumpMatrix
                 pMat->SetErrorInterpreter( NULL);
                 SCSIZE nCols, nRows;
                 pMat->GetDimensions( nCols, nRows );
                 if ( nCols == 0 || nRows == 0 )
                     SetIllegalParameter();
+                else if (pTokenMatrixMap && ((aMapIter = pTokenMatrixMap->find(
+                                    pCur)) != pTokenMatrixMap->end()))
+                    xNew = (*aMapIter).second;
                 else
                 {
                     ScJumpMatrix* pJumpMat = new ScJumpMatrix( nCols, nRows );
@@ -195,10 +194,13 @@ void ScInterpreter::ScIfJump()
                             }
                         }
                     }
-                    PushTempToken( new ScJumpMatrixToken( pJumpMat ) );
-                    // set endpoint of path for main code line
-                    aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
+                    xNew = new ScJumpMatrixToken( pJumpMat );
+                    GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type(
+                                pCur, xNew));
                 }
+                PushTempToken( xNew);
+                // set endpoint of path for main code line
+                aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
             }
         }
         break;
@@ -251,12 +253,17 @@ void ScInterpreter::ScChoseJump()
                 SetIllegalArgument();
             else
             {
+                ScTokenRef xNew;
+                ScTokenMatrixMap::const_iterator aMapIter;
                 // DoubleError handled by JumpMatrix
                 pMat->SetErrorInterpreter( NULL);
                 SCSIZE nCols, nRows;
                 pMat->GetDimensions( nCols, nRows );
                 if ( nCols == 0 || nRows == 0 )
                     SetIllegalParameter();
+                else if (pTokenMatrixMap && ((aMapIter = pTokenMatrixMap->find(
+                                    pCur)) != pTokenMatrixMap->end()))
+                    xNew = (*aMapIter).second;
                 else
                 {
                     ScJumpMatrix* pJumpMat = new ScJumpMatrix( nCols, nRows );
@@ -302,10 +309,13 @@ void ScInterpreter::ScChoseJump()
                             }
                         }
                     }
-                    PushTempToken( new ScJumpMatrixToken( pJumpMat ) );
-                    // set endpoint of path for main code line
-                    aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
+                    xNew = new ScJumpMatrixToken( pJumpMat );
+                    GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type(
+                                pCur, xNew));
                 }
+                PushTempToken( xNew);
+                // set endpoint of path for main code line
+                aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
             }
         }
         break;
@@ -569,6 +579,14 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
         pJumpMatrix = NULL;
         Pop();
         PushMatrix( pResMat );
+        // Remove jump matrix from map and remember result matrix in case it
+        // could be reused in another path of the same condition.
+        if (pTokenMatrixMap)
+        {
+            pTokenMatrixMap->erase( pCur);
+            pTokenMatrixMap->insert( ScTokenMatrixMap::value_type( pCur,
+                        pStack[sp-1]));
+        }
         return true;
     }
     return false;
@@ -1460,6 +1478,8 @@ short ScInterpreter::IsString()
                     case CELLTYPE_FORMULA :
                         nRes = !((ScFormulaCell*)pCell)->IsValue();
                         break;
+                    default:
+                        ; // nothing
                 }
             }
         }
@@ -1887,6 +1907,8 @@ void ScInterpreter::ScIsValue()
                     case CELLTYPE_FORMULA :
                         nRes = ((ScFormulaCell*)pCell)->IsValue();
                         break;
+                    default:
+                        ; // nothing
                 }
             }
         }
@@ -2160,6 +2182,8 @@ short ScInterpreter::IsEven()
                             nRes = 1;
                         }
                     break;
+                    default:
+                        ; // nothing
                 }
             }
         }
@@ -2197,6 +2221,8 @@ short ScInterpreter::IsEven()
             }
         }
         break;
+        default:
+            ; // nothing
     }
     if ( !nRes )
         SetError( errIllegalParameter);
@@ -2324,6 +2350,8 @@ void ScInterpreter::ScT()
                     case CELLTYPE_FORMULA :
                         bValue = ((ScFormulaCell*)pCell)->IsValue();
                         break;
+                    default:
+                        ; // nothing
                 }
             }
             if ( bValue )
@@ -2717,6 +2745,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
                         break;
                     case ifSUMSQ:   fRes += fVal * fVal; break;
                     case ifPRODUCT: fRes *= fVal; break;
+                    default: ; // nothing
                 }
                 nFuncFmtType = NUMBERFORMAT_NUMBER;
                 break;
@@ -2751,6 +2780,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
                                 break;
                             case ifSUMSQ:   fRes += fVal * fVal; break;
                             case ifPRODUCT: fRes *= fVal; break;
+                            default: ; // nothing
                         }
                     }
                     else if ( bTextAsZero && pCell->HasStringData() )
@@ -2872,6 +2902,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
                                             break;
                                         case ifSUMSQ:   fRes += fVal * fVal; break;
                                         case ifPRODUCT: fRes *= fVal; break;
+                                        default: ; // nothing
                                     }
                                 }
                                 else if ( bTextAsZero )
@@ -2899,6 +2930,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
         case ifCOUNT2:
         case ifCOUNT:   fRes  = nCount; break;
         case ifPRODUCT: if ( !nCount ) fRes = 0.0; break;
+        default: ; // nothing
     }
     // Bei Summen etc. macht ein BOOL-Ergebnis keinen Sinn
     // und Anzahl ist immer Number (#38345#)
@@ -3707,7 +3739,7 @@ void ScInterpreter::ScCountIf()
                 rEntry.nVal = fVal;
                 rEntry.eOp = SC_EQUAL;
             }
-            else if( rString.Len() )
+            else
             {
                 rParam.FillInExcelSyntax(rString, 0);
                 ULONG nIndex = 0;
@@ -3716,11 +3748,6 @@ void ScInterpreter::ScCountIf()
                         *rEntry.pStr, nIndex, rEntry.nVal));
                 if ( rEntry.bQueryByString )
                     rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
-            }
-            else
-            {
-                PushInt( 0 );
-                return;
             }
             double fSum = 0.0;
             rParam.nCol1  = nCol1;
@@ -4095,14 +4122,15 @@ void ScInterpreter::ScLookup()
     if (nGlobalError == 0 && nVecCount == nMatCount)
     {
         String sStr;
-        ScQueryParam rParam;
-        rParam.nCol1       = nCol1;
-        rParam.nRow1       = nRow1;
-        rParam.nCol2       = (bSpMatrix ? nCol1 : nCol2);
-        rParam.nRow2       = (bSpMatrix ? nRow2 : nRow1);
-        rParam.bMixedComparison = TRUE;
+        ScQueryParam aParam;
+        aParam.nCol1            = nCol1;
+        aParam.nRow1            = nRow1;
+        aParam.nCol2            = (bSpMatrix ? nCol1 : nCol2);
+        aParam.nRow2            = (bSpMatrix ? nRow2 : nRow1);
+        aParam.bByRow           = bSpMatrix;
+        aParam.bMixedComparison = TRUE;
 
-        ScQueryEntry& rEntry = rParam.GetEntry(0);
+        ScQueryEntry& rEntry = aParam.GetEntry(0);
         rEntry.bDoQuery = TRUE;
         rEntry.eOp = SC_LESS_EQUAL;
         rEntry.nField = nCol1;
@@ -4166,7 +4194,7 @@ void ScInterpreter::ScLookup()
             }
         }
         if ( rEntry.bQueryByString )
-            rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
+            aParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
         if (pMat1)
         {
             if (rEntry.bQueryByString)
@@ -4229,30 +4257,17 @@ void ScInterpreter::ScLookup()
                     nDelta = i-1;
             }
         }
-        else if (bSpMatrix)             // lookup in column
+        else
         {
-            rEntry.eOp = SC_LESS_EQUAL;
-            ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
+            ScQueryCellIterator aCellIter(pDok, nTab1, aParam, FALSE);
             SCCOL nC;
             SCROW nR;
+            // Advance Entry.nField in iterator upon switching columns if
+            // lookup in row.
+            aCellIter.SetAdvanceQueryParamEntryField( !bSpMatrix);
             if ( aCellIter.FindEqualOrSortedLastInRange( nC, nR ) )
-                nDelta = static_cast<SCSIZE>(nR - nRow1);
-            else
-            {
-                SetNV();
-                return;
-            }
-        }
-        else                            // lookup in row
-        {
-            rEntry.eOp = SC_LESS_EQUAL;
-            ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
-            // advance Entry.nField in Iterator upon switching columns
-            aCellIter.SetAdvanceQueryParamEntryField( TRUE );
-            SCCOL nC;
-            SCROW nR;
-            if ( aCellIter.FindEqualOrSortedLastInRange( nC, nR ) )
-                nDelta = static_cast<SCSIZE>(nC - nCol1);
+                nDelta = bSpMatrix ? static_cast<SCSIZE>(nR - nRow1) :
+                    static_cast<SCSIZE>(nC - nCol1);
             else
             {
                 SetNV();
@@ -5063,8 +5078,9 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
             switch( eFunc )
             {
                 case ifPRODUCT: nErg = 1; break;
-                case ifMAX:     nErg = MINDOUBLE; break;
+                case ifMAX:     nErg = -MAXDOUBLE; break;
                 case ifMIN:     nErg = MAXDOUBLE; break;
+                default: ; // nothing
             }
             do
             {
@@ -5085,6 +5101,7 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
                     case ifPRODUCT: nErg *= nVal; break;
                     case ifMAX:     if( nVal > nErg ) nErg = nVal; break;
                     case ifMIN:     if( nVal < nErg ) nErg = nVal; break;
+                    default: ; // nothing
                 }
             }
             while ( aValIter.GetNext(nVal, nErr) && !nErr );
@@ -5098,6 +5115,7 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
         case ifCOUNT:   nErg = nCount; break;
         case ifSUM:     nErg = ::rtl::math::approxAdd( nErg, fMem ); break;
         case ifAVERAGE: nErg = ::rtl::math::approxAdd( nErg, fMem ) / nCount; break;
+        default: ; // nothing
     }
     PushDouble( nErg );
 }
@@ -5209,7 +5227,6 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
     std::vector<double> values;
     double vSum    = 0.0;
     double vMean    = 0.0;
-    int i = 0;
 
     rValCount = 0.0;
     double fSum    = 0.0;
@@ -5238,7 +5255,7 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
 
     vMean = fSum / values.size();
 
-    for (i = 0; i < values.size(); i++)
+    for (size_t i = 0; i < values.size(); i++)
         vSum += (values[i] - vMean) * (values[i] - vMean);
 
     rVal = vSum;
