@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-18 17:13:18 $
+ *  last change: $Author: mba $ $Date: 2002-03-07 18:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #pragma hdrstop
 
 #include <so3/transbnd.hxx>             // SvProgressArg
+#include <svtools/eitem.hxx>
 
 #include "appdata.hxx"
 #include "request.hxx"
@@ -552,18 +553,24 @@ BOOL SfxProgress::SetState
                 pImp->pView = pDocView;
             else
             {
-                // not in a view, perhaps it's just loading
-                SfxFrame* pFrame = pObjSh->GetMedium()->GetLoadTargetFrame();
-                if ( pFrame && pFrame->GetCurrentViewFrame() )
+                // don't show status indicator for hidden documents
+                SfxMedium* pMedium = pObjSh->GetMedium();
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, FALSE );
+                if ( !pHiddenItem || !pHiddenItem->GetValue() )
                 {
-                    // recycling frame
-                    pImp->pView = pFrame->GetCurrentViewFrame();
-                }
-                else if ( pFrame )
-                {
-                    Reference < XStatusIndicatorFactory > xFact( pFrame->GetFrameInterface(), UNO_QUERY );
-                    if ( xFact.is() )
-                        pImp->xStatusInd = xFact->createStatusIndicator();
+                    // not in a view, perhaps it's just loading
+                    SfxFrame* pFrame = pMedium->GetLoadTargetFrame();
+                    if ( pFrame && pFrame->GetCurrentViewFrame() )
+                    {
+                        // recycling frame
+                        pImp->pView = pFrame->GetCurrentViewFrame();
+                    }
+                    else if ( pFrame )
+                    {
+                        Reference < XStatusIndicatorFactory > xFact( pFrame->GetFrameInterface(), UNO_QUERY );
+                        if ( xFact.is() )
+                            pImp->xStatusInd = xFact->createStatusIndicator();
+                    }
                 }
             }
         }
