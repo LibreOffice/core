@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xpathapi.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:32:00 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,12 @@ namespace XPath
     {
         // XXX
         // return static_cast< XXPathAPI* >(new CXPathAPI());
-        return Reference< XInterface >(static_cast<XXPathAPI*>(new CXPathAPI()));
+        return Reference< XInterface >(static_cast<XXPathAPI*>(new CXPathAPI(rSMgr)));
+    }
+
+    CXPathAPI::CXPathAPI(const Reference< XMultiServiceFactory >& rSMgr)
+        : m_aFactory(rSMgr)
+    {
     }
 
     const char* CXPathAPI::aImplementationName = "com.sun.star.comp.xml.xpath.XPathAPI";
@@ -124,7 +129,7 @@ namespace XPath
     void SAL_CALL CXPathAPI::registerNS(const OUString& aPrefix, const OUString& aURI)
         throw (RuntimeException)
     {
-        m_nsmap.insert(nsmap_t::value_type(aPrefix, aURI));                
+        m_nsmap.insert(nsmap_t::value_type(aPrefix, aURI));
     }
 
     void SAL_CALL CXPathAPI::unregisterNS(const OUString& aPrefix, const OUString& aURI)
@@ -132,13 +137,13 @@ namespace XPath
     {
         if ((m_nsmap.find(aPrefix))->second.equals(aURI))
             m_nsmap.erase(aPrefix);
-        
+
     }
-    
+
     static void _registerNamespaces(xmlXPathContextPtr ctx, const nsmap_t& nsmap)
     {
         nsmap_t::const_iterator i = nsmap.begin();
-        OString oprefix, ouri;        
+        OString oprefix, ouri;
         xmlChar *p, *u;
         while (i != nsmap.end())
         {
@@ -151,17 +156,31 @@ namespace XPath
         }
     }
 
+    static void _registerExtensions(xmlXPathContextPtr ctx, const extensions_t& extensions)
+    {
+        extensions_t::const_iterator i = extensions.begin();
+        while (i != extensions.end())
+        {
+            Libxml2ExtensionHandle aHandle = (*i)->getLibxml2ExtensionHandle();
+            if ( aHandle.functionLookupFunction != 0 )
+                xmlXPathRegisterFuncLookup(ctx, (xmlXPathFuncLookupFunc) aHandle.functionLookupFunction, (void*)(aHandle.functionData));
+            if ( aHandle.variableLookupFunction != 0 )
+                xmlXPathRegisterVariableLookup(ctx, (xmlXPathVariableLookupFunc) aHandle.variableLookupFunction, (void*)(aHandle.variableData));
+            i++;
+        }
+    }
+
     /**
     Use an XPath string to select a nodelist.
     */
     Reference< XNodeList > SAL_CALL CXPathAPI::selectNodeList(
-            const Reference< XNode >& contextNode, 
+            const Reference< XNode >& contextNode,
             const OUString& str)
         throw (RuntimeException)
     {
 
-        xmlXPathContextPtr xpathCtx; 
-        xmlXPathObjectPtr xpathObj; 
+        xmlXPathContextPtr xpathCtx;
+        xmlXPathObjectPtr xpathObj;
 
         // get the node and document
         Reference< XUnoTunnel > tunnel(contextNode, UNO_QUERY);
@@ -175,7 +194,7 @@ namespace XPath
 
         OString o1 = OUStringToOString(str, RTL_TEXTENCODING_UTF8);
         xmlChar *xStr = (xmlChar*)o1.getStr();
-        
+
         /* run the query */
         if ((xpathObj = xmlXPathEval(xStr, xpathCtx)) == NULL)
         {
@@ -183,7 +202,7 @@ namespace XPath
             throw RuntimeException();
         }
         Reference< XNodeList > aList(new CNodeList(xpathObj));
-        xmlXPathFreeContext(xpathCtx);        
+        xmlXPathFreeContext(xpathCtx);
         return aList;
     }
 
@@ -191,8 +210,8 @@ namespace XPath
     Use an XPath string to select a nodelist.
     */
     Reference< XNodeList > SAL_CALL CXPathAPI::selectNodeListNS(
-            const Reference< XNode >& contextNode, 
-            const OUString& str, 
+            const Reference< XNode >& contextNode,
+            const OUString& str,
             const Reference< XNode >&  namespaceNode)
         throw (RuntimeException)
     {
@@ -203,7 +222,7 @@ namespace XPath
     Use an XPath string to select a single node.
     */
     Reference< XNode > SAL_CALL CXPathAPI::selectSingleNode(
-            const Reference< XNode >& contextNode, 
+            const Reference< XNode >& contextNode,
             const OUString& str)
         throw (RuntimeException)
     {
@@ -216,8 +235,8 @@ namespace XPath
     Use an XPath string to select a single node.
     */
     Reference< XNode > SAL_CALL CXPathAPI::selectSingleNodeNS(
-            const Reference< XNode >& contextNode, 
-            const OUString& str, 
+            const Reference< XNode >& contextNode,
+            const OUString& str,
             const Reference< XNode >&  namespaceNode)
         throw (RuntimeException)
     {
@@ -228,8 +247,8 @@ namespace XPath
     Reference< XXPathObject > SAL_CALL CXPathAPI::eval(const Reference< XNode >& contextNode, const OUString& str)
             throw (RuntimeException)
     {
-        xmlXPathContextPtr xpathCtx; 
-        xmlXPathObjectPtr xpathObj; 
+        xmlXPathContextPtr xpathCtx;
+        xmlXPathObjectPtr xpathObj;
 
         // get the node and document
         Reference< XUnoTunnel > tunnel(contextNode, UNO_QUERY);
@@ -240,21 +259,25 @@ namespace XPath
         xpathCtx = xmlXPathNewContext(pDoc);
         if (xpathCtx == NULL)throw RuntimeException();
 
+        // set conext node
+        xpathCtx->node = pNode;
+
         _registerNamespaces(xpathCtx, m_nsmap);
-        
+        _registerExtensions(xpathCtx, m_extensions);
+
         OString o1 = OUStringToOString(str, RTL_TEXTENCODING_UTF8);
         xmlChar *xStr = (xmlChar*)o1.getStr();
 
 
         /* run the query */
-        if ((xpathObj = xmlXPathEval(xStr, xpathCtx)) == NULL) {            
+        if ((xpathObj = xmlXPathEval(xStr, xpathCtx)) == NULL) {
             // OSL_ENSURE(xpathCtx->lastError == NULL, xpathCtx->lastError->message);
             xmlXPathFreeContext(xpathCtx);
             throw RuntimeException();
         }
         xmlXPathFreeContext(xpathCtx);
 
-        Reference< XXPathObject > aObj(new CXPathObject(xpathObj));        
+        Reference< XXPathObject > aObj(new CXPathObject(xpathObj));
         return aObj;
     }
 
@@ -264,6 +287,21 @@ namespace XPath
         return Reference< XXPathObject>();
     }
 
+    void SAL_CALL CXPathAPI::registerExtension(const OUString& aName) throw (RuntimeException)
+    {
+        // get extension from service manager
+        Reference< XXPathExtension > aExtension(m_aFactory->createInstance(aName), UNO_QUERY_THROW);
+        m_extensions.push_back( aExtension );
+    }
+
+    void SAL_CALL CXPathAPI::registerExtensionInstance(const Reference< XXPathExtension>& aExtension) throw (RuntimeException)
+    {
+        if (aExtension.is()) {
+            m_extensions.push_back( aExtension );
+        }
+        else
+            throw RuntimeException();
+    }
 
 
 }
