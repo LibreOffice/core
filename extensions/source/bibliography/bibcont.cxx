@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibcont.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-17 09:43:10 $
+ *  last change: $Author: gt $ $Date: 2002-06-04 07:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,9 @@ long BibBookContainer::PreNotify( NotifyEvent& rNEvt )
                 nHandled = 1;
         }
     }
+
+    if( !nHandled )
+        nHandled = BibSplitWindow::PreNotify( rNEvt );
 
     return nHandled;
 }
