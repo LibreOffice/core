@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-26 17:13:05 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:41:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,26 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Left = TRUE ;
         Text = "~Vor Text" ;
         Text [ english ] = "~Before text" ;
-        Text [ english_us ] = "~Before text" ;
+        Text [ english_us ] = "Before text" ;
+        Text[ portuguese ] = "~Esquerda";
+        Text[ russian ] = "—ÎÂ‚‡";
+        Text[ greek ] = "A¸ ·ÒÈÛÙÂÒ‹";
+        Text[ dutch ] = "Van ~links";
+        Text[ french ] = "De gauche";
+        Text[ spanish ] = "De i~zquierda";
+        Text[ finnish ] = "~Vasemmalta";
+        Text[ italian ] = "Da sinistra";
+        Text[ danish ] = "Fra venstre";
+        Text[ swedish ] = "FrÂn ~v‰nster";
+        Text[ polish ] = "Od lewej";
+        Text[ portuguese_brazilian ] = "Da ~esquerda";
+        Text[ japanese ] = "Â∑¶„Åã„Çâ(~L)";
+        Text[ korean ] = "ÏôºÏ™ΩÎ∂ÄÌÑ∞(~L)";
+        Text[ chinese_simplified ] = "‰ªéÂ∑¶(~L)";
+        Text[ chinese_traditional ] = "ÂæûÂ∑¶(~L)";
+        Text[ turkish ] = "S~oldan";
+        Text[ arabic ] = "„‰ «·Ì”«—";
+        Text[ thai ] = "‡∏à‡∏≤‡∏Å~‡∏ã‡πâ‡∏≤‡∏¢";
     };
     MetricField ED_LEFTINDENT
     {
@@ -113,7 +132,26 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Left = TRUE ;
         Text = "~Hinter Text" ;
         Text [ english ] = "Aft~er text" ;
-        Text [ english_us ] = "Aft~er text" ;
+        Text [ english_us ] = "After text" ;
+        Text[ portuguese ] = "~Direita";
+        Text[ russian ] = "—Ô‡‚‡";
+        Text[ greek ] = "¡¸ ‰ÂÓÈ‹";
+        Text[ dutch ] = "Van ~rechts";
+        Text[ french ] = "De droite";
+        Text[ spanish ] = "Desde la drc~ha";
+        Text[ finnish ] = "~Oikealta";
+        Text[ italian ] = "Da destra";
+        Text[ danish ] = "Fra h¯jre";
+        Text[ swedish ] = "FrÂn hˆge~r";
+        Text[ polish ] = "Od prawej";
+        Text[ portuguese_brazilian ] = "Da dire~ita";
+        Text[ japanese ] = "Âè≥„Åã„Çâ(~H)";
+        Text[ korean ] = "Ïò§Î•∏Ï™ΩÎ∂ÄÌÑ∞(~H)";
+        Text[ chinese_simplified ] = "‰ªéÂè≥(~H)";
+        Text[ chinese_traditional ] = "ÂæûÂè≥(~H)";
+        Text[ turkish ] = "Sa~dan";
+        Text[ arabic ] = "„‰ «·Ì„Ì‰";
+        Text[ thai ] = "‡∏à‡∏≤‡∏Å‡∏Ç~‡∏ß‡∏≤";
     };
     MetricField ED_RIGHTINDENT
     {
@@ -245,7 +283,26 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Left = TRUE ;
         Text = "V~or Text" ;
         Text [ english ] = "Bef~ore text" ;
-        Text [ english_us ] = "Bef~ore text" ;
+        Text [ english_us ] = "~Top" ;
+        Text[ portuguese ] = "~Superior";
+        Text[ russian ] = "¬‚ÂıÛ";
+        Text[ greek ] = "–‹Ì˘";
+        Text[ dutch ] = "~Boven";
+        Text[ french ] = "En haut";
+        Text[ spanish ] = "Arriba";
+        Text[ finnish ] = "~Yl‰osa";
+        Text[ italian ] = "Dall'al~to";
+        Text[ danish ] = "Foroven";
+        Text[ swedish ] = "÷v~erkant";
+        Text[ polish ] = "Od gÛry";
+        Text[ portuguese_brazilian ] = "P~ara o topo";
+        Text[ japanese ] = "‰∏ä(~T)";
+        Text[ korean ] = "ÏúÑ(~T)";
+        Text[ chinese_simplified ] = "‰∏äÈÉ®(~T)";
+        Text[ chinese_traditional ] = "Âêë‰∏ä(~T)";
+        Text[ turkish ] = "~‹st";
+        Text[ arabic ] = "√⁄·Ï";
+        Text[ thai ] = "~‡∏ö‡∏ô";
     };
     MetricField ED_TOPDIST
     {
@@ -269,7 +326,26 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Left = TRUE ;
         Text = "H~inter Text" ;
         Text [ english ] = "After ~text" ;
-        Text [ english_us ] = "After ~text" ;
+        Text [ english_us ] = "~Bottom" ;
+        Text[ portuguese ] = "~Inferior";
+        Text[ russian ] = "—ÌËÁÛ";
+        Text[ greek ] = " ‹Ù˘";
+        Text[ dutch ] = "Be~neden";
+        Text[ french ] = "En bas";
+        Text[ spanish ] = "A~bajo";
+        Text[ finnish ] = "~Alaosa";
+        Text[ italian ] = "Dal ~basso";
+        Text[ danish ] = "Forneden";
+        Text[ swedish ] = "~Underkant";
+        Text[ polish ] = "Od do≥u";
+        Text[ portuguese_brazilian ] = "Para a ~base";
+        Text[ japanese ] = "‰∏ã(~B)";
+        Text[ korean ] = "ÏïÑÎûò(~B)";
+        Text[ chinese_simplified ] = "‰∏ãÈÉ®(~B)";
+        Text[ chinese_traditional ] = "Âêë‰∏ã(~B)";
+        Text[ turkish ] = "~Alt";
+        Text[ arabic ] = "√”›·";
+        Text[ thai ] = "~‡∏•‡πà‡∏≤‡∏á";
     };
     MetricField ED_BOTTOMDIST
     {
@@ -1034,6 +1110,15 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ swedish ] = "V‰nster/uppe";
         Text[ japanese ] = "Â∑¶/‰∏ä";
         Text[ chinese_simplified ] = "Â∑¶/‰∏ä";
+        Text[ portuguese ] = "~Left/Top";
+        Text[ russian ] = "~Left/Top";
+        Text[ greek ] = "~Left/Top";
+        Text[ dutch ] = "~Left/Top";
+        Text[ finnish ] = "~Left/Top";
+        Text[ danish ] = "~Left/Top";
+        Text[ polish ] = "~Left/Top";
+        Text[ turkish ] = "~Left/Top";
+        Text[ arabic ] = "~Left/Top";
     };
     String ST_RIGHTALIGN_ASIAN
     {
@@ -1047,6 +1132,15 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ swedish ] = "Hˆ~ger/nere";
         Text[ japanese ] = "Âè≥/‰∏ã";
         Text[ chinese_simplified ] = "Âè≥/‰∏ã";
+        Text[ portuguese ] = "Righ~t/Bottom";
+        Text[ russian ] = "Righ~t/Bottom";
+        Text[ greek ] = "Righ~t/Bottom";
+        Text[ dutch ] = "Righ~t/Bottom";
+        Text[ finnish ] = "Righ~t/Bottom";
+        Text[ danish ] = "Righ~t/Bottom";
+        Text[ polish ] = "Righ~t/Bottom";
+        Text[ turkish ] = "Righ~t/Bottom";
+        Text[ arabic ] = "Righ~t/Bottom";
     };
     FixedText FT_LASTLINE
     {
@@ -1218,7 +1312,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     };
     StringList [ catalan ] =
     {
-         < "Izquierda" ; Default ; > ;
+         < "Esquerra" ; Default ; > ;
         < "Centrado" ; Default ; > ;
         < "Justificada" ; Default ; > ;
     };
@@ -1275,11 +1369,11 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ spanish ] = "Usar cuadrÌcula (si activada)";
         Text[ finnish ] = "~Snap to text grid (if active)";
         Text[ italian ] = "Cattura alla griglia di testo (se attivata)";
-        Text[ danish ] = "~Snap to text grid (if active)";
+        Text[ danish ] = "MÂling ved tekstgitter (ved aktivering)";
         Text[ swedish ] = "F‰st mot textraster (om det ‰r aktiverat)";
         Text[ polish ] = "~Snap to text grid (if active)";
         Text[ portuguese_brazilian ] = "~Snap to text grid (if active)";
-        Text[ japanese ] = "ÊñáÂ≠ó„Ç∞„É™„ÉÉ„ÉâÁ∑ö„Åß‰ΩçÁΩÆÂêà„Çè„Åõ („Ç∞„É™„ÉÉ„ÉâÁ∑öË°®Á§∫Áä∂ÊÖã„Åß)";
+        Text[ japanese ] = "„Éû„ÇπÁõÆ„Å´Âêà„Çè„Åõ„Çã (ÂéüÁ®øÁî®Á¥ô„ÅÆÂ†¥Âêà)";
         Text[ korean ] = "ÌÖçÏä§Ìä∏ Í∑∏Î¶¨ÎìúÏÑ†Ïóê Ï†ïÎ†¨ (ÌôúÏÑ±Ïãú)";
         Text[ chinese_simplified ] = "ÂíåÊñáÂ≠óÊ†ºÂ≠êÁ∫øÂØπÈΩê(Â¶Ç‰ΩøÁî®Ê†ºÂ≠êÁ∫ø)";
         Text[ chinese_traditional ] = "ÂíåÊñáÂ≠óÊ†ºÂ≠êÁ∑öÂ∞çÈΩä(Â¶ÇÊúâ‰ΩøÁî®Ê†ºÂ≠êÁ∑ö)";
@@ -1310,11 +1404,11 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ spanish ] = "Texto a texto";
         Text[ finnish ] = "Tekstin tasaus pystysuunnassa";
         Text[ italian ] = "Testo a testo";
-        Text[ danish ] = "Vertical text alignment";
+        Text[ danish ] = "Lodret tekstjustering";
         Text[ swedish ] = "Text-till-text";
         Text[ polish ] = "WyrÛwnanie tekstu w pionie";
         Text[ portuguese_brazilian ] = "Vertical text alignment";
-        Text[ japanese ] = "ÊñáÂ≠óÂπÖ„Å®ÈñìÈöî";
+        Text[ japanese ] = "ÊñáÂ≠ó‰ΩçÁΩÆ";
         Text[ korean ] = "Î¨∏Ïûê Í∞Ñ ÏÇ¨Ïù¥";
         Text[ chinese_simplified ] = "Â≠óÁ¨¶È´òÂ∫¶";
         Text[ chinese_traditional ] = "Â≠óÂÖÉÈ´òÂ∫¶";
@@ -1339,7 +1433,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ spanish ] = "AlineaciÛn";
         Text[ finnish ] = "~Alignment";
         Text[ italian ] = "Allineamento";
-        Text[ danish ] = "~Alignment";
+        Text[ danish ] = "~Justering";
         Text[ swedish ] = "~Justering";
         Text[ polish ] = "~Alignment";
         Text[ portuguese_brazilian ] = "~Alignment";
@@ -1349,8 +1443,8 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ chinese_traditional ] = "Â∞çÈΩä";
         Text[ turkish ] = "~Alignment";
         Text[ arabic ] = "~Alignment";
-        Text[ catalan ] = "~Alignment";
-        Text[ thai ] = "~Alignment";
+        Text[ catalan ] = "~AlineaciÛ";
+        Text[ thai ] = "~‡∏à‡∏±‡∏î‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á";
     };
     ListBox LB_VERTALIGN
     {
@@ -1450,9 +1544,9 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     {
             < "Automatisk" ; > ;
         < "Basislinje" ; > ;
-        < "ÿverst" ; > ;
+        < "Top" ; > ;
         < "Centreret" ; > ;
-        < "nedad" ; > ;
+        < "Bund" ; > ;
     };
     StringList [ swedish ] =
     {
@@ -1854,7 +1948,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ portuguese_brazilian ] = "Op??s" ;
         Text [ portuguese ] = "OpÁıes" ;
         Text [ finnish ] = "Asetukset" ;
-        Text [ danish ] = "Supplerende" ;
+        Text [ danish ] = "Flere" ;
         Text [ french ] = "Options" ;
         Text [ swedish ] = "Till‰gg" ;
         Text [ dutch ] = "Overige" ;
@@ -1882,6 +1976,23 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ ENGLISH ] = "Breaks" ;
         Text [ english_us ] = "Breaks" ;
         Group = TRUE ;
+        Text[ portuguese ] = "Breaks";
+        Text[ russian ] = "Breaks";
+        Text[ greek ] = "Breaks";
+        Text[ dutch ] = "Breaks";
+        Text[ french ] = "Breaks";
+        Text[ spanish ] = "Breaks";
+        Text[ finnish ] = "Breaks";
+        Text[ italian ] = "Breaks";
+        Text[ danish ] = "Breaks";
+        Text[ swedish ] = "Breaks";
+        Text[ polish ] = "Breaks";
+        Text[ japanese ] = "Âå∫Âàá„Çä";
+        Text[ korean ] = "Breaks";
+        Text[ chinese_simplified ] = "Breaks";
+        Text[ chinese_traditional ] = "Breaks";
+        Text[ turkish ] = "Breaks";
+        Text[ arabic ] = "Breaks";
     };
     TriStateBox BTN_PAGEBREAK
     {
@@ -1890,7 +2001,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Size = MAP_APPFONT ( 61 , 10 ) ;
         Text = "~Zulassen" ;
         Text [ ENGLISH ] = "~Enable" ;
-        Text [ english_us ] = "~Enable" ;
+        Text [ english_us ] = "~Break" ;
         Group = TRUE ;
         Text[ chinese_simplified ] = "Êç¢È°µ(~B)";
         Text[ russian ] = "–‡Á˚‚";
@@ -1902,8 +2013,17 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ korean ] = "ÎÇòÎàÑÍ∏∞(~B)";
         Text[ turkish ] = "~Kesme";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Salto";
+        Text[ catalan ] = "~Permet";
         Text[ thai ] = "‡∏ï‡∏±‡∏ß‡πÅ~‡∏ö‡πà‡∏á";
+        Text[ portuguese ] = "~Quebra";
+        Text[ dutch ] = "~Afbreking";
+        Text[ french ] = "~Saut";
+        Text[ spanish ] = "~Salto";
+        Text[ finnish ] = "~Keskeytys";
+        Text[ italian ] = "I~nterruzione";
+        Text[ danish ] = "Skift";
+        Text[ swedish ] = "~Brytning";
+        Text[ portuguese_brazilian ] = "~Interrup??o";
     };
     FixedText FT_BREAKTYPE
     {
@@ -1911,6 +2031,26 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Size = MAP_APPFONT ( 20 , 10 ) ;
         Text = "~Typ" ;
         Text [ ENGLISH ] = "T~ype" ;
+        Text[ english_us ] = "T~ype";
+        Text[ portuguese ] = "T~ype";
+        Text[ russian ] = "T~ype";
+        Text[ greek ] = "T~ype";
+        Text[ dutch ] = "T~ype";
+        Text[ french ] = "T~ype";
+        Text[ spanish ] = "T~ype";
+        Text[ finnish ] = "T~ype";
+        Text[ italian ] = "T~ype";
+        Text[ danish ] = "T~ype";
+        Text[ swedish ] = "T~ype";
+        Text[ polish ] = "T~ype";
+        Text[ japanese ] = "Á®ÆÈ°û";
+        Text[ korean ] = "T~ype";
+        Text[ chinese_simplified ] = "T~ype";
+        Text[ chinese_traditional ] = "T~ype";
+        Text[ turkish ] = "T~ype";
+        Text[ arabic ] = "T~ype";
+        Text[ catalan ] = "~Tipus";
+        Text[ thai ] = "~‡∏ä‡∏ô‡∏¥‡∏î";
     };
     ListBox LB_BREAKTYPE
     {
@@ -1928,6 +2068,111 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
             < "Page" ; 0; > ;
             < "Column" ; 1; > ;
         };
+    StringList [ language_user1 ] =
+    {
+         < "Seite" ; 0; > ;
+        < "Spalte" ; 1; > ;
+    };
+    StringList [ english_us ] =
+    {
+         < "Page" ; 0; > ;
+        < "Col" ; 1; > ;
+    };
+    StringList [ portuguese ] =
+    {
+         < "P¡GINA" ; 0; > ;
+        < "Coluna" ; 1; > ;
+    };
+    StringList [ russian ] =
+    {
+         < "—“–¿Õ»÷¿" ; 0; > ;
+        < " ÓÎÓÌÍ‡" ; 1; > ;
+    };
+    StringList [ greek ] =
+    {
+         < "”ÂÎﬂ‰·" ; 0; > ;
+        < "”‘«À«" ; 1; > ;
+    };
+    StringList [ dutch ] =
+    {
+         < "Pagina" ; 0; > ;
+        < "Kolom" ; 1; > ;
+    };
+    StringList [ french ] =
+    {
+         < "¿ la page" ; 0; > ;
+        < "Col" ; 1; > ;
+    };
+    StringList [ spanish ] =
+    {
+         < "P¡GINA" ; 0; > ;
+        < "Columna" ; 1; > ;
+    };
+    StringList [ finnish ] =
+    {
+         < "Sivu" ; 0; > ;
+        < "Sar" ; 1; > ;
+    };
+    StringList [ italian ] =
+    {
+         < "Pagina" ; 0; > ;
+        < "Colonna" ; 1; > ;
+    };
+    StringList [ danish ] =
+    {
+         < "Side" ; 0; > ;
+        < "Kolonne" ; 1; > ;
+    };
+    StringList [ swedish ] =
+    {
+         < "Sida" ; 0; > ;
+        < "Kolumn" ; 1; > ;
+    };
+    StringList [ polish ] =
+    {
+         < "Strona" ; 0; > ;
+        < "Kolumna" ; 1; > ;
+    };
+    StringList [ japanese ] =
+    {
+         < "„Éö„Éº„Ç∏" ; 0; > ;
+        < "ÂàóÁï™Âè∑" ; 1; > ;
+    };
+    StringList [ korean ] =
+    {
+         < "Ïä¨ÎùºÏù¥Îìú" ; 0; > ;
+        < "Ïó¥" ; 1; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+         < "È°µ" ; 0; > ;
+        < "Ê†è" ; 1; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+         < "È†Å" ; 0; > ;
+        < "COLUMN" ; 1; > ;
+    };
+    StringList [ turkish ] =
+    {
+         < "Sayfa" ; 0; > ;
+        < "S‹TUN" ; 1; > ;
+    };
+    StringList [ arabic ] =
+    {
+         < "‘—ÌÕ…" ; 0; > ;
+        < "column_num" ; 1; > ;
+    };
+    StringList [ catalan ] =
+    {
+         < "Diapositiva" ; 0; > ;
+        < "COLUMN" ; 1; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "‡∏†‡∏≤‡∏û‡∏ô‡∏¥‡πà‡∏á" ; 0; > ;
+        < "‡∏Ñ‡∏≠‡∏•‡∏±‡∏°‡∏ô‡πå" ; 1; > ;
+    };
     };
     FixedText FT_BREAKPOSITION
     {
@@ -1936,6 +2181,25 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Right = TRUE;
         Text = "~Position" ;
         Text [ ENGLISH ] = "~Position" ;
+        Text[ english_us ] = "Position";
+        Text[ portuguese ] = "PosiÁ„o";
+        Text[ russian ] = "œÓÎÓÊÂÌËÂ";
+        Text[ greek ] = "»›ÛÁ";
+        Text[ dutch ] = "Pos~itie";
+        Text[ french ] = "Position";
+        Text[ spanish ] = "P~osiciÛn";
+        Text[ finnish ] = "Sijainti";
+        Text[ italian ] = "Posizione";
+        Text[ danish ] = "Stilling";
+        Text[ swedish ] = "~Befattning";
+        Text[ polish ] = "Pozy~cja";
+        Text[ japanese ] = "ÈÉ®ÁΩ≤";
+        Text[ korean ] = "ÏúÑÏπò";
+        Text[ chinese_simplified ] = "‰ΩçÁΩÆ(~O)";
+        Text[ chinese_traditional ] = "‰ΩçÁΩÆ(~P)";
+        Text[ turkish ] = "O~rtala";
+        Text[ arabic ] = "«·„Ê÷⁄";
+        Text[ thai ] = "~‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á";
     };
     ListBox LB_BREAKPOSITION
     {
@@ -1953,6 +2217,16 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
             < "Before" ; 0; > ;
             < "After" ; 1; > ;
         };
+    StringList [ language_user1 ] =
+    {
+         < "Davor" ; 0; > ;
+        < "Danach" ; 1; > ;
+    };
+    StringList [ japanese ] =
+    {
+         < "Ââç" ; 0; > ;
+        < "Âæå" ; 1; > ;
+    };
     };
     TriStateBox BTN_PAGECOLL
     {
@@ -2054,7 +2328,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ swedish ] = "Dela inte sty~cke" ;
         Text [ dutch ] = "A~linea niet splitsen" ;
         Text [ spanish ] = "Mantener lÌneas juntas" ;
-        Text [ english_us ] = "~Don't separate lines" ;
+        Text [ english_us ] = "~Do not split paragraph" ;
         Group = TRUE ;
         Text[ chinese_simplified ] = "ÊÆµ‰∏≠‰∏çÂàÜÈ°µ(~D)";
         Text[ russian ] = "ÕÂ ‡Á‰ÂÎˇÚ¸ ‡·Á‡ˆ";
@@ -2116,7 +2390,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ french ] = "Traitement des orphelines";
         Text[ spanish ] = "Ajuste de ~huÈrfanas";
         Text[ italian ] = "Controllo ~vedove";
-        Text[ danish ] = "Horeunge-ordning";
+        Text[ danish ] = "Fransk horeu~ngeordning";
         Text[ swedish ] = "ƒnkek~ontroll";
         Text[ polish ] = "~Kontrola szewcÛw";
         Text[ portuguese_brazilian ] = "~?rf?os";
@@ -2195,7 +2469,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ french ] = "Traitement des veuves";
         Text[ spanish ] = "Ajuste de ~viudas";
         Text[ italian ] = "Controllo orfane";
-        Text[ danish ] = "Fransk horeunge-ordning";
+        Text[ danish ] = "Ho~reungeordning";
         Text[ swedish ] = "Ho~rungekontroll";
         Text[ polish ] = "Kontrola bÍkartÛw";
         Text[ portuguese_brazilian ] = "~Vi?as";
@@ -2264,6 +2538,26 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Hide = TRUE ;
         Text = "Eigenschaften" ;
         Text [ ENGLISH ] = "Properties" ;
+        Text[ english_us ] = "Properties";
+        Text[ portuguese ] = "Properties";
+        Text[ russian ] = "Properties";
+        Text[ greek ] = "Properties";
+        Text[ dutch ] = "Properties";
+        Text[ french ] = "Properties";
+        Text[ spanish ] = "Properties";
+        Text[ finnish ] = "Properties";
+        Text[ italian ] = "Properties";
+        Text[ danish ] = "Properties";
+        Text[ swedish ] = "Properties";
+        Text[ polish ] = "Properties";
+        Text[ japanese ] = "Â±ûÊÄß";
+        Text[ korean ] = "Properties";
+        Text[ chinese_simplified ] = "Properties";
+        Text[ chinese_traditional ] = "Properties";
+        Text[ turkish ] = "Properties";
+        Text[ arabic ] = "Properties";
+        Text[ catalan ] = "Opcions";
+        Text[ thai ] = "‡∏Ñ‡∏∏‡∏ì‡∏™‡∏°‡∏ö‡∏±‡∏ï‡∏¥";
     };
     FixedText   FT_TEXTDIRECTION
     {
@@ -2272,6 +2566,24 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Hide = TRUE ;
         Text = "~Textfluss" ;
         Text [ ENGLISH ] = "Text ~direction" ;
+        Text[ english_us ] = "Text ~direction";
+        Text[ portuguese ] = "Text ~direction";
+        Text[ russian ] = "Text ~direction";
+        Text[ greek ] = "Text ~direction";
+        Text[ dutch ] = "Text ~direction";
+        Text[ french ] = "Text ~direction";
+        Text[ spanish ] = "Text ~direction";
+        Text[ finnish ] = "Text ~direction";
+        Text[ italian ] = "Text ~direction";
+        Text[ danish ] = "Text ~direction";
+        Text[ swedish ] = "Text ~direction";
+        Text[ polish ] = "Text ~direction";
+        Text[ japanese ] = "ÊñáÂ≠óÊñπÂêë";
+        Text[ korean ] = "Text ~direction";
+        Text[ chinese_simplified ] = "Text ~direction";
+        Text[ chinese_traditional ] = "Text ~direction";
+        Text[ turkish ] = "Text ~direction";
+        Text[ arabic ] = "Text ~direction";
     };
     ListBox     LB_TEXTDIRECTION
     {
@@ -2292,6 +2604,18 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
             < "Right-to-left" ; 1; > ;
             < "Use superordinate settings" ; 4; > ;
         };
+    StringList [ language_user1 ] =
+    {
+         < "Links nach rechts" ; 0; > ;
+        < "Rechts nach links" ; 1; > ;
+        < "Einstellungen des ¸bergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ japanese ] =
+    {
+         < "Â∑¶„Åã„ÇâÂè≥„Å∏" ; 0; > ;
+        < "Âè≥„Åã„ÇâÂ∑¶„Å∏" ; 1; > ;
+        < "Âë®„Çä„ÅÆ„ÉÜ„Ç≠„Çπ„Éà„ÅÆÊñáÂ≠óÊñπÂêë„Å´Âêà„Çè„Åõ„Çã" ; 4; > ;
+    };
     };
     Text[ chinese_simplified ] = "Êç¢Ë°åÂíåÂàÜÈ°µ";
     Text[ russian ] = "œÓÎÓÊÂÌËÂ Ì‡ ÒÚ‡ÌËˆÂ";
@@ -2330,7 +2654,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ french ] = "Retour ‡ la ligne";
         Text[ spanish ] = "Cambio de fila";
         Text[ italian ] = "Cambio ~riga";
-        Text[ danish ] = "Options";
+        Text[ danish ] = "Linjeskift";
         Text[ swedish ] = "Radbrytning";
         Text[ polish ] = "Podzia≥ wiersza";
         Text[ portuguese_brazilian ] = "Options";
@@ -2358,7 +2682,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ french ] = "Tenir compte de la ~liste des caractËres interdits en dÈbut et en fin de ligne";
         Text[ spanish ] = "Considerar lista de caracteres no aceptables a comienzo y fin de lÌnea.";
         Text[ italian ] = "Considera elenco dei caratteri non ammessi all'inizio e fine della riga.";
-        Text[ danish ] = "Apply list of forbidden characters at line end and line start";
+        Text[ danish ] = "Tag hensyn til ~liste over forbudte tegn ved linjestart og -slutning";
         Text[ swedish ] = "Anv‰nd ~lista med fˆrbjudna tecken i bˆrjan och slutet av rader";
         Text[ polish ] = "UwzglÍdnij listÍ znakÛw niedozwolonych na poczπtku i na koÒcu wiersza";
         Text[ portuguese_brazilian ] = "Apply list of forbidden characters at line end and line start";
@@ -2386,7 +2710,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ french ] = "Autoriser la ~coupure en milieu de mot pour le texte en caractËres latins";
         Text[ spanish ] = "Permitir salto dentro de palabras en texto con caracteres latinos.";
         Text[ italian ] = "Sono ammessi i separatori all'interno di parole scritte con caratteri latini.";
-        Text[ danish ] = "Allow break inside of words in latin text";
+        Text[ danish ] = "~Tillad tekstombrydning i ord i latinsk tekst";
         Text[ swedish ] = "TillÂt ~textbrytning inuti ord i latinsk text";
         Text[ polish ] = "DopuúÊ podzia≥ wyrazÛw w tekúcie napisanym literami ≥aciÒskimi";
         Text[ portuguese_brazilian ] = "Allow break inside of words in latin text";
@@ -2414,7 +2738,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ french ] = "Autoriser la ponctuation en retrait";
         Text[ spanish ] = "Permitir puntuaciÛn libre";
         Text[ italian ] = "Interpunzioni di rientro";
-        Text[ danish ] = "Hanging punctuation";
+        Text[ danish ] = "T~illad hÊngende tegnsÊtning";
         Text[ swedish ] = "TillÂt h‰ngande ~interpunktion";
         Text[ polish ] = "DopuúÊ sieroty i wdowy";
         Text[ portuguese_brazilian ] = "Hanging punctuation";
@@ -2442,7 +2766,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ french ] = "Espacement des caractËres";
         Text[ spanish ] = "Espacio entre caracteres";
         Text[ italian ] = "Distanza carattere";
-        Text[ danish ] = "Character distance";
+        Text[ danish ] = "Linjeafstand";
         Text[ swedish ] = "TeckenavstÂnd";
         Text[ polish ] = "OdstÍpy miÍdzy znakami";
         Text[ portuguese_brazilian ] = "Character distance";
@@ -2470,7 +2794,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ french ] = "Autoriser la po~nctuation en dÈbut de ligne pour compression";
         Text[ spanish ] = "Permitir puntuaciÛn al comienzo de fila para comprimir";
         Text[ italian ] = "Interpunzioni all'inizio di riga per compressione";
-        Text[ danish ] = "Allow punctuation at line start";
+        Text[ danish ] = "T~illad tegnsÊtning ved linjestart til komprimering";
         Text[ swedish ] = "TillÂt komprimering av i~nterpunktion i bˆrjan av rad";
         Text[ polish ] = "DopuúÊ kompresjÍ interpuncji na poczπtku wiersza";
         Text[ portuguese_brazilian ] = "Allow punctuation at line start";
@@ -2498,7 +2822,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ french ] = "Appliquer l'esp~acement entre les textes asiatiques, latins et complexes.";
         Text[ spanish ] = "Aplicar espacio entre texto asi·tico, latino y complejo.";
         Text[ italian ] = "Applica spazio tra testo asiatico, latino e complesso.";
-        Text[ danish ] = "Apply distance between asian, latin and complex text";
+        Text[ danish ] = "Anvend ~afstand mellem asiatisk, latinsk og kompleks tekst";
         Text[ swedish ] = "Anv‰nd ~avstÂnd mellan asiatisk, latinsk och komplex text";
         Text[ polish ] = "Ustaw odstÍp miÍdzy tekstem azjatyckim, ≥aciÒskim i z≥oøonym";
         Text[ portuguese_brazilian ] = "Apply distance between asian, latin and complex text";
@@ -2526,7 +2850,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ french ] = "A~dapter automatiquement l'espacement entre le texte asiatique et les nombres.";
         Text[ spanish ] = "Ajustar autom·ticamente espacio entre texto asi·tico y n˙meros";
         Text[ italian ] = "Aggiusta automaticamente la distanza tra testo asiatico e numeri";
-        Text[ danish ] = "Automatically adjust distance between asian text and numbers";
+        Text[ danish ] = "Tilpas automatisk afstan~d mellem asiatisk tekst og tal";
         Text[ swedish ] = "Anpassa automatiskt avstÂn~d mellan asiatisk text och siffror";
         Text[ polish ] = "Dopasuj automatycznie odstÍp miÍdzy tekstem azjatyckim a liczbami";
         Text[ portuguese_brazilian ] = "Automatically adjust distance between asian text and numbers";
@@ -2554,7 +2878,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ french ] = "Alignement du te~xte";
         Text[ spanish ] = "AlineaciÛn de texto";
         Text[ italian ] = "Allineamento testo";
-        Text[ danish ] = "Text alignment";
+        Text[ danish ] = "Te~kstjustering";
         Text[ swedish ] = "Te~xtjustering";
         Text[ polish ] = "WyrÛwnanie tekstu";
         Text[ portuguese_brazilian ] = "Text alignment";
@@ -2631,7 +2955,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     StringList [ danish ] =
     {
             < "Automatisk" ; Default ; > ;
-        < "??Manuell" ; Default ; > ;
+        < "??Manuel" ; Default ; > ;
     };
     StringList [ swedish ] =
     {
@@ -2702,7 +3026,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     Text[ french ] = "Typographie asiatique";
     Text[ spanish ] = "TipografÌa asi·tica";
     Text[ italian ] = "Tipografia asiatica";
-    Text[ danish ] = "Asian typography";
+    Text[ danish ] = "Asiatisk typografi";
     Text[ swedish ] = "Asiatisk typografi";
     Text[ polish ] = "Typografia azjatycka";
     Text[ portuguese_brazilian ] = "Asian typography";
