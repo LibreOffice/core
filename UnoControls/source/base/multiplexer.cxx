@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multiplexer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 12:27:12 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 //____________________________________________________________________________________________________________
 //  my own include
 //____________________________________________________________________________________________________________
@@ -131,9 +130,9 @@ namespace unocontrols{
 
 OMRCListenerMultiplexerHelper::OMRCListenerMultiplexerHelper(   const   Reference< XWindow >&   xControl    ,
                                                                 const   Reference< XWindow >&   xPeer       )
-    : m_aListenerHolder ( m_aMutex  )
+    : m_xPeer           ( xPeer     )
     , m_xControl        ( xControl  )
-    , m_xPeer           ( xPeer     )
+    , m_aListenerHolder ( m_aMutex  )
 {
 }
 
