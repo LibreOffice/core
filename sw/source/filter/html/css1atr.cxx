@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:53:19 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:25:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -846,7 +846,9 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, BOOL bUsed )
     // das Default-TextStyle wir nicht mit ausgegeben !!
     // das 0-Style ist das Default, wird nie ausgegeben !!
     USHORT nArrLen = pDoc->GetTxtFmtColls()->Count();
-    for( USHORT i=1; i<nArrLen; i++ )
+    USHORT i;
+
+    for( i = 1; i < nArrLen; i++ )
     {
         const SwTxtFmtColl* pColl = (*pDoc->GetTxtFmtColls())[i];
         USHORT nPoolId = pColl->GetPoolFmtId();
