@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:16:35 $
+ *  last change: $Author: ka $ $Date: 2001-06-29 14:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1016,6 +1016,12 @@ String STR_DRAWVIEWSHELL
     Text[ turkish ] = "Çizim kipi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modo Dibujo";
+};
+String STR_PRESVIEWSHELL
+{
+    Text = "Präsentationsmodus" ;
+    Text [ ENGLISH ] = "Presentation mode" ;
+    Text [ english_us ] = "Presentation mode" ;
 };
 String STR_TEXTOBJECTBARSHELL
 {

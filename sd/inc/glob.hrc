@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 17:11:07 $
+ *  last change: $Author: ka $ $Date: 2001-06-29 14:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,3 +154,4 @@
 #define STR_POWERPOINT_IMPORT                   RID_APP_START+795
 #define STR_STAROFFICE_XML_DRAW                 RID_APP_START+796
 #define STR_STAROFFICE_XML_IMPRESS              RID_APP_START+797
+#define STR_PRESVIEWSHELL                       RID_APP_START+798

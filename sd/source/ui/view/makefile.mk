@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:48:44 $
+#   last change: $Author: ka $ $Date: 2001-06-29 14:03:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,6 +113,7 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
         slidview.cxx	\
         outlnvsh.cxx	\
         outlnvs2.cxx	\
+        presvish.cxx	\
         outlview.cxx	\
         tabcontr.cxx	\
         layertab.cxx	\
@@ -173,6 +174,7 @@ SLOFILES =	\
         $(SLO)$/slidview.obj \
         $(SLO)$/outlnvsh.obj \
         $(SLO)$/outlnvs2.obj \
+        $(SLO)$/presvish.obj \
         $(SLO)$/outlview.obj \
         $(SLO)$/tabcontr.obj \
         $(SLO)$/layertab.obj \

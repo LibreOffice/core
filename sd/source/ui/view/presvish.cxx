@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: hidother.hrc,v $
+ *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-29 14:08:08 $
+ *  last change: $Author: ka $ $Date: 2001-06-29 14:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,18 +59,53 @@
  *
  ************************************************************************/
 
-#define SD_IF_SDAPP                     200 + 0
-#define SD_IF_SDDRAWDOCSHELL            200 + 1
-#define SD_IF_SDVIEWSHELL               200 + 2
-#define SD_IF_SDDRAWVIEWSHELL           200 + 3
-#define SD_IF_SDSLIDEVIEWSHELL          200 + 4
-#define SD_IF_SDOUTLINEVIEWSHELL        200 + 5
-#define SD_IF_SDDRAWSTDOBJECTBAR        200 + 6
-#define SD_IF_SDDRAWTEXTOBJECTBAR       200 + 7
-#define SD_IF_SDDRAWBEZIEROBJECTBAR     200 + 8
-#define SD_IF_SDDRAWGLUEPOINTSOBJECTBAR 200 + 9
-#define SD_IF_SDGRAPHICDOCSHELL         200 + 10
-#define SD_IF_SDGRAPHICVIEWSHELL        200 + 11
-#define SD_IF_SDGRAPHICSTDOBJECTBAR     200 + 12
-#define SD_IF_SDDRAWGRAFOBJECTBAR       200 + 13
-#define SD_IF_SDPRESVIEWSHELL           200 + 14
+#include <svx/svxids.hrc>
+#include <sfx2/app.hxx>
+#include "sdresid.hxx"
+#include "docshell.hxx"
+#include "presvish.hxx"
+#include "app.hrc"
+#include "strings.hrc"
+#include "glob.hrc"
+
+#define SdPresViewShell
+#include "sdslots.hxx"
+
+// -------------------
+// - SdPresViewShell -
+// -------------------
+
+SFX_IMPL_INTERFACE( SdPresViewShell, SdDrawViewShell, SdResId( STR_PRESVIEWSHELL ) )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+SFX_IMPL_VIEWFACTORY( SdPresViewShell, SdResId( STR_DEFAULTVIEW ) )
+{
+    SFX_VIEW_REGISTRATION( SdDrawDocShell );
+}
+
+// -----------------------------------------------------------------------------
+
+TYPEINIT1( SdPresViewShell, SdDrawViewShell );
+
+// -----------------------------------------------------------------------------
+
+SdPresViewShell::SdPresViewShell( SfxViewFrame* pFrame, SfxViewShell *pOldShell ) :
+    SdDrawViewShell( pFrame, pOldShell )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+SdPresViewShell::SdPresViewShell( SfxViewFrame* pFrame, const SdDrawViewShell& rShell ) :
+    SdDrawViewShell( pFrame, rShell )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+SdPresViewShell::~SdPresViewShell()
+{
+}

@@ -5,8 +5,8 @@
 #*    Beschreibung      ImpressViewShell-IDL
 #*
 #*    Ersterstellung    SOH (04.04.97)
-#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-18 16:48:29 $
-#*    $Revision: 1.1.1.1 $
+#*    Letzte Aenderung  $Author: ka $ $Date: 2001-06-29 14:06:45 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile:   T:/sd/sdi/drviewsh.sdv  $
 #*
@@ -16,7 +16,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/drviewsh.sdi,v 1.1.1.1 2000-09-18 16:48:29 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/drviewsh.sdi,v 1.2 2001-06-29 14:06:45 ka Exp $
 
 *************************************************************************/
 
@@ -217,11 +217,19 @@ shell SdDrawViewShell : SfxViewShell
     import ImpressEditView[Automation];
 }
 
+shell SdPresViewShell : SfxViewShell
+{
+    import ImpressEditView[Automation];
+}
+
 /*************************************************************************
 
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 16:48:29  hr
+      initial import
+
       Revision 1.264  1999/12/15 12:15:40  pw
       #70510# Removed SID_JUMPTOMARK
 
