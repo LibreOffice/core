@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallableStatement.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:41:11 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ Any SAL_CALL java_sql_CallableStatement::queryInterface( const Type & rType ) th
 sal_Bool SAL_CALL java_sql_CallableStatement::wasNull(  ) throw(starsdbc::SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
 
     {
@@ -151,7 +151,7 @@ sal_Bool SAL_CALL java_sql_CallableStatement::wasNull(  ) throw(starsdbc::SQLExc
 sal_Bool SAL_CALL java_sql_CallableStatement::getBoolean( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
 
     {
@@ -174,7 +174,7 @@ sal_Bool SAL_CALL java_sql_CallableStatement::getBoolean( sal_Int32 columnIndex 
 sal_Int8 SAL_CALL java_sql_CallableStatement::getByte( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
     jbyte out;
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
 
     {
@@ -198,7 +198,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_CallableStatement::getBytes( sal_Int32 co
 {
     Sequence< sal_Int8 > aSeq;
 
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         createStatement(t.pEnv);
@@ -227,7 +227,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_CallableStatement::getBytes( sal_Int32 co
 ::com::sun::star::util::Date SAL_CALL java_sql_CallableStatement::getDate( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
 
     {
@@ -251,7 +251,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_CallableStatement::getBytes( sal_Int32 co
 double SAL_CALL java_sql_CallableStatement::getDouble( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
     jdouble out;
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         createStatement(t.pEnv);
@@ -274,7 +274,7 @@ double SAL_CALL java_sql_CallableStatement::getDouble( sal_Int32 columnIndex ) t
 float SAL_CALL java_sql_CallableStatement::getFloat( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
     jfloat out;
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
 
     {
@@ -298,7 +298,7 @@ float SAL_CALL java_sql_CallableStatement::getFloat( sal_Int32 columnIndex ) thr
 sal_Int32 SAL_CALL java_sql_CallableStatement::getInt( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
 
     {
@@ -322,7 +322,7 @@ sal_Int32 SAL_CALL java_sql_CallableStatement::getInt( sal_Int32 columnIndex ) t
 sal_Int64 SAL_CALL java_sql_CallableStatement::getLong( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
     jlong out;
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
         // temporaere Variable initialisieren
@@ -344,7 +344,7 @@ sal_Int64 SAL_CALL java_sql_CallableStatement::getLong( sal_Int32 columnIndex ) 
 Any SAL_CALL java_sql_CallableStatement::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(starsdbc::SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
         // temporaere Variable initialisieren
@@ -367,7 +367,7 @@ Any SAL_CALL java_sql_CallableStatement::getObject( sal_Int32 columnIndex, const
 sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
     jshort out;
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
         // temporaere Variable initialisieren
@@ -388,7 +388,7 @@ sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex )
 
 ::rtl::OUString SAL_CALL java_sql_CallableStatement::getString( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     ::rtl::OUString aStr;
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -413,7 +413,7 @@ sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex )
  ::com::sun::star::util::Time SAL_CALL java_sql_CallableStatement::getTime( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
 
     {
@@ -437,7 +437,7 @@ sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex )
  ::com::sun::star::util::DateTime SAL_CALL java_sql_CallableStatement::getTimestamp( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
         // temporaere Variable initialisieren
@@ -459,7 +459,7 @@ sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex )
 
 void SAL_CALL java_sql_CallableStatement::registerOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName ) throw(starsdbc::SQLException, RuntimeException)
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         createStatement(t.pEnv);
@@ -483,7 +483,7 @@ void SAL_CALL java_sql_CallableStatement::registerOutParameter( sal_Int32 parame
 }
 void SAL_CALL java_sql_CallableStatement::registerNumericOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, sal_Int32 scale ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         createStatement(t.pEnv);
@@ -508,7 +508,7 @@ jclass java_sql_CallableStatement::getMyClass()
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass ){
-        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
         if( !t.pEnv ) return (jclass)0;
         jclass tempClass = t.pEnv->FindClass("java/sql/CallableStatement"); OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
         jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
@@ -540,7 +540,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_CallableStatem
 Reference< starsdbc::XArray > SAL_CALL java_sql_CallableStatement::getArray( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
         // temporaere Variable initialisieren
@@ -563,7 +563,7 @@ Reference< starsdbc::XArray > SAL_CALL java_sql_CallableStatement::getArray( sal
 Reference< starsdbc::XClob > SAL_CALL java_sql_CallableStatement::getClob( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
         // temporaere Variable initialisieren
@@ -585,7 +585,7 @@ Reference< starsdbc::XClob > SAL_CALL java_sql_CallableStatement::getClob( sal_I
 Reference< starsdbc::XBlob > SAL_CALL java_sql_CallableStatement::getBlob( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
         // temporaere Variable initialisieren
@@ -608,7 +608,7 @@ Reference< starsdbc::XBlob > SAL_CALL java_sql_CallableStatement::getBlob( sal_I
 Reference< starsdbc::XRef > SAL_CALL java_sql_CallableStatement::getRef( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
         // temporaere Variable initialisieren
@@ -644,7 +644,7 @@ void java_sql_CallableStatement::createStatement(JNIEnv* _pEnv)
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
 
 
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv && !object ){
         // temporaere Variable initialisieren
         static char * cSignature = "(Ljava/lang/String;II)Ljava/sql/CallableStatement;";
