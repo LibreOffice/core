@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 08:59:56 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,10 +173,11 @@ FltError ExportBiff5::Write()
     SfxDocumentInfo&    rInfo = rDocShell.GetDocInfo();
     rInfo.SavePropertySet( GetRootStorage() );
 
-    if( pExcRoot->bCellCut || IsTruncated() )
+    //! TODO: separate warnings for columns and sheets
+    if( pExcRoot->bCellCut || IsColTruncated() || IsRowTruncated() || IsTabTruncated() )
         return SCWARN_EXPORT_MAXROW;
-    else
-        return eERR_OK;
+
+    return eERR_OK;
 }
 
 
