@@ -58,7 +58,7 @@ inline ConstAsciiString::operator ::rtl::OUString () const
     extern const ConstAsciiString name
 
 #define IMPLEMENT_CONSTASCII_USTRING( name, string ) \
-    const ConstAsciiString name(string, sizeof(string)-1);
+    const ConstAsciiString name(string, sizeof(string)-1)
 
 
 #endif // _DBASHARED_CONSTASCIISTRING_HXX_
