@@ -31,6 +31,6 @@ vc	vcl\mac\source\window					nmake	-	m	vc__winm vc_unot NULL
 vc	vcl\mac\source\src						nmake	-	m	vc__srcm vc_unot NULL
 vc	vcl\util								nmake	-	all	vc_util vc__appa.u vc__appm.m vc__appp.p vc__appu.u vc__appw.w vc__gdim.m vc__gdip.p vc__gdiu.u vc__gdiw.w vc__srcm.m vc__srcp.p vc__srcu.u vc__srcw.w vc__wina.u vc__winm.m vc__winp.p vc__winu.u vc__winw.w vc_app vc_ctrl vc_gdi vc_hlp vc_remo vc_src vc_win NULL
 vc	vcl\workben								nmake	-	all	vc_wrkb vc_util NULL
-vc	vcl\com\sun\java\accessibility			nmake	-	all	vc_csj vc_wrkb NULL
-vc	vcl\com\sun\star\lib\accessibility		nmake	-	all	vc_csl vc_csj NULL
+vc	vcl\org\openoffice\Accessibility		nmake	-	all	vc_ooA vc_wrkb NULL
+vc	vcl\com\sun\star\lib\accessibility		nmake	-	all	vc_csl vc_ooA NULL
 vc	vcl\com\sun\star\comp\accessibility		nmake	-	all	vc_csc vc_csl NULL
