@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_calc.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:58:45 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ Module gid_Module_Prg_Calc_Bin
     Default = YES;
     Files = (gid_File_Extra_Cdecalc,gid_File_Lib_Calc,gid_File_Exe_Scalc,gid_File_Lib_Sc,gid_File_Lib_Scd,gid_File_Res_Sc,gid_File_Extra_Urldesktop_Calc,gid_File_Extra_Urlnew_Calc,gid_File_Extra_Urlstart_Calc,gid_File_Extra_Urltasks_Calc,gid_File_Oo_Office_Filter_Calc_Pkg,gid_File_Share_Config_Sofficecfg_Calc_Menubar_Xml,
     gid_File_Oo_Office_Ui_Calccommands_Xcs,gid_File_Oo_Office_Ui_Calccommands_Xcu,
+    gid_File_Registry_Spool_Oo_Common_Calc_Xcu,gid_File_Registry_Spool_Oo_Setup_Calc_Xcu,
     gid_File_Lib_Bf_Sc,gid_File_Res_Bf_Sc);
 End
 
