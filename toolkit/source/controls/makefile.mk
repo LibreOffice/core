@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2003-12-11 11:58:31 $
+#   last change: $Author: kz $ $Date: 2004-05-19 13:44:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,8 +87,10 @@ SLOFILES=   \
             $(SLO)$/unocontrolcontainermodel.obj 	\
             $(SLO)$/unocontrolmodel.obj 			\
             $(SLO)$/unocontrols.obj					\
-            $(SLO)$/formattedcontrol.obj\
-            $(SLO)$/dialogcontrol.obj \
+            $(SLO)$/formattedcontrol.obj			\
+            $(SLO)$/roadmapcontrol.obj				\
+            $(SLO)$/roadmapentry.obj				\
+            $(SLO)$/dialogcontrol.obj    			\
             $(SLO)$/tkscrollbar.obj \
             $(SLO)$/tkspinbutton.obj
 
