@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:39:38 $
+#   last change: $Author: vg $ $Date: 2003-04-24 12:59:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 PRJ=..
 
-PRJNAME=SM
+PRJNAME=starmath
 TARGET=smath3
 LIBTARGET=NO
 GEN_HID=TRUE
