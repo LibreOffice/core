@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:13:55 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
 #endif
 
 #ifndef _FSYS_HXX
@@ -210,6 +214,11 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
 #endif
+#ifndef _TOOLS_RESMGR_HXX
+#include <tools/resmgr.hxx>
+#endif
+#include "comphelper/anytostring.hxx"
+#include "cppuhelper/exc_hlp.hxx"
 
 #include "drawdoc.hxx"
 #ifndef SD_OUTLINER_HXX
@@ -798,7 +807,7 @@ void HtmlExport::ExportHtml()
         if(nSepPos != STRING_NOTFOUND)
             m_aDocFileName.Erase(nSepPos);
 
-        m_aDocFileName.AppendAscii( ".sxi" );
+        m_aDocFileName.AppendAscii( ".odp" );
     }
 
     //////
@@ -820,6 +829,9 @@ void HtmlExport::ExportHtml()
     // this is not a true while
     while( 1 )
     {
+        if( checkForExistingFiles() )
+            break;
+
         if( !CreateImagesForPresPages() )
             break;
 
@@ -938,9 +950,11 @@ void HtmlExport::ExportKiosk()
     InitProgress( 2*m_nSdPageCount );
 
     CreateFileNames();
-
-    if( CreateImagesForPresPages() )
-        CreateHtmlForPresPages();
+    if( !checkForExistingFiles() )
+    {
+        if( CreateImagesForPresPages() )
+            CreateHtmlForPresPages();
+    }
 
     ResetProgress();
 }
@@ -981,6 +995,9 @@ void HtmlExport::ExportWebCast()
     // this is not a true while
     while(1)
     {
+        if( checkForExistingFiles() )
+            break;
+
         if(!CreateImagesForPresPages())
             break;
 
@@ -1031,7 +1048,7 @@ bool HtmlExport::SavePresentation()
             aProperties[ 0 ].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Overwrite"));
             aProperties[ 0 ].Value <<= (sal_Bool)sal_True;
             aProperties[ 1 ].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
-            aProperties[ 1 ].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("StarOffice XML (Impress)"));
+            aProperties[ 1 ].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("impress8"));
             xStorable->storeToURL( aURL, aProperties );
 
             pDocSh->EnableSetModified( false );
@@ -3318,7 +3335,92 @@ bool HtmlExport::CopyFile( const String& rSourceFile, const String& rDestPath )
     }
 }
 
-// ---
+// =====================================================================
+
+bool HtmlExport::checkFileExists( Reference< ::com::sun::star::ucb::XSimpleFileAccess >& xFileAccess, String const & aFileName )
+{
+    try
+    {
+        OUString url( m_aExportPath );
+        url += aFileName;
+        return xFileAccess->exists( url );
+    }
+    catch( com::sun::star::uno::Exception& e )
+    {
+        (void)e;
+        DBG_ERROR((OString("sd::HtmlExport::checkFileExists(), exception caught: ") +
+             rtl::OUStringToOString( comphelper::anyToString( cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 )).getStr() );
+    }
+
+    return false;
+}
+
+// ---------------------------------------------------------------------
+
+bool HtmlExport::checkForExistingFiles()
+{
+    bool bFound = false;
+
+    try
+    {
+        Reference< XMultiServiceFactory > xMsf( ::comphelper::getProcessServiceFactory() );
+        Reference< ::com::sun::star::ucb::XSimpleFileAccess > xFA( xMsf->createInstance(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))), UNO_QUERY_THROW );
+
+        sal_uInt16 nSdPage;
+        for( nSdPage = 0; !bFound && (nSdPage < m_nSdPageCount); nSdPage++)
+        {
+            if( (m_pImageFiles[nSdPage] && checkFileExists( xFA, *m_pImageFiles[nSdPage] )) ||
+                (m_pHTMLFiles[nSdPage] && checkFileExists( xFA, *m_pHTMLFiles[nSdPage] )) ||
+                (m_pPageNames[nSdPage] && checkFileExists( xFA, *m_pPageNames[nSdPage] )) ||
+                (m_pTextFiles[nSdPage] && checkFileExists( xFA, *m_pTextFiles[nSdPage] )) )
+            {
+                bFound = true;
+            }
+        }
+
+        if( !bFound && m_bDownload )
+            bFound = checkFileExists( xFA, m_aDocFileName );
+
+        if( !bFound && m_bFrames )
+            bFound = checkFileExists( xFA, m_aFramePage );
+
+        if( bFound )
+        {
+            ResMgr *pResMgr = CREATERESMGR( dbw );
+            if( pResMgr )
+            {
+                ResId aResId( 4077, pResMgr );
+                String aMsg( aResId );
+
+                OUString aSystemPath;
+                osl::FileBase::getSystemPathFromFileURL( m_aExportPath, aSystemPath );
+                aMsg.SearchAndReplaceAscii( "%FILENAME", aSystemPath );
+                WarningBox aWarning( 0, WB_YES_NO | WB_DEF_YES, aMsg );
+                aWarning.SetImage( WarningBox::GetStandardImage() );
+                bFound = ( RET_NO == aWarning.Execute() );
+
+                delete pResMgr;
+            }
+            else
+            {
+                bFound = false;
+            }
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR((OString("sd::HtmlExport::checkForExistingFiles(), exception caught: ") +
+             rtl::OUStringToOString( comphelper::anyToString( cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 )).getStr() );
+        bFound = false;
+    }
+
+    return bFound;
+}
+
+// ---------------------------------------------------------------------
+
 
 class HideSpecialObjectsInfo
 {
@@ -3620,3 +3722,5 @@ void HtmlErrorContext::SetContext( USHORT nResId, const String& rURL1, const Str
 }
 
 // =====================================================================
+
+
