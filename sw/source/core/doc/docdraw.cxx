@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:49:18 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,24 +439,34 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
                       UINT32 nArrOrdNum )
     : pFmt( pFrmFmt ), pAnchor( pFlyAn ), nOrdNum( nArrOrdNum )
 {
-    if( pFmt->GetDoc()->GetRootFrm() )
+    // #i11176#
+    // This also needs to work when no layout exists. Thus, for
+    // FlyFrames an alternative method is used now in that case.
+    SwClientIter aIter( (SwFmt&)*pFmt );
+
+    if( RES_FLYFRMFMT == pFmt->Which() )
     {
-        SwClientIter aIter( (SwFmt&)*pFmt );
-        if( RES_FLYFRMFMT == pFmt->Which() )
+        if( pFmt->GetDoc()->GetRootFrm() )
         {
             // Schauen, ob es ein SdrObject dafuer gibt
             if( aIter.First( TYPE( SwFlyFrm) ) )
                 nOrdNum = ((SwFlyFrm*)aIter())->GetVirtDrawObj()->GetOrdNum();
         }
-        else if( RES_DRAWFRMFMT == pFmt->Which() )
+        else
         {
             // Schauen, ob es ein SdrObject dafuer gibt
-            if( aIter.First( TYPE(SwDrawContact) ) )
-                nOrdNum = ((SwDrawContact*)aIter())->GetMaster()->GetOrdNum();
+            if( aIter.First( TYPE(SwFlyDrawContact) ) )
+                nOrdNum = ((SwFlyDrawContact*)aIter())->GetMaster()->GetOrdNum();
         }
-        else
-            ASSERT( !this, "was ist das fuer ein Format?" );
     }
+    else if( RES_DRAWFRMFMT == pFmt->Which() )
+    {
+        // Schauen, ob es ein SdrObject dafuer gibt
+        if( aIter.First( TYPE(SwDrawContact) ) )
+            nOrdNum = ((SwDrawContact*)aIter())->GetMaster()->GetOrdNum();
+    }
+    else
+        ASSERT( !this, "was ist das fuer ein Format?" );
 }
 
 /*************************************************************************/
