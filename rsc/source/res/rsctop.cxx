@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsctop.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:53:24 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,10 @@
 |*    Letzte Aenderung  MM 03.06.91
 |*
 *************************************************************************/
-RscTop::RscTop( HASHID nId, USHORT nTypIdent, RscTop * pSuperCl )
+RscTop::RscTop( Atom nId, sal_uInt32 nTypIdent, RscTop * pSuperCl )
     : RefNode( nId )
-    , nTypId( nTypIdent )
     , pSuperClass( pSuperCl )
+    , nTypId( nTypIdent )
 {
     pRefClass = this;
     if( pSuperClass )
@@ -137,7 +137,7 @@ RSCINST RscTop::GetDefault()
 void RscTop :: Pre_dtor(){
     if( aDfltInst.IsInst() ){
         aDfltInst.pClass->Destroy( aDfltInst );
-        RscMem::Free( aDfltInst.pData );
+        rtl_freeMemory( aDfltInst.pData );
         aDfltInst = RSCINST();
     };
 }
@@ -151,8 +151,8 @@ void RscTop :: Pre_dtor(){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-HASHID  RscTop :: GetConstant( USHORT ){
-    return HASH_NONAME;
+Atom    RscTop :: GetConstant( sal_uInt32 ){
+    return InvalidAtom;
 }
 
 /*************************************************************************
@@ -181,7 +181,7 @@ RscTop * RscTop::GetTypeClass() const
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-USHORT RscTop :: Size()
+sal_uInt32 RscTop :: Size()
 {
     if( pSuperClass )
         return pSuperClass->Size();
@@ -231,9 +231,9 @@ BOOL RscTop::InHierarchy( RscTop * pClass ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-ERRTYPE RscTop::SetVariable( HASHID nVarName, RscTop * pClass,
-                     RSCINST * pDflt, RSCVAR nVarType, USHORT nMask,
-                     HASHID nDataBaseName )
+ERRTYPE RscTop::SetVariable( Atom nVarName, RscTop * pClass,
+                     RSCINST * pDflt, RSCVAR nVarType, sal_uInt32 nMask,
+                     Atom nDataBaseName )
 {
     if( pSuperClass )
         return pSuperClass->
@@ -270,7 +270,7 @@ void RscTop::EnumVariables( void * pData, VarEnumCallbackProc pProc )
 RSCINST RscTop::GetVariable
 (
     const RSCINST & rInst,
-    HASHID nVarName,
+    Atom nVarName,
     const RSCINST & rInitInst,
     BOOL bInitDflt,
     RscTop * pCreateClass
@@ -292,7 +292,7 @@ RSCINST RscTop::GetVariable
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-RSCINST RscTop::GetCopyVar( const RSCINST & rInst, HASHID nVarName )
+RSCINST RscTop::GetCopyVar( const RSCINST & rInst, Atom nVarName )
 {
     if( pSuperClass )
         return pSuperClass->
@@ -310,7 +310,7 @@ RSCINST RscTop::GetCopyVar( const RSCINST & rInst, HASHID nVarName )
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-RSCINST RscTop::GetTupelVar( const RSCINST & rInst, USHORT nPos,
+RSCINST RscTop::GetTupelVar( const RSCINST & rInst, sal_uInt32 nPos,
                             const RSCINST & rInitInst )
 {
     if( pSuperClass )
@@ -353,7 +353,7 @@ ERRTYPE RscTop::GetElement( const RSCINST & rInst, const RscId & rEleName,
 ERRTYPE RscTop::GetArrayEle
 (
     const RSCINST & rInst,
-    HASHID nId,
+    Atom nId,
     RscTop * pCreateClass,
     RSCINST * pGetInst
 )
@@ -415,7 +415,7 @@ RSCINST RscTop::SearchEle( const RSCINST & rInst, const RscId & rEleName,
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-RSCINST RscTop::GetPosEle( const RSCINST & rInst, USHORT nPos ){
+RSCINST RscTop::GetPosEle( const RSCINST & rInst, sal_uInt32 nPos ){
     if( pSuperClass )
         return pSuperClass->
             GetPosEle( rInst, nPos );
@@ -432,8 +432,8 @@ RSCINST RscTop::GetPosEle( const RSCINST & rInst, USHORT nPos ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-ERRTYPE RscTop::MovePosEle( const RSCINST & rInst, USHORT nDestPos,
-                    USHORT nSourcePos )
+ERRTYPE RscTop::MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
+                    sal_uInt32 nSourcePos )
 {
     if( pSuperClass )
         return pSuperClass->
@@ -451,7 +451,7 @@ ERRTYPE RscTop::MovePosEle( const RSCINST & rInst, USHORT nDestPos,
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-ERRTYPE RscTop::SetPosRscId( const RSCINST & rInst, USHORT nPos,
+ERRTYPE RscTop::SetPosRscId( const RSCINST & rInst, sal_uInt32 nPos,
                      const RscId & rRscId )
 {
     if( pSuperClass )
@@ -470,7 +470,7 @@ ERRTYPE RscTop::SetPosRscId( const RSCINST & rInst, USHORT nPos,
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-SUBINFO_STRUCT RscTop::GetInfoEle( const RSCINST & rInst, USHORT nPos ){
+SUBINFO_STRUCT RscTop::GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos ){
     if( pSuperClass )
         return pSuperClass->
             GetInfoEle( rInst, nPos );
@@ -487,7 +487,7 @@ SUBINFO_STRUCT RscTop::GetInfoEle( const RSCINST & rInst, USHORT nPos ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-USHORT  RscTop::GetCount( const RSCINST & rInst ){
+sal_uInt32  RscTop::GetCount( const RSCINST & rInst ){
     if( pSuperClass )
         return pSuperClass->GetCount( rInst );
     else
@@ -537,7 +537,7 @@ ERRTYPE RscTop::SetBool( const RSCINST & rInst, BOOL bValue ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-ERRTYPE RscTop::SetConst( const RSCINST & rInst, HASHID nId, INT32 nVal )
+ERRTYPE RscTop::SetConst( const RSCINST & rInst, Atom nId, INT32 nVal )
 {
     if( pSuperClass )
         return pSuperClass->SetConst( rInst, nId, nVal );
@@ -554,7 +554,7 @@ ERRTYPE RscTop::SetConst( const RSCINST & rInst, HASHID nId, INT32 nVal )
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-ERRTYPE RscTop::SetNotConst( const RSCINST & rInst, HASHID nId ){
+ERRTYPE RscTop::SetNotConst( const RSCINST & rInst, Atom nId ){
     if( pSuperClass )
         return pSuperClass->
                     SetNotConst( rInst, nId );
@@ -571,7 +571,7 @@ ERRTYPE RscTop::SetNotConst( const RSCINST & rInst, HASHID nId ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-ERRTYPE RscTop::SetString( const RSCINST & rInst, char * pStr ){
+ERRTYPE RscTop::SetString( const RSCINST & rInst, const char * pStr ){
     if( pSuperClass )
         return pSuperClass->
                     SetString( rInst, pStr );
@@ -622,7 +622,7 @@ ERRTYPE RscTop::GetBool( const RSCINST & rInst, BOOL * pB ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-ERRTYPE RscTop::GetConst( const RSCINST & rInst, HASHID * pH ){
+ERRTYPE RscTop::GetConst( const RSCINST & rInst, Atom * pH ){
     if( pSuperClass )
         return pSuperClass->
                     GetConst( rInst, pH );
@@ -756,7 +756,7 @@ BOOL    RscTop::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-void    RscTop::SetDefault( const RSCINST & rInst, HASHID nVarId ){
+void    RscTop::SetDefault( const RSCINST & rInst, Atom nVarId ){
     if( pSuperClass )
         pSuperClass->SetDefault( rInst, nVarId );
 }
@@ -770,7 +770,7 @@ void    RscTop::SetDefault( const RSCINST & rInst, HASHID nVarId ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-RSCINST RscTop::GetDefault( HASHID nVarId ){
+RSCINST RscTop::GetDefault( Atom nVarId ){
     if( pSuperClass )
         return pSuperClass->
                     GetDefault( nVarId );
@@ -803,7 +803,7 @@ void    RscTop::Delete( const RSCINST & rInst, RscTop * pClass,
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-void    RscTop::DeletePos( const RSCINST & rInst, USHORT nPos )
+void    RscTop::DeletePos( const RSCINST & rInst, sal_uInt32 nPos )
 {
     if( pSuperClass )
         pSuperClass->DeletePos( rInst, nPos );
@@ -905,7 +905,7 @@ ERRTYPE RscTop::WriteCxx( const RSCINST & rInst, FILE * fOutput,
 |*
 *************************************************************************/
 void RscTop::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
-                             RscTypCont * pTC, USHORT nTab,
+                             RscTypCont * pTC, sal_uInt32 nTab,
                              const RscId & rId, const char * pVarName )
 {
     if( pSuperClass )
@@ -924,7 +924,7 @@ void RscTop::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
 |*
 *************************************************************************/
 void RscTop::WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                       RscTypCont * pTC, USHORT nTab, const char * pVarName )
+                       RscTypCont * pTC, sal_uInt32 nTab, const char * pVarName )
 {
     if( pSuperClass )
         pSuperClass->WriteSrc( rInst, fOutput, pTC, nTab, pVarName );
@@ -941,7 +941,7 @@ void RscTop::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 *************************************************************************/
 ERRTYPE RscTop::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
                                RscTypCont * pTC, const RscId & rId,
-                               USHORT nDeep, BOOL bExtra )
+                               sal_uInt32 nDeep, BOOL bExtra )
 {
     if( pSuperClass )
         return( pSuperClass->
@@ -960,7 +960,7 @@ ERRTYPE RscTop::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
 |*
 *************************************************************************/
 ERRTYPE RscTop::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                         RscTypCont * pTC, USHORT nDeep, BOOL bExtra )
+                         RscTypCont * pTC, sal_uInt32 nDeep, BOOL bExtra )
 {
     if( pSuperClass )
         return( pSuperClass->
@@ -980,9 +980,9 @@ ERRTYPE RscTop::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
 *************************************************************************/
 void RscTop::WriteSyntaxHeader( FILE * fOutput, RscTypCont * pTC )
 {
-    if( GetId() != HASH_NONAME )
+    if( GetId() != InvalidAtom )
     {
-        fprintf( fOutput, "class %s \n{\n", pHS->Get( GetId() ) );
+        fprintf( fOutput, "class %s \n{\n", pHS->getString( GetId() ).getStr() );
         WriteSyntax( fOutput, pTC );
         fprintf( fOutput, "};\n\n" );
     }
@@ -1011,10 +1011,10 @@ void RscTop::WriteRcAccess
     const char * pName
 )
 {
-    if( GetId() != HASH_NONAME )
+    if( GetId() != InvalidAtom )
     {
         fprintf( fOutput, "\t\t//%s %s\n",
-                pHS->Get( GetId() ), pName );
+                pHS->getString( GetId() ).getStr(), pName );
     }
 }
 
