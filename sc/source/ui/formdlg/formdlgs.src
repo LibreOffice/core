@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-12 07:29:54 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ TabPage RID_SCTAB_FUNCTION
         QuickHelpText[ greek ] = "Εφαρμογή συνάρτησης";
         QuickHelpText[ korean ] = "ΗΤΌφ΅΅ΐϋΏλ!";
         QuickHelpText[ turkish ] = "Funktion όbernehmen";
+        QuickHelpText[ catalan ] = "Aplicar funciσn";
     };
     ListBox LB_CATEGORY
     {
@@ -486,6 +487,22 @@ TabPage RID_SCTAB_FUNCTION
         < "Text" ; Default ; > ;
         < "Add In" ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Ϊltima utilizaciσn" ; Default ; > ;
+        < "Todas" ; Default ; > ;
+        < "Base de datos" ; Default ; > ;
+        < "Fecha&Hora" ; Default ; > ;
+        < "Finanzas" ; Default ; > ;
+        < "Informaciσn" ; Default ; > ;
+        < "Lσgico" ; Default ; > ;
+        < "Matemαticas" ; Default ; > ;
+        < "Matriz" ; Default ; > ;
+        < "Estadνstica" ; Default ; > ;
+        < "Hoja de cαlculo" ; Default ; > ;
+        < "Texto" ; Default ; > ;
+        < "Add In" ; Default ; > ;
+    };
     };
     ListBox LB_FUNCTION
     {
@@ -520,6 +537,7 @@ TabPage RID_SCTAB_FUNCTION
         Text[ greek ] = "Κατηγορία";
         Text[ korean ] = "ΉόΑΦ(~C)";
         Text[ turkish ] = "~Kategori";
+        Text[ catalan ] = "Ca~tegorνa";
     };
     FixedText FT_FUNCTION
     {
@@ -547,6 +565,7 @@ TabPage RID_SCTAB_FUNCTION
         Text[ greek ] = "Συνάρτηση";
         Text[ korean ] = "ΗΤΌφ(~F)";
         Text[ turkish ] = "~Fonksiyon";
+        Text[ catalan ] = "~Funciσn";
     };
 };
 TabPage RID_SCTAB_STRUCT
@@ -587,6 +606,7 @@ TabPage RID_SCTAB_STRUCT
         Text[ greek ] = "Δομή";
         Text[ korean ] = "±ΈΑ¶(~S)";
         Text[ turkish ] = "~Yapύ";
+        Text[ catalan ] = "~Estructura";
     };
     Bitmap BMP_STR_CLOSE
     {
@@ -626,6 +646,7 @@ TabPage RID_SCTAB_STRUCT
         Text[ greek ] = "=?";
         Text[ korean ] = "=?";
         Text[ turkish ] = "=?";
+        Text[ catalan ] = "=?";
     };
     String STR_STRUCT_ERR2
     {
@@ -649,6 +670,7 @@ TabPage RID_SCTAB_STRUCT
         Text[ greek ] = "Σφάλμα";
         Text[ korean ] = "Ώΐ·ω";
         Text[ turkish ] = "Hata";
+        Text[ catalan ] = "Error";
     };
 };
 ModelessDialog RID_SCDLG_FORMULA
@@ -689,6 +711,7 @@ ModelessDialog RID_SCDLG_FORMULA
                 Text[ greek ] = "Συναρτήσεις";
                 Text[ korean ] = "ΗΤΌφ";
                 Text[ turkish ] = "Fonksiyon";
+                Text[ catalan ] = "Funciones";
             };
             PageItem
             {
@@ -713,6 +736,7 @@ ModelessDialog RID_SCDLG_FORMULA
                 Text[ greek ] = "Δομή";
                 Text[ korean ] = "±ΈΑ¶";
                 Text[ turkish ] = "Yapύ";
+                Text[ catalan ] = "Estructura";
             };
         };
     };
@@ -770,6 +794,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ greek ] = "Τύπος";
         Text[ korean ] = "Όφ½Δ(~M)";
         Text[ turkish ] = "F~ormόl";
+        Text[ catalan ] = "~Fσrmula";
     };
     Control ED_FORMULA
     {
@@ -847,6 +872,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ greek ] = "Αποτέλεσμα λειτουργίας";
         Text[ korean ] = "ΌÒ°θ";
         Text[ turkish ] = "Ara sonuη";
+        Text[ catalan ] = "Subtotal";
     };
     Window WND_RESULT
     {
@@ -881,6 +907,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ greek ] = "Αποτέλεσμα";
         Text[ korean ] = "°α°ϊ";
         Text[ turkish ] = "Sonuη";
+        Text[ catalan ] = "Resultado";
     };
     Window WND_FORMULA_RESULT
     {
@@ -915,6 +942,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ greek ] = "Μήτρα";
         Text[ korean ] = "Ηΰ·Δ";
         Text[ turkish ] = "Matri~s";
+        Text[ catalan ] = "Matri~z";
     };
     Edit ED_REF
     {
@@ -947,6 +975,7 @@ ModelessDialog RID_SCDLG_FORMULA
         QuickHelpText[ greek ] = "Μεγέθυνση";
         QuickHelpText[ korean ] = "Θ®΄λ!";
         QuickHelpText[ turkish ] = "Vergrφίern";
+        QuickHelpText[ catalan ] = "Aumentar";
     };
     /*
     HelpButton BTN_HELP
@@ -1011,6 +1040,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ greek ] = "<< Πίσω";
         Text[ korean ] = "<<µΪ·Ξ(~B)";
         Text[ turkish ] = "<< ~Geri";
+        Text[ catalan ] = "<< ~Regresar";
     };
     PushButton BTN_FORWARD
     {
@@ -1039,6 +1069,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ greek ] = "Επόμενο >>";
         Text[ korean ] = "΄Ωΐ½ (~N) >>";
         Text[ turkish ] = "~έleri >>";
+        Text[ catalan ] = "~Siguiente >>";
     };
     OKButton BTN_END
     {
@@ -1072,6 +1103,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ greek ] = "AutoPilot συνάρτησης";
         Text[ korean ] = "ΐΪµΏΖΔΐΟ·µ ±β΄Ι";
         Text[ turkish ] = "Fonksiyon oto pilotu";
+        Text[ catalan ] = "AutoPiloto de funciones";
     };
     String STR_TITLE2
     {
@@ -1097,5 +1129,6 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ greek ] = "AutoPilot συνάρτησης -  ";
         Text[ korean ] = "ΐΪµΏΖΔΐΟ·µ ±β΄Ι  -";
         Text[ turkish ] = "Fonksiyon oto pilotu  -";
+        Text[ catalan ] = "AutoPiloto de funciones  - ";
     };
 };
