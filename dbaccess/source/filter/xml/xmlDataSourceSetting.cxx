@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlDataSourceSetting.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:30:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                         s_aTypeNameMap[GetXMLToken( XML_FLOAT)]     = ::getCppuType( static_cast< double* >(NULL) );
                         s_aTypeNameMap[GetXMLToken( XML_STRING)]    = ::getCppuType( static_cast< ::rtl::OUString* >(NULL) );
                         s_aTypeNameMap[GetXMLToken( XML_INT)]       = ::getCppuType( static_cast< sal_Int32* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_SHORT)]     = ::getCppuType( static_cast< sal_Int16* >(NULL) );
                         s_aTypeNameMap[GetXMLToken( XML_VOID)]      = ::getVoidCppuType();
                     }
 
