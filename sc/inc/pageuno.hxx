@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pageuno.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2001-09-13 09:38:55 $
+ *  last change: $Author: sab $ $Date: 2002-09-27 11:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,14 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                             _CreateShape( SdrObject *pObj ) const throw();
+
+                            // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& rServiceName )
+        throw(com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames()
+        throw(com::sun::star::uno::RuntimeException);
 };
 
 #endif

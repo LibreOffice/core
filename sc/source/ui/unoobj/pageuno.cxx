@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pageuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2001-09-13 09:35:38 $
+ *  last change: $Author: sab $ $Date: 2002-09-27 11:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,3 +90,24 @@ uno::Reference<drawing::XShape > ScPageObj::_CreateShape( SdrObject *pObj ) cons
     return xShape;
 }
 
+::rtl::OUString SAL_CALL ScPageObj::getImplementationName()
+                                throw(uno::RuntimeException)
+{
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScPageObj"));
+}
+
+sal_Bool SAL_CALL ScPageObj::supportsService( const rtl::OUString& rServiceName )
+                                                    throw(uno::RuntimeException)
+{
+    String aServiceStr = rServiceName;
+    return aServiceStr.EqualsAscii( "com.sun.star.sheet.SpreadsheetDrawPage" );
+}
+
+uno::Sequence<rtl::OUString> SAL_CALL ScPageObj::getSupportedServiceNames()
+                                                    throw(uno::RuntimeException)
+{
+    uno::Sequence<rtl::OUString> aRet(1);
+    rtl::OUString* pArray = aRet.getArray();
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDrawPage"));
+    return aRet;
+}
