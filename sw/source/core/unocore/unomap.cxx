@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: os $ $Date: 2001-04-03 07:28:55 $
+ *  last change: $Author: os $ $Date: 2001-04-03 14:16:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1897,6 +1897,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
             {
                 static SfxItemPropertyMap aTextPortionExtensionMap_Impl[] =
                 {
+                    COMPLETE_TEXT_CURSOR_MAP
                     {SW_PROP_NAME(UNO_NAME_BOOKMARK),           FN_UNO_BOOKMARK, &::getCppuType((const Reference<XTextContent>*)0),   PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
                     {SW_PROP_NAME(UNO_NAME_CONTROL_CHARACTER ), FN_UNO_CONTROL_CHARACTER, &::getCppuType((const sal_Int16*)0),                 PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, MID_HYPHEN_MIN_LEAD   },
                     {SW_PROP_NAME(UNO_NAME_IS_COLLAPSED),       FN_UNO_IS_COLLAPSED, &::getBooleanCppuType(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
