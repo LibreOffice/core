@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 16:20:14 $
+#   last change: $Author: obo $ $Date: 2004-07-05 13:14:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,8 +76,7 @@ SCP_PRODUCT_TYPE=osl
 
 PARFILES= \
         module_impress.par              \
-        file_impress.par                \
-        configurationitem_impress.par
+        file_impress.par 
 
 .IF "$(GUI)"=="WNT"
 PARFILES += \
@@ -88,8 +87,7 @@ PARFILES += \
 ULFFILES= \
         module_impress.ulf              \
         registryitem_impress.ulf        \
-        folderitem_impress.ulf          \
-        configurationitem_impress.ulf
+        folderitem_impress.ulf
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
