@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 12:45:15 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1636,7 +1636,15 @@ void SfxViewFrame::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 {
                     // Im Gegensatz zu oben (TITLE_CHANGED) mu\s das UI nicht
                     // upgedated werden, da es nicht gehidet war!
-                    GetDispatcher()->GetBindings()->InvalidateAll(sal_True);
+
+                    // #i21560# InvalidateAll() causes the assertion
+                    // 'SfxBindings::Invalidate while in update" when
+                    // the sfx slot SID_BASICIDE_APPEAR is executed
+                    // via API from another thread (Java).
+                    // According to MBA this call is not necessary anymore,
+                    // because each document has its own SfxBindings.
+                    //
+                    //GetDispatcher()->GetBindings()->InvalidateAll(sal_True);
                 }
 
                 break;
