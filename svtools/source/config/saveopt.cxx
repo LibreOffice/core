@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2000-09-25 17:26:00 $
+ *  last change: $Author: mba $ $Date: 2000-09-25 17:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,19 +87,18 @@ static sal_Int32           nRefCount = 0;
 
 class SvtSaveOptions_Impl : public utl::ConfigItem
 {
-    sal_Int32               nAutoSaveTime;
-    sal_Int32               nSaveGraphics;
-    sal_Bool                bUseUserData,
-                            bBackup,
-                            bAutoSave,
-                            bAutoSavePrompt,
-                            bCreateBackup,
-                            bDocInfSave,
-                            bSaveWorkingSet,
-                            bSaveDocWins,
-                            bSaveDocView,
-                            bSaveRelINet,
-                            bSaveRelFSys;
+    sal_Int32                           nAutoSaveTime;
+    SvtSaveOptions::SaveGraphicsMode    eSaveGraphics;
+    sal_Bool                            bUseUserData,
+                                        bBackup,
+                                        bAutoSave,
+                                        bAutoSavePrompt,
+                                        bDocInfSave,
+                                        bSaveWorkingSet,
+                                        bSaveDocWins,
+                                        bSaveDocView,
+                                        bSaveRelINet,
+                                        bSaveRelFSys;
 public:
                             SvtSaveOptions_Impl();
 
@@ -116,10 +115,8 @@ public:
     BOOL                    IsAutoSavePrompt() const            { return bAutoSavePrompt; }
     void                    SetDocInfoSave(BOOL b)              { bDocInfSave = b; SetModified(); }
     BOOL                    IsDocInfoSave() const               { return bDocInfSave; }
-    void                    SetSaveOriginalGraphics(BOOL b)     { nSaveGraphics = 1; SetModified(); }
-    BOOL                    IsSaveOriginalGraphics() const      { return nSaveGraphics == 1; }
-    void                    SetSaveGraphicsCompressed(BOOL b)   { nSaveGraphics = 2; SetModified(); }
-    BOOL                    IsSaveGraphicsCompressed() const    { return nSaveGraphics == 2; }
+    void                    SetSaveGraphicsMode( SvtSaveOptions::SaveGraphicsMode eMode )   { eSaveGraphics = eMode; SetModified(); }
+    SvtSaveOptions::SaveGraphicsMode        GetSaveGraphicsMode() const         { return eSaveGraphics; }
     void                    SetSaveWorkingSet( BOOL b )         { bSaveWorkingSet = b; SetModified();}
     BOOL                    IsSaveWorkingSet() const            { return bSaveWorkingSet;         }
     void                    SetSaveDocWins( BOOL b )            { bSaveDocWins = b; SetModified();}
@@ -177,7 +174,7 @@ Sequence< OUString > GetPropertyNames()
 SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     : ConfigItem( OUString::createFromAscii("Office.Common/Save") )
     , nAutoSaveTime( 0 )
-    , nSaveGraphics( 0 )
+    , eSaveGraphics( SvtSaveOptions::SaveGraphicsNormal )
     , bUseUserData( sal_False )
     , bBackup( sal_False )
     , bAutoSave( sal_False )
@@ -213,7 +210,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
 
                     case FORMAT :
                         if ( pValues[nProp] >>= nTemp )
-                            nSaveGraphics = nTemp;
+                            eSaveGraphics = (SvtSaveOptions::SaveGraphicsMode) nTemp;
                         else
                             DBG_ERROR( "Wrong Type!" );
                         break;
@@ -229,7 +226,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                                     bUseUserData = bTemp;
                                     break;
                                 case CREATEBACKUP :
-                                    bCreateBackup = bTemp;
+                                    bBackup = bTemp;
                                     break;
                                 case AUTOSAVE :
                                     bAutoSave = bTemp;
@@ -284,13 +281,13 @@ void SvtSaveOptions_Impl::Commit()
                 pValues[nProp] <<= nAutoSaveTime;
                 break;
             case FORMAT :
-                pValues[nProp] <<= nSaveGraphics;
+                pValues[nProp] <<= (sal_Int16 ) eSaveGraphics;
                 break;
             case USEUSERDATA :
                 pValues[nProp] <<= bUseUserData;
                 break;
             case CREATEBACKUP :
-                pValues[nProp] <<= bCreateBackup;
+                pValues[nProp] <<= bBackup;
                 break;
             case AUTOSAVE :
                 pValues[nProp] <<= bAutoSave;
@@ -401,26 +398,6 @@ sal_Bool SvtSaveOptions::IsDocInfoSave() const
     return pImp->IsDocInfoSave();
 }
 
-void SvtSaveOptions::SetSaveOriginalGraphics(sal_Bool b)
-{
-    pImp->SetSaveOriginalGraphics( b );
-}
-
-sal_Bool SvtSaveOptions::IsSaveOriginalGraphics() const
-{
-    return pImp->IsSaveOriginalGraphics();
-}
-
-void SvtSaveOptions::SetSaveGraphicsCompressed(sal_Bool b)
-{
-    pImp->SetSaveGraphicsCompressed( b );
-}
-
-sal_Bool SvtSaveOptions::IsSaveGraphicsCompressed() const
-{
-    return pImp->IsSaveGraphicsCompressed();
-}
-
 void SvtSaveOptions::SetSaveWorkingSet( sal_Bool b )
 {
     pImp->SetSaveWorkingSet( b );
@@ -470,3 +447,14 @@ sal_Bool SvtSaveOptions::IsSaveRelFSys() const
 {
     return pImp->IsSaveRelFSys();
 }
+
+SvtSaveOptions::SaveGraphicsMode SvtSaveOptions::GetSaveGraphicsMode() const
+{
+    return pImp->GetSaveGraphicsMode();
+}
+
+void SvtSaveOptions::SetSaveGraphicsMode( SvtSaveOptions::SaveGraphicsMode eMode )
+{
+    pImp->SetSaveGraphicsMode( eMode );
+}
+
