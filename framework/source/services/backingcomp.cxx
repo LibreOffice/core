@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backingcomp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 12:53:22 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,6 @@
 #include <classes/droptargetlistener.hxx>
 #endif
 
-#ifndef __FRAMEWORK_HELPER_STATUSINDICATORFACTORY_HXX_
-#include <helper/statusindicatorfactory.hxx>
-#endif
-
 #ifndef __FRAMEWORK_HELPER_ACCELERATORINFO_HXX_
 #include <helper/acceleratorinfo.hxx>
 #endif
@@ -106,6 +102,10 @@
 
 //_______________________________________________
 // interface includes
+
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -243,7 +243,6 @@ css::uno::Any SAL_CALL BackingComp::queryInterface( /*IN*/ const css::uno::Type&
     // first look for own supported interfaces
     aResult = ::cppu::queryInterface(
                 aType,
-                static_cast< css::task::XStatusIndicatorSupplier* >(this),
                 static_cast< css::lang::XTypeProvider* >(this),
                 static_cast< css::lang::XServiceInfo* >(this),
                 static_cast< css::lang::XInitialization* >(this),
@@ -332,7 +331,6 @@ css::uno::Sequence< css::uno::Type > SAL_CALL BackingComp::getTypes()
                     ::getCppuType((const ::com::sun::star::uno::Reference< css::lang::XInitialization >*)NULL ),
                     ::getCppuType((const ::com::sun::star::uno::Reference< css::lang::XTypeProvider >*)NULL ),
                     ::getCppuType((const ::com::sun::star::uno::Reference< css::lang::XServiceInfo >*)NULL ),
-                    ::getCppuType((const ::com::sun::star::uno::Reference< css::task::XStatusIndicatorSupplier >*)NULL ),
                     ::getCppuType((const ::com::sun::star::uno::Reference< css::frame::XController >*)NULL ),
                     ::getCppuType((const ::com::sun::star::uno::Reference< css::lang::XComponent >*)NULL ),
                     lWindowTypes);
@@ -654,21 +652,17 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
             css::uno::makeAny(sTitle.makeStringAndClear()));
     }
 
-    // create the menu bar for the backing component
-    if ( xPropSet.is() )
-    {
-        css::uno::Any a;
-        css::uno::Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
-        a = xPropSet->getPropertyValue( DECLARE_ASCII( "LayoutManager" ));
-        a >>= xLayoutManager;
-        if ( xLayoutManager.is() )
+        // create the menu bar for the backing component
+        css::uno::Reference< dcss::frame::XLayoutManager > xLayoutManager;
+        xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
+        if (xLayoutManager.is())
         {
             xLayoutManager->lock();
-            xLayoutManager->createElement( DECLARE_ASCII( "private:resource/menubar/menubar" ));
+            xLayoutManager->createElement( DECLARE_ASCII( "private:resource/menubar/menubar"     ));
             xLayoutManager->createElement( DECLARE_ASCII( "private:resource/toolbar/standardbar" ));
             xLayoutManager->createElement( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
-            xLayoutManager->showElement( DECLARE_ASCII( "private:resource/toolbar/standardbar" ));
-            xLayoutManager->showElement( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
+            xLayoutManager->showElement  ( DECLARE_ASCII( "private:resource/toolbar/standardbar" ));
+            xLayoutManager->showElement  ( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
             xLayoutManager->unlock();
         }
     }
@@ -991,38 +985,6 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 
 /**
  */
-
-css::uno::Reference< css::task::XStatusIndicator > SAL_CALL BackingComp::getStatusIndicator() throw(css::uno::RuntimeException)
-{
-    css::uno::Reference< css::task::XStatusIndicator > xStatus;
-    /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
-
-    css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY);
-    if (xPropSet.is())
-    {
-        css::uno::Any a;
-        css::uno::Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
-        a = xPropSet->getPropertyValue( DECLARE_ASCII( "LayoutManager" ));
-        a >>= xLayoutManager;
-        if ( xLayoutManager.is() )
-        {
-            rtl::OUString aProgressBarResStr = DECLARE_ASCII( "private:resource/progressbar/progressbar" );
-            xLayoutManager->createElement( aProgressBarResStr );
-            css::uno::Reference< drafts::com::sun::star::ui::XUIElement > xProgressBar =
-                xLayoutManager->getElement( aProgressBarResStr );
-            if ( xProgressBar.is() )
-            {
-                xStatus = css::uno::Reference< css::task::XStatusIndicator >(
-                    xProgressBar->getRealInterface(), css::uno::UNO_QUERY );
-            }
-        }
-    }
-    aReadLock.unlock();
-    /* } SAFE */
-
-    return xStatus;
-}
 
 KeyCode impl_KeyCodeAWT2VCL( /*IN*/ const css::awt::KeyEvent& rAWTEvent )
 {
