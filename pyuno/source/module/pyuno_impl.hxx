@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_impl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2003-03-23 12:12:57 $
+ *  last change: $Author: jbu $ $Date: 2003-05-24 23:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,8 @@ PyRef PyUNO_callable_new (
     const com::sun::star::uno::Reference<com::sun::star::script::XInvocation2> &xInv,
     const rtl::OUString &methodName,
     const com::sun::star::uno::Reference<com::sun::star::lang::XSingleServiceFactory> &ssf,
-    const com::sun::star::uno::Reference<com::sun::star::script::XTypeConverter> &tc );
+    const com::sun::star::uno::Reference<com::sun::star::script::XTypeConverter> &tc,
+    ConversionMode mode = REJECT_UNO_ANY );
 
 PyObject* PyUNO_Type_new (const char *typeName , com::sun::star::uno::TypeClass t , const Runtime &r );
 PyObject* PyUNO_Enum_new( const char *enumBase, const char *enumValue, const Runtime &r );
@@ -163,6 +164,8 @@ PyRef getCharClass( const Runtime &);
 PyRef getByteSequenceClass( const Runtime & );
 PyRef getPyUnoClass( const Runtime &);
 PyRef getClass( const rtl::OUString & name , const Runtime & runtime );
+PyRef getAnyClass( const Runtime &);
+PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args );
 
 com::sun::star::uno::Any PyEnum2Enum( PyObject *obj, const Runtime & r )
     throw ( com::sun::star::uno::RuntimeException );

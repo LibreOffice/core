@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_callable.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2003-03-23 12:12:56 $
+ *  last change: $Author: jbu $ $Date: 2003-05-24 23:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ typedef struct
     Reference<XSingleServiceFactory> xInvocationFactory;
     Reference<XTypeConverter> xTypeConverter;
     OUString methodName;
+    ConversionMode mode;
 } PyUNO_callable_Internals;
 
 typedef struct
@@ -124,7 +125,7 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject* kwords)
     try
     {
         Runtime runtime;
-        any_params = runtime.pyObject2Any (args);
+        any_params = runtime.pyObject2Any (args, me->members->mode);
 
         if (any_params.getValueTypeClass () == com::sun::star::uno::TypeClass_SEQUENCE)
         {
@@ -215,7 +216,8 @@ PyRef PyUNO_callable_new (
     const Reference<XInvocation2> &my_inv,
     const OUString & methodName,
     const Reference<XSingleServiceFactory> &xInvocationFactory,
-    const Reference<XTypeConverter> &tc)
+    const Reference<XTypeConverter> &tc,
+    enum ConversionMode mode )
 {
     PyUNO_callable* self;
 
@@ -228,6 +230,7 @@ PyRef PyUNO_callable_new (
     self->members->methodName = methodName;
     self->members->xInvocationFactory = xInvocationFactory;
     self->members->xTypeConverter = tc;
+    self->members->mode = mode;
 
     return PyRef( (PyObject*)self, SAL_NO_ACQUIRE );
 }
