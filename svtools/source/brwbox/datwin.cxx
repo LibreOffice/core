@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:02:06 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,16 +91,25 @@ void ButtonFrame::Draw( OutputDevice& rDev )
     Color aColShadow( rSettings.GetShadowColor() );
     Color aColFace( rSettings.GetFaceColor() );
 
-    rDev.SetLineColor( bPressed ? aColShadow : aColLight );
-    rDev.DrawLine( aRect.TopLeft(), Point( aRect.Right(), aRect.Top() ) );
-    rDev.DrawLine( aRect.TopLeft(), Point( aRect.Left(), aRect.Bottom() - 1 ) );
-    rDev.SetLineColor( bPressed ? aColLight : aColShadow );
-    rDev.DrawLine( aRect.BottomRight(), Point( aRect.Right(), aRect.Top() ) );
-    rDev.DrawLine( aRect.BottomRight(), Point( aRect.Left(), aRect.Bottom() ) );
-
     rDev.SetLineColor( aColFace );
     rDev.SetFillColor( aColFace );
-    rDev.DrawRect( aInnerRect );
+    rDev.DrawRect( aRect );
+
+    if( rDev.GetOutDevType() == OUTDEV_WINDOW )
+    {
+        Window *pWin = (Window*) &rDev;
+        if( bPressed )
+            pWin->DrawSelectionBackground( aRect, 0, TRUE, FALSE, FALSE );
+    }
+    else
+    {
+        rDev.SetLineColor( bPressed ? aColShadow : aColLight );
+        rDev.DrawLine( aRect.TopLeft(), Point( aRect.Right(), aRect.Top() ) );
+        rDev.DrawLine( aRect.TopLeft(), Point( aRect.Left(), aRect.Bottom() - 1 ) );
+        rDev.SetLineColor( bPressed ? aColLight : aColShadow );
+        rDev.DrawLine( aRect.BottomRight(), Point( aRect.Right(), aRect.Top() ) );
+        rDev.DrawLine( aRect.BottomRight(), Point( aRect.Left(), aRect.Bottom() ) );
+    }
 
     if ( aText.Len() )
     {
