@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langselect.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:38:21 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 14:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include <list>
+#include <sal/types.h>
 #include <tools/string.hxx>
 #include <tools/lang.hxx>
 #include <rtl/ustring.hxx>
@@ -69,37 +70,27 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 namespace desktop
 {
 
-typedef std::list<rtl::OUString> IsoList;
-typedef std::list<String> StrList;
-
-class LanguageSelection;
-
-class LanguageSelectionDialog : public  ModalDialog
-{
-friend class LanguageSelection;
-private:
-    FixedText m_aText;
-    ListBox m_aListBox;
-    OKButton m_aButton;
-    ModalDialog *m_pDialog;
-    IsoList m_isoLanguages;
-
-public:
-    LanguageSelectionDialog(ResMgr* pResMgr);
-
-};
-
 class LanguageSelection
 {
 private:
+    static const rtl::OUString usFallbackLanguage;
+    static rtl::OUString aFoundLanguage;
+    static sal_Bool bFoundLanguage;
 
-    static IsoList getInstalledIsoLanguages();
-    static StrList getLanguageStrings(const IsoList&);
+    static com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
+        getConfigAccess(const sal_Char* pPath, sal_Bool bUpdate=sal_False);
+    static com::sun::star::uno::Sequence< rtl::OUString > getInstalledLanguages();
+    static sal_Bool isInstalledLanguage(rtl::OUString& usLocale, sal_Bool bExact=sal_False);
+    static rtl::OUString getFirstInstalledLanguage();
     static rtl::OUString getUserLanguage();
+    static rtl::OUString getSystemLanguage();
+    static void resetUserLanguage();
 
 public:
     static com::sun::star::lang::Locale IsoStringToLocale(const rtl::OUString& str);
