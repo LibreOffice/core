@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2001-05-14 17:26:57 $
+ *  last change: $Author: kso $ $Date: 2001-06-05 10:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,28 +753,43 @@ UUIInteractionHandler::handle(
     if (bErrorFlags)
     {
         bool bCanApprove = false;
+        bool bDefault = true;
         for (sal_Int32 i = 0; i < aContinuations.getLength(); ++i)
         {
             if (uno::Reference< task::XInteractionApprove >::query(
                         aContinuations[i]).
                     is())
+            {
                 bCanApprove = true;
+                bDefault = false;
+            }
             else if (uno::Reference< task::XInteractionDisapprove >::query(
                              aContinuations[i]).
                          is())
+            {
                 nFlags |= ERRCODE_BUTTON_NO;
+                bDefault = false;
+            }
             else if (uno::Reference< task::XInteractionAbort >::query(
                              aContinuations[i]).
                          is())
+            {
                 nFlags |= ERRCODE_BUTTON_CANCEL;
+                bDefault = false;
+            }
             else if (uno::Reference< task::XInteractionRetry >::query(
                              aContinuations[i]).
                          is())
+            {
                 nFlags |= ERRCODE_BUTTON_RETRY;
+                bDefault = false;
+            }
         }
         if (bCanApprove)
             nFlags |= nFlags & ERRCODE_BUTTON_NO ? ERRCODE_BUTTON_YES :
                                                    ERRCODE_BUTTON_NO;
+        if (bDefault)
+            nFlags |= ERRCODE_BUTTON_OK;
         switch (eClassification)
         {
             case task::InteractionClassification_ERROR:
