@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:31:58 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:55:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,9 @@
 #endif
 #ifndef _SVX_SRCHITEM_HXX
 #include <svx/srchitem.hxx>
+#endif
+#ifndef _SVX_FLSTITEM_HXX //autogen
+#include <svx/flstitem.hxx>
 #endif
 #ifndef _SVX_HTMLMODE_HXX
 #include <svx/htmlmode.hxx>
@@ -1161,7 +1164,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         // break;
         case SID_PRINTPREVIEW:
         {
-            FASTBOOL bDisable = GetProtocol().IsInPlaceActive();
+            FASTBOOL bDisable = IsInPlaceActive();
             if ( !bDisable )
             {
                 SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this);
@@ -1262,6 +1265,11 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                               : SFX_APP()->GetMiscConfig()->GetYear2000() ));
             }
             break;
+        case SID_ATTR_CHAR_FONTLIST:
+        {
+            rSet.Put( SvxFontListItem( pFontList, SID_ATTR_CHAR_FONTLIST ) );
+        }
+        break;
 
         default: DBG_ASSERT(!this,"Hier darfst Du nicht hinein!");
 
