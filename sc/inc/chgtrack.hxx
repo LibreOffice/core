@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-05 14:17:55 $
+ *  last change: $Author: dr $ $Date: 2000-12-06 15:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -855,6 +855,7 @@ public:
 
             void                GetOldString( String& ) const;
             void                GetNewString( String& ) const;
+            const ScBaseCell*   GetOldCell() const { return pOldCell; }
             const ScBaseCell*   GetNewCell() const { return pNewCell; }
     virtual void                GetDescription( String&, ScDocument*,
                                     BOOL bSplitRange = FALSE ) const;
