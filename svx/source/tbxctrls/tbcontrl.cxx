@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:51:12 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:16:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,12 @@
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
 #endif
+#ifndef _SFX_OBJFAC_HXX
+#include <sfx2/docfac.hxx>
+#endif
+#ifndef _SFX_TEMPLDLG_HXX
+#include <sfx2/templdlg.hxx>
+#endif
 #ifndef _SFXISETHINT_HXX
 #include <svtools/isethint.hxx>
 #endif
@@ -115,11 +121,19 @@
 #ifndef _SFXSTATUSLISTENER_HXX
 #include <sfx2/sfxstatuslistener.hxx>
 #endif
+#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-
+#endif
+#ifndef _SFX_CHILDWIN_HXX
+#include <sfx2/childwin.hxx>
+#endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
 #ifndef INCLUDED_SVTOOLS_FONTOPTIONS_HXX
 #include <svtools/fontoptions.hxx>
 #endif
+
 #pragma hdrstop
 
 #define _SVX_TBCONTRL_CXX
@@ -163,17 +177,20 @@
 #include "dlgutil.hxx"
 #include "dialmgr.hxx"
 #include "colorwindow.hxx"
+
 // ------------------------------------------------------------------------
 
 #define IMAGE_COL_TRANSPARENT       COL_LIGHTMAGENTA
 #define MAX_MRU_FONTNAME_ENTRIES    5
 #define LOGICAL_EDIT_HEIGHT         12
+
 // STATIC DATA -----------------------------------------------------------
 
 #ifndef DELETEZ
 #define DELETEZ(p) (delete (p), (p)=NULL)
 #endif
-#define MAX_STYLES_ENTRIES  ((USHORT)26)
+// don't make more than 15 entries visible at once
+#define MAX_STYLES_ENTRIES          static_cast< USHORT >( 15 )
 
 void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet );
 void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size &aItemSize );
@@ -202,10 +219,12 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxReloadControllerItem,  SfxBoolItem );
 // class SvxStyleBox_Impl -----------------------------------------------------
 //========================================================================
 
-class SvxStyleBox_Impl : public ListBox
+
+class SvxStyleBox_Impl : public ComboBox
 {
 public:
-    SvxStyleBox_Impl( Window* pParent, USHORT nSlot, const OUString& rCommand, SfxStyleFamily eFamily, const Reference< XDispatchProvider >& rDispatchProvider );
+    SvxStyleBox_Impl( Window* pParent, USHORT nSlot, const OUString& rCommand, SfxStyleFamily eFamily, const Reference< XDispatchProvider >& rDispatchProvider,
+                        const String& rClearFormatKey, const String& rMoreKey, BOOL bInSpecialMode );
     ~SvxStyleBox_Impl();
 
     void            SetFamily( SfxStyleFamily eNewFamily );
@@ -223,15 +242,18 @@ protected:
     virtual void    Select();
 
 private:
-    USHORT                         nSlotId;
-    SfxStyleFamily                 eStyleFamily;
-    USHORT                         nCurSel;
-    BOOL                           bRelease;
-    Size                           aLogicalSize;
-    Link                           aVisibilityListener;
-    BOOL                           bVisible;
-    Reference< XDispatchProvider > m_xDispatchProvider;
-    OUString                       m_aCommand;
+    USHORT                          nSlotId;
+    SfxStyleFamily                  eStyleFamily;
+    USHORT                          nCurSel;
+    BOOL                            bRelease;
+    Size                            aLogicalSize;
+    Link                            aVisibilityListener;
+    BOOL                            bVisible;
+    Reference< XDispatchProvider >  m_xDispatchProvider;
+    OUString                        m_aCommand;
+    String                          aClearFormatKey;
+    String                          aMoreKey;
+    BOOL                            bInSpecialMode;
 
     void            ReleaseFocus();
 };
@@ -425,17 +447,24 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(
     USHORT                                  nSlot,
     const rtl::OUString&                    rCommand,
     SfxStyleFamily                          eFamily,
-    const Reference< XDispatchProvider >&   rDispatchProvider ) :
+    const Reference< XDispatchProvider >&   rDispatchProvider,
+    const String&                           rClearFormatKey,
+    const String&                           rMoreKey,
+    BOOL                                    bInSpec ) :
 
-    ListBox( pParent, SVX_RES( RID_SVXTBX_STYLE ) ),
+    ComboBox( pParent, SVX_RES( RID_SVXTBX_STYLE ) ),
 
     eStyleFamily( eFamily ),
     nSlotId     ( nSlot ),
     bRelease    ( TRUE ),
     m_aCommand  ( rCommand ),
-    m_xDispatchProvider( rDispatchProvider )
+    m_xDispatchProvider( rDispatchProvider ),
+    aClearFormatKey ( rClearFormatKey ),
+    aMoreKey        ( rMoreKey ),
+    bInSpecialMode  ( bInSpec )
 {
     aLogicalSize = PixelToLogic( GetSizePixel(), MAP_APPFONT );
+    EnableAutocomplete( TRUE );
 }
 
 SvxStyleBox_Impl::~SvxStyleBox_Impl()
@@ -467,30 +496,61 @@ void SvxStyleBox_Impl::ReleaseFocus()
 void SvxStyleBox_Impl::Select()
 {
     // Tell base class about selection so that AT get informed about it.
-    ListBox::Select();
+    ComboBox::Select();
 
     if ( !IsTravelSelect() )
     {
-        Sequence< PropertyValue > aArgs( 2 );
-        aArgs[0].Name   = OUString::createFromAscii( "Template" );
-        aArgs[0].Value  = makeAny( OUString( GetSelectEntry() ));
-        aArgs[1].Name   = OUString::createFromAscii( "Family" );
-        aArgs[1].Value  = makeAny( sal_Int16( eStyleFamily ));
+        String aSelEntry( GetText() );
+        bool bDoIt = true, bClear = false;
+        if( bInSpecialMode )
+        {
+            if( aSelEntry == aClearFormatKey && GetSelectEntryPos() == 0 )
+            {
+                aSelEntry = String::CreateFromAscii( "Default" );
+                bClear = true;
+            }
+            else if( aSelEntry == aMoreKey && GetSelectEntryPos() == ( GetEntryCount() - 1 ) )
+            {
+                SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+                DBG_ASSERT( pViewFrm, "SvxStyleBox_Impl::Select(): no viewframe" );
+                pViewFrm->ShowChildWindow( SID_STYLE_DESIGNER );
+                SfxChildWindow* pChildWin = pViewFrm->GetChildWindow( SID_STYLE_DESIGNER );
+                if ( pChildWin && pChildWin->GetWindow() )
+                {
+                    static_cast<SfxTemplateDialog*>(pChildWin->GetWindow())->AutoShow(sal_True);
+                    pChildWin->GetWindow()->GrabFocus();
+                }
+                bDoIt = false;
+            }
+        }
 
         /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
             This instance may be deleted in the meantime (i.e. when a dialog is opened
             while in Dispatch()), accessing members will crash in this case. */
         ReleaseFocus();
 
-        SfxToolBoxControl::Dispatch( m_xDispatchProvider,
-                                     m_aCommand,
-                                     aArgs );
-/*
-        SfxStringItem aItem( nSlotId, GetSelectEntry() );
-        SfxUInt16Item aFamily( SID_STYLE_FAMILY, eStyleFamily );
-        rBindings.GetDispatcher()->Execute(
-            nSlotId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, &aFamily, 0L );
-*/
+        if( bDoIt )
+        {
+            if ( bClear )
+                SetText( aSelEntry );
+            SaveValue();
+
+            sal_Bool bCreateNew = GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND;
+            Sequence< PropertyValue > aArgs( 2 );
+            aArgs[0].Value  = makeAny( OUString( aSelEntry ) );
+            aArgs[1].Name   = OUString::createFromAscii( "Family" );
+            aArgs[1].Value  = makeAny( sal_Int16( eStyleFamily ));
+            if( bCreateNew )
+            {
+                aArgs[0].Name   = OUString::createFromAscii( "Param" );
+                SfxToolBoxControl::Dispatch( m_xDispatchProvider, String::CreateFromAscii(".uno:StyleNewByExample"), aArgs);
+            }
+            else
+            {
+                aArgs[0].Name   = OUString::createFromAscii( "Template" );
+                SfxToolBoxControl::Dispatch( m_xDispatchProvider, m_aCommand, aArgs );
+            }
+        }
     }
 }
 // -----------------------------------------------------------------------
@@ -508,9 +568,13 @@ long SvxStyleBox_Impl::PreNotify( NotifyEvent& rNEvt )
 
     if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
         nCurSel = GetSelectEntryPos();
-    else if(EVENT_LOSEFOCUS == nType)
-        SelectEntryPos(GetSavedValue());
-    return ListBox::PreNotify( rNEvt );
+    else if ( EVENT_LOSEFOCUS == nType )
+    {
+        // don't handle before our Select() is called
+        if ( !HasFocus() && !HasChildPathFocus() )
+            SetText( GetSavedValue() );
+    }
+    return ComboBox::PreNotify( rNEvt );
 }
 
 // -----------------------------------------------------------------------
@@ -543,7 +607,7 @@ long SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
                 break;
         }
     }
-    return nHandled ? nHandled : ListBox::Notify( rNEvt );
+    return nHandled ? nHandled : ComboBox::Notify( rNEvt );
 }
 /* -----------------------------08.03.2002 13:03------------------------------
 
@@ -558,12 +622,12 @@ void SvxStyleBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
         SetDropDownSizePixel(LogicToPixel(aDropSize, MAP_APPFONT));
     }
 
-    ListBox::DataChanged( rDCEvt );
+    ComboBox::DataChanged( rDCEvt );
 }
 
 void SvxStyleBox_Impl::StateChanged( StateChangedType nStateChange )
 {
-    ListBox::StateChanged( nStateChange );
+    ComboBox::StateChanged( nStateChange );
 
     if ( nStateChange == STATE_CHANGE_VISIBLE )
     {
@@ -1780,7 +1844,6 @@ IMPL_LINK( SvxLineWindow_Impl, SelectHdl, void *, EMPTYARG )
                                  OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineStyle" )),
                                  aArgs );
 //    GetBindings().GetDispatcher()->Execute( SID_FRAME_LINESTYLE, SFX_CALLMODE_RECORD, &aLineItem, 0L );
-
     return 0;
 }
 
@@ -2063,6 +2126,26 @@ void SfxStyleControllerItem_Impl::StateChanged(
 // class SvxStyleToolBoxControl ------------------------------------------
 //========================================================================
 
+struct SvxStyleToolBoxControl::Impl
+{
+    String                      aClearForm;
+    String                      aMore;
+    SvxStringArray              aDefaultStyleArray;
+    BOOL                        bListening;
+    BOOL                        bSpecModeWriter;
+    BOOL                        bSpecModeCalc;
+
+    inline Impl( void )
+        :aClearForm         ( SVX_RESSTR( RID_SVXSTR_CLEARFORM ) )
+        ,aMore              ( SVX_RESSTR( RID_SVXSTR_MORE ) )
+        ,aDefaultStyleArray ( SVX_RES( RID_SVXSTRARRAY_DEFAULTSTYLES ) )
+        ,bListening         ( FALSE )
+        ,bSpecModeWriter    ( FALSE )
+        ,bSpecModeCalc      ( FALSE )
+    {}
+};
+
+
 // mapping table from bound items. BE CAREFUL this table must be in the
 // same order as the uno commands bound to the slots SID_STYLE_FAMILY1..n
 // MAX_FAMILIES must also be correctly set!
@@ -2080,13 +2163,23 @@ SvxStyleToolBoxControl::SvxStyleToolBoxControl(
     :   SfxToolBoxControl   ( nSlotId, nId, rTbx ),
         pStyleSheetPool     ( NULL ),
         nActFamily          ( 0xffff ),
-        bListening          ( FALSE )
+        bListening          ( FALSE ),
+        pImpl               ( new Impl )
 {
     for ( USHORT i=0; i<MAX_FAMILIES; i++ )
     {
         pBoundItems[i] = 0;
         m_xBoundItems[i] = Reference< XComponent >();
         pFamilyState[i]  = NULL;
+    }
+
+    SfxObjectShell*     pDocShell = SfxObjectShell::Current();
+    if( pDocShell )
+    {
+        const char* pName = pDocShell->GetFactory().GetShortName();
+        pImpl->bSpecModeWriter = strcmp( pName, "swriter" ) == 0;
+        if( !pImpl->bSpecModeWriter )
+            pImpl->bSpecModeCalc = strcmp( pName, "scalc" ) == 0;
     }
 }
 
@@ -2193,7 +2286,8 @@ void SvxStyleToolBoxControl::FillStyleBox()
         //------------------------------
 
         pStyle = pStyleSheetPool->First();
-
+        //!!! TODO: This condition isn't right any longer, because we always show some default entries
+        //!!! so the list doesn't show the count
         if ( nCount != pBox->GetEntryCount() )
         {
             bDoFill = TRUE;
@@ -2213,36 +2307,83 @@ void SvxStyleToolBoxControl::FillStyleBox()
             pBox->SetUpdateMode( FALSE );
             pBox->Clear();
 
-            // Listbox nur so gross, wie Eintraege vorhanden,
-            // hoechstens MAX_STYLES_ENTRIES Eintraege
-            // mindestens 4 Eintraege
-
-            if ( nCount > MAX_STYLES_ENTRIES )
-                nCount = MAX_STYLES_ENTRIES;
-            else if (nCount < 4)
-                nCount = 4;
-
-            nCount += 1; // +1 fuer Selektion
-
-            Size aSize( pBox->GetOutputSizePixel() );
-            long nNewHeight = nCount * (14 + 2) ; // 14 == TextHeight
-
-            if ( aSize.Height() != nNewHeight )
             {
-                aSize.Height() = nNewHeight;
-                pBox->SetOutputSizePixel( aSize );
+                USHORT  i;
+                USHORT  nCnt = pImpl->aDefaultStyleArray.Count();
+                USHORT  nPos = 1;
+                long    nType = pImpl->bSpecModeWriter? 0 : 1;
+                bool    bInsert;
+
+                pStyle = pStyleSheetPool->First();
+
+                if( pImpl->bSpecModeWriter || pImpl->bSpecModeCalc )
+                {
+                    while ( pStyle )
+                    {
+                        // sort out default styles
+                        bInsert = true;
+                        String  aName( pStyle->GetName() );
+                        for( i = 0 ; i < nCnt ; ++i )
+                        {
+                            if( pImpl->aDefaultStyleArray.GetValue( i ) == nType
+                                && pImpl->aDefaultStyleArray.GetStringByPos( i ) == aName )
+                            {
+                                bInsert = false;
+                                break;
+                            }
+                        }
+
+                        if( bInsert )
+                            pBox->InsertEntry( aName );
+                        pStyle = pStyleSheetPool->Next();
+                    }
+                }
+                else
+                {
+                    while ( pStyle )
+                    {
+                        pBox->InsertEntry( pStyle->GetName() );
+                        pStyle = pStyleSheetPool->Next();
+                    }
+                }
             }
 
-            pStyle = pStyleSheetPool->First();
-
-            while ( pStyle )
+            if( pImpl->bSpecModeWriter || pImpl->bSpecModeCalc )
             {
-                pBox->InsertEntry( pStyle->GetName() );
-                pStyle = pStyleSheetPool->Next();
+                // disable sort to preserve special order
+                WinBits nWinBits = pBox->GetStyle();
+                nWinBits &= ~WB_SORT;
+                pBox->SetStyle( nWinBits );
+
+                pBox->InsertEntry( pImpl->aClearForm, 0 );
+                pBox->SetSeparatorPos( 0 );
+
+                // insert default styles
+                USHORT  i;
+                USHORT  nCnt = pImpl->aDefaultStyleArray.Count();
+                USHORT  nPos = 1;
+                long    nType = pImpl->bSpecModeWriter? 0 : 1;
+                for( i = 0 ; i < nCnt ; ++i )
+                {
+                    if( pImpl->aDefaultStyleArray.GetValue( i ) == nType )
+                    {
+                        pBox->InsertEntry( pImpl->aDefaultStyleArray.GetStringByPos( i ), nPos );
+                        ++nPos;
+                    }
+                }
+
+                pBox->InsertEntry( pImpl->aMore );
+
+                // enable sort again
+                nWinBits |= WB_SORT;
+                pBox->SetStyle( nWinBits );
             }
 
             pBox->SetUpdateMode( TRUE );
             pBox->SetFamily( eFamily );
+
+            USHORT nLines = Min( pBox->GetEntryCount(), MAX_STYLES_ENTRIES );
+            pBox->SetDropDownLineCount( nLines );
         }
     }
 }
@@ -2256,12 +2397,14 @@ void SvxStyleToolBoxControl::SelectStyle( const String& rStyleName )
 
     if ( pBox )
     {
-        String aStrSel( pBox->GetSelectEntry() );
+//      String aStrSel( pBox->GetSelectEntry() );
+        String aStrSel( pBox->GetText() );
 
         if ( rStyleName.Len() > 0 )
         {
             if ( rStyleName != aStrSel )
-                pBox->SelectEntry( rStyleName );
+//              pBox->SelectEntry( rStyleName );
+                pBox->SetText( rStyleName );
         }
         else
             pBox->SetNoSelection();
@@ -2406,7 +2549,10 @@ Window* SvxStyleToolBoxControl::CreateItemWindow( Window *pParent )
                                                    SID_STYLE_APPLY,
                                                    OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StyleApply" )),
                                                    SFX_STYLE_FAMILY_PARA,
-                                                   Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ));
+                                                   Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
+                                                   pImpl->aClearForm,
+                                                   pImpl->aMore,
+                                                   pImpl->bSpecModeWriter || pImpl->bSpecModeCalc );
 
     // Set visibility listener to bind/unbind controller
     pBox->SetVisibilityListener( LINK( this, SvxStyleToolBoxControl, VisibilityNotification ));
