@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.61 $
+#   $Revision: 1.62 $
 #
-#   last change: $Author: vg $ $Date: 2004-12-23 09:43:50 $
+#   last change: $Author: kz $ $Date: 2005-01-14 11:34:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -173,7 +173,7 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.zip
 
 #untar
 $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack $(PATCH_FILE_DEP)
-    +-$(RENAME) $(PACKAGE_DIR) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)_removeme
+    +-$(RENAME) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)_removeme
     +-rm -rf $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)_removeme
     @+-$(MKDIR) $(PACKAGE_DIR:d)
     @+-$(MKDIR) $(PACKAGE_DIR)
