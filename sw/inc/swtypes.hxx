@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 21:35:47 $
+ *  last change: $Author: jp $ $Date: 2001-04-06 08:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ class Graphic;
 class OutputDevice;
 class CharClass;
 class LocaleDataWrapper;
+class CollatorWrapper;
 
 typedef long SwTwips;
 #define INVALID_TWIPS   LONG_MAX
@@ -304,5 +305,21 @@ CharClass& GetAppCharClass();
 LocaleDataWrapper& GetAppLocaleData();
 
 ULONG GetAppLanguage();
+
+
+#if 0
+// I18N doesn't get this right, can't specify more than one to ignore
+#define SW_COLLATOR_IGNORES ( \
+    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE | \
+    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_KANA | \
+    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_WIDTH )
+#else
+#define SW_COLLATOR_IGNORES ( \
+    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE )
+#endif
+
+CollatorWrapper& GetAppCollator();
+CollatorWrapper& GetAppCaseCollator();
+
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-04-05 11:40:01 $
+ *  last change: $Author: jp $ $Date: 2001-04-06 08:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,17 +572,17 @@ sal_Bool SwXTextCursor::convertSortProperties(
     rSortOpt.aKeys;
     SwSortKey* pKey1 = new SwSortKey;
     pKey1->nColumnId = USHRT_MAX;
-    pKey1->eSortKeyType = SRT_NUMERIC;
+    pKey1->bIsNumeric = TRUE;
     pKey1->eSortOrder   = SRT_ASCENDING;
 
     SwSortKey* pKey2 = new SwSortKey;
     pKey2->nColumnId = USHRT_MAX;
-    pKey2->eSortKeyType = SRT_NUMERIC;
+    pKey2->bIsNumeric = TRUE;
     pKey2->eSortOrder   = SRT_ASCENDING;
 
     SwSortKey* pKey3 = new SwSortKey;
     pKey3->nColumnId = USHRT_MAX;
-    pKey3->eSortKeyType = SRT_NUMERIC;
+    pKey3->bIsNumeric = TRUE;
     pKey3->eSortOrder   = SRT_ASCENDING;
     SwSortKey* aKeys[3] = {pKey1, pKey2, pKey3};
 
@@ -639,7 +639,11 @@ sal_Bool SwXTextCursor::convertSortProperties(
             if ( aValue.getValueType() == ::getBooleanCppuType() && nIndex < 3 )
             {
                 sal_Bool bTemp = *(sal_Bool*)aValue.getValue();
-                aKeys[nIndex]->eSortKeyType = bTemp ? SRT_NUMERIC : SRT_APLHANUM;
+
+//JP 6.4.2001: must be changed in the API to the correct string
+                if( !bTemp )
+                    aKeys[nIndex]->sSortType.AssignAscii( "normal" );
+//JP 6.4.2001: must be changed in the API to the correct string
             }
             else
                 bRet = sal_False;

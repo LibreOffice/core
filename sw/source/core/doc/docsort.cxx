@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsort.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-12-15 14:46:33 $
+ *  last change: $Author: jp $ $Date: 2001-04-06 08:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,26 +69,35 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _APP_HXX //autogen
-#include <vcl/svapp.hxx>
+#ifndef _TOOLS_SOLMATH_HXX
+#include <tools/solmath.hxx>
 #endif
-#ifndef _SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
 #endif
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_COLLATOROPTIONS_HPP_
+#include <com/sun/star/i18n/CollatorOptions.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
+
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
 #endif
-#ifndef _SVX_LANGITEM_HXX //autogen
-#include <svx/langitem.hxx>
-#endif
-
-#ifndef _FMTANCHR_HXX //autogen
+#ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
 #endif
-#ifndef _FRMFMT_HXX //autogen
+#ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
 #endif
 #ifndef _DOC_HXX
@@ -138,10 +147,15 @@
 #endif
 #endif
 
-SwSortOptions* SwSortElement::pOptions = 0;
-SwDoc*         SwSortElement::pDoc = 0;
-const FlatFndBox* SwSortElement::pBox = 0;
-International* SwSortElement::pIntl = 0;
+using namespace ::com::sun::star::lang;
+
+SwSortOptions*      SwSortElement::pOptions = 0;
+SwDoc*              SwSortElement::pDoc = 0;
+const FlatFndBox*   SwSortElement::pBox = 0;
+CollatorWrapper*    SwSortElement::pSortCollator = 0;
+Locale*             SwSortElement::pLocale = 0;
+String*             SwSortElement::pLastAlgorithm = 0;
+LocaleDataWrapper*  SwSortElement::pLclData = 0;
 
 SV_IMPL_OP_PTRARR_SORT( SwSortElements, SwSortElementPtr );
 
@@ -158,26 +172,33 @@ void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,
     pDoc = pD;
     pOptions = new SwSortOptions( rOpt );
     pBox = pFltBx;
-    pIntl = (International*)&Application::GetAppInternational();
-    LanguageType eLang = ((const SvxLanguageItem&)pDoc->GetAttrPool().
-                        GetDefaultItem(RES_CHRATR_LANGUAGE )).GetLanguage();
 
-    if( !( eLang == ::GetSystemLanguage() &&
-        LANGUAGE_SYSTEM == pIntl->GetLanguage() ) &&
-        eLang != pIntl->GetLanguage() )
-        pIntl = new International( eLang );
+    LanguageType nLang = rOpt.nLanguage;
+    switch ( nLang )
+    {
+    case LANGUAGE_NONE:
+    case LANGUAGE_DONTKNOW:
+        nLang = (LanguageType)GetAppLanguage();
+        break;
+    }
+    pLocale = new Locale( SvxCreateLocale( nLang ) );
+
+    pSortCollator = new CollatorWrapper(
+                                ::comphelper::getProcessServiceFactory() );
+//  pSortCollator->loadCollatorAlgorithm( sAlgorithm, aLocale,
+//                      rOpt.bIgnoreCase ? SW_COLLATOR_IGNORES : 0 );
 }
 
 
 void SwSortElement::Finit()
 {
     delete pOptions, pOptions = 0;
+    delete pLocale, pLocale = 0;
+    delete pLastAlgorithm, pLastAlgorithm = 0;
+    delete pSortCollator, pSortCollator = 0;
+    delete pLclData, pLclData = 0;
     pDoc = 0;
     pBox = 0;
-
-    if( pIntl != &Application::GetAppInternational() )
-        delete pIntl;
-    pIntl = 0;
 }
 
 
@@ -188,18 +209,20 @@ SwSortElement::~SwSortElement()
 
 double SwSortElement::StrToDouble( const String& rStr ) const
 {
-    String aStr( rStr );
-    sal_Unicode cTSep = pIntl->GetNumThousandSep();
-    sal_Unicode cDSep = pIntl->GetNumDecimalSep();
-    register sal_Unicode c;
+    if( !pLclData )
+        pLclData = new LocaleDataWrapper(
+                    ::comphelper::getProcessServiceFactory(), *pLocale );
 
-    for( xub_StrLen i = 0; i < aStr.Len(); ++i )
-        if( cTSep == ( c = aStr.GetChar( i ) ) )
-            aStr.Erase( i--, 1 );
-        else if( cDSep == c || ',' == c )
-            aStr.SetChar( i, '.' );
+    const xub_Unicode *pEnd;
+    int nErrno;
+    double nRet = SolarMath::StringToDouble( rStr.GetBuffer(),
+                                    pLclData->getNumThousandSep().GetChar(0),
+                                    pLclData->getNumDecimalSep().GetChar(0),
+                                    nErrno, &pEnd );
 
-    return aStr.ToDouble();
+    if( 0 != nErrno || pEnd == rStr.GetBuffer() )
+        nRet = 0.0;
+    return nRet;
 }
 
 /*--------------------------------------------------------------------
@@ -216,7 +239,6 @@ BOOL SwSortElement::operator==(const SwSortElement& rCmp)
     Beschreibung: Kleiner-Operator fuers sortieren
  --------------------------------------------------------------------*/
 
-
 BOOL SwSortElement::operator<(const SwSortElement& rCmp)
 {
 
@@ -232,7 +254,7 @@ BOOL SwSortElement::operator<(const SwSortElement& rCmp)
         else
             pOrig = &rCmp, pCmp = this;
 
-        if( SRT_NUMERIC == pSrtKey->eSortKeyType )
+        if( pSrtKey->bIsNumeric )
         {
             double n1 = pOrig->GetValue( nKey );
             double n2 = pCmp->GetValue( nKey );
@@ -244,12 +266,23 @@ BOOL SwSortElement::operator<(const SwSortElement& rCmp)
         }
         else
         {
-            StringCompare eCmp = pIntl->Compare( pOrig->GetKey( nKey ),
-                                                 pCmp->GetKey( nKey ));
-            if( COMPARE_EQUAL == eCmp )
+            if( !pLastAlgorithm || *pLastAlgorithm != pSrtKey->sSortType )
+            {
+                if( pLastAlgorithm )
+                    *pLastAlgorithm = pSrtKey->sSortType;
+                else
+                    pLastAlgorithm = new String( pSrtKey->sSortType );
+                pSortCollator->loadCollatorAlgorithm( *pLastAlgorithm,
+                        *pLocale,
+                        pOptions->bIgnoreCase ? SW_COLLATOR_IGNORES : 0 );
+            }
+
+            sal_Int32 nCmp = pSortCollator->compareString(
+                        pOrig->GetKey( nKey ), pCmp->GetKey( nKey ));
+            if( 0 == nCmp )
                 continue;
 
-            return COMPARE_LESS == eCmp;
+            return -1 == nCmp;
         }
     }
     return FALSE;

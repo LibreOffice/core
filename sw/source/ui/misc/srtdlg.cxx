@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-04 08:18:54 $
+ *  last change: $Author: jp $ $Date: 2001-04-06 08:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,19 @@
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
 #endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
+#ifndef _SVX_CHARMAP_HXX
+#include <svx/charmap.hxx>
+#endif
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
+#endif
+
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
 #endif
-
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
@@ -123,20 +132,23 @@ static USHORT nCol1 = 1;
 static USHORT nCol2 = 1;
 static USHORT nCol3 = 1;
 
-static USHORT nType1 = SRT_APLHANUM;
-static USHORT nType2 = SRT_APLHANUM;
-static USHORT nType3 = SRT_APLHANUM;
+static USHORT nType1 = 0;
+static USHORT nType2 = 0;
+static USHORT nType3 = 0;
 
-static USHORT nLang = LANGUAGE_SYSTEM;
+static USHORT nLang = LANGUAGE_NONE;
 
 static BOOL   bAsc1  = TRUE;
 static BOOL   bAsc2  = TRUE;
 static BOOL   bAsc3  = TRUE;
 static BOOL   bCol   = FALSE;
-static BOOL   bIgnrCs= FALSE;
+static BOOL   bCsSens= FALSE;
 
 static sal_Unicode    cDeli  = '\t';
 
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::rtl;
 
 /*--------------------------------------------------------------------
      Beschreibung:  Fuer Tabellenselektion sel. Zeilen und Spalten
@@ -168,23 +180,9 @@ BOOL lcl_GetSelTbl( SwWrtShell &rSh, USHORT& rX, USHORT& rY )
     return TRUE;
 }
 
-void lcl_SelectUserData( ListBox& rLstBox, USHORT nType )
-{
-    USHORT n = 0, nEnd = rLstBox.GetEntryCount();
-    for( ; n < nEnd; ++n )
-        if( nType == (USHORT)(long)rLstBox.GetEntryData( n ) )
-            break;
-
-    if( n >= nEnd )
-        n = 0;
-    rLstBox.SelectEntryPos( n );
-}
-
 /*--------------------------------------------------------------------
      Beschreibung: Init-Liste
  --------------------------------------------------------------------*/
-
-
 
 SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
 
@@ -219,8 +217,14 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
     aDelimFreeRB(this,  SW_RES(RB_TABCH )),
     aDelimEdt(this,     SW_RES(ED_TABCH )),
     aDelimGrp(this,     SW_RES(GB_DELIM )),
-    aColTxt(SW_RES(STR_COL)),
-    aRowTxt(SW_RES(STR_ROW)),
+    aDelimPB(this,      SW_RES( PB_DELIM)),
+    aLangFL(this,       SW_RES( FL_LANG )),
+    aLangLB(this,       SW_RES( LB_LANG )),
+    aSortOptFL(this,    SW_RES( FL_SORT )),
+    aCaseCB(this,       SW_RES( CB_CASE )),
+    aNumericTxt(        SW_RES(STR_NUMERIC)),
+    aColTxt(            SW_RES(STR_COL)),
+    aRowTxt(            SW_RES(STR_ROW)),
     nX( 99 ),
     nY( 99 )
 {
@@ -254,6 +258,8 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
     aDelimFreeRB.SetClickHdl(aLk);
     aDelimTabRB.SetClickHdl(aLk);
 
+    aDelimPB.SetClickHdl( LINK( this, SwSortDlg, DelimCharHdl ));
+
     aKeyCB1.Check(bCheck1);
     aKeyCB2.Check(bCheck2);
     aKeyCB3.Check(bCheck3);
@@ -262,9 +268,15 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
     aColEdt2.SetValue(nCol2);
     aColEdt3.SetValue(nCol3);
 
-    ::lcl_SelectUserData( aTypDLB1, nType1 );
-    ::lcl_SelectUserData( aTypDLB2, nType2 );
-    ::lcl_SelectUserData( aTypDLB3, nType3 );
+    // first initialise the language, then select the
+    if( LANGUAGE_NONE == nLang || LANGUAGE_DONTKNOW == nLang )
+        nLang = (USHORT)GetAppLanguage();
+
+    aLangLB.SetLanguageList( LANG_LIST_ALL, TRUE, FALSE );
+    aLangLB.SelectLanguage( nLang );
+
+    LanguageHdl( 0 );
+    aLangLB.SetSelectHdl( LINK( this, SwSortDlg, LanguageHdl ));
 
     aSortUpRB.Check(bAsc1);
     aSortDnRB.Check(!bAsc1);
@@ -272,8 +284,10 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
     aSortDn2RB.Check(!bAsc2);
     aSortUp3RB.Check(bAsc3);
     aSortDn3RB.Check(!bAsc3);
-    aDelimTabRB.Check(cDeli == '\t');
 
+    aCaseCB.Check( bCsSens );
+
+    aDelimTabRB.Check(cDeli == '\t');
     if(!aDelimTabRB.IsChecked())
     {
         aDelimEdt.SetText(cDeli);
@@ -297,6 +311,18 @@ SwSortDlg::~SwSortDlg()
 {
 }
 
+sal_Unicode SwSortDlg::GetDelimChar() const
+{
+    sal_Unicode cDeli = '\t';
+    if( !aDelimTabRB.IsChecked() )
+    {
+        String aTmp( aDelimEdt.GetText() );
+        if( aTmp.Len() )
+            cDeli = aTmp.GetChar( 0 );
+    }
+    return cDeli;
+}
+
 /*--------------------------------------------------------------------
     Beschreibung: An die Core weiterreichen
  --------------------------------------------------------------------*/
@@ -312,47 +338,54 @@ void SwSortDlg::Apply()
     nCol2 = (USHORT)aColEdt2.GetValue();
     nCol3 = (USHORT)aColEdt3.GetValue();
 
-    nType1 = (USHORT)(long)aTypDLB1.GetEntryData(aTypDLB1.GetSelectEntryPos());
-    nType2 = (USHORT)(long)aTypDLB2.GetEntryData(aTypDLB2.GetSelectEntryPos());
-    nType3 = (USHORT)(long)aTypDLB3.GetEntryData(aTypDLB3.GetSelectEntryPos());
+    nType1 = aTypDLB1.GetSelectEntryPos();
+    nType2 = aTypDLB2.GetSelectEntryPos();
+    nType3 = aTypDLB3.GetSelectEntryPos();
 
     bAsc1 = aSortUpRB.IsChecked();
     bAsc2 = aSortUp2RB.IsChecked();
     bAsc3 = aSortUp3RB.IsChecked();
     bCol = aColumnRB.IsChecked();
+    nLang = aLangLB.GetSelectLanguage();
+    cDeli = GetDelimChar();
+    bCsSens = aCaseCB.IsChecked();
 
     SwSortOptions aOptions;
     if( bCheck1 )
     {
-        SwSortKey *pKey = new SwSortKey( nCol1, nType1,
+        String sEntry( aTypDLB1.GetSelectEntry() );
+        if( sEntry == aNumericTxt )
+            sEntry.Erase();
+        SwSortKey *pKey = new SwSortKey( nCol1, sEntry,
                                     bAsc1 ? SRT_ASCENDING : SRT_DESCENDING );
         aOptions.aKeys.C40_INSERT(SwSortKey, pKey, aOptions.aKeys.Count());
     }
 
     if( bCheck2 )
     {
-        SwSortKey *pKey = new SwSortKey( nCol2, nType2,
+        String sEntry( aTypDLB2.GetSelectEntry() );
+        if( sEntry == aNumericTxt )
+            sEntry.Erase();
+        SwSortKey *pKey = new SwSortKey( nCol2, sEntry,
                                     bAsc2 ? SRT_ASCENDING : SRT_DESCENDING );
         aOptions.aKeys.C40_INSERT( SwSortKey, pKey, aOptions.aKeys.Count() );
     }
 
     if( bCheck3 )
     {
-        SwSortKey *pKey = new SwSortKey( nCol3, nType3,
+        String sEntry( aTypDLB3.GetSelectEntry() );
+        if( sEntry == aNumericTxt )
+            sEntry.Erase();
+        SwSortKey *pKey = new SwSortKey( nCol3, sEntry,
                                     bAsc3 ? SRT_ASCENDING : SRT_DESCENDING );
         aOptions.aKeys.C40_INSERT( SwSortKey, pKey, aOptions.aKeys.Count() );
     }
-    aOptions.eDirection =  bCol ? SRT_COLUMNS : SRT_ROWS;
 
-    sal_Unicode cDeli = '\t';
-    if(!aDelimTabRB.IsChecked())
-    {
-        String aTmp( aDelimEdt.GetText() );
-        if( aTmp.Len() )
-            cDeli = aTmp.GetChar( 0 );
-    }
-    aOptions.cDeli      =  cDeli;
-    aOptions.bTable     =  rSh.IsTableMode();
+    aOptions.eDirection =  bCol ? SRT_COLUMNS : SRT_ROWS;
+    aOptions.cDeli = cDeli;
+    aOptions.nLanguage = nLang;
+    aOptions.bTable = rSh.IsTableMode();
+    aOptions.bIgnoreCase = !bCsSens;
 
     BOOL bRet;
     {
@@ -372,7 +405,19 @@ void SwSortDlg::Apply()
  * --------------------------------------------------*/
 IMPL_LINK( SwSortDlg, DelimHdl, RadioButton*, pButton )
 {
-    aDelimEdt.Enable(pButton == &aDelimFreeRB && aDelimFreeRB.IsEnabled());
+    BOOL bEnable = pButton == &aDelimFreeRB && aDelimFreeRB.IsEnabled();
+    aDelimEdt.Enable( bEnable );
+    aDelimPB.Enable( bEnable );
+    return 0;
+}
+
+IMPL_LINK( SwSortDlg, DelimCharHdl, PushButton*, pButton )
+{
+    SvxCharacterMap* pMap = new SvxCharacterMap( &aDelimPB );
+    pMap->SetChar( GetDelimChar() );
+    if( RET_OK == pMap->Execute() )
+        aDelimEdt.SetText( pMap->GetChar() );
+    delete pMap;
     return 0;
 }
 
@@ -401,9 +446,62 @@ IMPL_LINK( SwSortDlg, CheckHdl, CheckBox *, pCheck )
     return 0;
 }
 
+IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
+{
+    Locale aLcl( SvxCreateLocale( aLangLB.GetSelectLanguage() ) );
+    Sequence < OUString > aSeq(
+                            GetAppCollator().listCollatorAlgorithms( aLcl ));
+
+    String  sOldSel1( aTypDLB1.GetSelectEntry() ),
+            sOldSel2( aTypDLB2.GetSelectEntry() ),
+            sOldSel3( aTypDLB3.GetSelectEntry() );
+    aTypDLB1.Clear();
+    aTypDLB2.Clear();
+    aTypDLB3.Clear();
+
+    for( long n = 0, nEnd = aSeq.getLength(); n < nEnd; ++n )
+    {
+        String sAlg( aSeq[n] );
+
+        aTypDLB1.InsertEntry( sAlg );
+        aTypDLB2.InsertEntry( sAlg );
+        aTypDLB3.InsertEntry( sAlg );
+    }
+    aTypDLB1.InsertEntry( aNumericTxt );
+    aTypDLB2.InsertEntry( aNumericTxt );
+    aTypDLB3.InsertEntry( aNumericTxt );
+
+    if( !pLBox )
+    {
+        // set the init selected positions
+        aTypDLB1.SelectEntryPos( nType1 );
+        aTypDLB2.SelectEntryPos( nType2 );
+        aTypDLB3.SelectEntryPos( nType3 );
+    }
+    else
+    {
+        USHORT nFnd;
+        if( LISTBOX_ENTRY_NOTFOUND == ( nFnd = aTypDLB1.GetEntryPos( sOldSel1 ) ))
+            nFnd = 0;
+        aTypDLB1.SelectEntryPos( nFnd );
+        if( LISTBOX_ENTRY_NOTFOUND == ( nFnd = aTypDLB2.GetEntryPos( sOldSel2 ) ))
+            nFnd = 0;
+        aTypDLB2.SelectEntryPos( nFnd );
+        if( LISTBOX_ENTRY_NOTFOUND == ( nFnd = aTypDLB3.GetEntryPos( sOldSel3 ) ))
+            nFnd = 0;
+        aTypDLB3.SelectEntryPos( nFnd );
+    }
+    return 0;
+}
+
+
+
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/04/04 08:18:54  jp
+    changes for CJK sorting
+
     Revision 1.3  2000/12/15 14:46:49  os
     #80953# SortOptions-delimiter: char->sal_Unicode
 

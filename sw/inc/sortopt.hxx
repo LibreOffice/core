@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortopt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-04 08:17:30 $
+ *  last change: $Author: jp $ $Date: 2001-04-06 08:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,35 +62,12 @@
 #define _SORTOPT_HXX
 
 
-#ifndef _ONLY_SORT_KEY_TYPE
 #ifndef _SVARRAY_HXX
 #include <svtools/svarray.hxx>
 #endif
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
 #endif
-
-// also used in the resources !
-
-    // for all
-#define SRT_NUMERIC     1
-    // for western
-#define SRT_APLHANUM    2
-    // additional for chinese
-#define SRT_PINYIN      3
-#define SRT_STROKE      4
-#define SRT_RADICALS    5
-#define SRT_DATE        6
-#define SRT_CHUYIN      7
-    // additional for japanese
-#define SRT_JIS         8
-#define SRT_SYLLABEL    9
-    // additional for korean
-#define SRT_KS_CODE     10
-#define SRT_DICTIONARY  11
-
-
-#ifndef _ONLY_SORT_KEY_TYPE
-
-typedef USHORT SwSortKeyType;
 
 enum SwSortOrder        { SRT_ASCENDING, SRT_DESCENDING };
 enum SwSortDirection    { SRT_COLUMNS, SRT_ROWS         };
@@ -101,12 +78,13 @@ enum SwSortDirection    { SRT_COLUMNS, SRT_ROWS         };
 struct SwSortKey
 {
     SwSortKey();
-    SwSortKey(USHORT nId, SwSortKeyType eTyp, SwSortOrder eOrder);
-    SwSortKey(const SwSortKey& rOld);
+    SwSortKey( USHORT nId, const String& rSrtType, SwSortOrder eOrder );
+    SwSortKey( const SwSortKey& rOld );
 
-    USHORT          nColumnId;
-    SwSortKeyType   eSortKeyType;
+    String          sSortType;
     SwSortOrder     eSortOrder;
+    USHORT          nColumnId;
+    BOOL            bIsNumeric;
 };
 
 SV_DECL_PTRARR(SwSortKeys, SwSortKey*, 3, 1)
@@ -124,7 +102,5 @@ struct SwSortOptions
     BOOL            bTable;
     BOOL            bIgnoreCase;
 };
-
-#endif // _ONLY_SORT_KEY_TYPE
 
 #endif  // _SORTOPT_HXX

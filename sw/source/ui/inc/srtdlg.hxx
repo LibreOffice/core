@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:42 $
+ *  last change: $Author: jp $ $Date: 2001-04-06 08:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,28 +61,23 @@
 #ifndef _SRTDLG_HXX
 #define _SRTDLG_HXX
 
-#ifndef _SVX_STDDLG_HXX //autogen
-#include <svx/stddlg.hxx>
-#endif
-
-#ifndef _FIXED_HXX //autogen
+#ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
-
-#ifndef _BUTTON_HXX //autogen
+#ifndef _BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
-
-#ifndef _FIELD_HXX //autogen
+#ifndef _FIELD_HXX
 #include <vcl/field.hxx>
 #endif
-
-#ifndef _LSTBOX_HXX //autogen
+#ifndef _LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
-
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
+#ifndef _SVX_STDDLG_HXX
+#include <svx/stddlg.hxx>
+#endif
+#ifndef _SVX_LANGBOX_HXX
+#include <svx/langbox.hxx>
 #endif
 
 class SwWrtShell;
@@ -93,45 +88,61 @@ class SwSortDlg : public SvxStandardDialog
     FixedText           aTypLbl;
     FixedText           aDirLbl;
 
+    FixedLine           aDirGrp;
+
     CheckBox            aKeyCB1;
     NumericField        aColEdt1;
     ListBox             aTypDLB1;
     RadioButton         aSortUpRB;
     RadioButton         aSortDnRB;
+
     CheckBox            aKeyCB2;
     NumericField        aColEdt2;
     ListBox             aTypDLB2;
     RadioButton         aSortUp2RB;
     RadioButton         aSortDn2RB;
+
     CheckBox            aKeyCB3;
     NumericField        aColEdt3;
     ListBox             aTypDLB3;
     RadioButton         aSortUp3RB;
     RadioButton         aSortDn3RB;
-    GroupBox            aSortGrp;
+
+    FixedLine           aSortGrp;
     RadioButton         aColumnRB;
     RadioButton         aRowRB;
 
-    GroupBox            aDirGrp;
-
+    FixedLine           aDelimGrp;
     RadioButton         aDelimTabRB;
     RadioButton         aDelimFreeRB;
     Edit                aDelimEdt;
-    GroupBox            aDelimGrp;
+    PushButton          aDelimPB;
+
+    FixedLine           aLangFL;
+    SvxLanguageBox      aLangLB;
+
+    FixedLine           aSortOptFL;
+    CheckBox            aCaseCB;
+
     OKButton            aOkBtn;
     CancelButton        aCancelBtn;
     HelpButton          aHelpBtn;
 
     String aColTxt;
     String aRowTxt;
+    String aNumericTxt;
     USHORT nX;
     USHORT nY;
 
     SwWrtShell          &rSh;
 
     virtual void        Apply();
+    sal_Unicode         GetDelimChar() const;
+
     DECL_LINK( CheckHdl, CheckBox * );
     DECL_LINK( DelimHdl, RadioButton* );
+    DECL_LINK( LanguageHdl, ListBox* );
+    DECL_LINK( DelimCharHdl, PushButton* );
 
 public:
     SwSortDlg(Window * pParent, SwWrtShell &rSh);

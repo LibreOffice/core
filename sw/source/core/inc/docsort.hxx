@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsort.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+ *  last change: $Author: jp $ $Date: 2001-04-06 08:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,13 @@
 #ifndef _SORT_HXX
 #define _SORT_HXX
 
-#ifndef _SVARRAY_HXX //autogen
+#ifndef _SVARRAY_HXX
 #include <svtools/svarray.hxx>
 #endif
+#ifndef _NDINDEX_HXX
+#include <ndindex.hxx>
+#endif
+
 
 class SwDoc;
 class SwTableBox;
@@ -73,7 +77,13 @@ struct SwSortOptions;
 struct SwSortElement;
 class _FndBox;
 class _FndLine;
-class International;
+class CollatorWrapper;
+class LocaleDataWrapper;
+
+
+namespace com { namespace sun { namespace star { namespace lang {
+    struct Locale;
+}}}};
 
 /*--------------------------------------------------------------------
     Beschreibung: Liste aller sortierten Elemente
@@ -102,10 +112,13 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource,
 
 struct SwSortElement
 {
-    static  SwSortOptions*   pOptions;
-    static  SwDoc*           pDoc;
-    static const FlatFndBox* pBox;
-    static  International*   pIntl;
+    static SwSortOptions*       pOptions;
+    static SwDoc*               pDoc;
+    static const FlatFndBox*    pBox;
+    static CollatorWrapper*     pSortCollator;
+    static ::com::sun::star::lang::Locale* pLocale;
+    static String*              pLastAlgorithm;
+    static LocaleDataWrapper*   pLclData;
 
     static void Init( SwDoc*, const SwSortOptions& rOpt, FlatFndBox* = 0 );
     static void Finit();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *  last change: $Author: jp $ $Date: 2001-04-06 08:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,4 +90,10 @@
 #define RB_DN2      30
 #define RB_UP3      31
 #define RB_DN3      32
+#define STR_NUMERIC 33
+#define PB_DELIM    34
+#define FL_LANG     35
+#define LB_LANG     36
+#define FL_SORT     37
+#define CB_CASE     38
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-04 08:18:54 $
+ *  last change: $Author: jp $ $Date: 2001-04-06 08:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,15 +64,12 @@
 #include "cmdid.h"
 #include "helpid.h"
 
-#define _ONLY_SORT_KEY_TYPE
-#include "sortopt.hxx"
-
 ModalDialog DLG_SORTING
 {
     HelpID = FN_SORTING_DLG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 268 , 153 ) ;
+    Size = MAP_APPFONT ( 268 , 193 ) ;
     Text = "Sortieren" ;
     Text [ ENGLISH ] = "Sort" ;
     Text [ norwegian ] = "Sorter" ;
@@ -240,6 +237,11 @@ ModalDialog DLG_SORTING
         Last = 99 ;
         SpinSize = 1 ;
     };
+    String STR_NUMERIC
+    {
+        Text = "numerisch";
+        Text[ ENGLISH ] = "numeric";
+    };
     ListBox DLB_KEY1
     {
         Pos = MAP_APPFONT ( 96 , 23 ) ;
@@ -248,37 +250,6 @@ ModalDialog DLG_SORTING
         DropDown = TRUE ;
         CurPos = 0 ;
         Sort = TRUE;
-        StringList =
-        {
-            < "alphanumerisch" ; SRT_APLHANUM ; > ;
-            < "numerisch" ; SRT_NUMERIC ; > ;
-#ifdef DEBUG
-            < "Pinyin" ; SRT_PINYIN ; > ;
-            < "Stroke" ; SRT_STROKE ; > ;
-            < "Radicals" ; SRT_RADICALS ; > ;
-            < "Date" ; SRT_DATE ; > ;
-            < "Chuyin" ; SRT_CHUYIN ; > ;
-            < "JIS" ; SRT_JIS ; > ;
-            < "Syllabel" ; SRT_SYLLABEL ; > ;
-            < "KS code" ; SRT_KS_CODE ; > ;
-            < "Dictionary" ; SRT_DICTIONARY ; > ;
-#endif
-        };
-        StringList [ ENGLISH ] =
-        {
-            < "alphanumeric" ; SRT_APLHANUM ; > ;
-            < "numeric" ; SRT_NUMERIC ; > ;
-#ifdef DEBUG
-            < "Pinyin" ; SRT_PINYIN ; > ;
-            < "Stroke" ; SRT_STROKE ; > ;
-            < "Radicals" ; SRT_RADICALS ; > ;
-            < "Date" ; SRT_DATE ; > ;
-            < "Chuyin" ; SRT_CHUYIN ; > ;
-            < "JIS" ; SRT_JIS ; > ;
-            < "Syllabel" ; SRT_SYLLABEL ; > ;
-            < "KS code" ; SRT_KS_CODE ; > ;
-#endif
-        };
     };
     RadioButton RB_UP
     {
@@ -392,37 +363,6 @@ ModalDialog DLG_SORTING
         DropDown = TRUE ;
         CurPos = 0 ;
         Sort = TRUE;
-        StringList =
-        {
-            < "alphanumerisch" ; SRT_APLHANUM ; > ;
-            < "numerisch" ; SRT_NUMERIC ; > ;
-#ifdef DEBUG
-            < "Pinyin" ; SRT_PINYIN ; > ;
-            < "Stroke" ; SRT_STROKE ; > ;
-            < "Radicals" ; SRT_RADICALS ; > ;
-            < "Date" ; SRT_DATE ; > ;
-            < "Chuyin" ; SRT_CHUYIN ; > ;
-            < "JIS" ; SRT_JIS ; > ;
-            < "Syllabel" ; SRT_SYLLABEL ; > ;
-            < "KS code" ; SRT_KS_CODE ; > ;
-            < "Dictionary" ; SRT_DICTIONARY ; > ;
-#endif
-        };
-        StringList [ ENGLISH ] =
-        {
-            < "alphanumeric" ; SRT_APLHANUM ; > ;
-            < "numeric" ; SRT_NUMERIC ; > ;
-#ifdef DEBUG
-            < "Pinyin" ; SRT_PINYIN ; > ;
-            < "Stroke" ; SRT_STROKE ; > ;
-            < "Radicals" ; SRT_RADICALS ; > ;
-            < "Date" ; SRT_DATE ; > ;
-            < "Chuyin" ; SRT_CHUYIN ; > ;
-            < "JIS" ; SRT_JIS ; > ;
-            < "Syllabel" ; SRT_SYLLABEL ; > ;
-            < "KS code" ; SRT_KS_CODE ; > ;
-#endif
-        };
     };
     RadioButton RB_UP2
     {
@@ -536,37 +476,6 @@ ModalDialog DLG_SORTING
         DropDown = TRUE ;
         CurPos = 0 ;
         Sort = TRUE;
-        StringList =
-        {
-            < "alphanumerisch" ; SRT_APLHANUM ; > ;
-            < "numerisch" ; SRT_NUMERIC ; > ;
-#ifdef DEBUG
-            < "Pinyin" ; SRT_PINYIN ; > ;
-            < "Stroke" ; SRT_STROKE ; > ;
-            < "Radicals" ; SRT_RADICALS ; > ;
-            < "Date" ; SRT_DATE ; > ;
-            < "Chuyin" ; SRT_CHUYIN ; > ;
-            < "JIS" ; SRT_JIS ; > ;
-            < "Syllabel" ; SRT_SYLLABEL ; > ;
-            < "KS code" ; SRT_KS_CODE ; > ;
-            < "Dictionary" ; SRT_DICTIONARY ; > ;
-#endif
-        };
-        StringList [ ENGLISH ] =
-        {
-            < "alphanumeric" ; SRT_APLHANUM ; > ;
-            < "numeric" ; SRT_NUMERIC ; > ;
-#ifdef DEBUG
-            < "Pinyin" ; SRT_PINYIN ; > ;
-            < "Stroke" ; SRT_STROKE ; > ;
-            < "Radicals" ; SRT_RADICALS ; > ;
-            < "Date" ; SRT_DATE ; > ;
-            < "Chuyin" ; SRT_CHUYIN ; > ;
-            < "JIS" ; SRT_JIS ; > ;
-            < "Syllabel" ; SRT_SYLLABEL ; > ;
-            < "KS code" ; SRT_KS_CODE ; > ;
-#endif
-        };
     };
     RadioButton RB_UP3
     {
@@ -627,10 +536,10 @@ ModalDialog DLG_SORTING
         Text[ turkish ] = "Aza~lan";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GB_SORT
+    FixedLine GB_SORT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 200 , 102 ) ;
+        Size = MAP_APPFONT ( 200 , 8 ) ;
         Text = "Regel" ;
         Text [ ENGLISH ] = "Rule" ;
         Text [ norwegian ] = "+++Rule" ;
@@ -714,10 +623,10 @@ ModalDialog DLG_SORTING
         Text[ turkish ] = "~Satýr";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GB_DIR
+    FixedLine GB_DIR
     {
         Pos = MAP_APPFONT ( 6 , 108 ) ;
-        Size = MAP_APPFONT ( 98 , 42 ) ;
+        Size = MAP_APPFONT ( 98 , 8 ) ;
         Text = "Richtung" ;
         Text [ ENGLISH ] = "Direction" ;
         Text [ norwegian ] = "Retning" ;
@@ -742,24 +651,6 @@ ModalDialog DLG_SORTING
         Text[ turkish ] = "Yön";
         Text[ language_user1 ] = " ";
     };
-/*    GroupBox GB_ORDER
-    {
-        Pos = MAP_APPFONT ( 59 , 76 ) ;
-        Size = MAP_APPFONT ( 58 , 42 ) ;
-        Text = "Reihenfolge" ;
-        Text [ ENGLISH ] = "Order" ;
-        Text [ norwegian ] = "Rekkefølge" ;
-        Text [ italian ] = "Ordine" ;
-        Text [ portuguese_brazilian ] = "Ordem" ;
-        Text [ portuguese ] = "Ordem" ;
-        Text [ finnish ] = "Järjestys" ;
-        Text [ danish ] = "Rækkefølge" ;
-        Text [ french ] = "Ordre" ;
-        Text [ swedish ] = "Ordning" ;
-        Text [ dutch ] = "Volgorde" ;
-        Text [ spanish ] = "Orden" ;
-        Text [ english_us ] = "Order" ;
-    };*/
     RadioButton RB_TAB
     {
         Pos = MAP_APPFONT ( 113 , 120 ) ;
@@ -822,15 +713,15 @@ ModalDialog DLG_SORTING
     Edit ED_TABCH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 195 , 133 ) ;
-        Size = MAP_APPFONT ( 8 , 12 ) ;
+        Pos = MAP_APPFONT ( 180 , 133 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
     };
-    GroupBox GB_DELIM
+    FixedLine GB_DELIM
     {
         Pos = MAP_APPFONT ( 107 , 108 ) ;
-        Size = MAP_APPFONT ( 99 , 42 ) ;
+        Size = MAP_APPFONT ( 99 , 8 ) ;
         Text = "Trenner" ;
         Text [ ENGLISH ] = "Delimiter" ;
         Text [ norwegian ] = "Skilletegn" ;
@@ -907,6 +798,44 @@ ModalDialog DLG_SORTING
         Text[ turkish ] = "Sütun";
         Text[ language_user1 ] = " ";
     };
+    PushButton PB_DELIM
+    {
+        Pos = MAP_APPFONT ( 195 , 133 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "...";
+    };
+    FixedLine FL_LANG
+    {
+        Pos = MAP_APPFONT ( 6 , 147 ) ;
+        Size = MAP_APPFONT ( 99 , 8 ) ;
+        Text = "Sprache" ;
+        Text [ ENGLISH ] = "Language" ;
+    };
+    ListBox LB_LANG
+    {
+        Pos = MAP_APPFONT ( 12 , 157 ) ;
+        Size = MAP_APPFONT ( 90 , 61 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    FixedLine FL_SORT
+    {
+        Pos = MAP_APPFONT ( 107 , 147 ) ;
+        Size = MAP_APPFONT ( 99 , 8 ) ;
+        Text = "Einstellung" ;
+        Text [ ENGLISH ] = "Options" ;
+    };
+    CheckBox CB_CASE
+    {
+        Pos = MAP_APPFONT ( 113 , 160 ) ;
+        Size = MAP_APPFONT ( 90 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "Exacter Vergleich" ;
+        Text [ ENGLISH ] = "Case sensitive" ;
+    };
+
     Text[ chinese_simplified ] = "ÅÅÐò";
     Text[ russian ] = "Ñîðòèðîâêà";
     Text[ polish ] = "Sortuj";

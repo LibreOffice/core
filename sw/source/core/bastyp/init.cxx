@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-03 11:14:54 $
+ *  last change: $Author: jp $ $Date: 2001-04-06 08:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,93 +77,90 @@
 #ifndef _SV_MAPMOD_HXX
 #include <vcl/mapmod.hxx>
 #endif
-#ifndef _SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
-#endif
 
 #ifndef _XMLOFF_XMLCNITM_HXX
 #include <xmloff/xmlcnitm.hxx>
 #endif
 
-#ifndef _SFXMACITEM_HXX //autogen
+#ifndef _SFXMACITEM_HXX
 #include <svtools/macitem.hxx>
 #endif
-#ifndef _SVX_PBINITEM_HXX //autogen
+#ifndef _SVX_PBINITEM_HXX
 #include <svx/pbinitem.hxx>
 #endif
-#ifndef _SVX_KEEPITEM_HXX //autogen
+#ifndef _SVX_KEEPITEM_HXX
 #include <svx/keepitem.hxx>
 #endif
-#ifndef _SVX_NLBKITEM_HXX //autogen
+#ifndef _SVX_NLBKITEM_HXX
 #include <svx/nlbkitem.hxx>
 #endif
-#ifndef _SVX_HYZNITEM_HXX //autogen
+#ifndef _SVX_HYZNITEM_HXX
 #include <svx/hyznitem.hxx>
 #endif
-#ifndef _SVX_PROTITEM_HXX //autogen
+#ifndef _SVX_PROTITEM_HXX
 #include <svx/protitem.hxx>
 #endif
-#ifndef _SVX_ULSPITEM_HXX //autogen
+#ifndef _SVX_ULSPITEM_HXX
 #include <svx/ulspitem.hxx>
 #endif
-#ifndef _SVX_PRSZITEM_HXX //autogen
+#ifndef _SVX_PRSZITEM_HXX
 #include <svx/prszitem.hxx>
 #endif
-#ifndef _SVX_OPAQITEM_HXX //autogen
+#ifndef _SVX_OPAQITEM_HXX
 #include <svx/opaqitem.hxx>
 #endif
-#ifndef _SVX_SHADITEM_HXX //autogen
+#ifndef _SVX_SHADITEM_HXX
 #include <svx/shaditem.hxx>
 #endif
-#ifndef _SVX_PRNTITEM_HXX //autogen
+#ifndef _SVX_PRNTITEM_HXX
 #include <svx/prntitem.hxx>
 #endif
-#ifndef _SVX_BRKITEM_HXX //autogen
+#ifndef _SVX_BRKITEM_HXX
 #include <svx/brkitem.hxx>
 #endif
-#ifndef _SVX_TSTPITEM_HXX //autogen
+#ifndef _SVX_TSTPITEM_HXX
 #include <svx/tstpitem.hxx>
 #endif
-#ifndef _SVX_LANGITEM_HXX //autogen
+#ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
-#ifndef _SVX_WRLMITEM_HXX //autogen
+#ifndef _SVX_WRLMITEM_HXX
 #include <svx/wrlmitem.hxx>
 #endif
-#ifndef _SVX_KERNITEM_HXX //autogen
+#ifndef _SVX_KERNITEM_HXX
 #include <svx/kernitem.hxx>
 #endif
-#ifndef _SVX_ESCPITEM_HXX //autogen
+#ifndef _SVX_ESCPITEM_HXX
 #include <svx/escpitem.hxx>
 #endif
-#ifndef _SVX_CSCOITEM_HXX //autogen
+#ifndef _SVX_CSCOITEM_HXX
 #include <svx/cscoitem.hxx>
 #endif
-#ifndef _SVX_LRSPITEM_HXX //autogen
+#ifndef _SVX_LRSPITEM_HXX
 #include <svx/lrspitem.hxx>
 #endif
-#ifndef _SVX_ORPHITEM_HXX //autogen
+#ifndef _SVX_ORPHITEM_HXX
 #include <svx/orphitem.hxx>
 #endif
-#ifndef _SVX_WIDWITEM_HXX //autogen
+#ifndef _SVX_WIDWITEM_HXX
 #include <svx/widwitem.hxx>
 #endif
-#ifndef _SVX_NHYPITEM_HXX //autogen
+#ifndef _SVX_NHYPITEM_HXX
 #include <svx/nhypitem.hxx>
 #endif
-#ifndef _SVX_SPLTITEM_HXX //autogen
+#ifndef _SVX_SPLTITEM_HXX
 #include <svx/spltitem.hxx>
 #endif
-#ifndef _SVX_LSPCITEM_HXX //autogen
+#ifndef _SVX_LSPCITEM_HXX
 #include <svx/lspcitem.hxx>
 #endif
-#ifndef _SVX_BLNKITEM_HXX //autogen
+#ifndef _SVX_BLNKITEM_HXX
 #include <svx/blnkitem.hxx>
 #endif
-#ifndef _SVX_AKRNITEM_HXX //autogen
+#ifndef _SVX_AKRNITEM_HXX
 #include <svx/akrnitem.hxx>
 #endif
-#ifndef _SVX_EMPHITEM_HXX //autogen
+#ifndef _SVX_EMPHITEM_HXX
 #include <svx/emphitem.hxx>
 #endif
 #ifndef _SVX_TWOLINESITEM_HXX
@@ -193,10 +190,10 @@
 #ifndef _SVXSWAFOPT_HXX
 #include <svx/swafopt.hxx>
 #endif
-#ifndef _MySVXACORR_HXX //autogen
+#ifndef _MySVXACORR_HXX
 #include <svx/svxacorr.hxx>
 #endif
-#ifndef _OFF_APP_HXX //autogen
+#ifndef _OFF_APP_HXX
 #include <offmgr/app.hxx>
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
@@ -217,66 +214,76 @@
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_COLLATOROPTIONS_HPP_
+#include <com/sun/star/i18n/CollatorOptions.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
 
 
-#ifndef _FMTHBSH_HXX //autogen
+#ifndef _FMTHBSH_HXX
 #include <fmthbsh.hxx>
 #endif
-#ifndef _FMTANCHR_HXX //autogen
+#ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
 #endif
-#ifndef _FMTORNT_HXX //autogen
+#ifndef _FMTORNT_HXX
 #include <fmtornt.hxx>
 #endif
-#ifndef _FMTSRND_HXX //autogen
+#ifndef _FMTSRND_HXX
 #include <fmtsrnd.hxx>
 #endif
-#ifndef _FMTFSIZE_HXX //autogen
+#ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
 #endif
-#ifndef _FMTFLD_HXX //autogen
+#ifndef _FMTFLD_HXX
 #include <fmtfld.hxx>
 #endif
-#ifndef _FMTRFMRK_HXX //autogen
+#ifndef _FMTRFMRK_HXX
 #include <fmtrfmrk.hxx>
 #endif
-#ifndef _FMTTSPLT_HXX //autogen
+#ifndef _FMTTSPLT_HXX
 #include <fmtlsplt.hxx>
 #endif
-#ifndef _FMTEIRO_HXX //autogen
+#ifndef _FMTEIRO_HXX
 #include <fmteiro.hxx>
 #endif
-#ifndef _FMTCLDS_HXX //autogen
+#ifndef _FMTCLDS_HXX
 #include <fmtclds.hxx>
 #endif
-#ifndef _FMTURL_HXX //autogen
+#ifndef _FMTURL_HXX
 #include <fmturl.hxx>
 #endif
-#ifndef _FMTCNTNT_HXX //autogen
+#ifndef _FMTCNTNT_HXX
 #include <fmtcntnt.hxx>
 #endif
-#ifndef _FMTHDFT_HXX //autogen
+#ifndef _FMTHDFT_HXX
 #include <fmthdft.hxx>
 #endif
-#ifndef _FMTPDSC_HXX //autogen
+#ifndef _FMTPDSC_HXX
 #include <fmtpdsc.hxx>
 #endif
-#ifndef _FMTFTN_HXX //autogen
+#ifndef _FMTFTN_HXX
 #include <fmtftn.hxx>
 #endif
-#ifndef _FMTFORDR_HXX //autogen
+#ifndef _FMTFORDR_HXX
 #include <fmtfordr.hxx>
 #endif
-#ifndef _FMTFLCNT_HXX //autogen
+#ifndef _FMTFLCNT_HXX
 #include <fmtflcnt.hxx>
 #endif
-#ifndef _FCHRFMT_HXX //autogen
+#ifndef _FCHRFMT_HXX
 #include <fchrfmt.hxx>
 #endif
-#ifndef _FMTINFMT_HXX //autogen
+#ifndef _FMTINFMT_HXX
 #include <fmtinfmt.hxx>
 #endif
-#ifndef _FMTCNCT_HXX //autogen
+#ifndef _FMTCNCT_HXX
 #include <fmtcnct.hxx>
 #endif
 #ifndef _FMTLINE_HXX
@@ -611,6 +618,8 @@ SwBreakIt* pBreakIt = 0;
 CharClass* pAppCharClass = 0;
 LocaleDataWrapper* pAppLocaleData = 0;
 SwCalendarWrapper* pCalendarWrapper = 0;
+CollatorWrapper* pCollator = 0, *pCaseCollator = 0;
+
 
 /******************************************************************************
  *  void _InitCore()
@@ -907,6 +916,11 @@ void _InitCore()
     pAppLocaleData = new LocaleDataWrapper( xMSF, rLcl );
     pCalendarWrapper = new SwCalendarWrapper( xMSF );
 
+    pCollator = new CollatorWrapper( xMSF );
+    pCollator->loadDefaultCollator( rLcl, SW_COLLATOR_IGNORES );
+    pCaseCollator = new CollatorWrapper( xMSF );
+    pCaseCollator->loadDefaultCollator( rLcl, 0 );
+
     _FrmInit();
     _TextInit();
 
@@ -937,6 +951,8 @@ void _FinitCore()
     delete pAppCharClass;
     delete pAppLocaleData;
     delete pCalendarWrapper;
+    delete pCollator;
+    delete pCaseCollator;
 
     // das default TableAutoFormat zerstoeren
     delete SwTableAutoFmt::pDfltBoxAutoFmt;
@@ -1013,5 +1029,14 @@ ULONG GetAppLanguage()
 {
 //  return Application::GetAppInternational().GetFormatLanguage();
     return Application::GetAppInternational().GetLanguage();
+}
+
+CollatorWrapper& GetAppCollator()
+{
+    return *pCollator;
+}
+CollatorWrapper& GetAppCaseCollator()
+{
+    return *pCaseCollator;
 }
 

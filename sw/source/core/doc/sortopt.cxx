@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortopt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-04 08:19:14 $
+ *  last change: $Author: jp $ $Date: 2001-04-06 08:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,25 +84,26 @@ SV_IMPL_PTRARR(SwSortKeys, SwSortKey*)
  --------------------------------------------------------------------*/
 
 SwSortKey::SwSortKey() :
-    eSortKeyType(SRT_APLHANUM),
-    eSortOrder(SRT_ASCENDING),
-    nColumnId(0)
+    eSortOrder( SRT_ASCENDING ),
+    nColumnId( 0 ),
+    bIsNumeric( TRUE )
 {
 }
 
-
-SwSortKey::SwSortKey(USHORT nId, SwSortKeyType eTyp, SwSortOrder eOrder) :
-    eSortOrder(eOrder),
-    eSortKeyType(eTyp),
-    nColumnId(nId)
+SwSortKey::SwSortKey(USHORT nId, const String& rSrtType, SwSortOrder eOrder) :
+    eSortOrder( eOrder ),
+    sSortType( rSrtType ),
+    nColumnId( nId ),
+    bIsNumeric( 0 == rSrtType.Len() )
 {
 }
 
 
 SwSortKey::SwSortKey(const SwSortKey& rOld) :
-    eSortOrder(rOld.eSortOrder),
-    eSortKeyType(rOld.eSortKeyType),
-    nColumnId(rOld.nColumnId)
+    eSortOrder( rOld.eSortOrder ),
+    sSortType( rOld.sSortType ),
+    nColumnId( rOld.nColumnId ),
+    bIsNumeric( rOld.bIsNumeric )
 {
 }
 
@@ -128,7 +129,7 @@ SwSortOptions::SwSortOptions(const SwSortOptions& rOpt) :
     bTable( rOpt.bTable ),
     bIgnoreCase( rOpt.bIgnoreCase )
 {
-    for(USHORT i=0; i < rOpt.aKeys.Count(); ++i)
+    for( USHORT i=0; i < rOpt.aKeys.Count(); ++i )
     {
         SwSortKey* pNew = new SwSortKey(*rOpt.aKeys[i]);
         aKeys.C40_INSERT( SwSortKey, pNew, aKeys.Count());
