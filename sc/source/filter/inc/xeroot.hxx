@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:45:24 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,12 +106,9 @@ struct XclExpRootData : public XclRootData
 
     bool                mbRelUrl;           /// true = Store URLs relative.
 
-    explicit            XclExpRootData(
-                            XclBiff eBiff,
-                            SfxMedium& rMedium,
-                            ScDocument& rDocument,
-                            CharSet eCharSet,
-                            bool bRelUrl );
+    explicit            XclExpRootData( XclBiff eBiff, SfxMedium& rMedium,
+                            SotStorageRef xRootStrg, SvStream& rBookStrm,
+                            ScDocument& rDoc, CharSet eCharSet );
     virtual             ~XclExpRootData();
 };
 
@@ -121,6 +118,8 @@ struct XclExpRootData : public XclRootData
 class XclExpRoot : public XclRoot
 {
 public:
+    explicit            XclExpRoot( XclExpRootData& rExpRootData );
+
     /** Returns this root instance - for code readability in derived classes. */
     inline const XclExpRoot& GetRoot() const { return *this; }
     /** Returns true, if URLs should be stored relative to the document location. */
@@ -160,9 +159,6 @@ public:
     /** Checks and eventually crops the cell ranges to valid Excel dimensions.
         @descr  See XclRoot::CheckCellRangeList for details. */
     void                CheckCellRangeList( ScRangeList& rRanges ) const;
-
-protected:
-    explicit            XclExpRoot( XclExpRootData& rExpRootData );
 
 private:
     mutable XclExpRootData& mrExpData;      /// Reference to the global export data struct.
