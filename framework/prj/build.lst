@@ -17,5 +17,4 @@ fr  framework\source\layoutmanager			nmake   -   all fr_layoutmanager fr_threadh
 fr  framework\source\uielement              nmake   -   all fr_uielement fr_threadhelp fr_unotypes NULL
 fr  framework\source\uifactory              nmake   -   all fr_uifactory fr_threadhelp fr_unotypes NULL
 fr  framework\source\uiconfiguration        nmake   -   all fr_uiconfiguration fr_threadhelp fr_unotypes NULL
-fr  framework\collector                     nmake   -   all fr_collector NULL
 fr  framework\util                          nmake   -   all fr_util fr_constant fr_unotypes fr_threadhelp fr_classes fr_loadenv fr_jobs fr_interaction fr_helper fr_dispatch fr_services fr_register fr_recording fr_layoutmanager fr_uielement fr_uifactory fr_xml fr_uiconfiguration NULL
