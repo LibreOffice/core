@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:11:37 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 10:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,9 @@
 #ifndef SD_OBJECT_BAR_MANAGER_HXX
 #include "ObjectBarManager.hxx"
 #endif
+#ifndef _SDFORMATCLIPBOARD_HXX
+#include "formatclipboard.hxx"
+#endif
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
@@ -269,6 +272,21 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
     ULONG nMarkCount = rMarkList.GetMarkCount();
+
+    //format paintbrush
+    {
+        SdFormatClipboard* pFormatClipboard = GetDocSh()->pFormatClipboard;
+        bool bHasContent = pFormatClipboard && pFormatClipboard->HasContent();
+        rSet.Put(SfxBoolItem(SID_FORMATPAINTBRUSH,bHasContent));
+        if( ( nMarkCount!=1 && !bHasContent ) || pDrView->IsTextEdit() )
+            rSet.DisableItem( SID_FORMATPAINTBRUSH );
+        if( !bHasContent && nMarkCount==1 )
+        {
+            SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+            if( !pFormatClipboard->CanCopyThisType(pObj->GetObjInventor(),pObj->GetObjIdentifier()) )
+                rSet.DisableItem( SID_FORMATPAINTBRUSH );
+        }
+    }
 
     // Stati der SfxChild-Windows (Animator, Fontwork etc.)
     SetChildWindowState( rSet );
