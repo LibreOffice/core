@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testserver.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:07:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 #include <string.h>
-#include <assert.h>
 
 #ifndef _OSL_TIME_H_
 #include <osl/time.h>
