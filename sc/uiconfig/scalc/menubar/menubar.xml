@@ -335,8 +335,6 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Gallery" menu:helpid="5960" menu:label="" />
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:DatasourceAdministration" menu:helpid="10882" menu:label="" />
-            <menu:menuseparator/>
             <menu:menu menu:id=".uno:MacrosMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:MacroRecorder" menu:helpid="6669" menu:label="" />
