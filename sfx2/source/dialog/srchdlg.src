@@ -1,0 +1,162 @@
+/*************************************************************************
+ *
+ *  $RCSfile: srchdlg.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:04:10 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _SFX_SRCHDLG_HRC_
+#include "srchdlg.hrc"
+#endif
+#ifndef _SFX_DIALOG_HRC
+#include "dialog.hrc"
+#endif
+#ifndef _SFX_HELPID_HRC
+#include "helpid.hrc"
+#endif
+
+ModelessDialog RID_DLG_SEARCH
+{
+    HelpId = HID_SEARCHDIALOG;
+    OutputSize = TRUE;
+    Moveable = TRUE;
+    Closeable = TRUE;
+    Hide = TRUE;
+    Size = MAP_APPFONT( 218, 84 );
+    Text[ language_user1 ] = "em: The preposition 'in' used by Mozilla is incorrect because the conceptual model of a 'page' is a flat surface (not a container of HTML code, which must be where the 'in' originated)";
+    Text = "Auf dieser Seite suchen";
+    Text [ english_us ] = "Find on this Page";
+    FixedText FT_SEARCH
+    {
+        Pos = MAP_APPFONT( 6, 3 );
+        Size = MAP_APPFONT( 150, 8 );
+        Text[ language_user1 ] = "em: This is the same text used in SO search dialog under Edit – Find & Replace";
+        Text = "S~uchen nach";
+        Text [ english_us ] = "~Search for";
+    };
+    ComboBox ED_SEARCH
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 6, 14 );
+        Size = MAP_APPFONT( 150, 50 );
+        DropDown = TRUE ;
+        TabStop = TRUE;
+    };
+    CheckBox CB_WHOLEWORDS
+    {
+        Pos = MAP_APPFONT( 6, 29 );
+        Size = MAP_APPFONT( 150, 10 );
+        Text[ language_user1 ] = "";
+        Text = "Nur ganze ~Wörter" ;
+        Text [ english_us ] = "~Whole words only" ;
+        TabStop = TRUE;
+    };
+    CheckBox CB_MATCHCASE
+    {
+        Pos = MAP_APPFONT( 6, 42 );
+        Size = MAP_APPFONT( 150, 10 );
+        Text[ language_user1 ] = "";
+        Text = "E~xakte Suche" ;
+        Text[ english_us ] = "~Match case";
+        TabStop = TRUE;
+    };
+    CheckBox CB_WRAPAROUND
+    {
+        Pos = MAP_APPFONT( 6, 55 );
+        Size = MAP_APPFONT( 150, 10 );
+        Text[ language_user1 ] = "em: use the translation used in your language in Mozilla browser Search dialog only if it means both directions like 'wrap' in English. Otherwise, translate this string to mean 'Continue search at the start of the document'";
+        Text = "Suche am ~Dokumentanfang fortsetzen" ;
+        Text [ english_us ] = "Wrap ~around" ;
+        TabStop = TRUE;
+    };
+    CheckBox CB_BACKWARDS
+    {
+        Pos = MAP_APPFONT( 6, 68 );
+        Size = MAP_APPFONT( 150, 10 );
+        Text[ language_user1 ] = "";
+        Text = "~Rückwärts" ;
+        Text [ english_us ] = "~Backwards" ;
+        TabStop = TRUE;
+    };
+    PushButton PB_FIND
+    {
+        Pos = MAP_APPFONT( 162, 6 );
+        Size = MAP_APPFONT( 50, 14 );
+        Text[ language_user1 ] = "";
+        Text = "~Suchen" ;
+        Text [ english_us ] = "~Find" ;
+        TabStop = TRUE;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCELFIND
+    {
+        Pos = MAP_APPFONT( 162, 23 );
+        Size = MAP_APPFONT( 50, 14 );
+        Text[ language_user1 ] = "";
+        Text = "S~chließen" ;
+        Text [ english_us ] = "~Close" ;
+        TabStop = TRUE;
+    };
+
+    String STR_TOGGLE
+    {
+        Text[ language_user1 ] = "em: use the translation used in your language in Mozilla browser Search dialog only if it means both directions like 'wrap' in English. Otherwise, translate this string to mean 'Continue search at the end of the document'";
+        Text = "Suche am ~Dokumentende fortsetzen" ;
+        Text [ english_us ] = "Wrap ~around" ;
+    };
+};
+
