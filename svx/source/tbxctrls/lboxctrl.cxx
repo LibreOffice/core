@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-16 07:47:14 $
+ *  last change: $Author: mt $ $Date: 2001-10-29 14:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,13 +342,15 @@ SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
                                            : RID_SVXSTR_NUM_REDO_ACTIONS ) );
         Impl_SetInfo( rListBox.GetSelectEntryCount() );
 
+
+        // #92220# MT: use special StartPopupMode instead...
+/*
         // position window at the bottom-left of the toolbox icon.
         // The -2 offset takes the distance from the item-rect to
         // the toolbox border into account (can't be obtained from
         // the toolbox).
         Rectangle aItemRect( rBox.GetItemRect( nId ) );
         aItemRect.Bottom() += aItemRect.GetHeight() - 2;
-
         {
             MouseEvent aMEvt( aItemRect.TopLeft(), 1, 0, 0, 0 );
             Link aSave( rBox.GetSelectHdl() );
@@ -358,7 +360,10 @@ SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
         }
 
         pPopupWin->StartPopupMode( aItemRect );
-        pPopupWin->StartSelection();
+*/
+
+        pPopupWin->StartPopupMode( &rBox );
+//      pPopupWin->StartSelection();
     }
     return pPopupWin;
 }
