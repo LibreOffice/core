@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:29:11 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:33:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,11 +88,6 @@
 #endif
 
 
-const UINT16 RangeNameBuffer::nError = 0xFFFF;
-
-
-
-
 UINT32 StringHashEntry::MakeHashCode( const String& r )
 {
     register UINT32                 n = 0;
@@ -164,51 +159,6 @@ BOOL NameBuffer::Find( const sal_Char* pRefName, UINT16& rIndex )
     }
 
     return FALSE;
-}
-
-
-
-
-void RangeNameBuffer::Store( ByteString& r, const ScTokenArray* p, UINT16 n, const RangeType t)
-{
-    String aTmpStr( r, *pExcRoot->pCharset );
-    Store( aTmpStr, p, n, t );
-}
-
-
-void RangeNameBuffer::Store( String& rName, const ScTokenArray* pDef, UINT16 nAltSheet, const RangeType eNameType)
-{
-    if( pDef )
-    {
-        DBG_ASSERT( Count() < 0xFFFF,
-            "*RangeNameBuffer::Store(): max. 64K Names!" );
-
-        // Name schon vorhanden?
-        UINT16          nDummy;
-        if( pExcRoot->pScRangeName->SearchName( rName, nDummy ) )
-        {
-            rName.AppendAscii( "___" );
-            rName += String::CreateFromInt32( nAltSheet );
-        }
-
-        ScRangeData*    pData = new ScRangeData( pExcRoot->pDoc, rName, *pDef );
-
-        pData->GuessPosition();
-        pData->SetIndex( ( UINT16 ) Count() );
-
-        if( eNameType == RT_PRINTAREA )
-            pData->AddType( eNameType );
-        else if( eNameType == RT_CRITERIA )
-            pData->SetType( eNameType );
-        else if( eNameType == RT_NAME )
-            pData->SetType( eNameType );
-
-        pExcRoot->pScRangeName->Insert( pData );
-
-        Insert( ( void* ) TRUE, LIST_APPEND );
-    }
-    else
-        Insert( ( void* ) FALSE, LIST_APPEND );
 }
 
 
