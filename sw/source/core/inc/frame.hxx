@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:10:55 $
+ *  last change: $Author: ama $ $Date: 2001-10-22 11:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,8 @@ struct SwCrsrMoveState;
 
 #define FRM_NEIGHBOUR   0x2004
 #define FRM_NOTE_VERT   0x5a60
+#define FRM_HEADFOOT    0x0018
+#define FRM_BODYFTNC    0x00a0
 
 class SwFrm;
 typedef long (SwFrm:: *SwFrmGet)() const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:17:39 $
+ *  last change: $Author: ama $ $Date: 2001-10-22 11:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,8 +818,8 @@ void SwLayoutFrm::MakeAll()
         //uebernimmt im DTor die Benachrichtigung
     const SwLayNotify aNotify( this );
 #ifdef VERTICAL_LAYOUT
-    SwRectFn fnRect = ( IsNeighbourFrm() == IsVertical() )? fnRectHori
-                                                          : fnRectVert;
+    BOOL bVert = IsVertical();
+    SwRectFn fnRect = ( IsNeighbourFrm() == bVert )? fnRectHori : fnRectVert;
 #else
     const SzPtr pFix = pFIXSIZE;
 #endif
@@ -840,8 +840,18 @@ void SwLayoutFrm::MakeAll()
                 //Berechnung der PrtArea eingestellt.
                 bValidPrtArea = FALSE;
 #ifdef VERTICAL_LAYOUT
-                (aFrm.*fnRect->fnSetWidth)(
-                                    (GetUpper()->Prt().*fnRect->fnGetWidth)() );
+                SwTwips nPrtWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
+                if( IsBodyFrm() && bVert )
+                {
+                    if( GetPrev() )
+                        nPrtWidth -= GetPrev()->Frm().Height();
+                    SwFrm* pNxt = GetNext();
+                    while( pNxt && !pNxt->IsFooterFrm() )
+                        pNxt = pNxt->GetNext();
+                    if( pNxt )
+                        nPrtWidth -= pNxt->Frm().Height();
+                }
+                (aFrm.*fnRect->fnSetWidth)( nPrtWidth );
             }
             else
             {   // Don't leave your upper

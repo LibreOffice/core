@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:32:09 $
+ *  last change: $Author: ama $ $Date: 2001-10-22 11:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,7 +490,7 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
 void SwFrm::ChgSize( const Size& aNewSize )
 {
 #ifdef VERTICAL_LAYOUT
-    bFixSize = !IsNeighbourFrm();
+    bFixSize = TRUE;
     const Size aOldSize( Frm().SSize() );
     if ( aNewSize == aOldSize )
         return;
@@ -2991,9 +2991,52 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
     BOOL  bFixChgd, bVarChgd;
 #ifdef VERTICAL_LAYOUT
     if( bVert == pFrm->IsNeighbourFrm() )
+    {
+        bFixChgd = bWidthChgd;
+        bVarChgd = bHeightChgd;
+    }
+    else
+    {
+        bFixChgd = bHeightChgd;
+        bVarChgd = bWidthChgd;
+    }
+    USHORT nFixWidth = bVert ? (FRM_NEIGHBOUR | FRM_HEADFOOT): ~FRM_NEIGHBOUR;
+    USHORT nFixHeight= bVert ? ~(FRM_NEIGHBOUR | FRM_HEADFOOT | FRM_BODYFTNC) :
+                               FRM_NEIGHBOUR;
+    while ( pFrm )
+    {   //TxtFrms werden invalidiert, andere werden nur proportional angepasst.
+        if ( pFrm->IsTxtFrm() )
+        {
+            if ( bFixChgd )
+                ((SwCntntFrm*)pFrm)->Prepare( PREP_FIXSIZE_CHG );
+            if ( bVarChgd )
+                ((SwCntntFrm*)pFrm)->Prepare( PREP_ADJUST_FRM );
+        }
+        else
+        {
+            USHORT nType = pFrm->GetType();
+            if ( !(nType & (FRM_TAB|FRM_ROW|FRM_CELL|FRM_SECTION)) )
+            {
+                if ( bWidthChgd )
+                {
+                    if( nType & nFixWidth )
+                        pFrm->Frm().Width( Prt().Width() );
+                    else if( rOldSize.Width() )
+                        pFrm->Frm().Width( (pFrm->Frm().Width() * Prt().Width()) /
+                                        rOldSize.Width() );
+                }
+                if ( bHeightChgd )
+                {
+                    if( nType & nFixHeight )
+                        pFrm->Frm().Height( Prt().Height() );
+                    else if( rOldSize.Height() )
+                        pFrm->Frm().Height( (pFrm->Frm().Height() * Prt().Height()) /
+                                            rOldSize.Height() );
+                }
+            }
+        }
 #else
     if ( pFrm->bVarHeight )
-#endif
     {
         bFixChgd = bWidthChgd;
         bVarChgd = bHeightChgd;
@@ -3021,11 +3064,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
             //Neue Breite
             if ( bWidthChgd )
             {
-#ifdef VERTICAL_LAYOUT
-                if( pFrm->IsNeighbourFrm() == bVert )
-#else
                 if ( pFrm->bVarHeight )
-#endif
                     pFrm->Frm().Width( Prt().Width() );
                 else if ( (pFrm->GetType() & FRM_COLUMN) && rOldSize.Width() )
                     pFrm->Frm().Width( (pFrm->Frm().Width() * Prt().Width()) /
@@ -3034,17 +3073,14 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
             //Neue Hoehe
             if ( bHeightChgd )
             {
-#ifdef VERTICAL_LAYOUT
-                if( pFrm->IsNeighbourFrm() != bVert )
-#else
                 if ( !pFrm->bVarHeight )
-#endif
                     pFrm->Frm().Height( Prt().Height() );
                 else if ( (pFrm->GetType() & FRM_COLUMN) && rOldSize.Height() )
                     pFrm->Frm().Height( (pFrm->Frm().Height() * Prt().Height()) /
                                         rOldSize.Height() );
             }
         }
+#endif
         pFrm->_InvalidateAll();
         if ( bInvaCntnt && pFrm->IsCntntFrm() )
             pFrm->InvalidatePage();
