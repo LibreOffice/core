@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StdAfx.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:55 $
+ *  last change: $Author: jl $ $Date: 2001-06-27 10:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 //something, but do not change the name of _Module
 extern CComModule _Module;
 #include <atlcom.h>
+#include <stdio.h>
+#include <tchar.h>
+#include <string.h>
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clientTest.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-16 12:48:37 $
+ *  last change: $Author: jl $ $Date: 2001-06-27 10:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,6 @@
  *
  ************************************************************************/
 
-#include <windows.h>
-#include <comdef.h>
-#include <tchar.h>
-#include <atlbase.h>
-extern CComModule _Module;
-#include<atlcom.h>
-#include<atlimpl.cpp>
-
 #include <com/sun/star/bridge/ModelDependent.hpp>
 #include <com/sun/star/bridge/XBridgeSupplier2.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -77,6 +69,29 @@ extern CComModule _Module;
 #include <cppuhelper/servicefactory.hxx>
 #include <rtl/string.h>
 #pragma hdrstop
+
+
+//#include <windows.h>
+#include <comdef.h>
+//#include <tchar.h>
+#include <windef.h>
+#include <atlbase.h>
+
+// actually defined in windef.h but after altbase.h it is undefined
+// it is used in atlcom.h
+#ifndef max
+#define max(a,b)            (((a) > (b)) ? (a) : (b))
+#endif
+
+#ifndef min
+#define min(a,b)            (((a) < (b)) ? (a) : (b))
+#endif
+
+extern CComModule _Module;
+
+
+#include<atlcom.h>
+#include<atlimpl.cpp>
 
 #include "axhost.hxx"
 
