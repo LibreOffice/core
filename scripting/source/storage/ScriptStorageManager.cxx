@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.14 $
+*  $Revision: 1.15 $
 *
-*  last change: $Author: dfoster $ $Date: 2002-11-06 16:26:25 $
+*  last change: $Author: npower $ $Date: 2003-01-16 18:50:55 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -70,6 +70,8 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+
 #include <drafts/com/sun/star/script/framework/storage/XScriptStorageRefresh.hpp>
 
 #include "ScriptStorageManager.hxx"
@@ -96,25 +98,25 @@ extern ::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
 //*************************************************************************
 // ScriptStorageManager Constructor
 ScriptStorageManager::ScriptStorageManager( const Reference<
-    XComponentContext > & xContext ) SAL_THROW ( ( RuntimeException ) )
-    : m_xContext( xContext ), m_count( 0 )
+        XComponentContext > & xContext ) SAL_THROW ( ( RuntimeException ) )
+        : m_xContext( xContext ), m_count( 0 )
 {
     OSL_TRACE( "< ScriptStorageManager ctor called >\n" );
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
 
     validateXRef( m_xContext,
-        "ScriptStorageManager::ScriptStorageManager : cannot get component context" );
+                  "ScriptStorageManager::ScriptStorageManager : cannot get component context" );
 
     m_xMgr = m_xContext->getServiceManager();
     validateXRef( m_xMgr,
-        "ScriptStorageManager::ScriptStorageManager : cannot get service manager" );
+                  "ScriptStorageManager::ScriptStorageManager : cannot get service manager" );
 
     try
     {
         // obtain the macro expander singleton to use in determining the
         // location of the application script storage
         Any aAny = m_xContext->getValueByName( OUString::createFromAscii(
-                           "/singletons/com.sun.star.util.theMacroExpander" ) );
+                                                   "/singletons/com.sun.star.util.theMacroExpander" ) );
         Reference< util::XMacroExpander > xME;
         if ( sal_False == ( aAny >>= xME ) )
         {
@@ -125,12 +127,14 @@ ScriptStorageManager::ScriptStorageManager( const Reference<
         validateXRef( xME, "ScriptStorageManager constructor: can't get MacroExpander" );
 
         OUString base = OUString::createFromAscii(
-            SAL_CONFIGFILE( "${$SYSBINDIR/bootstrap" ) );
+                            SAL_CONFIGFILE( "${$SYSBINDIR/bootstrap" ) );
 
         setupAppStorage( xME,
-             base.concat( OUString::createFromAscii( "::BaseInstallation}/share" ) ) );
+                         base.concat( OUString::createFromAscii( "::BaseInstallation}/share" ) ),
+                         OUSTR( "SHARE" ) );
         setupAppStorage( xME,
-             base.concat( OUString::createFromAscii( "::UserInstallation}/user" ) ) );
+                         base.concat( OUString::createFromAscii( "::UserInstallation}/user" ) ),
+                         OUSTR( "USER" ) );
 
     }
     catch ( Exception & e )
@@ -145,7 +149,8 @@ ScriptStorageManager::ScriptStorageManager( const Reference<
 void
 ScriptStorageManager::setupAppStorage(
     const Reference< util::XMacroExpander > & xME,
-    const OUString & storageStr )
+    const OUString & storageStr,
+    const OUString & appStr)
 SAL_THROW ( ( RuntimeException ) )
 {
     try
@@ -154,10 +159,10 @@ SAL_THROW ( ( RuntimeException ) )
             m_xMgr->createInstanceWithContext(
                 OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ), m_xContext );
         validateXRef( xInterface,
-            "ScriptStorageManager constructor: can't get SimpleFileAccess XInterface" );
-        Reference<ucb::XSimpleFileAccess> xSFA( xInterface, UNO_QUERY_THROW );
+                      "ScriptStorageManager constructor: can't get SimpleFileAccess XInterface" );
+        Reference< ucb::XSimpleFileAccess > xSFA( xInterface, UNO_QUERY_THROW );
 
-        setupAnyStorage( xSFA, xME->expandMacros( storageStr ) );
+        setupAnyStorage( xSFA, xME->expandMacros( storageStr ), appStr );
     }
     catch ( Exception & e )
     {
@@ -172,7 +177,8 @@ SAL_THROW ( ( RuntimeException ) )
 sal_Int32
 ScriptStorageManager::setupAnyStorage(
     const Reference< ucb::XSimpleFileAccess > & xSFA,
-    const OUString & storageStr )
+    const OUString & storageStr,
+    const OUString & origStringURI )
 SAL_THROW ( ( RuntimeException ) )
 {
     // Required for scope of fnc to protect all access read and writes to m_count
@@ -188,10 +194,10 @@ SAL_THROW ( ( RuntimeException ) )
         aArgs[ 2 ] <<= storageStr;
 
         OSL_TRACE( "creating storage for: %s\n",
-            ::rtl::OUStringToOString( storageStr,
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                   ::rtl::OUStringToOString( storageStr,
+                                             RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 
-        Reference<XInterface> xInterface =
+        Reference< XInterface > xInterface =
             m_xMgr->createInstanceWithArgumentsAndContext(
                 OUString::createFromAscii(
                     "drafts.com.sun.star.script.framework.storage.ScriptStorage" ),
@@ -201,8 +207,12 @@ SAL_THROW ( ( RuntimeException ) )
 
         // and place it in the hash_map. Increment the counter
         m_ScriptStorageMap[ m_count++ ] = xInterface;
-        m_StorageIdHash [storageStr] = m_count - 1;
+        sal_Int32 sid =  m_count - 1;
 
+        // create hash of original uri i.e. file:///home/users/docs/mydoc.sxw
+        // and storage id (sid) this will allow us to retrieve
+        // the sid based on the url of the document.
+        m_StorageIdOrigURIHash [ origStringURI ] = sid;
         OSL_TRACE( "\tcreated with ID=%d\n", m_count - 1 );
 
     }
@@ -235,9 +245,10 @@ throw ( RuntimeException )
 {
     OSL_TRACE( "** ==> ScriptStorageManager in createScriptingStorage\n" );
     validateXRef( xSFA,
-        "ScriptStorageManager::createScriptStorage: XSimpleFileAccess is not valid" );
+                  "ScriptStorageManager::createScriptStorage: XSimpleFileAccess is not valid" );
 
-    return setupAnyStorage( xSFA, ::rtl::OUString::createFromAscii( "" ) );
+    return setupAnyStorage( xSFA, ::rtl::OUString::createFromAscii( "" ),
+                            ::rtl::OUString::createFromAscii( "" ) );
 }
 
 //*************************************************************************
@@ -253,14 +264,14 @@ throw ( RuntimeException )
     ::rtl::OUString canonicalURI(
         ::rtl::OUString::createFromAscii( "vnd.sun.star.pkg://" ) );
     canonicalURI = canonicalURI.concat( ::rtl::Uri::encode( stringURI,
-        rtl_UriCharClassUricNoSlash, rtl_UriEncodeCheckEscapes,
-        RTL_TEXTENCODING_ASCII_US ) );
+                                        rtl_UriCharClassUricNoSlash, rtl_UriEncodeCheckEscapes,
+                                        RTL_TEXTENCODING_ASCII_US ) );
 
-    return setupAnyStorage( xSFA, canonicalURI );
+    return setupAnyStorage( xSFA, canonicalURI, stringURI );
 }
 
 //*************************************************************************
-Reference <XInterface> SAL_CALL
+Reference < XInterface > SAL_CALL
 ScriptStorageManager::getScriptStorage( sal_Int32 scriptStorageID )
 throw( RuntimeException )
 {
@@ -277,36 +288,74 @@ throw( RuntimeException )
             Reference< XInterface >() );
     }
     validateXRef( itr->second,
-        "ScriptStorageManager::getScriptStorage: Cannot get ScriptStorage from ScriptStorageHash" );
+                  "ScriptStorageManager::getScriptStorage: Cannot get ScriptStorage from ScriptStorageHash" );
     return itr->second;
 }
 
 //*******************************************************************
+sal_Int32
+ScriptStorageManager::getScriptStorageID( const OUString & origURI )
+{
+    StorageId_hash::const_iterator it = m_StorageIdOrigURIHash.find( origURI );
+
+    if ( it == m_StorageIdOrigURIHash.end() )
+    {
+        OUString message = OUSTR( "ScriptStorageManager::getScriptStorageID(): Cannot find storage for " );
+        if ( origURI.getLength() == 0 )
+        {
+            message = message.concat( OUSTR("Empty URI") );
+        }
+        else
+        {
+            message = message.concat( origURI );
+        }
+        OSL_TRACE( ::rtl::OUStringToOString( message,
+                                            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        return -1;
+    }
+
+    return it->second;
+}
+
+//*******************************************************************
+void
+ScriptStorageManager::removeScriptDocURIHashEntry( const OUString & origURI )
+{
+    StorageId_hash::iterator it = m_StorageIdOrigURIHash.find( origURI );
+    if ( it == m_StorageIdOrigURIHash.end() )
+    {
+        OSL_TRACE( "ScriptStorageManager::removeScriptDocURIHashEntry: no entry to remove" );
+        return;
+    }
+
+    // remove entry for this doc url from orig uri map.
+    m_StorageIdOrigURIHash.erase( it );
+}
+
+//*******************************************************************
 void SAL_CALL
-ScriptStorageManager::refreshScriptStorage(const OUString & stringURI)
+ScriptStorageManager::refreshScriptStorage( const OUString & stringURI )
 throw( RuntimeException )
 {
-
-    OSL_TRACE( "** => ScriptStorageManager in refreshScriptStorage\n");
+    OSL_TRACE( "** => ScriptStorageManager in refreshScriptStorage\n" );
     OSL_TRACE( "** => refreshing URI: %s\n",
-            ::rtl::OUStringToOString(
-                stringURI, RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+               ::rtl::OUStringToOString(
+                   stringURI, RTL_TEXTENCODING_ASCII_US ).pData->buffer);
 
-    StorageId_hash::const_iterator it = m_StorageIdHash.find(stringURI);
+    sal_Int32 storageID = getScriptStorageID( stringURI );
 
-    if ( it == m_StorageIdHash.end() )
+    if ( storageID = -1 )
     {
-        throw RuntimeException(
-            OUSTR( "ScriptStorageManager::refresh: attempt to look for non-existent storage" ),
-            Reference< XInterface >() );
+        // Refreshing noexistent storage - just return
+        return;
     }
 
     try
     {
         Reference < storage::XScriptStorageRefresh > xSSR(
-            getScriptStorage(it->second), UNO_QUERY);
+            getScriptStorage( storageID ), UNO_QUERY );
 
-       xSSR->refresh();
+        xSSR->refresh();
     }
     catch ( RuntimeException & e )
     {
@@ -347,7 +396,7 @@ throw( RuntimeException )
 }
 
 //*************************************************************************
-Sequence<OUString> SAL_CALL
+Sequence< OUString > SAL_CALL
 ScriptStorageManager::getSupportedServiceNames( )
 throw( RuntimeException )
 {
@@ -360,27 +409,41 @@ ScriptStorageManager::disposing( const ::com::sun::star::lang::EventObject& Sour
 throw ( ::com::sun::star::uno::RuntimeException )
 {
     OSL_TRACE( "ScriptStorageManager::disposing started" );
-    Reference< beans::XPropertySet > xScriptingContext(Source.Source, UNO_QUERY );
-    validateXRef( xScriptingContext,
-        "ScriptStorageManager::disposing can't get script context from EventObject" );
-    scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
-        scripting_constants::ScriptingConstantsPool::instance();
-
-    // get the scriptStorageID from the script context
-    Any a = xScriptingContext->getPropertyValue(  scriptingConstantsPool.DOC_STORAGE_ID );
-    sal_Int32 scriptStorageID;
-    OSL_TRACE( "extracting sid");
-    if( sal_False == (a >>= scriptStorageID ) )
+    Reference< frame::XModel > xModel;
+    OUString docURI;
+    try
     {
-        throw RuntimeException(
-            OUSTR( "ScriptStorageManager::disposing: can't get script context" ),
-            Reference< XInterface > ());
+        Reference< XInterface > xInterface = Source.Source;
+        xModel = Reference< frame::XModel > ( xInterface, UNO_QUERY_THROW );
+        docURI = xModel->getURL();
+        if ( docURI.getLength() > 0 )
+        {
+            OSL_TRACE( "Document disposing is ... %s",
+                      ::rtl::OUStringToOString( docURI,
+                                                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        }
     }
+    catch ( RuntimeException& e )
+    {
+        OUString message =
+            OUSTR(
+                "ScriptStorageManager::disposing: can't get script context, reason = " );
+        message = message.concat( e.Message );
+        OSL_TRACE( ::rtl::OUStringToOString( message,
+                                            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        return;
+    }
+
+
+    // grab storage id.
+    sal_Int32 scriptStorageID = getScriptStorageID( docURI );
+
     // no need to do anything if there's no doc storage
     if( scriptStorageID == -1 )
     {
         return;
     }
+
     OSL_TRACE( "disposing storageID = %d", scriptStorageID );
 
     // attempt to get the storage from the hash to ensure that we have a
@@ -390,40 +453,18 @@ throw ( ::com::sun::star::uno::RuntimeException )
 
     if ( itr == m_ScriptStorageMap.end() )
     {
-        throw RuntimeException(
-            OUSTR( "ScriptStorageManager::disposing: attempt to dispose non-existent storage" ),
-            Reference< XInterface >() );
+        OSL_TRACE( "Entry for storage id %d doesn't exist in map", scriptStorageID );
+        return;
     }
-    validateXRef( itr->second,
-                  "ScriptStorageManager::getScriptStorage: Cannot get ScriptStorage from ScriptStorageHash" );
 
     // erase the entry from the hash
     m_ScriptStorageMap.erase( scriptStorageID );
 
-
-    // erase from name/storageId hash
-    StorageId_hash::iterator it = m_StorageIdHash.begin();
-    StorageId_hash::iterator it_end = m_StorageIdHash.end();
-    for( ; it != it_end; ++it)
-    {
-    if (it->second == scriptStorageID)
-        {
-         break;
-        }
-    }
-
-    if (it == it_end)
-    {
-    throw RuntimeException(
-            OUSTR( "ScriptStorageManager::disposing: attempt to dispose non-existent storage" ),
-            Reference< XInterface >() );
-    }
-
-    m_StorageIdHash.erase(it);
+    removeScriptDocURIHashEntry( docURI );
 }
 
 //*************************************************************************
-static Reference<XInterface> SAL_CALL
+static Reference< XInterface > SAL_CALL
 ssm_create(
     const Reference< XComponentContext > & xCompC )
 {
@@ -431,7 +472,7 @@ ssm_create(
 }
 
 //*************************************************************************
-static Sequence<OUString>
+static Sequence< OUString >
 ssm_getSupportedServiceNames( )
 SAL_THROW( () )
 {

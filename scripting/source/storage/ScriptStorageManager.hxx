@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorageManager.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-11-06 16:26:26 $
+ *  last change: $Author: npower $ $Date: 2003-01-16 18:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,7 @@ public:
 
     //XEventListener
     //======================================================================
+
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
         throw ( css::uno::RuntimeException );
 
@@ -178,21 +179,26 @@ private:
     ScriptStorageManager( const ScriptStorageManager & );
     ScriptStorageManager& operator= ( const ScriptStorageManager & );
 
+    sal_Int32 getScriptStorageID( const ::rtl::OUString & origURI);
+    void removeScriptDocURIHashEntry( const ::rtl::OUString & origURI );
+
     // to obtain other services if needed
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
     ::osl::Mutex m_mutex;
     ScriptStorage_map m_ScriptStorageMap;
-    StorageId_hash m_StorageIdHash;
+    StorageId_hash m_StorageIdOrigURIHash;
     sal_Int32 m_count;
 
     void setupAppStorage( const css::uno::Reference< css::util::XMacroExpander > & xME,
-        const ::rtl::OUString & storageStr )
+        const ::rtl::OUString & storageStr,
+        const ::rtl::OUString & appStr)
         SAL_THROW ( ( css::uno::RuntimeException ) );
 
     sal_Int32 setupAnyStorage(
         const css::uno::Reference< css::ucb::XSimpleFileAccess> & xSFA,
-        const ::rtl::OUString & storageStr )
+        const ::rtl::OUString & storageStr,
+        const ::rtl::OUString & origStringURI )
         SAL_THROW ( ( css::uno::RuntimeException ) );
 
 };
