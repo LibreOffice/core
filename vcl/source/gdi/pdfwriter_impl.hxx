@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-20 11:17:06 $
+ *  last change: $Author: sj $ $Date: 2002-09-26 10:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,7 +525,7 @@ public:
     { m_aGraphicsStack.front().m_aFont.SetColor( rColor ); }
 
     void clearClipRegion()
-    { m_aGraphicsStack.front().m_aClipRegion.SetEmpty(); }
+    { m_aGraphicsStack.front().m_aClipRegion.SetNull(); }
 
     void setClipRegion( const Region& rRegion );
 
