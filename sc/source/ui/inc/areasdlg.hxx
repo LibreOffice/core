@@ -2,9 +2,9 @@
  *
  *  $RCSfile: areasdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-23 15:05:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef SC_AREASDLG_HXX
 #define SC_AREASDLG_HXX
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
 
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
@@ -120,7 +124,7 @@ private:
     ScRefEdit*      pRefInputEdit;
     ScDocument*     pDoc;
     ScViewData*     pViewData;
-    USHORT          nCurTab;
+    SCTAB           nCurTab;
 
 #ifdef _AREASDLG_CXX
 private:
