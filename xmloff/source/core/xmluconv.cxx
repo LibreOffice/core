@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-24 16:57:13 $
+ *  last change: $Author: cl $ $Date: 2000-12-19 16:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1260,8 +1260,8 @@ sal_Int32 SvXMLUnitConverter::indexOfComma( const OUString& rStr,
 
 // ---
 
-SvXMLTokenEnumerator::SvXMLTokenEnumerator( const OUString& rString )
-: maTokenString( rString ), mnNextTokenPos(0)
+SvXMLTokenEnumerator::SvXMLTokenEnumerator( const OUString& rString, sal_Unicode cSeperator /* = sal_Unicode(' ') */ )
+: maTokenString( rString ), mnNextTokenPos(0), mcSeperator( cSeperator )
 {
 }
 
@@ -1270,7 +1270,7 @@ sal_Bool SvXMLTokenEnumerator::getNextToken( OUString& rToken )
     if( -1 == mnNextTokenPos )
         return sal_False;
 
-    int nTokenEndPos = maTokenString.indexOf( ' ', mnNextTokenPos );
+    int nTokenEndPos = maTokenString.indexOf( mcSeperator, mnNextTokenPos );
     if( nTokenEndPos != -1 )
     {
         rToken = maTokenString.copy( mnNextTokenPos,
