@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gui.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:25:58 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,18 +93,6 @@ static RscCompiler * pRscCompiler = NULL;
         delete pRscCompiler;
 }
 
-void PrimeNumber(){
-    USHORT i, n;
-    for( i = 801; i < 1000; i += 2 ){
-        for( n = 2; n < i && ((i % n) != 0); n++ );
-        if( n == i ){
-            printf( "\nPrimzahl: %d\n", i );
-            return;
-        }
-    }
-}
-
-
 #if defined( UNX ) || defined( MAC ) || ( defined( PM2 ) && ( defined( CSET ) || defined ( GCC ))) || defined (WTC) || defined(ICC)
 int main ( int argc, char ** argv) {
 #else
@@ -165,9 +153,9 @@ int cdecl main ( int argc, char ** argv) {
         return( 1 );
 }
 
-void RscExit( USHORT nExit )
+void RscExit( sal_uInt32 nExit )
 {
     if( nExit )
-        printf( "Program exit is %d\n", nExit );
+        printf( "Program exit is %ud\n", (unsigned int)nExit );
     exit( nExit );
 }
