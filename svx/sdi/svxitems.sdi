@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.sdi,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 08:21:40 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,7 +713,7 @@ item SvxColumnDescription SvxColumnItem;
 struct SvxTabStop
 {
     String  TabStops         MID_TABSTOPS; // dummy, will be represented by array of structs
-    INT32   StandardTabStop  MID_STD_TAB;
+    //INT32   StandardTabStop  MID_STD_TAB;
 };
 item SvxTabStop SvxTabStopItem;
 
@@ -726,3 +726,5 @@ item SvxCharRotate SvxCharRotateItem;
 
 item String                 SvxClipboardFmtItem;  // dummy
 item String                 SfxSetItem;  // dummy
+item String                 SvxDrawToolItem;
+item String                 SvxDrawAlignItem;
