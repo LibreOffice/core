@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:04:07 $
+ *  last change: $Author: sb $ $Date: 2000-11-10 10:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include <logindlg.hrc>
 #endif
 
-ModalDialog DLG_LOGIN
+ModalDialog DLG_UUI_LOGIN
 {
     HelpId = HID_DLG_LOGIN ;
     Border = TRUE ;

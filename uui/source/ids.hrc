@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:04:10 $
+ *  last change: $Author: sb $ $Date: 2000-11-10 10:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  The UUI Resources
 //
-// $Author: hr $ $Date: 2000-09-18 17:04:10 $ $Revision: 1.1.1.1 $
+// $Author: sb $ $Date: 2000-11-10 10:57:09 $ $Revision: 1.2 $
 //============================================================================
 
 #ifndef UUI_IDS_HRC
@@ -75,7 +75,7 @@
 //============================================================================
 #define RID_KEEP_PASSWORD (RID_UUI_START + 0)
 #define RID_SAVE_PASSWORD (RID_UUI_START + 1)
-#define DLG_LOGIN (RID_UUI_START + 2)
+#define DLG_UUI_LOGIN (RID_UUI_START + 2)
 #define DLG_COOKIES (RID_UUI_START + 3)
 #define STR_COOKIES_RECV_START (RID_UUI_START + 4)
 #define STR_COOKIES_RECV_COOKIES (RID_UUI_START + 5)

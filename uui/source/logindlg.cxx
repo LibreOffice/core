@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2000-10-04 13:16:57 $
+ *  last change: $Author: sb $ $Date: 2000-11-10 10:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,7 @@ LoginDialog::LoginDialog
     ResMgr* pResMgr
 ) :
 
-    ModalDialog( pParent, ResId( DLG_LOGIN, pResMgr ) ),
+    ModalDialog( pParent, ResId( DLG_UUI_LOGIN, pResMgr ) ),
 
     aErrorInfo      ( this, ResId( INFO_LOGIN_ERROR ) ),
     aErrorGB        ( this, ResId( GB_LOGIN_ERROR ) ),
