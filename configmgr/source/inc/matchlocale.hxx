@@ -2,9 +2,9 @@
  *
  *  $RCSfile: matchlocale.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-16 17:41:38 $
+ *  last change: $Author: jb $ $Date: 2001-03-20 16:37:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ namespace configmgr
             bool improve(SequencePos nPos, MatchQuality eQuality_);
 
             /// reset to no match or best match state
-            bool reset()
+            void reset()
             {
                 m_nPos =  c_noPosition;
                 m_eQuality = MISMATCH;
