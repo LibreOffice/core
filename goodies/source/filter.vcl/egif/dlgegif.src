@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgegif.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 20:15:45 $
+ *  last change: $Author: obo $ $Date: 2001-08-24 13:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,7 @@ ModalDialog DLG_EXPORT_GIF
     Text[ catalan ] = "Opciones GIF";
     Text[ finnish ] = "GIF-asetukset";
 };
+
 
 
 
