@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_env.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:31:03 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,8 @@ class HtmlEnvironment_Idl
                             output::Position    i_destination )
                                                 { CurPosition().Get_LinkTo(o_result, i_destination); }
     String              CurPageCe_AsText() const;
+    String              CurPageCe_AsFile(
+                            const char *        i_sEnding) const;
     const ary::idl::CodeEntity *
                         CurPageCe() const       { return pCurPageCe; }
 

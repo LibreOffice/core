@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_env.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:30:45 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,12 @@ HtmlEnvironment_Idl::Link2Manual( const String & i_link ) const
 String
 HtmlEnvironment_Idl::CurPageCe_AsText() const
 {
+    return CurPageCe_AsFile(".html");
+}
+
+String
+HtmlEnvironment_Idl::CurPageCe_AsFile(const char * i_sEnding) const
+{
     if (pCurPageCe == 0)
         return String::Null_();
 
@@ -199,7 +205,6 @@ HtmlEnvironment_Idl::CurPageCe_AsText() const
     if (aModule_.size() > 0)
         slCe().operator_join(aModule_.begin(), aModule_.end(), "/");
     if (NOT sCe.empty())
-        slCe() << "/" << sCe << ".html";
+        slCe() << "/" << sCe << i_sEnding;
     return String(slCe().c_str());
 }
-
