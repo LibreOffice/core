@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-09 20:38:56 $
+ *  last change: $Author: nf $ $Date: 2001-03-19 09:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ portuguese ] = "Consultas";
         Text[ russian ] = "Çàïğîñû";
         Text[ greek ] = "ÅñùôŞìáôá";
-        Text[ dutch ] = "Queries";
+        Text[ dutch ] = "Query's";
         Text[ french ] = "Requêtes";
         Text[ spanish ] = "Consultas";
         Text[ italian ] = "Ricerche";
@@ -358,7 +358,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ portuguese_brazilian ] = "Queries";
         Text[ japanese ] = "¸´Ø°";
         Text[ korean ] = "Queries";
-        Text[ chinese_simplified ] = "Queries";
+        Text[ chinese_simplified ] = "²éÑ¯";
         Text[ chinese_traditional ] = "¬d¸ß";
         Text[ turkish ] = "Queries";
         Text[ arabic ] = "ÇÓÊİÓÇÑÇÊ";
@@ -893,7 +893,7 @@ TabPage PAGE_ADO
         Text [ FINNISH ] = "~Käyttäjätunnus" ;
         Text [ FRENCH ] = "Nom d'~utilisateur" ;
         Text [ ITALIAN ] = "Nome ~utente" ;
-        Text [ DUTCH ] = "Naam ~gebruiker" ;
+        Text [ DUTCH ] = "~Gebruikersnaam" ;
         Text [ SWEDISH ] = "~Användarnamn" ;
         Text [ PORTUGUESE ] = "Nome do ~utilizador" ;
         Text [ portuguese_brazilian ] = "~Benutzername" ;
@@ -1098,22 +1098,22 @@ TabPage PAGE_JDBC
         Text [ ENGLISH ] = "~Character set:" ;
         Text [ NORWEGIAN ] = "~Character set:" ;
         Text [ DANISH ] = "Tegnsæt" ;
-        Text [ ENGLISH_US ] = "~Character set" ;
+        Text [ ENGLISH_US ] = "~Character set:" ;
         Text [ SPANISH ] = "J~uego de caracteres:" ;
         Text [ FINNISH ] = "~Merkistö:" ;
-        Text [ FRENCH ] = "~Jeu de caractères" ;
-        Text [ ITALIAN ] = "Ti~po di carattere" ;
-        Text [ DUTCH ] = "~Tekenset" ;
+        Text [ FRENCH ] = "~Jeu de caractères :" ;
+        Text [ ITALIAN ] = "Ti~po di carattere:" ;
+        Text [ DUTCH ] = "~Tekenset:" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "~Conjunto de caracteres" ;
         Text [ SWEDISH ] = "Te~ckenuppsättning" ;
         Text [ PORTUGUESE ] = "~Conjunto de caracteres" ;
-        Text[ chinese_simplified ] = "×ÖÌå(~C)" ;
-        Text[ russian ] = "Íàáîğ çíàêîâ" ;
+        Text[ chinese_simplified ] = "×ÖÌå(~C)£º" ;
+        Text[ russian ] = "Íàáîğ çíàêîâ:" ;
         Text[ polish ] = "Zbiór znaków:" ;
         Text[ japanese ] = "•¶š—ñ(~C)" ;
-        Text[ chinese_traditional ] = "¦r«¬(~C)" ;
+        Text[ chinese_traditional ] = "¦r«¬:" ;
         Text[ arabic ] = "ãÌãæÚÉ ÇáÃÍÑİ:" ;
-        Text[ greek ] = "Óåô ÷áñáêôŞñùí" ;
+        Text[ greek ] = "Óåô ÷áñáêôŞñùí:" ;
         Text[ korean ] = "¹®ÀÚÁıÇÕ(~C)" ;
         Text[ turkish ] = "Karakter kümesi" ;
         Text[ language_user1 ] = " :" ;
@@ -1297,11 +1297,11 @@ TabPage PAGE_TEXT
         Size = MAP_APPFONT ( 252 , 8 ) ;
         Text = "Zeilenformat";
         Text [ english ] = "Line format";
-        Text [ english_us ] = "Line format";
+        Text [ english_us ] = "Row format";
         Text[ portuguese ] = "Formato de linha";
         Text[ russian ] = "Ôîğìàò ñòğîêè";
         Text[ greek ] = "ÌïñöŞ ãñáììŞò";
-        Text[ dutch ] = "Line format";
+        Text[ dutch ] = "Regelformaat";
         Text[ french ] = "Format de ligne";
         Text[ spanish ] = "Formato de línea";
         Text[ italian ] = "Formato riga";
@@ -1311,7 +1311,7 @@ TabPage PAGE_TEXT
         Text[ portuguese_brazilian ] = "Line format";
         Text[ japanese ] = "s‚Ì‘®";
         Text[ korean ] = "Line format";
-        Text[ chinese_simplified ] = "Line format";
+        Text[ chinese_simplified ] = "ĞĞ¸ñÊ½";
         Text[ chinese_traditional ] = "¦C®æ¦¡";
         Text[ turkish ] = "Line format";
         Text[ arabic ] = "ÊäÓíŞ ÇáÎØ";
@@ -1518,7 +1518,7 @@ TabPage PAGE_TEXT
         Text[ portuguese ] = "Formato de ficheiro";
         Text[ russian ] = "Ôîğìàò ôàéëà";
         Text[ greek ] = "ÌïñöŞ áñ÷åßïõ";
-        Text[ dutch ] = "File format";
+        Text[ dutch ] = "Bestandsformaat";
         Text[ french ] = "Format de fichier";
         Text[ spanish ] = "Formato de archivo";
         Text[ italian ] = "Formato file";
@@ -1528,7 +1528,7 @@ TabPage PAGE_TEXT
         Text[ portuguese_brazilian ] = "File format";
         Text[ japanese ] = "Ì§²Ù‚Ì‘®";
         Text[ korean ] = "File format";
-        Text[ chinese_simplified ] = "File format";
+        Text[ chinese_simplified ] = "ÎÄ¼ş¸ñÊ½";
         Text[ chinese_traditional ] = "ÀÉ®×®æ¦¡";
         Text[ turkish ] = "File format";
         Text[ arabic ] = "ÊäÓíŞ Çáãáİ";
@@ -1769,22 +1769,22 @@ TabPage PAGE_TABLESUBSCRIPTION
         HelpId = HID_DSADMIN_SUPPRESS_VERSIONCL;
         Text = "Versionsspalten anzeigen (wenn verfuegbar)";
         Text [ english ] = "Display version columns (if appliable)";
-        Text [ english_us ] = "Suppress version columns";
-        Text[ portuguese ] = "Suprimir colunas de versão";
-        Text[ russian ] = "Ïîäàâëÿòü êîëîíêè âåğñèè";
-        Text[ greek ] = "Áğüêñõøç óôçëşí İêäïóçò";
-        Text[ dutch ] = "Versiekolommen onderdrukken";
-        Text[ french ] = "Interdire les colonnes de version";
+        Text [ english_us ] = "Display version columns (when available)";
+        Text[ portuguese ] = "Mostrar colunas de versão (se disponíveis)";
+        Text[ russian ] = "Ïîêàçàòü êîëîíêè âåğñèè (åñëè òàêîâûå èìåşòÿ)";
+        Text[ greek ] = "ĞñïâïëŞ óôçëşí İêäïóçò (áí åßíáé äéáèİóéìåò)";
+        Text[ dutch ] = "Versiekolommen weergeven (indien beschikbaar)";
+        Text[ french ] = "Afficher les colonnes de version (si disponibles)";
         Text[ spanish ] = "Suprimir columnas de versión (si están disponibles)";
-        Text[ italian ] = "Sopprimi colonne di versione";
+        Text[ italian ] = "Mostra colonne di versione (se disponibili)";
         Text[ danish ] = "Suppress version columns";
-        Text[ swedish ] = "Undertryck versionskolumner";
+        Text[ swedish ] = "Visa versionskolumner (om tillgängliga)";
         Text[ polish ] = "Poka¿ wersje kolumn (jeœli s¹ dostêpne)";
         Text[ portuguese_brazilian ] = "Suppress version columns";
-        Text[ japanese ] = "ÊŞ°¼Ş®İ—“‚ğ‰B‚·";
+        Text[ japanese ] = "ÊŞ°¼Ş®İ—“‚Ì•\\¦(‚ ‚éê‡)";
         Text[ korean ] = "¹öÀü ¿­ ¾ïÁ¦";
-        Text[ chinese_simplified ] = "ÒşÈë°æ±¾À¸Î»";
-        Text[ chinese_traditional ] = "Áô¤Jª©¥»Äæ¦ì";
+        Text[ chinese_simplified ] = "ÏÔÊ¾ÒşÈë°æ±¾À¸Î»(Èç¹û´æÔÚ)";
+        Text[ chinese_traditional ] = "Áô¤Jª©¥»Äæ¦ì(¦pªG¦s¦b)";
         Text[ turkish ] = "Suppress version columns";
         Text[ arabic ] = "ÅÙåÇÑ ÃÚãÏÉ ÇáÅÕÏÇÑ (İí ÍÇáÉ ÊæİÑåÇ)";
     };
@@ -1809,7 +1809,7 @@ TabPage PAGE_QUERYADMINISTRATION
         Text[ portuguese ] = "Consultas";
         Text[ russian ] = "Çàïğîñû";
         Text[ greek ] = "ÅñùôŞìáôá";
-        Text[ dutch ] = "Queries";
+        Text[ dutch ] = "Query's";
         Text[ french ] = "Requêtes";
         Text[ spanish ] = "Consultas";
         Text[ italian ] = "Queries";
@@ -1819,7 +1819,7 @@ TabPage PAGE_QUERYADMINISTRATION
         Text[ portuguese_brazilian ] = "Queries";
         Text[ japanese ] = "¸´Ø°";
         Text[ korean ] = "Queries";
-        Text[ chinese_simplified ] = "Queries";
+        Text[ chinese_simplified ] = "²éÑ¯";
         Text[ chinese_traditional ] = "¬d¸ß";
         Text[ turkish ] = "Queries";
         Text[ arabic ] = "ÇÓÊİÓÇÑÇÊ";
@@ -1846,7 +1846,7 @@ TabPage PAGE_QUERYADMINISTRATION
         Text[ portuguese ] = "~Novo";
         Text[ russian ] = "Ñîçä~àòü";
         Text[ greek ] = "Äçìéïõñãßá";
-        Text[ dutch ] = "~New";
+        Text[ dutch ] = "~Nieuw";
         Text[ french ] = "~Nouveau";
         Text[ spanish ] = "~Nuevo";
         Text[ italian ] = "~Nuovo";
@@ -1856,7 +1856,7 @@ TabPage PAGE_QUERYADMINISTRATION
         Text[ portuguese_brazilian ] = "~New";
         Text[ japanese ] = "V‹Kì¬(~N)";
         Text[ korean ] = "~New";
-        Text[ chinese_simplified ] = "~New";
+        Text[ chinese_simplified ] = "ĞÂ½¨²éÑ¯(~N)";
         Text[ chinese_traditional ] = "·s¬d¸ß";
         Text[ turkish ] = "~New";
         Text[ arabic ] = "ÌÏíÏ";
@@ -1874,7 +1874,7 @@ TabPage PAGE_QUERYADMINISTRATION
         Text[ portuguese ] = "~Editar";
         Text[ russian ] = "~Ïğàâêà";
         Text[ greek ] = "Åğåîåñãáóßá";
-        Text[ dutch ] = "~Edit";
+        Text[ dutch ] = "~Bewerken";
         Text[ french ] = "~Éditer";
         Text[ spanish ] = "~Editar";
         Text[ italian ] = "Modi~fica";
@@ -1884,7 +1884,7 @@ TabPage PAGE_QUERYADMINISTRATION
         Text[ portuguese_brazilian ] = "~Edit";
         Text[ japanese ] = "•ÒW(~E)";
         Text[ korean ] = "~Edit";
-        Text[ chinese_simplified ] = "~Edit";
+        Text[ chinese_simplified ] = "±à¼­(~E)";
         Text[ chinese_traditional ] = "½s¿è";
         Text[ turkish ] = "~Edit";
         Text[ arabic ] = "ÊÍÑíÑ";
@@ -1912,7 +1912,7 @@ TabPage PAGE_QUERYADMINISTRATION
         Text[ portuguese_brazilian ] = "~Delete";
         Text[ japanese ] = "íœ(~D)";
         Text[ korean ] = "~Delete";
-        Text[ chinese_simplified ] = "~Delete";
+        Text[ chinese_simplified ] = "É¾³ı(~D)";
         Text[ chinese_traditional ] = "§R°£";
         Text[ turkish ] = "~Delete";
         Text[ arabic ] = "ÍĞİ";
@@ -2130,7 +2130,7 @@ WarningBox WARN_SAVEFORQUERIES
     Message[ portuguese ] = "É necessário guardar a fonte de dados para poder administrar as respectivas consultas.\nGuardar as modificações efectuadas nesta caixa de diálogo?";
     Message[ russian ] = "Äëÿ óïğàâëåíèÿ çàïğîñàìè èñòî÷íèêà äàííûõ, íåîáõîäèìî ıòîò èñòî÷íèê äàííûõ ñîõğàíèòü.\nÑîõğàíèòü âñå èçìåíåíèÿ, âûïîëíåííûå â ıòîì äèàëîãå?";
     Message[ greek ] = "Ãéá íá åßíáé äõíáôŞ ç äéá÷åßñéóç ôùí åñùôçìÜôùí ìéáò ğñïİëåõóçò èá ğñİğåé ğñşôá íá áğïèçêåõôåß.\nÈİëåôå íá áğïèçêåõôïıí üëåò ïé áëëáãİò ğïõ İãéíáí óå áõôüí ôïí äéÜëïãï;";
-    Message[ dutch ] = "To administrate the queries of a data source, it must be saved.\nShould all changes made in this dialog now be saved?";
+    Message[ dutch ] = "Om de query's van een gegevensbron te beheren moet deze zijn opgeslagen.\nWilt u de wijzigingen die u in deze dialoog heeft aangebracht nu opslaan?";
     Message[ french ] = "Vous devez enregistrer la source de données afin de pouvoir en gérer les requêtes.\nEnregistrer toutes les modifications effectuées dans cette boîte de dialogue ?";
     Message[ spanish ] = "Para poder administrar las consultas de una fuente de datos, debe guardarse esta.\n¿Desea guardar todas las modificaciones realizadas hasta ahora en este diálogo?";
     Message[ italian ] = "Per gestire la ricerca di una sorgente di dati è necessario prima salvarla.\nVolete salvare le modifiche raccolte fino adesso nel dialogo?";
@@ -2140,7 +2140,7 @@ WarningBox WARN_SAVEFORQUERIES
     Message[ portuguese_brazilian ] = "To administrate the queries of a data source, it must be saved.\nShould all changes made in this dialog now be saved?";
     Message[ japanese ] = "ÃŞ°À¿°½‚Ì¸´Ø°‚ğŠÇ—‚·‚é‚½‚ß‚ÉA‚±‚ê‚ğ•Û‘¶‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B\n‚±‚ÌÀŞ²±Û¸Ş‚Ås‚Á‚½‚·‚×‚Ä‚Ì•ÏX‚ğ‚¢‚Ü‚·‚®•Û‘¶‚µ‚Ü‚·‚©B";
     Message[ korean ] = "To administrate the queries of a data source, it must be saved.\nShould all changes made in this dialog now be saved?";
-    Message[ chinese_simplified ] = "To administrate the queries of a data source, it must be saved.\nShould all changes made in this dialog now be saved?";
+    Message[ chinese_simplified ] = "ÔÚ¹ÜÀí×ÊÁÏÔ´µÄ²éÑ¯Ö®Ç°±ØĞëÏÈ´æÅÌËü¡£\nÏÖÔÚÒª´æÅÌÕâ¸ö¶Ô»°¿òÖ®ÖĞ¸ü¸ÄµÄÄÚÈİ£¿";
     Message[ chinese_traditional ] = "¦bºŞ²z¸ê®Æ·½ªº¬d¸ß¤§«e¥²¶·¥ıÀx¦s¥¦¡C\n²{¦b­nÀx¦s³o­Ó¹ï¸Ü¤è¶ôªºÅÜ§ó¤º®e¡H";
     Message[ turkish ] = "To administrate the queries of a data source, it must be saved.\nShould all changes made in this dialog now be saved?";
     Message[ arabic ] = "áÅÏÇÑÉ ÇÓÊİÓÇÑÇÊ ãÕÏÑ ÈíÇäÇÊ¡ íÌÈ ÍİÙ åĞÇ ÇáãÕÏÑ.\nåá ÊÑíÏ ÍİÙ ßÇİÉ ÇáÊÛííÑÇÊ ÇáÊí ÊãÊ ÍÊì ÇáÂä İí ãÑÈÚ ÇáÍæÇÑ åĞÇ¿";
@@ -2157,7 +2157,7 @@ ErrorBox ERR_CANTADMINQUERIES
     Message[ portuguese ] = "É necessário guardar a fonte de dados para a poder administrar.\nOs parâmetros actuais não permitem guardar as modificações (há conflito de nomes).\n\nNão é possível administrar as consultas enquanto estes conflitos não forem resolvidos e as modificações guardadas.";
     Message[ russian ] = "Äëÿ óïğàâëåíèÿ çàïğîñàìè èñòî÷íèêà äàííûõ íåîáõîäèìî ıòîò èñòî÷íèê äàííûõ ñîõğàíèòü.\nÎäíàêî òåêóùèå íàñòğîéêè íå ïîçâîëÿşò ñîõğàíèòü èçìåíåíèÿ (èç-çà êîíôëèêòà èìåí).\n\nÄî òåõ ïîğ, ïîêà ıòîò êîíôëèêò íå óñòğàíåí, à èçìåíåíèÿ íå ñîõğàíåíû, óïğàâëåíèå çàïğîñàìè íåâîçìîæíî.";
     Message[ greek ] = "Ãéá íá åßíáé äõíáôŞ ç äéá÷åßñéóç ôùí åñùôçìÜôùí ìéáò ğñïİëåõóçò äåäïìİíùí, áõôŞ èá ğñİğåé ğñşôá íá áğïèçêåõôåß.\nÏé ôñİ÷ïõóåò åéóáãùãİò äåí åğéôñİğïõí üìùò ôçí áğïèŞêåõóç ôùí áëëáãşí åğåéäŞ õğÜñ÷ïõí äéåíİîåéò ïíïìÜôùí.\n\nÇ äéá÷åßñéóç ôùí åñùôçìÜôùí äåí åßíáé äõíáôŞ üóï óõíå÷ßæïõí íá õğÜñ÷ïõí áõôİò ïé äéåíİîåéò êáé äåí ìğïñïıí íá áğïèçêåõôïıí ïé áëëáãİò.";
-    Message[ dutch ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
+    Message[ dutch ] = "Om de query's van een gegevensbron te beheren moet deze opgeslagen zijn.\nMaar met de actuele instellingen is het opslaan van wijzigingen niet mogelijk (moeilijkheden met naamgeving).\n\nU kunt de query's niet beheren zolang deze moeilijkheden niet zijn opgelost en de wijzigingen niet werden opgeslagen.";
     Message[ french ] = "Vous devez enregistrer la source de données afin de pouvoir en gérer les requêtes.\nLes paramètres actifs ne permettent cependant pas d'enregistrer les modifications car il y a des conflits de noms.\n\nTant que ces conflits persisteront et que les modifications n'auront pas été enregistrées, la gestion des requêtes sera impossible.";
     Message[ spanish ] = "Para administrar consultas de una fuente de datos, esta debe guardarse.\nLas entradas actuales, sin embargo, no permiten guardar las modificaciones (existen conflictos con los nombres).\n\nNo podrá administrar las consultas mientras no solucione estos conflictos y mientras no guarde las modificaciones.";
     Message[ italian ] = "Per gestire la ricerca di un database è necessario prima salvarla.\nLe indicazioni attuali non permettono di salvare la ricerca in quanto genera un conflitto di nomi.\n\nFintanto non avete risolto il conflitto fra i nomi e salvato le modifiche sarà impossibile gestire la ricerca.";
@@ -2167,7 +2167,7 @@ ErrorBox ERR_CANTADMINQUERIES
     Message[ portuguese_brazilian ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
     Message[ japanese ] = "ÃŞ°À¿°½‚Ì¸´Ø°‚ğŠÇ—‚·‚é‚½‚ß‚ÉA‚±‚ê‚ğ•Û‘¶‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B\n‚Æ‚±‚ë‚ªA–¼‘O‚Ì‹¤—Lˆá”½‚ª‹N‚±‚Á‚½‚½‚ßAŒ»İ‚Ì“ü—Í‚Å‚Í•ÏX‚Ì•Û‘¶‚Í‚Å‚«‚Ü‚¹‚ñB\n\n‚±‚Ì‹¤—Lˆá”½‚ªíœ‚³‚ê‚Ä•ÏX‚ª•Û‘¶‚³‚ê‚È‚¢‚¤‚¿‚ÍA¸´Ø°‚ÌŠÇ—‚Í‚Å‚«‚Ü‚¹‚ñB";
     Message[ korean ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
-    Message[ chinese_simplified ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
+    Message[ chinese_simplified ] = "Òª¹ÜÀíÒ»¸ö×ÊÁÏÔ´µÄ²éÑ¯£¬±ØĞëÏÈ´¢´æËü¡£\nµ«ÊÇÏÖÔÚÄú²»¿ÉÒÔ´æÅÌ¸ü¸ÄµÄÄÚÈİ£¬ÒòÎª´æÔÚÒ»¸öÃû³Æ³åÍ»µÄ´íÎó¡£\n\nÔÚÅÅ³ı´íÎóÖ®Ç°ÄúÎŞ·¨´æÅÌ¸ü¸ÄÄÚÈİ¡£";
     Message[ chinese_traditional ] = "­nºŞ²z¤@­Ó¸ê®Æ·½ªº¬d¸ß¡A¥²¶·¥ıÀx¦s¥¦¡C\n¦ı¬O²{¦b±z¤£¥i¥HÀx¦sÅÜ§ó¤º®e¡A¦]¬°¦s¦b¦WºÙ¨R¬ğ¿ù»~¡C\n\n¦b±Æ°£¿ù»~¤§«e±zµLªk¦sÀxÅÜ§ó¡C";
     Message[ turkish ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
     Message[ arabic ] = "áÅÏÇÑÉ ÇÓÊİÓÇÑÇÊ ãÕÏÑ ÈíÇäÇÊ¡ íÌÈ Ãä ÊŞæã ÃæáÇğ ÈÍİÙ åĞÇ ÇáãÕÏÑ¡\nÅáÇ Ãä ÇáÅÚÏÇÏÇÊ ÇáÍÇáíÉ áÇ ÊÓãÍ ÈÍİÙ ÇáÊÛííÑÇÊ (ÈÓÈÈ æÌæÏ ÊÚÇÑÖ İí ÇáÃÓãÇÁ).\n\náÇ íãßäß ÅÏÇÑÉ ÇáÇÓÊİÓÇÑÇÊ¡ ÅáÇ ÈÚÏ ÅÒÇáÉ åĞå ÇáÊÚÇÑÖÇÊ æÍİÙ ÇáÊÛííÑÇÊ.";
@@ -2176,6 +2176,9 @@ ErrorBox ERR_CANTADMINQUERIES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30  2001/03/09 20:38:56  avy
+ *  Merge SRC624: 03/09/01 - 21:38:33 (NoBranch)
+ *
  *  Revision 1.29  2001/03/06 12:50:11  fs
  *  minor layout changes
  *
