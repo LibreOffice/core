@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2001-05-07 14:00:43 $
+#   last change: $Author: jbu $ $Date: 2001-06-22 16:39:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ SLOFILES= \
         $(SLO)$/bridge_connection.obj\
         $(SLO)$/bridge_provider.obj 
 SHL1TARGET= $(TARGET)
+SHL1VERSIONMAP=	$(TARGET).map
 
 SHL1STDLIBS= \
         $(SALLIB)	\
@@ -97,7 +98,6 @@ SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=		$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
 .INCLUDE :	target.mk

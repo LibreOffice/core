@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remote_bridge.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-02 14:13:35 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@
 
 namespace remotebridges_bridge
 {
+    extern rtl_StandardModuleCount g_moduleCount;
+
     struct MyMutex
     {
         ::osl::Mutex m_mutex;

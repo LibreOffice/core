@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridgeimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-11 10:57:01 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,8 @@ namespace remotebridges_factory {
         OComponentHelper( m_mutex ),
         m_pContext( pContext )
     {
+        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+
         remote_DisposingListener::acquire = thisAcquire;
         remote_DisposingListener::release = thisRelease;
         remote_DisposingListener::disposing = thisDisposing;
@@ -89,6 +91,7 @@ namespace remotebridges_factory {
         {
             m_pContext->aBase.release( (uno_Context * ) m_pContext );
         }
+        g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
 
     ::com::sun::star::uno::Any OBridge::queryInterface( const ::com::sun::star::uno::Type & aType )
@@ -134,7 +137,6 @@ namespace remotebridges_factory {
             m_pContext->aBase.release( (uno_Context*)m_pContext );
             m_pContext = 0;
         }
-
     }
 
 
@@ -300,9 +302,4 @@ namespace remotebridges_factory {
         OBridge *m  = (OBridge * ) p;
         m->dispose();
     }
-
-
 }
-
-
-

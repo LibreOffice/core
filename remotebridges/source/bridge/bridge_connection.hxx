@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridge_connection.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-28 08:47:30 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@ namespace remotebridges_bridge
     public:
         OConnectionWrapper( const ::com::sun::star::uno::Reference <
                             ::com::sun::star::connection::XConnection > & );
+        ~OConnectionWrapper();
 
         static void      SAL_CALL thisAcquire( remote_Connection *);
         static void      SAL_CALL thisRelease( remote_Connection *);

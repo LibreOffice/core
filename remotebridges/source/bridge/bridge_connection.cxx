@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridge_connection.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-28 08:47:30 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 #include "bridge_connection.hxx"
+#include "remote_bridge.hxx"
 #include <rtl/byteseq.hxx>
 #include <string.h>
 
@@ -71,6 +72,7 @@ namespace remotebridges_bridge
         m_r( r ),
         m_nRef( 0 )
     {
+        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         acquire = thisAcquire;
         release = thisRelease;
         read = thisRead;
@@ -79,6 +81,10 @@ namespace remotebridges_bridge
         close = thisClose;
     }
 
+    OConnectionWrapper::~OConnectionWrapper()
+    {
+        g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+}
 
     void OConnectionWrapper::thisAcquire( remote_Connection *p)
     {

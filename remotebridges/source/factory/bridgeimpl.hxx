@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridgeimpl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:56 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include <com/sun/star/bridge/XInstanceProvider.hpp>
 
 namespace remotebridges_factory {
+    extern rtl_StandardModuleCount g_moduleCount;
 
     struct MyMutex
     {

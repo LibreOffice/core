@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridgefactory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-11 10:56:49 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 #include <bridges/remote/context.h>
 
-#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
@@ -99,6 +99,8 @@ using namespace ::com::sun::star::container;
 
 namespace remotebridges_factory
 {
+    rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+
     struct hashOUString
     {
         size_t operator()(const OUString & s) const
@@ -137,7 +139,8 @@ namespace remotebridges_factory
         public XServiceInfo
     {
     public:
-        OBridgeFactory( const Reference < XMultiServiceFactory > &rSMgr );
+        OBridgeFactory( const Reference < XComponentContext > &rCtx );
+        ~OBridgeFactory();
 
     public: // XInterface
         ::com::sun::star::uno::Any      SAL_CALL
@@ -169,29 +172,40 @@ namespace remotebridges_factory
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
                      getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    private: //XServiceInfo
+    public: //XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
+
+    public:
+        static OUString getImplementationNameStatic(  ) SAL_THROW( () );
+        static Sequence< OUString >  getSupportedServiceNamesStatic() SAL_THROW( () );
 
     private:
         void init();
         OUString getServiceNameForProtocol( const OUString &sProtocol );
 
     private:
-        Reference < XMultiServiceFactory > m_rSMgr;
+        Reference < XMultiComponentFactory > m_rSMgr;
+        Reference < XComponentContext > m_rCtx;
         BridgeHashMap m_mapBridge;
         ServiceHashMap m_mapProtocolToService;
         sal_Bool m_bInitialized;
         ::osl::Mutex m_mutexInit;
     };
 
-    OBridgeFactory::OBridgeFactory( const Reference < XMultiServiceFactory > &rSMgr ) :
-        OComponentHelper( m_mutex ),
-        m_rSMgr( rSMgr ),
-        m_bInitialized( sal_False )
+    OBridgeFactory::OBridgeFactory( const Reference < XComponentContext > &rCtx )
+        : OComponentHelper( m_mutex )
+        , m_rCtx( rCtx )
+        , m_rSMgr( rCtx->getServiceManager() )
+        , m_bInitialized( sal_False )
     {
+        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+    }
 
+    OBridgeFactory::~OBridgeFactory()
+    {
+        g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
 
     void OBridgeFactory::init()
@@ -202,7 +216,8 @@ namespace remotebridges_factory
             Reference< XContentEnumerationAccess > rContent( m_rSMgr , UNO_QUERY );
             if( rContent.is() )
             {
-                OUString sMetaService = OUString::createFromAscii( "com.sun.star.bridge.Bridge" );
+                OUString sMetaService = OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.bridge.Bridge" ) );
                 Reference < XEnumeration > rEnum =
                     rContent->createContentEnumeration( sMetaService );
                 while( rEnum->hasMoreElements() )
@@ -289,7 +304,8 @@ namespace remotebridges_factory
     {
         OUString sService = getServiceNameForProtocol( sProtocol );
 
-        Reference < XInterface > rXInterface = m_rSMgr->createInstance ( sService );
+        Reference < XInterface > rXInterface =
+            m_rSMgr->createInstanceWithContext(sService, m_rCtx );
         Reference < XInitialization > rInit(rXInterface, UNO_QUERY );
         Reference < XBridge > rBridge( rInit , UNO_QUERY );
 
@@ -412,7 +428,22 @@ namespace remotebridges_factory
         return (*pId).getImplementationId();
     }
 
-    Sequence< OUString > getSupportedServiceNames()
+    OUString OBridgeFactory::getImplementationNameStatic()
+    {
+        static OUString *pName = 0;
+        if( ! pName )
+        {
+            MutexGuard guard( Mutex::getGlobalMutex() );
+            if( ! pName )
+            {
+                static OUString name( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
+                pName = &name;
+            }
+        }
+        return *pName;
+    }
+
+    Sequence< OUString > OBridgeFactory::getSupportedServiceNamesStatic()
     {
         static Sequence < OUString > *pNames = 0;
         if( ! pNames )
@@ -430,12 +461,12 @@ namespace remotebridges_factory
 
     OUString OBridgeFactory::getImplementationName(  ) throw(RuntimeException)
     {
-        return OUString::createFromAscii( IMPLEMENTATION_NAME );
+        return getImplementationNameStatic();
     }
 
     sal_Bool SAL_CALL OBridgeFactory::supportsService( const OUString& ServiceName ) throw(RuntimeException)
     {
-        Sequence< OUString > seq = remotebridges_factory::getSupportedServiceNames();
+        Sequence< OUString > seq = getSupportedServiceNamesStatic();
         sal_Bool bReturn = sal_False;
         for( sal_Int32 i = 0 ; i < seq.getLength() ; i ++ )
         {
@@ -450,20 +481,33 @@ namespace remotebridges_factory
 
     Sequence< OUString > SAL_CALL OBridgeFactory::getSupportedServiceNames(  ) throw(RuntimeException)
     {
-        return remotebridges_factory::getSupportedServiceNames();
+        return getSupportedServiceNamesStatic();
     }
 
-    Reference< XInterface > SAL_CALL CreateInstance( const Reference< XMultiServiceFactory > &r)
+
+    Reference< XInterface > SAL_CALL CreateInstance(Reference< XComponentContext > const & xContext)
     {
-        return Reference < XInterface > (( OWeakObject * ) new OBridgeFactory( r ) );
+        return Reference < XInterface > ( *new OBridgeFactory( xContext ) );
     }
-
 }
 
 using namespace remotebridges_factory;
+static ImplementationEntry g_entries[] =
+{
+    {   CreateInstance, OBridgeFactory::getImplementationNameStatic,
+        OBridgeFactory::getSupportedServiceNamesStatic, createSingleComponentFactory ,
+        &g_moduleCount.modCnt , 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 extern "C"
 {
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
+
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
@@ -474,48 +518,13 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString::createFromAscii("/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
-
-            const Sequence< OUString > & rSNL = getSupportedServiceNames();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
+    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = 0;
-
-    if (pServiceManager && rtl_str_compare( pImplName, IMPLEMENTATION_NAME ) == 0)
-    {
-        Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString::createFromAscii( pImplName ), CreateInstance, getSupportedServiceNames() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }
 

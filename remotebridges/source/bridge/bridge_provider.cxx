@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridge_provider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-03 06:32:08 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 16:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ namespace remotebridges_bridge
         m_pBridgeCallback( pBridgeCallback ),
         m_nRef( 0 )
     {
+        g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         acquire = thisAcquire;
         release = thisRelease;
         getInstance = thisGetInstance;
@@ -91,6 +92,7 @@ namespace remotebridges_bridge
 
     OInstanceProviderWrapper::~OInstanceProviderWrapper()
     {
+        g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
     }
 
     void OInstanceProviderWrapper::thisAcquire( remote_InstanceProvider *p )
