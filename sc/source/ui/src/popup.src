@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:19:29 $
+ *  last change: $Author: obo $ $Date: 2001-06-29 02:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,7 +668,7 @@ String RID_POPUP_PIVOT
     Text [ italian ] = "Menu a scelta rapida DataPilot" ;
     Text [ portuguese_brazilian ] = "Data Pilot Popup Menu" ;
     Text [ portuguese ] = "Menu instantâneo para o piloto de dados" ;
-    Text [ french ] = "Menu Pop-up pour le DataPilote" ;
+    Text [ french ] = "Menu Pop-up pour le pilote de données" ;
     Text [ dutch ] = "PopUp-menu voor DataPiloot" ;
     Text [ spanish ] = "Menú emergente del piloto de datos" ;
     Text [ danish ] = "Popup-menu for datapiloten" ;
@@ -1789,6 +1789,7 @@ Menu RID_POPUP_PAGEBREAK
         };
     };
 };
+
 
 
 
