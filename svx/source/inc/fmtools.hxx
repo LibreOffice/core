@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:17 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,10 +249,6 @@
 #include <cppuhelper/component.hxx>
 #endif
 
-#ifndef _FM_IMPLEMENTATION_IDS_HXX_
-#include "fmimplids.hxx"
-#endif
-
 #ifndef _FM_STATIC_HXX_
 #include "fmstatic.hxx"
 #endif
@@ -422,59 +418,6 @@ public:
 
 //  ==================================================================
 
-//==============================================================================
-// FmSlotDispatch - some kind of translator between the Sfx-Slots and the UNO-dispatchers
-//==============================================================================
-
-typedef ::cppu::WeakImplHelper1< ::com::sun::star::frame::XDispatch >   FmSlotDispatch_x;
-class FmSlotDispatch
-            :public SfxControllerItem
-            ,public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XDispatch, ::com::sun::star::lang::XComponent>
-            //  ,public XComponent
-{
-protected:
-    ::cppu::OInterfaceContainerHelper   m_aDisposeListeners;
-    ::cppu::OInterfaceContainerHelper   m_aStatusListeners;
-
-    Link    m_aExecutor;
-    ::com::sun::star::util::URL     m_aUrl;             // the URL we're responsible for
-    ::osl::Mutex                    m_aAccessSafety;
-    sal_Int16   m_nSlot;            // the slot 'translation' of the URL
-
-public:
-    const ::com::sun::star::util::URL&  getUrl() const { return m_aUrl; }
-    sal_Int16       getSlot() const { return m_nSlot; }
-
-    void setExecutor(const Link& aExecutor) { m_aExecutor = aExecutor; }
-    Link getExecutor() const { return m_aExecutor; }
-
-public:
-    FmSlotDispatch(const ::com::sun::star::util::URL& rUrl, sal_Int16 nSlotId, SfxBindings& rBindings);
-    virtual ~FmSlotDispatch();
-
-    // force broadcasting the current status
-    void    BroadcastCurrentState( );
-
-    // ::com::sun::star::frame::XDispatch
-    virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw(::com::sun::star::uno::RuntimeException);
-
-    // XComponent
-    virtual void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
-
-protected:
-    // SfxControllerItem
-    virtual void StateChanged(USHORT _nSID, SfxItemState _eState, const SfxPoolItem* _pState);
-
-    ::com::sun::star::frame::FeatureStateEvent BuildEvent(SfxItemState eState, const SfxPoolItem* pState);
-
-    virtual void NotifyState(SfxItemState eState, const SfxPoolItem* pState, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener>& rListener = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener>());
-        // the default implementations notifies the given listeners (or all available listeners) with a statusChanged
-};
-
 //========================================================================
 //= dispatch interception helper classes
 //========================================================================
@@ -504,7 +447,6 @@ typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::frame::XDispatchPr
 class FmXDispatchInterceptorImpl : public FmXDispatchInterceptorImpl_BASE
 {
     ::osl::Mutex                    m_aFallback;
-    ::form::OImplementationIdsRef   m_aHoldImplIdHelper;
 
     // the component which's dispatches we're intercepting
     ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProviderInterception>
