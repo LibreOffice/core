@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3ddeflt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-09 11:24:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 16:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,12 +408,14 @@ void Base3DDefault::SetTransformationSet(B3dTransformationSet* pSet)
 
         // Testen, ob die Bitmap zu gross wird
         aLocalSizePixel = aSizePixel;
-        long nQuadSize = aLocalSizePixel.GetWidth() * aLocalSizePixel.GetHeight();
 
-        if(nQuadSize > GetMaxPixels())
+        double fQuadSize = aLocalSizePixel.GetWidth();  // sj: #i40320# solved overrun
+        fQuadSize *= aLocalSizePixel.GetHeight();
+
+        if( fQuadSize > GetMaxPixels() )
         {
             // Groesse reduzieren
-            double fFactor = sqrt((double)GetMaxPixels() / (double)nQuadSize);
+            double fFactor = sqrt((double)GetMaxPixels() / fQuadSize);
 
             // Bei Druckjobs die Reduzierung einschraenken
             if(fFactor < 0.25 && GetOutputDevice()->GetOutDevType() == OUTDEV_PRINTER)
