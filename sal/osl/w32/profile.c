@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2001-08-13 10:52:22 $
+ *  last change: $Author: jl $ $Date: 2001-08-20 14:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2016,7 +2016,7 @@ static sal_Bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
     sal_uInt32    i;
     sal_Char*       pStr;
     sal_Char*       pChar;
-    sal_Char        Line[1024];
+    sal_Char        Line[4096];
 
     pProfile->m_NoLines    = 0;
     pProfile->m_NoSections = 0;
@@ -2392,7 +2392,7 @@ static sal_Bool releaseProfile(osl_TProfileImpl* pProfile)
 static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile, sal_Unicode *strProfile)
 {
     sal_Char *pChr, *pStr;
-    sal_Char Buffer[1024] = "";
+    sal_Char Buffer[4096] = "";
     sal_Char Product[132] = "";
 
     WCHAR wcsPath[MAX_PATH] = L"";
