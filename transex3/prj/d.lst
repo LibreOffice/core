@@ -1,7 +1,5 @@
 mkdir: %_DEST%\inc%_EXT%\transex3
 
-..\%__SRC%\bin\xmlex.exe %_DEST%\bin%_EXT%\xmlex.exe
-..\%__SRC%\bin\xmlex %_DEST%\bin%_EXT%\xmlex
 ..\%__SRC%\bin\cfgex.exe %_DEST%\bin%_EXT%\cfgex.exe
 ..\%__SRC%\bin\cfgex %_DEST%\bin%_EXT%\cfgex
 ..\%__SRC%\bin\transex3.exe %_DEST%\bin%_EXT%\transex3.exe
@@ -18,6 +16,7 @@ mkdir: %_DEST%\inc%_EXT%\transex3
 ..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
 
 ..\inc\export.hxx %_DEST%\inc%_EXT%\transex3\export.hxx
+..\inc\utf8conv.hxx %_DEST%\inc%_EXT%\transex3\utf8conv.hxx
 ..\%__SRC%\lib\transex.lib %_DEST%\lib%_EXT%\transex.lib
 ..\%__SRC%\lib\libtransex.a %_DEST%\lib%_EXT%\libtransex.a
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: nf $ $Date: 2002-05-07 08:11:23 $
+#   last change: $Author: nf $ $Date: 2002-05-07 09:00:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -170,6 +170,3 @@ $(MISC)$/xml_yy.c : xmllex.l
 
 $(MISC)$/cfg_yy.c : cfglex.l
     +flex -l -8 -o$(MISC)$/cfg_yy.c cfglex.l
-
-$(MISC)$/xrm_yy.c : xrmlex.l
-    +flex -l -8 -o$(MISC)$/xrm_yy.c xrmlex.l

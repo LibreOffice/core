@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokens.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-23 11:45:29 $
+ *  last change: $Author: nf $ $Date: 2002-05-07 09:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,22 +103,6 @@
 #define TEXTREFID           522         /* Text = 12345                     */
 #define LISTRESID           523         /* < 12345; ... >                   */
 #define _LISTRESID          523         /* { 12345; ... }                   */
-
-
-/*------------------------------------------------------                    */
-/*------------------------------------------------------                    */
-/* Tokens for parsing xml files                                             */
-/*------------------------------------------------------                    */
-/*------------------------------------------------------                    */
-#define XML_RESSOURCEBUNDLE_START   501
-#define XML_RESSOURCEBUNDLE_END     502
-#define XML_CONTEXT_START           511
-#define XML_CONTEXT_END             512
-#define XML_KEY_START               521
-#define XML_KEY_END                 522
-#define XML_TEXT_START              531
-#define XML_TEXT_END                532
-#define XML_TEXTCHAR                600
 
 /*------------------------------------------------------                    */
 /*------------------------------------------------------                    */
