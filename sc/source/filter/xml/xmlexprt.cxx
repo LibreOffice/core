@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-28 17:03:28 $
+ *  last change: $Author: sab $ $Date: 2000-10-05 08:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2181,6 +2181,7 @@ void ScXMLExport::_ExportContent()
                                 AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_use_cell_protection, sXML_true);
                         SvXMLElementExport aElemT(*this, XML_NAMESPACE_TABLE, sXML_table, sal_True, sal_True);
                         CheckAttrList();
+                        WriteScenario();
                         table::CellRangeAddress aRange = GetEndAddress(xTable, nTable);
                         SetLastColumn(nTable, aRange.EndColumn);
                         SetLastRow(nTable, aRange.EndRow);
@@ -3224,6 +3225,10 @@ void ScXMLExport::GetStringOfFunction(const sal_Int32 nFunction, rtl::OUString& 
         case sheet::GeneralFunction_VAR : rString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("var")); break;
         case sheet::GeneralFunction_VARP : rString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("varp")); break;
     }
+}
+
+void ScXMLExport::WriteScenario()
+{
 }
 
 void ScXMLExport::WriteNamedExpressions(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-28 17:03:28 $
+ *  last change: $Author: sab $ $Date: 2000-10-05 08:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,6 +429,7 @@ class ScXMLExport : public SvXMLExport
     void GetStringFromRange(const ScRange& aRange, rtl::OUString& rString) const;
     void GetStringFromRange(const com::sun::star::table::CellRangeAddress& aRange, rtl::OUString& rString) const;
     void GetStringOfFunction(const sal_Int32 nFunction, rtl::OUString& rString) const;
+    void WriteScenario();
     void WriteNamedExpressions(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);
     void WriteImportDescriptor(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue> aImportDescriptor);
     rtl::OUString getOperatorXML(const com::sun::star::sheet::FilterOperator aFilterOperator, const sal_Bool bUseRegularExpressions) const;
