@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:32:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,10 @@
  *
  ************************************************************************/
 
-// includes --------------------------------------------------------------
+#include "sal/config.h"
+
+#include "imagemgr.hxx"
+
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
