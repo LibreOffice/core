@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessiblePreviewHeaderCell.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2004-01-05 18:45:45 $
+ *  last change:$Date: 2004-03-19 16:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
             log.println("Version with a fixed #103863#");
             oObj = at.getAccessibleObjectForRole(xRoot,
                                                  AccessibleRole.TABLE_CELL,
-                                                 "A");
+                                                 true);
         }
 
         log.println("ImplementationName " + utils.getImplName(oObj));
