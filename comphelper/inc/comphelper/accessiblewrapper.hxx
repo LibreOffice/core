@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblewrapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:30:56 $
+ *  last change: $Author: rt $ $Date: 2003-04-25 10:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,7 @@ namespace comphelper
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                 m_xParentAccessible;
-        ::com::sun::star::uno::WeakReference< ::drafts::com::sun::star::accessibility::XAccessibleContext >
+        ::com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessibleContext >
                 m_aContext;
 
     public:
@@ -417,7 +417,7 @@ namespace comphelper
         );
 
         // returns the context without creating it
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
                     getContextNoCreate( ) const;
 
     protected:
