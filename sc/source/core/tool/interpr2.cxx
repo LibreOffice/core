@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-07 12:04:58 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,13 +592,13 @@ void ScInterpreter::ScNBW()
                 {
                     case svDouble :
                     {
-                        nVal += (GetDouble() / pow(1.0 + nZins, nCount));
+                        nVal += (GetDouble() / pow(1.0 + nZins, (double)nCount));
                         nCount++;
                     }
                     break;
                     case svSingleRef :
                     {
-                        nVal += (GetDouble() / pow(1.0 + nZins, nCount));
+                        nVal += (GetDouble() / pow(1.0 + nZins, (double)nCount));
                         nCount++;
                     }
                     break;
@@ -610,11 +610,11 @@ void ScInterpreter::ScNBW()
                         ScValueIterator aValIter(pDok, aRange, glSubTotal);
                         if (aValIter.GetFirst(nCellVal, nErr))
                         {
-                            nVal += (nCellVal / pow(1.0 + nZins, nCount));
+                            nVal += (nCellVal / pow(1.0 + nZins, (double)nCount));
                             nCount++;
                             while ((nErr == 0) && aValIter.GetNext(nCellVal, nErr))
                             {
-                                nVal += (nCellVal / pow(1.0 + nZins, nCount));
+                                nVal += (nCellVal / pow(1.0 + nZins, (double)nCount));
                                 nCount++;
                             }
                             SetError(nErr);
@@ -677,12 +677,12 @@ void ScInterpreter::ScIKV()
         ScValueIterator aValIter(pDok, aRange, glSubTotal);
         if (aValIter.GetFirst(fWert, nErr))
         {
-            fZaehler +=           fWert / pow(1.0+x,nCount);
+            fZaehler +=           fWert / pow(1.0+x,(double)nCount);
             fNenner  += -nCount * fWert / pow(1.0+x,nCount+1.0);
             nCount++;
             while ((nErr == 0) && aValIter.GetNext(fWert, nErr))
             {
-                fZaehler +=           fWert / pow(1.0+x,nCount);
+                fZaehler +=           fWert / pow(1.0+x,(double)nCount);
                 fNenner  += -nCount * fWert / pow(1.0+x,nCount+1.0);
                 nCount++;
             }
