@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeaderArea.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-04 08:17:31 $
+ *  last change: $Author: sab $ $Date: 2002-08-13 17:37:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,21 @@ public:
     virtual ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet(void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    ///=====  XServiceInfo  ====================================================
+
+    /** Returns an identifier for the implementation of this object.
+    */
+    virtual ::rtl::OUString SAL_CALL
+        getImplementationName(void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Returns a list of all supported services.  In this case that is just
+        the AccessibleContext and Accessible service.
+    */
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+        getSupportedServiceNames(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     ///=====  XTypeProvider  ===================================================
