@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:57:38 $
+ *  last change: $Author: os $ $Date: 2002-05-06 08:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
+#include <svtools/accessibilityoptions.hxx>
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
@@ -1008,9 +1011,11 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     else if(rHint.ISA(SfxSimpleHint))
     {
         ULONG nHintId = ((SfxSimpleHint&)rHint).GetId();
-        if(SFX_HINT_COLORS_CHANGED == nHintId)
+        if(SFX_HINT_COLORS_CHANGED == nHintId ||
+            SFX_HINT_ACCESSIBILITY_CHANGED == nHintId)
         {
-            SwViewOption::ApplyColorConfigValues(*pColorConfig);
+            if(SFX_HINT_COLORS_CHANGED == nHintId)
+                SwViewOption::ApplyColorConfigValues(*pColorConfig);
 
             //invalidate all edit windows
             const TypeId aSwViewTypeId = TYPE(SwView);
@@ -1050,6 +1055,8 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             DELETEZ(pDBConfig);
             EndListening(*pColorConfig);
             DELETEZ(pColorConfig);
+            EndListening(*pAccessibilityOptions);
+            DELETEZ(pAccessibilityOptions);
         }
     }
 }
@@ -1135,6 +1142,18 @@ svx::ColorConfig& SwModule::GetColorConfig()
         StartListening(*pColorConfig);
     }
     return *pColorConfig;
+}
+/* -----------------------------06.05.2002 09:42------------------------------
+
+ ---------------------------------------------------------------------------*/
+SvtAccessibilityOptions& SwModule::GetAccessibilityOptions()
+{
+    if(!pAccessibilityOptions)
+    {
+        pAccessibilityOptions = new SvtAccessibilityOptions;
+        StartListening(*pAccessibilityOptions);
+    }
+    return *pAccessibilityOptions;
 }
 /*-----------------30.01.97 08.30-------------------
 

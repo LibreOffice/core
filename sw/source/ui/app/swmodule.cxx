@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-04-12 10:37:35 $
+ *  last change: $Author: os $ $Date: 2002-05-06 08:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,6 +395,7 @@ SwModule::SwModule( SvFactory* pFact,
     pWebToolbarConfig(0),
     pDBConfig(0),
     pColorConfig(0),
+    pAccessibilityOptions(0),
     pClipboard(0),
     pDragDrop(0),
     pXSelection(0),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-04-12 10:39:11 $
+ *  last change: $Author: os $ $Date: 2002-05-06 08:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,8 @@ class SwTransferable;
 class SwToolbarConfigItem;
 class SwAttrPool;
 namespace svx{ class ColorConfig;}
+class SvtAccessibilityOptions;
+
 struct SwDBData;
 #define VIEWOPT_DEST_VIEW       0
 #define VIEWOPT_DEST_TEXT       1
@@ -135,7 +137,8 @@ class SwModule: public SwModuleDummy , public SfxListener
     SwToolbarConfigItem*pToolbarConfig;     //fuer gestackte Toolbars, welche
     SwToolbarConfigItem*pWebToolbarConfig;  //war sichtbar?
     SwDBConfig*         pDBConfig;
-    svx::ColorConfig* pColorConfig;
+    svx::ColorConfig*   pColorConfig;
+    SvtAccessibilityOptions* pAccessibilityOptions;
 
     SfxErrorHandler*    pErrorHdl;
 
@@ -225,6 +228,7 @@ public:
     SwToolbarConfigItem*GetWebToolbarConfig()   { return pWebToolbarConfig; }
     SwDBConfig*         GetDBConfig();
     svx::ColorConfig&   GetColorConfig();
+    SvtAccessibilityOptions&    GetAccessibilityOptions();
 
     // UNO
 //  virtual Reflection* GetReflection( UsrUik aUIK );
