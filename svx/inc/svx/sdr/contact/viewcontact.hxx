@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontact.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:26:00 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@
 // predeclarations
 
 class SetOfByte;
+class SdrObject;
+class SdrPage;
 
 namespace sdr
 {
@@ -105,7 +107,10 @@ namespace sdr
         class ViewContact
         {
         protected:
-            // List of ViewObjectContacts
+            // List of ViewObjectContacts. This contains all VOCs which were constructed
+            // with this VC. Since the VOCs remember a reference to this VC, this list needs
+            // to be kept and is used e.g. at PrepareDelete() to destroy all VOCs.
+            // Registering and de-registering is done in the VOC constructors/destructors.
             ViewObjectContactList                           maVOCList;
 
             // PaintRectangle of the object in logic coordinates. This is the bounding
@@ -247,6 +252,11 @@ namespace sdr
 
             // test for existing AnimationInfo
             sal_Bool HasAnimationInfo() const;
+
+            // access to SdrObject and/or SdrPage. May return 0L like the default
+            // implementations do. Needs to be overloaded as needed.
+            virtual SdrObject* TryToGetSdrObject() const;
+            virtual SdrPage* TryToGetSdrPage() const;
         };
 
         // typedef for a list of ViewContact
