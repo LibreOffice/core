@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:49:08 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ IMPL_LINK( LoginDialog, OKHdl_Impl, OKButton *, EMPTYARG )
 
 IMPL_LINK( LoginDialog, PathHdl_Impl, PushButton *, EMPTYARG )
 {
-    PathDialog* pDlg = new PathDialog( this, WB_SVLOOK );
+    PathDialog* pDlg = new PathDialog( this, WB_3DLOOK );
 //  DirEntry aEntry;
 //  aEntry.ToAbs();
 //  pDlg->SetPath( aEntry.GetFull() );
