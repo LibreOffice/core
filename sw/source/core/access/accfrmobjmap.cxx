@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfrmobjmap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:36:19 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #ifndef _NODE_HXX
 #include <node.hxx>
 #endif
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
 
 #ifndef _ACCFFRMOBJMAP_HXX
 #include <accfrmobjmap.hxx>
@@ -132,13 +136,13 @@ SwFrmOrObjMap::SwFrmOrObjMap(
         ASSERT( bVisibleOnly, "page frame within tab frame???" );
         const SwPageFrm *pPgFrm =
             static_cast< const SwPageFrm * >( pFrm );
-        const SwSortDrawObjs *pObjs = pPgFrm->GetSortedObjs();
+        const SwSortedObjs *pObjs = pPgFrm->GetSortedObjs();
         if( pObjs )
         {
             const SwDoc *pDoc = pPgFrm->GetFmt()->GetDoc();
             for( sal_uInt16 i=0; i<pObjs->Count(); i++ )
             {
-                aLower = (*pObjs)[i];
+                aLower = (*pObjs)[i]->GetDrawObj();
                 if( aLower.GetBox().IsOver( rVisArea ) )
                     insert( aLower.GetSdrObject(), aLower, pDoc );
             }
@@ -148,12 +152,12 @@ SwFrmOrObjMap::SwFrmOrObjMap(
     {
         const SwDoc *pDoc = static_cast< const SwTxtFrm * >( pFrm )->GetNode()
                                                                    ->GetDoc();
-        const SwDrawObjs *pObjs = pFrm->GetDrawObjs();
+        const SwSortedObjs *pObjs = pFrm->GetDrawObjs();
         if( pObjs )
         {
             for( sal_uInt16 i=0; i<pObjs->Count(); i++ )
             {
-                aLower = (*pObjs)[i];
+                aLower = (*pObjs)[i]->GetDrawObj();
                 if( aLower.IsBoundAsChar() &&
                     (!bVisibleOnly || aLower.GetBox().IsOver( rVisArea )) )
                     insert( aLower.GetSdrObject(), aLower, pDoc );
