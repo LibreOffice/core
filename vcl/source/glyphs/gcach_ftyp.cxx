@@ -2,9 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.8 $
- *
- *  last change: $Author: cp $ $Date: 2001-02-23 17:56:12 $
+ *  $Revision: 1.9 $
+ *  last change: $Author: hdu $ $Date: 2001-02-26 10:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +76,7 @@
 #include "freetype/ftoutln.h"
 #include "freetype/tttables.h"
 #include "freetype/tttags.h"
+#include "freetype/ttnameid.h"
 
 #include <vector>
 
@@ -210,9 +210,14 @@ long FreetypeManager::AddFontDir( const String& rNormalizedName )
             // TODO: extract better font characterization data from font
             rData.meFamily      = FAMILY_DONTKNOW;
 
-            int i = aFaceFT->num_charmaps;
-            while( (--i >= 0) && (aFaceFT->charmaps[i]->encoding != ft_encoding_none) );
-            rData.meCharSet = (i >= 0) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE;
+            rData.meCharSet = RTL_TEXTENCODING_UNICODE;
+            for( int i = aFaceFT->num_charmaps; --i >= 0; )
+            {
+                const FT_CharMap aCM = aFaceFT->charmaps[i];
+                if( (aCM->platform_id == TT_PLATFORM_MICROSOFT)
+                && (aCM->encoding_id == TT_MS_ID_SYMBOL_CS) )
+                    rData.meCharSet = RTL_TEXTENCODING_SYMBOL;
+            }
             rData.meScript      = SCRIPT_DONTKNOW;
 
             rData.mePitch       = FT_IS_FIXED_WIDTH( aFaceFT ) ? PITCH_FIXED : PITCH_VARIABLE;
@@ -312,6 +317,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, const Ft
 
     FT_Encoding eEncoding = ft_encoding_unicode;
     if( mrFontInfo.aFontData.meCharSet == RTL_TEXTENCODING_SYMBOL )
+        // TODO: for FT>=2.0 use "eEncoding = ft_encoding_symbol";
         eEncoding = ft_encoding_none;
     rc = FT_Select_Charmap( maFaceFT, eEncoding );
 
