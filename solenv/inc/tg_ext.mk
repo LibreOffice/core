@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 08:36:06 $
+#   last change: $Author: hjs $ $Date: 2004-09-21 09:42:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,8 @@
 .IF "$(GUI)$(COM)"=="WNTMSC"
 .IF "$(EXT_USE_STLPORT)"==""
 INCLUDE!:=$(subst,$/stl, $(SOLARINC))
+.ELSE
+INCLUDE!:=$(SOLARINC)
 .ENDIF			# "$(EXT_USE_STLPORT)"==""
 INCLUDE!:=$(INCLUDE:s/ -I/;/)
 .EXPORT : INCLUDE
