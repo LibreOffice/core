@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EmbedUpdateModes.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:22:42 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,37 +62,41 @@
 #define __com_sun_star_embed_EmbedUpdateModes_idl__
 
 
-//=============================================================================
+//============================================================================
 
 module com { module sun { module star { module embed {
 
-//=============================================================================
-/** Possible modes to initialize object persistance.
-    The first four values can be combined with other following values by 'or' operation.
+//============================================================================
+/** The constant set specifies possible modes of object update.
 
     @see XEmbeddedObject
 */
 constants EmbedUpdateModes
 {
+    // -----------------------------------------------------------------------
     /** An object representation should be updated as often as possible.
 
-        <p> Any time object detects that it is changed the representation
+        <p>
+        Any time object detects that it is changed the representation
         of the object is updated.
         </p>
      */
-    const long EMBED_ALWAYS_UPDATE = 0;
+    const long ALWAYS_UPDATE = 0;
 
+    // -----------------------------------------------------------------------
     /** An object representation should be updated only in case of request.
 
-        <p> The representation of the object is updated only by explicit request.
+        <p>
+        The representation of the object is updated only by explicit request.
         </p>
      */
-    const long EMBED_EXPLICIT_UPDATE = 0;
+    const long EXPLICIT_UPDATE = 1;
 
 };
 
-//=============================================================================
+//============================================================================
 
 }; }; }; };
 
 #endif
+
