@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IMemberDescription.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2002-01-18 14:04:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:55:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,11 @@ package com.sun.star.uno;
  * The <code>IMemberDescription</code> is the base interface
  * for for the special subset of typedescriptions, which describe
  * members of IDL structs or interfeces.
- * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2002-01-18 14:04:55 $
+ *
+ * @deprecated This interface does not cover all the features supported by the
+ * corresponding (unpublished) implementation.  But no client code should need
+ * to access this functionality, anyway.
+ *
  * @since       UDK3.0
  */
 public interface IMemberDescription {
