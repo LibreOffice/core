@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: khong $ $Date: 2002-03-30 09:25:16 $
+ *  last change: $Author: er $ $Date: 2002-04-10 12:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,7 @@ static const struct InstancesArray {
     {       "com.sun.star.i18n.IndexEntrySupplier_Unicode",
         "com.sun.star.i18n.IndexEntrySupplier_Unicode",
         &IndexEntrySupplier_Unicode_CreateInstance },
-    {   "com.sun.star.i18n.Calendar",
+    {   "com.sun.star.i18n.LocaleCalendar",
         "com.sun.star.i18n.CalendarImpl",
         &CalendarImpl_CreateInstance },
     {   "com.sun.star.i18n.Calendar_gregorian",
