@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-27 22:03:08 $
+ *  last change: $Author: cl $ $Date: 2001-04-06 14:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_I18N_XFORBIDDENCHARACTERS_HPP_
+#include <com/sun/star/i18n/XForbiddenCharacters.hpp>
+#endif
+
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
 #endif
@@ -83,6 +87,10 @@
 
 #ifndef _COMPHELPER_PROPERTSETINFO_HXX_
 #include <comphelper/propertysetinfo.hxx>
+#endif
+
+#ifndef _SFXDOCINF_HXX
+#include <sfx2/docinf.hxx>
 #endif
 
 #ifndef _URLOBJ_HXX
@@ -102,6 +110,7 @@
 #endif
 
 #include "drawdoc.hxx"
+#include "docshell.hxx"
 #include "unomodel.hxx"
 
 #define MAP_LEN(x) x, sizeof(x)-1
@@ -119,6 +128,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::i18n;
 
 namespace sd
 {
@@ -172,66 +182,43 @@ namespace sd
         return (XWeak*)new DocumentSettings( pModel );
     }
 
-    const sal_Int32 HANDLE_PRINTDRAWING = 0;
-    const sal_Int32 HANDLE_PRINTNOTES = 1;
-    const sal_Int32 HANDLE_PRINTHANDOUT = 2;
-    const sal_Int32 HANDLE_PRINTOUTLINE = 3;
-    const sal_Int32 HANDLE_MEASUREUNIT = 4;
-    const sal_Int32 HANDLE_SCALEX = 5;
-    const sal_Int32 HANDLE_SCALEY = 6;
-    const sal_Int32 HANDLE_TABSTOP = 7;
-    const sal_Int32 HANDLE_SNAPTO_GRID = 8;
-    const sal_Int32 HANDLE_SNAPTO_SNAPLINES = 9;
-    const sal_Int32 HANDLE_SNAPTO_PAGEMARGINS = 10;
-    const sal_Int32 HANDLE_SNAPTO_OBJECTFRAME = 11;
-    const sal_Int32 HANDLE_SNAPTO_OBJECTPOINTS = 12;
-    const sal_Int32 HANDLE_SNAPRANGE = 13;
-    const sal_Int32 HANDLE_SNAPTOGRID = 14;
-    const sal_Int32 HANDLE_VISIBLEGRID = 15;
-    const sal_Int32 HANDLE_GRIDRESX = 16;
-    const sal_Int32 HANDLE_GRIDRESY = 17;
-    const sal_Int32 HANDLE_GRIDSUBX = 18;
-    const sal_Int32 HANDLE_GRIDSUBY = 19;
-    const sal_Int32 HANDLE_GRIDAXISSYNC = 20;
-    const sal_Int32 HANDLE_PRINTPAGENAME = 21;
-    const sal_Int32 HANDLE_PRINTDATE = 22;
-    const sal_Int32 HANDLE_PRINTTIME = 23;
-    const sal_Int32 HANDLE_PRINTHIDENPAGES = 24;
-    const sal_Int32 HANDLE_PRINTFITPAGE = 25;
-    const sal_Int32 HANDLE_PRINTTILEPAGE = 26;
-    const sal_Int32 HANDLE_PRINTBOOKLET = 27;
-    const sal_Int32 HANDLE_PRINTBOOKLETFRONT = 28;
-    const sal_Int32 HANDLE_PRINTBOOKLETBACK = 29;
-    const sal_Int32 HANDLE_PRINTQUALITY = 30;
-
-    const sal_Int32 HANDLE_COLORTABLEURL = 31;
-    const sal_Int32 HANDLE_DASHTABLEURL = 32;
-    const sal_Int32 HANDLE_LINEENDTABLEURL = 33;
-    const sal_Int32 HANDLE_HATCHTABLEURL = 34;
-    const sal_Int32 HANDLE_GRADIENTTABLEURL = 35;
-    const sal_Int32 HANDLE_BITMAPTABLEURL = 36;
+enum SdDocumentSettingsPropertyHandles
+{
+    HANDLE_PRINTDRAWING, HANDLE_PRINTNOTES, HANDLE_PRINTHANDOUT, HANDLE_PRINTOUTLINE, HANDLE_MEASUREUNIT, HANDLE_SCALEX,
+    HANDLE_SCALEY, HANDLE_TABSTOP, HANDLE_SNAPTO_GRID, HANDLE_SNAPTO_SNAPLINES, HANDLE_SNAPTO_PAGEMARGINS, HANDLE_SNAPTO_OBJECTFRAME,
+    HANDLE_SNAPTO_OBJECTPOINTS, HANDLE_SNAPRANGE, HANDLE_SNAPTOGRID, HANDLE_VISIBLEGRID, HANDLE_GRIDRESX, HANDLE_GRIDRESY,
+    HANDLE_GRIDSUBX, HANDLE_GRIDSUBY, HANDLE_GRIDAXISSYNC, HANDLE_PRINTPAGENAME, HANDLE_PRINTDATE, HANDLE_PRINTTIME,
+    HANDLE_PRINTHIDENPAGES, HANDLE_PRINTFITPAGE, HANDLE_PRINTTILEPAGE, HANDLE_PRINTBOOKLET, HANDLE_PRINTBOOKLETFRONT,
+    HANDLE_PRINTBOOKLETBACK, HANDLE_PRINTQUALITY, HANDLE_COLORTABLEURL, HANDLE_DASHTABLEURL, HANDLE_LINEENDTABLEURL, HANDLE_HATCHTABLEURL,
+    HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA
+};
 
     PropertySetInfo* createSettingsInfoImpl( sal_Bool bIsDraw )
     {
         static PropertyMapEntry aImpressSettingsInfoMap[] =
         {
+/*
             { MAP_LEN("IsPrintDrawing"),        HANDLE_PRINTDRAWING,        &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("IsPrintNotes"),          HANDLE_PRINTNOTES,          &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("IsPrintHandout"),        HANDLE_PRINTHANDOUT,        &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("IsPrintOutline"),        HANDLE_PRINTOUTLINE,        &::getBooleanCppuType(),                0,  0 },
+*/
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
         static PropertyMapEntry aDrawSettingsInfoMap[] =
         {
+/*
             { MAP_LEN("MeasureUnit"),           HANDLE_MEASUREUNIT,         &::getCppuType((const sal_Int32*)0),    0,  0 },
             { MAP_LEN("ScaleX"),                HANDLE_SCALEX,              &::getCppuType((const sal_Int32*)0),    0,  0 },
             { MAP_LEN("ScaleY"),                HANDLE_SCALEY,              &::getCppuType((const sal_Int32*)0),    0,  0 },
+*/
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
         static PropertyMapEntry aCommonSettingsInfoMap[] =
         {
+/*
             { MAP_LEN("DefaultTabStop"),        HANDLE_TABSTOP,             &::getCppuType((const sal_Int32*)0),    0,  0 },
             { MAP_LEN("IsSnapToGrid"),          HANDLE_SNAPTO_GRID,         &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("IsSnapToSnapLines"),     HANDLE_SNAPTO_SNAPLINES,    &::getBooleanCppuType(),                0,  0 },
@@ -256,13 +243,16 @@ namespace sd
             { MAP_LEN("IsPrintBookletFront"),   HANDLE_PRINTBOOKLETFRONT,   &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("IsPrintBookletBack"),    HANDLE_PRINTBOOKLETBACK,    &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("PrintQuality"),          HANDLE_PRINTQUALITY,        &::getCppuType((const sal_Int32*)0),    0,  0 },
-
+*/
             { MAP_LEN("ColorTableURL"),         HANDLE_COLORTABLEURL,       &::getCppuType((const OUString*)0),     0,  0 },
             { MAP_LEN("DashTableURL"),          HANDLE_DASHTABLEURL,        &::getCppuType((const OUString*)0),     0,  0 },
             { MAP_LEN("LineEndTableURL"),       HANDLE_LINEENDTABLEURL,     &::getCppuType((const OUString*)0),     0,  0 },
             { MAP_LEN("HatchTableURL"),         HANDLE_HATCHTABLEURL,       &::getCppuType((const OUString*)0),     0,  0 },
             { MAP_LEN("GradientTableURL"),      HANDLE_GRADIENTTABLEURL,    &::getCppuType((const OUString*)0),     0,  0 },
             { MAP_LEN("BitmapTableURL"),        HANDLE_BITMAPTABLEURL,      &::getCppuType((const OUString*)0),     0,  0 },
+
+            { MAP_LEN("ForbiddenCharacters"),   HANDLE_FORBIDDENCHARS,      &::getCppuType((const Reference< XForbiddenCharacters >*)0),    0, 0 },
+            { MAP_LEN("ApplyUserData"),         HANDLE_APPLYUSERDATA,       &::getBooleanCppuType(),                0,  0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
@@ -293,7 +283,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
     if( NULL == pDoc || NULL == pDocSh )
         throw UnknownPropertyException();
 
-    sal_Bool bOk;
+    sal_Bool bOk, bChanged = sal_False;
 
     while( *ppEntries )
     {
@@ -317,6 +307,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         {
                             pDoc->SetColorTable( pColTab );
                             bOk = sal_True;
+                            bChanged = sal_True;
                         }
                     }
                 }
@@ -338,6 +329,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         {
                             pDoc->SetDashList( pDashTab );
                             bOk = sal_True;
+                            bChanged = sal_True;
                         }
                     }
                 }
@@ -359,6 +351,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         {
                             pDoc->SetLineEndList( pTab );
                             bOk = sal_True;
+                            bChanged = sal_True;
                         }
                     }
                 }
@@ -380,6 +373,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         {
                             pDoc->SetHatchList( pTab );
                             bOk = sal_True;
+                            bChanged = sal_True;
                         }
                     }
                 }
@@ -401,6 +395,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         {
                             pDoc->SetGradientList( pTab );
                             bOk = sal_True;
+                            bChanged = sal_True;
                         }
                     }
                 }
@@ -422,7 +417,28 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         {
                             pDoc->SetBitmapList( pTab );
                             bOk = sal_True;
+                            bChanged = sal_True;
                         }
+                    }
+                }
+                break;
+            case HANDLE_FORBIDDENCHARS:
+                {
+                    bOk = sal_True;
+                }
+                break;
+            case HANDLE_APPLYUSERDATA:
+                {
+                    sal_Bool bApplyUserData;
+                    if( *pValues >>= bApplyUserData )
+                    {
+                        SfxDocumentInfo& rInfo = pDocSh->GetDocInfo();
+                        if( rInfo.IsUseUserData() != bApplyUserData )
+                        {
+                            rInfo.SetUseUserData( bApplyUserData );
+                            bChanged = sal_True;
+                        }
+                        bOk = sal_True;
                     }
                 }
                 break;
@@ -468,6 +484,9 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
         ppEntries++;
         pValues++;
     }
+
+    if( bChanged )
+        mpModel->SetModified( sal_True );
 }
 
 void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, Any* pValue ) throw(UnknownPropertyException, WrappedTargetException )
@@ -540,6 +559,13 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                     OUString aPath( aPathURL.GetMainURL() );
                     *pValue <<= aPath;
                 }
+                break;
+            case HANDLE_FORBIDDENCHARS:
+                *pValue <<= mpModel->getForbiddenCharsTable();
+                break;
+
+            case HANDLE_APPLYUSERDATA:
+                *pValue <<= (sal_Bool)pDocSh->GetDocInfo().IsUseUserData();
                 break;
 
             case HANDLE_PRINTDRAWING:

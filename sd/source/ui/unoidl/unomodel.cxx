@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-29 07:25:56 $
+ *  last change: $Author: cl $ $Date: 2001-04-06 14:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,14 @@
 #include <vcl/svapp.hxx>
 #endif
 
+#ifndef _SVX_UNOFORBIDDENCHARSTABLE_HXX_
+#include <svx/UnoForbiddenCharsTable.hxx>
+#endif
+
+#ifndef _FORBIDDENCHARACTERSTABLE_HXX
+#include <svx/forbiddencharacterstable.hxx>
+#endif
+
 // folgende fuer InsertSdPage()
 #ifndef _SVDLAYER_HXX //autogen
 #include <svx/svdlayer.hxx>
@@ -168,22 +176,73 @@ using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 
-const sal_Int32 WID_MODEL_LANGUAGE  = 1;
-const sal_Int32 WID_MODEL_TABSTOP   = 2;
-const sal_Int32 WID_MODEL_VISAREA   = 3;
-const sal_Int32 WID_MODEL_MAPUNIT   = 4;
-const sal_Int32 WID_MODEL_CONTFOCUS = 5;
-const sal_Int32 WID_MODEL_DSGNMODE  = 6;
+///////////////////////////////////////////////////////////////////////
+
+class SdUnoForbiddenCharsTable : public SvxUnoForbiddenCharsTable,
+                                 public SfxListener
+{
+private:
+    SdrModel*   mpModel;
+
+protected:
+    virtual void onChange();
+
+public:
+    SdUnoForbiddenCharsTable( SdrModel* pModel );
+    ~SdUnoForbiddenCharsTable();
+
+    // SfxListener
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw ();
+};
+
+SdUnoForbiddenCharsTable::SdUnoForbiddenCharsTable( SdrModel* pModel )
+: SvxUnoForbiddenCharsTable( pModel->GetForbiddenCharsTable() ), mpModel( pModel )
+{
+    StartListening( *pModel );
+}
+
+void SdUnoForbiddenCharsTable::onChange()
+{
+    if( mpModel )
+    {
+        mpModel->ReformatAllTextObjects();
+    }
+}
+
+SdUnoForbiddenCharsTable::~SdUnoForbiddenCharsTable()
+{
+    if( mpModel )
+        EndListening( *mpModel );
+}
+
+void SdUnoForbiddenCharsTable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
+{
+    const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+
+    if( pSdrHint && HINT_MODELCLEARED == pSdrHint->GetKind() )
+        mpModel = NULL;
+}
+
+///////////////////////////////////////////////////////////////////////
+
+const sal_Int32 WID_MODEL_LANGUAGE = 1;
+const sal_Int32 WID_MODEL_TABSTOP  = 2;
+const sal_Int32 WID_MODEL_VISAREA  = 3;
+const sal_Int32 WID_MODEL_MAPUNIT  = 4;
+const sal_Int32 WID_MODEL_FORBCHARS= 5;
+const sal_Int32 WID_MODEL_CONTFOCUS = 6;
+const sal_Int32 WID_MODEL_DSGNMODE  = 7;
 
 const SfxItemPropertyMap* ImplGetDrawModelPropertyMap()
 {
     // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     const static SfxItemPropertyMap aDrawModelPropertyMap_Impl[] =
     {
-        { MAP_CHAR_LEN(sUNO_Prop_CharLocale),       WID_MODEL_LANGUAGE,     &::getCppuType((const lang::Locale*)0),     0,  0},
-        { MAP_CHAR_LEN(sUNO_Prop_TabStop),          WID_MODEL_TABSTOP,      &::getCppuType((const sal_Int32*)0),        0,  0},
-        { MAP_CHAR_LEN(sUNO_Prop_VisibleArea),      WID_MODEL_VISAREA,      &::getCppuType((const awt::Rectangle*)0),   0,  0},
-        { MAP_CHAR_LEN(sUNO_Prop_MapUnit),          WID_MODEL_MAPUNIT,      &::getCppuType((const sal_Int16*)0),        beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN(sUNO_Prop_CharLocale),           WID_MODEL_LANGUAGE, &::getCppuType((const lang::Locale*)0),     0,  0},
+        { MAP_CHAR_LEN(sUNO_Prop_TabStop),              WID_MODEL_TABSTOP,  &::getCppuType((const sal_Int32*)0),        0,  0},
+        { MAP_CHAR_LEN(sUNO_Prop_VisibleArea),          WID_MODEL_VISAREA,  &::getCppuType((const awt::Rectangle*)0),   0,  0},
+        { MAP_CHAR_LEN(sUNO_Prop_MapUnit),              WID_MODEL_MAPUNIT,  &::getCppuType((const sal_Int16*)0),        beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN(sUNO_Prop_ForbiddenCharacters),  WID_MODEL_FORBCHARS,&::getCppuType((const uno::Reference< i18n::XForbiddenCharacters > *)0), beans::PropertyAttribute::READONLY, 0 },
         { MAP_CHAR_LEN(sUNO_Prop_AutomContFocus ),  WID_MODEL_CONTFOCUS,    &::getBooleanCppuType(),                    0,  0},
         { MAP_CHAR_LEN(sUNO_Prop_ApplyFrmDsgnMode), WID_MODEL_DSGNMODE,     &::getBooleanCppuType(),                    0,  0},
         { 0,0,0,0,0 }
@@ -505,8 +564,11 @@ void SAL_CALL SdXImpressDocument::lockControllers(  )
 void SAL_CALL SdXImpressDocument::unlockControllers(  )
     throw(uno::RuntimeException)
 {
-    if( pDoc )
+    if( pDoc && pDoc->isLocked() )
+    {
         pDoc->setLock( sal_False );
+        pDoc->ReformatAllTextObjects();
+    }
 }
 
 sal_Bool SAL_CALL SdXImpressDocument::hasControllersLocked(  )
@@ -971,8 +1033,13 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
                 SvxMapUnitToMeasureUnit( pEmbeddedObj->GetMapUnit(), nMeasureUnit );
                 aAny <<= (sal_Int16)nMeasureUnit;
 #endif
-            }
-            break;
+        }
+        break;
+        case WID_MODEL_FORBCHARS:
+        {
+            aAny <<= getForbiddenCharsTable();
+        }
+        break;
         case WID_MODEL_CONTFOCUS:
             aAny <<= (sal_Bool)pDoc->GetAutoControlFocus();
             break;
@@ -1016,6 +1083,16 @@ uno::Reference< ucb::XAnyCompare > SAL_CALL SdXImpressDocument::createAnyCompare
     throw(uno::RuntimeException)
 {
     return SvxCreateNumRuleCompare();
+}
+
+uno::Reference< i18n::XForbiddenCharacters > SdXImpressDocument::getForbiddenCharsTable()
+{
+    uno::Reference< i18n::XForbiddenCharacters > xForb(mxForbidenCharacters);
+
+    if( !xForb.is() )
+        mxForbidenCharacters = xForb = new SdUnoForbiddenCharsTable( pDoc );
+
+    return xForb;
 }
 
 //=============================================================================
