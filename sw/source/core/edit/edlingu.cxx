@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edlingu.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:49:23 $
+ *  last change: $Author: kz $ $Date: 2004-11-27 13:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,10 +150,10 @@
 #ifndef _TEMPAUTO_HXX
 #include <tempauto.hxx>
 #endif
-
-#ifndef S2U
-#define S2U(rString) rtl::OUString::createFromAscii(rString)
+#ifndef _UNOOBJ_HXX
+#include <unoobj.hxx>
 #endif
+
 
 using namespace ::svx;
 using namespace ::com::sun::star;
@@ -566,7 +566,7 @@ sal_Bool SwHyphIter::IsAuto()
 {
     uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
     return xProp.is() ? *(sal_Bool*)xProp->getPropertyValue(
-                                S2U(UPN_IS_HYPH_AUTO) ).getValue()
+                                C2U(UPN_IS_HYPH_AUTO) ).getValue()
                       : sal_False;
 }
 
@@ -1098,11 +1098,26 @@ uno::Reference< XSpellAlternatives >
             uno::Reference< XSpellChecker1 >  xSpell( ::GetSpellChecker() );
             if( xSpell.is() )
             {
-                LanguageType eActLang = (LanguageType)pNode->GetLang(
-                                                            nBegin, nLen );
+                LanguageType eActLang = (LanguageType)pNode->GetLang( nBegin, nLen );
                 if( xSpell->hasLanguage( eActLang ))
-                    xSpellAlt = xSpell->spell( aWord, eActLang,
-                                               Sequence< PropertyValue >() );
+                {
+                    // restrict the maximal number of suggestions displayed
+                    // in the context menu.
+                    // Note: That could of course be done by clipping the
+                    // resulting sequence but the current third party
+                    // implementations result differs greatly if the number of
+                    // suggestions to be retuned gets changed. Statistically
+                    // it gets much better if told to return e.g. only 7 strings
+                    // than returning e.g. 16 suggestions and using only the
+                    // first 7. Thus we hand down the value to use to that
+                    // implementation here by providing an additional parameter.
+                    Sequence< PropertyValue > aPropVals(1);
+                    PropertyValue &rVal = aPropVals.getArray()[0];
+                    rVal.Name = C2U( UPN_MAX_NUMBER_OF_SUGGESTIONS );
+                    rVal.Value <<= (INT16) 7;
+
+                    xSpellAlt = xSpell->spell( aWord, eActLang, aPropVals );
+                }
             }
 
             if ( xSpellAlt.is() )
