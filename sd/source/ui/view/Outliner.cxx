@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-23 10:45:57 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 10:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,6 @@
 #ifndef _SRCHITEM_HXX
 #include <svx/srchitem.hxx>
 #endif
-#ifndef _OSPLCFG_HXX
-#include <offmgr/osplcfg.hxx>
-#endif
 #ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
 #endif
@@ -121,9 +118,6 @@
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
-#endif
-#ifndef _OFFAPP_HXX //autogen
-#include <offmgr/app.hxx>
 #endif
 #ifndef _SVDITER_HXX //autogen
 #include <svx/svditer.hxx>
