@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-05 02:01:42 $
+ *  last change: $Author: pluby $ $Date: 2001-03-13 07:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,35 +145,45 @@ void InitSalMain()
     // can find resource files and in the DYLD_LIBRARY_PATH environment
     // variable so that the dynamic library loader can find shared libraries
     ByteString aPath( getenv( "PATH" ) );
+    ByteString aResPath( getenv( "STAR_RESOURCEPATH" ) );
+    ByteString aLibPath( getenv( "DYLD_LIBRARY_PATH" ) );
     ByteString aCmdPath( *pEnviron );
+    ByteString aTmpPath;
     // Get absolute path of command's directory
     if ( aCmdPath.Len() ) {
         DirEntry aCmdDirEntry( aCmdPath );
         aCmdDirEntry.ToAbs();
         aCmdPath = ByteString( aCmdDirEntry.GetPath().GetFull(), RTL_TEXTENCODING_ASCII_US );
     }
-    if ( aPath.Len() ) {
-        if ( aCmdPath.Len() )
-            aCmdPath += ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
-        aCmdPath += aPath;
-    }
     // Assign to PATH environment variable
-    if ( aCmdPath.Len() ) {
-        aPath = ByteString( "PATH=" );
-        aPath += aCmdPath;
-        putenv( aPath.GetBuffer() );
+    if ( aCmdPath.Len() )
+    {
+        aTmpPath = ByteString( "PATH=" );
+        aTmpPath += aCmdPath;
+        if ( aPath.Len() )
+            aTmpPath += ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
+        aTmpPath += aPath;
+        putenv( aTmpPath.GetBuffer() );
     }
     // Assign to STAR_RESOURCEPATH environment variable
-    if ( aCmdPath.Len() ) {
-        aPath = ByteString( "STAR_RESOURCEPATH=" );
-        aPath += aCmdPath;
-        putenv( aPath.GetBuffer() );
+    if ( aCmdPath.Len() )
+    {
+        aTmpPath = ByteString( "STAR_RESOURCEPATH=" );
+        aTmpPath += aCmdPath;
+        if ( aResPath.Len() )
+            aTmpPath += ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
+        aTmpPath += aResPath;
+        putenv( aTmpPath.GetBuffer() );
     }
     // Assign to DYLD_LIBRARY_PATH environment variable
-    if ( aCmdPath.Len() ) {
-        aPath = ByteString( "DYLD_LIBRARY_PATH=" );
-        aPath += aCmdPath;
-        putenv( aPath.GetBuffer() );
+    if ( aCmdPath.Len() )
+    {
+        aTmpPath = ByteString( "DYLD_LIBRARY_PATH=" );
+        aTmpPath += aCmdPath;
+        if ( aLibPath.Len() )
+            aTmpPath += ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
+        aTmpPath += aLibPath;
+        putenv( aTmpPath.GetBuffer() );
     }
 
     // Setup up autorelease pool for Objective-C objects
