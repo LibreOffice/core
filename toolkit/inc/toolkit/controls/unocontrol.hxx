@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:06:58 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:16:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,7 @@ protected:
         mxVclWindowPeer = ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >(mxPeer,::com::sun::star::uno::UNO_QUERY); // just to avoid the query_interface thing
     }
 
+    virtual sal_Bool   requiresNewPeer( const ::rtl::OUString& _rPropertyName ) const;
 
 public:
                 UnoControl();
