@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attriblistmerge.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-12 12:02:06 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,9 @@ namespace xmloff
     sal_Bool OAttribListMerger::seekToIndex(sal_Int16 _nGlobalIndex, Reference< sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex)
     {
         sal_Int16 nLeftOver = _nGlobalIndex;
-        for (   ConstAttributeListArrayIterator aLookupSublist = m_aLists.begin();
-                (aLookupSublist != m_aLists.end()) && (nLeftOver >= (*aLookupSublist)->getLength());
+        ConstAttributeListArrayIterator aLookupSublist = m_aLists.begin();
+
+        for ( ; (aLookupSublist != m_aLists.end()) && (nLeftOver >= (*aLookupSublist)->getLength());
                 ++aLookupSublist
             )
             nLeftOver -= (*aLookupSublist)->getLength();
@@ -204,6 +205,12 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1.204.1  2003/11/11 11:03:31  waratah
+ *  #i22301# Correct for scoping rules
+ *
+ *  Revision 1.1  2000/12/12 12:02:06  fs
+ *  initial checkin - helper class for mergin XAttributeList instances
+ *
  *
  *  Revision 1.0 12.12.00 10:32:56  fs
  ************************************************************************/
