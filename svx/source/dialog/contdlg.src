@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:34:31 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ spanish ] = "Asignar" ;
                 Text [ french ] = "Assigner" ;
                 Text [ dutch ] = "Toewijzen" ;
-                Text[ chinese_simplified ] = "Ê¹ÓÃ";
+                Text[ chinese_simplified ] = "Ö¸¶¨";
                 Text[ russian ] = "Ïðèìåíèòü";
                 Text[ polish ] = "Przypisz";
                 Text[ japanese ] = "“K—p";
@@ -818,6 +818,7 @@ String STR_CONTOURDLG_LINKED
     Text[ catalan ] = "Esta imagen está vinculada al documento. ¿Desea deshacer el vínculo para editar la imagen?";
 };
 /******************************************************************************/
+
 
 
 
