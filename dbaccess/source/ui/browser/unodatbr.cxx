@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.154 $
+ *  $Revision: 1.155 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-12 12:11:31 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
 #include <com/sun/star/form/XForm.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_LINEENDFORMAT_HPP_
+#include <com/sun/star/awt/LineEndFormat.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_TEXTALIGN_HPP_
 #include <com/sun/star/awt/TextAlign.hpp>
@@ -719,7 +722,6 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                 sal_Int32 nType = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_TYPE));
                 switch(nType)
                 {
-                    // TODO : die Strings fuer die Column-Typen irgendwo richtig platzieren
                     case DataType::BIT:
                         aCurrentModelType = ::rtl::OUString::createFromAscii("CheckBox");
                         sPropertyName = PROPERTY_DEFAULTSTATE;
@@ -728,12 +730,12 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                     case DataType::BINARY:
                     case DataType::VARBINARY:
                     case DataType::LONGVARBINARY:
+                    case DataType::LONGVARCHAR:
                         aCurrentModelType = ::rtl::OUString::createFromAscii("TextField");
                         sPropertyName = PROPERTY_DEFAULTTEXT;
                         break;
 
                     case DataType::VARCHAR:
-                    case DataType::LONGVARCHAR:
                     case DataType::CHAR:
                         bFormattedIsNumeric = sal_False;
                         // _NO_ break !
@@ -744,7 +746,8 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                         break;
                 }
 
-                Reference< XPropertySet >  xCurrentCol = xColFactory->createColumn(aCurrentModelType);
+                Reference< XPropertySet > xCurrentCol = xColFactory->createColumn(aCurrentModelType);
+                Reference< XPropertySetInfo > xColumnPropertyInfo = xCurrentCol->getPropertySetInfo();
                 xCurrentCol->setPropertyValue(PROPERTY_CONTROLSOURCE, makeAny(*pBegin));
                 xCurrentCol->setPropertyValue(PROPERTY_LABEL, makeAny(*pBegin));
                 if (bIsFormatted)
@@ -755,8 +758,11 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                     xCurrentCol->setPropertyValue(::rtl::OUString::createFromAscii("TreatAsNumber"), ::cppu::bool2any(bFormattedIsNumeric));
                 }
 
+                if ( DataType::LONGVARCHAR == nType )
+                    xCurrentCol->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MultiLine" ) ), makeAny( (sal_Bool)sal_True ) );
+
                 Any aDefault;
-                sal_Bool bDefault = xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_CONTROLDEFAULT);
+                sal_Bool bDefault = xColumnPropertyInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT);
                 if(bDefault)
                     aDefault = xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT);
 
