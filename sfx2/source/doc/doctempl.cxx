@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dv $ $Date: 2000-11-30 16:43:40 $
+ *  last change: $Author: dv $ $Date: 2000-12-01 11:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,9 @@
 #include <vcl/system.hxx>
 #endif
 #ifndef _MSGBOX_HXX //autogen
-#include <vcl/msgbox.hxx>
+#endif
+#ifndef _SV_RESARY_HXX
+#include <vcl/resary.hxx>
 #endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
@@ -301,6 +303,14 @@ public:
 
 DECLARE_LIST( RegionList_Impl, RegionData_Impl* );
 
+struct NamePair_Impl
+{
+    OUString maShortName;
+    OUString maLongName;
+};
+
+DECLARE_LIST( NameList_Impl, NamePair_Impl* );
+
 // ------------------------------------------------------------------------
 class SfxDocTemplate_Impl
 {
@@ -308,11 +318,14 @@ class SfxDocTemplate_Impl
     ::osl::Mutex        maMutex;
     String              maDirs;
     RegionList_Impl     maRegions;
+    NameList_Impl       maNames;
     long                mnRefCount;
     sal_Bool            mbConstructed;
 
 private:
     sal_Bool            InsertOrMarkRegion( RegionData_Impl *pData );
+    void                ReadFolderList();
+    OUString            GetLongName( const OUString& rShortName );
 
 public:
                         SfxDocTemplate_Impl();
@@ -2685,6 +2698,8 @@ void SfxDocTemplate_Impl::Construct( const String& rDirs )
         USHORT i;
         USHORT nCount = rDirs.GetTokenCount( C_DELIM );
 
+        ReadFolderList();
+
         for ( i=0; i<nCount; i++ )
         {
             Content aTemplDir;
@@ -2849,6 +2864,8 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
                     continue;
                 else if ( aTitle.compareToAscii( "internal" ) == 0 )
                     continue;
+
+                aTitle = GetLongName( aTitle );
 
                 OUString aURLTitle = aTitle + aIndex;
                 OUString aNewFolderURL = aRootURL + aURLTitle;
@@ -3284,6 +3301,8 @@ OUString SfxDocTemplate_Impl::GetTypeFromURL( const OUString& rURL )
         pValues->Value = makeAny( sal_Bool( sal_True ) );
 
         aTypeName = xTypeDetection->searchFilter( rURL, aValues );
+
+//      Sequence < OUString > testing = xTypeDetection->getAvailableFilterNames();
     }
     return aTypeName;
 #endif
@@ -3317,4 +3336,48 @@ OUString SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL )
     }
 
     return aTitle;
+}
+
+// -----------------------------------------------------------------------
+void SfxDocTemplate_Impl::ReadFolderList()
+{
+    ResStringArray  aShortNames( SfxResId( TEMPLATE_SHORT_NAMES_ARY ) );
+    ResStringArray  aLongNames( SfxResId( TEMPLATE_LONG_NAMES_ARY ) );
+
+    NamePair_Impl*  pPair;
+
+
+    USHORT nCount = Min( aShortNames.Count(), aLongNames.Count() );
+
+    for ( USHORT i=0; i<nCount; i++ )
+    {
+        pPair = new NamePair_Impl;
+        pPair->maShortName  = aShortNames.GetString( i );
+        pPair->maLongName   = aLongNames.GetString( i );
+
+        maNames.Insert( pPair, LIST_APPEND );
+    }
+}
+
+// -----------------------------------------------------------------------
+OUString SfxDocTemplate_Impl::GetLongName( const OUString& rShortName )
+{
+    OUString         aRet;
+    NamePair_Impl   *pPair = maNames.First();
+
+    while ( pPair )
+    {
+        if ( pPair->maShortName == rShortName )
+        {
+            aRet = pPair->maLongName;
+            break;
+        }
+        else
+            pPair = maNames.Next();
+    }
+
+    if ( !aRet.len() )
+        aRet = rShortName;
+
+    return aRet;
 }
