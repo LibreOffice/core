@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-26 20:40:53 $
+ *  last change: $Author: kz $ $Date: 2001-10-22 20:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1539,7 +1539,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ english_us ] = "Range contains ~column headers" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "еЊєеџџеЊ…еђ«е€—ж ‡йў(~C)";
-        Text[ russian ] = "Названия столбцов в области";
+        Text[ russian ] = "Заголовки столбцов в области";
         Text[ polish ] = "Obszar zawiera nagіуwki kolumn";
         Text[ japanese ] = "зЇ„е›ІгЃ«е€—гЃ®й …з›®ж¬„г‚’еђ«г‚Ђ(~C)";
         Text[ chinese_traditional ] = "еЌЂеџџеЊ…еђ«ж¬„жЁ™йЎЊ(~C)";
@@ -1769,7 +1769,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ spanish ] = "Бrea de datos:" ;
         Text [ english_us ] = "Data range:" ;
         Text[ chinese_simplified ] = "ж•°жЌ®еЊєеџџпјљ";
-        Text[ russian ] = "Область данных:";
+        Text[ russian ] = "Диапазон данных:";
         Text[ polish ] = "Obszar danych:";
         Text[ japanese ] = "пѕѓпѕћпЅ°пѕЂзЇ„е›І:";
         Text[ chinese_traditional ] = "иі‡ж–™еЌЂеџџпјљ";
@@ -2066,7 +2066,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ russian ] = "Результат фильтра в";
         Text[ polish ] = "Kopiuj rezultaty filtrowania do";
         Text[ japanese ] = "пѕЊпЅЁпѕ™пѕЂзµђжћњгЃ®иІјг‚Љд»гЃ‘е…€(~P)";
-        Text[ chinese_traditional ] = "е°‡зЇ©йЃёзµђжћњи¤‡иЈЅе€°(~P)...";
+        Text[ chinese_traditional ] = "и¤‡иЈЅзЇ©йЃёзµђжћње€°(~P)...";
         Text[ arabic ] = "дУО дКнМЙ ЗбКХЭнЙ Ебм";
         Text[ greek ] = "БнфйгсбцЮ брпфелеумЬфщн уфп";
         Text[ korean ] = "м—ђ кІ°кіјлҐј ліµм‚¬(~P)";
@@ -2231,7 +2231,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ spanish ] = "Бrea de datos:" ;
         Text [ english_us ] = "Data range:" ;
         Text[ chinese_simplified ] = "ж•°жЌ®еЊєеџџпјљ";
-        Text[ russian ] = "Область данных:";
+        Text[ russian ] = "Диапазон данных:";
         Text[ polish ] = "Obszar danych:";
         Text[ japanese ] = "пѕѓпѕћпЅ°пѕЂзЇ„е›І:";
         Text[ chinese_traditional ] = "иі‡ж–™еЌЂеџџпјљ";
@@ -3596,7 +3596,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ spanish ] = "Бrea de datos:" ;
         Text [ english_us ] = "Data range:" ;
         Text[ chinese_simplified ] = "ж•°жЌ®еЊєеџџ:";
-        Text[ russian ] = "Область данных:";
+        Text[ russian ] = "Диапазон данных:";
         Text[ polish ] = "Obszar danych:";
         Text[ japanese ] = "пѕѓпѕћпЅ°пѕЂзЇ„е›І:";
         Text[ chinese_traditional ] = "иі‡ж–™еЌЂеџџпјљ";
@@ -3646,6 +3646,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Filtro";
 };
+
 
 
 
