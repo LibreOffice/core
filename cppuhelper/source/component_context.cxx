@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:23:33 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define CONTEXT_DIAG
 #endif
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
 #include <stdio.h>
 #endif
 
@@ -446,7 +446,7 @@ void ComponentContext::throw_RT(
     buf.append( str1 );
     buf.append( str2 );
     OUString msg( buf.makeStringAndClear() );
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     OString str( OUStringToOString( msg, RTL_TEXTENCODING_ASCII_US ) );
     ::fprintf( stderr, "### %s\n", str.getStr() );
 #endif
@@ -464,7 +464,7 @@ void ComponentContext::throw_RT(
     buf.append( str3 );
     buf.append( str4 );
     OUString msg( buf.makeStringAndClear() );
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     OString str( OUStringToOString( msg, RTL_TEXTENCODING_ASCII_US ) );
     ::fprintf( stderr, "### %s\n", str.getStr() );
 #endif
@@ -537,7 +537,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
                     Reference< lang::XSingleServiceFactory > xFac;
                     if (usesService >>= xFac) // try via old XSingleServiceFactory
                     {
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
                         ::fprintf( stderr, "### omitting context for service instanciation!\n" );
 #endif
                         xInstance = args.getLength()
