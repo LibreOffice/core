@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-01 14:23:57 $
+ *  last change: $Author: fs $ $Date: 2001-06-26 09:32:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,15 @@ namespace dbaccess
         void firePropertyChange(sal_Int32 _nColumnIndex,const ::com::sun::star::uno::Any& _rOldValue);
 
         void rotateCacheIterator(sal_Int16 _nDist);
+
+#ifdef DBG_UTIL
+        void columnModified(sal_Int32 columnIndex);
+        // for the non-pro version only. This method is called whenever one of the updateXXX methods is invoked.
+        // This eases tracking column value changes.
+#else
+    #define columnModified(columnIndex)
+#endif
+
     protected:
         ORowSetMatrix::iterator& getIterator() { return m_aMatrixIter;}
         ORowSetMatrix::iterator& getEnd() { return m_aMatrixEnd;}
@@ -364,6 +373,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/02/01 14:23:57  oj
+    change for insert , delete and update rows
+
     Revision 1.6  2001/01/22 07:38:24  oj
     #82632# change member
 

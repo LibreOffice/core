@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-22 13:08:06 $
+ *  last change: $Author: fs $ $Date: 2001-06-26 09:32:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -729,6 +729,11 @@ sal_Int32 SAL_CALL ORowSetCache::hashBookmark( const Any& bookmark ) throw(SQLEx
     return m_pCacheSet->hashBookmark(bookmark);
 }
 // -------------------------------------------------------------------------
+#ifdef DBG_UTIL
+void ORowSetCache::columnModified(sal_Int32 columnIndex)
+{
+}
+#endif
 
 // XRowUpdate
 void SAL_CALL ORowSetCache::updateNull( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
@@ -741,6 +746,8 @@ void SAL_CALL ORowSetCache::updateNull( sal_Int32 columnIndex ) throw(SQLExcepti
     (*(*m_aInsertRow))[columnIndex].setNull();
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
+
+    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(SQLException, RuntimeException)
@@ -753,6 +760,8 @@ void SAL_CALL ORowSetCache::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) t
     (*(*m_aInsertRow))[columnIndex] = x;
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
+
+    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(SQLException, RuntimeException)
@@ -765,6 +774,8 @@ void SAL_CALL ORowSetCache::updateByte( sal_Int32 columnIndex, sal_Int8 x ) thro
     (*(*m_aInsertRow))[columnIndex] = (sal_Int32)x;
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
+
+    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(SQLException, RuntimeException)
@@ -777,6 +788,8 @@ void SAL_CALL ORowSetCache::updateShort( sal_Int32 columnIndex, sal_Int16 x ) th
     (*(*m_aInsertRow))[columnIndex] = (sal_Int32)x;
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
+
+    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(SQLException, RuntimeException)
@@ -789,6 +802,8 @@ void SAL_CALL ORowSetCache::updateInt( sal_Int32 columnIndex, sal_Int32 x ) thro
     (*(*m_aInsertRow))[columnIndex] = x;
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
+
+    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(SQLException, RuntimeException)
@@ -801,6 +816,8 @@ void SAL_CALL ORowSetCache::updateLong( sal_Int32 columnIndex, sal_Int64 x ) thr
     (*(*m_aInsertRow))[columnIndex] = x;
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
+
+    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateFloat( sal_Int32 columnIndex, float x ) throw(SQLException, RuntimeException)
@@ -813,6 +830,8 @@ void SAL_CALL ORowSetCache::updateFloat( sal_Int32 columnIndex, float x ) throw(
     (*(*m_aInsertRow))[columnIndex] = x;
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
+
+    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateDouble( sal_Int32 columnIndex, double x ) throw(SQLException, RuntimeException)
@@ -825,6 +844,8 @@ void SAL_CALL ORowSetCache::updateDouble( sal_Int32 columnIndex, double x ) thro
     (*(*m_aInsertRow))[columnIndex].setFromDouble(x,m_xMetaData->getColumnType(columnIndex));
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
+
+    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
@@ -837,6 +858,8 @@ void SAL_CALL ORowSetCache::updateString( sal_Int32 columnIndex, const ::rtl::OU
     (*(*m_aInsertRow))[columnIndex] = x;
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
+
+    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateBytes( sal_Int32 columnIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException)
@@ -849,6 +872,8 @@ void SAL_CALL ORowSetCache::updateBytes( sal_Int32 columnIndex, const Sequence< 
     (*(*m_aInsertRow))[columnIndex] = x;
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
+
+    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateDate( sal_Int32 columnIndex, const ::com::sun::star::util::Date& x ) throw(SQLException, RuntimeException)
@@ -861,6 +886,8 @@ void SAL_CALL ORowSetCache::updateDate( sal_Int32 columnIndex, const ::com::sun:
     (*(*m_aInsertRow))[columnIndex] = x;
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
+
+    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateTime( sal_Int32 columnIndex, const ::com::sun::star::util::Time& x ) throw(SQLException, RuntimeException)
@@ -873,6 +900,8 @@ void SAL_CALL ORowSetCache::updateTime( sal_Int32 columnIndex, const ::com::sun:
     (*(*m_aInsertRow))[columnIndex] = x;
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
+
+    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateTimestamp( sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x ) throw(SQLException, RuntimeException)
@@ -885,6 +914,8 @@ void SAL_CALL ORowSetCache::updateTimestamp( sal_Int32 columnIndex, const ::com:
     (*(*m_aInsertRow))[columnIndex] = x;
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
+
+    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateBinaryStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
@@ -901,6 +932,8 @@ void SAL_CALL ORowSetCache::updateBinaryStream( sal_Int32 columnIndex, const Ref
     //  (*(*m_aInsertRow))[columnIndex].setTypeKind(DataType::BLOB);
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
+
+    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
@@ -918,6 +951,8 @@ void SAL_CALL ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const 
     //  (*(*m_aInsertRow))[columnIndex].setTypeKind(DataType::CLOB);
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
+
+    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x ) throw(SQLException, RuntimeException)
@@ -930,6 +965,8 @@ void SAL_CALL ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x ) 
     (*(*m_aInsertRow))[columnIndex] = x;
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
+
+    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 scale ) throw(SQLException, RuntimeException)
@@ -942,6 +979,8 @@ void SAL_CALL ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const An
     (*(*m_aInsertRow))[columnIndex] = x;
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
+
+    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 // XResultSet
@@ -1821,6 +1860,9 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.36  2001/06/22 13:08:06  oj
+    #88012# a new method for repositioning the cache
+
     Revision 1.35  2001/05/22 13:08:22  oj
     #87199# check column names
 
