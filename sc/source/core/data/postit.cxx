@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:44:40 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
+#ifndef _SXCECITM_HXX
+#include <svx/sxcecitm.hxx>
+#endif
 #ifndef _EDITOBJ_HXX
 #include <svx/editobj.hxx>
 #endif
@@ -104,6 +107,9 @@
 #ifndef SC_DETFUNC_HXX
 #include "detfunc.hxx"
 #endif
+#ifndef SC_SCDOCPOL_HXX
+#include "docpool.hxx"
+#endif
 #ifndef SC_SCPATATR_HXX
 #include "patattr.hxx"
 #endif
@@ -115,6 +121,18 @@
 #endif
 #ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
+#endif
+#ifndef _SVX_XFLCLIT_HXX
+#include <svx/xflclit.hxx>
+#endif
+#ifndef _SVX_XLNSTCIT_HXX
+#include <svx/xlnstcit.hxx>
+#endif
+#ifndef _SVX_XLNSTIT_HXX
+#include <svx/xlnstit.hxx>
+#endif
+#ifndef _SVX_XLNSWIT_HXX
+#include <svx/xlnstwit.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
@@ -145,6 +163,7 @@ ScPostIt::ScPostIt( const String& rText, ScDocument* pDoc ):
 {
     // maRectangle is not initialised as it can be tested using IsEmpty().
     SetText( rText);
+    AutoStamp( );
 }
 
 ScPostIt::ScPostIt( const EditTextObject* pTextObj, ScDocument* pDoc ):
@@ -154,10 +173,36 @@ ScPostIt::ScPostIt( const EditTextObject* pTextObj, ScDocument* pDoc ):
 {
     // maRectangle is not initialised as it can be tested using IsEmpty().
     SetEditTextObject( pTextObj);
+    AutoStamp( );
+}
+
+ScPostIt::ScPostIt( const ScPostIt& rNote, ScDocument* pDoc ):
+    mpDoc ( pDoc ),
+    maItemSet(pDoc->GetNoteItemPool(), SDRATTR_START,  SDRATTR_END, EE_ITEMS_START, EE_ITEMS_END, 0,0)
+{
+    SetEditTextObject( rNote.mpEditObj.get());
+    maStrDate   = rNote.maStrDate;
+    maStrAuthor = rNote.maStrAuthor;
+    mbShown = rNote.mbShown;
+    maRectangle = rNote.maRectangle;
+    maItemSet.PutExtended(rNote.maItemSet,SFX_ITEM_DONTCARE, SFX_ITEM_DEFAULT);
 }
 
 ScPostIt::~ScPostIt()
 {
+}
+
+const ScPostIt& ScPostIt::operator=( const ScPostIt& rCpy )
+{
+    mpDoc       = rCpy.mpDoc;
+    SetEditTextObject( rCpy.mpEditObj.get());
+    maStrDate   = rCpy.maStrDate;
+    maStrAuthor = rCpy.maStrAuthor;
+    mbShown = rCpy.mbShown;
+    maRectangle = rCpy.maRectangle;
+    maItemSet.PutExtended(rCpy.maItemSet,SFX_ITEM_DONTCARE, SFX_ITEM_DEFAULT);
+
+    return *this;
 }
 
 // Support existing functionality - create simple text string from the
@@ -178,10 +223,11 @@ String ScPostIt::GetText() const
 
 void ScPostIt::SetEditTextObject( const EditTextObject* pTextObj)
 {
-    if(pTextObj)
+    if(pTextObj && mpDoc)
     {
-        mpEditObj.reset(pTextObj->Clone());
-        AutoStamp( );
+        ScNoteEditEngine& rEE = mpDoc->GetNoteEngine();
+        rEE.SetText( *pTextObj );
+        mpEditObj.reset(rEE.CreateTextObject());
     }
     else
         mpEditObj.reset();
@@ -196,7 +242,6 @@ void ScPostIt::SetText( const String& rText)
         ScNoteEditEngine& rEE = mpDoc->GetNoteEngine();
         rEE.SetText( rText );
         mpEditObj.reset(rEE.CreateTextObject());
-        AutoStamp( );
     }
     else
         mpEditObj.reset();
@@ -244,6 +289,49 @@ Rectangle ScPostIt::DefaultRectangle(const ScAddress& rPos) const
         if ( aRectPos.X() < 0 ) aRectPos.X() = 0;
 
     return Rectangle(aRectPos, aRectSize);
+}
+
+SfxItemSet ScPostIt::DefaultItemSet() const
+{
+    SfxItemSet  aCaptionSet( mpDoc->GetNoteItemPool(), SDRATTR_START,  SDRATTR_END, EE_ITEMS_START, EE_ITEMS_END, 0,0);
+
+    XPolygon aTriangle(4);
+    aTriangle[0].X()=10; aTriangle[0].Y()= 0;
+    aTriangle[1].X()= 0; aTriangle[1].Y()=30;
+    aTriangle[2].X()=20; aTriangle[2].Y()=30;
+    aTriangle[3].X()=10; aTriangle[3].Y()= 0;   // #99319# line end polygon must be closed
+
+    aCaptionSet.Put( XLineStartItem( EMPTY_STRING, aTriangle ) );
+    aCaptionSet.Put( XLineStartWidthItem( 200 ) );
+    aCaptionSet.Put( XLineStartCenterItem( FALSE ) );
+    aCaptionSet.Put( XFillStyleItem( XFILL_SOLID ) );
+    Color aYellow( ScDetectiveFunc::GetCommentColor() );
+    aCaptionSet.Put( XFillColorItem( String(), aYellow ) );
+
+    //  shadow
+    //  SdrShadowItem has FALSE, instead the shadow is set for the rectangle
+    //  only with SetSpecialTextBoxShadow when the object is created
+    //  (item must be set to adjust objects from older files)
+    aCaptionSet.Put( SdrShadowItem( FALSE ) );
+    aCaptionSet.Put( SdrShadowXDistItem( 100 ) );
+    aCaptionSet.Put( SdrShadowYDistItem( 100 ) );
+
+    //  text attributes
+    aCaptionSet.Put( SdrTextLeftDistItem( 100 ) );
+    aCaptionSet.Put( SdrTextRightDistItem( 100 ) );
+    aCaptionSet.Put( SdrTextUpperDistItem( 100 ) );
+    aCaptionSet.Put( SdrTextLowerDistItem( 100 ) );
+
+    //  #78943# do use the default cell style, so the user has a chance to
+    //  modify the font for the annotations
+    ((const ScPatternAttr&)mpDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
+    FillEditItemSet( &aCaptionSet );
+
+    // support the best position for the tail connector now that
+    // that notes can be resized and repositioned.
+    aCaptionSet.Put( SdrCaptionEscDirItem( SDRCAPT_ESCBESTFIT) );
+
+    return aCaptionSet;
 }
 
 void ScPostIt::SetItemSet(const SfxItemSet& rItemSet)
