@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-15 11:55:57 $
+ *  last change: $Author: cmc $ $Date: 2002-07-26 11:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,8 +725,6 @@ class RTFEndPosLst;
 
 class SttEndPos
 {
-    friend RTFEndPosLst;
-    void SetStart(xub_StrLen nInStart) { nStart = nInStart; }
     // falls mehrere Attribute den gleichen Bereich umspannen, sammeln
     SfxPoolItems aArr;
     xub_StrLen nStart, nEnd;
@@ -1084,28 +1082,37 @@ void RTFEndPosLst::EndAttrs( xub_StrLen nStrPos )
 
     if (bClosed)
     {
-        SttEndPos* pAdjustMe=0;
-        for (USHORT nSize = Count(); nSize > 0;)
+        //If there are open ranges whose start is before this point, and whose
+        //start is after the cliping start then they have been closed whether
+        //we wanted this or not. So accept that fact and then restart then
+        //again
+        USHORT nSize = Count();
+        while (nSize > 0)
         {
             pSEPos = GetObject(--nSize);
-            if (pSEPos->GetStart() < nStrPos && pSEPos->GetStart() >= nClipStart)
+            if ( pSEPos->GetStart() < nStrPos &&
+                    pSEPos->GetStart() >= nClipStart)
             {
-                if (!pAdjustMe || pSEPos->GetStart() > pAdjustMe->GetStart())
-                    pAdjustMe = pSEPos;
+                rWrt.Strm() << '}';
             }
         }
-        if (pAdjustMe)
+
+        nSize = Count();
+        USHORT n = 0;
+        while (n < nSize)
         {
-            pAdjustMe->SetStart(nStrPos);
-            rWrt.Strm() << '}';
-            rWrt.Strm() << '{';
-            for( USHORT i = 0; i < pAdjustMe->GetAttrs().Count(); ++i )
+            SttEndPos* pStt = (*this)[n++];
+            if (pStt->GetStart() < nStrPos && pStt->GetStart() >= nClipStart)
             {
-                const SfxPoolItem* pItem = pAdjustMe->GetAttrs()[i];
-                if( RES_FLTR_SCRIPTTYPE == pItem->Which() )
-                    OutFontAttrs( ((SfxUInt16Item*)pItem)->GetValue() );
-                else
-                    Out( aRTFAttrFnTab, *pItem, rWrt );
+                rWrt.Strm() << '{';
+                for( USHORT i = 0; i < pStt->GetAttrs().Count(); ++i )
+                {
+                    const SfxPoolItem* pItem = pStt->GetAttrs()[i];
+                    if( RES_FLTR_SCRIPTTYPE == pItem->Which() )
+                        OutFontAttrs( ((SfxUInt16Item*)pItem)->GetValue() );
+                    else
+                        Out( aRTFAttrFnTab, *pItem, rWrt );
+                }
             }
         }
     }
