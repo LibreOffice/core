@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:16:58 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,35 +111,6 @@ void InitFuncData( BOOL bBiff8 );
 void DeInitFuncData();
 
 
-
-static const sal_Char*          pWrkbkNameExcel5 = "Book";
-static const sal_Char*          pWrkbkNameExcel97 = "Workbook";
-const sal_Char*                 pPivotCacheStorageName = "_SX_DB_CUR";
-const sal_Char*                 pVBAStorageName = "_VBA_PROJECT_CUR";
-const sal_Char*                 pVBASubStorageName = "VBA";
-const sal_Char*                 pUserNamesStreamName = "User Names";
-const sal_Char*                 pRevLogStreamName = "Revision Log";
-
-String lcl_GetDocUrl( const SfxMedium& rMedium )
-{
-    String aDocUrl;
-    if( const SfxStringItem* pItem = (const SfxStringItem*) rMedium.GetItemSet()->GetItem( SID_FILE_NAME ) )
-        aDocUrl = pItem->GetValue();
-    return aDocUrl;
-}
-
-FltError ScImportExcel( SvStream& rStream, ScDocument* pDocument )
-{
-    XclBiff eBiff = XclImpStream::DetectBiffVersion( rStream );
-    if( eBiff <= xlBiff4 )
-    {
-        ImportExcel aFilter( rStream, eBiff, pDocument, String() );
-        return aFilter.Read();
-    }
-    return eERR_FORMAT;
-}
-
-
 FltError ScImportExcel( SfxMedium& r, ScDocument* p )
 {
     return ScImportExcel( r, p, EIF_AUTO );
@@ -156,10 +127,10 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
     {
         // *** look for contained streams ***
 
-        const String aStreamName5( String::CreateFromAscii( pWrkbkNameExcel5 ) );
+        const String aStreamName5( EXC_STREAM_BOOK );
         sal_Bool bHasBook = pStorage->IsContained( aStreamName5 ) && pStorage->IsStream( aStreamName5 );
 
-        const String aStreamName8( String::CreateFromAscii( pWrkbkNameExcel97 ) );
+        const String aStreamName8( EXC_STREAM_WORKBOOK );
         sal_Bool bHasWorkbook = pStorage->IsContained( aStreamName8 ) && pStorage->IsStream( aStreamName8 );
 
         // *** handle user-defined filter selection ***
@@ -209,7 +180,7 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
 
         if( (eRet == eERR_OK) && pStreamName )
         {
-            SvStorageStreamRef xStream = pStorage->OpenStream( *pStreamName, STREAM_READ | STREAM_SHARE_DENYALL );
+            SvStorageStreamRef xStream = ScfTools::OpenStorageStreamRead( pStorage, *pStreamName );
             DBG_ASSERT( xStream.Is(), "ScImportExcel - missing stream" );
             xStream->SetBufferSize( 32768 );
 
@@ -234,13 +205,6 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
                     eDetectedBiff = xlBiffUnknown;
             }
 
-            //!!! move into filter !!!
-            const String aPvCchStrgNm( String::CreateFromAscii( pPivotCacheStorageName ) );
-            SvStorage* pPivotCacheStorage = NULL;
-            if( eDetectedBiff == xlBiff8 )
-                pPivotCacheStorage = pStorage->OpenStorage( aPvCchStrgNm, STREAM_STD_READ );
-            //!!! move into filter !!!
-
             // *** and Go! ***
 
             if( eRet == eERR_OK )
@@ -248,9 +212,9 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
                 ImportExcel* pFilter = NULL;
 
                 if( eDetectedBiff == xlBiff5 )
-                    pFilter = new ImportExcel( *xStream, eBiff, pDocument, lcl_GetDocUrl( rMedium ) );
+                    pFilter = new ImportExcel( rMedium, *xStream, eBiff, pDocument );
                 else if( eDetectedBiff == xlBiff8 )
-                    pFilter = new ImportExcel8( pStorage, *xStream, eBiff, pDocument, lcl_GetDocUrl( rMedium ), pPivotCacheStorage );
+                    pFilter = new ImportExcel8( rMedium, *xStream, eBiff, pDocument );
 
                 if( pFilter )
                     eRet = pFilter->Read();
@@ -277,7 +241,7 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
 
             XclBiff eBiff = XclImpStream::DetectBiffVersion( *pStream );
 
-            ImportExcel aFilter( *pStream, eBiff, pDocument, lcl_GetDocUrl( rMedium ) );
+            ImportExcel aFilter( rMedium, *pStream, eBiff, pDocument );
             eRet = aFilter.Read();
 
             pStream->SetBufferSize( 0 );
@@ -307,19 +271,19 @@ FltError ScExportExcel234( SvStream &aStream, ScDocument *pDoc,
 FltError ScExportExcel5( SfxMedium &rOutMedium, ScDocument *pDocument,
     const BOOL bBiff8, CharSet eNach )
 {
-    const sal_Char*             pWrkBook;
+    String                      aWrkBook;
     const sal_Char*             pClipboard;
     const sal_Char*             pClassName;
 
     if( bBiff8 )
     {
-        pWrkBook = pWrkbkNameExcel97;
+        aWrkBook = EXC_STREAM_WORKBOOK;
         pClipboard = "Biff8";
         pClassName = "Microsoft Excel 97-Tabelle";
     }
     else
     {
-        pWrkBook = pWrkbkNameExcel5;
+        aWrkBook = EXC_STREAM_BOOK;
         pClipboard = "Biff5";
         pClassName = "Microsoft Excel 5.0-Tabelle";
     }
@@ -331,8 +295,7 @@ FltError ScExportExcel5( SfxMedium &rOutMedium, ScDocument *pDocument,
         SvStorage* pStorage = rOutMedium.GetStorage();
         if( pStorage )
         {// OLE2-Datei
-            SvStorageStreamRef  xStStream =
-                pStorage->OpenStream( _STRING( pWrkBook ), STREAM_READWRITE | STREAM_TRUNC );
+            SvStorageStreamRef xStStream = ScfTools::OpenStorageStreamWrite( pStorage, aWrkBook );
 
             xStStream->SetBufferSize( 32768 );
 
@@ -343,12 +306,12 @@ FltError ScExportExcel5( SfxMedium &rOutMedium, ScDocument *pDocument,
 
             if ( bBiff8 )
             {
-                ExportBiff8     aFilter( *pStorage, *xStStream, xlBiff8, pDocument, lcl_GetDocUrl( rOutMedium ), eNach, bRelUrl );
+                ExportBiff8 aFilter( rOutMedium, *xStStream, xlBiff8, pDocument, eNach, bRelUrl );
                 eRet = aFilter.Write();
             }
             else
             {
-                ExportBiff5     aFilter( *pStorage, *xStStream, xlBiff5, pDocument, lcl_GetDocUrl( rOutMedium ), eNach, bRelUrl );
+                ExportBiff5 aFilter( rOutMedium, *xStStream, xlBiff5, pDocument, eNach, bRelUrl );
                 eRet = aFilter.Write();
             }
 
