@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-20 12:24:12 $
+ *  last change: $Author: kz $ $Date: 2001-09-06 20:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,26 @@ FloatingWindow RID_SVXTBX_DRAW
                 RadioCheck = TRUE ;
                 Text = "Kurve" ;
                 Text [ ENGLISH ] = "Curve" ;
+                Text[ english_us ] = "Curve";
+                Text[ portuguese ] = "Bézier";
+                Text[ russian ] = "Áåçüå";
+                Text[ greek ] = "Bézier";
+                Text[ dutch ] = "Bézier";
+                Text[ french ] = "Bézier";
+                Text[ spanish ] = "Curva";
+                Text[ finnish ] = "B?zier";
+                Text[ italian ] = "Curva";
+                Text[ danish ] = "Bezier";
+                Text[ swedish ] = "Kurva";
+                Text[ polish ] = "Krzywa";
+                Text[ portuguese_brazilian ] = "Bezier";
+                Text[ japanese ] = "ï¾ï¾ï½¼ï¾ï½ªæ›²ç·š";
+                Text[ korean ] = "ë² ì§€ì—";
+                Text[ chinese_simplified ] = "æ›²çº¿";
+                Text[ chinese_traditional ] = "æ›²ç·š";
+                Text[ turkish ] = "Bezier";
+                Text[ arabic ] = "Bézier";
+                Text[ catalan ] = "Bézier";
             };
             ToolBoxItem
             {
@@ -248,6 +268,26 @@ FloatingWindow RID_SVXTBX_DRAW
                 RadioCheck = TRUE ;
                 Text = "Freihandkurve" ;
                 Text [ ENGLISH ] = "Freeform Curve" ;
+                Text[ english_us ] = "Freeform Curve";
+                Text[ portuguese ] = "Forma livre";
+                Text[ russian ] = "Ğèñîâàííàÿ ôîğìà";
+                Text[ greek ] = "Åëåıèåñç ó÷åäßáóç";
+                Text[ dutch ] = "Vrije hand";
+                Text[ french ] = "À main levée";
+                Text[ spanish ] = "Curva a mano alzada";
+                Text[ finnish ] = "Vapaamuoto";
+                Text[ italian ] = "Mano libera";
+                Text[ danish ] = "Frihånd";
+                Text[ swedish ] = "Frihandskurva";
+                Text[ polish ] = "Krzywa narysowana odrêcznie";
+                Text[ portuguese_brazilian ] = "Freihand";
+                Text[ japanese ] = "ï¾Œï¾˜ï½°ï¾Šï¾ï¾„ï¾";
+                Text[ korean ] = "ììœ ì„œì‹";
+                Text[ chinese_simplified ] = "è‡ªç”±å½¢å¼";
+                Text[ chinese_traditional ] = "è‡ªç”±å½¢";
+                Text[ turkish ] = "Serbest biçim";
+                Text[ arabic ] = "ÍÑ";
+                Text[ catalan ] = "Mano alzada";
             };
             ToolBoxItem
             {
@@ -335,7 +375,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ turkish ] = "Yay dilimi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Segmento de círculo";
-                Text[ finnish ] = "Ympyrän segmentti";
+                Text[ finnish ] = "Ympyr?n segmentti";
             };
             ToolBoxItem
             {
@@ -422,7 +462,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ turkish ] = "Metin canlandırma";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Animación de texto";
-                Text[ finnish ] = "Tekstin animaatio";
+                Text[ finnish ] = "Tekstianimaatio";
             };
             ToolBoxItem
             {
@@ -572,7 +612,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ italian ] = "Centrato" ;
                 Text [ portuguese_brazilian ] = "Centralizado" ;
                 Text [ portuguese ] = "Centrado" ;
-                Text [ finnish ] = "Keskitä" ;
+                Text [ finnish ] = "Keskell?" ;
                 Text [ danish ] = "Centreret" ;
                 Text [ french ] = "Centré" ;
                 Text [ swedish ] = "Centrerat" ;
@@ -630,7 +670,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ italian ] = "Sopra" ;
                 Text [ portuguese_brazilian ] = "Topo" ;
                 Text [ portuguese ] = "Em cima" ;
-                Text [ finnish ] = "Yläosa" ;
+                Text [ finnish ] = "Yl?osa" ;
                 Text [ danish ] = "Øverst" ;
                 Text [ french ] = "En haut" ;
                 Text [ swedish ] = "Överst" ;
@@ -722,6 +762,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
     Text[ catalan ] = "Alineación";
 };
  // ********************************************************************** EOF
+
 
 
 
