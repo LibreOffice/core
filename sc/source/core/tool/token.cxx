@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:33:53 $
+ *  last change: $Author: er $ $Date: 2001-02-26 13:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ ScToken* ScRawToken::CreateToken() const
             return new ScJumpToken( eOp, (short*) nJump );
         break;
         case svExternal :
-            return new ScExternalToken( eOp, (BYTE) cStr[0], String( cStr[1] ) );
+            return new ScExternalToken( eOp, (BYTE) cStr[0], String( cStr+1 ) );
         break;
         case svMissing :
             return new ScMissingToken( eOp );
