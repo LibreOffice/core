@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDocumentIndexesSupplier.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2004-03-19 14:36:33 $
+ *  last change:$Date: 2004-09-08 15:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
