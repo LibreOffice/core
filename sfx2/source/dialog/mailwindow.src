@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailwindow.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:20:37 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ Window RID_MAIL_WINDOW
         Text[ polish ] = "Wy渓ij";
         Text[ portuguese_brazilian ] = "Send";
         Text[ japanese ] = "憲怣";
-        Text[ korean ] = "Send";
+        Text[ korean ] = "~价脚";
         Text[ chinese_simplified ] = "寄发";
         Text[ chinese_traditional ] = "祇癳";
         Text[ turkish ] = "Send";
@@ -117,7 +117,7 @@ Window RID_MAIL_WINDOW
         Text[ polish ] = "Zamknij";
         Text[ portuguese_brazilian ] = "Close";
         Text[ japanese ] = "暵偠傞";
-        Text[ korean ] = "Close";
+        Text[ korean ] = "摧扁";
         Text[ chinese_simplified ] = "关闭";
         Text[ chinese_traditional ] = "闽超";
         Text[ turkish ] = "Close";
@@ -291,7 +291,7 @@ Window RID_MAIL_WINDOW
         Text[ polish ] = "Dotyczy:";
         Text[ portuguese_brazilian ] = "Subject:";
         Text[ japanese ] = "審柤:";
-        Text[ korean ] = "Subject:";
+        Text[ korean ] = "~ 促澜俊 措秦:";
         Text[ chinese_simplified ] = "事由：";
         Text[ chinese_traditional ] = "Ξ";
         Text[ turkish ] = "Subject:";
@@ -323,7 +323,7 @@ Window RID_MAIL_WINDOW
         Text[ polish ] = "Od:";
         Text[ portuguese_brazilian ] = "From:";
         Text[ japanese ] = "嵎弌恖:";
-        Text[ korean ] = "From:";
+        Text[ korean ] = "何磐:";
         Text[ chinese_simplified ] = "发件人：";
         Text[ chinese_traditional ] = "盚ン";
         Text[ turkish ] = "From:";
@@ -356,7 +356,7 @@ Window RID_MAIL_WINDOW
         Text[ polish ] = "Priorytet:";
         Text[ portuguese_brazilian ] = "Priority:";
         Text[ japanese ] = "廳梫搙:";
-        Text[ korean ] = "Priority:";
+        Text[ korean ] = "快急鉴困:";
         Text[ chinese_simplified ] = "重要性：";
         Text[ chinese_traditional ] = "璶┦";
         Text[ turkish ] = "Priority:";

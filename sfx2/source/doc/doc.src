@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:12:25 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:28:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,7 +402,7 @@ String STR_PRINT_STYLES
     Text[ dutch ] = "Opmaakprofielen afdrukken";
     Text[ chinese_simplified ] = "´òÓ¡¸ñÊ½ÑùÊ½";
     Text[ greek ] = "Åêôığùóç ğñïôığùí ìïñöïğïßçóçò";
-    Text[ korean ] = "¼­½Ä À¯ÇüÀ» ÀÎ¼âÁß";
+    Text[ korean ] = "¼­½Ä À¯ÇüÀ» ÀÎ¼âÃâ·Â";
     Text[ turkish ] = "Biçimler yazdırılıyor";
     Text[ language_user1 ] = " ";
 };
@@ -1323,7 +1323,7 @@ String RID_STR_WARNSTYLEOVERWRITE
     Text[ dutch ] = "Wilt u opmaakprofiel \"$(ARG1)\" vervangen?";
     Text[ chinese_simplified ] = "Òª¸üÌæÑùÊ½¡°$(ARG1)¡±£¿";
     Text[ greek ] = "Íá áíôéêáôáóôáèåß ôï óôõë $(ARG1);";
-    Text[ korean ] = "À¯Çü $(ARG1)À» ´ëÃ¼ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ korean ] = "À¯Çü $(ARG1)À»(¸¦)  ´ëÃ¼ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "\"$(ARG1)\" biçimi başkası ile değiştirilsin mi?";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
 };
@@ -1729,7 +1729,7 @@ String STR_DOCTYPENAME_SW
     Text[ polish ] = "Dokument tekstowy";
     Text[ portuguese_brazilian ] = "Text Document";
     Text[ japanese ] = "•¶‘ÄŞ·­ÒİÄ";
-    Text[ korean ] = "Text Document";
+    Text[ korean ] = "ÅØ½ºÆ® ¹®¼­";
     Text[ chinese_simplified ] = "ÎÄ±¾ÎÄµµ";
     Text[ chinese_traditional ] = "¤å¦r¤å¥ó";
     Text[ turkish ] = "Metin belgesi";
@@ -1753,7 +1753,7 @@ String STR_DOCTYPENAME_SWWEB
     Text[ polish ] = "Dokument HTML";
     Text[ portuguese_brazilian ] = "HTML Document";
     Text[ japanese ] = "HTML Œ`®ÄŞ·­ÒİÄ";
-    Text[ korean ] = "HTML Document";
+    Text[ korean ] = "HTML ¹®¼­";
     Text[ chinese_simplified ] = "HTML ÎÄµµ";
     Text[ chinese_traditional ] = "HTML ¤å¥ó";
     Text[ turkish ] = "HTML belgesi";
@@ -1777,7 +1777,7 @@ String STR_DOCTYPENAME_SWGLOB
     Text[ polish ] = "Dokument g³ówny";
     Text[ portuguese_brazilian ] = "Master Document";
     Text[ japanese ] = "Ï½À° ÄŞ·­ÒİÄ";
-    Text[ korean ] = "Master Document";
+    Text[ korean ] = "¸¶½ºÅÍ ¹®¼­";
     Text[ chinese_simplified ] = "Ö÷¿ØÎÄµµ";
     Text[ chinese_traditional ] = "¥D±±¤å¥ó";
     Text[ turkish ] = "Ana belge";
@@ -1801,7 +1801,7 @@ String STR_DOCTYPENAME_SC
     Text[ polish ] = "Arkusz kalkulacyjny";
     Text[ portuguese_brazilian ] = "Spreadsheet";
     Text[ japanese ] = "•\\ŒvZÄŞ·­ÒİÄ";
-    Text[ korean ] = "Spreadsheet";
+    Text[ korean ] = "½ºÇÁ·¹µå½ÃÆ®";
     Text[ chinese_simplified ] = "¹¤×÷±íÎÄµµ";
     Text[ chinese_traditional ] = "¤u§@ªí¤å¥ó";
     Text[ turkish ] = "Hesap tablosu";
@@ -1825,7 +1825,7 @@ String STR_DOCTYPENAME_SI
     Text[ polish ] = "Prezentacja";
     Text[ portuguese_brazilian ] = "Presentation";
     Text[ japanese ] = "ÌßÚ¾ŞİÃ°¼®İ";
-    Text[ korean ] = "Presentation";
+    Text[ korean ] = "ÇÁ¸®Á¨Å×ÀÌ¼Ç";
     Text[ chinese_simplified ] = "ÑİÊ¾ÎÄ¸å";
     Text[ chinese_traditional ] = "Â²³ø¤å¥ó";
     Text[ turkish ] = "Sunu";
@@ -1849,7 +1849,7 @@ String STR_DOCTYPENAME_SD
     Text[ polish ] = "Rysunek";
     Text[ portuguese_brazilian ] = "Drawing";
     Text[ japanese ] = "}Œ`•`‰æ";
-    Text[ korean ] = "Drawing";
+    Text[ korean ] = "±×¸®±â";
     Text[ chinese_simplified ] = "»æÍ¼";
     Text[ chinese_traditional ] = "Ã¸¹Ï¤å¥ó";
     Text[ turkish ] = "Çizim";
@@ -1873,7 +1873,7 @@ String STR_DOCTYPENAME_MESSAGE
     Text[ polish ] = "Wiadomoœæ";
     Text[ portuguese_brazilian ] = "Mail";
     Text[ japanese ] = "Ò¯¾°¼Ş";
-    Text[ korean ] = "Mail";
+    Text[ korean ] = "¸Ş½ÃÁö";
     Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş";
     Text[ chinese_traditional ] = "¹q¤l¶l¥ó";
     Text[ turkish ] = "İleti";
