@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:24:35 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,16 +186,19 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ danish ] = "Nyt indeks";
                 Text[ swedish ] = "Nytt index";
                 Text[ polish ] = "Nowy indeks";
-                Text[ portuguese_brazilian ] = "new index";
+                Text[ portuguese_brazilian ] = "Novo �ndice";
                 Text[ japanese ] = "新規作成インデックス";
                 Text[ korean ] = "새 색인";
                 Text[ chinese_simplified ] = "新建索引";
                 Text[ chinese_traditional ] = "開啟新索引";
-                Text[ turkish ] = "new index";
+                Text[ turkish ] = "Yeni dizin";
                 Text[ arabic ] = "���� ����";
                 Text[ catalan ] = "Nou �ndex";
                 Text[ finnish ] = "Uusi indeksi";
                 Text[ thai ] = "ดัชนีใหม่";
+                Text[ czech ] = "Nový rejstřík";
+                Text[ hebrew ] = "neuer Index";
+                Text[ hindi ] = "नया अनुक्रमणी";
             };
             ToolBoxItem
             {
@@ -215,16 +218,19 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ danish ] = "Slet aktuelt indeks";
                 Text[ swedish ] = "Radera aktuellt index";
                 Text[ polish ] = "Usu� bie��cy indeks";
-                Text[ portuguese_brazilian ] = "drop current index";
+                Text[ portuguese_brazilian ] = "Excluir o �ndice atual";
                 Text[ japanese ] = "現在のインデックスの削除";
                 Text[ korean ] = "현재 색인 삭제";
                 Text[ chinese_simplified ] = "删除当前的索引";
                 Text[ chinese_traditional ] = "刪除目前的索引";
-                Text[ turkish ] = "drop current index";
+                Text[ turkish ] = "Y�r�rl�kteki dizini sil";
                 Text[ arabic ] = "��� ������ ������";
                 Text[ catalan ] = "Suprimeix l'�ndex actual";
                 Text[ finnish ] = "Poista nykyinen indeksi";
                 Text[ thai ] = "ลบดัชนีปัจจุบัน";
+                Text[ czech ] = "Smazat aktuální rejstřík";
+                Text[ hebrew ] = "aktuellen Index löschen";
+                Text[ hindi ] = "वर्तमाण अनुक्रमणी को मिटाओ";
             };
             ToolBoxItem
             {
@@ -244,16 +250,19 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ danish ] = "Omd�b aktuelt indeks";
                 Text[ swedish ] = "Byt namn p� aktuellt index";
                 Text[ polish ] = "Zmie� nazw� bie��cego indeksu";
-                Text[ portuguese_brazilian ] = "rename current index";
+                Text[ portuguese_brazilian ] = "Renomear o �ndice atual?";
                 Text[ japanese ] = "現在のインデックスの名前を変更";
                 Text[ korean ] = "현재 색인 이름 바꾸기";
                 Text[ chinese_simplified ] = "重命名当前的索引";
                 Text[ chinese_traditional ] = "重新命名目前的索引";
-                Text[ turkish ] = "rename current index";
+                Text[ turkish ] = "Y�r�l�kteki dizini yeniden isimlendir";
                 Text[ arabic ] = "����� ����� ������ ������";
                 Text[ catalan ] = "Reanomena l'�ndex actual";
                 Text[ finnish ] = "Nime� nykyinen indeksi uudelleen";
                 Text[ thai ] = "เปลี่ยนชื่อดัชนีปัจจุบัน";
+                Text[ czech ] = "Přejmenovat aktuální rejstřík";
+                Text[ hebrew ] = "aktuellen Index umbenennen";
+                Text[ hindi ] = "वर्तमान अनुक्रमणी को पुनः नाम दो";
             };
             ToolBoxItem
             {
@@ -273,16 +282,19 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ danish ] = "Gem aktuelt indeks";
                 Text[ swedish ] = "Spara aktuellt index";
                 Text[ polish ] = "Zapisz bie��cy indeks";
-                Text[ portuguese_brazilian ] = "save current index";
+                Text[ portuguese_brazilian ] = "Salvar o �ndice atual";
                 Text[ japanese ] = "現在のインデックスの保存";
                 Text[ korean ] = "현재 색인 저장";
                 Text[ chinese_simplified ] = "存盘当前的索引";
                 Text[ chinese_traditional ] = "儲存目前的索引";
-                Text[ turkish ] = "save current index";
+                Text[ turkish ] = "Y�r�rl�kteki dizini kaydet";
                 Text[ arabic ] = "��� ������ ������";
                 Text[ catalan ] = "Desa l'�ndex actual";
                 Text[ finnish ] = "Tallenna nykyinen indeksi";
                 Text[ thai ] = "บันทึกดัชนีปัจจุบัน";
+                Text[ czech ] = "Uložit aktuální rejstřík";
+                Text[ hebrew ] = "aktuellen Index speichern";
+                Text[ hindi ] = "वर्तमान अनुक्रमणी संचित करो";
             };
             ToolBoxItem
             {
@@ -301,17 +313,20 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ italian ] = "Ripristina l'indice attuale";
                 Text[ danish ] = "Nulstil aktuelt indeks";
                 Text[ swedish ] = "�terst�ll aktuellt index";
-                Text[ polish ] = "Zresetuj bie��cy indeks";
-                Text[ portuguese_brazilian ] = "reset current index";
+                Text[ polish ] = "Resetuj bie��cy indeks";
+                Text[ portuguese_brazilian ] = "Restaurar o �ndice atual";
                 Text[ japanese ] = "現在のインデックスを元に戻す";
                 Text[ korean ] = "현재 색인을 원래대로";
                 Text[ chinese_simplified ] = "重设当前的索引";
                 Text[ chinese_traditional ] = "重設目前的索引";
-                Text[ turkish ] = "reset current index";
+                Text[ turkish ] = "Y�r�rl�kteki dizini temizle";
                 Text[ arabic ] = "����� ����� ������ ������";
                 Text[ catalan ] = "Reinicia l'�ndex actual";
                 Text[ finnish ] = "Palauta nykyisen indeksin asetukset";
                 Text[ thai ] = "ตั้งค่าดัชนีปัจจุบันอีกครั้ง";
+                Text[ czech ] = "Obnovit aktuální rejstřík";
+                Text[ hebrew ] = "aktuellen Index zurücksetzen";
+                Text[ hindi ] = "वर्तमान अनुक्रमणी को रिसेट्ट करो";
             };
         };
     };
@@ -342,16 +357,19 @@ ModalDialog DLG_INDEXDESIGN
         Text[ danish ] = "Indeksoplysninger";
         Text[ swedish ] = "Indexdetaljer";
         Text[ polish ] = "Szczeg�y indeksu";
-        Text[ portuguese_brazilian ] = "Index details";
+        Text[ portuguese_brazilian ] = "Detalhes do �ndice";
         Text[ japanese ] = "インデックスの詳細";
         Text[ korean ] = "색인 세부 정보";
         Text[ chinese_simplified ] = "索引细节";
         Text[ chinese_traditional ] = "索引細節";
-        Text[ turkish ] = "Index details";
+        Text[ turkish ] = "Dizin detaylar�";
         Text[ arabic ] = "������ ������";
         Text[ catalan ] = "Detalls de l'�ndex";
         Text[ finnish ] = "Indeksin tiedot";
         Text[ thai ] = "รายละเอียดดัชนี";
+        Text[ czech ] = "Podrobnosti o rejstříku";
+        Text[ hebrew ] = "Index-Details";
+        Text[ hindi ] = "अनुक्रमणिका विवरण";
     };
     FixedText FT_DESC_LABEL
     {
@@ -360,7 +378,7 @@ ModalDialog DLG_INDEXDESIGN
         Text = "Indexbezeichner:";
         Text [ english ] = "Index identifier:";
         Text [ english_us ] = "Index identifier:";
-        Text [ portuguese_brazilian ] = "Indexbezeichner:";
+        Text [ portuguese_brazilian ] = "Identificador de �ndice:";
         Text [ swedish ] = "Indexidentifikator:";
         Text [ danish ] = "Indeksidentifikator:";
         Text [ italian ] = "Identificatore indice:";
@@ -378,10 +396,13 @@ ModalDialog DLG_INDEXDESIGN
         Text [ chinese_simplified ] = "索引标志：";
         Text [ greek ] = "������������� ����������:";
         Text [ korean ] = "색인 확인자:";
-        Text[ turkish ] = "Index identifier:";
+        Text[ turkish ] = "Dizin tan�mlay�c�s�:";
         Text[ catalan ] = "Identificador de l'�ndex:";
         Text[ finnish ] = "Indeksin tunniste:";
         Text[ thai ] = "ตัวระบุดัชนี:";
+        Text[ czech ] = "Identifikátor rejstříku:";
+        Text[ hebrew ] = "Indexbezeichner:";
+        Text[ hindi ] = "अनुक्रमणी अइडेन्टिफयर:";
     };
     FixedText FT_DESCRIPTION
     {
@@ -405,17 +426,20 @@ ModalDialog DLG_INDEXDESIGN
         Text[ italian ] = "~Univoco";
         Text[ danish ] = "~Entydig";
         Text[ swedish ] = "~Entydigt";
-        Text[ polish ] = "Unikatowy";
-        Text[ portuguese_brazilian ] = "Unique";
+        Text[ polish ] = "~Unikatowy";
+        Text[ portuguese_brazilian ] = "~�nico";
         Text[ japanese ] = "固有(~U)";
         Text[ korean ] = "고유(~U)";
         Text[ chinese_simplified ] = "明确的(~U)";
         Text[ chinese_traditional ] = "明確的(~U)";
-        Text[ turkish ] = "Unique";
+        Text[ turkish ] = "Benzersiz";
         Text[ arabic ] = "����";
         Text[ catalan ] = "�~nic";
         Text[ finnish ] = "~Yksil�llinen";
         Text[ thai ] = "ไ~ม่ซ้ำ";
+        Text[ czech ] = "Jednoznačný";
+        Text[ hebrew ] = "~Eindeutig";
+        Text[ hindi ] = "~अपूर्व";
     };
     FixedText FT_FIELDS
     {
@@ -435,16 +459,19 @@ ModalDialog DLG_INDEXDESIGN
         Text[ danish ] = "Felter";
         Text[ swedish ] = "F�lt";
         Text[ polish ] = "Pola";
-        Text[ portuguese_brazilian ] = "Fields";
+        Text[ portuguese_brazilian ] = "Campos";
         Text[ japanese ] = "フィールド";
         Text[ korean ] = "필드";
         Text[ chinese_simplified ] = "字段";
         Text[ chinese_traditional ] = "欄位";
-        Text[ turkish ] = "Fields";
+        Text[ turkish ] = "Alanlar";
         Text[ arabic ] = "����";
         Text[ catalan ] = "Camps";
         Text[ finnish ] = "Kent�t";
         Text[ thai ] = "เขตข้อมูล";
+        Text[ czech ] = "Pole";
+        Text[ hebrew ] = "‮שדות‬";
+        Text[ hindi ] = "क्षेत्र";
     };
     Control CTR_FIELDS
     {
@@ -472,17 +499,20 @@ ModalDialog DLG_INDEXDESIGN
         Text[ italian ] = "C~hiudi";
         Text[ danish ] = "L~uk";
         Text[ swedish ] = "~St�ng";
-        Text[ polish ] = "Zamknij";
-        Text[ portuguese_brazilian ] = "~Close";
+        Text[ polish ] = "~Zamknij";
+        Text[ portuguese_brazilian ] = "~Fechar";
         Text[ japanese ] = "閉じる(~C)";
         Text[ korean ] = "닫기(~C)";
         Text[ chinese_simplified ] = "关闭(~C)";
         Text[ chinese_traditional ] = "關閉(~C)";
-        Text[ turkish ] = "~Close";
+        Text[ turkish ] = "~Kapal�";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "~Tanca";
         Text[ finnish ] = "~Sulje";
         Text[ thai ] = "~ปิด";
+        Text[ czech ] = "Zavřít";
+        Text[ hebrew ] = "‮סגירה‬";
+        Text[ hindi ] = "~बन्द करो";
     };
     HelpButton HB_HELP
     {
@@ -499,16 +529,19 @@ ModalDialog DLG_INDEXDESIGN
     Text[ danish ] = "Indeks";
     Text[ swedish ] = "Index";
     Text[ polish ] = "Indeksy";
-    Text[ portuguese_brazilian ] = "Indexes";
+    Text[ portuguese_brazilian ] = "�ndices";
     Text[ japanese ] = "インデックス";
     Text[ korean ] = "색인";
     Text[ chinese_simplified ] = "标志";
     Text[ chinese_traditional ] = "索引";
-    Text[ turkish ] = "Indexes";
+    Text[ turkish ] = "Dizinler";
     Text[ arabic ] = "�����";
     Text[ catalan ] = "�ndexs";
     Text[ finnish ] = "Indeksit";
     Text[ thai ] = "ดัชนี";
+    Text[ czech ] = "Rejstříky";
+    Text[ hebrew ] = "Indizes";
+    Text[ hindi ] = "अनुक्रमणी";
 };
 
 String STR_TAB_INDEX_SORTORDER
@@ -522,11 +555,11 @@ String STR_TAB_INDEX_SORTORDER
     Text [ french ] = "Ordre de tri" ;
     Text [ swedish ] = "Sorteringsordning" ;
     Text [ danish ] = "Sorteringsr�kkef�lge" ;
-    Text [ portuguese_brazilian ] = "Sortierreihenfolge" ;
+    Text [ portuguese_brazilian ] = "Ordem de classifica��o" ;
     Text [ portuguese ] = "Ordem de classifica��o" ;
     Text [ chinese_simplified ] = "排序规则";
     Text [ russian ] = "������� ����������";
-    Text [ polish ] = "Kolejno�� sortowania";
+    Text [ polish ] = "Porz�dek sortowania";
     Text [ japanese ] = "並べ替え順序";
     Text [ chinese_traditional ] = "排序規則";
     Text [ arabic ] = "����� �����";
@@ -534,10 +567,13 @@ String STR_TAB_INDEX_SORTORDER
     Text [ chinese_simplified ] = "排序规则";
     Text [ greek ] = "����� �����������";
     Text [ korean ] = "정렬 순서";
-    Text[ turkish ] = "Sort order";
+    Text[ turkish ] = "S�ralama kural�";
     Text[ catalan ] = "Ordenaci�";
     Text[ finnish ] = "Lajitteluj�rjestys";
     Text[ thai ] = "เรียงลำดับ";
+    Text[ czech ] = "Pořadí řazení";
+    Text[ hebrew ] = "Sortierreihenfolge";
+    Text[ hindi ] = "सोर्ट क्रम";
 };
 String STR_TAB_INDEX_FIELD
 {
@@ -554,16 +590,19 @@ String STR_TAB_INDEX_FIELD
     Text[ danish ] = "Indeksfelt";
     Text[ swedish ] = "Indexf�lt";
     Text[ polish ] = "Pole indeksu";
-    Text[ portuguese_brazilian ] = "Index field";
+    Text[ portuguese_brazilian ] = "Campo do �ndice";
     Text[ japanese ] = "インデックスフィールド";
     Text[ korean ] = "색인 필드";
     Text[ chinese_simplified ] = "索引字段";
     Text[ chinese_traditional ] = "索引欄位";
-    Text[ turkish ] = "Index field";
+    Text[ turkish ] = "Indeks alan�";
     Text[ arabic ] = "��� ����";
     Text[ catalan ] = "Camp �ndex";
     Text[ finnish ] = "Indeksikentt�";
     Text[ thai ] = "เขตข้อมูลดัชนี";
+    Text[ czech ] = "Pole rejstříku";
+    Text[ hebrew ] = "Indexfeld";
+    Text[ hindi ] = "अनुक्रमणी क्षेत्र";
 };
 String STR_ORDER_ASCENDING
 {
@@ -576,7 +615,7 @@ String STR_ORDER_ASCENDING
     Text [ french ] = "Croissant" ;
     Text [ swedish ] = "Stigande" ;
     Text [ danish ] = "Stigende" ;
-    Text [ portuguese_brazilian ] = "Aufsteigend" ;
+    Text [ portuguese_brazilian ] = "Crescente" ;
     Text [ portuguese ] = "Ascendente" ;
     Text [ chinese_simplified ] = "向上";
     Text [ russian ] = "�� �����������";
@@ -588,10 +627,13 @@ String STR_ORDER_ASCENDING
     Text [ chinese_simplified ] = "向上";
     Text [ greek ] = "�������";
     Text [ korean ] = "오름차순";
-    Text[ turkish ] = "Ascending";
+    Text[ turkish ] = "Artan";
     Text[ catalan ] = "Ascendent";
     Text[ finnish ] = "Nouseva";
     Text[ thai ] = "จากน้อยไปมาก";
+    Text[ czech ] = "Vzestupně";
+    Text[ hebrew ] = "Aufsteigend";
+    Text[ hindi ] = "आरोहण क्रम";
 };
 String STR_ORDER_DESCENDING
 {
@@ -604,7 +646,7 @@ String STR_ORDER_DESCENDING
     Text [ dutch ] = "Aflopend" ;
     Text [ swedish ] = "Fallande" ;
     Text [ danish ] = "Faldende" ;
-    Text [ portuguese_brazilian ] = "Absteigend" ;
+    Text [ portuguese_brazilian ] = "Decrescente" ;
     Text [ portuguese ] = "Descendente" ;
     Text [ chinese_simplified ] = "向下";
     Text [ russian ] = "�� ��������";
@@ -616,10 +658,13 @@ String STR_ORDER_DESCENDING
     Text [ chinese_simplified ] = "向下";
     Text [ greek ] = "��������";
     Text [ korean ] = "내림차순";
-    Text[ turkish ] = "Descending";
+    Text[ turkish ] = "Azalan";
     Text[ catalan ] = "Descendent";
     Text[ finnish ] = "Laskeva";
     Text[ thai ] = "จากมากไปน้อย";
+    Text[ czech ] = "Sestupně";
+    Text[ hebrew ] = "Absteigend";
+    Text[ hindi ] = "अवरोहण क्रम";
 };
 
 String STR_CONFIRM_DROP_INDEX
@@ -636,17 +681,20 @@ String STR_CONFIRM_DROP_INDEX
     Text[ italian ] = "Volete davvero eliminare l'indice '$name$'?";
     Text[ danish ] = "Er du sikker p�, at du vil slette indekset '$name$'?";
     Text[ swedish ] = "Vill du verkligen radera indexet '$name$'?";
-    Text[ polish ] = "Na pewno usun�� indeks '$name$'?";
-    Text[ portuguese_brazilian ] = "Do you really want to drop the index '$name$'?";
+    Text[ polish ] = "Czy na pewno chcesz usun�� indeks '$name$'?";
+    Text[ portuguese_brazilian ] = "Deseja realmente excluir o �ndice \"$name$\"?";
     Text[ japanese ] = "インデックス '$name$' を削除しますか。";
     Text[ korean ] = "색인 '$name$'(을)를 정말로 삭제하시겠습니까?";
     Text[ chinese_simplified ] = "真要删除索引'$name$'？";
     Text[ chinese_traditional ] = "真要刪除索引<$name$>？";
-    Text[ turkish ] = "Do you really want to drop the index '$name$'?";
+    Text[ turkish ] = "'$name$' dizinini silmek istiyor musunuz?";
     Text[ arabic ] = "�� ���� ������ ��� ������ '$name$'�";
     Text[ catalan ] = "Esteu segur que voleu suprimir l'�ndex '$name$'?";
     Text[ finnish ] = "Haluatko varmasti poistaa indeksin '$name$'?";
     Text[ thai ] = "คุณต้องการลบดัชนี '$name$'หรือไม่?";
+    Text[ czech ] = "Opravdu chcete smazat rejstřík '$name$'?";
+    Text[ hebrew ] = "Wollen Sie den Index '$name$' wirklich löschen?";
+    Text[ hindi ] = "आप सचमुच में '$name$' अनुक्रमणी को मिटाना चाहते है ?";
 };
 
 String STR_LOGICAL_INDEX_NAME
@@ -665,15 +713,18 @@ String STR_LOGICAL_INDEX_NAME
     Text[ danish ] = "INDEKS";
     Text[ swedish ] = "index";
     Text[ polish ] = "indeks";
-    Text[ portuguese_brazilian ] = "index";
+    Text[ portuguese_brazilian ] = "�ndice";
     Text[ japanese ] = "インデックス";
     Text[ korean ] = "색인";
     Text[ chinese_simplified ] = "索引";
     Text[ chinese_traditional ] = "索引";
-    Text[ turkish ] = "�ndis";
+    Text[ turkish ] = "Dizin";
     Text[ arabic ] = "����";
     Text[ catalan ] = "�ndex";
     Text[ thai ] = "ดัชนี";
+    Text[ czech ] = "rejstřík";
+    Text[ hebrew ] = "index";
+    Text[ hindi ] = "अनुक्रमणी";
 };
 
 Image IMG_PKEYICON
@@ -708,12 +759,12 @@ ErrorBox ERR_NEED_INDEX_FIELDS
     Message[ danish ] = "Indekset skal mindst indeholde �t felt.";
     Message[ swedish ] = "Indexet m�ste inneh�lla minst ett f�lt.";
     Message[ polish ] = "Indeks musi zawiera� co najmniej jedno pole.";
-    Message[ portuguese_brazilian ] = "Der Index mu? mindestens ein Feld enthalten.";
+    Message[ portuguese_brazilian ] = "O �ndice tem de incluir pelo menos um campo.";
     Message[ japanese ] = "インデックスにはフィールドが最低１つは必要です。";
     Message[ korean ] = "색인에 최소한 하나의 필드를 포함해야 합니다.";
     Message[ chinese_simplified ] = "索引必须至少含有一个字段。";
     Message[ chinese_traditional ] = "索引必須至少含有一個欄位。";
-    Message[ turkish ] = "Der Index mu� mindestens ein Feld enthalten.";
+    Message[ turkish ] = "Dizin en az�ndan bir alan i�ermelidir.";
     Message[ arabic ] = "��� �� ����� ������ ��� ��� ���� ��� �����.";
     Title[ portuguese ] = "Guardar �ndice";
     Title[ russian ] = "��������� ������";
@@ -735,9 +786,15 @@ ErrorBox ERR_NEED_INDEX_FIELDS
     Message[ catalan ] = "L'�ndex ha de contenir un camp com a m�nim.";
     Title[ catalan ] = "Desa l'�ndex";
     Message[ finnish ] = "Indeksiss� on oltava v�hint��n yksi kentt�.";
-    Title[ finnish ] = "Tallenna hakemisto";
+    Title[ finnish ] = "Save Index";
     Message[ thai ] = "ดัชนีต้องมีอย่างน้อยหนึ่งเขตข้อมูล";
     Title[ thai ] = "บันทึกดัชนี!";
+    Message[ czech ] = "Rejstřík musí obsahovat alespoň jedno pole.";
+    Message[ hebrew ] = "Der Index muss mindestens ein Feld enthalten.";
+    Title[ czech ] = "Uložit rejstřík";
+    Title[ hebrew ] = "Index speichern";
+    Message[ hindi ] = "अनुक्रमणी में कम से कम एक क्षेत्र का रहना ज़रूरी है ।";
+    Title[ hindi ] = "Save Index";
 };
 
 QueryBox QUERY_SAVE_CURRENT_INDEX
@@ -761,13 +818,13 @@ QueryBox QUERY_SAVE_CURRENT_INDEX
     Message[ italian ] = "Volete salvare le modifiche nell'indice attuale?";
     Message[ danish ] = "Vil du stadig gemme �ndringerne af det aktuelle indeks?";
     Message[ swedish ] = "Vill du spara �ndringarna av aktuellt index?";
-    Message[ polish ] = "Zapisa� modyfikacje bie��cego indeksu?";
-    Message[ portuguese_brazilian ] = "Do you want to save the changes made on the current index?";
+    Message[ polish ] = "Czy chcesz zapisa� zmiany w bie��cym indeksie?";
+    Message[ portuguese_brazilian ] = "Deseja salvar as modifica��es efetuadas no �ndice atual?";
     Message[ japanese ] = "現在のインデックスで行った変更を保存しますか。";
     Message[ korean ] = "현재 색인의 변경된 내용을 저장하시겠습니까?";
     Message[ chinese_simplified ] = "要存盘当前索引的修改内容？";
     Message[ chinese_traditional ] = "要儲存目前索引的變更內容？";
-    Message[ turkish ] = "Do you want to save the changes made on the current index?";
+    Message[ turkish ] = "Yapt���n�z de�i�kliklerin y�r�l�kteki dizinde kaydedilmesini ister misiniz?";
     Message[ arabic ] = "�� ���� ��� ��������� ������� �� ������ �������";
     Title[ portuguese ] = "Fechar esbo�o do �ndice";
     Title[ russian ] = "����� �� ������� �������";
@@ -776,7 +833,7 @@ QueryBox QUERY_SAVE_CURRENT_INDEX
     Title[ french ] = "Quitter l'�bauche d'index";
     Title[ spanish ] = "Cerrar dise�o de �ndice";
     Title[ italian ] = "close index design";
-    Title[ danish ] = "close index design";
+    Title[ danish ] = "Exit Index Design";
     Title[ swedish ] = "L�mna indexutkast";
     Title[ polish ] = "Opu�� projekt indeksu";
     Title[ portuguese_brazilian ] = "close index design";
@@ -789,9 +846,15 @@ QueryBox QUERY_SAVE_CURRENT_INDEX
     Message[ catalan ] = "Voleu desar els canvis realitzats a l'�ndex actual?";
     Title[ catalan ] = "tanca el disseny de l'�ndex";
     Message[ finnish ] = "Haluatko tallentaa nykyiseen indeksiin tehdyt muutokset?";
-    Title[ finnish ] = "Lopeta hakemiston suunnittelu";
+    Title[ finnish ] = "Exit Index Design";
     Message[ thai ] = "คุณต้องการบันทึกการเปลี่ยนแปลงที่ทำไปยังดัชนีปัจจุบันหรือไม่?";
     Title[ thai ] = "ออกจากการออกแบบดัชนี!";
+    Message[ czech ] = "Chcete uložit změny provedené na tomto rejstříku?";
+    Message[ hebrew ] = "Wollen Sie die Änderungen am aktuellen Index noch speichern?";
+    Title[ czech ] = "Ukončit návrh rejstříku";
+    Title[ hebrew ] = "Index-Entwurf verlassen";
+    Message[ hindi ] = "आप वर्तमान अनुक्रमणी में की हुयी परिवर्तनों को संचित करना चाहते है ?";
+    Title[ hindi ] = "Exit Index Design";
 };
 
 String STR_INDEX_NAME_ALREADY_USED
@@ -809,16 +872,19 @@ String STR_INDEX_NAME_ALREADY_USED
     Text[ danish ] = "Der findes allerede et andet indeks ved navn \"$name$\".";
     Text[ swedish ] = "Det finns redan ett annat index med namnet \"$name$\".";
     Text[ polish ] = "Istnieje ju� inny indeks o nazwie \"$name$\".";
-    Text[ portuguese_brazilian ] = "There's already another index named \"$name$\".";
+    Text[ portuguese_brazilian ] = "J� existe um �ndice com o nome \"$name$\".";
     Text[ japanese ] = "\"$name$\" のインデックス名はすでにあります。";
     Text[ korean ] = "\"$name$\"의 색인 이름이 이미 있습니다.";
     Text[ chinese_simplified ] = "There's already another index named \"$name$\".";
     Text[ chinese_traditional ] = "已經存在一個索引<$name$>。";
-    Text[ turkish ] = "There's already another index named \"$name$\".";
+    Text[ turkish ] = "\"$name$\" ad�nda bir dizin zaten mevcut.";
     Text[ arabic ] = "There's already another index named \"$name$\".";
     Text[ catalan ] = "Ja hi ha un altre �ndex anomenat \"$name$\".";
     Text[ finnish ] = "Indeksi nimelt��n \"$name$\" on jo olemassa.";
     Text[ thai ] = "มีดัชนีชื่อ \"$name$\"แล้ว";
+    Text[ czech ] = "Jiný rejstřík s názvem \"$name$\" již existuje.";
+    Text[ hebrew ] = "Es gibt schon einen anderen Index namens \"$name$\".";
+    Text[ hindi ] = "$name$ नाम का अनुक्रमणी पहिले से ही अस्तित्व में है ।";
 };
 
 String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
@@ -836,24 +902,41 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
     Text[ italian ] = "In una definizione di indice una colonna di tabella pu� apparire solo una volta, tuttavia la colonna \"$name$\" appare due volte.";
     Text[ danish ] = "I en indeksdefinition m� hver tabelkolonne h�jst forekomme �n gang, men du har brugt kolonnen \"$name$\" to gange.";
     Text[ swedish ] = "I en indexdefinition f�r varje tabellkolumn f�rekomma h�gst en g�ng, men du har anv�nt kolumnen \"$name$\" tv� g�nger.";
-    Text[ polish ] = "U�y�e� dwa razy kolumny \"$name$\" - uwzgl�dnij, �e pojedyncze kolumny tabeli wyst�powa� mog� w definicji indeksu tylko raz!";
-    Text[ portuguese_brazilian ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
+    Text[ polish ] = "Kolumna \"$name$\" zosta�a wprowadzona dwa razy. W definicji indeksu ka�da kolumna tabeli mo�e wyst�pi� tylko raz.";
+    Text[ portuguese_brazilian ] = "Numa defini��o de �ndice, as colunas da tabela s� podem aparecer uma vez. Entretanto, neste caso a coluna \"$name$\" foi utilizada duas vezes.";
     Text[ japanese ] = "インデックスの定義では、テーブルの列の見出しは各一回ずつしか使えません。列の見出し \"$name$\" は、二回目の入力です。";
     Text[ korean ] = "색인 정의에 따라 각 테이블의 열을 한 번만 지정할 수 있습니다. 열 \"$name$\"은(는) 두 번 지정되었습니다.";
     Text[ chinese_simplified ] = "在一个索引定义之中仅允许一次使用一个列名称。但是您第二次使用列名称 \"$name$\" 。";
     Text[ chinese_traditional ] = "在一個索引定義之中僅允許最多一次使用一個欄名稱。但現在是第二次使用欄名稱<$name$>。";
-    Text[ turkish ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
+    Text[ turkish ] = "Bir dizin tan�mlamas� i�inde ,bir tablo s�tunu  birden fazla yarat�lamaz, fakat siz  \"$name$\" s�tununu iki kez girdiniz.";
     Text[ arabic ] = "�� ����� �������� ���� ���� ���� �� ��� �� ����� �����ӡ ��� ��� ������� ������ \"$name$\" �����.";
     Text[ catalan ] = "En una definici� d'�ndex, cap columna de la taula no pot estar repetida. Tanmateix, heu introdu�t la columna \"$name$\" dues vegades.";
     Text[ finnish ] = "Taulun sarakkeet voivat esiinty� vain kertaalleen indeksin m��rityksiss�. Olet kuitenkin sy�tt�nyt sarakkeen \"$name$\" kahdesti.";
     Text[ thai ] = "ในคำจำกัดความของดัชนี, ไม่มีตารางคอลัมน์ที่จะปรากฏมากกว่าหนึ่งครั้ง อย่างไรก็ตาม, คุณได้ใส่คอลัมน์ \"$name$\" แล้วสองครั้ง";
+    Text[ czech ] = "V definici rejstříku se smí vyskytnout každý sloupec pouze jednou. Avšak sloupec \"$name$\" byl zadán dvakrát.";
+    Text[ hebrew ] = "In einer Index-Definition darf jede Tabellen-Spalte höchstens einmal vorkommen, Sie jedoch haben die Spalte \"$name$\"zweimal benutzt.";
+    Text[ hindi ] = "अनुक्रमणी परिभाषा में, कोई भी सारणी का स्तंभ एक से अधिक बार नहीं आना चाहिए । आपने \"$name$\" स्तंभ को दो बार प्रविष्ट किया है ।";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.32.8.3  2003/04/29 08:34:00  gh
+ *  final merge for Beta2
+ *
+ *  Revision 1.32.8.2  2003/04/16 11:10:57  gh
+ *  RESYNC: (1.32-1.33); FILE MERGED
+ *
+ *  Revision 1.32.8.1  2003/04/14 15:04:02  gh
+ *  merging all languages
+ *
+ *  Revision 1.33  2003/04/01 14:24:35  vg
+ *  INTEGRATION: CWS dba03 (1.13.2.3.8); FILE MERGED
+ *  2003/03/19 15:19:06 fs 1.13.2.3.8.2: #98020# adjusted the size of the dialog to the new texts
+ *  2003/03/18 09:24:38 oj 1.13.2.3.8.1: #98020# change string
+ *
  *  Revision 1.32  2003/03/19 17:52:25  hr
- *  MWS_SRX644: migrate branch mws_srx644 -> HEAD
+*   MWS_SRX644: migrate branch mws_srx644 -> HEAD
  *
  *  Revision 1.31.2.3.8.1  2003/03/18 09:22:57  oj
  *  #96296# change from small letter in capital
@@ -974,6 +1057,16 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
  *
  *  Revision 1.0 07.03.01 12:17:10  fs
  ************************************************************************/
+
+
+
+
+
+
+
+
+
+
 
 
 
