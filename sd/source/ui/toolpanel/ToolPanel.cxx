@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ToolPanel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-27 14:35:34 $
+ *  last change: $Author: rt $ $Date: 2004-11-29 16:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,8 @@ sal_uInt32 ToolPanel::AddControl (
         this,
         pControl,
         rTitle,
-        TitleBar::TBT_CONTROL_TITLE));
+        TitleBar::TBT_CONTROL_TITLE);
+    ::std::auto_ptr<TreeNode> pChild (pTitledControl);
 
     // Get the (grand) parent window which is focus-wise our parent.
     Window* pParent = GetParent();
