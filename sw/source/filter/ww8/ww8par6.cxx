@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-27 16:04:28 $
+ *  last change: $Author: cmc $ $Date: 2002-06-28 08:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4685,6 +4685,7 @@ sal_uInt32 SwWW8ImplReader::ExtractColour(const BYTE* &rpData)
     sal_uInt32 nRet = wwUtility::BGRToRGB(SVBT32ToLong(rpData));
     rpData+=4;
     ASSERT(SVBT16ToShort(rpData) == 0x0000, "Unknown 2 not 0xff000000");
+    rpData+=2;
     return nRet;
 }
 
