@@ -11210,3 +11210,5 @@ _real@41607ac000000000
 ?Characters@OSinglePropertyContext@xmloff@@UAEXABVOUString@rtl@@@Z
 ?StartElement@OPropertyElementsContext@xmloff@@UAEXABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@@Z
 ??0XMLDatabaseFieldImportContext@@IAE@AAVSvXMLImport@@AAVXMLTextImportHelper@@PBDGABVOUString@rtl@@_N@Z
+??0NativeNumberXmlAttributes@i18n@star@sun@com@@QAE@XZ
+??1NativeNumberXmlAttributes@i18n@star@sun@com@@QAE@XZ
