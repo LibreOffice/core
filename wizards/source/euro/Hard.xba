@@ -150,7 +150,7 @@ Dim LastIndex as Integer
 			If ThisSel(i) = True Then
 				RangeName = ListboxList(i)
 				oRange = RetrieveRangeoutofRangeName(RangeName)
-				ConvertCellCurrencies(oRange, Currfactor, False, SwitchFormat)
+				ConvertCellCurrencies(oRange)
 				If NOT bAutoPilot Then
 &apos; The following line has been put beside due to Bug #73157 (Two ranges lying side by side)
 &apos;				If oSelRanges.HasbyName(RangeName) Then
@@ -188,33 +188,25 @@ Dim LastIndex as Integer
 End Sub
 
 
-
-Sub ConvertCellCurrencies(oRange as Object, fFaktor as Double, CurrRoundMode, SwitchFormat as Boolean)
+Sub ConvertCellCurrencies(oRange as Object)
 Dim oValues as Object
-Dim IntValue as Long
-Dim i as Integer
-Dim CellValue as double
 Dim oCells as Object
 Dim oCell as Object
-Dim DecFactor as integer
-Dim nFormatDecimals as integer
-Dim IsHardFormatted as Boolean
-
-	&apos; Wenn der Bereich hart formatiert ist, dann bei selektierter
-	&apos; weichen Formatierung keine Umrechnung
-
-	&apos; konstante Werte im Bereich anpassen
   	oValues = oRange.queryContentCells( com.sun.star.sheet.CellFlags.VALUE )
-
 	If (oValues.Count &gt; 0) Then
 		oCells = oValues.Cells.createEnumeration
 		While oCells.hasMoreElements
 			oCell = oCells.nextElement
-			DecFactor = 0
-			CellValue = oCell.Value
-			oCell.Value = CellValue/fFaktor
+			ModifyObjectValuewithCurrFactor(oCell)
 		Wend
 	End If
+End Sub
+
+
+Sub ModifyObjectValuewithCurrFactor(oDocObject as Object)
+Dim oDocObjectValue as double
+	oDocObjectValue = oDocObject.Value
+	oDocObject.Value = oDocObjectValue/CurrFactor
 End Sub
 
 
@@ -225,8 +217,8 @@ Dim oFormatofObject() as Object
 	oFormatofObject() = oFormats.getByKey(FormatObject.NumberFormat)
 	On Local Error GoTo 0			
 
-	&apos; Typ und WÃ¤hrungssymbol des Numberformats heraussuchen
-	&apos; Todo: Ãœberprüfe, ob diese beiden Zeilen nicht eleganter gehen
+	&apos; Typ und Währungssymbol des Numberformats heraussuchen
+	&apos; Todo: Überprüfe, ob diese beiden Zeilen nicht eleganter gehen
 	 CheckIfRangeIsCurrency = INT(oFormatofObject.Type) AND com.sun.star.util.NumberFormat.CURRENCY
 	Exit Function
 NOKEY:

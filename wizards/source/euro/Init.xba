@@ -3,6 +3,15 @@
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Init" script:language="StarBasic">Option Explicit
 REM  *****  BASIC  *****
 
+&apos; Zu diskutieren:
+&apos; Autopilot von Werkzeugleiste für Textdokumente mit eigener Konverterseite?
+&apos; Konvertierung von Datenbankfeldern &apos;- Problematik der Formatierung mit FS durchsprechen!?
+&apos; Option des einleitenden Welcome-Text, der erklärt, was eigentlich Sache ist (wie beim Dokumenten Konverter)
+&apos; Option der Checkbox-Gruppe in der die zu konvertierenden Dokumenttypen aufgeführt sind
+&apos; -&gt; bei den letztgenannten Optionen müsste der Dialog in seiner Höhe vergrößert werden.
+&apos; Wir sollten informiert werden, ob und wie oder wann das Standard - Währungsformat für die Euroländer umgesetzt
+&apos; wird.
+
 Public sREADY as String
 Public sPROTECT as String
 Public sCONTINUE as String
@@ -54,6 +63,7 @@ Public sCurrIRISH as String
 Public sCurrLUXEMBOURG as String
 Public sCurrAUSTRIAN as String
 Public sCurrFINNISH as String
+Public sCurrGREEK as String
 Public sCurrUNKNOWN as String
 Public sCurrSYSUNKNOWN as String
 
@@ -61,7 +71,8 @@ Public sPrgsRETRIEVAL as String
 Public sPrgsCONVERTING as String
 Public sPrgsUNPROTECT as String
 
-Public Const SBCOUNTRYCOUNT = 11
+Public Const SBCOUNTRYCOUNT = 12
+Public CurMimeType as String
 Public CurCellCount as Long
 Public oSheets as Object
 Public oStyles as Object
@@ -101,8 +112,8 @@ Public CurExtension(1) as String
 Public Currfactor as Double
 Public CurrSymbolList(2) as String
 Public CurrLanguage as String
-Public CurrValue(10,5) as String
-Public LangIDValue(10,2,2) as String
+Public CurrValue(11,5)
+Public LangIDValue(11,2,2) as String
 Public PreName as String
 Public oAddressRanges as Object
 Public Separator as String
@@ -148,9 +159,10 @@ Sub InitializeResources()
 		DialogModel.lblSelection.Label = sCURRRANGES
 	Else
 	 	DialogModel.frmExtent.Label = GetResText(1200)
-		DialogModel.optSingleFile.Label = GetResText(1201)
+		DialogModel.optSingleFile.Label = &quot;Einzelnes Tabellen- oder Textdokument&quot;&apos;GetResText(1201)
  		DialogModel.optWholeDir.Label = GetResText(1202)
  		DialogModel.chkProtect.Label = GetResText(1207)
+ 		DialogModel.chkTextDocuments.Label = &quot;Auch Feldbefehle und Tabellen in Textdokumenten konvertieren&quot;
 		sSOURCEFILE = GetResText(1203)
 		sSOURCEDIR = GetResText(1204)
  		DialogModel.lblSource.Label = sSOURCEDIR
@@ -211,6 +223,7 @@ Sub InitializeResources()
 	sCurrLUXEMBOURG = GetResText(1508)
 	sCurrAUSTRIAN = GetResText(1509)
 	sCurrFINNISH = GetResText(1510)
+	sCurrGREEK = GetResText(1511)
 	sCurrUNKNOWN = GetResText(1511)
 	sCurrSYSUNKNOWN = GetResText(1512)
 End Sub
@@ -290,6 +303,11 @@ Sub InitializeLanguages()
 	LangIDValue(10,1,0) = &quot;sv&quot;
 	LangIDValue(10,1,1) = &quot;FI&quot;
 	LangIDValue(10,1,2) = &quot;-81D&quot;
+
+&apos; CURRENCIES_GREEK
+	LangIDValue(11,0,0) = &quot;el&quot;
+	LangIDValue(11,0,1) = &quot;GR&quot;
+	LangIDValue(11,0,2) = &quot;-408&quot;
 End Sub
 
 
@@ -300,102 +318,111 @@ Dim i as Integer
 
 	CurrValue(0,0) = sCurrPORTUGUESE
 	&apos; Wahrer Umrechnungskurs
-	CurrValue(0,1) = &quot;200.482&quot;
+	CurrValue(0,1) = 200.482
 	&apos; Gerundeter Umrechnungskurs
-	CurrValue(0,2) = &quot;200&quot;
+	CurrValue(0,2) = 200
 	CurrValue(0,3) = &quot;Esc.&quot;
 	CurrValue(0,4) = &quot;Esc.&quot;
 	CurrValue(0,5) = &quot;PTE&quot;
 
 	CurrValue(1,0) = sCurrDUTCH
 	&apos; Wahrer Umrechnungskurs
-	CurrValue(1,1) = &quot;2.20371&quot;
+	CurrValue(1,1) = 2.20371
 	&apos; Gerundeter Umrechnungskurs
-	CurrValue(1,2) = &quot;2&quot;
+	CurrValue(1,2) = 2
 	CurrValue(1,3) = &quot;F&quot;
 	CurrValue(1,4) = &quot;F&quot;
 	CurrValue(1,5) = &quot;NLG&quot;
 
 	CurrValue(2,0) = sCurrFRENCH
 	&apos; Wahrer Umrechnungskurs
-	CurrValue(2,1) = &quot;6.55957&quot;
+	CurrValue(2,1) = 6.55957
 	&apos; Gerundeter Umrechnungskurs
-	CurrValue(2,2) = &quot;7&quot;
+	CurrValue(2,2) = 7
 	CurrValue(2,3) = &quot;F&quot;
 	CurrValue(2,4) = &quot;F&quot;
 	CurrValue(2,5) = &quot;FRF&quot;
 
 	CurrValue(3,0) = sCurrSPANISH
 	&apos; Wahrer Umrechnungskurs
-	CurrValue(3,1) = &quot;166.386&quot;
+	CurrValue(3,1) = 166.386
 	&apos; Gerundeter Umrechnungskurs
-	CurrValue(3,2) = &quot;170&quot;
+	CurrValue(3,2) = 170
 	CurrValue(3,3) = &quot;Pts&quot;
 	CurrValue(3,4) = &quot;Pts&quot;
 	CurrValue(3,5) = &quot;ESP&quot;
 
 	CurrValue(4,0) = sCurrITALIAN
 	&apos; Wahrer Umrechnungskurs
-	CurrValue(4,1) = &quot;1936.27&quot;
+	CurrValue(4,1) = 1936.27
 	&apos; Gerundeter Umrechnungskurs
-	CurrValue(4,2) = &quot;2000&quot;
+	CurrValue(4,2) = 2000
 	CurrValue(4,3) = &quot;L.&quot;
 	CurrValue(4,4) = &quot;L.&quot;
 	CurrValue(4,5) = &quot;ITL&quot;
 
 	CurrValue(5,0) = sCurrGERMAN
 	&apos; Wahrer Umrechnungskurs
-	CurrValue(5,1) = &quot;1.95583&quot;
+	CurrValue(5,1) = 1.95583
 	&apos; Gerundeter Umrechnungskurs
-	CurrValue(5,2) = &quot;140&quot;
+	CurrValue(5,2) = 2
 	CurrValue(5,3) = &quot;DM&quot;
 	CurrValue(5,4) = &quot;DM&quot;
 	CurrValue(5,5) = &quot;DEM&quot;
 
 	CurrValue(6,0) = sCurrBELGIAN
 	&apos; Wahrer Umrechnungskurs
-	CurrValue(6,1) = &quot;40.3399&quot;
+	CurrValue(6,1) = 40.3399
 	&apos; Gerundeter Umrechnungskurs
-	CurrValue(6,2) = &quot;40&quot;
+	CurrValue(6,2) = 40
 	CurrValue(6,3) = &quot;FB&quot;
 	CurrValue(6,4) = &quot;BF&quot;
 	CurrValue(6,5) = &quot;BEF&quot;
 
 	CurrValue(7,0) = sCurrIRISH
 	&apos; Wahrer Umrechnungskurs
-	CurrValue(7,1) = &quot;0.787564&quot;
+	CurrValue(7,1) = 0.787564
 	&apos; Gerundeter Umrechnungskurs
-	CurrValue(7,2) = &quot;0.8&quot;
+	CurrValue(7,2) = 0.8
 	CurrValue(7,3) = &quot;£&quot;
 	CurrValue(7,4) = &quot;£&quot;
 	CurrValue(7,5) = &quot;IEP&quot;
 
 	CurrValue(8,0) = sCurrLUXEMBOURG
 	&apos; Wahrer Umrechnungskurs
-	CurrValue(8,1) = &quot;40.3399&quot;
+	CurrValue(8,1) = 40.3399
 	&apos; Gerundeter Umrechnungskurs
-	CurrValue(8,2) = &quot;40&quot;
+	CurrValue(8,2) = 40
 	CurrValue(8,3) = &quot;F&quot;
 	CurrValue(8,4) = &quot;F&quot;
 	CurrValue(8,5) = &quot;LUF&quot;
 
 	CurrValue(9,0) = sCurrAUSTRIAN
 	&apos; Wahrer Umrechnungskurs
-	CurrValue(9,1) = &quot;13.7603&quot;
+	CurrValue(9,1) = 13.7603
 	&apos; Gerundeter Umrechnungskurs
-	CurrValue(9,2) = &quot;15&quot;
+	CurrValue(9,2) = 15
 	CurrValue(9,3) = &quot;S&quot;
 	CurrValue(9,4) = &quot;S&quot;
 	CurrValue(9,5) = &quot;ATS&quot;
 
 	CurrValue(10,0) = sCurrFINNISH
 	&apos; Wahrer Umrechnungskurs
-	CurrValue(10,1) = &quot;5.94573&quot;
+	CurrValue(10,1) = 5.94573
 	&apos; Gerundeter Umrechnungskurs
-	CurrValue(10,2) = &quot;6&quot;
+	CurrValue(10,2) = 6
 	CurrValue(10,3) = &quot;mk&quot;
 	CurrValue(10,4) = &quot;mk&quot;
 	CurrValue(10,5) = &quot;FIM&quot;
+
+	CurrValue(11,0) = sCurrGREEK
+	&apos; Wahrer Umrechnungskurs
+	CurrValue(11,1) = 340.750
+	&apos; Gerundeter Umrechnungskurs
+	CurrValue(11,2) = 400
+	CurrValue(11,3) = &quot;Δρχ&quot;
+	CurrValue(11,4) = &quot;Δρχ&quot;
+	CurrValue(11,5) = &quot;GRD&quot;
 
 	i = -1
 	CurrSymbolList(0) = &quot;&quot;
@@ -431,9 +458,13 @@ Dim Isthere as Boolean
 	InitializeLocales(oLocale)
 	InitializeCurrencies()
 	InitializeControls()
-&apos; Todo Mimetypes für XML - Dokumente hinzufügen!	
-	Filterlist(0) = &quot;application/vnd.stardivision.calc&quot;
-&apos;	Filterlist(1) = &quot;application/vnd.stardivision.calc&quot;
+	FilterList(0) = &quot;application/x-starcalc&quot;
+	FilterList(1) = &quot;application/x-starwriter&quot;
+	FilterList(2) = &quot;application/vnd.stardivision.calc&quot;
+	FilterList(3) = &quot;application/vnd.stardivision.writer&quot;
+	FilterList(4) = &quot;application/vnd.stardivision.writer/web&quot;
+	FilterList(5) = &quot;application/vnd.sun.xml.calc&quot;
+	FilterList(6) = &quot;application/vnd.sun.xml.writer&quot;
 	BitmapDir = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
 	UnprotectList(0,0) = &quot;0&quot;
 	FillUpCurrencyListbox()
@@ -447,7 +478,7 @@ End Sub
 Sub	InitializeCurrencyValues(CurrIndex)
 	If CurrIndex &lt;&gt; -1 Then
 		CurrLanguage = CurrValue(CurrIndex,0)
-		CurrFactor = Val(CurrValue(CurrIndex,1))
+		CurrFactor = CurrValue(CurrIndex,1)
 		CurrSymbolList(0) = CurrValue(CurrIndex,3)
 		CurrSymbolList(1) = CurrValue(CurrIndex,4)
 		CurrSymbolList(2) = CurrValue(CurrIndex,5)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:56:11 $
+ *  last change: $Author: bc $ $Date: 2001-05-11 15:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1789,6 +1789,13 @@ Text[ english_us ] = "Finnish Mark";
 
 String CURRENCIES + 11
 {
+Text = "Griechische Drachme";
+Text[English] = "Greek Drachma";
+Text[ english_us ] = "Greek Drachma";
+};
+
+String CURRENCIES + 12
+{
 Text = "Die für das Dokument eingestellte Währung ist keine Euro-Währung!";
 Text[English] = "The currency of the document is not of the European Currency Union!";
 Text[ english_us ] = "The currency set for the document is not a currency in Euroland!";
@@ -1813,7 +1820,7 @@ Text[ english_us ] = "The currency set for the document is not a currency in Eur
     Text[ catalan ] = "¡La moneda determinada para el documento no pertenece a la zona del Euro!";
 };
 
-String CURRENCIES + 12
+String CURRENCIES + 13
 {
 Text = "Die für Ihr Betriebssystem eingestellte Sprache ist keine Sprache der Europäischen Währungsunion!";
 Text[English] = "The language set for the operation system is not a language of the European Currency Union!";

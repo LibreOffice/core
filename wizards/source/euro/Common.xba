@@ -7,12 +7,15 @@ Public DialogPassword as Object
 Public PasswordModel as Object
 
 Sub	RetrieveDocumentObjects()
-    oSheets = oDocument.Sheets
-	oSheet = oDocument.Sheets.GetbyIndex(0)
+	CurMimeType = oDocument.DocumentInfo.MimeType
+	If Instr(1, CurMimeType, &quot;calc&quot;) &lt;&gt; 0 Then
+	    oSheets = oDocument.Sheets
+		oSheet = oDocument.Sheets.GetbyIndex(0)
+		oAddressRanges = oDocument.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
+	End If
     oStatusline = oDocument.GetCurrentController.GetFrame.CreateStatusIndicator
     &apos; Retrieve the indices for the cellformatations
     oFormats = oDocument.NumberFormats
-	oAddressRanges = oDocument.createInstance(&quot;com.sun.star.sheet.SheetCellRanges&quot;)
 End Sub    
 
 
@@ -48,56 +51,64 @@ Dim DummyList(100) as String
 Dim RangeName as String
 Dim oDummySheet as Object
 Dim AddRange as Boolean
+Dim CurMimeType as String
 	GoOn = True
 	DocDisposed = True
 	CurCellCount = 0
 	StatusValue = 0
 	AddRange = True
-	
 	oStatusline.Start(sStsPROGRESS,100) 			&apos;&quot;Konvertierungsfortschritt:&quot;
 	StatusValue = 0
-	If Not bRangeListDefined Then
-		TotCellCount = 0
-		CreateRangeEnumeration(True)	
-	Else
-		IncreaseStatusvalue(SBRelGet/3)
-	End If
-	&apos; Check protected Areas
-	a = 1
-	i = 0
-	For i = 1 To Val(RangeList(0))
-		RangeName = RangeList(i)
-		If Rangename &lt;&gt; &quot;&quot; Then
-			oDummySheet = RetrieveSheetoutofRangeName(RangeName)
-
-			&apos; Unprotect the sheet if necessary
-			AddRange = UnprotectSheet(oDummySheet)
-			If AddRange Then
-&apos; Todo: Umschreiben mit Redim RangeList(RangeIndex) Preserve
-				DummyList(a) = RangeName
-				DummyList(0) = Str(a)
-				a = a + 1
-			Else
-				Exit For
-			End If
+	If Instr(1, CurMimeType, &quot;calc&quot;) &lt;&gt; 0 Then
+		If Not bRangeListDefined Then
+			TotCellCount = 0
+			CreateRangeEnumeration(True)	
+		Else
+			IncreaseStatusvalue(SBRelGet/3)
 		End If
-	Next
-	RangeIndex = Val(DummyList(0))
-	If AddRange And RangeIndex &gt; 0 Then
-		Dim LocRangeList(RangeIndex-1) as String
-		Dim LocRangeBools(RangeIndex-1) as String
-		For i = 1 To RangeIndex
-			LocRangeList(i-1 ) = DummyList(i)
-			LocRangeBools(i-1) = True
-		Next i
-		ConvertThehardWay(LocRangeList(), LocRangeBools(), True, True)
-		MakeStyleEnumeration(True)
-		oDocument.calculateAll()
-	End If
-	ReprotectSheets()
+		&apos; Check protected Areas
+		a = 1
+		i = 0
+		For i = 1 To Val(RangeList(0))
+			RangeName = RangeList(i)
+			If Rangename &lt;&gt; &quot;&quot; Then
+				oDummySheet = RetrieveSheetoutofRangeName(RangeName)	
+
+				&apos; Unprotect the sheet if necessary
+				AddRange = UnprotectSheet(oDummySheet)
+				If AddRange Then
+&apos; Todo: Umschreiben mit Redim RangeList(RangeIndex) Preserve
+					DummyList(a) = RangeName
+					DummyList(0) = Str(a)
+					a = a + 1
+				Else
+					Exit For
+				End If
+			End If
+		Next
+		RangeIndex = Val(DummyList(0))
+		If AddRange And RangeIndex &gt; 0 Then
+			Dim LocRangeList(RangeIndex-1) as String
+			Dim LocRangeBools(RangeIndex-1) as String
+			For i = 1 To RangeIndex
+				LocRangeList(i-1 ) = DummyList(i)
+				LocRangeBools(i-1) = True
+			Next i
+			ConvertThehardWay(LocRangeList(), LocRangeBools(), True, True)
+			MakeStyleEnumeration(True)
+			oDocument.calculateAll()
+		End If
+		ReprotectSheets()
+		bRangeListDefined = False
+		ConvertDocument = AddRange
+	Else
+		oStatusline.SetValue(10)
+		ConvertTextFields()
+		oStatusline.SetValue(80)
+		ConvertWriterTables()
+	End If	
 	oStatusline.End
-	bRangeListDefined = False
-	ConvertDocument = AddRange
+
 	On Local Error Goto 0 
 End Function
 
@@ -127,8 +138,8 @@ Dim AddToList as Boolean
 	On Local Error GoTo NOKEY
 	aFormat() = oFormats.getByKey(iNumberFormat)
 	On Local Error GoTo 0
-	&apos; Typ und WÃ¤hrungssymbol des Numberformats heraussuchen
-	&apos; neues WÃ¤hrungsformat mit passenden Einstellungen setzen
+	&apos; Typ und Währungssymbol des Numberformats heraussuchen
+	&apos; neues Währungsformat mit passenden Einstellungen setzen
 	nFormatDecimals = aFormat.Decimals
 	nFormatLeading = aFormat.LeadingZeros
 	bFormatNegRed = aFormat.NegativeRed
@@ -209,7 +220,7 @@ End Function
 
 Sub StartConversion()
 	GoOn = True
-&apos;	ToggleWindow(False)
+	ToggleWindow(False)
 	If DialogModel.Step = 2 Then
 		ConvertDocuments()
 	Else
@@ -219,7 +230,7 @@ Sub StartConversion()
 			ConvertRangesorStylesofDocument()
 		End If
 	End If
-&apos;	ToggleWindow(True)
+	ToggleWindow(True)
 End Sub
 
 

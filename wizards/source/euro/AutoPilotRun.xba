@@ -13,7 +13,7 @@ Public Source as String
 Public SubstFile as String
 Public SubstDir as String
 Public NoArgs()
-Public FilterList(0) as String
+Public FilterList(6) as String
 Public GoOn as Boolean
 Public UnprotectList(50,1) as String
 Public DoUnprotect as Integer

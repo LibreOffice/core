@@ -202,7 +202,7 @@ Dim LastIndex as Integer
 					oRange = RetrieveRangeoutofRangeName(RangeName)
 					If oRange.getPropertyState(&quot;NumberFormat&quot;) = 1 Then
 						&apos; Range Ist hart formatiert
-						ConvertCellCurrencies(oRange,Currfactor,False)
+						ConvertCellCurrencies(oRange)
 						CurCellCount = CountRangeCells(oRange)
 					End If
 					IncreaseStatusvalue((CurCellCount/TotCellCount)*(95-OldStatusValue))
