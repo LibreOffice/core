@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-24 08:03:34 $
+ *  last change: $Author: mba $ $Date: 2001-11-30 13:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ class SfxEvents_Impl : public ::cppu::WeakImplHelper2< ::com::sun::star::contain
     ::osl::Mutex                    maMutex;
     SfxObjectShell                 *mpObjShell;
 
-    sal_Bool                    Warn_Impl();
+    sal_Bool                    Warn_Impl( const String& );
     ANY                         BlowUpMacro( const ANY& rEvent ) const;
 
 public:

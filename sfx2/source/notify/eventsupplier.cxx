@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-19 11:18:48 $
+ *  last change: $Author: mba $ $Date: 2001-11-30 13:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,8 @@
 #include <evntconf.hxx>
 #endif
 
+#include <svtools/securityoptions.hxx>
+
 #ifndef _SFX_EVENTSUPPLIER_HXX_
 #include "eventsupplier.hxx"
 #endif
@@ -95,6 +97,7 @@
 
 #include "sfxsids.hrc"
 #include "sfxlocal.hrc"
+#include "docfile.hxx"
 
 //--------------------------------------------------------------------------------------------------------
 
@@ -248,6 +251,7 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
 
     if ( aEventData >>= aProperties )
     {
+        OUSTRING        aPrefix = OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
         OUSTRING        aType;
         OUSTRING        aScript;
         OUSTRING        aLibrary;
@@ -282,10 +286,9 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
 
         if ( aType.compareToAscii( STAR_BASIC ) == 0 )
         {
-            if ( ! aScript.getLength() && aMacroName.getLength() )
+            if ( !aScript.getLength() && aMacroName.getLength() )
             {
                 aScript = OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
-
                 if ( aLibrary.compareTo( SFX_APP()->GetName() ) != 0
                      && aLibrary.compareToAscii("StarDesktop") != 0 )
                 {
@@ -301,7 +304,8 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
             {
                 aGuard.clear();
                 ErrCode nErr;
-                if ( Warn_Impl() )
+                // never ask for macros from application basic
+                if ( !aScript.compareToAscii( "macro:///", 9 ) || Warn_Impl( aScript ) )
                     nErr = SfxMacroLoader::loadMacro( aScript, mpObjShell );
                 else
                     nErr = 0;
@@ -436,22 +440,31 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
 }
 
 //--------------------------------------------------------------------------------------------------------
-sal_Bool SfxEvents_Impl::Warn_Impl()
+sal_Bool SfxEvents_Impl::Warn_Impl( const String& rMacName )
 {
-    // Wenn das Macro sowieso nicht ausgef"uhrt wird, mu\s auch nicht gefragt werden
-    if ( !mpObjShell->IsSecure() )
+    SvtSecurityOptions aOpt;
+    EBasicSecurityMode eMode = aOpt.GetBasicMode();
+    if ( eMode == eNEVER_EXECUTE )
         return sal_False;
 
-    // Bei dokumentgebundenen Macros WarningStatus checken
-    // Wenn "Immer warnen" angeschaltet ist, Warnung ausgeben
-    sal_Bool bWarn = SFX_APP()->GetEventConfig()->IsWarningForced();
+    sal_Bool bConfirm = aOpt.IsConfirmationEnabled();
+    sal_Bool bWarn = aOpt.IsWarningEnabled();
+    sal_Bool bSecure = aOpt.IsSecureURL( rMacName, mpObjShell->GetMedium()->GetName() );
 
-    if ( bWarn )
+    //if ( !mpObjShell->IsSecure() )
+    //    return sal_False;
+    if ( bSecure && bWarn || !bSecure && bConfirm )
     {
-        SfxMacroQueryDlg_Impl aBox ( SfxResId( DLG_MACROQUERY ) );
+        OUSTRING aPrefix = OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
+        OUSTRING aName = rMacName.Copy( (USHORT) aPrefix.getLength() );
+        sal_Int32 nPos = aName.indexOf( '/' );
+        aName = aName.copy( nPos+1 );
+        SfxMacroQueryDlg_Impl aBox ( SfxResId( DLG_MACROQUERY ), aName, bSecure );
         if ( aBox.Execute() )
             bWarn = sal_False;
     }
+    else
+        return bSecure;
 
     return !bWarn;
 }

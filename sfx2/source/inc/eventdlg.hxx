@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-28 13:39:21 $
+ *  last change: $Author: mba $ $Date: 2001-11-30 13:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,16 +76,11 @@ class SfxEventConfigPage : public _SfxMacroTabPage
 {
     RadioButton     aStarOfficeRB;
     RadioButton     aDocumentRB;
-//  CheckBox        aWarningCB;
-    CheckBox        aAlwaysWarningCB;
-    FixedLine       aSafetyGb;
 
     SvxMacroItem*   pAppItem;
     SvxMacroItem*   pDocItem;
-    BOOL            bModified;
     BOOL            bAppConfig;
 
-    DECL_LINK(      ButtonHdl, Button* );
     DECL_LINK(      SelectHdl_Impl, RadioButton* );
 
 public:
