@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxpages.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-19 11:47:10 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,10 +96,10 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
         Text[ swedish ] = "Vilka ~beteckningar skall alternativfälten få?";
         Text[ polish ] = "Jakie okreœlenia powinny zawieraæ pola opcji?";
         Text[ portuguese_brazilian ] = "Which ~names do you want to give the Option Fields?";
-        Text[ japanese ] = "µÌß¼®İÌ¨°ÙÄŞ‚É‚Ç‚Ì–¼‘O‚ğ‚Â‚¯‚Ü‚·‚©B";
+        Text[ japanese ] = "µÌß¼®İÌ¨°ÙÄŞ‚É‚Ç‚Ì–¼‘O‚ğ‚Â‚¯‚Ü‚·‚©B(~N)";
         Text[ korean ] = "Which ~names do you want to give the Option Fields?";
-        Text[ chinese_simplified ] = "ÒªÊ¹ÓÃµÄÑ¡Ïî×Ö¶ÎµÄÃû³Æ£¿";
-        Text[ chinese_traditional ] = "­n¨Ï¥Îªº¿ï¶µÄæ¦ìªº¦WºÙ¡H";
+        Text[ chinese_simplified ] = "ÒªÊ¹ÓÃµÄÑ¡Ïî×Ö¶ÎµÄÃû³Æ(~N)£¿";
+        Text[ chinese_traditional ] = "­n¨Ï¥Îªº¿ï¶µÄæ¦ìªº¦WºÙ(~N)¡H";
         Text[ turkish ] = "Which ~names do you want to give the Option Fields?";
         Text[ arabic ] = "ßíİ ÊÑíÏ ÊÓãíÉ ÃÒÑÇÑ ÇáÎíÇÑ¿";
     };
@@ -129,7 +129,7 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
         Group = TRUE;
         Text = "~Optionsfelder";
         Text [ english ] = "~Option Fields";
-        Text [ english_us ] = "~Option Fields";
+        Text [ english_us ] = "~Option fields";
         Text[ portuguese ] = "~Botões de opção";
         Text[ russian ] = "~Ïîëÿ ïàğàìåòğîâ";
         Text[ greek ] = "Ğåäßá åğéë~ïãşí";
@@ -143,8 +143,8 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
         Text[ portuguese_brazilian ] = "~Option Fields";
         Text[ japanese ] = "µÌß¼®İÌ¨°ÙÄŞ(~O)";
         Text[ korean ] = "~Option Fields";
-        Text[ chinese_simplified ] = "Ñ¡Ïî×Ö¶Î";
-        Text[ chinese_traditional ] = "¿ï¶µÄæ¦ì";
+        Text[ chinese_simplified ] = "Ñ¡Ïî×Ö¶Î(~O)";
+        Text[ chinese_traditional ] = "¿ï¶µÄæ¦ì(~O)";
         Text[ turkish ] = "~Option Fields";
         Text[ arabic ] = "ÃÒÑÇÑ ÇáÎíÇÑ";
     };
@@ -238,8 +238,8 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
         Text[ portuguese_brazilian ] = "~Yes, the following:";
         Text[ japanese ] = "‚Í‚¢AˆÈ‰º‚É¦‚·Ì¨°ÙÄŞ(~Y):";
         Text[ korean ] = "~Yes, the following:";
-        Text[ chinese_simplified ] = "ÊÇ£¬Ñ¡ÔñÈçÏÂ£º";
-        Text[ chinese_traditional ] = "¬O¡A¿ï¾Ü¥H¤Uªº¡G";
+        Text[ chinese_simplified ] = "ÊÇ£¬Ñ¡ÔñÈçÏÂ(~Y)£º";
+        Text[ chinese_traditional ] = "¬O¡A¿ï¾Ü¥H¤Uªº(~Y)¡G";
         Text[ turkish ] = "~Yes, the following:";
         Text[ arabic ] = "äÚã¡ ÇáÍŞá ÇáÊÇáí:";
     };
@@ -359,14 +359,14 @@ TabPage RID_PAGE_OPTIONVALUES
         Text [ swedish ] = "Vilket ~värde vill du tilldela varje alternativ ?";
         Text [ polish ] = "Jak¹ wartoœæ przypisaæ pojedynczym opcjom?";
         Text [ portuguese_brazilian ] = "Welchen Wert möchten Sie jeder Option zuweisen ?";
-        Text [ japanese ] = "ŠeµÌß¼®İ‚É‚Ç‚Ì’l‚ğŠ„‚è“–‚Ä‚Ü‚·‚©B";
-        Text [ chinese_simplified ] = "ÒªÈÃÑ¡ÏîÊ¹ÓÃµÄÊıÖµÊÇ£¿";
-        Text [ chinese_traditional ] = "­n«ü©w¨C­Ó¿ï¶µ®M¥Îªº¼Æ­È¡H";
+        Text [ japanese ] = "ŠeµÌß¼®İ‚É‚Ç‚Ì’l‚ğŠ„‚è“–‚Ä‚Ü‚·‚©B(~V)";
+        Text [ chinese_simplified ] = "ÒªÈÃÑ¡ÏîÊ¹ÓÃµÄÊıÖµÊÇ(~V)£¿";
+        Text [ chinese_traditional ] = "­n«ü©w¨C­Ó¿ï¶µ®M¥Îªº¼Æ­È(~V)¡H";
         Text [ arabic ] = "ãÇ åí ÇáŞíãÉ ÇáÊí ÊÑíÏ ÊÚííäåÇ áßá ÎíÇÑ¿";
         Text [ dutch ] = "Welke waarden wilt u toewijzen aan de opties ?";
-        Text [ chinese_simplified ] = "ÒªÈÃÑ¡ÏîÊ¹ÓÃµÄÊıÖµÊÇ£¿";
+        Text [ chinese_simplified ] = "ÒªÈÃÑ¡ÏîÊ¹ÓÃµÄÊıÖµÊÇ(~V)£¿";
         Text [ greek ] = "ĞïéÜ ôéìŞ èİëåôå íá áíôéóôïé÷åß óå êÜèå åğéëïãŞ;";
-        Text [ korean ] = "¾î´À °ªÀ» °¢ ¿É¼Ç¿¡ ÇÒ´çÇÏ½Ã°Ú½À´Ï±î?";
+        Text [ korean ] = "¾î´À °ªÀ» °¢ ¿É¼Ç¿¡ ÇÒ´çÇÏ½Ã°Ú½À´Ï±î(~V)?";
         Text [ turkish ] = "Her bir seçeneğe hangi değeri atamak istiyorsunuz?";
     };
     Edit ET_OPTIONVALUE
@@ -383,7 +383,7 @@ TabPage RID_PAGE_OPTIONVALUES
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 14 , 8 ) ;
         Text = "~Optionsfelder";
         Text [ english ] = "~Option Fields";
-        Text [ english_us ] = "~Option Fields";
+        Text [ english_us ] = "~Option fields";
         Text [ portuguese ] = "~Botões de opção";
         Text [ russian ] = "~Ïîëÿ ïàğàìåòğîâ";
         Text [ dutch ] = "~Optievelden";
@@ -396,12 +396,12 @@ TabPage RID_PAGE_OPTIONVALUES
         Text [ portuguese_brazilian ] = "~Optionsfelder";
         Text [ japanese ] = "µÌß¼®İÌ¨°ÙÄŞ(~O)";
         Text [ chinese_simplified ] = "Ñ¡Ïî×Ö¶Î(~O)";
-        Text [ chinese_traditional ] = "¿ï¶µÄæ¦ì";
+        Text [ chinese_traditional ] = "¿ï¶µÄæ¦ì(~O)";
         Text [ arabic ] = "ÃÒÑÇÑ ÇáÎíÇÑ";
         Text [ dutch ] = "~Optievelden";
         Text [ chinese_simplified ] = "Ñ¡Ïî×Ö¶Î(~O)";
         Text [ greek ] = "Ğåäßá åğéë~ïãşí";
-        Text [ korean ] = "¿É¼Ç ÇÊµå";
+        Text [ korean ] = "¿É¼Ç ÇÊµå(~O)";
         Text [ turkish ] = "~Seçenek alanları";
     };
     ListBox LB_RADIOBUTTONS
@@ -482,14 +482,14 @@ TabPage RID_PAGE_OPTIONS_FINAL
         Text [ swedish ] = "Vilken ~beteckning skall din alternativgrupp ha?";
         Text [ polish ] = "Jakie etykiety powinna zawieraæ Twoja grupa opcji ?";
         Text [ portuguese_brazilian ] = "Welche  Beschriftung soll Ihre Options- gruppe haben ?";
-        Text [ japanese ] = "µÌß¼®İ¸ŞÙ°Ìß‚É‚Ç‚Ì–¼‘O‚ğ•t‚¯‚Ü‚·‚©B";
-        Text [ chinese_simplified ] = "Ñ¡ÏîĞ¡×éÃû³Æ£¿";
-        Text [ chinese_traditional ] = "¿ï¶µ¸s²Õªº¼ĞÃD¡H";
+        Text [ japanese ] = "µÌß¼®İ¸ŞÙ°Ìß‚É‚Ç‚Ì–¼‘O‚ğ•t‚¯‚Ü‚·‚©B(~C)";
+        Text [ chinese_simplified ] = "Ñ¡ÏîĞ¡×éÃû³Æ(~C)£¿";
+        Text [ chinese_traditional ] = "¿ï¶µ¸s²Õªº¼ĞÃD(~C)¡H";
         Text [ arabic ] = "ßíİ ÊÑíÏ ÊÓãíÉ ãÌãæÚÉ ÇáÎíÇÑÇÊ ÇáÎÇÕÉ Èß¿";
         Text [ dutch ] = "Welk naam wilt u uw optiegroep geven ?";
-        Text [ chinese_simplified ] = "Ñ¡ÏîĞ¡×éÃû³Æ£¿";
+        Text [ chinese_simplified ] = "Ñ¡ÏîĞ¡×éÃû³Æ(~C)£¿";
         Text [ greek ] = "Åğéëİîôå ôçí åğéãñáöŞ ãéá ôçí ïìÜäá óáò åğéëïãşí;";
-        Text [ korean ] = "¿É¼Ç ±×·ì¿¡ ¾î´À Ä¸¼ÇÀ» ÁöÁ¤ÇÏ½Ã°Ú½À´Ï±î?";
+        Text [ korean ] = "¿É¼Ç ±×·ì¿¡ ¾î´À Ä¸¼ÇÀ» ÁöÁ¤ÇÏ½Ã°Ú½À´Ï±î(~C)?";
         Text [ turkish ] = "Seçenek grubunuza hangi resim altyazısı verilsin?";
     };
     Edit ET_NAMEIT
@@ -559,6 +559,9 @@ String RID_STR_GROUPWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/03/19 11:47:10  kz
+ *  Merge SRC625: 19.03.01 - 12:46:54 (NoBranch)
+ *
  *  Revision 1.3  2001/03/09 20:48:53  kz
  *  Merge SRC624: 09.03.01 - 21:48:59 (NoBranch)
  *
