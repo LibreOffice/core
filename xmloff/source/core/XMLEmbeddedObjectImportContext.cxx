@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEmbeddedObjectImportContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:05:41 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,6 +356,9 @@ void XMLEmbeddedObjectImportContext::EndElement()
         xHandler->endDocument();
 
 
+        // storing part is commented out since it should be done through the object, not the model
+        // TODO/LATER: probably an object should be provided here an be stored here
+#if 0
         // Save the object. That's required because the object should not be
         // modified (it has been loaded just now). Setting it to unmodified
         // only does not work, because it is then assumed that it has been
@@ -375,7 +378,6 @@ void XMLEmbeddedObjectImportContext::EndElement()
                                   aSeq );
             }
         }
-#if 0
         // reset modifies state for the object since it has been imported
         // completly and therfor hasn't been modified.
         Reference < XModifiable > xModifiable( xComp, UNO_QUERY );
