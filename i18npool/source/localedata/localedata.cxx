@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:08:47 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:24:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,9 @@ static const struct {
     { "ru_RU",  lcl_DATA_EURO, "ru" },
     { "tr_TR",  lcl_DATA_EURO, "tr" },
     { "et_EE",  lcl_DATA_EURO, "et" },
+    { "lt_LT",  lcl_DATA_EURO, "lt" },
+    { "lv_LV",  lcl_DATA_EURO, "lv" },
+    { "uk_UA",  lcl_DATA_EURO, "uk" },
 
     { "ja_JP",  lcl_DATA_OTHERS, "ja" },
     { "ko_KR",  lcl_DATA_OTHERS, "ko" },
