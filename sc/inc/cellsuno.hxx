@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-06 11:43:50 $
+ *  last change: $Author: sab $ $Date: 2001-07-19 07:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,6 +687,11 @@ protected:
                                                 const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::lang::IllegalArgumentException,
                                         ::com::sun::star::uno::RuntimeException);
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
+                            GetCellByPosition_Impl( sal_Int32 nColumn, sal_Int32 nRow )
+                                throw(::com::sun::star::uno::RuntimeException);
+
 
 public:
                             ScCellRangeObj(ScDocShell* pDocSh, const ScRange& rR);
