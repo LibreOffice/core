@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilterdialogstrings.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:08:08 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:23:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@ String STR_IMPORT_ONLY
     Text[ chinese_simplified ] = "输入筛选器";
     Text[ chinese_traditional ] = "匯入篩選器";
     Text[ slovak ] = "importný filter";
+    Text[ portuguese_brazilian ] = "Filtro de importa��o";
 };
 
 String STR_IMPORT_EXPORT
@@ -177,6 +178,7 @@ String STR_IMPORT_EXPORT
     Text[ chinese_simplified ] = "输入/输出筛选器";
     Text[ chinese_traditional ] = "匯入/匯出篩選器";
     Text[ slovak ] = "importný/exportný filter";
+    Text[ portuguese_brazilian ] = "Filtro de importa��o/exporta��o";
 };
 
 String STR_EXPORT_ONLY
@@ -192,6 +194,7 @@ String STR_EXPORT_ONLY
     Text[ chinese_simplified ] = "输出筛选器";
     Text[ chinese_traditional ] = "匯出篩選器";
     Text[ slovak ] = "exportný filter";
+    Text[ portuguese_brazilian ] = "Filtro de exporta��o";
 };
 
 String STR_APPL_NAME_WRITER
@@ -227,6 +230,7 @@ String STR_WARN_DELETE
     Text[ chinese_simplified ] = "您真的要删除 XML 筛选器 '%s'? 此操作将无法撤销。";
     Text[ chinese_traditional ] = "您真的要刪除 XML 篩選器 '%s'? 此動作將無法恢復。";
     Text[ slovak ] = "Určite chcete zmazať XML filter '%s'? Tento krok nemôže byť vrátený.";
+    Text[ portuguese_brazilian ] = "Deseja realmente excluir o filtro XML '%s' ? Esta a��o n�o poder� ser desfeita. ";
 };
 
 String STR_ERROR_FILTER_NAME_EXISTS
@@ -242,6 +246,7 @@ String STR_ERROR_FILTER_NAME_EXISTS
     Text[ chinese_simplified ] = "已经存在一个名称为'%s'的 XML 筛选器 。请输入一个不同的名称。";
     Text[ chinese_traditional ] = "已經存在一個名稱為 '%s' 的 XML 篩選器。 請輸入一個不同的名稱。";
     Text[ slovak ] = "XML filter s týmto názvom '%s' už existuje. Prosím zadajte iný názov.";
+    Text[ portuguese_brazilian ] = "J� existe um filtro XML com o nome '%s'. Digite um nome diferente.";
 };
 
 String STR_ERROR_TYPE_NAME_EXISTS
@@ -257,6 +262,7 @@ String STR_ERROR_TYPE_NAME_EXISTS
     Text[ chinese_simplified ] = "XML 筛选器 '%s2' 已经使用了使用界面 '%s1' 的名称。请输入一个不同的名称。";
     Text[ chinese_traditional ] = "XML 篩選器 '%s2' 已使用使用介面 '%s1' 名稱。請輸入一個不同的名稱。";
     Text[ slovak ] = "Názov užívateľského interface '%s1' už používa XML filter '%s2'. Prosím zadajte iný názov.";
+    Text[ portuguese_brazilian ] = "O filtro XML '%s2' j� usa este nome para a interface do usu�rio '%s1'. Escolha outro nome ";
 };
 
 String STR_ERROR_DTD_NOT_FOUND
@@ -272,6 +278,7 @@ String STR_ERROR_DTD_NOT_FOUND
     Text[ chinese_simplified ] = "无法找到 DTD 。请输入一个有效的路径。";
     Text[ chinese_traditional ] = "無法找到 DTD 。請輸入一個有效的路徑。";
     Text[ slovak ] = "DTD nebolo nájdené. Prosím zadajte platnú cestu.";
+    Text[ portuguese_brazilian ] = "N�o foi poss�vel encontrar o DTD. Especifique um caminho v�lido ";
 };
 
 String STR_ERROR_EXPORT_XSLT_NOT_FOUND
@@ -287,6 +294,7 @@ String STR_ERROR_EXPORT_XSLT_NOT_FOUND
     Text[ chinese_simplified ] = "无法找到输出 XSLT 。请输入一个有效的路径。";
     Text[ chinese_traditional ] = "無法找到匯出 XSLT 。請輸入一個有效的路徑。";
     Text[ slovak ] = "XSLT pre export nebolo nájdené. Prosím zadajte platnú cestu.";
+    Text[ portuguese_brazilian ] = "N�o � poss�vel encontrar o XSLT de exporta��o. Digite um caminho v�lido.";
 };
 
 String STR_ERROR_IMPORT_XSLT_NOT_FOUND
@@ -302,6 +310,7 @@ String STR_ERROR_IMPORT_XSLT_NOT_FOUND
     Text[ chinese_simplified ] = "无法找到输入文档样式。请输入一个有效的路径。";
     Text[ chinese_traditional ] = "無法找到匯入文件樣式。請輸入一個有效的路徑。";
     Text[ slovak ] = "XSLT pre import nebolo nájdené. Prosím zadajte platnú cestu.";
+    Text[ portuguese_brazilian ] = "N�o foi poss�vel encontrar o XLST para importa��o. Digite um caminho v�lido.";
 };
 
 String STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND
@@ -317,6 +326,7 @@ String STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND
     Text[ chinese_simplified ] = "无法找到 DTD 。请输入一个有效的路径。";
     Text[ chinese_traditional ] = "無法找到 DTD 。請輸入一個有效的路徑。";
     Text[ slovak ] = "Zadaná šablóna nebola nájdená. Prosím zadajte platnú cestu.";
+    Text[ portuguese_brazilian ] = "N�o foi poss�vel encontrar o modelo de importa��o especificado. Digite um caminho v�lido. ";
 };
 
 String STR_NOT_SPECIFIED
@@ -332,6 +342,7 @@ String STR_NOT_SPECIFIED
     Text[ chinese_simplified ] = "尚未指定";
     Text[ chinese_traditional ] = "尚未指定";
     Text[ slovak ] = "Nešpecifikované";
+    Text[ portuguese_brazilian ] = "N�o especificado";
 };
 
 String STR_NO_ERRORS_FOUND
@@ -352,6 +363,7 @@ String STR_DEFAULT_FILTER_NAME
     Text[ chinese_simplified ] = "新的筛选器";
     Text[ chinese_traditional ] = "新的篩選器";
     Text[ slovak ] = "Nový filter";
+    Text[ portuguese_brazilian ] = "Novo filtro";
 };
 
 String STR_DEFAULT_UI_NAME
@@ -401,6 +413,7 @@ String STR_UNDEFINED_FILTER
     Text[ chinese_simplified ] = "未定义的筛选器";
     Text[ chinese_traditional ] = "未定義的篩選器";
     Text[ slovak ] = "nedefinovaný filter";
+    Text[ portuguese_brazilian ] = "Filtro indefinido";
 };
 
 String STR_FILTER_HAS_BEEN_SAVED
@@ -416,6 +429,7 @@ String STR_FILTER_HAS_BEEN_SAVED
     Text[ chinese_simplified ] = "XML 筛选器 '%s' 已经存为软件包 '%s' 。";
     Text[ chinese_traditional ] = "XML 篩選器 '%s' 已經另存為套裝 '%s' 。";
     Text[ slovak ] = "XML filter '%s' bol uložený ako balík '%s'. ";
+    Text[ portuguese_brazilian ] = "O filtro XML '%s' foi salvo como pacote '%s'";
 };
 
 String STR_FILTERS_HAVE_BEEN_SAVED
@@ -431,6 +445,7 @@ String STR_FILTERS_HAVE_BEEN_SAVED
     Text[ chinese_simplified ] = "%s XML 筛选器已经存入软件包 '%s' 。";
     Text[ chinese_traditional ] = "%s XML 篩選器已經存入套裝 '%s' 。";
     Text[ slovak ] = "%s XML filtre boli uložené do balíka '%s'.";
+    Text[ portuguese_brazilian ] = "Os filtros XML foram salvos no pacote '%s'.";
 };
 
 String STR_FILTER_PACKAGE
@@ -446,6 +461,7 @@ String STR_FILTER_PACKAGE
     Text[ chinese_simplified ] = "XSLT 筛选器软件包";
     Text[ chinese_traditional ] = "XSLT 篩選器套裝";
     Text[ slovak ] = "XSLT balík filtrov";
+    Text[ portuguese_brazilian ] = "Pacote de filtro XSLT";
 };
 
 String STR_FILTER_INSTALLED
@@ -461,6 +477,7 @@ String STR_FILTER_INSTALLED
     Text[ chinese_simplified ] = "已经成功地安装了 XML 筛选器 '%s' 。";
     Text[ chinese_traditional ] = "已經成功地安裝 XML 篩選器 '%s' 。";
     Text[ slovak ] = "XML filter '%s' bol úspešne inštalovaný.";
+    Text[ portuguese_brazilian ] = "O filtro XML '%s' foi instalado com sucesso.";
 };
 
 String STR_FILTERS_INSTALLED
@@ -476,6 +493,7 @@ String STR_FILTERS_INSTALLED
     Text[ chinese_simplified ] = "已经成功地安装了 %s XML 筛选器。";
     Text[ chinese_traditional ] = "已經成功安裝 %s XML 篩選器。";
     Text[ slovak ] = "%s XML filtre boli úspešne inštalované.";
+    Text[ portuguese_brazilian ] = "%s' filtros XML foram instalados com sucesso. ";
 };
 
 String STR_NO_FILTERS_FOUND
@@ -491,7 +509,9 @@ String STR_NO_FILTERS_FOUND
     Text[ chinese_simplified ] = "因为软件包 '%s' 没有包含任何的 XML 筛选器， 因此无法安装 XML 筛选器。";
     Text[ chinese_traditional ] = "因爲套裝 '%s' 沒有包含任何的 XML 篩選器，因此無法安裝 XML 篩選器。";
     Text[ slovak ] = "Nebol nainštalovaný žiaden XML filter, pretože balík '%s' neobsahuje žiadne XML filtre.";
+    Text[ portuguese_brazilian ] = "N�o foi poss�vel instalar os filtros XML por que o pacote '%s' n�o cont�m filtros XML. ";
 };
+
 
 
 
