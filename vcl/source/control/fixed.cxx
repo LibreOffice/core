@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fixed.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-14 10:15:16 $
+ *  last change: $Author: pl $ $Date: 2002-10-17 14:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,10 @@ FixedText::FixedText( Window* pParent, const ResId& rResId ) :
 
 USHORT FixedText::ImplGetTextStyle( WinBits nWinStyle )
 {
-    USHORT nTextStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_MULTILINE | TEXT_DRAW_ENDELLIPSIS;
+    USHORT nTextStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_ENDELLIPSIS;
+
+    if( ! (nWinStyle & WB_NOMULTILINE) )
+        nTextStyle |= TEXT_DRAW_MULTILINE;
 
     if ( nWinStyle & WB_RIGHT )
         nTextStyle |= TEXT_DRAW_RIGHT;
