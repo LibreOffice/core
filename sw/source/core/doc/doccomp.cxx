@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doccomp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:14:43 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ CompareLine::~CompareLine() {}
 // ----------------------------------------------------------------------
 
 CompareData::CompareData()
-    : nSttLineNum( 0 ), pIndex( 0 ), pChangedFlag( 0 )
+    : pIndex( 0 ), pChangedFlag( 0 ), nSttLineNum( 0 )
 {
 }
 
