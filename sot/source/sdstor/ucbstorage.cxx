@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-12 15:09:09 $
+ *  last change: $Author: mav $ $Date: 2002-09-25 10:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1816,6 +1816,7 @@ void UCBStorage_Impl::Init()
         }
         else
         {
+            ReadContent();
             // get the manifest information from the package
             Any aAny = m_pContent->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
             rtl::OUString aTmp;
@@ -1958,8 +1959,8 @@ void UCBStorage_Impl::ReadContent()
     }
     catch ( SQLException& )
     {
-        // any other error - not specified
-        SetError( ERRCODE_IO_GENERAL );
+        // means that the file can be broken
+        SetError( ERRCODE_IO_WRONGFORMAT );
     }
     catch ( Exception& )
     {
