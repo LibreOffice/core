@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-06 13:26:13 $
+#   last change: $Author: hdu $ $Date: 2001-02-15 17:01:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,3 +75,18 @@ PSPRINT=true
 .ENDIF
 .ENDIF
 .ENDIF
+
+.IF "$(GUI)" == "UNX"
+USE_BUILTIN_RASTERIZER=true
+#USE_XRENDER=true
+#ENVCFLAGS += -DUSE_XRENDER
+.ENDIF
+
+.IF "$(remote)" != ""
+USE_BUILTIN_RASTERIZER=true
+.ENDIF
+                                                                          
+.IF "$(USE_BUILTIN_RASTERIZER)" != ""
+ENVCFLAGS += -DUSE_BUILTIN_RASTERIZER
+.ENDIF
+
