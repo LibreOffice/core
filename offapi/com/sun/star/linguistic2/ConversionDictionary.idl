@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConversionDictionary.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:14:03 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,8 @@ module com { module sun { module star { module linguistic2 {
 
     <p>Specific implementations may put some restrictions for
     the dictionary or it's entries.
-    Namely usually the order for the entry pairs will be defined.</p>
+    Namely usually the order for the string pairs within a single entry
+    will be defined.</p>
 
     @see    com::sun::star::linguistic2::ConversionDictionaryList
     @see    com::sun::star::linguistic2::HangulHanjaConversionDictionary
