@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:03:07 $
+#   last change: $Author: sb $ $Date: 2001-10-08 14:13:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,10 @@ TARGET=fsys
 .INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
+
+UNOUCRRDB = applicat.rdb #$(SOLARBINDIR)$/applicat.rdb
+UNOUCROUT = $(OUT)$/inc
+UNOTYPES = com.sun.star.util.XStringWidth
 
 SLOFILES= \
             $(SLO)$/tempfile.obj   \
