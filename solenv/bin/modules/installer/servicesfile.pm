@@ -2,9 +2,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-21 14:24:24 $
+#   last change: $Author: obo $ $Date: 2004-06-22 10:22:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -176,73 +176,6 @@ sub make_file_url
 }
 
 ################################################################
-# Registering a component file in the services.rdb
-################################################################
-
-sub register_component
-{
-    my ($onefile, $regcompfileref, $servicesfile, $regcomprdb) = @_;
-
-    my $registerfile = $onefile->{'Name'};
-    my $java_component = 0;
-    my $error_occured = 0;
-    my $systemcall;
-
-    if ( $registerfile =~ /\.jar\s*$/ ) { $java_component = 1; }    # this is a .jar file, a Java component
-
-    my $do_register = 1;
-    if (( $java_component ) && (!( $installer::globals::solarjava ))) { $do_register = 0; }
-
-    if ( $do_register )
-    {
-        my $sourcepath = $onefile->{'sourcepath'};
-
-        my $from = cwd();
-        if ( $installer::globals::iswin ) { $from =~ s/\//\\/g; }
-
-        my $to = $sourcepath;
-        installer::pathanalyzer::get_path_from_fullqualifiedname(\$to);
-
-        # ATTENTION: "regcomp" can only be executed on the corresponding platform!
-        # On a Windows system, "regcomp.exe" has to be executed, on a Unix system
-        # the correct "regcomp"
-
-        chdir($to);
-
-        if ( $java_component )
-        {
-            my $fileurl = make_file_url($to);
-
-            $systemcall = "$$regcompfileref -register -br $regcomprdb -r $servicesfile -c " . $installer::globals::quote . "vnd.sun.star.expand\:\$UNO_JAVA_COMPONENT_PATH\/$registerfile" . $installer::globals::quote . " -l com.sun.star.loader.Java2 -env:UNO_JAVA_COMPONENT_PATH=" . $installer::globals::quote . $fileurl . $installer::globals::quote;
-            # $systemcall = "$$regcompfileref -register -br $regcomprdb -r $servicesfile -c \'vnd.sun.star.expand\:\$UNO_JAVA_COMPONENT_PATH\/$registerfile\' -l com.sun.star.loader.Java2 -env:UNO_JAVA_COMPONENT_PATH=\'" . $fileurl . "\'";
-        }
-        else
-        {
-            $systemcall = "$$regcompfileref -register -r $servicesfile -c $registerfile";
-        }
-
-        my $returnvalue = system($systemcall);
-
-        chdir($from);
-
-        my $infoline;
-        if ($returnvalue)
-        {
-            $infoline = "ERROR: $systemcall\n";
-            $error_occured = 1;
-        }
-        else
-        {
-            $infoline = "SUCCESS: $systemcall\n";
-        }
-
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-
-    return $error_occured;
-}
-
-################################################################
 # Determining all sourcepath from the uno components
 ################################################################
 
@@ -310,7 +243,7 @@ sub register_unocomponents
                 $counter++;
             }
 
-            if ((( $counter > 0 ) && ( $counter%$installer::globals::maxservices == 0 )) || (( $counter > 0 ) && ( $i == $#{$unocomponents} ))) # limiting to $installer::globals::maxservices files
+            if ((( $counter > 0 ) && ( $counter%$installer::globals::unomaxservices == 0 )) || (( $counter > 0 ) && ( $i == $#{$unocomponents} )))  # limiting to $installer::globals::maxservices files
             {
                 $filestring =~ s/\;\s*$//;
                 chdir($onesourcepath);
@@ -361,43 +294,64 @@ sub register_javacomponents
 
     if ( $do_register )
     {
-        for ( my $i = 0; $i <= $#{$javacomponents}; $i++ )
-        {
-            my $sourcepath = ${$javacomponents}[$i]->{'sourcepath'};
-            my $registerfile = ${$javacomponents}[$i]->{'Name'};
+        my $allsourcepathes = get_all_sourcepathes($javacomponents);
 
+        for ( my $j = 0; $j <= $#{$allsourcepathes}; $j++ )
+        {
+            my $filestring = "";
+            my $onesourcepath = ${$allsourcepathes}[$j];
+            my $to = "";
             my $from = cwd();
             if ( $installer::globals::iswin ) { $from =~ s/\//\\/g; }
 
-            my $to = $sourcepath;
-            installer::pathanalyzer::get_path_from_fullqualifiedname(\$to);
-
-            # ATTENTION: "regcomp" can only be executed on the corresponding platform!
-            # On a Windows system, "regcomp.exe" has to be executed, on a Unix system
-            # the correct "regcomp"
-
-            chdir($to);
-
-            my $fileurl = make_file_url($to);
-
-            $systemcall = "$$regcompfileref -register -s -br $regcomprdb -r $servicesfile -c " . $installer::globals::quote . "vnd.sun.star.expand\:\$UNO_JAVA_COMPONENT_PATH\/$registerfile" . $installer::globals::quote . " -l com.sun.star.loader.Java2 -env:UNO_JAVA_COMPONENT_PATH=" . $installer::globals::quote . $fileurl . $installer::globals::quote;
-
-            my $returnvalue = system($systemcall);
-
-            chdir($from);
-
-            my $infoline;
-            if ($returnvalue)
+            for ( my $i = 0; $i <= $#{$javacomponents}; $i++ )
             {
-                $infoline = "ERROR: $systemcall\n";
-                $error_occured = 1;
-            }
-            else
-            {
-                $infoline = "SUCCESS: $systemcall\n";
-            }
+                my $doinclude = 1;
+                my $sourcepath = ${$javacomponents}[$i]->{'sourcepath'};
 
-            push( @installer::globals::logfileinfo, $infoline);
+                $to = $sourcepath;
+                installer::pathanalyzer::get_path_from_fullqualifiedname(\$to);
+
+                if (!($to eq $onesourcepath)) { $doinclude = 0; }
+
+                if ( $doinclude )
+                {
+                    my $filename = ${$javacomponents}[$i]->{'Name'};
+                    $filename = "vnd.sun.star.expand\:\$UNO_JAVA_COMPONENT_PATH\/$filename";
+                    $filestring = $filestring . $filename . "\;";
+                    $counter++;
+                }
+
+                if ((( $counter > 0 ) && ( $counter%$installer::globals::javamaxservices == 0 )) || (( $counter > 0 ) && ( $i == $#{$javacomponents} )))    # limiting to $installer::globals::maxservices files
+                {
+                    $filestring =~ s/\;\s*$//;
+                    chdir($onesourcepath);
+
+                    my $fileurl = make_file_url($onesourcepath);
+
+                    $systemcall = "$$regcompfileref -register -s -br $regcomprdb -r $servicesfile -c " . $installer::globals::quote . $filestring . $installer::globals::quote . " -l com.sun.star.loader.Java2 -env:UNO_JAVA_COMPONENT_PATH=" . $installer::globals::quote . $fileurl . $installer::globals::quote;
+
+                    my $returnvalue = system($systemcall);
+
+                    my $infoline;
+                    if ($returnvalue)
+                    {
+                        $infoline = "ERROR: $systemcall\n";
+                        $error_occured = 1;
+                    }
+                    else
+                    {
+                        $infoline = "SUCCESS: $systemcall\n";
+                    }
+
+                    push( @installer::globals::logfileinfo, $infoline);
+
+                    chdir($from);
+
+                    $counter = 0;
+                    $filestring = "";
+                }
+            }
         }
     }
 

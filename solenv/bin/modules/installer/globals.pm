@@ -2,9 +2,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-21 14:24:25 $
+#   last change: $Author: obo $ $Date: 2004-06-22 10:22:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -152,7 +152,8 @@ BEGIN
     $addchildprojects = 0;
     $languagepack = 0;
 
-    $maxservices = 25;
+    $unomaxservices = 25;
+    $javamaxservices = 1;
 
     $one_cab_file  = 1;
     $many_cab_files = 0;
