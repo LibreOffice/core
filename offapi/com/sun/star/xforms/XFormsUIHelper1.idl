@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFormsUIHelper1.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:11:05 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,12 @@ interface XFormsUIHelper1
     string getSubmissionName( [in] com::sun::star::beans::XPropertySet xSubm,
                               [in] boolean bDetail );
 
+    // Creates a new binding based on the one passed as argument.
+    // The new binding does *not* contribute to the MIPs table and acts
+    // as a propertyset in disguise, which is what the UI needs this object for...
+    com::sun::star::beans::XPropertySet cloneBindingAsGhost( [in] com::sun::star::beans::XPropertySet binding );
+
+    void removeBindingIfUseless( [in] com::sun::star::beans::XPropertySet xBinding );
 
     // handle instances
 
@@ -133,7 +139,9 @@ interface XFormsUIHelper1
                       [in] string sURL,
                       [in] boolean bURLOnce );
 
-    void renameInstance( [in] string sFrom, [in] string sTo );
+    void renameInstance( [in] string sFrom, [in] string sTo,
+                      [in] string sURL,
+                      [in] boolean bURLOnce );
 
     void removeInstance( [in] string sName );
 
