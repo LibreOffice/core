@@ -2,9 +2,9 @@
 *
 *  $RCSfile: dbumiscres.src,v $
 *
-*  $Revision: 1.54 $
+*  $Revision: 1.55 $
 *
-*  last change: $Author: vg $ $Date: 2003-04-01 14:04:35 $
+*  last change: $Author: hr $ $Date: 2003-04-29 17:25:30 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -94,11 +94,15 @@ String STR_CONNUINAMES
     Text[ korean ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;텍스트;스프레드시트;주소록";
     Text[ chinese_simplified ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;文字;工作表;通讯簿";
     Text[ chinese_traditional ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;文字;工作表文件;通訊錄";
-    Text[ turkish ] = "Adabas;JDBC;ODBC;dBase;Text";
+    Text[ turkish ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Metin;Hesap �izelgesi;Adres defteri";
     Text[ arabic ] = "Adabas;JDBC;ODBC;dBase;ADO;��;����� �����";
     Text[ catalan ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet";
     Text[ thai ] = "Adabas;JDBC;ODBC;ดีเบส;ADO;ข้อความ;กระดาษคำนวณ;สมุดที่อยู่";
-};
+    Text[ czech ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Tabulka;Kontakty";
+        Text[ hebrew ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Tabellendokument;Adressbuch";
+        Text[ portuguese_brazilian ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;Planilha;Livro de Endere�os";
+        Text[ hindi ] = "Adabas;JDBC;ODBC;dBase;ADO;टेक्स्ट्;स्प्रेडशीट्;पतापुस्तक";
+    };
 };
 
 Resource RSC_CHARSETS
@@ -119,8 +123,8 @@ String 1
     Text[ danish ] = "Ansi";
     Text[ swedish ] = "System";
     Text[ polish ] = "Ansi";
-    Text[ portuguese_brazilian ] = "System";
-    Text[ japanese ] = "Ansi";
+    Text[ portuguese_brazilian ] = "Ansi";
+    Text[ japanese ] = "システム";
     Text[ korean ] = "시스템";
     Text[ chinese_simplified ] = "系统";
     Text[ chinese_traditional ] = "系統";
@@ -128,7 +132,10 @@ String 1
     Text[ arabic ] = "������";
     Text[ catalan ] = "Ansi";
     Text[ thai ] = "ระบบ";
-};
+    Text[ czech ] = "System";
+        Text[ hebrew ] = "System";
+        Text[ hindi ] = "Ansi";
+    };
 };
 
 //-------------------------------------------------------------------------
@@ -146,17 +153,20 @@ Text[ spanish ] = "Error durante la conexi�n con la fuente de datos";
 Text[ italian ] = "Errore durante il collegamento alla sorgente dati";
 Text[ danish ] = "Fejl under forbindelsen med datakilden";
 Text[ swedish ] = "Fel vid anslutningen till datak�llan";
-Text[ polish ] = "B��d w ��czeniu ze �r�d�em danych";
-Text[ portuguese_brazilian ] = "Error while connecting to the data source";
+Text[ polish ] = "B��d podczas ��czenia ze �r�d�em danych";
+Text[ portuguese_brazilian ] = "Erro durante a conex�o com a fonte de dados";
 Text[ japanese ] = "データソースへ接続時のエラー";
 Text[ korean ] = "데이터 원본으로 연결하던 중 오류";
 Text[ chinese_simplified ] = "在和数据源连接时发生一个错误";
 Text[ chinese_traditional ] = "連線到資料源時發生一個錯誤";
-Text[ turkish ] = "Error while connecting to the data source";
+Text[ turkish ] = "Veri kayna��na ba�lan�rken hata olu�tu";
 Text[ arabic ] = "��� ����� ������� ����� ��������";
 Text[ finnish ] = "On ilmennyt virhe muodostettaessa yhteytt� tietol�hteeseen";
 Text[ catalan ] = "S'ha produ�t un error en connectar amb la font de dades";
 Text[ thai ] = "ผิดพลาดขณะกำลังเชื่อมต่อกับแหล่งข้อมูล";
+    Text[ czech ] = "Chyba při připojování k datovému zdroji";
+    Text[ hebrew ] = "Fehler bei der Verbindung mit der Datenquelle";
+    Text[ hindi ] = "ड़ॉटा मूल को कनेक्ट करने के समय गलती घटित हुआ";
 };
 
 String STR_OBJECT_ALREADY_EXSISTS
@@ -173,17 +183,20 @@ Text[ spanish ] = "�Error al crear el objeto!";
 Text[ italian ] = "Errore nella creazione dell'oggetto";
 Text[ danish ] = "Fejl under genereringen!";
 Text[ swedish ] = "Fel n�r objekt skulle skapas!";
-Text[ polish ] = "B��d w trakcie tworzenia!";
-Text[ portuguese_brazilian ] = "Error while creating!";
+Text[ polish ] = "B��d podczas tworzenia!";
+Text[ portuguese_brazilian ] = "Erro durante a cria��o!";
 Text[ japanese ] = "作成するときのエラー。";
 Text[ korean ] = "만드는 중 오류";
 Text[ chinese_simplified ] = "在生成时发生一个错误！";
 Text[ chinese_traditional ] = "在建立時發生錯誤";
-Text[ turkish ] = "Error while creating!";
+Text[ turkish ] = "Yaratma esnas�nda hata olu�tu!";
 Text[ arabic ] = "��� ����� �������!";
 Text[ finnish ] = "Virhe luonnin aikana.";
 Text[ catalan ] = "S'ha produ�t un error durant el proc�s de creaci�";
 Text[ thai ] = "ผิดพลาดในระหว่างการสร้าง!";
+    Text[ czech ] = "Chyba při vytváření!";
+    Text[ hebrew ] = "Fehler beim Erzeugen";
+    Text[ hindi ] = "उत्पन्न करने के समय गलती ।!";
 };
 
 String STR_UNEXPECTED_ERROR
@@ -201,16 +214,19 @@ Text[ finnish ] = "On ilmennyt odottamaton virhe. Toimintoa ei voitu suorittaa."
 Text[ italian ] = "Si � verificato un errore inaspettato. Impossibile terminare l'operazione.";
 Text[ danish ] = "Der er opst�et en uventet fejl. Operationen kan ikke udf�res.";
 Text[ swedish ] = "Ett ov�ntat fel har uppst�tt. Det g�r inte att utf�ra operationen.";
-Text[ polish ] = "Wyst�pi� nieoczekiwany b��d. Operacji nie mo�na wykona�.";
-Text[ portuguese_brazilian ] = "An unexpected error occured. The operation could not be completed.";
+Text[ polish ] = "Wyst�pi� nieoczekiwany b��d. Nie mo�na wykona� operacji.";
+Text[ portuguese_brazilian ] = "Ocorreu um erro imprevisto. N�o � poss�vel executar a opera��o.";
 Text[ japanese ] = "予期しないエラーが発生しました。操作の実行はできません。";
 Text[ korean ] = "예상치 못했던 오류가 발생했습니다. 작업을 실행할 수 없습니다.";
 Text[ chinese_simplified ] = "发生一个意外的错误。无法执行这个操作。";
 Text[ chinese_traditional ] = "發生一個意外的錯誤。無法執行這個動作。";
-Text[ turkish ] = "An unexpected error occured. The operation could not be completed.";
+Text[ turkish ] = "Beklenmeyen hata olu�tu. ��lem tamamlanamad�.";
 Text[ arabic ] = "An unexpected error occured. The operation could not be completed.";
 Text[ catalan ] = "S'ha produ�t un error inesperat. L'operaci� no s'ha pogut realitzar.";
 Text[ thai ] = "เกิดข้อผิดพลาดที่ไม่คาดคิด ไม่สามารถแสดงปฏิบัติการได้";
+    Text[ czech ] = "Došlo k neočekávané chybě. Operace nemohla být provedena.";
+    Text[ hebrew ] = "Ein unerwarteter Fehler ist aufgetreten. Die operation kann nicht ausgeführt werden.";
+    Text[ hindi ] = "एक अज्ञात गलती घटित हुआ । कार्य को पूरा नहीं कर सकते है ।";
 };
 
 String STR_COULDNOTOPEN_LINKEDDOC
@@ -229,15 +245,18 @@ Text[ italian ] = "Impossibile\naprire il documento\n\n$file$.";
 Text[ danish ] = "Dokumentet\n\n$file$\n\nkunne ikke �bnes.";
 Text[ swedish ] = "Det gick inte att �ppna dokumentet\n\n$file$\n\n.";
 Text[ polish ] = "Otwarcie dokumentu\n\n$file$\n\nnie powiod�o si�.";
-Text[ portuguese_brazilian ] = "Th document\n\n$file$\n\ncould not be opened.";
+Text[ portuguese_brazilian ] = "N�o foi poss�vel abrir o documento\n\n$file$\n\n.";
 Text[ japanese ] = "ドキュメント\n\n$file$ は\n\n開けませんでした。";
 Text[ korean ] = "\n\n$file$\n\n문서를 열지 못했습니다.";
 Text[ chinese_simplified ] = "这个文档\n\n$file$\n\n无法被打开。";
 Text[ chinese_traditional ] = "這個文件\n\n$file$\n\n無法開啟。";
-Text[ turkish ] = "Th document\n\n$file$\n\ncould not be opened.";
+Text[ turkish ] = "$file$\n\\belgesi a��lamad�.";
 Text[ arabic ] = "Th document\n\n$file$\n\ncould not be opened.";
 Text[ catalan ] = "No s'ha pogut obrir el document\n\n$file$.\n\n";
 Text[ thai ] = "ไม่สามารถเปิดเอกสาร\n\n$file$\n\nได้";
+    Text[ czech ] = "Dokument\n\n$file$\n\nnemohl být otevřen.";
+    Text[ hebrew ] = "Das Dokument\n\n$file$\n\nkonnte nicht geöffnet werden.";
+    Text[ hindi ] = "लेखपत्र\n\n$file$\n\nको खोल नहीं सकते है ।";
 };
 
 String STR_MISSING_TABLES_XDROP
@@ -255,16 +274,19 @@ Text[ finnish ] = "Taulua ei voi poistaa, koska tietokantayhteys ei tue poistami
 Text[ italian ] = "Impossibile eliminare la tabella perch� non � supportata dal collegamento al database.";
 Text[ danish ] = "Tabellen kan ikke slettes, da databaseforbindelsen ikke underst�tter den.";
 Text[ swedish ] = "Det g�r inte att radera tabellen eftersom databasf�rbindelsen inte st�djer den.";
-Text[ polish ] = "Tabeli nie mo�na usun��, poniewa� nie jest ona os�ugiwana przez po��czenie z baz� danych.";
-Text[ portuguese_brazilian ] = "The table can't be dropped, 'cause the database connection does not support this.";
+Text[ polish ] = "Tabeli nie mo�na usun��, poniewa� po��czenie z baz� danych nie obs�uguje tej operacji.";
+Text[ portuguese_brazilian ] = "A tabela n�o pode ser excluida por que a conex�o � base de dados n�o suporta isto.";
 Text[ japanese ] = "テーブルはデータベースの接続がこれを支援しないため削除できません。";
 Text[ korean ] = "테이블을 데이터베이스 연결에서 지원되지 않기 때문에 삭제할 수 없습니다.";
 Text[ chinese_simplified ] = "因为数据库的连接不支持这个功能而无法删除这个表格。";
 Text[ chinese_traditional ] = "因為資料庫連線不支援這個動作而無法刪除這個表格。";
-Text[ turkish ] = "The table can't be dropped, 'cause the database connection does not support this.";
+Text[ turkish ] = "Veritaban� ba�lant�s� desteklemedi�i i�in tablo silinemiyor.";
 Text[ arabic ] = "The table can't be dropped, 'cause the database connection does not support this.";
 Text[ catalan ] = "No es pot suprimir la taula perqu� la connexi� de la base de dades no ho permet.";
 Text[ thai ] = "ไม่สามารถลบตารางได้เนื่องจากการเชื่อมต่อฐานข้อมูลไม่สนับสนุนสิ่งนี้";
+    Text[ czech ] = "Tabulka nemohla být zrušena, protože to databázové připojení nepodporuje.";
+    Text[ hebrew ] = "Die Tabelle kann nicht gelöscht werden, da die Datenbankverbindung diese nicht unterstützt.";
+    Text[ hindi ] = "लेखासंचय कनेक्शन समर्थन नहीं करने के कारण सारणी को नहीं मिटा सकते है ।";
 };
 
 String STR_BUTTON_TEXT_ALL
@@ -284,16 +306,19 @@ Text[ finnish ] = "~Kaikki";
 Text[ italian ] = "~Tutti";
 Text[ danish ] = "~Alle";
 Text[ swedish ] = "~Alla";
-Text[ polish ] = "~Wszystkie";
-Text[ portuguese_brazilian ] = "~All";
+Text[ polish ] = "~Wszystko";
+Text[ portuguese_brazilian ] = "~Tudo";
 Text[ japanese ] = "すべて(~A)";
 Text[ korean ] = "모두(~A)";
 Text[ chinese_simplified ] = "全部(~A)";
 Text[ chinese_traditional ] = "全部(~A)";
-Text[ turkish ] = "~All";
-Text[ arabic ] = "~All";
+Text[ turkish ] = "~T�m�";
+Text[ arabic ] = "����";
 Text[ catalan ] = "~Tots";
 Text[ thai ] = "~ทั้งหมด";
+    Text[ czech ] = "Vše";
+    Text[ hebrew ] = "‮הכל‬";
+    Text[ hindi ] = "~सब";
 };
 
 String STR_UNDO_COLON
@@ -311,16 +336,19 @@ Text[ italian ] = "Annulla:";
 Text[ danish ] = "Fortryd:";
 Text[ swedish ] = "�ngra:";
 Text[ polish ] = "Cofnij";
-Text[ portuguese_brazilian ] = "Undo:";
+Text[ portuguese_brazilian ] = "Apagar o resto ...";
 Text[ japanese ] = "元に戻す:";
 Text[ korean ] = "실행 취소:";
 Text[ chinese_simplified ] = "撤消命令：";
 Text[ chinese_traditional ] = "復原：";
-Text[ turkish ] = "Undo";
+Text[ turkish ] = "Gerial";
 Text[ arabic ] = "�����";
 Text[ catalan ] = "Desf�s:";
 Text[ finnish ] = "Peruuta:";
 Text[ thai ] = "เลิกทำ";
+    Text[ czech ] = "Zpět:";
+    Text[ hebrew ] = "‮ביטול פעולה:‬";
+    Text[ hindi ] = "Undo:";
 };
 
 String STR_REDO_COLON
@@ -338,23 +366,51 @@ Text[ italian ] = "Ripristina:";
 Text[ danish ] = "Gendan:";
 Text[ swedish ] = "�terst�ll:";
 Text[ polish ] = "Przywr��";
-Text[ portuguese_brazilian ] = "Redo:";
+Text[ portuguese_brazilian ] = "Refazer: ";
 Text[ japanese ] = "やり直し:";
 Text[ korean ] = "다시 실행:";
 Text[ chinese_simplified ] = "恢复撤消命令：";
 Text[ chinese_traditional ] = "恢復撤消指令:";
-Text[ turkish ] = "Redo";
+Text[ turkish ] = "Tekrar y�kle:";
 Text[ arabic ] = "�����";
 Text[ catalan ] = "Ref�s";
 Text[ finnish ] = "Toista ";
 Text[ thai ] = "ทำซ้ำ";
+    Text[ czech ] = "Znovu:";
+    Text[ hebrew ] = "‮שחזור פעולה:‬";
+    Text[ hindi ] = "Redo:";
 };
 
 String STR_UNKNOWN_TYPE_FOUND
 {
     Text = "F�r die Spalte '#1' konnte kein passender Spaltentyp gefunden werden." ;
     Text [ ENGLISH_us ] = "No corresponding column type could be found for column '#1'." ;
+    Text[ french ] = "Impossible de d�tecter le type de colonne correspondant pour la colonne '#1' !";
+    Text[ spanish ] = "No se encontr� ninguna columna correspondiente al tipo de columna '#1'.";
+    Text[ italian ] = "Impossibile trovare il tipo di colonna corrispondente per la colonna '#1'.";
+    Text[ swedish ] = "Ingen motsvarande kolumntyp kunde hittas f�r kolumn '#1'.";
+    Text[ japanese ] = "列 '#1' に関連した列の種類は見つかりませんでした。";
+    Text[ korean ] = "'#1' 열에 해당하는 열 유형을 찾지 못했습니다.";
+    Text[ chinese_simplified ] = "无法为列'#1'找到合适的列类型。";
+    Text[ chinese_traditional ] = "無法為欄 '#1' 找到合適的欄類型。";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
