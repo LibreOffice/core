@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosrch.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:24:47 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,15 @@
  *
  ************************************************************************/
 
+#include "unosrch.hxx"
+
 #pragma hdrstop
+
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
 #endif
 #ifndef _HINTS_HXX //autogen
 #include <hints.hxx>
-#endif
-#ifndef _UNOSRCH_HXX
-#include <unosrch.hxx>
 #endif
 #ifndef _UNOMAP_HXX
 #include <unomap.hxx>
@@ -75,12 +75,17 @@
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
 #endif
+
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _UNO_LINGU_HXX
+#include "svx/unolingu.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
 #include <com/sun/star/util/SearchOptions.hpp>
 #endif
@@ -804,7 +809,7 @@ void SwXTextSearch::FillSearchOptions( SearchOptions& rSearchOpt ) const
     else
         rSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
 
-    rSearchOpt.Locale = CreateLocale( GetAppLanguage() );
+    rSearchOpt.Locale = SvxCreateLocale( GetAppLanguage() );
     rSearchOpt.searchString = sSearchText;
     rSearchOpt.replaceString = sReplaceText;
 
