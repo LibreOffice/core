@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expbase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-08-22 11:22:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,8 @@ ScExportBase::~ScExportBase()
 }
 
 
-BOOL ScExportBase::GetDataArea( USHORT nTab, USHORT& nStartCol,
-            USHORT& nStartRow, USHORT& nEndCol, USHORT& nEndRow ) const
+BOOL ScExportBase::GetDataArea( SCTAB nTab, SCCOL& nStartCol,
+            SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const
 {
     pDoc->GetDataStart( nTab, nStartCol, nStartRow );
     pDoc->GetPrintArea( nTab, nEndCol, nEndRow, TRUE );
@@ -109,8 +109,8 @@ BOOL ScExportBase::GetDataArea( USHORT nTab, USHORT& nStartCol,
 }
 
 
-BOOL ScExportBase::TrimDataArea( USHORT nTab, USHORT& nStartCol,
-            USHORT& nStartRow, USHORT& nEndCol, USHORT& nEndRow ) const
+BOOL ScExportBase::TrimDataArea( SCTAB nTab, SCCOL& nStartCol,
+            SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const
 {
     while ( nStartCol <= nEndCol &&
             pDoc->GetColFlags( nStartCol, nTab ) & CR_HIDDEN )
@@ -128,11 +128,12 @@ BOOL ScExportBase::TrimDataArea( USHORT nTab, USHORT& nStartCol,
 }
 
 
-BOOL ScExportBase::IsEmptyTable( USHORT nTab ) const
+BOOL ScExportBase::IsEmptyTable( SCTAB nTab ) const
 {
     if ( !pDoc->HasTable( nTab ) || !pDoc->IsVisible( nTab ) )
         return TRUE;
-    USHORT nStartCol, nStartRow, nEndCol, nEndRow;
+    SCCOL nStartCol, nEndCol;
+    SCROW nStartRow, nEndRow;
     return !GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
 }
 
