@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basecontainernode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:05:10 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ namespace presentation
                                const NodeContext&                                   rContext );
 
             // overrides from BaseNode
+            virtual bool activate();
             virtual bool init();
             virtual void dispose();
             virtual void end();

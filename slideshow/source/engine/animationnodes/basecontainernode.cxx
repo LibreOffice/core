@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basecontainernode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:04:55 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:05:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <basecontainernode.hxx>
 #include <tools.hxx>
 #include <nodetools.hxx>
+#include <delayevent.hxx>
 
 #ifndef BOOST_BIND_HPP_INCLUDED
 #include <boost/bind.hpp>
@@ -96,6 +97,26 @@ namespace presentation
             mbDurationIndefinite( isIndefiniteTiming( xNode->getEnd() ) ||
                                   isIndefiniteTiming( xNode->getDuration() ) )
         {
+        }
+
+        bool BaseContainerNode::activate()
+        {
+            if( getState() == ACTIVE )
+                return true; // avoid duplicate event generation
+
+            if( !BaseNode::activate() )
+                return false;
+
+            if( isDurationInfinite() &&
+                maChildren.empty() )
+            {
+                // schedule deactivation:
+                maContext.mrEventQueue.addEvent(
+                    makeEvent( boost::bind( &BaseNode::deactivate,
+                                            getSelf() ) ) );
+            }
+
+            return true;
         }
 
         void BaseContainerNode::dispose()
