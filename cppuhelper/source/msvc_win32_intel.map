@@ -219,3 +219,9 @@ component_getDescriptionFunc;
     local:
         *;
 };
+
+UDK_3.2 {
+    global:
+?getCaughtException@cppu@@YA?AVAny@uno@star@sun@com@@XZ;
+??0OPropertySetHelper@cppu@@QAE@AAU?$OBroadcastHelperVar@VOMultiTypeInterfaceContainerHelper@cppu@@VType@uno@star@sun@com@@@1@_N@Z;
+} UDK_3_0_0;
