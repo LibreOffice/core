@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 08:39:05 $
+ *  last change: $Author: os $ $Date: 2001-01-19 15:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aColumnRB.SetClickHdl(aLk);
     aFilenameRB.SetClickHdl(aLk);
     BOOL bColumn = pModOpt->IsNameFromColumn();
-    if (bColumn)
+    if(bColumn)
         aColumnRB.Check();
     else
         aFilenameRB.Check();
@@ -255,7 +255,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
         aFilenameED.SetText(sMailName);
     }
     else
-        aColumnLB.SelectEntry(sMailName);
+        aColumnLB.SelectEntry(pModOpt->GetNameFromColumn());
 
     if (aAddressFldLB.GetSelectEntryCount() == 0)
         aAddressFldLB.SelectEntryPos(0);
@@ -429,12 +429,12 @@ void SwMailMergeDlg::ExecQryShell(BOOL bVisible)
             sPath.Copy(sPath.Len()-sDelim.Len()).CompareTo(sDelim) != COMPARE_EQUAL)
             sPath += sDelim;
 
-        pModOpt->SetNameFromColumn(aColumnRB.IsChecked());
+        pModOpt->SetIsNameFromColumn(aColumnRB.IsChecked());
 
         if (aColumnRB.IsChecked())
         {
             pMgr->SetEMailColumn(aColumnLB.GetSelectEntry());
-            pModOpt->SetMailName(aColumnLB.GetSelectEntry());
+            pModOpt->SetNameFromColumn(aColumnLB.GetSelectEntry());
         }
         else
         {
