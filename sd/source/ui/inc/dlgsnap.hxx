@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsnap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2001-05-16 15:54:01 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 /************************************************************************/
 
 class SfxItemSet;
-class SdView;
+class ::sd::View;
 
 #define RET_SNAP_DELETE 111
 
@@ -125,7 +125,7 @@ private:
     DECL_LINK( ClickHdl, Button * );
 
 public:
-    SdSnapLineDlg(Window* pWindow, const SfxItemSet& rInAttrs, SdView* pView);
+    SdSnapLineDlg(Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView);
 
     void GetAttr(SfxItemSet& rOutAttrs);
 
