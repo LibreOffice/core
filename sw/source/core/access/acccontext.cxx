@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-27 12:34:44 $
+ *  last change: $Author: mib $ $Date: 2002-05-27 15:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,7 +398,17 @@ void SwAccessibleContext::ScrolledIn()
         aEvent.NewValue <<= xThis;
 
         xParentImpl->FireAccessibleEvent( aEvent );
-        DBG_MSG_PARAM( "AccessibleChild (added)", xChildImpl.getBodyPtr() )
+        DBG_MSG_PARAM( "AccessibleChild (added)", xChildImpl.getBodyPtr() );
+
+        if( HasCursor() )
+        {
+            Window *pWin = GetWindow();
+            if( pWin && pWin->HasFocus() )
+            {
+                FireStateChangedEvent( AccessibleStateType::FOCUSED, sal_True );
+            }
+        }
+
     }
 }
 
@@ -501,8 +511,11 @@ void SwAccessibleContext::FireAccessibleEvent( AccessibleEventObject& rEvent )
     if( !GetFrm() )
         return;
 
-    Reference < XAccessibleContext > xThis( this );
-    rEvent.Source = xThis;
+    if( !rEvent.Source.is() )
+    {
+        Reference < XAccessibleContext > xThis( this );
+        rEvent.Source = xThis;
+    }
 
     ::cppu::OInterfaceIteratorHelper aIter( aAccessibleEventListeners );
     while( aIter.hasMoreElements() )
@@ -1028,6 +1041,20 @@ void SwAccessibleContext::ScrolledInShape( const SdrObject *pObj,
     Reference< XAccessible > xAcc( pAccImpl );
     aEvent.NewValue <<= xAcc;
     FireAccessibleEvent( aEvent );
+
+    if( pAccImpl->GetState( AccessibleStateType::FOCUSED ) )
+    {
+        Window *pWin = GetWindow();
+        if( pWin && pWin->HasFocus() )
+        {
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::ACCESSIBLE_STATE_EVENT;
+            aEvent.NewValue <<= AccessibleStateType::FOCUSED;
+            aEvent.Source = xAcc;
+
+            FireAccessibleEvent( aEvent );
+        }
+    }
 }
 
 void SwAccessibleContext::Dispose( sal_Bool bRecursive )
