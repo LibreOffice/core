@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basecontainer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 13:44:43 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,11 @@ class BaseContainer : public BaseLock
 
         /** @short  holds all listener, which are registered at this instance. */
         ::cppu::OMultiTypeInterfaceContainerHelper m_lListener;
+
+        /** @short  hold at least on filter cache instance alive and
+                    prevent he office from unloading this cache if no filter
+                    is currently used.*/
+        static ::salhelper::SingletonRef< FilterCache >* m_pPerformanceOptimizer;
 
     //-------------------------------------------
     // native interface
