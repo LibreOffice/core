@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 11:09:07 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 11:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1312,7 +1312,7 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
                 String sConnectionURL;
                 SFX_ITEMSET_GET(*GetExampleSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
                 sConnectionURL = pUrlItem->GetValue();
-                if(String::CreateFromAscii("sdbc:address:ldap") == sConnectionURL)
+                if(String::CreateFromAscii("sdbc:address:ldap:") == sConnectionURL)
                     addDetailPage(PAGE_LDAP,STR_PAGETITLE_LDAP,OLDAPDetailsPage::Create);
             }
             _pTabPage->disableConnectionURL();
@@ -1752,7 +1752,7 @@ const sal_Int32* ODbAdminDialog::getRelevantItems(const SfxItemSet& _rSet) const
                 String sConnectionURL;
                 SFX_ITEMSET_GET(*GetExampleSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
                 sConnectionURL = pUrlItem->GetValue();
-                if(String::CreateFromAscii("sdbc:address:ldap") == sConnectionURL)
+                if(String::CreateFromAscii("sdbc:address:ldap:") == sConnectionURL)
                     pRelevantItems = OLDAPDetailsPage::getDetailIds();
                 else
                 {
@@ -2655,6 +2655,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.54  2001/05/31 11:09:07  oj
+ *  #87149# change subprotocol and Propertynames
+ *
  *  Revision 1.53  2001/05/29 13:33:12  oj
  *  #87149# addressbook ui impl
  *

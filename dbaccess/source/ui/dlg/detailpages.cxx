@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-29 13:11:52 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 11:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -761,6 +761,10 @@ namespace dbaui
         ,m_aPortNumber      (this, ResId(FT_PORTNUMBER))
         ,m_aNFPortNumber    (this, ResId(NF_PORTNUMBER))
     {
+        m_aETHostname.SetModifyHdl(getControlModifiedLink());
+        m_aETBaseDN.SetModifyHdl(getControlModifiedLink());
+        m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
+
         FreeResource();
     }
 
@@ -1143,6 +1147,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/05/29 13:11:52  oj
+ *  #87149# addressbook ui impl
+ *
  *  Revision 1.5  2001/05/23 14:16:42  oj
  *  #87149# new helpids
  *
