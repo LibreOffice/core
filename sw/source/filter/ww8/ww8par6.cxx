@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-26 10:57:04 $
+ *  last change: $Author: cmc $ $Date: 2001-02-06 13:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1397,38 +1397,33 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos)
         pPageDesc->SetNumType( aType );
     }
 
-    if( !bVer67 )
+    // Page Number Restarts - sprmSFPgnRestart
+    BYTE nfPgnRestart = ReadBSprm( pSep, (bVer67 ? 150 : 0x3011), 0 );
+
+    if( nfPgnRestart )
     {
-        // Seitennummer neu starten - sprmSFPgnRestart
+        const SfxPoolItem* pItem;
+        const SfxItemSet* pSet;
+        if(     ( 0 != (pSet = pPaM->GetCntntNode()->GetpSwAttrSet()) )
+             && ( SFX_ITEM_SET ==
+                  pSet->GetItemState(RES_PAGEDESC, FALSE, &pItem) ) )
         {
-            BYTE nfPgnRestart = ReadBSprm( pSep, 0x3011, 0 );
-            if( nfPgnRestart )
-            {
-                const SfxPoolItem* pItem;
-                const SfxItemSet* pSet;
-                if(     ( 0 != (pSet = pPaM->GetCntntNode()->GetpSwAttrSet()) )
-                     && ( SFX_ITEM_SET ==
-                          pSet->GetItemState(RES_PAGEDESC, FALSE, &pItem) ) )
-                {
-                    // read Pagination Start attribute - sprmSPgnStart
-                    BYTE nPgnStart = ReadBSprm( pSep, 0x501C, 0 );
-                    ((SwFmtPageDesc*)pItem)->SetNumOffset( nPgnStart );
-                }
-                else
-                if( pPageDesc == &rDoc.GetPageDesc( 0 ) )
-                {
-                    // read Pagination Start attribute - sprmSPgnStart
-                    BYTE nPgnStart = ReadBSprm( pSep, 0x501C, 0 );
-                    SwFmtPageDesc aPgDesc( pPageDesc );
-                    aPgDesc.SetNumOffset( nPgnStart );
-                    rDoc.Insert( *pPaM, aPgDesc );
-                    SetLastPgDeskIdx();
-                }
-            }
+            // read Pagination Start attribute - sprmSPgnStart
+            BYTE nPgnStart = ReadBSprm( pSep, (bVer67 ? 161 : 0x501C), 0 );
+            ((SwFmtPageDesc*)pItem)->SetNumOffset( nPgnStart );
+        }
+        else if( pPageDesc == &rDoc.GetPageDesc( 0 ) )
+        {
+            // read Pagination Start attribute - sprmSPgnStart
+            BYTE nPgnStart = ReadBSprm( pSep, (bVer67 ? 161 : 0x501C), 0 );
+            SwFmtPageDesc aPgDesc( pPageDesc );
+            aPgDesc.SetNumOffset( nPgnStart );
+            rDoc.Insert( *pPaM, aPgDesc );
+            SetLastPgDeskIdx();
         }
 
         // Chapterlevel und Chapterdelimiter ? (sprmScnsPgn & sprmSiHeadingPgn)
-        BYTE* p = pSep->HasSprm( 0x3001 );
+        BYTE* p = pSep->HasSprm( bVer67 ? 132 : 0x3001 );
         if( p && *p )
         {
             bPgChpLevel = TRUE;
@@ -1436,7 +1431,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos)
             if( MAXLEVEL <= nPgChpLevel )
                 nPgChpLevel = MAXLEVEL - 1;
 
-            if( 0 != (p = pSep->HasSprm( 0x3000 )) )
+            if( 0 != (p = pSep->HasSprm( bVer67 ? 131 : 0x3000 )) )
                 nPgChpDelim = *p;
             else
                 nPgChpDelim = 0;
@@ -4879,12 +4874,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.7 2001-01-26 10:57:04 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.8 2001-02-06 13:13:07 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/01/26 10:57:04  cmc
+      ##158## Table relief Border width hack modified
+
       Revision 1.6  2000/12/01 11:22:52  jp
       Task #81077#: im-/export of CJK documents
 
