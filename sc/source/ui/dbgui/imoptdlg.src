@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text [ dutch ] = "~Veldbegrenzing" ;
         Text [ spanish ] = "Separador de campos" ;
         Text [ danish ] = "Feltseparator" ;
-        Text [ swedish ] = "~Fältdelare" ;
+        Text [ swedish ] = "~Fältavgränsare" ;
         Text [ finnish ] = "~Field delimiter" ;
         Text [ english_us ] = "~Field delimiter" ;
         Text[ chinese_simplified ] = "×Ö¶Î·Ö¸ô·û(~F)";
@@ -187,7 +187,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text [ finnish ] = "F~ont" ;
         Text [ english_us ] = "~Character set" ;
         Text[ chinese_simplified ] = "×ÖÌå(~C)";
-        Text[ russian ] = "Íàáîğ ñèìâîëîâ";
+        Text[ russian ] = "Íàáîğ çíàêîâ";
         Text[ polish ] = "Zbiór znaków";
         Text[ japanese ] = "•¶š—ñ(~C)";
         Text[ chinese_traditional ] = "¦r«¬(~C)";
@@ -231,7 +231,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text[ chinese_simplified ] = "×Ö¶ÎÑ¡Ïî";
         Text[ russian ] = "Ïàğàìåòğû ïîëÿ";
         Text[ polish ] = "Opcje pola";
-        Text[ japanese ] = "Ì¨°ÙÄŞµÌß¼®İ";
+        Text[ japanese ] = "Ì¨°ÙÄŞ‚ÌµÌß¼®İ";
         Text[ chinese_traditional ] = "Äæ¦ì¿ï¶µ";
         Text[ arabic ] = "ÎíÇÑÇÊ ÇáÍŞá";
         Text[ greek ] = "Åğéëïãİò ğåäßïõ";
