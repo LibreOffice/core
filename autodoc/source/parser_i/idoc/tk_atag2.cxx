@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_atag2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:21 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ Tok_AtTag::EV_TokenId ev_incomplete(Tok_AtTag::incomplete,"@incomplete");
 Tok_AtTag::EV_TokenId ev_version(Tok_AtTag::version,"@version");
 Tok_AtTag::EV_TokenId ev_guarantees(Tok_AtTag::guarantees,"@guarantees");
 Tok_AtTag::EV_TokenId ev_exception(Tok_AtTag::exception,"@exception");
+Tok_AtTag::EV_TokenId ev_since(Tok_AtTag::since,"@since");
 
 
 namespace lux
