@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 08:00:56 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 08:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
+#endif
+#ifndef COMPHELPER_EVENTLISTENERHELPER_HXX
+#include <comphelper/evtlistenerhlp.hxx>
 #endif
 
 using namespace ::com::sun::star::sdbc;
@@ -334,7 +337,10 @@ Reference< XInterface >  ODatabaseContext::getRegisteredObject(const rtl::OUStri
     // properties
     Reference< XComponent > xComponent(xNewObject, UNO_QUERY);
     if (xComponent.is())
-        xComponent->addEventListener(static_cast<XEventListener*>(this));
+    {
+        ::comphelper::OEventListenerHelper* pHelper = new ::comphelper::OEventListenerHelper(static_cast<XEventListener*>(this));
+        xComponent->addEventListener(pHelper);
+    }
     else
         DBG_ERROR("ODatabaseContext::getRegisteredObject: missing the XComponent interface!");
 
