@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-10 14:32:09 $
+ *  last change: $Author: fs $ $Date: 2002-09-10 15:02:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,15 @@ void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
                 {
                     if ( _nGetFocusFlags & GETFOCUS_FORWARD )
                     {
-                        GoToRowColumnId( 0, GetColumnId( 1 ) );
+                        if ( GetColumnId( 0 ) != 0 )
+                        {
+                            GoToRowColumnId( 0, GetColumnId( 0 ) );
+                        }
+                        else
+                        {   // the first column is the handle column -> not focussable
+                            if ( nColCount > 1 )
+                                GoToRowColumnId( 0, GetColumnId( 1 ) );
+                        }
                     }
                     else if ( _nGetFocusFlags & GETFOCUS_BACKWARD )
                     {
