@@ -4,11 +4,10 @@
  <dlg:styles>
   <dlg:style dlg:style-id="0" dlg:text-color="0xff"/>
   <dlg:style dlg:style-id="1" dlg:font-height="10"/>
-  <dlg:style dlg:style-id="2" dlg:font-height="10"/>
  </dlg:styles>
  <dlg:bulletinboard>
   <dlg:text dlg:id="Label2" dlg:tab-index="0" dlg:left="14" dlg:top="6" dlg:width="179" dlg:height="12" dlg:value="Integrated Help For Scripting Framework is not currently available." dlg:multiline="true"/>
-  <dlg:text dlg:id="Label1" dlg:tab-index="1" dlg:left="15" dlg:top="24" dlg:width="183" dlg:height="25" dlg:value="The Assign Script Dialogs (for Menus, Keys and Events) allow you to bind a script written in a supported language (currently Java and BeanShell) to a menu, key or event in Office." dlg:multiline="true"/>
+  <dlg:text dlg:id="Label1" dlg:tab-index="1" dlg:left="15" dlg:top="24" dlg:width="183" dlg:height="25" dlg:value="Assign Script Dialogs for Menus, Keys and Events allow you to bind a script written in a supported language (currently Java and BeanShell) to a menu item, key combo, Office event or document event." dlg:multiline="true"/>
   <dlg:text dlg:id="Label3" dlg:tab-index="2" dlg:left="14" dlg:top="65" dlg:width="185" dlg:height="27" dlg:value="The location combo box will be populated with User, Share or Document.  The default value will be User which will display all scripts (with the selected language type) in the User area.&#x0a;" dlg:multiline="true"/>
   <dlg:titledbox dlg:id="FrameControl1" dlg:tab-index="3" dlg:left="9" dlg:top="20" dlg:width="196" dlg:height="316"/>
   <dlg:text dlg:id="Label4" dlg:tab-index="4" dlg:left="14" dlg:top="92" dlg:width="185" dlg:height="18" dlg:value="The language combo box is populated with the languages of those scripts in those areas filtered by the Location combobox." dlg:multiline="true"/>
@@ -19,9 +18,9 @@
   <dlg:text dlg:id="Label6" dlg:tab-index="7" dlg:left="14" dlg:top="318" dlg:width="185" dlg:height="8" dlg:value="For further information see the User Guide at:" dlg:multiline="true"/>
   <dlg:text dlg:style-id="0" dlg:id="Label7" dlg:tab-index="8" dlg:left="14" dlg:top="325" dlg:width="185" dlg:height="9" dlg:value="http://framework.openoffice.org/scripting/user-guide.html" dlg:multiline="true"/>
   <dlg:text dlg:style-id="1" dlg:id="Label8" dlg:tab-index="9" dlg:left="14" dlg:top="53" dlg:width="185" dlg:height="13" dlg:value="Information common to all dialogs" dlg:multiline="true"/>
-  <dlg:text dlg:style-id="2" dlg:id="Label9" dlg:tab-index="10" dlg:left="14" dlg:top="178" dlg:width="185" dlg:height="13" dlg:value="Assign Script to Menu Dialog" dlg:multiline="true"/>
-  <dlg:text dlg:style-id="2" dlg:id="Label10" dlg:tab-index="11" dlg:left="14" dlg:top="225" dlg:width="185" dlg:height="13" dlg:value="Assign Script to Key Dialog" dlg:multiline="true"/>
-  <dlg:text dlg:style-id="2" dlg:id="Label11" dlg:tab-index="12" dlg:left="14" dlg:top="265" dlg:width="185" dlg:height="14" dlg:value="Assign Script to Event Dialog" dlg:multiline="true"/>
+  <dlg:text dlg:style-id="1" dlg:id="Label9" dlg:tab-index="10" dlg:left="14" dlg:top="178" dlg:width="185" dlg:height="13" dlg:value="Assign Script to Menu Dialog" dlg:multiline="true"/>
+  <dlg:text dlg:style-id="1" dlg:id="Label10" dlg:tab-index="11" dlg:left="14" dlg:top="225" dlg:width="185" dlg:height="13" dlg:value="Assign Script to Key Dialog" dlg:multiline="true"/>
+  <dlg:text dlg:style-id="1" dlg:id="Label11" dlg:tab-index="12" dlg:left="14" dlg:top="265" dlg:width="185" dlg:height="14" dlg:value="Assign Script to Event Dialog" dlg:multiline="true"/>
   <dlg:text dlg:id="Label12" dlg:tab-index="13" dlg:left="14" dlg:top="190" dlg:width="185" dlg:height="34" dlg:value="To assign, select the Top-Level menu and Sub-Menu under which you wish to add the new binding. Enter the new Menu name and click New. To delete, select the Menu to which the script is assigned and click Delete." dlg:multiline="true"/>
   <dlg:text dlg:id="Label13" dlg:tab-index="14" dlg:left="14" dlg:top="238" dlg:width="185" dlg:height="27" dlg:value="To assign, select the Key group and the Shortcut key, then click Assign. To delete, select the Shortcut to which the script is assigned and click Delete." dlg:multiline="true"/>
   <dlg:text dlg:id="Label14" dlg:tab-index="15" dlg:left="14" dlg:top="278" dlg:width="185" dlg:height="32" dlg:value="Scripts can be assigned to application wide events or to the current document by selecting the appropriate radio button.  To assign, select the Event then click Assign. To delete, select the Event to which the script is assigned and click Delete." dlg:multiline="true"/>
