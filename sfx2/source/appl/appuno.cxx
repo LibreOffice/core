@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:26:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,44 +330,36 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
         String aName = rProp.Name;
         if ( nCount == 1 && aName.CompareToAscii( pSlot->pUnoName ) == COMPARE_EQUAL )
         {
-            // simple property or complex property dispatched in one UNO struct
-#ifdef DBG_UTIL
-            // this indicates an error only for macro recording; if the dispatch API is used for
-            // UI purposes or from the testtool, it is possible to use the "toggle" ability of
-            // some property slots, so this should be notified as a warning only
-            if ( nCount != 1 )
-            {
-                ByteString aStr( "MacroPlayer: wrong number of parameters for slot: ");
-                aStr += ByteString::CreateFromInt32( nSlotId );
-                DBG_WARNING( aStr.GetBuffer() );
-            }
-#endif
+            // there is only one parameter and its name matches the name of the property,
+            // so it's either a simple property or a complex property in one single UNO struct
             if( pItem->PutValue( rProp.Value ) )
                 // only use successfully converted items
                 rSet.Put( *pItem );
 #ifdef DBG_UTIL
             else
             {
-                ByteString aStr( "MacroPlayer: Property not convertable: ");
+                ByteString aStr( "Property not convertable: ");
                 aStr += pSlot->pUnoName;
-                DBG_WARNING( aStr.GetBuffer() );
+                DBG_ERROR( aStr.GetBuffer() );
             }
 #endif
         }
 #ifdef DBG_UTIL
         else if ( nSubCount == 0 )
         {
-            // for a simple property the name of the only argument *must* match
-            ByteString aStr( "MacroPlayer: Property name does not match: ");
+            // for a simple property there can be only one parameter and its name *must* match
+            ByteString aStr( "Property name does not match: ");
             aStr += ByteString( aName, RTL_TEXTENCODING_UTF8 );
-            DBG_WARNING( aStr.GetBuffer() );
+            DBG_ERROR( aStr.GetBuffer() );
         }
 #endif
         else
         {
+            // there is more than one parameter and the property is a complex one
 #ifdef DBG_UTIL
-            // this indicates an error only for macro recording; if the dispatch API is used for
-            // UI purposes or from the testtool, it is possible to skip some or all arguments,
+            // if the dispatch API is used for UI purposes or from the testtool,
+            // it is possible to skip some or all arguments,
+            // but it indicates an error for macro recording;
             // so this should be notified as a warning only
             if ( nCount != nSubCount )
             {
@@ -377,7 +369,6 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             }
 #endif
             // complex property; collect sub items from the parameter set and reconstruct complex item
-            USHORT nFound=0;
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
                 const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
@@ -394,8 +385,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         BYTE nSubId = (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID;
                         if ( bConvertTwips )
                             nSubId |= CONVERT_TWIPS;
-                        if ( pItem->PutValue( rProp.Value, nSubId ) )
-                            ++nFound;
+                        if ( !pItem->PutValue( rProp.Value, nSubId ) )
+                        {
+#ifdef DBG_UTIL
+                            ByteString aStr( "Property not convertable: ");
+                            aStr += pSlot->pUnoName;
+                            DBG_ERROR( aStr.GetBuffer() );
+#endif
+                        }
                         break;
                     }
                 }
@@ -403,37 +400,27 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #ifdef DBG_UTIL
                 if ( nSub >= nSubCount )
                 {
-                    // for complex property slots every passed argument *must* match to the name of a member of the item
-                    ByteString aStr( "MacroPlayer: Property name does not match: ");
+                    // there was a parameter with a name that didn't match to any of the members
+                    ByteString aStr( "Property name does not match: ");
                     aStr += ByteString( String(rProp.Name), RTL_TEXTENCODING_UTF8 );
-                    DBG_WARNING( aStr.GetBuffer() );
+                    DBG_ERROR( aStr.GetBuffer() );
                 }
 #endif
             }
 
 // Comment out: Make sure we can convert incomplete items, talked with MBA
             if ( nFound > 0 )
-                // only use completely converted items
                 rSet.Put( *pItem );
-#ifdef DBG_UTIL
-/*
-            else
-            {
-                ByteString aStr( "MacroPlayer: Complex property not convertable: ");
-                aStr += pSlot->pUnoName;
-                DBG_WARNING( aStr.GetBuffer() );
-            }
-*/
-#endif
         }
 
         delete pItem;
     }
     else if ( nCount )
     {
+#ifdef DBG_UTIL
         // detect parameters that don't match to any formal argument or one of its members
         sal_Int32 nFoundArgs = 0;
-
+#endif
         // slot is a method
         for ( sal_uInt16 nArgs=0; nArgs<pSlot->nArgDefCount; nArgs++ )
         {
@@ -463,16 +450,18 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     String aName = rProp.Name;
                     if ( aName.CompareToAscii(rArg.pName) == COMPARE_EQUAL )
                     {
+#ifdef DBG_UTIL
                         ++nFoundArgs;
+#endif
                         if( pItem->PutValue( rProp.Value ) )
                             // only use successfully converted items
                             rSet.Put( *pItem );
 #ifdef DBG_UTIL
                         else
                         {
-                            ByteString aStr( "MacroPlayer: Property not convertable: ");
+                            ByteString aStr( "Property not convertable: ");
                             aStr += rArg.pName;
-                            DBG_WARNING( aStr.GetBuffer() );
+                            DBG_ERROR( aStr.GetBuffer() );
                         }
 #endif
                         break;
@@ -481,31 +470,35 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             }
             else
             {
-                // "simple" (base type) argument
+                // complex argument, could be passed in one struct
+                BOOL bAsWholeItem = FALSE;
                 for ( sal_uInt16 n=0; n<nCount; n++ )
                 {
                     const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
                     String aName = rProp.Name;
                     if ( aName.CompareToAscii(rArg.pName) == COMPARE_EQUAL )
                     {
+                        bAsWholeItem = TRUE;
+#ifdef DBG_UTIL
                         ++nFoundArgs;
+#endif
                         if( pItem->PutValue( rProp.Value ) )
                             // only use successfully converted items
                             rSet.Put( *pItem );
 #ifdef DBG_UTIL
                         else
                         {
-                            ByteString aStr( "MacroPlayer: Property not convertable: ");
+                            ByteString aStr( "Property not convertable: ");
                             aStr += rArg.pName;
-                            DBG_WARNING( aStr.GetBuffer() );
+                            DBG_ERROR( aStr.GetBuffer() );
                         }
 #endif
                     }
                 }
 
-                if ( nFoundArgs == 0 )
+                if ( !bAsWholeItem )
                 {
-                    // complex argument; collect sub items from argument arry and reconstruct complex item
+                    // complex argument; collect sub items from argument array and reconstruct complex item
                     // only put item if at least one member was found and had the correct type
                     // (is this a good idea?! Should we ask for *all* members?)
                     BOOL bRet = FALSE;
@@ -523,28 +516,32 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                             {
                                 // at least one member found ...
                                 bRet = TRUE;
-    #ifdef DBG_UTIL
+#ifdef DBG_UTIL
                                 ++nFoundArgs;
-    #endif
+#endif
                                 BYTE nSubId = (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID;
                                 if ( bConvertTwips )
                                     nSubId |= CONVERT_TWIPS;
                                 if (!pItem->PutValue( rProp.Value, nSubId ) )
+                                {
                                     // ... but it was not convertable
                                     bRet = FALSE;
+#ifdef DBG_UTIL
+                                    ByteString aStr( "Property not convertable: ");
+                                    aStr += rArg.pName;
+                                    DBG_ERROR( aStr.GetBuffer() );
+#endif
+                                }
+
                                 break;
                             }
                         }
                     }
 
                     if ( bRet )
-                        // only use completely converted items
+                        // only use successfully converted items
                         rSet.Put( *pItem );
 
-                }
-                else if ( nFoundArgs != nCount )
-                {
-                    DBG_ERROR( "Couldn't convert all parameters" );
                 }
             }
 
@@ -578,6 +575,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
         {
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
+#ifdef DBG_UTIL
+                ++nFoundArgs;
+#endif
                 const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
                 String aName = rProp.Name;
                 if ( aName == sModel )
@@ -883,10 +883,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_DOC_HIERARCHICALNAME, sVal ) );
                 }
+#ifdef DBG_UTIL
+                else
+                    --nFoundArgs;
+#endif
             }
         }
 #ifdef DB_UTIL
-        else if ( nFoundArgs == nCount )
+        if ( nFoundArgs == nCount )
         {
             // except for the "special" slots: assure that every argument was convertable
             ByteString aStr( "MacroPlayer: Some properties didn't match to any formal argument for slot: ");
