@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScModelObj.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2004-01-05 19:19:55 $
+ *  last change:$Date: 2004-11-02 12:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 package mod._sc;
 
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
@@ -73,7 +74,12 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.view.PrintJobEvent;
+import com.sun.star.view.PrintableState;
+import com.sun.star.view.XPrintable;
 import com.sun.star.view.XSelectionSupplier;
+import ifc.view._XPrintJobBroadcaster;
+import java.io.File;
 
 import java.io.PrintWriter;
 
@@ -83,6 +89,7 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 
 import util.SOfficeFactory;
+import util.utils;
 
 
 /**
@@ -203,7 +210,7 @@ public class ScModelObj extends TestCase {
                                          XSelectionSupplier.class, cont1);
 
         XCell toSel = null;
-
+        XCell[] xCalculatableCells = null;
         try {
             log.println("Getting spreadsheet");
 
@@ -216,6 +223,15 @@ public class ScModelObj extends TestCase {
 
             log.println("Getting a cell from sheet");
             toSel = oSheet.getCellByPosition(2, 3);
+            // create a simple formula for XCalculatable
+            oSheet.getCellByPosition(4, 5).setValue(15);
+            oSheet.getCellByPosition(5, 5).setValue(10);
+            oSheet.getCellByPosition(6, 5).setFormula("= E6 * F6");
+            xCalculatableCells = new XCell[]{
+                oSheet.getCellByPosition(4, 5),
+                oSheet.getCellByPosition(5, 5),
+                oSheet.getCellByPosition(6, 5)
+            };
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException(
@@ -234,9 +250,21 @@ public class ScModelObj extends TestCase {
         tEnv.addObjRelation("SELSUPP", sel);
         tEnv.addObjRelation("TOSELECT", toSel);
 
+        log.println("Adding cells for XCalculatable");
+        tEnv.addObjRelation("XCalculatable.Cells", xCalculatableCells);
         log.println("adding Controller as ObjRelation for XModel");
         tEnv.addObjRelation("CONT2", cont2);
 
+        // create object relation for XPrintJobBroadcaster
+        String fileName = utils.getOfficeTempDirSys((XMultiServiceFactory) Param.getMSF())+"printfile.prt" ;
+        File f = new File(fileName);
+        if (f.exists()) {
+            f.delete();
+        }
+        _XPrintJobBroadcaster.MyPrintJobListener listener = new _XPrintJobBroadcaster.MyPrintJobListener(oObj, fileName);
+        tEnv.addObjRelation("XPrintJobBroadcaster.XPrintJobListener", listener);
+
         return tEnv;
     }
+
 } // finish class ScModelObj
