@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-30 19:32:50 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 21:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,3 +687,4 @@ Resource RID_SVXERRCODE
     };
 };
  // ********************************************************************** EOF
+
