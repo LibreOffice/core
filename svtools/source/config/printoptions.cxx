@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-26 19:47:40 $
+ *  last change: $Author: ka $ $Date: 2001-05-03 07:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,22 +70,29 @@
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
-
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
 #endif
-
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-
+#ifndef _SV_PRINT_HXX
+#include <vcl/print.hxx>
+#endif
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+
+// -----------
+// - statics -
+// -----------
+
+static USHORT aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
+
+#define DPI_COUNT (sizeof(aDPIArray)/sizeof(aDPIArray[0 ]))
 
 // -----------
 // - Defines -
@@ -597,6 +604,53 @@ void SvtBasePrintOptions::SetConvertToGreyscales( sal_Bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetConvertToGreyscales( bState );
+}
+
+// -----------------------------------------------------------------------------
+
+void SvtBasePrintOptions::GetPrinterOptions( PrinterOptions& rOptions ) const
+{
+    rOptions.SetReduceTransparency( IsReduceTransparency() );
+    rOptions.SetReducedTransparencyMode( (PrinterTransparencyMode) GetReducedTransparencyMode() );
+    rOptions.SetReduceGradients( IsReduceGradients() );
+    rOptions.SetReducedGradientMode( (PrinterGradientMode) GetReducedGradientMode() );
+    rOptions.SetReducedGradientStepCount( GetReducedGradientStepCount() );
+    rOptions.SetReduceBitmaps( IsReduceBitmaps() );
+    rOptions.SetReducedBitmapMode( (PrinterBitmapMode) GetReducedBitmapMode() );
+    rOptions.SetReducedBitmapResolution( aDPIArray[ Min( (USHORT) GetReducedBitmapResolution(), (USHORT)( DPI_COUNT - 1 ) ) ] );
+    rOptions.SetReducedBitmapIncludesTransparency( IsReducedBitmapIncludesTransparency() );
+    rOptions.SetConvertToGreyscales( IsConvertToGreyscales() );
+}
+
+// -----------------------------------------------------------------------------
+
+void SvtBasePrintOptions::SetPrinterOptions( const PrinterOptions& rOptions )
+{
+    SetReduceTransparency( rOptions.IsReduceTransparency() );
+    SetReducedTransparencyMode( rOptions.GetReducedTransparencyMode() );
+    SetReduceGradients( rOptions.IsReduceGradients() );
+    SetReducedGradientMode( rOptions.GetReducedGradientMode() );
+    SetReducedGradientStepCount( rOptions.GetReducedGradientStepCount() );
+    SetReduceBitmaps( rOptions.IsReduceBitmaps() );
+    SetReducedBitmapMode( rOptions.GetReducedBitmapMode() );
+    SetReducedBitmapIncludesTransparency( rOptions.IsReducedBitmapIncludesTransparency() );
+    SetConvertToGreyscales( rOptions.IsConvertToGreyscales() );
+
+    const USHORT nDPI = rOptions.GetReducedBitmapResolution();
+
+    if( nDPI < aDPIArray[ 0 ] )
+        SetReducedBitmapResolution( 0 );
+    else
+    {
+        for( long i = ( DPI_COUNT - 1 ); i >= 0; i-- )
+        {
+            if( nDPI >= aDPIArray[ i ] )
+            {
+                SetReducedBitmapResolution( (sal_Int16) i );
+                i = -1;
+            }
+        }
+    }
 }
 
 // ---------------------
