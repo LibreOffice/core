@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:38:51 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 //_________________________________________________________________________________________________________________
 //  includes
