@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:49:08 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 16:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,10 +345,10 @@ TabPage RID_SVXPAGE_CAPTION
     };
     StringList [ finnish ] =
     {
-            < "Vapaa" ; 9000 ; > ;
-        < "30 astetta" ; 9000 ; > ;
-        < "45 astetta" ; 9000 ; > ;
-        < "60 astetta" ; 9000 ; > ;
+            < "Vapaa" ; 1 ; > ;
+        < "30 astetta" ; 3000 ; > ;
+        < "45 astetta" ; 4500 ; > ;
+        < "60 astetta" ; 6000 ; > ;
         < "90 astetta" ; 9000 ; > ;
     };
     };
@@ -566,10 +566,10 @@ TabPage RID_SVXPAGE_CAPTION
     };
     StringList [ finnish ] =
     {
-            < "Optimaalinen" ; 2 ; > ;
-        < "Ylhäältä" ; 2 ; > ;
-        < "Vasemmalta" ; 2 ; > ;
-        < "Vaakataso" ; 2 ; > ;
+            < "Optimaalinen" ; 4 ; > ;
+        < "Ylhäältä" ; 3 ; > ;
+        < "Vasemmalta" ; 3 ; > ;
+        < "Vaakataso" ; 1 ; > ;
         < "Pystysuora" ; 2 ; > ;
     };
     };
@@ -666,11 +666,11 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ dutch ] = "~Lengte" ;
         Text [ swedish ] = "~Längd" ;
         Text [ danish ] = "Længde" ;
-        Text [ portuguese_brazilian ] = "~Länge" ;
+        Text [ portuguese_brazilian ] = "~L?nge" ;
         Text [ portuguese ] = "~Comprimento" ;
         Text[ chinese_simplified ] = "³¤¶È(~L)";
         Text[ russian ] = "Äëèíà";
-        Text[ polish ] = "D³ugoœæ";
+        Text[ polish ] = "D³ugo?æ";
         Text[ japanese ] = "’·‚³(~L)";
         Text[ chinese_traditional ] = "ªø«×(~L)";
         Text[ arabic ] = "ÇáØæá";
@@ -843,7 +843,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ portuguese ] = "Superior; centro; inferior" ;
         Text[ chinese_simplified ] = "ÉÏ;ÖĞ;ÏÂ";
         Text[ russian ] = "Ââåğõó;Ïî ñğåäèíå;Âíèçó";
-        Text[ polish ] = "W górze, Na œrodku;Na dole";
+        Text[ polish ] = "W górze, Na ?rodku;Na dole";
         Text[ japanese ] = "ã;’†;‰º";
         Text[ chinese_traditional ] = "¤W;¤¤;¤U";
         Text[ arabic ] = "ÃÚáìºæÓØºÃÓİá";
@@ -869,7 +869,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ portuguese ] = "Esquerda; centro; direita" ;
         Text[ chinese_simplified ] = "×ó;ÖĞ;ÓÒ";
         Text[ russian ] = "Ñëåâà;Ïî ñğåäèíå;Ñïğàâà";
-        Text[ polish ] = "Z lewej; W œrodku; Z prawej";
+        Text[ polish ] = "Z lewej; W ?rodku; Z prawej";
         Text[ japanese ] = "¶;’†‰›;‰E";
         Text[ chinese_traditional ] = "¥ª;¤¤;¥k";
         Text[ arabic ] = "íÓÇÑºæÓØºíãíä";
@@ -941,7 +941,7 @@ TabDialog RID_SVXDLG_CAPTION
                 Text [ ENGLISH ] = "Position" ;
                 Text [ norwegian ] = "Posisjon" ;
                 Text [ italian ] = "Posizione" ;
-                Text [ portuguese_brazilian ] = "Posição" ;
+                Text [ portuguese_brazilian ] = "Posi??o" ;
                 Text [ portuguese ] = "Posição" ;
                 Text [ finnish ] = "Sijainti" ;
                 Text [ danish ] = "Placering" ;
