@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:40:06 $
+#   last change: $Author: obo $ $Date: 2003-10-20 14:16:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,36 +75,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-HXX1TARGET	=	xoutx
-HXX1EXT		=	hxx
-HXX1FILES	=	$(INC)$/xoutx.hxx
-HXX1EXCL	= 	-K:*compat.hxx
-
-HXX2TARGET	=	xattr
-HXX2EXT		=	hxx
-HXX2FILES	=	$(INC)$/xattr.hxx
-HXX2EXCL	= 	-K:*compat.hxx
-
-HXX3TARGET	=	xpoly
-HXX3EXT		=	hxx
-HXX3FILES	=	$(INC)$/xpoly.hxx
-HXX3EXCL	= 	-K:*compat.hxx
-
-HXX4TARGET	=	xtable
-HXX4EXT		=	hxx
-HXX4FILES	=	$(INC)$/xtable.hxx
-HXX4EXCL	= 	-K:*compat.hxx
-
-HXX5TARGET	=	xoutbmp
-HXX5EXT		=	hxx
-HXX5FILES	=	$(INC)$/xoutbmp.hxx
-HXX5EXCL	= 	-K:*compat.hxx
-
-HXX6TARGET	=	xpool
-HXX6EXT		=	hxx
-HXX6FILES	=	$(INC)$/xpool.hxx
-HXX6EXCL	= 	-K:*compat.hxx
-
 SLOFILES= \
         $(SLO)$/xcpoly.obj 		\
         $(SLO)$/xout.obj   		\
@@ -127,32 +97,5 @@ SLOFILES= \
         $(SLO)$/_ximp.obj   	\
         $(SLO)$/_xoutbmp.obj	\
         $(SLO)$/_xfont.obj
-
-SVXLIGHTOBJFILES= \
-        $(OBJ)$/xcpoly.obj 		\
-        $(OBJ)$/xout.obj   		\
-        $(OBJ)$/xout1.obj  		\
-        $(OBJ)$/xattr.obj  		\
-        $(OBJ)$/xattr2.obj  	\
-        $(OBJ)$/xattrbmp.obj	\
-        $(OBJ)$/xline.obj   	\
-        $(OBJ)$/xpool.obj  		\
-        $(OBJ)$/xtable.obj 		\
-        $(OBJ)$/xtabcolr.obj	\
-        $(OBJ)$/xtablend.obj	\
-        $(OBJ)$/xtabdash.obj	\
-        $(OBJ)$/xtabhtch.obj	\
-        $(OBJ)$/xtabgrdt.obj	\
-        $(OBJ)$/xtabbtmp.obj	\
-        $(OBJ)$/xexch.obj		\
-        $(OBJ)$/xiocomp.obj		\
-        $(OBJ)$/_xpoly.obj  	\
-        $(OBJ)$/_ximp.obj   	\
-        $(OBJ)$/_xoutbmp.obj	\
-        $(OBJ)$/_xfont.obj
-
-HXXCOPYFILES=\
-     $(PRJ)$/inc$/xenum.hxx
-
 
 .INCLUDE :  target.mk
