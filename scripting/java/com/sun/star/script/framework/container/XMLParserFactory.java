@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLParserFactory.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:07:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 15:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,10 +154,22 @@ public class XMLParserFactory {
                     // try xerces serialize package using introspection
                     ClassLoader cl = this.getClass().getClassLoader();
 
-                    Class serializerClass = Class.forName(
-                        "org.apache.xml.serialize.XMLSerializer", true, cl);
-                    Class formatterClass = Class.forName(
-                        "org.apache.xml.serialize.OutputFormat", true, cl);
+                    Class serializerClass = null;
+                    Class formatterClass = null;
+
+                    try {
+                        serializerClass = Class.forName(
+                            "org.apache.xml.serialize.XMLSerializer", true, cl);
+                        formatterClass = Class.forName(
+                            "org.apache.xml.serialize.OutputFormat", true, cl);
+                    } catch (ClassNotFoundException cnfe) {
+                        String prefix = "com.sun.org.apache.xml.internal.";
+
+                        serializerClass = Class.forName(
+                            prefix +  "serialize.XMLSerializer" , true, cl);
+                        formatterClass = Class.forName(
+                            prefix + "serialize.OutputFormat", true, cl);
+                    }
 
                     Object serializerObject = serializerClass.newInstance();
                     Object formatterObject = formatterClass.newInstance();
