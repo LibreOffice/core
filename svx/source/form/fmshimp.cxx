@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-31 05:49:29 $
+ *  last change: $Author: fs $ $Date: 2002-09-05 10:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1271,8 +1271,8 @@ sal_Bool FmXFormShell::ConvertControlTo(const Reference< XFormComponent>& xModel
         }
 
         // replace the mdoel within the parent container
-        Reference< XNameContainer> xNameParent(xChild->getParent(), UNO_QUERY);
-        if (xNameParent.is())
+        Reference< XIndexContainer> xIndexParent(xChild->getParent(), UNO_QUERY);   //Modified by BerryJia for fixing Bug102516 Time(China):2002-9-5 16:00
+        if (xIndexParent.is())
         {
             // the form container works with FormComponents
             Reference< XFormComponent> xComponent(xNewModel, UNO_QUERY);
@@ -1280,9 +1280,18 @@ sal_Bool FmXFormShell::ConvertControlTo(const Reference< XFormComponent>& xModel
             Any aNewModel(makeAny(xComponent));
             try
             {
-                DBG_ASSERT(::comphelper::hasProperty(FM_PROP_NAME, xOldSet),
-                    "FmXFormShell::ConvertControlTo : one of the models is invalid !");
-                xNameParent->replaceByName(::comphelper::getString(xOldSet->getPropertyValue(FM_PROP_NAME)), aNewModel);
+                //Modified by BerryJia for fixing Bug102516 Time(China):2002-9-5 16:00
+                sal_Int32 nIndex = getElementPos(xParent, xOldModel);
+                if (nIndex>=0 && nIndex<xParent->getCount())
+                    xIndexParent->replaceByIndex(nIndex, aNewModel);
+                else
+                {
+                    DBG_ERROR("FmXFormShell::ConvertControlTo : could not replace the model !");
+                    Reference< ::com::sun::star::lang::XComponent> xNewComponent(xNewModel, UNO_QUERY);
+                    if (xNewComponent.is())
+                        xNewComponent->dispose();
+                    return sal_False;
+                }
             }
             catch(Exception&)
             {
