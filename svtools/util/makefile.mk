@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.38 $
+#*  $Revision: 1.39 $
 #*
-#*  last change: $Author: mt $ $Date: 2002-08-14 14:06:13 $
+#*  last change: $Author: hro $ $Date: 2002-08-14 15:16:41 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -138,9 +138,6 @@ LIB7FILES+= 	$(SLB)$/eaimp.lib
 
 LIB7FILES+= \
             $(SLB)$/svdde.lib
-.IF "$(GUI)"=="WNT"
-LIB7FILES+=$(SOLARLIBDIR)$/user9x.lib $(SOLARLIBDIR)$/tools32.lib
-.ENDIF
 
 LIB8TARGET= $(SLB)$/svl.lib
 LIB8OBJFILES= \
@@ -201,6 +198,8 @@ SHL1STDLIBS=$(TOOLSLIB)			\
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= \
+        uwinapi.lib \
+        unicows.lib \
         $(LIBPRE) advapi32.lib	\
         $(LIBPRE) gdi32.lib
 .ENDIF
@@ -240,6 +239,8 @@ SHL2STDLIBS=$(TOOLSLIB) 	\
 
 .IF "$(GUI)"=="WNT"
 SHL2STDLIBS+= \
+            uwinapi.lib \
+            unicows.lib \
             $(LIBPRE) advapi32.lib	\
             $(LIBPRE) gdi32.lib
 .ENDIF

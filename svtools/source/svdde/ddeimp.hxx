@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddeimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:14:02 $
+ *  last change: $Author: hro $ $Date: 2002-08-14 15:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 
 #include <tools/prewin.h>
 #include <ddeml.h>
-#include <systools/win32/user9x.h>
 #include <tools/postwin.h>
 #include "ddewrap.hxx"
 
