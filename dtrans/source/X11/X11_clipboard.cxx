@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_clipboard.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:47:03 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ X11Clipboard::X11Clipboard( SelectionManager& rManager, Atom aSelection ) :
         m_aSelection( aSelection )
 {
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "creating instance of X11Clipboard (this=%x)\n", this );
+    fprintf( stderr, "creating instance of X11Clipboard (this=%p)\n", this );
 #endif
 
     if( m_aSelection != None )
@@ -144,7 +144,7 @@ X11Clipboard::~X11Clipboard()
     MutexGuard aGuard( *Mutex::getGlobalMutex() );
 
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "shutting down instance of X11Clipboard (this=%x, Selecttion=\"%s\")\n", this, OUStringToOString( m_rSelectionManager.getString( m_aSelection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+    fprintf( stderr, "shutting down instance of X11Clipboard (this=%p, Selecttion=\"%s\")\n", this, OUStringToOString( m_rSelectionManager.getString( m_aSelection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
     if( m_aSelection != None )
         m_rSelectionManager.deregisterHandler( m_aSelection );
