@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-09 10:14:13 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:27:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,8 +79,8 @@ PARFILES= \
         file_xsltfilter.par  \
         starregistryitem_xsltfilter.par
 
-LNGFILES= \
-        module_xsltfilter.lng
+ULFFILES= \
+        module_xsltfilter.ulf
 
 
 # --- File ---------------------------------------------------------
