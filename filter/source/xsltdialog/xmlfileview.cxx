@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfileview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:32:17 $
+ *  last change: $Author: vg $ $Date: 2003-07-09 09:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,8 @@
 #ifndef _COMPHELPER_STREAM_OSLFILEWRAPPER_HXX_
 #include <comphelper/oslfile2streamwrap.hxx>
 #endif
+
+#include <rtl/tencinfo.h>
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -542,6 +544,14 @@ void XMLFileWindow::Show( const rtl::OUString& rFileName )
 {
     String aFileName( rFileName );
     SvFileStream aStream( aFileName, STREAM_READ );
+
+    // since the xml files we load are utf-8 encoded, we need to set
+    // this encoding at the SvFileStream, else the TextEngine will
+    // use its default encoding which is not UTF8
+    const sal_Char *pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
+    rtl_TextEncoding eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
+    aStream.SetStreamCharSet( eDestEnc );
+
     if( Read( aStream ) )
     {
         long nPrevTextWidth = nCurTextWidth;
