@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:39:22 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 18:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,13 +482,56 @@ SfxDispatcher* SfxOfficeDispatch::GetDispatcher_Impl()
     return pControllerItem->GetDispatcher();
 }
 
-SfxDispatchController_Impl::SfxDispatchController_Impl( SfxOfficeDispatch* pDisp, SfxBindings* pBind, SfxDispatcher* pDispat, sal_uInt16 nSlotId, const ::com::sun::star::util::URL& rURL, sal_Bool bInter )
-    : aDispatchURL( rURL )
+void SfxOfficeDispatch::SetMasterUnoCommand( sal_Bool bSet )
+{
+    if ( pControllerItem )
+        pControllerItem->setMasterSlaveCommand( bSet );
+}
+
+sal_Bool SfxOfficeDispatch::IsMasterUnoCommand() const
+{
+    if ( pControllerItem )
+        pControllerItem->isMasterSlaveCommand();
+    return sal_False;
+}
+
+// Determine if URL contains a master/slave command which must be handled a little bit different
+sal_Bool SfxOfficeDispatch::IsMasterUnoCommand( const ::com::sun::star::util::URL& aURL )
+{
+    if ( aURL.Protocol.equalsAscii( ".uno:" ) &&
+         ( aURL.Path.indexOf( '.' ) > 0 ))
+        return sal_True;
+
+    return sal_False;
+}
+
+rtl::OUString SfxOfficeDispatch::GetMasterUnoCommand( const ::com::sun::star::util::URL& aURL )
+{
+    rtl::OUString aMasterCommand;
+    if ( IsMasterUnoCommand( aURL ))
+    {
+        sal_Int32 nIndex = aURL.Path.indexOf( '.' );
+        if ( nIndex > 0 )
+            aMasterCommand = aURL.Path.copy( 0, nIndex );
+    }
+
+    return aMasterCommand;
+}
+
+SfxDispatchController_Impl::SfxDispatchController_Impl(
+    SfxOfficeDispatch*                 pDisp,
+    SfxBindings*                       pBind,
+    SfxDispatcher*                     pDispat,
+    sal_uInt16                         nSlotId,
+    const ::com::sun::star::util::URL& rURL,
+    sal_Bool                           bInter )
+    : pDispatch( pDisp )
+    , aDispatchURL( rURL )
     , pDispatcher( pDispat )
     , pBindings( pBind )
     , pLastState( 0 )
     , nSlot( nSlotId )
-    , pDispatch( pDisp )
+    , bMasterSlave( sal_False )
 {
     SetId( nSlot );
 }
@@ -508,6 +551,16 @@ SfxDispatchController_Impl::~SfxDispatchController_Impl()
         aObject.Source = (::cppu::OWeakObject*) pDispatch;
         pDispatch->GetListeners().disposeAndClear( aObject );
     }
+}
+
+void SfxDispatchController_Impl::setMasterSlaveCommand( sal_Bool bSet )
+{
+    bMasterSlave = bSet;
+}
+
+sal_Bool SfxDispatchController_Impl::isMasterSlaveCommand() const
+{
+    return bMasterSlave;
 }
 
 void SfxDispatchController_Impl::UnBindController()
@@ -606,6 +659,15 @@ SfxMapUnit SfxDispatchController_Impl::GetCoreMetric( SfxItemPool& rPool, sal_uI
     return rPool.GetMetric( nWhich );
 }
 
+rtl::OUString SfxDispatchController_Impl::getSlaveCommand( const ::com::sun::star::util::URL& rURL )
+{
+    rtl::OUString   aSlaveCommand;
+    sal_Int32       nIndex = rURL.Path.indexOf( '.' );
+    if (( nIndex > 0 ) && ( nIndex < rURL.Path.getLength() ))
+        aSlaveCommand = rURL.Path.copy( nIndex+1 );
+    return aSlaveCommand;
+}
+
 void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util::URL& aURL,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener ) throw( ::com::sun::star::uno::RuntimeException )
@@ -676,6 +738,16 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                 if ( pDispatcher->GetShellAndSlot_Impl( GetId(), &pShell, &pSlot, sal_False,
                         SFX_CALLMODE_MODAL==(nCall&SFX_CALLMODE_MODAL), FALSE ) )
                 {
+                    if ( bMasterSlave )
+                    {
+                        // Extract slave command and add argument to the args list. Master slot MUST
+                        // have a argument that has the same name as the master slot and type is SfxStringItem.
+                        sal_Int32 nIndex = lNewArgs.getLength();
+                        lNewArgs.realloc( nIndex+1 );
+                        lNewArgs[nIndex].Name   = rtl::OUString::createFromAscii( pSlot->pUnoName );
+                        lNewArgs[nIndex].Value  = makeAny( SfxDispatchController_Impl::getSlaveCommand( aDispatchURL ));
+                    }
+
                     SfxAllItemSet aSet( pShell->GetPool() );
                     TransformParameters( GetId(), lNewArgs, aSet, pSlot );
                     if ( aSet.Count() )
