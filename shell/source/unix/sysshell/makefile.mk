@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 14:34:42 $
+#   last change: $Author: obo $ $Date: 2005-01-25 13:46:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,9 +88,17 @@ SHL1TARGET=recentfile
 
 # static libs must come at end of linker list on MacOSX
 .IF "$(OS)" == "MACOSX"
-SHL1STDLIBS= $(SALLIB) $(EXPATASCII3RDLIB)
+SHL1STDLIBS=$(SALLIB)\
+    $(EXPATASCII3RDLIB)\
+    $(CPPULIB)\
+    $(CPPUHELPERLIB)\
+    $(COMPHELPERLIB)
 .ELSE
-SHL1STDLIBS=$(EXPATASCII3RDLIB) $(SALLIB)
+SHL1STDLIBS=$(EXPATASCII3RDLIB)\
+    $(SALLIB)\
+    $(CPPULIB)\
+    $(CPPUHELPERLIB)\
+    $(COMPHELPERLIB)
 .ENDIF # MACOSX
 
 SHL1LIBS=$(SLB)$/xmlparser.lib
