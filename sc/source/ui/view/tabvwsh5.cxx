@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh5.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-14 08:52:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ void __EXPORT ScTabViewShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBC
     {
         ScPaintHint* pHint = (ScPaintHint*) &rHint;
         USHORT nParts = pHint->GetParts();
-        USHORT nTab = GetViewData()->GetTabNo();
+        SCTAB nTab = GetViewData()->GetTabNo();
         if (pHint->GetStartTab() <= nTab && pHint->GetEndTab() >= nTab)
         {
             if (nParts & PAINT_EXTRAS)          // zuerst, falls Tabelle weg ist !!!
@@ -217,12 +217,12 @@ void __EXPORT ScTabViewShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBC
         //  ScEditViewHint kommt nur an aktiver View an
 
         ScEditViewHint* pHint = (ScEditViewHint*) &rHint;
-        USHORT nTab = GetViewData()->GetTabNo();
+        SCTAB nTab = GetViewData()->GetTabNo();
         if ( pHint->GetTab() == nTab )
         {
             ScDocument* pDoc = GetViewData()->GetDocument();
-            USHORT nCol = pHint->GetCol();
-            USHORT nRow = pHint->GetRow();
+            SCCOL nCol = pHint->GetCol();
+            SCROW nRow = pHint->GetRow();
 #if 0
 // Abfrage ist ueberfluessig, passiert bereits in ScInputHandler StartTable
 //          if (pDoc->IsSelectionOrBlockEditable( nTab, nCol,nRow, nCol,nRow ))
@@ -256,11 +256,11 @@ void __EXPORT ScTabViewShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBC
     else if (rHint.ISA(ScTablesHint))               // Tabelle eingefuegt / geloescht
     {
             //  aktuelle Tabelle zuerst holen (kann bei DeleteTab an ViewData geaendert werden)
-        USHORT nActiveTab = GetViewData()->GetTabNo();
+        SCTAB nActiveTab = GetViewData()->GetTabNo();
 
         const ScTablesHint& rTabHint = (const ScTablesHint&)rHint;
-        USHORT nTab1 = rTabHint.GetTab1();
-        USHORT nTab2 = rTabHint.GetTab2();
+        SCTAB nTab1 = rTabHint.GetTab1();
+        SCTAB nTab2 = rTabHint.GetTab2();
         USHORT nId  = rTabHint.GetId();
         switch (nId)
         {
@@ -285,7 +285,7 @@ void __EXPORT ScTabViewShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBC
         //  hier keine Abfrage auf IsActive() mehr, weil die Aktion von Basic ausgehen
         //  kann und dann auch die aktive View umgeschaltet werden muss.
 
-        USHORT nNewTab = nActiveTab;
+        SCTAB nNewTab = nActiveTab;
         BOOL bForce = FALSE;
         switch (nId)
         {
