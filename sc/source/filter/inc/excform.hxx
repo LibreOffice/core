@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:01:40 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ private:
                             const BOOL bName );
 
                         // this function must read 2 bytes from stream and adjust <nBytesLeft>
-    virtual BOOL        Read3DTabReference( UINT16& rFirstTab, UINT16& rLastTab );
+    virtual BOOL        Read3DTabReference( SCTAB& rFirstTab, SCTAB& rLastTab );
 
 public:
                         ExcelToSc8( RootData* pRD, XclImpStream& aStr );
