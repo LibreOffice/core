@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-18 14:03:41 $
+ *  last change: $Author: iha $ $Date: 2002-11-11 17:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,9 +821,6 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
         }
     }
 
-    EndUndo();
-    pUndoMgr->LeaveListAction();
-
     if (nInsertPos > 2)
     {
         /**********************************************************************
@@ -944,7 +941,10 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
     }
 
     // #91146# Make absolutely sure no double masterpages are there
-    RemoveUnnessesaryMasterPages(NULL, TRUE, FALSE);
+    RemoveUnnessesaryMasterPages(NULL, TRUE, TRUE);
+
+    EndUndo();
+    pUndoMgr->LeaveListAction();
 
     return bContinue;
 }
