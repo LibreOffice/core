@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-24 16:48:29 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ String RID_GALLERYSTR_THEME_BULLETS
     Text[ chinese_traditional ] = "¦UÏú§Îª¬";
     Text[ arabic ] = "ÚáÇãÇÊ ÊÚÏÇÏ";
     Text[ greek ] = "Êïõêßäåò";
-    Text[ korean ] = "±Û¸Ó¸®Ç¥";
+    Text[ korean ] = "±Û¸Ó¸®±âÈ£";
     Text[ turkish ] = "Madde işaretleri";
     Text[ language_user1 ] = " ";
 };
