@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwUndoFmt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:48:20 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,8 @@ public:
 
 class SwUndoFrmFmtCreate : public SwUndoFmtCreate
 {
+    BOOL bAuto;
+
 public:
     SwUndoFrmFmtCreate(SwFrmFmt * pNew, SwFrmFmt * pDerivedFrom,
                        SwDoc * pDoc);
