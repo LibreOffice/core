@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:05:37 $
+ *  last change: $Author: hr $ $Date: 2001-10-18 09:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,12 +747,12 @@ BOOL ODbaseIndex::CreateImpl()
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-void SAL_CALL ODbaseIndex::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODbaseIndex::acquire() throw()
 {
     ODbaseIndex_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODbaseIndex::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODbaseIndex::release() throw()
 {
     ODbaseIndex_BASE::release();
 }

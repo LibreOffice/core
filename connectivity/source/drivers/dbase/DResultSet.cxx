@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DResultSet.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 09:15:36 $
+ *  last change: $Author: hr $ $Date: 2001-10-18 09:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,12 +260,12 @@ sal_Bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_x
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODbaseResultSet::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODbaseResultSet::acquire() throw()
 {
     ODbaseResultSet_BASE2::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODbaseResultSet::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODbaseResultSet::release() throw()
 {
     ODbaseResultSet_BASE2::release();
 }
