@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdorect.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-07 12:08:48 $
+ *  last change: $Author: thb $ $Date: 2002-08-22 09:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,10 @@
 
 #ifndef _SVX_XLNWTIT_HXX //autogen
 #include <xlnwtit.hxx>
+#endif
+
+#ifndef _SVX_SVDOIMP_HXX
+#include "svdoimp.hxx"
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -329,7 +333,7 @@ FASTBOOL SdrRectObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     aEmptySet.Put(XFillStyleItem(XFILL_NONE));
 
     // prepare line geometry
-    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft);
+    ::std::auto_ptr< ImpLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft) );
 
     // Shadows
     if (!bHideContour && ImpSetShadowAttributes(rXOut,FALSE))
@@ -340,18 +344,23 @@ FASTBOOL SdrRectObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
         // avoid shadow line drawing in XOut
         rXOut.SetLineAttr(aEmptySet);
 
-        if (PaintNeedsXPoly(nEckRad)) {
-            XPolygon aX(GetXPoly());
-            aX.Move(nXDist,nYDist);
-            rXOut.DrawXPolygon(aX);
-        } else {
-            Rectangle aR(aRect);
-            aR.Move(nXDist,nYDist);
-            rXOut.DrawRect(aR,USHORT(2*nEckRad),USHORT(2*nEckRad));
+        {
+            // #100127# Output original geometry for metafiles
+            ImpGraphicFill aFill( *this, rXOut );
+
+            if (PaintNeedsXPoly(nEckRad)) {
+                XPolygon aX(GetXPoly());
+                aX.Move(nXDist,nYDist);
+                rXOut.DrawXPolygon(aX);
+            } else {
+                Rectangle aR(aRect);
+                aR.Move(nXDist,nYDist);
+                rXOut.DrawRect(aR,USHORT(2*nEckRad),USHORT(2*nEckRad));
+            }
         }
 
         // new shadow line drawing
-        if(pLineGeometry)
+        if( pLineGeometry.get() )
         {
             // draw the line geometry
             ImpDrawShadowLineGeometry(rXOut, rSet, *pLineGeometry);
@@ -372,6 +381,9 @@ FASTBOOL SdrRectObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     }
 
     if (!bHideContour) {
+        // #100127# Output original geometry for metafiles
+        ImpGraphicFill aFill( *this, rXOut );
+
         if (PaintNeedsXPoly(nEckRad)) {
             rXOut.DrawXPolygon(GetXPoly());
         } else {
@@ -383,7 +395,7 @@ FASTBOOL SdrRectObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     DBG_ASSERT(aRect.GetWidth()>1 && aRect.GetHeight()>1,"SdrRectObj::Paint(): Rect hat Nullgroesse (oder negativ)!");
 
     // Own line drawing
-    if(!bHideContour && pLineGeometry)
+    if( !bHideContour && pLineGeometry.get() )
     {
         // draw the line geometry
         ImpDrawColorLineGeometry(rXOut, rSet, *pLineGeometry);
@@ -395,10 +407,6 @@ FASTBOOL SdrRectObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
         bOk=PaintGluePoints(rXOut,rInfoRec);
     }
-
-    // throw away line geometry
-    if(pLineGeometry)
-        delete pLineGeometry;
 
     return bOk;
 }

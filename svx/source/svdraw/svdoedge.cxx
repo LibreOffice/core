@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-07 12:08:47 $
+ *  last change: $Author: thb $ $Date: 2002-08-22 09:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@
 
 #ifndef _EEITEM_HXX
 #include "eeitem.hxx"
+#endif
+
+#ifndef _SVX_SVDOIMP_HXX
+#include "svdoimp.hxx"
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -598,7 +602,7 @@ FASTBOOL SdrEdgeObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     aEmptySet.Put(XFillStyleItem(XFILL_NONE));
 
     // prepare line geometry
-    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft);
+    ::std::auto_ptr< ImpLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft) );
 
     // Shadows
     if(!bHideContour && ImpSetShadowAttributes(rXOut,TRUE))
@@ -614,7 +618,7 @@ FASTBOOL SdrEdgeObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
         rXOut.DrawXPolyLine(aXP);
 
         // new shadow line drawing
-        if(pLineGeometry)
+        if( pLineGeometry.get() )
         {
             // draw the line geometry
             ImpDrawShadowLineGeometry(rXOut, rSet, *pLineGeometry);
@@ -643,7 +647,7 @@ FASTBOOL SdrEdgeObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     }
 
     // Own line drawing
-    if(!bHideContour && pLineGeometry)
+    if(!bHideContour && pLineGeometry.get() )
     {
         // draw the line geometry
         ImpDrawColorLineGeometry(rXOut, rSet, *pLineGeometry);
@@ -656,10 +660,6 @@ FASTBOOL SdrEdgeObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
         bOk=PaintGluePoints(rXOut,rInfoRec);
     }
-
-    // throw away line geometry
-    if(pLineGeometry)
-        delete pLineGeometry;
 
     return bOk;
 }

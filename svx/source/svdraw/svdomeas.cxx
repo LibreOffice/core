@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-07 12:08:47 $
+ *  last change: $Author: thb $ $Date: 2002-08-22 09:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,10 @@
 
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
+#endif
+
+#ifndef _SVX_SVDOIMP_HXX
+#include "svdoimp.hxx"
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -674,11 +678,11 @@ FASTBOOL SdrMeasureObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rIn
 
     // prepare line geometry
     BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
-    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft);
+    ::std::auto_ptr< ImpLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft) );
 
     // Shadows
     BOOL bShadOn = ((SdrShadowItem&)(rSet.Get(SDRATTR_SHADOW))).GetValue();
-    if(bShadOn && pLineGeometry)
+    if( bShadOn && pLineGeometry.get() )
     {
         // draw the line geometry
         ImpDrawShadowLineGeometry(rXOut, rSet, *pLineGeometry);
@@ -715,7 +719,7 @@ FASTBOOL SdrMeasureObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rIn
     rXOut.DrawLine(aMPol.aHelpline2.aP1,aMPol.aHelpline2.aP2);
 
     // Own line drawing
-    if(pLineGeometry)
+    if( pLineGeometry.get() )
     {
         // draw the line geometry
         ImpDrawColorLineGeometry(rXOut, rSet, *pLineGeometry);
@@ -727,10 +731,6 @@ FASTBOOL SdrMeasureObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rIn
     if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
         bOk=PaintGluePoints(rXOut,rInfoRec);
     }
-
-    // throw away line geometry
-    if(pLineGeometry)
-        delete pLineGeometry;
 
     return bOk;
 }
@@ -1388,16 +1388,21 @@ void SdrMeasureObj::RestGeoData(const SdrObjGeoData& rGeo)
     SetTextDirty();
 }
 
-void SdrMeasureObj::CreateLinePoly(PolyPolygon3D& rPolyPolygon, PolyPolygon3D& rPolyLine, OutputDevice& rOut,
-    BOOL bForceHair, BOOL bIsLineDraft) const
+::std::auto_ptr< ImpLineGeometry > SdrMeasureObj::CreateLinePoly( OutputDevice& rOut,
+                                                                  BOOL          bForceOnePixel,
+                                                                  BOOL          bForceTwoPixel,
+                                                                  BOOL          bIsLineDraft    ) const
 {
+    PolyPolygon3D aPolyPoly3D;
+    PolyPolygon3D aLinePoly3D;
+
     // get XOR Poly as base
     XPolyPolygon aTmpPolyPolygon;
     TakeXorPoly(aTmpPolyPolygon, TRUE);
 
     // get ImpLineStyleParameterPack
-    ImpLineStyleParameterPack aLineAttr(GetItemSet(), bForceHair || bIsLineDraft, &rOut);
-    ImpLineGeometryCreator aLineCreator(aLineAttr, rPolyPolygon, rPolyLine, bIsLineDraft);
+    ImpLineStyleParameterPack aLineAttr(GetItemSet(), bForceOnePixel || bForceTwoPixel || bIsLineDraft, &rOut);
+    ImpLineGeometryCreator aLineCreator(aLineAttr, aPolyPoly3D, aLinePoly3D, bIsLineDraft);
     UINT16 nCount(aTmpPolyPolygon.Count());
     Polygon3D aPoly3D;
     UINT16 nLoopStart(0);
@@ -1453,6 +1458,12 @@ void SdrMeasureObj::CreateLinePoly(PolyPolygon3D& rPolyPolygon, PolyPolygon3D& r
         aPoly3D = Polygon3D(aTmpPolyPolygon[nLoopStart]);
         aLineCreator.AddPolygon3D(aPoly3D);
     }
+
+    if(aPolyPoly3D.Count() || aLinePoly3D.Count())
+        return ::std::auto_ptr< ImpLineGeometry > (new ImpLineGeometry(aPolyPoly3D, aLinePoly3D,
+                                                                       aLineAttr, bForceOnePixel, bForceTwoPixel));
+    else
+        return NULL;
 }
 
 SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-17 11:35:21 $
+ *  last change: $Author: thb $ $Date: 2002-08-22 09:54:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,10 @@
 
 #ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>     // FRound
+#endif
+
+#ifndef _SVX_SVDOIMP_HXX
+#include "svdoimp.hxx"
 #endif
 
 /***********************************************************************
@@ -328,7 +332,7 @@ FASTBOOL SdrPathObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     aEmptySet.Put(XFillStyleItem(XFILL_NONE));
 
     // prepare line geometry
-    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft);
+    ::std::auto_ptr< ImpLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft) );
 
     // Shadows
     if (!bHideContour && ImpSetShadowAttributes(rXOut,!IsClosed()))
@@ -347,11 +351,14 @@ FASTBOOL SdrPathObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
                 rXOut.DrawXPolyLine(aTmpXPoly.GetObject(nPolyNum));
             }
         } else {
+            // #100127# Output original geometry for metafiles
+            ImpGraphicFill aFill( *this, rXOut );
+
             rXOut.DrawXPolyPolygon(aTmpXPoly);
         }
 
         // new shadow line drawing
-        if(pLineGeometry)
+        if( pLineGeometry.get() )
         {
             // draw the line geometry
             ImpDrawShadowLineGeometry(rXOut, rSet, *pLineGeometry);
@@ -375,22 +382,22 @@ FASTBOOL SdrPathObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
         }
     }
 
-    if (!bHideContour) {
-        if (!IsClosed()) {
-            USHORT nPolyAnz=aPathPolygon.Count();
-            for (USHORT nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
-                rXOut.DrawXPolyLine(aPathPolygon.GetObject(nPolyNum));
-            }
-        } else {
+    if( !bHideContour )
+    {
+        if( IsClosed() )
+        {
+            // #100127# Output original geometry for metafiles
+            ImpGraphicFill aFill( *this, rXOut );
+
             rXOut.DrawXPolyPolygon(aPathPolygon);
         }
-    }
 
-    // Own line drawing
-    if(!bHideContour && pLineGeometry)
-    {
-        // draw the line geometry
-        ImpDrawColorLineGeometry(rXOut, rSet, *pLineGeometry);
+        // Own line drawing
+        if( pLineGeometry.get() )
+        {
+            // draw the line geometry
+            ImpDrawColorLineGeometry(rXOut, rSet, *pLineGeometry);
+        }
     }
 
     FASTBOOL bOk=TRUE;
@@ -400,10 +407,6 @@ FASTBOOL SdrPathObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
         bOk=PaintGluePoints(rXOut,rInfoRec);
     }
-
-    // throw away line geometry
-    if(pLineGeometry)
-        delete pLineGeometry;
 
     return bOk;
 }

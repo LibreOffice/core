@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-07 12:08:47 $
+ *  last change: $Author: thb $ $Date: 2002-08-22 09:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,10 @@
 
 #ifndef _EEITEM_HXX
 #include "eeitem.hxx"
+#endif
+
+#ifndef _SVX_SVDOIMP_HXX
+#include "svdoimp.hxx"
 #endif
 
 void SetWinkPnt(const Rectangle& rR, long nWink, Point& rPnt)
@@ -351,7 +355,7 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     aEmptySet.Put(XFillStyleItem(XFILL_NONE));
 
     // prepare line geometry
-    ImpLineGeometry* pLineGeometry = ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft);
+    ::std::auto_ptr< ImpLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft) );
 
     // Shadows
     if(!bHideContour && ImpSetShadowAttributes(rXOut,eKind==OBJ_CARC || bIsFillDraft))
@@ -362,37 +366,42 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
         // avoid shadow line drawing in XOut
         rXOut.SetLineAttr(aEmptySet);
 
-        if (PaintNeedsXPoly()) {
-            XPolygon aX(GetXPoly()); // In dieser Reihenfolge, damit bXPolyIsLine gueltig ist.
-            aX.Move(nXDist,nYDist);
-            if (bXPolyIsLine) {
-                rXOut.DrawXPolyLine(aX);
+        {
+            // #100127# Output original geometry for metafiles
+            ImpGraphicFill aFill( *this, rXOut );
+
+            if (PaintNeedsXPoly()) {
+                XPolygon aX(GetXPoly()); // In dieser Reihenfolge, damit bXPolyIsLine gueltig ist.
+                aX.Move(nXDist,nYDist);
+                if (bXPolyIsLine) {
+                    rXOut.DrawXPolyLine(aX);
+                } else {
+                    rXOut.DrawXPolygon(aX);
+                }
             } else {
-                rXOut.DrawXPolygon(aX);
-            }
-        } else {
-            Rectangle aR(aRect);
-            aR.Move(nXDist,nYDist);
-            if (eKind==OBJ_CIRC) {
-                rXOut.DrawEllipse(aR);
-            } else {
-                GetBoundRect(); // fuer aPnt1,aPnt2
-                Point aTmpPt1(aPnt1);
-                Point aTmpPt2(aPnt2);
-                aTmpPt1.X()+=nXDist;
-                aTmpPt1.Y()+=nYDist;
-                aTmpPt2.X()+=nXDist;
-                aTmpPt2.Y()+=nYDist;
-                switch (eKind) {
-                    case OBJ_SECT: rXOut.DrawPie(aR,aTmpPt1,aTmpPt2); break;
-                    case OBJ_CARC: rXOut.DrawArc(aR,aTmpPt1,aTmpPt2); break;
-                    case OBJ_CCUT: DBG_ERROR("SdrCircObj::Paint(): ein Kreisabschnitt muss immer mit XPoly gepaintet werden"); break;
+                Rectangle aR(aRect);
+                aR.Move(nXDist,nYDist);
+                if (eKind==OBJ_CIRC) {
+                    rXOut.DrawEllipse(aR);
+                } else {
+                    GetBoundRect(); // fuer aPnt1,aPnt2
+                    Point aTmpPt1(aPnt1);
+                    Point aTmpPt2(aPnt2);
+                    aTmpPt1.X()+=nXDist;
+                    aTmpPt1.Y()+=nYDist;
+                    aTmpPt2.X()+=nXDist;
+                    aTmpPt2.Y()+=nYDist;
+                    switch (eKind) {
+                        case OBJ_SECT: rXOut.DrawPie(aR,aTmpPt1,aTmpPt2); break;
+                        case OBJ_CARC: rXOut.DrawArc(aR,aTmpPt1,aTmpPt2); break;
+                        case OBJ_CCUT: DBG_ERROR("SdrCircObj::Paint(): ein Kreisabschnitt muss immer mit XPoly gepaintet werden"); break;
+                    }
                 }
             }
         }
 
         // new shadow line drawing
-        if(pLineGeometry)
+        if( pLineGeometry.get() )
         {
             // draw the line geometry
             ImpDrawShadowLineGeometry(rXOut, rSet, *pLineGeometry);
@@ -415,6 +424,9 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     }
 
     if (!bHideContour) {
+        // #100127# Output original geometry for metafiles
+        ImpGraphicFill aFill( *this, rXOut );
+
         if (PaintNeedsXPoly()) {
             const XPolygon& rXP=GetXPoly(); // In dieser Reihenfolge, damit bXPolyIsLine gueltig ist.
             if (bXPolyIsLine) {
@@ -437,7 +449,7 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     }
 
     // Own line drawing
-    if(!bHideContour && pLineGeometry)
+    if(!bHideContour && pLineGeometry.get() )
     {
         // draw the line geometry
         ImpDrawColorLineGeometry(rXOut, rSet, *pLineGeometry);
@@ -450,10 +462,6 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
         bOk=PaintGluePoints(rXOut,rInfoRec);
     }
-
-    // throw away line geometry
-    if(pLineGeometry)
-        delete pLineGeometry;
 
     return bOk;
 }
