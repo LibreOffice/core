@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 13:59:26 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 15:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,7 @@ Image IMG_DATABASE_DELETED
 TabPage PAGE_GENERAL
 {
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_GENERAL;
 
@@ -413,10 +413,10 @@ TabPage PAGE_GENERAL
         Border = TRUE ;
     };
 
-    GroupBox GB_CONNECTION
+    FixedLine FL_SEPARATOR1
     {
-        Pos = MAP_APPFONT ( 6 , 23 ) ;
-        Size = MAP_APPFONT ( 248 , 48 ) ;
+        Pos = MAP_APPFONT ( 4 , 23 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
         Text = "Verbindung" ;
         Text [ english ] = "Connection" ;
         Text [ english_us ] = "Connection" ;
@@ -441,7 +441,7 @@ TabPage PAGE_GENERAL
 
     FixedText FT_DATATYPE
     {
-        Pos = MAP_APPFONT ( 10 , 35 ) ;
+        Pos = MAP_APPFONT ( 7 , 35 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Datenbank~typ:" ;
         Text [ english ] = "Database ~type:" ;
@@ -469,7 +469,7 @@ TabPage PAGE_GENERAL
     {
         HelpId = HID_DSADMIN_DSTYPE;
         Pos = MAP_APPFONT ( 90, 33 ) ;
-        Size = MAP_APPFONT ( 60, 60 ) ;
+        Size = MAP_APPFONT ( 60, 90 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -477,7 +477,7 @@ TabPage PAGE_GENERAL
     FixedText FT_CONNECTURL
     {
         HelpId = HID_DSADMIN_URL_GENERAL;
-        Pos = MAP_APPFONT ( 10 , 53 ) ;
+        Pos = MAP_APPFONT ( 7 , 53 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "D~atenquelle URL:" ;
         Text [ english ] = "~Data source URL:" ;
@@ -503,14 +503,14 @@ TabPage PAGE_GENERAL
     Edit ET_CONNECTURL
     {
         Pos = MAP_APPFONT ( 90 , 52 ) ;
-        Size = MAP_APPFONT ( 142 , 12 ) ;
+        Size = MAP_APPFONT ( 147 , 12 ) ;
         TabStop = TRUE ;
         Border = TRUE ;
     };
     PushButton PB_BROWSECONNECTION
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 236 , 51 ) ;
+        Pos = MAP_APPFONT ( 241 , 51 ) ;
         Size = MAP_APPFONT ( 12 , 14 ) ;
         HelpId = HID_DSADMIN_BROWSECONN;
         Text = "..." ;
@@ -685,49 +685,18 @@ TabPage PAGE_DBASE
     SVLook = TRUE ;
     Hide = TRUE;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     HelpId = HID_DSADMIN_PAGE_DBASE;
 
-    GroupBox GB_DBASE_MAIN
+    FixedLine FL_SEPARATOR1
     {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 248 , 37 ) ;
-    };
-
-    CheckBox CB_SHOWDELETEDROWS
-    {
-        Pos = MAP_APPFONT ( 76 , 12 ) ;
-        Size = MAP_APPFONT ( 127 , 10 ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_SHOWDELETED;
-        Text = "I~naktive Datensätze anzeigen" ;
-        Text [ english ] = "Show deleted records" ;
-        Text [ NORWEGIAN ] = "Show deleted records" ;
-        Text [ DANISH ] = "Vis inaktive dataposter" ;
-        Text [ ENGLISH_US ] = "Display i~nactive records" ;
-        Text [ SPANISH ] = "Mostrar registros inacti~vos" ;
-        Text [ FINNISH ] = "Näytä poistetut tietueet" ;
-        Text [ FRENCH ] = "Afficher les enregistrements ~désactivés" ;
-        Text [ ITALIAN ] = "~Mostra record inattivi" ;
-        Text [ DUTCH ] = "I~nactieve records weergeven" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Mostrar registros apagados" ;
-        Text [ SWEDISH ] = "Visa i~naktiva dataposter" ;
-        Text [ PORTUGUESE ] = "Mostrar registos i~nactivos" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾ÒþÈëµÄÊý¾Ý¼ÇÂ¼(~N)";
-        Text[ russian ] = "Ïîêàçàòü íåàêòèâíûå çàïèñè";
-        Text[ polish ] = "Poka¿ nieaktywne rekordy";
-        Text[ japanese ] = "±¸Ã¨ÌÞ‚Å‚È‚¢Úº°ÄÞ‚ð•\\Ž¦";
-        Text[ chinese_traditional ] = "Åã¥ÜÁô¤Jªº¸ê®Æ¶µ¥Ø";
-        Text[ arabic ] = "ÅÙåÇÑ ÇáÓÌáÇÊ ÇáÛíÑ äÔØÉ";
-        Text[ greek ] = "ÅìöÜ~íéóç ìç åíåñãþí åããñáöþí";
-        Text[ korean ] = "ºñÈ°¼º ·¹ÄÚµå µð½ºÇÃ·¹ÀÌ";
-        Text[ turkish ] = "Etkin olmayan kayýtlarý görüntüle";
-        Text[ language_user1 ] = " ";
+        Pos = MAP_APPFONT ( 4 , 6 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
     };
     FixedText FT_CHARSET
     {
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Pos = MAP_APPFONT ( 7 , 18 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Zeichensatz" ;
         Text [ english ] = "~Character set" ;
         Text [ NORWEGIAN ] = "~Character set" ;
@@ -755,21 +724,56 @@ TabPage PAGE_DBASE
     ListBox LB_CHARSET
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 76 , 25 ) ;
+        Pos = MAP_APPFONT ( 7 , 31 ) ;
         Size = MAP_APPFONT ( 105 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
         HelpId = HID_DSADMIN_CHARSET_DBASE;
     };
+    FixedLine FL_SEPARATOR2
+    {
+        Pos = MAP_APPFONT ( 4 , 51 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
+    };
+    CheckBox CB_SHOWDELETEDROWS
+    {
+        Pos = MAP_APPFONT ( 7 , 63 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_SHOWDELETED;
+        Text = "I~naktive Datensätze anzeigen" ;
+        Text [ english ] = "Show deleted records" ;
+        Text [ NORWEGIAN ] = "Show deleted records" ;
+        Text [ DANISH ] = "Vis inaktive dataposter" ;
+        Text [ ENGLISH_US ] = "Display i~nactive records" ;
+        Text [ SPANISH ] = "Mostrar registros inacti~vos" ;
+        Text [ FINNISH ] = "Näytä poistetut tietueet" ;
+        Text [ FRENCH ] = "Afficher les enregistrements ~désactivés" ;
+        Text [ ITALIAN ] = "~Mostra record inattivi" ;
+        Text [ DUTCH ] = "I~nactieve records weergeven" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Mostrar registros apagados" ;
+        Text [ SWEDISH ] = "Visa i~naktiva dataposter" ;
+        Text [ PORTUGUESE ] = "Mostrar registos i~nactivos" ;
+        Text[ chinese_simplified ] = "ÏÔÊ¾ÒþÈëµÄÊý¾Ý¼ÇÂ¼(~N)";
+        Text[ russian ] = "Ïîêàçàòü íåàêòèâíûå çàïèñè";
+        Text[ polish ] = "Poka¿ nieaktywne rekordy";
+        Text[ japanese ] = "±¸Ã¨ÌÞ‚Å‚È‚¢Úº°ÄÞ‚ð•\\Ž¦";
+        Text[ chinese_traditional ] = "Åã¥ÜÁô¤Jªº¸ê®Æ¶µ¥Ø";
+        Text[ arabic ] = "ÅÙåÇÑ ÇáÓÌáÇÊ ÇáÛíÑ äÔØÉ";
+        Text[ greek ] = "ÅìöÜ~íéóç ìç åíåñãþí åããñáöþí";
+        Text[ korean ] = "ºñÈ°¼º ·¹ÄÚµå µð½ºÇÃ·¹ÀÌ";
+        Text[ turkish ] = "Etkin olmayan kayýtlarý görüntüle";
+        Text[ language_user1 ] = " ";
+    };
     PushButton PB_INDICIES
     {
-        Pos = MAP_APPFONT ( 199 , 115 ) ;
+        Pos = MAP_APPFONT ( 199 , 165 ) ;
         Size = MAP_APPFONT ( 55 , 14 ) ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_DBASE_INDICIES;
         Text= "~Indizes...";
-        Text [ english ] = "Indexes..." ;
+        Text [ english ] = "~Indexes..." ;
         Text[ chinese_traditional ] = "¼Ð»x...";
         Text[ arabic ] = "ÝåÇÑÓ...";
         Text[ greek ] = "ÅõñåôÞñ~éá...";
@@ -797,7 +801,7 @@ TabPage PAGE_ADO
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_ADO;
 
@@ -837,9 +841,14 @@ TabPage PAGE_ADO
             // special help id here: though this is the usual ConnectURL field, it's placed on the JDBC page
             // (not as usual on the general page), so the documentation may want to write other help texts here.
     };
+    FixedLine FL_SEPARATOR1
+    {
+        Pos = MAP_APPFONT ( 6 , 24 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
+    };
     FixedText FT_USERNAME
     {
-        Pos = MAP_APPFONT ( 6 , 37 ) ;
+        Pos = MAP_APPFONT ( 6 , 36 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Text = "~Benutzername" ;
         Text [ ENGLISH ] = "~Username" ;
@@ -868,7 +877,7 @@ TabPage PAGE_ADO
     Edit ET_USERNAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 36 ) ;
+        Pos = MAP_APPFONT ( 90 , 35 ) ;
         Size = MAP_APPFONT ( 105 , 12 ) ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_USER_ADO;
@@ -906,7 +915,7 @@ TabPage PAGE_JDBC
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_JDBC;
 
@@ -1044,36 +1053,36 @@ TabPage PAGE_JDBC
     };
     FixedLine FL_SEPARATOR1
     {
-        Pos = MAP_APPFONT ( 6 , 64 ) ;
-        Size = MAP_APPFONT ( 248 , 1 ) ;
+        Pos = MAP_APPFONT ( 4 , 64 ) ;
+        Size = MAP_APPFONT ( 252 , 1 ) ;
     };
     FixedText FT_CHARSET
     {
         Pos = MAP_APPFONT ( 6 , 70 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
-        Text = "~Zeichensatz" ;
-        Text [ ENGLISH ] = "~Character set" ;
-        Text [ NORWEGIAN ] = "~Character set" ;
-        Text [ DANISH ] = "Tegnsæt" ;
-        Text [ ENGLISH_US ] = "~Character set" ;
-        Text [ SPANISH ] = "J~uego de caracteres" ;
-        Text [ FINNISH ] = "~Merkistö" ;
-        Text [ FRENCH ] = "~Jeu de caractères" ;
-        Text [ ITALIAN ] = "Ti~po di carattere" ;
-        Text [ DUTCH ] = "~Tekenset" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Conjunto de caracteres" ;
-        Text [ SWEDISH ] = "Te~ckenuppsättning" ;
-        Text [ PORTUGUESE ] = "~Conjunto de caracteres" ;
-        Text[ chinese_simplified ] = "×ÖÌå(~C)";
-        Text[ russian ] = "Íàáîð çíàêîâ";
-        Text[ polish ] = "Zbiór znaków";
-        Text[ japanese ] = "•¶Žš—ñ(~C)";
-        Text[ chinese_traditional ] = "¦r«¬(~C)";
-        Text[ arabic ] = "ãÌãæÚÉ ÃÍÑÝ";
-        Text[ greek ] = "Óåô ÷áñáêôÞñùí";
-        Text[ korean ] = "¹®ÀÚ ÁýÇÕ(~C)";
-        Text[ turkish ] = "Karakter kümesi";
-        Text[ language_user1 ] = " ";
+        Text = "~Zeichensatz:" ;
+        Text [ ENGLISH ] = "~Character set:" ;
+        Text [ NORWEGIAN ] = "~Character set:" ;
+        Text [ DANISH ] = "Tegnsæt:" ;
+        Text [ ENGLISH_US ] = "~Character set:" ;
+        Text [ SPANISH ] = "J~uego de caracteres:" ;
+        Text [ FINNISH ] = "~Merkistö:" ;
+        Text [ FRENCH ] = "~Jeu de caractères:" ;
+        Text [ ITALIAN ] = "Ti~po di carattere:" ;
+        Text [ DUTCH ] = "~Tekenset:" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Conjunto de caracteres:" ;
+        Text [ SWEDISH ] = "Te~ckenuppsättning:" ;
+        Text [ PORTUGUESE ] = "~Conjunto de caracteres:" ;
+        Text[ chinese_simplified ] = "×ÖÌå(~C):" ;
+        Text[ russian ] = "Íàáîð çíàêîâ:" ;
+        Text[ polish ] = "Zbiór znaków:" ;
+        Text[ japanese ] = "•¶Žš—ñ(~C):" ;
+        Text[ chinese_traditional ] = "¦r«¬(~C):" ;
+        Text[ arabic ] = "ãÌãæÚÉ ÃÍÑÝ:" ;
+        Text[ greek ] = "Óåô ÷áñáêôÞñùí:" ;
+        Text[ korean ] = "¹®ÀÚ ÁýÇÕ(~C):" ;
+        Text[ turkish ] = "Karakter kümesi:" ;
+        Text[ language_user1 ] = " :" ;
     };
     ListBox LB_CHARSET
     {
@@ -1092,7 +1101,7 @@ TabPage PAGE_ODBC
 {
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_ODBC;
 
@@ -1160,8 +1169,8 @@ TabPage PAGE_ODBC
     };
     FixedLine FL_SEPARATOR1
     {
-        Pos = MAP_APPFONT ( 6 , 34 ) ;
-        Size = MAP_APPFONT ( 248 , 1 ) ;
+        Pos = MAP_APPFONT ( 4 , 34 ) ;
+        Size = MAP_APPFONT ( 252 , 1 ) ;
     };
     FixedText FT_OPTIONS
     {
@@ -1245,13 +1254,21 @@ TabPage PAGE_TEXT
     SVLook = TRUE ;
     Hide = TRUE;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     HelpId = HID_DSADMIN_PAGE_TEXT;
 
+    FixedLine FL_SEPARATOR2
+    {
+        Pos = MAP_APPFONT ( 4 , 6 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
+        Text = "Zeilenformat";
+        Text [ english ] = "Line format";
+        Text [ english_us ] = "Line format";
+    };
     CheckBox CB_HEADER
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 125 , 6 ) ;
+        Pos = MAP_APPFONT ( 125 , 18 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         HelpId = HID_DSADMIN_TEXT_HEADER;
         Text = "~Text beinhaltet Kopfzeile" ;
@@ -1280,7 +1297,7 @@ TabPage PAGE_TEXT
     };
     FixedText FT_FIELDSEPARATOR
     {
-        Pos = MAP_APPFONT ( 6 , 21 ) ;
+        Pos = MAP_APPFONT ( 6 , 33 ) ;
         Size = MAP_APPFONT ( 119 , 10 ) ;
         Text = "~Feldtrenner" ;
         Text [ ENGLISH ] = "Field delimiter" ;
@@ -1308,7 +1325,7 @@ TabPage PAGE_TEXT
     };
     ComboBox CM_FIELDSEPARATOR
     {
-        Pos = MAP_APPFONT ( 125 , 19 ) ;
+        Pos = MAP_APPFONT ( 125 , 31 ) ;
         Size = MAP_APPFONT ( 48 , 60 ) ;
         Text = ";" ;
         TabStop = TRUE ;
@@ -1317,7 +1334,7 @@ TabPage PAGE_TEXT
     };
     FixedText FT_TEXTSEPARATOR
     {
-        Pos = MAP_APPFONT ( 6 , 38 ) ;
+        Pos = MAP_APPFONT ( 6 , 50 ) ;
         Size = MAP_APPFONT ( 119 , 10 ) ;
         Text = "T~exttrenner" ;
         Text [ ENGLISH ] = "String delimiter" ;
@@ -1345,7 +1362,7 @@ TabPage PAGE_TEXT
     };
     ComboBox CM_TEXTSEPARATOR
     {
-        Pos = MAP_APPFONT ( 125 , 36 ) ;
+        Pos = MAP_APPFONT ( 125 , 48 ) ;
         Size = MAP_APPFONT ( 48 , 60 ) ;
         Text = "\"" ;
         TabStop = TRUE ;
@@ -1354,7 +1371,7 @@ TabPage PAGE_TEXT
     };
     FixedText FT_DECIMALSEPARATOR
     {
-        Pos = MAP_APPFONT ( 6 , 55 ) ;
+        Pos = MAP_APPFONT ( 6 , 67 ) ;
         Size = MAP_APPFONT ( 119 , 10 ) ;
         Text = "~Dezimaltrennzeichen" ;
         Text [ ENGLISH ] = "~Decimal point" ;
@@ -1382,7 +1399,7 @@ TabPage PAGE_TEXT
     };
     ComboBox CM_DECIMALSEPARATOR
     {
-        Pos = MAP_APPFONT ( 125 , 53 ) ;
+        Pos = MAP_APPFONT ( 125 , 65 ) ;
         Size = MAP_APPFONT ( 32 , 60 ) ;
         Text = ";" ;
         TabStop = TRUE ;
@@ -1399,7 +1416,7 @@ TabPage PAGE_TEXT
     };
     FixedText FT_THOUSANDSSEPARATOR
     {
-        Pos = MAP_APPFONT ( 6 , 72 ) ;
+        Pos = MAP_APPFONT ( 6 , 84 ) ;
         Size = MAP_APPFONT ( 119 , 10 ) ;
         Text = "T~ausendertrennzeichen" ;
         Text [ ENGLISH ] = "Decimal point" ;
@@ -1427,7 +1444,7 @@ TabPage PAGE_TEXT
     };
     ComboBox CM_THOUSANDSSEPARATOR
     {
-        Pos = MAP_APPFONT ( 125 , 70 ) ;
+        Pos = MAP_APPFONT ( 125 , 84 ) ;
         Size = MAP_APPFONT ( 32 , 44 ) ;
         Text = "." ;
         TabStop = TRUE ;
@@ -1442,12 +1459,14 @@ TabPage PAGE_TEXT
     };
     FixedLine FL_SEPARATOR1
     {
-        Pos = MAP_APPFONT ( 6 , 87 ) ;
-        Size = MAP_APPFONT ( 248 , 1 ) ;
+        Pos = MAP_APPFONT ( 4 , 104 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
+        Text = "Dateiformat";
+        Text [ english ] = "File format";
     };
     FixedText FT_EXTENSION
     {
-        Pos = MAP_APPFONT ( 6 , 93 ) ;
+        Pos = MAP_APPFONT ( 6 , 116 ) ;
         Size = MAP_APPFONT ( 119 , 10 ) ;
         Text = "E~rweiterung" ;
         Text [ ENGLISH ] = "Extension" ;
@@ -1473,7 +1492,7 @@ TabPage PAGE_TEXT
     };
     ComboBox CM_EXTENSION
     {
-        Pos = MAP_APPFONT ( 125 , 91 ) ;
+        Pos = MAP_APPFONT ( 125 , 114 ) ;
         Size = MAP_APPFONT ( 32 , 44 ) ;
         Text = "txt" ;
         TabStop = TRUE ;
@@ -1489,7 +1508,7 @@ TabPage PAGE_TEXT
     };
     FixedText FT_CHARSET
     {
-        Pos = MAP_APPFONT ( 6 , 110 ) ;
+        Pos = MAP_APPFONT ( 6 , 133 ) ;
         Size = MAP_APPFONT ( 119 , 10 ) ;
         Text = "~Zeichensatz" ;
         Text [ ENGLISH ] = "~Character set" ;
@@ -1518,7 +1537,7 @@ TabPage PAGE_TEXT
     ListBox LB_CHARSET
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 125 , 108 ) ;
+        Pos = MAP_APPFONT ( 125 , 131 ) ;
         Size = MAP_APPFONT ( 61 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -1611,7 +1630,7 @@ TabPage PAGE_TEXT
         Text [ english_us ] = "Wildcards such as ?,* are not allowed in #1." ;
         Text [ portuguese ] = "Caracteres polivalentes como *,? não são admitidos emr #1." ;
         Text [ portuguese_brazilian ] = "Platzhalter wie *,? sind in der #1 nicht möglich." ;
-            Text [ swedish ] = "Jokertecken som *,? är inte tillåtna i #1." ;
+        Text [ swedish ] = "Jokertecken som *,? är inte tillåtna i #1." ;
         Text [ danish ] = "Jokertegn som *,? er ikke mulige i #1." ;
         Text [ italian ] = "Segnaposto quali *,? non sono possibili in #1." ;
         Text [ spanish ] = "Comodines como *,? no están permitidos en #1." ;
@@ -1635,13 +1654,13 @@ TabPage PAGE_TABLESUBSCRIPTION
     SVLook = TRUE ;
     Hide = TRUE;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     HelpId = HID_DSADMIN_TABLE_SUBSCRIPTION;
 
     GroupBox GB_TABLESUBSCRIPTION
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 91 ) ;
+        Size = MAP_APPFONT ( 248 , 141 ) ;
         Text = "Filter";
         Text [ english ] = "Filter";
         Text [ english_us ] = "Filter";
@@ -1666,7 +1685,7 @@ TabPage PAGE_TABLESUBSCRIPTION
     Control CTL_TABLESUBSCRIPTION
     {
         Pos     = MAP_APPFONT ( 12 , 15 ) ;
-        Size    = MAP_APPFONT ( 236 , 72 ) ;
+        Size    = MAP_APPFONT ( 236 , 122 ) ;
         Group   = TRUE;
         Border  = TRUE ;
         TabStop = TRUE ;
@@ -1674,7 +1693,7 @@ TabPage PAGE_TABLESUBSCRIPTION
     };
     CheckBox CB_SUPPRESVERSIONCL
     {
-        Pos     = MAP_APPFONT ( 6 , 102 ) ;
+        Pos     = MAP_APPFONT ( 6 , 152 ) ;
         Size    = MAP_APPFONT ( 200 , 12 ) ;
         Group   = TRUE ;
         TabStop = TRUE ;
@@ -1691,13 +1710,13 @@ TabPage PAGE_QUERYADMINISTRATION
     SVLook = TRUE ;
     Hide = TRUE;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     HelpId = HID_DSADMIN_QUERYADMINISTRATION;
 
     GroupBox GB_QUERIES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 192 , 126 ) ;
+        Size = MAP_APPFONT ( 192 , 176 ) ;
         Text = "Abfragen";
         Text [ english ] = "Queries";
         Text [ english_us ] = "Queries";
@@ -1705,7 +1724,7 @@ TabPage PAGE_QUERYADMINISTRATION
     ListBox LB_QUERIES
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 180 , 109 ) ;
+        Size = MAP_APPFONT ( 180 , 159 ) ;
         Border = TRUE;
         SVLook = TRUE;
         TabStop = TRUE ;
@@ -1972,6 +1991,9 @@ ErrorBox ERR_CANTADMINQUERIES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.26  2001/02/05 13:59:26  fs
+ *  #83430# +ERR_CANTADMINQUERIES / +WARN_SAVEFORQUERIES
+ *
  *  Revision 1.25  2001/01/30 08:34:41  fs
  *  redesigned the table subscription page
  *

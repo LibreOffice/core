@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 16:14:12 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 15:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,8 @@ namespace dbaui
     //------------------------------------------------------------------------
     ODbaseDetailsPage::ODbaseDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_DBASE, _rCoreAttrs, CBTP_USE_CHARSET)
-        ,m_aFrame           (this, ResId(GB_DBASE_MAIN))
+        ,m_aLine1           (this, ResId(FL_SEPARATOR1))
+        ,m_aLine2           (this, ResId(FL_SEPARATOR2))
         ,m_aShowDeleted     (this, ResId(CB_SHOWDELETEDROWS))
         ,m_aIndexes         (this, ResId(PB_INDICIES))
     {
@@ -316,7 +317,7 @@ namespace dbaui
         m_aShowDeleted.SetClickHdl(LINK(this, ODbaseDetailsPage, OnButtonClicked));
 
         // correct the z-order which is mixed-up because the base class constructed some controls before we did
-        m_pCharset->SetZOrder(&m_aShowDeleted, WINDOW_ZORDER_BEHIND);
+        m_pCharset->SetZOrder(&m_aShowDeleted, WINDOW_ZORDER_BEFOR);
 
         FreeResource();
     }
@@ -517,6 +518,7 @@ namespace dbaui
 
         ,m_aAdoUrlLabel     (this, ResId(FT_CONNECTURL))
         ,m_aAdoUrl          (this, ResId(ET_CONNECTURL))
+        ,m_aSeparator1      (this, ResId(FL_SEPARATOR1))
     {
         m_aAdoUrl.SetModifyHdl(getControlModifiedLink());
 
@@ -676,7 +678,7 @@ namespace dbaui
     //------------------------------------------------------------------------
     OTextDetailsPage::OTextDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_TEXT, _rCoreAttrs, CBTP_USE_CHARSET)
-
+        ,m_aLineFormat              (this, ResId(FL_SEPARATOR2))
         ,m_aHeader                  (this, ResId(CB_HEADER))
         ,m_aFieldSeparatorLabel     (this, ResId(FT_FIELDSEPARATOR))
         ,m_aFieldSeparator          (this, ResId(CM_FIELDSEPARATOR))
@@ -978,6 +980,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/26 16:14:12  fs
+ *  initial checkin - administration tab pages used for special DSN types
+ *
  *
  *  Revision 1.0 26.01.01 10:41:45  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 16:14:21 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 15:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,8 @@ namespace dbaui
         static sal_Int32* getDetailIds();
 
     private:
-        GroupBox            m_aFrame;
+        FixedLine           m_aLine1;
+        FixedLine           m_aLine2;
         CheckBox            m_aShowDeleted;
         PushButton          m_aIndexes;
 
@@ -184,6 +185,7 @@ namespace dbaui
     private:
         FixedText           m_aAdoUrlLabel;
         OConnectionURLEdit  m_aAdoUrl;
+        FixedLine           m_aSeparator1;
 
         OAdoDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
         ~OAdoDetailsPage();
@@ -238,6 +240,7 @@ namespace dbaui
         static sal_Int32* getDetailIds();
 
     private:
+        FixedLine   m_aLineFormat;
         CheckBox    m_aHeader;
         FixedText   m_aFieldSeparatorLabel;
         ComboBox    m_aFieldSeparator;
@@ -274,6 +277,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/26 16:14:21  fs
+ *  initial checkin - administration tab pages used for special DSN types
+ *
  *
  *  Revision 1.0 26.01.01 10:38:51  fs
  ************************************************************************/
