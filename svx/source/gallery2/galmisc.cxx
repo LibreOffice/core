@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-25 14:47:55 $
+ *  last change: $Author: ka $ $Date: 2000-11-02 11:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,17 +389,14 @@ BOOL CreateDir( const INetURLObject& rURL )
             INetURLObject                           aNewFolderURL( rURL );
             INetURLObject                           aParentURL( aNewFolderURL ); aParentURL.removeSegment();
             Content                                 aParent( aParentURL.GetMainURL(), aCmdEnv );
-            uno::Sequence< OUString >               aProps( 2 );
-            uno::Sequence< uno::Any >               aValues( 2 );
+            uno::Sequence< OUString >               aProps( 1 );
+            uno::Sequence< uno::Any >               aValues( 1 );
 
             aProps.getArray()[ 0 ] = OUString::createFromAscii( "Title" );
             aValues.getArray()[ 0 ] = uno::makeAny( OUString( aNewFolderURL.GetName() ) );
 
-            aProps.getArray()[ 1 ] = OUString::createFromAscii( "IsFolder" );
-            aValues.getArray()[ 1 ] = uno::makeAny( sal_Bool( sal_True ) );
-
-            bRet = aParent.insertNewContent( OUString::createFromAscii( "FSysFolder" ), aProps, aValues,
-                                             Content( aNewFolderURL.GetMainURL(), aCmdEnv ) );
+            bRet = aParent.insertNewContent( OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" ),
+                                             aProps, aValues, Content( aNewFolderURL.GetMainURL(), aCmdEnv ) );
         }
         catch( ... )
         {
