@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CachedContentResultSetStubFactory.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:22 $
+ *  last change:$Date: 2003-01-31 09:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@ import com.sun.star.ucb.XContentProvider;
 import com.sun.star.ucb.XDynamicResultSet;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.AnyConverter;
 import java.io.PrintWriter;
 import lib.StatusException;
 import lib.TestCase;
@@ -188,8 +190,14 @@ public class CachedContentResultSetStubFactory extends TestCase {
                 (OpenMode.ALL, 10000, null, new Property[] {prop},
                  new NumberedSortingInfo[0])) ;
 
-            XDynamicResultSet dynResSet = (XDynamicResultSet)
-                cmdProc.execute(cmd, 0, null) ;
+            XDynamicResultSet dynResSet = null;
+            try {
+                dynResSet = (XDynamicResultSet)
+                    AnyConverter.toObject(new Type(XDynamicResultSet.class),
+                                        cmdProc.execute(cmd, 0, null));
+            } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                throw new StatusException("Couldn't convert Any ",iae);
+            }
 
             resSet = dynResSet.getStaticResultSet() ;
 
