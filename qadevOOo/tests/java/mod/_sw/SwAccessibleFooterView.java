@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAccessibleFooterView.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Date: 2003-01-27 18:18:45 $
+ *  last change: $Date: 2003-02-06 10:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@ import util.AccessibilityTools;
 import util.WriterTools;
 import util.utils;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
 * Test of accessible object for a footer of a text document.<p>
 * Object implements the following interfaces :
@@ -122,14 +125,19 @@ public class SwAccessibleFooterView extends TestCase {
 
         // obtains style 'Standard' from style family 'PageStyles'
         try {
-            PageStyles = (XNameAccess) StyleFamNames.getByName("PageStyles");
-            StdStyle = (XStyle) PageStyles.getByName("Standard");
+            PageStyles = (XNameAccess) AnyConverter.toObject(
+                new Type(XNameAccess.class),StyleFamNames.getByName("PageStyles"));
+            StdStyle = (XStyle) AnyConverter.toObject(
+                    new Type(XStyle.class),PageStyles.getByName("Standard"));
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             e.printStackTrace(log);
             throw new StatusException("Error getting style by name!", e);
         } catch ( com.sun.star.container.NoSuchElementException e ) {
             e.printStackTrace(log);
             throw new StatusException("Error, no such style name! ", e);
+        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
+            e.printStackTrace(log);
+            throw new StatusException("Error getting style by name!", e);
         }
 
         final XPropertySet PropSet = (XPropertySet)
