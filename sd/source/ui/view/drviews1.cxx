@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: af $ $Date: 2002-11-12 10:24:49 $
+ *  last change: $Author: cl $ $Date: 2002-11-29 14:55:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1534,11 +1534,15 @@ sal_Int8 SdDrawViewShell::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHel
     if( nPage != SDRPAGE_NOTFOUND )
         nPage = pDoc->GetSdPage( nPage, ePageKind )->GetPageNum();
 
-    if( nLayer != SDRLAYER_NOTFOUND )
+    if( pFuSlideShow )
     {
+        if( !pFuSlideShow->IsLivePresentation() )
+        {
+            return DND_ACTION_NONE;
+        }
     }
 
-    return( pFuSlideShow ? DND_ACTION_NONE : pDrView->AcceptDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) );
+    return pDrView->AcceptDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer );
 }
 
 /*************************************************************************
@@ -1553,11 +1557,15 @@ sal_Int8 SdDrawViewShell::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetH
     if( nPage != SDRPAGE_NOTFOUND )
         nPage = pDoc->GetSdPage( nPage, ePageKind )->GetPageNum();
 
-    if( nLayer != SDRLAYER_NOTFOUND )
+    if( pFuSlideShow )
     {
+        if( !pFuSlideShow->IsLivePresentation() )
+        {
+            return DND_ACTION_NONE;
+        }
     }
 
-    return( pFuSlideShow ? DND_ACTION_NONE : pDrView->ExecuteDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) );
+    return pDrView->ExecuteDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer );
 }
 
 #ifdef WNT
