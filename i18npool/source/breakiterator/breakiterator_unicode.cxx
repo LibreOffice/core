@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-20 23:17:02 $
+ *  last change: $Author: khong $ $Date: 2002-06-03 19:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include <breakiterator_unicode.hxx>
 #include <unicode.hxx>
 #include <unicode/locid.h>
+#include <unicode/rbbi.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -81,7 +82,7 @@ static UErrorCode status; // status is shared in all calls to Calendar, it has t
 
 BreakIterator_Unicode::BreakIterator_Unicode()
 {
-    characterBreak = wordBreak = sentenceBreak = lineBreak = NULL;
+    characterBreak = dictWordBreak = editWordBreak = sentenceBreak = lineBreak = NULL;
     cBreakIterator = ImplementName;
 }
 
@@ -89,13 +90,15 @@ BreakIterator_Unicode::BreakIterator_Unicode()
 BreakIterator_Unicode::~BreakIterator_Unicode()
 {
     if (characterBreak) delete characterBreak;
-    if (wordBreak) delete wordBreak;
+    if (dictWordBreak) delete dictWordBreak;
+    if (editWordBreak) delete editWordBreak;
     if (sentenceBreak) delete sentenceBreak;
     if (lineBreak) delete lineBreak;
 }
 
 // loading ICU breakiterator on demand.
-static icu::BreakIterator* SAL_CALL loadICUBreakIterator(const com::sun::star::lang::Locale& rLocale, sal_Int16 which) throw(RuntimeException)
+static icu::BreakIterator* SAL_CALL loadICUBreakIterator(const com::sun::star::lang::Locale& rLocale,
+    const sal_Char* rulesName, sal_Int16 which) throw(RuntimeException)
 {
     icu::BreakIterator *breakiterator = NULL;
     icu::Locale icuLocale(
@@ -109,7 +112,7 @@ static icu::BreakIterator* SAL_CALL loadICUBreakIterator(const com::sun::star::l
         breakiterator =  icu::BreakIterator::createCharacterInstance(icuLocale, status);
         break;
         case LOAD_WORD_BREAKITERATOR:
-        breakiterator = icu::BreakIterator::createWordInstance(icuLocale, status);
+        breakiterator = icu::BreakIterator::createWordInstance(icuLocale, rulesName, status);
         break;
         case LOAD_SENTENCE_BREAKITERATOR:
         breakiterator = icu::BreakIterator::createSentenceInstance(icuLocale, status);
@@ -123,13 +126,25 @@ static icu::BreakIterator* SAL_CALL loadICUBreakIterator(const com::sun::star::l
     return breakiterator;
 }
 
+static icu::BreakIterator* SAL_CALL loadICUWordBreakIterator(const com::sun::star::lang::Locale& rLocale,
+    sal_Int16 rWordType, icu::BreakIterator* &dictWordBreak, icu::BreakIterator* &editWordBreak)
+    throw(RuntimeException)
+{
+    if (rWordType == WordType::DICTIONARY_WORD) {
+        if (!dictWordBreak) dictWordBreak = loadICUBreakIterator(rLocale, "dict_word", LOAD_WORD_BREAKITERATOR);
+        return dictWordBreak;
+    } else {
+        if (!editWordBreak) editWordBreak = loadICUBreakIterator(rLocale, "edit_word", LOAD_WORD_BREAKITERATOR);
+        return editWordBreak;
+    }
+}
 
 sal_Int32 SAL_CALL BreakIterator_Unicode::nextCharacters( const OUString& Text,
     sal_Int32 nStartPos, const lang::Locale &rLocale,
     sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
     throw(RuntimeException)
 {
-    if (!characterBreak) characterBreak = loadICUBreakIterator(rLocale, LOAD_CHARACTER_BREAKITERATOR);
+    if (!characterBreak) characterBreak = loadICUBreakIterator(rLocale, "", LOAD_CHARACTER_BREAKITERATOR);
 
     characterBreak->setText(UnicodeString(Text.getStr(), Text.getLength()));
     for (nDone = 0; nDone < nCount; nDone++) {
@@ -146,7 +161,7 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::previousCharacters( const OUString& Te
     throw(RuntimeException)
 {
     if (nCharacterIteratorMode == CharacterIteratorMode::SKIPCELL ) {
-        if (!characterBreak) characterBreak = loadICUBreakIterator(rLocale, LOAD_CHARACTER_BREAKITERATOR);
+        if (!characterBreak) characterBreak = loadICUBreakIterator(rLocale, "", LOAD_CHARACTER_BREAKITERATOR);
 
         characterBreak->setText(UnicodeString(Text.getStr(), Text.getLength()));
         for (nDone = 0; nDone < nCount; nDone++) {
@@ -164,8 +179,7 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::previousCharacters( const OUString& Te
 Boundary SAL_CALL BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int32 nStartPos,
     const lang::Locale& rLocale, sal_Int16 rWordType ) throw(RuntimeException)
 {
-    if (!wordBreak) wordBreak = loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR);
-
+    icu::BreakIterator* wordBreak = loadICUWordBreakIterator(rLocale, rWordType, dictWordBreak, editWordBreak);
     wordBreak->setText(UnicodeString(Text.getStr(), Text.getLength()));
 
     result.startPos = wordBreak->following(nStartPos);
@@ -188,8 +202,7 @@ Boundary SAL_CALL BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int
 Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_Int32 nStartPos,
     const lang::Locale& rLocale, sal_Int16 rWordType) throw(RuntimeException)
 {
-    if (!wordBreak) wordBreak = loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR);
-
+    icu::BreakIterator* wordBreak = loadICUWordBreakIterator(rLocale, rWordType, dictWordBreak, editWordBreak);
     wordBreak->setText(UnicodeString(Text.getStr(), Text.getLength()));
 
     result.startPos = wordBreak->preceding(nStartPos);
@@ -212,8 +225,7 @@ Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_
 Boundary SAL_CALL BreakIterator_Unicode::getWordBoundary( const OUString& Text, sal_Int32 nPos, const lang::Locale& rLocale,
     sal_Int16 rWordType, sal_Bool bDirection ) throw(RuntimeException)
 {
-    if (!wordBreak) wordBreak = loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR);
-
+    icu::BreakIterator* wordBreak = loadICUWordBreakIterator(rLocale, rWordType, dictWordBreak, editWordBreak);
     sal_Int32 len = Text.getLength();
     wordBreak->setText(UnicodeString(Text.getStr(), len));
 
@@ -247,7 +259,7 @@ Boundary SAL_CALL BreakIterator_Unicode::getWordBoundary( const OUString& Text, 
 sal_Int32 SAL_CALL BreakIterator_Unicode::beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
     const lang::Locale &rLocale ) throw(RuntimeException)
 {
-    if (!sentenceBreak) sentenceBreak = loadICUBreakIterator(rLocale, LOAD_SENTENCE_BREAKITERATOR);
+    if (!sentenceBreak) sentenceBreak = loadICUBreakIterator(rLocale, "", LOAD_SENTENCE_BREAKITERATOR);
 
     sentenceBreak->setText(UnicodeString(Text.getStr(), Text.getLength()));
     return sentenceBreak->preceding(nStartPos);
@@ -256,7 +268,7 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::beginOfSentence( const OUString& Text,
 sal_Int32 SAL_CALL BreakIterator_Unicode::endOfSentence( const OUString& Text, sal_Int32 nStartPos,
     const lang::Locale &rLocale ) throw(RuntimeException)
 {
-    if (!sentenceBreak) sentenceBreak = loadICUBreakIterator(rLocale, LOAD_SENTENCE_BREAKITERATOR);
+    if (!sentenceBreak) sentenceBreak = loadICUBreakIterator(rLocale, "", LOAD_SENTENCE_BREAKITERATOR);
 
     sentenceBreak->setText(UnicodeString(Text.getStr(), Text.getLength()));
 
@@ -275,16 +287,11 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
 {
     LineBreakResults result;
 
-    if (!lineBreak) lineBreak = loadICUBreakIterator(rLocale, LOAD_LINE_BREAKITERATOR);
+    if (!lineBreak) lineBreak = loadICUBreakIterator(rLocale, "", LOAD_LINE_BREAKITERATOR);
 
-    if ((bOptions.allowPunctuationOutsideMargin &&
+    if (bOptions.allowPunctuationOutsideMargin &&
         bOptions.forbiddenBeginCharacters.indexOf(Text[nStartPos]) != -1 &&
-        ++nStartPos == Text.getLength()) ||
-        // Bug 4503876. We fixed the problem in 6.0 by changing line break data.
-        // Since we are using ICU data after 6.0, and it is difficult to patch line
-        // break data in ICU, because the data is in binary mode, we have to add
-        // following condition to break Hangul characters for line break.
-        unicode::isUnicodeScriptType(Text[nStartPos], UnicodeScript_kHangulSyllable)) {
+        ++nStartPos == Text.getLength()) {
         result.breakIndex = nStartPos;
         result.breakType = BreakType::WORDBOUNDARY;
         return result;
@@ -318,24 +325,11 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
         result.breakType = BreakType::WORDBOUNDARY;
     }
 
-    if (0 < result.breakIndex && result.breakIndex < Text.getLength()) {
-
-        // Bug 4627181. ICU has defined line can be broken after ':' and 0x00BB (end quotation mark).
-        // In StarOffice, we don't want ':' to be broken in any locale and 0x00BB in German locale
-        // since 0x00BB are commonly used as start quotation mark in German.
-        sal_Unicode ch = Text[result.breakIndex-1];
-        while (ch == 0x003A || (ch == 0x00BB && rLocale.Language.compareToAscii("de") == 0)) {
-        result.breakIndex = lineBreak->preceding(result.breakIndex-1);
-        if (result.breakIndex <= 0) return result;
-        ch = Text[result.breakIndex-1];
-        }
-
-        if (bOptions.applyForbiddenRules) {
+    if (bOptions.applyForbiddenRules && 0 < result.breakIndex && result.breakIndex < Text.getLength()) {
         while (result.breakIndex > 0 &&
             (bOptions.forbiddenBeginCharacters.indexOf(Text[result.breakIndex]) != -1 ||
             bOptions.forbiddenEndCharacters.indexOf(Text[result.breakIndex - 1]) != -1))
-            result.breakIndex--;
-        }
+        result.breakIndex--;
     }
     return result;
 }

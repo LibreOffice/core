@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_unicode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:57:44 $
+ *  last change: $Author: khong $ $Date: 2002-06-03 19:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ protected:
 private:
     rtl::OUString cachedText;   // for script boundary
     sal_Int32 scriptStart, scriptLength;
-    icu::BreakIterator *characterBreak, *wordBreak, *sentenceBreak, *lineBreak;
+    icu::BreakIterator *characterBreak, *editWordBreak, *dictWordBreak, *sentenceBreak, *lineBreak;
     sal_Int32 SAL_CALL setTextByScriptBoundary(const rtl::OUString& Text, sal_Int32 nPos);
 };
 
