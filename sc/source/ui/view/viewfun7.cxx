@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:11:03 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
             SdrPage* pDestPage = pModel->GetPage( static_cast<sal_uInt16>(GetViewData()->GetTabNo()) );
             DBG_ASSERT(pDestPage,"nanu, Page?");
 
-            SdrMarkList aMark = pDragEditView->GetMarkList();
+            SdrMarkList aMark = pDragEditView->GetMarkedObjectList();
             aMark.ForceSort();
             ULONG nMarkAnz=aMark.GetMarkCount();
             for (ULONG nm=0; nm<nMarkAnz; nm++) {
