@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:21:34 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 17:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ TabDialog DLG_LAB
         Text = "Medium" ;
         Text [ ENGLISH ] = "Media" ;
         Text[ english_us ] = "Medium";
-        Text[ portuguese ] = "Media";
+        Text[ portuguese ] = "Tipo";
         Text[ russian ] = "Средство";
         Text[ greek ] = "МЭупн";
         Text[ dutch ] = "Medium";
@@ -711,7 +711,7 @@ FloatingWindow DLG_SYNC_BTN
         Text[ chinese_simplified ] = "±кЗ©Н¬ІЅ»Ї";
         Text[ russian ] = "Синхронизировать наклейки";
         Text[ polish ] = "Synchronizuj etykiety";
-        Text[ japanese ] = "ЧНЮЩ‚р“ЇЉъ‚·‚й";
+        Text[ japanese ] = "ЧНЮЩ‚р“ЇЉъ‚і‚№‚й";
         Text[ chinese_traditional ] = "¶KјР¦PЁB¤Ж";
         Text[ arabic ] = "КТЗгд ИШЗЮЗК ЗбЪдждЙ";
         Text[ greek ] = "Ухгчспнйумьт ефйкефюн";
@@ -1080,7 +1080,7 @@ TabPage TP_PRIVATE_DATA
         Text[ russian ] = "Страна/область";
         Text[ greek ] = "Чюсб";
         Text[ dutch ] = "~Land";
-        Text[ french ] = "~Pays/Йtat (US)";
+        Text[ french ] = "~Pays";
         Text[ spanish ] = "~Paнs/Provincia";
         Text[ italian ] = "Provincia/Paese";
         Text[ danish ] = "Land";
@@ -1462,7 +1462,7 @@ TabPage TP_BUSINESS_DATA
         Text[ russian ] = "Страна/область";
         Text[ greek ] = "Чюсб";
         Text[ dutch ] = "~Land";
-        Text[ french ] = "~Pays/Йtat (US)";
+        Text[ french ] = "~Pays";
         Text[ spanish ] = "Paнs/Pro~vincia";
         Text[ italian ] = "Provincia/Paese";
         Text[ danish ] = "Land";
