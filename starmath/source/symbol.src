@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-21 21:16:35 $
+ *  last change: $Author: nf $ $Date: 2002-01-22 14:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,7 +1043,7 @@ Resource RID_LOCALIZED_NAMES
         < "ALFA" ; > ;
         < "beta" ; > ;
         < "BETA" ; > ;
-        < "Gamma" ; > ;
+        < "gamma" ; > ;
         < "GAMMA" ; > ;
         < "delta" ; > ;
         < "DELTA" ; > ;
