@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:11:39 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,6 +377,9 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                 break;
         }
 
+#if 0   // TODO: this should only happen if the mouse pointer is over the menu
+        // as it only affects a single window manager, a better solution should be found
+        // currently it makes exact positioning impossible
         /*
          *  #95901# avoid mouse pointer for popup menus because
          *  of sawfish window manager. This cannot be done in
@@ -387,6 +390,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
               (nArrangeAry[nArrangeIndex] == FLOATWIN_POPUPMODE_RIGHT) )
             && ( nFlags & FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE ) )
             aPos.X() += 2;
+#endif
 
         // Evt. noch anpassen
         if ( bBreak && !(nFlags & FLOATWIN_POPUPMODE_NOAUTOARRANGE) )
@@ -467,19 +471,24 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( Window* pReference, const Poin
 
     do
     {
-        Rectangle devRect( pWin->ImplOutputToUnmirroredAbsoluteScreenPixel( Rectangle( pWin->ScreenToOutputPixel(pWin->GetPosPixel()), pWin->GetSizePixel()) ) ) ;
+        // compute the floating window's size in absolute screen coordinates
+
+        // use the border window to have the exact position
+        Window *pBorderWin = pWin->GetWindow( WINDOW_BORDER );
+
+        Point aPt;  // the top-left corner in output coordinates ie (0,0)
+        Rectangle devRect( pBorderWin->ImplOutputToUnmirroredAbsoluteScreenPixel( Rectangle( aPt, pBorderWin->GetSizePixel()) ) ) ;
         if ( devRect.IsInside( aAbsolute ) )
         {
             rHitTest = IMPL_FLOATWIN_HITTEST_WINDOW;
             return pWin;
         }
 
-        // test, if mouse in rectangle
-        /*
-         *  maFloatRect is set in startpopup mode and
-         *  already is in parent coordinates.
-         */
-        if ( pWin->maFloatRect.IsInside( rPos ) )
+        // test, if mouse is in rectangle, (this is typically the rect of the active
+        // toolbox item or similar)
+        // note: maFloatRect is set in FloatingWindow::StartPopupMode() and
+        //       is already in absolute device coordinates
+        if ( pWin->maFloatRect.IsInside( aAbsolute ) )
         {
             rHitTest = IMPL_FLOATWIN_HITTEST_RECT;
             return pWin;
@@ -636,18 +645,14 @@ void FloatingWindow::SetTitleType( USHORT nTitle )
 
 void FloatingWindow::StartPopupMode( const Rectangle& rRect, ULONG nFlags )
 {
-    DBG_ASSERT( (GetStyle() & WB_MOVEABLE) || !(nFlags & FLOATWIN_POPUPMODE_ALLOWTEAROFF),
-                "TearOff only allowed, when FloatingWindow moveable" );
-
-    // Wenn Fenster sichtbar, dann vorher hiden, da es sonst flackert
+    // avoid flickering
     if ( IsVisible() )
         Show( FALSE, SHOW_NOFOCUSCHANGE );
 
-    // Wenn Fenster klein, dann vorher aufklappen
     if ( IsRollUp() )
         RollDown();
 
-    // Title wegnehmen
+    // remove title
     mnOldTitle = mnTitle;
     if ( nFlags & FLOATWIN_POPUPMODE_ALLOWTEAROFF )
         SetTitleType( FLOATWIN_TITLE_TEAROFF );
@@ -661,17 +666,20 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, ULONG nFlags )
         nFlags &= ~FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
 
     // #102010# For debugging Accessibility
-    // MT->SSA: I wanted to set that flag in menu.cxx, why do you remove it above???
     static const char* pEnv = getenv("SAL_FLOATWIN_NOAPPFOCUSCLOSE" );
     if( pEnv && *pEnv )
         nFlags |= FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
 
-    // Fenster-Position ermitteln und setzen
+    // compute window position according to flags and arrangement
     USHORT nArrangeIndex;
     SetPosPixel( ImplCalcPos( this, rRect, nFlags, nArrangeIndex ) );
 
-    // Daten seten und Fenster anzeigen
+    // set data and display window
+    // convert maFloatRect to absolute device coordinates
+    // so they can be compared across different frames
+    // !!! rRect is expected to be in screen coordinates of the parent frame window !!!
     maFloatRect             = rRect;
+    maFloatRect.SetPos( GetParent()->OutputToAbsoluteScreenPixel( GetParent()->ScreenToOutputPixel( rRect.TopLeft() ) ) );
     maFloatRect.Left()     -= 2;
     maFloatRect.Top()      -= 2;
     maFloatRect.Right()    += 2;
@@ -686,50 +694,15 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, ULONG nFlags )
     mbOldSaveBackMode       = IsSaveBackgroundEnabled();
     EnableSaveBackground();
 
-/*
-    // Abfragen, ob Animation eingeschaltet ist
-    if ( (Application::GetSettings().GetAnimationOptions() & ANIMATION_OPTION_POPUP) &&
-         !(nFlags & FLOATWIN_POPUPMODE_NOANIMATION) )
-    {
-        USHORT nAniFlags;
-        switch ( nArrangeAry[nArrangeIndex] )
-        {
-            case FLOATWIN_POPUPMODE_LEFT:
-                nAniFlags = STARTANIMATION_LEFT;
-                break;
-            case FLOATWIN_POPUPMODE_RIGHT:
-                nAniFlags = STARTANIMATION_RIGHT;
-                break;
-            case FLOATWIN_POPUPMODE_UP:
-                nAniFlags = STARTANIMATION_UP;
-                break;
-            case FLOATWIN_POPUPMODE_DOWN:
-                nAniFlags = STARTANIMATION_DOWN;
-                break;
-        }
-        if ( !(nFlags & FLOATWIN_POPUPMODE_ANIMATIONSLIDE) )
-        {
-            if ( bLeft )
-                nAniFlags |= STARTANIMATION_LEFT;
-            else
-                nAniFlags |= STARTANIMATION_RIGHT;
-            if ( bTop )
-                nAniFlags |= STARTANIMATION_UP;
-            else
-                nAniFlags |= STARTANIMATION_DOWN;
-        }
-
-        ImpStartAnimation( this, nAniFlags );
-    }
-    else
-*/
-    // FloatingWindow in Liste der Fenster aufnehmen, die sich im PopupModus
-    // befinden
+    // add FloatingWindow to list of windows that are in popup mode
     ImplSVData* pSVData = ImplGetSVData();
     mpNextFloat = pSVData->maWinData.mpFirstFloat;
     pSVData->maWinData.mpFirstFloat = this;
     if( nFlags & FLOATWIN_POPUPMODE_GRABFOCUS )
-        mbGrabFocus = TRUE;     // force key input even without focus (useful for menues)
+    {
+        // force key input even without focus (useful for menues)
+        mbGrabFocus = TRUE;
+    }
     Show( TRUE, SHOW_NOACTIVATE );
 }
 
@@ -737,7 +710,7 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, ULONG nFlags )
 
 void FloatingWindow::StartPopupMode( ToolBox* pBox, ULONG nFlags )
 {
-    // Selektieten Button ermitteln
+    // get selected button
     USHORT nItemId = pBox->GetDownItemId();
     if ( !nItemId )
         return;
@@ -745,9 +718,10 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, ULONG nFlags )
     mpBox = pBox;
     pBox->ImplFloatControl( TRUE, this );
 
-    // Daten von der ToolBox holen
+    // retrieve some data from the ToolBox
     Rectangle aRect = pBox->GetItemRect( nItemId );
     Point aPos;
+    // convert to parent's screen coordinates
     aPos = GetParent()->OutputToScreenPixel( GetParent()->AbsoluteScreenToOutputPixel( pBox->OutputToAbsoluteScreenPixel( aRect.TopLeft() ) ) );
     aRect.SetPos( aPos );
 
