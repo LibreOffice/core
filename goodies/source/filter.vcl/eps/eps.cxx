@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-09 12:09:18 $
+ *  last change: $Author: sj $ $Date: 2002-03-12 15:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,6 +580,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     ImplWriteLine( "/r {rotate} bdef" );
     ImplWriteLine( "/t {neg translate} bdef" );
     ImplWriteLine( "/s {scale} bdef" );
+    ImplWriteLine( "/sw {show} bdef" );
     ImplWriteLine( "/gs {gsave} bdef" );
     ImplWriteLine( "/gr {grestore} bdef" );
 
@@ -1783,7 +1784,7 @@ void PSWriter::ImplWriteString( const ByteString& rString, const INT32* pDXArry,
             ImplWriteByte( '(', PS_NONE );
             for ( i = 0; i < nLen; i++ )
                 ImplWriteCharacter( rString.GetChar( i ) );
-            ImplWriteLine( ") s" );
+            ImplWriteLine( ") sw" );
         }
     }
 }
