@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ExceptionStatus.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-11-18 16:15:15 $
+ *  last change:$Date: 2004-11-02 11:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@ package lib;
  * The class implements Status behaviour for exception runstate Status objects.
  */
 class ExceptionStatus extends Status {
-    /**
-     * Contains the exception which caused the abnormal activty termination.
-     */
-    private final Throwable exception;
 
     /**
      * Creates an instance of Status object with EXCEPTION runstate.
@@ -76,51 +72,11 @@ class ExceptionStatus extends Status {
      * @param t the exception an activity terminated with.
      */
     ExceptionStatus( Throwable t ) {
-        exception = t;
+        super(EXCEPTION, FAILED);
+        String message = t.getMessage();
+        if (message != null)
+            runStateString = message;
+        else
+            runStateString = t.toString();
     }
-
-    /**
-     * @return state of the Status: FAILED.
-     */
-    public int getState() {
-        return FAILED;
-    }
-
-    /**
-     * @return the run state of the Status: EXCEPTION.
-     */
-    public int getRunState() {
-        return EXCEPTION;
-    }
-
-    /**
-     * @return a string describing run state of the Status.
-     */
-    public String getRunStateString() {
-        return exception.toString();
-    }
-
-    /**
-     * Compares this Status with obj.
-     *
-     * @return <tt>true</tt> if obj is an ExceptionStatus instance and has
-     * a similar exception.
-     */
-/*    public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof ExceptionStatus)) {
-            return false;
-        }
-
-        ExceptionStatus other = (ExceptionStatus)obj;
-
-        if (this.exception.getClass() != other.exception.getClass()) {
-            return false;
-        }
-
-        String thisMess = this.exception.getMessage();
-        String otherMess = other.exception.getMessage();
-
-        return (thisMess == otherMess)
-                || (thisMess != null && thisMess.equals(otherMess));
-    } */
 }
