@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: os $ $Date: 2002-04-17 07:26:25 $
+ *  last change: $Author: os $ $Date: 2002-05-29 14:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,11 +863,11 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
     rOpt.nMergeCnt = pImpl->pMergeData && pImpl->pMergeData->aSelection.getLength();
 
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
-    rOpt.bSinglePrtJobs = pModOpt->IsSinglePrintJob();
+    pModOpt->SetSinglePrintJob(rOpt.IsPrintSingleJobs());
 
     SfxPrinter *pPrt = pSh->GetPrt();
     Link aSfxSaveLnk = pPrt->GetEndPrintHdl();
-    if( rOpt.bSinglePrtJobs  )
+    if( rOpt.IsPrintSingleJobs()  )
         pPrt->SetEndPrintHdl( Link() );
 
     BOOL bNewJob = FALSE,
@@ -880,7 +880,7 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
             ++rOpt.nMergeAct;
             rView.SfxViewShell::Print( rProgress ); // ggf Basic-Macro ausfuehren
 
-            if( rOpt.bSinglePrtJobs && bRet )
+            if( rOpt.IsPrintSingleJobs() && bRet )
             {
                 //rOpt.bJobStartet = FALSE;
                 bRet = FALSE;
@@ -903,7 +903,7 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
                 bRet = FALSE;
                 break;
             }
-            if( !rOpt.bSinglePrtJobs )
+            if( !rOpt.IsPrintSingleJobs() )
             {
                 String& rJNm = (String&)rOpt.GetJobName();
                 rJNm.Erase();
@@ -911,7 +911,7 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
         }
     } while( bSynchronizedDoc ? ExistsNextRecord() : ToNextMergeRecord());
 
-    if( rOpt.bSinglePrtJobs )
+    if( rOpt.IsPrintSingleJobs() )
     {
         pSh->GetPrt()->SetEndPrintHdl( aSfxSaveLnk );
         if ( !bUserBreak && !pSh->GetPrt()->IsJobActive() )     //Schon zu spaet?

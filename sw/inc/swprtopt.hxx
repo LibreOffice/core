@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swprtopt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 08:41:58 $
+ *  last change: $Author: os $ $Date: 2002-05-29 14:26:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,8 @@ class SwPrtOptions : public SwPrintData
 public:
     SwPrtOptions( const String& rJobName ) : aOffset( Point(0,0) ),
         nMergeCnt( 0 ), nMergeAct( 0 ), sJobName( rJobName ),
-        nJobNo( 1 )
+        nJobNo( 1 ),  bCollate(FALSE), bPrintSelection (FALSE),
+        bJobStartet(FALSE)
     {}
 
     const String& MakeNextJobName();        // steht in vprint.cxx
@@ -99,23 +100,8 @@ public:
     ULONG  nMergeAct;           // Aktueller Serienbriefnr.
     USHORT nCopyCount;
 
-//    USHORT nPrintPostIts;
-//    BOOL   bPrintGraph,         //Grafiken/OLE Drucken
-//           bPrintTable,         //Tabellen Drucken
-//           bPrintDraw,          //Zeichenobjekte Drucken
-//           bPrintControl,       //Controls Drucken
-//           bPrintLeftPage,
-//           bPrintRightPage,
-//           bPrintReverse,
-//           bPaperFromSetup,
     BOOL   bCollate,
-
            bPrintSelection,     // Markierung drucken
-
-//           bPrintPageBackground,
-//           bPrintBlackFont,
-
-           bSinglePrtJobs,
            bJobStartet;
 
         SwPrtOptions& operator=(const SwPrintData& rData)

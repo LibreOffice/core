@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 08:45:10 $
+ *  last change: $Author: os $ $Date: 2002-05-29 14:27:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,7 +1045,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
             USHORT nLastPageNo  = 0;
             USHORT nPageNo      = 1;
 
-            if( rOptions.bSinglePrtJobs && sJobName.Len() &&
+            if( rOptions.IsPrintSingleJobs() && sJobName.Len() &&
                 ( bStartJob || rOptions.bJobStartet ) )
             {
                 pPrt->EndJob();
@@ -1557,6 +1557,9 @@ void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/05/10 08:45:10  os
+      store print options at the document
+
       Revision 1.5  2001/03/02 10:25:44  ama
       Fix #65244#: Right and left pages, virtual page numbering
 

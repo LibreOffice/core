@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:46:20 $
+ *  last change: $Author: os $ $Date: 2002-05-29 14:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,7 +661,7 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
 
     for ( USHORT nCnt = 0; nCnt < nCopyCnt; nCnt++ )
     {
-        if( rOptions.bSinglePrtJobs && rOptions.GetJobName().Len() &&
+        if( rOptions.IsPrintSingleJobs() && rOptions.GetJobName().Len() &&
             ( bStartJob || rOptions.bJobStartet ) )
         {
             pPrt->EndJob();
@@ -1080,7 +1080,7 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
 
     for( USHORT nCnt = 0; nCnt < nCopyCnt; nCnt++ )
     {
-        if( rOptions.bSinglePrtJobs && rOptions.GetJobName().Len() &&
+        if( rOptions.IsPrintSingleJobs() && rOptions.GetJobName().Len() &&
             ( bStartJob || rOptions.bJobStartet ) )
         {
             pPrt->EndJob();
@@ -1333,6 +1333,9 @@ Point ViewShell::GetPreviewFreePix() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2002/05/22 11:46:20  dvo
+      #95586# made page preview accessible
+
       Revision 1.6  2002/05/13 12:13:27  os
       #90353# new[]-delete[] mix fixed
 

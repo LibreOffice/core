@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-07-13 09:15:48 $
+ *  last change: $Author: os $ $Date: 2002-05-29 14:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef _DBUI_HXX
 #include <dbui.hxx>
+#endif
+#ifndef _PRTOPT_HXX
+#include <prtopt.hxx>
 #endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
@@ -708,6 +711,13 @@ void SwMailMergeDlg::ExecQryShell(BOOL bVisible)
                 pGridSelection[nSel] >>= pDlgSelection[nSel];
         }
     }
+    SwPrintData aPrtData = *SW_MOD()->GetPrtOptions(FALSE);
+    SwPrintData* pShellPrintData = rSh.GetPrintData();
+    if(pShellPrintData)
+        aPrtData = *pShellPrintData;
+    aPrtData.SetPrintSingleJobs(aSingleJobsCB.IsChecked());
+    rSh.SetPrintData(aPrtData);
+
     pModOpt->SetSinglePrintJob(aSingleJobsCB.IsChecked());
 
     BYTE nMailingMode = 0;
