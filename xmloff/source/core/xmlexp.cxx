@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-14 15:08:53 $
+ *  last change: $Author: dvo $ $Date: 2001-03-19 16:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,14 +638,10 @@ sal_uInt32 SvXMLExport::exportDoc( const sal_Char *pClass )
     // <office:document ...>
     CheckAttrList();
 
-    // office:class = ...
-    if( pClass )
-        AddAttributeASCII( XML_NAMESPACE_OFFICE, sXML_class, pClass );
-
-    // office:version = ...
-    if( !bExtended )
-        AddAttributeASCII( XML_NAMESPACE_OFFICE, sXML_version, sXML_0_9 );
-
+    // namespace attributes
+    // ( The namespace decls should be first attributes in the element;
+    //   some faulty XML parsers (JAXP1.1) have a problem with this,
+    //   also it's more elegant )
     sal_uInt16 nPos = pNamespaceMap->GetFirstIndex();
     while( USHRT_MAX != nPos )
     {
@@ -654,6 +650,14 @@ sal_uInt32 SvXMLExport::exportDoc( const sal_Char *pClass )
                                  pNamespaceMap->GetNameByIndex( nPos ) );
         nPos = pNamespaceMap->GetNextIndex( nPos );
     }
+
+    // office:class = ...
+    if( pClass )
+        AddAttributeASCII( XML_NAMESPACE_OFFICE, sXML_class, pClass );
+
+    // office:version = ...
+    if( !bExtended )
+        AddAttributeASCII( XML_NAMESPACE_OFFICE, sXML_version, sXML_0_9 );
 
     {
         char* pRootService;
