@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:18:33 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #ifdef PCH
 #include "ui_pch.hxx"
 #endif
+
+
 
 #pragma hdrstop
 
@@ -141,6 +143,9 @@
 #include "transobj.hxx"
 #include "detfunc.hxx"
 #include "preview.hxx"
+
+#include <svx/xmlsecctrl.hxx>
+
 
 #define ScModule
 #include "scslots.hxx"
@@ -434,6 +439,11 @@ void ScModule::FillStatusBar(StatusBar& rStatusBar)
     // Dokument geaendert
     rStatusBar.InsertItem( SID_DOC_MODIFIED,
                             SvxModifyControl::GetDefItemWidth(rStatusBar));
+
+    // signatures
+    rStatusBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rStatusBar ), SIB_USERDRAW );
+    rStatusBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
+
 
     rStatusBar.SetHelpId( SID_DOC_MODIFIED, SID_DOC_MODIFIED );
 
