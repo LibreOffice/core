@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:23:35 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,31 +600,22 @@ String RID_STR_SYNTAXERROR
     Text[ slovenian ] = "Napaka v sintaksi poizvedbe";
 };
 
+String RID_STR_INCOMPATIBLE_TYPES
+{
+    Text [ language_user1 ] = "This is a technical error message, which will never be visible at the user interface, "
+        "but is only seen by people who work with OOo's UNO API.";
 
+    Text = "Die von dem Binding unterstützten Typen können nicht zum Datenaustausch mit diesem Kontrollfeld benutzt werden.";
+    Text [ english ] = "The value types supported by the binding cannot be used for exchanging data with this control.";
+    Text [ english_us ] = "The value types supported by the binding cannot be used for exchanging data with this control.";
+};
 
+String RID_STR_INVALID_VALIDATOR
+{
+    Text [ language_user1 ] = "This is a technical error message, which will never be visible at the user interface, "
+        "but is only seen by people who work with OOo's UNO API.";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    Text = "Das Kontrollfeld hat eine Bindung an einen externen Wert, welche gleichzeitig als Validator fungiert. Diese Bindung muß gelöst werden, bevor ein neuer Validator eingesetzt werden kann.";
+    Text [ english ] = "The control is connected to an external value binding, which at the same time acts as validator. You need to revoke the value binding, before you can set a new validator.";
+    Text [ english_us ] = "The control is connected to an external value binding, which at the same time acts as validator. You need to revoke the value binding, before you can set a new validator.";
+};
