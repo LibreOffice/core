@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 16:59:49 $
+ *  last change: $Author: rt $ $Date: 2005-03-01 09:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,7 +638,7 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
     }
 
     // #i43005# repaint problems when deleting controls
-    Wallpaper aWallpaper( Color( COL_WHITE ) );
+    Wallpaper aWallpaper = Wallpaper( Color( COL_WHITE ) );
     if ( pWindow )
         pWindow->DrawWallpaper( aPaintRect, aWallpaper );
 
