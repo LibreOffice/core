@@ -11,7 +11,7 @@ touch: ..\%__SRC%\misc\basic.hid %_DEST%\bin%_EXT%\basic.hid
 ..\%__SRC%\misc\sb?????.map %_DEST%\bin%_EXT%\sb?????.map
 ..\%__SRC%\bin\testtool.exe %_DEST%\bin%_EXT%\testtool.exe
 ..\%__SRC%\bin\testtool %_DEST%\bin%_EXT%\testtool.bin
-..\%__SRC%\bin\stt%UPD%49.res %_DEST%\bin%_EXT%\testtool.res
+..\%__SRC%\bin\stt???49.res %_DEST%\bin%_EXT%\testtool.res
 ..\%__SRC%\bin\stt*.res %_DEST%\bin%_EXT%\stt*.res
 ..\%__SRC%\inc\classes %_DEST%\bin%_EXT%\classes
 ..\%__SRC%\inc\keycodes %_DEST%\bin%_EXT%\keycodes
