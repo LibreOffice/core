@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-25 12:06:22 $
+ *  last change: $Author: os $ $Date: 2000-10-20 12:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,6 +323,7 @@ SwTxtAttr* SwTxtNode::MakeTxtAttr( const SfxPoolItem& rAttr,
         pNew = new SwTxtTOXMark( (SwTOXMark&)rNew, nStt, &nEnd );
         break;
     case RES_UNKNOWNATR_CONTAINER:
+    case RES_TXTATR_UNKNOWN_CONTAINER:
         pNew = new SwTxtXMLAttrContainer( (SvXMLAttrContainerItem&)rNew,
                                         nStt, nEnd );
         break;
