@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propimp0.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-08 15:35:04 $
+ *  last change: $Author: cl $ $Date: 2001-01-30 14:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #include <com/sun/star/drawing/LineDash.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
@@ -95,55 +99,6 @@ using namespace ::com::sun::star;
 //////////////////////////////////////////////////////////////////////////////
 // implementation of presentation page property Change
 
-
-XMLDashArrayPropertyHdl::~XMLDashArrayPropertyHdl()
-{
-}
-
-sal_Bool XMLDashArrayPropertyHdl::equals(
-    const ::com::sun::star::uno::Any& r1,
-    const ::com::sun::star::uno::Any& r2 ) const
-{
-    sal_Int32 nChange1, nChange2;
-
-    if((r1 >>= nChange1) && (r2 >>= nChange2))
-        return (nChange1 == nChange2);
-    return sal_False;
-}
-
-sal_Bool XMLDashArrayPropertyHdl::importXML(
-    const OUString& rStrImpValue,
-    ::com::sun::star::uno::Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
-{
-    sal_Bool bRetval(sal_False);
-
-
-    return bRetval;
-}
-
-sal_Bool XMLDashArrayPropertyHdl::exportXML(
-    OUString& rStrExpValue,
-    const ::com::sun::star::uno::Any& rValue,
-    const SvXMLUnitConverter& rUnitConverter ) const
-{
-    sal_Int32 nVal;
-    sal_Bool bRetval(sal_False);
-
-    if(rValue >>= nVal)
-    {
-
-    sal_Int16 Dots;
-    sal_Int32 DotLen;
-    sal_Int16 Dashes;
-    sal_Int32 DashLen;
-    sal_Int32 Distance;
-
-    }
-
-    return bRetval;
-}
-
 //////////////////////////////////////////////////////////////////////////////
 // implementation of an effect duration property handler
 
@@ -157,10 +112,11 @@ sal_Bool XMLDurationPropertyHdl::importXML(
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
 {
-    const String aStr( rStrImpValue );
+    util::DateTime aTime;
+    SvXMLUnitConverter::convertTime( aTime,  rStrImpValue );
 
-    sal_Int32 nVal = aStr.ToInt32();
-    rValue <<= nVal;
+    const sal_Int32 nSeconds = ( aTime.Hours * 60 + aTime.Minutes ) * 60 + aTime.Seconds;
+    rValue <<= nSeconds;
 
     return sal_True;
 }
@@ -174,9 +130,10 @@ sal_Bool XMLDurationPropertyHdl::exportXML(
 
     if(rValue >>= nVal)
     {
+        util::DateTime aTime( 0, (sal_uInt16)nVal, 0, 0, 0, 0, 0 );
+
         OUStringBuffer aOut;
-        aOut.append( nVal );
-        aOut.append( OUString::createFromAscii( "s" ));
+        SvXMLUnitConverter::convertTime( aOut, aTime );
         rStrExpValue = aOut.makeStringAndClear();
         return sal_True;
     }

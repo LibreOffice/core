@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: mtg $ $Date: 2001-01-25 12:20:19 $
+ *  last change: $Author: cl $ $Date: 2001-01-30 14:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,11 +193,19 @@ XML_CONSTASCII_ACTION( sXML_alphabetical_index_mark_end, "alphabetical-index-mar
 XML_CONSTASCII_ACTION( sXML_alphabetical_index_mark_start, "alphabetical-index-mark-start" );
 XML_CONSTASCII_ACTION( sXML_alphabetical_index_source, "alphabetical-index-source" );
 XML_CONSTASCII_ACTION( sXML_alphabetical_separators, "alphabetical-separators" );
+XML_CONSTASCII_ACTION( sXML_alternate, "alternate" );
 XML_CONSTASCII_ACTION( sXML_am_pm, "am-pm" );
 XML_CONSTASCII_ACTION( sXML_ambient_color, "ambient-color");
 XML_CONSTASCII_ACTION( sXML_anchor_page_number, "anchor-page-number" );
 XML_CONSTASCII_ACTION( sXML_anchor_type, "anchor-type" );
 XML_CONSTASCII_ACTION( sXML_and, "and" );
+XML_CONSTASCII_ACTION( sXML_animation, "animation" );
+XML_CONSTASCII_ACTION( sXML_animation_direction, "animation-direction" );
+XML_CONSTASCII_ACTION( sXML_animation_start_inside, "animation-start-inside" );
+XML_CONSTASCII_ACTION( sXML_animation_stop_inside, "animation-stop-inside" );
+XML_CONSTASCII_ACTION( sXML_animation_repeat, "animation-repeat" );
+XML_CONSTASCII_ACTION( sXML_animation_delay, "animation-delay" );
+
 XML_CONSTASCII_ACTION( sXML_annotation, "annotation" );
 XML_CONSTASCII_ACTION( sXML_annotations, "annotations" );
 XML_CONSTASCII_ACTION( sXML_annote, "annote" );
@@ -221,6 +229,7 @@ XML_CONSTASCII_ACTION( sXML_author_name, "author-name" );
 XML_CONSTASCII_ACTION( sXML_auto, "auto" );
 XML_CONSTASCII_ACTION( sXML_auto_reload, "auto-reload" );
 XML_CONSTASCII_ACTION( sXML_auto_text_indent, "auto-text-indent" );
+XML_CONSTASCII_ACTION( sXML_up, "up" );
 XML_CONSTASCII_ACTION( sXML_auto_update, "auto-update" );
 XML_CONSTASCII_ACTION( sXML_automatic, "automatic");
 XML_CONSTASCII_ACTION( sXML_automatic_find_labels, "automatic-find-labels" );
@@ -255,6 +264,7 @@ XML_CONSTASCII_ACTION( sXML_bind_styles_to_content, "bind-styles-to-content");
 XML_CONSTASCII_ACTION( sXML_bitmap , "bitmap" );
 XML_CONSTASCII_ACTION( sXML_black, "black" );
 XML_CONSTASCII_ACTION( sXML_blend, "blend" );
+XML_CONSTASCII_ACTION( sXML_blinking, "blinking" );
 XML_CONSTASCII_ACTION( sXML_block, "block" );
 XML_CONSTASCII_ACTION( sXML_block_list, "block-list" );
 XML_CONSTASCII_ACTION( sXML_blue , "blue" );
@@ -531,6 +541,7 @@ XML_CONSTASCII_ACTION( sXML_dot, "dot" );
 XML_CONSTASCII_ACTION( sXML_dotted, "dotted" );
 XML_CONSTASCII_ACTION( sXML_double, "double" );
 XML_CONSTASCII_ACTION( sXML_double_sided, "double-sided" );
+XML_CONSTASCII_ACTION( sXML_down, "down" );
 XML_CONSTASCII_ACTION( sXML_draft, "draft");
 XML_CONSTASCII_ACTION( sXML_draw, "draw" );
 XML_CONSTASCII_ACTION( sXML_drawing, "drawing" );
@@ -1279,6 +1290,7 @@ XML_CONSTASCII_ACTION( sXML_school, "school" );
 XML_CONSTASCII_ACTION( sXML_scientific_number, "scientific-number" );
 XML_CONSTASCII_ACTION( sXML_score_spaces, "score-spaces" );
 XML_CONSTASCII_ACTION( sXML_script, "script" );
+XML_CONSTASCII_ACTION( sXML_scroll, "scroll" );
 XML_CONSTASCII_ACTION( sXML_sdev, "sdev" );
 XML_CONSTASCII_ACTION( sXML_search_criteria_must_apply_to_whole_cell, "search-criteria-must-apply-to-whole-cell" );
 XML_CONSTASCII_ACTION( sXML_sec, "sec" );
@@ -1338,6 +1350,7 @@ XML_CONSTASCII_ACTION( sXML_simple, "simple" );
 XML_CONSTASCII_ACTION( sXML_sin, "sin" );
 XML_CONSTASCII_ACTION( sXML_sinh, "sinh" );
 XML_CONSTASCII_ACTION( sXML_size, "size" );
+XML_CONSTASCII_ACTION( sXML_slide, "slide" );
 XML_CONSTASCII_ACTION( sXML_slow, "slow" );
 XML_CONSTASCII_ACTION( sXML_solid, "solid" );
 XML_CONSTASCII_ACTION( sXML_solid_type, "solid-type" );

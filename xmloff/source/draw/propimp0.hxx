@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propimp0.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-26 14:27:10 $
+ *  last change: $Author: cl $ $Date: 2001-01-30 14:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,15 +68,6 @@
 
 //////////////////////////////////////////////////////////////////////////////
 // graphic property Stroke
-
-class XMLDashArrayPropertyHdl : public XMLPropertyHandler
-{
-public:
-    virtual ~XMLDashArrayPropertyHdl();
-    virtual sal_Bool equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const;
-    virtual sal_Bool importXML( const rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
-    virtual sal_Bool exportXML( rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
-};
 
 class XMLDurationPropertyHdl : public XMLPropertyHandler
 {
