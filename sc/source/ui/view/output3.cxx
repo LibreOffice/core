@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:37:37 $
+ *  last change: $Author: nn $ $Date: 2000-11-21 18:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,15 +495,13 @@ void ScOutputData::DrawSelectiveObjects( USHORT nLayer, const Rectangle& rRect,
 
                     if (bClip && bDraw && nSdrObjKind == OBJ_GRAF)
                     {
-                        const Graphic& rGraph = ((SdrGrafObj*)pObject)->GetGraphic();
-                        GraphicType eType = rGraph.GetType();
-#ifndef VCL
-                        if ( eType == GRAPHIC_GDIMETAFILE || eType == GRAPHIC_WINMETAFILE ||
-                            eType == GRAPHIC_WNTMETAFILE || eType == GRAPHIC_OS2METAFILE ||
-#else
-                        if ( eType == GRAPHIC_GDIMETAFILE ||
-#endif
-                            rGraph.IsAnimated() )
+                        //  #80136# don't call GetGraphic here
+                        //  (would swap the graphic in and reschedule)
+                        //  GetGraphicType / IsAnimated don't swap in
+
+                        SdrGrafObj* pGrafObj = (SdrGrafObj*)pObject;
+                        GraphicType eType = pGrafObj->GetGraphicType();
+                        if ( eType == GRAPHIC_GDIMETAFILE || pGrafObj->IsAnimated() )
                             bClip = FALSE;
                     }
 
