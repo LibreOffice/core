@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XVclContainer.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:53 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,20 +80,7 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XVclContainer
-/** represents a container VCL window.
-
-
-
-
-
-
-
-
-
-
-
-
+/** represents a VCL container window.
 
     @deprecated
  */
@@ -101,7 +88,6 @@ interface XVclContainer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XVclContainer::addVclContainerListener
     /** adds the specified container listener to receive
         container events from this container.
      */
@@ -109,16 +95,15 @@ interface XVclContainer: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XVclContainer::removeVclContainerListener
     /** removes the specified container listener so that it
         no longer receives container events from this container.
      */
     [oneway] void removeVclContainerListener( [in] com::sun::star::awt::XVclContainerListener l );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XVclContainer::getWindows
 
-    // DocMerge: empty anyway
+    /** returns all windows.
+     */
     sequence<com::sun::star::awt::XWindow> getWindows();
 
 };

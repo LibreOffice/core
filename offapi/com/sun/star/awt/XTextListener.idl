@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextListener.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:53 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,15 +76,13 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XTextListener
-/** makes it possible to receive text change events from a component.
+/** makes it possible to receive text change events.
  */
 interface XTextListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XTextListener::textChanged
-    /** is called when the text changes.
+    /** is invoked when the text has changed.
      */
     [oneway] void textChanged( [in] com::sun::star::awt::TextEvent rEvent );
 
