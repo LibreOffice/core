@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:07:05 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:48:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ void lcl_formatChars1( sal_Unicode table[], int tableSize, int n, OUString& s )
 }
 
 static
-should_ignore( OUString s )
+int should_ignore( OUString s )
 {
     // return true if blank or null
     return s.compareToAscii(" ")==0 || (s.getLength()>0 && s[0]==0);
@@ -346,7 +346,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                break;
           case TRANSLITERATION:
            try {
-             OUString &tmp = OUString::valueOf( number );
+             const OUString &tmp = OUString::valueOf( number );
              OUString transliteration;
              getPropertyByName(aProperties, "Transliteration", sal_True) >>= transliteration;
              translit->loadModuleByImplName(transliteration, aLocale);
