@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 13:55:12 $
+#   last change: $Author: rt $ $Date: 2004-11-29 13:14:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,5 +116,5 @@ APP1STDLIBS+= \
 ALLTAR: REGCOMPSH
 
 REGCOMPSH :
-    +chmod +x $(MISC)$/regcomp.sh
+    +-chmod +x $(MISC)$/regcomp.sh
 .ENDIF	
