@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-15 13:34:15 $
+ *  last change: $Author: ka $ $Date: 2001-03-16 13:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ static const DataFlavorRepresentation aFormatArray_Impl[] =
 /*112 SOT_FORMATSTR_ID_STARCALC_60*/            { "application/vnd.sun.xml.calc", "Calc 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*113 SOT_FORMATSTR_ID_STARCHART_60*/           { "application/vnd.sun.xml.chart", "Chart 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*114 SOT_FORMATSTR_ID_STARMATH_60*/            { "application/vnd.sun.xml.math", "Math 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-/*115 SOT_FORMATSTR_ID_DUMMY3*/                 { "application/x-openoffice;windows_formatname=\"SO_DUMMYFORMAT_3\"", "SO_DUMMYFORMAT_3", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*115 SOT_FORMATSTR_WMF*/                       { "application/x-openoffice;windows_formatname=\"Image WMF\"", "Windows MetaFile", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*116 SOT_FORMATSTR_ID_DUMMY4*/                 { "application/x-openoffice;windows_formatname=\"SO_DUMMYFORMAT_4\"", "SO_DUMMYFORMAT_4", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
 };
 
