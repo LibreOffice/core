@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: dvo $ $Date: 2002-02-06 11:39:17 $
+#   last change: $Author: tl $ $Date: 2002-06-24 12:31:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,12 +86,12 @@ IDLFILES=\
     BibliographyDataField.idl\
     Bookmark.idl\
     Bookmarks.idl\
-    CellProperties.idl\
-    CellRange.idl\
-    ChainedTextFrame.idl\
+        CellProperties.idl\
+        CellRange.idl\
+        ChainedTextFrame.idl\
     ChapterFormat.idl\
     ChapterNumberingRule.idl\
-    CharacterCompressionType.idl\
+        CharacterCompressionType.idl\
     ContentIndex.idl\
     ContentIndexMark.idl\
     ControlCharacter.idl\
@@ -102,12 +102,13 @@ IDLFILES=\
     DocumentIndexLevelFormat.idl\
     DocumentIndexParagraphStyles.idl\
     DocumentIndexMark.idl\
+        DocumentIndexMarkAsian.idl\
     DocumentStatistic.idl\
     Endnote.idl\
     FilenameDisplayFormat.idl\
     FontEmphasis.idl\
-    FontRelief.idl\
-    Footnote.idl\
+        FontRelief.idl\
+        Footnote.idl\
     FootnoteNumbering.idl\
     Footnotes.idl\
     FootnoteSettings.idl\
@@ -130,8 +131,8 @@ IDLFILES=\
     PagePrintSettings.idl\
     Paragraph.idl\
     ParagraphEnumeration.idl\
-    ParagraphVertAlign.idl\
-    PlaceholderType.idl\
+        ParagraphVertAlign.idl\
+        PlaceholderType.idl\
     PrintSettings.idl\
     ReferenceFieldPart.idl\
     ReferenceFieldSource.idl\
@@ -175,7 +176,7 @@ IDLFILES=\
     TextSections.idl\
     TextSortDescriptor.idl\
     TextTable.idl\
-    TextTableCursor.idl\
+        TextTableCursor.idl\
     TextTableRow.idl\
     TextTables.idl\
     TextViewCursor.idl\
