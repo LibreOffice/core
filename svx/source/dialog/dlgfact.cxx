@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:18:04 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:45:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "dlgfact.hxx"
 
 // class ResId
@@ -192,6 +191,12 @@ void AbstractHangulHanjaConversionDialog_Impl::EndDialog(long nResult)
 {
     pDlg->EndDialog(nResult);
 }
+
+void AbstractHangulHanjaConversionDialog_Impl::EnableRubySupport( sal_Bool _bVal )
+{
+    pDlg->EnableRubySupport(_bVal);
+}
+
 void AbstractHangulHanjaConversionDialog_Impl::SetByCharacter( sal_Bool _bByCharacter )
 {
     pDlg->SetByCharacter(_bByCharacter);
