@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComponentBase.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2002-04-16 15:23:08 $
+ *  last change: $Author: jl $ $Date: 2002-04-23 09:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,9 @@ import com.sun.star.uno.Type;
 public class ComponentBase extends WeakBase implements XComponent
 {
     private final boolean DEBUG= false;
-    public MultiTypeInterfaceContainer listenerContainer;
-    private boolean bDisposed= false;
+    protected MultiTypeInterfaceContainer listenerContainer;
+    protected boolean bInDispose= false;
+    protected boolean bDisposed= false;
     static final Type  EVT_LISTENER_TYPE= new Type(XEventListener.class);
 
 
@@ -89,12 +90,12 @@ public class ComponentBase extends WeakBase implements XComponent
     /** Override to perform extra clean-up work. Provided for subclasses. It is
         called during dispose()
      */
-    protected void disposing()
+    protected void preDisposing()
     {
     }
     /** Override to become notified right before the disposing action is performed.
      */
-    protected void inDispose()
+    protected void postDisposing()
     {
     }
 
@@ -110,10 +111,10 @@ public class ComponentBase extends WeakBase implements XComponent
         boolean bDoDispose= false;
         synchronized (this)
         {
-            if ( bDisposed == false)
+            if ( ! bInDispose && ! bDisposed)
             {
                 bDoDispose= true;
-                bDisposed= true;
+                bInDispose= true;
             }
         }
         // The notification occures in an unsynchronized block in order to avoid
@@ -121,10 +122,20 @@ public class ComponentBase extends WeakBase implements XComponent
         // a synchronized method which uses the same object.
         if (bDoDispose)
         {
-            inDispose();
-            listenerContainer.disposeAndClear(new EventObject(this));
-            //notify subclasses that disposing is in progress
-            disposing();
+            try
+            {
+                preDisposing();
+                listenerContainer.disposeAndClear(new EventObject(this));
+                //notify subclasses that disposing is in progress
+                postDisposing();
+            }
+            finally
+            {
+                // finally makes sure that the  flags are set even if a RuntimeException is thrown.
+                // That ensures that this function is only called once.
+                bDisposed= true;
+                bInDispose= false;
+            }
         }
         else
         {
@@ -147,7 +158,7 @@ public class ComponentBase extends WeakBase implements XComponent
         boolean bDoDispose= false;
         synchronized (this)
         {
-            if (bDisposed == true)
+            if (bDisposed || bInDispose)
                 bDoDispose= true;
             else
                listenerContainer.addInterface(EVT_LISTENER_TYPE, listener);
@@ -160,7 +171,7 @@ public class ComponentBase extends WeakBase implements XComponent
 
     protected void finalize() throws Throwable
     {
-        if (bDisposed == false)
+        if ( ! bInDispose && ! bDisposed)
             dispose();
         super.finalize();
     }
