@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 14:39:58 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,10 @@ namespace connectivity
             rtl::OUString   m_sMozillaURI;
             sal_Int32       m_nAnonABCount;
             sal_Int32       m_nMaxResultRecords;
+            sal_Bool        m_bUseSSL;
+            rtl::OUString   m_sBindDN;
+            rtl::OUString   m_sPassword;
+            rtl::OUString   m_sHostName;
             MNameMapper*    m_aNameMapper;
 
             SDBCAddress::sdbc_address_type  m_eSDBCAddressType;
@@ -150,7 +154,6 @@ namespace connectivity
 
         public:
             virtual void construct( const ::rtl::OUString& url,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info) throw(::com::sun::star::sdbc::SQLException);
-
             OConnection(MozabDriver*    _pDriver);
             virtual ~OConnection();
 
@@ -188,7 +191,6 @@ namespace connectivity
             virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             //
-            ::rtl::OUString getUserName() const { return m_sUser; }
             MozabDriver*    getDriver() const { return m_pDriver;}
 
             // Added to enable me to use SQLInterpreter which requires an
@@ -199,6 +201,14 @@ namespace connectivity
             // Additions from the land of mozilla
             rtl::OUString getMozURI() const
                 { return m_sMozillaURI; }
+            // Get Ldap BindDN (user name)
+            rtl::OUString getBindDN() const { return m_sBindDN; }
+            // Get Ldap Password
+            rtl::OUString getPassword() const { return m_sPassword; }
+            // Get Ldap Host name
+            rtl::OUString getHost() const { return m_sHostName; }
+            // Get whether use ssl to connect to ldap
+            sal_Bool getUseSSL() const {return m_bUseSSL;}
 
             sal_Bool usesFactory(void) const { return (m_eSDBCAddressType == SDBCAddress::Outlook) || (m_eSDBCAddressType == SDBCAddress::OutlookExp); }
             sal_Bool isLDAP(void) const { return m_eSDBCAddressType == SDBCAddress::LDAP; }
