@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:39:48 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,13 @@ SFX_IMPL_TOOLBOX_CONTROL( SwTableOptimizeCtrl, SfxUInt16Item );
 
 
 
-SwTableOptimizeCtrl::SwTableOptimizeCtrl( USHORT nId,
-                                    ToolBox& rTbx,
-                                    SfxBindings& rBind ) :
-        SfxToolBoxControl( nId, rTbx, rBind )
+SwTableOptimizeCtrl::SwTableOptimizeCtrl(
+    USHORT nSlotId,
+    USHORT nId,
+    ToolBox& rTbx ) :
+        SfxToolBoxControl( nSlotId, nId, rTbx )
 {
+    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
 }
 /**********************************************************************
 
@@ -108,23 +110,9 @@ SwTableOptimizeCtrl::~SwTableOptimizeCtrl()
 
 SfxPopupWindow* SwTableOptimizeCtrl::CreatePopupWindow()
 {
-    USHORT nWinResId, nTbxResId;
-        nWinResId = RID_TBL_OPT_CTRL;
-        nTbxResId = TBX_OPTIMIZE_TABLE;
-
-    WindowAlign eAlign = WINDOWALIGN_TOP;
-    if(GetToolBox().IsHorizontal())
-        eAlign = WINDOWALIGN_LEFT;
-    SwPopupWindowTbxMgr *pWin = new SwPopupWindowTbxMgr( GetId(),
-                                    eAlign,
-                                    SW_RES(nWinResId),
-                                    SW_RES(nTbxResId),
-                                    GetBindings());
-    pWin->StartPopupMode(&GetToolBox(), TRUE);
-    pWin->StartSelection();
-    pWin->Show();
-    return pWin;
-
+    rtl::OUString aToolBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/optimizetablebar" ));
+    createAndPositionSubToolBar( aToolBarResStr );
+    return NULL;
 }
 
 /**********************************************************************
@@ -137,7 +125,3 @@ SfxPopupWindowType  SwTableOptimizeCtrl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONCLICK;
 }
-
-
-
-
