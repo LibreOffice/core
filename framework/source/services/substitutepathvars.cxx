@@ -2,9 +2,9 @@
  *
  *  $RCSfile: substitutepathvars.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:08:09 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@
 #define REPLACEMENT_DUTCH                   ASCII_STR("dutch")
 #define REPLACEMENT_ENGLISH                 ASCII_STR("english")
 #define REPLACEMENT_ENGLISH_UK              ASCII_STR("english_uk")
+#define REPLACEMENT_ESTONIAN                    ASCII_STR("estonian")
 #define REPLACEMENT_FINNISH                 ASCII_STR("finnish")
 #define REPLACEMENT_FRENCH                  ASCII_STR("french")
 #define REPLACEMENT_GERMAN                  ASCII_STR("german")
@@ -180,6 +181,7 @@
 #define REPLACEMENT_POLISH                  ASCII_STR("polish")
 #define REPLACEMENT_RUSSIAN                 ASCII_STR("russian")
 #define REPLACEMENT_SLOVAK                  ASCII_STR("slovak")
+#define REPLACEMENT_SLOVENIAN                   ASCII_STR("slovenian")
 #define REPLACEMENT_SPANISH                 ASCII_STR("spanish")
 #define REPLACEMENT_SWEDISH                 ASCII_STR("swedish")
 #define REPLACEMENT_TURKISH                 ASCII_STR("turkish")
@@ -930,6 +932,9 @@ rtl::OUString SubstitutePathVariables::GetLanguageString( LanguageType aLanguage
         case LANGUAGE_ENGLISH_UK            :   aLangStr = REPLACEMENT_ENGLISH_UK;
                                                 break ;
 
+        case LANGUAGE_ESTONIAN              :   aLangStr = REPLACEMENT_ESTONIAN;
+                                                break ;
+
         case LANGUAGE_FINNISH               :   aLangStr = REPLACEMENT_FINNISH;
                                                 break ;
 
@@ -972,6 +977,8 @@ rtl::OUString SubstitutePathVariables::GetLanguageString( LanguageType aLanguage
                                                 break ;
 
         case LANGUAGE_SLOVAK                :   aLangStr = REPLACEMENT_SLOVAK;
+                                                break ;
+        case LANGUAGE_SLOVENIAN             :   aLangStr = REPLACEMENT_SLOVENIAN;
                                                 break ;
 
         case LANGUAGE_SPANISH               :
