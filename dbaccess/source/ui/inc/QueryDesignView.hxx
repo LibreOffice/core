@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-11 12:43:14 $
+ *  last change: $Author: oj $ $Date: 2002-05-06 09:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,24 @@ namespace connectivity
 class ComboBox;
 namespace dbaui
 {
+    enum SqlParseError
+    {
+        eIllegalJoin,
+        eStatementTooLong,
+        eNoConnection,
+        eNoSelectStatement,
+        eStatementTooComplex,
+        eColumnInLikeNotFound,
+        eNoColumnInLike,
+        eColumnNotFound,
+        eNativeMode,
+        eTooManyTables,
+        eTooManyConditions,
+        eTooManyColumns,
+        eIllegalJoinCondition,
+        eOk
+    };
+
     class OQueryViewSwitch;
     class OAddTableDlg;
     class OQueryTableWindow;
@@ -153,7 +171,7 @@ namespace dbaui
         ::rtl::OUString                     getDecimalSeparator() const { return m_sDecimalSep;}
 
         sal_Bool HasTable() const;
-        sal_Bool InsertField( const OTableFieldDescRef& rInfo, sal_Bool bVis=sal_True, sal_Bool bActivate = sal_True);
+        SqlParseError InsertField( const OTableFieldDescRef& rInfo, sal_Bool bVis=sal_True, sal_Bool bActivate = sal_True);
         // save the position of the table window and the pos of the splitters
         void SaveTabWinUIConfig(OQueryTableWindow* pWin);
         // called when fields are deleted
@@ -169,7 +187,7 @@ namespace dbaui
         void stopTimer();
         void startTimer();
         void reset();
-        void InitFromParseNode();
+        sal_Bool InitFromParseNode();
 
         ::connectivity::OSQLParseNode* getPredicateTreeFromEntry(   OTableFieldDescRef pEntry,
                                                                     const String& _sCriteria,
