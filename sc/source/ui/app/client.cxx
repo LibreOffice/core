@@ -2,9 +2,9 @@
  *
  *  $RCSfile: client.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-17 13:35:09 $
+ *  last change: $Author: nn $ $Date: 2002-10-30 14:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,18 +281,22 @@ void __EXPORT ScClient::ViewChanged( USHORT nAspect )
             pClientData->SetObjArea( aObjArea );
         }
 
-            //  Groesse im Draw-Model setzen, dabei wird Scale neu eingestellt
+        //  Set size in draw model (scale is recalculated) - only if there was a visible
+        //  change (in pixels)
 
-        if ( aLogicRect.GetSize() != aVisSize )
+        SfxViewShell* pSfxViewSh = GetViewShell();
+        ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
+        if ( pViewSh )
         {
-            aLogicRect.SetSize( aVisSize );
-            pDrawObj->SetLogicRect( aLogicRect );
+            Window* pWin = pViewSh->GetActiveWin();
+            if ( pWin->LogicToPixel( aVisSize ) != pWin->LogicToPixel( aLogicRect.GetSize() ) )
+            {
+                aLogicRect.SetSize( aVisSize );
+                pDrawObj->SetLogicRect( aLogicRect );
 
-            //  set document modified (SdrModel::SetChanged is not used)
-            SfxViewShell* pSfxViewSh = GetViewShell();
-            ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
-            if (pViewSh)
+                //  set document modified (SdrModel::SetChanged is not used)
                 pViewSh->GetViewData()->GetDocShell()->SetDrawModified();
+            }
         }
     }
 }
