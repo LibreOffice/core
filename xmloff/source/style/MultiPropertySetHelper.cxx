@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultiPropertySetHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-14 13:04:53 $
+ *  last change: $Author: dvo $ $Date: 2001-05-17 16:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,24 +148,6 @@ MultiPropertySetHelper::~MultiPropertySetHelper()
 }
 
 
-// STL-type comparison functor for sorting a number array accoring to
-// String values in another array.
-class IndexedStringLess
-{
-    const OUString* pStringArray;
-
-public:
-    IndexedStringLess(const OUString* pStrings) :
-        pStringArray( pStrings )
-    {
-    }
-
-    bool operator() (sal_Int16 x, sal_Int16 y) const
-    {
-        return ( pStringArray[x] < pStringArray[y] ) ? true : false;
-    }
-};
-
 
 void MultiPropertySetHelper::hasProperties(
     const Reference<XPropertySetInfo> & rInfo )
@@ -176,25 +158,16 @@ void MultiPropertySetHelper::hasProperties(
     if ( NULL == pSequenceIndex )
         pSequenceIndex = new sal_Int16[nLength] ;
 
-    // create a temporary index according to the property names
-    sal_Int16* pSortIndex = new sal_Int16[nLength];
-    for( sal_Int16 i = 0; i < nLength; i++ )
-        pSortIndex[i] = i;
-
-    // sort index array according to property names
-    IndexedStringLess aLess( pPropertyNames );
-    ::std::sort( &pSortIndex[0], &pSortIndex[nLength], aLess );
-
     // construct pSequenceIndex
     sal_Int16 nNumberOfProperties = 0;
-    for( i = 0; i < nLength; i++ )
+    for( sal_Int16 i = 0; i < nLength; i++ )
     {
         // ask for property
         sal_Bool bHasProperty =
-            rInfo->hasPropertyByName( pPropertyNames[pSortIndex[i]] );
+            rInfo->hasPropertyByName( pPropertyNames[i] );
 
         // set index and increment (if appropriate)
-        pSequenceIndex[pSortIndex[i]]= bHasProperty ? nNumberOfProperties : -1;
+        pSequenceIndex[i]= bHasProperty ? nNumberOfProperties : -1;
         if ( bHasProperty )
             nNumberOfProperties++;
     }
@@ -209,46 +182,11 @@ void MultiPropertySetHelper::hasProperties(
         if ( nIndex != -1 )
             pPropertySequence[nIndex] = pPropertyNames[i];
     }
-
-    // discard sort index
-    delete[] pSortIndex;
 }
 
-
-void MultiPropertySetHelper::hasProperties(
-    const Reference<XMultiPropertySet> & rMultiPropertySet )
+sal_Bool MultiPropertySetHelper::checkedProperties()
 {
-    DBG_ASSERT( rMultiPropertySet.is(), "We need an XMultiPropertySet here." );
-
-    hasProperties( rMultiPropertySet->getPropertySetInfo() );
-
-#ifndef PRODUCT
-    // save name of implementation, so we can later on check that
-    // getValues isn't called on other (wrong) implementations
-    Reference<XServiceInfo> xServiceInfo( rMultiPropertySet, UNO_QUERY );
-    if ( xServiceInfo.is() )
-    {
-        sImplementationName = xServiceInfo->getImplementationName();
-    }
-#endif
-}
-
-void MultiPropertySetHelper::hasProperties(
-    const Reference<XPropertySet> & rPropertySet )
-{
-    DBG_ASSERT( rPropertySet.is(), "We need an XPropertySet here." );
-
-    hasProperties( rPropertySet->getPropertySetInfo() );
-
-#ifndef PRODUCT
-    // save name of implementation, so we can later on check that
-    // getValues isn't called on other (wrong) implementations
-    Reference<XServiceInfo> xServiceInfo( rPropertySet, UNO_QUERY );
-    if ( xServiceInfo.is() )
-    {
-        sImplementationName = xServiceInfo->getImplementationName();
-    }
-#endif
+    return (NULL != pSequenceIndex);
 }
 
 
@@ -258,18 +196,6 @@ void MultiPropertySetHelper::getValues(
 {
     DBG_ASSERT( rMultiPropertySet.is(), "We need an XMultiPropertySet." );
 
-#ifndef PRODUCT
-    // check if we are called on the 'proper' implementation
-    Reference<XServiceInfo> xServiceInfo( rMultiPropertySet, UNO_QUERY );
-    if ( xServiceInfo.is() && ( sImplementationName.getLength() > 0 ) )
-    {
-        DBG_ASSERT(
-            sImplementationName.equals(xServiceInfo->getImplementationName()),
-            "getValues() called for different implementation than "
-            "hasProperties() was previously called for." );
-    }
-#endif
-
     aValues = rMultiPropertySet->getPropertyValues( aPropertySequence );
     pValues = aValues.getConstArray();
 }
@@ -278,18 +204,6 @@ void MultiPropertySetHelper::getValues(
     const Reference<XPropertySet> & rPropertySet )
 {
     DBG_ASSERT( rPropertySet.is(), "We need an XPropertySet." );
-
-#ifndef PRODUCT
-    // check if we are called on the 'proper' implementation
-    Reference<XServiceInfo> xServiceInfo( rPropertySet, UNO_QUERY );
-    if ( xServiceInfo.is() && ( sImplementationName.getLength() > 0 ) )
-    {
-        DBG_ASSERT(
-            sImplementationName.equals(xServiceInfo->getImplementationName()),
-            "getValues() called for different implementation than "
-            "hasProperties() was previously called for." );
-    }
-#endif
 
     // re-alloc aValues (if necessary) and fill with values from XPropertySet
     sal_Int16 nSupportedPropertiesCount =

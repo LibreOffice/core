@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultiPropertySetHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-16 09:24:44 $
+ *  last change: $Author: dvo $ $Date: 2001-05-17 16:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,8 @@ namespace com { namespace sun { namespace star {
  *
  * Given a list of property names (as sal_Char** or OUString*), it can
  * query an XMultiPropertySet (or XPropertySet) which of these properties
- * it supports (method hasProperties(...)).
+ * it supports (method hasProperties(...)). The properties *MUST* be
+ * sorted alphabetically.
  *
  * Then, the X(Multi)PropertySet can be queried for values, and only
  * the supported properties are queried. (method getValues(...)) The
@@ -95,7 +96,7 @@ namespace com { namespace sun { namespace star {
  * Finally, each property can be queried for existence
  * (method hasProperty(...)) or its value (method (getValue(...))).
  *
- * After seom initial preparation (hasProperties, getValues) the
+ * After some initial preparation (hasProperties, getValues) the
  * MultiPropertySetHelper can be used similarly to an
  * XPropertySet in that you can query the values in the places where you
  * need them. However, if an XMultiPropertySet is supplied, the queries
@@ -112,11 +113,6 @@ class MultiPropertySetHelper
     /// the sequence of property names that the current (multi)
     /// property set implementation supports
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aPropertySequence;
-
-#ifndef PRODUCT
-    /// name of the implementation for which hasProperties() was called
-    ::rtl::OUString sImplementationName;
-#endif
 
     /// an array of indices that maps from pPropertyNames indices to
     /// aPropertySequence indices
@@ -147,19 +143,12 @@ public:
     void hasProperties( const ::com::sun::star::uno::Reference<
                             ::com::sun::star::beans::XPropertySetInfo> & );
 
-    /**
-     * Call hasProperties for the XMultiPropertySet's info.
-     */
-    void hasProperties( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::beans::XMultiPropertySet> & );
 
     /**
-     * Call hasProperties for the XPropertySet's info.
+     * Return whether hasProperties was called
+     * (i.e. if we are ready to call getValues)
      */
-    void hasProperties( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::beans::XPropertySet> & );
-
-
+    sal_Bool checkedProperties();
 
     /**
      * Get values from the XMultiPropertySet.
