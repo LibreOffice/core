@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:43:10 $
+#   last change: $Author: hr $ $Date: 2000-11-13 17:17:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,6 @@ IDLFILES=\
     DatabaseComboBox.idl\
     DatabaseCurrencyField.idl\
     DatabaseDateField.idl\
-    DatabaseForm.idl\
     DatabaseImageControl.idl\
     DatabaseListBox.idl\
     DatabaseNumericField.idl\
