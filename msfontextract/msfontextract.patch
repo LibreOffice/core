@@ -1,0 +1,238 @@
+*** misc/libmspack/mspack/makefile.mk	2004-01-25 11:18:01.000000000 -0500
+--- misc/build/libmspack/mspack/makefile.mk	2004-01-25 11:15:16.000000000 -0500
+***************
+*** 1 ****
+! dummy
+--- 1,98 ----
+! #*************************************************************************
+! #
+! #   $RCSfile: msfontextract.patch,v $
+! #
+! #   $Revision: 1.1 $
+! #
+! #   last change: $Author: mh $ $Date: 2004-04-08 13:49:56 $
+! #
+! #   The Contents of this file are made available subject to the terms of
+! #   either of the following licenses
+! #
+! #          - GNU Lesser General Public License Version 2.1
+! #          - Sun Industry Standards Source License Version 1.1
+! #
+! #   Sun Microsystems Inc., October, 2000
+! #
+! #   GNU Lesser General Public License Version 2.1
+! #   =============================================
+! #   Copyright 2000 by Sun Microsystems, Inc.
+! #   901 San Antonio Road, Palo Alto, CA 94303, USA
+! #
+! #   This library is free software; you can redistribute it and/or
+! #   modify it under the terms of the GNU Lesser General Public
+! #   License version 2.1, as published by the Free Software Foundation.
+! #
+! #   This library is distributed in the hope that it will be useful,
+! #   but WITHOUT ANY WARRANTY; without even the implied warranty of
+! #   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+! #   Lesser General Public License for more details.
+! #
+! #   You should have received a copy of the GNU Lesser General Public
+! #   License along with this library; if not, write to the Free Software
+! #   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+! #   MA  02111-1307  USA
+! #
+! #
+! #   Sun Industry Standards Source License Version 1.1
+! #   =================================================
+! #   The contents of this file are subject to the Sun Industry Standards
+! #   Source License Version 1.1 (the "License"); You may not use this file
+! #   except in compliance with the License. You may obtain a copy of the
+! #   License at http://www.openoffice.org/license.html.
+! #
+! #   Software provided under this License is provided on an "AS IS" basis,
+! #   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+! #   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+! #   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+! #   See the License for the specific provisions governing your rights and
+! #   obligations concerning the Software.
+! #
+! #   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+! #
+! #   Copyright: 2000 by Sun Microsystems, Inc.
+! #
+! #   All Rights Reserved.
+! #
+! #   Contributor(s): _______________________________________
+! #
+! #
+! #
+! #*************************************************************************
+! 
+! PRJ=..$/..$/..$/..$/..$/
+! 
+! PRJNAME=msfontextract
+! TARGET=msfontextract
+! TARGETTYPE=CUI
+! LIBTARGET=NO
+! 
+! # --- Settings -----------------------------------------------------
+! 
+! 
+! .INCLUDE :  settings.mk
+! 
+! 
+! # --- Files --------------------------------------------------------
+! 
+! CCFILES=   \
+! 			system.c \
+! 			cabd.c	\
+! 			lzxd.c \
+!                         ministub .c \
+! 			msfontextract.c
+! OBJFILES=   \
+! 			$(OBJ)$/system.obj	\
+! 			$(OBJ)$/cabd.obj	\
+! 			$(OBJ)$/lzxd.obj	\
+! 			$(OBJ)$/ministub.obj	\
+! 			$(OBJ)$/msfontextract.obj
+! 
+! APP1TARGET= $(TARGET)
+! APP1OBJS=   $(OBJFILES)
+! 
+! APP1STDLIBS=
+! 
+! # --- Targets ------------------------------------------------------
+! 
+! .INCLUDE :  target.mk
+*** misc/libmspack/mspack/ministub.c	2004-01-25 11:18:01.000000000 -0500
+--- misc/build/libmspack/mspack/ministub.c	2004-01-25 11:15:16.000000000 -0500
+***************
+*** 1 ****
+! dummy
+--- 1,11 ----
+! #include <mspack.h>
+! 
+! /* other expansion types not needed */
+! int mszipd_init() {return MSPACK_ERR_DECRUNCH;}
+! int mszipd_decompress() {return MSPACK_ERR_DECRUNCH;}
+! void mszipd_free() {}
+! 
+! int qtmd_init() {return MSPACK_ERR_DECRUNCH;}
+! int qtmd_decompress() {return MSPACK_ERR_DECRUNCH;}
+! void qtmd_free() {}
+! 
+*** misc/libmspack/mspack/msfontextract.c	2004-01-25 11:18:01.000000000 -0500
+--- misc/build/libmspack/mspack/msfontextract.c	2004-01-25 11:17:42.000000000 -0500
+***************
+*** 1 ****
+! dummy
+--- 1,111 ----
+! /*
+! * Portions (almost all!) (C) 2003 Stuart Caie.
+! * you can redistribute it and/or modify it under
+! * the terms of the GNU Lesser General Public License (LGPL) version 2.1
+! */
+! 
+! #include <ctype.h>
+! #include <stdio.h>
+! #include <stdlib.h>
+! #include <string.h>
+! #include <unistd.h>
+! #include <mspack.h>
+! 
+! char *error_msg(int error) {
+!   switch (error) {
+!   case MSPACK_ERR_OK:         return "no error";
+!   case MSPACK_ERR_ARGS:       return "bad arguments to library function";
+!   case MSPACK_ERR_OPEN:       return "error opening file";
+!   case MSPACK_ERR_READ:       return "read error";
+!   case MSPACK_ERR_WRITE:      return "write error";
+!   case MSPACK_ERR_SEEK:       return "seek error";
+!   case MSPACK_ERR_NOMEMORY:   return "out of memory";
+!   case MSPACK_ERR_SIGNATURE:  return "bad signature";
+!   case MSPACK_ERR_DATAFORMAT: return "error in data format";
+!   case MSPACK_ERR_CHECKSUM:   return "checksum error";
+!   case MSPACK_ERR_CRUNCH:     return "compression error";
+!   case MSPACK_ERR_DECRUNCH:   return "decompression error";
+!   }
+!   return "unknown error";
+! }
+! 
+! 
+! /* creates name of output file */
+! char *create_output_name(const char *fname, char *dir) {
+!   char c, *p, *name;
+!   if (!(name = malloc(strlen(fname) + (dir ? strlen(dir) : 0) + 2))) {
+!     fprintf(stderr, "out of memory!\n");
+!     return NULL;
+!   }
+!   /* start with blank name */
+!   *name = '\0';
+!   /* add output directory if needed */
+!   if (dir) {
+!     strcpy(name, dir);
+!     strcat(name, "/");
+!   }
+!   p = &name[strlen(name)];
+!   do {
+!     c = *fname++;
+!     *p++ = tolower((unsigned char) c);
+!   } while (c);
+! 
+!   return name;
+! }
+! 
+! 
+! int
+! main(int argc, char** argv)
+! {
+! 
+!   char * ef = NULL;
+!   char * dp = NULL;
+!   struct mscab_decompressor *cabd;
+!   struct mscabd_cabinet *cab;
+!   struct mscabd_file *file;
+!   char * ename = NULL;
+!   int err;
+! 
+!   /* argv[1] is the cabinet to extract */
+!   /* argv[2] is the path to extract to */
+! 
+!   if ((!(argv[1])) || (!(argv[2]))) {
+!     fprintf(stderr,"Usage: %s <cabinet> <destpath>\n",argv[0]);
+!     return 1;
+!   }
+! 
+!   /* initialize libmspack and create a CAB decompressor */
+!   MSPACK_SYS_SELFTEST(err);
+!   if (err) {
+!     fprintf(stderr,"Cannot initialize libmspack\n");
+!     return 1;
+!   }
+!   if (!(cabd = mspack_create_cab_decompressor(NULL))) {
+!      fprintf(stderr, "can't make decompressor: %s\n",
+!        error_msg(cabd->last_error(cabd)));
+!      return 1;
+!   }
+! 
+! 
+! 
+!    /* look for an embedded cabinet */
+!    if ((cab = cabd->search(cabd, argv[1]))) {
+!      /* for all files in the cabinet */
+!      for (file = cab->files; file; file = file->next) {
+!        if (!(ename = create_output_name(file->filename, argv[2]))) continue;
+!        if ((cabd->extract(cabd, file, ename))) {
+!          fprintf(stderr,"%s: extract error on \"%s\": %s\n", argv[1],
+!                 ename, error_msg(cabd->last_error(cabd)));
+!          exit(1);
+!        }
+!        free(ename);
+!      }
+!      cabd->close(cabd, cab);
+!    }
+!    else {
+!      fprintf(stderr, "%s: no embedded cabinet found\n", argv[1]);
+!    }
+!    mspack_destroy_cab_decompressor(cabd);
+!    return 0;
+! }
+! 

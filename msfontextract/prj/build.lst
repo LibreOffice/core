@@ -1,0 +1,2 @@
+mf      msfontextract : salhelper       NULL
+mf	msfontextract						nmake	-	all	mf_mkout NULL
