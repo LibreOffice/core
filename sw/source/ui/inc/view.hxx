@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:09:27 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #include <svx/zoomitem.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
@@ -203,7 +206,7 @@ struct SwApplyTemplate
     Beschreibung:   Sicht auf ein Dokument
  --------------------------------------------------------------------*/
 
-class SwView: public SfxViewShell
+class SW_DLLPUBLIC SwView: public SfxViewShell
 {
     //Messehack (MA,MBA)
     friend void lcl_SelectShellForDrop( SwView &rView );
@@ -317,92 +320,92 @@ class SwView: public SfxViewShell
 
     // Methoden fuers Suchen
     // Suchkontext setzen
-    BOOL            SearchAndWrap(BOOL bApi = FALSE);
-    BOOL            SearchAll(USHORT* pFound = 0);
-    ULONG           FUNC_Search( const SwSearchOptions& rOptions );
-    void            Replace();
+    SW_DLLPRIVATE BOOL              SearchAndWrap(BOOL bApi = FALSE);
+    SW_DLLPRIVATE BOOL          SearchAll(USHORT* pFound = 0);
+    SW_DLLPRIVATE ULONG         FUNC_Search( const SwSearchOptions& rOptions );
+    SW_DLLPRIVATE void          Replace();
 
     inline BOOL     IsDocumentBorder();
 
-    BOOL            IsTextTool() const;
+    SW_DLLPRIVATE BOOL          IsTextTool() const;
 
     // Bedienelemente verwalten anlegen
-    void            CreateBtns();
-    DECL_LINK( BtnPage, Button * );
+    SW_DLLPRIVATE void          CreateBtns();
+    SW_DLLPRIVATE DECL_LINK( BtnPage, Button * );
 
-    DECL_LINK( TimeoutHdl, Timer * );
+    SW_DLLPRIVATE DECL_LINK( TimeoutHdl, Timer * );
 
     inline long     GetXScroll() const;
     inline long     GetYScroll() const;
-           Point    AlignToPixel(const Point& rPt) const;
-           void     CalcPt( Point* pPt,const Rectangle& rRect,
+    SW_DLLPRIVATE  Point    AlignToPixel(const Point& rPt) const;
+    SW_DLLPRIVATE   void        CalcPt( Point* pPt,const Rectangle& rRect,
                             USHORT nRangeX = USHRT_MAX,
                             USHORT nRangeY = USHRT_MAX);
 
-    BOOL            GetPageScrollUpOffset(SwTwips& rOff) const;
-    BOOL            GetPageScrollDownOffset(SwTwips& rOff) const;
+    SW_DLLPRIVATE BOOL          GetPageScrollUpOffset(SwTwips& rOff) const;
+    SW_DLLPRIVATE BOOL          GetPageScrollDownOffset(SwTwips& rOff) const;
 
     // Scrollbar Movements
-    long            PageUp();
-    long            PageDown();
-    long            PageUpCrsr(BOOL bSelect);
-    long            PageDownCrsr(BOOL bSelect);
-    long            PhyPageUp();
-    long            PhyPageDown();
+    SW_DLLPRIVATE long          PageUp();
+    SW_DLLPRIVATE long          PageDown();
+    SW_DLLPRIVATE long          PageUpCrsr(BOOL bSelect);
+    SW_DLLPRIVATE long          PageDownCrsr(BOOL bSelect);
+    SW_DLLPRIVATE long          PhyPageUp();
+    SW_DLLPRIVATE long          PhyPageDown();
 
-    int             _CreateScrollbar( int bHori );
-    int             _KillScrollbar( int bHori );
-    DECL_LINK( ScrollHdl, SwScrollbar * );
-    DECL_LINK( EndScrollHdl, SwScrollbar * );
-    BOOL            UpdateScrollbars();
-    void            CalcVisArea( const Size &rPixelSz );
+    SW_DLLPRIVATE int               _CreateScrollbar( int bHori );
+    SW_DLLPRIVATE int               _KillScrollbar( int bHori );
+    SW_DLLPRIVATE DECL_LINK( ScrollHdl, SwScrollbar * );
+    SW_DLLPRIVATE DECL_LINK( EndScrollHdl, SwScrollbar * );
+    SW_DLLPRIVATE BOOL          UpdateScrollbars();
+    SW_DLLPRIVATE void          CalcVisArea( const Size &rPixelSz );
 
-    void            CreatePageButtons(BOOL bShow);
+    SW_DLLPRIVATE void            CreatePageButtons(BOOL bShow);
 
     // Linguistik-Funktionen
-    void            SpellDocument( const String* pStr, BOOL bAllRight = FALSE );
-    void            HyphenateDocument();
-    BOOL            IsDrawTextHyphenate();
-    void            HyphenateDrawText();
-    void            StartThesaurus();
+    SW_DLLPRIVATE void          SpellDocument( const String* pStr, BOOL bAllRight = FALSE );
+    SW_DLLPRIVATE void          HyphenateDocument();
+    SW_DLLPRIVATE BOOL          IsDrawTextHyphenate();
+    SW_DLLPRIVATE void          HyphenateDrawText();
+    SW_DLLPRIVATE void          StartThesaurus();
 
     // text conversion
-    void            ConvertDocument( const String* pStr );
-    void            _ConvertDocument( const String* pStr );
+    SW_DLLPRIVATE void            ConvertDocument( const String* pStr );
+    SW_DLLPRIVATE void            _ConvertDocument( const String* pStr );
 
     // used for spell checking and text conversion
-    void            SpellStart( SvxSpellArea eSpell, BOOL bStartDone,
+    SW_DLLPRIVATE void          SpellStart( SvxSpellArea eSpell, BOOL bStartDone,
                                 BOOL bEndDone, sal_Bool bIsConversion = sal_False );
-    void            SpellEnd( sal_Bool bIsConversion = sal_False );
+    SW_DLLPRIVATE void            SpellEnd( sal_Bool bIsConversion = sal_False );
 
-    void            HyphStart( SvxSpellArea eSpell );
-    void            _SpellDocument( const String* pStr, BOOL bAllRight );
-    BOOL            CheckSpecialCntnt();
-    void            SpellKontext(BOOL bOn = TRUE)
+    SW_DLLPRIVATE void            HyphStart( SvxSpellArea eSpell );
+    SW_DLLPRIVATE void          _SpellDocument( const String* pStr, BOOL bAllRight );
+    SW_DLLPRIVATE BOOL          CheckSpecialCntnt();
+    SW_DLLPRIVATE void          SpellKontext(BOOL bOn = TRUE)
                             { bCenterCrsr = bOn; bAllwaysShowSel = bOn; }
 
     // Methoden fuers Printing
-    virtual SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
-    virtual PrintDialog*    CreatePrintDialog( Window* pParent );
+    SW_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
+    SW_DLLPRIVATE virtual PrintDialog*  CreatePrintDialog( Window* pParent );
             SfxTabPage*     CreatePrintOptionsPage( Window* pParent,
                                                     const SfxItemSet& rSet);
     // fuer Readonly-Umschaltung
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    void            _CheckReadonlyState();
-    void            _CheckReadonlySelection();
+    SW_DLLPRIVATE virtual void  Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    SW_DLLPRIVATE void          _CheckReadonlyState();
+    SW_DLLPRIVATE void          _CheckReadonlySelection();
 
     // Methode fuer PageDesc drehen
-    void            SwapPageMargin(const SwPageDesc&, SvxLRSpaceItem& rLR);
+    SW_DLLPRIVATE void          SwapPageMargin(const SwPageDesc&, SvxLRSpaceItem& rLR);
 
-    void            _SetZoom( const Size &rEditSz,
+    SW_DLLPRIVATE void          _SetZoom( const Size &rEditSz,
                               SvxZoomType eZoomType,
                               short nFactor = 100,
                               BOOL bViewOnly = FALSE);
-    void            CalcAndSetBorderPixel( SvBorder &rToFill, FASTBOOL bInner );
+    SW_DLLPRIVATE void          CalcAndSetBorderPixel( SvBorder &rToFill, FASTBOOL bInner );
 
-    void            ShowAtResize();
+    SW_DLLPRIVATE void          ShowAtResize();
 
-    virtual void    Move();
+    SW_DLLPRIVATE virtual void  Move();
 
 
 protected:
