@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_lib_container.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:11:27 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ bool LibraryContainer::insert(
     verify_init( xCmdEnv );
 
     ::osl::MutexGuard guard( m_mutex );
-    t_libs_map::const_iterator const iFind( m_map.find( descr.aName ) );
+    t_libs_map::iterator const iFind( m_map.find( descr.aName ) );
     if (m_map.end() == iFind)
     {
         ::std::pair< t_libs_map::iterator, bool > insertion(
