@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-27 16:49:00 $
+ *  last change: $Author: sab $ $Date: 2001-03-29 10:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,16 +540,25 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
     }
 
     ScXMLImportWrapper aImport( aDocument, pMedium, pStor );
-    BOOL bRet = aImport.Import();
-    UpdateLinks();
-    // don't prevent establishing of listeners anymore
-    aDocument.SetInsertingFromOtherDoc( FALSE );
-    if ( bRet )
+    sal_Bool bRet(sal_False);
+    if (eShellMode != SFX_CREATE_MODE_ORGANIZER)
     {
-        aDocument.CompileXML();
-        ScChartListenerCollection* pChartListener = aDocument.GetChartListenerCollection();
-        if (pChartListener)
-            pChartListener->UpdateDirtyCharts();
+        bRet = aImport.Import(sal_False);
+        UpdateLinks();
+        // don't prevent establishing of listeners anymore
+        aDocument.SetInsertingFromOtherDoc( FALSE );
+        if ( bRet )
+        {
+            aDocument.CompileXML();
+            ScChartListenerCollection* pChartListener = aDocument.GetChartListenerCollection();
+            if (pChartListener)
+                pChartListener->UpdateDirtyCharts();
+        }
+    }
+    else
+    {
+        bRet = aImport.Import(sal_True);
+        aDocument.SetInsertingFromOtherDoc( FALSE );
     }
     aDocument.SetImportingXML( FALSE );
 
@@ -561,7 +570,11 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
 BOOL ScDocShell::SaveXML( SfxMedium* pMedium, SvStorage* pStor )
 {
     ScXMLImportWrapper aImport( aDocument, pMedium, pStor );
-    BOOL bRet = aImport.Export();
+    sal_Bool bRet(sal_False);
+    if (eShellMode != SFX_CREATE_MODE_ORGANIZER)
+        bRet = aImport.Export(sal_False);
+    else
+        bRet = aImport.Export(sal_True);
     return bRet;
 }
 
