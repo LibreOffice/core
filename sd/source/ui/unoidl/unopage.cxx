@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-23 07:49:22 $
+ *  last change: $Author: os $ $Date: 2002-08-14 09:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_SETTINGS_HXX
+#include <vcl/settings.hxx>
 #endif
 #ifndef _UNOMODEL_HXX
 #include <unomodel.hxx>
@@ -708,7 +711,9 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
     }
     case WID_PAGE_LDBITMAP:
         {
-            uno::Reference< awt::XBitmap > xBitmap( VCLUnoHelper::CreateBitmap( BitmapEx( SdResId( BMP_PAGE ) ) ) );
+            BOOL bHC = Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark();
+            uno::Reference< awt::XBitmap > xBitmap(
+                VCLUnoHelper::CreateBitmap( BitmapEx( SdResId( bHC ? BMP_PAGE_H : BMP_PAGE ) ) ) );
             aAny <<= xBitmap;
         }
         break;
