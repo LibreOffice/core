@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:39:03 $
+ *  last change: $Author: vg $ $Date: 2003-07-21 10:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1211,6 +1211,15 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
         rRepaint.Width( rRepaint.Width() - nChg );
     }
 
+    AdjustFrm( nChg, bHasToFit );
+
+/*
+    // FME 16.07.2003 #i16930# - removed this code because it did not
+    // work correctly. In SwCntntFrm::MakeAll, the frame did not move to the
+    // next page, instead the print area was recalculated and
+    // Prepare( PREP_POS_CHGD, (const void*)&bFormatted, FALSE ) invalidated
+    // the other flags => loop
+
     // OD 04.04.2003 #108446# - handle special case:
     // If text frame contains no content and just has splitted, because of a
     // line stop, it has to move forward. To force this forward move without
@@ -1236,16 +1245,20 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
     {
         AdjustFrm( nChg, bHasToFit );
     }
+ */
 
     if( HasFollow() || IsInFtn() )
         _AdjustFollow( rLine, nEnd, nStrLen, nNew );
 
+    // FME 16.07.2003 #i16930# - removed this code because it did not work
+    // correctly
     // OD 04.04.2003 #108446# - allow intrinsic format of follow, if above
     // special case has forbit it.
-    if ( bForcedNoIntrinsicFollowCalc )
+/*    if ( bForcedNoIntrinsicFollowCalc )
     {
         AllowFollowFormat();
     }
+ */
 
     pPara->SetPrepMustFit( sal_False );
 
