@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleItem.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:46 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ module com {  module sun {  module star {  module i18n {
     </p>
  */
 
-constants LocaleItem
+published constants LocaleItem
 {
     /// @see ::com::sun::star::i18n::LocaleDataItem::dateSeparator
     const short DATE_SEPARATOR          = 0;
