@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:25:58 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,9 +601,9 @@ void ScDrawTransferObj::SetDrawPersist( const SvEmbeddedObjectRef& rRef )
     aDrawPersistRef = rRef;
 }
 
-void lcl_InitMarks( SdrMarkView& rDest, const SdrMarkView& rSource, USHORT nTab )
+void lcl_InitMarks( SdrMarkView& rDest, const SdrMarkView& rSource, SCTAB nTab )
 {
-    rDest.ShowPagePgNum( nTab, Point() );
+    rDest.ShowPagePgNum( static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)), Point() );
     SdrPageView* pDestPV = rDest.GetPageViewPvNum(0);
     DBG_ASSERT(pDestPV,"PageView ??!?!");
 
@@ -627,11 +627,11 @@ void ScDrawTransferObj::SetDragSource( ScDrawView* pView )
     //! add as listener with document, delete pDragSourceView if document gone
 }
 
-void ScDrawTransferObj::SetDragSourceObj( SdrObject* pObj, USHORT nTab )
+void ScDrawTransferObj::SetDragSourceObj( SdrObject* pObj, SCTAB nTab )
 {
     DELETEZ( pDragSourceView );
     pDragSourceView = new SdrView( pObj->GetModel() );
-    pDragSourceView->ShowPagePgNum( nTab, Point() );
+    pDragSourceView->ShowPagePgNum( static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)), Point() );
     SdrPageView* pPV = pDragSourceView->GetPageViewPvNum(0);
     pDragSourceView->MarkObj(pObj, pPV);
 
