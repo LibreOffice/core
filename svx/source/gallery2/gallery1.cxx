@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-02 13:23:21 $
+ *  last change: $Author: ka $ $Date: 2000-11-06 15:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,8 +337,11 @@ void Gallery::ImplLoad( const String& rInitPath )
 
     if( bMultiPath )
     {
-        aRelPath = rInitPath.GetToken( 0, ';' );
-        aUserPath = rInitPath.GetToken( nTokenCount - 1, ';' );
+        const INetURLObject aRelURL( rInitPath.GetToken( 0, ';' ), INET_PROT_FILE );
+        const INetURLObject aUserURL( rInitPath.GetToken( nTokenCount - 1, ';' ), INET_PROT_FILE );
+
+        aRelPath = aRelURL.PathToFileName();
+        aUserPath = aUserURL.PathToFileName();
 
         for( USHORT i = 0UL; i < nTokenCount; i++ )
             ImplLoadSubDirs( rInitPath.GetToken( i, ';' ), i < ( nTokenCount - 1 ) );
