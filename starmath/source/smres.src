@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2001-12-14 17:59:49 $
+ *  last change: $Author: os $ $Date: 2001-12-18 16:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3105,7 +3105,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     FixedText 1
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Left = TRUE ;
         Text = "~Altes Symbol" ;
         Text [ English ] = "~Old Symbol" ;
@@ -3132,7 +3132,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     ComboBox 1
     {
-        Pos = MAP_APPFONT ( 55 , 6 ) ;
+        Pos = MAP_APPFONT ( 59 , 6 ) ;
         Size = MAP_APPFONT ( 80 , 50 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -3140,8 +3140,8 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     FixedText 2
     {
-        Pos = MAP_APPFONT ( 150 , 8 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 145 , 8 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Left = TRUE ;
         Text = "Alt~es Symbolset" ;
         Text [ English ] = "Ol~d Symbolset" ;
@@ -3185,7 +3185,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     FixedText 9
     {
         Pos = MAP_APPFONT ( 6 , 118 ) ;
-        Size = MAP_APPFONT ( 56 , 10 ) ;
+        Size = MAP_APPFONT ( 71 , 8 ) ;
         Text = "~Symbol" ;
         Text [ English ] = "~Symbol" ;
         Left = TRUE ;
@@ -3212,7 +3212,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     ComboBox 4
     {
-        Pos = MAP_APPFONT ( 70 , 115 ) ;
+        Pos = MAP_APPFONT ( 80 , 115 ) ;
         Size = MAP_APPFONT ( 100 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -3222,7 +3222,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     {
         Left = TRUE ;
         Pos = MAP_APPFONT ( 6 , 133 ) ;
-        Size = MAP_APPFONT ( 56 , 10 ) ;
+        Size = MAP_APPFONT ( 71 , 8 ) ;
         Text = "S~ymbolset" ;
         Text [ English ] = "S~ymbolset" ;
         Text[ english_us ] = "Symbol s~et";
@@ -3248,7 +3248,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     ComboBox 5
     {
-        Pos = MAP_APPFONT ( 70 , 130 ) ;
+        Pos = MAP_APPFONT ( 80 , 130 ) ;
         Size = MAP_APPFONT ( 100 , 50 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -3258,7 +3258,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     {
         Left = TRUE ;
         Pos = MAP_APPFONT ( 6 , 148 ) ;
-        Size = MAP_APPFONT ( 56 , 10 ) ;
+        Size = MAP_APPFONT ( 71 , 8 ) ;
         Text = "Schri~ftart" ;
         Text [ ENGLISH ] = "~Font" ;
         Text[ english_us ] = "~Font";
@@ -3285,7 +3285,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     ListBox 1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 70 , 145 ) ;
+        Pos = MAP_APPFONT ( 80 , 145 ) ;
         Size = MAP_APPFONT ( 100 , 50 ) ;
         TabStop = TRUE ;
         Sort = TRUE ;
@@ -3295,7 +3295,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     {
         Left = TRUE ;
         Pos = MAP_APPFONT ( 6 , 163 ) ;
-        Size = MAP_APPFONT ( 56 , 10 ) ;
+        Size = MAP_APPFONT ( 71 , 8 ) ;
         Text = "~Bereich" ;
         Text [ ENGLISH ] = "~Subset" ;
         Text[ english_us ] = "~Subset";
@@ -3322,7 +3322,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     ListBox LB_FONTS_SUBSET
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 70 , 160 ) ;
+        Pos = MAP_APPFONT ( 80 , 160 ) ;
         Size = MAP_APPFONT ( 100 , 50 ) ;
         TabStop = TRUE ;
         Sort = FALSE ;
@@ -3332,7 +3332,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     {
         Left = TRUE ;
         Pos = MAP_APPFONT ( 6 , 178 ) ;
-        Size = MAP_APPFONT ( 56 , 10 ) ;
+        Size = MAP_APPFONT ( 71 , 8 ) ;
         Text = "Schriftschni~tt" ;
         Text [ ENGLISH ] = "S~tyle" ;
         Text[ english_us ] = "~Typeface";
@@ -3359,7 +3359,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     ComboBox 3
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 70 , 175 ) ;
+        Pos = MAP_APPFONT ( 80 , 175 ) ;
         Size = MAP_APPFONT ( 100 , 50 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -3367,9 +3367,9 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     FixedText 5
     {
-        Left = TRUE ;
-        Pos  = MAP_APPFONT ( 310 , 130 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Center = TRUE ;
+        Pos  = MAP_APPFONT ( 303 , 130 ) ;
+        Size = MAP_APPFONT ( 54 , 8 ) ;
     };
     Control 2
     {
@@ -3379,9 +3379,9 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     FixedText 6
     {
-        Left = TRUE ;
-        Pos  = MAP_APPFONT ( 310 , 180 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Center = TRUE ;
+        Pos  = MAP_APPFONT ( 303 , 182 ) ;
+        Size = MAP_APPFONT ( 54 , 8 ) ;
     };
     FixedImage BMP_ARROW_RIGHT
     {
@@ -3396,9 +3396,9 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     FixedText 7
     {
-        Left = TRUE ;
-        Pos  = MAP_APPFONT ( 190 , 130 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Center = TRUE ;
+        Pos  = MAP_APPFONT ( 183 , 130 ) ;
+        Size = MAP_APPFONT ( 54 , 9 ) ;
     };
     Control 3
     {
@@ -3408,9 +3408,9 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     FixedText 8
     {
-        Left = TRUE ;
-        Pos  = MAP_APPFONT ( 190 , 180 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Center = TRUE ;
+        Pos  = MAP_APPFONT ( 183 , 182 ) ;
+        Size = MAP_APPFONT ( 54 , 8 ) ;
     };
     PushButton 1
     {
