@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-03 14:34:52 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
 #endif
+#ifndef DBACORE_SDBCORETOOLS_HXX
+#include "sdbcoretools.hxx"
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -109,6 +112,9 @@
 #endif
 #ifndef _COM_SUN_STAR_XEMBEDOBJECTCREATOR_HPP_
 #include <com/sun/star/embed/XEmbedObjectCreator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
 #endif
 #ifndef _UCBHELPER_CANCELCOMMANDEXECUTION_HXX_
 #include <ucbhelper/cancelcommandexecution.hxx>
@@ -157,6 +163,9 @@
 #endif
 #ifndef _COM_SUN_STAR_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XCOMMONEMBEDPERSIST_HPP_
+#include <com/sun/star/embed/XCommonEmbedPersist.hpp>
 #endif
 #ifndef DBA_INTERCEPT_HXX
 #include "intercept.hxx"
@@ -215,6 +224,9 @@
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
+#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
+#include <comphelper/sequenceashashmap.hxx>
+#endif
 
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::uno;
@@ -236,6 +248,9 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 
+
+#define DEFAULT_WIDTH  15000
+#define DEFAULT_HEIGHT 10000
 //........................................................................
 namespace dbaccess
 {
@@ -245,6 +260,7 @@ namespace dbaccess
         {
             Reference< XStateChangeBroadcaster > m_xBroadCaster;
             ODocumentDefinition*                 m_pDefinition;
+            sal_Bool                             m_bInStateChange;
         protected:
             virtual void SAL_CALL disposing();
         public:
@@ -252,6 +268,7 @@ namespace dbaccess
                 : TEmbedObjectHolder(m_aMutex)
                 ,m_xBroadCaster(_xBroadCaster)
                 ,m_pDefinition(_pDefinition)
+                ,m_bInStateChange(sal_False)
             {
                 osl_incrementInterlockedCount( &m_refCount );
                 if ( m_xBroadCaster.is() )
@@ -278,14 +295,16 @@ namespace dbaccess
         //------------------------------------------------------------------
         void SAL_CALL OEmbedObjectHolder::stateChanged( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException)
         {
-            if ( nNewState == EmbedStates::RUNNING && nOldState == EmbedStates::ACTIVE && m_pDefinition )
+            if ( !m_bInStateChange && nNewState == EmbedStates::RUNNING && nOldState == EmbedStates::ACTIVE && m_pDefinition )
             {
+                m_bInStateChange = sal_True;
                 Reference<XInterface> xInt(static_cast< ::cppu::OWeakObject* >(m_pDefinition),UNO_QUERY);
                 {
                     Reference<XEmbeddedObject> xEmbeddedObject(aEvent.Source,UNO_QUERY);
                     if ( xEmbeddedObject.is() )
                         xEmbeddedObject->changeState(EmbedStates::LOADED);
                 }
+                m_bInStateChange = sal_False;
             }
         }
         //------------------------------------------------------------------
@@ -669,9 +688,14 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
                                     {
                                         try
                                         {
+                                            xProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowRulers")),makeAny(sal_True));
+                                            xProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowVertRuler")),makeAny(sal_True));
+                                            xProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowHoriRuler")),makeAny(sal_True));
                                             xProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRasterVisible")),makeAny(sal_True));
                                             xProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsSnapToRaster")),makeAny(sal_True));
                                             xProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowOnlineLayout")),makeAny(sal_True));
+                                            xProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RasterSubdivisionX")),makeAny(sal_Int32(5)));
+                                            xProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RasterSubdivisionY")),makeAny(sal_Int32(5)));
                                         }
                                         catch(Exception&)
                                         {
@@ -904,9 +928,59 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
     }
     catch(Exception&)
     {
-        DBG_ERROR("ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
+        OSL_ENSURE(0,"ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
     }
     return sal_True;
+}
+// -----------------------------------------------------------------------------
+void ODocumentDefinition::fillLoadArgs(Sequence<PropertyValue>& _rArgs,Sequence<PropertyValue>& _rEmbeddedObjectDescriptor,const Reference<XConnection>& _xConnection,sal_Bool _bReadOnly)
+{
+    sal_Int32 nLen = _rArgs.getLength();
+    {
+        Sequence<PropertyValue> aDocumentContext(2);
+        aDocumentContext[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection"));
+        aDocumentContext[0].Value <<= _xConnection;
+
+        aDocumentContext[1].Name = PROPERTY_APPLYFORMDESIGNMODE;
+        aDocumentContext[1].Value <<= !_bReadOnly;
+
+        _rArgs.realloc(nLen+1);
+        _rArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ComponentData"));
+        _rArgs[nLen++].Value <<= aDocumentContext;
+    }
+
+    _rArgs.realloc(nLen+3);
+    _rArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+    _rArgs[nLen++].Value <<= _bReadOnly;
+
+    _rArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode"));
+    _rArgs[nLen++].Value <<= MacroExecMode::USE_CONFIG;
+
+    _rArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
+    _rArgs[nLen++].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/swriter"));
+
+    if ( m_pImpl->m_aProps.aTitle.getLength() )
+    {
+        _rArgs.realloc(nLen+1);
+        _rArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle"));
+        _rArgs[nLen++].Value <<= m_pImpl->m_aProps.aTitle;
+    }
+
+    if ( m_pInterceptor )
+    {
+        m_pInterceptor->DisconnectContentHolder();
+        m_pInterceptor->release();
+        m_pInterceptor = NULL;
+    }
+
+    m_pInterceptor = new OInterceptor( this ,_bReadOnly);
+    m_pInterceptor->acquire();
+    Reference<XDispatchProviderInterceptor> xInterceptor = m_pInterceptor;
+
+    _rEmbeddedObjectDescriptor.realloc(1);
+    nLen = 0;
+    _rEmbeddedObjectDescriptor[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutplaceDispatchInterceptor"));
+    _rEmbeddedObjectDescriptor[nLen++].Value <<= xInterceptor;
 }
 // -----------------------------------------------------------------------------
 void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClassID,const Reference<XConnection>& _xConnection,sal_Bool _bReadOnly)
@@ -920,64 +994,22 @@ void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClass
             if ( xEmbedFactory.is() )
             {
                 ::rtl::OUString sDocumentService;
+                sal_Bool bSetSize = sal_False;
                 sal_Int32 nEntryConnectionMode = EntryInitModes::DEFAULT_INIT;
                 Sequence< sal_Int8 > aClassID = _aClassID;
                 if ( aClassID.getLength() )
                 {
                     nEntryConnectionMode = EntryInitModes::TRUNCATE_INIT;
+                    bSetSize = sal_True;
                 }
                 else
                 {
                     aClassID = lcl_GetSequenceClassID(SO3_SW_CLASSID);
                     sDocumentService = lcl_GetDocumentServiceFromMediaType(xStorage,m_pImpl->m_aProps.sPersistentName);
                 }
-                Sequence<PropertyValue> aArgs;
-                sal_Int32 nLen = aArgs.getLength();
-                {
-                    Sequence<PropertyValue> aDocumentContext(2);
-                    aDocumentContext[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection"));
-                    aDocumentContext[0].Value <<= _xConnection;
 
-                    aDocumentContext[1].Name = PROPERTY_APPLYFORMDESIGNMODE;
-                    aDocumentContext[1].Value <<= !_bReadOnly;
-
-                    aArgs.realloc(nLen+1);
-                    aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ComponentData"));
-                    aArgs[nLen++].Value <<= aDocumentContext;
-                }
-
-                aArgs.realloc(nLen+3);
-                aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
-                aArgs[nLen++].Value <<= _bReadOnly;
-
-                aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode"));
-                aArgs[nLen++].Value <<= MacroExecMode::USE_CONFIG;
-
-                aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
-                aArgs[nLen++].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/swriter"));
-
-                if ( m_pImpl->m_aProps.aTitle.getLength() )
-                {
-                    aArgs.realloc(nLen+1);
-                    aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle"));
-                    aArgs[nLen++].Value <<= m_pImpl->m_aProps.aTitle;
-                }
-
-                if ( m_pInterceptor )
-                {
-                    m_pInterceptor->DisconnectContentHolder();
-                    m_pInterceptor->release();
-                    m_pInterceptor = NULL;
-                }
-
-                m_pInterceptor = new OInterceptor( this ,_bReadOnly);
-                m_pInterceptor->acquire();
-                Reference<XDispatchProviderInterceptor> xInterceptor = m_pInterceptor;
-
-                Sequence<PropertyValue> aEmbeddedObjectDescriptor(1);
-                nLen = 0;
-                aEmbeddedObjectDescriptor[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutplaceDispatchInterceptor"));
-                aEmbeddedObjectDescriptor[nLen++].Value <<= xInterceptor;
+                Sequence<PropertyValue> aArgs,aEmbeddedObjectDescriptor;
+                fillLoadArgs(aArgs,aEmbeddedObjectDescriptor,_xConnection,_bReadOnly);
 
                 m_xEmbeddedObject.set(xEmbedFactory->createInstanceUserInit(aClassID
                                                                             ,sDocumentService
@@ -996,13 +1028,32 @@ void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClass
                     }
                     Reference<XEmbeddedClient> xClient = m_pClientHelper;
                     m_xEmbeddedObject->setClientSite(xClient);
+                    m_xEmbeddedObject->changeState(EmbedStates::RUNNING);
+                    if ( bSetSize )
+                    {
+                        ::com::sun::star::awt::Size aSize;
+                        aSize.Width = DEFAULT_WIDTH;
+                        aSize.Height = DEFAULT_HEIGHT;
+
+                        m_xEmbeddedObject->setVisualAreaSize(Aspects::MSOLE_CONTENT,aSize);
+                    }
                 }
               }
         }
     }
     else if ( m_xEmbeddedObject->getCurrentState() == EmbedStates::LOADED )
     {
-        m_xEmbeddedObject->setClientSite(this);
+        if ( !m_pClientHelper )
+            m_pClientHelper = new OEmbeddedClientHelper(this);
+        Reference<XEmbeddedClient> xClient = m_pClientHelper;
+        m_xEmbeddedObject->setClientSite(xClient);
+
+        Sequence<PropertyValue> aArgs,aEmbeddedObjectDescriptor;
+        fillLoadArgs(aArgs,aEmbeddedObjectDescriptor,_xConnection,_bReadOnly);
+        Reference<XCommonEmbedPersist> xCommon(m_xEmbeddedObject,UNO_QUERY);
+        OSL_ENSURE(xCommon.is(),"unsupported interface!");
+        if ( xCommon.is() )
+            xCommon->reload(aArgs,aEmbeddedObjectDescriptor);
         m_xEmbeddedObject->changeState(EmbedStates::RUNNING);
     }
     Reference<XModel> xModel(getComponent(),UNO_QUERY);
@@ -1232,6 +1283,7 @@ void ODocumentDefinition::fillReportData(sal_Bool _bFill)
         setModelReadOnly(sal_True);
     }
 }
+// -----------------------------------------------------------------------------
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
