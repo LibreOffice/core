@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backingcomp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:35:01 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,9 +185,6 @@ class BackingComp : public  css::lang::XTypeProvider
 
         /** the owner frame of this component. */
         css::uno::Reference< css::frame::XFrame > m_xFrame;
-
-        /** used to show a progress for loading documents. */
-        css::uno::Reference< css::task::XStatusIndicatorFactory > m_xStatus;
 
         /** helper for drag&drop. */
         css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > m_xDropTargetListener;
