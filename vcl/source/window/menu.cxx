@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-29 10:08:28 $
+ *  last change: $Author: mt $ $Date: 2001-11-29 11:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,19 +676,17 @@ void Menu::ImplCallEventListeners( ULONG nEvent )
 {
     VclMenuEvent aEvent( this, nEvent );
 
-/*
-    if ( !mpDummy3_WindowEventListeners->empty() )
-        mpDummy3_WindowEventListeners->Call( &aEvent );
+    if ( !maEventListeners.empty() )
+        maEventListeners.Call( &aEvent );
 
-    Window* pWindow = this;
-    while ( pWindow )
+    Menu* pMenu = this;
+    while ( pMenu )
     {
-        if ( !mpDummy4_WindowChildEventListeners->empty() )
-            mpDummy4_WindowChildEventListeners->Call( &aEvent );
+        if ( !maChildEventListeners.empty() )
+            maChildEventListeners.Call( &aEvent );
 
-        pWindow = GetParent();
+        pMenu = ( pMenu->pStartedFrom != pMenu ) ? pMenu->pStartedFrom : NULL;
     }
-*/
 }
 
 void Menu::AddEventListener( const Link& rEventListener )
@@ -2208,7 +2206,7 @@ long PopupMenu::ImplCalcHeight( USHORT nEntries ) const
     long nHeight = 0;
 
     USHORT nFound = 0;
-    for ( ULONG n = 0; ( nFound < nEntries ) && ( n < pItemList->Count() ); n++ )
+    for ( USHORT n = 0; ( nFound < nEntries ) && ( n < pItemList->Count() ); n++ )
     {
         if ( ImplIsVisible( n ) )
         {
