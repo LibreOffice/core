@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_TitleRotation.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:27 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,14 +278,14 @@ TabPage TP_ALIGNMENT
         Text [ dutch ] = "~Hoog-laag verzet" ;
         Text [ swedish ] = "Upphφjt/nedsδnkt" ;
         Text [ danish ] = "Ulige tal forskudt" ;
-        Text[ chinese_simplified ] = "δΈδΈ‹η§»ε¨(~O)";
+        Text[ chinese_simplified ] = "ε¥‡δΊ¤ι”™";
         Text[ russian ] = "Ηθγηΰγξμ (νεχεςνϋε βϋψε)";
         Text[ polish ] = "Rozm. przest. (gσra-dσ³)";
         Text[ japanese ] = "δΈδΈ‹γ«ι…η½®(~O)";
         Text[ chinese_traditional ] = "δΈδΈ‹η§»ε‹•(~O)";
         Text[ arabic ] = "Ϊαζν Λγ Σέαν";
         Text[ dutch ] = "~Hoog-laag verzet";
-        Text[ chinese_simplified ] = "δΈδΈ‹η§»ε¨(~O)";
+        Text[ chinese_simplified ] = "ε¥‡δΊ¤ι”™";
         Text[ greek ] = "Μετατόπισ~η πάνω-κάτω";
         Text[ korean ] = "μ„ μ•„λ μ—‡κ°λ¦Ό(~O)";
         Text[ turkish ] = "Yukarύ/aώaπύ hizalama";
@@ -315,14 +315,14 @@ TabPage TP_ALIGNMENT
         Text [ french ] = "Transposer ~bas-haut" ;
         Text [ swedish ] = "Nedsδnkt/upphφjt" ;
         Text [ danish ] = "Lige tal forskudt" ;
-        Text[ chinese_simplified ] = "δΈ‹δΈη§»ε¨(~E)";
+        Text[ chinese_simplified ] = "ε¶δΊ¤ι”™";
         Text[ russian ] = "Ηθγηΰγξμ (χεςνϋε βϋψε)";
         Text[ polish ] = "Rozm. przest. (dσ³-gσra)";
         Text[ japanese ] = "δΈδΈ‹γ«ι…η½®(~E)";
         Text[ chinese_traditional ] = "δΈ‹δΈη§»ε‹•(~E)";
         Text[ arabic ] = "Σέαν Λγ Ϊαζν";
         Text[ dutch ] = "~Hoog-laag verzet";
-        Text[ chinese_simplified ] = "δΈ‹δΈη§»ε¨(~E)";
+        Text[ chinese_simplified ] = "ε¶δΊ¤ι”™";
         Text[ greek ] = "Μετατόπιση κά~τω-πάνω";
         Text[ korean ] = "μ•„λ μ„ μ—‡κ°λ¦Ό(~E)";
         Text[ turkish ] = "Aώaπύ/yukarύ hizalama";
@@ -352,14 +352,14 @@ TabPage TP_ALIGNMENT
         Text [ dutch ] = "~Automatisch" ;
         Text [ swedish ] = "~Automatiskt" ;
         Text [ danish ] = "~Automatisk" ;
-        Text[ chinese_simplified ] = "θ‡ªε¨(~U)";
+        Text[ chinese_simplified ] = "θ‡ªε¨";
         Text[ russian ] = "ΐβςξμΰςθχερκθ";
         Text[ polish ] = "A~utomatycznie";
         Text[ japanese ] = "θ‡ªε‹•(~U)";
         Text[ chinese_traditional ] = "θ‡ªε‹•(~U)";
         Text[ arabic ] = "ΚαήΗΖν";
         Text[ dutch ] = "~Automatisch";
-        Text[ chinese_simplified ] = "θ‡ªε¨(~U)";
+        Text[ chinese_simplified ] = "θ‡ªε¨";
         Text[ greek ] = "~Αυτόματα";
         Text[ korean ] = "μλ™(~U)";
         Text[ turkish ] = "~Otomatik";
