@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-16 10:39:38 $
+ *  last change: $Author: mib $ $Date: 2001-09-07 06:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,13 @@ SdXMLShapeContext::~SdXMLShapeContext()
     if(mxOldCursor.is())
         GetImport().GetTextImport()->SetCursor( mxOldCursor );
 
+    // reinstall old list item (if necessary) #91964#
+    if ( mxOldListBlock.Is() )
+    {
+        GetImport().GetTextImport()->_SetListBlock( mxOldListBlock );
+        GetImport().GetTextImport()->_SetListItem( mxOldListItem );
+    }
+
     if( mxLockable.is() )
         mxLockable->removeActionLock();
 }
@@ -308,12 +315,21 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( USHORT nPrefix,
             uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
             if( xText.is() )
             {
-                mxOldCursor = GetImport().GetTextImport()->GetCursor();
+                UniReference < XMLTextImportHelper > xTxtImport =
+                    GetImport().GetTextImport();
+                mxOldCursor = xTxtImport->GetCursor();
                 mxCursor = xText->createTextCursor();
                 if( mxCursor.is() )
                 {
-                    GetImport().GetTextImport()->SetCursor( mxCursor );
+                    xTxtImport->SetCursor( mxCursor );
                 }
+
+                // remember old list item and block (#91964#) and reset them
+                // for the text frame
+                mxOldListBlock = xTxtImport->_GetListBlock();
+                mxOldListItem = xTxtImport->_GetListItem();
+                xTxtImport->_SetListBlock( NULL );
+                xTxtImport->_SetListItem( NULL );
             }
         }
 

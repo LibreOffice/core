@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-01 15:27:01 $
+ *  last change: $Author: mib $ $Date: 2001-09-07 06:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1281,7 +1281,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 aAny <<= pListItem->GetStartValue();
                 xPropSet->setPropertyValue( sNumberingStartValue, aAny );
             }
-            SetListItem( 0 );
+            SetListItem( (XMLTextListItemContext *)0 );
         }
         else
         {
@@ -1868,6 +1868,11 @@ void XMLTextImportHelper::SetListItem( XMLTextListItemContext *pListItem )
     xListItem = pListItem;
 }
 
+void XMLTextImportHelper::_SetListItem( SvXMLImportContext *pListItem )
+{
+    xListItem = PTR_CAST( XMLTextListItemContext, pListItem );
+}
+
 XMLTextListBlockContext *XMLTextImportHelper::GetListBlock()
 {
     return (XMLTextListBlockContext *)&xListBlock;
@@ -1876,6 +1881,11 @@ XMLTextListBlockContext *XMLTextImportHelper::GetListBlock()
 void XMLTextImportHelper::SetListBlock( XMLTextListBlockContext *pListBlock )
 {
     xListBlock = pListBlock;
+}
+
+void XMLTextImportHelper::_SetListBlock( SvXMLImportContext *pListBlock )
+{
+    xListBlock = PTR_CAST( XMLTextListBlockContext, pListBlock );
 }
 
 const SvXMLTokenMap& XMLTextImportHelper::GetTextListBlockAttrTokenMap()

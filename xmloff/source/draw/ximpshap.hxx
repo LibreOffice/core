@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-09 13:59:28 $
+ *  last change: $Author: mib $ $Date: 2001-09-07 06:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,11 @@ protected:
     rtl::OUString               maPresentationClass;
     rtl::OUString               maShapeName;
     rtl::OUString               maThumbnailURL;
+
+    /// old list item and block (#91964#)
+    SvXMLImportContextRef       mxOldListBlock;
+    SvXMLImportContextRef       mxOldListItem;
+
     sal_uInt16                  mnStyleFamily;
     sal_uInt16                  mnClass;
     sal_Bool                    mbIsPlaceholder;
