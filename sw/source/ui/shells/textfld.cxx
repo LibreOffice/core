@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:11:40 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,11 +239,16 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 #if !defined(DDE_AVAILABLE)
                         return;
 #endif
-                        ::so3::SvBaseLinksDialog aDlg( pMDI,
-                                        &rSh.GetLinkManager() );
-                        aDlg.SetActLink( &((SwDDEFieldType*)pFld->GetTyp())->
-                                                GetBaseLink() );
-                        aDlg.Execute();
+
+                        ::so3::SvBaseLink& rLink = ((SwDDEFieldType*)pFld->GetTyp())->
+                                                GetBaseLink();
+                        if(rLink.IsVisible())
+                        {
+                            ::so3::SvBaseLinksDialog aDlg( pMDI,
+                                            &rSh.GetLinkManager() );
+                            aDlg.SetActLink( &rLink );
+                            aDlg.Execute();
+                        }
                         break;
                     }
                     default:
@@ -733,6 +738,12 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                     RES_SCRIPTFLD == nTempWhich ||
                     RES_AUTHORITY == nTempWhich )
                     rSet.DisableItem( nWhich );
+                else if( RES_DDEFLD == nTempWhich &&
+                        !((SwDDEFieldType*)pField->GetTyp())->GetBaseLink().IsVisible())
+                {
+                    // nested links cannot be edited
+                    rSet.DisableItem( nWhich );
+                }
             }
             break;
             case FN_EXECUTE_MACROFIELD:
