@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:23:51 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:24:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,8 +315,9 @@ Window* StatementList::SearchAllWin( Window *pBase, Search &aSearch, BOOL MaybeB
                 Window *pPParent = pBase;
                 while ( pPParent->GET_REAL_PARENT() )
                     pPParent = pPParent->GET_REAL_PARENT();
-                if ( !IsFirstDocFrame( pPParent ) )
-                {
+
+//              if ( !IsFirstDocFrame( pPParent ) )
+//              {
                     // get overlap window. Will be dialog else document itself
                     pBase = pBase->GetWindow( WINDOW_OVERLAP );
 
@@ -335,15 +336,15 @@ Window* StatementList::SearchAllWin( Window *pBase, Search &aSearch, BOOL MaybeB
 
                     if ( pControl )
                         return pControl;
-                }
+//              }
             }
         }
 
         pBase = Application::GetFirstTopLevelWindow();
 
         // Skip FirstDocFrame
-        if ( bSearchFocusFirst && IsFirstDocFrame( pBase ) )
-            pBase = Application::GetNextTopLevelWindow( pBase );
+//      if ( bSearchFocusFirst && IsFirstDocFrame( pBase ) )
+//          pBase = Application::GetNextTopLevelWindow( pBase );
 
         while ( pBase )
         {
@@ -353,8 +354,8 @@ Window* StatementList::SearchAllWin( Window *pBase, Search &aSearch, BOOL MaybeB
 
             pBase = Application::GetNextTopLevelWindow( pBase );
             // Skip FirstDocFrame
-            if ( bSearchFocusFirst && IsFirstDocFrame( pBase ) )
-                pBase = Application::GetNextTopLevelWindow( pBase );
+//          if ( bSearchFocusFirst && IsFirstDocFrame( pBase ) )
+//              pBase = Application::GetNextTopLevelWindow( pBase );
         }
         return NULL;
     }
