@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-20 13:19:24 $
+ *  last change: $Author: mt $ $Date: 2001-07-20 14:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1715,8 +1715,11 @@ void DateFormatter::SetLongFormat( BOOL bLong )
 
 void DateFormatter::SetShowDateCentury( BOOL bLong )
 {
-    mbShowDateCentury = bLong;
-    ReformatAll();
+    if ( mbShowDateCentury != bLong )
+    {
+        mbShowDateCentury = bLong;
+        ReformatAll();
+    }
 }
 
 // -----------------------------------------------------------------------
