@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-15 16:11:33 $
+ *  last change: $Author: sj $ $Date: 2001-02-27 10:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,19 +255,8 @@ GraphicFilter* SVX_LIGHT_GetGrfFilter_Impl()
 
             aFilterURL.removeSegment();
             aFilterURL.removeFinalSlash();
-
-            INetURLObject aConfigURL( aFilterURL );
-
-            aFilterURL.Append( "filter" );
-#ifndef UNX
-            aConfigURL.Append( "sop.ini" );
-#else
-            aConfigURL.Append( "soprc" );
-#endif
-
             SVX_LIGHT_pGrapicFilter = new GraphicFilter;
             SVX_LIGHT_pGrapicFilter->SetFilterPath( aFilterURL );
-            SVX_LIGHT_pGrapicFilter->SetConfigPath( aConfigURL );
         }
     }
 
