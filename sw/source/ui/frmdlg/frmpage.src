@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 23:20:54 $
+ *  last change: $Author: obo $ $Date: 2001-11-23 23:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2535,6 +2535,7 @@ TabPage TP_FRM_ADD
         Text[ catalan ] = "Additional Setting";
     };
 };
+
 
 
 
