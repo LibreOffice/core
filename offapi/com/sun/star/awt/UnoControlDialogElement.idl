@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlDialogElement.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2002-10-08 08:58:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
     <type>UnoControl</type> which is embedded in a
     <type>UnoControlDialogModel</type>.
  */
-service UnoControlDialogElement
+published service UnoControlDialogElement
 {
     //-------------------------------------------------------------------------
 
