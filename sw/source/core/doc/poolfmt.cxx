@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-28 13:25:46 $
+ *  last change: $Author: mtg $ $Date: 2001-07-19 16:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,22 +235,6 @@ static const USHORT aHeadlineSizes[ 2 * MAXLEVEL ] = {
     PT_24, PT_18, PT_14, PT_12, PT_10,
     PT_7, PT_7, PT_7, PT_7, PT_7            // HTML-Mode
 };
-
-// Array fuer alle Pool-Vorlagen-Name:
-SvStringsDtor   *SwDoc::pTextNmArray = 0,
-                *SwDoc::pListsNmArray = 0,
-                *SwDoc::pExtraNmArray = 0,
-                *SwDoc::pRegisterNmArray = 0,
-                *SwDoc::pDocNmArray = 0,
-                *SwDoc::pHTMLNmArray = 0,
-                *SwDoc::pFrmFmtNmArray = 0,
-                *SwDoc::pChrFmtNmArray = 0,
-                *SwDoc::pHTMLChrFmtNmArray = 0,
-                *SwDoc::pPageDescNmArray = 0,
-                *SwDoc::pNumRuleNmArray = 0;
-
-
-
 
 long lcl_GetRightMargin( SwDoc& rDoc )
 {
@@ -2294,136 +2278,6 @@ BOOL SwDoc::IsUsed( const SwNumRule& rRule ) const
     return bUsed;
 }
 
-
-// erfrage zu einer PoolId den Namen
-String& GetDocPoolNm( USHORT nId, String& rFillNm )
-{
-    return SwDoc::GetPoolNm( nId, rFillNm );
-}
-
-// erfrage zu einer PoolId den Namen
-String& SwDoc::GetPoolNm( USHORT nId, String& rFillNm )
-{
-    USHORT nRC = 0, nStt = 0, nEnd = 0;
-    SvStringsDtor** ppStrArr = 0;
-
-    switch( (USER_FMT | COLL_GET_RANGE_BITS | POOLGRP_NOCOLLID) & nId )
-    {
-    case COLL_TEXT_BITS:
-        if( RES_POOLCOLL_TEXT_BEGIN <= nId && nId < RES_POOLCOLL_TEXT_END )
-        {
-            ppStrArr = &SwDoc::pTextNmArray;
-            nRC = RC_POOLCOLL_TEXT_BEGIN;
-            nStt = RES_POOLCOLL_TEXT_BEGIN;
-            nEnd = RES_POOLCOLL_TEXT_END;
-        }
-        break;
-    case COLL_LISTS_BITS:
-        if( RES_POOLCOLL_LISTS_BEGIN <= nId && nId < RES_POOLCOLL_LISTS_END )
-        {
-            ppStrArr = &SwDoc::pListsNmArray;
-            nRC = RC_POOLCOLL_LISTS_BEGIN;
-            nStt = RES_POOLCOLL_LISTS_BEGIN;
-            nEnd = RES_POOLCOLL_LISTS_END;
-        }
-        break;
-    case COLL_EXTRA_BITS:
-        if( RES_POOLCOLL_EXTRA_BEGIN <= nId && nId < RES_POOLCOLL_EXTRA_END )
-        {
-            ppStrArr = &SwDoc::pExtraNmArray;
-            nRC = RC_POOLCOLL_EXTRA_BEGIN;
-            nStt = RES_POOLCOLL_EXTRA_BEGIN;
-            nEnd = RES_POOLCOLL_EXTRA_END;
-        }
-        break;
-    case COLL_REGISTER_BITS:
-        if( RES_POOLCOLL_REGISTER_BEGIN <= nId && nId < RES_POOLCOLL_REGISTER_END )
-        {
-            ppStrArr = &SwDoc::pRegisterNmArray;
-            nRC = RC_POOLCOLL_REGISTER_BEGIN;
-            nStt = RES_POOLCOLL_REGISTER_BEGIN;
-            nEnd = RES_POOLCOLL_REGISTER_END;
-        }
-        break;
-    case COLL_DOC_BITS:
-        if( RES_POOLCOLL_DOC_BEGIN <= nId && nId < RES_POOLCOLL_DOC_END )
-        {
-            ppStrArr = &SwDoc::pDocNmArray;
-            nRC = RC_POOLCOLL_DOC_BEGIN;
-            nStt = RES_POOLCOLL_DOC_BEGIN;
-            nEnd = RES_POOLCOLL_DOC_END;
-        }
-        break;
-    case COLL_HTML_BITS:
-        if( RES_POOLCOLL_HTML_BEGIN <= nId && nId < RES_POOLCOLL_HTML_END )
-        {
-            ppStrArr = &SwDoc::pHTMLNmArray;
-            nRC = RC_POOLCOLL_HTML_BEGIN;
-            nStt = RES_POOLCOLL_HTML_BEGIN;
-            nEnd = RES_POOLCOLL_HTML_END;
-        }
-        break;
-    case POOLGRP_CHARFMT:
-        if( RES_POOLCHR_NORMAL_BEGIN <= nId && nId < RES_POOLCHR_NORMAL_END )
-        {
-            ppStrArr = &SwDoc::pChrFmtNmArray;
-            nRC = RC_POOLCHRFMT_BEGIN;
-            nStt = RES_POOLCHR_NORMAL_BEGIN;
-            nEnd = RES_POOLCHR_NORMAL_END;
-        }
-        else if( RES_POOLCHR_HTML_BEGIN <= nId && nId < RES_POOLCHR_HTML_END )
-        {
-            ppStrArr = &SwDoc::pHTMLChrFmtNmArray;
-            nRC = RC_POOLCHRFMT_HTML_BEGIN;
-            nStt = RES_POOLCHR_HTML_BEGIN;
-            nEnd = RES_POOLCHR_HTML_END;
-        }
-        break;
-    case POOLGRP_FRAMEFMT:
-        if( RES_POOLFRM_BEGIN <= nId && nId < RES_POOLFRM_END )
-        {
-            ppStrArr = &SwDoc::pFrmFmtNmArray;
-            nRC = RC_POOLFRMFMT_BEGIN;
-            nStt = RES_POOLFRM_BEGIN;
-            nEnd = RES_POOLFRM_END;
-        }
-        break;
-    case POOLGRP_PAGEDESC:
-        if( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END )
-        {
-            ppStrArr = &SwDoc::pPageDescNmArray;
-            nRC = RC_POOLPAGEDESC_BEGIN;
-            nStt = RES_POOLPAGE_BEGIN;
-            nEnd = RES_POOLPAGE_END;
-        }
-        break;
-    case POOLGRP_NUMRULE:
-        if( RES_POOLNUMRULE_BEGIN <= nId && nId < RES_POOLNUMRULE_END )
-        {
-            ppStrArr = &SwDoc::pNumRuleNmArray;
-            nRC = RC_POOLNUMRULE_BEGIN;
-            nStt = RES_POOLNUMRULE_BEGIN;
-            nEnd = RES_POOLNUMRULE_END;
-        }
-        break;
-    }
-
-    if( ppStrArr )
-    {
-        if( !*ppStrArr )
-            SwDoc::NewNmArray( *ppStrArr, nRC, (nRC - nStt + nEnd ));
-        rFillNm = * (*ppStrArr)->operator[]( nId - nStt );
-    }
-//JP 13.04.95: soll der Name geloescht werden?
-//              erstmal bleibt er erhalten
-//  else
-//      rFillNm.Erase();
-    return rFillNm;
-}
-
-
-
-
     // loeche die nicht mehr benutzten Pattern-Namen aus dem Array.
     // alle nicht mehr referenzierten Namen werden durch 0-Pointer
     // ersetzt. Diese Positionen koennen wieder vergeben werden.
@@ -2472,8 +2326,6 @@ void SwDoc::ReOrgPatternHelpIds()
     }
 }
 
-
-
     // Suche die Position vom Vorlagen-Namen. Ist nicht vorhanden
     // dann fuege neu ein
 USHORT SwDoc::SetDocPattern( const String& rPatternName )
@@ -2498,223 +2350,6 @@ USHORT SwDoc::SetDocPattern( const String& rPatternName )
     SetModified();
     return nNewPos;
 }
-
-        // ist der Name ein Pool-Vorlagen-Name, returne seine ID,
-        // sonst USHRT_MAX
-
-
-// falls mit gechacht werden soll:
-USHORT lcl_ChkNm( USHORT nStt, USHORT nEnd, USHORT nResStt,
-                    const String& rName, SvStringsDtor*& pArray )
-{
-    USHORT n, i;
-    if( !pArray )
-    {
-        USHORT nFnd = 0;
-        pArray = new SvStringsDtor( BYTE(nEnd - nStt), 1 );
-        for( n = nStt, i = 0; n < nEnd; ++n, ++i )
-        {
-            const ResId rRId( nResStt + i, pSwResMgr );
-            String* pStr = new String( rRId );
-            pArray->Insert( pStr, i );
-            if( !nFnd && *pStr == rName )
-                nFnd = n;
-        }
-        return nFnd ? nFnd : USHRT_MAX;
-    }
-
-    for( n = nStt, i = 0; n < nEnd; ++n, ++i )
-        if( *(*pArray)[i] == rName )
-            return n;
-
-    return USHRT_MAX;
-}
-
-
-
-USHORT SwDoc::GetPoolId( const String& rName,
-                        SwGetPoolIdFromName eFlags )
-{
-    USHORT nId;
-    if( GET_POOLID_TXTCOLL & eFlags )
-    {
-        if( USHRT_MAX != ( nId = lcl_ChkNm( RES_POOLCOLL_TEXT_BEGIN,
-                RES_POOLCOLL_TEXT_END, RC_POOLCOLL_TEXT_BEGIN, rName,
-                SwDoc::pTextNmArray )))
-            return nId;
-        if( USHRT_MAX != ( nId = lcl_ChkNm( RES_POOLCOLL_LISTS_BEGIN,
-                RES_POOLCOLL_LISTS_END, RC_POOLCOLL_LISTS_BEGIN, rName,
-                SwDoc::pListsNmArray )))
-            return nId;
-        if( USHRT_MAX != ( nId = lcl_ChkNm( RES_POOLCOLL_EXTRA_BEGIN,
-                RES_POOLCOLL_EXTRA_END, RC_POOLCOLL_EXTRA_BEGIN, rName,
-                SwDoc::pExtraNmArray )))
-            return nId;
-        if( USHRT_MAX != ( nId = lcl_ChkNm( RES_POOLCOLL_REGISTER_BEGIN,
-                RES_POOLCOLL_REGISTER_END, RC_POOLCOLL_REGISTER_BEGIN, rName,
-                SwDoc::pRegisterNmArray )))
-            return nId;
-        if( USHRT_MAX != ( nId = lcl_ChkNm( RES_POOLCOLL_DOC_BEGIN,
-                RES_POOLCOLL_DOC_END, RC_POOLCOLL_DOC_BEGIN, rName,
-                SwDoc::pDocNmArray )))
-            return nId;
-        if( USHRT_MAX != ( nId = lcl_ChkNm( RES_POOLCOLL_HTML_BEGIN,
-                RES_POOLCOLL_HTML_END, RC_POOLCOLL_HTML_BEGIN, rName,
-                SwDoc::pHTMLNmArray )))
-            return nId;
-    }
-
-    if( GET_POOLID_CHRFMT & eFlags )
-    {
-        if( USHRT_MAX != ( nId = lcl_ChkNm( RES_POOLCHR_NORMAL_BEGIN,
-                RES_POOLCHR_NORMAL_END, RC_POOLCHRFMT_BEGIN, rName,
-                SwDoc::pChrFmtNmArray )))
-            return nId;
-        if( USHRT_MAX != ( nId = lcl_ChkNm( RES_POOLCHR_HTML_BEGIN,
-                RES_POOLCHR_HTML_END, RC_POOLCHRFMT_HTML_BEGIN, rName,
-                SwDoc::pHTMLChrFmtNmArray )))
-            return nId;
-    }
-    if( GET_POOLID_FRMFMT & eFlags &&
-        USHRT_MAX != ( nId = lcl_ChkNm( RES_POOLFRM_BEGIN,
-                RES_POOLFRM_END, RC_POOLFRMFMT_BEGIN, rName,
-                SwDoc::pFrmFmtNmArray )))
-            return nId;
-
-    if( GET_POOLID_PAGEDESC & eFlags &&
-        USHRT_MAX != ( nId = lcl_ChkNm( RES_POOLPAGE_BEGIN,
-                RES_POOLPAGE_END, RC_POOLPAGEDESC_BEGIN, rName,
-                SwDoc::pPageDescNmArray )))
-            return nId;
-
-    if( GET_POOLID_NUMRULE & eFlags &&
-        USHRT_MAX != ( nId = lcl_ChkNm( RES_POOLNUMRULE_BEGIN,
-                RES_POOLNUMRULE_END, RC_POOLNUMRULE_BEGIN, rName,
-                SwDoc::pNumRuleNmArray )))
-            return nId;
-
-    return USHRT_MAX;
-}
-
-
-
-
-
-SvStringsDtor* SwDoc::NewNmArray( SvStringsDtor*& pNmArray, USHORT nStt, USHORT nEnd )
-{
-    if( !pNmArray )
-    {
-        pNmArray = new SvStringsDtor( BYTE(nEnd - nStt), 1 );
-        while( nStt < nEnd )
-        {
-            const ResId rRId( nStt, pSwResMgr );
-            String* pStr = new String( rRId );
-            pNmArray->Insert( pStr, pNmArray->Count() );
-            ++nStt;
-        }
-    }
-    return pNmArray;
-}
-
-
-
-SvStringsDtor* SwDoc::NewTextNmArray() const
-{
-    return NewNmArray( pTextNmArray, RC_POOLCOLL_TEXT_BEGIN,
-            ( RC_POOLCOLL_TEXT_BEGIN +
-                    (RES_POOLCOLL_TEXT_END - RES_POOLCOLL_TEXT_BEGIN )) );
-}
-
-
-
-SvStringsDtor* SwDoc::NewListsNmArray() const
-{
-    return NewNmArray( pListsNmArray, RC_POOLCOLL_LISTS_BEGIN,
-            ( RC_POOLCOLL_LISTS_BEGIN +
-                    (RES_POOLCOLL_LISTS_END - RES_POOLCOLL_LISTS_BEGIN )) );
-}
-
-
-
-SvStringsDtor* SwDoc::NewExtraNmArray() const
-{
-    return NewNmArray( pExtraNmArray, RC_POOLCOLL_EXTRA_BEGIN,
-                ( RC_POOLCOLL_EXTRA_BEGIN +
-                    (RES_POOLCOLL_EXTRA_END - RES_POOLCOLL_EXTRA_BEGIN )) );
-}
-
-
-
-SvStringsDtor* SwDoc::NewRegisterNmArray() const
-{
-    return NewNmArray( pRegisterNmArray, RC_POOLCOLL_REGISTER_BEGIN,
-            ( RC_POOLCOLL_REGISTER_BEGIN +
-                (RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN )) );
-}
-
-
-
-SvStringsDtor* SwDoc::NewDocNmArray() const
-{
-    return NewNmArray( pDocNmArray, RC_POOLCOLL_DOC_BEGIN,
-                    ( RC_POOLCOLL_DOC_BEGIN +
-                        (RES_POOLCOLL_DOC_END - RES_POOLCOLL_DOC_BEGIN )) );
-}
-
-
-
-SvStringsDtor* SwDoc::NewHTMLNmArray() const
-{
-    return NewNmArray( pHTMLNmArray, RC_POOLCOLL_HTML_BEGIN,
-                    ( RC_POOLCOLL_HTML_BEGIN +
-                        (RES_POOLCOLL_HTML_END - RES_POOLCOLL_HTML_BEGIN )) );
-}
-
-
-
-SvStringsDtor* SwDoc::NewFrmFmtNmArray() const
-{
-    return NewNmArray( pFrmFmtNmArray, RC_POOLFRMFMT_BEGIN,
-                    ( RC_POOLFRMFMT_BEGIN +
-                        (RES_POOLFRM_END - RES_POOLFRM_BEGIN )) );
-}
-
-
-
-
-SvStringsDtor* SwDoc::NewChrFmtNmArray() const
-{
-    return NewNmArray( pChrFmtNmArray, RC_POOLCHRFMT_BEGIN,
-            ( RC_POOLCHRFMT_BEGIN +
-                    (RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN )) );
-}
-
-
-
-SvStringsDtor* SwDoc::NewHTMLChrFmtNmArray() const
-{
-    return NewNmArray( pHTMLChrFmtNmArray, RC_POOLCHRFMT_HTML_BEGIN,
-            ( RC_POOLCHRFMT_HTML_BEGIN +
-                    (RES_POOLCHR_HTML_END - RES_POOLCHR_HTML_BEGIN )) );
-}
-
-
-
-SvStringsDtor* SwDoc::NewPageDescNmArray() const
-{
-    return NewNmArray( pPageDescNmArray, RC_POOLPAGEDESC_BEGIN,
-            ( RC_POOLPAGEDESC_BEGIN +
-                    (RES_POOLPAGE_END - RES_POOLPAGE_BEGIN )) );
-}
-
-SvStringsDtor* SwDoc::NewNumRuleNmArray() const
-{
-    return NewNmArray( pNumRuleNmArray, RC_POOLNUMRULE_BEGIN,
-            ( RC_POOLNUMRULE_BEGIN +
-                    (RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN )) );
-}
-
-
 
 USHORT GetPoolParent( USHORT nId )
 {
@@ -2842,5 +2477,3 @@ USHORT GetPoolParent( USHORT nId )
 
     return nRet;
 }
-
-
