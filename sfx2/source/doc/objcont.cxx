@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 20:01:14 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,18 +609,8 @@ void SfxObjectShell::DocInfoDlg_Impl( SfxDocumentInfo &rDocInfo )
     {
         // neue DocInfo aus Dialog holen
         const SfxPoolItem *pItem = 0;
-        if ( SFX_ITEM_SET ==
-             pDlg->GetOutputItemSet()->GetItemState( SID_DOCINFO, TRUE, &pItem ) )
-        {
+        if ( SFX_ITEM_SET == pDlg->GetOutputItemSet()->GetItemState( SID_DOCINFO, TRUE, &pItem ) )
             rDocInfo = (*(const SfxDocumentInfoItem *)pItem)();
-
-            // ggf. den Titel des Dokuments neu setzen
-            String aNewTitle = rDocInfo.GetTitle();
-            aNewTitle.EraseLeadingChars();
-            aNewTitle.EraseTrailingChars();
-            if ( aTitle != aNewTitle && aNewTitle.Len() )
-                SetTitle( aNewTitle );
-        }
     }
     delete pDlg;
 }
