@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOOoTContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:18:30 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,11 +418,30 @@ XMLTypedPropertiesOOoTContext_Impl
         ++i;
     }
 
-    OSL_ENSURE( XML_NAMESPACE_NONE == nPrefix ||
+#ifndef PRODUCT
+    if( !( XML_NAMESPACE_NONE == nPrefix ||
                 (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) ||
                 XML_PROP_TYPE_END==m_aPropTypes[1] ||
-                (i<MAX_PROP_TYPES && XML_PROP_TYPE_END!=m_aPropTypes[i]),
-                "didn't find property" );
+                (i<MAX_PROP_TYPES && XML_PROP_TYPE_END!=m_aPropTypes[i]) ) )
+    {
+        ::rtl::OString aTmp("Didnt't find property: ");
+        const ::rtl::OUString& rPrefix =
+            GetTransformer().GetNamespaceMap().GetPrefixByKey( nPrefix );
+        aTmp += ::rtl::OString( rPrefix.getStr(), rPrefix.getLength(),
+                                RTL_TEXTENCODING_ASCII_US );
+        aTmp += ::rtl::OString::valueOf( ':' );
+        aTmp += ::rtl::OString( rLocalName.getStr(), rLocalName.getLength(),
+                                RTL_TEXTENCODING_ASCII_US );
+        aTmp += ::rtl::OString(", assuming <style:");
+        const ::rtl::OUString& rName =
+            ::xmloff::token::GetXMLToken( aPropTokens[m_aPropTypes[0]] );
+        aTmp += ::rtl::OString( rName.getStr(), rName.getLength(),
+                                RTL_TEXTENCODING_ASCII_US );
+        aTmp += ::rtl::OString::valueOf( '>' );
+
+        OSL_ENSURE( !this, aTmp );
+    }
+#endif
 
     if( !m_aPropContexts[nIndex].is() )
     {
@@ -481,11 +500,11 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+        const OUString sAttrName = xAttrList->getNameByIndex( i );
+        const OUString sAttrValue = xAttrList->getValueByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( sAttrName,
                                                                  &aLocalName );
         TransformerAction_Impl aAction;
         XMLTypedPropertiesOOoTContext_Impl *pContext =
@@ -493,34 +512,34 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         switch( aAction.m_nActionType )
         {
         case XML_ATACTION_COPY:
-            pContext->AddAttribute( rAttrName, rAttrValue );
+            pContext->AddAttribute( sAttrName, sAttrValue );
             break;
         case XML_ATACTION_COPY_DUPLICATE:
             {
-                pContext->AddAttribute( rAttrName, rAttrValue );
+                pContext->AddAttribute( sAttrName, sAttrValue );
                 XMLTypedPropertiesOOoTContext_Impl *pContext2 =
                     GetPropContext( (XMLPropType)aAction.m_nParam1 );
                 if( pContext2 )
-                    pContext2->AddAttribute( rAttrName, rAttrValue );
+                    pContext2->AddAttribute( sAttrName, sAttrValue );
             }
             break;
         case XML_ATACTION_RENAME:
             {
                 pContext->AddAttribute( aAction.GetQNamePrefixFromParam1(),
                                         aAction.GetQNameTokenFromParam1(),
-                                        rAttrValue );
+                                        sAttrValue );
             }
             break;
         case XML_ATACTION_ENCODE_STYLE_NAME_REF:
             {
-                OUString aAttrValue( rAttrValue );
+                OUString aAttrValue( sAttrValue );
                 GetTransformer().EncodeStyleName(aAttrValue);
-                pContext->AddAttribute( rAttrName, aAttrValue );
+                pContext->AddAttribute( sAttrName, aAttrValue );
             }
             break;
         case XML_ATACTION_RENAME_ENCODE_STYLE_NAME_REF:
             {
-                OUString aAttrValue( rAttrValue );
+                OUString aAttrValue( sAttrValue );
                 GetTransformer().EncodeStyleName(aAttrValue);
                 pContext->AddAttribute( aAction.GetQNamePrefixFromParam1(),
                                         aAction.GetQNameTokenFromParam1(),
@@ -529,14 +548,14 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             break;
         case XML_ATACTION_NEG_PERCENT:
             {
-                OUString aAttrValue( rAttrValue );
+                OUString aAttrValue( sAttrValue );
                 GetTransformer().NegPercent(aAttrValue);
-                pContext->AddAttribute( rAttrName, aAttrValue );
+                pContext->AddAttribute( sAttrName, aAttrValue );
             }
             break;
         case XML_ATACTION_RENAME_NEG_PERCENT:
             {
-                OUString aAttrValue( rAttrValue );
+                OUString aAttrValue( sAttrValue );
                 GetTransformer().NegPercent(aAttrValue);
                 pContext->AddAttribute( aAction.GetQNamePrefixFromParam1(),
                                         aAction.GetQNameTokenFromParam1(),
@@ -545,33 +564,33 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             break;
         case XML_ATACTION_INCH2IN:
             {
-                OUString aAttrValue( rAttrValue );
+                OUString aAttrValue( sAttrValue );
                 XMLTransformerBase::ReplaceSingleInchWithIn( aAttrValue );
-                pContext->AddAttribute( rAttrName, aAttrValue );
+                pContext->AddAttribute( sAttrName, aAttrValue );
             }
             break;
         case XML_ATACTION_INCH2IN_DUPLICATE:
             {
-                OUString aAttrValue( rAttrValue );
+                OUString aAttrValue( sAttrValue );
                 XMLTransformerBase::ReplaceSingleInchWithIn( aAttrValue );
-                pContext->AddAttribute( rAttrName, aAttrValue );
+                pContext->AddAttribute( sAttrName, aAttrValue );
                 XMLTypedPropertiesOOoTContext_Impl *pContext2 =
                     GetPropContext( (XMLPropType)aAction.m_nParam1 );
                 if( pContext2 )
-                    pContext2->AddAttribute( rAttrName, aAttrValue );
+                    pContext2->AddAttribute( sAttrName, aAttrValue );
             }
             break;
         case XML_ATACTION_INCHS2INS:
             {
-                OUString aAttrValue( rAttrValue );
+                OUString aAttrValue( sAttrValue );
                 XMLTransformerBase::ReplaceInchWithIn( aAttrValue );
-                pContext->AddAttribute( rAttrName, aAttrValue );
+                pContext->AddAttribute( sAttrName, aAttrValue );
             }
             break;
         case XML_PTACTION_LINE_MODE:
             {
                 OUString aAttrValue( GetXMLToken(
-                                        IsXMLToken( rAttrValue, XML_TRUE )
+                                        IsXMLToken( sAttrValue, XML_TRUE )
                                             ? XML_CONTINUOUS
                                             : XML_SKIP_WHITE_SPACE) );
                 OUString aAttrQName(
@@ -590,15 +609,15 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         case XML_PTACTION_KEEP_WITH_NEXT:
             {
                 OUString aAttrValue( GetXMLToken(
-                                        IsXMLToken( rAttrValue, XML_TRUE )
+                                        IsXMLToken( sAttrValue, XML_TRUE )
                                             ? XML_ALWAYS
                                             : XML_AUTO) );
-                pContext->AddAttribute( rAttrName, aAttrValue );
+                pContext->AddAttribute( sAttrName, aAttrValue );
             }
             break;
         case XML_PTACTION_UNDERLINE:
             {
-                XMLTokenEnum eToken = GetTransformer().GetToken( rAttrValue );
+                XMLTokenEnum eToken = GetTransformer().GetToken( sAttrValue );
                 sal_Bool bBold = sal_False, bDouble = sal_False;
                 switch( eToken )
                 {
@@ -647,7 +666,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                             XML_NAMESPACE_STYLE,
                             GetXMLToken( XML_TEXT_UNDERLINE_STYLE ) ),
                         eToken != XML_TOKEN_END ? GetXMLToken( eToken )
-                                                   : rAttrValue );
+                                                   : sAttrValue );
                 if( bDouble )
                     pContext->AddAttribute(
                             GetTransformer().GetNamespaceMap().GetQNameByKey(
@@ -664,7 +683,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             break;
         case XML_PTACTION_LINETHROUGH:
             {
-                XMLTokenEnum eToken = GetTransformer().GetToken( rAttrValue );
+                XMLTokenEnum eToken = GetTransformer().GetToken( sAttrValue );
                 sal_Bool bBold = sal_False, bDouble = sal_False;
                 sal_Unicode c = 0;
                 switch( eToken )
@@ -684,7 +703,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                     eToken = XML_SOLID;
                     c = '/';
                     break;
-                case XML_X:
+                case XML_uX:
                     eToken = XML_SOLID;
                     c = 'X';
                     break;
@@ -694,7 +713,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                             XML_NAMESPACE_STYLE,
                             GetXMLToken( XML_TEXT_LINE_THROUGH_STYLE ) ),
                         eToken != XML_TOKEN_END ? GetXMLToken( eToken )
-                                                   : rAttrValue );
+                                                   : sAttrValue );
                 if( bDouble )
                     pContext->AddAttribute(
                             GetTransformer().GetNamespaceMap().GetQNameByKey(
@@ -717,7 +736,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             break;
         case XML_PTACTION_SPLINES:
             {
-                sal_Int32 nSplineType = rAttrValue.toInt32();
+                sal_Int32 nSplineType = sAttrValue.toInt32();
                 OUString aNewAttrName = GetTransformer().GetNamespaceMap().GetQNameByKey(
                     XML_NAMESPACE_CHART, GetXMLToken( XML_INTERPOLATION ) );
 
@@ -748,16 +767,16 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             }
             break;
         case XML_PTACTION_INTERVAL_MAJOR:
-            pContext->AddAttribute( rAttrName, rAttrValue );
-            SvXMLUnitConverter::convertDouble( fIntervalMajor, rAttrValue );
+            pContext->AddAttribute( sAttrName, sAttrValue );
+            SvXMLUnitConverter::convertDouble( fIntervalMajor, sAttrValue );
             break;
         case XML_PTACTION_INTERVAL_MINOR:
-            SvXMLUnitConverter::convertDouble( fIntervalMinor, rAttrValue );
+            SvXMLUnitConverter::convertDouble( fIntervalMinor, sAttrValue );
             pIntervalMinorDivisorContext = pContext;
             break;
         case XML_PTACTION_SYMBOL:
             {
-                sal_Int32 nSymbolType = rAttrValue.toInt32();
+                sal_Int32 nSymbolType = sAttrValue.toInt32();
                 OUString aNewAttrName = GetTransformer().GetNamespaceMap().GetQNameByKey(
                     XML_NAMESPACE_CHART, GetXMLToken( XML_SYMBOL_TYPE ) );
 
@@ -847,7 +866,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                     GetTransformer(), GetTransformer().GetNamespaceMap().GetQNameByKey(
                         XML_NAMESPACE_CHART, GetXMLToken( XML_SYMBOL_IMAGE )));
 
-                OUString aAttrValue( rAttrValue );
+                OUString aAttrValue( sAttrValue );
                 if( GetTransformer().ConvertURIToOASIS( aAttrValue, sal_True ))
                 {
                     pSymbolImageContext->AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aAttrValue );
@@ -859,7 +878,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         // #i25616#
         case XML_PTACTION_TRANSPARENCY :
             {
-                OUString aAttrValue( rAttrValue );
+                OUString aAttrValue( sAttrValue );
                 GetTransformer().NegPercent(aAttrValue);
                 pContext->AddAttribute( XML_NAMESPACE_DRAW,
                                         XML_OPACITY,
@@ -1030,10 +1049,10 @@ void XMLStyleOOoTContext::StartElement(
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString sAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( sAttrName,
                                                                  &aLocalName );
         XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
         XMLTransformerActions::const_iterator aIter =
@@ -1046,7 +1065,7 @@ void XMLStyleOOoTContext::StartElement(
                     new XMLMutableAttributeList( xAttrList );
                 xAttrList = pMutableAttrList;
             }
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            const OUString sAttrValue = xAttrList->getValueByIndex( i );
             switch( (*aIter).second.m_nActionType )
             {
             case XML_ATACTION_STYLE_FAMILY:
@@ -1054,31 +1073,31 @@ void XMLStyleOOoTContext::StartElement(
                     sal_Bool bControl = sal_False;
                     if( XML_FAMILY_TYPE_END == m_eFamily )
                     {
-                        if( IsXMLToken( rAttrValue, XML_GRAPHICS ) )
+                        if( IsXMLToken( sAttrValue, XML_GRAPHICS ) )
                             m_eFamily = XML_FAMILY_TYPE_GRAPHIC;
-                        else if( IsXMLToken( rAttrValue, XML_PRESENTATION ) )
+                        else if( IsXMLToken( sAttrValue, XML_PRESENTATION ) )
                             m_eFamily = XML_FAMILY_TYPE_PRESENTATION;
-                        else if( IsXMLToken( rAttrValue, XML_DRAWING_PAGE ) )
+                        else if( IsXMLToken( sAttrValue, XML_DRAWING_PAGE ) )
                             m_eFamily = XML_FAMILY_TYPE_DRAWING_PAGE;
-                        else if( IsXMLToken( rAttrValue, XML_TEXT) )
+                        else if( IsXMLToken( sAttrValue, XML_TEXT) )
                             m_eFamily = XML_FAMILY_TYPE_TEXT;
-                        else if( IsXMLToken( rAttrValue, XML_PARAGRAPH) )
+                        else if( IsXMLToken( sAttrValue, XML_PARAGRAPH) )
                             m_eFamily = XML_FAMILY_TYPE_PARAGRAPH;
-                        else if( IsXMLToken( rAttrValue, XML_RUBY) )
+                        else if( IsXMLToken( sAttrValue, XML_RUBY) )
                             m_eFamily = XML_FAMILY_TYPE_RUBY;
-                        else if( IsXMLToken( rAttrValue, XML_SECTION) )
+                        else if( IsXMLToken( sAttrValue, XML_SECTION) )
                             m_eFamily = XML_FAMILY_TYPE_SECTION;
-                        else if( IsXMLToken( rAttrValue, XML_TABLE) )
+                        else if( IsXMLToken( sAttrValue, XML_TABLE) )
                             m_eFamily = XML_FAMILY_TYPE_TABLE;
-                        else if( IsXMLToken( rAttrValue, XML_TABLE_COLUMN) )
+                        else if( IsXMLToken( sAttrValue, XML_TABLE_COLUMN) )
                             m_eFamily = XML_FAMILY_TYPE_TABLE_COLUMN;
-                        else if( IsXMLToken( rAttrValue, XML_TABLE_ROW) )
+                        else if( IsXMLToken( sAttrValue, XML_TABLE_ROW) )
                             m_eFamily = XML_FAMILY_TYPE_TABLE_ROW;
-                        else if( IsXMLToken( rAttrValue, XML_TABLE_CELL) )
+                        else if( IsXMLToken( sAttrValue, XML_TABLE_CELL) )
                             m_eFamily = XML_FAMILY_TYPE_TABLE_CELL;
-                        else if( IsXMLToken( rAttrValue, XML_CHART) )
+                        else if( IsXMLToken( sAttrValue, XML_CHART) )
                             m_eFamily = XML_FAMILY_TYPE_CHART;
-                        else if( IsXMLToken( rAttrValue, XML_CONTROL) )
+                        else if( IsXMLToken( sAttrValue, XML_CONTROL) )
                         {
                             m_eFamily = XML_FAMILY_TYPE_PARAGRAPH;
                             bControl = sal_True;
@@ -1098,7 +1117,7 @@ void XMLStyleOOoTContext::StartElement(
                 break;
             case XML_ATACTION_INCH2IN:
                 {
-                    OUString aAttrValue( rAttrValue );
+                    OUString aAttrValue( sAttrValue );
                     if( XMLTransformerBase::ReplaceSingleInchWithIn(
                                 aAttrValue ) )
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
@@ -1106,7 +1125,7 @@ void XMLStyleOOoTContext::StartElement(
                 break;
             case XML_ATACTION_ENCODE_STYLE_NAME:
                 {
-                    OUString aAttrValue( rAttrValue );
+                    OUString aAttrValue( sAttrValue );
                     if( GetTransformer().EncodeStyleName(aAttrValue) )
                     {
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
@@ -1116,27 +1135,27 @@ void XMLStyleOOoTContext::StartElement(
                                     nPrefix, ::xmloff::token::GetXMLToken(
                                         XML_DISPLAY_NAME ) ) );
                         pMutableAttrList->AddAttribute( aNewAttrQName,
-                                                        rAttrValue );
+                                                        sAttrValue );
                     }
                 }
                 break;
             case XML_ATACTION_ENCODE_STYLE_NAME_REF:
                 {
-                    OUString aAttrValue( rAttrValue );
+                    OUString aAttrValue( sAttrValue );
                     if( GetTransformer().EncodeStyleName(aAttrValue) )
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
                 }
                 break;
             case XML_ATACTION_NEG_PERCENT:
                 {
-                    OUString aAttrValue( rAttrValue );
+                    OUString aAttrValue( sAttrValue );
                     if( GetTransformer().NegPercent(aAttrValue) )
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
                 }
                 break;
             case XML_ATACTION_URI_OOO:
                 {
-                    OUString aAttrValue( rAttrValue );
+                    OUString aAttrValue( sAttrValue );
                     if( GetTransformer().ConvertURIToOASIS( aAttrValue,
                             static_cast< sal_Bool >((*aIter).second.m_nParam1)))
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
