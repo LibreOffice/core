@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTransferableEx.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:18 $
+ *  last change: $Author: arellano $ $Date: 2001-04-02 20:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ interface XTransferableEx: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** @requestedFlavors
         Sequence of flavors of interest. Specify an empty sequence for interest
-        in all flavors with top-level MIME types. To get all MIME types call
+        in all flavors with top-level MIME types. To get all MIME types, call
         com::sun::star::datatransfer::XTransferable.
 
         @returns
