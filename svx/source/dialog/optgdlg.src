@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:00:57 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2593,6 +2593,12 @@ TabPage OFA_TP_LANGUAGES
         Text[ hungarian ] = "Nyelv";
         Text[ slovenian ] = "Jezik za";
     };
+    FixedImage FI_LOCALESETTING
+    {
+        Pos = MAP_APPFONT ( 5 , 17 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
+    };
     FixedText FT_LOCALESETTING
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
@@ -2649,6 +2655,12 @@ TabPage OFA_TP_LANGUAGES
         Size = MAP_APPFONT ( 113 , 10 ) ;
         Text = "~Dem Gebietsschema entsprechend ( %1 )" ;
         Text[ english_us ] = "~Same as locale setting ( %1 )";
+    };
+    FixedImage FI_CURRENCY
+    {
+        Pos = MAP_APPFONT ( 5 , 48 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
     };
     FixedText FT_CURRENCY
     {
@@ -2727,6 +2739,12 @@ TabPage OFA_TP_LANGUAGES
     Text[ hungarian ] = "A dokumentumok alapértelmezett nyelve";
     Text[ slovenian ] = "Privzeti jeziki za dokumente";
 };
+    FixedImage FI_WEST_LANG
+    {
+        Pos = MAP_APPFONT ( 5 , 77 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
+    };
     FixedText FT_WEST_LANG
     {
         Pos = MAP_APPFONT ( 12 , 75 ) ;
@@ -2771,6 +2789,12 @@ TabPage OFA_TP_LANGUAGES
         TabStop = TRUE ;
         Sort = TRUE;
     };
+    FixedImage FI_ASIAN_LANG
+    {
+        Pos = MAP_APPFONT ( 5 , 93 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
+    };
     FixedText FT_ASIAN_LANG
     {
         Pos = MAP_APPFONT ( 12 , 91 ) ;
@@ -2813,6 +2837,12 @@ TabPage OFA_TP_LANGUAGES
         Border = TRUE ;
         TabStop = TRUE ;
         Sort = TRUE;
+    };
+    FixedImage FI_COMPLEX_LANG
+    {
+        Pos = MAP_APPFONT ( 5 , 109 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
     };
     FixedText FT_COMPLEX_LANG
     {
@@ -2925,6 +2955,12 @@ TabPage OFA_TP_LANGUAGES
     Text[ hungarian ] = "Ázsiai nyelvek támogatása";
     Text[ slovenian ] = "Podpora za azijske jezike";
 };
+    FixedImage FI_ASIANSUPPORT
+    {
+        Pos = MAP_APPFONT ( 5 , 149 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
+    };
     CheckBox CB_ASIANSUPPORT
     {
         Pos = MAP_APPFONT ( 12 , 147 ) ;
@@ -2993,6 +3029,12 @@ TabPage OFA_TP_LANGUAGES
     Text[ hungarian ] = "Komplex szöveg (CTL) megjelenítésének támogatása";
     Text[ slovenian ] = "Podpora za postavitev kompleksnega besedila (Complex Text Layout-CTL)";
 };
+    FixedImage FI_CTLSUPPORT
+    {
+        Pos = MAP_APPFONT ( 5 , 175 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
+    };
     CheckBox CB_CTLSUPPORT
     {
         Pos = MAP_APPFONT ( 12 , 173 ) ;
@@ -3106,6 +3148,12 @@ TabPage OFA_TP_HELPERPROG
         Text[ hindi ] = "का उपयोग करके इ-मेइल संदेश जैसे लेखपत्र को ~भेजो";
         Text[ hungarian ] = "~Alapértelmezett levelezőprogram kiválasztása";
         Text[ slovenian ] = "Iz~beri kot privzeti e-poštni program";
+    };
+    FixedImage FI_PROGRAM
+    {
+        Pos = MAP_APPFONT ( 5 , 39 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
     };
     FixedText FT_PROGRAM
     {
@@ -3346,6 +3394,12 @@ TabPage OFA_TP_HELPERPROG
         Text[ hungarian ] = "Hivatkozások ~megnyitása a következővel";
         Text[ slovenian ] = "Izv~edi povezave s pomočjo";
     };
+    FixedImage FI_HTTP
+    {
+        Pos = MAP_APPFONT ( 5 , 84 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
+    };
     FixedText FT_HTTP
     {
         Pos = MAP_APPFONT ( 12 , 83 ) ;
@@ -3391,6 +3445,12 @@ TabPage OFA_TP_HELPERPROG
         Pos = MAP_APPFONT ( 239 , 81 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "..." ;
+    };
+    FixedImage FI_HTTPS
+    {
+        Pos = MAP_APPFONT ( 5 , 100 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
     };
     FixedText FT_HTTPS
     {
@@ -3438,6 +3498,12 @@ TabPage OFA_TP_HELPERPROG
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "..." ;
     };
+    FixedImage FI_FTP
+    {
+        Pos = MAP_APPFONT ( 5 , 116 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
+    };
     FixedText FT_FTP
     {
         Pos = MAP_APPFONT ( 12 , 115 ) ;
@@ -3483,6 +3549,12 @@ TabPage OFA_TP_HELPERPROG
         Pos = MAP_APPFONT ( 239 , 113 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "..." ;
+    };
+    FixedImage FI_MAILER
+    {
+        Pos = MAP_APPFONT ( 5 , 132 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
     };
     FixedText FT_MAILER
     {
@@ -3563,6 +3635,12 @@ TabPage OFA_TP_HELPERPROG
         Text[ slovak ] = "Správca súborov";
         Text[ hungarian ] = "Fájlkezelő";
         Text[ slovenian ] = "Upravitelj datotek";
+    };
+    FixedImage FI_DOCMANAGER
+    {
+        Pos = MAP_APPFONT ( 5 , 157 ) ;
+        Size = MAP_APPFONT ( 6 , 6 ) ;
+        Hide = TRUE;
     };
     FixedText FT_DOCMANAGER
     {
