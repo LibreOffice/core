@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-08 08:53:26 $
+ *  last change: $Author: mt $ $Date: 2002-02-25 17:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1777,6 +1777,17 @@ Size ImplListBoxWindow::CalcSize( USHORT nMaxLines ) const
     aSz.Width() = mnMaxWidth + 2*mnBorder;
     return aSz;
 }
+
+// -----------------------------------------------------------------------
+
+Rectangle ImplListBoxWindow::GetBoundingRectangle( USHORT nItem ) const
+{
+    Size aSz( GetSizePixel().Width(), GetEntryHeight() );
+    long nY = ( nItem - GetTopEntry() ) * GetEntryHeight();
+    Rectangle aRect( Point( 0, nY ), aSz );
+    return aRect;
+}
+
 
 // -----------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 09:54:45 $
+ *  last change: $Author: mt $ $Date: 2002-02-25 17:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
         pLBParent = mpFloatWin;
     mpImplLB = new ImplListBox( pLBParent, nStyle&(~WB_BORDER) );
     mpImplLB->SetSelectHdl( LINK( this, ListBox, ImplSelectHdl ) );
+    mpImplLB->SetScrollHdl( LINK( this, ListBox, ImplScrollHdl ) );
     mpImplLB->SetCancelHdl( LINK( this, ListBox, ImplCancelHdl ) );
     mpImplLB->SetDoubleClickHdl( LINK( this, ListBox, ImplDoubleClickHdl ) );
     mpImplLB->SetUserDrawHdl( LINK( this, ListBox, ImplUserDrawHdl ) );
@@ -269,6 +270,14 @@ IMPL_LINK( ListBox, ImplSelectHdl, void*, EMPTYARG )
     if ( ( !IsTravelSelect() || mpImplLB->IsSelectionChanged() ) || ( bPopup && !IsMultiSelectionEnabled() ) )
         Select();
 
+    return 1;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( ListBox, ImplScrollHdl, void*, EMPTYARG )
+{
+    ImplCallEventListeners( VCLEVENT_LISTBOX_SCROLLED );
     return 1;
 }
 
@@ -952,6 +961,14 @@ BOOL ListBox::IsInDropDown() const
 long ListBox::CalcWindowSizePixel( USHORT nLines ) const
 {
     return mpImplLB->GetEntryHeight() * nLines;
+}
+
+Rectangle ListBox::GetBoundingRectangle( USHORT nItem ) const
+{
+    Rectangle aRect = mpImplLB->GetMainWindow()->GetBoundingRectangle( nItem );
+    Rectangle aOffset = mpImplLB->GetMainWindow()->GetWindowExtentsRelative( (Window*)this );
+    aRect.Move( aOffset.TopLeft().X(), aOffset.TopLeft().Y() );
+    return aRect;
 }
 
 // -----------------------------------------------------------------------
