@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uri.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-05-29 07:33:34 $
+ *  last change: $Author: sb $ $Date: 2001-05-31 11:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,9 +247,11 @@ sal_Bool const * rtl_getUriCharClass(rtl_UriCharClass eCharClass)
     Any Unicode string.  Must not be null.
 
     @param pCharClass
-    A char class, represented as an array of 128 booleans.  Must not be null.
-    (See rtl_getUriCharClass() for a function mapping from rtl_UriCharClass to
-    such arrays.)
+    A char class, represented as an array of 128 booleans (true means keep the
+    corresponding ASCII character unencoded, false means encode it).  Must not
+    be null, and the boolean corresponding to the percent sign (0x25) must be
+    false.  (See rtl_getUriCharClass() for a function mapping from
+    rtl_UriCharClass to such arrays.)
 
     @param eMechanism
     The mechanism describing how escape sequences in the input text are
