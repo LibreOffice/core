@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-18 14:30:17 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 09:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,8 +418,11 @@ sal_Bool OColumnSettings::convertFastPropertyValue(
                 ::getCppuType(static_cast< ::rtl::OUString* >(NULL)));
             break;
         case PROPERTY_ID_CONTROLDEFAULT:
-            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aControlDefault,
-                ::getCppuType(static_cast< ::rtl::OUString* >(NULL)));
+            if ( bModified = !::comphelper::compare(rValue,m_aControlDefault) )
+            {
+                rConvertedValue = rValue;
+                rOldValue = m_aControlDefault;
+            }
             break;
     }
     return bModified;
