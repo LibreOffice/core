@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backtrace.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 10:53:48 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 
 
- /* Only Solaris */
 #ifdef SOLARIS
 
 #include <dlfcn.h>
@@ -149,3 +148,74 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 }
 
 #endif /* defined SOLARIS */
+
+
+#ifdef FREEBSD
+#include <dlfcn.h>
+#include <pthread.h>
+#include <setjmp.h>
+#include <stdio.h>
+#include "backtrace.h"
+
+#define FRAME_PTR_OFFSET 1
+#define FRAME_OFFSET 0
+
+int backtrace( void **buffer, int max_frames )
+{
+    return 1;
+}
+
+void backtrace_symbols_fd( void **buffer, int size, int fd )
+{
+
+}
+#endif /* defined FREEBSD */
+
+#if defined(IRIX)
+#include <stdio.h>
+#include <rld_interface.h>
+#include <exception.h>
+#include <sys/signal.h>
+#include <unistd.h>
+
+/* Need extra libs -lexc -ldwarf -lelf */
+
+int backtrace( void **buffer, int max_frames )
+{
+    struct sigcontext context;
+    int i = 0;
+
+    memset(&context, 0, sizeof(struct sigcontext));
+
+    exc_setjmp(&context);
+    while(context.sc_pc != 1 && i < max_frames) {
+        exc_unwind(&context, 0);
+        if(context.sc_pc != 1) {
+            *(buffer++) = (void *)context.sc_pc;
+            i++;
+        }
+    }
+    return(i);
+}
+
+void backtrace_symbols_fd( void **buffer, int size, int fd )
+{
+    FILE    *fp = fdopen( fd, "w" );
+    struct sigcontext context;
+    char *name;
+
+    if ( fp ) {
+        while(context.sc_pc!=1) {
+            if(context.sc_pc != 1) {
+                exc_unwind_name(&context, 0, &name);
+                fprintf(fp, " 0x%012lx %.100s\n", context.sc_pc, name ? name : "<unknown function>");
+                free(name);
+            }
+        }
+
+        fflush( fp );
+        fclose( fp );
+    }
+}
+#endif /* defined IRIX */
+
