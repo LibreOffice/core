@@ -1,0 +1,23 @@
+#ifndef __com_sun_star_frame_LayoutManager_idl__
+#define __com_sun_star_frame_LayoutManager_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XMenuBar_idl__
+#include <com/sun/star/awt/XMenuBar.idl>
+#endif
+
+module com { module sun { module star { module frame {
+
+interface XMenuBarAcceptor : com::sun::star::uno::XInterface
+{
+    /* Update menu bar according to the current frame mode */
+    /* F.e. if the frame is in the inplace editing mode we have to
+       merge our own menu into the container applications menu */
+    void updateMenuBar( [inout] com::sun::star::awt::XMenuBar xMenuBar );
+
+}; }; }; }; };
+
+#endif
