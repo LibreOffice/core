@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:21:20 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1026,8 +1026,8 @@ String STR_PRESVIEWSHELL
     Text[ russian ] = "Presentation mode";
     Text[ greek ] = "Presentation mode";
     Text[ dutch ] = "Presentatiemodus";
-    Text[ french ] = "Presentation mode";
-    Text[ spanish ] = "Presentation mode";
+    Text[ french ] = "Mode Présentation";
+    Text[ spanish ] = "Modo presentación";
     Text[ finnish ] = "Presentation mode";
     Text[ italian ] = "Presentation mode";
     Text[ danish ] = "Presentation mode";
@@ -2133,6 +2133,7 @@ String STR_POOLSHEET_ARROW
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Arrow";
 };
+
 
 
 
