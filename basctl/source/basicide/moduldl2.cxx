@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-26 09:38:57 $
+ *  last change: $Author: tbe $ $Date: 2001-09-26 16:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #include <iderdll2.hxx>
 #include <svx/passwd.hxx>
 #include <sbxitem.hxx>
+#include <basdoc.hxx>
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -671,7 +672,7 @@ void LibPage::FillListBox()
     {
         // Nur, wenn es ein dazugehoeriges Fenster gibt, damit nicht die
         // Gecachten Docs, die nicht sichtbar sind ( Remot-Dokumente )
-        if ( !pDocShell || ( ( pBasicMgr != SFX_APP()->GetBasicManager() )
+        if ( !pDocShell || ( ( !pDocShell->ISA(BasicDocShell) ) && ( pBasicMgr != SFX_APP()->GetBasicManager() )
                                 && ( SfxViewFrame::GetFirst( pDocShell ) ) ) )
         {
             String aBasMgr;
