@@ -7,8 +7,8 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Open Spreadsheet</value>
-            <value xml:lang="de">Offenes Tabellendokument</value>
+            <value xml:lang="en-US">Open Office Spreadsheet</value>
+            <value xml:lang="de">Open Office Tabellendokument</value>
         </prop>
         <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN DEFAULT</value></prop>
     </node>
