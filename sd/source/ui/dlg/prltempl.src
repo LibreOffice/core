@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:51:43 $
+ *  last change: $Author: hjs $ $Date: 2001-06-16 21:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
     Text [ norwegian ] = "Presentation layout" ;
     Text [ italian ] = "Layout di presentazione" ;
     Text [ portuguese_brazilian ] = "Layout de apresenta??o" ;
-    Text [ portuguese ] = "Modelo de apresentação" ;
+    Text [ portuguese ] = "Configuração da apresentação" ;
     Text [ finnish ] = "Esityksen asettelu" ;
     Text [ danish ] = "Præsentationslayout" ;
     Text [ french ] = "Mise en page de la présentation" ;
@@ -602,5 +602,6 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
         };
     };
 };
+
 
 
