@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-20 12:58:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,8 @@ void ZipPackageFolder::copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource)
     rDest.nSize             = rSource.nSize;
     rDest.nOffset           = rSource.nOffset;
     rDest.sName             = rSource.sName;
+    rDest.nNameLen          = rSource.nNameLen;
+    rDest.nExtraLen         = rSource.nExtraLen;
 }
 
 #ifdef MACOSX

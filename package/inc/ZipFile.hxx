@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mtg $ $Date: 2001-12-04 17:44:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
+    namespace ucb  { class XProgressHandler; }
 } } }
 namespace vos
 {
@@ -104,6 +105,7 @@ protected:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xFactory;
+    ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XProgressHandler > xProgressHandler;
 
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createMemoryStream(
             ZipEntry & rEntry,
@@ -124,10 +126,27 @@ protected:
             sal_Bool bDecrypt );
 
     sal_Bool hasValidPassword ( ZipEntry & rEntry, const vos::ORef < EncryptionData > &rData );
+
+    sal_Bool checkSizeAndCRC( const ZipEntry& aEntry );
+
+    sal_Int32 getCRC( sal_Int32 nOffset, sal_Int32 nSize );
+
+    void getSizeAndCRC( sal_Int32 nOffset, sal_Int32 nCompressedSize, sal_Int32 *nSize, sal_Int32 *nCRC );
+
 public:
+
     ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput,
              const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory,
-             sal_Bool bInitialise)
+             sal_Bool bInitialise
+             )
+        throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
+
+    ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput,
+             const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory,
+             sal_Bool bInitialise,
+             sal_Bool bForceRecover,
+             ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XProgressHandler > xProgress
+             )
         throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
 
     ~ZipFile();
@@ -161,6 +180,9 @@ protected:
         throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
     sal_Int32       findEND()
         throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
+    sal_Int32       recover()
+        throw(::com::sun::star::io::IOException, com::sun::star::packages::zip::ZipException, com::sun::star::uno::RuntimeException);
+
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-25 09:49:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:13:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ protected:
     ::rtl::OUString  sURL;
     sal_Bool         bHasEncryptedEntries;
     sal_Bool         bUseManifest;
+    sal_Bool         bForceRecovery;
     InitialisationMode eMode;
 
     ::com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xRootFolder;

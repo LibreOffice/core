@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUnbufferedStream.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 14:32:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-#include <string.h>
 #ifndef _XUNBUFFERED_STREAM_HXX
 #include <XUnbufferedStream.hxx>
 #endif
@@ -67,6 +66,9 @@
 #endif
 #ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPCONSTANTS_HPP_
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
 #endif
 #ifndef _PACKAGE_CONSTANTS_HXX_
 #include <PackageConstants.hxx>
@@ -82,11 +84,11 @@
 #endif
 #include <algorithm>
 
-
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using com::sun::star::lang::IllegalArgumentException;
+using com::sun::star::packages::zip::ZipIOException;
 using ::rtl::OUString;
 
 XUnbufferedStream::XUnbufferedStream( ZipEntry & rEntry,
@@ -170,15 +172,23 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
 
         if ( !mbRawStream )
         {
-            while ( 0 == ( nRead = maInflater.doInflateSegment( aData, nRead, aData.getLength() - nRead ) ) ||
-                  ( nRead + nLastRead < nRequestedBytes && mnZipCurrent < mnZipEnd ) )
+            while ( 0 == ( nLastRead = maInflater.doInflateSegment( aData, nRead, aData.getLength() - nRead ) ) ||
+                  ( nRead + nLastRead != nRequestedBytes && mnZipCurrent < mnZipEnd ) )
             {
-                nLastRead = nRead;
-                if ( maInflater.finished() || maInflater.needsDictionary() )
-                {
-                    // some error handling ?
-                    return nRead + nLastRead;
-                }
+                nRead += nLastRead;
+
+                if ( nRead > nRequestedBytes )
+                    throw RuntimeException(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "Should not be possible to read more then requested!" ) ),
+                        Reference< XInterface >() );
+
+                if ( maInflater.finished() )
+                    throw ZipIOException( OUString( RTL_CONSTASCII_USTRINGPARAM( "The stream seems to be broken!" ) ),
+                                        Reference< XInterface >() );
+
+                if ( maInflater.needsDictionary() )
+                    throw ZipIOException( OUString( RTL_CONSTASCII_USTRINGPARAM( "Dictionaries are not supported!" ) ),
+                                        Reference< XInterface >() );
 
                 sal_Int32 nDiff = static_cast < sal_Int32 > ( mnZipEnd - mnZipCurrent );
                 if ( nDiff > 0 )
@@ -191,6 +201,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                     // before passing to the Inflater
                     if ( maCipher )
                     {
+                        maCRC.update( maCompBuffer );
                         Sequence < sal_Int8 > aCryptBuffer ( nZipRead );
                         rtlCipherError aResult = rtl_cipher_decode ( maCipher,
                                       maCompBuffer.getConstArray(),
@@ -205,8 +216,8 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                 }
                 else
                 {
-                    // some error handling ?
-                    return nRead + nLastRead;
+                    throw ZipIOException( OUString( RTL_CONSTASCII_USTRINGPARAM( "The stream seems to be broken!" ) ),
+                                        Reference< XInterface >() );
                 }
             }
         }
@@ -214,14 +225,29 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
         {
             sal_Int64 nDiff = mnZipEnd - mnZipCurrent;
             mxZipSeek->seek ( mnZipCurrent );
-            nRead = mxZipStream->readBytes ( aData, static_cast < sal_Int32 > ( nDiff < nRequestedBytes ? nDiff : nRequestedBytes ) );
+            nRead = mxZipStream->readBytes (
+                                        aData,
+                                        static_cast < sal_Int32 > ( nDiff < nRequestedBytes ? nDiff : nRequestedBytes ) );
+
             mnZipCurrent += nRead;
         }
-        mnMyCurrent += nRead;
+
+        mnMyCurrent += nRead + nLastRead;
         nTotal = nRead + nLastRead;
         if ( nTotal < nRequestedBytes)
             aData.realloc ( nTotal );
+
+        if ( !mbRawStream )
+        {
+            if ( !maCipher )
+                maCRC.update( aData );
+
+            if ( mnZipSize == mnMyCurrent && maCRC.getValue() != maEntry.nCrc )
+                throw ZipIOException( OUString( RTL_CONSTASCII_USTRINGPARAM( "The stream seems to be broken!" ) ),
+                                    Reference< XInterface >() );
+        }
     }
+
     return nTotal;
 }
 

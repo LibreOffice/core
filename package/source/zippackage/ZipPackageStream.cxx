@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-20 13:02:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@ ZipPackageStream::ZipPackageStream (ZipPackage & rNewPackage )
     aEntry.nCompressedSize  = -1;
     aEntry.nSize        = -1;
     aEntry.nOffset      = -1;
+    aEntry.nNameLen     = -1;
+    aEntry.nExtraLen    = -1;
+
     if ( !aImplementationId.getLength() )
         {
 #ifdef MACOSX
@@ -142,6 +145,8 @@ void ZipPackageStream::setZipEntry( const ZipEntry &rInEntry)
     aEntry.nSize = rInEntry.nSize;
     aEntry.nOffset = rInEntry.nOffset;
     aEntry.sName = rInEntry.sName;
+    aEntry.nNameLen = rInEntry.nNameLen;
+    aEntry.nExtraLen = rInEntry.nExtraLen;
 }
 
 #ifdef MACOSX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-25 10:28:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,14 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XPROGRESSHANDLER_HPP_
+#include <com/sun/star/ucb/XProgressHandler.hpp>
+#endif
+
+#ifndef _CRC32_HXX_
+#include <CRC32.hxx>
+#endif
+
 #include <string.h> // for memcpy
 #include <vector>
 
@@ -107,6 +115,7 @@ using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::ucb;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::packages;
 using namespace com::sun::star::packages::zip;
@@ -115,7 +124,7 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 
 /** This class is used to read entries from a zip file
  */
-ZipFile::ZipFile( Reference < XInputStream > &xInput, const Reference < XMultiServiceFactory > &xNewFactory, sal_Bool bInitialise)
+ZipFile::ZipFile( Reference < XInputStream > &xInput, const Reference < XMultiServiceFactory > &xNewFactory, sal_Bool bInitialise )
     throw(IOException, ZipException, RuntimeException)
 : xStream(xInput)
 , xSeek(xInput, UNO_QUERY)
@@ -126,6 +135,31 @@ ZipFile::ZipFile( Reference < XInputStream > &xInput, const Reference < XMultiSe
     if (bInitialise)
     {
         if ( readCEN() == -1 )
+        {
+            aEntries.clear();
+            throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "stream data looks to be broken" ) ), Reference < XInterface > () );
+        }
+    }
+}
+
+
+
+ZipFile::ZipFile( Reference < XInputStream > &xInput, const Reference < XMultiServiceFactory > &xNewFactory, sal_Bool bInitialise, sal_Bool bForceRecovery, Reference < XProgressHandler > xProgress )
+    throw(IOException, ZipException, RuntimeException)
+: xStream(xInput)
+, xSeek(xInput, UNO_QUERY)
+, aGrabber(xInput)
+, aInflater (sal_True)
+, xFactory ( xNewFactory )
+, xProgressHandler( xProgress )
+{
+    if (bInitialise)
+    {
+        if ( bForceRecovery )
+        {
+            recover();
+        }
+        else if ( readCEN() == -1 )
         {
             aEntries.clear();
             throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "stream data looks to be broken" ) ), Reference < XInterface > () );
@@ -496,8 +530,8 @@ Reference< XInputStream > SAL_CALL ZipFile::getRawStream( ZipEntry& rEntry,
 sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
     throw(IOException, ZipException, RuntimeException)
 {
-    sal_uInt32 nTestSig, nTime, nCRC, nSize, nCompressedSize;
-    sal_uInt16 nVersion, nFlag, nHow, nNameLen, nExtraLen;
+    sal_Int32 nTestSig, nTime, nCRC, nSize, nCompressedSize;
+    sal_Int16 nVersion, nFlag, nHow, nNameLen, nExtraLen;
     sal_Int32 nPos = -rEntry.nOffset;
 
     aGrabber.seek(nPos);
@@ -515,6 +549,20 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
     aGrabber >> nNameLen;
     aGrabber >> nExtraLen;
     rEntry.nOffset = static_cast < sal_Int32 > (aGrabber.getPosition()) + nNameLen + nExtraLen;
+
+    if ( rEntry.nNameLen == -1 ) // the file was created
+        rEntry.nNameLen = nNameLen;
+
+    // the method can be reset for internal use so it is not checked
+    sal_Bool bBroken = rEntry.nVersion != nVersion
+                    || rEntry.nFlag != nFlag
+                    || rEntry.nTime != nTime
+                    || rEntry.nNameLen != nNameLen;
+
+    if ( bBroken )
+        throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM( "The stream seems to be broken!" ) ),
+                            Reference< XInterface >() );
+
     return sal_True;
 }
 
@@ -600,7 +648,7 @@ sal_Int32 ZipFile::readCEN()
 
         ZipEntry aEntry;
         sal_Int32 nTestSig;
-        sal_Int16 nNameLen, nExtraLen, nCommentLen;
+        sal_Int16 nCommentLen;
 
         for (nCount = 0 ; nCount < nTotal; nCount++)
         {
@@ -624,8 +672,8 @@ sal_Int32 ZipFile::readCEN()
             aMemGrabber >> aEntry.nCrc;
             aMemGrabber >> aEntry.nCompressedSize;
             aMemGrabber >> aEntry.nSize;
-            aMemGrabber >> nNameLen;
-            aMemGrabber >> nExtraLen;
+            aMemGrabber >> aEntry.nNameLen;
+            aMemGrabber >> aEntry.nExtraLen;
             aMemGrabber >> nCommentLen;
             aMemGrabber.skipBytes ( 8 );
             aMemGrabber >> aEntry.nOffset;
@@ -633,20 +681,20 @@ sal_Int32 ZipFile::readCEN()
             aEntry.nOffset += nLocPos;
             aEntry.nOffset *= -1;
 
-            if ( nNameLen > ZIP_MAXNAMELEN )
+            if ( aEntry.nNameLen > ZIP_MAXNAMELEN )
                 throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "name length exceeds ZIP_MAXNAMELEN bytes" ) ), Reference < XInterface > () );
 
             if ( nCommentLen > ZIP_MAXNAMELEN )
                 throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "comment length exceeds ZIP_MAXNAMELEN bytes" ) ), Reference < XInterface > () );
 
-            if ( nExtraLen > ZIP_MAXEXTRA )
+            if ( aEntry.nExtraLen > ZIP_MAXEXTRA )
                 throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "extra header info exceeds ZIP_MAXEXTRA bytes") ), Reference < XInterface > () );
 
             aEntry.sName = OUString ( (sal_Char *) aMemGrabber.getCurrentPos(),
-                                      nNameLen,
+                                      aEntry.nNameLen,
                                       RTL_TEXTENCODING_ASCII_US);
 
-            aMemGrabber.skipBytes( nNameLen + nExtraLen + nCommentLen );
+            aMemGrabber.skipBytes( aEntry.nNameLen + aEntry.nExtraLen + nCommentLen );
             aEntries[aEntry.sName] = aEntry;
         }
 
@@ -659,4 +707,221 @@ sal_Int32 ZipFile::readCEN()
         nCenPos = -1; // make sure we return -1 to indicate an error
     }
     return nCenPos;
+}
+
+sal_Int32 ZipFile::recover()
+    throw(IOException, ZipException, RuntimeException)
+{
+    sal_Int32 nLength;
+    Sequence < sal_Int8 > aBuffer;
+    Sequence < sal_Int32 > aHeaderOffsets;
+    sal_Int32 nNumOfHeaders = 0;
+
+    try
+    {
+        nLength = static_cast <sal_Int32 > (aGrabber.getLength());
+        if (nLength == 0 || nLength < ENDHDR)
+            return -1;
+
+        aGrabber.seek( 0 );
+
+        for( sal_Int32 nGenPos = 0; aGrabber.readBytes( aBuffer, 32000 ) && aBuffer.getLength() > 30; )
+        {
+            const sal_Int8 *pBuffer = aBuffer.getConstArray();
+            sal_Int32 nBufSize = aBuffer.getLength();
+
+            sal_Int32 nPos = 0;
+            while( nPos < nBufSize - 16 )
+            {
+                if ( nPos < nBufSize - 30 && pBuffer[nPos] == 'P' && pBuffer[nPos+1] == 'K' && pBuffer[nPos+2] == 3 && pBuffer[nPos+3] == 4 )
+                {
+                    ZipEntry aEntry;
+                    MemoryByteGrabber aMemGrabber ( Sequence< sal_Int8 >( ((sal_Int8*)(&(pBuffer[nPos+4]))), 26 ) );
+
+                    aMemGrabber >> aEntry.nVersion;
+                    if ( ( aEntry.nVersion & 1 ) != 1 )
+                    {
+                        aMemGrabber >> aEntry.nFlag;
+                        aMemGrabber >> aEntry.nMethod;
+
+                        if ( aEntry.nMethod == STORED || aEntry.nMethod == DEFLATED )
+                        {
+                            aMemGrabber >> aEntry.nTime;
+                            aMemGrabber >> aEntry.nCrc;
+                            aMemGrabber >> aEntry.nCompressedSize;
+                            aMemGrabber >> aEntry.nSize;
+                            aMemGrabber >> aEntry.nNameLen;
+                            aMemGrabber >> aEntry.nExtraLen;
+
+                            sal_Int32 nDescrLength =
+                                ( aEntry.nMethod == DEFLATED && ( aEntry.nFlag & 8 ) ) ?
+                                                        16 : 0;
+
+                            sal_Int32 nBlockLength = aEntry.nSize + aEntry.nNameLen + aEntry.nExtraLen + 30 + nDescrLength;
+                            if ( aEntry.nNameLen <= ZIP_MAXNAMELEN && aEntry.nExtraLen < ZIP_MAXEXTRA
+                                && ( nGenPos + nPos + nBlockLength ) <= nLength )
+                            {
+                                if( nPos + 30 + aEntry.nNameLen <= 32000 )
+                                    aEntry.sName = OUString ( (sal_Char *) &pBuffer[nPos + 30],
+                                                                  aEntry.nNameLen,
+                                                                RTL_TEXTENCODING_ASCII_US);
+                                else
+                                {
+                                    Sequence < sal_Int8 > aFileName;
+                                    aGrabber.seek( nGenPos + nPos + 30 );
+                                    aGrabber.readBytes( aFileName, aEntry.nNameLen );
+                                    aEntry.sName = OUString ( (sal_Char *) aFileName.getArray(),
+                                                                aFileName.getLength(),
+                                                                RTL_TEXTENCODING_ASCII_US);
+                                    aEntry.nNameLen = aFileName.getLength();
+                                }
+
+                                aEntry.nOffset = nGenPos + nPos + 30 + aEntry.nNameLen + aEntry.nExtraLen;
+
+                                if ( ( aEntry.nSize || aEntry.nCompressedSize ) && !checkSizeAndCRC( aEntry ) )
+                                {
+                                    aEntry.nCrc = 0;
+                                    aEntry.nCompressedSize = 0;
+                                    aEntry.nSize = 0;
+                                }
+
+                                if ( aEntries.find( aEntry.sName ) == aEntries.end() )
+                                    aEntries[aEntry.sName] = aEntry;
+                            }
+                        }
+                    }
+
+                    nPos += 4;
+                }
+                else if (pBuffer[nPos] == 'P' && pBuffer[nPos+1] == 'K' && pBuffer[nPos+2] == 7 && pBuffer[nPos+3] == 8 )
+                {
+                    sal_Int32 nCompressedSize, nSize, nCRC32;
+                    MemoryByteGrabber aMemGrabber ( Sequence< sal_Int8 >( ((sal_Int8*)(&(pBuffer[nPos+4]))), 12 ) );
+                    aMemGrabber >> nCRC32;
+                    aMemGrabber >> nCompressedSize;
+                    aMemGrabber >> nSize;
+
+                    for( EntryHash::iterator aIter = aEntries.begin(); aIter != aEntries.end(); aIter++ )
+                    {
+                        ZipEntry aTmp = (*aIter).second;
+                        if( (*aIter).second.nMethod == DEFLATED && (*aIter).second.nFlag & 8 )
+                        {
+                            sal_Int32 nStreamOffset = nGenPos + nPos - nCompressedSize;
+                            sal_Int32 nTmp1 = (*aIter).second.nOffset;
+                            if ( nStreamOffset == (*aIter).second.nOffset && nCompressedSize > (*aIter).second.nCompressedSize )
+                            {
+                                sal_Int32 nRealSize = 0, nRealCRC = 0;
+                                getSizeAndCRC( nStreamOffset, nCompressedSize, &nRealSize, &nRealCRC );
+                                if ( nRealSize == nSize && nRealCRC == nCRC32 )
+                                {
+                                    (*aIter).second.nCrc = nCRC32;
+                                    (*aIter).second.nCompressedSize = nCompressedSize;
+                                    (*aIter).second.nSize = nSize;
+                                }
+                            }
+#if 0
+// for now ignore clearly broken streams
+                            else if( !(*aIter).second.nCompressedSize )
+                            {
+                                (*aIter).second.nCrc = nCRC32;
+                                sal_Int32 nRealStreamSize = nGenPos + nPos - (*aIter).second.nOffset;
+                                (*aIter).second.nCompressedSize = nGenPos + nPos - (*aIter).second.nOffset;
+                                (*aIter).second.nSize = nSize;
+                            }
+#endif
+                        }
+                    }
+
+                    nPos += 4;
+                }
+                else
+                    nPos++;
+            }
+
+            nGenPos += nPos;
+            aGrabber.seek( nGenPos );
+        }
+
+        return 0;
+    }
+    catch ( IllegalArgumentException& )
+    {
+        throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip END signature not found!") ), Reference < XInterface > () );
+    }
+    catch ( NotConnectedException& )
+    {
+        throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip END signature not found!") ), Reference < XInterface > () );
+    }
+    catch ( BufferSizeExceededException& )
+    {
+        throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip END signature not found!") ), Reference < XInterface > () );
+    }
+    throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip END signature not found!") ), Reference < XInterface > () );
+
+}
+
+sal_Bool ZipFile::checkSizeAndCRC( const ZipEntry& aEntry )
+{
+    sal_Int32 nSize = 0, nCRC = 0;
+
+    if( aEntry.nMethod == STORED )
+        return ( getCRC( aEntry.nOffset, aEntry.nSize ) == aEntry.nCrc );
+
+    getSizeAndCRC( aEntry.nOffset, aEntry.nCompressedSize, &nSize, &nCRC );
+    return ( aEntry.nSize == nSize && aEntry.nCrc == nCRC );
+}
+
+sal_Int32 ZipFile::getCRC( sal_Int32 nOffset, sal_Int32 nSize )
+{
+    Sequence < sal_Int8 > aBuffer;
+    CRC32 aCRC;
+    sal_Int32 nBlockSize = ::std::min( nSize, 32000L );
+
+    aGrabber.seek( nOffset );
+    for ( int ind = 0;
+          aGrabber.readBytes( aBuffer, nBlockSize ) && ind * nBlockSize < nSize;
+          ind++ )
+    {
+        aCRC.updateSegment( aBuffer, 0, ::std::min( nBlockSize, nSize - ind * nBlockSize ) );
+    }
+
+    return aCRC.getValue();
+}
+
+void ZipFile::getSizeAndCRC( sal_Int32 nOffset, sal_Int32 nCompressedSize, sal_Int32 *nSize, sal_Int32 *nCRC )
+{
+    Sequence < sal_Int8 > aBuffer;
+    CRC32 aCRC;
+    sal_Int32 nRealSize = 0;
+    Inflater aInflater( sal_True );
+    sal_Int32 nBlockSize = ::std::min( nCompressedSize, 32000L );
+
+    aGrabber.seek( nOffset );
+    for ( int ind = 0;
+          !aInflater.finished() && aGrabber.readBytes( aBuffer, nBlockSize ) && ind * nBlockSize < nCompressedSize;
+          ind++ )
+    {
+        Sequence < sal_Int8 > aData( nBlockSize );
+        sal_Int32 nLastInflated = 0;
+        sal_Int32 nInBlock = 0;
+
+        aInflater.setInput( aBuffer );
+        do
+        {
+            nLastInflated = aInflater.doInflateSegment( aData, 0, nBlockSize );
+            aCRC.updateSegment( aData, 0, nLastInflated );
+            nInBlock += nLastInflated;
+        } while( !aInflater.finished() && nLastInflated );
+
+        nRealSize += nInBlock;
+    }
+
+    if( aInflater.finished() )
+    {
+        *nSize = nRealSize;
+        *nCRC = aCRC.getValue();
+    }
+    else
+        *nSize = *nCRC = 0;
+
 }

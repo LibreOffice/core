@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: XUnbufferedStream.hxx,v $
+ *  $RCSfile: EntryInputStream.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:13:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:13:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,68 +58,50 @@
  *
  *
  ************************************************************************/
-#ifndef _XUNBUFFERED_STREAM_HXX
-#define _XUNBUFFERED_STREAM_HXX
+#ifndef _ENTRY_INPUT_STREAM_HXX
+#define _ENTRY_INPUT_STREAM_HXX
 
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
-#include <com/sun/star/io/XOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
-#include <com/sun/star/io/XSeekable.hpp>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx> // helper for implementations
 #endif
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
-#include <com/sun/star/io/XOutputStream.hpp>
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _INFLATER_HXX_
+#include <Inflater.hxx>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPENTRY_HPP_
+#include <com/sun/star/packages/zip/ZipEntry.hpp>
 #endif
 #ifndef _VOS_REF_H_
 #include <vos/ref.hxx>
 #endif
-#ifndef _INFLATER_HXX
-#include <Inflater.hxx>
+#ifndef _ENCRYPTION_DATA_HXX
+#include <EncryptionData.hxx>
 #endif
-#ifndef _ZIP_ENTRY_HXX_
-#include <ZipEntry.hxx>
-#endif
-#ifndef _CRC32_HXX_
-#include <CRC32.hxx>
-#endif
-
-class EncryptionData;
-typedef void* rtlCipher;
-class XUnbufferedStream : public cppu::WeakImplHelper1
-<
-    com::sun::star::io::XInputStream
->
+class EntryInputStream : public cppu::WeakImplHelper2< com::sun::star::io::XInputStream,
+                                                       com::sun::star::io::XSeekable >
 {
 protected:
-    com::sun::star::uno::Reference < com::sun::star::io::XInputStream > mxZipStream;
-    com::sun::star::uno::Reference < com::sun::star::io::XSeekable > mxZipSeek;
-    com::sun::star::uno::Sequence < sal_Int8 > maCompBuffer, maHeader;
-    ZipEntry maEntry;
-    vos::ORef < EncryptionData > mxData;
-    rtlCipher maCipher;
-    Inflater maInflater;
-    sal_Bool mbRawStream, mbFinished;
-    sal_Int16 mnHeaderToRead;
-    sal_Int64 mnZipCurrent, mnZipEnd, mnZipSize, mnMyCurrent;
-    CRC32 maCRC;
-
+    com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xStream;
+    com::sun::star::uno::Reference< com::sun::star::io::XSeekable > xSeek;
+    sal_Int64 nEnd, nCurrent, nUncompressedSize;
+    sal_Bool bRawStream, bHaveInMemory, bEncrypted;
+    com::sun::star::uno::Sequence < sal_Int8 > aBuffer;
+    const vos::ORef < EncryptionData > xEncryptionData;
+    const com::sun::star::packages::zip::ZipEntry aEntry;
+    Inflater aInflater;
+    void readIntoMemory()
+        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 public:
-    XUnbufferedStream( ZipEntry & rEntry,
-                 com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
-                 const vos::ORef < EncryptionData > &rData,
-                 sal_Bool bRawStream,
-                 sal_Bool bIsEncrypted);
-
-    virtual ~XUnbufferedStream();
+             EntryInputStream( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xInput,
+                                const com::sun::star::packages::zip::ZipEntry &rNewEntry,
+                               const vos::ORef < EncryptionData > &xEncryptData,
+                               sal_Bool bGetRawStream = sal_False);
+    virtual ~EntryInputStream();
 
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
@@ -133,13 +115,16 @@ public:
     virtual void SAL_CALL closeInput(  )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     // XSeekable
-    /*
     virtual void SAL_CALL seek( sal_Int64 location )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Int64 SAL_CALL getPosition(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Int64 SAL_CALL getLength(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    /*
+private:
+    void fill( void );
     */
 };
+
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipEntry.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-30 13:53:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,8 @@ struct ZipEntry
     sal_Int32 nCompressedSize;
     sal_Int32 nSize;
     sal_Int32 nOffset;
+    sal_Int16 nNameLen;
+    sal_Int16 nExtraLen;
     ::rtl::OUString sName;
 };
 #endif

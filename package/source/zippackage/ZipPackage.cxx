@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-25 10:34:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,9 @@
 #ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
 #include <com/sun/star/ucb/OpenMode.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XPROGRESSHANDLER_HPP_
+#include <com/sun/star/ucb/XProgressHandler.hpp>
+#endif
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASTREAMER_HPP_
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #endif
@@ -255,6 +258,7 @@ ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 , xFactory( xNewFactory )
 , bHasEncryptedEntries ( sal_False )
 , bUseManifest ( sal_True )
+, bForceRecovery ( sal_False )
 , eMode ( e_IMode_None )
 {
     xRootFolder = pRootFolder = new ZipPackageFolder();
@@ -333,103 +337,110 @@ void ZipPackage::getZipFileContents()
     const OUString sManifest (RTL_CONSTASCII_USTRINGPARAM( "META-INF/manifest.xml") );
     if (hasByHierarchicalName( sManifest ) )
     {
-        Reference < XUnoTunnel > xTunnel;
-        Any aAny = getByHierarchicalName( sManifest );
-        aAny >>= xTunnel;
-        Reference < XActiveDataSink > xSink (xTunnel, UNO_QUERY);
-        if (xSink.is())
-        {
-            OUString sManifestReader ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestReader" ) );
-            Reference < XManifestReader > xReader (xFactory->createInstance( sManifestReader ), UNO_QUERY );
-            if ( xReader.is() )
+        try {
+            Reference < XUnoTunnel > xTunnel;
+            Any aAny = getByHierarchicalName( sManifest );
+            aAny >>= xTunnel;
+            Reference < XActiveDataSink > xSink (xTunnel, UNO_QUERY);
+            if (xSink.is())
             {
-                const OUString sPropFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
-                const OUString sPropMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
-                const OUString sPropInitialisationVector ( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) );
-                const OUString sPropSalt ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
-                const OUString sPropIterationCount ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
-                const OUString sPropSize ( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) );
-                const OUString sPropDigest ( RTL_CONSTASCII_USTRINGPARAM ( "Digest" ) );
-
-                Sequence < Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
-                sal_Int32 nLength = aManifestSequence.getLength();
-                const Sequence < PropertyValue > *pSequence = aManifestSequence.getConstArray();
-                ZipPackageStream *pStream = NULL;
-                ZipPackageFolder *pFolder = NULL;
-
-                for (sal_Int32 i = 0; i < nLength ; i++, pSequence++)
+                OUString sManifestReader ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestReader" ) );
+                Reference < XManifestReader > xReader (xFactory->createInstance( sManifestReader ), UNO_QUERY );
+                if ( xReader.is() )
                 {
-                    OUString sPath, sMediaType;
-                    const PropertyValue *pValue = pSequence->getConstArray();
-                    const Any *pSalt = NULL, *pVector = NULL, *pCount = NULL, *pSize = NULL, *pDigest = NULL;
-                    for (sal_Int32 j = 0, nNum = pSequence->getLength(); j < nNum; j++ )
+                    const OUString sPropFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
+                    const OUString sPropMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
+                    const OUString sPropInitialisationVector ( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) );
+                    const OUString sPropSalt ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
+                    const OUString sPropIterationCount ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
+                    const OUString sPropSize ( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) );
+                    const OUString sPropDigest ( RTL_CONSTASCII_USTRINGPARAM ( "Digest" ) );
+
+                    Sequence < Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
+                    sal_Int32 nLength = aManifestSequence.getLength();
+                    const Sequence < PropertyValue > *pSequence = aManifestSequence.getConstArray();
+                    ZipPackageStream *pStream = NULL;
+                    ZipPackageFolder *pFolder = NULL;
+
+                    for (sal_Int32 i = 0; i < nLength ; i++, pSequence++)
                     {
-                        if (pValue[j].Name.equals( sPropFullPath ) )
-                            pValue[j].Value >>= sPath;
-                        else if (pValue[j].Name.equals( sPropMediaType ) )
-                            pValue[j].Value >>= sMediaType;
-                        else if (pValue[j].Name.equals( sPropSalt ) )
-                            pSalt = &(pValue[j].Value);
-                        else if (pValue[j].Name.equals( sPropInitialisationVector ) )
-                            pVector = &(pValue[j].Value);
-                        else if (pValue[j].Name.equals( sPropIterationCount ) )
-                            pCount = &(pValue[j].Value);
-                        else if (pValue[j].Name.equals( sPropSize ) )
-                            pSize = &(pValue[j].Value);
-                        else if (pValue[j].Name.equals( sPropDigest ) )
-                            pDigest = &(pValue[j].Value);
-                    }
-                    if (sPath.getLength() && hasByHierarchicalName ( sPath ) )
-                    {
-                        Any aAny = getByHierarchicalName( sPath );
-                        Reference < XUnoTunnel > xTunnel;
-                        aAny >>= xTunnel;
-                        sal_Int64 nTest=0;
-                        if ((nTest = xTunnel->getSomething(ZipPackageFolder::static_getImplementationId())) != 0)
+                        OUString sPath, sMediaType;
+                        const PropertyValue *pValue = pSequence->getConstArray();
+                        const Any *pSalt = NULL, *pVector = NULL, *pCount = NULL, *pSize = NULL, *pDigest = NULL;
+                        for (sal_Int32 j = 0, nNum = pSequence->getLength(); j < nNum; j++ )
                         {
-                            pFolder = reinterpret_cast < ZipPackageFolder* > ( nTest );
-                            pFolder->SetMediaType ( sMediaType );
+                            if (pValue[j].Name.equals( sPropFullPath ) )
+                                pValue[j].Value >>= sPath;
+                            else if (pValue[j].Name.equals( sPropMediaType ) )
+                                pValue[j].Value >>= sMediaType;
+                            else if (pValue[j].Name.equals( sPropSalt ) )
+                                pSalt = &(pValue[j].Value);
+                            else if (pValue[j].Name.equals( sPropInitialisationVector ) )
+                                pVector = &(pValue[j].Value);
+                            else if (pValue[j].Name.equals( sPropIterationCount ) )
+                                pCount = &(pValue[j].Value);
+                            else if (pValue[j].Name.equals( sPropSize ) )
+                                pSize = &(pValue[j].Value);
+                            else if (pValue[j].Name.equals( sPropDigest ) )
+                                pDigest = &(pValue[j].Value);
                         }
-                        else
+                        if (sPath.getLength() && hasByHierarchicalName ( sPath ) )
                         {
-                            pStream = reinterpret_cast < ZipPackageStream* > ( xTunnel->getSomething(ZipPackageStream::static_getImplementationId()));
-                            pStream->SetMediaType ( sMediaType );
-
-                            if (pSalt && pVector && pCount && pSize)
+                            Any aAny = getByHierarchicalName( sPath );
+                            Reference < XUnoTunnel > xTunnel;
+                            aAny >>= xTunnel;
+                            sal_Int64 nTest=0;
+                            if ((nTest = xTunnel->getSomething(ZipPackageFolder::static_getImplementationId())) != 0)
                             {
-                                Sequence < sal_uInt8 > aSequence;
-                                sal_Int32 nCount, nSize;
-                                pStream->SetToBeEncrypted ( sal_True );
+                                pFolder = reinterpret_cast < ZipPackageFolder* > ( nTest );
+                                pFolder->SetMediaType ( sMediaType );
+                            }
+                            else
+                            {
+                                pStream = reinterpret_cast < ZipPackageStream* > ( xTunnel->getSomething(ZipPackageStream::static_getImplementationId()));
+                                pStream->SetMediaType ( sMediaType );
 
-                                *pSalt >>= aSequence;
-                                pStream->setSalt ( aSequence );
-
-                                *pVector >>= aSequence;
-                                pStream->setInitialisationVector ( aSequence );
-
-                                *pCount >>= nCount;
-                                pStream->setIterationCount ( nCount );
-
-                                *pSize >>= nSize;
-                                pStream->setSize ( nSize );
-
-                                if ( pDigest )
+                                if (pSalt && pVector && pCount && pSize)
                                 {
-                                    *pDigest >>= aSequence;
-                                    pStream->setDigest ( aSequence );
-                                }
+                                    Sequence < sal_uInt8 > aSequence;
+                                    sal_Int32 nCount, nSize;
+                                    pStream->SetToBeEncrypted ( sal_True );
 
-                                pStream->SetToBeEncrypted ( sal_True );
-                                pStream->SetIsEncrypted ( sal_True );
-                                if ( !bHasEncryptedEntries && pStream->getName().compareToAscii ( "content.xml" ) == 0 )
-                                    bHasEncryptedEntries = sal_True;
+                                    *pSalt >>= aSequence;
+                                    pStream->setSalt ( aSequence );
+
+                                    *pVector >>= aSequence;
+                                    pStream->setInitialisationVector ( aSequence );
+
+                                    *pCount >>= nCount;
+                                    pStream->setIterationCount ( nCount );
+
+                                    *pSize >>= nSize;
+                                    pStream->setSize ( nSize );
+
+                                    if ( pDigest )
+                                    {
+                                        *pDigest >>= aSequence;
+                                        pStream->setDigest ( aSequence );
+                                    }
+
+                                    pStream->SetToBeEncrypted ( sal_True );
+                                    pStream->SetIsEncrypted ( sal_True );
+                                    if ( !bHasEncryptedEntries && pStream->getName().compareToAscii ( "content.xml" ) == 0 )
+                                        bHasEncryptedEntries = sal_True;
+                                }
                             }
                         }
                     }
                 }
+                else
+                    VOS_ENSURE ( 0, "Couldn't get a ManifestReader!" ); // throw RuntimeException?
             }
-            else
-                VOS_ENSURE ( 0, "Couldn't get a ManifestReader!" ); // throw RuntimeException?
+        }
+        catch( Exception& )
+        {
+            if ( !bForceRecovery )
+                throw;
         }
     }
 
@@ -447,49 +458,80 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
 {
     RTL_LOGFILE_TRACE_AUTHOR ( "package", LOGFILE_AUTHOR, "{ ZipPackage::initialize" );
     sal_Bool bBadZipFile = sal_False, bHaveZipFile = sal_True;
+    Reference< XProgressHandler > xProgressHandler;
 
     if ( aArguments.getLength() )
     {
-        if ( (aArguments[0] >>= sURL))
+        for( int ind = 0; ind < aArguments.getLength(); ind++ )
         {
-            eMode = e_IMode_URL;
-            try
+            OUString aParamUrl;
+            if ( (aArguments[ind] >>= aParamUrl))
             {
-                Content aContent (sURL, Reference < XCommandEnvironment >() );
-                Any aAny = aContent.getPropertyValue( OUString::createFromAscii( "Size" ) );
-                sal_uInt64 aSize;
-                // kind of optimisation: treat empty files as nonexistent files
-                // and write to such files directly
-                if( ( aAny >>= aSize ) && aSize )
+                eMode = e_IMode_URL;
+                try
                 {
-                    Reference < XActiveDataSink > xSink = new ZipPackageSink;
-                    if (aContent.openStream ( xSink ) )
-                        xContentStream = xSink->getInputStream();
+                    sal_Int32 nParam = aParamUrl.indexOf( '?' );
+                    if ( nParam >= 0 )
+                    {
+                        sURL = aParamUrl.copy( 0, nParam );
+                        OUString aParam = aParamUrl.copy( nParam + 1 );
+
+                          sal_Int32 nIndex = 0;
+                        do
+                        {
+                            if ( aParam.getToken( 0, '&', nIndex ).equals( OUString::createFromAscii( "repairpackage" ) ) )
+                            {
+                                bForceRecovery = sal_True;
+                                break;
+                            }
+                        }
+                        while ( nIndex >= 0 );
+                    }
+                    else
+                        sURL = aParamUrl;
+
+                    Content aContent ( sURL, Reference < XCommandEnvironment >() );
+                    Any aAny = aContent.getPropertyValue( OUString::createFromAscii( "Size" ) );
+                    sal_uInt64 aSize;
+                    // kind of optimisation: treat empty files as nonexistent files
+                    // and write to such files directly
+                    if( ( aAny >>= aSize ) && aSize )
+                    {
+                        Reference < XActiveDataSink > xSink = new ZipPackageSink;
+                        if (aContent.openStream ( xSink ) )
+                            xContentStream = xSink->getInputStream();
+                    }
+                    else
+                        bHaveZipFile = sal_False;
                 }
-                else
+                catch (com::sun::star::uno::Exception&)
+                {
+                    // Exception derived from uno::Exception thrown. This probably
+                    // means the file doesn't exist...we'll create it at
+                    // commitChanges time
                     bHaveZipFile = sal_False;
+                }
             }
-            catch (com::sun::star::uno::Exception&)
+            else if ( (aArguments[ind] >>= xContentStream) )
             {
-                // Exception derived from uno::Exception thrown. This probably
-                // means the file doesn't exist...we'll create it at
-                // commitChanges time
-                bHaveZipFile = sal_False;
+                eMode = e_IMode_XInputStream;
+            }
+            else if ( (aArguments[ind] >>= xStream ) )
+            {
+                eMode = e_IMode_XStream;
+                xContentStream = xStream->getInputStream();
+            }
+            else if ( ( aArguments[ind] >>= xProgressHandler ) )
+            {
+                // progress handler is used only for repair feature
+            }
+            else
+            {
+                // The URL is not acceptable
+                throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Bad arguments." ) ),
+                    static_cast < ::cppu::OWeakObject * > ( this ) );
             }
         }
-        else if ( (aArguments[0] >>= xContentStream) )
-        {
-            eMode = e_IMode_XInputStream;
-        }
-        else if ( (aArguments[0] >>= xStream ) )
-        {
-            eMode = e_IMode_XStream;
-            xContentStream = xStream->getInputStream();
-        }
-        else
-            // The URL is not acceptable
-            throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Bad URL." ) ),
-                static_cast < ::cppu::OWeakObject * > ( this ) );
 
         try
         {
@@ -514,7 +556,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
         {
             try
             {
-                pZipFile = new ZipFile ( xContentStream, xFactory, sal_True );
+                pZipFile = new ZipFile ( xContentStream, xFactory, sal_True, bForceRecovery, xProgressHandler );
                 getZipFileContents();
             }
             catch ( IOException & )
@@ -540,6 +582,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
             }
         }
     }
+
     RTL_LOGFILE_TRACE_AUTHOR ( "package", LOGFILE_AUTHOR, "} ZipPackage::initialize" );
 }
 
@@ -1234,7 +1277,8 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         if (!( aValue >>= bUseManifest ) )
             throw IllegalArgumentException();
     }
-    throw UnknownPropertyException();
+    else
+        throw UnknownPropertyException();
 }
 Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
