@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-07-31 08:39:28 $
+ *  last change: $Author: as $ $Date: 2001-08-01 11:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ namespace framework{
 #define IMPLEMENTATIONNAME_SOUNDHANDLER                     DECLARE_ASCII("com.sun.star.comp.framework.SoundHandler"            )
 #define IMPLEMENTATIONNAME_CONTENTHANDLERFACTORY            DECLARE_ASCII("com.sun.star.comp.framework.ContentHandlerFactory"   )
 #define IMPLEMENTATIONNAME_PIPETERMINATOR                   DECLARE_ASCII("com.sun.star.comp.OfficeIPCThreadController"         )
+#define IMPLEMENTATIONNAME_QUICKLAUNCHER                    DECLARE_ASCII("com.sun.star.comp.desktop.QuickstartWrapper"         )
 
 }       //  namespace framework
 
