@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 12:35:05 $
+ *  last change: $Author: oj $ $Date: 2001-02-01 14:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1260,7 +1260,8 @@ void OPreparedStatement::prepareStatement()
     m_bPrepared = sal_True;
     OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
     ::rtl::OString aSql(::rtl::OUStringToOString(m_sSqlStatement,osl_getThreadTextEncoding()));
-    N3SQLPrepare(m_aStatementHandle,(SDB_ODBC_CHAR *) aSql.getStr(),aSql.getLength());
+    SQLRETURN nReturn = N3SQLPrepare(m_aStatementHandle,(SDB_ODBC_CHAR *) aSql.getStr(),aSql.getLength());
+    OTools::ThrowException(nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     initBoundParam();
 }
 // -----------------------------------------------------------------------------
