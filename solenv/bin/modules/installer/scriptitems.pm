@@ -787,7 +787,7 @@ sub get_Source_Directory_For_Files_From_Includepathlist
                     $infoline = "WARNING: Using $onefile->{'Name'} instead of $oldname\n";
                     push( @installer::globals::logfileinfo, $infoline);
                     print "    $infoline";
-                    if ( $onefile->{'destination'} ) { $onefile->{'destination'} =~ s/$oldname/$onefile->{'Name'}/; }
+                    if ( $onefile->{'destination'} ) { $onefile->{'destination'} =~ s/\Q$oldname\E/$onefile->{'Name'}/; }
 
                     # If the directory, in which the new file is installed, is not language dependent,
                     # the filename has to be changed to avoid installation conflicts
@@ -1633,6 +1633,66 @@ sub add_rootpath_to_links
             my $destinationfile = $onelink->{'destinationfile'};
             $destinationfile = $rootpath . $installer::globals::separator . $destinationfile;
             $onelink->{'destinationfile'} = $destinationfile;
+        }
+    }
+}
+
+#################################################################################
+# Collecting all parent gids
+#################################################################################
+
+sub collect_all_parent_feature
+{
+    my ($modulesref) = @_;
+
+    my @allparents = ();
+
+    for ( my $i = 0; $i <= $#{$modulesref}; $i++ )
+    {
+        my $onefeature = ${$modulesref}[$i];
+
+        my $parentgid = "";
+        if ( $onefeature->{'ParentID'} )
+        {
+            $parentgid = $onefeature->{'ParentID'};
+        }
+
+        if ( $parentgid ne "" )
+        {
+            if (! installer::existence::exists_in_array($parentgid, \@allparents))
+            {
+                push(@allparents, $parentgid);
+            }
+        }
+    }
+
+    return \@allparents;
+}
+
+#################################################################################
+# Checking for every feature, whether it has children
+#################################################################################
+
+sub set_children_flag
+{
+    my ($modulesref) = @_;
+
+    my $allparents = collect_all_parent_feature($modulesref);
+
+    for ( my $i = 0; $i <= $#{$modulesref}; $i++ )
+    {
+        my $onefeature = ${$modulesref}[$i];
+        my $gid = $onefeature->{'gid'};
+
+        # is this gid a parent?
+
+        if ( installer::existence::exists_in_array($gid, $allparents) )
+        {
+            $onefeature->{'has_children'} = 1;
+        }
+        else
+        {
+            $onefeature->{'has_children'} = 0;
         }
     }
 }
