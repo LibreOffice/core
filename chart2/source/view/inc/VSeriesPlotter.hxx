@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VSeriesPlotter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-19 19:04:25 $
+ *  last change: $Author: iha $ $Date: 2003-11-22 11:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,8 @@ public:
     sal_Int32 getSeriesCount() const;
     void deleteSeries();
 
+    void getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximum ) const;
+
     void calculateYSumsForCategory( sal_Int32 nCategoryIndex, double& rfPositiveSum, double& rfNegativeSum );
     bool calculateYMinAndMaxForCategoryRange( sal_Int32 nStartCategoryIndex, sal_Int32 nEndCategoryIndex
                                                 , double& rfMinimum, double& rfMaximum );
@@ -167,6 +169,10 @@ public:
 
     virtual double getMinimumZ();
     virtual double getMaximumZ();
+
+    //------
+
+    void getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximum ) const;
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------

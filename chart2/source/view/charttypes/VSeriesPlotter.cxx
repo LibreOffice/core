@@ -422,6 +422,28 @@ double VSeriesPlotter::getMaximumZ()
     return 0.5;
 }
 
+void VSeriesPlotter::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximum ) const
+{
+    ::rtl::math::setInf(&rfMinimum, false);
+    ::rtl::math::setInf(&rfMaximum, true);
+
+    ::std::vector< VDataSeriesGroup >::const_iterator aXSlotIter = m_aXSlots.begin();
+    const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = m_aXSlots.end();
+    for( ; aXSlotIter != aXSlotEnd; aXSlotIter++ )
+    {
+        double fLocalMinimum, fLocalMaximum;
+        aXSlotIter->getMinimumAndMaximiumX( fLocalMinimum, fLocalMaximum );
+        if( !::rtl::math::isNan(fLocalMinimum) && fLocalMinimum< rfMinimum )
+            rfMinimum = fLocalMinimum;
+        if( !::rtl::math::isNan(fLocalMaximum) && fLocalMaximum> rfMaximum )
+            rfMaximum = fLocalMaximum;
+    }
+    if(::rtl::math::isInf(rfMinimum))
+        ::rtl::math::setNan(&rfMinimum);
+    if(::rtl::math::isInf(rfMaximum))
+        ::rtl::math::setNan(&rfMaximum);
+}
+
 //static
 sal_Int32 VSeriesPlotter::getPointCount( const ::std::vector< VDataSeriesGroup >& rSlots )
 {
@@ -456,6 +478,36 @@ sal_Int32 VSeriesPlotter::getPointCount( const VDataSeriesGroup& rSeriesGroup )
             nRet = nPointCount;
     }
     return nRet;
+}
+
+void VDataSeriesGroup::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximum ) const
+{
+    const ::std::vector< VDataSeries* >* pSeriesList = &this->m_aSeriesVector;
+
+    ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
+    const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
+
+    ::rtl::math::setInf(&rfMinimum, false);
+    ::rtl::math::setInf(&rfMaximum, true);
+
+    for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+    {
+        sal_Int32 nPointCount = (*aSeriesIter)->getTotalPointCount();
+        for(sal_Int32 nN=0;nN<nPointCount;nN++)
+        {
+            double fX = (*aSeriesIter)->getX( nN );
+            if( ::rtl::math::isNan(fX) )
+                continue;
+            if(rfMaximum<fX)
+                rfMaximum=fX;
+            if(rfMinimum>fX)
+                rfMinimum=fX;
+        }
+    }
+    if(::rtl::math::isInf(rfMinimum))
+        ::rtl::math::setNan(&rfMinimum);
+    if(::rtl::math::isInf(rfMaximum))
+        ::rtl::math::setNan(&rfMaximum);
 }
 
 void VDataSeriesGroup::calculateYSumsForCategory( sal_Int32 nCategoryIndex

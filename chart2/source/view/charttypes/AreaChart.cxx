@@ -182,6 +182,26 @@ AreaChart::~AreaChart()
     delete m_pPosHelper;
 }
 
+double AreaChart::getMinimumX()
+{
+    if( m_bCategoryXAxis )
+        return VSeriesPlotter::getMinimumX();
+
+    double fMinimum, double fMaximum;
+    this->getMinimumAndMaximiumX( fMinimum, fMaximum );
+    return fMinimum;
+}
+
+double AreaChart::getMaximumX()
+{
+    if( m_bCategoryXAxis )
+        return VSeriesPlotter::getMaximumX();
+
+    double fMinimum, double fMaximum;
+    this->getMinimumAndMaximiumX( fMinimum, fMaximum );
+    return fMaximum;
+}
+
 double AreaChart::getMaximumZ()
 {
     if( 3!=m_nDimension )
