@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:38:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:26:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,12 @@ public:
                         {return aSection.IsHidden();}
     int                 IsProtect()const
                         {return aSection.IsProtect();}
+    // --> FME 2004-06-22 #114856# edit in readonly sections
+    int                 IsEditInReadonly()const
+                        {return aSection.IsEditInReadonly();}
+    void                SetEditInReadonly(int bFlag = TRUE)
+                        {aSection.SetEditInReadonly(bFlag);}
+    // <--
     void                SetHidden(int bFlag = TRUE)
                         {aSection.SetHidden(bFlag);}
     void                SetCondHidden(int bFlag = TRUE)
@@ -241,6 +247,11 @@ class SwEditRegionDlg : public SfxModalDialog
     FixedText       aConditionFT;
     ConditionEdit   aConditionED;
 
+    // --> FME 2004-06-22 #114856# edit in readonly sections
+    FixedLine       aPropertiesFL;
+    TriStateBox     aEditInReadonlyCB;
+    // <--
+
     OKButton        aOK;
     CancelButton    aCancel;
     PushButton      aOptionsPB;
@@ -273,6 +284,9 @@ class SwEditRegionDlg : public SfxModalDialog
     DECL_LINK( ChangePasswdHdl, Button * );
     DECL_LINK( ChangeProtectHdl, TriStateBox * );
     DECL_LINK( ChangeHideHdl, TriStateBox * );
+    // --> FME 2004-06-22 #114856# edit in readonly sections
+    DECL_LINK( ChangeEditInReadonlyHdl, TriStateBox * );
+    // <--
     DECL_LINK( ChangeDismissHdl, CheckBox * );
     DECL_LINK( UseFileHdl, CheckBox* );
     DECL_LINK( FileSearchHdl, PushButton* );
@@ -324,6 +338,11 @@ class SwInsertSectionTabPage : public SfxTabPage
     FixedText       aConditionFT;
     ConditionEdit   aConditionED;
 
+    // --> FME 2004-06-22 #114856# edit in readonly sections
+    FixedLine       aPropertiesFL;
+    CheckBox        aEditInReadonlyCB;
+    // <--
+
     String          sSection;
     String          sFileName;
     String          sFilterName;
@@ -334,6 +353,9 @@ class SwInsertSectionTabPage : public SfxTabPage
     SwWrtShell*     pWrtSh;
 
     DECL_LINK( ChangeHideHdl, CheckBox * );
+    // --> FME 2004-06-22 #114856# edit in readonly sections
+    DECL_LINK( ChangeEditInReadonlyHdl, CheckBox * );
+    // <--
     DECL_LINK( ChangeProtectHdl, CheckBox * );
     DECL_LINK( ChangePasswdHdl, Button * );
     DECL_LINK( NameEditHdl, Edit * );
