@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:53:05 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     /* ### ACHTUNG: Neuer Text in Resource? Tabelle einf�gen : Tabelle einf�gen */
     Text = "Tabelle einf�gen" ;
     Text [ ENGLISH ] = "Insert table" ;
-    Text [ DANISH ] = "Inds�t regneark" ;
+    Text [ DANISH ] = "Inds�t ark" ;
     Text [ ENGLISH_US ] = "Insert Sheet" ;
     Text [ SPANISH ] = "Insertar hoja" ;
     Text [ FRENCH ] = "Insertion de feuilles" ;
@@ -139,6 +139,8 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
         Text[ slovak ] = "Umiestnenie";
+        Text[ hungarian ] = "Pozíció";
+        Text[ slovenian ] = "Položaj";
     };
     RadioButton RB_BEFORE
     {
@@ -151,7 +153,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ english_us ] = "B~efore current sheet" ;
         Text [ portuguese_brazilian ] = "~Antes da planilha atual" ;
         Text [ swedish ] = "~F�re aktuell tabell" ;
-        Text [ danish ] = "F�r aktuelt ark" ;
+        Text [ danish ] = "~F�r nuv�rende ark" ;
         Text [ italian ] = "~Prima della tabella attiva" ;
         Text [ spanish ] = "~Delante de la hoja actual" ;
         Text [ french ] = "A~vant la feuille courante" ;
@@ -173,6 +175,8 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ hebrew ] = "~Vor aktueller Tabelle";
         Text[ hindi ] = "वर्तमान शीट् से प~हिले";
         Text[ slovak ] = "Pr~ed aktuálny list";
+        Text[ hungarian ] = "J~elenlegi munkalap elé";
+        Text[ slovenian ] = "Pr~ed trenutnim listom";
     };
     RadioButton RB_BEHIND
     {
@@ -185,7 +189,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ english_us ] = "~After current sheet" ;
         Text [ portuguese_brazilian ] = "A~p�s a planilha selecionada" ;
         Text [ swedish ] = "~Efter aktuell tabell" ;
-        Text [ danish ] = "Efter aktuelt ark" ;
+        Text [ danish ] = "~Efter nuv�rende ark" ;
         Text [ italian ] = "~Dopo la tabella attiva" ;
         Text [ spanish ] = "Detr�s de la ~hoja actual" ;
         Text [ french ] = "~Apr�s la feuille courante" ;
@@ -207,6 +211,8 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ hebrew ] = "~Nach aktueller Tabelle";
         Text[ hindi ] = "वर्तमान शीट् ~के पश्चात्";
         Text[ slovak ] = "Z~a aktuálny list";
+        Text[ hungarian ] = "Jelenlegi mu~nkalap mögé";
+        Text[ slovenian ] = "~Za trenutnim listom";
     };
     FixedLine FL_TABLE
     {
@@ -217,7 +223,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ english_us ] = "Sheet" ;
         Text [ portuguese_brazilian ] = "Planilha" ;
         Text [ swedish ] = "Tabell" ;
-        Text [ danish ] = "Tabel" ;
+        Text [ danish ] = "Ark" ;
         Text [ italian ] = "Tabella" ;
         Text [ spanish ] = "Hoja" ;
         Text [ french ] = "Feuille" ;
@@ -240,6 +246,8 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ hebrew ] = "Tabelle";
         Text[ hindi ] = "शीट्";
         Text[ slovak ] = "List";
+        Text[ hungarian ] = "Munkalap";
+        Text[ slovenian ] = "Delovni list";
     };
     RadioButton RB_NEW
     {
@@ -247,7 +255,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Size = MAP_APPFONT ( 197 , 10 ) ;
         Text = "Neu ~erstellen" ;
         Text [ ENGLISH ] = "~Create new" ;
-        Text [ DANISH ] = "~Opret ny" ;
+        Text [ DANISH ] = "~Nyt ark" ;
         Text [ ENGLISH_US ] = "~New sheet" ;
         Text [ SPANISH ] = "~Hoja nueva" ;
         Text [ FRENCH ] = "Cr�er" ;
@@ -273,6 +281,8 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ hebrew ] = "Neu ~erstellen";
         Text[ hindi ] = "~नया शीट्";
         Text[ slovak ] = "~Nový list";
+        Text[ hungarian ] = "Ú~j munkalap";
+        Text[ slovenian ] = "~Nov list";
     };
     FixedText FT_COUNT
     {
@@ -284,7 +294,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ english_us ] = "N~o. of sheets" ;
         Text [ portuguese_brazilian ] = "~N� de planilhas" ;
         Text [ swedish ] = "An~tal" ;
-        Text [ danish ] = "Antal" ;
+        Text [ danish ] = "An~tal ark" ;
         Text [ italian ] = "~Numero" ;
         Text [ spanish ] = "~N�m. de hojas" ;
         Text [ french ] = "N~ombre" ;
@@ -306,6 +316,8 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ hebrew ] = "An~zahl";
         Text[ hindi ] = "शीटों की सं~ख्या";
         Text[ slovak ] = "P~očet listov";
+        Text[ hungarian ] = "~Hány lapot?";
+        Text[ slovenian ] = "Št. list~ov";
     };
     NumericField NF_COUNT
     {
@@ -333,7 +345,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ french ] = "Nom";
         Text[ spanish ] = "No~mbre";
         Text[ italian ] = "No~me";
-        Text[ danish ] = "Navn";
+        Text[ danish ] = "Na~vn";
         Text[ swedish ] = "Na~mn";
         Text[ polish ] = "Naz~wa";
         Text[ portuguese_brazilian ] = "No~me";
@@ -350,6 +362,8 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ hebrew ] = "Na~me";
         Text[ hindi ] = "ना~म";
         Text[ slovak ] = "Náz~ov";
+        Text[ hungarian ] = "Né~v";
+        Text[ slovenian ] = "I~me";
     };
     Edit ED_TABNAME
     {
@@ -363,7 +377,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Size = MAP_APPFONT ( 197 , 10 ) ;
         Text = "~Aus Datei erstellen" ;
         Text [ ENGLISH ] = "F~rom file" ;
-        Text [ DANISH ] = "Opret fr~a fil" ;
+        Text [ DANISH ] = "~Fra fil" ;
         Text [ ENGLISH_US ] = "~From file" ;
         Text [ SPANISH ] = "~A partir de archivo" ;
         Text [ FRENCH ] = "~Cr�ation � partir d'un fichier" ;
@@ -389,6 +403,8 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ hebrew ] = "‮מקובץ‬";
         Text[ hindi ] = "फाइल ~से";
         Text[ slovak ] = "Zo sú~boru";
+        Text[ hungarian ] = "~Fájlból";
+        Text[ slovenian ] = "~Iz datoteke";
     };
     MultiListBox LB_TABLES
     {
@@ -404,7 +420,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text = "~Durchsuchen..." ;
         Text [ ENGLISH ] = "~Browse..." ;
-        Text [ DANISH ] = "Gennemse..." ;
+        Text [ DANISH ] = "~Gennemse..." ;
         Text [ ENGLISH_US ] = "~Browse..." ;
         Text [ SPANISH ] = "~Buscar..." ;
         Text [ FRENCH ] = "~Parcourir..." ;
@@ -430,6 +446,8 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ hebrew ] = "‮עיון...‬";
         Text[ hindi ] = "~ब्रउज़...";
         Text[ slovak ] = "~Listovať...";
+        Text[ hungarian ] = "~Tallózás...";
+        Text[ slovenian ] = "Pre~brskaj...";
     };
     CheckBox CB_LINK
     {
@@ -438,7 +456,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         /* ### ACHTUNG: Neuer Text in Resource? Ver~kn�pfen : Ver~kn�pfen */
         Text = "Ver~kn�pfen" ;
         Text [ ENGLISH ] = "Lin~k" ;
-        Text [ DANISH ] = "~K�d" ;
+        Text [ DANISH ] = "Sammen~k�d" ;
         Text [ ENGLISH_US ] = "Lin~k" ;
         Text [ SPANISH ] = "~Vincular" ;
         Text [ FRENCH ] = "~Lier" ;
@@ -464,6 +482,8 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ hebrew ] = "Ver~knüpfen";
         Text[ hindi ] = "लिं~क";
         Text[ slovak ] = "Od~kaz";
+        Text[ hungarian ] = "Hiv~atkozás";
+        Text[ slovenian ] = "Po~vezava";
     };
     FixedText FT_PATH
     {
@@ -475,7 +495,10 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     Text[ hebrew ] = "Tabelle einfügen";
     Text[ hindi ] = "Insert Sheet";
     Text[ slovak ] = "Vložiť list";
+    Text[ hungarian ] = "Munkalap beillesztése";
+    Text[ slovenian ] = "Vstavi list";
 };
+
 
 
 
