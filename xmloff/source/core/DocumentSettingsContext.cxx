@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-04 05:26:51 $
+ *  last change: $Author: cl $ $Date: 2001-04-05 16:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #include <list>
 #endif
 
+#ifndef _COM_SUN_STAR_I18N_XFORBIDDENCHARACTERS_HPP_
+#include <com/sun/star/i18n/XForbiddenCharacters.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
@@ -110,6 +113,16 @@
 #endif
 
 using namespace com::sun::star;
+
+enum XMLForbiddenCharactersEnum
+{
+    XML_FORBIDDEN_CHARACTER_LANGUAGE,
+    XML_FORBIDDEN_CHARACTER_COUNTRY,
+    XML_FORBIDDEN_CHARACTER_VARIANT,
+    XML_FORBIDDEN_CHARACTER_BEGIN_LINE,
+    XML_FORBIDDEN_CHARACTER_END_LINE,
+    XML_FORBIDDEN_CHARACTER_MAX
+};
 
 //------------------------------------------------------------------
 
@@ -282,12 +295,16 @@ public:
 
 class XMLConfigItemMapIndexedContext : public XMLConfigBaseContext
 {
+private:
+    rtl::OUString maConfigItemName;
+
 public:
     XMLConfigItemMapIndexedContext(SvXMLImport& rImport, USHORT nPrfx,
                                     const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     com::sun::star::uno::Any& rAny,
+                                    const rtl::OUString& rConfigItemName,
                                     XMLConfigBaseContext* pBaseContext);
     virtual ~XMLConfigItemMapIndexedContext();
 
@@ -335,7 +352,7 @@ SvXMLImportContext *CreateSettingsContext(SvXMLImport& rImport, USHORT nPrefix,
         else if(rLocalName.compareToAscii(sXML_config_item_map_named) == 0)
             pContext = new XMLConfigItemMapNamedContext(rImport, nPrefix, rLocalName, xAttrList, rProp.Value, pBaseContext);
         else if(rLocalName.compareToAscii(sXML_config_item_map_indexed) == 0)
-            pContext = new XMLConfigItemMapIndexedContext(rImport, nPrefix, rLocalName, xAttrList, rProp.Value, pBaseContext);
+            pContext = new XMLConfigItemMapIndexedContext(rImport, nPrefix, rLocalName, xAttrList, rProp.Value, rProp.Name, pBaseContext);
     }
 
     if( !pContext )
@@ -618,8 +635,10 @@ XMLConfigItemMapIndexedContext::XMLConfigItemMapIndexedContext(SvXMLImport& rImp
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     com::sun::star::uno::Any& rAny,
+                                    const ::rtl::OUString& rConfigItemName,
                                     XMLConfigBaseContext* pBaseContext)
-    : XMLConfigBaseContext(rImport, nPrfx, rLName, rAny, pBaseContext)
+    : XMLConfigBaseContext(rImport, nPrfx, rLName, rAny, pBaseContext),
+      maConfigItemName( rConfigItemName )
 {
 }
 
@@ -639,7 +658,97 @@ void XMLConfigItemMapIndexedContext::EndElement()
 {
     if (pBaseContext)
     {
-        rAny <<= aProps.GetIndexContainer();
+        if( maConfigItemName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ForbiddenCharacters" ) ) )
+        {
+            uno::Reference< i18n::XForbiddenCharacters > xForbChars;
+
+            // get the forbidden characters from the document
+            uno::Reference< lang::XMultiServiceFactory > xFac( GetImport().GetModel(), uno::UNO_QUERY );
+            if( xFac.is() )
+            {
+                uno::Reference< beans::XPropertySet > xProps( xFac->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ), uno::UNO_QUERY );
+                if( xProps.is() && xProps->getPropertySetInfo()->hasPropertyByName( maConfigItemName ) )
+                {
+                    xProps->getPropertyValue( maConfigItemName ) >>= xForbChars;
+                }
+            }
+
+            if( xForbChars.is() )
+            {
+
+                uno::Reference< container::XIndexAccess > xIndex( aProps.GetIndexContainer(), uno::UNO_QUERY );
+
+                const sal_Int32 nCount = xIndex->getCount();
+                uno::Sequence < beans::PropertyValue > aProps;
+                for (sal_Int32 i = 0; i < nCount; i++)
+                {
+                    if ((xIndex->getByIndex( i ) >>= aProps) && (aProps.getLength() == XML_FORBIDDEN_CHARACTER_MAX ) )
+                    {
+                        beans::PropertyValue *pForChar = aProps.getArray();
+                        i18n::ForbiddenCharacters aForbid;
+                        lang::Locale aLocale;
+                        const rtl::OUString sLanguage  ( RTL_CONSTASCII_USTRINGPARAM ( "Language" ) );
+                        const rtl::OUString sCountry   ( RTL_CONSTASCII_USTRINGPARAM ( "Country" ) );
+                        const rtl::OUString sVariant   ( RTL_CONSTASCII_USTRINGPARAM ( "Variant" ) );
+                        const rtl::OUString sBeginLine ( RTL_CONSTASCII_USTRINGPARAM ( "BeginLine" ) );
+                        const rtl::OUString sEndLine   ( RTL_CONSTASCII_USTRINGPARAM ( "EndLine" ) );
+                        sal_Bool bHaveLanguage = sal_False, bHaveCountry = sal_False, bHaveVariant = sal_False,
+                                 bHaveBegin = sal_False, bHaveEnd = sal_False;
+
+                        for ( sal_Int32 j = 0 ; j < XML_FORBIDDEN_CHARACTER_MAX ; j++ )
+                        {
+                            if (pForChar->Name.equals (sLanguage ) )
+                            {
+                                pForChar->Value >>= aLocale.Language;
+                                bHaveLanguage = sal_True;
+                            }
+                            else if (pForChar->Name.equals (sCountry ) )
+                            {
+                                pForChar->Value >>= aLocale.Country;
+                                bHaveCountry = sal_True;
+                            }
+                            else if (pForChar->Name.equals (sVariant ) )
+                            {
+                                pForChar->Value >>= aLocale.Variant;
+                                bHaveVariant = sal_True;
+                            }
+                            else if (pForChar->Name.equals (sBeginLine ) )
+                            {
+                                pForChar->Value >>= aForbid.beginLine;
+                                bHaveBegin = sal_True;
+                            }
+                            else if (pForChar->Name.equals (sEndLine ) )
+                            {
+                                pForChar->Value >>= aForbid.endLine;
+                                bHaveEnd = sal_True;
+                            }
+                            pForChar++;
+                        }
+
+                        if ( bHaveLanguage && bHaveCountry && bHaveVariant && bHaveBegin && bHaveEnd )
+                        {
+                            try
+                            {
+                                xForbChars->setForbiddenCharacters( aLocale, aForbid );
+                            }
+                            catch( uno::Exception& )
+                            {
+                                DBG_ERROR( "Exception while importing forbidden characters" );
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                DBG_ERROR( "could not get the XForbiddenCharacters from document!" );
+                rAny <<= aProps.GetIndexContainer();
+            }
+        }
+        else
+        {
+            rAny <<= aProps.GetIndexContainer();
+        }
         pBaseContext->AddPropertyValue();
     }
     else

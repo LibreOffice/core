@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 17:37:03 $
+ *  last change: $Author: cl $ $Date: 2001-04-05 16:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,15 +78,39 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
-
+#ifndef _COMPHELPER_PROCESSFACTORYHXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XSUPPORTEDLOCALES_HPP_
+#include <com/sun/star/linguistic2/XSupportedLocales.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_XFORBIDDENCHARACTERS_HPP_
+#include <com/sun/star/i18n/XForbiddenCharacters.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
+#include <com/sun/star/container/XIndexContainer.hpp>
+#endif
 
 using namespace ::com::sun::star;
+
+enum XMLForbiddenCharactersEnum
+{
+    XML_FORBIDDEN_CHARACTER_LANGUAGE,
+    XML_FORBIDDEN_CHARACTER_COUNTRY,
+    XML_FORBIDDEN_CHARACTER_VARIANT,
+    XML_FORBIDDEN_CHARACTER_BEGIN_LINE,
+    XML_FORBIDDEN_CHARACTER_END_LINE,
+    XML_FORBIDDEN_CHARACTER_MAX
+};
 
 XMLSettingsExportHelper::XMLSettingsExportHelper(SvXMLExport& rTempExport)
     : rExport(rTempExport)
@@ -174,6 +198,10 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
                 util::DateTime aDateTime;
                 rAny >>= aDateTime;
                 exportDateTime(aDateTime, rName);
+            }
+            else if( aType.equals(getCppuType( (uno::Reference<i18n::XForbiddenCharacters> *)0 ) ) )
+            {
+                exportForbiddenCharacters( rAny, rName );
             }
             else
                 DBG_ERROR("this type is not implemented now");
@@ -325,6 +353,68 @@ void XMLSettingsExportHelper::exportIndexAccess(
         for (sal_Int32 i = 0; i < nCount; i++)
         {
             exportMapEntry(aIndexed->getByIndex(i), sEmpty, sal_False);
+        }
+    }
+}
+
+void XMLSettingsExportHelper::exportForbiddenCharacters(
+                    const uno::Any &rAny,
+                    const rtl::OUString rName) const
+{
+    uno::Reference<i18n::XForbiddenCharacters> xForbChars;
+    uno::Reference<linguistic2::XSupportedLocales> xLocales;
+
+    rAny >>= xForbChars;
+    rAny >>= xLocales;
+
+    DBG_ASSERT( xForbChars.is() && xLocales.is(),"XMLSettingsExportHelper::exportForbiddenCharacters: got illegal forbidden characters!" );
+
+    if( !xForbChars.is() || !xLocales.is() )
+        return;
+
+    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
+    DBG_ASSERT( xServiceFactory.is(), "XMLSettingsExportHelper::exportForbiddenCharacters: got no service manager" );
+
+    if( xServiceFactory.is() )
+    {
+        uno::Reference< container::XIndexContainer > xBox(xServiceFactory->createInstance(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.document.IndexedPropertyValues") ) ), uno::UNO_QUERY);
+        DBG_ASSERT( xBox.is(), "could not create service com.sun.star.document.IndexedPropertyValues" );
+        if (xBox.is() )
+        {
+            const uno::Sequence< lang::Locale > aLocales( xLocales->getLocales() );
+            const lang::Locale* pLocales = aLocales.getConstArray();
+
+            const sal_Int32 nCount = aLocales.getLength();
+
+            const rtl::OUString sLanguage  ( RTL_CONSTASCII_USTRINGPARAM ( "Language" ) );
+            const rtl::OUString sCountry   ( RTL_CONSTASCII_USTRINGPARAM ( "Country" ) );
+            const rtl::OUString sVariant   ( RTL_CONSTASCII_USTRINGPARAM ( "Variant" ) );
+            const rtl::OUString sBeginLine ( RTL_CONSTASCII_USTRINGPARAM ( "BeginLine" ) );
+            const rtl::OUString sEndLine   ( RTL_CONSTASCII_USTRINGPARAM ( "EndLine" ) );
+
+            for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++, pLocales++ )
+            {
+                const i18n::ForbiddenCharacters aChars( xForbChars->getForbiddenCharacters( *pLocales ) );
+
+
+                uno::Sequence < beans::PropertyValue > aSequence ( XML_FORBIDDEN_CHARACTER_MAX );
+                beans::PropertyValue *pForChar = aSequence.getArray();
+
+                pForChar[XML_FORBIDDEN_CHARACTER_LANGUAGE].Name    = sLanguage;
+                pForChar[XML_FORBIDDEN_CHARACTER_LANGUAGE].Value <<= pLocales->Language;
+                pForChar[XML_FORBIDDEN_CHARACTER_COUNTRY].Name    = sCountry;
+                pForChar[XML_FORBIDDEN_CHARACTER_COUNTRY].Value <<= pLocales->Country;
+                pForChar[XML_FORBIDDEN_CHARACTER_VARIANT].Name    = sVariant;
+                pForChar[XML_FORBIDDEN_CHARACTER_VARIANT].Value <<= pLocales->Variant;
+                pForChar[XML_FORBIDDEN_CHARACTER_BEGIN_LINE].Name    = sBeginLine;
+                pForChar[XML_FORBIDDEN_CHARACTER_BEGIN_LINE].Value <<= aChars.beginLine;
+                pForChar[XML_FORBIDDEN_CHARACTER_END_LINE].Name    = sEndLine;
+                pForChar[XML_FORBIDDEN_CHARACTER_END_LINE].Value <<= aChars.endLine;
+                xBox->insertByIndex(nIndex, uno::makeAny( aSequence ));
+            }
+
+            uno::Reference< container::XIndexAccess > xIA( xBox, uno::UNO_QUERY );
+            exportIndexAccess( xIA, rName );
         }
     }
 }
