@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 15:38:08 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,8 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ hebrew ] = "~Formelzelle";
         Text[ hindi ] = "~सूत्र का कोष्ठ";
         Text[ slovak ] = "Bun~ka so vzorcom";
+        Text[ hungarian ] = "~Képletcella";
+        Text[ slovenian ] = "Celica s ~formulo";
     };
     Edit ED_FORMULACELL
     {
@@ -157,6 +159,8 @@ ModelessDialog RID_SCDLG_SOLVER
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     FixedText FT_TARGETVAL
     {
@@ -191,6 +195,8 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ hebrew ] = "~Zielwert";
         Text[ hindi ] = "लक्ष्य का ~मूल्य";
         Text[ slovak ] = "Cieľo~vá hodnota";
+        Text[ hungarian ] = "K~eresett érték";
+        Text[ slovenian ] = "Ciljna ~vrednost";
     };
     Edit ED_TARGETVAL
     {
@@ -210,7 +216,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ portuguese_brazilian ] = "~C�lula vari�vel" ;
         Text [ portuguese ] = "C�lula ~vari�vel" ;
         Text [ finnish ] = "Muuttuja~solu" ;
-        Text [ danish ] = "Variabel celle" ;
+        Text [ danish ] = "~Variabelcelle" ;
         Text [ french ] = "Cellule variable" ;
         Text [ swedish ] = "~Variabel cell" ;
         Text [ dutch ] = "~Variabele cel" ;
@@ -232,6 +238,8 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ hebrew ] = "~Variable Zelle";
         Text[ hindi ] = "वेरिऐबल ~कोष्ठ";
         Text[ slovak ] = "~Bunka s premennou";
+        Text[ hungarian ] = "Változó ~cella";
+        Text[ slovenian ] = "Spremenljiva ~celica";
     };
     Edit ED_VARCELL
     {
@@ -274,6 +282,8 @@ ModelessDialog RID_SCDLG_SOLVER
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     FixedLine FL_VARIABLES
     {
@@ -286,7 +296,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ portuguese_brazilian ] = "Defini��es" ;
         Text [ portuguese ] = "Predefini��es" ;
         Text [ finnish ] = "Oletusasetukset" ;
-        Text [ danish ] = "Forudindstillinger" ;
+        Text [ danish ] = "Standardindstillinger" ;
         Text [ french ] = "D�finitions" ;
         Text [ swedish ] = "F�rinst�llningar" ;
         Text [ dutch ] = "Standaard" ;
@@ -308,6 +318,8 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ hebrew ] = "Vorgaben";
         Text[ hindi ] = "अनुपस्थिति निर्धारण";
         Text[ slovak ] = "Východzie nastavenia";
+        Text[ hungarian ] = "Alapbeállítások";
+        Text[ slovenian ] = "Privzete nastavitve";
     };
     OKButton BTN_OK
     {
@@ -360,6 +372,8 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ hebrew ] = "Unzulässiger Zielwert";
         Text[ hindi ] = "लक्ष्य का मूल्य अमान्य है ।";
         Text[ slovak ] = "Neplatná cieľová hodnota.";
+        Text[ hungarian ] = "Érvénytelen célérték.";
+        Text[ slovenian ] = "Neveljavna ciljna vrednost.";
     };
     String STR_INVALIDVAR
     {
@@ -370,7 +384,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ portuguese_brazilian ] = "Nome indefinido para c�lula vari�vel!" ;
         Text [ portuguese ] = "Nome indefinido para c�lula vari�vel!" ;
         Text [ finnish ] = "M��ritt�m�t�n nimi muuttujasoluna" ;
-        Text [ danish ] = "Udefineret navn som variabelcelle!" ;
+        Text [ danish ] = "Udefineret navn p� variabelcelle." ;
         Text [ french ] = "Le nom pour la cellule variable n'a pas �t� d�fini !" ;
         Text [ swedish ] = "Odefinierat namn som variabel cell!" ;
         Text [ dutch ] = "Niet-gedefinieerde naam voor variabele cel!" ;
@@ -392,6 +406,8 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ hebrew ] = "Undefinierter Name als variable Zelle";
         Text[ hindi ] = "वेरिऐबल कोष्ठ केलिए परिभाषा न किया हुआ नाम ।";
         Text[ slovak ] = "Nedefinovaný názov pre bunku s premennou.";
+        Text[ hungarian ] = "A változót tartalmazó cella neve nem definiált.";
+        Text[ slovenian ] = "Nedefinirano ime za spremenljivo celico.";
     };
     String STR_INVALIDFORM
     {
@@ -402,7 +418,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ portuguese_brazilian ] = "Nome indefinido para c�lula de f�rmula!" ;
         Text [ portuguese ] = "Nome indefinido para c�lula f�rmula!" ;
         Text [ finnish ] = "M��ritt�m�t�n nimi kaavasoluna" ;
-        Text [ danish ] = "Udefineret navn som formelcelle!" ;
+        Text [ danish ] = "Udefineret navn som formelcelle." ;
         Text [ french ] = "Le nom de la cellule de formule n'a pas �t� d�fini !" ;
         Text [ swedish ] = "Odefinierat namn som formelcell!" ;
         Text [ dutch ] = "Niet-gedefinieerde naam voor formulecel!" ;
@@ -424,6 +440,8 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ hebrew ] = "Undefinierter Name als Formelzelle";
         Text[ hindi ] = "सूत्र कोष्ठ केलिए परिभाषा न किया हुआ नाम ।";
         Text[ slovak ] = "Nedefinovaný názov pre bunku so vzorcom.";
+        Text[ hungarian ] = "A képletet tartalmazó cella neve nem definiált.";
+        Text[ slovenian ] = "Nedefinirano ime za celico s formulo.";
     };
     String STR_NOFORMULA
     {
@@ -435,7 +453,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ portuguese_brazilian ] = "A c�lula deve conter uma f�rmula !" ;
         Text [ portuguese ] = "A c�lula tem de conter uma f�rmula!" ;
         Text [ finnish ] = "Solussa on oltava kaava." ;
-        Text [ danish ] = "Cellen skal indeholde en formel!" ;
+        Text [ danish ] = "Cellen skal indeholde en formel." ;
         Text [ french ] = "La cellule doit contenir une formule !" ;
         Text [ swedish ] = "Cell m�ste inneh�lla en formel!" ;
         Text [ dutch ] = "Cel moet een formule bevatten" ;
@@ -457,6 +475,8 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ hebrew ] = "Zelle muss eine Formel enthalten";
         Text[ hindi ] = "कोष्ठ में सूत्र का रहना ज़रूरी है ।";
         Text[ slovak ] = "Bunka musí obsahovať vzorec.";
+        Text[ hungarian ] = "A cellának képletet kell tartalmaznia.";
+        Text[ slovenian ] = "Celica mora vsebovati formulo.";
     };
     Text[ chinese_simplified ] = "单变量求解";
     Text[ russian ] = "������ ���������";
@@ -474,6 +494,6 @@ ModelessDialog RID_SCDLG_SOLVER
     Text[ hebrew ] = "Zielwertsuche";
     Text[ hindi ] = "गोल सीक";
     Text[ slovak ] = "Vyhľadanie cieľa";
+    Text[ hungarian ] = "Célértékkeresés";
+    Text[ slovenian ] = "Iskanje cilja";
 };
-
-
