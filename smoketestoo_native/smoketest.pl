@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-15 15:38:08 $
+#   last change: $Author: kz $ $Date: 2004-12-06 17:30:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -280,7 +280,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.7 $ ';
+$id_str = ' $Revision: 1.8 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -674,9 +674,9 @@ sub getInstset {
     return ($NEWINSTSET, $INSTSET);
 }
 
-sub get_milestone {
+sub get_milestoneAndBuildID {
     my ( $ws, $pf ) = @_;
-    my ($milestone, $upd, $path, $updext);
+    my ($milestone, $buildid, $upd, $path, $updext);
 
     if ( $ws =~ /^\D+(\d+)$/) {
         $upd = $1;
@@ -702,11 +702,14 @@ sub get_milestone {
             if ( /LAST_MINOR=(\w+)/ ) {
                 $milestone = $1;
             }
+            elsif ( /BUILD=(\d+)/ ) {
+                $buildid = $1;
+            }
         }
 
         close(MINORMK);
     }
-    return ($milestone);
+    return ($milestone, $buildid);
 }
 
 sub get_productcode {
@@ -749,13 +752,19 @@ sub getSetFromServer {
     my $workspace = $ENV{WORK_STAMP};
     my $platform  = $ENV{INPATH};
     my $latestset;
-    my (@DirArray, $mask);
+    my (@DirArray, $mask, $buildid);
     $SetupFullPath = $PORDUCT;
     if ( ! ( $workspace && $platform ) ) {
         print_error ( "Error: environment not set correctly.", 1);
     }
     # get latest broadcastet milestone and pack number
-    $milestone = get_milestone( $workspace, $platform );
+    ($milestone, $buildid) = get_milestoneAndBuildID( $workspace, $platform );
+    if (!defined($milestone)) {
+            print_error ("Milestone ist not defined!", 2);
+    }
+    if (!defined($buildid)) {
+            print_error ("Build-ID ist not defined!", 2);
+    }
 
 #    if ( $SetupFullPath =~ /^\/s.*\/install\// ) {
 #        if ( $gui eq "UNX" ) {
@@ -766,7 +775,7 @@ sub getSetFromServer {
 #    }
 
 #    my $ws_lc = lc $workspace;
-    $mask = "^$workspace" . "_" . $milestone . "_native_packed-(\\d+)_en-US\\.\\d+";
+    $mask = "^$workspace" . "_" . $milestone . "_native_packed-(\\d+)_en-US\\.$buildid";
     $global_instset_mask = $mask;
     getSubFiles ($SetupFullPath, \@DirArray, $mask);
     @DirArray = sort InstsetSort @DirArray;
