@@ -22380,3 +22380,5 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?setName@SvxGraphCtrlAccessibleContext@@QAEXABVOUString@rtl@@@Z
 ?supportsService@SvxGraphCtrlAccessibleContext@@UAAEABVOUString@rtl@@@Z
 ?upper_bound@?$_Rb_tree@V?$Reference@VXEventListener@document@star@sun@com@@@uno@star@sun@com@@V12345@U?$_Identity@V?$Reference@VXEventListener@document@star@sun@com@@@uno@star@sun@com@@@_STL@@U?$less@V?$Reference@VXEventListener@document@star@sun@com@@@uno@star@sun@com@@@7@V?$allocator@V?$Reference@VXEventListener@document@star@sun@com@@@uno@star@sun@com@@@7@@_STL@@QAE?AU?$_Rb_tree_iterator@V?$Reference@VXEventListener@document@star@sun@com@@@uno@star@sun@com@@U?$_Nonconst_traits@V?$Reference@VXEventListener@document@star@sun@com@@@uno@star@sun@com@@@_STL@@@2@ABV?$Reference@VXEventListener@document@star@sun@com@@@uno@star@sun@com@@@Z
+?PutValue@SvxHyperlinkItem@@UAEEABVAny@uno@star@sun@com@@E@Z
+?QueryValue@SvxHyperlinkItem@@UBEEAAVAny@uno@star@sun@com@@E@Z
