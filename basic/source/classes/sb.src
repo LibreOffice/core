@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:09:06 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -886,7 +886,7 @@ Resource RID_BASIC_START
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El fitxer ja �s obert";
         Text[ thai ] = "แฟ้มเปิดอยู่แล้ว";
-        Text[ czech ] = "Soubor již otevřen";
+        Text[ czech ] = "Soubor je již otevřen";
         Text[ hebrew ] = "‮קובץ זה כבר פתוח‬";
         Text[ hindi ] = "फाइल पहिले से ही खुला है";
         Text[ slovak ] = "Súbor je už otvorený";
@@ -921,7 +921,7 @@ Resource RID_BASIC_START
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error d'E/S del dispositiu";
         Text[ thai ] = "อุปกรณ์ I/O ผิดพลาด";
-        Text[ czech ] = "Chyba zařízení I/O";
+        Text[ czech ] = "I/O chyba zařízení";
         Text[ hebrew ] = "‮שגיאת קלט\\פלט על הכונן‬";
         Text[ hindi ] = "साधन I/O गलती";
         Text[ slovak ] = "Chyba zariadenia I/O";
@@ -1436,7 +1436,7 @@ Resource RID_BASIC_START
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El patr� de la cadena no �s v�lid";
         Text[ thai ] = "ลวดลายสายอักขระไม่ถูกต้อง";
-        Text[ czech ] = "Chybný řetězec";
+        Text[ czech ] = "Chybný řetězcový vzorek";
         Text[ hebrew ] = "‮תבנית מחרוזת לא חוקית‬";
         Text[ hindi ] = "अमान्य स्ट्रिंग नमूना";
         Text[ slovak ] = "Chybný reťazec";
@@ -1815,7 +1815,7 @@ Resource RID_BASIC_START
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "L'aplicaci� externa est� ocupada";
         Text[ thai ] = "โปรแกรมประยุกต์ภายนอกไม่ว่าง";
-        Text[ czech ] = "Externí aplikace běží";
+        Text[ czech ] = "Externí aplikace zaneprázdněna";
         Text[ hebrew ] = "‮יישום חיצוני תפוס‬";
         Text[ hindi ] = "बाहरी कार्यक्रम कार्य में निरत है";
         Text[ slovak ] = "Externá aplikácia je zaneprázdnená­";
@@ -2542,7 +2542,7 @@ Resource RID_BASIC_START
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aquest objecte no permet l'automatitzaci� OLE";
         Text[ thai ] = "ไม่สนับสนุน OLE อัตโนมัติด้วยวัตถุนี้";
-        Text[ czech ] = "OLE není tímto objektem podporováno";
+        Text[ czech ] = "OLE automatizace není tímto objektem podporována";
         Text[ hebrew ] = "‮העצם אינו תומך ב OLE Automation‬";
         Text[ hindi ] = "OLE स्वचालित यह वस्तु से असमर्थित है";
         Text[ slovak ] = "OLE Automation nieje podporovaná týmto objektom";
@@ -2611,7 +2611,7 @@ Resource RID_BASIC_START
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error d'automatitzaci� OLE";
         Text[ thai ] = "OLE อัตโนมัติผิดพลาด";
-        Text[ czech ] = "Chyba OLE automation";
+        Text[ czech ] = "Chyba OLE automatizace";
         Text[ hebrew ] = "‮שגיאה ב OLE Automation‬";
         Text[ hindi ] = "OLE स्वचालित गलती";
         Text[ slovak ] = "Chyba OLE automation";
@@ -2921,7 +2921,7 @@ Resource RID_BASIC_START
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No s'ha trobat la funci� DLL indicada";
         Text[ thai ] = "ไม่พบฟังก์ชั่น DLL ที่ระบุ ";
-        Text[ czech ] = "Daná funkce DLL nenalezena";
+        Text[ czech ] = "Zadaná funkce DLL nenalezena";
         Text[ hebrew ] = "‮לא ניתן לאתר את שגרת ה-DLL המבוקשת‬";
         Text[ hindi ] = "निर्दिष्ट कया हुआ DLL फंक्शन नहीं मिला";
         Text[ slovak ] = "Daná funkcia DLL nenájdená";
@@ -3196,7 +3196,7 @@ Resource RID_BASIC_START
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No es pot determinar la propietat";
         Text[ thai ] = "ไม่สามารถกำหนดคุณสมบัติได้";
-        Text[ czech ] = "Nelze určit vlastnost";
+        Text[ czech ] = "Nelze zjistit vlastnost";
         Text[ hebrew ] = "‮לא ניתן לזהות מאפיין זה‬";
         Text[ hindi ] = "विशेषता निर्धारण करने में असमर्थ";
         Text[ slovak ] = "Nieje možné určiť vlastnosť";
@@ -3469,7 +3469,7 @@ Resource RID_BASIC_START
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El subprocediment o el procediment de funci� $(ARG1) ja s'ha definit";
         Text[ thai ] = "ระบุกระบวนคำสั่งย่อยหรือกระบวนฟังก์ชั่น $(ARG1) แล้ว";
-        Text[ czech ] = "Pod procedura nebo funkční procedura $(ARG1) je již definována";
+        Text[ czech ] = "Podprocedura nebo funkční procedura $(ARG1) je již definována";
         Text[ hebrew ] = "‮תת השגרה או תפקוד $(ARG1) כבר מוגדר‬";
         Text[ hindi ] = "Sub procedure or function procedure $(ARG1) already defined";
         Text[ slovak ] = "Subprocedúra alebo funkčná procedúra $(ARG1) je už definovaná";
@@ -3982,7 +3982,7 @@ Resource RID_BASIC_START
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ARG1) no est� perm�s dins d'un procediment";
         Text[ thai ] = "ไม่อนุญาตให้ $(ARG1) อยู่ในกระบวนคำสั่ง";
-        Text[ czech ] = "(ARG1) není povolen v této proceduře";
+        Text[ czech ] = "$(ARG1) není povolen v této proceduře";
         Text[ hebrew ] = "‮$(ARG1) אינו חוקי בתוך שגרה‬";
         Text[ hindi ] = "$(ARG1) कार्यप्रणाली के भीतर स्वीकृत नहीं है";
         Text[ slovak ] = "$(ARG1) nieje povolený v tejto procedúre";
@@ -4294,7 +4294,7 @@ String IDS_SBERR_STOREREF
     Text [ finnish ] = "Viitett� ei tallenneta: " ;
     Text[ catalan ] = "No es desar� la refer�ncia:  ";
     Text[ thai ] = "จะไม่บันทึกการอ้างอิง: ";
-    Text[ czech ] = "Odkaz nebyl uložen: ";
+    Text[ czech ] = "Odkaz nebude uložen: ";
     Text[ hebrew ] = "‮הציון לא ישמר‬";
     Text[ hindi ] = "रेफरेन्स को संचित नहीं कर सकते है: ";
     Text[ slovak ] = "Odkaz nebude uložený: ";
@@ -4509,6 +4509,8 @@ String ERRCODE_BASMGR_UNLOADLIB & ERRCODE_RES_MASK
     Text[ hindi ] = "लैब्ररी को मेमरी से नहीं हटा सकते है ।";
     Text[ slovak ] = "Knižnica nemohla byť odstránená z pamäti.";
 };
+
+
 
 
 
