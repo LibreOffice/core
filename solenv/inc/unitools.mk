@@ -56,7 +56,6 @@
 #
 #
 #*************************************************************************
-
 # Common tools
 TRANSEX*=transex3
 ULFEX*=ulfex
@@ -165,6 +164,7 @@ ECHONL=echo
 
 MAKEDEPEND*=$(WRAPCMD) $(SOLARBINDIR)$/makedepend
 ADJUSTVISIBILITY*=$(WRAPCMD) adjustvisibility
+CONVERT*=$(PERL) $(SOLARENV)$/bin$/leconvert.pl
 
 RM+=$(RMFLAGS)
 
