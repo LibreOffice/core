@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:08:53 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2437,7 +2437,7 @@ TabPage TP_FRM_URL
         Text[ arabic ] = "�������";
         Text[ catalan ] = "~Servidor";
         Text[ thai ] = "แผนที่ภาพไซท์เ~ซิร์ฟเวอร์";
-        Text[ czech ] = "Obr. mapa na straně serveru";
+        Text[ czech ] = "Obrázková mapa na straně serveru";
         Text[ hebrew ] = "~Server-side image map";
         Text[ hindi ] = "~सर्वर-भाग का चित्र नक्शा";
         Text[ slovak ] = "Obr. mapa na strane ~serveru";
@@ -2469,7 +2469,7 @@ TabPage TP_FRM_URL
         Text[ arabic ] = "������";
         Text[ catalan ] = "~Client";
         Text[ thai ] = "ภาพแผนที่ไซท์ไ~คลเอ็นท์";
-        Text[ czech ] = "Obr. mapa na straně klienta";
+        Text[ czech ] = "Obrázková mapa na straně klienta";
         Text[ hebrew ] = "~Client-side image map";
         Text[ hindi ] = "~ग्राहक-भाग का चित्र नक्शा";
         Text[ slovak ] = "Obr. mapa na strane ~klienta";
@@ -2501,7 +2501,7 @@ TabPage TP_FRM_URL
         Text[ catalan ] = "Imatge Map";
         Text[ finnish ] = "Kuvakartta";
         Text[ thai ] = "ภาพแผนที่";
-        Text[ czech ] = "Obr. mapa";
+        Text[ czech ] = "Obrázková mapa";
         Text[ hebrew ] = "Image map";
         Text[ hindi ] = "चित्र नक्शा";
         Text[ slovak ] = "Obr. mapa";
@@ -2725,7 +2725,7 @@ TabPage TP_FRM_ADD
     };
     StringList [ czech ] =
     {
-         < "<Keiner>" ; > ;
+         < "<Žádný>" ; > ;
     };
     StringList [ hebrew ] =
     {
@@ -2873,7 +2873,7 @@ TabPage TP_FRM_ADD
     };
     StringList [ czech ] =
     {
-         < "<Keiner>" ; > ;
+         < "<Žádný>" ; > ;
     };
     StringList [ hebrew ] =
     {
@@ -3392,6 +3392,12 @@ TabPage TP_FRM_ADD
     };
     };
 };
+
+
+
+
+
+
 
 
 
