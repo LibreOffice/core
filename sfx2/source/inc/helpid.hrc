@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 08:31:11 $
+ *  last change: $Author: ka $ $Date: 2001-04-26 19:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,8 +338,9 @@
 #define HID_MAILWIN_FROM_EDIT                       (HID_SFX_START + 272)
 #define HID_MAILWIN_PRIO_BOX                        (HID_SFX_START + 273)
 #define HID_TABDLG_APPLY_BTN                        (HID_SFX_START + 274)
+#define HID_TP_COMMONPRINTOPTIONS                   (HID_SFX_START + 275)
 
-#define ACT_SFX_HID_END     HID_TABDLG_APPLY_BTN
+#define ACT_SFX_HID_END HID_TP_COMMONPRINTOPTIONS
 
 // "Uberlaufpr"ufung --------------------------------------------------------
 
@@ -350,4 +351,3 @@
 #endif // #ifndef _SFX_HELPID_HRC
 
 // ******************************************************************* EOF
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-23 11:04:56 $
+ *  last change: $Author: ka $ $Date: 2001-04-26 19:52:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,8 @@
 #define RID_STR_CLOSE_BTN_BACKTOMSG     ( RC_DIALOG_BEGIN + 86 )
 
 #define STR_APPLY                       ( RC_DIALOG_BEGIN + 87 )
+
+#define TP_COMMONPRINTOPTIONS           ( RC_DIALOG_BEGIN + 90 )
 
 #endif // #ifndef _SFX_DIALOG_HRC
 
