@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistentwindowstate.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:36:01 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
 
     switch(aEvent.Action)
     {
+        /*
         case css::frame::FrameAction_COMPONENT_ATTACHED :
             {
                 if (bRestoreWindowState)
@@ -247,6 +248,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
                 }
             }
             break;
+        */
 
         case css::frame::FrameAction_COMPONENT_REATTACHED :
             {
@@ -390,6 +392,7 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
 void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Reference< css::awt::XWindow >& xWindow     ,
                                                           const ::rtl::OUString&                          sWindowState)
 {
+    /*
     if (
         (!xWindow.is()                ) ||
         ( sWindowState.getLength() < 1)
@@ -421,6 +424,7 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
 
     aSolarLock.clear();
     // <- SOLAR SAFE ------------------------
+    */
 }
 
 } // namespace framework
