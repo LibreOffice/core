@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:39:55 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ public:
         NET_WM_WINDOW_TYPE_MENU,
         NET_WM_WINDOW_TYPE_NORMAL,
         NET_WM_WINDOW_TYPE_TOOLBAR,
+        KDE_NET_WM_WINDOW_TYPE_OVERRIDE,
         NET_WM_WINDOW_TYPE_SPLASH,
         NET_WM_WINDOW_TYPE_UTILITY,
         NET_NUMBER_OF_DESKTOPS,
@@ -134,6 +135,7 @@ public:
         MOTIF_WM_HINTS,
         WM_PROTOCOLS,
         WM_DELETE_WINDOW,
+        WM_TAKE_FOCUS,
         WM_SAVE_YOURSELF,
         WM_CLIENT_LEADER,
         WM_COMMAND,
@@ -169,7 +171,8 @@ public:
         windowType_ModalDialogue,
         windowType_ModelessDialogue,
         windowType_Utility,
-        windowType_Splash
+        windowType_Splash,
+        windowType_Toolbar
     };
 
 protected:
@@ -261,6 +264,11 @@ public:
      *  tells whether there is WM support for splash screens
      */
     bool supportsSplash() const { return m_aWMAtoms[ NET_WM_WINDOW_TYPE_SPLASH ] != 0; }
+
+    /*
+     *  tells whteher there is WM support for NET_WM_WINDOW_TYPE_TOOLBAR
+     */
+    bool supportsToolbar() const { return m_aWMAtoms[ NET_WM_WINDOW_TYPE_TOOLBAR ] != 0; }
 
     /*
      *  enables always on top or equivalent if possible
