@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:55:35 $
+ *  last change: $Author: gt $ $Date: 2001-02-27 14:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -960,5 +960,62 @@ String XclAddInNameTranslator::GetXclName( const String& rScName )
         return aRet;
     else
         return rScName;
+}
+
+
+struct CountryLanguageEntry
+{
+    UINT16          nCntry;
+    LanguageType    eLng;
+};
+
+
+BOOL XclAddInNameTranslator::SetLanguage( UINT16 n )
+{
+    static const CountryLanguageEntry   aTransTab[] =
+    {
+        {   1, LANGUAGE_ENGLISH_US },
+        {   2, LANGUAGE_ENGLISH_CAN },
+        {   3, LANGUAGE_SPANISH },              // Latin Americam except Brasil
+        {  31, LANGUAGE_DUTCH },
+        {  32, LANGUAGE_DUTCH_BELGIAN },        // Belgium
+        {  33, LANGUAGE_FRENCH },
+        {  34, LANGUAGE_SPANISH },
+        {  39, LANGUAGE_ITALIAN },
+        {  41, LANGUAGE_GERMAN_SWISS },
+        {  43, LANGUAGE_GERMAN_AUSTRIAN },
+        {  44, LANGUAGE_ENGLISH_UK },
+        {  45, LANGUAGE_DANISH },
+        {  46, LANGUAGE_SWEDISH },
+        {  47, LANGUAGE_NORWEGIAN },
+        {  49, LANGUAGE_GERMAN },
+        {  52, LANGUAGE_SPANISH_MEXICAN },
+        {  55, LANGUAGE_PORTUGUESE_BRAZILIAN },
+        {  61, LANGUAGE_ENGLISH_AUS },
+        {  64, LANGUAGE_ENGLISH_NZ },
+        {  81, LANGUAGE_JAPANESE },
+        {  82, LANGUAGE_KOREAN },
+        { 351, LANGUAGE_PORTUGUESE },
+        { 354, LANGUAGE_ICELANDIC },
+        { 358, LANGUAGE_SWEDISH_FINLAND },
+        { 785, LANGUAGE_ARABIC_SAUDI_ARABIA },
+        { 886, LANGUAGE_CHINESE },
+        { 972, LANGUAGE_HEBREW },               // Israel
+        NULL
+    };
+
+    const CountryLanguageEntry*     p = aTransTab;
+
+    while( p )
+    {
+        if( p->nCntry == n )
+        {
+            eLng = p->eLng;
+            return TRUE;
+        }
+        p++;
+    }
+
+    return FALSE;
 }
 
