@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-19 20:14:36 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,14 +76,14 @@
     text [ danish ] = "Ikke-kædet grafik" ; \
     text [ portuguese_brazilian ] = "unverkn?fte Grafik" ; \
     text [ portuguese ] = "Imagem não ligada" ; \
-    text[ chinese_simplified ] = "Î´Á´½ÓµÄÍ¼ĞÎ";    \
+    text[ chinese_simplified ] = "æœªé“¾æ¥çš„å›¾å½¢";  \
     text[ russian ] = "Íåñâÿçàííàÿ ãğàôèêà";    \
     text[ polish ] = "Nie po³¹czona grafika";   \
-    text[ japanese ] = "Øİ¸‚³‚ê‚Ä‚¢‚È‚¢}"; \
-    text[ chinese_traditional ] = "¥¼³sµ²ªº¹Ï§Î";   \
+    text[ japanese ] = "ï¾˜ï¾ï½¸ã•ã‚Œã¦ã„ãªã„å›³";    \
+    text[ chinese_traditional ] = "æœªé€£çµçš„åœ–å½¢"; \
     text[ arabic ] = "ÕæÑÉ ÛíÑ ãÑÊÈØÉ"; \
     text[ greek ] = "Ãñáöéêü ÷ùñßò óıíäåóç";    \
-    text[ korean ] = "¿¬°áµÇÁö ¾ÊÀº ±×·¡ÇÈ";    \
+    text[ korean ] = "ì—°ê²°ë˜ì§€ ì•Šì€ ê·¸ë˜í”½";   \
     text[ turkish ] = "Bağlantısız grafik"; \
     text[ language_user1 ] = " ";   \
     text[ finnish ] = "Linkittämätön kuva"; \
@@ -127,14 +127,14 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ danish ] = "Som" ;
         Text [ portuguese_brazilian ] = "~Als" ;
         Text [ portuguese ] = "~Como" ;
-        Text[ chinese_simplified ] = "µ±×÷(~S)";
+        Text[ chinese_simplified ] = "å½“ä½œ(~S)";
         Text[ russian ] = "Êàê";
         Text[ polish ] = "Jako";
-        Text[ japanese ] = "—l®(~S)";
-        Text[ chinese_traditional ] = "·í§@(~S)";
+        Text[ japanese ] = "æ§˜å¼(~S)";
+        Text[ chinese_traditional ] = "ç•¶ä½œ(~S)";
         Text[ arabic ] = "ßÜ";
         Text[ greek ] = "Ùò";
-        Text[ korean ] = "ÇüÅÂ(~S)";
+        Text[ korean ] = "í˜•íƒœ(~S)";
         Text[ turkish ] = "~Artalan";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Nimellä";
@@ -204,8 +204,8 @@ TabPage RID_SVXPAGE_BACKGROUND
         };
     StringList [ chinese_simplified ] =
     {
-            < "ÑÕÉ«" ; Default ; > ;
-        < "Í¼ĞÎ" ; Default ; > ;
+            < "é¢œè‰²" ; Default ; > ;
+        < "å›¾å½¢" ; Default ; > ;
     };
     StringList [ russian ] =
     {
@@ -219,13 +219,13 @@ TabPage RID_SVXPAGE_BACKGROUND
     };
     StringList [ japanese ] =
     {
-            < "F" ; Default ; > ;
-        < "}" ; Default ; > ;
+            < "è‰²" ; Default ; > ;
+        < "å›³" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "ÃC¦â" ; Default ; > ;
-        < "¹Ï§Î" ; Default ; > ;
+            < "é¡”è‰²" ; Default ; > ;
+        < "åœ–å½¢" ; Default ; > ;
     };
     StringList [ arabic ] =
     {
@@ -239,8 +239,8 @@ TabPage RID_SVXPAGE_BACKGROUND
     };
     StringList [ korean ] =
     {
-            < "»ö»ó" ; Default ; > ;
-        < "±×·¡ÇÈ" ; Default ; > ;
+            < "ìƒ‰ìƒ" ; Default ; > ;
+        < "ê·¸ë˜í”½" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -281,14 +281,14 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ danish ] = "For" ;
         Text [ portuguese_brazilian ] = "F?r" ;
         Text [ portuguese ] = "~Para" ;
-        Text[ chinese_simplified ] = "ÓÃÓÚ(~O)";
+        Text[ chinese_simplified ] = "ç”¨äº(~O)";
         Text[ russian ] = "Äëÿ";
         Text[ polish ] = "Dla";
-        Text[ japanese ] = "—p“r(~O)";
-        Text[ chinese_traditional ] = "¥Î©ó(~O)";
+        Text[ japanese ] = "ç”¨é€”(~O)";
+        Text[ chinese_traditional ] = "ç”¨æ–¼(~O)";
         Text[ arabic ] = "áÜ";
         Text[ greek ] = "Ãéá";
-        Text[ korean ] = "´ë»ó(~O)";
+        Text[ korean ] = "ëŒ€ìƒ(~O)";
         Text[ turkish ] = "He~def";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Kohde";
@@ -369,9 +369,9 @@ TabPage RID_SVXPAGE_BACKGROUND
         };
     StringList [ chinese_simplified ] =
     {
-            < "µ¥Ôª¸ñ" ; > ;
-        < "ĞĞ" ; > ;
-        < "±í¸ñ" ; > ;
+            < "å•å…ƒæ ¼" ; > ;
+        < "è¡Œ" ; > ;
+        < "è¡¨æ ¼" ; > ;
     };
     StringList [ russian ] =
     {
@@ -387,15 +387,15 @@ TabPage RID_SVXPAGE_BACKGROUND
     };
     StringList [ japanese ] =
     {
-            < "¾Ù" ; > ;
-        < "s" ; > ;
-        < "•\\" ; > ;
+            < "ï½¾ï¾™" ; > ;
+        < "è¡Œ" ; > ;
+        < "è¡¨" ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "Àx¦s®æ" ; > ;
-        < "Àx¦s®æ" ; > ;
-        < "ªí®æ" ; > ;
+            < "å„²å­˜æ ¼" ; > ;
+        < "å„²å­˜æ ¼" ; > ;
+        < "è¡¨æ ¼" ; > ;
     };
     StringList [ arabic ] =
     {
@@ -411,9 +411,9 @@ TabPage RID_SVXPAGE_BACKGROUND
     };
     StringList [ korean ] =
     {
-            < "¼¿" ; > ;
-        < "Çà" ; > ;
-        < "Å×ÀÌºí" ; > ;
+            < "ì…€" ; > ;
+        < "í–‰" ; > ;
+        < "í…Œì´ë¸”" ; > ;
     };
     StringList [ turkish ] =
     {
@@ -504,8 +504,8 @@ TabPage RID_SVXPAGE_BACKGROUND
         };
     StringList [ chinese_simplified ] =
     {
-            < "¶ÎÂä" ; > ;
-        < "×Ö·û" ; > ;
+            < "æ®µè½" ; > ;
+        < "å­—ç¬¦" ; > ;
     };
     StringList [ russian ] =
     {
@@ -519,13 +519,13 @@ TabPage RID_SVXPAGE_BACKGROUND
     };
     StringList [ japanese ] =
     {
-            < "’i—" ; > ;
-        < "•¶š" ; > ;
+            < "æ®µè½" ; > ;
+        < "æ–‡å­—" ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "¬q¸¨" ; > ;
-        < "¦r¤¸" ; > ;
+            < "æ®µè½" ; > ;
+        < "å­—å…ƒ" ; > ;
     };
     StringList [ arabic ] =
     {
@@ -539,8 +539,8 @@ TabPage RID_SVXPAGE_BACKGROUND
     };
     StringList [ korean ] =
     {
-            < "´Ü¶ô" ; > ;
-        < "¹®ÀÚ" ; > ;
+            < "ë‹¨ë½" ; > ;
+        < "ë¬¸ì" ; > ;
     };
     StringList [ turkish ] =
     {
@@ -596,14 +596,14 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ PORTUGUESE_BRAZILIAN ] = "Background Color" ;
         Text [ SWEDISH ] = "Bakgrundsfärg" ;
         Text [ PORTUGUESE ] = "Cor de fundo" ;
-        Text[ chinese_simplified ] = "±³¾°ÑÕÉ«";
+        Text[ chinese_simplified ] = "èƒŒæ™¯é¢œè‰²";
         Text[ russian ] = "Öâåò ôîíà";
         Text[ polish ] = "Kolor t³a";
-        Text[ japanese ] = "”wŒiF";
-        Text[ chinese_traditional ] = "­I´ºÃC¦â";
+        Text[ japanese ] = "èƒŒæ™¯è‰²";
+        Text[ chinese_traditional ] = "èƒŒæ™¯é¡”è‰²";
         Text[ arabic ] = "áæä ÇáÎáİíÉ";
         Text[ greek ] = "×ñşìá öüíôïõ";
-        Text[ korean ] = "¹è°æ»ö»ó";
+        Text[ korean ] = "ë°°ê²½ìƒ‰ìƒ";
         Text[ turkish ] = "Artalan rengi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Background color";
@@ -632,14 +632,14 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ danish ] = "Fil" ;
         Text [ portuguese_brazilian ] = "Datei" ;
         Text [ portuguese ] = "Ficheiro" ;
-        Text[ chinese_simplified ] = "ÎÄ¼ş";
+        Text[ chinese_simplified ] = "æ–‡ä»¶";
         Text[ russian ] = "Ôàéë";
         Text[ polish ] = "Plik";
-        Text[ japanese ] = "Ì§²Ù";
-        Text[ chinese_traditional ] = "ÀÉ®×";
+        Text[ japanese ] = "ï¾Œï½§ï½²ï¾™";
+        Text[ chinese_traditional ] = "æª”æ¡ˆ";
         Text[ arabic ] = "ãáİ";
         Text[ greek ] = "Áñ÷åßï";
-        Text[ korean ] = "ÆÄÀÏ";
+        Text[ korean ] = "íŒŒì¼";
         Text[ turkish ] = "Dosya";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Tiedosto";
@@ -661,14 +661,14 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ french ] = "~Parcourir..." ;
         Text [ dutch ] = "~Doorzoeken..." ;
         Text [ portuguese ] = "~Pesquisar..." ;
-        Text[ chinese_simplified ] = "ä¯ÀÀ(~B)...";
+        Text[ chinese_simplified ] = "æµè§ˆ(~B)...";
         Text[ russian ] = "Âûáğàòü...";
         Text[ polish ] = "Przegl¹d~aj...";
-        Text[ japanese ] = "‘I‘ğ(~B)...";
-        Text[ chinese_traditional ] = "ÂsÄı(~B)...";
+        Text[ japanese ] = "é¸æŠ(~B)...";
+        Text[ chinese_traditional ] = "ç€è¦½(~B)...";
         Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
         Text[ greek ] = "ÅğéëïãŞ...";
-        Text[ korean ] = "¼±ÅÃÇÏ±â(~B)...";
+        Text[ korean ] = "ì„ íƒí•˜ê¸°(~B)...";
         Text[ turkish ] = "Seç...";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Selaa";
@@ -690,14 +690,14 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ danish ] = "Kæd" ;
         Text [ portuguese_brazilian ] = "~Verkn?fen" ;
         Text [ portuguese ] = "~Ligação" ;
-        Text[ chinese_simplified ] = "Á´½Ó(~L)";
+        Text[ chinese_simplified ] = "é“¾æ¥(~L)";
         Text[ russian ] = "Ñâÿçàòü";
         Text[ polish ] = "Po~³¹cz";
-        Text[ japanese ] = "Øİ¸(~L)";
-        Text[ chinese_traditional ] = "±¶®|(~L)";
+        Text[ japanese ] = "ï¾˜ï¾ï½¸(~L)";
+        Text[ chinese_traditional ] = "æ·å¾‘(~L)";
         Text[ arabic ] = "ÑÈØ";
         Text[ greek ] = "Óıíäåóç";
-        Text[ korean ] = "¿¬°á(~L)";
+        Text[ korean ] = "ì—°ê²°(~L)";
         Text[ turkish ] = "Bağla";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Linkitä";
@@ -726,14 +726,14 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ danish ] = "Type" ;
         Text [ portuguese_brazilian ] = "Art" ;
         Text [ portuguese ] = "Tipo" ;
-        Text[ chinese_simplified ] = "ÀàĞÍ";
+        Text[ chinese_simplified ] = "ç±»å‹";
         Text[ russian ] = "Òèï";
         Text[ polish ] = "Typ";
-        Text[ japanese ] = "í—Ş";
-        Text[ chinese_traditional ] = "Ãş«¬";
+        Text[ japanese ] = "ç¨®é¡";
+        Text[ chinese_traditional ] = "é¡å‹";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "Ôığïò";
-        Text[ korean ] = "À¯Çü";
+        Text[ korean ] = "ìœ í˜•";
         Text[ turkish ] = "Tür";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Type";
@@ -755,14 +755,14 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ danish ] = "Placering" ;
         Text [ portuguese_brazilian ] = "~Position" ;
         Text [ portuguese ] = "~Posição" ;
-        Text[ chinese_simplified ] = "Î»ÖÃ(~P)";
+        Text[ chinese_simplified ] = "ä½ç½®(~P)";
         Text[ russian ] = "Ïîëîæåíèå";
         Text[ polish ] = "Pozy~cja";
-        Text[ japanese ] = "ˆÊ’u(~P)";
-        Text[ chinese_traditional ] = "¦ì¸m(~P)";
+        Text[ japanese ] = "ä½ç½®(~P)";
+        Text[ chinese_traditional ] = "ä½ç½®(~P)";
         Text[ arabic ] = "ÇáãæÖÚ";
         Text[ greek ] = "Èİóç";
-        Text[ korean ] = "À§Ä¡(~P)";
+        Text[ korean ] = "ìœ„ì¹˜(~P)";
         Text[ turkish ] = "O~rtala";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Sijainti";
@@ -785,14 +785,14 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ danish ] = "F~lade" ;
         Text [ portuguese_brazilian ] = "~Fl?che" ;
         Text [ portuguese ] = "~Preenchimento" ;
-        Text[ chinese_simplified ] = "Æ½Ãæ(~E)";
+        Text[ chinese_simplified ] = "å¹³é¢(~E)";
         Text[ russian ] = "Îáëàñòü";
         Text[ polish ] = "Obsza~r";
-        Text[ japanese ] = "•\\–Ê(~E)";
-        Text[ chinese_traditional ] = "¥­­±(~E)";
+        Text[ japanese ] = "è¡¨é¢(~E)";
+        Text[ chinese_traditional ] = "å¹³é¢(~E)";
         Text[ arabic ] = "ãÓÇÍÉ";
         Text[ greek ] = "ÅğéöÜíåéá";
-        Text[ korean ] = "¿µ¿ª(~E)";
+        Text[ korean ] = "ì˜ì—­(~E)";
         Text[ turkish ] = "Ser";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Alue";
@@ -814,14 +814,14 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ danish ] = "Side om side" ;
         Text [ portuguese_brazilian ] = "~Kachel" ;
         Text [ portuguese ] = "~Azulejo" ;
-        Text[ chinese_simplified ] = "Æ½ÆÌ(~T)";
+        Text[ chinese_simplified ] = "å¹³é“º(~T)";
         Text[ russian ] = "Ïëèòêà";
         Text[ polish ] = "P³yt~ka";
-        Text[ japanese ] = "À²Ù(~T)";
-        Text[ chinese_traditional ] = "¥­¾Q(~T)";
+        Text[ japanese ] = "ï¾€ï½²ï¾™(~T)";
+        Text[ chinese_traditional ] = "å¹³é‹ª(~T)";
         Text[ arabic ] = "ÈáÇØÉ";
         Text[ greek ] = "Óå ğáñÜèåóç";
-        Text[ korean ] = "¹ÙµÏÆÇ½Ä(~T)";
+        Text[ korean ] = "ë°”ë‘‘íŒì‹(~T)";
         Text[ turkish ] = "~Döşe";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Vierekkäin";
@@ -858,22 +858,22 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ danish ] = "Eksempel" ;
         Text [ portuguese ] = "~Previsualizar" ;
         Text [ portuguese_brazilian ] = "V~orschau" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀ(~V)";
+        Text[ chinese_simplified ] = "é¢„è§ˆ(~V)";
         Text[ russian ] = "Ïğîñìîòğ";
         Text[ polish ] = "P~odgl¹d";
-        Text[ japanese ] = "ÌßÚËŞ­°(~V)";
-        Text[ chinese_traditional ] = "¹wÄı(~V)";
+        Text[ japanese ] = "ï¾Œï¾Ÿï¾šï¾‹ï¾ï½­ï½°(~V)";
+        Text[ chinese_traditional ] = "é è¦½(~V)";
         Text[ arabic ] = "ãÚÇíäÉ";
         Text[ greek ] = "Ğñïåğéóêüğçóç";
-        Text[ korean ] = "¹Ì¸® º¸±â(~V)";
+        Text[ korean ] = "ë¯¸ë¦¬ ë³´ê¸°(~V)";
         Text[ turkish ] = "Ö~nizleme";
         Text [ portuguese_brazilian ] = "V~orschau" ;
         Text [ portuguese ] = "~Previsualizar" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀ(~V)";
+        Text[ chinese_simplified ] = "é¢„è§ˆ(~V)";
         Text[ russian ] = "Ïğîñìîòğ";
         Text[ polish ] = "P~odgl¹d";
-        Text[ japanese ] = "ÌßÚËŞ­°(~V)";
-        Text[ chinese_traditional ] = "¹wÄı(~V)";
+        Text[ japanese ] = "ï¾Œï¾Ÿï¾šï¾‹ï¾ï½­ï½°(~V)";
+        Text[ chinese_traditional ] = "é è¦½(~V)";
         Text[ arabic ] = "ãÚÇíäÉ";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Esikatselu";
@@ -892,14 +892,14 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ danish ] = "Søg grafik" ;
         Text [ portuguese_brazilian ] = "Grafik suchen" ;
         Text [ portuguese ] = "Localizar imagem" ;
-        Text[ chinese_simplified ] = "ËÑÑ°Í¼ĞÎ";
+        Text[ chinese_simplified ] = "æœå¯»å›¾å½¢";
         Text[ russian ] = "Íàéòè ãğàôèêó";
         Text[ polish ] = "Szukaj grafiki";
-        Text[ japanese ] = "}‚ğŒŸõ";
-        Text[ chinese_traditional ] = "·j´M¹Ï§Î";
+        Text[ japanese ] = "å›³ã‚’æ¤œç´¢";
+        Text[ chinese_traditional ] = "æœå°‹åœ–å½¢";
         Text[ arabic ] = "ÇáÈÍË Úä ÑÓã";
         Text[ greek ] = "ÁíáæŞôçóç ãñáöéêïı";
-        Text[ korean ] = "±×·¡ÇÈ Ã£±â";
+        Text[ korean ] = "ê·¸ë˜í”½ ì°¾ê¸°";
         Text[ turkish ] = "Grafik bul";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Etsi kuvat";
@@ -909,19 +909,20 @@ TabPage RID_SVXPAGE_BACKGROUND
     {
         UNLINKED_IMAGE
     };
-    Text[ chinese_simplified ] = "±³¾°";
+    Text[ chinese_simplified ] = "èƒŒæ™¯";
     Text[ russian ] = "Ôîí";
     Text[ polish ] = "T³o";
-    Text[ japanese ] = "”wŒi";
-    Text[ chinese_traditional ] = "­I´º";
+    Text[ japanese ] = "èƒŒæ™¯";
+    Text[ chinese_traditional ] = "èƒŒæ™¯";
     Text[ arabic ] = "ÇáÎáİíÉ";
     Text[ greek ] = "Öüíôï";
-    Text[ korean ] = "¹è°æ";
+    Text[ korean ] = "ë°°ê²½";
     Text[ turkish ] = "Artalan";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fondo";
 };
  // ********************************************************************** EOF
+
 
 
 
