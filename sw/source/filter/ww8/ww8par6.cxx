@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-24 12:06:01 $
+ *  last change: $Author: cmc $ $Date: 2002-10-29 17:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2323,15 +2323,16 @@ bool WW8FlyPara::operator==(const WW8FlyPara& rSrc) const
 
 bool WW8FlyPara::Read(const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap)
 {
-    if( pSprm29 )
-        nSp29 = *pSprm29;                           // PPC ( Bindung )
+    sal_uInt8 nOrigSp29 = 0;
+    if (pSprm29)
+        nOrigSp29 = *pSprm29;                           // PPC ( Bindung )
 
+    bool bVertSet=false;
     const BYTE* pS = 0;
-
     if( bVer67 )
     {
         SetValSprm( &nSp26, pPap, 26 ); // X-Position   //sprmPDxaAbs
-        SetValSprm( &nSp27, pPap, 27 ); // Y-Position   //sprmPDyaAbs
+        bVertSet = SetValSprm( &nSp27, pPap, 27 );  // Y-Position   //sprmPDyaAbs
         SetValSprm( &nSp45, pPap, 45 ); // Hoehe        //sprmPWHeightAbs
         SetValSprm( &nSp28, pPap, 28 ); // Breite       //sprmPDxaWidth
         SetValSprm( &nLeMgn, pPap, 49 ); // L-Raender   //sprmPDxaFromText
@@ -2346,7 +2347,7 @@ bool WW8FlyPara::Read(const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap)
     else
     {
         SetValSprm( &nSp26, pPap, 0x8418 ); // X-Position
-        SetValSprm( &nSp27, pPap, 0x8419 ); // Y-Position
+        bVertSet = SetValSprm( &nSp27, pPap, 0x8419 );  // Y-Position
         SetValSprm( &nSp45, pPap, 0x442B ); // Hoehe
         SetValSprm( &nSp28, pPap, 0x841A ); // Breite
         SetValSprm( &nLeMgn, pPap, 0x842F );    // L-Raender
@@ -2362,8 +2363,21 @@ bool WW8FlyPara::Read(const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap)
     if( ::lcl_ReadBorders( bVer67, brc, pPap ))     // Umrandung
         bBorderLines = ::lcl_IsBorder( bVer67, brc );
 
-    if( !nSp29 && !nSp27 && !nLeMgn && !nRiMgn && !nSp37 )  // alles 0 heisst
+    // alles 0 heisst
+    if (!nOrigSp29 && !nSp27 && !nLeMgn && !nRiMgn && !nSp37)
         return false;                               // Apo ist nicht vorhanden
+
+    /*
+     #i8798#
+     Appears that with no dyaAbs set then the actual vert anchoring set is
+     ignored and we remain relative to text, so if that is the case we are 0
+     from para anchor, so we update the frame to have explicitly this type of
+     anchoring
+    */
+    if (!bVertSet)
+        nSp29 = (nOrigSp29 & 0xCF) | 0x20;
+    else
+        nSp29 = nOrigSp29;
 
     return true;
 }
@@ -2435,14 +2449,17 @@ bool WW8FlyPara::ReadFull(const BYTE* pSprm29, SwWW8ImplReader* pIo)
 // Read fuer Apo-Defs in Styledefs
 bool WW8FlyPara::Read(const BYTE* pSprm29, WW8RStyle* pStyle)
 {
-    if( pSprm29 )
-        nSp29 = *pSprm29;                           // PPC ( Bindung )
+    sal_uInt8 nOrigSp29 = 0;
 
+    if (pSprm29)
+        nOrigSp29 = *pSprm29;                           // PPC ( Bindung )
+
+    bool bVertSet=false;
     const BYTE* pS = 0;
-    if( bVer67 )
+    if (bVer67)
     {
         SetValSprm( &nSp26, pStyle, 26 );   // X-Position
-        SetValSprm( &nSp27, pStyle, 27 );   // Y-Position
+        bVertSet = SetValSprm(&nSp27, pStyle, 27);  // Y-Position
         SetValSprm( &nSp45, pStyle, 45 );   // Hoehe
         SetValSprm( &nSp28, pStyle, 28 );   // Breite
         SetValSprm( &nLeMgn,    pStyle, 49 );   // L-Raender
@@ -2457,7 +2474,7 @@ bool WW8FlyPara::Read(const BYTE* pSprm29, WW8RStyle* pStyle)
     else
     {
         SetValSprm( &nSp26, pStyle, 0x8418 );   // X-Position
-        SetValSprm( &nSp27, pStyle, 0x8419 );   // Y-Position
+        bVertSet = SetValSprm(&nSp27, pStyle, 0x8419);  // Y-Position
         SetValSprm( &nSp45, pStyle, 0x442B );   // Hoehe
         SetValSprm( &nSp28, pStyle, 0x841A );   // Breite
         SetValSprm( &nLeMgn, pStyle, 0x842F );  // L-Raender
@@ -2470,11 +2487,24 @@ bool WW8FlyPara::Read(const BYTE* pSprm29, WW8RStyle* pStyle)
             nSp37 = *pS;
     }
 
-    if( !nSp29 && !nSp27 && !nLeMgn && !nRiMgn && !nSp37 )  // alles 0 heisst
+    // alles 0 heisst
+    if (!nOrigSp29 && !nSp27 && !nLeMgn && !nRiMgn && !nSp37)
         return false;                               // Apo ist nicht vorhanden
 
-    if( ::lcl_ReadBorders( bVer67, brc, 0, pStyle ) )       // Umrandung
-        bBorderLines = ::lcl_IsBorder( bVer67, brc );
+    if (::lcl_ReadBorders(bVer67, brc, 0, pStyle))      // Umrandung
+        bBorderLines = ::lcl_IsBorder(bVer67, brc);
+
+    /*
+     #i8798#
+     Appears that with no dyaAbs set then the actual vert anchoring set is
+     ignored and we remain relative to text, so if that is the case we are 0
+     from para anchor, so we update the frame to have explicitly this type of
+     anchoring
+    */
+    if (!bVertSet)
+        nSp29 = (nOrigSp29 & 0xCF) | 0x20;
+    else
+        nSp29 = nOrigSp29;
 
     return true;
 }
@@ -5701,7 +5731,6 @@ SprmReadInfo aSprmReadTab[] = {
     0x6816, (FNReadRecord)0, //undocumented
     0x6870, &SwWW8ImplReader::Read_TxtForeColor,
     0xC64D, &SwWW8ImplReader::Read_ParaBackColor,
-    0x6467, (FNReadRecord)0, //undocumented
     0x6467, (FNReadRecord)0, //undocumented
     0xF617, (FNReadRecord)0, //undocumented
     0xD660, (FNReadRecord)0, //undocumented
