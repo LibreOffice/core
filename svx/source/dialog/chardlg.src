@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:15:23 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 13:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@ String RID_SVXSTR_COLOR_USER
     Text[ hebrew ] = "Benutzer";
     Text[ hindi ] = "उपभोक्ता";
     Text[ slovak ] = "Užívateľ";
+    Text[ hungarian ] = "Egyéni";
+    Text[ slovenian ] = "Uporabnik";
 };
 
 // RID_SVXPAGE_CHAR_NAME ----------------------------------------------------
@@ -135,6 +137,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "Schriftart für westlichen Text";
         Text[ hindi ] = "पाश्चात्य टेक्स्ट् अक्षर";
         Text[ slovak ] = "Písmo pre západné texty";
+        Text[ hungarian ] = "Nyugati szövegbetű";
+        Text[ slovenian ] = "Pisava za zahodno besedilo";
     };
     FixedText FT_WEST_NAME
     {
@@ -150,7 +154,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ french ] = "Police";
         Text[ spanish ] = "Fuente";
         Text[ italian ] = "Tipo di carattere";
-        Text[ danish ] = "S~krifttype";
+        Text[ danish ] = "Skrifttype";
         Text[ swedish ] = "Tecken~snitt";
         Text[ polish ] = "Czcionka";
         Text[ portuguese_brazilian ] = "Fonte";
@@ -167,6 +171,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "‮גופן‬";
         Text[ hindi ] = "अक्षर";
         Text[ slovak ] = "Písmo";
+        Text[ hungarian ] = "Betűkészlet";
+        Text[ slovenian ] = "Pisava";
     };
     FixedText FT_WEST_NAME_NOCJK
     {
@@ -182,7 +188,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ french ] = "Police";
         Text[ spanish ] = "Fuente";
         Text[ italian ] = "Tipo di carattere";
-        Text[ danish ] = "S~krifttype";
+        Text[ danish ] = "~Skrifttype";
         Text[ swedish ] = "Tecken~snitt";
         Text[ polish ] = "~Czcionka";
         Text[ portuguese_brazilian ] = "~Fonte";
@@ -199,6 +205,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "‮גופן‬";
         Text[ hindi ] = "~अक्षर";
         Text[ slovak ] = "~Písmo";
+        Text[ hungarian ] = "~Betűkészlet";
+        Text[ slovenian ] = "~Pisava";
     };
     ComboBox LB_WEST_NAME
     {
@@ -247,6 +255,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "‮צורת גופן‬";
         Text[ hindi ] = "~टइपफेस";
         Text[ slovak ] = "Š~týl písma";
+        Text[ hungarian ] = "Be~tűstílus";
+        Text[ slovenian ] = "~Tipografija";
     };
     FixedText FT_WEST_STYLE_NOCJK
     {
@@ -279,6 +289,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "‮צורת גופן‬";
         Text[ hindi ] = "~टइपफेस";
         Text[ slovak ] = "Š~týl písma";
+        Text[ hungarian ] = "Be~tűstílus";
+        Text[ slovenian ] = "~Tipografija";
     };
     ComboBox LB_WEST_STYLE
     {
@@ -476,6 +488,20 @@ TabPage RID_SVXPAGE_CHAR_NAME
         "Tučné" ;
         "Tučná kurzíva" ;
     };
+    StringList [ hungarian ] =
+    {
+        "Normál" ;
+        "Dőlt" ;
+        "Kövér" ;
+            "Félkövér dőlt" ;
+        };
+    StringList [ slovenian ] =
+    {
+        "Navadno" ;
+        "Ležeče" ;
+        "Krepko" ;
+            "Krepko ležeče" ;
+        };
     };
     ComboBox LB_WEST_STYLE_NOCJK
     {
@@ -673,6 +699,20 @@ TabPage RID_SVXPAGE_CHAR_NAME
         "Tučné" ;
         "Tučná kurzíva" ;
     };
+    StringList [ hungarian ] =
+    {
+        "Normál" ;
+        "Dőlt" ;
+        "Félkövér" ;
+            "Félkövér dőlt" ;
+        };
+    StringList [ slovenian ] =
+    {
+        "Navadno" ;
+        "Ležeče" ;
+        "Krepko" ;
+            "Krepko ležeče" ;
+        };
     };
     FixedText FT_WEST_SIZE
     {
@@ -688,7 +728,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ french ] = "Taille";
         Text[ spanish ] = "Tama�o";
         Text[ italian ] = "~Dimensione";
-        Text[ danish ] = "Sk~riftgrad";
+        Text[ danish ] = "St�rrelse";
         Text[ swedish ] = "Teckenst~orlek";
         Text[ polish ] = "Rozmi~ar";
         Text[ portuguese_brazilian ] = "Tamanho";
@@ -705,6 +745,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "परिमाण";
         Text[ slovak ] = "Veľkosť";
+        Text[ hungarian ] = "Méret";
+        Text[ slovenian ] = "Velikost";
     };
     FixedText FT_WEST_SIZE_NOCJK
     {
@@ -720,7 +762,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ french ] = "Taille";
         Text[ spanish ] = "Tama�o";
         Text[ italian ] = "~Dimensione";
-        Text[ danish ] = "Sk~riftgrad";
+        Text[ danish ] = "St�rrelse";
         Text[ swedish ] = "Teckenst~orlek";
         Text[ polish ] = "Rozmi~ar";
         Text[ portuguese_brazilian ] = "Tamanho";
@@ -737,6 +779,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "परिमाण";
         Text[ slovak ] = "Veľkosť";
+        Text[ hungarian ] = "Méret";
+        Text[ slovenian ] = "Velikost";
     };
     MetricBox LB_WEST_SIZE
     {
@@ -768,7 +812,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ french ] = "~Langue";
         Text[ spanish ] = "Idioma";
         Text[ italian ] = "Lingua";
-        Text[ danish ] = "S~prog";
+        Text[ danish ] = "Sprog";
         Text[ swedish ] = "S~pr�k";
         Text[ polish ] = "J�zyk";
         Text[ portuguese_brazilian ] = "Idioma";
@@ -785,6 +829,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ thai ] = "Language";
         Text[ hindi ] = "भाषा";
         Text[ slovak ] = "Jazyk";
+        Text[ hungarian ] = "Nyelv";
+        Text[ slovenian ] = "Jezik";
     };
     FixedText FT_WEST_LANG_NOCJK
     {
@@ -817,6 +863,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "‮שפה‬";
         Text[ hindi ] = "~भाषा";
         Text[ slovak ] = "~Jazyk";
+        Text[ hungarian ] = "~Nyelv";
+        Text[ slovenian ] = "~Jezik";
     };
     ListBox LB_WEST_LANG
     {
@@ -866,6 +914,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "Schriftart für asiatischen Text";
         Text[ hindi ] = "ऐशियन टेक्स्ट् अक्षर";
         Text[ slovak ] = "Písmo pre ázijský text";
+        Text[ hungarian ] = "Ázsiai szövegbetű";
+        Text[ slovenian ] = "Pisava za azijsko besedilo";
     };
     FixedText FT_EAST_NAME
     {
@@ -881,7 +931,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ french ] = "Police";
         Text[ spanish ] = "Fuente";
         Text[ italian ] = "Tipo di carattere";
-        Text[ danish ] = "Skriftt~ype";
+        Text[ danish ] = "Skrifttype";
         Text[ swedish ] = "Tec~kensnitt";
         Text[ polish ] = "Czcionka";
         Text[ portuguese_brazilian ] = "Fonte";
@@ -898,6 +948,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "‮גופן‬";
         Text[ hindi ] = "अक्षर";
         Text[ slovak ] = "Písmo";
+        Text[ hungarian ] = "Betűkészlet";
+        Text[ slovenian ] = "Pisava";
     };
     ComboBox LB_EAST_NAME
     {
@@ -938,6 +990,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "Schr~iftschnitt";
         Text[ hindi ] = "ट~इपफेस";
         Text[ slovak ] = "Š~týl písma";
+        Text[ hungarian ] = "B~etűstílus";
+        Text[ slovenian ] = "T~ipografija";
     };
     ComboBox LB_EAST_STYLE
     {
@@ -1135,6 +1189,20 @@ TabPage RID_SVXPAGE_CHAR_NAME
         "Tučné" ;
         "Tučná kurzíva" ;
     };
+    StringList [ hungarian ] =
+    {
+        "Normál" ;
+        "Dőlt" ;
+        "Félkövér" ;
+        "Félkövér dőlt" ;
+    };
+    StringList [ slovenian ] =
+    {
+        "Navadno" ;
+        "Ležeče" ;
+        "Krepko" ;
+        "Krepko ležeče" ;
+    };
     };
     FixedText FT_EAST_SIZE
     {
@@ -1150,7 +1218,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ french ] = "Taille";
         Text[ spanish ] = "Tama�o";
         Text[ italian ] = "~Dimensione";
-        Text[ danish ] = "Skrift~grad";
+        Text[ danish ] = "St�rrelse";
         Text[ swedish ] = "Teckens~torlek";
         Text[ polish ] = "~Rozmiar";
         Text[ portuguese_brazilian ] = "Tamanho";
@@ -1167,6 +1235,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "परिमाण";
         Text[ slovak ] = "Veľkosť";
+        Text[ hungarian ] = "Méret";
+        Text[ slovenian ] = "Velikost";
     };
     MetricBox LB_EAST_SIZE
     {
@@ -1190,7 +1260,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ french ] = "Langue";
         Text[ spanish ] = "Idioma";
         Text[ italian ] = "Lingua";
-        Text[ danish ] = "Spr~og";
+        Text[ danish ] = "Sprog";
         Text[ swedish ] = "Sp~r�k";
         Text[ polish ] = "J�zyk";
         Text[ portuguese_brazilian ] = "Idioma";
@@ -1207,6 +1277,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ thai ] = "Language";
         Text[ hindi ] = "भाषा";
         Text[ slovak ] = "Jazyk";
+        Text[ hungarian ] = "Nyelv";
+        Text[ slovenian ] = "Jezik";
     };
     ListBox LB_EAST_LANG
     {
@@ -1231,7 +1303,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ spanish ] = "Fuente CTL";
         Text[ finnish ] = "Complex script font";
         Text[ italian ] = "Carattere per script complessi";
-        Text[ danish ] = "Complex script font";
+        Text[ danish ] = "CTL-skrifttype";
         Text[ swedish ] = "Teckensnitt f�r CTL";
         Text[ polish ] = "Complex script font";
         Text[ portuguese_brazilian ] = "Fonte para textos de layout complexo (TLC)";
@@ -1247,6 +1319,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "Schriftart für CTL";
         Text[ hindi ] = "CTL font";
         Text[ slovak ] = "CTL písmo";
+        Text[ hungarian ] = "CTL-betűkészlet";
+        Text[ slovenian ] = "CTL pisava";
     };
     FixedText FT_CTL_NAME
     {
@@ -1262,7 +1336,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ french ] = "Police";
         Text[ spanish ] = "~Fuente";
         Text[ italian ] = "Tipo di carattere";
-        Text[ danish ] = "Font";
+        Text[ danish ] = "Skrifttype";
         Text[ swedish ] = "Tec~kensnitt";
         Text[ polish ] = "Czcionka";
         Text[ portuguese_brazilian ] = "Fonte";
@@ -1279,6 +1353,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "‮גופן‬";
         Text[ hindi ] = "Font";
         Text[ slovak ] = "Písmo";
+        Text[ hungarian ] = "Betűkészlet";
+        Text[ slovenian ] = "Pisava";
     };
     ComboBox LB_CTL_NAME
     {
@@ -1302,7 +1378,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ french ] = "Style";
         Text[ spanish ] = "~Estilo";
         Text[ italian ] = "Stile";
-        Text[ danish ] = "Type";
+        Text[ danish ] = "Typograf~i";
         Text[ swedish ] = "Tecke~nstil";
         Text[ polish ] = "Styl";
         Text[ portuguese_brazilian ] = "Estilo";
@@ -1319,6 +1395,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "Schriftsch~nitt";
         Text[ hindi ] = "Ty~peface";
         Text[ slovak ] = "Štýl ~písma";
+        Text[ hungarian ] = "B~etűstílus";
+        Text[ slovenian ] = "Ti~pografija";
     };
     ComboBox LB_CTL_STYLE
     {
@@ -1400,7 +1478,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         StringList [ danish ] =
         {
             "Normal" ;
-            "Italic" ;
+            "Kursiv" ;
             "Fed" ;
             "Fed kursiv" ;
         };
@@ -1516,6 +1594,20 @@ TabPage RID_SVXPAGE_CHAR_NAME
         "Tučné" ;
         "Tučná kurzíva" ;
     };
+    StringList [ hungarian ] =
+    {
+        "Normál" ;
+        "Dőlt" ;
+        "Félkövér" ;
+        "Félkövér dőlt" ;
+    };
+    StringList [ slovenian ] =
+    {
+        "Navadno" ;
+        "Ležeče" ;
+        "Krepko" ;
+        "Krepko ležeče" ;
+    };
     };
     FixedText FT_CTL_SIZE
     {
@@ -1531,7 +1623,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ french ] = "Taille";
         Text[ spanish ] = "~Tama�o";
         Text[ italian ] = "~Dimensione";
-        Text[ danish ] = "Size";
+        Text[ danish ] = "St�rrelse";
         Text[ swedish ] = "T~eckenstorlek";
         Text[ polish ] = "Rozmiar";
         Text[ portuguese_brazilian ] = "Tamanho";
@@ -1548,6 +1640,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "Size";
         Text[ slovak ] = "Veľkosť";
+        Text[ hungarian ] = "Méret";
+        Text[ slovenian ] = "Velikost";
     };
     MetricBox LB_CTL_SIZE
     {
@@ -1571,7 +1665,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ french ] = "Langue";
         Text[ spanish ] = "~Idioma";
         Text[ italian ] = "Lingua";
-        Text[ danish ] = "Language";
+        Text[ danish ] = "Sprog";
         Text[ swedish ] = "Spr�k";
         Text[ polish ] = "J�zyk";
         Text[ portuguese_brazilian ] = "Idioma";
@@ -1588,6 +1682,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "‮שפה‬";
         Text[ hindi ] = "Language";
         Text[ slovak ] = "Jazyk";
+        Text[ hungarian ] = "Nyelv";
+        Text[ slovenian ] = "Jezik";
     };
     ListBox LB_CTL_LANG
     {
@@ -1629,6 +1725,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "Beispiel";
         Text[ hindi ] = "उदाहरण";
         Text[ slovak ] = "Príklad";
+        Text[ hungarian ] = "Példa";
+        Text[ slovenian ] = "Primer";
     };
     FixedText FT_CHAR_FONTTYPE
     {
@@ -1669,6 +1767,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "रंग";
         Text[ slovak ] = "Farba";
+        Text[ hungarian ] = "Szín";
+        Text[ slovenian ] = "Barva";
     };
     FixedText FT_COLOR2
     {
@@ -1684,7 +1784,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ french ] = "~Couleur de police";
         Text[ spanish ] = "Color de fuente";
         Text[ italian ] = "Colore carattere";
-        Text[ danish ] = "Skriftfar~ve";
+        Text[ danish ] = "Skrift~farve";
         Text[ swedish ] = "Teckenf�r~g";
         Text[ polish ] = "K~olor czcionki";
         Text[ portuguese_brazilian ] = "~Cor da fonte";
@@ -1701,6 +1801,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "Schriftfar~be";
         Text[ hindi ] = "अक्षर का ~रंग";
         Text[ slovak ] = "~Farba písma";
+        Text[ hungarian ] = "~Betűszín";
+        Text[ slovenian ] = "~Barva pisave";
     };
     ListBox LB_COLOR2
     {
@@ -1739,6 +1841,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "Nicht %s";
         Text[ hindi ] = "%s नहीं";
         Text[ slovak ] = "Nie %s";
+        Text[ hungarian ] = "Nem %s";
+        Text[ slovenian ] = "Brez %s";
     };
     String STR_CHARNAME_TRANSPARENT
     {
@@ -1769,6 +1873,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ hebrew ] = "Transparent";
         Text[ hindi ] = "पारदर्शक";
         Text[ slovak ] = "Priehľadné";
+        Text[ hungarian ] = "Átlátszó";
+        Text[ slovenian ] = "Prosojno";
     };
 };
 
@@ -1793,7 +1899,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ french ] = "~Soulignage";
         Text[ spanish ] = "Subrayado";
         Text[ italian ] = "Sottolineato";
-        Text[ danish ] = "~Understregning";
+        Text[ danish ] = "Understregning";
         Text[ swedish ] = "~Understrykning";
         Text[ polish ] = "Podkre�lenie";
         Text[ portuguese_brazilian ] = "Sublinhando";
@@ -1810,6 +1916,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "~Unterstreichung";
         Text[ hindi ] = "रेखांकित करना";
         Text[ slovak ] = "Podčiarkovanie";
+        Text[ hungarian ] = "Aláhúzás";
+        Text[ slovenian ] = "Podčrtovanje";
     };
     ListBox LB_UNDERLINE
     {
@@ -2020,20 +2128,20 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ danish ] =
         {
-            < "(Ingen)" ; CHRDLG_UNDERLINE_NONE ; > ;
+            < "(Uden)" ; CHRDLG_UNDERLINE_NONE ; > ;
             < "Enkelt" ; CHRDLG_UNDERLINE_SINGLE ; > ;
             < "Dobbelt" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
             < "Fed"; CHRDLG_UNDERLINE_BOLD; > ;
             < "Punkteret" ; CHRDLG_UNDERLINE_DOTTED ; > ;
-            < "Punkteret fed" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
-            < "Streg"; CHRDLG_UNDERLINE_DASH; > ;
+            < "Punkteret (Fed)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Stiplet"; CHRDLG_UNDERLINE_DASH; > ;
             < "Fed streg"; CHRDLG_UNDERLINE_BOLDDASH; > ;
             < "Lang streg"; CHRDLG_UNDERLINE_LONGDASH; > ;
             < "Lang, fed streg"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
             < "Punkt Streg"; CHRDLG_UNDERLINE_DASHDOT; > ;
             < "Punkt Streg fed"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
             < "Punkt Punkt Streg"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
-            < "Punkt Punkt Streg fed"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Punkt Punkt Streg (fed)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
             < "B�lge"; CHRDLG_UNDERLINE_WAVE; > ;
             < "Fed b�lge"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
             < "Dobbelt b�lge"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
@@ -2358,6 +2466,46 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         < "Vlnka (tučné)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
         < "Dvojitá vlna"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "(nincs)" ; CHRDLG_UNDERLINE_NONE ; > ;
+        < "Egyszeres" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Dupla" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "Vastag"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Pontozott" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "Pontozott (vastag)" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Szaggatott"; CHRDLG_UNDERLINE_DASH; > ;
+            < "Szaggatott (vastag)"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "Hosszú szaggatott"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "Hosszú szaggatott (vastag)"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Pont-vonás"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Pont-vonás (vastag)"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Pont-pont-vonás"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Pont-pont-vonás (vastag)"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Hullámos"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "Hullámos (vastag)"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Dupla hullámos"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
+    StringList [ slovenian ] =
+    {
+         < "(brez)" ; CHRDLG_UNDERLINE_NONE ; > ;
+        < "Enojno" ; CHRDLG_UNDERLINE_SINGLE ; > ;
+            < "Dvojno" ; CHRDLG_UNDERLINE_DOUBLE ; > ;
+            < "Krepko"; CHRDLG_UNDERLINE_BOLD; > ;
+            < "Pikasto" ; CHRDLG_UNDERLINE_DOTTED ; > ;
+            < "Pikasto krepko" ; CHRDLG_UNDERLINE_BOLDDOTTED; > ;
+            < "Črtkano"; CHRDLG_UNDERLINE_DASH; > ;
+            < "Črtkano krepko"; CHRDLG_UNDERLINE_BOLDDASH; > ;
+            < "Dolge črtice"; CHRDLG_UNDERLINE_LONGDASH; > ;
+            < "Dolge črtice krepko"; CHRDLG_UNDERLINE_BOLDLONGDASH; > ;
+            < "Pika črta"; CHRDLG_UNDERLINE_DASHDOT; > ;
+            < "Pika črta krepko"; CHRDLG_UNDERLINE_BOLDDASHDOT; > ;
+            < "Pika pika črta"; CHRDLG_UNDERLINE_DASHDOTDOT; > ;
+            < "Pika pika črta krepko"; CHRDLG_UNDERLINE_BOLDDASHDOTDOT; > ;
+            < "Valovito"; CHRDLG_UNDERLINE_WAVE; > ;
+            < "Valovito krepko"; CHRDLG_UNDERLINE_BOLDWAVE; > ;
+            < "Valovito dvojno"; CHRDLG_UNDERLINE_DOUBLEWAVE; > ;
+        };
     };
     FixedText FT_UNDERLINE_COLOR
     {
@@ -2373,7 +2521,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ french ] = "Couleur";
         Text[ spanish ] = "Color";
         Text[ italian ] = "Colore";
-        Text[ danish ] = "Far~ve";
+        Text[ danish ] = "Farve";
         Text[ swedish ] = "~F�rg";
         Text[ polish ] = "Kolor";
         Text[ portuguese_brazilian ] = "Cor";
@@ -2390,6 +2538,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "रंग";
         Text[ slovak ] = "Farba";
+        Text[ hungarian ] = "Szín";
+        Text[ slovenian ] = "Barva";
     };
     ListBox LB_UNDERLINE_COLOR
     {
@@ -2413,7 +2563,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ french ] = "~Barr�";
         Text[ spanish ] = "Tachado";
         Text[ italian ] = "Barrato";
-        Text[ danish ] = "~Gennemstregning";
+        Text[ danish ] = "Gennemstreget";
         Text[ swedish ] = "~Genomstrykning";
         Text[ polish ] = "Przekre�lenie";
         Text[ portuguese_brazilian ] = "Rasurado";
@@ -2430,6 +2580,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "‮מבוטל‬";
         Text[ hindi ] = "स्ट्रइकत्रु";
         Text[ slovak ] = "Preškrtnuté";
+        Text[ hungarian ] = "Áthúzás";
+        Text[ slovenian ] = "Prečrtano";
     };
     ListBox LB_STRIKEOUT
     {
@@ -2530,7 +2682,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ danish ] =
         {
-            < "(Ingen)" ; CHRDLG_STRIKEOUT_NONE ; > ;
+            < "(Uden)" ; CHRDLG_STRIKEOUT_NONE ; > ;
             < "Enkelt" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
             < "Dobbelt" ; CHRDLG_STRIKEOUT_DOUBLE ; > ;
             < "Fed" ; CHRDLG_STRIKEOUT_BOLD ; > ;
@@ -2681,6 +2833,16 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         < "S /" ; CHRDLG_STRIKEOUT_SLASH ; > ;
         < "S X" ; CHRDLG_STRIKEOUT_X ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "(nincs)" ; CHRDLG_STRIKEOUT_NONE ; > ;
+        < "Egyszeres" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+        };
+    StringList [ slovenian ] =
+    {
+         < "(brez)" ; CHRDLG_STRIKEOUT_NONE ; > ;
+        < "Enojno" ; CHRDLG_STRIKEOUT_SINGLE ; > ;
+        };
     };
     CheckBox CB_INDIVIDUALWORDS
     {
@@ -2714,6 +2876,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "‮מלים נפרדות‬";
         Text[ hindi ] = "अलग अलग ~शब्द";
         Text[ slovak ] = "Jednotlivé ~slová";
+        Text[ hungarian ] = "~Különálló szavak";
+        Text[ slovenian ] = "Posamezne ~besede";
     };
     FixedText FT_EMPHASIS
     {
@@ -2746,6 +2910,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "~Betonungszeichen";
         Text[ hindi ] = "विशि~ष्ट उच्चारण चिह्न";
         Text[ slovak ] = "Znak ~zvýraznenia";
+        Text[ hungarian ] = "~Hangsúlyjel";
+        Text[ slovenian ] = "Po~udarno znamenje";
     };
     ListBox LB_EMPHASIS
     {
@@ -2844,7 +3010,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ danish ] =
         {
-            < "(Ingen)" ; default ; > ;
+            < "(Uden)" ; default ; > ;
             < "Punkt" ; default ; > ;
             < "Cirkel" ; default ; > ;
             < "Skive" ; default ; > ;
@@ -2978,6 +3144,22 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         < "Disk" ; default ; > ;
         < "Zarovnať" ; default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "(nincs)" ; default ; > ;
+        < "Pont" ; default ; > ;
+        < "Kör" ; default ; > ;
+        < "Lemez" ; default ; > ;
+        < "Ékezet" ; default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "(brez)" ; default ; > ;
+        < "Pika" ; default ; > ;
+        < "Krožec" ; default ; > ;
+        < "Plošča" ; default ; > ;
+        < "Naglas" ; default ; > ;
+    };
     };
     FixedText FT_POSITION
     {
@@ -2993,7 +3175,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ french ] = "Position";
         Text[ spanish ] = "Posici�n";
         Text[ italian ] = "Posizione";
-        Text[ danish ] = "~Placering";
+        Text[ danish ] = "Placering";
         Text[ swedish ] = "~Position";
         Text[ polish ] = "Pozycja";
         Text[ portuguese_brazilian ] = "Posi��o";
@@ -3010,6 +3192,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
         Text[ slovak ] = "Umiestnenie";
+        Text[ hungarian ] = "Pozíció";
+        Text[ slovenian ] = "Položaj";
     };
     ListBox LB_POSITION
     {
@@ -3153,6 +3337,16 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
          < "Nad textom" ; CHRDLG_POSITION_OVER ; > ;
         < "Pod textom" ; CHRDLG_POSITION_UNDER ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Szöveg felett" ; CHRDLG_POSITION_OVER ; > ;
+        < "Szöveg alatt" ; CHRDLG_POSITION_UNDER ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Nad besedilom" ; CHRDLG_POSITION_OVER ; > ;
+        < "Pod besedilom" ; CHRDLG_POSITION_UNDER ; > ;
+    };
     };
     FixedText FT_FONTCOLOR
     {
@@ -3168,7 +3362,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ french ] = "Couleur de police";
         Text[ spanish ] = "~Color de fuente";
         Text[ italian ] = "Colore carattere";
-        Text[ danish ] = "Font ~color";
+        Text[ danish ] = "Skrift~farve";
         Text[ swedish ] = "Tecken~f�rg";
         Text[ polish ] = "Kolor";
         Text[ portuguese_brazilian ] = "Cor da fonte";
@@ -3185,6 +3379,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "S~chriftfarbe";
         Text[ hindi ] = "Font ~color";
         Text[ slovak ] = "~Farba písma";
+        Text[ hungarian ] = "Be~tűszín";
+        Text[ slovenian ] = "~Barva pisave";
     };
     ListBox LB_FONTCOLOR
     {
@@ -3208,7 +3404,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ french ] = "~Attributs";
         Text[ spanish ] = "Efectos";
         Text[ italian ] = "Effet~ti";
-        Text[ danish ] = "~Effekter";
+        Text[ danish ] = "Effekter";
         Text[ swedish ] = "~Effekter";
         Text[ polish ] = "Efekty";
         Text[ portuguese_brazilian ] = "Efeitos";
@@ -3225,6 +3421,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "‮אפקטים‬";
         Text[ hindi ] = "प्रभाव";
         Text[ slovak ] = "Efekty";
+        Text[ hungarian ] = "Hatások";
+        Text[ slovenian ] = "Učinki";
     };
     ListBox LB_EFFECTS2
     {
@@ -3321,10 +3519,10 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ danish ] =
         {
-            < "(Ingen)" ; Default ; > ;
+            < "(Uden)" ; Default ; > ;
             < "Store bogstaver" ; Default ; > ;
             < "Sm� bogstaver" ; Default ; > ;
-            < "Titelskrift" ; Default ; > ;
+            < "Titel" ; Default ; > ;
             < "Kapit�ler" ; Default ; > ;
         };
         StringList [ swedish ] =
@@ -3455,6 +3653,22 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         < "Nadpis" ; Default ; > ;
         < "Malé kapitálky" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "(nincs)" ; Default ; > ;
+        < "Nagybetűs" ; Default ; > ;
+        < "Kisbetűs" ; Default ; > ;
+        < "Cím" ; Default ; > ;
+        < "Kiskapitális" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "(brez)" ; Default ; > ;
+        < "Velike črke" ; Default ; > ;
+        < "Male črke" ; Default ; > ;
+        < "Naslov" ; Default ; > ;
+        < "Pomanjšane velike črke" ; Default ; > ;
+    };
     };
     FixedText FT_RELIEF
     {
@@ -3487,6 +3701,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "‮תבליט‬";
         Text[ hindi ] = "~सहायता";
         Text[ slovak ] = "~Reliéf";
+        Text[ hungarian ] = "Ki~emelés";
+        Text[ slovenian ] = "~Relief";
     };
     ListBox LB_RELIEF
     {
@@ -3561,9 +3777,9 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ danish ] =
         {
-            < "(Ingen)" ; Default ; > ;
+            < "(Uden)" ; Default ; > ;
             < "Oph�jet" ; Default ; > ;
-            < "Fordybet" ; Default ; > ;
+            < "Indgraveret" ; Default ; > ;
         };
         StringList [ swedish ] =
         {
@@ -3661,6 +3877,18 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         < "Reliéf" ; Default ; > ;
         < "Rytina" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "(nincs)" ; Default ; > ;
+        < "Kiemelt" ; Default ; > ;
+        < "Bevésett" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "(brez)" ; Default ; > ;
+        < "Izbočeno" ; Default ; > ;
+        < "Vrezano" ; Default ; > ;
+    };
     };
     TriStateBox CB_OUTLINE
     {
@@ -3676,7 +3904,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ french ] = "Contour";
         Text[ spanish ] = "Contorno";
         Text[ italian ] = "Contorno";
-        Text[ danish ] = "~Kontur";
+        Text[ danish ] = "Kontur";
         Text[ swedish ] = "~Kontur";
         Text[ polish ] = "Kontur";
         Text[ portuguese_brazilian ] = "Contorno";
@@ -3693,6 +3921,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "‮מסגרת‬";
         Text[ hindi ] = "बाहरी रूपरेखा";
         Text[ slovak ] = "Osnova";
+        Text[ hungarian ] = "Körvonalas";
+        Text[ slovenian ] = "Oris";
     };
     TriStateBox CB_SHADOW
     {
@@ -3708,7 +3938,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ french ] = "~Ombre";
         Text[ spanish ] = "Sombra";
         Text[ italian ] = "Ombreggiato";
-        Text[ danish ] = "Sk~ygger";
+        Text[ danish ] = "Skygge";
         Text[ swedish ] = "~Skugga";
         Text[ polish ] = "Cie�";
         Text[ portuguese_brazilian ] = "Sombra";
@@ -3725,6 +3955,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "‮הצללה‬";
         Text[ hindi ] = "छाया";
         Text[ slovak ] = "Tieň";
+        Text[ hungarian ] = "Árnyékolt";
+        Text[ slovenian ] = "Senca";
     };
     TriStateBox CB_BLINKING
     {
@@ -3758,6 +3990,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "‮הבהוב‬";
         Text[ hindi ] = "~टिमटिमाहट";
         Text[ slovak ] = "~Blikajúce";
+        Text[ hungarian ] = "~Villogó";
+        Text[ slovenian ] = "~Utripanje";
     };
     Window WIN_EFFECTS_PREVIEW
     {
@@ -3790,6 +4024,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "Beispiel";
         Text[ hindi ] = "उदाहरण";
         Text[ slovak ] = "Príklad";
+        Text[ hungarian ] = "Példa";
+        Text[ slovenian ] = "Primer";
     };
     FixedText FT_EFFECTS_FONTTYPE
     {
@@ -3825,6 +4061,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "‮אותיות גדולות‬";
         Text[ hindi ] = "बड़े अक्षरें";
         Text[ slovak ] = "Veľké písmená";
+        Text[ hungarian ] = "Nagybetűk";
+        Text[ slovenian ] = "Velike črke";
     };
     String STR_EFFECTS_LOWERCASE
     {
@@ -3854,6 +4092,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "‮אותיות קטנות‬";
         Text[ hindi ] = "लोवरकेस";
         Text[ slovak ] = "Malé písmená";
+        Text[ hungarian ] = "Kisbetűk";
+        Text[ slovenian ] = "Male črke";
     };
     String STR_EFFECTS_TITLE
     {
@@ -3866,7 +4106,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ french ] = "Caract�res du titre";
         Text[ spanish ] = "T�tulo";
         Text[ italian ] = "Titolo";
-        Text[ danish ] = "Titelskrift";
+        Text[ danish ] = "Titel";
         Text[ swedish ] = "Titel";
         Text[ polish ] = "Jak w tytule";
         Text[ portuguese_brazilian ] = "T�tulo";
@@ -3883,6 +4123,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "‮כותרת‬";
         Text[ hindi ] = "शीर्षक";
         Text[ slovak ] = "Titul";
+        Text[ hungarian ] = "Cím";
+        Text[ slovenian ] = "Naslov";
     };
     String STR_EFFECTS_SMALL
     {
@@ -3912,6 +4154,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "‮אותיות גדולות קטנות‬";
         Text[ hindi ] = "छोटा बड़े अक्षरें";
         Text[ slovak ] = "Malé kapitálky";
+        Text[ hungarian ] = "Kiskapitálisok";
+        Text[ slovenian ] = "Pomanjšane velike črke";
     };
     String STR_EFFECTS_OUTLINE
     {
@@ -3941,6 +4185,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "‮מסגרת‬";
         Text[ hindi ] = "बाहरी रूपरेखा";
         Text[ slovak ] = "Osnova";
+        Text[ hungarian ] = "Körvonal";
+        Text[ slovenian ] = "Oris";
     };
     String STR_EFFECTS_SHADOW
     {
@@ -3953,7 +4199,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ french ] = "Ombre";
         Text[ spanish ] = "Sombra";
         Text[ italian ] = "Ombreggiato";
-        Text[ danish ] = "Skygger";
+        Text[ danish ] = "Skygge";
         Text[ swedish ] = "Skugga";
         Text[ polish ] = "Cie�";
         Text[ portuguese_brazilian ] = "Sombra";
@@ -3970,6 +4216,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "‮הצללה‬";
         Text[ hindi ] = "छाया";
         Text[ slovak ] = "Tieň";
+        Text[ hungarian ] = "Árnyék";
+        Text[ slovenian ] = "Senca";
     };
     String STR_EFFECTS_BLINKING
     {
@@ -3999,6 +4247,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "‮הבהוב‬";
         Text[ hindi ] = "टिमटिमाहट";
         Text[ slovak ] = "Blikajúci";
+        Text[ hungarian ] = "Villogás";
+        Text[ slovenian ] = "Utripanje";
     };
     String STR_CHARNAME_TRANSPARENT
     {
@@ -4029,6 +4279,8 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ hebrew ] = "Transparent";
         Text[ hindi ] = "Transparent";
         Text[ slovak ] = "Priehľadné";
+        Text[ hungarian ] = "Átlátszó";
+        Text[ slovenian ] = "Prosojno";
     };
 };
 
@@ -4052,7 +4304,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ french ] = "Position";
         Text[ spanish ] = "Posici�n";
         Text[ italian ] = "Posizione";
-        Text[ danish ] = "Position";
+        Text[ danish ] = "Placering";
         Text[ swedish ] = "Position";
         Text[ polish ] = "Pozycja";
         Text[ portuguese_brazilian ] = "Posi��o";
@@ -4069,6 +4321,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
         Text[ slovak ] = "Umiestnenie";
+        Text[ hungarian ] = "Pozíció";
+        Text[ slovenian ] = "Položaj";
     };
     RadioButton RB_HIGHPOS
     {
@@ -4085,7 +4339,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ french ] = "Exposant";
         Text[ spanish ] = "Super�ndice";
         Text[ italian ] = "~Apice";
-        Text[ danish ] = "H�~j";
+        Text[ danish ] = "H�vet skrift";
         Text[ swedish ] = "Upph�j~d";
         Text[ polish ] = "Indeks g�rny";
         Text[ portuguese_brazilian ] = "Sobrescrito";
@@ -4102,6 +4356,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ hebrew ] = "‮כיתוב עילי‬";
         Text[ hindi ] = "सूपरस्क्रिप्ट्";
         Text[ slovak ] = "Horný index";
+        Text[ hungarian ] = "Felső index";
+        Text[ slovenian ] = "Nadpisano";
     };
     RadioButton RB_NORMALPOS
     {
@@ -4118,7 +4374,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ french ] = "~Normal";
         Text[ spanish ] = "Normal";
         Text[ italian ] = "Normale";
-        Text[ danish ] = "~Normal";
+        Text[ danish ] = "Normal";
         Text[ swedish ] = "~Normal";
         Text[ polish ] = "Normalna";
         Text[ portuguese_brazilian ] = "Normal";
@@ -4135,6 +4391,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ hebrew ] = "‮כיתוב רגיל‬";
         Text[ hindi ] = "सामान्य";
         Text[ slovak ] = "Normálne";
+        Text[ hungarian ] = "Normál";
+        Text[ slovenian ] = "Navadno";
     };
     RadioButton RB_LOWPOS
     {
@@ -4147,11 +4405,11 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ portuguese ] = "A~baixo";
         Text[ russian ] = "����";
         Text[ greek ] = "�������";
-        Text[ dutch ] = "Su~b";
+        Text[ dutch ] = "Su~bscript";
         Text[ french ] = "~Indice";
         Text[ spanish ] = "Sub�ndice";
         Text[ italian ] = "P~edice";
-        Text[ danish ] = "S~�nket";
+        Text[ danish ] = "S�nket skrift";
         Text[ swedish ] = "N~eds�nkt";
         Text[ polish ] = "Indeks dolny";
         Text[ portuguese_brazilian ] = "Subscrito";
@@ -4168,6 +4426,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ hebrew ] = "‮כיתוב תחתי‬";
         Text[ hindi ] = "सबस्क्रिप्ट्";
         Text[ slovak ] = "Dolný index";
+        Text[ hungarian ] = "Alsó index";
+        Text[ slovenian ] = "Podpisano";
     };
     FixedText FT_HIGHLOW
     {
@@ -4179,11 +4439,11 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ portuguese ] = "~Superior/Inferior em";
         Text[ russian ] = "�������� ��";
         Text[ greek ] = "~�������. ����/����";
-        Text[ dutch ] = "~Superscript/subscript met";
+        Text[ dutch ] = "~Hoger/lager met";
         Text[ french ] = "Exposant/indice �";
         Text[ spanish ] = "Super/sub�ndice";
         Text[ italian ] = "Apice/Pedice di";
-        Text[ danish ] = "H~�j/s�nket om";
+        Text[ danish ] = "~H�v/s�nk med";
         Text[ swedish ] = "H�j/s�n~k med";
         Text[ polish ] = "~Podnie�/obni� o";
         Text[ portuguese_brazilian ] = "~Aumentar / Reduzir de";
@@ -4200,6 +4460,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ hebrew ] = "‮הגבה/הנמוך ב ‬";
         Text[ hindi ] = "से ~बढ़ाओ/घटाओ";
         Text[ slovak ] = "~Zvýšiť/znížiť o";
+        Text[ hungarian ] = "~Nagyítás és kicsinyítés";
+        Text[ slovenian ] = "~Zvišaj/znižaj za";
     };
     MetricField ED_HIGHLOW
     {
@@ -4249,6 +4511,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "स्व~चालित";
         Text[ slovak ] = "A~utomaticky";
+        Text[ hungarian ] = "A~utomatikus";
+        Text[ slovenian ] = "Sa~modejno";
     };
     FixedText FT_FONTSIZE
     {
@@ -4264,7 +4528,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ french ] = "~Taille relative";
         Text[ spanish ] = "Tama�o relativo";
         Text[ italian ] = "Dim. relative ~caratt.";
-        Text[ danish ] = "S~kriftst�rrelse rel.";
+        Text[ danish ] = "Relativ skriftst�rrelse";
         Text[ swedish ] = "Rel. tecken~storlek";
         Text[ polish ] = "Wzgl. rozm. czcionki";
         Text[ portuguese_brazilian ] = "Tamanho relativo da fonte";
@@ -4281,6 +4545,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ hebrew ] = "‮גודל גופן יחסי‬";
         Text[ hindi ] = "संबन्धित फ़ॉन्ट परिमाण";
         Text[ slovak ] = "Relatívna veľkosť písma";
+        Text[ hungarian ] = "Relatív betűméret";
+        Text[ slovenian ] = "Relativna velikost pisave";
     };
     MetricField ED_FONTSIZE
     {
@@ -4328,6 +4594,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ hebrew ] = "‮סיבוב/קביעת גודל‬";
         Text[ hindi ] = "घुमाव / स्केलिंग";
         Text[ slovak ] = "Rotácia / škálovanie";
+        Text[ hungarian ] = "Forgatás és méretezés";
+        Text[ slovenian ] = "Sukanje / spreminjanje merila";
     };
     FixedLine FL_SCALING
     {
@@ -4359,6 +4627,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ hebrew ] = "Skalierung";
         Text[ hindi ] = "स्केलिंग";
         Text[ slovak ] = "Upravovanie";
+        Text[ hungarian ] = "Méretezés";
+        Text[ slovenian ] = "Spreminjanje merila";
     };
     RadioButton RB_0_DEG
     {
@@ -4392,6 +4662,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ hebrew ] = "~0 Grad";
         Text[ hindi ] = "~0 डिग्रियाँ";
         Text[ slovak ] = "~0 stupňov";
+        Text[ hungarian ] = "~0 fok";
+        Text[ slovenian ] = "~0 stopinj";
     };
     RadioButton RB_90_DEG
     {
@@ -4425,6 +4697,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ hebrew ] = "~90 Grad";
         Text[ hindi ] = "~90 डिग्रियाँ";
         Text[ slovak ] = "~90 stupňov";
+        Text[ hungarian ] = "~90 fok";
+        Text[ slovenian ] = "~90 stopinj";
     };
     RadioButton RB_270_DEG
     {
@@ -4458,6 +4732,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ hebrew ] = "~270 Grad";
         Text[ hindi ] = "~270 डिग्रियाँ";
         Text[ slovak ] = "~270 stupňov";
+        Text[ hungarian ] = "~270 fok";
+        Text[ slovenian ] = "~270 stopinj";
     };
     CheckBox CB_FIT_TO_LINE
     {
@@ -4474,7 +4750,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ french ] = "Adapter � la ligne";
         Text[ spanish ] = "~Ajustar a la l�nea";
         Text[ italian ] = "Adatta alla riga";
-        Text[ danish ] = "Tilpas til ~linje";
+        Text[ danish ] = "Tilpas til linje";
         Text[ swedish ] = "Anpassa till ~rad";
         Text[ polish ] = "Dopasuj do wiersza";
         Text[ portuguese_brazilian ] = "Ajustar na linha";
@@ -4491,6 +4767,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ hebrew ] = "‮התאמה לשורה‬";
         Text[ hindi ] = "रेखा के योग्य";
         Text[ slovak ] = "Prispôsobiť riadku";
+        Text[ hungarian ] = "Igazítás a vonalhoz";
+        Text[ slovenian ] = "Prilagodi vrstici";
     };
     FixedText FT_SCALE_WIDTH
     {
@@ -4523,6 +4801,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ hebrew ] = "‮רוחב יחסי‬";
         Text[ hindi ] = "~चौड़ाई स्केल करो";
         Text[ slovak ] = "Zväčšiť na š~írku";
+        Text[ hungarian ] = "S~zélesség változtatása";
+        Text[ slovenian ] = "Spremeni ~širino";
     };
     MetricField MF_SCALE_WIDTH
     {
@@ -4570,6 +4850,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ hebrew ] = "‮ריווח‬";
         Text[ hindi ] = "अंतर देना";
         Text[ slovak ] = "Vzdialenosť";
+        Text[ hungarian ] = "Betűköz";
+        Text[ slovenian ] = "Razmik";
     };
     ListBox LB_KERNING2
     {
@@ -4739,6 +5021,18 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         < "Rozšírené" ; Default ; > ;
         < "Zúžené" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Alapértelmezett" ; Default ; > ;
+        < "Ritkított" ; Default ; > ;
+        < "Sűrített" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Privzeto" ; Default ; > ;
+        < "Razširjeno" ; Default ; > ;
+        < "Stisnjeno" ; Default ; > ;
+    };
     };
     FixedText FT_KERNING2
     {
@@ -4772,6 +5066,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ hebrew ] = "‮ב‬";
         Text[ hindi ] = "~से";
         Text[ slovak ] = "~o";
+        Text[ hungarian ] = "mé~rték";
+        Text[ slovenian ] = "z~a";
     };
     MetricField ED_KERNING2
     {
@@ -4801,7 +5097,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ french ] = "~Cr�nage pair";
         Text[ spanish ] = "~Ajuste par entre caracteres";
         Text[ italian ] = "Crenatura caratteri a coppia";
-        Text[ danish ] = "Par~vis knibning";
+        Text[ danish ] = "~Parvis knibning";
         Text[ swedish ] = "~Parvis kerning";
         Text[ polish ] = "~Kerning";
         Text[ portuguese_brazilian ] = "~Kerning de pares";
@@ -4818,6 +5114,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ hebrew ] = "~Paarweises Kerning";
         Text[ hindi ] = "~युगल कर्निन्ग";
         Text[ slovak ] = "Kerning ~párov";
+        Text[ hungarian ] = "~Betűpár alávágása";
+        Text[ slovenian ] = "~Parno spodsekavanje";
     };
     Window WIN_POS_PREVIEW
     {
@@ -4850,6 +5148,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ hebrew ] = "Beispiel";
         Text[ hindi ] = "उदाहरण";
         Text[ slovak ] = "Príklad";
+        Text[ hungarian ] = "Példa";
+        Text[ slovenian ] = "Primer";
     };
     FixedText FT_POS_FONTTYPE
     {
@@ -4894,6 +5194,8 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ hebrew ] = "Doppelzeilig";
         Text[ hindi ] = "द्विगुणित रेखा";
         Text[ slovak ] = "Dvojriadkové";
+        Text[ hungarian ] = "Kétsoros";
+        Text[ slovenian ] = "Dvovrstično";
     };
     CheckBox CB_TWOLINES
     {
@@ -4927,6 +5229,8 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ hebrew ] = "~Doppelzeilig schreiben";
         Text[ hindi ] = "द्विगुणित रेखाओं में ~लिखो";
         Text[ slovak ] = "~Písať v dvojitých riadkoch";
+        Text[ hungarian ] = "~Duplasoros írásmód";
+        Text[ slovenian ] = "Piši ~v dvojnih vrsticah";
     };
     FixedLine FL_ENCLOSE
     {
@@ -4958,6 +5262,8 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ hebrew ] = "Einschließende Zeichen";
         Text[ hindi ] = "घिरा हुआ अक्षर";
         Text[ slovak ] = "Znak okolo";
+        Text[ hungarian ] = "Körbezáró karakter";
+        Text[ slovenian ] = "Zajemajoči znak";
     };
     FixedText FT_STARTBRACKET
     {
@@ -4989,6 +5295,8 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ hebrew ] = "A~nfangszeichen";
         Text[ hindi ] = "प्रा~रंभ का अक्षर";
         Text[ slovak ] = "Ú~vodný znak";
+        Text[ hungarian ] = "~Kezdőbetű";
+        Text[ slovenian ] = "Za~četni znak";
     };
     ListBox ED_STARTBRACKET
     {
@@ -5239,6 +5547,24 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
         < "Iné znaky..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "(Nincs)" ; CHRDLG_ENCLOSE_NONE ; > ;
+        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+        < "Egyéb karakterek..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "(brez)" ; CHRDLG_ENCLOSE_NONE ; > ;
+        < "(" ; CHRDLG_ENCLOSE_ROUND ; > ;
+        < "[" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+        < "<" ; CHRDLG_ENCLOSE_POINTED ; > ;
+        < "{" ; CHRDLG_ENCLOSE_CURVED ; > ;
+        < "Ostali znaki..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+    };
     };
     FixedText FT_ENDBRACKET
     {
@@ -5270,6 +5596,8 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ hebrew ] = "~Endzeichen";
         Text[ hindi ] = "अंतिम अक्ष~र";
         Text[ slovak ] = "~Koncový znak";
+        Text[ hungarian ] = "~Záró karakter";
+        Text[ slovenian ] = "Ko~nčni znak";
     };
     ListBox ED_ENDBRACKET
     {
@@ -5520,6 +5848,24 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
         < "Iné znaky..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "(Nincs)" ; CHRDLG_ENCLOSE_NONE ; > ;
+        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+        < "Egyéb karakterek..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "(brez)" ; CHRDLG_ENCLOSE_NONE ; > ;
+        < ")" ; CHRDLG_ENCLOSE_ROUND ; > ;
+        < "]" ; CHRDLG_ENCLOSE_SQUARE ; > ;
+        < ">" ; CHRDLG_ENCLOSE_POINTED ; > ;
+        < "}" ; CHRDLG_ENCLOSE_CURVED ; > ;
+        < "Ostali znaki..." ; CHRDLG_ENCLOSE_SPECIAL_CHAR ; > ;
+    };
     };
     Window WIN_TWOLINES_PREVIEW
     {
@@ -5552,6 +5898,8 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ hebrew ] = "Beispiel";
         Text[ hindi ] = "उदाहरण";
         Text[ slovak ] = "Príklad";
+        Text[ hungarian ] = "Példa";
+        Text[ slovenian ] = "Primer";
     };
     FixedText FT_TWOLINES_FONTTYPE
     {
@@ -5563,6 +5911,36 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
 };
 
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
