@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:04:06 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ class ImportExcel8 : public ImportExcel
         void                    AutoFilter( void );             // 0x9E
         void                    Scenman( void );                // 0xAE
         void                    Scenario( void );               // 0xAF
+        void                    ReadBasic( void );              // 0xD3
         void                    Cellmerging( void );            // 0xE5     geraten...
         void                    Msodrawinggroup( void );        // 0xEB
         void                    Msodrawing( void );             // 0xEC
@@ -155,6 +156,7 @@ class ImportExcel8 : public ImportExcel
                                 ImportExcel8(
                                     SvStorage*  pStorage,
                                     SvStream&   aStream,
+                                    XclBiff     eBiff,
                                     ScDocument* pDoc,
                                     const String& rDocUrl,
                                     SvStorage*  pPivotCache );
