@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPagesPanel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:26:20 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
         ::std::auto_ptr<TreeNode>(pSelector),
         SdResId(STR_TASKPANEL_CURRENT_MASTER_PAGES_TITLE),
         HID_SD_CURRENT_MASTERS);
+    pSelector->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_CURRENT) );
 
     // Create a panel with the most recently used master pages.
     pSelector = new controls::RecentMasterPagesSelector (
@@ -109,6 +110,7 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
         ::std::auto_ptr<TreeNode>(pSelector),
         SdResId(STR_TASKPANEL_RECENT_MASTER_PAGES_TITLE),
         HID_SD_RECENT_MASTERS);
+    pSelector->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_RECENT) );
 
     // Create a panel with all available master pages.
     pSelector = new controls::AllMasterPagesSelector (
@@ -123,6 +125,7 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
         HID_SD_ALL_MASTERS);
 
     AddControl (::std::auto_ptr<TreeNode>(pScrollPanel));
+    pSelector->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_ALL) );
 }
 
 
