@@ -5,11 +5,8 @@ mkdir: %_DEST%\bin%_EXT%\so
 ..\%__SRC%\misc\*.ico %_DEST%\res%_EXT%\icons\*.ico
 ..\%__SRC%\misc\*.gif %_DEST%\res%_EXT%\icons\*.gif
 ..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%\*.zip
-..\%__SRC%\bin\lngconv* %_DEST%\bin%_EXT%\lngconv*
 ..\%__SRC%\bin\noarch\*.rpm %_DEST%\bin%_EXT%\*.rpm
 ..\%__SRC%\bin\*.tar.gz %_DEST%\bin%_EXT%\*.tar.gz
-..\%__SRC%\misc\dtint.sh %_DEST%\bin%_EXT%\dtint
-..\%__SRC%\misc\dtappintegrate.sh %_DEST%\bin%_EXT%\dtappintegrate
 
 ..\%__SRC%\bin\gnomeint %_DEST%\bin%_EXT%\gnomeint.bin
 ..\%__SRC%\bin\gnomeint.sh %_DEST%\bin%_EXT%\gnomeint
