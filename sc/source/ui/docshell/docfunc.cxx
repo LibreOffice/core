@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-15 14:32:24 $
+ *  last change: $Author: sab $ $Date: 2002-07-24 09:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2480,7 +2480,8 @@ BOOL ScDocFunc::RemovePageBreak( BOOL bColumn, const ScAddress& rPos,
 //------------------------------------------------------------------------
 
 BOOL lcl_ValidPassword( ScDocument* pDoc, USHORT nTab,
-                        const uno::Sequence<sal_Int8>& rPassword, uno::Sequence<sal_Int8>* pReturnOld = NULL )
+                        const String& rPassword,
+                        uno::Sequence<sal_Int8>* pReturnOld = NULL )
 {
     uno::Sequence<sal_Int8> aOldPassword;
     if ( nTab == TABLEID_DOC )
@@ -2497,7 +2498,7 @@ BOOL lcl_ValidPassword( ScDocument* pDoc, USHORT nTab,
     if (pReturnOld)
         *pReturnOld = aOldPassword;
 
-    return ((aOldPassword.getLength() == 0) || (rPassword == aOldPassword));
+    return ((aOldPassword.getLength() == 0) || SvPasswordHelper::CompareHashPassword(aOldPassword, rPassword));
 }
 
 BOOL ScDocFunc::Protect( USHORT nTab, const String& rPassword, BOOL bApi )
@@ -2506,13 +2507,13 @@ BOOL ScDocFunc::Protect( USHORT nTab, const String& rPassword, BOOL bApi )
 
     ScDocument* pDoc = rDocShell.GetDocument();
     BOOL bUndo(pDoc->IsUndoEnabled());
-    uno::Sequence<sal_Int8> aPass;
-    if (rPassword.Len())
-        SvPasswordHelper::GetHashPassword(aPass, rPassword);
-    BOOL bOk = lcl_ValidPassword( pDoc, nTab, aPass );
-
+    BOOL bOk = lcl_ValidPassword( pDoc, nTab, rPassword);
     if ( bOk )
     {
+        uno::Sequence<sal_Int8> aPass;
+        if (rPassword.Len())
+            SvPasswordHelper::GetHashPassword(aPass, rPassword);
+
         if (bUndo)
         {
             rDocShell.GetUndoManager()->AddUndoAction(
@@ -2548,10 +2549,7 @@ BOOL ScDocFunc::Unprotect( USHORT nTab, const String& rPassword, BOOL bApi )
     BOOL bUndo(pDoc->IsUndoEnabled());
     uno::Sequence<sal_Int8> aOldPassword;
     uno::Sequence<sal_Int8> aPass;
-    if (rPassword.Len())
-        SvPasswordHelper::GetHashPassword(aPass, rPassword);
-    BOOL bOk = lcl_ValidPassword( pDoc, nTab, aPass, &aOldPassword );
-
+    BOOL bOk = lcl_ValidPassword( pDoc, nTab, rPassword, &aOldPassword );
     if ( bOk )
     {
         uno::Sequence<sal_Int8> aEmptyPass;

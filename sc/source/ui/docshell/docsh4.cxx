@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-18 11:05:11 $
+ *  last change: $Author: sab $ $Date: 2002-07-24 09:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -995,11 +995,9 @@ BOOL ScDocShell::ExecuteChangeProtectionDialog( BOOL bJustQueryIfProtected )
 
         if ( aPassword.Len() )
         {
-            com::sun::star::uno::Sequence< sal_Int8 > aPass;
-            SvPasswordHelper::GetHashPassword( aPass, aPassword );
             if ( bProtected )
             {
-                if ( aPass == pChangeTrack->GetProtection() )
+                if ( SvPasswordHelper::CompareHashPassword(pChangeTrack->GetProtection(), aPassword) )
                 {
                     if ( bJustQueryIfProtected )
                         bDone = TRUE;
@@ -1015,7 +1013,11 @@ BOOL ScDocShell::ExecuteChangeProtectionDialog( BOOL bJustQueryIfProtected )
                 }
             }
             else
+            {
+                com::sun::star::uno::Sequence< sal_Int8 > aPass;
+                SvPasswordHelper::GetHashPassword( aPass, aPassword );
                 pChangeTrack->SetProtection( aPass );
+            }
             if ( bProtected != pChangeTrack->IsProtected() )
             {
                 //  update "accept changes" dialog
