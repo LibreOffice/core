@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:06:11 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,6 @@
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
 #endif
-#ifndef _SVX_ADRITEM_HXX //autogen
-#include <svx/adritem.hxx>
-#endif
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
@@ -105,6 +102,15 @@
 #endif
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
+#include <svtools/useroptions.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef _SHL_HXX
+#include <tools/shl.hxx>
 #endif
 
 #ifndef _DOC_HXX
@@ -405,9 +411,9 @@ static USHORT __READONLY_DATA aHashValue[ 27 ] =
 };
 static USHORT __READONLY_DATA aAdrToken[ 12 ] =
 {
-    POS_COMPANY, POS_STREET, POS_COUNTRY, POS_PLZ,
-    POS_CITY, POS_TITLE, POS_POSITION, POS_TEL_COMPANY,
-    POS_TEL_PRIVATE, POS_FAX, POS_EMAIL, POS_STATE
+    USER_OPT_COMPANY, USER_OPT_STREET, USER_OPT_COUNTRY, USER_OPT_ZIP,
+    USER_OPT_CITY, USER_OPT_TITLE, USER_OPT_POSITION, USER_OPT_TELEPHONEWORK,
+    USER_OPT_TELEPHONEHOME, USER_OPT_FAX, USER_OPT_EMAIL, USER_OPT_STATE
 };
 
 static USHORT SwDocStat::* __READONLY_DATA aDocStat1[ 3 ] =
@@ -446,17 +452,17 @@ static ULONG SwDocStat::* __READONLY_DATA aDocStat2[ 4 ] =
     for( n = 0; n < 4; ++n )
         ((SwCalcExp*)VarTable[ aHashValue[ n + 7 ] ])->nValue.PutLong( rDocStat.*aDocStat2[ n ]  );
 
-    SvxAddressItem aAdr;
+    SvtUserOptions& rUserOptions = SW_MOD()->GetUserOptions();
 
-    ((SwCalcExp*)VarTable[ aHashValue[ 11 ] ])->nValue.PutString( aAdr.GetFirstName() );
-    ((SwCalcExp*)VarTable[ aHashValue[ 12 ] ])->nValue.PutString( aAdr.GetName() );
-    ((SwCalcExp*)VarTable[ aHashValue[ 13 ] ])->nValue.PutString( aAdr.GetShortName() );
+    ((SwCalcExp*)VarTable[ aHashValue[ 11 ] ])->nValue.PutString( rUserOptions.GetFirstName() );
+    ((SwCalcExp*)VarTable[ aHashValue[ 12 ] ])->nValue.PutString( rUserOptions.GetLastName() );
+    ((SwCalcExp*)VarTable[ aHashValue[ 13 ] ])->nValue.PutString( rUserOptions.GetID() );
 
     for( n = 0; n < 11; ++n )
         ((SwCalcExp*)VarTable[ aHashValue[ n + 14 ] ])->nValue.PutString(
-                                        aAdr.GetToken( aAdrToken[ n ] ));
+                                        rUserOptions.GetToken( aAdrToken[ n ] ));
 
-    nVal.PutString( aAdr.GetToken( aAdrToken[ 11 ] ));
+    nVal.PutString( rUserOptions.GetToken( aAdrToken[ 11 ] ));
     sTmpStr.AssignAscii( sNTypeTab[ 25 ] );
     VarTable[ aHashValue[ 25 ] ]->pNext = new SwCalcExp( sTmpStr, nVal, 0 );
 
