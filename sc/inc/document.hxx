@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:07:53 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:23:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
+#endif
+
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
 #endif
 
 #ifndef SC_TABLE_HXX
@@ -461,7 +465,7 @@ public:
     ScFieldEditEngine*  CreateFieldEditEngine();
     void                DisposeFieldEditEngine(ScFieldEditEngine*& rpEditEngine);
 
-    ScRangeName*    GetRangeName();
+SC_DLLPUBLIC    ScRangeName*    GetRangeName();
     void            SetRangeName( ScRangeName* pNewRangeName );
     SCTAB           GetMaxTableNumber() { return nMaxTableNumber; }
     void            SetMaxTableNumber(SCTAB nNumber) { nMaxTableNumber = nNumber; }
@@ -471,7 +475,7 @@ public:
     ScRangePairListRef& GetColNameRangesRef() { return xColNameRanges; }
     ScRangePairListRef& GetRowNameRangesRef() { return xRowNameRanges; }
 
-    ScDBCollection* GetDBCollection() const;
+SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     void            SetDBCollection( ScDBCollection* pNewDBCollection,
                                         BOOL bRemoveAutoFilter = FALSE );
     ScDBData*       GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab,
@@ -511,7 +515,7 @@ public:
     void            SetVisibleTab(SCTAB nTab)   { nVisibleTab = nTab; }
 
     BOOL            HasTable( SCTAB nTab ) const;
-    BOOL            GetName( SCTAB nTab, String& rName ) const;
+    SC_DLLPUBLIC BOOL           GetName( SCTAB nTab, String& rName ) const;
     BOOL            GetTable( const String& rName, SCTAB& rTab ) const;
     inline SCTAB    GetTableCount() const { return nMaxTableNumber; }
     SvULONGTable*   GetFormatExchangeList() const { return pFormatExchangeList; }
@@ -556,9 +560,9 @@ public:
     void            SetEmbedded( const Rectangle& rRect );          // aus VisArea (1/100 mm)
     void            SnapVisArea( Rectangle& rRect ) const;          // 1/100 mm
 
-    BOOL            ValidTabName( const String& rName ) const;
-    BOOL            ValidNewTabName( const String& rName ) const;
-    void            CreateValidTabName(String& rName) const;
+    SC_DLLPUBLIC BOOL           ValidTabName( const String& rName ) const;
+    SC_DLLPUBLIC BOOL           ValidNewTabName( const String& rName ) const;
+    SC_DLLPUBLIC void           CreateValidTabName(String& rName) const;
     BOOL            InsertTab( SCTAB nPos, const String& rName,
                                 BOOL bExternalDocument = FALSE );
     BOOL            DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc = NULL );
@@ -719,7 +723,7 @@ public:
                                   SCCOL nCol1, SCROW nRow1,
                                   SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark);
 
-    void            GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
+    SC_DLLPUBLIC void           GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
     void            GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
     double          GetValue( const ScAddress& );
     void            GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue );
@@ -743,7 +747,7 @@ public:
     BOOL            HasNoteObject( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
     BOOL            HasData( SCCOL nCol, SCROW nRow, SCTAB nTab );
-    BOOL            HasStringData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
+    SC_DLLPUBLIC BOOL           HasStringData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     BOOL            HasValueData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     USHORT          GetErrorData(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
     BOOL            HasStringCells( const ScRange& rRange ) const;
@@ -1244,7 +1248,7 @@ public:
     ScStyleSheetPool*   GetStyleSheetPool() const;
 
     // PageStyle:
-    const String&   GetPageStyle( SCTAB nTab ) const;
+    SC_DLLPUBLIC const String&  GetPageStyle( SCTAB nTab ) const;
     void            SetPageStyle( SCTAB nTab, const String& rName );
     Size            GetPageSize( SCTAB nTab ) const;
     void            SetPageSize( SCTAB nTab, const Size& rSize );
@@ -1319,7 +1323,7 @@ public:
                         BOOL bPageMode, BOOL bFormulaMode,
                         const ScMarkData* pMarkData = NULL );
 
-    SvNumberFormatter*  GetFormatTable() const;
+SC_DLLPUBLIC    SvNumberFormatter*  GetFormatTable() const;
 
     void            Sort( SCTAB nTab, const ScSortParam& rSortParam, BOOL bKeepQuery );
     SCSIZE          Query( SCTAB nTab, const ScQueryParam& rQueryParam, BOOL bKeepSub );
@@ -1330,7 +1334,7 @@ public:
 
     BOOL            GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 TypedStrCollection& rStrings );
-    BOOL            GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
+    SC_DLLPUBLIC BOOL           GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
                                 SCTAB nTab, TypedStrCollection& rStrings );
     BOOL            GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 TypedStrCollection& rStrings, BOOL bLimit = FALSE );
