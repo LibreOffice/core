@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistentwindowstate.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:30:33 $
+ *  last change: $Author: kz $ $Date: 2004-12-03 14:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,8 +163,9 @@ DEFINE_XTYPEPROVIDER_4(PersistentWindowState           ,
 
 //*****************************************************************************************************************
 PersistentWindowState::PersistentWindowState(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
-    : ThreadHelpBase(&Application::GetSolarMutex())
-    , m_xSMGR       (xSMGR                        )
+    : ThreadHelpBase          (&Application::GetSolarMutex())
+    , m_xSMGR                 (xSMGR                        )
+    , m_bWindowStateAlreadySet(sal_False                    )
 {
 }
 
@@ -212,6 +213,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR ;
     css::uno::Reference< css::frame::XFrame >              xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
+    sal_Bool                                               bRestoreWindowState = !m_bWindowStateAlreadySet;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -233,8 +235,16 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
     {
         case css::frame::FrameAction_COMPONENT_ATTACHED :
             {
-                ::rtl::OUString sWindowState = PersistentWindowState::implst_getWindowStateFromConfig(xSMGR, sModuleName);
-                PersistentWindowState::implst_setWindowStateOnWindow(xWindow,sWindowState);
+                if (bRestoreWindowState)
+                {
+                    ::rtl::OUString sWindowState = PersistentWindowState::implst_getWindowStateFromConfig(xSMGR, sModuleName);
+                    PersistentWindowState::implst_setWindowStateOnWindow(xWindow,sWindowState);
+                    // SAFE -> ----------------------------------
+                    WriteGuard aWriteLock(m_aLock);
+                    m_bWindowStateAlreadySet = sal_True;
+                    aWriteLock.unlock();
+                    // <- SAFE ----------------------------------
+                }
             }
             break;
 
