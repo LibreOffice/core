@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlpivot.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 12:55:01 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include "xlpivot.hxx"
 #endif
 
+#ifndef SC_DPGROUP_HXX
+#include "dpgroup.hxx"
+#endif
+
 #ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
 #endif
@@ -83,32 +87,6 @@ namespace ScDPShowItemsMode = ::com::sun::star::sheet::DataPilotFieldShowItemsMo
 namespace ScDPLayoutMode = ::com::sun::star::sheet::DataPilotFieldLayoutMode;
 namespace ScDPRefItemType = ::com::sun::star::sheet::DataPilotFieldReferenceItemType;
 
-// helper functions ===========================================================
-
-namespace {
-
-void lclReadName( XclImpStream& rStrm, String& rString, bool* pbUseCache = 0 )
-{
-    sal_uInt16 nStrLen;
-    rStrm >> nStrLen;
-    if( nStrLen == EXC_PT_NOSTRING )
-        rString.Erase();
-    else
-        rString = rStrm.ReadUniString( nStrLen );
-    if( pbUseCache )
-        *pbUseCache = nStrLen == EXC_PT_NOSTRING;
-}
-
-void lclWriteName( XclExpStream& rStrm, const String& rString, const bool* pbUseCache = 0 )
-{
-    if( rString.Len() && (!pbUseCache || !*pbUseCache) )
-        rStrm << XclExpString( rString, EXC_STR_DEFAULT, EXC_PT_MAXSTRLEN );
-    else
-        rStrm << EXC_PT_NOSTRING;
-}
-
-} // namespace
-
 // ============================================================================
 // Pivot cache
 // ============================================================================
@@ -116,6 +94,7 @@ void lclWriteName( XclExpStream& rStrm, const String& rString, const bool* pbUse
 XclPCItem::XclPCItem() :
     meType( EXC_PCITEM_INVALID ),
     mfValue( 0.0 ),
+    mnValue( 0 ),
     mnError( EXC_ERR_NULL ),
     mbValue( false )
 {
@@ -126,6 +105,7 @@ void XclPCItem::SetEmpty()
     meType = EXC_PCITEM_EMPTY;
     maText.Erase();
     mfValue = 0.0;
+    mnValue = 0;
     mnError = EXC_ERR_NULL;
     mbValue = false;
 }
@@ -134,25 +114,41 @@ void XclPCItem::SetText( const String& rText )
 {
     meType = EXC_PCITEM_TEXT;
     maText = rText;
+    //! TODO convert string to double
     mfValue = 0.0;
+    mnValue = 0;
     mnError = EXC_ERR_NULL;
     mbValue = rText.Len() != 0;
 }
 
-void XclPCItem::SetValue( double fValue )
+void XclPCItem::SetDouble( double fValue )
 {
     meType = EXC_PCITEM_VALUE;
+    //! TODO convert double to string
     maText.Erase();
     mfValue = fValue;
+    mnValue = ::lulimit< sal_Int16 >( fValue );
     mnError = EXC_ERR_NULL;
     mbValue = fValue != 0.0;
+}
+
+void XclPCItem::SetInteger( sal_Int16 nValue )
+{
+    meType = EXC_PCITEM_INTEGER;
+    maText = String::CreateFromInt32( nValue );
+    mfValue = nValue;
+    mnValue = nValue;
+    mnError = EXC_ERR_NULL;
+    mbValue = nValue != 0;
 }
 
 void XclPCItem::SetDate( double fDate )
 {
     meType = EXC_PCITEM_DATE;
+    //! TODO convert date to string
     maText.Erase();
     mfValue = fDate;
+    mnValue = ::lulimit< sal_Int16 >( fDate );
     mnError = EXC_ERR_NULL;
     mbValue = fDate != 0.0;
 }
@@ -160,8 +156,10 @@ void XclPCItem::SetDate( double fDate )
 void XclPCItem::SetError( sal_uInt16 nError )
 {
     meType = EXC_PCITEM_ERROR;
+    //! TODO convert error to string
     maText.Erase();
     mfValue = nError;
+    mnValue = ::lulimit< sal_Int16 >( nError );
     mnError = nError;
     mbValue = false;
 }
@@ -169,8 +167,10 @@ void XclPCItem::SetError( sal_uInt16 nError )
 void XclPCItem::SetBool( bool bValue )
 {
     meType = EXC_PCITEM_BOOL;
+    //! TODO convert boolean to string
     maText.Erase();
     mfValue = bValue ? 1.0 : 0.0;
+    mnValue = bValue ? 1 : 0;
     mnError = EXC_ERR_NULL;
     mbValue = bValue;
 }
@@ -187,9 +187,14 @@ const String* XclPCItem::GetText() const
     return (meType == EXC_PCITEM_TEXT) ? &maText : 0;
 }
 
-const double* XclPCItem::GetValue() const
+const double* XclPCItem::GetDouble() const
 {
     return (meType == EXC_PCITEM_VALUE) ? &mfValue : 0;
+}
+
+const sal_Int16* XclPCItem::GetInteger() const
+{
+    return (meType == EXC_PCITEM_INTEGER) ? &mnValue : 0;
 }
 
 const double* XclPCItem::GetDate() const
@@ -207,36 +212,313 @@ const bool* XclPCItem::GetBool() const
     return (meType == EXC_PCITEM_BOOL) ? &mbValue : 0;
 }
 
+// ----------------------------------------------------------------------------
+
+bool operator==( const XclPCItem& rLeft, const XclPCItem& rRight )
+{
+    if( rLeft.GetType() != rRight.GetType() )
+        return false;
+    switch( rLeft.GetType() )
+    {
+        case EXC_PCITEM_INVALID:    return true;
+        case EXC_PCITEM_EMPTY:      return true;
+        case EXC_PCITEM_TEXT:       return rLeft.ConvertToText()    == rRight.ConvertToText();
+        case EXC_PCITEM_VALUE:      return rLeft.ConvertToDouble()  == rRight.ConvertToDouble();
+        case EXC_PCITEM_INTEGER:    return rLeft.ConvertToInteger() == rRight.ConvertToInteger();
+        case EXC_PCITEM_DATE:       return rLeft.ConvertToDate()    == rRight.ConvertToDate();
+        case EXC_PCITEM_BOOL:       return rLeft.ConvertToBool()    == rRight.ConvertToBool();
+        case EXC_PCITEM_ERROR:      return rLeft.ConvertToError()   == rRight.ConvertToError();
+        default:    DBG_ERRORFILE( "operator== - unknown pivot cache item type" );
+    }
+    return false;
+}
+
+// Field settings =============================================================
+
+XclPCFieldInfo::XclPCFieldInfo() :
+    mnFlags( 0 ),
+    mnGroupChild( 0 ),
+    mnGroupBase( 0 ),
+    mnVisItems( 0 ),
+    mnGroupItems( 0 ),
+    mnBaseItems( 0 ),
+    mnOrigItems( 0 )
+{
+}
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclPCFieldInfo& rInfo )
+{
+    rStrm   >> rInfo.mnFlags
+            >> rInfo.mnGroupChild
+            >> rInfo.mnGroupBase
+            >> rInfo.mnVisItems
+            >> rInfo.mnGroupItems
+            >> rInfo.mnBaseItems
+            >> rInfo.mnOrigItems;
+    if( rStrm.GetRecLeft() >= 3 )
+        rInfo.maName = rStrm.ReadUniString();
+    else
+        rInfo.maName.Erase();
+    return rStrm;
+}
+
+XclExpStream& operator<<( XclExpStream& rStrm, const XclPCFieldInfo& rInfo )
+{
+    return rStrm
+        << rInfo.mnFlags
+        << rInfo.mnGroupChild
+        << rInfo.mnGroupBase
+        << rInfo.mnVisItems
+        << rInfo.mnGroupItems
+        << rInfo.mnBaseItems
+        << rInfo.mnOrigItems
+        << XclExpString( rInfo.maName );
+}
+
+// Numeric grouping field settings ============================================
+
+XclPCNumGroupInfo::XclPCNumGroupInfo() :
+    mnFlags( EXC_SXNUMGROUP_AUTOMIN | EXC_SXNUMGROUP_AUTOMAX )
+{
+    SetNumType();
+}
+
+bool XclPCNumGroupInfo::IsNumType() const
+{
+    return GetXclDataType() == EXC_SXNUMGROUP_TYPE_NUM;
+}
+
+void XclPCNumGroupInfo::SetNumType()
+{
+    SetXclDataType( EXC_SXNUMGROUP_TYPE_NUM );
+}
+
+sal_Int32 XclPCNumGroupInfo::GetScDateType() const
+{
+    sal_Int32 nScType = 0;
+    switch( GetXclDataType() )
+    {
+        case EXC_SXNUMGROUP_TYPE_SEC:   nScType = SC_DP_DATE_SECONDS;   break;
+        case EXC_SXNUMGROUP_TYPE_MIN:   nScType = SC_DP_DATE_MINUTES;   break;
+        case EXC_SXNUMGROUP_TYPE_HOUR:  nScType = SC_DP_DATE_HOURS;     break;
+        case EXC_SXNUMGROUP_TYPE_DAY:   nScType = SC_DP_DATE_DAYS;      break;
+        case EXC_SXNUMGROUP_TYPE_MONTH: nScType = SC_DP_DATE_MONTHS;    break;
+        case EXC_SXNUMGROUP_TYPE_QUART: nScType = SC_DP_DATE_QUARTERS;  break;
+        case EXC_SXNUMGROUP_TYPE_YEAR:  nScType = SC_DP_DATE_YEARS;     break;
+        default:    DBG_ERROR1( "XclPCNumGroupInfo::GetScDateType - unexpected date type %d", GetXclDataType() );
+    }
+    return nScType;
+}
+
+void XclPCNumGroupInfo::SetScDateType( sal_Int32 nScType )
+{
+    sal_uInt16 nXclType = EXC_SXNUMGROUP_TYPE_NUM;
+    switch( nScType )
+    {
+        case SC_DP_DATE_SECONDS:    nXclType = EXC_SXNUMGROUP_TYPE_SEC;     break;
+        case SC_DP_DATE_MINUTES:    nXclType = EXC_SXNUMGROUP_TYPE_MIN;     break;
+        case SC_DP_DATE_HOURS:      nXclType = EXC_SXNUMGROUP_TYPE_HOUR;    break;
+        case SC_DP_DATE_DAYS:       nXclType = EXC_SXNUMGROUP_TYPE_DAY;     break;
+        case SC_DP_DATE_MONTHS:     nXclType = EXC_SXNUMGROUP_TYPE_MONTH;   break;
+        case SC_DP_DATE_QUARTERS:   nXclType = EXC_SXNUMGROUP_TYPE_QUART;   break;
+        case SC_DP_DATE_YEARS:      nXclType = EXC_SXNUMGROUP_TYPE_YEAR;    break;
+        default:    DBG_ERROR1( "XclPCNumGroupInfo::SetScDateType - unexpected date type %d", nScType );
+    }
+    SetXclDataType( nXclType );
+}
+
+sal_uInt16 XclPCNumGroupInfo::GetXclDataType() const
+{
+    sal_uInt16 nXclType = 0;
+    ::extract_value( nXclType, mnFlags, 2, 4 );
+    return nXclType;
+}
+
+void XclPCNumGroupInfo::SetXclDataType( sal_uInt16 nXclType )
+{
+    ::insert_value( mnFlags, nXclType, 2, 4 );
+}
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclPCNumGroupInfo& rInfo )
+{
+    return rStrm >> rInfo.mnFlags;
+}
+
+XclExpStream& operator<<( XclExpStream& rStrm, const XclPCNumGroupInfo& rInfo )
+{
+    return rStrm << rInfo.mnFlags;
+}
+
+// Base class for pivot cache fields ==========================================
+
+XclPCField::XclPCField( XclPCFieldType eFieldType, sal_uInt16 nFieldIdx ) :
+    mnFieldIdx( nFieldIdx ),
+    meFieldType( eFieldType )
+{
+}
+
+bool XclPCField::IsSupportedField() const
+{
+    return (meFieldType != EXC_PCFIELD_CALCED) && (meFieldType != EXC_PCFIELD_UNKNOWN);
+}
+
+bool XclPCField::IsStandardField() const
+{
+    return meFieldType == EXC_PCFIELD_STANDARD;
+}
+
+bool XclPCField::IsCalculatedField() const
+{
+    return meFieldType == EXC_PCFIELD_CALCED;
+}
+
+bool XclPCField::IsStdGroupField() const
+{
+    return meFieldType == EXC_PCFIELD_STDGROUP;
+}
+
+bool XclPCField::IsNumGroupField() const
+{
+    return meFieldType == EXC_PCFIELD_NUMGROUP;
+}
+
+bool XclPCField::IsDateGroupField() const
+{
+    return (meFieldType == EXC_PCFIELD_DATEGROUP) || (meFieldType == EXC_PCFIELD_DATECHILD);
+}
+
+bool XclPCField::IsGroupField() const
+{
+    return IsStdGroupField() || IsNumGroupField() || IsDateGroupField();
+}
+
+bool XclPCField::IsGroupBaseField() const
+{
+    return ::get_flag( maFieldInfo.mnFlags, EXC_SXFIELD_HASCHILD );
+}
+
+bool XclPCField::IsGroupChildField() const
+{
+    return (meFieldType == EXC_PCFIELD_STDGROUP) || (meFieldType == EXC_PCFIELD_DATECHILD);
+}
+
+sal_uInt16 XclPCField::GetBaseFieldIndex() const
+{
+    return IsGroupChildField() ? maFieldInfo.mnGroupBase : mnFieldIdx;
+}
+
+bool XclPCField::HasPostponedItems() const
+{
+    return ::get_flag( maFieldInfo.mnFlags, EXC_SXFIELD_POSTPONE );
+}
+
+// Pivot cache settings =======================================================
+
+/** Contains data for a pivot cache (SXDB record). */
+XclPCInfo::XclPCInfo() :
+    mnSrcRecs( 0 ),
+    mnStrmId( 0xFFFF ),
+    mnFlags( EXC_SXDB_DEFAULTFLAGS ),
+    mnBlockRecs( EXC_SXDB_BLOCKRECS ),
+    mnStdFields( 0 ),
+    mnTotalFields( 0 ),
+    mnSrcType( EXC_SXDB_SRC_SHEET )
+{
+}
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclPCInfo& rInfo )
+{
+    rStrm   >> rInfo.mnSrcRecs
+            >> rInfo.mnStrmId
+            >> rInfo.mnFlags
+            >> rInfo.mnBlockRecs
+            >> rInfo.mnStdFields
+            >> rInfo.mnTotalFields;
+    rStrm.Ignore( 2 );
+    rStrm   >> rInfo.mnSrcType;
+    rInfo.maUserName = rStrm.ReadUniString();
+    return rStrm;
+}
+
+XclExpStream& operator<<( XclExpStream& rStrm, const XclPCInfo& rInfo )
+{
+    return rStrm
+        << rInfo.mnSrcRecs
+        << rInfo.mnStrmId
+        << rInfo.mnFlags
+        << rInfo.mnBlockRecs
+        << rInfo.mnStdFields
+        << rInfo.mnTotalFields
+        << sal_uInt16( 0 )
+        << rInfo.mnSrcType
+        << XclExpString( rInfo.maUserName );
+}
+
 // ============================================================================
 // Pivot table
 // ============================================================================
+
+// cached name ================================================================
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclPTCachedName& rCachedName )
+{
+    sal_uInt16 nStrLen;
+    rStrm >> nStrLen;
+    rCachedName.mbUseCache = nStrLen == EXC_PT_NOSTRING;
+    if( rCachedName.mbUseCache )
+        rCachedName.maName.Erase();
+    else
+        rCachedName.maName = rStrm.ReadUniString( nStrLen );
+    return rStrm;
+}
+
+XclExpStream& operator<<( XclExpStream& rStrm, const XclPTCachedName& rCachedName )
+{
+    if( rCachedName.mbUseCache )
+        rStrm << EXC_PT_NOSTRING;
+    else
+        rStrm << XclExpString( rCachedName.maName, EXC_STR_DEFAULT, EXC_PT_MAXSTRLEN );
+    return rStrm;
+}
+
+// ----------------------------------------------------------------------------
+
+const String* XclPTVisNameInfo::GetVisName() const
+{
+    return HasVisName() ? &maVisName.maName : 0;
+}
+
+void XclPTVisNameInfo::SetVisName( const String& rName )
+{
+    maVisName.maName = rName;
+    maVisName.mbUseCache = rName.Len() == 0;
+}
 
 // Field item settings ========================================================
 
 XclPTItemInfo::XclPTItemInfo() :
     mnType( EXC_SXVI_TYPE_DATA ),
     mnFlags( EXC_SXVI_DEFAULTFLAGS ),
-    mnCacheIdx( EXC_SXVI_DEFAULT_CACHE ),
-    mbUseCache( false )
+    mnCacheIdx( EXC_SXVI_DEFAULT_CACHE )
 {
 }
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTItemInfo& rInfo )
 {
-    rStrm   >> rInfo.mnType
-            >> rInfo.mnFlags
-            >> rInfo.mnCacheIdx;
-    lclReadName( rStrm, rInfo.maName, &rInfo.mbUseCache );
-    return rStrm;
+    return rStrm
+        >> rInfo.mnType
+        >> rInfo.mnFlags
+        >> rInfo.mnCacheIdx
+        >> rInfo.maVisName;
 }
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTItemInfo& rInfo )
 {
-    rStrm   << rInfo.mnType
-            << rInfo.mnFlags
-            << rInfo.mnCacheIdx;
-    lclWriteName( rStrm, rInfo.maName, &rInfo.mbUseCache );
-    return rStrm;
+    return rStrm
+        << rInfo.mnType
+        << rInfo.mnFlags
+        << rInfo.mnCacheIdx
+        << rInfo.maVisName;
 }
 
 // General field settings =====================================================
@@ -246,21 +528,22 @@ XclPTFieldInfo::XclPTFieldInfo() :
     mnSubtCount( 1 ),
     mnSubtotals( EXC_SXVD_SUBT_DEFAULT ),
     mnItemCount( 0 ),
-    mnCacheIdx( SAL_MAX_UINT16 )
+    mnCacheIdx( EXC_SXVD_DEFAULT_CACHE )
 {
 }
 
-DataPilotFieldOrientation XclPTFieldInfo::GetApiOrient() const
+DataPilotFieldOrientation XclPTFieldInfo::GetApiOrient( sal_uInt16 nMask ) const
 {
     using namespace ::com::sun::star::sheet;
     DataPilotFieldOrientation eOrient = DataPilotFieldOrientation_HIDDEN;
-    if( mnAxes & EXC_SXVD_AXIS_ROW )
+    sal_uInt16 nUsedAxes = mnAxes & nMask;
+    if( nUsedAxes & EXC_SXVD_AXIS_ROW )
         eOrient = DataPilotFieldOrientation_ROW;
-    else if( mnAxes & EXC_SXVD_AXIS_COL )
+    else if( nUsedAxes & EXC_SXVD_AXIS_COL )
         eOrient = DataPilotFieldOrientation_COLUMN;
-    else if( mnAxes & EXC_SXVD_AXIS_PAGE )
+    else if( nUsedAxes & EXC_SXVD_AXIS_PAGE )
         eOrient = DataPilotFieldOrientation_PAGE;
-    else if( mnAxes & EXC_SXVD_AXIS_DATA )
+    else if( nUsedAxes & EXC_SXVD_AXIS_DATA )
         eOrient = DataPilotFieldOrientation_DATA;
     return eOrient;
 }
@@ -330,23 +613,23 @@ void XclPTFieldInfo::SetSubtotals( const XclPTSubtotalVec& rSubtotals )
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTFieldInfo& rInfo )
 {
     // rInfo.mnCacheIdx is not part of the SXVD record
-    rStrm   >> rInfo.mnAxes
-            >> rInfo.mnSubtCount
-            >> rInfo.mnSubtotals
-            >> rInfo.mnItemCount;
-    lclReadName( rStrm, rInfo.maVisName );
-    return rStrm;
+    return rStrm
+        >> rInfo.mnAxes
+        >> rInfo.mnSubtCount
+        >> rInfo.mnSubtotals
+        >> rInfo.mnItemCount
+        >> rInfo.maVisName;
 }
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTFieldInfo& rInfo )
 {
     // rInfo.mnCacheIdx is not part of the SXVD record
-    rStrm   << rInfo.mnAxes
-            << rInfo.mnSubtCount
-            << rInfo.mnSubtotals
-            << rInfo.mnItemCount;
-    lclWriteName( rStrm, rInfo.maVisName );
-    return rStrm;
+    return rStrm
+        << rInfo.mnAxes
+        << rInfo.mnSubtCount
+        << rInfo.mnSubtotals
+        << rInfo.mnItemCount
+        << rInfo.maVisName;
 }
 
 // Extended field settings ====================================================
@@ -414,10 +697,10 @@ void XclPTFieldExtInfo::SetApiLayoutMode( sal_Int32 nLayoutMode )
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTFieldExtInfo& rInfo )
 {
-    rStrm   >> rInfo.mnFlags
-            >> rInfo.mnSortField
-            >> rInfo.mnShowField;
-    return rStrm;
+    return rStrm
+        >> rInfo.mnFlags
+        >> rInfo.mnSortField
+        >> rInfo.mnShowField;
 }
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTFieldExtInfo& rInfo )
@@ -441,18 +724,18 @@ XclPTPageFieldInfo::XclPTPageFieldInfo() :
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTPageFieldInfo& rInfo )
 {
-    rStrm   >> rInfo.mnField
-            >> rInfo.mnSelItem
-            >> rInfo.mnObjId;
-    return rStrm;
+    return rStrm
+        >> rInfo.mnField
+        >> rInfo.mnSelItem
+        >> rInfo.mnObjId;
 }
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTPageFieldInfo& rInfo )
 {
-    rStrm   << rInfo.mnField
-            << rInfo.mnSelItem
-            << rInfo.mnObjId;
-    return rStrm;
+    return rStrm
+        << rInfo.mnField
+        << rInfo.mnSelItem
+        << rInfo.mnObjId;
 }
 
 // Data field settings ========================================================
@@ -569,28 +852,27 @@ void XclPTDataFieldInfo::SetApiRefItemType( sal_Int32 nRefItemType )
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTDataFieldInfo& rInfo )
 {
-    rStrm   >> rInfo.mnField
-            >> rInfo.mnAggFunc
-            >> rInfo.mnRefType
-            >> rInfo.mnRefField
-            >> rInfo.mnRefItem
-            >> rInfo.mnNumFmt;
-    lclReadName( rStrm, rInfo.maVisName );
-    return rStrm;
+    return rStrm
+        >> rInfo.mnField
+        >> rInfo.mnAggFunc
+        >> rInfo.mnRefType
+        >> rInfo.mnRefField
+        >> rInfo.mnRefItem
+        >> rInfo.mnNumFmt
+        >> rInfo.maVisName;
 }
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTDataFieldInfo& rInfo )
 {
-    rStrm   << rInfo.mnField
-            << rInfo.mnAggFunc
-            << rInfo.mnRefType
-            << rInfo.mnRefField
-            << rInfo.mnRefItem
-            << rInfo.mnNumFmt;
-    lclWriteName( rStrm, rInfo.maVisName );
-    return rStrm;
+    return rStrm
+        << rInfo.mnField
+        << rInfo.mnAggFunc
+        << rInfo.mnRefType
+        << rInfo.mnRefField
+        << rInfo.mnRefItem
+        << rInfo.mnNumFmt
+        << rInfo.maVisName;
 }
-
 
 // Pivot table settings =======================================================
 
