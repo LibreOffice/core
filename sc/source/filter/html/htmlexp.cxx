@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-03-07 17:31:33 $
+ *  last change: $Author: er $ $Date: 2001-03-14 18:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,6 @@
 #include <svtools/htmlout.hxx>
 #include <svtools/parhtml.hxx>
 #include <vcl/outdev.hxx>
-#include <tools/intn.hxx>
 #include <stdio.h>
 
 #if defined(GetNumberFormat) && SUPD<356

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-01-30 15:10:05 $
+ *  last change: $Author: er $ $Date: 2001-03-14 18:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 
 #include <sfx2/objsh.hxx>
 #include <svtools/zforlist.hxx>
-#include <tools/intn.hxx>
 
 #include "scitems.hxx"
 #include "column.hxx"

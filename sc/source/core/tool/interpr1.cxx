@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 16:02:54 $
+ *  last change: $Author: er $ $Date: 2001-03-14 18:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 #include <unotools/textsearch.hxx>
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
-#include <tools/intn.hxx>
 #include <tools/solar.h>
 #include <unotools/charclass.hxx>
 #include <sfx2/docfile.hxx>

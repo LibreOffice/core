@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabsrc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-08 14:24:43 $
+ *  last change: $Author: er $ $Date: 2001-03-14 18:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <tools/debug.hxx>
-#include <tools/intn.hxx>
 #include <tools/solmath.hxx>
 #include <svtools/itemprop.hxx>
 

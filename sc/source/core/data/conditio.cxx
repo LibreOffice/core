@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 15:57:39 $
+ *  last change: $Author: er $ $Date: 2001-03-14 18:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #include <sfx2/objsh.hxx>
 #include <svtools/itemset.hxx>
 #include <svtools/zforlist.hxx>
-#include <tools/intn.hxx>
 #include <tools/solmath.hxx>
 
 #ifndef _UNOTOOLS_COLLATORWRAPPER_HXX

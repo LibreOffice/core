@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-06 16:35:27 $
+ *  last change: $Author: er $ $Date: 2001-03-14 18:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,6 @@
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
-#include <tools/intn.hxx>
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
 #endif

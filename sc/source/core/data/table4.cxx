@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:16 $
+ *  last change: $Author: er $ $Date: 2001-03-14 18:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,6 @@
 #endif
 #include <svtools/zforlist.hxx>
 #include <vcl/keycodes.hxx>
-#include <tools/intn.hxx>
 #include <tools/solmath.hxx>
 #include <unotools/charclass.hxx>
 #include <math.h>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filt_pch.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: er $ $Date: 2001-03-14 18:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,6 @@
 #include <tools/time.hxx>
 #include <tools/date.hxx>
 #include <svtools/svarray.hxx>
-#include <tools/intn.hxx>
 #include <vcl/sv.h>
 #include <vcl/timer.hxx>
 #include <tools/gen.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ui_pch.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-21 16:58:56 $
+ *  last change: $Author: er $ $Date: 2001-03-14 18:13:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,6 @@
 #include <vcl/font.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/settings.hxx>
-#include <tools/intn.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/gdiobj.hxx>
 #include <vcl/outdev.hxx>

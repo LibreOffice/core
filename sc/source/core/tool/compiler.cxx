@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 16:02:54 $
+ *  last change: $Author: er $ $Date: 2001-03-14 18:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,6 @@
 #include <basic/sbstar.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/rcid.h>
-#include <tools/intn.hxx>
 #include <tools/rc.hxx>
 #include <tools/solar.h>
 #include <unotools/charclass.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-19 19:56:01 $
+ *  last change: $Author: er $ $Date: 2001-03-14 18:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
-#include <tools/intn.hxx>
 #include <tools/isolang.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/system.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabres.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-07 17:45:25 $
+ *  last change: $Author: er $ $Date: 2001-03-14 18:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <tools/debug.hxx>
-#include <tools/intn.hxx>
 #include <math.h>
 #include <float.h>          //! Test !!!
 
