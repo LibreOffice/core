@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.58 $
+*  $Revision: 1.59 $
 *
-*  last change: $Author: kz $ $Date: 2004-12-09 16:16:21 $
+*  last change: $Author: hr $ $Date: 2004-12-10 18:37:55 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -375,17 +375,6 @@ File gid_File_Bin_Senddoc
     Name = "senddoc.exe";
   #endif
 End
-
-#ifdef UNX
-
-File gid_File_Bin_Sopatchlevel_Sh
-    BIN_FILE_BODY;
-    Name = "sopatchlevel.sh";
-    Dir = gid_Dir_Program;
-    Styles = (PACKED, SETUPZIP);
-End
-
-#endif
 
 #ifdef SOLARIS
 
@@ -2750,13 +2739,6 @@ File gid_File_Xsl_Import_Wordml_Wordml2ooo_Text
     Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Import_Wordml;
     Name = "/xslt/import/wordml/wordml2ooo_text.xsl";
-End
-
-File gid_File_Xsl_Userregistry
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-    Name = "user_registry.xsl";
 End
 
 #ifdef SOLAR_JAVA
