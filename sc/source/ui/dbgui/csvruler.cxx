@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvruler.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-16 12:59:09 $
+ *  last change: $Author: dr $ $Date: 2002-10-22 10:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,16 +263,6 @@ void ScCsvRuler::MoveSplit( sal_Int32 nPos, sal_Int32 nNewPos )
         ImplEraseSplit( nPos );
         ImplDrawSplit( nNewPos );
         Repaint();
-    }
-}
-
-void ScCsvRuler::MoveSplitRel( sal_Int32 nPos, ScMoveMode eDir )
-{
-    if( HasSplit( nPos ) )
-    {
-        sal_Int32 nNewPos = FindEmptyPos( nPos, eDir );
-        if( nNewPos != CSV_POS_INVALID )
-            Execute( CSVCMD_MOVESPLIT, nPos, nNewPos );
     }
 }
 

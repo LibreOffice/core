@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvruler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-15 09:29:12 $
+ *  last change: $Author: dr $ $Date: 2002-10-22 10:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,8 +158,6 @@ public:
     void                        RemoveSplit( sal_Int32 nPos );
     /** Moves a split from nPos to nNewPos. */
     void                        MoveSplit( sal_Int32 nPos, sal_Int32 nNewPos );
-    /** Moves the split from nPos to the given direction. */
-    void                        MoveSplitRel( sal_Int32 nPos, ScMoveMode eDir );
     /** Removes all splits of the ruler. */
     void                        RemoveAllSplits();
 
