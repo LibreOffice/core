@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdep.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 15:36:59 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,14 +77,10 @@
 
 #include "prj.hxx"
 
-#if SUPD < 356
-#include <tools.hxx>
-#else
 #include <string.hxx>
 #include <list.hxx>
 #include <fsys.hxx>
 #include <stream.hxx>
-#endif
 
 #include "cppdep.hxx"
 
