@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:38:57 $
+ *  last change: $Author: as $ $Date: 2001-06-12 06:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1016,9 +1016,10 @@ Reference< XFrame > SAL_CALL Desktop::findFrame(    const   OUString&   sTargetF
                                     xSearchedFrame = m_aChildTaskContainer.searchFlatDown( sTargetFrameName );
                                 }
                                 break;
-        #ifdef ENABLE_ASSERTIONS
-        default: LOG_ERROR( "Desktop::findFrame()", "Unexpected result of TargetFinder::classify() detected!" )
-        #endif
+        default             :   {
+                                    LOG_WARNING( "Desktop::findFrame()", "Unexpected result of TargetFinder::classify() detected!" )
+                                }
+                                break;
     }
 
     // If no right target could be found - but CREATE flag was set ... do it; create a new task.
