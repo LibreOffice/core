@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ssa $ $Date: 2001-06-27 08:25:19 $
+ *  last change: $Author: ssa $ $Date: 2001-07-04 16:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,7 +697,8 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
 
                         // query DropTarget from child window
                         ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > xDragGestureRecognizer =
-                            pMouseDownWin->GetDragGestureRecognizer();
+                            ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > ( pMouseDownWin->mxDNDListenerContainer,
+                                ::com::sun::star::uno::UNO_QUERY );
 
                         if( xDragGestureRecognizer.is() )
                         {
