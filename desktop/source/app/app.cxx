@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-02 12:32:07 $
+ *  last change: $Author: lo $ $Date: 2002-10-11 14:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -647,6 +647,8 @@ void Desktop::DeInit()
 {
     Reference<XMultiServiceFactory> xXMultiServiceFactory(::comphelper::getProcessServiceFactory());
     destroyApplicationServiceManager( xXMultiServiceFactory );
+    // nobody should get a reference to the destroyed factory
+    ::comphelper::setProcessServiceFactory(NULL);
 
     if( !Application::IsRemoteServer() )
     {
