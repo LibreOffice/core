@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:16:55 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ TabPage TP_LAB_PRT
         Text[ czech ] = "Celá stránka";
         Text[ hebrew ] = "‮דף שלם‬";
         Text[ hindi ] = "~सम्पूर्ण पृष्ठ";
+        Text[ slovak ] = "~Celá stránka";
     };
     RadioButton BTN_SINGLE
     {
@@ -134,6 +135,7 @@ TabPage TP_LAB_PRT
         Text[ czech ] = "Jeden štítek";
         Text[ hebrew ] = "‮מדבקה יחידה‬";
         Text[ hindi ] = "~अकेला लेबिल";
+        Text[ slovak ] = "~Jeden štítok";
     };
     FixedText TXT_COL
     {
@@ -167,6 +169,7 @@ TabPage TP_LAB_PRT
         Text[ czech ] = "Sloupec";
         Text[ hebrew ] = "S~palte";
         Text[ hindi ] = "स्तं~भ";
+        Text[ slovak ] = "S~tĺpec";
     };
     NumericField FLD_COL
     {
@@ -212,6 +215,7 @@ TabPage TP_LAB_PRT
         Text[ czech ] = "Řádek";
         Text[ hebrew ] = "Zei~le";
         Text[ hindi ] = "~पंक्ति";
+        Text[ slovak ] = "Ria~dok";
     };
     NumericField FLD_ROW
     {
@@ -256,6 +260,7 @@ TabPage TP_LAB_PRT
         Text[ czech ] = "Synchronizovat obsahy";
         Text[ hebrew ] = "‮סינכרון תוכן‬";
         Text[ hindi ] = "विष~यों की समीकरण";
+        Text[ slovak ] = "Synchroni~zovať obsahy";
     };
     FixedLine FL_DONTKNOW
     {
@@ -287,6 +292,7 @@ TabPage TP_LAB_PRT
         Text[ czech ] = "Rozdělit";
         Text[ hebrew ] = "‮פיזור‬";
         Text[ hindi ] = "वितरण";
+        Text[ slovak ] = "Rozdelenie";
     };
     FixedText INF_PRINTER
     {
@@ -319,6 +325,7 @@ TabPage TP_LAB_PRT
         Text[ czech ] = "Název tiskárny";
         Text[ hebrew ] = "‮שם מדפסת‬";
         Text[ hindi ] = "मुद्रक नाम";
+        Text[ slovak ] = "Názov tlačiarne";
     };
     PushButton BTN_PRTSETUP
     {
@@ -351,6 +358,7 @@ TabPage TP_LAB_PRT
         Text[ czech ] = "Nastavení...";
         Text[ hebrew ] = "~Einrichten...";
         Text[ hindi ] = "सेटप...";
+        Text[ slovak ] = "Nastavenie...";
     };
     FixedLine FL_PRINTER
     {
@@ -382,9 +390,12 @@ TabPage TP_LAB_PRT
         Text[ czech ] = " Tiskárna";
         Text[ hebrew ] = "‮מדפסת ‬";
         Text[ hindi ] = " मुद्रक ";
+        Text[ slovak ] = " Tlačiareň";
     };
 };
  // **************************************************************************
+
+
 
 
 
