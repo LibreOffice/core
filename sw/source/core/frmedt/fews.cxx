@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:45:51 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1077,6 +1077,39 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                     aPos.Y() = nTop;
                 }
             }
+
+            // --> OD 2004-10-05 #i26945# - adjust horizontal 'virtual' anchor
+            // position (<aPos.X()> respectively <aPos.Y()>), if object is
+            // anchored to character and horizontal aligned at character.
+            if ( _nAnchorId == FLY_AUTO_CNTNT &&
+                 _eHoriRelOrient == REL_CHAR )
+            {
+                ASSERT( pFrm->ISA(SwTxtFrm),
+                        "<SwFEShell::CalcBoundRect(..)> - wrong anchor frame." )
+                const SwTxtFrm* pTxtFrm = static_cast<const SwTxtFrm*>(pFrm);
+                SwTwips nLeft = 0L;
+                SwRect aCharRect;
+                if ( _pToCharCntntPos )
+                {
+                    pTxtFrm->GetAutoPos( aCharRect, *_pToCharCntntPos );
+                }
+                else
+                {
+                    // No content position provided. Thus, use a default one.
+                    SwPosition aDefaultCntntPos( *(pTxtFrm->GetTxtNode()) );
+                    pTxtFrm->GetAutoPos( aCharRect, aDefaultCntntPos );
+                }
+                nLeft = (aCharRect.*fnRect->fnGetLeft)();
+                if ( bVert )
+                {
+                    aPos.Y() = nLeft;
+                }
+                else
+                {
+                    aPos.X() = nLeft;
+                }
+            }
+            // <--
 
             if ( bVert )
             {
