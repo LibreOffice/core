@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checkit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:41:50 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 10:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace drafts::com::sun::star::i18n;
+using namespace ::com::sun::star::i18n;
 
 SwCheckIt::SwCheckIt()
 {
