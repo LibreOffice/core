@@ -482,7 +482,7 @@
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-wipe" pres:preset-sub-type="from-bottom">
         <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
-        <anim:transitionFilter smil:dur="0.5" smil:type="barWipe" smil:subtype="topToBottom"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="barWipe" smil:subtype="topToBottom" smil:direction="reverse"/>
     </anim:par>
     </anim:par>
     </anim:par>
@@ -506,7 +506,7 @@
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-wipe" pres:preset-sub-type="from-top">
         <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
-        <anim:transitionFilter smil:dur="0.5" smil:type="barWipe" smil:subtype="topToBottom" smil:direction="reverse"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="barWipe" smil:subtype="topToBottom"/>
     </anim:par>
     </anim:par>
     </anim:par>
@@ -1702,7 +1702,7 @@
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-wipe" pres:preset-sub-type="from-bottom">
-        <anim:transitionFilter smil:dur="0.5" smil:type="barWipe" smil:subtype="topToBottom" smil:mode="out"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="barWipe" smil:subtype="topToBottom" smil:mode="out" smil:direction="reverse"/>
         <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
     </anim:par>
     </anim:par>
@@ -1726,7 +1726,7 @@
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par pres:preset-property="Direction" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-wipe" pres:preset-sub-type="from-top">
-        <anim:transitionFilter smil:dur="0.5" smil:type="barWipe" smil:subtype="topToBottom" smil:mode="out" smil:direction="reverse"/>
+        <anim:transitionFilter smil:dur="0.5" smil:type="barWipe" smil:subtype="topToBottom" smil:mode="out"/>
         <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
     </anim:par>
     </anim:par>
