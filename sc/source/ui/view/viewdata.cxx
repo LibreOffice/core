@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:04:39 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,7 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh )
         bEditActive[i] = FALSE;
     }
 
-    nEditEndCol = nEditCol = nEditEndRow = nEditRow = 0;
+    nEditEndCol = nEditStartCol = nEditCol = nEditEndRow = nEditRow = 0;
     nTabStartCol = SC_TABSTART_NONE;
 
     if (pDocShell)
@@ -416,7 +416,7 @@ ScViewData::ScViewData( const ScViewData& rViewData )
         bEditActive[i] = FALSE;
     }
 
-    nEditEndCol = nEditCol = nEditEndRow = nEditRow = 0;
+    nEditEndCol = nEditStartCol = nEditCol = nEditEndRow = nEditRow = 0;
     nTabStartCol = SC_TABSTART_NONE;
     CalcPPT();
 }
@@ -862,6 +862,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
                                 ScEditEngineDefaulter* pNewEngine,
                                 Window* pWin, USHORT nNewX, USHORT nNewY )
 {
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTabNo );
     ScHSplitPos eHWhich = WhichH(eWhich);
 
     BOOL bWasThere = FALSE;
@@ -928,6 +929,17 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         nEditEndRow = nEditRow;
         if (pMergeAttr->GetRowMerge() > 1)
             nEditEndRow += pMergeAttr->GetRowMerge() - 1;
+        nEditStartCol = nEditCol;
+
+        //  For growing use only the alignment value from the attribute, numbers
+        //  (existing or started) with default aligment extend to the right.
+        BOOL bGrowCentered = ( eJust == SVX_HOR_JUSTIFY_CENTER );
+        BOOL bGrowToLeft = ( eJust == SVX_HOR_JUSTIFY_RIGHT );      // visual left
+        BOOL bGrowBackwards = bGrowToLeft;                          // logical left
+        if ( bLayoutRTL )
+            bGrowBackwards = !bGrowBackwards;                       // invert on RTL sheet
+        if ( bAsianVertical )
+            bGrowCentered = bGrowToLeft = bGrowBackwards = FALSE;   // keep old behavior for asian mode
 
         long nSizeXPix;
         if (bBreak && !bAsianVertical)
@@ -935,7 +947,19 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         else
         {
             DBG_ASSERT(pView,"keine View fuer EditView");
-            nSizeXPix = pView->GetGridWidth(eHWhich) - aPixRect.Left();
+
+            if ( bGrowCentered )
+            {
+                //  growing into both directions until one edge is reached
+                //! should be limited to whole cells in both directions
+                long nLeft = aPixRect.Left();
+                long nRight = pView->GetGridWidth(eHWhich) - aPixRect.Right();
+                nSizeXPix = aPixRect.GetWidth() + 2 * Min( nLeft, nRight );
+            }
+            else if ( bGrowToLeft )
+                nSizeXPix = aPixRect.Right();   // space that's available in the window when growing to the left
+            else
+                nSizeXPix = pView->GetGridWidth(eHWhich) - aPixRect.Left();
 
             if ( nSizeXPix <= 0 )
                 nSizeXPix = aPixRect.GetWidth();    // editing outside to the right of the window -> keep cell width
@@ -965,17 +989,17 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         if ( nEditAdjust == SVX_ADJUST_RIGHT )
         {
             aVis.Right() = aPaper.Width() - 1;
-            bMoveArea = TRUE;
+            bMoveArea = !bLayoutRTL;
         }
         else if ( nEditAdjust == SVX_ADJUST_CENTER )
         {
             aVis.Right() = ( aPaper.Width() - 1 + nDiff ) / 2;
-            bMoveArea = TRUE;
+            bMoveArea = TRUE;   // always
         }
         else
         {
             aVis.Right() = nDiff;
-            bMoveArea = FALSE;
+            bMoveArea = bLayoutRTL;
         }
         aVis.Left() = aVis.Right() - nDiff;
         pEditView[eWhich]->SetVisArea(aVis);
@@ -1004,6 +1028,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
     //      Hintergrundfarbe der Zelle
     Color aBackCol = ((const SvxBrushItem&)pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
+
     ScModule* pScMod = SC_MOD();
     //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     if ( aBackCol.GetTransparency() > 0 ||
@@ -1052,11 +1077,14 @@ void ScViewData::EditGrowX()
     if ( !pCurView || !bEditActive[eWhich])
         return;
 
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTabNo );
+
     ScEditEngineDefaulter* pEngine =
         (ScEditEngineDefaulter*) pCurView->GetEditEngine();
     Window* pWin = pCurView->GetWindow();
 
-    USHORT nRight = GetPosX(eHWhich) + VisibleCellsX(eHWhich);
+    USHORT nLeft = GetPosX(eHWhich);
+    USHORT nRight = nLeft + VisibleCellsX(eHWhich);
 
     Size        aSize = pEngine->GetPaperSize();
     Rectangle   aArea = pCurView->GetOutputArea();
@@ -1066,30 +1094,139 @@ void ScViewData::EditGrowX()
     long nTextWidth = pEngine->CalcTextWidth();
 
     BOOL bChanged = FALSE;
-    while (aArea.GetWidth() + 0 < nTextWidth && nEditEndCol < nRight)
+    BOOL bAsianVertical = pEngine->IsVertical();
+
+    //  get bGrow... variables the same way as in SetEditEngine
+    const ScPatternAttr* pPattern = pDoc->GetPattern( nEditCol, nEditRow, nTabNo );
+    SvxCellHorJustify eJust = (SvxCellHorJustify)((const SvxHorJustifyItem&)
+                                    pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
+    BOOL bGrowCentered = ( eJust == SVX_HOR_JUSTIFY_CENTER );
+    BOOL bGrowToLeft = ( eJust == SVX_HOR_JUSTIFY_RIGHT );      // visual left
+    BOOL bGrowBackwards = bGrowToLeft;                          // logical left
+    if ( bLayoutRTL )
+        bGrowBackwards = !bGrowBackwards;                       // invert on RTL sheet
+    if ( bAsianVertical )
+        bGrowCentered = bGrowToLeft = bGrowBackwards = FALSE;   // keep old behavior for asian mode
+
+    BOOL bUnevenGrow = FALSE;
+    if ( bGrowCentered )
     {
-        ++nEditEndCol;
-        long nPix = ToPixel( pDoc->GetColWidth( nEditEndCol, nTabNo ), nPPTX );
-        aArea.Right() += pWin->PixelToLogic(Size(nPix,0)).Width();
+        while (aArea.GetWidth() + 0 < nTextWidth && ( nEditStartCol > nLeft || nEditEndCol < nRight ) )
+        {
+            long nLogicLeft = 0;
+            if ( nEditStartCol > nLeft )
+            {
+                --nEditStartCol;
+                long nLeftPix = ToPixel( pDoc->GetColWidth( nEditStartCol, nTabNo ), nPPTX );
+                nLogicLeft = pWin->PixelToLogic(Size(nLeftPix,0)).Width();
+            }
+            long nLogicRight = 0;
+            if ( nEditEndCol < nRight )
+            {
+                ++nEditEndCol;
+                long nRightPix = ToPixel( pDoc->GetColWidth( nEditEndCol, nTabNo ), nPPTX );
+                nLogicRight = pWin->PixelToLogic(Size(nRightPix,0)).Width();
+            }
 
-        if ( aArea.Right() > aArea.Left() + aSize.Width() - 1 )
-            aArea.Right() = aArea.Left() + aSize.Width() - 1;
+            aArea.Left() -= bLayoutRTL ? nLogicRight : nLogicLeft;
+            aArea.Right() += bLayoutRTL ? nLogicLeft : nLogicRight;
 
-        bChanged = TRUE;
+            if ( aArea.Right() > aArea.Left() + aSize.Width() - 1 )
+            {
+                long nCenter = ( aArea.Left() + aArea.Right() ) / 2;
+                long nHalf = aSize.Width() / 2;
+                aArea.Left() = nCenter - nHalf + 1;
+                aArea.Right() = nCenter + aSize.Width() - nHalf - 1;
+            }
+
+            bChanged = TRUE;
+            if ( nLogicLeft != nLogicRight )
+                bUnevenGrow = TRUE;
+        }
+    }
+    else if ( bGrowBackwards )
+    {
+        while (aArea.GetWidth() + 0 < nTextWidth && nEditStartCol > nLeft)
+        {
+            --nEditStartCol;
+            long nPix = ToPixel( pDoc->GetColWidth( nEditStartCol, nTabNo ), nPPTX );
+            long nLogicWidth = pWin->PixelToLogic(Size(nPix,0)).Width();
+            if ( !bLayoutRTL )
+                aArea.Left() -= nLogicWidth;
+            else
+                aArea.Right() += nLogicWidth;
+
+            if ( aArea.Right() > aArea.Left() + aSize.Width() - 1 )
+            {
+                if ( !bLayoutRTL )
+                    aArea.Left() = aArea.Right() - aSize.Width() + 1;
+                else
+                    aArea.Right() = aArea.Left() + aSize.Width() - 1;
+            }
+
+            bChanged = TRUE;
+        }
+    }
+    else
+    {
+        while (aArea.GetWidth() + 0 < nTextWidth && nEditEndCol < nRight)
+        {
+            ++nEditEndCol;
+            long nPix = ToPixel( pDoc->GetColWidth( nEditEndCol, nTabNo ), nPPTX );
+            long nLogicWidth = pWin->PixelToLogic(Size(nPix,0)).Width();
+            if ( bLayoutRTL )
+                aArea.Left() -= nLogicWidth;
+            else
+                aArea.Right() += nLogicWidth;
+
+            if ( aArea.Right() > aArea.Left() + aSize.Width() - 1 )
+            {
+                if ( bLayoutRTL )
+                    aArea.Left() = aArea.Right() - aSize.Width() + 1;
+                else
+                    aArea.Right() = aArea.Left() + aSize.Width() - 1;
+            }
+
+            bChanged = TRUE;
+        }
     }
 
     if (bChanged)
     {
-        if ( bMoveArea )
+        if ( bMoveArea || bGrowCentered || bGrowBackwards || bLayoutRTL )
         {
-            //  hart auf linksbuendig schalten und VisArea wieder nach links setzen
-
-            pEngine->SetDefaultItem( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
-
             Rectangle aVis = pCurView->GetVisArea();
-            long nMove = aVis.Left();
-            aVis.Left() = 0;
-            aVis.Right() -= nMove;
+
+            if ( bGrowCentered )
+            {
+                //  switch to center-aligned (undo?) and reset VisArea to center
+
+                pEngine->SetDefaultItem( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
+
+                long nCenter = aSize.Width() / 2;
+                long nVisSize = aArea.GetWidth();
+                aVis.Left() = nCenter - nVisSize / 2;
+                aVis.Right() = aVis.Left() + nVisSize - 1;
+            }
+            else if ( bGrowToLeft )
+            {
+                //  switch to right-aligned (undo?) and reset VisArea to the right
+
+                pEngine->SetDefaultItem( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+
+                aVis.Right() = aSize.Width() - 1;
+                aVis.Left() = aSize.Width() - aArea.GetWidth();     // with the new, increased area
+            }
+            else
+            {
+                //  switch to left-aligned (undo?) and reset VisArea to the left
+
+                pEngine->SetDefaultItem( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
+
+                long nMove = aVis.Left();
+                aVis.Left() = 0;
+                aVis.Right() -= nMove;
+            }
             pCurView->SetVisArea( aVis );
             bMoveArea = FALSE;
         }
@@ -1098,7 +1235,14 @@ void ScViewData::EditGrowX()
 
         //  In vertical mode, the whole text is moved to the next cell (right-aligned),
         //  so everything must be repainted. Otherwise, paint only the new area.
-        if ( !pEngine->IsVertical() )
+        //  If growing in centered alignment, if the cells left and right have different sizes,
+        //  the whole text will move, and may not even obscure all of the original display.
+        if ( bUnevenGrow )
+        {
+            aArea.Left() = pWin->PixelToLogic( Point(0,0) ).X();
+            aArea.Right() = pWin->PixelToLogic( aScrSize ).Width();
+        }
+        else if ( !bAsianVertical && !bGrowToLeft && !bGrowCentered )
             aArea.Left() = nOldRight;
         pWin->Invalidate(aArea);
     }
@@ -1353,6 +1497,12 @@ Point ScViewData::GetScrPos( USHORT nWhereX, USHORT nWhereY, ScSplitPos eWhich,
             }
         }
 
+    if ( pDoc->IsLayoutRTL( nTabNo ) )
+    {
+        //  mirror horizontal position
+        nScrPosX = aScrSize.Width() - 1 - nScrPosX;
+    }
+
     if (nScrPosX > 32767) nScrPosX=32767;
     if (nScrPosY > 32767) nScrPosY=32767;
     return Point( nScrPosX, nScrPosY );
@@ -1513,6 +1663,15 @@ BOOL ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
 
     ScHSplitPos eHWhich = WhichH(eWhich);
     ScVSplitPos eVWhich = WhichV(eWhich);
+
+    if ( pDoc->IsLayoutRTL( nTabNo ) )
+    {
+        //  mirror horizontal position
+        if (pView)
+            aScrSize.Width() = pView->GetGridWidth(eHWhich);
+        nClickX = aScrSize.Width() - 1 - nClickX;
+    }
+
     short nStartPosX = GetPosX(eHWhich);
     short nStartPosY = GetPosY(eVWhich);
     rPosX = nStartPosX;
@@ -1615,11 +1774,14 @@ BOOL ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
 void ScViewData::GetMouseQuadrant( const Point& rClickPos, ScSplitPos eWhich,
                                         short nPosX, short nPosY, BOOL& rLeft, BOOL& rTop )
 {
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTabNo );
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
+
     Point aCellStart = GetScrPos( nPosX, nPosY, eWhich, TRUE );
     long nSizeX;
     long nSizeY;
     GetMergeSizePixel( nPosX, nPosY, nSizeX, nSizeY );
-    rLeft = rClickPos.X() - aCellStart.X() <= nSizeX / 2;
+    rLeft = ( rClickPos.X() - aCellStart.X() ) * nLayoutSign <= nSizeX / 2;
     rTop  = rClickPos.Y() - aCellStart.Y() <= nSizeY / 2;
 }
 
