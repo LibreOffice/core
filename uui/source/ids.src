@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-31 13:08:43 $
+ *  last change: $Author: kz $ $Date: 2001-09-06 20:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "$(ARG1) does already exist";
         Text[ dutch ] = "$(ARG1) bestaat reeds";
         Text[ french ] = "$(ARG1) existe déjà.";
-        Text[ spanish ] = "Ya existe la carpeta $(ARG1)";
+        Text[ spanish ] = "Ya existe $(ARG1)";
         Text[ finnish ] = "$(ARG1) does already exist";
         Text[ italian ] = "$(ARG1) esiste già";
         Text[ danish ] = "$(ARG1) does already exist";
@@ -236,7 +236,7 @@ Resource RID_UUI_ERRHDL
         Text[ russian ] = "Ñîçäàòü îáúåêò $(ARG1) â ïàïêå $(ARG2) íåâîçìîæíî";
         Text[ greek ] = "The object $(ARG1) could not be created in directory $(ARG2)";
         Text[ dutch ] = "Het object $(ARG1) kan niet worden geplaatst in directory $(ARG2)";
-        Text[ french ] = "Impossible de créer l'objet $(ARG1) dans le répertoire $(ARG2) !";
+        Text[ french ] = "Impossible de créer l'objet $(ARG1) dans le répertoire $(ARG2) ";
         Text[ spanish ] = "No se puede crear el objeto $(ARG1) en el directorio $(ARG2).";
         Text[ finnish ] = "The object $(ARG1) could not be created in directory $(ARG2)";
         Text[ italian ] = "Impossibile creare l'oggetto $(ARG1) nella cartella $(ARG2)";
@@ -262,13 +262,13 @@ Resource RID_UUI_ERRHDL
         Text[ russian ] = "Ïğî÷èòàòü äàííûå $(ARG1) íåâîçìîæíî";
         Text[ greek ] = "Data of $(ARG1) could not be read";
         Text[ dutch ] = "De gegevens van $(ARG1) konden niet worden gelezen";
-        Text[ french ] = "Impossible de lire les données pour $(ARG1) !";
+        Text[ french ] = "Impossible de lire les données pour $(ARG1) ";
         Text[ spanish ] = "No se pudieron leer los datos de $(ARG1).";
         Text[ finnish ] = "Data of $(ARG1) could not be read";
         Text[ italian ] = "Impossibile leggere i dati di $(ARG1)";
         Text[ danish ] = "Data of $(ARG1) could not be read";
         Text[ swedish ] = "Det gick inte att läsa data från $(ARG1)";
-        Text[ polish ] = "Odczytanie $(ARG1) nie powiod³o siê";
+        Text[ polish ] = "Odczytanie danych z $(ARG1) nie powiod³o siê";
         Text[ portuguese_brazilian ] = "Data of $(ARG1) could not be read";
         Text[ japanese ] = "$(ARG1) ã®ï¾ƒï¾ï½°ï¾€ã¯èª­ã¿å–ã‚Œã¾ã›ã‚“ã§ã—ãŸã€‚";
         Text[ korean ] = "$(ARG1)ì˜ ë°ì´í„°ë¥¼ ì½ì„ ìˆ˜ ì—†ì—ˆìŠµë‹ˆë‹¤.";
@@ -288,13 +288,13 @@ Resource RID_UUI_ERRHDL
         Text[ russian ] = "Âûïîëíèòü îïåğàöèş seek íà $(ARG1) íåâîçìîæíî";
         Text[ greek ] = "The seek operation on $(ARG1) could not be completed";
         Text[ dutch ] = "Het zoeken op $(ARG1) was niet mogelijk";
-        Text[ french ] = "Impossible d'exécuter l'opération seek sur $(ARG1) !";
+        Text[ french ] = "Impossible d'exécuter l'opération seek sur $(ARG1) ";
         Text[ spanish ] = "No se pudo ejecutar la operación seek en $(ARG1).";
         Text[ finnish ] = "The seek operation on $(ARG1) could not be completed";
         Text[ italian ] = "Impossibile portare a termine l'operazione 'seek' su $(ARG1)";
         Text[ danish ] = "The seek operation on $(ARG1) could not be completed";
         Text[ swedish ] = "Det gick inte att utföra seek-operationen $(ARG1)";
-        Text[ polish ] = "Wykonanie operacji wyszukiwanie (seek) na $(ARG1) nie powiod³o siê";
+        Text[ polish ] = "Wykonanie operacji 'seek' na $(ARG1) nie powiod³o siê";
         Text[ portuguese_brazilian ] = "The seek operation on $(ARG1) could not be completed";
         Text[ japanese ] = "$(ARG1) ã¸ã® seek æ“ä½œã¯å®Ÿè¡Œã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
         Text[ korean ] = "$(ARG1)ì—ì„œëŠ” ì°¾ê¸° ì‘ì—…ì„ ì‹¤í–‰í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
@@ -314,13 +314,13 @@ Resource RID_UUI_ERRHDL
         Text[ russian ] = "Âûïîëíèòü îïåğàöèş tell íà $(ARG1) íåâîçìîæíî";
         Text[ greek ] = "The tell operation on $(ARG1) could not be completed";
         Text[ dutch ] = "De tell-actie op $(ARG1) kon niet worden uitgevoerd";
-        Text[ french ] = "Impossible d'exécuter l'opération tell sur $(ARG1) !";
+        Text[ french ] = "Impossible d'exécuter l'opération tell sur $(ARG1) ";
         Text[ spanish ] = "No se pudo ejecutar la operación tell en $(ARG1).";
         Text[ finnish ] = "The tell operation on $(ARG1) could not be completed";
         Text[ italian ] = "Impossibile portare a termine l'operazione 'tell' su  $(ARG1)";
         Text[ danish ] = "The tell operation on $(ARG1) could not be completed";
         Text[ swedish ] = "Det gick inte att utföra tell-operationen på $(ARG1)";
-        Text[ polish ] = "Wykonanie operacji tell na $(ARG1) nie powiod³o siê";
+        Text[ polish ] = "Wykonanie operacji 'tell' na $(ARG1) nie powiod³o siê";
         Text[ portuguese_brazilian ] = "The tell operation on $(ARG1) could not be completed";
         Text[ japanese ] = "$(ARG1) ã¸ã® tell æ“ä½œã¯å®Ÿè¡Œã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
         Text[ korean ] = "$(ARG1)ì—ì„œëŠ” ì•Œë¦¼ ì‘ì—…ì„ ì‹¤í–‰í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
@@ -340,7 +340,7 @@ Resource RID_UUI_ERRHDL
         Text[ russian ] = "Íàïèñàòü äàííûå äëÿ $(ARG1) íåâîçìîæíî";
         Text[ greek ] = "Data for $(ARG1) could not be written";
         Text[ dutch ] = "De gegevens voor $(ARG1) konden niet worden geschreven";
-        Text[ french ] = "Impossible d'écrire les données pour $(ARG1) !";
+        Text[ french ] = "Impossible d'écrire les données pour $(ARG1) ";
         Text[ spanish ] = "No se pudieron guardar los datos para $(ARG1).";
         Text[ finnish ] = "Data for $(ARG1) could not be written";
         Text[ italian ] = "Impossibile scrivere i dati per $(ARG1)";
@@ -367,7 +367,7 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "Action not allowed: $(ARG1) is the current directory";
         Text[ dutch ] = "Deze opdracht kan niet worden uitgevoerd: $(ARG1) is de actuele directory";
         Text[ french ] = "Opération impossible : $(ARG1) est le répertoire actif.";
-        Text[ spanish ] = "En el directorio actual no es posible realizar la acción $(ARG1)";
+        Text[ spanish ] = "Acción imposible: $(ARG1) es el directorio actual";
         Text[ finnish ] = "Action not allowed: $(ARG1) is the current directory";
         Text[ italian ] = "L'operazione non è ammessa: $(ARG1) è la cartella corrente";
         Text[ danish ] = "Action not allowed: $(ARG1) is the current directory";
@@ -387,18 +387,18 @@ Resource RID_UUI_ERRHDL
     {
         Text = "$(ARG1) ist nicht bereit";
         Text[english] = "$(ARG1) is not ready";
-        Text[ english_us ] = "The device (drive) $(ARG1) is not ready";
+        Text[ english_us ] = "$(ARG1) is not ready";
         Text[ portuguese ] = "O dispositivo (unidade) $(ARG1) não está preparado.";
         Text[ russian ] = "Óñòğîéñòâî (äèñê) $(ARG1) íå ãîòîâî";
         Text[ greek ] = "The Device (drive) $(ARG1) is not ready";
         Text[ dutch ] = "Apparatuur (station) $(ARG1) is niet bereid";
         Text[ french ] = "L'appareil (unité) $(ARG1) n'est pas prêt(e).";
-        Text[ spanish ] = "El dispositivo (Unidad) $(ARG1) no está preparado";
+        Text[ spanish ] = "$(ARG1) no está preparado";
         Text[ finnish ] = "The Device (drive) $(ARG1) is not ready";
         Text[ italian ] = "Il drive $(ARG1) non è pronto";
         Text[ danish ] = "The Device (drive) $(ARG1) is not ready";
-        Text[ swedish ] = "Enheten $(ARG1) är inte redo";
-        Text[ polish ] = "Urz¹dzenie (napêd) $(ARG1) nie jest gotowe";
+        Text[ swedish ] = "$(ARG1) är inte redo";
+        Text[ polish ] = "$(ARG1) nie jest gotowe";
         Text[ portuguese_brazilian ] = "The Device (drive) $(ARG1) is not ready";
         Text[ japanese ] = "ï¾ƒï¾ï¾Šï¾ï½²ï½½(ï¾„ï¾ï¾—ï½²ï¾Œï¾) $(ARG1) ã®æº–å‚™ãŒã§ãã¦ã„ã¾ã›ã‚“ã€‚";
         Text[ korean ] = "ì¥ì¹˜(ë“œë¼ì´ë¸Œ) $(ARG1)ì´(ê°€) ì¤€ë¹„ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.";
@@ -419,7 +419,7 @@ Resource RID_UUI_ERRHDL
         Text[ greek ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
         Text[ dutch ] = "Deze opdracht kan niet worden uitgevoerd: $(ARG1) en $(ARG2) zijn verschillende apparaten (stations)";
         Text[ french ] = "Opération impossible : $(ARG1) et $(ARG2) sont des appareils (unités) différent(e)s.";
-        Text[ spanish ] = "No es posible la acción: $(ARG1) y $(ARG2) son dispositivos (unidades) diferentes.";
+        Text[ spanish ] = "Acción imposible: $(ARG1) y $(ARG2) son dispositivos (unidades) diferentes.";
         Text[ finnish ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
         Text[ italian ] = "L'operazione non è ammessa: $(ARG1) e $(ARG2) sono due drive diversi";
         Text[ danish ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
@@ -450,7 +450,7 @@ Resource RID_UUI_ERRHDL
         Text[ italian ] = "Errore generale di I/O nell'accesso a $(ARG1).";
         Text[ danish ] = "General input/output error while accessing $(ARG1)";
         Text[ swedish ] = "Allmänt input/outputfel vid åtkomst till $(ARG1)";
-        Text[ polish ] = "General input/output error while accessing $(ARG1)";
+        Text[ polish ] = "Ogólny b³¹d w wejœciu/wyjœciu w dostêpie do $(ARG1).";
         Text[ portuguese_brazilian ] = "General input/output error while accessing $(ARG1)";
         Text[ japanese ] = "$(ARG1) ã¸ï½±ï½¸ï½¾ï½½ã™ã‚‹éš›ã®ä¸€èˆ¬çš„ãªå…¥åŠ›/å‡ºåŠ›ã®ï½´ï¾—ï½°ã€‚";
         Text[ korean ] = "$(ARG1)ì˜ ì•¡ì„¸ìŠ¤ì—ì„œ ì¼ë°˜ ì…/ì¶œë ¥ ì˜¤ë¥˜";
@@ -632,7 +632,7 @@ Resource RID_UUI_ERRHDL
         Text[ italian ] = "Errore nell'accesso comune a $(ARG1)";
         Text[ danish ] = "Sharing violation while accessing $(ARG1)";
         Text[ swedish ] = "Fel vid gemensam åtkomst till $(ARG1)";
-        Text[ polish ] = "B³¹d wspólnego dostêpu do $(ARG1)";
+        Text[ polish ] = "B³¹d we wspólnym dostêpie do $(ARG1)";
         Text[ portuguese_brazilian ] = "Sharing violation while accessing $(ARG1)";
         Text[ japanese ] = "$(ARG1) ã¸ã®å…±æœ‰ï½±ï½¸ï½¾ï½½ã®éš›ã®ï½´ï¾—ï½°ã€‚";
         Text[ korean ] = "$(ARG1)ì„ ê³µë™ ì•¡ì„¸ìŠ¤í•˜ëŠ” ë™ì•ˆ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.";
@@ -840,7 +840,7 @@ Resource RID_UUI_ERRHDL
         Text[ italian ] = "Il drive $(ARG1) non ha più spazio disponibile";
         Text[ danish ] = "There was no space left on device $(ARG1)";
         Text[ swedish ] = "Det finns ingen plats kvar på enheten $(ARG1)";
-        Text[ polish ] = "Nie ma ju¿ miejsca na urz¹dzeniu $(ARG1)";
+        Text[ polish ] = "Brak miejsca na urz¹dzeniu $(ARG1)";
         Text[ portuguese_brazilian ] = "There was no space left on device $(ARG1)";
         Text[ japanese ] = "ï¾ƒï¾ï¾Šï¾ï½²ï½½ $(ARG1) ã«ã¯ç©ºãå®¹é‡ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
         Text[ korean ] = "ì¥ì¹˜ $(ARG1)ì—ëŠ” ë” ì´ìƒ ê³µê°„ì´ ì—†ìŠµë‹ˆë‹¤.";
@@ -970,7 +970,7 @@ Resource RID_UUI_ERRHDL
         Text[ italian ] = "Errore sconosciuto di I/O nell'accesso a $(ARG1).";
         Text[ danish ] = "Unknown input/output error while accessing $(ARG1)";
         Text[ swedish ] = "Okänt input/outputfel vid åtkomst till $(ARG1)";
-        Text[ polish ] = "Unknown input/output error while accessing $(ARG1)";
+        Text[ polish ] = "Nieznany b³¹d w wejœciu/wyjœciu w dostêpie do $(ARG1)";
         Text[ portuguese_brazilian ] = "Unknown input/output error while accessing $(ARG1)";
         Text[ japanese ] = "$(ARG1) ã¸ï½±ï½¸ï½¾ï½½ã™ã‚‹éš›ã®ä¸æ˜ãªå…¥åŠ›/å‡ºåŠ›ã®ï½´ï¾—ï½°ã€‚";
         Text[ korean ] = "$(ARG1)ì— ì•¡ì„¸ìŠ¤í•˜ëŠ” ë„ì¤‘ ì•Œ ìˆ˜ ì—†ëŠ” ì…/ì¶œë ¥ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.";
@@ -1037,7 +1037,7 @@ Resource RID_UUI_ERRHDL
     {
         Text = "$(ARG1) liegt in einer falschen Version vor";
         Text[english] = "$(ARG1) has an incorrect version";
-        Text[ english_us ] = "$(ARG1) is not in the correct version";
+        Text[ english_us ] = "The version of $(ARG1) is not correct";
         Text[ portuguese ] = "A versão de $(ARG1) está incorrecta.";
         Text[ russian ] = "$(ARG1) â íåïğàâèëüíîé âåğñèè";
         Text[ greek ] = "$(ARG1) has an incorrect version";
@@ -1074,7 +1074,7 @@ Resource RID_UUI_ERRHDL
         Text[ italian ] = "Il drive $(ARG1) non esiste";
         Text[ danish ] = "Volume $(ARG1) does not exist";
         Text[ swedish ] = "Enheten $(ARG1) existerar inte";
-        Text[ polish ] = "Volume $(ARG1) does not exist";
+        Text[ polish ] = "Napêd $(ARG1) nie istnieje";
         Text[ portuguese_brazilian ] = "Volume $(ARG1) does not exist";
         Text[ japanese ] = "ï¾„ï¾ï¾—ï½²ï¾Œï¾ $(ARG1) ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚";
         Text[ korean ] = "$(ARG1) ê¶Œì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.";
@@ -1100,7 +1100,7 @@ Resource RID_UUI_ERRHDL
         Text[ italian ] = "La cartella $(ARG1) non esiste";
         Text[ danish ] = "Folder $(ARG1) does not exist";
         Text[ swedish ] = "Mappen $(ARG1) existerar inte";
-        Text[ polish ] = "Folder $(ARG1) does not exist";
+        Text[ polish ] = "Folder $(ARG1) nie istnieje";
         Text[ portuguese_brazilian ] = "Folder $(ARG1) does not exist";
         Text[ japanese ] = "ï¾Œï½«ï¾™ï¾€ï¾ $(ARG1) ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚";
         Text[ korean ] = "$(ARG1) í´ë”ê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.";
@@ -1126,7 +1126,7 @@ Resource RID_UUI_ERRHDL
         Text[ italian ] = "La versione di Java installata non è supportata";
         Text[ danish ] = "The installed Java version is not supported";
         Text[ swedish ] = "Den installerade Java-versionen understöds inte";
-        Text[ polish ] = "The installed Java version is not supported";
+        Text[ polish ] = "Zainstalowana wersja Javy nie jest obs³ugiwana";
         Text[ portuguese_brazilian ] = "The installed Java version is not supported";
         Text[ japanese ] = "æ—¢å­˜ã™ã‚‹ Java ï¾Šï¾ï½°ï½¼ï¾ï½®ï¾ã¯æ”¯æ´ã•ã‚Œã¾ã›ã‚“ã€‚";
         Text[ korean ] = "The installed Java version is not supported";
@@ -1152,7 +1152,7 @@ Resource RID_UUI_ERRHDL
         Text[ italian ] = "La versione di Java $(ARG1) installata non è supportata";
         Text[ danish ] = "The installed Java version $(ARG1) is not supported";
         Text[ swedish ] = "Den installerade Java-versionen $(ARG1) understöds inte";
-        Text[ polish ] = "The installed Java version $(ARG1) is not supported";
+        Text[ polish ] = "Zainstalowana wersja Javy $(ARG1) nie jest obs³ugiwana";
         Text[ portuguese_brazilian ] = "The installed Java version $(ARG1) is not supported";
         Text[ japanese ] = "æ—¢å­˜ã™ã‚‹ Java ï¾Šï¾ï½°ï½¼ï¾ï½®ï¾ $(ARG1) ã¯æ”¯æ´ã•ã‚Œã¾ã›ã‚“ã€‚";
         Text[ korean ] = "The installed Java version $(ARG1) is not supported";
@@ -1177,7 +1177,7 @@ Resource RID_UUI_ERRHDL
         Text[ italian ] = "La versione di Java installata non è supportata. È necessario installare almeno una versione $(ARG1)";
         Text[ danish ] = "The installed Java version is not supported, at least versin $(ARG1) is required";
         Text[ swedish ] = "Den installerade Java-versionen understöds inte, minst version $(ARG1) krävs";
-        Text[ polish ] = "The installed Java version is not supported, at least versin $(ARG1) is required";
+        Text[ polish ] = "Zainstalowana wersja Javy nie jest obs³ugiwana, wymagana jest co najmniej wersja $(ARG1)";
         Text[ portuguese_brazilian ] = "The installed Java version is not supported, at least versin $(ARG1) is required";
         Text[ japanese ] = "æ—¢å­˜ã™ã‚‹ Java ï¾Šï¾ï½°ï½¼ï¾ï½®ï¾ã¯æ”¯æ´ã•ã‚Œã¾ã›ã‚“ã€‚ï¾Šï¾ï½°ï½¼ï¾ï½®ï¾ $(ARG1) ä»¥ä¸Šã®ã‚‚ã®ãŒå¿…è¦ã§ã™ã€‚";
         Text[ korean ] = "The installed Java version is not supported, at least versin $(ARG1) is required";
@@ -1203,7 +1203,7 @@ Resource RID_UUI_ERRHDL
         Text[ italian ] = "La versione di Java $(ARG1) installata non è supportata. È necessario installare almeno una versione $(ARG2)";
         Text[ danish ] = "The installed Java version $(ARG1) is not supported, at least versin $(ARG2) is required";
         Text[ swedish ] = "Den installerade Java-versionen $(ARG1) understöds inte, minst version $(ARG2) krävs";
-        Text[ polish ] = "The installed Java version $(ARG1) is not supported, at least versin $(ARG2) is required";
+        Text[ polish ] = "Zainstalowana wersja Javy $(ARG1) nie jest obs³ugiwana, wymagana jest co najmniej wersja $(ARG2)";
         Text[ portuguese_brazilian ] = "The installed Java version $(ARG1) is not supported, at least versin $(ARG2) is required";
         Text[ japanese ] = "æ—¢å­˜ã™ã‚‹ Java ï¾Šï¾ï½°ï½¼ï¾ï½®ï¾ $(ARG1) ã¯æ”¯æ´ã•ã‚Œã¾ã›ã‚“ã€‚ï¾Šï¾ï½°ï½¼ï¾ï½®ï¾ $(ARG2) ä»¥ä¸Šã¯å¿…è¦ã§ã™ã€‚";
         Text[ korean ] = "The installed Java version $(ARG1) is not supported, at least versin $(ARG2) is required";
@@ -1219,17 +1219,17 @@ Resource RID_UUI_ERRHDL
         Text = "Die zu der Partnerschaft gespeicherten Daten sind defekt";
         Text[english] = "The data associated with the partnership are corrupted";
         Text[ english_us ] = "The data associated with the partnership is corrupted";
-        Text[ portuguese ] = "The data associated with the partnership are corrupted";
-        Text[ russian ] = "The data associated with the partnership are corrupted";
+        Text[ portuguese ] = "Os dados associados à parceria estão danificados.";
+        Text[ russian ] = "Äàííûå, ñîõğàíåííûå äëÿ ïàğòíåğñòâà, ïîâğåæäåíû.";
         Text[ greek ] = "The data associated with the partnership are corrupted";
         Text[ dutch ] = "De bij het partnerschap opgeslagen gegevens zijn defect.";
-        Text[ french ] = "The data associated with the partnership are corrupted";
-        Text[ spanish ] = "Los datos guardados correspondientes a la cooperación están en estado defectuoso.";
+        Text[ french ] = "Les données associées au partenariat sont défectueuses.";
+        Text[ spanish ] = "Los datos guardados correspondientes a la asociación están en estado defectuoso.";
         Text[ finnish ] = "The data associated with the partnership are corrupted";
         Text[ italian ] = "I dati relativi alla partnership sono corrotti";
         Text[ danish ] = "The data associated with the partnership are corrupted";
-        Text[ swedish ] = "The data associated with the partnership are corrupted";
-        Text[ polish ] = "The data associated with the partnership are corrupted";
+        Text[ swedish ] = "De data som har sparats till partnerskapet är defekta";
+        Text[ polish ] = "Zapisane dane dotycz¹ce relacji s¹ uszkodzone";
         Text[ portuguese_brazilian ] = "The data associated with the partnership are corrupted";
         Text[ japanese ] = "ï¾Šï¾Ÿï½°ï¾„ï¾…ï½¼ï½¯ï¾Œï¾Ÿã«ä¿å­˜ã•ã‚ŒãŸï¾ƒï¾ï½°ï¾€ãŒç ´æã—ã¦ã„ã¾ã™ã€‚";
         Text[ korean ] = "The data associated with the partnership are corrupted";
@@ -1245,17 +1245,17 @@ Resource RID_UUI_ERRHDL
         Text = "Die zu der Partnerschaft $(ARG1) gespeicherten Daten sind defekt";
         Text[english] = "The data associated with the partnership $(ARG1) are corrupted";
         Text[ english_us ] = "The data associated with the partnership $(ARG1) is corrupted";
-        Text[ portuguese ] = "The data associated with the partnership $(ARG1) are corrupted";
-        Text[ russian ] = "The data associated with the partnership $(ARG1) are corrupted";
+        Text[ portuguese ] = "Os dados associados à parceria $(ARG1) estão danificados.";
+        Text[ russian ] = "Äàííûå, ñîõğàíåííûå äëÿ ïàğòíåğñòâà $(ARG1), ïîâğåæäåíû";
         Text[ greek ] = "The data associated with the partnership $(ARG1) are corrupted";
         Text[ dutch ] = "De bij het partnerschap $(ARG1) opgeslagen gegevens zijn defect";
-        Text[ french ] = "The data associated with the partnership $(ARG1) are corrupted";
-        Text[ spanish ] = "Los datos guardados correspondientes a la cooperación $(ARG1) están en estado defectuoso.";
+        Text[ french ] = "Les données associées au partenariat $(ARG1) sont défectueuses.";
+        Text[ spanish ] = "Los datos guardados correspondientes a la asociación $(ARG1) están en estado defectuoso.";
         Text[ finnish ] = "The data associated with the partnership $(ARG1) are corrupted";
         Text[ italian ] = "I dati relativi alla partnership $(ARG1) sono corrotti";
         Text[ danish ] = "The data associated with the partnership $(ARG1) are corrupted";
-        Text[ swedish ] = "The data associated with the partnership $(ARG1) are corrupted";
-        Text[ polish ] = "The data associated with the partnership $(ARG1) are corrupted";
+        Text[ swedish ] = "De data som har sparats till partnerskapet $(ARG1) är defekta";
+        Text[ polish ] = "Zapisane dane dotycz¹ce relacji $(ARG1) s¹ uszkodzone";
         Text[ portuguese_brazilian ] = "The data associated with the partnership $(ARG1) are corrupted";
         Text[ japanese ] = "ï¾Šï¾Ÿï½°ï¾„ï¾…ï½°ï½¼ï½¯ï¾Œï¾Ÿ $(ARG1) ã«ä¿å­˜ã•ã‚ŒãŸï¾ƒï¾ï½°ï¾€ãŒç ´æã—ã¦ã„ã¾ã™ã€‚";
         Text[ korean ] = "The data associated with the partnership $(ARG1) are corrupted";
@@ -1270,18 +1270,78 @@ Resource RID_UUI_ERRHDL
     {
         Text = "Laufwerk $(ARG1) ist nicht bereit";
         Text[english] = "Volume $(ARG1) is not ready";
+        Text[ english_us ] = "Volume $(ARG1) is not ready";
+        Text[ portuguese ] = "A unidade $(ARG1) não está preparada.";
+        Text[ russian ] = "Äèñê $(ARG1) íå ãîòîâ";
+        Text[ greek ] = "Volume $(ARG1) is not ready";
+        Text[ dutch ] = "Volume $(ARG1) is not ready";
+        Text[ french ] = "L'unité $(ARG1) n'est pas prête.";
+        Text[ spanish ] = "El dispositivo $(ARG1) no está preparado";
+        Text[ finnish ] = "Volume $(ARG1) is not ready";
+        Text[ italian ] = "Il drive $(ARG1) non è pronto";
+        Text[ danish ] = "Volume $(ARG1) is not ready";
+        Text[ swedish ] = "Enheten $(ARG1) är inte redo";
+        Text[ polish ] = "Napêd $(ARG1) nie jest gotowy";
+        Text[ portuguese_brazilian ] = "Volume $(ARG1) is not ready";
+        Text[ japanese ] = "ï¾„ï¾ï¾—ï½²ï¾Œï¾ $(ARG1) ã®æº–å‚™ãŒã§ãã¦ã„ã¾ã›ã‚“ã€‚";
+        Text[ korean ] = "Volume $(ARG1) is not ready";
+        Text[ chinese_simplified ] = "é©±åŠ¨ç›˜ $(ARG1) å°šæœªå‡†å¤‡å°±ç»ª";
+        Text[ chinese_traditional ] = "é©…å‹•ç›¤ $(ARG1) å°šæœªå°±ç·’ã€‚";
+        Text[ turkish ] = "Volume $(ARG1) is not ready";
+        Text[ arabic ] = "Volume $(ARG1) is not ready";
+        Text[ catalan ] = "Volume $(ARG1) is not ready";
     };
 
     String (ERRCODE_UUI_IO_NOTREADY_REMOVABLE & ERRCODE_RES_MASK)
     {
         Text = "$(ARG1) ist nicht bereit; bitte legen Sie ein Speichermedium ein";
         Text[english] = "$(ARG1) is not ready; please insert a storage medium";
+        Text[ english_us ] = "$(ARG1) is not ready; please insert a storage medium";
+        Text[ portuguese ] = "$(ARG1) não está preparado; introduza outro média de armazenamento.";
+        Text[ russian ] = "$(ARG1) íå ãîòîâî. Ââåäèòå íîñèòåëÿ èíôîğìàöèè";
+        Text[ greek ] = "$(ARG1) is not ready; please insert a storage medium";
+        Text[ dutch ] = "$(ARG1) is not ready; please insert a storage medium";
+        Text[ french ] = "$(ARG1) n'est pas prêt ; insérez un autre média.";
+        Text[ spanish ] = "$(ARG1) no está preparado; inserte un medio de almacenamiento";
+        Text[ finnish ] = "$(ARG1) is not ready; please insert a storage medium";
+        Text[ italian ] = "$(ARG1) non è pronto; inserite un supporto";
+        Text[ danish ] = "$(ARG1) is not ready; please insert a storage medium";
+        Text[ swedish ] = "$(ARG1) är inte redo; lägg in ett lagringsmedium";
+        Text[ polish ] = "$(ARG1) nie jest gotowy; nale¿y wsun¹æ noœnik danych";
+        Text[ portuguese_brazilian ] = "$(ARG1) is not ready; please insert a storage medium";
+        Text[ japanese ] = "$(ARG1) ã®æº–å‚™ãŒã§ãã¦ã„ã¾ã›ã‚“ã€‚ï¾’ï¾“ï¾˜åª’ä½“ã‚’å…¥ã‚Œã¦ãã ã•ã„ã€‚";
+        Text[ korean ] = "$(ARG1) is not ready; please insert a storage medium";
+        Text[ chinese_simplified ] = "$(ARG1) å°šæœªå‡†å¤‡å°±ç»ªï¼›è¯·æ”¾å…¥ç£ç›˜æˆ–å…‰ç›˜ã€‚";
+        Text[ chinese_traditional ] = "$(ARG1) å°šæœªå°±ç·’ã€‚è«‹æ’å…¥è»Ÿç›¤ã€‚";
+        Text[ turkish ] = "$(ARG1) is not ready; please insert a storage medium";
+        Text[ arabic ] = "$(ARG1) is not ready; please insert a storage medium";
+        Text[ catalan ] = "$(ARG1) is not ready; please insert a storage medium";
     };
 
     String (ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE & ERRCODE_RES_MASK)
     {
         Text = "Laufwerk $(ARG1) ist nicht bereit; bitte legen Sie ein Speichermedium ein";
         Text[english] = "Volume $(ARG1) is not ready; please insert a storage medium";
+        Text[ english_us ] = "Volume $(ARG1) is not ready; please insert a storage medium";
+        Text[ portuguese ] = "A unidade $(ARG1) não está preparada; introduza um média de armazenamento.";
+        Text[ russian ] = "Äèñê $(ARG1) íå ãîòîâ. Ââåäèòå íîñèòåëÿ èíôîğìàöèè";
+        Text[ greek ] = "Volume $(ARG1) is not ready; please insert a storage medium";
+        Text[ dutch ] = "Volume $(ARG1) is not ready; please insert a storage medium";
+        Text[ french ] = "L'unité $(ARG1) n'est pas prête ; insérez un autre média.";
+        Text[ spanish ] = "La unidad $(ARG1) no está preparada; inserte un medio de almacenamiento";
+        Text[ finnish ] = "Volume $(ARG1) is not ready; please insert a storage medium";
+        Text[ italian ] = "Il drive $(ARG1) non è pronto; inserite un supporto dati";
+        Text[ danish ] = "Volume $(ARG1) is not ready; please insert a storage medium";
+        Text[ swedish ] = "Enheten $(ARG1) är inte redo; lägg in ett lagringsmedium";
+        Text[ polish ] = "Napêd $(ARG1) nie jest gotowy; nale¿y wsun¹æ noœnik danych";
+        Text[ portuguese_brazilian ] = "Volume $(ARG1) is not ready; please insert a storage medium";
+        Text[ japanese ] = "ï¾„ï¾ï¾—ï½²ï¾Œï¾ $(ARG1) ã®æº–å‚™ãŒã§ãã¦ã„ã¾ã›ã‚“ã€‚ï¾’ï¾“ï¾˜åª’ä½“ã‚’å…¥ã‚Œã¦ãã ã•ã„ã€‚";
+        Text[ korean ] = "Volume $(ARG1) is not ready; please insert a storage medium";
+        Text[ chinese_simplified ] = "é©±åŠ¨ç›˜ $(ARG1) å°šæœªå‡†å¤‡å°±ç»ªã€‚è¯·æ”¾å…¥ç£ç›˜ã€‚";
+        Text[ chinese_traditional ] = "é©…å‹•ç›¤ $(ARG1) å°šæœªå°±ç·’ã€‚è«‹æ’å…¥è»Ÿç›¤ã€‚";
+        Text[ turkish ] = "Volume $(ARG1) is not ready; please insert a storage medium";
+        Text[ arabic ] = "Volume $(ARG1) is not ready; please insert a storage medium";
+        Text[ catalan ] = "Volume $(ARG1) is not ready; please insert a storage medium";
     };
 
     String (ERRCODE_UUI_WRONGMEDIUM & ERRCODE_RES_MASK)
@@ -1299,7 +1359,7 @@ Resource RID_UUI_ERRHDL
         Text[ italian ] = "Inserite il supporto dati $(ARG1)";
         Text[ japanese ] = "åª’ä½“ $(ARG1) ã‚’å…¥ã‚Œã¦ãã ã•ã„ã€‚";
         Text[ korean ] = "ë°ì´í„° ë§¤ì²´ $(ARG1)ì„(ë¥¼) ì‚½ì…í•˜ì‹­ì‹œì˜¤";
-        Text[ polish ] = "Wsuñ proszê noœnik danych $(ARG1)";
+        Text[ polish ] = "Wsuñ noœnik danych $(ARG1)";
         Text[ portuguese ] = "Introduza o media $(ARG1)";
         Text[ portuguese_brazilian ] = "Please insert disk $(ARG1)";
         Text[ russian ] = "Âñòàâüòå, ïîæàëóéñòà, äèñê $(ARG1)";
@@ -1319,7 +1379,7 @@ Resource RID_UUI_ERRHDL
         Text[ russian ] = "Ñîçäàòü îáúåêò â ïàïêå $(ARG2) íåâîçìîæíî";
         Text[ greek ] = "The object could not be created in directory $(ARG2)";
         Text[ dutch ] = "Het object kan niet worden geplaatst in directory $(ARG2)";
-        Text[ french ] = "Impossible de créer l'objet dans le répertoire $(ARG2) !";
+        Text[ french ] = "Impossible de créer l'objet dans le répertoire $(ARG2) ";
         Text[ spanish ] = "No se puede crear el objeto en el directorio $(ARG2).";
         Text[ finnish ] = "The object could not be created in directory $(ARG2)";
         Text[ italian ] = "Impossibile creare l'oggetto nella cartella $(ARG2)";
@@ -1327,12 +1387,13 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Det går inte att skapa objektet i katalogen $(ARG2)";
         Text[ polish ] = "Utworzenie obiektu w katalogu $(ARG2) nie jest mo¿liwe";
         Text[ portuguese_brazilian ] = "The object could not be created in directory $(ARG2)";
-        Text[ japanese ] = "ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã¯ï¾Œï½«ï¾™ï¾€ï¾ $(ARG2) ã«æ ¼ç´ã§ãã¾ãã‚“ã€‚";
+        Text[ japanese ] = "ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã¯ï¾Œï½«ï¾™ï¾€ï¾ $(ARG2) ã«æ ¼ç´ã§ãã¾ï¿½ã‚“ã€‚";
         Text[ korean ] = "ë””ë ‰í† ë¦¬ $(ARG2)ì— ê°œì²´ì„(ë¥¼) ë§Œë“¤ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-        Text[ chinese_simplified ] = "æ— æ³•åœ¨ç®å½• $(ARG2) å†…æ–°å»ºå¯¹è±¡ã€‚";
-        Text[ chinese_traditional ] = "ç„¡æ³•åœ¨ç®éŒ„ $(ARG2) ä¹‹ä¸‹å»ºç«‹ç‰©ä»¶";
+        Text[ chinese_simplified ] = "æ— æ³•åœ¨ï¿½å½• $(ARG2) å†…æ–°å»ºå¯¹è±¡ã€‚";
+        Text[ chinese_traditional ] = "ç„¡æ³•åœ¨ï¿½éŒ„ $(ARG2) ä¹‹ä¸‹å»ºç«‹ç‰©ä»¶";
         Text[ turkish ] = "The object could not be created in directory $(ARG2)";
         Text[ arabic ] = "The object could not be created in directory $(ARG2)";
         Text[ catalan ] = "The object could not be created in directory $(ARG2)";
     };
 };
+
