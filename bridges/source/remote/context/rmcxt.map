@@ -1,0 +1,10 @@
+UDK_2_0_0 {
+    global:
+        remote_getContext;
+        remote_createContext;
+        remote_getContextList;
+        remote_removeContextListener;
+        remote_addContextListener;
+    local:
+        *;
+};
