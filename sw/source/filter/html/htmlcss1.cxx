@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlcss1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:25:18 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ void SwCSS1Parser::ChgPageDesc( const SwPageDesc *pPageDesc,
     USHORT nPageDescs = pDoc->GetPageDescCnt();
     USHORT i;
     for( i=0; i<nPageDescs; i++ )
-        if( pPageDesc == &(pDoc->GetPageDesc(i)) )
+        if( pPageDesc == &(const_cast<const SwDoc *>(pDoc)->GetPageDesc(i)) )
         {
             pDoc->ChgPageDesc( i, rNewPageDesc );
             return;
@@ -1498,7 +1498,8 @@ static SwPageDesc *FindPageDesc( SwDoc *pDoc, USHORT nPoolId, USHORT& rPage )
 {
     USHORT nPageDescs = pDoc->GetPageDescCnt();
     for( rPage=0; rPage < nPageDescs &&
-         pDoc->GetPageDesc(rPage).GetPoolFmtId() != nPoolId; rPage++ )
+         const_cast<const SwDoc *>(pDoc)->
+             GetPageDesc(rPage).GetPoolFmtId() != nPoolId; rPage++ )
          ;
 
     return rPage < nPageDescs ? &pDoc->_GetPageDesc( rPage ) : 0;
