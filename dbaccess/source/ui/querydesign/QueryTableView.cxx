@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:06:37 $
+ *  last change: $Author: oj $ $Date: 2002-10-08 13:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,6 +579,10 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
     sal_Bool bSuccess = ShowTabWin(pNewTabWin, pUndoAction,bAppend);
     if(!bSuccess)
     {
+        // reset table window
+        pUndoAction->SetTabWin(NULL);
+        pUndoAction->SetOwnership(sal_False);
+
         delete pUndoAction;
         if(bAppend)
             delete pNewTabWinData;
