@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:33:32 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 
 #ifndef SC_UNONAMES_HXX
 #define SC_UNONAMES_HXX
+
+// service names
+#define SC_SERVICENAME_VALBIND      "drafts.com.sun.star.table.CellValueBinding"
+#define SC_SERVICENAME_LISTCELLBIND "drafts.com.sun.star.table.ListPositionCellBinding"
+#define SC_SERVICENAME_LISTSOURCE   "drafts.com.sun.star.table.CellRangeListSource"
+#define SC_SERVICENAME_CELLADDRESS  "com.sun.star.table.CellAddressConversion"
+#define SC_SERVICENAME_RANGEADDRESS "com.sun.star.table.CellRangeAddressConversion"
 
 //  document
 #define SC_UNO_AREALINKS            "AreaLinks"
@@ -523,6 +530,17 @@
 #define SC_UNONAME_PAGESIZE         "PageSize"
 #define SC_UNONAME_RENDERDEV        "RenderDevice"
 #define SC_UNONAME_SOURCERANGE      "SourceRange"
+
+// CellValueBinding
+#define SC_UNONAME_BOUNDCELL        "BoundCell"
+// CellRangeListSource
+#define SC_UNONAME_CELLRANGE        "CellRange"
+
+// CellAddressConversion / CellRangeAddressConversion
+#define SC_UNONAME_ADDRESS          "Address"
+#define SC_UNONAME_UIREPR           "UserInterfaceRepresentation"
+#define SC_UNONAME_PERSREPR         "PersistentRepresentation"
+#define SC_UNONAME_REFSHEET         "ReferenceSheet"
 
 #endif
 
