@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-17 21:41:06 $
+ *  last change: $Author: os $ $Date: 2002-12-02 13:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ Menu MN_SPELL_POPUP
         {
             Identifier = MN_SPELLING ;
             HelpID = HID_LINGU_SPELLING_DLG ;
-            Text = "~Rechtschreibung..." ;
+            Text = "~Rechtschreibprüfung..." ;
             Text [ English ] = "~Spelling..." ;
             Text[ language_user1 ] = "triple dots (...) are required now at the end of the text";
             Text [ english_us ] = "~Spellcheck..." ;
@@ -80,11 +80,11 @@ Menu MN_SPELL_POPUP
             Text [ french ] = "~Orthographe..." ;
             Text [ dutch ] = "~Spellingcontrole..." ;
             Text [ swedish ] = "~Rättstavning..." ;
-            Text [ danish ] = "Stavekont~rol" ;
+            Text [ danish ] = "~Stavekontrol…" ;
             Text [ portuguese ] = "Or~tografia" ;
             Text [ portuguese_brazilian ] = "~Rechtschreibung" ;
             Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥(~S)...";
-            Text[ russian ] = "Ïğàâ~îïèñàíèå...";
+            Text[ russian ] = "Ïğîâåğêà îğôîãğàôèè...";
             Text[ polish ] = "~Pisownia...";
             Text[ japanese ] = "æ–‡ç« æ ¡æ­£(~S)...";
             Text[ chinese_traditional ] = "æ‹¼å¯«æª¢æŸ¥(~S)...";
@@ -94,8 +94,9 @@ Menu MN_SPELL_POPUP
             Text[ greek ] = "Ïñèïã~ñáößá";
             Text[ korean ] = "ë§ì¶¤ë²•(~S)";
             Text[ turkish ] = "~Yazım kılavuzu";
-            Text[ catalan ] = "Ortogra~fía";
-            Text[ finnish ] = "~Oikeinkirjoituksen tarkistus";
+            Text[ catalan ] = "Ortogra~fia";
+            Text[ finnish ] = "~Oikeinkirjoituksen tarkistus...";
+            Text[ thai ] = "~à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸à¸²à¸£à¸ªà¸°à¸à¸”";
         };
         MenuItem
         {
@@ -127,8 +128,9 @@ Menu MN_SPELL_POPUP
             Text[ korean ] = "ì¶”ê°€(~A)";
             Text[ turkish ] = "Ekle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Incluir";
-            Text[ finnish ] = "~Lis??";
+            Text[ catalan ] = "~Afegeix";
+            Text[ finnish ] = "Lis~ää";
+            Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡";
         };
         MenuItem
         {
@@ -149,19 +151,20 @@ Menu MN_SPELL_POPUP
             Text [ dutch ] = "Alle ~negeren" ;
             Text [ spanish ] = "~Ignorar todo" ;
             Text [ english_us ] = "Ignore All" ;
-            Text[ chinese_simplified ] = "å…¨éƒ¨å¿½ç•¥(~I)";
+            Text[ chinese_simplified ] = "å…¨éƒ¨å¿½ç•¥";
             Text[ russian ] = "Ïğîïóñêàòü âñå";
             Text[ polish ] = "Zignoruj wszystkie";
             Text[ japanese ] = "ã™ã¹ã¦ç„¡è¦–ã™ã‚‹";
             Text[ language_user1 ] = " ";
-            Text[ chinese_traditional ] = "å…¨éƒ¨å¿½ç•¥(~I)";
+            Text[ chinese_traditional ] = "å…¨éƒ¨å¿½ç•¥";
             Text[ arabic ] = "ÊÌÇåá Çáßá";
             Text[ dutch ] = "Alle ~negeren";
-            Text[ chinese_simplified ] = "å…¨éƒ¨å¿½ç•¥(~I)";
+            Text[ chinese_simplified ] = "å…¨éƒ¨å¿½ç•¥";
             Text[ greek ] = "ĞáñÜ~âëåøç üëùí";
             Text[ korean ] = "ëª¨ë‘ ë¬´ì‹œ";
             Text[ turkish ] = "Tümünü yok say";
-            Text[ catalan ] = "~Ignorar todo";
+            Text[ catalan ] = "Ignora'ls tots";
+            Text[ thai ] = "à¸¢à¸à¹€à¸¥à¸´à¸à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
         };
         MenuItem
         {
@@ -181,20 +184,21 @@ Menu MN_SPELL_POPUP
             Text [ french ] = "AutoCo~rrection" ;
             Text [ dutch ] = "Auto~Correctie" ;
             Text [ portuguese ] = "Auto~Correcção" ;
-            Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£(~K)";
+            Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£";
             Text[ russian ] = "Àâòîçàìåíà";
             Text[ polish ] = "Autokorekta";
-            Text[ japanese ] = "ï½µï½°ï¾„ï½ºï¾šï½¸ï¾„";
-            Text[ chinese_traditional ] = "è‡ªå‹•æ ¡æ­£(~K)";
+            Text[ japanese ] = "ã‚ªãƒ¼ãƒˆã‚³ãƒ¬ã‚¯ãƒˆ";
+            Text[ chinese_traditional ] = "è‡ªå‹•æ ¡æ­£";
             Text[ arabic ] = "ÊÕÍíÍ ÊáŞÇÆí";
             Text[ dutch ] = "Auto~Correctie";
-            Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£(~K)";
+            Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£";
             Text[ greek ] = "Áõôï~Äéüñèùóç";
             Text[ korean ] = "ìë™ê³ ì¹¨";
             Text[ turkish ] = "Otomatik düzeltme";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Auto~Corrección";
+            Text[ catalan ] = "Auto~correcció";
             Text[ finnish ] = "Automaattinen korjaus";
+            Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¹ƒà¸«à¹‰à¸–à¸¹à¸à¸•à¹‰à¸­à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
         };
     };
 };
@@ -210,7 +214,7 @@ String STR_WORD
     Text [ italian ] = "Il termine è " ;
     Text [ spanish ] = "La palabra es " ;
     Text [ french ] = "Le mot est en " ;
-    Text [ dutch ] = "Woord is  " ;
+    Text [ dutch ] = "Woord is" ;
     Text[ chinese_simplified ] = "å•è¯æ˜¯ ";
     Text[ russian ] = "ßçûê ñëîâà: ";
     Text[ polish ] = "S³owo jest   ";
@@ -218,13 +222,14 @@ String STR_WORD
     Text[ chinese_traditional ] = "å­—æ˜¯ ";
     Text[ language_user1 ] = " ";
     Text[ arabic ] = "áÛÉ ÇáßáãÉ: ";
-    Text[ dutch ] = "Woord is  ";
+    Text[ dutch ] = "Woord is";
     Text[ chinese_simplified ] = "å•è¯æ˜¯ ";
     Text[ greek ] = "Ç ëİîç åßíáé ";
     Text[ korean ] = "ë‹¨ì–´ëŠ” ";
     Text[ turkish ] = "Sözcük: ";
-    Text[ catalan ] = "La palabra es ";
+    Text[ catalan ] = "La paraula és ";
     Text[ finnish ] = "sana on ";
+    Text[ thai ] = "à¸„à¸³à¹ƒà¸™ ";
 };
 String STR_PARAGRAPH
 {
@@ -238,7 +243,7 @@ String STR_PARAGRAPH
     Text [ italian ] = "Il paragrafo è " ;
     Text [ spanish ] = "El párrafo es  " ;
     Text [ french ] = "Le paragraphe est en" ;
-    Text [ dutch ] = "Alinea is  " ;
+    Text [ dutch ] = "Alinea is" ;
     Text[ chinese_simplified ] = "æ®µè½æ˜¯ ";
     Text[ russian ] = "ßçûê àáçàöà: ";
     Text[ polish ] = "Akapit jest   ";
@@ -246,13 +251,14 @@ String STR_PARAGRAPH
     Text[ chinese_traditional ] = "æ®µè½æ˜¯ ";
     Text[ arabic ] = "áÛÉ ÇáİŞÑÉ: ";
     Text[ language_user1 ] = " ";
-    Text[ dutch ] = "Alinea is  ";
+    Text[ dutch ] = "Alinea is";
     Text[ chinese_simplified ] = "æ®µè½æ˜¯ ";
     Text[ greek ] = "Ç ğáñÜãñáöïò åßíáé ";
     Text[ korean ] = "ë‹¨ë½ì€ ";
     Text[ turkish ] = "Paragraf: ";
-    Text[ catalan ] = "El párrafo es  ";
+    Text[ catalan ] = "El paràgraf és  ";
     Text[ finnish ] = "Kappale on ";
+    Text[ thai ] = "à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²à¹ƒà¸™ ";
 };
 String STR_SPELL_OK
 {
@@ -269,9 +275,9 @@ String STR_SPELL_OK
     Text [ french ] = "La vérification de l'orthographe est terminée !" ;
     Text [ dutch ] = "De spellingcontrole is beëindigd!" ;
     Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥å·²ç»ç»“æŸï¼";
-    Text[ russian ] = "Ïğîâåğêà ïğàâîïèñàíèÿ çàêîí÷åíà!";
+    Text[ russian ] = "Ïğîâåğêà îğôîãğàôèè çàâåğøåíà.";
     Text[ polish ] = "Sprawdzanie pisowni zosta³o zakoñczone!";
-    Text[ japanese ] = "ï½½ï¾ï¾Ÿï¾™ï¾ï½ªï½¯ï½¸ã¯çµ‚äº†ã—ã¾ã—ãŸã€‚";
+    Text[ japanese ] = "ã‚¹ãƒšãƒ«ãƒã‚§ãƒƒã‚¯ã¯çµ‚äº†ã—ã¾ã—ãŸã€‚";
     Text[ chinese_traditional ] = "æ‹¼å¯«æª¢æŸ¥å·²ç¶“çµæŸï¹—";
     Text[ arabic ] = ".Êã ÇáÇäÊåÇÁ ãä ÇáÊÏŞíŞ ÇáÅãáÇÆí";
     Text[ dutch ] = "De spellingcontrole is beëindigd!";
@@ -280,8 +286,9 @@ String STR_SPELL_OK
     Text[ korean ] = "ë§ì¶¤ë²• ê²€ì‚¬ê°€ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.";
     Text[ turkish ] = "Yazım denetimi tamamlandı!";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "¡Ha finalizado la revisión ortográfica!";
+    Text[ catalan ] = "Ha finalitzat la revisió ortogràfica!";
     Text[ finnish ] = "Oikeinkirjoituksen tarkistus on valmis.";
+    Text[ thai ] = "à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸à¸²à¸£à¸ªà¸°à¸à¸”à¸ªà¸¡à¸šà¸¹à¸£à¸“à¹Œ";
 };
 String STR_HYP_OK
 {
@@ -297,9 +304,9 @@ String STR_HYP_OK
     Text [ french ] = "La coupure des mots est terminée !" ;
     Text [ dutch ] = "De verdeling in lettergrepen is beëindigd!" ;
     Text[ chinese_simplified ] = "è¿å­—ç¬¦æ£€æŸ¥å·²ç»å®Œæˆï¼";
-    Text[ russian ] = "Ğàññòàíîâêà ïåğåíîñîâ çàêîí÷åíà!";
+    Text[ russian ] = "Ğàññòàíîâêà ïåğåíîñîâ çàâåğøåíà";
     Text[ polish ] = "Dzielenie wyrazów zosta³o zakoñczone.";
-    Text[ japanese ] = "ï¾Šï½²ï¾Œï¾ˆï½°ï½¼ï½®ï¾ãŒçµ‚äº†ã—ã¾ã—ãŸã€‚";
+    Text[ japanese ] = "ãƒã‚¤ãƒ•ãƒãƒ¼ã‚·ãƒ§ãƒ³ãŒçµ‚äº†ã—ã¾ã—ãŸã€‚";
     Text[ chinese_traditional ] = "é€£å­—ç¬¦æª¢æŸ¥å·²ç¶“å®Œæˆï¼";
     Text[ arabic ] = "ÊãøóÊ ÚãáíÉ İÕá ÇáãŞÇØÚ!";
     Text[ dutch ] = "De verdeling in lettergrepen is beëindigd!";
@@ -308,9 +315,14 @@ String STR_HYP_OK
     Text[ korean ] = "í•˜ì´í”ˆì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.";
     Text[ turkish ] = "Heceleme tamamlandı.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "La separación silábica ha finalizado";
+    Text[ catalan ] = "Ha finalitzat la separació en síl.labes!";
     Text[ finnish ] = "Tavutus valmis";
+    Text[ thai ] = "à¹ƒà¸Šà¹‰à¸¢à¸±à¸•à¸´à¸ à¸±à¸‡à¸„à¹Œà¸ªà¸¡à¸šà¸¹à¸£à¸“à¹Œ";
 };
+
+
+
+
 
 
 
