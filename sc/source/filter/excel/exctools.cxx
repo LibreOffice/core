@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-15 09:02:52 $
+ *  last change: $Author: dr $ $Date: 2001-03-19 13:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,10 +200,12 @@ RootData::RootData( void )
     pTabBuffer = NULL;
     pTabId = NULL;
     pUserBViewList = NULL;
+    pCellMerging = NULL;
     pNameList = NULL;
     pPalette2 = NULL;
     pFontRecs = NULL;
     pFormRecs = NULL;
+    pXFRecs = NULL;
     pExtSheetCntAndRecs = NULL;
     nRowMax = 0;
     nRangeNameIndex = 1;

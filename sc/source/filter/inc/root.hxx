@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-15 09:03:46 $
+ *  last change: $Author: dr $ $Date: 2001-03-19 13:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,13 @@
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
-#ifndef SC_SCGLOB_HXX
-#include <global.hxx>
+#ifndef _SVSTOR_HXX
+#include <so3/svstor.hxx>
 #endif
 
+#ifndef SC_SCGLOB_HXX
+#include "global.hxx"
+#endif
 #ifndef _FLTTYPES_HXX
 #include "flttypes.hxx"
 #endif
@@ -77,10 +80,6 @@
 #endif
 #ifndef _EXCDEFS_HXX
 #include "excdefs.hxx"
-#endif
-
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
 #endif
 
 class SvStorage;
@@ -108,12 +107,13 @@ class XclImpTabIdBuffer;
 class ExcETabNumBuffer;
 class XclExpChTrTabId;
 class XclExpUserBViewList;
+class XclExpCellMerging;
 class ExcNameList;
 class ExcPalette2;
 class UsedFontList;
 class UsedFormList;
+class UsedAttrList;
 class XclSstList;
-class XclSupbookList;
 class XclExternsheetList;
 class XclObjList;
 class XclNoteList;
@@ -184,10 +184,12 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     ExcETabNumBuffer*   pTabBuffer;
     XclExpChTrTabId*    pTabId;             // pointer to rec list, do not destroy
     XclExpUserBViewList* pUserBViewList;    // pointer to rec list, do not destroy
+    XclExpCellMerging*  pCellMerging;       // pointer to rec list, do not destroy
     ExcNameList*        pNameList;
     ExcPalette2*        pPalette2;
     UsedFontList*       pFontRecs;
     UsedFormList*       pFormRecs;
+    UsedAttrList*       pXFRecs;
     ExcExternDup*       pExtSheetCntAndRecs;
     UINT16              nColMax;
     UINT16              nRowMax;

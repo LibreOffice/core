@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-13 10:10:47 $
+ *  last change: $Author: dr $ $Date: 2001-03-19 13:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,10 +213,11 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
     UINT16  nExcTabCount    = rTabBuffer.GetExcTabCount();
     UINT16  nCodenames      = rR.nCodenames;
 
-    ExcNameList*    pNameL      = rR.pNameList = new ExcNameList;
-    ExcPalette2*    pPalette2   = rR.pPalette2 = new ExcPalette2( *rR.pColor );
-    UsedFontList*   pFontRecs   = rR.pFontRecs = new UsedFontList( rR ) ;
-    UsedFormList*   pFormRecs   = rR.pFormRecs = new UsedFormList;
+    ExcNameList*    pNameL      = rR.pNameList  = new ExcNameList;
+    ExcPalette2*    pPalette2   = rR.pPalette2  = new ExcPalette2( *rR.pColor );
+    UsedFontList*   pFontRecs   = rR.pFontRecs  = new UsedFontList( rR ) ;
+    UsedFormList*   pFormRecs   = rR.pFormRecs  = new UsedFormList;
+    UsedAttrList*   pXFRecs     = rR.pXFRecs    = new UsedAttrList( &rR, *pPalette2, *pFontRecs, *pFormRecs );
 
     XclSstList*         pSstRecs            = NULL;
     XclExternsheetList* pExternsheetRecs    = NULL;     // change: ExternsheetList includes Supbooks
@@ -226,18 +227,14 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         rR.pExternsheetRecs = pExternsheetRecs  = new XclExternsheetList( &rR );
     }
 
-    rR.pObjRecs = NULL;     // per sheet
-    rR.pNoteRecs = NULL;        // per sheet
+    rR.pObjRecs = NULL;             // per sheet
+    rR.pNoteRecs = NULL;            // per sheet
 
     pFontRecs->SetBaseIndex( 6 );   // 6 statt 5 wegen Ausfall von 4!
     pFormRecs->SetBaseIndex( 164 ); // siehe auch ValueFormBuffer::nNewFormats
-    ExcFont::SetPalette( *pPalette2 );
-
-    UsedAttrList*   pXFRecs = new UsedAttrList( &rR, *pPalette2, *pFontRecs, *pFormRecs );
     pXFRecs->SetBaseIndex( 21 );
-    ExcCell::SetXFRecs( pXFRecs );
 
-
+    ExcFont::SetPalette( *pPalette2 );
     ExcXf::SetPalette( *pPalette2 );
 
     if( rR.eDateiTyp < Biff8 )
@@ -509,7 +506,7 @@ void ExcTable::FillAsTable( void )
     UINT16                  nMaxFlagCol = rDoc.GetLastFlaggedCol( nScTab );
     UINT16                  nMaxFlagRow = rDoc.GetLastFlaggedRow( nScTab );;
 
-    ExcRecord*              pAktExcCell;
+    ExcCell*                pAktExcCell;
     SvNumberFormatter&      rFormatter = *rR.pFormTable;
     const BiffTyp           eDateiTyp = rR.eDateiTyp;
 
@@ -521,7 +518,6 @@ void ExcTable::FillAsTable( void )
     rR.pStyleSheetItemSet = pStyleSheetItemSet;
 
     ExcRecordList*          pHlinks = new ExcRecordList;
-    XclCellMergingList*     pCellMerging = new XclCellMergingList;
     XclExpTableOpManager    aTableOpList;
     XclExpTableOp*          pTableOpRec = NULL;
 
@@ -573,6 +569,9 @@ void ExcTable::FillAsTable( void )
 
     ExcEOutline aExcOLCol( pOLColArray );
     ExcEOutline aExcOLRow( pOLRowArray );
+
+    DBG_ASSERT( !rR.pCellMerging, "ExcTable::FillAsTable - old merging list found" );
+    rR.pCellMerging = new XclExpCellMerging;
 
 
     ScUsedAreaIterator      aIterator( &rDoc, nScTab, 0, 0, nLastCol, nLastRow );
@@ -712,6 +711,9 @@ void ExcTable::FillAsTable( void )
         pAktScCell = aIterator.GetCell();
         pPatt = aIterator.GetPattern();
 
+        pAktExcCell = NULL;
+        pTableOpRec = NULL;
+
         // add ROW recs from empty rows
         while( nPrevRow < nRow )
         {
@@ -743,24 +745,24 @@ void ExcTable::FillAsTable( void )
                             ATTR_VALUE_FORMAT )).GetValue() ) == NUMBERFORMAT_LOGICAL )
                     {
                         pLastRKMulRK = NULL;
-                        pAktExcCell = new ExcBoolerr( aScPos, pPatt, UINT8(fVal), FALSE );
+                        pAktExcCell = new ExcBoolerr( aScPos, pPatt, rR, UINT8(fVal), FALSE );
                     }
                     else if( XclExpHelper::GetRKFromDouble( fVal, nRKValue ) )
                     {
                         if( pLastRKMulRK )
                         {
-                            ExcRKMulRK* pNewRK = pLastRKMulRK->Extend( aScPos, pPatt, nRKValue );
+                            ExcRKMulRK* pNewRK = pLastRKMulRK->Extend( aScPos, pPatt, rR, nRKValue );
                             if( pNewRK )
                                 pLastRKMulRK = pNewRK;
 
                             pAktExcCell = pNewRK;
                         }
                         else
-                            pAktExcCell = pLastRKMulRK = new ExcRKMulRK( aScPos, pPatt, nRKValue );
+                            pAktExcCell = pLastRKMulRK = new ExcRKMulRK( aScPos, pPatt, rR, nRKValue );
                     }
                     else
                     {
-                        pAktExcCell = new ExcNumber( aScPos, pPatt, fVal );
+                        pAktExcCell = new ExcNumber( aScPos, pPatt, rR, fVal );
                         pLastRKMulRK = NULL;
                     }
                 }
@@ -773,9 +775,9 @@ void ExcTable::FillAsTable( void )
                     ( ( ScStringCell* ) pAktScCell )->GetString( aTemp );
 
                     if ( rR.eDateiTyp < Biff8 )
-                        pAktExcCell = new ExcLabel( aScPos, pPatt, aTemp, rR );
+                        pAktExcCell = new ExcLabel( aScPos, pPatt, rR, aTemp );
                     else
-                        pAktExcCell = new ExcLabelSst( aScPos, pPatt, aTemp, rR );
+                        pAktExcCell = new ExcLabelSst( aScPos, pPatt, rR, aTemp );
                 }
                 break;
                 case CELLTYPE_FORMULA:
@@ -820,7 +822,7 @@ void ExcTable::FillAsTable( void )
 
                     }
                     ExcFormula* pFmlaCell = new ExcFormula(
-                        &rR, aScPos, pPatt, nAltNumForm, bForceAltNumForm, *pFormCell->GetCode(),
+                        aScPos, pPatt, rR, nAltNumForm, bForceAltNumForm, *pFormCell->GetCode(),
                         &pLastArray, ( ScMatrixMode ) pFormCell->GetMatrixFlag(), &pShrdFmla, &aShrdFmlaList );
                     pAktExcCell = pFmlaCell;
                     pTableOpRec = aTableOpList.InsertCell( pFormCell->GetCode(), *pFmlaCell );
@@ -830,9 +832,9 @@ void ExcTable::FillAsTable( void )
                 {
                     pLastRKMulRK = NULL;
                     if( rR.eDateiTyp < Biff8 )
-                        pAktExcCell = new ExcRString( &rR, aScPos, pPatt, *((ScEditCell*) pAktScCell) );
+                        pAktExcCell = new ExcRString( aScPos, pPatt, rR, *((ScEditCell*) pAktScCell) );
                     else
-                        pAktExcCell = new ExcLabelSst( aScPos, pPatt, *((ScEditCell*) pAktScCell), rR );
+                        pAktExcCell = new ExcLabelSst( aScPos, pPatt, rR, *((ScEditCell*) pAktScCell) );
 
                     XclHlink*&      rpHlink = rR.pLastHlink;
                     if( rpHlink )
@@ -867,14 +869,14 @@ void ExcTable::FillAsTable( void )
             pNote = NULL;
             if( pLastBlank && pLastBlank->GetLastCol() + 1 == aIterator.GetStartCol() )
             {
-                pLastBlank->Add( pPatt,
+                pLastBlank->Add( aScPos, pPatt, rR,
                     aIterator.GetEndCol() - aIterator.GetStartCol() + 1 );
 
                 pAktScCell = NULL;  // kein NEUER Record!
             }
             else
             {
-                pLastBlank = new ExcBlankMulblank( aScPos, pPatt,
+                pLastBlank = new ExcBlankMulblank( aScPos, pPatt, rR,
                     aIterator.GetEndCol() - aIterator.GetStartCol() + 1 );
                 pAktExcCell = pLastBlank;
             }
@@ -883,7 +885,6 @@ void ExcTable::FillAsTable( void )
         if( pAktExcCell )
         {
             Add( pAktExcCell );
-            pAktExcCell = NULL;
 
             if( pLastArray )
             {
@@ -904,10 +905,7 @@ void ExcTable::FillAsTable( void )
         }
 
         if( pTableOpRec )
-        {
             Add( pTableOpRec );
-            pTableOpRec = NULL;
-        }
 
         // notes
         String sNoteText;
@@ -936,9 +934,11 @@ void ExcTable::FillAsTable( void )
         {
             ScMergeAttr& rItem = (ScMergeAttr&) pPatt->GetItem( ATTR_MERGE );
             if( rItem.IsMerged() )
+            {
+                UINT16 nXF = pAktExcCell ? pAktExcCell->GetXF() : (pLastRKMulRK ? pLastRKMulRK->GetXF() : 0);
                 for( UINT16 iCol = aIterator.GetStartCol(); iCol <= aIterator.GetEndCol(); iCol++ )
-                    pCellMerging->Append( iCol, rItem.GetColMerge(),
-                                            nRow, rItem.GetRowMerge() );
+                    rR.pCellMerging->Append( iCol, rItem.GetColMerge(), nRow, rItem.GetRowMerge(), nXF );
+            }
         }
 
         bIter = aIterator.GetNext();
@@ -970,7 +970,8 @@ void ExcTable::FillAsTable( void )
     }
 
     // insert merged cells
-    Add( pCellMerging );
+    Add( rR.pCellMerging );
+    rR.pCellMerging = NULL;
     // update dimensions
     pDimensions->SetLimits( nFirstCol, nFirstRow, nLastCol, nLastRow );
     // update formula cells for multiple operations
@@ -1195,12 +1196,11 @@ ExcDocument::~ExcDocument()
 
 void ExcDocument::ReadDoc( void )
 {
-    CodenameList*   pL = pExcRoot->pExtDocOpt->GetCodenames();
-    UINT16          nCodenames = pExcRoot->nCodenames = (UINT16) (pL ? pL->Count() : 0);
+    pExcRoot->nCodenames = pExcRoot->pTabBuffer->GetCodenameCount();
 
     aHeader.FillAsHeader( aBundleSheetRecList );
 
-    UINT16          nTabs = Max( pExcRoot->pDoc->GetTableCount(), nCodenames );
+    UINT16          nTabs = pExcRoot->pTabBuffer->GetMaxScTabCount();
     UINT16          nTabCnt;
     pExcRoot->pAktTab = &nTabCnt;
 

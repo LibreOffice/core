@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-15 09:03:45 $
+ *  last change: $Author: dr $ $Date: 2001-03-19 13:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,11 @@
 
 #define EXC_XF_LOCKED               0x0001
 #define EXC_XF_HIDDEN               0x0002
+
+//_________________________________________________________
+// (0x00E5) CELLMERGING
+
+#define EXC_MERGE_MAXCOUNT          1024
 
 //_________________________________________________________
 // (0x01B8) HLINK

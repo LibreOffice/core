@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:53:18 $
+ *  last change: $Author: dr $ $Date: 2001-03-19 13:24:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1589,19 +1589,23 @@ ExcBofC8::ExcBofC8()
 #if 0
 // --- class ExcLabel8 -----------------------------------------------
 
-ExcLabel8::ExcLabel8( const ScAddress& rPos, const ScPatternAttr* pAttr,
-                    const String& rNewText )
-        :
-        ExcCell( rPos, pAttr ),
-        aText( rNewText, 255 )
+ExcLabel8::ExcLabel8(
+        const ScAddress& rPos,
+        const ScPatternAttr* pAttr,
+        RootData& rRoot,
+        const String& rNewText ) :
+    ExcCell( rPos, pAttr, rRoot ),
+    aText( rNewText, 255 )
 {
 }
 
 
-ExcLabel8::ExcLabel8( const ScAddress& rPos, const ScPatternAttr* pAttr,
-                    const ScEditCell& rEdCell, RootData& rRoot )
-        :
-        ExcCell( rPos, pAttr )
+ExcLabel8::ExcLabel8(
+        const ScAddress& rPos,
+        const ScPatternAttr* pAttr,
+        RootData& rRoot,
+        const ScEditCell& rEdCell ) :
+    ExcCell( rPos, pAttr, rRoot )
 {
     String aStr;
     aText.SetRichData( new ExcRichStr( *this, aStr, pAttr, rEdCell, rRoot, 255 ) );
@@ -1634,19 +1638,23 @@ ULONG ExcLabel8::GetDiffLen() const
 #endif
 // --- class ExcLabelSst ---------------------------------------------
 
-ExcLabelSst::ExcLabelSst( const ScAddress& rPos, const ScPatternAttr* pAttr,
-                    const String& rNewText, RootData& rRoot )
-        :
-        ExcCell( rPos, pAttr )
+ExcLabelSst::ExcLabelSst(
+        const ScAddress& rPos,
+        const ScPatternAttr* pAttr,
+        RootData& rRoot,
+        const String& rNewText ) :
+    ExcCell( rPos, pAttr, rRoot )
 {
     nIsst = rRoot.pSstRecs->Add( new XclExpUniString( rNewText ) );
 }
 
 
-ExcLabelSst::ExcLabelSst( const ScAddress& rPos, const ScPatternAttr* pAttr,
-                    const ScEditCell& rEdCell, RootData& rRoot )
-        :
-        ExcCell( rPos, pAttr )
+ExcLabelSst::ExcLabelSst(
+        const ScAddress& rPos,
+        const ScPatternAttr* pAttr,
+        RootData& rRoot,
+        const ScEditCell& rEdCell ) :
+    ExcCell( rPos, pAttr, rRoot )
 {
     XclExpRichString* pRS = new XclExpRichString;
     String aStr;
@@ -2212,71 +2220,59 @@ ULONG XclDConRef::GetLen() const
 
 
 
-// --- class XclCellMerging, class XclCellMergingList ----------------
+// --- class XclExpCellMerging ---------------------------------------
 
-XclCellMerging::~XclCellMerging()
+void XclExpCellMerging::Append( UINT16 nCol1, UINT16 nColCnt, UINT16 nRow1, UINT16 nRowCnt, UINT16 nXF )
 {
-}
-
-void XclCellMerging::Append( UINT16 nCol1, UINT16 nColCnt,
-                             UINT16 nRow1, UINT16 nRowCnt )
-{
-    aCoordList.Append( nRow1 );
-    aCoordList.Append( nRow1 + nRowCnt - 1 );
-    aCoordList.Append( nCol1 );
-    aCoordList.Append( nCol1 + nColCnt - 1 );
-    nCount++;
-}
-
-void XclCellMerging::SaveCont( XclExpStream& rStrm )
-{
-    rStrm << nCount;
-    for( UINT16 nInd = 0; nInd < nCount * 4; nInd++ )
-        rStrm << aCoordList.Get( nInd );
-}
-
-UINT16 XclCellMerging::GetNum() const
-{
-    return 0x00E5;
-}
-
-ULONG XclCellMerging::GetLen() const
-{
-    return nCount * 8 + 2;
+    AppendCell( new XclExpMergedCell( nCol1, nCol1 + nColCnt - 1, nRow1, nRow1 + nRowCnt - 1, nXF ) );
 }
 
 
-
-
-XclCellMergingList::~XclCellMergingList()
+BOOL XclExpCellMerging::FindNextMerge( const ScAddress& rPos, UINT16& rnCol )
 {
-    for( XclCellMerging* pMrg = _First(); pMrg; pMrg = _Next() )
-        delete pMrg;
-}
-
-XclCellMerging* XclCellMergingList::InsertNewRec()
-{
-    XclCellMerging* pMrg = new XclCellMerging;
-    List::Insert( pMrg, LIST_APPEND );
-    return pMrg;
-}
-
-void XclCellMergingList::Append( UINT16 nCol1, UINT16 nColCnt,
-                                UINT16 nRow1, UINT16 nRowCnt )
-{
-    if( !pCurrRec )
-        pCurrRec = InsertNewRec();
-    if( pCurrRec->IsListFull() )
-        pCurrRec = InsertNewRec();
-
-    pCurrRec->Append( nCol1, nColCnt, nRow1, nRowCnt );
+    rnCol = 0xFFFF;
+    for( XclExpMergedCell* pCell = FirstCell(); pCell; pCell = NextCell() )
+        if( (pCell->nRow1 <= rPos.Row()) && (rPos.Row() <= pCell->nRow2) &&
+            (rPos.Col() <= pCell->nCol1) && (pCell->nCol1 < rnCol) )
+            rnCol = pCell->nCol1;
+    return rnCol < 0xFFFF;
 }
 
 
-void XclCellMergingList::Save( XclExpStream& rStrm )
+BOOL XclExpCellMerging::FindMergeBaseXF( const ScAddress& rPos, UINT16& rnXF, UINT16& rnColCount )
 {
-    for( XclCellMerging* pMrg = _First(); pMrg; pMrg = _Next() )
-        pMrg->Save( rStrm );
+    for( XclExpMergedCell* pCell = FirstCell(); pCell; pCell = NextCell() )
+        if( (pCell->nCol1 <= rPos.Col()) && (rPos.Col() <= pCell->nCol2) &&
+            (pCell->nRow1 <= rPos.Row()) && (rPos.Row() <= pCell->nRow2) )
+        {
+            rnXF = pCell->nXF;
+            rnColCount = pCell->nCol2 - rPos.Col() + 1;
+            return TRUE;
+        }
+    return FALSE;
+}
+
+
+void XclExpCellMerging::Save( XclExpStream& rStrm )
+{
+    ULONG nCount = aCellList.Count();
+    if( !nCount ) return;
+
+    ULONG nIndex = 0;
+    while( nCount )
+    {
+        ULONG nPortion = Min( nCount, (ULONG)EXC_MERGE_MAXCOUNT );
+        nCount -= nPortion;
+        rStrm.StartRecord( 0x00E5, 2 + nPortion * 8 );
+        rStrm << (UINT16) nPortion;
+        while( nPortion-- )
+        {
+            XclExpMergedCell* pCell = GetCell( nIndex++ );
+            if( pCell )
+                rStrm << *pCell;
+        }
+        rStrm.EndRecord();
+    }
 }
 
 

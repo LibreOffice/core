@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-01 15:31:49 $
+ *  last change: $Author: dr $ $Date: 2001-03-19 13:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,12 +768,13 @@ public:
                                 ExcLabel8(
                                     const ScAddress&        rPos,
                                     const ScPatternAttr*    pAttr,
+                                    RootData&               rRoot,
                                     const String&           rText );
                                 ExcLabel8(
                                     const ScAddress&        rPos,
                                     const ScPatternAttr*    pAttr,
-                                    const ScEditCell&       rEdCell,
-                                    RootData&               rRoot );
+                                    RootData&               rRoot,
+                                    const ScEditCell&       rEdCell );
     virtual                     ~ExcLabel8();
 
     virtual UINT16              GetNum() const;
@@ -794,13 +795,13 @@ public:
                                 ExcLabelSst(
                                     const ScAddress&        rPos,
                                     const ScPatternAttr*    pAttr,
-                                    const String&           rText,
-                                    RootData&               rRoot );
+                                    RootData&               rRoot,
+                                    const String&           rText );
                                 ExcLabelSst(
                                     const ScAddress&        rPos,
                                     const ScPatternAttr*    pAttr,
-                                    const ScEditCell&       rEdCell,
-                                    RootData&               rRoot );
+                                    RootData&               rRoot,
+                                    const ScEditCell&       rEdCell );
     virtual                     ~ExcLabelSst();
 
     virtual UINT16              GetNum() const;
@@ -982,50 +983,53 @@ public:
 };
 
 
-// --- class XclCellMerging, class XclCellMergingList ----------------
+// --- class XclExpCellMerging ---------------------------------------
 
-class XclCellMerging : public ExcRecord
+struct XclExpMergedCell
 {
-private:
-    UINT16                  nCount;
-    UINT16List              aCoordList;
+    UINT16                  nCol1;
+    UINT16                  nCol2;
+    UINT16                  nRow1;
+    UINT16                  nRow2;
+    UINT16                  nXF;
 
-    virtual void            SaveCont( XclExpStream& rStrm );
-
-public:
-    inline                  XclCellMerging() : nCount( 0 ) {}
-    virtual                 ~XclCellMerging();
-
-    inline BOOL             IsListFull() const  { return nCount >= 1024; }
-    void                    Append( UINT16 nCol1, UINT16 nColCnt,
-                                    UINT16 nRow1, UINT16 nRowCnt );
-
-    virtual UINT16          GetNum() const;
-    virtual ULONG           GetLen() const;
+    inline                  XclExpMergedCell( UINT16 nC1, UINT16 nC2, UINT16 nR1, UINT16 nR2, UINT16 _nXF ) :
+                                nCol1( nC1 ), nCol2( nC2 ), nRow1( nR1 ), nRow2( nR2 ), nXF( _nXF ) {}
 };
 
+inline XclExpStream& operator<<( XclExpStream& rStrm, const XclExpMergedCell& rCell )
+{
+    return (rStrm << rCell.nRow1 << rCell.nRow2 << rCell.nCol1 << rCell.nCol2);
+}
 
 
-class XclCellMergingList : public ExcEmptyRec, private List
+
+class XclExpCellMerging : public ExcEmptyRec
 {
 private:
-    XclCellMerging*         pCurrRec;
+    List                        aCellList;
 
-    inline XclCellMerging*  _First()    { return (XclCellMerging*) List::First(); }
-    inline XclCellMerging*  _Next()     { return (XclCellMerging*) List::Next(); }
+    inline XclExpMergedCell*    FirstCell() { return (XclExpMergedCell*) aCellList.First(); }
+    inline XclExpMergedCell*    NextCell()  { return (XclExpMergedCell*) aCellList.Next(); }
+    inline XclExpMergedCell*    GetCell( ULONG nIndex )
+                                    { return (XclExpMergedCell*) aCellList.GetObject( nIndex ); }
+    inline void                 AppendCell( XclExpMergedCell* pNewCell )
+                                    { aCellList.Insert( pNewCell, LIST_APPEND ); }
 
-    XclCellMerging*         InsertNewRec();
-
-protected:
 public:
-    inline                  XclCellMergingList() : pCurrRec( NULL ) {}
-    virtual                 ~XclCellMergingList();
+    void                        Append( UINT16 nCol1, UINT16 nColCnt, UINT16 nRow1, UINT16 nRowCnt, UINT16 nXF );
+    BOOL                        FindNextMerge( const ScAddress& rPos, UINT16& rnCol );
+    BOOL                        FindMergeBaseXF( const ScAddress& rPos, UINT16& rnXF, UINT16& rnColCount );
+    inline BOOL                 FindMergeBaseXF( const ScAddress& rPos, UINT16& rnXF );
 
-    void                    Append( UINT16 nCol1, UINT16 nColCnt,
-                                    UINT16 nRow1, UINT16 nRowCnt );
-
-    virtual void            Save( XclExpStream& rStrm );
+    virtual void                Save( XclExpStream& rStrm );
 };
+
+inline BOOL XclExpCellMerging::FindMergeBaseXF( const ScAddress& rPos, UINT16& rnXF )
+{
+    UINT16 nCols;
+    return FindMergeBaseXF( rPos, rnXF, nCols );
+}
 
 
 

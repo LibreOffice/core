@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-21 08:34:03 $
+ *  last change: $Author: dr $ $Date: 2001-03-19 13:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #include <vcl/exchange.hxx>
 #include <tools/globname.hxx>
 //#include <segmentc.hxx>
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 
 // wenn definiert, erzeugt Excel-Import nur Dumps ueber die DBG_TRACE-Funktion
 //#define __DUMPER__
@@ -84,6 +87,7 @@
 #include "excimp8.hxx"
 #include "exp_op.hxx"
 
+static NAMESPACE_VOS( OMutex )      aSemaphore;
 
 void InitFuncData( BOOL bBiff8 );
 void DeInitFuncData();
@@ -245,6 +249,8 @@ FltError ScExportExcel5( SfxMedium &rOutMedium, ScDocument *pDocument,
     const sal_Char*             pClipboard;
     const sal_Char*             pClassName;
 
+    aSemaphore.acquire();
+
     if( bBiff8 )
     {
         pWrkBook = pWrkbkNameExcel97;
@@ -260,51 +266,55 @@ FltError ScExportExcel5( SfxMedium &rOutMedium, ScDocument *pDocument,
 
     FltError                eRet = eERR_NI;
 
-    if( &rOutMedium == NULL )
-        return eERR_OPEN;
+    if( &rOutMedium != NULL )
+    {
+        SvStorage* pStorage = rOutMedium.GetStorage();
+        if( pStorage )
+        {// OLE2-Datei
+            SvStorageStreamRef  xStStream =
+                pStorage->OpenStream( _STRING( pWrkBook ), STREAM_READWRITE | STREAM_TRUNC );
 
-    SvStorage* pStorage = rOutMedium.GetStorage();
-    if( pStorage )
-    {// OLE2-Datei
-        SvStorageStreamRef  xStStream =
-            pStorage->OpenStream( _STRING( pWrkBook ), STREAM_READWRITE | STREAM_TRUNC );
+            xStStream->SetBufferSize( 32768 );
 
-        xStStream->SetBufferSize( 32768 );
+            InitFuncData( bBiff8 );
 
-        InitFuncData( bBiff8 );
+            if ( bBiff8 )
+            {
+                SvtSaveOptions aSaveOpt;
+                BOOL            bStoreRel = rOutMedium.IsRemote()?
+                                                aSaveOpt.IsSaveRelINet() :
+                                                aSaveOpt.IsSaveRelFSys();
+                ExportBiff8     aFilter( *pStorage, *xStStream, pDocument, eNach, bStoreRel );
+                eRet = aFilter.Write();
+            }
+            else
+            {
+                ExportBiff5     aFilter( *pStorage, *xStStream, pDocument, eNach );
+                eRet = aFilter.Write();
+            }
 
-        if ( bBiff8 )
-        {
-            SvtSaveOptions aSaveOpt;
-            BOOL            bStoreRel = rOutMedium.IsRemote()?
-                                            aSaveOpt.IsSaveRelINet() :
-                                            aSaveOpt.IsSaveRelFSys();
-            ExportBiff8     aFilter( *pStorage, *xStStream, pDocument, eNach, bStoreRel );
-            eRet = aFilter.Write();
+
+            if( eRet == eERR_RNGOVRFLW )
+                eRet = SCWARN_EXPORT_MAXROW;
+
+            DeInitFuncData();
+
+            xStStream->SetBufferSize( 0 );
+
+            // CompObj schreiben
+            SvGlobalName        aName( 0x00020810, 0x0000, 0x0000, 0xc0, 0x00,
+                                        0x00, 0x00, 0x00, 0x00, 0x00, 0x46 );
+            UINT32              nClip = Exchange::RegisterFormatName( _STRING( pClipboard ) );
+            pStorage->SetClass( aName, nClip, _STRING( pClassName ) );
+            xStStream->Commit();
         }
         else
-        {
-            ExportBiff5     aFilter( *pStorage, *xStStream, pDocument, eNach );
-            eRet = aFilter.Write();
-        }
-
-
-        if( eRet == eERR_RNGOVRFLW )
-            eRet = SCWARN_EXPORT_MAXROW;
-
-        DeInitFuncData();
-
-        xStStream->SetBufferSize( 0 );
-
-        // CompObj schreiben
-        SvGlobalName        aName( 0x00020810, 0x0000, 0x0000, 0xc0, 0x00,
-                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x46 );
-        UINT32              nClip = Exchange::RegisterFormatName( _STRING( pClipboard ) );
-        pStorage->SetClass( aName, nClip, _STRING( pClassName ) );
-        xStStream->Commit();
+            eRet = eERR_OPEN;
     }
     else
         eRet = eERR_OPEN;
+
+    aSemaphore.release();
 
     return eRet;
 }

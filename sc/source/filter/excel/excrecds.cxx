@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-28 06:50:27 $
+ *  last change: $Author: dr $ $Date: 2001-03-19 13:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,10 +97,11 @@
 #include "patattr.hxx"
 #include "cell.hxx"
 #include "document.hxx"
+#include "scextopt.hxx"
 #include "patattr.hxx"
 #include "attrib.hxx"
-#include "dociter.hxx"
 #include "progress.hxx"
+#include "dociter.hxx"
 #include "rangenam.hxx"
 #include "dbcolect.hxx"
 #include "stlsheet.hxx"
@@ -124,7 +125,8 @@
 //---------------------------------------------------- class ExcETabNumBuffer -
 
 ExcETabNumBuffer::ExcETabNumBuffer( ScDocument& rDoc ) :
-    bEnableLog( FALSE )
+    bEnableLog( FALSE ),
+    nCodeCnt( 0 )
 {
     nScCnt = rDoc.GetTableCount();
     pBuffer = nScCnt ? new UINT32[ nScCnt ] : NULL;
@@ -142,6 +144,15 @@ ExcETabNumBuffer::ExcETabNumBuffer( ScDocument& rDoc ) :
             pBuffer[ nTab ] = EXC_TABBUF_FLAGEXT;
     }
     ApplyBuffer();
+
+    if( rDoc.GetExtDocOptions() )
+    {
+        CodenameList* pCList = rDoc.GetExtDocOptions()->GetCodenames();
+        if( pCList )
+            nCodeCnt = (UINT16) Min( pCList->Count(), (ULONG) 0xFFFF );
+    }
+
+
 }
 
 ExcETabNumBuffer::~ExcETabNumBuffer()
@@ -208,7 +219,7 @@ void ExcETabNumBuffer::AppendTabRef( UINT16 nExcFirst, UINT16 nExcLast )
 
 
 //------------------------------------------------------------- class ExcCell -
-UsedAttrList*   ExcCell::pXFRecs = NULL;
+
 UINT32          ExcCell::nCellCount = 0UL;
 ScProgress*     ExcCell::pPrgrsBar = NULL;
 #ifdef DBG_UTIL
@@ -1093,19 +1104,23 @@ void ExcNote::Save( XclExpStream& rStrm )
 
 //------------------------------------------------------------- class ExcCell -
 
-ExcCell::ExcCell( const ScAddress rPos, const ScPatternAttr* pAttr,
-                    const ULONG nAltNumForm, BOOL bForceAltNumForm ) :
+ExcCell::ExcCell(
+        const ScAddress rPos,
+        const ScPatternAttr* pAttr,
+        RootData& rRootData,
+        const ULONG nAltNumForm,
+        BOOL bForceAltNumForm ) :
     aPos( rPos )
 {
     if( pPrgrsBar )
         pPrgrsBar->SetState( GetCellCount() );
-
     IncCellCount();
 
-    // Basis-Daten
-    DBG_ASSERT( pXFRecs, "-ExcCell::ExcCell(): Halt Fremder!" );
+    DBG_ASSERT( rRootData.pXFRecs, "ExcCell::ExcCell - missing XF record list" );
+    DBG_ASSERT( rRootData.pCellMerging, "ExcCell::ExcCell - missing cell merging list" );
 
-    nXF = pXFRecs->Find( pAttr, FALSE, nAltNumForm, bForceAltNumForm );
+    if( !rRootData.pCellMerging->FindMergeBaseXF( aPos, nXF ) )
+        nXF = rRootData.pXFRecs->Find( pAttr, FALSE, nAltNumForm, bForceAltNumForm );
 
 #ifdef DBG_UTIL
     _nRefCount++;
@@ -1115,7 +1130,6 @@ ExcCell::ExcCell( const ScAddress rPos, const ScPatternAttr* pAttr,
 
 ExcCell::~ExcCell()
 {
-    pXFRecs = NULL;
 #ifdef DBG_UTIL
     _nRefCount--;
     DBG_ASSERT( _nRefCount >= 0, "*ExcCell::~ExcCell(): Das war mindestens einer zuviel!" );
@@ -1123,11 +1137,16 @@ ExcCell::~ExcCell()
 }
 
 
+UINT16 ExcCell::GetXF() const
+{
+    return nXF;
+}
+
+
 void ExcCell::SaveCont( XclExpStream& rStrm )
 {
     if( pPrgrsBar )
         pPrgrsBar->SetState( GetCellCount() );
-
     IncCellCount();
 
     rStrm << ( UINT16 ) aPos.Row() << ( UINT16 ) aPos.Col() << nXF;
@@ -1149,9 +1168,12 @@ ULONG ExcCell::GetLen() const
 
 //----------------------------------------------------------- class ExcNumber -
 
-ExcNumber::ExcNumber( const ScAddress rPos, const ScPatternAttr* pAttr,
-    const double& rNewVal ) :
-    ExcCell( rPos, pAttr )
+ExcNumber::ExcNumber(
+        const ScAddress rPos,
+        const ScPatternAttr* pAttr,
+        RootData& rRootData,
+        const double& rNewVal ) :
+    ExcCell( rPos, pAttr, rRootData )
 {
     fVal = rNewVal;
 }
@@ -1178,10 +1200,14 @@ ULONG ExcNumber::GetDiffLen( void ) const
 
 //---------------------------------------------------------- class ExcBoolerr -
 
-ExcBoolerr::ExcBoolerr( const ScAddress rPos, const ScPatternAttr* pAttr,
-    UINT8 nValP, BOOL bIsError ) :
+ExcBoolerr::ExcBoolerr(
+        const ScAddress rPos,
+        const ScPatternAttr* pAttr,
+        RootData& rRootData,
+        UINT8 nValP,
+        BOOL bIsError ) :
     // #73420# force to "no number format" if boolean value
-    ExcCell( rPos, pAttr, (bIsError ? NUMBERFORMAT_ENTRY_NOT_FOUND : 0), !bIsError ),
+    ExcCell( rPos, pAttr, rRootData, (bIsError ? NUMBERFORMAT_ENTRY_NOT_FOUND : 0), !bIsError ),
     nVal( bIsError ? nValP : (nValP != 0) ),
     bError( bIsError != 0 )
 {
@@ -1209,63 +1235,63 @@ ULONG ExcBoolerr::GetDiffLen( void ) const
 
 //---------------------------------------------------------- class ExcRKMulRK -
 
-ExcRKMulRK::ExcRKMulRK( const ScAddress rPos, const ScPatternAttr *pAttr, const INT32 nVal ) :
-    aPos( rPos )
+ExcRKMulRK::ExcRKMulRK(
+        const ScAddress rPos,
+        const ScPatternAttr *pAttr,
+        RootData& rRootData,
+        const INT32 nVal ) :
+    ExcCell( rPos, pAttr, rRootData )
 {
     if( ExcCell::pPrgrsBar )
         ExcCell::pPrgrsBar->SetState( ExcCell::GetCellCount() );
-
     ExcCell::IncCellCount();
 
-    // Basis-Daten
-    DBG_ASSERT( ExcCell::pXFRecs, "-ExcRKMulRk::ExcRKMulRK(): Halt Fremder!" );
-
-    CONT*   pNewCont = new CONT;
-
-    if( pAttr )
-        pNewCont->nXF = ExcCell::pXFRecs->Find( pAttr );
-    else
-        pNewCont->nXF = 15;
+    ExcRKMulRKEntry* pNewCont = new ExcRKMulRKEntry;
+    pNewCont->nXF = nXF;
     pNewCont->nVal = nVal;
+
     List::Insert( pNewCont, LIST_APPEND );
 }
 
 
 ExcRKMulRK::~ExcRKMulRK()
 {
-    CONT*   pDel = ( CONT* ) List::First();
-    while( pDel )
-    {
+    for( ExcRKMulRKEntry* pDel = _First(); pDel; pDel = _Next() )
         delete pDel;
-        pDel = ( CONT* ) List::Next();
-    }
 }
 
 
 ExcRKMulRK* ExcRKMulRK::Extend(
-    const ScAddress rPos, const ScPatternAttr* pAttr, const INT32 nVal )
+        const ScAddress rPos,
+        const ScPatternAttr* pAttr,
+        RootData& rRootData,
+        const INT32 nVal )
 {
     if( aPos.Row() == rPos.Row() && aPos.Col() + List::Count() == rPos.Col() )
     {// extendable
         if( ExcCell::pPrgrsBar )
             ExcCell::pPrgrsBar->SetState( ExcCell::GetCellCount() );
-
         ExcCell::IncCellCount();
 
-        CONT*   pNewCont = new CONT;
+        ExcRKMulRKEntry* pNewCont = new ExcRKMulRKEntry;
 
-        if( pAttr )
-            pNewCont->nXF = ExcCell::pXFRecs->Find( pAttr );
-        else
-            pNewCont->nXF = 15;
+        if( !rRootData.pCellMerging->FindMergeBaseXF( rPos, pNewCont->nXF ) )
+            pNewCont->nXF = rRootData.pXFRecs->Find( pAttr );
         pNewCont->nVal = nVal;
         List::Insert( pNewCont, LIST_APPEND );
         return NULL;
     }
     else
     {// create new
-        return new ExcRKMulRK( rPos, pAttr, nVal );
+        return new ExcRKMulRK( rPos, pAttr, rRootData, nVal );
     }
+}
+
+
+UINT16 ExcRKMulRK::GetXF() const
+{
+    ExcRKMulRKEntry* pLast = List::Count() ? _Get( List::Count() - 1 ) : NULL;
+    return pLast ? pLast->nXF : 0;
 }
 
 
@@ -1274,24 +1300,23 @@ void ExcRKMulRK::SaveCont( XclExpStream& rStrm )
     if( ExcCell::pPrgrsBar )
         ExcCell::pPrgrsBar->SetState( ExcCell::GetCellCount() );
 
-    CONT*   pAct = ( CONT* ) List::First();
-
-    DBG_ASSERT( pAct, "-ExcRKMulRk::SaveCont(): einen brauch' ich schon! ")
+    ExcRKMulRKEntry* pCurr = _First();
+    DBG_ASSERT( pCurr, "ExcRKMulRK::SaveDiff - list empty" );
+    if( !pCurr ) return;
 
     if( IsRK() )
     {
-        rStrm << ( UINT16 ) aPos.Row()  << ( UINT16 ) aPos.Col() << pAct->nXF
-            << pAct->nVal;
+        rStrm << (UINT16) aPos.Row() << (UINT16) aPos.Col() << pCurr->nXF << pCurr->nVal;
         ExcCell::IncCellCount();
     }
     else
     {
         UINT16  nLastCol = aPos.Col();
-        rStrm << ( UINT16 ) aPos.Row()  << nLastCol;
-        while( pAct )
+        rStrm << (UINT16) aPos.Row()  << nLastCol;
+        while( pCurr )
         {
-            rStrm << pAct->nXF << pAct->nVal;
-            pAct = ( CONT* ) List::Next();
+            rStrm << pCurr->nXF << pCurr->nVal;
+            pCurr = _Next();
             ExcCell::IncCellCount();
             nLastCol++;
         }
@@ -1308,18 +1333,22 @@ UINT16 ExcRKMulRK::GetNum( void ) const
 }
 
 
-ULONG ExcRKMulRK::GetLen( void ) const
+ULONG ExcRKMulRK::GetDiffLen( void ) const
 {
-    return 6 + (IsRK() ? 4 : List::Count() * 6);
+    return IsRK() ? 4 : List::Count() * 6;
 }
 
 
 
 //------------------------------------------------------------ class ExcLabel -
 
-ExcLabel::ExcLabel( const ScAddress rPos, const ScPatternAttr* pAttr, const String& rText, RootData& rExcRoot ) :
-    ExcCell( rPos, pAttr ),
-    aText( rText, *rExcRoot.pCharset )
+ExcLabel::ExcLabel(
+        const ScAddress rPos,
+        const ScPatternAttr* pAttr,
+        RootData& rRootData,
+        const String& rText ) :
+    ExcCell( rPos, pAttr, rRootData ),
+    aText( rText, *rRootData.pCharset )
 {
     nTextLen = (UINT16) Min( aText.Len(), (xub_StrLen) 0xFFFF );
 
@@ -1524,8 +1553,7 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
         }
 
         // XF mit Umbruch auswaehlen?
-        rExcCell.SetXF( nParCnt <= 1 ? ExcCell::GetXFRecs()->Find( pAttr ) :
-            ExcCell::GetXFRecs()->FindWithLineBreak( pAttr ) );
+        rExcCell.SetXF( nParCnt <= 1 ? rRoot.pXFRecs->Find( pAttr ) : rRoot.pXFRecs->FindWithLineBreak( pAttr ) );
     }
     else
     {
@@ -1578,11 +1606,14 @@ void ExcRichStr::Write( XclExpStream& rStrm )
 
 //---------------------------------------------------------- class ExcRString -
 
-ExcRString::ExcRString( RootData* pRootData, const ScAddress aNewPos, const ScPatternAttr* pAttr,
-    const ScEditCell& rEdCell ) :
-    ExcCell( aNewPos, pAttr )
+ExcRString::ExcRString(
+        const ScAddress aNewPos,
+        const ScPatternAttr* pAttr,
+        RootData& rRootData,
+        const ScEditCell& rEdCell ) :
+    ExcCell( aNewPos, pAttr, rRootData )
 {
-    pRichStr = new ExcRichStr( *this, aText, pAttr, rEdCell, *pRootData, 255 );
+    pRichStr = new ExcRichStr( *this, aText, pAttr, rEdCell, rRootData, 255 );
     DBG_ASSERT( aText.Len() <= 0xFFFF, "*ExcRString::ExcRString(): String to long!" );
     nTextLen = (UINT16) Min( aText.Len(), (xub_StrLen) 255 );
 }
@@ -1618,10 +1649,18 @@ ULONG ExcRString::GetDiffLen( void ) const
 
 //---------------------------------------------------------- class ExcFormula -
 
-ExcFormula::ExcFormula( RootData* pRD, const ScAddress rPos, const ScPatternAttr* pAttr,
-                    const ULONG nAltNumForm, BOOL bForceAltNumForm, const ScTokenArray& rTokArray,
-                    ExcArray** ppArray, ScMatrixMode eMM, ExcShrdFmla** ppShrdFmla, ExcArrays* pShrdFmlas ) :
-    ExcCell( rPos, pAttr, nAltNumForm, bForceAltNumForm )
+ExcFormula::ExcFormula(
+        const ScAddress rPos,
+        const ScPatternAttr* pAttr,
+        RootData& rRootData,
+        const ULONG nAltNumForm,
+        BOOL bForceAltNumForm,
+        const ScTokenArray& rTokArray,
+        ExcArray** ppArray,
+        ScMatrixMode eMM,
+        ExcShrdFmla** ppShrdFmla,
+        ExcArrays* pShrdFmlas ) :
+    ExcCell( rPos, pAttr, rRootData, nAltNumForm, bForceAltNumForm )
 {
     bShrdFmla = FALSE;
     EC_Codetype     eCodeType;
@@ -1630,7 +1669,7 @@ ExcFormula::ExcFormula( RootData* pRD, const ScAddress rPos, const ScPatternAttr
     switch( eMM )
     {
         case MM_FORMULA:
-            pExcUPN = new ExcUPN( TRUE, pRD, rTokArray, eCodeType, rPos );
+            pExcUPN = new ExcUPN( TRUE, &rRootData, rTokArray, eCodeType, rPos );
             if( eCodeType == EC_ArrayFmla )
                 break;
             else
@@ -1652,7 +1691,7 @@ ExcFormula::ExcFormula( RootData* pRD, const ScAddress rPos, const ScPatternAttr
             // no break here!
         default:
             newchance:
-            pExcUPN = new ExcUPN( pRD, rTokArray, eCodeType, &rPos, FALSE, pShrdFmlas );
+            pExcUPN = new ExcUPN( &rRootData, rTokArray, eCodeType, &rPos, FALSE, pShrdFmlas );
     }
 
     switch( eCodeType )
@@ -1766,85 +1805,116 @@ ULONG ExcFormula::GetDiffLen( void ) const
 
 //---------------------------------------------------- class ExcBlankMulblank -
 
-ExcBlankMulblank::ExcBlankMulblank( const ScAddress rPos,
-    const ScPatternAttr *pFirstAttr, UINT16 nFirstCount ) :
-    ExcCell( rPos, pFirstAttr ),
-    nLen( 0 )
-{// nFirstCount > 1 -> Mulblank, otherwise Blank
-    DBG_ASSERT( nFirstCount > 0, "-ExcBlankMulblank::ExcBlankMulblank(): count==0!" );
-    nLastCol = aPos.Col();
+ExcBlankMulblank::ExcBlankMulblank(
+        const ScAddress rPos,
+        const ScPatternAttr* pAttr,
+        RootData& rRootData,
+        UINT16 nCount ) :
+    ExcCell( rPos, NULL, rRootData )
+{
+    nRecLen = 2 * nCount - 2;
+    nLastCol = aPos.Col() + nCount - 1;
+    bMulBlank = (nCount > 1);
 
-    nFirstCount--;  // one is in ExcCell
-    if( nFirstCount )
-    {
-        List::Insert( MakeEntry( nXF, nFirstCount ), LIST_APPEND );
-
-        bMulBlank = TRUE;
-        nLen += 2 * nFirstCount + 2;
-        nLastCol += nFirstCount;
-    }
-    else
-        bMulBlank = FALSE;
+    AddEntries( rPos, pAttr, rRootData, nCount );
+    nXF = GetXF( UINT32List::Get( 0 ) );        // store first XF in ExcCell::nXF
 }
 
 
-void ExcBlankMulblank::Add( const ScPatternAttr *pAttr, const UINT16 nAddCount )
+void ExcBlankMulblank::Add(
+        const ScAddress rPos,
+        const ScPatternAttr* pAttr,
+        RootData& rRootData,
+        UINT16 nCount )
 {
-    DBG_ASSERT( pXFRecs, "-ExcMulblank::Add(): Wohin des Weges Fremder?" );
+    DBG_ASSERT( rPos.Col() == nLastCol + 1, "ExcBlankMulblank::Add - wrong address" );
 
-    if( !bMulBlank )
-    {
-        bMulBlank = TRUE;
-        nLen += 2;
-    }
+    nRecLen += 2 * nCount;
+    nLastCol += nCount;
+    bMulBlank = TRUE;
 
-    List::Insert( MakeEntry( pXFRecs->Find( pAttr ), nAddCount ), LIST_APPEND );
-    nLen += 2 * nAddCount;
-    nLastCol += nAddCount;
+    AddEntries( rPos, pAttr, rRootData, nCount );
 }
 
 
-void ExcBlankMulblank::SaveDiff( XclExpStream& rStrm )
+void ExcBlankMulblank::AddEntries(
+        const ScAddress rPos,
+        const ScPatternAttr* pAttr,
+        RootData& rRootData,
+        UINT16 nCount )
 {
-    if( bMulBlank )
+    DBG_ASSERT( nCount > 0, "ExcBlankMulblank::AddEntries - count==0!" );
+
+    ScAddress   aCurrPos( rPos );
+    UINT16      nCellXF = rRootData.pXFRecs->Find( pAttr );
+
+    while( nCount )
     {
-        void    *pAkt = List::First();
-        if( pAkt )
+        UINT16 nMergeXF, nMergeCount;
+        if( rRootData.pCellMerging->FindMergeBaseXF( aCurrPos, nMergeXF, nMergeCount ) )
         {
-            UINT16  nCol = ( UINT16 ) aPos.Col();
-            UINT16  nXF, nTmpCount;
+            nMergeCount = Min( nMergeCount, nCount );
+            Append( nMergeXF, nMergeCount );
+            nCount -= nMergeCount;
+            aCurrPos.IncCol( nMergeCount );
+        }
+        else
+        {
+            UINT16 nMergeCol;
+            UINT16 nColCount = nCount;
 
-            do{
-                nXF = GetXF( pAkt );
-                nTmpCount = GetAnz( pAkt );
+            if( rRootData.pCellMerging->FindNextMerge( aCurrPos, nMergeCol ) )
+                nColCount = Min( (UINT16)(nMergeCol - aCurrPos.Col()), nCount );
 
-                nCol += nTmpCount;
-
-                while( nTmpCount )
-                {
-                    rStrm << nXF;
-                    nTmpCount--;
-                }
-
-                pAkt = List::Next();
-            } while( pAkt );
-
-            rStrm << nCol;  // nur 'nCol' und nicht 'nCol-1', weil initial schon einen zu
-                            //  wenig wegen 'Single-Schreiben' eines XFs in ExcCell!
+            if( nColCount )
+            {
+                Append( nCellXF, nColCount );
+                nCount -= nColCount;
+                aCurrPos.IncCol( nColCount );
+            }
         }
     }
 }
 
 
-UINT16 ExcBlankMulblank::GetNum( void ) const
+UINT16 ExcBlankMulblank::GetXF() const
+{
+    DBG_ASSERT( UINT32List::Count(), "ExcBlankMulblank::GetXF - list empty" );
+    return GetXF( UINT32List::Get( UINT32List::Count() - 1 ) );
+}
+
+
+void ExcBlankMulblank::SaveDiff( XclExpStream& rStrm )
+{
+    if( !bMulBlank ) return;
+
+    UINT16 nLastCol = (UINT16) aPos.Col();
+    for( ULONG nIndex = 0; nIndex < UINT32List::Count(); nIndex++ )
+    {
+        UINT32 nCurr = UINT32List::Get( nIndex );
+        UINT16 nXF = GetXF( nCurr );
+        UINT16 nTmpCount = GetCount( nCurr );
+
+        if( !nIndex )
+            nTmpCount--;        // very first XF is saved in ExcCell::SaveCont()
+
+        nLastCol += nTmpCount;
+        while( nTmpCount-- )
+            rStrm << nXF;
+    }
+    rStrm << nLastCol;
+}
+
+
+UINT16 ExcBlankMulblank::GetNum() const
 {
     return bMulBlank ? 0x00BE : 0x0201;
 }
 
 
-ULONG ExcBlankMulblank::GetDiffLen( void ) const
+ULONG ExcBlankMulblank::GetDiffLen() const
 {
-    return nLen;
+    return bMulBlank ? (nRecLen + 2) : 0;
 }
 
 
