@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popupmenucontrollerbase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:47:19 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ DEFINE_XINTERFACE_8                     (   PopupMenuControllerBase             
                                             OWeakObject                                                                 ,
                                             DIRECT_INTERFACE( css::lang::XTypeProvider                                  ),
                                             DIRECT_INTERFACE( css::lang::XServiceInfo                                   ),
-                                            DIRECT_INTERFACE( drafts::com::sun::star::frame::XPopupMenuController       ),
+                                            DIRECT_INTERFACE( ::com::sun::star::frame::XPopupMenuController       ),
                                             DIRECT_INTERFACE( css::lang::XInitialization                                ),
                                             DIRECT_INTERFACE( css::frame::XStatusListener                               ),
                                             DIRECT_INTERFACE( css::awt::XMenuListener                                   ),
@@ -143,7 +143,7 @@ DEFINE_XINTERFACE_8                     (   PopupMenuControllerBase             
 DEFINE_XTYPEPROVIDER_7                  (   PopupMenuControllerBase                             ,
                                             css::lang::XTypeProvider                            ,
                                             css::lang::XServiceInfo                             ,
-                                            drafts::com::sun::star::frame::XPopupMenuController ,
+                                            ::com::sun::star::frame::XPopupMenuController ,
                                             css::lang::XInitialization                          ,
                                             css::frame::XStatusListener                         ,
                                             css::awt::XMenuListener                             ,
