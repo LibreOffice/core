@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checkediterator.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2000-12-01 06:58:51 $
+ *  last change: $Author: obo $ $Date: 2000-12-15 14:48:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,14 +296,14 @@ class CheckedIterator
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        inline TContainer::const_iterator getEntry()
+        inline typename TContainer::const_iterator getEntry()
         {
             // Warn programmer if he forget to initialize these object ...
             LOG_ASSERT( !(m_pContainer==NULL)       , "CheckedIterator::getEntry()\nObject not initialized!\n"          )
             // or try to read a non existing element!
             LOG_ASSERT( !(m_eEndState!=E_BEFOREEND) , "CheckedIterator::getEntry()\nWrong using of class detected!\n"   )
 
-            TContainer::const_iterator pEntry = m_pContainer->begin();
+            typename TContainer::const_iterator pEntry = m_pContainer->begin();
             if( m_bReverse == sal_True )
             {
                 for( sal_Int32 i=0; i<m_nBackward; ++i )
