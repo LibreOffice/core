@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optctl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:39:57 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 14:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ class SvxCTLOptionsPage : public SfxTabPage
 private:
     FixedLine           m_aSequenceCheckingFL;
     CheckBox            m_aSequenceCheckingCB;
+    CheckBox            m_aRestrictedCB;
 
     FixedLine           m_aCursorControlFL;
     FixedText           m_aMovementFT;
@@ -90,6 +91,8 @@ private:
     FixedLine           m_aGeneralFL;
     FixedText           m_aNumeralsFT;
     ListBox             m_aNumeralsLB;
+
+    DECL_LINK( SequenceCheckingCB_Hdl, void* );
 
     SvxCTLOptionsPage( Window* pParent, const SfxItemSet& rSet );
 
