@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-10 13:11:52 $
+ *  last change: $Author: cmc $ $Date: 2002-06-10 14:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,8 +573,20 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint,
                 aString = ByteString(sEditable, nOldIndex, nIndex - nOldIndex,
                     gsl_getSystemTextEncoding());
             }
-            TrueExtTextOut(aPoint, String(sEditable, nOldIndex,
-                nIndex-nOldIndex), aString, pDXAry+nOldIndex);
+
+            if (xub_StrLen nLen = (nIndex-nOldIndex) == 1)
+            {
+                ByteString sTemp;
+                sTemp.Append(static_cast<sal_Char>(
+                    sEditable.GetChar(nOldIndex)));
+                TrueTextOut(aPoint, sTemp);
+            }
+            else
+            {
+                String sTemp(sEditable, nOldIndex, nLen);
+                TrueExtTextOut(aPoint, sTemp, aString, pDXAry+nOldIndex);
+            }
+
             for (xub_StrLen nI=nOldIndex;nI < nIndex;nI++)
                 aPoint.X() += pDXAry[nI];
         }
