@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-29 16:45:35 $
+ *  last change: $Author: th $ $Date: 2001-06-07 16:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,11 +589,7 @@ void ImplStyleData::SetStandardStyles()
     Font aStdFont( FAMILY_SWISS, Size( 0, 8 ) );
     aStdFont.SetCharSet( gsl_getSystemTextEncoding() );
     aStdFont.SetWeight( WEIGHT_NORMAL );
-#ifdef REMOTE_APPSERVER
-    aStdFont.SetName( XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Arial Unicode MS;MS Sans Serif;Geneva;Helv;WarpSans;Tahoma;Dialog;Lucida;Helvetica;Charcoal;Chicago;Arial;Times;Times New Roman;Interface System" ) ) );
-#else
-    aStdFont.SetName( XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Arial Unicode MS;Interface User;MS Sans Serif;Geneva;Helv;WarpSans;Tahoma;Dialog;Lucida;Helvetica;Charcoal;Chicago;Arial;Times;Times New Roman;Interface System" ) ) );
-#endif
+    aStdFont.SetName( XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Tahoma;Arial Unicode MS;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;Arial;MS Sans Serif;Helv;Times;Times New Roman;Interface System" ) ) );
     maAppFont                   = aStdFont;
     maHelpFont                  = aStdFont;
     maMenuFont                  = aStdFont;
@@ -607,11 +603,7 @@ void ImplStyleData::SetStandardStyles()
     maIconFont                  = aStdFont;
     maFloatTitleFont            = aStdFont;
     aStdFont.SetWeight( WEIGHT_BOLD );
-#ifdef REMOTE_APPSERVER
-    aStdFont.SetName( XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Arial Unicode MS;MS Sans Serif;Charcoal;Chicago;Geneva;Helv;WarpSans;Tahoma;Dialog;Lucida;Helvetica;Arial;Times;Times New Roman;Interface System" ) ) );
-#else
-    aStdFont.SetName( XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Arial Unicode MS;Interface User;MS Sans Serif;Charcoal;Chicago;Geneva;Helv;WarpSans;Tahoma;Dialog;Lucida;Helvetica;Arial;Times;Times New Roman;Interface System" ) ) );
-#endif
+    aStdFont.SetName( XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Tahoma;Arial Unicode MS;Interface User;Charcoal;Chicago;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Arial;MS Sans Serif;Helv;Times;Times New Roman;Interface System" ) ) );
     maTitleFont                 = aStdFont;
 
     maFaceColor                 = Color( COL_LIGHTGRAY );
@@ -691,11 +683,7 @@ void ImplStyleData::SetStandardOS2Styles()
     Font aStdFont( FAMILY_SWISS, Size( 0, 9 ) );
     aStdFont.SetCharSet( gsl_getSystemTextEncoding() );
     aStdFont.SetWeight( WEIGHT_NORMAL );
-#ifdef REMOTE_APPSERVER
-    aStdFont.SetName( XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Arial Unicode MS;WarpSans;MS Sans Serif;Geneva;Helv;Tahoma;Dialog;Lucida;Helvetica;Charcoal;Chicago;Arial;Times;Times New Roman;Interface System" ) ) );
-#else
-    aStdFont.SetName( XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Arial Unicode MS;Interface User;WarpSans;MS Sans Serif;Geneva;Helv;Tahoma;Dialog;Lucida;Helvetica;Charcoal;Chicago;Arial;Times;Times New Roman;Interface System" ) ) );
-#endif
+    aStdFont.SetName( XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Tahoma;Arial Unicode MS;Interface User;WarpSans;Geneva;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;Arial;MS Sans Serif;Helv;Times;Times New Roman;Interface System" ) ) );
     maAppFont                   = aStdFont;
     maHelpFont                  = aStdFont;
     maToolFont                  = aStdFont;
@@ -708,11 +696,7 @@ void ImplStyleData::SetStandardOS2Styles()
     maIconFont                  = aStdFont;
     maFloatTitleFont            = aStdFont;
     aStdFont.SetWeight( WEIGHT_BOLD );
-#ifdef REMOTE_APPSERVER
-    aStdFont.SetName( XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Arial Unicode MS;WarpSans;MS Sans Serif;Charcoal;Chicago;Geneva;Helv;Tahoma;Dialog;Lucida;Helvetica;Arial;Times;Times New Roman;Interface System" ) ) );
-#else
-    aStdFont.SetName( XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Arial Unicode MS;Interface User;WarpSans;MS Sans Serif;Charcoal;Chicago;Geneva;Helv;Tahoma;Dialog;Lucida;Helvetica;Arial;Times;Times New Roman;Interface System" ) ) );
-#endif
+    aStdFont.SetName( XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Tahoma;Arial Unicode MS;Interface User;WarpSans;Charcoal;Chicago;Geneva;Dialog;Swiss;Lucida;Helvetica;Arial;MS Sans Serif;Helv;Times;Times New Roman;Interface System" ) ) );
     maMenuFont                  = aStdFont;
     maTitleFont                 = aStdFont;
 
@@ -777,11 +761,7 @@ void ImplStyleData::SetStandardMacStyles()
     Font aStdFont( FAMILY_SWISS, Size( 0, 8 ) );
     aStdFont.SetCharSet( gsl_getSystemTextEncoding() );
     aStdFont.SetWeight( WEIGHT_NORMAL );
-#ifdef REMOTE_APPSERVER
-    aStdFont.SetName( XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Arial Unicode MS;Geneva;MS Sans Serif;Helv;Tahoma;WarpSans;Dialog;Lucida;Helvetica;Charcoal;Chicago;Arial;Times;Times New Roman;Interface System" ) ) );
-#else
-    aStdFont.SetName( XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Arial Unicode MS;Interface User;Geneva;MS Sans Serif;Helv;Tahoma;WarpSans;Dialog;Lucida;Helvetica;Charcoal;Chicago;Arial;Times;Times New Roman;Interface System" ) ) );
-#endif
+    aStdFont.SetName( XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Tahoma;Arial Unicode MS;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;Arial;MS Sans Serif;Helv;Times;Times New Roman;Interface System" ) ) );
     maAppFont                   = aStdFont;
     maHelpFont                  = aStdFont;
     maToolFont                  = aStdFont;
@@ -793,11 +773,7 @@ void ImplStyleData::SetStandardMacStyles()
     maFieldFont                 = aStdFont;
     maIconFont                  = aStdFont;
     maFloatTitleFont            = aStdFont;
-#ifdef REMOTE_APPSERVER
-    aStdFont.SetName( XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Arial Unicode MS;Charcoal;Chicago;Geneva;MS Sans Serif;Helv;Tahoma;WarpSans;Dialog;Lucida;Helvetica;Arial;Times;Times New Roman;Interface System" ) ) );
-#else
-    aStdFont.SetName( XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Arial Unicode MS;Interface User;Charcoal;Chicago;Geneva;MS Sans Serif;Helv;Tahoma;WarpSans;Dialog;Lucida;Helvetica;Arial;Times;Times New Roman;Interface System" ) ) );
-#endif
+    aStdFont.SetName( XubString( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI;Tahoma;Arial Unicode MS;Interface User;Charcoal;Chicago;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Arial;MS Sans Serif;Helv;Times;Times New Roman;Interface System" ) ) );
 //    aStdFont.SetWeight( WEIGHT_BOLD );
     maMenuFont                  = aStdFont;
     maTitleFont                 = aStdFont;
