@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TConnection.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:00:37 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 13:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _RTL_TEXTENC_H
 #include <rtl/textenc.h>
+#endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
