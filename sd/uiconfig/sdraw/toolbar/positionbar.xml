@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:BringToFront" toolbar:helpid="helpid:10286" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:Forward" toolbar:helpid="helpid:27031" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:Backward" toolbar:helpid="helpid:27032" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:SendToBack" toolbar:helpid="helpid:10287" toolbar:text="" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:BeforeObject" toolbar:helpid="helpid:27326" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:BehindObject" toolbar:helpid="helpid:27116" toolbar:text="" />
+ <toolbar:toolbarspace/>
+ <toolbar:toolbaritem xlink:href=".uno:ReverseOrder" toolbar:helpid="helpid:27117" toolbar:text="" />
+</toolbar:toolbar>
