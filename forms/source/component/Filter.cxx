@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Filter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:01:15 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,8 +162,8 @@
 #ifndef _FRM_RESOURCE_HRC_
 #include "frm_resource.hrc"
 #endif
-#ifndef FORMS_MODULE_HXX
-#include "formsmodule.hxx"
+#ifndef FRM_MODULE_HXX
+#include "frm_module.hxx"
 #endif
 
 //--------------------------------------------------------------------------
