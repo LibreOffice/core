@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layctrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:04:53 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,13 @@
 #ifndef _SFXTBXCTRL_HXX //autogen
 #include <sfx2/tbxctrl.hxx>
 #endif
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // class SvxTableToolBoxControl ------------------------------------------
 
-class SvxTableToolBoxControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxTableToolBoxControl : public SfxToolBoxControl
 {
 private:
     FASTBOOL    bEnabled;
@@ -90,7 +94,7 @@ public:
 
 // class SvxColumnsToolBoxControl ----------------------------------------
 
-class SvxColumnsToolBoxControl : public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxColumnsToolBoxControl : public SfxToolBoxControl
 {
     FASTBOOL    bEnabled;
 public:
