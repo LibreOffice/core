@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-31 11:16:01 $
+ *  last change: $Author: sj $ $Date: 2001-02-05 18:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,6 @@ static const SvxMSDffCalculationData mso_sptParallelogramCalc[] =
     { 0x2000, 0x0402, 1750, 0 },
     { 0x8000, 21600, 0, 0x0403 }
 };
-
 static const sal_Int32 mso_sptParallelogramTextRect[] =
 {
     1, 3 MSO_I, 3 MSO_I, 4 MSO_I, 4 MSO_I
@@ -4219,6 +4218,258 @@ static const mso_AutoShape msoWave =
     0x80000000, 0x80000000
 };
 
+static const sal_Int32 mso_sptFlowChartProcessVert[] =
+{
+    0, 0,
+    21600, 0,
+    21600, 21600,
+    0, 21600
+};
+static const mso_AutoShape msoFlowChartProcess =
+{
+    (sal_Int32*)mso_sptFlowChartProcessVert, sizeof( mso_sptFlowChartProcessVert ) >> 3,
+    NULL, 0,
+    NULL, 0,
+    NULL,
+    NULL,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartAlternateProcessVert[] =
+{
+    0,  2 MSO_I,
+    0 MSO_I,0,
+    1 MSO_I,0,
+    21600, 2 MSO_I,
+    21600, 3 MSO_I,
+    1 MSO_I, 21600,
+    0 MSO_I, 21600,
+    0, 3 MSO_I
+};
+static const sal_uInt16 mso_sptFlowChartAlternateProcessSegm[] =
+{
+    0x4000, 0xa801, 0x0001, 0xa701, 0x0001, 0xa801, 0x0001, 0xa701, 0x6000, 0x8000
+};
+static const SvxMSDffCalculationData mso_sptFlowChartAlternateProcessCalc[] =
+{
+    { 0x2000, DFF_Prop_geoLeft, 2540, 0 },
+    { 0x2000, DFF_Prop_geoRight, 0, 2540 },
+    { 0x2000, DFF_Prop_geoTop, 2540, 0 },
+    { 0x2000, DFF_Prop_geoBottom, 0, 2540 },
+    { 0x2000, DFF_Prop_geoLeft, 800, 0 },
+    { 0x2000, DFF_Prop_geoRight, 0, 800 },
+    { 0x2000, DFF_Prop_geoTop, 800, 0 },
+    { 0x2000, DFF_Prop_geoBottom,0, 800 }
+};
+static const sal_Int32 mso_sptFlowChartAlternateProcessTextRect[] =
+{
+    1, 4 MSO_I, 6 MSO_I, 5 MSO_I, 7 MSO_I
+};
+static const mso_AutoShape msoFlowChartAlternateProcess =
+{
+    (sal_Int32*)mso_sptFlowChartAlternateProcessVert, sizeof( mso_sptFlowChartAlternateProcessVert ) >> 3,
+    (sal_uInt16*)mso_sptFlowChartAlternateProcessSegm, sizeof( mso_sptFlowChartAlternateProcessSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptFlowChartAlternateProcessCalc, sizeof( mso_sptFlowChartAlternateProcessCalc ) / sizeof( SvxMSDffCalculationData ),
+    NULL,
+    (sal_Int32*)mso_sptFlowChartAlternateProcessTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartDecisionVert[] =
+{
+    0, 10800,
+    10800, 0,
+    21600, 10800,
+    10800, 21600
+};
+static const sal_Int32 mso_sptFlowChartDecisionTextRect[] =
+{
+    1, 5400, 5400, 16200, 16200
+};
+static const mso_AutoShape msoFlowChartDecision =
+{
+    (sal_Int32*)mso_sptFlowChartDecisionVert, sizeof( mso_sptFlowChartDecisionVert ) >> 3,
+    NULL, 0,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartDecisionTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartInputOutputVert[] =
+{
+    4230, 0,
+    21600, 0,
+    17370, 21600,
+    0, 21600
+};
+static const sal_Int32 mso_sptFlowChartInputOutputTextRect[] =
+{
+    1, 4230, 0, 17370, 21600
+};
+static const mso_AutoShape msoFlowChartInputOutput =
+{
+    (sal_Int32*)mso_sptFlowChartInputOutputVert, sizeof( mso_sptFlowChartInputOutputVert ) >> 3,
+    NULL, 0,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartInputOutputTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartPredefinedProcessVert[] =
+{
+    0, 0,
+    21600, 0,
+    21600, 21600,
+    0, 21600,
+
+    2540, 0,
+    2540, 21600,
+
+    21600 - 2540, 0,
+    21600 - 2540, 21600
+};
+static const sal_uInt16 mso_sptFlowChartPredefinedProcessSegm[] =
+{
+    0x4000, 0x0003, 0x6000, 0x8000,
+    0x4000, 0x0001, 0x8000,
+    0x4000, 0x0001, 0x8000
+};
+static const sal_Int32 mso_sptFlowChartPredefinedProcessTextRect[] =
+{
+    1, 2540, 0, 21600 - 2540, 21600
+};
+static const mso_AutoShape msoFlowChartPredefinedProcess =
+{
+    (sal_Int32*)mso_sptFlowChartPredefinedProcessVert, sizeof( mso_sptFlowChartPredefinedProcessVert ) >> 3,
+    (sal_uInt16*)mso_sptFlowChartPredefinedProcessSegm, sizeof( mso_sptFlowChartPredefinedProcessSegm ) >> 1,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartPredefinedProcessTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartInternalStorageVert[] =
+{
+    0, 0,
+    21600, 0,
+    21600, 21600,
+    0, 21600,
+
+    4230, 0,
+    4230, 21600,
+
+    4230, 0,
+    21600, 4230
+};
+static const sal_uInt16 mso_sptFlowChartInternalStorageSegm[] =
+{
+    0x4000, 0x0003, 0x6000, 0x8000,
+    0x4000, 0x0001, 0x8000,
+    0x4000, 0x0001, 0x8000
+};
+static const sal_Int32 mso_sptFlowChartInternalStorageTextRect[] =
+{
+    1, 4230, 4230, 21600, 21600
+};
+static const mso_AutoShape msoFlowChartInternalStorage =
+{
+    (sal_Int32*)mso_sptFlowChartInternalStorageVert, sizeof( mso_sptFlowChartInternalStorageVert ) >> 3,
+    (sal_uInt16*)mso_sptFlowChartInternalStorageSegm, sizeof( mso_sptFlowChartInternalStorageSegm ) >> 1,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartInternalStorageTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartDocumentVert[] =
+{
+    0, 0,
+    21600, 0,
+    21600, 17360,
+    13050, 17220,   // c
+    13340, 20770,   // c
+    5620, 21600,    // p
+    2860, 21100,    // c
+    1850, 20700,    // c
+    0,  20120
+};
+static const sal_uInt16 mso_sptFlowChartDocumentSegm[] =
+{
+    0x4000, 0x0002, 0x2002, 0x6000, 0x8000
+};
+static const sal_Int32 mso_sptFlowChartDocumentTextRect[] =
+{
+    1, 0, 0, 21600, 17360
+};
+static const mso_AutoShape msoFlowChartDocument =
+{
+    (sal_Int32*)mso_sptFlowChartDocumentVert, sizeof( mso_sptFlowChartDocumentVert ) >> 3,
+    (sal_uInt16*)mso_sptFlowChartDocumentSegm, sizeof( mso_sptFlowChartDocumentSegm ) >> 1,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartDocumentTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartMultidocumentVert[] =
+{
+    0, 3600,
+    1500, 3600,
+    1500, 1800,
+    3000, 1800,
+    3000, 0,
+    21600, 0,
+    21600, 14409,
+    21600 - 1500, 14409,
+    21600 - 1500, 14409 + 1800,
+    21600 - 3000, 14409 + 1800,
+    21600 - 3000, 14409 + 3600, // p
+    11610, 14293 + 3600,        // c
+    11472, 17239 + 3600,        // c
+    4833, 17928 + 3600,         // p
+    2450, 17513 + 3600,         // c
+    1591, 17181 + 3600,         // c
+    0,  16700 + 3600,
+
+    1500, 3600,
+    21600 - 3000, 3600,
+    21600 - 3000, 14409 + 1800,
+
+    3000, 1800,
+    21600 - 1500, 1800,
+    21600 - 3000, 14409
+};
+static const sal_uInt16 mso_sptFlowChartMultidocumentSegm[] =
+{
+    0x4000, 0x000a, 0x2002, 0x6000, 0x8000,
+    0x4000, 0x0002, 0x8000,
+    0x4000, 0x0002, 0x8000
+};
+static const sal_Int32 mso_sptFlowChartMultidocumentTextRect[] =
+{
+    1, 0, 3600, 21600 - 3000, 17360, 14409 + 3600
+};
+static const mso_AutoShape msoFlowChartMultidocument =
+{
+    (sal_Int32*)mso_sptFlowChartMultidocumentVert, sizeof( mso_sptFlowChartMultidocumentVert ) >> 3,
+    (sal_uInt16*)mso_sptFlowChartMultidocumentSegm, sizeof( mso_sptFlowChartMultidocumentSegm ) >> 1,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartMultidocumentTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+
 class SvxMSDffAdjustmentHandle
 {
     sal_Int32   nAdjustValue;
@@ -4479,6 +4730,15 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
             nColorData = 0x30dd0000;
         }
         break;
+        case mso_sptFlowChartProcess :          pDefAutoShape = &msoFlowChartProcess; break;
+        case mso_sptFlowChartAlternateProcess : pDefAutoShape = &msoFlowChartAlternateProcess; break;
+        case mso_sptFlowChartDecision :         pDefAutoShape = &msoFlowChartDecision; break;
+        case mso_sptFlowChartInputOutput :      pDefAutoShape = &msoFlowChartInputOutput; break;
+        case mso_sptFlowChartPredefinedProcess :pDefAutoShape = &msoFlowChartPredefinedProcess; break;
+        case mso_sptFlowChartInternalStorage :  pDefAutoShape = &msoFlowChartInternalStorage; break;
+        case mso_sptFlowChartDocument :         pDefAutoShape = &msoFlowChartDocument; break;
+        case mso_sptFlowChartMultidocument :    pDefAutoShape = &msoFlowChartMultidocument; break;
+
 //      case mso_sptWave :                  pDefAutoShape = &msoWave; break;
         break;
         default :
