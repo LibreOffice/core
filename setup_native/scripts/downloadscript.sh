@@ -65,7 +65,7 @@ fi
 
 echo "Unpacking ..."
 
-$tail_prog +$linenum $0 | (cd $UNPACKDIR; tar xvf -)
+$tail_prog +$linenum $0 | (cd $UNPACKDIR; tar xf -)
 
 echo "All files have been successfully unpacked."
 
