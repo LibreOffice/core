@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:11:12 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 10:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,6 +387,18 @@ DialogImpl::TreeListBoxImpl::~TreeListBoxImpl()
 }
 
 //______________________________________________________________________________
+long DialogImpl::SelectionBoxControl::Notify( NotifyEvent & rEvt )
+{
+    const long nRet = Control::Notify( rEvt );
+    if (rEvt.GetType() == EVENT_GETFOCUS &&
+        rEvt.GetWindow() != static_cast<Window *>(m_dialog->m_treelb.get()))
+    {
+        m_dialog->m_treelb->GrabFocus();
+    }
+    return nRet;
+}
+
+//______________________________________________________________________________
 DialogImpl::TreeListBoxImpl::TreeListBoxImpl(
     Window * pParent, DialogImpl * dialog )
     : SvHeaderTabListBox( pParent,
@@ -396,7 +408,7 @@ DialogImpl::TreeListBoxImpl::TreeListBoxImpl(
                           WB_HASBUTTONSATROOT | WB_HIDESELECTION |
                           WB_HSCROLL ),
       m_dialog( dialog ),
-      m_currentEntry( 0 ),
+      m_currentSelectedEntry( 0 ),
       m_hiContrastMode( GetDisplayBackground().GetColor().IsDark() ),
       m_strEnabled( getResourceString(RID_STR_ENABLED) ),
       m_strDisabled( getResourceString(RID_STR_DISABLED) ),
@@ -511,8 +523,20 @@ SvLBoxEntry * DialogImpl::TreeListBoxImpl::addPackageNode(
 }
 
 //______________________________________________________________________________
-bool DialogImpl::TreeListBoxImpl::isFirstLevelChild( SvLBoxEntry * entry )
+SvLBoxEntry * DialogImpl::TreeListBoxImpl::getCurrentSingleSelectedEntry() const
 {
+    SvLBoxEntry * entry = FirstSelected();
+    if (entry != 0 && NextSelected(entry) == 0)
+        return entry;
+    else
+        return 0;
+}
+
+//______________________________________________________________________________
+bool DialogImpl::TreeListBoxImpl::isFirstLevelChild( SvLBoxEntry * entry ) const
+{
+    if (entry == 0)
+        return false;
     entry = GetParent( entry );
     if (entry != 0)
         return GetParent( entry ) == 0;
@@ -521,16 +545,22 @@ bool DialogImpl::TreeListBoxImpl::isFirstLevelChild( SvLBoxEntry * entry )
 }
 
 //______________________________________________________________________________
-OUString DialogImpl::TreeListBoxImpl::getContext( SvLBoxEntry * entry )
+OUString DialogImpl::TreeListBoxImpl::getContext( SvLBoxEntry * entry ) const
 {
-    return NodeImpl::get(entry)->m_xPackageManager->getContext();
+    if (entry == 0)
+        return OUString();
+    else
+        return NodeImpl::get(entry)->m_xPackageManager->getContext();
 }
 
 //______________________________________________________________________________
 Reference<deployment::XPackage>
-DialogImpl::TreeListBoxImpl::getPackage( SvLBoxEntry * entry )
+DialogImpl::TreeListBoxImpl::getPackage( SvLBoxEntry * entry ) const
 {
-    return NodeImpl::get(entry)->m_xPackage;
+    if (entry == 0)
+        return Reference<deployment::XPackage>();
+    else
+        return NodeImpl::get(entry)->m_xPackage;
 }
 
 //______________________________________________________________________________
@@ -601,12 +631,15 @@ void DialogImpl::TreeListBoxImpl::ExcecuteContextMenuAction(
 void DialogImpl::TreeListBoxImpl::MouseMove( MouseEvent const & evt )
 {
     Point pos = evt.GetPosPixel();
-    m_currentEntry = GetCurEntry();
+    m_currentSelectedEntry = getCurrentSingleSelectedEntry();
 
-    if (m_currentEntry != 0 && GetEntry( pos ) == m_currentEntry) {
+    if (m_currentSelectedEntry != 0 &&
+        GetEntry( pos ) == m_currentSelectedEntry)
+    {
         m_timer.Start();
     }
-    else {
+    else
+    {
         Help::ShowBalloon( this, pos, String() );
         m_timer.Stop();
     }
@@ -617,10 +650,10 @@ IMPL_LINK( DialogImpl::TreeListBoxImpl, TimerHandler, Timer *, timer )
 {
     m_timer.Stop();
     Point pos = GetPointerPosPixel();
-    SvLBoxEntry * currentEntry = GetCurEntry();
+    SvLBoxEntry * currentEntry = getCurrentSingleSelectedEntry();
     if (currentEntry != 0 &&
         GetEntry( pos ) == currentEntry &&
-        m_currentEntry == currentEntry ) // still the same?
+        m_currentSelectedEntry == currentEntry ) // still the same?
     {
         NodeImpl * node = NodeImpl::get(currentEntry);
         String balloon;
@@ -670,16 +703,13 @@ void DialogImpl::TreeListBoxImpl::DeselectHdl()
 //______________________________________________________________________________
 void DialogImpl::TreeListBoxImpl::KeyInput( KeyEvent const & evt )
 {
-    SvLBoxEntry * currentEntry = GetCurEntry();
-    if (currentEntry != 0 && isFirstLevelChild( currentEntry ))
+    const KeyCode key = evt.GetKeyCode();
+    if (key == KEY_DELETE &&
+        m_dialog != 0 && m_dialog->m_removeButton->IsEnabled())
     {
-        KeyCode key = evt.GetKeyCode();
-        if (key == KEY_DELETE) {
-            // remove selected:
-            if (m_dialog != 0)
-                m_dialog->m_removeButton->Click();
-            return;
-        }
+        // remove selected:
+        m_dialog->m_removeButton->Click();
+        return;
     }
     SvTreeListBox::KeyInput( evt );
 }
