@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: rt $ $Date: 2002-10-07 13:49:38 $
+#   last change: $Author: sb $ $Date: 2002-11-06 15:45:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,7 +96,7 @@ LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1FILES=$(SLB)$/cpposl.lib $(SLB)$/oslall.lib $(SLB)$/cpprtl.lib
 
 .IF "$(GUI)"!="WIN"
-LIB1FILES+=$(SLB)$/textenc.lib
+LIB1FILES+=$(SLB)$/textenc.lib $(SLB)$/systoolsunx.lib
 .ENDIF
 
 LIB3TARGET=$(LB)$/a$(TARGET).lib
@@ -105,7 +105,7 @@ LIB3FILES=$(LB)$/cpposl.lib $(LB)$/oslall.lib $(LB)$/cpprtl.lib
 
 .IF "$(UPDATER)"!=""
 .IF "$(GUI)"!="WIN"
-LIB3FILES+=$(LB)$/textenc.lib
+LIB3FILES+=$(LB)$/textenc.lib $(LB)$/systoolsunx.lib
 .ENDIF
 .ENDIF
 
