@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:40 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,7 @@ SdrObject* SvxMSDffAutoShape3D::Create3DObject( const SdrObject* pObj, const Dff
 
     MSO_3DRenderMode eRenderMode( (MSO_3DRenderMode)rPropSet.GetPropertyValue( DFF_Prop_c3DRenderMode, mso_FullRender ) );
     XFillStyle eFillStyle( ITEMVALUE( aSet, XATTR_FILLSTYLE, XFillStyleItem ) );
-    pScene->SetItem( Svx3DShadeModeItem( 0 ) );
+    pScene->SetMergedItem( Svx3DShadeModeItem( 0 ) );
     aSet.Put( Svx3DPercentDiagonalItem( 0 ) );
     aSet.Put( Svx3DTextureModeItem( 1 ) );
     if ( eRenderMode == mso_Wireframe )
@@ -278,8 +278,10 @@ SdrObject* SvxMSDffAutoShape3D::Create3DObject( const SdrObject* pObj, const Dff
         pNext = pObj;
     while ( pNext )
     {
-        sal_Bool bIsPlaceholderObject = (((XFillStyleItem&)pNext->GetItem( XATTR_FILLSTYLE )).GetValue() == XFILL_NONE )
-                                     && (((XLineStyleItem&)pNext->GetItem( XATTR_LINESTYLE )).GetValue() == XLINE_NONE );
+        const SfxItemSet& rNextItemSet = pNext->GetMergedItemSet();
+
+        sal_Bool bIsPlaceholderObject = (((XFillStyleItem&)rNextItemSet.Get( XATTR_FILLSTYLE )).GetValue() == XFILL_NONE )
+                                     && (((XLineStyleItem&)rNextItemSet.Get( XATTR_LINESTYLE )).GetValue() == XLINE_NONE );
 
         SdrObject* pNewObj = pNext->ConvertToPolyObj( FALSE, FALSE );
         SdrPathObj* pPath = PTR_CAST( SdrPathObj, pNewObj );
@@ -289,16 +291,16 @@ SdrObject* SvxMSDffAutoShape3D::Create3DObject( const SdrObject* pObj, const Dff
             E3dCompoundObject* p3DObj = new E3dExtrudeObj( a3DDefaultAttr,
                 rPolyPolygon, bUseTwoFillStyles ? 1 : fDepth );
             p3DObj->NbcSetLayer( pObj->GetLayer() );
-            p3DObj->SetItemSet( aSet );
+            p3DObj->SetMergedItemSet( aSet );
             if ( bIsPlaceholderObject )
                 aPlaceholderObjectList.push_back( p3DObj );
             else if ( bUseTwoFillStyles )
             {
                 Bitmap aFillBmp;
-                sal_Bool bFillBmpTile = ((XFillBmpTileItem&)p3DObj->GetItem( XATTR_FILLBMP_TILE )).GetValue();
+                sal_Bool bFillBmpTile = ((XFillBmpTileItem&)p3DObj->GetMergedItem( XATTR_FILLBMP_TILE )).GetValue();
                 if ( bFillBmpTile )
                 {
-                    const XFillBitmapItem& rBmpItm = (XFillBitmapItem&)p3DObj->GetItem( XATTR_FILLBITMAP );
+                    const XFillBitmapItem& rBmpItm = (XFillBitmapItem&)p3DObj->GetMergedItem( XATTR_FILLBITMAP );
                     const XOBitmap& rXOBmp = rBmpItm.GetValue();
                     aFillBmp = rXOBmp.GetBitmap();
                     Size aLogicalSize = aFillBmp.GetPrefSize();
@@ -310,14 +312,14 @@ SdrObject* SvxMSDffAutoShape3D::Create3DObject( const SdrObject* pObj, const Dff
                     aLogicalSize.Height() *= 5;
                     aFillBmp.SetPrefSize( aLogicalSize );
                     aFillBmp.SetPrefMapMode( MAP_100TH_MM );
-                    p3DObj->SetItem( XFillBitmapItem( String(), aFillBmp ) );
+                    p3DObj->SetMergedItem( XFillBitmapItem( String(), aFillBmp ) );
                 }
                 else
                 {
                     Rectangle aBoundRect( rPolyPolygon.GetBoundRect() );
                     if ( rSnapRect != aBoundRect )
                     {
-                        const XFillBitmapItem& rBmpItm = (XFillBitmapItem&)p3DObj->GetItem( XATTR_FILLBITMAP );
+                        const XFillBitmapItem& rBmpItm = (XFillBitmapItem&)p3DObj->GetMergedItem( XATTR_FILLBITMAP );
                         const XOBitmap& rXOBmp = rBmpItm.GetValue();
                         aFillBmp = rXOBmp.GetBitmap();
                         Size aBmpSize( aFillBmp.GetSizePixel() );
@@ -330,33 +332,33 @@ SdrObject* SvxMSDffAutoShape3D::Create3DObject( const SdrObject* pObj, const Dff
                                                 (sal_Int32)( aBmpSize.Height() * fYScale ) );
                         Rectangle aCropRect( aPt, aSize );
                          aFillBmp.Crop( aCropRect );
-                        p3DObj->SetItem( XFillBitmapItem( String(), aFillBmp ) );
+                        p3DObj->SetMergedItem( XFillBitmapItem( String(), aFillBmp ) );
                     }
                 }
                 pScene->Insert3DObj( p3DObj );
                 p3DObj = new E3dExtrudeObj( a3DDefaultAttr, pPath->GetPathPoly(), fDepth );
                 p3DObj->NbcSetLayer( pObj->GetLayer() );
-                p3DObj->SetItemSet( aSet );
-                p3DObj->SetItem( XFillStyleItem( XFILL_SOLID ) );
-                p3DObj->SetItem( Svx3DCloseFrontItem( sal_False ) );
-                p3DObj->SetItem( Svx3DCloseBackItem( sal_False ) );
+                p3DObj->SetMergedItemSet( aSet );
+                p3DObj->SetMergedItem( XFillStyleItem( XFILL_SOLID ) );
+                p3DObj->SetMergedItem( Svx3DCloseFrontItem( sal_False ) );
+                p3DObj->SetMergedItem( Svx3DCloseBackItem( sal_False ) );
                 pScene->Insert3DObj( p3DObj );
                 p3DObj = new E3dExtrudeObj( a3DDefaultAttr, pPath->GetPathPoly(), 1 );
                 p3DObj->NbcSetLayer( pObj->GetLayer() );
-                p3DObj->SetItemSet( aSet );
+                p3DObj->SetMergedItemSet( aSet );
                 Matrix4D aFrontTransform( p3DObj->GetTransform() );
                 aFrontTransform.Translate( 0, 0, fDepth );
                 p3DObj->NbcSetTransform( aFrontTransform );
                 if ( ( eFillStyle == XFILL_BITMAP ) && !aFillBmp.IsEmpty() )
-                    p3DObj->SetItem( XFillBitmapItem( String(), aFillBmp ) );
+                    p3DObj->SetMergedItem( XFillBitmapItem( String(), aFillBmp ) );
             }
             else if ( eFillStyle == XFILL_NONE )
             {
-                XLineColorItem& rLineColor = (XLineColorItem&)p3DObj->GetItem( XATTR_LINECOLOR );
-                p3DObj->SetItem( XFillColorItem( String(), rLineColor.GetValue() ) );
-                p3DObj->SetItem( Svx3DDoubleSidedItem( sal_True ) );
-                p3DObj->SetItem( Svx3DCloseFrontItem( sal_False ) );
-                p3DObj->SetItem( Svx3DCloseBackItem( sal_False ) );
+                XLineColorItem& rLineColor = (XLineColorItem&)p3DObj->GetMergedItem( XATTR_LINECOLOR );
+                p3DObj->SetMergedItem( XFillColorItem( String(), rLineColor.GetValue() ) );
+                p3DObj->SetMergedItem( Svx3DDoubleSidedItem( sal_True ) );
+                p3DObj->SetMergedItem( Svx3DCloseFrontItem( sal_False ) );
+                p3DObj->SetMergedItem( Svx3DCloseBackItem( sal_False ) );
             }
             pScene->Insert3DObj( p3DObj );
             bSceneHasObjects = sal_True;
@@ -476,32 +478,32 @@ SdrObject* SvxMSDffAutoShape3D::Create3DObject( const SdrObject* pObj, const Dff
         if ( nAmbientColor > 255 )
             nAmbientColor = 255;
         Color aGlobalAmbientColor( (sal_uInt8)nAmbientColor, (sal_uInt8)nAmbientColor, (sal_uInt8)nAmbientColor );
-        pScene->SetItem( Svx3DAmbientcolorItem( aGlobalAmbientColor ) );
+        pScene->SetMergedItem( Svx3DAmbientcolorItem( aGlobalAmbientColor ) );
 
         sal_uInt8 nSpotLight1 = (sal_uInt8)( fLightIntensity * 255.0 );
         Vector3D aSpotLight1( (double)nLightX, (double)nLightY, (double)nLightZ );
         aSpotLight1.Normalize();
-        pScene->SetItem( Svx3DLightOnOff1Item( sal_True ) );
+        pScene->SetMergedItem( Svx3DLightOnOff1Item( sal_True ) );
         Color aAmbientSpot1Color( nSpotLight1, nSpotLight1, nSpotLight1 );
-        pScene->SetItem( Svx3DLightcolor1Item( aAmbientSpot1Color ) );
-        pScene->SetItem( Svx3DLightDirection1Item( aSpotLight1 ) );
+        pScene->SetMergedItem( Svx3DLightcolor1Item( aAmbientSpot1Color ) );
+        pScene->SetMergedItem( Svx3DLightDirection1Item( aSpotLight1 ) );
 
         sal_uInt8 nSpotLight2 = (sal_uInt8)( fLight2Intensity * 255.0 );
         Vector3D aSpotLight2( (double)nLight2X, (double)nLight2Y, (double)nLight2Z );
         aSpotLight2.Normalize();
-        pScene->SetItem( Svx3DLightOnOff2Item( sal_True ) );
+        pScene->SetMergedItem( Svx3DLightOnOff2Item( sal_True ) );
         Color aAmbientSpot2Color( nSpotLight2, nSpotLight2, nSpotLight2 );
-        pScene->SetItem( Svx3DLightcolor2Item( aAmbientSpot2Color ) );
-        pScene->SetItem( Svx3DLightDirection2Item( aSpotLight2 ) );
+        pScene->SetMergedItem( Svx3DLightcolor2Item( aAmbientSpot2Color ) );
+        pScene->SetMergedItem( Svx3DLightDirection2Item( aSpotLight2 ) );
 
         if ( nLightX || nLightY )
         {
             sal_uInt8 nSpotLight3 = 70;
             Vector3D aSpotLight3( 0, 0, 1 );
-            pScene->SetItem( Svx3DLightOnOff3Item( sal_True ) );
+            pScene->SetMergedItem( Svx3DLightOnOff3Item( sal_True ) );
             Color aAmbientSpot3Color( nSpotLight3, nSpotLight3, nSpotLight3 );
-            pScene->SetItem( Svx3DLightcolor3Item( aAmbientSpot3Color ) );
-            pScene->SetItem( Svx3DLightDirection3Item( aSpotLight3 ) );
+            pScene->SetMergedItem( Svx3DLightcolor3Item( aAmbientSpot3Color ) );
+            pScene->SetMergedItem( Svx3DLightDirection3Item( aSpotLight3 ) );
         }
 
         double fSpecular = ((double)rPropSet.GetPropertyValue( DFF_Prop_c3DSpecularAmt, 0 )) / 65536.0;
@@ -518,8 +520,8 @@ SdrObject* SvxMSDffAutoShape3D::Create3DObject( const SdrObject* pObj, const Dff
         {
             aSpecularCol = Color( 128, 128, 128 );
         }
-        pScene->SetItem( Svx3DMaterialSpecularItem( aSpecularCol ) );
-        pScene->SetItem( Svx3DMaterialSpecularIntensityItem( nItensity ) );
+        pScene->SetMergedItem( Svx3DMaterialSpecularItem( aSpecularCol ) );
+        pScene->SetMergedItem( Svx3DMaterialSpecularIntensityItem( nItensity ) );
 
         pScene->SetModel( pObj->GetModel() );
         pScene->InitTransformationSet();
