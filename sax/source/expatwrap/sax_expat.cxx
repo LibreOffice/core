@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sax_expat.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 14:01:06 $
+ *  last change: $Author: svesik $ $Date: 2001-05-02 01:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #ifdef WIN32
 #include <malloc.h>
 #else
-#ifndef MACOSX
+#if !(defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
 #include <alloca.h>
 #endif
 #endif
