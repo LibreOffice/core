@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-13 17:03:18 $
+ *  last change: $Author: sj $ $Date: 2001-05-14 14:35:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,7 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
 {
     if ( !mbStdControlsInit )
     {
-        mpGrpMore     = new GroupBox            ( this, ResId (GRP_MORE) );
+        mpGrpMore     = new FixedLine           ( this, ResId (GRP_MORE) );
         mpFtFrame     = new FixedText           ( this, ResId (FT_FRAME) );
         mpCbbFrame    = new SvxFramesComboBox   ( this, ResId (CB_FRAME) );
         mpFtForm      = new FixedText           ( this, ResId (FT_FORM) );

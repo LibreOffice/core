@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 06:51:59 $
+ *  last change: $Author: sj $ $Date: 2001-05-14 14:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,10 +84,10 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     Text [ ENGLISH ] = "Hyperlink" ;
     Text [ english_us ] = "Hyperlink" ;
 
-    GroupBox GRP_LINKTYPE
+    FixedLine GRP_LINKTYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 85 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Art des Hyperlinks" ;
         Text [ ENGLISH ] = "Kind of hyperlink" ;
         Text [ english_us ] = "Hyperlink type" ;
@@ -403,10 +403,10 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     Text[ arabic ] = "«— »«ÿ  ‘⁄»Ì";
 
 
-    GroupBox GRP_MORE
+    FixedLine GRP_MORE
     {
         Pos = MAP_APPFONT ( 6 , 92 ) ;
-        Size = MAP_APPFONT ( 248 , 64 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Weitere Einstellungen" ;
         Text [ ENGLISH ] = "More options" ;
         Text [ english_us ] = "Further settings" ;
@@ -739,10 +739,10 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     Text [ ENGLISH ] = "Hyperlink" ;
     Text [ english_us ] = "Hyperlink" ;
 
-    GroupBox GRP_MAILNEWS
+    FixedLine GRP_MAILNEWS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 85 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Mail & News" ;
         Text [ ENGLISH ] = "Mail & News" ;
         Text [ english_us ] = "Mail & News" ;
@@ -916,10 +916,10 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ finnish ] = "Osoitekirja!";
     };
 
-    GroupBox GRP_MORE
+    FixedLine GRP_MORE
     {
         Pos = MAP_APPFONT ( 6 , 92 ) ;
-        Size = MAP_APPFONT ( 248 , 64 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Weitere Einstellungen" ;
         Text [ ENGLISH ] = "More options" ;
         Text [ english_us ] = "Further settings" ;
@@ -1269,10 +1269,10 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     Text [ ENGLISH ] = "Hyperlink" ;
     Text [ english_us ] = "Hyperlink" ;
 
-    GroupBox GRP_DOCUMENT
+    FixedLine GRP_DOCUMENT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 31 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Dokument" ;
         Text [ ENGLISH ] = "Document" ;
         Text [ english_us ] = "Document" ;
@@ -1359,10 +1359,10 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ finnish ] = "Avaa tiedosto!";
     };
 
-    GroupBox GRP_TARGET
+    FixedLine GRP_TARGET
     {
         Pos = MAP_APPFONT ( 6 , 38 ) ;
-        Size = MAP_APPFONT ( 248 , 48 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Sprungziel im Dokument" ;
         Text [ ENGLISH ] = "Link target inside the document" ;
         Text [ english_us ] = "Target in document" ;
@@ -1509,10 +1509,10 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ finnish ] = "Kohde asiakirjassa!";
     };
 
-    GroupBox GRP_MORE
+    FixedLine GRP_MORE
     {
         Pos = MAP_APPFONT ( 6 , 92 ) ;
-        Size = MAP_APPFONT ( 248 , 64 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Weitere Einstellungen" ;
         Text [ ENGLISH ] = "More options" ;
         Text [ english_us ] = "Further settings" ;
@@ -1861,10 +1861,10 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     Text [ ENGLISH ] = "Hyperlink" ;
     Text [ english_us ] = "Hyperlink" ;
 
-    GroupBox GRP_NEWDOCUMENT
+    FixedLine GRP_NEWDOCUMENT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 85 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Neues Dokument" ;
         Text [ ENGLISH ] = "New document" ;
         Text [ english_us ] = "New document" ;
@@ -2048,10 +2048,10 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ finnish ] = "Valitse polku!";
     };
 
-    GroupBox GRP_MORE
+    FixedLine GRP_MORE
     {
         Pos = MAP_APPFONT ( 6 , 92 ) ;
-        Size = MAP_APPFONT ( 248 , 64 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Weitere Einstellungen" ;
         Text [ ENGLISH ] = "More options" ;
         Text [ english_us ] = "Further settings" ;
