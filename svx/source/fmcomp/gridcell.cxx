@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-31 10:31:48 $
+ *  last change: $Author: oj $ $Date: 2002-08-23 12:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1017,15 +1017,35 @@ void DbTextField::updateFromModel( Reference< XPropertySet > _rxModel )
 
     ::rtl::OUString sText;
     _rxModel->getPropertyValue( FM_PROP_TEXT ) >>= sText;
+    Edit* pEdit = static_cast< Edit* >( m_pWindow );
 
-    static_cast< Edit* >( m_pWindow )->SetText( sText );
-    static_cast< Edit* >( m_pWindow )->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
+    xub_StrLen nMaxTextLen = pEdit->GetMaxTextLen();
+    if ( EDIT_NOLIMIT != nMaxTextLen && sText.getLength() > nMaxTextLen )
+    {
+        sal_Int32 nDiff = sText.getLength() - nMaxTextLen;
+        sText = sText.replaceAt(sText.getLength() - nDiff,nDiff,::rtl::OUString());
+    }
+
+
+    pEdit->SetText( sText );
+    pEdit->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
 }
 
 //------------------------------------------------------------------------------
 sal_Bool DbTextField::commitControl()
 {
-    ::rtl::OUString aText( m_pWindow->GetText() );
+    Edit* pEdit = static_cast< Edit* >( m_pWindow );
+    ::rtl::OUString aText( pEdit->GetText() );
+    // we have to check if the length before we can decide if the value was modified
+    xub_StrLen nMaxTextLen = pEdit->GetMaxTextLen();
+    if ( EDIT_NOLIMIT != nMaxTextLen )
+    {
+        ::rtl::OUString sOldValue;
+        m_rColumn.getModel()->getPropertyValue( FM_PROP_TEXT ) >>= sOldValue;
+        // if the new value didn't change we must set the old long value again
+        if ( sOldValue.getLength() > nMaxTextLen && sOldValue.compareTo(aText,nMaxTextLen) == 0 )
+            aText = sOldValue;
+    }
     m_rColumn.getModel()->setPropertyValue( FM_PROP_TEXT, makeAny( aText ) );
     return sal_True;
 }
