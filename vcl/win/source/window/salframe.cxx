@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 09:22:02 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,6 +852,21 @@ static void ImplSalCalcBorder( const WinSalFrame* pFrame,
     rBottom = nFrameY;
 }
 
+
+static void ImplSalAddBorder( const WinSalFrame* pFrame, int& width, int& height )
+{
+    // transform client size into window size
+    RECT    aWinRect;
+    aWinRect.left   = 0;
+    aWinRect.right  = width-1;
+    aWinRect.top    = 0;
+    aWinRect.bottom = height-1;
+    AdjustWindowRectEx( &aWinRect, GetWindowStyle( pFrame->mhWnd ),
+                        FALSE,     GetWindowExStyle( pFrame->mhWnd ) );
+    width  = aWinRect.right - aWinRect.left + 1;
+    height = aWinRect.bottom - aWinRect.top + 1;
+}
+
 // -----------------------------------------------------------------------
 
 static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
@@ -932,6 +947,8 @@ WinSalFrame::WinSalFrame()
     mnHeight            = 0;
     mnMinWidth          = 0;
     mnMinHeight         = 0;
+    mnMaxWidth          = SHRT_MAX;
+    mnMaxHeight         = SHRT_MAX;
     mnInputLang         = 0;
     mnInputCodePage     = 0;
     mbGraphics          = FALSE;
@@ -1339,6 +1356,12 @@ void WinSalFrame::SetMinClientSize( long nWidth, long nHeight )
     mnMinHeight = nHeight;
 }
 
+void WinSalFrame::SetMaxClientSize( long nWidth, long nHeight )
+{
+    mnMaxWidth  = nWidth;
+    mnMaxHeight = nHeight;
+}
+
 // -----------------------------------------------------------------------
 
 void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
@@ -1495,14 +1518,19 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
 
 
     // Adjust Window in the screen
-    if ( nX+nWidth > nScreenX+nScreenWidth )
-        nX = (nScreenX+nScreenWidth) - nWidth;
-    if ( nY+nHeight > nScreenY+nScreenHeight )
-        nY = (nScreenY+nScreenHeight) - nHeight;
-    if ( nX < nScreenX )
-        nX = nScreenX;
-    if ( nY < nScreenY )
-        nY = nScreenY;
+    // but don't do this for floaters or ownerdraw windows
+    // TODO: move this into independent layer
+    if( !(mnStyle & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) )
+    {
+        if ( nX+nWidth > nScreenX+nScreenWidth )
+            nX = (nScreenX+nScreenWidth) - nWidth;
+        if ( nY+nHeight > nScreenY+nScreenHeight )
+            nY = (nScreenY+nScreenHeight) - nHeight;
+        if ( nX < nScreenX )
+            nX = nScreenX;
+        if ( nY < nScreenY )
+            nY = nScreenY;
+    }
 
     UINT nPosFlags = SWP_NOACTIVATE | SWP_NOOWNERZORDER | nPosSize;
     // bring floating windows always to top
@@ -4388,34 +4416,31 @@ static int ImplHandleMinMax( HWND hWnd, LPARAM lParam )
 
             if ( pFrame->mnMinWidth || pFrame->mnMinHeight )
             {
-                int nMinWidth   = pFrame->mnMinWidth;
-                int nMinHeight  = pFrame->mnMinHeight;
+                int nWidth   = pFrame->mnMinWidth;
+                int nHeight  = pFrame->mnMinHeight;
 
-                /*
-                int nLeft;
-                int nTop;
-                int nRight;
-                int nBottom;
+                ImplSalAddBorder( pFrame, nWidth, nHeight );
 
-                ImplSalCalcBorder( pFrame, nLeft, nTop, nRight, nBottom );  // does not honor tool window sizes
-                nMinWidth  += nLeft+nRight;
-                nMinHeight += nTop+nBottom;
-                */
+                if ( pMinMax->ptMinTrackSize.x < nWidth )
+                     pMinMax->ptMinTrackSize.x = nWidth;
+                if ( pMinMax->ptMinTrackSize.y < nHeight )
+                     pMinMax->ptMinTrackSize.y = nHeight;
+            }
 
-                RECT    aWinRect;
-                aWinRect.left   = 0;
-                aWinRect.right  = pFrame->mnMinWidth-1;
-                aWinRect.top    = 0;
-                aWinRect.bottom = pFrame->mnMinHeight-1;
-                AdjustWindowRectEx( &aWinRect, GetWindowStyle( pFrame->mhWnd ),
-                                    FALSE,     GetWindowExStyle( pFrame->mhWnd ) );
-                nMinWidth  = aWinRect.right - aWinRect.left + 1;
-                nMinHeight = aWinRect.bottom - aWinRect.top + 1;
+            if ( pFrame->mnMaxWidth || pFrame->mnMaxHeight )
+            {
+                int nWidth   = pFrame->mnMaxWidth;
+                int nHeight  = pFrame->mnMaxHeight;
 
-                if ( pMinMax->ptMinTrackSize.x < nMinWidth )
-                     pMinMax->ptMinTrackSize.x = nMinWidth;
-                if (  pMinMax->ptMinTrackSize.y < nMinHeight )
-                     pMinMax->ptMinTrackSize.y = nMinHeight;
+                ImplSalAddBorder( pFrame, nWidth, nHeight );
+
+                if( nWidth > 0 && nHeight > 0 ) // protect against int overflow due to INT_MAX initialisation
+                {
+                    if ( pMinMax->ptMaxTrackSize.x > nWidth )
+                        pMinMax->ptMaxTrackSize.x = nWidth;
+                    if ( pMinMax->ptMaxTrackSize.y > nHeight )
+                        pMinMax->ptMaxTrackSize.y = nHeight;
+                }
             }
         }
 
