@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convdicxml.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:06:34 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:34:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #ifndef _COM_SUN_STAR_LINGUISTIC2_CONVERSIONDICTIONARYTYPE_HPP_
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_CONVERSIONPROPERTYTYPE_HPP_
+#include <com/sun/star/linguistic2/ConversionPropertyType.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
 #include <com/sun/star/util/XFlushable.hpp>
 #endif
@@ -156,7 +159,7 @@ using namespace linguistic;
 
 #define XML_NAMESPACE_TCD_STRING        "http://openoffice.org/2003/text-conversion-dictionary"
 #define CONV_TYPE_HANGUL_HANJA          "Hangul / Hanja"
-//#define CONV_TYPE_SCHINESE_TCHINESE     "Chinese simplified / Chinese traditional"
+#define CONV_TYPE_SCHINESE_TCHINESE     "Chinese simplified / Chinese traditional"
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -165,8 +168,8 @@ static const OUString ConversionTypeToText( sal_Int16 nConversionType )
     OUString aRes;
     if (nConversionType == ConversionDictionaryType::HANGUL_HANJA)
         aRes = A2OU( CONV_TYPE_HANGUL_HANJA );
-//    else if (nConversionType == ConversionDictionaryType::SCHINESE_TCHINESE)
-//        aRes = A2OU( CONV_TYPE_SCHINESE_TCHINESE );
+    else if (nConversionType == ConversionDictionaryType::SCHINESE_TCHINESE)
+        aRes = A2OU( CONV_TYPE_SCHINESE_TCHINESE );
     return aRes;
 }
 
@@ -175,8 +178,8 @@ static sal_Int16 GetConversionTypeFromText( const String &rText )
     sal_Int16 nRes = -1;
     if (rText.EqualsAscii( CONV_TYPE_HANGUL_HANJA ))
         nRes = ConversionDictionaryType::HANGUL_HANJA;
-//    else if (rText.EqualsAscii( CONV_TYPE_SCHINESE_TCHINESE ))
-//        nRes = ConversionDictionaryType::SCHINESE_TCHINESE;
+    else if (rText.EqualsAscii( CONV_TYPE_SCHINESE_TCHINESE ))
+        nRes = ConversionDictionaryType::SCHINESE_TCHINESE;
     return nRes;
 }
 
@@ -236,7 +239,8 @@ public:
 class ConvDicXMLEntryTextContext_Impl :
     public ConvDicXMLImportContext
 {
-    OUString aLeftText;
+    OUString    aLeftText;
+    sal_Int16   nPropertyType;  // used for Chinese simplified/traditional conversion
     ConvDicXMLDictionaryContext_Impl    &rDicContext;
 
 public:
@@ -245,7 +249,8 @@ public:
             sal_uInt16 nPrefix, const OUString& rLName,
             ConvDicXMLDictionaryContext_Impl &rParentContext ) :
         ConvDicXMLImportContext( rImport, nPrefix, rLName ),
-        rDicContext( rParentContext )
+        rDicContext( rParentContext ),
+        nPropertyType( ConversionPropertyType::NOT_DEFINED )
     {
     }
 
@@ -254,6 +259,8 @@ public:
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList );
 
     const OUString &    GetLeftText() const { return aLeftText; }
+    sal_Int16           GetPropertyType() const { return nPropertyType; }
+    void                SetPropertyType( sal_Int16 nVal )   { nPropertyType = nVal; }
 };
 
 
@@ -377,6 +384,8 @@ void ConvDicXMLEntryTextContext_Impl::StartElement(
 
         if (nPrefix == XML_NAMESPACE_TCD && aLocalName.equalsAscii( "left-text" ))
             aLeftText = aValue;
+        if (nPrefix == XML_NAMESPACE_TCD && aLocalName.equalsAscii( "property-type" ))
+            nPropertyType = (sal_Int16) aValue.toInt32();
     }
 }
 
@@ -466,6 +475,17 @@ void ConvDicXMLExport::_ExportContent()
     {
         OUString aLeftText( *aKeyIt );
         AddAttribute( XML_NAMESPACE_TCD, "left-text", aLeftText );
+        if (rDic.pConvPropType.get())   // property-type list available?
+        {
+            sal_Int16 nPropertyType = -1;
+            PropTypeMap::iterator aIt = rDic.pConvPropType->find( aLeftText );
+            if (aIt != rDic.pConvPropType->end())
+                nPropertyType = (*aIt).second;
+            DBG_ASSERT( nPropertyType, "property-type not found" );
+            if (nPropertyType == -1)
+                nPropertyType = ConversionPropertyType::NOT_DEFINED;
+            AddAttribute( XML_NAMESPACE_TCD, "property-type", OUString::valueOf( (sal_Int32) nPropertyType ) );
+        }
         SvXMLElementExport aEntryMain( *this, XML_NAMESPACE_TCD,
                 "entry" , sal_True, sal_True );
 
