@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-07 10:17:39 $
+ *  last change: $Author: ssa $ $Date: 2002-05-16 11:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2689,83 +2689,6 @@ void ToolBox::ImplDrawNext( BOOL bIn )
 
 // -----------------------------------------------------------------------
 
-void ToolBox::ImplDrawSelectionBackground( const Rectangle& rRect, USHORT highlight, BOOL bChecked, BOOL bDrawBorder, BOOL bDrawExtBorderOnly )
-{
-    // colors used for item highlighting
-    Color aSelectionBorderCol( GetSettings().GetStyleSettings().GetActiveColor() );
-    Color aSelectionFillCol( aSelectionBorderCol );
-    Color aSelectionMaskCol( aSelectionBorderCol );
-
-    USHORT lum = GetSettings().GetStyleSettings().GetFaceColor().GetLuminance();
-    BOOL bDark = (lum <= 25);
-    BOOL bBright = (lum >= 225);
-
-    Rectangle aRect( rRect );
-    if( bDrawExtBorderOnly )
-    {
-        aRect.nLeft     -= 1;
-        aRect.nTop      -= 1;
-        aRect.nRight    += 1;
-        aRect.nBottom   += 1;
-    }
-    Color oldFillCol = GetFillColor();
-    Color oldLineCol = GetLineColor();
-
-    if( bDrawBorder )
-        SetLineColor( bDark ? Color(COL_WHITE) : ( bBright ? Color(COL_BLACK) : aSelectionBorderCol ) );
-    else
-        SetLineColor();
-
-    USHORT nPercent;
-    if( !highlight )
-    {
-        if( bDark )
-            aSelectionFillCol = COL_WHITE;
-        else
-            nPercent = 95;              // just checked (light)
-
-    }
-    else
-    {
-        if( bChecked || highlight == 1 )
-        {
-            if( bDark )
-                aSelectionFillCol = COL_GRAY;
-            else
-                nPercent = 55;          // selected, pressed or checked ( very dark )
-        }
-        else
-        {
-            if( bDark )
-                aSelectionFillCol = COL_LIGHTGRAY;
-            else
-                nPercent = 85;          // selected ( dark )
-        }
-    }
-
-    if( bDark && bDrawExtBorderOnly )
-        SetFillColor();
-    else
-        SetFillColor( aSelectionFillCol );
-
-
-    if( bDark )
-    {
-        DrawRect( aRect );
-    }
-    else
-    {
-        Polygon aPoly( aRect );
-        PolyPolygon aPolyPoly( aPoly );
-        DrawTransparent( aPolyPoly, nPercent );
-    }
-
-    SetFillColor( oldFillCol );
-    SetLineColor( oldLineCol );
-}
-
-// -----------------------------------------------------------------------
-
 void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
@@ -3029,7 +2952,7 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
         }
         if ( bHighlight || (pItem->meState == STATE_CHECK) )
         {
-            ImplDrawSelectionBackground( pItem->maRect, bHighlight, pItem->meState == STATE_CHECK, TRUE, pItem->mpWindow ? TRUE : FALSE );
+            DrawSelectionBackground( pItem->maRect, bHighlight, pItem->meState == STATE_CHECK, TRUE, pItem->mpWindow ? TRUE : FALSE );
 
             // no shadows until our icons are not redesigned
             /*
@@ -3103,7 +3026,7 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
 
         // draw selection only if not already draw during imgae output (see above)
         if ( !bImage && (bHighlight || (pItem->meState == STATE_CHECK) ) )
-            ImplDrawSelectionBackground( pItem->maRect, bHighlight, pItem->meState == STATE_CHECK, TRUE, pItem->mpWindow ? TRUE : FALSE );
+            DrawSelectionBackground( pItem->maRect, bHighlight, pItem->meState == STATE_CHECK, TRUE, pItem->mpWindow ? TRUE : FALSE );
 
         USHORT nTextStyle = 0;
         if ( !pItem->mbEnabled )
@@ -3145,7 +3068,7 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
         Erase( aClearRect );
 
         if( bHighlight || (pItem->meState == STATE_CHECK) )
-            ImplDrawSelectionBackground( aClearRect, bHighlight, pItem->meState == STATE_CHECK, FALSE, FALSE );
+            DrawSelectionBackground( aClearRect, bHighlight, pItem->meState == STATE_CHECK, FALSE, FALSE );
 
         BOOL bBlack = FALSE;
 
@@ -4898,6 +4821,10 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         {
             // do nothing to avoid key presses going into the document
             // while the toolbox has the focus
+            // just forward function and special keys
+            USHORT aKeyGroup = aKeyCode.GetGroup();
+            if( aKeyGroup == KEYGROUP_FKEYS || aKeyGroup == KEYGROUP_MISC )
+                bForwardKey = TRUE;
         }
     }
 
@@ -5156,7 +5083,7 @@ void ToolBox::ImplShowFocus()
     {
         ImplToolItem* pItem = ImplGetItem( mnHighItemId );
         if( pItem->mpWindow )
-            ImplDrawSelectionBackground( pItem->maRect, 2, FALSE, TRUE, pItem->mpWindow ? TRUE : FALSE );
+            DrawSelectionBackground( pItem->maRect, 2, FALSE, TRUE, pItem->mpWindow ? TRUE : FALSE );
     }
 }
 
@@ -5171,7 +5098,7 @@ void ToolBox::ImplHideFocus()
         {
             Rectangle aRect( pItem->maRect );
             // increase rect a little to get rid of selection border
-            // see ImplDrawSelectionBackground(...)
+            // see DrawSelectionBackground(...)
             aRect.nLeft     -= 1;
             aRect.nTop      -= 1;
             aRect.nRight    += 1;
