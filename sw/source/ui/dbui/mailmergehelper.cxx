@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmergehelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:28:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:35:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,16 +453,24 @@ void SwAddressPreview::Paint(const Rectangle&)
         nStartRow = (sal_uInt16)aVScrollBar.GetThumbPos();
     }
     Size aPartSize( aSize.Width()/pImpl->nColumns, aSize.Height()/pImpl->nRows );
+    aPartSize.Width() -= 2;
+    aPartSize.Height() -= 2;
 
     sal_uInt16 nAddress = nStartRow * pImpl->nColumns;
+    const sal_uInt16 nNumAddresses = pImpl->aAdresses.size();
     for(sal_uInt16 nRow = 0; nRow < pImpl->nRows ; ++nRow)
     {
         for(sal_uInt16 nCol = 0; nCol < pImpl->nColumns; ++nCol)
         {
-            if(nAddress >= pImpl->aAdresses.size())
+            if(nAddress >= nNumAddresses)
                 break;
             Point aPos(nCol * aPartSize.Width(), (nRow) * aPartSize.Height());
-            DrawText_Impl( pImpl->aAdresses[nAddress], aPos, aPartSize, nAddress == pImpl->nSelectedAddress);
+            aPos.Move(1,1);
+            bool bIsSelected = nAddress == pImpl->nSelectedAddress;
+            if((pImpl->nColumns * pImpl->nRows) == 1)
+                bIsSelected = false;
+            ::rtl::OUString adr(pImpl->aAdresses[nAddress]);
+            DrawText_Impl(adr,aPos,aPartSize,bIsSelected);
             ++nAddress;
         }
     }
@@ -821,7 +829,7 @@ uno::Reference< uno::XComponentContext> getCurrentCmpCtx(
 /*-- 13.07.2004 09:07:01---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwMailTransferable::SwMailTransferable(const String& rBody, const String& rMimeType) :
+SwMailTransferable::SwMailTransferable(const rtl::OUString& rBody, const rtl::OUString& rMimeType) :
     cppu::WeakComponentImplHelper1< datatransfer::XTransferable >(m_aMutex),
     m_aMimeType( rMimeType ),
     m_sBody( rBody ),
@@ -831,8 +839,8 @@ SwMailTransferable::SwMailTransferable(const String& rBody, const String& rMimeT
 /*-- 13.07.2004 09:07:01---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwMailTransferable::SwMailTransferable(const String& rURL,
-                const String& rName, const String& rMimeType) :
+SwMailTransferable::SwMailTransferable(const rtl::OUString& rURL,
+                const rtl::OUString& rName, const rtl::OUString& rMimeType) :
     cppu::WeakComponentImplHelper1< datatransfer::XTransferable >(m_aMutex),
     m_aMimeType( rMimeType ),
     m_aURL(rURL),
