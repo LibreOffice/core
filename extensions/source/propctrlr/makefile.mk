@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 12:04:29 $
+#   last change: $Author: rt $ $Date: 2004-04-02 11:01:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -146,10 +146,10 @@ UNOTYPES=\
     com.sun.star.awt.XSpinListener				\
     com.sun.star.awt.XAdjustmentListener		\
     com.sun.star.awt.XMenuListener				\
-    drafts.com.sun.star.form.XBindableValue     \
-    drafts.com.sun.star.form.XValueBinding      \
-    drafts.com.sun.star.form.XListEntrySource   \
-    drafts.com.sun.star.form.XListEntrySink     \
+    com.sun.star.form.binding.XBindableValue     \
+    com.sun.star.form.binding.XValueBinding      \
+    com.sun.star.form.binding.XListEntrySource   \
+    com.sun.star.form.binding.XListEntrySink     \
 
 
 SLOFILES=			$(SLO)$/controlfontdialog.obj	\
