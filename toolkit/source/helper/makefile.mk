@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pb $ $Date: 2002-03-22 08:34:45 $
+#   last change: $Author: pb $ $Date: 2002-05-30 13:14:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,8 @@ SLOFILES=   \
             $(SLO)$/unomemorystream.obj 		\
             $(SLO)$/unopropertyarrayhelper.obj	\
             $(SLO)$/unowrapper.obj 				\
-            $(SLO)$/vclunohelper.obj
+            $(SLO)$/vclunohelper.obj			\
+            $(SLO)$/externallock.obj
 
 # --- Targets ------------------------------------------------------
 
