@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-11-01 13:23:22 $
+ *  last change: $Author: tl $ $Date: 2002-11-11 13:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,10 @@ class SwFrm;
 struct SwPrintData;
 class SvtAccessibilityOptions;
 class Fraction;
+class SvEmbeddedObjectRef;
+
 struct SwAccessibilityOptions;
+
 
 //JP 19.07.98: - Bug 52312
 // define fuer Flags, die im CTOR oder den darunter liegenden Schichten
@@ -312,6 +315,10 @@ public:
     //"Drucken" fuer OLE 2.0
     static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt,
                          OutputDevice* pOleOut, const Rectangle& rRect );
+
+    // creates temporary doc with selected text for PDF export
+    SwDoc * CreatePrtDoc( SfxPrinter* pPrt, SvEmbeddedObjectRef &rDocShellRef );
+    SwDoc * FillPrtDoc( SwDoc* pPrtDoc, SfxPrinter* pPrt );
 
     //Wird intern fuer die Shell gerufen die Druckt. Formatiert die Seiten.
     void CalcPagesForPrint( sal_uInt16 nMax, SfxProgress* pProgress = 0,

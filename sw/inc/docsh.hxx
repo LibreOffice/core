@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-09-26 13:31:19 $
+ *  last change: $Author: tl $ $Date: 2002-11-11 13:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,7 @@ public:
     // View setzen fuer Aktionen ueber Shell
     void          SetView(SwView* pVw);
     const SwView *GetView() const { return pView; }
+    SwView       *GetView()       { return pView; }
 
     // Zugriff auf die zur SwView gehoerige SwWrtShell
           SwWrtShell *GetWrtShell()       { return pWrtShell; }
