@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoconversionutilities.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-12 13:15:53 $
+ *  last change: $Author: jl $ $Date: 2000-10-19 11:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,11 +131,12 @@ public:
     Sequence<Any> createOleArrayWrapperOfDim(SAFEARRAY* pArray, unsigned int dimCount, unsigned int actDim, long* index, VARTYPE type);
     Sequence<Any> createOleArrayWrapper(SAFEARRAY* pArray, VARTYPE type);
 
-//  SAFEARRAY* createUnoSequenceWrapper(const Any& rSeq);
 
     VARTYPE mapTypeClassToVartype( TypeClass type);
 
-    Reference< XSingleServiceFactory > getInvocationFactory();
+//  Reference< XSingleServiceFactory > getInvocationFactory();
+    Reference< XSingleServiceFactory > getInvocationFactory(const Any& anyObject);
+
 
     virtual Reference< XInterface > createUnoWrapperInstance()=0;
     virtual Reference< XInterface > createComWrapperInstance()=0;
@@ -145,9 +146,12 @@ public:
 
 
 protected:
+    // helper function for Sequence conversion
     void getElementCountAndTypeOfSequence( const Any& rSeq, sal_Int32 dim, Sequence< sal_Int32 >& seqElementCounts, TypeDescription& typeDesc);
+    // helper function for Sequence conversion
     sal_Bool incrementMultidimensionalIndex(sal_Int32 dimensions, const sal_Int32 * parDimensionLength,
                                     sal_Int32 * parMultidimensionalIndex);
+    // helper function for Sequence conversion
     size_t getOleElementSize( VARTYPE type);
 
 
@@ -158,26 +162,61 @@ protected:
     sal_uInt8 m_nComWrapperClass;
 
     // This factory is set by calling XInitialization::initialize.
-    // If this ServiceManager is supplied then it is used to create all
-    // necessary services.
+    // If this ServiceManager is supplied then it is used to create
+    // a remote invocation service, whenever an UNO object is to be converted.
+    // This happens when the service com.sun.star.bridge.OleBridgeSupplierVar1 is
+    // being used to convert an object. The service is used in the plugin
+    // where it converts remote objects ( e.g. the XFrame). Thus the object and
+    // the invocation service are on the remote server.
     Reference<XMultiServiceFactory> m_xMultiServiceFactory;
-    Reference<XSingleServiceFactory> m_xInvocationFactory;
+    Reference<XSingleServiceFactory> m_xInvocationFactoryLocal;
+    Reference<XSingleServiceFactory> m_xInvocationFactoryRemote;
 
 
 };
 
+//template<class T>
+//Reference< XSingleServiceFactory > UnoConversionUtilities<T>::getInvocationFactory()
+//{
+//  if( m_xInvocationFactory.is() )
+//      return Reference< XSingleServiceFactory >( m_xInvocationFactory );
+//
+//  if( m_xMultiServiceFactory.is() )
+//      m_xInvocationFactory= Reference<XSingleServiceFactory >( m_xMultiServiceFactory->createInstance( INVOCATION_SERVICE), UNO_QUERY);
+//  else
+//      m_xInvocationFactory= Reference<XSingleServiceFactory>( o2u_getMultiServiceFactory()->createInstance(INVOCATION_SERVICE ), UNO_QUERY);
+//
+//  return m_xInvocationFactory;
+//}
+
+// Gets the invocation factory depending on the Type in the Any.
+// The factory can be created by a local or remote multi service factory.
+// In case there is a remote multi service factory available there are
+// some services or types for which the local factory is used. The exceptions
+// are:  all structs.
+// Param anyObject - contains the object ( interface, struct) for what we need an invocation object.
+//
 template<class T>
-Reference< XSingleServiceFactory > UnoConversionUtilities<T>::getInvocationFactory()
+Reference< XSingleServiceFactory > UnoConversionUtilities<T>::getInvocationFactory(const Any& anyObject)
 {
-    if( m_xInvocationFactory.is() )
-        return Reference< XSingleServiceFactory >( m_xInvocationFactory );
+    Reference< XSingleServiceFactory > retVal;
 
-    if( m_xMultiServiceFactory.is() )
-        m_xInvocationFactory= Reference<XSingleServiceFactory >( m_xMultiServiceFactory->createInstance( INVOCATION_SERVICE), UNO_QUERY);
+    if( anyObject.getValueTypeClass() != TypeClass_STRUCT &&
+        m_xMultiServiceFactory.is() )
+    {
+        if(  ! m_xInvocationFactoryRemote.is() )
+            m_xInvocationFactoryRemote= Reference<XSingleServiceFactory>(
+            m_xMultiServiceFactory->createInstance( INVOCATION_SERVICE), UNO_QUERY);
+        retVal= m_xInvocationFactoryRemote;
+    }
     else
-        m_xInvocationFactory= Reference<XSingleServiceFactory>( o2u_getMultiServiceFactory()->createInstance(INVOCATION_SERVICE ), UNO_QUERY);
-
-    return m_xInvocationFactory;
+    {
+        if( ! m_xInvocationFactoryLocal.is() )
+            m_xInvocationFactoryLocal= Reference<XSingleServiceFactory>(
+            o2u_getMultiServiceFactory()->createInstance(INVOCATION_SERVICE ), UNO_QUERY);
+        retVal= m_xInvocationFactoryLocal;
+    }
+    return retVal;
 }
 
 template<class T>
@@ -956,8 +995,9 @@ IDispatch*  UnoConversionUtilities<T>::createUnoObjectWrapper(const Any& rObj)
 
     if (! pDispatch && !xInv.is())
     {
-    //      static Reference<XSingleServiceFactory> xInvFactory(o2u_getMultiServiceFactory()->createInstance(INVOCATION_SERVICE),UNO_QUERY);
-        Reference<XSingleServiceFactory> xInvFactory= getInvocationFactory();
+
+
+        Reference<XSingleServiceFactory> xInvFactory= getInvocationFactory(rObj);
         if( xInvFactory.is())
         {
             Sequence<Any> params(1);
