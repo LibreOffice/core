@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basdoc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 12:56:30 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 #ifndef _SV_STATUS_HXX //autogen
 #include <vcl/status.hxx>
 #endif
+
+#include <svx/xmlsecctrl.hxx>
 
 #include <basdoc.hxx>
 #include <basidesh.hrc>
@@ -163,6 +165,10 @@ void BasicDocShell::FillStatusBar( StatusBar& rStatusBar )
     // Modify
     rStatusBar.InsertItem( SID_DOC_MODIFIED,
         rStatusBar.GetTextWidth( '*' ) );
+
+    // signatures
+    rStatusBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rStatusBar ), SIB_USERDRAW );
+    rStatusBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
 
     // Position
     aTmp.Erase();
