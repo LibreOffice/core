@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-22 18:11:36 $
+ *  last change: $Author: sj $ $Date: 2000-11-28 18:23:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,13 @@
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_TEXTVERTICALADJUST_HPP_
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_TEXTHORIZONTALADJUST_HPP_
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#endif
+
 #include <svtools/fltcall.hxx>
 
 //#include <svx/xbtmpit.hxx>
@@ -1542,31 +1549,31 @@ void PPTWriter::ImplWriteTextBundle( sal_Bool bDisableAutoGrowHeight )
 
         if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "TextVerticalAdjust" ) ) ) )
         {
-            ::com::sun::star::style::VerticalAlignment aVA;
-            mAny >>= aVA;
-            switch ( aVA )
+            ::com::sun::star::drawing::TextVerticalAdjust eVA;
+            mAny >>= eVA;
+            switch ( eVA )
             {
-                case ::com::sun::star::style::VerticalAlignment_MIDDLE :
+                case 1 :    // ::com::sun::star::drawing::TextVerticalAdjust_CENTER :
                     eAnchor = _Escher_AnchorMiddle;
                 break;
 
-                case ::com::sun::star::style::VerticalAlignment_BOTTOM :
+                case 2 :    // ::com::sun::star::drawing::TextVerticalAdjust_BOTTOM :
                     eAnchor = _Escher_AnchorBottom;
                 break;
 
                 default :
-                case ::com::sun::star::style::VerticalAlignment_TOP :
+                case 0 :    // ::com::sun::star::drawing::TextVerticalAdjust_TOP :
                     eAnchor = _Escher_AnchorTop;
                 break;
             }
         }
         if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "TextHorizontalAdjust" ) ) ) )
         {
-            ::com::sun::star::drawing::TextAdjust aTA;
-            mAny >>= aTA;
-            switch ( aTA )
+            ::com::sun::star::drawing::TextHorizontalAdjust eTA;
+            mAny >>= eTA;
+            switch ( eTA )
             {
-                case ::com::sun::star::drawing::TextAdjust_CENTER :
+                case 1 :    // ::com::sun::star::drawing::TextHorizontalAdjust_CENTER :
                 {
                     switch( eAnchor )
                     {
@@ -1582,10 +1589,9 @@ void PPTWriter::ImplWriteTextBundle( sal_Bool bDisableAutoGrowHeight )
                     }
                 }
                 break;
-                case ::com::sun::star::drawing::TextAdjust_RIGHT :
-                case ::com::sun::star::drawing::TextAdjust_LEFT :
-                case ::com::sun::star::drawing::TextAdjust_STRETCH :
-                case ::com::sun::star::drawing::TextAdjust_BLOCK :
+                case 2 :    // ::com::sun::star::drawing::TextHorizontalAdjust_RIGHT :
+                case 0 :    // ::com::sun::star::drawing::TextHorizontalAdjust_LEFT :
+                case 3 :    // ::com::sun::star::drawing::TextHorizontalAdjust_BLOCK :
                 break;
             }
         }
