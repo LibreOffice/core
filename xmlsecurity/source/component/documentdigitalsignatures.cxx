@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mmi $ $Date: 2004-08-12 02:29:20 $
+ *  last change: $Author: pb $ $Date: 2004-08-20 08:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,15 +75,15 @@
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
 #endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 #ifndef INCLUDED_SVTOOLS_SECURITYOPTIONS_HXX
 #include <svtools/securityoptions.hxx>
 #endif
 
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star;
-
 
 DocumentDigitalSignatures::DocumentDigitalSignatures( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory> rxMSF )
 {
@@ -239,7 +239,25 @@ void DocumentDigitalSignatures::ShowCertificate( const ::com::sun::star::uno::Re
 
 ::sal_Bool DocumentDigitalSignatures::isLocationTrusted( const ::rtl::OUString& Location ) throw (::com::sun::star::uno::RuntimeException)
 {
-    return sal_False;
+    sal_Bool bFound = sal_False;
+    INetURLObject aLocObj( Location );
+
+    SvtSecurityOptions aSecOpt;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSecURLs = aSecOpt.GetSecureURLs();
+    sal_Int32 nCnt = aSecURLs.getLength();
+    const ::rtl::OUString* pSecURLs = aSecURLs.getConstArray();
+    const ::rtl::OUString* pSecURLsEnd = pSecURLs + aSecURLs.getLength();
+    for ( ; pSecURLs != pSecURLsEnd; ++pSecURLs )
+    {
+        INetURLObject aSecURL( *pSecURLs );
+        if ( aSecURL == aLocObj )
+        {
+            bFound = sal_True;
+            break;
+        }
+    }
+
+    return bFound;
 }
 
 void DocumentDigitalSignatures::addAuthorToTrustedSources( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& Author ) throw (::com::sun::star::uno::RuntimeException)
