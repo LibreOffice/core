@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astoperation.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 #include <idlc/astscope.hxx>
 #endif
 
+namespace typereg { class Writer; }
+
 #define OP_NONE         0x0000
 #define OP_ONEWAY       0x0001
 
@@ -88,16 +90,18 @@ public:
     sal_Bool isOneway()
         { return ((m_flags & OP_ONEWAY) == OP_ONEWAY); }
     sal_Bool isVoid();
-    AstType* getReturnType()
-        { return m_pReturnType; }
 
-    void addExceptions(StringList* pExceptions);
+    bool isVariadic() const;
+
+    bool isConstructor() const { return m_pReturnType == 0; }
+
+    void setExceptions(DeclList const * pExceptions);
     const DeclList& getExceptions()
         { return m_exceptions; }
     sal_uInt16 nExceptions()
         { return m_exceptions.size(); }
 
-    sal_Bool dumpBlob(RegistryTypeWriter& rBlob, sal_uInt16 index);
+    sal_Bool dumpBlob(typereg::Writer & rBlob, sal_uInt16 index);
 
     // scope management
     virtual AstDeclaration* addDeclaration(AstDeclaration* pDecl);
