@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commanddefinition.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:40 $
+ *  last change: $Author: fs $ $Date: 2000-10-05 09:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ using namespace ::osl;
 using namespace ::utl;
 using namespace ::cppu;
 using namespace dbaccess;
+using namespace comphelper;
 
 //==========================================================================
 //= OCommandDefinition
@@ -127,7 +128,7 @@ void OCommandDefinition::registerProperties()
 
 //--------------------------------------------------------------------------
 OCommandDefinition::OCommandDefinition()
-    :OSimplePropertyContainer(m_aBHelper)
+    :OPropertyContainer(m_aBHelper)
     ,OConfigurationFlushable(m_aMutex)
 {
     DBG_CTOR(OCommandDefinition, NULL);
@@ -143,7 +144,7 @@ OCommandDefinition::~OCommandDefinition()
 //--------------------------------------------------------------------------
 OCommandDefinition::OCommandDefinition(const Reference< XInterface >& _rxContainer, const ::rtl::OUString& _rElementName,
             const Reference< XRegistryKey >& _rxConfigurationRoot)
-    :OSimplePropertyContainer(m_aBHelper)
+    :OPropertyContainer(m_aBHelper)
     ,OConfigurationFlushable(m_aMutex)
     ,m_xContainer(_rxContainer)
 {
@@ -167,7 +168,7 @@ Any SAL_CALL OCommandDefinition::queryInterface( const Type& _rType ) throw(Runt
 {
     Any aReturn = OCommandDefinition_Base::queryInterface(_rType);
     if (!aReturn.hasValue())
-        aReturn = OSimplePropertyContainer::queryInterface(_rType);
+        aReturn = OPropertyContainer::queryInterface(_rType);
     if (!aReturn.hasValue())
         aReturn = OConfigurationFlushable::queryInterface(_rType);
 

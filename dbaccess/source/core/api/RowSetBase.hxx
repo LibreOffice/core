@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:20:51 $
+ *  last change: $Author: fs $ $Date: 2000-10-05 09:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,8 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
 #endif
-#ifndef _DBA_CORE_SIMPLEPROPERTYCONTAINER_HXX_
-#include "simplepropertycontainer.hxx"
+#ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
+#include <comphelper/propertycontainer.hxx>
 #endif
 #ifndef _UNOTOOLS_PROPERTY_ARRAY_HELPER_HXX_
 #include <unotools/proparrhlp.hxx>
@@ -127,7 +127,7 @@ namespace dbaccess
 
     class ORowSetBase : public connectivity::OBaseMutex,
                         public ORowSetBase_BASE,
-                        public OSimplePropertyContainer,
+                        public ::comphelper::OPropertyContainer,
                         public ::utl::OPropertyArrayUsageHelper<ORowSetBase> // this class hold the static property info
     {
     protected:
@@ -176,7 +176,7 @@ namespace dbaccess
         // check if the insert must be canceled
         virtual void checkInsert() = 0;
 
-    // OSimplePropertyContainer
+    // OPropertyContainer
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;
 
     public:

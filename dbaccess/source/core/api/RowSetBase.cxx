@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-04 14:11:52 $
+ *  last change: $Author: fs $ $Date: 2000-10-05 09:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 #endif
 using namespace dbaccess;
 using namespace connectivity;
+using namespace comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
@@ -121,7 +122,7 @@ public:
 };
 // -------------------------------------------------------------------------
 ORowSetBase::ORowSetBase(::cppu::OBroadcastHelper   &_rBHelper)
-            : OSimplePropertyContainer(_rBHelper)
+            : OPropertyContainer(_rBHelper)
             , m_rBHelper(_rBHelper)
             , m_aListeners(m_aMutex)
             , m_aApproveListeners(m_aMutex)
@@ -143,13 +144,13 @@ ORowSetBase::ORowSetBase(::cppu::OBroadcastHelper   &_rBHelper)
 //--------------------------------------------------------------------------
 Sequence< Type > ORowSetBase::getTypes() throw (RuntimeException)
 {
-    return ::utl::concatSequences(ORowSetBase_BASE::getTypes(),OSimplePropertyContainer::getTypes());
+    return ::utl::concatSequences(ORowSetBase_BASE::getTypes(),OPropertyContainer::getTypes());
 }
 // com::sun::star::uno::XInterface
 //--------------------------------------------------------------------------
 Any ORowSetBase::queryInterface( const Type & rType ) throw (RuntimeException)
 {
-    Any aRet = OSimplePropertyContainer::queryInterface(rType);
+    Any aRet = OPropertyContainer::queryInterface(rType);
     if(!aRet.hasValue())
         aRet = ORowSetBase_BASE::queryInterface(rType);
     return aRet;
@@ -168,11 +169,11 @@ void SAL_CALL ORowSetBase::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) c
             rValue.setValue(&m_pCache->m_bRowCountFinal,::getCppuBooleanType());
             break;
         default:
-            OSimplePropertyContainer::getFastPropertyValue(rValue,nHandle);
+            OPropertyContainer::getFastPropertyValue(rValue,nHandle);
         };
     }
     else
-        OSimplePropertyContainer::getFastPropertyValue(rValue,nHandle);
+        OPropertyContainer::getFastPropertyValue(rValue,nHandle);
 }
 // -------------------------------------------------------------------------
 // OComponentHelper

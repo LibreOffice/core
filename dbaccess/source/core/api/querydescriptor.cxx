@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-05 09:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ using namespace ::utl;
 using namespace ::osl;
 using namespace ::cppu;
 using namespace dbaccess;
+using namespace comphelper;
 
 //==========================================================================
 //= OQueryDescriptor
@@ -100,7 +101,7 @@ using namespace dbaccess;
 void OQueryDescriptor::registerProperties()
 {
     // the properties which OCommandBase supplies (it has no own registration, as it's not derived from
-    // a OSimplePropertyContainer)
+    // a OPropertyContainer)
     registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND,
                     &m_sElementName, ::getCppuType(&m_sElementName));
 

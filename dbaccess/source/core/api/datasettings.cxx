@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasettings.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:38 $
+ *  last change: $Author: fs $ $Date: 2000-10-05 09:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ using namespace ::com::sun::star::registry;
 using namespace ::utl;
 using namespace ::cppu;
 using namespace dbaccess;
+using namespace comphelper;
 
 //==========================================================================
 //= ODataSettings
@@ -120,14 +121,14 @@ void ODataSettings::registerProperties()
 }
 //--------------------------------------------------------------------------
 ODataSettings::ODataSettings(OBroadcastHelper& _rBHelper)
-    :OSimplePropertyContainer(_rBHelper)
+    :OPropertyContainer(_rBHelper)
 {
     registerProperties();
 }
 
 //--------------------------------------------------------------------------
 ODataSettings::ODataSettings(const ODataSettings& _rSource, ::cppu::OBroadcastHelper& _rBHelper)
-    :OSimplePropertyContainer(_rBHelper)
+    :OPropertyContainer(_rBHelper)
     ,ODataSettings_Base(_rSource)
 {
     registerProperties();

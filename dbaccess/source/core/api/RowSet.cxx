@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-04 13:34:40 $
+ *  last change: $Author: fs $ $Date: 2000-10-05 09:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@
 
 using namespace dbaccess;
 using namespace connectivity;
+using namespace comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
@@ -262,7 +263,7 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             m_pCache->m_bModified = cppu::any2bool(rValue);
             break;
         default:
-            OSimplePropertyContainer::setFastPropertyValue_NoBroadcast(nHandle,rValue);
+            OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle,rValue);
     }
 
     switch(nHandle)
@@ -435,7 +436,7 @@ Reference< XInterface > ORowSet::Create(const Reference< XMultiServiceFactory >&
 // OComponentHelper
 void SAL_CALL ORowSet::disposing(void)
 {
-    OSimplePropertyContainer::disposing();
+    OPropertyContainer::disposing();
 
     MutexGuard aGuard(m_aMutex);
 
@@ -2354,6 +2355,9 @@ sal_Int64 SAL_CALL ORowSetClone::getSomething( const Sequence< sal_Int8 >& rId )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/04 13:34:40  oj
+    some changes for deleteRow and updateRow
+
     Revision 1.2  2000/09/29 15:20:51  oj
     rowset impl
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commandbase.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-05 09:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ protected:
 // <properties>
     ::rtl::OUString     m_sElementName;
     ::rtl::OUString     m_sCommand;
-    sal_Bool            m_bEscapeProcessing;        // no BitField ! so it can be used with a OSimplePropertyContainer
+    sal_Bool            m_bEscapeProcessing;        // no BitField ! so it can be used with a OPropertyContainer
     ::rtl::OUString     m_sUpdateTableName;
     ::rtl::OUString     m_sUpdateSchemaName;
     ::rtl::OUString     m_sUpdateCatalogName;
