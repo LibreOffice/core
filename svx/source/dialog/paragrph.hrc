@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 17:07:08 $
+ *  last change: $Author: os $ $Date: 2001-01-09 11:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,5 +138,12 @@
 #define CB_AS_HANG_PUNC         2
 #define CB_AS_SCRIPT_SPACE      3
 #define CB_AS_FORBIDDEN         4
+#define GB_AS_CHAR_DIST         5
+#define CB_AS_PUNCTUATION       6
+#define CB_AS_ADJUST_WESTERN    7
+#define CB_AS_ADJUST_NUMBERS    8
+#define FT_TEXT_ALIGN           9
+#define LB_TEXT_ALIGN          10
+
 #endif
 

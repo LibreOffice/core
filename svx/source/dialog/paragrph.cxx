@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-12-19 12:07:01 $
+ *  last change: $Author: os $ $Date: 2001-01-09 11:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2123,7 +2123,13 @@ SvxAsianTabPage::SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet ) :
     aOptionsGB(         this, ResId(GB_AS_OPTIONS       )),
     aHangingPunctCB(    this, ResId(CB_AS_HANG_PUNC     )),
     aScriptSpaceCB(     this, ResId(CB_AS_SCRIPT_SPACE  )),
-    aForbiddenRulesCB(  this, ResId(CB_AS_FORBIDDEN     ))
+    aForbiddenRulesCB(  this, ResId(CB_AS_FORBIDDEN     )),
+    aCharDistGB(        this, ResId(GB_AS_CHAR_DIST     )),
+    aPuntuationCB(      this, ResId(CB_AS_PUNCTUATION   )),
+    aAdjustWesternCB(   this, ResId(CB_AS_ADJUST_WESTERN)),
+    aAdjustNumbersCB(   this, ResId(CB_AS_ADJUST_NUMBERS)),
+    aTextAlignFT(       this, ResId(FT_TEXT_ALIGN       )),
+    aTextAlignLB(       this, ResId(LB_TEXT_ALIGN       ))
 {
     FreeResource();
 
@@ -2198,48 +2204,39 @@ BOOL        SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
 /*-- 29.11.00 11:36:25---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SvxAsianTabPage::Reset( const SfxItemSet& rSet )
+void lcl_SetBox(const SfxItemSet& rSet, USHORT nSlotId, TriStateBox& rBox)
 {
-    SfxItemPool* pPool = rSet.GetPool();
-    USHORT nWhich = pPool->GetWhich(SID_ATTR_PARA_SCRIPTSPACE);
+    USHORT nWhich = rSet.GetPool()->GetWhich(nSlotId);
     SfxItemState eState = rSet.GetItemState(nWhich, TRUE);
     if(!eState)
-        aScriptSpaceCB.Enable(FALSE);
+        rBox.Enable(FALSE);
     else if(eState >= SFX_ITEM_AVAILABLE)
     {
-        aScriptSpaceCB.EnableTriState( FALSE );
-        aScriptSpaceCB.Check(((const SfxBoolItem&)rSet.Get(nWhich)).GetValue());
+        rBox.EnableTriState( FALSE );
+        rBox.Check(((const SfxBoolItem&)rSet.Get(nWhich)).GetValue());
     }
     else
-        aScriptSpaceCB.SetState( STATE_DONTKNOW );
+        rBox.SetState( STATE_DONTKNOW );
+    rBox.SaveValue();
+}
 
-    nWhich = pPool->GetWhich(SID_ATTR_PARA_HANGPUNCTUATION);
-    eState = rSet.GetItemState(nWhich, TRUE);
-    if(!eState)
-        aHangingPunctCB.Enable(FALSE);
-    else if(eState >= SFX_ITEM_AVAILABLE)
-    {
-        aHangingPunctCB.EnableTriState( FALSE );
-        aHangingPunctCB.Check(((const SfxBoolItem&)rSet.Get(nWhich)).GetValue());
-    }
-    else
-        aHangingPunctCB.SetState( STATE_DONTKNOW );
 
-    nWhich = pPool->GetWhich(SID_ATTR_PARA_FORBIDDEN_RULES);
-    eState = rSet.GetItemState(nWhich, TRUE);
-    if(!eState)
-        aForbiddenRulesCB.Enable(FALSE);
-    else if(eState >= SFX_ITEM_AVAILABLE)
-    {
-        aForbiddenRulesCB.EnableTriState( FALSE );
-        aForbiddenRulesCB.Check(((const SfxBoolItem&)rSet.Get(nWhich)).GetValue());
-    }
-    else
-        aForbiddenRulesCB.SetState( STATE_DONTKNOW );
+void SvxAsianTabPage::Reset( const SfxItemSet& rSet )
+{
+    lcl_SetBox(rSet, SID_ATTR_PARA_SCRIPTSPACE, aScriptSpaceCB );
+    lcl_SetBox(rSet, SID_ATTR_PARA_HANGPUNCTUATION, aHangingPunctCB );
+    lcl_SetBox(rSet, SID_ATTR_PARA_FORBIDDEN_RULES, aForbiddenRulesCB );
 
-    aScriptSpaceCB.SaveValue();
-    aHangingPunctCB.SaveValue();
-    aForbiddenRulesCB.SaveValue();
+    //character distance not yet available
+//  lcl_SetBox(rSet, , aPuntuationCB    );
+//  lcl_SetBox(rSet, , aAdjustWesternCB );
+//  lcl_SetBox(rSet, , aAdjustNumbersCB );
+    aPuntuationCB       .Enable(FALSE);
+    aAdjustWesternCB    .Enable(FALSE);
+    aAdjustNumbersCB    .Enable(FALSE);
+    aTextAlignFT.Enable(FALSE);
+    aTextAlignLB.Enable(FALSE);
+
 }
 /* -----------------------------19.12.00 12:59--------------------------------
 

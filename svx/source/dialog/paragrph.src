@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-12-19 12:07:01 $
+ *  last change: $Author: os $ $Date: 2001-01-09 11:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2070,6 +2070,57 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ chinese_traditional ] = "≈U§Œ¶Ê≠∫¶Ê•Ω∏T§Ó®œ•Œ¶r§∏™∫≤M≥Ê";
         Text[ turkish ] = "Apply list of forbidden characters at line end and line start";
         Text[ arabic ] = " ÿ»Ìﬁ ﬁ«∆„… «·√Õ—› «·„„‰Ê⁄… ⁄·Ï »œ«Ì… «·√”ÿ— Ê‰Â«Ì Â«";
+    };
+    GroupBox GB_AS_CHAR_DIST
+    {
+        Pos = MAP_APPFONT ( 3 , 61 ) ;
+        Size = MAP_APPFONT ( 254 , 66 ) ;
+        Text = "Zeichenabstand" ;
+        Text [ ENGLISH ] = "Character distance" ;
+    };
+    TriStateBox CB_AS_PUNCTUATION
+    {
+        Pos = MAP_APPFONT ( 6 , 71 ) ;
+        Size = MAP_APPFONT ( 245 , 12 ) ;
+        Text = "~Interpunktion am Zeilenbeginn zum Komprimieren zulassen" ;
+        Text [ ENGLISH ] = "Allow punctuation at line start" ;
+    };
+    TriStateBox CB_AS_ADJUST_WESTERN
+    {
+        Pos = MAP_APPFONT ( 6 , 84 ) ;
+        Size = MAP_APPFONT ( 245 , 12 ) ;
+        Text = "Abstand zwischen asiatischem und westlichenm Text ~automatisch anpassen" ;
+        Text [ ENGLISH ] = "Automatically adjust distance between asian and western text" ;
+    };
+    TriStateBox CB_AS_ADJUST_NUMBERS
+    {
+        Pos = MAP_APPFONT ( 6 , 97 ) ;
+        Size = MAP_APPFONT ( 245 , 12 ) ;
+        Text = "Abstan~d zwischen asiatischem Text und Zahlen automatisch anpassen" ;
+        Text [ ENGLISH ] = "Automatically adjust distance between asian text and numbers" ;
+    };
+    FixedText FT_TEXT_ALIGN
+    {
+        Pos = MAP_APPFONT ( 6 , 110 ) ;
+        Size = MAP_APPFONT ( 60 , 12 ) ;
+        Text = "Te~xtausrichtung" ;
+        Text [ ENGLISH ] = "Text alignment" ;
+    };
+    ListBox LB_TEXT_ALIGN
+    {
+        Pos = MAP_APPFONT ( 70 , 109 ) ;
+        Size = MAP_APPFONT ( 60 , 12 ) ;
+        DropDown = TRUE;
+        StringList =
+        {
+            < "Automatisch" ; Default ; > ;
+            < "??Manuell" ; Default ; > ;
+        };
+        StringList [English] =
+        {
+            < "Automatic" ; Default ; > ;
+            < "??Manual" ; Default ; > ;
+        };
     };
     Text[ english_us ] = "Asian Typography";
     Text[ portuguese ] = "Asian typography";
