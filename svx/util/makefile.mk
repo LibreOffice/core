@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2001-10-02 12:48:58 $
+#   last change: $Author: thb $ $Date: 2001-12-06 14:10:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -157,6 +157,7 @@ DEF1NAME        =$(SHL1TARGET)
 DEF1DEPN        =$(MISC)$/$(SHL1TARGET).flt
 DEFLIB1NAME=svx
 DEF1DES		= Rtf, Edt, Outliner, SvDraw, Form, Fmcomp, Engine3D, MSFilter
+# THB: exports list svx checked for 6.0 Final 6.12.2001
 DEF1EXPORTFILE	= svx.dxp
 
 .IF "$(BIG_SVX)"==""
