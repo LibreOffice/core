@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-04 13:11:45 $
+ *  last change: $Author: cp $ $Date: 2002-07-11 11:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,6 +454,19 @@ OutputDevice::OutputDevice() :
     mbTextLines         = FALSE;
     mbTextSpecial       = FALSE;
     mbRefPoint          = FALSE;
+
+    // struct ImplMapRes
+    maMapRes.mnMapOfsX          = 0;
+    maMapRes.mnMapOfsY          = 0;
+    maMapRes.mnMapScNumX        = 1;
+    maMapRes.mnMapScNumY        = 1;
+    maMapRes.mnMapScDenomX      = 1;
+    maMapRes.mnMapScDenomY      = 1;
+    // struct ImplThresholdRes
+    maThresRes.mnThresLogToPixX = 0;
+    maThresRes.mnThresLogToPixY = 0;
+    maThresRes.mnThresPixToLogX = 0;
+    maThresRes.mnThresPixToLogY = 0;
 }
 
 // -----------------------------------------------------------------------
