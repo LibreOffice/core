@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-15 14:48:40 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_IMGCTRL_CXX
-
 #ifndef _SV_EVENT_HXX
 #include <event.hxx>
 #endif
@@ -71,16 +69,16 @@
 ImageControl::ImageControl( Window* pParent, WinBits nStyle ) :
     FixedImage( pParent, nStyle )
 {
-    mnDummy1_mbScaleImage = TRUE;
+    mbScaleImage = TRUE;
 }
 
 // -----------------------------------------------------------------------
 
 void ImageControl::SetScaleImage( BOOL bScale )
 {
-    if ( bScale != mnDummy1_mbScaleImage )
+    if ( bScale != mbScaleImage )
     {
-        mnDummy1_mbScaleImage = bScale;
+        mbScaleImage = bScale;
         Invalidate();
     }
 }
@@ -90,7 +88,7 @@ void ImageControl::SetScaleImage( BOOL bScale )
 BOOL ImageControl::IsScaleImage() const
 {
     // Make inline when changing member from dummy...
-    return (BOOL)mnDummy1_mbScaleImage;
+    return mbScaleImage;
 }
 
 
@@ -123,7 +121,7 @@ void ImageControl::UserDraw( const UserDrawEvent& rUDEvt )
         Image aImage( maBmp );
         if ( !!aImage )
         {
-            if ( mnDummy1_mbScaleImage )
+            if ( mbScaleImage )
                 rUDEvt.GetDevice()->DrawImage( rUDEvt.GetRect().TopLeft(),
                                                 rUDEvt.GetRect().GetSize(),
                                                 aImage, nStyle );
@@ -139,7 +137,7 @@ void ImageControl::UserDraw( const UserDrawEvent& rUDEvt )
     }
     else
     {
-        if ( mnDummy1_mbScaleImage )
+        if ( mbScaleImage )
         {
             maBmp.Draw( rUDEvt.GetDevice(),
                         rUDEvt.GetRect().TopLeft(),
