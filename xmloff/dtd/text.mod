@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.8 2000-11-30 16:46:14 dvo Exp $
+	$Id: text.mod,v 1.9 2000-12-01 17:24:27 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -216,6 +216,7 @@
 <!ATTLIST text:list-level-style-bullet text:level %positiveInteger; #REQUIRED>
 <!ATTLIST text:list-level-style-bullet text:style-name %styleName; #IMPLIED>
 <!ATTLIST text:list-level-style-bullet text:bullet-char %character; #REQUIRED>
+<!ATTLIST text:list-level-style-bullet text:bullet-relative-size %percentage; #IMPLIED>
 <!ATTLIST text:list-level-style-bullet style:num-prefix %string; #IMPLIED>
 <!ATTLIST text:list-level-style-bullet style:num-suffix %string; #IMPLIED>
 
