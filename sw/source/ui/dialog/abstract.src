@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abstract.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:37:28 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ korean ] = "µî·ÏÁ¤º¸";
         Text[ turkish ] = "Özellikler";
         Text[ catalan ] = "Propiedades";
+        Text[ finnish ] = "Ominaisuudet";
     };
     FixedText FT_LEVEL
     {
@@ -130,6 +131,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ korean ] = "°ü·ÃµÈ¡¡Àå¼öÁØ.";
         Text[ turkish ] = "Dahil edilen bölüm düzeyleri";
         Text[ catalan ] = "Niveles del capítulo incluidos";
+        Text[ finnish ] = "Sisällytetyt rajaustasot";
     };
     NumericField NF_LEVEL
     {
@@ -174,6 +176,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ korean ] = "Àå´ç ´Ü¶ô";
         Text[ turkish ] = "Beher bölüm paragraf sayýsý";
         Text[ catalan ] = "Párrafos por capítulo";
+        Text[ finnish ] = "Alipisteitä tasolla";
     };
     NumericField NF_PARA
     {
@@ -219,6 +222,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ korean ] = "Ãß»ó¿¡¼­´Â ¿¬°üµÈ Àå ¼öÁØ¿¡¼­ ¼±ÅÃÇÑ ´Ü¶ôÀÇ ¼ö°¡ ³ªÅ¸³³´Ï´Ù.";
         Text[ turkish ] = "Özet içinde, dahil edilen bölüm düzeylerinden seçilen paragraflar bulunuyor.";
         Text[ catalan ] = "En el extracto aparece la cantidad deseada de párrafos de los niveles de los capítulos incluidos.";
+        Text[ finnish ] = "Tiivistelmässä on valittu määrä kappaleita sisällytetyistä jäsennystasoista.";
     };
     OKButton PB_OK
     {
@@ -260,4 +264,5 @@ ModalDialog DLG_INSERT_ABSTRACT
     Text[ korean ] = "ÀÚµ¿Ãß»ó ¸¸µé±â";
     Text[ turkish ] = "Otomatik özet oluþtur";
     Text[ catalan ] = "Crear AutoAbstracto";
+    Text[ finnish ] = "Luo automaattinen tiivistelmä";
 };
