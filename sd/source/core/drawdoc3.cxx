@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:44:29 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,8 +433,7 @@ void SdDrawDocument::IterateBookmarkPages( SdDrawDocument* pBookmarkDoc, List* p
         if( !pBookmarkList )
         {
             // simply take master page of nPos'th page in source document
-            pBMMPage = (SdPage*) pBookmarkDoc->
-                GetSdPage(nPos, PK_STANDARD)->GetMasterPage(0);
+            pBMMPage = (SdPage*)(&(pBookmarkDoc->GetSdPage(nPos, PK_STANDARD)->TRG_GetMasterPage()));
         }
         else
         {
@@ -457,9 +456,7 @@ void SdDrawDocument::IterateBookmarkPages( SdDrawDocument* pBookmarkDoc, List* p
             if (pBMPage && pBMPage->GetPageKind()==PK_STANDARD && !pBMPage->IsMasterPage())
             {
                 const USHORT nBMSdPage = (nBMPage - 1) / 2;
-
-                pBMMPage = (SdPage*) pBookmarkDoc->
-                    GetSdPage(nBMSdPage, PK_STANDARD)->GetMasterPage(0);
+                pBMMPage = (SdPage*) (&(pBookmarkDoc->GetSdPage(nBMSdPage, PK_STANDARD)->TRG_GetMasterPage()));
             }
         }
 
@@ -832,7 +829,13 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                 if (bReplace)
                 {
                     // Seite & Notizseite ausfuegen
-                    SdPage* pStandardPage = (SdPage*) GetPage(nActualInsertPos+2);
+                    const sal_uInt16 nDestPageNum(nActualInsertPos + 2);
+                    SdPage* pStandardPage = 0L;
+
+                    if(nDestPageNum < GetPageCount())
+                    {
+                        pStandardPage = (SdPage*)GetPage(nDestPageNum);
+                    }
 
                     if (pStandardPage)
                     {
@@ -844,10 +847,15 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                         }
 
                         AddUndo(new SdrUndoDelPage(*pStandardPage));
-                        RemovePage(nActualInsertPos+2);
+                        RemovePage(nDestPageNum);
                     }
 
-                    SdPage* pNotesPage = (SdPage*) GetPage(nActualInsertPos+2);
+                    SdPage* pNotesPage = 0L;
+
+                    if(nDestPageNum < GetPageCount())
+                    {
+                        pNotesPage = (SdPage*)GetPage(nDestPageNum);
+                    }
 
                     if (pNotesPage)
                     {
@@ -859,7 +867,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                         }
 
                         AddUndo(new SdrUndoDelPage(*pNotesPage));
-                        RemovePage(nActualInsertPos+2);
+                        RemovePage(nDestPageNum);
                     }
 
                     nReplacedStandardPages++;
@@ -1630,8 +1638,8 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
 
     SdPage* pSelectedPage   = GetSdPage(nSdPageNum, PK_STANDARD);
     SdPage* pNotes          = (SdPage*) GetPage(pSelectedPage->GetPageNum()+1);
-    SdPage* pOldMaster      = (SdPage*) pSelectedPage->GetMasterPage(0);
-    SdPage* pOldNotesMaster = (SdPage*) pNotes->GetMasterPage(0);
+    SdPage& rOldMaster      = (SdPage&)pSelectedPage->TRG_GetMasterPage();
+    SdPage& rOldNotesMaster = (SdPage&)pNotes->TRG_GetMasterPage();
     SdPage* pMaster         = NULL;
     SdPage* pNotesMaster    = NULL;
     SdPage* pPage           = NULL;
@@ -1857,7 +1865,7 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
             // dagegen ersetzt, so muss vor der Position der alten Masterpage
             // eingefuegt werden, damit ab jetzt beim Suchen (z. B. SdPage::
             // SetPresentationLayout) die neue Masterpage zuerst gefunden wird
-            USHORT nInsertPos = pOldMaster->GetPageNum();
+            USHORT nInsertPos = rOldMaster.GetPageNum();
             BegUndo();
 
             if (!bLayoutReloaded)
@@ -1924,32 +1932,32 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         if (pSourceDoc != this)
         {
             // die Masterpages angleichen
-            Size aSize(pOldMaster->GetSize());
-            Rectangle aBorderRect(pOldMaster->GetLftBorder(),
-                                  pOldMaster->GetUppBorder(),
-                                  pOldMaster->GetRgtBorder(),
-                                  pOldMaster->GetLwrBorder());
+            Size aSize(rOldMaster.GetSize());
+            Rectangle aBorderRect(rOldMaster.GetLftBorder(),
+                                  rOldMaster.GetUppBorder(),
+                                  rOldMaster.GetRgtBorder(),
+                                  rOldMaster.GetLwrBorder());
             pMaster->ScaleObjects(aSize, aBorderRect, TRUE);
             pMaster->SetSize(aSize);
-            pMaster->SetBorder(pOldMaster->GetLftBorder(),
-                               pOldMaster->GetUppBorder(),
-                               pOldMaster->GetRgtBorder(),
-                               pOldMaster->GetLwrBorder());
-            pMaster->SetOrientation( pOldMaster->GetOrientation() );
+            pMaster->SetBorder(rOldMaster.GetLftBorder(),
+                               rOldMaster.GetUppBorder(),
+                               rOldMaster.GetRgtBorder(),
+                               rOldMaster.GetLwrBorder());
+            pMaster->SetOrientation( rOldMaster.GetOrientation() );
             pMaster->SetAutoLayout(pMaster->GetAutoLayout());
 
-            aSize = pOldNotesMaster->GetSize();
-            Rectangle aNotesBorderRect(pOldNotesMaster->GetLftBorder(),
-                                       pOldNotesMaster->GetUppBorder(),
-                                       pOldNotesMaster->GetRgtBorder(),
-                                       pOldNotesMaster->GetLwrBorder());
+            aSize = rOldNotesMaster.GetSize();
+            Rectangle aNotesBorderRect(rOldNotesMaster.GetLftBorder(),
+                                       rOldNotesMaster.GetUppBorder(),
+                                       rOldNotesMaster.GetRgtBorder(),
+                                       rOldNotesMaster.GetLwrBorder());
             pNotesMaster->ScaleObjects(aSize, aNotesBorderRect, TRUE);
             pNotesMaster->SetSize(aSize);
-            pNotesMaster->SetBorder(pOldNotesMaster->GetLftBorder(),
-                                    pOldNotesMaster->GetUppBorder(),
-                                    pOldNotesMaster->GetRgtBorder(),
-                                    pOldNotesMaster->GetLwrBorder());
-            pNotesMaster->SetOrientation( pOldNotesMaster->GetOrientation() );
+            pNotesMaster->SetBorder(rOldNotesMaster.GetLftBorder(),
+                                    rOldNotesMaster.GetUppBorder(),
+                                    rOldNotesMaster.GetRgtBorder(),
+                                    rOldNotesMaster.GetLwrBorder());
+            pNotesMaster->SetOrientation( rOldNotesMaster.GetOrientation() );
             pNotesMaster->SetAutoLayout(pNotesMaster->GetAutoLayout());
 
             // Liste der ersetzten Vorlagen mit Inhalt loeschen
@@ -2098,7 +2106,7 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
     else
     {
         // Nur die ausgetauschte MasterPage pruefen
-        RemoveUnnessesaryMasterPages(pOldMaster);
+        RemoveUnnessesaryMasterPages(&rOldMaster);
     }
 
     pUndoMgr->LeaveListAction();
