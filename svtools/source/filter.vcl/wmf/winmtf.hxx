@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:38:39 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 15:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,8 +595,10 @@ class WinMtfOutput
         sal_Int32           mnWinOrgX, mnWinOrgY;       // aktuelles Window-Origin
         sal_Int32           mnWinExtX, mnWinExtY;       // aktuelles Window-Extent
 
-        sal_Int32           mnRefExtX, mnRefExtY;       // Reference Device for mapmode MM_TEXT
-
+        sal_Int32           mnPixX, mnPixY;             // Reference Device in pixel
+        sal_Int32           mnMillX, mnMillY;           // Reference Device in Mill
+        Rectangle           mrclFrame;                  // rectangle in logical units 1/100th mm
+        Rectangle           mrclBounds;
 
         GDIMetaFile*        mpGDIMetaFile;
 
@@ -626,8 +628,12 @@ class WinMtfOutput
         void                SetWinExt( const Size& rSize );
         void                ScaleWinExt( double fX, double fY );
 
-        void                SetRefExt( const Size& rSize );
+        void                SetrclBounds( const Rectangle& rRect );
+        void                SetrclFrame( const Rectangle& rRect );
+        void                SetRefPix( const Size& rSize );
+        void                SetRefMill( const Size& rSize );
 
+        sal_uInt32          GetMapMode() const { return mnMapMode; };
         void                SetMapMode( sal_uInt32 mnMapMode );
         void                SetWorldTransform( const XForm& rXForm );
         void                ModifyWorldTransform( const XForm& rXForm, UINT32 nMode );
@@ -715,9 +721,6 @@ class WinMtf
 
 class EnhWMFReader : public WinMtf
 {
-    Rectangle       rclFrame;
-    sal_Int32       nPixX, nPixY, nMillX, nMillY;
-
     sal_Bool        bRecordPath;
     sal_Int32       nRecordCount;
 
