@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 11:50:18 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 14:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,12 @@
 
 #pragma hdrstop
 
-#include "breakit.hxx"
-#include "viewsh.hxx"
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
+#ifndef _VIEWSH_HXX
+#include <viewsh.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -80,7 +84,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::i18n;
 
 
 SwBreakIt::SwBreakIt()
@@ -88,7 +92,7 @@ SwBreakIt::SwBreakIt()
     _GetLocale( LANGUAGE_NONE );
     Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     Reference < XInterface > xI = xMSF->createInstance(
-        ::rtl::OUString::createFromAscii( "com.sun.star.text.BreakIterator" ) );
+        ::rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
     if ( xI.is() )
     {
         Any x = xI->queryInterface( ::getCppuType((const Reference< XBreakIterator >*)0) );
