@@ -2,9 +2,9 @@
 *
 *  $RCSfile: profile_ooo.scp,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: hr $ $Date: 2004-11-09 14:02:56 $
+*  last change: $Author: hr $ $Date: 2004-11-26 21:53:59 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -102,17 +102,6 @@ Profile gid_Profile_Soffice_Ini
     Name = "soffice.ini";
   #endif
     Dir = gid_Dir_Program;
-    Styles = (NETWORK);
-End
-
-Profile gid_Profile_Sversion_Ini
-    ModuleID = gid_Module_Root;
-  #ifdef UNX
-    Name = ".sversionrc";
-  #else
-    Name = "sversion.ini";
-  #endif
-    Dir = PREDEFINED_CONFIGDIR;
     Styles = (NETWORK);
 End
 
