@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2002-04-30 07:42:27 $
+ *  last change: $Author: fs $ $Date: 2002-05-08 07:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ namespace comphelper
         if ( aListeners.getLength() )
         {
             AccessibleEventObject aEvent;
-            aEvent.Source = m_pImpl->getCreator();
+            aEvent.Source = *this;
             OSL_ENSURE( aEvent.Source.is(), "OAccessibleContextHelper::NotifyAccessibleEvent: invalid creator!" );
             aEvent.EventId = _nEventId;
             aEvent.OldValue = _rOldValue;
@@ -352,6 +352,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2002/04/30 07:42:27  hr
+ *  #65293#: removed not needed vcl/svapp.hxx includes to reduce dependencies
+ *
  *  Revision 1.4  2002/04/26 14:24:28  fs
  *  #98750# +getAccessibleCreator / use the creator (XAccessible) as event source
  *
