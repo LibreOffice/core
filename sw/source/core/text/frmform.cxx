@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-09 09:33:41 $
+ *  last change: $Author: ama $ $Date: 2001-05-15 07:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,7 +519,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
         {
             //Kann sein, dass ich die richtige Grosse habe, der Upper aber zu
             //klein ist und der Upper noch Platz schaffen kann.
-            if( ( nRstHeight > 0 || ( IsInFtn() && IsInSct() ) ) && !bHasToFit )
+            if( ( nRstHeight >= 0 || ( IsInFtn() && IsInSct() ) ) && !bHasToFit )
                 nRstHeight += GetUpper()->Grow( Frm().Height()-nRstHeight, pHeight );
             // In spaltigen Bereichen wollen wir moeglichst nicht zu gross werden, damit
             // nicht ueber GetNextSctLeaf weitere Bereiche angelegt werden. Stattdessen
