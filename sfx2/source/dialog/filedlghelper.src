@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-19 20:10:46 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,7 @@ String STR_CB_FILTER_OPTIONS
     Text[ polish ] = "Edytuj ustawienia filtra";
     Text[ portuguese_brazilian ] = "~Customize Filtersettings";
     Text[ japanese ] = "Μ¨Ωΐέ’θ‚Μ•ÒW(~F)";
-    Text[ chinese_simplified ] = "±ΰΌ­ΙΈΡ΅µΔΙθ¶¨(~F)";
+    Text[ chinese_simplified ] = "±ΰΌ­ΙΈΡ΅Ιθ¶¨(~F)";
     Text[ chinese_traditional ] = "½sΏθΏzΏο³]©w(~F)";
     Text[ arabic ] = "ΚΝΡνΡ ΕΪΟΗΟΗΚ ΗαέαΚΡ";
     Text[ greek ] = "Επεξεργασία ρυθμίσεων φίλτρου";
@@ -545,6 +545,7 @@ String STR_LB_VERSION
 };
 
 //******************************************************************** EOF
+
 
 
 
