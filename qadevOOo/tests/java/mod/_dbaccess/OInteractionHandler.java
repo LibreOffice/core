@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OInteractionHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:37:16 $
+ *  last change:$Date: 2003-09-08 11:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,19 @@
 
 package mod._dbaccess;
 
-import com.sun.star.sdbc.SQLException;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.task.XInteractionContinuation;
-import com.sun.star.task.XInteractionRequest;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.Status;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
+
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdbc.SQLException;
+import com.sun.star.task.XInteractionContinuation;
+import com.sun.star.task.XInteractionRequest;
+import com.sun.star.uno.XInterface;
 
 /**
 * Test for object which is represented by service
