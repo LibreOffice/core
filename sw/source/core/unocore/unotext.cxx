@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 15:44:24 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,7 @@ void SwXText::insertString(const uno::Reference< XTextRange > & xTextRange,
                 //hier wird ein PaM angelegt, der vor dem Parameter-PaM liegt, damit der
                 //Text davor eingefuegt wird
                 UnoActionContext aContext(GetDoc());
-                const SwPosition* pPos = pCursor ? pCursor->GetPaM()->Start() : &pRange->GetBookmark()->GetPos();
+                const SwPosition* pPos = pCursor ? pCursor->GetPaM()->Start() : pRange->GetBookmark()->Start();
                 SwPaM aInsertPam(*pPos);
                 sal_Bool bGroupUndo = GetDoc()->DoesGroupUndo();
                 GetDoc()->DoGroupUndo(sal_False);
