@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2000-12-19 15:55:08 $
+ *  last change: $Author: os $ $Date: 2000-12-22 09:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,6 +605,62 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
 #define ANCHOR_TYPES_PROPERTY    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),  FN_UNO_ANCHOR_TYPES,    &::getCppuType((const uno::Sequence<text::TextContentAnchorType>*)0),PropertyAttribute::READONLY, 0xff},
 #endif
 
+#define COMMON_FRAME_PROPERTIES \
+    { SW_PROP_NAME(UNO_NAME_ANCHOR_PAGE_NO),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ANCHOR_PAGENUM       },              \
+    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},             \
+    ANCHOR_TYPES_PROPERTY\
+    { SW_PROP_NAME(UNO_NAME_BACK_COLOR       ),     RES_BACKGROUND,         &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_BACK_COLOR        },                      \
+    { SW_PROP_NAME(UNO_NAME_CONTENT_PROTECTED ),        RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_CONTENT   },                          \
+    { SW_PROP_NAME(UNO_NAME_FRAME_STYLE_NAME),          0,                      &::getCppuType((const OUString*)0),         PROPERTY_NONE, 0},                                   \
+    { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_URL      ),    RES_BACKGROUND,         &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_GRAPHIC_URL    },                 \
+    { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_FILTER  ),     RES_BACKGROUND,         &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_GRAPHIC_FILTER    },              \
+    { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_LOCATION    ), RES_BACKGROUND,         &::getCppuType((const style::GraphicLocation*)0), PROPERTY_NONE ,MID_GRAPHIC_POSITION},    \
+    { SW_PROP_NAME(UNO_NAME_LEFT_MARGIN),           RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},            \
+    { SW_PROP_NAME(UNO_NAME_RIGHT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},            \
+    { SW_PROP_NAME(UNO_NAME_HEIGHT),                    RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS},\
+    { SW_PROP_NAME(UNO_NAME_SIZE_TYPE),                 RES_FRM_SIZE,           &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,   MID_FRMSIZE_SIZE_TYPE  },        \
+    { SW_PROP_NAME(UNO_NAME_HORI_ORIENT  ),             RES_HORI_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_HORIORIENT_ORIENT    },             \
+    { SW_PROP_NAME(UNO_NAME_HORI_ORIENT_POSITION),  RES_HORI_ORIENT,        &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_HORIORIENT_POSITION|CONVERT_TWIPS    }, \
+    { SW_PROP_NAME(UNO_NAME_HORI_ORIENT_RELATION),  RES_HORI_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_HORIORIENT_RELATION  },               \
+    { SW_PROP_NAME(UNO_NAME_HYPER_LINK_U_R_L   ),       RES_URL,                &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_URL},                         \
+    { SW_PROP_NAME(UNO_NAME_HYPER_LINK_TARGET  ),       RES_URL,                &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_TARGET},                      \
+    { SW_PROP_NAME(UNO_NAME_HYPER_LINK_NAME ),      RES_URL,                &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_HYPERLINKNAME     },                 \
+    { SW_PROP_NAME(UNO_NAME_OPAQUE),                    RES_OPAQUE,             &::getBooleanCppuType(),            PROPERTY_NONE, 0},                                        \
+    { SW_PROP_NAME(UNO_NAME_PAGE_TOGGLE),               RES_HORI_ORIENT,        &::getBooleanCppuType(),            PROPERTY_NONE ,MID_HORIORIENT_PAGETOGGLE },               \
+    { SW_PROP_NAME(UNO_NAME_POSITION_PROTECTED),    RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_POSITION},                      \
+    { SW_PROP_NAME(UNO_NAME_PRINT),                     RES_PRINT,              &::getBooleanCppuType(),            PROPERTY_NONE, 0},                                        \
+    { SW_PROP_NAME(UNO_NAME_RELATIVE_HEIGHT),       RES_FRM_SIZE,           &::getCppuType((const sal_Int8*)0)  ,       PROPERTY_NONE,   MID_FRMSIZE_REL_HEIGHT },            \
+    { SW_PROP_NAME(UNO_NAME_RELATIVE_WIDTH),            RES_FRM_SIZE,           &::getCppuType((const sal_Int8*)0)  ,       PROPERTY_NONE,   MID_FRMSIZE_REL_WIDTH  },         \
+    { SW_PROP_NAME(UNO_NAME_SHADOW_FORMAT),             RES_SHADOW,             &::getCppuType((const table::ShadowFormat*)0),  PROPERTY_NONE, CONVERT_TWIPS},             \
+    { SW_PROP_NAME(UNO_NAME_SERVER_MAP      ),      RES_URL,                &::getBooleanCppuType(),            PROPERTY_NONE ,MID_URL_SERVERMAP         },                      \
+    { SW_PROP_NAME(UNO_NAME_SIZE),                  RES_FRM_SIZE,           &::getCppuType((const awt::Size*)0),            PROPERTY_NONE, MID_FRMSIZE_SIZE|CONVERT_TWIPS},        \
+    { SW_PROP_NAME(UNO_NAME_SIZE_PROTECTED    ),    RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_SIZE    },                      \
+    { SW_PROP_NAME(UNO_NAME_SIZE_RELATIVE),             RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_REL_SIZE   },          \
+    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),                 RES_SURROUND,           &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE    },        \
+    { SW_PROP_NAME(UNO_NAME_SURROUND                  ), RES_SURROUND,          &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE    },        \
+    { SW_PROP_NAME(UNO_NAME_SURROUND_ANCHORONLY),   RES_SURROUND,           &::getBooleanCppuType(),            PROPERTY_NONE, MID_SURROUND_ANCHORONLY      },                 \
+    { SW_PROP_NAME(UNO_NAME_TOP_MARGIN),                RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_UP_MARGIN|CONVERT_TWIPS},          \
+    { SW_PROP_NAME(UNO_NAME_BOTTOM_MARGIN),             RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_LO_MARGIN|CONVERT_TWIPS},          \
+    { SW_PROP_NAME(UNO_NAME_BACK_TRANSPARENT ), RES_BACKGROUND,         &::getBooleanCppuType(),            PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },                    \
+    { SW_PROP_NAME(UNO_NAME_VERT_ORIENT  ),             RES_VERT_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_VERTORIENT_ORIENT    },             \
+    { SW_PROP_NAME(UNO_NAME_VERT_ORIENT_POSITION),  RES_VERT_ORIENT,        &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_VERTORIENT_POSITION|CONVERT_TWIPS    }, \
+    { SW_PROP_NAME(UNO_NAME_VERT_ORIENT_RELATION),  RES_VERT_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_VERTORIENT_RELATION  },               \
+    { SW_PROP_NAME(UNO_NAME_WIDTH),                     RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_FRMSIZE_WIDTH|CONVERT_TWIPS}, \
+    { SW_PROP_NAME(UNO_NAME_LEFT_BORDER),               RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, LEFT_BORDER  |CONVERT_TWIPS },             \
+    { SW_PROP_NAME(UNO_NAME_RIGHT_BORDER),          RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, RIGHT_BORDER |CONVERT_TWIPS },                 \
+    { SW_PROP_NAME(UNO_NAME_TOP_BORDER),                RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, TOP_BORDER   |CONVERT_TWIPS },             \
+    { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER),         RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, BOTTOM_BORDER|CONVERT_TWIPS },                 \
+    { SW_PROP_NAME(UNO_NAME_BORDER_DISTANCE),         RES_BOX,              &::getCppuType((const sal_Int32*)0),    0, BORDER_DISTANCE|CONVERT_TWIPS },                       \
+    { SW_PROP_NAME(UNO_NAME_LEFT_BORDER_DISTANCE),  RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },                \
+    { SW_PROP_NAME(UNO_NAME_RIGHT_BORDER_DISTANCE), RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },                \
+    { SW_PROP_NAME(UNO_NAME_TOP_BORDER_DISTANCE),       RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },            \
+    { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER_DISTANCE),    RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },            \
+    { SW_PROP_NAME(UNO_LINK_DISPLAY_NAME),          FN_PARAM_LINK_DISPLAY_NAME,     &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0xff},                \
+    { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),       RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },\
+    { SW_PROP_NAME(UNO_NAME_Z_ORDER),               FN_UNO_Z_ORDER,         &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, 0},
+
+
+
 #define COMMON_TEXT_CONTENT_PROPERTIES \
                     { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),    FN_UNO_ANCHOR_TYPE, &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_ANCHOR_ANCHORTYPE},\
                     ANCHOR_TYPES_PROPERTY\
@@ -1188,79 +1244,26 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 aMapArr[nPropertyId] = aSearchPropertyMap_Impl;
             }
             break;
+
+
+
             case PROPERTY_MAP_TEXT_FRAME:
             {
                 static SfxItemPropertyMap aFramePropertyMap_Impl[] =
                 {
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_PAGE_NO),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ANCHOR_PAGENUM       },
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),   FN_UNO_ANCHOR_TYPES, new uno::Type(::getCppuType((uno::Sequence<text::TextContentAnchorType>*)0)),PropertyAttribute::READONLY, 0xff},
-#else
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),           FN_UNO_ANCHOR_TYPES,    &::getCppuType((const uno::Sequence<text::TextContentAnchorType>*)0),PropertyAttribute::READONLY, 0xff},
-#endif
-                    { SW_PROP_NAME(UNO_NAME_BACK_COLOR       ),     RES_BACKGROUND,         &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_BACK_COLOR        },
+                    COMMON_FRAME_PROPERTIES
                     { SW_PROP_NAME(UNO_NAME_CHAIN_NEXT_NAME),           RES_CHAIN,              &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID ,MID_CHAIN_NEXTNAME},
                     { SW_PROP_NAME(UNO_NAME_CHAIN_PREV_NAME),           RES_CHAIN,              &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID ,MID_CHAIN_PREVNAME},
                 /*not impl*/    { SW_PROP_NAME(UNO_NAME_CLIENT_MAP      ),      RES_URL,                &::getBooleanCppuType(),            PROPERTY_NONE ,MID_URL_CLIENTMAP         },
-                    { SW_PROP_NAME(UNO_NAME_CONTENT_PROTECTED ),        RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_CONTENT   },
                     { SW_PROP_NAME(UNO_NAME_EDIT_IN_READONLY),      RES_EDIT_IN_READONLY,   &::getBooleanCppuType(),            PROPERTY_NONE, 0},
-                    { SW_PROP_NAME(UNO_NAME_FRAME_STYLE_NAME),          0,                      &::getCppuType((const OUString*)0),         PROPERTY_NONE, 0},
                 //  { SW_PROP_NAME(UNO_NAME_GRAPHIC           ),        RES_BACKGROUND,         &,                              PROPERTY_NONE, MID_GRAPHIC
-                    { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_URL      ),    RES_BACKGROUND,         &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_GRAPHIC_URL    },
-                    { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_FILTER  ),     RES_BACKGROUND,         &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
-                    { SW_PROP_NAME(UNO_NAME_BACK_GRAPHIC_LOCATION    ), RES_BACKGROUND,         &::getCppuType((const style::GraphicLocation*)0), PROPERTY_NONE ,MID_GRAPHIC_POSITION},
-                    { SW_PROP_NAME(UNO_NAME_LEFT_MARGIN),           RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},
-                    { SW_PROP_NAME(UNO_NAME_RIGHT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
-                    { SW_PROP_NAME(UNO_NAME_HEIGHT),                    RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS         },
-                    { SW_PROP_NAME(UNO_NAME_SIZE_TYPE),                 RES_FRM_SIZE,           &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,   MID_FRMSIZE_SIZE_TYPE  },
-                    { SW_PROP_NAME(UNO_NAME_HORI_ORIENT  ),             RES_HORI_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_HORIORIENT_ORIENT    },
-                    { SW_PROP_NAME(UNO_NAME_HORI_ORIENT_POSITION),  RES_HORI_ORIENT,        &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_HORIORIENT_POSITION|CONVERT_TWIPS    },
-                    { SW_PROP_NAME(UNO_NAME_HORI_ORIENT_RELATION),  RES_HORI_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_HORIORIENT_RELATION  },
-                    { SW_PROP_NAME(UNO_NAME_HYPER_LINK_U_R_L   ),       RES_URL,                &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_URL},
-                    { SW_PROP_NAME(UNO_NAME_HYPER_LINK_TARGET  ),       RES_URL,                &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_TARGET},
-                    { SW_PROP_NAME(UNO_NAME_HYPER_LINK_NAME ),      RES_URL,                &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_HYPERLINKNAME     },
-                    { SW_PROP_NAME(UNO_NAME_OPAQUE),                    RES_OPAQUE,             &::getBooleanCppuType(),            PROPERTY_NONE, 0},
-                    { SW_PROP_NAME(UNO_NAME_PAGE_TOGGLE),               RES_HORI_ORIENT,        &::getBooleanCppuType(),            PROPERTY_NONE ,MID_HORIORIENT_PAGETOGGLE },
-                    { SW_PROP_NAME(UNO_NAME_POSITION_PROTECTED),    RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_POSITION},
-                    { SW_PROP_NAME(UNO_NAME_PRINT),                     RES_PRINT,              &::getBooleanCppuType(),            PROPERTY_NONE, 0},
-                    { SW_PROP_NAME(UNO_NAME_RELATIVE_HEIGHT),       RES_FRM_SIZE,           &::getCppuType((const sal_Int8*)0)  ,       PROPERTY_NONE,   MID_FRMSIZE_REL_HEIGHT },
-                    { SW_PROP_NAME(UNO_NAME_RELATIVE_WIDTH),            RES_FRM_SIZE,           &::getCppuType((const sal_Int8*)0)  ,       PROPERTY_NONE,   MID_FRMSIZE_REL_WIDTH  },
-                    { SW_PROP_NAME(UNO_NAME_SHADOW_FORMAT),             RES_SHADOW,             &::getCppuType((const table::ShadowFormat*)0),  PROPERTY_NONE, CONVERT_TWIPS},
-                    { SW_PROP_NAME(UNO_NAME_SERVER_MAP      ),      RES_URL,                &::getBooleanCppuType(),            PROPERTY_NONE ,MID_URL_SERVERMAP         },
-                    { SW_PROP_NAME(UNO_NAME_SIZE),                  RES_FRM_SIZE,           &::getCppuType((const awt::Size*)0),            PROPERTY_NONE, MID_FRMSIZE_SIZE|CONVERT_TWIPS},
-                    { SW_PROP_NAME(UNO_NAME_SIZE_PROTECTED    ),    RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_SIZE    },
-                    { SW_PROP_NAME(UNO_NAME_SIZE_RELATIVE),             RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_REL_SIZE   },
-                    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),                 RES_SURROUND,           &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE    },
-                    { SW_PROP_NAME(UNO_NAME_SURROUND                  ), RES_SURROUND,          &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE    },
-                    { SW_PROP_NAME(UNO_NAME_SURROUND_ANCHORONLY),   RES_SURROUND,           &::getBooleanCppuType(),            PROPERTY_NONE, MID_SURROUND_ANCHORONLY      },
                     { SW_PROP_NAME(UNO_NAME_TEXT_COLUMNS),          RES_COL,                &::getCppuType((uno::Reference<text::XTextColumns>*)0),    PROPERTY_NONE, MID_COLUMNS},
-                    //MID_COLUMN_SEPARATOR_LINE ???
-                    { SW_PROP_NAME(UNO_NAME_TOP_MARGIN),                RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_UP_MARGIN|CONVERT_TWIPS},
-                    { SW_PROP_NAME(UNO_NAME_BOTTOM_MARGIN),             RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_LO_MARGIN|CONVERT_TWIPS},
-                    { SW_PROP_NAME(UNO_NAME_BACK_TRANSPARENT ), RES_BACKGROUND,         &::getBooleanCppuType(),            PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
-                    { SW_PROP_NAME(UNO_NAME_VERT_ORIENT  ),             RES_VERT_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_VERTORIENT_ORIENT    },
-                    { SW_PROP_NAME(UNO_NAME_VERT_ORIENT_POSITION),  RES_VERT_ORIENT,        &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_VERTORIENT_POSITION|CONVERT_TWIPS    },
-                    { SW_PROP_NAME(UNO_NAME_VERT_ORIENT_RELATION),  RES_VERT_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_VERTORIENT_RELATION  },
-                    { SW_PROP_NAME(UNO_NAME_WIDTH),                     RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_FRMSIZE_WIDTH|CONVERT_TWIPS          },
-                    { SW_PROP_NAME(UNO_NAME_LEFT_BORDER),               RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, LEFT_BORDER  |CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_RIGHT_BORDER),          RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, RIGHT_BORDER |CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_TOP_BORDER),                RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, TOP_BORDER   |CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER),         RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, BOTTOM_BORDER|CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_BORDER_DISTANCE),         RES_BOX,              &::getCppuType((const sal_Int32*)0),    0, BORDER_DISTANCE|CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_LEFT_BORDER_DISTANCE),  RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_RIGHT_BORDER_DISTANCE), RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_TOP_BORDER_DISTANCE),       RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER_DISTANCE),    RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_LINK_DISPLAY_NAME),          FN_PARAM_LINK_DISPLAY_NAME,     &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0xff},
                     //next elements are part of the service description
                     { MAP_CHAR_LEN("FrameHeightAbsolute"),          RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS         },
                     { MAP_CHAR_LEN("FrameHeightPercent"),               RES_FRM_SIZE,           &::getCppuType((const sal_Int8*)0),         PROPERTY_NONE, MID_FRMSIZE_REL_HEIGHT   },
                     { MAP_CHAR_LEN("FrameIsAutomaticHeight"),         RES_FRM_SIZE,         &::getBooleanCppuType(),        PROPERTY_NONE, MID_FRMSIZE_IS_AUTO_HEIGHT   },
                     { MAP_CHAR_LEN("FrameWidthAbsolute"),           RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, MID_FRMSIZE_WIDTH|CONVERT_TWIPS          },
                     { MAP_CHAR_LEN("FrameWidthPercent"),                RES_FRM_SIZE,           &::getCppuType((const sal_Int8*)0),         PROPERTY_NONE, MID_FRMSIZE_REL_WIDTH    },
-                    { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),       RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
-                    { SW_PROP_NAME(UNO_NAME_Z_ORDER),               FN_UNO_Z_ORDER,         &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aFramePropertyMap_Impl;
@@ -1270,70 +1273,17 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
             {
                 static SfxItemPropertyMap aGraphicPropertyMap_Impl[] =
                 {
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_PAGE_NO),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ANCHOR_PAGENUM       },
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),   FN_UNO_ANCHOR_TYPES, new uno::Type(::getCppuType((uno::Sequence<text::TextContentAnchorType>*)0)),PropertyAttribute::READONLY, 0xff},
-#else
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPES   ),           FN_UNO_ANCHOR_TYPES,    &::getCppuType((const uno::Sequence<text::TextContentAnchorType>*)0),PropertyAttribute::READONLY, 0xff},
-#endif
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},
-                    { SW_PROP_NAME(UNO_NAME_BACK_COLOR       ),     RES_BACKGROUND,         &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_BACK_COLOR        },
-                    { SW_PROP_NAME(UNO_NAME_CLIENT_MAP      ),      RES_URL,                &::getBooleanCppuType(),            PROPERTY_NONE ,MID_URL_CLIENTMAP         },
-                    { SW_PROP_NAME(UNO_NAME_CONTENT_PROTECTED ),        RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_CONTENT   },
+                    COMMON_FRAME_PROPERTIES
                     { SW_PROP_NAME(UNO_NAME_CONTOUR_OUTSIDE),       RES_SURROUND,           &::getBooleanCppuType(),            PROPERTY_NONE, MID_SURROUND_CONTOUROUTSIDE  },
-                    { SW_PROP_NAME(UNO_NAME_FRAME_STYLE_NAME),          0,                      &::getCppuType((const OUString*)0),         PROPERTY_NONE, 0},
                     { SW_PROP_NAME(UNO_NAME_GRAPHIC_CROP),          RES_GRFATR_CROPGRF,     &::getCppuType((const text::GraphicCrop*)0),    PROPERTY_NONE, CONVERT_TWIPS },
                     { SW_PROP_NAME(UNO_NAME_HORI_MIRRORED_ON_EVEN_PAGES),           RES_GRFATR_MIRRORGRF,   &::getBooleanCppuType(),            PROPERTY_NONE,      MID_MIRROR_HORZ_EVEN_PAGES            },
                     { SW_PROP_NAME(UNO_NAME_HORI_MIRRORED_ON_ODD_PAGES),            RES_GRFATR_MIRRORGRF,   &::getBooleanCppuType(),            PROPERTY_NONE,      MID_MIRROR_HORZ_ODD_PAGES                 },
-                    { SW_PROP_NAME(UNO_NAME_HEIGHT),                    RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS         },
-                    { SW_PROP_NAME(UNO_NAME_HORI_ORIENT  ),             RES_HORI_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_HORIORIENT_ORIENT    },
-                    { SW_PROP_NAME(UNO_NAME_HORI_ORIENT_POSITION),  RES_HORI_ORIENT,        &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_HORIORIENT_POSITION|CONVERT_TWIPS    },
-                    { SW_PROP_NAME(UNO_NAME_HORI_ORIENT_RELATION),  RES_HORI_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_HORIORIENT_RELATION  },
-                    { SW_PROP_NAME(UNO_NAME_HYPER_LINK_U_R_L   ),       RES_URL,                &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_URL},
-                    { SW_PROP_NAME(UNO_NAME_HYPER_LINK_TARGET  ),       RES_URL,                &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_TARGET},
-                    { SW_PROP_NAME(UNO_NAME_HYPER_LINK_NAME ),      RES_URL,                &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_HYPERLINKNAME     },
-                    { SW_PROP_NAME(UNO_NAME_LEFT_MARGIN),           RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},
-                    { SW_PROP_NAME(UNO_NAME_RIGHT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
-                    { SW_PROP_NAME(UNO_NAME_OPAQUE),                    RES_OPAQUE,             &::getBooleanCppuType(),            PROPERTY_NONE, 0},
-                    { SW_PROP_NAME(UNO_NAME_PAGE_TOGGLE),               RES_HORI_ORIENT,        &::getBooleanCppuType(),            PROPERTY_NONE ,MID_HORIORIENT_PAGETOGGLE },
-                    { SW_PROP_NAME(UNO_NAME_POSITION_PROTECTED),    RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_POSITION},
-                    { SW_PROP_NAME(UNO_NAME_PRINT),                     RES_PRINT,              &::getBooleanCppuType(),            PROPERTY_NONE, 0},
-                    { SW_PROP_NAME(UNO_NAME_RELATIVE_HEIGHT),       RES_FRM_SIZE,           &::getCppuType((const sal_Int8*)0)  ,       PROPERTY_NONE,   MID_FRMSIZE_REL_HEIGHT },
-                    { SW_PROP_NAME(UNO_NAME_RELATIVE_WIDTH),            RES_FRM_SIZE,           &::getCppuType((const sal_Int8*)0)  ,       PROPERTY_NONE,   MID_FRMSIZE_REL_WIDTH  },
-                    { SW_PROP_NAME(UNO_NAME_SERVER_MAP      ),      RES_URL,                &::getBooleanCppuType(),            PROPERTY_NONE ,MID_URL_SERVERMAP         },
-                    { SW_PROP_NAME(UNO_NAME_SHADOW_FORMAT),             RES_SHADOW,             &::getCppuType((const table::ShadowFormat*)0),  PROPERTY_NONE, 0},
-                    { SW_PROP_NAME(UNO_NAME_SIZE),                  RES_FRM_SIZE,           &::getCppuType((const awt::Size*)0),            PROPERTY_NONE, MID_FRMSIZE_SIZE|CONVERT_TWIPS},
-                    { SW_PROP_NAME(UNO_NAME_SIZE_RELATIVE),             RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_REL_SIZE   },
-                    { SW_PROP_NAME(UNO_NAME_SIZE_PROTECTED    ),    RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_SIZE    },
-                    { SW_PROP_NAME(UNO_NAME_TEXT_WRAP),                 RES_SURROUND,           &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE    },
-                    { SW_PROP_NAME(UNO_NAME_SURROUND                  ), RES_SURROUND,          &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE    },
-                    { SW_PROP_NAME(UNO_NAME_SURROUND_ANCHORONLY),   RES_SURROUND,           &::getBooleanCppuType(),            PROPERTY_NONE, MID_SURROUND_ANCHORONLY      },
-                    { SW_PROP_NAME(UNO_NAME_SURROUND_CONTOUR     ),     RES_SURROUND,           &::getBooleanCppuType(),            PROPERTY_NONE, MID_SURROUND_CONTOUR         },
-                    { SW_PROP_NAME(UNO_NAME_TOP_MARGIN),                RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_UP_MARGIN|CONVERT_TWIPS},
-                    { SW_PROP_NAME(UNO_NAME_BOTTOM_MARGIN),             RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_LO_MARGIN|CONVERT_TWIPS},
-                    { SW_PROP_NAME(UNO_NAME_BACK_TRANSPARENT ), RES_BACKGROUND,         &::getBooleanCppuType(),            PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
                     { SW_PROP_NAME(UNO_NAME_VERT_MIRRORED),         RES_GRFATR_MIRRORGRF,   &::getBooleanCppuType(),            PROPERTY_NONE,     MID_MIRROR_VERT            },
-                    { SW_PROP_NAME(UNO_NAME_VERT_ORIENT  ),             RES_VERT_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_VERTORIENT_ORIENT    },
-                    { SW_PROP_NAME(UNO_NAME_VERT_ORIENT_POSITION),  RES_VERT_ORIENT,        &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_VERTORIENT_POSITION|CONVERT_TWIPS    },
-                    { SW_PROP_NAME(UNO_NAME_VERT_ORIENT_RELATION),  RES_VERT_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_VERTORIENT_RELATION  },
-                    { SW_PROP_NAME(UNO_NAME_WIDTH),                     RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_FRMSIZE_WIDTH            },
-                    { SW_PROP_NAME(UNO_NAME_LEFT_BORDER),               RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, LEFT_BORDER  |CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_RIGHT_BORDER),          RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, RIGHT_BORDER |CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_TOP_BORDER),                RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, TOP_BORDER   |CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER),         RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, BOTTOM_BORDER|CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_BORDER_DISTANCE),         RES_BOX,              &::getCppuType((const sal_Int32*)0),    0, BORDER_DISTANCE|CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_LEFT_BORDER_DISTANCE),  RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_RIGHT_BORDER_DISTANCE), RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_TOP_BORDER_DISTANCE),       RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER_DISTANCE),    RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
                     { SW_PROP_NAME(UNO_NAME_GRAPHIC_URL),               0,                      &::getCppuType((const OUString*)0), 0, 0 },
                     { SW_PROP_NAME(UNO_NAME_GRAPHIC_FILTER),            0,                      &::getCppuType((const OUString*)0), 0, 0 },
                     { SW_PROP_NAME(UNO_NAME_ACTUAL_SIZE),           0,                      &::getCppuType((const awt::Size*)0),    PropertyAttribute::READONLY, CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_ALTERNATIVE_TEXT),      0,                      &::getCppuType((const OUString*)0),         PROPERTY_NONE , 0   },
-                    { SW_PROP_NAME(UNO_LINK_DISPLAY_NAME),          FN_PARAM_LINK_DISPLAY_NAME,     &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0xff},
-                    { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),       RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, &::getCppuType((PointSequenceSequence*)0), PropertyAttribute::MAYBEVOID, 0 },
-                    { SW_PROP_NAME(UNO_NAME_Z_ORDER),               FN_UNO_Z_ORDER,         &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, 0},
                     { SW_PROP_NAME(UNO_NAME_GRAPHIC_ROTATION),      RES_GRFATR_ROTATION,     &::getCppuType((sal_Int16*)0), 0,   0},
                     { SW_PROP_NAME(UNO_NAME_ADJUST_LUMINANCE),      RES_GRFATR_LUMINANCE,    &::getCppuType((sal_Int16*)0), 0,   0},
                     { SW_PROP_NAME(UNO_NAME_ADJUST_CONTRAST),       RES_GRFATR_CONTRAST,     &::getCppuType((sal_Int16*)0), 0,   0},
@@ -1347,6 +1297,16 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aGraphicPropertyMap_Impl;
+            }
+            break;
+            case PROPERTY_MAP_EMBEDDED_OBJECT:
+            {
+                static SfxItemPropertyMap aEmbeddedPropertyMap_Impl[] =
+                {
+                    COMMON_FRAME_PROPERTIES
+                    {0,0,0,0}
+                };
+                aMapArr[nPropertyId] = aEmbeddedPropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_SHAPE:

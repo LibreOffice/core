@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-20 07:55:54 $
+ *  last change: $Author: os $ $Date: 2000-12-22 09:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1329,7 +1329,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             }
             else
             {
-                sal_uInt16 nCount = pDoc->GetFlyCount(eType);
+                sal_uInt16 nCount = pDoc->GetFlyCount(FLYCNTTYPE_FRM);
 
                 SwFrmFmt* pChain = 0;
                 for( sal_uInt16 i = 0; i < nCount; i++)
@@ -2519,7 +2519,7 @@ uno::Reference<container::XNameReplace> SAL_CALL
 
   -----------------------------------------------------------------------*/
 SwXTextEmbeddedObject::SwXTextEmbeddedObject() :
-    SwXFrame(FLYCNTTYPE_OLE, aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_FRAME))
+    SwXFrame(FLYCNTTYPE_OLE, aSwMapProvider.GetPropertyMap(PROPERTY_MAP_EMBEDDED_OBJECT))
 {
 
 }
@@ -2527,7 +2527,7 @@ SwXTextEmbeddedObject::SwXTextEmbeddedObject() :
 
   -----------------------------------------------------------------------*/
 SwXTextEmbeddedObject::SwXTextEmbeddedObject(SwFrmFmt& rFmt) :
-    SwXFrame(rFmt, FLYCNTTYPE_OLE, aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_FRAME))
+    SwXFrame(rFmt, FLYCNTTYPE_OLE, aSwMapProvider.GetPropertyMap(PROPERTY_MAP_EMBEDDED_OBJECT))
 {
 
 }
