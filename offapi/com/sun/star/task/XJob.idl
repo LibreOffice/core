@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XJob.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:44:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:50:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ module com {  module sun {  module star {  module task {
 
     @see XAsyncJob
 */
-interface XJob : com::sun::star::uno::XInterface
+published interface XJob : com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
     /** executes the job synchronously
