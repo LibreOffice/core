@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 16:56:56 $
+ *  last change: $Author: er $ $Date: 2002-04-10 12:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,7 @@ CalendarImpl::getImplementationName(void) throw( RuntimeException )
     return OUString::createFromAscii("com.sun.star.i18n.CalendarImpl");
 }
 
-const sal_Char cCalendar[] = "com.sun.star.i18n.Calendar";
+const sal_Char cCalendar[] = "com.sun.star.i18n.LocaleCalendar";
 
 sal_Bool SAL_CALL
 CalendarImpl::supportsService(const OUString& rServiceName) throw( RuntimeException )
