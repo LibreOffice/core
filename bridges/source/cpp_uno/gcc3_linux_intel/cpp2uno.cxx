@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-19 13:32:39 $
+ *  last change: $Author: dbo $ $Date: 2001-10-19 14:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,9 +284,9 @@ static typelib_TypeClass cpp_mediate(
     OSL_ENSURE( nVtableCall < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
     if (nVtableCall >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
-//          throw RuntimeException(
-//              OUString::createFromAscii("illegal vtable index!"),
-//              (XInterface *)pCppI );
+        throw RuntimeException(
+            OUString::createFromAscii("illegal vtable index!"),
+            (XInterface *)pCppI );
     }
 
     // determine called method
@@ -377,9 +377,9 @@ static typelib_TypeClass cpp_mediate(
     }
     default:
     {
-//          throw RuntimeException(
-//              OUString::createFromAscii("no member description found!"),
-//              (XInterface *)pCppI );
+        throw RuntimeException(
+            OUString::createFromAscii("no member description found!"),
+            (XInterface *)pCppI );
         // is here for dummy
         eRet = typelib_TypeClass_VOID;
     }
