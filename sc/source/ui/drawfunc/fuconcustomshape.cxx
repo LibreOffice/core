@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconcustomshape.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:21:10 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,3 +329,10 @@ void FuConstCustomShape::SetAttributes( SdrObject* pObj )
     }
 }
 
+// #i33136#
+bool FuConstCustomShape::doConstructOrthogonal() const
+{
+    return SdrObjCustomShape::doConstructOrthogonal(aCustomShape);
+}
+
+// eof
