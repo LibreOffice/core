@@ -1,40 +1,61 @@
-# Builds the NotesAccess java demo.
+# Builds the Java NotesAccess example of the SDK.
 
-PRJ=..$(PS)..$(PS)..
-SETTINGS=../../../settings
+PRJ=../../..
+SETTINGS=$(PRJ)/settings
 
 include $(SETTINGS)/settings.mk
-
-include $(SETTINGS)/dk.mk
 include $(SETTINGS)/std.mk
+include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
+COMPONENT_NAME=NotesAccessExample
+OUT_COMP_CLASS = $(OUT_CLASS)/$(COMPONENT_NAME)
 
 JAVAFILES  = \
 	NotesAccess.java
 
-CLASSFILES = $(patsubst %.java,$(OUT_CLASS)$(PS)%.class,$(JAVAFILES))
+CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
 
-SDK_CLASSPATH =	$(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)$(PS)jurt.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)unoil.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)ridl.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)sandbox.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)juh.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)Notes.jar\
-		$(PATH_SEPARATOR)$(OUT_CLASS))
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)/jurt.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/ridl.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/sandbox.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/juh.jar\
+		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/Notes.jar\
+		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
 
 
 # Targets
 .PHONY: ALL
-ALL : notesaccess
+ALL : \
+    JavaNotesAccessExample
 
 include $(SETTINGS)/stdtarget.mk
 
-$(CLASSFILES) : $(OUT) $(OUT_CLASS) $(JAVAFILES)
-	javac -classpath "$(SDK_CLASSPATH)" -d $(OUT_CLASS) $(JAVAFILES) 
+$(OUT_COMP_CLASS) : $(OUT)
+	$(MKDIR) $(subst /,$(PS),$@)
 
-notesaccess: $(CLASSFILES)
+$(OFFICE_CLASSES_DIR)/Notes.jar : 
 	@echo --------------------------------------------------------------------------------
-	@echo Please use the following command to execute
-	@echo java -classpath "$(SDK_CLASSPATH)" NotesAccess $(OSEP)Connection$(CSEP) $(OSEP)Host$(CSEP) $(OSEP)User$(CSEP) $(OSEP)Password$(CSEP) $(OSEP)Database$(CSEP)
+	@echo You need the Notes.jar from Notes/Domino for this example.
+	@echo You can download it from http://www.servlets.com/cos/index.html
+	@echo and then please copy it into your $(OFFICE_CLASSES_DIR) directory.
 	@echo --------------------------------------------------------------------------------
+
+
+$(CLASSFILES) : $(OUT_COMP_CLASS) $(JAVAFILES) $(OFFICE_CLASSES_DIR)/Notes.jar
+	javac -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+
+JavaNotesAccessExample : $(CLASSFILES)
+	@echo --------------------------------------------------------------------------------
+	@echo Please use one of the following commands to execute the examples!
+	@echo -
+	@echo make NotesAccess.run
+	@echo --------------------------------------------------------------------------------
+
+%.run: $(OUT_COMP_CLASS)/%.class
+	java -classpath "$(SDK_CLASSPATH)" $(basename $@) "" "" "" "Stocks.nsf"
+
+.PHONY: clean
+clean :
+	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))

@@ -27,7 +27,7 @@ import com.sun.star.table.XCell;
 public class NotesAccess implements Runnable {
   /** Connection to the office.
    */
-  static String stringOfficeConnection = "";
+  static String sOfficeConnection = "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager";
 
   /** Host server of the Domino Directory.
    */
@@ -51,15 +51,15 @@ public class NotesAccess implements Runnable {
   public static void main( String args[] ) {
     Thread thread;
 
-    if ( args.length < 5 ) {
+    if ( args.length < 4 ) {
       System.out.println(
       "usage: java -classpath .;<Office path>/program/classes/jurt.jar;" +
       "<Office path>/program/classes/ridl.jar;" +
       "<Office path>/program/classes/sandbox.jar;" +
       "<Office path>/program/classes/unoil.jar;" +
       "<Office path>/program/classes/juh.jar " +
-      "NotesAccess \"<Connection>\" \"<Domino Host>\" \"<User>\" " +
-      "\"<Password>\" \"<Database>\"" );
+      "NotesAccess \"<Domino Host>\" \"<User>\" " +
+      "\"<Password>\" \"<Database>\" [\"<Connection>\"]" );
       System.out.println( "\ne.g.:" );
       System.out.println(
       "java -classpath .;d:/office60/program/classes/jurt.jar;" +
@@ -67,14 +67,15 @@ public class NotesAccess implements Runnable {
       "d:/office60/program/classes/sandbox.jar;" +
       "d:/office60/program/classes/unoil.jar; " +
       "d:/office60/program/classes/juh.jar " +
-      "NotesAccess \"uno:socket,host=localhost,port=8100;urp;" +
-      "StarOffice.ServiceManager\"" +
-      " \"\" \"\" \"\" " +
-      "\"F:\\odk3.0.0\\examples\\java\\NotesAccess\\Stocks.nsf\"" );
+      "NotesAccess \"\" \"\" \"\" \"Stocks.nsf\"" );
       System.exit( 1 );
     }
 
-    stringOfficeConnection = args[ 0 ].trim();
+    // It is possible to use a different connection string, passed as argument
+    if ( args.length == 2 ) {
+        sConnectionString = args[1];
+    }
+
     if ( !args[ 1 ].trim().equals( "" ) ) {
       stringHost = args[ 1 ].trim();
     }
@@ -159,7 +160,7 @@ public class NotesAccess implements Runnable {
 
       // Resolves an object that is specified as follow:
       // uno:<connection description>;<protocol description>;<initial object name>
-      Object objectInitial = xurlresolver.resolve( stringOfficeConnection );
+      Object objectInitial = xurlresolver.resolve( sOfficeConnection );
 
       // Create a service manager from the initial object
       xmulticomponentfactory = ( XMultiComponentFactory )
