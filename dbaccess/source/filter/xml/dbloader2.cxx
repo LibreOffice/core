@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:38:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,12 @@
 #ifndef _COM_SUN_STAR_FRAME_XLOADEVENTLISTENER_HPP_
 #include <com/sun/star/frame/XLoadEventListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -156,6 +162,9 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 #ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
 #include <comphelper/sequenceashashmap.hxx>
 #endif
@@ -177,6 +186,9 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
+#ifndef _COMPHELPER_STORAGEHELPER_HXX
+#include <comphelper/storagehelper.hxx>
+#endif
 #ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
 #include <com/sun/star/task/XJobExecutor.hpp>
 #endif
@@ -197,6 +209,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::embed;
 namespace css = ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 namespace css = ::com::sun::star;
@@ -207,6 +220,7 @@ namespace dbaxml
 
 class DBTypeDetection : public ::cppu::WeakImplHelper2< XExtendedFilterDetection, XServiceInfo>
 {
+    Reference< XMultiServiceFactory > m_xServiceFactory;
 public:
     DBTypeDetection(const Reference< XMultiServiceFactory >&);
 
@@ -228,6 +242,7 @@ public:
 };
 // -------------------------------------------------------------------------
 DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFactory)
+: m_xServiceFactory(_rxFactory)
 {
 }
 // -------------------------------------------------------------------------
@@ -242,6 +257,18 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
         INetURLObject aURL(sTemp);
         if ( aURL.GetExtension().equalsIgnoreAsciiCaseAscii("odb") )
             return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBase"));
+        else
+        {
+            Reference<XPropertySet> xProp(::comphelper::OStorageHelper::GetStorageFromURL(sTemp,ElementModes::READ,m_xServiceFactory),UNO_QUERY);
+            if ( xProp.is() )
+            {
+                ::rtl::OUString sMediaType;
+                xProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) ) >>= sMediaType;
+                if ( sMediaType.equalsAscii("application/vnd.sun.xml.base") )
+                    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBase"));
+                ::comphelper::disposeComponent(xProp);
+            }
+        }
     }
     return ::rtl::OUString();
 }
