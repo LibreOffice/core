@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:46:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 08:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1962,7 +1962,11 @@ SwFtnFrm *SwFtnBossFrm::FindFtn( const SwCntntFrm *pRef, const SwTxtFtn *pAttr )
             if ( pClient->IsA( TYPE(SwFrm) ) )
             {
                 SwFrm *pFrm = ((SwFrm*)pClient)->GetUpper();
-                SwFtnFrm *pFtn = pFrm->FindFtnFrm();
+                // #i28500#, #i27243# Due to the endnode collector, there are
+                // SwFtnFrms, which are not in the layout. Therefore the
+                // bInfFtn flags are not set correctly, and a cell of FindFtnFrm
+                // would return 0. Therefore we better call ImplFindFtnFrm().
+                SwFtnFrm *pFtn = pFrm->ImplFindFtnFrm();
                 if ( pFtn && pFtn->GetRef() == pRef )
                 {
                     // The following condition becomes true, if the whole
