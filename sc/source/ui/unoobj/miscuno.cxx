@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscuno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 05:24:59 $
+ *  last change: $Author: sab $ $Date: 2002-09-11 09:07:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ using namespace com::sun::star;
 
 SC_SIMPLE_SERVICE_INFO( ScEmptyEnumeration, "ScEmptyEnumeration", "stardiv.unknown" )
 SC_SIMPLE_SERVICE_INFO( ScEmptyEnumerationAccess, "ScEmptyEnumerationAccess", "stardiv.unknown" )
-SC_SIMPLE_SERVICE_INFO( ScIndexEnumeration, "ScIndexEnumeration", "stardiv.unknown" )
+//SC_SIMPLE_SERVICE_INFO( ScIndexEnumeration, "ScIndexEnumeration", "stardiv.unknown" )
 SC_SIMPLE_SERVICE_INFO( ScPrintSettingsObj, "ScPrintSettingsObj", "stardiv.unknown" )
 
 SC_SIMPLE_SERVICE_INFO( ScNameToIndexAccess, "ScNameToIndexAccess", "stardiv.unknown" )
@@ -217,8 +217,10 @@ void ScUnoHelpFunctions::SetBoolInAny( uno::Any& rAny, sal_Bool bValue )
 
 //------------------------------------------------------------------------
 
-ScIndexEnumeration::ScIndexEnumeration(const uno::Reference<container::XIndexAccess>& rInd) :
+ScIndexEnumeration::ScIndexEnumeration(const uno::Reference<container::XIndexAccess>& rInd,
+                                       const rtl::OUString& rServiceName) :
     xIndex( rInd ),
+    sServiceName(rServiceName),
     nPos( 0 )
 {
 }
@@ -240,6 +242,28 @@ uno::Any SAL_CALL ScIndexEnumeration::nextElement() throw(container::NoSuchEleme
 {
     ScUnoGuard aGuard;
     return xIndex->getByIndex(nPos++);
+}
+
+::rtl::OUString SAL_CALL ScIndexEnumeration::getImplementationName()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::rtl::OUString::createFromAscii("ScIndexEnumeration");
+}
+
+sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const ::rtl::OUString& ServiceName )
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    return sServiceName == ServiceName;
+}
+
+::com::sun::star::uno::Sequence< ::rtl::OUString >
+    SAL_CALL ScIndexEnumeration::getSupportedServiceNames(void)
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aRet(1);
+    ::rtl::OUString* pArray = aRet.getArray();
+    pArray[0] = sServiceName;
+    return aRet;
 }
 
 //------------------------------------------------------------------------
