@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-27 01:47:43 $
+ *  last change: $Author: pluby $ $Date: 2000-12-04 20:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,6 @@
 #ifndef _SV_VCLWINDOW_H
 #include <VCLWindow.h>
 #endif
-#ifndef _SV_VCLAUTORELEASEPOOL_H
-#include <VCLAutoreleasePool.h>
-#endif
-
 #ifndef _SV_SYSDATA_HXX
 #include <sysdata.hxx>
 #endif
@@ -84,7 +80,6 @@
 struct SalFrameData
 {
     VCLWINDOW               mhWnd;                  // Window handle
-    VCLAUTORELEASEPOOL      mhAutoreleasePool;      // Objective-C release pool
     SalGraphics*            mpGraphics;             // current frame graphics
     SalFrame*               mpNextFrame;            // pointer to next frame
     SalFrame*               mpParent;               // pointer to parent frame
