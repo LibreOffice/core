@@ -2,9 +2,9 @@
 *
 *  $RCSfile: directory_ooo.scp,v $
 *
-*  $Revision: 1.1 $
+*  $Revision: 1.2 $
 *
-*  last change: $Author: is $ $Date: 2004-02-05 18:10:01 $
+*  last change: $Author: kz $ $Date: 2004-02-25 17:26:39 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -144,6 +144,11 @@ End
 Directory gid_Dir_User_Registry_Data_Org_Openoffice_Office
     ParentID = gid_Dir_User_Registry_Data_Org_Openoffice;
     DosName = "Office";
+End
+
+Directory gid_Dir_User_Registry_Data_Org_Openoffice_Office_Ui
+    ParentID = gid_Dir_User_Registry_Data_Org_Openoffice_Office;
+    DosName = "UI";
 End
 
 Directory gid_Dir_User_Registry_Data_Org_Openoffice_Ucb
@@ -414,6 +419,151 @@ Directory gid_Dir_Share_Config
     DosName = "config";
 End
 
+Directory gid_Dir_Share_Config_Sofficecfg
+    ParentID = gid_Dir_Share_Config;
+    DosName = "soffice.cfg";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Basicide
+    ParentID = gid_Dir_Share_Config_Sofficecfg;
+    DosName = "BasicIDE";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Basicide_Menubar
+    ParentID = gid_Dir_Share_Config_Sofficecfg_Basicide;
+    DosName = "menubar";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Dbquery
+    ParentID = gid_Dir_Share_Config_Sofficecfg;
+    DosName = "dbquery";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Dbquery_Menubar
+    ParentID = gid_Dir_Share_Config_Sofficecfg_Dbquery;
+    DosName = "menubar";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Dbrelation
+    ParentID = gid_Dir_Share_Config_Sofficecfg;
+    DosName = "dbrelation";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Dbrelation_Menubar
+    ParentID = gid_Dir_Share_Config_Sofficecfg_Dbrelation;
+    DosName = "menubar";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Dbtable
+    ParentID = gid_Dir_Share_Config_Sofficecfg;
+    DosName = "dbtable";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Dbtable_Menubar
+    ParentID = gid_Dir_Share_Config_Sofficecfg_Dbtable;
+    DosName = "menubar";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Sbibliography
+    ParentID = gid_Dir_Share_Config_Sofficecfg;
+    DosName = "sbibliography";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Sbibliography_Menubar
+    ParentID = gid_Dir_Share_Config_Sofficecfg_Sbibliography;
+    DosName = "menubar";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Scalc
+    ParentID = gid_Dir_Share_Config_Sofficecfg;
+    DosName = "scalc";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Scalc_Menubar
+    ParentID = gid_Dir_Share_Config_Sofficecfg_Scalc;
+    DosName = "menubar";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Schart
+    ParentID = gid_Dir_Share_Config_Sofficecfg;
+    DosName = "schart";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Schart_Menubar
+    ParentID = gid_Dir_Share_Config_Sofficecfg_Schart;
+    DosName = "menubar";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Sdraw
+    ParentID = gid_Dir_Share_Config_Sofficecfg;
+    DosName = "sdraw";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Sdraw_Menubar
+    ParentID = gid_Dir_Share_Config_Sofficecfg_Sdraw;
+    DosName = "menubar";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Sglobal
+    ParentID = gid_Dir_Share_Config_Sofficecfg;
+    DosName = "sglobal";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Sglobal_Menubar
+    ParentID = gid_Dir_Share_Config_Sofficecfg_Sglobal;
+    DosName = "menubar";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Simpress
+    ParentID = gid_Dir_Share_Config_Sofficecfg;
+    DosName = "simpress";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Simpress_Menubar
+    ParentID = gid_Dir_Share_Config_Sofficecfg_Simpress;
+    DosName = "menubar";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Smath
+    ParentID = gid_Dir_Share_Config_Sofficecfg;
+    DosName = "smath";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Smath_Menubar
+    ParentID = gid_Dir_Share_Config_Sofficecfg_Smath;
+    DosName = "menubar";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Startmodule
+    ParentID = gid_Dir_Share_Config_Sofficecfg;
+    DosName = "StartModule";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Startmodule_Menubar
+    ParentID = gid_Dir_Share_Config_Sofficecfg_Startmodule;
+    DosName = "menubar";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Sweb
+    ParentID = gid_Dir_Share_Config_Sofficecfg;
+    DosName = "sweb";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Sweb_Menubar
+    ParentID = gid_Dir_Share_Config_Sofficecfg_Sweb;
+    DosName = "menubar";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Swriter
+    ParentID = gid_Dir_Share_Config_Sofficecfg;
+    DosName = "swriter";
+End
+
+Directory gid_Dir_Share_Config_Sofficecfg_Swriter_Menubar
+    ParentID = gid_Dir_Share_Config_Sofficecfg_Swriter;
+    DosName = "menubar";
+End
+
 Directory gid_Dir_Share_Registry
     ParentID = gid_Dir_Share;
     DosName = "registry";
@@ -437,6 +587,11 @@ End
 Directory gid_Dir_Share_Registry_Schema_Org_Openoffice_Office
     ParentID = gid_Dir_Share_Registry_Schema_Org_Openoffice;
     HostName = "Office";
+End
+
+Directory gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui
+    ParentID = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    HostName = "UI";
 End
 
 Directory gid_Dir_Share_Registry_Schema_Org_Openoffice_Ucb
@@ -467,6 +622,11 @@ End
 Directory gid_Dir_Share_Registry_Data_Org_Openoffice_Office
     ParentID = gid_Dir_Share_Registry_Data_Org_Openoffice;
     HostName = "Office";
+End
+
+Directory gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui
+    ParentID = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    HostName = "UI";
 End
 
 Directory gid_Dir_Share_Registry_Data_Org_Openoffice_Ucb
