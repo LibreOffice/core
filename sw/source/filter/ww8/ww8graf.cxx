@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-12 09:24:43 $
+ *  last change: $Author: jp $ $Date: 2001-07-31 18:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -862,17 +862,21 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
                 {
                     const SfxPoolItem *pItem = ((*pCtrlStck)[i])->pAttr;
                     USHORT nWhich = pItem->Which();
-                    USHORT nSlotId = rDoc.GetAttrPool().GetSlotId(nWhich);
-                    if (
-                        nSlotId && nWhich != nSlotId &&
-                        0 != (nWhich = pEditPool->GetWhich(nSlotId)) &&
-                        nWhich != nSlotId
-                       )
+                    if( nWhich < RES_FLTRATTR_BEGIN ||
+                        nWhich >= RES_FLTRATTR_END )
                     {
-                        SfxPoolItem* pCopy = pItem->Clone();
-                        pCopy->SetWhich( nWhich );
-                        pS->Put( *pCopy );
-                        delete pCopy;
+                        USHORT nSlotId = rDoc.GetAttrPool().GetSlotId(nWhich);
+                        if (
+                            nSlotId && nWhich != nSlotId &&
+                            0 != (nWhich = pEditPool->GetWhich(nSlotId)) &&
+                            nWhich != nSlotId
+                           )
+                        {
+                            SfxPoolItem* pCopy = pItem->Clone();
+                            pCopy->SetWhich( nWhich );
+                            pS->Put( *pCopy );
+                            delete pCopy;
+                        }
                     }
                 }
             }
@@ -2957,11 +2961,14 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.28 2001-06-12 09:24:43 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.29 2001-07-31 18:38:30 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.28  2001/06/12 09:24:43  cmc
+      #87558# #87591# ##976## ##980## Implement draw textbox attributes by using normal writer import and mapping to draw attributes using slotids
+
       Revision 1.27  2001/06/06 12:46:32  cmc
       #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
 
