@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 10:12:54 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2623,6 +2623,7 @@ int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
 {
     sal_uInt8 *table = getTable(ttf, O_name);
     sal_uInt16 n = GetUInt16(table, 2, 1);
+    sal_uInt8* rec_string = NULL;
     NameRecord *rec;
     sal_uInt16 i;
 
@@ -2638,8 +2639,22 @@ int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
         rec[i].nameID = GetUInt16(table + 6, 6 + 12 * i, 1);
         rec[i].slen = GetUInt16(table + 6, 8 + 12 * i, 1);
         if (rec[i].slen) {
-            rec[i].sptr = (sal_uInt8 *) malloc(rec[i].slen); assert(rec[i].sptr != 0);
-            memcpy(rec[i].sptr, table + GetUInt16(table, 4, 1) + GetUInt16(table + 6, 10 + 12 * i, 1), rec[i].slen);
+            rec_string = table + GetUInt16(table, 4, 1) + GetUInt16(table + 6, 10 + 12 * i, 1);
+            // sanity check
+            if( rec_string > (sal_uInt8*)ttf->ptr && rec_string < ((sal_uInt8*)ttf->ptr + ttf->fsize - rec[i].slen ) )
+            {
+                rec[i].sptr = (sal_uInt8 *) malloc(rec[i].slen); assert(rec[i].sptr != 0);
+                memcpy(rec[i].sptr, rec_string, rec[i].slen);
+            }
+            else
+            {
+#ifdef DEBUG
+                fprintf( stderr, "found invalid name record %d with name id %d for file %s\n",
+                         i, rec[i].nameID, ttf->fname );
+#endif
+                rec[i].sptr = 0;
+                rec[i].slen = 0;
+            }
         } else {
             rec[i].sptr = 0;
         }
