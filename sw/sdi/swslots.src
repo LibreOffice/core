@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:17:19 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2106,5 +2106,36 @@ SfxSlotInfo FN_WORDCOUNT_DIALOG
 {
     SlotName [ de ] = "Wortanzahl";
     SlotName[ en-US ] = "Word Count";
+};
+SfxSlotInfo FN_TABLE_DELETE_TABLE
+{
+    SlotName [ de ] = "Tabelle löschen";
+    SlotName [ en-US ] = "Delete table";
+};
+SfxSlotInfo FN_TABLE_SELECT_CELL
+{
+    SlotName [ de ] = "Zelle selektieren";
+    SlotName [ en-US ] = "Select cell";
+};
+SfxSlotInfo FN_CONVERT_TEXT_TO_TABLE
+{
+    SlotName [ de ] = "Konvertiere Text zu Tabelle ";
+    SlotName [ en-US ] = "Convert Text to Table";
+};
+
+SfxSlotInfo FN_CONVERT_TABLE_TO_TEXT
+{
+    SlotName [ de ] = "Konvertiere Tabelle in Text";
+    SlotName [ en-US ] = "Convert Table to Text";
+};
+SfxSlotInfo FN_TABLE_SORT_DIALOG
+{
+    SlotName [ de ] = "Sortieren";
+    SlotName [ en-US ] = "Sort";
+};
+SfxSlotInfo FN_TABLE_HEADLINE_REPEAT
+{
+    SlotName [ de ] = "Überschrift wiederholen";
+    SlotName [ en-US ] = "Heading Rows Repeat";
 };
 
