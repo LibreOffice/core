@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenercontainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 13:26:28 $
+ *  last change: $Author: obo $ $Date: 2000-11-14 10:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ namespace configmgr
             BasicContainerHelper *  getContainerHelper( Index nIndex) const
             {
                 osl::MutexGuard aGuard(mutex());
-                return (nIndex < m_aContainers.size()) ? m_aContainers[nIndex].pContainer : 0 );
+                return ((nIndex < m_aContainers.size()) ? m_aContainers[nIndex].pContainer : 0 );
             }
             /**
              * Return the container for the given type created under this index.
@@ -320,7 +320,7 @@ namespace configmgr
             ListenerContainer *  getContainer( Index nIndex, const UnoType & aType) const
             {
                 osl::MutexGuard aGuard(mutex());
-                BasicContainerHelper* pContainer = (nIndex < m_aContainers.size()) ? m_aContainers[nIndex].pContainer : 0 );
+                BasicContainerHelper* pContainer = (nIndex < m_aContainers.size()) ? m_aContainers[nIndex].pContainer : 0 ;
 
                 return pContainer ? pContainer->getContainer(aType) : 0;
             }
