@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strimpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: lla $ $Date: 2001-03-23 09:37:46 $
+ *  last change: $Author: lla $ $Date: 2001-08-20 11:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ namespace configmgr
 
     // simple types names
     IMPLEMENT_CONSTASCII_USTRING(TYPE_BOOLEAN,  "boolean");
+    IMPLEMENT_CONSTASCII_USTRING(TYPE_BYTE,     "byte");
     IMPLEMENT_CONSTASCII_USTRING(TYPE_SHORT,    "short");
     IMPLEMENT_CONSTASCII_USTRING(TYPE_INT,      "int");
     IMPLEMENT_CONSTASCII_USTRING(TYPE_LONG,     "long");

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconverter.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dg $ $Date: 2001-06-21 15:51:06 $
+ *  last change: $Author: lla $ $Date: 2001-08-20 11:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,7 @@ namespace configmgr
         case uno::TypeClass_STRING:   aRet = TYPE_STRING; break;
         case uno::TypeClass_SEQUENCE: aRet = TYPE_BINARY; break;
         case uno::TypeClass_ANY: aRet = TYPE_ANY; break;
+        case uno::TypeClass_BYTE:     aRet = TYPE_BYTE; break;
         default:
         {
             ::rtl::OString aStr("Wrong typeclass! ");
