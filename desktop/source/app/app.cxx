@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:51:28 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 09:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1906,9 +1906,16 @@ void Desktop::OpenDefault()
 
     Sequence < PropertyValue > aNoArgs;
     Reference< XComponentLoader > xDesktop(
-            ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+            ::comphelper::getProcessServiceFactory()->createInstance(
+            OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
             ::com::sun::star::uno::UNO_QUERY );
-    xDesktop->loadComponentFromURL( aName, ::rtl::OUString::createFromAscii( "_default" ), 0, aNoArgs );
+    Reference<XComponent> aComp = xDesktop->loadComponentFromURL(
+        aName, ::rtl::OUString::createFromAscii( "_default" ), 0, aNoArgs );
+
+    // shut down again if no component could be loaded
+    OSL_ENSURE(aComp.is(), "Desktop::OpenDesfault(), no component was loaded.");
+    if (!aComp.is())
+        Application::PostUserEvent( STATIC_LINK( 0, Desktop, AsyncTerminate ) );
 }
 
 
