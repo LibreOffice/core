@@ -182,6 +182,7 @@ hedabu: ..\inc\atom.hxx %_DEST%\inc%_EXT%\vcl\atom.hxx
 hedabu: ..\inc\threadex.hxx %_DEST%\inc%_EXT%\vcl\threadex.hxx
 hedabu: ..\inc\evntpost.hxx %_DEST%\inc%_EXT%\vcl\evntpost.hxx
 hedabu: ..\inc\unohelp.hxx %_DEST%\inc%_EXT%\vcl\unohelp.hxx
+hedabu: ..\inc\i18nhelp.hxx %_DEST%\inc%_EXT%\vcl\i18nhelp.hxx
 hedabu: ..\inc\dndhelp.hxx %_DEST%\inc%_EXT%\vcl\dndhelp.hxx
 hedabu: ..\unx\inc\salconfig.hxx %_DEST%\inc%_EXT%\vcl\unx\salconfig.hxx
 

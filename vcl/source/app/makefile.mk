@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: pl $ $Date: 2001-06-28 13:33:35 $
+#   last change: $Author: mt $ $Date: 2001-08-03 13:47:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,8 @@ SLOFILES=	$(SLO)$/access.obj		\
             $(SLO)$/system.obj		\
             $(SLO)$/timer.obj		\
             $(SLO)$/dndhelp.obj     \
-            $(SLO)$/unohelp.obj
+            $(SLO)$/unohelp.obj     \
+            $(SLO)$/i18nhelp.obj
 
 .IF "$(remote)"!=""
 EXCEPTIONSFILES=					\
@@ -113,6 +114,7 @@ EXCEPTIONSFILES=					\
             $(SLO)$/svapp.obj		\
             $(SLO)$/dndhelp.obj 	\
             $(SLO)$/unohelp.obj 	\
+            $(SLO)$/i18nhelp.obj 	\
             $(SLO)$/svmain.obj
 .ENDIF
 

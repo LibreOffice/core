@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: th $ $Date: 2001-07-10 07:43:31 $
+ *  last change: $Author: mt $ $Date: 2001-08-03 13:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 #endif
 #ifndef _SV_SETTINGS_HXX
 #include <settings.hxx>
+#endif
+
+#ifndef _VCL_I18NHELP_HXX
+#include <i18nhelp.hxx>
 #endif
 
 #include <unohelp.hxx>
@@ -1436,6 +1440,8 @@ ImplAllSettingsData::ImplAllSettingsData()
     mpUILocaleDataWrapper       = NULL;
     mpCollatorWrapper           = NULL;
     mpUICollatorWrapper         = NULL;
+    mpI18nHelper                = NULL;
+    mpUII18nHelper              = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -1465,6 +1471,8 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     mpUILocaleDataWrapper       = NULL;
     mpCollatorWrapper           = NULL;
     mpUICollatorWrapper         = NULL;
+    mpI18nHelper                = NULL;
+    mpUII18nHelper              = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -1479,6 +1487,10 @@ ImplAllSettingsData::~ImplAllSettingsData()
         delete mpCollatorWrapper;
     if ( mpUICollatorWrapper )
         delete mpUICollatorWrapper;
+    if ( mpI18nHelper )
+        delete mpI18nHelper;
+    if ( mpI18nHelper )
+        delete mpUII18nHelper;
 }
 
 // -----------------------------------------------------------------------
@@ -1662,6 +1674,16 @@ ULONG AllSettings::Update( ULONG nFlags, const AllSettings& rSet )
                 delete mpData->mpUILocaleDataWrapper;
                 mpData->mpUILocaleDataWrapper = NULL;
             }
+            if ( mpData->mpI18nHelper )
+            {
+                delete mpData->mpI18nHelper;
+                mpData->mpI18nHelper = NULL;
+            }
+            if ( mpData->mpUII18nHelper )
+            {
+                delete mpData->mpUII18nHelper;
+                mpData->mpUII18nHelper = NULL;
+            }
         }
     }
 
@@ -1783,6 +1805,11 @@ void AllSettings::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
         delete mpData->mpLocaleDataWrapper;
         mpData->mpLocaleDataWrapper = NULL;
     }
+    if ( mpData->mpI18nHelper )
+    {
+        delete mpData->mpI18nHelper;
+        mpData->mpI18nHelper = NULL;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1803,6 +1830,11 @@ void AllSettings::SetUILocale( const ::com::sun::star::lang::Locale& rLocale )
         delete mpData->mpUILocaleDataWrapper;
         mpData->mpUILocaleDataWrapper = NULL;
     }
+    if ( mpData->mpUII18nHelper )
+    {
+        delete mpData->mpUII18nHelper;
+        mpData->mpUII18nHelper = NULL;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1821,6 +1853,11 @@ void AllSettings::SetLanguage( LanguageType eLang )
         delete mpData->mpLocaleDataWrapper;
         mpData->mpLocaleDataWrapper = NULL;
     }
+    if ( mpData->mpI18nHelper )
+    {
+        delete mpData->mpI18nHelper;
+        mpData->mpI18nHelper = NULL;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1838,6 +1875,11 @@ void AllSettings::SetUILanguage( LanguageType eLang  )
     {
         delete mpData->mpUILocaleDataWrapper;
         mpData->mpUILocaleDataWrapper = NULL;
+    }
+    if ( mpData->mpUII18nHelper )
+    {
+        delete mpData->mpUII18nHelper;
+        mpData->mpUII18nHelper = NULL;
     }
 }
 
@@ -1910,6 +1952,25 @@ const LocaleDataWrapper& AllSettings::GetUILocaleDataWrapper() const
         ((AllSettings*)this)->mpData->mpUILocaleDataWrapper = new LocaleDataWrapper( vcl::unohelper::GetMultiServiceFactory(), GetUILocale() );
     return *mpData->mpUILocaleDataWrapper;
 }
+
+// -----------------------------------------------------------------------
+
+const vcl::I18nHelper& AllSettings::GetLocaleI18nHelper() const
+{
+    if ( !mpData->mpI18nHelper )
+        ((AllSettings*)this)->mpData->mpI18nHelper = new vcl::I18nHelper( vcl::unohelper::GetMultiServiceFactory(), GetLocale() );
+    return *mpData->mpI18nHelper;
+}
+
+// -----------------------------------------------------------------------
+
+const vcl::I18nHelper& AllSettings::GetUILocaleI18nHelper() const
+{
+    if ( !mpData->mpUII18nHelper )
+        ((AllSettings*)this)->mpData->mpUII18nHelper = new vcl::I18nHelper( vcl::unohelper::GetMultiServiceFactory(), GetUILocale() );
+    return *mpData->mpUII18nHelper;
+}
+
 
 // -----------------------------------------------------------------------
 /*
