@@ -2,9 +2,9 @@
  *
  *  $RCSfile: delete.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:04:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:12:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,15 +149,24 @@ long SwWrtShell::DelLeft()
     const int nCmp = SEL_FRM | SEL_GRF | SEL_OLE | SEL_DRW;
     if( nCmp & nSelType )
     {
+        /*  #108205# Remember object's position. */
+        Point aTmpPt = GetObjRect().TopLeft();
+
         DelSelectedObj();
+
+        /*  #108205# Set cursor to remembered position. */
+        SetCrsr(&aTmpPt);
+
         LeaveSelFrmMode();
         UnSelectFrm();
+
         nSelType = GetSelectionType();
         if ( nCmp & nSelType )
         {
             EnterSelFrmMode();
             GotoNextFly();
         }
+
         return 1L;
     }
 
@@ -299,9 +308,18 @@ long SwWrtShell::DelRight(BOOL bDelFrm)
     case SEL_DRW:
     case SEL_DRW_TXT:
     case SEL_DRW_FORM:
-        DelSelectedObj();
-        LeaveSelFrmMode();
-        UnSelectFrm();
+        {
+            /*  #108205# Remember object's position. */
+            Point aTmpPt = GetObjRect().TopLeft();
+
+            DelSelectedObj();
+
+            /*  #108205# Set cursor to remembered position. */
+            SetCrsr(&aTmpPt);
+
+            LeaveSelFrmMode();
+            UnSelectFrm();
+        }
 
         if( IsFrmSelected() )
         {
