@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNameItemTable.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-04 10:14:41 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 09:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,11 @@ SvxUnoNameItemTable::~SvxUnoNameItemTable() throw()
     if( mpModel )
         EndListening( *mpModel );
     dispose();
+}
+
+bool SvxUnoNameItemTable::isValid( const NameOrIndex* pItem ) const
+{
+    return pItem && (pItem->GetName().Len() != 0);
 }
 
 void SvxUnoNameItemTable::dispose()
@@ -227,7 +232,7 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
         {
             NameOrIndex* pNewItem = createItem();
             pNewItem->SetName( aSearchName );
-            if( !pNewItem->PutValue( aElement, mnMemberId ) )
+            if( !pNewItem->PutValue( aElement, mnMemberId ) || !isValid( pNewItem ) )
                 throw lang::IllegalArgumentException();
 
             (*aIter)->Put( *pNewItem );
@@ -283,7 +288,7 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
         {
             pItem = (NameOrIndex*)mpModelPool->GetItem( mnWhich, (USHORT)nSurrogate );
 
-            if( pItem && pItem->GetName() == aSearchName )
+            if( isValid( pItem ) && (pItem->GetName() == aSearchName) )
             {
                 pItem->QueryValue( aAny, mnMemberId );
                 return aAny;
@@ -311,7 +316,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
     {
         pItem = (NameOrIndex*)mpModelPool->GetItem( mnWhich, (USHORT)nSurrogate );
 
-        if( pItem == NULL || pItem->GetName().Len() == 0 )
+        if( !isValid( pItem ) )
             continue;
 
         SvxUnogetApiNameForItem( mnWhich, pItem->GetName(), aApiName );
@@ -352,7 +357,7 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
     for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
         pItem = (NameOrIndex*)mpModelPool->GetItem( mnWhich, nSurrogate );
-        if( pItem && pItem->GetName() == aSearchName )
+        if( isValid( pItem ) && (pItem->GetName() == aSearchName) )
             return sal_True;
     }
 
@@ -372,7 +377,7 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasElements(  )
     {
         pItem = (NameOrIndex*)mpModelPool->GetItem( mnWhich, (USHORT)nSurrogate );
 
-        if( pItem && pItem->GetName().Len() != 0 )
+        if( isValid( pItem ) )
             return sal_True;
     }
 
