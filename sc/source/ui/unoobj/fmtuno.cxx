@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-01 17:45:36 $
+ *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         {
             table::CellAddress aAddress;
             if ( rProp.Value >>= aAddress )
-                aPos = ScAddress( aAddress.Column, aAddress.Row, aAddress.Sheet );
+                aPos = ScAddress( (USHORT)aAddress.Column, (USHORT)aAddress.Row, aAddress.Sheet );
         }
         else if ( aPropName.EqualsAscii( SC_UNONAME_STYLENAME ) )
         {
@@ -343,7 +343,7 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XSheetConditionalEntry> xEntry = GetObjectByIndex_Impl(nIndex);
+    uno::Reference<sheet::XSheetConditionalEntry> xEntry = GetObjectByIndex_Impl((USHORT)nIndex);
     uno::Any aAny;
     if (xEntry.is())
         aAny <<= xEntry;
@@ -385,7 +385,7 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByName( const rtl::OUString& aNam
     for (long i=0; i<nCount; i++)
         if ( aName == lcl_GetEntryNameFromIndex(i) )
         {
-            xEntry = GetObjectByIndex_Impl(i);
+            xEntry = GetObjectByIndex_Impl((USHORT)i);
             break;
         }
 
@@ -565,7 +565,7 @@ void SAL_CALL ScTableConditionalEntry::setSourcePosition( const table::CellAddre
                                             throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    aSrcPos.Set( aSourcePosition.Column, aSourcePosition.Row, aSourcePosition.Sheet );
+    aSrcPos.Set( (USHORT)aSourcePosition.Column, (USHORT)aSourcePosition.Row, aSourcePosition.Sheet );
     if (pParent)
         pParent->DataChanged();
 }
@@ -731,7 +731,7 @@ void SAL_CALL ScTableValidationObj::setSourcePosition( const table::CellAddress&
                                             throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    aSrcPos.Set( aSourcePosition.Column, aSourcePosition.Row, aSourcePosition.Sheet );
+    aSrcPos.Set( (USHORT)aSourcePosition.Column, (USHORT)aSourcePosition.Row, aSourcePosition.Sheet );
     DataChanged();
 }
 

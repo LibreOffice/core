@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appluno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-09 08:28:58 $
+ *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,7 +737,7 @@ uno::Any SAL_CALL ScFunctionListObj::getByIndex( sal_Int32 nIndex )
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( pFuncList )
     {
-        if ( nIndex >= 0 && nIndex < pFuncList->GetCount() )
+        if ( nIndex >= 0 && nIndex < (sal_Int32)pFuncList->GetCount() )
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
             if ( pDesc )

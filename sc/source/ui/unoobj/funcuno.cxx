@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-13 19:53:27 $
+ *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,7 +660,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
                     else
                     {
                         // copy data
-                        if ( !lcl_CopyData( pSrcDoc, aSrcRange, pDoc, ScAddress( 0, nDocRow, 0 ) ) )
+                        if ( !lcl_CopyData( pSrcDoc, aSrcRange, pDoc, ScAddress( 0, (USHORT)nDocRow, 0 ) ) )
                             bOverflow = TRUE;
                     }
 
@@ -687,7 +687,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
     uno::Any aRet;
     if ( !bArgErr && !bOverflow && nDocRow <= MAXROW )
     {
-        ScAddress aFormulaPos( 0, nDocRow, 0 );
+        ScAddress aFormulaPos( 0, (USHORT)nDocRow, 0 );
         ScFormulaCell* pFormula = new ScFormulaCell( pDoc, aFormulaPos, &aTokenArr, MM_FORMULA );
         pDoc->PutCell( aFormulaPos, pFormula );     //! necessary?
 

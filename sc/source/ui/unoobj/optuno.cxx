@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optuno.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-12 10:18:48 $
+ *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
     {
         sal_Int32 nIntVal;
         if ( aValue >>= nIntVal )
-            rOptions.SetIterCount( nIntVal );
+            rOptions.SetIterCount( (USHORT)nIntVal );
     }
     else if ( aString.EqualsAscii( SC_UNO_STANDARDDEC ) )
     {

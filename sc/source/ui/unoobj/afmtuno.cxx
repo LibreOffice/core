@@ -2,9 +2,9 @@
  *
  *  $RCSfile: afmtuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ uno::Any SAL_CALL ScAutoFormatsObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference< container::XNamed >  xFormat = GetObjectByIndex_Impl(nIndex);
+    uno::Reference< container::XNamed >  xFormat = GetObjectByIndex_Impl((sal_uInt16)nIndex);
     uno::Any aAny;
     if (xFormat.is())
         aAny <<= xFormat;
@@ -612,7 +612,7 @@ uno::Any SAL_CALL ScAutoFormatObj::getByIndex( sal_Int32 nIndex )
     uno::Any aAny;
     if (IsInserted())
     {
-        uno::Reference< beans::XPropertySet >  xField = GetObjectByIndex_Impl(nIndex);
+        uno::Reference< beans::XPropertySet >  xField = GetObjectByIndex_Impl((sal_uInt16)nIndex);
         aAny <<= xField;
     }
     return aAny;

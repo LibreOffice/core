@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cursuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,8 +305,8 @@ void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRo
         if ( nEndY > MAXROW ) nEndY = MAXROW;
         //! Fehler/Exception oder so, wenn zu gross/zu klein?
 
-        aNewRange.aEnd.SetCol(nEndX);
-        aNewRange.aEnd.SetRow(nEndY);
+        aNewRange.aEnd.SetCol((USHORT)nEndX);
+        aNewRange.aEnd.SetRow((USHORT)nEndY);
 
         aNewRange.Justify();    //! wirklich?
 
@@ -482,11 +482,11 @@ void SAL_CALL ScCellCursorObj::gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nR
          aRange.aStart.Row() + nRowOffset    >= 0 &&
          aRange.aEnd.Row()   + nRowOffset    <= MAXROW )
     {
-        ScRange aNew( aRange.aStart.Col() + nColumnOffset,
-                      aRange.aStart.Row() + nRowOffset,
+        ScRange aNew( (USHORT)(aRange.aStart.Col() + nColumnOffset),
+                      (USHORT)(aRange.aStart.Row() + nRowOffset),
                       aRange.aStart.Tab(),
-                      aRange.aEnd.Col() + nColumnOffset,
-                      aRange.aEnd.Row() + nRowOffset,
+                      (USHORT)(aRange.aEnd.Col() + nColumnOffset),
+                      (USHORT)(aRange.aEnd.Row() + nRowOffset),
                       aRange.aEnd.Tab() );
         SetNewRange( aNew );
     }
@@ -547,7 +547,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellCursorObj::getSupportedServiceNames(
 {
     //  get all service names from cell range
     uno::Sequence<rtl::OUString> aParentSeq = ScCellRangeObj::getSupportedServiceNames();
-    UINT32 nParentLen = aParentSeq.getLength();
+    sal_Int32 nParentLen = aParentSeq.getLength();
     const rtl::OUString* pParentArr = aParentSeq.getConstArray();
 
     //  SheetCellCursor should be first (?)

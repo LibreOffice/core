@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-09 09:40:58 $
+ *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -923,7 +923,7 @@ void SAL_CALL ScAreaLinksObj::insertAtPosition( const table::CellAddress& aDestP
         String aFilterStr = aFilter;
         String aOptionStr = aFilterOptions;
         String aSourceStr = aSourceArea;
-        ScAddress aDestAddr( aDestPos.Column, aDestPos.Row, aDestPos.Sheet );
+        ScAddress aDestAddr( (USHORT)aDestPos.Column, (USHORT)aDestPos.Row, aDestPos.Sheet );
 
         aFileStr = ScGlobal::GetAbsDocName( aFileStr, pDocShell );  //! in InsertAreaLink ???
 
@@ -937,7 +937,7 @@ void SAL_CALL ScAreaLinksObj::insertAtPosition( const table::CellAddress& aDestP
 void SAL_CALL ScAreaLinksObj::removeByIndex( sal_Int32 nIndex ) throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, nIndex);
+    ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, (USHORT)nIndex);
     if (pLink)
     {
         //! SetAddUndo oder so

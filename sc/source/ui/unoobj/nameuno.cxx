@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nameuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-09 09:40:58 $
+ *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ void SAL_CALL ScNamedRangeObj::setReferencePosition( const table::CellAddress& a
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScAddress aPos( aReferencePosition.Column, aReferencePosition.Row, aReferencePosition.Sheet );
+    ScAddress aPos( (USHORT)aReferencePosition.Column, (USHORT)aReferencePosition.Row, aReferencePosition.Sheet );
     Modify_Impl( NULL, NULL, &aPos, NULL );
 }
 
@@ -447,7 +447,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
     ScUnoGuard aGuard;
     String aNameStr = aName;
     String aContStr = aContent;
-    ScAddress aPos( aPosition.Column, aPosition.Row, aPosition.Sheet );
+    ScAddress aPos( (USHORT)aPosition.Column, (USHORT)aPosition.Row, aPosition.Sheet );
 
     sal_uInt16 nNewType = RT_NAME;
     if ( nUnoType & sheet::NamedRangeFlag::FILTER_CRITERIA )    nNewType |= RT_CRITERIA;
@@ -540,7 +540,7 @@ void SAL_CALL ScNamedRangesObj::outputList( const table::CellAddress& aOutputPos
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScAddress aPos( aOutputPosition.Column, aOutputPosition.Row, aOutputPosition.Sheet );
+    ScAddress aPos( (USHORT)aOutputPosition.Column, (USHORT)aOutputPosition.Row, aOutputPosition.Sheet );
     if (pDocShell)
     {
         ScDocFunc aFunc(*pDocShell);
@@ -582,7 +582,7 @@ uno::Any SAL_CALL ScNamedRangesObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference< sheet::XNamedRange >  xRange = GetObjectByIndex_Impl(nIndex);
+    uno::Reference< sheet::XNamedRange >  xRange = GetObjectByIndex_Impl((sal_uInt16)nIndex);
     uno::Any aAny;
     if ( xRange.is() )
         aAny <<= xRange;
@@ -872,7 +872,7 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
         ScDocument* pDoc = pDocShell->GetDocument();
         ScRangePairList* pOldList = bColumn ? pDoc->GetColNameRanges() : pDoc->GetRowNameRanges();
 
-        if ( pOldList && nIndex < pOldList->Count() )
+        if ( pOldList && nIndex < (sal_Int32)pOldList->Count() )
         {
             ScRangePairListRef xNewList = pOldList->Clone();
 
@@ -929,7 +929,7 @@ uno::Any SAL_CALL ScLabelRangesObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference< sheet::XLabelRange >  xRange = GetObjectByIndex_Impl(nIndex);
+    uno::Reference< sheet::XLabelRange >  xRange = GetObjectByIndex_Impl((sal_uInt16)nIndex);
     uno::Any aAny;
     if ( xRange.is() )
         aAny <<= xRange;

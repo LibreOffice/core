@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-11 15:19:14 $
+ *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -679,7 +679,7 @@ ScStyleObj* ScStyleFamilyObj::GetObjectByIndex_Impl(UINT32 nIndex)
         SfxStyleSheetIterator aIter( pStylePool, eFamily );
         if ( nIndex < aIter.Count() )
         {
-            SfxStyleSheetBase* pStyle = aIter[nIndex];
+            SfxStyleSheetBase* pStyle = aIter[(USHORT)nIndex];
             if ( pStyle )
             {
                 String aName = pStyle->GetName();
@@ -1383,7 +1383,7 @@ void ScStyleObj::SetOrResetPropertyValue_Impl(const rtl::OUString& aPropertyName
                             {
                                 sal_Int16 nVal;
                                 *pValue >>= nVal;
-                                rSet.Put( SfxUInt16Item( pMap->nWID, HMMToTwips(nVal) ) );
+                                rSet.Put( SfxUInt16Item( pMap->nWID, (USHORT)HMMToTwips(nVal) ) );
                             }
                             break;
                         case ATTR_ROTATE_VALUE:

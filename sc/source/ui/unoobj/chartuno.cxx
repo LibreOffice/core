@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 17:04:34 $
+ *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,8 +242,8 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
         const table::CellRangeAddress* pAry = aRanges.getConstArray();
         for (USHORT i=0; i<nRangeCount; i++)
         {
-            ScRange aRange( pAry[i].StartColumn, pAry[i].StartRow, pAry[i].Sheet,
-                            pAry[i].EndColumn,   pAry[i].EndRow,   pAry[i].Sheet );
+            ScRange aRange( (USHORT)pAry[i].StartColumn, (USHORT)pAry[i].StartRow, pAry[i].Sheet,
+                            (USHORT)pAry[i].EndColumn,   (USHORT)pAry[i].EndRow,   pAry[i].Sheet );
             pList->Append( aRange );
         }
     }
@@ -603,8 +603,8 @@ void SAL_CALL ScChartObj::setRanges( const uno::Sequence<table::CellRangeAddress
         const table::CellRangeAddress* pAry = aRanges.getConstArray();
         for (USHORT i=0; i<nRangeCount; i++)
         {
-            ScRange aRange( pAry[i].StartColumn, pAry[i].StartRow, pAry[i].Sheet,
-                            pAry[i].EndColumn,   pAry[i].EndRow,   pAry[i].Sheet );
+            ScRange aRange( (USHORT)pAry[i].StartColumn, (USHORT)pAry[i].StartRow, pAry[i].Sheet,
+                            (USHORT)pAry[i].EndColumn,   (USHORT)pAry[i].EndRow,   pAry[i].Sheet );
             pList->Append( aRange );
         }
     }

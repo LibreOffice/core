@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-26 18:58:52 $
+ *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,7 +417,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
                 const util::SortField* pFieldArray = aSeq.getConstArray();
                 for (i=0; i<nCount; i++)
                 {
-                    rParam.nField[i]     = pFieldArray[i].Field;
+                    rParam.nField[i]     = (USHORT)pFieldArray[i].Field;
                     rParam.bAscending[i] = pFieldArray[i].SortAscending;
                     // FieldType wird ignoriert
                     rParam.bDoSort[i] = TRUE;
@@ -438,8 +438,8 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
             if ( rProp.Value >>= aAddress )
             {
                 rParam.nDestTab = aAddress.Sheet;
-                rParam.nDestCol = aAddress.Column;
-                rParam.nDestRow = aAddress.Row;
+                rParam.nDestCol = (USHORT)aAddress.Column;
+                rParam.nDestRow = (USHORT)aAddress.Row;
             }
         }
         else if (aPropName.EqualsAscii( SC_UNONAME_ISULIST ))
@@ -448,7 +448,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
         {
             sal_Int32 nVal;
             if ( rProp.Value >>= nVal )
-                rParam.nUserIndex = nVal;
+                rParam.nUserIndex = (USHORT)nVal;
         }
     }
 }
@@ -484,7 +484,7 @@ void SAL_CALL ScSubTotalFieldObj::setGroupColumn( sal_Int32 nGroupColumn ) throw
     ScSubTotalParam aParam;
     rParent.GetData(aParam);
 
-    aParam.nField[nPos] = nGroupColumn;
+    aParam.nField[nPos] = (USHORT)nGroupColumn;
 
     rParent.PutData(aParam);
 }
@@ -529,7 +529,7 @@ void SAL_CALL ScSubTotalFieldObj::setSubTotalColumns(
             const sheet::SubTotalColumn* pAry = aSubTotalColumns.getConstArray();
             for (USHORT i=0; i<nCount; i++)
             {
-                aParam.pSubTotals[nPos][i] = pAry[i].Column;
+                aParam.pSubTotals[nPos][i] = (USHORT)pAry[i].Column;
                 aParam.pFunctions[nPos][i] =
                             ScDataUnoConversion::GeneralToSubTotal( pAry[i].Function );
             }
@@ -608,7 +608,7 @@ void SAL_CALL ScSubTotalDescriptorBase::addNew(
     if ( nPos < MAXSUBTOTAL && nColCount <= USHRT_MAX )
     {
         aParam.bGroupActive[nPos] = TRUE;
-        aParam.nField[nPos] = nGroupColumn;
+        aParam.nField[nPos] = (USHORT)nGroupColumn;
 
         delete aParam.pSubTotals[nPos];
         delete aParam.pFunctions[nPos];
@@ -623,7 +623,7 @@ void SAL_CALL ScSubTotalDescriptorBase::addNew(
             const sheet::SubTotalColumn* pAry = aSubTotalColumns.getConstArray();
             for (USHORT i=0; i<nCount; i++)
             {
-                aParam.pSubTotals[nPos][i] = pAry[i].Column;
+                aParam.pSubTotals[nPos][i] = (USHORT)pAry[i].Column;
                 aParam.pFunctions[nPos][i] =
                             ScDataUnoConversion::GeneralToSubTotal( pAry[i].Function );
             }
@@ -670,7 +670,7 @@ uno::Any SAL_CALL ScSubTotalDescriptorBase::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XSubTotalField> xField = GetObjectByIndex_Impl(nIndex);
+    uno::Reference<sheet::XSubTotalField> xField = GetObjectByIndex_Impl((USHORT)nIndex);
     uno::Any aAny;
     if (xField.is())
         aAny <<= xField;
@@ -726,7 +726,7 @@ void SAL_CALL ScSubTotalDescriptorBase::setPropertyValue(
     {
         sal_Int32 nVal;
         if ( aValue >>= nVal )
-            aParam.nUserIndex = nVal;
+            aParam.nUserIndex = (USHORT)nVal;
     }
 
     PutData(aParam);
@@ -922,8 +922,8 @@ void SAL_CALL ScConsolidationDescriptor::setSources(
         USHORT i;
         for (i=0; i<nCount; i++)
             pNew[i] = new ScArea( pAry[i].Sheet,
-                                    pAry[i].StartColumn, pAry[i].StartRow,
-                                    pAry[i].EndColumn,   pAry[i].EndRow );
+                                    (USHORT)pAry[i].StartColumn, (USHORT)pAry[i].StartRow,
+                                    (USHORT)pAry[i].EndColumn,   (USHORT)pAry[i].EndRow );
 
         aParam.SetAreas( pNew, nCount );    // kopiert alles
 
@@ -951,8 +951,8 @@ void SAL_CALL ScConsolidationDescriptor::setStartOutputPosition(
                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    aParam.nCol = aStartOutputPosition.Column;
-    aParam.nRow = aStartOutputPosition.Row;
+    aParam.nCol = (USHORT)aStartOutputPosition.Column;
+    aParam.nRow = (USHORT)aStartOutputPosition.Row;
     aParam.nTab = aStartOutputPosition.Sheet;
 }
 
@@ -1108,7 +1108,7 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
 
         rEntry.bDoQuery         = TRUE;
         rEntry.eConnect         = (pAry[i].Connection == sheet::FilterConnection_AND) ? SC_AND : SC_OR;
-        rEntry.nField           = pAry[i].Field;
+        rEntry.nField           = (USHORT)pAry[i].Field;
         rEntry.eOp              = eQueryOp;
         rEntry.bQueryByString   = !pAry[i].IsNumeric;
         *rEntry.pStr            = String( pAry[i].StringValue );
@@ -1173,8 +1173,8 @@ void SAL_CALL ScFilterDescriptorBase::setPropertyValue(
         if ( aValue >>= aAddress )
         {
             aParam.nDestTab = aAddress.Sheet;
-            aParam.nDestCol = aAddress.Column;
-            aParam.nDestRow = aAddress.Row;
+            aParam.nDestCol = (USHORT)aAddress.Column;
+            aParam.nDestRow = (USHORT)aAddress.Row;
         }
     }
     else if (aString.EqualsAscii( SC_UNONAME_SAVEOUT ))
@@ -1414,8 +1414,8 @@ void SAL_CALL ScDatabaseRangeObj::setDataArea( const table::CellRangeAddress& aD
     {
         ScDBData aNewData( *pData );
         //! MoveTo ???
-        aNewData.SetArea( aDataArea.Sheet, aDataArea.StartColumn, aDataArea.StartRow,
-                                           aDataArea.EndColumn, aDataArea.EndRow );
+        aNewData.SetArea( aDataArea.Sheet, (USHORT)aDataArea.StartColumn, (USHORT)aDataArea.StartRow,
+                                           (USHORT)aDataArea.EndColumn, (USHORT)aDataArea.EndRow );
         ScDBDocFunc aFunc(*pDocShell);
         aFunc.ModifyDBData(aNewData, TRUE);
     }
@@ -1841,8 +1841,8 @@ void SAL_CALL ScDatabaseRangesObj::addNewByName( const rtl::OUString& aName,
         ScDBDocFunc aFunc(*pDocShell);
 
         String aString = aName;
-        ScRange aNameRange( aRange.StartColumn, aRange.StartRow, aRange.Sheet,
-                            aRange.EndColumn,   aRange.EndRow,   aRange.Sheet );
+        ScRange aNameRange( (USHORT)aRange.StartColumn, (USHORT)aRange.StartRow, aRange.Sheet,
+                            (USHORT)aRange.EndColumn,   (USHORT)aRange.EndRow,   aRange.Sheet );
         bDone = aFunc.AddDBRange( aString, aNameRange, TRUE );
     }
     if (!bDone)
@@ -1896,7 +1896,7 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XDatabaseRange> xRange = GetObjectByIndex_Impl(nIndex);
+    uno::Reference<sheet::XDatabaseRange> xRange = GetObjectByIndex_Impl((USHORT)nIndex);
     uno::Any aAny;
     if (xRange.is())
         aAny <<= xRange;

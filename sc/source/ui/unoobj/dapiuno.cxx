@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapiuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,8 +346,8 @@ void SAL_CALL ScDataPilotTablesObj::insertNewByName( const rtl::OUString& aNewNa
         ScArea aSrcArea;
         pImp->GetParam( aParam, aQuery, aSrcArea );
 
-        aParam.nCol = aOutputAddress.Column;
-        aParam.nRow = aOutputAddress.Row;
+        aParam.nCol = (USHORT)aOutputAddress.Column;
+        aParam.nRow = (USHORT)aOutputAddress.Row;
         aParam.nTab = aOutputAddress.Sheet;
 
         //  in den Uno-Objekten sind alle Fields in den Descriptoren innerhalb des Bereichs gezaehlt
@@ -467,7 +467,7 @@ uno::Any SAL_CALL ScDataPilotTablesObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XDataPilotTable> xTable = GetObjectByIndex_Impl(nIndex);
+    uno::Reference<sheet::XDataPilotTable> xTable = GetObjectByIndex_Impl((USHORT)nIndex);
     uno::Any aAny;
     if (xTable.is())
         aAny <<= xTable;
@@ -678,10 +678,10 @@ void SAL_CALL ScDataPilotDescriptorBase::setSourceRange(
     GetParam( aParam, aQuery, aSrcArea );
 
     aSrcArea.nTab       = aSourceRange.Sheet;
-    aSrcArea.nColStart  = aSourceRange.StartColumn;
-    aSrcArea.nRowStart  = aSourceRange.StartRow;
-    aSrcArea.nColEnd    = aSourceRange.EndColumn;
-    aSrcArea.nRowEnd    = aSourceRange.EndRow;
+    aSrcArea.nColStart  = (USHORT)aSourceRange.StartColumn;
+    aSrcArea.nRowStart  = (USHORT)aSourceRange.StartRow;
+    aSrcArea.nColEnd    = (USHORT)aSourceRange.EndColumn;
+    aSrcArea.nRowEnd    = (USHORT)aSourceRange.EndRow;
 
     SetParam( aParam, aQuery, aSrcArea );
 }
@@ -1319,7 +1319,7 @@ uno::Any SAL_CALL ScDataPilotFieldsObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<beans::XPropertySet> xField = GetObjectByIndex_Impl(nIndex);
+    uno::Reference<beans::XPropertySet> xField = GetObjectByIndex_Impl((USHORT)nIndex);
     uno::Any aAny;
     if (xField.is())
         aAny <<= xField;

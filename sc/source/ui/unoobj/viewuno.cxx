@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-21 11:26:01 $
+ *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,8 +319,8 @@ uno::Reference<table::XCellRange> SAL_CALL ScViewPaneBase::getReferredCells()
         ScDocShell* pDocSh = pViewShell->GetViewData()->GetDocShell();
 
         table::CellRangeAddress aAdr = getVisibleRange();       //! Hilfsfunktion mit ScRange?
-        ScRange aRange( aAdr.StartColumn, aAdr.StartRow, aAdr.Sheet,
-                        aAdr.EndColumn, aAdr.EndRow, aAdr.Sheet );
+        ScRange aRange( (USHORT)aAdr.StartColumn, (USHORT)aAdr.StartRow, aAdr.Sheet,
+                        (USHORT)aAdr.EndColumn, (USHORT)aAdr.EndRow, aAdr.Sheet );
         if ( aRange.aStart == aRange.aEnd )
             return new ScCellObj( pDocSh, aRange.aStart );
         else
@@ -872,7 +872,7 @@ uno::Any SAL_CALL ScTabViewObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XViewPane> xPane = GetObjectByIndex_Impl(nIndex);
+    uno::Reference<sheet::XViewPane> xPane = GetObjectByIndex_Impl((USHORT)nIndex);
     uno::Any aAny;
     if (xPane.is())
         aAny <<= xPane;
@@ -1164,7 +1164,7 @@ void SAL_CALL ScTabViewObj::freezeAtPosition( sal_Int32 nColumns, sal_Int32 nRow
             aWinStart = pWin->GetPosPixel();
 
         ScViewData* pViewData = pViewSh->GetViewData();
-        Point aSplit = pViewData->GetScrPos( nColumns, nRows, SC_SPLIT_BOTTOMLEFT, TRUE );
+        Point aSplit = pViewData->GetScrPos( (USHORT)nColumns, (USHORT)nRows, SC_SPLIT_BOTTOMLEFT, TRUE );
         aSplit += aWinStart;
 
         pViewSh->SplitAtPixel( aSplit, TRUE, TRUE );

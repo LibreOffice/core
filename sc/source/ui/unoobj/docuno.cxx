@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-13 18:56:58 $
+ *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,8 +658,8 @@ sheet::GoalResult SAL_CALL ScModelObj::seekGoal(
         ScDocument* pDoc = pDocShell->GetDocument();
         double fValue = 0.0;
         BOOL bFound = pDoc->Solver(
-                    aFormulaPosition.Column, aFormulaPosition.Row, aFormulaPosition.Sheet,
-                    aVariablePosition.Column, aVariablePosition.Row, aVariablePosition.Sheet,
+                    (USHORT)aFormulaPosition.Column, (USHORT)aFormulaPosition.Row, aFormulaPosition.Sheet,
+                    (USHORT)aVariablePosition.Column, (USHORT)aVariablePosition.Row, aVariablePosition.Sheet,
                     aGoalString, fValue );
         aResult.Result = fValue;
         if (bFound)
@@ -1051,7 +1051,7 @@ SvxFmDrawPage* ScDrawPagesObj::GetObjectByIndex_Impl(INT32 nIndex) const
         DBG_ASSERT(pDrawLayer,"kann Draw-Layer nicht anlegen");
         if ( pDrawLayer && nIndex >= 0 && nIndex < pDocShell->GetDocument()->GetTableCount() )
         {
-            SdrPage* pPage = pDrawLayer->GetPage(nIndex);
+            SdrPage* pPage = pDrawLayer->GetPage((USHORT)nIndex);
             DBG_ASSERT(pPage,"Draw-Page nicht gefunden");
             if (pPage)
             {
@@ -1074,7 +1074,7 @@ uno::Reference<drawing::XDrawPage> SAL_CALL ScDrawPagesObj::insertNewByIndex( sa
         String aNewName;
         pDocShell->GetDocument()->CreateValidTabName(aNewName);
         ScDocFunc aFunc(*pDocShell);
-        if ( aFunc.InsertTable( nPos, aNewName, TRUE, TRUE ) )
+        if ( aFunc.InsertTable( (USHORT)nPos, aNewName, TRUE, TRUE ) )
             xRet = GetObjectByIndex_Impl( nPos );
     }
     return xRet;
@@ -1391,7 +1391,7 @@ uno::Any SAL_CALL ScTableSheetsObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XSpreadsheet> xSheet = GetObjectByIndex_Impl(nIndex);
+    uno::Reference<sheet::XSpreadsheet> xSheet = GetObjectByIndex_Impl((USHORT)nIndex);
     uno::Any aAny;
     if (xSheet.is())
         aAny <<= xSheet;
@@ -1526,7 +1526,8 @@ void SAL_CALL ScTableColumnsObj::insertByIndex( sal_Int32 nPosition, sal_Int32 n
             nStartCol+nPosition+nCount-1 <= MAXCOL )
     {
         ScDocFunc aFunc(*pDocShell);
-        ScRange aRange( nStartCol+nPosition, 0, nTab, nStartCol+nPosition+nCount-1, MAXROW, nTab );
+        ScRange aRange( (USHORT)(nStartCol+nPosition), 0, nTab,
+                        (USHORT)(nStartCol+nPosition+nCount-1), MAXROW, nTab );
         bDone = aFunc.InsertCells( aRange, INS_INSCOLS, TRUE, TRUE );
     }
     if (!bDone)
@@ -1542,7 +1543,8 @@ void SAL_CALL ScTableColumnsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCou
     if ( pDocShell && nCount > 0 && nIndex >= 0 && nStartCol+nIndex+nCount-1 <= nEndCol )
     {
         ScDocFunc aFunc(*pDocShell);
-        ScRange aRange( nStartCol+nIndex, 0, nTab, nStartCol+nIndex+nCount-1, MAXROW, nTab );
+        ScRange aRange( (USHORT)(nStartCol+nIndex), 0, nTab,
+                        (USHORT)(nStartCol+nIndex+nCount-1), MAXROW, nTab );
         bDone = aFunc.DeleteCells( aRange, DEL_DELCOLS, TRUE, TRUE );
     }
     if (!bDone)
@@ -1571,7 +1573,7 @@ uno::Any SAL_CALL ScTableColumnsObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<table::XCellRange> xColumn = GetObjectByIndex_Impl(nIndex);
+    uno::Reference<table::XCellRange> xColumn = GetObjectByIndex_Impl((USHORT)nIndex);
     uno::Any aAny;
     if (xColumn.is())
         aAny <<= xColumn;
@@ -1791,7 +1793,8 @@ void SAL_CALL ScTableRowsObj::insertByIndex( sal_Int32 nPosition, sal_Int32 nCou
             nStartRow+nPosition+nCount-1 <= MAXROW )
     {
         ScDocFunc aFunc(*pDocShell);
-        ScRange aRange( 0, nStartRow+nPosition, nTab, MAXCOL, nStartRow+nPosition+nCount-1, nTab );
+        ScRange aRange( 0, (USHORT)(nStartRow+nPosition), nTab,
+                        MAXCOL, (USHORT)(nStartRow+nPosition+nCount-1), nTab );
         bDone = aFunc.InsertCells( aRange, INS_INSROWS, TRUE, TRUE );
     }
     if (!bDone)
@@ -1807,7 +1810,8 @@ void SAL_CALL ScTableRowsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount 
     if ( pDocShell && nCount > 0 && nIndex >= 0 && nStartRow+nIndex+nCount-1 <= nEndRow )
     {
         ScDocFunc aFunc(*pDocShell);
-        ScRange aRange( 0, nStartRow+nIndex, nTab, MAXCOL, nStartRow+nIndex+nCount-1, nTab );
+        ScRange aRange( 0, (USHORT)(nStartRow+nIndex), nTab,
+                        MAXCOL, (USHORT)(nStartRow+nIndex+nCount-1), nTab );
         bDone = aFunc.DeleteCells( aRange, DEL_DELROWS, TRUE, TRUE );
     }
     if (!bDone)
@@ -1836,7 +1840,7 @@ uno::Any SAL_CALL ScTableRowsObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<table::XCellRange> xRow = GetObjectByIndex_Impl(nIndex);
+    uno::Reference<table::XCellRange> xRow = GetObjectByIndex_Impl((USHORT)nIndex);
     uno::Any aAny;
     if (xRow.is())
         aAny <<= xRow;
@@ -2110,7 +2114,7 @@ void SAL_CALL ScAnnotationsObj::insertNew( const table::CellAddress& aPosition,
     if (pDocShell)
     {
         DBG_ASSERT( aPosition.Sheet == nTab, "addAnnotation mit falschem Sheet" );
-        ScAddress aPos( aPosition.Column, aPosition.Row, nTab );
+        ScAddress aPos( (USHORT)aPosition.Column, (USHORT)aPosition.Row, nTab );
 
         String aString = aText;
 
@@ -2174,7 +2178,7 @@ uno::Any SAL_CALL ScAnnotationsObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XSheetAnnotation> xAnnotation = GetObjectByIndex_Impl(nIndex);
+    uno::Reference<sheet::XSheetAnnotation> xAnnotation = GetObjectByIndex_Impl((USHORT)nIndex);
     uno::Any aAny;
     if (xAnnotation.is())
         aAny <<= xAnnotation;
@@ -2286,8 +2290,8 @@ void SAL_CALL ScScenariosObj::addNewByName( const rtl::OUString& aName,
             for (USHORT i=0; i<nRangeCount; i++)
             {
                 DBG_ASSERT( pAry[i].Sheet == nTab, "addScenario mit falscher Tab" );
-                ScRange aRange( pAry[i].StartColumn, pAry[i].StartRow, nTab,
-                                pAry[i].EndColumn,   pAry[i].EndRow,   nTab );
+                ScRange aRange( (USHORT)pAry[i].StartColumn, (USHORT)pAry[i].StartRow, nTab,
+                                (USHORT)pAry[i].EndColumn,   (USHORT)pAry[i].EndRow,   nTab );
 
                 aMarkData.SetMultiMarkArea( aRange );
             }
@@ -2352,7 +2356,7 @@ uno::Any SAL_CALL ScScenariosObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XScenario> xScen = GetObjectByIndex_Impl(nIndex);
+    uno::Reference<sheet::XScenario> xScen = GetObjectByIndex_Impl((USHORT)nIndex);
     uno::Any aAny;
     if (xScen.is())
         aAny <<= xScen;
