@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 11:57:21 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3457,6 +3457,13 @@ void VCLXDateField::setProperty( const ::rtl::OUString& PropertyName, const ::co
                      ((DateField*)GetWindow())->SetShowDateCentury( b );
             }
             break;
+            case BASEPROPERTY_ENFORCE_FORMAT:
+            {
+                sal_Bool bEnforce( sal_True );
+                OSL_VERIFY( Value >>= bEnforce );
+                static_cast< DateField* >( GetWindow() )->EnforceValidValue( bEnforce );
+            }
+            break;
             default:
             {
                 VCLXFormattedSpinField::setProperty( PropertyName, Value );
@@ -3494,6 +3501,11 @@ void VCLXDateField::setProperty( const ::rtl::OUString& PropertyName, const ::co
             case BASEPROPERTY_DATESHOWCENTURY:
             {
                 aProp <<= ((DateField*)GetWindow())->IsShowDateCentury();
+            }
+            break;
+            case BASEPROPERTY_ENFORCE_FORMAT:
+            {
+                aProp <<= (sal_Bool)static_cast< DateField* >( GetWindow() )->IsEnforceValidValue( );
             }
             break;
             default:
@@ -3885,6 +3897,13 @@ void VCLXTimeField::setProperty( const ::rtl::OUString& PropertyName, const ::co
                     ((TimeField*)GetWindow())->SetExtFormat( (ExtTimeFieldFormat) n );
             }
             break;
+            case BASEPROPERTY_ENFORCE_FORMAT:
+            {
+                sal_Bool bEnforce( sal_True );
+                OSL_VERIFY( Value >>= bEnforce );
+                static_cast< TimeField* >( GetWindow() )->EnforceValidValue( bEnforce );
+            }
+            break;
             default:
             {
                 VCLXFormattedSpinField::setProperty( PropertyName, Value );
@@ -3916,6 +3935,11 @@ void VCLXTimeField::setProperty( const ::rtl::OUString& PropertyName, const ::co
             case BASEPROPERTY_TIMEMAX:
             {
                 aProp <<= (sal_Int32) getMax();
+            }
+            break;
+            case BASEPROPERTY_ENFORCE_FORMAT:
+            {
+                aProp <<= (sal_Bool)static_cast< TimeField* >( GetWindow() )->IsEnforceValidValue( );
             }
             break;
             default:
