@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:03 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:56:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ ModalDialog RID_STYLECATALOG
     Text [ English ] = "Stylesheet Catalogue" ;
     Text [ norwegian ] = "Stylesheet Catalogue" ;
     Text [ italian ] = "Catalogo modelli" ;
-    Text [ portuguese_brazilian ] = "Stylesheet Catalogue" ;
+    Text [ portuguese_brazilian ] = "Cat�logo de estilos" ;
     Text [ portuguese ] = "Cat�logo de estilos" ;
     Text [ french ] = "Catalogue des styles" ;
     Text [ dutch ] = "Catalogus opmaakprofielen" ;
@@ -141,7 +141,7 @@ ModalDialog RID_STYLECATALOG
         Text [ English ] = "~Organize..." ;
         Text [ norwegian ] = "~Organize..." ;
         Text [ italian ] = "Gestisci..." ;
-        Text [ portuguese_brazilian ] = "~Organize..." ;
+        Text [ portuguese_brazilian ] = "~Organizador..." ;
         Text [ portuguese ] = "~Gerir..." ;
         Text [ french ] = "~G�rer..." ;
         Text [ dutch ] = "Be~heren..." ;
@@ -153,7 +153,7 @@ ModalDialog RID_STYLECATALOG
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "管理(~O)...";
         Text[ russian ] = "����������...";
-        Text[ polish ] = "Zarz�dzaj...";
+        Text[ polish ] = "~Zarz�dzaj...";
         Text[ japanese ] = "管理(~O)...";
         Text[ chinese_traditional ] = "管理(~O)...";
         Text[ arabic ] = "�������...";
@@ -162,6 +162,9 @@ ModalDialog RID_STYLECATALOG
         Text[ turkish ] = "~Y�net...";
         Text[ catalan ] = "~Organitzador...";
         Text[ thai ] = "~ตัวจัดระเบียบ...";
+        Text[ czech ] = "Organizátor...";
+        Text[ hebrew ] = "‮סדרן‬";
+        Text[ hindi ] = "~व्यवस्थापक...";
     };
     PushButton BT_DEL
     {
@@ -171,7 +174,7 @@ ModalDialog RID_STYLECATALOG
         Text [ English ] = "~Delete..." ;
         Text [ norwegian ] = "~Delete..." ;
         Text [ italian ] = "Elimina..." ;
-        Text [ portuguese_brazilian ] = "~Apagar..." ;
+        Text [ portuguese_brazilian ] = "Exc~luir..." ;
         Text [ portuguese ] = "E~liminar..." ;
         Text [ french ] = "~Supprimer..." ;
         Text [ dutch ] = "~Wissen..." ;
@@ -183,7 +186,7 @@ ModalDialog RID_STYLECATALOG
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "删除(~D)...";
         Text[ russian ] = "�������...";
-        Text[ polish ] = "Usu�...";
+        Text[ polish ] = "~Usu�...";
         Text[ japanese ] = "削除(~D)...";
         Text[ chinese_traditional ] = "刪除(~D)...";
         Text[ arabic ] = "���...";
@@ -192,6 +195,9 @@ ModalDialog RID_STYLECATALOG
         Text[ turkish ] = "~Sil...";
         Text[ catalan ] = "~Suprimeix...";
         Text[ thai ] = "~ลบ...";
+        Text[ czech ] = "Smazat...";
+        Text[ hebrew ] = "‮מחיקה...‬";
+        Text[ hindi ] = "~मिटाओ...";
     };
     PushButton BT_EDIT
     {
@@ -201,7 +207,7 @@ ModalDialog RID_STYLECATALOG
         Text [ English ] = "~Change..." ;
         Text [ norwegian ] = "~Change..." ;
         Text [ italian ] = "Mo~difica..." ;
-        Text [ portuguese_brazilian ] = "~Change..." ;
+        Text [ portuguese_brazilian ] = "~Modificar..." ;
         Text [ portuguese ] = "~Modificar..." ;
         Text [ french ] = "Modifier..." ;
         Text [ dutch ] = "~Wijzigen..." ;
@@ -213,15 +219,18 @@ ModalDialog RID_STYLECATALOG
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "更改(~M)...";
         Text[ russian ] = "��������...";
-        Text[ polish ] = "Modyfikuj...";
+        Text[ polish ] = "M~odyfikuj...";
         Text[ japanese ] = "変更(~M)...";
         Text[ chinese_traditional ] = "變更(~M)...";
         Text[ arabic ] = "�����...";
         Text[ greek ] = "�����������...";
-        Text[ korean ] = "변경(~M)...";
+        Text[ korean ] = "수정(~M)...";
         Text[ turkish ] = "~De�i�tir...";
         Text[ catalan ] = "~Modifica...";
         Text[ thai ] = "~ดัดแปลงแก้ไข...";
+        Text[ czech ] = "Změnit...";
+        Text[ hebrew ] = "‮שינוי...‬";
+        Text[ hindi ] = "~सुधारो...";
     };
     PushButton BT_NEW
     {
@@ -243,7 +252,7 @@ ModalDialog RID_STYLECATALOG
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "新建(~N)...";
         Text[ russian ] = "�������...";
-        Text[ polish ] = "Nowy...";
+        Text[ polish ] = "~Nowy...";
         Text[ japanese ] = "新規作成(~N)...";
         Text[ chinese_traditional ] = "開啟新檔(~N)...";
         Text[ arabic ] = "...����";
@@ -252,6 +261,9 @@ ModalDialog RID_STYLECATALOG
         Text[ turkish ] = "~Yeni...";
         Text[ catalan ] = "~Nou...";
         Text[ thai ] = "ใ~หม่...";
+        Text[ czech ] = "Nový...";
+        Text[ hebrew ] = "‮חדש...‬";
+        Text[ hindi ] = "~नया...";
     };
     HelpButton BT_HELP
     {
@@ -284,6 +296,9 @@ ModalDialog RID_STYLECATALOG
         Hide = TRUE ;
         DropDown = TRUE ;
     };
+    Text[ czech ] = "Katalog stylů";
+    Text[ hebrew ] = "‮קטלוג סגנונות‬";
+    Text[ hindi ] = "शैली वर्ग";
 };
  // Strings ---------------------------------------------------------------
 String DLG_STYLE_DESIGNER
@@ -291,7 +306,7 @@ String DLG_STYLE_DESIGNER
     Text = "Stylist" ;
     Text [ English ] = "Stylist" ;
     Text [ english_us ] = "Stylist" ;
-    Text [ portuguese_brazilian ] = "Designer" ;
+    Text [ portuguese_brazilian ] = "Estilista" ;
     Text [ swedish ] = "Stylist" ;
     Text [ danish ] = "Stylist" ;
     Text [ italian ] = "Stilista" ;
@@ -307,10 +322,13 @@ String DLG_STYLE_DESIGNER
     Text[ arabic ] = "�������";
     Text[ greek ] = "Stylist";
     Text[ korean ] = "스타일리스트";
-    Text[ turkish ] = "Stylist";
+    Text[ turkish ] = "Stil listesi";
     Text[ catalan ] = "Estilista";
     Text[ finnish ] = "Tyylity�kalu";
     Text[ thai ] = "ตัวออกแบบ";
+    Text[ czech ] = "Stylista";
+    Text[ hebrew ] = "‮מעצב‬";
+    Text[ hindi ] = "स्टइलिस्ट्";
 };
 String STR_STYLE_FILTER_HIERARCHICAL
 {
@@ -318,7 +336,7 @@ String STR_STYLE_FILTER_HIERARCHICAL
     TEXT [ English ] = "Hierarchical" ;
     TEXT [ norwegian ] = "Hierarkisk" ;
     TEXT [ italian ] = "Gerarchico" ;
-    TEXT [ portuguese_brazilian ] = "Hierarchical" ;
+    TEXT [ portuguese_brazilian ] = "Hier�rquico" ;
     TEXT [ portuguese ] = "Hier�rquico" ;
     TEXT [ finnish ] = "Hierarkkinen" ;
     TEXT [ danish ] = "Hierarkisk" ;
@@ -338,6 +356,9 @@ String STR_STYLE_FILTER_HIERARCHICAL
     TEXT[ turkish ] = "Hiyerar�ik";
     TEXT[ catalan ] = "Jer�rquic";
     TEXT[ thai ] = "ลำดับชั้น";
+    TEXT[ czech ] = "Hierarchicky";
+    TEXT[ hebrew ] = "‮מדורג (הייררכיה)‬";
+    TEXT[ hindi ] = "हइरार्किकल";
 };
  // DLG_STYLE_DESIGNER ----------------------------------------------------
 DockingWindow DLG_STYLE_DESIGNER
@@ -373,7 +394,7 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text [ English ] = "Watercan" ;
                 Text [ norwegian ] = "Rammefyll" ;
                 Text [ italian ] = "Modo riempimento" ;
-                Text [ portuguese_brazilian ] = "Watercan" ;
+                Text [ portuguese_brazilian ] = "Preenchimento completo" ;
                 Text [ portuguese ] = "Preenchimento completo" ;
                 Text [ english_us ] = "Fill Format Mode" ;
                 Text [ finnish ] = "T�ytt�muotoilutila" ;
@@ -381,18 +402,21 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text [ french ] = "Mode Remplir tout" ;
                 Text [ swedish ] = "Tilldelningsl�ge" ;
                 Text [ dutch ] = "Gietermodus" ;
-                Text [ spanish ] = "Modo regadera" ;
+                Text [ spanish ] = "Modo relleno" ;
                 Text[ chinese_simplified ] = "充填模式";
                 Text[ russian ] = "�������� �������";
-                Text[ polish ] = "Tryb konewki";
+                Text[ polish ] = "Tryb wype�niania formatem";
                 Text[ japanese ] = "水やりモード";
                 Text[ chinese_traditional ] = "充填模式";
                 Text[ arabic ] = "��� �������";
                 Text[ greek ] = "��������� ����������";
-                Text[ korean ] = "채우기모드";
+                Text[ korean ] = "채우기 모드";
                 Text[ turkish ] = "Doldur kipi";
                 Text[ catalan ] = "Mode Format d'emplenament";
                 Text[ thai ] = "เติมโหมดรูปแบบ";
+                Text[ czech ] = "Režim vyplňování formátu";
+                Text[ hebrew ] = "‮מצב מילוי‬";
+                Text[ hindi ] = "रचना प्रकार भरो";
             };
             ToolBoxItem
             {
@@ -402,7 +426,7 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text [ English ] = "New style by example" ;
                 Text [ norwegian ] = "Ny mal etter eksempel" ;
                 Text [ italian ] = "Nuovo modello dalla selezione" ;
-                Text [ portuguese_brazilian ] = "Novo estilo por exemplo" ;
+                Text [ portuguese_brazilian ] = "Novo estilo a partir da sele��o" ;
                 Text [ portuguese ] = "Novo estilo a partir da selec��o" ;
                 Text [ english_us ] = "New Style from Selection" ;
                 Text [ finnish ] = "Uusi tyyli valinnasta" ;
@@ -413,7 +437,7 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text [ spanish ] = "Nuevo estilo a partir de selecci�n" ;
                 Text[ chinese_simplified ] = "选中的新样式";
                 Text[ russian ] = "������� ����� �� �����������";
-                Text[ polish ] = "Nowy styl z selekcji";
+                Text[ polish ] = "Nowy styl z zaznaczenia";
                 Text[ japanese ] = "選択スタイルから新規作成";
                 Text[ chinese_traditional ] = "選取的新樣式";
                 Text[ arabic ] = "��� ���� �� �������";
@@ -422,6 +446,9 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text[ turkish ] = "Yeni bi�im se�imi";
                 Text[ catalan ] = "Nou estil a partir de la selecci�";
                 Text[ thai ] = "ลักษณะใหม่จากการเลือก";
+                Text[ czech ] = "Nový styl z výběru";
+                Text[ hebrew ] = "‮סגנון חדש מבחירה‬";
+                Text[ hindi ] = "चुनाव से नया शैली";
             };
             ToolBoxItem
             {
@@ -431,7 +458,7 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text [ English ] = "Update style by example" ;
                 Text [ norwegian ] = "Oppdater mal etter eksempel" ;
                 Text [ italian ] = "Aggiorna modello" ;
-                Text [ portuguese_brazilian ] = "Atualizar estilo por exemplo" ;
+                Text [ portuguese_brazilian ] = "Atualizar estilo" ;
                 Text [ portuguese ] = "Actualizar modelo" ;
                 Text [ english_us ] = "Update Style" ;
                 Text [ finnish ] = "P�ivit� tyyli" ;
@@ -451,10 +478,22 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text[ turkish ] = "Bi�imi g�ncelle";
                 Text[ catalan ] = "Actualitza l'estil";
                 Text[ thai ] = "ปรับปรุงลักษณะ";
+                Text[ czech ] = "Aktualizovat styl";
+                Text[ hebrew ] = "‮עידכון סגנון‬";
+                Text[ hindi ] = "शैली अपडेट् करो";
             };
         };
     };
 };
+
+
+
+
+
+
+
+
+
 
 
 
