@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaexchange.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 15:06:22 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,7 @@ namespace svx
 
             // extract the any from the transferable
             DataFlavor aFlavor;
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
             sal_Bool bSuccess =
 #endif
             SotExchange::GetFormatDataFlavor(getDescriptorFormatId(), aFlavor);
@@ -321,7 +321,7 @@ namespace svx
 
             // extract the property value sequence
             Sequence< PropertyValue > aDescriptorProps;
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
             bSuccess =
 #endif
             aDescriptor >>= aDescriptorProps;
@@ -570,7 +570,7 @@ namespace svx
         {
             // extract the any from the transferable
             DataFlavor aFlavor;
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
             sal_Bool bSuccess =
 #endif
             SotExchange::GetFormatDataFlavor(nKnownFormatId, aFlavor);
@@ -580,7 +580,7 @@ namespace svx
 
             // extract the property value sequence
             Sequence< PropertyValue > aDescriptorProps;
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
             bSuccess =
 #endif
             aDescriptor >>= aDescriptorProps;
@@ -605,7 +605,7 @@ namespace svx
         for (pSelRows; pSelRows<pSelRowsEnd; ++pSelRows)
         {
             sal_Int32 nSelectedRow;
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
             sal_Bool bSuccess =
 #endif
             *pSelRows >>= nSelectedRow;
