@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-10 08:40:50 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 13:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -806,7 +806,7 @@ const SdrModel* SdrModel::LoadModel(const String& rFileName)
 
         DBG_ASSERT( aFileURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL(), STREAM_READ );
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
 
         if( pIStm )
         {

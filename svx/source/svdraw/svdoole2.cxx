@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-24 08:51:46 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 13:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1196,7 +1196,7 @@ void SvInPlaceObject::CreatePlugin( uno::Reference< awt::XToolkit > xToolkit,
             INT16 nMode = nPlugInMode == PLUGIN_EMBEDED ? plugin::PluginMode::EMBED : plugin::PluginMode::FULL;
 
             if (xPMgr.is() )
-                xPlugin = xPMgr->createPluginFromURL( xPMgr->createPluginContext(), nMode, aCmds, aArgs, xToolkit, xPeer, pURL->GetMainURL() );
+                xPlugin = xPMgr->createPluginFromURL( xPMgr->createPluginContext(), nMode, aCmds, aArgs, xToolkit, xPeer, pURL->GetMainURL( INetURLObject::NO_DECODE ) );
         }
     }
 }

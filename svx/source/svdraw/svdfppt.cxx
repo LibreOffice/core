@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-27 08:30:30 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 13:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1897,7 +1897,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
                 aFileName.Append( String::CreateFromInt32( nCount++ ) );
                 aURL.SetName( aFileName );
 
-                SvStream* pDbgOut = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_TRUNC | STREAM_WRITE );
+                SvStream* pDbgOut = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_TRUNC | STREAM_WRITE );
 
                 if( pDbgOut )
                 {
@@ -2267,7 +2267,7 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
                     INetURLObject   aURL( aFileURLStr );
                     aURL.SetName( String( RTL_CONSTASCII_STRINGPARAM( "dbgfontmetrics.txt" ) ) );
 
-                    SvStream* pDbgOut = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_WRITE );
+                    SvStream* pDbgOut = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE );
                     if( pDbgOut )
                     {
                         pDbgOut->Seek( STREAM_SEEK_TO_END );

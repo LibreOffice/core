@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxln.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-22 15:43:42 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 13:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,7 +349,7 @@ FASTBOOL SdrTextObj::ReloadLinkedText(FASTBOOL bForceLoad)
                 INetURLObject aURL( pData->aFileName );
                 DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-                ::ucb::Content aCnt( aURL.GetMainURL(), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+                ::ucb::Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
                 ::com::sun::star::uno::Any aAny( aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ) ) );
                 ::com::sun::star::util::DateTime aDateTime;
 
@@ -398,7 +398,7 @@ FASTBOOL SdrTextObj::LoadText(const String& rFileName, const String& rFilterName
 
     DBG_ASSERT( aFileURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL(), STREAM_READ );
+    SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
 
     if( pIStm )
     {

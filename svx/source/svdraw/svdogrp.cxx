@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-28 08:06:31 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 13:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,7 +455,7 @@ FASTBOOL SdrObjGroup::ReloadLinkedGroup(FASTBOOL bForceLoad)
                 INetURLObject aURL( pData->aFileName );
                 DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-                ::ucb::Content aCnt( aURL.GetMainURL(), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+                ::ucb::Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
                 ::com::sun::star::uno::Any aAny( aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ) ) );
                 ::com::sun::star::util::DateTime aDateTime;
 
@@ -582,7 +582,7 @@ void SdrObjGroup::ImpLinkAnmeldung()
                                                                INetURLObject::WAS_ENCODED,
                                                                INetURLObject::DECODE_UNAMBIGUOUS ) );
 
-        if( !aURLObj.GetMainURL().Equals( aLinkURLObj.GetMainURL() ) )
+        if( !aURLObj.GetMainURL( INetURLObject::NO_DECODE ).Equals( aLinkURLObj.GetMainURL( INetURLObject::NO_DECODE ) ) )
         {
             // Keine gelinkten Objekte im eigenen Model
             pData->pLink = new ImpSdrObjGroupLink(this);
