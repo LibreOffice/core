@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findtxt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-13 10:43:16 $
+ *  last change: $Author: fme $ $Date: 2002-08-02 09:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #include <vcl/svapp.hxx>
 #endif
 
+#ifndef _TXATRITR_HXX
+#include <txatritr.hxx>
+#endif
 #ifndef _FLDBAS_HXX //autogen
 #include <fldbas.hxx>
 #endif
@@ -105,6 +108,9 @@
 #endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -273,41 +279,81 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                 lcl_CleanStr( *(SwTxtNode*)pNode, nEnde, nStart,
                                 aFltArr, sCleanStr );
 
-            if( (rSTxt.*fnMove->fnSearch)( sCleanStr, &nStart, &nEnde, 0 ))
+            SwScriptIterator* pScriptIter = 0;
+            USHORT nSearchScript;
+            USHORT nCurrScript;
+
+            if ( SearchAlgorithms_APPROXIMATE == rSearchOpt.algorithmType &&
+                 pBreakIt->xBreak.is() )
             {
-                // setze den Bereich richtig
-                *GetPoint() = *pPam->GetPoint();
-                SetMark();
-
-                // Start und Ende wieder korrigieren !!
-                if( aFltArr.Count() )
-                {
-                    xub_StrLen n, nNew;
-                    // bei Rueckwaertssuche die Positionen temp. vertauschen
-                    if( !bSrchForward ) { n = nStart; nStart = nEnde; nEnde = n; }
-
-                    for( n = 0, nNew = nStart;
-                        n < aFltArr.Count() && aFltArr[ n ] <= nStart;
-                        ++n, ++nNew )
-                        ;
-                    nStart = nNew;
-                    for( n = 0, nNew = nEnde;
-                        n < aFltArr.Count() && aFltArr[ n ] < nEnde;
-                        ++n, ++nNew )
-                        ;
-                    nEnde = nNew;
-
-                    // bei Rueckwaertssuche die Positionen temp. vertauschen
-                    if( !bSrchForward ) { n = nStart; nStart = nEnde; nEnde = n; }
-                }
-                GetMark()->nContent = nStart;       // Startposition setzen
-                GetPoint()->nContent = nEnde;
-
-                if( !bSrchForward )         // rueckwaerts Suche?
-                    Exchange();             // Point und Mark tauschen
-                bFound = TRUE;
-                break;
+                pScriptIter = new SwScriptIterator( sCleanStr, nStart, bSrchForward );
+                nSearchScript = pBreakIt->GetRealScriptOfText( rSearchOpt.searchString, 0 );
             }
+
+            xub_StrLen nStringEnd = nEnde;
+            xub_StrLen nLngPos;
+            while ( bSrchForward && nStart < nStringEnd ||
+                    ! bSrchForward && nStart > nStringEnd )
+            {
+                // SearchAlgorithms_APPROXIMATE works on a per word base
+                // so we have to provide the text searcher with the correct
+                // locale, because it uses the breakiterator
+                if ( pScriptIter )
+                {
+                    nEnde = pScriptIter->GetScriptChgPos();
+                    nCurrScript = pScriptIter->GetCurrScript();
+                    nLngPos = bSrchForward ? nStart : nEnde;
+                    LanguageType eActLang = ((SwTxtNode*)pNode)->GetLang( nLngPos );
+                    const ::com::sun::star::lang::Locale aLocale(
+                            pBreakIt->GetLocale( eActLang ) );
+                    rSTxt.SetLocale( rSearchOpt, aLocale );
+                    pScriptIter->Next();
+                }
+
+                if( nSearchScript == nCurrScript &&
+                    (rSTxt.*fnMove->fnSearch)( sCleanStr, &nStart, &nEnde, 0 ))
+                {
+                    // setze den Bereich richtig
+                    *GetPoint() = *pPam->GetPoint();
+                    SetMark();
+
+                    // Start und Ende wieder korrigieren !!
+                    if( aFltArr.Count() )
+                    {
+                        xub_StrLen n, nNew;
+                        // bei Rueckwaertssuche die Positionen temp. vertauschen
+                        if( !bSrchForward ) { n = nStart; nStart = nEnde; nEnde = n; }
+
+                        for( n = 0, nNew = nStart;
+                            n < aFltArr.Count() && aFltArr[ n ] <= nStart;
+                            ++n, ++nNew )
+                            ;
+                        nStart = nNew;
+                        for( n = 0, nNew = nEnde;
+                            n < aFltArr.Count() && aFltArr[ n ] < nEnde;
+                            ++n, ++nNew )
+                            ;
+                        nEnde = nNew;
+
+                        // bei Rueckwaertssuche die Positionen temp. vertauschen
+                        if( !bSrchForward ) { n = nStart; nStart = nEnde; nEnde = n; }
+                    }
+                    GetMark()->nContent = nStart;       // Startposition setzen
+                    GetPoint()->nContent = nEnde;
+
+                    if( !bSrchForward )         // rueckwaerts Suche?
+                        Exchange();             // Point und Mark tauschen
+                    bFound = TRUE;
+                    break;
+                }
+
+                nStart = nEnde;
+            } // end of script while
+
+            delete pScriptIter;
+
+            if ( bFound )
+                break;
             else if( ( bChkEmptyPara && !nStart && !nTxtLen ) || bChkParaEnd )
             {
                 *GetPoint() = *pPam->GetPoint();
