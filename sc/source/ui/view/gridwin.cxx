@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:14:49 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4497,9 +4497,7 @@ BOOL ScGridWindow::GetEditUrlOrError( BOOL bSpellErr, const Point& rPos,
 
         //  vertikal kann (noch) nicht angeklickt werden:
 
-    SvxCellOrientation eOrient = (SvxCellOrientation) ((SvxOrientationItem&)pPattern->
-                                            GetItem(ATTR_ORIENTATION)).GetValue();
-    if (eOrient != SVX_ORIENTATION_STANDARD)
+    if (pPattern->GetCellOrientation() != SVX_ORIENTATION_STANDARD)
         return FALSE;
 
     BOOL bBreak = ((SfxBoolItem&)pPattern->GetItem(ATTR_LINEBREAK)).GetValue() ||
