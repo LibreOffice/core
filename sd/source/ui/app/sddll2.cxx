@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:22:24 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,9 @@
 #ifndef SD_EFFECT_CHILD_WINDOW_HXX
 #include "EffectChildWindow.hxx"
 #endif
+#ifndef SD_LAZER_DIALOG_CHILD_WINDOW_HXX
+#include "LayerDialogChildWindow.hxx"
+#endif
 #ifndef SD_SLIDE_CHANGE_CHILD_WINDOW_HXX
 #include "SlideChangeChildWindow.hxx"
 #endif
@@ -183,7 +186,12 @@
 #ifndef SD_GRAPHIC_VIEW_SHELL_HXX
 #include "GraphicViewShell.hxx"
 #endif
-
+#ifndef SD_PANE_CHILD_WINDOWS_HXX
+#include "PaneChildWindows.hxx"
+#endif
+#ifndef SD_NOTES_CHILD_WINDOW_HXX
+#include "NotesChildWindow.hxx"
+#endif
 
 
 /*************************************************************************
@@ -223,6 +231,7 @@ void SdDLL::RegisterControllers()
     ::sd::NavigatorChildWindow::RegisterChildWindowContext( ::sd::GraphicViewShell::_GetInterfaceIdImpl(), pMod );
     ::sd::PreviewChildWindow::RegisterChildWindow(0, pMod);
     ::sd::EffectChildWindow::RegisterChildWindow(0, pMod);
+    ::sd::LayerDialogChildWindow::RegisterChildWindow(0, pMod);
     ::sd::SlideChangeChildWindow::RegisterChildWindow(0, pMod);
     //Sd3DChildWindow::RegisterChildWindow(0, pMod);
     Svx3DChildWindow::RegisterChildWindow(0, pMod);
@@ -234,6 +243,9 @@ void SdDLL::RegisterControllers()
     SvxIMapDlgChildWindow::RegisterChildWindow(0, pMod);
     SvxHyperlinkDlgWrapper::RegisterChildWindow(0, pMod);
     SvxHlinkDlgWrapper::RegisterChildWindow(0, pMod);
+    ::sd::LeftPaneChildWindow::RegisterChildWindow(0, pMod);
+    ::sd::RightPaneChildWindow::RegisterChildWindow(0, pMod);
+    ::sd::notes::NotesChildWindow::RegisterChildWindow(0, pMod);
 
     SvxFillToolBoxControl::RegisterControl(0, pMod);
     SvxLineStyleToolBoxControl::RegisterControl(0, pMod);
