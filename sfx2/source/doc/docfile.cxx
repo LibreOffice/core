@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.154 $
+ *  $Revision: 1.155 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:51:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,7 @@ using namespace ::com::sun::star::io;
 #include <unotools/progresshandlerwrap.hxx>
 #include <ucbhelper/content.hxx>
 #include <sot/stg.hxx>
+#include <svtools/saveopt.hxx>
 
 #include "helper.hxx"
 #include "request.hxx"      // SFX_ITEMSET_SET
@@ -364,7 +365,6 @@ class SfxMedium_Impl : public SvCompatWeakBase
 {
 public:
     ::ucb::Content aContent;
-    String aBaseURL;
     sal_Bool bUpdatePickList : 1;
     sal_Bool bIsTemp        : 1;
     sal_Bool bForceSynchron : 1;
@@ -582,25 +582,36 @@ Reference < XContent > SfxMedium::GetContent() const
     return pImp->aContent.get();
 }
 
-const String& SfxMedium::GetBaseURL()
+::rtl::OUString SfxMedium::GetBaseURL( bool bForSaving )
 {
-    if ( !pImp->aBaseURL.Len() && GetContent().is() )
+    ::rtl::OUString aBaseURL;
+    const SfxStringItem* pBaseURLItem = static_cast<const SfxStringItem*>( GetItemSet()->GetItem(SID_DOC_BASEURL) );
+    if ( pBaseURLItem )
+        aBaseURL = pBaseURLItem->GetValue();
+    else if ( GetContent().is() )
     {
         try
         {
             Any aAny = pImp->aContent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI" )) );
-            ::rtl::OUString aStr;
-            if ( ( aAny >>= aStr ) && aStr.getLength() )
-                pImp->aBaseURL = aStr;
+            aAny >>= aBaseURL;
         }
         catch ( ::com::sun::star::uno::Exception& )
         {
         }
     }
 
-    if ( !pImp->aBaseURL.Len() )
-        pImp->aBaseURL = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-    return pImp->aBaseURL;
+    if ( !aBaseURL.getLength() )
+        aBaseURL = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+
+    if ( bForSaving )
+    {
+        SvtSaveOptions aOpt;
+        sal_Bool bIsRemote = IsRemote();
+        if( bIsRemote && !aOpt.IsSaveRelINet() || !bRemote && !aOpt.IsSaveRelFSys() )
+            return ::rtl::OUString();
+    }
+
+    return aBaseURL;
 }
 
 //------------------------------------------------------------------
@@ -2087,6 +2098,8 @@ void SfxMedium::Init_Impl()
 {
     Reference< XOutputStream > rOutStream;
     pImp->pVersions = NULL;
+
+    // TODO/LATER: handle lifetime of storages
     pImp->bDisposeStorage = FALSE;
 
     SFX_ITEMSET_ARG( pSet, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
@@ -2295,7 +2308,7 @@ void SfxMedium::RefreshName_Impl()
 
 void SfxMedium::SetIsRemote_Impl()
 {
-    INetURLObject aObj( GetName() );
+    INetURLObject aObj( GetBaseURL() );
     switch( aObj.GetProtocol() )
     {
         case INET_PROT_FTP:
@@ -2485,7 +2498,7 @@ SfxMedium::SfxMedium
 }
 //------------------------------------------------------------------
 
-SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, sal_Bool bRootP )
+SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const SfxItemSet* p, sal_Bool bRootP )
 :   IMPL_CTOR( bRootP, 0 ), // bRoot, pURLObj
     pSet(0),
     pImp( new SfxMedium_Impl( this ))
@@ -2497,6 +2510,11 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, sal_Bool 
     Init_Impl();
     pImp->xStorage = rStor;
     pImp->bDisposeStorage = FALSE;
+
+    // always take BaseURL first, could be overwritten by ItemSet
+    GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, rBaseURL ) );
+    if ( p )
+        GetItemSet()->Put( *p );
 }
 
 //------------------------------------------------------------------
