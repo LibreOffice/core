@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-01-25 10:54:26 $
+ *  last change: $Author: rt $ $Date: 2001-01-29 16:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,8 @@ SV_DECL_VARARR_SORT( SortedINT16Array, INT16, 32, 32);
 SV_IMPL_VARARR_SORT( SortedINT16Array, INT16 );
 
 // forward declarations
-Sequence< OUString > GetLangSvcList( const Any &rVal );
-Sequence< OUString > GetLangSvc( const Any &rVal );
+Sequence< OUString > static GetLangSvcList( const Any &rVal );
+Sequence< OUString > static GetLangSvc( const Any &rVal );
 
 ///////////////////////////////////////////////////////////////////////////
 
