@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_bridge.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:33:00 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:49:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,9 +494,9 @@ void SAL_CALL uno_ext_getMapping(
         (sizeof (jlong) == sizeof (sal_Int64)))
     {
         OUString const & from_env_typename =
-            *reinterpret_cast< OUString const * >( &pFrom->pTypeName );
+            OUString::unacquired( &pFrom->pTypeName );
         OUString const & to_env_typename =
-            *reinterpret_cast< OUString const * >( &pTo->pTypeName );
+            OUString::unacquired( &pTo->pTypeName );
 
         uno_Mapping * mapping = 0;
 
