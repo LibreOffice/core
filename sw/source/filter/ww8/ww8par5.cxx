@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:28:56 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,10 @@
 #include <SwStyleNameMapper.hxx>
 #endif
 
+#ifndef SW_WRITERHELPER
+#include "writerhelper.hxx"
+#endif
+
 #ifndef _WW8SCAN_HXX
 #include "ww8scan.hxx"          // WW8FieldDesc
 #endif
@@ -214,9 +218,15 @@
 #include "ww8par2.hxx"
 #endif
 
+#ifndef SW_MS_MSFILTER_HXX
+#include "../inc/msfilter.hxx"
+#endif
+
 #define MAX_FIELDLEN 64000
 
 #define WW8_TOX_LEVEL_DELIM     ':'
+
+using namespace sw::util;
 
 class _ReadFieldParams
 {
@@ -505,8 +515,8 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
         if( aVal.Len() > (MAX_FIELDLEN - 4))
             aVal.Erase( MAX_FIELDLEN - 4 );
     }
-    pRefStck->NewAttr( *pPaM->GetPoint(), SwFltBookmark( *pName, aVal,
-        pB->GetHandle(), 0 ) );
+    pRefStck->NewAttr(*pPaM->GetPoint(),
+        SwFltBookmark(BookmarkToWriter(*pName), aVal, pB->GetHandle(), 0));
     return 0;
 }
 
@@ -527,7 +537,8 @@ void SwWW8ImplReader::ConvertFFileName( String& rName, const String& rOrg )
         rName.Erase( rName.Len()-1, 1);
 
     //#82900# Need the more sophisticated url converter. cmc
-    rName = URIHelper::SmartRelToAbs(rName);
+    if (rName.Len())
+        rName = URIHelper::SmartRelToAbs(rName);
 }
 
 // ConvertUFNneme uebersetzt FeldParameter-Namen u. ae. in den
@@ -764,8 +775,8 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, ULONG& rFormat,
         return NUMBERFORMAT_DATE;
     }
 
-    const SvxLanguageItem& rLang = (const SvxLanguageItem&)(rDoc.GetAttrPool().
-        GetDefaultItem( RES_CHRATR_LANGUAGE ));
+    const SvxLanguageItem& rLang =
+        DefaultItemGet<SvxLanguageItem>(rDoc,RES_CHRATR_LANGUAGE);
 
     ULONG nFmtIdx = MSDateTimeFormatToSwFormat(sParams, pFormatter,
         rLang.GetValue(), rbForceJapanese);
@@ -1215,6 +1226,11 @@ String SwWW8ImplReader::GetFieldResult( WW8FieldDesc* pF )
                                 nL, eStructCharSet );
 
     pStrm->Seek( nOldPos );
+
+    //replace CR 0x0D with LF 0x0A
+    sRes.SearchAndReplaceAll(0x0D, 0x0A);
+    //replace VT 0x0B with LF 0x0A
+    sRes.SearchAndReplaceAll(0x0B, 0x0A);
     return sRes;
 }
 
@@ -1272,7 +1288,7 @@ long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
         pF->nSCode, pF->nSCode + pF->nLen, nIndex);
     if (sName.Len())
     {
-        pPlcxMan->GetBook()->SetStatus(nIndex,BOOK_IGNORE);
+        pPlcxMan->GetBook()->SetStatus(nIndex, BOOK_IGNORE);
         nNo = nIndex;
     }
     else
@@ -1282,7 +1298,8 @@ long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
         sName += String::CreateFromInt32(nNo);
         nNo += pPlcxMan->GetBook()->GetIMax();
     }
-    pRefStck->NewAttr(*pPaM->GetPoint(),SwFltBookmark(sName,rData,nNo,0));
+    pRefStck->NewAttr(*pPaM->GetPoint(),SwFltBookmark(BookmarkToWriter(sName),
+        rData,nNo,0));
     pRefStck->aFieldVarNames[rOrigName] = sName;
     return nNo;
 }
@@ -1349,18 +1366,19 @@ bool SwWW8FltRefStack::RangeToHidden(SwField* pFld,
     return bRet;
 }
 
-const String &SwWW8ImplReader::GetMappedBookmark(String &rOrigName)
+String SwWW8ImplReader::GetMappedBookmark(const String &rOrigName)
 {
+    String sName(BookmarkToWriter(rOrigName));
     ASSERT(pPlcxMan,"no pPlcxMan");
-    pPlcxMan->GetBook()->MapName(rOrigName);
+    pPlcxMan->GetBook()->MapName(sName);
 
     //See if there has been a variable set with this name, if so get
     //the pseudo bookmark name that was set with it.
     ::std::map<String,String,SwWW8FltRefStack::ltstr>::const_iterator aResult =
-            pRefStck->aFieldVarNames.find(rOrigName);
+            pRefStck->aFieldVarNames.find(sName);
 
     const String &rBkmName = (aResult == pRefStck->aFieldVarNames.end())
-        ? rOrigName : (*aResult).second;
+        ? sName : (*aResult).second;
 
     return rBkmName;
 }
@@ -2017,7 +2035,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
     }
     else
     {
-        const String &rBkmName = GetMappedBookmark(sOrigBkmName);
+        String sBkmName(GetMappedBookmark(sOrigBkmName));
 
         if (!bAboveBelow || bChapterNr)
         {
@@ -2025,7 +2043,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
             {
                 SwGetRefField aFld(
                     (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ),
-                    rBkmName,REF_BOOKMARK,0,REF_CHAPTER);
+                    sBkmName,REF_BOOKMARK,0,REF_CHAPTER);
                 rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
             }
             else
@@ -2047,7 +2065,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
         if( bAboveBelow )
         {
             SwGetRefField aFld( (SwGetRefFieldType*)
-                rDoc.GetSysFldType( RES_GETREFFLD ), rBkmName, REF_BOOKMARK, 0,
+                rDoc.GetSysFldType( RES_GETREFFLD ), sBkmName, REF_BOOKMARK, 0,
                 REF_UPDOWN );
             rDoc.Insert(*pPaM, SwFmtFld(aFld));
         }
@@ -2137,10 +2155,10 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, String& rStr )
     }
     else
     {
-        const String &rName = GetMappedBookmark(sOrigName);
+        String sName(GetMappedBookmark(sOrigName));
 
         SwGetRefField aFld(
-            (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ), rName,
+            (SwGetRefFieldType*)rDoc.GetSysFldType( RES_GETREFFLD ), sName,
             REF_BOOKMARK, 0, REF_PAGE );
 
         rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
@@ -2571,17 +2589,18 @@ void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
             nScript = com::sun::star::i18n::ScriptType::ASIAN;
 
         //Check to see if we already have a ruby charstyle that this fits
+        std::vector<const SwCharFmt*>::const_iterator aEnd =
+            aRubyCharFmts.end();
         for(std::vector<const SwCharFmt*>::const_iterator aIter
-            = aRubyCharFmts.begin(); aIter != aRubyCharFmts.end(); ++aIter)
+            = aRubyCharFmts.begin(); aIter != aEnd; ++aIter)
         {
             const SvxFontHeightItem &rFH =
-                (const SvxFontHeightItem &)((*aIter)->GetAttr(
-                GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript)));
+                ItemGet<SvxFontHeightItem>(*(*aIter),
+                GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript));
             if (rFH.GetHeight() == nFontSize*10)
             {
-                const SvxFontItem &rF =
-                    (const SvxFontItem &)((*aIter)->GetAttr(
-                    GetWhichOfScript(RES_CHRATR_FONT,nScript)));
+                const SvxFontItem &rF = ItemGet<SvxFontItem>(*(*aIter),
+                    GetWhichOfScript(RES_CHRATR_FONT,nScript));
                 if (rF.GetFamilyName().Equals(sFontName))
                 {
                     pCharFmt=*aIter;
@@ -2644,6 +2663,32 @@ void lcl_toxMatchACSwitch(  SwWW8ImplReader& rReader,
     }
 }
 
+//For all outline styles that are not in the outline numbering add them here as
+//custom extra styles
+bool SwWW8ImplReader::AddExtraOutlinesAsExtraStyles(SwTOXBase& rBase)
+{
+    bool bExtras = false;
+    //This is the case if the winword outline numbering is set while the
+    //writer one is not
+    for (USHORT nI = 0; nI < nColls; ++nI)
+    {
+        SwWW8StyInf& rSI = pCollA[nI];
+        if (rSI.IsOutline())
+        {
+            const SwTxtFmtColl *pFmt = (const SwTxtFmtColl*)(rSI.pFmt);
+            if (rSI.nOutlineLevel != pFmt->GetOutlineLevel())
+            {
+                String sStyles(rBase.GetStyleNames(rSI.nOutlineLevel));
+                if(sStyles.Len())
+                    sStyles += TOX_STYLE_DELIMITER;
+                sStyles += pFmt->GetName();
+                rBase.SetStyleNames(sStyles, rSI.nOutlineLevel);
+                bExtras = true;
+            }
+        }
+    }
+    return bExtras;
+}
 
 void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader, SwTOXBase& rBase,
     _ReadFieldParams& rParam)
@@ -3082,7 +3127,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                     break;
                 */
                 }
-            }
+             }
             if( !nMaxLevel )
                 nMaxLevel = MAXLEVEL;
             pBase->SetLevel( nMaxLevel );
@@ -3091,8 +3136,15 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
             switch( eType )
             {
                 case TOX_CONTENT:
-                    if( eCreateFrom )
-                        pBase->SetCreate( eCreateFrom );
+                    if (eCreateFrom)
+                    {
+                        if (eCreateFrom == TOX_OUTLINELEVEL)
+                        {
+                            if (AddExtraOutlinesAsExtraStyles(*pBase))
+                                eCreateFrom |= TOX_TEMPLATE;
+                        }
+                        pBase->SetCreate(eCreateFrom);
+                    }
                     break;
                 case TOX_ILLUSTRATIONS:
                     {
@@ -3262,8 +3314,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
     }
 
     // das Resultat uebernehmen
-    String sDef(GetFieldResult(pF));
-    ASSERT( (sURL.Len() || sMark.Len()) && sDef.Len(), "WW8: Empty URL" )
+    ASSERT((sURL.Len() || sMark.Len()), "WW8: Empty URL")
 
     if( sMark.Len() )
         ( sURL += INET_MARK_TOKEN ) += sMark;
@@ -3278,19 +3329,18 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
     return FLD_TEXT;
 }
 
-
-void SwWW8ImplReader::ImportTox( int nFldId, String aStr )
+void lcl_ImportTox(SwDoc &rDoc, SwPaM &rPaM, const String &rStr, bool bIdx)
 {
-    bool bIdx = ( nFldId != 9 );
-    TOXTypes eTox = ( !bIdx ) ? TOX_CONTENT : TOX_INDEX;    // Default
+    TOXTypes eTox = (!bIdx) ? TOX_CONTENT : TOX_INDEX;  // Default
 
     USHORT nLevel = 1;
 
     xub_StrLen n;
     String sFldTxt;
     long nRet;
-    _ReadFieldParams aReadParam( aStr );
+    _ReadFieldParams aReadParam( rStr );
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
+    {
         switch( nRet )
         {
         case -2:
@@ -3325,6 +3375,7 @@ void SwWW8ImplReader::ImportTox( int nFldId, String aStr )
             }
             break;
         }
+    }
 
     ASSERT( rDoc.GetTOXTypeCount( eTox ), "Doc.GetTOXTypeCount() == 0  :-(" );
 
@@ -3351,10 +3402,22 @@ void SwWW8ImplReader::ImportTox( int nFldId, String aStr )
     }
 
     if (sFldTxt.Len())
-        {
+    {
         aM.SetAlternativeText( sFldTxt );
-        rDoc.Insert( *pPaM, aM );
-        }
+        rDoc.Insert( rPaM, aM );
+    }
+}
+
+void sw::ms::ImportXE(SwDoc &rDoc, SwPaM &rPaM, const String &rStr)
+{
+    lcl_ImportTox(rDoc, rPaM, rStr, true);
+}
+
+void SwWW8ImplReader::ImportTox( int nFldId, String aStr )
+{
+    bool bIdx = ( nFldId != 9 );
+    TOXTypes eTox = ( !bIdx ) ? TOX_CONTENT : TOX_INDEX;    // Default
+    lcl_ImportTox(rDoc, *pPaM, aStr, bIdx);
 }
 
 void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
@@ -3436,7 +3499,7 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
         USHORT nNameLen = *pName++;
         if( sFieldName.EqualsIgnoreCaseAscii( pName, nC, nNameLen ) )
         {
-            ImportTox( aFldId[i], sFieldName.Copy( nC + nNameLen ) );
+            ImportTox(aFldId[i], sFieldName.Copy( nC + nNameLen ));
             break;                  // keine Mehrfachnennungen moeglich
         }
     }
