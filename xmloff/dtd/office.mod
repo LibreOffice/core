@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.31 2001-02-23 15:50:36 sab Exp $
+	$Id: office.mod,v 1.32 2001-02-26 14:53:39 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -149,7 +149,7 @@
 		table:named-expressions?,
 		table:database-ranges?,table:data-pilot-tables?,
 		table:consolidation?,
-		presentation:shows?)">
+		presentation:settings?)">
 <!ELEMENT office:body %body;>
 <!ATTLIST office:body table:structure-protected %boolean; "false"
 			table:protection-key CDATA #IMPLIED>

@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.24 2001-02-21 20:32:25 dvo Exp $
+	$Id: text.mod,v 1.25 2001-02-26 14:53:39 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -1058,7 +1058,7 @@ indices, and there may be only one text:index-title element.
 <!ELEMENT text:ruby (text:ruby-base, text:ruby-text)>
 <!ATTLIST text:ruby text:style-name %styleName; #IMPLIED>
 
-<!ELEMENT text:ruby-base (%inline-text;)>
+<!ELEMENT text:ruby-base %inline-text;>
 
 <!ELEMENT text:ruby-text (#PCDATA)>
 <!ATTLIST text:ruby-text text:style-name %styleName; #IMPLIED>
