@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unitconv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 07:56:13 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 15:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,8 @@ ScUnitConverter::ScUnitConverter( USHORT nInit, USHORT nDelta ) :
     ScLinkConfigItem aConfigItem( OUString::createFromAscii( CFGPATH_UNIT ) );
 
     // empty node name -> use the config item's path itself
-    Sequence<OUString> aNodeNames = aConfigItem.GetNodeNames( OUString() );
+    OUString aEmptyString;
+    Sequence<OUString> aNodeNames = aConfigItem.GetNodeNames( aEmptyString );
 
     long nNodeCount = aNodeNames.getLength();
     if ( nNodeCount )
