@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppletExecutionContext.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-11-22 13:47:40 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ public final class AppletExecutionContext extends ExecutionContext
     private String _className;
     private Vector _jarResourceProxys = new Vector();
 
-    private URL _documentURL = null;
+    private URL _documentBase = null;
     private URL _baseURL = null;
 
     private Toolkit _toolkit;
@@ -127,21 +127,21 @@ public final class AppletExecutionContext extends ExecutionContext
     }
     //************** C++ WRAPPER ******************
 
-    public AppletExecutionContext( URL documentURL,
+    public AppletExecutionContext( URL documentBase,
                                    Hashtable parameters,
                                    Container container,
                                    long pCppJSbxObject)
     {
         this(pCppJSbxObject);
 
-        if(DEBUG) System.err.println("#### AppletExecutionContext.<init>:" + documentURL + " " + parameters + " " + container + " " + pCppJSbxObject);
-        _documentURL = documentURL;
+        if(DEBUG) System.err.println("#### AppletExecutionContext.<init>:" + documentBase + " " + parameters + " " + container + " " + pCppJSbxObject);
+        _documentBase = documentBase;
         _parameters = parameters;
         _container = container;
 
         _toolkit = container.getToolkit();
 
-        _documentProxy = DocumentProxy.getDocumentProxy(documentURL, _toolkit);
+        _documentProxy = DocumentProxy.getDocumentProxy(documentBase, _toolkit);
         addObserver(_documentProxy);
     }
 
@@ -154,24 +154,14 @@ public final class AppletExecutionContext extends ExecutionContext
             if (!codeBase.endsWith("/")) {
                 codeBase += "/";
             }
-            _baseURL = new URL(_documentURL, codeBase);
+            _baseURL = new URL(_documentBase, codeBase);
         }
         catch (MalformedURLException e) {
-            try {
-                String file = _documentURL.getFile();
-                int i = file.lastIndexOf('/');
-
-                if (i > 0 && i < file.length() - 1) {
-                    _baseURL = new URL(_documentURL, file.substring(0, i + 1));
-                }
-            }
-            catch (MalformedURLException e2) {
-                _baseURL = _documentURL;
-            }
+            if(DEBUG) System.err.println("#### AppletExecutionContext: Could not create base Url");
         }
 
         if(_baseURL == null)
-            _baseURL = _documentURL;
+            _baseURL = _documentBase;
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".init - baseUrl:" + _baseURL);
 
