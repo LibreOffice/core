@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:20:16 $
+#   last change: $Author: hr $ $Date: 2004-05-10 15:57:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sc
 TARGET=dbgui
-
+LIBTARGET=no
 PROJECTPCH4DLL=TRUE
 PROJECTPCH=ui_pch
 PDBTARGET=ui_pch
@@ -106,7 +106,9 @@ SLOFILES =	\
     $(SLO)$/csvruler.obj	\
     $(SLO)$/csvgrid.obj		\
     $(SLO)$/csvtablebox.obj	\
-    $(SLO)$/asciiopt.obj
+    $(SLO)$/asciiopt.obj	\
+    $(SLO)$/scuiasciiopt.obj	\
+     $(SLO)$/scuiimoptdlg.obj
 
 EXCEPTIONSFILES= \
     $(SLO)$/dapidata.obj
@@ -122,6 +124,25 @@ SRC1FILES =  \
         validate.src    \
         asciiopt.src    \
         outline.src
+
+LIB1TARGET = $(SLB)$/$(TARGET).lib
+
+LIB1OBJFILES =  \
+         $(SLO)$/filtdlg.obj		\
+    $(SLO)$/sfiltdlg.obj	\
+    $(SLO)$/foptmgr.obj		\
+       $(SLO)$/dbnamdlg.obj	\
+    $(SLO)$/expftext.obj	\
+           $(SLO)$/fieldwnd.obj	\
+    $(SLO)$/pvlaydlg.obj	\
+    $(SLO)$/consdlg.obj		\
+    $(SLO)$/imoptdlg.obj	\
+    $(SLO)$/csvsplits.obj	\
+    $(SLO)$/csvcontrol.obj	\
+    $(SLO)$/csvruler.obj	\
+    $(SLO)$/csvgrid.obj		\
+    $(SLO)$/csvtablebox.obj	\
+    $(SLO)$/asciiopt.obj
 
 # --- Tagets -------------------------------------------------------
 
