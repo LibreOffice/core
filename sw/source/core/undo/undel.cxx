@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 15:13:25 $
+ *  last change: $Author: jp $ $Date: 2001-05-18 18:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,7 +676,13 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
                 if( bJoinNext )
                 {
                     aPrevIdx = aPos.nNode;
-                    pDoc->GetNodes().GoPrevious( &aPrevIdx );
+                    if( aPrevIdx.GetNode().IsEndNode() &&
+                        aPrevIdx.GetNode().FindStartNode()->IsSectionNode() )
+                        // used for Buf #70454#
+                        pDoc->GetNodes().GoNext( &aPrevIdx );
+                    else
+                        // used for Buf #73345#
+                        pDoc->GetNodes().GoPrevious( &aPrevIdx );
                 }
                 else
                 {
@@ -904,11 +910,14 @@ void SwUndoDelete::Repeat( SwUndoIter& rUndoIter )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/undel.cxx,v 1.2 2000-10-25 15:13:25 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/undel.cxx,v 1.3 2001-05-18 18:06:50 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/25 15:13:25  jp
+      use CharClass/BreakIt instead of old WordSelection
+
       Revision 1.1.1.1  2000/09/19 00:08:27  hr
       initial import
 
