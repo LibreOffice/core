@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 11:52:11 $
+ *  last change: $Author: pw $ $Date: 2000-11-22 13:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,9 +319,11 @@ BOOL SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
                 uno::Reference< frame::XComponentLoader > xLoader( xDesktop, uno::UNO_QUERY );
                 if( xLoader.is() )
                 {
-                    uno::Sequence< beans::PropertyValue > noargs;
-                    xComp = xLoader->loadComponentFromURL( aURL, OUString::createFromAscii( "_hidden" ), 0,
-                                                           noargs );
+                    uno::Sequence< beans::PropertyValue > aArg(1);
+                    aArg.getArray()[0].Name = OUString::createFromAscii( "Hidden" );
+                    aArg.getArray()[0].Value <<= (sal_Bool) TRUE;
+                    xComp = xLoader->loadComponentFromURL( aURL, OUString::createFromAscii( "_blank" ), 0,
+                                                           aArg );
                 }
             }
             else
@@ -421,10 +423,10 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                 {
                     // get bitmap for the tree-entry
                     uno::Any aAny( xTarget->getPropertyValue( OUString::createFromAscii( "LinkDisplayBitmap" ) ) );
-                    if( aAny.getValueType() == ::getCppuType(( const uno::Reference< awt::XBitmap >*)0) && aAny.hasValue() )
+                    uno::Reference< awt::XBitmap > aXBitmap;
+                    if( aAny >>= aXBitmap )
                     {
-                        uno::Reference< awt::XBitmap > xBmp( (awt::XBitmap *)aAny.getValue() );
-                        BitmapEx aBmp( VCLUnoHelper::GetBitmap( xBmp ) );
+                        BitmapEx aBmp( VCLUnoHelper::GetBitmap( aXBitmap ) );
 
                         // insert Displayname into treelist with bitmaps
                         pEntry = maLbTree.InsertEntry ( aStrDisplayname,
