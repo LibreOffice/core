@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:05:40 $
+ *  last change: $Author: vg $ $Date: 2005-03-24 10:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,7 @@ namespace xmloff
     bool OFormLayerXMLExport_Impl::pageContainsForms( const Reference< XDrawPage >& _rxDrawPage ) const
     {
         Reference< XFormsSupplier2 > xFormsSupp( _rxDrawPage, UNO_QUERY );
-        DBG_ASSERT( xFormsSupp.s(), "OFormLayerXMLExport_Impl::pageContainsForms: no XFormsSupplier2!" );
+        DBG_ASSERT( xFormsSupp.is(), "OFormLayerXMLExport_Impl::pageContainsForms: no XFormsSupplier2!" );
         return xFormsSupp.is() && xFormsSupp->hasForms();
     }
 
