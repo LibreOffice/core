@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dbo $ $Date: 2001-12-11 10:58:01 $
+#   last change: $Author: tpf $ $Date: 2002-01-14 17:17:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,6 +92,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssperftest.db \
     $(UCR)$/cssbridgetest.db \
     $(UCR)$/cssuno.db \
+    $(UCR)$/cssulog.db \
     $(UCR)$/csscorba.db \
     $(UCR)$/cssiop.db \
     $(UCR)$/cssiiop.db \

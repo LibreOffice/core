@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-06 13:18:33 $
+#   last change: $Author: tpf $ $Date: 2002-01-14 17:16:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ INCLUDES= \
     com$/sun$/star$/beans$/makefile.mk \
     com$/sun$/star$/lang$/makefile.mk \
     com$/sun$/star$/uno$/makefile.mk \
+    com$/sun$/star$/uno$/util$/logging$/makefile.mk \
     com$/sun$/star$/corba$/makefile.mk			\
     com$/sun$/star$/corba$/iop$/makefile.mk 	\
     com$/sun$/star$/corba$/giop$/makefile.mk 	\
