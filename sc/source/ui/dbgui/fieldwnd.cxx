@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-01 11:35:58 $
+ *  last change: $Author: dr $ $Date: 2002-05-22 14:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,11 @@
 #include "ui_pch.hxx"
 #endif
 
+#pragma hdrstop
 
-#ifndef PCH
 #include <vcl/virdev.hxx>
-#endif
+#include <vcl/decoview.hxx>
+#include <vcl/svapp.hxx>
 
 #include <tools/debug.hxx>
 
@@ -102,6 +103,8 @@ ScDPFieldWindow::ScDPFieldWindow(
         aTextPos.X() = (aWinSize.Width() - aTextSize.Width()) / 2;
         aTextPos.Y() = (aWinSize.Height() - aTextSize.Height()) / 2;
     }
+
+    GetStyleSettings();
 }
 
 __EXPORT ScDPFieldWindow::~ScDPFieldWindow()
@@ -109,6 +112,16 @@ __EXPORT ScDPFieldWindow::~ScDPFieldWindow()
     for( long nIx = 0; nIx < nFieldCount; ++nIx )
         delete aFieldArr[ nIx ];
     delete[] aFieldArr;
+}
+
+//-------------------------------------------------------------------
+
+void ScDPFieldWindow::GetStyleSettings()
+{
+    const StyleSettings& rStyleSet = GetSettings().GetStyleSettings();
+    aFaceColor = rStyleSet.GetFaceColor();
+    aWinColor = rStyleSet.GetWindowColor();
+    aTextColor = rStyleSet.GetButtonTextColor();
 }
 
 //-------------------------------------------------------------------
@@ -184,14 +197,15 @@ void ScDPFieldWindow::DrawBackground( OutputDevice& rDev )
     if ( eType == TYPE_SELECT )
     {
         rDev.SetLineColor();
-        rDev.SetFillColor( GetBackground().GetColor() );
+        rDev.SetFillColor( aFaceColor );
         rDev.DrawRect( Rectangle( aPos0, aSize ) );
     }
     else
     {
-        rDev.SetLineColor( Color( COL_BLACK ) );
-        rDev.SetFillColor( Color( COL_WHITE ) );
+        rDev.SetLineColor( aTextColor );
+        rDev.SetFillColor( aWinColor );
         rDev.DrawRect( Rectangle( aPos0, aSize ) );
+        rDev.SetTextColor( aTextColor );
         rDev.DrawCtrlText( aTextPos, GetText() );
     }
 }
@@ -203,45 +217,21 @@ void ScDPFieldWindow::DrawField(
         BOOL bSelected )
 {
     VirtualDevice aVirDev( rDev );
-    Size    aDevSize( rRect.GetSize() );
+    Size aDevSize( rRect.GetSize() );
     long    nWidth       = aDevSize.Width();
     long    nHeight      = aDevSize.Height();
     long    nLabelWidth  = rDev.GetTextWidth( rText );
     long    nLabelHeight = rDev.GetTextHeight();
-    Point   topLeft( 1, 1 );
-    Point   topRight( nWidth - 2, 1 );
-    Point   botLeft( 1, nHeight - 2 );
-    Point   botRight( nWidth - 2, nHeight - 2 );
     Point   aLabelPos(
         ((nWidth > nLabelWidth + 6) ? (nWidth - nLabelWidth) / 2 : 3),
         ((nHeight > nLabelHeight + 6) ? (nHeight - nLabelHeight) / 2 : 3) );
 
-    aVirDev.SetOutputSizePixel  ( aDevSize );
-    aVirDev.SetFont             ( rDev.GetFont() );
-    aVirDev.SetFillColor( GetBackground().GetColor() );
-    aVirDev.SetLineColor( Color( COL_BLACK ) );
-
-    aVirDev.DrawRect( Rectangle( Point(), aDevSize ) );     // 1 pixel border
+    aVirDev.SetOutputSizePixel( aDevSize );
+    aVirDev.SetFont( rDev.GetFont() );
+    DecorationView aDecoView( &aVirDev );
+    aDecoView.DrawButton( Rectangle( Point(), aDevSize ), bSelected ? BUTTON_DRAW_DEFAULT : 0 );
+    aVirDev.SetTextColor( aTextColor );
     aVirDev.DrawText( aLabelPos, rText );                   // text
-    if( bSelected )
-    {
-        aVirDev.SetLineColor( Color( COL_GRAY ) );          // thick border
-        aVirDev.SetFillColor();
-        Rectangle aRect( topLeft, botRight );
-        aVirDev.DrawRect( aRect );
-        ++aRect.nLeft; ++aRect.nTop; --aRect.nRight; --aRect.nBottom;
-        aVirDev.DrawRect( aRect );
-    }
-    else
-    {
-        aVirDev.SetLineColor( Color( COL_WHITE ) );         // 3D border
-        aVirDev.DrawLine( topLeft, topRight );
-        aVirDev.DrawLine( topLeft, botLeft  );
-        aVirDev.SetLineColor( Color( COL_GRAY ) );
-        aVirDev.DrawLine( botLeft, botRight );
-        aVirDev.DrawLine( topRight, botRight );
-    }
-
     rDev.DrawBitmap( rRect.TopLeft(), aVirDev.GetBitmap( Point(), aDevSize ) );
 }
 
@@ -404,6 +394,17 @@ void __EXPORT ScDPFieldWindow::Paint( const Rectangle& rRect )
         pFtCaption->Hide();
     }
     Redraw();
+}
+
+void __EXPORT ScDPFieldWindow::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        GetStyleSettings();
+        Redraw();
+    }
+    else
+        Control::DataChanged( rDCEvt );
 }
 
 void __EXPORT ScDPFieldWindow::MouseButtonDown( const MouseEvent& rMEvt )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-01 11:33:44 $
+ *  last change: $Author: dr $ $Date: 2002-05-22 14:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,15 @@ private:
     Point                   aTextPos;       /// Position of the caption text.
     String**                aFieldArr;      /// Pointer to string array of the field names.
     ScDPFieldType           eType;          /// Type of this area.
+    Color                   aFaceColor;     /// Color for dialog background.
+    Color                   aWinColor;      /// Color for window background.
+    Color                   aTextColor;     /// Color for text output.
     long                    nFieldSize;     /// Maximum count of fields.
     long                    nFieldCount;    /// Count of existing fields.
     long                    nFieldSelected; /// Currently selected field.
+
+    /** Reads all needed style settings. */
+    void                    GetStyleSettings();
 
     /** @return  The pixel position of a field (without bound check). */
     Point                   GetFieldPosition( long nIndex ) const;
@@ -153,6 +159,7 @@ private:
 
 protected:
     virtual void            Paint( const Rectangle& rRect );
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt );
     virtual void            MouseButtonDown( const MouseEvent& rMEvt );
     virtual void            MouseButtonUp( const MouseEvent& rMEvt );
     virtual void            MouseMove( const MouseEvent& rMEvt );
