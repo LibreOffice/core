@@ -109,11 +109,11 @@
 </FormatElement>
 <FormatElement msgid="DateFormatskey19" default="false" type="medium" usage="DATE" formatindex="32">
 <FormatCode>YY-MM-DD</FormatCode>
-<DefaultName></DefaultName>
+<DefaultName>ISO 8601</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey20" default="false" type="medium" usage="DATE" formatindex="33">
 <FormatCode>YYYY-MM-DD</FormatCode>
-<DefaultName></DefaultName>
+<DefaultName>ISO 8601</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
 <FormatCode>WW</FormatCode>
