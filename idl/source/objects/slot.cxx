@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slot.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 15:51:00 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1223,7 +1223,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
         pLinkedSlot = pFirstEnumSlot;
 
         // Slaves untereinander verketten
-        rList.Seek(0UL);
+        rList.Seek(0U);
         xEnumSlot = pFirstEnumSlot;
         SvSlotElement *pEle;
         do
