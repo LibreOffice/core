@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: yl146652 $ $Date: 2004-01-30 05:04:47 $
+ *  last change: $Author: yl146652 $ $Date: 2004-01-30 09:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,6 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     // extra settings for a ldap address book
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_HOSTNAME, ::rtl::OUString::createFromAscii("HostName")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_BASEDN, ::rtl::OUString::createFromAscii("BaseDN")));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_USESSL, ::rtl::OUString::createFromAscii("UseSSL")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_PORTNUMBER, ::rtl::OUString::createFromAscii("PortNumber")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_ROWCOUNT, ::rtl::OUString::createFromAscii("MaxRowCount")));
 
@@ -748,7 +747,6 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxBoolItem(DSID_USECATALOG, sal_False);
     *pCounter++ = new SfxStringItem(DSID_CONN_LDAP_HOSTNAME, String());
     *pCounter++ = new SfxStringItem(DSID_CONN_LDAP_BASEDN, String());
-    *pCounter++ = new SfxBoolItem(DSID_CONN_LDAP_USESSL, sal_False);
     *pCounter++ = new SfxInt32Item(DSID_CONN_LDAP_PORTNUMBER, 389);
     *pCounter++ = new SfxInt32Item(DSID_CONN_LDAP_ROWCOUNT, 100);
     *pCounter++ = new SfxBoolItem(DSID_SQL92CHECK, sal_False);
@@ -761,7 +759,6 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     // create the pool
     static SfxItemInfo __READONLY_DATA aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
     {
-        {0,0},
         {0,0},
         {0,0},
         {0,0},

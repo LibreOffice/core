@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: yl146652 $ $Date: 2004-01-30 05:04:48 $
+ *  last change: $Author: yl146652 $ $Date: 2004-01-30 09:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1190,8 +1190,7 @@ namespace dbaui
     //= OLDAPDetailsPage
     //========================================================================
     OLDAPDetailsPage::OLDAPDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_LDAP, _rCoreAttrs, CBTP_USE_UIDPWD)
-        ,m_aSeparator1      (this, ResId(FL_SEPARATOR1))
+        :OCommonBehaviourTabPage(pParent, PAGE_LDAP, _rCoreAttrs, 0)
         ,m_aHostname        (this, ResId(FT_HOSTNAME))
         ,m_aETHostname      (this, ResId(ET_HOSTNAME))
         ,m_aBaseDN          (this, ResId(FT_BASEDN))
@@ -1201,11 +1200,9 @@ namespace dbaui
         ,m_aNFPortNumber    (this, ResId(NF_PORTNUMBER))
         ,m_aFTRowCount      (this, ResId(FT_LDAPROWCOUNT))
         ,m_aNFRowCount      (this, ResId(NF_LDAPROWCOUNT))
-        ,m_aCBUseSSL        (this, ResId(CB_USESSL))
     {
         m_aETHostname.SetModifyHdl(getControlModifiedLink());
         m_aETBaseDN.SetModifyHdl(getControlModifiedLink());
-        m_aCBUseSSL.SetToggleHdl(getControlModifiedLink());
         m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
         m_aNFRowCount.SetModifyHdl(getControlModifiedLink());
 
@@ -1232,7 +1229,6 @@ namespace dbaui
             {
                 DSID_CONN_LDAP_HOSTNAME,
                 DSID_CONN_LDAP_BASEDN,
-                DSID_CONN_LDAP_USESSL,
                 DSID_CONN_LDAP_PORTNUMBER,
                 DSID_CONN_LDAP_ROWCOUNT,
                 0
@@ -1248,11 +1244,6 @@ namespace dbaui
 
         FILL_STRING_ITEM(m_aETHostname,_rSet,DSID_CONN_LDAP_HOSTNAME,bChangedSomething)
         FILL_STRING_ITEM(m_aETBaseDN,_rSet,DSID_CONN_LDAP_BASEDN,bChangedSomething)
-        if ( m_aCBUseSSL.IsChecked() != m_aCBUseSSL.GetSavedValue() )
-        {
-            _rSet.Put(SfxBoolItem(DSID_CONN_LDAP_USESSL, m_aCBUseSSL.IsChecked()));
-            bChangedSomething = sal_True;
-        }
         if ( m_aNFPortNumber.GetValue() != m_aNFPortNumber.GetSavedValue() )
         {
             _rSet.Put(SfxInt32Item(DSID_CONN_LDAP_PORTNUMBER, m_aNFPortNumber.GetValue()));
@@ -1263,6 +1254,7 @@ namespace dbaui
             _rSet.Put(SfxInt32Item(DSID_CONN_LDAP_ROWCOUNT, m_aNFRowCount.GetValue()));
             bChangedSomething = sal_True;
         }
+
         return bChangedSomething;
     }
     // -----------------------------------------------------------------------
@@ -1277,7 +1269,6 @@ namespace dbaui
 
         SFX_ITEMSET_GET(_rSet, pHostName, SfxStringItem, DSID_CONN_LDAP_HOSTNAME, sal_True);
         SFX_ITEMSET_GET(_rSet, pBaseDN, SfxStringItem, DSID_CONN_LDAP_BASEDN, sal_True);
-        SFX_ITEMSET_GET(_rSet, pUseSSL, SfxBoolItem, DSID_CONN_LDAP_USESSL, sal_True);
         SFX_ITEMSET_GET(_rSet, pPortNumber, SfxInt32Item, DSID_CONN_LDAP_PORTNUMBER, sal_True);
         SFX_ITEMSET_GET(_rSet, pRowCount, SfxInt32Item, DSID_CONN_LDAP_ROWCOUNT, sal_True);
 
@@ -1286,14 +1277,12 @@ namespace dbaui
         m_aNFPortNumber.SetValue(pPortNumber->GetValue());
         m_aNFRowCount.SetValue(pRowCount->GetValue());
 
-        m_aCBUseSSL.Check(pUseSSL->GetValue());
         if (_bSaveValue)
         {
             m_aETHostname.SaveValue();
             m_aETBaseDN.SaveValue();
             m_aNFPortNumber.SaveValue();
             m_aNFRowCount.SaveValue();
-            m_aCBUseSSL.SaveValue();
         }
 
         if (bReadonly)
@@ -1302,7 +1291,6 @@ namespace dbaui
             m_aETBaseDN.Disable();
             m_aNFPortNumber.Disable();
             m_aNFRowCount.Disable();
-            m_aCBUseSSL.Disable();
         }
     }
 
@@ -1528,7 +1516,7 @@ namespace dbaui
         else
             return sal_True;
 
-        //ErrorBox(NULL, WB_OK, MnemonicGenerator::EraseAllMnemonicChars( aErrorText)).Execute();
+        ErrorBox(NULL, WB_OK, MnemonicGenerator::EraseAllMnemonicChars( aErrorText)).Execute();
         pErrorWin->GrabFocus();
         return 0;
     }

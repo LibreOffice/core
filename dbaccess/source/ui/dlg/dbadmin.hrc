@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: yl146652 $ $Date: 2004-01-30 05:04:48 $
+ *  last change: $Author: yl146652 $ $Date: 2004-01-30 09:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,6 @@
 #define ET_AUTOINCREMENTVALUE  10
 #define ET_RETRIEVE_AUTO       11
 
-
 #define PB_BROWSECONNECTION     1
 #define PB_INDICIES             2
 #define PB_ADDALLTABLES         3
@@ -127,7 +126,6 @@
 #define CB_USECATALOG           6
 #define CB_SQL92CHECK           7
 #define CB_RETRIEVE_AUTO        8
-#define CB_USESSL               9
 
 #define FL_SEPARATOR1           1
 #define FL_SEPARATOR2           2
