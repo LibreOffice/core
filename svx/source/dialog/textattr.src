@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:12 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 18:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ french ] = "Adapter ~largeur au texte" ;
         Text [ swedish ] = "Anpassa br~edd till text" ;
         Text [ danish ] = "Tilpas bredde til tekst" ;
-        Text [ portuguese ] = "Adaptar ~largura ao texto" ;
+        Text [ portuguese ] = "Ajustar ~largura ao texto" ;
         Text [ portuguese_brazilian ] = "Br~eite an Text anpassen" ;
         Text[ chinese_simplified ] = "єНОДЧЦїн¶И¶ФУ¦(~W)";
         Text[ russian ] = "Выровнять ширину по тексту";
@@ -124,7 +124,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ french ] = "Adapter la h~auteur au texte" ;
         Text [ swedish ] = "Anpassa hцjd ~till text" ;
         Text [ danish ] = "Tilpas hшjde til tekst" ;
-        Text [ portuguese ] = "Adaptar ~altura ao texto" ;
+        Text [ portuguese ] = "Ajustar ~altura ao texto" ;
         Text [ portuguese_brazilian ] = "H~цhe an Text anpassen" ;
         Text[ chinese_simplified ] = "єНОДЧЦёЯ¶И¶ФУ¦(~H)";
         Text[ russian ] = "Выровнять высоту по тексту";
