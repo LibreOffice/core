@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hro $ $Date: 2002-01-15 08:33:21 $
+ *  last change: $Author: hro $ $Date: 2002-07-09 13:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1082,13 +1082,15 @@ public:
      @see   getStatus
     */
 
-    inline static RC setTime( const ::rtl::OUString& strPath, TimeValue& rCreationTime,
-                                                              TimeValue& rLastAccessTime,
-                                                              TimeValue& rLastWriteTime )
+    inline static RC setTime( const ::rtl::OUString& strPath, const TimeValue& rCreationTime,
+                                                              const TimeValue& rLastAccessTime,
+                                                              const TimeValue& rLastWriteTime )
     {
-        return (RC)  osl_setFileTime( strPath.pData, &rCreationTime,
-                                                                    &rLastAccessTime,
-                                                                    &rLastWriteTime );
+        return (RC)  osl_setFileTime(
+            strPath.pData,
+            &rCreationTime,
+            &rLastAccessTime,
+            &rLastWriteTime );
     }
 
     friend class DirectoryItem;
