@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:56:35 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1483,6 +1483,7 @@ String ScUndoConversion::GetComment() const
     {
         case SC_CONVERSION_SPELLCHECK:  aText = ScGlobal::GetRscString( STR_UNDO_SPELLING );    break;
         case SC_CONVERSION_HANGULHANJA: aText = ScGlobal::GetRscString( STR_UNDO_HANGULHANJA ); break;
+        case SC_CONVERSION_CHINESE_TRANSLATION: aText = ScGlobal::GetRscString( STR_UNDO_CHINESE_TRANSLATION ); break;
         default: DBG_ERRORFILE( "ScUndoConversion::GetComment - unknown conversion type" );
     }
     return aText;
