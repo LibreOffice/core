@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-28 20:36:10 $
+ *  last change: $Author: jp $ $Date: 2000-12-02 15:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,8 +694,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case SID_GRFFILTER_POPART:
         case SID_GRFFILTER_SEPIA:
         case SID_GRFFILTER_SOLARIZE:
-            if( !bParentCntProt && GRAPHIC_BITMAP == nGrfType )
-                bDisable = FALSE;
+            bDisable = bParentCntProt || GRAPHIC_BITMAP != nGrfType;
             break;
 
         default:
@@ -961,6 +960,9 @@ IMPL_LINK( SwTextShell, InitGraphicFrame, Button *, pButton )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/11/28 20:36:10  jp
+    task #80795#: ReRead and InsertGrafik with GraphicObject
+
     Revision 1.5  2000/11/24 18:01:42  jp
     Task #80752#: control for imagefilter
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slotadd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 15:46:52 $
+ *  last change: $Author: jp $ $Date: 2000-12-02 15:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,9 @@
 #ifndef _SVX_XFTSFIT_HXX //autogen
 #include <svx/xftsfit.hxx>
 #endif
-
+#ifndef _SVX_GRAFCTRL_HXX
+#include <svx/grafctrl.hxx>
+#endif
 
 #ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
@@ -318,6 +320,9 @@
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/10 15:46:52  tbe
+    removed outcommented basctl include file idetemp.hxx
+
     Revision 1.3  2000/10/31 16:06:37  hr
     #65293#: includes
 
