@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-29 10:58:31 $
+ *  last change: $Author: jp $ $Date: 2000-10-23 11:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,22 @@
 #ifndef _TXTATR_HXX //autogen
 #include <txtatr.hxx>
 #endif
-#include "cmdid.h"
-#include "charfmt.hxx"
-#include "hints.hxx"        // SwUpdateAttr
+#ifndef _FMT2LINES_HXX
+#include <fmt2lines.hxx>
+#endif
+#ifndef _FMTRUBY_HXX
+#include <fmtruby.hxx>
+#endif
+#ifndef _CHARFMT_HXX
+#include <charfmt.hxx>
+#endif
+#ifndef _HINTS_HXX
+#include <hints.hxx>        // SwUpdateAttr
+#endif
+
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
 #endif
@@ -382,4 +395,227 @@ BOOL SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
 
 
 
+
+/*************************************************************************
+|*    class SwFmt2Lines
+*************************************************************************/
+
+SwFmt2Lines::SwFmt2Lines( sal_Unicode nStartBracket, sal_Unicode nEndBracket )
+    : SfxPoolItem( RES_TXTATR_TWO_LINES ),
+    cStartBracket( nStartBracket ), cEndBracket( nEndBracket )
+{
+}
+
+SwFmt2Lines::SwFmt2Lines( const SwFmt2Lines& rAttr )
+    : SfxPoolItem( RES_TXTATR_TWO_LINES ),
+    cStartBracket( rAttr.cStartBracket ), cEndBracket( rAttr.cEndBracket )
+{
+}
+
+SwFmt2Lines::~SwFmt2Lines()
+{
+}
+
+int SwFmt2Lines::operator==( const SfxPoolItem& rAttr ) const
+{
+    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    return cStartBracket == ((SwFmt2Lines&)rAttr).cStartBracket &&
+           cEndBracket == ((SwFmt2Lines&)rAttr).cEndBracket;
+}
+
+SfxPoolItem* SwFmt2Lines::Clone( SfxItemPool* ) const
+{
+    return new SwFmt2Lines( *this );
+}
+
+BOOL SwFmt2Lines::QueryValue( com::sun::star::uno::Any& rVal,
+                                BYTE nMemberId ) const
+{
+    BOOL bRet = TRUE;
+    XubString sVal;
+    switch( nMemberId )
+    {
+/*  case MID_URL_URL:
+        sVal = aURL;
+        break;
+    case MID_URL_TARGET:
+        sVal = aTargetFrame;
+        break;
+    case MID_URL_HYPERLINKNAME:
+        sVal = aName;
+        break;
+    case MID_URL_VISITED_FMT:
+        sVal = SwXStyleFamilies::GetProgrammaticName( aVisitedFmt,
+                                                    SFX_STYLE_FAMILY_CHAR );
+        break;
+    case MID_URL_UNVISITED_FMT:
+        sVal = SwXStyleFamilies::GetProgrammaticName( aINetFmt,
+                                                    SFX_STYLE_FAMILY_CHAR );
+        break;
+*/
+    default:
+        bRet = FALSE;
+        break;
+    }
+    rVal <<= OUString(sVal);
+    return bRet;
+}
+
+BOOL SwFmt2Lines::PutValue( const com::sun::star::uno::Any& rVal,
+                            BYTE nMemberId )
+{
+    BOOL bRet;
+    if( rVal.getValueType() == ::getCppuType((rtl::OUString*)0) )
+    {
+        bRet = TRUE;
+
+        XubString sVal = *(rtl::OUString*)rVal.getValue();
+        switch( nMemberId )
+        {
+/*      case MID_URL_URL:
+            aURL = sVal;
+            break;
+        case MID_URL_TARGET:
+            aTargetFrame = sVal;
+            break;
+        case MID_URL_HYPERLINKNAME:
+            aName = sVal;
+            break;
+        case MID_URL_VISITED_FMT:
+            aVisitedFmt = SwXStyleFamilies::GetUIName( sVal,
+                                                    SFX_STYLE_FAMILY_CHAR );
+            nVisitedId = USHRT_MAX;
+            break;
+        case MID_URL_UNVISITED_FMT:
+            aINetFmt = SwXStyleFamilies::GetUIName( sVal,
+                                                    SFX_STYLE_FAMILY_CHAR );
+            nINetId = USHRT_MAX;
+            break;
+*/      default:
+            bRet = FALSE;
+            break;
+        }
+    }
+    else
+        bRet = FALSE;
+    return bRet;
+}
+
+
+
+
+
+/*************************************************************************
+|*    class SwFmtRuby
+*************************************************************************/
+
+SwFmtRuby::SwFmtRuby( const String& rRubyTxt )
+    : SfxPoolItem( RES_TXTATR_CJK_RUBY ),
+    sRubyTxt( rRubyTxt ),
+    nCharFmtId( 0 ),
+    nPosition( 0 ), nAdjustment( 0 ),
+    pTxtAttr( 0 )
+{
+}
+
+SwFmtRuby::SwFmtRuby( const SwFmtRuby& rAttr )
+    : SfxPoolItem( RES_TXTATR_CJK_RUBY ),
+    sRubyTxt( rAttr.sRubyTxt ),
+    sCharFmtName( rAttr.sCharFmtName ),
+    nCharFmtId( rAttr.nCharFmtId),
+    nPosition( rAttr.nPosition ), nAdjustment( rAttr.nAdjustment ),
+    pTxtAttr( 0 )
+{
+}
+
+SwFmtRuby::~SwFmtRuby()
+{
+}
+
+int SwFmtRuby::operator==( const SfxPoolItem& rAttr ) const
+{
+    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    return sRubyTxt == ((SwFmtRuby&)rAttr).sRubyTxt &&
+           sCharFmtName == ((SwFmtRuby&)rAttr).sCharFmtName &&
+           nCharFmtId == ((SwFmtRuby&)rAttr).nCharFmtId &&
+           nPosition == ((SwFmtRuby&)rAttr).nPosition &&
+           nAdjustment == ((SwFmtRuby&)rAttr).nAdjustment;
+}
+
+SfxPoolItem* SwFmtRuby::Clone( SfxItemPool* ) const
+{
+    return new SwFmtRuby( *this );
+}
+
+BOOL SwFmtRuby::QueryValue( com::sun::star::uno::Any& rVal,
+                            BYTE nMemberId ) const
+{
+    BOOL bRet = TRUE;
+    XubString sVal;
+    switch( nMemberId )
+    {
+/*  case MID_URL_URL:
+        sVal = aURL;
+        break;
+    case MID_URL_TARGET:
+        sVal = aTargetFrame;
+        break;
+    case MID_URL_HYPERLINKNAME:
+        sVal = aName;
+        break;
+    case MID_URL_VISITED_FMT:
+        sVal = SwXStyleFamilies::GetProgrammaticName( aVisitedFmt,
+                                                    SFX_STYLE_FAMILY_CHAR );
+        break;
+    case MID_URL_UNVISITED_FMT:
+        sVal = SwXStyleFamilies::GetProgrammaticName( aINetFmt,
+                                                    SFX_STYLE_FAMILY_CHAR );
+        break;
+*/
+    default:
+        bRet = FALSE;
+        break;
+    }
+    rVal <<= OUString(sVal);
+    return bRet;
+}
+BOOL SwFmtRuby::PutValue( const com::sun::star::uno::Any& rVal,
+                            BYTE nMemberId  )
+{
+    BOOL bRet;
+    if( rVal.getValueType() == ::getCppuType((rtl::OUString*)0) )
+    {
+        bRet = TRUE;
+
+        XubString sVal = *(rtl::OUString*)rVal.getValue();
+        switch( nMemberId )
+        {
+/*      case MID_URL_URL:
+            aURL = sVal;
+            break;
+        case MID_URL_TARGET:
+            aTargetFrame = sVal;
+            break;
+        case MID_URL_HYPERLINKNAME:
+            aName = sVal;
+            break;
+        case MID_URL_VISITED_FMT:
+            aVisitedFmt = SwXStyleFamilies::GetUIName( sVal,
+                                                    SFX_STYLE_FAMILY_CHAR );
+            nVisitedId = USHRT_MAX;
+            break;
+        case MID_URL_UNVISITED_FMT:
+            aINetFmt = SwXStyleFamilies::GetUIName( sVal,
+                                                    SFX_STYLE_FAMILY_CHAR );
+            nINetId = USHRT_MAX;
+            break;
+*/      default:
+            bRet = FALSE;
+            break;
+        }
+    }
+    else
+        bRet = FALSE;
+    return bRet;
+}
 

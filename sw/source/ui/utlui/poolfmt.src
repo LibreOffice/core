@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:42:33 $
+ *  last change: $Author: jp $ $Date: 2000-10-23 11:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4952,5 +4952,17 @@ String STR_POOLNUMRULE_PRGM_BUL4
 String STR_POOLNUMRULE_PRGM_BUL5
 {
     Text  = "List 5" ;
+};
+
+
+String STR_POOLCHR_RUBYTEXT
+{
+    Text = "Phonetische Symbole" ;
+    Text [ English ] = "Phonetic Symbols" ;
+};
+
+String STR_POOLCHR_PRGM_RUBYTEXT
+{
+    Text  = "Phonetic Symbols" ;
 };
 

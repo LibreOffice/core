@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-09-27 17:34:01 $
+ *  last change: $Author: jp $ $Date: 2000-10-23 11:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,12 @@
 #endif
 #ifndef _FMTFTNTX_HXX
 #include <fmtftntx.hxx>
+#endif
+#ifndef _FMTRUBY_HXX
+#include <fmtruby.hxx>
+#endif
+#ifndef _FMT2LINES_HXX
+#include <fmt2lines.hxx>
 #endif
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>
@@ -682,12 +688,8 @@ void _InitCore()
     aAttrTab[ RES_TXTATR_TOXMARK - POOLATTR_BEGIN ] = new SwTOXMark;
     aAttrTab[ RES_TXTATR_CHARFMT- POOLATTR_BEGIN ] = new SwFmtCharFmt( 0 );
 
-    aAttrTab[ RES_TXTATR_TWO_LINES - POOLATTR_BEGIN ] =
-//JP 28.07.00: must be changed to the correct attributes!!
-                new SfxBoolItem( RES_TXTATR_TWO_LINES);
-    aAttrTab[ RES_TXTATR_CJK_RUBY - POOLATTR_BEGIN ] =
-//JP 28.07.00: must be changed to the correct attributes!!
-                new SfxBoolItem( RES_TXTATR_CJK_RUBY );
+    aAttrTab[ RES_TXTATR_TWO_LINES - POOLATTR_BEGIN ] = new SwFmt2Lines;
+    aAttrTab[ RES_TXTATR_CJK_RUBY - POOLATTR_BEGIN ] = new SwFmtRuby( aEmptyStr );
     aAttrTab[ RES_TXTATR_UNKNOWN_CONTAINER - POOLATTR_BEGIN ] =
                 new SvXMLAttrContainerItem( RES_TXTATR_UNKNOWN_CONTAINER );
 

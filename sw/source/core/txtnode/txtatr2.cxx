@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtatr2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-27 08:27:14 $
+ *  last change: $Author: jp $ $Date: 2000-10-23 11:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,8 +138,16 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>          // SwDoc
 #endif
+#ifndef _FMTRUBY_HXX
+#include <fmtruby.hxx>
+#endif
+#ifndef _FMT2LINES_HXX
+#include <fmt2lines.hxx>
+#endif
 
 TYPEINIT1(SwTxtINetFmt,SwClient);
+TYPEINIT1(SwTxtRuby,SwClient);
+
 
 /*************************************************************************
  *                      class SwImplPrev
@@ -654,5 +662,107 @@ SwTxtXMLAttrContainer::SwTxtXMLAttrContainer(
     : SwTxtAttrEnd( rAttr, nStart, nEnd )
 {}
 
+
+
+// ******************************
+
+SwTxtRuby::SwTxtRuby( const SwFmtRuby& rAttr,
+                        xub_StrLen nStart, xub_StrLen nEnd )
+    : SwTxtAttrEnd( rAttr, nStart, nEnd ),
+    SwClient( 0 ),
+    pMyTxtNd( 0 )
+{
+    ((SwFmtRuby&)rAttr).pTxtAttr  = this;
+
+}
+
+SwTxtRuby::~SwTxtRuby()
+{
+}
+
+/*
+void SwTxtRuby::ChgFnt(SwFont *)
+{
+}
+void SwTxtRuby::RstFnt(SwFont *)
+{
+}
+*/
+
+void SwTxtRuby::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+{
+    USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+#ifndef PRODUCT
+    if ( (nWhich<RES_CHRATR_BEGIN || nWhich>RES_CHRATR_END)
+            && (nWhich!=RES_OBJECTDYING)
+            && (nWhich!=RES_ATTRSET_CHG)
+            && (nWhich!=RES_FMT_CHG) )
+        ASSERT(!this, "SwTxtCharFmt::Modify(): unbekanntes Modify!");
+#endif
+
+    if( pMyTxtNd )
+    {
+        SwUpdateAttr aUpdateAttr( *GetStart(), *GetEnd(), nWhich );
+        pMyTxtNd->SwCntntNode::Modify( &aUpdateAttr, &aUpdateAttr );
+    }
+}
+
+BOOL SwTxtRuby::GetInfo( SfxPoolItem& rInfo ) const
+{
+    if( RES_AUTOFMT_DOCNODE != rInfo.Which() || !pMyTxtNd ||
+        &pMyTxtNd->GetNodes() != ((SwAutoFmtGetDocNode&)rInfo).pNodes )
+        return TRUE;
+
+    ((SwAutoFmtGetDocNode&)rInfo).pCntntNode = pMyTxtNd;
+    return FALSE;
+}
+
+SwCharFmt* SwTxtRuby::GetCharFmt()
+{
+    const SwFmtRuby& rFmt = SwTxtAttrEnd::GetRuby();
+    SwCharFmt* pRet = 0;
+
+    if( rFmt.GetText().Len() )
+    {
+        const SwDoc* pDoc = GetTxtNode().GetDoc();
+        const String& rStr = rFmt.GetCharFmtName();
+        USHORT nId = rStr.Len() ? rFmt.GetCharFmtId() : RES_POOLCHR_RUBYTEXT;
+
+        // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
+        //              correct charstyle.
+        BOOL bResetMod = !pDoc->IsModified();
+        Link aOle2Lnk;
+        if( bResetMod )
+        {
+            aOle2Lnk = pDoc->GetOle2Link();
+            ((SwDoc*)pDoc)->SetOle2Link( Link() );
+        }
+
+        pRet = IsPoolUserFmt( nId )
+                ? ((SwDoc*)pDoc)->FindCharFmtByName( rStr )
+                : ((SwDoc*)pDoc)->GetCharFmtFromPool( nId );
+
+        if( bResetMod )
+        {
+            ((SwDoc*)pDoc)->ResetModified();
+            ((SwDoc*)pDoc)->SetOle2Link( aOle2Lnk );
+        }
+    }
+
+    if( pRet )
+        pRet->Add( this );
+    else if( GetRegisteredIn() )
+        pRegisteredIn->Remove( this );
+
+    return pRet;
+}
+
+// ******************************
+
+SwTxt2Lines::SwTxt2Lines( const SwFmt2Lines& rAttr,
+                        xub_StrLen nStart, xub_StrLen nEnd )
+    : SwTxtAttrEnd( rAttr, nStart, nEnd )
+{
+}
 
 

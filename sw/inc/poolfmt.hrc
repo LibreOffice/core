@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: jp $ $Date: 2000-10-23 11:58:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #define STR_POOLCHR_IDX_MAIN_ENTRY      (RC_POOLCHRFMT_BEGIN+ 12)
 #define STR_POOLCHR_FOOTNOTE_ANCHOR     (RC_POOLCHRFMT_BEGIN+ 13)
 #define STR_POOLCHR_ENDNOTE_ANCHOR      (RC_POOLCHRFMT_BEGIN+ 14)
+#define STR_POOLCHR_RUBYTEXT            (RC_POOLCHRFMT_BEGIN+ 15)
 
 #define STR_POOLCHR_HTML_EMPHASIS       (RC_POOLCHRFMT_HTML_BEGIN+  0)
 #define STR_POOLCHR_HTML_CITIATION      (RC_POOLCHRFMT_HTML_BEGIN+  1)
@@ -109,8 +110,9 @@
 #define STR_POOLCHR_PRGM_IDX_MAIN_ENTRY     (RC_POOLCHRFMT_PRGM_BEGIN + 12)
 #define STR_POOLCHR_PRGM_FOOTNOTE_ANCHOR    (RC_POOLCHRFMT_PRGM_BEGIN + 13)
 #define STR_POOLCHR_PRGM_ENDNOTE_ANCHOR     (RC_POOLCHRFMT_PRGM_BEGIN + 14)
+#define STR_POOLCHR_PRGM_RUBYTEXT           (RC_POOLCHRFMT_PRGM_BEGIN + 15)
 
-#define STR_POOLCHR_PRGM_CURRENT_END        STR_POOLCHR_PRGM_ENDNOTE_ANCHOR
+#define STR_POOLCHR_PRGM_CURRENT_END        STR_POOLCHR_PRGM_RUBYTEXT
 
 
 #define STR_POOLCHR_PRGM_HTML_EMPHASIS      (RC_POOLCHRFMT_PRGM_HTML_BEGIN +  0)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: jp $ $Date: 2000-10-23 11:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,12 @@
 #endif
 #ifndef _FMTLINE_HXX
 #include <fmtline.hxx>
+#endif
+#ifndef _FMTRUBY_HXX
+#include <fmtruby.hxx>
+#endif
+#ifndef _FMT2LINES_HXX
+#include <fmt2lines.hxx>
 #endif
 #ifndef _SWATRSET_HXX
 #include <swatrset.hxx>
@@ -259,6 +265,44 @@ SfxItemPresentation SwFmtINetFmt::GetPresentation
             rText = GetValue();
             return ePres;
         }
+    }
+    return SFX_ITEM_PRESENTATION_NONE;
+}
+
+SfxItemPresentation SwFmt2Lines::GetPresentation( SfxItemPresentation ePres,
+                            SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
+                            String &rText, const International* pIntl ) const
+{
+    switch ( ePres )
+    {
+    case SFX_ITEM_PRESENTATION_NONE:
+        rText.Erase();
+        break;
+    case SFX_ITEM_PRESENTATION_NAMELESS:
+    case SFX_ITEM_PRESENTATION_COMPLETE:
+    {
+        rText = aEmptyStr;
+        return ePres;
+    }
+    }
+    return SFX_ITEM_PRESENTATION_NONE;
+}
+
+SfxItemPresentation SwFmtRuby::GetPresentation( SfxItemPresentation ePres,
+                            SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
+                            String &rText, const International* pIntl ) const
+{
+    switch ( ePres )
+    {
+    case SFX_ITEM_PRESENTATION_NONE:
+        rText.Erase();
+        break;
+    case SFX_ITEM_PRESENTATION_NAMELESS:
+    case SFX_ITEM_PRESENTATION_COMPLETE:
+    {
+        rText = aEmptyStr;
+        return ePres;
+    }
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -1235,6 +1279,9 @@ SfxItemPresentation SwDrawModeGrf::GetPresentation(
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:49  hr
+      initial import
+
       Revision 1.48  2000/09/18 16:06:16  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtatr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-25 12:00:00 $
+ *  last change: $Author: jp $ $Date: 2000-10-23 11:58:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,17 @@
 #ifndef _TXATBASE_HXX
 #include <txatbase.hxx>     // SwTxtAttr/SwTxtAttrEnd
 #endif
+#ifndef _CALBCK_HXX
+#include <calbck.hxx>
+#endif
 
 class SwTxtNode;    // fuer SwTxtFld
 class SvxFont;
 class SwCharSetCol;
 class SwImplPrev;
+class SwFmtRuby;
+class SwCharFmt;
+class SwFmt2Lines;
 
 // ATT_FONT ***********************************************************
 
@@ -419,6 +425,43 @@ public:
                         xub_StrLen nStart, xub_StrLen nEnd );
 };
 
+// ******************************
+
+class SwTxtRuby : public SwTxtAttrEnd, public SwClient
+{
+    SwTxtNode* pMyTxtNd;
+
+public:
+    SwTxtRuby( const SwFmtRuby& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
+    virtual ~SwTxtRuby();
+    TYPEINFO();
+
+//??    virtual void ChgFnt(SwFont *);
+//??    virtual void RstFnt(SwFont *);
+
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
+
+    // erfrage und setze den TxtNode Pointer
+    const SwTxtNode* GetpTxtNode() const            { return pMyTxtNd; }
+    inline const SwTxtNode& GetTxtNode() const;
+    void ChgTxtNode( const SwTxtNode* pNew ) { pMyTxtNd = (SwTxtNode*)pNew; }
+
+          SwCharFmt* GetCharFmt();
+    const SwCharFmt* GetCharFmt() const
+            { return ((SwTxtRuby*)this)->GetCharFmt(); }
+};
+
+
+// ******************************
+
+class SwTxt2Lines : public SwTxtAttrEnd
+{
+public:
+    SwTxt2Lines( const SwFmt2Lines& rAttr,
+                    xub_StrLen nStart, xub_StrLen nEnd );
+};
+
 
 
 // --------------- Inline Implementierungen ------------------------
@@ -430,6 +473,11 @@ inline const SwTxtNode& SwTxtCharFmt::GetTxtNode() const
     return *pMyTxtNd;
 }
 
+inline const SwTxtNode& SwTxtRuby::GetTxtNode() const
+{
+    ASSERT( pMyTxtNd, "SwTxtRuby:: wo ist mein TextNode?" );
+    return *pMyTxtNd;
+}
 
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 12:36:57 $
+ *  last change: $Author: jp $ $Date: 2000-10-23 11:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,12 @@
 #ifndef _FTNIDX_HXX //autogen
 #include <ftnidx.hxx>
 #endif
+#ifndef _FMTRUBY_HXX
+#include <fmtruby.hxx>
+#endif
+#ifndef _FMT2LINES_HXX
+#include <fmt2lines.hxx>
+#endif
 
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -187,7 +193,9 @@
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
 #endif
-#include "swfont.hxx"
+#ifndef _SWFONT_HXX
+#include <swfont.hxx>
+#endif
 
 
 #ifndef PRODUCT
@@ -326,6 +334,12 @@ SwTxtAttr* SwTxtNode::MakeTxtAttr( const SfxPoolItem& rAttr,
     case RES_TXTATR_UNKNOWN_CONTAINER:
         pNew = new SwTxtXMLAttrContainer( (SvXMLAttrContainerItem&)rNew,
                                         nStt, nEnd );
+        break;
+    case RES_TXTATR_TWO_LINES:
+        pNew = new SwTxt2Lines( (SwFmt2Lines&)rNew, nStt, nEnd );
+        break;
+    case RES_TXTATR_CJK_RUBY:
+        pNew = new SwTxtRuby( (SwFmtRuby&)rNew, nStt, nEnd );
         break;
     }
     ASSERT( pNew, "was fuer ein TextAttribut soll hier angelegt werden?" );
@@ -1649,6 +1663,15 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
         break;
     case RES_TXTATR_TOXMARK:
         ((SwTxtTOXMark*)pHint)->ChgTxtNode( &rNode );
+        break;
+
+    case RES_TXTATR_CJK_RUBY:
+        {
+            ((SwTxtRuby*)pHint)->ChgTxtNode( &rNode );
+            SwCharFmt* pFmt = rNode.GetDoc()->GetCharFmtFromPool(
+                                                    RES_POOLCHR_RUBYTEXT );
+            pFmt->Add( (SwTxtRuby*)pHint );
+        }
         break;
     }
 

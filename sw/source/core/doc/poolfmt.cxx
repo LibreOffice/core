@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:16 $
+ *  last change: $Author: jp $ $Date: 2000-10-23 11:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1294,6 +1294,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
         }
         break;
 
+
     case RES_POOLCHR_BUL_LEVEL:             // Aufzaehlungszeichen
         {
             const Font& rBulletFont = SwNumRule::GetDefBulletFont();
@@ -1324,6 +1325,12 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
             aSet.Put( SvxColorItem( aCol ) );
             aSet.Put( SvxUnderlineItem( UNDERLINE_DOTTED ) );
             aSet.Put( SvxCaseMapItem( SVX_CASEMAP_KAPITAELCHEN ) );
+        }
+        break;
+
+    case RES_POOLCHR_RUBYTEXT:
+        {
+// ???          aSet.Put( SvxEscapementItem( DFLT_ESC_AUTO_SUPER, 58 ) );
         }
         break;
 
