@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.7 $
+#  $Revision: 1.8 $
 #
-#  last change: $Author: hr $ $Date: 2004-02-02 20:08:11 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:29:50 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -66,7 +66,7 @@ CXXFILES = remoteclient.cxx
 
 SLOFILES = $(patsubst %.cxx,$(OUT_COMP_SLO)/%.$(OBJ_EXT),$(CXXFILES))
 
-TYPES = $(shell xml2cmp -types stdout $(COMPONENT_XML))
+TYPES = $(shell $(XML2CMP) -types stdout $(COMPONENT_XML))
 TYPESLIST = $(foreach t,$(TYPES),-T$(t))
 
 # Targets
@@ -80,12 +80,12 @@ include $(SETTINGS)/stdtarget.mk
 $(OUT_BIN)/%.rdb :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$@)
-	regmerge $@ / $(DKREGISTRYNAME) 
+	$(REGMERGE) $@ / $(DKREGISTRYNAME) 
 
 $(COMPONENT_TYPEFLAG) : $(COMPONENT_RDB) $(COMPONENT_XML)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
-	cppumaker -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB)
+	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB)
 	echo flagged > $@
 
 $(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG)
@@ -119,15 +119,15 @@ $(COMPOENNT_ENV_FLAG) : $(COMPONENT_RDB) $(OUT_BIN)/remoteserver.rdb
 	@echo --------------------------------------------------------------------------------
 	@echo   Register necessary runtime components in remoteserver/remoteclientsample rdb
 	@echo --------------------------------------------------------------------------------
-	regcomp -register -r $(OUT_BIN)/remoteserver.rdb -c connector.uno.$(SHAREDLIB_EXT)
-	regcomp -register -r $(OUT_BIN)/remoteserver.rdb -c remotebridge.uno.$(SHAREDLIB_EXT)
-	regcomp -register -r $(OUT_BIN)/remoteserver.rdb -c bridgefac.uno.$(SHAREDLIB_EXT)
-	regcomp -register -r $(OUT_BIN)/remoteserver.rdb -c uuresolver.uno.$(SHAREDLIB_EXT)
-	regcomp -register -r $(OUT_BIN)/remoteserver.rdb -c streams.uno.$(SHAREDLIB_EXT)
-	regcomp -register -r $(COMPONENT_RDB) -c connector.uno.$(SHAREDLIB_EXT)
-	regcomp -register -r $(COMPONENT_RDB) -c remotebridge.uno.$(SHAREDLIB_EXT)
-	regcomp -register -r $(COMPONENT_RDB) -c bridgefac.uno.$(SHAREDLIB_EXT)
-	regcomp -register -r $(COMPONENT_RDB) -c uuresolver.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(OUT_BIN)/remoteserver.rdb -c connector.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(OUT_BIN)/remoteserver.rdb -c remotebridge.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(OUT_BIN)/remoteserver.rdb -c bridgefac.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(OUT_BIN)/remoteserver.rdb -c uuresolver.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(OUT_BIN)/remoteserver.rdb -c streams.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(COMPONENT_RDB) -c connector.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(COMPONENT_RDB) -c remotebridge.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(COMPONENT_RDB) -c bridgefac.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(COMPONENT_RDB) -c uuresolver.uno.$(SHAREDLIB_EXT)
 	@echo bla > $@
 
 CppOfficeClientExample : $(COMPONENT_IMPL) $(COMPOENNT_ENV_FLAG)
@@ -166,6 +166,6 @@ clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_INC))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_SLO))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
-	-$(DEL) $(subst /,$(PS),$(SHAREDLIB_OUT)/$(COMPONENT_NAME).*)
-	-$(DEL) $(subst /,$(PS),$(OUT_BIN)/remoteserver.rdb)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_TYPEFLAG)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(SHAREDLIB_OUT)/$(COMPONENT_NAME).*))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/remoteserver.rdb))
