@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 15:15:50 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,8 +142,9 @@
 #include <stdio.h>
 #include <salsys.hxx>
 #include <svids.hrc>
-
-
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -152,19 +153,14 @@ using namespace rtl;
 
 // =======================================================================
 
-// static Empty-SV-String
-static XubString aImplSVEmptyStr;
-XubString& rImplSVEmptyStr = aImplSVEmptyStr;
-static ByteString aImplSVEmptyByteStr;
-ByteString& rImplSVEmptyByteStr = aImplSVEmptyByteStr;
+namespace
+{
+    struct private_aImplSVData :
+        public rtl::Static<ImplSVData, private_aImplSVData> {};
+}
 
-ImplSVData private_aImplSVData;
 // static SV-Data
-ImplSVData* pImplSVData = &private_aImplSVData;
-
-// static SharedLib SV-Data
-ImplSVShlData aImplSVShlData;
-
+ImplSVData* pImplSVData = &private_aImplSVData::get();
 
 SalSystem* ImplGetSalSystem()
 {
@@ -190,7 +186,7 @@ void ImplInitSVData()
 {
     ImplSVData* pSVData = pImplSVData;
     ImplSVData** ppSVData = (ImplSVData**)GetAppData( SHL_SV );
-    *ppSVData = &private_aImplSVData;
+    *ppSVData = &private_aImplSVData::get();
 
     // init global sharedlib data
     // ...
