@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-05 13:08:59 $
+ *  last change: $Author: pl $ $Date: 2001-02-06 10:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,9 +229,8 @@ SelectionManager::IncrementalTransfer::IncrementalTransfer(
 // ------------------------------------------------------------------------
 
 SelectionManager::SelectionManager() :
-        ::cppu::WeakComponentImplHelper7<
+        ::cppu::WeakComponentImplHelper6<
                 XDropTargetDropContext,
-                XDropTargetFactory,
                 XDragSource,
                 XDragSourceContext,
                 XInitialization,
@@ -2468,28 +2467,17 @@ void SelectionManager::deregisterHandler( Atom selection )
         m_pInstance = NULL;
 }
 
-/*
- *  XDropTargetFactory
- */
-
 // ------------------------------------------------------------------------
 
-Reference< XDropTarget > SelectionManager::createDropTarget( const Sequence< sal_Int8 >& windowId )
+void SelectionManager::registerDropTarget( Window aWindow, DropTarget* pTarget )
 {
-    Window aWindow = None;
-    Reference< XDropTarget > xRet;
-
-    if( windowId.getLength() == sizeof( aWindow ) )
-        aWindow = *(Window*)windowId.getConstArray();
+    MutexGuard aGuard(m_aMutex);
 
     // sanity check
     ::std::hash_map< Window, DropTargetEntry >::const_iterator it =
           m_aDropTargets.find( aWindow );
     if( it != m_aDropTargets.end() )
-    {
         OSL_ASSERT( "attempt to register window as drop target twice" );
-        xRet = it->second.m_xTarget;
-    }
     else if( aWindow )
     {
         XSelectInput( m_pDisplay, aWindow, PropertyChangeMask );
@@ -2497,7 +2485,7 @@ Reference< XDropTarget > SelectionManager::createDropTarget( const Sequence< sal
         // set XdndAware
         XChangeProperty( m_pDisplay, aWindow, m_nXdndAware, XA_ATOM, 32, PropModeReplace, (unsigned char*)&nXdndProtocolRevision, 1 );
 
-        DropTargetEntry aEntry( new DropTarget() );
+        DropTargetEntry aEntry( pTarget );
         // get root window of window (in 99.999% of all cases this will be
         // DefaultRootWindow( m_pDisplay )
         int x, y;
@@ -2505,27 +2493,18 @@ Reference< XDropTarget > SelectionManager::createDropTarget( const Sequence< sal
         XGetGeometry( m_pDisplay, aWindow, &aEntry.m_aRootWindow,
                       &x, &y, &w, &h, &bw, &d );
         m_aDropTargets[ aWindow ] = aEntry;
-        xRet = aEntry.m_xTarget;
     }
     else
         OSL_ASSERT( "attempt to register None as drop target" );
-
-    return xRet;
 }
 
 // ------------------------------------------------------------------------
 
-void SelectionManager::deregisterDropTarget( const Reference< XDropTarget >& xTarget )
+void SelectionManager::deregisterDropTarget( Window aWindow )
 {
-    for( ::std::hash_map< Window, DropTargetEntry >::iterator it =
-             m_aDropTargets.begin(); it != m_aDropTargets.end(); ++it )
-    {
-        if( it->second.m_xTarget == xTarget )
-        {
-            m_aDropTargets.erase( it );
-            break;
-        }
-    }
+    MutexGuard aGuard(m_aMutex);
+
+    m_aDropTargets.erase( aWindow );
 }
 
 /*

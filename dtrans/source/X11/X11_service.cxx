@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_service.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:28 $
+ *  last change: $Author: pl $ $Date: 2001-02-06 10:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,23 @@ Reference< XInterface > SAL_CALL Xdnd_createInstance(
     return Reference < XInterface >( ( OWeakObject * )& SelectionManager::get() );
 }
 
+// ------------------------------------------------------------------------
+
+Sequence< OUString > SAL_CALL Xdnd_dropTarget_getSupportedServiceNames()
+{
+    Sequence< OUString > aRet(1);
+    aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.dnd.X11DropTarget");
+    return aRet;
+}
+
+// ------------------------------------------------------------------------
+
+Reference< XInterface > SAL_CALL Xdnd_dropTarget_createInstance(
+    const Reference< XMultiServiceFactory > & xMultiServiceFactory)
+{
+    return Reference < XInterface >( ( OWeakObject * ) new DropTarget() );
+}
+
 }
 
 static const OUString& getClipboardImplementationName()
@@ -145,6 +162,18 @@ static const OUString& getXdndImplementationName()
 static const OUString& getXdndServiceName()
 {
     static OUString aImpl = OUString::createFromAscii("com.sun.star.datatransfer.dnd.X11DragAndDrop" );
+    return aImpl;
+}
+
+static const OUString& getXdndDropTargetImplementationName()
+{
+    static OUString aImpl = OUString::createFromAscii(XDND_DROPTARGET_IMPLEMENTATION_NAME);
+    return aImpl;
+}
+
+static const OUString& getXdndDropTargetServiceName()
+{
+    static OUString aImpl = OUString::createFromAscii("com.sun.star.datatransfer.dnd.X11DropTarget" );
     return aImpl;
 }
 
@@ -174,6 +203,12 @@ extern "C" {
                 aImplName += getXdndImplementationName();
                 aImplName += ::rtl::OUString::createFromAscii( "/UNO/SERVICES/" );
                 aImplName += getXdndServiceName();
+                xKey->createKey( aImplName );
+
+                aImplName = OUString::createFromAscii( "/" );
+                aImplName += getXdndDropTargetImplementationName();
+                aImplName += ::rtl::OUString::createFromAscii( "/UNO/SERVICES/" );
+                aImplName += getXdndDropTargetServiceName();
                 xKey->createKey( aImplName );
 
                 return sal_True;
@@ -212,6 +247,12 @@ extern "C" {
                 xFactory = ::cppu::createSingleFactory(
                     xMgr, aImplName, Xdnd_createInstance,
                     Xdnd_getSupportedServiceNames() );
+            }
+            else if( aImplName.equals( getXdndDropTargetImplementationName() ) )
+            {
+                xFactory = ::cppu::createSingleFactory(
+                    xMgr, aImplName, Xdnd_dropTarget_createInstance,
+                    Xdnd_dropTarget_getSupportedServiceNames() );
             }
             if( xFactory.is() )
             {

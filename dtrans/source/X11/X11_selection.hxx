@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-05 13:08:59 $
+ *  last change: $Author: pl $ $Date: 2001-02-06 10:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,12 @@
 #ifndef _DTRANS_X11_SELECTION_HXX_
 #define _DTRANS_X11_SELECTION_HXX_
 
-#ifndef _CPPUHELPER_COMPBASE1_HXX_
-#include <cppuhelper/compbase1.hxx>
+#ifndef _CPPUHELPER_COMPBASE3_HXX_
+#include <cppuhelper/compbase3.hxx>
 #endif
 
-#ifndef _CPPUHELPER_COMPBASE7_HXX_
-#include <cppuhelper/compbase7.hxx>
+#ifndef _CPPUHELPER_COMPBASE6_HXX_
+#include <cppuhelper/compbase6.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
@@ -80,10 +80,6 @@
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETDROPCONTEXT_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTargetDropContext.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETFACTORY_HPP_
-#include <com/sun/star/datatransfer/dnd/XDropTargetFactory.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGSOURCE_HPP_
@@ -125,6 +121,7 @@
 #include <X11/Xlib.h>
 
 #define XDND_IMPLEMENTATION_NAME "com.sun.star.datatransfer.dnd.XdndSupport"
+#define XDND_DROPTARGET_IMPLEMENTATION_NAME "com.sun.star.datatransfer.dnd.XdndDropTarget"
 
 using namespace ::com::sun::star::uno;
 
@@ -141,18 +138,21 @@ namespace x11 {
     };
 
     class DropTarget :
-        public ::cppu::WeakImplHelper1< ::com::sun::star::datatransfer::dnd::XDropTarget >
+        public ::cppu::WeakComponentImplHelper3<
+            ::com::sun::star::datatransfer::dnd::XDropTarget,
+            ::com::sun::star::lang::XInitialization,
+            ::com::sun::star::lang::XServiceInfo
+        >
     {
     public:
         ::osl::Mutex        m_aMutex;
         bool                m_bActive;
         sal_Int8            m_nDefaultActions;
+        Window              m_aTargetWindow;
         ::std::list< Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener > >
                             m_aListeners;
 
-        DropTarget() :
-                m_bActive( false ),
-                m_nDefaultActions( 0 ) {}
+        DropTarget();
         virtual ~DropTarget();
 
         // convenience functions that loop over listeners
@@ -161,6 +161,10 @@ namespace x11 {
         void dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde );
         void dropActionChanged( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde );
         void drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& dtde );
+
+        // XInitialization
+        virtual void        SAL_CALL initialize( const Sequence< Any >& args );
+
         // XDropTarget
         virtual void        SAL_CALL addDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& );
         virtual void        SAL_CALL removeDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& );
@@ -168,12 +172,17 @@ namespace x11 {
         virtual void        SAL_CALL setActive( sal_Bool active );
         virtual sal_Int8    SAL_CALL getDefaultActions();
         virtual void        SAL_CALL setDefaultActions( sal_Int8 actions );
+
+        // XServiceInfo
+        virtual ::rtl::OUString SAL_CALL getImplementationName();
+        virtual sal_Bool    SAL_CALL supportsService( const ::rtl::OUString& ServiceName );
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                            SAL_CALL getSupportedServiceNames();
     };
 
     class SelectionManager :
-        public ::cppu::WeakComponentImplHelper7<
+        public ::cppu::WeakComponentImplHelper6<
             ::com::sun::star::datatransfer::dnd::XDropTargetDropContext,
-            ::com::sun::star::datatransfer::dnd::XDropTargetFactory,
             ::com::sun::star::datatransfer::dnd::XDragSource,
             ::com::sun::star::datatransfer::dnd::XDragSourceContext,
             ::com::sun::star::lang::XInitialization,
@@ -236,26 +245,22 @@ namespace x11 {
         struct DropTargetEntry
         {
             DropTarget*     m_pTarget;
-            Reference< ::com::sun::star::datatransfer::dnd::XDropTarget >
-                            m_xTarget;
             Window          m_aRootWindow;
 
             DropTargetEntry() : m_pTarget( NULL ), m_aRootWindow( None ) {}
             DropTargetEntry( DropTarget* pTarget ) :
                     m_pTarget( pTarget ),
-                    m_xTarget( pTarget ),
                     m_aRootWindow( None )
                 {}
             DropTargetEntry( const DropTargetEntry& rEntry ) :
                     m_pTarget( rEntry.m_pTarget ),
-                    m_xTarget( rEntry.m_xTarget ),
                     m_aRootWindow( rEntry.m_aRootWindow )
                 {}
             ~DropTargetEntry() {}
 
             DropTarget* operator->() const { return m_pTarget; }
             DropTargetEntry& operator=(const DropTargetEntry& rEntry)
-                { m_pTarget = rEntry.m_pTarget; m_xTarget = rEntry.m_xTarget; m_aRootWindow = rEntry.m_aRootWindow; return *this; }
+                { m_pTarget = rEntry.m_pTarget; m_aRootWindow = rEntry.m_aRootWindow; return *this; }
         };
 
         // internal data
@@ -431,6 +436,10 @@ namespace x11 {
         bool getPasteDataTypes( Atom selection, Sequence< ::com::sun::star::datatransfer::DataFlavor >& rTypes );
         bool getPasteData( Atom selection, const ::rtl::OUString& rType, Sequence< sal_Int8 >& rData );
 
+        // for XDropTarget to register/deregister itself
+        void registerDropTarget( Window aWindow, DropTarget* pTarget );
+        void deregisterDropTarget( Window aWindow );
+
         // XDropTargetDragContext
         virtual void        SAL_CALL accept( sal_Int8 dragOperation );
         virtual void        SAL_CALL reject();
@@ -441,9 +450,6 @@ namespace x11 {
         // XDropTargetDropContext
         virtual void        SAL_CALL dropComplete( sal_Bool success );
 
-        // XDropTargetFactory
-        virtual Reference< ::com::sun::star::datatransfer::dnd::XDropTarget >
-                            SAL_CALL createDropTarget( const Sequence< sal_Int8 >& windowId );
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName();
         virtual sal_Bool    SAL_CALL supportsService( const ::rtl::OUString& ServiceName );
@@ -481,6 +487,10 @@ namespace x11 {
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL Xdnd_getSupportedServiceNames();
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Xdnd_createInstance(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMultiServiceFactory);
+
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL Xdnd_dropTarget_getSupportedServiceNames();
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Xdnd_dropTarget_createInstance(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMultiServiceFactory);
 
 // ------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_droptarget.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:25 $
+ *  last change: $Author: pl $ $Date: 2001-02-06 10:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,39 @@
 #include <X11_selection.hxx>
 
 using namespace x11;
+using namespace rtl;
+using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;
 
+DropTarget::DropTarget() :
+        ::cppu::WeakComponentImplHelper3<
+            XDropTarget,
+            XInitialization,
+            XServiceInfo
+        >( m_aMutex ),
+    m_bActive( false ),
+    m_nDefaultActions( 0 ),
+    m_aTargetWindow( None )
+{
+}
+
 DropTarget::~DropTarget()
 {
-    SelectionManager::get().deregisterDropTarget( Reference< XDropTarget >(this) );
+    SelectionManager::get().deregisterDropTarget( this );
+}
+
+// --------------------------------------------------------------------------
+
+void DropTarget::initialize( const Sequence< Any >& args )
+{
+    if( args.getLength() > 1 )
+    {
+        sal_Int32 aWindow = None;
+        args.getConstArray()[1] >>= aWindow;
+        SelectionManager::get().initialize( args );
+        SelectionManager::get().registerDropTarget( aWindow, this );
+    }
 }
 
 // --------------------------------------------------------------------------
@@ -199,3 +226,36 @@ void DropTarget::dropActionChanged( const DropTargetDragEvent& dtde )
         (*it2)->dropActionChanged( dtde );
     }
 }
+
+/*
+ *  XServiceInfo
+ */
+
+// ------------------------------------------------------------------------
+
+OUString DropTarget::getImplementationName(  )
+{
+    return OUString::createFromAscii(XDND_DROPTARGET_IMPLEMENTATION_NAME);
+}
+
+// ------------------------------------------------------------------------
+
+sal_Bool DropTarget::supportsService( const OUString& ServiceName )
+{
+    Sequence < OUString > SupportedServicesNames = Xdnd_dropTarget_getSupportedServiceNames();
+
+    for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
+        if (SupportedServicesNames[n].compareTo(ServiceName) == 0)
+            return sal_True;
+
+    return sal_False;
+}
+
+// ------------------------------------------------------------------------
+
+Sequence< OUString > DropTarget::getSupportedServiceNames()
+{
+    return Xdnd_dropTarget_getSupportedServiceNames();
+}
+
+
