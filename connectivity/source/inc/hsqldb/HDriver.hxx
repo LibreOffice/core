@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HDriver.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:43:38 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,11 @@
 #ifndef _COM_SUN_STAR_SDBCX_XCREATECATALOG_HPP_
 #include <com/sun/star/sdbcx/XCreateCatalog.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTIONLISTENER_HPP_
+#include <com/sun/star/embed/XTransactionListener.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
-#include <com/sun/star/lang/XEventListener.hpp>
 #endif
 #ifndef _CPPUHELPER_COMPBASE5_HXX_
 #include <cppuhelper/compbase5.hxx>
@@ -106,11 +106,11 @@ namespace connectivity
         typedef ::cppu::WeakComponentImplHelper5<   ::com::sun::star::sdbc::XDriver
                                         ,::com::sun::star::sdbcx::XDataDefinitionSupplier
                                         , ::com::sun::star::lang::XServiceInfo
-                                        , ::com::sun::star::lang::XEventListener
-                                        ,::com::sun::star::sdbcx::XCreateCatalog
+                                        , ::com::sun::star::sdbcx::XCreateCatalog
+                                        , ::com::sun::star::embed::XTransactionListener
                                         >   ODriverDelegator_BASE;
 
-        typedef ::std::pair< ::rtl::OUString ,OMetaConnection*> TWeakConnectionPair;
+        typedef ::std::pair< ::rtl::OUString ,::com::sun::star::uno::WeakReferenceHelper > TWeakConnectionPair;
         typedef ::std::pair< ::com::sun::star::uno::WeakReferenceHelper,TWeakConnectionPair> TWeakPair;
         typedef ::std::vector< TWeakPair > TWeakPairVector;
 
@@ -126,6 +126,7 @@ namespace connectivity
                                                                                                 //  for this Driver
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                 m_xDriver;
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xFactory;
+            sal_Bool                                                                            m_bInShutDownConnections;
 
             /** load the driver we want to delegate.
                 The <member>m_xDriver</member> may be <NULL/> if the driver could not be loaded.
@@ -133,6 +134,12 @@ namespace connectivity
                     The driver which was currently selected.
             */
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > loadDriver( );
+
+            /** shut down the connection and revoke the storage from the map
+                @param  _aIter
+                    The connection to shut down and storage to revoke.
+            */
+            void shutdownConnection(const TWeakPairVector::iterator& _aIter);
 
         public:
             /** creates a new delegator for a HSQLDB driver
@@ -160,6 +167,12 @@ namespace connectivity
 
             // XEventListener
             virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+
+            // XTransactionListener
+            virtual void SAL_CALL preCommit( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL commited( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL preRevert( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL reverted( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
             void shutdownConnections();
         protected:
