@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2002-06-20 09:52:54 $
+ *  last change: $Author: ka $ $Date: 2002-06-21 11:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,12 +116,32 @@ void GalleryButton::KeyInput( const KeyEvent& rKEvt )
 GalleryThemeListBox::GalleryThemeListBox( GalleryBrowser1* pParent, WinBits nWinBits ) :
     ListBox( pParent, nWinBits )
 {
+    InitSettings();
 }
 
 // -----------------------------------------------------------------------------
 
 GalleryThemeListBox::~GalleryThemeListBox()
 {
+}
+
+// ------------------------------------------------------------------------
+
+void GalleryThemeListBox::InitSettings()
+{
+    SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
+    SetControlBackground( GALLERY_BG_COLOR );
+    SetControlForeground( GALLERY_FG_COLOR );
+}
+
+// -----------------------------------------------------------------------
+
+void GalleryThemeListBox::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+        InitSettings();
+    else
+        ListBox::DataChanged( rDCEvt );
 }
 
 // -----------------------------------------------------------------------------
@@ -165,8 +185,6 @@ GalleryBrowser1::GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, 
     maNewTheme.SetClickHdl( LINK( this, GalleryBrowser1, ClickNewThemeHdl ) );
 
     mpThemes->SetHelpId( HID_GALLERY_THEMELIST );
-    mpThemes->SetControlForeground( COL_BLACK );
-    mpThemes->SetControlBackground( COL_WHITE );
     mpThemes->SetSelectHdl( LINK( this, GalleryBrowser1, SelectThemeHdl ) );
 
     for( ULONG i = 0, nCount = mpGallery->GetThemeCount(); i < nCount; i++ )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-18 14:57:27 $
+ *  last change: $Author: ka $ $Date: 2002-06-21 11:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@ class GalleryThemeListBox : public ListBox
 {
 protected:
 
+    void            InitSettings();
+
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     virtual long    PreNotify( NotifyEvent& rNEvt );
 
 public:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-18 14:54:30 $
+ *  last change: $Author: ka $ $Date: 2002-06-21 11:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,8 @@ private:
     long                    mnDummy1;
     long                    mnDummy2;
     long                    mnDummy3;
+
+    void                    InitSettings();
 
     virtual BOOL            Close();
     virtual void            Resize();

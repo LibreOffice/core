@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2002-06-20 09:52:54 $
+ *  last change: $Author: ka $ $Date: 2002-06-21 11:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include "helpid.hrc"
 #include "galbrws2.hxx"
 #include "galtheme.hxx"
+#include "galmisc.hxx"
 #include "galctrl.hxx"
 
 // -----------
@@ -71,8 +72,6 @@
 
 #define GALLERY_BRWBOX_TITLE    1
 #define GALLERY_BRWBOX_PATH     2
-
-#define GALLERY_BG_COLOR        Color( COL_WHITE )
 
 // ------------------
 // - GalleryPreview -
@@ -85,8 +84,7 @@ GalleryPreview::GalleryPreview( GalleryBrowser2* pParent, GalleryTheme* pTheme )
     mpTheme( pTheme )
 {
     SetHelpId( HID_GALLERY_WINDOW );
-    SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
-    SetControlBackground( GALLERY_BG_COLOR );
+    InitSettings();
     aSound.SetNotifyHdl( LINK( this, GalleryPreview, SoundEndHdl ) );
 }
 
@@ -99,8 +97,7 @@ GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
     mpTheme( NULL )
 {
     SetHelpId( HID_GALLERY_PREVIEW );
-    SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
-    SetControlBackground( GALLERY_BG_COLOR );
+    InitSettings();
     aSound.SetNotifyHdl( LINK( this, GalleryPreview, SoundEndHdl ) );
 }
 
@@ -108,6 +105,25 @@ GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
 
 GalleryPreview::~GalleryPreview()
 {
+}
+
+// ------------------------------------------------------------------------
+
+void GalleryPreview::InitSettings()
+{
+    SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
+    SetControlBackground( GALLERY_BG_COLOR );
+    SetControlForeground( GALLERY_FG_COLOR );
+}
+
+// -----------------------------------------------------------------------
+
+void GalleryPreview::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+        InitSettings();
+    else
+        Window::DataChanged( rDCEvt );
 }
 
 // ------------------------------------------------------------------------
@@ -293,9 +309,7 @@ GalleryIconView::GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme
     EnableFullItemMode( FALSE );
 
     SetHelpId( HID_GALLERY_WINDOW );
-    SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
-    SetControlBackground( GALLERY_BG_COLOR );
-    SetColor( GALLERY_BG_COLOR );
+    InitSettings();
     SetExtraSpacing( 2 );
     SetItemWidth( S_THUMB + 6 );
     SetItemHeight( S_THUMB + 6 );
@@ -305,6 +319,26 @@ GalleryIconView::GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme
 
 GalleryIconView::~GalleryIconView()
 {
+}
+
+// ------------------------------------------------------------------------
+
+void GalleryIconView::InitSettings()
+{
+    SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
+    SetControlBackground( GALLERY_BG_COLOR );
+    SetControlForeground( GALLERY_FG_COLOR );
+    SetColor( GALLERY_BG_COLOR );
+}
+
+// -----------------------------------------------------------------------
+
+void GalleryIconView::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+        InitSettings();
+    else
+        ValueSet::DataChanged( rDCEvt );
 }
 
 // ------------------------------------------------------------------------
@@ -441,8 +475,8 @@ GalleryListView::GalleryListView( GalleryBrowser2* pParent, GalleryTheme* pTheme
     mbInit( FALSE )
 {
     SetHelpId( HID_GALLERY_WINDOW );
-    SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
-    SetControlBackground( GALLERY_BG_COLOR );
+
+    InitSettings();
 
     SetMode( BROWSER_AUTO_VSCROLL | BROWSER_AUTOSIZE_LASTCOL );
     SetDataRowHeight( 28 );
@@ -454,6 +488,25 @@ GalleryListView::GalleryListView( GalleryBrowser2* pParent, GalleryTheme* pTheme
 
 GalleryListView::~GalleryListView()
 {
+}
+
+// ------------------------------------------------------------------------
+
+void GalleryListView::InitSettings()
+{
+    SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
+    SetControlBackground( GALLERY_BG_COLOR );
+    SetControlForeground( GALLERY_FG_COLOR );
+}
+
+// -----------------------------------------------------------------------
+
+void GalleryListView::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+        InitSettings();
+    else
+        BrowseBox::DataChanged( rDCEvt );
 }
 
 // ------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-22 09:56:55 $
+ *  last change: $Author: ka $ $Date: 2002-06-21 11:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,12 +111,12 @@ GalleryBrowser::GalleryBrowser( SfxBindings* pBindings, SfxChildWindow* pCW,
 
     mpBrowser1->SelectTheme( 0 );
     mpBrowser1->Show( TRUE );
-
     mpBrowser2->Show( TRUE );
 
-    mpSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
     mpSplitter->SetSplitHdl( LINK( this, GalleryBrowser, SplitHdl ) );
     mpSplitter->Show( TRUE );
+
+    InitSettings();
 }
 
 // -----------------------------------------------------------------------------
@@ -128,6 +128,23 @@ GalleryBrowser::~GalleryBrowser()
     delete mpBrowser1;
     Gallery::ReleaseGallery( mpGallery );
     GrabFocusToDocument();
+}
+
+// -----------------------------------------------------------------------------
+
+void GalleryBrowser::InitSettings()
+{
+    mpSplitter->SetBackground( Wallpaper( GALLERY_DLG_COLOR ) );
+    mpSplitter->SetControlBackground( GALLERY_DLG_COLOR );
+    mpSplitter->SetControlForeground( GALLERY_DLG_COLOR );
+
+    mpBrowser1->SetBackground( Wallpaper( GALLERY_DLG_COLOR ) );
+    mpBrowser1->SetControlBackground( GALLERY_DLG_COLOR );
+    mpBrowser1->SetControlForeground( GALLERY_DLG_COLOR );
+
+    mpBrowser2->SetBackground( Wallpaper( GALLERY_DLG_COLOR ) );
+    mpBrowser2->SetControlBackground( GALLERY_DLG_COLOR );
+    mpBrowser2->SetControlForeground( GALLERY_DLG_COLOR );
 }
 
 // -----------------------------------------------------------------------------

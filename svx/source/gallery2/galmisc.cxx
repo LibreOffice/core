@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-23 11:55:51 $
+ *  last change: $Author: ka $ $Date: 2002-06-21 11:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,12 +104,6 @@ using namespace ::ucb;
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ucb;
-
-// -----------
-// - Defines -
-// -----------
-
-#define GALLERY_PROGRESS_RANGE 10000
 
 // ----------
 // - ResMgr -

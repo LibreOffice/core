@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ka $ $Date: 2002-06-20 14:18:44 $
+ *  last change: $Author: ka $ $Date: 2002-06-21 11:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,15 +341,16 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
     meLastMode          ( GALLERYBROWSERMODE_NONE ),
     mbCurActionIsLinkage( FALSE )
 {
+    Image       aDummyImage;
     const Link  aSelectHdl( LINK( this, GalleryBrowser2, SelectObjectHdl ) );
     Font        aInfoFont( maInfoBar.GetControlFont() );
 
-    maViewBox.InsertItem( TBX_ID_ICON, Image( GAL_RESID( RID_SVXIMG_GALLERY_VIEW_ICON ) ) );
+    maViewBox.InsertItem( TBX_ID_ICON, aDummyImage );
     maViewBox.SetItemBits( TBX_ID_ICON, TIB_RADIOCHECK | TIB_AUTOCHECK );
     maViewBox.SetHelpId( TBX_ID_ICON, HID_GALLERY_ICONVIEW );
     maViewBox.SetQuickHelpText( TBX_ID_ICON, String( GAL_RESID( RID_SVXSTR_GALLERY_ICONVIEW ) ) );
 
-    maViewBox.InsertItem( TBX_ID_LIST, Image( GAL_RESID( RID_SVXIMG_GALLERY_VIEW_LIST ) ) );
+    maViewBox.InsertItem( TBX_ID_LIST, aDummyImage );
     maViewBox.SetItemBits( TBX_ID_LIST, TIB_RADIOCHECK | TIB_AUTOCHECK );
     maViewBox.SetHelpId( TBX_ID_LIST, HID_GALLERY_LISTVIEW );
     maViewBox.SetQuickHelpText( TBX_ID_LIST, String( GAL_RESID( RID_SVXSTR_GALLERY_LISTVIEW ) ) );
@@ -360,15 +361,13 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
     maViewBox.SetSelectHdl( LINK( this, GalleryBrowser2, SelectTbxHdl ) );
     maViewBox.Show();
 
-    aInfoFont.SetWeight( WEIGHT_BOLD );
-    aInfoFont.SetColor( COL_BLACK );
-    maInfoBar.SetControlFont( aInfoFont );
     maInfoBar.Show();
-
     maSeparator.Show();
 
     mpIconView->SetSelectHdl( aSelectHdl );
     mpListView->SetSelectHdl( aSelectHdl );
+
+    InitSettings();
 
     SetMode( ( GALLERYBROWSERMODE_PREVIEW != GalleryBrowser2::meInitMode ) ? GalleryBrowser2::meInitMode : GALLERYBROWSERMODE_ICON );
 }
@@ -383,6 +382,45 @@ GalleryBrowser2::~GalleryBrowser2()
 
     if( mpCurTheme )
         mpGallery->ReleaseTheme( mpCurTheme, *this );
+}
+
+// -----------------------------------------------------------------------------
+
+void GalleryBrowser2::InitSettings()
+{
+    Image aIconImage( GAL_RESID( RID_SVXIMG_GALLERY_VIEW_ICON ) );
+    Image aListImage( GAL_RESID( RID_SVXIMG_GALLERY_VIEW_LIST ) );
+    Font  aInfoFont( maInfoBar.GetControlFont() );
+
+    if( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+    {
+        aIconImage = aIconImage.GetColorTransformedImage( IMAGECOLORTRANSFORM_HIGHCONTRAST );
+        aListImage = aListImage.GetColorTransformedImage( IMAGECOLORTRANSFORM_HIGHCONTRAST );
+    }
+
+    maViewBox.SetItemImage( TBX_ID_ICON, aIconImage );
+    maViewBox.SetItemImage( TBX_ID_LIST, aListImage );
+
+    aInfoFont.SetWeight( WEIGHT_BOLD );
+    aInfoFont.SetColor( GALLERY_FG_COLOR );
+    maInfoBar.SetControlFont( aInfoFont );
+
+    maInfoBar.SetBackground( Wallpaper( GALLERY_DLG_COLOR ) );
+    maInfoBar.SetControlBackground( GALLERY_DLG_COLOR );
+
+    maSeparator.SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
+    maSeparator.SetControlBackground( GALLERY_BG_COLOR );
+    maSeparator.SetControlForeground( GALLERY_FG_COLOR );
+}
+
+// -----------------------------------------------------------------------------
+
+void GalleryBrowser2::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+        InitSettings();
+    else
+        Control::DataChanged( rDCEvt );
 }
 
 // -----------------------------------------------------------------------------
