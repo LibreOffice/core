@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2001-07-03 14:05:42 $
+#   last change: $Author: as $ $Date: 2001-10-24 09:36:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,6 +93,7 @@ SLOFILES =\
         $(SLO)$/fltfnc.obj				\
         $(SLO)$/mieclip.obj				\
         $(SLO)$/fltdlg.obj				\
+        $(SLO)$/fltlst.obj				\
         $(SLO)$/helper.obj
 
 SRCFILES =\
