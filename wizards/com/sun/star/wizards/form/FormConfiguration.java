@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormConfiguration.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $  $Date: 2004-10-27 13:33:48 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 13:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,10 +110,10 @@ public class FormConfiguration {
                               new Object[] {UIConsts.INTEGERS[8], "HID:34421", sSelectManually, new Integer(97), new Integer(26), ISubFormStep, new Short(curtabindex++), new Integer(160)});
         optOnExistingRelation = CurUnoDialog.insertRadioButton("optOnExistingRelation", STOGGLESTEPS, this,
                             new String[] {"Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-                            new Object[] {Boolean.FALSE, UIConsts.INTEGERS[8], "HID:34422", sOnExistingRelation, new Integer(103), new Integer(43), ISubFormStep, new Short(curtabindex++), new Integer(160)});
+                            new Object[] {Boolean.FALSE, UIConsts.INTEGERS[8], "HID:34422", sOnExistingRelation, new Integer(107), new Integer(43), ISubFormStep, new Short(curtabindex++), new Integer(160)});
         optSelectManually = CurUnoDialog.insertRadioButton("optSelectManually", STOGGLESTEPS, this,
                             new String[] {"Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
-                            new Object[] {Boolean.FALSE, UIConsts.INTEGERS[8], "HID:34423", sOnManualRelation, new Integer(103), new Integer(99), new Short((short)1), ISubFormStep, new Short(curtabindex++), new Integer(160)});
+                            new Object[] {Boolean.FALSE, UIConsts.INTEGERS[8], "HID:34423", sOnManualRelation, new Integer(107), new Integer(99), new Short((short)1), ISubFormStep, new Short(curtabindex++), new Integer(160)});
         lblRelations = CurUnoDialog.insertLabel("lblSelectRelation",
                             new String[] {"Enabled", "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
                             new Object[] {Boolean.FALSE, new Integer(19), sSelectRelation, Boolean.TRUE, new Integer(119), new Integer(56), ISubFormStep, new Short(curtabindex++), new Integer(80)});

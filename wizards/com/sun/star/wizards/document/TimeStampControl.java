@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TimeStampControl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $  $Date: 2004-10-27 13:32:45 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 13:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,8 @@ public class TimeStampControl extends DatabaseControl {
         xShapes.add(oTimeControl.xShape);
         xShapeGroup = _oFormHandler.xShapeGrouper.group(xShapes);
         xShape = (XShape) UnoRuntime.queryInterface(XShape.class, xShapeGroup);
+        nreldatewidth = 1.0/((double)getSize().Width/(double)nDateWidth);
+        nreltimewidth = 1.0 - nreldatewidth;
     }
 
 
@@ -182,8 +184,9 @@ public class TimeStampControl extends DatabaseControl {
     }
 
 
-
-
+    public int getControlType() {
+        return FormHandler.SODATETIMECONTROL;
+    }
 }
 
 
