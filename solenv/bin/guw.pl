@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: guw.pl,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2003-12-01 16:17:29 $
+#   last change: $Author: hr $ $Date: 2004-02-04 12:36:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,8 +112,9 @@ sub WinFormat {
     chomp( $d2 = qx{cygpath -w "$d1"} ) ;
     $variable =~ s/$d1/$d2/ ;
   }
-  if ( $variable =~ /\A(-\w)[\'\"]?((?:\/[\w\.\- ~]+)+\/?)[\'\"]?\Z/ ) { # Include paths (sometimes with "/" at the end)
+  if ( $variable =~ /\A(-\w(?:[\w\.]+=)?)[\'\"]?((?:\/[\w\.\- ~]+)+\/?)[\'\"]?\Z/ ) { # Include paths (sometimes with "/" at the end)
     # This regex: option -> $1, filename without quotes -> $2
+    # option may be of the form -X<path> or -X<something>=<path>
     if ( defined $debug ) { print(STDERR "WinFormat:\ninclude path:\n$variable\n");};
     $d1_prefix = $1;
     $d1 = $2;
