@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2001-06-11 10:28:31 $
+ *  last change: $Author: os $ $Date: 2001-06-12 12:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,111 +473,6 @@ ModelessDialog RID_SVXDLG_RUBY
             "Top" ;
             "Bottom" ;
         };
-    StringList [ language_user1 ] =
-    {
-            < "Oben" ;
-        < "Unten" ;
-    };
-    StringList [ english_us ] =
-    {
-            < "Top" ;
-        < "Bottom" ;
-    };
-    StringList [ portuguese ] =
-    {
-            < "para cima" ;
-        < "Base" ;
-    };
-    StringList [ russian ] =
-    {
-            < "Ñâåðõó" ;
-        < "Ñíèçó" ;
-    };
-    StringList [ greek ] =
-    {
-            < "ðÜíù" ;
-        < "êÜôù" ;
-    };
-    StringList [ dutch ] =
-    {
-            < "Boven" ;
-        < "onder" ;
-    };
-    StringList [ french ] =
-    {
-            < "En haut" ;
-        < "En bas" ;
-    };
-    StringList [ spanish ] =
-    {
-            < "Arriba" ;
-        < "Abajo" ;
-    };
-    StringList [ finnish ] =
-    {
-            < "Ylhäällä" ;
-        < "pohjalla" ;
-    };
-    StringList [ italian ] =
-    {
-            < "Alto" ;
-        < "Sotto" ;
-    };
-    StringList [ danish ] =
-    {
-            < "Top" ;
-        < "Nede" ;
-    };
-    StringList [ swedish ] =
-    {
-            < "Uppe" ;
-        < "Nere" ;
-    };
-    StringList [ polish ] =
-    {
-            < "Na górze" ;
-        < "Na dole" ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
-            < "Oben" ;
-        < "Unten" ;
-    };
-    StringList [ japanese ] =
-    {
-            < "ã" ;
-        < "‰º" ;
-    };
-    StringList [ korean ] =
-    {
-            < "À§¿¡" ;
-        < "¾Æ·¡" ;
-    };
-    StringList [ chinese_simplified ] =
-    {
-            < "ÉÏ·½" ;
-        < "ÏÂ·½" ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "¦V¤W" ;
-        < "¦V¤U" ;
-    };
-    StringList [ turkish ] =
-    {
-            < "Yukarý" ;
-        < "Aþaðý" ;
-    };
-    StringList [ arabic ] =
-    {
-            < "ÃÚáì" ;
-        < "ÃÓÝá" ;
-    };
-    StringList [ catalan ] =
-    {
-            < "Oben" ;
-        < "Unten" ;
-    };
     };
     FixedText FT_CHAR_STYLE
     {
