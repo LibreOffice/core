@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1par.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 class Ww1Shell : public SwFltShell
 {
 public:
-    Ww1Shell(SwDoc&, SwPaM&, BOOL bNew, ULONG nFieldFlags);
+    Ww1Shell(SwDoc&, SwPaM&, const String& rBaseURL, BOOL bNew, ULONG nFieldFlags);
 };
 
 
