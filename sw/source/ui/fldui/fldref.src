@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldref.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:55:34 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ TabPage TP_FLD_REF
         Text [ portuguese_brazilian ] = "~Tipo" ;
         Text [ portuguese ] = "Tipo de ~campo" ;
         Text [ finnish ] = "~Tyyppi" ;
-        Text [ danish ] = "Felttype" ;
+        Text [ danish ] = "~Type" ;
         Text [ french ] = "~Type de champ" ;
         Text [ swedish ] = "~F�lttyp" ;
         Text [ dutch ] = "~Veldtype" ;
@@ -104,6 +104,8 @@ TabPage TP_FLD_REF
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
         Text[ slovak ] = "~Typ";
+        Text[ hungarian ] = "~Típus";
+        Text[ slovenian ] = "~Vrsta";
     };
     ListBox LB_REFTYPE
     {
@@ -147,6 +149,8 @@ TabPage TP_FLD_REF
         Text[ hebrew ] = "~Auswahl";
         Text[ hindi ] = "चुना~व";
         Text[ slovak ] = "Výb~er";
+        Text[ hungarian ] = "~Kijelölés";
+        Text[ slovenian ] = "~Izbor";
     };
     ListBox LB_REFSELECTION
     {
@@ -166,7 +170,7 @@ TabPage TP_FLD_REF
         Text [ english_us ] = "F~ormat" ;
         Text [ portuguese_brazilian ] = "F~ormato" ;
         Text [ swedish ] = "F~ormat" ;
-        Text [ danish ] = "Format" ;
+        Text [ danish ] = "~Format" ;
         Text [ italian ] = "F~ormato" ;
         Text [ spanish ] = "F~ormato" ;
         Text [ french ] = "F~ormat" ;
@@ -189,6 +193,8 @@ TabPage TP_FLD_REF
         Text[ hebrew ] = "F~ormat";
         Text[ hindi ] = "र~चना";
         Text[ slovak ] = "F~ormát";
+        Text[ hungarian ] = "~Formátum";
+        Text[ slovenian ] = "O~blika";
     };
     ListBox LB_REFFORMAT
     {
@@ -209,7 +215,7 @@ TabPage TP_FLD_REF
         Text [ english_us ] = "Na~me" ;
         Text [ portuguese_brazilian ] = "No~me" ;
         Text [ swedish ] = "Na~mn" ;
-        Text [ danish ] = "Navn" ;
+        Text [ danish ] = "Na~vn" ;
         Text [ italian ] = "No~me" ;
         Text [ spanish ] = "No~mbre" ;
         Text [ french ] = "Nom" ;
@@ -232,6 +238,8 @@ TabPage TP_FLD_REF
         Text[ hebrew ] = "Na~me";
         Text[ hindi ] = "ना~म";
         Text[ slovak ] = "Ná~zov";
+        Text[ hungarian ] = "~Név";
+        Text[ slovenian ] = "I~me";
     };
     Edit ED_REFNAME
     {
@@ -252,7 +260,7 @@ TabPage TP_FLD_REF
         Text [ portuguese_brazilian ] = "~Valor" ;
         Text [ portuguese ] = "Valor" ;
         Text [ finnish ] = "~Arvo" ;
-        Text [ danish ] = "V�rdi" ;
+        Text [ danish ] = "~V�rdi" ;
         Text [ french ] = "~Valeur" ;
         Text [ swedish ] = "~V�rde" ;
         Text [ dutch ] = "~Waarde" ;
@@ -276,6 +284,8 @@ TabPage TP_FLD_REF
         Text[ hebrew ] = "~Wert";
         Text[ hindi ] = "~मूल्य";
         Text[ slovak ] = "Ho~dnota";
+        Text[ hungarian ] = "É~rték";
+        Text[ slovenian ] = "~Vrednost";
     };
     Edit ED_REFVALUE
     {
@@ -296,7 +306,7 @@ TabPage TP_FLD_REF
         Text [ spanish ] = "Marcas de texto" ;
         Text [ french ] = "Rep�res de texte" ;
         Text [ swedish ] = "Bokm�rken" ;
-        Text [ danish ] = "Tekstmarkeringer" ;
+        Text [ danish ] = "Bogm�rker" ;
         Text [ portuguese ] = "Marcadores de texto" ;
         Text [ portuguese_brazilian ] = "Marcadores" ;
         Text[ chinese_simplified ] = "书签";
@@ -316,6 +326,8 @@ TabPage TP_FLD_REF
         Text[ hebrew ] = "Textmarken";
         Text[ hindi ] = "पृष्ठसंकेत";
         Text[ slovak ] = "Záložky";
+        Text[ hungarian ] = "Könyvjelzők";
+        Text[ slovenian ] = "Zaznamki";
     };
     String STR_REFFOOTNOTE
     {
@@ -348,6 +360,8 @@ TabPage TP_FLD_REF
         Text[ hebrew ] = "‮הערות שוליים‬";
         Text[ hindi ] = "पृष्ठ के नीचे की टीका";
         Text[ slovak ] = "Poznámky pod čiarou";
+        Text[ hungarian ] = "Lábjegyzetek";
+        Text[ slovenian ] = "Sprotne opombe";
     };
     String STR_REFENDNOTE
     {
@@ -356,7 +370,7 @@ TabPage TP_FLD_REF
         Text [ english_us ] = "Endnotes" ;
         Text [ portuguese_brazilian ] = "Notas de Fim" ;
         Text [ swedish ] = "Slutnoter" ;
-        Text [ danish ] = "Slutnote" ;
+        Text [ danish ] = "Slutnoter" ;
         Text [ italian ] = "Note di chiusura" ;
         Text [ spanish ] = "Notas finales" ;
         Text [ french ] = "Notes de fin" ;
@@ -379,11 +393,13 @@ TabPage TP_FLD_REF
         Text[ hebrew ] = "Endnoten";
         Text[ hindi ] = "अंतिम टीका";
         Text[ slovak ] = "Vysvetlivky";
+        Text[ hungarian ] = "Végjegyzetek";
+        Text[ slovenian ] = "Končne opombe";
     };
     Text [ english_us ] = "References" ;
     Text [ portuguese_brazilian ] = "Refer�ncias" ;
     Text [ swedish ] = "Referenser" ;
-    Text [ danish ] = "Referencer" ;
+    Text [ danish ] = "Henvisninger" ;
     Text [ italian ] = "Riferimenti" ;
     Text [ spanish ] = "Referencias" ;
     Text [ french ] = "R�f�rences" ;
@@ -406,37 +422,6 @@ TabPage TP_FLD_REF
     Text[ hebrew ] = "Referenzen";
     Text[ hindi ] = "रेफरेन्स";
     Text[ slovak ] = "Odkazy";
+    Text[ hungarian ] = "Hivatkozások";
+    Text[ slovenian ] = "Sklici";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
