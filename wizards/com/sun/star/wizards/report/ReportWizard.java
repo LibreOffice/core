@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 14:00:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,10 @@ import java.util.Vector;
 
 import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.VclWindowPeerAttribute;
+import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XTextListener;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.awt.XReschedule;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.WrappedTargetException;
@@ -73,6 +75,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.wizards.ui.*;
@@ -282,7 +285,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         CurReportDocument.xProgressBar.setValue(50);
         CurGroupFieldHandler = new GroupFieldHandler(CurReportDocument, this);
         CurReportDocument.xProgressBar.setValue(60);
-        CurSortingComponent = new SortingComponent(this, SOSORTPAGE, 95, 30, 210, 34345);
+        CurSortingComponent = new SortingComponent(this, SOSORTPAGE, 95, 30, 210, 34346);
         CurReportDocument.xProgressBar.setValue(70);
         CurReportLayouter = new ReportLayouter(CurReportDocument, this);
         CurReportDocument.xProgressBar.setValue(80);
