@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellManager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-28 16:33:16 $
+ *  last change: $Author: rt $ $Date: 2005-02-04 14:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #endif
 #include "ViewShellCache.hxx"
 #include "Window.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
 
 #include <sfx2/dispatch.hxx>
 
@@ -463,6 +466,7 @@ void ViewShellManager::Implementation::DeactivateViewShell (const ViewShell* pSh
         UpdateLock aLocker (*this);
 
         ViewShell* pViewShell = aI->mpViewShell;
+        mrBase.GetDocShell()->Disconnect(pViewShell);
         pViewShell->GetObjectBarManager().Clear();
         maActiveViewShells.erase (aI);
         pViewShell->GetActiveWindow()->RemoveEventListener(
