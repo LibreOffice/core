@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:23:44 $
+ *  last change: $Author: oj $ $Date: 2001-04-11 10:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,22 +186,26 @@ using namespace ::com::sun::star::awt;
 #define HTML_META_SDENDNOTE     11
 #define HTML_META_CONTENT_TYPE  12
 
-static HTMLOptionEnum __READONLY_DATA aHTMLMetaNameTable[] =
+const HTMLOptionEnum* getOptions()
 {
-    { sHTML_META_author,        HTML_META_AUTHOR        },
-    { sHTML_META_changed,       HTML_META_CHANGED       },
-    { sHTML_META_changedby,     HTML_META_CHANGEDBY     },
-    { sHTML_META_classification,HTML_META_CLASSIFICATION},
-    { sHTML_META_content_type,  HTML_META_CONTENT_TYPE  },
-    { sHTML_META_created,       HTML_META_CREATED       },
-    { sHTML_META_description,   HTML_META_DESCRIPTION   },
-    { sHTML_META_keywords,      HTML_META_KEYWORDS      },
-    { sHTML_META_generator,     HTML_META_GENERATOR     },
-    { sHTML_META_refresh,       HTML_META_REFRESH       },
-    { sHTML_META_sdendnote,     HTML_META_SDENDNOTE     },
-    { sHTML_META_sdfootnote,    HTML_META_SDFOOTNOTE    },
-    { 0,                        0                       }
-};
+    static HTMLOptionEnum __READONLY_DATA aHTMLMetaNameTable[] =
+    {
+        { sHTML_META_author,        HTML_META_AUTHOR        },
+        { sHTML_META_changed,       HTML_META_CHANGED       },
+        { sHTML_META_changedby,     HTML_META_CHANGEDBY     },
+        { sHTML_META_classification,HTML_META_CLASSIFICATION},
+        { sHTML_META_content_type,  HTML_META_CONTENT_TYPE  },
+        { sHTML_META_created,       HTML_META_CREATED       },
+        { sHTML_META_description,   HTML_META_DESCRIPTION   },
+        { sHTML_META_keywords,      HTML_META_KEYWORDS      },
+        { sHTML_META_generator,     HTML_META_GENERATOR     },
+        { sHTML_META_refresh,       HTML_META_REFRESH       },
+        { sHTML_META_sdendnote,     HTML_META_SDENDNOTE     },
+        { sHTML_META_sdfootnote,    HTML_META_SDFOOTNOTE    },
+        { 0,                        0                       }
+    };
+    return aHTMLMetaNameTable;
+}
 
 // ==========================================================================
 DBG_NAME(OHTMLReader);
@@ -710,7 +714,7 @@ void OHTMLReader::setTextEncoding()
         {
         case HTML_O_HTTPEQUIV:
             aName = pOption->GetString();
-            pOption->GetEnum( nAction, aHTMLMetaNameTable );
+            pOption->GetEnum( nAction, getOptions() );
             bHTTPEquiv = TRUE;
             break;
         case HTML_O_CONTENT:
