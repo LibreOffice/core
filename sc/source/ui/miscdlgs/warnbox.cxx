@@ -2,9 +2,9 @@
  *
  *  $RCSfile: warnbox.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-11 10:55:11 $
+ *  last change: $Author: nn $ $Date: 2002-07-16 13:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ sal_Int16 ScCbWarningBox::Execute()
     sal_Int16 nRet = (GetStyle() & WB_DEF_YES) ? RET_YES : RET_NO;
     if( IsDialogEnabled() )
     {
-        sal_Int16 nRet = WarningBox::Execute();
+        nRet = WarningBox::Execute();
         if( GetCheckBoxState() )
             DisableDialog();
     }
