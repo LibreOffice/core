@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selglos.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:57:00 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,19 +72,8 @@ ModalDialog DLG_SEL_GLOS
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 220 , 100 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? AutoText einfügen : AutoText einf³gen */
-    Text = "AutoText einfügen" ;
-    Text [ ENGLISH ] = "Insert AutoText" ;
-    Text [ norwegian ] = "Insert AutoText" ;
-    Text [ italian ] = "Inserisci testo automatico" ;
-    Text [ portuguese_brazilian ] = "Inserir AutoTexto" ;
-    Text [ portuguese ] = "Inserir AutoTexto" ;
-    Text [ finnish ] = "Lisää automaattinen teksti" ;
-    Text [ danish ] = "Indsæt AutoTekst" ;
-    Text [ french ] = "Insérer un AutoTexte" ;
-    Text [ swedish ] = "Infoga AutoText" ;
-    Text [ dutch ] = "AutoTekst invoegen" ;
-    Text [ spanish ] = "Insertar Texto automático" ;
-    Text [ english_us ] = "Insert AutoText" ;
+    Text [ de ] = "AutoText einfügen" ;
+    Text [ en-US ] = "Insert AutoText" ;
     Moveable = TRUE ;
     OKButton BT_OK
     {
@@ -110,37 +99,9 @@ ModalDialog DLG_SEL_GLOS
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 152 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? AutoTexte zum Kürzel  : AutoTexte zum K³rzel  */
-        Text = "AutoTexte zum Kürzel " ;
-        Text [ ENGLISH ] = "Entries for Short Name " ;
-        Text [ norwegian ] = "Entries for Short Name " ;
-        Text [ italian ] = "Testo automatico per la sigla " ;
-        Text [ portuguese_brazilian ] = "AutoTextos para atalho" ;
-        Text [ portuguese ] = "AutoTexto para abreviatura" ;
-        Text [ finnish ] = "Pikavalikoiden automaattiset tekstit " ;
-        Text [ danish ] = "AutoTekster til genvej " ;
-        Text [ french ] = "AutoTextes pour raccourci " ;
-        Text [ swedish ] = "AutoText till genvägen " ;
-        Text [ dutch ] = "AutoTekst voor afkortingen" ;
-        Text [ spanish ] = "Texto automático para la abreviatura " ;
-        Text [ english_us ] = "AutoTexts for shortcut " ;
-        Text[ chinese_simplified ] = "è‡ªåŠ¨å›¾æ–‡é›†çš„ç¼©å†™ ";
-        Text[ russian ] = "Àâòîòåêñò äëÿ ñîêğàùåíèÿ";
-        Text[ polish ] = "Autotekst skrótu";
-        Text[ japanese ] = "ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆå…¥åŠ›æ”¯æ´ ";
-        Text[ chinese_traditional ] = "è‡ªå‹•åœ–æ–‡é›†çš„ç¸®å¯« ";
-        Text[ arabic ] = "äÕ ÊáŞÇÆí ááÇÎÊÕÇÑ ";
-        Text[ greek ] = "Áõôüìáôá êåßìåíá ãéá óõíôüìåõóç ";
-        Text[ korean ] = "ìë™ í…ìŠ¤íŠ¸ ë°”ë¡œ ê°€ê¸° ";
-        Text[ turkish ] = "Kısayollar için otomatik metinler";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "AutoText per nom curt  ";
-        Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´à¸ªà¸³à¸«à¸£à¸±à¸šà¹€à¸›à¹‡à¸™à¸—à¸²à¸‡à¸¥à¸±à¸” ";
-        Text[ czech ] = "AutomatickÃ© texty pro zkratku ";
-        Text[ hebrew ] = "AutoTexte zum KÃ¼rzel";
-        Text[ hindi ] = "à¤¸à¤°à¤²à¤µà¤¿à¤§à¤¿ à¤•à¥‡à¤²à¤¿à¤ à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤¢à¤‚à¤— à¤¸à¥‡ à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ ";
-        Text[ slovak ] = "AutomatickÃ© texty pre skratku";
-        Text[ hungarian ] = "SzÃ¶veg-o-mata a gyorsbillentyÅ±hÃ¶z ";
-        Text[ slovenian ] = "Samobesedilo za bliÅ¾njico";
+        Text [ de ] = "AutoTexte zum Kürzel " ;
+        Text [ en-US ] = "AutoTexts for shortcut " ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_GLOS
     {
@@ -150,24 +111,7 @@ ModalDialog DLG_SEL_GLOS
         TabStop = TRUE ;
         AutoHScroll = TRUE ;
     };
-    Text[ chinese_simplified ] = "æ’å…¥è‡ªåŠ¨å›¾æ–‡é›†";
-    Text[ russian ] = "Âñòàâèòü àâòîòåêñò";
-    Text[ polish ] = "Wstaw autotekst";
-    Text[ japanese ] = "å…¥åŠ›æ”¯æ´ã®æŒ¿å…¥";
-    Text[ chinese_traditional ] = "æ’å…¥è‡ªå‹•åœ–æ–‡é›†";
-    Text[ arabic ] = "ÅÏÑÇÌ äÕ ÊáŞÇÆí";
-    Text[ greek ] = "ÅéóáãùãŞ áõôüìáôïõ êåéìİíïõ";
-    Text[ korean ] = "ìë™ í…ìŠ¤íŠ¸ ì‚½ì…";
-    Text[ turkish ] = "Otomatik metin ekle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insereix AutoText";
-    Text[ thai ] = "à¹à¸—à¸£à¸à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-    Text[ czech ] = "VloÅ¾it automatickÃ½ text";
-    Text[ hebrew ] = "AutoText einfÃ¼gen";
-    Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤¢à¤‚à¤— à¤¸à¥‡ à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤œà¥‹à¤¡à¤¼à¥‹";
-    Text[ slovak ] = "VloÅ¾iÅ¥ automatickÃ½ text";
-    Text[ hungarian ] = "FelvÃ©tel szÃ¶veg-o-matÃ¡ba";
-    Text[ slovenian ] = "Vstavi samobesedilo";
+    Text [ x-comment ] = " ";
 };
 
 
