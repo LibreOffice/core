@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-04 14:18:55 $
+ *  last change: $Author: rt $ $Date: 2005-02-07 16:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,15 @@ void PresentationViewShell::FinishInitialization (
 }
 
 
+SvxRuler* PresentationViewShell::CreateHRuler(::sd::Window* pWin, BOOL bIsFirst)
+{
+    return NULL;
+}
+
+SvxRuler* PresentationViewShell::CreateVRuler(::sd::Window* pWin)
+{
+    return NULL;
+}
 
 
 void PresentationViewShell::Activate( BOOL bIsMDIActivate )
