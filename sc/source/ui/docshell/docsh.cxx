@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 13:55:25 $
+ *  last change: $Author: sab $ $Date: 2000-12-08 14:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,6 +695,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
             ScXMLImportWrapper aImport( aDocument, rMedium );
             bRet = aImport.Import();
+            UpdateLinks();
             if ( bRet )
             {
                 // don't prevent establishing of listeners anymore
