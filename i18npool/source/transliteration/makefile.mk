@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.3 $
+#*  $Revision: 1.4 $
 #*
-#*  last change: $Author: khong $ $Date: 2002-03-30 09:24:46 $
+#*  last change: $Author: rt $ $Date: 2003-04-08 16:05:37 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -82,7 +82,6 @@ SLOFILES=   \
                         $(SLO)$/transliteration_OneToOne.obj \
                         $(SLO)$/transliteration_Ignore.obj \
                         $(SLO)$/transliteration_Numeric.obj \
-                        $(SLO)$/oneToOneMapping.obj \
                         $(SLO)$/hiraganaToKatakana.obj \
                         $(SLO)$/katakanaToHiragana.obj \
                         $(SLO)$/ignoreKana.obj \
