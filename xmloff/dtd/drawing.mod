@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.66 2001-07-24 11:23:13 cl Exp $
+	$Id: drawing.mod,v 1.67 2001-07-31 11:00:01 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -606,7 +606,7 @@
 <!ATTLIST draw:object %zindex;>
 <!ATTLIST draw:object draw:id %draw-shape-id;>
 <!ATTLIST draw:object draw:layer %layerName; #IMPLIED>
-<!ATTLIST draw:object draw:notify-on-change-of-table %string; #IMPLIED>
+<!ATTLIST draw:object draw:notify-on-update-of-ranges %string; #IMPLIED>
 
 <!ELEMENT draw:object-ole (office:binary-data?|office:events?|draw:image-map?|svg:desc?|draw:contour-polygon?|draw:contour-path?|draw:thumbnail?)>
 <!ATTLIST draw:object-ole draw:class-id CDATA #IMPLIED>
