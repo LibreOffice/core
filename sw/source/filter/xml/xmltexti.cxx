@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:28:05 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,7 +599,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
         return xPropSet;
 
     SvStorageRef pStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE);
-    SvFactory *pPlugInFactory = SvFactory::GetDefaultPlugInFactory();
+    SvFactory *pPlugInFactory = (SvFactory*) SvPlugInObject::ClassFactory();
     SvPlugInObjectRef xPlugin = &pPlugInFactory->CreateAndInit( *pPlugInFactory, pStor );
 
     xPlugin->EnableSetModified( FALSE );
