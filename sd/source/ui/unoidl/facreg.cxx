@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-16 08:12:31 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,14 @@
 using namespace rtl;
 using namespace com::sun::star;
 
+extern uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance( const uno::Reference< lang::XMultiServiceFactory > & _rxFactory );
+extern OUString SdDrawingDocument_getImplementationName() throw( uno::RuntimeException );
+extern uno::Sequence< OUString > SAL_CALL SdDrawingDocument_getSupportedServiceNames() throw( uno::RuntimeException );
+
+extern uno::Reference< uno::XInterface > SAL_CALL SdPresentationDocument_createInstance( const uno::Reference< lang::XMultiServiceFactory > & _rxFactory );
+extern OUString SdPresentationDocument_getImplementationName() throw( uno::RuntimeException );
+extern uno::Sequence< OUString > SAL_CALL SdPresentationDocument_getSupportedServiceNames() throw( uno::RuntimeException );
+
 extern uno::Reference< uno::XInterface > SAL_CALL SdHtmlOptionsDialog_CreateInstance( const uno::Reference< lang::XMultiServiceFactory > & _rxFactory );
 extern OUString SdHtmlOptionsDialog_getImplementationName() throw( uno::RuntimeException );
 extern uno::Sequence< OUString > SAL_CALL SdHtmlOptionsDialog_getSupportedServiceNames() throw( uno::RuntimeException );
@@ -108,6 +116,8 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             registry::XRegistryKey *pKey = reinterpret_cast< registry::XRegistryKey * >( pRegistryKey );
 
             writeInfo( pKey, SdHtmlOptionsDialog_getImplementationName(), SdHtmlOptionsDialog_getSupportedServiceNames() );
+            writeInfo( pKey, SdDrawingDocument_getImplementationName(), SdDrawingDocument_getSupportedServiceNames() );
+            writeInfo( pKey, SdPresentationDocument_getImplementationName(), SdPresentationDocument_getSupportedServiceNames() );
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -135,6 +145,22 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                 SdHtmlOptionsDialog_CreateInstance,
                 SdHtmlOptionsDialog_getSupportedServiceNames() );
         }
+        else if( SdDrawingDocument_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SdDrawingDocument_getImplementationName(),
+                SdDrawingDocument_createInstance,
+                SdDrawingDocument_getSupportedServiceNames() );
+        }
+        else if( SdPresentationDocument_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SdPresentationDocument_getImplementationName(),
+                SdPresentationDocument_createInstance,
+                SdPresentationDocument_getSupportedServiceNames() );
+        }
+
+
         if( xFactory.is())
         {
             xFactory->acquire();
