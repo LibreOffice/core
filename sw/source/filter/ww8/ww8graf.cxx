@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 12:07:14 $
+ *  last change: $Author: khz $ $Date: 2000-11-03 09:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2146,15 +2146,20 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
 {
     if( pRecord )
     {
-        UINT32 nXAlign = pRecord->nXAlign; // abs. Position, Left,  Centered,  Right,  Inside, Outside
-        UINT32 nYAlign = pRecord->nYAlign; // abs. Position, Top,   Centered,  Bottom, Inside, Outside
+        // nXAlign - abs. Position, Left,  Centered,  Right,  Inside, Outside
+        // nYAlign - abs. Position, Top,   Centered,  Bottom, Inside, Outside
 
-        UINT32 nXRelTo = pRecord->nXRelTo; // Page printable area, Page,  Column,    Character
-        UINT32 nYRelTo = pRecord->nYRelTo; // Page printable area, Page,  Paragraph, Line
+        // nXRelTo - Page printable area, Page,  Column,    Character
+        // nYRelTo - Page printable area, Page,  Paragraph, Line
+
+        const int nCntXAlign = 6;
+        const int nCntYAlign = 6;
+
+        const int nCntRelTo  = 4;
 
 /*
         // our anchor settings
-        RndStdIds __READONLY_DATA aAnchorTab[] = {
+        static const RndStdIds aAnchorTab[] = {
             FLY_AT_CNTNT,   // Frame bound to paragraph
             FLY_IN_CNTNT,   //             to character
             FLY_PAGE,       //             to page
@@ -2164,7 +2169,7 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
 */
 
         // horizontal Adjustment
-        SwHoriOrient __READONLY_DATA aHoriOriTab[] = {
+        static const SwHoriOrient aHoriOriTab[ nCntXAlign ] = {
             HORI_NONE,      // Value of nXPos defined RelPos directly.
 
             HORI_LEFT,      // automatical adjustment
@@ -2177,7 +2182,7 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
 
 
         // vertical Adjustment
-        SwVertOrient __READONLY_DATA aVertOriTab[] = {
+        static const SwVertOrient aVertOriTab[ nCntYAlign ] = {
             VERT_NONE,          // Value of nXPos defined RelPos directly.
             VERT_TOP,           // automatical adjustment
             VERT_CENTER,        // automatical adjustment
@@ -2187,7 +2192,7 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
         };
 
         // Adjustment is relative to...
-        SwRelationOrient __READONLY_DATA aRelOriTab[] = {
+        static const SwRelationOrient aRelOriTab[ nCntRelTo ] = {
             REL_PG_PRTAREA, // Page printable area, when bound to page. identical with PRTAREA
             REL_PG_FRAME,   // Page,                when bound to page. identical with FRAME
 //          FRAME,          // Paragraph printable area
@@ -2200,6 +2205,12 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
 //          REL_FRM_RIGHT,  // in right paragraph-border
         };
 
+
+        UINT16 nXAlign = nCntXAlign > pRecord->nXAlign ? pRecord->nXAlign : 1;
+        UINT16 nYAlign = nCntYAlign > pRecord->nYAlign ? pRecord->nYAlign : 1;
+
+        UINT16 nXRelTo = nCntRelTo > pRecord->nXRelTo ? pRecord->nXRelTo : 1;
+        UINT16 nYRelTo = nCntRelTo > pRecord->nYRelTo ? pRecord->nYRelTo : 1;
 
         RndStdIds        eAnchor;
         SwHoriOrient     eHoriOri;
@@ -3014,11 +3025,16 @@ void SwWW8ImplReader::GrafikDtor()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.3 2000-10-30 12:07:14 aw Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.4 2000-11-03 09:35:25 khz Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/10/30 12:07:14  aw
+      change SdrObjects to use SfxItemSet instead of SfxSetItems.
+      Removed TakeAttributes() and SetAttributes(), new ItemSet
+      modification methods (GetItem[Set], SetItem[Set], ClearItem,...)
+
       Revision 1.2  2000/10/16 10:35:05  khz
       read extended WW9-Frame-Alignment (stored in Escher record 0xF122)
 
