@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-07 16:33:36 $
+ *  last change: $Author: ka $ $Date: 2001-03-08 13:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,7 +621,7 @@ sal_Bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjec
         xStm->Read( aSeq.getArray(),  nLen );
 
         if( nLen && ( SotExchange::GetFormat( rFlavor ) == SOT_FORMAT_STRING ) )
-            maAny <<= ::rtl::OUString( (const sal_Char*) aSeq.getConstArray(), nLen, gsl_getSystemTextEncoding() );
+            maAny <<= ::rtl::OUString( (const sal_Char*) aSeq.getConstArray(), nLen - 1, gsl_getSystemTextEncoding() );
         else
             maAny <<= aSeq;
     }
