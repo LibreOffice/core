@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2002-08-02 20:12:19 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ Window RID_SCDLG_NAVIGATOR
         Text[ korean ] = "단";
         Text[ turkish ] = "S�tun";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "COLUMN";
+        Text[ catalan ] = "Columna";
         Text[ thai ] = "คอลัมน์";
     };
     SpinField ED_COL
@@ -303,7 +303,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Dokument";
-        QuickHelpText[ catalan ] = "Documento";
+        QuickHelpText[ catalan ] = "Document";
         QuickHelpText[ finnish ] = "Asiakirja";
         QuickHelpText[ thai ] = "Document";
     };
@@ -981,7 +981,7 @@ String SCSTR_CONTENT_DBAREA
     Text[ korean ] = "데이터베이스 영역";
     Text[ turkish ] = "Veritaban� alanlar�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "�rees de la base de dades";
+    Text[ catalan ] = "�rees de la base de dades";
     Text[ finnish ] = "Tietokanta-alueet";
     Text[ thai ] = "ช่วงฐานข้อมูล";
 };
@@ -1097,7 +1097,7 @@ String SCSTR_CONTENT_AREALINK
     Text[ korean ] = "링크된 영역";
     Text[ turkish ] = "Ba�lant�l� alanlar";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "�rees enlla�ades";
+    Text[ catalan ] = "�rees enlla�ades";
     Text[ finnish ] = "Linkitetyt alueet";
     Text[ thai ] = "พื้นที่เชื่อมโยง";
 };
