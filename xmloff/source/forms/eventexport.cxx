@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventexport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-27 17:44:27 $
+ *  last change: $Author: fs $ $Date: 2001-09-04 10:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,13 +111,17 @@ namespace xmloff
 
             sLocalMacroName = pEvents->ScriptCode;
             sLibrary = ::rtl::OUString();
-            if ( 0 == pEvents->ScriptType.compareToAscii( "StarBasic" ) )
+            if ( 0 == pEvents->ScriptType.compareToAscii( EVENT_STARBASIC ) )
             {   // for StarBasic, the library name is part of the ScriptCode
                 sal_Int32 nPrefixLen = sLocalMacroName.indexOf( ':' );
                 DBG_ASSERT( 0 <= nPrefixLen, "OEventDescriptorMapper::OEventDescriptorMapper: invalid script code prefix!" );
                 if ( 0 <= nPrefixLen )
                 {
+                    // the export handler for StarBasic expects "StarOffice", not "application" for application modules ...
                     sLibrary = sLocalMacroName.copy( 0, nPrefixLen );
+                    if ( sLibrary.equalsAscii( EVENT_APPLICATION ) )
+                        sLibrary = EVENT_STAROFFICE;
+
                     sLocalMacroName = sLocalMacroName.copy( nPrefixLen + 1 );
                 }
             }
@@ -188,6 +192,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/08/27 17:44:27  fs
+ *  #91537# corrected evaluation of macro names for StarBasic script ebents
+ *
  *  Revision 1.2  2001/08/27 16:56:33  fs
  *  #91537# export a library attribute when exporting a StarBasic script event descriptor
  *

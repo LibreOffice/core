@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventimport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-27 16:55:44 $
+ *  last change: $Author: fs $ $Date: 2001-09-04 10:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,11 @@ namespace xmloff
                     pEventDescription->Value >>= sLibrary;
             }
 
-            if ( 0 == pTranslated->ScriptType.compareToAscii( "StarBasic" ) )
+            if ( 0 == pTranslated->ScriptType.compareToAscii( EVENT_STARBASIC ) )
             {
+                if ( 0 == sLibrary.compareToAscii( EVENT_STAROFFICE ) )
+                    sLibrary = EVENT_APPLICATION;
+
                 // for StarBasic, the library is prepended
                 sal_Unicode cLibSeparator = ':';
                 sLibrary += ::rtl::OUString( &cLibSeparator, 1 );
@@ -193,6 +196,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/08/27 16:55:44  fs
+ *  #91537# recognize the library attribute when reading events
+ *
  *  Revision 1.2  2001/03/16 14:36:39  sab
  *  did the required change (move of extract.hxx form cppuhelper to comphelper)
  *
