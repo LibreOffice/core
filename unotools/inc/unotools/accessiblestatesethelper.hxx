@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-27 09:06:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:47:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #define _UTL_ACCESSIBLESTATESETHELPER_HXX_
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESSTATESET_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleStateSet.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESSTATESET_HPP_
+#include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
@@ -106,7 +106,7 @@ namespace utl
 */
 class AccessibleStateSetHelper
     :   public cppu::WeakImplHelper1<
-        ::drafts::com::sun::star::accessibility::XAccessibleStateSet
+        ::com::sun::star::accessibility::XAccessibleStateSet
         >
 {
 public:
