@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: abi $ $Date: 2001-01-23 10:37:49 $
+ *  last change: $Author: kso $ $Date: 2001-02-01 13:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2618,7 +2618,7 @@ shell::ensuredir( const rtl::OUString& rUnqPath )
             if ( ( nError == osl::FileBase::E_ACCES ) &&
                  ( aPath.getLength() == 6 ) &&
                  ( aPath[ aPath.getLength() - 1 ] == sal_Unicode( ':' ) ) )
-                return true;
+                continue;
 
             return false;
         }
