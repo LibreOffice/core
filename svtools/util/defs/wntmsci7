@@ -13914,3 +13914,4 @@ WriteJPEG
 ?setControlProperty@OControlAccess@svt@@QAEXABVOUString@rtl@@0ABVAny@uno@star@sun@com@@@Z
 ?setLabel@OControlAccess@svt@@QAEXFABVOUString@rtl@@@Z
 ?setValue@OControlAccess@svt@@QAEXFFABVAny@uno@star@sun@com@@@Z
+?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Sequence@UProperty@beans@star@sun@com@@@2345@@Z
