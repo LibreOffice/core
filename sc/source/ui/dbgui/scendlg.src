@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:44:43 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ greek ] = "ÅìöÜíéóç ðëáéóßïõ óôï";
         Text[ korean ] = "°æ°è¼± Ç¥½Ã";
         Text[ turkish ] = "Çerçeve rengi";
+        Text[ catalan ] = "Mostrar borde en";
     };
     ListBox LB_COLOR
     {
@@ -176,6 +177,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ greek ] = "Åêôýðùóç ðëáéóßïõ";
         Text[ korean ] = "ÇÁ·¹ÀÓ  ÀÎ¼â";
         Text[ turkish ] = "Çerçeveyi yazdýr";
+        Text[ catalan ] = "Imprimir borde";
     };
     CheckBox CB_TWOWAY
     {
@@ -203,6 +205,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ korean ] = "µÇµ¹·Á º¹»ç";
         Text[ turkish ] = "Geri kopyala";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Actualizar escenario con valores modificados";
     };
     CheckBox CB_ATTRIB
     {
@@ -230,6 +233,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ korean ] = "¼Ó¼º";
         Text[ turkish ] = "Öznitelik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Atributos";
     };
     CheckBox CB_VALUE
     {
@@ -257,6 +261,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ korean ] = "°ª¸¸ º¹»ç";
         Text[ turkish ] = "Yalnýzca deðerleri kopyala";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Copiar solo valores";
     };
     CheckBox CB_COPYALL
     {
@@ -283,6 +288,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ korean ] = "ÀüÃ¼ ½ÃÆ® º¹»ç";
         Text[ turkish ] = "Tablonun tümünü kopyala";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Copiar toda la hoja";
     };
     String STR_EDIT
     {
@@ -307,6 +313,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ korean ] = "½Ã³ª¸®¿À ÆíÁý";
         Text[ turkish ] = "Senaryoyu düzenle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Editar escenario";
     };
     String STR_CREATEDBY
     {
@@ -333,6 +340,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ korean ] = "·Î ¸¸µé±â";
         Text[ turkish ] = "Yazan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Creado por";
     };
     String STR_ON
     {
@@ -359,6 +367,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ korean ] = "À§Ä¡";
         Text[ turkish ] = "tarih:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "en";
     };
     GroupBox GB_NAME
     {
@@ -385,6 +394,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ korean ] = "½Ã³ª¸®¿À ÀÌ¸§";
         Text[ turkish ] = "Senaryonun adý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nombre del escenario";
     };
     GroupBox GB_COMMENT
     {
@@ -411,6 +421,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ korean ] = "ÁÖ¼®";
         Text[ turkish ] = "Açýklama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Comentario";
     };
     GroupBox GB_OPTIONS
     {
@@ -437,6 +448,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ korean ] = "¼³Á¤";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Configuración";
     };
     Text[ chinese_simplified ] = "½¨Á¢·½°¸";
     Text[ russian ] = "Ñîçäàòü ñöåíàðèé";
@@ -448,4 +460,5 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     Text[ korean ] = "½Ã³ª¸®¿À ¸¸µé±â";
     Text[ turkish ] = "Senaryo oluþtur";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Crear escenario";
 };
