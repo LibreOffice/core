@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NativeConnection.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-18 07:14:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:57:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,8 @@
 package com.sun.star.beans;
 
 import com.sun.star.connection.XConnection;
-
+/* @deprecated
+ */
 /* package */ class NativeConnection
     implements XConnection
 {
