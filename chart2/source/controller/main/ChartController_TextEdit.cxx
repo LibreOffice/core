@@ -46,7 +46,7 @@ void ChartController::StartTextEdit()
 {
     //the first marked object will be edited
 
-    SdrObject* pTextObj = m_pDrawViewWrapper->GetTextEditObject();
+    SdrObject* pTextObj = m_pDrawViewWrapper->getTextEditObject();
     if(!pTextObj)
         return;
 
@@ -83,7 +83,7 @@ void ChartController::StartTextEdit()
 bool ChartController::EndTextEdit()
 {
     m_pDrawViewWrapper->EndTextEdit();
-    SdrObject* pTextObject = m_pDrawViewWrapper->GetTextEditObject();
+    SdrObject* pTextObject = m_pDrawViewWrapper->getTextEditObject();
     if(!pTextObject)
         return false;
 
