@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.68 $
+#   $Revision: 1.69 $
 #
-#   last change: $Author: rt $ $Date: 2004-06-07 09:34:09 $
+#   last change: $Author: hjs $ $Date: 2004-06-07 13:41:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.68 $ ';
+$id_str = ' $Revision: 1.69 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -111,7 +111,7 @@ $module             = 0;            # module name
 $base_dir           = 0;            # path to module base directory
 $dlst_file          = 0;            # path to d.lst
 @ilst_file          = ();           # array of pathes to image lists
-$ilst_ext           = 'ilst';      # extension of image lists
+$ilst_ext           = 'ilst2';      # extension of image lists
 $umask              = 22;           # default file/directory creation mask
 $dest               = 0;            # optional destination path
 $common_build       = 0;            # do we have common trees?

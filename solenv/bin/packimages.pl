@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: packimages.pl,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2004-05-27 15:04:22 $
+#   last change: $Author: hjs $ $Date: 2004-06-07 13:41:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,7 @@ my $extra_verbose;           # be extra verbose
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.3 $ ';
+my $id_str = ' $Revision: 1.4 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -148,7 +148,7 @@ sub parse_options
 
 sub get_image_lists
 {
-    my @image_lists = glob("$imagelist_path/*.ilst");
+    my @image_lists = glob("$imagelist_path/*.ilst2");
 
     if ( !@image_lists ) {
         print_error("can't find any image lists in '$imagelist_path'", 3);
