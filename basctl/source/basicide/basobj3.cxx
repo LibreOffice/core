@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-01 11:36:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -891,6 +891,8 @@ void BasicIDE::InvalidateDebuggerSlots()
     rBindings.Update( SID_BASICSTEPOUT );
     rBindings.Invalidate( SID_BASICIDE_TOGGLEBRKPNT );
     rBindings.Update( SID_BASICIDE_TOGGLEBRKPNT );
+    rBindings.Invalidate( SID_BASICIDE_MANAGEBRKPNTS );
+    rBindings.Update( SID_BASICIDE_MANAGEBRKPNTS );
     rBindings.Invalidate( SID_BASICIDE_STAT_POS );
     rBindings.Update( SID_BASICIDE_STAT_POS );
 }
