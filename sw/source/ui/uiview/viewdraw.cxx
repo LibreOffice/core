@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-10-25 13:09:21 $
+ *  last change: $Author: os $ $Date: 2002-12-09 11:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,6 +346,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     };
     GetViewFrame()->GetBindings().Invalidate(aInval);
 
+    BOOL bEndTextEdit = TRUE;
     if (pFuncPtr)
     {
         if (GetDrawFuncPtr())
@@ -372,6 +373,17 @@ void SwView::ExecDraw(SfxRequest& rReq)
                 SetDrawFuncPtr(NULL);
                 LeaveDrawCreate();
                 pWrtShell->EnterStdMode();
+                SdrView *pSdrView = pWrtShell->GetDrawView();
+                const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+                sal_uInt32 nCount = rMarkList.GetMarkCount();
+                if(rMarkList.GetMarkCount() == 1 &&
+                        (SID_DRAW_TEXT == nSlotId || SID_DRAW_TEXT_VERTICAL == nSlotId ||
+                            SID_DRAW_TEXT_MARQUEE == nSlotId ))
+                {
+                    SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+                    BeginTextEdit(pObj);
+                    bEndTextEdit = FALSE;
+                }
             }
         }
     }
@@ -381,7 +393,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
             pWrtShell->EnterSelFrmMode(NULL);
     }
 
-    if (pSdrView && pSdrView->IsTextEdit())
+    if(bEndTextEdit && pSdrView && pSdrView->IsTextEdit())
         pSdrView->EndTextEdit( sal_True );
 
     AttrChangedNotify(pWrtShell);
