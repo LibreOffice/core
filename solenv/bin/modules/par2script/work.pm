@@ -2,9 +2,9 @@
 #
 #   $RCSfile: work.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-29 11:46:35 $
+#   last change: $Author: rt $ $Date: 2004-02-10 14:30:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -180,7 +180,7 @@ sub make_complete_pathes_for_parfiles
 
 sub put_item_into_collector
 {
-    my ( $item, $parfile, $collector, $parfilename ) = @_;
+    my ( $item, $parfile, $collector ) = @_;
 
     my $include = 0;
 
@@ -505,12 +505,10 @@ sub set_scriptversion_into_installation_object
 
 sub collect_all_items
 {
-    my ($parfiles) = @_;
+    my ($parfile) = @_;
 
     my @setupscript = ();
     my $setupscript = \@setupscript;
-
-    my %allitemshash = ();
 
     for ( my $i = 0; $i <= $#par2script::globals::allitems; $i++ )
     {
@@ -519,11 +517,7 @@ sub collect_all_items
         my @itemcollector = ();
         my $itemcollector = \@itemcollector;
 
-        for ( my $j = 0; $j <= $#{$parfiles}; $j++ )
-        {
-            my $parfile = par2script::files::read_file(${$parfiles}[$j]);
-            put_item_into_collector($oneitem, $parfile, $itemcollector, ${$parfiles}[$j]);
-        }
+        put_item_into_collector($oneitem, $parfile, $itemcollector);
 
         # testing uniqueness of each gid
 
@@ -626,15 +620,19 @@ sub add_definitionblock_into_script
         }
     }
 
-    $insertline = $insertline + 2;
-
     if ( $insertline != -1 )
     {
+        $insertline = $insertline + 2;
         # inserting an empty line at the end of the block if required
         if (!(${$newblock}[$#{$newblock}] =~ /^\s*$/)) { push(@{$newblock}, "\n"); }
         # inserting the new block
         splice( @{$script}, $insertline, 0, @{$newblock} );
     }
+    else
+    {
+        die "ERROR: Could not include definition block. Found no definition of $gid!\n";
+    }
+
 }
 
 ############################################
@@ -650,7 +648,7 @@ sub remove_definitionblock_from_script
 
     for ( my $i = 0; $i <= $#{$script}; $i++ )
     {
-        if ( ${$script}[$i] =~ /^\s*\w+\s+$gid\s*$/ )
+        if ( ${$script}[$i] =~ /^\s*\w+\s+$gid\s*$/i )
         {
             $startline = $i;
             last;
@@ -659,16 +657,16 @@ sub remove_definitionblock_from_script
 
     if ( $startline != -1 )
     {
-        while (! ( ${$script}[$startline] =~ /^\s*End\s*$/i ) )
+        my $endline = $startline;
+
+        while (! ( ${$script}[$endline] =~ /^\s*End\s*$/i ) )
         {
-            splice(@{$script}, $startline, 1);
-            # $startline++; # keeping the number constant!
+            $endline++;
         }
 
-        splice(@{$script}, $startline, 1);  # removing the line "End"
-        splice(@{$script}, $startline, 1);  # removing the next empty line
+        my $blocklength = $endline - $startline + 2;    # "+2" because of endline and emptyline
+        splice(@{$script}, $startline, $blocklength);
     }
-
 }
 
 ############################################
@@ -695,6 +693,41 @@ sub get_value_from_definitionblock
     $value =~ s/\;\s*$//;   # removing ending semicolons
 
     return $value;
+}
+
+##################################################
+# Collecting the content of all par files.
+# Then the files do not need to be opened twice.
+##################################################
+
+sub read_all_parfiles
+{
+    my ($parfiles) = @_;
+
+    my @parfilecontent = ();
+
+    for ( my $i = 0; $i <= $#{$parfiles}; $i++ )
+    {
+        my $parfile = par2script::files::read_file(${$parfiles}[$i]);
+        add_array_into_array(\@parfilecontent, $parfile);
+        push(@parfilecontent, "\n");
+    }
+
+    return \@parfilecontent;
+}
+
+##########################################################
+# Add the content of an array to another array
+##########################################################
+
+sub add_array_into_array
+{
+    my ($basearray, $newarray) = @_;
+
+    for ( my $i = 0; $i <= $#{$newarray}; $i++ )
+    {
+        push(@{$basearray}, ${$newarray}[$i]);
+    }
 }
 
 1;
