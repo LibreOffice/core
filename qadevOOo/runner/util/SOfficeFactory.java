@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SOfficeFactory.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-07 10:41:39 $
+ *  last change:$Date: 2003-02-13 12:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,22 +513,40 @@ public class SOfficeFactory {
     }
 
     public XComponent loadDocument( String fileName )
-                throws com.sun.star.lang.IllegalArgumentException,
-                       com.sun.star.io.IOException,
-                       com.sun.star.uno.Exception {
+                            throws com.sun.star.lang.IllegalArgumentException,
+                               com.sun.star.io.IOException,
+                               com.sun.star.uno.Exception {
 
-        // that noargs thing for load attributes
-        PropertyValue [] szEmptyArgs = new PropertyValue [0];
-        String frameName = "_blank";
+            // that noargs thing for load attributes
+            PropertyValue [] szEmptyArgs = new PropertyValue [0];
+            String frameName = "_blank";
 
-        XComponent oDoc = oCLoader.loadComponentFromURL(
-                    fileName, frameName, 0, szEmptyArgs );
+            XComponent oDoc = oCLoader.loadComponentFromURL(
+                                    fileName, frameName, 0, szEmptyArgs );
 
-        if ( oDoc == null ) {
-            return null;
-        }
+            if ( oDoc == null ) {
+                    return null;
+            }
 
-        return oDoc;
+            return oDoc;
+    }
+
+    public XComponent loadDocument( String fileName , PropertyValue[] Args)
+                            throws com.sun.star.lang.IllegalArgumentException,
+                               com.sun.star.io.IOException,
+                               com.sun.star.uno.Exception {
+
+            // that noargs thing for load attributes
+            String frameName = "_blank";
+
+            XComponent oDoc = oCLoader.loadComponentFromURL(
+                                    fileName, frameName, 0, Args );
+
+            if ( oDoc == null ) {
+                    return null;
+            }
+
+            return oDoc;
     }
 
     public XComponent openDoc(String kind, String frameName)
