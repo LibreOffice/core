@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-27 13:22:50 $
+ *  last change: $Author: bm $ $Date: 2001-03-29 11:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,8 @@ SchXMLChartContext::SchXMLChartContext( SchXMLImportHelper& rImpHelper,
                                         SvXMLImport& rImport, const rtl::OUString& rLocalName ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mrImportHelper( rImpHelper ),
-        mbHasOwnTable( sal_False )
+        mbHasOwnTable( sal_False ),
+        mbHasLegend( sal_False )
 {
     // hide title, subtitle and legend
     uno::Reference< beans::XPropertySet > xProp( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
@@ -507,7 +508,7 @@ void SchXMLChartContext::EndElement()
         xModel->unlockControllers();
 
     // set absolute legend position after (BuildChart!)
-    if( maLegendPos.X != -1 )
+    if( mbHasLegend )
     {
         uno::Reference< drawing::XShape > xLegendShape( xDoc->getLegend(), uno::UNO_QUERY );
         if( xLegendShape.is())
@@ -568,6 +569,7 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
 
         case XML_TOK_CHART_LEGEND:
             pContext = new SchXMLLegendContext( mrImportHelper, GetImport(), rLocalName, maLegendPos );
+            mbHasLegend =sal_True;
             break;
 
         case XML_TOK_CHART_TABLE:
@@ -693,6 +695,11 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
         {
             xDocProp->setPropertyValue( rtl::OUString::createFromAscii( "HasLegend" ), aTrueBool );
             SCH_BUILDCHART( xDoc );
+
+            // initialize position
+            uno::Reference< drawing::XShape > xLegendShape( xDoc->getLegend(), uno::UNO_QUERY );
+            if( xLegendShape.is())
+                mrPosition = xLegendShape->getPosition();
         }
         catch( beans::UnknownPropertyException )
         {
