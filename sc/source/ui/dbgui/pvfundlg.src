@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:21:27 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ korean ] = "¾øÀ½(~N)";
         Text[ turkish ] = "~Yok";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ningún";
     };
     RadioButton BTN_AUTO
     {
@@ -133,6 +134,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ korean ] = "ÀÚµ¿(~A)";
         Text[ turkish ] = "~Otomatik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Automático";
     };
     RadioButton BTN_USER
     {
@@ -162,6 +164,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ(~U)";
         Text[ turkish ] = "~Kullanýcý tanýmlý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Definido por el ~usuario";
     };
     MultiListBox LB_FUNC
     {
@@ -496,6 +499,20 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Suma" ; Default ; > ;
+        < "Cantidad" ; Default ; > ;
+        < "Promedio" ; Default ; > ;
+        < "Máx" ; Default ; > ;
+        < "Mín" ; Default ; > ;
+        < "Producto" ; Default ; > ;
+        < "Cantidad2 (solo números)" ; Default ; > ;
+        < "DesvEst (Muestra)" ; Default ; > ;
+        < "DesvEstP (Población)" ; Default ; > ;
+        < "Varianza (Muestra)" ; Default ; > ;
+        < "Varianzas (Población)" ; Default ; > ;
+    };
     };
     GroupBox GB_FUNC
     {
@@ -528,6 +545,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ arabic ] = "ÅÙåÇÑ ÇáÚäÇÕÑ ÈÏæä ÈíÇäÇÊ";
         Text[ turkish ] = "~Ögeleri veriler olmadan görüntüle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Mostrar elementos sin datos";
     };
     FixedText FT_NAMELABEL
     {
@@ -556,6 +574,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ korean ] = "ÀÌ¸§:";
         Text[ turkish ] = "Ad:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nombre:";
     };
     FixedText FT_NAME
     {
@@ -606,6 +625,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ korean ] = "¼Ò°è";
         Text[ turkish ] = "Ara toplam";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Subtotales";
     };
     String STR_DATAFUNC
     {
@@ -632,6 +652,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ korean ] = "ÇÔ¼ö";
         Text[ turkish ] = "Fonksiyon";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Función";
     };
     Text [ spanish ] = "Campo de datos" ;
     Text [ french ] = "Champ de données" ;
@@ -648,4 +669,5 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     Text[ korean ] = "µ¥ÀÌÅÍ ÇÊµå";
     Text[ turkish ] = "Veri alaný";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo de datos";
 };
