@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-10-31 08:42:52 $
+ *  last change: $Author: os $ $Date: 2002-03-07 10:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -750,6 +750,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
             SfxBindings& rBindings = GetView().GetViewFrame()->GetBindings();
             rBindings.Update(SID_RULER_BORDERS);
             rBindings.Update(SID_ATTR_TABSTOP);
+            rBindings.Update(SID_RULER_BORDERS_VERTICAL);
+            rBindings.Update(SID_ATTR_TABSTOP_VERTICAL);
         }
         break;
         case FN_NUM_FORMAT_TABLE_DLG:
