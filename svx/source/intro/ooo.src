@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ooo.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:46:39 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 18:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 #define OOO_LICENSE "LGPL"
 #define OOO_INTRO "openintro_sun.bmp"
 #else
-//#define OOO_VENDOR "my company"
+#define OOO_VENDOR "my company"
 #define OOO_LICENSE "LGPL"
 #define OOO_INTRO "openintro.bmp"
 #endif
@@ -195,53 +195,63 @@ ModalDialog RID_DEFAULTABOUT
 
 ImageList RID_SVTOOLS_IMAGELIST_BIG
 {
-    Prefix = "lo";
+    Prefix = "lx";
     MASK_COL2
     X_IMAGE_LIST
 };
 
 ImageList RID_SVTOOLS_IMAGELIST_SMALL
 {
-    Prefix = "so";
+    Prefix = "sx";
     MASK_COL2
     X_IMAGE_LIST
 };
 
 ImageList RID_SVTOOLS_IMAGELIST_BIG_HIGHCONTRAST
 {
-    Prefix = "loh";
+    Prefix = "lxh";
     MASK_COL2
     X_IMAGE_LIST
 };
 
 ImageList RID_SVTOOLS_IMAGELIST_SMALL_HIGHCONTRAST
 {
-    Prefix = "soh";
+    Prefix = "sxh";
     MASK_COL2
     X_IMAGE_LIST
 };
 
+#define MASK_COL    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; } ;
+#define IMGLST_IDLST \
+    IdList = {                      \
+        SID_GENERAL_OPTIONS;        \
+        SID_LANGUAGE_OPTIONS;       \
+        SID_INET_DLG;               \
+        SID_SW_EDITOPTIONS;         \
+        SID_SW_ONLINEOPTIONS;       \
+        SID_SC_EDITOPTIONS;         \
+        SID_SD_EDITOPTIONS;         \
+        SID_SD_GRAPHIC_OPTIONS;     \
+        SID_SM_EDITOPTIONS;         \
+        SID_SCH_EDITOPTIONS;        \
+        SID_SB_STARBASEOPTIONS;     \
+        SID_FILTER_DLG;             \
+    };                              \
+    IdCount = {                     \
+        12;                         \
+    };
+
 ImageList RID_IMGLIST_TREEOPT
 {
-    Prefix = "oo";
-    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; } ;
-    IdList = {
-        SID_GENERAL_OPTIONS;
-        SID_LANGUAGE_OPTIONS;
-        SID_INET_DLG;
-        SID_SW_EDITOPTIONS;
-        SID_SW_ONLINEOPTIONS;
-        SID_SC_EDITOPTIONS;
-        SID_SD_EDITOPTIONS;
-        SID_SD_GRAPHIC_OPTIONS;
-        SID_SM_EDITOPTIONS;
-        SID_SCH_EDITOPTIONS;
-        SID_SB_STARBASEOPTIONS;
-        SID_FILTER_DLG;
-    };
-    IdCount = {
-        12;
-        };
+    Prefix = "tr";
+    MASK_COL
+    IMGLST_IDLST
 };
 
+ImageList RID_IMGLIST_TREEOPT_HC
+{
+    Prefix = "trh";
+    MASK_COL
+    IMGLST_IDLST
+};
 
