@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:18:29 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text [ dutch ] = "Volgorde van a~ctivering" ;
             Text[ chinese_simplified ] = "¬÷ªªÀ≥–Ú...";
             Text[ russian ] = "œÓˇ‰ÓÍ ‡ÍÚË‚ËÓ‚‡ÌËˇ";
-            Text[ polish ] = "Kolejno?Ê aktywacji";
+            Text[ polish ] = "KolejnoúÊ aktywacji";
             Text[ japanese ] = "¿Ãﬁµ∞¿ﬁ∞...";
             Text[ chinese_traditional ] = "±“∞ ∂∂ß«...";
             Text[ arabic ] = " — Ì» «· ‰‘Ìÿ...";
@@ -284,7 +284,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text [ dutch ] = "~Eigenschappen" ;
             Text[ chinese_simplified ] = " Ù–‘(~I)";
             Text[ russian ] = "—‚ÓÈÒÚ‚‡";
-            Text[ polish ] = "W≥a?ciwo?ci";
+            Text[ polish ] = "W≥aúciwoúci";
             Text[ japanese ] = "Ãﬂ€ ﬂ√®(~I)";
             Text[ chinese_traditional ] = "ƒ›© (~I)";
             Text[ arabic ] = "Œ’«∆’";
@@ -456,7 +456,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ italian ] = "Casella di ~gruppo";
             Text[ danish ] = "Gruppeboks";
             Text[ swedish ] = "~Grupperingsram";
-            Text[ polish ] = "Pole grupy";
+            Text[ polish ] = "~Ramka grupujπca";
             Text[ portuguese_brazilian ] = "F~rameControl";
             Text[ japanese ] = "∏ﬁŸ∞ÃﬂŒﬁØ∏Ω(~R)";
             Text[ korean ] = "±◊∑Ï π⁄Ω∫(~R)";
@@ -894,7 +894,7 @@ ModalDialog RID_SVXDLG_SETFORM
         Text [ dutch ] = "Pad" ;
         Text[ chinese_simplified ] = "¬∑æ∂";
         Text[ russian ] = "œÛÚ¸";
-        Text[ polish ] = "?cieøka";
+        Text[ polish ] = "åcieøka";
         Text[ japanese ] = " ﬂΩ";
         Text[ chinese_traditional ] = "∏ÙÆ|";
         Text[ arabic ] = "«·„”«—";
@@ -981,3 +981,4 @@ DockingWindow RID_SVX_FMEXPLORER
     Text[ catalan ] = "Navegador de formulario";
     Text[ finnish ] = "Lomakkeen siirtym‰valikko";
 };
+
