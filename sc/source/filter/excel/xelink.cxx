@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xelink.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:03:21 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,6 @@
 #include "scextopt.hxx"
 #endif
 
-#include "root.hxx"
-
 // ============================================================================
 // *** Helper classes ***
 // ============================================================================
@@ -92,16 +90,12 @@
 
 /** This is a base class for any external name (i.e. add-in names or DDE links).
     @descr  Derived classes implement creation and export of the external names. */
-class XclExpExtNameBase : public XclExpRecord
+class XclExpExtNameBase : public XclExpRecord, protected XclExpRoot
 {
 public:
-    /** @param nFlags  The flags to export directly.
-        @param nAddSize  The size of additional data derived classes will write. */
-    explicit            XclExpExtNameBase(
-                            const String& rName,
-                            sal_uInt16 nFlags = 0,
-                            sal_uInt32 nAddSize = 0 );
-
+    /** @param nFlags  The flags to export. */
+    explicit            XclExpExtNameBase( const XclExpRoot& rRoot,
+                            const String& rName, sal_uInt16 nFlags = 0 );
     virtual             ~XclExpExtNameBase();
 
     /** Returns the name string of the external name. */
@@ -110,13 +104,13 @@ public:
 private:
     /** Writes the start of the record that is equal in all EXTERNNAME records and calls WriteAddData(). */
     virtual void        WriteBody( XclExpStream& rStrm );
-
     /** Called to write additional data following the common record contents.
         @descr  Derived classes should overwrite this function to write their data. */
     virtual void        WriteAddData( XclExpStream& rStrm );
 
 private:
-    String              maName;         /// Name of the external name.
+    String              maName;         /// Calc name (title) of the external name.
+    XclExpStringRef     mxName;         /// Excel name (title) of the external name.
     sal_uInt16          mnFlags;        /// Flags for record export.
 };
 
@@ -126,8 +120,7 @@ private:
 class XclExpExtNameAddIn : public XclExpExtNameBase
 {
 public:
-    inline explicit     XclExpExtNameAddIn( const String& rName ) :
-                            XclExpExtNameBase( rName, 0, 4 ) {}
+    explicit            XclExpExtNameAddIn( const XclExpRoot& rRoot, const String& rName );
 
 private:
     /** Writes additional record contents. */
@@ -140,44 +133,32 @@ private:
 class XclExpExtNameDde : public XclExpExtNameBase
 {
 public:
-    explicit            XclExpExtNameDde( const String& rName, sal_uInt16 nFlags );
-
-    /** Inserts result list of a DDE link. */
-    bool                InsertDde(
-                            const XclExpRoot& rRoot,
-                            const String& rApplic,
-                            const String& rTopic,
-                            const String& rItem );
+    explicit            XclExpExtNameDde( const XclExpRoot& rRoot, const String& rName,
+                            sal_uInt16 nFlags, const ScMatrix* pResults = 0 );
 
 private:
     /** Writes additional record contents. */
     virtual void        WriteAddData( XclExpStream& rStrm );
 
 private:
-    typedef ::std::auto_ptr< XclExpCachedMatrix > XclExpCachedMatrixPtr;
-
-    XclExpCachedMatrixPtr mxMatrix;     /// Cached results of the DDE link.
-    sal_uInt32          mnBaseSize;     /// Cached size of base record.
+    typedef ScfRef< XclExpCachedMatrix > XclExpCachedMatRef;
+    XclExpCachedMatRef  mxMatrix;       /// Cached results of the DDE link.
 };
 
 // List of external names =====================================================
 
 /** List of all external names of a sheet. */
-class XclExpExtNameBuffer : XclExpRecordBase
+class XclExpExtNameBuffer : public XclExpRecordBase, protected XclExpRoot
 {
 public:
-    explicit            XclExpExtNameBuffer() : mbHasDde( false ) {}
+    explicit            XclExpExtNameBuffer( const XclExpRoot& rRoot );
 
     /** Inserts an add-in function name
         @return  The 1-based (Excel-like) list index of the name. */
     sal_uInt16          InsertAddIn( const String& rName );
     /** Inserts a DDE link.
         @return  The 1-based (Excel-like) list index of the DDE link. */
-    sal_uInt16          InsertDde(
-                            const XclExpRoot& rRoot,
-                            const String& rApplic,
-                            const String& rTopic,
-                            const String& rItem );
+    sal_uInt16          InsertDde( const String& rApplic, const String& rTopic, const String& rItem );
 
     /** Writes the EXTERNNAME record list. */
     virtual void        Save( XclExpStream& rStrm );
@@ -189,14 +170,12 @@ private:
 private:
     /** Returns the 1-based (Excel-like) list index of the external name or 0, if not found. */
     sal_uInt16          GetIndex( const String& rName ) const;
-
-    /** Appends the external name.
+    /** Appends the passed newly crested external name.
         @return  The 1-based (Excel-like) list index of the appended name. */
-    sal_uInt16          Append( XclExpExtNameRef xName );
+    sal_uInt16          AppendNew( XclExpExtNameBase* pExtName );
 
 private:
     XclExpExtNameList   maNameList;     /// The list with all EXTERNNAME records.
-    bool                mbHasDde;       /// true = contains DDE links.
 };
 
 // Cached external cells ======================================================
@@ -301,68 +280,148 @@ private:
     sal_uInt16          mnSBTab;        /// Referred sheet index in SUPBOOK record.
 };
 
+// External documents (EXTERNSHEET/SUPBOOK), base class =======================
+
+/** Base class for records representing external sheets/documents.
+
+    In BIFF5/BIFF7, this record is the EXTERNSHEET record containing one sheet
+    of the own or an external document. In BIFF8, this record is the SUPBOOK
+    record representing the entire own or external document with all referenced
+    sheets.
+ */
+class XclExpExternSheetBase : public XclExpRecord, protected XclExpRoot
+{
+public:
+    explicit            XclExpExternSheetBase( const XclExpRoot& rRoot,
+                            sal_uInt16 nRecId, sal_uInt32 nRecSize = 0 );
+
+protected:
+    /** Creates and returns the list of EXTERNNAME records. */
+    XclExpExtNameBuffer& GetExtNameBuffer();
+    /** Creates and returns the list of EXTERNNAME records. */
+    void                WriteExtNameBuffer( XclExpStream& rStrm );
+
+private:
+    typedef ScfRef< XclExpExtNameBuffer >   XclExpExtNameBfrRef;
+    XclExpExtNameBfrRef mxExtNameBfr;   /// List of EXTERNNAME records.
+};
+
+// External documents (EXTERNSHEET, BIFF5/BIFF7) ==============================
+
+/** Represents an EXTERNSHEET record containing the URL and sheet name of a sheet.
+    @descr  This class is used up to BIFF7 only, writing a BIFF8 EXTERNSHEET
+        record is implemented directly in the link manager. */
+class XclExpExternSheet : public XclExpExternSheetBase
+{
+public:
+    /** Creates an EXTERNSHEET record containing a special code (i.e. own document or sheet). */
+    explicit            XclExpExternSheet( const XclExpRoot& rRoot, sal_Unicode cCode );
+    /** Creates an EXTERNSHEET record referring to an internal sheet. */
+    explicit            XclExpExternSheet( const XclExpRoot& rRoot, const String& rTabName );
+
+    /** Finds or inserts an EXTERNNAME record for add-ins.
+        @return  The 1-based EXTERNNAME record index; or 0, if the record list is full. */
+    sal_uInt16          InsertAddIn( const String& rName );
+
+    /** Writes the EXTERNSHEET and all EXTERNNAME, XCT and CRN records. */
+    virtual void        Save( XclExpStream& rStrm );
+
+private:
+    /** Initializes the record data with the passed encoded URL. */
+    void                Init( const String& rEncUrl );
+    /** Writes the contents of the EXTERNSHEET  record. */
+    virtual void        WriteBody( XclExpStream& rStrm );
+
+private:
+    XclExpString        maTabName;      /// The name of the sheet.
+};
+
 // External documents (SUPBOOK, BIFF8) ========================================
 
 /** The SUPBOOK record contains data for an external document (URL, sheet names, external values). */
-class XclExpSupbook : public XclExpRecord
+class XclExpSupbook : public XclExpExternSheetBase
 {
 public:
     /** Creates a SUPBOOK record for internal references. */
-    explicit            XclExpSupbook( sal_uInt16 nXclTabCount );
+    explicit            XclExpSupbook( const XclExpRoot& rRoot, sal_uInt16 nXclTabCount );
     /** Creates a SUPBOOK record for add-in functions. */
-    explicit            XclExpSupbook();
+    explicit            XclExpSupbook( const XclExpRoot& rRoot );
     /** Creates a SUPBOOK record for an external document. */
     explicit            XclExpSupbook( const XclExpRoot& rRoot, const String& rUrl );
     /** Creates a SUPBOOK record for a DDE link. */
     explicit            XclExpSupbook( const XclExpRoot& rRoot, const String& rApplic, const String& rTopic );
 
-    /** Returns document URL encoded for Excel. */
-    inline const XclExpString& GetUrlEncoded() const { return maUrlEncoded; }
-    /** Returns the sheet name inside of this SUPBOOK. */
-    const XclExpString* GetTabName( sal_uInt16 nXclTab ) const;
-
     /** Returns true, if this SUPBOOK contains the passed URL of an external document. */
     bool                IsUrlLink( const String& rUrl ) const;
     /** Returns true, if this SUPBOOK contains the passed DDE link. */
     bool                IsDdeLink( const String& rApplic, const String& rTopic ) const;
+    /** Fills the passed reference log entry with the URL and sheet names. */
+    void                FillRefLogEntry( XclExpRefLogEntry& rRefLogEntry,
+                            sal_uInt16 nFirstSBTab, sal_uInt16 nLastSBTab ) const;
 
     /** Stores all cells in the given range in the CRN list of the specified SUPBOOK sheet. */
-    void                StoreCellRange( const XclExpRoot& rRoot, const ScRange& rRange, sal_uInt16 nSBTab );
+    void                StoreCellRange( const ScRange& rRange, sal_uInt16 nSBTab );
 
     /** Inserts a new sheet name into the SUPBOOK and returns the SUPBOOK internal sheet index. */
     sal_uInt16          InsertTabName( const String& rTabName );
     /** Finds or inserts an EXTERNNAME record for add-ins.
-        @return  The 1-based EXTERNNAME record index. */
+        @return  The 1-based EXTERNNAME record index; or 0, if the record list is full. */
     sal_uInt16          InsertAddIn( const String& rName );
     /** Finds or inserts an EXTERNNAME record for DDE links.
-        @return  The 1-based EXTERNNAME record index. */
-    sal_uInt16          InsertDde( const XclExpRoot& rRoot, const String& rItem );
+        @return  The 1-based EXTERNNAME record index; or 0, if the record list is full. */
+    sal_uInt16          InsertDde( const String& rItem );
 
     /** Writes the SUPBOOK and all EXTERNNAME, XCT and CRN records. */
     virtual void        Save( XclExpStream& rStrm );
 
 private:
-    /** Creates and returns the list of EXTERNNAME records. */
-    XclExpExtNameBuffer& GetExtNameBuffer();
+    /** Returns the sheet name inside of this SUPBOOK. */
+    const XclExpString* GetTabName( sal_uInt16 nSBTab ) const;
 
     /** Writes the SUPBOOK record contents. */
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    typedef XclExpRecordList< XclExpXct >           XclExpXctList;
-    typedef XclExpXctList::RecordRefType            XclExpXctRef;
-    typedef ::std::auto_ptr< XclExpExtNameBuffer >  XclExpExtNameBfrPtr;
+    typedef XclExpRecordList< XclExpXct >   XclExpXctList;
+    typedef XclExpXctList::RecordRefType    XclExpXctRef;
 
     XclExpXctList       maXctList;      /// List of XCT records (which contain CRN records).
     String              maUrl;          /// URL of the external document or application name for DDE.
     String              maDdeTopic;     /// Topic of an DDE link.
     XclExpString        maUrlEncoded;   /// Document name encoded for Excel.
-    XclExpExtNameBfrPtr mxExtNameBfr;   /// List of EXTERNNAME records.
     XclSupbookType      meType;         /// Type of this SUPBOOK record.
     sal_uInt16          mnXclTabCount;  /// Number of internal sheets.
 };
 
 // All SUPBOOKS in a document =================================================
+
+/** This struct contains a sheet index range for 3D references.
+    @descr  This reference consists of an index to a SUPBOOK record and indexes
+    to SUPBOOK sheet names. */
+struct XclExpXti
+{
+    sal_uInt16          mnSupbook;      /// Index to SUPBOOK record.
+    sal_uInt16          mnFirstSBTab;   /// Index to the first sheet of the range in the SUPBOOK.
+    sal_uInt16          mnLastSBTab;    /// Index to the last sheet of the range in the SUPBOOK.
+
+    inline explicit     XclExpXti() : mnSupbook( 0 ), mnFirstSBTab( 0 ), mnLastSBTab( 0 ) {}
+    inline explicit     XclExpXti( sal_uInt16 nSupbook, sal_uInt16 nFirstSBTab, sal_uInt16 nLastSBTab ) :
+                            mnSupbook( nSupbook ), mnFirstSBTab( nFirstSBTab ), mnLastSBTab( nLastSBTab ) {}
+
+    /** Writes this XTI structure (inside of the EXTERNSHEET record). */
+    inline void         Save( XclExpStream& rStrm ) const
+                            { rStrm << mnSupbook << mnFirstSBTab << mnLastSBTab; }
+};
+
+inline bool operator==( const XclExpXti& rLeft, const XclExpXti& rRight )
+{
+    return
+        (rLeft.mnSupbook    == rRight.mnSupbook)    &&
+        (rLeft.mnFirstSBTab == rRight.mnFirstSBTab) &&
+        (rLeft.mnLastSBTab  == rRight.mnLastSBTab);
+}
+
+// ----------------------------------------------------------------------------
 
 /** Contains a list of all SUPBOOK records and index arrays of external sheets. */
 class XclExpSupbookBuffer : public XclExpRecordBase, protected XclExpRoot
@@ -370,18 +429,10 @@ class XclExpSupbookBuffer : public XclExpRecordBase, protected XclExpRoot
 public:
     explicit            XclExpSupbookBuffer( const XclExpRoot& rRoot );
 
-    /** Returns the external document URL of the Excel sheet nXclTab. */
-    const XclExpString* GetUrl( sal_uInt16 nXclTab ) const;
-    /** Returns the external sheet name of the Excel sheet nXclTab. */
-    const XclExpString* GetTabName( sal_uInt16 nXclTab ) const;
-
     /** Finds SUPBOOK index and SUPBOOK sheet range from given Excel sheet range.
-        @param rnSupbook  Returns the index of the SUPBOOK record containing the sheet range.
-        @param rnSBTabFirst  Returns the index of the first XTI structure.
-        @param rnSBTabLast  Returns the index of the last XTI structure. */
-    void                GetSBTabRange(
-                            sal_uInt16& rnSupbook, sal_uInt16& rnSBTabFirst, sal_uInt16& rnSBTabLast,
-                            sal_uInt16 nXclFirst, sal_uInt16 nXclLast ) const;
+        @return  An XTI structure containing SUPBOOK and sheet indexes. */
+    XclExpXti           GetXti( sal_uInt16 nFirstXclTab, sal_uInt16 nLastXclTab,
+                            XclExpRefLogEntry* pRefLogEntry = 0 ) const;
 
     /** Stores all cells in the given range in a CRN record list. */
     void                StoreCellRange( const ScRange& rRange );
@@ -389,13 +440,13 @@ public:
     /** Finds or inserts an EXTERNNAME record for an add-in function name.
         @param rnSupbook  Returns the index of the SUPBOOK record which contains the add-in function name.
         @param rnExtName  Returns the 1-based EXTERNNAME record index. */
-    void                InsertAddIn(
+    bool                InsertAddIn(
                             sal_uInt16& rnSupbook, sal_uInt16& rnExtName,
                             const String& rName );
     /** Finds or inserts an EXTERNNAME record for DDE links.
         @param rnSupbook  Returns the index of the SUPBOOK record which contains the DDE link.
         @param rnExtName  Returns the 1-based EXTERNNAME record index. */
-    void                InsertDde(
+    bool                InsertDde(
                             sal_uInt16& rnSupbook, sal_uInt16& rnExtName,
                             const String& rApplic, const String& rTopic, const String& rItem );
 
@@ -407,106 +458,162 @@ private:
     typedef XclExpSupbookList::RecordRefType    XclExpSupbookRef;
 
 private:
-    /** Returns the SUPBOOK record of an Excel sheet. */
-    XclExpSupbookRef    GetSupbook( sal_uInt16 nXclTab ) const;
     /** Searches for the SUPBOOK record containing the passed document URL.
-        @param rnIndex  Returns the list index, if the SUPBOOK exists.
-        @return  The SUPBOOK record or 0, if not found. */
-    XclExpSupbookRef    GetSupbookUrl( sal_uInt16& rnIndex, const String& rUrl ) const;
+        @param rxSupbook  (out-param) Returns a reference to the SUPBOOK record, or 0.
+        @param rnIndex  (out-param) Returns the list index, if the SUPBOOK exists.
+        @return  True, if the SUPBOOK record exists (out-parameters are valid). */
+    bool                GetSupbookUrl( XclExpSupbookRef& rxSupbook, sal_uInt16& rnIndex,
+                            const String& rUrl ) const;
     /** Searches for the SUPBOOK record containing the passed DDE link.
-        @param rnIndex  Returns the list index, if the SUPBOOK exists.
-        @return  The SUPBOOK record or 0, if not found. */
-    XclExpSupbookRef    GetSupbookDde( sal_uInt16& rnIndex, const String& rApplic, const String& rTopic ) const;
+        @param rxSupbook  (out-param) Returns a reference to the SUPBOOK record, or 0.
+        @param rnIndex  (out-param) Returns the list index, if the SUPBOOK exists.
+        @return  True, if the SUPBOOK record exists (out-parameters are valid). */
+    bool                GetSupbookDde( XclExpSupbookRef& rxSupbook, sal_uInt16& rnIndex,
+                            const String& rApplic, const String& rTopic ) const;
 
     /** Appends a new SUPBOOK to the list.
         @return  The list index of the SUPBOOK record. */
     sal_uInt16          Append( XclExpSupbookRef xSupbook );
     /** Creates and appends an external SUPBOOK record from the Calc sheet nScTab. */
-    void                AddExt( SCTAB nScTab );
+    void                AddExtSupbook( SCTAB nScTab );
 
 private:
+    struct XclExpSBIndex
+    {
+        sal_uInt16          mnSupbook;          /// SUPBOOK index for an Excel sheet.
+        sal_uInt16          mnSBTab;            /// Sheet name in SUPBOOK for an Excel sheet.
+        inline void         Set( sal_uInt16 nSupbook, sal_uInt16 nSBTab )
+                                { mnSupbook = nSupbook; mnSBTab = nSBTab; }
+    };
+    typedef ::std::vector< XclExpSBIndex > XclExpSBIndexVec;
+
     XclExpSupbookList   maSupbookList;      /// List of all SUPBOOK records.
-    ScfUInt16Vec        maSBIndexBuffer;    /// SUPBOOK index for each Excel sheet.
-    ScfUInt16Vec        maSBTabBuffer;      /// Sheet name indexes inside of SUPBOOK records.
+    XclExpSBIndexVec    maSBIndexVec;       /// SUPBOOK and sheet name index for each Excel sheet.
+    sal_uInt16          mnOwnDocSB;         /// Index to SUPBOOK for own document.
     sal_uInt16          mnAddInSB;          /// Index to add-in SUPBOOK.
 };
 
 // Export link manager ========================================================
 
-/** This struct contains a sheet index range for 3D references.
-    @descr  This reference consists of an index to a SUPBOOK record and indexes
-    to SUPBOOK sheet names. */
-struct XclExpXti
+/** Abstract base class for implementation classes of the link manager. */
+class XclExpLinkManagerImpl : protected XclExpRoot
 {
-    sal_uInt16          mnSupbook;      /// Index to SUPBOOK record.
-    sal_uInt16          mnSBTabFirst;   /// Index to the first sheet of the range in the SUPBOOK.
-    sal_uInt16          mnSBTabLast;    /// Index to the last sheet of the range in the SUPBOOK.
+public:
+    /** Derived classes search for an EXTSHEET structure for the given Calc sheet range. */
+    virtual void        FindExtSheet( sal_uInt16& rnExtSheet,
+                            sal_uInt16& rnFirstXclTab, sal_uInt16& rnLastXclTab,
+                            SCTAB nFirstScTab, SCTAB nLastScTab,
+                            XclExpRefLogEntry* pRefLogEntry ) = 0;
+    /** Derived classes search for a special EXTERNSHEET index for the own document. */
+    virtual sal_uInt16  FindExtSheet( sal_Unicode cCode ) = 0;
 
-    inline explicit     XclExpXti() : mnSupbook( 0 ), mnSBTabFirst( 0 ), mnSBTabLast( 0 ) {}
-    inline explicit     XclExpXti( sal_uInt16 nSupbook, sal_uInt16 nSBTabFirst, sal_uInt16 nSBTabLast ) :
-                            mnSupbook( nSupbook ), mnSBTabFirst( nSBTabFirst ), mnSBTabLast( nSBTabLast ) {}
+    /** Derived classes store all cells in the given range in a CRN record list. */
+    virtual void        StoreCellRange( const SingleRefData& rRef1, const SingleRefData& rRef2 ) = 0;
 
-    /** Writes this XTI structure (inside of the EXTERNSHEET record). */
-    inline void         Save( XclExpStream& rStrm ) const
-                            { rStrm << mnSupbook << mnSBTabFirst << mnSBTabLast; }
+    /** Derived classes find or insert an EXTERNNAME record for an add-in function name. */
+    virtual bool        InsertAddIn(
+                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
+                            const String& rName ) = 0;
+    /** Derived classes find or insert an EXTERNNAME record for DDE links. */
+    virtual bool        InsertDde(
+                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
+                            const String& rApplic, const String& rTopic, const String& rItem ) = 0;
+
+    /** Derived classes write the entire link table to the passed stream. */
+    virtual void        Save( XclExpStream& rStrm ) = 0;
+
+protected:
+    explicit            XclExpLinkManagerImpl( const XclExpRoot& rRoot );
 };
-
-inline bool operator==( const XclExpXti& rLeft, const XclExpXti& rRight )
-{
-    return
-        (rLeft.mnSupbook    == rRight.mnSupbook)    &&
-        (rLeft.mnSBTabFirst == rRight.mnSBTabFirst) &&
-        (rLeft.mnSBTabLast  == rRight.mnSBTabLast);
-}
 
 // ----------------------------------------------------------------------------
 
-/** Implementation of the link manager. */
-class XclExpLinkManagerImpl : public XclExpRecordBase, protected XclExpRoot
+/** Implementation of the link manager for BIFF5/BIFF7. */
+class XclExpLinkManagerImpl5 : public XclExpLinkManagerImpl
 {
 public:
-    explicit            XclExpLinkManagerImpl( const XclExpRoot& rRoot );
+    explicit            XclExpLinkManagerImpl5( const XclExpRoot& rRoot );
 
-    /** Searches for XTI structure with the given Excel sheet range. Adds new XTI if not found.
-        @return  The list index of the XTI structure. */
-    sal_uInt16          FindXti( sal_uInt16 nXclFirst, sal_uInt16 nXclLast );
+    virtual void        FindExtSheet( sal_uInt16& rnExtSheet,
+                            sal_uInt16& rnFirstXclTab, sal_uInt16& rnLastXclTab,
+                            SCTAB nFirstScTab, SCTAB nLastScTab,
+                            XclExpRefLogEntry* pRefLogEntry );
+    virtual sal_uInt16  FindExtSheet( sal_Unicode cCode );
 
-    /** Returns the external document URL of the specified Excel sheet. */
-    inline const XclExpString* GetUrl( sal_uInt16 nXclTab ) const
-                            { return maSBBuffer.GetUrl( nXclTab ); }
-    /** Returns the external sheet name of the specified Excel sheet. */
-    inline const XclExpString* GetTabName( sal_uInt16 nXclTab ) const
-                            { return maSBBuffer.GetTabName( nXclTab ); }
+    virtual void        StoreCellRange( const SingleRefData& rRef1, const SingleRefData& rRef2 );
 
-    /** Stores all cells in the given range in a CRN record list. */
-    void                StoreCellRange( const SingleRefData& rRef1, const SingleRefData& rRef2 );
-
-    /** Finds or inserts an EXTERNNAME record for an add-in function name.
-        @param rnXti  Returns the index of the XTI structure which contains the add-in function name.
-        @param rnExtName  Returns the 1-based EXTERNNAME record index. */
-    void                InsertAddIn(
-                            sal_uInt16& rnXti, sal_uInt16& rnExtName,
+    virtual bool        InsertAddIn(
+                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
                             const String& rName );
-    /** Finds or inserts an EXTERNNAME record for DDE links.
-        @param rnXti  Returns the index of the XTI structure which contains the DDE link.
-        @param rnExtName  Returns the 1-based EXTERNNAME record index. */
-    bool                InsertDde(
-                            sal_uInt16& rnXti, sal_uInt16& rnExtName,
+    virtual bool        InsertDde(
+                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
                             const String& rApplic, const String& rTopic, const String& rItem );
 
-    /** Writes all SUPBOOK records with their sub records and the trailing EXTERNSHEET record. */
+    virtual void        Save( XclExpStream& rStrm );
+
+private:
+    typedef XclExpRecordList< XclExpExternSheet >   XclExpExtSheetList;
+    typedef XclExpExtSheetList::RecordRefType       XclExpExtSheetRef;
+    typedef ::std::map< SCTAB, sal_uInt16 >         XclExpIntTabMap;
+    typedef ::std::map< sal_Unicode, sal_uInt16 >   XclExpCodeMap;
+
+private:
+    /** Returns the number of EXTERNSHEET records. */
+    sal_uInt16          GetExtSheetCount() const;
+
+    /** Appends an internal EXTERNSHEET record and returns the one-based index. */
+    sal_uInt16          AppendInternal( XclExpExtSheetRef xExtSheet );
+    /** Creates all EXTERNSHEET records for internal sheets on first call. */
+    void                CreateInternal();
+
+    /** Returns the specified internal EXTERNSHEET record. */
+    XclExpExtSheetRef   GetInternal( sal_uInt16 nExtSheet );
+    /** Returns the EXTERNSHEET index of an internal Calc sheet, or a deleted reference. */
+    XclExpExtSheetRef   FindInternal( sal_uInt16& rnExtSheet, sal_uInt16& rnXclTab, SCTAB nScTab );
+    /** Finds or creates the EXTERNSHEET index of an internal special EXTERNSHEET. */
+    XclExpExtSheetRef   FindInternal( sal_uInt16& rnExtSheet, sal_Unicode cCode );
+
+private:
+    XclExpExtSheetList  maExtSheetList;     /// List with EXTERNSHEET records.
+    XclExpIntTabMap     maIntTabMap;        /// Maps internal Calc sheets to EXTERNSHEET records.
+    XclExpCodeMap       maCodeMap;          /// Maps special external codes to EXTERNSHEET records.
+};
+
+// ----------------------------------------------------------------------------
+
+/** Implementation of the link manager for BIFF8. */
+class XclExpLinkManagerImpl8 : public XclExpLinkManagerImpl
+{
+public:
+    explicit            XclExpLinkManagerImpl8( const XclExpRoot& rRoot );
+
+    virtual void        FindExtSheet( sal_uInt16& rnExtSheet,
+                            sal_uInt16& rnFirstXclTab, sal_uInt16& rnLastXclTab,
+                            SCTAB nFirstScTab, SCTAB nLastScTab,
+                            XclExpRefLogEntry* pRefLogEntry );
+    virtual sal_uInt16  FindExtSheet( sal_Unicode cCode );
+
+    virtual void        StoreCellRange( const SingleRefData& rRef1, const SingleRefData& rRef2 );
+
+    virtual bool        InsertAddIn(
+                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
+                            const String& rName );
+    virtual bool        InsertDde(
+                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
+                            const String& rApplic, const String& rTopic, const String& rItem );
+
     virtual void        Save( XclExpStream& rStrm );
 
 private:
     /** Searches for or inserts a new XTI structure.
-        @return  The list index of the XTI structure. */
+        @return  The 0-based list index of the XTI structure. */
     sal_uInt16          InsertXti( const XclExpXti& rXti );
 
 private:
     typedef ::std::vector< XclExpXti > XclExpXtiVec;
 
-    XclExpXtiVec        maXtiVec;       /// List of XTI structures.
     XclExpSupbookBuffer maSBBuffer;     /// List of all SUPBOOK records.
+    XclExpXtiVec        maXtiVec;       /// List of XTI structures for the EXTERNSHEET record.
 };
 
 // ============================================================================
@@ -516,7 +623,7 @@ private:
 // Excel sheet indexes ========================================================
 
 const sal_uInt8 EXC_TABBUF_IGNORE   = 0x01;     /// Sheet will be ignored completely.
-const sal_uInt8 EXC_TABBUF_EXTERN   = 0x02;     /// Sheet is extern linked.
+const sal_uInt8 EXC_TABBUF_EXTERN   = 0x02;     /// Sheet is linked externally.
 const sal_uInt8 EXC_TABBUF_SKIPMASK = 0x0F;     /// Sheet will be skipped, if any flag is set.
 const sal_uInt8 EXC_TABBUF_VISIBLE  = 0x10;     /// Sheet is visible.
 const sal_uInt8 EXC_TABBUF_SELECTED = 0x20;     /// Sheet is selected.
@@ -524,27 +631,27 @@ const sal_uInt8 EXC_TABBUF_SELECTED = 0x20;     /// Sheet is selected.
 // ----------------------------------------------------------------------------
 
 XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
+    XclExpRoot( rRoot ),
     mnScCnt( 0 ),
     mnXclCnt( 0 ),
     mnXclExtCnt( 0 ),
     mnXclCodeCnt( 0 ),
     mnXclSelected( 0 ),
     mnXclActive( 0 ),
-    mnXclFirstVis( 0 ),
-    mbEnableLog( false )
+    mnXclFirstVis( 0 )
 {
-    ScDocument& rDoc = rRoot.GetDoc();
-    ScExtDocOptions& rExtDocOpt = rRoot.GetExtDocOptions();
+    ScDocument& rDoc = GetDoc();
+    ScExtDocOptions& rExtDocOpt = GetExtDocOptions();
 
     mnScCnt = rDoc.GetTableCount();
 
     SCTAB nScTab;
-    SCTAB nScFirstVis = SCTAB_MAX;   // first visible sheet
-    SCTAB nScFirstExp = SCTAB_MAX;   // first exported sheet
+    SCTAB nScFirstVis = SCTAB_INVALID;  // first visible sheet
+    SCTAB nScFirstExp = SCTAB_INVALID;  // first exported sheet
 
     // --- initialize the flags in the index buffer ---
 
-    maTabInfoVec.resize( mnScCnt, ScTabInfoEntry( 0, 0 ) );
+    maTabInfoVec.resize( mnScCnt );
     for( nScTab = 0; nScTab < mnScCnt; ++nScTab )
     {
         // ignored sheets (skipped by export, with invalid Excel sheet index)
@@ -562,11 +669,14 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
         // exported sheets
         else
         {
+            // sheet name
+            rDoc.GetName( nScTab, maTabInfoVec[ nScTab ].maScName );
+
             // remember first exported sheet
-            if( nScFirstExp == SCTAB_MAX )
+            if( nScFirstExp == SCTAB_INVALID )
                nScFirstExp = nScTab;
             // remember first visible exported sheet
-            if( (nScFirstVis == SCTAB_MAX) && rDoc.IsVisible( nScTab ) )
+            if( (nScFirstVis == SCTAB_INVALID) && rDoc.IsVisible( nScTab ) )
                nScFirstVis = nScTab;
 
             // sheet visible (only exported sheets)
@@ -581,11 +691,11 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
     // --- visible/selected sheets ---
 
     // #112908# find first visible exported sheet
-    if( (nScFirstVis == SCTAB_MAX) || !IsExportTab( nScFirstVis ) )
+    if( (nScFirstVis == SCTAB_INVALID) || !IsExportTab( nScFirstVis ) )
     {
         // no exportable visible sheet -> use first exportable sheet
         nScFirstVis = nScFirstExp;
-        if( (nScFirstVis == SCTAB_MAX) || !IsExportTab( nScFirstVis ) )
+        if( (nScFirstVis == SCTAB_INVALID) || !IsExportTab( nScFirstVis ) )
         {
             // no exportable sheet at all -> use active sheet and export it
             nScFirstVis = static_cast<SCTAB>(rExtDocOpt.nActTab);
@@ -613,7 +723,7 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
 
     // --- sorted vectors for index lookup ---
 
-    CalcSortedIndexes( rDoc );
+    CalcSortedIndexes();
 
     // --- VB codenames ---
 
@@ -623,7 +733,7 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
 
 bool XclExpTabInfo::IsExportTab( SCTAB nScTab ) const
 {
-    DBG_ASSERT( nScTab < mnScCnt, "XclExpTabInfo::IsExportTab - sheet out of range" );
+    /*  Check sheet index before to avoid assertion in GetFlag(). */
     return (nScTab < mnScCnt) && !GetFlag( nScTab, EXC_TABBUF_SKIPMASK );
 }
 
@@ -650,52 +760,40 @@ bool XclExpTabInfo::IsActiveTab( SCTAB nScTab ) const
     return GetXclTab( nScTab ) == mnXclActive;
 }
 
+const String& XclExpTabInfo::GetScTabName( SCTAB nScTab ) const
+{
+    DBG_ASSERT( nScTab < mnScCnt, "XclExpTabInfo::IsActiveTab - sheet out of range" );
+    return (nScTab < mnScCnt) ? maTabInfoVec[ nScTab ].maScName : EMPTY_STRING;
+}
+
 sal_uInt16 XclExpTabInfo::GetXclTab( SCTAB nScTab ) const
 {
-    return (nScTab < mnScCnt) ? maTabInfoVec[ nScTab ].first : EXC_EXTSH_DELETED;
+    return (nScTab < mnScCnt) ? maTabInfoVec[ nScTab ].mnXclTab : EXC_TAB_DELETED;
 }
 
 SCTAB XclExpTabInfo::GetRealScTab( SCTAB nSortedScTab ) const
 {
     DBG_ASSERT( nSortedScTab < mnScCnt, "XclExpTabInfo::GetRealScTab - sheet out of range" );
-    return (nSortedScTab < mnScCnt) ? maFromSortedVec[ nSortedScTab ] : SCTAB_MAX;
+    return (nSortedScTab < mnScCnt) ? maFromSortedVec[ nSortedScTab ] : SCTAB_INVALID;
 }
 
 SCTAB XclExpTabInfo::GetSortedScTab( SCTAB nScTab ) const
 {
     DBG_ASSERT( nScTab < mnScCnt, "XclExpTabInfo::GetSortedScTab - sheet out of range" );
-    return (nScTab < mnScCnt) ? maToSortedVec[ nScTab ] : SCTAB_MAX;
-}
-
-void XclExpTabInfo::StartRefLog()
-{
-    maRefLog.clear();
-    mbEnableLog = true;
-}
-
-const XclExpRefLogVec& XclExpTabInfo::EndRefLog()
-{
-    mbEnableLog = false;
-    return maRefLog;
-}
-
-void XclExpTabInfo::AppendTabRef( sal_uInt16 nXclFirst, sal_uInt16 nXclLast )
-{
-    if( mbEnableLog )
-        maRefLog.push_back( XclExpRefLogEntry( nXclFirst, nXclLast ) );
+    return (nScTab < mnScCnt) ? maToSortedVec[ nScTab ] : SCTAB_INVALID;
 }
 
 bool XclExpTabInfo::GetFlag( SCTAB nScTab, sal_uInt8 nFlags ) const
 {
     DBG_ASSERT( nScTab < mnScCnt, "XclExpTabInfo::GetFlag - sheet out of range" );
-    return (nScTab < mnScCnt) && ::get_flag( maTabInfoVec[ nScTab ].second, nFlags );
+    return (nScTab < mnScCnt) && ::get_flag( maTabInfoVec[ nScTab ].mnFlags, nFlags );
 }
 
 void XclExpTabInfo::SetFlag( SCTAB nScTab, sal_uInt8 nFlags, bool bSet )
 {
     DBG_ASSERT( nScTab < mnScCnt, "XclExpTabInfo::SetFlag - sheet out of range" );
     if( nScTab < mnScCnt )
-        ::set_flag( maTabInfoVec[ nScTab ].second, nFlags, bSet );
+        ::set_flag( maTabInfoVec[ nScTab ].mnFlags, nFlags, bSet );
 }
 
 void XclExpTabInfo::CalcXclIndexes()
@@ -708,11 +806,11 @@ void XclExpTabInfo::CalcXclIndexes()
     {
         if( IsExportTab( nScTab ) )
         {
-            maTabInfoVec[ nScTab ].first = nXclTab;
+            maTabInfoVec[ nScTab ].mnXclTab = nXclTab;
             ++nXclTab;
         }
         else
-            maTabInfoVec[ nScTab ].first = EXC_EXTSH_DELETED;
+            maTabInfoVec[ nScTab ].mnXclTab = EXC_TAB_DELETED;
     }
     mnXclCnt = nXclTab;
 
@@ -721,7 +819,7 @@ void XclExpTabInfo::CalcXclIndexes()
     {
         if( IsExternalTab( nScTab ) )
         {
-            maTabInfoVec[ nScTab ].first = nXclTab;
+            maTabInfoVec[ nScTab ].mnXclTab = nXclTab;
             ++nXclTab;
             ++mnXclExtCnt;
         }
@@ -739,8 +837,9 @@ inline bool operator<( const XclExpTabName& rArg1, const XclExpTabName& rArg2 )
     return ScGlobal::pCollator->compareString( rArg1.first, rArg2.first ) == COMPARE_LESS;
 }
 
-void XclExpTabInfo::CalcSortedIndexes( ScDocument& rDoc )
+void XclExpTabInfo::CalcSortedIndexes()
 {
+    ScDocument& rDoc = GetDoc();
     XclExpTabNameVec aVec( mnScCnt );
     SCTAB nScTab;
 
@@ -764,12 +863,16 @@ void XclExpTabInfo::CalcSortedIndexes( ScDocument& rDoc )
 
 // External names =============================================================
 
-XclExpExtNameBase::XclExpExtNameBase( const String& rName, sal_uInt16 nFlags, sal_uInt32 nAddSize ) :
-    XclExpRecord( EXC_ID_EXTERNNAME, rName.Len() + 8 + nAddSize ),
+XclExpExtNameBase::XclExpExtNameBase(
+        const XclExpRoot& rRoot, const String& rName, sal_uInt16 nFlags ) :
+    XclExpRecord( EXC_ID_EXTERNNAME ),
+    XclExpRoot( rRoot ),
     maName( rName ),
+    mxName( XclExpStringHelper::CreateString( rRoot, rName, EXC_STR_8BITLENGTH ) ),
     mnFlags( nFlags )
 {
     DBG_ASSERT( maName.Len() <= 255, "XclExpExtNameBase::XclExpExtNameBase - string too long" );
+    SetRecSize( 6 + mxName->GetSize() );
 }
 
 XclExpExtNameBase::~XclExpExtNameBase()
@@ -780,7 +883,7 @@ void XclExpExtNameBase::WriteBody( XclExpStream& rStrm )
 {
     rStrm   << mnFlags
             << sal_uInt32( 0 )
-            << XclExpString( maName, EXC_STR_8BITLENGTH );
+            << *mxName;
     WriteAddData( rStrm );
 }
 
@@ -790,76 +893,68 @@ void XclExpExtNameBase::WriteAddData( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
+XclExpExtNameAddIn::XclExpExtNameAddIn( const XclExpRoot& rRoot, const String& rName ) :
+    XclExpExtNameBase( rRoot, rName )
+{
+    AddRecSize( 4 );
+}
+
 void XclExpExtNameAddIn::WriteAddData( XclExpStream& rStrm )
 {
-    rStrm << sal_uInt16( 2 ) << sal_uInt16( 0x171C );  // error value 0x17
+    // write a #REF! error formula
+    rStrm << sal_uInt16( 2 ) << EXC_TOKID_ERR << EXC_ERR_REF;
 }
 
 // ----------------------------------------------------------------------------
 
-XclExpExtNameDde::XclExpExtNameDde( const String& rName, sal_uInt16 nFlags ) :
-    XclExpExtNameBase( rName, nFlags ),
-    mnBaseSize( GetRecSize() )
+XclExpExtNameDde::XclExpExtNameDde( const XclExpRoot& rRoot,
+        const String& rName, sal_uInt16 nFlags, const ScMatrix* pResults ) :
+    XclExpExtNameBase( rRoot, rName, nFlags )
 {
-}
-
-bool XclExpExtNameDde::InsertDde(
-        const XclExpRoot& rRoot,
-        const String& rApplic, const String& rTopic, const String& rItem )
-{
-    ScDocument& rDoc = rRoot.GetDoc();
-    USHORT nPos;
-    bool bRet = rDoc.FindDdeLink( rApplic, rTopic, rItem, SC_DDE_IGNOREMODE, nPos );
-    if( bRet )
+    if( pResults )
     {
-        // try to find results, but it is not necessary for success of this func (bRet remains true)
-        if( const ScMatrix* pScMatrix = rDoc.GetDdeLinkResultMatrix( nPos ) )
-        {
-            mxMatrix.reset( new XclExpCachedMatrix( *pScMatrix ) );
-            SetRecSize( mnBaseSize + mxMatrix->GetSize() );
-        }
-        else
-        {
-            mxMatrix.reset();
-            SetRecSize( mnBaseSize );
-        }
+        mxMatrix.reset( new XclExpCachedMatrix( *pResults ) );
+        AddRecSize( mxMatrix->GetSize() );
     }
-    return bRet;
 }
 
 void XclExpExtNameDde::WriteAddData( XclExpStream& rStrm )
 {
-    if( mxMatrix.get() )
+    if( mxMatrix.is() )
         mxMatrix->Save( rStrm );
 }
 
 // List of external names =====================================================
 
+XclExpExtNameBuffer::XclExpExtNameBuffer( const XclExpRoot& rRoot ) :
+    XclExpRoot( rRoot )
+{
+}
+
 sal_uInt16 XclExpExtNameBuffer::InsertAddIn( const String& rName )
 {
     sal_uInt16 nIndex = GetIndex( rName );
-    return nIndex ? nIndex : Append( XclExpExtNameRef( new XclExpExtNameAddIn( rName ) ) );
+    return nIndex ? nIndex : AppendNew( new XclExpExtNameAddIn( GetRoot(), rName ) );
 }
 
 sal_uInt16 XclExpExtNameBuffer::InsertDde(
-        const XclExpRoot& rRoot,
         const String& rApplic, const String& rTopic, const String& rItem )
 {
-    if( !mbHasDde )
-    {
-        Append( XclExpExtNameRef( new XclExpExtNameDde(
-            String( RTL_CONSTASCII_USTRINGPARAM( "StdDocumentName" ) ),
-            EXC_EXTN_EXPDDE_STDDOC ) ) );
-        mbHasDde = true;
-    }
-
     sal_uInt16 nIndex = GetIndex( rItem );
-    if( !nIndex )
+    if( nIndex == 0 )
     {
-        XclExpExtNameDde* pName = new XclExpExtNameDde( rItem, EXC_EXTN_EXPDDE );
-        XclExpExtNameRef xName( pName );
-        if( pName->InsertDde( rRoot, rApplic, rTopic, rItem ) )
-            nIndex = Append( xName );
+        USHORT nPos;
+        if( GetDoc().FindDdeLink( rApplic, rTopic, rItem, SC_DDE_IGNOREMODE, nPos ) )
+        {
+            // create the leading 'StdDocumentName' EXTERNNAME record
+            if( maNameList.Empty() )
+                AppendNew( new XclExpExtNameDde(
+                    GetRoot(), CREATE_STRING( "StdDocumentName" ), EXC_EXTN_EXPDDE_STDDOC ) );
+
+            // try to find DDE result array, but create EXTERNNAME record without them too
+            const ScMatrix* pScMatrix = GetDoc().GetDdeLinkResultMatrix( nPos );
+            nIndex = AppendNew( new XclExpExtNameDde( GetRoot(), rItem, EXC_EXTN_EXPDDE, pScMatrix ) );
+        }
     }
     return nIndex;
 }
@@ -871,16 +966,22 @@ void XclExpExtNameBuffer::Save( XclExpStream& rStrm )
 
 sal_uInt16 XclExpExtNameBuffer::GetIndex( const String& rName ) const
 {
-    for( size_t nNamePos = 0, nNameSize = maNameList.Size(); nNamePos < nNameSize; ++nNamePos )
-        if( maNameList.GetRecord( nNamePos )->GetName() == rName )
-            return ulimit_cast< sal_uInt16 >( nNamePos + 1 );
+    for( size_t nPos = 0, nSize = maNameList.Size(); nPos < nSize; ++nPos )
+        if( maNameList.GetRecord( nPos )->GetName() == rName )
+            return static_cast< sal_uInt16 >( nPos + 1 );
     return 0;
 }
 
-sal_uInt16 XclExpExtNameBuffer::Append( XclExpExtNameRef xName )
+sal_uInt16 XclExpExtNameBuffer::AppendNew( XclExpExtNameBase* pExtName )
 {
-    maNameList.AppendRecord( xName );
-    return ulimit_cast< sal_uInt16 >( maNameList.Size() );
+    XclExpExtNameRef xExtName( pExtName );
+    size_t nSize = maNameList.Size();
+    if( nSize < 0x7FFF )
+    {
+        maNameList.AppendRecord( xExtName );
+        return static_cast< sal_uInt16 >( nSize + 1 );
+    }
+    return 0;
 }
 
 // Cached external cells ======================================================
@@ -922,7 +1023,7 @@ XclExpCrnString::XclExpCrnString( SCCOL nScCol, SCROW nScRow, const String& rTex
     maText( rText )
 {
     // set correct size after maText is initialized
-    SetRecSize( GetRecSize() + maText.GetSize() );
+    AddRecSize( maText.GetSize() );
 }
 
 void XclExpCrnString::WriteAddData( XclExpStream& rStrm )
@@ -1012,24 +1113,90 @@ void XclExpXct::WriteBody( XclExpStream& rStrm )
     rStrm << nCount << mnSBTab;
 }
 
+// External documents (EXTERNSHEET/SUPBOOK), base class =======================
+
+XclExpExternSheetBase::XclExpExternSheetBase( const XclExpRoot& rRoot, sal_uInt16 nRecId, sal_uInt32 nRecSize ) :
+    XclExpRecord( nRecId, nRecSize ),
+    XclExpRoot( rRoot )
+{
+}
+
+XclExpExtNameBuffer& XclExpExternSheetBase::GetExtNameBuffer()
+{
+    if( !mxExtNameBfr )
+        mxExtNameBfr.reset( new XclExpExtNameBuffer( GetRoot() ) );
+    return *mxExtNameBfr;
+}
+
+void XclExpExternSheetBase::WriteExtNameBuffer( XclExpStream& rStrm )
+{
+    if( mxExtNameBfr.is() )
+        mxExtNameBfr->Save( rStrm );
+}
+
+// External documents (EXTERNSHEET, BIFF5/BIFF7) ==============================
+
+XclExpExternSheet::XclExpExternSheet( const XclExpRoot& rRoot, sal_Unicode cCode ) :
+    XclExpExternSheetBase( rRoot, EXC_ID_EXTERNSHEET )
+{
+    Init( String( cCode ) );
+}
+
+XclExpExternSheet::XclExpExternSheet( const XclExpRoot& rRoot, const String& rTabName ) :
+    XclExpExternSheetBase( rRoot, EXC_ID_EXTERNSHEET )
+{
+    // reference to own sheet: \03<sheetname>
+    Init( String( EXC_EXTSH_TABNAME ).Append( rTabName ) );
+}
+
+void XclExpExternSheet::Save( XclExpStream& rStrm )
+{
+    // EXTERNSHEET record
+    XclExpRecord::Save( rStrm );
+    // EXTERNNAME records
+    WriteExtNameBuffer( rStrm );
+}
+
+void XclExpExternSheet::Init( const String& rEncUrl )
+{
+    DBG_ASSERT_BIFF( GetBiff() <= xlBiff7 );
+    maTabName.AssignByte( rEncUrl, GetCharSet(), EXC_STR_8BITLENGTH );
+    SetRecSize( maTabName.GetSize() );
+}
+
+sal_uInt16 XclExpExternSheet::InsertAddIn( const String& rName )
+{
+    return GetExtNameBuffer().InsertAddIn( rName );
+}
+
+void XclExpExternSheet::WriteBody( XclExpStream& rStrm )
+{
+    sal_uInt8 nNameSize = static_cast< sal_uInt8 >( maTabName.Len() );
+    // special case: reference to own sheet (starting with '\03') needs wrong string length
+    if( maTabName.GetChar( 0 ) == EXC_EXTSH_TABNAME )
+        --nNameSize;
+    rStrm << nNameSize;
+    maTabName.WriteBuffer( rStrm );
+}
+
 // External document (SUPBOOK, BIFF8) =========================================
 
-XclExpSupbook::XclExpSupbook( sal_uInt16 nXclTabCount ) :
-    XclExpRecord( EXC_ID_SUPBOOK, 4 ),
+XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, sal_uInt16 nXclTabCount ) :
+    XclExpExternSheetBase( rRoot, EXC_ID_SUPBOOK, 4 ),
     meType( EXC_SBTYPE_SELF ),
     mnXclTabCount( nXclTabCount )
 {
 }
 
-XclExpSupbook::XclExpSupbook() :
-    XclExpRecord( EXC_ID_SUPBOOK, 4 ),
+XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot ) :
+    XclExpExternSheetBase( rRoot, EXC_ID_SUPBOOK, 4 ),
     meType( EXC_SBTYPE_ADDIN ),
     mnXclTabCount( 1 )
 {
 }
 
 XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const String& rUrl ) :
-    XclExpRecord( EXC_ID_SUPBOOK ),
+    XclExpExternSheetBase( rRoot, EXC_ID_SUPBOOK ),
     maUrl( rUrl ),
     maUrlEncoded( XclExpUrlHelper::EncodeUrl( rRoot, rUrl ) ),
     meType( EXC_SBTYPE_EXTERN ),
@@ -1039,7 +1206,7 @@ XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const String& rUrl ) :
 }
 
 XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const String& rApplic, const String& rTopic ) :
-    XclExpRecord( EXC_ID_SUPBOOK ),
+    XclExpExternSheetBase( rRoot, EXC_ID_SUPBOOK, 4 ),
     maUrl( rApplic ),
     maDdeTopic( rTopic ),
     maUrlEncoded( XclExpUrlHelper::EncodeDde( rApplic, rTopic ) ),
@@ -1047,12 +1214,6 @@ XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const String& rApplic, co
     mnXclTabCount( 0 )
 {
     SetRecSize( 2 + maUrlEncoded.GetSize() );
-}
-
-const XclExpString* XclExpSupbook::GetTabName( sal_uInt16 nXclTab ) const
-{
-    const XclExpXctRef xXct = maXctList.GetRecord( nXclTab );
-    return xXct.get() ? &xXct->GetTabName() : 0;
 }
 
 bool XclExpSupbook::IsUrlLink( const String& rUrl ) const
@@ -1065,11 +1226,19 @@ bool XclExpSupbook::IsDdeLink( const String& rApplic, const String& rTopic ) con
     return (meType == EXC_SBTYPE_SPECIAL) && (maUrl == rApplic) && (maDdeTopic == rTopic);
 }
 
-void XclExpSupbook::StoreCellRange( const XclExpRoot& rRoot, const ScRange& rRange, sal_uInt16 nSBTab )
+void XclExpSupbook::FillRefLogEntry( XclExpRefLogEntry& rRefLogEntry,
+        sal_uInt16 nFirstSBTab, sal_uInt16 nLastSBTab ) const
+{
+    rRefLogEntry.mpUrl = maUrlEncoded.IsEmpty() ? 0 : &maUrlEncoded;
+    rRefLogEntry.mpFirstTab = GetTabName( nFirstSBTab );
+    rRefLogEntry.mpLastTab = GetTabName( nLastSBTab );
+}
+
+void XclExpSupbook::StoreCellRange( const ScRange& rRange, sal_uInt16 nSBTab )
 {
     XclExpXctRef xXct = maXctList.GetRecord( nSBTab );
-    if( xXct.get() )
-        xXct->StoreCellRange( rRoot, rRange );
+    if( xXct.is() )
+        xXct->StoreCellRange( GetRoot(), rRange );
 }
 
 sal_uInt16 XclExpSupbook::InsertTabName( const String& rTabName )
@@ -1077,7 +1246,7 @@ sal_uInt16 XclExpSupbook::InsertTabName( const String& rTabName )
     DBG_ASSERT( meType == EXC_SBTYPE_EXTERN, "XclExpSupbook::InsertTabName - don't insert sheet names here" );
     sal_uInt16 nSBTab = ulimit_cast< sal_uInt16 >( maXctList.Size() );
     XclExpXctRef xXct( new XclExpXct( rTabName, nSBTab ) );
-    SetRecSize( GetRecSize() + xXct->GetTabName().GetSize() );
+    AddRecSize( xXct->GetTabName().GetSize() );
     maXctList.AppendRecord( xXct );
     return nSBTab;
 }
@@ -1087,24 +1256,25 @@ sal_uInt16 XclExpSupbook::InsertAddIn( const String& rName )
     return GetExtNameBuffer().InsertAddIn( rName );
 }
 
-sal_uInt16 XclExpSupbook::InsertDde( const XclExpRoot& rRoot, const String& rItem )
+sal_uInt16 XclExpSupbook::InsertDde( const String& rItem )
 {
-    return GetExtNameBuffer().InsertDde( rRoot, maUrl, maDdeTopic, rItem );
-}
-
-XclExpExtNameBuffer& XclExpSupbook::GetExtNameBuffer()
-{
-    if( !mxExtNameBfr.get() )
-        mxExtNameBfr.reset( new XclExpExtNameBuffer );
-    return *mxExtNameBfr;
+    return GetExtNameBuffer().InsertDde( maUrl, maDdeTopic, rItem );
 }
 
 void XclExpSupbook::Save( XclExpStream& rStrm )
 {
+    // SUPBOOK record
     XclExpRecord::Save( rStrm );
+    // XCT record, CRN records
     maXctList.Save( rStrm );
-    if( mxExtNameBfr.get() )
-        mxExtNameBfr->Save( rStrm );
+    // EXTERNNAME records
+    WriteExtNameBuffer( rStrm );
+}
+
+const XclExpString* XclExpSupbook::GetTabName( sal_uInt16 nSBTab ) const
+{
+    const XclExpXctRef xXct = maXctList.GetRecord( nSBTab );
+    return xXct.is() ? &xXct->GetTabName() : 0;
 }
 
 void XclExpSupbook::WriteBody( XclExpStream& rStrm )
@@ -1136,115 +1306,116 @@ void XclExpSupbook::WriteBody( XclExpStream& rStrm )
 
 XclExpSupbookBuffer::XclExpSupbookBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
-    mnAddInSB( 0xFFFF )
+    mnOwnDocSB( SAL_MAX_UINT16 ),
+    mnAddInSB( SAL_MAX_UINT16 )
 {
     XclExpTabInfo& rTabInfo = GetTabInfo();
-
-    SCTAB nScCnt = rTabInfo.GetScTabCount();
     sal_uInt16 nXclCnt = rTabInfo.GetXclTabCount();
+    sal_uInt16 nCodeCnt = rTabInfo.GetXclCodenameCount();
     size_t nCount = nXclCnt + rTabInfo.GetXclExtTabCount();
 
+    DBG_ASSERT( nCount > 0, "XclExpSupbookBuffer::XclExpSupbookBuffer - no sheets to export" );
     if( nCount )
     {
-        maSBIndexBuffer.resize( nCount );
-        maSBTabBuffer.resize( nCount );
+        maSBIndexVec.resize( nCount );
 
         // self-ref SUPBOOK first of list
-        XclExpSupbookRef xSupbook( new XclExpSupbook( ::std::max( nXclCnt, rTabInfo.GetXclCodenameCount() ) ) );
-        sal_uInt16 nSelfSB = Append( xSupbook );
+        XclExpSupbookRef xSupbook( new XclExpSupbook( GetRoot(), ::std::max( nXclCnt, nCodeCnt ) ) );
+        mnOwnDocSB = Append( xSupbook );
         for( sal_uInt16 nXclTab = 0; nXclTab < nXclCnt; ++nXclTab )
-        {
-            maSBIndexBuffer[ nXclTab ] = nSelfSB;
-            maSBTabBuffer[ nXclTab ] = nXclTab;
-        }
+            maSBIndexVec[ nXclTab ].Set( mnOwnDocSB, nXclTab );
 
         // add SUPBOOKs with external references
-        for( SCTAB nScTab = 0; nScTab < nScCnt; ++nScTab )
+        for( SCTAB nScTab = 0, nScCnt = rTabInfo.GetScTabCount(); nScTab < nScCnt; ++nScTab )
             if( rTabInfo.IsExternalTab( nScTab ) )
-                AddExt( nScTab );
+                AddExtSupbook( nScTab );
     }
 }
 
-const XclExpString* XclExpSupbookBuffer::GetUrl( sal_uInt16 nXclTab ) const
+XclExpXti XclExpSupbookBuffer::GetXti( sal_uInt16 nFirstXclTab, sal_uInt16 nLastXclTab,
+        XclExpRefLogEntry* pRefLogEntry ) const
 {
-    const XclExpSupbookRef xSupbook = GetSupbook( nXclTab );
-    const XclExpString* pString = xSupbook.get() ? &xSupbook->GetUrlEncoded() : 0;
-    return (pString && pString->Len()) ? pString : 0;
-}
-
-const XclExpString* XclExpSupbookBuffer::GetTabName( sal_uInt16 nXclTab ) const
-{
-    DBG_ASSERT( nXclTab < maSBTabBuffer.size(), "XclExpSupbookBuffer::GetTabName - out of range" );
-    const XclExpSupbookRef xSupbook = GetSupbook( nXclTab );
-    return xSupbook.get() ? xSupbook->GetTabName( maSBTabBuffer[ nXclTab ] ) : 0;
-}
-
-void XclExpSupbookBuffer::GetSBTabRange(
-        sal_uInt16& rnSupbook, sal_uInt16& rnSBTabFirst, sal_uInt16& rnSBTabLast,
-        sal_uInt16 nXclFirst, sal_uInt16 nXclLast ) const
-{
-    size_t nCount = maSBIndexBuffer.size();
-    if( (nXclFirst < nCount) && (nXclLast < nCount) )
+    XclExpXti aXti;
+    size_t nSize = maSBIndexVec.size();
+    if( (nFirstXclTab < nSize) && (nLastXclTab < nSize) )
     {
-        // external reference
-        rnSupbook = maSBIndexBuffer[ nXclFirst ];
+        // index of the SUPBOOK record
+        aXti.mnSupbook = maSBIndexVec[ nFirstXclTab ].mnSupbook;
 
         // all sheets in the same supbook?
-        bool bConflict = false;
-        for( sal_uInt16 nXclTab = nXclFirst + 1; !bConflict && (nXclTab <= nXclLast); ++nXclTab )
+        bool bSameSB = true;
+        for( sal_uInt16 nXclTab = nFirstXclTab + 1; bSameSB && (nXclTab <= nLastXclTab); ++nXclTab )
         {
-            bConflict = (maSBIndexBuffer[ nXclTab ] != rnSupbook);
-            if( bConflict )
-                nXclLast = nXclTab - 1;
+            bSameSB = maSBIndexVec[ nXclTab ].mnSupbook == aXti.mnSupbook;
+            if( !bSameSB )
+                nLastXclTab = nXclTab - 1;
         }
-        rnSBTabFirst = maSBTabBuffer[ nXclFirst ];
-        rnSBTabLast = maSBTabBuffer[ nXclLast ];
+        aXti.mnFirstSBTab = maSBIndexVec[ nFirstXclTab ].mnSBTab;
+        aXti.mnLastSBTab = maSBIndexVec[ nLastXclTab ].mnSBTab;
+
+        // fill external reference log entry (for change tracking)
+        if( pRefLogEntry )
+        {
+            pRefLogEntry->mnFirstXclTab = nFirstXclTab;
+            pRefLogEntry->mnLastXclTab = nLastXclTab;
+            const XclExpSupbookRef xSupbook = maSupbookList.GetRecord( aXti.mnSupbook );
+            if( xSupbook.is() )
+                xSupbook->FillRefLogEntry( *pRefLogEntry, aXti.mnFirstSBTab, aXti.mnLastSBTab );
+        }
     }
     else
     {
-        // internal reference
-        rnSupbook = 0;
-        rnSBTabFirst = nXclFirst;
-        rnSBTabLast = nXclLast;
+        // special range, i.e. for deleted sheets or add-ins
+        aXti.mnSupbook = mnOwnDocSB;
+        aXti.mnFirstSBTab = nFirstXclTab;
+        aXti.mnLastSBTab = nLastXclTab;
     }
+
+    return aXti;
 }
 
 void XclExpSupbookBuffer::StoreCellRange( const ScRange& rRange )
 {
     sal_uInt16 nXclTab = GetTabInfo().GetXclTab( rRange.aStart.Tab() );
-    DBG_ASSERT( nXclTab < maSBTabBuffer.size(), "XclExpSupbookBuffer::StoreCellRange - out of range" );
-
-    XclExpSupbookRef xSupbook = GetSupbook( nXclTab );
-    if( xSupbook.get() )
-        xSupbook->StoreCellRange( GetRoot(), rRange, maSBTabBuffer[ nXclTab ] );
+    if( nXclTab < maSBIndexVec.size() )
+    {
+        const XclExpSBIndex& rSBIndex = maSBIndexVec[ nXclTab ];
+        XclExpSupbookRef xSupbook = maSupbookList.GetRecord( rSBIndex.mnSupbook );
+        DBG_ASSERT( xSupbook.is(), "XclExpSupbookBuffer::StoreCellRange - missing SUPBOOK record" );
+        if( xSupbook.is() )
+            xSupbook->StoreCellRange( rRange, rSBIndex.mnSBTab );
+    }
 }
 
-void XclExpSupbookBuffer::InsertAddIn( sal_uInt16& rnSupbook, sal_uInt16& rnExtName, const String& rName )
+bool XclExpSupbookBuffer::InsertAddIn(
+        sal_uInt16& rnSupbook, sal_uInt16& rnExtName, const String& rName )
 {
     XclExpSupbookRef xSupbook;
-    if( mnAddInSB == 0xFFFF )
+    if( mnAddInSB == SAL_MAX_UINT16 )
     {
-        xSupbook.reset( new XclExpSupbook );
+        xSupbook.reset( new XclExpSupbook( GetRoot() ) );
         mnAddInSB = Append( xSupbook );
     }
     else
         xSupbook = maSupbookList.GetRecord( mnAddInSB );
-    DBG_ASSERT( xSupbook.get(), "XclExpSupbookBuffer::InsertAddin - missing add-in supbook" );
+    DBG_ASSERT( xSupbook.is(), "XclExpSupbookBuffer::InsertAddin - missing add-in supbook" );
     rnSupbook = mnAddInSB;
     rnExtName = xSupbook->InsertAddIn( rName );
+    return rnExtName > 0;
 }
 
-void XclExpSupbookBuffer::InsertDde(
+bool XclExpSupbookBuffer::InsertDde(
         sal_uInt16& rnSupbook, sal_uInt16& rnExtName,
         const String& rApplic, const String& rTopic, const String& rItem )
 {
-    XclExpSupbookRef xSupbook = GetSupbookDde( rnSupbook, rApplic, rTopic );
-    if( !xSupbook.get() )
+    XclExpSupbookRef xSupbook;
+    if( !GetSupbookDde( xSupbook, rnSupbook, rApplic, rTopic ) )
     {
         xSupbook.reset( new XclExpSupbook( GetRoot(), rApplic, rTopic ) );
         rnSupbook = Append( xSupbook );
     }
-    rnExtName = xSupbook->InsertDde( GetRoot(), rItem );
+    rnExtName = xSupbook->InsertDde( rItem );
+    return rnExtName > 0;
 }
 
 void XclExpSupbookBuffer::Save( XclExpStream& rStrm )
@@ -1252,38 +1423,34 @@ void XclExpSupbookBuffer::Save( XclExpStream& rStrm )
     maSupbookList.Save( rStrm );
 }
 
-XclExpSupbookBuffer::XclExpSupbookRef XclExpSupbookBuffer::GetSupbook( sal_uInt16 nXclTab ) const
-{
-    DBG_ASSERT( nXclTab < maSBIndexBuffer.size(), "XclSupbookList::GetSupbook - out of range" );
-    return maSupbookList.GetRecord( maSBIndexBuffer[ nXclTab ] );
-}
-
-XclExpSupbookBuffer::XclExpSupbookRef XclExpSupbookBuffer::GetSupbookUrl( sal_uInt16& rnIndex, const String& rUrl ) const
+bool XclExpSupbookBuffer::GetSupbookUrl(
+        XclExpSupbookRef& rxSupbook, sal_uInt16& rnIndex, const String& rUrl ) const
 {
     for( size_t nPos = 0, nSize = maSupbookList.Size(); nPos < nSize; ++nPos )
     {
-        XclExpSupbookRef xSupbook = maSupbookList.GetRecord( nPos );
-        if( xSupbook->IsUrlLink( rUrl ) )
+        rxSupbook = maSupbookList.GetRecord( nPos );
+        if( rxSupbook->IsUrlLink( rUrl ) )
         {
             rnIndex = ulimit_cast< sal_uInt16 >( nPos );
-            return xSupbook;
+            return true;
         }
     }
-    return XclExpSupbookRef();
+    return false;
 }
 
-XclExpSupbookBuffer::XclExpSupbookRef XclExpSupbookBuffer::GetSupbookDde( sal_uInt16& rnIndex, const String& rApplic, const String& rTopic ) const
+bool XclExpSupbookBuffer::GetSupbookDde( XclExpSupbookRef& rxSupbook,
+        sal_uInt16& rnIndex, const String& rApplic, const String& rTopic ) const
 {
     for( size_t nPos = 0, nSize = maSupbookList.Size(); nPos < nSize; ++nPos )
     {
-        XclExpSupbookRef xSupbook = maSupbookList.GetRecord( nPos );
-        if( xSupbook->IsDdeLink( rApplic, rTopic ) )
+        rxSupbook = maSupbookList.GetRecord( nPos );
+        if( rxSupbook->IsDdeLink( rApplic, rTopic ) )
         {
             rnIndex = ulimit_cast< sal_uInt16 >( nPos );
-            return xSupbook;
+            return true;
         }
     }
-    return XclExpSupbookRef();
+    return false;
 }
 
 sal_uInt16 XclExpSupbookBuffer::Append( XclExpSupbookRef xSupbook )
@@ -1292,88 +1459,259 @@ sal_uInt16 XclExpSupbookBuffer::Append( XclExpSupbookRef xSupbook )
     return ulimit_cast< sal_uInt16 >( maSupbookList.Size() - 1 );
 }
 
-void XclExpSupbookBuffer::AddExt( SCTAB nScTab )
+void XclExpSupbookBuffer::AddExtSupbook( SCTAB nScTab )
 {
     sal_uInt16 nXclTab = GetTabInfo().GetXclTab( nScTab );
-    DBG_ASSERT( nXclTab < maSBIndexBuffer.size(), "XclExpSupbookBuffer::AddExt - out of range" );
+    DBG_ASSERT( nXclTab < maSBIndexVec.size(), "XclExpSupbookBuffer::AddExtSupbook - out of range" );
 
     // find ext doc name or append new one, save position in maSBIndexBuffer
     const String& rUrl = GetDoc().GetLinkDoc( nScTab );
-    DBG_ASSERT( rUrl.Len(), "XclExpSupbookBuffer::AddExt - missing external linked sheet" );
-    sal_uInt16 nPos = 0;
-    XclExpSupbookRef xSupbook = GetSupbookUrl( nPos, rUrl );
-    if( !xSupbook.get() )
+    DBG_ASSERT( rUrl.Len(), "XclExpSupbookBuffer::AddExtSupbook - missing external linked sheet" );
+    sal_uInt16 nSupbook;
+    XclExpSupbookRef xSupbook;
+    if( !GetSupbookUrl( xSupbook, nSupbook, rUrl ) )
     {
         xSupbook.reset( new XclExpSupbook( GetRoot(), rUrl ) );
-        nPos = Append( xSupbook );
+        nSupbook = Append( xSupbook );
     }
-    maSBIndexBuffer[ nXclTab ] = nPos;
 
-    // append new sheet name, save position in maSBTabBuffer
-    maSBTabBuffer[ nXclTab ] = xSupbook->InsertTabName( GetDoc().GetLinkTab( nScTab ) );
+    // append new sheet name, save SUPBOOK and sheet position in maSBIndexVec
+    maSBIndexVec[ nXclTab ].mnSupbook = nSupbook;
+    maSBIndexVec[ nXclTab ].mnSBTab = xSupbook->InsertTabName( GetDoc().GetLinkTab( nScTab ) );
 }
 
 // Export link manager ========================================================
 
 XclExpLinkManagerImpl::XclExpLinkManagerImpl( const XclExpRoot& rRoot ) :
-    XclExpRoot( rRoot ),
+    XclExpRoot( rRoot )
+{
+}
+
+// ----------------------------------------------------------------------------
+
+XclExpLinkManagerImpl5::XclExpLinkManagerImpl5( const XclExpRoot& rRoot ) :
+    XclExpLinkManagerImpl( rRoot )
+{
+}
+
+void XclExpLinkManagerImpl5::FindExtSheet(
+        sal_uInt16& rnExtSheet, sal_uInt16& rnFirstXclTab, sal_uInt16& rnLastXclTab,
+        SCTAB nFirstScTab, SCTAB nLastScTab, XclExpRefLogEntry* pRefLogEntry )
+{
+    FindInternal( rnExtSheet, rnFirstXclTab, nFirstScTab );
+    if( (rnFirstXclTab == EXC_TAB_DELETED) || (nFirstScTab == nLastScTab) )
+    {
+        rnLastXclTab = rnFirstXclTab;
+    }
+    else
+    {
+        sal_uInt16 nDummyExtSheet;
+        FindInternal( nDummyExtSheet, rnLastXclTab, nLastScTab );
+    }
+
+    DBG_ASSERT( !pRefLogEntry, "XclExpLinkManagerImpl5::FindExtSheet - fill reflog entry not implemented" );
+}
+
+sal_uInt16 XclExpLinkManagerImpl5::FindExtSheet( sal_Unicode cCode )
+{
+    sal_uInt16 nExtSheet;
+    FindInternal( nExtSheet, cCode );
+    return nExtSheet;
+}
+
+void XclExpLinkManagerImpl5::StoreCellRange( const SingleRefData& rRef1, const SingleRefData& rRef2 )
+{
+    // not implemented
+}
+
+bool XclExpLinkManagerImpl5::InsertAddIn(
+        sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const String& rName )
+{
+    XclExpExtSheetRef xExtSheet = FindInternal( rnExtSheet, EXC_EXTSH_ADDIN );
+    if( xExtSheet.is() )
+    {
+        rnExtName = xExtSheet->InsertAddIn( rName );
+        return rnExtName > 0;
+    }
+    return false;
+}
+
+bool XclExpLinkManagerImpl5::InsertDde(
+        sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
+        const String& rApplic, const String& rTopic, const String& rItem )
+{
+    // not implemented
+    return false;
+}
+
+void XclExpLinkManagerImpl5::Save( XclExpStream& rStrm )
+{
+    if( sal_uInt16 nExtSheetCount = GetExtSheetCount() )
+    {
+        // EXTERNCOUNT record
+        XclExpUInt16Record( EXC_ID_EXTERNCOUNT, nExtSheetCount ).Save( rStrm );
+        // list of EXTERNSHEET records with EXTERNNAME, XCT, CRN records
+        maExtSheetList.Save( rStrm );
+    }
+}
+
+sal_uInt16 XclExpLinkManagerImpl5::GetExtSheetCount() const
+{
+    return static_cast< sal_uInt16 >( maExtSheetList.Size() );
+}
+
+sal_uInt16 XclExpLinkManagerImpl5::AppendInternal( XclExpExtSheetRef xExtSheet )
+{
+    if( GetExtSheetCount() < 0x7FFF )
+    {
+        maExtSheetList.AppendRecord( xExtSheet );
+        // return negated one-based EXTERNSHEET index (i.e. 0xFFFD for 3rd record)
+        return static_cast< sal_uInt16 >( -GetExtSheetCount() );
+    }
+    return 0;
+}
+
+void XclExpLinkManagerImpl5::CreateInternal()
+{
+    if( maIntTabMap.empty() )
+    {
+        // create EXTERNSHEET records for all internal exported sheets
+        XclExpTabInfo& rTabInfo = GetTabInfo();
+        for( SCTAB nScTab = 0, nScCnt = rTabInfo.GetScTabCount(); nScTab < nScCnt; ++nScTab )
+        {
+            if( rTabInfo.IsExportTab( nScTab ) )
+            {
+                XclExpExtSheetRef xRec;
+                if( nScTab == GetCurrScTab() )
+                    xRec.reset( new XclExpExternSheet( GetRoot(), EXC_EXTSH_OWNTAB ) );
+                else
+                    xRec.reset( new XclExpExternSheet( GetRoot(), rTabInfo.GetScTabName( nScTab ) ) );
+                maIntTabMap[ nScTab ] = AppendInternal( xRec );
+            }
+        }
+    }
+}
+
+XclExpLinkManagerImpl5::XclExpExtSheetRef XclExpLinkManagerImpl5::GetInternal( sal_uInt16 nExtSheet )
+{
+    return maExtSheetList.GetRecord( static_cast< sal_uInt16 >( -nExtSheet - 1 ) );
+}
+
+XclExpLinkManagerImpl5::XclExpExtSheetRef XclExpLinkManagerImpl5::FindInternal(
+        sal_uInt16& rnExtSheet, sal_uInt16& rnXclTab, SCTAB nScTab )
+{
+    // create internal EXTERNSHEET records on demand
+    CreateInternal();
+
+    // try to find an EXTERNSHEET record - if not, return a "deleted sheet" reference
+    XclExpExtSheetRef xExtSheet;
+    XclExpIntTabMap::const_iterator aIt = maIntTabMap.find( nScTab );
+    if( aIt == maIntTabMap.end() )
+    {
+        xExtSheet = FindInternal( rnExtSheet, EXC_EXTSH_OWNDOC );
+        rnXclTab = EXC_TAB_DELETED;
+    }
+    else
+    {
+        rnExtSheet = aIt->second;
+        xExtSheet = GetInternal( rnExtSheet );
+        rnXclTab = GetTabInfo().GetXclTab( nScTab );
+    }
+    return xExtSheet;
+}
+
+XclExpLinkManagerImpl5::XclExpExtSheetRef XclExpLinkManagerImpl5::FindInternal(
+    sal_uInt16& rnExtSheet, sal_Unicode cCode )
+{
+    XclExpExtSheetRef xExtSheet;
+    XclExpCodeMap::const_iterator aIt = maCodeMap.find( cCode );
+    if( aIt == maCodeMap.end() )
+    {
+        xExtSheet.reset( new XclExpExternSheet( GetRoot(), cCode ) );
+        rnExtSheet = maCodeMap[ cCode ] = AppendInternal( xExtSheet );
+    }
+    else
+    {
+        rnExtSheet = aIt->second;
+        xExtSheet = GetInternal( rnExtSheet );
+    }
+    return xExtSheet;
+}
+
+// ----------------------------------------------------------------------------
+
+XclExpLinkManagerImpl8::XclExpLinkManagerImpl8( const XclExpRoot& rRoot ) :
+    XclExpLinkManagerImpl( rRoot ),
     maSBBuffer( rRoot )
 {
 }
 
-sal_uInt16 XclExpLinkManagerImpl::FindXti( sal_uInt16 nXclFirst, sal_uInt16 nXclLast )
+void XclExpLinkManagerImpl8::FindExtSheet(
+        sal_uInt16& rnExtSheet, sal_uInt16& rnFirstXclTab, sal_uInt16& rnLastXclTab,
+        SCTAB nFirstScTab, SCTAB nLastScTab, XclExpRefLogEntry* pRefLogEntry )
 {
-    XclExpXti aXti;
-    maSBBuffer.GetSBTabRange( aXti.mnSupbook, aXti.mnSBTabFirst, aXti.mnSBTabLast, nXclFirst, nXclLast );
-    return InsertXti( aXti );
+    XclExpTabInfo& rTabInfo = GetTabInfo();
+    rnFirstXclTab = rTabInfo.GetXclTab( nFirstScTab );
+    rnLastXclTab = rTabInfo.GetXclTab( nLastScTab );
+    rnExtSheet = InsertXti( maSBBuffer.GetXti( rnFirstXclTab, rnLastXclTab, pRefLogEntry ) );
 }
 
-void XclExpLinkManagerImpl::StoreCellRange( const SingleRefData& rRef1, const SingleRefData& rRef2 )
+sal_uInt16 XclExpLinkManagerImpl8::FindExtSheet( sal_Unicode cCode )
+{
+    DBG_ASSERT( (cCode == EXC_EXTSH_OWNDOC) || (cCode == EXC_EXTSH_ADDIN),
+        "XclExpLinkManagerImpl8::FindExtSheet - unknown externsheet code" );
+    return InsertXti( maSBBuffer.GetXti( EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) );
+}
+
+void XclExpLinkManagerImpl8::StoreCellRange( const SingleRefData& rRef1, const SingleRefData& rRef2 )
 {
     if( !rRef1.IsDeleted() && !rRef2.IsDeleted() && (rRef1.nTab >= 0) && (rRef2.nTab >= 0) )
     {
+        const XclExpTabInfo& rTabInfo = GetTabInfo();
         SCTAB nFirstScTab = static_cast< SCTAB >( rRef1.nTab );
         SCTAB nLastScTab = static_cast< SCTAB >( rRef2.nTab );
+        ScRange aRange(
+            static_cast< SCCOL >( rRef1.nCol ), static_cast< SCROW >( rRef1.nRow ), 0,
+            static_cast< SCCOL >( rRef2.nCol ), static_cast< SCROW >( rRef2.nRow ), 0 );
         for( SCTAB nScTab = nFirstScTab; nScTab <= nLastScTab; ++nScTab )
-            if( GetTabInfo().IsExternalTab( nScTab ) )
-                maSBBuffer.StoreCellRange( ScRange(
-                    static_cast< SCCOL >( rRef1.nCol ), static_cast< SCROW >( rRef1.nRow ), nScTab,
-                    static_cast< SCCOL >( rRef2.nCol ), static_cast< SCROW >( rRef2.nRow ), nScTab ) );
+        {
+            if( rTabInfo.IsExternalTab( nScTab ) )
+            {
+                aRange.aStart.SetTab( nScTab );
+                aRange.aEnd.SetTab( nScTab );
+                maSBBuffer.StoreCellRange( aRange );
+            }
+        }
     }
 }
 
-void XclExpLinkManagerImpl::InsertAddIn( sal_uInt16& rnXti, sal_uInt16& rnExtName, const String& rName )
+bool XclExpLinkManagerImpl8::InsertAddIn(
+        sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const String& rName )
 {
     sal_uInt16 nSupbook;
-    maSBBuffer.InsertAddIn( nSupbook, rnExtName, rName );
-    rnXti = InsertXti( XclExpXti( nSupbook, EXC_EXTSH_EXTERNAL, EXC_EXTSH_EXTERNAL ) );
+    if( maSBBuffer.InsertAddIn( nSupbook, rnExtName, rName ) )
+    {
+        rnExtSheet = InsertXti( XclExpXti( nSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) );
+        return true;
+    }
+    return false;
 }
 
-bool XclExpLinkManagerImpl::InsertDde(
-        sal_uInt16& rnXti, sal_uInt16& rnExtName,
+bool XclExpLinkManagerImpl8::InsertDde(
+        sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
         const String& rApplic, const String& rTopic, const String& rItem )
 {
     sal_uInt16 nSupbook;
-    maSBBuffer.InsertDde( nSupbook, rnExtName, rApplic, rTopic, rItem );
-    if( !rnExtName )
-        return false;
-    rnXti = InsertXti( XclExpXti( nSupbook, EXC_EXTSH_EXTERNAL, EXC_EXTSH_EXTERNAL ) );
-    return true;
+    if( maSBBuffer.InsertDde( nSupbook, rnExtName, rApplic, rTopic, rItem ) )
+    {
+        rnExtSheet = InsertXti( XclExpXti( nSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) );
+        return true;
+    }
+    return false;
 }
 
-sal_uInt16 XclExpLinkManagerImpl::InsertXti( const XclExpXti& rXti )
+void XclExpLinkManagerImpl8::Save( XclExpStream& rStrm )
 {
-    for( XclExpXtiVec::const_iterator aIt = maXtiVec.begin(), aEnd = maXtiVec.end(); aIt != aEnd; ++aIt )
-        if( *aIt == rXti )
-            return ulimit_cast< sal_uInt16 >( aIt - maXtiVec.begin() );
-    maXtiVec.push_back( rXti );
-    return ulimit_cast< sal_uInt16 >( maXtiVec.size() - 1 );
-}
-
-void XclExpLinkManagerImpl::Save( XclExpStream& rStrm )
-{
-    DBG_ASSERT_BIFF( GetBiff() >= xlBiff8 );
-
     if( !maXtiVec.empty() )
     {
         // SUPBOOKs, XCTs, CRNs, EXTERNNAMEs
@@ -1390,57 +1728,83 @@ void XclExpLinkManagerImpl::Save( XclExpStream& rStrm )
     }
 }
 
+sal_uInt16 XclExpLinkManagerImpl8::InsertXti( const XclExpXti& rXti )
+{
+    for( XclExpXtiVec::const_iterator aIt = maXtiVec.begin(), aEnd = maXtiVec.end(); aIt != aEnd; ++aIt )
+        if( *aIt == rXti )
+            return ulimit_cast< sal_uInt16 >( aIt - maXtiVec.begin() );
+    maXtiVec.push_back( rXti );
+    return ulimit_cast< sal_uInt16 >( maXtiVec.size() - 1 );
+}
+
 // ============================================================================
 
 XclExpLinkManager::XclExpLinkManager( const XclExpRoot& rRoot ) :
-    mpImpl( new XclExpLinkManagerImpl( rRoot ) )
+    XclExpRoot( rRoot )
 {
+    switch( GetBiff() )
+    {
+        case xlBiff5:
+        case xlBiff7:
+            mxImpl.reset( new XclExpLinkManagerImpl5( rRoot ) );
+        break;
+        case xlBiff8:
+            mxImpl.reset( new XclExpLinkManagerImpl8( rRoot ) );
+        break;
+        default:
+            DBG_ERROR_BIFF();
+    }
 }
 
 XclExpLinkManager::~XclExpLinkManager()
 {
 }
 
-sal_uInt16 XclExpLinkManager::FindXti( sal_uInt16 nXclFirst, sal_uInt16 nXclLast )
+void XclExpLinkManager::FindExtSheet(
+        sal_uInt16& rnExtSheet, sal_uInt16& rnXclTab,
+        SCTAB nScTab, XclExpRefLogEntry* pRefLogEntry )
 {
-    return mpImpl->FindXti( nXclFirst, nXclLast );
+    mxImpl->FindExtSheet( rnExtSheet, rnXclTab, rnXclTab, nScTab, nScTab, pRefLogEntry );
 }
 
-const XclExpString* XclExpLinkManager::GetUrl( sal_uInt16 nXclTab ) const
+void XclExpLinkManager::FindExtSheet(
+        sal_uInt16& rnExtSheet, sal_uInt16& rnFirstXclTab, sal_uInt16& rnLastXclTab,
+        SCTAB nFirstScTab, SCTAB nLastScTab, XclExpRefLogEntry* pRefLogEntry )
 {
-    return mpImpl->GetUrl( nXclTab );
+    mxImpl->FindExtSheet( rnExtSheet, rnFirstXclTab, rnLastXclTab, nFirstScTab, nLastScTab, pRefLogEntry );
 }
 
-const XclExpString* XclExpLinkManager::GetTabName( sal_uInt16 nXclTab ) const
+sal_uInt16 XclExpLinkManager::FindExtSheet( sal_Unicode cCode )
 {
-    return mpImpl->GetTabName( nXclTab );
+    return mxImpl->FindExtSheet( cCode );
 }
 
 void XclExpLinkManager::StoreCell( const SingleRefData& rRef )
 {
-    mpImpl->StoreCellRange( rRef, rRef );
+    mxImpl->StoreCellRange( rRef, rRef );
 }
 
 void XclExpLinkManager::StoreCellRange( const ComplRefData& rRef )
 {
-    mpImpl->StoreCellRange( rRef.Ref1, rRef.Ref2 );
+    mxImpl->StoreCellRange( rRef.Ref1, rRef.Ref2 );
 }
 
-void XclExpLinkManager::InsertAddIn( sal_uInt16& rnXti, sal_uInt16& rnExtName, const String& rName )
+bool XclExpLinkManager::InsertAddIn(
+        sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const String& rName )
 {
-    mpImpl->InsertAddIn( rnXti, rnExtName, rName );
+    return mxImpl->InsertAddIn( rnExtSheet, rnExtName, rName );
 }
 
 bool XclExpLinkManager::InsertDde(
-        sal_uInt16& rnXti, sal_uInt16& rnExtName,
+        sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
         const String& rApplic, const String& rTopic, const String& rItem )
 {
-    return mpImpl->InsertDde( rnXti, rnExtName, rApplic, rTopic, rItem );
+    return mxImpl->InsertDde( rnExtSheet, rnExtName, rApplic, rTopic, rItem );
 }
 
 void XclExpLinkManager::Save( XclExpStream& rStrm )
 {
-    mpImpl->Save( rStrm );
+    mxImpl->Save( rStrm );
 }
 
 // ============================================================================
