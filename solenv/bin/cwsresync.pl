@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2004-10-11 13:42:00 $
+#   last change: $Author: hr $ $Date: 2004-10-11 13:45:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.8 $ ';
+my $id_str = ' $Revision: 1.9 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1699,6 +1699,7 @@ sub get_cvs_root
     }
 
     my ($dummy1, $method, $user_at_server, $repository) = split(/:/, $cvsroot);
+    $repository =~ s/^\d*//;
     my ($dummy2, $server) = split(/@/, $user_at_server);
 
     if ( ! ($method && $server && $repository ) ) {
