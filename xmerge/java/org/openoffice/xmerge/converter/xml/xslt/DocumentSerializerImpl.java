@@ -75,6 +75,7 @@ import org.openoffice.xmerge.converter.xml.xslt.GenericOfficeDocument;
 import org.openoffice.xmerge.converter.dom.DOMDocument;
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.registry.ConverterInfo;
+import org.openoffice.xmerge.converter.xml.OfficeConstants;
 
 // Imported TraX classes
 import javax.xml.transform.TransformerFactory;
@@ -113,7 +114,7 @@ import java.io.FileNotFoundException;
 
 
 public final class DocumentSerializerImpl
-    implements DocumentSerializer {
+    implements DocumentSerializer,OfficeConstants {
 
 
     /** SXW <code>Document</code> object that this converter processes. */
@@ -187,24 +188,29 @@ public final class DocumentSerializerImpl
         Node tmpNode;
         Node rootNode = (Node)rootElement;
 
-        nodeList= metaDoc.getElementsByTagName("office:meta");
+        nodeList= metaDoc.getElementsByTagName(TAG_OFFICE_META);
+        if (nodeList.getLength()>0){
         tmpNode = newDoc.importNode(nodeList.item(0),true);
         rootNode.appendChild(tmpNode);
-
-        nodeList= styleDoc.getElementsByTagName("office:styles");
+        }
+        nodeList= styleDoc.getElementsByTagName(TAG_OFFICE_STYLES);
+        if (nodeList.getLength()>0){
         tmpNode = newDoc.importNode(nodeList.item(0),true);
         rootNode.appendChild(tmpNode);
-
-        nodeList= styleDoc.getElementsByTagName("office:automatic-styles");
+        }
+        nodeList= domDoc.getElementsByTagName(TAG_OFFICE_AUTOMATIC_STYLES);
+        if (nodeList.getLength()>0){
         tmpNode = newDoc.importNode(nodeList.item(0),true);
         rootNode.appendChild(tmpNode);
-
-        nodeList= domDoc.getElementsByTagName("office:body");
+        }
+        nodeList= domDoc.getElementsByTagName(TAG_OFFICE_BODY);
+        if (nodeList.getLength()>0){
         tmpNode = newDoc.importNode(nodeList.item(0),true);
         rootNode.appendChild(tmpNode);
+        }
         domDoc=newDoc;
         }catch(Exception e){
-        System.out.println("\n"+e);
+        System.out.println("\nAn Exception occurred with Xslt Serializer"+e);
         }
 
     }
