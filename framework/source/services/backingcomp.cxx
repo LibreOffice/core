@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backingcomp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:10:08 $
+ *  last change: $Author: as $ $Date: 2004-09-24 09:08:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -958,6 +958,8 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
     css::uno::Reference< css::lang::XComponent > xBroadcaster(m_xWindow, css::uno::UNO_QUERY);
     if (xBroadcaster.is())
         xBroadcaster->addEventListener(static_cast< css::lang::XEventListener* >(this));
+
+    m_xWindow->setVisible(sal_True);
 
     aWriteLock.unlock();
     /* } SAFE */
