@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:21:35 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:36:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #endif
 #include <svtools/intitem.hxx>
 #include <svtools/itemset.hxx>
+#include <svtools/visitem.hxx>
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
 #endif
@@ -103,6 +104,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTSTATE_HPP_
 #include <com/sun/star/frame/DispatchResultState.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_STATUS_VISIBILITY_HPP_
+#include <com/sun/star/frame/status/Visibility.hpp>
 #endif
 
 #include <comphelper/processfactory.hxx>
@@ -531,6 +535,7 @@ SfxDispatchController_Impl::SfxDispatchController_Impl(
     , pBindings( pBind )
     , pLastState( 0 )
     , nSlot( nSlotId )
+    , bVisible( sal_True )
     , bMasterSlave( sal_False )
 {
     SetId( nSlot );
@@ -868,12 +873,22 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::st
         aState = makeAny( aItemStatus );
     }
 
-    ::com::sun::star::frame::FeatureStateEvent aEvent;
+    ::com::sun::star::frame::FeatureStateEvent  aEvent;
     aEvent.FeatureURL = aURL;
-    aEvent.Source = (::com::sun::star::frame::XDispatch*) pDispatch;
-    aEvent.IsEnabled = eState != SFX_ITEM_DISABLED;
-    aEvent.Requery = sal_False;
-    aEvent.State = aState;
+    aEvent.Source     = (::com::sun::star::frame::XDispatch*) pDispatch;
+    aEvent.Requery    = sal_False;
+    if ( bVisible )
+    {
+        aEvent.IsEnabled  = eState != SFX_ITEM_DISABLED;
+        aEvent.State      = aState;
+    }
+    else
+    {
+        ::com::sun::star::frame::status::Visibility aVisibilityStatus;
+        aVisibilityStatus.bVisible = sal_False;
+        aEvent.IsEnabled           = SFX_ITEM_AVAILABLE;
+        aEvent.State               = makeAny( aVisibilityStatus );
+    }
 
     aListener->statusChanged( aEvent );
 }
@@ -893,15 +908,30 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     }
 
     // Bindings instance notifies controller about a state change, listeners must be notified also
+    // Don't cache visibility state changes as they are volatile. We need our real state to send it
+    // to our controllers after visibility is set to true.
     sal_Bool bNotify = sal_True;
-    sal_Bool bBothAvailable = pLastState && pState && !IsInvalidItem(pLastState) && !IsInvalidItem(pState);
-    if ( bBothAvailable )
-        bNotify = pState->Type() != pLastState->Type() || *pState != *pLastState;
+    if ( pState && !IsInvalidItem( pState ) )
+    {
+        if ( !pState->ISA( SfxVisibilityItem ) )
+        {
+            sal_Bool bBothAvailable = pLastState && !IsInvalidItem(pLastState);
+            if ( bBothAvailable )
+                bNotify = pState->Type() != pLastState->Type() || *pState != *pLastState;
+            if ( pLastState && !IsInvalidItem( pLastState ) )
+                delete pLastState;
+            pLastState = !IsInvalidItem(pState) ? pState->Clone() : pState;
+            bVisible = sal_True;
+        }
+        else
+            bVisible = ((SfxVisibilityItem *)pState)->GetValue();
+    }
     else
-        bNotify = ( pLastState != pState );
-    if ( pLastState && !IsInvalidItem( pLastState ) )
-        delete pLastState;
-    pLastState = ( pState && !IsInvalidItem(pState) ) ? pState->Clone() : pState;
+    {
+        if ( pLastState && !IsInvalidItem( pLastState ) )
+            delete pLastState;
+        pLastState = pState;
+    }
 
     ::cppu::OInterfaceContainerHelper* pContnr = pDispatch->GetListeners().getContainer ( aDispatchURL.Complete );
     if ( bNotify && pContnr )
@@ -926,7 +956,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
             nSubId |= CONVERT_TWIPS;
 
         ::com::sun::star::uno::Any aState;
-        if ( ( eState >= SFX_ITEM_AVAILABLE ) && pState && !pState->ISA(SfxVoidItem) )
+        if ( ( eState >= SFX_ITEM_AVAILABLE ) && pState && !IsInvalidItem( pState ) && !pState->ISA(SfxVoidItem) )
             pState->QueryValue( aState, (BYTE)nSubId );
         else if ( eState == SFX_ITEM_DONTCARE )
         {
@@ -957,5 +987,3 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         }
     }
 }
-
-
