@@ -1,13 +1,13 @@
-    :
+:
     eval 'exec perl -S $0 ${1+"$@"}'
         if 0;
 #*************************************************************************
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.112 $
+#   $Revision: 1.113 $
 #
-#   last change: $Author: hr $ $Date: 2004-06-28 14:49:39 $
+#   last change: $Author: hr $ $Date: 2004-06-28 16:36:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,9 +72,13 @@
     use Cwd;
     use File::Path;
 
+    use lib ("$ENV{SOLARENV}/bin/modules");
+    if (defined $ENV{COMMON_ENV_TOOLS}) {
+        unshift(@INC, "$ENV{COMMON_ENV_TOOLS}/modules");
+    };
+
     my $log = undef;
     if (defined $ENV{CWS_WORK_STAMP}) {
-        require lib; import lib ("$ENV{SOLARENV}/bin/modules", "$ENV{COMMON_ENV_TOOLS}/modules");
         require Cws; import Cws;
         require CvsModule; import CvsModule;
         require GenInfoParser; import GenInfoParser;
@@ -89,7 +93,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.112 $ ';
+    $id_str = ' $Revision: 1.113 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -187,7 +191,7 @@
     };
 
     $StandDir = &get_stand_dir();
-    &provide_consistency if (defined $ENV{CWS_WORK_STAMP});
+    &provide_consistency if (defined $ENV{CWS_WORK_STAMP} && defined($log));
 
     $deliver_commando = $ENV{DELIVER};
     $deliver_commando .= ' '. $dlv_switch if ($dlv_switch);
@@ -274,10 +278,10 @@
                     $Prj = $prj_link;
                 } elsif (-l $StandDir.$prj_link) {
                     &print_error("There is no target for link $StandDir$prj_link");
-                } elsif (defined $ENV{CWS_WORK_STAMP}) {
+                } elsif (defined $ENV{CWS_WORK_STAMP} && defined($log)) {
                     &checkout_module($Prj, 'image');
                 };
-            } elsif (defined $ENV{CWS_WORK_STAMP}) {
+            } elsif (defined $ENV{CWS_WORK_STAMP} && defined($log)) {
                 &check_module_consistency($Prj);
             };
             my @DepsArray;
@@ -332,7 +336,7 @@
                 };
                 &print_annonce($Prj);
                 $PrjDir = &CorrectPath($StandDir.$Prj);
-                &mark_force_deliver($Prj, $PrjDir) if (defined $ENV{CWS_WORK_STAMP});
+                &mark_force_deliver($Prj, $PrjDir) if (defined $ENV{CWS_WORK_STAMP} && defined($log));
                  &get_deps_hash($Prj, \%LocalDepsHash);
                  &BuildDependent(\%LocalDepsHash);
                 my $deliver_commando = &get_deliver_commando($Prj);
@@ -359,7 +363,7 @@ sub dmake_dir {
     my ($folder_nick, $BuildDir, $new_BuildDir, $OldBuildDir, $error_code);
     $folder_nick = shift;
     $BuildDir = &CorrectPath($StandDir . $PathHash{$folder_nick});
-    if ((!(-d $BuildDir)) && (defined $ENV{CWS_WORK_STAMP})) {
+    if ((!(-d $BuildDir)) && (defined $ENV{CWS_WORK_STAMP} && defined($log))) {
         $OldBuildDir = $BuildDir;
         my $modified_path = $PathHash{$folder_nick};
         $modified_path =~ s/^([^\\\/]+)/$1\.lnk/;
@@ -1114,7 +1118,7 @@ sub build_multiprocessing {
                 &RemoveFromDependencies($Prj, \%global_deps_hash);
                 next;
             }
-            &mark_force_deliver($Prj, &CorrectPath($StandDir.$Prj)) if (defined $ENV{CWS_WORK_STAMP});
+            &mark_force_deliver($Prj, &CorrectPath($StandDir.$Prj)) if (defined $ENV{CWS_WORK_STAMP} && defined($log));
             push @build_queue, $Prj;
             $projects_deps_hash{$Prj} = {};
             &get_deps_hash($Prj, $projects_deps_hash{$Prj});
