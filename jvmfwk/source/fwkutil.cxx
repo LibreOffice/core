@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-07 14:49:41 $
+ *  last change: $Author: jl $ $Date: 2004-05-12 13:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,7 +659,6 @@ javaFrameworkError buildClassPathFromDirectory(const rtl::OUString & relPath,
         return JFW_E_ERROR;
     }
     sBuffer.append(sDirPath);
-    sBuffer.appendAscii(szSep);
 
     rtl::OUString sJarExtension(RTL_CONSTASCII_USTRINGPARAM(".jar"));
     sal_Int32 nJarExtensionLength = sJarExtension.getLength();
@@ -713,8 +712,8 @@ javaFrameworkError buildClassPathFromDirectory(const rtl::OUString & relPath,
             {
                 return JFW_E_ERROR;
             }
-            sBuffer.append(sFilePath);
             sBuffer.appendAscii(szSep);
+            sBuffer.append(sFilePath);
         }
         else if (fileErrorCode == osl::FileBase::E_NOENT)
         {
