@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:00:59 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,7 +483,7 @@ ExcBundlesheet::ExcBundlesheet( RootData& rRootData, SCTAB nTab ) :
 {
     String sTabName = rRootData.pER->GetTabInfo().GetScTabName( nTab );
     DBG_ASSERT( sTabName.Len() < 256, "ExcBundlesheet::ExcBundlesheet - table name too long" );
-    aName = ByteString( sTabName, *rRootData.pCharset );
+    aName = ByteString( sTabName, rRootData.pER->GetCharSet() );
 }
 
 
@@ -528,48 +528,6 @@ void XclExpCountry::WriteBody( XclExpStream& rStrm )
 {
     rStrm << mnUICountry << mnDocCountry;
 }
-
-//---------------------------------------------------------- class ExcWindow2 -
-
-XclExpWindow2::XclExpWindow2( const XclExpRoot& rRoot, SCTAB nScTab ) :
-    XclExpRecord( 0x023E, 10 ),
-    mnFlags( 0x00B6 )
-{
-    const XclExpTabInfo& rTabInfo = rRoot.GetTabInfo();
-    ::set_flag( mnFlags, (sal_uInt16)EXC_WIN2_SELECTED,  rTabInfo.IsSelectedTab( nScTab ) );
-    ::set_flag( mnFlags, (sal_uInt16)EXC_WIN2_DISPLAYED, rTabInfo.IsActiveTab( nScTab ) );
-}
-
-void XclExpWindow2::WriteBody( XclExpStream& rStrm )
-{
-    rStrm << mnFlags;
-    rStrm.WriteZeroBytes( 8 );
-}
-
-//-------------------------------------------------------- class ExcSelection -
-
-void ExcSelection::SaveCont( XclExpStream& rStrm )
-{
-    rStrm   << nPane                // pane
-            << nRow << nCol         // active cell
-            << (UINT16) 0           // index in ref array
-            << (UINT16) 1           // size of ref array
-            << nRow << nRow         // ref array (activ cell only)
-            << (UINT8) nCol << (UINT8) nCol;
-}
-
-
-UINT16 ExcSelection::GetNum( void ) const
-{
-    return 0x001D;
-}
-
-
-ULONG ExcSelection::GetLen( void ) const
-{
-    return 15;
-}
-
 
 // XclExpWsbool ===============================================================
 
@@ -709,7 +667,7 @@ BOOL XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
     if( rEntry.pStr )
         sText.Assign( *rEntry.pStr );
 
-    BOOL bLen = TRUEBOOL( sText.Len() );
+    BOOL bLen = sText.Len() > 0;
 
     // empty/nonempty fields
     if( !bLen && (rEntry.nVal == SC_EMPTYFIELDS) )
@@ -741,7 +699,7 @@ BOOL XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
                 nNewFlags = (EXC_AFFLAG_TOP10 | EXC_AFFLAG_TOP10PERC);
             break;
         }
-        BOOL bNewTop10 = TRUEBOOL( nNewFlags & EXC_AFFLAG_TOP10 );
+        BOOL bNewTop10 = ::get_flag( nNewFlags, EXC_AFFLAG_TOP10 );
 
         bConflict = HasTop10() && bNewTop10;
         if( !bConflict )
@@ -927,7 +885,7 @@ void ExcAutoFilterRecs::AddObjRecs()
         for( SCCOL nObj = 0, nCount = pFilterInfo->GetColCount(); nObj < nCount; nObj++ )
         {
             XclObjDropDown* pObj = new XclObjDropDown( GetRoot(), aAddr, IsFiltered( nObj ) );
-            mpRD->pObjRecs->Add( pObj );
+            GetOldRoot().pObjRecs->Add( pObj );
             aAddr.IncCol( 1 );
         }
     }
