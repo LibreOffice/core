@@ -741,31 +741,6 @@ SfxVoidItem ArrangeHorizontal SID_HORIZONTALWINS
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ArrangeIcons SID_ARRANGEICONS
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem ArrangeWinsVertical SID_VERTICALDOCKWINS
 ()
 [
