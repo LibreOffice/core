@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:15:54 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 09:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,3 +463,7 @@ hidspecial UID_OFA_CONNPOOL_DRIVERLIST_BACK         { HelpId = UID_OFA_CONNPOOL_
 hidspecial HID_OFA_CONNPOOL_DRIVERLIST              { HelpId = HID_OFA_CONNPOOL_DRIVERLIST; };
 
 hidspecial HID_HANGULDLG_BUTTON_OPTIONS             { HelpId = HID_HANGULDLG_BUTTON_OPTIONS; };
+
+hidspecial HID_SCRIPTSBOX                           { HelpId = HID_SCRIPTSBOX; };
+hidspecial HID_SELECTOR_CATEGORIES                  { HelpId = HID_SELECTOR_CATEGORIES; };
+hidspecial HID_SELECTOR_COMMANDS                    { HelpId = HID_SELECTOR_COMMANDS; };
