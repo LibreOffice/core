@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-12 11:02:19 $
+ *  last change: $Author: pb $ $Date: 2001-10-12 13:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,7 @@ using namespace ::cppu;
 
 #define IODLG_CONFIGNAME        String(DEFINE_CONST_UNICODE("FilePicker_Save"))
 #define IMPGRF_CONFIGNAME       String(DEFINE_CONST_UNICODE("FilePicker_Graph"))
+#define USERITEM_NAME           OUString::createFromAscii( "UserItem" )
 
 //-----------------------------------------------------------------------------
 
@@ -1585,7 +1586,7 @@ void FileDialogHelper_Impl::saveConfig()
             aFilter = EncodeSpaces_Impl( aFilter );
             aUserData.SetToken( 3, ' ', aFilter );
 
-            aDlgOpt.SetUserData( aUserData );
+            aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aUserData ) ) );
         }
         catch( IllegalArgumentException ){}
     }
@@ -1597,7 +1598,10 @@ void FileDialogHelper_Impl::saveConfig()
 
         if ( aDlgOpt.Exists() )
         {
-            aUserData = aDlgOpt.GetUserData();
+            Any aUserItem = aDlgOpt.GetUserItem( USERITEM_NAME );
+            OUString aTemp;
+            if ( aUserItem >>= aTemp )
+                aUserData = String( aTemp );
         }
 
         if ( mbHasAutoExt )
@@ -1625,7 +1629,7 @@ void FileDialogHelper_Impl::saveConfig()
         }
 
         if ( bWriteConfig )
-            aDlgOpt.SetUserData( aUserData );
+            aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aUserData ) ) );
     }
 
     SfxApplication *pSfxApp = SFX_APP();
@@ -1647,7 +1651,12 @@ void FileDialogHelper_Impl::loadConfig()
         String aUserData;
 
         if ( aViewOpt.Exists() )
-            aUserData = aViewOpt.GetUserData();
+        {
+            Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
+            OUString aTemp;
+            if ( aUserItem >>= aTemp )
+                aUserData = String( aTemp );
+        }
 
         if ( aUserData.Len() > 0 )
         {
@@ -1692,7 +1701,12 @@ void FileDialogHelper_Impl::loadConfig()
         String aUserData;
 
         if ( aViewOpt.Exists() )
-            aUserData = aViewOpt.GetUserData();
+        {
+            Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
+            OUString aTemp;
+            if ( aUserItem >>= aTemp )
+                aUserData = String( aTemp );
+        }
 
         if ( ! aUserData.Len() )
             aUserData = String::CreateFromAscii( STD_CONFIG_STR );

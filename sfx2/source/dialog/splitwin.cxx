@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 07:45:26 $
+ *  last change: $Author: pb $ $Date: 2001-10-12 13:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,12 @@
 #include "msgpool.hxx"
 #include "viewfrm.hxx"
 
+using namespace ::com::sun::star::uno;
+using namespace ::rtl;
+
 #define VERSION 1
-#define nPixel 30L
+#define nPixel  30L
+#define USERITEM_NAME           OUString::createFromAscii( "UserItem" )
 
 struct SfxDock_Impl
 {
@@ -266,7 +270,11 @@ SfxSplitWindow::SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
         String aWindowId = String::CreateFromAscii("SplitWindow");
         aWindowId += String::CreateFromInt32( (sal_Int32) eTbxAlign );
         SvtViewOptions aWinOpt( E_WINDOW, aWindowId );
-        String aWinData( aWinOpt.GetUserData() );
+        String aWinData;
+        Any aUserItem = aWinOpt.GetUserItem( USERITEM_NAME );
+        OUString aTemp;
+        if ( aUserItem >>= aTemp )
+            aWinData = String( aTemp );
         if ( aWinData.Len() && aWinData.GetChar( (USHORT) 0 ) == 'V' )
         {
             pEmptyWin->nState = (USHORT) aWinData.GetToken( 1, ',' ).ToInt32();
@@ -365,7 +373,7 @@ void SfxSplitWindow::SaveConfig_Impl()
     String aWindowId = String::CreateFromAscii("SplitWindow");
     aWindowId += String::CreateFromInt32( (sal_Int32) GetAlign() );
     SvtViewOptions aWinOpt( E_WINDOW, aWindowId );
-    aWinOpt.SetUserData( aWinData );
+    aWinOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aWinData ) ) );
 }
 
 //-------------------------------------------------------------------------

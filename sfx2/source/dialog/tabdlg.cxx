@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-10 11:30:02 $
+ *  last change: $Author: pb $ $Date: 2001-10-12 13:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,12 @@
 
 #include "dialog.hrc"
 #include "helpid.hrc"
+
+// for OUString and Any
+using namespace ::com::sun::star::uno;
+using namespace ::rtl;
+
+#define USERITEM_NAME           OUString::createFromAscii( "UserItem" )
 
 /*  -----------------------------------------------------------------
     Verwaltungsdatenstruktur f"ur jede Seite
@@ -543,11 +549,9 @@ SfxTabDialog::SfxTabDialog
 
 SfxTabDialog::~SfxTabDialog()
 {
-
     // save settings (screen position and current page)
     SvtViewOptions aDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
-    Point aPos = GetPosPixel();
-    aDlgOpt.SetPosition( aPos.X(), aPos.Y() );
+    aDlgOpt.SetWindowState( OUString::createFromAscii( GetWindowState().GetBuffer() ) );
     aDlgOpt.SetPageID( aTabCtrl.GetCurPageId() );
 
     const USHORT nCount = pImpl->pData->Count();
@@ -564,7 +568,7 @@ SfxTabDialog::~SfxTabDialog()
             {
                 // save settings of all pages (user data)
                 SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( pDataObject->nId ) );
-                aPageOpt.SetUserData( aPageData );
+                aPageOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aPageData ) ) );
             }
 
             if ( pDataObject->bOnDemand )
@@ -754,9 +758,7 @@ void SfxTabDialog::Start_Impl()
     SvtViewOptions aDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
     if ( aDlgOpt.Exists() )
     {
-        Point aPos;
-        aDlgOpt.GetPosition( aPos.X(), aPos.Y() );
-        SetPosPixel( aPos );
+        SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
 
         // initiale TabPage aus Programm/Hilfe/Konfig
         nActPage = (USHORT)aDlgOpt.GetPageID();
@@ -884,7 +886,7 @@ void SfxTabDialog::RemoveTabPage( USHORT nId )
             {
                 // save settings of this page (user data)
                 SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( pDataObject->nId ) );
-                aPageOpt.SetUserData( aPageData );
+                aPageOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aPageData ) ) );
             }
 
             if ( pDataObject->bOnDemand )
@@ -1343,7 +1345,12 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
         pDataObject->pTabPage = pTabPage;
         pDataObject->pTabPage->SetTabDialog( this );
         SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( pDataObject->nId ) );
-        pTabPage->SetUserData( aPageOpt.GetUserData() );
+        String sUserData;
+        Any aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
+        OUString aTemp;
+        if ( aUserItem >>= aTemp )
+            sUserData = String( aTemp );
+        pTabPage->SetUserData( sUserData );
         Size aSiz = pTabPage->GetSizePixel();
         Size aCtrlSiz = pTabCtrl->GetOutputSizePixel();
         // Gr"o/se am TabControl nur dann setzen, wenn < als TabPage

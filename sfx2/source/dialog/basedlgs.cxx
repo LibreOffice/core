@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 13:57:31 $
+ *  last change: $Author: pb $ $Date: 2001-10-12 13:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,11 @@
 
 static String aEmptyString;
 
+using namespace ::com::sun::star::uno;
+using namespace ::rtl;
+
+#define USERITEM_NAME OUString::createFromAscii( "UserItem" )
+
 // class SfxModalDefParentHelper -----------------------------------------
 
 SfxModalDefParentHelper::SfxModalDefParentHelper( Window *pWindow)
@@ -107,20 +112,19 @@ SfxModalDefParentHelper::~SfxModalDefParentHelper()
 
 // -----------------------------------------------------------------------
 
-void SetDialogData_Impl(SfxViewFrame *pFrame, Window *pDlg,
-                        sal_uInt16 nId, const String &rExtraData = aEmptyString)
+void SetDialogData_Impl( SfxViewFrame *pFrame, SfxModalDialog *pDlg,
+                         sal_uInt16 nId, const String &rExtraData = aEmptyString )
 {
     // save settings
     SvtViewOptions aDlgOpt( E_DIALOG, String::CreateFromInt32( nId ) );
-    Point aPos = pDlg->GetPosPixel();
-    aDlgOpt.SetPosition( aPos.X(), aPos.Y() );
+    aDlgOpt.SetWindowState( OUString::createFromAscii( pDlg->GetWindowState().GetBuffer() ) );
     if ( rExtraData.Len() )
-        aDlgOpt.SetUserData( rExtraData );
+        aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( rExtraData ) ) );
 }
 
 // -----------------------------------------------------------------------
 
-String GetDialogData_Impl( SfxViewFrame *pFrame, Window *pDlg, sal_uInt16 nId)
+String GetDialogData_Impl( SfxViewFrame *pFrame, SfxModalDialog *pDlg, sal_uInt16 nId )
 
 /*      [Beschreibung]
 
@@ -129,18 +133,19 @@ String GetDialogData_Impl( SfxViewFrame *pFrame, Window *pDlg, sal_uInt16 nId)
 */
 
 {
-    String aRetString;
+    String sRet;
     SvtViewOptions aDlgOpt( E_DIALOG, String::CreateFromInt32( nId ) );
     if ( aDlgOpt.Exists() )
     {
         // load settings
-        Point aPos;
-        aDlgOpt.GetPosition( aPos.X(), aPos.Y() );
-        pDlg->SetPosPixel(aPos);
-        aRetString = aDlgOpt.GetUserData();
+        pDlg->SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
+        Any aUserItem = aDlgOpt.GetUserItem( USERITEM_NAME );
+        OUString aTemp;
+        if ( aUserItem >>= aTemp )
+            sRet = String( aTemp );
     }
 
-    return aRetString;
+    return sRet;
 }
 
 // -----------------------------------------------------------------------
@@ -763,7 +768,7 @@ IMPL_LINK( SfxSingleTabDialog, OKHdl_Impl, Button *, pButton )
         pPage->FillUserData();
         String sData( pPage->GetUserData() );
         SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( GetUniqId() ) );
-        aPageOpt.SetUserData( sData );
+        aPageOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( sData ) ) );
         EndDialog( RET_OK );
     }
     else
@@ -778,9 +783,6 @@ SfxSingleTabDialog::SfxSingleTabDialog
     Window *pParent,
     const SfxItemSet& rSet,
     sal_uInt16 nUniqueId
-#if SUPD < 637
-    ,sal_Bool bGroupBox
-#endif
 ) :
 
 /*      [Beschreibung]
@@ -794,19 +796,12 @@ SfxSingleTabDialog::SfxSingleTabDialog
     pOKBtn          ( 0 ),
     pCancelBtn      ( 0 ),
     pHelpBtn        ( 0 ),
-#if SUPD < 637
-    pDummy          ( NULL ),
-#endif
-
     pPage           ( 0 ),
     pOptions        ( &rSet ),
     pOutSet         ( 0 )
-#if SUPD < 637
-    ,bGrpBox         ( bGroupBox )
-#endif
 
 {
-    DBG_WARNING( "bitte den Ctor mit ViewFrame verwenden" );
+    DBG_WARNING( "please use the ctor with ViewFrame" );
 }
 
 // -----------------------------------------------------------------------
@@ -817,9 +812,6 @@ SfxSingleTabDialog::SfxSingleTabDialog
     Window*                         pParent,
     const SfxItemSet&       rSet,
     sal_uInt16                          nUniqueId
-#if SUPD < 637
-    ,sal_Bool                            bGroupBox
-#endif
 ) :
 
 /*  [Beschreibung]
@@ -833,16 +825,9 @@ SfxSingleTabDialog::SfxSingleTabDialog
     pOKBtn          ( 0 ),
     pCancelBtn      ( 0 ),
     pHelpBtn        ( 0 ),
-#if SUPD < 637
-    pDummy          ( NULL ),
-#endif
-
     pPage           ( 0 ),
     pOptions        ( &rSet ),
     pOutSet         ( 0 )
-#if SUPD < 637
-    ,bGrpBox         ( bGroupBox )
-#endif
 
 {
 }
@@ -854,9 +839,6 @@ SfxSingleTabDialog::SfxSingleTabDialog
     Window* pParent,
     sal_uInt16 nUniqueId,
     const SfxItemSet* pInSet
-#if SUPD < 637
-    ,sal_Bool bGroupBox
-#endif
 )
 
 /*      [Beschreibung]
@@ -871,16 +853,9 @@ SfxSingleTabDialog::SfxSingleTabDialog
     pOKBtn          ( 0 ),
     pCancelBtn      ( 0 ),
     pHelpBtn        ( 0 ),
-#if SUPD < 637
-    pDummy          ( NULL ),
-#endif
-
     pPage           ( 0 ),
     pOptions        ( pInSet ),
     pOutSet         ( 0 )
-#if SUPD < 637
-    ,bGrpBox         ( bGroupBox )
-#endif
 
 {
     DBG_WARNING( "bitte den Ctor mit ViewFrame verwenden" );
@@ -894,9 +869,6 @@ SfxSingleTabDialog::SfxSingleTabDialog
     Window* pParent,
     sal_uInt16 nUniqueId,
     const SfxItemSet* pInSet
-#if SUPD < 637
-    ,sal_Bool bGroupBox
-#endif
 )
 
 /*  [Beschreibung]
@@ -910,15 +882,9 @@ SfxSingleTabDialog::SfxSingleTabDialog
     pOKBtn          ( 0 ),
     pCancelBtn      ( 0 ),
     pHelpBtn        ( 0 ),
-#if SUPD < 637
-    pDummy          ( NULL ),
-#endif
     pPage           ( 0 ),
     pOptions        ( pInSet ),
     pOutSet         ( 0 )
-#if SUPD < 637
-    ,bGrpBox         ( bGroupBox )
-#endif
 
 {
 }
@@ -952,11 +918,6 @@ void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
 */
 
 {
-#if SUPD < 637
-    DBG_ASSERT( !bGrpBox, "GroupBox no more supported" );
-    bGrpBox = sal_False;
-#endif
-
     if ( !pOKBtn )
     {
         pOKBtn = new OKButton( this, WB_DEFBUTTON );
@@ -976,7 +937,12 @@ void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
     {
         // erstmal die User-Daten besorgen, dann erst Reset()
         SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( GetUniqId() ) );
-        pPage->SetUserData( aPageOpt.GetUserData() );
+        String sUserData;
+        Any aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
+        OUString aTemp;
+        if ( aUserItem >>= aTemp )
+            sUserData = String( aTemp );
+        pPage->SetUserData( sUserData );
         pPage->Reset( *pOptions );
         pPage->Show();
 

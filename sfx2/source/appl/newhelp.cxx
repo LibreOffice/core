@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-12 07:41:55 $
+ *  last change: $Author: pb $ $Date: 2001-10-12 13:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,8 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 #define PROPERTY_TITLE          DEFINE_CONST_OUSTRING("Title")
 #define HELP_URL                DEFINE_CONST_OUSTRING("vnd.sun.star.help://")
 #define HELP_SEARCH_TAG         DEFINE_CONST_OUSTRING("/?Query=")
+
+#define USERITEM_NAME           rtl::OUString::createFromAscii( "UserItem" )
 
 #define PARSE_URL( aURL ) \
     Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( \
@@ -892,7 +894,11 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
     SvtViewOptions aViewOpt( E_TABPAGE, CONFIGNAME_SEARCHPAGE );
     if ( aViewOpt.Exists() )
     {
-        String aUserData = aViewOpt.GetUserData();
+        String aUserData;
+        Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
+        ::rtl::OUString aTemp;
+        if ( aUserItem >>= aTemp )
+            aUserData = String( aTemp );
         BOOL bChecked = ( 1 == aUserData.GetToken(0).ToInt32() ) ? TRUE : FALSE;
         aFullWordsCB.Check( bChecked );
         bChecked = ( 1 == aUserData.GetToken(1).ToInt32() ) ? TRUE : FALSE;
@@ -932,7 +938,8 @@ SearchTabPage_Impl::~SearchTabPage_Impl()
     }
 
     aUserData.EraseTrailingChars(';');
-    aViewOpt.SetUserData( aUserData );
+    Any aUserItem = makeAny( ::rtl::OUString( aUserData ) );
+    aViewOpt.SetUserItem( USERITEM_NAME, aUserItem );
 }
 
 // -----------------------------------------------------------------------
@@ -2100,17 +2107,21 @@ void SfxHelpWindow_Impl::InitSizes()
 
 void SfxHelpWindow_Impl::LoadConfig()
 {
-    sal_Int32 nWidth;
      SvtViewOptions aViewOpt( E_WINDOW, CONFIGNAME_HELPWIN );
     if ( aViewOpt.Exists() )
     {
-        aViewOpt.GetSize( nWidth, nHeight );
         bIndex = aViewOpt.IsVisible();
-        String aUserData = aViewOpt.GetUserData();
-        DBG_ASSERT( aUserData.GetTokenCount() == 2, "invalid user data" );
-        nIndexSize = aUserData.GetToken(0).ToInt32();
-        nTextSize = aUserData.GetToken(1).ToInt32();
-
+        String aUserData;
+        Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
+        rtl::OUString aTemp;
+        if ( aUserItem >>= aTemp )
+            aUserData = String( aTemp );
+        DBG_ASSERT( aUserData.GetTokenCount() == 4, "invalid user data" );
+        USHORT nIdx = 0;
+        nIndexSize = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
+        nTextSize = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
+        sal_Int32 nWidth = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
+        nHeight = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
         if ( bIndex )
         {
             nExpandWidth = nWidth;
@@ -2131,18 +2142,24 @@ void SfxHelpWindow_Impl::LoadConfig()
 void SfxHelpWindow_Impl::SaveConfig()
 {
     SvtViewOptions aViewOpt( E_WINDOW, CONFIGNAME_HELPWIN );
+    sal_Int32 nW = 0, nH = 0;
 
     if ( xWindow.is() )
     {
         ::com::sun::star::awt::Rectangle aRect = xWindow->getPosSize();
-        aViewOpt.SetSize( aRect.Width, aRect.Height );
+        nW = aRect.Width;
+        nH = aRect.Height;
     }
 
     aViewOpt.SetVisible( bIndex );
     String aUserData = String::CreateFromInt32( nIndexSize );
     aUserData += ';';
     aUserData += String::CreateFromInt32( nTextSize );
-    aViewOpt.SetUserData( aUserData );
+    aUserData += ';';
+    aUserData += String::CreateFromInt32( nW );
+    aUserData += ';';
+    aUserData += String::CreateFromInt32( nH );
+    aViewOpt.SetUserItem( USERITEM_NAME, makeAny( rtl::OUString( aUserData ) ) );
 }
 
 // -----------------------------------------------------------------------
