@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-07 16:04:38 $
+ *  last change: $Author: mt $ $Date: 2001-05-07 16:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,11 +142,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 
-#include <comphelper/processfactory.hxx>
-
-
 using namespace ::com::sun::star;
-
 
 class TETextDataObject :    public ::com::sun::star::datatransfer::XTransferable,
                         public ::cppu::OWeakObject
