@@ -284,10 +284,12 @@ HRESULT CSOActiveX::GetUrlStruct( OLECHAR* sUrl, CComPtr<IDispatch>& pdispUrl )
     if( !SUCCEEDED( hr ) ) return hr;
 
     CComVariant dummyResult;
-    CComVariant aInOutParam;
-    aInOutParam.ppdispVal = &pdispUrl;
-    aInOutParam.vt = VT_DISPATCH | VT_BYREF;
-    hr = ExecuteFunc( pdispTransformer, L"parseStrict", &aInOutParam, 1, &dummyResult );
+    CComVariant aParam[2];
+    aParam[1].ppdispVal = &pdispUrl;
+    aParam[1].vt = VT_DISPATCH | VT_BYREF;
+    aParam[0] = CComVariant( L"file:///" );
+
+    hr = ExecuteFunc( pdispTransformer, L"parseSmart", aParam, 2, &dummyResult );
     if( !SUCCEEDED( hr ) || dummyResult.vt != VT_BOOL || !dummyResult.boolVal ) return hr;
 
     return S_OK;
