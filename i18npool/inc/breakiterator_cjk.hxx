@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_cjk.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:57:44 $
+ *  last change: $Author: khong $ $Date: 2002-08-09 17:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@ public:
     Boundary SAL_CALL getWordBoundary( const rtl::OUString& Text, sal_Int32 nPos,
             const com::sun::star::lang::Locale& nLocale, sal_Int16 WordType, sal_Bool bDirection )
             throw(com::sun::star::uno::RuntimeException);
+    LineBreakResults SAL_CALL getLineBreak( const rtl::OUString& Text, sal_Int32 nStartPos,
+        const com::sun::star::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
+        const LineBreakHyphenationOptions& hOptions, const LineBreakUserOptions& bOptions )
+        throw(com::sun::star::uno::RuntimeException);
 
 protected:
     xdictionary *dict;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_cjk.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-02 01:35:52 $
+ *  last change: $Author: khong $ $Date: 2002-08-09 17:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,29 @@ BreakIterator_CJK::getWordBoundary( const OUString& text, sal_Int32 anyPos,
         throw RuntimeException();
 }
 
+LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
+    const OUString& Text, sal_Int32 nStartPos,
+    const lang::Locale& rLocale, sal_Int32 nMinBreakPos,
+    const LineBreakHyphenationOptions& hOptions,
+    const LineBreakUserOptions& bOptions ) throw(RuntimeException)
+{
+    LineBreakResults result;
+
+    if (bOptions.allowPunctuationOutsideMargin &&
+        bOptions.forbiddenBeginCharacters.indexOf(Text[nStartPos]) != -1 &&
+        ++nStartPos == Text.getLength()) {
+        ; // do nothing
+    } else if (bOptions.applyForbiddenRules && 0 < nStartPos && nStartPos < Text.getLength()) {
+        while (nStartPos > 0 &&
+            (bOptions.forbiddenBeginCharacters.indexOf(Text[nStartPos]) != -1 ||
+            bOptions.forbiddenEndCharacters.indexOf(Text[nStartPos]) != -1))
+        nStartPos--;
+    }
+
+    result.breakIndex = nStartPos;
+    result.breakType = BreakType::WORDBOUNDARY;
+    return result;
+}
 //  ----------------------------------------------------
 //  class BreakIterator_zh
 //  ----------------------------------------------------;

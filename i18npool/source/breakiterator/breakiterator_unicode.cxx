@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-02 16:00:18 $
+ *  last change: $Author: khong $ $Date: 2002-08-09 17:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,14 +300,6 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
 
     if (!lineBreak) lineBreak = loadICUBreakIterator(rLocale, "", LOAD_LINE_BREAKITERATOR);
 
-    if (bOptions.allowPunctuationOutsideMargin &&
-        bOptions.forbiddenBeginCharacters.indexOf(Text[nStartPos]) != -1 &&
-        ++nStartPos == Text.getLength()) {
-        result.breakIndex = nStartPos;
-        result.breakType = BreakType::WORDBOUNDARY;
-        return result;
-    }
-
     lineBreak->setText(UnicodeString(Text.getStr(), Text.getLength()));
 
     if (lineBreak->isBoundary(nStartPos)) { //Line boundary break
@@ -336,12 +328,6 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
         result.breakType = BreakType::WORDBOUNDARY;
     }
 
-    if (bOptions.applyForbiddenRules && 0 < result.breakIndex && result.breakIndex < Text.getLength()) {
-        while (result.breakIndex > 0 &&
-            (bOptions.forbiddenBeginCharacters.indexOf(Text[result.breakIndex]) != -1 ||
-            bOptions.forbiddenEndCharacters.indexOf(Text[result.breakIndex - 1]) != -1))
-        result.breakIndex--;
-    }
     return result;
 }
 
