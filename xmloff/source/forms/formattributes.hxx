@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-12 12:01:05 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 13:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,13 @@ namespace xmloff
     #define SCA_IS_TRISTATE             0x00000800
     #define SCA_STATE                   0x00001000
 
+    // attributes of the office:forms element
+    enum OfficeFormsAttributes
+    {
+        ofaAutomaticFocus,
+        ofaApplyDesignMode
+    };
+
     //=====================================================================
     //= OAttributeMetaData
     //=====================================================================
@@ -225,6 +232,18 @@ namespace xmloff
                 the id of the attribute. Has to be one of the SCA_* constants.
         */
         static sal_uInt16 getSpecialAttributeNamespace(sal_Int32 _nId);
+
+        /** calculates the xml attribute representation of a attribute of the office:forms element
+            @param _nId
+                the id of the attribute
+        */
+        static const sal_Char* getOfficeFormsAttributeName(OfficeFormsAttributes _eAttrib);
+
+        /** calculates the xml namedspace key of a attribute of the office:forms element
+            @param _nId
+                the id of the attribute
+        */
+        static sal_uInt16 getOfficeFormsAttributeNamespace(OfficeFormsAttributes _eAttrib);
     };
 
     //=====================================================================
@@ -349,6 +368,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/12 12:01:05  fs
+ *  new implementations for the import - still under construction
+ *
  *  Revision 1.3  2000/12/06 17:28:05  fs
  *  changes for the formlayer import - still under construction
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 08:02:29 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 13:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,26 @@ namespace xmloff
         return XML_NAMESPACE_FORM;
     }
 
+    //---------------------------------------------------------------------
+    const sal_Char* OAttributeMetaData::getOfficeFormsAttributeName(OfficeFormsAttributes _eAttrib)
+    {
+        switch (_eAttrib)
+        {
+            case ofaAutomaticFocus:     return "automatic-focus";
+            case ofaApplyDesignMode:    return "apply-design-mode";
+            default:
+                OSL_ENSURE(sal_False, "OAttributeMetaData::getOfficeFormsAttributeName: invalid id!");
+        }
+        return "";
+    }
+
+    //---------------------------------------------------------------------
+    sal_uInt16 OAttributeMetaData::getOfficeFormsAttributeNamespace(OfficeFormsAttributes /* _eAttrib */)
+    {
+        // nothing special here
+        return XML_NAMESPACE_FORM;
+    }
+
     //=====================================================================
     //= OAttribute2Property
     //=====================================================================
@@ -320,6 +340,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/03/20 08:02:29  fs
+ *  #85114# #85115# corrected attributed names for encoding type and detail fields
+ *
  *  Revision 1.6  2001/02/13 13:44:41  fs
  *  tab_index -> tab-index
  *
