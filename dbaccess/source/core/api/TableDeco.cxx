@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:40:19 $
+ *  last change: $Author: fs $ $Date: 2001-04-27 08:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 #endif
 #ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
 #include <definitioncolumn.hxx>
-#endif
-#ifndef _DBA_SHARED_STUBS_HXX_
-#include "stubs.hxx"
 #endif
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
