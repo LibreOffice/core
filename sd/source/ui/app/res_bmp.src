@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:56:53 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1394,6 +1394,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ greek ] = "Στυλ αντικειμένων γραφικών";
             Text[ korean ] = "κ·Έλ¦Ό μ¤νƒ€μΌ";
             Text[ turkish ] = "Grafik Biηemleri";
+            Text[ czech ] = "GrafickΓ© styly";
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
             FilterList =
             {
@@ -1424,6 +1425,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ greek ] = "Πρότυπα αντικειμένων παρουσίασης";
             Text[ korean ] = "ν”„λ μ  ν…μ΄μ… μ¤νƒ€μΌ";
             Text[ turkish ] = "Sunum Biηemleri";
+            Text[ czech ] = "Styly prezentace";
             StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
             FilterList =
             {
