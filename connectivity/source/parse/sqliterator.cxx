@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-29 10:39:47 $
+ *  last change: $Author: oj $ $Date: 2001-01-03 09:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1095,7 +1095,7 @@ void OSQLParseTreeIterator::appendColumns(const OSQLTable& _rTable)
             aIter = find(m_aSelectColumns->begin(),m_aSelectColumns->end(),aName,m_aCaseEqual);
         }
         Reference< XPropertySet > xColumn;
-        if(xColumns->getByName(*pBegin) >>= xColumn)
+        if((xColumns->getByName(*pBegin) >>= xColumn) && xColumn.is())
         {
             OParseColumn* pColumn = new OParseColumn(xColumn,m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
             //  pColumn->setTableName(aIter->first);
