@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2002-10-09 14:01:16 $
+ *  last change: $Author: tl $ $Date: 2002-10-23 12:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,6 +421,9 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
         SwXFrame* pFrame = xIfcTunnel.is() ? (SwXFrame*)
             xIfcTunnel->getSomething(SwXFrame::getUnoTunnelId()) : 0;
 
+        SwXCell* pCell = xIfcTunnel.is() ? (SwXCell*)
+            xIfcTunnel->getSomething(SwXCell::getUnoTunnelId()) : 0;
+
         SwPaM * pPam = 0;
         SwXTextRanges* pPosN = 0;
         if(xCrsr.is())
@@ -446,7 +449,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
             }
         }
         // prevent misinterpretation of text frames that provide a XTextRange interface, too
-        else if(!pFrame && xPos.is())
+        else if(!pFrame && !pCell && xPos.is())
         {
             SwUnoInternalPaM aPam(*pDoc);
             if(SwXTextRange::XTextRangeToSwPaM(aPam, xPos))
@@ -457,7 +460,9 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
         if(pPam)
         {
             rSh.EnterStdMode();
+            rSh.SttSelect();
             rSh.SetSelection(*pPam);
+            rSh.EndSelect();
             while( pPam->GetNext() != pPam )
                 delete pPam->GetNext();
             delete pPam;
@@ -495,8 +500,6 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
             return sal_True;
         }
 
-        SwXCell* pCell = xIfcTunnel.is() ? (SwXCell*)
-            xIfcTunnel->getSomething(SwXCell::getUnoTunnelId()) : 0;
         if(pCell)
         {
             SwFrmFmt* pTblFrmFmt = pCell->GetFrmFmt();
@@ -512,7 +515,9 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                     SwPaM aPam(aPos);
                     aPam.Move(fnMoveForward, fnGoNode);
                     rSh.EnterStdMode();
+                    rSh.SttSelect();
                     rSh.SetSelection(aPam);
+                    rSh.EndSelect();
                     return sal_True;
                 }
             }
@@ -525,7 +530,9 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
            if(pUnoCrsr)
            {
                 rSh.EnterStdMode();
+                rSh.SttSelect();
                 rSh.SetSelection(*pUnoCrsr);
+                rSh.EndSelect();
                 return sal_True;
            }
         }
@@ -1137,7 +1144,9 @@ void SwXTextViewCursor::collapseToStart(void) throw( uno::RuntimeException )
                 pShellCrsr->Exchange();
             pShellCrsr->DeleteMark();
             rSh.EnterStdMode();
+            rSh.SttSelect();
             rSh.SetSelection(*pShellCrsr);
+            rSh.EndSelect();
         }
     }
     else
@@ -1159,7 +1168,9 @@ void SwXTextViewCursor::collapseToEnd(void) throw( uno::RuntimeException )
                 pShellCrsr->Exchange();
             pShellCrsr->DeleteMark();
             rSh.EnterStdMode();
+            rSh.SttSelect();
             rSh.SetSelection(*pShellCrsr);
+            rSh.EndSelect();
         }
     }
     else
@@ -1319,7 +1330,9 @@ void SwXTextViewCursor::gotoRange(
             else
                 aOwnPaM.DeleteMark();
         }
+        rSh.SttSelect();
         rSh.SetSelection(aOwnPaM);
+        rSh.EndSelect();
     }
     else
         throw uno::RuntimeException();
