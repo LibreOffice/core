@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.79 $
+#   $Revision: 1.80 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-23 15:58:37 $
+#   last change: $Author: hr $ $Date: 2005-04-06 10:52:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.79 $ ';
+$id_str = ' $Revision: 1.80 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -712,6 +712,15 @@ sub is_unstripped {
     return '';
 }
 
+sub is_jar {
+    my $file_name = shift;
+
+    if (-f $file_name && (( `file $file_name` ) =~ /Zip archive/o)) {
+        return '1' if ($file_name =~ /\.jar\.*/o);
+    };
+    return '';
+}
+
 sub execute_system {
     my $command = shift;
     if (system($command)) {
@@ -726,6 +735,16 @@ sub strip_target {
     my $rc = copy($file, $temp_file);
     execute_system("$strip $temp_file");
     return $rc;
+};
+
+sub cachejar {
+    my $file = shift;
+    my $to = $file.".so";
+    print "CACHEJAR: $file -> $to with $ENV{GCJ_DATABASE}\n";
+    print "Caching 1/2: $ENV{JAVACOMPILER} -shared -fPIC -Wl,-Bsymbolic -O2 -findirect-dispatch -fjni -o $to $file\n";
+    system("$ENV{JAVACOMPILER} -shared -fPIC -Wl,-Bsymbolic -O2 -findirect-dispatch -fjni -o $to $file");
+    print "Caching 2/2: $ENV{JAVACACHE} -a $ENV{GCJ_DATABASE} $file $to\n";
+    system("$ENV{JAVACACHE} -a $ENV{GCJ_DATABASE} $file $to");
 };
 
 sub copy_if_newer
@@ -754,6 +773,9 @@ sub copy_if_newer
         # hard link if possible
         if( link($from, $to) ){
             print "LINK: $from -> $to\n";
+            if ($ENV{JDK} eq 'gcj' && is_jar($from)) {
+                cachejar($to);
+            }
             return 1;
         }
     }
@@ -787,6 +809,9 @@ sub copy_if_newer
         fix_file_permissions($$from_stat_ref[2], $temp_file);
         $rc = rename($temp_file, $to);
         if ( $rc ) {
+            if ($ENV{JDK} eq 'gcj' && is_jar($from)) {
+                cachejar($to);
+            }
             # handle special packaging of *.dylib files for Mac OS X
             if ( $^O eq 'darwin' )
             {
