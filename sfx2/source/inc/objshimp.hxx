@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:51:18 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,8 @@ struct SfxObjectShell_Impl
     String              aTempName;
     DateTime            nTime;
     sal_uInt16          nVisualDocumentNumber;
+    sal_Int16           nDocumentSignatureState;
+    sal_Int16           nScriptingSignatureState;
     sal_Bool            bTemplateConfig:1,
                         bInList:1,          // ob per First/Next erreichbar
                         bClosing:1,         // sal_True w"aehrend Close(), um Benachrichtigungs-Rekursionen zu verhindern
@@ -133,6 +135,7 @@ struct SfxObjectShell_Impl
                         bBasicInitialized :1,
                         bHidden :1, // indicates a hidden view shell
                         bIsPrintJobCancelable :1; // Stampit disable/enable cancel button for print jobs ... default = true = enable!
+//!                        bLoadReadOnly:1; // if doc should be opened read only by config
 
     String              aNewName;  // Der Name, unter dem das Doc gespeichert
                                    // werden soll
@@ -182,6 +185,8 @@ struct SfxObjectShell_Impl
         pDialogLibContainer( 0 ),
         pProgress( 0),
         nVisualDocumentNumber( USHRT_MAX),
+        nDocumentSignatureState( SIGNATURESTATE_UNKNOWN ),
+        nScriptingSignatureState( SIGNATURESTATE_UNKNOWN ),
         bIsSaving( sal_False),
         bIsNamedVisible( sal_False),
         pCfgMgr( 0),
@@ -230,6 +235,7 @@ struct SfxObjectShell_Impl
         , nMacroMode( -1 )
         , bDisposing( sal_False )
         , bIsPrintJobCancelable( sal_True )
+//        , bLoadReadOnly( sal_False )
     {}
     ~SfxObjectShell_Impl();
 
