@@ -2,9 +2,9 @@
 #
 #   $RCSfile: javainstaller.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-08-17 13:51:20 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:54:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -394,6 +394,8 @@ sub set_classpath_for_install_sdk
     else { installer::exiter::exit_program("ERROR: Environment variable \"ENV_ROOT\" not set!", "set_classpath_for_install_sdk"); }
 
     $installsdk = $installsdk . $installer::globals::separator . "InstallSDK";
+
+    if ( $ENV{'INSTALLSDK_SOURCE'} ) { $installsdk = $ENV{'INSTALLSDK_SOURCE'}; }   # overriding the Install SDK with INSTALLSDK_SOURCE
 
     # The variable CLASSPATH has to contain:
     # $installsdk/classes:$installsdk/classes/setupsdk.jar:
