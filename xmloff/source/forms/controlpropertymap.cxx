@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertymap.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:15:32 $
+ *  last change: $Author: fs $ $Date: 2000-12-19 08:43:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ namespace xmloff
         // "FontType" - ignored - UnoControls don't use a FontType
         { "FontUnderline",  XML_NAMESPACE_STYLE,    sXML_text_underline,        XML_TYPE_TEXT_UNDERLINE, 0 },
         { "FontWeight",     XML_NAMESPACE_FO,       sXML_font_weight,           XML_TYPE_TEXT_WEIGHT, 0 },
-        { "FontWidth",      XML_NAMESPACE_FORM,     sXML_font_width,            XML_TYPE_FONT_WIDTH, 0 },
+        { "FontWidth",      XML_NAMESPACE_FORM,     sXML_font_width,            XML_TYPE_MEASURE16, 0 },
         { "FontWordLineMode",XML_NAMESPACE_FORM,    sXML_font_word_line_mode,   XML_TYPE_BOOL, 0 },
         { 0, 0, 0, 0 }
     };
@@ -146,6 +146,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/12/18 15:15:32  fs
+ *  initial checkin - property maps
+ *
  *
  *  Revision 1.0 14.12.00 10:09:14  fs
  ************************************************************************/
