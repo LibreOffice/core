@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:20:29 $
+#   last change: $Author: vg $ $Date: 2003-04-24 12:53:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 PRJ=..
 
-PRJNAME=SD
+PRJNAME=sd
 TARGET=sdraw3
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
