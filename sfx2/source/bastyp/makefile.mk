@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:28:18 $
+#   last change: $Author: rt $ $Date: 2003-09-19 07:58:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,7 @@ SLOFILES =\
         $(SLO)$/itmfac.obj				\
         $(SLO)$/sfxhtml.obj				\
         $(SLO)$/frmhtml.obj				\
-        $(SLO)$/frmhtmlw.obj			\
+        $(SLO)$/frmhtmlw.obj				\
         $(SLO)$/misc.obj				\
         $(SLO)$/idpool.obj				\
         $(SLO)$/progress.obj			\
