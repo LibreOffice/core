@@ -15,3 +15,4 @@ fl	filter\source\xsltvalidate				nmake	-	all fl_xsltvalidate		NULL
 fl	filter\source\xsltdialog				nmake	-	all fl_xsltdialog fl_flash		NULL
 fl	filter\source\docbook				nmake	-	all fl_docbook		NULL
 fl	filter\source\mswordxml				nmake	-	all fl_mswordxml		NULL
+fl	filter\util     				    nmake	-	all fl_util fl_flash fl_xsltdialog fl_pdf NULL
