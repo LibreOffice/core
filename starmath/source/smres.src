@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 15:07:49 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1065,14 +1065,14 @@ ModalDialog RID_ALIGNDIALOG
     OutputSize = TRUE ;
     SVLook = TRUE ;
     HelpID = SID_ALIGN ;
-    Size = MAP_APPFONT ( 119 , 66 ) ;
+    Size = MAP_APPFONT ( 139 , 66 ) ;
     Text [ de ] = "Ausrichtung" ;
     Text [ en-US ] = "Alignment" ;
     RadioButton 1
     {
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 17 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
         Text [ de ] = "~Links" ;
         Text [ en-US ] = "~Left" ;
         Text [ x-comment ] = " ";
@@ -1081,7 +1081,7 @@ ModalDialog RID_ALIGNDIALOG
     {
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 31 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
         Text [ de ] = "~Zentriert" ;
         Text [ en-US ] = "~Centered" ;
         Text [ x-comment ] = " ";
@@ -1090,7 +1090,7 @@ ModalDialog RID_ALIGNDIALOG
     {
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 44 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
         Text [ de ] = "~Rechts" ;
         Text [ en-US ] = "~Right" ;
         Text [ x-comment ] = " ";
@@ -1098,28 +1098,28 @@ ModalDialog RID_ALIGNDIALOG
     FixedLine 1
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 51 , 8 ) ;
+        Size = MAP_APPFONT ( 71 , 8 ) ;
         Text [ de ] = "Horizontal" ;
         Text [ en-US ] = "Horizontal" ;
         Text [ x-comment ] = " ";
     };
     OKButton 1
     {
-        Pos = MAP_APPFONT ( 63 , 6 ) ;
+        Pos = MAP_APPFONT ( 83 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton 1
     {
-        Pos = MAP_APPFONT ( 63 , 23 ) ;
+        Pos = MAP_APPFONT ( 83 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     PushButton 1
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 63 , 46 ) ;
+        Pos = MAP_APPFONT ( 83 , 46 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ de ] = "~Standard" ;
         Text [ en-US ] = "~Default" ;
