@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-27 10:45:54 $
+ *  last change: $Author: mba $ $Date: 2001-11-01 17:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,6 +610,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 return;
             }
 
+            SetModified( FALSE );
             ULONG lErr = GetErrorCode();
             ErrorHandler::HandleError(lErr);
 
