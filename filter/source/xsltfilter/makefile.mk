@@ -2,9 +2,9 @@
 # 
 #   $RCSfile: makefile.mk,v $ 
 # 
-#   $Revision: 1.7 $ 
+#   $Revision: 1.8 $ 
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 15:12:49 $ 
+#   last change: $Author: obo $ $Date: 2005-01-25 15:13:22 $ 
 # 
 #   The Contents of this file are made available subject to the terms of 
 #   either of the following licenses 
@@ -72,27 +72,6 @@ CLASSDIR!:=$(CLASSDIR)$/$(TARGET)
 XCLASSPATH+=":$(XML_CLASSPATH)"
 .ENDIF
 .INCLUDE: settings.mk  
-#USE_UDK_EXTENDED_MANIFESTFILE=TRUE
-#USE_EXTENDED_MANIFESTFILE=TRUE
-JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar 
-JAVAFILES		= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
-CUSTOMMANIFESTFILE = Manifest  
-#JARMANIFEST = Manifest
-
-#JARDIR=$(CLASSDIR)
-
-JARCOMPRESS		= TRUE  
-JARCLASSDIRS	= XSLTFilter*.class XSLTransformer*.class
-JARTARGET		= $(TARGET).jar
-
-
-# --- Files --------------------------------------------------------  
-JAVACLASSFILES=$(CLASSDIR)$/XSLTFilter.class  $(CLASSDIR)$/XSLTransformer.class  
-
-#---Manifest -------------------------------------------------------
-#$(OUT)$/class$/$(TARGET)$/META-INF: META-INF
-#        + $(COPY) $(COPYRECURSE) META-INF $(OUT)$/class$/XSLTFilter$/META-INF
-#
 
 SLOFILES=$(SLO)$/XSLTFilter.obj
 LIBNAME=xsltfilter
@@ -112,15 +91,39 @@ SHL1STDLIBS= \
     $(CPPUHELPERLIB)    \
     $(CPPULIB)          \
     $(SALLIB)
-    
+
+.IF "$(SOLAR_JAVA)"!=""
+.IF "$(JDK)"!="gcj"
+
+#USE_UDK_EXTENDED_MANIFESTFILE=TRUE
+#USE_EXTENDED_MANIFESTFILE=TRUE
+JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar 
+JAVAFILES		= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
+CUSTOMMANIFESTFILE = Manifest  
+#JARMANIFEST = Manifest
+
+#JARDIR=$(CLASSDIR)
+
+JARCOMPRESS		= TRUE  
+JARCLASSDIRS	= XSLTFilter*.class XSLTransformer*.class
+JARTARGET		= $(TARGET).jar
+
+
+# --- Files --------------------------------------------------------  
+JAVACLASSFILES=$(CLASSDIR)$/XSLTFilter.class  $(CLASSDIR)$/XSLTransformer.class     
+.ENDIF
+.ENDIF
     
 # --- Targets ------------------------------------------------------  
 .INCLUDE :  target.mk 
 .IF "$(SOLAR_JAVA)"!=""
+.IF "$(JDK)"=="gcj"
+all:
+    @echo This dir cannot be build with gcj because of ‘StreamSource’ not found in the declaration of the local variable ‘stylesource’
+.ELSE
 $(JAVACLASSFILES) : $(CLASSDIR)
-.ENDIF
-  
+
 $(CLASSDIR) :
     $(MKDIR) $(CLASSDIR)
-
-
+.ENDIF
+.ENDIF
