@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoolsclient.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:34:38 $
+ *  last change: $Author: rt $ $Date: 2001-07-27 08:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ namespace svxform
             {
                 // get the symbol for the method creating the factory
                 const ::rtl::OUString sFactoryCreationFunc = ::rtl::OUString::createFromAscii("createDataAccessToolsFactory");
-                s_pFactoryCreationFunc = static_cast<createDataAccessToolsFactoryFunction>(
+                s_pFactoryCreationFunc = reinterpret_cast<createDataAccessToolsFactoryFunction>(
                     osl_getSymbol(s_hDbtoolsModule, sFactoryCreationFunc.pData));
 
                 if (NULL == s_pFactoryCreationFunc)
@@ -254,6 +254,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/07/25 13:34:38  fs
+ *  initial checkin - base class for accessing DBTOOLS with load-on-demand
+ *
  *
  *  Revision 1.0 24.07.01 16:55:54  fs
  ************************************************************************/
