@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-03 11:08:16 $
+ *  last change: $Author: mba $ $Date: 2002-06-03 14:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,7 +481,7 @@ void LoadURL( const String& rURL, ViewShell* pVSh, USHORT nFilter,
 
     const SfxPoolItem* aArr[] = {
                 &aName,
-                &aNewView, /*&aSilent,*/ &aReadOnly,
+                &aNewView, /*&aSilent,*/
                 &aReferer,
                 &aView, &aTargetFrameName,
                 &aBrowse,
