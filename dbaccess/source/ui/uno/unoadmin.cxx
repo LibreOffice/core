@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoadmin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-27 08:08:47 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 08:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@
 #endif
 // ---
 
-#define THISREF()   static_cast< starlang::XServiceInfo* >(this)
+#define THISREF()   static_cast< XServiceInfo* >(this)
 
 using namespace dbaui;
 
@@ -113,9 +113,13 @@ namespace dbaui
 {
 //.........................................................................
 
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::beans;
+
 //=========================================================================
 //-------------------------------------------------------------------------
-ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const staruno::Reference< starlang::XMultiServiceFactory >& _rxORB)
+ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XMultiServiceFactory >& _rxORB)
     :OGenericUnoDialog(_rxORB)
     ,m_pDatasourceItems(NULL)
     ,m_pItemPool(NULL)
@@ -137,38 +141,38 @@ ODatabaseAdministrationDialog::~ODatabaseAdministrationDialog()
 }
 
 //-------------------------------------------------------------------------
-staruno::Sequence<sal_Int8> SAL_CALL ODatabaseAdministrationDialog::getImplementationId(  ) throw(staruno::RuntimeException)
+Sequence<sal_Int8> SAL_CALL ODatabaseAdministrationDialog::getImplementationId(  ) throw(RuntimeException)
 {
     static ::cppu::OImplementationId aId;
     return aId.getImplementationId();
 }
 
 //-------------------------------------------------------------------------
-staruno::Reference< staruno::XInterface > SAL_CALL ODatabaseAdministrationDialog::Create(const staruno::Reference< starlang::XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > SAL_CALL ODatabaseAdministrationDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
     return *(new ODatabaseAdministrationDialog(_rxFactory));
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseAdministrationDialog::getImplementationName() throw(staruno::RuntimeException)
+::rtl::OUString SAL_CALL ODatabaseAdministrationDialog::getImplementationName() throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString ODatabaseAdministrationDialog::getImplementationName_Static() throw(staruno::RuntimeException)
+::rtl::OUString ODatabaseAdministrationDialog::getImplementationName_Static() throw(RuntimeException)
 {
     return ::rtl::OUString::createFromAscii("org.openoffice.comp.sdb.ODatabaseAdministrationDialog");
 }
 
 //-------------------------------------------------------------------------
-::comphelper::StringSequence SAL_CALL ODatabaseAdministrationDialog::getSupportedServiceNames() throw(staruno::RuntimeException)
+::comphelper::StringSequence SAL_CALL ODatabaseAdministrationDialog::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 
 //-------------------------------------------------------------------------
-::comphelper::StringSequence ODatabaseAdministrationDialog::getSupportedServiceNames_Static() throw(staruno::RuntimeException)
+::comphelper::StringSequence ODatabaseAdministrationDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
     aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.DatasourceAdministrationDialog");
@@ -176,9 +180,9 @@ staruno::Reference< staruno::XInterface > SAL_CALL ODatabaseAdministrationDialog
 }
 
 //-------------------------------------------------------------------------
-staruno::Reference<starbeans::XPropertySetInfo>  SAL_CALL ODatabaseAdministrationDialog::getPropertySetInfo() throw(staruno::RuntimeException)
+Reference<XPropertySetInfo>  SAL_CALL ODatabaseAdministrationDialog::getPropertySetInfo() throw(RuntimeException)
 {
-    staruno::Reference<starbeans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
@@ -191,7 +195,7 @@ staruno::Reference<starbeans::XPropertySetInfo>  SAL_CALL ODatabaseAdministratio
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* ODatabaseAdministrationDialog::createArrayHelper( ) const
 {
-    staruno::Sequence< starbeans::Property > aProps;
+    Sequence< Property > aProps;
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
@@ -207,7 +211,26 @@ void ODatabaseAdministrationDialog::destroyDialog()
 Dialog* ODatabaseAdministrationDialog::createDialog(Window* _pParent)
 {
     ODbAdminDialog::createItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults, &m_aCollection);
-    return new ODbAdminDialog(_pParent, m_pDatasourceItems, m_xORB);
+    ODbAdminDialog* pDialog = new ODbAdminDialog(_pParent, m_pDatasourceItems, m_xORB);
+    pDialog->selectDataSource(m_sInitialSelection);
+    return pDialog;
+}
+
+//------------------------------------------------------------------------------
+void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
+{
+    starbeans::PropertyValue aProperty;
+    if (_rValue >>= aProperty)
+    {
+        if (aProperty.Name.equalsAsciiL("InitialSelection", sizeof("InitialSelection") - 1))
+        {
+            aProperty.Value >>= m_sInitialSelection;
+            if (m_pDialog)
+                static_cast<ODbAdminDialog*>(m_pDialog)->selectDataSource(m_sInitialSelection);
+            return;
+        }
+    }
+    OGenericUnoDialog::implInitialize(_rValue);
 }
 
 //.........................................................................
@@ -217,6 +240,9 @@ Dialog* ODatabaseAdministrationDialog::createDialog(Window* _pParent)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/27 08:08:47  fs
+ *  don't include stringconstants.hrc directly anymore
+ *
  *  Revision 1.1  2000/10/25 12:56:26  fs
  *  moved herein from ..\dlg
  *

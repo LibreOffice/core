@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoadmin.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-25 12:49:14 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 08:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,26 +94,28 @@ protected:
     SfxPoolItem**           m_pItemPoolDefaults;    // pool defaults
     ODsnTypeCollection      m_aCollection;          // datasource type collection
 
+    ::rtl::OUString         m_sInitialSelection;
+
 protected:
     ODatabaseAdministrationDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
     ~ODatabaseAdministrationDialog();
 
 public:
     // XTypeProvider
-    virtual staruno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(staruno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw(staruno::RuntimeException);
-    virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(staruno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo - static methods
-    static staruno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( staruno::RuntimeException );
-    static ::rtl::OUString getImplementationName_Static(void) throw( staruno::RuntimeException );
-    static staruno::Reference< staruno::XInterface >
-            SAL_CALL Create(const staruno::Reference< starlang::XMultiServiceFactory >&);
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static ::rtl::OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+            SAL_CALL Create(const ::com::sun::star::uno::Reference< starlang::XMultiServiceFactory >&);
 
     // XPropertySet
-    virtual staruno::Reference<starbeans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(staruno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
     // OPropertyArrayUsageHelper
@@ -123,6 +125,7 @@ protected:
 // OGenericUnoDialog overridables
     virtual Dialog* createDialog(Window* _pParent);
     virtual void destroyDialog();
+    virtual void implInitialize(const staruno::Any& _rValue);
 };
 
 //.........................................................................
@@ -134,6 +137,9 @@ protected:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/25 12:49:14  fs
+ *  moved herein from ..\dlg
+ *
  *  Revision 1.2  2000/10/11 11:31:03  fs
  *  new implementations - still under construction
  *
