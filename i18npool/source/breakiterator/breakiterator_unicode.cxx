@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: khong $ $Date: 2002-09-26 01:34:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #include <breakiterator_unicode.hxx>
-#include <unicode.hxx>
+#include <i18nutil/unicode.hxx>
 #include <unicode/locid.h>
 #include <unicode/rbbi.h>
 #include <data/dict_word_ca.h>
