@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-08 16:04:52 $
+ *  last change: $Author: dl $ $Date: 2001-12-05 09:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,6 +755,10 @@ void  SdDrawViewShell::GetRulerState(SfxItemSet& rSet)
         Point aPnt2 = pWindow->GetViewOrigin();
         Rectangle aMinMaxRect = Rectangle( aPnt1, Size(ULONG_MAX, ULONG_MAX) );
         rSet.Put( SfxRectangleItem(SID_RULER_LR_MIN_MAX, aMinMaxRect) );
+    }
+    else
+    {
+        rSet.Put( SfxRectangleItem(SID_RULER_LR_MIN_MAX, aRect) );
     }
 
     SvxLongLRSpaceItem aLRSpace(aPagePos.X() + pActualPage->GetLftBorder(),
