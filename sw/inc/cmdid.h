@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:32:50 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:40:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,8 +399,6 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 #define FN_INSERT_SOFT_HYPHEN   (FN_INSERT + 43)    /* weicher Trenner */
 #define FN_INSERT_HARD_SPACE    (FN_INSERT + 44)    /* hartes Space */
-#define FN_INSERT_REGION        (FN_INSERT + 45)    /* Bereich einfuegen */
-
 
 
 #define FN_TOOL_GROUP           (FN_INSERT + 47)    /* Objekte gruppieren */
@@ -471,7 +469,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_INSERT_PAGEFOOTER    (FN_INSERT2 + 14)   /* Standard Fusszeile einfuegen */
 
 #define FN_INSERT_ENDNOTE           (FN_INSERT2 + 18)   /* Endnote einfuegen*/
-#define FN_INSERT_COLUMN_SECTION    (FN_INSERT2 + 19)   /* Spaltigen Bereich einfügen */
+#define FN_INSERT_REGION            (FN_INSERT2 + 19)   /* Insert section */
 
 #define FN_INSERT_MULTI_TOX         (FN_INSERT2 + 20)   /* insert any TOX */
 #define FN_INSERT_AUTH_ENTRY_DLG    (FN_INSERT2 + 21)   /* insert entry for table of authorities*/
