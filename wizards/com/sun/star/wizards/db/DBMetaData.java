@@ -2,9 +2,9 @@
 *
 *  $RCSfile: DBMetaData.java,v $
 *
-*  $Revision: 1.10 $
+*  $Revision: 1.11 $
 *
-*  last change: $Author: kz $ $Date: 2005-03-18 16:15:05 $
+*  last change: $Author: hr $ $Date: 2005-04-06 10:18:21 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -735,12 +735,12 @@ public class DBMetaData {
 
 
 
-    public XComponent openDatabaseDocument(String _docname, boolean _bAsTemplate, boolean _bReadOnly, XHierarchicalNameAccess _xDocuments){
+    public XComponent openDatabaseDocument(String _docname, boolean _bAsTemplate, boolean _bOpenInDesign, XHierarchicalNameAccess _xDocuments){
     XComponent xRetComponent = null;
     try {
         XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, _xDocuments);
         PropertyValue[] aPropertyValues = new PropertyValue[4];
-        aPropertyValues[0] = Properties.createProperty("OpenMode", _bReadOnly ?  "openDesign": "open" );
+        aPropertyValues[0] = Properties.createProperty("OpenMode", _bOpenInDesign ?  "openDesign": "open" );
         aPropertyValues[1] = Properties.createProperty("ActiveConnection", this.DBConnection);
         aPropertyValues[2] = Properties.createProperty("DocumentTitle", _docname);
         aPropertyValues[3] = Properties.createProperty("AsTemplate", new Boolean(_bAsTemplate));
@@ -755,15 +755,15 @@ public class DBMetaData {
     }
 
 
-    public XComponent openFormDocument(String _sformname, boolean _bReadOnly){
+    public XComponent openFormDocument(String _sformname, boolean _bOpenInDesign){
         XHierarchicalNameAccess xFormDocuments = getFormDocuments();
-        return openDatabaseDocument(_sformname, false, _bReadOnly, xFormDocuments);
+        return openDatabaseDocument(_sformname, false, _bOpenInDesign, xFormDocuments);
     }
 
 
-    public XComponent openReportDocument(String _sreportname, boolean _bAsTemplate, boolean _bReadOnly){
+    public XComponent openReportDocument(String _sreportname, boolean _bAsTemplate, boolean _bOpenInDesign){
         XHierarchicalNameAccess xReportDocuments = getReportDocuments();
-        return openDatabaseDocument(_sreportname, _bAsTemplate, _bReadOnly, xReportDocuments);
+        return openDatabaseDocument(_sreportname, _bAsTemplate, _bOpenInDesign, xReportDocuments);
     }
 
 
