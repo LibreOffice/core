@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCContext.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-31 16:11:06 $
+ *  last change: $Author: dvo $ $Date: 2001-08-23 09:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ class XMLIndexTOCContext : public SvXMLImportContext
 {
     const ::rtl::OUString sTitle;
     const ::rtl::OUString sIsProtected;
+    const ::rtl::OUString sName;
 
     /** XPropertySet of the index */
     ::com::sun::star::uno::Reference<

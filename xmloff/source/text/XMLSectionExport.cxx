@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-02 10:18:42 $
+ *  last change: $Author: dvo $ $Date: 2001-08-23 09:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,7 @@ XMLSectionExport::XMLSectionExport(
         sParaStyleLevel(RTL_CONSTASCII_USTRINGPARAM("ParaStyleLevel")),
         sSection(GetXMLToken(XML_SECTION)),
         sTitle(RTL_CONSTASCII_USTRINGPARAM("Title")),
+        sName(RTL_CONSTASCII_USTRINGPARAM("Name")),
         sUseAlphabeticalSeparators(
             RTL_CONSTASCII_USTRINGPARAM("UseAlphabeticalSeparators")),
         sUseCombinedEntries(RTL_CONSTASCII_USTRINGPARAM("UseCombinedEntries")),
@@ -924,6 +925,14 @@ void XMLSectionExport::ExportBaseIndexStart(
     if (*(sal_Bool*)aAny.getValue())
     {
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_PROTECTED, XML_TRUE);
+    }
+
+    // index name
+    OUString sIndexName;
+    rPropertySet->getPropertyValue(sName) >>= sIndexName;
+    if ( sIndexName.getLength() > 0 )
+    {
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, sIndexName);
     }
 
     // index  Element start

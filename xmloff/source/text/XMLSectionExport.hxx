@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: dvo $ $Date: 2001-08-23 09:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@ class XMLSectionExport
     const ::rtl::OUString sParaStyleLevel;
     const ::rtl::OUString sSection;
     const ::rtl::OUString sTitle;
+    const ::rtl::OUString sName;
     const ::rtl::OUString sUseAlphabeticalSeparators;
     const ::rtl::OUString sUseCombinedEntries;
     const ::rtl::OUString sUseDash;

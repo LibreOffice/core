@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: dvo $ $Date: 2001-08-23 09:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,8 @@ XMLIndexTOCContext::XMLIndexTOCContext(
         bValid(sal_False),
         xBodyContextRef(),
         sTitle(RTL_CONSTASCII_USTRINGPARAM("Title")),
-        sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected"))
+        sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected")),
+        sName(RTL_CONSTASCII_USTRINGPARAM("Name"))
 {
     if (XML_NAMESPACE_TEXT == nPrfx)
     {
@@ -384,8 +385,10 @@ void XMLIndexTOCContext::StartElement(
 
         // find text:style-name attribute and set section style
         // find text:protected and set value
+        // find text:name and set value (if not empty)
         sal_Int16 nCount = xAttrList->getLength();
         sal_Bool bProtected = sal_False;
+        OUString sIndexName;
         for(sal_Int16 nAttr = 0; nAttr < nCount; nAttr++)
         {
             OUString sLocalName;
@@ -413,11 +416,21 @@ void XMLIndexTOCContext::StartElement(
                         bProtected = bTmp;
                     }
                 }
+                else if ( IsXMLToken( sLocalName, XML_NAME ) )
+                {
+                    sIndexName = xAttrList->getValueByIndex(nAttr);
+                }
             }
         }
         Any aAny;
         aAny.setValue( &bProtected, ::getBooleanCppuType() );
         xTOCPropertySet->setPropertyValue( sIsProtected, aAny );
+
+        if (sIndexName.getLength() > 0)
+        {
+            aAny <<= sIndexName;
+            xTOCPropertySet->setPropertyValue( sName, aAny );
+        }
     }
 }
 
