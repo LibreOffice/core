@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-28 11:53:08 $
+ *  last change: $Author: hdu $ $Date: 2002-03-08 14:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1171,7 +1171,7 @@ bool SalGraphicsData::DrawServerAAForcedString( int nX, int nY,
             {
                 if( p20 >= (unsigned char*)pImg->data )
                 {
-                    unsigned char* const p22 = p20 + pImg->bytes_per_line;  // dest right limit
+                    unsigned char* const p22 = p20 + pImg->width * bpp; // dest right limit
                     unsigned char* pDst = p21;
                     const unsigned char* pSrc = p10;
                     for( int x = pRawBitmap->mnWidth; (--x >= 0) && (p22 > pDst); ++pSrc )
