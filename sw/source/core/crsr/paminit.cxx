@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paminit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:46:20 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,9 @@ SwGoInDoc fnGoDoc       = &GoInDoc;
 SwGoInDoc fnGoSection   = &GoInSection;
 SwGoInDoc fnGoNode      = &GoInNode;
 SwGoInDoc fnGoCntnt     = &GoInCntnt;
-SwGoInDoc fnGoCntntCells= &GoInCntntCells;
+SwGoInDoc fnGoCntntCells = &GoInCntntCells;
+SwGoInDoc fnGoCntntSkipHidden      = &GoInCntntSkipHidden;
+SwGoInDoc fnGoCntntCellsSkipHidden = &GoInCntntCellsSkipHidden;
 
 SwWhichPara fnParaPrev  = &GoPrevPara;
 SwWhichPara fnParaCurr  = &GoCurrPara;
