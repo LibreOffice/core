@@ -8,7 +8,7 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-COMPONENT_NAME=FlatXmlFilterDetection
+COMPONENT_NAME=FlatXMLFilterDetection
 COMPONENT_IMPL_NAME=$(COMPONENT_NAME).uno.$(SHAREDLIB_EXT) 
 OUT_COMP_INC = $(OUT_INC)/$(COMPONENT_NAME)
 OUT_COMP_GEN = $(OUT_MISC)/$(COMPONENT_NAME)
