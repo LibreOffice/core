@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 08:41:50 $
+#   last change: $Author: hr $ $Date: 2004-11-09 16:47:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,17 +93,24 @@ SLOFILES=\
             $(SLO)$/saltimer.obj		\
             $(SLO)$/saldisp.obj			\
             $(SLO)$/salinst.obj			\
-            $(SLO)$/salsound2.obj		\
-            $(SLO)$/audioconvert.obj	\
-            $(SLO)$/osssound.obj		\
-            $(SLO)$/devaudiosound.obj	\
-            $(SLO)$/rptpsound.obj		\
-            $(SLO)$/nassound.obj		\
             $(SLO)$/salsys.obj			\
             $(SLO)$/soicon.obj			\
             $(SLO)$/sm.obj				\
             $(SLO)$/keysymnames.obj		\
             $(SLO)$/wmadaptor.obj		\
+
+SLOFILES+=\
+            $(SLO)$/salsound2.obj		\
+            $(SLO)$/osssound.obj		\
+            $(SLO)$/devaudiosound.obj		\
+            $(SLO)$/audioconvert.obj		\
+            $(SLO)$/rptpsound.obj		\
+            $(SLO)$/nassound.obj		
+
+.IF "$(ENABLE_PASF)" != ""
+CFLAGS+=-DUSE_PASF
+SLOFILES+=$(SLO)$/pasfsound.obj
+.ENDIF
 
 .IF "$(WITH_LIBSN)"=="YES"
 CDEFS+=-DHAVE_LIBSN
