@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:03:50 $
+ *  last change: $Author: hr $ $Date: 2004-08-05 16:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ namespace dbaccess
 //==========================================================================
 //= OQueryDescriptor
 //==========================================================================
-DBG_NAME(OQueryDescriptor);
+DBG_NAME(OQueryDescriptor)
 //--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor()
     : ODataSettings(m_aBHelper)
