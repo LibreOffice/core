@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontactofobjlistpainter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:06:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,17 @@ namespace sdr
         // Update Draw Hierarchy data
         void ObjectContactPainter::EnsureValidDrawHierarchy(DisplayInfo& rDisplayInfo)
         {
+            const sal_uInt32 nCount(maDrawHierarchy.Count());
+
+            // #i35614#
+            if(mbIsInitialized && !nCount)
+            {
+                // DrawHierarchy is not only invalid, but also completely
+                // removed. Thus, we need to change the mbIsInitialized flag
+                // to express that state.
+                mbIsInitialized = sal_False;
+            }
+
             if(mbIsInitialized)
             {
                 // no new StartPoint, is the invalid flag set which means
@@ -114,7 +125,6 @@ namespace sdr
                 if(!IsDrawHierarchyValid())
                 {
                     // Yes, check the sub-hierarchies
-                    const sal_uInt32 nCount(maDrawHierarchy.Count());
 
                     for(sal_uInt32 a(0L); a < nCount; a++)
                     {
