@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:11:18 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:38:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,35 +65,33 @@ PRJ=..
 PRJNAME=UnoControls
 TARGET=ctl
 LIBTARGET=NO
-USE_LDUMP2=TRUE
-USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------
+
 .INCLUDE :	$(PRJ)$/util$/makefile.pmk
 
-
 # --- Files --------------------------------------------------------
+
 LIB1TARGET= 	$(SLB)$/$(TARGET).lib
-#LIB1OBJFILES=	$(SLOFILES)
 LIB1FILES=	$(SLB)$/base.lib	\
         $(SLB)$/controls.lib
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= i$(TARGET)
 
+SHL1VERSIONMAP=exports.map
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
+
 SHL1STDLIBS= \
-        $(CPPULIB)	 \
-        $(CPPUHELPERLIB)	 \
-        $(VOSLIB) 	 \
-        $(SALLIB) 	 \
-        $(TOOLSLIB)
+        $(TOOLSLIB) \
+        $(CPPUHELPERLIB) \
+        $(CPPULIB) \
+        $(VOSLIB) \
+        $(SALLIB)
 
 SHL1DEPN=		makefile.mk
 SHL1LIBS=		$(LIB1TARGET)
-#SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=		$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
 .INCLUDE :	target.mk
