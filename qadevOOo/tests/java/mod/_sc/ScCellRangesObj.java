@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScCellRangesObj.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:06:10 $
+ *  last change:$Date: 2003-11-18 16:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import ifc.sheet._XCellRangesQuery;
+
 
 /**
 * Test for object which is represented by service
@@ -145,8 +147,8 @@ public class ScCellRangesObj extends TestCase {
     }
 
     /**
-    * Disposes Spreadsheet document.
-    */
+     * Disposes Spreadsheet document.
+     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp =
@@ -242,6 +244,7 @@ public class ScCellRangesObj extends TestCase {
                 "Exception occurred while filling cells", e);
         }
 
+
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         // NameReplaceIndex : _XNameReplace
@@ -270,7 +273,24 @@ public class ScCellRangesObj extends TestCase {
         XPropertySet PropSet = (XPropertySet)
                     UnoRuntime.queryInterface(XPropertySet.class, oObj);
         tEnv.addObjRelation("PropSet",PropSet);
+        tEnv.addObjRelation("SHEET", oSheet);
+        // add expected results for the XCellRangesQuery interface test
+        String[]expectedResults = new String[7];
+        expectedResults[_XCellRangesQuery.QUERYCOLUMNDIFFERENCES] = "Sheet1.I7:J8";
+        expectedResults[_XCellRangesQuery.QUERYCONTENTCELLS] = "";
+        expectedResults[_XCellRangesQuery.QUERYEMPTYCELLS] = "";
+        expectedResults[_XCellRangesQuery.QUERYFORMULACELLS] = "";
+        expectedResults[_XCellRangesQuery.QUERYINTERSECTION] = "Sheet1.D4";
+        expectedResults[_XCellRangesQuery.QUERYROWDIFFERENCES] = "Sheet1.I7:J8";
+        expectedResults[_XCellRangesQuery.QUERYVISIBLECELLS] = "Sheet1.C2:D4"; // first range, first line invisible
+        tEnv.addObjRelation("XCellRangesQuery.EXPECTEDRESULTS", expectedResults);
 
+        // for XSearchable and XReplaceable interface test
+        tEnv.addObjRelation("SEARCHSTRING", "15");
+
+        // for XFormulaQuery interface test
+        tEnv.addObjRelation("EXPECTEDDEPENDENTVALUES", new int[]{4,5,1,4});
+        tEnv.addObjRelation("EXPECTEDPRECEDENTVALUES", new int[]{4,5,1,4});
         return tEnv ;
     }
 
