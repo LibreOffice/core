@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:15 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:34:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,10 @@ protected:
         com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
 public:
-    SdXMLImport( sal_Bool bIsDraw, sal_uInt16 nImportFlags = IMPORT_ALL );
+    // #110680#
+    SdXMLImport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+        sal_Bool bIsDraw, sal_uInt16 nImportFlags = IMPORT_ALL );
     ~SdXMLImport() throw ();
 
     // XImporter
