@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:13:41 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,16 @@
 #ifndef XMLOFF_FORMS_FORMCELLBINDING
 #include "formcellbinding.hxx"
 #endif
+#ifndef _XMLOFF_XFORMSIMPORT_HXX
+#include "xformsimport.hxx"
+#endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include "xmlnmspe.hxx"
+#endif
+#include <algorithm>
 
 SV_IMPL_REF( SvXMLStylesContext );
 
@@ -431,6 +441,42 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    void OFormLayerXMLImport_Impl::registerXFormsValueBinding(
+        const Reference< XPropertySet >& _rxControlModel,
+        const ::rtl::OUString& _rBindingID )
+    {
+        // TODO: is an empty binding name allowed?
+        OSL_ENSURE( _rxControlModel.is(), "need  model" );
+
+        m_aXFormsValueBindings.push_back(
+            ModelStringPair( _rxControlModel, _rBindingID ) );
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLImport_Impl::registerXFormsListBinding(
+        const Reference< XPropertySet >& _rxControlModel,
+        const ::rtl::OUString& _rBindingID )
+    {
+        // TODO: is an empty binding name allowed?
+        OSL_ENSURE( _rxControlModel.is(), "need  model" );
+
+        m_aXFormsListBindings.push_back(
+            ModelStringPair( _rxControlModel, _rBindingID ) );
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLImport_Impl::registerXFormsSubmission(
+        const Reference< XPropertySet >& _rxControlModel,
+        const ::rtl::OUString& _rSubmissionID )
+    {
+        // TODO: is an empty binding name allowed?
+        OSL_ENSURE( _rxControlModel.is(), "need  model" );
+
+        m_aXFormsSubmissions.push_back(
+            ModelStringPair( _rxControlModel, _rSubmissionID ) );
+    }
+
+    //---------------------------------------------------------------------
     void OFormLayerXMLImport_Impl::registerCellRangeListSource( const Reference< XPropertySet >& _rxControlModel, const ::rtl::OUString& _rCellRangeAddress )
     {
         OSL_ENSURE( _rxControlModel.is() && _rCellRangeAddress.getLength(),
@@ -625,14 +671,28 @@ namespace xmloff
         const Reference< sax::XAttributeList >& _rxAttribs)
     {
         OSL_ENSURE(m_xForms.is(), "OFormLayerXMLImport_Impl::createContext: have no forms collection (did you use startPage?)!");
-        OSL_ENSURE(0 == _rLocalName.compareToAscii("form"), "OFormLayerXMLImport_Impl::createContext: don't know the element name (must be \"form\")!");
 
-        if (!m_xForms.is() || (0 != _rLocalName.compareToAscii("form")))
+        SvXMLImportContext* pContext = NULL;
+        if( m_xForms.is() && (0 == _rLocalName.compareToAscii("form")))
         {
-            return new SvXMLImportContext(m_rImporter, _nPrefix, _rLocalName);
+            pContext =
+               new OFormImport(*this, *this, _nPrefix, _rLocalName, m_xForms );
+        }
+        else if( _nPrefix == XML_NAMESPACE_XFORMS
+                 && xmloff::token::IsXMLToken( _rLocalName,
+                                               xmloff::token::XML_MODEL ) )
+        {
+            pContext =
+                createXFormsModelContext( m_rImporter, _nPrefix, _rLocalName );
+        }
+        else
+        {
+            OSL_ENSURE( false, "unknown element" );
+            pContext =
+                new SvXMLImportContext(m_rImporter, _nPrefix, _rLocalName);
         }
 
-        return new OFormImport(*this, *this, _nPrefix, _rLocalName, m_xForms );
+        return pContext;
     }
 
     //---------------------------------------------------------------------
@@ -714,6 +774,22 @@ namespace xmloff
             }
             m_aCellRangeListSources.clear();
         }
+
+        // process XForms-bindings; call registerXFormsValueBinding for each
+        std::for_each( m_aXFormsValueBindings.begin(),
+                       m_aXFormsValueBindings.end(),
+                       bind1st( ptr_fun( bindXFormsValueBinding ),
+                                getGlobalContext().GetModel() ) );
+        // same for list bindings
+        std::for_each( m_aXFormsListBindings.begin(),
+                       m_aXFormsListBindings.end(),
+                       bind1st( ptr_fun( bindXFormsListBinding ),
+                                getGlobalContext().GetModel() ) );
+        // same for submissions
+        std::for_each( m_aXFormsSubmissions.begin(),
+                       m_aXFormsSubmissions.end(),
+                       bind1st( ptr_fun( bindXFormsSubmission ),
+                                getGlobalContext().GetModel() ) );
     }
 
 //.........................................................................
