@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-11 16:26:58 $
+ *  last change: $Author: mt $ $Date: 2001-06-13 08:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,8 @@ static VCLRegServiceInfo aVCLComponentsArray[] =
     {"sysdtrans", sal_False},
 #endif
     {"dtrans", sal_False},
+    {"mcnttype.dll", sal_False},
+    {"ftransl.dll", sal_False},
     {"dnd", sal_False},
     {NULL, sal_False}
 };
