@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:00:49 $
+ *  last change: $Author: rt $ $Date: 2001-06-13 22:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1377,7 +1377,7 @@ String RID_SVXSTR_GALLERY_DELETEOBJ
     Text[ dutch ] = "Wilt u dit object\nwerkelijk wissen?";
     Text[ chinese_simplified ] = "ΔϊΥζµΔÒªΙΎ³ύΥβΈφ¶ΤΟσΒπ£Ώ";
     Text[ greek ] = "Θέλετε πραγματικά να\nδιαγραφεί αυτό το αντικείμενο;";
-    Text[ korean ] = "ΐΜ °³ΓΌΈ¦\n Α¤Έ» »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Text[ korean ] = "ΐΜ °³ΓΌΈ¦\nΑ¤Έ» »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "Bu nesneyi gerηekten\nsilmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "ΏDesea realmente\neliminar este objeto?";
@@ -2650,4 +2650,5 @@ Menu RID_SVXMN_GALLERY2
         };
     };
 };
+
 
