@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ssa $ $Date: 2001-05-18 09:22:51 $
+ *  last change: $Author: th $ $Date: 2001-07-03 14:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,11 +89,6 @@
 #include <vos/mutex.hxx>
 #endif
 
-#if defined( WIN ) || defined( WNT ) || defined( OS2 )
-#ifndef _DLL_HXX
-#include <tools/dll.hxx>
-#endif
-#endif
 #ifndef _TOOLS_H
 #include <tools/tools.h>
 #endif
@@ -1431,20 +1426,8 @@ void Application::EnterMultiThread( BOOL bEnter )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-#if defined( WIN ) || defined( WNT ) || defined( OS2 )
-    ::EnterMultiThread( bEnter );
-#endif
-
     if ( bEnter )
-    {
         pSVData->mnThreadCount++;
-
-#ifndef REMOTE_APPSERVER
-        // Unser DefaultWindow muss vor einem Thread-Starten erzeugt werden,
-        // damit dieses im Hauptthread laeuft
-        ImplGetDefaultWindow();
-#endif
-    }
     else
         pSVData->mnThreadCount--;
 }
