@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-27 16:27:36 $
+ *  last change: $Author: aw $ $Date: 2001-07-03 14:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,11 +591,6 @@ BOOL E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDs
         B3dCamera& rCameraSetDst = pDstScene->GetCameraSet();
         B3dCamera& rCameraSetSrc = pSrcScene->GetCameraSet();
 
-        // get coor of source scene, take aOffset into account.
-        Rectangle aSrcRect = pSrcScene->GetSnapRect();
-        if(aOffset.X() != 0 || aOffset.Y() != 0)
-            aSrcRect.Move(aOffset.X(), aOffset.Y());
-
         for(sal_uInt32 i(0); i < pSrcScene->GetSubList()->GetObjCount(); i++)
         {
             SdrObject* pObj = pSrcScene->GetSubList()->GetObj(i);
@@ -700,7 +695,52 @@ BOOL E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDs
                     aMatSrc *= aMatDst;
 
                     // Neue Objekttransformation setzen
-                    pNew->NbcSetTransform(aMatSrc);
+                    pNew->SetTransform(aMatSrc);
+
+                    // force new camera and SnapRect on scene, geometry may have really
+                    // changed
+                    pDstScene->CorrectSceneDimensions();
+
+                    // #83403# translate in view coor
+                    {
+                        // screen position of center of old object
+                        Matrix4D aSrcFullTrans = ((E3dCompoundObject*)pObj)->GetFullTransform();
+                        rCameraSetSrc.SetObjectTrans(aSrcFullTrans);
+                        Vector3D aSrcCenter = ((E3dCompoundObject*)pObj)->GetCenter();
+                        aSrcCenter = rCameraSetSrc.ObjectToViewCoor(aSrcCenter);
+                        if(aOffset.X() != 0 || aOffset.Y() != 0)
+                            aSrcCenter += Vector3D((double)aOffset.X(), (double)aOffset.Y(), 0.0);
+
+                        // to have a valid Z-Coor in dst system, calc current center of dst object
+                        Matrix4D aDstFullTrans = pNew->GetFullTransform();
+                        rCameraSetDst.SetObjectTrans(aDstFullTrans);
+                        Vector3D aDstCenter = pNew->GetCenter();
+                        aDstCenter = rCameraSetDst.ObjectToEyeCoor(aDstCenter);
+
+                        // convert aSrcCenter to a eye position of dst scene
+                        Vector3D aNewDstCenter = rCameraSetDst.ViewToEyeCoor(aSrcCenter);
+                        aNewDstCenter.Z() = aDstCenter.Z();
+
+                        // transform back to object coor
+                        aNewDstCenter = rCameraSetDst.EyeToObjectCoor(aNewDstCenter);
+
+                        // get transform vector
+                        Vector3D aTransformCorrection = aNewDstCenter - pNew->GetCenter();
+                        Matrix4D aTransCorrMat;
+                        aTransCorrMat.Translate(aTransformCorrection);
+
+                        // treanslate new object, add translate in front of obj transform
+                        pNew->SetTransform(aTransCorrMat * pNew->GetTransform());
+
+                        // force new camera and SnapRect on scene, geometry may have really
+                        // changed
+                        pDstScene->CorrectSceneDimensions();
+
+                        //Rectangle aOldPosSize = pObj->GetSnapRect();
+                        //if(aOffset.X() != 0 || aOffset.Y() != 0)
+                        //  aOldPosSize.Move(aOffset.X(), aOffset.Y());
+                        //Rectangle aNewPosSize = pNew->GetSnapRect();
+                    }
 
                     // Undo anlegen
                     AddUndo(new SdrUndoNewObj(*pNew));
