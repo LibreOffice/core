@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-23 10:30:41 $
+ *  last change: $Author: aw $ $Date: 2002-03-22 09:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #include "drwlayer.hxx"
 #include "sc.hrc"
 #include "tabvwsh.hxx"
+
+// #98185# Create default drawing objects via keyboard
+#include "scresid.hxx"
 
 //  Maximal erlaubte Mausbewegung um noch Drag&Drop zu starten
 //! fusel,fuconstr,futext - zusammenfassen!
@@ -828,6 +831,66 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel)
         pView->SetLayerLocked( pLockLayer->GetName(), TRUE );
 }
 
+// #98185# Create default drawing objects via keyboard
+SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+{
+    // case SID_DRAW_TEXT:
+    // case SID_DRAW_TEXT_VERTICAL:
+    // case SID_DRAW_TEXT_MARQUEE:
+    // case SID_DRAW_NOTEEDIT:
 
+    SdrObject* pObj = SdrObjFactory::MakeNewObject(
+        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
+        0L, pDrDoc);
 
+    if(pObj)
+    {
+        if(pObj->ISA(SdrTextObj))
+        {
+            SdrTextObj* pText = (SdrTextObj*)pObj;
+            pText->SetLogicRect(rRectangle);
+
+            String aText(ScResId(STR_CAPTION_DEFAULT_TEXT));
+            pText->SetText(aText);
+
+            sal_Bool bVertical = (SID_DRAW_TEXT_VERTICAL == nID);
+            sal_Bool bMarquee = (SID_DRAW_TEXT_MARQUEE == nID);
+
+            pText->SetVerticalWriting(bVertical);
+
+            if(bVertical)
+            {
+                SdrTextObj* pText = (SdrTextObj*)pObj;
+                SfxItemSet aSet(pDrDoc->GetItemPool());
+
+                aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
+                aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
+                aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
+                aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+
+                pText->SetItemSet(aSet);
+            }
+
+            if(bMarquee)
+            {
+                SfxItemSet aSet(pDrDoc->GetItemPool(), SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST);
+
+                aSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
+                aSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
+                aSet.Put( SdrTextAniKindItem( SDRTEXTANI_SLIDE ) );
+                aSet.Put( SdrTextAniDirectionItem( SDRTEXTANI_LEFT ) );
+                aSet.Put( SdrTextAniCountItem( 1 ) );
+                aSet.Put( SdrTextAniAmountItem( (INT16)pWindow->PixelToLogic(Size(2,1)).Width()) );
+
+                pObj->SetItemSetAndBroadcast(aSet);
+            }
+        }
+        else
+        {
+            DBG_ERROR("Object is NO text object");
+        }
+    }
+
+    return pObj;
+}
 

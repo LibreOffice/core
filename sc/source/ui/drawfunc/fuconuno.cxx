@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-28 14:14:16 $
+ *  last change: $Author: aw $ $Date: 2002-03-22 09:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,5 +483,21 @@ void FuConstUnoControl::Deactivate()
     pViewShell->SetActivePointer( aOldPointer );
 }
 
+// #98185# Create default drawing objects via keyboard
+SdrObject* FuConstUnoControl::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+{
+    // case SID_FM_CREATE_CONTROL:
+
+    SdrObject* pObj = SdrObjFactory::MakeNewObject(
+        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
+        0L, pDrDoc);
+
+    if(pObj)
+    {
+        pObj->SetLogicRect(rRectangle);
+    }
+
+    return pObj;
+}
 
 

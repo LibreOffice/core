@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-24 17:37:41 $
+ *  last change: $Author: aw $ $Date: 2002-03-22 09:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,6 +540,33 @@ void FuPoor::StopDragTimer()
         aDragTimer.Stop();
 }
 
+/*************************************************************************
+|*
+|* #98185# Create default drawing objects via keyboard
+|*
+\************************************************************************/
+
+SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+{
+    // empty base implementation
+    return 0L;
+}
+
+void FuPoor::ImpForceQuadratic(Rectangle& rRect)
+{
+    if(rRect.GetWidth() > rRect.GetHeight())
+    {
+        rRect = Rectangle(
+            Point(rRect.Left() + ((rRect.GetWidth() - rRect.GetHeight()) / 2), rRect.Top()),
+            Size(rRect.GetHeight(), rRect.GetHeight()));
+    }
+    else
+    {
+        rRect = Rectangle(
+            Point(rRect.Left(), rRect.Top() + ((rRect.GetHeight() - rRect.GetWidth()) / 2)),
+            Size(rRect.GetWidth(), rRect.GetWidth()));
+    }
+}
 
 
 

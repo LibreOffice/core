@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconpol.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:56 $
+ *  last change: $Author: aw $ $Date: 2002-03-22 09:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,11 @@
 #include "fuconpol.hxx"
 #include "tabvwsh.hxx"
 #include "sc.hrc"
+
+// #98185# Create default drawing objects via keyboard
+#ifndef _SVDOPATH_HXX
+#include <svx/svdopath.hxx>
+#endif
 
 //  Pixelabstand zum Schliessen von Freihand-Zeichnungen
 
@@ -378,6 +383,110 @@ void FuConstPolygon::Deactivate()
     FuConstruct::Deactivate();
 
     pViewShell->SetActivePointer( aOldPointer );
+}
+
+// #98185# Create default drawing objects via keyboard
+SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+{
+    // case SID_DRAW_POLYGON:
+    // case SID_DRAW_POLYGON_NOFILL:
+    // case SID_DRAW_BEZIER_NOFILL:
+    // case SID_DRAW_FREELINE_NOFILL:
+
+    SdrObject* pObj = SdrObjFactory::MakeNewObject(
+        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
+        0L, pDrDoc);
+
+    if(pObj)
+    {
+        if(pObj->ISA(SdrPathObj))
+        {
+            XPolyPolygon aPoly;
+
+            switch(nID)
+            {
+                case SID_DRAW_BEZIER_NOFILL:
+                {
+                    XPolygon aInnerPoly;
+                    aInnerPoly[0] = rRectangle.BottomLeft();
+                    aInnerPoly[1] = rRectangle.BottomCenter();
+                    aInnerPoly[2] = rRectangle.BottomCenter();
+                    aInnerPoly[3] = rRectangle.Center();
+                    aInnerPoly[4] = rRectangle.TopCenter();
+                    aInnerPoly[5] = rRectangle.TopCenter();
+                    aInnerPoly[6] = rRectangle.TopRight();
+
+                    aInnerPoly.SetFlags(1, XPOLY_CONTROL);
+                    aInnerPoly.SetFlags(2, XPOLY_CONTROL);
+                    aInnerPoly.SetFlags(3, XPOLY_SYMMTR);
+                    aInnerPoly.SetFlags(4, XPOLY_CONTROL);
+                    aInnerPoly.SetFlags(5, XPOLY_CONTROL);
+
+                    aPoly.Insert(aInnerPoly);
+                    break;
+                }
+                case SID_DRAW_FREELINE_NOFILL:
+                {
+                    XPolygon aInnerPoly;
+                    aInnerPoly[0] = rRectangle.BottomLeft();
+                    aInnerPoly[1] = rRectangle.TopLeft();
+                    aInnerPoly[2] = rRectangle.TopCenter();
+                    aInnerPoly[3] = rRectangle.Center();
+                    aInnerPoly[4] = rRectangle.BottomCenter();
+                    aInnerPoly[5] = rRectangle.BottomRight();
+                    aInnerPoly[6] = rRectangle.TopRight();
+
+                    aInnerPoly.SetFlags(1, XPOLY_CONTROL);
+                    aInnerPoly.SetFlags(2, XPOLY_CONTROL);
+                    aInnerPoly.SetFlags(3, XPOLY_SMOOTH);
+                    aInnerPoly.SetFlags(4, XPOLY_CONTROL);
+                    aInnerPoly.SetFlags(5, XPOLY_CONTROL);
+
+                    if(SID_DRAW_FREELINE == nID)
+                    {
+                        aInnerPoly[7] = rRectangle.BottomRight();
+                    }
+
+                    aPoly.Insert(aInnerPoly);
+                    break;
+                }
+                case SID_DRAW_POLYGON:
+                case SID_DRAW_POLYGON_NOFILL:
+                {
+                    XPolygon aInnerPoly;
+                    sal_Int32 nWdt(rRectangle.GetWidth());
+                    sal_Int32 nHgt(rRectangle.GetHeight());
+
+                    aInnerPoly[0] = rRectangle.BottomLeft();
+                    aInnerPoly[1] = rRectangle.TopLeft() + Point((nWdt * 30) / 100, (nHgt * 70) / 100);
+                    aInnerPoly[2] = rRectangle.TopLeft() + Point(0, (nHgt * 15) / 100);
+                    aInnerPoly[3] = rRectangle.TopLeft() + Point((nWdt * 65) / 100, 0);
+                    aInnerPoly[4] = rRectangle.TopLeft() + Point(nWdt, (nHgt * 30) / 100);
+                    aInnerPoly[5] = rRectangle.TopLeft() + Point((nWdt * 80) / 100, (nHgt * 50) / 100);
+                    aInnerPoly[6] = rRectangle.TopLeft() + Point((nWdt * 80) / 100, (nHgt * 75) / 100);
+                    aInnerPoly[7] = rRectangle.BottomRight();
+
+                    if(SID_DRAW_POLYGON_NOFILL == nID)
+                    {
+                        aInnerPoly[8] = rRectangle.BottomCenter();
+                    }
+
+                    aPoly.Insert(aInnerPoly);
+                    break;
+                }
+            }
+
+            ((SdrPathObj*)pObj)->SetPathPoly(aPoly);
+        }
+        else
+        {
+            DBG_ERROR("Object is NO path object");
+        }
+
+        pObj->SetLogicRect(rRectangle);
+    }
+
+    return pObj;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-28 12:12:01 $
+ *  last change: $Author: aw $ $Date: 2002-03-22 09:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,16 @@
 #include "tabvwsh.hxx"
 #include "sc.hrc"
 
+// #98185# Create default drawing objects via keyboard
+#ifndef _SVDOPATH_HXX
+#include <svx/svdopath.hxx>
+#endif
+
+#ifndef _SVDCAPT_HXX
+#include <svx/svdocapt.hxx>
+#endif
+
+#include "scresid.hxx"
 
 //------------------------------------------------------------------------
 
@@ -431,5 +441,90 @@ void FuConstRectangle::Deactivate()
     pViewShell->SetActivePointer( aOldPointer );
 }
 
+// #98185# Create default drawing objects via keyboard
+SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+{
+    // case SID_DRAW_LINE:
+    // case SID_DRAW_RECT:
+    // case SID_DRAW_ELLIPSE:
+    // case SID_DRAW_CAPTION:
+    // case SID_DRAW_CAPTION_VERTICAL:
 
+    SdrObject* pObj = SdrObjFactory::MakeNewObject(
+        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
+        0L, pDrDoc);
+
+    if(pObj)
+    {
+        Rectangle aRect(rRectangle);
+        Point aStart = aRect.TopLeft();
+        Point aEnd = aRect.BottomRight();
+
+        switch(nID)
+        {
+            case SID_DRAW_LINE:
+            {
+                if(pObj->ISA(SdrPathObj))
+                {
+                    XPolyPolygon aPoly;
+                    aPoly.Insert(XPolygon(2));
+
+                    sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
+                    aPoly[0][0] = Point(aStart.X(), nYMiddle);
+                    aPoly[0][1] = Point(aEnd.X(), nYMiddle);
+
+                    ((SdrPathObj*)pObj)->SetPathPoly(aPoly);
+                }
+                else
+                {
+                    DBG_ERROR("Object is NO line object");
+                }
+
+                break;
+            }
+            case SID_DRAW_CAPTION:
+            case SID_DRAW_CAPTION_VERTICAL:
+            {
+                if(pObj->ISA(SdrCaptionObj))
+                {
+                    sal_Bool bIsVertical(SID_DRAW_CAPTION_VERTICAL == nID);
+
+                    ((SdrTextObj*)pObj)->SetVerticalWriting(bIsVertical);
+
+                    if(bIsVertical)
+                    {
+                        SfxItemSet aSet(pObj->GetItemSet());
+                        aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
+                        aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+                        pObj->SetItemSet(aSet);
+                    }
+
+                    String aText(ScResId(STR_CAPTION_DEFAULT_TEXT));
+                    ((SdrCaptionObj*)pObj)->SetText(aText);
+                    ((SdrCaptionObj*)pObj)->SetLogicRect(aRect);
+                    ((SdrCaptionObj*)pObj)->SetTailPos(
+                        aRect.TopLeft() - Point(aRect.GetWidth() / 2, aRect.GetHeight() / 2));
+                }
+                else
+                {
+                    DBG_ERROR("Object is NO caption object");
+                }
+
+                break;
+            }
+
+            default:
+            {
+                pObj->SetLogicRect(aRect);
+
+                break;
+            }
+        }
+
+        SfxItemSet aAttr(pDrDoc->GetItemPool());
+        pObj->SetItemSet(aAttr);
+    }
+
+    return pObj;
+}
 

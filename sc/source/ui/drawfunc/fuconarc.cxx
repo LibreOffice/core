@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconarc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2000-12-07 10:03:57 $
+ *  last change: $Author: aw $ $Date: 2002-03-22 09:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,15 @@
 #include "fuconarc.hxx"
 #include "sc.hrc"
 #include "tabvwsh.hxx"
+
+// #98185# Create default drawing objects via keyboard
+#ifndef _SVDOCIRC_HXX
+#include <svx/svdocirc.hxx>
+#endif
+
+#ifndef _SXCIAITM_HXX
+#include <svx/sxciaitm.hxx>
+#endif
 
 
 //------------------------------------------------------------------------
@@ -229,5 +238,44 @@ void FuConstArc::Deactivate()
     pViewShell->SetActivePointer( aOldPointer );
 }
 
+// #98185# Create default drawing objects via keyboard
+SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+{
+    // case SID_DRAW_ARC:
+    // case SID_DRAW_PIE:
+    // case SID_DRAW_CIRCLECUT:
+
+    SdrObject* pObj = SdrObjFactory::MakeNewObject(
+        pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
+        0L, pDrDoc);
+
+    if(pObj)
+    {
+        if(pObj->ISA(SdrCircObj))
+        {
+            Rectangle aRect(rRectangle);
+
+            if(SID_DRAW_ARC == nID || SID_DRAW_CIRCLECUT == nID)
+            {
+                // force quadratic
+                ImpForceQuadratic(aRect);
+            }
+
+            pObj->SetLogicRect(aRect);
+
+            SfxItemSet aAttr(pDrDoc->GetItemPool());
+            aAttr.Put(SdrCircStartAngleItem(9000));
+            aAttr.Put(SdrCircEndAngleItem(0));
+
+            pObj->SetItemSet(aAttr);
+        }
+        else
+        {
+            DBG_ERROR("Object is NO circle object");
+        }
+    }
+
+    return pObj;
+}
 
 
