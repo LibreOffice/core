@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MediaObjectBar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:17:27 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,11 @@
 
 #include "MediaObjectBar.hxx"
 #include <avmedia/mediaitem.hxx>
+#include <sfx2/msg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/request.hxx>
+#include <sfx2/objface.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/itempool.hxx>
 #include <svx/svdomedia.hxx>
