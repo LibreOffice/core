@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hjs $ $Date: 2002-11-04 18:10:43 $
+#   last change: $Author: vg $ $Date: 2003-04-01 13:34:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,8 +59,7 @@
 #
 #
 #*************************************************************************
-.IF "$(GUI)"!="UNX"
-.IF "$(GUI)"!="MAC"
+.IF "$(GUI)"=="WNT"
 AWK*=awk
 SORT*=sort
 SED*=sed
@@ -81,7 +80,7 @@ PERL*:=perl
 RENAME*=mv
 TOUCH*=touch
 TYPE*=cat
-.ELSE
+.ELSE			# "$(USE_SHELL)"!="4nt"
 COPY*=copy
 COPYRECURSE=/s
 COPYUPDATE=/u
@@ -98,43 +97,11 @@ PERL*:=call perl5.btm
 RENAME*=ren
 TOUCH*=$(BUILD_TOOLS)$/touch.exe
 TYPE*=type
-.ENDIF
+.ENDIF  "$(USE_SHELL)"!="4nt"
 MKDIRHIER=$(MKDIR) 
-.IF "$(GUI)"=="WNT"
 SCP_CHECK_TOOL=checkscp.exe
 
-#signing for win32 only
-SIGNCODE=$(BUILD_TOOLS)$/PackSign$/signcode
-CABARC=$(BUILD_TOOLS)$/PackSign$/cabarc
-SIGNTOOL=$(BUILD_TOOLS)$/signtool$/signtool
-.ENDIF
-.IF "$(GUI)"=="WIN"
-# using 32-bit tools 
-GREP=$(SOLARROOT)$/util$/nt$/grep32.exe
-FIND=$(SOLARROOT)$/util$/nt$/find.exe
-LS=$(SOLARROOT)$/util$/nt$/ls.exe
-MKDIRHIER=echo v | xcopy nul 
-.ENDIF
-.ELSE
-SED*=sed
-AWK=awk
-SORT*=sort
-PERL=perl
-TYPE=cat
-COPY=cp -f
-COPYRECURSE=-r
-GNUCOPY=cp
-TOUCH=touch
-RENAME=mv
-MKDIR=mkdir
-MKDIRHIER=mkdir -p
-GREP=grep
-FIND=find
-LS=ls
-ECHON=echo -n
-ECHONL=echo
-.ENDIF
-.ELSE
+.ELIF "$(GUI)"=="UNX"	# "$(GUI)"=="WNT"
 SED*=sed
 SORT*=sort
 PERL=perl
@@ -164,7 +131,7 @@ FIND=find
 LS=ls
 ECHON=echo -n
 ECHONL=echo
-.ENDIF
+.ENDIF			# "$(GUI)"=="UNX"
 
 MAKEDEPEND*=$(WRAPCMD) makedepend
 
@@ -173,9 +140,11 @@ RM+=$(RMFLAGS)
 .IF "$(GUI)"=="UNX"
 SCP_CHECK_TOOL=checkscp
 NULLDEV=/dev/null
-.ELIF "$(GUI)"=="MAC"
+.ELIF "$(GUI)"=="WNT"
+.IF "$(USE_SHELL)"!="4nt"
 NULLDEV=/dev/null
 .ELSE
 NULLDEV=nul
+.ENDIF
 .ENDIF
 
