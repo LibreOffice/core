@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceptor.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 14:58:20 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,12 +83,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::connection;
-
-#if defined( MACOSX ) && ( __GNUC__ < 3 )
-ClassData2 cppu::WeakImplHelper2<com::sun::star::connection::XAcceptor, com::sun::star::lang::XServiceInfo>::s_aCD(1);
-/*ClassData1 cppu::WeakImplHelper1<com::sun::star::connection::XConnection>::s_aCD(1);
-ClassData2 cppu::WeakImplHelper2<com::sun::star::connection::XConnection, com::sun::star::connection::XConnectionBroadcaster>::s_aCD(1);*/
-#endif
 
 namespace io_acceptor
 {
