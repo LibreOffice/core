@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:05:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:50:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,6 +380,12 @@ namespace dbaui
             the configuration node name of user defined driver DSN prefix.
     */
     ::rtl::OUString getDriverDsnPrefixNodeName();
+
+    /** returns the configuration node name of user defined driver extension.
+        @return
+            the configuration node name of user defined driver extension.
+    */
+    ::rtl::OUString getDriverExtensionNodeName();
 
     /** returns the result of the user action when view the query dialog.
         @param  _pParent
