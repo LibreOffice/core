@@ -35,7 +35,9 @@ UNOTYPES= \
         com.sun.star.registry.XRegistryKey	\
         com.sun.star.container.XSet		\
         com.sun.star.test.bridge.XBridgeTest 	\
-        com.sun.star.bridge.XUnoUrlResolver
+        com.sun.star.bridge.XUnoUrlResolver		\
+        com.sun.star.lang.XSingleComponentFactory	\
+        com.sun.star.uno.XComponentContext          
 
 SLOFILES= \
         $(SLO)$/cppobj.obj	\

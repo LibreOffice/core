@@ -36,7 +36,9 @@ UNOTYPES= \
         com.sun.star.registry.XRegistryKey	\
         com.sun.star.bridge.XUnoUrlResolver	\
         com.sun.star.container.XSet		\
-        com.sun.star.test.performance.XPerformanceTest
+        com.sun.star.test.performance.XPerformanceTest \
+        com.sun.star.lang.XSingleComponentFactory	\
+        com.sun.star.uno.XComponentContext          
 
 SLOFILES= \
         $(SLO)$/ubtest.obj	\
