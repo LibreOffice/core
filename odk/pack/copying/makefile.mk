@@ -217,10 +217,13 @@ JAVA_OFFICEBEAN_SIMPLEBEAN= \
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/SimpleBean$/Makefile
 
 JAVA_OFFICEBEAN_OFFICEWRITERBEAN= \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/OfficeWriterBean.java \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/OfficeBean.java \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/OfficeWriter.java \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/OfficeWriterBeanInfo.java \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/Office.java \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/OfficeBeanInfo.java \
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/DocViewer.java \
-    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/Makefile
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/Makefile \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeWriterBean$/manifest.tmp
 
 JAVA_OFFICEBEAN_HELPERBEANS= \
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeCommand.java \
