@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-09 11:39:13 $
+ *  last change: $Author: ka $ $Date: 2000-10-26 13:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,10 @@
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
 #endif
+#ifndef _SFX_INETTBC_HXX
+#include <sfx2/inettbc.hxx>
+#endif
+
 #pragma hdrstop
 
 #ifndef SVTOOLS_URIHELPER_HXX
@@ -252,6 +256,12 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
     FreeResource();
 
     // nur temporaer bis Vollupdate
+    pOwnData->pURLBox = new SfxURLBox( this );
+    pOwnData->pURLBox->SetPosSizePixel( aCbbURL.GetPosPixel(), aCbbURL.GetSizePixel() );
+    aCbbURL.Hide();
+    pOwnData->pURLBox->Show();
+
+    // nur temporaer bis Vollupdate
     pOwnData->pFtTarget = new FixedText( this, SVX_RES( RID_SVXCTL_FT_TARGET ) );
     pOwnData->pFtTarget->Show();
 
@@ -264,9 +274,9 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
     pIMapWnd->SetGraphSizeLink( LINK( this, SvxIMapDlg, GraphSizeHdl ) );
     pIMapWnd->SetUpdateLink( LINK( this, SvxIMapDlg, StateHdl ) );
 
-    aCbbURL.SetModifyHdl( LINK( this, SvxIMapDlg, URLModifyHdl ) );
-    aCbbURL.SetSelectHdl( LINK( this, SvxIMapDlg, URLModifyHdl ) );
-    aCbbURL.SetLoseFocusHdl( LINK( this, SvxIMapDlg, URLLoseFocusHdl ) );
+    pOwnData->pURLBox->SetModifyHdl( LINK( this, SvxIMapDlg, URLModifyHdl ) );
+    pOwnData->pURLBox->SetSelectHdl( LINK( this, SvxIMapDlg, URLModifyHdl ) );
+    pOwnData->pURLBox->SetLoseFocusHdl( LINK( this, SvxIMapDlg, URLLoseFocusHdl ) );
     aEdtText.SetModifyHdl( LINK( this, SvxIMapDlg, URLModifyHdl ) );
     pOwnData->pCbbTarget->SetLoseFocusHdl( LINK( this, SvxIMapDlg, URLLoseFocusHdl ) );
 
@@ -282,7 +292,7 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
     aStbStatus.InsertItem( 3, 10 + GetTextWidth( DEFINE_CONST_UNICODE( " 9999,99 cm x 9999,99 cm ") ), SIB_CENTER | SIB_IN );
 
     aFtURL.Disable();
-    aCbbURL.Disable();
+    pOwnData->pURLBox->Disable();
     aFtText.Disable();
     aEdtText.Disable();
     pOwnData->pFtTarget->Disable();
@@ -311,6 +321,7 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
 SvxIMapDlg::~SvxIMapDlg()
 {
     // URL-Liste loeschen
+    delete pOwnData->pURLBox;
     delete pOwnData->pCbbTarget;
     delete pOwnData->pFtTarget;
     delete pIMapWnd;
@@ -771,10 +782,10 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
 
     if ( rInfo.bNewObj )
     {
-        if( rInfo.aMarkURL.Len() && ( aCbbURL.GetEntryPos( rInfo.aMarkURL ) == LISTBOX_ENTRY_NOTFOUND ) )
-            aCbbURL.InsertEntry( rInfo.aMarkURL );
+        if( rInfo.aMarkURL.Len() && ( pOwnData->pURLBox->GetEntryPos( rInfo.aMarkURL ) == LISTBOX_ENTRY_NOTFOUND ) )
+            pOwnData->pURLBox->InsertEntry( rInfo.aMarkURL );
 
-        aCbbURL.SetText( rInfo.aMarkURL );
+        pOwnData->pURLBox->SetText( rInfo.aMarkURL );
         aEdtText.SetText( rInfo.aMarkDescription );
 
         if ( !rInfo.aMarkTarget.Len() )
@@ -792,13 +803,13 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
         aStbStatus.SetItemText( 1, aStr );
 
         aFtURL.Disable();
-        aCbbURL.Disable();
+        pOwnData->pURLBox->Disable();
         aFtText.Disable();
         aEdtText.Disable();
         pOwnData->pFtTarget->Disable();
         pOwnData->pCbbTarget->Disable();
 
-        aCbbURL.SetText( String() );
+        pOwnData->pURLBox->SetText( String() );
         aEdtText.SetText( String() );
     }
     else
@@ -809,7 +820,7 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
         aTbxIMapDlg1.EnableItem( TBI_PROPERTY, TRUE );
 
         aFtURL.Enable();
-        aCbbURL.Enable();
+        pOwnData->pURLBox->Enable();
         aFtText.Enable();
         aEdtText.Enable();
         pOwnData->pFtTarget->Enable();
@@ -817,8 +828,8 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
 
         aStbStatus.SetItemText( 1, rInfo.aMarkURL );
 
-        if ( aCbbURL.GetText() != rInfo.aMarkURL )
-            aCbbURL.SetText( rInfo.aMarkURL );
+        if ( pOwnData->pURLBox->GetText() != rInfo.aMarkURL )
+            pOwnData->pURLBox->SetText( rInfo.aMarkURL );
 
         if ( aEdtText.GetText() != rInfo.aMarkDescription )
             aEdtText.SetText( rInfo.aMarkDescription );
@@ -886,7 +897,7 @@ IMPL_LINK( SvxIMapDlg, URLModifyHdl, void*, p )
 {
     NotifyInfo  aNewInfo;
 
-    aNewInfo.aMarkURL = aCbbURL.GetText();
+    aNewInfo.aMarkURL = pOwnData->pURLBox->GetText();
     aNewInfo.aMarkDescription = aEdtText.GetText();
     aNewInfo.aMarkTarget = pOwnData->pCbbTarget->GetText();
 
@@ -905,7 +916,7 @@ IMPL_LINK( SvxIMapDlg, URLModifyHdl, void*, p )
 IMPL_LINK( SvxIMapDlg, URLLoseFocusHdl, void*, p )
 {
     NotifyInfo      aNewInfo;
-    const String    aURLText( aCbbURL.GetText() );
+    const String    aURLText( pOwnData->pURLBox->GetText() );
     const String    aTargetText( pOwnData->pCbbTarget->GetText() );
 
     if ( aURLText.Len() )

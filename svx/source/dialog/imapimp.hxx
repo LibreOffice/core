@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapimp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: ka $ $Date: 2000-10-26 13:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ public:
     ImageMap        aUpdateImageMap;
     TargetList      aUpdateTargetList;
     void*           pUpdateEditingObject;
+    SfxURLBox*      pURLBox;
     FixedText*      pFtTarget;
     ComboBox*       pCbbTarget;
     BOOL            bExecState;
