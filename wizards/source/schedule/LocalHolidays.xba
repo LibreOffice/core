@@ -45,6 +45,7 @@ Dim lDate&amp;
 End Sub
 
 
+
 Sub FindWholeYearHolidays_FI(ByVal YearInt as Integer)
 	Dim OsternDate&amp;
 	&apos; New Year
@@ -148,6 +149,7 @@ Dim lDate&amp;
 End Sub
 
 
+
 Sub FindWholeYearHolidays_TRK(ByVal YearInt as Integer)
 Dim lDate as Long
 	&apos; New Years&apos; Day
@@ -168,6 +170,7 @@ Dim lDate as Long
 	CalInsertBankholiday(DateSerial(YearInt, 10, 29), &quot;Cumhuriyet Bayramı&quot;, cHolidayType_Full)
 	&apos; Commemoration Of Ataturk-Anniversary of Ataturk&apos;s Death
 	CalInsertBankholiday(DateSerial(YearInt, 11, 10), &quot;Atatürk&apos;ün Ölüm Günü&quot;, cHolidayType_Full)
+	CalculateturkishReligousHolidays(YearInt)
 End Sub
 
 
@@ -181,7 +184,7 @@ Dim lRamazanBayRamStartDate as Long
 			lRamazanBayRamStartDate = DateSerial(iSelYear, 12, 4)
 		Case 2003
 			lKurbanBayRamStartDate = DateSerial(iSelYear, 2, 10)
-			lRamazanBayRamStartDate = DateSerial(iSelYear, 11, 14)
+			lRamazanBayRamStartDate = DateSerial(iSelYear, 11, 24)
 		Case 2004
 			lKurbanBayRamStartDate = DateSerial(iSelYear, 1, 31)
 			lRamazanBayRamStartDate = DateSerial(iSelYear, 11, 13)
@@ -199,7 +202,7 @@ Dim lRamazanBayRamStartDate as Long
 			lKurbanBayRamStartDate = DateSerial(iSelYear, 1, 1)
 			&apos; Note: The first day has already been in 2006!!!
 			AddFollowUpHolidays(lKurbanBayRamStartDate-1, 3, &quot;Kurban Bayram&quot;, cHolidayType_Full)
-			lKurbanBayRamStartDate = DateSerial(iSelYear, 12, 20)
+			lKurbanBayRamStartDate = DateSerial(iSelYear, 12, 19)
 
 			lRamazanBayRamStartDate = DateSerial(iSelYear, 10, 11)
 		Case 2008
@@ -271,6 +274,7 @@ Dim lDate as Long
 	&apos; All Saints Day
 	CalInsertBankholiday(lDate+56, &quot;Των Αγίων Πάντων&quot;, cHolidayType_Full)
 End Sub
+
 
 
 Sub FindWholeYearHolidays_SPAIN(ByVal YearInt as Integer)

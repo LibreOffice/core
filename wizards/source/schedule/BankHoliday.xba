@@ -28,8 +28,11 @@ Dim B%,C%,D%,E%,F%,G%,H%,I%,K%,L%,M%,N%,O%, nMonth%, nDay%
 End Function
 
 
+&apos; Note: the following algorithm is valid only till the Year 2100.
+&apos; but I have no Idea from which date in the paste it is valid
 Function CalOrthodoxEasterTable(ByVal iYear as Integer) as Long
 Dim R1%, R2%, R3%, RA%, R4%, RB%, R5%, RC%
+Dim lDate as Long
 	R1 = iYear mod 19
 	R2 = iYear mod 4
 	R3 = iYear mod 7
@@ -38,7 +41,8 @@ Dim R1%, R2%, R3%, RA%, R4%, RB%, R5%, RC%
 	RB = 2 * R2 + 4 * R3 + 6 * R4
 	R5 = RB mod 7
 	RC = R4 + R5
-&apos;	Todo: Add the result to March 22;
+	lDate = DateSerial(iYear, 4,4)
+	CalOrthodoxEasterTable() = lDate + RC
 End Function
 
 
@@ -159,8 +163,6 @@ Dim lDate as Long
 End Function
 
 
-
-
 &apos; Finds the next weekday after a fixed date
 &apos; e.g. Midsummerfeast in Sweden: next Saturday after 20th June
 Function GetNextWeekDay(iYear as Integer, iMonth as Integer, iDay as Integer, iWeekDay as Integer)
@@ -180,6 +182,6 @@ Sub AddFollowUpHolidays(ByVal lStartDate as Long, iCount as Integer, HolidayName
 Dim lDate as Long
 	For lDate = lStartDate + 1 To lStartDate + 4
 		CalInsertBankholiday(lDate, HolidayName, iType)
-	Next i
+	Next lDate
 End Sub
 </script:module>
