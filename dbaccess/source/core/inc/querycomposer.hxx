@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:39 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 12:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,14 +118,14 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xColumns;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
 
-        String                                  m_aQuery;
-        String                                  m_aFilter;  // curently used where clause
-        String                                  m_aOrder;   // curently used order by clause
+        ::rtl::OUString                         m_aQuery;
+        ::rtl::OUString                         m_aFilter;  // curently used where clause
+        ::rtl::OUString                         m_aOrder;   // curently used order by clause
 
-        String                                  m_aWorkSql;
-        String                                  m_aOrgFilter;
-        String                                  m_aOrgOrder;
-        International                           m_aInternational;
+        ::rtl::OUString                         m_aWorkSql;
+        ::rtl::OUString                         m_aOrgFilter;
+        ::rtl::OUString                         m_aOrgOrder;
+        ::com::sun::star::lang::Locale          m_aLocale;
 
 
         sal_Bool setORCriteria(::connectivity::OSQLParseNode* pCondition,
@@ -135,11 +135,11 @@ namespace dbaccess
         sal_Bool setComparsionPredicate(::connectivity::OSQLParseNode* pCondition,
             ::std::vector < ::com::sun::star::beans::PropertyValue > & rFilters, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const;
 
-        String getColumnName(::connectivity::OSQLParseNode* pColumnRef) const;
-        void resetIterator(const String& aSql);
-        String getComposedSort() const;
-        String getComposedFilter() const;
-        String getGroupBy() const;
+        ::rtl::OUString getColumnName(::connectivity::OSQLParseNode* pColumnRef) const;
+        void resetIterator(const ::rtl::OUString& aSql);
+        ::rtl::OUString getComposedSort() const;
+        ::rtl::OUString getComposedFilter() const;
+        ::rtl::OUString getGroupBy() const;
     public:
 
         OQueryComposer( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xTableSupplier,

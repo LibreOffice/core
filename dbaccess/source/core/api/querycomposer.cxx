@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-12 16:21:03 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 12:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #endif
+//#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+//#include <com/sun/star/sdbc/XConnection.hpp>
+//#endif
 #ifndef _COM_SUN_STAR_SDBC_COLUMNSEARCH_HPP_
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #endif
@@ -89,8 +92,8 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-#ifndef _DBASHARED_STRINGCONSTANTS_HRC_
-#include "stringconstants.hrc"
+#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
+#include "dbastrings.hrc"
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -103,6 +106,15 @@
 #endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
+#endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XLOCALEDATA_HPP_
+#include <com/sun/star/lang/XLocaleData.hpp>
 #endif
 
 using namespace dbaccess;
@@ -119,16 +131,16 @@ using namespace ::osl;
 using namespace ::utl;
 //  using namespace ::com::sun::star::registry;
 
-#define STR_SELECT      String::CreateFromAscii("SELECT ")
-#define STR_FROM        String::CreateFromAscii(" FROM ")
-#define STR_WHERE       String::CreateFromAscii(" WHERE ")
-#define STR_ORDER_BY    String::CreateFromAscii(" ORDER BY ")
-#define STR_AND         String::CreateFromAscii(" AND ")
-#define STR_LIKE        String::CreateFromAscii(" LIKE ")
-#define STR_EQUAL       String::CreateFromAscii(" = ")
-#define L_BRACKET       '('
-#define R_BRACKET       ')'
-#define COMMA           ','
+#define STR_SELECT      ::rtl::OUString::createFromAscii("SELECT ")
+#define STR_FROM        ::rtl::OUString::createFromAscii(" FROM ")
+#define STR_WHERE       ::rtl::OUString::createFromAscii(" WHERE ")
+#define STR_ORDER_BY    ::rtl::OUString::createFromAscii(" ORDER BY ")
+#define STR_AND         ::rtl::OUString::createFromAscii(" AND ")
+#define STR_LIKE        ::rtl::OUString::createFromAscii(" LIKE ")
+#define STR_EQUAL       ::rtl::OUString::createFromAscii(" = ")
+#define L_BRACKET       ::rtl::OUString::createFromAscii("(")
+#define R_BRACKET       ::rtl::OUString::createFromAscii(")")
+#define COMMA           ::rtl::OUString::createFromAscii(",")
 
 DBG_NAME(OQueryComposer)
 // -------------------------------------------------------------------------
@@ -141,6 +153,7 @@ OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
  , m_aSqlIterator(_xTableSupplier,_xConnection->getMetaData(),NULL)
  , m_xTableSupplier(_xTableSupplier)
  , m_xServiceFactory(_xServiceFactory)
+ , m_aSqlParser(_xServiceFactory)
 {
     DBG_CTOR(OQueryComposer,NULL);
     OSL_ENSHURE(_xServiceFactory.is()," ServiceFactory cant be null!");
@@ -148,8 +161,7 @@ OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
     OSL_ENSHURE(_xTableSupplier.is(),"TableSupplier cant be null!");
 
     Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
-    LanguageType eLanguage = ConvertIsoStringToLanguage(::comphelper::getString(aValue),'_');
-    m_aInternational = International( eLanguage );
+    m_aLocale.Language = ::comphelper::getString(aValue);
 }
 // -------------------------------------------------------------------------
 OQueryComposer::~OQueryComposer()
@@ -247,7 +259,7 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
 
     m_aQuery = command;
     delete m_pSqlParseNode;
-    String aErrorMsg;
+    ::rtl::OUString aErrorMsg;
     m_pSqlParseNode = m_aSqlParser.parseTree(aErrorMsg,m_aQuery);
     if(!m_pSqlParseNode)
         throw SQLException();
@@ -285,7 +297,7 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
 
     if (m_pSqlParseNode)
     {
-        String aResult;
+        ::rtl::OUString aResult;
         m_pSqlParseNode->parseNodeToStr(aResult,m_xConnection->getMetaData());
         return aResult;
     }
@@ -309,16 +321,16 @@ Sequence< Sequence< PropertyValue > > SAL_CALL OQueryComposer::getStructuredFilt
     MutexGuard aGuard(m_aMutex);
 
     Sequence< Sequence< PropertyValue > > aFilterSeq;
-    if (m_aFilter.Len() != 0)
+    if (m_aFilter.getLength() != 0)
     {
-        String aSql(m_aWorkSql);
+        ::rtl::OUString aSql(m_aWorkSql);
         // build a temporary parse node
         OSQLParseNode* pTempNode = m_pSqlParseNode;
 
         aSql += STR_WHERE;
         aSql += m_aFilter;
         //  THIS->resetIterator(aSql);
-        String aErrorMsg;
+        ::rtl::OUString aErrorMsg;
         m_pSqlParseNode = m_aSqlParser.parseTree(aErrorMsg,aSql);
         m_aSqlIterator.setParseTree(m_pSqlParseNode);
 
@@ -402,7 +414,7 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
     column->getPropertyValue(PROPERTY_VALUE) >>= aValue;
 
 
-    String aSql = aName;
+    ::rtl::OUString aSql = aName;
 
     sal_Int32 nType = 0;
     column->getPropertyValue(PROPERTY_NAME) >>= nType;
@@ -412,9 +424,9 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
         case DataType::CHAR:
         case DataType::LONGVARCHAR:
             aSql += STR_LIKE;
-            aSql += '\'';
+            aSql += ::rtl::OUString::createFromAscii("\'");
             aSql += toString(aValue).getStr();
-            aSql += '\'';
+            aSql += ::rtl::OUString::createFromAscii("\'");
             break;
         case DataType::VARBINARY:
         case DataType::BINARY:
@@ -426,11 +438,11 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
                     if(nSearchable == ColumnSearch::CHAR)
                     {
                         aSql += STR_LIKE;
-                        aSql += '\'';
+                        aSql += ::rtl::OUString::createFromAscii("\'");
                     }
                     else
                         aSql += STR_EQUAL;
-                    aSql.AppendAscii("0x");
+                    aSql += ::rtl::OUString::createFromAscii("0x");
                     const sal_Int8* pBegin  = aSeq.getConstArray();
                     const sal_Int8* pEnd    = pBegin + aSeq.getLength();
                     for(;pBegin != pEnd;++pBegin)
@@ -438,7 +450,7 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
                         aSql += ::rtl::OUString::valueOf((sal_Int32)*pBegin,16).getStr();
                     }
                     if(nSearchable == ColumnSearch::NONE)
-                        aSql += '\'';
+                        aSql += ::rtl::OUString::createFromAscii("\'");
                 }
                 else
                     throw SQLException();
@@ -448,18 +460,18 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
             {
                 ::rtl::OUString aValueStr(toString(aValue));
                 aSql += STR_EQUAL;
-                aSql += ' ';
+                aSql += ::rtl::OUString::createFromAscii(" ");
                 aSql += aValueStr.getStr();
             }
     }
 
     // filter anhaengen
     // select ohne where und order by aufbauen
-    String aSql2(m_aWorkSql);
+    ::rtl::OUString aSql2(m_aWorkSql);
 
-    if ((m_aFilter.Len() != 0) && (aSql.Len() != 0))
+    if ((m_aFilter.getLength() != 0) && (aSql.getLength() != 0))
     {
-        String sTemp(L_BRACKET);
+        ::rtl::OUString sTemp(L_BRACKET);
         sTemp += m_aFilter;
         sTemp += R_BRACKET;
         sTemp += STR_AND;
@@ -491,14 +503,14 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
 
     // filter anhaengen
     // select ohne where und order by aufbauen
-    String aSql(m_aWorkSql);
-    String aAppendOrder(aName);
+    ::rtl::OUString aSql(m_aWorkSql);
+    ::rtl::OUString aAppendOrder(aName);
 
-    if ((m_aOrder.Len() != 0) && aAppendOrder.Len())
+    if ((m_aOrder.getLength() != 0) && aAppendOrder.getLength())
         m_aOrder += COMMA;
     m_aOrder += aAppendOrder;
-    if(!ascending && aAppendOrder.Len())
-        m_aOrder.AppendAscii(" DESC ");
+    if(!ascending && aAppendOrder.getLength())
+        m_aOrder += ::rtl::OUString::createFromAscii(" DESC ");
 
     // add the filter and the sort order
     aSql += getComposedFilter();
@@ -514,7 +526,7 @@ void SAL_CALL OQueryComposer::setFilter( const ::rtl::OUString& filter ) throw(S
 
     ::osl::MutexGuard aGuard( m_aMutex );
     m_aFilter = filter;
-    String aSql(m_aWorkSql);
+    ::rtl::OUString aSql(m_aWorkSql);
 
     // add the filter and the sort order
     aSql += getComposedFilter();
@@ -533,7 +545,7 @@ void SAL_CALL OQueryComposer::setOrder( const ::rtl::OUString& order ) throw(SQL
 
     m_aOrder = order;
 
-    String aSql(m_aWorkSql);
+    ::rtl::OUString aSql(m_aWorkSql);
 
     // add the filter and the sort order
     aSql += getComposedFilter();
@@ -630,19 +642,22 @@ sal_Bool OQueryComposer::setANDCriteria(OSQLParseNode * pCondition,
         if (SQL_ISRULE(pCondition->getChild(0), column_ref))
         {
             PropertyValue aItem;
-            String aValue;
-            String aColumnName;
+            ::rtl::OUString aValue;
+            ::rtl::OUString aColumnName;
 
-            pCondition->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aInternational);
-            pCondition->getChild(0)->parseNodeToPredicateStr(aColumnName,m_xConnection->getMetaData(), xFormatter, m_aInternational);
+
+
+            Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.lang.LocaleData")),UNO_QUERY);
+            LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
+            pCondition->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
+            pCondition->getChild(0)->parseNodeToPredicateStr(aColumnName,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
 
             // don't display the column name
-            aValue.Erase(0, aColumnName.Len());
-            aValue.EraseLeadingChars();
+            aValue = aValue.copy(aColumnName.getLength());
+            aValue.trim();
 
-            aItem.Name = UniString(getColumnName(pCondition->getChild(0)));
-            rtl::OUString aStrValue = UniString(aValue);
-            aItem.Value <<= aStrValue;
+            aItem.Name = getColumnName(pCondition->getChild(0));
+            aItem.Value <<= aValue;
             rFilter.push_back(aItem);
         }
         else
@@ -670,7 +685,7 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
         SQL_ISRULE(pCondition->getChild(pCondition->count()-1), column_ref))
     {
         PropertyValue aItem;
-        String aValue;
+        ::rtl::OUString aValue;
         sal_uInt16 nPos;
         if (SQL_ISRULE(pCondition->getChild(0), column_ref))
         {
@@ -682,8 +697,10 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
                 i++;
 
             // go forward
+            Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.lang.LocaleData")),UNO_QUERY);
+            LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
             for (;i < pCondition->count();i++)
-                pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aInternational);
+                pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
         }
         else if (SQL_ISRULE(pCondition->getChild(pCondition->count()-1), column_ref))
         {
@@ -700,127 +717,131 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
                 case SQL_NODE_LESS:
                     // take the opposite as we change the order
                     i--;
-                    aValue = '>';
+                    aValue = ::rtl::OUString::createFromAscii(">");
                     break;
                 case SQL_NODE_LESSEQ:
                     // take the opposite as we change the order
                     i--;
-                    aValue.AssignAscii(">=");
+                    aValue = ::rtl::OUString::createFromAscii(">=");
                     break;
                 case SQL_NODE_GREAT:
                     // take the opposite as we change the order
                     i--;
-                    aValue = '<';
+                    aValue = ::rtl::OUString::createFromAscii("<");
                     break;
                 case SQL_NODE_GREATEQ:
                     // take the opposite as we change the order
                     i--;
-                    aValue.AssignAscii("<=");
+                    aValue = ::rtl::OUString::createFromAscii("<=");
                     break;
             }
 
             // go backward
+            Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.lang.LocaleData")),UNO_QUERY);
+            LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
             for (; i >= 0; i--)
-                pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aInternational);
+                pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
         }
         else
             return sal_False;
 
-        aItem.Name = UniString(getColumnName(pCondition->getChild(nPos)));
-        rtl::OUString aStrValue = UniString(aValue);
-        aItem.Value <<= aStrValue;
+        aItem.Name = getColumnName(pCondition->getChild(nPos));
+        aItem.Value <<= aValue;
         rFilter.push_back(aItem);
     }
     else if (SQL_ISRULE(pCondition->getChild(0), set_fct_spec ) ||
              SQL_ISRULE(pCondition->getChild(0), general_set_fct))
     {
         PropertyValue aItem;
-        String aValue;
-        String aColumnName;
-        pCondition->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aInternational);
-        pCondition->getChild(0)->parseNodeToPredicateStr(aColumnName,m_xConnection->getMetaData(), xFormatter, m_aInternational);
+        ::rtl::OUString aValue;
+        ::rtl::OUString aColumnName;
+        Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.lang.LocaleData")),UNO_QUERY);
+        LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
+
+        pCondition->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
+        pCondition->getChild(0)->parseNodeToPredicateStr(aColumnName,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
 
         // don't display the column name
-        aValue.Erase(0, aColumnName.Len());
-        aValue.EraseLeadingChars();
+        aValue = aValue.copy(aColumnName.getLength());
+        aValue.trim();
 
         aItem.Name = UniString(getColumnName(pCondition->getChild(0)));
-        rtl::OUString aStrValue = UniString(aValue);
-        aItem.Value <<= aStrValue;
+        aItem.Value <<= aValue;
         rFilter.push_back(aItem);
     }
     else // kann sich nur um einen Expr. Ausdruck handeln
     {
         PropertyValue aItem;
-        String aName, aValue;
+        ::rtl::OUString aName, aValue;
 
         OSQLParseNode *pLhs = pCondition->getChild(0);
         OSQLParseNode *pRhs = pCondition->getChild(2);
 
         // Feldnamen
         sal_uInt16 i;
+        Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.lang.LocaleData")),UNO_QUERY);
+        LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
         for (i=0;i< pLhs->count();i++)
-             pCondition->getChild(i)->parseNodeToPredicateStr(aName,m_xConnection->getMetaData(), xFormatter, m_aInternational);
+             pCondition->getChild(i)->parseNodeToPredicateStr(aName,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
 
         // Kriterium
         aValue = pCondition->getChild(1)->getTokenValue();
         for(i=0;i< pRhs->count();i++)
-            pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aInternational);
+            pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
 
         aItem.Name = aName;
-        rtl::OUString aStrValue = aValue;
-        aItem.Value <<= aStrValue;
+        aItem.Value <<= aValue;
         rFilter.push_back(aItem);
     }
     return sal_True;
 }
 // functions for analysing SQL
 //--------------------------------------------------------------------------------------------------
-String OQueryComposer::getColumnName(::connectivity::OSQLParseNode* pColumnRef) const
+::rtl::OUString OQueryComposer::getColumnName(::connectivity::OSQLParseNode* pColumnRef) const
 {
-    String aTableRange, aColumnName;
+    ::rtl::OUString aTableRange, aColumnName;
     m_aSqlIterator.getColumnRange(pColumnRef, aColumnName, aTableRange );
     return aColumnName;
 }
 //------------------------------------------------------------------------------
-void OQueryComposer::resetIterator(const String& aSql)
+void OQueryComposer::resetIterator(const ::rtl::OUString& aSql)
 {
-    String aErrorMsg;
+    ::rtl::OUString aErrorMsg;
     delete m_pSqlParseNode;
     m_pSqlParseNode = m_aSqlParser.parseTree(aErrorMsg, aSql);
     m_aSqlIterator.setParseTree(m_pSqlParseNode);
 }
 //-----------------------------------------------------------------------------
-String OQueryComposer::getComposedFilter() const
+::rtl::OUString OQueryComposer::getComposedFilter() const
 {
-    String aResult;
+    ::rtl::OUString aResult;
     // compose the query use brackets if necessary
-    if ((m_aOrgFilter.Len() != 0) && (m_aFilter.Len() != 0))
+    if ((m_aOrgFilter.getLength() != 0) && (m_aFilter.getLength() != 0))
         (((((((aResult = STR_WHERE) += L_BRACKET) += m_aOrgFilter) += R_BRACKET) += STR_AND) += L_BRACKET) += m_aFilter) += R_BRACKET;
-    else if (m_aOrgFilter.Len() != 0)
+    else if (m_aOrgFilter.getLength() != 0)
         (aResult = STR_WHERE) += m_aOrgFilter;
-    else if (m_aFilter.Len() != 0)
+    else if (m_aFilter.getLength() != 0)
         (aResult = STR_WHERE) += m_aFilter;
     return aResult;
 }
 
 //-----------------------------------------------------------------------------
-String OQueryComposer::getComposedSort() const
+::rtl::OUString OQueryComposer::getComposedSort() const
 {
-    String aResult;
+    ::rtl::OUString aResult;
     // set the order part
-    if ((m_aOrgOrder.Len() != 0) && (m_aOrder.Len() != 0))
+    if ((m_aOrgOrder.getLength() != 0) && (m_aOrder.getLength() != 0))
         (((aResult = STR_ORDER_BY) += m_aOrgOrder) += COMMA) += m_aOrder;
-    else if (m_aOrgOrder.Len() != 0)
+    else if (m_aOrgOrder.getLength() != 0)
         (aResult = STR_ORDER_BY) += m_aOrgOrder;
-    else if (m_aOrder.Len() != 0)
+    else if (m_aOrder.getLength() != 0)
         (aResult = STR_ORDER_BY) += m_aOrder;
     return aResult;
 }
 // -------------------------------------------------------------------------
-String OQueryComposer::getGroupBy() const
+::rtl::OUString OQueryComposer::getGroupBy() const
 {
-    String aResult;
+    ::rtl::OUString aResult;
     const OSQLParseNode* pGroupBy = m_aSqlIterator.getGroupByTree();
     if(pGroupBy)
         pGroupBy->parseNodeToStr(aResult,m_xConnection->getMetaData());
