@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:00:07 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,7 +496,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case SID_PRINTPREVIEW:
             {
-                if ( !pThisFrame->ISA( SfxInPlaceFrame ) )          // nicht bei OLE
+                if ( !pThisFrame->GetFrame()->IsInPlace() )          // nicht bei OLE
                 {
                     //  print preview is now always in the same frame as the tab view
                     //  -> always switch this frame back to normal view
