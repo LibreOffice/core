@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kso $ $Date: 2002-06-25 13:04:15 $
+#   last change: $Author: hr $ $Date: 2003-08-07 14:39:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,8 +80,7 @@ SLOFILES=\
     $(SLO)$/ucbstore.obj \
     $(SLO)$/ucbprops.obj \
         $(SLO)$/provprox.obj \
-        $(SLO)$/ucbcmds.obj \
-    $(SLO)$/coreremotecontentbroker.obj
+        $(SLO)$/ucbcmds.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)
