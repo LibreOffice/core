@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:42:54 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,18 +147,39 @@
 #include "diactrl.hxx"
 #include "gluectrl.hxx"
 #include "tbx_ww.hxx"
-#include "drtxtob.hxx"
-#include "drbezob.hxx"
-#include "drstdob.hxx"
+#ifndef SD_TEXT_OBJECT_BAR_HXX
+#include "TextObjectBar.hxx"
+#endif
+#ifndef SD_BEZIER_OBJECT_BAR_HXX
+#include "BezierObjectBar.hxx"
+#endif
+#ifndef SD_IMPRESS_OBJECT_BAR_HXX
+#include "ImpressObjectBar.hxx"
+#endif
+#ifndef SD_ANIMATION_CHILD_WINDOW_HXX
+#include "AnimationChildWindow.hxx"
+#endif
 #include "animobjs.hxx"
-#include "navichld.hxx"
-#include "prevchld.hxx"
-#include "efctchld.hxx"
-#include "slidchld.hxx"
+#ifndef SD_NAVIGATOR_CHILD_WINDOW_HXX
+#include "NavigatorChildWindow.hxx"
+#endif
+#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
+#include "PreviewChildWindow.hxx"
+#endif
+#ifndef SD_EFFECT_CHILD_WINDOW_HXX
+#include "EffectChildWindow.hxx"
+#endif
+#ifndef SD_SLIDE_CHANGE_CHILD_WINDOW_HXX
+#include "SlideChangeChildWindow.hxx"
+#endif
 //#include "3dchld.hxx"
 #include "app.hrc"
-#include "drviewsh.hxx"
-#include "grviewsh.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_GRAPHIC_VIEW_SHELL_HXX
+#include "GraphicViewShell.hxx"
+#endif
 
 
 
@@ -194,12 +215,12 @@ void SdDLL::RegisterControllers()
     SdTbxCtlDiaPages::RegisterControl( SID_PAGES_PER_ROW, pMod );
     SdTbxCtlGlueEscDir::RegisterControl( SID_GLUE_ESCDIR, pMod );
 
-    SdAnimationChildWindow::RegisterChildWindow(0, pMod);
-    SdNavigatorChildWindow::RegisterChildWindowContext( SdDrawViewShell::_GetInterfaceIdImpl(), pMod );
-    SdNavigatorChildWindow::RegisterChildWindowContext( SdGraphicViewShell::_GetInterfaceIdImpl(), pMod );
-    SdPreviewChildWindow::RegisterChildWindow(0, pMod);
-    SdEffectChildWindow::RegisterChildWindow(0, pMod);
-    SdSlideChangeChildWindow::RegisterChildWindow(0, pMod);
+    ::sd::AnimationChildWindow::RegisterChildWindow(0, pMod);
+    ::sd::NavigatorChildWindow::RegisterChildWindowContext( ::sd::DrawViewShell::_GetInterfaceIdImpl(), pMod );
+    ::sd::NavigatorChildWindow::RegisterChildWindowContext( ::sd::GraphicViewShell::_GetInterfaceIdImpl(), pMod );
+    ::sd::PreviewChildWindow::RegisterChildWindow(0, pMod);
+    ::sd::EffectChildWindow::RegisterChildWindow(0, pMod);
+    ::sd::SlideChangeChildWindow::RegisterChildWindow(0, pMod);
     //Sd3DChildWindow::RegisterChildWindow(0, pMod);
     Svx3DChildWindow::RegisterChildWindow(0, pMod);
     SvxFontWorkChildWindow::RegisterChildWindow(0, pMod);
