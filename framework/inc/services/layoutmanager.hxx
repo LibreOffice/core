@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-21 13:57:16 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,8 +569,8 @@ namespace framework
             css::uno::Reference< css::lang::XMultiServiceFactory >                      m_xSMGR; /** reference to factory, which has created this instance. */
             css::uno::Reference< css::util::XURLTransformer >                           m_xURLTransformer;
             css::uno::Reference< css::frame::XFrame >                                   m_xFrame;
-            css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >  m_xModuleCfgMgr;
-            css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >  m_xDocCfgMgr;
+            css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >        m_xModuleCfgMgr;
+            css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >        m_xDocCfgMgr;
             css::uno::WeakReference< css::frame::XModel >                               m_xModel;
             css::uno::Reference< css::awt::XWindow >                                    m_xContainerWindow;
             css::uno::Reference< css::awt::XWindow >                                    m_xDockAreaWindows[DOCKINGAREAS_COUNT];
@@ -587,21 +587,23 @@ namespace framework
             DockingOperation                                                            m_eDockOperation;
             UIElement                                                                   m_aDockUIElement;
             css::awt::Rectangle                                                         m_aDockingArea;
-            css::uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor >   m_xDockingAreaAcceptor;
+            css::uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor >           m_xDockingAreaAcceptor;
             Point                                                                       m_aStartDockMousePos;
             css::uno::Reference< ::com::sun::star::lang::XComponent >                   m_xInplaceMenuBar;
             MenuBarManager*                                                             m_pInplaceMenuBar;
-            css::uno::Reference< ::com::sun::star::ui::XUIElement >             m_xMenuBar;
+            css::uno::Reference< ::com::sun::star::ui::XUIElement >                     m_xMenuBar;
             UIElement                                                                   m_aStatusBarElement;
             UIElement                                                                   m_aProgressBarElement;
-            com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >    m_xProgressBarBackup;
-            css::uno::Reference< ::com::sun::star::frame::XModuleManager >      m_xModuleManager;
-            css::uno::Reference< ::com::sun::star::ui::XUIElementFactory >      m_xUIElementFactoryManager;
+            com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >          m_xProgressBarBackup;
+            css::uno::Reference< ::com::sun::star::frame::XModuleManager >              m_xModuleManager;
+            css::uno::Reference< ::com::sun::star::ui::XUIElementFactory >              m_xUIElementFactoryManager;
             css::uno::Reference< ::com::sun::star::frame::XStatusListener >             m_xMenuBarCloseListener;
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowState;
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowStateSupplier;
             rtl::OUString                                                               m_aModuleIdentifier;
             rtl::OUString                                                               m_aCustomTbxPrefix;
+            rtl::OUString                                                               m_aFullCustomTbxPrefix;
+            rtl::OUString                                                               m_aFullAddonTbxPrefix;
             rtl::OUString                                                               m_aStatusBarAlias;
             rtl::OUString                                                               m_aProgressBarAlias;
             rtl::OUString                                                               m_aPropDocked;
