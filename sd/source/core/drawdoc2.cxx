@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:07:26 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,9 @@
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
-#include "sdoutl.hxx"
+#ifndef SD_OUTLINE_HXX
+#include "Outliner.hxx"
+#endif
 #else   // SVX_LIGHT
 #ifndef _OUTLINER_HXX //autogen wg. Outliner
 #include <svx/outliner.hxx>
@@ -148,25 +150,39 @@
 
 #ifndef SVX_LIGHT
 #ifdef MAC
-#include "::ui:inc:docshell.hxx"
-#include "::ui:inc:frmview.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "::ui:inc:DrawDocShell.hxx"
+#endif
+#ifndef SD_FRAME_VIEW_HXX
+#include "::ui:inc:FrameView.hxx"
+#endif
 #include "::ui:inc:cfgids.hxx"
 #include "::ui:inc:strings.hrc"
 #else
 #ifdef UNX
-#include "../ui/inc/docshell.hxx"
-#include "../ui/inc/frmview.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "../ui/inc/DrawDocShell.hxx"
+#endif
+#ifndef SD_FRAME_VIEW_HXX
+#include "../ui/inc/FrameView.hxx"
+#endif
 #include "../ui/inc/cfgids.hxx"
 #include "../ui/inc/strings.hrc"
 #else
-#include "..\ui\inc\docshell.hxx"
-#include "..\ui\inc\frmview.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "..\ui\inc\DrawDocShell.hxx"
+#endif
+#ifndef SD_FRAME_VIEW_HXX
+#include "..\ui\inc\FrameView.hxx"
+#endif
 #include "..\ui\inc\cfgids.hxx"
 #include "..\ui\inc\strings.hrc"
 #endif
 #endif
 
 #endif // !SVX_LIGHT
+
+#include "PageListWatcher.hxx"
 
 const long PRINT_OFFSET = 30;       // siehe \svx\source\dialog\page.cxx (PB)
 
