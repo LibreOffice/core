@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 14:39:09 $
+ *  last change: $Author: dbo $ $Date: 2001-03-12 18:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,12 +380,15 @@ static void* generateRTTI( typelib_CompoundTypeDescription * pCompTypeDescr )
 
 //--------------------------------------------------------------------------------------------------
 
+static Mutex s_aMutex;
 static std::map< void*, typelib_TypeDescription* > aExceptionMap;
 
 static void deleteException( void* pExc )
 {
+    MutexGuard aGuard( s_aMutex );
     std::map< void*, typelib_TypeDescription* >::iterator element =
         aExceptionMap.find( pExc );
+    OSL_ASSERT( element != aExceptionMap.end() );
     if( element != aExceptionMap.end() )
     {
         typelib_TypeDescription* pType = (*element).second;
@@ -420,7 +423,10 @@ void cc50_solaris_intel_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cp
     typelib_CompoundTypeDescription * pCompTypeDescr = (typelib_CompoundTypeDescription *)pTypeDescr;
     void* pRTTI = generateRTTI( pCompTypeDescr );
 
-    TYPELIB_DANGER_RELEASE( pTypeDescr );
+    {
+    MutexGuard aGuard( s_aMutex );
+    aExceptionMap[ pCppExc ] = pTypeDescr;
+    }
 
     __Crun::ex_throw( pCppExc, (const __Crun::static_type_info*)pRTTI, deleteException );
 }
