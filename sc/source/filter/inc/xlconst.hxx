@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:20:15 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:42:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@ const sal_uInt16 EXC_MAXTAB_BIFF4           = 32767;
 const sal_uInt16 EXC_MAXCOL_BIFF8           = EXC_MAXCOL_BIFF4;
 const sal_uInt16 EXC_MAXROW_BIFF8           = 65535;
 const sal_uInt16 EXC_MAXTAB_BIFF8           = EXC_MAXTAB_BIFF4;
+
+const sal_uInt16 EXC_NOTAB                  = 0xFFFF;   /// An invalid sheet index, for common use.
 
 
 // In/out stream --------------------------------------------------------------
@@ -178,80 +180,11 @@ const sal_uInt8 EXC_PATT_6_25_PERC          = 0x12;
 const sal_uInt16 EXC_ID_STRING              = 0x0207;
 
 
-// (0x0014, 0x0015) HEADER, FOOTER --------------------------------------------
-
-const sal_uInt16 EXC_ID_HEADER              = 0x0014;
-const sal_uInt16 EXC_ID_FOOTER              = 0x0015;
-
-
-// (0x0017) EXC_ID_EXTERNSHEET ------------------------------------------------
-
-const sal_uInt16 EXC_ID_EXTERNSHEET         = 0x0017;
-
-
-// (0x0018, 0x0218) NAME ------------------------------------------------------
-
-// flags
-const sal_uInt16 EXC_NAME_HIDDEN            = 0x0001;
-const sal_uInt16 EXC_NAME_FUNC              = 0x0002;
-const sal_uInt16 EXC_NAME_VB                = 0x0004;
-const sal_uInt16 EXC_NAME_PROC              = 0x0008;
-const sal_uInt16 EXC_NAME_CALCEXP           = 0x0010;
-const sal_uInt16 EXC_NAME_BUILTIN           = 0x0020;
-const sal_uInt16 EXC_NAME_FGROUPMASK        = 0x0FC0;
-const sal_uInt16 EXC_NAME_BIG               = 0x1000;
-
-// codes for BuiltIn names
-const sal_Unicode EXC_BUILTIN_CONSOLIDATEAREA   = 0x0000;
-const sal_Unicode EXC_BUILTIN_AUTOOPEN          = 0x0001;
-const sal_Unicode EXC_BUILTIN_AUTOCLOSE         = 0x0002;
-const sal_Unicode EXC_BUILTIN_EXTRACT           = 0x0003;
-const sal_Unicode EXC_BUILTIN_DATABASE          = 0x0004;
-const sal_Unicode EXC_BUILTIN_CRITERIA          = 0x0005;
-const sal_Unicode EXC_BUILTIN_PRINTAREA         = 0x0006;
-const sal_Unicode EXC_BUILTIN_PRINTTITLES       = 0x0007;
-const sal_Unicode EXC_BUILTIN_RECORDER          = 0x0008;
-const sal_Unicode EXC_BUILTIN_DATAFORM          = 0x0009;
-const sal_Unicode EXC_BUILTIN_AUTOACTIVATE      = 0x000A;
-const sal_Unicode EXC_BUILTIN_AUTODEACTIVATE    = 0x000B;
-const sal_Unicode EXC_BUILTIN_SHEETTITLE        = 0x000C;
-const sal_Unicode EXC_BUILTIN_AUTOFILTER        = 0x000D;
-const sal_Unicode EXC_BUILTIN_UNKNOWN           = 0x000E;
-
-
-// (0x001A, 0x001B) VERTICAL-, HORIZONTALPAGEBREAKS ---------------------------
-
-const sal_uInt16 EXC_ID_VERTPAGEBREAKS      = 0x001A;
-const sal_uInt16 EXC_ID_HORPAGEBREAKS       = 0x001B;
-
-
 // (0x001C) NOTE --------------------------------------------------------------
 
 const sal_uInt16 EXC_ID_NOTE                = 0x001C;
 const sal_uInt16 EXC_NOTE_VISIBLE           = 0x0002;
 
-
-// (0x0023) EXTERNNAME --------------------------------------------------------
-
-const sal_uInt16 EXC_ID_EXTERNNAME          = 0x0023;
-
-const sal_uInt16 EXC_EXTN_BUILTIN           = 0x0001;
-const sal_uInt16 EXC_EXTN_OLE               = 0x0010;
-const sal_uInt16 EXC_EXTN_OLE_OR_DDE        = 0xFFFE;
-
-const sal_uInt16 EXC_EXTN_EXPDDE_STDDOC     = 0x7FEA;  /// for export
-const sal_uInt16 EXC_EXTN_EXPDDE            = 0x7FE2;  /// for export
-
-
-// (0x0026, 0x0027, 0x0028, 0x0029) LEFT-, RIGHT-, TOP-, BOTTOMMARGIN ---------
-
-const sal_uInt16 EXC_ID_LEFTMARGIN          = 0x0026;
-const sal_uInt16 EXC_ID_RIGHTMARGIN         = 0x0027;
-const sal_uInt16 EXC_ID_TOPMARGIN           = 0x0028;
-const sal_uInt16 EXC_ID_BOTTOMMARGIN        = 0x0029;
-
-const sal_uInt16 EXC_ULMARGIN_DEFAULT_TWIPS = 1417;     // Excel default top/bottom twip size = 2.5cm
-const sal_uInt16 EXC_LRMARGIN_DEFAULT_TWIPS = 1077;     // Excel default left/right twip size = 1.9cm
 
 // (0x0012, 0x0019) PROTECT and WINDOWPROTECT --------------------
 
@@ -264,18 +197,13 @@ const sal_uInt16 EXC_ID_WINDOWPROTECT       = 0x0019;
 const sal_uInt16 EXC_ID_DEFCOLWIDTH         = 0x0055;
 
 
-// (0x0059, 0x005A) XCT, CRN --------------------------------------------------
-
-const sal_uInt16 EXC_ID_XCT                 = 0x0059;
-const sal_uInt16 EXC_ID_CRN                 = 0x005A;
-
-
 // (0x007D) COLINFO -----------------------------------------------------------
 
 const sal_uInt16 EXC_ID_COLINFO             = 0x007D;
 
 const sal_uInt16 EXC_COLINFO_HIDDEN         = 0x0001;
 const sal_uInt16 EXC_COLINFO_COLLAPSED      = 0x1000;
+
 
 // (0x007E) RK ----------------------------------------------------------------
 
@@ -303,22 +231,6 @@ const sal_uInt16 EXC_WSBOOL_DEFAULTFLAGS    = 0x04C1;
 // (0x008C) COUNTRY -----------------------------------------------------------
 
 const sal_uInt16 EXC_ID_COUNTRY             = 0x008C;
-
-
-// (0x013D) TABID -------------------------------------------------------------
-
-const sal_uInt16 EXC_ID_TABID               = 0x013D;
-
-
-// (0x01AE) SUPBOOK -----------------------------------------------------------
-
-const sal_uInt16 EXC_ID_SUPBOOK             = 0x01AE;
-
-const sal_uInt16 EXC_TAB_EXTERNAL           = 0xFFFE;     /// Addins, DDE, OLE.
-const sal_uInt16 EXC_TAB_INVALID            = 0xFFFF;     /// Deleted 3D reference.
-
-const sal_uInt16 EXC_SUPB_SELF              = 0x0401;
-const sal_uInt16 EXC_SUPB_ADDIN             = 0x3A01;
 
 
 // ============================================================================
