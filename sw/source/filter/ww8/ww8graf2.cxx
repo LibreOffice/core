@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:26:54 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,10 +110,6 @@
 #endif
 #ifndef _SFX_FCONTNR_HXX
 #include <sfx2/fcontnr.hxx>
-#endif
-
-#ifndef _FSYS_HXX
-#include <tools/fsys.hxx>
 #endif
 
 #ifndef _IPOBJ_HXX //autogen
@@ -432,34 +428,26 @@ WW8PicDesc::WW8PicDesc( const WW8_PIC& rPic )
     nHeight = nAddHeight * rPic.my / 1000;
 }
 
-void SwWW8ImplReader::ReplaceObjWithGraphicLink(const SdrObject &rReplaceObj,
-    const String& rFileName)
+void SwWW8ImplReader::ReplaceObj(const SdrObject &rReplaceObj,
+    SdrObject &rSubObj)
 {
     // SdrGrafObj anstatt des SdrTextObj in dessen Gruppe einsetzen
-    if(SdrObject* pGroupObject = rReplaceObj.GetUpGroup())
+    if (SdrObject* pGroupObject = rReplaceObj.GetUpGroup())
     {
         SdrObjList* pObjectList = pGroupObject->GetSubList();
-
-        // neues Sdr-Grafik-Objekt erzeugen und konfigurieren
-        SdrGrafObj* pGrafObj = new SdrGrafObj;
-
+#if 0
         if( !pDrawModel )   // 1. GrafikObjekt des Docs
             GrafikCtor();
 
         pGrafObj->SetModel(pDrawModel);
+#endif
 
-        pGrafObj->SetLogicRect(rReplaceObj.GetBoundRect());
+        rSubObj.SetLogicRect(rReplaceObj.GetBoundRect());
+        rSubObj.SetLayer(rReplaceObj.GetLayer());
 
-        pGrafObj->SetLayer(rReplaceObj.GetLayer());
-
-        if (rFileName.Len())
-        {
-            pGrafObj->SetFileName(rFileName);
-            pGrafObj->SetGraphicLink(rFileName, aEmptyStr);
-        }
         // altes Objekt raus aus Gruppen-Liste und neues rein
         // (dies tauscht es ebenfalls in der Drawing-Page aus)
-        pObjectList->ReplaceObject(pGrafObj, rReplaceObj.GetOrdNum());
+        pObjectList->ReplaceObject(&rSubObj, rReplaceObj.GetOrdNum());
     }
     else
     {
@@ -730,8 +718,6 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     aGrSet.Put( aCrop );
                 }
 
-                bool bTextObjWasGrouped = false;
-
                 // ggfs. altes AttrSet uebernehmen und
                 // horiz. Positionierungs-Relation korrigieren
                 if( pOldFlyFmt )
@@ -745,48 +731,23 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     }
                 }
 
-                String aObjectName(pObject->GetName());
-                if (UINT16(OBJ_OLE2) == pObject->GetObjIdentifier())
-                    pRet = InsertOle(*((SdrOle2Obj*)pObject),aAttrSet);
+                   bool bTextObjWasGrouped = false;
+                if (pOldFlyFmt && pTextObj && pTextObj->GetUpGroup())
+                    bTextObjWasGrouped = true;
+
+                if (bTextObjWasGrouped)
+                    ReplaceObj(*pTextObj, *pObject);
                 else
                 {
-                    if (SdrGrafObj* pGraphObject = PTR_CAST(SdrGrafObj, pObject))
+                    if (UINT16(OBJ_OLE2) == pObject->GetObjIdentifier())
+                        pRet = InsertOle(*((SdrOle2Obj*)pObject),aAttrSet);
+                    else
                     {
-                        // Nun den Link bzw. die Grafik ins Doc stopfen
-                        const Graphic& rGraph = pGraphObject->GetGraphic();
-                        bool bDone = false;
-
-                        if( pGraphObject->IsLinkedGraphic() )
+                        if (SdrGrafObj* pGraphObject = PTR_CAST(SdrGrafObj, pObject))
                         {
-                            aGrName = pGraphObject->GetFileName();
-                            DirEntry aGrfFileEntry( aGrName );
-                            if(    aGrfFileEntry.Exists()
-                                || (GRAPHIC_NONE == rGraph.GetType()))
-                            {
-                                if( pOldFlyFmt && pTextObj &&
-                                    pTextObj->GetUpGroup() )
-                                {
-                                    bTextObjWasGrouped = true;
-                                    /*
-                                        Hier *nichts* ins Doc inserten!  (
-                                        lediglich in der DrawPage statt dem
-                                        Sdr-Text-Objekt einen Grafik- Link
-                                        einbauen )
-                                    */
-                                    ReplaceObjWithGraphicLink(*pTextObj,
-                                        aGrName);
-                                }
-                                else
-                                {
-                                    pRet = rDoc.Insert(*pPaM, aGrName,
-                                        aEmptyStr, 0, &aAttrSet, &aGrSet);
-                                }
-                                bDone = true;
-                            }
-                        }
+                            // Nun den Link bzw. die Grafik ins Doc stopfen
+                            const Graphic& rGraph = pGraphObject->GetGraphic();
 
-                        if (!bDone)
-                        {
                             if (nObjLocFc)  // is it a OLE-Object?
                                 pRet = ImportOle(&rGraph, &aAttrSet);
 
@@ -796,20 +757,24 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                                     &rGraph, &aAttrSet, &aGrSet );
                             }
                         }
+                        else
+                            pRet = rDoc.Insert(*pPaM, *pObject, &aAttrSet);
                     }
-                    else
-                        pRet = rDoc.Insert(*pPaM, *pObject, &aAttrSet);
                 }
+
                 // also nur, wenn wir ein *Insert* gemacht haben
                 if (pRet)
                 {
                     if (pRecord)
-                        SetAttributesAtGrfNode(pRecord,pRet,0);
+                        SetAttributesAtGrfNode(pRecord, pRet, 0);
                     // mehrfaches Auftreten gleicher Grafik-Namen vermeiden
                     if (pObject->HasSetName())
                         pRet->SetName(pObject->GetName());
                     else
-                        maGrfNameGenerator.SetUniqueGraphName(pRet,aObjectName);
+                    {
+                        String aObjectName(pObject->GetName());
+                        maGrfNameGenerator.SetUniqueGraphName(pRet, aObjectName);
+                    }
 
                     // Zeiger auf neues Objekt ermitteln und Z-Order-Liste
                     // entsprechend korrigieren (oder Eintrag loeschen)
