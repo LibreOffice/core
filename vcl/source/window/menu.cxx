@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:50:21 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 14:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,33 +554,23 @@ void DecoToolBox::SetImages()
 {
     if( lastSize != -1 )
     {
-        Bitmap aMask( maImage.GetBitmap() );
-        aMask.SetSizePixel( Size( lastSize, lastSize ) );
-        aMask.Erase( Color( COL_WHITE ) );
-        Bitmap aBmpOrg( maImage.GetBitmap() );
-        aBmpOrg.SetSizePixel( Size( lastSize, lastSize ) );
-        aBmpOrg.Erase( Color( COL_BLACK ) );
+        Color       aEraseColor( 255, 255, 255, 255 );
+        BitmapEx    aBmpExDst( maImage.GetBitmapEx() );
+        BitmapEx    aBmpExSrc( GetSettings().GetStyleSettings().GetMenuBarColor().IsDark() ?
+                                 maImageHC.GetBitmapEx() : aBmpExDst );
 
-        BitmapEx aBmp( aBmpOrg, aMask );
-        aBmp.SetTransparentColor( Color( COL_MAGENTA ) );
-
-        //BitmapEx aBmp( maImage.GetBitmap(), Color( COL_LIGHTMAGENTA ) );
-        //aBmp.SetSizePixel( Size( lastSize, lastSize ) );
-        // TODO: erase transparent !!!
-        //aBmp.Erase( GetSettings().GetStyleSettings().GetMenuBarColor() );
+        aEraseColor.SetTransparency( 255 );
+        aBmpExDst.Erase( aEraseColor );
+        aBmpExDst.SetSizePixel( Size( lastSize, lastSize ) );
 
         Rectangle aSrcRect( Point(0,0), maImage.GetSizePixel() );
-        Rectangle aDestRect( Point((lastSize - maImage.GetSizePixel().Width())/2, (lastSize - maImage.GetSizePixel().Height())/2 ),
-            maImage.GetSizePixel() );
+        Rectangle aDestRect( Point((lastSize - maImage.GetSizePixel().Width())/2,
+                                   (lastSize - maImage.GetSizePixel().Height())/2 ),
+                             maImage.GetSizePixel() );
 
-        BitmapEx aBmpSrc(
-            GetSettings().GetStyleSettings().GetMenuBarColor().IsDark() ?
-            maImageHC.GetBitmap() : maImage.GetBitmap(),
-            Color( COL_LIGHTMAGENTA ) );
-        aBmp.CopyPixel( aDestRect, aSrcRect, &aBmpSrc );
-        Image aImg( aBmp );
 
-        SetItemImage( IID_DOCUMENTCLOSE, aImg );
+        aBmpExDst.CopyPixel( aDestRect, aSrcRect, &aBmpExSrc );
+        SetItemImage( IID_DOCUMENTCLOSE, Image( aBmpExDst ) );
     }
 }
 
@@ -1640,28 +1630,12 @@ void Menu::SetItemImage( USHORT nItemId, const Image& rImage )
 
 static inline Image ImplRotImage( const Image& rImage, long nAngle10 )
 {
-    Image aRet;
+    Image       aRet;
+    BitmapEx    aBmpEx( rImage.GetBitmapEx() );
 
-    // rotate the image to the new angle
-    Bitmap aRotBitmap = rImage.GetBitmap();
-    if( rImage.HasMaskColor() )
-    {
-        aRotBitmap.Rotate( nAngle10, rImage.GetMaskColor() );
-        aRet = Image( aRotBitmap, rImage.GetMaskColor() );
-    }
-    else if( rImage.HasMaskBitmap() )
-    {
-        aRotBitmap.Rotate( nAngle10, Color( COL_WHITE ) );
-        Bitmap aRotMask = rImage.GetMaskBitmap();
-        aRotMask.Rotate( nAngle10, Color( COL_WHITE ) );
-        aRet = Image( aRotBitmap, aRotMask );
-    }
-    else
-    {
-        aRotBitmap.Rotate( nAngle10, Color( COL_WHITE ) );
-        aRet = Image( aRotBitmap );
-    }
-    return aRet;
+    aBmpEx.Rotate( nAngle10, COL_WHITE );
+
+    return Image( aBmpEx );
 }
 
 void Menu::SetItemImageAngle( USHORT nItemId, long nAngle10 )
@@ -1683,26 +1657,12 @@ void Menu::SetItemImageAngle( USHORT nItemId, long nAngle10 )
 
 static inline Image ImplMirrorImage( const Image& rImage )
 {
-    Image aRet;
+    Image       aRet;
+    BitmapEx    aBmpEx( rImage.GetBitmapEx() );
 
-    // rotate the image to the new angle
-    Bitmap aMirrorBitmap = rImage.GetBitmap();
-    aMirrorBitmap.Mirror( BMP_MIRROR_HORZ );
-    if( rImage.HasMaskColor() )
-    {
-        aRet = Image( aMirrorBitmap, rImage.GetMaskColor() );
-    }
-    else if( rImage.HasMaskBitmap() )
-    {
-        Bitmap aMirrorMask = rImage.GetMaskBitmap();
-        aMirrorMask.Mirror( BMP_MIRROR_HORZ );
-        aRet = Image( aMirrorBitmap, aMirrorMask );
-    }
-    else
-    {
-        aRet = Image( aMirrorBitmap );
-    }
-    return aRet;
+    aBmpEx.Mirror( BMP_MIRROR_HORZ );
+
+    return Image( aBmpEx );
 }
 
 void Menu::SetItemImageMirrorMode( USHORT nItemId, BOOL bMirror )
