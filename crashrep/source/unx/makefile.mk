@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-15 14:31:53 $
+#   last change: $Author: hr $ $Date: 2003-07-16 17:39:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,13 @@ LIBSALCPPRT=$(0)
 .INCLUDE :  settings.mk
 # ------------------------------------------------------------------
 
+.IF "$(OS)"=="MACOSX"
+
+dummy:
+    @echo "Nothing to build for OS $(OS)"
+
+.ELSE		# "$(OS)"=="MACOSX"
+
 # Only build crash reporter if either a product build with debug info 
 # or a non-pro build is done.
 
@@ -100,6 +107,7 @@ APP1STDLIBS+=-lsocket
 .ENDIF
 
 
+
 # Build statically linked version for special builds and non-pros
 
 .IF "$(ENABLE_CRASHDUMP)" == "STATIC" || "$(PRODUCT)" != "FULL"
@@ -117,6 +125,10 @@ APP2STDLIBS+=-lsocket
 
 ALL: ALLTAR $(BIN)$/crash_dump.res.01
 
+.ENDIF #  "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" != "FULL"
+
+.ENDIF #  "$(OS)"=="MACOSX"
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
@@ -126,5 +138,4 @@ $(OBJ)$/main.obj: $(INCCOM)$/_version.h
 $(BIN)$/crash_dump.res.01: ..$/all$/crashrep.lng
     $(BIN)$/unxcrashres ..$/all$/crashrep.lng $(BIN)$/crash_dump.res
 
-.ENDIF
 # Building crash_report
