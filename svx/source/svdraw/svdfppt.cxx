@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-12 16:52:50 $
+ *  last change: $Author: sj $ $Date: 2001-03-20 17:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4583,6 +4583,8 @@ PPTParaPropSet::PPTParaPropSet( PPTParaPropSet& rParaPropSet )
 {
     pParaSet = rParaPropSet.pParaSet;
     pParaSet->mnRefCount++;
+
+    mnOriginalTextPos = rParaPropSet.mnOriginalTextPos;
 }
 
 PPTParaPropSet::~PPTParaPropSet()
@@ -4599,12 +4601,15 @@ PPTParaPropSet& PPTParaPropSet::operator=( PPTParaPropSet& rParaPropSet )
             delete pParaSet;
         pParaSet = rParaPropSet.pParaSet;
         pParaSet->mnRefCount++;
+
+        mnOriginalTextPos = rParaPropSet.mnOriginalTextPos;
     }
     return *this;
 }
 
-PPTCharPropSet::PPTCharPropSet() :
+PPTCharPropSet::PPTCharPropSet( sal_uInt32 nParagraph ) :
     pCharSet        ( new ImplPPTCharPropSet ),
+    mnParagraph     ( nParagraph ),
     mpFieldItem     ( NULL )
 {
 }
@@ -4614,6 +4619,18 @@ PPTCharPropSet::PPTCharPropSet( PPTCharPropSet& rCharPropSet )
     pCharSet = rCharPropSet.pCharSet;
     pCharSet->mnRefCount++;
 
+    mnParagraph = rCharPropSet.mnParagraph;
+    mnOriginalTextPos = rCharPropSet.mnOriginalTextPos;
+    maString = rCharPropSet.maString;
+    mpFieldItem = ( rCharPropSet.mpFieldItem ) ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : NULL;
+}
+
+PPTCharPropSet::PPTCharPropSet( PPTCharPropSet& rCharPropSet, sal_uInt32 nParagraph )
+{
+    pCharSet = rCharPropSet.pCharSet;
+    pCharSet->mnRefCount++;
+
+    mnParagraph = nParagraph;
     mnOriginalTextPos = rCharPropSet.mnOriginalTextPos;
     maString = rCharPropSet.maString;
     mpFieldItem = ( rCharPropSet.mpFieldItem ) ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : NULL;
@@ -4634,7 +4651,9 @@ PPTCharPropSet& PPTCharPropSet::operator=( PPTCharPropSet& rCharPropSet )
             delete pCharSet;
         pCharSet = rCharPropSet.pCharSet;
         pCharSet->mnRefCount++;
+
         mnOriginalTextPos = rCharPropSet.mnOriginalTextPos;
+        mnParagraph = rCharPropSet.mnParagraph;
         maString = rCharPropSet.maString;
         mpFieldItem = ( rCharPropSet.mpFieldItem ) ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : NULL;
     }
@@ -4798,8 +4817,7 @@ PPTTextRulerInterpreter::~PPTTextRulerInterpreter()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImport& rMan, const DffRecordHeader& rTextHeader,
-                                                    PPTTextRulerInterpreter& rRuler, const DffRecordHeader& rExtParaHd ) :
-    pCharPropsATable    ( NULL )
+                                                    PPTTextRulerInterpreter& rRuler, const DffRecordHeader& rExtParaHd )
 {
     sal_uInt32 nMerk = rIn.Tell();
 
@@ -4877,7 +4895,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
     }
     if ( aString.Len() )
     {
-        UINT32  nParaCount, nMask;
+        UINT32  nMask;
         UINT32  nCharCount, nCharAnzRead = 0;
         INT32   nCharsToRead;
         UINT16  i, j, nDummy16;
@@ -5017,7 +5035,9 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                 aParaPropSet = PPTParaPropSet();
                 DBG_ERROR( "SJ:PPTStyleTextPropReader::could not get this PPT_PST_StyleTextPropAtom by reading the paragraph attributes" );
             }
-            nParaCount = 1;
+            PPTParaPropSet* pPara = new PPTParaPropSet( aParaPropSet );
+            pPara->mnOriginalTextPos = nCharAnzRead;
+            aParaPropList.Insert( pPara, LIST_APPEND );
             if ( nCharCount )
             {
                 sal_uInt32   nCount;
@@ -5025,23 +5045,22 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                 for ( nCount = 0; nCount < nCharCount; nCount++ )
                 {
                     if ( pDat[ nCount ] == 0xd )
-                        nParaCount++;
+                    {
+                        pPara = new PPTParaPropSet( aParaPropSet );
+                        pPara->mnOriginalTextPos = nCharAnzRead + nCount + 1;
+                        aParaPropList.Insert( pPara, LIST_APPEND );
+                    }
                 }
             }
-            while ( nParaCount-- )
-                aParaPropList.Insert( new PPTParaPropSet( aParaPropSet ), LIST_APPEND );
-
             nCharAnzRead += nCharCount + 1;
         }
         UINT32 bEmptyParaPossible = TRUE;
-        pCharPropsATable = new UINT32[ aParaPropList.Count() ];
-        memset( pCharPropsATable, 0, sizeof( UINT32 ) * aParaPropList.Count() );
         UINT32 nCurrentPara = nCharAnzRead = 0;
 
         UINT32 nCurrentSpecMarker = (UINT32)aSpecMarkerList.First();
         while ( nCharAnzRead < nStringLen )
         {
-            PPTCharPropSet aCharPropSet;
+            PPTCharPropSet aCharPropSet( nCurrentPara );
             if ( bTextPropAtom )
             {
                 rIn >> nDummy16;
@@ -5150,10 +5169,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                         else if ( bEmptyParaPossible )
                             aCharPropSet.maString = String();
                         if ( nLen || bEmptyParaPossible )
-                        {
-                            aCharPropList.Insert( new PPTCharPropSet( aCharPropSet ), LIST_APPEND );
-                            pCharPropsATable[ nCurrentPara ]++;
-                        }
+                            aCharPropList.Insert( new PPTCharPropSet( aCharPropSet, nCurrentPara ), LIST_APPEND );
                         nCurrentPara++;
                         nLen++;
                         nCharAnzRead += nLen;
@@ -5164,15 +5180,13 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                     {
                         if ( ( nCurrentSpecMarker & 0xffff ) != nCharAnzRead )
                         {
-                             pCharPropsATable[ nCurrentPara ]++;
                             nLen = ( nCurrentSpecMarker & 0xffff ) - nCharAnzRead;
                             aCharPropSet.maString = String( aString, (UINT16)nCharAnzRead, (UINT16)nLen );
-                            aCharPropList.Insert( new PPTCharPropSet( aCharPropSet ), LIST_APPEND );
+                            aCharPropList.Insert( new PPTCharPropSet( aCharPropSet, nCurrentPara ), LIST_APPEND );
                             nCharCount -= nLen;
                             nCharAnzRead += nLen;
                         }
-                        pCharPropsATable[ nCurrentPara ]++;
-                        PPTCharPropSet* pCPropSet = new PPTCharPropSet( aCharPropSet );
+                        PPTCharPropSet* pCPropSet = new PPTCharPropSet( aCharPropSet, nCurrentPara );
 
                         Font    aFont;
                         UINT32  nMappedFontId;
@@ -5191,15 +5205,13 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                     {
                         if ( ( nCurrentSpecMarker & 0xffff ) != nCharAnzRead )
                         {
-                             pCharPropsATable[ nCurrentPara ]++;
                             nLen = ( nCurrentSpecMarker & 0xffff ) - nCharAnzRead;
                             aCharPropSet.maString = String( aString, (UINT16)nCharAnzRead, (UINT16)nLen );
-                            aCharPropList.Insert( new PPTCharPropSet( aCharPropSet ), LIST_APPEND );
+                            aCharPropList.Insert( new PPTCharPropSet( aCharPropSet, nCurrentPara ), LIST_APPEND );
                             nCharCount -= nLen;
                             nCharAnzRead += nLen;
                         }
-                        pCharPropsATable[ nCurrentPara ]++;
-                        PPTCharPropSet* pCPropSet = new PPTCharPropSet( aCharPropSet );
+                        PPTCharPropSet* pCPropSet = new PPTCharPropSet( aCharPropSet, nCurrentPara );
                         pCPropSet->SetFont( rMan.pFonts->Count() - 1 );
                         pCPropSet->maString = (sal_uInt8)( nCurrentSpecMarker >> 24 );
                         aCharPropList.Insert( pCPropSet, LIST_APPEND );
@@ -5213,18 +5225,16 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                 else
                 {
                     aCharPropSet.maString = String( aString, (UINT16)nCharAnzRead, (UINT16)nCharCount );
-                    aCharPropList.Insert( new PPTCharPropSet( aCharPropSet ), LIST_APPEND );
-                    pCharPropsATable[ nCurrentPara ]++;
+                    aCharPropList.Insert( new PPTCharPropSet( aCharPropSet, nCurrentPara ), LIST_APPEND );
                     nCharAnzRead += nCharCount;
                     bEmptyParaPossible = FALSE;
                     break;
                 }
             }
          }
-        if ( ( nCurrentPara == aParaPropList.Count() - 1 ) && ( !pCharPropsATable[ nCurrentPara ] ) )
+        if ( aCharPropList.Count() && ( ((PPTCharPropSet*)aCharPropList.Last())->mnParagraph != nCurrentPara ) )
         {
-            pCharPropsATable[ nCurrentPara ]++;
-            PPTCharPropSet* pCharPropSet = new PPTCharPropSet( *(PPTCharPropSet*)aCharPropList.GetObject( aCharPropList.Count() - 1 ) );
+            PPTCharPropSet* pCharPropSet = new PPTCharPropSet( *(PPTCharPropSet*)aCharPropList.Last(), nCurrentPara );
             pCharPropSet->maString = String();
             pCharPropSet->mnOriginalTextPos = nStringLen - 1;
             aCharPropList.Insert( pCharPropSet, LIST_APPEND );
@@ -5240,7 +5250,6 @@ PPTStyleTextPropReader::~PPTStyleTextPropReader()
         delete (PPTParaPropSet*)pTmp;
     for ( pTmp = aCharPropList.First(); pTmp; pTmp = aCharPropList.Next() )
         delete (PPTCharPropSet*)pTmp;
-    delete pCharPropsATable;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -5271,7 +5280,8 @@ struct FieldEntry
 PPTPortionObj::PPTPortionObj( PPTStyleSheet& rStyleSheet, UINT32 nInstance, UINT32 nDepth ) :
     mrStyleSheet    ( rStyleSheet ),
     mnInstance      ( nInstance ),
-    mnDepth         ( ( nDepth > 4 ) ? 4 : nDepth )
+    mnDepth         ( ( nDepth > 4 ) ? 4 : nDepth ),
+    PPTCharPropSet  ( 0 )
 {
 }
 
@@ -5544,15 +5554,21 @@ PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader, const PPT
     mnInstance              ( nInstance ),
     mbTab                   ( FALSE ),
     mnCurrentObject         ( 0 ),
-    mnPortionCount          ( rPropReader.pCharPropsATable[ rPropReader.aParaPropList.GetCurPos() ] ),
+    mnPortionCount          ( 0 ),
     mpPortionList           ( NULL )
 {
-    if ( mnPortionCount )
+    sal_uInt32 nCurPos = rPropReader.aCharPropList.GetCurPos();
+    PPTCharPropSet* pCharPropSet = (PPTCharPropSet*)rPropReader.aCharPropList.GetCurObject();
+    if ( pCharPropSet )
     {
+        sal_uInt32 nCurrentParagraph = pCharPropSet->mnParagraph;
+        for ( ; pCharPropSet && ( pCharPropSet->mnParagraph == nCurrentParagraph ); pCharPropSet = (PPTCharPropSet*)rPropReader.aCharPropList.Next() )
+            mnPortionCount++;   // counting number of portions that are part of this paragraph
+        pCharPropSet = (PPTCharPropSet*)rPropReader.aCharPropList.Seek( nCurPos );
+
         mpPortionList = new PPTPortionObj*[ mnPortionCount ];
         for ( UINT32 i = 0; i < mnPortionCount; i++ )
         {
-            PPTCharPropSet* pCharPropSet = (PPTCharPropSet*)rPropReader.aCharPropList.GetCurObject();
             if ( pCharPropSet )
             {
                 mpPortionList[ i ] = new PPTPortionObj( *pCharPropSet, rStyleSheet, nInstance, pParaSet->mnDepth );
@@ -5564,7 +5580,7 @@ PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader, const PPT
                 DBG_ERROR( "SJ:PPTParagraphObj::It seems that there are missing some textportions" );
                 mpPortionList[ i ] = NULL;
             }
-            rPropReader.aCharPropList.Next();
+            pCharPropSet = (PPTCharPropSet*)rPropReader.aCharPropList.Next();
         }
     }
 }
@@ -6408,141 +6424,148 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                             {
                                 PPTFieldEntry* pFE = (PPTFieldEntry*)pFieldList->First();
                                 List& aCharPropList = aStyleTextPropReader.aCharPropList;
-                                UINT32 n = aCharPropList.Count();
 
-                                for ( UINT32 i = nParagraphs; pFE && n && i-- ;  )
+                                sal_Int32   i = nParagraphs - 1;
+                                sal_Int32   n = aCharPropList.Count() - 1;
+
+                                // at this point we just have a list of textportions(aCharPropList)
+                                // the next while loop tries to resolve the list of fields(pFieldList)
+                                while( pFE && ( n >= 0 ) && ( i >= 0 ) )
                                 {
-                                    for ( UINT32 m = aStyleTextPropReader.pCharPropsATable[ i ]; pFE && n && m-- ; )
+                                     PPTCharPropSet* pSet  = (PPTCharPropSet*)aCharPropList.GetObject( n );
+                                    String aString( pSet->maString );
+                                    UINT32 nCount = aString.Len();
+                                    UINT32 nPos = pSet->mnOriginalTextPos + nCount;
+                                    while ( pFE && nCount-- )
                                     {
-                                        PPTCharPropSet* pSet = (PPTCharPropSet*)aCharPropList.GetObject( --n );
-                                        String aString( pSet->maString );
-                                        UINT32 nCount = aString.Len();
-                                        if ( nCount )
-                                        {
-                                            UINT32 nPos = pSet->mnOriginalTextPos + nCount;
-                                            while ( pFE && nCount-- )
-                                            {
-                                                nPos--;
-                                                while ( pFE && ( pFE->nPos > nPos ) )
-                                                    pFE = (PPTFieldEntry*)pFieldList->Next();
-                                                if ( !pFE )
-                                                    break;
-                                                if ( pFE->nPos == nPos )
-                                                {
-                                                    INT32 nCharPropAdd = 0;
-                                                    if ( aString.GetChar( (sal_uInt16)nCount ) == 0x2a )
-                                                    {
-                                                        UINT32 nBehind = aString.Len() - ( nCount + 1 );
-                                                        pSet->maString = String();
-                                                        if ( nBehind )
-                                                        {
-                                                            nCharPropAdd++;
-                                                            PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
-                                                            pNewCPS->maString = String( aString, (UINT16)nCount + 1, (UINT16)nBehind );
-                                                            aCharPropList.Insert( pNewCPS, n + 1 );
-                                                        }
-                                                        if ( pFE->pField2 )
-                                                        {
-                                                            nCharPropAdd += 2;
-                                                            PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
-                                                            pNewCPS->mpFieldItem = pFE->pField2, pFE->pField2 = NULL;
-                                                            aCharPropList.Insert( pNewCPS, n + 1 );
+                                        nPos--;
+                                        while ( pFE && ( pFE->nPos > nPos ) )
+                                            pFE = (PPTFieldEntry*)pFieldList->Next();
+                                        if ( !pFE )
+                                            break;
 
-                                                            pNewCPS = new PPTCharPropSet( *pSet );
-                                                            pNewCPS->maString = String( String( RTL_CONSTASCII_USTRINGPARAM( " " ) ) );
-                                                            aCharPropList.Insert( pNewCPS, n + 1 );
-                                                        }
-                                                        if ( nCount )
-                                                        {
-                                                            nCharPropAdd++;
-                                                            PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
-                                                            pNewCPS->maString = String( aString, (UINT16)0, (UINT16)nCount );
-                                                            aCharPropList.Insert( pNewCPS, n++ );
-                                                        }
-                                                        if ( pFE->pField1 )
-                                                        {
-                                                            pSet->mpFieldItem = pFE->pField1, pFE->pField1 = NULL;
-                                                        }
-                                                        else if ( pFE->pString )
-                                                        {
-                                                            String aString( *pFE->pString );
-                                                            if ( aString.Len() )
-                                                                pSet->maString = aString;
-                                                            else
-                                                            {
-                                                                nCharPropAdd--;
-                                                                delete (PPTCharPropSet*)aCharPropList.Remove( n );
-                                                            }
-                                                        }
-                                                        aStyleTextPropReader.pCharPropsATable[ i ] += nCharPropAdd;
-                                                    }
+                                        if ( pFE->nPos == nPos )
+                                        {
+                                            if ( aString.GetChar( (sal_uInt16)nCount ) == 0x2a )
+                                            {
+                                                UINT32 nBehind = aString.Len() - ( nCount + 1 );
+                                                pSet->maString = String();
+                                                if ( nBehind )
+                                                {
+                                                    PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
+                                                    pNewCPS->maString = String( aString, (UINT16)nCount + 1, (UINT16)nBehind );
+                                                    aCharPropList.Insert( pNewCPS, n + 1 );
+                                                }
+                                                if ( pFE->pField2 )
+                                                {
+                                                    PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
+                                                    pNewCPS->mpFieldItem = pFE->pField2, pFE->pField2 = NULL;
+                                                    aCharPropList.Insert( pNewCPS, n + 1 );
+
+                                                    pNewCPS = new PPTCharPropSet( *pSet );
+                                                    pNewCPS->maString = String( String( RTL_CONSTASCII_USTRINGPARAM( " " ) ) );
+                                                    aCharPropList.Insert( pNewCPS, n + 1 );
+                                                }
+                                                if ( nCount )
+                                                {
+                                                    PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
+                                                    pNewCPS->maString = String( aString, (UINT16)0, (UINT16)nCount );
+                                                    aCharPropList.Insert( pNewCPS, n++ );
+                                                }
+                                                if ( pFE->pField1 )
+                                                {
+                                                    pSet->mpFieldItem = pFE->pField1, pFE->pField1 = NULL;
+                                                }
+                                                else if ( pFE->pString )
+                                                {
+                                                    String aString( *pFE->pString );
+                                                    if ( aString.Len() )
+                                                        pSet->maString = aString;
                                                     else
-                                                    {
-                                                        if ( pFE->nTextRangeEnd )   // text range hyperlink
-                                                        {
-                                                            UINT32 nHyperLen = pFE->nTextRangeEnd - nPos;
-                                                            if ( pFieldList->GetCurPos() )
-                                                            {
-                                                                PPTFieldEntry* pF = (PPTFieldEntry*)pFieldList->GetObject( pFieldList->GetCurPos() - 1 );
-                                                                UINT32 nTmp = pF->nPos - pFE->nPos;
-                                                                if ( nTmp < nHyperLen )
-                                                                    nHyperLen = nTmp;
-                                                            }
-                                                            if ( nHyperLen )
-                                                            {
-                                                                PPTCharPropSet* pBefCPS = NULL;
-                                                                if ( nCount )
-                                                                {
-                                                                    pBefCPS = new PPTCharPropSet( *pSet );
-                                                                    pSet->maString = String( pSet->maString, (UINT16)nCount, (UINT16)( pSet->maString.Len() - nCount ) );
-                                                                }
-                                                                if ( pSet->maString.Len() > nHyperLen )
-                                                                {
-                                                                    nCharPropAdd++;
-                                                                    PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
-                                                                    pNewCPS->maString = String( pSet->maString, (UINT16)nHyperLen, (UINT16)( pSet->maString.Len() - nHyperLen ) );
-                                                                    aCharPropList.Insert( pNewCPS, n + 1 );
-                                                                    pSet->maString = String( pSet->maString, 0, (UINT16)nHyperLen );
-                                                                }
-                                                                pSet->mpFieldItem = pFE->pField1, pFE->pField1 = NULL;
-                                                                while ( pSet->maString.Len() < nHyperLen )
-                                                                {
-                                                                    if ( ( n + 1 ) >= aCharPropList.Count() )
-                                                                        break;
-                                                                    PPTCharPropSet* pNext = (PPTCharPropSet*)aCharPropList.GetObject( n + 1 );
-                                                                    if ( !pNext->maString.Len() )
-                                                                        break;
-                                                                    if ( pNext->maString.Len() <= nHyperLen - pSet->maString.Len() )
-                                                                    {
-                                                                        pSet->maString += pNext->maString;
-                                                                        nCharPropAdd--;
-                                                                        delete (PPTCharPropSet*)aCharPropList.Remove( n + 1 );
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        UINT32 nLeft = nHyperLen - pSet->maString.Len();
-                                                                        pSet->maString += String( pNext->maString, 0, (UINT16)nLeft );
-                                                                        pNext->maString = String( pNext->maString, (UINT16)nLeft, (UINT16)( pNext->maString.Len() - nLeft ) );
-                                                                    }
-                                                                }
-                                                                ((SvxURLField*)(pSet->mpFieldItem)->GetField())->SetRepresentation( pSet->maString );
-                                                                pSet->maString = String();
-                                                                pSet->SetColor( PPT_COLSCHEME_A_UND_HYPERLINK );
-                                                                if ( pBefCPS )
-                                                                {
-                                                                    nCharPropAdd++;
-                                                                    pBefCPS->maString = String( aString, (UINT16)0, (UINT16)nCount );
-                                                                    aCharPropList.Insert( pBefCPS, n++ );
-                                                                }
-                                                                aStyleTextPropReader.pCharPropsATable[ i ] += nCharPropAdd;
-                                                            }
-                                                        }
-                                                    }
-                                                    break;
+                                                        delete (PPTCharPropSet*)aCharPropList.Remove( n );
                                                 }
                                             }
+                                            else
+                                            {
+                                                if ( pFE->nTextRangeEnd )   // text range hyperlink
+                                                {
+                                                    sal_uInt32 nHyperLen = pFE->nTextRangeEnd - nPos;
+                                                    if ( nHyperLen )
+                                                    {
+                                                        PPTCharPropSet* pBefCPS = NULL;
+                                                        if ( nCount )
+                                                        {
+                                                            pBefCPS = new PPTCharPropSet( *pSet );
+                                                            pSet->maString = String( pSet->maString, (UINT16)nCount, (UINT16)( pSet->maString.Len() - nCount ) );
+                                                        }
+                                                        sal_uInt32  nIdx = n;
+                                                        sal_Int32   nHyperLenLeft = nHyperLen;
+
+                                                        while ( ( aCharPropList.Count() > nIdx ) && nHyperLenLeft )
+                                                        {
+                                                            // the textrange hyperlink can take more than 1 paragraph
+                                                            // the solution here is to clone the hyperlink...
+
+                                                            PPTCharPropSet* pCurrent = (PPTCharPropSet*)aCharPropList.GetObject( nIdx );
+                                                            sal_Int32       nNextStringLen = pCurrent->maString.Len();
+
+                                                            const SvxURLField* pField = (const SvxURLField*)pFE->pField1->GetField();
+
+                                                            if ( pCurrent->mpFieldItem )
+                                                            {
+                                                                pCurrent->SetColor( PPT_COLSCHEME_A_UND_HYPERLINK );
+                                                                if ( pCurrent->mpFieldItem->GetField()->ISA( SvxURLField ) )
+                                                                    break;
+                                                                nHyperLenLeft--;
+                                                            }
+                                                            else if ( nNextStringLen )
+                                                            {
+                                                                if ( nNextStringLen <= nHyperLenLeft )
+                                                                {
+                                                                    pCurrent->mpFieldItem = new SvxFieldItem( SvxURLField( pField->GetURL(), pCurrent->maString, SVXURLFORMAT_REPR ) );
+                                                                    nHyperLenLeft -= nNextStringLen;
+
+                                                                    if ( nHyperLenLeft )
+                                                                    {
+                                                                        // if the next portion is in a higher paragraph,
+                                                                        // the textrange is to decrease (because of the LineBreak character)
+                                                                        if ( aCharPropList.Count() > ( nIdx + 1 ) )
+                                                                        {
+                                                                            PPTCharPropSet* pNext = (PPTCharPropSet*)aCharPropList.GetObject( nIdx + 1 );
+                                                                            if ( pNext->mnParagraph > pCurrent->mnParagraph )
+                                                                                nHyperLenLeft--;
+                                                                        }
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pCurrent );
+                                                                    pNewCPS->maString = String( pCurrent->maString, (UINT16)nHyperLenLeft, (UINT16)( nNextStringLen - nHyperLenLeft ) );
+                                                                    aCharPropList.Insert( pNewCPS, nIdx + 1 );
+                                                                    String aRepresentation( pCurrent->maString, 0, (UINT16)nHyperLenLeft );
+                                                                    pCurrent->mpFieldItem = new SvxFieldItem( SvxURLField( pField->GetURL(), aRepresentation, SVXURLFORMAT_REPR ) );
+                                                                    nHyperLenLeft = 0;
+                                                                }
+                                                                pCurrent->maString = String();
+                                                                pCurrent->SetColor( PPT_COLSCHEME_A_UND_HYPERLINK );
+                                                            }
+                                                            nIdx++;
+                                                        }
+                                                        delete pFE->pField1, pFE->pField1 = NULL;
+
+                                                        if ( pBefCPS )
+                                                        {
+                                                            pBefCPS->maString = String( aString, (UINT16)0, (UINT16)nCount );
+                                                            aCharPropList.Insert( pBefCPS, n++ );
+
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            break;
                                         }
                                     }
+                                    n--;
                                 }
                                 for ( void* pPtr = pFieldList->First(); pPtr; pPtr = pFieldList->Next() )
                                     delete (PPTFieldEntry*)pPtr;
