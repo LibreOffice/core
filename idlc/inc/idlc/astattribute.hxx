@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astattribute.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,23 +64,46 @@
 #ifndef _IDLC_ASTDECLARATION_HXX_
 #include <idlc/astdeclaration.hxx>
 #endif
+#include "idlc/astscope.hxx"
 
-class AstAttribute : public AstDeclaration
-{
+#include "registry/types.h"
+
+namespace typereg { class Writer; }
+
+class AstAttribute: public AstDeclaration, public AstScope {
 public:
-    AstAttribute(sal_uInt32 flags, AstType *pType, const ::rtl::OString& name, AstScope* pScope)
-        : AstDeclaration(NT_attribute, name, pScope)
-        , m_flags(flags)
-        , m_pType(pType)
-        {}
-    AstAttribute(NodeType nodeType, sal_uInt32 flags, AstType *pType, const ::rtl::OString& name, AstScope* pScope)
-        : AstDeclaration(nodeType, name, pScope)
+    AstAttribute(
+        sal_uInt32 flags, AstType const * type, rtl::OString const & name,
+        AstScope * scope):
+        AstDeclaration(NT_attribute, name, scope), m_flags(flags),
+        AstScope(NT_attribute), m_pType(type)
+    {}
+
+    AstAttribute(NodeType nodeType, sal_uInt32 flags, AstType const * pType, const ::rtl::OString& name, AstScope* pScope)
+        : AstDeclaration(nodeType, name, pScope), AstScope(nodeType)
         , m_flags(flags)
         , m_pType(pType)
         {}
     virtual ~AstAttribute() {}
 
-    AstType* getType()
+    void setExceptions(
+        DeclList const * getter, DeclList const * setter)
+    {
+        if (getter != 0) {
+            m_getExceptions = *getter;
+        }
+        if (setter != 0) {
+            m_setExceptions = *setter;
+        }
+    }
+
+    DeclList::size_type getGetExceptionCount() const
+    { return m_getExceptions.size(); }
+
+    DeclList::size_type getSetExceptionCount() const
+    { return m_setExceptions.size(); }
+
+    AstType const * getType() const
         { return m_pType; }
     const sal_Bool isReadonly()
         { return ((m_flags & AF_READONLY) == AF_READONLY); }
@@ -105,10 +128,18 @@ public:
     const sal_Bool isRemoveable()
         { return ((m_flags & AF_REMOVEABLE) == AF_REMOVEABLE); }
 
-    sal_Bool dumpBlob(RegistryTypeWriter& rBlob, sal_uInt16 index);
+    sal_Bool dumpBlob(
+        typereg::Writer & rBlob, sal_uInt16 index, sal_uInt16 * methodIndex);
+
 private:
+    void dumpExceptions(
+        typereg::Writer & writer, DeclList const & exceptions,
+        RTMethodMode flags, sal_uInt16  * methodIndex);
+
     const sal_uInt32    m_flags;
-    AstType*            m_pType;
+    AstType const * m_pType;
+    DeclList m_getExceptions;
+    DeclList m_setExceptions;
 };
 
 #endif // _IDLC_ASTATTRIBUTE_HXX_
