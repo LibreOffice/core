@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:48:35 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,12 +542,22 @@ TabPage RID_SVXPAGE_INET_SECURITY
         Text [ de ] = "Wenn ein Dokument aufgezeichnete Änderungen, Versionen, versteckte Informationen oder Notizen enthält, warnen beim:";
         Text [ en-US ] = "Warn if document contains recorded changes, versions, hidden information or notes:";
     };
+    FixedImage FI_SEC_SAVEORSENDDOCS
+    {
+        Pos = MAP_APPFONT( COL_2 - 7, ROW_2 + 2 );
+        Size = MAP_APPFONT( 6, 6 );
+    };
     CheckBox CB_SEC_SAVEORSENDDOCS
     {
         Pos = MAP_APPFONT( COL_2, ROW_2 );
         Size = MAP_APPFONT( CHECKBOX_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
         Text [ de ] = "Speichern oder Senden";
         Text [ en-US ] = "When saving or sending";
+    };
+    FixedImage FI_SEC_SIGNDOCS
+    {
+        Pos = MAP_APPFONT( COL_2 + CHECKBOX_WIDTH + RSC_SP_CTRL_X - 7, ROW_2 + 2 );
+        Size = MAP_APPFONT( 6, 6 );
     };
     CheckBox CB_SEC_SIGNDOCS
     {
@@ -556,12 +566,22 @@ TabPage RID_SVXPAGE_INET_SECURITY
         Text [ de ] = "Signieren";
         Text [ en-US ] = "When signing";
     };
+    FixedImage FI_SEC_PRINTDOCS
+    {
+        Pos = MAP_APPFONT( COL_2 - 7, ROW_3 + 2 );
+        Size = MAP_APPFONT( 6, 6 );
+    };
     CheckBox CB_SEC_PRINTDOCS
     {
         Pos = MAP_APPFONT( COL_2, ROW_3 );
         Size = MAP_APPFONT( CHECKBOX_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
         Text [ de ] = "Drucken";
         Text [ en-US ] = "When printing";
+    };
+    FixedImage FI_SEC_CREATEPDF
+    {
+        Pos = MAP_APPFONT( COL_2 + CHECKBOX_WIDTH + RSC_SP_CTRL_X - 7, ROW_3 + 2 );
+        Size = MAP_APPFONT( 6, 6 );
     };
     CheckBox CB_SEC_CREATEPDF
     {
@@ -570,12 +590,22 @@ TabPage RID_SVXPAGE_INET_SECURITY
         Text [ de ] = "PDF-Dateien erzeugen";
         Text [ en-US ] = "When creating PDF files";
     };
+    FixedImage FI_SEC_REMOVEPERSINFO
+    {
+        Pos = MAP_APPFONT( COL_1 - 7, ROW_4 + 2 );
+        Size = MAP_APPFONT( 6, 6 );
+    };
     CheckBox CB_SEC_REMOVEPERSINFO
     {
         Pos = MAP_APPFONT( COL_1, ROW_4 );
         Size = MAP_APPFONT( COL_5-COL_1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ de ] = "Persönliche Informationen beim Speichern aus Dateien entfernen";
         Text [ en-US ] = "Remove personal information on saving";
+    };
+    FixedImage FI_SEC_RECOMMPASSWD
+    {
+        Pos = MAP_APPFONT( COL_1 - 7, ROW_5 + 2 );
+        Size = MAP_APPFONT( 6, 6 );
     };
     CheckBox CB_SEC_RECOMMPASSWD
     {
