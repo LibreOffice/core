@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 14:39:32 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1112,6 +1112,7 @@ void SwDrawContact::Changed( const SdrObject& rObj,
     // is in contruction
     SwDoc* pDoc = GetFmt()->GetDoc();
     if ( pDoc->GetRootFrm() &&
+         pDoc->GetRootFrm()->GetCurrShell() &&
          pDoc->GetRootFrm()->GetCurrShell()->IsInConstructor() )
     {
         return;
@@ -1293,15 +1294,9 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
             }
             if ( bNotify )
             {
-                Rectangle* pOldRect = new Rectangle( aOldObjRect );;
-                if ( rObj.ISA(SwDrawVirtObj) )
-                {
-                    const Point aOffset = static_cast<const SwDrawVirtObj&>(rObj).GetOffset();
-                    pOldRect->Move( -aOffset.X(), -aOffset.Y() );
-                }
-                lcl_NotifyBackgroundOfObj( *this, *GetMaster(), pOldRect );
-                NotifyBackgrdOfAllVirtObjs( pOldRect );
-                delete pOldRect;
+                // --> OD 2004-07-20 #i31573# - correction: Only invalidate
+                // background of given drawing object.
+                lcl_NotifyBackgroundOfObj( *this, rObj, &aOldObjRect );
             }
         }
         break;
@@ -1677,6 +1672,8 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                         if ( FLY_AT_FLY == pAnch->GetAnchorId() && !pFrm->IsFlyFrm() )
                         {
                             pFrm = pFrm->FindFlyFrm();
+                            ASSERT( pFrm,
+                                    "<SwDrawContact::ConnectToLayout(..)> - missing fly frame -> crash." );
                         }
 
                         // OD 2004-01-20 #110582# - find correct follow for
