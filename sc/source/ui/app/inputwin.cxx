@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 13:52:19 $
+ *  last change: $Author: nn $ $Date: 2001-04-03 17:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,6 +586,7 @@ void ScInputWindow::StateChanged( StateChangedType nType )
 
 ScTextWnd::ScTextWnd( Window* pParent )
     :   Window       ( pParent, WinBits(WB_HIDE | WB_BORDER) ),
+        DragSourceHelper( this ),
         pEditEngine  ( NULL ),
         pEditView    ( NULL ),
         bIsInsertMode( TRUE ),
@@ -733,6 +734,18 @@ void __EXPORT ScTextWnd::Command( const CommandEvent& rCEvt )
     }
     else
         Window::Command(rCEvt);     //  sonst soll sich die Basisklasse drum kuemmern...
+}
+
+void ScTextWnd::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+{
+    if ( pEditView )
+    {
+        CommandEvent aDragEvent( rPosPixel, COMMAND_STARTDRAG, TRUE );
+        pEditView->Command( aDragEvent );
+
+        //  handling of d&d to different view (CancelHandler) can't be done here,
+        //  because the call returns before d&d is complete.
+    }
 }
 
 void __EXPORT ScTextWnd::KeyInput(const KeyEvent& rKEvt)

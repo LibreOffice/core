@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 13:51:20 $
+ *  last change: $Author: nn $ $Date: 2001-04-03 17:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _WINDOW_HXX //autogen
 #include <vcl/window.hxx>
 #endif
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
+#endif
 
 class ScEditEngineDefaulter;
 class EditView;
@@ -86,7 +89,7 @@ class ScInputHandler;
 
 //========================================================================
 
-class ScTextWnd : public Window                         // Edit-Fenster
+class ScTextWnd : public Window, public DragSourceHelper        // edit window
 {
 public:
                     ScTextWnd( Window* pParent );
@@ -119,6 +122,8 @@ protected:
     virtual void    KeyInput(const KeyEvent& rKEvt);
     virtual void    GetFocus();
     virtual void    LoseFocus();
+
+    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
     virtual String  GetText() const;
 
