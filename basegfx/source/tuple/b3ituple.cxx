@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3ituple.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:19:40 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ namespace { struct EmptyTuple : public rtl::Static<basegfx::B3ITuple, EmptyTuple
 
 namespace basegfx
 {
-    static const B3ITuple& getEmptyTuple()
+    const B3ITuple& B3ITuple::getEmptyTuple()
     {
         return EmptyTuple::get();
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3i64tuple.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:19:27 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ namespace { struct EmptyTuple : public rtl::Static<basegfx::B3I64Tuple, EmptyTup
 
 namespace basegfx
 {
-    static const B3I64Tuple& getEmptyTuple()
+    const B3I64Tuple& B3I64Tuple::getEmptyTuple()
     {
         return EmptyTuple::get();
     }
