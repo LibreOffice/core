@@ -2,9 +2,9 @@
  *
  *  $RCSfile: index.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:42:01 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,7 +698,9 @@ void SwIndexReg::MoveIdx( const SwIndex& rOldPos, const SwIndex& rNewPos )
     }
 
     {
-        for( SwIndex* pTmp = pStt; pTmp != pEnd; pTmp = pTmp->pNext )
+        SwIndex* pTmp;
+
+        for( pTmp = pStt; pTmp != pEnd; pTmp = pTmp->pNext )
             pTmp->nIndex = nNewIndex;
         pTmp->nIndex = nNewIndex;
     }
