@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-07 13:12:28 $
+ *  last change: $Author: oj $ $Date: 2002-01-22 07:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,12 +832,18 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
             ::rtl::OUString sComposedName;
             ::dbaui::composeTableName(m_xConnection->getMetaData(),m_xDestObject,sComposedName,sal_False);
             if(xTables->hasByName(sComposedName))
+            {
                 xTables->getByName(sComposedName) >>= m_xDestObject;
+                m_sName = sComposedName;
+            }
             else
                 m_xDestObject = NULL;
         }
         if(m_xDestObject.is())
         {
+            // insert new table name into table filter
+            ::dbaui::appendToFilter(m_xConnection,m_sName,GetFactory(),this);
+            // set column mappings
             Reference<XColumnsSupplier> xColSup(m_xDestObject,UNO_QUERY);
             Reference<XNameAccess> xNameAccess = xColSup->getColumns();
             Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();

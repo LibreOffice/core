@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 13:22:02 $
+ *  last change: $Author: oj $ $Date: 2002-01-22 07:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ namespace dbaui
         virtual sal_Bool        LeavePage();
         virtual String          GetTitle() const;
 
-        OWizTypeSelect(Window* pParent);
+        OWizTypeSelect(Window* pParent,SvStream*    _pStream = NULL);
         virtual ~OWizTypeSelect();
 
     };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-23 14:51:40 $
+ *  last change: $Author: oj $ $Date: 2002-01-22 07:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,17 @@
 #include "TypeInfo.hxx"
 #endif
 
+namespace com { namespace sun { namespace star { namespace awt
+{
+    struct FontDescriptor;
+}}}}
+
+class Window;
 namespace dbaui
 {
     class OFieldDescription;
     class OTypeInfo;
+    class OWizTypeSelect;
     class ODatabaseExport
     {
     public:
@@ -152,11 +159,26 @@ namespace dbaui
         sal_Bool            m_bFoundTable;      // set to true when a table was found
 
 
-        virtual sal_Bool    CreateTable(int nToken) = 0;
-        void                CreateDefaultColumn(const ::rtl::OUString& _rColumnName);
-        sal_Int32           CheckString(const String& aToken, sal_Int32 _nOldFormat);
-        void                insertValueIntoColumn();
-        sal_Bool            createRowSet();
+        virtual sal_Bool        CreateTable(int nToken)         = 0;
+
+        /** createPage is called when the wizards needs an additional page to show
+        */
+        virtual OWizTypeSelect* createPage(Window* _pParent)    = 0;
+        void                    CreateDefaultColumn(const ::rtl::OUString& _rColumnName);
+        sal_Int32               CheckString(const String& aToken, sal_Int32 _nOldFormat);
+        void                    insertValueIntoColumn();
+        sal_Bool                createRowSet();
+
+        /** executeWizard calls a wizard to create/append data
+            @param  _sTableName the tablename
+            @param  _aTextColor the text color of the new created table
+            @param  _rFont      the font of the new table
+
+            @return true when an error occurs
+        */
+        sal_Bool                executeWizard(  const ::rtl::OUString& _sTableName,
+                                                const ::com::sun::star::uno::Any& _aTextColor,
+                                                const ::com::sun::star::awt::FontDescriptor& _rFont);
 
         virtual ~ODatabaseExport();
     public:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RtfReader.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-23 14:51:40 $
+ *  last change: $Author: oj $ $Date: 2002-01-22 07:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,24 +130,15 @@
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
-#ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
-#include "WCopyTable.hxx"
-#endif
 #ifndef DBAUI_WIZ_EXTENDPAGES_HXX
 #include "WExtendPages.hxx"
-#endif
-#ifndef DBAUI_WIZ_NAMEMATCHING_HXX
-#include "WNameMatch.hxx"
-#endif
-#ifndef DBAUI_WIZ_COLUMNSELECT_HXX
-#include "WColumnSelect.hxx"
 #endif
 #ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
 #endif
-#ifndef DBAUI_WIZARD_CPAGE_HXX
-#include "WCPage.hxx"
-#endif
+//#ifndef DBAUI_WIZARD_CPAGE_HXX
+//#include "WCPage.hxx"
+//#endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
@@ -422,68 +413,33 @@ sal_Bool ORTFReader::CreateTable(int nToken)
     }
     while((nTmpToken2 = GetNextToken()) != RTF_ROW && eState != SVPAR_ERROR && eState != SVPAR_ACCEPTED);
 
-    if(m_vDestVector.empty())
-        return sal_False;
-
-    if(aColumnName.Len())
-        CreateDefaultColumn(aColumnName);
-
-    m_bInTbl        = sal_False;
-    m_bFoundTable   = sal_True;
-
-    sal_Bool bError = sal_False;
-
-    OCopyTableWizard aWizard(NULL,aTableName,m_aDestColumns,m_vDestVector,m_xConnection,m_xFormatter,m_xFactory);
-
-    OCopyTable*         pPage1 = new OCopyTable(&aWizard,COPY, sal_False,OCopyTableWizard::WIZARD_DEF_DATA);
-    OWizNameMatching*   pPage2 = new OWizNameMatching(&aWizard);
-    OWizColumnSelect*   pPage3 = new OWizColumnSelect(&aWizard);
-    OWizRTFExtend*      pPage4 = new OWizRTFExtend(&aWizard,rInput);
-
-    aWizard.AddWizardPage(pPage1);
-    aWizard.AddWizardPage(pPage2);
-    aWizard.AddWizardPage(pPage3);
-    aWizard.AddWizardPage(pPage4);
-
-    aWizard.ActivatePage();
-
-    if (aWizard.Execute())
+    sal_Bool bOk = !m_vDestVector.empty();
+    if(bOk)
     {
-        switch(aWizard.getCreateStyle())
-        {
-            case OCopyTableWizard::WIZARD_DEF_DATA:
-            case OCopyTableWizard::WIZARD_APPEND_DATA:
-                {
-                    m_xTable = aWizard.createTable();
-                    bError = !m_xTable.is();
-                    if(m_xTable.is())
-                    {
-                        m_xTable->setPropertyValue(PROPERTY_FONT,makeAny(aFont));
-                        if(m_vecColor.size())
-                            m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,makeAny(m_vecColor[0]));
 
-                        m_bIsAutoIncrement  = aWizard.SetAutoincrement();
-                        m_vColumns          = aWizard.GetColumnPositions();
-                        m_vColumnTypes      = aWizard.GetColumnTypes();
-                    }
-                }
-                break;
-            default:
-                bError = TRUE; // there is no error but I have nothing more to do
-        }
+        if(aColumnName.Len())
+            CreateDefaultColumn(aColumnName);
+
+        m_bInTbl        = sal_False;
+        m_bFoundTable   = sal_True;
+
+        Any aTextColor;
+        if(!m_vecColor.empty())
+            aTextColor <<= m_vecColor[0];
+
+        bOk = !executeWizard(aTableName,aTextColor,aFont) && m_xTable.is();
     }
-    else
-        bError = TRUE;
-
-    if(!bError)
-        bError = !createRowSet();
-
-    return !bError && m_xTable.is();
+    return bOk;
 }
 // -----------------------------------------------------------------------------
 void ORTFReader::release()
 {
     ReleaseRef();
+}
+// -----------------------------------------------------------------------------
+OWizTypeSelect* ORTFReader::createPage(Window* _pParent)
+{
+    return new OWizRTFExtend(_pParent,rInput);
 }
 // -----------------------------------------------------------------------------
 

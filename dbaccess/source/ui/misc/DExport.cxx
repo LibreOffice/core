@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 06:25:15 $
+ *  last change: $Author: oj $ $Date: 2002-01-22 07:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,14 +127,30 @@
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
-#ifndef _MEMORY_
 #include <memory>
-#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
+#include <com/sun/star/awt/FontDescriptor.hpp>
+#endif
+#ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
+#include "WCopyTable.hxx"
+#endif
+#ifndef DBAUI_WIZ_EXTENDPAGES_HXX
+#include "WExtendPages.hxx"
+#endif
+#ifndef DBAUI_WIZ_NAMEMATCHING_HXX
+#include "WNameMatch.hxx"
+#endif
+#ifndef DBAUI_WIZ_COLUMNSELECT_HXX
+#include "WColumnSelect.hxx"
+#endif
+#ifndef DBAUI_WIZARD_CPAGE_HXX
+#include "WCPage.hxx"
 #endif
 
 #define CONTAINER_ENTRY_NOTFOUND    ((ULONG)0xFFFFFFFF)
@@ -149,6 +165,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::awt;
 
 // ==========================================================================
 // ==========================================================================
@@ -627,6 +644,56 @@ sal_Bool ODatabaseExport::createRowSet()
     m_xRowUpdate        = Reference< XRowUpdate>(xDestSet,UNO_QUERY);
 
     return m_xResultSetUpdate.is() && m_xRowUpdate.is() && m_xResultSetMetaData.is();
+}
+// -----------------------------------------------------------------------------
+sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _sTableName,const Any& _aTextColor,const FontDescriptor& _rFont)
+{
+    sal_Bool bError = sal_False;
+    OCopyTableWizard aWizard(NULL,_sTableName,m_aDestColumns,m_vDestVector,m_xConnection,m_xFormatter,m_xFactory);
+
+    OCopyTable*         pPage1 = new OCopyTable(&aWizard,COPY, sal_False,OCopyTableWizard::WIZARD_DEF_DATA);
+    OWizNameMatching*   pPage2 = new OWizNameMatching(&aWizard);
+    OWizColumnSelect*   pPage3 = new OWizColumnSelect(&aWizard);
+    OWizTypeSelect*     pPage4 = createPage(&aWizard);
+
+    aWizard.AddWizardPage(pPage1);
+    aWizard.AddWizardPage(pPage2);
+    aWizard.AddWizardPage(pPage3);
+    aWizard.AddWizardPage(pPage4);
+
+    aWizard.ActivatePage();
+
+    if (aWizard.Execute())
+    {
+        switch(aWizard.getCreateStyle())
+        {
+            case OCopyTableWizard::WIZARD_DEF_DATA:
+            case OCopyTableWizard::WIZARD_APPEND_DATA:
+                {
+                    m_xTable = aWizard.createTable();
+                    bError = !m_xTable.is();
+                    if(m_xTable.is())
+                    {
+                        m_xTable->setPropertyValue(PROPERTY_FONT,makeAny(_rFont));
+                        if(_aTextColor.hasValue())
+                            m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,_aTextColor);
+                    }
+                    m_bIsAutoIncrement  = aWizard.SetAutoincrement();
+                    m_vColumns          = aWizard.GetColumnPositions();
+                    m_vColumnTypes      = aWizard.GetColumnTypes();
+                }
+                break;
+            default:
+                bError = sal_True; // there is no error but I have nothing more to do
+        }
+    }
+    else
+        bError = sal_True;
+
+    if(!bError)
+        bError = !createRowSet();
+
+    return bError;
 }
 // -----------------------------------------------------------------------------
 

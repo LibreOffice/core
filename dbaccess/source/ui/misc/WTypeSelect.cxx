@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-15 15:15:04 $
+ *  last change: $Author: oj $ $Date: 2002-01-22 07:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ const OTypeInfoMap* OWizTypeSelectControl::getTypeInfo() const
 DBG_NAME(OWizTypeSelect);
 #define IMG_PRIMARY_KEY 1
 //========================================================================
-OWizTypeSelect::OWizTypeSelect( Window* pParent)
+OWizTypeSelect::OWizTypeSelect( Window* pParent,SvStream*   _pStream)
                :OWizardPage( pParent, ModuleRes( TAB_WIZ_TYPE_SELECT ))
                ,m_lbColumnNames( this, ModuleRes( LB_NEW_COLUMN_NAMES ) )
                ,m_flColumns( this, ModuleRes( FL_COLUMN_NAME ) )
@@ -206,7 +206,7 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent)
                ,m_ftAuto( this, ModuleRes( FT_AUTO ) )
                ,m_etAuto( this, ModuleRes( ET_AUTO ) )
                ,m_pbAuto( this, ModuleRes( PB_AUTO ) )
-               ,m_pParserStream(NULL)
+               ,m_pParserStream(_pStream)
 {
     DBG_CTOR(OWizTypeSelect,NULL);
     m_lbColumnNames.SetSelectHdl(LINK(this,OWizTypeSelect,ColumnSelectHdl));
@@ -215,7 +215,6 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent)
     m_imgPKey = aImageList.GetImage(IMG_PRIMARY_KEY);
 
     m_aTypeControl.Show();
-    //  m_etAuto.SetInternational(Application::GetAppInternational());
     m_etAuto.SetText(String::CreateFromAscii("10"));
     m_etAuto.SetDecimalDigits(0);
     m_pbAuto.SetClickHdl(LINK(this,OWizTypeSelect,ButtonClickHdl));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RtfReader.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-23 14:51:40 $
+ *  last change: $Author: oj $ $Date: 2002-01-22 07:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,13 @@ namespace dbaui
 
         //  void insertValueIntoColumn();
     protected:
-        virtual sal_Bool    CreateTable(int nToken);
-        virtual void        NextToken( int nToken ); // Basisklasse
+        virtual sal_Bool        CreateTable(int nToken);
+        virtual void            NextToken( int nToken ); // Basisklasse
+
+        /** createPage creates the tabpage for this type
+            @param  _pParent    teh parent window
+        */
+        virtual OWizTypeSelect* createPage(Window* _pParent);
 
         ~ORTFReader();
     public:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WExtendPages.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 13:22:02 $
+ *  last change: $Author: oj $ $Date: 2002-01-22 07:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,10 +76,9 @@ namespace dbaui
     protected:
         virtual SvParser*   createReader(sal_Int32 _nRows);
     public:
-        OWizHTMLExtend(Window* pParent,SvStream&    rRtfStream)
-            : OWizTypeSelect( pParent)
+        OWizHTMLExtend(Window* pParent,SvStream&    _rStream)
+            : OWizTypeSelect( pParent,&_rStream)
         {
-            m_pParserStream = &rRtfStream;
         }
 
         virtual ~OWizHTMLExtend(){}
@@ -92,10 +91,9 @@ namespace dbaui
     protected:
         virtual SvParser* createReader(sal_Int32 _nRows);
     public:
-        OWizRTFExtend(Window* pParent,SvStream& rRtfStream)
-            : OWizTypeSelect( pParent)
+        OWizRTFExtend(Window* pParent,SvStream& _rStream)
+            : OWizTypeSelect( pParent,&_rStream)
         {
-            m_pParserStream = &rRtfStream;
         }
 
         virtual ~OWizRTFExtend(){}
