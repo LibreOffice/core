@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-12 10:31:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,11 +115,13 @@ class SwXFieldMaster : public cppu::WeakImplHelper4
     sal_Bool                    bParam1;    // IsExpression
     sal_Int32                   nParam2;
 
+protected:
+    virtual ~SwXFieldMaster();
 public:
 
     SwXFieldMaster(SwDoc* pDoc, sal_uInt16 nResId);
     SwXFieldMaster(SwFieldType& rType, SwDoc* pDoc);
-    virtual ~SwXFieldMaster();
+
 
     TYPEINFO();
 
@@ -187,10 +189,12 @@ class SwXTextField : public cppu::WeakImplHelper5
 
     //SwFieldType* GetFldType() const { return (SwFieldType*)GetRegisteredIn(); }
     SwDoc*       GetDoc() {return m_pDoc;}
+protected:
+    virtual ~SwXTextField();
 public:
     SwXTextField(sal_uInt16 nServiceId);
     SwXTextField(const SwFmtFld& rFmt, SwDoc* pDoc);
-    virtual ~SwXTextField();
+
 
     TYPEINFO();
 
@@ -254,9 +258,11 @@ SwXTextFieldMastersBaseClass;
 class SwXTextFieldMasters : public SwXTextFieldMastersBaseClass,
     public SwUnoCollection
 {
+protected:
+    virtual ~SwXTextFieldMasters();
 public:
     SwXTextFieldMasters(SwDoc* pDoc);
-    virtual ~SwXTextFieldMasters();
+
 
     //XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName(const rtl::OUString& Name) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
@@ -291,10 +297,11 @@ class SwXTextFieldTypes : public SwXTextFieldTypesBaseClass,
         public SwUnoCollection
 {
     SwRefreshListenerContainer      aRefreshCont;
-
+protected:
+    virtual ~SwXTextFieldTypes();
 public:
     SwXTextFieldTypes(SwDoc* pDoc);
-    virtual ~SwXTextFieldTypes();
+
 
     //XEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >  SAL_CALL createEnumeration(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -332,9 +339,10 @@ class SwXFieldEnumeration : public cppu::WeakImplHelper2
 
     SwDoc* pDoc;
 
+protected:
+    virtual ~SwXFieldEnumeration();
 public:
     SwXFieldEnumeration(SwDoc* pDoc);
-    virtual ~SwXFieldEnumeration();
 
     //XEnumeration
     virtual BOOL SAL_CALL hasMoreElements(void) throw( ::com::sun::star::uno::RuntimeException );
