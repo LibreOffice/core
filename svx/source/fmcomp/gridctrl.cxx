@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:43:38 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,16 @@ using namespace ::com::sun::star::container;
 using namespace com::sun::star::accessibility;
 
 #define ROWSTATUS(row)  !row.Is() ? "NULL" : row->GetStatus() == GRS_CLEAN ? "CLEAN" : row->GetStatus() == GRS_MODIFIED ? "MODIFIED" : row->GetStatus() == GRS_DELETED ? "DELETED" : "INVALID"
+
+
+#define DEFAULT_BROWSE_MODE             \
+              BROWSER_COLUMNSELECTION   \
+            | BROWSER_MULTISELECTION    \
+            | BROWSER_KEEPSELECTION     \
+            | BROWSER_TRACKING_TIPS     \
+            | BROWSER_HLINESFULL        \
+            | BROWSER_VLINESFULL        \
+            | BROWSER_HEADERBAR_NEW     \
 
 //==============================================================================
 
@@ -975,14 +985,7 @@ DbGridControl::DbGridControl(
                 Reference< XMultiServiceFactory > _rxFactory,
                 Window* pParent,
                 WinBits nBits)
-            :DbGridControl_Base(pParent, EBBF_NONE, nBits,
-                       BROWSER_KEEPSELECTION |
-                       BROWSER_COLUMNSELECTION |
-                       BROWSER_MULTISELECTION |
-                       BROWSER_TRACKING_TIPS |
-                       BROWSER_HLINESFULL |
-                       BROWSER_VLINESFULL |
-                       BROWSER_AUTO_VSCROLL)
+            :DbGridControl_Base(pParent, EBBF_NONE, nBits, DEFAULT_BROWSE_MODE )
 #pragma warning (disable : 4355)
             ,m_aBar(this)
 #pragma warning (default : 4355)
@@ -998,6 +1001,7 @@ DbGridControl::DbGridControl(
             ,m_bWantDestruction(sal_False)
             ,m_bInAdjustDataSource(sal_False)
             ,m_bPendingAdjustRows(sal_False)
+            ,m_bHideScrollbars( sal_False )
             ,m_xServiceFactory(_rxFactory)
             ,m_pSelectionListener(NULL)
 {
@@ -1011,14 +1015,7 @@ DbGridControl::DbGridControl(
                 Reference< XMultiServiceFactory > _rxFactory,
                 Window* pParent,
                 const ResId& rId)
-            :DbGridControl_Base(pParent, rId, EBBF_NONE,
-                    BROWSER_KEEPSELECTION |
-                    BROWSER_COLUMNSELECTION |
-                    BROWSER_MULTISELECTION |
-                    BROWSER_TRACKING_TIPS |
-                    BROWSER_HLINESFULL |
-                    BROWSER_VLINESFULL |
-                    BROWSER_AUTO_VSCROLL)
+            :DbGridControl_Base(pParent, rId, EBBF_NONE, DEFAULT_BROWSE_MODE )
 #pragma warning (disable : 4355)
             ,m_aBar(this)
 #pragma warning (default : 4355)
@@ -1046,14 +1043,7 @@ void DbGridControl::Construct()
     m_nTotalCount = m_nSeekPos = m_nCurrentPos = -1;
     m_bDesignMode = m_bUpdating = m_bRecordCountFinal = sal_False;
     m_bFilterMode = sal_False;
-    m_nMode = BROWSER_KEEPSELECTION |
-            BROWSER_COLUMNSELECTION |
-            BROWSER_MULTISELECTION |
-            BROWSER_TRACKING_TIPS |
-            BROWSER_HLINESFULL |
-            BROWSER_VLINESFULL |
-            BROWSER_AUTO_VSCROLL |
-            BROWSER_HEADERBAR_NEW;
+    m_nMode = DEFAULT_BROWSE_MODE;
 
     m_bNavigationBar = m_bMultiSelection = sal_True;
     m_nOptions = OPT_READONLY;
@@ -1283,10 +1273,47 @@ void DbGridControl::EnableHandle(sal_Bool bEnable)
 }
 
 //------------------------------------------------------------------------------
+namespace
+{
+    bool adjustModeForScrollbars( BrowserMode& _rMode, sal_Bool _bNavigationBar, sal_Bool _bHideScrollbars )
+    {
+        BrowserMode nOldMode = _rMode;
+
+        if ( !_bNavigationBar )
+        {
+            _rMode &= ~BROWSER_AUTO_HSCROLL;
+        }
+
+        if ( _bHideScrollbars )
+        {
+            _rMode |= ( BROWSER_NO_HSCROLL | BROWSER_NO_VSCROLL );
+            _rMode &= ~( BROWSER_AUTO_HSCROLL | BROWSER_AUTO_VSCROLL );
+        }
+        else
+        {
+            _rMode |= ( BROWSER_AUTO_HSCROLL | BROWSER_AUTO_VSCROLL );
+            _rMode &= ~( BROWSER_NO_HSCROLL | BROWSER_NO_VSCROLL );
+        }
+
+        // note: if we have a navigation bar, we always have a AUTO_HSCROLL. In particular,
+        // _bHideScrollbars is ignored then
+        if ( _bNavigationBar )
+        {
+            _rMode |= BROWSER_AUTO_HSCROLL;
+            _rMode &= ~BROWSER_NO_HSCROLL;
+        }
+
+        return nOldMode != _rMode;
+    }
+}
+
+//------------------------------------------------------------------------------
 void DbGridControl::EnableNavigationBar(sal_Bool bEnable)
 {
     if (m_bNavigationBar == bEnable)
         return;
+
+    m_bNavigationBar = bEnable;
 
     if (bEnable)
     {
@@ -1294,14 +1321,13 @@ void DbGridControl::EnableNavigationBar(sal_Bool bEnable)
         m_aBar.Enable();
         m_aBar.InvalidateAll(m_nCurrentPos, sal_True);
 
-        m_nMode &= ~BROWSER_AUTO_HSCROLL;
-        SetMode(m_nMode);
+        if ( adjustModeForScrollbars( m_nMode, m_bNavigationBar, m_bHideScrollbars ) )
+            SetMode( m_nMode );
 
         // liefert die Groeﬂe der Reserved ControlArea
         Point aPoint = GetControlArea().TopLeft();
         sal_uInt16 nX = (sal_uInt16)aPoint.X();
 
-        m_bNavigationBar = bEnable;
         ArrangeControls(nX, (sal_uInt16)aPoint.Y());
         ReserveControlArea((sal_uInt16)nX);
     }
@@ -1310,11 +1336,10 @@ void DbGridControl::EnableNavigationBar(sal_Bool bEnable)
         m_aBar.Hide();
         m_aBar.Disable();
 
-        m_nMode |= BROWSER_AUTO_HSCROLL;
-        SetMode(m_nMode);
+        if ( adjustModeForScrollbars( m_nMode, m_bNavigationBar, m_bHideScrollbars ) )
+            SetMode( m_nMode );
 
         ReserveControlArea();
-        m_bNavigationBar = bEnable;
     }
 }
 
@@ -1394,6 +1419,24 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
     ActivateCell();
     Invalidate();
     return m_nOptions;
+}
+
+//------------------------------------------------------------------------------
+void DbGridControl::ForceHideScrollbars( sal_Bool _bForce )
+{
+    if ( m_bHideScrollbars == _bForce )
+        return;
+
+    m_bHideScrollbars = _bForce;
+
+    if ( adjustModeForScrollbars( m_nMode, m_bNavigationBar, m_bHideScrollbars ) )
+        SetMode( m_nMode );
+}
+
+//------------------------------------------------------------------------------
+sal_Bool DbGridControl::IsForceHideScrollbars() const
+{
+    return m_bHideScrollbars;
 }
 
 //------------------------------------------------------------------------------
@@ -1583,29 +1626,28 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
         }
 
         sal_Bool bPermanentCursor = IsPermanentCursorEnabled();
-        m_nMode = BROWSER_COLUMNSELECTION | BROWSER_KEEPSELECTION |
-                BROWSER_TRACKING_TIPS |
-                BROWSER_HLINESFULL | BROWSER_VLINESFULL | BROWSER_HEADERBAR_NEW |
-                BROWSER_AUTO_VSCROLL;
-        if (bPermanentCursor)
+        m_nMode = DEFAULT_BROWSE_MODE;
+
+        if ( bPermanentCursor )
         {
             m_nMode |= BROWSER_CURSOR_WO_FOCUS;
             m_nMode &= ~BROWSER_HIDECURSOR;
         }
         else
-            // Duerfen Updates gemacht werden, kein Focus-RechtEck
-            if (m_nOptions & OPT_UPDATE)
-                m_nMode |= BROWSER_HIDECURSOR;
-
-        if (m_bMultiSelection)
-            m_nMode |= BROWSER_MULTISELECTION;
-
-        if (!m_bNavigationBar)
         {
-            m_nMode |= BROWSER_AUTO_HSCROLL;
-            m_nMode |= BROWSER_NO_HSCROLL;
-            ReserveControlArea();
+            // Duerfen Updates gemacht werden, kein Focus-RechtEck
+            if ( m_nOptions & OPT_UPDATE )
+                m_nMode |= BROWSER_HIDECURSOR;
         }
+
+        if ( m_bMultiSelection )
+            m_nMode |= BROWSER_MULTISELECTION;
+        else
+            m_nMode &= ~BROWSER_MULTISELECTION;
+
+        adjustModeForScrollbars( m_nMode, m_bNavigationBar, m_bHideScrollbars );
+
+        ReserveControlArea();
 
         Reference< XColumnsSupplier >  xSupplyColumns(_xCursor, UNO_QUERY);
         if (xSupplyColumns.is())
