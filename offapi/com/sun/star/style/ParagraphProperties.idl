@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParagraphProperties.idl,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:42:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@
 // DocMerge from xml: service com::sun::star::style::ParagraphProperties
 /** describes the style of paragraphs.
  */
-service ParagraphProperties
+published service ParagraphProperties
 {
     //-------------------------------------------------------------------------
 
