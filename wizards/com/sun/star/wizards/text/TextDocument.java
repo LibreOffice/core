@@ -2,9 +2,9 @@
 *
 *  $RCSfile: TextDocument.java,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 13:39:44 $
+*  last change: $Author: kz $ $Date: 2004-11-27 09:07:23 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -70,6 +70,7 @@ import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XFramesSupplier;
 import com.sun.star.frame.XModel;
+import com.sun.star.frame.XTerminateListener;
 import com.sun.star.frame.XStorable;
 import com.sun.star.i18n.NumberFormatIndex;
 import com.sun.star.awt.Rectangle;
@@ -77,6 +78,7 @@ import com.sun.star.awt.Size;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.lang.Locale;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
@@ -93,7 +95,9 @@ import com.sun.star.text.XTextViewCursor;
 import com.sun.star.text.XTextViewCursorSupplier;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.DateTime;
+import com.sun.star.util.XModifiable;
 import com.sun.star.util.XNumberFormatsSupplier;
+import com.sun.star.util.XRefreshable;
 import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
@@ -120,14 +124,14 @@ public class TextDocument {
     public XStorable xStorable;
 
     //creates an instance of TextDocument and creates a frame
-    public TextDocument(XMultiServiceFactory xMSF) {
+    public TextDocument(XMultiServiceFactory xMSF, XTerminateListener listener) {
         this.xMSF = xMSF;
         XDesktop xDesktop = Desktop.getDesktop(xMSF);
-        xFrame = OfficeDocument.createNewFrame(xMSF);
+        xFrame = OfficeDocument.createNewFrame(xMSF, listener);
     }
 
     //creates an instance of TextDocument and creates a frame with an empty document
-    public TextDocument(XMultiServiceFactory xMSF, boolean bshowStatusIndicator, boolean bgetCurrentFrame) {
+    public TextDocument(XMultiServiceFactory xMSF, boolean bshowStatusIndicator, boolean bgetCurrentFrame, XTerminateListener listener) {
         this.xMSF = xMSF;
         XDesktop xDesktop = Desktop.getDesktop(xMSF);
 
@@ -137,7 +141,7 @@ public class TextDocument {
             xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xFrame.getController().getModel());
             xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, xComponent);
         } else {
-            xFrame = OfficeDocument.createNewFrame(xMSF);
+            xFrame = OfficeDocument.createNewFrame(xMSF, listener);
             PropertyValue[] xEmptyArgs = new PropertyValue[0];
             Object oDoc = OfficeDocument.load(xFrame, "private:factory/swriter", "_self", xEmptyArgs);
             xTextDocument = (XTextDocument) oDoc;
@@ -202,7 +206,16 @@ public class TextDocument {
         loadValues[2].Name = "Preview";
         loadValues[2].Value = Boolean.TRUE;
 
-
+        //set the preview document to non-modified mode in order to avoid the 'do u want to save' box
+        if (xTextDocument != null){
+            try {
+                XModifiable xModi = (XModifiable) UnoRuntime.queryInterface(XModifiable.class, xTextDocument);
+                xModi.setModified(false);
+            } catch (PropertyVetoException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
         Object oDoc = OfficeDocument.load(xFrame, sDefaultTemplate, "_self", loadValues);
         xTextDocument = (com.sun.star.text.XTextDocument) oDoc;
         DocSize = getPageSize();
@@ -215,7 +228,11 @@ public class TextDocument {
             e.printStackTrace();
         }
 
+        TextFieldHandler myFieldHandler = new TextFieldHandler(xMSF, xTextDocument);
+        myFieldHandler.updateDocInfoFields();
+
         return xTextDocument;
+
     }
 
     public Size getPageSize() {
@@ -235,11 +252,11 @@ public class TextDocument {
     }
 
     //creates an instance of TextDocument and creates a frame and loads a document
-    public TextDocument(XMultiServiceFactory xMSF, String URL, PropertyValue[] xArgs) {
+    public TextDocument(XMultiServiceFactory xMSF, String URL, PropertyValue[] xArgs, XTerminateListener listener) {
         this.xMSF = xMSF;
         XDesktop xDesktop = Desktop.getDesktop(xMSF);
 
-        xFrame = OfficeDocument.createNewFrame(xMSF);
+        xFrame = OfficeDocument.createNewFrame(xMSF,listener);
         Object oDoc = OfficeDocument.load(xFrame, URL, "_self", xArgs);
         xTextDocument = (XTextDocument) oDoc;
         xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xTextDocument);
@@ -295,6 +312,11 @@ public class TextDocument {
         while (xTextDocument.hasControllersLocked() == true) {
             xTextDocument.unlockControllers();
         }
+    }
+
+    public void refresh () {
+        XRefreshable xRefreshable = (XRefreshable) UnoRuntime.queryInterface(XRefreshable.class, xTextDocument);
+        xRefreshable.refresh();
     }
 
     /**
