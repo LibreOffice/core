@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcedtw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-08-30 10:32:32 $
+ *  last change: $Author: os $ $Date: 2002-09-03 07:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,7 +388,6 @@ void  SwSrcEditWindow::Resize()
             pTextView->SetStartDocPos( aStartDocPos );
             pTextView->ShowCursor();
         }
-        InitScrollBars();
         long nScrollStd = GetSettings().GetStyleSettings().GetScrollBarSize();
         Size aScrollSz(aOutSz.Width() - nScrollStd, nScrollStd );
         Point aScrollPos(0, aOutSz.Height() - nScrollStd);
@@ -403,6 +402,8 @@ void  SwSrcEditWindow::Resize()
         aOutSz.Width()  -= nScrollStd;
         aOutSz.Height()     -= nScrollStd;
         pOutWin->SetOutputSizePixel(aOutSz);
+        InitScrollBars();
+
         // Zeile im ersten Resize setzen
         if(USHRT_MAX != nStartLine)
         {
@@ -642,7 +643,7 @@ void SwSrcEditWindow::InitScrollBars()
 {
     SetScrollBarRanges();
 
-    Size aOutSz( GetOutputSizePixel() );
+    Size aOutSz( pOutWin->GetOutputSizePixel() );
     pVScrollbar->SetVisibleSize( aOutSz.Height() );
     pVScrollbar->SetPageSize(  aOutSz.Height() * 8 / 10 );
     pVScrollbar->SetLineSize( pOutWin->GetTextHeight() );
@@ -934,10 +935,7 @@ void SwSrcEditWindow::HandleWheelCommand( const CommandEvent& rCEvt )
 
 void SwSrcEditWindow::GetFocus()
 {
-//  rView.GotFocus();
     pOutWin->GrabFocus();
-//  pOutWin->GetFocus();
-//  Window::GetFocus();
 }
 
 /*void SwSrcEditWindow::LoseFocus()
