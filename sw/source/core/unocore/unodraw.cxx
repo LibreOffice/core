@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:12:17 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 18:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,7 +608,7 @@ uno::Sequence< uno::Type > SwXDrawPage::getTypes() throw( uno::RuntimeException 
     {
         pPageTypes[nIndex++] = pSvxTypes[nPos];
     }
-    pPageTypes[nIndex] = ::getCppuType((uno::Reference<form::XFormsSupplier>*)0);
+    pPageTypes[nIndex] = ::getCppuType((uno::Reference<form::XFormsSupplier2>*)0);
     return aPageTypes;
 }
 /*-- 22.01.99 11:33:44---------------------------------------------------
