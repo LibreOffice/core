@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-03 09:04:56 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 12:35:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1577,6 +1577,8 @@ void OResultSet::getFastPropertyValue(
 // -------------------------------------------------------------------------
 void OResultSet::fillRow(sal_Int32 _nToColumn)
 {
+    if(m_aRow.size() <= _nToColumn)
+        m_aRow.resize(_nToColumn+1);
     m_bFetchData = sal_False;
     Reference< XResultSetMetaData > xMeta = getMetaData();
     for(sal_Int32 i=m_nLastColumnPos+1;i <= _nToColumn; ++i)
