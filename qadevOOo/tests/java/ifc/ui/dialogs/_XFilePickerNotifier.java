@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFilePickerNotifier.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:31:06 $
+ *  last change:$Date: 2003-09-08 11:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,18 +61,19 @@
 
 package ifc.ui.dialogs;
 
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.lang.EventObject;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ui.dialogs.FilePickerEvent;
 import com.sun.star.ui.dialogs.XExecutableDialog;
 import com.sun.star.ui.dialogs.XFilePicker;
 import com.sun.star.ui.dialogs.XFilePickerListener;
 import com.sun.star.ui.dialogs.XFilePickerNotifier;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XCancellable;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
 
 
 /**
@@ -190,7 +191,7 @@ public class _XFilePickerNotifier extends MultiMethodTest {
         }
 
         try {
-            Thread.sleep(1000) ;
+            Thread.sleep(5000) ;
         } catch(InterruptedException e) {}
 
         if (!listener.called) {
@@ -224,7 +225,7 @@ public class _XFilePickerNotifier extends MultiMethodTest {
         }
 
         try {
-            Thread.sleep(1000) ;
+            Thread.sleep(2000) ;
         } catch(InterruptedException e) {}
 
         tRes.tested("removeFilePickerListener()", !listener.called) ;
@@ -246,6 +247,7 @@ public class _XFilePickerNotifier extends MultiMethodTest {
         public void run() {
             execRes = Diag.execute();
             System.out.println("HERE: "+execRes);
+            shortWait();
         }
     }
 
