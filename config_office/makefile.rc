@@ -3,8 +3,8 @@
 #*    $Workfile:$
 #*
 #*    generated recursive makefile
-#*    last change       $Author: jmarmion $ $Date: 2000-10-11 14:43:18 $
-#*    $Revision: 1.2 $
+#*    last change       $Author: jmarmion $ $Date: 2000-10-12 13:07:23 $
+#*    $Revision: 1.3 $
 #*
 #*    $Logfile:$
 #*
@@ -157,7 +157,7 @@ cpputools : cppuhelper
 dbaccess : svx
 desktop : sc sd sw
 eventattacher : cppuhelper
-extensions : offmgr rdbmaker xml2cmp 
+extensions : offmgr rdbmaker xml2cmp unoil
 external : std2
 forms : svx
 framework : svtools
