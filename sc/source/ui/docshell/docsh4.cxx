@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:31:48 $
+ *  last change: $Author: nn $ $Date: 2001-02-26 19:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,14 +153,6 @@
 #define SC_PREVIEW_SIZE_X   10000
 #define SC_PREVIEW_SIZE_Y   12400
 
-
-//------------------------------------------------------------------
-
-Window* lcl_GetDialogParent()
-{
-    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-    return pViewSh ? pViewSh->GetDialogParent() : Application::GetDefDialogParent();
-}
 
 //------------------------------------------------------------------
 
@@ -521,7 +513,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                 if(nSet==LM_ON_DEMAND)
                 {
-                    QueryBox aBox( lcl_GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                    QueryBox aBox( GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                                              ScGlobal::GetRscString(STR_RELOAD_TABLES) );
 
                     nDlgRet=aBox.Execute();
@@ -553,7 +545,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 DBG_ASSERT(pViewSh,"SID_REIMPORT_AFTER_LOAD: keine View");
                 if (pViewSh && pDBColl)
                 {
-                    QueryBox aBox( lcl_GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                    QueryBox aBox( GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                                              ScGlobal::GetRscString(STR_REIMPORT_AFTER_LOAD) );
                     if (aBox.Execute() == RET_YES)
                     {
@@ -633,7 +625,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     if(pDoc->GetChangeTrack()!=NULL)
                     {
-                        WarningBox  aBox( lcl_GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_NO),
+                        WarningBox  aBox( GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_NO),
                                 ScGlobal::GetRscString( STR_END_REDLINING ) );
 
                         if(aBox.Execute()==RET_YES)
@@ -839,7 +831,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                                 //! anderen Titel am Dialog setzen
                                 ScNewScenarioDlg* pNewDlg =
-                                    new ScNewScenarioDlg( lcl_GetDialogParent(), aName, TRUE );
+                                    new ScNewScenarioDlg( GetDialogParent(), aName, TRUE );
                                 pNewDlg->SetScenarioData( aName, aComment, aColor, nFlags );
                                 if ( pNewDlg->Execute() == RET_OK )
                                 {
@@ -1086,7 +1078,7 @@ BOOL ScDocShell::AdjustPrintZoom( const ScRange& rRange )
 
         long nBlkTwipsX = 0;
         if (bHeaders)
-            nBlkTwipsX += PRINT_HEADER_WIDTH;
+            nBlkTwipsX += (long) PRINT_HEADER_WIDTH;
         USHORT nStartCol = rRange.aStart.Col();
         USHORT nEndCol = rRange.aEnd.Col();
         if ( pRepeatCol && nStartCol >= pRepeatCol->aStart.Col() )
@@ -1101,7 +1093,7 @@ BOOL ScDocShell::AdjustPrintZoom( const ScRange& rRange )
 
         long nBlkTwipsY = 0;
         if (bHeaders)
-            nBlkTwipsY += PRINT_HEADER_HEIGHT;
+            nBlkTwipsY += (long) PRINT_HEADER_HEIGHT;
         USHORT nStartRow = rRange.aStart.Row();
         USHORT nEndRow = rRange.aEnd.Row();
         if ( pRepeatRow && nStartRow >= pRepeatRow->aStart.Row() )
@@ -1202,7 +1194,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
 
                         SfxItemSet&     rStyleSet = pStyleSheet->GetItemSet();
 
-                        ScStyleDlg* pDlg = new ScStyleDlg( lcl_GetDialogParent(),
+                        ScStyleDlg* pDlg = new ScStyleDlg( GetDialogParent(),
                                                            *pStyleSheet,
                                                            RID_SCDLG_STYLES_PAGE );
 
@@ -1357,7 +1349,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
 
                         ScHFEditDlg* pDlg
                              = new ScHFEditDlg( SFX_APP()->GetViewFrame(),
-                                                lcl_GetDialogParent(),
+                                                GetDialogParent(),
                                                 rStyleSet,
                                                 aStr,
                                                 nResId );
