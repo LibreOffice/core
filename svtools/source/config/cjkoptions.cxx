@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cjkoptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-05-07 10:21:13 $
+ *  last change: $Author: dg $ $Date: 2001-06-22 08:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,11 @@ public:
 Sequence<OUString> SvtCJKOptions_Impl::aPropertyNames;
 
 SvtCJKOptions_Impl::SvtCJKOptions_Impl() :
+#ifdef TF_CFGDATA
+    utl::ConfigItem(C2U("Office/Common/I18N/CJK")),
+#else
     utl::ConfigItem(C2U("Setup/CJK/Enable")),
+#endif
     bIsLoaded(sal_False),
     bCJKFont(sal_True),
     bVerticalText(sal_True),
@@ -170,6 +174,7 @@ void SvtCJKOptions_Impl::Load()
     {
         aPropertyNames.realloc(9);
         OUString* pNames = aPropertyNames.getArray();
+
         pNames[0] = C2U("CJKFont");
         pNames[1] = C2U("VerticalText");
         pNames[2] = C2U("AsianTypography");
@@ -179,6 +184,7 @@ void SvtCJKOptions_Impl::Load()
         pNames[6] = C2U("DoubleLines");
         pNames[7] = C2U("EmphasisMarks");
         pNames[8] = C2U("VerticalCallOut");
+
         EnableNotification( aPropertyNames );
     }
     Sequence< Any > aValues = GetProperties(aPropertyNames);
