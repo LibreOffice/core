@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:20:06 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 namespace configmgr
 {
     class ISubtree;
-    class Change;
+    class SubtreeChange;
     struct TreeChangeList;
 
     namespace configuration
@@ -126,7 +126,7 @@ namespace configmgr
         */
         bool adjustToChanges(   NodeChangesInformation& rLocalChanges,
                                 Tree const& aBaseTree, NodeRef const& aBaseNode,
-                                Change const& aExternalChange) ;
+                                SubtreeChange const& aExternalChange) ;
 
 
 //-----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeinfo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 16:08:06 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "apitypes.hxx"
 #include "configpath.hxx"
 #include "noderef.hxx"
+#include "valueref.hxx"
 
 #include <vos/ref.hxx>
 
@@ -80,7 +81,9 @@ namespace configmgr
 //-----------------------------------------------------------------------------
         class Tree;
         class NodeRef;
+        class ValueRef;
         class NodeID;
+        class SubNodeID;
 
         class ElementTreeImpl;
         typedef vos::ORef<ElementTreeImpl>  ElementTreeHolder;
@@ -192,7 +195,7 @@ namespace configmgr
             NodeID getAffectedNodeID() const;
 
             /// identify the node (within the affected tree), that actually is changed (this one may be a value node)
-            NodeID getChangedNodeID() const;
+            SubNodeID getChangingValueID() const;
 
         //-------------------------------------------------
             void setAccessor( RelativePath const& aAccessor );
@@ -201,13 +204,11 @@ namespace configmgr
             void setBase( Tree const& aBaseTree, NodeRef const& aBaseNode )
             { setBase( NodeID(aBaseTree,aBaseNode) ); }
 
-            void setTarget( NodeID const& aTargetID );
-            void setTarget( Tree const& aTargetTree, NodeRef const& aTargetNode )
-            { setTarget( NodeID(aTargetTree,aTargetNode) ); }
+            void setAffected( NodeID const& aTargetID );
+            void setAffected( Tree const& aTargetTree, NodeRef const& aTargetNode )
+            { setAffected( NodeID(aTargetTree,aTargetNode) ); }
 
-            void setChanging( NodeID const& aChangedID );
-            void setChanging( Tree const& aChangedTree, NodeRef const& aChangedNode )
-            { setChanging( NodeID(aChangedTree,aChangedNode) ); }
+            void setChangingSubnode( bool bSubnode = true );
         //-------------------------------------------------
             NodeChangeLocation();
         //  NodeChangeLocation(NodeChangeLocation const& aOther);
@@ -217,8 +218,8 @@ namespace configmgr
         private:
             RelativePath    m_path;     // path from baseNode to changing node
             NodeID          m_base;     // a (non-empty) node
-            NodeID          m_target;   // identifies the affected node (if available)
-            NodeID          m_changed;  // identifies the affected node (if available)
+            NodeID          m_affected; // identifies the affected node (if available)
+            bool            m_bSubNodeChanging; // do we change a value ?
         //-------------------------------------------------
         };
 //-----------------------------------------------------------------------------

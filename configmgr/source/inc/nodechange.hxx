@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechange.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 16:08:06 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ namespace configmgr
         class RelativePath;
         class NodeRef;
         class NodeID;
+        class SubNodeID;
         class Tree;
 //-----------------------------------------------------------------------------
 
@@ -136,9 +137,6 @@ namespace configmgr
             NodeRef getAffectedNode() const;
             // identify the node where the change is actually taking place
             NodeID getAffectedNodeID() const;
-
-            // identify the node where the change is actually taking place
-            NodeID getChangedNodeID() const;
 
             // Comparison
             friend bool operator==(NodeChange const& lhs, NodeChange const& rhs)
