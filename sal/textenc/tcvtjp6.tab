@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtjp6.tab,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:47:13 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:38:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1459,7 +1459,7 @@ static ImplDBCSToUniLeadTab const aAPPLEJAPANESEUniLeadTab[256] =
 
 static ImplUniToDBCSHighTab const aAPPLEJAPANESEDBCSHighTab[256] =
 {
-    { 0x00, 0xF7, aImplUniToDBCSTab_SJIS_00 },                  /* 0x00 */
+    { 0x00, 0xF7, aImplUniToDBCSTab_APPLEJAPANESE_00 },         /* 0x00 */
     {    1,    0, NULL },                                       /* 0x01 */
     {    1,    0, NULL },                                       /* 0x02 */
     { 0x91, 0xC9, aImplUniToDBCSTab_SJIS_03 },                  /* 0x03 */
