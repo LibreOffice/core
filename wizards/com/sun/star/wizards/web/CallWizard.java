@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallWizard.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:11:03 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,11 @@ package com.sun.star.wizards.web;
 
 import com.sun.star.beans.XPropertyAccess;
 import com.sun.star.comp.loader.FactoryHelper;
-import com.sun.star.lang.*;
+import com.sun.star.lang.XInitialization;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XServiceInfo;
+import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.lang.XTypeProvider;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.task.XJob;
 import com.sun.star.task.XJobExecutor;
@@ -75,10 +79,9 @@ import com.sun.star.wizards.common.Resource;
  * information into the given registry key (<CODE>__writeRegistryServiceInfo</CODE>).
  *
  * @author rpiterman
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class CallWizard {
-    static boolean bWizardstartedalready;
 
     /**
      * Gives a factory for creating the service. This method is called by the
@@ -140,7 +143,7 @@ public class CallWizard {
             }
         }
 
-        private static boolean canStart=true;
+        private static WebWizard webWizard = null;
         /**
          * Execute Wizard
          *
@@ -148,24 +151,27 @@ public class CallWizard {
          */
         public void trigger(String str) {
             if (str.equalsIgnoreCase("start")) {
-                if (canStart) {
-                    bWizardstartedalready = false;
+                if (webWizard == null) {
                     Thread t = new Thread() {
                         public void run() {
                             WebWizard ww = null;
                             try {
-                                ww = new WebWizard(xmultiservicefactory);
-                                ww.show();
-
+                                webWizard = new WebWizard(xmultiservicefactory);
+                                ww = webWizard;
+                                webWizard.show();
+                                webWizard = null;
                             }
                             catch (StoppedByUserException ex1) {
+                                webWizard = null;
                                 //do nothing;
                             }
                             catch (Exception ex) {
+                                webWizard = null;
                                 ex.printStackTrace();
                                 Resource.showCommonResourceError(xmultiservicefactory);
                             }
                             finally {
+                                webWizard = null;
                                 try {
                                     if (ww != null)
                                         ww.cleanup();
@@ -173,13 +179,17 @@ public class CallWizard {
                                 catch (Exception ex) {
                                     ex.printStackTrace();
                                 }
-                                canStart = true;
+
                             }
                         }
                     };
 
                     t.start();
                 }
+                else {
+                    webWizard.activate();
+                }
+
 
             }
         }
@@ -208,7 +218,7 @@ public class CallWizard {
          *         will be passed to the caller.
          */
         public void initialize(Object[] object) throws com.sun.star.uno.Exception {
-            bWizardstartedalready = true;
+            //wizardStarted = false;
         }
 
         /**
