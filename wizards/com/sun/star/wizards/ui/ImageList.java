@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageList.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $  $Date: 2004-10-27 13:41:50 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 14:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -57,7 +57,6 @@
  *  Contributor(s): _______________________________________
  *
  */package com.sun.star.wizards.ui;
-
 import com.sun.star.awt.*;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
@@ -150,13 +149,14 @@ import javax.swing.event.ListDataListener;
 
         int imageTextHeight = imageTextLines * LINE_HEIGHT;
 
-        PeerConfigHelper peerConfigHelper = new PeerConfigHelper(dialog.xUnoDialog);
+
+        PeerConfig opeerConfig = new PeerConfig(dialog.xWindow);
 
         MOVE_SELECTION_VALS[2] = step;
 
         imgContainer = dialog.insertImage(name + "lblContainer", new String[] { "BackgroundColor", "Border", "Height", "PositionX", "PositionY", "Step", "Width" }, new Object[] { BACKGROUND_COLOR, new Short((short) 1), new Integer((imageSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1), new Integer(pos.Width), new Integer(pos.Height), step, new Integer((imageSize.Width + gap.Width) * cols + gap.Width)});
 
-        peerConfigHelper.setPeerProperties(imgContainer, new String[] { "MouseTransparent" }, new Object[] { Boolean.TRUE });
+        opeerConfig.setPeerProperties(imgContainer, new String[] { "MouseTransparent" }, new Object[] { Boolean.TRUE });
 
         //XWindow win = (XWindow)UnoRuntime.queryInterface(XWindow.class,lblContainer);
         /*dialog.xWindow.addWindowListener(uiEventListener);
