@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-28 20:35:38 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,12 +153,12 @@ private:
     BOOL                bInit;
     short               nDockMode;
     Point               aSplitterInitPos;
-    ScFuncDesc*         pFuncDesc;
+    const ScFuncDesc*   pFuncDesc;
     USHORT              nArgs;
     String**            pArgArr;
 
 
-    ScFuncDesc*     aLRUList[LRU_MAX];
+    const ScFuncDesc*   aLRUList[LRU_MAX];
 
     void            UpdateFunctionList();
     void            UpdateLRUList();
