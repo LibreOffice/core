@@ -1,3 +1,64 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ldapuserprofilelayer.hxx,v $
+ *
+ *  $Revision: 1.4 $
+ *
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:39:56 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards OOurce License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free OOftware; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free OOftware Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free OOftware
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards OOurce License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  OOurce License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  OOftware provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE OOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the OOftware.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2004 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
 #ifndef EXTENSIONS_CONFIG_LDAP_LADPUSERPROFILELAYER_HXX_
 #define EXTENSIONS_CONFIG_LDAP_LADPUSERPROFILELAYER_HXX_
 
@@ -7,6 +68,8 @@
 #ifndef EXTENSIONS_CONFIG_LDAP_LDAPACCESS_HXX_
 #include "ldapaccess.hxx"
 #endif // EXTENSIONS_CONFIG_LDAP_LDAPACCESS_HXX_
+
+#include "propertysethelper.hxx"
 
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYER_HPP_
 #include <com/sun/star/configuration/backend/XLayer.hpp>
@@ -50,18 +113,22 @@ struct LdapUserProfileSource : public salhelper::SimpleReferenceObject
     LdapConnection      mConnection;
     LdapUserProfileMap  mProfileMap;
 
+    rtl::OUString getComponentName() const;
     rtl::OUString getConfigurationBasePath() const;
     void getUserProfile(rtl::OUString const & aUser, LdapUserProfile & aProfile);
 };
 typedef rtl::Reference< LdapUserProfileSource > LdapUserProfileSourceRef;
 //------------------------------------------------------------------------------
+
 /**
   Implementation of the XLayer interfaces  for LdapUserProfileBe.
   Class reads UserProfile setting form LDAP.
   The timestamp indicates the last modification time
   */
- class LdapUserProfileLayer : public cppu::WeakImplHelper2<backend::XLayer,
-                                                           util::XTimeStamped>
+ class LdapUserProfileLayer : public cppu::ImplInheritanceHelper2<
+                                                apihelper::ReadOnlyPropertySetHelper,
+                                                backend::XLayer,
+                                                util::XTimeStamped>
 {
     public :
         /** Constructor */
@@ -88,6 +155,11 @@ typedef rtl::Reference< LdapUserProfileSource > LdapUserProfileSourceRef;
             throw (uno::RuntimeException)
         { return mTimestamp; }
 
+    protected:
+        // PropertySetHelper
+        virtual cppu::IPropertyArrayHelper * SAL_CALL newInfoHelper();
+
+        virtual void SAL_CALL getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) const;
     private :
         struct ProfileData;
         bool readProfile();
