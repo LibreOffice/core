@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rootactiontriggercontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-12-10 13:21:24 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,14 +91,14 @@ namespace framework
 {
 
 //MACOSX moved outside of class above
-#ifdef MACOSX
+#if defined(MACOSX) && (__GNUC__ < 3)
     static sal_uInt8 pGUID[16] = { 0x17, 0x0F, 0xA2, 0xC9, 0xCA, 0x50, 0x4A, 0xD3, 0xA6, 0x3B, 0x39, 0x99, 0xC5, 0x96, 0x43, 0x27 };
     static ::com::sun::star::uno::Sequence< sal_Int8 > seqID((sal_Int8*)pGUID,16) ;
 #endif
 
 static Sequence< sal_Int8 > impl_getStaticIdentifier()
 {
-#ifndef MACOSX
+#if !(defined(MACOSX) && (__GNUC__ < 3))
     //MACOSX moved outside of class above
     static sal_uInt8 pGUID[16] = { 0x17, 0x0F, 0xA2, 0xC9, 0xCA, 0x50, 0x4A, 0xD3, 0xA6, 0x3B, 0x39, 0x99, 0xC5, 0x96, 0x43, 0x27 };
     static ::com::sun::star::uno::Sequence< sal_Int8 > seqID((sal_Int8*)pGUID,16) ;
