@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumns.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 06:56:36 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 10:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,18 @@ void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
     {
         WpADOColumn aColumn = pColumn->getColumnImpl();
         DataTypeEnum eType = aColumn.get_Type();
+
+        sal_Int32 nPrecision    = aColumn.get_Precision();
+        sal_Int32 nScale        = aColumn.get_NumericScale();
+        sal_Int32 nType         = ADOS::MapADOType2Jdbc(eType);
+
+        sal_Bool bForceTo = sal_True;
+        const OTypeInfoMap* pTypeInfoMap = m_pConnection->getTypeInfo();
+        const ::connectivity::OTypeInfo* pTypeInfo = OConnection::getTypeInfoFromType(*m_pConnection->getTypeInfo(),nType,::rtl::OUString(),nPrecision,nScale,bForceTo);
+        if ( pTypeInfo && pTypeInfo->bCurrency ) // change column type if necessary
+            aColumn.put_Type(adCurrency);
+
+
         if ( !m_aCollection.Append(aColumn) )
             ADOS::ThrowException(*m_pConnection->getConnection(),*this);
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 06:56:59 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 10:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,13 @@ namespace connectivity
 
             sal_Int32 getEngineType()   const { return m_nEngineType; }
             ODriver*  getDriver()       const { return m_pDriver; }
+
+            static const ::connectivity::OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
+                               sal_Int32 _nType,
+                               const ::rtl::OUString& _sTypeName,
+                               sal_Int32 _nPrecision,
+                               sal_Int32 _nScale,
+                               sal_Bool& _brForceToType);
         };
     }
 }

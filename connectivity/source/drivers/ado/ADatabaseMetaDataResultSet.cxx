@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-01-24 07:06:58 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 10:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,14 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResult
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( !m_aValueRange.empty()  && columnIndex == 11 && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end() )
+    {
+        getValue(2);
+        if ( static_cast<sal_Int16>(m_aValue) != adCurrency )
+            return sal_False;
+    }
     return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
@@ -265,7 +273,7 @@ sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) t
 
     if(m_aValue.isNull())
         return 0;
-    if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
+    if ( !m_aValueRange.empty() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
         return (sal_Int8)(*m_aValueRangeIter).second[(sal_Int32)m_aValue];
     else if(m_aStrValueRange.size() && (m_aStrValueRangeIter = m_aStrValueRange.find(columnIndex)) != m_aStrValueRange.end())
         return (sal_Int8)(*m_aStrValueRangeIter).second[m_aValue];
@@ -1211,6 +1219,9 @@ void ODatabaseMetaDataResultSet::setTypeInfoMap(sal_Bool _bJetEngine)
     aSerachMapping[DB_SEARCHABLE]       = ColumnSearch::FULL;
 
     m_aValueRange[9] = aSerachMapping;
+
+    TInt2IntMap aCurrencyMapping;
+    m_aValueRange[11] = aCurrencyMapping;
 
     ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
     pMetaData->setTypeInfoMap();

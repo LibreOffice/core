@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumn.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 06:56:36 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 10:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,117 +238,14 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
             case PROPERTY_ID_DEFAULTVALUE:
                 pAdoPropertyName = "Description";
                 break;
-
-            case PROPERTY_ID_ISCURRENCY:
-                m_aColumn.put_Type(adCurrency);
-                break;
         }
 
         if ( pAdoPropertyName )
             OTools::putValue( m_aColumn.get_Properties(), ::rtl::OUString::createFromAscii( pAdoPropertyName ), getString( rValue ) );
-
     }
     OColumn_ADO::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
-namespace
-{
-    const ::connectivity::OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
-                               sal_Int32 _nType,
-                               const ::rtl::OUString& _sTypeName,
-                               sal_Int32 _nPrecision,
-                               sal_Int32 _nScale,
-                               sal_Bool& _brForceToType)
-    {
-        const ::connectivity::OTypeInfo* pTypeInfo = NULL;
-        _brForceToType = sal_False;
-        // search for type
-        ::std::pair<OTypeInfoMap::const_iterator, OTypeInfoMap::const_iterator> aPair = _rTypeInfo.equal_range(_nType);
-        OTypeInfoMap::const_iterator aIter = aPair.first;
-        if(aIter != _rTypeInfo.end()) // compare with end is correct here
-        {
-            for(;aIter != aPair.second;++aIter)
-            {
-                // search the best matching type
-        #ifdef DBG_UTIL
-                ::rtl::OUString sDBTypeName = aIter->second->aTypeName;
-                sal_Int32       nDBTypePrecision = aIter->second->nPrecision;
-                sal_Int32       nDBTypeScale = aIter->second->nMaximumScale;
-        #endif
-                if  (   (   !_sTypeName.getLength()
-                        ||  (aIter->second->aTypeName.equalsIgnoreAsciiCase(_sTypeName))
-                        )
-                    &&  (aIter->second->nPrecision      >= _nPrecision)
-                    &&  (aIter->second->nMaximumScale   >= _nScale)
-                    )
-                    break;
-            }
-
-            if (aIter == aPair.second)
-            {
-                for(aIter = aPair.first; aIter != aPair.second; ++aIter)
-                {
-                    // search the best matching type (now comparing the local names)
-                    if  (   (aIter->second->aLocalTypeName.equalsIgnoreAsciiCase(_sTypeName))
-                        &&  (aIter->second->nPrecision      >= _nPrecision)
-                        &&  (aIter->second->nMaximumScale   >= _nScale)
-                        )
-                    {
-    // we can not assert here because we could be in d&d
-    /*
-                        OSL_ENSURE(sal_False,
-                            (   ::rtl::OString("getTypeInfoFromType: assuming column type ")
-                            +=  ::rtl::OString(aIter->second->aTypeName.getStr(), aIter->second->aTypeName.getLength(), gsl_getSystemTextEncoding())
-                            +=  ::rtl::OString("\" (expected type name ")
-                            +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
-                            +=  ::rtl::OString(" matches the type's local name).")).getStr());
-    */
-                        break;
-                    }
-                }
-            }
-
-            if (aIter == aPair.second)
-            {   // no match for the names, no match for the local names
-                // -> drop the precision and the scale restriction, accept any type with the property
-                // type id (nType)
-
-                // we can not assert here because we could be in d&d
-    /*
-                OSL_ENSURE(sal_False,
-                    (   ::rtl::OString("getTypeInfoFromType: did not find a matching type")
-                    +=  ::rtl::OString(" (expected type name: ")
-                    +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
-                    +=  ::rtl::OString(")! Defaulting to the first matching type.")).getStr());
-    */
-                pTypeInfo = aPair.first->second;
-                _brForceToType = sal_True;
-            }
-            else
-                pTypeInfo = aIter->second;
-        }
-        else
-        {
-            ::comphelper::TStringMixEqualFunctor aCase(sal_False);
-            // search for typeinfo where the typename is equal _sTypeName
-            OTypeInfoMap::const_iterator aFind = ::std::find_if(_rTypeInfo.begin(),
-                                                                _rTypeInfo.end(),
-                                                                ::std::compose1(
-                                                                    ::std::bind2nd(aCase, _sTypeName),
-                                                                    ::std::compose1(
-                                                                        ::std::mem_fun(&::connectivity::OTypeInfo::getDBName),
-                                                                        ::std::select2nd<OTypeInfoMap::value_type>())
-                                                                    )
-                                                                );
-            if(aFind != _rTypeInfo.end())
-                pTypeInfo = aFind->second;
-        }
-
-    // we can not assert here because we could be in d&d
-    //  OSL_ENSURE(pTypeInfo, "getTypeInfoFromType: no type info found for this type!");
-        return pTypeInfo;
-    }
-}
-// -------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 void OAdoColumn::fillPropertyValues()
 {
     if(m_aColumn.IsValid())
@@ -364,7 +261,7 @@ void OAdoColumn::fillPropertyValues()
 
         sal_Bool bForceTo = sal_True;
         const OTypeInfoMap* pTypeInfoMap = m_pConnection->getTypeInfo();
-        const ::connectivity::OTypeInfo* pTypeInfo = getTypeInfoFromType(*m_pConnection->getTypeInfo(),m_Type,::rtl::OUString(),m_Precision,m_Scale,bForceTo);
+        const ::connectivity::OTypeInfo* pTypeInfo = OConnection::getTypeInfoFromType(*m_pConnection->getTypeInfo(),m_Type,::rtl::OUString(),m_Precision,m_Scale,bForceTo);
         if ( pTypeInfo )
                 m_TypeName = pTypeInfo->aTypeName;
 

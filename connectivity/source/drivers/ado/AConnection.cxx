@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 06:56:37 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 10:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,23 +492,23 @@ void OConnection::buildTypeInfo() throw( SQLException)
     // Loop on the result set until we reach end of file
     while (xRs->next())
     {
-        OTypeInfo* aInfo = new OTypeInfo();
-        aInfo->aTypeName            = xRow->getString (1);
-        aInfo->nType                = xRow->getShort (2);
+        OTypeInfo* aInfo        = new OTypeInfo();
+        aInfo->aTypeName        = xRow->getString (1);
+        aInfo->nType            = xRow->getShort (2);
         aInfo->nPrecision       = xRow->getInt (3);
         aInfo->aLiteralPrefix   = xRow->getString (4);
         aInfo->aLiteralSuffix   = xRow->getString (5);
-        aInfo->aCreateParams        = xRow->getString (6);
-        aInfo->bNullable            = xRow->getInt (7) == ColumnValue::NULLABLE;
+        aInfo->aCreateParams    = xRow->getString (6);
+        aInfo->bNullable        = xRow->getInt (7) == ColumnValue::NULLABLE;
         aInfo->bCaseSensitive   = xRow->getBoolean (8);
         aInfo->nSearchType      = xRow->getShort (9);
-        aInfo->bUnsigned            = xRow->getBoolean (10);
-        aInfo->bCurrency            = xRow->getBoolean (11);
+        aInfo->bUnsigned        = xRow->getBoolean (10);
+        aInfo->bCurrency        = xRow->getBoolean (11);
         aInfo->bAutoIncrement   = xRow->getBoolean (12);
         aInfo->aLocalTypeName   = xRow->getString (13);
-        aInfo->nMinimumScale        = xRow->getShort (14);
-        aInfo->nMaximumScale        = xRow->getShort (15);
-        aInfo->nNumPrecRadix        = (sal_Int16)xRow->getInt (18);
+        aInfo->nMinimumScale    = xRow->getShort (14);
+        aInfo->nMaximumScale    = xRow->getShort (15);
+        aInfo->nNumPrecRadix    = (sal_Int16)xRow->getInt (18);
         // Now that we have the type info, save it
         // in the Hashtable if we don't already have an
         // entry for this SQL type.
@@ -567,6 +567,103 @@ Sequence< sal_Int8 > OConnection::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 // -----------------------------------------------------------------------------
+const ::connectivity::OTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
+                           sal_Int32 _nType,
+                           const ::rtl::OUString& _sTypeName,
+                           sal_Int32 _nPrecision,
+                           sal_Int32 _nScale,
+                           sal_Bool& _brForceToType)
+{
+    const ::connectivity::OTypeInfo* pTypeInfo = NULL;
+    _brForceToType = sal_False;
+    // search for type
+    ::std::pair<OTypeInfoMap::const_iterator, OTypeInfoMap::const_iterator> aPair = _rTypeInfo.equal_range(_nType);
+    OTypeInfoMap::const_iterator aIter = aPair.first;
+    if(aIter != _rTypeInfo.end()) // compare with end is correct here
+    {
+        for(;aIter != aPair.second;++aIter)
+        {
+            // search the best matching type
+    #ifdef DBG_UTIL
+            ::rtl::OUString sDBTypeName = aIter->second->aTypeName;
+            sal_Int32       nDBTypePrecision = aIter->second->nPrecision;
+            sal_Int32       nDBTypeScale = aIter->second->nMaximumScale;
+    #endif
+            if  (   (   !_sTypeName.getLength()
+                    ||  (aIter->second->aTypeName.equalsIgnoreAsciiCase(_sTypeName))
+                    )
+                &&  (aIter->second->nPrecision      >= _nPrecision)
+                &&  (aIter->second->nMaximumScale   >= _nScale)
+                )
+                break;
+        }
+
+        if (aIter == aPair.second)
+        {
+            for(aIter = aPair.first; aIter != aPair.second; ++aIter)
+            {
+                // search the best matching type (now comparing the local names)
+                if  (   (aIter->second->aLocalTypeName.equalsIgnoreAsciiCase(_sTypeName))
+                    &&  (aIter->second->nPrecision      >= _nPrecision)
+                    &&  (aIter->second->nMaximumScale   >= _nScale)
+                    )
+                {
+// we can not assert here because we could be in d&d
+/*
+                    OSL_ENSURE(sal_False,
+                        (   ::rtl::OString("getTypeInfoFromType: assuming column type ")
+                        +=  ::rtl::OString(aIter->second->aTypeName.getStr(), aIter->second->aTypeName.getLength(), gsl_getSystemTextEncoding())
+                        +=  ::rtl::OString("\" (expected type name ")
+                        +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
+                        +=  ::rtl::OString(" matches the type's local name).")).getStr());
+*/
+                    break;
+                }
+            }
+        }
+
+        if (aIter == aPair.second)
+        {   // no match for the names, no match for the local names
+            // -> drop the precision and the scale restriction, accept any type with the property
+            // type id (nType)
+
+            // we can not assert here because we could be in d&d
+/*
+            OSL_ENSURE(sal_False,
+                (   ::rtl::OString("getTypeInfoFromType: did not find a matching type")
+                +=  ::rtl::OString(" (expected type name: ")
+                +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
+                +=  ::rtl::OString(")! Defaulting to the first matching type.")).getStr());
+*/
+            pTypeInfo = aPair.first->second;
+            _brForceToType = sal_True;
+        }
+        else
+            pTypeInfo = aIter->second;
+    }
+    else
+    {
+        ::comphelper::TStringMixEqualFunctor aCase(sal_False);
+        // search for typeinfo where the typename is equal _sTypeName
+        OTypeInfoMap::const_iterator aFind = ::std::find_if(_rTypeInfo.begin(),
+                                                            _rTypeInfo.end(),
+                                                            ::std::compose1(
+                                                                ::std::bind2nd(aCase, _sTypeName),
+                                                                ::std::compose1(
+                                                                    ::std::mem_fun(&::connectivity::OTypeInfo::getDBName),
+                                                                    ::std::select2nd<OTypeInfoMap::value_type>())
+                                                                )
+                                                            );
+        if(aFind != _rTypeInfo.end())
+            pTypeInfo = aFind->second;
+    }
+
+// we can not assert here because we could be in d&d
+//  OSL_ENSURE(pTypeInfo, "getTypeInfoFromType: no type info found for this type!");
+    return pTypeInfo;
+}
+// -----------------------------------------------------------------------------
+
 
 
 
