@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventqueue.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:54:47 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:15:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <queue>
 #include <event.hxx>
 
-#include "boost/utility.hpp" // for boost::noncopyable
-
+#include <boost/utility.hpp> // for boost::noncopyable
+#include <functional>
 
 /* Definition of ActivitiesQueue class */
 
@@ -127,7 +127,7 @@ namespace presentation
             getTimer() const { return mpTimer; }
 
         private:
-            struct EventEntry
+            struct EventEntry : public ::std::unary_function<EventEntry, bool>
             {
                 EventSharedPtr  pEvent;
                 double          nTime;
