@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-13 07:13:52 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,10 @@
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
 #endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE dbtools
+#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
+#include "propertyids.hxx"
+#endif
 
 using namespace ::comphelper;
 using namespace ::com::sun::star::uno;
@@ -165,6 +169,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::form;
+using namespace connectivity::dbtools;
 
 //.........................................................................
 namespace dbtools
@@ -331,7 +336,7 @@ Reference< XConnection> getConnection(
                 sal_Bool bPwdReq = sal_False;
                 try
                 {
-                    xProp->getPropertyValue(::rtl::OUString::createFromAscii("Password")) >>= sPwd;
+                    xProp->getPropertyValue(PROPERTY_PASSWORD) >>= sPwd;
                     bPwdReq = ::cppu::any2bool(xProp->getPropertyValue(::rtl::OUString::createFromAscii("IsPasswordRequired")));
                     xProp->getPropertyValue(::rtl::OUString::createFromAscii("User")) >>= sUser;
                 }
@@ -377,13 +382,7 @@ Reference< XConnection> getConnection(const Reference< XRowSet>& _rxRowSet) thro
     Reference< XConnection> xReturn;
     Reference< XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
     if (xRowSetProps.is())
-    {
-        Any aConn(xRowSetProps->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")));
-        if  (aConn.getValueType().equals(
-            getCppuType(reinterpret_cast< Reference< XConnection>*>(NULL))
-            ))
-            xReturn = *(Reference< XConnection>*)aConn.getValue();
-    }
+        xRowSetProps->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")) >>= xReturn;
     return xReturn;
 }
 
@@ -408,8 +407,6 @@ Reference< XConnection> calcConnection(
             if (!xReturn.is())
             {
                 static const ::rtl::OUString s_sUserProp = ::rtl::OUString::createFromAscii("User");
-                static const ::rtl::OUString s_sPwdProp = ::rtl::OUString::createFromAscii("Password");
-
                 // the row set didn't supply a connection -> build one with it's current settings
                 ::rtl::OUString sDataSourceName;
                 xRowSetProps->getPropertyValue(::rtl::OUString::createFromAscii("DataSourceName")) >>= sDataSourceName;
@@ -422,8 +419,8 @@ Reference< XConnection> calcConnection(
 
                     if (hasProperty(s_sUserProp, xRowSetProps))
                         xRowSetProps->getPropertyValue(s_sUserProp) >>= sUser;
-                    if (hasProperty(s_sPwdProp, xRowSetProps))
-                        xRowSetProps->getPropertyValue(s_sPwdProp) >>= sPwd;
+                    if (hasProperty(PROPERTY_PASSWORD, xRowSetProps))
+                        xRowSetProps->getPropertyValue(PROPERTY_PASSWORD) >>= sPwd;
                     xReturn = getConnection(sDataSourceName, sUser, sPwd, _rxFactory);
                 }
                 else if (sURL.getLength())
@@ -436,8 +433,8 @@ Reference< XConnection> calcConnection(
                         ::rtl::OUString sUser, sPwd;
                         if (hasProperty(s_sUserProp, xRowSetProps))
                             xRowSetProps->getPropertyValue(s_sUserProp) >>= sUser;
-                        if (hasProperty(s_sPwdProp, xRowSetProps))
-                            xRowSetProps->getPropertyValue(s_sPwdProp) >>= sPwd;
+                        if (hasProperty(PROPERTY_PASSWORD, xRowSetProps))
+                            xRowSetProps->getPropertyValue(PROPERTY_PASSWORD) >>= sPwd;
                         if (sUser.getLength())
                         {   // use user and pwd together with the url
                             Sequence< PropertyValue> aInfo(2);
@@ -476,9 +473,7 @@ Reference< XConnection> calcConnection(
 }
 
 //------------------------------------------------------------------------------
-Reference< XNameAccess> getTableFields(
-            const Reference< XConnection>& _rxConn,
-            const ::rtl::OUString& _rName)
+Reference< XNameAccess> getTableFields(const Reference< XConnection>& _rxConn,const ::rtl::OUString& _rName)
 {
     Reference< XTablesSupplier> xSupplyTables(_rxConn, UNO_QUERY);
     OSL_ENSHURE(xSupplyTables.is(), "::getTableFields : invalid connection !");
@@ -486,7 +481,8 @@ Reference< XNameAccess> getTableFields(
     Reference< XNameAccess> xTables( xSupplyTables->getTables());
     if (xTables.is() && xTables->hasByName(_rName))
     {
-        Reference< XColumnsSupplier> xTableCols(*(Reference< XInterface >*)xTables->getByName(_rName).getValue(), UNO_QUERY);
+        Reference< XColumnsSupplier> xTableCols;
+        xTables->getByName(_rName) >>= xTableCols;
         OSL_ENSHURE(xTableCols.is(), "::getTableFields : invalid table !");
             // the table is expected to support the service sddb::Table, which requires an XColumnsSupplier interface
 
@@ -713,12 +709,8 @@ void TransferFormComponentProperties(
         Any aFormatKey( xOldProps->getPropertyValue(sPropFormatKey) );
         if (aFormatKey.hasValue())
         {
-            Any aSupplier( xOldProps->getPropertyValue(sPropFormatsSupplier) );
-            OSL_ENSHURE(isAReference(aSupplier.getValueType(), static_cast< XNumberFormatsSupplier*>(NULL)),
-                "TransferFormComponentProperties : invalid property type !");
             Reference< XNumberFormatsSupplier> xSupplier;
-            if (aSupplier.hasValue())
-                xSupplier = *(Reference< XNumberFormatsSupplier>*)aSupplier.getValue();
+            xOldProps->getPropertyValue(sPropFormatsSupplier) >>= xSupplier;
             if (xSupplier.is())
             {
                 Reference< XNumberFormats> xFormats(xSupplier->getNumberFormats());
@@ -799,12 +791,8 @@ void TransferFormComponentProperties(
     {
         // zuerst die Formatierung
         // einen Supplier koennen wir nicht setzen, also muss das neue Set schon einen mitbringen
-        Any aSupplier( xNewProps->getPropertyValue(sPropFormatsSupplier) );
-        OSL_ENSHURE(isAReference(aSupplier, static_cast< XNumberFormatsSupplier*>(NULL)),
-            "TransferFormComponentProperties : invalid property type !");
         Reference< XNumberFormatsSupplier> xSupplier;
-        if (aSupplier.hasValue())
-            xSupplier = *(Reference< XNumberFormatsSupplier>*)aSupplier.getValue();
+        xNewProps->getPropertyValue(sPropFormatsSupplier) >>= xSupplier;
         if (xSupplier.is())
         {
             Reference< XNumberFormats> xFormats(xSupplier->getNumberFormats());
@@ -933,21 +921,19 @@ Reference< XSQLQueryComposer> getCurrentSettingsComposer(
             // as this reflects the status after the last execute, not the currently set properties
 
             ::rtl::OUString sStatement;
-            const ::rtl::OUString sPropCommand = ::rtl::OUString::createFromAscii("Command");
             const ::rtl::OUString sPropCommandType = ::rtl::OUString::createFromAscii("CommandType");
             const ::rtl::OUString sPropFilter = ::rtl::OUString::createFromAscii("Filter");
             const ::rtl::OUString sPropOrder = ::rtl::OUString::createFromAscii("Order");
             const ::rtl::OUString sPropApplyFilter = ::rtl::OUString::createFromAscii("ApplyFilter");
-            const ::rtl::OUString sPropEscapeProcessing = ::rtl::OUString::createFromAscii("EscapeProcessing");
 
             // first ensure we have all properties needed
-            if (hasProperty(sPropCommand, _rxRowSetProps) && hasProperty(sPropCommandType, _rxRowSetProps)
+            if (hasProperty(PROPERTY_COMMAND, _rxRowSetProps) && hasProperty(sPropCommandType, _rxRowSetProps)
                 && hasProperty(sPropFilter, _rxRowSetProps) && hasProperty(sPropOrder, _rxRowSetProps)
-                && hasProperty(sPropEscapeProcessing, _rxRowSetProps) && hasProperty(sPropApplyFilter, _rxRowSetProps))
+                && hasProperty(PROPERTY_ESCAPEPROCESSING, _rxRowSetProps) && hasProperty(sPropApplyFilter, _rxRowSetProps))
             {
                 sal_Int32 nCommandType = getINT32(_rxRowSetProps->getPropertyValue(sPropCommandType));
-                ::rtl::OUString sCommand = getString(_rxRowSetProps->getPropertyValue(sPropCommand));
-                sal_Bool bEscapeProcessing = getBOOL(_rxRowSetProps->getPropertyValue(sPropEscapeProcessing));
+                ::rtl::OUString sCommand = getString(_rxRowSetProps->getPropertyValue(PROPERTY_COMMAND));
+                sal_Bool bEscapeProcessing = getBOOL(_rxRowSetProps->getPropertyValue(PROPERTY_ESCAPEPROCESSING));
                 switch (nCommandType)
                 {
                     case CommandType::COMMAND:
@@ -981,21 +967,22 @@ Reference< XSQLQueryComposer> getCurrentSettingsComposer(
                         if (!xQueries.is() || !xQueries->hasByName(sCommand))
                             break;
 
-                        Reference< XPropertySet> xQueryProps(*(Reference< XInterface>*)xQueries->getByName(sCommand).getValue(), UNO_QUERY);
+                        Reference< XPropertySet> xQueryProps;
+                        xQueries->getByName(sCommand) >>= xQueryProps;
                         if (!xQueryProps.is())
                             break;
 
                         //  a native query ?
-                        if (!hasProperty(sPropEscapeProcessing, xQueryProps))
+                        if (!hasProperty(PROPERTY_ESCAPEPROCESSING, xQueryProps))
                             break;
-                        if (!getBOOL(xQueryProps->getPropertyValue(sPropEscapeProcessing)))
+                        if (!getBOOL(xQueryProps->getPropertyValue(PROPERTY_ESCAPEPROCESSING)))
                             break;
 
-                        if (!hasProperty(sPropCommand, xQueryProps))
+                        if (!hasProperty(PROPERTY_COMMAND, xQueryProps))
                             break;
 
                         // the command used by the query
-                        sStatement = getString(xQueryProps->getPropertyValue(sPropCommand));
+                        sStatement = getString(xQueryProps->getPropertyValue(PROPERTY_COMMAND));
 
                         // use an additional composer to build a statement from the query filter/order props
                         Reference< XSQLQueryComposerFactory> xFactory(xConn, UNO_QUERY);
@@ -1141,6 +1128,9 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2000/11/13 07:13:52  oj
+ *  wrong use of replaceAt
+ *
  *  Revision 1.8  2000/11/10 13:39:59  oj
  *  #80159# use of XInteractionHandler when no user nor password is given
  *
