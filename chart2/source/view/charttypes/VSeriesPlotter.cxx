@@ -623,7 +623,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( const VDataSeries& rVDataSeri
         uno::Reference< XRegressionCurve > xRegressionCurve( aCurveList[nN] );
         xRegressionCurve->recalculateRegression( rVDataSeries.getAllX(), rVDataSeries.getAllY() );
 
-        sal_Int32 nRegressionPointCount = 20;//@todo find a more optimal solution if more complicated curve types are introduced
+        sal_Int32 nRegressionPointCount = 50;//@todo find a more optimal solution if more complicated curve types are introduced
         drawing::PolyPolygonShape3D aRegressionPoly;
         aRegressionPoly.SequenceX.realloc(1);
         aRegressionPoly.SequenceY.realloc(1);
@@ -631,7 +631,8 @@ void VSeriesPlotter::createRegressionCurvesShapes( const VDataSeries& rVDataSeri
         aRegressionPoly.SequenceX[0].realloc(nRegressionPointCount);
         aRegressionPoly.SequenceY[0].realloc(nRegressionPointCount);
         aRegressionPoly.SequenceZ[0].realloc(nRegressionPointCount);
-        for(sal_Int32 nP=0; nP<nRegressionPointCount; nP++ )
+        sal_Int32 nRealPointCount=0;
+        for(sal_Int32 nP=0; nP<nRegressionPointCount; nP++)
         {
             double fLogicX = fMinX + nP*(fMaxX-fMinX)/double(nRegressionPointCount-1);
             double fLogicY = xRegressionCurve->getCurveValue( fLogicX );
@@ -648,21 +649,32 @@ void VSeriesPlotter::createRegressionCurvesShapes( const VDataSeries& rVDataSeri
                         SequenceToPosition3D(
                             m_pPosHelper->getTransformationLogicToScene()->transform(
                                 Position3DToSequence(aScaledLogicPosition) ) ) );
-                aRegressionPoly.SequenceX[0][nP] = aTransformedPosition.PositionX;
-                aRegressionPoly.SequenceY[0][nP] = aTransformedPosition.PositionY;
+                aRegressionPoly.SequenceX[0][nRealPointCount] = aTransformedPosition.PositionX;
+                aRegressionPoly.SequenceY[0][nRealPointCount] = aTransformedPosition.PositionY;
+                nRealPointCount++;
             }
         }
+        aRegressionPoly.SequenceX[0].realloc(nRealPointCount);
+        aRegressionPoly.SequenceY[0].realloc(nRealPointCount);
+        aRegressionPoly.SequenceZ[0].realloc(nRealPointCount);
+
         drawing::PolyPolygonShape3D aClippedPoly;
         Clipping::clipPolygonAtRectangle( aRegressionPoly, m_pPosHelper->getTransformedClipDoubleRect(), aClippedPoly );
         aRegressionPoly = aClippedPoly;
+
+        if( !aRegressionPoly.SequenceX[0].getLength() )
+            continue;
 
         uno::Reference< beans::XPropertySet > xCurveModelProp( xRegressionCurve, uno::UNO_QUERY );
         VLineProperties aVLineProperties;
         aVLineProperties.initFromPropertySet( xCurveModelProp );
 
+        //create an extra group shape for each curve for selection handling
+        uno::Reference< drawing::XShapes > xRegressionGroupShapes =
+            createGroupShape( xTarget, rVDataSeries.getDataCurveCID( xCurveModelProp ) );
         uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
-            xTarget, PolyToPointSequence( aRegressionPoly ), aVLineProperties );
-        m_pShapeFactory->setShapeName( xShape, rVDataSeries.getDataCurveCID( xCurveModelProp ) );
+            xRegressionGroupShapes, PolyToPointSequence( aRegressionPoly ), aVLineProperties );
+        m_pShapeFactory->setShapeName( xShape, C2U("MarkHandles") );
     }
 }
 
