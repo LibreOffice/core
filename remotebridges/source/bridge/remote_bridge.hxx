@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remote_bridge.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-28 08:47:31 $
+ *  last change: $Author: jbu $ $Date: 2001-05-02 14:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,11 +162,11 @@ namespace remotebridges_bridge
         static void SAL_CALL thisAcquire( remote_InstanceProvider * );
         static void SAL_CALL thisRelease( remote_InstanceProvider * );
         static void SAL_CALL thisGetInstance( remote_InstanceProvider * pProvider ,
-                                     uno_Environment *pEnvRemote,
-                                     remote_Interface **ppRemoteI,
-                                     rtl_uString *pInstanceName,
-                                     typelib_InterfaceTypeDescription *pType
-                                     );
+                                              uno_Environment *pEnvRemote,
+                                              remote_Interface **ppRemoteI,
+                                              rtl_uString *pInstanceName,
+                                              typelib_InterfaceTypeDescription *pType,
+                                              uno_Any **ppException );
 
     private:
         ::com::sun::star::uno::Reference <

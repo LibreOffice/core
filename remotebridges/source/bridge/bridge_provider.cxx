@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridge_provider.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-28 08:47:30 $
+ *  last change: $Author: jbu $ $Date: 2001-05-02 14:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,6 @@ namespace remotebridges_bridge
 
     OInstanceProviderWrapper::~OInstanceProviderWrapper()
     {
-#ifdef VERBOSE
-        printf( "Instance Provider Wrapper dies\n" );
-#endif
     }
 
     void OInstanceProviderWrapper::thisAcquire( remote_InstanceProvider *p )
@@ -111,12 +108,41 @@ namespace remotebridges_bridge
         }
     }
 
+    static convertToRemoteRuntimeException ( uno_Any **ppException,
+                                             const ::rtl::OUString &sMessage,
+                                             const Reference< XInterface > &rContext,
+                                             Mapping &map )
+    {
+
+        uno_type_any_construct( *ppException ,
+                                0 ,
+                                getCppuType( (RuntimeException  *)0 ).getTypeLibType() ,
+                                0 );
+
+        typelib_CompoundTypeDescription * pCompType = 0 ;
+        getCppuType( (Exception*)0 ).getDescription( (typelib_TypeDescription **) &pCompType );
+        if( ! ((typelib_TypeDescription *)pCompType)->bComplete )
+        {
+            typelib_typedescription_complete( (typelib_TypeDescription**) &pCompType );
+        }
+
+        char *pValue = (char*) (*ppException)->pData;
+        rtl_uString_assign( (rtl_uString ** ) pValue  , sMessage.pData );
+
+        *((remote_Interface**) pValue+pCompType->pMemberOffsets[1]) =
+            (remote_Interface*) map.mapInterface(
+                rContext.get(), getCppuType( &rContext) );
+
+        typelib_typedescription_release( (typelib_TypeDescription *) pCompType );
+    }
+
     void OInstanceProviderWrapper::thisGetInstance(
         remote_InstanceProvider * pProvider ,
         uno_Environment *pEnvRemote,
         remote_Interface **ppRemoteI,
         rtl_uString *pInstanceName,
-        typelib_InterfaceTypeDescription *pType
+        typelib_InterfaceTypeDescription *pType,
+        uno_Any **ppException
         )
     {
         OInstanceProviderWrapper * m = (OInstanceProviderWrapper *)pProvider;
@@ -131,35 +157,42 @@ namespace remotebridges_bridge
         if( OUString( pType->aBase.pTypeName ) ==
             getCppuType( (Reference<XInterface>*)0).getTypeName() )
         {
+            OUString sCppuName( RTL_CONSTASCII_USTRINGPARAM( CPPU_CURRENT_LANGUAGE_BINDING_NAME ) );
+
+            uno_Environment *pEnvThis = 0;
+            uno_getEnvironment( &pEnvThis ,
+                                sCppuName.pData ,
+                                0 );
+            Mapping map( pEnvThis , pEnvRemote );
+            pEnvThis->release( pEnvThis );
+
             try
             {
                 Reference< XInterface > r = m->m_rProvider->getInstance(
                     OUString( pInstanceName ) );
-
-                OUString sCppuName( RTL_CONSTASCII_USTRINGPARAM( CPPU_CURRENT_LANGUAGE_BINDING_NAME ) );
-                uno_Environment *pEnvThis = 0;
-                uno_getEnvironment( &pEnvThis ,
-                                    sCppuName.pData ,
-                                    0 );
-
-                Mapping map( pEnvThis , pEnvRemote );
 
                 *ppRemoteI = (remote_Interface*) map.mapInterface (
                     r.get(),
                     getCppuType( (Reference< XInterface > *) 0 )
                 );
 
-                pEnvThis->release( pEnvThis );
-
                 if( *ppRemoteI && m->m_pBridgeCallback )
                 {
                     m->m_pBridgeCallback->objectMappedSuccesfully();
                     m->m_pBridgeCallback = 0;
                 }
+                *ppException = 0;
             }
-            catch( ::com::sun::star::container::NoSuchElementException & )
+            catch( ::com::sun::star::container::NoSuchElementException &e )
             {
-                // simply pass a null reference
+                // NoSuchElementException not specified, so convert it to a runtime exception
+                convertToRemoteRuntimeException(
+                    ppException , e.Message.pData , e.Context.get(), map );
+            }
+            catch( ::com::sun::star::uno::RuntimeException &e )
+            {
+                convertToRemoteRuntimeException(
+                    ppException , e.Message.pData , e.Context.get(), map );
             }
 
         }

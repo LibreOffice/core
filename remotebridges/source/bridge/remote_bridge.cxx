@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remote_bridge.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 16:16:37 $
+ *  last change: $Author: jbu $ $Date: 2001-05-02 14:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,50 +225,89 @@ namespace remotebridges_bridge
     {
         Reference < XInterface > rReturn;
 
-        if( m_pContext && m_pContext->getRemoteInstance )
+        remote_Context *pContext = 0;
+        {
+            MutexGuard guard( m_mutex );
+            if( m_pContext && m_pContext->getRemoteInstance )
+            {
+                pContext = m_pContext;
+                pContext->aBase.acquire( (uno_Context*)pContext );
+            }
+        }
+        if( pContext )
         {
             // get the appropriate remote environment
             uno_Environment *pEnvRemote = 0;
-            uno_getEnvironment( &pEnvRemote , m_sProtocol.pData , m_pContext );
+            uno_getEnvironment( &pEnvRemote , m_sProtocol.pData , pContext );
 
             if( ! pEnvRemote )
             {
-                return Reference< XInterface > ();
+                pContext->aBase.release( (uno_Context*) pContext );
+                throw RuntimeException(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "RemoteBridge: bridge already disposed" ) ),
+                    Reference< XInterface > () );
             }
 
             Type type = getCppuType( (Reference < XInterface > * ) 0 );
 
             remote_Interface *pRemoteI = 0;
-            m_pContext->getRemoteInstance(
+            uno_Any exception;
+            uno_Any *pException = &exception;
+
+            pContext->getRemoteInstance(
                 pEnvRemote,
                 &pRemoteI,
                 sInstanceName.pData,
-                type.getTypeLibType()  );
+                type.getTypeLibType(),
+                &pException );
+            pContext->aBase.release( (uno_Context*) pContext );
+            pContext = 0;
 
-            if( pRemoteI )
+            uno_Environment *pEnvCpp =0;
+            OUString sCppuName( RTL_CONSTASCII_USTRINGPARAM( CPPU_CURRENT_LANGUAGE_BINDING_NAME ) );
+            uno_getEnvironment( &pEnvCpp ,
+                                sCppuName.pData ,
+                                0 );
+            Mapping map( pEnvRemote , pEnvCpp );
+
+            pEnvCpp->release( pEnvCpp );
+            pEnvRemote->release( pEnvRemote );
+
+            if( pException )
+            {
+                typelib_CompoundTypeDescription * pCompType = 0 ;
+                getCppuType( (Exception*)0 ).getDescription( (typelib_TypeDescription **) &pCompType );
+
+                if( ! ((typelib_TypeDescription *)pCompType)->bComplete )
+                {
+                    typelib_typedescription_complete( (typelib_TypeDescription**) &pCompType );
+                }
+                XInterface *pXInterface = (XInterface *) map.mapInterface(
+                    *(remote_Interface**) ( ((char*)pException->pData)+pCompType->pMemberOffsets[1] ),
+                    getCppuType( (Reference< XInterface > *)0 ) );
+                RuntimeException myException(
+                    *((rtl_uString **)pException->pData),
+                    Reference< XInterface > ( pXInterface , SAL_NO_ACQUIRE) );
+                uno_any_destruct( pException , 0 );
+
+                throw myException;
+            }
+            else if( pRemoteI )
             {
                 // got an interface !
-                uno_Environment *pEnvCpp =0;
-                OUString sCppuName( RTL_CONSTASCII_USTRINGPARAM( CPPU_CURRENT_LANGUAGE_BINDING_NAME ) );
-                uno_getEnvironment( &pEnvCpp ,
-                                    sCppuName.pData ,
-                                    0 );
-
-                Mapping map( pEnvRemote , pEnvCpp );
-
                 XInterface * pCppI = ( XInterface * ) map.mapInterface( pRemoteI, type );
-
-                rReturn = Reference<XInterface > ( pCppI );
-
-                pCppI->release( );
-
+                rReturn = Reference<XInterface > ( pCppI, SAL_NO_ACQUIRE );
                 pRemoteI->release( pRemoteI );
-                pEnvCpp->release( pEnvCpp );
                 objectMappedSuccesfully();
             }
-
-            pEnvRemote->release( pEnvRemote );
         }
+        else
+        {
+            throw RuntimeException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "RemoteBridge: bridge already disposed." ) ),
+                Reference< XInterface > () );
+        }
+
         return rReturn;
     }
 
