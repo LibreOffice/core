@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cp $ $Date: 2002-05-29 13:38:51 $
+ *  last change: $Author: mt $ $Date: 2002-06-14 08:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1173,11 +1173,17 @@ BOOL MiscSettings::GetEnableATToolSupport() const
 {
     if( mpData->mnEnableATT == (USHORT)~0 )
     {
-        rtl::OUString aEnable =
-            vcl::SettingsConfigItem::get()->
-            getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accessibility" ) ),
-                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableATToolSupport" ) ) );
-        mpData->mnEnableATT = aEnable.equalsIgnoreAsciiCaseAscii( "true" ) ? TRUE : FALSE;
+        static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
+        if( !pEnv || !*pEnv )
+        {
+            rtl::OUString aEnable =
+                vcl::SettingsConfigItem::get()->
+                getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accessibility" ) ),
+                          rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableATToolSupport" ) ) );
+            mpData->mnEnableATT = aEnable.equalsIgnoreAsciiCaseAscii( "true" ) ? TRUE : FALSE;
+        }
+        else
+            mpData->mnEnableATT = true;
     }
     return (BOOL)mpData->mnEnableATT;
 }
@@ -1186,11 +1192,17 @@ BOOL MiscSettings::GetEnableATToolSupport() const
 
 void MiscSettings::SetEnableATToolSupport( BOOL bEnable )
 {
-    vcl::SettingsConfigItem::get()->
-        setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accessibility" ) ),
-                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableATToolSupport" ) ),
-                  rtl::OUString::createFromAscii( bEnable ? "true" : "false" ) );
-    mpData->mnEnableATT = bEnable;
+    if ( bEnable != mpData->mnEnableATT )
+    {
+        if( bEnable && !ImplInitAccessBridge() )
+            bEnable = FALSE;
+
+        vcl::SettingsConfigItem::get()->
+            setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accessibility" ) ),
+                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableATToolSupport" ) ),
+                      rtl::OUString::createFromAscii( bEnable ? "true" : "false" ) );
+        mpData->mnEnableATT = bEnable;
+    }
 }
 
 // =======================================================================

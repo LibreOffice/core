@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-07 15:47:26 $
+ *  last change: $Author: mt $ $Date: 2002-06-14 08:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,15 @@
 #ifndef _VCL_UNOWRAP_HXX
 #include <unowrap.hxx>
 #endif
+#ifndef _VCL_UNOHELP_HXX
+#include <unohelp.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_BRIDGE_XACCESSIBLETOPWINDOWMAP_HPP_
+#include <drafts/com/sun/star/accessibility/bridge/XAccessibleTopWindowMap.hpp>
 #endif
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -115,6 +121,11 @@
 #include <stdio.h>
 
 #pragma hdrstop
+
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace drafts::com::sun::star::accessibility::bridge;
+using namespace rtl;
 
 // =======================================================================
 
@@ -252,6 +263,32 @@ ResMgr* ImplGetResMgr()
         }
     }
     return pSVData->mpResMgr;
+}
+
+bool ImplInitAccessBridge()
+{
+    bool bSuccess = true;
+    ImplSVData* pSVData = ImplGetSVData();
+    if( ! pSVData->mxAccessBridge.is() )
+    {
+        try
+        {
+            Reference< XMultiServiceFactory > xFactory(vcl::unohelper::GetMultiServiceFactory());
+
+            if(xFactory.is())
+            {
+                pSVData->mxAccessBridge = Reference< XAccessibleTopWindowMap >( xFactory->createInstance(
+                                                                                                         OUString::createFromAscii( "drafts.com.sun.star.accessibility.bridge.AccessBridge" ) ), UNO_QUERY );
+                if( !pSVData->mxAccessBridge.is() )
+                    bSuccess = false;
+            }
+        }
+        catch(::com::sun::star::uno::Exception exception)
+        {
+            bSuccess = false;
+        }
+    }
+    return bSuccess;
 }
 
 // -----------------------------------------------------------------------
