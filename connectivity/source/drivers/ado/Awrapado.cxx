@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapado.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:49:51 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,7 +571,6 @@ sal_Int32 WpADOField::GetDefinedSize() const
     OSL_ENSURE(pInterface,"Interface is null!");
     aValVar.setEmpty();
     sal_Bool bOk = SUCCEEDED(pInterface->get_Value(&aValVar));
-    OSL_ENSURE(bOk,"get_Value doesn't work!");
 }
 
  OLEVariant WpADOField::get_Value() const
@@ -1141,7 +1140,7 @@ sal_Int32 WpADOColumn::get_DefinedSize() const
     pInterface->get_DefinedSize(&nPrec);
     return nPrec;
 }
-sal_Int32 WpADOColumn::get_NumericScale() const
+sal_uInt8 WpADOColumn::get_NumericScale() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     sal_uInt8 nPrec=0;
@@ -2158,7 +2157,7 @@ ADORecordset* WpADOConnection::getColumnPrivileges( const ::com::sun::star::uno:
     return pRecordset;
 }
 // -----------------------------------------------------------------------------
-ADORecordset* WpADOConnection::getTypeInfo( )
+ADORecordset* WpADOConnection::getTypeInfo(DataTypeEnum _eType)
 {
     HRESULT hr = S_OK;
     // Create elements used in the array
