@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: af $ $Date: 2002-06-07 08:12:46 $
+ *  last change: $Author: af $ $Date: 2002-06-12 12:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1269,12 +1269,12 @@ void AccessibleShape::disposing (void)
     if (pStateSet != NULL)
         pStateSet->RemoveState (AccessibleStateType::FOCUSED);
 
-    // Unregister at broadcasters.
+    // Unregister from broadcasters.
     Reference<lang::XComponent> xComponent (mxShape, uno::UNO_QUERY);
     if (xComponent.is())
         xComponent->removeEventListener (this);
 
-    // Register at model as document::XEventListener.
+    // Unregister from model.
     if (maShapeTreeInfo.GetModelBroadcaster().is())
         maShapeTreeInfo.GetModelBroadcaster()->removeEventListener (
             static_cast<document::XEventListener*>(this));
