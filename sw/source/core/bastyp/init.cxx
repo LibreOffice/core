@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2002-05-13 12:08:58 $
+ *  last change: $Author: mba $ $Date: 2002-06-10 17:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,7 +579,7 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { 0, SFX_ITEM_POOLABLE },                           // RES_LAYOUT_SPLIT
     { 0, 0 },                                           // RES_CHAIN
     { 0, SFX_ITEM_POOLABLE },                           // RES_TEXTGRID
-    { 0, SFX_ITEM_POOLABLE },                           // RES_LINENUMBER
+    { FN_FORMAT_LINENUMBER, SFX_ITEM_POOLABLE },        // RES_LINENUMBER
     { 0, SFX_ITEM_POOLABLE },                           // RES_FTN_AT_TXTEND
     { 0, SFX_ITEM_POOLABLE },                           // RES_END_AT_TXTEND
     { 0, SFX_ITEM_POOLABLE },                           // RES_COLUMNBALANCE
