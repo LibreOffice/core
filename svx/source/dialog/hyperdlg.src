@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-20 21:23:22 $
+ *  last change: $Author: kz $ $Date: 2002-01-09 21:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,7 +772,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ swedish ] = "E-post & nyheter";
         Text[ polish ] = "Poczta i wiadomo�ci";
         Text[ portuguese_brazilian ] = "Mail & News";
-        Text[ japanese ] = "メールとニュース";
+        Text[ japanese ] = "E-mail＆ニュース";
         Text[ korean ] = "메일 & 뉴스";
         Text[ chinese_simplified ] = "电子邮件和新闻组";
         Text[ chinese_traditional ] = "電子郵件和新聞群組";
@@ -2618,7 +2618,7 @@ String RID_SVXSTR_HYPERDLG_HLMAILTP
     Text[ swedish ] = "E-post & nyheter";
     Text[ polish ] = "Poczta i wiadomo�ci";
     Text[ portuguese_brazilian ] = "Mail & News";
-    Text[ japanese ] = "メール & ニュース";
+    Text[ japanese ] = "E-mail＆ニュース";
     Text[ korean ] = "메일 & 뉴스";
     Text[ chinese_simplified ] = "电子邮件和新闻组";
     Text[ chinese_traditional ] = "電子郵件和新聞";
@@ -2757,6 +2757,7 @@ Image RID_SVXBMP_HLDOCNTP
     ImageBitmap = Bitmap { File = "hldocntp.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
