@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-24 07:49:06 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 08:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ OTableWindow::~OTableWindow()
         stopComponentListening(xComponent);
     if (m_pListBox)
     {
-        EmptyListBox();
+        OSL_ENSURE(m_pListBox->GetEntryCount()==0,"Forgot to call EmptyListbox()!");
         ::std::auto_ptr<Window> aTemp(m_pListBox);
         m_pListBox = NULL;
     }
@@ -255,7 +255,10 @@ BOOL OTableWindow::FillListBox()
     Image aPrimKeyImage = aImageList.GetImage(IMG_PRIMARY_KEY);
 
     if (GetData()->IsShowAll())
-        m_pListBox->InsertEntry( ::rtl::OUString::createFromAscii("*") );
+    {
+        SvLBoxEntry* pEntry = m_pListBox->InsertEntry( ::rtl::OUString::createFromAscii("*") );
+        pEntry->SetUserData( createUserData(NULL,false) );
+    }
 
     ::osl::MutexGuard aGuard( m_aMutex  );
     // first we need the keys from the table
@@ -287,21 +290,37 @@ BOOL OTableWindow::FillListBox()
         const ::rtl::OUString* pBegin = aColumns.getConstArray();
         const ::rtl::OUString* pEnd = pBegin + aColumns.getLength();
 
+        SvLBoxEntry* pEntry = NULL;
         for (; pBegin != pEnd; ++pBegin)
         {
+            bool bPrimaryKeyColumn;
             // is this column in the primary key
-            if (xPKeyColumns.is() && xPKeyColumns->hasByName(*pBegin))
-                m_pListBox->InsertEntry(*pBegin, aPrimKeyImage, aPrimKeyImage);
+            if ( bPrimaryKeyColumn = (xPKeyColumns.is() && xPKeyColumns->hasByName(*pBegin)) )
+                pEntry = m_pListBox->InsertEntry(*pBegin, aPrimKeyImage, aPrimKeyImage);
             else
-                m_pListBox->InsertEntry(*pBegin);
+                pEntry = m_pListBox->InsertEntry(*pBegin);
+
+            Reference<XPropertySet> xColumn;
+            m_xColumns->getByName(*pBegin) >>= xColumn;
+            pEntry->SetUserData( createUserData(xColumn,bPrimaryKeyColumn) );
         }
     }
 
     return TRUE;
 }
-
+// -----------------------------------------------------------------------------
+void* OTableWindow::createUserData(const Reference< XPropertySet>& _xColumn,bool _bPrimaryKey)
+{
+    return NULL;
+}
+// -----------------------------------------------------------------------------
+void OTableWindow::deleteUserData(void*& _pUserData)
+{
+    OSL_ENSURE(!_pUserData,"INVALID call. Need to delete the userclass!");
+    _pUserData = NULL;
+}
 //------------------------------------------------------------------------------
-void OTableWindow::EmptyListBox()
+void OTableWindow::clearListBox()
 {
     // da ich defaultmaessig keine USerData an die Items haenge, kann ich hier einfach loeschen
     if ( m_pListBox )
@@ -310,6 +329,8 @@ void OTableWindow::EmptyListBox()
 
         while(pEntry)
         {
+            void* pUserData = pEntry->GetUserData();
+            deleteUserData(pUserData);
             SvLBoxEntry* pNextEntry = m_pListBox->Next(pEntry);
             m_pListBox->GetModel()->Remove(pEntry);
             pEntry = pNextEntry;
@@ -385,7 +406,7 @@ BOOL OTableWindow::Init()
                 m_pListBox->Show();
 
                 // die Felder in die ListBox eintragen
-                EmptyListBox();
+                clearListBox();
                 if (bInit = FillListBox())
                     m_pListBox->SelectAll(FALSE);
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-24 07:49:59 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 08:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,7 @@
 #ifndef DBAUI_TABLEWINDOWDATA_HXX
 #include "TableWindowData.hxx"
 #endif
-#ifndef _VECTOR_
 #include <vector>
-#endif
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
 #endif
@@ -114,6 +112,7 @@ namespace dbaui
         OTableWindowTitle       m_aTitle;
         OTableWindowListBox*    m_pListBox;
         IAccessibleHelper*      m_pAccessible;
+
     private:
         // the columns of the table
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    m_xTable;
@@ -137,11 +136,8 @@ namespace dbaui
 
         virtual OTableWindowListBox*    CreateListBox();
             // wird im ERSTEN Init aufgerufen
-        virtual BOOL FillListBox();
+        BOOL FillListBox();
             // wird in JEDEM Init aufgerufen
-
-        virtual void EmptyListBox();
-            // Liste wird geleert, damit haben abgeleitete Klassen die Moeglichkeit, eventuell gesetzte UserData zu loeschen
 
         virtual void OnEntryDoubleClicked(SvLBoxEntry* pEntry) { }
             // wird aus dem DoubleClickHdl der ListBox heraus aufgerufen
@@ -153,6 +149,25 @@ namespace dbaui
                 <TRUE/> when the table could handle the keyevent.
         */
         BOOL            HandleKeyInput( const KeyEvent& rEvt );
+
+        /** delete the user data with the equal type as created within createUserData
+            @param  _pUserData
+                The user data store in the listbox entries. Created with a call to createUserData.
+                _pUserData may be <NULL/>. _pUserData will be set to <NULL/> after call.
+        */
+        virtual void deleteUserData(void*& _pUserData);
+
+        /** creates user information that will be append at the ListBoxentry
+            @param  _xColumn
+                The corresponding column, can be <NULL/>.
+            @param  _bPrimaryKey
+                <TRUE/> when the column belongs to the primary key
+            @return
+                the user data which will be append at the listbox entry, may be <NULL/>
+        */
+        virtual void* createUserData(const ::com::sun::star::uno::Reference<
+                                    ::com::sun::star::beans::XPropertySet>& _xColumn,
+                                    bool _bPrimaryKey);
     public:
         TYPEINFO();
         OTableWindow( Window* pParent, OTableWindowData* pTabWinData);
@@ -216,6 +231,10 @@ namespace dbaui
 
         // OEventListenerAdapter
         virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );
+
+        /** clears the listbox inside. Must be called be the dtor is called.
+        */
+        void clearListBox();
     };
 }
 #endif //DBAUI_TABLEWINDOW_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTabWinUndoAct.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 08:22:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
         OSL_ENSURE(!m_pTabWin->IsVisible(), "OQueryTabWinUndoAct::~OQueryTabWinUndoAct() : *m_pTabWin sollte nicht sichtbar sein");
 
         delete m_pTabWin->GetData();
+        if ( m_pTabWin )
+            m_pTabWin->clearListBox();
         delete m_pTabWin;
 
         // und natuerlich auch die entsprechenden Connections

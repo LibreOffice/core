@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableWindow.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-10 08:23:32 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 08:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ sal_Bool OQueryTableWindow::Init()
         m_aTitle.SetText(GetAliasName());
         m_aTitle.Show();
 
-        EmptyListBox();
+        clearListBox();
             // neu zu fuellen brauche ich die nicht, da ich ja keine Tabelle habe
         m_pListBox->Show();
     }
@@ -230,101 +230,21 @@ sal_Bool OQueryTableWindow::Init()
     getTableView()->getDesignView()->getController()->InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
     return bSuccess;
 }
-//------------------------------------------------------------------------------
-sal_Bool OQueryTableWindow::FillListBox()
+// -----------------------------------------------------------------------------
+void* OQueryTableWindow::createUserData(const Reference< XPropertySet>& _xColumn,bool _bPrimaryKey)
 {
-    ModuleRes TmpRes(isHiContrast(m_pListBox) ? IMG_JOINS_H : IMG_JOINS);
-    ImageList aImageList(TmpRes);
-    Image aPrimKeyImage = aImageList.GetImage(IMG_PRIMARY_KEY);
-
-
-
-    // first we need the keys from the table
-    Reference<XKeysSupplier> xKeys(GetTable(),UNO_QUERY);
-    Reference<XNameAccess> xPKeyColumns;
-    if(xKeys.is())
-    {
-        Reference< XIndexAccess> xKeyIndex = xKeys->getKeys();
-        Reference<XColumnsSupplier> xColumnsSupplier;
-        // search the one and only primary key
-        for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
-        {
-            Reference<XPropertySet> xProp;
-            ::cppu::extractInterface(xProp,xKeyIndex->getByIndex(i));
-            OSL_ENSURE(xProp.is(),"OQueryTableWindow::FillListBox Key isn't a XPropertySet!");
-            if(xProp.is())
-            {
-                sal_Int32 nKeyType = 0;
-                xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-                if(KeyType::PRIMARY == nKeyType)
-                {
-                    xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
-                    break;
-                }
-            }
-        }
-        if(xColumnsSupplier.is())
-            xPKeyColumns = xColumnsSupplier->getColumns();
-    }
-
-    // first we need a *
-    SvLBoxEntry* pEntry = NULL;
-    if (GetData()->IsShowAll())
-    {
-        pEntry = m_pListBox->InsertEntry( ::rtl::OUString::createFromAscii("*") );
-        pEntry->SetUserData( new OTableFieldInfo() );
-    }
-
-    if(GetOriginalColumns().is())
-    {
-        Sequence< ::rtl::OUString> aColumns = GetOriginalColumns()->getElementNames();
-        const ::rtl::OUString* pBegin = aColumns.getConstArray();
-        const ::rtl::OUString* pEnd = pBegin + aColumns.getLength();
-
-        for (; pBegin != pEnd; ++pBegin)
-        {
-            OTableFieldInfo* pInfo = new OTableFieldInfo();
-            // is this column in the primary key
-            if (xPKeyColumns.is() && xPKeyColumns->hasByName(*pBegin))
-            {
-                pEntry = m_pListBox->InsertEntry(*pBegin, aPrimKeyImage, aPrimKeyImage);
-                pInfo->SetKey(TAB_PRIMARY_FIELD);
-            }
-            else
-            {
-                pEntry = m_pListBox->InsertEntry(*pBegin);
-                pInfo->SetKey(TAB_NORMAL_FIELD);
-            }
-            Reference<XPropertySet> xColumn;
-            ::cppu::extractInterface(xColumn,GetOriginalColumns()->getByName(*pBegin));
-            OSL_ENSURE(xColumn.is(),"No column!");
-            if(xColumn.is())
-                pInfo->SetDataType(::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_TYPE)));
-            pEntry->SetUserData( pInfo );
-        }
-    }
-    return sal_True;
+    OTableFieldInfo* pInfo = new OTableFieldInfo();
+    pInfo->SetKey(_bPrimaryKey ? TAB_PRIMARY_FIELD : TAB_NORMAL_FIELD);
+    if ( _xColumn.is() )
+        pInfo->SetDataType(::comphelper::getINT32(_xColumn->getPropertyValue(PROPERTY_TYPE)));
+    return pInfo;
 }
-
-//------------------------------------------------------------------------------
-void OQueryTableWindow::EmptyListBox()
+// -----------------------------------------------------------------------------
+void OQueryTableWindow::deleteUserData(void*& _pUserData)
 {
-    if(m_pListBox)
-    {
-        SvLBoxEntry* pEntry = m_pListBox->First();
-
-        while(pEntry)
-        {
-            OTableFieldInfo* pInf = (OTableFieldInfo*)pEntry->GetUserData();
-            delete pInf;
-
-            SvLBoxEntry* pNextEntry = m_pListBox->Next(pEntry);
-            m_pListBox->GetModel()->Remove(pEntry);
-            pEntry = pNextEntry;
-        }
-    }
+    delete static_cast<OTableFieldInfo*>(_pUserData);
+    _pUserData = NULL;
 }
-
 //------------------------------------------------------------------------------
 void OQueryTableWindow::OnEntryDoubleClicked(SvLBoxEntry* pEntry)
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-24 07:56:02 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 08:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,6 +400,7 @@ void OJoinTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rt
     else
     {
         delete pNewTabWinData;
+        pNewTabWin->clearListBox();
         delete pNewTabWin;
     }
 }
@@ -448,6 +449,8 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
 
         if (pTabWin == m_pLastFocusTabWin)
             m_pLastFocusTabWin = NULL;
+
+        pTabWin->clearListBox();
         delete pTabWin;
     }
 
@@ -1649,7 +1652,11 @@ void OJoinTableView::clearLayoutInformation()
     // Listen loeschen
     OTableWindowMapIterator aIter = m_aTableMap.begin();
     for(;aIter != m_aTableMap.end();++aIter)
+    {
+        if ( aIter->second )
+            aIter->second->clearListBox();
         delete aIter->second;
+    }
 
     m_aTableMap.clear();
 

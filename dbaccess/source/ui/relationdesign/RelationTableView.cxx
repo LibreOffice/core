@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationTableView.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-22 11:16:34 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 08:23:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,7 @@ void ORelationTableView::ReSync()
         {
             // das Initialisieren ging schief, dass heisst, dieses TabWin steht nicht zur Verfuegung, also muss ich es inklusive
             // seiner Daten am Dokument aufraeumen
+            pTabWin->clearListBox();
             delete pTabWin;
             arrInvalidTables.push_back(pData->GetTableName());
 
@@ -478,6 +479,7 @@ void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const 
     else
     {
         delete pNewTabWinData;
+        pNewTabWin->clearListBox();
         delete pNewTabWin;
     }
 }

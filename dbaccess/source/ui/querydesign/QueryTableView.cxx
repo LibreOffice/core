@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-22 10:43:25 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 08:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,32 +157,6 @@ using namespace ::com::sun::star::container;
 TYPEINIT1(OQueryTableView, OJoinTableView);
 
 //------------------------------------------------------------------------------
-::rtl::OUString ConvertAlias(const ::rtl::OUString& _rName)
-{
-    if (!_rName.getLength())
-        return _rName;
-
-    String rName(_rName);
-
-    const sal_Unicode* pStr = rName.GetBuffer();
-    sal_Bool bValid(!((*pStr >= 48) && (*pStr <=  57)));    // keine Zahl am Anfang
-
-    String aTmp;
-    if (bValid)
-        aTmp = rName;
-
-    for (sal_Int32 i=0; i < rName.Len() && *pStr;i++, pStr++ ){
-        if ( ((*pStr >= 97) && (*pStr <= 122)) ||((*pStr >= 65) && (*pStr <=  90)) ||
-             ((*pStr >= 48) && (*pStr <=  57)) ||  *pStr == '_'                    )
-              ;
-        else
-            aTmp.SearchAndReplace(*pStr,'_');
-
-    }
-
-    return aTmp;
-}
-
 namespace
 {
     // -----------------------------------------------------------------------------
@@ -413,6 +387,7 @@ void OQueryTableView::ReSync()
         {
             // das Initialisieren ging schief, dass heisst, dieses TabWin steht nicht zur Verfuegung, also muss ich es inklusive
             // seiner Daten am Dokument aufraeumen
+            pTabWin->clearListBox();
             delete pTabWin;
             arrInvalidTables.push_back(pData->GetAliasName());
 
@@ -522,8 +497,9 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& strDatabase, const ::rtl:
         return;
     try
     {
+        Reference< XDatabaseMetaData > xMetaData = xConnection->getMetaData();
         ::rtl::OUString sCatalog, sSchema, sTable;
-        ::dbtools::qualifiedNameComponents(xConnection->getMetaData(),
+        ::dbtools::qualifiedNameComponents(xMetaData,
                                     strDatabase,
                                     sCatalog,
                                     sSchema,
@@ -533,7 +509,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& strDatabase, const ::rtl:
             sRealName+= ::rtl::OUString('.');
         sRealName += sTable;
 
-        AddTabWin(strDatabase, sRealName, ConvertAlias(strTableName), bNewTable);
+        AddTabWin(strDatabase, sRealName, strTableName, bNewTable);
     }
     catch(SQLException&)
     {
@@ -1060,10 +1036,13 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
             bSuccess = sal_True;
         }
         else
+        {
             //////////////////////////////////////////////////////////////////
             // Initialisierung fehlgeschlagen
             // (z.B. wenn Verbindung zur Datenbank in diesem Augenblick unterbrochen worden ist)
+            pTabWin->clearListBox();
             delete pTabWin;
+        }
     }
 
     // damit habe ich das Doc natuerlich modifiziert
