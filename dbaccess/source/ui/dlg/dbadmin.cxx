@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 06:59:12 $
+ *  last change: $Author: fs $ $Date: 2001-01-26 16:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,12 @@
 #endif
 #ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
+#endif
+#ifndef _DBAUI_DETAILPAGES_HXX_
+#include "detailpages.hxx"
+#endif
+#ifndef _DBAUI_COMMONPAGES_HXX_
+#include "commonpages.hxx"
 #endif
 #ifndef _DBAUI_LOCALRESACCESS_HXX_
 #include "localresaccess.hxx"
@@ -618,7 +624,7 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     // add the initial tab pages
     AddTabPage(PAGE_GENERAL, String(ResId(STR_PAGETITLE_GENERAL)), OGeneralPage::Create, NULL);
     AddTabPage(PAGE_TABLESUBSCRIPTION, String(ResId(STR_PAGETITLE_TABLESUBSCRIPTION)), OTableSubscriptionPage::Create, NULL);
-//  AddTabPage(PAGE_QUERYADMINISTRATION, String(ResId(STR_PAGETITLE_QUERIES)), OQueryAdministrationPage::Create, NULL);
+    AddTabPage(PAGE_QUERYADMINISTRATION, String(ResId(STR_PAGETITLE_QUERIES)), OQueryAdministrationPage::Create, NULL);
 
     // no local resources needed anymore
     FreeResource();
@@ -1164,7 +1170,7 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource, 
     }
     // remove the table/query tab pages
     RemoveTabPage(PAGE_TABLESUBSCRIPTION);
-//  RemoveTabPage(PAGE_QUERYADMINISTRATION);
+    RemoveTabPage(PAGE_QUERYADMINISTRATION);
 
     // extract all relevant data from the property set of the data source
     translateProperties(_rxDatasource, *GetInputSetImpl());
@@ -1188,7 +1194,7 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource, 
     {
         OLocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
         AddTabPage(PAGE_TABLESUBSCRIPTION, String(ResId(STR_PAGETITLE_TABLESUBSCRIPTION)), OTableSubscriptionPage::Create, NULL);
-//      AddTabPage(PAGE_QUERYADMINISTRATION, String(ResId(STR_PAGETITLE_QUERIES)), OQueryAdministrationPage::Create, NULL);
+        AddTabPage(PAGE_QUERYADMINISTRATION, String(ResId(STR_PAGETITLE_QUERIES)), OQueryAdministrationPage::Create, NULL);
     }
 
     m_bResetting = sal_True;
@@ -2229,6 +2235,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30  2001/01/26 06:59:12  fs
+ *  some basics for the query administration page - not enabled yet
+ *
  *  Revision 1.29  2001/01/17 09:17:27  fs
  *  #82627# implApplyChanges: do an ShowPage after applying the changes
  *
