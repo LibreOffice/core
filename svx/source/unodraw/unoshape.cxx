@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-08 16:39:30 $
+ *  last change: $Author: cl $ $Date: 2000-12-14 09:43:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1727,17 +1727,16 @@ beans::PropertyState SAL_CALL SvxShape::getPropertyState( const OUString& Proper
 
         switch( rSet.GetItemState( pMap->nWID, sal_False ) )
         {
-        case SFX_ITEM_DONTCARE:
-        case SFX_ITEM_DISABLED:
-            return beans::PropertyState_AMBIGUOUS_VALUE;
         case SFX_ITEM_READONLY:
         case SFX_ITEM_SET:
             return beans::PropertyState_DIRECT_VALUE;
         case SFX_ITEM_DEFAULT:
             return beans::PropertyState_DEFAULT_VALUE;
         case SFX_ITEM_UNKNOWN:
+        case SFX_ITEM_DONTCARE:
+        case SFX_ITEM_DISABLED:
         default:
-            throw beans::UnknownPropertyException();
+            return beans::PropertyState_AMBIGUOUS_VALUE;
         }
     }
 }
