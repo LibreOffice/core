@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:56:03 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef SVTOOLS_URIHELPER_HXX
@@ -2432,8 +2431,11 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
             HORI_LEFT,     // left
             HORI_CENTER,   // centered
             HORI_RIGHT,    // right
-            HORI_INSIDE,   // inside
-            HORI_OUTSIDE   // outside
+            // --> OD 2004-12-06 #i36649#
+            // - inside -> HORI_LEFT and outside -> HORI_RIGHT
+            HORI_LEFT,   // inside
+            HORI_RIGHT   // outside
+            // <--
         };
 
 
@@ -2483,6 +2485,27 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         eHoriOri = aHoriOriTab[ nXAlign ];
         SwRelationOrient eHoriRel;
         eHoriRel = aHoriRelOriTab[  nXRelTo ];
+
+        // --> OD 2004-12-06 #i36649# - adjustments for certain alignments
+        if ( eHoriOri == HORI_LEFT && eHoriRel == REL_PG_FRAME )
+        {
+            // convert 'left to page' to 'from left -<width> to page text area'
+            eHoriOri = HORI_NONE;
+            eHoriRel = REL_PG_PRTAREA;
+            const long nWidth = pFSPA->nXaRight - pFSPA->nXaLeft;
+            pFSPA->nXaLeft = -nWidth;
+            pFSPA->nXaRight = 0;
+        }
+        else if ( eHoriOri == HORI_RIGHT && eHoriRel == REL_PG_FRAME )
+        {
+            // convert 'right to page' to 'from left 0 to right page border'
+            eHoriOri = HORI_NONE;
+            eHoriRel = REL_PG_RIGHT;
+            const long nWidth = pFSPA->nXaRight - pFSPA->nXaLeft;
+            pFSPA->nXaLeft = 0;
+            pFSPA->nXaRight = nWidth;
+        }
+        // <--
 
         //#111875#
         if ((eHoriRel == REL_PG_FRAME) && (eHoriOri == HORI_RIGHT))
