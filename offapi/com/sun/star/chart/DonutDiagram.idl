@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DonutDiagram.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 
     <p>Donut diagrams are also known as ring diagrams.</p>
 */
-service DonutDiagram
+published service DonutDiagram
 {
     service com::sun::star::chart::Diagram;
 };

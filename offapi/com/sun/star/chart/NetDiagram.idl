@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NetDiagram.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 
     <p>Net diagrams are also known as radar diagrams.</p>
  */
-service NetDiagram
+published service NetDiagram
 {
     service com::sun::star::chart::Diagram;
     service com::sun::star::chart::StackableDiagram;
