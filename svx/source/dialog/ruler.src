@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:13:39 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 07:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ Menu RID_SVXMN_RULER
             Text[ turkish ] = "Milimetre";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Milímetros";
+            Text[ finnish ] = "Millimetri";
         };
         MenuItem
         {
@@ -147,6 +148,7 @@ Menu RID_SVXMN_RULER
             Text[ turkish ] = "Metre";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Metro";
+            Text[ finnish ] = "Metri";
         };
         MenuItem
         {
@@ -174,6 +176,7 @@ Menu RID_SVXMN_RULER
             Text[ turkish ] = "Kilometre";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Kilómetro";
+            Text[ finnish ] = "Kilometri";
         };
         MenuItem
         {
@@ -201,6 +204,7 @@ Menu RID_SVXMN_RULER
             Text[ turkish ] = "Inç";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Pulgadas";
+            Text[ finnish ] = "Tuuma";
         };
         MenuItem
         {
@@ -230,6 +234,7 @@ Menu RID_SVXMN_RULER
             Text[ turkish ] = "Ft";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Pie";
+            Text[ finnish ] = "Jalka";
         };
         MenuItem
         {
@@ -257,6 +262,7 @@ Menu RID_SVXMN_RULER
             Text[ turkish ] = "Mil";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Millas";
+            Text[ finnish ] = "Mailia";
         };
         MenuItem
         {
@@ -384,7 +390,7 @@ String RID_SVXSTR_RULER_TAB_CENTER
     TEXT [ italian ] = "Centrato" ;
     TEXT [ portuguese_brazilian ] = "Centralizado" ;
     TEXT [ portuguese ] = "Centrado" ;
-    TEXT [ finnish ] = "Keski" ;
+    TEXT [ finnish ] = "Keskitä" ;
     TEXT [ danish ] = "Centreret" ;
     TEXT [ french ] = "Centré" ;
     TEXT [ swedish ] = "Centrerat" ;
