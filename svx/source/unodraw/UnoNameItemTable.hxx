@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNameItemTable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-01-29 17:09:20 $
+ *  last change: $Author: cl $ $Date: 2001-01-31 19:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,12 @@ private:
     SfxItemPool*    mpModelPool;
     SfxItemPool*    mpStylePool;
     USHORT          mnWhich;
+    BYTE            mnMemberId;
 
     ItemPoolVector maItemSetVector;
 
 public:
-    SvxUnoNameItemTable( SdrModel* pModel, USHORT nWhich ) throw();
+    SvxUnoNameItemTable( SdrModel* pModel, USHORT nWhich, BYTE nMemberId = 0 ) throw();
     virtual ~SvxUnoNameItemTable() throw();
 
     virtual NameOrIndex* createItem() const throw() = 0;

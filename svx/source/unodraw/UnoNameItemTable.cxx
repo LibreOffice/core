@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNameItemTable.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-28 16:24:30 $
+ *  last change: $Author: cl $ $Date: 2001-01-31 19:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,11 +81,11 @@ using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::cppu;
 
-SvxUnoNameItemTable::SvxUnoNameItemTable( SdrModel* pModel, USHORT nWhich ) throw()
+SvxUnoNameItemTable::SvxUnoNameItemTable( SdrModel* pModel, USHORT nWhich, BYTE nMemberId ) throw()
 : mpModel( pModel ),
   mpModelPool( pModel ? &pModel->GetItemPool() : NULL ),
   mpStylePool( pModel ? &pModel->GetStyleSheetPool()->GetPool() : NULL ),
-  mnWhich( nWhich )
+  mnWhich( nWhich ), mnMemberId( nMemberId )
 {
 }
 
@@ -126,7 +126,7 @@ void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aName, const un
 
     NameOrIndex* pNewItem = createItem();
     pNewItem->SetName( String( aName ) );
-    pNewItem->PutValue( aElement );
+    pNewItem->PutValue( aElement, mnMemberId );
 
     mpInSet1->Put( *pNewItem, mnWhich );
     mpInSet2->Put( *pNewItem, mnWhich );
@@ -178,7 +178,7 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aName, const u
         {
             NameOrIndex* pNewItem = createItem();
             pNewItem->SetName( aSearchName );
-            if( !pNewItem->PutValue( aElement, 0 ) )
+            if( !pNewItem->PutValue( aElement, mnMemberId ) )
                 throw lang::IllegalArgumentException();
 
             (*aIter).first->Put( *pNewItem );
@@ -211,7 +211,7 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const  OUString& aName )
 
             if( pItem && pItem->GetName() == aSearchName )
             {
-                pItem->QueryValue( aAny, 0 );
+                pItem->QueryValue( aAny, mnMemberId );
                 return aAny;
             }
         }
@@ -223,7 +223,7 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const  OUString& aName )
 
             if( pItem && pItem->GetName() == aSearchName )
             {
-                pItem->QueryValue( aAny, 0 );
+                pItem->QueryValue( aAny, mnMemberId );
                 return aAny;
             }
         }

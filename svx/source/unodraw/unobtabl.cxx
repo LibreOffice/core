@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unobtabl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-28 16:24:30 $
+ *  last change: $Author: cl $ $Date: 2001-01-31 19:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ public:
 };
 
 SvxUnoBitmapTable::SvxUnoBitmapTable( SdrModel* pModel ) throw()
-: SvxUnoNameItemTable( pModel, XATTR_FILLBITMAP )
+: SvxUnoNameItemTable( pModel, XATTR_FILLBITMAP, MID_GRAFURL )
 {
 }
 
