@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:24:32 $
+ *  last change: $Author: kz $ $Date: 2001-07-20 20:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1674,7 +1674,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ french ] = "ATTENTION : Les scripts %PRODUCTNAME Basic provenant de l'Internet seront exécutés sans vérification !" ;
         Text [ dutch ] = "PAS OP: %PRODUCTNAME Basic scripts uit Internet worden zonder controle uitgevoerd." ;
         Text [ portuguese ] = "ATENÇÃO: os scripts do %PRODUCTNAME Basic da Internet serão executados sem verificação!" ;
-        Text[ chinese_simplified ] = "×¢Òâ£º¹ú¼Ê»¥ÁªÍø´«µİµÄ %PRODUCTNAME Basic ½Å±¾²»ĞèÓÃ»§¼ì²é¾Í»áÖ±½Ó×Ô¶¯Ö´ĞĞ£¡";
+        Text[ chinese_simplified ] = "×¢Òâ£º¹ú¼Ê»¥ÁªÍø´«µİµÄ %PRODUCTNAME Basic ½Å±¾²»ĞèÊ¹ÓÃÕß¼ì²é¾Í»áÖ±½Ó×Ô¶¯Ö´ĞĞ£¡";
         Text[ russian ] = "ÂÍÈÌÀÍÈÅ: Ñêğèïòû %PRODUCTNAME Basic èç Èíòåğíåòà âûïîëíÿşòñÿ áåç ïğîâåğêè!";
         Text[ polish ] = "UWAGA: Skrypty %PRODUCTNAME Basic z Internetu bêd¹ wykonywane bez potwierdzenia!";
         Text[ japanese ] = "’ˆÓ: ²İÀ°È¯Ä‚©‚ç‚Ì %PRODUCTNAME Basic ½¸ØÌßÄ‚ÍAŠm”F‚È‚µ‚ÅÀs‚µ‚Ü‚·B";
@@ -2010,7 +2010,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 42 , 10 ) ;
         Text = "~ClassPath" ;
         Text [ English ] = "~ClassPath" ;
-        Text [ english_us ] = "~Class path" ;
+        Text [ english_us ] = "~ClassPath" ;
         Text [ italian ] = "~ClassPath" ;
         Text [ spanish ] = "~ClassPath" ;
         Text [ french ] = "ClassPath" ;
@@ -2028,7 +2028,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ greek ] = "~Class path";
         Text[ korean ] = "Å¬·¡½º °æ·Î(~C)";
         Text[ turkish ] = "~ClassPath";
-        Text[ language_user1 ] = " ";
+        Text[ language_user1 ] = "EM18.7.01 (laut AS) Java Variable: This must left the same as German";
         Text[ finnish ] = "~Class path";
         Text[ catalan ] = "~Class path";
     };
@@ -2260,6 +2260,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
 };
 
  // ******************************************************************* EOF
+
 
 
 
