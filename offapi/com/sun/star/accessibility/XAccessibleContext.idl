@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessibleContext.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 10:56:47 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,9 +124,10 @@ interface XAccessibleContext : ::com::sun::star::uno::XInterface
             If the object has an i-th child the returned value is a
             reference to that child.  Otherwise an empty reference is
             returned.
-        @throws IndexOutOfBoundsException
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
             If no child with the given index exists then an
-            <type>IndexOutOfBoundsException</type> exception is thrown.
+            <type scope="::com::sun::star::lang">IndexOutOfBoundsException</type>
+            exception is thrown.
     */
     XAccessible getAccessibleChild ([in] long i)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
