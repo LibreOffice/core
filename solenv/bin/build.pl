@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2001-04-25 17:16:47 $
+#   last change: $Author: hjs $ $Date: 2001-04-27 11:05:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.13 $ ';
+$id_str = ' $Revision: 1.14 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -200,7 +200,7 @@ sub MakeDir {
     if (!$error) {
         RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
     } else {
-        print "Error $error occurred while making $BuilidDir\n";
+        print "Error $error occurred while making $BuildDir\n";
         $ENV{mk_tmp} = "";
         exit();
     };
