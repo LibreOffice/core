@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2000-12-19 00:11:58 $
+ *  last change: $Author: cp $ $Date: 2000-12-19 17:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,10 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
             #endif
             mnStatusStyle( 0 ),
             mnPreeditStyle( 0 ),
-            mnSupportedStatusStyle( // XIMStatusCallbacks |
+            mnSupportedStatusStyle(
+                    #ifdef LINUX
+                    XIMStatusCallbacks |
+                    #endif
                     XIMStatusNothing | XIMStatusNone
                                 /*  | XIMStatusCallbacks
                                     | XIMStatusArea */ )
@@ -247,10 +250,10 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
     mbMultiLingual = pInputMethod->IsMultiLingual();
 
     mnSupportedPreeditStyle = (aIsOnTheSpot?
-                               XIMPreeditCallbacks | XIMPreeditPosition |
+                               XIMPreeditCallbacks |
                                XIMPreeditNothing | XIMPreeditNone :
-                               XIMPreeditPosition | XIMPreeditNothing |
-                               XIMPreeditNone);
+                               XIMPreeditCallbacks |
+                               XIMPreeditNothing | XIMPreeditNone);
     if (pInputMethod->UseMethod()
         && SupportInputMethodStyle( pInputMethod->GetSupportedStyles() ) )
     {
@@ -276,6 +279,29 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
 
         switch ( mnStatusStyle )
         {
+            case XIMStatusCallbacks:
+            {
+                static XIMCallback aStatusStartCallback;
+                static XIMCallback aStatusDoneCallback;
+                static XIMCallback aStatusDrawCallback;
+
+                aStatusStartCallback.callback    = (XIMProc)StatusStartCallback;
+                aStatusStartCallback.client_data = (XPointer)NULL;
+                aStatusDoneCallback.callback     = (XIMProc)StatusDoneCallback;
+                aStatusDoneCallback.client_data  = (XPointer)NULL;
+                aStatusDrawCallback.callback     = (XIMProc)StatusDrawCallback;
+                aStatusDrawCallback.client_data  = (XPointer)NULL;
+
+                mpStatusAttributes = XVaCreateNestedList (
+                        0,
+                        XNStatusStartCallback, &aStatusStartCallback,
+                        XNStatusDoneCallback,  &aStatusDoneCallback,
+                        XNStatusDrawCallback,  &aStatusDrawCallback,
+                        0 );
+
+                break;
+            }
+
             case XIMStatusArea:
             {
                 XRectangle *pStatusArea = new XRectangle;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: htajima $ $Date: 2000-12-15 01:27:51 $
+ *  last change: $Author: cp $ $Date: 2000-12-19 17:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,3 +568,26 @@ CommitStringCallback( XIC ic, XPointer client_data, XPointer call_data )
     return 0;
 }
 
+// ----------------------------------------------------------------------------------
+//
+// vi. status callbacks: for now these are empty, they are just needed for turbo linux
+//
+// ----------------------------------------------------------------------------------
+
+void
+StatusStartCallback (XIC ic, XPointer client_data, XPointer call_data)
+{
+    return;
+}
+
+void
+StatusDoneCallback (XIC ic, XPointer client_data, XPointer call_data)
+{
+    return;
+}
+
+void
+StatusDrawCallback (XIC ic, XPointer client_data, XIMStatusDrawCallbackStruct *call_data)
+{
+    return;
+}
