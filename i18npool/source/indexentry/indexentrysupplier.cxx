@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: khong $ $Date: 2002-06-18 22:29:26 $
+ *  last change: $Author: khong $ $Date: 2002-07-25 04:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #include <tools/intn.hxx>
 #include <tools/isolang.hxx>
 #include <indexentrysupplier.hxx>
+#include <data/zh_pinyin.h>
+#include <data/zh_zhuyin.h>
+#include <data/ko_phonetic.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -92,7 +95,7 @@ static const struct {
     { "hu",  "alphanumeric", 1 },
     { "is",  "alphanumeric", 1 },
     { "it",  "alphanumeric", 1 },
-    { "ja",  "phonetic", 1 },
+    { "ja",  "phonetic (alphanumeric first) (grouped by syllable),phonetic (alphanumeric first) (grouped by consonant),phonetic (alphanumeric last) (grouped by syllable),phonetic (alphanumeric last) (grouped by consonant)", 4 },
     { "ko",  "dict", 1 },
     { "nb",  "alphanumeric", 1 },
     { "nl",  "alphanumeric", 1 },
@@ -104,8 +107,8 @@ static const struct {
     { "sv",  "alphanumeric", 1 },
     { "tr",  "alphanumeric", 1 },
     { "th",  "alphanumeric", 1 },
-    { "zh_CN",  "pinyin stroke radical", 3 },
-    { "zh_TW",  "stroke radical zhuyin pinyin", 4 },
+    { "zh_CN",  "pinyin,stroke,radical", 3 },
+    { "zh_TW",  "stroke,radical,zhuyin,pinyin", 4 },
 };
 
 static const sal_Int16 nbOfLocales = sizeof(aLocaleList) / sizeof(aLocaleList[0]);
@@ -167,7 +170,7 @@ Sequence < OUString > SAL_CALL IndexEntrySupplier::getAlgorithmList( const Local
         algorithmList.realloc(aLocaleList[i].pAlgorithmCount);
         index = 0;
         for (sal_Int16 j=0; j<aLocaleList[i].pAlgorithmCount; j++)
-            algorithmList[j] = algorithms.getToken(0, sal_Unicode(' '), index);
+            algorithmList[j] = algorithms.getToken(0, sal_Unicode(','), index);
 
         break;
         }
@@ -186,14 +189,57 @@ sal_Bool SAL_CALL IndexEntrySupplier::loadAlgorithm( const Locale& rLocale, cons
 sal_Bool SAL_CALL IndexEntrySupplier::usePhoneticEntry( const Locale& rLocale ) throw (RuntimeException)
 {
     // First implementation only turns the feature on for Japanese language.
-    return rLocale.Language.compareToAscii("ja") == 0;
+    return rLocale.Language.equalsAscii("zh")
+        || rLocale.Language.equalsAscii("ja")
+        || rLocale.Language.equalsAscii("ko");
 }
 
 OUString SAL_CALL IndexEntrySupplier::getPhoneticCandidate( const OUString& rIndexEntry,
     const Locale& rLocale ) throw (RuntimeException)
 {
+    static OUString space(OUString::createFromAscii(" "));
+    OUString candidate;
     // TODO: the phonetic candidate will be provided by language engine for CJK.
-    return OUString();
+    if (rLocale.Language.equalsAscii("zh")) {
+        sal_Unicode *Str;
+        sal_uInt16 *Index1, *Index2;
+        if (rLocale.Country.equalsAscii("TW") ||
+        rLocale.Country.equalsAscii("HK") ||
+        rLocale.Country.equalsAscii("MO")) {
+            Str = ZhuYinStr_zh;
+            Index1 = ZhuYinIndex1_zh;
+            Index2 = ZhuYinIndex2_zh;
+        } else {
+            Str = PinYinStr_zh;
+            Index1 = PinYinIndex1_zh;
+            Index2 = PinYinIndex2_zh;
+        }
+
+        for (sal_Int32 i=0; i < rIndexEntry.getLength(); i++) {
+        sal_Unicode ch = rIndexEntry[i];
+        sal_uInt16 address = Index1[ch>>8];
+        if (address != 0xFFFF)
+            address = Index2[address + (ch & 0xFF)];
+        if (i > 0)
+            candidate += space;
+        if (address != 0xFFFF)
+            candidate += OUString(&Str[address]);
+        }
+    } else if (rLocale.Language.equalsAscii("ja")) {
+        ; // TODO
+    } else if (rLocale.Language.equalsAscii("ko")) {
+        for (sal_Int32 i=0; i < rIndexEntry.getLength(); i++) {
+        sal_Unicode ch = rIndexEntry[i];
+        sal_uInt16 address = PhoneticIndex_ko[ch>>8];
+        if (address != 0xFFFF)
+            address = PhoneticCharacter_ko[address + (ch & 0xFF)];
+        if (address != 0xFFFF)
+            candidate += OUString(address);
+        else
+            candidate += space;
+        }
+    }
+    return candidate;
 }
 
 OUString SAL_CALL IndexEntrySupplier::getIndexKey( const OUString& rIndexEntry,
