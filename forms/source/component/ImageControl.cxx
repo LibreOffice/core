@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:14:40 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
-#ifndef _SVX_IMPGRF_HXX
-#include <svx/impgrf.hxx>
-#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
