@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-09 08:10:24 $
+ *  last change: $Author: nf $ $Date: 2001-05-23 08:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #define STATE_BREAKHELP 0x0008
 #define STATE_UNMERGE   0x0009
 #define STATE_UTF8      0x000A
+#define STATE_LANGUAGES 0x000B
 
 // set of global variables
 ByteString sInputFile;
@@ -96,6 +97,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
     bUTF8 = FALSE;
     sPrj = "";
     sPrjRoot = "";
+    Export::sLanguages = "";
 
     USHORT nState = STATE_NON;
     BOOL bInput = FALSE;
@@ -124,6 +126,9 @@ BOOL ParseCommandLine( int argc, char* argv[])
         else if ( ByteString( argv[ i ]).ToUpperAscii() == "-UTF8" ) {
             nState = STATE_UTF8;
             bUTF8 = TRUE;
+        }
+        else if (( ByteString( argv[ i ]) == "-l" ) || ( argv[ i ] == "-L" )) {
+            nState = STATE_LANGUAGES;
         }
         else {
             switch ( nState ) {
@@ -154,6 +159,10 @@ BOOL ParseCommandLine( int argc, char* argv[])
                     bMergeMode = TRUE; // activate merge mode, cause merge database found
                 }
                 break;
+                case STATE_LANGUAGES: {
+                    Export::sLanguages = argv[ i ];
+                }
+                break;
             }
         }
     }
@@ -173,7 +182,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
 void Help()
 /*****************************************************************************/
 {
-    fprintf( stdout, "Syntax:LNGEX[-p Prj][-r PrjRoot]-i FileIn -o FileOut[-m DataBase][-e][-b][-u][-UTF8]\n" );
+    fprintf( stdout, "Syntax:LNGEX[-p Prj][-r PrjRoot]-i FileIn -o FileOut[-m DataBase][-e][-b][-u][-UTF8][-L l1,l2,...]\n" );
     fprintf( stdout, " Prj:      Project\n" );
     fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
     fprintf( stdout, " FileIn:   Source file (*.lng)\n" );
@@ -183,6 +192,7 @@ void Help()
     fprintf( stdout, " -b: no function\n" );
     fprintf( stdout, " -u: no function\n" );
     fprintf( stdout, " -UTF8: enable UTF8 as language independent encoding\n" );
+    fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (01,33,46,49...)\n" );
 }
 
 /*****************************************************************************/

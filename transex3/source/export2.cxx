@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-05 09:22:28 $
+ *  last change: $Author: nf $ $Date: 2001-05-23 08:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@ ResData::~ResData()
 //
 // class Export
 //
+
+/*****************************************************************************/
+ByteString Export::sLanguages;
+/*****************************************************************************/
 
 /*****************************************************************************/
 USHORT Export::LangId[ LANGUAGES ] =
@@ -412,3 +416,17 @@ const ByteString Export::LangName[ LANGUAGES ] =
     "hebrew",
     "catalan"
 };
+
+/*****************************************************************************/
+BOOL Export::LanguageAllowed( USHORT nLanguage )
+/*****************************************************************************/
+{
+    if ( !sLanguages.Len())
+        return TRUE;
+
+    for ( ULONG i = 0; i < sLanguages.GetTokenCount( ',' ); i++ )
+        if ( nLanguage == sLanguages.GetToken( i, ',' ).ToInt32())
+            return TRUE;
+
+    return FALSE;
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-18 11:27:31 $
+ *  last change: $Author: nf $ $Date: 2001-05-23 08:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ Export *pExport = 0L;
 #define STATE_BREAKHELP 0x0008
 #define STATE_UNMERGE   0x0009
 #define STATE_UTF8      0x000A
+#define STATE_LANGUAGES 0X000B
 
 // set of global variables
 DECLARE_LIST( FileList, ByteString * );
@@ -116,6 +117,7 @@ extern char *GetOutputFile( int argc, char* argv[])
     sPrj = "";
     sPrjRoot = "";
     sActFileName = "";
+    Export::sLanguages = "";
 
     USHORT nState = STATE_NON;
     BOOL bInput = FALSE;
@@ -154,6 +156,9 @@ extern char *GetOutputFile( int argc, char* argv[])
             nState = STATE_UTF8;
             bUTF8 = TRUE;
         }
+        else if (( ByteString( argv[ i ]) == "-l" ) || ( argv[ i ] == "-L" )) {
+            nState = STATE_LANGUAGES;
+        }
         else {
             switch ( nState ) {
                 case STATE_NON: {
@@ -181,6 +186,10 @@ extern char *GetOutputFile( int argc, char* argv[])
                 case STATE_MERGESRC: {
                     sMergeSrc = ByteString( argv[ i ]);
                     bMergeMode = TRUE; // activate merge mode, cause merge database found
+                }
+                break;
+                case STATE_LANGUAGES: {
+                    Export::sLanguages = ByteString( argv[ i ]);
                 }
                 break;
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-16 08:18:11 $
+ *  last change: $Author: nf $ $Date: 2001-05-23 08:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ extern "C" { YYWarning( char * ); }
 #define STATE_MERGESRC  0x0006
 #define STATE_ERRORLOG  0x0007
 #define STATE_UTF8      0x0008
+#define STATE_LANGUAGES 0X0009
 
 // set of global variables
 BOOL bEnableExport;
@@ -110,6 +111,7 @@ extern char *GetOutputFile( int argc, char* argv[])
     sPrjRoot = "";
     sInputFileName = "";
     sActFileName = "";
+    Export::sLanguages = "";
 
     USHORT nState = STATE_NON;
     BOOL bInput = FALSE;
@@ -139,6 +141,9 @@ extern char *GetOutputFile( int argc, char* argv[])
             nState = STATE_UTF8;
             bUTF8 = TRUE;
         }
+        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-L" ) {
+            nState = STATE_LANGUAGES;
+        }
         else {
             switch ( nState ) {
                 case STATE_NON: {
@@ -167,6 +172,11 @@ extern char *GetOutputFile( int argc, char* argv[])
                     sMergeSrc = ByteString( argv[ i ]);
                     bMergeMode = TRUE; // activate merge mode, cause merge database found
                 }
+                break;
+                case STATE_LANGUAGES: {
+                    Export::sLanguages = ByteString( argv[ i ]);
+                }
+                break;
             }
         }
     }

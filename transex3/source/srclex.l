@@ -248,7 +248,7 @@ main( int argc, char* argv[])
 
 	pOutput = GetOutputFile( argc, argv );
 	if ( !pOutput ) {
-		fprintf( stdout, "Syntax:TRANSEX[-p Prj][-r PrjRoot]-i FileIn...[-o FileOut][-m DataBase][-e][-b][-u][-UTF8]\n" );
+		fprintf( stdout, "Syntax:TRANSEX[-p Prj][-r PrjRoot]-i FileIn...[-o FileOut][-m DataBase][-e][-b][-u][-UTF8][-L l1,l2,...]\n" );
 		fprintf( stdout, " Prj:      Project\n" );
 		fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
 		fprintf( stdout, " FileIn:   Source files (*.src)\n" );
@@ -258,6 +258,7 @@ main( int argc, char* argv[])
 		fprintf( stdout, " -b: Break when Token \"HelpText\" found in source\n" );
 		fprintf( stdout, " -u: [english] and [german] are allowed, Id is Taken from DataBase \n" );
 		fprintf( stdout, " -UTF8: enable UTF8 as language independent encoding\n" );
+		fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (01,33,46,49...)\n" );
 		return 1;
 	}
 
