@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sspellimp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-17 12:37:45 $
+ *  last change: $Author: tl $ $Date: 2000-12-05 15:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,7 +392,7 @@ OUString SAL_CALL
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return A2OU( "StarOffice example SpellChecker" );
+    return A2OU( "OpenOffice example spellchecker" );
 }
 
 
