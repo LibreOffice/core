@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SheetCellRange.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:12 $
+ *  last change: $Author: mi $ $Date: 2001-03-21 11:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,10 @@
 #include <com/sun/star/style/ParagraphProperties.idl>
 #endif
 
+#ifndef __com_sun_star_chart_XChartData_idl__
+#include <com/sun/star/chart/XChartData.idl>
+#endif
+
 //=============================================================================
 
  module com {  module sun {  module star {  module sheet {
@@ -135,6 +139,10 @@ service SheetCellRange
     // DocMerge: empty anyway
     interface com::sun::star::sheet::XSheetOperation;
 
+    /** offers the cell range for a chart.  Makes it possible to learn
+        about changes in the cell values. */
+    interface com::sun::star::chart::XChartData;
+
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::sheet::SheetCellRange::Position
@@ -158,6 +166,9 @@ service SheetCellRange
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:12  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:43:46  mi
     moved from api
 
