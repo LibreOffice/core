@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_attr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: svesik $ $Date: 2001-05-14 13:21:31 $
+ *  last change: $Author: hr $ $Date: 2002-03-06 11:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ Attribute::Release()
     if ( mpAnnotation != NULL )
         delete mpAnnotation;
     if ( mpKeyName != NULL )
-        free( (void*)mpKeyName );
+        delete mpKeyName;
     if ( mpName != NULL )
         free( (void*)mpName );
 }
