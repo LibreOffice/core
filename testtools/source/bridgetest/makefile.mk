@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2003-09-04 09:16:38 $
+#   last change: $Author: obo $ $Date: 2003-09-05 12:58:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -223,13 +223,11 @@ $(DESTDIR)$/bridgetest_inprocess_java$(BATCH_SUFFIX) : makefile.mk
     $(GIVE_EXEC_RIGHTS) $@
 .ENDIF
 
-bla=testComponent.jar
-JAVACOMP=$(PWD)
-JavaComponentURL : $$JAVACOMP=file:///$($(assign $(JAVACOMP)= $(subst,\,/ $(PWD:d))class/testComponent.jar)) ;
-    echo ###JavaComponentURL
-    @echo $(JAVACOMP) 
-
-#	$(JAVACOMP)=file:///$($(assign $(JAVACOMP)= $(subst,\,/ $(PWD:d))class/testComponent.jar))
+.IF "$(GUI)"=="WNT"
+JAVA_TEST_COMPONENT = $(subst,\,/ file:///$(PWD:d))class/testComponent.jar
+.ELSE
+JAVA_TEST_COMPONENT = $(subst,\,/ file://$(PWD:d))class/testComponent.jar
+.ENDIF
 
 # I can't make a dependency on shared libraries, because dependent targets
 # get the .setdir current directory. AAARGGGGGG !
@@ -247,12 +245,10 @@ $(DESTDIR)$/uno_services.rdb .SETDIR=$(DESTDIR) : $(WINTARGETS)
         -c javaloader.uno$(MY_DLLPOSTFIX)	\
         -c javavm.uno$(MY_DLLPOSTFIX)
     regcomp -register -br uno_types.rdb -br uno_services.rdb -r uno_services.rdb \
-        -c $(subst,\,/ file:///$(PWD:d))class/testComponent.jar \
+        -c $(JAVA_TEST_COMPONENT) \
         -l com.sun.star.loader.Java \
         -classpath $(MY_CLASSPATH)
 .ENDIF
-
-BLA:=$(PWD:s/bin/class)
 
 $(DESTDIR)$/regcomp.exe : $(SOLARBINDIR)$/regcomp.exe
     -rm -f $@
