@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-26 15:18:49 $
+ *  last change: $Author: fs $ $Date: 2001-03-28 08:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ namespace dbaui
 
 
         void ImplSelect(sal_uInt16 nId);
-        sal_Bool ImplStartColumnDrag(const Point& _rMousePos);
+        sal_Bool ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMousePos);
     };
 
     // =========================================================================
