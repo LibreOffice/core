@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrlist.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:15:30 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,12 @@ struct SvXMLTagAttribute_Impl
     {
     }
 
+    SvXMLTagAttribute_Impl( const SvXMLTagAttribute_Impl& r ) :
+        sName(r.sName),
+        sValue(r.sValue)
+    {
+    }
+
     OUString sName;
     OUString sValue;
 };
@@ -105,7 +111,14 @@ struct SvXMLAttributeList_Impl
         // performance improvement during adding
         vecAttribute.reserve(20);
     }
+
+    SvXMLAttributeList_Impl( const SvXMLAttributeList_Impl& r ) :
+            vecAttribute( r.vecAttribute )
+    {
+    }
+
     ::std::vector<struct SvXMLTagAttribute_Impl> vecAttribute;
+    typedef ::std::vector<struct SvXMLTagAttribute_Impl>::size_type size_type;
 };
 
 
@@ -116,15 +129,30 @@ sal_Int16 SAL_CALL SvXMLAttributeList::getLength(void) throw( ::com::sun::star::
 }
 
 
-SvXMLAttributeList::SvXMLAttributeList( const SvXMLAttributeList &r )
+SvXMLAttributeList::SvXMLAttributeList( const SvXMLAttributeList &r ) :
+    m_pImpl( new SvXMLAttributeList_Impl( *r.m_pImpl ) )
+{
+}
+
+SvXMLAttributeList::SvXMLAttributeList( const uno::Reference<
+        xml::sax::XAttributeList> & rAttrList )
+    : sType( GetXMLToken(XML_CDATA) )
 {
     m_pImpl = new SvXMLAttributeList_Impl;
-    *m_pImpl = *(r.m_pImpl);
+
+    SvXMLAttributeList* pImpl =
+        SvXMLAttributeList::getImplementation( rAttrList );
+
+    if( pImpl )
+        *m_pImpl = *(pImpl->m_pImpl);
+    else
+        AppendAttributeList( rAttrList );
 }
 
 OUString SAL_CALL SvXMLAttributeList::getNameByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException )
 {
-    if( i < m_pImpl->vecAttribute.size() ) {
+    if( static_cast< SvXMLAttributeList_Impl::size_type >( i )
+            < m_pImpl->vecAttribute.size() ) {
         return m_pImpl->vecAttribute[i].sName;
     }
     return OUString();
@@ -138,7 +166,8 @@ OUString SAL_CALL SvXMLAttributeList::getTypeByIndex(sal_Int16 i) throw( ::com::
 
 OUString SAL_CALL  SvXMLAttributeList::getValueByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException )
 {
-    if( i < m_pImpl->vecAttribute.size() ) {
+    if( static_cast< SvXMLAttributeList_Impl::size_type >( i )
+            < m_pImpl->vecAttribute.size() ) {
         return m_pImpl->vecAttribute[i].sValue;
     }
     return OUString();
@@ -154,7 +183,7 @@ OUString SAL_CALL SvXMLAttributeList::getValueByName(const OUString& sName) thro
 {
     ::std::vector<struct SvXMLTagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
+    for( ; ii != m_pImpl->vecAttribute.end() ; ++ii ) {
         if( (*ii).sName == sName ) {
             return (*ii).sValue;
         }
@@ -201,7 +230,7 @@ void SvXMLAttributeList::RemoveAttribute( const OUString sName )
 {
     ::std::vector<struct SvXMLTagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
+    for( ; ii != m_pImpl->vecAttribute.end() ; ++ii ) {
         if( (*ii).sName == sName ) {
             m_pImpl->vecAttribute.erase( ii );
             break;
@@ -220,17 +249,65 @@ void SvXMLAttributeList::AppendAttributeList( const uno::Reference< ::com::sun::
 {
     assert( r.is() );
 
-    sal_Int32 nMax = r->getLength();
-    sal_Int32 nTotalSize = m_pImpl->vecAttribute.size() + nMax;
+    sal_Int16 nMax = r->getLength();
+    SvXMLAttributeList_Impl::size_type nTotalSize =
+        m_pImpl->vecAttribute.size() + nMax;
     m_pImpl->vecAttribute.reserve( nTotalSize );
 
-    for( sal_Int32 i = 0 ; i < nMax ; i ++ ) {
+    for( sal_Int16 i = 0 ; i < nMax ; ++i ) {
         m_pImpl->vecAttribute.push_back( SvXMLTagAttribute_Impl(
             r->getNameByIndex( i ) ,
             r->getValueByIndex( i )));
     }
 
     assert( nTotalSize == getLength());
+}
+
+void SvXMLAttributeList::SetValueByIndex( sal_Int16 i,
+        const ::rtl::OUString& rValue )
+{
+    if( static_cast< SvXMLAttributeList_Impl::size_type >( i )
+            < m_pImpl->vecAttribute.size() )
+    {
+        m_pImpl->vecAttribute[i].sValue = rValue;
+    }
+}
+
+void SvXMLAttributeList::RemoveAttributeByIndex( sal_Int16 i )
+{
+    ::std::vector<struct SvXMLTagAttribute_Impl>::iterator ii =
+        m_pImpl->vecAttribute.begin();
+
+    for( ; i && ii != m_pImpl->vecAttribute.end() ; --i )
+        ++ii;
+
+    if( ii !=  m_pImpl->vecAttribute.end() )
+        m_pImpl->vecAttribute.erase( ii );
+}
+
+void SvXMLAttributeList::RenameAttributeByIndex( sal_Int16 i,
+                                                 const OUString& rNewName )
+{
+    if( static_cast< SvXMLAttributeList_Impl::size_type >( i )
+            < m_pImpl->vecAttribute.size() )
+    {
+        m_pImpl->vecAttribute[i].sName = rNewName;
+    }
+}
+
+sal_Int16 SvXMLAttributeList::GetIndexByName( const OUString& rName ) const
+{
+    ::std::vector<struct SvXMLTagAttribute_Impl>::iterator ii =
+        m_pImpl->vecAttribute.begin();
+
+    for( sal_Int16 nIndex=0; ii!=m_pImpl->vecAttribute.end(); ++ii, ++nIndex )
+    {
+        if( (*ii).sName == rName )
+        {
+            return nIndex;
+        }
+    }
+    return -1;
 }
 
 // XUnoTunnel & co
