@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueconverter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: lla $ $Date: 2001-05-16 09:57:37 $
+ *  last change: $Author: jb $ $Date: 2001-05-18 15:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,7 @@ namespace
 
         sal_Int32 findFirstTokenStart(OUString const& sText) const throw()
         {
-            return 0;
+            return sText.getLength() ? 0 : NO_MORE_TOKENS;
         }
         sal_Int32 findNextTokenStart(OUString const& sText, sal_Int32 nPrevTokenEnd) const throw()
         {
