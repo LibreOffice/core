@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 13:39:50 $
+#   last change: $Author: rt $ $Date: 2003-06-12 08:07:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,8 @@ SLOFILES =	\
         $(SLO)$/accfrmobjslist.obj \
         $(SLO)$/accgraphic.obj \
         $(SLO)$/accheaderfooter.obj \
+        $(SLO)$/acchyperlink.obj \
+        $(SLO)$/acchypertextdata.obj \
         $(SLO)$/accmap.obj \
         $(SLO)$/accnotextframe.obj \
         $(SLO)$/accpage.obj \
@@ -118,6 +120,8 @@ EXCEPTIONSFILES=	\
         $(SLO)$/accfrmobjslist.obj \
         $(SLO)$/accgraphic.obj \
         $(SLO)$/accheaderfooter.obj \
+        $(SLO)$/acchyperlink.obj \
+        $(SLO)$/acchypertextdata.obj \
         $(SLO)$/accmap.obj \
         $(SLO)$/accnotextframe.obj \
         $(SLO)$/accpage.obj \
