@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:33:25 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,6 +476,18 @@ hidspecial HID_SVX_CONFIG_MENU        { HelpId = HID_SVX_CONFIG_MENU; };
 hidspecial HID_SVX_CONFIG_TOOLBAR     { HelpId = HID_SVX_CONFIG_TOOLBAR; };
 hidspecial HID_SVX_CONFIG_MENU_CONTENTS { HelpId = HID_SVX_CONFIG_MENU_CONTENTS; };
 hidspecial HID_SVX_CONFIG_TOOLBAR_CONTENTS { HelpId = HID_SVX_CONFIG_TOOLBAR_CONTENTS; };
+hidspecial HID_SVX_NEW_TOOLBAR         { HelpId = HID_SVX_NEW_TOOLBAR; };
+hidspecial HID_SVX_MODIFY_TOOLBAR      { HelpId = HID_SVX_MODIFY_TOOLBAR; };
+hidspecial HID_SVX_NEW_TOOLBAR_ITEM    { HelpId = HID_SVX_NEW_TOOLBAR_ITEM; };
+hidspecial HID_SVX_MODIFY_TOOLBAR_ITEM { HelpId = HID_SVX_MODIFY_TOOLBAR_ITEM; };
+hidspecial HID_SVX_SAVE_IN             { HelpId = HID_SVX_SAVE_IN; };
+hidspecial HID_SVX_CONFIG_MENU_ORGANIZER { HelpId = HID_SVX_CONFIG_MENU_ORGANIZER; };
+hidspecial HID_SVX_CONFIG_ICON_SELECTOR { HelpId = HID_SVX_CONFIG_ICON_SELECTOR; };
+hidspecial HID_SVX_CONFIG_NAME_SUBMENU { HelpId = HID_SVX_CONFIG_NAME_SUBMENU; };
+hidspecial HID_SVX_CONFIG_RENAME_MENU  { HelpId = HID_SVX_CONFIG_RENAME_MENU; };
+hidspecial HID_SVX_CONFIG_RENAME_MENU_ITEM  { HelpId = HID_SVX_CONFIG_RENAME_MENU_ITEM; };
+hidspecial HID_SVX_CONFIG_RENAME_TOOLBAR    { HelpId = HID_SVX_CONFIG_RENAME_TOOLBAR; };
+hidspecial HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM  { HelpId = HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM; };
 
 hidspecial HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_SIMPLIFIED { HelpId = HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_SIMPLIFIED; };
 hidspecial HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_TRADITIONAL { HelpId = HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_TRADITIONAL; };
