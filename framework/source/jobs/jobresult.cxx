@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobresult.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:46 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 09:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,8 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
             (lProtocol[i].Value >>= m_bDeactivate                          )
            )
         {
-            m_eParts |= E_DEACTIVATE;
+            if ( m_bDeactivate )
+                m_eParts |= E_DEACTIVATE;
         }
         else
         if (
