@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:53:03 $
+ *  last change: $Author: vg $ $Date: 2003-07-21 12:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -972,6 +972,8 @@ void OTableController::appendPrimaryKey(Reference<XKeysSupplier>& _rxSup,sal_Boo
     OSL_ENSURE(_rxSup.is(),"No XKeysSupplier!");
     Reference<XDataDescriptorFactory> xKeyFactory(_rxSup->getKeys(),UNO_QUERY);
     OSL_ENSURE(xKeyFactory.is(),"No XDataDescriptorFactory Interface!");
+    if ( !xKeyFactory.is() )
+        return;
     Reference<XAppend> xAppend(xKeyFactory,UNO_QUERY);
     OSL_ENSURE(xAppend.is(),"No XAppend Interface!");
 
