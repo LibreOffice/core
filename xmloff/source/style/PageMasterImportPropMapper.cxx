@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportPropMapper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:23:02 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,11 +118,13 @@ sal_Bool PageMasterImportPropertyMapper::handleSpecialItem(
 
     if( CTF_PM_REGISTER_STYLE==nContextID )
     {
+        ::rtl::OUString sDisplayName( rImport.GetStyleDisplayName(
+                    XML_STYLE_FAMILY_TEXT_PARAGRAPH, rValue ) );
         Reference < XNameContainer > xParaStyles =
             rImport.GetTextImport()->GetParaStyles();
-        if( xParaStyles.is() && xParaStyles->hasByName( rValue ) )
+        if( xParaStyles.is() && xParaStyles->hasByName( sDisplayName ) )
         {
-            rProperty.maValue <<= rValue;
+            rProperty.maValue <<= sDisplayName;
             bRet = sal_True;
         }
     }
