@@ -2,9 +2,9 @@
  *
  *  $RCSfile: properties.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:49:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,20 @@ namespace framework{
 #define AUTORECOVERY_PROPHANDLE_CRASHED                 1
 
 #define AUTORECOVERY_PROPCOUNT                          2
+
+//_______________________________________________
+/** properties for Filter config */
+
+#define FILTER_PROPNAME_ASCII_DOCUMENTSERVICE           "DocumentService"
+
+#define FILTER_PROPNAME_DOCUMENTSERVICE                 ::rtl::OUString::createFromAscii( FILTER_PROPNAME_ASCII_DOCUMENTSERVICE )
+
+//_______________________________________________
+/** properties for office module config (Setup.xcu) */
+
+#define OFFICEFACTORY_PROPNAME_ASCII_WINDOWATTRIBUTES   "ooSetupFactoryWindowAttributes"
+
+#define OFFICEFACTORY_PROPNAME_WINDOWATTRIBUTES         ::rtl::OUString::createFromAscii( OFFICEFACTORY_PROPNAME_ASCII_WINDOWATTRIBUTES )
 
 //_______________________________________________
 /** provides some helper methods to implement property sets. */
