@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-01 13:37:27 $
+#   last change: $Author: vg $ $Date: 2003-06-04 10:41:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,10 +85,11 @@ ADDITIONAL_FILES=source$/data$/brkitr$/edit_word.txt \
 
 .IF "$(GUI)"=="UNX"
 .IF "$(COMNAME)"=="sunpro5"
+.IF "$(BUILD_TOOLS)$/cc"=="$(shell +which cc)"
 CC:=$(COMPATH)$/bin$/cc
 CXX:=$(COMPATH)$/bin$/CC
+.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell which cc)"
 .ENDIF          # "$(COMNAME)"=="sunpro5"
-.EXPORT : CC CXX
 
 CONFIGURE_DIR=source
 
@@ -162,9 +163,6 @@ all: \
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
 
-TG_DELIVER : $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
-        $(DELIVER)
-
 .IF "$(BINARY_PATCH_FILE_NAME)"!=""
 
 $(PACKAGE_DIR)$/so_add_binary :  $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
@@ -183,8 +181,4 @@ $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_add_binary
 $(MISC)$/remove_build.flag : $(BINARY_PATCH_FILE_NAME) $(PATCH_FILE_NAME) makefile.mk
     $(REMOVE_PACKAGE_COMMAND)
     +$(TOUCH) $(MISC)$/remove_build.flag
-
-.IF "$(BUILD_SOSL)"!=""
-ALLTAR : TG_DELIVER
-.ENDIF
 
