@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:09:02 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,7 +375,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
     ::rtl::OString aSql(::rtl::OUStringToOString(sql.getStr(),getTextEncoding()));
     char pOut[2048];
     SQLINTEGER nOutLen;
-    OTools::ThrowException(this,N3SQLNativeSql(m_aConnectionHandle,(SDB_ODBC_CHAR*)aSql.getStr(),aSql.getLength(),(SDB_ODBC_CHAR*)pOut,2048,&nOutLen),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
+    OTools::ThrowException(this,N3SQLNativeSql(m_aConnectionHandle,(SDB_ODBC_CHAR*)aSql.getStr(),aSql.getLength(),(SDB_ODBC_CHAR*)pOut,sizeof pOut - 1,&nOutLen),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
     return ::rtl::OUString(pOut,nOutLen,getTextEncoding());
 }
 // --------------------------------------------------------------------------------
@@ -487,7 +487,7 @@ void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQ
     sal_Int32 nValueLen;
     char pCat[1024];
     OTools::ThrowException(this,
-        N3SQLGetConnectAttr(m_aConnectionHandle,SQL_ATTR_CURRENT_CATALOG,(SDB_ODBC_CHAR*)pCat,1024,&nValueLen),
+        N3SQLGetConnectAttr(m_aConnectionHandle,SQL_ATTR_CURRENT_CATALOG,(SDB_ODBC_CHAR*)pCat,(sizeof pCat)-1,&nValueLen),
         m_aConnectionHandle,SQL_HANDLE_DBC,*this);
 
     return ::rtl::OUString(pCat,nValueLen,getTextEncoding());
