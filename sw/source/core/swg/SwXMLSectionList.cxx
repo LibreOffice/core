@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLSectionList.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-13 11:38:31 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:14:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,12 @@ using namespace ::xmloff::token;
 
 sal_Char __READONLY_DATA sXML_np__block_list[] = "_block-list";
 
-SwXMLSectionList::SwXMLSectionList ( SvStrings & rNewSectionList)
-: rSectionList ( rNewSectionList )
+// #110680#
+SwXMLSectionList::SwXMLSectionList(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    SvStrings & rNewSectionList)
+:   SvXMLImport( xServiceFactory ),
+    rSectionList ( rNewSectionList )
 {
     GetNamespaceMap().Add( OUString ( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__block_list ) ),
                            GetXMLToken ( XML_N_BLOCK_LIST),
