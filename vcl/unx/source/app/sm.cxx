@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:08:43 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 14:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@
 #include <svapp.hxx>
 #endif
 
+#include <osl/conditn.h>
+
 #define USE_SM_EXTENSION
 
 extern "C" void SAL_CALL ICEConnectionWorker( void* );
@@ -125,6 +127,9 @@ IceConn* ICEConnectionObserver::pConnections = NULL;
 int ICEConnectionObserver::nConnections = 0;
 oslMutex ICEConnectionObserver::ICEMutex = NULL;
 oslThread ICEConnectionObserver::ICEThread = NULL;
+oslCondition SessionManagerClient::aSaveCond = NULL;
+oslCondition SessionManagerClient::aDieCond = NULL;
+
 
 static SmProp*  pSmProps = NULL;
 static SmProp** ppSmProps = NULL;
@@ -188,6 +193,24 @@ static void BuildSmPropertyList()
 }
 
 
+IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, pDummy )
+{
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "posting save documents event\n" );
+#endif
+    Application::EnableDialogCancel( TRUE );
+    ApplicationEvent aEvent( String( RTL_CONSTASCII_USTRINGPARAM( "SessionManager" ) ),
+                             ApplicationAddress(),
+                             ByteString( APPEVENT_SAVEDOCUMENTS_STRING ),
+                             String( RTL_CONSTASCII_USTRINGPARAM( "All" ) ) );
+
+    if( GetpApp() )
+        GetpApp()->AppEvent( aEvent );
+    if( aSaveCond )
+        osl_setCondition( aSaveCond );
+    return 0;
+}
+
 void SessionManagerClient::SaveYourselfProc(
     SmcConn connection,
     SmPointer client_data,
@@ -211,6 +234,22 @@ void SessionManagerClient::SaveYourselfProc(
 #endif
     BuildSmPropertyList();
 #ifdef USE_SM_EXTENSION
+    if( shutdown )
+    {
+        aSaveCond = osl_createCondition();
+        if( aSaveCond )
+            osl_resetCondition( aSaveCond );
+        Application::PostUserEvent( STATIC_LINK( NULL, SessionManagerClient, SaveYourselfHdl ) );
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "waiting for save yourself event to be processed\n" );
+#endif
+        osl_waitCondition( aSaveCond, NULL );
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "wakeup on save yourself condition\n" );
+#endif
+        osl_destroyCondition( aSaveCond );
+        aSaveCond = NULL;
+    }
     SmcSetProperties( aSmcConnection, nSmProps, ppSmProps );
     SmcSaveYourselfDone( aSmcConnection, True );
 #endif
@@ -222,10 +261,19 @@ IMPL_STATIC_LINK( SessionManagerClient, ShutDownHdl, void*, pDummy )
     fprintf( stderr, GetSalData()->pFirstFrame_ ? "shutdown on first frame\n" : "shutdown event but no frame\n" );
 #endif
     if( GetSalData()->pFirstFrame_ )
-    {
         GetSalData()->pFirstFrame_->maFrameData.ShutDown();
-    }
     return 0;
+}
+
+void SessionManagerClient::shutdownDone()
+{
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "SessionManagerClient::shutdownDone\n" );
+    if( ! aDieCond )
+        fprintf( stderr, "no DieCond\n" );
+#endif
+    if( aDieCond )
+        osl_setCondition( aDieCond );
 }
 
 void SessionManagerClient::DieProc(
@@ -236,12 +284,29 @@ void SessionManagerClient::DieProc(
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "Session: die\n" );
 #endif
+    if( connection == aSmcConnection )
+    {
+        aSmcConnection = NULL;
+        aDieCond = osl_createCondition();
+        if( aDieCond )
+            osl_resetCondition( aDieCond );
+        Application::PostUserEvent( STATIC_LINK( NULL, SessionManagerClient, ShutDownHdl ) );
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "waiting for shutdown event to be processed\n" );
+#endif
+        osl_waitCondition( aDieCond, NULL );
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "wakeup on die condition\n" );
+#endif
+        osl_destroyCondition( aDieCond );
+        aDieCond = NULL;
+    }
 #ifdef USE_SM_EXTENSION
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "closing connection\n" );
+#endif
     SmcCloseConnection( connection, 0, NULL );
 #endif
-    if( connection == aSmcConnection )
-        aSmcConnection = NULL;
-    Application::PostUserEvent( STATIC_LINK( NULL, SessionManagerClient, ShutDownHdl ) );
 }
 
 void SessionManagerClient::SaveCompleteProc(
