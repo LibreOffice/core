@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventattachermgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 07:46:02 $
+ *  last change: $Author: fs $ $Date: 2001-08-07 07:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,14 @@ public:
 
 private:
     Reference< XIdlReflection > getReflection() throw( Exception );
+
+    /** checks if <arg>_nIndex</arg> is a valid index, throws an <type>IllegalArgumentException</type> if not
+    @param _nIndex
+        the index to check
+    @return
+        the iterator pointing to the position indicated by the index
+    */
+    ::std::deque<AttacherIndex_Impl>::iterator implCheckIndex( sal_Int32 _nIndex ) SAL_THROW ( ( IllegalArgumentException ) );
 };
 
 //========================================================================
@@ -533,6 +541,22 @@ Reference< XIdlReflection > ImplEventAttacherManager::getReflection() throw( Exc
 
 
 //-----------------------------------------------------------------------------
+::std::deque<AttacherIndex_Impl>::iterator ImplEventAttacherManager::implCheckIndex( sal_Int32 _nIndex ) SAL_THROW ( ( IllegalArgumentException ) )
+{
+    if (_nIndex < 0)
+        throw IllegalArgumentException();
+
+    ::std::deque<AttacherIndex_Impl>::iterator aIt = aIndex.begin();
+    for ( sal_Int32 i = 0; (i < _nIndex) && (aIt != aIndex.end()); ++i, ++aIt )
+        ;
+
+    if( aIt == aIndex.end() )
+        throw IllegalArgumentException();
+
+    return aIt;
+}
+
+//-----------------------------------------------------------------------------
 void detachAll_Impl
 (
     ImplEventAttacherManager * pMgr,
@@ -575,17 +599,10 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvent
 )
     throw( IllegalArgumentException, RuntimeException )
 {
-    if( nIndex < 0 )
-        throw IllegalArgumentException();
-
     Guard< Mutex > aGuard( aLock );
-    // Index pruefen und Array anpassen
-    ::std::deque<AttacherIndex_Impl>::iterator aIt = aIndex.begin();
-    for( sal_Int32 i = 0; i < nIndex; i++ )
-        aIt++;
 
-    if( aIt == aIndex.end() )
-        throw IllegalArgumentException();
+    // Index pruefen und Array anpassen
+    ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
     ::std::deque< AttachedObject_Impl > aList = (*aIt).aObjList;
 
@@ -635,26 +652,17 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvents
 )
     throw( IllegalArgumentException, RuntimeException )
 {
-    if( nIndex < 0 )
-        throw IllegalArgumentException();
-
     Guard< Mutex > aGuard( aLock );
 
     // Index pruefen und Array anpassen
-    ::std::deque<AttacherIndex_Impl>::iterator aIt = aIndex.begin();
-    sal_Int32 i;
-    for( i = 0; i < nIndex; i++ )
-        aIt++;
-
-    if( aIt == aIndex.end() )
-        throw IllegalArgumentException();
+    ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
     ::std::deque< AttachedObject_Impl > aList = (*aIt).aObjList;
     detachAll_Impl( this, nIndex, aList );
 
     const ScriptEventDescriptor* pArray = ScriptEvents.getConstArray();
     sal_Int32 nLen = ScriptEvents.getLength();
-    for( i = 0 ; i < nLen ; i++ )
+    for( sal_Int32 i = 0 ; i < nLen ; i++ )
         registerScriptEvent( nIndex, pArray[ i ] );
 
     attachAll_Impl( this, nIndex, aList );
@@ -670,16 +678,9 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
 )
     throw( IllegalArgumentException, RuntimeException )
 {
-    if( nIndex < 0 )
-        throw IllegalArgumentException();
+    Guard< Mutex > aGuard( aLock );
 
-    ::std::deque<AttacherIndex_Impl>::iterator aIt = aIndex.begin();
-    sal_Int32 i;
-    for( i = 0; i < nIndex; i++ )
-        aIt++;
-
-    if( aIt == aIndex.end() )
-        throw IllegalArgumentException();
+    ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
     ::std::deque< AttachedObject_Impl > aList = (*aIt).aObjList;
     detachAll_Impl( this, nIndex, aList );
@@ -707,21 +708,21 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
     }
 #else
     sal_Int32 nLen = (*aIt).aEventList.getLength();
-    ScriptEventDescriptor * pEL = (*aIt).aEventList.getArray();
-    for( i = 0; i < nLen; i++ )
+
+            ScriptEventDescriptor* pEventList = (*aIt).aEventList.getArray();
+    const   ScriptEventDescriptor* pEventListEnd = pEventList + (*aIt).aEventList.getLength();
+    for( ; pEventList < pEventListEnd; ++pEventList )
     {
-        if( aLstType            == pEL[i].ListenerType
-          && EventMethod            == pEL[i].EventMethod
-          && ToRemoveListenerParam  == pEL[i].AddListenerParam )
+        if  (   (aLstType               == pEventList->ListenerType )
+            &&  (EventMethod            == pEventList->EventMethod      )
+            &&  (ToRemoveListenerParam  == pEventList->AddListenerParam)
+            )
         {
-            Sequence< ScriptEventDescriptor > tmpSequence( (*aIt).aEventList );
-            sal_Int32 index = 0;
-            for ( sal_Int32 j=0; j < nLen; j++)
+            ScriptEventDescriptor* pMoveTo = pEventList;
+            const ScriptEventDescriptor* pMoveFrom = pMoveTo + 1;
+            while (pMoveFrom < pEventListEnd)
             {
-                if ( j != i )
-                {
-                    (*aIt).aEventList[j] = tmpSequence[index++];
-                }
+                *pMoveTo++ = *pMoveFrom++;
             }
             break;
         }
@@ -734,15 +735,8 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
 void SAL_CALL ImplEventAttacherManager::revokeScriptEvents(sal_Int32 nIndex )
     throw( IllegalArgumentException, RuntimeException )
 {
-    if( nIndex < 0 )
-        throw IllegalArgumentException();
-
-    ::std::deque<AttacherIndex_Impl>::iterator aIt = aIndex.begin();
-    for( sal_Int32 i = 0; i < nIndex; i++ )
-        aIt++;
-
-    if( aIt == aIndex.end() )
-        throw IllegalArgumentException();
+    Guard< Mutex > aGuard( aLock );
+    ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
     ::std::deque< AttachedObject_Impl > aList = (*aIt).aObjList;
     detachAll_Impl( this, nIndex, aList );
@@ -758,6 +752,7 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvents(sal_Int32 nIndex )
 void SAL_CALL ImplEventAttacherManager::insertEntry(sal_Int32 nIndex)
     throw( IllegalArgumentException, RuntimeException )
 {
+    Guard< Mutex > aGuard( aLock );
     if( nIndex < 0 )
         throw IllegalArgumentException();
 
@@ -773,15 +768,8 @@ void SAL_CALL ImplEventAttacherManager::insertEntry(sal_Int32 nIndex)
 void SAL_CALL ImplEventAttacherManager::removeEntry(sal_Int32 nIndex)
     throw( IllegalArgumentException, RuntimeException )
 {
-    if( nIndex < 0 )
-        throw IllegalArgumentException();
-
-    ::std::deque<AttacherIndex_Impl>::iterator aIt = aIndex.begin();
-    for( sal_Int32 i = 0; i < nIndex; i++ )
-        aIt++;
-
-    if( aIt == aIndex.end() )
-        throw IllegalArgumentException();
+    Guard< Mutex > aGuard( aLock );
+    ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
     ::std::deque< AttachedObject_Impl > aList = (*aIt).aObjList;
     detachAll_Impl( this, nIndex, aList );
@@ -792,15 +780,8 @@ void SAL_CALL ImplEventAttacherManager::removeEntry(sal_Int32 nIndex)
 Sequence< ScriptEventDescriptor > SAL_CALL ImplEventAttacherManager::getScriptEvents(sal_Int32 nIndex)
     throw( IllegalArgumentException, RuntimeException )
 {
-    if( nIndex < 0 )
-        throw IllegalArgumentException();
-
-    ::std::deque<AttacherIndex_Impl>::iterator aIt = aIndex.begin();
-    for( sal_Int32 i = 0; i < nIndex; i++ )
-        aIt++;
-
-    if( aIt == aIndex.end() )
-        throw IllegalArgumentException();
+    Guard< Mutex > aGuard( aLock );
+    ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
 #ifdef DEQUE_OK
     Sequence< ScriptEventDescriptor > aSeq( (*aIt).aEventList.size() );
@@ -824,7 +805,7 @@ Sequence< ScriptEventDescriptor > SAL_CALL ImplEventAttacherManager::getScriptEv
 void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference< XInterface >& xObject, const Any & Helper)
     throw( IllegalArgumentException, ServiceNotRegisteredException, RuntimeException )
 {
-    //return;
+    Guard< Mutex > aGuard( aLock );
     if( nIndex < 0 || !xObject.is() )
         throw IllegalArgumentException();
 
@@ -909,6 +890,7 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
 void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference< XInterface >& xObject)
     throw( IllegalArgumentException, RuntimeException )
 {
+    Guard< Mutex > aGuard( aLock );
     //return;
     if( nIndex < 0  || !xObject.is() )
         throw IllegalArgumentException();
@@ -976,12 +958,14 @@ void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference
 void SAL_CALL ImplEventAttacherManager::addScriptListener(const Reference< XScriptListener >& aListener)
     throw( IllegalArgumentException, RuntimeException )
 {
+    Guard< Mutex > aGuard( aLock );
     aScriptListeners.addInterface( aListener );
 }
 
 void SAL_CALL ImplEventAttacherManager::removeScriptListener(const Reference< XScriptListener >& aListener)
     throw( IllegalArgumentException, RuntimeException )
 {
+    Guard< Mutex > aGuard( aLock );
     aScriptListeners.removeInterface( aListener );
 }
 
@@ -996,6 +980,7 @@ OUString SAL_CALL ImplEventAttacherManager::getServiceName(void)
 void SAL_CALL ImplEventAttacherManager::write(const Reference< XObjectOutputStream >& OutStream)
     throw( IOException, RuntimeException )
 {
+    Guard< Mutex > aGuard( aLock );
     // Ohne XMarkableStream laeuft nichts
     Reference< XMarkableStream > xMarkStream( OutStream, UNO_QUERY );
     if( !xMarkStream.is() )
@@ -1060,6 +1045,7 @@ void SAL_CALL ImplEventAttacherManager::write(const Reference< XObjectOutputStre
 void SAL_CALL ImplEventAttacherManager::read(const Reference< XObjectInputStream >& InStream)
     throw( IOException, RuntimeException )
 {
+    Guard< Mutex > aGuard( aLock );
     // Ohne XMarkableStream laeuft nichts
     Reference< XMarkableStream > xMarkStream( InStream, UNO_QUERY );
     if( !xMarkStream.is() )
@@ -1128,6 +1114,9 @@ void SAL_CALL ImplEventAttacherManager::read(const Reference< XObjectInputStream
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/03/15 07:46:02  fs
+ *  NAMESPACE_STD(\:i) => ::std::\1
+ *
  *  Revision 1.1.1.1  2000/09/29 11:28:15  fs
  *  initial import
  *
