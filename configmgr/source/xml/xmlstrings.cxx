@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstrings.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 11:00:29 $
+ *  last change: $Author: jb $ $Date: 2002-05-27 10:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@ namespace configmgr
 //----------------------------------------------------------------------------
     // extern declaration for strings used in the XML format
         // namespace prefixes
-        IMPLEMENT_CONSTASCII_USTRING(NS_PREFIX_OOR, "oor:");
-        IMPLEMENT_CONSTASCII_USTRING(NS_PREFIX_XS,  "xs:");
+        IMPLEMENT_CONSTASCII_USTRING(NS_PREFIX_OOR, "oor");
+        IMPLEMENT_CONSTASCII_USTRING(NS_PREFIX_XS,  "xs");
 
         // namespace urls
         IMPLEMENT_CONSTASCII_USTRING(NS_URI_OOR,"http://openoffice.org/2001/registry");

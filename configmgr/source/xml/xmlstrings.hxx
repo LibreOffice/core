@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstrings.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 11:00:29 $
+ *  last change: $Author: jb $ $Date: 2002-05-27 10:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@ namespace configmgr
         // namespace prefixes
         DECLARE_CONSTASCII_USTRING(NS_PREFIX_OOR);
         DECLARE_CONSTASCII_USTRING(NS_PREFIX_XS);
+
+        const sal_Unicode k_NS_SEPARATOR(':');
 
         // namespace urls
         DECLARE_CONSTASCII_USTRING(NS_URI_OOR);

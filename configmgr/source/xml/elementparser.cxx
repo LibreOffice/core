@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementparser.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 11:00:28 $
+ *  last change: $Author: jb $ $Date: 2002-05-27 10:37:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,9 +314,10 @@ void badValueType(sal_Char const * _pMsg, OUString const & _sExtra)
 // -----------------------------------------------------------------------------
 static
 inline
-sal_Bool matchPrefix(OUString const & _sString, OUString const & _sPrefix)
+sal_Bool matchNsPrefix(OUString const & _sString, OUString const & _sPrefix)
 {
-    return _sString.match(_sPrefix);
+    return _sString.match(_sPrefix) &&
+            _sString.getStr()[_sPrefix.getLength()] == k_NS_SEPARATOR;
 }
 // -----------------------------------------------------------------------------
 static
@@ -332,11 +333,11 @@ sal_Bool matchSuffix(OUString const & _sString, OUString const & _sSuffix)
 // -----------------------------------------------------------------------------
 static
 inline
-OUString stripPrefix(OUString const & _sString, OUString const & _sPrefix)
+OUString stripNsPrefix(OUString const & _sString, OUString const & _sPrefix)
 {
-    OSL_ASSERT( matchPrefix(_sString,_sPrefix) );
+    OSL_ASSERT( matchNsPrefix(_sString,_sPrefix) );
 
-    return _sString.copy(_sPrefix.getLength());
+    return _sString.copy(_sPrefix.getLength() + 1);
 }
 // -----------------------------------------------------------------------------
 static
@@ -354,10 +355,10 @@ static
 inline
 OUString stripTypeName(OUString const & _sString, OUString const & _sPrefix)
 {
-    if (matchPrefix(_sString, _sPrefix))
-        return stripPrefix(_sString, _sPrefix);
+    if ( matchNsPrefix(_sString,_sPrefix))
+        return stripNsPrefix(_sString, _sPrefix);
 
-    badValueType("Missing expected prefix: ", _sPrefix);
+    badValueType("Missing expected namespace prefix: ", _sPrefix);
 
     return _sString;
 }
@@ -371,6 +372,7 @@ uno::Type ElementParser::getPropertyValueType(SaxAttributeList const& xAttribs) 
 
     uno::Type aType;
 
+    // valuetype names are either 'xs:<type>' or 'oor:<type>' or 'oor:<type>-list'
     if (matchSuffix(sTypeName,VALUETYPE_LIST_SUFFIX))
     {
         OUString sBasicName = stripTypeName( stripSuffix(sTypeName,VALUETYPE_LIST_SUFFIX), NS_PREFIX_OOR );
@@ -379,7 +381,9 @@ uno::Type ElementParser::getPropertyValueType(SaxAttributeList const& xAttribs) 
     }
     else
     {
-        OUString sBasicName = stripTypeName( sTypeName, NS_PREFIX_OOR );
+        OUString sPrefix = matchNsPrefix(sTypeName,NS_PREFIX_OOR) ? NS_PREFIX_OOR : NS_PREFIX_XS;
+
+        OUString sBasicName = stripTypeName( sTypeName, sPrefix );
 
         aType = toType(sBasicName);
     }
