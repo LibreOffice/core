@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-28 13:59:54 $
+ *  last change: $Author: fs $ $Date: 2001-03-29 09:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ namespace xmloff
     OPropertyImport::OPropertyImport(IFormsImportContext& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName)
         :SvXMLImportContext(_rImport.getGlobalContext(), _nPrefix, _rName)
         ,m_rContext(_rImport)
+        ,m_bTrackAttributes(sal_False)
     {
     }
 
@@ -169,7 +170,8 @@ namespace xmloff
             nNamespace = m_rContext.getGlobalContext().GetNamespaceMap().GetKeyByAttrName(_rxAttrList->getNameByIndex(i), &sLocalName);
             handleAttribute(nNamespace, sLocalName, _rxAttrList->getValueByIndex(i));
 
-            m_aEncounteredAttributes.insert(sLocalName);
+            if (m_bTrackAttributes)
+                m_aEncounteredAttributes.insert(sLocalName);
         }
 
         // TODO: create PropertyValues for all the attributes which were not present, because they were implied
@@ -185,6 +187,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     sal_Bool OPropertyImport::encounteredAttribute(const ::rtl::OUString& _rAttributeName) const
     {
+        OSL_ENSURE(m_bTrackAttributes, "OPropertyImport::encounteredAttribute: attribute tracking not enabled!");
         return m_aEncounteredAttributes.end() != m_aEncounteredAttributes.find(_rAttributeName);
     }
 
@@ -555,6 +558,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/03/28 13:59:54  fs
+ *  #85371# +simulateDefaultedAttribute / +encounteredAttribute
+ *
  *  Revision 1.10  2001/03/28 09:59:38  fs
  *  #85097# correctly import boolean properties with inverse semantics
  *

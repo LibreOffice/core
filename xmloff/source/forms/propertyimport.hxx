@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-28 13:59:54 $
+ *  last change: $Author: fs $ $Date: 2001-03-29 09:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,9 @@ namespace xmloff
         DECLARE_STL_STDKEY_SET( ::rtl::OUString, StringSet );
         StringSet               m_aEncounteredAttributes;
 
-        IFormsImportContext&        m_rContext;
+        IFormsImportContext&    m_rContext;
+
+        sal_Bool                m_bTrackAttributes;
 
         // TODO: think about the restriction that the class does not know anything about the object it is importing.
         // Perhaps this object should be known to the class, so setting the properties ('normal' ones as well as
@@ -167,6 +169,12 @@ namespace xmloff
             @see encounteredAttribute
         */
         void        simluateDefaultedAttribute(const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName, const sal_Char* _pAttributeDefault);
+
+        /** enables the tracking of the encountered attributes
+            <p>The tracking will raise the import, but allow derived classes' instances to use
+            <method>simluateDefaultedAttribute</method>.</p>
+        */
+        void        enableTrackAttributes() { m_bTrackAttributes = sal_True; }
 
         void implPushBackPropertyValue(const ::com::sun::star::beans::PropertyValue& _rProp)
         { m_aValues.push_back(_rProp); }
@@ -268,6 +276,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/03/28 13:59:54  fs
+ *  #85371# +simulateDefaultedAttribute / +encounteredAttribute
+ *
  *  Revision 1.6  2001/03/28 09:59:38  fs
  *  #85097# correctly import boolean properties with inverse semantics
  *
