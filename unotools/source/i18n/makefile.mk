@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: cp $ $Date: 2001-03-02 17:28:25 $
+#   last change: $Author: er $ $Date: 2001-05-13 03:12:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,6 +99,7 @@ SLOFILES=	\
     $(SLO)$/charclass.obj	\
     $(SLO)$/calendarwrapper.obj	\
     $(SLO)$/collatorwrapper.obj	\
+    $(SLO)$/intlwrapper.obj \
     $(SLO)$/localedatawrapper.obj	\
     $(SLO)$/numberformatcodewrapper.obj \
     $(SLO)$/transliterationwrapper.obj \
