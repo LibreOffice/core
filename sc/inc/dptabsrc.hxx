@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabsrc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:30:00 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #define SC_DPTABSRC_HXX
 
 #include <vector>
+#include <hash_map>
 
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
@@ -725,6 +726,9 @@ public:
     //! number format (for data fields and date fields)
 };
 
+// hash map from name to index in the member array, for fast name access
+typedef ::std::hash_map< ::rtl::OUString, sal_Int32, ::rtl::OUStringHash > ScDPMembersHashMap;
+
 class ScDPMembers : public cppu::WeakImplHelper2<
                             com::sun::star::container::XNameAccess,
                             com::sun::star::lang::XServiceInfo >
@@ -736,6 +740,7 @@ private:
     long            nLev;
     long            nMbrCount;
     ScDPMember**    ppMbrs;
+    mutable ScDPMembersHashMap aHashMap;
 
 public:
                             ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL );
@@ -768,6 +773,8 @@ public:
     virtual ScDPMember*     getByIndex(long nIndex) const;
 
     long                    getMinMembers() const;
+
+    sal_Int32               GetIndexFromName( const ::rtl::OUString& rName ) const;     // <0 if not found
 };
 
 class ScDPMember : public cppu::WeakImplHelper3<
