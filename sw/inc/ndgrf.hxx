@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-28 20:33:09 $
+ *  last change: $Author: mib $ $Date: 2001-03-06 10:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,9 @@ class SwGrfNode: public SwNoTxtNode
     GraphicObject aGrfObj;
     SvBaseLinkRef refLink;      // falls Grafik nur als Link, dann Pointer gesetzt
     Size nGrfSize;
-    String aStrmName;           // SW3: Name des Storage-Streams fuer Embedded
-    String aNewStrmName;        // SW3: name des Storage-Streams bei SaveAs
+//  String aStrmName;           // SW3: Name des Storage-Streams fuer Embedded
+    String aNewStrmName;        // SW3/XML: new stream name (either SW3 stream
+                                // name or package url)
     String aLowResGrf;          // HTML: LowRes Grafik (Ersatzdarstellung bis
                                 //      die normale (HighRes) geladen ist.
 
@@ -117,6 +118,9 @@ class SwGrfNode: public SwNoTxtNode
                SwAttrSet* pAutoAttr = 0 );
 
     void InsertLink( const String& rGrfName, const String& rFltName );
+    BOOL ImportGraphic( SvStream& rStrm );
+    BOOL HasStreamName() const { return aGrfObj.HasUserData(); }
+    BOOL GetStreamStorageNames( String& rStrmName, String& rStgName ) const;
     void DelStreamName();
 
     DECL_LINK( SwapGraphic, GraphicObject* );
@@ -172,8 +176,9 @@ public:
         // Schreiben der Grafik
     BOOL StoreGraphics( SvStorage* pDocStg = NULL );
         // Zugriff auf den Storage-Streamnamen
-    const String& GetStreamName() const;
-    void SetStreamName( const String& r ) { aStrmName = r; }
+    String GetStreamName() const;
+    void SetStreamName( const String& r ) { aGrfObj.SetUserData( r ); }
+    void SetNewStreamName( const String& r ) { aNewStrmName = r; }
     void SaveCompleted( BOOL bClear );
 #endif
 
