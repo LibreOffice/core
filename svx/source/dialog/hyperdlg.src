@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:43:37 $
+ *  last change: $Author: kz $ $Date: 2001-06-15 21:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,7 +697,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
             ImageBitmap = Bitmap { File = "script.bmp" ; };
             MaskColor = STD_MASKCOLOR ;
         };
-        QuickHelpText[ portuguese ] = "Script";
+        QuickHelpText[ portuguese ] = "Eventos!";
         QuickHelpText[ russian ] = "События";
         QuickHelpText[ greek ] = "Гегпньфб";
         QuickHelpText[ dutch ] = "Gebeurtenissen";
@@ -1210,7 +1210,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
             ImageBitmap = Bitmap { File = "script.bmp" ; };
             MaskColor = STD_MASKCOLOR ;
         };
-        QuickHelpText[ portuguese ] = "Script";
+        QuickHelpText[ portuguese ] = "Eventos!";
         QuickHelpText[ russian ] = "События";
         QuickHelpText[ greek ] = "Гегпньфб";
         QuickHelpText[ dutch ] = "Gebeurtenissen";
@@ -1803,7 +1803,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
             ImageBitmap = Bitmap { File = "script.bmp" ; };
             MaskColor = STD_MASKCOLOR ;
         };
-        QuickHelpText[ portuguese ] = "Script";
+        QuickHelpText[ portuguese ] = "Eventos!";
         QuickHelpText[ russian ] = "События";
         QuickHelpText[ greek ] = "Гегпньфб";
         QuickHelpText[ dutch ] = "Gebeurtenissen";
@@ -2342,7 +2342,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
             ImageBitmap = Bitmap { File = "script.bmp" ; };
             MaskColor = STD_MASKCOLOR ;
         };
-        QuickHelpText[ portuguese ] = "Script";
+        QuickHelpText[ portuguese ] = "Eventos!";
         QuickHelpText[ russian ] = "События";
         QuickHelpText[ greek ] = "Гегпньфб";
         QuickHelpText[ dutch ] = "Gebeurtenissen";
@@ -2762,6 +2762,7 @@ Image RID_SVXBMP_HLDOCNTP
     ImageBitmap = Bitmap { File = "hldocntp.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
