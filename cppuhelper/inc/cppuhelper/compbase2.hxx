@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compbase2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-15 15:47:29 $
+ *  last change: $Author: dbo $ $Date: 2001-05-14 11:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,19 @@ __DEF_COMPIMPLHELPER( 2 )
 
 namespace cppu
 {
+    /** This template class inherits from ::cppu::ImplHelperBaseN<>, com.sun.star.lang.XComponent
+        and ::cppu::OWeakObject, thus delegating life-cycle to that implementation.
+        Use this helper implementing an object, that can be held weakly using the
+        ::cppu::WeakReference<> template class.
+        The template class expects a C++ mutex reference for synchronization in its ctor.
+        The com.sun.star.lang.XComponent implementation fires a final disposing() call
+        to the implementation when the component is to be disposed.  So implement disposing()
+        when sub-classing.
+
+        All other virtual functions (inherited from given template parameter interfaces)
+        have to be implemented by sub-classing from the templated class, e.g.
+        class MyImpl : public ::cppu::WeakComponentImplHelperN<> { ... };
+    */
     template< class Ifc1, class Ifc2 >
     class WeakComponentImplHelper2
         : public ::cppu::OWeakObject
@@ -139,6 +152,19 @@ namespace cppu
                 rBHelper.removeListener( ::getCppuType( &xListener ), xListener );
             }
     };
+    /** This template class inherits from ::cppu::ImplHelperBaseN<>, com.sun.star.lang.XComponent
+        and ::cppu::OWeakAggObject, thus delegating life-cycle to that implementation.
+        Use this helper implementing an object, that can be held weakly using the
+        ::cppu::WeakReference<> template class and can be aggregated by other objects.
+        The template class expects a C++ mutex reference for synchronization in its ctor.
+        The com.sun.star.lang.XComponent implementation fires a final disposing() call
+        to the implementation when the component is to be disposed.  So implement disposing()
+        when sub-classing.
+
+        All other virtual functions (inherited from given template parameter interfaces)
+        have to be implemented by sub-classing from the templated class, e.g.
+        class MyImpl : public ::cppu::WeakAggComponentImplHelperN<> { ... };
+    */
     template< class Ifc1, class Ifc2 >
     class WeakAggComponentImplHelper2
         : public ::cppu::OWeakAggObject

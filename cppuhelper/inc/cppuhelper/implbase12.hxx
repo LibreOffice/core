@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase12.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-15 15:47:29 $
+ *  last change: $Author: dbo $ $Date: 2001-05-14 11:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,16 @@ namespace cppu
             : ClassDataBase( nClassCode )
             {}
     };
+    /** This template class serves as a base class for all subsequent implementation helper classes.
+        It inherits from given interfaces (template parameters) and com.sun.star.lang.XTypeProvider.
+
+        Do not use this class directly, use
+               ImplHelperBaseN<>,
+               WeakImplHelperN<>,
+               WeakAggImplHelperN<>
+               WeakComponentImplHelperN<>,
+               WeakAggComponentImplHelperN<>.
+    */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9, class Ifc10, class Ifc11, class Ifc12 >
     class ImplHelperBase12
         : public ::com::sun::star::lang::XTypeProvider
@@ -130,6 +140,14 @@ namespace cppu
                 return rCD;
             }
     };
+    /** This template class inherits from ImplHelperBaseN<> and implements
+        com.sun.star.uno.XInterface::queryInterface() and the com.sun.star.lang.XTypeProvider
+        interface.
+
+        All other virtual functions (inherited from given template parameter interfaces)
+        have to be implemented by sub-classing from the templated class, e.g.
+        class MyImpl : public ::cppu::ImplHelperN<> { ... };
+    */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9, class Ifc10, class Ifc11, class Ifc12 >
     class ImplHelper12
         : public ImplHelperBase12< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10, Ifc11, Ifc12 >
@@ -143,6 +161,15 @@ namespace cppu
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
             { return getClassData( s_aCD ).getImplementationId(); }
     };
+    /** This template class inherits from ::cppu::ImplHelperBaseN<> and ::cppu::OWeakObject,
+        thus delegating life-cycle to that implementation.
+        Use this helper implementing an object, that can be held weakly, using the
+        ::cppu::WeakReference<> template class.
+
+        All other virtual functions (inherited from given template parameter interfaces)
+        have to be implemented by sub-classing from the templated class, e.g.
+        class MyImpl : public ::cppu::WeakImplHelperN<> { ... };
+    */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9, class Ifc10, class Ifc11, class Ifc12 >
     class WeakImplHelper12
         : public ::cppu::OWeakObject
@@ -164,6 +191,15 @@ namespace cppu
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
             { return getClassData( s_aCD ).getImplementationId(); }
     };
+    /** This template class inherits from ::cppu::ImplHelperBaseN<> and ::cppu::OWeakAggObject,
+        thus delegating life-cycle to that implementation.
+        Use this helper implementing an object, that can be held weakly using the
+        ::cppu::WeakReference<> template class and can be aggregated by other objects.
+
+        All other virtual functions (inherited from given template parameter interfaces)
+        have to be implemented by sub-classing from the templated class, e.g.
+        class MyImpl : public ::cppu::WeakAggImplHelperN<> { ... };
+    */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9, class Ifc10, class Ifc11, class Ifc12 >
     class WeakAggImplHelper12
         : public ::cppu::OWeakAggObject
