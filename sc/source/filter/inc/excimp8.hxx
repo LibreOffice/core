@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-28 13:46:46 $
+ *  last change: $Author: dr $ $Date: 2001-06-06 12:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,6 @@
 #endif
 #include <string.h>
 
-class OfaFilterOptions;
-
 struct ClientAnchorData;
 class FilterProgressBar;
 class PosBuffer;
@@ -129,7 +127,6 @@ protected:
     virtual ULONG           Calc_nBLIPPos( ULONG nOrgVal, ULONG nStreamPos ) const;
     virtual FASTBOOL        GetColorFromPalette( USHORT nNum, Color& ) const;
     virtual BOOL            ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const;
-    static UINT32           GetImportOpts( OfaFilterOptions* );
 public:
                             Biff8MSDffManager(
                                             RootData*           pRootData,

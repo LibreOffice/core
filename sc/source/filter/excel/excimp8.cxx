@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-28 13:44:50 $
+ *  last change: $Author: dr $ $Date: 2001-06-06 12:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,30 +686,6 @@ BOOL Biff8MSDffManager::ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const
 
     return FALSE;
 }
-
-
-UINT32 Biff8MSDffManager::GetImportOpts( OfaFilterOptions* p )
-{
-    UINT32      n = 0;
-    if( p )
-    {
-        if( p->IsMathType2Math() )
-            n |= OLE_MATHTYPE_2_STARMATH;
-
-        if( p->IsWinWord2Writer() )
-            n |= OLE_WINWORD_2_STARWRITER;
-
-        if( p->IsExcel2Calc() )
-            n |= OLE_EXCEL_2_STARCALC;
-
-        if( p->IsPowerPoint2Impress() )
-            n |= OLE_POWERPOINT_2_STARIMPRESS;
-    }
-
-    return n;
-}
-
-
 
 
 String      ImportExcel8::aSstErrTxt( _STRINGCONST( "*** ERROR IN SST ***" ) );
