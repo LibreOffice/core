@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:59:06 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -876,8 +876,36 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
         else
         {
             String aTmp = CalcCaseMap( rInf.GetText() );
-            rInf.SetText( aTmp );
-            aTxtSize = pLastFont->GetTextSize( rInf );
+            const XubString &rOldStr = rInf.GetText();
+            sal_Bool bCaseMapLengthDiffers(aTmp.Len() != rOldStr.Len());
+
+            if(bCaseMapLengthDiffers && rInf.GetLen())
+            {
+                // #108203#
+                // If the length of the original string and the CaseMapped one
+                // are different, it is necessary to handle the given text part as
+                // a single snippet since itÄs size may differ, too.
+                xub_StrLen nOldIdx(rInf.GetIdx());
+                xub_StrLen nOldLen(rInf.GetLen());
+                const XubString aSnippet(rOldStr, nOldIdx, nOldLen);
+                XubString aNewText(CalcCaseMap(aSnippet));
+
+                rInf.SetText( aNewText );
+                rInf.SetIdx( 0 );
+                rInf.SetLen( aNewText.Len() );
+
+                aTxtSize = pLastFont->GetTextSize( rInf );
+
+                rInf.SetIdx( nOldIdx );
+                rInf.SetLen( nOldLen );
+            }
+            else
+            {
+                rInf.SetText( aTmp );
+                aTxtSize = pLastFont->GetTextSize( rInf );
+            }
+
+            rInf.SetText( rOldStr );
         }
         rInf.SetKern( nOldKern );
         rInf.SetText( rOldTxt );
@@ -997,10 +1025,36 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const BOOL bGrey )
             pLastFont->DrawText( rInf );
         else
         {
-            XubString aString( CalcCaseMap( rInf.GetText() ) );
             const XubString &rOldStr = rInf.GetText();
-            rInf.SetText( aString );
-            pLastFont->DrawText( rInf );
+            XubString aString( CalcCaseMap( rOldStr ) );
+            sal_Bool bCaseMapLengthDiffers(aString.Len() != rOldStr.Len());
+
+            if(bCaseMapLengthDiffers && rInf.GetLen())
+            {
+                // #108203#
+                // If the length of the original string and the CaseMapped one
+                // are different, it is necessary to handle the given text part as
+                // a single snippet since itÄs size may differ, too.
+                xub_StrLen nOldIdx(rInf.GetIdx());
+                xub_StrLen nOldLen(rInf.GetLen());
+                const XubString aSnippet(rOldStr, nOldIdx, nOldLen);
+                XubString aNewText = CalcCaseMap(aSnippet);
+
+                rInf.SetText( aNewText );
+                rInf.SetIdx( 0 );
+                rInf.SetLen( aNewText.Len() );
+
+                pLastFont->DrawText( rInf );
+
+                rInf.SetIdx( nOldIdx );
+                rInf.SetLen( nOldLen );
+            }
+            else
+            {
+                rInf.SetText( aString );
+                pLastFont->DrawText( rInf );
+            }
+
             rInf.SetText( rOldStr );
         }
     }
