@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-26 11:10:07 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:31:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -758,7 +758,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAccessibleChildCoun
     if( NULL == mpView )
         throw DisposedException();
 
-    const SdrMarkList& rList = mpView->GetMarkList();
+    const SdrMarkList& rList = mpView->GetMarkedObjectList();
     return rList.GetMarkCount();
 }
 
@@ -773,7 +773,7 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getSelectedAcce
 
     Reference< XAccessible > xAccessible;
 
-    const SdrMarkList& rList = mpView->GetMarkList();
+    const SdrMarkList& rList = mpView->GetMarkedObjectList();
     SdrObject* pObj = rList.GetMark(nIndex)->GetObj();
     if( pObj )
         xAccessible = getAccessible( pObj );
@@ -791,7 +791,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::deselectAccessibleChild( sal_Int32 
 
     if( mpView )
     {
-        const SdrMarkList& rList = mpView->GetMarkList();
+        const SdrMarkList& rList = mpView->GetMarkedObjectList();
 
         SdrObject* pObj = getSdrObject( nIndex );
         if( pObj )
