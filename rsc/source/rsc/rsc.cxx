@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2001-11-06 11:30:26 $
+ *  last change: $Author: hjs $ $Date: 2001-11-06 12:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -855,7 +855,9 @@ ERRTYPE RscCompiler::Link()
             // rc-Datei schreiben
             ByteString aDir( it->aOutputRc );
             aDir.SetToken( aDir.GetTokenCount( PATHSEP )-1, PATHSEP, ByteString() );
-            char* pTmp = tempnam( aDir.GetBuffer(), "rsc" );
+            aDir.Append( "rscXXXXXX" );
+            char* pTmp = strdup( aDir.GetBuffer() );
+            mktemp( pTmp );
             if ( NULL == (fExitFile = foutput = fopen( pTmp, "wb" )) )
                 pTC->pEH->FatalError( ERR_OPENFILE, RscId(), pTmp );
 
@@ -863,7 +865,7 @@ ERRTYPE RscCompiler::Link()
 
             // Schreibe Datei
 #ifdef DEBUG
-            fprintf( stderr, "using tmp file %s\n", pTmp );
+            fprintf( stderr, "using tmp file %s %s\n", pTmp, aDir.GetBuffer() );
 #endif
             pTC->ChangeLanguage( it->nLangTypeId );
             pTC->ChangeDefLanguage( International::GetNeutralLanguage( it->nLangTypeId ) );
@@ -875,6 +877,7 @@ ERRTYPE RscCompiler::Link()
 #ifdef DEBUG
             fprintf( stderr, "move %s -> %s\n", pTmp, it->aOutputRc.GetBuffer() );
 #endif
+            unlink( it->aOutputRc.GetBuffer() );
             if( rename( pTmp, it->aOutputRc.GetBuffer() ) )
             {
                 char aBuf[1024];
