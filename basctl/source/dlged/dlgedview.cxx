@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-10 09:29:27 $
+ *  last change: $Author: vg $ $Date: 2003-03-26 12:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 #include "dlged.hxx"
 #endif
 
+#ifndef _BASCTL_DLGEDPAGE_HXX
+#include <dlgedpage.hxx>
+#endif
+
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -87,20 +91,6 @@ TYPEINIT1( DlgEdView, SdrView );
 
 //----------------------------------------------------------------------------
 
-void DlgEdView::MarkListHasChanged()
-{
-    SdrView::MarkListHasChanged();
-
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_PROPERTYBROWSER) : NULL;
-
-    if( pChildWin )
-        ((PropBrw*)(pChildWin->GetWindow()))->Update( this );
-}
-
-//----------------------------------------------------------------------------
-
 DlgEdView::DlgEdView( SdrModel* pModel, OutputDevice* pOut, DlgEditor* pEditor )
     :SdrView( pModel, pOut )
     ,pDlgEditor( pEditor )
@@ -111,6 +101,23 @@ DlgEdView::DlgEdView( SdrModel* pModel, OutputDevice* pOut, DlgEditor* pEditor )
 
 DlgEdView::~DlgEdView()
 {
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEdView::MarkListHasChanged()
+{
+    SdrView::MarkListHasChanged();
+
+    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_PROPERTYBROWSER) : NULL;
+    if( pChildWin )
+        ((PropBrw*)(pChildWin->GetWindow()))->Update( this );
+
+    DlgEdHint aHint( DLGED_HINT_SELECTIONCHANGED );
+    if ( pDlgEditor )
+        pDlgEditor->Broadcast( aHint );
 }
 
 //----------------------------------------------------------------------------
@@ -176,7 +183,12 @@ void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
         rWin.Invalidate();
 
         // update scroll bars
-        pDlgEditor->UpdateScrollBars();
+        if ( pDlgEditor )
+            pDlgEditor->UpdateScrollBars();
+
+        DlgEdHint aHint( DLGED_HINT_WINDOWSCROLLED );
+        if ( pDlgEditor )
+            pDlgEditor->Broadcast( aHint );
     }
 }
 
