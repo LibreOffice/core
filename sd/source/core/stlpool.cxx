@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-01 13:15:44 $
+ *  last change: $Author: cl $ $Date: 2002-11-27 16:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,6 +580,15 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rNotesSet.Put( SvxCharReliefItem(RELIEF_NONE) );
         rNotesSet.Put( SvxColorItem( Color(COL_AUTO)) );
         rNotesSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
+        rNotesSet.Put( SvxLRSpaceItem( 0, 0, 600, -600 ) );
+
+        SvxNumBulletItem aNumBullet( (const SvxNumBulletItem&) rNotesSet.Get(EE_PARA_NUMBULLET) );
+
+        EditEngine::ImportBulletItem( aNumBullet, 0, NULL,
+                                &(const SvxLRSpaceItem&) rNotesSet.Get( EE_PARA_LRSPACE ) );
+
+        ( (SfxItemSet&) rNotesSet).Put( aNumBullet );
+
     }
 
     /**************************************************************************
@@ -1386,7 +1395,6 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
 
             rSet.Put( SvxNumBulletItem( aNumRule, EE_PARA_NUMBULLET ) );
             ((SfxStyleSheet*)pSheet)->Broadcast(SfxSimpleHint( SFX_HINT_DATACHANGED ) );
-
         }
         break;
 
