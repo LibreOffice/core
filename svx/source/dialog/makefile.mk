@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 16:52:07 $
+#   last change: $Author: rt $ $Date: 2004-05-19 09:00:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,6 +116,8 @@ SRC1FILES =  \
         prtqry.src \
         ruler.src \
         rubydialog.src\
+        scriptdlg.src \
+        selector.src \
         spldlg.src \
         srchdlg.src \
         srchxtra.src \
@@ -200,6 +202,8 @@ EXCEPTIONSFILES=\
     $(SLO)$/multifil.obj	\
     $(SLO)$/optdict.obj	\
     $(SLO)$/cuigaldlg.obj \
+    $(SLO)$/scriptdlg.obj \
+    $(SLO)$/selector.obj \
     $(SLO)$/showcols.obj \
     $(SLO)$/svxbmpnumvalueset.obj 
 
@@ -363,6 +367,8 @@ LIB1OBJFILES= \
     $(SLO)$/relfld.obj   \
     $(SLO)$/rlrcitem.obj \
     $(SLO)$/rulritem.obj \
+    $(SLO)$/scriptdlg.obj \
+    $(SLO)$/selector.obj \
     $(SLO)$/simptabl.obj \
     $(SLO)$/srchctrl.obj \
     $(SLO)$/srchdlg.obj  \
