@@ -36,8 +36,8 @@ int SAL_CALL main(int argc, char **argv)
     Reference< XSimpleRegistry > xReg = createSimpleRegistry();
     OSL_ENSURE( xReg.is(), "### cannot get service instance of \"com.sun.star.regiystry.SimpleRegistry\"!" );
 
-    xReg->open(OUString::createFromAscii("counter.rdb"), sal_False, sal_False);
-    OSL_ENSURE( xReg->isValid(), "### cannot open test registry \"counter.rdb\"!" );
+    xReg->open(OUString::createFromAscii("counter.uno.rdb"), sal_False, sal_False);
+    OSL_ENSURE( xReg->isValid(), "### cannot open test registry \"counter.uno.rdb\"!" );
 
     Reference< XComponentContext > xContext = bootstrap_InitialComponentContext(xReg);
     OSL_ENSURE( xContext.is(), "### cannot creage intial component context!" );
@@ -55,9 +55,9 @@ int SAL_CALL main(int argc, char **argv)
         xImplReg->registerImplementation(
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), // loader for component
 #ifdef UNX
-            OUString::createFromAscii("libcounter.so"),     // component location
+            OUString::createFromAscii("counter.uno.so"),        // component location
 #else
-            OUString::createFromAscii("counter.dll"),       // component location
+            OUString::createFromAscii("counter.uno.dll"),       // component location
 #endif
             Reference< XSimpleRegistry >()   // registry omitted,
                                              // defaulting to service manager registry used
