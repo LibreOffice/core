@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 14:49:11 $
+#   last change: $Author: vg $ $Date: 2003-12-16 11:38:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -264,7 +264,12 @@ $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
     +$(COPY) $(foreach,i,$(OUT2LIB) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(LB)
 .ENDIF			# "$(OUT2LIB)"!=""
 .IF "$(OUT2INC)"!=""
+.IF "$(OUT2INC_SUBDIR)"!=""
+    +-$(MKDIR) $(INCCOM)$/$(OUT2INC_SUBDIR)
+    +$(COPY) $(foreach,i,$(OUT2INC) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(INCCOM)$/$(OUT2INC_SUBDIR)
+.ELSE          # "$(OUT2INC_SUBDIR)"!=""
     +$(COPY) $(foreach,i,$(OUT2INC) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(INCCOM)
+.ENDIF          # "$(OUT2INC_SUBDIR)"!=""
 .ENDIF			# "$(OUT2INC)"!=""
 .IF "$(OUTDIR2INC)"!=""
 .IF "$(GUI)"=="WNT"
