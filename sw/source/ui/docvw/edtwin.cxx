@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: os $ $Date: 2002-06-12 08:42:52 $
+ *  last change: $Author: os $ $Date: 2002-06-13 12:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1188,6 +1188,21 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                 return ;
         }
     }
+    int nLclSelectionType;
+    //A is converted to 1
+    if( rKeyCode.GetFullCode() == (KEY_A | KEY_MOD1 |KEY_SHIFT)
+        && rSh.HasDrawView() &&
+        (0 != (nLclSelectionType = rSh.GetSelectionType()) &&
+        ((nLclSelectionType & SwWrtShell::SEL_FRM) ||
+        ((nLclSelectionType & SwWrtShell::SEL_DRW|SwWrtShell::SEL_DRW_FORM) &&
+                rSh.GetDrawView()->GetMarkList().GetMarkCount() == 1))))
+    {
+        SdrHdlList& rHdlList = (SdrHdlList&)rSh.GetDrawView()->GetHdlList();
+        SdrHdl* pAnchor = rHdlList.GetHdl(HDL_ANCHOR);
+        if(pAnchor)
+            rHdlList.SetFocusHdl(pAnchor);
+        return;
+    }
 
     OfaAutoCorrCfg* pACfg = 0;
     SvxAutoCorrect* pACorr = 0;
@@ -1574,7 +1589,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         }
                     }
                     break;
-
                 case KEY_TAB:
                 {
 #ifdef SW_CRSR_TIMER
@@ -1826,16 +1840,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
             sal_Bool bForward(!aKeyEvent.GetKeyCode().IsShift());
 
             ((SdrHdlList&)rHdlList).TravelFocusHdl(bForward);
-
-            // guarantee visibility of focused handle
-/*            SdrHdl* pHdl = rHdlList.GetFocusHdl();
-            if(pHdl)
-            {
-                Point aHdlPosition(pHdl->GetPos());
-                Rectangle aVisRect(aHdlPosition - Point(100, 100), Size(200, 200));
-                pView->MakeVisible(aVisRect, *pWindow);
-            }
-  */
             eKeyState = KS_Ende;
         }
         break;
