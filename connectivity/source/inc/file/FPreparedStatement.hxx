@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:05:41 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 14:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,12 +106,13 @@ namespace connectivity
             ::rtl::OUString                                     m_aSql;
             OValueRow                                           m_aRow;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >          m_xRS; // only to enshure that the result isn't deleted
+            //  ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet >      m_xRS; // only to enshure that the result isn't deleted
             OResultSet*                                         m_pResultSet;
             OFileTable*                                         m_pTable;
 
             // factory method for resultset's
             virtual OResultSet* createResultSet();
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> initResultSet();
 
         public:
             DECLARE_CTY_DEFAULTS(OStatement_BASE2);
