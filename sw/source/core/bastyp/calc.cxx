@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:32:12 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,15 +62,14 @@
 #pragma hdrstop
 
 
-#include <ctype.h>
+#include <cctype>
 #if defined(MAC) || defined(MACOSX)
 #include <stdlib.h>
-#else
-#include <search.h>
 #endif
-#include <limits.h>
-#include <math.h>
-#include <float.h>
+#include <cstdlib>
+#include <climits>
+#include <cmath>
+#include <cfloat>
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
