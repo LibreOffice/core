@@ -1,0 +1,14 @@
+    <node oor:name="StarOffice XML (Base)" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>6200</value></prop>
+        <prop oor:name="Type"><value>StarBase</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.sdb.DatabaseDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">%productname% %formatversion% Database Document</value>
+            <value xml:lang="de">%productname% %formatversion% Datenbank Document</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT OWN DEFAULT 3RDPARTYFILTER</value></prop>
+    </node>
