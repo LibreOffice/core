@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-21 09:46:47 $
+ *  last change: $Author: sj $ $Date: 2002-12-06 10:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1910,7 +1910,6 @@ void PPTWriter::ImplWriteOLE( sal_uInt32 nCnvrtFlags )
                         SvStorageRef xTempStorage( new SvStorage( new SvMemoryStream(), TRUE ) );
                         aOleExport.ExportOLEObject( *xInplaceObj, *xTempStorage );
                         String aPersistStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( SVEXT_PERSIST_STREAM ) ) );
-                        xTempStorage->Remove( aPersistStream );
                         SvStorageRef xCleanStorage( new SvStorage( new SvMemoryStream(), TRUE ) );
                         xTempStorage->CopyTo( xCleanStorage );
                         // SJ: #99809# create a dummy content stream, the dummy content is necessary for ppt, but not for
