@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 21:53:50 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 21:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ String STR_FILTER_CHANNELON_OFFLINE
     Text[ japanese ] = "‚±‚Μw“Η‚ΝµΜΧ²έ Σ°Δή‚Ε‚Μέ’θ‚Ι]‚Α‚Δ“Η‚έζ‚η‚κ‚ά‚·B\n\n%PRODUCTNAME‚Ν »έµέΧ²έ Σ°Δή‚Ι‚Θ‚Α‚Δ‚Ά‚ά‚·B%PRODUCTNAME‚π΅ µΜΧ²έ Σ°Δή‚ΙΨ‚θ·‚¦‚ά‚·‚©?";
     Text[ chinese_traditional ] = "«φ·Σ³]©w¨Ο¥ΞªΜ¨Ο¥Ξ³s½uΎ\\ΕªΌÒ¦΅΅C\n\n%PRODUCTNAME ²{¦b³B©σ½u¤Wª¬ΊA΅C±z­nΕύ %PRODUCTNAME Βΰ¨μ³s½uΌÒ¦΅΅H";
     Text[ arabic ] = "νΜΘ Γδ νήΡΓ εΠΗ ΗαΗΤΚΡΗί΅ ΝΣΘ ΗαΕΪΟΗΟΗΚ΅ έν ζΦΪ ΗαΗδέΥΗα.\n\n%PRODUCTNAMEΝΗανΗπ έν ζΦΪ ΗαΗΚΥΗα. εα ΚΡνΟ ΚΫννΡ %PRODUCTNAME ΗαΒδ Εαμ ζΦΪ ΗαΗδέΥΗαΏ";
-    Text[ greek ] = "Η ανάγνωση αυτής της συνδρομής θα πρέπει να γίνει, βάσει των ρυθμίσεων, σε κατάσταση 'Χωρίς σύνδεση'.\n\nΤο %PRODUCTNAME βρίσκεται όμως σε κατάσταση";
+    Text[ greek ] = "Η ανάγνωση αυτής της συνδρομής θα πρέπει να γίνει, βάσει των ρυθμίσεων, σε κατάσταση 'Χωρίς σύνδεση'.\n\nΤο %PRODUCTNAME βρίσκεται όμως σε κατάσταση ";
     Text[ korean ] = "°΅ΐΤΐΊ Ό³Α¤Ώ΅ µϋ¶σ  ΏΐΗΑ¶σΐΞ ΈπµεΏ΅Ό­ ΐΠΎξΎί ΗΥ΄Ο΄Ω.\n\n%PRODUCTNAME ΐΊ(΄Β) Ηφΐη ΏΒ¶σΐΞ ΈπµεΏ΅ ΐΦ½ΐ΄Ο΄Ω. Αφ±έ ΏΐΗΑ¶σΐΞ Έπµε·Ξ ΐόΘ―ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "Bu όyelik, ηevrimdύώύ kipte okunmak όzere ayarlanmύώtύr.\n\n%PRODUCTNAME ώu an ηevrimiηi kipinde. %PRODUCTNAME, ηevrimdύώύ kipe geηsin mi?";
     Text[ language_user1 ] = " ";
@@ -194,4 +194,5 @@ String STR_FILTER_CONSULT_SERVICE
     Text[ catalan ] = "El filtro seleccionado $(FILTER) no estα incluido en su ediciσn.\nEn nuestra pαgina de Internet encontrarα las informaciones para poder pedirlos.";
     Text[ finnish ] = "Valittu suodatin $(FILTER) ei sisδlly laitokseen.\nTilausohjeet ovat kotisivullamme.";
 };
+
 
