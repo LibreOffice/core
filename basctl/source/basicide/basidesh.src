@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:55:18 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 22:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,7 @@ String RID_STR_ERROROPENLIB
     Text[ russian ] = "Îøèáêà ïğè çàãğóçêå áèáëèîòåêè";
     Text[ polish ] = "B³¹d przy ³adowaniu biblioteki.";
     Text[ japanese ] = "×²ÌŞ×Ø‚ğ“Ç‚İ‚Ş‚Æ‚«‚Ì´×°‚Å‚·B";
-    Text[ chinese_traditional ] = "¦b¸Ë¸üµ{¦¡®w®Éµo¥Í¿ù»~¡C";
+    Text[ chinese_traditional ] = "¸ü¤Jµ{¦¡®w®Éµo¥Í¿ù»~¡C";
     Text[ arabic ] = "ÎØÃ ÃËäÇÁ ÊÍãíá ÇáãßÊÈÉ";
     Text[ dutch ] = "Fout bij het laden van de bibliotheek";
     Text[ chinese_simplified ] = "ÔÚ×°ÔØ³ÌĞò¿âÊ±·¢Éú´íÎó¡£";
@@ -507,7 +507,7 @@ String RID_STR_SEARCHNOTFOUND
     Text[ russian ] = "Èñêîìîå ïîíÿòèå íå íàéäåíî";
     Text[ polish ] = "Nie znaleziono szukanego has³a.";
     Text[ japanese ] = "ŒŸõ·°‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
-    Text[ chinese_traditional ] = "¨S¦³§ä¨ì´M§äªº¤º®e";
+    Text[ chinese_traditional ] = "¨S¦³§ä¨ì·j´M¶µ¥Ø";
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáÈíÇäÇÊ ÇáÊí ÊÈÍË ÚäåÇ.";
     Text[ dutch ] = "Zoekbegrip niet gevonden";
     Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½ÒªËÑÑ°ÄÚÈİ";
@@ -560,7 +560,7 @@ String RID_STR_SEARCHREPLACES
     Text[ russian ] = "Èñêîìîå ïîíÿòèå çàìåíåíî XX ğàç";
     Text[ polish ] = "Szukane has³o zast¹piono XXrazy.";
     Text[ japanese ] = "ŒŸõ·°‚Í XX ‰ñ‚à’uŠ·‚³‚ê‚Ä‚¢‚Ü‚·B";
-    Text[ chinese_traditional ] = "¥N´À´M§ä¤º®e XX ¦¸";
+    Text[ chinese_traditional ] = "·j´M¶µ¥Ø XX ¦¸¥N´À";
     Text[ arabic ] = "Êã ÇÓÊÈÏÇá ÈíÇäÇÊ ÇáÈÍË ××× ãÑÉ";
     Text[ dutch ] = "Zoekbegrip XX keer vervangen";
     Text[ chinese_simplified ] = "¸üÌæËÑÑ°ÄÚÈİ XX ´Î";
@@ -687,7 +687,7 @@ String RID_STR_CANNOTUNLOADSTDLIB
     Text[ russian ] = "Äåàêòèâèğîâàòü ñòàíäàğòíóş áèáëèîòåêó íåâîçìîæíî";
     Text[ polish ] = "Standardowej biblioteki nie mo¿na by³o zdeaktywowaæ.";
     Text[ japanese ] = "•W€×²ÌŞ×Ø‚ğ”ñ±¸Ã¨ÌŞ‚É‚·‚é‚±‚Æ‚Í‚Å‚«‚Ü‚¹‚ñB";
-    Text[ chinese_traditional ] = "µLªk¥¢¬¡³o­Ó¼Ğ·Çµ{¦¡®w";
+    Text[ chinese_traditional ] = "µLªkÃö³¬³o­Ó¼Ğ·Çµ{¦¡®w";
     Text[ arabic ] = "áÇ íãßä ÅáÛÇÁ ÊäÔíØ ÇáãßÊÈÉ ÇáÇİÊÑÇÖíÉ";
     Text[ dutch ] = "De standaardbibliotheek kan niet worden gedeactiveerd.";
     Text[ chinese_simplified ] = "ÎŞ·¨Ê§»î±ê×¼³ÌĞò¿â";
@@ -712,7 +712,7 @@ String RID_STR_GENERATESOURCE
     Text[ russian ] = "Ñîçäàòü èñõîäíûé òåêñò";
     Text[ polish ] = "Utwórz tekst Ÿród³owy";
     Text[ japanese ] = "¿°½‚Ì¶¬";
-    Text[ chinese_traditional ] = "¥Í¦¨­ì©lÀÉ";
+    Text[ chinese_traditional ] = "«Ø¥ß­ì©lÀÉ";
     Text[ arabic ] = "ÅäÔÇÁ äÕ ãÕÏÑ";
     Text[ dutch ] = "Brontekst maken";
     Text[ chinese_simplified ] = "Éú³ÉÔ´ÎÄ±¾";
@@ -1084,7 +1084,7 @@ String RID_STR_CANNOTCLOSE
     Text[ russian ] = "Çàêğûòü îêíî íåâîçìîæíî,\nïîêà ïğîãğàììà BASIC íàõîäèòñÿ â äåéñòâèè.";
     Text[ polish ] = "Okna nie mo¿na by³o zamkn¹æ,\nprzy uruchomionym programie BASIC.";
     Text[ japanese ] = "BASIC ÌßÛ¸Ş×Ñ‚ÌÀs’†‚ÍA³¨İÄŞ³‚ğ•Â‚¶‚é‚±‚Æ‚Í‚Å‚«‚Ü‚¹‚ñB";
-    Text[ chinese_traditional ] = "¦b BASIC µ{¦¡¹B¦æ®É\nµLªkÃö³¬µ¡¤f¡C";
+    Text[ chinese_traditional ] = "¦b BASIC µ{¦¡¹B¦æ®É\nµLªkÃö³¬µøµ¡¡C";
     Text[ arabic ] = "áÇ íãßä ÅÛáÇŞ ÇáäÇİĞÉ¡\nÈíäãÇ ÈÑäÇãÌ BASIC ŞíÏ ÇáÊÔÛíá.";
     Text[ dutch ] = "Het venster kan niet worden gesloten \ntijdens het uitvoeren van het BASIC-programma.";
     Text[ chinese_simplified ] = "ÔÚ BASIC ³ÌĞòÔËĞĞÊ±\nÎŞ·¨¹Ø±Õ´°¿Ú¡£";
@@ -1162,7 +1162,7 @@ String RID_STR_WATCHNAME
     Text[ chinese_simplified ] = "²é¿´";
     Text[ russian ] = "Êîíòğîëüíîå çíà÷åíèå";
     Text[ polish ] = "Czujka";
-    Text[ japanese ] = "µÌŞ»Ş°ÊŞ°";
+    Text[ japanese ] = "µÌŞ»Ş°ÊŞ";
     Text[ chinese_traditional ] = "ÀËµø";
     Text[ arabic ] = "ãÑÇŞÈ";
     Text[ dutch ] = "Controle";
@@ -1499,12 +1499,12 @@ String RID_STR_SEARCHALLMODULES
     Text [ swedish ] = "Skall texten ersättas i alla aktiva moduler?" ;
     Text [ danish ] = "Skal teksten erstattes i alle aktive moduler?" ;
     Text [ portuguese_brazilian ] = "Soll der Text in allen aktiven Modulen ersetzt werden?" ;
-    Text [ portuguese ] = "Deseja substituir o texto em todos os módulos activos?" ;
+    Text [ portuguese ] = "Substituir o texto em todos os módulos activos?" ;
     Text[ chinese_simplified ] = "ÄúÒª¸üÌæËùÓĞ¼¤»îµÄÄ£¿éº¬ÓĞµÄÎÄ×Ö£¿";
     Text[ russian ] = "Çàìåíèòü òåêñò âî âñåõ àêòèâíûõ ìîäóëÿõ?";
     Text[ polish ] = "Czy zast¹piæ ten tekst we wszystkich aktywnych modu³ach?";
     Text[ japanese ] = "Ã·½Ä‚ğ‚·‚×‚Ä‚Ì±¸Ã¨ÌŞ‚ÈÓ¼Ş­°Ù‚Å’u‚«Š·‚¦‚Ü‚·‚©B";
-    Text[ chinese_traditional ] = "±z­n¥N´À¦b©Ò¦³¿E¬¡¼Ò¶ô¤¤ªº¤º¤å¡S";
+    Text[ chinese_traditional ] = "±z­n¥N´À¦b©Ò¦³±Ò°Ê¼Ò¶ô¤¤ªº¤å¦r¡S";
     Text[ arabic ] = "åá ÊÑíÏ ÇÓÊÈÏÇá ÇáäÕ İí ßá ÇáæÍÏÇÊ ÇáäãØíÉ ÇáäÔØÉ¿";
     Text[ dutch ] = "Wilt u de tekst in alle actieve modules vervangen?";
     Text[ chinese_simplified ] = "ÄúÒª¸üÌæËùÓĞ¼¤»îµÄÄ£¿éº¬ÓĞµÄÎÄ×Ö£¿";
@@ -2006,7 +2006,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ chinese_simplified ] = "²é¿´";
             Text[ russian ] = "Ïîêàçàòü êîíòğîëüíîå çíà÷åíèå";
             Text[ polish ] = "Poka¿ czujkê";
-            Text[ japanese ] = "µÌŞ»Ş°ÊŞ°‚Ì•\\¦";
+            Text[ japanese ] = "µÌŞ»Ş°ÊŞ‚Ì•\\¦";
             Text[ chinese_traditional ] = "Åã¥ÜÀËµø";
             Text[ arabic ] = "ÅÙåÇÑ ÇáãÑÇŞÈ";
             Text[ dutch ] = "Controle weergeven";
@@ -2274,7 +2274,7 @@ Menu RID_POPUP_BRKPROPS
             Text[ russian ] = "Àêòèâíûé";
             Text[ polish ] = "Aktywny";
             Text[ japanese ] = "±¸Ã¨ÌŞ";
-            Text[ chinese_traditional ] = "¿E¬¡";
+            Text[ chinese_traditional ] = "¨Ï¥Î¤¤";
             Text[ arabic ] = "äÔØ";
             Text[ dutch ] = "Actief";
             Text[ chinese_simplified ] = "¼¤»î";
