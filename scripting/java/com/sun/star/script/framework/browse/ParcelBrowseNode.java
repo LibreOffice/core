@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelBrowseNode.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 13:55:37 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 13:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@ import com.sun.star.script.XInvocation;
 
 import com.sun.star.ucb.XSimpleFileAccess;
 
-import drafts.com.sun.star.script.browse.XBrowseNode;
-import drafts.com.sun.star.script.browse.BrowseNodeTypes;
+import com.sun.star.script.browse.XBrowseNode;
+import com.sun.star.script.browse.BrowseNodeTypes;
 
 import com.sun.star.script.framework.provider.ScriptProvider;
 import com.sun.star.script.framework.log.LogUtils;
