@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: sb $ $Date: 2000-10-18 10:12:37 $
+#   last change: $Author: kso $ $Date: 2001-10-12 13:01:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ PRJ=..$/..
 
 PRJNAME=ucb
 TARGET=ucbdemo
+TARGETTYPE=GUI
 LIBTARGET=NO
 
 ENABLE_EXCEPTIONS=TRUE
