@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: thb $ $Date: 2001-09-27 09:18:28 $
+ *  last change: $Author: ka $ $Date: 2001-10-26 12:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,18 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
     if (pInfo)
     {
         const SvxFieldData* pField = pInfo->GetField().GetField();
+        SdDrawDocShell*     pDocShell = NULL;
+
+        if( pInfo->GetOutliner() )
+        {
+            const SdrTextObj* pTextObj = static_cast< SdrOutliner* >( pInfo->GetOutliner() )->GetTextObj();
+
+            if( pTextObj && pTextObj->GetModel() && pTextObj->GetModel()->ISA( SdDrawDocument ) )
+                pDocShell = static_cast< SdDrawDocument* >( pTextObj->GetModel() )->GetDocSh();
+        }
+
+        if( !pDocShell )
+            pDocShell = PTR_CAST( SdDrawDocShell, SfxObjectShell::Current() );
 
         if (pField && pField->ISA(SvxDateField))
         {
@@ -192,23 +204,17 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             String aFile;
             if( pFileField->GetType() == SVXFILETYPE_FIX )
                 aFile =  pFileField->GetFormatted();
-            else
+            else if( pDocShell )
             {
-                SdDrawDocShell* pDocSh = PTR_CAST( SdDrawDocShell,
-                                            SfxObjectShell::Current() );
+                String aName;
+                if( pDocShell->HasName() )
+                    aName = pDocShell->GetMedium()->GetName();
+                else
+                    aName = pDocShell->GetName();
 
-                if( pDocSh )
-                {
-                    String aName;
-                    if( pDocSh->HasName() )
-                        aName = pDocSh->GetMedium()->GetName();
-                    else
-                        aName = pDocSh->GetName();
-
-                    // #92496# Set new content also for living field
-                    const_cast< SvxExtFileField* >(pFileField)->SetFile( aName );
-                    aFile = pFileField->GetFormatted();
-                }
+                // #92496# Set new content also for living field
+                const_cast< SvxExtFileField* >(pFileField)->SetFile( aName );
+                aFile = pFileField->GetFormatted();
             }
 
             pInfo->SetRepresentation( aFile );
@@ -245,7 +251,10 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             String aRepresentation;
             aRepresentation += sal_Unicode( ' ' );
 
-            SdViewShell* pViewSh = PTR_CAST( SdViewShell, SfxViewShell::Current() );
+            SdViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
+
+            if( !pViewSh )
+                pViewSh = PTR_CAST( SdViewShell, SfxViewShell::Current() );
 
             if( pViewSh )
             {

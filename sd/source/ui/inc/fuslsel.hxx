@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuslsel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-24 13:20:01 $
+ *  last change: $Author: ka $ $Date: 2001-10-26 12:36:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,6 @@ private:
     Point                       CalcPosOfInsertMarker(const Point& rPoint);
 
     USHORT                      GetTargetPage(const Point& rPoint) const;
-    BOOL                        MovePages(USHORT nTargetPage) const;
 
     void                        CreateSubst();
     void                        DeleteSubst();
