@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:37:04 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,21 +271,6 @@ XclBoolError XclTools::ErrorToEnum( double& rfDblValue, sal_uInt8 bErrOrBool, sa
         rfDblValue = nValue ? 1.0 : 0.0;
     }
     return eType;
-}
-
-
-sal_Int32 XclTools::CalcX( ScDocument& rDoc, sal_uInt16 nTab, sal_uInt16 nCol, sal_uInt16 nColOffset, double fScale )
-{
-    return static_cast< sal_Int32 >( fScale *
-        (rDoc.GetColOffset( nCol, nTab ) +
-        ::std::min< sal_uInt16 >( nColOffset, 1024 ) / 1024.0 * rDoc.GetColWidth( nCol, nTab )) );
-}
-
-sal_Int32 XclTools::CalcY( ScDocument& rDoc, sal_uInt16 nTab, sal_uInt16 nRow, sal_uInt16 nRowOffset, double fScale )
-{
-    return static_cast< sal_Int32 >( fScale *
-        (rDoc.GetRowOffset( nRow, nTab ) +
-        ::std::min< sal_uInt16 >( nRowOffset, 256 ) / 256.0 * rDoc.GetRowHeight( nRow, nTab )) );
 }
 
 
