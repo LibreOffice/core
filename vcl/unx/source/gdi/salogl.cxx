@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:59:38 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 12:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,9 @@ Display*        X11SalOpenGL::mpDisplay    = 0;
 XVisualInfo*    X11SalOpenGL::mpVisualInfo = 0;
 BOOL            X11SalOpenGL::mbHaveGLVisual = FALSE;
 
-#ifdef MACOSX
 oslModule      X11SalOpenGL::mpGLLib    = 0;
-#else
-void *      X11SalOpenGL::mpGLLib    = 0;
+#ifdef SOLARIS
+oslModule      aMotifLib;
 #endif
 
 ULONG       X11SalOpenGL::mnOGLState = OGL_STATE_UNLOADED;
@@ -225,10 +224,7 @@ bool X11SalOpenGL::IsValid()
             }
         }
         if( mnOGLState != OGL_STATE_VALID )
-        {
-            ImplFreeLib();
             mnOGLState = OGL_STATE_INVALID;
-        }
 #if OSL_DEBUG_LEVEL > 1
         if( mnOGLState == OGL_STATE_VALID )
             fprintf( stderr, "Using GLX on visual id %x.\n", mpVisualInfo->visualid );
@@ -240,11 +236,34 @@ bool X11SalOpenGL::IsValid()
     return mnOGLState == OGL_STATE_VALID ? TRUE : FALSE;
 }
 
-// ------------------------------------------------------------------------
-
 void X11SalOpenGL::Release()
 {
-    ImplFreeLib();
+    if( maGLXContext && pDestroyContext )
+        pDestroyContext( mpDisplay, maGLXContext );
+}
+
+// ------------------------------------------------------------------------
+
+void X11SalOpenGL::ReleaseLib()
+{
+    if( mpGLLib )
+    {
+        osl_unloadModule( mpGLLib );
+        #ifdef SOLARIS
+        if( aMotifLib )
+            osl_unloadModule( aMotifLib );
+        #endif
+
+        mpGLLib             = 0;
+        pCreateContext      = 0;
+        pDestroyContext     = 0;
+        pGetCurrentContext  = 0;
+        pMakeCurrent        = 0;
+        pSwapBuffers        = 0;
+        pGetConfig          = 0;
+
+        mnOGLState          = OGL_STATE_UNLOADED;
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -274,41 +293,13 @@ void X11SalOpenGL::OGLExit( SalGraphics* pGraphics )
 
 // ------------------------------------------------------------------------
 
-void X11SalOpenGL::ImplFreeLib()
-{
-    if( mpGLLib )
-    {
-        if( maGLXContext && pDestroyContext )
-            pDestroyContext( mpDisplay, maGLXContext );
-#ifdef MACOSX
-        osl_unloadModule( (oslModule) mpGLLib );
-#else
-        osl_unloadModule( mpGLLib );
-#endif
-
-        mpGLLib             = 0;
-        pCreateContext      = 0;
-        pDestroyContext     = 0;
-        pGetCurrentContext  = 0;
-        pMakeCurrent        = 0;
-        pSwapBuffers        = 0;
-        pGetConfig          = 0;
-    }
-}
-
-// ------------------------------------------------------------------------
-
 void* X11SalOpenGL::resolveSymbol( const char* pSymbol )
 {
     void* pSym = NULL;
     if( mpGLLib )
     {
         OUString aSym = OUString::createFromAscii( pSymbol );
-#ifdef MACOSX
-        pSym = osl_getSymbol( (oslModule) mpGLLib, aSym.pData );
-#else
         pSym = osl_getSymbol( mpGLLib, aSym.pData );
-#endif
     }
     return pSym;
 }
@@ -321,8 +312,21 @@ BOOL X11SalOpenGL::ImplInit()
         ByteString sNoGL( getenv( "SAL_NOOPENGL" ) );
         if( sNoGL.ToLowerAscii() == "true"  )
             return FALSE;
+
+        sal_Int32 nRtldMode = SAL_LOADMODULE_NOW;
+        #ifdef SOLARIS
+        /* #i36866# an obscure interaction with jvm can let java crash
+        *  if we do not use SAL_LOADMODULE_GLOBAL here
+        */
+        nRtldMode |= SAL_LOADMODULE_GLOBAL;
+
+        /* #i36899# and we need Xm, too, else jvm will not work properly.
+        */
+        OUString aMotifName( RTL_CONSTASCII_USTRINGPARAM( "libXm.so" ) );
+        aMotifLib = osl_loadModule( aMotifName.pData, nRtldMode );
+        #endif
         OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( OGL_LIBNAME ) );
-        mpGLLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_NOW );
+        mpGLLib = osl_loadModule( aLibName.pData, nRtldMode );
     }
     if( ! mpGLLib )
     {
@@ -404,10 +408,7 @@ void X11SalOpenGL::MakeVisualWeights( Display* pDisplay,
         return;
 
     if( ! ImplInit() )
-    {
-        ImplFreeLib();
         return;
-    }
 
     for( i = 0; i < nVisuals; i++ )
     {
@@ -425,6 +426,4 @@ void X11SalOpenGL::MakeVisualWeights( Display* pDisplay,
             }
         }
     }
-
-    ImplFreeLib();
 }
