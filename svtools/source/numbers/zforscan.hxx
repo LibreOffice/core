@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2000-10-17 18:46:13 $
+ *  last change: $Author: er $ $Date: 2000-11-03 20:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ private:                            // ---- privater Teil
     xub_StrLen nCurrPos;                        // Position des Waehrungssymbols
 
 #ifdef _ZFORSCAN_CXX                // ----- private Methoden -----
-    void SetDependentKeywords(LanguageType eLnge);
+    void SetDependentKeywords();
                                                 // Setzt die Sprachabh. Keyw.
     void SkipStrings(USHORT& i,xub_StrLen& nPos);// Ueberspringt StringSymbole
     USHORT PreviousKeyword(USHORT i);           // Gibt Index des vorangeh.
