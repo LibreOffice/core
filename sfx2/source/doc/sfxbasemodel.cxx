@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:58:43 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,14 @@
 #include <com/sun/star/view/PaperOrientation.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTIONBROADCASTER_HPP_
+#include <com/sun/star/embed/XTransactionBroadcaster.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
@@ -121,6 +129,18 @@
 
 #ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDER_HPP_
 #include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <drafts/com/sun/star/ui/XUIConfigurationManagerSupllier.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONSTORAGE_HPP_
+#include <drafts/com/sun/star/ui/XUIConfigurationStorage.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
 #endif
 
 #ifndef _UNO_MAPPING_HXX_
@@ -245,6 +265,7 @@
 #include "loadenv.hxx"
 #include "docfac.hxx"
 #include "fcontnr.hxx"
+#include "commitlistener.hxx"
 
 //________________________________________________________________________________________________________
 //  defines
@@ -274,6 +295,8 @@
 #define XINDEXCONTAINER                         ::com::sun::star::container::XIndexContainer
 #define UNSUPPORTEDFLAVOREXCEPTION              ::com::sun::star::datatransfer::UnsupportedFlavorException
 #define XPRINTJOBLISTENER                       ::com::sun::star::view::XPrintJobListener
+#define XUICONFIGURATIONSTORAGE                 ::drafts::com::sun::star::ui::XUIConfigurationStorage
+#define XPROPERTYSET                            ::com::sun::star::beans::XPropertySet
 
 //________________________________________________________________________________________________________
 //  namespaces
@@ -319,6 +342,8 @@ struct IMPL_SfxBaseModel_DataContainer
     REFERENCE< com::sun::star::view::XPrintJob>     m_xPrintJob             ;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aPrintOptions;
     REFERENCE< XSCRIPTPROVIDER >                        m_xScriptProvider;
+    REFERENCE< XUICONFIGURATIONMANAGER >                m_xUIConfigurationManager;
+    OChildCommitListen_Impl*                            m_pChildCommitListen;
 
     IMPL_SfxBaseModel_DataContainer::IMPL_SfxBaseModel_DataContainer(   MUTEX&          aMutex          ,
                                                                         SfxObjectShell* pObjectShell    )
@@ -329,6 +354,7 @@ struct IMPL_SfxBaseModel_DataContainer
             ,   m_aInterfaceContainer   ( aMutex        )
             ,   m_bClosed               ( sal_False     )
             ,   m_bClosing              ( sal_False     )
+            ,   m_pChildCommitListen    ( NULL          )
     {
     }
 } ;
@@ -458,9 +484,10 @@ ANY SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( RUNTIME
                                             static_cast< XVIEWDATASUPPLIER*     > ( this )  ,
                                                static_cast< XEVENTBROADCASTER*      > ( this )  ,
                                                static_cast< XUNOTUNNEL*             > ( this )  ,
+                                            static_cast< XUICONFIGURATIONMANAGERSUPPLIER* > ( this ) ,
                                                static_cast< XDOCUMENTSUBSTORAGESUPPLIER* > ( this ) ,
                                                static_cast< XSCRIPTPROVIDERSUPPLIER* > ( this ) ,
-                                               static_cast< XEVENTSSUPPLIER*        > ( this )  ) ;
+                                               static_cast< XEVENTSSUPPLIER*        > ( this ) ) ;
     }
     // If searched interface supported by this class ...
     if ( aReturn.hasValue() == sal_True )
@@ -742,6 +769,14 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
         }
 
         return;
+    }
+
+    // disconnect from the listener so that no more messages from substorages come
+    if ( m_pData->m_pChildCommitListen )
+    {
+        m_pData->m_pChildCommitListen->OwnerIsDisposed();
+        m_pData->m_pChildCommitListen->release();
+        m_pData->m_pChildCommitListen = NULL;
     }
 
     EVENTOBJECT aEvent( (XMODEL *)this );
@@ -2304,7 +2339,41 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
         SfxEventHint* pNamedHint = PTR_CAST( SfxEventHint, &rHint );
         if ( pNamedHint )
         {
-            if ( SFX_EVENT_SAVEASDOCDONE == pNamedHint->GetEventId() )
+            if ( SFX_EVENT_SAVEASDOC == pNamedHint->GetEventId() )
+            {
+                // Temporary solution for storage problem
+                if ( m_pData->m_xUIConfigurationManager.is() )
+                {
+                    Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNO_QUERY );
+                    xUIConfigStorage->setStorage( REFERENCE< XSTORAGE >() );
+                }
+            }
+            else if ( SFX_EVENT_SAVEDOC == pNamedHint->GetEventId() )
+            {
+                // Temporary solution for storage problem
+                if ( m_pData->m_xUIConfigurationManager.is() )
+                {
+                    Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNO_QUERY );
+                    xUIConfigStorage->setStorage( REFERENCE< XSTORAGE >() );
+                }
+            }
+            else if ( SFX_EVENT_SAVEDOCDONE == pNamedHint->GetEventId() )
+            {
+                // Temporary solution for storage problem
+                if ( m_pData->m_xUIConfigurationManager.is() )
+                {
+                    REFERENCE< XSTORAGE > xConfigStorage;
+                    rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
+
+                    xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::ELEMENT_READWRITE );
+                    if ( !xConfigStorage.is() )
+                        xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::ELEMENT_READ );
+
+                    Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNO_QUERY );
+                    xUIConfigStorage->setStorage( xConfigStorage );
+                }
+            }
+            else if ( SFX_EVENT_SAVEASDOCDONE == pNamedHint->GetEventId() )
             {
                 m_pData->m_sURL = m_pData->m_pObjectShell->GetMedium()->GetName();
                 SfxItemSet *pSet = m_pData->m_pObjectShell->GetMedium()->GetItemSet();
@@ -2313,6 +2382,20 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                 TransformItems( SID_SAVEASDOC, *pSet, aArgs );
                 addTitle_Impl( aArgs, aTitle );
                 attachResource( m_pData->m_pObjectShell->GetMedium()->GetName(), aArgs );
+
+                // Temporary solution for storage problem
+                if ( m_pData->m_xUIConfigurationManager.is() )
+                {
+                    REFERENCE< XSTORAGE > xConfigStorage;
+                    rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
+
+                    xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::ELEMENT_READWRITE );
+                    if ( !xConfigStorage.is() )
+                        xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::ELEMENT_READ );
+
+                    Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNO_QUERY );
+                    xUIConfigStorage->setStorage( xConfigStorage );
+                }
             }
 
             postEvent_Impl( *pNamedHint );
@@ -2682,6 +2765,15 @@ sal_Int64 SAL_CALL SfxBaseModel::getSomething( const ::com::sun::star::uno::Sequ
     return 0;
 }
 
+void SfxBaseModel::ChildIsCommited()
+{
+    // this call can only be called by listener that listens for commit of substorages of models storage
+    // there must be no locking, listener does it
+
+    if ( !impl_isDisposed() && m_pData->m_pObjectShell.Is() )
+        m_pData->m_pObjectShell->SetModified( sal_True );
+}
+
 REFERENCE< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentSubStorage( const ::rtl::OUString& aStorageName, sal_Int32 nMode )
     throw ( RUNTIMEEXCEPTION)
 {
@@ -2694,7 +2786,20 @@ REFERENCE< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentSubStorage( const ::rtl:
     {
         SotStorageRef rStorage = m_pData->m_pObjectShell->GetMedium()->GetStorage();
         if ( rStorage.Is() )
+        {
             xResult = rStorage->GetUNOAPIDuplicate( aStorageName, nMode );
+            uno::Reference< embed::XTransactionBroadcaster > xBroadcaster( xResult, UNO_QUERY );
+            if ( xBroadcaster.is() )
+            {
+                if ( m_pData->m_pChildCommitListen == NULL )
+                {
+                    m_pData->m_pChildCommitListen = new OChildCommitListen_Impl( *this );
+                    m_pData->m_pChildCommitListen->acquire();
+                }
+                xBroadcaster->addTransactionListener( static_cast< embed::XTransactionListener* >(
+                                                                        m_pData->m_pChildCommitListen ) );
+            }
+        }
     }
 
     return xResult;
@@ -2721,3 +2826,48 @@ REFERENCE< XSCRIPTPROVIDER > SAL_CALL SfxBaseModel::getScriptProvider()
     return m_pData->m_xScriptProvider;
 }
 
+REFERENCE< XUICONFIGURATIONMANAGER > SAL_CALL SfxBaseModel::getUIConfigurationManager()
+        throw ( RUNTIMEEXCEPTION )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
+    if ( !m_pData->m_xUIConfigurationManager.is() )
+    {
+        m_pData->m_xUIConfigurationManager = REFERENCE< XUICONFIGURATIONMANAGER >(
+            ::comphelper::getProcessServiceFactory()->createInstance(
+                ::rtl::OUString::createFromAscii( "drafts.com.sun.star.ui.UIConfigurationManager" )),
+                UNO_QUERY );
+
+        Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNO_QUERY );
+        if ( xUIConfigStorage.is() )
+        {
+            rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
+            REFERENCE< XSTORAGE > xConfigStorage;
+
+            // First try to open with READWRITE and then READ
+            xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::ELEMENT_READWRITE );
+            if ( xConfigStorage.is() )
+            {
+                rtl::OUString aMediaTypeProp( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ));
+                rtl::OUString aUIConfigMediaType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.xml.ui.configuration" ));
+                rtl::OUString aMediaType;
+                REFERENCE< XPROPERTYSET > xPropSet( xConfigStorage, UNO_QUERY );
+                Any a = xPropSet->getPropertyValue( aMediaTypeProp );
+                if ( !( a >>= aMediaType ) || ( aMediaType.getLength() == 0 ))
+                {
+                    a <<= aUIConfigMediaType;
+                    xPropSet->setPropertyValue( aMediaTypeProp, a );
+                }
+            }
+            else
+                xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::ELEMENT_READ );
+
+            // initialize ui configuration manager with document substorage
+            xUIConfigStorage->setStorage( xConfigStorage );
+        }
+    }
+
+    return m_pData->m_xUIConfigurationManager;
+}
