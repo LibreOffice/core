@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:54:06 $
+ *  last change: $Author: rt $ $Date: 2003-05-27 16:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1169,6 +1169,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool
             aBox.SetLine( &aNew, BOX_LINE_BOTTOM );
 
             aSet.Put( aBox );
+            aSet.Put( SwParaConnectBorderItem( FALSE ) );
             SetAllScriptItem( aSet, SvxFontHeightItem(120) );
 
             SvxULSpaceItem aUL;
