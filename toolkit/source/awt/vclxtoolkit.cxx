@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-23 10:21:28 $
+ *  last change: $Author: obr $ $Date: 2002-08-23 12:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1309,7 +1309,7 @@ void SAL_CALL VCLXToolkit::fireFocusGained(
 }
 
 // virtual
-void SAL_CALL fireFocusLost(
+void SAL_CALL VCLXToolkit::fireFocusLost(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::uno::XInterface > const & source)
     throw (::com::sun::star::uno::RuntimeException)
