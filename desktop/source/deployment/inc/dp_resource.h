@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_resource.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:06:27 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,10 @@
 #include "vos/mutex.hxx"
 #include "tools/string.hxx"
 #include "tools/resid.hxx"
+#include "com/sun/star/lang/Locale.hpp"
 
 
-namespace dp_misc
-{
+namespace dp_misc {
 
 extern ::vos::IMutex * g_pResMgrMmutex;
 
@@ -77,6 +77,20 @@ ResId getResId( USHORT id );
 
 //==============================================================================
 String getResourceString( USHORT id );
+
+//==============================================================================
+inline ::com::sun::star::lang::Locale toLocale( ::rtl::OUString const & slang )
+{
+    ::com::sun::star::lang::Locale locale;
+    sal_Int32 nIndex = 0;
+    locale.Language = slang.getToken( 0, '-', nIndex );
+    locale.Country = slang.getToken( 1, '-', nIndex );
+    locale.Variant = slang.getToken( 2, '-', nIndex );
+    return locale;
+}
+
+//==============================================================================
+::com::sun::star::lang::Locale const & getOfficeLocale();
 
 }
 
