@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-20 12:14:21 $
+ *  last change: $Author: lla $ $Date: 2001-01-10 13:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ void OCreateSubtreeAction::handle(SubtreeChange& _rChange)
 //--------------------------------------------------------------------------
 void OCreateSubtreeAction::handle(RemoveNode& _rChange)
 {
-    OSL_ENSURE(false,"OCreateSubtreeAction::handle: RemoveNode isn't valid");
+    // we have nothing to do
 }
 
 //--------------------------------------------------------------------------
