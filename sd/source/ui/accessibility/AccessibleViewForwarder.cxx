@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleViewForwarder.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-04-11 13:30:12 $
+ *  last change: $Author: af $ $Date: 2002-04-22 14:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ AccessibleViewForwarder::AccessibleViewForwarder (SdrPaintView* pView, USHORT nW
 
 AccessibleViewForwarder::AccessibleViewForwarder (SdrPaintView* pView, OutputDevice& rDevice)
     : mpView (pView),
-      mnWindowId (-1),
+      mnWindowId (0),
       mrDevice (rDevice)
 {
     // Search the output device to determine its id.
