@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convertgb18030.tab,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-12 10:44:53 $
+ *  last change: $Author: sb $ $Date: 2001-10-12 13:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,6 @@
 #include "rtl/textenc.h"
 #endif
 
-#ifndef INCLUDED_STDDEF_H
-#include <stddef.h>
-#define INCLUDED_STDDEF_H
-#endif
-
 #include "generate/gb180302000.tab"
 
 static ImplGb18030ConverterData const aImplGb18030ConvertData
@@ -100,8 +95,8 @@ static ImplTextEncodingData const aImplGb18030TextEncodingData
         1,
         4,
         2,
-        0, /* TODO! */
-        NULL, /* TODO! */
+        134,
+        "gbk-0",
         "UTF-8",
         RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
     /* SCRIPT_CHINESE_SIMPLIFIED */
