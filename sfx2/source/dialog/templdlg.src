@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:52:26 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 05:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ ModalDialog RID_STYLECATALOG
     Text [ spanish ] = "Catálogo de estilos" ;
     Text [ danish ] = "Typografi-katalog" ;
     Text [ swedish ] = "Mallkatalog" ;
-    Text [ finnish ] = "Stylesheet Catalogue" ;
+    Text [ finnish ] = "Tyyliluettelo" ;
     Text [ english_us ] = "Style Catalog" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel oder OK - Button !
@@ -127,7 +127,7 @@ ModalDialog RID_STYLECATALOG
         Text [ spanish ] = "~Administrar..." ;
         Text [ danish ] = "Administrer..." ;
         Text [ swedish ] = "~Administrera..." ;
-        Text [ finnish ] = "~Organize..." ;
+        Text [ finnish ] = "~Järjestelytyökalu" ;
         Text [ english_us ] = "~Organizer..." ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "¹ÜÀí(~O)...";
@@ -158,7 +158,7 @@ ModalDialog RID_STYLECATALOG
         Text [ spanish ] = "~Eliminar..." ;
         Text [ danish ] = "Slet..." ;
         Text [ swedish ] = "~Radera..." ;
-        Text [ finnish ] = "~Delete..." ;
+        Text [ finnish ] = "~Poista" ;
         Text [ english_us ] = "~Delete..." ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "É¾³ý(~D)...";
@@ -189,7 +189,7 @@ ModalDialog RID_STYLECATALOG
         Text [ spanish ] = "~Modificar..." ;
         Text [ danish ] = "Modificer..." ;
         Text [ swedish ] = "Än~dra..." ;
-        Text [ finnish ] = "~Change..." ;
+        Text [ finnish ] = "~Muokkaa" ;
         Text [ english_us ] = "~Modify..." ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "¸ü¸Ä(~M)...";
@@ -214,7 +214,7 @@ ModalDialog RID_STYLECATALOG
         Text [ portuguese_brazilian ] = "~Novo..." ;
         Text [ portuguese ] = "~Novo..." ;
         Text [ english_us ] = "~New..." ;
-        Text [ finnish ] = "~Uusi..." ;
+        Text [ finnish ] = "~Uusi" ;
         Text [ danish ] = "Ny..." ;
         Text [ french ] = "~Nouveau..." ;
         Text [ swedish ] = "~Nytt..." ;
@@ -298,6 +298,7 @@ String DLG_STYLE_DESIGNER
     Text[ korean ] = "½ºÅ¸ÀÏ";
     Text[ turkish ] = "Stylist";
     Text[ catalan ] = "Estilista";
+    Text[ finnish ] = "Tyylityökalu";
 };
 String STR_STYLE_FILTER_HIERARCHICAL
 {
@@ -307,7 +308,7 @@ String STR_STYLE_FILTER_HIERARCHICAL
     TEXT [ italian ] = "Gerarchico" ;
     TEXT [ portuguese_brazilian ] = "Hierarchical" ;
     TEXT [ portuguese ] = "Hierárquico" ;
-    TEXT [ finnish ] = "Hierarchical" ;
+    TEXT [ finnish ] = "Hierarkkinen" ;
     TEXT [ danish ] = "Hierarkisk" ;
     TEXT [ french ] = "Hiérarchie" ;
     TEXT [ swedish ] = "Hierarkiskt" ;
@@ -364,7 +365,7 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text [ portuguese_brazilian ] = "Watercan" ;
                 Text [ portuguese ] = "Preenchimento completo" ;
                 Text [ english_us ] = "Fill Format Mode" ;
-                Text [ finnish ] = "Ruisku" ;
+                Text [ finnish ] = "Täyttömuodon laji" ;
                 Text [ danish ] = "Fyldmodus" ;
                 Text [ french ] = "Mode Remplir tout" ;
                 Text [ swedish ] = "Vattenkanneläge" ;
@@ -394,7 +395,7 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text [ portuguese_brazilian ] = "Novo estilo por exemplo" ;
                 Text [ portuguese ] = "Novo estilo a partir da selecção" ;
                 Text [ english_us ] = "New Style from Selection" ;
-                Text [ finnish ] = "Uusi tyyli esimerkin mukaan" ;
+                Text [ finnish ] = "Uusi tyyli valinnasta" ;
                 Text [ danish ] = "Ny typografi fra markeringen" ;
                 Text [ french ] = "Nouveau style à partir de la sélection" ;
                 Text [ swedish ] = "Ny formatmall från markering" ;
@@ -422,7 +423,7 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text [ portuguese_brazilian ] = "Atualizar estilo por exemplo" ;
                 Text [ portuguese ] = "Actualizar modelo" ;
                 Text [ english_us ] = "Update Style" ;
-                Text [ finnish ] = "Päivitä tyyli esimerkin mukaan" ;
+                Text [ finnish ] = "Päivitä tyyli" ;
                 Text [ danish ] = "Opdater typografi" ;
                 Text [ french ] = "Actualiser le style" ;
                 Text [ swedish ] = "Uppdatera formatmall" ;
