@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 10:00:34 $
+ *  last change: $Author: mba $ $Date: 2001-06-20 10:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,7 +611,7 @@ const ::rtl::OUString& SfxObjectFactory::GetDocumentServiceName() const
 void SfxObjectFactory::RegisterObjectFactory_Impl( SfxObjectFactory &rFac )
 {
     SfxObjectFactory *pFac = &rFac;
-    GetObjFacArray_Impl().C40_INSERT( SfxObjectFactory, pFac, GetObjFacArray_Impl().Count() );
+    GetObjFacArray_Impl().Insert( pFac, GetObjFacArray_Impl().Count() );
 }
 
 //--------------------------------------------------------------------
