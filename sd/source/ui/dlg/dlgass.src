@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 06:32:01 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,7 @@ ModalDialog DLG_ASS
         Text [ swedish ] = "Välj ut ett presentationsmedium" ;
         Text [ danish ] = "Vælg et output-medie" ;
         Text [ portuguese ] = "Seleccione o modo de apresentação" ;
-        Text [ portuguese_brazilian ] = "Wählen Sie das Medium Ihrer Präsentation" ;
+        Text [ portuguese_brazilian ] = "W?hlen Sie das Medium Ihrer Pr?sentation" ;
         Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÊä³öÑİÊ¾ÎÄ¸åµÄÃ½Ìå";
         Text[ russian ] = "Ñğåäñòâî ïîêàçà ïğåçåíòàöèè";
         Text[ polish ] = "Proszê wybraæ medium prezentacji";
@@ -566,7 +566,7 @@ ModalDialog DLG_ASS
         Text[ italian ] = "Scegliete un cambio diapositive";
         Text[ danish ] = "Vælg en diasovergang";
         Text[ swedish ] = "Välj ut en diabildsväxling";
-        Text[ polish ] = "Wybierz typ przejœcia slajdu";
+        Text[ polish ] = "Wybierz typ przej?cia slajdu";
         Text[ portuguese_brazilian ] = "Choose your slide change";
         Text[ japanese ] = "‰æ–ÊØ‚è‘Ö‚¦•û–@";
         Text[ chinese_simplified ] = "ÇëÑ¡ÔñÒ»¸ö¸ü»»µÄ»ÃµÆÆ¬";
@@ -636,7 +636,7 @@ ModalDialog DLG_ASS
         Text[ italian ] = "Velocità:";
         Text[ danish ] = "Hastighed:";
         Text[ swedish ] = "~Hastighet:";
-        Text[ polish ] = "Szy~bkoœæ:";
+        Text[ polish ] = "Szy~bko?æ:";
         Text[ portuguese_brazilian ] = "~Speed:";
         Text[ japanese ] = "½Ëß°ÄŞ(~S):";
         Text[ chinese_simplified ] = "ËÙ¶È(~S)£º";
@@ -706,7 +706,7 @@ ModalDialog DLG_ASS
         Text[ italian ] = "Standard";
         Text[ danish ] = "Standard";
         Text[ swedish ] = "~Standard";
-        Text[ polish ] = "Domyœlne";
+        Text[ polish ] = "Domy?lne";
         Text[ portuguese_brazilian ] = "~Standard";
         Text[ japanese ] = "•W€(~D)";
         Text[ chinese_simplified ] = "±ê×¼(~D)";
@@ -821,7 +821,7 @@ ModalDialog DLG_ASS
         Text[ italian ] = "Durata pausa";
         Text[ danish ] = "Pausetid";
         Text[ swedish ] = "~Paustid";
-        Text[ polish ] = "D³ugoœæ przerwy";
+        Text[ polish ] = "D³ugo?æ przerwy";
         Text[ portuguese_brazilian ] = "~Duration of pause";
         Text[ japanese ] = "ŠÔ‚ğ’u‚­ŠÔ(~R)";
         Text[ chinese_simplified ] = "ÔİÍ£Ê±¼ä(~R)";
@@ -985,7 +985,7 @@ ModalDialog DLG_ASS
         Text [ swedish ] = "Vilket tema har Din presentation?" ;
         Text [ danish ] = "Hvilket emne skal præsentationen have?" ;
         Text [ portuguese ] = "Qual é o tema da sua apresentação?" ;
-        Text [ portuguese_brazilian ] = "Was ist der Themenbereich Ihrer Präsentation?" ;
+        Text [ portuguese_brazilian ] = "Was ist der Themenbereich Ihrer Pr?sentation?" ;
         Text[ chinese_simplified ] = "ÑİÊ¾ÎÄ¸åµÄÖ÷Ìâ°üÀ¨ÄÄĞ©·½Ãæ£¿";
         Text[ russian ] = "Íàçîâèòå òåìó Âàøåé ïğåçåíòàöèè";
         Text[ polish ] = "Co jest tematem twojej prezentacji?";
@@ -1157,7 +1157,7 @@ ModalDialog DLG_ASS
         Text [ dutch ] = "<< Vor~ige" ;
         Text [ swedish ] = "<< ~Tillbaka" ;
         Text [ danish ] = "<< Tilbage" ;
-        Text [ portuguese_brazilian ] = "<< ~Zurück" ;
+        Text [ portuguese_brazilian ] = "<< ~Zur?k" ;
         Text [ portuguese ] = "<< ~Anterior" ;
         Text[ chinese_simplified ] = "<< ·µ»Ø(~B)";
         Text[ russian ] = "<< ~Íàçàä";
