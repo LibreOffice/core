@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:19:56 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,16 @@ IMPL_LINK( SwInsertChartDlg, NextHdl, Button *, pBtn )
     SfxViewFrame* pVFrame = pWrtShell->GetView().GetViewFrame();
     pVFrame->ShowChildWindow(SID_INSERT_DIAGRAM, FALSE);
     bChildOpen = TRUE;
+    bool bEnabled = IsEnabled();
+    /* #i35390# prevent focus from wandering into this dialog
+     * while pScChartTestDlg is executing. Else the strange "fix"
+     * for #107337# in :Activate can easily produce and endless
+     * loop of activation/deactivation. It's a rather strange idea
+     * to Hide() in Activate()
+     */
+    Enable( FALSE );
     USHORT nResult = pChartDlg->Execute();
+    Enable( bEnabled );
     bChildOpen = FALSE;
     switch( nResult )
     {
