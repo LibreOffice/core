@@ -2,9 +2,9 @@
 *
 *  $RCSfile: StorageBridge.hxx,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: dfoster $ $Date: 2002-10-23 14:11:26 $
+*  last change: $Author: dfoster $ $Date: 2002-10-24 13:57:03 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -104,7 +104,7 @@ public:
      */
     virtual css::uno::Sequence< ::rtl::OUString >
         SAL_CALL getScriptLogicalNames()
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+        throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 private:
     StorageBridge( const css::uno::Reference< css::uno::XComponentContext >& xContext,
         sal_Int32 sid );

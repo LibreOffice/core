@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptRuntimeManager.hxx,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: dfoster $ $Date: 2002-10-23 14:11:24 $
+*  last change: $Author: dfoster $ $Date: 2002-10-24 13:57:02 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -117,10 +117,10 @@ public:
              the invocation context contains the documentStorageID and document reference
              for use in script name resolving
 
-    @param aParams all parameters; pure, out params are undefined in sequence,
-        i.e., the value has to be ignored by the callee
-    @param aOutParamIndex out indices
-    @param aOutParam out parameters
+        @param aParams all parameters; pure, out params are undefined in sequence,
+            i.e., the value has to be ignored by the callee
+        @param aOutParamIndex out indices
+        @param aOutParam out parameters
 
         @returns
             the value returned from the function being invoked

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-23 14:11:22 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-24 13:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,10 +96,10 @@ ScriptNameResolverImpl::ScriptNameResolverImpl(
     m_xContext( xContext ), m_StorageFactory( xContext )
 {
     OSL_TRACE( "< ScriptNameResolverImpl ctor called >\n" );
-    if(!m_pSearchIDs)
+    if( !m_pSearchIDs )
     {
         osl::Guard< osl::Mutex > aGuard( m_mutex );
-        if(!m_pSearchIDs)
+        if( !m_pSearchIDs )
         {
             scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
                 scripting_constants::ScriptingConstantsPool::instance();
@@ -259,22 +259,6 @@ ScriptNameResolverImpl::resolveURIFromStorageID
 ( sal_Int32 sid, const ::rtl::OUString& scriptURI )
 SAL_THROW ( ( lang::IllegalArgumentException, RuntimeException ) )
 {
-#ifdef FOOOOO //_DEBUG
-
-    ::rtl::OString locationO( ::rtl::OUStringToOString(
-        scriptURI.getLocation(), RTL_TEXTENCODING_ASCII_US ) );
-    ::rtl::OString languageO( ::rtl::OUStringToOString(
-        scriptURI.getLanguage(), RTL_TEXTENCODING_ASCII_US ) );
-    ::rtl::OString functionName( ::rtl::OUStringToOString(
-        scriptURI.getFunctionName(), RTL_TEXTENCODING_ASCII_US ) );
-    ::rtl::OString logicalName( ::rtl::OUStringToOString(
-        scriptURI.getLogicalName(), RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr,
-        "trying to resolve URI, {location = %s}, {language = %s}, {funtionName = %s}, {logicalName = %s}\n",
-        locationO.pData->buffer, languageO.pData->buffer,
-        functionName.pData->buffer, logicalName.pData->buffer );
-#endif
-
     Reference< XInterface > resolvedName;
     scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
         scripting_constants::ScriptingConstantsPool::instance();
