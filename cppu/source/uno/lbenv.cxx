@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:29 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,37 +59,6 @@
  *
  ************************************************************************/
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
-#ifndef _OSL_INTERLOCK_H_
-#include <osl/interlck.h>
-#endif
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
-#endif
-#ifndef _OSL_MODULE_H_
-#include <osl/module.h>
-#endif
-#ifndef _OSL_PROCESS_H_
-#include <osl/process.h>
-#endif
-#ifndef _RTL_PROCESS_H_
-#include <rtl/process.h>
-#endif
-#ifndef _RTL_UNLOAD_H_
-#include <rtl/unload.h>
-#endif
-#ifndef _RTL_STRING_HXX_
-#include <rtl/string.hxx>
-#endif
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
-#endif
-
 #include <stdio.h>
 #ifdef SOLARIS
 #include <alloca.h>
@@ -101,27 +70,31 @@
 #include <hash_map>
 #include <vector>
 
-#ifndef _TYPELIB_TYPEDESCRIPTION_H_
-#include <typelib/typedescription.h>
-#endif
-#ifndef _UNO_DISPATCHER_H_
-#include <uno/dispatcher.h>
-#endif
-#ifndef _UNO_ENVIRONMENT_H_
-#include <uno/environment.h>
-#endif
+#include "osl/diagnose.h"
+#include "osl/interlck.h"
+#include "osl/mutex.hxx"
+#include "osl/module.h"
+#include "osl/process.h"
+#include "rtl/process.h"
+#include "rtl/unload.h"
+#include "rtl/string.hxx"
+#include "rtl/ustring.hxx"
+#include "rtl/ustrbuf.hxx"
+
+#include "typelib/typedescription.h"
+#include "uno/dispatcher.h"
+#include "uno/environment.h"
+
+#include "uno/lbnames.h"
 
 #include "prim.hxx"
 #include "destr.hxx"
 
-#include <com/sun/star/uno/XInterface.hpp>
 
-
-using namespace std;
-using namespace osl;
-using namespace rtl;
-using namespace cppu;
-using namespace com::sun::star::uno;
+using namespace ::std;
+using namespace ::osl;
+using namespace ::rtl;
+using namespace ::cppu;
 
 
 namespace cppu
@@ -184,12 +157,15 @@ struct FctOUStringHash : public unary_function< const OUString &, size_t >
 };
 
 // mapping from environment name to environment
-typedef hash_map< OUString, uno_Environment *, FctOUStringHash, equal_to< OUString > > OUString2EnvironmentMap;
+typedef hash_map<
+    OUString, uno_Environment *, FctOUStringHash, equal_to< OUString > > OUString2EnvironmentMap;
 
 // mapping from ptr to object entry
-typedef hash_map< void *, ObjectEntry *, FctPtrHash, equal_to< void * > > Ptr2ObjectMap;
+typedef hash_map<
+    void *, ObjectEntry *, FctPtrHash, equal_to< void * > > Ptr2ObjectMap;
 // mapping from oid to object entry
-typedef hash_map< OUString, ObjectEntry *, FctOUStringHash, equal_to< OUString > > OId2ObjectMap;
+typedef hash_map<
+    OUString, ObjectEntry *, FctOUStringHash, equal_to< OUString > > OId2ObjectMap;
 
 //==================================================================================================
 struct EnvironmentsData
@@ -288,12 +264,15 @@ inline const InterfaceEntry * ObjectEntry::find(
     typelib_InterfaceTypeDescription * pTypeDescr ) const
     SAL_THROW( () )
 {
+    OSL_ASSERT( ! aInterfaces.empty() );
+
     // shortcut common case
-    if (((typelib_TypeDescription *)pTypeDescr)->pTypeName->length == sizeof("com.sun.star.uno.XInterface") &&
-        ::rtl_ustr_ascii_compare( ((typelib_TypeDescription *)pTypeDescr)->pTypeName->buffer,
-                                  "com.sun.star.uno.XInterface" ) == 0)
+    OUString const & type_name =
+        * reinterpret_cast< OUString const * >(
+            &((typelib_TypeDescription *) pTypeDescr)->pTypeName );
+    if (type_name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ))
     {
-        return &aInterfaces[0];
+        return &aInterfaces[ 0 ];
     }
 
     size_t nSize = aInterfaces.size();
@@ -654,7 +633,7 @@ static void writeLine( void * stream, const sal_Char * pLine, const sal_Char * p
                 {
                     if (stream)
                     {
-                        ::fprintf( (FILE *)stream, "%s\n", pLine );
+                        fprintf( (FILE *) stream, "%s\n", pLine );
                     }
                     else
                     {
@@ -670,11 +649,11 @@ static void writeLine( void * stream, const sal_Char * pLine, const sal_Char * p
     {
         if (stream)
         {
-            ::fprintf( (FILE *)stream, "%s\n", pLine );
+            fprintf( (FILE *) stream, "%s\n", pLine );
         }
         else
         {
-            ::fprintf( stderr, "%s\n", pLine );
+            fprintf( stderr, "%s\n", pLine );
         }
     }
 }
@@ -816,46 +795,25 @@ static void SAL_CALL unoenv_computeObjectIdentifier(
         *ppOId = 0;
     }
 
-    typelib_InterfaceTypeDescription * pTXInterfaceDescr = 0;
-    const Type & rXIType = ::getCppuType( (const Reference< XInterface > *)0 );
-    typelib_TypeDescription * pMTqueryInterface = _getQueryInterfaceTypeDescr();
-
-    void * pArgs[1];
-    pArgs[0] = const_cast< Type * >( &rXIType );
-    uno_Any aRet, aExc;
-    uno_Any * pExc = &aExc;
-
-    (*((uno_Interface *)pInterface)->pDispatcher)(
-        (uno_Interface *)pInterface, pMTqueryInterface, &aRet, pArgs, &pExc );
-
-    OSL_ENSURE( !pExc, "### Exception occured during queryInterface()!" );
-    if (pExc) // cleanup exception object
+    uno_Interface * pUnoI = (uno_Interface *)
+        binuno_queryInterface(
+            pInterface, * typelib_static_type_getByTypeClass( typelib_TypeClass_INTERFACE ) );
+    if (0 != pUnoI)
     {
-        _destructAny( pExc, 0 );
+        (*pUnoI->release)( pUnoI );
+        // interface
+        OUStringBuffer oid( 64 );
+        oid.append( reinterpret_cast< sal_Int64 >( pUnoI ), 16 );
+        oid.append( (sal_Unicode)';' );
+        // environment[context]
+        oid.append( ((uno_Environment *) pEnv)->pTypeName );
+        oid.append( (sal_Unicode)'[' );
+        oid.append( (sal_Int64)((uno_Environment *) pEnv)->pContext, 16 );
+        // process;good guid
+        oid.append( unoenv_getStaticOIdPart() );
+        OUString aStr( oid.makeStringAndClear() );
+        ::rtl_uString_acquire( *ppOId = aStr.pData );
     }
-    else
-    {
-        OSL_ENSURE( aRet.pType->eTypeClass == typelib_TypeClass_INTERFACE,
-                     "### cannot query for XInterface!" );
-        if (aRet.pType->eTypeClass == typelib_TypeClass_INTERFACE)
-        {
-            // interface
-            OUStringBuffer oid( 64 );
-            oid.append( (sal_Int64)*(void **)aRet.pData, 16 );
-            oid.append( (sal_Unicode)';' );
-            // environment[context]
-            oid.append( ((uno_Environment *)pEnv)->pTypeName );
-            oid.append( (sal_Unicode)'[' );
-            oid.append( (sal_Int64)((uno_Environment *)pEnv)->pContext, 16 );
-            // process;good guid
-            oid.append( unoenv_getStaticOIdPart() );
-            OUString aStr( oid.makeStringAndClear() );
-            ::rtl_uString_acquire( *ppOId = aStr.pData );
-        }
-        _destructAny( &aRet, 0 );
-    }
-
-    typelib_typedescription_release( pMTqueryInterface );
 }
 //==================================================================================================
 static void SAL_CALL unoenv_acquireInterface( uno_ExtEnvironment *, void * pUnoI )
@@ -886,10 +844,10 @@ EnvironmentsData::~EnvironmentsData() SAL_THROW( () )
 
         if (pHard)
         {
-#ifdef CPPU_ALLOW_ASSERTIONS
-            ::uno_dumpEnvironment( 0, pHard, 0 );
+#if defined DEBUG
+            uno_dumpEnvironment( 0, pHard, 0 );
 #endif
-#ifdef CPPU_LEAK_STATIC_DATA
+#if defined CPPU_LEAK_STATIC_DATA
             pHard->environmentDisposing = 0; // set to null => wont be called
 #else
             (*pHard->dispose)( pHard ); // send explicit dispose
