@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclfactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:00 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,11 +96,17 @@ class PolyPolygon;
 class Size;
 class Graphic;
 class GDIMetaFile;
+class Animation;
 
 namespace rtl
 {
     class OUString;
 }
+namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
+{
+    class  XBitmapCanvas;
+    class  XSpriteCanvas;
+} } } } }
 
 /* Definition of VCLFactory class */
 
@@ -120,8 +126,12 @@ namespace cppcanvas
         static VCLFactory& getInstance();
 
         BitmapCanvasSharedPtr   createCanvas( const ::Window& rVCLWindow );
+        BitmapCanvasSharedPtr   createCanvas( const ::com::sun::star::uno::Reference<
+                                                          ::drafts::com::sun::star::rendering::XBitmapCanvas >& xCanvas );
 
         SpriteCanvasSharedPtr   createSpriteCanvas( const ::Window& rVCLWindow ) const;
+        SpriteCanvasSharedPtr   createSpriteCanvas( const ::com::sun::star::uno::Reference<
+                                                               ::drafts::com::sun::star::rendering::XSpriteCanvas >& xCanvas ) const;
         SpriteCanvasSharedPtr   createFullscreenSpriteCanvas( const ::Window& rVCLWindow, const Size& rFullscreenSize ) const;
 
         /** Create a polygon from a tools::Polygon
@@ -136,6 +146,10 @@ namespace cppcanvas
          */
         BitmapSharedPtr         createBitmap( const CanvasSharedPtr&, const ::Size& rSize ) const;
 
+        /** Create an uninitialized alpha bitmap with the given size
+         */
+        BitmapSharedPtr         createAlphaBitmap( const CanvasSharedPtr&, const ::Size& rSize ) const;
+
         /** Create a bitmap from a VCL Bitmap
          */
         BitmapSharedPtr         createBitmap( const CanvasSharedPtr&, const ::Bitmap& rBitmap ) const;
@@ -146,13 +160,17 @@ namespace cppcanvas
             The created renderer initially draws the graphic
             one-by-one units large, in user coordinate space
          */
-        RendererSharedPtr       createRenderer( const CanvasSharedPtr&, const ::Graphic& rGraphic ) const;
+        RendererSharedPtr       createRenderer( const CanvasSharedPtr&          rCanvas,
+                                                const ::Graphic&                rGraphic,
+                                                const Renderer::Parameters&     rParms ) const;
         /** Create a renderer object from a Metafile
 
             The created renderer initially draws the metafile
             one-by-one units large, in user coordinate space
          */
-        RendererSharedPtr       createRenderer( const CanvasSharedPtr&, const ::GDIMetaFile& rMtf ) const;
+        RendererSharedPtr       createRenderer( const CanvasSharedPtr&          rCanvas,
+                                                const ::GDIMetaFile&            rMtf,
+                                                const Renderer::Parameters&     rParms ) const;
 
         /** Create an animated sprite from a VCL animation
          */
