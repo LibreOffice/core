@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:01:31 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,11 +181,16 @@ BOOL SwEditWin::RulerColumnDrag( SwView& rView , const MouseEvent& rMEvt, BOOL b
 }
 
 // #i23726#
-BOOL SwEditWin::RulerMarginDrag( SwView& rView , const MouseEvent& rMEvt)
+// --> OD 2005-02-18 #i42921# - add 3rd parameter <bVerticalMode> in order
+// to consider vertical layout
+BOOL SwEditWin::RulerMarginDrag( SwView& rView,
+                                 const MouseEvent& rMEvt,
+                                 const bool bVerticalMode )
 {
-    SvxRuler& rRuler = rView.GetHLineal();
+    SvxRuler& rRuler = bVerticalMode ?  rView.GetVLineal() : rView.GetHLineal();
     return !rRuler.StartDocDrag( rMEvt, RULER_TYPE_INDENT);
 }
+// <--
 
 Dialog* GetSearchDialog()
 {
