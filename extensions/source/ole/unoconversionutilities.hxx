@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoconversionutilities.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2001-10-18 12:27:26 $
+ *  last change: $Author: jl $ $Date: 2001-10-22 14:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1309,9 +1309,20 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(IUnknown* pUnknown)
         CComQIPtr<IUnoObjectWrapper> spUno( pUnknown);
         if( spUno)
         {
+            // The wrapped UNO object can either be a struct that has been converted to XInvocation
+            // or another interface
+            // try first for an interface
             Reference<XInterface> xInt;
-            spUno->getOriginalUnoObject( &xInt);
-            ret <<= xInt;
+            if( SUCCEEDED( spUno->getOriginalUnoObject( &xInt)))
+            {
+                ret <<= xInt;
+            }
+            else
+            {
+                Any any;
+                if( SUCCEEDED( spUno->getOriginalUnoStruct(&any)))
+                    ret= any;
+            }
         }
         else
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2001-10-18 12:27:26 $
+ *  last change: $Author: jl $ $Date: 2001-10-22 14:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::getWrapperXInterface( Reference<XInterfac
 STDMETHODIMP InterfaceOleWrapper_Impl::getOriginalUnoObject( Reference<XInterface>* pXInt)
 {
     *pXInt= m_xOrigin;
-    return S_OK;
+    return m_xOrigin.is() ? S_OK : E_FAIL;
 }
 STDMETHODIMP  InterfaceOleWrapper_Impl::getOriginalUnoStruct( Any * pStruct)
 {

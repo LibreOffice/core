@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jscriptclasses.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:40 $
+ *  last change: $Author: jl $ $Date: 2001-10-22 14:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,8 @@ STDMETHODIMP JScriptValue::Set( VARIANT type, VARIANT value)
 {
     Lock();
     HRESULT hr= S_OK;
-    m_varValue= value;
+    m_varValue.Clear();
+    hr= VariantCopyInd( &m_varValue, &value);
     VARIANT var;
     VariantInit( &var);
     if( SUCCEEDED( hr= VariantChangeType( &var, &type, 0, VT_BSTR)))
