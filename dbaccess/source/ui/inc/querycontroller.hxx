@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:45:58 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,12 +172,6 @@ namespace dbaui
 
         virtual void            reconnect( sal_Bool _bUI );
         virtual void            updateTitle( );
-        /** can be used to load sub toolbars, will be called by the <method>loadMenu</method>.
-            @param _xLayoutManager
-                The layout manager.
-        */
-        virtual void            loadSubToolbar(const ::com::sun::star::uno::Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager);
-
 
         OQueryContainerWindow*  getContainer() const { return static_cast< OQueryContainerWindow* >( getView() ); }
 
@@ -231,6 +225,8 @@ namespace dbaui
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
     protected:
+        virtual void    onLoadedMenu(const ::com::sun::star::uno::Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager);
+
         virtual OTableWindowData* createTableWindowData();
         virtual OJoinDesignView*  getJoinView();
         // ask the user if the design should be saved when it is modified
