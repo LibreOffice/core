@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:03:12 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@
 #ifndef SC_FPROGRESSBAR_HXX
 #include "fprogressbar.hxx"
 #endif
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
+#endif
 #ifndef SC_XESTYLE_HXX
 #include "xestyle.hxx"
 #endif
@@ -235,6 +238,161 @@ void XclExpProgressBar::Progress()
         mpSubProgress->Progress();
 }
 
+// Calc->Excel cell address/range conversion ==================================
+
+namespace {
+
+/** Fills the passed Excel address with the passed Calc cell coordinates without checking any limits. */
+inline void lclFillAddress( XclAddress& rXclPos, SCCOL nScCol, SCROW nScRow )
+{
+    rXclPos.mnCol = static_cast< sal_uInt16 >( nScCol );
+    rXclPos.mnRow = static_cast< sal_uInt16 >( nScRow );
+}
+
+} // namespace
+
+// ----------------------------------------------------------------------------
+
+XclExpAddressConverter::XclExpAddressConverter( const XclExpRoot& rRoot ) :
+    XclAddressConverterBase( rRoot.GetTracer(), rRoot.GetXclMaxPos() )
+{
+}
+
+// cell address ---------------------------------------------------------------
+
+bool XclExpAddressConverter::CheckAddress( const ScAddress& rScPos, bool bWarn )
+{
+    // ScAddress::operator<=() doesn't do what we want here
+    bool bValidCol = (0 <= rScPos.Col()) && (rScPos.Col() <= maMaxPos.Col());
+    bool bValidRow = (0 <= rScPos.Row()) && (rScPos.Row() <= maMaxPos.Row());
+    bool bValidTab = (0 <= rScPos.Tab()) && (rScPos.Tab() <= maMaxPos.Tab());
+
+    bool bValid = bValidCol && bValidRow && bValidTab;
+    if( !bValid && bWarn )
+    {
+        mbColTrunc |= !bValidCol;
+        mbRowTrunc |= !bValidRow;
+        mbTabTrunc |= (rScPos.Tab() > maMaxPos.Tab());  // do not warn for deleted refs
+        mrTracer.TraceInvalidAddress( rScPos, maMaxPos );
+    }
+    return bValid;
+}
+
+bool XclExpAddressConverter::ConvertAddress( XclAddress& rXclPos,
+        const ScAddress& rScPos, bool bWarn )
+{
+    bool bValid = CheckAddress( rScPos, bWarn );
+    if( bValid )
+        lclFillAddress( rXclPos, rScPos.Col(), rScPos.Row() );
+    return bValid;
+}
+
+XclAddress XclExpAddressConverter::CreateValidAddress( const ScAddress& rScPos, bool bWarn )
+{
+    XclAddress aXclPos( ScAddress::UNINITIALIZED );
+    if( !ConvertAddress( aXclPos, rScPos, bWarn ) )
+    {
+        aXclPos.mnCol = static_cast< sal_uInt16 >( rScPos.Col(), maMaxPos.Col() );
+        aXclPos.mnRow = static_cast< sal_uInt16 >( rScPos.Row(), maMaxPos.Row() );
+    }
+    return aXclPos;
+}
+
+// cell range -----------------------------------------------------------------
+
+bool XclExpAddressConverter::CheckRange( const ScRange& rScRange, bool bWarn )
+{
+    return CheckAddress( rScRange.aStart, bWarn ) && CheckAddress( rScRange.aEnd, bWarn );
+}
+
+bool XclExpAddressConverter::ValidateRange( ScRange& rScRange, bool bWarn )
+{
+    rScRange.Justify();
+
+    // check start position
+    bool bValidStart = CheckAddress( rScRange.aStart, bWarn );
+    if( bValidStart )
+    {
+        // check & correct end position
+        ScAddress& rScEnd = rScRange.aEnd;
+        if( !CheckAddress( rScEnd, bWarn ) )
+        {
+            rScEnd.SetCol( ::std::min( rScEnd.Col(), maMaxPos.Col() ) );
+            rScEnd.SetRow( ::std::min( rScEnd.Row(), maMaxPos.Row() ) );
+            rScEnd.SetTab( ::std::min( rScEnd.Tab(), maMaxPos.Tab() ) );
+        }
+    }
+
+    return bValidStart;
+}
+
+bool XclExpAddressConverter::ConvertRange( XclRange& rXclRange,
+        const ScRange& rScRange, bool bWarn )
+{
+    // check start position
+    bool bValidStart = CheckAddress( rScRange.aStart, bWarn );
+    if( bValidStart )
+    {
+        lclFillAddress( rXclRange.maFirst, rScRange.aStart.Col(), rScRange.aStart.Row() );
+
+        // check & correct end position
+        SCCOL nScCol2 = rScRange.aEnd.Col();
+        SCROW nScRow2 = rScRange.aEnd.Row();
+        if( !CheckAddress( rScRange.aEnd, bWarn ) )
+        {
+            nScCol2 = ::std::min( nScCol2, maMaxPos.Col() );
+            nScRow2 = ::std::min( nScRow2, maMaxPos.Row() );
+        }
+        lclFillAddress( rXclRange.maLast, nScCol2, nScRow2 );
+    }
+    return bValidStart;
+}
+
+XclRange XclExpAddressConverter::CreateValidRange( const ScRange& rScRange, bool bWarn )
+{
+    return XclRange(
+        CreateValidAddress( rScRange.aStart, bWarn ),
+        CreateValidAddress( rScRange.aEnd, bWarn ) );
+}
+
+// cell range list ------------------------------------------------------------
+
+bool XclExpAddressConverter::CheckRangeList( const ScRangeList& rScRanges, bool bWarn )
+{
+    for( ULONG nIdx = 0, nSize = rScRanges.Count(); nIdx < nSize; ++nIdx )
+        if( const ScRange* pScRange = rScRanges.GetObject( nIdx ) )
+            if( !CheckRange( *pScRange, bWarn ) )
+                return false;
+    return true;
+}
+
+void XclExpAddressConverter::ValidateRangeList( ScRangeList& rScRanges, bool bWarn )
+{
+    ULONG nIdx = rScRanges.Count();
+    while( nIdx )
+    {
+        --nIdx; // backwards to keep nIdx valid
+        ScRange* pScRange = rScRanges.GetObject( nIdx );
+        if( pScRange && !CheckRange( *pScRange, bWarn ) )
+            delete rScRanges.Remove( nIdx );
+    }
+}
+
+void XclExpAddressConverter::ConvertRangeList( XclRangeList& rXclRanges,
+        const ScRangeList& rScRanges, bool bWarn )
+{
+    rXclRanges.clear();
+    for( ULONG nPos = 0, nCount = rScRanges.Count(); nPos < nCount; ++nPos )
+    {
+        if( const ScRange* pScRange = rScRanges.GetObject( nPos ) )
+        {
+            XclRange aXclRange( ScAddress::UNINITIALIZED );
+            if( ConvertRange( aXclRange, *pScRange, bWarn ) )
+                rXclRanges.push_back( aXclRange );
+        }
+    }
+}
+
 // EditEngine->String conversion ==============================================
 
 namespace {
@@ -265,7 +423,7 @@ String XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
 {
     String aUrlRepr;
 
-    if( GetBiff() >= xlBiff8 )      // no HLINK records in BIFF2-BIFF7
+    if( GetBiff() == EXC_BIFF8 )    // no HLINK records in BIFF2-BIFF7
     {
         // there was/is already a HLINK record
         mbMultipleUrls = mxLinkRec.is();
@@ -490,7 +648,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
         const XclExpRoot& rRoot, const String& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
     XclExpStringRef xString( new XclExpString );
-    if( rRoot.GetBiff() >= xlBiff8 )
+    if( rRoot.GetBiff() == EXC_BIFF8 )
         xString->Assign( rString, nFlags, nMaxLen );
     else
         xString->AssignByte( rString, rRoot.GetCharSet(), nFlags, nMaxLen );
@@ -507,7 +665,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
 
 void XclExpStringHelper::AppendString( XclExpString& rXclString, const XclExpRoot& rRoot, const String& rString )
 {
-    if( rRoot.GetBiff() >= xlBiff8 )
+    if( rRoot.GetBiff() == EXC_BIFF8 )
         rXclString.Append( rString );
     else
         rXclString.AppendByte( rString, rRoot.GetCharSet() );
@@ -515,7 +673,7 @@ void XclExpStringHelper::AppendString( XclExpString& rXclString, const XclExpRoo
 
 void XclExpStringHelper::AppendChar( XclExpString& rXclString, const XclExpRoot& rRoot, sal_Unicode cChar )
 {
-    if( rRoot.GetBiff() >= xlBiff8 )
+    if( rRoot.GetBiff() == EXC_BIFF8 )
         rXclString.Append( cChar );
     else
         rXclString.AppendByte( cChar, rRoot.GetCharSet() );
@@ -931,11 +1089,10 @@ void lclEncodeDosUrl( XclBiff eBiff, String& rUrl, const String* pTableName = 0 
     {
         switch( eBiff )
         {
-            case xlBiff5:
-            case xlBiff7:
+            case EXC_BIFF5:
                 rUrl = pTableName ? EXC_URLSTART_SELFENCODED : EXC_URLSTART_SELF;
             break;
-            case xlBiff8:
+            case EXC_BIFF8:
                 DBG_ASSERT( pTableName, "lclEncodeDosUrl - sheet name required for BIFF8" );
                 rUrl = EXC_URLSTART_SELF;
             break;
@@ -1047,7 +1204,7 @@ sal_uInt32 XclExpCachedMatrix::GetSize() const
 
 void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
 {
-    if( rStrm.GetRoot().GetBiff() <= xlBiff7 )
+    if( rStrm.GetRoot().GetBiff() <= EXC_BIFF5 )
         // in BIFF2-BIFF7: 256 columns represented by 0 columns
         rStrm << static_cast< sal_uInt8 >( mnScCols ) << static_cast< sal_uInt16 >( mnScRows );
     else
