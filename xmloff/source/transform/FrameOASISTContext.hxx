@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameOASISTContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 16:42:58 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,11 @@ class XMLFrameOASISTransformerContext : public XMLTransformerContext
     ::rtl::OUString m_aElemQName;
 
     bool m_bIgnoreElement;
+
+    sal_Bool IsLinkedEmbeddedObject(
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList >& rAttrList );
 
 public:
     TYPEINFO();
