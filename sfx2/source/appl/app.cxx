@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: er $ $Date: 2001-07-09 08:38:22 $
+ *  last change: $Author: cd $ $Date: 2001-07-10 06:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,7 @@
 #endif
 #include <basic/basmgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <rtl/logfile.hxx>
 
 #include <appuno.hxx>
 #include "sfxhelp.hxx"
@@ -276,6 +277,8 @@ void SfxApplication::SetApp( SfxApplication* pSfxApp )
     static ::osl::Mutex aProtector;
     ::osl::MutexGuard aGuard( aProtector );
 
+    RTL_LOGFILE_CONTEXT( aLog, "SfxApplication::SetApp()" );
+
     DBG_ASSERT( !pApp, "SfxApplication already created!" );
     if ( pApp )
         DELETEZ( pApp );
@@ -309,6 +312,9 @@ SfxApplication::SfxApplication()
     , pImageMgr( 0 )
     , nInterfaces( 0 )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "SfxApplication::SfxApplication()" );
+
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "start create svtools option objects" );
     pSaveOptions = new SvtSaveOptions;
     pUndoOptions = new SvtUndoOptions;
     pHelpOptions = new SvtHelpOptions;
@@ -326,6 +332,7 @@ SfxApplication::SfxApplication()
     pInternalOptions = new SvtInternalOptions;
     pSysLocaleOptions = new SvtSysLocaleOptions;
     SvtViewOptions::AcquireOptions();
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "end create svtools option objects" );
 
     pImp = new SfxApplication_Impl;
     pImp->bConfigLoaded = sal_False;
@@ -361,8 +368,11 @@ SfxApplication::SfxApplication()
     pAppData_Impl->UpdateApplicationSettings( SvtMenuOptions().IsEntryHidingEnabled() );
     pApp->PreInit();
 
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "start create SfxConfigManager" );
     pCfgMgr = new SfxConfigManager;
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "end create SfxConfigManager" );
 
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "start InitializeDDE()" );
 #ifdef DDE_AVAILABLE
 #ifdef PRODUCT
     InitializeDde();
@@ -378,6 +388,7 @@ SfxApplication::SfxApplication()
     }
 #endif
 #endif
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "end InitializeDDE()" );
 }
 
 SfxApplication::~SfxApplication()
