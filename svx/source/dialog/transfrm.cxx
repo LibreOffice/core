@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:12:29 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 14:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
+#endif
+#ifndef _SVX_SWPOSSIZETABPAGE_HXX
+#include <swpossizetabpage.hxx>
 #endif
 
 // Toleranz fuer WorkingArea
@@ -233,8 +236,19 @@ SvxTransformTabDialog::SvxTransformTabDialog( Window* pParent, const SfxItemSet*
 
     DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
 
-    AddTabPage( RID_SVXPAGE_POSITION_SIZE, SvxPositionSizeTabPage::Create,
+    //different positioning page in Writer
+    if(nAnchorCtrls & 0x00ff )
+    {
+        AddTabPage( RID_SVXPAGE_SWPOSSIZE, SvxSwPosSizeTabPage::Create,
+                           SvxSwPosSizeTabPage::GetRanges );
+        RemoveTabPage( RID_SVXPAGE_POSITION_SIZE);
+    }
+    else
+    {
+        AddTabPage( RID_SVXPAGE_POSITION_SIZE, SvxPositionSizeTabPage::Create,
                             SvxPositionSizeTabPage::GetRanges );
+        RemoveTabPage( RID_SVXPAGE_SWPOSSIZE );
+    }
     AddTabPage( RID_SVXPAGE_ANGLE, SvxAngleTabPage::Create,
                             SvxAngleTabPage::GetRanges );
     AddTabPage( RID_SVXPAGE_SLANT, SvxSlantTabPage::Create,
@@ -256,14 +270,22 @@ void SvxTransformTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
         case RID_SVXPAGE_POSITION_SIZE:
             ( (SvxPositionSizeTabPage&) rPage ).SetView( pView );
             ( (SvxPositionSizeTabPage&) rPage ).Construct();
-            if( nAnchorCtrls & SVX_OBJ_NORESIZE )
-                ( (SvxPositionSizeTabPage&) rPage ).DisableResize();
+          if( nAnchorCtrls & SVX_OBJ_NORESIZE )
+              ( (SvxPositionSizeTabPage&) rPage ).DisableResize();
 
-            if( nAnchorCtrls & SVX_OBJ_NOPROTECT )
-                ( (SvxPositionSizeTabPage&) rPage ).DisableProtect();
+          if( nAnchorCtrls & SVX_OBJ_NOPROTECT )
+              ( (SvxPositionSizeTabPage&) rPage ).DisableProtect();
 
-            if(nAnchorCtrls & 0x00ff )
-                ( (SvxPositionSizeTabPage&) rPage ).ShowAnchorCtrls(nAnchorCtrls);
+//          if(nAnchorCtrls & 0x00ff )
+//              ( (SvxPositionSizeTabPage&) rPage ).ShowAnchorCtrls(nAnchorCtrls);
+        break;
+        case RID_SVXPAGE_SWPOSSIZE :
+        {
+            SvxSwPosSizeTabPage& rSwPos =  static_cast<SvxSwPosSizeTabPage&>(rPage);
+            rSwPos.EnableAnchorTypes(nAnchorCtrls);
+            rSwPos.SetValidateFramePosLink( aValidateLink );
+            rSwPos.SetView( pView );
+        }
         break;
 
         case RID_SVXPAGE_ANGLE:
@@ -276,6 +298,14 @@ void SvxTransformTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
             ( (SvxSlantTabPage&) rPage ).Construct();
         break;
     }
+}
+
+/*-- 05.03.2004 11:47:36---------------------------------------------------
+    link for the Writer to validate positions
+  -----------------------------------------------------------------------*/
+void SvxTransformTabDialog::SetValidateFramePosLink( const Link& rLink )
+{
+    aValidateLink = rLink;
 }
 
 /*************************************************************************
@@ -773,11 +803,11 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage( Window* pParent, const SfxItemSe
     maTsbPosProtect     ( this, ResId( TSB_POSPROTECT ) ),
     maFtPosReference    ( this, ResId( FT_POSREFERENCE ) ),
     maCtlPos            ( this, ResId( CTL_POSRECT ), RP_LT ),
-    maAnchorBox      ( this, ResId( FL_ANCHOR ) ),
-    maFtAnchor       ( this, ResId( FT_ANCHOR ) ),
-    maDdLbAnchor     ( this, ResId( LB_ANCHOR ) ),
-    maFtOrient       ( this, ResId( FT_ORIENT ) ),
-    maDdLbOrient     ( this, ResId( LB_ORIENT ) ),
+//  maAnchorBox      ( this, ResId( FL_ANCHOR ) ),
+//  maFtAnchor       ( this, ResId( FT_ANCHOR ) ),
+//  maDdLbAnchor     ( this, ResId( LB_ANCHOR ) ),
+//  maFtOrient       ( this, ResId( FT_ORIENT ) ),
+//  maDdLbOrient     ( this, ResId( LB_ORIENT ) ),
     mbPageDisabled   ( FALSE ),
 
     maFlSize                         ( this, ResId( FL_SIZE ) ),
@@ -810,8 +840,8 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage( Window* pParent, const SfxItemSe
     DBG_ASSERT( pPool, "Wo ist der Pool" );
     mePoolUnit = pPool->GetMetric( SID_ATTR_TRANSFORM_POS_X );
 
-    maDdLbAnchor.SetSelectHdl( LINK( this, SvxPositionSizeTabPage, SetAnchorHdl ) );
-    maDdLbOrient.SetSelectHdl( LINK( this, SvxPositionSizeTabPage, SetOrientHdl ) );
+//  maDdLbAnchor.SetSelectHdl( LINK( this, SvxPositionSizeTabPage, SetAnchorHdl ) );
+//  maDdLbOrient.SetSelectHdl( LINK( this, SvxPositionSizeTabPage, SetOrientHdl ) );
 
     meRP = RP_LT; // s.o.
 
@@ -992,7 +1022,7 @@ BOOL SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
                     maTsbPosProtect.GetState() == STATE_CHECK ? TRUE : FALSE ) );
             bModified |= TRUE;
         }
-        if(maAnchorBox.IsVisible()) //nur fuer den Writer
+/*      if(maAnchorBox.IsVisible()) //nur fuer den Writer
         {
             if(maDdLbAnchor.GetSavedValue() != maDdLbAnchor.GetSelectEntryPos())
             {
@@ -1007,7 +1037,7 @@ BOOL SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
                         SID_ATTR_TRANSFORM_VERT_ORIENT, maDdLbOrient.GetSelectEntryPos()));
             }
         }
-    }
+*/  }
 
     if ( maMtrWidth.IsValueModified() || maMtrHeight.IsValueModified() )
     {
@@ -1127,7 +1157,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet& rOutAttrs )
         // #i2379# Disable controls for protected objects
         ChangePosProtectHdl( this );
 
-        if(maAnchorBox.IsVisible()) //nur fuer den Writer
+/*      if(maAnchorBox.IsVisible()) //nur fuer den Writer
         {
             pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_ANCHOR );
             USHORT nAnchorPos = 0;
@@ -1162,7 +1192,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet& rOutAttrs )
             SetOrientHdl(&maDdLbOrient);
             maCtlPos.Invalidate();
         }
-    }
+*/  }
 
     pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_WIDTH );
     mlOldWidth = Max( pItem ? ( (const SfxUInt32Item*)pItem )->GetValue() : 0, (UINT32)1 );
@@ -1665,7 +1695,7 @@ void SvxPositionSizeTabPage::PointChanged( Window* pWindow, RECT_POINT eRP )
 
 //------------------------------------------------------------------------
 
-void SvxPositionSizeTabPage::ShowAnchorCtrls(USHORT nAnchorCtrls)
+/*void SvxPositionSizeTabPage::ShowAnchorCtrls(USHORT nAnchorCtrls)
 {
     maTsbAutoGrowWidth.Hide();
     maTsbAutoGrowHeight.Hide();
@@ -1689,7 +1719,7 @@ void SvxPositionSizeTabPage::ShowAnchorCtrls(USHORT nAnchorCtrls)
         maDdLbAnchor.RemoveEntry(0);
 
     maDdLbAnchor     .Show();
-};
+};*/
 
 //------------------------------------------------------------------------
 
@@ -1718,7 +1748,7 @@ void SvxPositionSizeTabPage::DisableProtect()
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxPositionSizeTabPage, SetAnchorHdl, ListBox *, pBox)
+/*IMPL_LINK( SvxPositionSizeTabPage, SetAnchorHdl, ListBox *, pBox)
 {
     BOOL bDisable = TRUE;
     switch( (ULONG)pBox->GetEntryData(pBox->GetSelectEntryPos()) )
@@ -1747,16 +1777,16 @@ IMPL_LINK( SvxPositionSizeTabPage, SetAnchorHdl, ListBox *, pBox)
     }
     return 0;
 }
-
+*/
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxPositionSizeTabPage, SetOrientHdl, ListBox *, pBox )
+/*IMPL_LINK( SvxPositionSizeTabPage, SetOrientHdl, ListBox *, pBox )
 {
     if(pBox->IsEnabled())
     switch( pBox->GetSelectEntryPos() )
     {
         case SVX_VERT_TOP         :
-        case SVX_VERT_CENTER      :
+           case SVX_VERT_CENTER      :
         case SVX_VERT_BOTTOM      :
         case SVX_VERT_LINE_TOP    :
         case SVX_VERT_LINE_CENTER :
@@ -1768,7 +1798,7 @@ IMPL_LINK( SvxPositionSizeTabPage, SetOrientHdl, ListBox *, pBox )
         break;
     }
     return 0;
-}
+}*/
 
 Rectangle SvxPositionSizeTabPage::GetRect()
 {
