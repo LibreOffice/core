@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:10:42 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:14:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1399,6 +1399,10 @@ Image IMG_HELP_TOOLBOX_HCL_COPY
     ImageBitmap = Bitmap { File = "lch05711.bmp" ; };
     MASKCOLOR_MAGENTA
 };
+
+
+
+
 
 
 
