@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.16 $
- *  last change: $Author: hdu $ $Date: 2001-03-08 11:41:12 $
+ *  $Revision: 1.17 $
+ *  last change: $Author: hdu $ $Date: 2001-03-08 12:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,7 +417,7 @@ static inline void SplitGlyphFlags( int& nGlyphIndex, int& nGlyphFlags )
     nGlyphIndex &= 0x00ffffff;
 }
 
-static void SetTransform( int nSin, int nCos, int nGlyphFlags, FT_Glyph& rGlyphFT )
+static void SetTransform( int nSin, int nCos, int nHeight, int nGlyphFlags, FT_Glyph& rGlyphFT )
 {
     FT_Vector aVector = { 0, 0};
     FT_Matrix aMatrix;
@@ -428,14 +428,16 @@ static void SetTransform( int nSin, int nCos, int nGlyphFlags, FT_Glyph& rGlyphF
         aMatrix.yy = -nSin;
         aMatrix.xy = -nCos;
         aMatrix.yx = +nCos;
-        //TODO: aVector += ...
+        aVector.x += (nHeight * nCos) >> 10;
+        aVector.y += (nHeight * nSin) >> 10;
         break;
     case +2:    // right
         aMatrix.xx = -nSin;
         aMatrix.yy = -nSin;
         aMatrix.xy = +nCos;
         aMatrix.yx = -nCos;
-        //TODO: aVector += ...
+        aVector.x -= (nHeight * nCos) >> 10;
+        aVector.y -= (nHeight * nSin) >> 10;
         break;
     default:    // straight
         aMatrix.xx = +nCos;
@@ -530,7 +532,8 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     if( aGlyphFT->format != ft_glyph_format_bitmap )
     {
         if( (nCos!=0x10000) || (nGlyphFlags!=0) )
-            SetTransform( nSin, nCos, nGlyphFlags, aGlyphFT );
+            SetTransform( nSin, nCos, GetFontSelData().mnHeight,
+                nGlyphFlags, aGlyphFT );
 
         if( aGlyphFT->format == ft_glyph_format_outline )
             ((FT_OutlineGlyphRec*)aGlyphFT )->outline.flags |= ft_outline_high_precision;
@@ -543,16 +546,6 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     // autohinting miscaculates the offsets below by +-1
     rRawBitmap.mnXOffset        = +rBmpGlyphFT->left;
     rRawBitmap.mnYOffset        = -rBmpGlyphFT->top;
-
-    if( nGlyphFlags != 0 )
-    {
-        // TODO: remove once vector move works in SetTransform
-        int nH = GetFontSelData().mnHeight;
-        if( nGlyphFlags == +2 )
-            nH = -nH;
-        rRawBitmap.mnXOffset += (nH * nCos) >> 16;
-        rRawBitmap.mnYOffset -= (nH * nSin) >> 16;
-    }
 
     const FT_Bitmap& rBitmapFT  = rBmpGlyphFT->bitmap;
     rRawBitmap.mnHeight         = rBitmapFT.rows;
@@ -597,7 +590,8 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     if( aGlyphFT->format == ft_glyph_format_outline )
     {
         if( (nCos!=0x10000) || (nGlyphFlags!=0) )
-            SetTransform( nSin, nCos, nGlyphFlags, aGlyphFT );
+            SetTransform( nSin, nCos, GetFontSelData().mnHeight,
+                nGlyphFlags, aGlyphFT );
 
         ((FT_OutlineGlyph)aGlyphFT)->outline.flags |= ft_outline_high_precision;
     }
@@ -609,16 +603,6 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(aGlyphFT);
     rRawBitmap.mnXOffset        = +rBmpGlyphFT->left;
     rRawBitmap.mnYOffset        = -rBmpGlyphFT->top;
-
-    if( nGlyphFlags != 0 )
-    {
-        // TODO: remove once vector move works in SetTransform
-        int nH = GetFontSelData().mnHeight;
-        if( nGlyphFlags == +2 )
-            nH = -nH;
-        rRawBitmap.mnXOffset += (nH * nCos) >> 16;
-        rRawBitmap.mnYOffset -= (nH * nSin) >> 16;
-    }
 
     const FT_Bitmap& rBitmapFT  = rBmpGlyphFT->bitmap;
     rRawBitmap.mnHeight         = rBitmapFT.rows;
