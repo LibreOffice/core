@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: bc $ $Date: 2002-10-02 11:30:27 $
+ *  last change: $Author: bc $ $Date: 2002-10-21 13:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,11 +498,11 @@ public class ReportWizard {
             if (iPos != iOldContentPos){
             iOldContentPos = iPos;
             tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(false));
-            CurReportDocument.ReportTextDocument.lockControllers();
+//          CurReportDocument.ReportTextDocument.lockControllers();
             CurReportDocument.loadSectionsfromTemplate(CurReportPaths.ContentFiles[0][iPos]);
             CurReportDocument.loadStyleTemplates(CurReportPaths.ContentFiles[0][iPos], "LoadTextStyles");
             CurReportDocument.setTableColumnSeparators();
-            CurReportDocument.ReportTextDocument.unlockControllers();
+//          CurReportDocument.ReportTextDocument.unlockControllers();
             CurReportDocument.selectFirstPage();
             tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(true));
             }
@@ -522,7 +522,6 @@ public class ReportWizard {
             tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(true));
             }
             break;
-
         default:
             break;
            }
@@ -1364,6 +1363,10 @@ public class ReportWizard {
     }
 
 
+    /**
+     * @param xMSF
+     * @param CurPropertyValue
+     */
     public void startReportWizard(XMultiServiceFactory xMSF, Object[] CurPropertyValue){
     try{
     xGlobalMSF = xMSF;
@@ -1416,6 +1419,9 @@ public class ReportWizard {
             break;
         }
         if (bdisposeDialog == true)
+        if (CurReportDocument.ReportTextDocument.hasControllersLocked())
+            CurReportDocument.ReportTextDocument.unlockControllers();
+        System.out.println("WizardDialog wird weggeschmissen!");
         CurUNODialog.xComponent.dispose();
     }
     else{
@@ -1442,6 +1448,7 @@ public class ReportWizard {
         if (bcreateLink && bDocisStored)
             CurReportDocument.CurDBMetaData.createDBLink(CurReportDocument.CurDBMetaData.DataSource, StorePath);
         }
+        System.out.println("Fortschrittsdialog wird weggeschmissen!");
         CurUNOProgressDialog.xComponent.dispose();
     }
     catch (ThreadDeath td){

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: bc $ $Date: 2002-09-23 12:58:49 $
+ *  last change: $Author: bc $ $Date: 2002-10-21 13:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.script.XInvocation;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.style.XStyleLoader;
+import com.sun.star.style.BreakType;
 import com.sun.star.style.TabStop;
 import com.sun.star.frame.XFrame;
 import com.sun.star.awt.XListBox;
@@ -372,6 +373,8 @@ public class Dataimport extends ReportWizard{
     int RecordFieldCount = FieldCount - GroupFieldCount;
     int[] SelColIndices = null;
     int[] GroupColIndices = null;
+    BreakType CorrBreakValue = null;
+    String CorrPageDescName = "";
     int iCommandType = CurDBMetaData.CommandType;
     if ((iCommandType == com.sun.star.sdb.CommandType.QUERY) || (iCommandType == com.sun.star.sdb.CommandType.COMMAND)){
         SelColIndices = CurDBMetaData.getSelectedQueryFields(CurDBMetaData.RecordFieldNames);
@@ -383,10 +386,23 @@ public class Dataimport extends ReportWizard{
     XFrame xFrame = CurReportDocument.Frame;
     xTextDocument.lockControllers();
         if (CurDBMetaData.ResultSet.next() == true){
+
         tools.setUNOPropertyValue(xTextCursor, "PageDescName", "First Page");
         for (ColIndex = 0; ColIndex < GroupFieldCount; ColIndex++){
             CurGroupTableName = "Tbl_GroupField" + Integer.toString(ColIndex+1);
             xGroupBaseTables[ColIndex] = (XTextTable) CurReportDocument.TextTablesSupplier.getTextTables().getByName(CurGroupTableName);
+        if (ColIndex == 0){
+            BreakType BreakValue = (BreakType) tools.getUNOPropertyValue(xGroupBaseTables[ColIndex], "BreakType");
+            if (BreakValue.equals(BreakType.NONE) == false) {
+            CorrBreakValue = BreakValue;
+            tools.setUNOPropertyValue(xGroupBaseTables[ColIndex], "BreakType", BreakType.NONE);
+            }
+            String PageDescName = (String) tools.getUNOPropertyValue(xGroupBaseTables[ColIndex], "PageDescName");
+            if (PageDescName.equals("") == false){
+            CorrPageDescName = PageDescName;
+            tools.setUNOPropertyValue(xGroupBaseTables[ColIndex], "PageDescName", "");
+            }
+        }
             CurGroupValue = CurDBMetaData.getGroupColumnValue(iCommandType, GroupColIndices, ColIndex);
         OldGroupFieldValues[ColIndex] = CurGroupValue;
         CurGroupFieldFormat = (ReportDocument.GroupFieldFormat) CurReportDocument.GroupFormatVector.elementAt(ColIndex);
@@ -426,6 +442,10 @@ public class Dataimport extends ReportWizard{
         }
     setLayoutSectionsInvisible(CurReportDocument.TextSectionsSupplier, GroupFieldCount);
     CurReportDocument.breakLinkofTextSections();
+    if (CorrBreakValue != null)
+        tools.setUNOPropertyValue(xGroupBaseTables[0], "BreakType", CorrBreakValue);
+    if (CorrPageDescName != "")
+        tools.setUNOPropertyValue(xGroupBaseTables[0], "PageDescName", CorrPageDescName);
     }
     catch( com.sun.star.uno.Exception exception ){
         exception.printStackTrace(System.out);
