@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-05 16:15:20 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-19 13:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@
 #endif
 #ifndef _XMLOFF_XMLSTARBASICCONTEXTFACTORY_HXX
 #include "XMLStarBasicContextFactory.hxx"
+#endif
+#ifndef _XMLOFF_XMLSCRIPTCONTEXTFACTORY_HXX
+#include "XMLScriptContextFactory.hxx"
 #endif
 
 #ifndef _XMLOFF_PROGRESSBARHELPER_HXX
@@ -1211,6 +1214,9 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
         OUString sStarBasic(GetXMLToken(XML_STARBASIC));
         pEventImportHelper->RegisterFactory(sStarBasic,
                                             new XMLStarBasicContextFactory());
+        OUString sScript(GetXMLToken(XML_SCRIPT));
+        pEventImportHelper->RegisterFactory(sScript,
+                                            new XMLScriptContextFactory());
         pEventImportHelper->AddTranslationTable(aStandardEventTable);
 
         // register StarBasic event handler with capitalized spelling

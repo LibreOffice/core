@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-11 14:32:05 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-19 13:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,10 @@
 
 #ifndef _XMLOFF_XMLSTARBASICEXPORTHANDLER_HXX
 #include "XMLStarBasicExportHandler.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLSCRIPTEXPORTHANDLER_HXX
+#include "XMLScriptExportHandler.hxx"
 #endif
 
 #ifndef _XMLOFF_SETTINGSEXPORTHELPER_HXX
@@ -1581,6 +1585,8 @@ XMLEventExport& SvXMLExport::GetEventExport()
         // and register standard handlers + names
         OUString sStarBasic(RTL_CONSTASCII_USTRINGPARAM("StarBasic"));
         pEventExport->AddHandler(sStarBasic, new XMLStarBasicExportHandler());
+        OUString sScript(RTL_CONSTASCII_USTRINGPARAM("Script"));
+        pEventExport->AddHandler(sScript, new XMLScriptExportHandler());
         pEventExport->AddTranslationTable(aStandardEventTable);
     }
 
