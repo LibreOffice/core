@@ -9346,3 +9346,7 @@ _TI3?AVNoMasterException@task@star@sun@com@@
 ?release@?$WeakImplHelper2@VXFolderPicker@dialogs@ui@star@sun@com@@VXServiceInfo@lang@456@@cppu@@WBI@AAXXZ
 _real@4@4000c000000000000000
 ?Call@Link@@QBEJPAX@Z
+?GetHost@INetURLObject@@QBE?AVString@@W4DecodeMechanism@1@G@Z
+?ShouldUseFtpProxy@SvtInetOptions@@QBEEABVOUString@rtl@@@Z
+?getToken@OUString@rtl@@QBE?AV12@JGAAJ@Z
+?valueOf@OUString@rtl@@SA?AV12@_JF@Z
