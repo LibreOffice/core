@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-02 13:52:54 $
+#   last change: $Author: rt $ $Date: 2004-08-23 08:05:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -156,7 +156,8 @@ IDLFILES=\
      ParagraphEnumeration.idl\
      ParagraphVertAlign.idl\
      PlaceholderType.idl\
-     PrintPreviewSettings.idl\
+        PositionLayoutDir.idl\
+        PrintPreviewSettings.idl\
      PrintSettings.idl\
      RedlinePortion.idl\
      ReferenceFieldPart.idl\
