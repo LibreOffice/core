@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: mav $ $Date: 2002-07-09 04:13:05 $
+#   last change: $Author: mav $ $Date: 2002-07-17 14:18:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ IDLFILES=\
     EventDescriptor.idl\
     Events.idl\
     EventObject.idl\
-    ConfigItemAPIMode.idl\
+    UpdateDocMode.idl\
     DocumentInfo.idl\
     ExportFilter.idl\
     FilterFactory.idl\
