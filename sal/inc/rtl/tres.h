@@ -27,9 +27,13 @@ extern "C" {
 #define rtl_tres_Flag_PASSED    0x10000000
 #define rtl_tres_Flag_OK        0x20000000
 
- /* forward declaration and type definitions */
+
+
+ /* forward declaration and type definition */
 struct _rtl_TestResult;
 typedef struct _rtl_TestResult rtl_TestResult;
+
+
 typedef void* rtl_funcstate;
 typedef void* rtl_cmpstate;
 
@@ -63,7 +67,6 @@ typedef sal_Bool (SAL_CALL *rtl_tres_getstat_ptr)( rtl_cmpstate );
 typedef sal_Char* (SAL_CALL *rtl_tres_getmsg_ptr)( rtl_cmpstate );
 typedef rtl_cmpstate (SAL_CALL *rtl_tres_getnextcmpstate_ptr)( rtl_cmpstate );
 
-
  /* type definition of vtable structure for testresult */
 typedef struct _rtl_TestResult_vtable
 {
@@ -88,12 +91,12 @@ typedef struct _rtl_TestResult_vtable
 } rtl_TestResult_vtable;
 
  /* type definition of testresult structure */
-typedef struct _rtl_TestResult
+struct _rtl_TestResult
 {
     rtl_TestResult_vtable * pFuncs;
     void *                  pExternalData;
 
-} rtl_TestResult;
+};
 
 
  /* exports */
