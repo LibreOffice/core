@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-03 14:05:29 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,16 +535,19 @@
                     </value>
                 </prop>
             </node>
-
             <node oor:name="Java" oor:op="replace">
                 <prop oor:name="MigrationService">
-                    <value>com.sun.star.desktop.MigrationOO2</value>
+                    <value>com.sun.star.migration.Java</value>
                 </prop>
                 <prop oor:name="ServiceConfigComponents">
                     <value>org.openoffice.Office.Java</value>
                 </prop>
             </node>
-
+            <node oor:name="Basic" oor:op="replace">
+                <prop oor:name="MigrationService">
+                    <value>com.sun.star.migration.Basic</value>
+                </prop>
+            </node>
             <node oor:name="UserProfile" oor:op="replace">
                 <prop oor:name="IncludedNodes">
                     <value>org.openoffice.UserProfile</value>
