@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgpage.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-24 20:48:13 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:41:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,14 +105,14 @@ TabDialog TAB_PAGE
                 Text [ spanish ] = "Página" ;
                 Text [ english_us ] = "Page" ;
                 PageResID = RID_SVXPAGE_PAGE ;
-                Text[ chinese_simplified ] = "Ò³";
+                Text[ chinese_simplified ] = "é¡µ";
                 Text[ russian ] = "Ñòğàíèöà";
                 Text[ polish ] = "Strona";
-                Text[ japanese ] = "Íß°¼Ş";
-                Text[ chinese_traditional ] = "­¶";
+                Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾";
+                Text[ chinese_traditional ] = "é ";
                 Text[ arabic ] = "ÕİÍÉ";
                 Text[ greek ] = "Óåëßäá";
-                Text[ korean ] = "ÆäÀÌÁö";
+                Text[ korean ] = "í˜ì´ì§€";
                 Text[ turkish ] = "Sayfa";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Página";
@@ -133,14 +133,14 @@ TabDialog TAB_PAGE
                 Text[ dutch ] = "Achtergrond";
                 Text[ spanish ] = "Fondo";
                 Text[ english_us ] = "Background";
-                Text[ chinese_simplified ] = "±³¾°";
+                Text[ chinese_simplified ] = "èƒŒæ™¯";
                 Text[ russian ] = "Ôîí";
                 Text[ polish ] = "T³o";
-                Text[ japanese ] = "”wŒi";
-                Text[ chinese_traditional ] = "­I´º";
+                Text[ japanese ] = "èƒŒæ™¯";
+                Text[ chinese_traditional ] = "èƒŒæ™¯";
                 Text[ arabic ] = "ÇáÎáİíÉ";
                 Text[ greek ] = "Öüíôï";
-                Text[ korean ] = "¹è°æ";
+                Text[ korean ] = "ë°°ê²½";
                 Text[ turkish ] = "Artalan";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Fondo";
@@ -185,30 +185,31 @@ TabDialog TAB_PAGE
         Text [ spanish ] = "Regresar" ;
         Text [ english_us ] = "Return" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "·µ»Ø";
+        Text[ chinese_simplified ] = "è¿”å›";
         Text[ russian ] = "Íàçàä";
         Text[ polish ] = "Wstecz";
-        Text[ japanese ] = "–ß‚é";
-        Text[ chinese_traditional ] = "ªğ¦^";
+        Text[ japanese ] = "æˆ»ã‚‹";
+        Text[ chinese_traditional ] = "è¿”å›";
         Text[ arabic ] = "ÇáÓÇÈŞ";
         Text[ greek ] = "ÅğéóôñïöŞ";
-        Text[ korean ] = "µÇµ¹¾Æ °¡±â";
+        Text[ korean ] = "ë˜ëŒì•„ ê°€ê¸°";
         Text[ turkish ] = "Geri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Regresar";
     };
-    Text[ chinese_simplified ] = "Éè¶¨Ò³Ãæ";
+    Text[ chinese_simplified ] = "è®¾å®šé¡µé¢";
     Text[ russian ] = "Ïàğàìåòğû ñòğàíèöû";
     Text[ polish ] = "Uk³ad strony";
-    Text[ japanese ] = "Íß°¼Şİ’è";
-    Text[ chinese_traditional ] = "­¶­±³]©w";
+    Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾è¨­å®š";
+    Text[ chinese_traditional ] = "é é¢è¨­å®š";
     Text[ arabic ] = "ÅÚÏÇÏ ÇáÕİÍÉ";
     Text[ greek ] = "Äéáìüñöùóç óåëßäáò";
-    Text[ korean ] = "ÂÊ ¼³Á¤";
+    Text[ korean ] = "ìª½ ì„¤ì •";
     Text[ turkish ] = "Sayfa yapısı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Preparar página";
 };
+
 
 
 
