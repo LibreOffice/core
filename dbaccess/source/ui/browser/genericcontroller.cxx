@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 14:15:24 $
+ *  last change: $Author: oj $ $Date: 2001-01-29 09:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #endif
 #ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
@@ -881,8 +884,11 @@ void OGenericUnoController::showError(const SQLExceptionInfo& _rInfo)
     {
         try
         {
-            Sequence< Any > aArgs(1);
+            Sequence< Any > aArgs(2);
             aArgs[0] <<= PropertyValue(PROPERTY_SQLEXCEPTION, 0, _rInfo.get(), PropertyState_DIRECT_VALUE);
+            aArgs[1] <<= PropertyValue(PROPERTY_PARENTWINDOW, 0, makeAny(VCLUnoHelper::GetInterface(getView())), PropertyState_DIRECT_VALUE);
+
+
             Reference< XExecutableDialog > xErrorDialog(
                 m_xMultiServiceFacatory->createInstanceWithArguments(::rtl::OUString::createFromAscii("com.sun.star.sdb.ErrorMessageDialog"), aArgs), UNO_QUERY);
             if (xErrorDialog.is())
