@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2004-09-08 15:23:49 $
+dnl * Date: $Date: 2004-09-09 11:22:06 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.68 $ )
+AC_REVISION( $Revision: 1.69 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2299,6 +2299,53 @@ else
 fi
 AC_SUBST(WITH_FONTS)
 AC_SUBST(SCPDEFS)
+
+AC_MSG_CHECKING([whether and how to use Xinerama])
+if test "$_os" = "Darwin"; then
+   USE_XINERAMA=YES
+   AC_MSG_RESULT([yes])
+elif test "$_os" = "Linux"; then
+   if test -f "$XLIB/libXinerama.so" -a -f "$XLIB/libXinerama.a"; then
+      # we have both versions, let the user decide but use the static one
+      # per default
+      USE_XINERAMA=YES
+      if test -n "$with_dynamic_xinerama" -o "$with_system_libs"; then
+         XINERAMA_LINK=dynamic
+      else
+         XINERAMA_LINK=static
+      fi
+   elif test -f "$XLIB/libXinerama.so" -a ! -f "XLIB/libXinerama.a"; then
+      # we have only the dynamic version
+      USE_XINERAMA=YES
+      XINERAMA_LINK=dynamic
+   elif test -f "$XLIB/libXinerama.a"; then
+      # static version
+      if test "`uname -m`" = "i586" -o "`uname -m`" = "i686"; then
+         USE_XINERAMA=YES
+         XINERAMA_LINK=static
+      else
+         USE_XINERAMA_=NO
+         XINERAMA_LINK=none
+      fi
+   else
+      # no Xinerama
+      USE_XINERAMA=NO
+      XINERAMA_LINK=none
+   fi
+   if test "$USE_XINERAMA" = "YES"; then
+      AC_MSG_RESULT([yes, with $XINERAMA_LINK linking])
+      AC_CHECK_HEADER(X11/extensions/Xinerama.h, [],
+          [AC_MSG_ERROR(Xinerama header not found.)], [])
+      AC_CHECK_LIB(Xinerama, XineramaIsActive, [],
+          [AC_MSG_ERROR(Xinerama not functional?)], [-L$XLIB -lXext])
+   else
+      AC_MSG_RESULT([no, libXinerama not found or wrong architecture.])
+   fi
+else
+   AC_MSG_RESULT([no])
+fi
+AC_SUBST(USE_XINERAMA)
+AC_SUBST(XINERAMA_LINK)
 
 dnl ===================================================================
 dnl Test for the presence of Ant and that it works
