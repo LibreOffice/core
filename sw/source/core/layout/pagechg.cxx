@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-11 12:23:30 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,7 @@ SwPageFrm::~SwPageFrm()
         for ( USHORT i = 0; i < pSortedObjs->Count(); ++i )
         {
             SdrObject *pObj = (*pSortedObjs)[i];
-            if ( pObj->IsWriterFlyFrame() )
+            if ( pObj->ISA(SwVirtFlyDrawObj) )
             {
                 SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
                 if ( pFly->IsFlyFreeFrm() )
@@ -1046,7 +1046,7 @@ void SwPageFrm::Cut()
             {
                 SdrObject *pO = (*GetSortedObjs())[i];
                 SwFlyFrm *pFly;
-                if ( pO->IsWriterFlyFrame() &&
+                if ( pO->ISA(SwVirtFlyDrawObj) &&
                      (pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm())->IsFlyAtCntFrm() )
                 {
                     SwPageFrm *pAnchPage = pFly->GetAnchor() ?
@@ -1154,7 +1154,7 @@ void lcl_PrepFlyInCntRegister( SwCntntFrm *pFrm )
         {
             SwFlyFrm *pFly;
             SdrObject *pO = (*pFrm->GetDrawObjs())[i];
-            if( pO->IsWriterFlyFrame() &&
+            if( pO->ISA(SwVirtFlyDrawObj) &&
                 0 != (pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()) &&
                 pFly->IsFlyInCntFrm() )
             {
@@ -1184,7 +1184,7 @@ void SwPageFrm::PrepareRegisterChg()
         for( USHORT i = 0; i < GetSortedObjs()->Count(); ++i )
         {
             SdrObject *pO = (*GetSortedObjs())[i];
-            if ( pO->IsWriterFlyFrame() )
+            if ( pO->ISA(SwVirtFlyDrawObj) )
             {
                 SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                 pFrm = pFly->ContainsCntnt();
@@ -1612,7 +1612,7 @@ void SwRootFrm::RemoveSuperfluous()
             for ( USHORT i = 0; bOnlySuperfluosObjs && i < rObjs.Count(); ++i )
             {
                 SdrObject *pO = rObjs[i];
-                if ( pO->IsWriterFlyFrame() )
+                if ( pO->ISA(SwVirtFlyDrawObj) )
                 {
                     SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                     // OD 19.06.2003 #108784# - correction
@@ -1957,7 +1957,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
             {
                 SdrObject *pObj = (*pFrm->GetDrawObjs())[i];
                 SwFrmFmt *pFmt = ::FindFrmFmt( pObj );
-                const FASTBOOL bFly = pObj->IsWriterFlyFrame();
+                const FASTBOOL bFly = pObj->ISA(SwVirtFlyDrawObj);
                 if ( bFly &&
                      WEIT_WECH == ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->Frm().Width()||
                      pFmt->GetFrmSize().GetWidthPercent() )
@@ -1968,7 +1968,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
                 {
                     case FLY_IN_CNTNT:
                         nWidth = bFly ? pFmt->GetFrmSize().GetWidth() :
-                                        pObj->GetBoundRect().GetWidth();
+                                        pObj->GetCurrentBoundRect().GetWidth();
                         break;
                     case FLY_AT_CNTNT:
                         {
@@ -1991,7 +1991,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
                             //Fuer Zeichenobjekte ist die Auswahl sehr klein,
                             //weil sie keine Attribute haben, also durch ihre
                             //aktuelle Groesse bestimmt werden.
-                            nWidth = pObj->GetBoundRect().Right() -
+                            nWidth = pObj->GetCurrentBoundRect().Right() -
                                      pObj->GetAnchorPos().X();
 
 //MA 31. Jan. 97: Zaehlt doch garnicht mehr, seit die Flys den Rand nicht
