@@ -2,9 +2,9 @@
  *
  *  $RCSfile: kernel9x.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-02 15:35:02 $
+ *  last change: $Author: tra $ $Date: 2000-11-22 13:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #pragma once
 
 #ifndef _WINDOWS_
@@ -68,67 +69,113 @@
 extern "C" {
 #endif
 
-/* undefine if already defined as macros */
+//------------------------------------------------------------------------
+// undefine the macros defined in the winbase.h file in order to avoid
+// warnings because of multiple defines
+//------------------------------------------------------------------------
+
 #ifdef LoadLibraryW
-#   undef LoadLibraryW
+#undef LoadLibraryW
 #endif
 
 #ifdef LoadLibraryExW
-#   undef LoadLibraryExW
+#undef LoadLibraryExW
 #endif
 
 #ifdef GetModuleFileNameW
-#   undef GetModuleFileNameW
+#undef GetModuleFileNameW
 #endif
 
 #ifdef GetLogicalDriveStringsW
-#   undef GetLogicalDriveStringsW
+#undef GetLogicalDriveStringsW
 #endif
 
 #ifdef DeleteFileW
-#   undef DeleteFileW
+#undef DeleteFileW
 #endif
 
 #ifdef CopyFileW
-#   undef CopyFileW
+#undef CopyFileW
 #endif
 
 #ifdef MoveFileW
-#   undef MoveFileW
+#undef MoveFileW
 #endif
 
 #ifdef MoveFileExW
-#   undef MoveFileExW
+#undef MoveFileExW
 #endif
 
 #ifdef CreateFileW
-#   undef CreateFileW
+#undef CreateFileW
 #endif
 
 #ifdef RemoveDirectoryW
-#   undef RemoveDirectoryW
+#undef RemoveDirectoryW
 #endif
+
+#ifdef CreateDirectoryW
+#undef CreateDirectoryW
+#endif
+
+#ifdef CreateDirectoryExW
+#undef CreateDirectoryExW
+#endif
+
+#ifdef CreateFileW
+#undef CreateFileW
+#endif
+
+#ifdef GetLongPathNameW
+#undef GetLongPathNameW
+#endif
+
+//------------------------------------------------------------------------
+// set the compiler directives for the function pointer we declare below
+// if we build sal or sal will be used as static library we define extern
+// else sal exports the function pointers from a dll and we use __declspec
+//------------------------------------------------------------------------
+
+#if defined(SAL_EXPORT_SYSTOOLS) || defined(USE_SAL_STATIC)
+    #define KERNEL9X_API extern
+#else
+    #define KERNEL9X_API __declspec( dllimport )
+#endif
+
+//------------------------------------------------------------------------
+// the Kernel9xInit and Kernel9xDeInit functions will be used only by
+// sal itself and will not be exported
+//------------------------------------------------------------------------
+
+#if defined(SAL_EXPORT_SYSTOOLS)
+    extern void WINAPI Kernel9xInit( );
+    extern void WINAPI Kernel9xDeInit( );
+#endif
+
+//------------------------------------------------------------------------
+// declare function pointers to the appropriate kernel functions
+//------------------------------------------------------------------------
 
 //BOOL WINAPI RegisterServiceProcess( DWORD dwProcessID, BOOL fRegister );
 
-extern HMODULE (WINAPI *lpfnLoadLibraryExW) (
+KERNEL9X_API HMODULE (WINAPI *lpfnLoadLibraryExW ) (
     LPCWSTR lpLibFileName,  // file name of module
     HANDLE hFile,           // reserved, must be NULL
     DWORD dwFlags           // entry-point execution option
 );
 
-extern DWORD (WINAPI *lpfnGetModuleFileNameW) (
+KERNEL9X_API DWORD (WINAPI *lpfnGetModuleFileNameW ) (
     HMODULE hModule,    // handle to module
     LPWSTR lpFilename,  // file name of module
     DWORD nSize         // size of buffer
 );
 
-extern DWORD (WINAPI *lpfnGetLogicalDriveStringsW) (
+KERNEL9X_API DWORD (WINAPI *lpfnGetLogicalDriveStringsW ) (
     DWORD nBufferLength,    // size of buffer
     LPWSTR lpBuffer         // drive strings buffer
 );
 
-extern HANDLE ( WINAPI *lpfnCreateFileW )(
+KERNEL9X_API HANDLE ( WINAPI *lpfnCreateFileW )(
     LPCWSTR lpFileName,
     DWORD   dwDesiredAccess,
     DWORD   dwShareMode,
@@ -138,74 +185,99 @@ extern HANDLE ( WINAPI *lpfnCreateFileW )(
     HANDLE  hTemplateFile
 );
 
-extern DWORD WINAPI GetCanonicalPathNameA(
+KERNEL9X_API DWORD WINAPI GetCanonicalPathNameA(
     LPCSTR lpszPath,            // file name
     LPSTR lpszCanonicalPath,    // path buffer
     DWORD cchBuffer             // size of path buffer
 );
 
-extern DWORD WINAPI GetCanonicalPathNameW(
+KERNEL9X_API DWORD WINAPI GetCanonicalPathNameW(
     LPCWSTR lpszPath,           // file name
     LPWSTR lpszCanonicalPath,   // path buffer
     DWORD cchBuffer             // size of path buffer
 );
 
-
-extern BOOL (WINAPI *lpfnDeleteFileW) (
-    LPCWSTR lpFileName          // file name
-);
-
-extern BOOL (WINAPI *lpfnCopyFileW) (
-    LPCWSTR lpExistingFileName, // file name
-    LPCWSTR lpNewFileName,      // new file name
-    BOOL    bFailIfExist        // operation if file exists
-);
-
-extern BOOL (WINAPI *lpfnMoveFileW) (
-    LPCWSTR lpExistingFileName, // file name
-    LPCWSTR lpNewFileName       // new file name
-);
-
-extern BOOL (WINAPI *lpfnMoveFileExW) (
-  LPCWSTR lpExistingFileName,   // file name
-  LPCWSTR lpNewFileName,        // new file name
-  DWORD dwFlags                 // move options
-);
-
-extern HANDLE (WINAPI *lpfnCreateFileW) (
+KERNEL9X_API HANDLE ( WINAPI * lpfnCreateFileW ) (
     LPCWSTR lpFileName,
     DWORD   dwDesiredAccess,
     DWORD   dwShareMode,
     LPSECURITY_ATTRIBUTES   lpSecurityAttributes,
     DWORD   dwCreationDisposition,
     DWORD   dwFlagsAndAttributes,
-    HANDLE  hTemplateFile
+    HANDLE  hTemplateFile );
+
+KERNEL9X_API BOOL (WINAPI *lpfnDeleteFileW ) (
+    LPCWSTR lpFileName          // file name
 );
 
-extern BOOL (WINAPI *lpfnRemoveDirectoryW) (
+KERNEL9X_API BOOL (WINAPI *lpfnCopyFileW ) (
+    LPCWSTR lpExistingFileName, // file name
+    LPCWSTR lpNewFileName,      // new file name
+    BOOL    bFailIfExist        // operation if file exists
+);
+
+KERNEL9X_API BOOL (WINAPI *lpfnMoveFileW ) (
+    LPCWSTR lpExistingFileName, // file name
+    LPCWSTR lpNewFileName       // new file name
+);
+
+KERNEL9X_API BOOL (WINAPI *lpfnMoveFileExW ) (
+  LPCWSTR lpExistingFileName,   // file name
+  LPCWSTR lpNewFileName,        // new file name
+  DWORD dwFlags                 // move options
+);
+
+KERNEL9X_API BOOL (WINAPI *lpfnRemoveDirectoryW ) (
     LPCWSTR lpPathName          // directory name
 );
 
+KERNEL9X_API BOOL ( WINAPI * lpfnCreateDirectoryW ) (
+    LPCWSTR lpNewDirectory, LPSECURITY_ATTRIBUTES lpSecurityAttributes );
+
+KERNEL9X_API BOOL ( WINAPI * lpfnCreateDirectoryExW ) (
+    LPCWSTR lpTemplateDirectory,
+    LPCWSTR lpNewDirectory,
+    LPSECURITY_ATTRIBUTES   lpSecurityAttributes );
+
+KERNEL9X_API DWORD ( WINAPI * lpfnGetLongPathNameW ) (
+  LPCWSTR lpszShortPath, // file name
+  LPWSTR lpszLongPath,   // path buffer
+  DWORD cchBuffer        // size of path buffer
+);
+
+KERNEL9X_API DWORD ( WINAPI * lpfnGetCanonicalPathW ) (
+    LPCWSTR lpszPath,           // file name
+    LPWSTR  lpszCanonicalPath,  // path buffer
+    DWORD   cchBuffer           // size of path buffer
+);
+
+/*
 #ifdef UNICODE
 #define GetCanonicalPath    GetCanonicalPathW
 #else
 #define GetCanonicalPath    GetCanonicalPathA
 #endif
+*/
 
-/* replace API calls */
+//------------------------------------------------------------------------
+// redefine the above undefined macros so that the preprocessor replaces
+// all occurrences of this macros with our function pointer
+//------------------------------------------------------------------------
+
 #define LoadLibraryExW              lpfnLoadLibraryExW
 #define LoadLibraryW(c)             LoadLibraryExW(c, NULL, 0)
 #define GetModuleFileNameW          lpfnGetModuleFileNameW
 #define GetLogicalDriveStringsW     lpfnGetLogicalDriveStringsW
+#define CreateFileW                 lpfnCreateFileW
 #define DeleteFileW                 lpfnDeleteFileW
 #define CopyFileW                   lpfnCopyFileW
 #define MoveFileW                   lpfnMoveFileW
 #define MoveFileExW                 lpfnMoveFileExW
-#define CreateFileW                 lpfnCreateFileW
 #define RemoveDirectoryW            lpfnRemoveDirectoryW
-
-extern void WINAPI Kernel9xInit(LPOSVERSIONINFO lpVersionInfo);
-extern void WINAPI Kernel9xDeInit();
+#define CreateDirectoryW            lpfnCreateDirectoryW
+#define CreateDirectoryExW          lpfnCreateDirectoryExW
+#define GetLongPathNameW            lpfnGetLongPathNameW
+#define GetCanonicalPathW           lpfnGetCanonicalPathW
 
 #ifdef __cplusplus
 }

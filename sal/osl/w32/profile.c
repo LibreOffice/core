@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2000-10-30 12:43:47 $
+ *  last change: $Author: tra $ $Date: 2000-11-22 13:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1353,7 +1353,7 @@ static osl_TFile* openFileImpl(rtl_uString * strFileName, oslProfileOption Profi
         OSL_TRACE("opening '%s' read only\n",pszFilename);
 #endif
 
-        pFile->m_Handle = lpfnCreateFile( rtl_uString_getStr( strFileName ), GENERIC_READ,
+        pFile->m_Handle = CreateFileW( rtl_uString_getStr( strFileName ), GENERIC_READ,
                                           FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
                                           OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -1366,7 +1366,7 @@ static osl_TFile* openFileImpl(rtl_uString * strFileName, oslProfileOption Profi
         OSL_TRACE("opening '%s' read/write\n",pszFilename);
 #endif
 
-        if ((pFile->m_Handle = lpfnCreateFile( rtl_uString_getStr( strFileName ), GENERIC_READ | GENERIC_WRITE,
+        if ((pFile->m_Handle = CreateFileW( rtl_uString_getStr( strFileName ), GENERIC_READ | GENERIC_WRITE,
                                                FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
                                                OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL))
             == INVALID_HANDLE_VALUE)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell9x.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-02 15:35:02 $
+ *  last change: $Author: tra $ $Date: 2000-11-22 13:55:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #pragma once
 
 #ifndef _WINDOWS_
@@ -72,7 +73,11 @@
 extern "C"{
 #endif
 
-/* undefine if already a macro */
+//------------------------------------------------------------------------
+// undefine the macros defined in the shlobj.h file in order to avoid
+// warnings because of multiple defines
+//------------------------------------------------------------------------
+
 #ifdef CommandLineToArgvW
 #undef CommandLineToArgvW
 #endif
@@ -85,37 +90,44 @@ extern "C"{
 #undef SHGetPathFromIDListW
 #endif
 
-#ifdef SetWindowTextW
-#undef SetWindowTextW
+//------------------------------------------------------------------------
+// set the compiler directives for the function pointer we declare below
+// if we build sal or sal will be used as static library we define extern
+// else sal exports the function pointers from a dll and we use __declspec
+//------------------------------------------------------------------------
+
+#if defined(SAL_EXPORT_SYSTOOLS) || defined(USE_SAL_STATIC)
+    #define SHELL9X_API extern
+#else
+    #define SHELL9X_API __declspec( dllimport )
 #endif
 
-extern LPWSTR * (WINAPI *lpfnCommandLineToArgvW) (
-  LPCWSTR lpCmdLine,  // pointer to a command-line string
-  int *pNumArgs       // receives the argument count
-);
+//------------------------------------------------------------------------
+// the Shell9xInit and Shell9xDeInit functions will be used only by
+// sal itself and will not be exported
+//------------------------------------------------------------------------
 
-extern LPITEMIDLIST ( WINAPI * lpfnSHBrowseForFolderW) (
-    LPBROWSEINFOW lpbi
-);
+#if defined(SAL_EXPORT_SYSTOOLS)
+    extern void WINAPI Shell9xInit( );
+    extern void WINAPI Shell9xDeInit( );
+#endif
 
-extern BOOL ( WINAPI * lpfnSHGetPathFromIDListW ) (
-    LPCITEMIDLIST pidl,
-    LPWSTR pszPath
-);
+//------------------------------------------------------------------------
+// declare function pointers to the appropriate shell functions
+//------------------------------------------------------------------------
 
-extern BOOL ( WINAPI * lpfnSetWindowTextW ) (
-    HWND hWnd,
-    LPCWSTR lpString
-);
+SHELL9X_API LPWSTR *     ( WINAPI * lpfnCommandLineToArgvW ) ( LPCWSTR lpCmdLine, int *pNumArgs );
+SHELL9X_API LPITEMIDLIST ( WINAPI * lpfnSHBrowseForFolderW ) ( LPBROWSEINFOW lpbi );
+SHELL9X_API BOOL         ( WINAPI * lpfnSHGetPathFromIDListW ) ( LPCITEMIDLIST pidl, LPWSTR pszPath );
 
-/* define as macro */
+//------------------------------------------------------------------------
+// redefine the above undefined macros so that the preprocessor replaces
+// all occurrences of this macros with our function pointer
+//------------------------------------------------------------------------
+
 #define CommandLineToArgvW   lpfnCommandLineToArgvW
 #define SHBrowseForFolderW   lpfnSHBrowseForFolderW
 #define SHGetPathFromIDListW lpfnSHGetPathFromIDListW
-#define SetWindowTextW       lpfnSetWindowTextW
-
-void WINAPI Shell9xInit(LPOSVERSIONINFO lpVersionInfo);
-void WINAPI Shell9xDeInit();
 
 #ifdef __cplusplus
 }

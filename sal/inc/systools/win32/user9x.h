@@ -2,9 +2,9 @@
  *
  *  $RCSfile: user9x.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2000-11-14 06:48:47 $
+ *  last change: $Author: tra $ $Date: 2000-11-22 13:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #pragma once
 
 #ifndef _WINDOWS_
@@ -68,7 +69,10 @@
 extern "C"{
 #endif
 
-/* undefine if already a macro */
+//------------------------------------------------------------------------
+// undefine the macros defined in the winuser.h file in order to avoid
+// warnings because of multiple defines
+//------------------------------------------------------------------------
 
 #ifdef SendMessageW
 #undef SendMessageW
@@ -94,14 +98,44 @@ extern "C"{
 #undef GetClipboardFormatNameW
 #endif
 
-extern LRESULT ( WINAPI * lpfnSendMessageW) (
+#ifdef SetWindowTextW
+#undef SetWindowTextW
+#endif
+
+//------------------------------------------------------------------------
+// set the compiler directives for the function pointer we declare below
+// if we build sal or sal will be used as static library we define extern
+// else sal exports the function pointers from a dll and we use __declspec
+//------------------------------------------------------------------------
+
+#if defined(SAL_EXPORT_SYSTOOLS) || defined(USE_SAL_STATIC)
+    #define USER9X_API extern
+#else
+    #define USER9X_API __declspec( dllimport )
+#endif
+
+//------------------------------------------------------------------------
+// the Shell9xInit and Shell9xDeInit functions will be used only by
+// sal itself and will not be exported
+//------------------------------------------------------------------------
+
+#if defined(SAL_EXPORT_SYSTOOLS)
+    extern void WINAPI User9xInit( );
+    extern void WINAPI User9xDeInit( );
+#endif
+
+//------------------------------------------------------------------------
+// declare function pointers to the appropriate user32 functions
+//------------------------------------------------------------------------
+
+USER9X_API LRESULT ( WINAPI * lpfnSendMessageW) (
     HWND hWnd,      // handle to the destination window
     UINT Msg,       // message
     WPARAM wParam,  // first message parameter
     LPARAM lParam   // second message parameter
 );
 
-extern HWND ( WINAPI * lpfnCreateWindowExW ) (
+USER9X_API HWND ( WINAPI * lpfnCreateWindowExW ) (
     DWORD dwExStyle,      // extended window style
     LPCWSTR lpClassName,  // registered class name
     LPCWSTR lpWindowName, // window name
@@ -116,36 +150,42 @@ extern HWND ( WINAPI * lpfnCreateWindowExW ) (
     LPVOID lpParam        // window-creation data
 );
 
-extern ATOM ( WINAPI * lpfnRegisterClassExW ) (
+USER9X_API ATOM ( WINAPI * lpfnRegisterClassExW ) (
     CONST WNDCLASSEXW* lpwcx // class data
 );
 
-extern BOOL ( WINAPI * lpfnUnregisterClassW ) (
+USER9X_API BOOL ( WINAPI * lpfnUnregisterClassW ) (
     LPCWSTR lpClassName, // class name
     HINSTANCE hInstance  // handle to application instance
 );
 
-extern UINT (WINAPI * lpfnRegisterClipboardFormatW) (
+USER9X_API UINT (WINAPI * lpfnRegisterClipboardFormatW) (
     LPCWSTR lpszFormat // name of new format
 );
 
-extern int ( WINAPI * lpfnGetClipboardFormatNameW ) (
+USER9X_API int ( WINAPI * lpfnGetClipboardFormatNameW ) (
     UINT   format,          // clipboard format to retrieve
     LPWSTR lpszFormatName,  // format name
     int    cchMaxCount      // length of format name buffer
 );
 
-/* define as macro */
+USER9X_API BOOL ( WINAPI * lpfnSetWindowTextW ) (
+    HWND hWnd,
+    LPCWSTR lpString
+);
+
+//------------------------------------------------------------------------
+// redefine the above undefined macros so that the preprocessor replaces
+// all occurrences of this macros with our function pointer
+//------------------------------------------------------------------------
+
 #define SendMessageW                lpfnSendMessageW
 #define CreateWindowExW             lpfnCreateWindowExW
 #define RegisterClassExW            lpfnRegisterClassExW
 #define UnregisterClassW            lpfnUnregisterClassW
 #define RegisterClipboardFormatW    lpfnRegisterClipboardFormatW
 #define GetClipboardFormatNameW     lpfnGetClipboardFormatNameW
-
-
-void WINAPI User9xInit(LPOSVERSIONINFO lpVersionInfo);
-void WINAPI User9xDeInit();
+#define SetWindowTextW              lpfnSetWindowTextW
 
 #ifdef __cplusplus
 }

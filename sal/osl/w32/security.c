@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:32:59 $
+ *  last change: $Author: tra $ $Date: 2000-11-22 13:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include "dirW9X.h"
 
 #include "secimpl.h"
+#include <systools/win32/kernel9x.h>
 
 
 /*****************************************************************************/
@@ -770,7 +771,7 @@ static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
                        {
                         /* if directory does not exist, create it */
                         if (_waccess(PathW, 0) < 0)
-                            lpfnCreateDirectory(PathW, NULL);
+                            CreateDirectoryW(PathW, NULL);
 
                         rtl_uString_newFromStr( strPath, PathW);
                         bRet = sal_True;

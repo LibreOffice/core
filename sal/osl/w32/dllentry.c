@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hro $ $Date: 2000-11-21 14:32:52 $
+ *  last change: $Author: tra $ $Date: 2000-11-22 13:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,6 @@
 
 #include <windows.h>
 #include <winsock.h>
-
-#include <systools/win32/advapi9x.h>
-#include <systools/win32/kernel9x.h>
-#include <systools/win32/shell9x.h>
-#include <systools/win32/comdlg9x.h>
-#include <systools/win32/user9x.h>
-
 #include <osl/diagnose.h>
 #include <sal/types.h>
 
@@ -75,25 +68,41 @@
 #define _DIRW9X_INITIALIZE_
 #include "dirW9X.h"
 
+//------------------------------------------------------------------------------
+// externals
+//------------------------------------------------------------------------------
+
 extern HRESULT (WINAPI *_CoInitializeEx) (LPVOID pvReserved, DWORD dwCoInit);
 extern LPWSTR *lpArgvW;
 
 extern DWORD            g_dwTLSTextEncodingIndex;
-extern void SAL_CALL _osl_callThreadKeyCallbackOnThreadDetach(void);
-extern CRITICAL_SECTION     g_ThreadKeyListCS;
+extern void SAL_CALL    _osl_callThreadKeyCallbackOnThreadDetach(void);
+extern CRITICAL_SECTION g_ThreadKeyListCS;
+extern OSVERSIONINFO    g_OSVerInfo; // defined in systoolinit
 
-/* remember plattform */
-DWORD g_dwPlatformId = VER_PLATFORM_WIN32_WINDOWS;
+//------------------------------------------------------------------------------
+// defines
+//------------------------------------------------------------------------------
 
 #define ERR_GENERAL_WRONG_CPU       101
 #define ERR_WINSOCK_INIT_FAILED     102
 #define ERR_WINSOCK_WRONG_VERSION   103
 
+//------------------------------------------------------------------------------
+// globales
+//------------------------------------------------------------------------------
+
+DWORD g_dwPlatformId = VER_PLATFORM_WIN32_WINDOWS; // remember plattform
+
+//------------------------------------------------------------------------------
+// showMessage
+//------------------------------------------------------------------------------
+
 static sal_Bool showMessage(int MessageId)
 {
     const char *pStr = "unknown error";
 
-    switch (MessageId)
+    switch ( MessageId )
     {
         case ERR_GENERAL_WRONG_CPU:
             pStr = "x486 or Pentium compatible CPU required!\nThe application may not run stable.";
@@ -111,36 +120,46 @@ static sal_Bool showMessage(int MessageId)
             pStr = "Unknown error while initialization!\nThe application may not run stable.";
     }
 
-    MessageBox(NULL, pStr, "Sun Microsystems - System Abstraction Layer", MB_OK | MB_ICONWARNING | MB_TASKMODAL);
+    MessageBox( NULL,
+                pStr,
+                "Sun Microsystems - System Abstraction Layer",
+                MB_OK | MB_ICONWARNING | MB_TASKMODAL );
 
-    return (sal_True);
+    return ( sal_True );
 }
 
-static void InitDCOM(void)
+//------------------------------------------------------------------------------
+// InitDCOM
+//------------------------------------------------------------------------------
+
+static void InitDCOM( )
 {
-    HINSTANCE hInstance = LoadLibrary("ole32.dll");
+    HINSTANCE hInstance = LoadLibrary( "ole32.dll" );
 
-    if(hInstance)
+    if( hInstance )
     {
-        FARPROC pFunc = GetProcAddress(hInstance, "CoInitializeEx");
+        FARPROC pFunc = GetProcAddress( hInstance, "CoInitializeEx" );
 
-        if(pFunc)
-            _CoInitializeEx = (HRESULT (WINAPI *) (LPVOID, DWORD)) pFunc;
+        if( pFunc )
+            _CoInitializeEx = ( HRESULT ( WINAPI * ) ( LPVOID, DWORD ) ) pFunc;
 
         FreeLibrary(hInstance);
     }
 }
 
-__declspec( dllexport ) sal_Bool WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
+//------------------------------------------------------------------------------
+// DllMain
+//------------------------------------------------------------------------------
+
+sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
 {
     switch (fdwReason)
     {
         case DLL_PROCESS_ATTACH:
             {
-                OSVERSIONINFO aInfo;
-                WORD wVersionRequested;
-                WSADATA wsaData;
-                int error;
+                WORD     wVersionRequested;
+                WSADATA  wsaData;
+                int      error;
 
 #ifdef _M_IX86
                 SYSTEM_INFO SystemInfo;
@@ -157,7 +176,7 @@ __declspec( dllexport ) sal_Bool WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwRea
                 wVersionRequested = MAKEWORD(2, 2);
 
                 error = WSAStartup(wVersionRequested, &wsaData);
-                if (error == 0)
+                if ( 0 == error )
                 {
                     WORD wMajorVersionRequired = 1;
                     WORD wMinorVersionRequired = 1;
@@ -168,39 +187,30 @@ __declspec( dllexport ) sal_Bool WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwRea
                         showMessage(ERR_WINSOCK_WRONG_VERSION);
                 }
                 else
+                {
                     showMessage(ERR_WINSOCK_INIT_FAILED);
+                }
 
                 /* initialize Win9x unicode functions */
-                aInfo.dwOSVersionInfoSize = sizeof(aInfo);
-                if (GetVersionEx(&aInfo))
+
+                if ( VER_PLATFORM_WIN32_NT == g_OSVerInfo.dwPlatformId )
                 {
-                    Kernel9xInit(&aInfo);
-                    Advapi9xInit(&aInfo);
-                    Comdlg9xInit(&aInfo);
-                    Shell9xInit(&aInfo);
-                    User9xInit(&aInfo);
-
-                    if (aInfo.dwPlatformId==VER_PLATFORM_WIN32_NT)
-                    {
-                        lpfnFindFirstFile = FindFirstFileW;
-                        lpfnFindNextFile = FindNextFileW;
-                        lpfnCreateFile = CreateFileW;
-                        lpfnSetFileAttributes = SetFileAttributesW;
-                        lpfnSearchPath = SearchPathW;
-                        lpfnCreateProcess = CreateProcessW;
-                        lpfnCreateProcessAsUser = CreateProcessAsUserW;
-                        lpfnGetEnvironmentVariable=GetEnvironmentVariableW;
-                        lpfnWNetAddConnection2=WNetAddConnection2W;
-                        lpfnWNetCancelConnection2=WNetCancelConnection2W;
-                        lpfnWNetGetUser=WNetGetUserW;
-                        lpfnGetWindowsDirectory=GetWindowsDirectoryW;
-                        lpfnCreateDirectory=CreateDirectoryW;
-                        lpfnWritePrivateProfileString=WritePrivateProfileStringW;
-                        lpfnGetPrivateProfileString=GetPrivateProfileStringW;
-                    }
-
-                    g_dwPlatformId = aInfo.dwPlatformId;
+                    lpfnFindFirstFile             = FindFirstFileW;
+                    lpfnFindNextFile              = FindNextFileW;
+                    lpfnSetFileAttributes         = SetFileAttributesW;
+                    lpfnSearchPath                = SearchPathW;
+                    lpfnCreateProcess             = CreateProcessW;
+                    lpfnCreateProcessAsUser       = CreateProcessAsUserW;
+                    lpfnGetEnvironmentVariable    = GetEnvironmentVariableW;
+                    lpfnWNetAddConnection2        = WNetAddConnection2W;
+                    lpfnWNetCancelConnection2     = WNetCancelConnection2W;
+                    lpfnWNetGetUser               = WNetGetUserW;
+                    lpfnGetWindowsDirectory       = GetWindowsDirectoryW;
+                    lpfnWritePrivateProfileString = WritePrivateProfileStringW;
+                    lpfnGetPrivateProfileString   = GetPrivateProfileStringW;
                 }
+
+                g_dwPlatformId = g_OSVerInfo.dwPlatformId;
 
                 g_dwTLSTextEncodingIndex = TlsAlloc();
                 InitializeCriticalSection( &g_ThreadKeyListCS );
@@ -212,29 +222,24 @@ __declspec( dllexport ) sal_Bool WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwRea
 
         case DLL_PROCESS_DETACH:
             {
-                Advapi9xDeInit();
-                Comdlg9xDeInit();
-                Kernel9xDeInit();
-                Shell9xDeInit();
-                User9xDeInit();
-
-                WSACleanup();
-                if (lpArgvW)
-                    GlobalFree(lpArgvW);
+                WSACleanup( );
+                if ( lpArgvW )
+                    GlobalFree( lpArgvW );
 
                 TlsFree( g_dwTLSTextEncodingIndex );
                 DeleteCriticalSection( &g_ThreadKeyListCS );
 
                 break;
             }
+
         case DLL_THREAD_ATTACH:
             break;
 
         case DLL_THREAD_DETACH:
-            _osl_callThreadKeyCallbackOnThreadDetach();
+            _osl_callThreadKeyCallbackOnThreadDetach( );
             break;
     }
 
-    return (sal_True);
+    return ( sal_True );
 }
 

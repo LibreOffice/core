@@ -2,9 +2,9 @@
  *
  *  $RCSfile: advapi9x.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-02 15:35:02 $
+ *  last change: $Author: tra $ $Date: 2000-11-22 13:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,12 @@
 extern "C"{
 #endif
 
-/* obsolete Win32 API Functions */
+//------------------------------------------------------------------------
+// undefine the macros defined in the shlobj.h file in order to avoid
+// warnings because of multiple defines
+//------------------------------------------------------------------------
+
+// begin obsolete Win32 API functions -->
 #ifdef RegOpenKey
 #undef RegOpenKey
 #endif
@@ -84,8 +89,8 @@ extern "C"{
 #ifdef RegSetValue
 #undef RegSetValue
 #endif
+// <-- end obsolete Win32 functions
 
-/* undefine if already defined as macros */
 #ifdef RegOpenKeyExW
 #undef RegOpenKeyExW
 #endif
@@ -111,7 +116,23 @@ extern "C"{
 #undef RegDeleteValueW
 #endif
 
-extern LONG (WINAPI * lpfnRegOpenKeyExW) (
+//------------------------------------------------------------------------
+// set the compiler directives for the function pointer we declare below
+// if we build sal or sal will be used as static library we define extern
+// else sal exports the function pointers from a dll and we use __declspec
+//------------------------------------------------------------------------
+
+#if defined(SAL_EXPORT_SYSTOOLS) || defined(USE_SAL_STATIC)
+    #define ADVAPI9X_API extern
+#else
+    #define ADVAPI9X_API __declspec( dllimport )
+#endif
+
+//------------------------------------------------------------------------
+// declare function pointers to the appropriate shell functions
+//------------------------------------------------------------------------
+
+ADVAPI9X_API LONG (WINAPI * lpfnRegOpenKeyExW) (
   HKEY hKey,         // handle to open key
   LPCWSTR lpSubKey,  // subkey name
   DWORD ulOptions,   // reserved
@@ -119,7 +140,7 @@ extern LONG (WINAPI * lpfnRegOpenKeyExW) (
   PHKEY phkResult    // handle to open key
 );
 
-extern LONG (WINAPI *lpfnRegEnumKeyExW) (
+ADVAPI9X_API LONG (WINAPI *lpfnRegEnumKeyExW) (
   HKEY hKey,                  // handle to key to enumerate
   DWORD dwIndex,              // subkey index
   LPWSTR lpName,              // subkey name
@@ -130,7 +151,7 @@ extern LONG (WINAPI *lpfnRegEnumKeyExW) (
   PFILETIME lpftLastWriteTime // last write time
 );
 
-extern LONG (WINAPI *lpfnRegCreateKeyExW)(
+ADVAPI9X_API LONG (WINAPI *lpfnRegCreateKeyExW)(
   HKEY hKey,                                  // handle to open key
   LPCWSTR lpSubKey,                           // subkey name
   DWORD Reserved,                             // reserved
@@ -142,12 +163,12 @@ extern LONG (WINAPI *lpfnRegCreateKeyExW)(
   LPDWORD lpdwDisposition                     // disposition value buffer
 );
 
-extern LONG (WINAPI *lpfnRegDeleteKeyW) (
+ADVAPI9X_API LONG (WINAPI *lpfnRegDeleteKeyW) (
   HKEY hKey,         // handle to open key
   LPCWSTR lpSubKey   // subkey name
 );
 
-extern LONG (WINAPI *lpfnRegEnumValueW) (
+ADVAPI9X_API LONG (WINAPI *lpfnRegEnumValueW) (
   HKEY hKey,             // handle to key to query
   DWORD dwIndex,         // index of value to query
   LPWSTR lpValueName,    // value buffer
@@ -158,7 +179,7 @@ extern LONG (WINAPI *lpfnRegEnumValueW) (
   LPDWORD lpcbData       // size of data buffer
 );
 
-extern LONG (WINAPI *lpfnRegQueryValueExW) (
+ADVAPI9X_API LONG (WINAPI *lpfnRegQueryValueExW) (
   HKEY hKey,            // handle to key
   LPCWSTR lpValueName,  // value name
   LPDWORD lpReserved,   // reserved
@@ -167,7 +188,7 @@ extern LONG (WINAPI *lpfnRegQueryValueExW) (
   LPDWORD lpcbData      // size of data buffer
 );
 
-extern LONG (WINAPI *lpfnRegSetValueExW)(
+ADVAPI9X_API LONG (WINAPI *lpfnRegSetValueExW)(
   HKEY hKey,           // handle to key
   LPCWSTR lpValueName, // value name
   DWORD Reserved,      // reserved
@@ -176,22 +197,34 @@ extern LONG (WINAPI *lpfnRegSetValueExW)(
   DWORD cbData         // size of value data
 );
 
-extern LONG (WINAPI *lpfnRegDeleteValueW) (
+ADVAPI9X_API LONG (WINAPI *lpfnRegDeleteValueW) (
   HKEY hKey,            // handle to key
   LPCWSTR lpValueName   // value name
 );
 
-#define RegOpenKeyExW lpfnRegOpenKeyExW
-#define RegEnumKeyExW lpfnRegEnumKeyExW
-#define RegCreateKeyExW lpfnRegCreateKeyExW
-#define RegDeleteKeyW lpfnRegDeleteKeyW
-#define RegEnumValueW lpfnRegEnumValueW
-#define RegQueryValueExW lpfnRegQueryValueExW
-#define RegSetValueExW lpfnRegSetValueExW
-#define RegDeleteValueW lpfnRegDeleteValueW
+//------------------------------------------------------------------------
+// the Advapi9xInit and Advapi9xDeInit functions will be used only by
+// sal itself and will not be exported
+//------------------------------------------------------------------------
 
-extern void WINAPI Advapi9xInit(LPOSVERSIONINFO lpVersionInfo);
-extern void WINAPI Advapi9xDeInit();
+#if defined(SAL_EXPORT_SYSTOOLS)
+    extern void WINAPI Advapi9xInit( );
+    extern void WINAPI Advapi9xDeInit( );
+#endif
+
+//------------------------------------------------------------------------
+// redefine the above undefined macros so that the preprocessor replaces
+// all occurrences of this macros with our function pointer
+//------------------------------------------------------------------------
+
+#define RegOpenKeyExW    lpfnRegOpenKeyExW
+#define RegEnumKeyExW    lpfnRegEnumKeyExW
+#define RegCreateKeyExW  lpfnRegCreateKeyExW
+#define RegDeleteKeyW    lpfnRegDeleteKeyW
+#define RegEnumValueW    lpfnRegEnumValueW
+#define RegQueryValueExW lpfnRegQueryValueExW
+#define RegSetValueExW   lpfnRegSetValueExW
+#define RegDeleteValueW  lpfnRegDeleteValueW
 
 #ifdef __cplusplus
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: comdlg9x.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-02 15:35:02 $
+ *  last change: $Author: tra $ $Date: 2000-11-22 13:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #pragma once
 
 #ifndef _WINDOWS_
@@ -72,7 +73,10 @@
 extern "C"{
 #endif
 
-/* undefine if already a macro */
+//------------------------------------------------------------------------
+// undefine the macros defined in the shlobj.h file in order to avoid
+// warnings because of multiple defines
+//------------------------------------------------------------------------
 
 #ifdef GetOpenFileNameW
 #undef GetOpenFileNameW
@@ -82,20 +86,42 @@ extern "C"{
 #undef GetSaveFileNameW
 #endif
 
-extern BOOL ( WINAPI * lpfnGetOpenFileNameW) (
-    LPOPENFILENAMEW lpofn
-);
+//------------------------------------------------------------------------
+// set the compiler directives for the function pointer we declare below
+// if we build sal or sal will be used as static library we define extern
+// else sal exports the function pointers from a dll and we use __declspec
+//------------------------------------------------------------------------
 
-extern BOOL ( WINAPI * lpfnGetSaveFileNameW) (
-    LPOPENFILENAMEW lpofn
-);
+#if defined(SAL_EXPORT_SYSTOOLS) || defined(USE_SAL_STATIC)
+    #define COMDLG9X_API extern
+#else
+    #define COMDLG9X_API __declspec( dllimport )
+#endif
 
-/* define as macro */
-#define GetOpenFileNameW   lpfnGetOpenFileNameW
-#define GetSaveFileNameW   lpfnGetSaveFileNameW
+//------------------------------------------------------------------------
+// the Comdlg9xInit and Comdlg9xDeInit functions will be used only by
+// sal itself and will not be exported
+//------------------------------------------------------------------------
 
-void WINAPI Comdlg9xInit(LPOSVERSIONINFO lpVersionInfo);
-void WINAPI Comdlg9xDeInit();
+#if defined(SAL_EXPORT_SYSTOOLS)
+    extern void WINAPI Comdlg9xInit( );
+    extern void WINAPI Comdlg9xDeInit( );
+#endif
+
+//------------------------------------------------------------------------
+// declare function pointers to the appropriate comdlg functions
+//------------------------------------------------------------------------
+
+COMDLG9X_API BOOL ( WINAPI * lpfnGetOpenFileNameW ) ( LPOPENFILENAMEW lpofn );
+COMDLG9X_API BOOL ( WINAPI * lpfnGetSaveFileNameW ) ( LPOPENFILENAMEW lpofn );
+
+//------------------------------------------------------------------------
+// redefine the above undefined macros so that the preprocessor replaces
+// all occurrences of this macros with our function pointer
+//------------------------------------------------------------------------
+
+#define GetOpenFileNameW    lpfnGetOpenFileNameW
+#define GetSaveFileNameW    lpfnGetSaveFileNameW
 
 #ifdef __cplusplus
 }
