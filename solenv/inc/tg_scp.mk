@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_scp.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2001-07-12 13:39:32 $
+#   last change: $Author: hjs $ $Date: 2001-08-15 09:58:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,6 +102,8 @@ SCP1 SCP2 SCP3 SCP4 SCP5 SCP6 SCP7 SCP8 SCP9:
 
 # try to get missing parfiles
 $(PAR)$/%.par : $(SOLARPARDIR)$/%.par
+    @+-$(MKDIRHIER) $(@:d:d)
+#   >& $(NULLDEV)
     +$(COPY) $< $@
 
 LOCALSCP$(TNR)FILES=$(foreach,i,$(SCP$(TNR)FILES) $(foreach,j,$(SCP$(TNR)LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
