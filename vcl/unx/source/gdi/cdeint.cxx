@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cdeint.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-10 17:27:28 $
+ *  last change: $Author: cp $ $Date: 2002-06-14 09:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,8 @@ static int getHexDigit( const char c )
 void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
 {
     static Color aColors[ 8 ];
-    static sal_Bool bRead = sal_False;
+    static sal_Bool bRead  = sal_False;
+    static sal_Bool bValid = sal_False;
 
     if( ! bRead )
     {
@@ -206,6 +207,7 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
                         }
                     }
 
+                    bValid = sal_True;
                     break;
                 }
             }
@@ -217,53 +219,56 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
             XFree( aTextProperty.value );
     }
 
-    StyleSettings aStyleSettings = rSettings.GetStyleSettings();
-
-    aStyleSettings.SetActiveColor( aColors[0] );
-    aStyleSettings.SetActiveColor2( aColors[0] );
-    aStyleSettings.SetActiveBorderColor( aColors[0] );
-
-    aStyleSettings.SetDeactiveColor( aColors[0] );
-    aStyleSettings.SetDeactiveColor2( aColors[0] );
-    aStyleSettings.SetDeactiveBorderColor( aColors[0] );
-
-    Color aActive =
-        aColors[ 0 ].GetBlue() < 128        ||
-        aColors[ 0 ].GetGreen() < 128       ||
-        aColors[ 0 ].GetRed() < 128
-        ? Color( COL_WHITE ) : Color( COL_BLACK );
-    Color aDeactive =
-        aColors[ 1 ].GetBlue() < 128        ||
-        aColors[ 1 ].GetGreen() < 128       ||
-        aColors[ 1 ].GetRed() < 128
-        ? Color( COL_WHITE ) : Color( COL_BLACK );
-    aStyleSettings.SetActiveTextColor( aActive );
-    aStyleSettings.SetDeactiveTextColor( aDeactive );
-
-    aStyleSettings.SetDialogTextColor( aActive );
-    aStyleSettings.SetMenuTextColor( aActive );
-    aStyleSettings.SetButtonTextColor( aActive );
-    aStyleSettings.SetRadioCheckTextColor( aActive );
-    aStyleSettings.SetGroupTextColor( aActive );
-    aStyleSettings.SetLabelTextColor( aActive );
-    aStyleSettings.SetInfoTextColor( aActive );
-
-    aStyleSettings.Set3DColors( aColors[1] );
-    aStyleSettings.SetFaceColor( aColors[1] );
-    aStyleSettings.SetDialogColor( aColors[1] );
-    aStyleSettings.SetMenuColor( aColors[1] );
-    aStyleSettings.SetMenuBarColor( aColors[1] );
-    if ( aStyleSettings.GetFaceColor() == COL_LIGHTGRAY )
-        aStyleSettings.SetCheckedColor( Color( 0xCC, 0xCC, 0xCC ) );
-    else
+    if (bValid)
     {
-        // calculate Checked color
-        Color   aColor2 = aStyleSettings.GetLightColor();
-        BYTE    nRed    = (BYTE)(((USHORT)aColors[1].GetRed()   + (USHORT)aColor2.GetRed())/2);
-        BYTE    nGreen  = (BYTE)(((USHORT)aColors[1].GetGreen() + (USHORT)aColor2.GetGreen())/2);
-        BYTE    nBlue   = (BYTE)(((USHORT)aColors[1].GetBlue()  + (USHORT)aColor2.GetBlue())/2);
-        aStyleSettings.SetCheckedColor( Color( nRed, nGreen, nBlue ) );
-    }
+        StyleSettings aStyleSettings = rSettings.GetStyleSettings();
 
-    rSettings.SetStyleSettings( aStyleSettings );
+        aStyleSettings.SetActiveColor( aColors[0] );
+        aStyleSettings.SetActiveColor2( aColors[0] );
+        aStyleSettings.SetActiveBorderColor( aColors[0] );
+
+        aStyleSettings.SetDeactiveColor( aColors[0] );
+        aStyleSettings.SetDeactiveColor2( aColors[0] );
+        aStyleSettings.SetDeactiveBorderColor( aColors[0] );
+
+        Color aActive =
+            aColors[ 0 ].GetBlue() < 128        ||
+            aColors[ 0 ].GetGreen() < 128       ||
+            aColors[ 0 ].GetRed() < 128
+            ? Color( COL_WHITE ) : Color( COL_BLACK );
+        Color aDeactive =
+            aColors[ 1 ].GetBlue() < 128        ||
+            aColors[ 1 ].GetGreen() < 128       ||
+            aColors[ 1 ].GetRed() < 128
+            ? Color( COL_WHITE ) : Color( COL_BLACK );
+        aStyleSettings.SetActiveTextColor( aActive );
+        aStyleSettings.SetDeactiveTextColor( aDeactive );
+
+        aStyleSettings.SetDialogTextColor( aActive );
+        aStyleSettings.SetMenuTextColor( aActive );
+        aStyleSettings.SetButtonTextColor( aActive );
+        aStyleSettings.SetRadioCheckTextColor( aActive );
+        aStyleSettings.SetGroupTextColor( aActive );
+        aStyleSettings.SetLabelTextColor( aActive );
+        aStyleSettings.SetInfoTextColor( aActive );
+
+        aStyleSettings.Set3DColors( aColors[1] );
+        aStyleSettings.SetFaceColor( aColors[1] );
+        aStyleSettings.SetDialogColor( aColors[1] );
+        aStyleSettings.SetMenuColor( aColors[1] );
+        aStyleSettings.SetMenuBarColor( aColors[1] );
+        if ( aStyleSettings.GetFaceColor() == COL_LIGHTGRAY )
+            aStyleSettings.SetCheckedColor( Color( 0xCC, 0xCC, 0xCC ) );
+        else
+        {
+            // calculate Checked color
+            Color   aColor2 = aStyleSettings.GetLightColor();
+            BYTE    nRed    = (BYTE)(((USHORT)aColors[1].GetRed()   + (USHORT)aColor2.GetRed())/2);
+            BYTE    nGreen  = (BYTE)(((USHORT)aColors[1].GetGreen() + (USHORT)aColor2.GetGreen())/2);
+            BYTE    nBlue   = (BYTE)(((USHORT)aColors[1].GetBlue()  + (USHORT)aColor2.GetBlue())/2);
+            aStyleSettings.SetCheckedColor( Color( nRed, nGreen, nBlue ) );
+        }
+
+        rSettings.SetStyleSettings( aStyleSettings );
+    }
 }
