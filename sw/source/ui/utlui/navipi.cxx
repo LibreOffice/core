@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-07-03 14:55:09 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 15:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1006,7 +1006,7 @@ SwNavigationPI::~SwNavigationPI()
     EndListening(*SFX_APP());
 
 #if(SUPD>633)
-    SfxImageManager* pImgMan = pBindings->GetImageManager();
+    SfxImageManager* pImgMan = GetBindings().GetImageManager();
 #else
     SfxImageManager* pImgMan = SFX_APP()->GetImageManager();
 #endif
