@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-07 10:50:39 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1863,8 +1863,10 @@ int lcl_CheckForm( const SwForm& rForm, BYTE nLvl, String& rText )
     bool bPgNumFnd = false;
     FormTokenType eTType;
     // #i21237#
-    while( TOKEN_END != ( eTType = (++aIt)->eTokenType ) && !bPgNumFnd )
+    while( ++aIt != aPattern.end() && !bPgNumFnd )
     {
+        eTType = aIt->eTokenType;
+
         switch( eTType )
         {
         case TOKEN_PAGE_NUMS:
@@ -1905,8 +1907,9 @@ bool lcl_IsHyperlinked(const SwForm& rForm, USHORT nTOXLvl)
 
         FormTokenType eTType;
         // #i21237#
-        while (TOKEN_END != (eTType = (++aIt)->eTokenType))
+        while ( ++aIt != aPattern.end() )
         {
+            eTType = aIt->eTokenType;
             switch (eTType)
             {
                 case TOKEN_LINK_START:
