@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlCheckBoxModel.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:46:00 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 14:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,21 +61,22 @@
 #ifndef __com_sun_star_awt_UnoControlCheckBoxModel_idl__
 #define __com_sun_star_awt_UnoControlCheckBoxModel_idl__
 
+#ifndef __com_sun_star_awt_FontDescriptor_idl__
+#include <com/sun/star/awt/FontDescriptor.idl>
+#endif
+
 #ifndef __com_sun_star_awt_UnoControlModel_idl__
 #include <com/sun/star/awt/UnoControlModel.idl>
+#endif
+
+#ifndef __com_sun_star_style_VerticalAlignment_idl__
+#include <com/sun/star/style/VerticalAlignment.idl>
 #endif
 
 #ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
 #endif
 
-#ifndef __com_sun_star_awt_FontDescriptor_idl__
-#include <com/sun/star/awt/FontDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_style_VerticalAlignment_idl__
-#include <com/sun/star/style/VerticalAlignment.idl>
-#endif
 
 //=============================================================================
 
@@ -88,6 +89,20 @@
 published service UnoControlCheckBoxModel
 {
     service com::sun::star::awt::UnoControlModel;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the horizontal alignment of the text in the control.
+
+        <pre>
+        0: left
+        1: center
+        2: right
+        </pre>
+
+        @since OOo 2.0.0
+     */
+    [optional, property] short Align;
 
     //-------------------------------------------------------------------------
 
@@ -138,7 +153,7 @@ published service UnoControlCheckBoxModel
     /** specifies the position of the image, if any, relative to the text, if any
 
         <p>Valid values of this property are specified with <type>ImagePosition</type>.</p>
-    */
+     */
     [optional, property] short ImagePosition;
 
     //-------------------------------------------------------------------------
@@ -152,6 +167,14 @@ published service UnoControlCheckBoxModel
     /** specifies the label of the control.
      */
     [property] string Label;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the text may be displayed on more than one line.
+
+        @since OOo 2.0.0
+     */
+    [optional, property] boolean MultiLine;
 
     //-------------------------------------------------------------------------
 
@@ -197,20 +220,25 @@ published service UnoControlCheckBoxModel
 
     //-------------------------------------------------------------------------
 
+    /** specifies the vertical alignment of the text in the control.
+
+        @since OOo 2.0.0
+     */
+    [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
+
+    //-------------------------------------------------------------------------
+
     /** specifies a visual effect to apply to the check box control
 
         <p>Possible values for this property are <type>VisualEffect</type>::FLAT and
         <type>VisualEffect</type>::LOOK3D.</p>
 
         @see com::sun::star::awt::VisualEffect
-    */
+
+        @since OOo 2.0.0
+     */
     [optional, property] short VisualEffect;
 
-    //-------------------------------------------------------------------------
-
-    /** specifies the vertical alignment of the text in the control
-    */
-    [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 };
 
 //=============================================================================
