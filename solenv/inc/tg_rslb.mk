@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_rslb.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-19 11:42:44 $
+#   last change: $Author: kz $ $Date: 2005-01-14 11:35:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -128,7 +128,6 @@ $(RSC_MULTI$(TNR)) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC$(TNR)HEADER) $(RESLIB$(TNR)SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
@@ -144,7 +143,6 @@ $(RSC_MULTI$(TNR)) : \
     -subGLOBALRES=$(SOLARSRC)$/$(RSCDEFIMG)$/res \
     -oil=$(BIN) \
     -ft=$@ \
-    -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC$(TNR)HEADER) $(RESLIB$(TNR)SRSFILES) \
     ) > $(NULLDEV)
 .ENDIF			# "$(common_build_reslib)"!=""
