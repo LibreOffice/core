@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:06:32 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,38 +302,34 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, SwFrmFmt* pFrmFmt,
     case RND_STD_FOOTERL:
     case RND_STD_FOOTERR:
         {
-
-//JP erstmal ein Hack, solange keine Flys/Headers/Footers Undofaehig sind
-if( DoesUndo() )
-    DelAllUndoObj();
-
             pFmt = new SwFrmFmt( GetAttrPool(),
-                                (bHeader ? "Header" : "Footer"),
-                                GetDfltFrmFmt() );
+                                 (bHeader ? "Header" : "Footer"),
+                                 GetDfltFrmFmt() );
 
             SwNodeIndex aTmpIdx( GetNodes().GetEndOfAutotext() );
-            SwStartNode* pSttNd = GetNodes().MakeTextSection( aTmpIdx,
-                                bHeader ? SwHeaderStartNode : SwFooterStartNode,
-                                GetTxtCollFromPool(
-                                bHeader
-                                    ? ( eRequest == RND_STD_HEADERL
-                                        ? RES_POOLCOLL_HEADERL
-                                        : eRequest == RND_STD_HEADERR
-                                            ? RES_POOLCOLL_HEADERR
-                                            : RES_POOLCOLL_HEADER )
-                                    : ( eRequest == RND_STD_FOOTERL
-                                        ? RES_POOLCOLL_FOOTERL
-                                        : eRequest == RND_STD_FOOTERR
-                                            ? RES_POOLCOLL_FOOTERR
-                                            : RES_POOLCOLL_FOOTER )
-                                    ) );
+            SwStartNode* pSttNd =
+                GetNodes().MakeTextSection
+                ( aTmpIdx,
+                  bHeader ? SwHeaderStartNode : SwFooterStartNode,
+                  GetTxtCollFromPool(bHeader
+                                     ? ( eRequest == RND_STD_HEADERL
+                                         ? RES_POOLCOLL_HEADERL
+                                         : eRequest == RND_STD_HEADERR
+                                         ? RES_POOLCOLL_HEADERR
+                                         : RES_POOLCOLL_HEADER )
+                                     : ( eRequest == RND_STD_FOOTERL
+                                         ? RES_POOLCOLL_FOOTERL
+                                         : eRequest == RND_STD_FOOTERR
+                                         ? RES_POOLCOLL_FOOTERR
+                                         : RES_POOLCOLL_FOOTER )
+                                     ) );
             pFmt->SetAttr( SwFmtCntnt( pSttNd ));
 
             if( pSet )      // noch ein paar Attribute setzen ?
                 pFmt->SetAttr( *pSet );
 
-// JP: warum zuruecksetzen ???  Doc. ist doch veraendert ???
-// bei den Fly auf jedenfall verkehrt !!
+            // JP: warum zuruecksetzen ???  Doc. ist doch veraendert ???
+            // bei den Fly auf jedenfall verkehrt !!
             if ( !bMod )
                 ResetModified();
         }
@@ -441,11 +437,6 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
         //Inhalt Loeschen.
         if( pCntIdx )
         {
-
-//JP erstmal ein Hack, solange keine Headers/Footers Undofaehig sind
-if( DoesUndo() )
-    DelAllUndoObj();
-
             SwNode *pNode = &pCntIdx->GetNode();
             ((SwFmtCntnt&)pFmt->GetAttr( RES_CNTNT )).SetNewCntntIdx( 0 );
             DeleteSection( pNode );
