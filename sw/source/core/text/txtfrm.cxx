@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:50:45 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -905,7 +905,9 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                     SET_WRONG( nPos, nPos + nLen, Invalidate )
                     SET_SCRIPT_INVAL( nPos )
                 }
-                else if ( RES_CHRATR_LANGUAGE == nTmp )
+                else if ( RES_CHRATR_LANGUAGE == nTmp ||
+                          RES_CHRATR_CJK_LANGUAGE == nTmp ||
+                          RES_CHRATR_CTL_LANGUAGE == nTmp )
                     SET_WRONG( nPos, nPos + nLen, Invalidate )
                 else if ( RES_CHRATR_FONT == nTmp || RES_CHRATR_CJK_FONT == nTmp ||
                           RES_CHRATR_CTL_FONT == nTmp )
@@ -1099,7 +1101,11 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 SET_SCRIPT_INVAL( 0 )
             }
             else if ( SFX_ITEM_SET ==
-                      rNewSet.GetItemState( RES_CHRATR_LANGUAGE, sal_False ) )
+                      rNewSet.GetItemState( RES_CHRATR_LANGUAGE, sal_False ) ||
+                      SFX_ITEM_SET ==
+                      rNewSet.GetItemState( RES_CHRATR_CJK_LANGUAGE, sal_False ) ||
+                      SFX_ITEM_SET ==
+                      rNewSet.GetItemState( RES_CHRATR_CTL_LANGUAGE, sal_False ) )
                 SET_WRONG( 0, STRING_LEN, Invalidate )
             else if ( SFX_ITEM_SET ==
                       rNewSet.GetItemState( RES_CHRATR_FONT, sal_False ) ||
