@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-14 16:27:55 $
+ *  last change: $Author: cmc $ $Date: 2002-11-18 14:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,4 +222,4 @@ Color   ConvertBrushStyle(const Color& rCol, const Color& rFillCol, BYTE nStyle)
 void    CalculateFlySize( SfxItemSet& rFlySet, SwNodeIndex& rAnchor,
                           SwTwips nPageWidth );
 
-#endif _FLTINI_HXX
+#endif
