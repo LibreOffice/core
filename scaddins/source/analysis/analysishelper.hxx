@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:14:40 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,13 +151,6 @@ double              GetGcd( double f1, double f2 );
 double              GammaHelp( double& x, sal_Bool& bReflect );
 double              Gamma( double f );
 double              GammaN( double f, sal_uInt32 nIter );
-double              Bessel( double fNum, sal_Int32 nOrder, sal_Bool bModfied ) THROWDEF_RTE_IAE;
-double              Besselk0( double fNum );
-double              Besselk1( double fNum );
-double              Besselk( double fNum, sal_Int32 nOrder );
-double              Bessely0( double fNum );
-double              Bessely1( double fNum );
-double              Bessely( double fNum, sal_Int32 nOrder );
 double              ConvertToDec( const STRING& rFromNum, sal_uInt16 nBaseFrom, sal_uInt16 nCharLim ) THROWDEF_RTE_IAE;
 STRING              ConvertFromDec(
                         sal_Int64 nNum, sal_Int64 nMin, sal_Int64 nMax, sal_uInt16 nBase,
@@ -703,7 +696,7 @@ inline sal_Int32 GetDiffDate360( constREFXPS& xOpt, sal_Int32 nDate1, sal_Int32 
 
 inline sal_Int16 GetDayOfWeek( sal_Int32 n )
 {   // monday = 0, ..., sunday = 6
-    return ( n - 1 ) % 7;
+    return static_cast< sal_Int16 >( ( n - 1 ) % 7 );
 }
 
 
