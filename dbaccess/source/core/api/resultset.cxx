@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultset.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,20 +125,26 @@ OResultSet::OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star:
 
     m_pColumns = new OColumns(*this, m_aMutex, _bCaseSensitive, ::std::vector< ::rtl::OUString>(), NULL,NULL);
 
-    m_aStatement = _xStatement;
-    m_xAggregateAsRow = Reference< ::com::sun::star::sdbc::XRow >(m_xAggregateAsResultSet, UNO_QUERY);
-    m_xAggregateAsRowUpdate = Reference< ::com::sun::star::sdbc::XRowUpdate >(m_xAggregateAsResultSet, UNO_QUERY);
-
-    Reference< XPropertySet > xSet(m_xAggregateAsResultSet, UNO_QUERY);
-    xSet->getPropertyValue(PROPERTY_RESULTSETTYPE) >>= m_nResultSetType;
-    xSet->getPropertyValue(PROPERTY_RESULTSETCONCURRENCY) >>= m_nResultSetConcurrency;
-
-    // test for Bookmarks
-    if (ResultSetType::FORWARD_ONLY != m_nResultSetType)
+    try
     {
-        Reference <XPropertySetInfo > xInfo(xSet->getPropertySetInfo());
-        if (xInfo->hasPropertyByName(PROPERTY_ISBOOKMARKABLE))
-            m_bIsBookmarkable = ::comphelper::getBOOL(xSet->getPropertyValue(PROPERTY_ISBOOKMARKABLE));
+        m_aStatement = _xStatement;
+        m_xAggregateAsRow = Reference< ::com::sun::star::sdbc::XRow >(m_xAggregateAsResultSet, UNO_QUERY);
+        m_xAggregateAsRowUpdate = Reference< ::com::sun::star::sdbc::XRowUpdate >(m_xAggregateAsResultSet, UNO_QUERY);
+
+        Reference< XPropertySet > xSet(m_xAggregateAsResultSet, UNO_QUERY);
+        xSet->getPropertyValue(PROPERTY_RESULTSETTYPE) >>= m_nResultSetType;
+        xSet->getPropertyValue(PROPERTY_RESULTSETCONCURRENCY) >>= m_nResultSetConcurrency;
+
+        // test for Bookmarks
+        if (ResultSetType::FORWARD_ONLY != m_nResultSetType)
+        {
+            Reference <XPropertySetInfo > xInfo(xSet->getPropertySetInfo());
+            if (xInfo->hasPropertyByName(PROPERTY_ISBOOKMARKABLE))
+                m_bIsBookmarkable = ::comphelper::getBOOL(xSet->getPropertyValue(PROPERTY_ISBOOKMARKABLE));
+        }
+    }
+    catch(Exception&)
+    {
     }
 }
 
