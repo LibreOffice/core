@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-07 16:07:29 $
+ *  last change: $Author: sj $ $Date: 2001-07-05 10:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,8 +169,6 @@ private:
 
     double              fXScaling;          // represents the factor of the current ( MapMode to 100THmm )
     double              fYScaling;
-    double              fXOrigin;           // this points to the origin ( in 100THmm )
-    double              fYOrigin;           //
                                             //
     StackMember*        pGDIStack;
     ULONG               mnCursorPos;        // aktuelle Cursorposition im Output
@@ -1053,8 +1051,11 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                 {
                     fXScaling *= (double)aMapMode.GetScaleX();
                     fYScaling *= (double)aMapMode.GetScaleY();
-                    fXOrigin  += (double)aMapMode.GetOrigin().X() * fXScaling;
-                    fYOrigin  += (double)aMapMode.GetOrigin().Y() * fYScaling;
+                    sal_Int32 nXOffset = aMapMode.GetOrigin().X();
+                    sal_Int32 nYOffset = aMapMode.GetOrigin().Y();
+                    ImplTranslate( (double)nXOffset * fXScaling, (double)nYOffset * fYScaling );
+                    if ( !aClipRegion.IsEmpty() )
+                        aClipRegion.Move( -nXOffset, -nYOffset );
                 }
                 else
                     ImplGetMapMode( aMapMode );
@@ -1090,8 +1091,6 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                 pGS->aFont = maFont;
                 pGS->fXScale = fXScaling;
                 pGS->fYScale = fYScaling;
-                pGS->fXOrig = fXOrigin;
-                pGS->fYOrig = fYOrigin;
                 mnLatestPush = mpPS->Tell();
                 ImplWriteLine( "gs" );
             }
@@ -1129,8 +1128,6 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                     maLastFont = Font();                // set maLastFont != maFont -> so that
                     fXScaling = pGS->fXScale;
                     fYScaling = pGS->fYScale;
-                    fXOrigin = pGS->fXOrig;
-                    fYOrigin = pGS->fYOrig;
                     delete pGS;
                     UINT32 nCurrentPos = mpPS->Tell();
                     if ( nCurrentPos - 6 == mnLatestPush )
@@ -1189,7 +1186,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                         double fXScale = (double)aSize.Width() * (double)fXScaling / ( nBoundingBox[ 2 ] - nBoundingBox[ 0 ] );
                         double fYScale = (double)aSize.Height() * (double)fYScaling / ( nBoundingBox[ 3 ] - nBoundingBox[ 1 ] );
                         ImplWriteLine( "gs\n%%BeginDocument:" );
-                        ImplTranslate( aPoint.X() * fXScaling + fXOrigin, aPoint.Y() * fYScaling + fYOrigin + nBoundingBox[ 3 ] * fYScale );
+                        ImplTranslate( aPoint.X() * fXScaling, aPoint.Y() * fYScaling + nBoundingBox[ 3 ] * fYScale );
                         ImplScale( fXScale, fYScale );
                         mpPS->Write( pSource, aGfxLink.GetDataSize() );
                         ImplWriteLine( "%%EndDocument\ngr" );
@@ -1241,8 +1238,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
 
 inline void PSWriter::ImplWritePoint( const Point& rPoint, sal_uInt32 nMode )
 {
-    ImplWriteDouble( rPoint.X() * fXScaling + fXOrigin );
-    ImplWriteDouble( rPoint.Y() * fYScaling + fYOrigin, nMode );
+    ImplWriteDouble( rPoint.X() * fXScaling );
+    ImplWriteDouble( rPoint.Y() * fYScaling, nMode );
 }
 
 //---------------------------------------------------------------------------------
@@ -1278,10 +1275,13 @@ void PSWriter::ImplCurveTo( const Point& rP1, const Point& rP2, const Point& rP3
 
 void PSWriter::ImplTranslate( const double& fX, const double& fY, sal_uInt32 nMode )
 {
-    ImplWriteDouble( fX );
-    ImplWriteDouble( fY );
-    ImplWriteByte( 't' );
-    ImplExecMode( nMode );
+    if ( ( fX != 0.0 ) || ( fY != 0.0 ) )
+    {
+        ImplWriteDouble( fX );
+        ImplWriteDouble( fY );
+        ImplWriteByte( 't' );
+        ImplExecMode( nMode );
+    }
 }
 
 //---------------------------------------------------------------------------------
@@ -1413,10 +1413,10 @@ void PSWriter::ImplSetClipRegion()
 
         while ( aClipRegion.GetNextEnumRect( hRegionHandle, aRect ) )
         {
-            double nX1 = aRect.Left() * fXScaling + fXOrigin;
-            double nY1 = aRect.Top() * fYScaling + fYOrigin;
-            double nX2 = aRect.Right() * fXScaling + fXOrigin;
-            double nY2 = aRect.Bottom() * fYScaling + fYOrigin;
+            double nX1 = aRect.Left() * fXScaling;
+            double nY1 = aRect.Top() * fYScaling;
+            double nX2 = aRect.Right() * fXScaling;
+            double nY2 = aRect.Bottom() * fYScaling;
             ImplWriteDouble( nX1 );
             ImplWriteDouble( nY1 );
             ImplWriteByte( 'm' );
@@ -1500,7 +1500,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
         if ( bDoTrans )
         {
             ImplWriteLine( "gs\npum" );
-            ImplTranslate( aSourcePos.X() * fXScaling + fXOrigin, - ( -aSourcePos.Y() * fYScaling - fYOrigin ) );
+            ImplTranslate( aSourcePos.X() * fXScaling, - ( -aSourcePos.Y() * fYScaling ) );
             ImplScale( nXWidth * fXScaling / nWidth,  nYHeight * fYScaling / nHeight );
             if ( !aClipRegion.IsEmpty() )
             {
@@ -1534,7 +1534,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
         if (!bDoTrans )
             ImplWriteLine( "pum" );
 
-        ImplTranslate( aSourcePos.X() * fXScaling + fXOrigin, - ( -aSourcePos.Y() * fYScaling - fYOrigin - nYHeight * fYScaling ) );
+        ImplTranslate( aSourcePos.X() * fXScaling, - ( -aSourcePos.Y() * fYScaling - nYHeight * fYScaling ) );
         ImplScale( nXWidth * fXScaling, nYHeight * fYScaling );
         if ( mnLevel == 1 )                 // level 1 is always grayscale !!!
         {
@@ -1920,7 +1920,7 @@ void PSWriter::ImplText( const String& rUniString, const Point& rPos, const INT3
             {
                 ImplWriteLine( "pum" );
                 // always adjust text position to match baseline alignment
-                ImplTranslate( aPos.X() * fXScaling + fXOrigin, aPos.Y() * fYScaling + fYOrigin );
+                ImplTranslate( aPos.X() * fXScaling, aPos.Y() * fYScaling );
                 if ( nRotation )
                 {
                     ImplWriteF( nRotation, 1 );
@@ -2131,8 +2131,7 @@ void PSWriter::ImplGetMapMode( const MapMode& aMapMode )
             // that does not look right
             break;
     }
-    fXOrigin = aMapMode.GetOrigin().X() * nMul;
-    fYOrigin = aMapMode.GetOrigin().Y() * nMul;
+    ImplTranslate( aMapMode.GetOrigin().X() * nMul, aMapMode.GetOrigin().Y() * nMul );
     double nScale = aMapMode.GetScaleX();
     fXScaling = nMul * nScale;
     nScale = aMapMode.GetScaleY();
