@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-06 07:17:15 $
+ *  last change: $Author: jb $ $Date: 2001-08-02 10:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,27 +62,81 @@
 #ifndef _UTL_BOOTSTRAP_HXX
 #define _UTL_BOOTSTRAP_HXX
 
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-
-using ::rtl::OUString;
-using ::rtl::OString;
+namespace rtl
+{
+    class OUString;
+}
 
 namespace utl
 {
+//-----------------------------------------------------------------------------
+    /** provides configuration information needed for application startup.
+        <p>This class handles the startup information for the office application.
+           It encapsulates knowledge of how to retriev such information and how
+           to diagnose failures to retriev required data.
+        </p>
+    */
+    class Bootstrap
+    {
+    // the static interface
+    public: // some common information items
+
+        /// retrieve the product key; defaults to executable name (without extension)
+        static rtl::OUString getProductKey();
+        /// retrieve the product key; uses the given default, if not found
+        static rtl::OUString getProductKey(rtl::OUString const& _sDefault);
+
+        /// retrieve the LOGO information item; uses the given default, if not found
+        static rtl::OUString getLogoData(rtl::OUString const& _sDefault);     //
+
+     public: // retrieve path information about the installatíon location
+        enum PathStatus
+        {
+            PATH_EXISTS,  // Success: Found a path to an existing file or directory
+            PATH_VALID,   // Found a valid path, but the file or directory does not exist
+            DATA_INVALID, // Retrieved a string for this path, that is not a valid file url or system path
+            DATA_MISSING, // Could not retrieve any data for this path
+            DATA_UNKNOWN  // No attempt to retrieve data for this path was made
+        };
+
+        /// get a file URL to the common base installation [${insturl}]
+        static PathStatus locateBaseInstallation(rtl::OUString& _rURL);
+
+        /// get a file URL to the user installation [${userurl}]
+        static PathStatus locateUserInstallation(rtl::OUString& _rURL);
+
+        /// get a file URL to the shared data directory [default is ${insturl}/share]
+        static PathStatus locateSharedData(rtl::OUString& _rURL);
+
+        /// get a file URL to the user data directory [default is ${userurl}/user]
+        static PathStatus locateUserData(rtl::OUString& _rURL);
+
+    // the next two items are mainly supported for diagnostic purposes. both items may be unused
+        /// get a file URL to the bootstrap INI file used [e.g. ${insturl}/program/bootraprc]
+        static PathStatus locateBootstrapFile(rtl::OUString& _rURL);
+        /// get a file URL to the version locator INI file used [e.g. ${SYSUSERCONFIG}/sversion.ini]
+        static PathStatus locateVersionFile(rtl::OUString& _rURL);
+
+    public: // evaluate the validity of the installation
+        enum Status
+        {
+            DATA_OK,              // user-dir and share-dir do exist, product key found or can be defaulted to exe-name
+            MISSING_USER_INSTALL, // ${userurl} does not exist; or version-file cannot be found or is invalid
+            INVALID_USER_INSTALL, // can locate ${userurl}, but user-dir is missing
+            INVALID_BASE_INSTALL  // other failure: e.g. cannot locate share-dir; bootstraprc missing or invalid; no product key
+        };
+        /// Evaluates the status of the installation and returns a diagnostic message corresponding to this status
+        static Status checkBootstrapStatus(rtl::OUString& _rDiagnosticMessage);
+
+    public:
+        // singleton impl-class
+        class Impl;
+        static Impl const& data();
+    };
+//-----------------------------------------------------------------------------
 
 // ===================================================================================
-enum BootstrapResult
-{
-    BOOTSTRAP_DATA_OK = 0,
-    MISSING_BOOTSTRAP_FILE,
-    INVALID_BOOTSTRAP_DATA,
-    INVALID_INSTALLATION,
-    BOOTSTRAP_FAILURE
-};
-
-// ---------------------------------------------------------------------------------------
+/// @deprecated: old bootstrap helpers, scheduled for removal
 enum BootstrapRetVal
 {
     BOOTSTRAP_OK = 0,
@@ -95,14 +149,14 @@ enum BootstrapRetVal
     SREGISTRY_INI_INVALID
 };
 
+/// @deprecated: get the office/user install directories (the latter may be empty resp. unknown)
+BootstrapRetVal bootstrap_locateUserInstallationPath(rtl::OUString& _rOfficeInstallPath,rtl::OUString& _rUserInstallPath, rtl::OUString& _sIniPath);
+
+/// @deprecated: retrieve product key and logo information from bootstrap profile (providing hard-coded defaults)
+BootstrapRetVal bootstrap_getProductKeyAndLogo( rtl::OUString& _rProductKey, rtl::OUString& _rLogo, rtl::OUString& _sIniPath );
 // ===================================================================================
 
-// get the office/user install directories (the latter may be empty resp. unknown)
-BootstrapRetVal bootstrap_locateUserInstallationPath(OUString& _rOfficeInstallPath,OUString& _rUserInstallPath, OUString& _sIniPath);
-
-// retrieve product key and logo information from bootstrap profile
-BootstrapRetVal bootstrap_getProductKeyAndLogo( OUString& _rProductKey, OUString& _rLogo, OUString& _sIniPath );
-
-}
+//-----------------------------------------------------------------------------
+} // namespace utl
 
 #endif // _UTL_BOOTSTRAP_HXX

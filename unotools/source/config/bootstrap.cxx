@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-06 07:17:45 $
+ *  last change: $Author: jb $ $Date: 2001-08-02 10:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,70 +61,46 @@
 
 #include <stdio.h>
 
-#ifndef _UTL_BOOTSTRAP_HXX
 #include "unotools/bootstrap.hxx"
+
+// ---------------------------------------------------------------------------------------
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+// ---------------------------------------------------------------------------------------
+// needed until
+#ifndef _RTL_STRING_HXX_
+#include <rtl/string.hxx>
 #endif
 
 #ifndef _OSL_PROFILE_HXX_
 #include <osl/profile.hxx>
 #endif
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/string.hxx>
-#endif
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
-#include <com/sun/star/uno/Any.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-
-#ifndef _OSL_THREAD_H_
-#include <osl/thread.h>
-#endif
-
-#ifndef _OSL_PROCESS_H_
-#include <osl/process.h>
-#endif
-
 #ifndef _OSL_SECURITY_H_
-#include <osl/security.h>
+#include <osl/security.h> // for osl_getConfigDir
 #endif
-#undef INI_FILE_NAME
-
-#ifdef UNX
-#define INI_FILE_NAME( name ) #name "rc"
-#else
-#define INI_FILE_NAME( name ) #name ".ini"
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h> // for osl_getExecutableFile
 #endif
-
-#define LOCAL_SESSION_IDENTIFIER            "local"
-
-#define BOOTSTRAP_FILE                  INI_FILE_NAME( bootstrap )
-#define CONFIGURATION_PROFILE_NAME      INI_FILE_NAME( sregistry )
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h> // for osl_getThreadTextEncoding
+#endif
+// ---------------------------------------------------------------------------------------
+#define BOOTSTRAP_FILE                  SAL_CONFIGFILE( "bootstrap" )
 
 #define BOOTSTRAP_SECTION                   "Bootstrap"
 #define BOOTSTRAP_ITEM_PRODUCT_KEY          "ProductKey"
@@ -132,108 +108,191 @@
 #define BOOTSTRAP_ITEM_SECTION              "Section"
 #define BOOTSTRAP_ITEM_LOGO                 "Logo"
 
-#define BOOTSTRAP_VALUE_PRODUCT_KEY_DEFAULT "StarOffice 6.0"
 #define BOOTSTRAP_VALUE_SECTION_DEFAULT     "Versions"
-#define BOOTSTRAP_VALUE_LOGO_DEFAULT        "1"
-
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-namespace uno = ::com::sun::star::uno;
-
 // ---------------------------------------------------------------------------------------
 typedef char const * AsciiString;
-
-namespace utl{
-
 // ---------------------------------------------------------------------------------------
 
-BootstrapRetVal locateBootstrapFiles(OUString& _rOfficeInstall, OUString& _rUserInstallPath, OUString& _rProfilePath);
-BootstrapRetVal getProductKeyAndLogo( OUString& _rProductKey, OUString& _rLogo, OUString& _sIniPath );
-
-// ---------------------------------------------------------------------------------------
-
-inline bool oslOK(::osl::FileBase::RC code) { return code == ::osl::FileBase::E_None; }
-inline bool oslOK(oslFileError code) { return code == osl_File_E_None; }
-
-// ---------------------------------------------------------------------------------------
-BootstrapResult const mapBootstrapResult[/*RetVal*/] =
+namespace utl
 {
-    BOOTSTRAP_DATA_OK,      //  BOOTSTRAP_OK,
-    MISSING_BOOTSTRAP_FILE, //  BOOTSTRAP_INI_NOT_FOUND,
-    INVALID_BOOTSTRAP_DATA, //  BOOTSTRAP_INI_INVALID,
-    INVALID_INSTALLATION,   //  SVERSION_INI_NOT_FOUND,
-    INVALID_INSTALLATION,   //  SVERSION_INI_NO_ENTRY,
-    INVALID_BOOTSTRAP_DATA, //  SVERSION_INI_INVALID,
-    MISSING_BOOTSTRAP_FILE, //  SREGISTRY_INI_NOT_FOUND
-    INVALID_BOOTSTRAP_DATA, //  SREGISTRY_INI_INVALID
-};
+// ---------------------------------------------------------------------------------------
+    using ::rtl::OUString;
+    using ::rtl::OUStringBuffer;
+    using ::rtl::OString;
 
 // ---------------------------------------------------------------------------------------
-OUString getBootstrapErrorMessage( BootstrapResult rc )
-{
-    sal_Char const * const mapErrMsg[/*BootstrapResult*/] =
+// Implementation class: Bootstrap::Impl
+// ---------------------------------------------------------------------------------------
+
+    class Bootstrap::Impl
     {
-        "Bootstrap OK",                     // BOOTSTRAP_DATA_OK,
-        "A bootstrap file is missing",      // MISSING_BOOTSTRAP_FILE,
-        "Invalid bootstrap data",           // INVALID_BOOTSTRAP_DATA,
-        "Invalid user installation",        // INVALID_INSTALLATION
-        "An unexpected failure occurred while bootstrapping" // BOOTSTRAP_FAILURE
+    public: // struct to cache the result of a path lookup
+        struct PathData
+        {
+            OUString     path;
+            PathStatus   status;
+
+            PathData()
+            : path()
+            , status(DATA_UNKNOWN)
+            {}
+        };
+    public: // data members
+        // base install data
+        PathData aBootstrapINI_;
+        PathData aBaseInstall_;
+        OUString sExename_;
+
+        // user install data
+        PathData aVersionINI_;
+        PathData aUserInstall_;
+
+        // overall status
+        Status status_;
+
+    public: // construction and initialization
+        Impl()
+        {
+            status_ = initialize();
+        }
+
+        Status initialize();
+
+        // access helper - only use for pure ASCII data
+        OUString getBootstrapValue(AsciiString _sName, OUString const& _sDefault) const;
+
+    private: // implementation
+        bool initBaseInstallationData();
+        bool initUserInstallationData();
     };
-    OSL_ENSURE(0 <= rc && rc < (sizeof mapErrMsg/sizeof 0[mapErrMsg]), "FATAL ERROR: Result code out of range in getBootstrapErrorMessage()");
+// ---------------------------------------------------------------------------------------
+    Bootstrap::Impl const& Bootstrap::data()
+    {
+        static Impl* s_pData = NULL;
 
-    return OUString::createFromAscii( mapErrMsg[rc] );
-}
+        if (!s_pData)
+        {
+            using namespace osl;
+            MutexGuard aGuard( Mutex::getGlobalMutex() );
+
+            static Impl s_theData;
+
+            s_pData = &s_theData;
+        }
+        return *s_pData;
+    }
 
 // ---------------------------------------------------------------------------------------
-static bool isEmptySettingValue(uno::Any const& aAny)
+// helper
+// ---------------------------------------------------------------------------------------
+
+typedef Bootstrap::PathStatus PathStatus;
+
+sal_Unicode const cURLSeparator = '/';
+
+// ---------------------------------------------------------------------------------------
+static
+inline
+OUString getURLSeparator()
 {
-    if (!aAny.hasValue())
-    {
-        return true;
-    }
-
-
-    // string check
-    OUString sStringCheck;
-    if (aAny >>= sStringCheck)
-    {
-        // it's a string - check if empty
-        return (0 == sStringCheck.getLength());
-    }
-
-    // boolean check - 'false' must be accepted
-    if (aAny.getValueType() == ::getBooleanCppuType())
-    {
-        return false;
-    }
-
-    // integer check
-    sal_Int32 nIntCheck = 0;
-    if (aAny >>= nIntCheck)
-    {
-        // it's an int - check for zero
-        return(0 == nIntCheck);
-    }
-
-    OSL_ENSURE(false, "Unknown settings type");
-    return false; // nevertheless accept
+    static OUString theSep(&cURLSeparator,1);
+    return theSep;
 }
 
 // ---------------------------------------------------------------------------------------
-// - helper
-// ---------------------------------------------------------------------------------------
+// path status utility function
+static
+PathStatus checkStatusOfURL(OUString const& _sURL)
+{
+    using namespace osl;
 
-// normalizeAndSubstitutePathVariables
-// ---------------------------------------------------------------------------------------
+    PathStatus eStatus = Bootstrap::DATA_UNKNOWN;
 
-bool normalizeAndSubstitutePathVariables(OUString& _rPath)
+    if (_sURL.getLength() != 0)
+    {
+        DirectoryItem aItem;
+        switch( DirectoryItem::get(_sURL, aItem) )
+        {
+        case DirectoryItem::E_None:         // Success
+            eStatus = Bootstrap::PATH_EXISTS;
+            break;
+
+        case DirectoryItem::E_NOENT:        // No such file or directory<br>
+            eStatus = Bootstrap::PATH_VALID;
+            break;
+
+        case DirectoryItem::E_INVAL:        // the format of the parameters was not valid<br>
+        case DirectoryItem::E_NAMETOOLONG:  // File name too long<br>
+        case DirectoryItem::E_NOTDIR:       // A component of the path prefix of path is not a directory<p>
+            eStatus = Bootstrap::DATA_INVALID;
+            break;
+
+        // how to handle these ?
+        case DirectoryItem::E_LOOP:         // Too many symbolic links encountered<br>
+        case DirectoryItem::E_ACCES:        // permission denied<br>
+        // any other error - what to do ?
+        default:
+            eStatus = Bootstrap::DATA_UNKNOWN;
+            break;
+        }
+    }
+    else
+        eStatus = Bootstrap::DATA_MISSING;
+
+    return eStatus;
+}
+
+// ----------------------------------------------------------------------------------
+// helpers to build and check a nested URL
+static
+PathStatus getDerivedPath(OUString& _rURL, OUString const& _sRelativeURL, OUString const& _aBaseURL, PathStatus _aBaseStatus)
+{
+    OSL_ASSERT(_sRelativeURL.getLength() != 0 && _sRelativeURL[0] != cURLSeparator);
+
+    PathStatus aStatus = _aBaseStatus;
+
+    // do we have a base path ?
+    if (_aBaseURL.getLength())
+    {
+        OSL_PRECOND(_aBaseURL[_aBaseURL.getLength()-1] != cURLSeparator,"Unexpected: base URL ends in slash");
+
+        _rURL = _aBaseURL + getURLSeparator() + _sRelativeURL;
+
+        // a derived (nested) URL can only exist or have a lesser status, if the parent exists
+        if (aStatus == Bootstrap::PATH_EXISTS)
+            aStatus = checkStatusOfURL(_rURL);
+
+        else // the relative appendix must be valid
+            OSL_ASSERT(aStatus != Bootstrap::PATH_VALID || checkStatusOfURL(_rURL) == Bootstrap::PATH_VALID);
+    }
+    else
+    {
+        // clear the result
+        _rURL = _aBaseURL;
+
+        // if we have no data it can't be a valid path
+        OSL_ASSERT( aStatus > Bootstrap::PATH_VALID );
+    }
+
+    return aStatus;
+}
+
+// ----------------------------------------------------------------------------------
+static
+inline
+PathStatus getDerivedPath(OUString& _rURL, OUString const& _sRelativeURL, Bootstrap::Impl::PathData const& _aBaseData)
+{
+    return getDerivedPath(_rURL,_sRelativeURL,_aBaseData.path,_aBaseData.status);
+}
+
+// ---------------------------------------------------------------------------------------
+static bool normalizeAndSubstitutePathVariables(OUString& _rPath)
 {
     OSL_PRECOND(_rPath.getLength() != 0 , "Invalid parameter: Empty path in normalizeAndSubstitutePathVariables" );
 
     typedef sal_Bool (SAL_CALL * getSystemDirectoryFunction)(oslSecurity, rtl_uString **);
     // recognized variables and methods to retrieve their substitute pathes
-    // Note: variables are expected to be a system path and thus must be at the beginning of _rPath
+    // Note: variables are expected to be an absolute URL and thus must be at the beginning of _rPath
     struct
     {
         sal_Char const *            pattern;
@@ -256,7 +315,7 @@ bool normalizeAndSubstitutePathVariables(OUString& _rPath)
         OSL_ENSURE( 0 >= nVariablePos, "Unexpected: System directory variable in the middle of a path");
         if (0 == nVariablePos)
         {
-            OSL_ENSURE( !bIsNormalized, "Found duplicate path variable");
+            OSL_ENSURE( !bIsNormalized, "Found multiple path variables");
 
             oslSecurity aCurrentUserSec = osl_getCurrentSecurity();
 
@@ -272,48 +331,562 @@ bool normalizeAndSubstitutePathVariables(OUString& _rPath)
         }
     }
 
-#ifdef TF_FILEURL
     if ( !bIsNormalized)
     {
         OUString sOther;
 
         // make a normalized path
-        if ( oslOK(osl::File::getFileURLFromSystemPath(_rPath, sOther)))
+        if ( osl::File::E_None == osl::File::getFileURLFromSystemPath(_rPath, sOther) )
         {
             _rPath = sOther;
+            bIsNormalized = true;
 
         }
         // check if it already was normalized
-        else if ( !oslOK(osl::File::getSystemPathFromFileURL(_rPath, sOther)) )
-            return false;
+        else
+            bIsNormalized = ( osl::File::E_None == osl::File::getSystemPathFromFileURL(_rPath, sOther) );
     }
 
-#else // ! TF_FILEURL
-    OUString sNormalized;
-    if ( oslOK(osl_normalizePath(_rPath.pData, &sNormalized.pData)) )
-    {
-        _rPath = sNormalized;
-    }
+    return bIsNormalized;
+}
+
+// ----------------------------------------------------------------------------------
+static
+void readPathFromINI(Bootstrap::Impl::PathData & _rResult, osl::Profile & _rIniFile, OString const& _sSection, OString const& _sEntry)
+{
+    // encoding to use for converting pathes read from an INI
+    rtl_TextEncoding const nCvtEncoding = osl_getThreadTextEncoding();
+
+    OString sConvertable = _rIniFile.readString(_sSection, _sEntry, OString());
+
+    _rResult.path   = rtl::OStringToOUString(sConvertable, nCvtEncoding);
+
+    if ( _rResult.path.getLength() == 0)
+        _rResult.status = Bootstrap::DATA_MISSING;
+
+    else if ( normalizeAndSubstitutePathVariables(_rResult.path) )
+        _rResult.status = checkStatusOfURL(_rResult.path);
+
     else
+        _rResult.status = Bootstrap::DATA_INVALID;
+}
+// ---------------------------------------------------------------------------------------
+
+static void addFileError(OUStringBuffer& _rBuf, OUString const& _aPath, AsciiString _sWhat)
+{
+    OUString sSimpleFileName = _aPath.copy(1 +_aPath.lastIndexOf(cURLSeparator));
+
+    _rBuf.appendAscii("A main configuration file ").appendAscii(_sWhat);
+    _rBuf.appendAscii(". (").append(sSimpleFileName).appendAscii(") ");
+}
+// ---------------------------------------------------------------------------------------
+
+static void addDirectoryError(OUStringBuffer& _rBuf, OUString const& _aPath, AsciiString _sWhat)
+{
+    _rBuf.appendAscii("A configuration directory ").appendAscii(_sWhat);
+    _rBuf.appendAscii(". (").append(_aPath).appendAscii(") ");
+}
+// ---------------------------------------------------------------------------------------
+
+static void addUnexpectedError(OUStringBuffer& _rBuf, AsciiString _sExtraInfo)
+{
+    _rBuf.appendAscii("An unexpected bootstrap problem occurred");
+    _rBuf.appendAscii(". (").appendAscii(_sExtraInfo).appendAscii(") ");
+}
+// ---------------------------------------------------------------------------------------
+
+static void describeError(OUStringBuffer& _rBuf, Bootstrap::Impl const& _rData)
+{
+    switch (_rData.aUserInstall_.status)
+    {
+    case Bootstrap::PATH_EXISTS:
+        switch (_rData.aBaseInstall_.status)
+        {
+        case Bootstrap::PATH_VALID:
+            addDirectoryError(_rBuf, _rData.aBaseInstall_.path, "cannot be found");
+            break;
+
+        case Bootstrap::DATA_INVALID:
+            addUnexpectedError(_rBuf,"Installation path invalid");
+            break;
+
+        case Bootstrap::DATA_MISSING:
+            addUnexpectedError(_rBuf,"Installation path not available");
+            break;
+
+        case Bootstrap::PATH_EXISTS: // seems to be all fine (?)
+            addUnexpectedError(_rBuf,"Data OK");
+            break;
+
+        default: OSL_ASSERT(false);
+            addUnexpectedError(_rBuf,"Internal failure");
+            break;
+        }
+        break;
+
+    case Bootstrap::PATH_VALID:
+        addDirectoryError(_rBuf, _rData.aUserInstall_.path, "is missing");
+        break;
+
+        // else fall through
+    case Bootstrap::DATA_INVALID:
+        if (_rData.aVersionINI_.status == Bootstrap::PATH_EXISTS)
+        {
+            addFileError(_rBuf, _rData.aVersionINI_.path, "is corrupt");
+            break;
+        }
+        // else fall through
+
+    case Bootstrap::DATA_MISSING:
+        switch (_rData.aVersionINI_.status)
+        {
+        case Bootstrap::PATH_EXISTS:
+            addFileError(_rBuf, _rData.aVersionINI_.path, "has no data for this version");
+            break;
+
+        case Bootstrap::PATH_VALID:
+            addFileError(_rBuf, _rData.aVersionINI_.path, "is missing");
+            break;
+
+        default:
+            switch (_rData.aBootstrapINI_.status)
+            {
+            case Bootstrap::PATH_EXISTS:
+                addFileError(_rBuf, _rData.aVersionINI_.path, "is corrupt");
+                break;
+
+            case Bootstrap::DATA_INVALID: OSL_ASSERT(false);
+            case Bootstrap::PATH_VALID:
+                addFileError(_rBuf, _rData.aVersionINI_.path, "is missing");
+                break;
+
+            default:
+                addUnexpectedError(_rBuf,"No data");
+                break;
+            }
+            break;
+        }
+        break;
+
+    default: OSL_ASSERT(false);
+        addUnexpectedError(_rBuf,"Internal Failure");
+        break;
+    }
+}
+// ---------------------------------------------------------------------------------------
+
+static void describeResolution(OUStringBuffer& _rBuf, Bootstrap::Impl const& _rData)
+{
+    OUString aProductName = _rData.getBootstrapValue( BOOTSTRAP_ITEM_PRODUCT_KEY,_rData.sExename_);
+
+    _rBuf.appendAscii("Please start ").append(aProductName).appendAscii(" setup");
+    switch (_rData.status_)
+    {
+    case Bootstrap::MISSING_USER_INSTALL:
+        _rBuf.appendAscii(" from ").append(_rData.aBaseInstall_.path);
+        _rBuf.appendAscii(" to complete the installation. ");
+        break;
+
+    case Bootstrap::INVALID_BASE_INSTALL:
+    case Bootstrap::INVALID_USER_INSTALL:
+        _rBuf.appendAscii(" and choose the Repair option to solve the problem. ");
+        break;
+
+    default: OSL_ASSERT(false);
+    case Bootstrap::DATA_OK: // what happened ?
+        _rBuf.appendAscii(" to repair or reinstall the product. ");
+    }
+}
+
+// ---------------------------------------------------------------------------------------
+// class Bootstrap
+// ---------------------------------------------------------------------------------------
+
+OUString Bootstrap::getProductKey()
+{
+    Impl const& aData = data();
+
+    OUString const& sDefaultProductKey = aData.sExename_;
+    //OUString const sDefaultProductKey(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_VALUE_PRODUCT_KEY_DEFAULT));
+
+    return aData.getBootstrapValue( BOOTSTRAP_ITEM_PRODUCT_KEY, sDefaultProductKey );
+}
+// ---------------------------------------------------------------------------------------
+
+OUString Bootstrap::getProductKey(OUString const& _sDefault)
+{
+    Impl const& aData = data();
+
+    return aData.getBootstrapValue( BOOTSTRAP_ITEM_PRODUCT_KEY, _sDefault );
+}
+// ---------------------------------------------------------------------------------------
+
+OUString Bootstrap::getLogoData(OUString const& _sDefault)
+{
+    Impl const& aData = data();
+
+    return aData.getBootstrapValue( BOOTSTRAP_ITEM_LOGO, _sDefault );
+}
+// ---------------------------------------------------------------------------------------
+
+Bootstrap::PathStatus Bootstrap::locateBaseInstallation(OUString& _rURL)
+{
+    Impl::PathData const& aPathData = data().aBaseInstall_;
+
+    _rURL = aPathData.path;
+    return aPathData.status;
+}
+// ---------------------------------------------------------------------------------------
+
+PathStatus Bootstrap::locateUserInstallation(OUString& _rURL)
+{
+    Impl::PathData const& aPathData = data().aUserInstall_;
+
+    _rURL = aPathData.path;
+    return aPathData.status;
+}
+// ---------------------------------------------------------------------------------------
+
+PathStatus Bootstrap::locateSharedData(OUString& _rURL)
+{
+    OUString const aShareDir(RTL_CONSTASCII_USTRINGPARAM("share"));
+
+    return getDerivedPath(_rURL,aShareDir,data().aBaseInstall_);
+}
+// ---------------------------------------------------------------------------------------
+
+PathStatus Bootstrap::locateUserData(OUString& _rURL)
+{
+    OUString const aUserDir(RTL_CONSTASCII_USTRINGPARAM("user"));
+
+    return getDerivedPath(_rURL,aUserDir,data().aUserInstall_);
+}
+// ---------------------------------------------------------------------------------------
+
+PathStatus Bootstrap::locateBootstrapFile(OUString& _rURL)
+{
+    Impl::PathData const& aPathData = data().aBootstrapINI_;
+
+    _rURL = aPathData.path;
+    return aPathData.status;
+}
+// ---------------------------------------------------------------------------------------
+
+PathStatus Bootstrap::locateVersionFile(OUString& _rURL)
+{
+    Impl::PathData const& aPathData = data().aVersionINI_;
+
+    _rURL = aPathData.path;
+    return aPathData.status;
+}
+// ---------------------------------------------------------------------------------------
+
+Bootstrap::Status Bootstrap::checkBootstrapStatus(OUString& _rDiagnosticMessage)
+{
+    Impl const& aData = data();
+
+    Status result = aData.status_;
+
+    // maybe do further checks here
+
+    OUStringBuffer sErrorBuffer;
+    if (result != DATA_OK)
+    {
+        describeError(sErrorBuffer,aData);
+        describeResolution(sErrorBuffer,aData);
+    }
+    _rDiagnosticMessage = sErrorBuffer.makeStringAndClear();
+
+    return result;
+}
+// ---------------------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------------------
+// class Bootstrap::Impl
+// ---------------------------------------------------------------------------------------
+
+bool Bootstrap::Impl::initBaseInstallationData()
+{
+    OUString sExecutable;
+
+    if (osl_Process_E_None != osl_getExecutableFile(&sExecutable.pData))
+    {
+        aBaseInstall_.status = DATA_MISSING;
         return false;
+    }
 
-#endif // TF_FILEURL
+    // split the executable name
+    sal_Int32 nSepIndex = sExecutable.lastIndexOf(cURLSeparator);
 
-    #ifdef _DEBUG
-    OUString sSystemPathCheck; // check that this has become a file url for a local path
-    #endif // _DEBUG
-    OSL_POSTCOND( oslOK( osl::File::getSystemPathFromFileURL(_rPath, sSystemPathCheck) ),
-                  "Unexpected: System path variable substitution did not result in valid file URL");
+    sExename_ = sExecutable.copy(nSepIndex + 1);
+
+    OSL_ENSURE(nSepIndex > 0, "osl_getExecutableFile returns local path only");
+    if (nSepIndex <= 0)
+    {
+        aBaseInstall_.status = DATA_INVALID;
+        return false;
+    }
+
+    // reduce to executable directory
+    sExecutable = sExecutable.copy(0,nSepIndex);
+
+    // ... and split to find installation directory
+    nSepIndex = sExecutable.lastIndexOf(cURLSeparator);
+    OSL_ENSURE(nSepIndex > 0, "osl_getExecutableFile returns relative path only");
+    if (nSepIndex <= 0)
+    {
+        aBaseInstall_.status = DATA_INVALID;
+        return false;
+    }
+
+    aBaseInstall_.path      = sExecutable.copy(0,nSepIndex);
+    aBaseInstall_.status    = PATH_EXISTS;
+
+    OSL_ASSERT( checkStatusOfURL(sExecutable) == PATH_EXISTS );
+    OSL_ASSERT( checkStatusOfURL(aBaseInstall_.path) == PATH_EXISTS );
+
+    // now find the bootstrap ini
+    OUString const sBootstrapName(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_FILE));
+    aBootstrapINI_.status = getDerivedPath(aBootstrapINI_.path,sBootstrapName,sExecutable,PATH_EXISTS);
 
     return true;
 }
+// ---------------------------------------------------------------------------------------
 
+bool Bootstrap::Impl::initUserInstallationData()
+{
+    OString sVersionFileSection(BOOTSTRAP_VALUE_SECTION_DEFAULT);
+    //OString sVersionFileProductKey(BOOTSTRAP_VALUE_PRODUCT_KEY_DEFAULT);
+    OString sVersionFileProductKey = rtl::OUStringToOString(
+                        this->getBootstrapValue(BOOTSTRAP_ITEM_PRODUCT_KEY,sExename_),
+                        RTL_TEXTENCODING_ASCII_US);
 
+    // try to find a sversion ini
+    if (aBootstrapINI_.status == PATH_EXISTS)
+    {
+        // read the bootstrap file
+        osl::Profile aBootstrapFile(aBootstrapINI_.path);
+
+        OString const sSection(BOOTSTRAP_SECTION);
+        // get the section/key name of the entry in the product version file
+        sVersionFileSection = aBootstrapFile.readString(sSection,BOOTSTRAP_ITEM_SECTION,sVersionFileSection);
+
+        sVersionFileProductKey = aBootstrapFile.readString(sSection,BOOTSTRAP_ITEM_PRODUCT_KEY,sVersionFileProductKey);
+
+        readPathFromINI(aVersionINI_, aBootstrapFile, sSection,BOOTSTRAP_ITEM_LOCATION);
+    }
+
+    // try to find a user installation
+    switch (aVersionINI_.status)
+    {
+    case PATH_EXISTS: // sversion ini found
+        {
+        // open the product version profile
+            osl::Profile aProductVersionFile(aVersionINI_.path);
+
+            readPathFromINI(aUserInstall_, aProductVersionFile, sVersionFileSection, sVersionFileProductKey);
+        }
+        break;
+
+    case PATH_VALID:   // sversion ini location invalid or file missing
+    case DATA_INVALID:
+        aUserInstall_.status = DATA_MISSING;
+        break;
+
+    default: OSL_ASSERT(!"Unreachable code");
+    case DATA_UNKNOWN: // no bootstrap ini
+    case DATA_MISSING: // no sversion ini location
+        {
+            // should we do this - look for a single-user user directory ?
+            OUString const aUserDir(RTL_CONSTASCII_USTRINGPARAM("user"));
+            OUString sTestUserDir;
+            if ( getDerivedPath(sTestUserDir,aUserDir,aBaseInstall_) )
+                aUserInstall_ = aBaseInstall_;
+            else
+
+            // or just this - distinguishing this from
+                aUserInstall_.status = DATA_MISSING;
+        }
+        break;
+    }
+
+    return aUserInstall_.status == PATH_EXISTS;
+}
+// ---------------------------------------------------------------------------------------
+
+Bootstrap::Status Bootstrap::Impl::initialize()
+{
+    Bootstrap::Status result;
+
+    if (!initBaseInstallationData())
+    {
+        result = INVALID_BASE_INSTALL;
+    }
+    else if (!initUserInstallationData())
+    {
+        result = INVALID_USER_INSTALL;
+
+        if (aUserInstall_.status >= DATA_MISSING)
+        {
+            switch (aVersionINI_.status)
+            {
+            case PATH_EXISTS:
+            case PATH_VALID:
+                result = MISSING_USER_INSTALL;
+                break;
+
+            case DATA_INVALID:
+            case DATA_MISSING:
+                result = INVALID_BASE_INSTALL;
+                break;
+            }
+        }
+    }
+    else
+    {
+        result = DATA_OK;
+    }
+    return result;
+}
+// ---------------------------------------------------------------------------------------
+
+OUString Bootstrap::Impl::getBootstrapValue(AsciiString _sName, OUString const& _sDefault) const
+{
+    if (aBootstrapINI_.status != PATH_EXISTS) return _sDefault;
+
+    osl::Profile aBootstrapFile(aBootstrapINI_.path);
+
+    // get the path to the sversion.ini
+    OString sConvertable = aBootstrapFile.readString( BOOTSTRAP_SECTION, _sName, OString());
+
+    return rtl::OStringToOUString(sConvertable, RTL_TEXTENCODING_ASCII_US);
+}
+// ---------------------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------------------
+// The old (deprecated) interface
 // ----------------------------------------------------------------------------------
-sal_Unicode const cURLSeparator = '/';
+// the old hard-coded defaults
+#define BOOTSTRAP_VALUE_LOGO_DEFAULT        "1"
+#define BOOTSTRAP_VALUE_PRODUCT_KEY_DEFAULT "StarOffice 6.0"
 
+#ifdef DBG_UTIL
+// old implementations used for cross-checking
+BootstrapRetVal legacy_bootstrap_getProductKeyAndLogo( OUString& _rProductKey, OUString& _rLogo, OUString& _sIniPath );
+BootstrapRetVal legacy_bootstrap_locateUserInstallationPath(OUString& _rOfficeInstallPath,OUString& _rUserInstallPath, OUString& _sIniPath);
+#endif
+
+// locate the user path
+BootstrapRetVal bootstrap_locateUserInstallationPath(OUString& _rOfficeInstallPath,OUString& _rUserInstallPath, OUString& _sIniPath)
+{
+    Bootstrap::locateBaseInstallation(_rOfficeInstallPath);
+
+     BootstrapRetVal nStatus = SREGISTRY_INI_INVALID; // tag unexcpected control flow
+
+    switch ( Bootstrap::locateUserInstallation(_rUserInstallPath) )
+    {
+    case Bootstrap::PATH_EXISTS:
+        nStatus = BOOTSTRAP_OK;
+        break;
+
+    case Bootstrap::PATH_VALID:
+        nStatus = SREGISTRY_INI_NOT_FOUND;
+        break;
+
+    case Bootstrap::DATA_INVALID:
+        nStatus = SVERSION_INI_INVALID;
+        Bootstrap::locateVersionFile(_sIniPath);
+        break;
+
+    case Bootstrap::DATA_MISSING:
+        switch (Bootstrap::locateVersionFile(_sIniPath))
+        {
+        case Bootstrap::PATH_EXISTS:
+            nStatus = SVERSION_INI_NO_ENTRY;
+            break;
+
+        case Bootstrap::PATH_VALID:
+            nStatus = SVERSION_INI_NOT_FOUND;
+            break;
+
+        default:
+            if (Bootstrap::locateBootstrapFile(_sIniPath) == Bootstrap::PATH_EXISTS)
+                nStatus = BOOTSTRAP_INI_INVALID;
+            else
+                nStatus = BOOTSTRAP_INI_NOT_FOUND;
+            break;
+        }
+        break;
+    }
+    #ifdef DBG_UTIL
+    OUString chkOI,chkUI, chkIP;
+    BootstrapRetVal chkRet = legacy_bootstrap_locateUserInstallationPath(chkOI,chkUI, chkIP);
+    OSL_ENSURE(chkOI == _rOfficeInstallPath || (nStatus && !chkOI.getLength()), "Bootstrap: semantics changed for Base Install Path");
+    OSL_ENSURE(chkUI == _rUserInstallPath   || (nStatus && !chkUI.getLength()), "Bootstrap: semantics changed for User Install Path");
+    OSL_ENSURE(chkIP == _sIniPath           || (nStatus && !chkIP.getLength()), "Bootstrap: semantics changed for INI path");
+    OSL_ENSURE(chkRet == nStatus, "Bootstrap: semantics changed for status returned");
+    #endif
+
+
+    return nStatus;
+}
 // ----------------------------------------------------------------------------------
-static inline void moveUpOneDirectory(OUString& _rsPath, bool leaveSlash = false)
+
+// retrieve product key and logo information
+BootstrapRetVal bootstrap_getProductKeyAndLogo( OUString& _rProductKey, OUString& _rLogo, OUString& _sIniPath )
+{
+    OString sAsciiProductKey(BOOTSTRAP_VALUE_PRODUCT_KEY_DEFAULT);
+    OString sAsciiLogo      (BOOTSTRAP_VALUE_LOGO_DEFAULT);
+
+    BootstrapRetVal nStatus = BOOTSTRAP_INI_INVALID;
+
+    if ( Bootstrap::locateBootstrapFile(_sIniPath) == Bootstrap::PATH_EXISTS )
+    {
+        osl::Profile aBootstrapFile(_sIniPath);
+
+        OString const sSection(BOOTSTRAP_SECTION);
+
+        sAsciiProductKey = aBootstrapFile.readString(sSection, BOOTSTRAP_ITEM_PRODUCT_KEY, sAsciiProductKey);
+        sAsciiLogo       = aBootstrapFile.readString(sSection, BOOTSTRAP_ITEM_LOGO, sAsciiLogo);
+
+        OUString sVersionINI;
+        switch( Bootstrap::locateVersionFile(sVersionINI) )
+        {
+        case Bootstrap::PATH_EXISTS:
+            _sIniPath = sVersionINI;
+            nStatus = BOOTSTRAP_OK;
+            break;
+
+        case Bootstrap::PATH_VALID:
+            _sIniPath = sVersionINI;
+            nStatus = SVERSION_INI_NOT_FOUND;
+            break;
+
+        default:
+            nStatus = BOOTSTRAP_INI_INVALID;
+            break;
+        }
+    }
+    else
+        nStatus = BOOTSTRAP_INI_NOT_FOUND;
+
+    _rProductKey    = rtl::OStringToOUString(sAsciiProductKey,RTL_TEXTENCODING_ASCII_US);
+    _rLogo          = rtl::OStringToOUString(sAsciiLogo,RTL_TEXTENCODING_ASCII_US);
+
+    #ifdef DBG_UTIL
+    OUString chkPK, chkLG, chkIP;
+    BootstrapRetVal chkRet = legacy_bootstrap_getProductKeyAndLogo(chkPK, chkLG, chkIP);
+    OSL_ENSURE(chkPK == _rProductKey || (nStatus && !chkPK.getLength()), "Bootstrap: semantics changed for PRODUCT_KEY");
+    OSL_ENSURE(chkLG == _rLogo       || (nStatus && !chkLG.getLength()), "Bootstrap: semantics changed for LOGO");
+    OSL_ENSURE(chkIP == _sIniPath    || (nStatus && !chkIP.getLength()), "Bootstrap: semantics changed for INI path");
+    OSL_ENSURE(chkRet == nStatus     || chkRet>=SREGISTRY_INI_NOT_FOUND, "Bootstrap: semantics changed for status returned");
+    #endif
+
+    return nStatus;
+}
+// ----------------------------------------------------------------------------------
+#ifdef DBG_UTIL
+static inline void legacy_moveUpOneDirectory(OUString& _rsPath, bool leaveSlash = false)
 {
     sal_Int32 nSepIndex = _rsPath.lastIndexOf(cURLSeparator);
 
@@ -331,7 +904,7 @@ static inline void moveUpOneDirectory(OUString& _rsPath, bool leaveSlash = false
 // ----------------------------------------------------------------------------------
 // locate the office install and bootstrap ini
 
-static bool locateBootstrapProfile(OUString& _rOfficeInstallPath, OUString& _rProfileFile)
+static bool legacy_locateBootstrapProfile(OUString& _rOfficeInstallPath, OUString& _rProfileFile)
 {
     // get the bootstrap.ini file, where we find basic informations about the version of the product
     // we're running in
@@ -342,29 +915,29 @@ static bool locateBootstrapProfile(OUString& _rOfficeInstallPath, OUString& _rPr
     // take care for the office install path
     _rOfficeInstallPath = sBootstrap;
     // for this, cut two levels from the executable (the executable name and the program directory)
-    moveUpOneDirectory(_rOfficeInstallPath);
-    moveUpOneDirectory(_rOfficeInstallPath);
+    legacy_moveUpOneDirectory(_rOfficeInstallPath);
+    legacy_moveUpOneDirectory(_rOfficeInstallPath);
 
     // cut the executable file name and append the bootstrap ini file name
-    moveUpOneDirectory(sBootstrap,true);
+    legacy_moveUpOneDirectory(sBootstrap,true);
     sBootstrap += OUString::createFromAscii(BOOTSTRAP_FILE);
 
     _rProfileFile = sBootstrap;
 
     osl::DirectoryItem aCheckPath;
-    return oslOK(aCheckPath.get(sBootstrap, aCheckPath));
+    return osl::File::E_None==aCheckPath.get(sBootstrap, aCheckPath);
 }
 
 static inline bool isValidFileURL(OUString const& _sFileURL)
 {
     OUString sSystemPath;
-    return _sFileURL.getLength() && oslOK(osl::File::getSystemPathFromFileURL(_sFileURL, sSystemPath));
+    return _sFileURL.getLength() && osl::File::E_None==osl::File::getSystemPathFromFileURL(_sFileURL, sSystemPath);
 }
 
 // ----------------------------------------------------------------------------------
 // locate the user path
 
-BootstrapRetVal bootstrap_locateUserInstallationPath(OUString& _rOfficeInstallPath,OUString& _rUserInstallPath, OUString& _sIniPath)
+BootstrapRetVal legacy_bootstrap_locateUserInstallationPath(OUString& _rOfficeInstallPath,OUString& _rUserInstallPath, OUString& _sIniPath)
 {
     rtl_TextEncoding const nCvtEncoding = osl_getThreadTextEncoding();
 
@@ -372,7 +945,7 @@ BootstrapRetVal bootstrap_locateUserInstallationPath(OUString& _rOfficeInstallPa
 
     try
     {
-        if ( !locateBootstrapProfile(_rOfficeInstallPath,_sIniPath) )
+        if ( !legacy_locateBootstrapProfile(_rOfficeInstallPath,_sIniPath) )
         {
             return BOOTSTRAP_INI_NOT_FOUND;
         }
@@ -404,7 +977,7 @@ BootstrapRetVal bootstrap_locateUserInstallationPath(OUString& _rOfficeInstallPa
         _sIniPath = sProductVersionFile;
 
         osl::DirectoryItem aCheckPath;
-        if (!oslOK(aCheckPath.get(sProductVersionFile, aCheckPath)))
+        if (osl::File::E_None!=aCheckPath.get(sProductVersionFile, aCheckPath) )
         {
             return SVERSION_INI_NOT_FOUND;
         }
@@ -440,11 +1013,7 @@ BootstrapRetVal bootstrap_locateUserInstallationPath(OUString& _rOfficeInstallPa
             // normalize the path
             OUString sNormalized;
             // normalize the user directory path
-#ifdef TF_FILEURL
-            if (!oslOK(osl::File::getFileURLFromSystemPath(sUserPath, sNormalized)))
-#else
-            if (!oslOK(osl_normalizePath(sUserPath.pData, &sNormalized.pData)))
-#endif
+            if ( osl::File::E_None!= osl::File::getFileURLFromSystemPath(sUserPath, sNormalized) )
             {
                 return SVERSION_INI_INVALID;
             }
@@ -464,75 +1033,11 @@ BootstrapRetVal bootstrap_locateUserInstallationPath(OUString& _rOfficeInstallPa
     return nStatus;
 }
 
-// locateBootstrapFiles
-// ---------------------------------------------------------------------------------------
-
-static bool locateConfigProfile(OUString const& _sBasePath, OUString& _rProfileFile)
-{
-    if ( !isValidFileURL(_sBasePath) ) // do we have a location ?
-        return false;
-
-    // the name of our very personal ini file
-    const OUString sIniName(RTL_CONSTASCII_USTRINGPARAM(CONFIGURATION_PROFILE_NAME));
-
-     // the composed name of the user dir and the ini file name
-    OUString sProfileFile = _sBasePath;
-
-    sProfileFile += OUString(RTL_CONSTASCII_USTRINGPARAM("/user/"));
-    sProfileFile += sIniName;
-
-    // does our ini file exist in the user directory ?
-    ::osl::DirectoryItem aItem;
-    bool bExists = oslOK( aItem.get(sProfileFile, aItem) );
-
-    if (bExists) _rProfileFile = sProfileFile;
-
-    return bExists;
-}
-
-// ----------------------------------------------------------------------------------
-BootstrapRetVal locateBootstrapFiles(OUString& _rOfficeInstall, OUString& _rUserInstallPath, OUString& _rProfileFile)
-{
-    // get the office/user install directories (the latter may be empty resp. unknown)
-    BootstrapRetVal nLocateError = bootstrap_locateUserInstallationPath(_rOfficeInstall, _rUserInstallPath, _rProfileFile);
-
-    switch (nLocateError)
-    {
-        case BOOTSTRAP_OK: // check if we have a sregistry.ini
-            OSL_ASSERT( isValidFileURL(_rUserInstallPath) );
-            OSL_ASSERT( _rProfileFile.getLength() == 0 );
-
-            if ( !locateConfigProfile(_rUserInstallPath,_rProfileFile) )
-            {
-                nLocateError = SREGISTRY_INI_NOT_FOUND;
-            }
-            break;
-
-        case BOOTSTRAP_INI_NOT_FOUND: // support installations without bootstrap.ini and sversion.ini
-            OSL_ASSERT( _rUserInstallPath.getLength() == 0 );
-            {
-                OUString sProfile;
-                if ( locateConfigProfile(_rOfficeInstall,sProfile) )
-                {
-                    nLocateError = BOOTSTRAP_OK;
-                    _rUserInstallPath = _rOfficeInstall;
-                    _rProfileFile = sProfile;
-                }
-            }
-            break;
-
-        default:
-            OSL_ASSERT( _rUserInstallPath.getLength() == 0 );
-            break;
-    }
-    return nLocateError;
-}
-
 
 // ----------------------------------------------------------------------------------
 // retrieve product key and logo information
 
-BootstrapRetVal bootstrap_getProductKeyAndLogo( OUString& _rProductKey, OUString& _rLogo, OUString& _sIniPath )
+BootstrapRetVal legacy_bootstrap_getProductKeyAndLogo( OUString& _rProductKey, OUString& _rLogo, OUString& _sIniPath )
 {
     OUString aOfficeInstallPath;
 
@@ -542,7 +1047,7 @@ BootstrapRetVal bootstrap_getProductKeyAndLogo( OUString& _rProductKey, OUString
 
     try
     {
-        if ( !locateBootstrapProfile( aOfficeInstallPath, _sIniPath) )
+        if ( !legacy_locateBootstrapProfile( aOfficeInstallPath, _sIniPath) )
         {
             return BOOTSTRAP_INI_NOT_FOUND;
         }
@@ -574,7 +1079,7 @@ BootstrapRetVal bootstrap_getProductKeyAndLogo( OUString& _rProductKey, OUString
         _sIniPath = sProductVersionFile;
 
         osl::DirectoryItem aCheckPath;
-        if (!oslOK(aCheckPath.get(sProductVersionFile, aCheckPath)))
+        if (osl::File::E_None!=aCheckPath.get(sProductVersionFile, aCheckPath) )
         {
             return SVERSION_INI_NOT_FOUND;
         }
@@ -608,6 +1113,8 @@ BootstrapRetVal bootstrap_getProductKeyAndLogo( OUString& _rProductKey, OUString
 
     return nStatus;
 }
+#endif
+// ----------------------------------------------------------------------------------
 
 } // namespace utl
 
