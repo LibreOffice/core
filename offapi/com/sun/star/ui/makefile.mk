@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-13 18:50:09 $
+#   last change: $Author: kz $ $Date: 2005-03-01 18:32:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,18 +73,51 @@ PACKAGE=com$/sun$/star$/ui
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    ActionTrigger.idl               \
-    ActionTriggerContainer.idl      \
-    ActionTriggerSeparator.idl      \
-    ActionTriggerSeparatorType.idl  \
-    ContextMenuExecuteEvent.idl     \
-    ContextMenuInterceptorAction.idl\
-    GlobalAcceleratorConfiguration.idl \
-    ModuleUICategoryDescription.idl \
-    UICategoryDescription.idl       \
-    XAcceleratorConfiguration.idl   \
-    XContextMenuInterception.idl    \
-    XContextMenuInterceptor.idl     \
+    ActionTrigger.idl                           \
+    ActionTriggerContainer.idl                  \
+    ActionTriggerSeparator.idl                  \
+    ActionTriggerSeparatorType.idl              \
+    ConfigurableUIElement.idl                   \
+    ConfigurationEvent.idl                      \
+    ContextMenuExecuteEvent.idl                 \
+    ContextMenuInterceptorAction.idl            \
+    DockingArea.idl                             \
+    GlobalAcceleratorConfiguration.idl          \
+    ImageType.idl                               \
+    ItemDescriptor.idl                          \
+    ItemStyle.idl                               \
+    ItemType.idl                                \
+    ModuleUICategoryDescription.idl             \
+    ModuleUICommandDescription.idl              \
+    ModuleUIConfigurationManager.idl            \
+    ModuleUIConfigurationManagerSupplier.idl    \
+    ModuleWindowStateConfiguration.idl          \
+    UICategoryDescription.idl                   \
+    UICommandDescription.idl                    \
+    UIConfigurationManager.idl                  \
+    UIElement.idl                               \
+    UIElementFactory.idl                        \
+    UIElementFactoryManager.idl                 \
+    UIElementSettings.idl                       \
+    UIElementType.idl                           \
+    WindowStateConfiguration.idl                \
+    XAcceleratorConfiguration.idl               \
+    XContextMenuInterception.idl                \
+    XContextMenuInterceptor.idl                 \
+    XDockingAreaAcceptor.idl                    \
+    XImageManager.idl                           \
+    XModuleUIConfigurationManager.idl           \
+    XModuleUIConfigurationManagerSupplier.idl   \
+    XUIConfiguration.idl                        \
+    XUIConfigurationListener.idl                \
+    XUIConfigurationManager.idl                 \
+    XUIConfigurationManagerSupplier.idl         \
+    XUIConfigurationPersistence.idl             \
+    XUIConfigurationStorage.idl                 \
+    XUIElement.idl                              \
+    XUIElementFactory.idl                       \
+    XUIElementFactoryRegistration.idl           \
+    XUIElementSettings.idl                      \
     XUIFunctionListener.idl
 
 # ------------------------------------------------------------------
