@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsnap.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:10:01 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,6 +406,8 @@ ModalDialog DLG_SNAPLINE
     Text[ hindi ] = "नया स्नॉप वस्तु";
     Text[ slovak ] = "Nový snímok";
 };
+
+
 
 
 
