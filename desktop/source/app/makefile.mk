@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: cd $ $Date: 2002-08-16 14:19:26 $
+#   last change: $Author: cd $ $Date: 2002-08-23 09:31:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,7 +116,7 @@ SLOFILES = \
         $(SLO)$/dispatchwatcher.obj		\
         $(SLO)$/ssoinit.obj				\
         $(SLO)$/officeipcmanager.obj	\
-        $(OBJ)$/javainteractionhandler.obj
+        $(SLO)$/javainteractionhandler.obj
 
 .ENDIF
 
