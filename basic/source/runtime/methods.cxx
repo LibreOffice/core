@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 14:02:01 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 11:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,7 +496,7 @@ RTLFUNC(CurDir)
         rPar.Get(0)->PutString( String::CreateFromAscii( pBuffer ) );
     else
         StarBASIC::Error( SbERR_NO_DEVICE );
-    delete pBuffer;
+    delete [] pBuffer;
     _chdrive(old);
 #else
 #ifdef OS2
@@ -507,7 +507,7 @@ RTLFUNC(CurDir)
         rPar.Get(0)->PutString( String::CreateFromAscii( pBuffer ) );
     else
         StarBASIC::Error( SbERR_NO_DEVICE );
-    delete pBuffer;
+    delete [] pBuffer;
 #endif
 
 #elif defined MAC
@@ -573,16 +573,16 @@ RTLFUNC(CurDir)
         if( getcwd( pMem, nSize-1 ) != NULL )
           {
             rPar.Get(0)->PutString( String::CreateFromAscii(pMem) );
-            delete pMem;
+            delete [] pMem;
             return;
           }
         if( errno != ERANGE )
           {
             StarBASIC::Error( SbERR_INTERNAL_ERROR );
-            delete pMem;
+            delete [] pMem;
             return;
           }
-        delete pMem;
+        delete [] pMem;
         nSize += _PATH_INCR;
       };
 
