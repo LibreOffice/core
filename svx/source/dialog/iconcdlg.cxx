@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iconcdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:57 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:14:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,7 +574,6 @@ void IconChoiceDialog::Paint( const Rectangle& rRect )
         if ( pData->nId == mnCurrentPageId )
         {
             ShowPageImpl ( pData );
-            pData->pPage->Invalidate();
         }
         else
         {
@@ -609,7 +608,7 @@ EIconChoicePos IconChoiceDialog::SetCtrlPos( const EIconChoicePos& rPos )
     maIconCtrl.SetStyle ( aWinBits );
 
     SetPosSizeCtrls();
-    Invalidate ();
+
 
     EIconChoicePos eOldPos = meChoicePos;
     meChoicePos = rPos;
@@ -656,8 +655,11 @@ void IconChoiceDialog::RemoveResetButton()
 
 void IconChoiceDialog::ShowPage( USHORT nId )
 {
+    bool bInvalidate = GetCurPageId() != nId;
     SetCurPageId( nId );
     ActivatePageImpl( );
+    if(bInvalidate)
+        Invalidate();
 }
 
 /**********************************************************************
@@ -889,6 +891,7 @@ IMPL_LINK ( IconChoiceDialog , ChosePageHdl_Impl, void *, EMPTYARG )
         SetCurPageId ( *pId );
 
         ActivatePageImpl();
+        Invalidate();
     }
 
     return 0L;
@@ -1007,7 +1010,6 @@ void IconChoiceDialog::ActivatePageImpl ()
     else
         aResetBtn.Show();
 
-    Invalidate ();
 }
 
 // -----------------------------------------------------------------------
