@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svparser.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:58:59 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <stdio.h>
@@ -117,13 +116,16 @@ struct SvParser_Impl
 
 // Konstruktor
 SvParser::SvParser( SvStream& rIn, BYTE nStackSize )
-    : rInput( rIn ), eState( SVPAR_NOTSTARTED ),
-    nlLineNr( 1 ), nlLinePos( 1 ),
-    nTokenStackSize( nStackSize ), nTokenStackPos( 0 ),
-    nTokenValue( 0 ),
-    pImplData( 0 ),
-    bDownloadingFile( FALSE ),
-    eSrcEnc( RTL_TEXTENCODING_DONTKNOW )
+    : rInput( rIn )
+    , nlLineNr( 1 )
+    , nlLinePos( 1 )
+    , pImplData( 0 )
+    , nTokenValue( 0 )
+    , eState( SVPAR_NOTSTARTED )
+    , eSrcEnc( RTL_TEXTENCODING_DONTKNOW )
+    , bDownloadingFile( FALSE )
+    , nTokenStackSize( nStackSize )
+    , nTokenStackPos( 0 )
 {
     bUCS2BSrcEnc = bSwitchToUCS2 = FALSE;
     eState = SVPAR_NOTSTARTED;
@@ -166,14 +168,7 @@ SvParser::~SvParser()
 
     delete pImplData;
 
-#ifdef MPW
-    // der MPW-Compiler ruft sonst keine Dtoren!
-    for (int n = 0; n < nTokenStackSize; ++n )
-        (pTokenStack+n)->TokenStackType::~TokenStackType();
-    delete (void*) pTokenStack;
-#else
     delete [] pTokenStack;
-#endif
 }
 
 void SvParser::ClearTxtConvContext()
