@@ -2,9 +2,9 @@
  *
  *  $RCSfile: index.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:32:25 $
+ *  last change: $Author: rt $ $Date: 2004-06-11 08:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,7 +392,8 @@ SwIndexReg::~SwIndexReg()
 #endif
 
 
-void SwIndexReg::Update( const SwIndex& rIdx, xub_StrLen nDiff, BOOL bNeg )
+void SwIndexReg::Update( const SwIndex& rIdx, xub_StrLen nDiff, BOOL bNeg,
+                         BOOL /* argument is only used in derived class*/ )
 {
     register SwIndex* pStt = (SwIndex*)&rIdx;
     register xub_StrLen nNewVal = rIdx.nIndex;
