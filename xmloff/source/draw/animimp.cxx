@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animimp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:14:00 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include <tools/debug.hxx>
 
+#ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
+#include "unointerfacetouniqueidentifiermapper.hxx"
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -403,7 +406,7 @@ class AnimImpImpl
 public:
     Reference< XPropertySet > mxLastShape;
     sal_Int32 mnPresOrder;
-    sal_Int32 mnLastShapeId;
+    OUString maLastShapeId;
 
     OUString msDimColor;
     OUString msDimHide;
@@ -421,7 +424,6 @@ public:
 
     AnimImpImpl()
     :   mnPresOrder( 0 ),
-        mnLastShapeId( -1 ),
         msDimColor( RTL_CONSTASCII_USTRINGPARAM( "DimColor" ) ),
         msDimHide( RTL_CONSTASCII_USTRINGPARAM( "DimHide" ) ),
         msDimPrev( RTL_CONSTASCII_USTRINGPARAM( "DimPrevious" ) ),
@@ -455,7 +457,7 @@ public:
 
     XMLActionKind   meKind;
     sal_Bool        mbTextEffect;
-    sal_Int32       mnShapeId;
+    OUString        maShapeId;
 
     XMLEffect       meEffect;
     XMLEffectDirection  meDirection;
@@ -465,7 +467,7 @@ public:
     Color           maDimColor;
     OUString        maSoundURL;
     sal_Bool        mbPlayFull;
-    sal_Int32       mnPathShapeId;
+    OUString        maPathShapeId;
 
 public:
     TYPEINFO();
@@ -537,7 +539,7 @@ TYPEINIT1( XMLAnimationsEffectContext, SvXMLImportContext );
 XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList, AnimImpImpl* pImpl )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName),
     mpImpl( pImpl ),
-    meKind( XMLE_SHOW ), mbTextEffect( sal_False ), mnShapeId( -1 ), mnPathShapeId( -1 ),
+    meKind( XMLE_SHOW ), mbTextEffect( sal_False ),
     meEffect( EK_none ), meDirection( ED_none ), mnStartScale( 100 ),
     meSpeed( AnimationSpeed_MEDIUM ), maDimColor(0), mbPlayFull( sal_False )
 {
@@ -587,7 +589,7 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  s
         case XML_NAMESPACE_DRAW:
             if( IsXMLToken( aLocalName, XML_SHAPE_ID ) )
             {
-                SvXMLUnitConverter::convertNumber(mnShapeId, sValue);
+                maShapeId = sValue;
             }
             else if( IsXMLToken( aLocalName, XML_COLOR ) )
             {
@@ -622,7 +624,7 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  s
             }
             else if( IsXMLToken( aLocalName, XML_PATH_ID ) )
             {
-                SvXMLUnitConverter::convertNumber(mnPathShapeId, sValue);
+                maPathShapeId = sValue;
             }
             break;
         }
@@ -647,12 +649,12 @@ void XMLAnimationsEffectContext::EndElement()
         UniReference< XMLShapeImportHelper > xShapeImport( GetImport().GetShapeImport() );
         Any aAny;
 
-        if( mnShapeId != -1 )
+        if( maShapeId.getLength() )
         {
             Reference< XPropertySet > xSet;
-            if( mpImpl->mnLastShapeId != mnShapeId )
+            if( mpImpl->maLastShapeId != maShapeId )
             {
-                xSet = Reference< XPropertySet >::query( xShapeImport->getShapeFromId( mnShapeId ) );
+                xSet = Reference< XPropertySet >::query( GetImport().getInterfaceToIdentifierMapper().getReference( maShapeId ) );
                 if( xSet.is() )
                 {
                     // check for presentation shape service
@@ -662,7 +664,7 @@ void XMLAnimationsEffectContext::EndElement()
                             return;
                     }
 
-                    mpImpl->mnLastShapeId = mnShapeId;
+                    mpImpl->maLastShapeId = maShapeId;
                     mpImpl->mxLastShape = xSet;
 
                     aAny <<= mpImpl->mnPresOrder++;
@@ -703,20 +705,14 @@ void XMLAnimationsEffectContext::EndElement()
                     {
                         const AnimationEffect eEffect = ImplSdXMLgetEffect( meEffect, meDirection, mnStartScale, meKind == XMLE_SHOW );
 
-                        aAny <<= eEffect;
-                        xSet->setPropertyValue( mbTextEffect ? mpImpl->msTextEffect : mpImpl->msEffect, aAny );
+                        xSet->setPropertyValue( mbTextEffect ? mpImpl->msTextEffect : mpImpl->msEffect, makeAny( eEffect ) );
+                        xSet->setPropertyValue( mpImpl->msSpeed, makeAny( meSpeed ) );
 
-                        aAny <<= meSpeed;
-                        xSet->setPropertyValue( mpImpl->msSpeed, aAny );
-
-                        if( eEffect == AnimationEffect_PATH && mnPathShapeId != -1 )
+                        if( eEffect == AnimationEffect_PATH && maPathShapeId.getLength() )
                         {
-                            Reference< XShape > xPath( xShapeImport->getShapeFromId( mnPathShapeId ) );
+                            Reference< XShape > xPath( GetImport().getInterfaceToIdentifierMapper().getReference( maPathShapeId ), UNO_QUERY );
                             if( xPath.is() )
-                            {
-                                aAny <<= xPath;
-                                xSet->setPropertyValue( mpImpl->msAnimPath, aAny );
-                            }
+                                xSet->setPropertyValue( mpImpl->msAnimPath, makeAny( xPath ) );
                         }
                     }
                 }
