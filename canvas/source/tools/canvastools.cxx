@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:26:02 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 11:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,23 +59,23 @@
  *
  ************************************************************************/
 
-#ifndef _DRAFTS_COM_SUN_STAR_GEOMETRY_AFFINEMATRIX2D_HPP_
-#include <drafts/com/sun/star/geometry/AffineMatrix2D.hpp>
+#ifndef _COM_SUN_STAR_GEOMETRY_AFFINEMATRIX2D_HPP_
+#include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_GEOMETRY_MATRIX2D_HPP_
-#include <drafts/com/sun/star/geometry/Matrix2D.hpp>
+#ifndef _COM_SUN_STAR_GEOMETRY_MATRIX2D_HPP_
+#include <com/sun/star/geometry/Matrix2D.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
-#include <drafts/com/sun/star/rendering/RenderState.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
+#include <com/sun/star/rendering/RenderState.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_VIEWSTATE_HPP__
-#include <drafts/com/sun/star/rendering/ViewState.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_VIEWSTATE_HPP__
+#include <com/sun/star/rendering/ViewState.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCANVAS_HPP__
-#include <drafts/com/sun/star/rendering/XCanvas.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP__
+#include <com/sun/star/rendering/XCanvas.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_COMPOSITEOPERATION_HPP__
-#include <drafts/com/sun/star/rendering/CompositeOperation.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_COMPOSITEOPERATION_HPP__
+#include <com/sun/star/rendering/CompositeOperation.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -111,7 +111,6 @@
 #include <cstdio>
 
 
-using namespace ::drafts::com::sun::star;
 using namespace ::com::sun::star;
 
 namespace canvas
@@ -338,52 +337,34 @@ namespace canvas
                                                         const ::basegfx::B2DRange&      inRect,
                                                         const ::basegfx::B2DHomMatrix&  transformation )
         {
-            double left, top, bottom, right;
+            outRect.reset();
 
             // transform all four extremal points of the rectangle,
             // take bounding rect of those.
-            ::basegfx::B2DPoint aPoint;
 
             // transform left-top point
-            aPoint.setX( inRect.getMinX() );
-            aPoint.setY( inRect.getMinY() );
-
-            aPoint *= transformation;
-            left = right = aPoint.getX();
-            top = bottom = aPoint.getY();
+            outRect.expand( transformation * inRect.getMinimum() );
 
             // transform bottom-right point
-            aPoint.setX( inRect.getMaxX() );
-            aPoint.setY( inRect.getMaxY() );
+            outRect.expand( transformation * inRect.getMaximum() );
 
-            aPoint *= transformation;
-            left   = ::std::min(left, aPoint.getX());
-            top    = ::std::min(top, aPoint.getY());
-            right  = ::std::max(right, aPoint.getX());
-            bottom = ::std::max(bottom, aPoint.getY());
+            ::basegfx::B2DPoint aPoint;
 
             // transform top-right point
             aPoint.setX( inRect.getMaxX() );
             aPoint.setY( inRect.getMinY() );
 
             aPoint *= transformation;
-            left   = ::std::min(left, aPoint.getX());
-            top    = ::std::min(top, aPoint.getY());
-            right  = ::std::max(right, aPoint.getX());
-            bottom = ::std::max(bottom, aPoint.getY());
+            outRect.expand( aPoint );
 
             // transform bottom-left point
             aPoint.setX( inRect.getMinX() );
             aPoint.setY( inRect.getMaxY() );
 
             aPoint *= transformation;
-            left   = ::std::min(left, aPoint.getX());
-            top    = ::std::min(top, aPoint.getY());
-            right  = ::std::max(right, aPoint.getX());
-            bottom = ::std::max(bottom, aPoint.getY());
+            outRect.expand( aPoint );
 
             // over and out.
-            outRect = ::basegfx::B2DRectangle( left, top, right, bottom );
             return outRect;
         }
 
