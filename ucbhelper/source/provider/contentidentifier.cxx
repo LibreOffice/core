@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentidentifier.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-20 13:18:22 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 16:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ ContentIdentifier_Impl::ContentIdentifier_Impl(
     if ( nPos != -1 )
     {
         OUString aScheme( rURL.copy( 0, nPos ) );
-        m_aProviderScheme = aScheme.toLowerCase();
+        m_aProviderScheme = aScheme.toAsciiLowerCase();
         m_aContentId = rURL.replaceAt( 0, nPos, aScheme );
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgelem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mm $ $Date: 2000-10-24 08:16:02 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 16:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@ BOOL StgEntry::SetName( const String& rName )
 {
     // make upper case character in current language
     aName = rName;
-    aName = rtl::OUString( aName ).toUpperCase();
+    aName = rtl::OUString( aName ).toAsciiUpperCase();
     aName.Erase( 31 );
 
     int i;
@@ -402,7 +402,7 @@ BOOL StgEntry::Load( const void* pFrom )
 
     aName = String( nName, n );
     // make upper case character in current language
-    aName = rtl::OUString( aName ).toUpperCase();
+    aName = rtl::OUString( aName ).toAsciiUpperCase();
     aName.Erase( 31 );
     return TRUE;
 }
