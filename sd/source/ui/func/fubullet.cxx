@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fubullet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2001-10-25 08:00:17 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include "fubullet.hxx"
+
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
 #endif
@@ -70,10 +72,15 @@
 #define ITEMID_FONT             EE_CHAR_FONTINFO
 #include <svx/fontitem.hxx>
 
-#include "outlnvsh.hxx"
-#include "drviewsh.hxx"
-#include "sdwindow.hxx"
-#include "fubullet.hxx"
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "strings.hrc"
 #include "sdresid.hxx"
@@ -94,6 +101,8 @@
 #endif
 #endif
 
+namespace sd {
+
 TYPEINIT1( FuBullet, FuPoor );
 
 /*************************************************************************
@@ -102,9 +111,13 @@ TYPEINIT1( FuBullet, FuPoor );
 |*
 \************************************************************************/
 
-FuBullet::FuBullet( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                 SdDrawDocument* pDoc, SfxRequest& rReq)
-       : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+FuBullet::FuBullet (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
 
     SvxCharacterMap* pDlg = new SvxCharacterMap( NULL, FALSE );
@@ -138,10 +151,10 @@ FuBullet::FuBullet( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     if( nResult == RET_OK )
     {
         OutlinerView* pOV = NULL;
-        Outliner*     pOL = NULL;
+        ::Outliner*   pOL = NULL;
 
         // je nach ViewShell Outliner und OutlinerView bestimmen
-        if (pViewSh->ISA(SdDrawViewShell))
+        if (pViewSh->ISA(DrawViewShell))
         {
             pOV = pView->GetTextEditOutlinerView();
             if (pOV)
@@ -149,11 +162,11 @@ FuBullet::FuBullet( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                 pOL = pView->GetTextEditOutliner();
             }
         }
-        else if (pViewSh->ISA(SdOutlineViewShell))
+        else if (pViewSh->ISA(OutlineViewShell))
         {
-            pOL = ((SdOutlineView*)pView)->GetOutliner();
-            pOV = ((SdOutlineView*)pView)->GetViewByWindow(
-                                        pViewShell->GetActiveWindow());
+            pOL = static_cast<OutlineView*>(pView)->GetOutliner();
+            pOV = static_cast<OutlineView*>(pView)->GetViewByWindow(
+                pViewShell->GetActiveWindow());
         }
 
         // Sonderzeichen einfuegen
@@ -206,5 +219,4 @@ FuBullet::FuBullet( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     }
 }
 
-
-
+} // end of namespace sd
