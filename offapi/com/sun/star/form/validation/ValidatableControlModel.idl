@@ -1,0 +1,131 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ValidatableControlModel.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:39:49 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_validation_ValidatableControlModel_idl__
+#define __com_sun_star_form_validation_ValidatableControlModel_idl__
+
+#ifndef __com_sun_star_form_FormControlModel_idl__
+#include <com/sun/star/form/FormControlModel.idl>
+#endif
+
+#ifndef __com_sun_star_form_validation_XValidatableFormComponent_idl__
+#include <com/sun/star/form/validation/XValidatableFormComponent.idl>
+#endif
+
+#ifndef __com_sun_star_form_validation_XValidityConstraintListener_idl__
+#include <com/sun/star/form/validation/XValidityConstraintListener.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module form { module validation {
+
+/** specifies the model of a form control which supports live validation of its
+    input.
+
+    <p>Validatable control models support setting a validator with dynamic
+    validity constraints, and broadcasting changes in their value as well as the
+    validity of their value.</p>
+*/
+service ValidatableControlModel
+{
+    /** specifies the basic functionality for a form control model
+
+        <p>Via this service, validatable control models inherit the
+        <type scope="com::sun::star::util">XCloneable</type> interface.<br/>
+        If an validatable control model, at which a validator has been set (via
+        <member>XValidatable::setValidator</member>), is being cloned, then the
+        validator is also set at the clone. Effectively, this means that
+        both control model instances share the same validator instance.</p>
+    */
+    service com::sun::star::form::FormControlModel;
+
+    /** enables support for validating the value of the control model
+
+        <p>Setting an retrieving the current validator of the control model is
+        possible via the <type>XValidatable</type> interface (which
+        <type>XValidatableFormComponent</type> is derived from).</p>
+
+        <p>Easy access to the current value of the control, as well as it's validity
+        (relative to the active validator), is provided by the methods <member>XValidatableFormComponent::isValid</member>
+        and <member>XValidatableFormComponent::getCurrentValue</member>.</p>
+
+        <p>Note that the type of the value provided by <member>XValidatableFormComponent::getCurrentValue</member>
+        is not specified here, but depends on the concrete control type.</p>
+    */
+    interface XValidatableFormComponent;
+
+    /** enables support for validators with dynamic validity constraints.
+
+        <p>As soon as a validator is set via <member>XValidatable::setValidator</member>, the validatable
+        control model registers itself as listener. If the validity constraint of the validator
+        changes, the <type>ValidatableControlModel</type> re-validates it's current valid, and
+        broadcasts any resuling changes to all its <type>XFormComponentValidityListener</type>, if
+        necessary.</p>
+    */
+    interface XValidityConstraintListener;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
