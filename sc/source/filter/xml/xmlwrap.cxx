@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-22 12:29:30 $
+ *  last change: $Author: mtg $ $Date: 2002-01-29 15:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         else
             return sal_False;
         xDocStream->SetBufferSize( 16*1024 );
-        aParserInput.aInputStream = new utl::OInputStreamWrapper( *xDocStream );
+        aParserInput.aInputStream = xDocStream->GetXInputStream();
 
         uno::Any aAny;
         bEncrypted = xDocStream->GetProperty(
