@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:44:51 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,6 +478,7 @@ void OfficeIPCThread::DisableOfficeIPCThread()
 
         // exit gracefully and join
         pOfficeIPCThread->join();
+        delete pOfficeIPCThread;
     }
 }
 
@@ -717,11 +718,6 @@ void SAL_CALL OfficeIPCThread::run()
             sleep( tval );
         }
     } while( schedule() );
-}
-
-void SAL_CALL OfficeIPCThread::onTerminated()
-{
-    delete this;
 }
 
 static void AddToDispatchList(
