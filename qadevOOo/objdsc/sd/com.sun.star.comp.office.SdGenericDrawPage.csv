@@ -28,7 +28,7 @@
 "SdGenericDrawPage";"com::sun::star::drawing::GenericDrawPage";"BorderTop#optional"
 "SdGenericDrawPage";"com::sun::star::drawing::GenericDrawPage";"Height#optional"
 "SdGenericDrawPage";"com::sun::star::drawing::GenericDrawPage";"Width#optional"
-"SdGenericDrawPage";"com::sun::star::drawing::GenericDrawPage";"Number"
+"SdGenericDrawPage";"com::sun::star::drawing::GenericDrawPage";"Number#optional"
 "SdGenericDrawPage";"com::sun::star::drawing::GenericDrawPage";"Orientation#optional"
 "SdGenericDrawPage";"com::sun::star::drawing::GenericDrawPage";"UserDefinedAttributes#optional"
 "SdGenericDrawPage";"com::sun::star::drawing::GenericDrawPage";"IsBackgroundDark#optional"
