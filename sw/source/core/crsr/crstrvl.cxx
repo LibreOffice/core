@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstrvl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 14:58:25 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1125,7 +1125,7 @@ FASTBOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
         SwPosition aPos( *pCurCrsr->GetPoint() );
 
         SwTxtNode* pTxtNd;
-        SwCntntFrm *pFrm;
+        SwCntntFrm *pFrm(0);
         SwTxtAttr* pTxtAttr;
         SwCrsrMoveState aTmpState;
         aTmpState.bFieldInfo = TRUE;
@@ -1576,6 +1576,9 @@ FASTBOOL SwContentAtPos::IsInProtectSect() const
         case SW_INETATTR:
             pNd = ((SwTxtINetFmt*)pFndTxtAttr)->GetpTxtNode();
             break;
+
+        default:
+            break;
         }
     }
 
@@ -1588,25 +1591,17 @@ bool SwContentAtPos::IsInRTLText()const
 {
     bool bRet = false;
     const SwTxtNode* pNd = 0;
-    if( pFndTxtAttr )
+    if (pFndTxtAttr && (eCntntAtPos == SW_FTN))
     {
-        switch( eCntntAtPos )
+        const SwTxtFtn* pTxtFtn = static_cast<const SwTxtFtn*>(pFndTxtAttr);
+        if(pTxtFtn->GetStartNode())
         {
-            case SW_FTN:
-            {
-                const SwTxtFtn* pTxtFtn = static_cast<const SwTxtFtn*>(pFndTxtAttr);
-                if(pTxtFtn->GetStartNode())
-                {
-                    SwStartNode* pSttNd = pTxtFtn->GetStartNode()->GetNode().GetStartNode();
-                    SwPaM aTemp( *pSttNd );
-                    aTemp.Move(fnMoveForward, fnGoNode);
-                    SwCntntNode* pCntntNode = aTemp.GetCntntNode();
-                    if(pCntntNode && pCntntNode->IsTxtNode())
-                        pNd = static_cast<SwTxtNode*>(pCntntNode);
-                }
-            }
-            break;
-
+            SwStartNode* pSttNd = pTxtFtn->GetStartNode()->GetNode().GetStartNode();
+            SwPaM aTemp( *pSttNd );
+            aTemp.Move(fnMoveForward, fnGoNode);
+            SwCntntNode* pCntntNode = aTemp.GetCntntNode();
+            if(pCntntNode && pCntntNode->IsTxtNode())
+                pNd = static_cast<SwTxtNode*>(pCntntNode);
         }
     }
     if(pNd)
@@ -1845,6 +1840,8 @@ FASTBOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                         break;
                     case HORI_RIGHT:
                         aAdj.SetAdjust( SVX_ADJUST_RIGHT );
+                        break;
+                    default:
                         break;
                     }
                     GetDoc()->Insert( *pCurCrsr, aAdj );
