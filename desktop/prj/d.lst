@@ -58,24 +58,7 @@ mkdir: %_DEST%\bin%_EXT%\96
 
 ..\%__SRC%\bin\sweb %_DEST%\bin%_EXT%\sweb.bin
 
-..\%__SRC%\bin\01\loader2.ex? %_DEST%\bin%_EXT%\01\loader2.ex?
-..\%__SRC%\bin\03\loader2.ex? %_DEST%\bin%_EXT%\03\loader2.ex?
-..\%__SRC%\bin\07\loader2.ex? %_DEST%\bin%_EXT%\07\loader2.ex?
-..\%__SRC%\bin\31\loader2.ex? %_DEST%\bin%_EXT%\31\loader2.ex?
-..\%__SRC%\bin\33\loader2.ex? %_DEST%\bin%_EXT%\33\loader2.ex?
-..\%__SRC%\bin\34\loader2.ex? %_DEST%\bin%_EXT%\34\loader2.ex?
-..\%__SRC%\bin\39\loader2.ex? %_DEST%\bin%_EXT%\39\loader2.ex?
-..\%__SRC%\bin\45\loader2.ex? %_DEST%\bin%_EXT%\45\loader2.ex?
-..\%__SRC%\bin\46\loader2.ex? %_DEST%\bin%_EXT%\46\loader2.ex?
-..\%__SRC%\bin\48\loader2.ex? %_DEST%\bin%_EXT%\48\loader2.ex?
-..\%__SRC%\bin\49\loader2.ex? %_DEST%\bin%_EXT%\49\loader2.ex?
-..\%__SRC%\bin\66\loader2.ex? %_DEST%\bin%_EXT%\66\loader2.ex?
-..\%__SRC%\bin\81\loader2.ex? %_DEST%\bin%_EXT%\81\loader2.ex?
-..\%__SRC%\bin\82\loader2.ex? %_DEST%\bin%_EXT%\82\loader2.ex?
-..\%__SRC%\bin\86\loader2.ex? %_DEST%\bin%_EXT%\86\loader2.ex?
-..\%__SRC%\bin\88\loader2.ex? %_DEST%\bin%_EXT%\88\loader2.ex?
-..\%__SRC%\bin\91\loader2.ex? %_DEST%\bin%_EXT%\91\loader2.ex?
-..\%__SRC%\bin\96\loader2.ex? %_DEST%\bin%_EXT%\96\loader2.ex?
+..\%__SRC%\bin\loader2.ex? %_DEST%\bin%_EXT%\loader2.ex?
 
 ..\%__SRC%\bin\deployment*.uno.dll %_DEST%\bin%_EXT%\deployment*.uno.dll
 ..\%__SRC%\lib\deployment*.uno.so %_DEST%\lib%_EXT%\deployment*.uno.so
