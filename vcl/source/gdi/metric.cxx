@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metric.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: hdu $ $Date: 2001-06-28 15:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ FontInfo& FontInfo::operator=( const FontInfo& rInfo )
     mpImplMetric = rInfo.mpImplMetric;
 
     return *this;
+
 }
 
 // -----------------------------------------------------------------------
@@ -140,3 +141,121 @@ BOOL FontInfo::operator==( const FontInfo& rInfo ) const
     else
         return FALSE;
 }
+
+// =======================================================================
+
+static const sal_UCS4 pDefaultRangeCodes[] = {0x0020,0xD800, 0xE000,0xFFF0};
+
+FontCharMap::FontCharMap()
+{
+    ImplSetDefaultRanges();
+}
+
+// -----------------------------------------------------------------------
+
+FontCharMap::~FontCharMap()
+{
+    if( mpRangeCodes && mpRangeCodes != pDefaultRangeCodes )
+        delete[] mpRangeCodes;
+}
+
+// -----------------------------------------------------------------------
+
+void FontCharMap::ImplSetRanges( ULONG nPairs, const sal_UCS4* pCodes )
+{
+    mnRangeCount = nPairs;
+    mpRangeCodes = pCodes;
+
+    mnCharCount = 0;
+    for( int i = 0; i < nPairs; ++i )
+        mnCharCount += mpRangeCodes[ 2*i+1 ] - mpRangeCodes[ 2*i ];
+}
+
+// -----------------------------------------------------------------------
+
+void FontCharMap::ImplSetDefaultRanges()
+{
+    int nCodes = sizeof(pDefaultRangeCodes)/sizeof(*pDefaultRangeCodes);
+    ImplSetRanges( nCodes, pDefaultRangeCodes );
+}
+
+// -----------------------------------------------------------------------
+
+BOOL FontCharMap::IsDefaultMap() const
+{
+    return (mpRangeCodes == pDefaultRangeCodes);
+}
+
+// -----------------------------------------------------------------------
+
+int FontCharMap::ImplFindRange( sal_UCS4 cChar ) const
+{
+    int nLower = 0;
+    int nMid   = mnRangeCount;
+    int nUpper = 2 * mnRangeCount;
+    while( nLower < nUpper ) {
+        if( cChar >= mpRangeCodes[ nMid ] )
+            nLower = nMid;
+        else
+            nUpper = nMid - 1;
+        nMid = (nLower + nUpper + 1) / 2;
+    }
+    return nMid;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL FontCharMap::HasChar( sal_UCS4 cChar ) const
+{
+    int nRange = ImplFindRange( cChar );
+    if( nRange==0 && cChar<mpRangeCodes[0] )
+        return FALSE;
+    return (nRange & 1) ? FALSE: TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+sal_UCS4 FontCharMap::GetFirstChar() const
+{
+    return mpRangeCodes[0];
+}
+
+// -----------------------------------------------------------------------
+
+sal_UCS4 FontCharMap::GetLastChar() const
+{
+    return (mpRangeCodes[ 2*mnRangeCount-1 ] - 1);
+}
+
+// -----------------------------------------------------------------------
+
+sal_UCS4 FontCharMap::GetNextChar( sal_UCS4 cChar ) const
+{
+    if( cChar < GetFirstChar() )
+        return GetFirstChar();
+    if( cChar >= GetLastChar() )
+        return GetLastChar();
+
+    int nRange = ImplFindRange( cChar );
+    if( nRange & 1 )                        // inbetween ranges?
+        return mpRangeCodes[ nRange + 1 ];  // first in next range
+    return (cChar + 1);
+}
+
+// -----------------------------------------------------------------------
+
+sal_UCS4 FontCharMap::GetPrevChar( sal_UCS4 cChar ) const
+{
+    if( cChar <= GetFirstChar() )
+        return GetFirstChar();
+    if( cChar > GetLastChar() )
+        return GetLastChar();
+
+    int nRange = ImplFindRange( cChar );
+    // inbetween ranges or first in range?
+    if( (nRange & 1) || (cChar == mpRangeCodes[ nRange ]) )
+        return (mpRangeCodes[ nRange ] - 1);   // last in prev range
+    return (cChar - 1);
+}
+
+// =======================================================================
