@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msoleexp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-02 10:46:42 $
+ *  last change: $Author: sj $ $Date: 2002-12-10 17:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,10 @@
 void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
                                                 SvStorage& rDestStg )
 {
+    sal_Bool bOwn = sal_False;
+    const SfxFilter* pExpFilter = NULL;
     SfxInPlaceObjectRef xSfxIPObj( &rObj );
-    const SfxFilter* pExpFilter = 0;
-    if( xSfxIPObj.Is() && xSfxIPObj->GetObjectShell() && GetFlags() )
+    if( xSfxIPObj.Is() && xSfxIPObj->GetObjectShell() )
     {
         static struct _ObjExpType {
             UINT32 nFlag;
@@ -115,20 +116,23 @@ void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
             { OLE_STARIMPRESS_2_POWERPOINT, "MS PowerPoint 97",
                 {SO3_SIMPRESS_CLASSID_60, SO3_SIMPRESS_CLASSID_50,
                  SO3_SIMPRESS_CLASSID_40, SO3_SIMPRESS_CLASSID_30 }},
-            { 0,0 }
+            { 0, "",
+                {SO3_SCH_CLASSID_60, SO3_SCH_CLASSID_50,
+                 SO3_SCH_CLASSID_40, SO3_SCH_CLASSID_30 }},
+            { 0xffff,0 }
         };
-
-        BOOL bFnd = FALSE;
-        for( const _ObjExpType* pArr = aArr; !bFnd && pArr->nFlag; ++pArr )
-            if( GetFlags() & pArr->nFlag )
+        for( const _ObjExpType* pArr = aArr; !pExpFilter && ( pArr->nFlag != 0xffff ); ++pArr )
+        {
+            for ( int n = 0; n < 4; ++n )
             {
-                for ( int n = 0; !bFnd && n < 4; ++n )
+                const _ObjExpType::_GlobalNameIds& rId = pArr->aGlNmIds[ n ];
+                SvGlobalName aGlbNm( rId.n1, rId.n2, rId.n3,
+                            rId.b8, rId.b9, rId.b10, rId.b11,
+                            rId.b12, rId.b13, rId.b14, rId.b15 );
+                if( *xSfxIPObj->GetSvFactory() == aGlbNm )
                 {
-                    const _ObjExpType::_GlobalNameIds& rId = pArr->aGlNmIds[ n ];
-                    SvGlobalName aGlbNm( rId.n1, rId.n2, rId.n3,
-                                rId.b8, rId.b9, rId.b10, rId.b11,
-                                rId.b12, rId.b13, rId.b14, rId.b15 );
-                    if( *xSfxIPObj->GetSvFactory() == aGlbNm )
+                    bOwn = sal_True;
+                    if( GetFlags() & pArr->nFlag )
                     {
                         const SfxObjectFactory& rFact = xSfxIPObj->
                                                 GetObjectShell()->GetFactory();
@@ -136,12 +140,12 @@ void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
                             pExpFilter = rFact.GetFilterContainer()->
                                 GetFilter4FilterName( String::CreateFromAscii(
                                                 pArr->pFilterNm ));
-                        bFnd = TRUE;
+                        break;
                     }
                 }
             }
+        }
     }
-
     if( pExpFilter )                        // use this filter for the export
     {
         SfxMedium aMed( &rDestStg, FALSE );
@@ -150,12 +154,12 @@ void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
     }
     else
     {
-        rDestStg.SetVersion( SOFFICE_FILEFORMAT_50 );
+        rDestStg.SetVersion( bOwn ? SOFFICE_FILEFORMAT_50 : SOFFICE_FILEFORMAT_31 );
         rObj.DoSaveAs( &rDestStg );
         rObj.DoSaveCompleted();
     }
     //We never need this stream: See #99809# and #i2179#
-    rObj.Remove(CREATE_CONST_ASC(SVEXT_PERSIST_STREAM));
+    rDestStg.Remove(CREATE_CONST_ASC(SVEXT_PERSIST_STREAM));
 }
 
 
