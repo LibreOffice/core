@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:18:35 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ ModalDialog DLG_PASSWD
         Text[ french ] = "~Utilisateur";
         Text[ spanish ] = "Usuar~io";
         Text[ italian ] = "Utente";
-        Text[ danish ] = "Bruger";
+        Text[ danish ] = "~Bruger";
         Text[ swedish ] = "Anv�ndare";
         Text[ polish ] = "~U�ytkownik";
         Text[ portuguese_brazilian ] = "~Usu�rio";
@@ -125,6 +125,8 @@ ModalDialog DLG_PASSWD
         Text[ hebrew ] = "‮משתמש‬";
         Text[ hindi ] = "~उपभोक्ता";
         Text[ slovak ] = "~Užívateľ";
+        Text[ hungarian ] = "~Felhasználó";
+        Text[ slovenian ] = "~Uporabnik";
     };
     Edit ED_PASSWD_USER
     {
@@ -164,6 +166,8 @@ ModalDialog DLG_PASSWD
         Text[ hebrew ] = "‮סיסמה‬";
         Text[ hindi ] = "~कूटशब्द";
         Text[ slovak ] = "~Heslo";
+        Text[ hungarian ] = "~Jelszó";
+        Text[ slovenian ] = "~Geslo";
     };
     Edit ED_PASSWD_PASSWORD
     {
@@ -186,7 +190,7 @@ ModalDialog DLG_PASSWD
         Text[ french ] = "~Confirmation";
         Text[ spanish ] = "Confirmar";
         Text[ italian ] = "Conferma";
-        Text[ danish ] = "Bekr�ft";
+        Text[ danish ] = "Be~kr�ft";
         Text[ swedish ] = "Bekr�fta";
         Text[ polish ] = "~Potwierd�";
         Text[ portuguese_brazilian ] = "~Confirmar";
@@ -203,6 +207,8 @@ ModalDialog DLG_PASSWD
         Text[ hebrew ] = "‮אישור‬";
         Text[ hindi ] = "~दृढ़ करो";
         Text[ slovak ] = "Potvrd~iť";
+        Text[ hungarian ] = "~Megerősítés";
+        Text[ slovenian ] = "Po~trdi";
     };
     Edit ED_PASSWD_CONFIRM
     {
@@ -244,6 +250,8 @@ ModalDialog DLG_PASSWD
         Text[ hebrew ] = "‮סיסמה‬";
         Text[ hindi ] = "कूटशब्द";
         Text[ slovak ] = "Heslo";
+        Text[ hungarian ] = "Jelszó";
+        Text[ slovenian ] = "Geslo";
     };
     OKButton BTN_PASSWD_OK
     {
@@ -293,6 +301,8 @@ ModalDialog DLG_PASSWD
         Text[ hebrew ] = "‮אישור סיסמה‬";
         Text[ hindi ] = "कूटशब्द दृढ़ करो";
         Text[ slovak ] = "Potvrdiť heslo";
+        Text[ hungarian ] = "Jelszó megerősítése";
+        Text[ slovenian ] = "Potrdi geslo";
     };
     Text[ turkish ] = "Parolay� Girin";
     Text[ language_user1 ] = " ";
@@ -302,9 +312,12 @@ ModalDialog DLG_PASSWD
     Text[ hebrew ] = "‮הקלדת סיסמה‬";
     Text[ hindi ] = "कूटशब्द प्रविष्ट करो";
     Text[ slovak ] = "Zadať heslo";
+    Text[ hungarian ] = "Adja meg a jelszót";
+    Text[ slovenian ] = "Vnesi geslo";
 };
 
 // ********************************************************************** EOF
+
 
 
 
