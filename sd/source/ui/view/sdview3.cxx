@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-19 19:11:24 $
+ *  last change: $Author: ka $ $Date: 2001-02-11 17:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,7 @@ BOOL SdView::InsertData( const Reference< XTransferable >& rxTransferable,
         {
             BOOL bChanged = FALSE;
 
-            xStm->SetVersion( SOFFICE_FILEFORMAT_NOW );
+            xStm->SetVersion( SOFFICE_FILEFORMAT_50 );
             FmFormModel* pModel = new FmFormModel( SvtPathOptions().GetPalettePath(), NULL, pDocSh );
             xStm->Seek( 0 );
             pModel->SetStreamingSdrModel( TRUE );
@@ -1165,7 +1165,7 @@ BOOL SdView::InsertData(SvDataObjectRef pDataObject, const Point& rPos,
 
             if ( aData.GetData(xStream) )       // Setzt auch die BufferSize
             {
-                xStream->SetVersion(SOFFICE_FILEFORMAT_NOW);
+                xStream->SetVersion(SOFFICE_FILEFORMAT_50);
                 FmFormModel* pModel = new FmFormModel( SvtPathOptions().GetPalettePath(), NULL, pDocSh );
                 xStream->Seek(0);
                 pModel->SetStreamingSdrModel(TRUE);

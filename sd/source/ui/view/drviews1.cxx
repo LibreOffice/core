@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-28 11:23:40 $
+ *  last change: $Author: ka $ $Date: 2001-02-11 17:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -934,10 +934,10 @@ ErrCode __EXPORT SdDrawViewShell::DoVerb(long nVerb)
                     SvStorageRef aStor = new SvStorage(String());
 #ifndef SO3
                     SvInPlaceObjectRef aNewIPObj = &SvInPlaceObject::ClassFactory()
-                    ->CreateAndInit(SimModuleDummy::GetID(SOFFICE_FILEFORMAT_50), aStor);
+                    ->CreateAndInit(SimModuleDummy::GetID(SOFFICE_FILEFORMAT_CURRENT), aStor);
 #else
                     SvInPlaceObjectRef aNewIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())
-                    ->CreateAndInit(SimModuleDummy::GetID(SOFFICE_FILEFORMAT_50), aStor);
+                    ->CreateAndInit(SimModuleDummy::GetID(SOFFICE_FILEFORMAT_CURRENT), aStor);
 #endif
                     if ( aNewIPObj.Is() )
                     {

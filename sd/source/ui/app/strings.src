@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-07 16:09:20 $
+ *  last change: $Author: ka $ $Date: 2001-02-11 17:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -10850,6 +10850,29 @@ String STR_IMPRESS_DOCUMENT
     Text[ arabic ] = "⁄—÷  ﬁœÌ„Ì";
     Text[ turkish ] = "Sunu";
 };
+String STR_IMPRESS_DOCUMENT_FULLTYPE_60
+{
+    Text = "%PRODUCTNAME 6.0 Pr‰sentation" ;
+    Text [ ENGLISH ] = "StarOffice 6.0 Presentation" ;
+    Text [ english_us ] = "%PRODUCTNAME 6.0 Presentation" ;
+    Text [ dutch ] = "%PRODUCTNAME 6.0 Presentatie" ;
+    Text [ swedish ] = "%PRODUCTNAME 6.0 presentation" ;
+    Text [ danish ] = "%PRODUCTNAME 6.0 prÊsentation" ;
+    Text [ italian ] = "Presentazione %PRODUCTNAME 6.0" ;
+    Text [ spanish ] = "%PRODUCTNAME 6.0 PresentaciÛn" ;
+    Text [ french ] = "%PRODUCTNAME 6.0 PrÈsentation" ;
+    Text [ portuguese ] = "ApresentaÁ„o (%PRODUCTNAME 6.0)" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Pr‰sentation" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 —› æŒƒ∏Â";
+    Text[ russian ] = "œÂÁÂÌÚ‡ˆËˇ ‚ %PRODUCTNAME 6.0";
+    Text[ polish ] = "Prezentacja w Star Office 6.0";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 Ãﬂ⁄æﬁ›√∞ºÆ›";
+    Text[ greek ] = "–·ÒÔıÛﬂ·ÛÁ (%PRODUCTNAME 6.0)";
+    Text[ korean ] = "%PRODUCTNAME 6.0 «¡∏Æ¡®≈◊¿Ãº«";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 ¬≤≥¯";
+    Text[ arabic ] = "⁄—÷  ﬁœÌ„Ì „‰ %PRODUCTNAME 6.0";
+    Text[ turkish ] = "Sunu (%PRODUCTNAME 6.0)";
+};
 String STR_IMPRESS_DOCUMENT_FULLTYPE_50
 {
     Text = "%PRODUCTNAME 5.0 Pr‰sentation" ;
@@ -10966,6 +10989,29 @@ String STR_GRAPHIC_DOCUMENT_FULLTYPE_50
     Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 √∏πœ";
     Text[ arabic ] = "—”„… „‰ %PRODUCTNAME 5.0";
     Text[ turkish ] = "%PRODUCTNAME 5.0 Áizimi";
+};
+String STR_GRAPHIC_DOCUMENT_FULLTYPE_60
+{
+    Text = "%PRODUCTNAME 6.0 Zeichnung" ;
+    Text [ ENGLISH ] = "StarOffice 6.0 Drawing" ;
+    Text [ english_us ] = "Drawing (%PRODUCTNAME 6.0)" ;
+    Text [ portuguese ] = "Desenho (%PRODUCTNAME 6.0)" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Zeichnung" ;
+    Text [ swedish ] = "%PRODUCTNAME 6.0 Teckning" ;
+    Text [ danish ] = "%PRODUCTNAME 6.0 tegning" ;
+    Text [ italian ] = "Disegno %PRODUCTNAME 6.0" ;
+    Text [ spanish ] = "PRODUCTNAME 6.0 Dibujo" ;
+    Text [ french ] = "%PRODUCTNAME 6.0 Dessin" ;
+    Text [ dutch ] = "%PRODUCTNAME 6.0 tekening" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 ªÊÕº";
+    Text[ russian ] = "–ËÒÛÌÓÍ %PRODUCTNAME 6.0";
+    Text[ polish ] = "Rysunek %PRODUCTNAME 6.0";
+    Text[ japanese ] = "%PRODUCTNAME 6.0ÇÃê}å`ï`âÊ";
+    Text[ greek ] = "”˜›‰ÈÔ (%PRODUCTNAME 6.0)";
+    Text[ korean ] = "%PRODUCTNAME 6.0 ±◊∏Æ±‚";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 √∏πœ";
+    Text[ arabic ] = "—”„… „‰ %PRODUCTNAME 6.0";
+    Text[ turkish ] = "%PRODUCTNAME 6.0 Áizimi";
 };
 String STR_VIEWTYPE_VIEW
 {

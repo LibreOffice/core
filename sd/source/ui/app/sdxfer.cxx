@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-31 11:20:24 $
+ *  last change: $Author: ka $ $Date: 2001-02-11 17:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,7 +532,7 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
             pDoc->BurnInStyleSheetAttributes();
             pDoc->SetStreamingSdrModel( TRUE );
             pDoc->RemoveNotPersistentObjects( TRUE );
-            rxOStm->SetVersion( SOFFICE_FILEFORMAT_NOW );
+            rxOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
             rxOStm->SetBufferSize( 16348 );
             pDoc->PreSave();
             pDoc->GetItemPool().SetFileFormatVersion( rxOStm->GetVersion() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-08 12:12:47 $
+ *  last change: $Author: ka $ $Date: 2001-02-11 17:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,10 +268,7 @@
 #define STR_IMPRESS_DOCUMENT_FULLTYPE_31  (RID_APP_START+167)
 #define STR_IMPRESS_DOCUMENT_FULLTYPE_40  (RID_APP_START+168)
 #define STR_IMPRESS_DOCUMENT_FULLTYPE_50  (RID_APP_START+169)
-
-#define STR_UNDO_VECTORIZE          (RID_APP_START+170)
-
-
+#define STR_IMPRESS_DOCUMENT_FULLTYPE_60  (RID_APP_START+170)
 
 /*
  *  ResourceIDs fuer Toolboxen nicht aendern, ohne die Strings in
@@ -591,8 +588,7 @@
 #define STR_GRAPHIC                         (RID_APP_START+498)
 #define STR_GRAPHIC_DOCUMENT                (RID_APP_START+499)
 #define STR_GRAPHIC_DOCUMENT_FULLTYPE_50    (RID_APP_START+500)
-
-#define STR_TWAIN_NO_SOURCE                 (RID_APP_START+501)
+#define STR_GRAPHIC_DOCUMENT_FULLTYPE_60    (RID_APP_START+501)
 
 #define STR_FIX                             (RID_APP_START+502)
 #define STR_VAR                             (RID_APP_START+503)
@@ -739,6 +735,9 @@
 #define STR_EFFECT_STRTCH_VERTICAL          (RID_APP_START+645)
 #define STR_EFFECT_ROTATE_HORIZONTAL        (RID_APP_START+646)
 #define STR_EFFECT_ROTATE_VERTICAL          (RID_APP_START+647)
+
+#define STR_TWAIN_NO_SOURCE                 (RID_APP_START+670)
+#define STR_UNDO_VECTORIZE                  (RID_APP_START+671)
 
 /******************************************************************************
 * Ab (RID_APP_START+700 beginnen die Ids in glob.hrc!

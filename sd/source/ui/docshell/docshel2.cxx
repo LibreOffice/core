@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-19 19:12:52 $
+ *  last change: $Author: ka $ $Date: 2001-02-11 17:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,7 @@ SvPseudoObject* __EXPORT SdDrawDocShell::DdeCreateHotLink( const String& rItem )
 void __EXPORT SdDrawDocShell::FillRegInfo( SvEmbeddedRegistryInfo * pInfo )
 {
     SfxInPlaceObject::FillRegInfo( pInfo );
-    pInfo->nMajorVers = 5;
+    pInfo->nMajorVers = 6;
     pInfo->nMinorVers = 0;
 
     if (pDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-24 12:17:32 $
+ *  last change: $Author: ka $ $Date: 2001-02-11 17:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,9 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
             aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
         // Get other filters
+        pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_60 );
+        if( pFilter )
+            aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
         pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_50 );
         if( pFilter )
             aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
@@ -218,6 +221,9 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
         if( pFilter )
             aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
+        pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_60 );
+        if( pFilter )
+            aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
         pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_50 );
         if( pFilter )
             aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );

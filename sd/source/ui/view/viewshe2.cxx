@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:12:19 $
+ *  last change: $Author: ka $ $Date: 2001-02-11 17:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1096,30 +1096,30 @@ BOOL SdViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         if( aName.EqualsAscii( "StarChart" ))
         {
             aNewIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                             SchModuleDummy::GetID(SOFFICE_FILEFORMAT_50), aStor);
+                             SchModuleDummy::GetID(SOFFICE_FILEFORMAT_CURRENT), aStor);
         }
         else if( aName.EqualsAscii( "StarOrg" ))
         {
             // z.Z noch Nummer vom StarChart!
             aNewIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                             SchModuleDummy::GetID(SOFFICE_FILEFORMAT_50), aStor);
+                             SchModuleDummy::GetID(SOFFICE_FILEFORMAT_CURRENT), aStor);
         }
         else if( aName.EqualsAscii( "StarCalc" ))
         {
             aNewIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                             ScModuleDummy::GetID(SOFFICE_FILEFORMAT_50), aStor);
+                             ScModuleDummy::GetID(SOFFICE_FILEFORMAT_CURRENT), aStor);
         }
 #ifdef STARIMAGE_AVAILABLE
         else if( aName.EqualsAscii( "StarImage" ))
         {
             aNewIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                             SimModuleDummy::GetID(SOFFICE_FILEFORMAT_50), aStor);
+                             SimModuleDummy::GetID(SOFFICE_FILEFORMAT_CURRENT), aStor);
         }
 #endif
         else if( aName.EqualsAscii( "StarMath" ))
         {
             aNewIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                             SmModuleDummy::GetID(SOFFICE_FILEFORMAT_50), aStor);
+                             SmModuleDummy::GetID(SOFFICE_FILEFORMAT_CURRENT), aStor);
         }
         else
         {

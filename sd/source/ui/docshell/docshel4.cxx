@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-11 14:52:07 $
+ *  last change: $Author: ka $ $Date: 2001-02-11 17:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,7 +360,9 @@ BOOL SdDrawDocShell::Load( SvStorage * pStor )
 
     ULONG nStorFmt = pStor->GetFormat();
 
-    if ( nStorFmt == SOT_FORMATSTR_ID_STARIMPRESS_50 ||
+    if ( nStorFmt == SOT_FORMATSTR_ID_STARIMPRESS_60 ||
+         nStorFmt == SOT_FORMATSTR_ID_STARIMPRESS_50 ||
+         nStorFmt == SOT_FORMATSTR_ID_STARDRAW_60    ||
          nStorFmt == SOT_FORMATSTR_ID_STARDRAW_50    ||
          nStorFmt == SOT_FORMATSTR_ID_STARDRAW_40    ||
          nStorFmt == SOT_FORMATSTR_ID_STARDRAW )
@@ -611,9 +613,6 @@ BOOL SdDrawDocShell::Save()
 
     if( bRet )
     {
-        if( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
-            pDoc->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
-
 //-/        pDoc->PrepareStore();
         pDoc->PreSave();
 
@@ -766,9 +765,6 @@ BOOL SdDrawDocShell::SaveAs( SvStorage * pStor )
 
     if (bRet)
     {
-        if( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
-            pDoc->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
-
 //-/        pDoc->PrepareStore();
         pDoc->PreSave();
 
@@ -1103,34 +1099,43 @@ void SdDrawDocShell::FillClass(SvGlobalName* pClassName,
 
     if (nFileFormat == SOFFICE_FILEFORMAT_31)
     {
-        *pClassName     = SvGlobalName(SO3_SIMPRESS_CLASSID_30);
-        *pFormat        = SOT_FORMATSTR_ID_STARDRAW;
-        *pAppName       = String(RTL_CONSTASCII_USTRINGPARAM("Sdraw 3.1"));
-        *pFullTypeName  = String(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_31));;
+        *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_30);
+        *pFormat = SOT_FORMATSTR_ID_STARDRAW;
+        *pAppName = String(RTL_CONSTASCII_USTRINGPARAM("Sdraw 3.1"));
+        *pFullTypeName = String(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_31));;
         *pShortTypeName = String(SdResId(STR_IMPRESS_DOCUMENT));
     }
     else if (nFileFormat == SOFFICE_FILEFORMAT_40)
     {
-        *pClassName     = SvGlobalName(SO3_SIMPRESS_CLASSID_40);
-        *pFormat        = SOT_FORMATSTR_ID_STARDRAW_40;
-        *pFullTypeName  = String(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_40));
+        *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_40);
+        *pFormat = SOT_FORMATSTR_ID_STARDRAW_40;
+        *pFullTypeName = String(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_40));
         *pShortTypeName = String(SdResId(STR_IMPRESS_DOCUMENT));
     }
-    else if (nFileFormat == SOFFICE_FILEFORMAT_NOW)
+    else
     {
-        if (eDocType == DOCUMENT_TYPE_DRAW)
+        if (nFileFormat == SOFFICE_FILEFORMAT_50)
         {
-            *pFullTypeName  = String(SdResId(STR_GRAPHIC_DOCUMENT_FULLTYPE_50));
-            *pShortTypeName = String(SdResId(STR_GRAPHIC_DOCUMENT));
+            if (eDocType == DOCUMENT_TYPE_DRAW)
+            {
+                *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_50);
+                *pFormat = SOT_FORMATSTR_ID_STARDRAW_50;
+                *pFullTypeName = String(SdResId(STR_GRAPHIC_DOCUMENT_FULLTYPE_50));
+            }
+            else
+            {
+                *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_50);
+                *pFormat = SOT_FORMATSTR_ID_STARIMPRESS_50;
+                *pFullTypeName = String(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_50));
+            }
         }
-        else
+        else if (nFileFormat == SOFFICE_FILEFORMAT_CURRENT)
         {
-            *pFullTypeName  = String(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_50));
-            *pShortTypeName = String(SdResId(STR_IMPRESS_DOCUMENT));
+            *pFullTypeName = String(SdResId( (eDocType == DOCUMENT_TYPE_DRAW) ?
+                                              STR_GRAPHIC_DOCUMENT_FULLTYPE_60 : STR_IMPRESS_DOCUMENT_FULLTYPE_60 ));
         }
+
+        *pShortTypeName = String(SdResId( (eDocType == DOCUMENT_TYPE_DRAW) ?
+                                          STR_GRAPHIC_DOCUMENT : STR_IMPRESS_DOCUMENT ));
     }
 }
-
-
-
-
