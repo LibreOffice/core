@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:11:31 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 12:36:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,7 @@ SLOFILES =  $(SLO)$/ieps.obj
 
 SHL1TARGET=     ips$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     ieps
-SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB)
+SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB) $(SALLIB)
 SHL1DEPN=       $(LB)$/ieps.lib
 SHL1LIBS=       $(SLB)$/ieps.lib
 
