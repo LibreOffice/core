@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cvtgrf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:37 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 17:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ GraphicConverter::GraphicConverter() :
     mpConvertData( NULL )
 {
 #ifndef REMOTE_APPSERVER
-    SetFilterCallback( ImplFilterCallback, this );
+    SetFilterCallback( (void*)ImplFilterCallback, this );
 #endif
 }
 
