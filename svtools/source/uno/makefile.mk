@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 14:39:47 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:45:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,12 +74,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(header)" == ""
-
-.IF "$(GUI)"!="DOS"
 SRS1NAME=	uno
 SRC1FILES=  unoifac2.src
-.ENDIF
 
 SLOFILES= \
             $(SLO)$/unoevent.obj\
@@ -100,8 +96,6 @@ LIB1OBJFILES=  \
             $(SLO)$/registerservices.obj \
             $(SLO)$/unoiface.obj	\
             $(SLO)$/imgprod.obj
-
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
