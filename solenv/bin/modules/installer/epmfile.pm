@@ -1199,6 +1199,9 @@ sub create_packages_without_epm
 
         if ( $rpmversion >= 4 ) { $rpmcommand = "rpmbuild"; }
 
+        # saving globally for later usage
+        $installer::globals::rpmcommand = $rpmcommand;
+
         # my $systemcall = "$rpmcommand -bb $specfilename --target i586 \> /dev/null";
         my $systemcall = "$rpmcommand -bb $specfilename --target i586 2\>\&1 |";
         print "... $systemcall ...\n";
