@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-09 17:03:17 $
+ *  last change: $Author: sj $ $Date: 2001-04-12 10:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5424,9 +5424,6 @@ BOOL PPTPortionObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstance
 void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, UINT32 nInstanceInSheet )
 {
     UINT32  nVal;
-
-    static String aTahoma( String( RTL_CONSTASCII_USTRINGPARAM( "Tahoma" ) ) );
-
     if ( GetAttrib( PPT_CharAttr_Bold, nVal, nInstanceInSheet ) )
         rSet.Put( SvxWeightItem( nVal != 0 ? WEIGHT_BOLD : WEIGHT_NORMAL ) );
 
@@ -5448,20 +5445,17 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
     sal_uInt32  nAsianFontId = 0xffff;
     if ( GetAttrib( PPT_CharAttr_AsianOrComplexFont, nAsianFontId, nInstanceInSheet ) )
     {
-        String aFontName( aTahoma );
-        CharSet eCharSet = rManager.eCharSetSystem;
         if ( nAsianFontId != 0xffff )
         {
-            PptFontCollection& rFontCollection = *rManager.pFonts;
-            if ( nAsianFontId < rFontCollection.Count() )
+            PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nAsianFontId );
+            if ( pFontEnityAtom )
             {
-                CharSet eFontCharSet =  rFontCollection[ (USHORT)nAsianFontId ]->eCharSet;
-                if ( eFontCharSet != gsl_getSystemTextEncoding() )
-                    eCharSet = eFontCharSet;
+                rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName,
+                            String(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet, EE_CHAR_FONTINFO_CJK ) );
+                rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName,
+                            String(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet, EE_CHAR_FONTINFO_CTL ) );
             }
         }
-        rSet.Put( SvxFontItem( FAMILY_DONTKNOW, aFontName, String(), PITCH_DONTKNOW, eCharSet, EE_CHAR_FONTINFO_CJK ) );
-        rSet.Put( SvxFontItem( FAMILY_DONTKNOW, aFontName, String(), PITCH_DONTKNOW, eCharSet, EE_CHAR_FONTINFO_CTL ) );
     }
     if ( GetAttrib( PPT_CharAttr_Font, nVal, nInstanceInSheet ) )
     {
@@ -5515,7 +5509,6 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
         SvxEscapementItem aItem( nEsc, nProp );
         rSet.Put( aItem );
     }
-
     sal_uInt16 nLanguage = mnLanguage;
     if ( !nLanguage )
          nLanguage = mrStyleSheet.maTxSI.nLanguage;
