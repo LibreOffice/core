@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerBase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 11:09:22 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 12:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -802,6 +802,21 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
                     }
                     break;
+                case XML_ATACTION_RNG2ISO_DATETIME:
+                    {
+                        OUString aAttrValue( rAttrValue );
+                        if( ConvertRNGDateTimeToISO( aAttrValue ))
+                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                    }
+                    break;
+                case XML_ATACTION_RENAME_RNG2ISO_DATETIME:
+                    {
+                        OUString aAttrValue( rAttrValue );
+                        if( ConvertRNGDateTimeToISO( aAttrValue ))
+                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        bRename = sal_True;
+                    }
+                    break;
                 case XML_ATACTION_IN2TWIPS:
                     {
                         OUString aAttrValue( rAttrValue );
@@ -1422,6 +1437,18 @@ sal_Bool XMLTransformerBase::RenameAttributeValue(
              lcl_ConvertAttr( rOutAttributeValue, nParam3) );
 }
 
+// static
+bool XMLTransformerBase::ConvertRNGDateTimeToISO( ::rtl::OUString& rDateTime )
+{
+    if( rDateTime.getLength() > 0 &&
+        rDateTime.indexOf( sal_Unicode('.')) != -1 )
+    {
+        rDateTime = rDateTime.replace( sal_Unicode('.'), sal_Unicode(','));
+        return true;
+    }
+
+    return false;
+}
 
 XMLTokenEnum XMLTransformerBase::GetToken( const OUString& rStr ) const
 {
