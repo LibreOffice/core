@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:18:58 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ russian ] = "Κεπνθνγ";
         Text[ greek ] = "Διαγραμμάτωση";
         Text[ dutch ] = "Kerning";
-        Text[ french ] = "Kerning";
-        Text[ spanish ] = "Kerning";
+        Text[ french ] = "Crιnage";
+        Text[ spanish ] = "Ajuste entre caracteres";
         Text[ italian ] = "Kerning";
         Text[ danish ] = "Kerning";
         Text[ swedish ] = "Kerning";
@@ -109,7 +109,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ russian ] = "Òξλόκξ ηΰοΰδνϋε ηνΰκθ";
         Text[ greek ] = "Μό~νο δυτικούς χαρακτήρες";
         Text[ dutch ] = "Western characters only";
-        Text[ french ] = "Western characters only";
+        Text[ french ] = "U~niquement les caractθres occidentaux";
         Text[ spanish ] = "Solo caracteres del alfabeto occidental";
         Text[ italian ] = "Western characters only";
         Text[ danish ] = "Western characters only";
@@ -134,7 +134,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ russian ] = "Ηΰοΰδνϋι ςεκρς θ οσνκςσΰφθÿ";
         Text[ greek ] = "Δυτικό κείμενο και σημεία στίξης";
         Text[ dutch ] = "Western text and punctuation";
-        Text[ french ] = "Western text and punctuation";
+        Text[ french ] = "Texte ~occidental et ponctuation";
         Text[ spanish ] = "Texto y puntuaciσn occidentales";
         Text[ italian ] = "Western text and punctuation";
         Text[ danish ] = "Western text and punctuation";
@@ -159,8 +159,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ russian ] = "Πΰρρςξÿνθε μεζδσ ηνΰκΰμθ";
         Text[ greek ] = "Απόσταση χαρακτήρων";
         Text[ dutch ] = "Character distance";
-        Text[ french ] = "Character distance";
-        Text[ spanish ] = "Character distance";
+        Text[ french ] = "Espacement des caractθres";
+        Text[ spanish ] = "Espacio de caracteres";
         Text[ italian ] = "Character distance";
         Text[ danish ] = "Character distance";
         Text[ swedish ] = "Teckenavstεnd";
@@ -184,7 +184,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ russian ] = "Αεη σζΰςθÿ";
         Text[ greek ] = "Χωρίς συμπίεση";
         Text[ dutch ] = "No compression";
-        Text[ french ] = "No compression";
+        Text[ french ] = "~Sans compression";
         Text[ spanish ] = "Sin compresiσn";
         Text[ italian ] = "No compression";
         Text[ danish ] = "No compression";
@@ -209,7 +209,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ russian ] = "Σζΰςό ςξλόκξ οσνκςσΰφθώ";
         Text[ greek ] = "Συμπίεση μόνο των σημείων στίξης";
         Text[ dutch ] = "Compress punctuation only";
-        Text[ french ] = "Compress punctuation only";
+        Text[ french ] = "Compression uniquement pour la ponctuat~ion";
         Text[ spanish ] = "Comprimir solo puntuaciσn";
         Text[ italian ] = "Compress punctuation only";
         Text[ danish ] = "Compress punctuation only";
@@ -234,7 +234,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ russian ] = "Σζΰςό οσνκςσΰφθώ θ κΰνσ";
         Text[ greek ] = "Συμπίεση σημείων στίξης και ~ιαπωνέζικης Kana";
         Text[ dutch ] = "Compress punctuation and japanese Kana";
-        Text[ french ] = "Compress punctuation and japanese Kana";
+        Text[ french ] = "Compression pour la ponctuation les kana japonais";
         Text[ spanish ] = "Comprimir puntuaciσn y Kana japonιs";
         Text[ italian ] = "Compress punctuation and japanese Kana";
         Text[ danish ] = "Compress punctuation and japanese Kana";
@@ -259,8 +259,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ russian ] = "Νΰχΰλόνϋι θ κξνεχνϋι ηνΰκθ";
         Text[ greek ] = "Χαρακτήρες αρχής και τέλους";
         Text[ dutch ] = "Start and end characters";
-        Text[ french ] = "Start and end characters";
-        Text[ spanish ] = "Start and end characters";
+        Text[ french ] = "Caractθres de dιbut et de fin";
+        Text[ spanish ] = "Carαcter de inicio y final";
         Text[ italian ] = "Start and end characters";
         Text[ danish ] = "Start and end characters";
         Text[ swedish ] = "Start- och sluttecken";
@@ -284,7 +284,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ russian ] = "ίηϋκ";
         Text[ greek ] = "Γλώσ~σα";
         Text[ dutch ] = "Language";
-        Text[ french ] = "Language";
+        Text[ french ] = "~Langue";
         Text[ spanish ] = "Idioma";
         Text[ italian ] = "Language";
         Text[ danish ] = "Language";
@@ -316,7 +316,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ russian ] = "Ρςΰνδΰπς";
         Text[ greek ] = "Προεπιλογή";
         Text[ dutch ] = "Standard";
-        Text[ french ] = "Standard";
+        Text[ french ] = "Par ~dιfaut";
         Text[ spanish ] = "Predeterminado";
         Text[ italian ] = "Standard";
         Text[ danish ] = "Standard";
@@ -341,7 +341,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ russian ] = "Νε β νΰχΰλε ρςπξκθ:";
         Text[ greek ] = "&#908;&#967;&#953; &#963;&#964;&#951;&#957; &#945;&#961;&#967;&#942; &#956;&#953;&#945;&#962; &#963;&#949;&#953;&#961;&#940;&#962;:";
         Text[ dutch ] = "No start of line:";
-        Text[ french ] = "No start of line:";
+        Text[ french ] = "Pas en dι~but de ligne :";
         Text[ spanish ] = "Sin inicio de fila:";
         Text[ italian ] = "No start of line:";
         Text[ danish ] = "No start of line:";
@@ -373,7 +373,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ russian ] = "Νε β κξνφε ρςπξκθ:";
         Text[ greek ] = "Όχι στο τέλος μιας σ~ειράς:";
         Text[ dutch ] = "No end of line:";
-        Text[ french ] = "No end of line:";
+        Text[ french ] = "Pas en ~fin de ligne :";
         Text[ spanish ] = "Sin fin de lνnea:";
         Text[ italian ] = "No end of line:";
         Text[ danish ] = "No end of line:";
@@ -405,7 +405,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ russian ] = "Αεη ηΰδΰννϋυ οξλόηξβΰςελεμ ηνΰκξβ πΰηπϋβΰ ρςπξκθ";
         Text[ greek ] = "Χωρίς προσωπικούς χαρακτήρες αλλαγής σειράς";
         Text[ dutch ] = "Without user-defined line break symbols";
-        Text[ french ] = "Without user-defined line break symbols";
+        Text[ french ] = "Sans caractθres personnalisιs de retour ΰ la ligne";
         Text[ spanish ] = "Sin carαcter de cambio de fila definido por el usuario";
         Text[ italian ] = "Without user-defined line break symbols";
         Text[ danish ] = "Without user-defined line break symbols";
