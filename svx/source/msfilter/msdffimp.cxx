@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:22:32 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1038,7 +1038,11 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     aAny <<= nId;
                                     SetPropValue( aAny, xPropSet, aPropName, sal_True );
                                 }
-                                pO->SendRepaintBroadcast();
+
+                                // Not sure what this is good for, repaint or broadcast of object change.
+                                //( Thus i am adding repaint here
+                                pO->SetChanged();
+                                pO->BroadcastObjectChange();
                             }
                         }
                     }
@@ -2066,12 +2070,10 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
         else    // SYSCOLOR
         {
 //          UINT16 nParameter = (BYTE)( nColorCode >> 16);      // SJ: nice compiler optimization bug on windows, though downcasting
-
-            UINT16 nParameter = ( nColorCode >> 16 ) & 0x00ff;  // the HiByte of nParameter is not zero, an exclusive AND is helping :o
-
+            UINT16 nParameter = sal_uInt16(( nColorCode >> 16 ) & 0x00ff);  // the HiByte of nParameter is not zero, an exclusive AND is helping :o
             UINT16 nFunctionBits = (UINT16)( ( nColorCode & 0x00000f00 ) >> 8 );
             UINT16 nAdditionalFlags = (UINT16)( ( nColorCode & 0x0000f000) >> 8 );
-            UINT16 nColorIndex = nColorCode & 0x00ff;
+            UINT16 nColorIndex = sal_uInt16(nColorCode & 0x00ff);
             UINT32 nPropColor;
 
             sal_uInt16  nCProp = DFF_Prop_lineColor;
@@ -2287,7 +2289,7 @@ FASTBOOL SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
                 SfxItemSet aSet(rOutliner.GetEmptyItemSet());
                 aSet.Put(SvxColorItem( COL_BLACK ));
                 rOutliner.SetParaAttribs(0,aSet);
-                pText->SetItemSet(aSet);
+                pText->SetMergedItemSet(aSet);
 
                 bClearParaAttribs = FALSE;
                 if( bClearParaAttribs )
@@ -2367,7 +2369,7 @@ FASTBOOL SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
                                 }
 
                                 // evtl. noch default-TABs ergaenzen (immer)
-                                UINT16 nObjWidth = pObj->GetSnapRect().GetWidth() + 1;
+                                UINT16 nObjWidth = sal_uInt16(pObj->GetSnapRect().GetWidth() + 1);
                                 UINT16 nDefaultTabPos = nDefaultTab;
 
                                 while(nDefaultTabPos <= nObjWidth && nDefaultTabPos <= nMostrightTab)
@@ -2517,7 +2519,7 @@ SdrObject* SvxMSDffManager::ImportWordArt( SvStream& rStCtrl, SfxItemSet& rSet, 
             rSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
             rSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
             rSet.Put( SvxFontItem( FAMILY_DONTKNOW, aFontName, String() ) );
-            pNewObj->SetItemSet(rSet);
+            pNewObj->SetMergedItemSet(rSet);
 
             pRet = pNewObj->ConvertToPolyObj( FALSE, FALSE );
             if( !pRet )
@@ -3218,7 +3220,7 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                         if ( aObjData.eShapeType == mso_sptTextBox )
                             aSet.Put( SdrTextMinFrameHeightItem( aBoundRect.GetHeight() ) );
                         pRet->SetModel( pSdrModel );
-                        pRet->SetItemSet(aSet);
+                        pRet->SetMergedItemSet(aSet);
                         // Rotieren
                         if ( pRet->ISA( SdrCaptionObj ) )       // sj: #96758# SetModel is changing
                             pRet->SetSnapRect( aBoundRect );    // the original snaprect
@@ -3273,7 +3275,7 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                                 {
                                     SdrObject*  pObj = pObjectList->GetObj( i );
                                     if ( pObj )
-                                        pObj->SetItemSet(aSet);
+                                        pObj->SetMergedItemSet(aSet);
                                 }
                             }
                         }
@@ -3626,7 +3628,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                     aSet.Put( SdrTextHorzAdjustItem( eTHA ) );
             }
 
-            pTextObj->SetItemSet(aSet);
+            pTextObj->SetMergedItemSet(aSet);
             pTextObj->SetModel(pSdrModel);
 
             if (bVerticalText)
@@ -3688,7 +3690,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             if( SFX_ITEM_DEFAULT == eState )
                 aSet.Put( XFillColorItem( String(),
                           Color( mnDefaultColor ) ) );
-            pObj->SetItemSet(aSet);
+            pObj->SetMergedItemSet(aSet);
         }
 
         //Means that fBehindDocument is set
