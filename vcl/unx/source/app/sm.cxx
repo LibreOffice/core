@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:32:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ void SessionManagerClient::SaveYourselfProc(
     Bool fast
     )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "Session: save yourself, save_type = %s, shutdown = %s, interact_style = %s, fast = %s\n",
              save_type == SmSaveLocal ? "SmcSaveLocal" :
              ( save_type == SmSaveGlobal ? "SmcSaveGlobal" :
@@ -218,7 +218,7 @@ void SessionManagerClient::SaveYourselfProc(
 
 IMPL_STATIC_LINK( SessionManagerClient, ShutDownHdl, void*, pDummy )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, GetSalData()->pFirstFrame_ ? "shutdown on first frame\n" : "shutdown event but no frame\n" );
 #endif
     if( GetSalData()->pFirstFrame_ )
@@ -233,7 +233,7 @@ void SessionManagerClient::DieProc(
     SmPointer client_data
     )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "Session: die\n" );
 #endif
 #ifdef USE_SM_EXTENSION
@@ -249,7 +249,7 @@ void SessionManagerClient::SaveCompleteProc(
     SmPointer client_data
     )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "Session: save complete\n" );
 #endif
 }
@@ -258,7 +258,7 @@ void SessionManagerClient::ShutdownCanceledProc(
     SmcConn connection,
     SmPointer client_data )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "Session: shutdown canceled\n" );
 #endif
 }
@@ -299,10 +299,10 @@ void SessionManagerClient::open()
                                             &pClientID,
                                             sizeof( aErrBuf ),
                                             aErrBuf );
-#if defined DEBUG || defined DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 1)  || defined DBG_UTIL
         if( ! aSmcConnection )
             fprintf( stderr, "SmcOpenConnection failed: %s\n", aErrBuf );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         else
             fprintf( stderr, "SmcOpenConnection succeeded, client ID is \"%s\"\n", pClientID );
 #endif
@@ -326,7 +326,7 @@ void SessionManagerClient::open()
                              );
         }
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     else if( aSmcConnection )
         fprintf( stderr, "no SESSION_MANAGER\n" );
 #endif
@@ -339,7 +339,7 @@ void SessionManagerClient::close()
     {
 #ifdef USE_SM_EXTENSION
         SmcCloseConnection( aSmcConnection, 0, NULL );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "SmcConnection closed\n" );
 #endif
 #endif
@@ -377,7 +377,7 @@ const ByteString& SessionManagerClient::getPreviousSessionID()
             break;
         }
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "previous ID = \"%s\"\n", aPrevId.GetBuffer() );
 #endif
     return aPrevId;
@@ -434,7 +434,7 @@ void ICEConnectionWorker( void* pData )
                          400 );
         if( nRet > 0 )
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "IceProcessMessages\n" );
 #endif
             Bool bReply;
@@ -496,7 +496,7 @@ void ICEConnectionObserver::ICEWatchProc(
             ICEThread = NULL;
         }
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "ICE connection on %d %s\n",
              IceConnectionNumber( connection ),
              opening ? "inserted" : "removed" );
