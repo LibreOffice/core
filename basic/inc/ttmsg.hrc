@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:07 $
+ *  last change: $Author: gh $ $Date: 2000-12-06 16:13:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@
 #define S_UNKNOWN_METHOD                    ( TT_START +  22 )
 #define S_INCLUDE_FILE_WARNINGS_DETECTED    ( TT_START +  23 )
 #define S_NO_INCLUDE_FILE_WARNINGS_DETECTED ( TT_START +  24 )
-
+#define S_UNPACKING_STORAGE_FAILED          ( TT_START +  25 )
 
 // Stings
 

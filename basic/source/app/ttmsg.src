@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-06 11:05:44 $
+ *  last change: $Author: gh $ $Date: 2000-12-06 16:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -623,11 +623,12 @@ String S_UNKNOWN_METHOD
     Text[ arabic ] = "Unknown method '($Arg1)' to ($Arg2)";
     Text[ turkish ] = "Unknown method on object :($Arg1).($Arg2)";
 };
-/*
-String
+String S_UNPACKING_STORAGE_FAILED
 {
-    Text = ;
+    Text = "Entpacken der Storage \"($Arg1)\" nach \"($Arg2)\" ist fehlgeschlagen";
+    Text[ english_us ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
 };
+/*
 String
 {
     Text = ;
