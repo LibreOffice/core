@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewElementListProvider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-12 18:12:07 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 15:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,19 @@
 #include <svx/svdobj.hxx>
 #endif
 
+
+//---------------
+//for creation of a symbol Graphic
+// header for class VirtualDevice
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
+// header for class SdrView
+#ifndef _SVDVIEW_HXX
+#include <svx/svdview.hxx>
+#endif
+//---------------
+
 /*
 //for creation of own number formatter
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -171,7 +184,7 @@ XBitmapList*   ViewElementListProvider::GetBitmapList() const
 }
 
 //create chartspecific symbols for linecharts
-SdrObjList*   ViewElementListProvider::GetSymbolList() const
+SdrObjList* ViewElementListProvider::GetSymbolList() const
 {
     static SdrObjList* m_pSymbolList = NULL;
     static uno::Reference< drawing::XShapes > m_xSymbols(NULL);//@todo this keeps the first drawinglayer alive ...
@@ -212,6 +225,51 @@ SdrObjList*   ViewElementListProvider::GetSymbolList() const
         ASSERT_EXCEPTION( e );
     }
     return m_pSymbolList;
+}
+
+Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, const SfxItemSet* pSymbolShapeProperties ) const
+{
+    SdrObjList* pSymbolList = this->GetSymbolList();
+    if( !pSymbolList->GetObjCount() )
+        return Graphic();
+    if(nStandardSymbol<0)
+        nStandardSymbol*=-1;
+    if( nStandardSymbol >= static_cast<sal_Int32>(pSymbolList->GetObjCount()) )
+        nStandardSymbol %= pSymbolList->GetObjCount();
+    SdrObject* pObj = pSymbolList->GetObj(nStandardSymbol);
+
+    VirtualDevice aVDev;
+    aVDev.SetMapMode(MapMode(MAP_100TH_MM));
+    SdrModel* pModel = new SdrModel();
+    pModel->GetItemPool().FreezeIdRanges();
+    SdrPage* pPage = new SdrPage( *pModel, FALSE );
+    pPage->SetSize(Size(1000,1000));
+    pModel->InsertPage( pPage, 0 );
+    SdrView* pView = new SdrView( pModel, &aVDev );
+    pView->SetMarkHdlHidden( TRUE );
+    SdrPageView* pPageView = pView->ShowPage(pPage, Point());
+
+    pObj=pObj->Clone();
+    pPage->NbcInsertObject(pObj);
+    pView->MarkObj(pObj,pPageView);
+    if( pSymbolShapeProperties )
+        pObj->SetItemSet(*pSymbolShapeProperties);
+
+    GDIMetaFile aMeta(pView->GetAllMarkedMetaFile());
+
+    Graphic aGraph(aMeta);
+    Size aSize = pObj->GetSnapRect().GetSize();
+    aGraph.SetPrefSize(aSize);
+    aGraph.SetPrefMapMode(MAP_100TH_MM);
+
+    pView->UnmarkAll();
+    pObj=pPage->RemoveObject(0);
+    if(pObj)
+        delete pObj;
+    delete pView;
+    delete pModel;
+
+    return aGraph;
 }
 
 FontList* ViewElementListProvider::getFontList() const

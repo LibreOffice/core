@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewElementListProvider.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:27 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 15:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,8 @@ public:
     XBitmapList*    GetBitmapList() const;//from class SdrModel
 
     //create chartspecific symbols for linecharts
-    SdrObjList*     GetSymbolList() const;// in old chart called GetSdrObjList
+    SdrObjList*     GetSymbolList() const;
+    Graphic         GetSymbolGraphic( sal_Int32 nStandardSymbol, const SfxItemSet* pSymbolShapeProperties ) const;
 
     FontList*       getFontList() const;
     //SfxPrinter*   getPrinter();
