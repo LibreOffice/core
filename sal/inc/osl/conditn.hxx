@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditn.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:12 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 08:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,15 +64,11 @@
 
 #ifdef __cplusplus
 
-#include <osl/macros.hxx>
-
 #include <osl/conditn.h>
 
 
-#ifdef _USE_NAMESPACE
 namespace osl
 {
-#endif
 
     class Condition
     {
@@ -136,9 +132,7 @@ namespace osl
         }
     };
 
-#ifdef _USE_NAMESPACE
 }
-#endif
 
 #endif  /* __cplusplus */
 #endif  /* _OSL_CONDITN_HXX_ */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: semaphor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-28 12:52:43 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 08:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,15 +64,11 @@
 
 #ifdef __cplusplus
 
-#include <osl/macros.hxx>
-
 #include <osl/semaphor.h>
 
 
-#ifdef _USE_NAMESPACE
 namespace osl
 {
-#endif
 
     class Semaphore {
         oslSemaphore semaphore;
@@ -126,9 +122,7 @@ namespace osl
             return osl_releaseSemaphore(semaphore);
         }
     };
-#ifdef _USE_NAMESPACE
 }
-#endif
 
 #endif  /* __cplusplus */
 #endif  /* _OSL_SEMAPHORE_HXX_  */

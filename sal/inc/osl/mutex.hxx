@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:40:09 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 08:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,15 +64,11 @@
 
 #ifdef __cplusplus
 
-#include <osl/macros.hxx>
-
 #include <osl/mutex.h>
 
 
-#ifdef _USE_NAMESPACE
 namespace osl
 {
-#endif
 
     class Mutex {
         oslMutex mutex;
@@ -189,9 +185,7 @@ namespace osl
     typedef Guard<Mutex> MutexGuard;
     typedef ClearableGuard<Mutex> ClearableMutexGuard;
 
-#ifdef _USE_NAMESPACE
 }
-#endif
 
 #endif  /* __cplusplus */
 #endif  /* _OSL_MUTEX_HXX_ */

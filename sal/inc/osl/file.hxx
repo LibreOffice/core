@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-06 17:26:01 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 08:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@
 #endif
 
 #include <osl/file.h>
-#include <osl/macros.hxx>
 
 #ifndef _RTL_BYTESEQ_HXX_
 #   include <rtl/byteseq.hxx>
@@ -82,10 +81,8 @@
 
 #include <stdio.h>
 
-#ifdef _USE_NAMESPACE
 namespace osl
 {
-#endif
 
 
 // -----------------------------------------------------------------------------
@@ -1452,9 +1449,7 @@ public:
     }
 };
 
-#ifdef _USE_NAMESPACE
 }
-#endif
 
 #endif  /* __cplusplus */
 #endif  /* _OSL_FILE_HXX_ */
