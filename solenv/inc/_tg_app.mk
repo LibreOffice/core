@@ -56,12 +56,17 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP1OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP1LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP_LINKTYPE) $(APP1STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+# Need to strip __objcInit symbol to avoid duplicate symbols when loading
+# libraries at runtime
+    @+echo __objcInit > $(MISC)$/$(@:b).strip
+    @strip -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -238,12 +243,17 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP2OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP2LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP_LINKTYPE) $(APP2STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+# Need to strip __objcInit symbol to avoid duplicate symbols when loading
+# libraries at runtime
+    @+echo __objcInit > $(MISC)$/$(@:b).strip
+    @strip -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -420,12 +430,17 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP3OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP3LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP_LINKTYPE) $(APP3STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+# Need to strip __objcInit symbol to avoid duplicate symbols when loading
+# libraries at runtime
+    @+echo __objcInit > $(MISC)$/$(@:b).strip
+    @strip -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -602,12 +617,17 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP4OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP4LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP_LINKTYPE) $(APP4STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+# Need to strip __objcInit symbol to avoid duplicate symbols when loading
+# libraries at runtime
+    @+echo __objcInit > $(MISC)$/$(@:b).strip
+    @strip -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -784,12 +804,17 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP5OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP5LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP_LINKTYPE) $(APP5STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+# Need to strip __objcInit symbol to avoid duplicate symbols when loading
+# libraries at runtime
+    @+echo __objcInit > $(MISC)$/$(@:b).strip
+    @strip -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -966,12 +991,17 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP6OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP6LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP_LINKTYPE) $(APP6STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+# Need to strip __objcInit symbol to avoid duplicate symbols when loading
+# libraries at runtime
+    @+echo __objcInit > $(MISC)$/$(@:b).strip
+    @strip -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -1148,12 +1178,17 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP7OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP7LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP_LINKTYPE) $(APP7STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+# Need to strip __objcInit symbol to avoid duplicate symbols when loading
+# libraries at runtime
+    @+echo __objcInit > $(MISC)$/$(@:b).strip
+    @strip -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -1330,12 +1365,17 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP8OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP8LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP_LINKTYPE) $(APP8STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+# Need to strip __objcInit symbol to avoid duplicate symbols when loading
+# libraries at runtime
+    @+echo __objcInit > $(MISC)$/$(@:b).strip
+    @strip -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -1512,12 +1552,17 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP9OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP9LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP_LINKTYPE) $(APP9STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+# Need to strip __objcInit symbol to avoid duplicate symbols when loading
+# libraries at runtime
+    @+echo __objcInit > $(MISC)$/$(@:b).strip
+    @strip -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
@@ -1694,12 +1739,17 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP10OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP10LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
     $(APP_LINKTYPE) $(APP10STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
+# Need to strip __objcInit symbol to avoid duplicate symbols when loading
+# libraries at runtime
+    @+echo __objcInit > $(MISC)$/$(@:b).strip
+    @strip -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
