@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smplmailclient.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:43:56 $
+ *  last change: $Author: hr $ $Date: 2004-06-21 15:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ void CSmplMailClient::assembleCommandLine(
     }
 
     Sequence<rtl::OUString> bccRecipients = xSimpleMailMessage->getBccRecipient();
-    for (i = 0; i < bccRecipients.getLength(); i++)
+    for (int i = 0; i < bccRecipients.getLength(); i++)
     {
         rCommandArgs.push_back(BCC);
         rCommandArgs.push_back(bccRecipients[i]);
@@ -273,7 +273,7 @@ void CSmplMailClient::assembleCommandLine(
     }
 
     Sequence<rtl::OUString> attachments = xSimpleMailMessage->getAttachement();
-    for (i = 0; i < attachments.getLength(); i++)
+    for (int i = 0; i < attachments.getLength(); i++)
     {
         rtl::OUString sysPath;
         osl::FileBase::RC err = osl::FileBase::getSystemPathFromFileURL(attachments[i], sysPath);
