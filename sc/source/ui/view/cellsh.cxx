@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-13 10:48:17 $
+ *  last change: $Author: nn $ $Date: 2001-07-19 20:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,12 @@
 #include <svtools/stritem.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/moduleoptions.hxx>
+#include <svtools/cliplistener.hxx>
 #include <offmgr/sbasltid.hrc>
 #include <sot/formats.hxx>
 #include <svx/hlnkitem.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/bindings.hxx>
 //#include <sfx2/objitem.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/langitem.hxx>
@@ -118,7 +120,9 @@ SFX_IMPL_INTERFACE(ScCellShell, ScFormatShell , ScResId(SCSTR_CELLSHELL) )
 
 
 ScCellShell::ScCellShell(ScViewData* pData) :
-    ScFormatShell(pData)
+    ScFormatShell(pData),
+    pClipEvtLstnr(NULL),
+    bPastePossible(FALSE)
 {
     SetHelpId(HID_SCSHELL_CELLSH);
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Cell")));
@@ -126,6 +130,11 @@ ScCellShell::ScCellShell(ScViewData* pData) :
 
 ScCellShell::~ScCellShell()
 {
+    if ( pClipEvtLstnr )
+    {
+        pClipEvtLstnr->AddRemoveListener( GetViewData()->GetActiveWin(), FALSE );
+        pClipEvtLstnr->release();
+    }
 }
 
 //------------------------------------------------------------------
@@ -377,41 +386,70 @@ void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats )
 
 //  Einfuegen, Inhalte einfuegen
 
+BOOL lcl_IsCellPastePossible( const TransferableDataHelper& rData )
+{
+    BOOL bPossible = FALSE;
+    if ( ScTransferObj::GetOwnClipboard( NULL ) || ScDrawTransferObj::GetOwnClipboard( NULL ) )
+        bPossible = TRUE;
+    else
+    {
+        if ( rData.HasFormat( SOT_FORMAT_BITMAP ) ||
+             rData.HasFormat( SOT_FORMAT_GDIMETAFILE ) ||
+             rData.HasFormat( SOT_FORMATSTR_ID_SVXB ) ||
+             rData.HasFormat( FORMAT_PRIVATE ) ||
+             rData.HasFormat( SOT_FORMAT_RTF ) ||
+             rData.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE ) ||
+             rData.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ) ||
+             rData.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) ||
+             rData.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ) ||
+             rData.HasFormat( SOT_FORMAT_STRING ) ||
+             rData.HasFormat( SOT_FORMATSTR_ID_SYLK ) ||
+             rData.HasFormat( SOT_FORMATSTR_ID_LINK ) ||
+             rData.HasFormat( SOT_FORMATSTR_ID_HTML ) ||
+             rData.HasFormat( SOT_FORMATSTR_ID_HTML_SIMPLE ) ||
+             rData.HasFormat( SOT_FORMATSTR_ID_DIF ) )
+        {
+            bPossible = TRUE;
+        }
+    }
+    return bPossible;
+}
+
+IMPL_LINK( ScCellShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
+{
+    if ( pDataHelper )
+    {
+        bPastePossible = lcl_IsCellPastePossible( *pDataHelper );
+
+        SfxBindings& rBindings = GetViewData()->GetBindings();
+        rBindings.Invalidate( SID_PASTE );
+        rBindings.Invalidate( FID_PASTE_CONTENTS );
+        rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
+    }
+    return 0;
+}
+
+
 void __EXPORT ScCellShell::GetClipState( SfxItemSet& rSet )
 {
-    BOOL bDisable = TRUE;
-
 // SID_PASTE
 // FID_PASTE_CONTENTS
 // SID_CLIPBOARD_FORMAT_ITEMS
 
-    Window* pWin = GetViewData()->GetActiveWin();
-    if ( ScTransferObj::GetOwnClipboard( pWin ) || ScDrawTransferObj::GetOwnClipboard( pWin ) )
-        bDisable = FALSE;
-    else
+    if ( !pClipEvtLstnr )
     {
-        TransferableDataHelper aDataHelper(
-            TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
+        // create listener
+        pClipEvtLstnr = new TransferableClipboardListener( LINK( this, ScCellShell, ClipboardChanged ) );
+        pClipEvtLstnr->acquire();
+        Window* pWin = GetViewData()->GetActiveWin();
+        pClipEvtLstnr->AddRemoveListener( pWin, TRUE );
 
-        if ( aDataHelper.HasFormat( SOT_FORMAT_BITMAP ) ||
-             aDataHelper.HasFormat( SOT_FORMAT_GDIMETAFILE ) ||
-             aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) ||
-             aDataHelper.HasFormat( FORMAT_PRIVATE ) ||
-             aDataHelper.HasFormat( SOT_FORMAT_RTF ) ||
-             aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE ) ||
-             aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ) ||
-             aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) ||
-             aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ) ||
-             aDataHelper.HasFormat( SOT_FORMAT_STRING ) ||
-             aDataHelper.HasFormat( SOT_FORMATSTR_ID_SYLK ) ||
-             aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK ) ||
-             aDataHelper.HasFormat( SOT_FORMATSTR_ID_HTML ) ||
-             aDataHelper.HasFormat( SOT_FORMATSTR_ID_HTML_SIMPLE ) ||
-             aDataHelper.HasFormat( SOT_FORMATSTR_ID_DIF ) )
-        {
-            bDisable = FALSE;
-        }
+        // get initial state
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
+        bPastePossible = lcl_IsCellPastePossible( aDataHelper );
     }
+
+    BOOL bDisable = !bPastePossible;
 
     //  Zellschutz / Multiselektion
 

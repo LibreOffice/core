@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-12 09:29:00 $
+ *  last change: $Author: nn $ $Date: 2001-07-19 20:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2621,7 +2621,8 @@ BOOL ScInputHandler::InputCommand( const CommandEvent& rCEvt, BOOL bForce )
     {
         HideTip();
 
-        if (bSelIsRef)
+        // COMMAND_CURSORPOS must not change the selection
+        if ( bSelIsRef && rCEvt.GetCommand() != COMMAND_CURSORPOS )
         {
             RemoveSelection();
             bSelIsRef = FALSE;
