@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgresid.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:03:09 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,12 +136,12 @@ String RID_STR_BRWTITLE_PROPERTIES
     Text[ polish ] = "W³aœciwoœci: ";
     Text[ portuguese_brazilian ] = "Properties: ";
     Text[ japanese ] = "ÌßÛÊßÃ¨: ";
-    Text[ korean ] = "Properties: ";
+    Text[ korean ] = "¼Ó¼º: ";
     Text[ chinese_simplified ] = "ÊôĞÔ£º";
     Text[ chinese_traditional ] = "Äİ©Ê¡G";
     Text[ turkish ] = "Properties: ";
     Text[ arabic ] = "ÇáÎÕÇÆÕ: ";
-    Text[ finnish ] = "Eigenschaften: ";
+    Text[ finnish ] = "Ominaisuudet:";
     Text[ catalan ] = "Properties: ";
 };
 String RID_STR_BRWTITLE_NO_PROPERTIES
@@ -161,7 +161,7 @@ String RID_STR_BRWTITLE_NO_PROPERTIES
     Text[ polish ] = "Nie zaznaczono formantu";
     Text[ portuguese_brazilian ] = "No Control marked";
     Text[ japanese ] = "ºİÄÛ°Ù—v‘f‚Ì‘I‘ğ‚È‚µ";
-    Text[ korean ] = "No Control marked";
+    Text[ korean ] = "ÄÁÆ®·Ñ ¿ä¼Ò°¡ ¸¶Å·µÇÁö ¾Ê¾ÒÀ½";
     Text[ chinese_simplified ] = "Ã»ÓĞÑ¡Ôñ¿ØÖÆÏî";
     Text[ chinese_traditional ] = "¨S¦³¿ï¨ú±±¨î¶µ";
     Text[ turkish ] = "No Control marked";
@@ -186,12 +186,12 @@ String RID_STR_BRWTITLE_MULTISELECT
     Text[ polish ] = "Wybór wielokrotny";
     Text[ portuguese_brazilian ] = "Multiselection";
     Text[ japanese ] = "•¡”‘I‘ğ";
-    Text[ korean ] = "Multiselection";
+    Text[ korean ] = "´ÙÁß ¼±ÅÃ";
     Text[ chinese_simplified ] = "¶àÖØÑ¡Ôñ";
     Text[ chinese_traditional ] = "¦h­«¿ï¨ú";
     Text[ turkish ] = "Multiselection";
     Text[ arabic ] = "ÊÍÏíÏ ãÊÚÏÏ";
-    Text[ finnish ] = "Mehrfachselektion";
+    Text[ finnish ] = "Monivalinta";
     Text[ catalan ] = "Multiselection";
 };
 
