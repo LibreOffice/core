@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-29 15:00:12 $
+ *  last change: $Author: abi $ $Date: 2001-07-03 13:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,9 +646,13 @@ namespace fileaccess {
         // Helper function for mkfil,mkdir and write
         // Creates whole path
         // returns success of the operation
+        // The calle determines the errorCode, which should be used to install
+        // any error
 
         sal_Bool SAL_CALL
-        ensuredir( const rtl::OUString& aDirectoryName )
+        ensuredir( sal_Int32 CommandId,
+                   const rtl::OUString& aDirectoryName,
+                   sal_Int32 errorCode )
             throw();
 
         // General

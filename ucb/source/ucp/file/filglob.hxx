@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filglob.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-29 15:00:12 $
+ *  last change: $Author: abi $ $Date: 2001-07-03 13:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #endif
 
 
@@ -139,7 +142,10 @@ namespace fileaccess {
     // It never returns;
 
     extern void throw_handler( sal_Int32 errorCode,
-                               sal_Int32 minorCode );
+                               sal_Int32 minorCode,
+                               const com::sun::star::uno::Reference<
+                               com::sun::star::ucb::XCommandEnvironment >& xEnv,
+                               const rtl::OUString& aUncPath );
 
 } // end namespace fileaccess
 

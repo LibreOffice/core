@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtask.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-29 15:00:12 $
+ *  last change: $Author: abi $ $Date: 2001-07-03 13:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef INCLUDED_STL_HASH_MAP
 #include <hash_map>
 #define INCLUDED_STL_HASH_MAP
+#endif
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -231,7 +234,8 @@ namespace fileaccess
          *  "endTask" throws in case an error code is set the corresponding exception.
          */
 
-        void SAL_CALL endTask( sal_Int32 CommandId );
+        void SAL_CALL endTask( sal_Int32 CommandId,
+                               const rtl::OUString& aUnqPath );  // The URL of the object
 
         com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > SAL_CALL
         getInteractionHandler( sal_Int32 CommandId );

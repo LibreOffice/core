@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtask.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-29 15:00:12 $
+ *  last change: $Author: abi $ $Date: 2001-07-03 13:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 
 using namespace fileaccess;
 using namespace com::sun::star;
+using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 
 
@@ -109,7 +110,8 @@ TaskManager::startTask(
 
 
 void SAL_CALL
-TaskManager::endTask( sal_Int32 CommandId )
+TaskManager::endTask( sal_Int32 CommandId,
+                      const rtl::OUString& aUncPath )
 {
     vos::OGuard aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
@@ -118,10 +120,12 @@ TaskManager::endTask( sal_Int32 CommandId )
 
     sal_Int32 ErrorCode = it->second.getInstalledError();
     sal_Int32 MinorCode = it->second.getMinorErrorCode();
+    Reference< XCommandEnvironment > xComEnv = it->second.getCommandEnvironment();
+
     m_aTaskMap.erase( it );
 
     if( ErrorCode != TASKHANDLER_NO_ERROR )
-        throw_handler( ErrorCode,MinorCode );
+        throw_handler( ErrorCode,MinorCode,xComEnv,aUncPath );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-29 15:00:12 $
+ *  last change: $Author: abi $ $Date: 2001-07-03 13:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,7 +472,7 @@ BaseContent::execute( const Command& aCommand,
 
 
     // This is the only function allowed to throw an exception
-    m_pMyShell->endTask( CommandId );
+    m_pMyShell->endTask( CommandId,m_aUncPath );
 
     return aAny;
 }
@@ -1067,14 +1067,13 @@ BaseContent::deleteContent( sal_Int32 nMyCommandIdentifier,
 void SAL_CALL
 BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
                        const TransferInfo& aTransferInfo )
-    throw( CommandAbortedException,
-           InteractiveBadTransferURLException )
+    throw( CommandAbortedException )
 {
 
     if( m_nState & Deleted )
         return;
 
-    // No write access to route
+    // Never write access to root
 #ifdef TF_FILEURL
     if( m_pMyShell->m_bFaked && m_aUncPath.compareToAscii( "file:///" ) == 0 )
 #else
@@ -1083,10 +1082,12 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
             throw CommandAbortedException();
 
 
-    rtl::OUString scheme = aTransferInfo.SourceURL.copy( 0,5 );
-    if( scheme.compareToAscii( "file:" ) != 0 )
-        throw InteractiveBadTransferURLException();
-
+    if( aTransferInfo.SourceURL.compareToAscii( "file:",5 ) != 0 )
+    {
+        m_pMyShell->installError( nMyCommandIdentifier,
+                                  TASKHANDLING_TRANSFER_INVALIDSCHEME );
+        return;
+    }
 
     sal_Unicode slash = '/';
     rtl::OUString srcUnc;
@@ -1144,30 +1145,16 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
 
 
 
-void SAL_CALL
-BaseContent::write( sal_Int32 nMyCommandIdentifier,
-                    sal_Bool OverWrite,
-                    const Reference< io::XInputStream >& aInputStream )
-    throw()
-{
-    m_pMyShell->write( nMyCommandIdentifier,
-                       m_aUncPath,
-                       OverWrite,
-                       aInputStream );
-}
-
-
-
-
 void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
                                    const InsertCommandArgument& aInsertArgument )
     throw()
 {
     if( m_nState & FullFeatured )
     {
-        write( nMyCommandIdentifier,
-               aInsertArgument.ReplaceExisting,
-               aInsertArgument.Data );
+        m_pMyShell->write( nMyCommandIdentifier,
+                           m_aUncPath,
+                           aInsertArgument.ReplaceExisting,
+                           aInsertArgument.Data );
         return;
     }
 
@@ -1198,7 +1185,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
 
     Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
 
-    bool contentTypeSet = true;  // ?
+    bool contentTypeSet = true;  // is set to false, if contentType not set
     try
     {
         bDocument = xRow->getBoolean( 1 );
@@ -1223,17 +1210,13 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
 
     sal_Bool success;
     if( bDocument )
-    {
         success = m_pMyShell->mkfil( nMyCommandIdentifier,
                                      m_aUncPath,
                                      aInsertArgument.ReplaceExisting,
                                      aInsertArgument.Data );
-    }
     else
-    {
         success = m_pMyShell->mkdir( nMyCommandIdentifier,
                                      m_aUncPath );
-    }
 
     if( ! success )
     {

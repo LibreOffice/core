@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-29 15:00:12 $
+ *  last change: $Author: abi $ $Date: 2001-07-03 13:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,18 +427,11 @@ namespace fileaccess {
         void SAL_CALL
         transfer( sal_Int32 nMyCommandIdentifier,
                   const com::sun::star::ucb::TransferInfo& aTransferInfo )
-            throw( com::sun::star::ucb::CommandAbortedException,
-                   com::sun::star::ucb::InteractiveBadTransferURLException );
+            throw( com::sun::star::ucb::CommandAbortedException );
 
         void SAL_CALL
         insert( sal_Int32 nMyCommandIdentifier,
                 const com::sun::star::ucb::InsertCommandArgument& aInsertArgument )
-            throw();
-
-        void SAL_CALL
-        write( sal_Int32 nMyCommandIdentifier,
-               sal_Bool OverWrite,
-               const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& aInputStream )
             throw();
 
         friend class ContentEventNotifier;

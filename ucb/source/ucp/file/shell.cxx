@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-29 15:00:12 $
+ *  last change: $Author: abi $ $Date: 2001-07-03 13:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1388,6 +1388,8 @@ shell::mkdir( sal_Int32 CommandId,
     throw()
 {
     rtl::OUString aUnqPath;
+
+    // remove trailing slash
     if ( rUnqPath[ rUnqPath.getLength() - 1 ] == sal_Unicode( '/' ) )
         aUnqPath = rUnqPath.copy( 0, rUnqPath.getLength() - 1 );
     else
@@ -1397,12 +1399,16 @@ shell::mkdir( sal_Int32 CommandId,
 
     switch ( nError )
     {
-        case osl::FileBase::E_EXIST:
+        case osl::FileBase::E_EXIST:   // Directory cannot be overwritten
             return sal_False;
         case osl::FileBase::E_None:
+        {
+            rtl::OUString aPrtPath = getParentName( aUnqPath );
+            notifyInsert( getContentEventListeners( aPrtPath ),aUnqPath );
             return sal_True;
+        }
         default:
-            return ensuredir( aUnqPath );
+            return ensuredir( CommandId,aUnqPath,TASKHANDLING_CREATEDIRECTORY_MKDIR );
     }
 }
 
@@ -1425,7 +1431,6 @@ shell::mkfil( sal_Int32 CommandId,
               const uno::Reference< io::XInputStream >& aInputStream )
     throw()
 {
-
     // return value unimportant
     write( CommandId,
            aUnqPath,
@@ -1461,7 +1466,9 @@ shell::write( sal_Int32 CommandId,
     throw()
 {
     // Create parent path, if necessary.
-    if ( ! ensuredir( getParentName( aUnqPath ) ) )
+    if ( ! ensuredir( CommandId,
+                      getParentName( aUnqPath ),
+                      TASKHANDLING_ENSUREDIR_FOR_WRITE ) )
         return;
 
     osl::FileBase::RC err;
@@ -1490,6 +1497,10 @@ shell::write( sal_Int32 CommandId,
         err = aFile.open( OpenFlag_Write );
         if( err == osl::FileBase::E_None )  // The file exists and shall not be overwritten
         {
+            installError( CommandId,
+                          TASKHANDLING_NOREPLACE_FOR_WRITE,  // Now an exception
+                          err );
+
             aFile.close();
             return;
         }
@@ -1505,9 +1516,14 @@ shell::write( sal_Int32 CommandId,
         }
     }
 
-    if( aInputStream.is() )
+
+    if( ! aInputStream.is() )
     {
-        bool bSuccess( true );
+        installError( CommandId,
+                      TASKHANDLING_INPUTSTREAM_FOR_WRITE );
+    }
+    else
+    {
         sal_uInt64 nTotalNumberOfBytes = 0;
         sal_uInt64 nWrittenBytes;
         sal_Int32 nReadBytes = 0, nRequestedBytes = 32768 /*32k*/;
@@ -1524,23 +1540,20 @@ shell::write( sal_Int32 CommandId,
             {
                 installError( CommandId,
                               TASKHANDLING_NOTCONNECTED_FOR_WRITE );
-                bSuccess = false;
+                break;
             }
             catch( const io::BufferSizeExceededException& )
             {
                 installError( CommandId,
                               TASKHANDLING_BUFFERSIZEEXCEEDED_FOR_WRITE );
-                bSuccess = false;
+                break;
             }
             catch( const io::IOException& )
             {
                 installError( CommandId,
                               TASKHANDLING_IOEXCEPTION_FOR_WRITE );
-                bSuccess = false;
-            }
-
-            if( ! bSuccess )
                 break;
+            }
 
             if( nReadBytes )
             {
@@ -1562,10 +1575,16 @@ shell::write( sal_Int32 CommandId,
             }
         } while( sal_uInt64( nReadBytes ) == nRequestedBytes );
 
-        aFile.setSize( nTotalNumberOfBytes );
+        err = aFile.setSize( nTotalNumberOfBytes );
+        if( err != osl::FileBase::E_None  )
+            installError( CommandId,
+                          TASKHANDLING_FILESIZE_FOR_WRITE,
+                          err );
+
     }
 
     aFile.close();
+
     return;
 }
 
@@ -1754,7 +1773,10 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
 // Creates whole path
 // returns success of the operation
 
-sal_Bool SAL_CALL shell::ensuredir( const rtl::OUString& rUnqPath )
+
+sal_Bool SAL_CALL shell::ensuredir( sal_Int32 CommandId,
+                                    const rtl::OUString& rUnqPath,
+                                    sal_Int32 errorCode )
     throw()
 {
     rtl::OUString aPath;
@@ -1778,25 +1800,40 @@ sal_Bool SAL_CALL shell::ensuredir( const rtl::OUString& rUnqPath )
         return sal_True;
 
     nError = osl::Directory::create( aPath );
-    sal_Bool            bSuccess = (nError == osl::File::E_None || nError == osl::FileBase::E_EXIST);
 
-    if ( !bSuccess)
+    if( nError == osl::File::E_None )
+        notifyInsert( getContentEventListeners( getParentName( aPath ) ),aPath );
+
+    sal_Bool  bSuccess = ( nError == osl::File::E_None || nError == osl::FileBase::E_EXIST );
+
+    if( ! bSuccess )
     {
-        rtl::OUString   aParentDir = getParentName( aPath );
+        rtl::OUString aParentDir = getParentName( aPath );
 
         if ( aParentDir != aPath )
-        {
-            bSuccess = ensuredir( getParentName( aPath ) );
+        {   // Create first the parent directory
+            bSuccess = ensuredir( CommandId,
+                                  getParentName( aPath ),
+                                  errorCode );
 
             // After parent directory structure exists try it one's more
 
             if ( bSuccess )
-            {
+            {   // Parent directory exists, retry creation of directory
                 nError = osl::Directory::create( aPath );
-                bSuccess = (nError == osl::File::E_None || nError == osl::FileBase::E_EXIST);
+
+                if( nError == osl::File::E_None )
+                    notifyInsert( getContentEventListeners( getParentName( aPath ) ),aPath );
+
+                bSuccess =( nError == osl::File::E_None || nError == osl::FileBase::E_EXIST );
             }
         }
     }
+
+    if( ! bSuccess )
+        installError( CommandId,
+                      errorCode,
+                      nError );
 
     return bSuccess;
 }
@@ -2076,7 +2113,7 @@ shell::commit( const shell::ContentMap::iterator& it,
         osl_getDateTimeFromTimeValue( &myLocalTime, &myDateTime );
         util::DateTime aDateTime;
 
-        aDateTime.HundredthSeconds = myDateTime.NanoSeconds / 10000000;
+        aDateTime.HundredthSeconds = (unsigned short)(myDateTime.NanoSeconds / 10000000);
         aDateTime.Seconds = myDateTime.Seconds;
         aDateTime.Minutes = myDateTime.Minutes;
         aDateTime.Hours = myDateTime.Hours;
@@ -2103,7 +2140,7 @@ shell::commit( const shell::ContentMap::iterator& it,
         osl_getDateTimeFromTimeValue( &myLocalTime,&myDateTime );
         util::DateTime aDateTime;
 
-        aDateTime.HundredthSeconds = myDateTime.NanoSeconds / 10000000;
+        aDateTime.HundredthSeconds = ( unsigned short )(myDateTime.NanoSeconds / 10000000);
         aDateTime.Seconds = myDateTime.Seconds;
         aDateTime.Minutes = myDateTime.Minutes;
         aDateTime.Hours = myDateTime.Hours;
