@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: er $ $Date: 2002-03-14 16:08:23 $
+ *  last change: $Author: er $ $Date: 2002-04-09 13:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,8 +153,8 @@
 
 const static sal_Char __FAR_DATA sMyBegComment[]    = "<!-- ";
 const static sal_Char __FAR_DATA sMyEndComment[]    = " -->";
-const static sal_Char __FAR_DATA sFontFamily[]      = "font-family: ";
-const static sal_Char __FAR_DATA sFontSize[]        = "font-size: ";
+const static sal_Char __FAR_DATA sFontFamily[]      = "font-family:";
+const static sal_Char __FAR_DATA sFontSize[]        = "font-size:";
 
 const USHORT __FAR_DATA ScHTMLExport::nDefaultFontSize[SC_HTML_FONTSIZES] =
 {
@@ -163,6 +163,11 @@ const USHORT __FAR_DATA ScHTMLExport::nDefaultFontSize[SC_HTML_FONTSIZES] =
 };
 
 USHORT ScHTMLExport::nFontSize[SC_HTML_FONTSIZES] = { 0 };
+
+const char* __FAR_DATA ScHTMLExport::pFontSizeCss[SC_HTML_FONTSIZES] =
+{
+    "xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large"
+};
 
 const USHORT ScHTMLExport::nCellSpacing = 0;
 const sal_Char __FAR_DATA ScHTMLExport::sIndentSource[nIndentMax+1] =
@@ -369,6 +374,12 @@ USHORT ScHTMLExport::GetFontSizeNumber( USHORT nHeight )
     return nSize;
 }
 
+const char* ScHTMLExport::GetFontSizeCss( USHORT nHeight )
+{
+    USHORT nSize = GetFontSizeNumber( nHeight );
+    return pFontSizeCss[ nSize-1 ];
+}
+
 
 USHORT ScHTMLExport::ToPixel( USHORT nVal )
 {
@@ -438,6 +449,41 @@ void ScHTMLExport::WriteHeader()
 
         lcl_WriteTeamInfo( rStrm, eDestEnc );
     }
+    OUT_LF();
+
+    // CSS1 StyleSheet
+    PageDefaults( bAll ? 0 : aRange.aStart.Tab() );
+    IncIndent(1); TAG_ON_LF( sHTML_style );
+    rStrm << sMyBegComment; OUT_LF();
+    rStrm << sHTML_body << "," << sHTML_division << "," << sHTML_table << ","
+        << sHTML_thead << "," << sHTML_tbody << "," << sHTML_tfoot << ","
+        << sHTML_tablerow << "," << sHTML_tableheader << ","
+        << sHTML_tabledata << "," << sHTML_parabreak << " { " << sFontFamily;
+    xub_StrLen nFonts = aHTMLStyle.aFontFamilyName.GetTokenCount( ';' );
+    if ( nFonts == 1 )
+    {
+        rStrm << '\"';
+        OUT_STR( aHTMLStyle.aFontFamilyName );
+        rStrm << '\"';
+    }
+    else
+    {   // Fontliste, VCL: Semikolon als Separator,
+        // CSS1: Komma als Separator und jeder einzelne Fontname quoted
+        const String& rList = aHTMLStyle.aFontFamilyName;
+        for ( xub_StrLen j = 0, nPos = 0; j < nFonts; j++ )
+        {
+            rStrm << '\"';
+            OUT_STR( rList.GetToken( 0, ';', nPos ) );
+            rStrm << '\"';
+            if ( j < nFonts-1 )
+                rStrm << ", ";
+        }
+    }
+    rStrm << "; " << sFontSize
+        << GetFontSizeCss( ( USHORT ) aHTMLStyle.nFontHeight ) << " }";
+    OUT_LF();
+    rStrm << sMyEndComment;
+    IncIndent(-1); OUT_LF(); TAG_OFF_LF( sHTML_style );
 
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( sHTML_head );
 }
@@ -482,28 +528,40 @@ const SfxItemSet& ScHTMLExport::PageDefaults( USHORT nTab )
     SfxStyleSheetBasePool*  pStylePool  = pDoc->GetStyleSheetPool();
     SfxStyleSheetBase*      pStyleSheet = NULL;
     DBG_ASSERT( pStylePool, "StylePool not found! :-(" );
-    pStylePool->SetSearchMask( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
-    pStyleSheet = pStylePool->Find( ScGlobal::GetRscString(STR_STYLENAME_STANDARD), SFX_STYLE_FAMILY_PARA );
-    DBG_ASSERT( pStyleSheet, "ParaStyle not found! :-(" );
-    if (!pStyleSheet)
-        pStyleSheet = pStylePool->First();
-    const SfxItemSet& rSetPara = pStyleSheet->GetItemSet();
 
-    // Defaults fuer Vergleich in WriteCell merken
-    aHTMLStyle.aFontFamilyName =
-        ((const SvxFontItem&)(rSetPara.Get( ATTR_FONT ))).GetFamilyName();
-    aHTMLStyle.nFontHeight =
-        ((const SvxFontHeightItem&)(rSetPara.Get( ATTR_FONT_HEIGHT ))).GetHeight();
+    // remember defaults for compare in WriteCell
+    if ( !aHTMLStyle.bInitialized )
+    {
+        pStylePool->SetSearchMask( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
+        pStyleSheet = pStylePool->Find(
+                ScGlobal::GetRscString(STR_STYLENAME_STANDARD),
+                SFX_STYLE_FAMILY_PARA );
+        DBG_ASSERT( pStyleSheet, "ParaStyle not found! :-(" );
+        if (!pStyleSheet)
+            pStyleSheet = pStylePool->First();
+        const SfxItemSet& rSetPara = pStyleSheet->GetItemSet();
 
-    // Seitenvorlage Druckeinstellungen fuer z.B. Hintergrundgrafik,
-    // es gibt nur eine Hintergrundgrafik in HTML!
-    // aHTMLStyle.aBackgroundColor wird nicht hier sondern in WriteBody gesetzt
+        aHTMLStyle.aFontFamilyName =
+            ((const SvxFontItem&)(rSetPara.Get( ATTR_FONT ))).GetFamilyName();
+        aHTMLStyle.nFontHeight =
+            ((const SvxFontHeightItem&)(rSetPara.Get( ATTR_FONT_HEIGHT ))).GetHeight();
+        aHTMLStyle.nFontSizeNumber = GetFontSizeNumber( aHTMLStyle.nFontHeight );
+    }
+
+    // Page style sheet printer settings, e.g. for background graphics.
+    // There's only one background graphic in HTML!
     pStylePool->SetSearchMask( SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_ALL );
     pStyleSheet = pStylePool->Find( pDoc->GetPageStyle( nTab ), SFX_STYLE_FAMILY_PAGE );
     DBG_ASSERT( pStyleSheet, "PageStyle not found! :-(" );
     if (!pStyleSheet)
         pStyleSheet = pStylePool->First();
     const SfxItemSet& rSet = pStyleSheet->GetItemSet();
+    if ( !aHTMLStyle.bInitialized )
+    {
+        const SvxBrushItem* pBrushItem = (const SvxBrushItem*)&rSet.Get( ATTR_BACKGROUND );
+        aHTMLStyle.aBackgroundColor = pBrushItem->GetColor();
+        aHTMLStyle.bInitialized = TRUE;
+    }
     return rSet;
 }
 
@@ -608,40 +666,6 @@ void ScHTMLExport::WriteBody()
 {
     const SfxItemSet& rSet = PageDefaults( bAll ? 0 : aRange.aStart.Tab() );
     const SvxBrushItem* pBrushItem = (const SvxBrushItem*)&rSet.Get( ATTR_BACKGROUND );
-
-    aHTMLStyle.aBackgroundColor = pBrushItem->GetColor();
-
-    // CSS1 StyleSheet
-    IncIndent(1); TAG_ON_LF( sHTML_style );
-    rStrm << sMyBegComment; OUT_LF();
-    rStrm << sHTML_body << " { " << sFontFamily;
-    xub_StrLen nFonts = aHTMLStyle.aFontFamilyName.GetTokenCount( ';' );
-    if ( nFonts == 1 )
-    {
-        rStrm << '\"';
-        OUT_STR( aHTMLStyle.aFontFamilyName );
-        rStrm << '\"';
-    }
-    else
-    {   // Fontliste, VCL: Semikolon als Separator,
-        // CSS1: Komma als Separator und jeder einzelne Fontname quoted
-        const String& rList = aHTMLStyle.aFontFamilyName;
-        for ( xub_StrLen j = 0, nPos = 0; j < nFonts; j++ )
-        {
-            rStrm << '\"';
-            OUT_STR( rList.GetToken( 0, ';', nPos ) );
-            rStrm << '\"';
-            if ( j < nFonts-1 )
-                rStrm << ", ";
-        }
-    }
-    rStrm << "; " << sFontSize
-        << ByteString::CreateFromInt32( GetFontSizeNumber( ( USHORT ) aHTMLStyle.nFontHeight ) ).GetBuffer()
-        << " }";
-    OUT_LF();
-    rStrm << sMyEndComment;
-    IncIndent(-1); OUT_LF(); TAG_OFF_LF( sHTML_style );
-    OUT_LF();
 
     // default Textfarbe schwarz
     rStrm << '<' << sHTML_body << ' ' << sHTML_O_text << "=\"#000000\"";
@@ -1087,12 +1111,23 @@ void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
 #if 0
 // keine StyleSheet-Fontangaben: hart fuer jede Zelle
     BOOL bSetFontName   = TRUE;
-    BOOL bSetFontHeight = TRUE;
+    USHORT nSetFontSizeNumber = GetFontSizeNumber( (USHORT)rFontHeightItem.GetHeight() );
 #else
     BOOL bSetFontName   = ( aHTMLStyle.aFontFamilyName  != rFontItem.GetFamilyName() );
-    BOOL bSetFontHeight = ( aHTMLStyle.nFontHeight      != rFontHeightItem.GetHeight() );
+    USHORT nSetFontSizeNumber = 0;
+    UINT32 nFontHeight = rFontHeightItem.GetHeight();
+    if ( nFontHeight != aHTMLStyle.nFontHeight )
+    {
+        nSetFontSizeNumber = GetFontSizeNumber( (USHORT) nFontHeight );
+        if ( nSetFontSizeNumber == aHTMLStyle.nFontSizeNumber )
+            nSetFontSizeNumber = 0;   // no difference, don't set
+    }
 #endif
-    BOOL bSetFont = (bSetFontColor || bSetFontName || bSetFontHeight);
+    BOOL bSetFont = (bSetFontColor || bSetFontName || nSetFontSizeNumber);
+
+    //! TODO: we could entirely use CSS1 here instead, but that would exclude
+    //! Netscape 3.0 and Netscape 4.x without JavaScript enabled.
+    //! Do we want that?
 
     switch( rHorJustifyItem.GetValue() )
     {
@@ -1189,10 +1224,10 @@ void ScHTMLExport::WriteCell( USHORT nCol, USHORT nRow, USHORT nTab )
             }
             aStr += '\"';
         }
-        if ( bSetFontHeight )
+        if ( nSetFontSizeNumber )
         {
             (((aStr += ' ') += sHTML_O_size) += '=')
-                += ByteString::CreateFromInt32( GetFontSizeNumber( (USHORT)rFontHeightItem.GetHeight() ) );
+                += ByteString::CreateFromInt32( nSetFontSizeNumber );
         }
         if ( bSetFontColor )
         {
