@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DriverManager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:41:43 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ jclass java_sql_DriverManager::getMyClass()
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass ){
-        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
         if( !t.pEnv ) return (jclass)0;
         jclass tempClass = t.pEnv->FindClass("java/sql/DriverManager"); OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
         jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
@@ -101,7 +101,7 @@ void java_sql_DriverManager::saveClassRef( jclass pClass )
 jobject java_sql_DriverManager::getDriver(const ::rtl::OUString &url)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv )
     {
         jvalue args[1];
@@ -128,7 +128,7 @@ jobject java_sql_DriverManager::getDriver(const ::rtl::OUString &url)
 
 void java_sql_DriverManager::setLoginTimeout(sal_Int32 _par0)
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     jobject out(0);
     if( t.pEnv )
     {
