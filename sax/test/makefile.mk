@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:43:13 $
+#   last change: $Author: pluby $ $Date: 2001-02-15 01:11:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,12 +89,15 @@ APP1STDLIBS = 	$(SALLIB) \
         $(CPPULIB)\
         $(CPPUHELPERLIB)
 
-
 APP2OBJS   = $(OBJ)$/saxdemo.obj
 APP2STDLIBS = 	$(SALLIB) \
         $(CPPULIB) \
         $(CPPUHELPERLIB)
 
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+APP2OBJS+=$(OBJ)$/staticmbtest.obj   
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
