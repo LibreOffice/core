@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 15:46:31 $
+ *  last change: $Author: tra $ $Date: 2001-03-02 17:40:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,9 +543,9 @@ void CXTDataObject::validateFormatEtc( LPFORMATETC lpFormatEtc ) const
     if ( lpFormatEtc->lindex != -1 )
         throw CInvalidFormatEtcException( DV_E_LINDEX );
 
-    if ( !(lpFormatEtc->dwAspect & DVASPECT_CONTENT) &&
+    if ( !(lpFormatEtc->dwAspect & DVASPECT_CONTENT) /*&&
          !(lpFormatEtc->dwAspect & DVASPECT_COPY) &&
-         !(lpFormatEtc->dwAspect & DVASPECT_LINK) &&
+         !(lpFormatEtc->dwAspect & DVASPECT_LINK)*/ &&
          !(lpFormatEtc->dwAspect & DVASPECT_SHORTNAME) )
         throw CInvalidFormatEtcException( DV_E_DVASPECT );
 
