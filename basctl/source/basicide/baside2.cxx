@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:11:19 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 07:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
+#include <com/sun/star/document/MacroExecMode.hpp>
 #endif
 
 #ifndef _SFXDOCFILE_HXX //autogen
@@ -350,6 +353,19 @@ void ModulWindow::CheckCompileBasic()
 BOOL ModulWindow::BasicExecute()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
+
+    // #116444# check security settings before macro execution
+    SfxObjectShell* pShell = GetShell();
+    if ( pShell )
+    {
+        pShell->AdjustMacroMode( String() );
+        if ( pShell->GetMacroMode() == ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE )
+        {
+            WarningBox( this, WB_OK, String( IDEResId( RID_STR_CANNOTRUNMACRO ) ) ).Execute();
+            return FALSE;
+        }
+    }
+
     CheckCompileBasic();
 
     if ( xModule.Is() && xModule->IsCompiled() && !aStatus.bError )
