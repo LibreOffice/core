@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:15:30 $
+ *  last change: $Author: cl $ $Date: 2002-09-03 11:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,33 +120,6 @@ TabDialog TAB_PARAGRAPH
             };
             PageItem
             {
-                Identifier = RID_SVXPAGE_PARA_ASIAN ;
-                PageResID = RID_SVXPAGE_PARA_ASIAN ;
-                Text = "Asiatische Typographie" ;
-                Text [ ENGLISH ] = "Asian typography" ;
-                Text[ english_us ] = "Asian Typography";
-                Text[ portuguese ] = "Tipografia asiática";
-                Text[ russian ] = "Àçèàòñêèå øğèôòû";
-                Text[ greek ] = "ÁóéáôéêŞ ôõğïãñáößá";
-                Text[ dutch ] = "Aziatische typografie";
-                Text[ french ] = "Typographie asiatique";
-                Text[ spanish ] = "Tipografía asiática";
-                Text[ italian ] = "Tipografia asiatica";
-                Text[ danish ] = "Asian typography";
-                Text[ swedish ] = "Asiatisk typografi";
-                Text[ polish ] = "Typografia azjatycka";
-                Text[ portuguese_brazilian ] = "Asian typography";
-                Text[ japanese ] = "“ú–{Œê•¶‚Ì‘ÌÙ";
-                Text[ korean ] = "¾Æ½Ã¾Æ  Å¸ÀÌÆ÷±×·¡ÇÇ";
-                Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
-                Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
-                Text[ turkish ] = "Asian typography";
-                Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
-                Text[ catalan ] = "Tipografía asiática";
-                Text[ finnish ] = "Aasialaiset merkit";
-            };
-            PageItem
-            {
                 Identifier = RID_SVXPAGE_ALIGN_PARAGRAPH ;
                 Text = "Ausrichtung" ;
                 Text [ ENGLISH ] = "Alignment" ;
@@ -172,6 +145,33 @@ TabDialog TAB_PARAGRAPH
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Alineación";
                 Text[ finnish ] = "Tasaus";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_PARA_ASIAN ;
+                PageResID = RID_SVXPAGE_PARA_ASIAN ;
+                Text = "Asiatische Typographie" ;
+                Text [ ENGLISH ] = "Asian typography" ;
+                Text[ english_us ] = "Asian Typography";
+                Text[ portuguese ] = "Tipografia asiática";
+                Text[ russian ] = "Àçèàòñêèå øğèôòû";
+                Text[ greek ] = "ÁóéáôéêŞ ôõğïãñáößá";
+                Text[ dutch ] = "Aziatische typografie";
+                Text[ french ] = "Typographie asiatique";
+                Text[ spanish ] = "Tipografía asiática";
+                Text[ italian ] = "Tipografia asiatica";
+                Text[ danish ] = "Asian typography";
+                Text[ swedish ] = "Asiatisk typografi";
+                Text[ polish ] = "Typografia azjatycka";
+                Text[ portuguese_brazilian ] = "Asian typography";
+                Text[ japanese ] = "“ú–{Œê•¶‚Ì‘ÌÙ";
+                Text[ korean ] = "¾Æ½Ã¾Æ  Å¸ÀÌÆ÷±×·¡ÇÇ";
+                Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
+                Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
+                Text[ turkish ] = "Asian typography";
+                Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
+                Text[ catalan ] = "Tipografía asiática";
+                Text[ finnish ] = "Aasialaiset merkit";
             };
             /*
             PageItem  {
