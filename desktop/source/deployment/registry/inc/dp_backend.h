@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_backend.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:49:50 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include "dp_interact.h"
 #include "rtl/ref.hxx"
 #include "cppuhelper/weakref.hxx"
+#include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/compbase1.hxx"
 #include "cppuhelper/compbase3.hxx"
 #include "tools/inetmime.hxx"
@@ -75,11 +76,13 @@
 #include "com/sun/star/deployment/XPackageRegistry.hpp"
 #include <memory>
 #include <hash_map>
+#include "dp_registry.hrc"
 
 namespace dp_registry
 {
 namespace backend
 {
+
 
 namespace css = ::com::sun::star;
 
@@ -91,13 +94,17 @@ typedef ::cppu::WeakComponentImplHelper1<
 //==============================================================================
 class Package : protected ::dp_misc::MutexHolder, public t_PackageBase
 {
+    void processPackage_(
+        bool registerPackage,
+        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
+
 protected:
     ::rtl::Reference<PackageRegistryBackend> m_myBackend;
-    ::rtl::OUString m_url;
-    ::rtl::OUString m_mediaType;
+    const ::rtl::OUString m_url;
     ::rtl::OUString m_name;
     ::rtl::OUString m_displayName;
-    ::rtl::OUString m_description;
+    const css::uno::Reference<css::deployment::XPackageTypeInfo> m_xPackageType;
 
     void check();
     void fireModified();
@@ -123,12 +130,44 @@ protected:
     virtual ~Package();
     Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
              ::rtl::OUString const & url,
-             ::rtl::OUString const & mediaType,
              ::rtl::OUString const & name,
              ::rtl::OUString const & displayName,
-             ::rtl::OUString const & description );
+             css::uno::Reference<css::deployment::XPackageTypeInfo> const &
+             xPackageType );
 
 public:
+
+    class TypeInfo :
+        public ::cppu::WeakImplHelper1<css::deployment::XPackageTypeInfo>
+    {
+        const ::rtl::OUString m_mediaType;
+        const ::rtl::OUString m_fileFilter;
+        const ::rtl::OUString m_shortDescr;
+        const sal_uInt16 m_smallIcon, m_smallIcon_HC;
+    public:
+        virtual ~TypeInfo();
+        TypeInfo( ::rtl::OUString const & mediaType,
+                  ::rtl::OUString const & fileFilter,
+                  ::rtl::OUString const & shortDescr,
+                  sal_uInt16 smallIcon, sal_uInt16 smallIcon_HC )
+            : m_mediaType(mediaType), m_fileFilter(fileFilter),
+              m_shortDescr(shortDescr),
+              m_smallIcon(smallIcon), m_smallIcon_HC(smallIcon_HC)
+            {}
+        // XPackageTypeInfo
+        virtual ::rtl::OUString SAL_CALL getMediaType()
+            throw (css::uno::RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getDescription()
+            throw (css::uno::RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getShortDescription()
+            throw (css::uno::RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getFileFilter()
+            throw (css::uno::RuntimeException);
+        virtual css::uno::Any SAL_CALL getIcon( sal_Bool highContrast,
+                                                sal_Bool smallIcon )
+            throw (css::uno::RuntimeException);
+    };
+
     // XComponent
     virtual void SAL_CALL dispose() throw (css::uno::RuntimeException);
     virtual void SAL_CALL addEventListener(
@@ -185,17 +224,14 @@ public:
                css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getName()
         throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getMediaType()
-        throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getURL()
         throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getDisplayName()
         throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getDescription()
         throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getIcon(
-        sal_Bool highContrast, sal_Bool smallIcon )
-        throw (css::uno::RuntimeException);
+    virtual css::uno::Reference<css::deployment::XPackageTypeInfo> SAL_CALL
+    getPackageType() throw (css::uno::RuntimeException);
     virtual void SAL_CALL exportTo(
         ::rtl::OUString const & destFolderURL,
         ::rtl::OUString const & newTitle,
@@ -216,8 +252,7 @@ class PackageRegistryBackend
 {
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
     ::rtl::OUString m_cachePath;
-    ::rtl::OUString m_implName;
-    css::uno::Sequence< ::rtl::OUString > m_supportedMediaTypes;
+    const ::rtl::OUString m_implName;
 
     typedef ::std::hash_map<
         ::rtl::OUString, css::uno::WeakReference<css::deployment::XPackage>,
@@ -234,9 +269,10 @@ protected:
     } m_eContext;
     sal_Bool m_readOnly;
 
-    ::rtl::OUString m_strCannotBindPackage;
-    ::rtl::OUString m_strCannotDetectMediaType;
-    ::rtl::OUString m_strUnsupportedMediaType;
+    struct StrCannotDetectMediaType : public ::dp_misc::StaticResourceString<
+        StrCannotDetectMediaType, RID_STR_CANNOT_DETECT_MEDIA_TYPE> {};
+    struct StrUnsupportedMediaType : public ::dp_misc::StaticResourceString<
+        StrUnsupportedMediaType, RID_STR_UNSUPPORTED_MEDIA_TYPE> {};
 
     // @@@ to be implemented by specific backend:
     virtual css::uno::Reference<css::deployment::XPackage> bindPackage_(
@@ -251,12 +287,13 @@ protected:
     PackageRegistryBackend(
         css::uno::Sequence<css::uno::Any> const & args,
         css::uno::Reference<css::uno::XComponentContext> const & xContext,
-        ::rtl::OUString const & implName,
-        css::uno::Sequence< ::rtl::OUString > const & supportedMediaTypes );
+        ::rtl::OUString const & implName );
 
 public:
-    ::rtl::OUString m_strRegisteringPackage;
-    ::rtl::OUString m_strRevokingPackage;
+    struct StrRegisteringPackage : public ::dp_misc::StaticResourceString<
+        StrRegisteringPackage, RID_STR_REGISTERING_PACKAGE> {};
+    struct StrRevokingPackage : public ::dp_misc::StaticResourceString<
+        StrRevokingPackage, RID_STR_REVOKING_PACKAGE> {};
 
     inline css::uno::Reference<css::uno::XComponentContext> const &
     getComponentContext() const { return m_xComponentContext; }
@@ -284,8 +321,9 @@ public:
         throw (css::deployment::DeploymentException,
                css::ucb::CommandFailedException,
                css::lang::IllegalArgumentException, css::uno::RuntimeException);
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL
-    getSupportedMediaTypes() throw (css::uno::RuntimeException);
+//     virtual css::uno::Sequence<
+//         css::uno::Reference<css::deployment::XPackageTypeInfo> > SAL_CALL
+//     getSupportedPackageTypes() throw (css::uno::RuntimeException);
 };
 
 }
