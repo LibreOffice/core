@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:16:34 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef SC_SORTPARAM_HXX
 #include "sortparam.hxx"
 #endif
+#ifndef SC_COMPRESSEDARRAY_HXX
+#include "compressedarray.hxx"
+#endif
 
 namespace utl {
     class SearchParam;
@@ -147,10 +150,10 @@ private:
     com::sun::star::uno::Sequence<sal_Int8> aProtectPass;
 
     USHORT*         pColWidth;
-    USHORT*         pRowHeight;
+    ScSummableCompressedArray< SCROW, USHORT>*  pRowHeight;
 
     BYTE*           pColFlags;
-    BYTE*           pRowFlags;
+    ScBitMaskCompressedArray< SCROW, BYTE>*     pRowFlags;
 
     ScOutlineTable* pOutlineTable;
 
@@ -559,6 +562,8 @@ public:
 
     USHORT      GetColWidth( SCCOL nCol ) const;
     USHORT      GetRowHeight( SCROW nRow ) const;
+    ULONG       GetRowHeight( SCROW nStartRow, SCROW nEndRow ) const;
+    ULONG       GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale ) const;
     ULONG       GetColOffset( SCCOL nCol ) const;
     ULONG       GetRowOffset( SCROW nRow ) const;
 
@@ -578,6 +583,7 @@ public:
 
     void        SetColFlags( SCCOL nCol, BYTE nNewFlags );
     void        SetRowFlags( SCROW nRow, BYTE nNewFlags );
+    void        SetRowFlags( SCROW nStartRow, SCROW nEndRow, BYTE nNewFlags );
 
                 /// @return  the index of the last column with any set flags (auto-pagebreak is ignored).
     SCCOL      GetLastFlaggedCol() const;
@@ -593,6 +599,11 @@ public:
 
     BYTE        GetColFlags( SCCOL nCol ) const;
     BYTE        GetRowFlags( SCROW nRow ) const;
+
+    const ScBitMaskCompressedArray< SCROW, BYTE> * GetRowFlagsArray() const
+                    { return pRowFlags; }
+    const ScSummableCompressedArray< SCROW, USHORT> * GetRowHeightArray() const
+                    { return pRowHeight; }
 
     BOOL        UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, BOOL bShow );
     BOOL        UpdateOutlineRow( SCROW nStartRow, SCROW nEndRow, BOOL bShow );
