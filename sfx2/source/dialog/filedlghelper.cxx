@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:22:13 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -791,21 +791,14 @@ void FileDialogHelper_Impl::updateVersions()
                 if ( !xStorage.is() )
                     throw uno::RuntimeException();
 
-                SfxVersionTableDtor* pVerTable = SfxMedium::GetVersionList( xStorage );
+                uno::Sequence < util::RevisionTag > xVersions = SfxMedium::GetVersionList( xStorage );
 
-                if ( pVerTable )
-                {
-                    SvStringsDtor* pVersions = pVerTable->GetVersions();
+                aEntries.realloc( xVersions.getLength() + 1 );
+                aEntries[0] = OUString( String ( SfxResId( STR_SFX_FILEDLG_ACTUALVERSION ) ) );
 
-                    aEntries.realloc( pVersions->Count() + 1 );
-                    aEntries[0] = OUString( String ( SfxResId( STR_SFX_FILEDLG_ACTUALVERSION ) ) );
+                for ( sal_Int32 i=0; i<xVersions.getLength(); i++ )
+                    aEntries[ i + 1 ] = xVersions[i].Identifier;
 
-                    for ( USHORT i = 0; i < pVersions->Count(); i++ )
-                        aEntries[ i + 1 ] = OUString( *(pVersions->GetObject(i)) );
-
-                    delete pVersions;
-                    delete pVerTable;
-                }
                 // TODO/LATER: not sure that this information must be shown in future ( binfilter? )
 //REMOVE                    else
 //REMOVE                    {
@@ -1455,8 +1448,9 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                                         SfxItemSet *&   rpSet,
                                         String&         rFilter )
 {
-    // rpSet is in/out parameter, usually just a media-descriptor that
-    // can be changed by dialog
+    // rFilter is a pure output parameter, it shouldn't be used for anything else
+    // changing this would surely break code
+    // rpSet is in/out parameter, usually just a media-descriptor that can be changed by dialog
 
     Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
 
