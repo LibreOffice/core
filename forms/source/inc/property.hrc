@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hrc,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:46:04 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ namespace frm
 #define PROPERTY_ID_ALLOWADDITIONS      (PROPERTY_ID_START + 15)
 #define PROPERTY_ID_ALLOWEDITS          (PROPERTY_ID_START + 16)
 #define PROPERTY_ID_ALLOWDELETIONS      (PROPERTY_ID_START + 17)
-    // free
+#define PROPERTY_ID_NATIVE_LOOK         (PROPERTY_ID_START + 18)
     // free
     // free
     // free
