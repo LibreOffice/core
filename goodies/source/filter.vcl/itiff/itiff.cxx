@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itiff.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:57:57 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1311,8 +1311,9 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
 }
 
 //============================= fuer Windows ==================================
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifdef WIN
 
