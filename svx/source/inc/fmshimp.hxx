@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2002-02-27 17:07:20 $
+ *  last change: $Author: fs $ $Date: 2002-05-02 16:31:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,14 +305,14 @@ class FmXFormShell  :public FmXFormShell_BASE
     friend class FmFormView;
     friend class WizardUsageConfigItem;
 
+    class SuspendPropertyTracking;
+    friend class SuspendPropertyTracking;
+
     // Timer um verzoegerte Markierung vorzunehmen
     Timer              m_aMarkTimer;
     SdrObjArray         m_arrSearchedControls;
         // We enable a permanent cursor for the grid we found a searched text, it's disabled in the next "found" event.
     FmFormArray         m_arrSearchContexts;
-
-    // Liste der markierten Object, dient zur Restauration beim Umschalten von Alive in DesignMode
-    SdrMarkList         m_aMark;
 
         // some typedefs :
     // all dispatchers belonging to a form
@@ -467,8 +467,6 @@ protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> GetBoundField(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& _xControl, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& _xForm) const;
 
-    void ObjectRemovedInAliveMode(const SdrObject* pObject);
-
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>  GetControlFromModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xModel);
         // liefert das Control, welches das angegebene Model hat
     void CollectFormContexts(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xStartingPoint, const UniString& strCurrentLevelPrefix, UniString& strNames);
@@ -525,9 +523,6 @@ public:
     void SetSelection(const SdrMarkList& rMarkList);
     void SetSelectionDelayed(FmFormView* pView);
 
-    void SaveMarkList(const FmFormView* pView);
-    void RestoreMarkList(FmFormView* pView);
-
     void SetDesignMode(sal_Bool bDesign);
 
     sal_Bool    GetWizardUsing() const { return m_bUseWizards; }
@@ -563,16 +558,6 @@ private:
     DECL_LINK(OnCanceledNotFound, FmFoundRecordInformation*);
     DECL_LINK(OnSearchContextRequest, FmSearchContext*);
     DECL_LINK(OnTimeOut, void*);
-
-    class ObjectRemoveListener : public SfxListener
-    {
-        FmXFormShell* m_pParent;
-    public:
-        ObjectRemoveListener(FmXFormShell* pParent);
-        virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
-    };
-    ObjectRemoveListener* m_pCheckForRemoval;
-    friend class ObjectRemoveListener;
 
     void LoopGrids(sal_Int16 nWhat);
 
