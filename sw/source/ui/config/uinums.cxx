@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uinums.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:19:12 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,22 +200,7 @@ void SwBaseNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, USHORT nIdx)
     else
         *pNumRules[nIdx] = rCopy;
 }
-/*------------------------------------------------------------------------
- Beschreibung:  Zugriff auf eine Regel ueber ihren Namen
- Return:        Pointer auf die Regel oder Nullptr, wenn nicht vorhanden
-------------------------------------------------------------------------*/
 
-
-const SwNumRulesWithName *SwBaseNumRules::GetRules(const String &rName) const
-{
-    for(USHORT i = 0; i < nMaxRules; ++i)
-    {
-        SwNumRulesWithName *pRule = pNumRules[i];
-        if( pRule && pRule->GetName() == rName)
-            return pRule;
-    }
-    return 0;
-}
 // PROTECTED METHODES ----------------------------------------------------
 /*------------------------------------------------------------------------
  Beschreibung:  Speichern
