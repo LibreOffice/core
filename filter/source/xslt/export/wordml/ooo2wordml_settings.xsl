@@ -51,7 +51,7 @@
    Contributor(s): _______________________________________
    
  -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.org/2000/style" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:config="http://openoffice.org/2001/config" xmlns:text="http://openoffice.org/2000/text" exclude-result-prefixes="office style dc config text">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:openoffice:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:openoffice:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:openoffice:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:openoffice:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:openoffice:xmlns:drawing:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:openoffice:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:openoffice:xmlns:datastyle:1.0"  xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="urn:oasis:names:tc:openoffice:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:openoffice:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:openoffice:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:openoffice:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:openoffice:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="office table style text draw svg   dc config xlink meta oooc dom ooo chart math dr3d form script ooow draw">
     <xsl:template match="office:settings">
         <w:docPr>
             <xsl:variable name="view-settings" select="config:config-item-set[@config:name = 'view-settings']"/>
@@ -79,7 +79,7 @@
                 </xsl:choose>
             </w:zoom>
             <w:defaultTabStop>
-                <xsl:attribute name="w:val"><xsl:call-template name="convert2dxa"><xsl:with-param name="value" select="/office:document/office:styles/style:default-style[@style:family='paragraph']/style:properties/@style:tab-stop-distance"/></xsl:call-template></xsl:attribute>
+                <xsl:attribute name="w:val"><xsl:call-template name="convert2twip"><xsl:with-param name="value" select="/office:document/office:styles/style:default-style[@style:family='paragraph']/style:paragraph-properties/@style:tab-stop-distance"/></xsl:call-template></xsl:attribute>
             </w:defaultTabStop>
             <xsl:if test="../office:master-styles/style:master-page/style:header-left">
                 <w:evenAndOddHeaders/>
@@ -87,11 +87,11 @@
             <xsl:apply-templates select="/office:document/office:styles/text:footnotes-configuration"/>
             <xsl:apply-templates select="/office:document/office:styles/text:endnotes-configuration"/>
             <!-- add the variables declaration in w:docpr G.Y.  Begin-->
-            <xsl:if test="/office:document/office:body/text:variable-decls | /office:document/office:body/text:user-field-decls |/office:document/office:body/text:sequence-decls ">
+            <xsl:if test="/office:document/office:body/office:text/text:variable-decls | /office:document/office:body/office:text/text:user-field-decls |/office:document/office:body/office:text/text:sequence-decls ">
                 <xsl:call-template name="field_declare">
-                    <xsl:with-param name="simple_field_variable_declares" select="/office:document/office:body/text:variable-decls"/>
-                    <xsl:with-param name="user_field_variable_declares" select=" /office:document/office:body/text:user-field-decls"/>
-                    <xsl:with-param name="field_sequence_declares" select="/office:document/office:body/text:sequence-decls"/>
+                    <xsl:with-param name="simple_field_variable_declares" select="/office:document/office:body/office:text/text:variable-decls"/>
+                    <xsl:with-param name="user_field_variable_declares" select=" /office:document/office:body/office:text/text:user-field-decls"/>
+                    <xsl:with-param name="field_sequence_declares" select="/office:document/office:body/office:text/text:sequence-decls"/>
                 </xsl:call-template>
             </xsl:if>
             <!--add the variables declaration in w:docpr  G.Y. End-->
@@ -133,7 +133,7 @@
                 </xsl:choose>
             </xsl:if>
             <xsl:if test="$within-section != 'yes'">
-                <!-- because in SO/OOo footnote-sep is defined within every page-master, but in Word XML footnote separator 
+                <!-- because in SO/OOo footnote-sep is defined within every page-layout, but in Word XML footnote separator 
                 is defined solely in docPr, so not trouble to find the proper footnote-sep definition. -->
                 <w:footnote w:type="separator">
                     <w:p>
@@ -239,6 +239,7 @@
                 <w:numFmt w:val="decimal-full-width"/>
             </xsl:when>
             <xsl:when test="$number-format = '①, ②, ③, ...'">
+                <!-- decimal-enclosed-circle seems same -->
                 <w:numFmt w:val="decimal-enclosed-circle-chinese"/>
             </xsl:when>
             <xsl:when test="$number-format = '一, 二, 三, ...' and normalize-space($number-prefix) = '(' and normalize-space($number-suffix) = ')'">
@@ -276,7 +277,6 @@
             <xsl:when test="$number-format = 'ｲ, ﾛ, ﾊ, ...'">
                 <w:numFmt w:val="iroha"/>
             </xsl:when>
-            <xsl:when test="$number-format = '壹, 貳, 參, ...'"/>
             <xsl:when test="$number-format = '일, 이, 삼, ...'">
                 <!-- '일, 이, 삼, ...' also seems: korean-counting -->
                 <w:numFmt w:val="korean-digital"/>
@@ -328,7 +328,7 @@
                 </xsl:choose>
             </xsl:when>
             <!-- unsupported: ordinal, cardinal-text, ordinal-text, hex, chicago, bullet, ideograph-zodiac-traditional, 
-            chinese-not-impl, korean-legal, none  -->
+            chinese-not-impl, korean-legal -->
             <xsl:otherwise>
                 <w:numFmt w:val="decimal"/>
             </xsl:otherwise>
