@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:10:24 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 10:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@
 #include "FrameView.hxx"
 #endif
 #include "unomodel.hxx"
-
+#include "formatclipboard.hxx"
 
 using namespace sd;
 #define DrawDocShell
@@ -271,6 +271,7 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
     pFontList(NULL),
     pFuActual(NULL),
     bUIActive(FALSE),
+    pFormatClipboard(new SdFormatClipboard()),
     pProgress(NULL),
 //  pStbMgr( NULL ),
     bSdDataObj(bDataObject),
@@ -299,6 +300,7 @@ DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
     pFontList(NULL),
     pFuActual(NULL),
     bUIActive(FALSE),
+    pFormatClipboard(new SdFormatClipboard()),
     pProgress(NULL),
 //  pStbMgr( NULL ),
     bSdDataObj(bDataObject),
@@ -323,6 +325,8 @@ DrawDocShell::~DrawDocShell()
 
     delete pFontList;
     delete pUndoManager;
+    if(pFormatClipboard)
+        delete pFormatClipboard;
 
     if (bOwnPrinter)
         delete pPrinter;
