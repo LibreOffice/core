@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpoev.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:49:20 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ SdrPolyEditView::SdrPolyEditView(SdrModel* pModel1, OutputDevice* pOut):
     ImpClearVars();
 }
 
-SdrPolyEditView::SdrPolyEditView(SdrModel* pModel1, ExtOutputDevice* pXOut):
+SdrPolyEditView::SdrPolyEditView(SdrModel* pModel1, XOutputDevice* pXOut):
     SdrEditView(pModel1,pXOut)
 {
     ImpClearVars();
