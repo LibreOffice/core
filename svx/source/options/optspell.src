@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optspell.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:22:52 $
+ *  last change: $Author: vg $ $Date: 2001-08-30 20:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ TabPage RID_SFXPAGE_SPELL
         Text [ italian ] = "Parole con ~numeri " ;
         Text [ portuguese_brazilian ] = "~Palavras com n?eros " ;
         Text [ portuguese ] = "~Palavras com números " ;
-        Text [ finnish ] = "~Numeroita sisältävät sanat" ;
+        Text [ finnish ] = "~Numeroita sis?lt?v?t sanat" ;
         Text [ danish ] = "Ord med tal " ;
         Text [ french ] = "les mots comportant des ~chiffres  " ;
         Text [ swedish ] = "Ord med s~iffror  " ;
@@ -292,6 +292,7 @@ TabPage RID_SFXPAGE_SPELL
     Text[ catalan ] = "Ortografía";
 };
  // ********************************************************************** EOF
+
 
 
 
