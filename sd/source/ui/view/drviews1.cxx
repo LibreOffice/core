@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: thb $ $Date: 2001-11-13 12:04:37 $
+ *  last change: $Author: thb $ $Date: 2001-11-20 10:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,9 +196,27 @@ void SdDrawViewShell::Activate(BOOL bIsMDIActivate)
     // #94252# Enable own controls
     aTabControl.Enable();
     aLayerTab.Enable();
-    aPageBtn.Enable();
-    aMasterPageBtn.Enable();
-    aLayerBtn.Enable();
+
+    // #94951# handout and notes are no separate views,
+    // handle difference in enabled functionality
+    if (ePageKind == PK_NOTES)
+    {
+        aPageBtn.Enable();
+        aMasterPageBtn.Enable();
+        aLayerBtn.Disable();
+    }
+    else if (ePageKind == PK_HANDOUT)
+    {
+        aPageBtn.Disable();
+        aMasterPageBtn.Enable();
+        aLayerBtn.Disable();
+    }
+    else
+    {
+        aPageBtn.Enable();
+        aMasterPageBtn.Enable();
+        aLayerBtn.Enable();
+    }
 }
 
 /*************************************************************************
