@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_interact.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:05:47 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:05:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 #include "rtl/ref.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/deployment/DeploymentException.hpp"
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include "com/sun/star/task/XAbortChannel.hpp"
 
@@ -75,32 +74,33 @@ namespace css = ::com::sun::star;
 namespace dp_misc
 {
 
+inline void progressUpdate(
+    ::rtl::OUString const & status,
+    css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+{
+    if (xCmdEnv.is()) {
+        css::uno::Reference<css::ucb::XProgressHandler> xProgressHandler(
+            xCmdEnv->getProgressHandler() );
+        if (xProgressHandler.is()) {
+            xProgressHandler->update( css::uno::makeAny(status) );
+        }
+    }
+}
+
 //==============================================================================
 class ProgressLevel
 {
-    css::uno::Reference< css::ucb::XProgressHandler > m_xProgressHandler;
+    css::uno::Reference<css::ucb::XProgressHandler> m_xProgressHandler;
 
 public:
-    inline ProgressLevel(
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
+    inline ~ProgressLevel();
     inline ProgressLevel(
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
         ::rtl::OUString const & status );
-    inline ~ProgressLevel();
 
-    inline void update( ::rtl::OUString const & status );
-    inline void update();
+    inline void update( ::rtl::OUString const & status ) const;
+    inline void update( css::uno::Any const & status ) const;
 };
-
-//______________________________________________________________________________
-inline ProgressLevel::ProgressLevel(
-    css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv )
-{
-    if (xCmdEnv.is())
-        m_xProgressHandler = xCmdEnv->getProgressHandler();
-    if (m_xProgressHandler.is())
-        m_xProgressHandler->push( css::uno::Any() );
-}
 
 //______________________________________________________________________________
 inline ProgressLevel::ProgressLevel(
@@ -121,33 +121,28 @@ inline ProgressLevel::~ProgressLevel()
 }
 
 //______________________________________________________________________________
-inline void ProgressLevel::update( ::rtl::OUString const & status )
+inline void ProgressLevel::update( ::rtl::OUString const & status ) const
 {
     if (m_xProgressHandler.is())
         m_xProgressHandler->update( css::uno::makeAny(status) );
 }
 
 //______________________________________________________________________________
-inline void ProgressLevel::update()
+inline void ProgressLevel::update( css::uno::Any const & status ) const
 {
     if (m_xProgressHandler.is())
-        m_xProgressHandler->update( css::uno::Any() );
+        m_xProgressHandler->update( status );
 }
 
 //##############################################################################
 
-//==============================================================================
+/** @return true if ia handler is present and any selection has been chosen
+ */
 bool interactContinuation(
     css::uno::Any const & request,
     css::uno::Type const & continuation,
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
-    bool * pabort = 0 );
-
-//==============================================================================
-void interactContinuation_throw(
-    css::deployment::DeploymentException const & exc,
-    css::uno::Type const & continuation,
-    css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
+    bool * pcont, bool * pabort );
 
 //##############################################################################
 
@@ -170,7 +165,7 @@ public:
 
     class Chain
     {
-        ::rtl::Reference<AbortChannel> m_abortChannel;
+        const ::rtl::Reference<AbortChannel> m_abortChannel;
     public:
         inline Chain(
             ::rtl::Reference<AbortChannel> const & abortChannel,
