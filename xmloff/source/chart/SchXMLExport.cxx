@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-26 10:24:47 $
+ *  last change: $Author: bm $ $Date: 2001-02-27 12:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,12 @@
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _GLOBNAME_HXX
+#include <tools/globname.hxx>
+#endif
+#ifndef _SOT_CLSIDS_HXX
+#include <sot/clsids.hxx>
 #endif
 
 #ifndef _SVTOOLS_NMSPMAP_HXX
@@ -171,7 +177,8 @@ SchXMLExportHelper::SchXMLExportHelper(
         mnRowCount( 0 ),
         mnDomainAxes( 0 ),
         mbHasRowDescriptions( sal_False ),
-        mbHasColumnDescriptions( sal_False )
+        mbHasColumnDescriptions( sal_False ),
+        msCLSID( rtl::OUString( SvGlobalName( SO3_SCH_CLASSID ).GetHexName()))
 {
     msTableName = rtl::OUString::createFromAscii( "local-table" );
 
@@ -195,6 +202,11 @@ SchXMLExportHelper::SchXMLExportHelper(
         rtl::OUString::createFromAscii( XML_STYLE_FAMILY_SCH_CHART_NAME ),
         mxExpPropMapper.get(),
         rtl::OUString::createFromAscii( XML_STYLE_FAMILY_SCH_CHART_PREFIX ));
+}
+
+const rtl::OUString& SchXMLExportHelper::getChartCLSID()
+{
+    return msCLSID;
 }
 
 void SchXMLExportHelper::exportAutoStyles()
