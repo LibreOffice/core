@@ -8,7 +8,6 @@ Public oPreSelRange as Object
 &apos; Todo Vorselektion der Listbox
 &apos; Mauspointer umschalten:
 
-&apos; Todo: Sinnigkeit von &apos;DocDisposed&apos; noch einmal überprüfen
 &apos; Todo: In der Hilfe sollte ein Hinweis erscheinen, dass immer zwei Nachkommastellen angezeigt werden
 &apos; und die resultierende Betrag ebenfalls bis auf zwei Stellen nach dem Komma gerundet wird
 
@@ -17,8 +16,7 @@ Sub Main()
 	If InitResources(&quot;Euro Converter&quot;, &quot;eur&quot;) Then
 		bDoUnProtect = False
 		bPreSelected = True
-&apos;		DocDisposed = False
-		oDocument = StarDesktop.CurrentFrame.Controller.Model
+		oDocument = ThisComponent
 		RetrieveDocumentObjects()											&apos; Statusline, SheetsCollection etc.
 		InitializeConverter(oDocument.CharLocale, 1)
 		GetPreSelectedRange()
@@ -246,6 +244,7 @@ Dim OldCurrSymbolList(2) as String
 Dim OldCurrIndex as Integer
 Dim OldCurExtension(2) as String
 	oPreSelRange = AddSelectedRangeToSelRangesEnum()
+	
 	DialogModel.chkComplete.State = Abs(Not(bPreSelected))
 	If bPreSelected Then
 		DialogModel.optSelRange.State = 1

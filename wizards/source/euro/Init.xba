@@ -20,7 +20,6 @@ Public UnprotectList() as String
 Public FilterNames(2,1) as String
 Public bDoUnProtect as Boolean
 Public bCancelTask as Boolean
-Public bDisposable as Boolean
 
 Public sREADY as String
 Public sPROTECT as String
@@ -513,7 +512,7 @@ Dim bTakeThisLocale as Boolean
 			If DialogModel.Step = 2 Then
 				bTakeThisLocale = LangIDValue(n,m,0) = sLanguage
 			Else
-				bTakeThisLocale = LangIDValue(n,m,0) = sLanguage AND LangIDValue(n,m,1) = sCountry
+				bTakeThisLocale = LangIDValue(n,m,0) = sLanguage&apos; AND LangIDValue(n,m,1) = sCountry
 			End If
 			If bTakeThisLocale Then
 				CurrIndex = n

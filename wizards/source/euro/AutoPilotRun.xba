@@ -42,6 +42,8 @@ End Sub
 
 Sub ConvertDocuments()
 Dim FilesList()
+Dim bDisposable as Boolean
+
 	If Source &lt;&gt; &quot;&quot; And TargetDir &lt;&gt; &quot;&quot; Then
 		If DialogModel.optSingleFile.State = 1 Then
 			SourceFile = Source
@@ -66,11 +68,11 @@ Dim FilesList()
 &apos;		ChangeToNextProgressStep()
 		sTotDocCount = CStr(TotDocCount)
 		OpenProperties(0).Name = &quot;Hidden&quot;
-		OpenProperties(0).Value = False
+		OpenProperties(0).Value = True
 		OpenProperties(1).Name = &quot;AsTemplate&quot;
-		
+		OpenProperties(1).Value = False
 		For DocIndex = 0 To TotDocCount - 1
-			If InitializeDocument(FilesList()) Then
+			If InitializeDocument(FilesList(), bDisposable) Then
 				If StoreDocument() Then
 					ConvertDocument()
 					oDocument.Store
@@ -88,7 +90,7 @@ Dim FilesList()
 End Sub
 
 
-Function InitializeDocument(FilesList()) as Boolean
+Function InitializeDocument(FilesList(), bDisposable as Boolean) as Boolean
 &apos; The Autopilot is started from step No. 2
 Dim sViewPath as String
 Dim bIsReadOnly as Boolean
@@ -105,13 +107,6 @@ Dim sExtension as String
 		End If
 		If CreateFolder(TargetDir) Then
 			sExtension = GetFileNameExtension(SourceFile, &quot;/&quot;)
-			OpenProperties(1).Value = False
-			Select Case sExtension
-				Case &quot;vor&quot;, &quot;stc&quot;, &quot;stw&quot;, &quot;sti&quot;, &quot;std&quot;
-					OpenProperties(1).Value = False
-				Case Else
-					OpenProperties(1).Value = False
-			End Select
  			oDocument = OpenDocument(SourceFile, OpenProperties(), bDisposable)
 			If (oDocument.IsReadOnly) AND (UCase(SourceFile) = UCase(TargetFile)) Then
 				bIsReadOnly = True
@@ -196,12 +191,6 @@ Sub SwapExtent()
 		End If
 	End If
 	ToggleGoOnButton()
-End Sub
-
-
-Sub HelperDialog()
-&apos;Todo: The String &quot;start&quot; can be replaced by a HelpIndex
-	StarDesktop.LoadComponentfromUrl(&quot;vnd.sun.star.help://&quot; &amp; sDocType &amp; &quot;/start&quot;, &quot;_OFFICE_HELP&quot;, 64, NoArgs())
 End Sub
 
 
@@ -361,83 +350,33 @@ End Sub
 Sub CallFilePicker()
 	If DialogModel.optSingleFile.State = 1 Then
 		Dim oMasterKey as Object
-		Dim oFilters() as Object
+		Dim oTypes() as Object
+		Dim oUIKey() as Object
 		
 		oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.Office.TypeDetection/&quot;)
-		oFilters() = oMasterKey.Types
-
+		oTypes() = oMasterKey.Types
+		oUIKey = GetRegistryKeyContent(&quot;org.openoffice.Office.UI/FilterClassification/LocalFilters&quot;)
 		If DialogModel.chkTextDocuments.State = 1 Then
-			Dim FilterNames(21,1) as String
-
-			FilterNames(9,0) = oFilters.GetByName(&quot;writer_StarOffice_XML_Writer&quot;).UIName
-			FilterNames(9,1) = &quot;*.sxw&quot;
-
-			FilterNames(10,0) = oFilters.GetByName(&quot;writer_StarOffice_XML_Writer_Template&quot;).UIName
-			FilterNames(10,1) = &quot;*.vor&quot;
-
-			FilterNames(11,0) = oFilters.GetByName(&quot;writer_StarWriter_10&quot;).UIName
-			FilterNames(11,1) = &quot;*.sdw&quot;
-
-			FilterNames(12,0) = oFilters.GetByName(&quot;writer_StarWriter_30&quot;).UIName
-			FilterNames(12,1) = &quot;*.sdw&quot;
-
-			FilterNames(13,0) = oFilters.GetByName(&quot;writer_StarWriter_30_VorlageTemplate&quot;).UIName
-			FilterNames(13,1) = &quot;*.vor&quot;
-
-			FilterNames(14,0) = oFilters.GetByName(&quot;writer_StarWriter_40&quot;).UIName
-			FilterNames(14,1) = &quot;*.sdw&quot;
-
-			FilterNames(15,0) = oFilters.GetByName(&quot;writer_StarWriter_40_VorlageTemplate&quot;).UIName
-			FilterNames(15,1) = &quot;*.vor&quot;
-
-			FilterNames(16,0) = oFilters.GetByName(&quot;writer_StarWriter_50&quot;).UIName
-			FilterNames(16,1) = &quot;*.sdw&quot;
-
-			FilterNames(17,0) = oFilters.GetByName(&quot;writer_StarWriter_50_VorlageTemplate&quot;).UIName
-			FilterNames(17,1) = &quot;*.vor&quot;
-
-			FilterNames(18,0) = oFilters.GetByName(&quot;writer_web_StarOffice_XML_Writer_Web_Template&quot;).UIName
-			FilterNames(18,1) = &quot;*.stw&quot;
-
-			FilterNames(19,0) = oFilters.GetByName(&quot;writer_web_StarWriterWeb_40_VorlageTemplate&quot;).UIName
-			FilterNames(19,1) = &quot;*.vor&quot;
-
-			FilterNames(20,0) = oFilters.GetByName(&quot;writer_web_StarWriterWeb_50_VorlageTemplate&quot;).UIName
-			FilterNames(20,1) = &quot;*.vor&quot;
-
-			FilterNames(21,0) = oFilters.GetByName(&quot;writer_web_HTML&quot;).UIName
-			FilterNames(21,1) = &quot;*.HTML&quot;
-
+			Dim FilterNames(7,1) as String
+			FilterNames(4,0) = oTypes.GetByName(&quot;writer_StarOffice_XML_Writer&quot;).UIName
+			FilterNames(4,1) = &quot;*.sxw&quot;
+			FilterNames(5,0) = oTypes.GetByName(&quot;writer_StarOffice_XML_Writer_Template&quot;).UIName
+			FilterNames(5,1) = &quot;*.stw&quot;
+			FilterNames(6,0) = oUIKey.Classes.GetByName(&quot;sw3to5&quot;).DisplayName
+			FilterNames(6,1) = &quot;*.sdw&quot;
+			FilterNames(7,0) = oUIKey.Classes.GetByName(&quot;sw3to5templ&quot;).DisplayName
+			Filternames(7,1) = &quot;*.vor&quot;
 		Else
-			ReDim FilterNames(8,1) as String
+			ReDim FilterNames(3,1) as String
 		End If
-		FilterNames(0,0) = oFilters.GetByName(&quot;calc_StarOffice_XML_Calc&quot;).UIName	
+		FilterNames(0,0) = oTypes.GetByName(&quot;calc_StarOffice_XML_Calc&quot;).UIName	
 		Filternames(0,1) = &quot;*.sxc&quot;
-
-		FilterNames(1,0) = oFilters.GetByName(&quot;calc_StarOffice_XML_Calc_Template&quot;).UIName
-		Filternames(1,1) = &quot;*.stw&quot;
-
-		FilterNames(2,0) = oFilters.GetByName(&quot;calc_StarCalc_10&quot;).UIName
-		Filternames(2,1) = &quot;*.sdc&quot;
-
-		FilterNames(3,0) = oFilters.GetByName(&quot;calc_StarCalc_30&quot;).UIName
-		Filternames(3,1) = &quot;*.sdc&quot;
-
-		FilterNames(4,0) = oFilters.GetByName(&quot;calc_StarCalc_30_VorlageTemplate&quot;).UIName
-		Filternames(4,1) = &quot;*.vor&quot;
-
-		FilterNames(5,0) = oFilters.GetByName(&quot;calc_StarCalc_40&quot;).UIName
-		Filternames(5,1) = &quot;*.sdc&quot;
-
-		FilterNames(6,0) = oFilters.GetByName(&quot;calc_StarCalc_40_VorlageTemplate&quot;).UIName
-		Filternames(6,1) = &quot;*.vor&quot;
-
-		FilterNames(7,0) = oFilters.GetByName(&quot;calc_StarCalc_50&quot;).UIName
-		Filternames(7,1) = &quot;*.sdc&quot;
-
-		FilterNames(8,0) = oFilters.GetByName(&quot;calc_StarCalc_50_VorlageTemplate&quot;).UIName
-		Filternames(8,1) = &quot;*.vor&quot;
-
+		FilterNames(1,0) = oTypes.GetByName(&quot;calc_StarOffice_XML_Calc_Template&quot;).UIName
+		Filternames(1,1) = &quot;*.stc&quot;
+		FilterNames(2,0) = oUIKey.Classes.GetByName(&quot;sc345&quot;).DisplayName
+		FilterNames(2,1) = &quot;*.sdc&quot;
+		FilterNames(3,0) = oUIKey.Classes.GetByName(&quot;sc345templ&quot;).DisplayName
+		Filternames(3,1) = &quot;*.vor&quot;
 		GetFileName(DialogModel.txtSource, Filternames())
 	Else
 		GetFolderName(DialogModel.txtSource)

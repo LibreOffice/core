@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="DialogConvert" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="2" dlg:help-url="HID:34660">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="DialogConvert" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="3" dlg:help-url="HID:34660">
  <dlg:bulletinboard>
   <dlg:button dlg:id="cmdCancel" dlg:tab-index="0" dlg:left="6" dlg:top="190" dlg:width="53" dlg:height="14" dlg:help-url="HID:34673" dlg:value="cmdCancel">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Euro.Common.CancelTask" script:language="StarBasic"/>
@@ -60,7 +60,7 @@
   </dlg:radiogroup>
   <dlg:text dlg:id="lblCurProgress" dlg:tab-index="22" dlg:left="16" dlg:top="130" dlg:width="181" dlg:height="8" dlg:page="3"/>
   <dlg:text dlg:id="lblRetrieval" dlg:tab-index="23" dlg:left="9" dlg:top="119" dlg:width="178" dlg:height="8" dlg:page="3" dlg:value="lblRetrieval"/>
-  <dlg:textfield dlg:id="txtConfig" dlg:tab-index="24" dlg:left="6" dlg:top="50" dlg:width="258" dlg:height="55" dlg:page="3" dlg:vscroll="true" dlg:multiline="true"/>
+  <dlg:textfield dlg:id="txtConfig" dlg:tab-index="24" dlg:left="6" dlg:top="50" dlg:width="258" dlg:height="55" dlg:page="3" dlg:vscroll="true" dlg:multiline="true" dlg:readonly="true"/>
   <dlg:text dlg:id="lblConfig" dlg:tab-index="25" dlg:left="6" dlg:top="39" dlg:width="94" dlg:height="8" dlg:page="3" dlg:value="lblConfig"/>
   <dlg:text dlg:id="lblCurDocument" dlg:tab-index="26" dlg:left="16" dlg:top="141" dlg:width="208" dlg:height="8" dlg:page="3"/>
   <dlg:img dlg:id="imgPreview" dlg:tab-index="27" dlg:left="6" dlg:top="6" dlg:width="258" dlg:height="26" dlg:src="file:///D:/office630np/share/template/german/wizard/bitmap/euro_2.bmp"/>

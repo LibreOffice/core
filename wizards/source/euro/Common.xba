@@ -216,25 +216,18 @@ Dim OldCurrIndex as Integer
 	CurExtension(1) = LangIDValue(CurrIndex,1,2)
 	CurExtension(2) = LangIDValue(CurrIndex,2,2)
 	If DialogModel.Step = 1 Then
-		If OldCurrIndex = -1 Then
-			DialogModel.chkComplete.State = 1
-			EnableStep1DialogControls(True,False, True)
-			SetOptionValuestoNull()
-		Else
-			EnableStep1DialogControls(False,False, False)
-			If DialogModel.optCellTemplates.State = 1 Then
-				EnableStep1DialogControls(False, False, False)
-				CreateStyleEnumeration()
-			ElseIf ((DialogModel.optSheetRanges.State = 1) OR (DialogModel.optDocRanges.State = 1)) AND (DialogModel.Step = 1) Then
-				UpRangeList = UBound(RangeList())
-				ReDim RangeList(UpRangeList) &apos;as String
-				CreateRangeEnumeration(False)
-			ElseIf DialogModel.optSelRange.State= 1 Then
-				&apos;Preselected Range
-&apos;				CheckRangeSelection()
-			End If
-			EnableStep1DialogControls(True, True, True)
+		EnableStep1DialogControls(False,False, False)
+		If DialogModel.optCellTemplates.State = 1 Then
+			EnableStep1DialogControls(False, False, False)
+			CreateStyleEnumeration()
+		ElseIf ((DialogModel.optSheetRanges.State = 1) OR (DialogModel.optDocRanges.State = 1)) AND (DialogModel.Step = 1) Then
+			UpRangeList = UBound(RangeList())
+			ReDim RangeList(UpRangeList) &apos;as String
+			CreateRangeEnumeration(False)
+		ElseIf DialogModel.optSelRange.State= 1 Then
+			&apos;Preselected Range
 		End If
+		EnableStep1DialogControls(True, True, True)
 	ElseIf DialogModel.Step = 2 Then
 		EnableStep2DialogControls(True)
 	End If
