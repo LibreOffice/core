@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-29 13:43:42 $
+ *  last change: $Author: mt $ $Date: 2002-09-05 07:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XDATEFIELD_HPP_
 #include <com/sun/star/awt/XDateField.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XSPINFIELD_HPP_
+#include <com/sun/star/awt/XSpinField.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XTIMEFIELD_HPP_
 #include <com/sun/star/awt/XTimeField.hpp>
@@ -1107,6 +1110,45 @@ public:
 };
 
 //  ----------------------------------------------------
+//  class UnoSpinFieldControl
+//  ----------------------------------------------------
+class UnoSpinFieldControl : public UnoEditControl,
+                            public ::com::sun::star::awt::XSpinField
+{
+private:
+    SpinListenerMultiplexer     maSpinListeners;
+    BOOL                        mbRepeat;
+
+public:
+                                UnoSpinFieldControl();
+
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoEditControl::queryInterface(rType); }
+    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
+
+    // ::com::sun::star::lang::XTypeProvider
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+
+    void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XSpinField
+    void SAL_CALL addSpinListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSpinListener >& l ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL removeSpinListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSpinListener >& l ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL up() throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL down() throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL first() throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL last() throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL enableRepeat( sal_Bool bRepeat ) throw(::com::sun::star::uno::RuntimeException);
+
+
+    // ::com::sun::star::lang::XServiceInfo
+    // No service info, only base class for other fields.
+};
+
+
+//  ----------------------------------------------------
 //  class UnoControlDateFieldModel
 //  ----------------------------------------------------
 class UnoControlDateFieldModel : public UnoControlModel
@@ -1135,7 +1177,7 @@ public:
 //  ----------------------------------------------------
 //  class UnoDateFieldControl
 //  ----------------------------------------------------
-class UnoDateFieldControl : public UnoEditControl,
+class UnoDateFieldControl : public UnoSpinFieldControl,
                             public ::com::sun::star::awt::XDateField
 {
 private:
@@ -1146,7 +1188,7 @@ public:
                     UnoDateFieldControl();
     ::rtl::OUString         GetComponentServiceName();
 
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoEditControl::queryInterface(rType); }
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoSpinFieldControl::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
     void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
@@ -1211,7 +1253,7 @@ public:
 //  ----------------------------------------------------
 //  class UnoTimeFieldControl
 //  ----------------------------------------------------
-class UnoTimeFieldControl : public UnoEditControl,
+class UnoTimeFieldControl : public UnoSpinFieldControl,
                             public ::com::sun::star::awt::XTimeField
 {
 private:
@@ -1222,7 +1264,7 @@ public:
                         UnoTimeFieldControl();
     ::rtl::OUString     GetComponentServiceName();
 
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoEditControl::queryInterface(rType); }
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoSpinFieldControl::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
     void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
@@ -1286,7 +1328,7 @@ public:
 //  ----------------------------------------------------
 //  class UnoNumericFieldControl
 //  ----------------------------------------------------
-class UnoNumericFieldControl :  public UnoEditControl,
+class UnoNumericFieldControl :  public UnoSpinFieldControl,
                                 public ::com::sun::star::awt::XNumericField
 {
 private:
@@ -1297,7 +1339,7 @@ public:
                         UnoNumericFieldControl();
     ::rtl::OUString     GetComponentServiceName();
 
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoEditControl::queryInterface(rType); }
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoSpinFieldControl::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
     void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
@@ -1363,7 +1405,7 @@ public:
 //  ----------------------------------------------------
 //  class UnoCurrencyFieldControl
 //  ----------------------------------------------------
-class UnoCurrencyFieldControl : public UnoEditControl,
+class UnoCurrencyFieldControl : public UnoSpinFieldControl,
                                 public ::com::sun::star::awt::XCurrencyField
 {
 private:
@@ -1374,7 +1416,7 @@ public:
                         UnoCurrencyFieldControl();
     ::rtl::OUString     GetComponentServiceName();
 
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoEditControl::queryInterface(rType); }
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoSpinFieldControl::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
     void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
@@ -1439,7 +1481,7 @@ public:
 //  ----------------------------------------------------
 //  class UnoPatternFieldControl
 //  ----------------------------------------------------
-class UnoPatternFieldControl :  public UnoEditControl,
+class UnoPatternFieldControl :  public UnoSpinFieldControl,
                                 public ::com::sun::star::awt::XPatternField
 {
 protected:
@@ -1449,7 +1491,7 @@ public:
                         UnoPatternFieldControl();
     ::rtl::OUString     GetComponentServiceName();
 
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoEditControl::queryInterface(rType); }
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoSpinFieldControl::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
     void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
