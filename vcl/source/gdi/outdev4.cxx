@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev4.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-27 08:20:18 $
+ *  last change: $Author: ka $ $Date: 2001-09-03 13:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,7 +608,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
         nSteps = 1;
 
     // Ausgabebegrenzungen und Schrittweite fuer jede Richtung festlegen
-    Polygon aPoly( rRect );
+    Polygon aPoly;
     double  fScanLeft = aRect.Left();
     double  fScanTop = aRect.Top();
     double  fScanRight = aRect.Right();
@@ -625,12 +625,22 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
 
     if( pPolyPoly )
     {
-        pPolyPoly->Insert( aPoly );
+        pPolyPoly->Insert( aPoly = rRect );
         pPolyPoly->Insert( aPoly );
     }
 #ifndef REMOTE_APPSERVER
     else
-        ImplDrawPolygon( aPoly, pClipPolyPoly );
+    {
+        // extend rect, to avoid missing bounding line
+        Rectangle aExtRect( rRect );
+
+        aExtRect.Left() -= 1;
+        aExtRect.Top() -= 1;
+        aExtRect.Right() += 1;
+        aExtRect.Bottom() += 1;
+
+        ImplDrawPolygon( aPoly = aExtRect, pClipPolyPoly );
+    }
 #endif
 
     // Schleife, um nacheinander die Polygone/PolyPolygone auszugeben
