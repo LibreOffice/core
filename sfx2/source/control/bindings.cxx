@@ -2,8 +2,8 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.30 $
- *  last change: $Author: rt $ $Date: 2004-09-08 15:38:39 $
+ *  $Revision: 1.31 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,9 +112,9 @@
 #pragma hdrstop
 #endif
 
-#include "ipfrm.hxx"
-#include "ipenv.hxx"
-#include "interno.hxx"
+//#include "ipfrm.hxx"
+//#include "ipenv.hxx"
+//#include "interno.hxx"
 #include "bindings.hxx"
 #include "msg.hxx"
 #include "statcach.hxx"
@@ -132,6 +132,7 @@
 #include "sfxuno.hxx"
 #include "topfrm.hxx"
 #include "cfgmgr.hxx"
+#include "objsh.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -2936,14 +2937,14 @@ SfxToolBoxConfig* SfxBindings::GetToolBoxConfig() const
     return NULL;
 }
 
-SfxConfigManager* SfxBindings::GetConfigManager( USHORT nType ) const
-{
-    SfxConfigManager *pMgr = pDispatcher->GetFrame()->GetObjectShell()->GetConfigManager();
-    if ( pMgr && pMgr->HasConfigItem( nType ) )
-        return pMgr;
-    else
-        return SFX_APP()->GetConfigManager_Impl();
-}
+//REMOVE SfxConfigManager* SfxBindings::GetConfigManager( USHORT nType ) const
+//{
+//REMOVE        SfxConfigManager *pMgr = pDispatcher->GetFrame()->GetObjectShell()->GetConfigManager();
+//REMOVE        if ( pMgr && pMgr->HasConfigItem( nType ) )
+//REMOVE            return pMgr;
+//REMOVE        else
+//        return SFX_APP()->GetConfigManager_Impl();
+//}
 
 com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxBindings::GetRecorder() const
 {
