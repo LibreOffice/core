@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:03:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-15 11:19:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,8 +136,7 @@ public:
     void showProgress( sal_Int32 progressSections );
     void progressSection(
         String const & text,
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel =
-        css::uno::Reference<css::task::XAbortChannel>() );
+        css::uno::Reference< css::task::XAbortChannel > const & xAbortChannel = 0 );
     inline bool isAborted() const { return m_aborted; }
 
     // XCommandEnvironment
