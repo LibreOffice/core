@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-11 18:33:24 $
+ *  last change: $Author: bm $ $Date: 2001-05-29 12:44:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_ENTRY( "SolidType", CHART, solid_type, XML_SCH_TYPE_SOLID_TYPE ),
     MAP_ENTRY( "SplineType", CHART, splines, XML_TYPE_NUMBER ),
     MAP_ENTRY( "Stacked", CHART, stacked, XML_TYPE_BOOL ),
-    MAP_CONTEXT( "SymbolType", CHART, symbol, XML_TYPE_NUMBER, USER_SYMBOL ),
+    MAP_ENTRY( "SymbolType", CHART, symbol, XML_TYPE_NUMBER ),
     MAP_SPECIAL( "SymbolSize", CHART, symbol_width, XML_TYPE_MEASURE | MID_FLAG_MERGE_PROPERTY, SYMBOL_WIDTH ),
     MAP_SPECIAL( "SymbolSize", CHART, symbol_height, XML_TYPE_MEASURE | MID_FLAG_MERGE_PROPERTY, SYMBOL_HEIGHT ),
     MAP_SPECIAL( "SymbolBitmapURL", CHART, symbol_image_name, XML_TYPE_STRING, SYMBOL_IMAGE_NAME ),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-17 13:24:32 $
+ *  last change: $Author: bm $ $Date: 2001-05-29 12:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,15 +235,6 @@ void XMLChartExportPropertyMapper::ContextFilter(
         // to prevent writing this property set mnIndex member to -1
         switch( getPropertySetMapper()->GetEntryContextId( property->mnIndex ))
         {
-            case XML_SCH_CONTEXT_USER_SYMBOL:
-                {
-                    sal_Int32 nIndex = chart::ChartSymbolType::NONE;
-                    property->maValue >>= nIndex;
-                    if( nIndex == chart::ChartSymbolType::NONE )
-                        property->mnIndex = -1;
-                }
-                break;
-
             // if Auto... is set the corresponding properties mustn't be exported
             case XML_SCH_CONTEXT_MIN:
                 bCheckAuto = sal_True;
