@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileLogWriter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-10-06 12:41:01 $
+ *  last change:$Date: 2005-02-02 13:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ public class FileLogWriter extends PrintWriter implements LogWriter {
     HashMap mFileWriters = null;
     boolean logging = false;
     share.DescEntry entry = null;
+    share.Watcher ow = null;
 
     public FileLogWriter() {
         super(System.out);
@@ -119,8 +120,9 @@ public class FileLogWriter extends PrintWriter implements LogWriter {
 
 
     public void println(String msg) {
-        share.Watcher ow = (share.Watcher)
-                                entry.UserDefinedParams.get("Watcher");
+
+        this.ow = (share.Watcher) entry.UserDefinedParams.get("Watcher");
+
         if (ow != null) {
             ow.ping();
         }
@@ -161,6 +163,14 @@ public class FileLogWriter extends PrintWriter implements LogWriter {
         }
         System.out.println("");
         return true;
+    }
+
+    public Object getWatcher() {
+        return this.ow;
+    }
+
+    public void setWatcher(Object watcher) {
+        entry.UserDefinedParams.put("Watcher", (share.Watcher) watcher);
     }
 
 }
