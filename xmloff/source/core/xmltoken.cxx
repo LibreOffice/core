@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:01:48 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2159,6 +2159,17 @@ namespace xmloff { namespace token {
         TOKEN( "scale-to-Y" ),                  //XML_SCALE_TO_Y
 
         TOKEN( "keep-together" ),              // XML_KEEP_TOGETHER
+
+        TOKEN( "header-visible" ),              // XML_HEADER_VISIBLE
+        TOKEN( "header-text"),                  // XML_HEADER_TEXT
+        TOKEN( "footer-visible" ),              // XML_FOOTER_VISIBLE
+        TOKEN( "footer-text" ),                 // XML_FOOTER_TEXT
+        TOKEN( "page-number-visible" ),         // XML_PAGE_NUMBER_VISIBLE
+        TOKEN( "date-time-visible" ),           // XML_DATE_TIME_VISIBLE
+        TOKEN( "date-time-format" ),            // XML_DATE_TIME_FORMAT
+        TOKEN( "date-time-update" ),            // XML_DATE_TIME_UPDATE
+        TOKEN( "date-time-text" ),              // XML_DATE_TIME_TEXT
+
         // DVO, OD 01.10.2003 #i18732#
         TOKEN( "flow-with-text" ),   // XML_FLOW_WITH_TEXT
 
