@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-01-10 16:07:03 $
+ *  last change: $Author: jp $ $Date: 2001-02-02 17:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,8 +170,8 @@
 #ifndef _BREAK_HXX
 #include <break.hxx>
 #endif
-#ifndef _DATAEX_HXX
-#include <dataex.hxx>
+#ifndef _SWDTFLVR_HXX
+#include <swdtflvr.hxx>
 #endif
 #ifndef _DOCSTAT_HXX
 #include <docstat.hxx>
@@ -441,10 +441,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
             break;
         case FN_CALCULATE:
-        {
-            SwDataExchangeRef aRef( new SwDataExchange( rWrtSh ) );
-            aRef->CalculateAndCopy();
-        }
+            {
+                SwTransferable* pTransfer = new SwTransferable( rWrtSh );
+/*??*/          ::com::sun::star::uno::Reference<
+                    ::com::sun::star::datatransfer::XTransferable > xRef(
+                                                    pTransfer );
+                pTransfer->CalculateAndCopy();
+            }
             break;
         case FN_GOTO_REFERENCE:
         {
@@ -1022,6 +1025,9 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/01/10 16:07:03  os
+    Ruby dialog
+
     Revision 1.2  2000/10/06 13:36:37  jp
     should changes: don't use IniManager
 

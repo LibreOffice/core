@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-24 13:14:12 $
+ *  last change: $Author: jp $ $Date: 2001-02-02 17:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,8 +211,8 @@
 #ifndef _PARDLG_HXX
 #include <pardlg.hxx>
 #endif
-#ifndef _DATAEX_HXX
-#include <dataex.hxx>
+#ifndef _SWDTFLVR_HXX
+#include <swdtflvr.hxx>
 #endif
 #ifndef _DRWTXTSH_HXX
 #include <drwtxtsh.hxx>
@@ -682,7 +682,8 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
         return;
 
     ESelection aSel(pOLV->GetSelection());
-    const sal_Bool bCopy = (aSel.nStartPara != aSel.nEndPara) || (aSel.nStartPos != aSel.nEndPos);
+    const sal_Bool bCopy = (aSel.nStartPara != aSel.nEndPara) ||
+                           (aSel.nStartPos != aSel.nEndPos);
 
 
     SfxWhichIter aIter(rSet);
@@ -700,17 +701,11 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
 
             case SID_PASTE:
                 {
-                    //!!OS: das muss ein if/else bleiben, weil BLC das
-                    //      nicht anders versteht
-                    SwModule* pMod = SW_MOD();
-                    SvDataObjectRef xObj;
-                    if( pMod->pClipboard )
-                        xObj = pMod->pClipboard;
-                    else
-                        xObj = SvDataObject::PasteClipboard();
+                    TransferableDataHelper aDataHelper(
+                        TransferableDataHelper::CreateFromSystemClipboard() );
 
-                    if( !xObj.Is() ||
-                        !SwDataExchange::IsPaste( GetShell(), *xObj ) )
+                    if( !aDataHelper.GetTransferable().is() ||
+                        !SwTransferable::IsPaste( GetShell(), aDataHelper ))
                         rSet.DisableItem( SID_PASTE );
                 }
                 break;

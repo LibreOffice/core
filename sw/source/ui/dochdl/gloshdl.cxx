@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-17 15:15:44 $
+ *  last change: $Author: jp $ $Date: 2001-02-02 17:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,8 +142,8 @@
 #ifndef _GLOSLST_HXX
 #include <gloslst.hxx>
 #endif
-#ifndef _DATAEX_HXX
-#include <dataex.hxx>
+#ifndef _SWDTFLVR_HXX
+#include <swdtflvr.hxx>
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
@@ -817,23 +817,13 @@ void SwGlossaryHdl::SetMacros(const String& rShortName,
     SwTextBlocks *pGlos = pGlossary ? pGlossary :
                                 pCurGrp ? pCurGrp
                                   : rStatGlossaries.GetGroupDoc( aCurGrp );
-    int nIdx = pGlos->GetIndex( rShortName );
-    pGlos->BeginGetDoc( nIdx );
-    SwDoc* pDoc = pGlos->GetDoc();
-
+    SvxMacroTableDtor aMacroTbl;
     if( pStart )
-        pDoc->SetGlobalMacro( SW_EVENT_START_INS_GLOSSARY, *pStart  );
-    else
-        pDoc->DelGlobalMacro( SW_EVENT_START_INS_GLOSSARY );
+        aMacroTbl.Insert( SW_EVENT_START_INS_GLOSSARY, new SvxMacro(*pStart));
     if( pEnd )
-        pDoc->SetGlobalMacro( SW_EVENT_END_INS_GLOSSARY, *pEnd );
-    else
-        pDoc->DelGlobalMacro( SW_EVENT_END_INS_GLOSSARY );
-    pGlos->EndGetDoc();
-
-    pGlos->BeginPutDoc( rShortName, pGlos->GetLongName( nIdx ) );
-    pGlos->PutDoc();
-    if( pGlos->GetError() )
+        aMacroTbl.Insert( SW_EVENT_END_INS_GLOSSARY, new SvxMacro(*pEnd));
+    int nIdx = pGlos->GetIndex( rShortName );
+    if( !pGlos->SetMacroTable( nIdx, aMacroTbl ) && pGlos->GetError() )
         ErrorHandler::HandleError( pGlos->GetError() );
 
     if(!pCurGrp && !pGlossary)
@@ -961,8 +951,12 @@ BOOL SwGlossaryHdl::CopyToClipboard(SwWrtShell& rSh, const String& rShortName)
 {
     SwTextBlocks *pGlossary = pCurGrp ? pCurGrp
                                     : rStatGlossaries.GetGroupDoc(aCurGrp);
-    SwDataExchangeRef xExch = new SwDataExchange( rSh );
-    int nRet = xExch->CopyGlossary( *pGlossary, rShortName );
+
+    SwTransferable* pTransfer = new SwTransferable( rSh );
+/*??*/::com::sun::star::uno::Reference<
+        ::com::sun::star::datatransfer::XTransferable > xRef( pTransfer );
+
+    int nRet = pTransfer->CopyGlossary( *pGlossary, rShortName );
     if( !pCurGrp )
         rStatGlossaries.PutGroupDoc( pGlossary );
     return 0 != nRet;
@@ -1012,6 +1006,9 @@ String SwGlossaryHdl::GetValidShortCut( const String& rLong,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/17 15:15:44  os
+    Change: SfxMedium Ctor
+
     Revision 1.1.1.1  2000/09/18 17:14:34  hr
     initial import
 

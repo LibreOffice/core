@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-22 12:07:32 $
+ *  last change: $Author: jp $ $Date: 2001-02-02 17:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,9 @@
 #ifndef _DATAEX_HXX
 #include <dataex.hxx>
 #endif
+#ifndef _SWDTFLVR_HXX
+#include <swdtflvr.hxx>
+#endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
 #endif
@@ -473,27 +476,34 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             rView.GetEditWin().FlushInBuffer( &rSh );
             if ( rSh.HasSelection() )
             {
-                SwDataExchangeRef aDataEx( new SwDataExchange( rSh ) );
+                SwTransferable* pTransfer = new SwTransferable( rSh );
+/*??*/          ::com::sun::star::uno::Reference<
+                    ::com::sun::star::datatransfer::XTransferable > xRef(
+                                                                pTransfer );
+
                 if ( nId == SID_CUT )
-                    aDataEx->Cut();
+                    pTransfer->Cut();
                 else
-                    aDataEx->Copy( FALSE );
+                    pTransfer->Copy();
                 break;
             }
             return;
 
         case SID_PASTE:
             {
-                SVDATAOBJ;
-                if ( xObj.Is() && SwDataExchange::IsPaste( GetShell(), *xObj ) )
+                TransferableDataHelper aDataHelper(
+                        TransferableDataHelper::CreateFromSystemClipboard() );
+
+                if( aDataHelper.GetTransferable().is() &&
+                    SwTransferable::IsPaste( rSh, aDataHelper ))
                 {
                     // temp. Variablen, da die Shell nach dem Paste schon
                     // zerstoert sein kann
                     SwView* pView = &rView;
-                    SwDataExchange::Paste( rSh, *xObj );
-                    if( rSh.IsFrmSelected() || rSh.IsObjSelected())
+                    SwTransferable::Paste( rSh, aDataHelper );
+                    if( rSh.IsFrmSelected() || rSh.IsObjSelected() )
                         rSh.EnterSelFrmMode();
-                    pView->AttrChangedNotify(&rSh);
+                    pView->AttrChangedNotify( &rSh );
                 }
                 else
                     return;
@@ -501,23 +511,25 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             break;
         case FN_PASTESPECIAL:
             {
-                SVDATAOBJ;
+                TransferableDataHelper aDataHelper(
+                        TransferableDataHelper::CreateFromSystemClipboard() );
                 int nRet;
-                if ( xObj.Is() &&
-                     SwDataExchange::IsPasteSpecial( rSh, *xObj ) )
+                if( aDataHelper.GetTransferable().is() &&
+                    SwTransferable::IsPaste( rSh, aDataHelper ))
                 {
                     // temp. Variablen, da die Shell nach dem Paste schon
                     // zerstoert sein kann
                     SwView* pView = &rView;
 
-                    nRet = SwDataExchange::PasteSpecial( rSh, *xObj );
+                    rReq.SetReturnValue( SfxInt16Item( nId,
+                            SwTransferable::PasteSpecial( rSh, aDataHelper )));
+
                     if (rSh.IsFrmSelected() || rSh.IsObjSelected())
                         rSh.EnterSelFrmMode();
-                    pView->AttrChangedNotify(&rSh);
+                    pView->AttrChangedNotify( &rSh );
                 }
                 else
                     return;
-                rReq.SetReturnValue(SfxInt16Item(nId, nRet));
             }
             break;
         default:
@@ -536,7 +548,6 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
     SfxWhichIter aIter(rSet);
 
     const BOOL bCopy = rSh.HasSelection();
-    SVDATAOBJ;
 
     USHORT nWhich = aIter.FirstWhich();
 
@@ -555,13 +566,24 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                 break;
             case SID_PASTE:
-                if( !xObj.Is() || !SwDataExchange::IsPaste( rSh, *xObj))
-                    rSet.DisableItem( SID_PASTE );
+                {
+                    TransferableDataHelper aDataHelper(
+                        TransferableDataHelper::CreateFromSystemClipboard() );
+
+                    if( !aDataHelper.GetTransferable().is() ||
+                        !SwTransferable::IsPaste( rSh, aDataHelper ))
+                        rSet.DisableItem( SID_PASTE );
+                }
                 break;
             case FN_PASTESPECIAL:
-                if( !xObj.Is() ||
-                    !SwDataExchange::IsPasteSpecial( rSh, *xObj ) )
-                    rSet.DisableItem( FN_PASTESPECIAL );
+                {
+                    TransferableDataHelper aDataHelper(
+                        TransferableDataHelper::CreateFromSystemClipboard() );
+
+                    if( !aDataHelper.GetTransferable().is() ||
+                        !SwTransferable::IsPasteSpecial( rSh, aDataHelper ))
+                        rSet.DisableItem( FN_PASTESPECIAL );
+                }
                 break;
         }
         nWhich = aIter.NextWhich();
@@ -2515,6 +2537,9 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/22 12:07:32  jp
+    Bug #81672#: asynch loaded graphics for status updates
+
     Revision 1.3  2000/11/23 20:08:52  jp
     Task #80648#: use new class SvxScriptSetItem
 
