@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrib.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:01:45 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
+#endif
+
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
 #endif
 
 #ifndef SC_SCGLOB_HXX
@@ -153,7 +157,7 @@ public:
 };
 
 //------------------------------------------------------------------------
-class ScProtectionAttr: public SfxPoolItem
+class SC_DLLPUBLIC ScProtectionAttr: public SfxPoolItem
 {
     BOOL        bProtection;    // Zelle schuetzen
     BOOL        bHideFormula;   // Formel nicht Anzeigen
@@ -318,7 +322,7 @@ inline ScTableListItem::ScTableListItem( const USHORT nWhich )
 #define SC_HF_CENTERAREA 2
 #define SC_HF_RIGHTAREA  3
 
-class ScPageHFItem : public SfxPoolItem
+class SC_DLLPUBLIC ScPageHFItem : public SfxPoolItem
 {
     EditTextObject* pLeftArea;
     EditTextObject* pCenterArea;
@@ -358,7 +362,7 @@ public:
 //----------------------------------------------------------------------------
 // Seitenformat-Item: Kopf-/Fusszeileninhalte
 
-class ScViewObjectModeItem: public SfxEnumItem
+class SC_DLLPUBLIC ScViewObjectModeItem: public SfxEnumItem
 {
 public:
                 TYPEINFO();
@@ -415,7 +419,7 @@ const BYTE SC_MID_PAGE_SCALETO_HEIGHT   = 2;
 
 
 /** Contains the "scale to width/height" attribute in page styles. */
-class ScPageScaleToItem : public SfxPoolItem
+class SC_DLLPUBLIC ScPageScaleToItem : public SfxPoolItem
 {
 public:
                                 TYPEINFO();
