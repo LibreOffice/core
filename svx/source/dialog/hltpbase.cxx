@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:39:11 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,16 @@
 #include <unotools/localfilehelper.hxx>
 #endif
 #include "hyperdlg.hrc"
-#ifndef _SVX_TAB_HYPERLINK_HXX
-#include "hyperdlg.hxx"
-#endif
+//CHINA001 #ifndef _SVX_TAB_HYPERLINK_HXX
+//CHINA001 #include "hyperdlg.hxx"
+//CHINA001 #endif
+#ifndef _CUI_TAB_HYPERLINK_HXX //CHINA001
+#include "cuihyperdlg.hxx"  //CHINA001
+#endif //CHINA001
 #include "hltpbase.hxx"
+
+#include "svxdlg.hxx" //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 using namespace ucb;
 
@@ -340,6 +346,7 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( Window *pParent,
 {
     // create bookmark-window
     mpMarkWnd = new SvxHlinkDlgMarkWnd ( this );
+
 }
 
 SvxHyperlinkTabPageBase::~SvxHyperlinkTabPageBase ()
