@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
+ *  last change: $Author: os $ $Date: 2002-06-17 12:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,10 @@
 #define FL_SHADE                37
 #define CB_HEADLINE     40
 #define FL_HEADLINE     41
+#define FL_PROPERTIES       42
+#define FT_TEXTDIRECTION    43
+#define LB_TEXTDIRECTION    44
+
 #define BT_OK           100
 #define BT_CANCEL       101
 #define BT_MORE         102
