@@ -8032,3 +8032,8 @@ _real@4096800000000000
 ?size@?$hashtable@HHU?$hash@H@_STL@@U?$_Identity@H@2@U?$equal_to@H@2@V?$allocator@H@2@@_STL@@QBEIXZ
 ?uninitialized_fill_n@_STL@@YAPADPADIABD@Z
 ?value_type@_STL@@YAPADPBD@Z
+??0WinTextLayoutCache@@QAE@XZ
+??1WinTextLayoutCache@@UAE@XZ
+??_7WinTextLayoutCache@@6B@
+??_GWinTextLayoutCache@@UAEPAXI@Z
+?flush@WinTextLayoutCache@@UAEXH@Z
