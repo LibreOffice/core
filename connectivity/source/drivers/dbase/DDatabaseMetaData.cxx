@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:17:57 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 11:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
-
-
 
 ODbaseDatabaseMetaData::ODbaseDatabaseMetaData(OConnection* _pCon)  :ODatabaseMetaData(_pCon)
 {
@@ -430,17 +428,6 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getBestRowIdentifier(
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
         Reference< XResultSet > xRef = pResult;
     pResult->setBestRowIdentifierMap();
-    return xRef;
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getTablePrivileges(
-        const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
-        Reference< XResultSet > xRef = pResult;
-    pResult->setTablePrivilegesMap();
     return xRef;
 }
 // -------------------------------------------------------------------------
