@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextSection.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 // DocMerge from xml: interface com::sun::star::text::XTextSection
 /** provide special data of a <type>TextSection</type>.@see TextSection
  */
-interface XTextSection: com::sun::star::text::XTextContent
+published interface XTextSection: com::sun::star::text::XTextContent
 {
     //-------------------------------------------------------------------------
 
