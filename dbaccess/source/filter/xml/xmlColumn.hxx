@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlColumn.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:18:50 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ namespace dbaxml
         ::rtl::OUString m_sName;
         ::rtl::OUString m_sStyleName;
         ::rtl::OUString m_sHelpMessage;
+        ::com::sun::star::uno::Any m_aDefaultValue;
         sal_Bool        m_bHidden;
 
         ODBFilter& GetOwnImport();
