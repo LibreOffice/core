@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleImageBullet.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:24 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:47:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,27 +540,28 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
 
+        int nClientId( getNotifierClientId() );
+
+        // #108212# drop all references before notifying dispose
+        mxParent = NULL;
+        mnNotifierClientId = -1;
+        mpEditSource = NULL;
+
         // notify listeners
-        if( getNotifierClientId() != -1 )
+        if( nClientId != -1 )
         {
             try
             {
                 uno::Reference < XAccessibleContext > xThis = getAccessibleContext();
 
                 // #106234# Delegate to EventNotifier
-                ::comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( getNotifierClientId(),
-                                                                                    xThis );
+                ::comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nClientId, xThis );
 #ifdef DBG_UTIL
-                OSL_TRACE( "AccessibleImageBullet disposed ID: %d", mnNotifierClientId );
+                OSL_TRACE( "AccessibleImageBullet disposed ID: %d", nClientId );
 #endif
             }
             catch( const uno::Exception& ) {}
         }
-
-        // drop all references
-        mxParent = NULL;
-        mnNotifierClientId = -1;
-        mpEditSource = NULL;
     }
 
     void AccessibleImageBullet::SetEditSource( SvxEditSource* pEditSource )
