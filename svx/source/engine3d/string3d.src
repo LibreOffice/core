@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string3d.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 06:23:36 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ String RID_SVX_3D_UNDO_LATHE
     Text [ swedish ] = "Skapa rotationsobjekt" ;
     Text [ danish ] = "Opret rotationslegeme" ;
     Text [ portuguese ] = "Criar objecto de rotação" ;
-    Text [ portuguese_brazilian ] = "Rotationskörper erstellen" ;
+    Text [ portuguese_brazilian ] = "Rotationsk?per erstellen" ;
     Text[ chinese_simplified ] = "ÖÆ×÷Ðý×ªÌå";
     Text[ russian ] = "Ñîçäàòü òåëî âðàùåíèÿ";
     Text[ polish ] = "Utwórz obiekt obrotowy";
@@ -310,7 +310,7 @@ String RID_SVX_3D_UNDO_BREAK_LATHE
     Text [ ENGLISH ] = "Break 3-D object" ;
     Text [ english_us ] = "Split 3D object" ;
     Text [ portuguese ] = "Subdividir objecto 3-D" ;
-    Text [ portuguese_brazilian ] = "Rotationskörper aufbrechen" ;
+    Text [ portuguese_brazilian ] = "Rotationsk?per aufbrechen" ;
     Text [ swedish ] = "Dela upp 3D-objekt" ;
     Text [ danish ] = "Opdel 3D-rotationslegeme" ;
     Text [ italian ] = "Separa oggetto 3D" ;
