@@ -27,34 +27,34 @@ $(RSC_MULTI1) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB1NAME)$(RESLIB1VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB1NAME)$(RESLIB1VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
-    -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
-    -ft$@ \
+    -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC1HEADER) $(RESLIB1SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(BIN)$/$(RESLIB1NAME)$(RESLIB1VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(BIN)$/$(RESLIB1NAME)$(RESLIB1VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
-    -oil$(BIN) \
-    -ft$@ \
+    -oil=$(BIN) \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC1HEADER) $(RESLIB1SRSFILES) \
     ) > $(NULLDEV)
@@ -109,34 +109,34 @@ $(RSC_MULTI2) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB2NAME)$(RESLIB2VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB2NAME)$(RESLIB2VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
-    -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
-    -ft$@ \
+    -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC2HEADER) $(RESLIB2SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(BIN)$/$(RESLIB2NAME)$(RESLIB2VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(BIN)$/$(RESLIB2NAME)$(RESLIB2VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
-    -oil$(BIN) \
-    -ft$@ \
+    -oil=$(BIN) \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC2HEADER) $(RESLIB2SRSFILES) \
     ) > $(NULLDEV)
@@ -191,34 +191,34 @@ $(RSC_MULTI3) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB3NAME)$(RESLIB3VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB3NAME)$(RESLIB3VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
-    -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
-    -ft$@ \
+    -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC3HEADER) $(RESLIB3SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(BIN)$/$(RESLIB3NAME)$(RESLIB3VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(BIN)$/$(RESLIB3NAME)$(RESLIB3VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
-    -oil$(BIN) \
-    -ft$@ \
+    -oil=$(BIN) \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC3HEADER) $(RESLIB3SRSFILES) \
     ) > $(NULLDEV)
@@ -273,34 +273,34 @@ $(RSC_MULTI4) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB4NAME)$(RESLIB4VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB4NAME)$(RESLIB4VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
-    -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
-    -ft$@ \
+    -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC4HEADER) $(RESLIB4SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(BIN)$/$(RESLIB4NAME)$(RESLIB4VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(BIN)$/$(RESLIB4NAME)$(RESLIB4VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
-    -oil$(BIN) \
-    -ft$@ \
+    -oil=$(BIN) \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC4HEADER) $(RESLIB4SRSFILES) \
     ) > $(NULLDEV)
@@ -355,34 +355,34 @@ $(RSC_MULTI5) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB5NAME)$(RESLIB5VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB5NAME)$(RESLIB5VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
-    -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
-    -ft$@ \
+    -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC5HEADER) $(RESLIB5SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(BIN)$/$(RESLIB5NAME)$(RESLIB5VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(BIN)$/$(RESLIB5NAME)$(RESLIB5VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
-    -oil$(BIN) \
-    -ft$@ \
+    -oil=$(BIN) \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC5HEADER) $(RESLIB5SRSFILES) \
     ) > $(NULLDEV)
@@ -437,34 +437,34 @@ $(RSC_MULTI6) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB6NAME)$(RESLIB6VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB6NAME)$(RESLIB6VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
-    -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
-    -ft$@ \
+    -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC6HEADER) $(RESLIB6SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(BIN)$/$(RESLIB6NAME)$(RESLIB6VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(BIN)$/$(RESLIB6NAME)$(RESLIB6VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
-    -oil$(BIN) \
-    -ft$@ \
+    -oil=$(BIN) \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC6HEADER) $(RESLIB6SRSFILES) \
     ) > $(NULLDEV)
@@ -519,34 +519,34 @@ $(RSC_MULTI7) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB7NAME)$(RESLIB7VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB7NAME)$(RESLIB7VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
-    -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
-    -ft$@ \
+    -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC7HEADER) $(RESLIB7SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(BIN)$/$(RESLIB7NAME)$(RESLIB7VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(BIN)$/$(RESLIB7NAME)$(RESLIB7VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
-    -oil$(BIN) \
-    -ft$@ \
+    -oil=$(BIN) \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC7HEADER) $(RESLIB7SRSFILES) \
     ) > $(NULLDEV)
@@ -601,34 +601,34 @@ $(RSC_MULTI8) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB8NAME)$(RESLIB8VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB8NAME)$(RESLIB8VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
-    -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
-    -ft$@ \
+    -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC8HEADER) $(RESLIB8SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(BIN)$/$(RESLIB8NAME)$(RESLIB8VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(BIN)$/$(RESLIB8NAME)$(RESLIB8VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
-    -oil$(BIN) \
-    -ft$@ \
+    -oil=$(BIN) \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC8HEADER) $(RESLIB8SRSFILES) \
     ) > $(NULLDEV)
@@ -683,34 +683,34 @@ $(RSC_MULTI9) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB9NAME)$(RESLIB9VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB9NAME)$(RESLIB9VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
-    -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
-    -ft$@ \
+    -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC9HEADER) $(RESLIB9SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(BIN)$/$(RESLIB9NAME)$(RESLIB9VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(BIN)$/$(RESLIB9NAME)$(RESLIB9VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
-    -oil$(BIN) \
-    -ft$@ \
+    -oil=$(BIN) \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC9HEADER) $(RESLIB9SRSFILES) \
     ) > $(NULLDEV)
@@ -765,34 +765,34 @@ $(RSC_MULTI10) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB10NAME)$(RESLIB10VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB10NAME)$(RESLIB10VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
-    -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
-    -ft$@ \
+    -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC10HEADER) $(RESLIB10SRSFILES) \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
+    $(foreach,i,$(alllangiso) -lg=$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs{$(BIN)$/$(RESLIB10NAME)$(RESLIB10VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
-    -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
+    -fs={$(BIN)$/$(RESLIB10NAME)$(RESLIB10VERSION)$i.res} \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip={$j}$/$i \
+    -lip={$j} ) \
+    -lip=$(SOLARSRC)$/res$/$i -lip=$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
-    -oil$(BIN) \
-    -ft$@ \
+    -oil=$(BIN) \
+    -ft=$@ \
     -I$(RSCLOCINC) -I$(RSCGLOINC) -I$(INC) $(SOLARINC) \
     $(RSC10HEADER) $(RESLIB10SRSFILES) \
     ) > $(NULLDEV)
