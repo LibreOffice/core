@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:04:29 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 09:56:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5103,12 +5103,14 @@ void MenuBarWindow::Resize()
 
     if ( aCloser.IsVisible() )
     {
+        aCloser.Hide();
         nX -= n;
         aCloser.SetImages( n );
         Size aTbxSize( aCloser.CalcWindowSizePixel() );
         long nTbxY = (aOutSz.Height() - aTbxSize.Height())/2;
         aCloser.SetPosSizePixel( nX, nTbxY, aTbxSize.Width(), aTbxSize.Height() );
         nX -= 3;
+        aCloser.Show();
     }
     if ( aFloatBtn.IsVisible() )
     {
