@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OFunctions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:50:52 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,10 +152,14 @@ sal_Bool LoadLibrary_ODBC3(::rtl::OUString &_rPath)
     _rPath = ::rtl::OUString::createFromAscii("ODBC32.DLL");
 #endif
 #ifdef UNX
+ #ifdef MACOSX
+     _rPath = ::rtl::OUString::createFromAscii("libiodbc.dylib");
+ #else
     _rPath = ::rtl::OUString::createFromAscii("libodbc.so.1");
     pODBCso = osl_loadModule( _rPath.pData,SAL_LOADMODULE_NOW );
     if ( !pODBCso )
         _rPath = ::rtl::OUString::createFromAscii("libodbc.so");
+ #endif   /* MACOSX */
 #endif
 #ifdef OS2
     _rPath = ::rtl::OUString::createFromAscii("ODBC");
