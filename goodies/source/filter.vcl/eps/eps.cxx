@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-10 11:11:41 $
+ *  last change: $Author: svesik $ $Date: 2001-08-09 12:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2209,7 +2209,7 @@ void PSWriter::ImplWriteDouble( double fNumber, ULONG nMode )
     sal_Int32 n, nLen;
 
     sal_Int32   nPTemp = (sal_Int32)fNumber;
-    sal_Int32   nATemp = abs( (sal_Int32)( ( fNumber - nPTemp ) * 100000 ) );
+    sal_Int32   nATemp = labs( (sal_Int32)( ( fNumber - nPTemp ) * 100000 ) );
 
     if ( !nPTemp && nATemp && ( fNumber < 0.0 ) )
         *mpPS << (sal_Char)'-';
