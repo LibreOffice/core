@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-31 18:19:10 $
+ *  last change: $Author: oj $ $Date: 2002-11-28 10:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,10 +150,10 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >       m_xMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xNumberFormats;
     // <properties>
-        sal_Int32                                                                       m_nPrivileges;
+        mutable sal_Int32                                                                   m_nPrivileges;
     // </properties>
-        ::connectivity::sdbcx::OCollection*                                             m_pColumns;
-        ::connectivity::sdbcx::OCollection*                                             m_pTables;
+        ::connectivity::sdbcx::OCollection*                                                 m_pColumns;
+        ::connectivity::sdbcx::OCollection*                                                 m_pTables;
 
         // IColumnFactory
         virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
