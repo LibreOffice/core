@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:52:34 $
+ *  last change: $Author: er $ $Date: 2001-04-18 12:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1713,7 +1713,8 @@ BOOL ScViewFunc::DeleteTables(const SvUShorts &TheTabs, BOOL bRecord )
                 bWasLinked = TRUE;
                 pUndoDoc->SetLink( nTab, pDoc->GetLinkMode(nTab), pDoc->GetLinkDoc(nTab),
                                     pDoc->GetLinkFlt(nTab), pDoc->GetLinkOpt(nTab),
-                                    pDoc->GetLinkTab(nTab) );
+                                    pDoc->GetLinkTab(nTab),
+                                    pDoc->GetLinkRefreshDelay(nTab) );
             }
             if ( pDoc->IsScenario(nTab) )
             {
@@ -1974,17 +1975,18 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
 
         BOOL bWasThere = pDoc->HasLink( aFileName, aFilterName, aOptions );
 
+        ULONG nRefresh = 0;
         String aTabStr;
         for (i=0; i<nInsCount; i++)
         {
             pSrcDoc->GetName( pSrcTabs[i], aTabStr );
             pDoc->SetLink( nTab+i, SC_LINK_NORMAL,
-                                aFileName, aFilterName, aOptions, aTabStr );
+                        aFileName, aFilterName, aOptions, aTabStr, nRefresh );
         }
 
         if (!bWasThere)         // Link pro Quelldokument nur einmal eintragen
         {
-            ScTableLink* pLink = new ScTableLink( pDocSh, aFileName, aFilterName, aOptions );
+            ScTableLink* pLink = new ScTableLink( pDocSh, aFileName, aFilterName, aOptions, nRefresh );
             pLink->SetInCreate( TRUE );
             pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName, &aFilterName );
             pLink->Update();
