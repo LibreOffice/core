@@ -2,9 +2,9 @@
 # 
 #   $RCSfile: makefile.mk,v $ 
 # 
-#   $Revision: 1.4 $ 
+#   $Revision: 1.5 $ 
 #
-#   last change: $Author: vg $ $Date: 2005-03-10 15:15:05 $ 
+#   last change: $Author: obo $ $Date: 2005-03-15 09:04:54 $ 
 # 
 #   The Contents of this file are made available subject to the terms of 
 #   either of the following licenses 
@@ -67,10 +67,6 @@ TARGET  = sdbc_hsqldb
 # --- Settings ----------------------------------------------------- 
 .INCLUDE: settings.mk  
 
-.IF "$(JDK)"=="gcj"
-all:
-    @echo This dir cannot be build with gcj because of org.hsqldb.lib.FileAccess
-.ELSE
 # --- Files --------------------------------------------------------  
 
 
@@ -92,4 +88,3 @@ JARTARGET	= $(TARGET).jar
 
 # --- Targets ------------------------------------------------------  
 .INCLUDE :  target.mk 
-.ENDIF
