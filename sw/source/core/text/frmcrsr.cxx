@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-31 13:17:30 $
+ *  last change: $Author: fme $ $Date: 2002-02-01 11:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,6 +572,9 @@ struct SwFillData
     const long Left() const { return aFrm.Left(); }
     const long Right() const { return aFrm.Right(); }
     const long Bottom() const { return aFrm.Bottom(); }
+#ifdef VERTICAL_LAYOUT
+    SwRect& Frm() { return aFrm; }
+#endif
     SwFillCrsrPos &Fill() const { return *pCMS->pFill; }
     void SetTab( MSHORT nNew ) { pCMS->pFill->nTabCnt = nNew; }
     void SetSpace( MSHORT nNew ) { pCMS->pFill->nSpaceCnt = nNew; }
@@ -587,10 +590,24 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
     if( IsLocked() || IsHiddenNow() )
         return sal_False;
 
+#ifndef VERTICAL_LAYOUT
     SwFillData *pFillData = ( pCMS && pCMS->pFill ) ?
                             new SwFillData( pCMS, pPos, Frm(), rPoint ) : NULL;
+#endif
 
     ((SwTxtFrm*)this)->GetFormatted();
+
+#ifdef VERTICAL_LAYOUT
+    Point aOldPoint( rPoint );
+    if ( IsVertical() )
+    {
+        SwitchVerticalToHorizontal( (Point&)rPoint );
+        ((SwTxtFrm*)this)->SwapWidthAndHeight();
+    }
+    SwFillData *pFillData = ( pCMS && pCMS->pFill ) ?
+                        new SwFillData( pCMS, pPos, Frm(), rPoint ) : NULL;
+#endif
+
     if ( IsEmpty() )
     {
         SwTxtNode* pTxtNd = ((SwTxtFrm*)this)->GetTxtNode();
@@ -605,15 +622,6 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
     }
     else
     {
-#ifdef VERTICAL_LAYOUT
-        Point aOldPoint( rPoint );
-        if ( IsVertical() )
-        {
-            SwitchVerticalToHorizontal( (Point&)rPoint );
-            ((SwTxtFrm*)this)->SwapWidthAndHeight();
-        }
-#endif
-
         SwTxtSizeInfo aInf( (SwTxtFrm*)this );
         SwTxtCursor  aLine( ((SwTxtFrm*)this), &aInf );
 
@@ -633,12 +641,6 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
                 aLine.Prev();
 
         xub_StrLen nOffset = aLine.GetCrsrOfst( pPos, rPoint, bChgFrm, pCMS );
-
-#ifdef VERTICAL_LAYOUT
-        if ( IsVertical() )
-            ((SwTxtFrm*)this)->SwapWidthAndHeight();
-       (Point&)rPoint = aOldPoint;
-#endif
 
         if( pCMS && pCMS->eState == MV_NONE && aLine.GetEnd() == nOffset )
             ((SwCrsrMoveState*)pCMS)->eState = MV_RIGHTMARGIN;
@@ -682,8 +684,30 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
             }
         }
     }
+#ifdef VERTICAL_LAYOUT
+    sal_Bool bChgFillData = sal_False;
+    if( pFillData && FindPageFrm()->Frm().IsInside( aOldPoint ) )
+    {
+        FillCrsrPos( *pFillData );
+        bChgFillData = sal_True;
+    }
+
+#else
     if( pFillData && FindPageFrm()->Frm().IsInside( rPoint ) )
         FillCrsrPos( *pFillData );
+#endif
+
+#ifdef VERTICAL_LAYOUT
+    if ( IsVertical() )
+    {
+        if ( bChgFillData )
+            SwitchHorizontalToVertical( pFillData->Fill().aCrsr.Pos() );
+        ((SwTxtFrm*)this)->SwapWidthAndHeight();
+    }
+    (Point&)rPoint = aOldPoint;
+    delete pFillData;
+#endif
+
     return sal_True;
 }
 
@@ -1486,7 +1510,17 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                          pUp->GetUpper()->GetUpper()->IsSctFrm() )
                     pUp = pUp->GetUpper()->GetUpper()->GetUpper();
             }
+#ifdef VERTICAL_LAYOUT
+            SWRECTFN( this )
+            SwTwips nLimit = (pUp->*fnRect->fnGetPrtBottom)();
+            SwTwips nRectBottom = rRect.Bottom();
+            if ( bVert )
+                nRectBottom = SwitchHorizontalToVertical( nRectBottom );
+
+            if( (*fnRect->fnYDiff)( nLimit, nRectBottom ) < 0 )
+#else
             if( pUp->Frm().Top() + pUp->Prt().Bottom() < rRect.Bottom() )
+#endif
                 bFill = sal_False;
             else
                 rRect.Width( 1 );
