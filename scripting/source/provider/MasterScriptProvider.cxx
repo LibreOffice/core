@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-26 16:30:29 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:06:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,9 @@
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 
 #include <com/sun/star/deployment/XPackage.hpp>
-#include <drafts/com/sun/star/script/browse/BrowseNodeTypes.hpp>
-#include <drafts/com/sun/star/script/provider/XScriptProviderFactory.hpp>
-#include <drafts/com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
+#include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
+#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 
 #include <util/scriptingconstants.hxx>
 #include <util/util.hxx>
@@ -83,22 +83,25 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::script;
+using namespace ::com::sun::star::script;
 using namespace ::sf_misc;
+using namespace ::scripting_util;
 
 namespace func_provider
 {
 
 ::rtl::OUString s_implName = ::rtl::OUString::createFromAscii(
-    "drafts.com.sun.star.script.provider.MasterScriptProvider" );
+    "com.sun.star.script.provider.MasterScriptProvider" );
 const ::rtl::OUString s_serviceNameList[] = {
     ::rtl::OUString::createFromAscii(
-        "drafts.com.sun.star.script.provider.MasterScriptProvider" ),
+        "com.sun.star.script.provider.MasterScriptProvider" ),
     ::rtl::OUString::createFromAscii(
-        "drafts.com.sun.star.script.provider.ScriptProvider" ) };
+        "com.sun.star.script.browse.BrowseNode" ),
+    ::rtl::OUString::createFromAscii(
+        "com.sun.star.script.provider.ScriptProvider" ) };
 
 Sequence< ::rtl::OUString > s_serviceNames = Sequence <
-        ::rtl::OUString > ( s_serviceNameList, 2 );
+        ::rtl::OUString > ( s_serviceNameList, 3 );
 
 //*************************************************************************
 //  Definitions for MasterScriptProviderFactory global methods.
@@ -226,7 +229,7 @@ throw ( Exception, RuntimeException )
                 throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
             }
         }
-        ::rtl::OUString pkgSpec( OUSTR("uno_packages") );
+        ::rtl::OUString pkgSpec = OUSTR("uno_packages");
         sal_Int32 indexOfPkgSpec = m_sCtxString.lastIndexOf( pkgSpec );
 
         // if contex string ends with "uno_packages"
@@ -274,7 +277,7 @@ void MasterScriptProvider::createPkgProvider()
 
         Reference< provider::XScriptProviderFactory > xFac(
             m_xContext->getValueByName(
-                OUSTR( "/singletons/drafts.com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY_THROW );
+                OUSTR( "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY_THROW );
 
         m_xMSPPkg.set(
             xFac->createScriptProvider( location ), UNO_QUERY_THROW );
@@ -411,7 +414,7 @@ throw ( provider::ScriptFrameworkErrorException,
         OSL_TRACE("MasterScriptProvider::getScript() location is in this context or is Basic script");
         Reference< provider::XScriptProvider > xScriptProvider;
         ::rtl::OUStringBuffer buf( 80 );
-        buf.appendAscii( "drafts.com.sun.star.script.provider.ScriptProviderFor");
+        buf.appendAscii( "com.sun.star.script.provider.ScriptProviderFor");
         buf.append( language );
         ::rtl::OUString serviceName = buf.makeStringAndClear();
         if ( providerCache() )
@@ -445,7 +448,7 @@ throw ( provider::ScriptFrameworkErrorException,
     {
         Reference< provider::XScriptProviderFactory > xFac(
             m_xContext->getValueByName(
-                OUSTR( "/singletons/drafts.com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY_THROW );
+                OUSTR( "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY_THROW );
 
         Reference< provider::XScriptProvider > xSP(
             xFac->createScriptProvider( makeAny( location ) ), UNO_QUERY_THROW );
@@ -470,8 +473,8 @@ MasterScriptProvider::providerCache()
         ::osl::MutexGuard aGuard( m_mutex );
         if ( !m_pPCache )
         {
-            ::rtl::OUString serviceName1 = OUSTR("drafts.com.sun.star.script.provider.ScriptProviderForBasic");
-            ::rtl::OUString serviceName2 = OUSTR("drafts.com.sun.star.script.provider.ScriptProviderForPython");
+            ::rtl::OUString serviceName1 = OUSTR("com.sun.star.script.provider.ScriptProviderForBasic");
+            ::rtl::OUString serviceName2 = OUSTR("com.sun.star.script.provider.ScriptProviderForPython");
             Sequence< ::rtl::OUString > blacklist(2);
             blacklist[ 0 ] = serviceName1;
             blacklist[ 1 ] = serviceName2;
@@ -1044,12 +1047,12 @@ extern "C"
                     reinterpret_cast< registry::XRegistryKey * >(pRegistryKey);
 
                 Reference< registry::XRegistryKey >xKey = pKey->createKey(
-                    OUSTR("drafts.com.sun.star.script.provider.MasterScriptProviderFactory/UNO/SINGLETONS/drafts.com.sun.star.script.provider.theMasterScriptProviderFactory"));
-                xKey->setStringValue( OUSTR("drafts.com.sun.star.script.provider.MasterScriptProviderFactory") );
+                    OUSTR("com.sun.star.script.provider.MasterScriptProviderFactory/UNO/SINGLETONS/com.sun.star.script.provider.theMasterScriptProviderFactory"));
+                xKey->setStringValue( OUSTR("com.sun.star.script.provider.MasterScriptProviderFactory") );
                 // BrowseNodeFactory Mangager singleton
                 xKey = pKey->createKey(
-                    OUSTR("drafts.com.sun.star.script.browse.BrowseNodeFactory/UNO/SINGLETONS/drafts.com.sun.star.script.browse.theBrowseNodeFactory"));
-                xKey->setStringValue( OUSTR("drafts.com.sun.star.script.browse.BrowseNodeFactory") );
+                    OUSTR("com.sun.star.script.browse.BrowseNodeFactory/UNO/SINGLETONS/com.sun.star.script.browse.theBrowseNodeFactory"));
+                xKey->setStringValue( OUSTR("com.sun.star.script.browse.BrowseNodeFactory") );
                 return sal_True;
             }
             catch (Exception & exc)
