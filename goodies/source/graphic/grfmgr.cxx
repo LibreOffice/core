@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-11 12:53:23 $
+ *  last change: $Author: ka $ $Date: 2001-06-20 14:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,7 @@ BOOL GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
         rClipPolyPoly = aClipPoly;
 
         if( rGraphic.GetPrefMapMode() == MAP_PIXEL )
-            aSize100 = pOut->PixelToLogic( rGraphic.GetPrefSize(), aMap100 );
+            aSize100 = Application::GetDefaultDevice()->PixelToLogic( rGraphic.GetPrefSize(), aMap100 );
         else
             aSize100 = pOut->LogicToLogic( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode(), aMap100 );
 
