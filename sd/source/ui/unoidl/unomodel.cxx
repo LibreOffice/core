@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-07 12:59:23 $
+ *  last change: $Author: cl $ $Date: 2000-11-08 11:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@
 #include <unoobj.hxx>
 #include <unostyls.hxx>
 #include <stlpool.hxx>
+#include <unopback.hxx>
 #include <unogstyl.hxx>
 
 #include "viewshel.hxx"
@@ -575,6 +576,10 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
     {
         return uno::Reference< uno::XInterface >( (uno::XWeak*)(new SvxUnoNumberingRules( pDoc )) );
     }
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Background" ) ) )
+    {
+        return uno::Reference< uno::XInterface >( (uno::XWeak*)(new SdUnoPageBackground( pDoc )) );
+    }
 
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.style.Style") ) )
     {
@@ -671,31 +676,35 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
 {
     const uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
 
+    uno::Sequence< OUString > aSNS( mbImpressDoc ? 20 : 9 );
+
+
+    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DashTable"));
+    aSNS.getArray()[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GradientTable"));
+    aSNS.getArray()[2] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.HatchTable"));
+    aSNS.getArray()[3] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.BitmapTable"));
+    aSNS.getArray()[4] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TransparencyGradientTable"));
+    aSNS.getArray()[5] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.MarkerTable"));
+    aSNS.getArray()[6] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.NumberingRules"));
+    aSNS.getArray()[7] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Background"));
+    aSNS.getArray()[8] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.Style"));
+
     if(mbImpressDoc)
     {
-        uno::Sequence< OUString > aSNS( 11 );
-        aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.Style"));
-        aSNS.getArray()[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TitleTextShape"));
-        aSNS.getArray()[2] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OutlinerShape"));
-        aSNS.getArray()[3] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.SubtitleShape"));
-        aSNS.getArray()[4] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.GraphicObjectShape"));
-        aSNS.getArray()[9] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.ChartShape"));
-        aSNS.getArray()[5] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PageShape"));
-        aSNS.getArray()[6] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OLE2Shape"));
-        aSNS.getArray()[7] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TableShape"));
-        aSNS.getArray()[8] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OrgChartShape"));
-        aSNS.getArray()[9] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.NotesShape"));
-        aSNS.getArray()[10] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HandoutShape"));
-
-        return comphelper::concatSequences( aSNS_ORG, aSNS );
+        aSNS.getArray()[ 9] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TitleTextShape"));
+        aSNS.getArray()[10] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OutlinerShape"));
+        aSNS.getArray()[11] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.SubtitleShape"));
+        aSNS.getArray()[12] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.GraphicObjectShape"));
+        aSNS.getArray()[13] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.ChartShape"));
+        aSNS.getArray()[14] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PageShape"));
+        aSNS.getArray()[15] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OLE2Shape"));
+        aSNS.getArray()[16] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TableShape"));
+        aSNS.getArray()[17] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OrgChartShape"));
+        aSNS.getArray()[18] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.NotesShape"));
+        aSNS.getArray()[19] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HandoutShape"));
     }
-    else
-    {
-        uno::Sequence< OUString > aSNS( 1 );
-        aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TitleTextShape"));
 
-        return comphelper::concatSequences( aSNS_ORG, aSNS );
-    }
+    return comphelper::concatSequences( aSNS_ORG, aSNS );
 }
 
 // lang::XServiceInfo
