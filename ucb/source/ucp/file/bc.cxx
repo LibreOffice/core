@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-09 11:50:39 $
+ *  last change: $Author: abi $ $Date: 2001-07-10 11:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1134,7 +1134,10 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
     // Determine the new title !
     rtl::OUString NewTitle;
     if( aTransferInfo.NewTitle.getLength() )
-        NewTitle = aTransferInfo.NewTitle;
+        NewTitle = rtl::Uri::encode( aTransferInfo.NewTitle,
+                                     rtl_UriCharClassPchar,
+                                     rtl_UriEncodeIgnoreEscapes,
+                                     RTL_TEXTENCODING_UTF8 );
     else
         NewTitle = srcUncPath.copy( 1 + srcUncPath.lastIndexOf( sal_Unicode('/') ) );
 
