@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: sab $ $Date: 2000-10-23 10:26:55 $
+#   last change: $Author: mib $ $Date: 2000-11-13 08:42:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,13 +141,15 @@ CXXFILES = \
         XMLClipPropertyHandler.cxx		\
         XMLConstantsPropertyHandler.cxx	\
         XMLElementPropertyContext.cxx	\
+        XMLFontAutoStylePool.cxx		\
+        XMLFontStylesContext.cxx		\
         XMLPageExport.cxx				\
         PageMasterPropHdl.cxx			\
         PageMasterPropHdlFactory.cxx	\
         PageMasterStyleMap.cxx			\
         PageMasterPropMapper.cxx		\
-        PageMasterExportPropMapper.cxx		\
-        PageMasterImportPropMapper.cxx		\
+        PageMasterExportPropMapper.cxx	\
+        PageMasterImportPropMapper.cxx	\
         PageMasterImportContext.cxx		\
         PagePropertySetContext.cxx		\
         PageHeaderFooterContext.cxx
@@ -217,13 +219,15 @@ SLOFILES =	\
         $(SLO)$/XMLConstantsPropertyHandler.obj	\
         $(SLO)$/AttributeContainerHandler.obj	\
         $(SLO)$/XMLElementPropertyContext.obj	\
+        $(SLO)$/XMLFontAutoStylePool.obj		\
+        $(SLO)$/XMLFontStylesContext.obj		\
         $(SLO)$/XMLPageExport.obj				\
         $(SLO)$/PageMasterPropHdl.obj			\
         $(SLO)$/PageMasterPropHdlFactory.obj	\
         $(SLO)$/PageMasterStyleMap.obj			\
         $(SLO)$/PageMasterPropMapper.obj		\
-        $(SLO)$/PageMasterExportPropMapper.obj		\
-        $(SLO)$/PageMasterImportPropMapper.obj		\
+        $(SLO)$/PageMasterExportPropMapper.obj	\
+        $(SLO)$/PageMasterImportPropMapper.obj	\
         $(SLO)$/PageMasterImportContext.obj		\
         $(SLO)$/PagePropertySetContext.obj		\
         $(SLO)$/PageHeaderFooterContext.obj

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:08 $
+ *  last change: $Author: mib $ $Date: 2000-11-13 08:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,9 @@
 #endif
 #ifndef _XMLOFF_XMLINDEXTOCCONTEXT_HXX_
 #include "XMLIndexTOCContext.hxx"
+#endif
+#ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX
+#include "XMLFontStylesContext.hxx"
 #endif
 
 
@@ -877,6 +880,20 @@ void XMLTextImportHelper::SetHyperlink(
 void XMLTextImportHelper::SetAutoStyles( SvXMLStylesContext *pStyles )
 {
     xAutoStyles = pStyles;
+}
+
+void XMLTextImportHelper::SetFontDecls( XMLFontStylesContext *pFontDecls )
+{
+    xFontDecls = pFontDecls;
+    ((XMLTextImportPropertyMapper *)xParaImpPrMap.get())
+        ->SetFontDecls( pFontDecls );
+    ((XMLTextImportPropertyMapper *)xTextImpPrMap.get())
+        ->SetFontDecls( pFontDecls );
+}
+
+const XMLFontStylesContext *XMLTextImportHelper::GetFontDecls() const
+{
+    return (XMLFontStylesContext *)&xFontDecls;
 }
 
 SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(

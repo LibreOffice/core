@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:05 $
+ *  last change: $Author: mib $ $Date: 2000-11-13 08:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,39 +434,55 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
         {
             if( sBulletFontName.getLength() )
             {
-                Any aAny;
-                OUString sTmp;
+                OUString sStyleName =
+                    GetExport().GetFontAutoStylePool()->Find(
+                        sBulletFontName, sBulletFontStyleName,
+                        eBulletFontFamily, eBulletFontPitch,
+                        eBulletFontEncoding );
 
-                const SvXMLUnitConverter& rUnitConv =
-                    GetExport().GetMM100UnitConverter();
-                XMLFontFamilyNamePropHdl aFamilyNameHdl;
-                aAny <<= sBulletFontName;
-                if( aFamilyNameHdl.exportXML( sTmp, aAny, rUnitConv ) )
-                    GetExport().AddAttribute( XML_NAMESPACE_FO,
-                                              sXML_font_family, sTmp );
+                if( sStyleName.getLength() )
+                {
+                        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                                  sXML_font_name,
+                                                  sStyleName );
+                }
+                else
+                {
+                    Any aAny;
+                    OUString sTmp;
 
-                if( sBulletFontStyleName.getLength() )
-                    GetExport().AddAttribute( XML_NAMESPACE_FO,
-                                              sXML_font_style_name,
-                                              sBulletFontStyleName );
+                    const SvXMLUnitConverter& rUnitConv =
+                        GetExport().GetMM100UnitConverter();
+                    XMLFontFamilyNamePropHdl aFamilyNameHdl;
+                    aAny <<= sBulletFontName;
+                    if( aFamilyNameHdl.exportXML( sTmp, aAny, rUnitConv ) )
+                        GetExport().AddAttribute( XML_NAMESPACE_FO,
+                                                  sXML_font_family, sTmp );
 
-                XMLFontFamilyPropHdl aFamilyHdl;
-                aAny <<= (sal_Int16)eBulletFontFamily;
-                if( aFamilyHdl.exportXML( sTmp, aAny, rUnitConv  ) )
-                    GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                              sXML_font_family_generic, sTmp );
+                    if( sBulletFontStyleName.getLength() )
+                        GetExport().AddAttribute( XML_NAMESPACE_FO,
+                                                  sXML_font_style_name,
+                                                  sBulletFontStyleName );
 
-                XMLFontPitchPropHdl aPitchHdl;
-                aAny <<= (sal_Int16)eBulletFontPitch;
-                if( aPitchHdl.exportXML( sTmp, aAny, rUnitConv  ) )
-                    GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                              sXML_font_pitch, sTmp );
+                    XMLFontFamilyPropHdl aFamilyHdl;
+                    aAny <<= (sal_Int16)eBulletFontFamily;
+                    if( aFamilyHdl.exportXML( sTmp, aAny, rUnitConv  ) )
+                        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                                  sXML_font_family_generic,
+                                                  sTmp );
 
-                XMLFontEncodingPropHdl aEncHdl;
-                aAny <<= (sal_Int16)eBulletFontEncoding;
-                if( aEncHdl.exportXML( sTmp, aAny, rUnitConv  ) )
-                    GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                              sXML_font_charset, sTmp );
+                    XMLFontPitchPropHdl aPitchHdl;
+                    aAny <<= (sal_Int16)eBulletFontPitch;
+                    if( aPitchHdl.exportXML( sTmp, aAny, rUnitConv  ) )
+                        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                                  sXML_font_pitch, sTmp );
+
+                    XMLFontEncodingPropHdl aEncHdl;
+                    aAny <<= (sal_Int16)eBulletFontEncoding;
+                    if( aEncHdl.exportXML( sTmp, aAny, rUnitConv  ) )
+                        GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                                  sXML_font_charset, sTmp );
+                }
             }
         }
         else if( NumberingType::BITMAP == eType )

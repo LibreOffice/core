@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-23 09:37:16 $
+ *  last change: $Author: mib $ $Date: 2000-11-13 08:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,8 +111,14 @@
 #ifndef _XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
 #include "fonthdl.hxx"
 #endif
+#ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX
+#include "XMLFontStylesContext.hxx"
+#endif
 #ifndef _XMLOFF_FAMILIES_HXX
 #include "families.hxx"
+#endif
+#ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
+#include "maptype.hxx"
 #endif
 
 
@@ -542,6 +548,7 @@ enum SvxXMLStyleAttributesAttrTokens
     XML_TOK_STYLE_ATTRIBUTES_ATTR_MIN_LABEL_WIDTH,
     XML_TOK_STYLE_ATTRIBUTES_ATTR_MIN_LABEL_DIST,
     XML_TOK_STYLE_ATTRIBUTES_ATTR_TEXT_ALIGN,
+    XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_NAME,
     XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_FAMILY,
     XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_FAMILY_GENERIC,
     XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_STYLENAME,
@@ -565,6 +572,8 @@ static __FAR_DATA SvXMLTokenMapEntry aStyleAttributesAttrTokenMap[] =
             XML_TOK_STYLE_ATTRIBUTES_ATTR_MIN_LABEL_DIST },
     { XML_NAMESPACE_FO, sXML_text_align,
             XML_TOK_STYLE_ATTRIBUTES_ATTR_TEXT_ALIGN },
+    { XML_NAMESPACE_STYLE, sXML_font_name,
+            XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_NAME },
     { XML_NAMESPACE_FO, sXML_font_family,
             XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_FAMILY },
     { XML_NAMESPACE_STYLE, sXML_font_family_generic,
@@ -597,7 +606,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
     SvXMLTokenMap aTokenMap( aStyleAttributesAttrTokenMap );
     SvXMLUnitConverter aUnitConv( MAP_100TH_MM, MAP_100TH_MM);
 
-    OUString sFontFamily, sFontStyleName, sFontFamilyGeneric,
+    OUString sFontName, sFontFamily, sFontStyleName, sFontFamilyGeneric,
              sFontPitch, sFontCharset;
     OUString sVerticalPos, sVerticalRel;
 
@@ -637,6 +646,9 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
                 rListLevel.SetAdjust( eAdjust );
             }
             break;
+        case XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_NAME:
+            sFontName = rValue;
+            break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_FAMILY:
             sFontFamily = rValue;
             break;
@@ -669,6 +681,47 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
         }
     }
 
+    if( sFontName.getLength() )
+    {
+        const XMLFontStylesContext *pFontDecls =
+            GetImport().GetTextImport()->GetFontDecls();
+        if( pFontDecls )
+        {
+            ::std::vector < XMLPropertyState > aProps;
+            if( pFontDecls->FillProperties( sFontName, aProps, 0, 1, 2, 3, 4 ) )
+            {
+                OUString sTmp;
+                sal_Int16 nTmp;
+                ::std::vector< XMLPropertyState >::iterator i;
+                for( i = aProps.begin(); i != aProps.end(); i++ )
+                {
+                    switch( i->mnIndex )
+                    {
+                    case 0:
+                        i->maValue >>= sTmp;
+                        rListLevel.SetBulletFontName( sTmp);
+                        break;
+                    case 1:
+                        i->maValue >>= sTmp;
+                        rListLevel.SetBulletFontStyleName( sTmp );
+                        break;
+                    case 2:
+                        i->maValue >>= nTmp;
+                        rListLevel.SetBulletFontFamily( nTmp );
+                        break;
+                    case 3:
+                        i->maValue >>= nTmp;
+                        rListLevel.SetBulletFontPitch( nTmp );
+                        break;
+                    case 4:
+                        i->maValue >>= nTmp;
+                        rListLevel.SetBulletFontEncoding( nTmp );
+                        break;
+                    }
+                }
+            }
+        }
+    }
     if( sFontFamily.getLength() )
     {
         String sEmpty;

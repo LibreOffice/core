@@ -79,4 +79,6 @@ hedabu: ..\inc\XMLTextMasterStylesContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLTextMa
 hedabu: ..\inc\XMLTextMasterPageContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLTextMasterPageContext.hxx
 hedabu: ..\inc\XMLTextTableContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLTextTableContext.hxx
 hedabu: ..\source\text\XMLTextShapeImportHelper.hxx %_DEST%\inc%_EXT%\xmloff\XMLTextShapeImportHelper.hxx
+hedabu: ..\inc\XMLFontAutoStylePool.hxx %_DEST%\inc%_EXT%\xmloff\XMLFontAutoStylePool.hxx
+hedabu: ..\inc\XMLFontStylesContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLFontStylesContext.hxx
 hedabu: ..\inc\ProgressBarHelper.hxx %_DEST%\inc%_EXT%\xmloff\ProgressBarHelper.hxx

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimppr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-26 10:37:03 $
+ *  last change: $Author: mib $ $Date: 2000-11-13 08:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef _COM_SUN_STAR_TEXT_VERTORIENTATION_HPP_
 #include <com/sun/star/text/VertOrientation.hpp>
 #endif
+#ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX_
+#include "XMLFontStylesContext.hxx"
+#endif
 
 #ifndef _XMLOFF_TEXTPRMAP_HXX_
 #include "txtprmap.hxx"
@@ -93,9 +96,77 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::text;
 
+sal_Bool XMLTextImportPropertyMapper::handleSpecialItem(
+            XMLPropertyState& rProperty,
+            ::std::vector< XMLPropertyState >& rProperties,
+            const ::rtl::OUString& rValue,
+            const SvXMLUnitConverter& rUnitConverter,
+            const SvXMLNamespaceMap& rNamespaceMap ) const
+{
+    sal_Bool bRet = sal_False;
+    sal_Int32 nIndex = rProperty.mnIndex;
+    switch( getPropertySetMapper()->GetEntryContextId( nIndex  ) )
+    {
+    case CTF_FONTNAME:
+    case CTF_FONTNAME_CJK:
+    case CTF_FONTNAME_CTL:
+        if( xFontDecls.Is() )
+        {
+            DBG_ASSERT(
+                ( CTF_FONTFAMILYNAME ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+1) &&
+                  CTF_FONTSTYLENAME ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+2) &&
+                  CTF_FONTFAMILY ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+3) &&
+                  CTF_FONTPITCH ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+4) &&
+                  CTF_FONTCHARSET ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+5) ) ||
+                ( CTF_FONTFAMILYNAME_CJK ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+1) &&
+                  CTF_FONTSTYLENAME_CJK ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+2) &&
+                  CTF_FONTFAMILY_CJK ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+3) &&
+                  CTF_FONTPITCH_CJK ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+4) &&
+                  CTF_FONTCHARSET_CJK ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+5) ) ||
+                ( CTF_FONTFAMILYNAME_CTL ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+1) &&
+                  CTF_FONTSTYLENAME_CTL ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+2) &&
+                  CTF_FONTFAMILY_CTL ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+3) &&
+                  CTF_FONTPITCH_CTL ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+4) &&
+                  CTF_FONTCHARSET_CTL ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+5) ),
+                "illegal property map" );
+
+            ((XMLFontStylesContext *)&xFontDecls)->FillProperties(
+                            rValue, rProperties,
+                            rProperty.mnIndex+1, rProperty.mnIndex+2,
+                            rProperty.mnIndex+3, rProperty.mnIndex+4,
+                            rProperty.mnIndex+5 );
+            bRet = sal_False; // the property hasn't been filled
+        }
+        break;
+    default:
+        bRet = SvXMLImportPropertyMapper::handleSpecialItem( rProperty,
+                    rProperties, rValue, rUnitConverter, rNamespaceMap );
+        break;
+    }
+
+    return bRet;
+}
+
 XMLTextImportPropertyMapper::XMLTextImportPropertyMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper ) :
-    SvXMLImportPropertyMapper( rMapper )
+            const UniReference< XMLPropertySetMapper >& rMapper,
+            XMLFontStylesContext *pFontDecls ) :
+    SvXMLImportPropertyMapper( rMapper ),
+    xFontDecls( pFontDecls )
 {
 }
 
@@ -103,15 +174,58 @@ XMLTextImportPropertyMapper::~XMLTextImportPropertyMapper()
 {
 }
 
+void XMLTextImportPropertyMapper::SetFontDecls(
+        XMLFontStylesContext *pFontDecls )
+{
+    xFontDecls = pFontDecls;
+}
+
+void XMLTextImportPropertyMapper::FontFinished(
+    XMLPropertyState *pFontFamilyNameState,
+    XMLPropertyState *pFontStyleNameState,
+    XMLPropertyState *pFontFamilyState,
+    XMLPropertyState *pFontPitchState,
+    XMLPropertyState *pFontCharsetState ) const
+{
+    if( pFontFamilyNameState && pFontFamilyNameState->mnIndex != -1 )
+    {
+        OUString sName;
+        pFontFamilyNameState->maValue >>= sName;
+        if( !sName.getLength() )
+            pFontFamilyNameState->mnIndex = -1;
+    }
+    if( !pFontFamilyNameState || pFontFamilyNameState->mnIndex == -1 )
+    {
+        if( pFontStyleNameState )
+            pFontStyleNameState->mnIndex = -1;
+        if( pFontFamilyState )
+            pFontFamilyState->mnIndex = -1;
+        if( pFontPitchState )
+            pFontPitchState->mnIndex = -1;
+        if( pFontCharsetState )
+            pFontCharsetState->mnIndex = -1;
+    }
+}
+
 void XMLTextImportPropertyMapper::finished(
             ::std::vector< XMLPropertyState >& rProperties,
             sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
-    XMLPropertyState* pFontName = 0;
+    XMLPropertyState* pFontFamilyName = 0;
     XMLPropertyState* pFontStyleName = 0;
     XMLPropertyState* pFontFamily = 0;
     XMLPropertyState* pFontPitch = 0;
     XMLPropertyState* pFontCharSet = 0;
+    XMLPropertyState* pFontFamilyNameCJK = 0;
+    XMLPropertyState* pFontStyleNameCJK = 0;
+    XMLPropertyState* pFontFamilyCJK = 0;
+    XMLPropertyState* pFontPitchCJK = 0;
+    XMLPropertyState* pFontCharSetCJK = 0;
+    XMLPropertyState* pFontFamilyNameCTL = 0;
+    XMLPropertyState* pFontStyleNameCTL = 0;
+    XMLPropertyState* pFontFamilyCTL = 0;
+    XMLPropertyState* pFontPitchCTL = 0;
+    XMLPropertyState* pFontCharSetCTL = 0;
     XMLPropertyState* pAllBorderDistance = 0;
     XMLPropertyState* pBorderDistances[4] = { 0, 0, 0, 0 };
     XMLPropertyState* pNewBorderDistances[4] = { 0, 0, 0, 0 };
@@ -130,11 +244,23 @@ void XMLTextImportPropertyMapper::finished(
     {
         switch( getPropertySetMapper()->GetEntryContextId( property->mnIndex ) )
         {
-        case CTF_FONTNAME:  pFontName = property;   break;
+        case CTF_FONTFAMILYNAME:    pFontFamilyName = property; break;
         case CTF_FONTSTYLENAME: pFontStyleName = property;  break;
         case CTF_FONTFAMILY:    pFontFamily = property; break;
         case CTF_FONTPITCH: pFontPitch = property;  break;
         case CTF_FONTCHARSET:   pFontCharSet = property;    break;
+
+        case CTF_FONTFAMILYNAME_CJK:    pFontFamilyNameCJK = property;  break;
+        case CTF_FONTSTYLENAME_CJK: pFontStyleNameCJK = property;   break;
+        case CTF_FONTFAMILY_CJK:    pFontFamilyCJK = property;  break;
+        case CTF_FONTPITCH_CJK: pFontPitchCJK = property;   break;
+        case CTF_FONTCHARSET_CJK:   pFontCharSetCJK = property; break;
+
+        case CTF_FONTFAMILYNAME_CTL:    pFontFamilyNameCTL = property;  break;
+        case CTF_FONTSTYLENAME_CTL: pFontStyleNameCTL = property;   break;
+        case CTF_FONTFAMILY_CTL:    pFontFamilyCTL = property;  break;
+        case CTF_FONTPITCH_CTL: pFontPitchCTL = property;   break;
+        case CTF_FONTCHARSET_CTL:   pFontCharSetCTL = property; break;
 
         case CTF_ALLBORDERDISTANCE:     pAllBorderDistance = property; break;
         case CTF_LEFTBORDERDISTANCE:    pBorderDistances[XML_LINE_LEFT] = property; break;
@@ -158,27 +284,18 @@ void XMLTextImportPropertyMapper::finished(
         }
     }
 
-    if( pFontName )
-    {
-        OUString sName;
-        pFontName->maValue >>= sName;
-        if( !sName.getLength() )
-        {
-            pFontName->mnIndex = -1;
-            pFontName = 0;
-        }
-    }
-    if( !pFontName )
-    {
-        if( pFontStyleName )
-            pFontStyleName->mnIndex = -1;
-        if( pFontFamily )
-            pFontFamily->mnIndex = -1;
-        if( pFontPitch )
-            pFontPitch->mnIndex = -1;
-        if( pFontCharSet )
-            pFontCharSet->mnIndex = -1;
-    }
+    if( pFontFamilyName || pFontStyleName || pFontFamily ||
+        pFontPitch || pFontCharSet )
+        FontFinished( pFontFamilyName, pFontStyleName, pFontFamily,
+                      pFontPitch, pFontCharSet );
+    if( pFontFamilyNameCJK || pFontStyleNameCJK || pFontFamilyCJK ||
+        pFontPitchCJK || pFontCharSetCJK )
+        FontFinished( pFontFamilyNameCJK, pFontStyleNameCJK, pFontFamilyCJK,
+                      pFontPitchCJK, pFontCharSetCJK );
+    if( pFontFamilyNameCTL || pFontStyleNameCTL || pFontFamilyCTL ||
+        pFontPitchCTL || pFontCharSetCTL )
+        FontFinished( pFontFamilyNameCTL, pFontStyleNameCTL, pFontFamilyCTL,
+                      pFontPitchCTL, pFontCharSetCTL );
 
     for( sal_uInt16 i=0; i<4; i++ )
     {

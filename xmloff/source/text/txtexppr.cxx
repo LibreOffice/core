@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:08 $
+ *  last change: $Author: mib $ $Date: 2000-11-13 08:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,12 @@
 #ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_FONTFAMILY_HPP
+#include <com/sun/star/awt/FontFamily.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTPITCH_HPP
+#include <com/sun/star/awt/FontPitch.hpp>
+#endif
 #ifndef _XMLOFF_TXTEXPPR_HXX
 #include "txtexppr.hxx"
 #endif
@@ -92,6 +98,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::awt;
 
 void XMLTextExportPropertySetMapper::handleElementItem(
         const Reference< xml::sax::XDocumentHandler > & rHandler,
@@ -196,13 +203,14 @@ void XMLTextExportPropertySetMapper::handleSpecialItem(
 
 XMLTextExportPropertySetMapper::XMLTextExportPropertySetMapper(
         const UniReference< XMLPropertySetMapper >& rMapper,
-        SvXMLExport& rExport ) :
+        SvXMLExport& rExp ) :
     SvXMLExportPropertyMapper( rMapper ),
+    rExport( rExp ),
     bDropWholeWord( sal_False ),
-    maTabStopExport( rExport.GetDocHandler(), rExport.GetMM100UnitConverter() ),
-    maDropCapExport( rExport.GetDocHandler(), rExport.GetMM100UnitConverter() ),
-    maTextColumnsExport( rExport ),
-    maBackgroundImageExport( rExport )
+    maTabStopExport( rExp.GetDocHandler(), rExp.GetMM100UnitConverter() ),
+    maDropCapExport( rExp.GetDocHandler(), rExp.GetMM100UnitConverter() ),
+    maTextColumnsExport( rExp ),
+    maBackgroundImageExport( rExp )
 {
 }
 
@@ -210,14 +218,128 @@ XMLTextExportPropertySetMapper::~XMLTextExportPropertySetMapper()
 {
 }
 
+void XMLTextExportPropertySetMapper::ContextFontFilter(
+    XMLPropertyState *pFontNameState,
+    XMLPropertyState *pFontFamilyNameState,
+    XMLPropertyState *pFontStyleNameState,
+    XMLPropertyState *pFontFamilyState,
+    XMLPropertyState *pFontPitchState,
+    XMLPropertyState *pFontCharsetState ) const
+{
+    OUString sFamilyName;
+    OUString sStyleName;
+    sal_Int16 nFamily = FontFamily::DONTKNOW;
+    sal_Int16 nPitch = FontPitch::DONTKNOW;
+    rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
+
+    OUString sTmp;
+    if( pFontFamilyNameState && (pFontFamilyNameState->maValue >>= sTmp ) )
+        sFamilyName = sTmp;
+    if( pFontStyleNameState && (pFontStyleNameState->maValue >>= sTmp ) )
+        sStyleName = sTmp;
+
+    sal_Int16 nTmp;
+    if( pFontFamilyState && (pFontFamilyState->maValue >>= nTmp ) )
+        nFamily = nTmp;
+    if( pFontPitchState && (pFontPitchState->maValue >>= nTmp ) )
+        nPitch = nTmp;
+    if( pFontCharsetState && (pFontCharsetState->maValue >>= nTmp ) )
+        eEnc = (rtl_TextEncoding)nTmp;
+
+    OUString sName( ((SvXMLExport&)GetExport()).GetFontAutoStylePool()->Find(
+                        sFamilyName, sStyleName, nFamily, nPitch, eEnc ) );
+    if( sName.getLength() )
+    {
+        pFontNameState->maValue <<= sName;
+        if( pFontFamilyNameState )
+            pFontFamilyNameState->mnIndex = -1;
+        if( pFontStyleNameState )
+            pFontStyleNameState->mnIndex = -1;
+        if( pFontFamilyState )
+            pFontFamilyState->mnIndex = -1;
+        if( pFontPitchState )
+            pFontPitchState->mnIndex = -1;
+        if( pFontCharsetState )
+            pFontCharsetState->mnIndex = -1;
+    }
+    else
+    {
+        pFontNameState->mnIndex = -1;
+    }
+}
+
+void XMLTextExportPropertySetMapper::ContextFontHeightFilter(
+    XMLPropertyState* pCharHeightState,
+    XMLPropertyState* pCharPropHeightState,
+    XMLPropertyState* pCharDiffHeightState ) const
+{
+    if( pCharPropHeightState )
+    {
+        sal_Int32 nTemp;
+        pCharPropHeightState->maValue >>= nTemp;
+        if( nTemp == 100 )
+        {
+            pCharPropHeightState->mnIndex = -1;
+            pCharPropHeightState->maValue.clear();
+        }
+        else
+        {
+            pCharHeightState->mnIndex = -1;
+            pCharHeightState->maValue.clear();
+        }
+    }
+    if( pCharDiffHeightState )
+    {
+        float nTemp;
+        pCharDiffHeightState->maValue >>= nTemp;
+        if( nTemp == 0. )
+        {
+            pCharDiffHeightState->mnIndex = -1;
+            pCharDiffHeightState->maValue.clear();
+        }
+        else
+        {
+            pCharHeightState->mnIndex = -1;
+            pCharHeightState->maValue.clear();
+        }
+    }
+
+}
+
 void XMLTextExportPropertySetMapper::ContextFilter(
     ::std::vector< XMLPropertyState >& rProperties,
     Reference< XPropertySet > rPropSet ) const
 {
+    // filter font
+    XMLPropertyState *pFontNameState = 0;
+    XMLPropertyState *pFontFamilyNameState = 0;
+    XMLPropertyState *pFontStyleNameState = 0;
+    XMLPropertyState *pFontFamilyState = 0;
+    XMLPropertyState *pFontPitchState = 0;
+    XMLPropertyState *pFontCharsetState = 0;
+    XMLPropertyState *pFontNameCJKState = 0;
+    XMLPropertyState *pFontFamilyNameCJKState = 0;
+    XMLPropertyState *pFontStyleNameCJKState = 0;
+    XMLPropertyState *pFontFamilyCJKState = 0;
+    XMLPropertyState *pFontPitchCJKState = 0;
+    XMLPropertyState *pFontCharsetCJKState = 0;
+    XMLPropertyState *pFontNameCTLState = 0;
+    XMLPropertyState *pFontFamilyNameCTLState = 0;
+    XMLPropertyState *pFontStyleNameCTLState = 0;
+    XMLPropertyState *pFontFamilyCTLState = 0;
+    XMLPropertyState *pFontPitchCTLState = 0;
+    XMLPropertyState *pFontCharsetCTLState = 0;
+
     // filter char height point/percent
     XMLPropertyState* pCharHeightState = NULL;
     XMLPropertyState* pCharPropHeightState = NULL;
     XMLPropertyState* pCharDiffHeightState = NULL;
+    XMLPropertyState* pCharHeightCJKState = NULL;
+    XMLPropertyState* pCharPropHeightCJKState = NULL;
+    XMLPropertyState* pCharDiffHeightCJKState = NULL;
+    XMLPropertyState* pCharHeightCTLState = NULL;
+    XMLPropertyState* pCharPropHeightCTLState = NULL;
+    XMLPropertyState* pCharDiffHeightCTLState = NULL;
 
     // filter left margin measure/percent
     XMLPropertyState* pParaLeftMarginState = NULL;
@@ -307,6 +429,12 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_CHARHEIGHT:            pCharHeightState = propertie; break;
         case CTF_CHARHEIGHT_REL:        pCharPropHeightState = propertie; break;
         case CTF_CHARHEIGHT_DIFF:       pCharDiffHeightState = propertie; break;
+        case CTF_CHARHEIGHT_CJK:        pCharHeightCJKState = propertie; break;
+        case CTF_CHARHEIGHT_REL_CJK:    pCharPropHeightCJKState = propertie; break;
+        case CTF_CHARHEIGHT_DIFF_CJK:   pCharDiffHeightCJKState = propertie; break;
+        case CTF_CHARHEIGHT_CTL:        pCharHeightCTLState = propertie; break;
+        case CTF_CHARHEIGHT_REL_CTL:    pCharPropHeightCTLState = propertie; break;
+        case CTF_CHARHEIGHT_DIFF_CTL:   pCharDiffHeightCTLState = propertie; break;
         case CTF_PARALEFTMARGIN:        pParaLeftMarginState = propertie; break;
         case CTF_PARALEFTMARGIN_REL:    pParaLeftMarginRelState = propertie; break;
         case CTF_PARARIGHTMARGIN:       pParaRightMarginState = propertie; break;
@@ -359,39 +487,54 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_VERTICALREL_PAGE:      pVertOrientRelPageState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_VERTICALREL_FRAME:     pVertOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_VERTICALREL_ASCHAR:    pVertOrientRelAsCharState = propertie; bNeedsAnchor = sal_True; break;
+
+        case CTF_FONTNAME:              pFontNameState = propertie; break;
+        case CTF_FONTFAMILYNAME:        pFontFamilyNameState = propertie; break;
+        case CTF_FONTSTYLENAME:         pFontStyleNameState = propertie; break;
+        case CTF_FONTFAMILY:            pFontFamilyState = propertie; break;
+        case CTF_FONTPITCH:             pFontPitchState = propertie; break;
+        case CTF_FONTCHARSET:           pFontCharsetState = propertie; break;
+
+        case CTF_FONTNAME_CJK:          pFontNameCJKState = propertie; break;
+        case CTF_FONTFAMILYNAME_CJK:    pFontFamilyNameCJKState = propertie; break;
+        case CTF_FONTSTYLENAME_CJK:     pFontStyleNameCJKState = propertie; break;
+        case CTF_FONTFAMILY_CJK:        pFontFamilyCJKState = propertie; break;
+        case CTF_FONTPITCH_CJK:         pFontPitchCJKState = propertie; break;
+        case CTF_FONTCHARSET_CJK:       pFontCharsetCJKState = propertie; break;
+
+        case CTF_FONTNAME_CTL:          pFontNameCTLState = propertie; break;
+        case CTF_FONTFAMILYNAME_CTL:    pFontFamilyNameCTLState = propertie; break;
+        case CTF_FONTSTYLENAME_CTL:     pFontStyleNameCTLState = propertie; break;
+        case CTF_FONTFAMILY_CTL:        pFontFamilyCTLState = propertie; break;
+        case CTF_FONTPITCH_CTL:         pFontPitchCTLState = propertie; break;
+        case CTF_FONTCHARSET_CTL:       pFontCharsetCTLState = propertie; break;
         }
     }
 
-    if( pCharHeightState && pCharPropHeightState )
-    {
-        sal_Int32 nTemp;
-        pCharPropHeightState->maValue >>= nTemp;
-        if( nTemp == 100 )
-        {
-            pCharPropHeightState->mnIndex = -1;
-            pCharPropHeightState->maValue.clear();
-        }
-        else
-        {
-            pCharHeightState->mnIndex = -1;
-            pCharHeightState->maValue.clear();
-        }
-    }
-    if( pCharHeightState && pCharDiffHeightState )
-    {
-        float nTemp;
-        pCharDiffHeightState->maValue >>= nTemp;
-        if( nTemp == 0. )
-        {
-            pCharDiffHeightState->mnIndex = -1;
-            pCharDiffHeightState->maValue.clear();
-        }
-        else
-        {
-            pCharHeightState->mnIndex = -1;
-            pCharHeightState->maValue.clear();
-        }
-    }
+    if( pFontNameState )
+        ContextFontFilter( pFontNameState, pFontFamilyNameState,
+                           pFontStyleNameState, pFontFamilyState,
+                           pFontPitchState, pFontCharsetState );
+    if( pFontNameCJKState )
+        ContextFontFilter( pFontNameCJKState, pFontFamilyNameCJKState,
+                           pFontStyleNameCJKState, pFontFamilyCJKState,
+                           pFontPitchCJKState, pFontCharsetCJKState );
+    if( pFontNameCTLState )
+        ContextFontFilter( pFontNameCTLState, pFontFamilyNameCTLState,
+                           pFontStyleNameCTLState, pFontFamilyCTLState,
+                           pFontPitchCTLState, pFontCharsetCTLState );
+
+    if( pCharHeightState && (pCharPropHeightState || pCharDiffHeightState ) )
+        ContextFontHeightFilter( pCharHeightState, pCharPropHeightState,
+                                 pCharDiffHeightState  );
+    if( pCharHeightCJKState &&
+        (pCharPropHeightCJKState || pCharDiffHeightCJKState ) )
+        ContextFontHeightFilter( pCharHeightCJKState, pCharPropHeightCJKState,
+                                 pCharDiffHeightCJKState  );
+    if( pCharHeightCTLState &&
+        (pCharPropHeightCTLState || pCharDiffHeightCTLState ) )
+        ContextFontHeightFilter( pCharHeightCTLState, pCharPropHeightCTLState,
+                                 pCharDiffHeightCTLState  );
 
     if( pParaLeftMarginState && pParaLeftMarginRelState )
     {

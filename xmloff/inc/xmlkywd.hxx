@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-08 13:44:38 $
+ *  last change: $Author: mib $ $Date: 2000-11-13 08:42:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,6 +297,8 @@ XML_CONSTASCII_ACTION( sXML_count, "count" );
 XML_CONSTASCII_ACTION( sXML_counterclockwise, "counterclockwise" );
 XML_CONSTASCII_ACTION( sXML_countnums, "countnums" );
 XML_CONSTASCII_ACTION( sXML_country, "country" );
+XML_CONSTASCII_ACTION( sXML_country_asian, "country-asian" );
+XML_CONSTASCII_ACTION( sXML_country_complex, "country-complex" );
 XML_CONSTASCII_ACTION( sXML_covered_table_cell, "covered-table-cell" );
 XML_CONSTASCII_ACTION( sXML_create_date, "create-date" );
 XML_CONSTASCII_ACTION( sXML_create_date_string, "create-date-string" );
@@ -458,15 +460,38 @@ XML_CONSTASCII_ACTION( sXML_fixed, "fixed" );
 XML_CONSTASCII_ACTION( sXML_float, "float");
 XML_CONSTASCII_ACTION( sXML_floor, "floor" );
 XML_CONSTASCII_ACTION( sXML_font_charset, "font-charset" );
+XML_CONSTASCII_ACTION( sXML_font_charset_asian, "font-charset-asian" );
+XML_CONSTASCII_ACTION( sXML_font_charset_complex, "font-charset-complex" );
+XML_CONSTASCII_ACTION( sXML_font_decls, "font-decls" );
+XML_CONSTASCII_ACTION( sXML_font_decl, "font-decl" );
 XML_CONSTASCII_ACTION( sXML_font_family, "font-family" );
+XML_CONSTASCII_ACTION( sXML_font_family_asian, "font-family-asian" );
+XML_CONSTASCII_ACTION( sXML_font_family_complex, "font-family-complex" );
 XML_CONSTASCII_ACTION( sXML_font_family_generic, "font-family-generic" );
+XML_CONSTASCII_ACTION( sXML_font_family_generic_asian, "font-family-generic-asian" );
+XML_CONSTASCII_ACTION( sXML_font_family_generic_complex, "font-family-generic-complex" );
+XML_CONSTASCII_ACTION( sXML_font_name, "font-name" );
+XML_CONSTASCII_ACTION( sXML_font_name_asian, "font-name-asian" );
+XML_CONSTASCII_ACTION( sXML_font_name_complex, "font-name-complex" );
 XML_CONSTASCII_ACTION( sXML_font_pitch, "font-pitch" );
+XML_CONSTASCII_ACTION( sXML_font_pitch_asian, "font-pitch-asian" );
+XML_CONSTASCII_ACTION( sXML_font_pitch_complex, "font-pitch-complex" );
 XML_CONSTASCII_ACTION( sXML_font_size, "font-size" );
+XML_CONSTASCII_ACTION( sXML_font_size_asian, "font-size-asian" );
+XML_CONSTASCII_ACTION( sXML_font_size_complex, "font-size-complex" );
 XML_CONSTASCII_ACTION( sXML_font_size_rel, "font-size-rel" );
+XML_CONSTASCII_ACTION( sXML_font_size_rel_asian, "font-size-rel-asian" );
+XML_CONSTASCII_ACTION( sXML_font_size_rel_complex, "font-size-rel-complex" );
 XML_CONSTASCII_ACTION( sXML_font_style, "font-style" );
+XML_CONSTASCII_ACTION( sXML_font_style_asian, "font-style-asian" );
+XML_CONSTASCII_ACTION( sXML_font_style_complex, "font-style-complex" );
 XML_CONSTASCII_ACTION( sXML_font_style_name, "font-style-name" );
+XML_CONSTASCII_ACTION( sXML_font_style_name_asian, "font-style-name-asian-complex" );
+XML_CONSTASCII_ACTION( sXML_font_style_name_complex, "font-style-name" );
 XML_CONSTASCII_ACTION( sXML_font_variant, "font-variant" );
 XML_CONSTASCII_ACTION( sXML_font_weight, "font-weight" );
+XML_CONSTASCII_ACTION( sXML_font_weight_asian, "font-weight-asian" );
+XML_CONSTASCII_ACTION( sXML_font_weight_complex, "font-weight-complex" );
 XML_CONSTASCII_ACTION( sXML_footer, "footer" );
 XML_CONSTASCII_ACTION( sXML_footer_left, "footer-left" );
 XML_CONSTASCII_ACTION( sXML_footer_style, "footer-style" );
@@ -599,6 +624,8 @@ XML_CONSTASCII_ACTION( sXML_label_range, "label-range" );
 XML_CONSTASCII_ACTION( sXML_label_ranges, "label-ranges" );
 XML_CONSTASCII_ACTION( sXML_landscape, "landscape" );
 XML_CONSTASCII_ACTION( sXML_language, "language" );
+XML_CONSTASCII_ACTION( sXML_language_asian, "language-asian" );
+XML_CONSTASCII_ACTION( sXML_language_complex, "language-complex" );
 XML_CONSTASCII_ACTION( sXML_last_column_spanned, "last-column-spanned" );
 XML_CONSTASCII_ACTION( sXML_last_row_spanned, "last-row-spanned" );
 XML_CONSTASCII_ACTION( sXML_leader_char, "leader-char" );

@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.7 2000-11-02 15:51:17 dvo Exp $
+	$Id: office.mod,v 1.8 2000-11-13 08:42:12 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -54,6 +54,7 @@
 -->
 
 <!ELEMENT office:document ( office:meta?,
+							office:font-decls?,
 							office:styles?,
 							office:automatic-styles?,
 							office:master-styles?,
@@ -100,6 +101,7 @@
 				  meta:user-defined*)">
 <!ELEMENT office:meta %meta;>
 
+<!ELEMENT office:font-decls (style:font-decl)*>
 
 <!ENTITY % styles "(style:style|text:list-style|number:number-style|
 		number:currency-style|number:percentage-style|number:date-style|

@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.9 2000-11-01 11:15:55 sab Exp $
+	$Id: style.mod,v 1.10 2000-11-13 08:42:12 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -53,6 +53,16 @@
 
 -->
 
+<!ELEMENT style:font-decl EMPTY>
+<!ATTLIST style:font-decl style:name %string; #REQUIRED>
+<!ATTLIST style:font-decl fo:font-family %string; #REQUIRED>
+<!ATTLIST style:font-decl style:font-style-name %string; #IMPLIED>
+<!ENTITY % fontFamilyGeneric "(roman|swiss|modern|decorative|script|system)">
+<!ATTLIST style:font-decl style:font-family-generic %fontFamilyGeneric;
+						   #IMPLIED>
+<!ENTITY % fontPitch "(fixed|variable)">
+<!ATTLIST style:font-decl style:font-pitch %fontPitch; #IMPLIED>
+<!ATTLIST style:font-decl style:font-charset %textEncoding; #IMPLIED>
 
 <!ELEMENT style:style ( style:properties?,style:map*)>
 
@@ -128,19 +138,47 @@
 						   (none|single-line|double-line|thick-line|slash|X)
 						   #IMPLIED>
 <!ATTLIST style:properties style:text-position CDATA #IMPLIED>
+
+<!ATTLIST style:properties style:font-name %string; #IMPLIED>
 <!ATTLIST style:properties fo:font-family %string; #IMPLIED>
-<!ATTLIST style:properties style:font-family-generic
-						   (roman|swiss|modern|decorative|script|system)
+<!ATTLIST style:properties style:font-family-generic %fontFamilyGeneric;
 						   #IMPLIED>
 <!ATTLIST style:properties style:font-style-name %string; #IMPLIED>
-<!ATTLIST style:properties style:font-pitch (fixed|variable) #IMPLIED>
+<!ATTLIST style:properties style:font-pitch %fontPitch; #IMPLIED>
 <!ATTLIST style:properties style:font-charset %textEncoding; #IMPLIED>
+<!ATTLIST style:properties style:font-name-asian %string; #IMPLIED>
+<!ATTLIST style:properties style:font-family-asian %string; #IMPLIED>
+<!ATTLIST style:properties style:font-family-generic-asian %fontFamilyGeneric;
+						   #IMPLIED>
+<!ATTLIST style:properties style:font-style-name-asian %string; #IMPLIED>
+<!ATTLIST style:properties style:font-pitch-asian %fontPitch; #IMPLIED>
+<!ATTLIST style:properties style:font-charset-asian %textEncoding; #IMPLIED>
+<!ATTLIST style:properties style:font-name-complex %string; #IMPLIED>
+<!ATTLIST style:properties style:font-family-complex %string; #IMPLIED>
+<!ATTLIST style:properties style:font-family-generic-complex %fontFamilyGeneric;
+						   #IMPLIED>
+<!ATTLIST style:properties style:font-style-name-complex %string; #IMPLIED>
+<!ATTLIST style:properties style:font-pitch-complex %fontPitch; #IMPLIED>
+<!ATTLIST style:properties style:font-charset-complex %textEncoding; #IMPLIED>
+
 <!ATTLIST style:properties fo:font-size %positiveLengthOrPercentage; #IMPLIED>
+<!ATTLIST style:properties fo:font-size-rel %length; #IMPLIED>
+<!ATTLIST style:properties fo:font-size-asian %positiveLengthOrPercentage; #IMPLIED>
+<!ATTLIST style:properties fo:font-size-rel-asian %length; #IMPLIED>
+<!ATTLIST style:properties fo:font-size-complex %positiveLengthOrPercentage; #IMPLIED>
+<!ATTLIST style:properties fo:font-size-rel-complex %length; #IMPLIED>
 <!ENTITY % normalOrLength "CDATA">
 <!ATTLIST style:properties fo:letter-spacing %normalOrLength; #IMPLIED>
 <!ATTLIST style:properties fo:language %languageOnly; #IMPLIED>
+<!ATTLIST style:properties style:language-asian %languageOnly; #IMPLIED>
+<!ATTLIST style:properties style:language-complex %languageOnly; #IMPLIED>
 <!ATTLIST style:properties fo:country %country; #IMPLIED>
-<!ATTLIST style:properties fo:font-style (normal|italic|oblique) #IMPLIED>
+<!ATTLIST style:properties style:country-asian %country; #IMPLIED>
+<!ATTLIST style:properties style:country-complex %country; #IMPLIED>
+<!ENTITY % fontStyle "(normal|italic|oblique)">
+<!ATTLIST style:properties fo:font-style %fontStyle; #IMPLIED>
+<!ATTLIST style:properties style:font-style-asian %fontStyle; #IMPLIED>
+<!ATTLIST style:properties style:font-style-complex %fontStyle; #IMPLIED>
 <!ATTLIST style:properties fo:text-shadow CDATA #IMPLIED>
 <!ATTLIST style:properties style:text-underline
 						   (none|single|double|dotted|dash|long-dash|dot-dash|
@@ -148,6 +186,8 @@
 							bold-long-dash|bold-dot-dash|bold-dot-dot-dash|
 							bold-wave|double-wave|small-wave) #IMPLIED>
 <!ATTLIST style:properties fo:font-weight CDATA #IMPLIED>
+<!ATTLIST style:properties fo:font-weight-asian CDATA #IMPLIED>
+<!ATTLIST style:properties fo:font-weight-complex CDATA #IMPLIED>
 <!ATTLIST style:properties fo:score-spaces %boolean; #IMPLIED>
 <!ATTLIST style:properties style:letter-kerning %boolean; #IMPLIED>
 <!ATTLIST style:properties style:text-blinking %boolean; #IMPLIED>

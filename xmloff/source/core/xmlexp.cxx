@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-10 18:12:55 $
+ *  last change: $Author: mib $ $Date: 2000-11-13 08:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #endif
 #ifndef _XMLOFF_DASHSTYLE_HXX
 #include <DashStyle.hxx>
+#endif
+#ifndef _XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX
+#include "XMLFontAutoStylePool"
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
@@ -293,6 +296,8 @@ void SvXMLExport::ImplExportStyles( sal_Bool bUsed )
 {
     CheckAttrList();
 
+    _ExportFontDecls();
+
 //  AddAttributeASCII( XML_NAMESPACE_NONE, sXML_id, sXML_styles_id );
     {
         // <style:styles>
@@ -411,6 +416,12 @@ void SvXMLExport::_ExportMeta()
 {
     SfxXMLMetaExport aMeta( GetDocHandler(), xModel );
     aMeta.Export( GetNamespaceMap() );
+}
+
+void SvXMLExport::_ExportFontDecls()
+{
+    if( mxFontAutoStylePool.is() )
+        mxFontAutoStylePool->exportXML();
 }
 
 void SvXMLExport::_ExportStyles( sal_Bool bUsed )
@@ -629,6 +640,11 @@ XMLPageExport* SvXMLExport::CreatePageExport()
 SchXMLExportHelper* SvXMLExport::CreateChartExport()
 {
     return new SchXMLExportHelper(*this,*GetAutoStylePool().get());
+}
+
+XMLFontAutoStylePool* SvXMLExport::CreateFontAutoStylePool()
+{
+    return new XMLFontAutoStylePool( *this );
 }
 
 OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat) const

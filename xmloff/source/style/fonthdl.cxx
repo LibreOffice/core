@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fonthdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-24 08:11:33 $
+ *  last change: $Author: mib $ $Date: 2000-11-13 08:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ sal_Bool XMLFontFamilyPropHdl::importXML( const OUString& rStrImpValue, uno::Any
     sal_uInt16 eNewFamily;
 
     if( ( bRet = rUnitConverter.convertEnum( eNewFamily, rStrImpValue, aFontFamilyGenericMapping ) ) )
-        rValue <<= eNewFamily;
+        rValue <<= (sal_Int16)eNewFamily;
 
     return bRet;
 }

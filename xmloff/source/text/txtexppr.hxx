@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:08 $
+ *  last change: $Author: mib $ $Date: 2000-11-13 08:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,22 @@
 class SvXMLExport;
 class XMLTextExportPropertySetMapper: public SvXMLExportPropertyMapper
 {
+    SvXMLExport& rExport;
+
     ::rtl::OUString sDropCharStyle;
     sal_Bool bDropWholeWord;
+
+    void ContextFontFilter(
+                XMLPropertyState *pFontNameState,
+                XMLPropertyState *pFontFamilyNameState,
+                XMLPropertyState *pFontStyleNameState,
+                XMLPropertyState *pFontFamilyState,
+                XMLPropertyState *pFontPitchState,
+                XMLPropertyState *pFontCharsetState ) const;
+    void ContextFontHeightFilter(
+                XMLPropertyState* pCharHeightState,
+                XMLPropertyState* pCharPropHeightState,
+                XMLPropertyState* pCharDiffHeightState ) const;
 
 protected:
 //  SvXMLUnitConverter& mrUnitConverter;
@@ -97,11 +111,13 @@ protected:
             ::std::vector< XMLPropertyState >& rProperties,
             ::com::sun::star::uno::Reference<
                         ::com::sun::star::beans::XPropertySet > rPropSet ) const;
+    const SvXMLExport& GetExport() const { return rExport; }
+
 public:
 
     XMLTextExportPropertySetMapper(
             const UniReference< XMLPropertySetMapper >& rMapper,
-            SvXMLExport& rExport );
+            SvXMLExport& rExt );
     virtual ~XMLTextExportPropertySetMapper();
 
     virtual void handleElementItem(
