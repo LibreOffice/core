@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -998,8 +998,16 @@ Font Outliner::ImpCalcBulletFont( USHORT nPara ) const
     const SvxNumberFormat* pFmt = ImplGetBullet( nPara );
     DBG_ASSERT( pFmt && ( pFmt->GetNumberingType() != SVX_NUM_BITMAP ) && ( pFmt->GetNumberingType() != SVX_NUM_NUMBER_NONE ), "ImpCalcBulletFont: Missing or BitmapBullet!" );
 
-    ESelection aSel( nPara, 0, nPara, 0 );
-    Font aStdFont = EditEngine::CreateFontFromItemSet( pEditEngine->GetAttribs( aSel ), GetScriptType( aSel ) );
+    Font aStdFont;  //#107508#
+    if ( !pEditEngine->IsFlatMode() )
+    {
+        ESelection aSel( nPara, 0, nPara, 0 );
+        aStdFont = EditEngine::CreateFontFromItemSet( pEditEngine->GetAttribs( aSel ), GetScriptType( aSel ) );
+    }
+    else
+    {
+        aStdFont = pEditEngine->GetStandardFont( nPara );
+    }
 
     Font aBulletFont;
     if ( pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL )
@@ -1015,7 +1023,8 @@ Font Outliner::ImpCalcBulletFont( USHORT nPara ) const
         aBulletFont.SetRelief( RELIEF_NONE );
     }
 
-    USHORT nScale = pEditEngine->IsFlatMode() ? DEFAULT_SCALE : pFmt->GetBulletRelSize();
+    // #107508# Use original scale...
+    USHORT nScale = /* pEditEngine->IsFlatMode() ? DEFAULT_SCALE : */ pFmt->GetBulletRelSize();
     ULONG nScaledLineHeight = aStdFont.GetSize().Height();
     nScaledLineHeight *= nScale*10;
     nScaledLineHeight /= 1000;
@@ -1126,9 +1135,22 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                             if ( p->GetDepth() == 0 )
                                 nPage++;
                         }
-                        const SvxFontHeightItem& rFH = (const SvxFontHeightItem&)pEditEngine->GetParaAttrib( nPara, EE_CHAR_FONTHEIGHT );
-                        Size aFontSz( 0, rFH.GetHeight() );
-                        aFontSz.Height() /= 5;
+
+                        long nFontHeight = 0;
+                        if ( !pEditEngine->IsFlatMode() )
+                        {
+                            const SvxFontHeightItem& rFH = (const SvxFontHeightItem&)pEditEngine->GetParaAttrib( nPara, EE_CHAR_FONTHEIGHT );
+                            nFontHeight = rFH.GetHeight();
+                            nFontHeight /= 5;
+                        }
+                        else
+                        {
+                            const SvxFontHeightItem& rFH = (const SvxFontHeightItem&)pEditEngine->GetEmptyItemSet().Get( EE_CHAR_FONTHEIGHT );
+                            nFontHeight = rFH.GetHeight();
+                            nFontHeight *= 10;
+                            nFontHeight /= 25;
+                        }
+                        Size aFontSz( 0, nFontHeight );
 
                         LanguageType eLang = pEditEngine->GetDefaultLanguage();
                         // USHORT nScriptType = GetScriptTypeOfLanguage( eLang );
