@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-08 13:54:31 $
+ *  last change: $Author: fs $ $Date: 2002-02-01 12:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,9 @@
 #include <tools/time.hxx>
 
 using namespace ::com::sun::star;
-
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 //  ----------------------------------------------------
 //  class UnoControlHolder
@@ -380,7 +382,31 @@ uno::Reference< uno::XInterface >UnoControlDialogModel::createInstance( const ::
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlFixedLineModel ) == 0 )
         pNewModel = new OGeometryControlModel< UnoControlFixedLineModel >;
 
-    uno::Reference< uno::XInterface > xNewModel = (::cppu::OWeakObject*)pNewModel;
+    if ( !pNewModel )
+    {
+        Reference< XMultiServiceFactory > xORB( ::comphelper::getProcessServiceFactory() );
+        if ( xORB.is() )
+        {
+            Reference< XInterface > xObject = xORB->createInstance( aServiceSpecifier );
+            Reference< XServiceInfo > xSI( xObject, UNO_QUERY );
+            Reference< XCloneable > xCloneAccess( xSI, UNO_QUERY );
+            Reference< XAggregation > xAgg( xCloneAccess, UNO_QUERY );
+            if ( xAgg.is() )
+            {
+                if ( xSI->supportsService( ::rtl::OUString::createFromAscii( "com.sun.star.awt.UnoControlModel" ) ) )
+                {
+                    // release 3 of the 4 references we have to the object
+                    xAgg.clear();
+                    xSI.clear();
+                    xObject.clear();
+
+                    pNewModel = new OCommonGeometryControlModel( xCloneAccess, aServiceSpecifier );
+                }
+            }
+        }
+    }
+
+    uno::Reference< uno::XInterface > xNewModel = static_cast< ::cppu::OWeakObject* >( pNewModel );
     return xNewModel;
 }
 
