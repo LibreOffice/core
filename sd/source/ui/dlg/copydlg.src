@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 15:27:23 $
+ *  last change: $Author: kz $ $Date: 2001-08-17 20:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ ModalDialog DLG_COPY
         QuickHelpText [ portuguese ] = "Aplica os valores seleccionados" ;
         QuickHelpText[ russian ] = "Ïğèíÿòü çíà÷åíèÿ èç îòáîğà";
         QuickHelpText[ polish ] = "Wpisz wartoœci selekcji";
-        QuickHelpText[ japanese ] = "é¸æŠã—ãŸæ•°å€¤ã‚’æ›¸ãã“ã‚€";
+        QuickHelpText[ japanese ] = "é¸æŠã—ãŸï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã®æ•°å€¤ã‚’é©ç”¨";
         QuickHelpText[ chinese_simplified ] = "æ¥å—é€‰æ‹©çš„æ•°å€¼";
         QuickHelpText[ chinese_traditional ] = "ä½¿ç”¨é¸å–çš„æ•¸å€¼";
         QuickHelpText[ arabic ] = "ÇáŞíã ÍÓÈ ÇáÊÍÏíÏ";
@@ -630,6 +630,7 @@ ModalDialog DLG_COPY
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Duplicar";
 };
+
 
 
 
