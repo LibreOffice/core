@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txenctab.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 12:35:45 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 14:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ StringArray RID_SVXSTR_TEXTENCODING_TABLE
         < "Thai (ISO-8859-11/TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
         < "Thai (Windows-874)"                              ; RTL_TEXTENCODING_MS_874           ; > ;
         < "Kyrillisch (KOI8-U)"                             ; RTL_TEXTENCODING_KOI8_U           ; > ;
+        < "Kyrillisch (PT154)"                              ; RTL_TEXTENCODING_PT154            ; > ;
     };
     ItemList [ en-US ] =
     {
@@ -239,6 +240,7 @@ StringArray RID_SVXSTR_TEXTENCODING_TABLE
         < "Thai (ISO-8859-11/TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
         < "Thai (Windows-874)"                              ; RTL_TEXTENCODING_MS_874           ; > ;
         < "Cyrillic (KOI8-U)"                             ; RTL_TEXTENCODING_KOI8_U           ; > ;
+        < "Cyrillic (PT154)"                                ; RTL_TEXTENCODING_PT154            ; > ;
     };
 };
  // ********************************************************************** EOF
