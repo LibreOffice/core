@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: bm $ $Date: 2002-08-07 13:27:55 $
+ *  last change: $Author: bm $ $Date: 2002-10-23 13:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2594,7 +2594,9 @@ OUString SAL_CALL SchXMLExport_getImplementationName() throw()
 
 uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SchXMLExport();
+    // #103997# removed some flags from EXPORT_ALL
+    return (cppu::OWeakObject*)new SchXMLExport(
+        EXPORT_ALL ^ ( EXPORT_SETTINGS | EXPORT_MASTERSTYLES | EXPORT_SCRIPTS ));
 }
 
 // ============================================================
