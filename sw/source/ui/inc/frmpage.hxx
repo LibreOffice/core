@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-08-23 13:37:58 $
+ *  last change: $Author: os $ $Date: 2002-09-25 11:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@ class SwFrmPage: public SfxTabPage
     Size            aWrap;
     SwTwips         nUpperBorder;
     SwTwips         nLowerBorder;
+    double          fWidthHeightRatio; //width-to-height ratio to support the KeepRatio button
 
     // Die alten Ausrichtungen
     USHORT          nOldH;
@@ -178,7 +179,6 @@ class SwFrmPage: public SfxTabPage
                             long   nX,  long   nY);
 
     DECL_LINK( EditModifyHdl, Edit * );
-    DECL_LINK( AspectRatioCheckHdl, CheckBox * );
     DECL_LINK( RealSizeHdl, Button * );
     DECL_LINK( RelSizeClickHdl, CheckBox * );
     DECL_LINK( MirrorHdl, CheckBox * );

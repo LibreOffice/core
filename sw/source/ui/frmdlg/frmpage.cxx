@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:51:25 $
+ *  last change: $Author: os $ $Date: 2002-09-25 11:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,7 +687,8 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     bWidthLastChanged ( TRUE ),
     nHtmlMode(0),
     bHtmlMode(FALSE),
-    bNoModifyHdl(TRUE)
+    bNoModifyHdl(TRUE),
+    fWidthHeightRatio(1.0)
 {
     FreeResource();
     SetExchangeSupport();
@@ -723,7 +724,7 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     aRelWidthCB.SetClickHdl( aLk );
     aRelHeightCB.SetClickHdl( aLk );
 
-    aFixedRatioCB.SetClickHdl(LINK(this, SwFrmPage, AspectRatioCheckHdl));
+//  aFixedRatioCB.SetClickHdl(LINK(this, SwFrmPage, AspectRatioCheckHdl));
 }
 
 /*--------------------------------------------------------------------
@@ -865,6 +866,10 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     RangeModifyHdl(&aWidthED);  // Alle Maximalwerte initial setzen
 
     aAutoHeightCB.SaveValue();
+
+    SwTwips nWidth = aWidthED.Denormalize(aWidthED.GetValue(FUNIT_TWIP));
+    SwTwips nHeight = aHeightED.Denormalize(aHeightED.GetValue(FUNIT_TWIP));
+    fWidthHeightRatio = nHeight ? double(nWidth) / double(nHeight) : 1.0;
 }
 
 
@@ -1873,7 +1878,7 @@ IMPL_LINK( SwFrmPage, RelHdl, ListBox *, pLB )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SwFrmPage, AspectRatioCheckHdl, CheckBox *, pCB )
+/*IMPL_LINK( SwFrmPage, AspectRatioCheckHdl, CheckBox *, pCB )
 {
     if ( aFixedRatioCB.IsChecked() &&
             (aWidthED.IsValueModified() || aHeightED.IsValueModified()) &&
@@ -1919,12 +1924,13 @@ IMPL_LINK( SwFrmPage, AspectRatioCheckHdl, CheckBox *, pCB )
         RangeModifyHdl(&aWidthED);  // Alle Maximalwerte neu initialisieren
 
     return 0;
-}
+} */
 
 IMPL_LINK_INLINE_START( SwFrmPage, RealSizeHdl, Button *, EMPTYARG )
 {
     aWidthED.SetUserValue( aWidthED. Normalize(aGrfSize.Width() ), FUNIT_TWIP);
     aHeightED.SetUserValue(aHeightED.Normalize(aGrfSize.Height()), FUNIT_TWIP);
+    fWidthHeightRatio = aGrfSize.Height() ? double(aGrfSize.Width()) / double(aGrfSize.Height()) : 1.0;
     UpdateExample();
     return 0;
 }
@@ -1943,56 +1949,24 @@ IMPL_LINK( SwFrmPage, ModifyHdl, Edit *, pEdit )
     else if (pEdit == &aHeightED)
         bWidthLastChanged = FALSE;
 
+    SwTwips nWidth = aWidthED.Denormalize(aWidthED.GetValue(FUNIT_TWIP));
+    SwTwips nHeight = aHeightED.Denormalize(aHeightED.GetValue(FUNIT_TWIP));
     if ( aFixedRatioCB.IsChecked() )
     {
         BOOL bWidthRelative = aRelWidthCB.IsChecked();
         BOOL bHeightRelative = aRelHeightCB.IsChecked();
         if ( pEdit == &aWidthED )
         {
-            const SwTwips nTmp = aHeightED.Normalize(aGrfSize.Height() *
-                           aWidthED.Denormalize(aWidthED.GetValue(FUNIT_TWIP)) /
-                                                Max(aGrfSize.Width(), 1L));
-            const SwTwips nMaxHeight = bHeightRelative ?
-                aHeightED.GetRefValue() * ( aHeightED.GetOldDigits() == 1 ? 10 : 100):
-                            aHeightED.GetMax(FUNIT_TWIP);
-            if(nMaxHeight >= nTmp)
-                aHeightED.SetPrcntValue(nTmp, FUNIT_TWIP);
-            else
-            {
-                //cut selected width
-                const SwTwips nNewWidth = aWidthED.Normalize(aGrfSize.Width() *
-                                aHeightED.Denormalize(nMaxHeight) /
-                                Max(aGrfSize.Height(),1L));
-                aWidthED.SetUserValue(nNewWidth, FUNIT_TWIP);
-                //aHeightED.SetValue(nMaxHeight, FUNIT_TWIP);
-                aHeightED.SetUserValue(nMaxHeight, FUNIT_TWIP);
-
-            }
+            nHeight = SwTwips((double)nWidth / fWidthHeightRatio);
+            aHeightED.SetPrcntValue(aHeightED.Normalize(nHeight), FUNIT_TWIP);
         }
         else
         {
-            const SwTwips nTmp = aWidthED.Normalize(aGrfSize.Width() *
-                            aHeightED.Denormalize(aHeightED.GetValue(FUNIT_TWIP)) /
-                            Max(aGrfSize.Height(),1L));
-            const SwTwips nMaxWidth = bWidthRelative ?
-                            aWidthED.GetRefValue() * (aWidthED.GetOldDigits()== 1 ? 10 : 100):
-                            aWidthED.GetMax(FUNIT_TWIP);
-            if(nMaxWidth >= nTmp)
-                aWidthED.SetPrcntValue(nTmp, FUNIT_TWIP);
-            else
-            {
-                //cut selected height
-                const SwTwips nNewHeight = aHeightED.Normalize(aGrfSize.Height() *
-                                aWidthED.Denormalize(nMaxWidth) /
-                                Max(aGrfSize.Width(),1L));
-                aHeightED.SetUserValue(nNewHeight, FUNIT_TWIP);
-                //aWidthED.SetValue(nMaxWidth, FUNIT_TWIP);
-                aWidthED.SetUserValue(nMaxWidth, FUNIT_TWIP);
-
-            }
+            nWidth = SwTwips((double)nHeight * fWidthHeightRatio);
+            aWidthED.SetPrcntValue(aWidthED.Normalize(nWidth), FUNIT_TWIP);
         }
     }
-
+    fWidthHeightRatio = nHeight ? double(nWidth) / double(nHeight) : 1.0;
     UpdateExample();
     return 0;
 }
