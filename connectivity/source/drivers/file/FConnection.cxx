@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-20 06:51:53 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,15 @@
 #ifndef _CONNECTIVITY_FILE_CATALOG_HXX_
 #include "file/FCatalog.hxx"
 #endif
+#if SUPD > 605
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
+#else
 #ifndef _COM_SUN_STAR_FRAME_XCONFIGMANAGER_HPP_
 #include <com/sun/star/frame/XConfigManager.hpp>
 #endif
+#endif // SUPD
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
@@ -127,11 +133,12 @@ using namespace com::sun::star::ucb;
 using namespace rtl;
 // --------------------------------------------------------------------------------
 OConnection::OConnection(OFileDriver*   _pDriver)
-                         : OConnection_BASE(m_aMutex),
-                         OSubComponent<OConnection>((::cppu::OWeakObject*)_pDriver),
-                         m_pDriver(_pDriver),
-                         m_bClosed(sal_False),
-                         m_xMetaData(NULL)
+                         : OConnection_BASE(m_aMutex)
+                         ,OSubComponent<OConnection>((::cppu::OWeakObject*)_pDriver)
+                         ,m_pDriver(_pDriver)
+                         ,m_bClosed(sal_False)
+                         ,m_xMetaData(NULL)
+                         ,m_nTextEncoding(RTL_TEXTENCODING_MS_1252)
 {
     ModuleContext::AddRef();
 }
@@ -172,13 +179,16 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 
     if (aURL.GetProtocol() == INET_PROT_FILE)
     {
+#if SUPD > 605
+        SvtPathOptions aPathOptions;
+        aFileName = aPathOptions.SubstituteVariable(aFileName);
+#else
         // $Inst muﬂ gesetzt sein
-        // sehr umstaendlicher weg, um an den Inimanager zu kommen
-        // aber ohne Arme(Sfx) keine Kekse
         Reference< ::com::sun::star::frame::XConfigManager > xSofficeIni(
                 m_pDriver->getFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.config.SpecialConfigManager")), UNO_QUERY);
 
         aFileName = xSofficeIni->substituteVariables(aFileName);
+#endif
     }
 
     ::rtl::OUString aExt;
@@ -186,8 +196,10 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     const PropertyValue *pEnd    = pBegin + info.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if(!pBegin->Name.compareToAscii("EXTENSTION"))
+        if(!pBegin->Name.compareToAscii("Extenstion"))
             pBegin->Value >>= aExt;
+        if(!pBegin->Name.compareToAscii("CharSet"))
+            pBegin->Value >>= m_nTextEncoding;
     }
 
     if(aExt.len())
@@ -249,10 +261,10 @@ Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLExcep
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OConnection_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
     OStatement* pStmt = new OStatement(this);
 
-        m_aStatements.push_back(WeakReferenceHelper(*pStmt));
+    m_aStatements.push_back(WeakReferenceHelper(*pStmt));
     return pStmt;
 }
 // --------------------------------------------------------------------------------
@@ -260,10 +272,11 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OConnection_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
+
     OPreparedStatement* pStmt = new OPreparedStatement(this,m_aTypeInfo);
     pStmt->construct(sql);
-        m_aStatements.push_back(WeakReferenceHelper(*pStmt));
+    m_aStatements.push_back(WeakReferenceHelper(*pStmt));
     return pStmt;
 }
 // --------------------------------------------------------------------------------
@@ -271,7 +284,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OConnection_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
     return NULL;
 }
 // --------------------------------------------------------------------------------
@@ -286,7 +299,7 @@ void SAL_CALL OConnection::setAutoCommit( sal_Bool autoCommit ) throw(SQLExcepti
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OConnection_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
     m_bAutoCommit = autoCommit;
 }
@@ -295,7 +308,7 @@ sal_Bool SAL_CALL OConnection::getAutoCommit(  ) throw(SQLException, RuntimeExce
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OConnection_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
     return m_bAutoCommit;
 }
@@ -304,7 +317,7 @@ void SAL_CALL OConnection::commit(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OConnection_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
 
 }
@@ -313,7 +326,7 @@ void SAL_CALL OConnection::rollback(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OConnection_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
 
 }
@@ -329,7 +342,7 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLEx
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OConnection_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
     if(!m_xMetaData.is())
         m_xMetaData = new ODatabaseMetaData(this);
@@ -341,7 +354,7 @@ void SAL_CALL OConnection::setReadOnly( sal_Bool readOnly ) throw(SQLException, 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OConnection_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
     m_bReadOnly = readOnly;
 }
@@ -350,7 +363,7 @@ sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeExcepti
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OConnection_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
     return m_bReadOnly;
 }
@@ -366,7 +379,7 @@ void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQ
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OConnection_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
     return ::rtl::OUString();
 }
@@ -375,7 +388,7 @@ void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLE
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OConnection_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
 }
 // --------------------------------------------------------------------------------
@@ -383,7 +396,7 @@ sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OConnection_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
     return 0;
 }
@@ -392,7 +405,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getT
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OConnection_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
     return NULL;
 }
@@ -407,7 +420,7 @@ void SAL_CALL OConnection::close(  ) throw(SQLException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if (OConnection_BASE::rBHelper.bDisposed)
-                        throw DisposedException();
+            throw DisposedException();
     }
     dispose();
 }
@@ -415,7 +428,7 @@ void SAL_CALL OConnection::close(  ) throw(SQLException, RuntimeException)
 // XWarningsSupplier
 Any SAL_CALL OConnection::getWarnings(  ) throw(SQLException, RuntimeException)
 {
-        return Any();
+    return Any();
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeException)
@@ -430,7 +443,7 @@ void OConnection::disposing()
     //  m_aTables.disposing();
     for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
     {
-                Reference< XComponent > xComp(i->get(), UNO_QUERY);
+        Reference< XComponent > xComp(i->get(), UNO_QUERY);
         if (xComp.is())
             xComp->dispose();
     }

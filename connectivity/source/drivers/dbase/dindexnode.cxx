@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:21 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -890,7 +890,7 @@ void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
         aBuf.EraseTrailingChars();
 
         //  aKey = ONDXKey((aBuf,rIndex.GetDBFConnection()->GetCharacterSet()) ,aKey.nRecord);
-        aKey = ONDXKey((aBuf,osl_getThreadTextEncoding()) ,aKey.nRecord);
+        aKey = ONDXKey((aBuf,rIndex.m_pTable->getConnection()->getTextEncoding()) ,aKey.nRecord);
     }
     rStream >> aChild;
 }

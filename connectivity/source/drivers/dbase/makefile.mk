@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: patrick.luby $ $Date: 2000-09-25 05:25:51 $
+#   last change: $Author: oj $ $Date: 2000-09-29 15:28:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,10 +75,28 @@ ENVCFLAGS+=/FR$(SLO)$/
 .INCLUDE : settings.mk
 .INCLUDE :  $(PRJ)$/version.mk
 
+# --- Types -------------------------------------
+
+
+UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
+
+UNOUCROUT=$(OUT)$/inc
+INCPRE+=$(UNOUCROUT)
+
+# --- Types -------------------------------------
+
+UNOTYPES+=	\
+        com.sun.star.sdbcx.XRowLocate					\
+        com.sun.star.sdbcx.CompareBookmark				\
+        com.sun.star.sdbcx.XDeleteRows
 
 # --- Files -------------------------------------
 
 SLOFILES=\
+    $(SLO)$/DResultSet.obj			\
+    $(SLO)$/DStatement.obj			\
+    $(SLO)$/DPreparedStatement.obj	\
     $(SLO)$/dindexnode.obj			\
     $(SLO)$/DIndexPage.obj			\
     $(SLO)$/DIndexIter.obj			\

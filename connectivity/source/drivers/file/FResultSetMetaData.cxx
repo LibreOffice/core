@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:22 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #endif
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
+#endif
+#ifndef _CONNECTIVITY_FILE_TABLE_HXX_
+#include "file/FTable.hxx"
 #endif
 using namespace connectivity;
 using namespace connectivity::file;
@@ -183,19 +186,19 @@ sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQL
 
 sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    return sal_True;
+    return m_pTable->isReadOnly();
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return !m_pTable->isReadOnly();
 ;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    return !m_pTable->isReadOnly();
 }
 // -------------------------------------------------------------------------
 

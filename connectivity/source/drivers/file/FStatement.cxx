@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:22 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,12 +217,12 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
-        Reference<XCloseable> xCloseable;
+    Reference<XCloseable> xCloseable;
     if(::utl::query_interface(m_xResultSet.get(),xCloseable))
         xCloseable->close();
-        m_xResultSet = Reference< XResultSet>();
+    m_xResultSet = Reference< XResultSet>();
 }
 //--------------------------------------------------------------------
 // setWarning
@@ -233,7 +233,7 @@ void OStatement_Base::setWarning (const SQLWarning &ex) throw( SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
     m_aLastWarning = ex;
 }
@@ -244,7 +244,7 @@ sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(S
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
     //  ::rtl::OString aSql(::rtl::OUStringToOString(sql,osl_getThreadTextEncoding()));
         Reference< XResultSet > xRS = executeQuery(sql);
@@ -258,9 +258,9 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
-        Reference< XResultSet > xRS = NULL;
+    Reference< XResultSet > xRS = NULL;
 
     String aErr;
     m_pParseTree = m_aParser.parseTree(aErr,sql);
@@ -270,17 +270,15 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
         m_aSQLIterator.traverseAll();
         const OSQLTables& xTabs = m_aSQLIterator.getTables();
         if(xTabs.begin() == xTabs.end())
-                        throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
+            throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
 
-        OResultSet* pResult = new OResultSet(this,m_aSQLIterator);
+        OResultSet* pResult = createResultSet();
         pResult->OpenImpl();
         xRS = pResult;
 
     }
     else
-                throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
-
-
+        throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
 
     // Execute the statement.  If execute returns true, a result
     // set exists.
@@ -289,16 +287,16 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
 // -------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL OStatement_Base::getConnection(  ) throw(SQLException, RuntimeException)
 {
-        return (Reference< XConnection >)m_pConnection;
+    return (Reference< XConnection >)m_pConnection;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
-        Reference< XResultSet > xRS = NULL;
+    Reference< XResultSet > xRS = NULL;
 
     String aErr;
     m_pParseTree = m_aParser.parseTree(aErr,sql);
@@ -308,15 +306,15 @@ sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& sql ) 
         m_aSQLIterator.traverseAll();
         const OSQLTables& xTabs = m_aSQLIterator.getTables();
         if(xTabs.begin() == xTabs.end())
-                        throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
+            throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
 
-        OResultSet* pResult = new OResultSet(this,m_aSQLIterator);
+        OResultSet* pResult = createResultSet();
         pResult->OpenImpl();
         xRS = pResult;
         return pResult->getRowCountResult();
     }
     else
-                throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
+        throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
 
     return 0;
 }
@@ -325,9 +323,9 @@ Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeExcepti
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
-        return makeAny(m_aLastWarning);
+    return makeAny(m_aLastWarning);
 }
 // -------------------------------------------------------------------------
 
@@ -336,14 +334,14 @@ void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeExce
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
-        m_aLastWarning = SQLWarning();
+    m_aLastWarning = SQLWarning();
 }
 // -------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OStatement_Base::createArrayHelper( ) const
 {
-        Sequence< Property > aProps;
+    Sequence< Property > aProps;
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
@@ -352,6 +350,11 @@ void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeExce
 ::cppu::IPropertyArrayHelper & OStatement_Base::getInfoHelper()
 {
     return *const_cast<OStatement_Base*>(this)->getArrayHelper();
+}
+// -------------------------------------------------------------------------
+OResultSet* OStatement::createResultSet()
+{
+    return new OResultSet(this,m_aSQLIterator);
 }
 // -------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbc.driver.file.Statement","com.sun.star.sdbc.Statement");

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DConnection.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:21 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,12 @@
 #ifndef _URLOBJ_HXX //autogen wg. INetURLObject
 #include <tools/urlobj.hxx>
 #endif
-//#ifndef _FSYS_HXX //autogen
-//#include <tools/fsys.hxx>
-//#endif
-
+#ifndef _CONNECTIVITY_DBASE_DPREPAREDSTATEMENT_HXX_
+#include "dbase/DPreparedStatement.hxx"
+#endif
+#ifndef _CONNECTIVITY_DBASE_DSTATEMENT_HXX_
+#include "dbase/DStatement.hxx"
+#endif
 using namespace connectivity::dbase;
 using namespace connectivity::file;
 
@@ -118,7 +120,7 @@ Reference< XDatabaseMetaData > SAL_CALL ODbaseConnection::getMetaData(  ) throw(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OConnection_B::rBHelper.bDisposed)
-                throw DisposedException();
+        throw DisposedException();
 
     if(!m_xMetaData.is())
         m_xMetaData = new ODbaseDatabaseMetaData(this);
@@ -129,7 +131,7 @@ Reference< XDatabaseMetaData > SAL_CALL ODbaseConnection::getMetaData(  ) throw(
 ::com::sun::star::uno::Reference< XTablesSupplier > ODbaseConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-        Reference< XTablesSupplier > xTab = m_xCatalog;
+    Reference< XTablesSupplier > xTab = m_xCatalog;
     if(!m_xCatalog.get().is())
     {
         ODbaseCatalog *pCat = new ODbaseCatalog(this);
@@ -138,4 +140,36 @@ Reference< XDatabaseMetaData > SAL_CALL ODbaseConnection::getMetaData(  ) throw(
     }
     return xTab;
 }
+// --------------------------------------------------------------------------------
+Reference< XStatement > SAL_CALL ODbaseConnection::createStatement(  ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if (OConnection_BASE::rBHelper.bDisposed)
+        throw DisposedException();
+    ODbaseStatement* pStmt = new ODbaseStatement(this);
+
+    m_aStatements.push_back(WeakReferenceHelper(*pStmt));
+    return pStmt;
+}
+// --------------------------------------------------------------------------------
+Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if (OConnection_BASE::rBHelper.bDisposed)
+        throw DisposedException();
+
+    ODbasePreparedStatement* pStmt = new ODbasePreparedStatement(this,m_aTypeInfo);
+    pStmt->construct(sql);
+    m_aStatements.push_back(WeakReferenceHelper(*pStmt));
+    return pStmt;
+}
+// --------------------------------------------------------------------------------
+Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareCall( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if (OConnection_BASE::rBHelper.bDisposed)
+        throw DisposedException();
+    return NULL;
+}
+
 
