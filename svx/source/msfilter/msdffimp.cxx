@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:22 $
+ *  last change: $Author: sj $ $Date: 2000-09-27 13:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2606,13 +2606,13 @@ SdrObject* SvxMSDffManager::ImportWordArt( SvStream& rStCtrl, SfxItemSet& rSet, 
         SdrObject* pNewObj = new SdrRectObj( OBJ_TEXT, rBoundRect );
         if( pNewObj )
         {
+            pNewObj->SetModel( pSdrModel );
             ((SdrRectObj*)pNewObj)->SetText( aObjectText );
             SdrFitToSizeType eFTS = SDRTEXTFIT_PROPORTIONAL;
             rSet.Put( SdrTextFitToSizeTypeItem( eFTS ) );
             rSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
             rSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
             rSet.Put( SvxFontItem( FAMILY_DONTKNOW, aFontName, String() ) );
-            pNewObj->SetModel( pSdrModel );
             pNewObj->NbcSetAttributes( rSet, FALSE );
 
             pRet = pNewObj->ConvertToPolyObj( FALSE, FALSE );
