@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:25:43 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,10 +527,31 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
         aToken += aStrBuffer;
 }
 
-
 void SvRTFParser::SkipGroup()
 {
     short nBrackets = 1;
+#if 1   //#i16185# fecking \bin keyword
+    do
+    {
+        switch (nNextCh)
+        {
+            case '{':
+                ++nBrackets;
+                break;
+            case '}':
+                if (!--nBrackets)
+                    return;
+                break;
+        }
+        int nToken = _GetNextToken();
+        if (nToken == RTF_BIN)
+        {
+            rInput.SeekRel(-1);
+            rInput.SeekRel(nTokenValue);
+            nNextCh = GetNextChar();
+        }
+    } while (sal_Unicode(EOF) != nNextCh && IsParserWorking());
+#else
     sal_Unicode cPrev = 0;
     do {
         switch( nNextCh )
@@ -553,6 +574,7 @@ void SvRTFParser::SkipGroup()
         cPrev = nNextCh;
         nNextCh = GetNextChar();
     } while( sal_Unicode(EOF) != nNextCh && IsParserWorking() );
+#endif
 
     if( SVPAR_PENDING != eState && '}' != nNextCh )
         eState = SVPAR_ERROR;
