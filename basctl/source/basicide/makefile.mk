@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tbe $ $Date: 2000-11-20 08:32:07 $
+#   last change: $Author: tbe $ $Date: 2001-02-26 11:14:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,8 @@ PROJECTPCHSOURCE=ide_pch
 .IF "$(basicdebug)" != "" || "$(BASICDEBUG)" != ""
 CDEFS+=-DBASICDEBUG
 .ENDIF
+
+#CDEFS+=-D_DLGEDITOR_
 
 # --- Allgemein ----------------------------------------------------------
 

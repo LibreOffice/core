@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-10 09:38:57 $
+ *  last change: $Author: tbe $ $Date: 2001-02-26 11:14:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,21 @@
 
 #include <basidesh.hrc>
 #include <baside3.hxx>
+
+#ifdef _DLGEDITOR_
+#include <dlged.hxx>
+#else
 #include <vced.hxx>
+#endif
+
+#ifdef _DLGEDITOR_
+#ifndef _BASCTL_PROPBRW_HXX
+#include <propbrw.hxx>
+#endif
+#else
 #include <vcbrw.hxx>
+#endif
+
 #include <basobj.hxx>
 #include <iderdll.hxx>
 #include <basidesh.hxx>
@@ -103,9 +116,15 @@ DialogWindow::DialogWindow( Window* pParent, VCSbxDialogRef aDialog,
     }
 
     InitSettings( TRUE, TRUE, TRUE );
+
     pEditor = new VCDlgEditor( GetBasic() );
     pEditor->SetWindow( this );
+#ifdef _DLGEDITOR_
+    //pEditor->SetScrollBars( GetHScrollBar(), GetVScrollBar() );
+    pEditor->SetDialog();
+#else
     pEditor->SetVCSbxForm( pDialog );
+#endif
 
     // Undo einrichten
     pUndoMgr = new SfxUndoManager;
@@ -154,7 +173,9 @@ void DialogWindow::Paint( const Rectangle& rRect )
 
 void DialogWindow::Resize()
 {
-    pEditor->SetScrollBars( GetHScrollBar(), GetVScrollBar() );
+    if ( GetHScrollBar() && GetVScrollBar() ) {
+        pEditor->SetScrollBars( GetHScrollBar(), GetVScrollBar() );
+    }
 }
 
 
@@ -503,7 +524,11 @@ void DialogWindow::DisableBrowser()
     SfxViewFrame* pCurFrame = SfxViewFrame::Current();
     SfxChildWindow* pChildWin = pCurFrame ? pCurFrame->GetChildWindow(SID_SHOW_BROWSER) : NULL;
     if( pChildWin )
+#ifdef _DLGEDITOR_
+        ((PropBrw*)(pChildWin->GetWindow()))->Update( 0 );
+#else
         ((VCBrowser*)(pChildWin->GetWindow()))->Update( 0 );
+#endif
 }
 
 
@@ -514,7 +539,11 @@ void DialogWindow::UpdateBrowser()
     SfxViewFrame* pCurFrame = SfxViewFrame::Current();
     SfxChildWindow* pChildWin = pCurFrame ? pCurFrame->GetChildWindow(SID_SHOW_BROWSER) : NULL;
     if( pChildWin )
+#ifdef _DLGEDITOR_
+        ((PropBrw*)(pChildWin->GetWindow()))->Update(GetEditor()->GetView());
+#else
         ((VCBrowser*)(pChildWin->GetWindow()))->Update(GetEditor()->GetView());
+#endif
 }
 
 
