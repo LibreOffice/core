@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:36:37 $
+ *  last change: $Author: os $ $Date: 2000-12-12 10:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -717,31 +717,41 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 
                 case FN_FRAME_CHAIN:
                 {
-                    const SwFrmFmt *pFmt = rSh.GetFlyFrmFmt();
-                    if ( bParentCntProt || rSh.GetView().GetEditWin().GetApplyTemplate() ||
-                         !pFmt || pFmt->GetChain().GetNext() )
-                    {
+                    const int nSel = rSh.GetSelectionType();
+                    if (nSel & SwWrtShell::SEL_GRF || nSel & SwWrtShell::SEL_OLE)
                         rSet.DisableItem( FN_FRAME_CHAIN );
-                    }
                     else
                     {
-                        BOOL bChainMode = rSh.GetView().GetEditWin().IsChainMode();
-                        rSet.Put( SfxBoolItem( FN_FRAME_CHAIN, bChainMode ) );
+                        const SwFrmFmt *pFmt = rSh.GetFlyFrmFmt();
+                        if ( bParentCntProt || rSh.GetView().GetEditWin().GetApplyTemplate() ||
+                             !pFmt || pFmt->GetChain().GetNext() )
+                        {
+                            rSet.DisableItem( FN_FRAME_CHAIN );
+                        }
+                        else
+                        {
+                            BOOL bChainMode = rSh.GetView().GetEditWin().IsChainMode();
+                            rSet.Put( SfxBoolItem( FN_FRAME_CHAIN, bChainMode ) );
+                        }
                     }
-                    break;
                 }
-
+                break;
                 case FN_FRAME_UNCHAIN:
                 {
-                    const SwFrmFmt *pFmt = rSh.GetFlyFrmFmt();
-                    if ( bParentCntProt || rSh.GetView().GetEditWin().GetApplyTemplate() ||
-                         !pFmt || !pFmt->GetChain().GetNext() )
-                    {
+                    const int nSel = rSh.GetSelectionType();
+                    if (nSel & SwWrtShell::SEL_GRF || nSel & SwWrtShell::SEL_OLE)
                         rSet.DisableItem( FN_FRAME_UNCHAIN );
+                    else
+                    {
+                        const SwFrmFmt *pFmt = rSh.GetFlyFrmFmt();
+                        if ( bParentCntProt || rSh.GetView().GetEditWin().GetApplyTemplate() ||
+                             !pFmt || !pFmt->GetChain().GetNext() )
+                        {
+                            rSet.DisableItem( FN_FRAME_UNCHAIN );
+                        }
                     }
-                    break;
                 }
-
+                break;
                 case SID_FRAME_TO_TOP:
                 case SID_FRAME_TO_BOTTOM:
                 case FN_FRAME_UP:
@@ -1026,6 +1036,9 @@ void  SwFrameShell::StateInsert(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/06 13:36:37  jp
+    should changes: don't use IniManager
+
     Revision 1.1.1.1  2000/09/18 17:14:46  hr
     initial import
 
