@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-07 12:31:40 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,7 +448,7 @@ TabPage RID_SVXPAGE_CAPTION
         };
         stringlist [ portuguese ] =
         {
-            < "Óptimo" ; 4 ; > ;
+            < "Optimizar" ; 4 ; > ;
             < "De cima" ; 3 ; > ;
             < "Da esquerda" ; 3 ; > ;
             < "Horizontal" ; 1 ; > ;
@@ -666,7 +666,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ swedish ] = "~Optimal" ;
         Text [ danish ] = "Optimal" ;
         Text [ portuguese_brazilian ] = "~Optimal" ;
-        Text [ portuguese ] = "~Óptimo" ;
+        Text [ portuguese ] = "~Optimizar" ;
         Text[ chinese_simplified ] = "×î¼Ñ(~O)";
         Text[ russian ] = "Îïòèìàëüíî";
         Text[ polish ] = "Optymalny";
@@ -787,7 +787,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ danish ] = "Øverst;Centreret;Nederst" ;
         Text [ portuguese_brazilian ] = "Oben;Mitte;Unten" ;
         Text [ portuguese ] = "Superior; centro; inferior" ;
-        Text[ chinese_simplified ] = "ÉÏ£»ÖĞ£»ÏÂ";
+        Text[ chinese_simplified ] = "ÉÏ;ÖĞ;ÏÂ";
         Text[ russian ] = "Ââåğõó;Ïî ñğåäèíå;Âíèçó";
         Text[ polish ] = "W górze, Na œrodku;Na dole";
         Text[ japanese ] = "ã;’†;‰º";
@@ -811,7 +811,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ danish ] = "Venstre;Centreret;Højre" ;
         Text [ portuguese_brazilian ] = "Links;Mitte;Rechts" ;
         Text [ portuguese ] = "Esquerda; centro; direita" ;
-        Text[ chinese_simplified ] = "×ó£»ÖĞ£»ÓÒ";
+        Text[ chinese_simplified ] = "×ó;ÖĞ;ÓÒ";
         Text[ russian ] = "Ñëåâà;Ïî ñğåäèíå;Ñïğàâà";
         Text[ polish ] = "Z lewej; W œrodku; Z prawej";
         Text[ japanese ] = "¶;’†‰›;‰E";
