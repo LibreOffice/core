@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:28:34 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -771,7 +771,7 @@ BOOL Bitmap::ImplConvertDown( USHORT nBitCount, Color* pExtColor )
             ImpErrorQuad*   pErrQuad1 = new ImpErrorQuad[ nWidth ];
             ImpErrorQuad*   pErrQuad2 = new ImpErrorQuad[ nWidth ];
             ImpErrorQuad*   pQLine1 = pErrQuad1;
-            ImpErrorQuad*   pQLine2;
+            ImpErrorQuad*   pQLine2 = 0;
             long            nX, nY;
             long            nYTmp = 0L;
             BYTE            cIndex;
@@ -1542,7 +1542,7 @@ BOOL Bitmap::ImplDitherFloyd16()
         ImpErrorQuad*   pErrQuad1 = new ImpErrorQuad[ nWidth ];
         ImpErrorQuad*   pErrQuad2 = new ImpErrorQuad[ nWidth ];
         ImpErrorQuad*   pQLine1 = pErrQuad1;
-        ImpErrorQuad*   pQLine2;
+        ImpErrorQuad*   pQLine2 = 0;
         long            nX, nY;
         long            nYTmp = 0L;
         BOOL            bQ1 = TRUE;
@@ -2020,7 +2020,8 @@ void Bitmap::ImplMedianCut( ULONG* pColBuf, BitmapPalette& rPal,
         else
         {
             const long  nTest = ( nPixels >> 1 );
-            long        nPixOld, nPixNew = 0;
+            long        nPixOld = 0;
+            long        nPixNew = 0;
 
             if( nBLen > nGLen && nBLen > nRLen )
             {
