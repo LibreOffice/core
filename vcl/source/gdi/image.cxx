@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 16:23:20 $
+ *  last change: $Author: rt $ $Date: 2004-05-24 12:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,7 @@ Image Image::GetColorTransformedImage( ImageColorTransform eColorTransform ) con
         BitmapEx aBmpEx( GetBitmapEx() );
 
         if( !aBmpEx.IsEmpty() )
-            aRet = Image( aBmpEx.GetColorTransformedBitmapEx( static_cast< BmpColorMode >( eColorTransform ) ) );
+            aRet = Image( aBmpEx.GetColorTransformedBitmapEx( ( BmpColorMode )( eColorTransform ) ) );
     }
 
     if( !aRet )
@@ -1368,7 +1368,7 @@ ImageList ImageList::GetColorTransformedImageList( ImageColorTransform eColorTra
     {
         aRet = *this;
         aRet.ImplMakeUnique();
-           aRet.mpImplData->mpImageBitmap->ColorTransform( static_cast< BmpColorMode >( eColorTransform ) );
+           aRet.mpImplData->mpImageBitmap->ColorTransform( ( BmpColorMode )( eColorTransform ) );
     }
 
     if( !aRet.GetImageCount() )
