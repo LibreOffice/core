@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-03 16:25:34 $
+ *  last change: $Author: fs $ $Date: 2001-01-24 09:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -943,6 +943,20 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    void OFormImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    {
+        m_rFormImport.enterEventContext();
+        OFormImport_Base::StartElement(_rxAttrList);
+    }
+
+    //---------------------------------------------------------------------
+    void OFormImport::EndElement()
+    {
+        OFormImport_Base::EndElement();
+        m_rFormImport.leaveEventContext();
+    }
+
+    //---------------------------------------------------------------------
     SvXMLImportContext* OFormImport::implCreateControlWrapper(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName)
     {
         return new OControlWrapperImport(m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer);
@@ -1034,6 +1048,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/01/03 16:25:34  fs
+ *  file format change (extra wrapper element for controls, similar to columns)
+ *
  *  Revision 1.6  2001/01/02 15:58:21  fs
  *  event ex- & import
  *
