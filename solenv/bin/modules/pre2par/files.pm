@@ -2,9 +2,9 @@
 #
 #   $RCSfile: files.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 10:50:59 $
+#   last change: $Author: vg $ $Date: 2005-02-21 12:12:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,6 +96,8 @@ sub read_file
 sub save_file
 {
     my ($savefile, $savecontent) = @_;
+    if (-f $savefile) { unlink $savefile };
+    if (-f $savefile) { pre2par::exiter::exit_program("ERROR: Cannot delete existing file: $savefile", "save_file"); };
     open( OUT, ">$savefile" );
     print OUT @{$savecontent};
     close( OUT);
