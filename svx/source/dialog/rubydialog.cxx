@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-12 09:33:35 $
+ *  last change: $Author: os $ $Date: 2002-09-04 10:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -643,6 +643,9 @@ IMPL_LINK(SvxRubyDialog, ApplyHdl_Impl, PushButton*, EMPTYARG)
         CharStyleHdl_Impl(&aCharStyleLB);
     }
     GetText();
+    //reset all edit fields - SaveValue is called
+    ScrollHdl_Impl(&aScrollSB);
+
     Reference<XRubySelection>  xSelection = pImpl->GetRubySelection();
     if(IsModified() && xSelection.is())
     {
