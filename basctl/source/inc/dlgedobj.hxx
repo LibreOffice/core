@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-26 10:57:50 $
+ *  last change: $Author: tbe $ $Date: 2001-03-01 09:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ class DlgEdObj: public SdrUnoObj
 private:
     sal_Bool        bIsListening;
     sal_uInt32      nEvent;
+    //String            aName;
     DlgEdForm*      pDlgEdForm;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener> m_xListener;
 
@@ -115,6 +116,9 @@ public:
 
     virtual void SetRectFromProps();
     virtual void SetPropsFromRect();
+    virtual void SAL_CALL SetNameFromProp( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
+
+    String  GetUniqueName();
 
     virtual sal_uInt32 GetObjInventor() const;
     virtual sal_uInt16 GetObjIdentifier() const;
@@ -134,6 +138,8 @@ protected:
     virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
     DECL_LINK(OnCreate, void* );
+
+    String  GetDefaultName();
 
 public:
     virtual void SAL_CALL _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);

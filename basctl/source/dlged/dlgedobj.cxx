@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2001-02-27 14:50:51 $
+ *  last change: $Author: tbe $ $Date: 2001-03-01 09:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,12 @@
 #include <tools/shl.hxx>
 #endif
 
+#ifndef _STRING_HXX
+//#include <tools/string.hxx>
+#endif
+
 #ifndef _SVX_FMRESIDS_HRC
-//#include "fmresids.hrc"
+//#include <svx/fmresids.hrc>
 #endif
 
 #ifndef _SVX_FMGLOB_HXX
@@ -305,6 +309,71 @@ void DlgEdObj::SetPropsFromRect()
 
 //----------------------------------------------------------------------------
 
+void SAL_CALL DlgEdObj::SetNameFromProp( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException)
+{
+    // get old name
+    ::rtl::OUString aOldName;
+    evt.OldValue >>= aOldName;
+
+    // get new name
+    ::rtl::OUString aNewName;
+    evt.NewValue >>= aNewName;
+
+    // remove the control by the old name and insert the control by the new name in the container
+    uno::Reference< container::XNameAccess > xNameAcc((GetDlgEdForm()->GetUnoControlModel()), uno::UNO_QUERY);
+    if ( xNameAcc.is() && xNameAcc->hasByName(aOldName) )
+    {
+        uno::Reference< container::XNameContainer > xCont(xNameAcc, uno::UNO_QUERY );
+        if ( xCont.is() )
+        {
+            uno::Reference< awt::XControlModel > xCtrl(GetUnoControlModel(), uno::UNO_QUERY);
+            uno::Any aAny;
+            aAny <<= xCtrl;
+            xCont->removeByName( aOldName );
+            xCont->insertByName( aNewName , aAny );
+        }
+    }
+}
+
+//----------------------------------------------------------------------------
+
+String DlgEdObj::GetDefaultName()
+{
+    String aStr = GetUnoControlTypeName();
+
+    sal_Unicode pDelims[] = { '.' , 0 };
+    xub_StrLen nPos = aStr.SearchCharBackward( pDelims );
+    if( nPos != STRING_NOTFOUND )
+    {
+        aStr.Erase( 0, ++nPos );
+    }
+
+    return aStr;
+}
+
+//----------------------------------------------------------------------------
+
+String DlgEdObj::GetUniqueName()
+{
+    String sUniqueName;
+    uno::Reference< container::XNameAccess > xNameAcc((GetDlgEdForm()->GetUnoControlModel()), uno::UNO_QUERY);
+
+    if ( xNameAcc.is() )
+    {
+        sal_Int32 n = 0;
+        String sDefaultName = GetDefaultName();
+
+        do
+        {
+            sUniqueName = sDefaultName + String::CreateFromInt32(++n);
+        }   while (xNameAcc->hasByName(sUniqueName));
+    }
+
+    return sUniqueName;
+}
+
+//----------------------------------------------------------------------------
+
 sal_uInt32 DlgEdObj::GetObjInventor()   const
 {
     /*
@@ -413,15 +482,35 @@ FASTBOOL DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     sal_Bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
 
-    // set properties
+    // get unique name
+    ::rtl::OUString aOUniqueName( GetUniqueName() );
+
+    // set name property
+    uno::Reference< beans::XPropertySet > xPSet( GetUnoControlModel(), uno::UNO_QUERY );
+    uno::Any aUniqueName;
+    aUniqueName <<= aOUniqueName;
+    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aUniqueName );
+
+    // set geometry properties
     SetPropsFromRect();
+
+    // set labels
+    String sDefaultName = GetDefaultName();
+    if (sDefaultName.EqualsAscii("Button") ||
+        sDefaultName.EqualsAscii("RadioButton") ||
+        sDefaultName.EqualsAscii("CheckBox") ||
+        sDefaultName.EqualsAscii("GroupBox") ||
+        sDefaultName.EqualsAscii("FixedText") )
+    {
+        xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Label" ) ), aUniqueName );
+    }
 
     // insert control model in dialog model
     uno::Reference< container::XNameContainer > xC((GetDlgEdForm()->GetUnoControlModel()), uno::UNO_QUERY);
     uno::Reference< awt::XControlModel > xCtrl(GetUnoControlModel(), uno::UNO_QUERY);
     uno::Any aAny;
     aAny <<= xCtrl;
-    xC->insertByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("newcontrol" ) ), aAny );    // name handling missing!!!
+    xC->insertByName( aOUniqueName , aAny );
 
     return bResult;
 }
@@ -452,6 +541,10 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
         {
             SetRectFromProps();
         }
+        else if ( evt.PropertyName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")) )
+        {
+            SetNameFromProp(evt);
+        }
     }
 }
 
@@ -475,6 +568,7 @@ void DlgEdObj::StartPropertyListening()
             xControlModel->addPropertyChangeListener(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height")), m_xListener);
             xControlModel->addPropertyChangeListener(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionX")), m_xListener);
             xControlModel->addPropertyChangeListener(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionY")), m_xListener);
+            xControlModel->addPropertyChangeListener(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), m_xListener);
         }
 
         bIsListening = sal_True;
@@ -501,6 +595,7 @@ void DlgEdObj::EndPropertyListening(sal_Bool bRemoveListener)
                 xControlModel->removePropertyChangeListener(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height")), m_xListener);
                 xControlModel->removePropertyChangeListener(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionX")), m_xListener);
                 xControlModel->removePropertyChangeListener(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionY")), m_xListener);
+                xControlModel->removePropertyChangeListener(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), m_xListener);
             }
 
             m_xListener.clear();
