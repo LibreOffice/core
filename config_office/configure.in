@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-02-18 10:58:56 $
+dnl * Date: $Date: 2005-02-21 15:16:34 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.97 $ )
+AC_REVISION( $Revision: 1.98 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -46,7 +46,6 @@ AC_ARG_WITH(fonts,
                           for specific distributions where the fonts are known 
                           to be already available
 ],,)
-
 AC_ARG_ENABLE(mozilla,
 [  --disable-mozilla       OO.o usually includes a strangely hacked up mozilla
                           binary for your platform, to build without this
@@ -65,6 +64,9 @@ AC_ARG_ENABLE(fontooo,
 [  --disable-fontooo       disable FontOOo
                           (useful for distributions using fontconfig for OOo)
 ],,enable_fontooo="yes")
+AC_ARG_WITH(system-stdlibs,
+[  --with-system-stdlibs   use libstdc++/libgcc_s already on system
+],,)
 AC_ARG_WITH(system-mspack,
 [  --with-system-mspack    use libmspack already installed on system
 ],,)
@@ -1949,6 +1951,20 @@ if test "z$enable_epm" = "z" -o "$enable_epm" != "no"; then
 fi
 
 dnl ===================================================================
+dnl Check for system stdlibs
+dnl ===================================================================
+AC_MSG_CHECKING([whether to provide libstdc++/libgcc_s in the installset])
+if test -n "$with_system_stdlibs" -o -n "$with_system_libs" && \
+   test "$with_system_stdlibs" != "no"; then
+   AC_MSG_RESULT([no])
+   SYSTEM_STDLIBS=YES
+else
+   AC_MSG_RESULT([yes])
+   SYSTEM_STDLIBS=NO
+fi
+AC_SUBST(SYSTEM_STDLIBS)
+
+dnl ===================================================================
 dnl Check for system zlib
 dnl ===================================================================
 AC_MSG_CHECKING([which zlib to use])
@@ -2175,8 +2191,25 @@ if test -n "$with_system_odbc_headers"; then
 else
    AC_MSG_RESULT([internal])
    SYSTEM_ODBC_HEADERS=NO
+   BUILD_TYPE="$BUILD_TYPE UNIXODBC"
 fi
 AC_SUBST(SYSTEM_ODBC_HEADERS)
+
+dnl ===================================================================
+dnl Check for system sane
+dnl ===================================================================
+AC_MSG_CHECKING([which sane header to use])
+if test -n "$with_system_sane_header"; then
+   AC_MSG_RESULT([external])
+   SYSTEM_SANE_HEADER=YES
+   AC_CHECK_HEADER(sane/sane.h, [],
+      [AC_MSG_ERROR(sane not found. install sane)], [])
+else
+   AC_MSG_RESULT([internal])
+   SYSTEM_SANE_HEADER=NO
+   BUILD_TYPE="$BUILD_TYPE SANE"
+fi
+AC_SUBST(SYSTEM_SANE_HEADER)
 
 # DISABLED; INCOMPLETE
 dnl ===================================================================
@@ -2270,7 +2303,23 @@ AC_SUBST(XINC)
 XLIB="$x_libraries"
 AC_SUBST(XLIB)
 
-dnl ==================================================================
+dnl ===================================================================
+dnl Check for system Xrender
+dnl ===================================================================
+AC_MSG_CHECKING([which X11 XRender headers to use])
+if test -n "$with_system_xrender_headers"; then
+   AC_MSG_RESULT([external])
+   SYSTEM_XRENDER_HEADERS=YES
+   AC_CHECK_HEADER(X11/extensions/Xrender.h, [],
+      [AC_MSG_ERROR(Xrender not found. install X)], [])
+else
+   AC_MSG_RESULT([internal])
+   SYSTEM_XRENDER_HEADERS=NO
+   BUILD_TYPE="$BUILD_TYPE X11_EXTENSIONS"
+fi
+AC_SUBST(SYSTEM_XRENDER_HEADERS)
+
+dnl ===================================================================
 dnl Check for system nas
 dnl ===================================================================
 AC_MSG_CHECKING([which nas to use])
