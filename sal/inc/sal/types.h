@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: svesik $ $Date: 2001-05-14 12:43:22 $
+ *  last change: $Author: dbo $ $Date: 2001-05-17 13:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,8 +111,8 @@ typedef unsigned long       sal_Size;
 #define SAL_MAX_ENUM 0x7fff
 #endif
 
-#ifdef SAL_W32
-#   define SAL_DLLEXPORT        __declspec(dllexport)
+#ifdef _MSC_VER
+#   define SAL_DLLEXPORT    __declspec(dllexport)
 #   define SAL_CALL         __cdecl
 #   define SAL_CALL_ELLIPSE __cdecl
 #elif defined SAL_OS2
@@ -131,7 +131,15 @@ typedef unsigned long       sal_Size;
 #   error("unknown platform")
 #endif
 
-
+/** Use this for pure virtual classes, e.g. class SAL_NO_VTABLE Foo { ...
+    This hinders the compiler from setting a generic vtable stating that
+    a pure virtual function was called and thus slightly reduces code size.
+*/
+#ifdef _MSC_VER
+#define SAL_NO_VTABLE __declspec(novtable)
+#else
+#define SAL_NO_VTABLE
+#endif
 
 #ifdef SAL_W32
 #pragma pack(push, 8)
