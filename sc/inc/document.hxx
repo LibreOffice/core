@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-19 07:57:04 $
+ *  last change: $Author: dr $ $Date: 2001-07-30 11:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,7 @@ struct ScCopyBlockFromClipParams
 #define SC_DDE_DEFAULT      0
 #define SC_DDE_ENGLISH      1
 #define SC_DDE_TEXT         2
+#define SC_DDE_IGNOREMODE   255     // for usage in FindDdeLink() only!
 
 // -----------------------------------------------------------------------
 
@@ -655,6 +656,7 @@ public:
     BOOL            UpdateDdeLink( const String& rAppl, const String& rTopic, const String& rItem );
 
                     // For XML Export/Import:
+                    // nPos is index of DDE links only
     BOOL            GetDdeLinkMode(USHORT nPos, USHORT& nMode);
     BOOL            GetDdeLinkResultDimension( USHORT nPos , USHORT& nCol, USHORT& nRow, ScMatrix*& pMatrix);
     BOOL            GetDdeLinkResult(const ScMatrix* pMatrix, USHORT nCol, USHORT nRow, String& rStrValue, double& rDoubValue, BOOL& bIsString);

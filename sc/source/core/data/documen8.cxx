@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: er $ $Date: 2001-06-25 14:13:16 $
+ *  last change: $Author: dr $ $Date: 2001-07-30 11:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1227,11 +1227,19 @@ BOOL ScDocument::GetDdeLinkResult(const ScMatrix* pMatrix, USHORT nCol, USHORT n
     if (pMatrix)
     {
         BOOL bIsEmpty = pMatrix->IsEmpty(nCol, nRow);
-        bIsString = pMatrix->IsString(nCol, nRow);
-        if (bIsString)
-            rStrValue = pMatrix->GetString(nCol, nRow);
+        if (bIsEmpty)
+        {
+            bIsString = TRUE;
+            rStrValue.Erase();
+        }
         else
-            rDoubValue = pMatrix->GetDouble(nCol, nRow);
+        {
+            bIsString = pMatrix->IsString(nCol, nRow);
+            if (bIsString)
+                rStrValue = pMatrix->GetString(nCol, nRow);
+            else
+                rDoubValue = pMatrix->GetDouble(nCol, nRow);
+        }
         return bIsEmpty;
     }
     return TRUE;
@@ -1268,6 +1276,7 @@ BOOL ScDocument::FindDdeLink(const String& rAppl, const String& rTopic, const St
 {
     const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     USHORT nCount = rLinks.Count();
+    USHORT nDdeCount = 0;
     for (USHORT i=0; i<nCount; i++)
     {
         ::so3::SvBaseLink* pBase = *rLinks[i];
@@ -1277,11 +1286,12 @@ BOOL ScDocument::FindDdeLink(const String& rAppl, const String& rTopic, const St
             if ( pLink->GetAppl() == rAppl &&
                  pLink->GetTopic() == rTopic &&
                  pLink->GetItem() == rItem &&
-                 pLink->GetMode() == nMode )
+                 (nMode == SC_DDE_IGNOREMODE || pLink->GetMode() == nMode) )
             {
-                nPos = i;
+                nPos = nDdeCount;
                 return TRUE;
             }
+            nDdeCount++;
         }
     }
     return FALSE;
