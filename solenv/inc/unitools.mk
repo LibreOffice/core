@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-19 18:11:17 $
+#   last change: $Author: hjs $ $Date: 2002-03-21 19:52:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -136,13 +136,13 @@ ECHONL=echo
 .ENDIF
 .ELSE
 SED*=sed
-AWK=awk
 SORT*=sort
 PERL=perl
 TYPE=cat
 COPY=cp -f
 COPYRECURSE=-r
 .IF "$(OS)"=="SOLARIS"
+AWK=nawk
 GNUCOPY=gnucp
 GNUPATCH=gnupatch
 .ELSE			# "$(OS)"=="SOLARIS"
