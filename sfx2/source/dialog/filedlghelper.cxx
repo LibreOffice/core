@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-25 13:26:13 $
+ *  last change: $Author: dv $ $Date: 2001-06-27 06:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,9 @@ using namespace ::cppu;
 
 namespace sfx2 {
 
+String EncodeSpaces_Impl( const String& rSource );
+String DecodeSpaces_Impl( const String& rSource );
+
 // ------------------------------------------------------------------------
 class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
 {
@@ -258,7 +261,7 @@ public:
     void                    setPath( const OUString& rPath );
     void                    setFilter( const OUString& rFilter );
 
-    OUString                getPath() const { return maPath; }
+    OUString                getPath() const;
     OUString                getFilter() const;
     OUString                getRealFilter() const;
 };
@@ -658,19 +661,8 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
     rpSet = NULL;
     rpURLList = NULL;
 
-    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
-
-    if ( ! mxFileDlg.is() || !xFltMgr.is() )
+    if ( ! mxFileDlg.is() )
         return ERRCODE_ABORT;
-
-    if ( maCurFilter.getLength() )
-    {
-        try
-        {
-            xFltMgr->setCurrentFilter( maCurFilter );
-        }
-        catch( IllegalArgumentException ){}
-    }
 
     loadConfig();
 
@@ -786,19 +778,8 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
 // ------------------------------------------------------------------------
 ErrCode FileDialogHelper_Impl::execute()
 {
-    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
-
-    if ( ! mxFileDlg.is() || !xFltMgr.is() )
+    if ( ! mxFileDlg.is() )
         return ERRCODE_ABORT;
-
-    if ( maCurFilter.getLength() )
-    {
-        try
-        {
-            xFltMgr->setCurrentFilter( maCurFilter );
-        }
-        catch( IllegalArgumentException ){}
-    }
 
     loadConfig();
 
@@ -813,6 +794,19 @@ ErrCode FileDialogHelper_Impl::execute()
         return ERRCODE_ABORT;
     else
         return ERRCODE_NONE;
+}
+
+// ------------------------------------------------------------------------
+OUString FileDialogHelper_Impl::getPath() const
+{
+    OUString aPath;
+
+    if ( mxFileDlg.is() )
+        aPath = mxFileDlg->getDisplayDirectory();
+    else
+        aPath = maPath;
+
+    return aPath;
 }
 
 // ------------------------------------------------------------------------
@@ -879,6 +873,17 @@ void FileDialogHelper_Impl::setFilter( const OUString& rFilter )
                                         rFilter, 0, SFX_FILTER_NOTINFILEDLG );
         if ( pFilter )
             maCurFilter = pFilter->GetUIName();
+    }
+
+    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+
+    if ( maCurFilter.getLength() && xFltMgr.is() )
+    {
+        try
+        {
+            xFltMgr->setCurrentFilter( maCurFilter );
+        }
+        catch( IllegalArgumentException ){}
     }
 }
 
@@ -1045,41 +1050,63 @@ void FileDialogHelper_Impl::saveConfig()
     if ( ! xDlg.is() )
         return;
 
-    if ( mbHasAutoExt )
-    {
-        try
-        {
-            aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0 );
-            sal_Bool bAutoExt = sal_False;
-            if ( aValue >>= bAutoExt )
-            {
-                SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
-                aDlgOpt.SetUserData( String::CreateFromInt32( (sal_Int32) bAutoExt ) );
-            }
-        }
-        catch( IllegalArgumentException ){}
-    }
-
-    if ( mbHasPreview || mbHasLink )
+    if ( mbHasPreview )
     {
         SvtViewOptions aDlgOpt( E_DIALOG, IMPGRF_CONFIGNAME );
-        String aUserData( ';' );// = aDlgOpt.GetUserData();
+        String aUserData = String::CreateFromAscii( "   " );
 
         try
         {
             aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0 );
             sal_Bool bValue = sal_False;
-            if ( aValue >>= bValue )
-                aUserData.SetToken( 0, ';', String::CreateFromInt32( (sal_Int32) bValue ) );
+            aValue >>= bValue;
+            aUserData.SetToken( 0, ' ', String::CreateFromInt32( (sal_Int32) bValue ) );
 
             aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
             bValue = sal_False;
-            if ( aValue >>= bValue )
-                aUserData.SetToken( 1, ';', String::CreateFromInt32( (sal_Int32) bValue ) );
+            aValue >>= bValue;
+            aUserData.SetToken( 1, ' ', String::CreateFromInt32( (sal_Int32) bValue ) );
+
+            aUserData.SetToken( 2, ' ', getPath() );
+
+            String aFilter = getFilter();
+            aFilter = EncodeSpaces_Impl( aFilter );
+            aUserData.SetToken( 3, ' ', aFilter );
 
             aDlgOpt.SetUserData( aUserData );
         }
         catch( IllegalArgumentException ){}
+    }
+    else
+    {
+        SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
+           String aUserData = String::CreateFromAscii( "1  " );
+
+        if ( aDlgOpt.Exists() )
+        {
+            String aOld = aDlgOpt.GetUserData();
+            aUserData.SetToken( 0, ' ', aOld.GetToken( 0, ' ' ) );
+        }
+
+        if ( mbHasAutoExt )
+        {
+            try
+            {
+                aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0 );
+                sal_Bool bAutoExt = sal_True;
+                aValue >>= bAutoExt;
+                aUserData.SetToken( 0, ' ', String::CreateFromInt32( (sal_Int32) bAutoExt ) );
+            }
+            catch( IllegalArgumentException ){}
+        }
+
+        aUserData.SetToken( 1, ' ', getPath() );
+
+        String aFilter = getFilter();
+        aFilter = EncodeSpaces_Impl( aFilter );
+        aUserData.SetToken( 2, ' ', aFilter );
+
+        aDlgOpt.SetUserData( aUserData );
     }
 }
 
@@ -1092,24 +1119,7 @@ void FileDialogHelper_Impl::loadConfig()
     if ( ! xDlg.is() )
         return;
 
-    if ( mbHasAutoExt )
-    {
-        // initialize from config
-        SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
-
-        if ( aDlgOpt.Exists() )
-        {
-            sal_Int32 nFlag = aDlgOpt.GetUserData().toInt32();
-            aValue <<= (sal_Bool) nFlag;
-            try
-            {
-                xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue );
-            }
-            catch( IllegalArgumentException ){}
-        }
-    }
-
-    if ( mbHasPreview || mbHasLink )
+    if ( mbHasPreview )
     {
         SvtViewOptions aViewOpt( E_DIALOG, IMPGRF_CONFIGNAME );
         String aUserData;
@@ -1122,19 +1132,61 @@ void FileDialogHelper_Impl::loadConfig()
             try
             {
                 // respect the last "insert as link" state
-                sal_Bool bLink = (sal_Bool) aUserData.GetToken(0).ToInt32();
+                sal_Bool bLink = (sal_Bool) aUserData.GetToken( 0, ' ' ).ToInt32();
                 aValue <<= bLink;
                 xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aValue );
 
                 // respect the last "show preview" state
-                sal_Bool bShowPreview = (sal_Bool) aUserData.GetToken(1).ToInt32();
+                sal_Bool bShowPreview = (sal_Bool) aUserData.GetToken( 1, ' ' ).ToInt32();
                 aValue <<= bShowPreview;
                 xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, aValue );
+
+                if ( ! maPath.getLength() )
+                    setPath( aUserData.GetToken( 2, ' ' ) );
+
+                if ( ! maCurFilter.getLength() )
+                {
+                    String aFilter = aUserData.GetToken( 3, ' ' );
+                    aFilter = DecodeSpaces_Impl( aFilter );
+                    setFilter( aFilter );
+                }
 
                 // set the member so we know that we have to show the preview
                 mbShowPreview = bShowPreview;
             }
             catch( IllegalArgumentException ){}
+        }
+    }
+    else
+    {
+        SvtViewOptions aViewOpt( E_DIALOG, IODLG_CONFIGNAME );
+        String aUserData;
+
+        if ( aViewOpt.Exists() )
+            aUserData = aViewOpt.GetUserData();
+
+        if ( aUserData.Len() > 0 )
+        {
+            if ( ! maPath.getLength() )
+                setPath( aUserData.GetToken( 1, ' ' ) );
+
+            if ( ! maCurFilter.getLength() )
+            {
+                String aFilter = aUserData.GetToken( 2, ' ' );
+                aFilter = DecodeSpaces_Impl( aFilter );
+                setFilter( aFilter );
+            }
+
+            if ( mbHasAutoExt )
+            {
+                sal_Int32 nFlag = aUserData.GetToken( 0, ' ' ).ToInt32();
+                aValue <<= (sal_Bool) nFlag;
+                try
+                {
+                    xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue );
+                }
+                catch( IllegalArgumentException ){}
+            }
         }
     }
 }
@@ -1361,6 +1413,24 @@ ErrCode FileOpenDialog_Impl( sal_uInt32 nFlags,
     return nRet;
 }
 
+
+// ------------------------------------------------------------------------
+String EncodeSpaces_Impl( const String& rSource )
+{
+    String aRet( rSource );
+    aRet.SearchAndReplaceAll( String::CreateFromAscii( " " ),
+                              String::CreateFromAscii( "%20" ) );
+    return aRet;
+}
+
+// ------------------------------------------------------------------------
+String DecodeSpaces_Impl( const String& rSource )
+{
+    String aRet( rSource );
+    aRet.SearchAndReplaceAll( String::CreateFromAscii( "%20" ),
+                              String::CreateFromAscii( " " ) );
+    return aRet;
+}
 
 // ------------------------------------------------------------------------
 
