@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: er $ $Date: 2002-08-07 14:55:10 $
+ *  last change: $Author: er $ $Date: 2002-09-05 18:00:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,22 +1045,32 @@ BOOL ImpSvNumberInputScan::GetDateRef( double& fDays, USHORT& nCounter,
         if ( bFormatTurn )
         {
 #if 0
-// TODO: We are currently not able to fully support a switch to another
-// calendar for several reasons:
-// 1. All calendars are not able to handle other field input than Gregorian,
-//    which has to be implemented in the i18n framework.
-//    See #if NF_TEST_CALENDAR further down.
-// 2. The GetMonth() method currently only matches month names of the default
-//    calendar. Alternating month names of the actual format's calendar would
-//    have to be implemented.
-// As long as both issues aren't solved there is no need to even try to switch
-// the calendar here, since any field input would result in Gregorian input
-// anyways, producing wrong results.
-// 3. We do have a problem if both (locale's default and format's) calendars
-//    define the same YMD order and use the same date separator, there is no
-//    way to distinguish between them if the input results in valid calendar
-//    input for both calendars. How to solve?
+/* TODO:
+We are currently not able to fully support a switch to another calendar during
+input for the following reasons:
+1. We do have a problem if both (locale's default and format's) calendars
+   define the same YMD order and use the same date separator, there is no way
+   to distinguish between them if the input results in valid calendar input for
+   both calendars. How to solve? Would NfEvalDateFormat be sufficient? Should
+   it always be set to NF_EVALDATEFORMAT_FORMAT_INTL and thus the format's
+   calendar be preferred? This could be confusing if a Calc cell was formatted
+   different to the locale's default and has no content yet, then the user has
+   no clue about the format or calendar being set.
+2. In Calc cell edit mode a date is always displayed and edited using the
+   default edit format of the default calendar (normally being Gregorian). If
+   input was ambiguous due to issue #1 we'd need a mechanism to tell that a
+   date was edited and not newly entered. Not feasible. Otherwise we'd need a
+   mechanism to use a specific edit format with a specific calendar according
+   to the format set.
+3. For some calendars like Japanese Gengou we'd need era input, which isn't
+   implemented at all. Though this is a rare and special case, forcing a
+   calendar dependent edit format as suggested in item #2 might require era
+   input, if it shouldn't result in a fallback to Gregorian calendar.
+4. Last and least: the GetMonth() method currently only matches month names of
+   the default calendar. Alternating month names of the actual format's
+   calendar would have to be implemented. No problem.
 
+*/
             if ( pFormat->IsOtherCalendar( nStringScanNumFor ) )
                 pFormat->SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             else
@@ -1300,11 +1310,20 @@ BOOL ImpSvNumberInputScan::GetDateRef( double& fDays, USHORT& nCounter,
 #if NF_TEST_CALENDAR
 {
     using namespace ::com::sun::star;
+    struct entry { const char* lan; const char* cou; const char* cal; };
+    const entry cals[] = {
+        { "en", "US",  "gregorian" },
+        { "ar", "TN",      "hijri" },
+        { "he", "IL",     "jewish" },
+        { "ja", "JP",     "gengou" },
+        { "ko", "KR", "hanja_yoil" },
+        { "th", "TH",   "buddhist" },
+        { "zh", "TW",        "ROC" },
+        0
+    };
     lang::Locale aLocale;
     sal_Bool bValid;
-    sal_Int16 nDay, nMonth, nYear;
-    aLocale.Language = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "he" ) );
-    aLocale.Country = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IL" ) );
+    sal_Int16 nDay, nMonth, nYear, nDaySet, nMonthSet, nYearSet;
     uno::Reference< lang::XMultiServiceFactory > xSMgr =
         ::comphelper::getProcessServiceFactory();
     uno::Reference< ::drafts::com::sun::star::i18n::XExtendedCalendar > xCal(
@@ -1312,23 +1331,25 @@ BOOL ImpSvNumberInputScan::GetDateRef( double& fDays, USHORT& nCounter,
                     RTL_CONSTASCII_USTRINGPARAM(
                         "com.sun.star.i18n.LocaleCalendar" ) ) ),
             uno::UNO_QUERY );
-    xCal->loadCalendar( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "jewish"
-                    ) ), aLocale );
-    xCal->setValue( i18n::CalendarFieldIndex::DAY_OF_MONTH, 23 );
-    xCal->setValue( i18n::CalendarFieldIndex::MONTH, 11 );
-    xCal->setValue( i18n::CalendarFieldIndex::YEAR, 5678 );
-    bValid = xCal->isValid();
-    nDay   = xCal->getValue( i18n::CalendarFieldIndex::DAY_OF_MONTH );
-    nMonth = xCal->getValue( i18n::CalendarFieldIndex::MONTH );
-    nYear  = xCal->getValue( i18n::CalendarFieldIndex::YEAR );
-
-    // bValid: 1   nDay: 13   nMonth: 8   nYear: 9439
-
-    // #102027#
-    // The difference seems to be the difference of Jewish calendar to
-    // Gregorian calendar, as if the setValue() calls were interpreted as
-    // Gregorian calendar input instead of Jewish calendar input.
-
+    for ( const entry* p = cals; p->lan; ++p )
+    {
+        aLocale.Language = ::rtl::OUString::createFromAscii( p->lan );
+        aLocale.Country = ::rtl::OUString::createFromAscii( p->cou );
+        xCal->loadCalendar( ::rtl::OUString::createFromAscii( p->cal ),
+                aLocale );
+        xCal->setDateTime( 0.0 );   // 1-Jan-1970
+        nDaySet   = xCal->getValue( i18n::CalendarFieldIndex::DAY_OF_MONTH );
+        nMonthSet = xCal->getValue( i18n::CalendarFieldIndex::MONTH );
+        nYearSet  = xCal->getValue( i18n::CalendarFieldIndex::YEAR );
+        xCal->setValue( i18n::CalendarFieldIndex::DAY_OF_MONTH, nDaySet );
+        xCal->setValue( i18n::CalendarFieldIndex::MONTH, nMonthSet );
+        xCal->setValue( i18n::CalendarFieldIndex::YEAR, nYearSet );
+        bValid = xCal->isValid();
+        nDay   = xCal->getValue( i18n::CalendarFieldIndex::DAY_OF_MONTH );
+        nMonth = xCal->getValue( i18n::CalendarFieldIndex::MONTH );
+        nYear  = xCal->getValue( i18n::CalendarFieldIndex::YEAR );
+        bValid = bValid && nDay == nDaySet && nMonth == nMonthSet && nYear == nYearSet;
+    }
 }
 #endif  // NF_TEST_CALENDAR
 
