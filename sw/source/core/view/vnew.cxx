@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 16:51:18 $
+ *  last change: $Author: rt $ $Date: 2001-08-10 10:52:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 
 #pragma hdrstop
 
-#include <so3/advise.hxx>
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
 #endif
@@ -394,6 +393,9 @@ SdrView* ViewShell::GetDrawViewWithValidMarkList()
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/07/31 16:51:18  jp
+      Task #90434#: add author to the profiling statements
+
       Revision 1.4  2001/07/23 17:18:16  jp
       Task #90121#: add profiling statements
 
