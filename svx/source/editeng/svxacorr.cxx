@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-09 18:00:24 $
+ *  last change: $Author: mtg $ $Date: 2001-02-16 09:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2113,6 +2113,8 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
  * --------------------------------------------------*/
 SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
 {
+
+
     if( pAutocorr_List )
         pAutocorr_List->DeleteAndDestroy( 0, pAutocorr_List->Count() );
     else
@@ -2282,7 +2284,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
             }
 
             // get filter
-            Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLAutoCorrectImport( pAutocorr_List, rAutoCorrect );
+            Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLAutoCorrectImport( pAutocorr_List, rAutoCorrect, xStg );
 
             // connect parser and filter
             Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
@@ -2514,7 +2516,8 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
         SfxMedium aSrcMedium( sShareAutoCorrFile, STREAM_STD_READ, TRUE );
         SvStorageRef xSrcStg = aSrcMedium.GetStorage();
         SfxMedium aDstMedium( sUserAutoCorrFile, STREAM_STD_WRITE, TRUE );
-        SvStorageRef xDstStg = aDstMedium.GetOutputStorage();
+        // Copy it to a UCBStorage
+        SvStorageRef xDstStg = aDstMedium.GetOutputStorage(  );
 
         if( xSrcStg.Is() && xDstStg.Is() )
         {
