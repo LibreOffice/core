@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsicheck.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gh $ $Date: 2001-11-21 15:24:43 $
+ *  last change: $Author: gh $ $Date: 2001-11-28 13:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,12 +99,13 @@ private:
     GSILine *pGermanLine;
     void PrintList( ParserMessageList &rList, ByteString aPrefix, GSILine *pLine );
     BOOL bPrintContext;
+    BOOL bInternal;
 
 public:
-    GSIBlock( BOOL PbPrintContext ) : pGermanLine( NULL ), bPrintContext( PbPrintContext ) {};
+    GSIBlock( BOOL PbPrintContext, BOOL bInt ) : pGermanLine( NULL ), bPrintContext( PbPrintContext ), bInternal( bInt ) {};
     ~GSIBlock();
     void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, ULONG nLine, ByteString aUniqueId = ByteString() );
-    void InsertLine( const ByteString &rLine, ULONG nLine, BOOL bInternal );
+    void InsertLine( const ByteString &rLine, ULONG nLine );
     BOOL CheckSyntax( ULONG nLine );
 
     void WriteError( SvStream &aErrOut );
@@ -131,7 +132,6 @@ GSILine::GSILine( const ByteString &rLine, ULONG nLine )
 //
 // class GSIBlock
 //
-
 /*****************************************************************************/
 GSIBlock::~GSIBlock()
 /*****************************************************************************/
@@ -143,7 +143,7 @@ GSIBlock::~GSIBlock()
 }
 
 /*****************************************************************************/
-void GSIBlock::InsertLine( const ByteString &rLine, ULONG nLine, BOOL bInternal )
+void GSIBlock::InsertLine( const ByteString &rLine, ULONG nLine )
 /*****************************************************************************/
 {
     GSILine *pLine = new GSILine( rLine, nLine );
@@ -231,7 +231,8 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine )
     {
         if ( !aTester.ReferenceOK( *pGermanLine ) )
         {
-            PrintList( aTester.GetReferenceErrors(), "ReferenceString", pGermanLine );
+            if ( bInternal )
+                PrintList( aTester.GetReferenceErrors(), "ReferenceString", pGermanLine );
             pGermanLine->NotOK();
         }
     }
@@ -255,7 +256,7 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine )
 void GSIBlock::WriteError( SvStream &aErrOut )
 {
     BOOL bHasError = FALSE;
-    BOOL bCopyAll = !pGermanLine || !pGermanLine->IsOK();
+    BOOL bCopyAll = ( !pGermanLine || !pGermanLine->IsOK() ) && bInternal;
     ULONG i;
     for ( i = 0; i < Count(); i++ )
     {
@@ -266,7 +267,7 @@ void GSIBlock::WriteError( SvStream &aErrOut )
         }
     }
 
-    if ( pGermanLine && ( bHasError || !pGermanLine->IsOK() ) )
+    if ( pGermanLine && ( bHasError || ( !pGermanLine->IsOK() && bInternal ) ) )
         aErrOut.WriteLine( *pGermanLine );
 }
 
@@ -303,7 +304,7 @@ void Help()
 /*****************************************************************************/
 {
     fprintf( stdout, "\n" );
-    fprintf( stdout, "gsicheck (c)1999 by StarOffice Entwicklungs GmbH\n" );
+    fprintf( stdout, "gsicheck Version 1.5.0 (c)1999 - 2001 by SUN Microsystems\n" );
     fprintf( stdout, "================================================\n" );
     fprintf( stdout, "\n" );
     fprintf( stdout, "gsicheck checks the syntax of tags in GSI-Files (Gutschmitt-Interface)\n" );
@@ -475,12 +476,12 @@ int _cdecl main( int argc, char *argv[] )
 
                         delete pBlock;
                     }
-                    pBlock = new GSIBlock( bPrintContext );
+                    pBlock = new GSIBlock( bPrintContext, bInternal );
 
                     aOldId = aId;
                 }
 
-                pBlock->InsertLine( sGSILine, nLine, bInternal );
+                pBlock->InsertLine( sGSILine, nLine );
             }
         }
     }
