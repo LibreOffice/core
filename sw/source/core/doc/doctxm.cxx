@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 10:55:55 $
+ *  last change: $Author: os $ $Date: 2000-10-31 11:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1103,7 +1103,8 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
         pDoc->GetNodes().Delete( aInsPos, 1 );
 
     aN2L.RestoreUpperFrms( pDoc->GetNodes(), nIdx, nIdx + 1 );
-    SwFrm::CheckPageDescs( (SwPageFrm*)pDoc->GetRootFrm()->Lower() );
+    if(pDoc->GetRootFrm())
+        SwFrm::CheckPageDescs( (SwPageFrm*)pDoc->GetRootFrm()->Lower() );
 
     SetProtect( SwTOXBase::IsProtected() );
 }
