@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonlingui.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 13:59:24 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
  // include ---------------------------------------------------------------
 #include "dialogs.hrc"
 #include "helpid.hrc"
@@ -339,6 +338,16 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ hindi ] = "हमेशा प्रतिस्थापि~त करो";
         Text[ hungarian ] = "Mindig ~cseréli";
         Text[ slovenian ] = "Vedno z~amenjaj";
+    };
+
+    PushButton BTN_OPTIONS
+    {
+        Pos = MAP_APPFONT( 209, 129 );
+        Size = MAP_APPFONT( 55, 14 );
+        Hide = TRUE ;
+        Text = "Options..." ;
+        Text [ ENGLISH ] = "Options..." ;
+        Text [ english_us ] = "Options..." ;
     };
 
     FixedText FT_STATUS
