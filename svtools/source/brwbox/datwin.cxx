@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 15:19:58 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:32:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,28 +226,30 @@ void BrowserColumn::ZoomChanged(const Fraction& rNewZoom)
 
 //-------------------------------------------------------------------
 
-BrowserDataWin::BrowserDataWin( BrowseBox* pParent ) :
-    Control( pParent, WinBits(WB_CLIPCHILDREN) ),
-    DragSourceHelper( this ),
-    DropTargetHelper( this ),
-    pHeaderBar( 0 ),
-    pEventWin( pParent ),
-    pCornerWin( 0 ),
-    pDtorNotify( 0 ),
-    bInPaint( FALSE ),
-    bInCommand( FALSE ),
-    bNoScrollBack( FALSE ),
-    bUpdateMode( TRUE ),
-    bResizeOnPaint( FALSE ),
-    bUpdateOnUnlock( FALSE ),
-    bInUpdateScrollbars( FALSE ),
-    bHadRecursion( FALSE ),
-    bOwnDataChangedHdl( FALSE ),
-    bCallingDropCallback( FALSE ),
-    nUpdateLock( 0 ),
-    nCursorHidden( 0 ),
-    m_nDragRowDividerLimit( 0 ),
-    m_nDragRowDividerOffset( 0 )
+BrowserDataWin::BrowserDataWin( BrowseBox* pParent )
+    :Control( pParent, WinBits(WB_CLIPCHILDREN) )
+    ,DragSourceHelper( this )
+    ,DropTargetHelper( this )
+    ,pHeaderBar( 0 )
+    ,pEventWin( pParent )
+    ,pCornerWin( 0 )
+    ,pDtorNotify( 0 )
+    ,bInPaint( FALSE )
+    ,bInCommand( FALSE )
+    ,bNoScrollBack( FALSE )
+    ,bUpdateMode( TRUE )
+    ,bResizeOnPaint( FALSE )
+    ,bUpdateOnUnlock( FALSE )
+    ,bInUpdateScrollbars( FALSE )
+    ,bHadRecursion( FALSE )
+    ,bOwnDataChangedHdl( FALSE )
+    ,bCallingDropCallback( FALSE )
+    ,nUpdateLock( 0 )
+    ,nCursorHidden( 0 )
+    ,m_nDragRowDividerLimit( 0 )
+    ,m_nDragRowDividerOffset( 0 )
+    ,bNoHScroll( FALSE )
+    ,bNoVScroll( FALSE )
 {
     aMouseTimer.SetTimeoutHdl( LINK( this, BrowserDataWin, RepeatedMouseMove ) );
     aMouseTimer.SetTimeout( 100 );
