@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.145 $
+ *  $Revision: 1.146 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-02 13:07:21 $
+ *  last change: $Author: pl $ $Date: 2002-10-09 08:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3014,8 +3014,8 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
                            &nLeft,
                            &nTop,
                            &hDummy );
-    pFrame_->maGeometry.nLeftDecoration = nLeft;
-    pFrame_->maGeometry.nTopDecoration  = nTop;
+    pFrame_->maGeometry.nLeftDecoration = nLeft-1;
+    pFrame_->maGeometry.nTopDecoration  = nTop-1;
 
     /*
      *  decorations are not symmetric,
