@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpptwrp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:18:57 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@ public:
         sal_Bool bShowProgress);
     virtual ~SdPPTFilter (void);
 
-    virtual sal_Bool        Import();
-    virtual sal_Bool        Export();
+    sal_Bool        Import();
+    sal_Bool        Export();
 
     // these methods are necassary for the export to PowerPoint
     void                    PreSaveBasic();         // restaures the original basic storage
