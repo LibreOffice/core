@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 06:56:59 $
+ *  last change: $Author: fs $ $Date: 2001-01-30 08:26:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,9 @@
 #define RID_STR_QUERIES_CONTAINER           RID_STRING_START + 36
 #define RID_STR_TABLES_CONTAINER            RID_STRING_START + 37
 #define STR_OBJECT_ALREADY_EXSISTS          RID_STRING_START + 38
+#define STR_ALL_TABLES                      RID_STRING_START + 39
+#define STR_ALL_VIEWS                       RID_STRING_START + 40
+#define STR_ALL_TABLES_AND_VIEWS            RID_STRING_START + 41
 
 //========================================================================
 // untyped resources
@@ -225,6 +228,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2001/01/26 06:56:59  fs
+ *  +PAGE_QUERYADMINISTRATION
+ *
  *  Revision 1.18  2001/01/11 09:20:02  oj
  *  #81232# new string
  *
