@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:55:01 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:30:18 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -59,11 +59,7 @@ JAVAFILES  = \
 
 CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
 
-SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)/jurt.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/ridl.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/sandbox.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/juh.jar\
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
 
 
@@ -76,7 +72,7 @@ include $(SETTINGS)/stdtarget.mk
 
 $(CLASSFILES) : $(JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
 
 JavaDocumentHandlingExamples : $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
@@ -114,16 +110,16 @@ JavaDocumentHandlingExamples : $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
 
 DocumentConverter.run: $(OUT_COMP_CLASS)/DocumentConverter.class
-	java -classpath "$(SDK_CLASSPATH)" $(basename $@) "./test" "MS Word 97" "doc"
+	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@) "./test" "MS Word 97" "doc"
 
 DocumentLoader.run: $(OUT_COMP_CLASS)/DocumentLoader.class
-	java -classpath "$(SDK_CLASSPATH)" $(basename $@) "./test/test1.sxw"
+	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@) "./test/test1.sxw"
 
 DocumentPrinter.run: $(OUT_COMP_CLASS)/DocumentPrinter.class
-	java -classpath "$(SDK_CLASSPATH)" $(basename $@) "my_printer" "./test/test1.sxw" 1
+	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@) "my_printer" "./test/test1.sxw" 1
 
 DocumentSaver.run: $(OUT_COMP_CLASS)/DocumentSaver.class
-	java -classpath "$(SDK_CLASSPATH)" $(basename $@) "./test/test1.sxw" "./test/testsave.sxw"
+	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@) "./test/test1.sxw" "./test/testsave.sxw"
 
 .PHONY: clean
 clean :
