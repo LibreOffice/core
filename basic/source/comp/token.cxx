@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:34:05 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
     { CALL,     "Call" },
     { CASE,     "Case" },
     { _CDECL_,  "Cdecl" },
+    { CLASSMODULE, "ClassModule" },
     { CLOSE,    "Close" },
     { COMPARE,  "Compare" },
     { COMPATIBLE,"Compatible" },
@@ -124,6 +125,7 @@ static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
     { END,      "End" },
     { ENDFUNC,  "End Function" },
     { ENDIF,    "End If" },
+    { ENDPROPERTY, "End Property" },
     { ENDSELECT,"End Select" },
     { ENDSUB,   "End Sub" },
     { ENDTYPE,  "End Type" },
@@ -135,6 +137,7 @@ static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
     { EXPLICIT, "Explicit" },
     { FOR,      "For" },
     { FUNCTION, "Function" },
+    { GET,      "Get" },
     { GLOBAL,   "Global" },
     { GOSUB,    "GoSub" },
     { GOTO,     "GoTo" },
@@ -169,6 +172,7 @@ static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
     { PRESERVE, "Preserve" },
     { PRINT,    "Print" },
     { PRIVATE,  "Private" },
+    { PROPERTY, "Property" },
     { PUBLIC,   "Public" },
     { RANDOM,   "Random" },
     { READ,     "Read" },
@@ -585,6 +589,7 @@ special:
             case SELECT:   Next(); eCurTok = ENDSELECT; break;
             case SUB:      Next(); eCurTok = ENDSUB; break;
             case FUNCTION: Next(); eCurTok = ENDFUNC; break;
+            case PROPERTY: Next(); eCurTok = ENDPROPERTY; break;
             case TYPE:     Next(); eCurTok = ENDTYPE; break;
             case WITH:     Next(); eCurTok = ENDWITH; break;
             default :      eCurTok = END;
@@ -616,6 +621,11 @@ special:
         else if( eCurTok >= DATATYPE1 && eCurTok <= DATATYPE2 )
             eCurTok = SYMBOL;
     }
+
+    // #118084 PROPERTY token only visible in compatible mode
+    if( tp->t == PROPERTY && !bCompatible )
+        eCurTok = SYMBOL;
+
     bEos = IsEoln( eCurTok );
     return eCurTok;
 }
