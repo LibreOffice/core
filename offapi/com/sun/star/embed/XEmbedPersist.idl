@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEmbedPersist.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-06 08:53:35 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,35 +85,40 @@
 #include <com/sun/star/beans/PropertyValue.idl>
 #endif
 
-//=============================================================================
+//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
-/** Specifies an implementation for embedded object persistence.
-The idea is that any usable embedded object should be initialized
-with an entry in the parent storage that will be used as persistent representation.
-The only exception is a linked object. During creation it will be assigned with
-it's own persistent representation. It is possible to convert the linked object
-to embedded object just by specifying entry and persistent storage, thay will be
-used as persistent representation of the object.
+//============================================================================
+/** specifies an implementation for embedded object persistence.
+    <p>
+    The idea is that any usable embedded object should be initialized
+    with an entry in the parent storage that will be used as persistent
+    representation.
+    </p>
  */
 interface XEmbedPersist: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-    /** Provide object with a parent storage and a name for object's entry
+    //------------------------------------------------------------------------
+    /** provides object with a parent storage and a name for object's entry.
 
-        <p> An entry with the specified name should be created\opened inside provided storage.
-        It can be a storage or a stream. For example, OOo API will refer to ole storages
-        only by streams, but the object implementation will use storage based on this stream.
+        <p>
+        An entry with the specified name should be created/opened inside
+        provided storage. It can be a storage or a stream. For example,
+        OOo API will refer to ole storages only by streams, but the object
+        implementation will use storage based on this stream.
         </p>
 
-        <p> Factory does this call to initialize the embedded object.
-        The linked object can be initialized by factory in different way ( internally ).
+        <p>
+        Factory does this call to initialize the embedded object.
+        The linked object can be initialized by factory in different way
+        ( internally ).
         </p>
 
-        <p> It is also possible to switch object persistent representation through this call.
-        Actually this is the way, this call can be used by user ( since initialization is done by factory ).
+        <p>
+        It is also possible to switch object persistent representation through
+        this call. Actually this is the way, this call can be used by user
+        ( since initialization is done by factory ).
         </p>
 
         @param xStorage
@@ -126,13 +131,15 @@ interface XEmbedPersist: com::sun::star::uno::XInterface
             a mode in which the object should be initialized from entry
             can take values from EntryInitModes constant set
 
-        @param lArguments
-            optional parameters for the embedded document persistence initialization
-            see also <type scope="com::sun::star::document">MediaDescriptor</type>
+        @param aMediaArgs
+            optional parameters for the embedded document persistence
+            initialization, see also
+            <type scope="com::sun::star::document">MediaDescriptor</type>
 
-        @param lObjArgs
-            optional parameters for the object persistence initialization
-            see also <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
+        @param aObjectArgs
+            optional parameters for the object persistence initialization,
+            see also
+            <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
 
         @thrown ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal
@@ -146,18 +153,19 @@ interface XEmbedPersist: com::sun::star::uno::XInterface
         @throws com::sun::star::uno::Exception
             in case of other problems
      */
-    void setPersistentEntry( [in] ::com::sun::star::embed::XStorage xStorage,
-                             [in] string sEntName,
-                             [in] long nEntryConnectionMode,
-                             [in] sequence< ::com::sun::star::beans::PropertyValue > lArguments,
-                             [in] sequence< ::com::sun::star::beans::PropertyValue > lObjArgs )
+    void setPersistentEntry(
+            [in] ::com::sun::star::embed::XStorage xStorage,
+            [in] string sEntName,
+            [in] long nEntryConnectionMode,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaArgs,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception );
 
-    //-------------------------------------------------------------------------
-    /** Let the object store itself to it's own entry
+    //------------------------------------------------------------------------
+    /** lets the object store itself to it's own entry
 
         @throws com::sun::star::embed::WrongStateException
             the object is in wrong state
@@ -173,8 +181,9 @@ interface XEmbedPersist: com::sun::star::uno::XInterface
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception );
 
-    //-------------------------------------------------------------------------
-    /** Let the object store itself to an entry in destination storage, the own persistence entry is not changed
+    //------------------------------------------------------------------------
+    /** lets the object store itself to an entry in destination storage,
+        the own persistence entry is not changed.
 
         @param xStorage
             a parent storage the entry should be created inside
@@ -182,13 +191,13 @@ interface XEmbedPersist: com::sun::star::uno::XInterface
         @param sEntName
             a name for the entry
 
-        @param lArguments
-            optional parameters for document saving
-            see also <type scope="com::sun::star::document">MediaDescriptor</type>
+        @param aMediaArgs
+            optional parameters for document saving, see also
+            <type scope="com::sun::star::document">MediaDescriptor</type>
 
-        @param lObjArgs
-            optional parameters for the object saving
-            see also <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
+        @param aObjectArgs
+            optional parameters for the object saving, see also
+            <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
 
         @thrown ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal
@@ -197,26 +206,32 @@ interface XEmbedPersist: com::sun::star::uno::XInterface
             the object is in wrong state
 
         @throws com::sun::star::io::IOException
-            in case of io problems during opening\creation
+            in case of io problems during storing
 
         @throws com::sun::star::uno::Exception
             in case of other problems
      */
-    void storeToEntry(  [in] ::com::sun::star::embed::XStorage xStorage,
-                        [in] string sEntName,
-                        [in] sequence< ::com::sun::star::beans::PropertyValue > lArguments,
-                        [in] sequence< ::com::sun::star::beans::PropertyValue > lObjArgs )
+    void storeToEntry(
+            [in] ::com::sun::star::embed::XStorage xStorage,
+            [in] string sEntName,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaArgs,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception );
 
-    //-------------------------------------------------------------------------
-    /** Let the object store itself to an entry in destination storage and prepare to use the new entry for own persistence
+    //------------------------------------------------------------------------
+    /** lets the object store itself to an entry in destination storage and
+        prepare to use the new entry for own persistence.
 
-        <p> The object should be stored to the new entry, after the entry should be remembered by the object.
-        After the storing process is finished the saveCompleted() method can be used to specify should the
-        object use the new entry or the old one. The object persistence can not be used until saveCompleted() is called.
+        <p>
+        The object should be stored to the new entry, after that the entry
+        should be remembered by the object. After the storing process is
+        finished the <method>XEmbedPersist::saveCompleted</method> method
+        can be used to specify whether the object should use the new entry or
+        the old one. The object persistence can not be used until
+        <method>XEmbedPersist::saveCompleted</method> is called.
         So this state can be treated as "HandsOff" state.
         <p>
 
@@ -226,13 +241,13 @@ interface XEmbedPersist: com::sun::star::uno::XInterface
         @param sEntName
             a name for the entry
 
-        @param lArguments
-            optional parameters for document saving
-            see also <type scope="com::sun::star::document">MediaDescriptor</type>
+        @param aMediaArgs
+            optional parameters for document saving, see also
+            <type scope="com::sun::star::document">MediaDescriptor</type>
 
-        @param lObjArgs
-            optional parameters for the object saving
-            see also <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
+        @param aObjectArgs
+            optional parameters for the object saving, see also
+            <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
 
         @thrown ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal
@@ -241,23 +256,25 @@ interface XEmbedPersist: com::sun::star::uno::XInterface
             the object is in wrong state
 
         @throws com::sun::star::io::IOException
-            in case of io problems during opening\creation
+            in case of io problems during storing
 
         @throws com::sun::star::uno::Exception
             in case of other problems
      */
-    void storeAsEntry(  [in] ::com::sun::star::embed::XStorage xStorage,
-                        [in] string sEntName,
-                        [in] sequence< ::com::sun::star::beans::PropertyValue > lArguments,
-                        [in] sequence< ::com::sun::star::beans::PropertyValue > lObjArgs )
+    void storeAsEntry(
+            [in] ::com::sun::star::embed::XStorage xStorage,
+            [in] string sEntName,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaArgs,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception );
 
 
-    //-------------------------------------------------------------------------
-    /** Specify whether the object should use an old storage or a new one after "save as" procedure.
+    //------------------------------------------------------------------------
+    /** specifies whether the object should use an old storage or a new one
+        after "save as" operation.
 
         @param bUseNew
             <TRUE/> the new storage should be used
@@ -274,8 +291,8 @@ interface XEmbedPersist: com::sun::star::uno::XInterface
         raises( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception );
 
-    //-------------------------------------------------------------------------
-    /** Allows to detect if the object has entry.
+    //------------------------------------------------------------------------
+    /** allows to detect if the object has entry.
 
         @returns
             <TRUE/> if the object has own entry set
@@ -284,8 +301,8 @@ interface XEmbedPersist: com::sun::star::uno::XInterface
     boolean hasEntry()
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //-------------------------------------------------------------------------
-    /** Allows to retrieve the current object entry name.
+    //------------------------------------------------------------------------
+    /** allows to retrieve the current object entry name.
 
         @returns
             the object entry name if any
@@ -296,8 +313,8 @@ interface XEmbedPersist: com::sun::star::uno::XInterface
     string getEntryName()
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //-------------------------------------------------------------------------
-    /** Allows to detect if the data store is read-only.
+    //------------------------------------------------------------------------
+    /** allows to detect if the data store is read-only.
 
         @returns
             <TRUE/> if the data store is readonly or opened readonly
@@ -309,16 +326,16 @@ interface XEmbedPersist: com::sun::star::uno::XInterface
     boolean isReadonly()
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //-------------------------------------------------------------------------
-    /** Let the object reload itself from the persistent entry
+    //------------------------------------------------------------------------
+    /** lets the object reload itself from the persistent entry
 
-        @param lArguments
-            optional parameters for document reloading
-            see also <type scope="com::sun::star::document">MediaDescriptor</type>
+        @param aMediaArgs
+            optional parameters for document reloading, see also
+            <type scope="com::sun::star::document">MediaDescriptor</type>
 
-        @param lObjArgs
-            optional parameters for object reloading
-            see also <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
+        @param aObjectArgs
+            optional parameters for object reloading, see also
+            <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
 
         @thrown ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal
@@ -332,8 +349,9 @@ interface XEmbedPersist: com::sun::star::uno::XInterface
         @throws com::sun::star::uno::Exception
             in case of other problems
      */
-    void reload( [in] sequence< ::com::sun::star::beans::PropertyValue > lArguments,
-                 [in] sequence< ::com::sun::star::beans::PropertyValue > lObjArgs )
+    void reload(
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaArgs,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
@@ -341,7 +359,7 @@ interface XEmbedPersist: com::sun::star::uno::XInterface
 
 };
 
-//=============================================================================
+//============================================================================
 
 }; }; }; };
 
