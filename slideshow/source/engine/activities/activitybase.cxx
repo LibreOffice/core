@@ -2,9 +2,9 @@
  *
  *  $RCSfile: activitybase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:57:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,20 +102,27 @@ namespace presentation
             mbIsActive = false;
         }
 
+        double ActivityBase::calcTimeLag() const
+        {
+            // TODO(Q1): implement different init process!
+            if (isActive() && mbFirstPerformCall)
+            {
+                mbFirstPerformCall = false;
+
+                // notify derived classes that we're
+                // starting now
+                const_cast<ActivityBase *>(this)->startAnimation();
+            }
+            return 0.0;
+        }
+
         bool ActivityBase::perform()
         {
             // still active?
             if( !isActive() )
                 return false; // no, early exit.
 
-            if( mbFirstPerformCall )
-            {
-                mbFirstPerformCall = false;
-
-                // notify derived classes that we're
-                // starting now
-                start();
-            }
+            OSL_ASSERT( ! mbFirstPerformCall );
 
             return true;
         }
@@ -153,18 +160,6 @@ namespace presentation
             return true;
         }
 
-        void ActivityBase::end()
-        {
-            mbIsActive = false;
-
-            // Activity is ending, queue event, then
-            if( mpEndEvent.get() )
-                mrEventQueue.addEvent( mpEndEvent );
-
-            // release references
-            mpEndEvent.reset();
-        }
-
         void ActivityBase::setTargets( const AnimatableShapeSharedPtr&      rShape,
                                        const ShapeAttributeLayerSharedPtr&  rAttrLayer )
         {
@@ -175,6 +170,19 @@ namespace presentation
 
             mpShape = rShape;
             mpAttributeLayer = rAttrLayer;
+        }
+
+        void ActivityBase::endActivity()
+        {
+            // this is a regular activity end
+            mbIsActive = false;
+
+            // Activity is ending, queue event, then
+            if( mpEndEvent.get() )
+                mrEventQueue.addEvent( mpEndEvent );
+
+            // release references
+            mpEndEvent.reset();
         }
 
         double ActivityBase::calcAcceleratedTime( double nT ) const
