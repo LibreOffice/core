@@ -72,6 +72,7 @@ mkdir: %_DEST%\inc%_EXT%\mozilla\nspr
 mkdir: %_DEST%\inc%_EXT%\mozilla\nspr\obsolete
 mkdir: %_DEST%\inc%_EXT%\mozilla\nspr\private
 mkdir: %_DEST%\inc%_EXT%\mozilla\nsprefm
+mkdir: %_DEST%\inc%_EXT%\mozilla\nss
 mkdir: %_DEST%\inc%_EXT%\mozilla\oji
 mkdir: %_DEST%\inc%_EXT%\mozilla\obsolete
 mkdir: %_DEST%\inc%_EXT%\mozilla\plugin
@@ -115,6 +116,7 @@ mkdir: %_DEST%\inc%_EXT%\mozilla\xpicleanup
 mkdir: %_DEST%\inc%_EXT%\mozilla\xpinstall
 mkdir: %_DEST%\inc%_EXT%\mozilla\xpnet
 mkdir: %_DEST%\inc%_EXT%\mozilla\zlib
+mkdir: %_DEST%\inc%_EXT%\mozilla\xpcom_obsolete
 
 ..\%__SRC%\inc\*.h %_DEST%\inc%_EXT%\mozilla
 ..\%__SRC%\inc\absync\* %_DEST%\inc%_EXT%\mozilla\absync
@@ -189,6 +191,7 @@ mkdir: %_DEST%\inc%_EXT%\mozilla\zlib
 ..\%__SRC%\inc\nspr\obsolete\* %_DEST%\inc%_EXT%\mozilla\nspr\obsolete
 ..\%__SRC%\inc\nspr\private\* %_DEST%\inc%_EXT%\mozilla\nspr\private
 ..\%__SRC%\inc\nsprefm\* %_DEST%\inc%_EXT%\mozilla\nsprefm
+..\%__SRC%\inc\nss\* %_DEST%\inc%_EXT%\mozilla\nss
 ..\%__SRC%\inc\oji\* %_DEST%\inc%_EXT%\mozilla\oji
 ..\%__SRC%\inc\obsolete\* %_DEST%\inc%_EXT%\mozilla\obsolete
 ..\%__SRC%\inc\plugin\* %_DEST%\inc%_EXT%\mozilla\plugin
@@ -232,5 +235,6 @@ mkdir: %_DEST%\inc%_EXT%\mozilla\zlib
 ..\%__SRC%\inc\xpinstall\* %_DEST%\inc%_EXT%\mozilla\xpinstall
 ..\%__SRC%\inc\xpnet\* %_DEST%\inc%_EXT%\mozilla\xpnet
 ..\%__SRC%\inc\zlib\* %_DEST%\inc%_EXT%\mozilla\zlib
+..\%__SRC%\inc\xpcom_obsolete\* %_DEST%\inc%_EXT%\mozilla\xpcom_obsolete
 ..\%__SRC%\lib\* %_DEST%\lib%_EXT%
 ..\%__SRC%\bin\*.zip %_DEST%\bin%_EXT%
