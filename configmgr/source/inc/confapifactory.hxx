@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confapifactory.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:28:14 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,9 @@ namespace configmgr
         uno::Reference< uno::XInterface > SAL_CALL
             instantiateCopyImporter( CreationContext const& xContext );
 
+        uno::Reference<uno::XInterface> SAL_CALL
+            instantiateMultiStratumBackend( CreationContext const& xContext );
+
         const SingletonRegistrationInfo * getDefaultBackendSingletonInfo();
         const ServiceRegistrationInfo   * getDefaultBackendServiceInfo();
 
@@ -162,6 +165,7 @@ namespace configmgr
         const ServiceRegistrationInfo * getSingleBackendAdapterServiceInfo();
         const ServiceRegistrationInfo * getMergeImportServiceInfo();
         const ServiceRegistrationInfo * getCopyImportServiceInfo();
+        const ServiceRegistrationInfo * getMultiStratumBackendServiceInfo();
     }
     namespace localbe
     {
@@ -174,10 +178,19 @@ namespace configmgr
         uno::Reference<uno::XInterface> SAL_CALL
             instantiateLocalHierarchyBrowser( CreationContext const& xContext );
 
+        uno::Reference<uno::XInterface> SAL_CALL
+            instantiateLocalSchemaSupplier( CreationContext const& xContext );
+
+        uno::Reference<uno::XInterface> SAL_CALL
+            instantiateLocalSingleStratum( CreationContext const& xContext );
+
         const ServiceRegistrationInfo * getLocalBackendServiceInfo();
         const ServiceRegistrationInfo * getLocalDataImportServiceInfo();
         const ServiceRegistrationInfo * getLocalHierarchyBrowserServiceInfo();
+        const ServiceRegistrationInfo * getLocalSchemaSupplierServiceInfo();
+        const ServiceRegistrationInfo * getLocalSingleStratumServiceInfo();
     } // localbe
+
 } //  namespace configmgr
 
 #endif // CONFIGMGR_API_FACTORY_HXX_
