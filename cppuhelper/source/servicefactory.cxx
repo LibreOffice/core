@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kr $ $Date: 2001-09-03 14:28:17 $
+ *  last change: $Author: jbu $ $Date: 2001-09-27 15:34:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,7 +474,8 @@ static Reference<XSimpleRegistry> nestRegistries(const OUString baseDir,
                                                  const Reference<XSingleServiceFactory> & xNesRegFac,
                                                  OUString csl_rdbs,
                                                  const OUString & write_rdb,
-                                                 sal_Bool forceWrite_rdb)
+                                                 sal_Bool forceWrite_rdb,
+                                                 sal_Bool bFallenBack)
     SAL_THROW((Exception))
 {
     sal_Int32 index;
@@ -493,6 +494,7 @@ static Reference<XSimpleRegistry> nestRegistries(const OUString baseDir,
         }
         catch (InvalidRegistryException & invalidRegistryException)
         {
+            // be tolerant for write registries ...
 #ifdef DEBUG
             OString rdb_name_tmp = OUStringToOString(write_rdb, RTL_TEXTENCODING_ASCII_US);
             OString message_dbg = OUStringToOString(invalidRegistryException.Message, RTL_TEXTENCODING_ASCII_US);
@@ -510,11 +512,12 @@ static Reference<XSimpleRegistry> nestRegistries(const OUString baseDir,
         OUString rdb_name = (index == -1) ? csl_rdbs : csl_rdbs.copy(0, index);
         csl_rdbs = (index == -1) ? OUString() : csl_rdbs.copy(index + 1);
 
+        Reference<XSimpleRegistry> simpleRegistry = Reference<XSimpleRegistry>::query(xSimRegFac->createInstance());
+
+        osl::FileBase::getAbsoluteFileURL(baseDir, rdb_name, rdb_name);
+
         try
         {
-            Reference<XSimpleRegistry> simpleRegistry = Reference<XSimpleRegistry>::query(xSimRegFac->createInstance());
-
-            osl::FileBase::getAbsoluteFileURL(baseDir, rdb_name, rdb_name);
             simpleRegistry->open(rdb_name, sal_True, sal_False);
 
             if(lastRegistry.is())
@@ -533,11 +536,17 @@ static Reference<XSimpleRegistry> nestRegistries(const OUString baseDir,
             else
                 lastRegistry = simpleRegistry;
         }
-        catch(InvalidRegistryException & invalidRegistryException)
+        catch ( InvalidRegistryException & e )
         {
+            // if a registry was explicitly given, the exception shall fly
+            if( ! bFallenBack )
+                throw;
+
+            // otherwise just a warning in debug case is sufficient ( e.g. tools, that
+            // don't need types/services registry)
 #ifdef DEBUG
-            OString rdb_name_tmp = OUStringToOString(rdb_name, RTL_TEXTENCODING_ASCII_US);
-            OString message_dbg = OUStringToOString(invalidRegistryException.Message, RTL_TEXTENCODING_ASCII_US);
+            OString rdb_name_tmp = OUStringToOString(write_rdb, RTL_TEXTENCODING_ASCII_US);
+            OString message_dbg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
             OSL_TRACE("warning: couldn't open %s cause of %s", rdb_name_tmp.getStr(), message_dbg.getStr());
 #endif
         }
@@ -557,11 +566,13 @@ Reference<XComponentContext> SAL_CALL defaultBootstrap_InitialComponentContext(c
 {
     Bootstrap bootstrap(iniFile);
 
-      OUString cls_uno_types = findBoostrapArgument(bootstrap, OUString(RTL_CONSTASCII_USTRINGPARAM("TYPES")), NULL);
-      OUString cls_uno_services = findBoostrapArgument(bootstrap, OUString(RTL_CONSTASCII_USTRINGPARAM("SERVICES")), NULL);
+    sal_Bool bFallenBackTypes = sal_False;
+    sal_Bool bFallenBackServices = sal_False;
+      OUString cls_uno_types = findBoostrapArgument(bootstrap, OUString(RTL_CONSTASCII_USTRINGPARAM("TYPES")), &bFallenBackTypes);
+      OUString cls_uno_services = findBoostrapArgument(bootstrap, OUString(RTL_CONSTASCII_USTRINGPARAM("SERVICES")),&bFallenBackServices);
 
-    sal_Bool fallenBack;
-      OUString write_rdb = findBoostrapArgument(bootstrap, OUString(RTL_CONSTASCII_USTRINGPARAM("WRITERDB")), &fallenBack);
+    sal_Bool fallenBackWriteRegistry;
+      OUString write_rdb = findBoostrapArgument(bootstrap, OUString(RTL_CONSTASCII_USTRINGPARAM("WRITERDB")), &fallenBackWriteRegistry);
 
     OUString bootstrapPath;
 
@@ -592,8 +603,12 @@ Reference<XComponentContext> SAL_CALL defaultBootstrap_InitialComponentContext(c
     bootstrap.getIniName(iniDir);
     iniDir = iniDir.copy(0, iniDir.lastIndexOf('/'));
 
-    Reference<XSimpleRegistry> types_xRegistry = nestRegistries(iniDir, xSimRegFac, xNesRegFac, cls_uno_types, OUString(), sal_False);
-    Reference<XSimpleRegistry> services_xRegistry = nestRegistries(iniDir, xSimRegFac, xNesRegFac, cls_uno_services, write_rdb, !fallenBack);
+    Reference<XSimpleRegistry> types_xRegistry =
+        nestRegistries(iniDir, xSimRegFac, xNesRegFac, cls_uno_types,
+                       OUString(), sal_False , bFallenBackTypes);
+    Reference<XSimpleRegistry> services_xRegistry =
+        nestRegistries( iniDir, xSimRegFac, xNesRegFac, cls_uno_services,
+                        write_rdb, !fallenBackWriteRegistry, bFallenBackServices);
 
     return initializeSF(smgr_XMultiComponentFactory, types_xRegistry, services_xRegistry, bootstrapPath);
 }
