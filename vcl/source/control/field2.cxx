@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:18:02 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1190,45 +1190,6 @@ static ExtDateFieldFormat ImplGetExtFormat( DateFormat eOld )
     }
 }
 
-static USHORT ImplCutMonthFromString( XubString& rStr, const CalendarWrapper& rCalendarWrapper )
-{
-    USHORT nPos;
-
-    //Nach Monatsnamen suchen
-    for ( USHORT i=1; i <= 12; i++ )
-    {
-        String aMonthName = rCalendarWrapper.getMonths()[i-1].FullName;
-        // Voller Monatsname ?
-        nPos = rStr.Search( aMonthName );
-        if ( nPos != STRING_NOTFOUND )
-        {
-            rStr.Erase( 0, nPos + aMonthName.Len() );
-            return i;
-        }
-        // Kurzer Monatsname ?
-        String aAbbrevMonthName = rCalendarWrapper.getMonths()[i-1].AbbrevName;
-        nPos = rStr.Search( aAbbrevMonthName );
-        if ( nPos != STRING_NOTFOUND )
-        {
-            rStr.Erase( 0, nPos + aAbbrevMonthName.Len() );
-            return i;
-        }
-    }
-
-    // Nach Zahl suchen
-    while ( rStr.Len() && !(rStr.GetChar( 0 ) >= '0' && rStr.GetChar( 0 ) <= '9') )
-        rStr.Erase( 0, 1 );
-    if ( !rStr.Len() )
-        return 0;
-    XubString aNumStr;
-    while ( rStr.Len() && (rStr.GetChar( 0 ) >= '0' && rStr.GetChar( 0 ) <= '9') )
-    {
-        aNumStr.Insert( rStr.GetChar( 0 ) );
-        rStr.Erase( 0, 1 );
-    }
-    return (USHORT)aNumStr.ToInt32();
-}
-
 // -----------------------------------------------------------------------
 
 static USHORT ImplCutNumberFromString( XubString& rStr )
@@ -1245,6 +1206,40 @@ static USHORT ImplCutNumberFromString( XubString& rStr )
         rStr.Erase( 0, 1 );
     }
     return (USHORT)aNumStr.ToInt32();
+}
+
+// -----------------------------------------------------------------------
+
+static BOOL ImplCutMonthName( XubString& rStr, const XubString& _rLookupMonthName )
+{
+    USHORT nPos = rStr.Search( _rLookupMonthName );
+    if ( nPos != STRING_NOTFOUND )
+    {
+        rStr.Erase( 0, nPos + _rLookupMonthName.Len() );
+        return TRUE;
+    }
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
+static USHORT ImplCutMonthFromString( XubString& rStr, const CalendarWrapper& rCalendarWrapper )
+{
+    // search for a month' name
+    for ( USHORT i=1; i <= 12; i++ )
+    {
+        String aMonthName = rCalendarWrapper.getMonths()[i-1].FullName;
+        // long month name?
+        if ( ImplCutMonthName( rStr, aMonthName ) )
+            return i;
+
+        // short month name?
+        String aAbbrevMonthName = rCalendarWrapper.getMonths()[i-1].AbbrevName;
+        if ( ImplCutMonthName( rStr, aAbbrevMonthName ) )
+            return i;
+    }
+
+    return ImplCutNumberFromString( rStr );
 }
 
 // -----------------------------------------------------------------------
@@ -1588,6 +1583,12 @@ static void ImplDateIncrementYear( Date& rDate, BOOL bUp )
 }
 
 // -----------------------------------------------------------------------
+BOOL DateFormatter::ImplAllowMalformedInput() const
+{
+    return ( NULL != GetField() ) && ( ( GetField()->GetStyle() & 0x80000000 ) != 0 );
+}
+
+// -----------------------------------------------------------------------
 
 void DateField::ImplDateSpinArea( BOOL bUp )
 {
@@ -1693,7 +1694,8 @@ DateFormatter::DateFormatter() :
     maFieldDate( 0 ),
     maLastDate( 0 ),
     maMin( 1, 1, 1900 ),
-    maMax( 31, 12, 2200 )
+    maMax( 31, 12, 2200 ),
+    mbEnforceValidValue( TRUE )
 {
     ImplInit();
 }
@@ -1978,10 +1980,15 @@ Date DateFormatter::GetDate() const
             // !!! allen anderen Feldern anders behandelt wird.
             // !!! Siehe dazu Bug: 52304
 
-            if ( maLastDate.GetDate() )
-                aDate = maLastDate;
-            else if ( !IsEmptyFieldValueEnabled() )
-                aDate = Date();
+            if ( !ImplAllowMalformedInput() )
+            {
+                if ( maLastDate.GetDate() )
+                    aDate = maLastDate;
+                else if ( !IsEmptyFieldValueEnabled() )
+                    aDate = Date();
+            }
+            else
+                aDate = GetInvalidDate();
         }
     }
 
@@ -1999,7 +2006,9 @@ Date DateFormatter::GetRealDate() const
 
     if ( GetField() )
     {
-        ImplDateGetValue( GetField()->GetText(), aDate, GetExtDateFormat(TRUE), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() );
+        if ( !ImplDateGetValue( GetField()->GetText(), aDate, GetExtDateFormat(TRUE), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() ) )
+            if ( ImplAllowMalformedInput() )
+                aDate = GetInvalidDate();
     }
 
     return aDate;
@@ -2194,7 +2203,18 @@ long DateField::Notify( NotifyEvent& rNEvt )
 
             BOOL bTextLen = GetText().Len() != 0;
             if ( bTextLen || !IsEmptyFieldValueEnabled() )
-                Reformat();
+            {
+                if ( !ImplAllowMalformedInput() )
+                    Reformat();
+                else
+                {
+                    Date aDate( 0, 0, 0 );
+                    if ( ImplDateGetValue( GetText(), aDate, GetExtDateFormat(TRUE), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() ) )
+                        // even with strict text analysis, our text is a valid date -> do a complete
+                        // reformat
+                        Reformat();
+                }
+            }
             else if ( !bTextLen && IsEmptyFieldValueEnabled() )
             {
                 ResetLastDate();
@@ -2446,9 +2466,47 @@ static BOOL ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
 
 // -----------------------------------------------------------------------
 
+static BOOL ImplIsOnlyDigits( const String& _rStr )
+{
+    const sal_Unicode* _pChr = _rStr.GetBuffer();
+    for ( xub_StrLen i = 0; i < _rStr.Len(); ++i, ++_pChr )
+    {
+        if ( *_pChr < '0' || *_pChr > '9' )
+            return FALSE;
+    }
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+static BOOL ImplIsValidTimePortion( BOOL _bSkipInvalidCharacters, const String& _rStr )
+{
+    if ( !_bSkipInvalidCharacters )
+    {
+        if ( ( _rStr.Len() > 2 ) || ( _rStr.Len() < 1 ) || !ImplIsOnlyDigits( _rStr ) )
+            return FALSE;
+    }
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+static BOOL ImplCutTimePortion( String& _rStr, xub_StrLen _nSepPos, BOOL _bSkipInvalidCharacters, short* _pPortion )
+{
+    String sPortion = _rStr.Copy( 0, _nSepPos );
+    _rStr.Erase( 0, _nSepPos + 1 );
+
+    if ( !ImplIsValidTimePortion( _bSkipInvalidCharacters, sPortion ) )
+        return FALSE;
+    *_pPortion = (short)sPortion.ToInt32();
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------
+
 static BOOL ImplTimeGetValue( const XubString& rStr, Time& rTime,
                               TimeFieldFormat eFormat, TimeFormat eTimeFormat, BOOL bDuration,
-                              const LocaleDataWrapper& rLocaleDataWrapper )
+                              const LocaleDataWrapper& rLocaleDataWrapper, BOOL _bSkipInvalidCharacters = TRUE )
 {
     XubString   aStr    = rStr;
     short       nHour   = 0;
@@ -2488,24 +2546,24 @@ static BOOL ImplTimeGetValue( const XubString& rStr, Time& rTime,
     {
         if ( nSepPos == STRING_NOTFOUND )
             nSepPos = aStr.Len();
-        nHour = (short)aStr.Copy( 0, nSepPos ).ToInt32();
-        aStr.Erase( 0, nSepPos+1 );
+        if ( !ImplCutTimePortion( aStr, nSepPos, _bSkipInvalidCharacters, &nHour ) )
+            return FALSE;
 
         nSepPos = aStr.Search( rLocaleDataWrapper.getTimeSep() );
         if ( aStr.GetChar( 0 ) == '-' )
             bNegative = TRUE;
         if ( nSepPos != STRING_NOTFOUND )
         {
-            nMinute = (short)aStr.Copy( 0, nSepPos ).ToInt32();
-            aStr.Erase( 0, nSepPos+1 );
+            if ( !ImplCutTimePortion( aStr, nSepPos, _bSkipInvalidCharacters, &nMinute ) )
+                return FALSE;
 
             nSepPos = aStr.Search( rLocaleDataWrapper.getTimeSep() );
             if ( aStr.GetChar( 0 ) == '-' )
                 bNegative = TRUE;
             if ( nSepPos != STRING_NOTFOUND )
             {
-                nSecond = (short)aStr.Copy( 0, nSepPos ).ToInt32();
-                aStr.Erase( 0, nSepPos+1 );
+                if ( !ImplCutTimePortion( aStr, nSepPos, _bSkipInvalidCharacters, &nSecond ) )
+                    return FALSE;
                 if ( aStr.GetChar( 0 ) == '-' )
                     bNegative = TRUE;
                 n100Sec = (short)aStr.ToInt32();
@@ -2714,6 +2772,12 @@ BOOL TimeFormatter::ImplTimeReformat( const XubString& rStr, XubString& rOutStr 
 }
 
 // -----------------------------------------------------------------------
+BOOL TimeFormatter::ImplAllowMalformedInput() const
+{
+    return ( NULL != GetField() ) && ( ( GetField()->GetStyle() & 0x80000000 ) != 0 );
+}
+
+// -----------------------------------------------------------------------
 
 void TimeField::ImplTimeSpinArea( BOOL bUp )
 {
@@ -2798,7 +2862,8 @@ TimeFormatter::TimeFormatter() :
     maLastTime( 0, 0 ),
     maMin( 0, 0 ),
     maMax( 23, 59, 59, 99 ),
-    maFieldTime( 0, 0 )
+    maFieldTime( 0, 0 ),
+    mbEnforceValidValue( TRUE )
 {
     ImplInit();
 }
@@ -3024,7 +3089,8 @@ Time TimeFormatter::GetTime() const
 
     if ( GetField() )
     {
-        if ( ImplTimeGetValue( GetField()->GetText(), aTime, GetFormat(), GetTimeFormat(), IsDuration(), ImplGetLocaleDataWrapper() ) )
+        BOOL bAllowMailformed = ImplAllowMalformedInput();
+        if ( ImplTimeGetValue( GetField()->GetText(), aTime, GetFormat(), GetTimeFormat(), IsDuration(), ImplGetLocaleDataWrapper(), !bAllowMailformed ) )
         {
             if ( aTime > GetMax() )
                 aTime = GetMax();
@@ -3032,7 +3098,12 @@ Time TimeFormatter::GetTime() const
                 aTime = GetMin();
         }
         else
-            aTime = maLastTime;
+        {
+            if ( bAllowMailformed )
+                aTime = GetInvalidTime();
+            else
+                aTime = maLastTime;
+        }
     }
 
     return aTime;
@@ -3046,7 +3117,10 @@ Time TimeFormatter::GetRealTime() const
 
     if ( GetField() )
     {
-        ImplTimeGetValue( GetField()->GetText(), aTime, GetFormat(), GetTimeFormat(), IsDuration(), ImplGetLocaleDataWrapper() );
+        BOOL bAllowMailformed = ImplAllowMalformedInput();
+        if ( !ImplTimeGetValue( GetField()->GetText(), aTime, GetFormat(), GetTimeFormat(), IsDuration(), ImplGetLocaleDataWrapper(), !bAllowMailformed ) )
+            if ( bAllowMailformed )
+                aTime = GetInvalidTime();
     }
 
     return aTime;
@@ -3170,7 +3244,18 @@ long TimeField::Notify( NotifyEvent& rNEvt )
     else if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
         if ( MustBeReformatted() && (GetText().Len() || !IsEmptyFieldValueEnabled()) )
-            Reformat();
+        {
+            if ( !ImplAllowMalformedInput() )
+                Reformat();
+            else
+            {
+                Time aTime( 0, 0, 0 );
+                if ( ImplTimeGetValue( GetText(), aTime, GetFormat(), GetTimeFormat(), IsDuration(), ImplGetLocaleDataWrapper(), FALSE ) )
+                    // even with strict text analysis, our text is a valid time -> do a complete
+                    // reformat
+                    Reformat();
+            }
+        }
     }
 
     return SpinField::Notify( rNEvt );
