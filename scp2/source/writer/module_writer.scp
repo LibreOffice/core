@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_writer.scp,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 21:57:36 $
+ *  last change: $Author: rt $ $Date: 2004-12-16 10:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ Module gid_Module_Prg_Wrt_Bin
     Default = YES;
     Files = (gid_File_Bin_Cde_Sagenda,gid_File_Bin_Cde_Sfax,gid_File_Bin_Cde_Slabel,
     gid_File_Bin_Cde_Sletter,gid_File_Bin_Cde_Smemo,gid_File_Bin_Cde_Svcard,
-    gid_File_Extra_Cdewriter,gid_File_Lib_Jsreader, gid_File_Lib_Wps2star,
+    gid_File_Lib_Jsreader, gid_File_Lib_Wps2star,
     gid_File_Lib_Hwpreader, gid_File_Exe_Swriter, gid_File_Exe_Sglobal,
     gid_File_Exe_Sweb, gid_File_Lib_Swd,
     gid_File_Lib_Swui,
