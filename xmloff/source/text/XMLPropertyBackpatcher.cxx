@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLPropertyBackpatcher.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:44 $
+ *  last change: $Author: dvo $ $Date: 2000-09-28 18:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,4 +251,3 @@ void XMLPropertyBackpatcher<A>::SetDefault()
 // force instantiation of templates
 template XMLPropertyBackpatcher<sal_Int16>;
 template XMLPropertyBackpatcher<OUString>;
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLPropertyBackpatcher.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:45 $
+ *  last change: $Author: dvo $ $Date: 2000-09-28 18:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,12 +71,17 @@
 #include <stl/vector>
 #endif
 
+#ifndef _XMLOFF_FUNCTIONAL_HXX
+#include "functional.hxx"
+#endif
+
 
 namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
     namespace uno { template<class A> class Reference; }
 } } }
+
 
 /** This class maintains an OUString->sal_Int16 mapping for cases in
  * which an XPropertySet needs to be filled with values that are not
@@ -132,10 +137,10 @@ class XMLPropertyBackpatcher
 
     /// backpatch list for unresolved IDs
     //::std::map<const ::rtl::OUString, BackpatchListType*> aBackpatchListMap;
-    ::std::map<const ::rtl::OUString, void* > aBackpatchListMap;
+    ::std::map<const ::rtl::OUString, void*, less_functor> aBackpatchListMap;
 
     /// mapping of names -> IDs
-    ::std::map<const ::rtl::OUString, A> aIDMap;
+    ::std::map<const ::rtl::OUString, A, less_functor> aIDMap;
 
 public:
 
