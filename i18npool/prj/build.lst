@@ -1,0 +1,7 @@
+in	i18npool	:	bridges sax stoc svtools unotools NULL
+in	i18npool									usr1	-	all	in_mkout NULL
+in	i18npool\source\unotypes					nmake	-	all	in_utypes NULL
+in	i18npool\source\localedata_ascii			nmake	-	all	in_locdata_ascii in_xmlparser NULL
+in	i18npool\source\localedata_CJK				nmake	-	all	in_locdata_cjk in_xmlparser NULL
+in  i18npool\source\xmlparser                   nmake   -   all in_xmlparser in_utypes NULL
+in  i18npool\util                               nmake   -   all in_util in_locdata_ascii in_locdata_cjk in_xmlparser NULL
