@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpgradnt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:55:56 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:17:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,13 +279,13 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet& rSet )
             aURL.Append( pGradientList->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-            if ( aURL.getBase().Len() > 18 )
+            if ( aURL.getBase().getLength() > 18 )
             {
-                aString += aURL.getBase().Copy( 0, 15 );
+                aString += String(aURL.getBase()).Copy( 0, 15 );
                 aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
             }
             else
-                aString += aURL.getBase();
+                aString += String(aURL.getBase());
 
             if ( *pPageType == PT_GRADIENT && *pPos != LISTBOX_ENTRY_NOTFOUND )
             {
@@ -767,13 +767,13 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, p )
                     String aString( ResId( RID_SVXSTR_TABLE, pMgr ) );
                     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
-                    if ( aURL.getBase().Len() > 18 )
+                    if ( aURL.getBase().getLength() > 18 )
                     {
-                        aString += aURL.getBase().Copy( 0, 15 );
+                        aString += String(aURL.getBase()).Copy( 0, 15 );
                         aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
                     }
                     else
-                        aString += aURL.getBase();
+                        aString += String(aURL.getBase());
 
                     // Flag fuer gewechselt setzen
                     *pnGradientListState |= CT_CHANGED;
@@ -823,7 +823,7 @@ IMPL_LINK( SvxGradientTabPage, ClickSaveHdl_Impl, void *, p )
     {
         aFile.Append( pGradientList->GetName() );
 
-        if( !aFile.getExtension().Len() )
+        if( !aFile.getExtension().getLength() )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sog" ) ) );
     }
 
@@ -846,13 +846,13 @@ IMPL_LINK( SvxGradientTabPage, ClickSaveHdl_Impl, void *, p )
             String aString( SVX_RES( RID_SVXSTR_TABLE ) );
             aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
-            if ( aURL.getBase().Len() > 18 )
+            if ( aURL.getBase().getLength() > 18 )
             {
-                aString += aURL.getBase().Copy( 0, 15 );
+                aString += String(aURL.getBase()).Copy( 0, 15 );
                 aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
             }
             else
-                aString += aURL.getBase();
+                aString += String(aURL.getBase());
 
             // Flag fuer gespeichert setzen
             *pnGradientListState |= CT_SAVED;
