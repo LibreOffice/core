@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:05:24 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4983,7 +4983,7 @@ void SdrObject::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPol
     if( pModel->IsWriter() )
     {
         if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
-            aTranslate -= Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+            aTranslate += Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
     }
 
     // build BaseRect
@@ -5021,6 +5021,23 @@ sal_Bool SdrObject::IsInDestruction() const
     if(pModel)
         return pModel->IsInDestruction();
     return sal_False;
+}
+
+// #i34682#
+// return if fill is != XFILL_NONE
+sal_Bool SdrObject::HasFillStyle() const
+{
+    return (((const XFillStyleItem&)GetObjectItem(XATTR_FILLSTYLE)).GetValue() != XFILL_NONE);
+}
+
+// #b4899532#
+// Force LineStyle with hard attributes to hair line in COL_LIGHTGRAY
+void SdrObject::ImpPrepareLocalItemSetForDraftLine(SfxItemSet& rItemSet) const
+{
+    rItemSet.Put(XLineStyleItem(XLINE_SOLID));
+    rItemSet.Put(XLineWidthItem(0));
+    rItemSet.Put(XLineColorItem(String(), Color(COL_LIGHTGRAY)));
+    rItemSet.Put(XLineTransparenceItem(0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -5177,3 +5194,4 @@ void SdrObjFactory::RemoveMakeUserDataHdl(const Link& rLink)
     rLL.RemoveLink(rLink);
 }
 
+// eof
