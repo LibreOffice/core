@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-26 13:21:24 $
+ *  last change: $Author: sj $ $Date: 2001-04-28 15:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,4 @@
 #define KEY_PREVIEW                     259
 #define KEY_VERSION_CHECK               260
 #define KEY_TEXTMODE                    261
-#define KEY_TEXTRESOLUTIONS             263
-#define KEY_SELECTEDTEXTRESOLUTION      264
-#define KEY_TEXTRESOLUTION_DPI          265
 

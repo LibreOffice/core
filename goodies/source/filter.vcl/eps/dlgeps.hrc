@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-26 13:17:54 $
+ *  last change: $Author: sj $ $Date: 2001-04-28 15:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,4 +77,3 @@
 #define RB_COMPRESSION_LZW 5
 #define RB_COMPRESSION_NONE 6
 #define LB_TEXT_MODE 1
-#define LB_TEXT_RESOLUTION 2

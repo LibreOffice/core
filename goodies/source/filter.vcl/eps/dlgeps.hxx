@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-26 13:18:34 $
+ *  last change: $Author: sj $ $Date: 2001-04-28 15:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,6 @@ private:
     FixedLine           aGrpPreview;
     CheckBox            aCBPreviewTiff;
     CheckBox            aCBPreviewEPSI;
-    FixedLine           aGrpText;
-    ListBox             aLBTextMode;
-    ListBox             aLBTextResolution;
     FixedLine           aGrpVersion;
     RadioButton         aRBLevel1;
     RadioButton         aRBLevel2;
@@ -97,6 +94,8 @@ private:
     FixedLine           aGrpCompression;
     RadioButton         aRBCompressionLZW;
     RadioButton         aRBCompressionNone;
+    FixedLine           aGrpText;
+    ListBox             aLBTextMode;
     OKButton            aBtnOK;
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;
@@ -107,7 +106,6 @@ private:
     DECL_LINK( OK, void * );
     DECL_LINK( LEVEL1, void* );
     DECL_LINK( LEVEL2, void* );
-    DECL_LINK( TEXTMODE, void* );
 
 public:
             DlgExportEPS( FltCallDialogParameter& rPara );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-26 13:20:01 $
+ *  last change: $Author: sj $ $Date: 2001-04-28 15:38:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@ ModalDialog DLG_EXPORT_EPS
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 251, 118 ) ;
+    Size = MAP_APPFONT ( 251, 147 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     Text = "EPS Export Optionen" ;
@@ -105,8 +105,8 @@ ModalDialog DLG_EXPORT_EPS
 
     FixedLine GRP_PREVIEW
     {
-        Pos = MAP_APPFONT ( 4 , 3  ) ;
-        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 88 , 8 ) ;
         Text = "Vorschau";
         Text [ ENGLISH ] = "Preview";
         Text[ italian ] = "Anteprima";
@@ -132,8 +132,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     CheckBox CB_PREVIEW_TIFF
     {
-        Pos = MAP_APPFONT ( 7, 14 ) ;
-        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 14 ) ;
+        Size = MAP_APPFONT ( 82 , 10 ) ;
         Text = "~Vorschau Bild (Tiff)" ;
         Text [ ENGLISH ] = "~Preview picture (Tiff)" ;
         TabStop = TRUE ;
@@ -160,8 +160,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     CheckBox CB_PREVIEW_EPSI
     {
-        Pos = MAP_APPFONT ( 7 , 28 ) ;
-        Size = MAP_APPFONT ( 84, 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 82, 10 ) ;
         Text = "~Interchange (EPSI)" ;
         Text [ ENGLISH ] = "~Interchange (EPSI)" ;
         TabStop = TRUE ;
@@ -184,48 +184,10 @@ ModalDialog DLG_EXPORT_EPS
         Text[ arabic ] = "~Interchange (EPSI)";
         Text[ turkish ] = "Interchange (EPSI)";
     };
-
-
-    FixedLine  GRP_TEXT
-    {
-        Pos = MAP_APPFONT ( 100 , 3 ) ;
-        Size = MAP_APPFONT ( 90, 8 ) ;
-        Text = "Text als Bitmap";
-        Text [ ENGLISH ] = "Text as Bitmap";
-    };
-    ListBox LB_TEXT_MODE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT( 103 , 14 );
-        Size = MAP_APPFONT( 84, 48 );
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        StringList =
-        {
-            < "Immer" ; > ;
-            < "Nie" ; > ;
-            < "nicht standard Fonts" ; > ;
-        };
-        StringList [ ENGLISH ] =
-        {
-            < "always" ; > ;
-            < "never" ; > ;
-            < "non standard fonts" ; > ;
-        };
-    };
-    ListBox LB_TEXT_RESOLUTION
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT( 103, 28 ) ;
-        Size = MAP_APPFONT( 84, 48 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-    };
-
     FixedLine GRP_VERSION
     {
-        Pos = MAP_APPFONT ( 4, 41 ) ;
-        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 41 ) ;
+        Size = MAP_APPFONT ( 88 , 8 ) ;
         Text = "Version";
         Text [ ENGLISH ] = "Version";
         Text[ italian ] = "Versione";
@@ -251,8 +213,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     RadioButton RB_LEVEL1
     {
-        Pos = MAP_APPFONT ( 7 , 52 ) ;
-        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 52 ) ;
+        Size = MAP_APPFONT ( 82 , 10 ) ;
         Text = "Level ~1" ;
         Text [ ENGLISH ] = "Level ~1" ;
         TabStop = TRUE ;
@@ -279,8 +241,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     RadioButton RB_LEVEL2
     {
-        Pos = MAP_APPFONT ( 7 , 66 ) ;
-        Size = MAP_APPFONT ( 84, 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 66 ) ;
+        Size = MAP_APPFONT ( 82, 10 ) ;
         Text = "Level ~2" ;
         Text [ ENGLISH ] = "Level ~2" ;
         TabStop = TRUE ;
@@ -308,8 +270,8 @@ ModalDialog DLG_EXPORT_EPS
 
     FixedLine GRP_COLOR
     {
-        Pos = MAP_APPFONT ( 4 , 79 ) ;
-        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 79 ) ;
+        Size = MAP_APPFONT ( 88 , 8 ) ;
         Text = "Farb Format";
         Text [ ENGLISH ] = "Color Type";
         Text[ italian ] = "Formato colore";
@@ -335,8 +297,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     RadioButton RB_COLOR
     {
-        Pos = MAP_APPFONT ( 7 , 90 ) ;
-        Size = MAP_APPFONT ( 84, 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 90 ) ;
+        Size = MAP_APPFONT ( 82, 10 ) ;
         Text = "~Farbe" ;
         Text [ ENGLISH ] = "~Color" ;
         TabStop = TRUE ;
@@ -363,8 +325,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     RadioButton RB_GRAYSCALE
     {
-        Pos = MAP_APPFONT ( 7 , 104 ) ;
-        Size = MAP_APPFONT ( 84, 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 104 ) ;
+        Size = MAP_APPFONT ( 82, 10 ) ;
         Text = "~Graustufen" ;
         Text [ ENGLISH ] = "~Grayscale" ;
         TabStop = TRUE ;
@@ -393,7 +355,7 @@ ModalDialog DLG_EXPORT_EPS
     FixedLine  GRP_COMPRESSION
     {
         Pos = MAP_APPFONT ( 100 , 79 ) ;
-        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Size = MAP_APPFONT ( 88 , 8 ) ;
         Text = "Kompression";
         Text [ ENGLISH ] = "Compression";
         Text[ italian ] = "Compressione";
@@ -419,8 +381,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     RadioButton RB_COMPRESSION_LZW
     {
-        Pos = MAP_APPFONT ( 103, 90 );
-        Size = MAP_APPFONT ( 84, 10 ) ;
+        Pos = MAP_APPFONT ( 106, 90 );
+        Size = MAP_APPFONT ( 82, 10 ) ;
         Text = "LZW Kodierung" ;
         Text [ ENGLISH ] = "LZW Compression" ;
         TabStop = TRUE ;
@@ -447,8 +409,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     RadioButton RB_COMPRESSION_NONE
     {
-        Pos = MAP_APPFONT ( 103, 104 ) ;
-        Size = MAP_APPFONT ( 84, 10 ) ;
+        Pos = MAP_APPFONT ( 106, 104 ) ;
+        Size = MAP_APPFONT ( 82, 10 ) ;
         Text = "Keine" ;
         Text [ ENGLISH ] = "None" ;
         TabStop = TRUE ;
@@ -473,6 +435,34 @@ ModalDialog DLG_EXPORT_EPS
         Text[ korean ] = "¾øÀ½";
         Text[ turkish ] = "Yok";
     };
+
+    FixedLine  GRP_TEXT
+    {
+        Pos = MAP_APPFONT ( 6 , 117 ) ;
+        Size = MAP_APPFONT ( 182, 8 ) ;
+        Text = "Text Einstellungen";
+        Text [ ENGLISH ] = "TextMode";
+    };
+    ListBox LB_TEXT_MODE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT( 12, 128 );
+        Size = MAP_APPFONT( 170, 48 );
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Glyph Outlines immer exportieren" ; > ;
+            < "Glyph Outlines niemals exportieren" ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "always export glyph outlines" ; > ;
+            < "newer export glyph outlines " ; > ;
+        };
+    };
+
+
 
     Text[ italian ] = "Opzioni d'esportazione EPS";
     Text[ portuguese_brazilian ] = "EPS Export Optionen";
