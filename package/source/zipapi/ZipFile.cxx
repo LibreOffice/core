@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-13 17:00:43 $
+ *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Martin Gallwey (gallwey@sun.com)
  *
  *
  ************************************************************************/
@@ -94,28 +94,13 @@ void ZipFile::updateFromManList(std::vector < ManifestEntry * > &rManList)
 {
     sal_Int32 i=0, nSize = rManList.size();
     aEntries.clear();
-    package::ZipEntry *pEntry = &rManList[i]->aEntry;
 
+    // This is a bitwise copy, = is not an overloaded operator
+    // I'm not sure how evil this is in this case...
     for (;i < nSize ; i++)
     {
-        // This is a bitwise copy, = is not an overloaded operator
-        // I'm not sure how evil this is in this case...
-        aEntries[pEntry->sName] = *pEntry;//rManList[i]->aEntry;
-        /*
-        package::ZipEntry *pEntry = new package::ZipEntry;
-        pEntry->nVersion        = rManList[i]->aEntry.nVersion;
-        pEntry->nFlag           = rManList[i]->aEntry.nFlag;
-        pEntry->nMethod         = rManList[i]->aEntry.nMethod;
-        pEntry->nTime           = rManList[i]->aEntry.nTime;
-        pEntry->nCrc            = rManList[i]->aEntry.nCrc;
-        pEntry->nCompressedSize = rManList[i]->aEntry.nCompressedSize;
-        pEntry->nSize           = rManList[i]->aEntry.nSize;
-        pEntry->nOffset         = rManList[i]->aEntry.nOffset;
-        pEntry->sName           = rManList[i]->aEntry.sName;
-        pEntry->extra           = rManList[i]->aEntry.extra;
-        pEntry->sComment        = rManList[i]->aEntry.sComment;
+        package::ZipEntry * pEntry = &rManList[i]->aEntry;
         aEntries[pEntry->sName] = *pEntry;
-        */
     }
 }
 

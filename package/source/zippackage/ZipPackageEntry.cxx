@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-04 16:16:42 $
+ *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Martin Gallwey (gallwey@sun.com)
  *
  *
  ************************************************************************/
@@ -70,27 +70,20 @@ ZipPackageEntry::ZipPackageEntry (void)
 ZipPackageEntry::~ZipPackageEntry( void )
 {
 }
-
+/* I made these pure virtual to bypass a couple of virtual calls...
+ * acquire/release/queryInterface are called several thousand times in a single
+ * ZipPackage instance
 uno::Any SAL_CALL ZipPackageEntry::queryInterface( const uno::Type& rType )
     throw(uno::RuntimeException)
 {
-    // Ask for my own supported interfaces ...
-    uno::Any aReturn    ( ::cppu::queryInterface    (   rType                                       ,
+    return ( ::cppu::queryInterface (   rType                                       ,
+                                                // OWeakObject interfaces
+                                                static_cast< uno::XWeak*            > ( this )  ,
+                                                static_cast< uno::XInterface*       > ( this )  ,
+                                                // my own interfaces
                                                 static_cast< container::XNamed*     > ( this )  ,
                                                 static_cast< lang::XUnoTunnel*      > ( this )  ,
                                                 static_cast< container::XChild*     > ( this )  ) );
-
-    // If searched interface supported by this class ...
-    if ( aReturn.hasValue () == sal_True )
-    {
-        // ... return this information.
-        return aReturn ;
-    }
-    else
-    {
-        // Else; ... ask baseclass for interfaces!
-        return OWeakObject::queryInterface ( rType ) ;
-    }
 }
 void SAL_CALL ZipPackageEntry::acquire(  )
     throw()
@@ -102,6 +95,7 @@ void SAL_CALL ZipPackageEntry::release(  )
 {
     OWeakObject::release();
 }
+*/
     // XChild
 ::rtl::OUString SAL_CALL ZipPackageEntry::getName(  )
     throw(uno::RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-13 17:00:47 $
+ *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,15 +54,12 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Martin Gallwey (gallwey@sun.com)
  *
  *
  ************************************************************************/
 #ifndef _ZIP_PACKAGE_HXX
 #include "ZipPackage.hxx"
-#endif
-#ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #endif
 
 using namespace rtl;
@@ -97,7 +94,7 @@ ZipPackage::ZipPackage (Reference < XInputStream > &xNewInput,
 
     xZipFile    = Reference < XZipFile > ( pZipFile );
     pRootFolder = new ZipPackageFolder( );
-    xRootFolder = Reference < XUnoTunnel > ( pRootFolder );
+    xRootFolder = Reference < XNameContainer > ( pRootFolder );
     getZipFileContents();
 }
 
@@ -111,15 +108,21 @@ ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 , xZipFile (NULL)
 , xFactory(xNewFactory)
 {
-
     pRootFolder = new ZipPackageFolder();
-    xRootFolder = Reference < XUnoTunnel >   (pRootFolder );
+    xRootFolder = Reference < XNameContainer > (pRootFolder );
 }
 
 ZipPackage::~ZipPackage( void )
 {
     if (pContent)
         delete pContent;
+    // As all folders and streams contain raferences to their parents,
+    // we must remove these references so that they will be deleted when
+    // the hash_map of the root folder is cleared, releasing all subfolders
+    // and substreams which in turn release theirs, etc. When xRootFolder is
+    // released when this destructor completes, the folder tree should be
+    // deleted fully (and automagically).
+    pRootFolder->releaseUpwardRef();
 }
 
 void ZipPackage::destroyFolderTree( Reference < XUnoTunnel > xFolder )
@@ -148,30 +151,26 @@ void ZipPackage::destroyFolderTree( Reference < XUnoTunnel > xFolder )
             bIsFolder = sal_False;
         }
         if (bIsFolder)
-        {
             destroyFolderTree(xTunnel);
-            delete pFolder;
-        }
         else
-        {
-            delete pStream;
-        }
+            pStream->release();
     }
 }
 
 void ZipPackage::getZipFileContents()
 {
     Reference< XEnumeration > xEnum = pZipFile->entries();
-    Reference< XNameContainer > xCurrent (xRootFolder, UNO_QUERY);
+    Reference< XNameContainer > xCurrent;
     ZipPackageStream *pPkgStream;
     ZipPackageFolder *pPkgFolder;
     ZipEntry aEntry;
+    Any aAny;
 
     while (xEnum->hasMoreElements())
     {
-        xCurrent  = Reference < XNameContainer > (pRootFolder);
+        xCurrent  = xRootFolder;
         sal_Int32 nOldIndex =0,nIndex = 0;
-        Any aAny = xEnum->nextElement();
+        aAny = xEnum->nextElement();
         aAny >>= aEntry;
         OUString &rName = aEntry.sName;
 
@@ -198,8 +197,8 @@ void ZipPackage::getZipFileContents()
                 }
                 else
                 {
-                    aAny = xCurrent->getByName(sTemp);
                     Reference < XUnoTunnel> xRef;
+                    aAny = xCurrent->getByName(sTemp);
                     aAny >>= xRef;
                     xCurrent = Reference < XNameContainer > (xRef, UNO_QUERY);
                 }
@@ -230,8 +229,8 @@ void ZipPackage::getZipFileContents()
                 }
                 else
                 {
-                    aAny = xCurrent->getByName(sTemp);
                     Reference < XUnoTunnel> xRef;
+                    aAny = xCurrent->getByName(sTemp);
                     aAny >>= xRef;
                     xCurrent = Reference < XNameContainer > (xRef, UNO_QUERY);
                 }
@@ -245,6 +244,7 @@ void ZipPackage::getZipFileContents()
                 pPkgFolder = pInZip->getRootFolder();
                 pPkgFolder->setName(sStreamName);
                 pPkgFolder->pPackage = pInZip;
+                pPkgFolder->xPackage = Reference < XSingleServiceFactory > (pInZip);
                 try
                 {
                     pPkgFolder->setParent( Reference < XInterface >(xCurrent, UNO_QUERY));
@@ -273,8 +273,8 @@ void ZipPackage::getZipFileContents()
     }
     if (hasByHierarchicalName(OUString::createFromAscii("META-INF/manifest.xml")))
     {
-        Any aAny = getByHierarchicalName(OUString::createFromAscii("META-INF/manifest.xml"));
         Reference < XUnoTunnel > xTunnel;
+        aAny = getByHierarchicalName(OUString::createFromAscii("META-INF/manifest.xml"));
         aAny >>= xTunnel;
         Reference < XActiveDataSink > xSink (xTunnel, UNO_QUERY);
         if (xSink.is())
@@ -320,19 +320,38 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
         // File doesn't exist, we'll create it at commitChanges time
     }
 }
+/*
 // XHierarchicalNameAccess
 Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
         throw(NoSuchElementException, RuntimeException)
 {
+    static OUString sClear = OUString::createFromAscii("");
+    if (hasByHierarchicalName(aName))
+    {
+        sLastSearch = sClear;
+        return aKinglyAny;
+    }
+    else
+        throw NoSuchElementException();
+}
+sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
+        throw(RuntimeException)
+{
     sal_Int32 nOldIndex =0,nIndex = 0;
-    Any aAny;
+
+    if (aName == sLastSearch)
+        return sal_True;
+    else
+        sLastSearch=aName;
+
     Reference < XNameContainer > xCurrent  = Reference < XNameContainer > (pRootFolder);
     if (aName[nOldIndex] == '/')
         nOldIndex++;
 
     if (aName == OUString::createFromAscii("/"))
     {
-        aAny <<= Reference < XUnoTunnel > (pRootFolder);
+        aKinglyAny <<= Reference < XUnoTunnel > (pRootFolder);
+        return sal_True;
     }
     else if (aName.lastIndexOf('/') == aName.getLength()-1)
     {
@@ -344,12 +363,12 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
             if (xCurrent->hasByName(sTemp))
             {
                 Reference < XUnoTunnel > xRef;
-                aAny = xCurrent->getByName(sTemp);
-                aAny >>= xRef;
+                aKinglyAny = xCurrent->getByName(sTemp);
+                aKinglyAny >>= xRef;
                 xCurrent = Reference < XNameContainer > (xRef, UNO_QUERY);
             }
             else
-                throw NoSuchElementException();
+                return sal_False;
             nOldIndex = nIndex+1;
         }
     }
@@ -363,6 +382,89 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
             if (xCurrent->hasByName(sTemp))
             {
                 Reference < XUnoTunnel > xChildRef;
+                aKinglyAny = xCurrent->getByName(sTemp);
+                aKinglyAny >>= xChildRef;
+                xCurrent = Reference < XNameContainer > (xChildRef, UNO_QUERY);
+            }
+            else
+                return sal_False;
+
+            nOldIndex = nIndex+1;
+        }
+        OUString sStreamName = aName.copy( nOldIndex, aName.getLength() - nOldIndex);
+        if (xCurrent->hasByName(sStreamName))
+            aKinglyAny <<= xCurrent->getByName(sStreamName);
+        else
+            return sal_False;
+    }
+    return sal_True;
+}
+*/
+
+Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
+        throw(NoSuchElementException, RuntimeException)
+{
+    static OUString sTemp, sRoot = OUString::createFromAscii("/");
+    sal_Int32 nOldIndex =0, nIndex;
+    Any aAny;
+    Reference < XNameContainer > xCurrent  (xRootFolder);
+    Reference < XNameContainer > xPrevious  (NULL);
+
+    if (aName[nOldIndex] == '/')
+        nOldIndex++;
+
+    if (aName == sRoot)
+        aAny <<= Reference < XUnoTunnel > (pRootFolder);
+    else if (aName.lastIndexOf('/') == (nIndex = aName.getLength()-1))
+    {
+        if ( aRecent.count(aName) && (nOldIndex = aName.lastIndexOf('/', nIndex)) != -1)
+        {
+            sTemp = aName.copy(++nOldIndex, nIndex-nOldIndex);
+            if (aRecent[aName]->hasByName(sTemp) )
+                return aRecent[aName]->getByName(sTemp);
+            else
+                aRecent.erase(aName);
+        }
+        nOldIndex=0;
+        while ((nIndex = aName.indexOf('/', nOldIndex)) != -1)
+        {
+            sTemp = aName.copy (nOldIndex, nIndex - nOldIndex);
+            Reference < XUnoTunnel > xRef;
+
+            if (nIndex == nOldIndex)
+                break;
+            if (xCurrent->hasByName(sTemp))
+            {
+                aAny = xCurrent->getByName(sTemp);
+                aAny >>= xRef;
+                xCurrent = Reference < XNameContainer > (xRef, UNO_QUERY);
+            }
+            else
+                throw NoSuchElementException();
+            nOldIndex = nIndex+1;
+        }
+        aRecent[aName] = xPrevious;
+    }
+    else
+    {
+        if ( aRecent.count(aName) && (nOldIndex = aName.lastIndexOf('/', nIndex)) != -1)
+        {
+            sTemp = aName.copy(++nOldIndex, nIndex-nOldIndex);
+            if (aRecent[aName]->hasByName(sTemp) )
+                return aRecent[aName]->getByName(sTemp);
+            else
+                aRecent.erase(aName);
+        }
+        nOldIndex=0;
+        while ((nIndex = aName.indexOf('/', nOldIndex)) != -1)
+        {
+            sTemp = aName.copy (nOldIndex, nIndex - nOldIndex);
+            Reference < XUnoTunnel > xChildRef;
+
+            if (nIndex == nOldIndex)
+                break;
+            if (xCurrent->hasByName(sTemp))
+            {
                 aAny = xCurrent->getByName(sTemp);
                 aAny >>= xChildRef;
                 xCurrent = Reference < XNameContainer > (xChildRef, UNO_QUERY);
@@ -374,56 +476,80 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
         }
         OUString sStreamName = aName.copy( nOldIndex, aName.getLength() - nOldIndex);
         if (xCurrent->hasByName(sStreamName))
-            aAny <<= xCurrent->getByName(sStreamName);
+        {
+            aRecent[aName] = xCurrent;
+            return xCurrent->getByName(sStreamName);
+        }
         else
             throw NoSuchElementException();
     }
     return aAny;
 }
+
 sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
         throw(RuntimeException)
 {
-    sal_Int32 nOldIndex = 0, nIndex = 0;
+    static OUString sTemp, sRoot = OUString::createFromAscii("/");
+    sal_Int32 nOldIndex = 0, nIndex;
     Any aAny;
-    Reference < XNameContainer > xCurrent  = Reference < XNameContainer > (pRootFolder);
+    Reference < XNameContainer > xCurrent  (xRootFolder);
+    Reference < XNameContainer > xPrevious  (NULL);
 
     if (aName[nOldIndex] == '/')
         nOldIndex++;
 
-    if (aName == OUString::createFromAscii("/"))
-    {
+    if (aName == sRoot)
         return sal_True;
-    }
-    else if (aName.lastIndexOf('/') == aName.getLength()-1)
+    else if (aName.lastIndexOf('/') == (nIndex = aName.getLength()-1))
     {
+        if ( aRecent.count(aName) && (nOldIndex = aName.lastIndexOf('/', nIndex)) != -1)
+        {
+            sTemp = aName.copy(++nOldIndex, nIndex - nOldIndex);
+            if (aRecent[aName]->hasByName(sTemp) )
+                return sal_True;
+            else
+                aRecent.erase(aName);
+        }
+        nOldIndex=0;
         while ((nIndex = aName.indexOf('/', nOldIndex)) != -1)
         {
-            OUString sTemp = aName.copy (nOldIndex, nIndex - nOldIndex);
+            sTemp = aName.copy (nOldIndex, nIndex - nOldIndex);
+            Reference < XUnoTunnel > xRef;
             if (nIndex == nOldIndex)
                 break;
             if (xCurrent->hasByName(sTemp))
             {
-                Reference < XUnoTunnel > xRef;
                 aAny = xCurrent->getByName(sTemp);
                 aAny >>= xRef;
+                xPrevious = xCurrent;
                 xCurrent = Reference < XNameContainer > (xRef, UNO_QUERY);
             }
             else
                 return sal_False;
             nOldIndex = nIndex+1;
         }
+        aRecent[aName] = xPrevious;
         return sal_True;
     }
     else
     {
+        if ( aRecent.count(aName) && (nOldIndex = aName.lastIndexOf('/', nIndex)) != -1)
+        {
+            sTemp = aName.copy(++nOldIndex, nIndex - nOldIndex);
+            if (aRecent[aName]->hasByName(sTemp) )
+                return sal_True;
+            else
+                aRecent.erase(aName);
+        }
+        nOldIndex=0;
         while ((nIndex = aName.indexOf('/', nOldIndex)) != -1)
         {
-            OUString sTemp = aName.copy (nOldIndex, nIndex - nOldIndex);
+            sTemp = aName.copy (nOldIndex, nIndex - nOldIndex);
+            Reference < XUnoTunnel > xChildRef;
             if (nIndex == nOldIndex)
                 break;
             if (xCurrent->hasByName(sTemp))
             {
-                Reference < XUnoTunnel > xChildRef;
                 aAny = xCurrent->getByName(sTemp);
                 aAny >>= xChildRef;
                 xCurrent = Reference < XNameContainer > (xChildRef, UNO_QUERY);
@@ -433,9 +559,16 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
             nOldIndex = nIndex+1;
         }
         OUString sStreamName = aName.copy( nOldIndex, aName.getLength() - nOldIndex);
-        return xCurrent->hasByName(sStreamName);
+
+        if (xCurrent->hasByName(sStreamName))
+        {
+            aRecent[aName] = xCurrent;
+            return sal_True;
+        }
+        return sal_False;
     }
 }
+
 // XSingleServiceFactory
 Reference< XInterface > SAL_CALL ZipPackage::createInstance(  )
         throw(Exception, RuntimeException)
@@ -473,8 +606,6 @@ ZipPackageBuffer & SAL_CALL ZipPackage::writeToBuffer(  )
     pZipOut->setMethod(DEFLATED);
     pZipOut->setLevel(DEFAULT_COMPRESSION);
 
-    Reference < XNameContainer > xZipRoot = Reference < XNameContainer > (xRootFolder, UNO_QUERY);
-
     sal_Bool bAddMetaFolder = sal_False;
 
     // Remove the old META-INF directory as this will be re-generated below.
@@ -482,15 +613,15 @@ ZipPackageBuffer & SAL_CALL ZipPackage::writeToBuffer(  )
     // are placed inside the Manifest et al. Note: saveContents is called
     // recursively.
 
-    if (xZipRoot->hasByName(OUString::createFromAscii("META-INF")))
-        xZipRoot->removeByName(OUString::createFromAscii("META-INF"));
+    if (xRootFolder->hasByName(OUString::createFromAscii("META-INF")))
+        xRootFolder->removeByName(OUString::createFromAscii("META-INF"));
 
     pRootFolder->saveContents(OUString::createFromAscii(""), aManList, *pZipOut);
 
     ZipPackageFolder *pMetaInfFolder = new ZipPackageFolder();
     ZipPackageStream *pManifestStream = new ZipPackageStream( pZipFile );
     aAny <<= Reference < XUnoTunnel > (pMetaInfFolder);
-    xZipRoot->insertByName(OUString::createFromAscii("META-INF"), aAny);
+    xRootFolder->insertByName(OUString::createFromAscii("META-INF"), aAny);
 
     ZipPackageBuffer *pBuffer = new ZipPackageBuffer(65535);
     Reference < XOutputStream > xManOutStream (pBuffer);
@@ -716,6 +847,7 @@ Any SAL_CALL ZipPackage::queryInterface( const Type& rType )
         return OWeakObject::queryInterface ( rType ) ;
     }
 }
+
 void SAL_CALL ZipPackage::acquire(  )
     throw()
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-13 17:00:47 $
+ *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Martin Gallwey (gallwey@sun.com)
  *
  *
  ************************************************************************/
@@ -100,17 +100,50 @@ void SAL_CALL  ZipPackageBuffer::release(void)
 sal_Int32 SAL_CALL ZipPackageBuffer::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
+    //const sal_Int8 *pBuffer = aBuffer.getConstArray()+nCurrent;
+
     if (nBytesToRead < 0)
         throw BufferSizeExceededException(::rtl::OUString(),*this);
 
     if (nBytesToRead + nCurrent > nEnd)
         nBytesToRead = static_cast < sal_Int32 > (nEnd - nCurrent);
 
-    aData.realloc(nBytesToRead);
     memcpy(aData.getArray(), aBuffer.getConstArray() + nCurrent, nBytesToRead);
     nCurrent +=nBytesToRead;
-
     return nBytesToRead;
+    //aData.realloc(nBytesToRead);
+    //memcpy(aData.getArray(), pBuffer + nCurrent, nBytesToRead);
+    //memcpy(pData, pBuffer, nBytesToRead);
+
+    // Optimisations for often called cases
+    /*
+    switch (nBytesToRead)
+    {
+        case 0:
+            return 0;
+        case 1:
+            *(pData++)    = *pBuffer;
+            nCurrent +=1;
+            return 1;
+        case 2:
+            *(pData++)   = *(pBuffer++);
+            * pData      = *pBuffer;
+            nCurrent +=2;
+            return 2;
+        case 4:
+            *(pData++) = *(pBuffer++);
+            *(pData++) = *(pBuffer++);
+            *(pData++) = *(pBuffer++);
+            * pData    = * pBuffer;
+            nCurrent +=4;
+            return 4;
+        default:
+            memcpy(pData, pBuffer, nBytesToRead);
+            nCurrent +=nBytesToRead;
+            return nBytesToRead;
+    }
+    //return nBytesToRead;
+    */
 }
 
 sal_Int32 SAL_CALL ZipPackageBuffer::readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
@@ -153,14 +186,44 @@ void SAL_CALL ZipPackageBuffer::writeBytes( const Sequence< sal_Int8 >& aData )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     sal_Int64 nDataLen = aData.getLength();
+    const sal_Int8 *pData   = aData.getConstArray();
+
     if (nEnd + nDataLen > nBufferSize)
     {
         while (nEnd + nDataLen > nBufferSize)
             nBufferSize *=2;
         aBuffer.realloc(static_cast < sal_Int32 > (nBufferSize));
     }
-
-    memcpy(aBuffer.getArray()+nCurrent, aData.getConstArray(), static_cast < sal_Int32 > (nDataLen));
+    /*
+    sal_Int8 *pBuffer = aBuffer.getArray()+nCurrent;
+    switch (nDataLen)
+    {
+        case 0:
+            break;
+        case 1:
+            * pBuffer    = *pData;
+            nCurrent++;
+            break;
+        case 2:
+            *(pBuffer++) = *(pData++);
+            * pBuffer    = * pData   ;
+            nCurrent +=2;
+            break;
+        case 4:
+            *(pBuffer++) = *(pData++);
+            *(pBuffer++) = *(pData++);
+            *(pBuffer++) = *(pData++);
+            * pBuffer    = * pData   ;
+            nCurrent +=4;
+            break;
+        default:
+            memcpy(pBuffer, pData, static_cast < sal_Int32 > (nDataLen));
+            nCurrent += nDataLen;
+            break;
+    }
+    */
+    //memcpy( pBuffer + nCurrent, aData.getConstArray(), static_cast < sal_Int32 > (nDataLen));
+    memcpy( aBuffer.getArray() + nCurrent, aData.getConstArray(), static_cast < sal_Int32 > (nDataLen));
     nCurrent+=nDataLen;
     if (nCurrent>nEnd)
         nEnd = nCurrent;

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mtg $ $Date: 2000-11-24 11:16:05 $
+#   last change: $Author: mtg $ $Date: 2000-12-19 21:55:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,8 +90,8 @@ SLOFILES= \
 # --- UNO stuff ---------------------------------------------------
 
 CPPUMAKERFLAGS=
-#UNOUCROUT=$(OUT)$/inc
-#INCPRE+=$(UNOUCROUT)
+UNOUCROUT=$(OUT)$/inc
+INCPRE+=$(UNOUCROUT)
 
 UNOUCRDEP=  $(SOLARBINDIR)$/applicat.rdb
 UNOUCRRDB=  $(SOLARBINDIR)$/applicat.rdb

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-13 17:21:40 $
+ *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Martin Gallwey (gallwey@sun.com)
  *
  *
  ************************************************************************/
@@ -265,12 +265,21 @@ void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
     throw(io::IOException, uno::RuntimeException)
 {
     sal_Int16 i=0, nCommentLength = static_cast < sal_Int16 > (sComment.getLength());
+    static uno::Sequence < sal_Int8 > aSequence (nCommentLength);
+    static sal_Int8 *pArray = aSequence.getArray();
+    static sal_Int16 nOldLength = nCommentLength;
+
+    if (nOldLength != nCommentLength)
+    {
+        nOldLength = nCommentLength;
+        aSequence.realloc (nOldLength);
+        pArray = aSequence.getArray();
+    }
     const sal_Unicode *pChar = sComment.getStr();
-    uno::Sequence < sal_Int8 > aSequence (nCommentLength);
     for ( ; i < nCommentLength; i++)
     {
         VOS_ENSURE (pChar[i] <127, "Non US ASCII character in zipfile comment!");
-        aSequence[i] = static_cast < const sal_Int8 > (pChar[i]);
+        *(pArray+i) = static_cast < const sal_Int8 > (pChar[i]);
     }
     aChucker << ENDSIG;
     aChucker << static_cast < sal_Int16 > ( 0 );
@@ -290,6 +299,9 @@ void ZipOutputStream::writeCEN( const package::ZipEntry &rEntry )
               nCommentLength    = static_cast < sal_Int16 > ( rEntry.sComment.getLength() ) ,
               nExtraLength      = static_cast < sal_Int16 > ( rEntry.extra.getLength() );
     sal_Int16 i = 0;
+    static uno::Sequence < sal_Int8 > aSequence (nNameLength);
+    static sal_Int8 *pArray = aSequence.getArray();
+    static sal_Int16 nOldLength=0;
 
     aChucker << CENSIG;
     aChucker << rEntry.nVersion;
@@ -316,11 +328,16 @@ void ZipOutputStream::writeCEN( const package::ZipEntry &rEntry )
     aChucker.seek(nCurrent);
 */
     const sal_Unicode *pChar = rEntry.sName.getStr();
-    uno::Sequence < sal_Int8 > aSequence (nNameLength);
+    if (nOldLength != nNameLength)
+    {
+        nOldLength = nNameLength;
+        aSequence.realloc(nOldLength);
+        pArray = aSequence.getArray();
+    }
     for ( ; i < nNameLength; i++)
     {
         VOS_ENSURE (pChar[i] <127, "Non US ASCII character in zipentry name!");
-        aSequence[i] = static_cast < const sal_Int8 > (pChar[i]);
+        *(pArray+i) = static_cast < const sal_Int8 > (pChar[i]);
     }
 
     aChucker.writeBytes( aSequence );
@@ -328,11 +345,16 @@ void ZipOutputStream::writeCEN( const package::ZipEntry &rEntry )
         aChucker.writeBytes( rEntry.extra);
     if (nCommentLength)
     {
-        aSequence.realloc (nCommentLength);
+        if (nOldLength != nCommentLength)
+        {
+            nOldLength = nCommentLength;
+            aSequence.realloc (nOldLength);
+            pArray = aSequence.getArray();
+        }
         for (i=0, pChar = rEntry.sComment.getStr(); i < nCommentLength; i++)
         {
             VOS_ENSURE (pChar[i] <127, "Non US ASCII character in zipentry comment!");
-            aSequence[i] = static_cast < const sal_Int8 > (pChar[i]);
+            *(pArray+i) = static_cast < const sal_Int8 > (pChar[i]);
         }
         aChucker.writeBytes( aSequence );
     }
@@ -350,6 +372,16 @@ void ZipOutputStream::writeLOC( const package::ZipEntry &rEntry )
     throw(io::IOException, uno::RuntimeException)
 {
     sal_Int16 nNameLength = static_cast < sal_Int16 > (rEntry.sName.getLength());
+
+    static sal_Int16 nOldLength=nNameLength;
+    static uno::Sequence < sal_Int8 > aSequence(nNameLength);
+    static sal_Int8 *pArray = aSequence.getArray();
+    if ( nNameLength != nOldLength)
+    {
+        nOldLength = nNameLength;
+        aSequence.realloc(nOldLength);
+        pArray = aSequence.getArray();
+    }
     sal_Int16 i=0;
     aChucker << LOCSIG;
     aChucker << rEntry.nVersion;
@@ -372,11 +404,10 @@ void ZipOutputStream::writeLOC( const package::ZipEntry &rEntry )
     aChucker << static_cast <sal_Int16 > ( rEntry.extra.getLength());
 
     const sal_Unicode *pChar = rEntry.sName.getStr();
-    uno::Sequence < sal_Int8 > aSequence (nNameLength);
     for ( ; i < nNameLength; i++)
     {
         VOS_ENSURE (pChar[i] <127, "Non US ASCII character in zipentry name!");
-        aSequence[i] = static_cast < const sal_Int8 > (pChar[i]);
+        *(pArray+i) = static_cast < const sal_Int8 > (pChar[i]);
     }
     aChucker.writeBytes( aSequence );
     if (rEntry.extra.getLength() != 0)

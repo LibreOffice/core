@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-13 17:00:36 $
+ *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Martin Gallwey (gallwey@sun.com)
  *
  *
  ************************************************************************/
@@ -91,6 +91,10 @@
 
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #endif
 
 #ifndef _ZIP_FILE_HXX
@@ -130,29 +134,31 @@
 #endif
 
 #include <vector>
+
 class ZipPackageFolder;
 
-class ZipPackage : public com::sun::star::lang::XInitialization,
+class ZipPackage :
+                   public ::cppu::OWeakObject,
+                   public com::sun::star::lang::XInitialization,
                    public com::sun::star::lang::XSingleServiceFactory,
                    public com::sun::star::lang::XUnoTunnel,
                    public com::sun::star::container::XHierarchicalNameAccess,
-                   public com::sun::star::util::XChangesBatch,
-                   public ::cppu::OWeakObject
+                   public com::sun::star::util::XChangesBatch
 {
 private:
     ZipPackageFolder *pRootFolder;
     ZipFile          *pZipFile;
     ::ucb::Content   *pContent;
     sal_Bool         bContained;
-    ::std::vector < com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > > aContainedZips;
     ::com::sun::star::uno::Reference < com::sun::star::package::XZipFile > xZipFile;
-    ::com::sun::star::uno::Reference < com::sun::star::lang::XUnoTunnel > xRootFolder;
+    ::com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xRootFolder;
     ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xContentStream;
     ::com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xContentSeek;
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xFactory;
     sal_Bool isZipFile(com::sun::star::package::ZipEntry &rEntry);
     void getZipFileContents();
     void destroyFolderTree( ::com::sun::star::uno::Reference < ::com::sun::star::lang::XUnoTunnel > xFolder );
+    NameHash         aRecent;
 
 public:
     ZipPackage (com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput,
@@ -168,10 +174,12 @@ public:
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
         throw(::com::sun::star::uno::RuntimeException);
+
     virtual void SAL_CALL acquire(  )
         throw();
     virtual void SAL_CALL release(  )
         throw();
+
     // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
         throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);

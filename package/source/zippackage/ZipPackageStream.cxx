@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-13 17:00:47 $
+ *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Martin Gallwey (gallwey@sun.com)
  *
  *
  ************************************************************************/
@@ -64,6 +64,7 @@
 #endif
 
 using namespace com::sun::star;
+using namespace cppu;
 
 ZipPackageStream::ZipPackageStream (ZipFile *pInFile)
 : pZipFile(pInFile)
@@ -101,36 +102,31 @@ void ZipPackageStream::setZipEntry( const package::ZipEntry &rInEntry)
 uno::Any SAL_CALL ZipPackageStream::queryInterface( const uno::Type& rType )
     throw(uno::RuntimeException)
 {
-    // Ask for my own supported interfaces ...
-    uno::Any aReturn    ( ::cppu::queryInterface    (   rType                                       ,
+    return ( ::cppu::queryInterface (   rType                                       ,
+                                                // OWeakObject interfaces
+                                                reinterpret_cast< uno::XInterface*      > ( this )  ,
+                                                static_cast< uno::XWeak*            > ( this )  ,
+                                                // ZipPackageEntry interfaces
                                                 static_cast< container::XNamed*     > ( this )  ,
                                                 static_cast< container::XChild*     > ( this )  ,
-                                                static_cast< io::XActiveDataSink*       > ( this )  ,
                                                 static_cast< lang::XUnoTunnel*      > ( this )  ,
-                                                static_cast< beans::XPropertySet*       > ( this ) ) );
+                                                // My own interfaces
+                                                static_cast< io::XActiveDataSink*   > ( this )  ,
+                                                static_cast< beans::XPropertySet*   > ( this ) ) );
 
-    // If searched interface supported by this class ...
-    if ( aReturn.hasValue () == sal_True )
-    {
-        // ... return this information.
-        return aReturn ;
-    }
-    else
-    {
-        // Else; ... ask baseclass for interfaces!
-        return ZipPackageEntry::queryInterface ( rType ) ;
-    }
 }
+
 void SAL_CALL ZipPackageStream::acquire(  )
     throw()
 {
-    ZipPackageEntry::acquire();
+    OWeakObject::acquire();
 }
 void SAL_CALL ZipPackageStream::release(  )
     throw()
 {
-    ZipPackageEntry::release();
+    OWeakObject::release();
 }
+
     // XActiveDataSink
 void SAL_CALL ZipPackageStream::setInputStream( const uno::Reference< io::XInputStream >& aStream )
         throw(uno::RuntimeException)
@@ -196,15 +192,14 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const ::rtl::OUString& aProper
 uno::Any SAL_CALL ZipPackageStream::getPropertyValue( const ::rtl::OUString& PropertyName )
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
+    uno::Any aAny;
     if (PropertyName == ::rtl::OUString::createFromAscii("MediaType"))
     {
-        uno::Any aAny;
         aAny <<= sMediaType;
         return aAny;
     }
     else if (PropertyName == ::rtl::OUString::createFromAscii("Size"))
     {
-        uno::Any aAny;
         aAny <<= aEntry.nSize;
         return aAny;
     }

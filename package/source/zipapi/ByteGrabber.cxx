@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteGrabber.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-13 17:00:43 $
+ *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Martin Gallwey (gallwey@sun.com)
  *
  *
  ************************************************************************/
@@ -146,80 +146,92 @@ sal_Int64 SAL_CALL ByteGrabber::getLength(  )
 }
 ByteGrabber& ByteGrabber::operator >> (sal_Int8& rInt8)
 {
-    uno::Sequence< sal_Int8 > aSequence (1);
+    static uno::Sequence< sal_Int8 > aSequence (1);
+
     if (xStream->readBytes(aSequence,1) != 1)
     {
         rInt8 = 0;
         return *this;
     }
-    rInt8 = aSequence[0]& 0xFF;
+    const sal_Int8 *pArray = aSequence.getArray();
+    rInt8 = *(pArray) & 0xFF;
     return *this;
 }
 ByteGrabber& ByteGrabber::operator >> (sal_Int16& rInt16)
 {
-    uno::Sequence< sal_Int8 > aSequence (2);
+    static uno::Sequence< sal_Int8 > aSequence (2);
+
     if (xStream->readBytes(aSequence, 2) != 2)
     {
         rInt16 = 0;
         return *this;
     }
+    const sal_Int8 *pArray = aSequence.getArray();
     rInt16 = static_cast <sal_Int16>
-            (static_cast <sal_uInt8> (aSequence[0]& 0xFF)
-           | static_cast <sal_uInt8> (aSequence[1]& 0xFF) << 8);
+            ((* pArray   & 0xFF)
+           | (*(pArray+1)& 0xFF) << 8);
     return *this;
 }
 ByteGrabber& ByteGrabber::operator >> (sal_Int32& rInt32)
 {
-    uno::Sequence< sal_Int8 > aSequence (4);
+    static uno::Sequence< sal_Int8 > aSequence (4);
+
     if (xStream->readBytes(aSequence, 4) != 4)
     {
         rInt32 = 0;
         return *this;
     }
+    const sal_Int8 *pArray = aSequence.getArray();
     rInt32 = static_cast < sal_Int32 >
-            (static_cast < sal_uInt8> (aSequence[0]& 0xFF)
-           | static_cast < sal_uInt8> (aSequence[1]& 0xFF) << 8
-           | static_cast < sal_uInt8> (aSequence[2]& 0xFF) << 16
-           | static_cast < sal_uInt8> (aSequence[3]& 0xFF) << 24 );
+            ((* (pArray  ) & 0xFF)
+           | (* (pArray+1) & 0xFF) << 8
+           | (* (pArray+2) & 0xFF) << 16
+           | (* (pArray+3) & 0xFF) << 24 );
     return *this;
 }
 
 ByteGrabber& ByteGrabber::operator >> (sal_uInt8& ruInt8)
 {
-    uno::Sequence< sal_Int8 > aSequence (1);
+    static uno::Sequence< sal_Int8 > aSequence (1);
+
     if (xStream->readBytes(aSequence,1) != 1)
     {
         ruInt8 = 0;
         return *this;
     }
-    ruInt8 = static_cast <sal_uInt8> (aSequence[0]& 0xFF);
+    const sal_Int8 *pArray = aSequence.getArray();
+    ruInt8 = static_cast <sal_uInt8> (* (pArray  ) & 0xFF);
     return *this;
 }
 ByteGrabber& ByteGrabber::operator >> (sal_uInt16& ruInt16)
 {
-    uno::Sequence< sal_Int8 > aSequence (2);
+    static uno::Sequence< sal_Int8 > aSequence (2);
+
     if (xStream->readBytes(aSequence, 2) != 2)
     {
         ruInt16 = 0;
         return *this;
     }
+    const sal_Int8 *pArray = aSequence.getArray();
     ruInt16 = static_cast <sal_uInt16>
-             (static_cast < sal_uInt8 > (aSequence[0]& 0xFF)
-            | static_cast < sal_uInt8 > (aSequence[1]& 0xFF) << 8);
+             ((* pArray   & 0xFF)
+            | (*(pArray+1)& 0xFF) << 8);
     return *this;
 }
 ByteGrabber& ByteGrabber::operator >> (sal_uInt32& ruInt32)
 {
-    uno::Sequence< sal_Int8 > aSequence (4);
+    static uno::Sequence< sal_Int8 > aSequence (4);
+
     if (xStream->readBytes(aSequence, 4) != 4)
     {
         ruInt32 = 0;
         return *this;
     }
+    const sal_Int8 *pArray = aSequence.getArray();
     ruInt32 = static_cast < sal_uInt32 >
-            (static_cast < sal_uInt8> (aSequence[0]& 0xFF)
-           | static_cast < sal_uInt8> (aSequence[1]& 0xFF) << 8
-           | static_cast < sal_uInt8> (aSequence[2]& 0xFF) << 16
-           | static_cast < sal_uInt8> (aSequence[3]& 0xFF) << 24);
+            ((* (pArray  ) & 0xFF)
+           | (* (pArray+1) & 0xFF) << 8
+           | (* (pArray+2) & 0xFF) << 16
+           | (* (pArray+3) & 0xFF) << 24 );
     return *this;
 }

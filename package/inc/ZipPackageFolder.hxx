@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-13 17:00:36 $
+ *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Martin Gallwey (gallwey@sun.com)
  *
  *
  ************************************************************************/
@@ -93,6 +93,10 @@
 #include <cppuhelper/typeprovider.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#endif
+
 #include <hash_map>
 #include <time.h>
 #include <utime.h>
@@ -113,7 +117,15 @@ struct hashFunc
         return r1.hashCode();
     }
 };
-//#include "ZipPackageStream.hxx"
+typedef std::hash_map < rtl::OUString,
+                        com::sun::star::uno::Reference < com::sun::star::lang::XUnoTunnel >,
+                        hashFunc,
+                        eqFunc > TunnelHash;
+
+typedef std::hash_map < rtl::OUString,
+                        com::sun::star::uno::Reference < com::sun::star::container::XNameContainer >,
+                        hashFunc,
+                        eqFunc > NameHash;
 
 /* This include must be after the above struct and typedef declarations.
  * Ugly...but true :)
@@ -151,9 +163,9 @@ struct hashFunc
 #include "ManifestEntry.hxx"
 #endif
 
-typedef std::hash_map < rtl::OUString, com::sun::star::uno::Reference < com::sun::star::lang::XUnoTunnel > , hashFunc, eqFunc > TunnelHash;
 class ZipPackage;
 class ZipPackageFolder : public ZipPackageEntry,
+                         public ::cppu::OWeakObject,
                          public ::com::sun::star::container::XNameContainer,
                          public ::com::sun::star::container::XEnumerationAccess,
                          public ::com::sun::star::beans::XPropertySet
@@ -162,25 +174,33 @@ private:
     ::rtl::OUString sMediaType;
     TunnelHash aContents;
     com::sun::star::uno::Reference < com::sun::star::uno::XInterface > xParent;
+    static com::sun::star::uno::Any aReturn;
 public:
     ZipPackage *pPackage;
+    com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > xPackage;
+
     ZipPackageFolder ( void );
     virtual ~ZipPackageFolder( void );
 
     static void copyZipEntry( com::sun::star::package::ZipEntry &rDest, const com::sun::star::package::ZipEntry &rSource);
     void  saveContents(rtl::OUString &rPath, std::vector < ManifestEntry * > &rManList, ZipOutputStream & rZipOut)
         throw(::com::sun::star::uno::RuntimeException);
+
     void  updateReferences( ZipFile * pNewZipFile);
+    void  releaseUpwardRef( void );
+
     inline sal_Bool isFolder( void ) {return sal_True;}
     inline sal_Bool isStream( void ) {return sal_False;}
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
         throw(::com::sun::star::uno::RuntimeException);
+
     virtual void SAL_CALL acquire(  )
         throw();
     virtual void SAL_CALL release(  )
         throw();
+
     // XNameContainer
     virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
