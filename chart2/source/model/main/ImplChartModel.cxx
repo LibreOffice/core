@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplChartModel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:23 $
+ *  last change: $Author: bm $ $Date: 2003-11-21 16:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "CachedDataSequence.hxx"
 #include "DataSeries.hxx"
 #include "DataInterpreter.hxx"
+#include "XYDataInterpreter.hxx"
 #include "StyleFamilies.hxx"
 #include "StyleFamily.hxx"
 #include "macros.hxx"
@@ -108,6 +109,9 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
 using ::rtl::OUString;
+
+// enable this to get x-values in the data-series
+// #define USE_XY_DATA
 
 namespace chart
 {
@@ -210,7 +214,11 @@ void ImplChartModel::ReadData( const ::rtl::OUString & rRangeRepresentation )
         m_xChartData = m_xDataProvider->getDataByRangeRepresentation( rRangeRepresentation );
 
         // create DataSeries objects using the standard data interpreter
+#ifdef USE_XY_DATA
+        m_aInterpretedData = XYDataInterpreter::InterpretData( m_xChartData );
+#else
         m_aInterpretedData = DataInterpreter::InterpretData( m_xChartData );
+#endif
 
         const size_t nMaxSeries = m_aInterpretedData.size();
         const OUString aStyleNameStub( RTL_CONSTASCII_USTRINGPARAM( "Series " ));
