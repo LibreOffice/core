@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invocation.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2000-09-18 23:13:49 $
+ *  last change: $Author: dbo $ $Date: 2000-10-06 14:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,7 +614,8 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
     if (_xIntrospectionAccess.is())
     {
         // throw NoSuchMethodException if not exist
-        Reference<XIdlMethod> xMethod = _xIntrospectionAccess->getMethod( FunctionName, MethodConcept::ALL ^ MethodConcept::DANGEROUS );
+        Reference<XIdlMethod> xMethod = _xIntrospectionAccess->getMethod(
+            FunctionName, MethodConcept::ALL ^ MethodConcept::DANGEROUS );
 
         // ParameterInfos
         Sequence<ParamInfo> aFParams        = xMethod->getParameterInfos();
@@ -624,7 +625,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
         // IN Parameter
         const Any* pInParams                = InParams.getConstArray();
         sal_uInt32 nInParamsLen             = InParams.getLength();
-        sal_uInt32 nInIndex                 = 0;
+        OSL_ENSURE( nInParamsLen == nFParamsLen, "### new convention used for XInvocation::invoke!" );
 
         // Introspection Invoke Parameter
         Sequence<Any> aInvokeParams( nFParamsLen );
@@ -635,9 +636,11 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
         sal_Int16* pOutIndizes              = OutIndizes.getArray();
         sal_uInt32 nOutIndex                = 0;
 
+        sal_uInt32 nPos;
+
         try
         {
-            for ( sal_uInt32 nPos = 0; nPos < nFParamsLen; ++nPos )
+            for ( nPos = 0; nPos < nFParamsLen; ++nPos )
             {
                 const ParamInfo& rFParam = pFParams[nPos];
                 const Reference<XIdlClass>& rDestType = rFParam.aType;
@@ -645,22 +648,27 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
                 // is IN/INOUT parameter?
                 if (rFParam.aMode != ParamMode_OUT)
                 {
-                    // IN parameter available?
-                    if (nInIndex >= nInParamsLen)
-                        throw CannotConvertException();
+//                      // IN parameter available?
+//                      if (nInIndex >= nInParamsLen)
+//                          throw CannotConvertException();
                     //TODO: Parameter? throw( CannotConvertException( OUString( RTL_CONSTASCII_USTRINGPARAM(not enough IN parameters available!")), Reference<XInterface>(), rDestType->getTypeClass(), FailReason::NO_DEFAULT_AVAILABLE, nInIndex ) );
 
-                    if (rDestType->isAssignableFrom( TypeToIdlClass( pInParams[nInIndex].getValueType(), xCoreReflection ) ))
-                        pInvokeParams[nPos] = pInParams[nInIndex];
+                    if (rDestType->isAssignableFrom( TypeToIdlClass( pInParams[nPos].getValueType(), xCoreReflection ) ))
+                    {
+                        pInvokeParams[nPos] = pInParams[nPos];
+                    }
                     else if (xTypeConverter.is())
                     {
                         Type aDestType( rDestType->getTypeClass(), rDestType->getName() );
-                        pInvokeParams[nPos] = xTypeConverter->convertTo( pInParams[nInIndex], aDestType );
+                        pInvokeParams[nPos] = xTypeConverter->convertTo( pInParams[nPos], aDestType );
                     }
                     else
-                        throw CannotConvertException();
-
-                    ++nInIndex;
+                    {
+                        CannotConvertException aExc;
+                        aExc.Context = *this;
+                        aExc.Message = OUString( RTL_CONSTASCII_USTRINGPARAM("invocation type mismatch!") );
+                        throw aExc;
+                    }
                 }
 
                 // is OUT/INOUT parameter?
@@ -682,19 +690,24 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
             OutParams.realloc( nOutIndex );
             Any* pOutParams = OutParams.getArray();
 
-            for ( ; nOutIndex--; )
-                pOutParams[nOutIndex] = pInvokeParams[pOutIndizes[nOutIndex]];
+            while (nOutIndex--)
+            {
+                pOutParams[nOutIndex] = pInvokeParams[ pOutIndizes[nOutIndex] ];
+            }
 
             return aRet;
         }
         catch( CannotConvertException& rExc )
         {
-            rExc.ArgumentIndex = nInIndex;  // optionalen Parameter Index hinzufuegen
+            rExc.ArgumentIndex = nPos;  // optionalen Parameter Index hinzufuegen
             throw rExc;
         }
     }
-    throw NoSuchMethodException();
-    return Any();
+
+    RuntimeException aExc;
+    aExc.Context = *this;
+    aExc.Message = OUString( RTL_CONSTASCII_USTRINGPARAM("invocation lacking of introspection access!") );
+    throw aExc;
 }
 
 //--------------------------------------------------------------------------------------------------

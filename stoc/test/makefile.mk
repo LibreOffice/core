@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:29:35 $
+#   last change: $Author: dbo $ $Date: 2000-10-06 14:25:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,7 @@ TARGET1=testloader
 TARGET2=testregistry
 TARGET3=testsmgr
 TARGET4=testcorefl
-TARGET5=testiadapter
+TARGET5=testinvocation
 TARGET6=testintrosp
 TARGET7=testconv
 TARGET8=testproxyfac
@@ -111,8 +111,7 @@ APP2STDLIBS= \
         $(CPPULIB)	\
         $(CPPUHELPERLIB) 	\
         $(VOSLIB) 	\
-        $(SALLIB)	\
-        $(UNOTOOLSLIB)
+        $(SALLIB)
 
 .IF "$(GUI)"=="WNT"
 APP2STDLIBS+= 
@@ -149,7 +148,7 @@ APP4STDLIBS= \
 APP4STDLIBS+=	$(LIBCIMT)
 .ENDIF
 
-# --- Application 5 - testiadapter main ------------------------------------
+# --- Application 5 - testinvocation main ------------------------------------
 APP5TARGET= 	$(TARGET5)
 APP5OBJS  = 	$(OBJ)$/testiadapter.obj 
 APP5STDLIBS= \
@@ -161,7 +160,7 @@ APP5STDLIBS= \
 APP5STDLIBS+=	$(LIBCIMT)
 .ENDIF
 
-# --- Application 6 - testiadapter main ------------------------------------
+# --- Application 6 - testitrosp main ------------------------------------
 APP6TARGET= 	$(TARGET6)
 APP6OBJS  = 	$(OBJ)$/testintrosp.obj 
 APP6STDLIBS= \
@@ -174,7 +173,7 @@ APP6STDLIBS= \
 APP6STDLIBS+=	$(LIBCIMT)
 .ENDIF
 
-# --- Application 7 - testiadapter main ------------------------------------
+# --- Application 7 - testconv main ------------------------------------
 APP7TARGET= 	$(TARGET7)
 APP7OBJS  = 	$(OBJ)$/testconv.obj 
 APP7STDLIBS= \
@@ -217,7 +216,7 @@ CPPUMAKERFLAGS =
 CPPUMAKERFLAGS = -L
 .ENDIF
 
-FACTORYTYPES:=com.sun.star.container.XEnumeration;com.sun.star.lang.XComponent;com.sun.star.registry.XSimpleRegistry;com.sun.star.lang.XInitialization;com.sun.star.lang.XMultiServiceFactory;com.sun.star.loader.XImplementationLoader;com.sun.star.registry.XImplementationRegistration;com.sun.star.container.XSet;com.sun.star.lang.XSingleServiceFactory
+FACTORYTYPES:=com.sun.star.container.XEnumeration;com.sun.star.lang.XComponent;com.sun.star.registry.XSimpleRegistry;com.sun.star.lang.XInitialization;com.sun.star.lang.XMultiServiceFactory;com.sun.star.loader.XImplementationLoader;com.sun.star.registry.XImplementationRegistration;com.sun.star.container.XSet;com.sun.star.lang.XSingleServiceFactory;com.sun.star.lang.XServiceInfo
 TESTCOREFL:=ModuleC;ModuleC.XInterfaceA;ModuleC.XInterfaceB;ModuleA.XInterface1;com.sun.star.reflection.XIdlReflection;com.sun.star.reflection.XIdlField;com.sun.star.reflection.XIdlArray;com.sun.star.reflection.XIdlMethod;com.sun.star.reflection.XIdlClass;com.sun.star.beans.XPropertySet;com.sun.star.lang.XComponent;com.sun.star.container.XHierarchicalNameAccess
 TESTIADAPTER:=com.sun.star.beans.XIntrospection;com.sun.star.beans.MethodConcept;com.sun.star.beans.XExactName;com.sun.star.lang.XTypeProvider;com.sun.star.uno.XAggregation;com.sun.star.script.XInvocationAdapterFactory;com.sun.star.script.XInvocation;com.sun.star.lang.XMultiServiceFactory;com.sun.star.registry.XSimpleRegistry;com.sun.star.lang.XInitialization;test.XLanguageBindingTest
 TESTINTROSP:=ModuleA;ModuleA.XIntroTest;com.sun.star.beans.XPropertySet;com.sun.star.container.XIndexAccess;com.sun.star.container.XNameAccess;com.sun.star.beans.PropertyAttribute;com.sun.star.beans.PropertyConcept

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iafactory.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:34 $
+ *  last change: $Author: dbo $ $Date: 2000-10-06 14:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,37 +322,29 @@ void AdapterImpl::invoke(
     sal_Int32 nParams = ((typelib_InterfaceMethodTypeDescription *)pMemberType)->nParams;
     typelib_MethodParameter * pFormalParams = ((typelib_InterfaceMethodTypeDescription *)pMemberType)->pParams;
 
-    // count in params
-    sal_Int32 nInParams = 0;
-    sal_Int32 nPos;
-    for ( nPos = nParams; nPos--; )
-    {
-        if (pFormalParams[nPos].bIn)
-            ++nInParams;
-    }
-
     // in params
     typelib_TypeDescription * pAnySeqTD = 0;
     const Type & rAnyType = ::getCppuType( (const Sequence< Any > *)0 );
     TYPELIB_DANGER_GET( &pAnySeqTD, rAnyType.getTypeLibType() );
     uno_Sequence * pInParamsSeq = 0;
-    uno_sequence_construct( &pInParamsSeq, pAnySeqTD, 0, nInParams, 0 );
+    uno_sequence_construct( &pInParamsSeq, pAnySeqTD, 0, nParams, 0 );
 
     uno_Any * pInAnys = (uno_Any *)pInParamsSeq->elements;
     typelib_TypeDescription * pAnyTD = 0;
     TYPELIB_DANGER_GET( &pAnyTD, ((typelib_IndirectTypeDescription *)pAnySeqTD)->pType );
-    sal_Int32 nInParamsPos = nInParams;
-    for ( nPos = nParams; nPos--; )
+
+    for ( sal_Int32 nPos = nParams; nPos--; )
     {
         typelib_MethodParameter & rParam = pFormalParams[nPos];
-        if (rParam.bIn)
+        if (rParam.bIn) // in/ inout
         {
             typelib_TypeDescription * pTD = 0;
             TYPELIB_DANGER_GET( &pTD, rParam.pTypeRef );
             // assignment to any never fails...
-            uno_assignData( &pInAnys[--nInParamsPos], pAnyTD, pArgs[nPos], pTD, 0, 0, 0 );
+            uno_assignData( &pInAnys[nPos], pAnyTD, pArgs[nPos], pTD, 0, 0, 0 );
             TYPELIB_DANGER_RELEASE( pTD );
         }
+        // pure out is empty any
     }
 
     // out params, out indices

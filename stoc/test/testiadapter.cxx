@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testiadapter.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:35 $
+ *  last change: $Author: dbo $ $Date: 2000-10-06 14:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -980,6 +980,24 @@ static sal_Bool test_adapter( const Reference< XMultiServiceFactory > & xMgr )
 
     return (performTest( xLBT ) && raiseException( xLBT ));
 }
+//==================================================================================================
+static sal_Bool test_invocation( const Reference< XMultiServiceFactory > & xMgr )
+{
+    Reference< XInvocationAdapterFactory > xAdapFac(
+        xMgr->createInstance( OUString::createFromAscii("com.sun.star.script.InvocationAdapterFactory") ), UNO_QUERY );
+    Reference< XSingleServiceFactory > xInvocFac(
+        xMgr->createInstance( OUString::createFromAscii("com.sun.star.script.Invocation") ), UNO_QUERY );
+
+    Reference< XLanguageBindingTest > xOriginal( (XLanguageBindingTest *)new Test_Impl() );
+    Any aOriginal( &xOriginal, ::getCppuType( &xOriginal ) );
+    Reference< XInvocation > xInvok(
+        xInvocFac->createInstanceWithArguments( Sequence< Any >( &aOriginal, 1 ) ), UNO_REF_QUERY );
+
+    Reference< XLanguageBindingTest > xLBT( xAdapFac->createAdapter(
+        xInvok, ::getCppuType( (const Reference< XLanguageBindingTest > *)0 ) ), UNO_QUERY );
+
+    return (performTest( xLBT ) && raiseException( xLBT ));
+}
 
 #ifdef UNX
 #define REG_PREFIX      "lib"
@@ -1007,23 +1025,40 @@ int __cdecl main( int argc, char * argv[] )
             UNO_QUERY );
         OSL_ENSHURE( xImplReg.is(), "### no impl reg!" );
 
-        OUString aLibName( OUString::createFromAscii(REG_PREFIX "invadp" DLL_POSTFIX) );
         xImplReg->registerImplementation(
-            OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
+            OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
+            OUString::createFromAscii(REG_PREFIX "invadp" DLL_POSTFIX),
+            Reference< XSimpleRegistry >() );
+        xImplReg->registerImplementation(
+            OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
+            OUString::createFromAscii(REG_PREFIX "inv" DLL_POSTFIX),
+            Reference< XSimpleRegistry >() );
+        xImplReg->registerImplementation(
+            OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
+            OUString::createFromAscii(REG_PREFIX "corefl" DLL_POSTFIX),
+            Reference< XSimpleRegistry >() );
+        xImplReg->registerImplementation(
+            OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
+            OUString::createFromAscii(REG_PREFIX "insp" DLL_POSTFIX),
+            Reference< XSimpleRegistry >() );
 
-        bSucc = test_adapter( xMgr );
+        if (test_adapter( xMgr ))
+        {
+            fprintf( stderr, "> test_iadapter() succeeded.\n" );
+            if (test_invocation( xMgr ))
+            {
+                fprintf( stderr, "> test_invocation() succeeded.\n" );
+            }
+        }
     }
     catch (Exception & rExc)
     {
-        OSL_ENSHURE( sal_False, "### exception occured!" );
+        fprintf( stderr, "> exception occured: " );
         OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( "### exception occured: " );
-        OSL_TRACE( aMsg.getStr() );
-        OSL_TRACE( "\n" );
+        fprintf( stderr, "%s\n", aMsg.getStr() );
     }
 
     Reference< XComponent >( xMgr, UNO_QUERY )->dispose();
 
-    printf( "testiadapter %s !\n", (bSucc ? "succeeded" : "failed") );
-    return (bSucc ? 0 : -1);
+    return 0;
 }
