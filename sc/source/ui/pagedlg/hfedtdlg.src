@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:40:07 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,7 +747,7 @@ TabPage RID_HFBASE
         Text [ ENGLISH ] = "~Left Area" ;
         Text [ norwegian ] = "~Left Area" ;
         Text [ italian ] = "Area ~sinistra" ;
-        Text [ portuguese_brazilian ] = "~Αrea Esquerda" ;
+        Text [ portuguese_brazilian ] = "Αrea ~esquerda" ;
         Text [ portuguese ] = "~Αrea esquerda" ;
         Text [ finnish ] = "~Vasen alue" ;
         Text [ danish ] = "Venstre omrεde" ;
@@ -792,7 +792,7 @@ TabPage RID_HFBASE
         Text [ ENGLISH ] = "~Center Area" ;
         Text [ norwegian ] = "~Center Area" ;
         Text [ italian ] = "Area ~centrale" ;
-        Text [ portuguese_brazilian ] = "~Αrea Central" ;
+        Text [ portuguese_brazilian ] = "Αrea ~central" ;
         Text [ portuguese ] = "~Αrea central" ;
         Text [ finnish ] = "~Keskitδ alue" ;
         Text [ danish ] = "Midteromrεde" ;
@@ -837,7 +837,7 @@ TabPage RID_HFBASE
         Text [ ENGLISH ] = "~Right Area" ;
         Text [ norwegian ] = "~Right Area" ;
         Text [ italian ] = "Area ~destra" ;
-        Text [ portuguese_brazilian ] = "~Αrea Direita" ;
+        Text [ portuguese_brazilian ] = "Αrea ~direita" ;
         Text [ portuguese ] = "~Αrea direita" ;
         Text [ finnish ] = "~Oikea alue" ;
         Text [ danish ] = "Hψ~jre omrεde" ;
@@ -1351,7 +1351,7 @@ TabPage RID_HFBASE
         Text[ arabic ] = "ΗΣΚΞΟγ ΗαγέΗΚνΝ αΚΫννΡ δζΪ ΗαΞΨ Γζ αΕΦΗέΙ ΓζΗγΡ Νήζα΅ γΛα ΗαΚΗΡνΞ΅ Γζ ΗαζήΚ ...ΕαΞ.";
         Text[ dutch ] = "Gebruik de knoppen om de tekstattributen te wijzigen of om veldopdrachten zoals datum, tijd, enz. in te voegen.";
         Text[ chinese_simplified ] = "θ―·η‚Ήε‡»ζ‰ι’®οΌζ›΄ζ”Ήε­—δ½“ζ–ζ’ε…¥ζ—¥ζοΌζ—¶ι—΄η­‰εΊεζ‡δ»¤γ€‚";
-        Text[ greek ] = "Χρησιμοποιήστε τα πεδία εντολής για να αλλάξετε την γραμματοσειρά ή για να εισάγετε πεδία εντολών, όπως π.χ. ημερομηνία, ώρα, κτλ.";
+        Text[ greek ] = "Χρησιμοποιήστε τα κουμπιά για να αλλάξετε την γραμματοσειρά ή για να εισάγετε εντολές πεδίων, όπως π.χ. ημερομηνία, ώρα, κτλ.";
         Text[ korean ] = "κΈ€κΌ΄μ„ λ³€κ²½ν•κ±°λ‚ λ‚ μ§, μ‹κ°„λ“±μ ν•„λ“λ¥Ό μ‚½μ…ν•κΈ° μ„ν•΄μ„ λ²„νΌμ„ μ‚¬μ©ν•μ‹­μ‹μ¤.";
         Text[ turkish ] = "Yazύtipini deπiώtirmek ya da tarih, saat gibi alan komutlarύ eklemek iηin dόπmeleri kullanύnύz.";
         Text[ language_user1 ] = " ";
@@ -1370,7 +1370,7 @@ TabPage RID_HFBASE
         Text [ ENGLISH ] = "Hint" ;
         Text [ norwegian ] = "Hint" ;
         Text [ italian ] = "Nota" ;
-        Text [ portuguese_brazilian ] = "Anotaηγo" ;
+        Text [ portuguese_brazilian ] = "Lembrete:" ;
         Text [ portuguese ] = "Observaηγo" ;
         Text [ finnish ] = "Huomautus" ;
         Text [ danish ] = "Bemζrk!" ;
@@ -1517,6 +1517,7 @@ TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
         TabStop = TRUE ;
     };
 };
+
 
 
 
