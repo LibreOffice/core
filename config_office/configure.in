@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-01-25 16:54:53 $
+dnl * Date: $Date: 2005-01-27 12:18:42 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.87 $ )
+AC_REVISION( $Revision: 1.88 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -177,7 +177,7 @@ AC_ARG_WITH(system-nas,
 [  --with-system-nas      Use nas already on system
 ],,)
 AC_ARG_WITH(system-neon,
-[  --with-system-neon      Use neon 0.23.x already on system
+[  --with-system-neon     Use neon already on system
 ],,)
 AC_ARG_WITH(stlport4,
 [  --with-stlport4         The location that STLport4 is installed in. The STL
@@ -2233,23 +2233,9 @@ AC_MSG_CHECKING([which neon to use])
 if test -n "$with_system_neon" -o -n "$with_system_libs" && \
 	test "$with_system_neon" != "no"; then
         AC_MSG_RESULT([external])
-        AC_PATH_PROG(NEON_CONFIG, neon-config)
-        if test -z "$NEON_CONFIG"; then
-           AC_MSG_ERROR([no neon found in \$PATH, install neon])
-        else
-           AC_MSG_CHECKING([whether neon version is 0.23.x])
-           # check whether we have 0.23.x. 0.24.x is API-incompatible....
-           NEON_VER=$($NEON_CONFIG --version | $AWK '{print $2}' \
-               | cut -d"." -f1,2)
-           if test "$NEON_VER" = "0.23"; then
-               AC_MSG_RESULT([yes])
-               SYSTEM_NEON=YES
-               NEON_CFLAGS="$($NEON_CONFIG --cflags) -DSYSTEM_NEON -DUSE_DAV_LOCKS=1"
-               NEON_LIBS=$($NEON_CONFIG --libs)
-           else
-               AC_MSG_ERROR([no. neon 0.24.x is API-incompatible. use 0.23.x])
-           fi
-	fi
+        PKG_CHECK_MODULES(NEON, neon >= 0.24.0)
+        NEON_CFLAGS="$NEON_CFLAGS -DSYSTEM_NEON -DUSE_DAV_LOCKS=1"
+        SYSTEM_NEON=YES
 else
     AC_MSG_RESULT([internal])
     SYSTEM_NEON=NO
