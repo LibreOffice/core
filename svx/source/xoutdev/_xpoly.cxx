@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _xpoly.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:28 $
+ *  last change: $Author: aw $ $Date: 2002-05-17 13:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,7 +465,8 @@ XPolygon::XPolygon(const Point& rCenter, long nRx, long nRy,
         GenBezArc(rCenter, nRx, nRy, nXHdl, nYHdl, nA1, nA2, nQuad, nPos);
         nPos += 3;
         if ( !bLoopEnd )
-            pImpXPolygon->pFlagAry[nPos] = (BYTE) XPOLY_SMOOTH;
+            // ## XPOLY_SMOOTH -> XPOLY_SYMMTR
+            pImpXPolygon->pFlagAry[nPos] = (BYTE) XPOLY_SYMMTR;
 
     } while ( !bLoopEnd );
 
@@ -475,8 +476,9 @@ XPolygon::XPolygon(const Point& rCenter, long nRx, long nRy,
 
     if ( bFull )
     {
-        pImpXPolygon->pFlagAry[0   ] = (BYTE) XPOLY_SMOOTH;
-        pImpXPolygon->pFlagAry[nPos] = (BYTE) XPOLY_SMOOTH;
+        // ## XPOLY_SMOOTH -> XPOLY_SYMMTR
+        pImpXPolygon->pFlagAry[0   ] = (BYTE) XPOLY_SYMMTR;
+        pImpXPolygon->pFlagAry[nPos] = (BYTE) XPOLY_SYMMTR;
     }
     pImpXPolygon->nPoints = nPos + 1;
 }
