@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2001-04-21 20:26:15 $
+ *  last change: $Author: dr $ $Date: 2001-04-24 14:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,10 @@ class ScMarkData;
 class ScPaintLockData;
 class ScJobSetup;
 class ScChangeAction;
+
+//==================================================================
+
+extern const sal_Char __FAR_DATA pFilterHtmlWebQ[];
 
 //==================================================================
 
