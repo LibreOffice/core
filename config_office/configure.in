@@ -115,7 +115,7 @@ dnl ===================================================================
 dnl checking the os
 AC_MSG_CHECKING([the operating system])
 _os=`uname`
-if test "$_os" = "SunOS" -o "$_os" = "Linux" -o "$_os" = "FreeBSD" -o "$_os" = "WINNT" -o "$_os" = "Darwin"; then
+if test "$_os" = "SunOS" -o "$_os" = "Linux" -o "$_os" = "WINNT" -o "$_os" = "Darwin"; then
    AC_MSG_RESULT([checked ($_os)])
 else
    AC_MSG_ERROR([$_os operating system is not suitable to build OpenOffice!])
@@ -149,10 +149,10 @@ dnl ===================================================================
 if test "$_os" = "SunOS"; then
    CC=cc; export CC;
 fi   
-if test "$_os" != "WINNT"; then
+if test "$_os" != "WINNT" && test -z "$with_gcc_home"; then
    AC_PROG_CC
 fi
-if test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
+if test "$_os" = "Linux"; then
    dnl ******************************************
    dnl Testing for GNU compiler and version...
    dnl ******************************************
@@ -168,8 +168,10 @@ if test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
       dnl Compiler has been installed to its own directory and it's home is arg with_gcc_home
       _gcc_path="$with_gcc_home/bin/gcc"
       if test -x $_gcc_path; then
+         CC=gcc; export CC;
          GCC=$_gcc_path
          COMPATH="$with_gcc_home/bin"
+         PATH=$COMPATH:$PATH; export PATH;
          _gcc_include_start=$with_gcc_home
          _gxx_include_start=$with_gcc_home
       fi
@@ -257,13 +259,9 @@ if test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
                      _gcc_include_path="NO_GCC_INCLUDE"
                   fi
                else
-		if test "$_os" = "FreeBSD"; then
-                  _gcc_include_path="/usr/include/g++"
-		else
                   AC_MSG_WARN([could not find 2.95.2/include directory of the gcc compiler])
                   AC_MSG_WARN([could not find 2.95.2/include directory of the gcc compiler]) >> warn
                   _gcc_include_path="NO_GCC_INCLUDE"
-		fi
                fi
             fi
          fi
@@ -350,8 +348,8 @@ if test "$_os" != "WINNT"; then
    AC_HEADER_STDC
 fi
 
-dnl Check if palm-appl.h is available on Linux or FreeBSD
-if test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
+dnl Check if palm-appl.h is available on Linux
+if test "$_os" = "Linux"; then
    AC_MSG_CHECKING([pam_appl.h])
    if test -f "/usr/include/security/pam_appl.h"; then
       AC_MSG_RESULT([yes])
@@ -365,7 +363,7 @@ dnl Testing for c++ compiler and version...
 dnl ***************************************
 
 AC_PROG_CXX
-if test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
+if test "$_os" = "Linux"; then
    dnl Check whether the gnu gcc compiler is used.
    if test "$CC" = "gcc"; then
       AC_MSG_CHECKING([g++ Compiler])
@@ -529,9 +527,6 @@ if test "$JAVA"; then
    if test "$_os" = "Linux" -a "$_machine_type" = "i686"; then
       _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
    fi
-   if test "$_os" = "FreeBSD"; then
-      _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
-   fi
    if test "$_os" = "Linux" -a "$_machine_type" = "sparc"; then
       _jdk_middle=`echo $_jdk | $AWK -F. '{ if ($2 != 2) print "false"; else print "true" }'`
    fi
@@ -546,9 +541,6 @@ if test "$JAVA"; then
    fi
    if test "$_jdk_middle" = "true"; then
       if test "$_os" = "SunOS"; then
-         _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 != 2) print "false"; else print "true" }'`
-      fi
-      if test "$_os" = "FreeBSD"; then
          _jdk_minor=`echo $_jdk | $AWK -F. '{ if ($3 != 2) print "false"; else print "true" }'`
       fi
       if test "$_os" = "Linux"; then
@@ -592,11 +584,11 @@ dnl ===================================================================
 dnl Checks for programs.
 dnl ===================================================================
 dnl Check whether there's a C pre-processor.
-if test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
+if test "$_os" = "Linux"; then
    AC_PROG_CPP
 fi
 dnl Check whether there's a C++ pre-processor.
-if test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
+if test "$_os" = "Linux"; then
    AC_PROG_CXXCPP
 fi
 dnl Check for a BSD compatible install program.
