@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 17:33:36 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 14:45:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,8 +100,13 @@ SLOFILES=\
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 
-SHL1STDLIBS= \
-        $(CPPUHELPERLIB) \
+.IF "$(OS)"=="MACOSX"
+SHL1STDLIBS= $(LIBSTLPORT) $(CPPUHELPERLIB)
+.ELSE
+SHL1STDLIBS= $(CPPUHELPERLIB)
+.ENDIF
+
+SHL1STDLIBS+= \
         $(CPPULIB) 	\
         $(SALLIB)	\
         -lX11
