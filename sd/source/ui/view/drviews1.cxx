@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:18:45 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #endif
 #ifndef _SVDOGRAF_HXX //autogen
 #include <svx/svdograf.hxx>
+#endif
+#ifndef _SVDOPAGE_HXX
+#include <svx/svdopage.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -1291,6 +1294,25 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
             if (aTabControl.GetPageText(nSelectedPage+1) != aLayoutName)
             {
                 aTabControl.SetPageText(nSelectedPage+1, aLayoutName);
+            }
+
+            if( ePageKind == PK_HANDOUT )
+            {
+                // set pages for all available handout presentation objects
+                sd::PresentationObjectList::iterator aIter( pMaster->GetPresObjList().begin() );
+                const sd::PresentationObjectList::iterator aEnd( pMaster->GetPresObjList().end() );
+
+                sal_uInt16 nPgNum = 0;
+                while( aIter != aEnd )
+                {
+                    if( (*aIter).meKind == PRESOBJ_HANDOUT )
+                    {
+                        static_cast<SdrPageObj*>((*aIter).mpObject)->SetReferencedPage(GetDoc()->GetPage(2 * nPgNum + 1));
+                        nPgNum++;
+                    }
+
+                    aIter++;
+                }
             }
         }
 
