@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 09:01:54 $
+#   last change: $Author: hr $ $Date: 2004-11-09 12:27:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,12 +75,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  sv.mk
 CDEFS+=-DCONV_STAR_FONTS
 
-# --- to build xmlkywd.obj in obj, too -----------------------------
-
-OBJFILES =  $(OBJ)$/xmlkywd.obj
-LIB2TARGET =$(LB)$/xmlkywd.lib
-LIB2OBJFILES  =$(OBJFILES)
-
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
@@ -95,6 +89,7 @@ SLOFILES =	\
         $(SLO)$/DocumentTContext.obj	\
         $(SLO)$/EventMap.obj	\
         $(SLO)$/EventOASISTContext.obj	\
+        $(SLO)$/DlgOASISTContext.obj	\
         $(SLO)$/EventOOoTContext.obj	\
         $(SLO)$/FlatTContext.obj	\
         $(SLO)$/FormPropOASISTContext.obj	\
@@ -121,6 +116,7 @@ SLOFILES =	\
         $(SLO)$/TransformerBase.obj		\
         $(SLO)$/TransformerContext.obj	\
         $(SLO)$/TransformerTokenMap.obj	\
+        $(SLO)$/XMLFilterRegistration.obj
 
 
 CPPUMAKERFLAGS=
