@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblekeybindinghelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2002-12-10 17:18:32 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef COMPHELPER_ACCESSIBLE_KEYBINDING_HELPER_HXX
 #define COMPHELPER_ACCESSIBLE_KEYBINDING_HELPER_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEKEYBINDING_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEKEYBINDING_HPP_
+#include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
@@ -84,7 +84,7 @@ namespace comphelper
     // OAccessibleKeyBindingHelper
     //==============================================================================
 
-    typedef ::cppu::WeakImplHelper1 <   ::drafts::com::sun::star::accessibility::XAccessibleKeyBinding
+    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::accessibility::XAccessibleKeyBinding
                                     >   OAccessibleKeyBindingHelper_Base;
 
     /** a helper class for implementing an accessible keybinding
@@ -92,7 +92,7 @@ namespace comphelper
     class OAccessibleKeyBindingHelper : public OAccessibleKeyBindingHelper_Base
     {
     private:
-        typedef ::std::vector< ::com::sun::star::uno::Sequence< ::drafts::com::sun::star::awt::KeyStroke > > KeyBindings;
+        typedef ::std::vector< ::com::sun::star::uno::Sequence< ::com::sun::star::awt::KeyStroke > > KeyBindings;
 
         KeyBindings     m_aKeyBindings;
 
@@ -105,12 +105,12 @@ namespace comphelper
         OAccessibleKeyBindingHelper();
         OAccessibleKeyBindingHelper( const OAccessibleKeyBindingHelper& rHelper );
 
-        void AddKeyBinding( const ::com::sun::star::uno::Sequence< ::drafts::com::sun::star::awt::KeyStroke >& rKeyBinding ) throw (::com::sun::star::uno::RuntimeException);
-        void AddKeyBinding( const ::drafts::com::sun::star::awt::KeyStroke& rKeyStroke ) throw (::com::sun::star::uno::RuntimeException);
+        void AddKeyBinding( const ::com::sun::star::uno::Sequence< ::com::sun::star::awt::KeyStroke >& rKeyBinding ) throw (::com::sun::star::uno::RuntimeException);
+        void AddKeyBinding( const ::com::sun::star::awt::KeyStroke& rKeyStroke ) throw (::com::sun::star::uno::RuntimeException);
 
         // XAccessibleKeyBinding
         virtual sal_Int32 SAL_CALL getAccessibleKeyBindingCount() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::drafts::com::sun::star::awt::KeyStroke > SAL_CALL getAccessibleKeyBinding( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::awt::KeyStroke > SAL_CALL getAccessibleKeyBinding( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     };
 
 //..............................................................................
