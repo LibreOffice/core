@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unload.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 14:41:49 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,13 +72,13 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
+#include <hash_map>
 
 #ifndef INCLUDED_SAL_INTERNAL_ALLOCATOR_HXX
 #include "internal/allocator.hxx"
 #endif
 
 #include <functional>
-#include <hash_map>
 #include <list>
 #include <deque>
 
