@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:43:58 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,11 +525,11 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                     while(aIter.IsMore())
                     {
                         SdrObject* pObj = aIter.Next();
-                        const SvxFontHeightItem& rItem = (const SvxFontHeightItem&)pObj->GetItem(EE_CHAR_FONTHEIGHT);
+                        const SvxFontHeightItem& rItem = (const SvxFontHeightItem&)pObj->GetMergedItem(EE_CHAR_FONTHEIGHT);
 
                         if(rItem.GetHeight() == rDefaultFontHeight.GetHeight())
                         {
-                            pObj->SetItem(rDefaultFontHeight);
+                            pObj->SetMergedItem(rDefaultFontHeight);
                         }
                     }
                 }
