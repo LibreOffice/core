@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frm_strings.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:04:46 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:51:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,7 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_DEFAULT_SELECT_SEQ,       "DefaultSelection" );
     FORMS_CONSTASCII_STRING( PROPERTY_MULTISELECTION,           "MultiSelection" );
     FORMS_CONSTASCII_STRING( PROPERTY_ALIGN,                    "Align" );
+    FORMS_CONSTASCII_STRING( PROPERTY_VERTICALALIGN,            "VerticalAlign" );
     FORMS_CONSTASCII_STRING( PROPERTY_DEFAULT_DATE,             "DefaultDate" );
     FORMS_CONSTASCII_STRING( PROPERTY_DEFAULT_TIME,             "DefaultTime" );
     FORMS_CONSTASCII_STRING( PROPERTY_DEFAULT_VALUE,            "DefaultValue" );
