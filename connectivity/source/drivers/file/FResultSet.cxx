@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 11:01:24 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 13:45:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -766,20 +766,21 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
     if(!m_bInserted)
         throw SQLException();
 
+    // we know that we append new rows at the end
+    // so we have to know where the end is
+    SkipDeleted(OFileTable::FILE_LAST,1,sal_False);
     m_bRowInserted = m_pTable->InsertRow(m_aInsertRow.getBody(), TRUE,Reference<XIndexAccess>(m_xColNames,UNO_QUERY));
     if(m_bRowInserted && m_pFileSet)
     {
         sal_Int32 nPos = (*m_aInsertRow)[0];
         m_pFileSet->push_back(nPos);
         m_aRow = m_aInsertRow;
-        // we know that we append new rows at the end
-        // so we can assume this
+
+
         if(m_aBookmarkToPos.size())
             m_aBookmarkToPos[nPos] = m_aBookmarkToPos.rbegin()->second + 1;
         else
             m_aBookmarkToPos[nPos] = 1;
-//      else
-//          m_aBookmarkToPos[nPos] = m_nRowPos + 1;
     }
 }
 // -------------------------------------------------------------------------
