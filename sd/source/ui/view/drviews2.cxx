@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:54:37 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,10 @@
 #ifndef _SVX_XLNEDWIT_HXX
 #include <svx/xlnedwit.hxx>
 #endif
+#ifndef _SVX_FONTWORK_BAR_HXX
+#include <svx/fontworkbar.hxx>
+#endif
+
 //CHINA001 #ifndef _SVX_DLG_NAME_HXX
 //CHINA001 #include <svx/dlgname.hxx>
 //CHINA001 #endif
@@ -1177,6 +1181,15 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             pDrView->SetMarkedOriginalSize();
             Cancel();
             rReq.Done();
+        break;
+
+        case SID_DRAW_FONTWORK:
+        case SID_DRAW_FONTWORK_VERTICAL:
+        {
+            svx::FontworkBar::execute( pView, nSId );
+            Cancel();
+            rReq.Done();
+        }
         break;
 
         default:
