@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: er $ $Date: 2001-07-26 16:10:25 $
+ *  last change: $Author: nn $ $Date: 2001-08-06 15:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@
 #include <offmgr/app.hxx>
 #include <vcl/graph.hxx>
 #include <sot/formats.hxx>
+#include <sot/clsids.hxx>
 
 #include <svx/svdview.hxx>      // fuer Command-Handler (COMMAND_INSERTTEXT)
 #include <svx/outliner.hxx>     // fuer Command-Handler (COMMAND_INSERTTEXT)
@@ -2730,8 +2731,23 @@ ULONG lcl_GetDropFormatId( const uno::Reference<datatransfer::XTransferable>& xT
         nFormatId = SOT_FORMATSTR_ID_SVXB;
     else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE ) )
     {
-        //! if this is a Writer object, use RTF
-        nFormatId = SOT_FORMATSTR_ID_EMBED_SOURCE;
+        //  If it's a Writer object, insert RTF instead of OLE
+
+        BOOL bDoRtf = FALSE;
+        SotStorageStreamRef xStm;
+        TransferableObjectDescriptor aObjDesc;
+        if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
+            aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBED_SOURCE, xStm ) )
+        {
+            SvStorageRef xStore( new SvStorage( *xStm ) );
+            bDoRtf = ( ( aObjDesc.maClassName == SvGlobalName( SO3_SW_CLASSID ) ||
+                         aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )
+                       && aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
+        }
+        if ( bDoRtf )
+            nFormatId = FORMAT_RTF;
+        else
+            nFormatId = SOT_FORMATSTR_ID_EMBED_SOURCE;
     }
     else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ) )
         nFormatId = SOT_FORMATSTR_ID_LINK_SOURCE;
