@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layouter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:32:00 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ public:
 
     void LoopControl( SwPageFrm* pPage, BYTE nLoop );
     void EndLoopControl();
+    void LoopingLouieLight( const SwDoc& rDoc, const SwTxtFrm& rFrm );
 
     static void CollectEndnotes( SwDoc* pDoc, SwSectionFrm* pSect );
     static BOOL Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn );
@@ -150,6 +151,9 @@ public:
                               const SwFrm& _rFrm );
     // <--
 };
+
+
+extern void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTxtFrm& rTxtFrm );
 
 #endif  //_LAYOUTER_HXX
 
