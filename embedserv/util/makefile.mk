@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mav $ $Date: 2003-03-12 15:38:00 $
+#   last change: $Author: mav $ $Date: 2003-03-19 10:56:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,10 +90,6 @@ SHL1OBJS= \
 
 SHL1STDLIBS=\
     $(SALLIB) 	\
-    $(VOSLIB)	\
-    $(TOOLSLIB)	\
-    $(UNOTOOLSLIB)	\
-    $(VCLLIB)	\
     $(CPPULIB)	\
     $(CPPUHELPERLIB)	\
     $(LIBCIMT) 	\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-05 15:50:11 $
+ *  last change: $Author: mav $ $Date: 2003-03-19 10:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,9 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-
-#include <vos/thread.hxx>
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
+#endif
 
 using namespace com::sun::star;
 
@@ -88,6 +89,42 @@ const GUID* guidList[ SUPPORTED_FACTORIES_NUM ] = {
     &OID_MathServer
 };
 
+class CurThreadData
+{
+    public:
+        CurThreadData();
+        virtual ~CurThreadData();
+
+        sal_Bool SAL_CALL setData(void *pData);
+
+        void* SAL_CALL getData();
+
+    protected:
+        oslThreadKey m_hKey;
+};
+
+CurThreadData::CurThreadData()
+{
+    m_hKey = osl_createThreadKey( (oslThreadKeyCallbackFunction)NULL );
+}
+
+CurThreadData::~CurThreadData()
+{
+    osl_destroyThreadKey(m_hKey);
+}
+
+sal_Bool CurThreadData::setData(void *pData)
+{
+    OSL_ENSURE( m_hKey, "No thread key!\n" );
+    return (osl_setThreadKeyData(m_hKey, pData));
+}
+
+void *CurThreadData::getData()
+{
+    OSL_ENSURE( m_hKey, "No thread key!\n" );
+    return (osl_getThreadKeyData(m_hKey));
+}
+
 
 // CoInitializeEx *
 typedef DECLSPEC_IMPORT HRESULT (STDAPICALLTYPE *ptrCoInitEx)( LPVOID, DWORD);
@@ -96,7 +133,7 @@ typedef DECLSPEC_IMPORT HRESULT (STDAPICALLTYPE *ptrCoInit)( LPVOID);
 
 void o2u_attachCurrentThread()
 {
-    static ::vos::OThreadData oleThreadData;
+    static CurThreadData oleThreadData;
 
     if ((sal_Bool)oleThreadData.getData() != sal_True)
     {
