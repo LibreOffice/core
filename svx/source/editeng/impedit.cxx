@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:31:59 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #include <editeng.hxx>
 #include <editview.hxx>
 
-#ifndef _SV_POLY_HXX //autogen
-#include <vcl/poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 
 #ifndef _UNO_LINGU_HXX
@@ -402,7 +402,7 @@ void ImpEditView::ImplDrawHighlightRect( Window* pOutWin, const Point& rDocPosTo
         }
         else
         {
-            pOutWin->HighlightRect( aRect );
+            pOutWin->Invert( aRect );
         }
     }
 }
@@ -1546,8 +1546,8 @@ void ImpEditView::ShowDDCursor( const Rectangle& rRect )
         if ( pOutWin->GetCursor() )
             pOutWin->GetCursor()->Hide();
 
-        Brush aOldBrush = GetWindow()->GetFillInBrush( );
-        GetWindow()->SetFillInBrush( Brush( Color( COL_GRAY), BRUSH_50 ) );
+        Color aOldFillColor = GetWindow()->GetFillColor();
+        GetWindow()->SetFillColor( Color(4210752) );    // GRAY BRUSH_50, OLDSV, change to DDCursor!
 
         // Hintergrund sichern...
         Rectangle aSaveRec( GetWindow()->LogicToPixel( rRect ) );
@@ -1584,7 +1584,7 @@ void ImpEditView::ShowDDCursor( const Rectangle& rRect )
         pDragAndDropInfo->bVisCursor = sal_True;
         pDragAndDropInfo->aCurCursor = rRect;
 
-        GetWindow()->SetFillInBrush( aOldBrush );
+        GetWindow()->SetFillColor( aOldFillColor );
     }
 }
 
