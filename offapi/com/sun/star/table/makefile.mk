@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mi $ $Date: 2002-11-01 18:43:24 $
+#   last change: $Author: sab $ $Date: 2002-11-13 06:04:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,11 +92,14 @@ IDLFILES=\
     TableBorder.idl\
     TableChart.idl\
     TableCharts.idl\
+    TableChartsEnumeration.idl\
     TableColumn.idl\
     TableColumns.idl\
+    TableColumnsEnumeration.idl\
     TableOrientation.idl\
     TableRow.idl\
     TableRows.idl\
+    TableRowsEnumeration.idl\
     TableSortDescriptor.idl\
     XAutoFormattable.idl\
     XCell.idl\
