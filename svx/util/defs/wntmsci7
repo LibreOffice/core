@@ -20498,3 +20498,16 @@ _real@8@400cfa00000000000000
 ?setMaster@SvxShape@@QAEXPAVSvxShapeMaster@@@Z
 ?queryAggregation@SvxOle2Shape@@UAA?AVAny@uno@star@sun@com@@ABVType@3456@@Z
 ?setShapeKind@SvxShape@@QAEXK@Z
+??4?$WeakReference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@QAEAAV01234@ABV01234@@Z
+??0?$_Vector_base@VINetURLObject@@V?$allocator@VINetURLObject@@@_STL@@@_STL@@QAE@ABV?$allocator@VINetURLObject@@@1@@Z
+??0INetURLObject@@QAE@ABV0@@Z
+??1?$_STL_alloc_proxy@PAVINetURLObject@@V1@V?$allocator@VINetURLObject@@@_STL@@@_STL@@QAE@XZ
+??1?$_Vector_base@VINetURLObject@@V?$allocator@VINetURLObject@@@_STL@@@_STL@@QAE@XZ
+??1?$allocator@VINetURLObject@@@_STL@@QAE@XZ
+??1?$vector@VINetURLObject@@V?$allocator@VINetURLObject@@@_STL@@@_STL@@QAE@XZ
+?InsertFileOrDirURL@GalleryTheme@@QAEEABVINetURLObject@@K@Z
+?_Construct@_STL@@YAXPAVINetURLObject@@ABV2@@Z
+?_M_insert_overflow@?$vector@VINetURLObject@@V?$allocator@VINetURLObject@@@_STL@@@_STL@@IAEXPAVINetURLObject@@ABV3@I@Z
+?__uninitialized_copy_aux@_STL@@YAPAVINetURLObject@@PAV2@00U__false_type@@@Z
+?__uninitialized_fill_n_aux@_STL@@YAPAVINetURLObject@@PAV2@IABV2@U__false_type@@@Z
+?deallocate@?$_STL_alloc_proxy@PAVINetURLObject@@V1@V?$allocator@VINetURLObject@@@_STL@@@_STL@@QAEXPAVINetURLObject@@I@Z
