@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputopt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 16:19:07 $
+ *  last change: $Author: dr $ $Date: 2002-07-11 10:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ private:
     BOOL        bMarkHeader;
     BOOL        bUseTabCol;
     BOOL        bTextWysiwyg;
+    BOOL        bReplCellsWarn;
 
 public:
                 ScInputOptions();
@@ -94,24 +95,26 @@ public:
 
     void        SetDefaults();
 
-    void        SetMoveDir(USHORT nNew)     { nMoveDir = nNew;       }
-    USHORT      GetMoveDir() const          { return nMoveDir;       }
-    void        SetMoveSelection(BOOL bSet) { bMoveSelection = bSet; }
-    BOOL        GetMoveSelection() const    { return bMoveSelection; }
-    void        SetEnterEdit(BOOL bSet)     { bEnterEdit = bSet;     }
-    BOOL        GetEnterEdit() const        { return bEnterEdit;     }
-    void        SetExtendFormat(BOOL bSet)  { bExtendFormat = bSet;  }
-    BOOL        GetExtendFormat() const     { return bExtendFormat;  }
-    void        SetRangeFinder(BOOL bSet)   { bRangeFinder = bSet;   }
-    BOOL        GetRangeFinder() const      { return bRangeFinder;   }
-    void        SetExpandRefs(BOOL bSet)    { bExpandRefs = bSet;    }
-    BOOL        GetExpandRefs() const       { return bExpandRefs;    }
-    void        SetMarkHeader(BOOL bSet)    { bMarkHeader = bSet;    }
-    BOOL        GetMarkHeader() const       { return bMarkHeader;    }
-    void        SetUseTabCol(BOOL bSet)     { bUseTabCol = bSet;     }
-    BOOL        GetUseTabCol() const        { return bUseTabCol;     }
-    void        SetTextWysiwyg(BOOL bSet)   { bTextWysiwyg = bSet;   }
-    BOOL        GetTextWysiwyg() const      { return bTextWysiwyg;   }
+    void        SetMoveDir(USHORT nNew)         { nMoveDir = nNew;       }
+    USHORT      GetMoveDir() const              { return nMoveDir;       }
+    void        SetMoveSelection(BOOL bSet)     { bMoveSelection = bSet; }
+    BOOL        GetMoveSelection() const        { return bMoveSelection; }
+    void        SetEnterEdit(BOOL bSet)         { bEnterEdit = bSet;     }
+    BOOL        GetEnterEdit() const            { return bEnterEdit;     }
+    void        SetExtendFormat(BOOL bSet)      { bExtendFormat = bSet;  }
+    BOOL        GetExtendFormat() const         { return bExtendFormat;  }
+    void        SetRangeFinder(BOOL bSet)       { bRangeFinder = bSet;   }
+    BOOL        GetRangeFinder() const          { return bRangeFinder;   }
+    void        SetExpandRefs(BOOL bSet)        { bExpandRefs = bSet;    }
+    BOOL        GetExpandRefs() const           { return bExpandRefs;    }
+    void        SetMarkHeader(BOOL bSet)        { bMarkHeader = bSet;    }
+    BOOL        GetMarkHeader() const           { return bMarkHeader;    }
+    void        SetUseTabCol(BOOL bSet)         { bUseTabCol = bSet;     }
+    BOOL        GetUseTabCol() const            { return bUseTabCol;     }
+    void        SetTextWysiwyg(BOOL bSet)       { bTextWysiwyg = bSet;   }
+    BOOL        GetTextWysiwyg() const          { return bTextWysiwyg;   }
+    void        SetReplaceCellsWarn(BOOL bSet)  { bReplCellsWarn = bSet; }
+    BOOL        GetReplaceCellsWarn() const     { return bReplCellsWarn; }
 
     const ScInputOptions&   operator=   ( const ScInputOptions& rOpt );
     friend SvStream&        operator>>  ( SvStream& rStream, ScInputOptions& rOpt );

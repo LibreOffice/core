@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: nn $ $Date: 2001-04-27 19:29:36 $
+#   last change: $Author: dr $ $Date: 2002-07-11 10:55:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,41 +81,42 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        delcldlg.cxx inscldlg.cxx 	\
-        delcodlg.cxx inscodlg.cxx	\
-        strindlg.cxx mtrindlg.cxx 	\
-        lbseldlg.cxx filldlg.cxx  	\
-        autofmt.cxx  solvrdlg.cxx 	\
-        mvtabdlg.cxx groupdlg.cxx 	\
-        tabopdlg.cxx crdlg.cxx 		\
-    namecrea.cxx namepast.cxx 	\
-    teamdlg.cxx textdlgs.cxx 	\
-    chartdlg.cxx anyrefdg.cxx	\
-    crnrdlg.cxx shtabdlg.cxx \
-    instbdlg.cxx acredlin.cxx \
-    highred.cxx simpref.cxx	\
-    redcom.cxx linkarea.cxx
-
 SLOFILES =  \
-        $(SLO)$/delcldlg.obj $(SLO)$/inscldlg.obj \
-        $(SLO)$/delcodlg.obj $(SLO)$/inscodlg.obj \
-        $(SLO)$/strindlg.obj $(SLO)$/mtrindlg.obj \
-        $(SLO)$/lbseldlg.obj $(SLO)$/filldlg.obj  \
-        $(SLO)$/autofmt.obj  $(SLO)$/solvrdlg.obj \
-        $(SLO)$/mvtabdlg.obj $(SLO)$/groupdlg.obj \
-        $(SLO)$/tabopdlg.obj $(SLO)$/crdlg.obj 	\
-    $(SLO)$/namecrea.obj $(SLO)$/namepast.obj \
-    $(SLO)$/teamdlg.obj $(SLO)$/textdlgs.obj 	\
-    $(SLO)$/chartdlg.obj $(SLO)$/anyrefdg.obj	\
-    $(SLO)$/crnrdlg.obj $(SLO)$/shtabdlg.obj \
-    $(SLO)$/instbdlg.obj $(SLO)$/acredlin.obj \
-    $(SLO)$/highred.obj	 $(SLO)$/simpref.obj  \
-    $(SLO)$/redcom.obj $(SLO)$/linkarea.obj
+    $(SLO)$/delcldlg.obj		\
+    $(SLO)$/inscldlg.obj		\
+    $(SLO)$/delcodlg.obj		\
+    $(SLO)$/inscodlg.obj		\
+    $(SLO)$/strindlg.obj		\
+    $(SLO)$/mtrindlg.obj		\
+    $(SLO)$/lbseldlg.obj		\
+    $(SLO)$/filldlg.obj			\
+    $(SLO)$/autofmt.obj			\
+    $(SLO)$/solvrdlg.obj		\
+    $(SLO)$/mvtabdlg.obj		\
+    $(SLO)$/groupdlg.obj		\
+    $(SLO)$/tabopdlg.obj		\
+    $(SLO)$/crdlg.obj			\
+    $(SLO)$/namecrea.obj		\
+    $(SLO)$/namepast.obj		\
+    $(SLO)$/teamdlg.obj			\
+    $(SLO)$/textdlgs.obj		\
+    $(SLO)$/chartdlg.obj		\
+    $(SLO)$/anyrefdg.obj		\
+    $(SLO)$/crnrdlg.obj			\
+    $(SLO)$/shtabdlg.obj		\
+    $(SLO)$/instbdlg.obj		\
+    $(SLO)$/acredlin.obj		\
+    $(SLO)$/highred.obj			\
+    $(SLO)$/simpref.obj			\
+    $(SLO)$/redcom.obj			\
+    $(SLO)$/linkarea.obj		\
+    $(SLO)$/warnbox.obj
 
 SRCFILES = \
-    instbdlg.src acredlin.src \
-    highred.src linkarea.src
+    instbdlg.src				\
+    acredlin.src				\
+    highred.src					\
+    linkarea.src
 
 NOOPTFILES=\
     $(SLO)$/chartdlg.obj

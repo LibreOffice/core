@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputopt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 19:06:00 $
+ *  last change: $Author: dr $ $Date: 2002-07-11 10:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ void ScInputOptions::SetDefaults()
     bMarkHeader     = TRUE;
     bUseTabCol      = FALSE;        //! ja wie denn nun?
     bTextWysiwyg    = TRUE;
+    bReplCellsWarn  = TRUE;
 }
 
 //------------------------------------------------------------------------
@@ -140,6 +141,7 @@ const ScInputOptions& ScInputOptions::operator=( const ScInputOptions& rCpy )
     bMarkHeader     = rCpy.bMarkHeader;
     bUseTabCol      = rCpy.bUseTabCol;
     bTextWysiwyg    = rCpy.bTextWysiwyg;
+    bReplCellsWarn  = rCpy.bReplCellsWarn;
 
     return *this;
 }
@@ -209,7 +211,8 @@ SvStream& operator<<( SvStream& rStream, const ScInputOptions& rOpt )
 #define SCINPUTOPT_MARKHEADER       6
 #define SCINPUTOPT_USETABCOL        7
 #define SCINPUTOPT_TEXTWYSIWYG      8
-#define SCINPUTOPT_COUNT            9
+#define SCINPUTOPT_REPLCELLSWARN    9
+#define SCINPUTOPT_COUNT            10
 
 Sequence<OUString> ScInputCfg::GetPropertyNames()
 {
@@ -223,7 +226,8 @@ Sequence<OUString> ScInputCfg::GetPropertyNames()
         "ExpandReference",          // SCINPUTOPT_EXPANDREFS
         "HighlightSelection",       // SCINPUTOPT_MARKHEADER
         "UseTabCol",                // SCINPUTOPT_USETABCOL
-        "UsePrinterMetrics"         // SCINPUTOPT_TEXTWYSIWYG
+        "UsePrinterMetrics",        // SCINPUTOPT_TEXTWYSIWYG
+        "ReplaceCellsWarning"       // SCINPUTOPT_REPLCELLSWARN
     };
     Sequence<OUString> aNames(SCINPUTOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -280,6 +284,9 @@ ScInputCfg::ScInputCfg() :
                     case SCINPUTOPT_TEXTWYSIWYG:
                         SetTextWysiwyg( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
+                    case SCINPUTOPT_REPLCELLSWARN:
+                        SetReplaceCellsWarn( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
+                        break;
                 }
             }
         }
@@ -325,6 +332,9 @@ void ScInputCfg::Commit()
                 break;
             case SCINPUTOPT_TEXTWYSIWYG:
                 ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetTextWysiwyg() );
+                break;
+            case SCINPUTOPT_REPLCELLSWARN:
+                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetReplaceCellsWarn() );
                 break;
         }
     }

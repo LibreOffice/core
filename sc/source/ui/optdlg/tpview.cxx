@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-01 09:30:25 $
+ *  last change: $Author: dr $ $Date: 2002-07-11 10:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,6 +472,7 @@ ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
     aExpRefCB( this,        ResId( CB_EXPREF    )),
     aMarkHdrCB( this,       ResId( CB_MARKHDR   )),
     aTextFmtCB( this,       ResId( CB_TEXTFMT   )),
+    aReplWarnCB( this,      ResId( CB_REPLWARN  )),
     aUnitArr(               ResId(ST_UNIT           )),
     pDoc(NULL)
 {
@@ -613,6 +614,12 @@ BOOL    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
         bRet = TRUE;
     }
 
+    if( aReplWarnCB.GetSavedValue() != aReplWarnCB.IsChecked() )
+    {
+        rCoreSet.Put( SfxBoolItem( SID_SC_INPUT_REPLCELLSWARN, aReplWarnCB.IsChecked() ) );
+        bRet = TRUE;
+    }
+
     return bRet;
 }
 /*-----------------11.01.97 10.53-------------------
@@ -688,6 +695,9 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet& rCoreSet )
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SC_INPUT_TEXTWYSIWYG, FALSE, &pItem))
         aTextFmtCB.Check(((const SfxBoolItem*)pItem)->GetValue());
 
+    if( SFX_ITEM_SET == rCoreSet.GetItemState( SID_SC_INPUT_REPLCELLSWARN, FALSE, &pItem ) )
+        aReplWarnCB.Check( ( (const SfxBoolItem*)pItem)->GetValue() );
+
     aAlignCB    .SaveValue();
     aAlignLB    .SaveValue();
     aEditModeCB .SaveValue();
@@ -696,6 +706,7 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet& rCoreSet )
     aExpRefCB   .SaveValue();
     aMarkHdrCB  .SaveValue();
     aTextFmtCB  .SaveValue();
+    aReplWarnCB .SaveValue();
     AlignHdl(&aAlignCB);
 
     aAlwaysRB.SaveValue();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 07:51:56 $
+ *  last change: $Author: dr $ $Date: 2002-07-11 10:46:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,6 +574,9 @@
 
 // #97776# new entry "Filter..." in DP popup menu
 #define SID_DP_FILTER                   (SC_VIEW_START + 91)
+
+// #101160# Replace cell contents warning
+#define SID_SC_INPUT_REPLCELLSWARN      (SC_VIEW_START + 92)
 
 // Nachrichten -------------------------------------------------------------
 
@@ -1255,6 +1258,8 @@
 #define STR_DLG_SELECTTABLES_TITLE  (STR_START + 89)
 #define STR_DLG_SELECTTABLES_LBNAME (STR_START + 90)
 
+// #101160# Replace cell contents warning
+#define STR_REPLCELLSWARN           (STR_START + 91)
 
 // Items
 

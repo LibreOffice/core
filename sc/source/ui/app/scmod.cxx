@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-08 14:56:56 $
+ *  last change: $Author: dr $ $Date: 2002-07-11 10:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1234,6 +1234,11 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             bUpdateRefDev = TRUE;
         }
     }
+    if( IS_AVAILABLE( SID_SC_INPUT_REPLCELLSWARN, pItem ) )
+    {
+        pInputCfg->SetReplaceCellsWarn( ((const SfxBoolItem*)pItem)->GetValue() );
+        bSaveInputOptions = TRUE;
+    }
 
     //============================================
     // PrintOptions
@@ -1934,6 +1939,7 @@ SfxItemSet*  ScModule::CreateItemSet( USHORT nId )
                             // TP_INPUT:
                             SID_SC_INPUT_SELECTION,SID_SC_INPUT_MARK_HEADER,
                             SID_SC_INPUT_TEXTWYSIWYG,SID_SC_INPUT_TEXTWYSIWYG,
+                            SID_SC_INPUT_REPLCELLSWARN,SID_SC_INPUT_REPLCELLSWARN,
                             // TP_USERLISTS:
                             SCITEM_USERLIST,        SCITEM_USERLIST,
                             // TP_PRINT:
@@ -1991,6 +1997,8 @@ SfxItemSet*  ScModule::CreateItemSet( USHORT nId )
                     rInpOpt.GetMarkHeader() ) );
         pRet->Put( SfxBoolItem( SID_SC_INPUT_TEXTWYSIWYG,
                     rInpOpt.GetTextWysiwyg() ) );
+        pRet->Put( SfxBoolItem( SID_SC_INPUT_REPLCELLSWARN,
+                    rInpOpt.GetReplaceCellsWarn() ) );
 
         // RID_SC_TP_PRINT
         pRet->Put( ScTpPrintItem( SID_SCPRINTOPTIONS, GetPrintOptions() ) );
