@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: os $ $Date: 2002-11-04 10:00:12 $
+ *  last change: $Author: tl $ $Date: 2002-11-11 14:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 
 #include "viscrs.hxx"
 #include <sfx2/frame.hxx>
+#ifndef _SFX_PRINTER_HXX
+#include <sfx2/printer.hxx>
+#endif
 #include <cmdid.h>
 #include <hintids.hxx>
 #ifndef _SWDOCSH_HXX //autogen
@@ -125,6 +128,9 @@
 #endif
 #ifndef _SVDOGRP_HXX //autogen
 #include <svx/svdogrp.hxx>
+#endif
+#ifndef _SVX_PBINITEM_HXX
+#include <svx/pbinitem.hxx>
 #endif
 #ifndef _PAGEDESC_HXX //autogen
 #include <pagedesc.hxx>
@@ -1002,11 +1008,55 @@ void SAL_CALL SwXTextView::setRubyList(
     SwDoc* pDoc = pView->GetDocShell()->GetDoc();
     pDoc->SetRubyList( *rSh.GetCrsr(), aList, 0 );
 }
+/*-- 29.12.02 15:45:29---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SfxObjectShellRef SwXTextView::BuildTmpSelectionDoc( SvEmbeddedObjectRef &rRef )
+{
+    SwWrtShell* pOldSh = &pView->GetWrtShell();
+    SfxPrinter *pPrt = pOldSh->GetPrt();
+//    SwDoc *pPrtDoc = pOldSh->CreatePrtDoc( pPrt, rRef );
+    SwDocShell* pDocSh;
+    SfxObjectShellRef xDocSh( pDocSh = new SwDocShell( /*pPrtDoc, */SFX_CREATE_MODE_STANDARD ) );
+    xDocSh->DoInitNew( 0 );
+    pOldSh->FillPrtDoc(pDocSh->GetDoc(),  pPrt);
+    SfxViewFrame* pDocFrame = SFX_APP()->CreateViewFrame( *xDocSh, 0, TRUE );
+    SwView* pDocView = (SwView*) pDocFrame->GetViewShell();
+    pDocView->AttrChangedNotify( &pDocView->GetWrtShell() );//Damit SelectShell gerufen wird.
+    SwWrtShell* pSh = pDocView->GetWrtShellPtr();
+    SfxPrinter* pTempPrinter = pSh->GetPrt( TRUE );
+    if(pOldSh )
+    {
+        const SwPageDesc& rCurPageDesc = pOldSh->GetPageDesc(pOldSh->GetCurPageDesc());
+        if(pOldSh->GetPrt(FALSE))
+        {
+            pSh->GetDoc()->SetJobsetup(*pOldSh->GetDoc()->GetJobsetup());
+            //#69563# if it isn't the same printer then the pointer has been invalidated!
+            pTempPrinter = pSh->GetPrt( TRUE );
+        }
+        pTempPrinter->SetPaperBin(rCurPageDesc.GetMaster().GetPaperBin().GetValue());
+    }
+#ifdef DEBUG
+    //pDocFrame->GetFrame()->Appear();
+#endif
+    return xDocSh;
+}
+
 /*-- 17.12.98 09:34:29---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXTextView::NotifySelChanged()
 {
+    DBG_ASSERT( pView, "view is missing" );
+
+    // destroy temporary document with selected text that is used
+    // in PDF export of (multi-)selections.
+    if (pView && pView->GetTmpSelectionDoc().Is())
+    {
+        pView->GetTmpSelectionDoc()->DoClose();
+        pView->GetTmpSelectionDoc() = 0;
+    }
+
     Reference< uno::XInterface >  xInt = (cppu::OWeakObject*)(SfxBaseController*)this;
 
      lang::EventObject aEvent(xInt);

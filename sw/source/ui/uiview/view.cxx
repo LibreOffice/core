@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: os $ $Date: 2002-10-30 10:40:17 $
+ *  last change: $Author: tl $ $Date: 2002-11-11 14:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1714,4 +1714,25 @@ BOOL SwView::IsPasteSpecialAllowed()
 void SwView::NotifyDBChanged()
 {
     GetViewImpl()->GetUNOObject_Impl()->NotifyDBChanged();
+}
+/* -----------------------------28.10.02 13:25--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SfxObjectShellRef & SwView::GetTmpSelectionDoc()
+{
+    return GetViewImpl()->GetTmpSelectionDoc();
+}
+/* -----------------------------31.10.02 13:25--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SfxObjectShellRef & SwView::GetOrCreateTmpSelectionDoc()
+{
+    SfxObjectShellRef &rxTmpDoc = GetViewImpl()->GetTmpSelectionDoc();
+    if (!rxTmpDoc.Is())
+    {
+        SwXTextView *pImpl = GetViewImpl()->GetUNOObject_Impl();
+        rxTmpDoc = pImpl->BuildTmpSelectionDoc(
+                    GetViewImpl()->GetEmbeddedObjRef() );
+    }
+    return rxTmpDoc;
 }

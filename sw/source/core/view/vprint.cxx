@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-11-11 14:03:01 $
+ *  last change: $Author: tl $ $Date: 2002-11-11 14:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -859,9 +859,184 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
     pLayout->EndAllAction();
 }
 
+/******************************************************************************/
+
+SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SvEmbeddedObjectRef &rDocShellRef)
+{
+    ASSERT( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
+    SwFEShell* pFESh = (SwFEShell*)this;
+    // Wir bauen uns ein neues Dokument
+    SwDoc *pPrtDoc = new SwDoc;
+    pPrtDoc->AddLink();
+    pPrtDoc->SetRefForDocShell( (SvEmbeddedObjectRef*)&(long&)rDocShellRef );
+    pPrtDoc->LockExpFlds();
+
+    // Der Drucker wird uebernommen
+    if (pPrt)
+        pPrtDoc->SetPrt( pPrt );
+
+    const SfxPoolItem* pCpyItem;
+    const SfxItemPool& rPool = GetAttrPool();
+    for( USHORT nWh = POOLATTR_BEGIN; nWh < POOLATTR_END; ++nWh )
+        if( 0 != ( pCpyItem = rPool.GetPoolDefaultItem( nWh ) ) )
+            pPrtDoc->GetAttrPool().SetPoolDefaultItem( *pCpyItem );
+
+    // JP 29.07.99 - Bug 67951 - set all Styles from the SourceDoc into
+    //                              the PrintDoc - will be replaced!
+    pPrtDoc->ReplaceStyles( *GetDoc() );
+
+    SwShellCrsr *pActCrsr = pFESh->_GetCrsr();
+    SwShellCrsr *pFirstCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetNext());
+    if( !pActCrsr->HasMark() ) // bei Multiselektion kann der aktuelle Cursor leer sein
+        pActCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetPrev());
+    // Die Y-Position der ersten Selektion
+    long nMinY = pFESh->IsTableMode() ? pFESh->GetTableCrsr()->GetSttPos().Y()
+                               : pFirstCrsr->GetSttPos().Y();
+    SwPageFrm* pPage = (SwPageFrm*)GetLayout()->Lower();
+    // Suche die zugehoerige Seite
+    while ( pPage->GetNext() && nMinY >= pPage->GetNext()->Frm().Top() )
+        pPage = (SwPageFrm*)pPage->GetNext();
+    // und ihren Seitendescribtor
+    SwPageDesc *pSrc = pPage->GetPageDesc();
+    SwPageDesc* pPageDesc = pPrtDoc->FindPageDescByName(
+                                pPage->GetPageDesc()->GetName() );
+
+    if( !pFESh->IsTableMode() && pActCrsr->HasMark() )
+    {   // Am letzten Absatz die Absatzattribute richten:
+        SwNodeIndex aNodeIdx( *pPrtDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
+        SwTxtNode* pTxtNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx )->GetTxtNode();
+        SwCntntNode *pLastNd =
+            pActCrsr->GetCntntNode( (*pActCrsr->GetMark()) <= (*pActCrsr->GetPoint()) );
+        // Hier werden die Absatzattribute des ersten Absatzes uebertragen
+        if( pLastNd && pLastNd->IsTxtNode() )
+            ((SwTxtNode*)pLastNd)->CopyCollFmt( *pTxtNd );
+    }
+
+    // es wurde in der CORE eine neu angelegt (OLE-Objekte kopiert!)
+//      if( aDocShellRef.Is() )
+//          SwDataExchange::InitOle( aDocShellRef, pPrtDoc );
+    // und fuellen es mit dem selektierten Bereich
+    pFESh->Copy( pPrtDoc );
+
+    //Jetzt noch am ersten Absatz die Seitenvorlage setzen
+    {
+        SwNodeIndex aNodeIdx( *pPrtDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
+        SwCntntNode* pCNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx ); // gehe zum 1. ContentNode
+        if( pFESh->IsTableMode() )
+        {
+            SwTableNode* pTNd = pCNd->FindTableNode();
+            if( pTNd )
+                pTNd->GetTable().GetFrmFmt()->SetAttr( SwFmtPageDesc( pPageDesc ) );
+        }
+        else
+        {
+            pCNd->SetAttr( SwFmtPageDesc( pPageDesc ) );
+            if( pFirstCrsr->HasMark() )
+            {
+                SwTxtNode *pTxtNd = pCNd->GetTxtNode();
+                if( pTxtNd )
+                {
+                    SwCntntNode *pFirstNd =
+                        pFirstCrsr->GetCntntNode( (*pFirstCrsr->GetMark()) > (*pFirstCrsr->GetPoint()) );
+                    // Hier werden die Absatzattribute des ersten Absatzes uebertragen
+                    if( pFirstNd && pFirstNd->IsTxtNode() )
+                        ((SwTxtNode*)pFirstNd)->CopyCollFmt( *pTxtNd );
+                }
+            }
+        }
+    }
+    return pPrtDoc;
+}
+SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, SfxPrinter* pPrt)
+{
+    ASSERT( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
+    SwFEShell* pFESh = (SwFEShell*)this;
+    // Wir bauen uns ein neues Dokument
+//    SwDoc *pPrtDoc = new SwDoc;
+//    pPrtDoc->AddLink();
+//    pPrtDoc->SetRefForDocShell( (SvEmbeddedObjectRef*)&(long&)rDocShellRef );
+    pPrtDoc->LockExpFlds();
+
+    // Der Drucker wird uebernommen
+    if (pPrt)
+        pPrtDoc->SetPrt( pPrt );
+
+    const SfxPoolItem* pCpyItem;
+    const SfxItemPool& rPool = GetAttrPool();
+    for( USHORT nWh = POOLATTR_BEGIN; nWh < POOLATTR_END; ++nWh )
+        if( 0 != ( pCpyItem = rPool.GetPoolDefaultItem( nWh ) ) )
+            pPrtDoc->GetAttrPool().SetPoolDefaultItem( *pCpyItem );
+
+    // JP 29.07.99 - Bug 67951 - set all Styles from the SourceDoc into
+    //                              the PrintDoc - will be replaced!
+    pPrtDoc->ReplaceStyles( *GetDoc() );
+
+    SwShellCrsr *pActCrsr = pFESh->_GetCrsr();
+    SwShellCrsr *pFirstCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetNext());
+    if( !pActCrsr->HasMark() ) // bei Multiselektion kann der aktuelle Cursor leer sein
+        pActCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetPrev());
+    // Die Y-Position der ersten Selektion
+    long nMinY = pFESh->IsTableMode() ? pFESh->GetTableCrsr()->GetSttPos().Y()
+                               : pFirstCrsr->GetSttPos().Y();
+    SwPageFrm* pPage = (SwPageFrm*)GetLayout()->Lower();
+    // Suche die zugehoerige Seite
+    while ( pPage->GetNext() && nMinY >= pPage->GetNext()->Frm().Top() )
+        pPage = (SwPageFrm*)pPage->GetNext();
+    // und ihren Seitendescribtor
+    SwPageDesc *pSrc = pPage->GetPageDesc();
+    SwPageDesc* pPageDesc = pPrtDoc->FindPageDescByName(
+                                pPage->GetPageDesc()->GetName() );
+
+    if( !pFESh->IsTableMode() && pActCrsr->HasMark() )
+    {   // Am letzten Absatz die Absatzattribute richten:
+        SwNodeIndex aNodeIdx( *pPrtDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
+        SwTxtNode* pTxtNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx )->GetTxtNode();
+        SwCntntNode *pLastNd =
+            pActCrsr->GetCntntNode( (*pActCrsr->GetMark()) <= (*pActCrsr->GetPoint()) );
+        // Hier werden die Absatzattribute des ersten Absatzes uebertragen
+        if( pLastNd && pLastNd->IsTxtNode() )
+            ((SwTxtNode*)pLastNd)->CopyCollFmt( *pTxtNd );
+    }
+
+    // es wurde in der CORE eine neu angelegt (OLE-Objekte kopiert!)
+//      if( aDocShellRef.Is() )
+//          SwDataExchange::InitOle( aDocShellRef, pPrtDoc );
+    // und fuellen es mit dem selektierten Bereich
+    pFESh->Copy( pPrtDoc );
+
+    //Jetzt noch am ersten Absatz die Seitenvorlage setzen
+    {
+        SwNodeIndex aNodeIdx( *pPrtDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
+        SwCntntNode* pCNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx ); // gehe zum 1. ContentNode
+        if( pFESh->IsTableMode() )
+        {
+            SwTableNode* pTNd = pCNd->FindTableNode();
+            if( pTNd )
+                pTNd->GetTable().GetFrmFmt()->SetAttr( SwFmtPageDesc( pPageDesc ) );
+        }
+        else
+        {
+            pCNd->SetAttr( SwFmtPageDesc( pPageDesc ) );
+            if( pFirstCrsr->HasMark() )
+            {
+                SwTxtNode *pTxtNd = pCNd->GetTxtNode();
+                if( pTxtNd )
+                {
+                    SwCntntNode *pFirstNd =
+                        pFirstCrsr->GetCntntNode( (*pFirstCrsr->GetMark()) > (*pFirstCrsr->GetPoint()) );
+                    // Hier werden die Absatzattribute des ersten Absatzes uebertragen
+                    if( pFirstNd && pFirstNd->IsTxtNode() )
+                        ((SwTxtNode*)pFirstNd)->CopyCollFmt( *pTxtNd );
+                }
+            }
+        }
+    }
+    return pPrtDoc;
+}
+
 /******************************************************************************
  *  Methode     :   void ViewShell::Prt( const SwPrtOptions& rOptions, SfxProgress& rProgress,
-                                         OutputDevice *pPDFOut )
+ *                                       OutputDevice *pPDFOut )
  *  Beschreibung:
  *  Erstellt    :   OK 04.11.94 15:33
  *  Aenderung   :   MA 10. May. 95
@@ -919,92 +1094,20 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
     // eine neue Shell fuer den Printer erzeugen
     ViewShell *pShell;
     SwDoc *pPrtDoc;
+
+    //!! muss warum auch immer hier in diesem scope existieren !!
+    //!! (hängt mit OLE Objekten im Dokument zusammen.)
     SvEmbeddedObjectRef aDocShellRef;
 
-    if ( bSelection )
+    // PDF export for (multi-)selection has already generated a temporary document
+    // with the selected text. (see XRenderable implementation in unotxdoc.cxx)
+    // Thus we like to go in the 'else' part here in that case.
+    // Is is implemented this way because PDF export calls this Prt function
+    // once per page and we do not like to always have the temporary document
+    // to be created that often here in the 'then' part.
+    if ( !pPDFOut && bSelection )
     {
-        ASSERT( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
-        SwFEShell* pFESh = (SwFEShell*)this;
-        // Wir bauen uns ein neues Dokument
-        pPrtDoc = new SwDoc;
-        pPrtDoc->AddLink();
-        pPrtDoc->SetRefForDocShell( (SvEmbeddedObjectRef*)&(long&)aDocShellRef );
-        pPrtDoc->LockExpFlds();
-
-        // Der Drucker wird uebernommen
-        if (pPrt)
-            pPrtDoc->SetPrt( pPrt );
-
-        const SfxPoolItem* pCpyItem;
-        const SfxItemPool& rPool = GetAttrPool();
-        for( USHORT nWh = POOLATTR_BEGIN; nWh < POOLATTR_END; ++nWh )
-            if( 0 != ( pCpyItem = rPool.GetPoolDefaultItem( nWh ) ) )
-                pPrtDoc->GetAttrPool().SetPoolDefaultItem( *pCpyItem );
-
-        // JP 29.07.99 - Bug 67951 - set all Styles from the SourceDoc into
-        //                              the PrintDoc - will be replaced!
-        pPrtDoc->ReplaceStyles( *GetDoc() );
-
-        SwShellCrsr *pActCrsr = pFESh->_GetCrsr();
-        SwShellCrsr *pFirstCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetNext());
-        if( !pActCrsr->HasMark() ) // bei Multiselektion kann der aktuelle Cursor leer sein
-            pActCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetPrev());
-        // Die Y-Position der ersten Selektion
-        long nMinY = pFESh->IsTableMode() ? pFESh->GetTableCrsr()->GetSttPos().Y()
-                                   : pFirstCrsr->GetSttPos().Y();
-        SwPageFrm* pPage = (SwPageFrm*)GetLayout()->Lower();
-        // Suche die zugehoerige Seite
-        while ( pPage->GetNext() && nMinY >= pPage->GetNext()->Frm().Top() )
-            pPage = (SwPageFrm*)pPage->GetNext();
-        // und ihren Seitendescribtor
-        SwPageDesc *pSrc = pPage->GetPageDesc();
-        SwPageDesc* pPageDesc = pPrtDoc->FindPageDescByName(
-                                    pPage->GetPageDesc()->GetName() );
-
-        if( !pFESh->IsTableMode() && pActCrsr->HasMark() )
-        {   // Am letzten Absatz die Absatzattribute richten:
-            SwNodeIndex aNodeIdx( *pPrtDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
-            SwTxtNode* pTxtNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx )->GetTxtNode();
-            SwCntntNode *pLastNd =
-                pActCrsr->GetCntntNode( (*pActCrsr->GetMark()) <= (*pActCrsr->GetPoint()) );
-            // Hier werden die Absatzattribute des ersten Absatzes uebertragen
-            if( pLastNd && pLastNd->IsTxtNode() )
-                ((SwTxtNode*)pLastNd)->CopyCollFmt( *pTxtNd );
-        }
-
-        // es wurde in der CORE eine neu angelegt (OLE-Objekte kopiert!)
-//      if( aDocShellRef.Is() )
-//          SwDataExchange::InitOle( aDocShellRef, pPrtDoc );
-        // und fuellen es mit dem selektierten Bereich
-        pFESh->Copy( pPrtDoc );
-
-        //Jetzt noch am ersten Absatz die Seitenvorlage setzen
-        {
-            SwNodeIndex aNodeIdx( *pPrtDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
-            SwCntntNode* pCNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx ); // gehe zum 1. ContentNode
-            if( pFESh->IsTableMode() )
-            {
-                SwTableNode* pTNd = pCNd->FindTableNode();
-                if( pTNd )
-                    pTNd->GetTable().GetFrmFmt()->SetAttr( SwFmtPageDesc( pPageDesc ) );
-            }
-            else
-            {
-                pCNd->SetAttr( SwFmtPageDesc( pPageDesc ) );
-                if( pFirstCrsr->HasMark() )
-                {
-                    SwTxtNode *pTxtNd = pCNd->GetTxtNode();
-                    if( pTxtNd )
-                    {
-                        SwCntntNode *pFirstNd =
-                            pFirstCrsr->GetCntntNode( (*pFirstCrsr->GetMark()) > (*pFirstCrsr->GetPoint()) );
-                        // Hier werden die Absatzattribute des ersten Absatzes uebertragen
-                        if( pFirstNd && pFirstNd->IsTxtNode() )
-                            ((SwTxtNode*)pFirstNd)->CopyCollFmt( *pTxtNd );
-                    }
-                }
-            }
-        }
+        pPrtDoc = CreatePrtDoc( pPrt, aDocShellRef );
 
         // eine ViewShell darauf
         OutputDevice *pTmpDev = pPDFOut ? pPDFOut : 0;
@@ -1682,405 +1785,4 @@ void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
 }
 
 /************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.13  2002/11/01 15:34:37  hbrinkm
-      #102110# stop printing in SwViewShell::CalcPagesForPrint
-
-      Revision 1.12  2002/10/18 13:20:08  ama
-      Fix #104331#: Print it again, sam
-
-      Revision 1.11  2002/09/09 12:07:41  tl
-      #102510# XRenderable (PDF) export for selection implemented
-
-      Revision 1.10  2002/09/06 05:53:24  tl
-      #102510# XRenderable (PDF) export implementation
-
-      Revision 1.9  2002/09/03 08:06:36  od
-      #102450# - add 3rd parameter to method calls SwViewImp::PaintLayer
-
-      Revision 1.8  2002/06/27 11:39:50  fme
-      #89703# Controls were printed although disabled in the options
-
-      Revision 1.7  2002/05/29 14:27:29  os
-      #99649# 'single print job' corrected
-
-      Revision 1.6  2001/05/10 08:45:10  os
-      store print options at the document
-
-      Revision 1.5  2001/03/02 10:25:44  ama
-      Fix #65244#: Right and left pages, virtual page numbering
-
-      Revision 1.4  2001/02/14 09:57:12  jp
-      changes: international -> localdatawrapper
-
-      Revision 1.3  2001/01/17 12:09:31  jp
-      remove compiler warning
-
-      Revision 1.2  2000/10/25 12:03:41  jp
-      Spellchecker/Hyphenator are not longer member of the shells
-
-      Revision 1.1.1.1  2000/09/19 00:08:29  hr
-      initial import
-
-      Revision 1.193  2000/09/18 16:04:38  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.192  2000/06/15 19:06:54  jp
-      Prt: don't forget to start the printjob, if sortet, copies and single printjobes are desired
-
-      Revision 1.191  2000/05/23 17:37:30  jp
-      Bugfixes for Unicode
-
-      Revision 1.190  2000/05/10 13:43:09  ama
-      Unicode changes
-
-      Revision 1.189  2000/05/09 11:43:25  ama
-      Unicode changes
-
-      Revision 1.188  2000/04/27 07:37:23  os
-      UNICODE
-
-      Revision 1.187  2000/03/28 20:57:23  jp
-      Bug #74562#: Prt - on the printer can be run a job, its not an error
-
-      Revision 1.186  2000/02/21 16:01:07  ama
-      Fix #73147#: No spoildemo for free versions
-
-      Revision 1.185  2000/02/11 14:36:15  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.184  1999/12/16 14:31:58  hjs
-      #65293# static instead of const - ask jp
-
-      Revision 1.183  1999/12/14 14:28:34  jp
-      Bug #69595#: print can create single Jobs
-
-      Revision 1.182  1999/10/25 19:09:24  tl
-      ongoing ONE_LINGU implementation
-
-      Revision 1.181  1999/08/31 08:45:54  TL
-      #if[n]def ONE_LINGU inserted (for transition of lingu to StarOne)
-
-
-      Rev 1.180   31 Aug 1999 10:45:54   TL
-   #if[n]def ONE_LINGU inserted (for transition of lingu to StarOne)
-
-      Rev 1.179   26 Aug 1999 11:35:14   AMA
-   Fix #68153#: Draft mode for controls
-
-      Rev 1.178   29 Jul 1999 17:13:46   JP
-   Bug #67951#: Prt - replace all templates in dest Doc
-
-      Rev 1.177   08 Mar 1999 15:55:34   AMA
-   Fix #62873#: Vorschau von HTML-Vorlagen
-
-      Rev 1.176   02 Mar 1999 16:07:56   AMA
-   Fix #62568#: Invalidierungen so sparsam wie moeglich, so gruendlich wie noetig
-
-      Rev 1.175   22 Feb 1999 08:35:24   MA
-   1949globale Shell entsorgt, Shells am RootFrm
-
-      Rev 1.174   01 Feb 1999 19:41:16   JP
-   Bug #61335#: ReadOnlyFlag vorm Drucken uebertragen
-
-      Rev 1.173   25 Nov 1998 11:50:20   MA
-   #54599# InitPrt auch mit NULL
-
-      Rev 1.172   28 Oct 1998 14:02:36   AMA
-   Fix #58223#58219#: Seiten/Absatzformate beim Selektionsdruck beachten.
-
-      Rev 1.171   27 Jul 1998 17:35:24   AMA
-   Fix #53934#: Endlosschleife beim Speichern durch selektiertes Objekt
-
-      Rev 1.170   15 Jul 1998 14:05:38   AMA
-   Fix #53012#: Das InitPrt muss nach dem StartJob erfolgen
-
-      Rev 1.169   14 Jul 1998 10:26:28   AMA
-   Fix #52725#: Verzoegerten PrintJobStart beachten beim Formatieren
-
-      Rev 1.168   07 Jul 1998 14:38:24   AMA
-   Chg: DoPrint uebernimmt das Drucken
-
-      Rev 1.167   03 Jul 1998 17:26:24   AMA
-   Chg: DoPrint uebernimmt das Drucken
-
-      Rev 1.166   29 Jun 1998 12:05:20   AMA
-   Feat.: Notizen mit Zeilenangabe ausdrucken
-
-      Rev 1.165   23 Jun 1998 16:05:06   AMA
-   Fix #51465#: Die _virtuelle_ Seitennummer entscheidet ueber rechts/links
-
-      Rev 1.164   17 Jun 1998 22:40:22   JP
-   PostIts: GetPageNo - immer mit der virtuellen abpruefen, aber die virtuelle drucken
-
-      Rev 1.163   04 Jun 1998 18:20:42   AMA
-   Chg: UNO-Controls jetzt im eigenen Drawing-Layer
-
-      Rev 1.162   27 Apr 1998 15:09:08   MA
-   ein paar sv2vcl
-
-      Rev 1.161   24 Apr 1998 11:17:44   AMA
-   Fix #49654#49450#: Selektiondrucken: GPF bei OLE; Sprachverlust wg. Poolattr.
-
-      Rev 1.160   23 Apr 1998 09:33:36   MA
-   #49472# Optional ein Outdev durchschleusen
-
-      Rev 1.159   26 Mar 1998 17:58:52   MA
-   Wechsel fuer Drucker/Jobsetup jetzt vollstaendig und am Dokument
-
-      Rev 1.158   24 Mar 1998 18:20:02   MA
-   #39275# Jetzt will der Meyer doch ein Clipping
-
-      Rev 1.157   27 Jan 1998 22:35:36   JP
-   GetNumDepend durch GetDepends ersetzt
-
-      Rev 1.156   22 Jan 1998 20:08:58   JP
-   CTOR des SwPaM umgestellt
-
-      Rev 1.155   10 Dec 1997 17:05:34   JP
-   IsAnyField: if abfrage gerichtet
-
-      Rev 1.154   28 Nov 1997 09:11:24   MA
-   includes
-
-      Rev 1.153   20 Nov 1997 12:44:20   MA
-   includes
-
-      Rev 1.152   18 Nov 1997 13:39:50   MA
-   #45516# LongTableHack, auch Grafiken drucken
-
-      Rev 1.151   03 Nov 1997 13:07:28   MA
-   precomp entfernt
-
-      Rev 1.150   13 Oct 1997 15:54:26   JP
-   pNext vom Ring wurde privat; zugriff ueber GetNext()
-
-      Rev 1.149   13 Oct 1997 10:30:12   MA
-   Umbau/Vereinfachung Paint
-
-      Rev 1.148   09 Oct 1997 16:05:20   JP
-   Umstellung NodeIndex/-Array/BigPtrArray
-
-      Rev 1.147   10 Sep 1997 15:33:56   AMA
-   Fix #43570#: PrtFormat-Flag formatiert auch im BrowseMode fuer den Drucker
-
-      Rev 1.146   09 Sep 1997 10:53:32   MA
-   pragmas entfernt
-
-      Rev 1.145   15 Aug 1997 12:24:08   OS
-   charatr/frmatr/txtatr aufgeteilt
-
-      Rev 1.144   12 Aug 1997 13:43:16   OS
-   Header-Umstellung
-
-      Rev 1.143   07 Aug 1997 15:01:20   OM
-   Headerfile-Umstellung
-
-      Rev 1.142   18 Jun 1997 09:18:18   MA
-   #40790# VisArea fuer PrtOle und BrowseMode
-
-      Rev 1.141   06 Jun 1997 12:45:42   MA
-   chg: versteckte Absaetze ausblenden
-
-      Rev 1.140   14 Apr 1997 18:21:26   MA
-   #38806# Options auch fuer Prospect, jetzt mit eigener Methode
-
-      Rev 1.139   18 Feb 1997 16:54:12   MA
-   #36138# toleranz fuer GetSvPaper
-
-      Rev 1.138   06 Feb 1997 13:42:48   AMA
-   Fix #34400#: MinPrtLine verhindert doppelten Druck von Tabellenzellenzeilen.
-
-      Rev 1.137   28 Nov 1996 15:43:04   OS
-   neu: schwarz drucken
-
-      Rev 1.136   11 Nov 1996 09:57:56   MA
-   ResMgr
-
-      Rev 1.135   29 Oct 1996 15:40:10   JP
-   am Doc ist das NodesArray nur noch ueber Get..() zugaenglich
-
-      Rev 1.134   27 Sep 1996 13:57:02   MA
-   #29411# lange Tabellenzeilen drucken
-
-      Rev 1.133   24 Aug 1996 17:10:38   JP
-   svdraw.hxx entfernt
-
-      Rev 1.132   17 Jul 1996 10:53:04   OS
-   svdraw unter OS/2 ausserhalb der PCH
-
-      Rev 1.131   16 Jul 1996 15:52:36   MA
-   new: PrintPageBackground
-
-      Rev 1.130   11 Jul 1996 12:51:12   HJS
-   clooks
-
-      Rev 1.129   27 Jun 1996 16:24:26   MA
-   includes
-
-      Rev 1.128   24 Jun 1996 15:47:14   AMA
-   Fix #28641#: Detaillierte Ausgabe im Druckmonitor.
-
-      Rev 1.127   21 Jun 1996 17:11:22   AMA
-   Fix #28641#: Aktuelle Seitennummer beim Druck anzeigen.
-
-      Rev 1.126   20 Jun 1996 16:33:06   MA
-   JAKET-Einstellung erst nach dem SetVisArea
-
-      Rev 1.125   11 Jun 1996 19:44:40   JP
-   Bug #27584#: kein ULONG_MAX als Item verschicken -> eigene MessageId definieren
-
-      Rev 1.124   21 Mar 1996 14:06:50   MA
-   svhxx entfernt
-
-      Rev 1.123   21 Mar 1996 14:04:46   OM
-   Umstellung 311
-
-      Rev 1.122   19 Mar 1996 14:23:32   HJS
-   clooks
-
-      Rev 1.121   07 Mar 1996 16:59:20   AMA
-   New/Opt.: Progress-Anzeige beim Serienbrief
-
-      Rev 1.120   05 Mar 1996 16:57:46   AMA
-   New: SwPrtOptions fuer den Serienbriefdruck-Progress durchreichen
-
-      Rev 1.119   05 Mar 1996 15:31:16   HJS
-   clook-defs nur fuer win16
-
-      Rev 1.118   29 Feb 1996 21:40:24   HJS
-   clooks
-
-      Rev 1.117   19 Jan 1996 09:46:32   OM
-   CLOOKs entfernt
-
-      Rev 1.116   14 Dec 1995 16:58:08   WKC
-   MAC only: aText -> aStr
-
-      Rev 1.115   13 Dec 1995 17:01:08   MA
-   opt: International
-
-      Rev 1.114   05 Dec 1995 14:28:48   MA
-   fix: Repaint beim Druck fuer PreView per Invalidate/Update
-
-      Rev 1.113   28 Nov 1995 21:22:48   JP
-   UiSystem-Klasse aufgehoben, in initui/swtype aufgeteilt
-
-      Rev 1.112   24 Nov 1995 17:11:42   OM
-   PCH->PRECOMPILED
-
-      Rev 1.111   23 Nov 1995 15:41:46   MA
-   fix/opt: blc Warnings
-
-      Rev 1.110   14 Nov 1995 11:01:32   MA
-   kommentar
-
-      Rev 1.109   13 Nov 1995 12:18:44   MA
-   chg: static -> lcl_
-
-      Rev 1.108   09 Nov 1995 14:14:34   AMA
-   Fix 22084(HACK): MultiSelection jetzt mit long-Ranges
-
-      Rev 1.107   08 Nov 1995 12:18:38   AMA
-   Set statt Change (301)
-
-      Rev 1.106   03 Nov 1995 13:19:52   MA
-   chg: Draft des Drawing
-
-      Rev 1.105   01 Nov 1995 09:31:42   MA
-   opt: String
-
-      Rev 1.104   27 Oct 1995 15:06:48   MA
-   new: Demo
-
-      Rev 1.103   12 Oct 1995 12:59:24   JP
-   Bug20370: Code umgestellt
-
-      Rev 1.102   04 Sep 1995 19:13:42   JP
-   ClientIter: spz. Pointer mit First/Next geben lassen
-
-      Rev 1.101   17 Aug 1995 13:28:58   MA
-   fix: Hack fuer Print jetzt richtig
-
-      Rev 1.100   11 Aug 1995 18:53:50   MA
-   Hack: Endlosschleife beim Druck
-
-      Rev 1.99   11 Aug 1995 14:48:48   AMA
-   Fix: Kopienanzahl beim Drucken quadriert
-
-      Rev 1.98   08 Aug 1995 18:30:24   MA
-   chg: USHORT anstelle Orientation uebergeben
-
-      Rev 1.97   08 Aug 1995 14:34:44   MA
-   ChgAllxxx in die ViewShell verlagert.
-
-      Rev 1.96   27 Jul 1995 17:52:38   JP
-   neu: IsAnyFieldInDoc - stelle fest, ob im Doc Felder existieren
-
-      Rev 1.95   12 Jul 1995 14:10:16   AMA
-   Fix: Druckereinstellungen zuruecksetzen
-
-      Rev 1.94   11 Jul 1995 19:15:14   JP
-   _SetGetExpFld: fuer bedingte Bereiche erweitert
-
-      Rev 1.93   11 Jul 1995 08:54:44   AMA
-   New: SetPaper, SetPaperSizeUser am Drucker aufrufen.
-
-      Rev 1.92   06 Jul 1995 12:41:24   AMA
-   New: PrintSelection funktioniert jetzt.
-
-      Rev 1.91   05 Jul 1995 17:09:58   MA
-   new: Flag fuer Controls nicht drucken
-
-      Rev 1.90   04 Jul 1995 13:52:44   AMA
-   New: PrintSelection, noch nicht scharf geschaltet.
-
-      Rev 1.89   30 Jun 1995 16:32:54   AMA
-   FIx 14789: Vor Progress-Status auf Druck-Abbruch reagieren
-
-      Rev 1.88   26 Jun 1995 13:41:40   JP
-   PrtOle2: vorm loeschen der Shell das Stack-Object loeschen
-
-      Rev 1.87   23 Jun 1995 13:32:32   MA
-   Zeichnungen nicht drucken
-
-      Rev 1.86   07 Jun 1995 19:19:36   MA
-   Reschedules bei Progress.
-
-      Rev 1.85   10 May 1995 14:01:26   MA
-   fix: Painten waehrend des Druckens.
-
-      Rev 1.84   05 May 1995 19:36:20   AMA
-   Umbau pProgress;
-
-      Rev 1.83   04 May 1995 19:19:54   AMA
-   Fix: PrtOle2
-
-      Rev 1.82   04 May 1995 18:56:42   AMA
-   Fix: Druckenmonitor
-
-      Rev 1.81   03 May 1995 20:33:56   AMA
-   Umbau: SfxProgress etc.
-
-      Rev 1.80   28 Apr 1995 18:34:36   MA
-   FlowFrm neu, compilierbar aber nicht mehr lauffaehig.
-
-      Rev 1.79   05 Apr 1995 21:36:22   JP
-   PrtOle2: neuen Parameter - Rectangle in dem auszugeben ist
-
-      Rev 1.78   26 Feb 1995 15:04:50   JP
-   auf die richtigen Shells casten
-
-      Rev 1.77   25 Feb 1995 17:37:18   AMA
-   PrintDialog -> MultiSelection
-
-      Rev 1.76   16 Feb 1995 19:27:44   MA
-   fix: Root aber keine Shell.
-
-      Rev 1.75   16 Feb 1995 18:49:54   MA
-   chg: PrtOle2 umgestellt.
-
-*************************************************************************/
-
 

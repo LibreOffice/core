@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-10-30 10:39:35 $
+ *  last change: $Author: tl $ $Date: 2002-11-11 14:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #endif
 #ifndef _SFXVIEWSH_HXX //autogen
 #include <sfx2/viewsh.hxx>
+#endif
+#ifndef _SFX_OBJSH_HXX
+#include <sfx2/objsh.hxx>   // SfxObjectShellRef <-> SV_DECL_REF(SfxObjectShell)
 #endif
 #ifndef _SVX_SVXENUM_HXX //autogen
 #include <svx/svxenum.hxx>
@@ -602,6 +605,9 @@ public:
     ~SwView();
 
     void NotifyDBChanged();
+
+    SfxObjectShellRef & GetTmpSelectionDoc();
+    SfxObjectShellRef & GetOrCreateTmpSelectionDoc();
 };
 
 // ----------------- inline Methoden ----------------------
