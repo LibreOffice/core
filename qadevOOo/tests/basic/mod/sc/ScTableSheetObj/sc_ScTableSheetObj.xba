@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sc_ScTableSheetObj.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:00:44 $ 
+'*  last change:$Date: 2003-08-07 15:07:05 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -107,4 +107,51 @@ Exit Sub
 ErrHndl:
     Test.Exception()
 End Sub
+Function modifyDescriptor(descr As Variant) As Variant
+On Error Goto ErrHndl
+    Dim i As Integer, n as Integer
+    Dim oCell As Object
+    Dim vFields(0) as new com.sun.star.table.TableSortField
+    
+    for i = 0 to 10 - 1
+        oCell = oObj.getCellByPosition(0, i)
+        oCell.String = "" + (10 - i)
+        oCell.setFormula(10 - i)
+    next i
+    'ShowNameValuePair(descr)
+    vFields(0).IsCaseSensitive = false
+    vFields(0).IsAscending = true
+    vFields(0).FieldType = com.sun.star.table.TableSortFieldType.ALPHANUMERIC    
+    for i = 0 to ubound(descr)
+        if descr(i).Name = "IsSortColumns" then descr(i).Value = false
+        if descr(i).Name = "SortFields" then descr(i).Value = vFields()
+    next i
+
+    modifyDescriptor() = descr
+Exit Function
+ErrHndl:
+    Out.Log("Exception in ScTableSheetObj.modifyDescriptor() :")
+    Test.Exception()
+end Function
+
+Function checkSort() As Boolean
+On Error Goto ErrHndl
+    Dim i As Integer, oCell As Object
+    Dim bOK As Boolean
+
+    bOK = true
+    for i = 0 to 10 - 1
+        oCell = oObj.getCellByPosition(0,i)
+        bOK = bOK AND oCell.String = "" + (i + 1)
+        out.dbg(oCell.String + ":" + (i+1))
+    next i
+
+    checkSort() = bOK
+Exit Function
+ErrHndl:
+    Out.Log("Exception in ScTableSheetObj.checkSort() :")
+    Test.Exception()
+end Function
+
+
 </script:module>
