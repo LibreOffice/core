@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-02 12:27:42 $
+ *  last change: $Author: mt $ $Date: 2002-09-02 13:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,10 @@
 
 #ifndef _UNOTOOLS_CALENDARWRAPPER_HXX
 #include <unotools/calendarwrapper.hxx>
+#endif
+
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -228,17 +232,32 @@ static void ImplSkipDelimiters( const sal_Unicode*& rpBuf )
 
 static int ImplIsPatternChar( xub_Unicode cChar, sal_Char cEditMask )
 {
+    sal_Int32 nType = 0;
+
+    try
+    {
+        String aCharStr( cChar );
+        nType = ImplGetCharClass()->getStringType( aCharStr, 0, aCharStr.Len(), Application::GetSettings().GetLocale() );
+    }
+    catch ( ::com::sun::star::uno::Exception& )
+    {
+        DBG_ERRORFILE( "ImplIsPatternChar: Exception caught!" );
+        return FALSE;
+    }
+
     if ( (cEditMask == EDITMASK_ALPHA) || (cEditMask == EDITMASK_UPPERALPHA) )
     {
-        if ( ((cChar < 'A') || (cChar > 'Z')) &&
-             ((cChar < 'a') || (cChar > 'z')) )
+        if( !CharClass::isLetterType( nType ) )
+            return FALSE;
+    }
+    else if ( cEditMask == EDITMASK_NUM )
+    {
+        if( !CharClass::isNumericType( nType ) )
             return FALSE;
     }
     else if ( (cEditMask == EDITMASK_ALPHANUM) || (cEditMask == EDITMASK_UPPERALPHANUM) )
     {
-        if ( ((cChar < 'A') || (cChar > 'Z')) &&
-             ((cChar < 'a') || (cChar > 'z')) &&
-             ((cChar < '0') || (cChar > '9')) )
+        if( !CharClass::isLetterNumericType( nType ) )
             return FALSE;
     }
     else if ( (cEditMask == EDITMASK_ALLCHAR) || (cEditMask == EDITMASK_UPPERALLCHAR) )
@@ -246,14 +265,9 @@ static int ImplIsPatternChar( xub_Unicode cChar, sal_Char cEditMask )
         if ( cChar < 32 )
             return FALSE;
     }
-    else if ( cEditMask == EDITMASK_NUM )
-    {
-        if ( (cChar < '0') || (cChar > '9') )
-            return FALSE;
-    }
     else if ( cEditMask == EDITMASK_NUMSPACE )
     {
-        if ( ((cChar < '0') || (cChar > '9')) && (cChar != ' ') )
+        if ( !CharClass::isNumericType( nType ) && ( cChar != ' ' ) )
             return FALSE;
     }
     else
@@ -269,16 +283,11 @@ static xub_Unicode ImplPatternChar( xub_Unicode cChar, sal_Char cEditMask )
     if ( ImplIsPatternChar( cChar, cEditMask ) )
     {
         if ( (cEditMask == EDITMASK_UPPERALPHA) ||
-             (cEditMask == EDITMASK_UPPERALPHANUM) )
-        {
-            if ( (cChar >= 'a') && (cChar <= 'z') )
-                cChar = (cChar - 'a') + 'A';
-        }
-        else if ( cEditMask == EDITMASK_UPPERALLCHAR )
+             (cEditMask == EDITMASK_UPPERALPHANUM) ||
+             ( cEditMask == EDITMASK_UPPERALLCHAR ) )
         {
             cChar = ImplGetCharClass()->toUpper( String(cChar),0,1,Application::GetSettings().GetLocale() )[0];
         }
-
         return cChar;
     }
     else
