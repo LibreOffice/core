@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:55:38 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:00:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,11 +376,9 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::getDefaultForm()
 }
 
 //------------------------------------------------------------------------------
-Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::SetDefaults(const Reference< ::com::sun::star::form::XFormComponent > & rContent,
-                                     const Reference< XDataSource > & rDatabase,
-                                     const ::rtl::OUString& rDBTitle,
-                                     const ::rtl::OUString& rCursorSource,
-                                     sal_Int32 nCommandType)
+Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::placeInFormComponentHierarchy(
+    const Reference< XFormComponent > & rContent, const Reference< XDataSource > & rDatabase,
+    const ::rtl::OUString& rDBTitle, const ::rtl::OUString& rCursorSource, sal_Int32 nCommandType )
 {
     // if the control already is child of a form, don't do anything
     if (!rContent.is() || rContent->getParent().is())
@@ -397,16 +395,16 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::SetDefaults(const Re
         validateCurForm();
 
         // erst in der aktuellen form suchen
-        xForm = FindForm(xCurrentForm, rDatabase, rCursorSource, nCommandType);
+        xForm = findFormForDataSource( xCurrentForm, rDatabase, rCursorSource, nCommandType );
 
         Reference< ::com::sun::star::container::XIndexAccess >  xFormsByIndex(xForms, UNO_QUERY);
-        DBG_ASSERT(xFormsByIndex.is(), "FmFormPageImpl::SetDefaults : no index access for my forms collection !");
+        DBG_ASSERT(xFormsByIndex.is(), "FmFormPageImpl::placeInFormComponentHierarchy : no index access for my forms collection !");
         sal_Int32 nCount = xFormsByIndex->getCount();
         for (sal_Int32 i = 0; !xForm.is() && i < nCount; i++)
         {
             Reference< ::com::sun::star::form::XForm >  xToSearch;
             xFormsByIndex->getByIndex(i) >>= xToSearch;
-            xForm = FindForm(xToSearch, rDatabase, rCursorSource, nCommandType);
+            xForm = findFormForDataSource( xToSearch, rDatabase, rCursorSource, nCommandType );
         }
 
         // wenn keine ::com::sun::star::form gefunden, dann eine neue erzeugen
@@ -470,7 +468,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::SetDefaults(const Re
 }
 
 //------------------------------------------------------------------------------
-Reference< XForm >  FmFormPageImpl::FindForm(
+Reference< XForm >  FmFormPageImpl::findFormForDataSource(
         const Reference< XForm > & rForm, const Reference< XDataSource > & _rxDatabase,
         const ::rtl::OUString& _rCursorSource, sal_Int32 nCommandType)
 {
@@ -480,7 +478,7 @@ Reference< XForm >  FmFormPageImpl::FindForm(
     if (!xDBForm.is() || !xFormProps.is())
         return xResultForm;
 
-    OSL_ENSURE(_rxDatabase.is(), "FmFormPageImpl::FindForm: invalid data source!");
+    OSL_ENSURE(_rxDatabase.is(), "FmFormPageImpl::findFormForDataSource: invalid data source!");
     ::rtl::OUString sLookupName;            // the name of the data source we're looking for
     ::rtl::OUString sFormDataSourceName;    // the name of the data source the current connection in the form is based on
     try
@@ -493,12 +491,12 @@ Reference< XForm >  FmFormPageImpl::FindForm(
         if (0 == sFormDataSourceName.getLength())
         {
             // check if it has an active connection
-            Reference< XConnection > xFormConnection = OStaticDataAccessTools().getRowSetConnection(xDBForm);
+            Reference< XConnection > xFormConnection;
+            xFormProps->getPropertyValue( FM_PROP_ACTIVE_CONNECTION ) >>= xFormConnection;
+            if ( !xFormConnection.is() )
+                OStaticDataAccessTools().isEmbeddedInDatabase( xFormProps, xFormConnection );
             if (xFormConnection.is())
             {
-                OSL_ENSURE(sal_False, "FmFormPageImpl::FindForm: a connection without data source name?");
-                    // don't know if this is allowed to happen (don't think so, that's why asserting this).
-                    // 05.06.2001 - 87688 - frank.schoenheit@sun.com
                 Reference< XChild > xConnAsChild(xFormConnection, UNO_QUERY);
                 if (xConnAsChild.is())
                 {
@@ -517,7 +515,7 @@ Reference< XForm >  FmFormPageImpl::FindForm(
     catch(const Exception& e)
     {
         e;
-        OSL_ENSURE(sal_False, "FmFormPageImpl::FindForm: caught an exception!");
+        OSL_ENSURE(sal_False, "FmFormPageImpl::findFormForDataSource: caught an exception!");
     }
 
     if (sLookupName == sFormDataSourceName)
@@ -544,9 +542,9 @@ Reference< XForm >  FmFormPageImpl::FindForm(
     {
         Reference< ::com::sun::star::form::XForm >  xSearchForm;
         xComponents->getByIndex(i) >>= xSearchForm;
-        // jetzt innerhalb der ::com::sun::star::form weitersuchen
+        // continue searching in the sub form
         if (xSearchForm.is())
-            xResultForm = FindForm(xSearchForm, _rxDatabase, _rCursorSource, nCommandType);
+            xResultForm = findFormForDataSource( xSearchForm, _rxDatabase, _rCursorSource, nCommandType );
     }
     return xResultForm;
 }
