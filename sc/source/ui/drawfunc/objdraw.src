@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:16:01 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,7 +790,7 @@ String RID_DRAW_OBJECTBAR
     Text [ english_us ] = "Drawing Object Bar" ;
     Text[ chinese_simplified ] = "»æÍ¼¶ÔÏóÀ¸";
     Text[ russian ] = "Ïàíåëü ãğàôè÷åñêèõ îáúåêòîâ";
-    Text[ polish ] = "Pasek obiektów rysunkowych";
+    Text[ polish ] = "Pasek obiektów graficznych";
     Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸ÄÊŞ°";
     Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó¤u¨ã¦C";
     Text[ arabic ] = "ÔÑíØ ÇáßÇÆäÇÊ ÇáÑÓæãíÉ";
@@ -1152,7 +1152,7 @@ String RID_GRAPHIC_OBJECTBAR
     Text[ swedish ] = "Grafikobjektlist";
     Text[ polish ] = "Pasek obiektów graficznych";
     Text[ portuguese_brazilian ] = "Toolbar for graphic objects";
-    Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸ÄÊŞ°";
+    Text[ japanese ] = "}µÌŞ¼Şª¸ÄÊŞ°";
     Text[ korean ] = "±×·¡ÇÈ °³Ã¼ ¸ğÀ½";
     Text[ chinese_simplified ] = "Í¼ĞÎ¶ÔÏóÀ¸";
     Text[ chinese_traditional ] = "¹Ï§Îª«¥ó¦C";
@@ -1410,7 +1410,7 @@ String RID_POPUP_DRAW
     Text [ english_us ] = "Pop-up menu for drawing objects" ;
     Text[ chinese_simplified ] = "»æÍ¼µ¯³öÊ½²Ëµ¥";
     Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ãğàôè÷åñêèõ îáúåêòîâ";
-    Text[ polish ] = "Menu podrêczne dla obiektów rysunkowych";
+    Text[ polish ] = "Menu podrêczne obiektów graficznych";
     Text[ japanese ] = "•`‰æÂ°ÙÎŞ¯¸½‚ÌÎß¯Ìß±¯ÌßÒÆ­°";
     Text[ chinese_traditional ] = "Ã¸¹Ï§ÖÅã¥\\¯àªí";
     Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ ááßÇÆäÇÊ ÇáÑÓæãíÉ";
