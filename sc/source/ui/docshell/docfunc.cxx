@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-31 15:59:24 $
+ *  last change: $Author: sab $ $Date: 2001-11-21 08:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -877,6 +877,7 @@ BOOL ScDocFunc::PutData( const ScAddress& rPos, EditEngine& rEngine, BOOL bInter
         bRet = PutCell( rPos,
                         new ScEditCell( pNewData, pDoc, rEngine.GetEditTextObjectPool() ),
                         bApi );
+        delete pNewData;
 
         // Set the paragraph attributes back to the EditEngine.
         if (!aRememberItems.empty())
@@ -894,7 +895,6 @@ BOOL ScDocFunc::PutData( const ScAddress& rPos, EditEngine& rEngine, BOOL bInter
 
         if (bUpdateMode)
             rEngine.SetUpdateMode(sal_True);
-
     }
     else
     {
