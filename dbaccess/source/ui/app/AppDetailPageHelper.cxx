@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:00:02 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,36 +584,11 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
     }
     if ( !m_pLists[E_TABLE]->GetEntryCount() )
     {
-        try
-        {
-            Reference< XTablesSupplier > xTableSupp(_xConnection,UNO_QUERY);
-            Reference< XViewsSupplier > xViewSupp;
-            Reference< XNameAccess > xTables, xViews;
+        static_cast<OTableTreeListBox*>(m_pLists[E_TABLE])->UpdateTableList(_xConnection);
 
-            xTables = xTableSupp->getTables();
-
-            // get the views supplier and the views
-            Sequence< ::rtl::OUString> sTables,sViews;
-            if ( xTables.is() )
-                sTables = xTables->getElementNames();
-
-            xViewSupp.set(xTableSupp,UNO_QUERY);
-            if ( xViewSupp.is() )
-            {
-                xViews = xViewSupp->getViews();
-                if (xViews.is())
-                    sViews = xViews->getElementNames();
-            }
-            static_cast<OTableTreeListBox*>(m_pLists[E_TABLE])->UpdateTableList(_xConnection->getMetaData(),sTables,sViews);
-
-            SvLBoxEntry* pEntry = m_pLists[E_TABLE]->First();
-            if ( pEntry )
-                m_pLists[E_TABLE]->Expand(pEntry);
-        }
-        catch(Exception&)
-        {
-            OSL_ENSURE(0,"Exception catched!");
-        }
+        SvLBoxEntry* pEntry = m_pLists[E_TABLE]->First();
+        if ( pEntry )
+            m_pLists[E_TABLE]->Expand(pEntry);
         m_pLists[E_TABLE]->SelectAll(FALSE);
     }
 
@@ -851,12 +826,12 @@ SvLBoxEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const ::rtl::
     return pRet;
 }
 // -----------------------------------------------------------------------------
-void OAppDetailPageHelper::elementRemoved(const ::rtl::OUString& _rName, const Reference< XConnection >& _rxConn )
+void OAppDetailPageHelper::elementRemoved(ElementType _eType,const ::rtl::OUString& _rName, const Reference< XConnection >& _rxConn )
 {
     DBTreeListBox* pTreeView = getCurrentView();
     if ( pTreeView )
     {
-        switch( getElementType() )
+        switch( _eType )
         {
             case E_TABLE:
                 OSL_ENSURE(_rxConn.is(),"Connection is NULL! ->GPF");

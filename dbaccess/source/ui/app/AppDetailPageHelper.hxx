@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:00:15 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,12 +366,15 @@ namespace dbaui
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn = NULL);
 
         /** removes an element from the detail page.
+            @param  _eType
+                The type where the entry shold be appended.
             @param  _rName
                 The name of the element to be removed.
             @param  _rxConn
                 If we remove a table, the connection must be set.
         */
-        void elementRemoved(const ::rtl::OUString& _rName
+        void elementRemoved(ElementType _eType
+                            ,const ::rtl::OUString& _rName
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn);
 
 
