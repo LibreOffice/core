@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seltrans.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:37:28 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:26:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
         if ( pSdrView )
         {
             //  handle selection on drawing layer
-            const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+            const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
             ULONG nMarkCount = rMarkList.GetMarkCount();
             if ( nMarkCount )
             {
@@ -371,7 +371,7 @@ void ScSelectionTransferObj::CreateDrawData()
         if ( pDrawView )
         {
             BOOL bAnyOle, bOneOle;
-            const SdrMarkList& rMarkList = pDrawView->GetMarkList();
+            const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
             lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
 
             //---------------------------------------------------------
