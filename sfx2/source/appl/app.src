@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2001-09-06 20:10:36 $
+ *  last change: $Author: kz $ $Date: 2001-09-21 20:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1990,7 +1990,7 @@ String MSG_IOERR_SHARING
     Text [ spanish ] = "Error durante el acceso compartido al archivo $(FILE)." ;
     Text [ english_us ] = "Error by shared access to $(FILE)." ;
     Text[ chinese_simplified ] = "åœ¨åŒæ—¶è¯»å–æ–‡ä»¶ $(FILE) æ—¶å‘ç”Ÿé”™è¯¯ã€‚";
-    Text[ russian ] = "Îøèáêà ïğè êîëëåêòèâíîì äîñòóïå ê ôàéëó $(FILE).";
+    Text[ russian ] = "Îøèáêà ïğè ñîâìåñòíîì äîñòóïå ê ôàéëó $(FILE).";
     Text[ polish ] = "Brak wspólnego dostêpu do pliku $(FILE).";
     Text[ japanese ] = "ï¾Œï½§ï½²ï¾™ $(FILE) ã¸ã®å…±æœ‰ï½±ï½¸ï½¾ï½½ã®éš›ã®ï½´ï¾—ï½°ã€‚";
     Text[ chinese_traditional ] = "åœ¨åŒæ™‚è®€å–æª”æ¡ˆ$(FILE) æ™‚ç™¼ç”ŸéŒ¯èª¤ã€‚";
@@ -2041,7 +2041,7 @@ String MSG_IOERR_GENERAL
     Text[ chinese_simplified ] = "åœ¨è¯»å–$(FILE)æ—¶å‘ç”Ÿä¸€ä¸ªä¸€èˆ¬çš„è¾“å…¥/è¾“å‡ºé”™è¯¯ã€‚";
     Text[ russian ] = "Îáùàÿ îøèáêà ââîäà âûâîäà ïğè äîñòóïå ê ôàéëó $(FILE).";
     Text[ polish ] = "Ogólny b³¹d w wejœciu/wyjœciu w dostêpie do $(FILE).";
-    Text[ japanese ] = "$(FILE)ã¸ã®ï½±ï½¸ï½¾ï½½ã®éš›ã®ä¸€èˆ¬çš„ãªI/Oï½´ï¾—ï½°ã€‚";
+    Text[ japanese ] = "$(FILE) ã¸ï½±ï½¸ï½¾ï½½ã™ã‚‹éš›ã®ä¸€èˆ¬çš„ãªå…¥åŠ›/å‡ºåŠ›ã®ï½´ï¾—ï½°ã€‚";
     Text[ chinese_traditional ] = "åœ¨è®€å–$(FILE)æ™‚ç™¼ç”Ÿä¸€å€‹ä¸€èˆ¬çš„è¼¸å…¥/è¼¸å‡ºéŒ¯èª¤ã€‚";
     Text[ arabic ] = "ÍÏË ÎØÃ ÅÏÎÇá æÅÎÑÇÌ ÚÇã ÃËäÇÁ ãÍÇæáÉ ÇáæÕæá Åáì$(FILE).";
     Text[ dutch ] = "Algemene in-/uitvoerfout bij toegang op $(FILE).";
@@ -3744,11 +3744,11 @@ String STR_KEY_TEMP_PATH
     Text = "Temporäre Dateien" ;
     Text [ English ] = "Temporary Files" ;
     Text[ english_us ] = "Temporary files";
-    Text[ portuguese ] = "Directório de base temporáro";
-    Text[ russian ] = "Âğåìåííûé áàçèñíûé êàòàëîã";
+    Text[ portuguese ] = "Ficheiros temporários";
+    Text[ russian ] = "Âğåìåííûå ôàéëû";
     Text[ greek ] = "Temporary base directory";
-    Text[ dutch ] = "Temporary base directory";
-    Text[ french ] = "Répertoire de base temporaire";
+    Text[ dutch ] = "Tijdelijke bestanden";
+    Text[ french ] = "Fichiers temporaires";
     Text[ spanish ] = "Archivos temporales";
     Text[ finnish ] = "Temporary base directory";
     Text[ italian ] = "File temporanei";
@@ -3756,9 +3756,9 @@ String STR_KEY_TEMP_PATH
     Text[ swedish ] = "Temporära filer";
     Text[ polish ] = "Pliki tymczasowe";
     Text[ portuguese_brazilian ] = "Temporary base directory";
-    Text[ japanese ] = "ä¸€æ™‚ï¾ï½°ï¾‘ï¾ƒï¾ï½¨ï¾šï½¸ï¾„ï¾˜";
+    Text[ japanese ] = "ä¸€æ™‚ï¾Œï½§ï½²ï¾™";
     Text[ korean ] = "Temporary base directory";
-    Text[ chinese_simplified ] = "ä¸´æ—¶æ ¹ç›®å½•";
+    Text[ chinese_simplified ] = "ä¸´æ—¶æ–‡ä»¶";
     Text[ chinese_traditional ] = "æš«æ™‚çš„æ ¹ç›®éŒ„";
     Text[ turkish ] = "Temporary base directory";
     Text[ arabic ] = "Temporary base directory";
@@ -4125,6 +4125,7 @@ String STR_QUICKSTART_LNKNAME
 
 
  // ********************************************************************** EOF
+
 
 
 
