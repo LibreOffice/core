@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:13:02 $
+ *  last change: $Author: rt $ $Date: 2001-06-16 21:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   namedlg.src  $
- //   $Author: kz $
- //     $Date: 2001-06-13 23:13:02 $
- // $Revision: 1.15 $
+ //   $Author: rt $
+ //     $Date: 2001-06-16 21:51:36 $
+ // $Revision: 1.16 $
  //  $Logfile:   T:/sc/source/ui/src/namedlg.srv  $
  //---------------------------------------------------------------------------
 
@@ -225,7 +225,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ danish ] = "Henviser til" ;
         Text [ french ] = "Assigné à" ;
         Text [ swedish ] = "Refererar till" ;
-        Text [ dutch ] = "Toepassen op" ;
+        Text [ dutch ] = "Toegevoegd aan" ;
         Text [ spanish ] = "Asignado a" ;
         Text [ english_us ] = "Assigned to" ;
         Text[ chinese_simplified ] = "Ö¸¶¨¸ø";
@@ -529,5 +529,6 @@ ModelessDialog RID_SCDLG_NAMES
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Definir nombres";
 };
+
 
 
