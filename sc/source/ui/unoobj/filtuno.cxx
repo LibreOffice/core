@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:41:45 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ void SAL_CALL ScFilterOptionsObj::setPropertyValues( const uno::Sequence<beans::
     for (long i = 0; i < nPropCount; i++)
     {
         const beans::PropertyValue& rProp = pPropArray[i];
-        String aPropName = rProp.Name;
+        String aPropName(rProp.Name);
 
         if ( aPropName.EqualsAscii( SC_UNONAME_FILENAME ) )
             rProp.Value >>= aFileName;
@@ -183,8 +183,8 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         //  ascii import is special...
 
         INetURLObject aURL( aFileName );
-        String aExt = aURL.getExtension();
-        String aPrivDatName = aURL.getName();
+        String aExt(aURL.getExtension());
+        String aPrivDatName(aURL.getName());
         sal_Unicode cAsciiDel;
         if (aExt.EqualsIgnoreCaseAscii("CSV"))
             cAsciiDel = ',';
@@ -227,7 +227,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
             //  ascii export (import is handled above)
 
             INetURLObject aURL( aFileName );
-            String aExt = aURL.getExtension();
+            String aExt(aURL.getExtension());
             if (aExt.EqualsIgnoreCaseAscii("CSV"))
                 cAsciiDel = ',';
             else
