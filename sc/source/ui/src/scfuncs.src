@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-26 14:22:46 $
+ *  last change: $Author: kz $ $Date: 2002-05-21 09:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -26112,7 +26112,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ korean ] = "X";
             Text[ turkish ] = "X";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "X";
+            Text[ catalan ] = "Nombre";
         };
         String 3 // Description of Parameter 1
         {
