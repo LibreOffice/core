@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 09:19:40 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using ::rtl::OUString;
 
 namespace xmlscript
 {
@@ -178,9 +178,14 @@ void ScrollBarElement::endElement()
     ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ScrollValueMax") ),
                             OUString( RTL_CONSTASCII_USTRINGPARAM("maxpos") ),
                             _xAttributes );
+    ctx.importLongProperty( OUSTR("ScrollValueMin"), OUSTR("minpos"),
+                            _xAttributes );
     ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("VisibleSize") ),
                             OUString( RTL_CONSTASCII_USTRINGPARAM("visible-size") ),
                             _xAttributes );
+    ctx.importLongProperty( OUSTR("RepeatDelay"), OUSTR("repeat"),
+                            _xAttributes );
+
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -290,6 +295,9 @@ void PatternFieldElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("strict-format") ),
                                _xAttributes );
+    ctx.importBooleanProperty(
+        OUSTR("HideInactiveSelection"), OUSTR("hide-inactive-selection"),
+        _xAttributes );
     ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
                               OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
                               _xAttributes );
@@ -359,6 +367,9 @@ void FormattedFieldElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("strict-format") ),
                                _xAttributes );
+    ctx.importBooleanProperty(
+        OUSTR("HideInactiveSelection"), OUSTR("hide-inactive-selection"),
+        _xAttributes );
     ctx.importAlignProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("align") ),
                              _xAttributes );
@@ -380,6 +391,10 @@ void FormattedFieldElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
                                _xAttributes );
+    if (ctx.importLongProperty( OUSTR("RepeatDelay"), OUSTR("repeat"),
+                                _xAttributes ))
+        ctx.getControlModel()->setPropertyValue(
+            OUSTR("Repeat"), makeAny(true) );
 
     OUString sDefault(
         _xAttributes->getValueByUidName(
@@ -527,6 +542,9 @@ void TimeFieldElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("strict-format") ),
                                _xAttributes );
+    ctx.importBooleanProperty(
+        OUSTR("HideInactiveSelection"), OUSTR("hide-inactive-selection"),
+        _xAttributes );
     ctx.importTimeFormatProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("TimeFormat") ),
                                   OUString( RTL_CONSTASCII_USTRINGPARAM("time-format") ),
                                   _xAttributes );
@@ -542,6 +560,11 @@ void TimeFieldElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
                                _xAttributes );
+    if (ctx.importLongProperty( OUSTR("RepeatDelay"), OUSTR("repeat"),
+                                _xAttributes ))
+        ctx.getControlModel()->setPropertyValue(
+            OUSTR("Repeat"), makeAny(true) );
+
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -599,6 +622,9 @@ void NumericFieldElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("strict-format") ),
                                _xAttributes );
+    ctx.importBooleanProperty(
+        OUSTR("HideInactiveSelection"), OUSTR("hide-inactive-selection"),
+        _xAttributes );
     ctx.importShortProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("DecimalAccuracy") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("decimal-accuracy") ),
                                _xAttributes );
@@ -620,6 +646,11 @@ void NumericFieldElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
                                _xAttributes );
+    if (ctx.importLongProperty( OUSTR("RepeatDelay"), OUSTR("repeat"),
+                                _xAttributes ))
+        ctx.getControlModel()->setPropertyValue(
+            OUSTR("Repeat"), makeAny(true) );
+
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -677,6 +708,9 @@ void DateFieldElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("strict-format") ),
                                _xAttributes );
+    ctx.importBooleanProperty(
+        OUSTR("HideInactiveSelection"), OUSTR("hide-inactive-selection"),
+        _xAttributes );
     ctx.importDateFormatProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("DateFormat") ),
                                   OUString( RTL_CONSTASCII_USTRINGPARAM("date-format") ),
                                   _xAttributes );
@@ -695,6 +729,10 @@ void DateFieldElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
                                _xAttributes );
+    if (ctx.importLongProperty( OUSTR("RepeatDelay"), OUSTR("repeat"),
+                                _xAttributes ))
+        ctx.getControlModel()->setPropertyValue(
+            OUSTR("Repeat"), makeAny(true) );
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Dropdown") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("dropdown") ),
                                _xAttributes );
@@ -755,6 +793,9 @@ void CurrencyFieldElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("StrictFormat") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("strict-format") ),
                                _xAttributes );
+    ctx.importBooleanProperty(
+        OUSTR("HideInactiveSelection"), OUSTR("hide-inactive-selection"),
+        _xAttributes );
     ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("CurrencySymbol") ),
                               OUString( RTL_CONSTASCII_USTRINGPARAM("currency-symbol") ),
                               _xAttributes );
@@ -779,6 +820,10 @@ void CurrencyFieldElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Spin") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
                                _xAttributes );
+    if (ctx.importLongProperty( OUSTR("RepeatDelay"), OUSTR("repeat"),
+                                _xAttributes ))
+        ctx.getControlModel()->setPropertyValue(
+            OUSTR("Repeat"), makeAny(true) );
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("PrependCurrencySymbol") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("prepend-symbol") ),
                                _xAttributes );
@@ -833,6 +878,9 @@ void FileControlElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
                                _xAttributes );
+    ctx.importBooleanProperty(
+        OUSTR("HideInactiveSelection"), OUSTR("hide-inactive-selection"),
+        _xAttributes );
     ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
                               OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
                               _xAttributes );
@@ -1010,6 +1058,9 @@ void TextFieldElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("VScroll") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("vscroll") ),
                                _xAttributes );
+    ctx.importBooleanProperty(
+        OUSTR("HideInactiveSelection"), OUSTR("hide-inactive-selection"),
+        _xAttributes );
     ctx.importShortProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MaxTextLen") ),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("maxlength") ),
                              _xAttributes );
@@ -1144,6 +1195,7 @@ void TitledBoxElement::endElement()
             pStyle->importTextColorStyle( xControlModel );
             pStyle->importTextLineColorStyle( xControlModel );
             pStyle->importFontStyle( xControlModel );
+            pStyle->importVisualEffectStyle( xControlModel );
         }
 
         ctx.importDefaults( _nBasePosX, _nBasePosY, xAttributes );
@@ -1167,7 +1219,7 @@ void TitledBoxElement::endElement()
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ),
                                          makeAny( nVal ) );
 
-        vector< Reference< xml::input::XElement > > * radioEvents =
+        ::std::vector< Reference< xml::input::XElement > > * radioEvents =
             static_cast< RadioElement * >( xRadio.get() )->getEvents();
         ctx.importEvents( *radioEvents );
         // avoid ring-reference:
@@ -1255,6 +1307,7 @@ void RadioGroupElement::endElement()
             pStyle->importTextColorStyle( xControlModel );
             pStyle->importTextLineColorStyle( xControlModel );
             pStyle->importFontStyle( xControlModel );
+            pStyle->importVisualEffectStyle( xControlModel );
         }
 
         ctx.importDefaults( _nBasePosX, _nBasePosY, xAttributes );
@@ -1278,7 +1331,7 @@ void RadioGroupElement::endElement()
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ),
                                          makeAny( nVal ) );
 
-        vector< Reference< xml::input::XElement > > * radioEvents =
+        ::std::vector< Reference< xml::input::XElement > > * radioEvents =
             static_cast< RadioElement * >( xRadio.get() )->getEvents();
         ctx.importEvents( *radioEvents );
         // avoid ring-reference:
@@ -1510,6 +1563,9 @@ void ComboBoxElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Dropdown") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
                                _xAttributes );
+    ctx.importBooleanProperty(
+        OUSTR("HideInactiveSelection"), OUSTR("hide-inactive-selection"),
+        _xAttributes );
     ctx.importShortProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MaxTextLen") ),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("maxlength") ),
                              _xAttributes );
@@ -1570,6 +1626,7 @@ void CheckBoxElement::endElement()
         pStyle->importTextColorStyle( xControlModel );
         pStyle->importTextLineColorStyle( xControlModel );
         pStyle->importFontStyle( xControlModel );
+        pStyle->importVisualEffectStyle( xControlModel );
     }
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
@@ -1672,6 +1729,17 @@ void ButtonElement::endElement()
     ctx.importImageAlignProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageAlign") ),
                                   OUString( RTL_CONSTASCII_USTRINGPARAM("image-align") ),
                                   _xAttributes );
+    if (ctx.importLongProperty( OUSTR("RepeatDelay"), OUSTR("repeat"),
+                                _xAttributes ))
+        ctx.getControlModel()->setPropertyValue(
+            OUSTR("Repeat"), makeAny(true) );
+    sal_Int32 toggled;
+    if (getLongAttr( &toggled, OUSTR("toggled"), _xAttributes,
+                     _pImport->XMLNS_DIALOGS_UID ) && toggled == 1)
+        ctx.getControlModel()->setPropertyValue(OUSTR("Toggle"), makeAny(true));
+    ctx.importBooleanProperty( OUSTR("FocusOnClick"), OUSTR("grab-focus"),
+                               _xAttributes );
+
     // State
     sal_Bool bChecked;
     if (getBoolAttr(
