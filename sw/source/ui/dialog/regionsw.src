@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:33:45 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1057,6 +1057,13 @@ TabDialog DLG_INSERT_SECTION
             };
             PageItem
             {
+                Identifier = TP_SECTION_INDENTS;
+                PageResID = TP_SECTION_INDENTS;
+                Text = "Einz�ge" ;
+                Text [ english_us ] = "Indents" ;
+            };
+            PageItem
+            {
                 Identifier = TP_BACKGROUND ;
                 PageResID = TP_BACKGROUND ;
                 Text = "Hintergrund" ;
@@ -1415,6 +1422,13 @@ TabDialog DLG_SECTION_PROPERTIES
                 Text[ hebrew ] = "‮טורים‬";
                 Text[ hindi ] = "स्तंभें";
                 Text[ slovak ] = "Stĺpce";
+            };
+            PageItem
+            {
+                Identifier = TP_SECTION_INDENTS;
+                PageResID = TP_SECTION_INDENTS;
+                Text = "Einz�ge" ;
+                Text [ english_us ] = "Indents" ;
             };
             PageItem
             {
@@ -2079,41 +2093,72 @@ TabPage TP_SECTION_FTNENDNOTES
     };
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+TabPage TP_SECTION_INDENTS
+{
+    HelpID = HID_SECTION_INDENTS_PAGE;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE ;
+    FixedLine FL_INDENT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 173 , 8 ) ;
+        Text = "Einzug" ;
+        Text [ english_us ] = "Indent" ;
+    };
+    FixedText FT_BEFORE
+    {
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Left = TRUE ;
+        Text = "~Vor Bereich" ;
+        Text [ english_us ] = "~Before section" ;
+    };
+    MetricField MF_BEFORE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 135 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Group = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 9999 ;
+        Minimum = -9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    FixedText FT_AFTER
+    {
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Left = TRUE ;
+        Text = "H~inter Bereich" ;
+        Text [ english_us ] = "~After section" ;
+    };
+    MetricField MF_AFTER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 135 , 30 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Group = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 9999 ;
+        Minimum = -9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    Window WIN_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 185 , 7 ) ;
+        Size = MAP_APPFONT ( 68 , 112 ) ;
+    };
+};
