@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2002-05-28 20:15:36 $
+ *  last change: $Author: kz $ $Date: 2002-06-10 15:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,23 +149,23 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ french ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Param�trage de la bordure" ; 0; > ;
+        < "Ligne de bordure gauche" ; 1; > ;
+        < "Ligne de bordure droite" ; 2; > ;
+        < "Ligne de bordure sup�rieure" ; 3; > ;
+        < "Ligne de bordure inf�rieure" ; 4; > ;
+        < "Ligne de bordure horizontale" ; 5; > ;
+        < "Ligne de bordure verticale" ; 6; > ;
     };
     ItemList [ spanish ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Configuraci�n del borde" ; 0; > ;
+        < "Borde izquierdo" ; 1; > ;
+        < "Borde derecho" ; 2; > ;
+        < "Borde superior" ; 3; > ;
+        < "Borde inferior" ; 4; > ;
+        < "Borde horizontal" ; 5; > ;
+        < "Borde vertical" ; 6; > ;
     };
     ItemList [ finnish ] =
     {
@@ -179,13 +179,13 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ italian ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Impostazione bordo" ; 0; > ;
+        < "Bordo sinistro" ; 1; > ;
+        < "Bordo destro" ; 2; > ;
+        < "Bordo superiore" ; 3; > ;
+        < "Bordo inferiore" ; 4; > ;
+        < "Bordo orizzontale" ; 5; > ;
+        < "Bordo verticale" ; 6; > ;
     };
     ItemList [ danish ] =
     {
@@ -199,13 +199,13 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ swedish ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Inst�llning av inramning" ; 0; > ;
+        < "V�nster inramningslinje" ; 1; > ;
+        < "H�ger inramningslinje" ; 2; > ;
+        < "�vre inramningslinje" ; 3; > ;
+        < "Undre inramningslinje" ; 4; > ;
+        < "Horisontell inramningslinje" ; 5; > ;
+        < "Vertikal inramningslinje" ; 6; > ;
     };
     ItemList [ polish ] =
     {
@@ -229,33 +229,33 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ japanese ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "外枠の設定" ; 0; > ;
+        < "外枠左側の線" ; 1; > ;
+        < "外枠右側の線" ; 2; > ;
+        < "外枠上方の線" ; 3; > ;
+        < "外枠下方の線" ; 4; > ;
+        < "外枠横の線" ; 5; > ;
+        < "外枠縦の線" ; 6; > ;
     };
     ItemList [ korean ] =
     {
-         < "외곽선 설정" ; 0; > ;
-        < "왼쪽 외곽선" ; 1; > ;
-        < "오른쪽 외곽선" ; 2; > ;
-        < "위쪽 외곽선" ; 3; > ;
-        < "아래쪽 경계선" ; 4; > ;
-        < "수평 외곽선" ; 5; > ;
-        < "수직 외곽선" ; 6; > ;
+         < "테두리 설정" ; 0; > ;
+        < "왼쪽 테두리" ; 1; > ;
+        < "오른쪽 테두리" ; 2; > ;
+        < "위쪽 테두리" ; 3; > ;
+        < "아래쪽 테두리" ; 4; > ;
+        < "수평 테두리" ; 5; > ;
+        < "수직 테두리" ; 6; > ;
     };
     ItemList [ chinese_simplified ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "边框的设定" ; 0; > ;
+        < "左边框线" ; 1; > ;
+        < "右边框线" ; 2; > ;
+        < "上边框线" ; 3; > ;
+        < "下边框线" ; 4; > ;
+        < "水平边框线" ; 5; > ;
+        < "垂直边框线" ; 6; > ;
     };
     ItemList [ chinese_traditional ] =
     {
@@ -392,23 +392,23 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ french ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Param�trage de la bordure" ; 0; > ;
+        < "Ligne de bordure gauche" ; 1; > ;
+        < "Ligne de bordure droite" ; 2; > ;
+        < "Ligne de bordure sup�rieure" ; 3; > ;
+        < "Ligne de bordure inf�rieure" ; 4; > ;
+        < "Ligne de bordure horizontale" ; 5; > ;
+        < "Ligne de bordure verticale" ; 6; > ;
     };
     ItemList [ spanish ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Configuraci�n del borde" ; 0; > ;
+        < "Borde izquierdo" ; 1; > ;
+        < "Borde derecho" ; 2; > ;
+        < "Borde superior" ; 3; > ;
+        < "Borde inferior" ; 4; > ;
+        < "Borde horizontal" ; 5; > ;
+        < "Borde vertical" ; 6; > ;
     };
     ItemList [ finnish ] =
     {
@@ -422,13 +422,13 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ italian ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Impostazioni bordo" ; 0; > ;
+        < "Bordo sinistro" ; 1; > ;
+        < "Bordo destro" ; 2; > ;
+        < "Bordo superiore" ; 3; > ;
+        < "Bordo inferiore" ; 4; > ;
+        < "Bordo orizzontale" ; 5; > ;
+        < "Bordo verticale" ; 6; > ;
     };
     ItemList [ danish ] =
     {
@@ -442,13 +442,13 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ swedish ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Inst�llning av inramning" ; 0; > ;
+        < "V�nster inramningslinje" ; 1; > ;
+        < "H�ger inramningslinje" ; 2; > ;
+        < "�vre inramningslinje" ; 3; > ;
+        < "Undre inramningslinje" ; 4; > ;
+        < "Horisontell inramningslinje" ; 5; > ;
+        < "Vertikal inramningslinje" ; 6; > ;
     };
     ItemList [ polish ] =
     {
@@ -472,33 +472,33 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ japanese ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "外枠の設定" ; 0; > ;
+        < "外枠左側の線" ; 1; > ;
+        < "外枠右側の線" ; 2; > ;
+        < "外枠上方の線" ; 3; > ;
+        < "外枠下方の線" ; 4; > ;
+        < "外枠横の線" ; 5; > ;
+        < "外枠縦の線" ; 6; > ;
     };
     ItemList [ korean ] =
     {
-         < "외곽선 설정" ; 0; > ;
-        < "왼쪽 외곽선" ; 1; > ;
-        < "오른쪽 외곽선" ; 2; > ;
-        < "위쪽 외곽선" ; 3; > ;
-        < "아래쪽 외곽선" ; 4; > ;
-        < "수평 외곽선" ; 5; > ;
-        < "수직 외곽선" ; 6; > ;
+         < "테두리 설정" ; 0; > ;
+        < "왼쪽 테두리" ; 1; > ;
+        < "오른쪽 테두리" ; 2; > ;
+        < "위쪽 테두리" ; 3; > ;
+        < "아래쪽 테두리" ; 4; > ;
+        < "수평 테두리" ; 5; > ;
+        < "수직 테두리" ; 6; > ;
     };
     ItemList [ chinese_simplified ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "边框的设定" ; 0; > ;
+        < "左边框线" ; 1; > ;
+        < "右边框线" ; 2; > ;
+        < "上边框线" ; 3; > ;
+        < "下边框线" ; 4; > ;
+        < "水平边框线" ; 5; > ;
+        < "垂直边框线" ; 6; > ;
     };
     ItemList [ chinese_traditional ] =
     {
