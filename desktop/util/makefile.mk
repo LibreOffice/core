@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.53 $
+#   $Revision: 1.54 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-30 16:05:50 $
+#   last change: $Author: kz $ $Date: 2005-03-03 20:25:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -164,12 +164,6 @@ APP1OBJS=$(TARGETOBJS)
 APP1OBJS += $(OBJ)$/copyright_ascii_sun.obj
 
 .IF "$(GUI)" == "UNX"
-.IF "$(OS)" != "MACOSX"
-APP1OBJS +=	$(OBJ)$/icon_resource_sun.obj
-.ENDIF
-.ENDIF
-
-.IF "$(GUI)" == "UNX"
 .IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
 APP1STDLIBS+= -lXext -lSM -lICE
 .ENDIF
@@ -255,12 +249,6 @@ APP5STDLIBS=			\
 
 APP5OBJS=$(TARGETOBJS)
 APP5OBJS += $(OBJ)$/copyright_ascii_ooo.obj
-
-.IF "$(GUI)" == "UNX"
-.IF "$(OS)" != "MACOSX"
-APP5OBJS +=	$(OBJ)$/icon_resource_ooo.obj
-.ENDIF # MACOSX
-.ENDIF # UNX
 
 .IF "$(OS)" == "LINUX"
 APP5STDLIBS+= -lXext -lSM -lICE
