@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-11 15:10:28 $
+ *  last change: $Author: jp $ $Date: 2001-10-11 17:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef _SOT_FORMATS_HXX //autogen
 #include <sot/formats.hxx>
 #endif
+#ifndef _SFX_BINDINGS_HXX
+#include <sfx2/bindings.hxx>
+#endif
 
 
 #ifndef _FMTURL_HXX //autogen
@@ -154,12 +157,15 @@ void SwEditWin::StopDDTimer(SwWrtShell *pSh, const Point &rPt)
 void SwEditWin::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
-//!!    if( rSh.GetDrawView() &&
-//!!        rSh.GetDrawView()->StartDrag( nAction, rPosPixel, this) )
-//!!    {
-//!!        rView.GetViewFrame()->GetBindings().InvalidateAll(FALSE);
-//!!        return; // Event von der SdrView ausgewertet
-//!!    }
+    if( rSh.GetDrawView() )
+    {
+        CommandEvent aDragEvent( rPosPixel, COMMAND_STARTDRAG, TRUE );
+        if( rSh.GetDrawView()->Command( aDragEvent, this ) )
+        {
+            rView.GetViewFrame()->GetBindings().InvalidateAll(FALSE);
+            return; // Event von der SdrView ausgewertet
+        }
+    }
 
     if ( !pApplyTempl && !rSh.IsDrawCreate() && !IsDrawAction())
     {
@@ -172,9 +178,12 @@ void SwEditWin::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
             bStart = TRUE;
         else if ( !bFrmDrag && rSh.IsSelFrmMode() &&
                     rSh.IsInsideSelectedObj( aDocPos ) )
+        {
             //Wir sind nicht am internen Draggen und stehen auf
             //einem Objekt (Rahmen, Zeichenobjekt)
+
             bStart = TRUE;
+        }
         else if( !bFrmDrag && rView.GetDocShell()->IsReadOnly() &&
                 OBJCNT_NONE != rSh.GetObjCntType( aDocPos, pObj ))
         {
@@ -570,6 +579,9 @@ IMPL_LINK( SwEditWin, DDHandler, Timer *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/09/11 15:10:28  jp
+    Task #91678#: 'selection clipbord' implemented
+
     Revision 1.7  2001/08/13 22:02:14  jp
     Bug #86173#: ask for the default flag on the event
 
