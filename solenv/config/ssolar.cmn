@@ -193,7 +193,7 @@ common
             SO_GEN_ERROR
             SO_GEN_ERROR2
 			NO_SRS_PATCH true
-            CVS_HEAD SRX645
+            CVS_HEAD SRC680
 		}
 		bsclient
 		{
