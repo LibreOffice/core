@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splash.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:06:09 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <osl/mutex.hxx>
 #include <sfx2/sfxuno.hxx>
+#include <vcl/virdev.hxx>
 
 
 using namespace ::rtl;
@@ -129,6 +130,7 @@ private:
     static osl::Mutex _aMutex;
     Reference< XMultiServiceFactory > _rFactory;
 
+    VirtualDevice _vdev;
     Bitmap          _aIntroBmp;
     sal_Int32 _iMax;
     sal_Int32 _iProgress;
