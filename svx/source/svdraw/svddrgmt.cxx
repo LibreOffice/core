@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svddrgmt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:28 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,13 +547,23 @@ FASTBOOL SdrDragObjOwn::End(FASTBOOL bCopy)
             }
         }
         bRet=pObj->EndDrag(DragStat());
-        if (bRet) {
-            if (pUndo!=NULL) {
-                if (pUndo2!=NULL) {
-                    rView.BegUndo();
+
+        if(bRet)
+        {
+            if(pUndo)
+            {
+                // #109992#
+                // Rescue the UNDO text if a 2nd undo is done here and put it
+                // into BegUndo() to have a comment in the UNDO field.
+                if(pUndo2)
+                {
+                    rView.BegUndo(pUndo->GetComment());
                 }
+
                 rView.AddUndo(pUndo);
-                if (pUndo2!=NULL) {
+
+                if(pUndo2)
+                {
                     rView.AddUndo(pUndo2);
                     rView.EndUndo();
                 }
