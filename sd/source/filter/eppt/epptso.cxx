@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-10 08:21:52 $
+ *  last change: $Author: sj $ $Date: 2000-11-15 10:22:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3683,7 +3683,10 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
     UINT8   nOleVerb = 0;           // Determines object's class (sound, video, other)
 
     if ( eAe == ::com::sun::star::presentation::AnimationEffect_NONE )
+    {
+        nBuildType = 0;
         eAe = eTe;
+    }
     switch ( eAe )
     {
         case ::com::sun::star::presentation::AnimationEffect_WAVYLINE_FROM_TOP :
