@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibconfig.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-01-25 11:41:22 $
+ *  last change: $Author: os $ $Date: 2001-03-09 12:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ Sequence<OUString>& BibConfig::GetPropertyNames()
 
  ---------------------------------------------------------------------------*/
 BibConfig::BibConfig() :
-    ConfigItem(C2U("Office.DataAccess/Bibliography")),
+    ConfigItem(C2U("Office.DataAccess/Bibliography"), CONFIG_MODE_DELAYED_UPDATE),
     pMappingsArr(new MappingArray),
     nBeamerSize(0),
     nViewSize(0)
