@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:40:21 $
+ *  last change: $Author: fs $ $Date: 2001-04-27 15:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1301,6 +1301,10 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource, 
     // prevent flicker
     SetUpdateMode(sal_False);
 
+    m_bResetting = sal_True;
+    ShowPage(PAGE_GENERAL);
+    m_bResetting = sal_False;
+
     // remove all tab pages (except the general one)
     // remove all current detail pages
     while (m_aCurrentDetailPages.size())
@@ -2452,6 +2456,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.46  2001/04/26 11:40:21  fs
+ *  file is alive, again - added support for data source associated bookmarks
+ *
  *  Revision 1.45  2001/04/20 13:38:06  oj
  *  #85736# new checkbox for odbc
  *
