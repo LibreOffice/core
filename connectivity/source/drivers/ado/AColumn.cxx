@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumn.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
+ *  last change: $Author: oj $ $Date: 2002-03-27 08:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,10 +220,8 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 {
                     sal_Int32 nVal=0;
                     rValue >>= nVal;
-                    ColumnAttributesEnum eNullable = adColFixed;
-                    if( nVal == ColumnValue::NULLABLE)
-                        eNullable = adColNullable;
-                    m_aColumn.put_Attributes(eNullable);
+                    if ( nVal == ColumnValue::NULLABLE )
+                        m_aColumn.put_Attributes( adColNullable );
                 }
                 break;
             case PROPERTY_ID_ISROWVERSION:
@@ -269,7 +267,7 @@ void OAdoColumn::fillPropertyValues()
         }
         m_Precision     = m_aColumn.get_Precision();
         m_Scale         = m_aColumn.get_NumericScale();
-        m_IsNullable    = (m_aColumn.get_Attributes() == adColNullable) ? ColumnValue::NULLABLE : ColumnValue::NO_NULLS;
+        m_IsNullable    = ((m_aColumn.get_Attributes() & adColNullable) == adColNullable) ? ColumnValue::NULLABLE : ColumnValue::NO_NULLS;
         m_IsCurrency    = (m_aColumn.get_Type() == adCurrency);
         // fill some specific props
         {
@@ -277,11 +275,11 @@ void OAdoColumn::fillPropertyValues()
 
             if ( aProps.IsValid() )
             {
-                m_IsAutoIncrement = OTools::getValue( aProps, ::rtl::OUString::createFromAscii( "Autoincrement" ) );
+                m_IsAutoIncrement = OTools::getValue( aProps, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Autoincrement")) );
 
-                m_Description = OTools::getValue( aProps, ::rtl::OUString::createFromAscii( "Description" ) );
+                m_Description = OTools::getValue( aProps, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description")) );
 
-                m_DefaultValue = OTools::getValue( aProps, ::rtl::OUString::createFromAscii( "Default" ) );
+                m_DefaultValue = OTools::getValue( aProps, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Default")) );
             }
         }
     }
