@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-13 07:25:03 $
+ *  last change: $Author: fs $ $Date: 2002-09-13 12:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #endif
 #ifndef _SV_BITMAPEX_HXX
 #include <vcl/bitmapex.hxx>
+#endif
+#ifndef _VCL_CONTROLLAYOUT_HXX
+#include <vcl/controllayout.hxx>
 #endif
 
 using namespace ::drafts::com::sun::star::accessibility;
@@ -603,6 +606,46 @@ BOOL SvtIconChoiceCtrl::HandleShortCutKey( const KeyEvent& r )
 Rectangle SvtIconChoiceCtrl::GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const
 {
     return _pImp->CalcFocusRect( pEntry );
+}
+
+void SvtIconChoiceCtrl::FillLayoutData() const
+{
+    DBG_ASSERT( !mpLayoutData, "SvtIconChoiceCtrl::FillLayoutData: shouldn't this be called with non-existent layout data only?" );
+    mpLayoutData = new ::vcl::ControlLayoutData();
+
+    SvtIconChoiceCtrl* pNonConstMe = const_cast< SvtIconChoiceCtrl* >( this );
+
+    // loop through all entries
+    sal_uInt16 nCount = GetEntryCount();
+    sal_uInt16 nPos = 0;
+    while ( nPos < nCount )
+    {
+        SvxIconChoiceCtrlEntry* pEntry = GetEntry( nPos );
+
+        Point aPos = _pImp->GetEntryBoundRect( pEntry ).TopLeft();
+        String sEntryText = pEntry->GetDisplayText( );
+        Rectangle aTextRect = _pImp->CalcTextRect( pEntry, &aPos, sal_False, &sEntryText );
+
+        sal_Bool bLargeIconMode = WB_ICON == ( _pImp->GetStyle() & ( VIEWMODE_MASK ) );
+        sal_uInt16 nTextPaintFlags = bLargeIconMode ? PAINTFLAG_HOR_CENTERED : PAINTFLAG_VER_CENTERED;
+
+        _pImp->PaintItem( aTextRect, IcnViewFieldTypeText, pEntry, nTextPaintFlags, pNonConstMe, &sEntryText, mpLayoutData );
+
+        ++nPos;
+    }
+}
+
+Rectangle SvtIconChoiceCtrl::GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const
+{
+    Rectangle aRect;
+
+    Pair aEntryCharacterRange = GetLineStartEnd( _nEntryPos );
+    if ( aEntryCharacterRange.A() + _nCharacterIndex < aEntryCharacterRange.B() )
+    {
+        aRect = GetCharacterBounds( aEntryCharacterRange.A() + _nCharacterIndex );
+    }
+
+    return aRect;
 }
 
 void SvtIconChoiceCtrl::AddEventListener( const Link& rEventListener )

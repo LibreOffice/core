@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-13 07:22:15 $
+ *  last change: $Author: fs $ $Date: 2002-09-13 12:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,6 +319,8 @@ protected:
                             SvxIconChoiceCtrlEntry* pEntry,
                             BOOL bInplaceEdit );
 
+    virtual void        FillLayoutData() const;
+
 public:
 
                         SvtIconChoiceCtrl( Window* pParent, WinBits nWinStyle = WB_ICON | WB_BORDER );
@@ -406,6 +408,7 @@ public:
     BOOL                HandleShortCutKey( const KeyEvent& rKeyEvent );
 
     Rectangle           GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const;
+    Rectangle           GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const;
 
     // ACCESSIBILITY ==========================================================
 
