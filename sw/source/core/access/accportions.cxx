@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2002-07-24 14:51:49 $
+ *  last change: $Author: dvo $ $Date: 2002-09-02 16:48:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -810,8 +810,21 @@ sal_Bool SwAccessiblePortionData::GetEditableRange(
     // iterate over portions, and make sure there is no read-only portion
     // in-between
     size_t nLastPortion = nEndPortion;
-    if( (nLastPortion > 0) && IsSpecialPortion(nLastPortion) )
-        nLastPortion--;
+
+    // don't count last portion if we're in front of a special portion
+    if( IsSpecialPortion(nLastPortion) )
+    {
+        if (nLastPortion > 0)
+            nLastPortion--;
+        else
+            // special case: because size_t is usually unsigned, we can't just
+            // decrease nLastPortion to -1 (which would normally do the job, so
+            // this whole if wouldn't be needed). Instead, we'll do this
+            // special case and just increae the start portion beyond the last
+            // portion to make sure the loop below will have zero iteration.
+            nStartPortion = nLastPortion + 1;
+    }
+
     for( size_t nPor = nStartPortion; nPor <= nLastPortion; nPor ++ )
     {
         bIsEditable &= ! IsReadOnlyPortion( nPor );
