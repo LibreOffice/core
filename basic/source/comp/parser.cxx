@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:53:05 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ static SbiStatement StmntTable [] = {
 #endif
 
 SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
-        : SbiTokenizer( pm->GetSource(), pb ),
+        : SbiTokenizer( pm->GetSource32(), pb ),
           aGblStrings( this ),
           aLclStrings( this ),
           aPublics( aGblStrings, SbPUBLIC ),
@@ -501,8 +501,9 @@ SbiExprNode* SbiParser::GetWithVar()
 void SbiParser::Symbol()
 {
     SbiExpression aVar( this, SbSYMBOL );
-    aVar.Gen();
-    if( Peek() != EQ )
+    bool bEQ = ( Peek() == EQ );
+    aVar.Gen( bEQ );
+    if( !bEQ )
     {
         aGen.Gen( _GET );
     }
