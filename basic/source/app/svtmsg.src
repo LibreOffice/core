@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:12:48 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 20:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ String S_NO_DIALOG_IN_GETACTIVE
 String S_NO_POPUP
 {
     Text = "Kein PopupMenu geöffnet";
-    Text[ english_us ] = "PopUp menu not open";
+    Text[ english_us ] = "Pop-up menu not open";
     Text[ portuguese ] = "PopupMenu não está aberto";
     Text[ russian ] = "PopUp menu not open";
     Text[ greek ] = "PopUp menu not open";
