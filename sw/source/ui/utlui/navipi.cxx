@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-12-19 09:13:13 $
+ *  last change: $Author: os $ $Date: 2002-03-13 08:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,6 +397,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
     // mit Ctrl Unterebenen nicht mitnehmen
     BOOL bOutlineWithChilds  = ( KEY_MOD1 != pBox->GetModifier());
     int nFuncId = 0;
+    BOOL bFocusToDoc = FALSE;
     switch (nId)
     {
         case FN_UP:
@@ -436,6 +437,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
             }
             else if (rSh.GotoFooterTxt())
                 nFuncId = FN_TO_FOOTER;
+            bFocusToDoc = TRUE;
         }
         break;
         case FN_SELECT_HEADER:
@@ -449,6 +451,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
             }
             else if (rSh.GotoHeaderTxt())
                 nFuncId = FN_TO_HEADER;
+            bFocusToDoc = TRUE;
         }
         break;
         case FN_SELECT_FOOTNOTE:
@@ -473,6 +476,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
                 else if (rSh.GotoPrevFtnAnchor())
                     nFuncId = FN_PREV_FOOTNOTE;
             }
+            bFocusToDoc = TRUE;
         }
         break;
 
@@ -506,6 +510,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
         break;
         case FN_CREATE_NAVIGATION:
         {
+            CreateNavigationTool(pBox->GetItemRect(FN_CREATE_NAVIGATION), TRUE);
         }
         break;
     }
@@ -514,7 +519,8 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
     {
         lcl_UnSelectFrm(&rSh);
     }
-    pView->GetEditWin().GrabFocus();
+    if(bFocusToDoc)
+        pView->GetEditWin().GrabFocus();
     return TRUE;
 }
 /*------------------------------------------------------------------------
@@ -588,20 +594,32 @@ void SwNavHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
     if(rEvt.GetButtons() == MOUSE_LEFT &&
             FN_CREATE_NAVIGATION == GetItemId(rEvt.GetPosPixel()))
     {
-        SfxBindings& rBind = ((SwNavigationPI*)GetParent())->GetCreateView()->GetViewFrame()->GetBindings();
-        rBind.ENTERREGISTRATIONS();
-        SwScrollNaviPopup* pPopup = new
-            SwScrollNaviPopup(FN_SCROLL_NAVIGATION,
-                            SW_RES(RID_SCROLL_NAVIGATION_WIN),
-                            rBind);
-        rBind.LEAVEREGISTRATIONS();
-
-        Rectangle aRect = GetItemRect(FN_CREATE_NAVIGATION);
-        aRect.SetPos(OutputToScreenPixel(aRect.TopLeft()));
-        pPopup->StartPopupMode(aRect, FLOATWIN_POPUPMODE_RIGHT|FLOATWIN_POPUPMODE_ALLOWTEAROFF);
+        ((SwNavigationPI*)GetParent())->CreateNavigationTool(GetItemRect(FN_CREATE_NAVIGATION), FALSE);
     }
     else
         SwHelpToolBox::MouseButtonDown(rEvt);
+}
+/* -----------------------------12.03.2002 16:55------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwNavigationPI::CreateNavigationTool(const Rectangle& rRect, BOOL bSetFocus)
+{
+    SfxBindings& rBind = GetCreateView()->GetViewFrame()->GetBindings();
+    rBind.ENTERREGISTRATIONS();
+    SwScrollNaviPopup* pPopup = new
+        SwScrollNaviPopup(FN_SCROLL_NAVIGATION,
+                        SW_RES(RID_SCROLL_NAVIGATION_WIN),
+                        rBind);
+    rBind.LEAVEREGISTRATIONS();
+
+    Rectangle aRect(rRect);
+    aRect.SetPos(OutputToScreenPixel(aRect.TopLeft()));
+    pPopup->StartPopupMode(aRect, FLOATWIN_POPUPMODE_RIGHT|FLOATWIN_POPUPMODE_ALLOWTEAROFF);
+    if(bSetFocus)
+    {
+        pPopup->EndPopupMode(FLOATWIN_POPUPMODEEND_TEAROFF);
+        pPopup->GrabFocus();
+    }
 }
 
 /*-----------------19.06.97 10:12-------------------
