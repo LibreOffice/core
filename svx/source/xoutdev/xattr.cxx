@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-01 13:40:06 $
+ *  last change: $Author: cl $ $Date: 2002-04-08 13:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,30 +333,6 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
         }
     }
 
-    if( aUniqueName.Len() && pPool2 )
-    {
-        const sal_uInt16 nCount = pPool2->GetItemCount( nWhich );
-
-        const NameOrIndex *pItem;
-        for( sal_uInt16 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
-        {
-            pItem = (NameOrIndex*)pPool2->GetItem( nWhich, nSurrogate );
-
-            if( pItem && ( pItem->GetName() == pCheckItem->GetName() ) )
-            {
-                // if there is already an item with the same name and the same
-                // value its ok to set it
-                if( !pCompareValueFunc( pItem, pCheckItem ) )
-                {
-                    // same name but different value, we need a new name for this item
-                    aUniqueName = String();
-                    bForceNew = sal_True;
-                }
-                break;
-            }
-        }
-    }
-
     // if we have no name yet, find existing item with same conent or
     // create a unique name
     if( aUniqueName.Len() == 0 )
@@ -366,22 +342,48 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
         String aUser( aRes );
         aUser += sal_Unicode( ' ' );
 
-        if( pPool1 )
+        if( pDefaults )
         {
-            const sal_uInt16 nCount = pPool1->GetItemCount( nWhich );
-            const NameOrIndex *pItem;
-            for( sal_uInt16 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+            const int nCount = pDefaults->Count();
+            int nIndex;
+            for( nIndex = 0; nIndex < nCount; nIndex++ )
             {
-                pItem = (NameOrIndex*)pPool1->GetItem( nWhich, nSurrogate );
-
-                if( pItem && pItem->GetName().Len() )
+                XPropertyEntry* pEntry = pDefaults->Get( nIndex, 0 );
+                if( pEntry )
                 {
-                    if( !bForceNew && pCompareValueFunc( pItem, pCheckItem ) )
-                        return pItem->GetName();
+                    bool bFound = false;
 
-                    if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                    switch( nWhich )
                     {
-                        sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                    case XATTR_FILLBITMAP:
+                        bFound =  (((XFillBitmapItem*)pCheckItem)->GetValue().GetGraphicObject().GetUniqueID() ==
+                            ((XBitmapEntry*)pEntry)->GetXBitmap().GetGraphicObject().GetUniqueID());
+                        break;
+                    case XATTR_LINEDASH:
+                        bFound = (((XLineDashItem*)pCheckItem)->GetValue() == ((XDashEntry*)pEntry) ->GetDash());
+                        break;
+                    case XATTR_LINESTART:
+                        bFound = (((XLineStartItem*)pCheckItem)->GetValue() == ((XLineEndEntry*)pEntry)->GetLineEnd());
+                        break;
+                    case XATTR_LINEEND:
+                        bFound = (((XLineEndItem*)pCheckItem)->GetValue() == ((XLineEndEntry*)pEntry)->GetLineEnd());
+                        break;
+                    case XATTR_FILLGRADIENT:
+                        bFound = (((XFillGradientItem*)pCheckItem)->GetValue() == ((XGradientEntry*)pEntry)->GetGradient());
+                        break;
+                    case XATTR_FILLHATCH:
+                        bFound = (((XFillHatchItem*)pCheckItem)->GetValue() == ((XHatchEntry*)pEntry)->GetHatch());
+                        break;
+                    }
+
+                    if( bFound )
+                    {
+                        aUniqueName = pEntry->GetName();
+                        break;
+                    }
+                    else
+                    {
+                        sal_Int32 nThisIndex = pEntry->GetName().Copy( aUser.Len() ).ToInt32();
                         if( nThisIndex >= nUserIndex )
                             nUserIndex = nThisIndex + 1;
                     }
@@ -389,13 +391,13 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
             }
         }
 
-        if( pPool2 )
+        if( (aUniqueName.Len() == 0) && pPool1 )
         {
-            const sal_uInt16 nCount = pPool2->GetItemCount( nWhich );
+            const sal_uInt16 nCount = pPool1->GetItemCount( nWhich );
             const NameOrIndex *pItem;
             for( sal_uInt16 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
             {
-                pItem = (NameOrIndex*)pPool2->GetItem( nWhich, nSurrogate );
+                pItem = (NameOrIndex*)pPool1->GetItem( nWhich, nSurrogate );
 
                 if( pItem && pItem->GetName().Len() )
                 {
