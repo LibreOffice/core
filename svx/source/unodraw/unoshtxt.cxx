@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-17 08:37:12 $
+ *  last change: $Author: cl $ $Date: 2001-08-05 15:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,26 @@
 
 #pragma hdrstop
 
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 //#include <tools/debug.hxx>
 //#include <svx/editeng.hxx>
 
 #include <unoshtxt.hxx>
+
+#ifndef _SFXLSTNER_HXX //autogen
+#include <svtools/lstner.hxx>
+#endif
+
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
+
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
 
 #ifndef _SFXHINT_HXX //autogen
 #include <svtools/hint.hxx>
@@ -96,155 +112,382 @@
 
 #include "unotext.hxx"
 
+using namespace ::osl;
+using namespace ::vos;
+using namespace ::rtl;
+
+namespace css = ::com::sun::star;
+
+//------------------------------------------------------------------------
+// SvxTextEditSourceImpl
 //------------------------------------------------------------------------
 
-SvxTextEditSource::SvxTextEditSource( SdrObject* pObject ) :
-    pObj            ( pObject ),
-    pOutliner       ( NULL ),
-    pTextForwarder  ( NULL ),
-    bDataValid      ( FALSE ),
-    bDestroyed      ( FALSE )
+class SvxTextEditSourceImpl : public SfxListener
 {
-    DBG_ASSERT( pObj, "invalid pObject!" );
+private:
+    oslInterlockedCount maRefCount;
 
-    if( pObj && pObj->GetModel() )
-        StartListening( *pObj->GetModel() );
+    SdrObject*              mpObject;
+    Outliner*               mpOutliner;
+    SvxTextForwarder*       mpTextForwarder;
+    BOOL                    mbDataValid;
+    BOOL                    mbDestroyed;
+    BOOL                    mbIsLocked;
+    BOOL                    mbNeedsUpdate;
+    BOOL                    mbOldUndoMode;
+
+public:
+    SvxTextEditSourceImpl( SdrObject* pObject );
+    ~SvxTextEditSourceImpl();
+
+    void SAL_CALL acquire();
+    void SAL_CALL release();
+
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    SvxEditSource*      Clone() const;
+    SvxTextForwarder*   GetTextForwarder();
+    void                UpdateData();
+
+    SdrObject* GetSdrObject() const { return mpObject; }
+
+    void lock();
+    void unlock();
+};
+
+//------------------------------------------------------------------------
+
+SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject )
+:   mpObject        ( pObject ),
+    mpOutliner      ( NULL ),
+    mpTextForwarder ( NULL ),
+    mbDataValid     ( FALSE ),
+    mbDestroyed     ( FALSE ),
+    mbIsLocked      ( FALSE ),
+    mbNeedsUpdate   ( FALSE ),
+    mbOldUndoMode   ( FALSE ),
+    maRefCount      ( 0 )
+{
+    DBG_ASSERT( mpObject, "invalid pObject!" );
+
+    if( mpObject && mpObject->GetModel() )
+        StartListening( *mpObject->GetModel() );
 }
 
 //------------------------------------------------------------------------
-SvxTextEditSource::~SvxTextEditSource()
-{
-    if( pObj && pObj->GetModel() )
-        EndListening( *pObj->GetModel() );
 
-    delete pTextForwarder;
-    delete pOutliner;
+SvxTextEditSourceImpl::~SvxTextEditSourceImpl()
+{
+    DBG_ASSERT( mbIsLocked == sal_False, "text edit source was not unlocked before dispose!" );
+
+    if( mpObject && mpObject->GetModel() )
+        EndListening( *mpObject->GetModel() );
+
+    delete mpTextForwarder;
+    delete mpOutliner;
 }
 
 //------------------------------------------------------------------------
-SvxEditSource* SvxTextEditSource::Clone() const
+
+void SAL_CALL SvxTextEditSourceImpl::acquire() throw()
 {
-    return new SvxTextEditSource( pObj );
+    osl_incrementInterlockedCount( &maRefCount );
 }
 
 //------------------------------------------------------------------------
-SvxTextForwarder* SvxTextEditSource::GetTextForwarder()
+
+void SAL_CALL SvxTextEditSourceImpl::release() throw()
 {
-    if( bDestroyed || pObj == NULL )
-        return NULL;
-
-    if (!pTextForwarder)
-    {
-        if( pOutliner == NULL )
-        {
-            SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, pObj );
-            USHORT nOutlMode = OUTLINERMODE_TEXTOBJECT;
-            if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_OUTLINETEXT )
-                nOutlMode = OUTLINERMODE_OUTLINEOBJECT;
-            SdrModel* pModel = pObj->GetModel();
-            pOutliner = SdrMakeOutliner( nOutlMode, pModel );
-            Outliner& aDrawOutliner = pModel->GetDrawOutliner();
-            pOutliner->SetCalcFieldValueHdl( aDrawOutliner.GetCalcFieldValueHdl() );
-        }
-
-        pTextForwarder = new SvxOutlinerForwarder( *pOutliner );
-    }
-
-    if( pObj && !bDataValid )
-    {
-        OutlinerParaObject* pOutlinerParaObject = NULL;
-        BOOL bTextEditActive = FALSE;
-        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, pObj );
-        if( pTextObj )
-            pOutlinerParaObject = pTextObj->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
-
-        if( pOutlinerParaObject )
-            bTextEditActive = TRUE; // text edit active
-        else
-            pOutlinerParaObject = pObj->GetOutlinerParaObject();
-
-        if( pOutlinerParaObject && ( bTextEditActive || !pObj->IsEmptyPresObj() || pObj->GetPage()->IsMasterPage() ) )
-        {
-            pOutliner->SetText( *pOutlinerParaObject );
-
-//          if( pObj->IsEmptyPresObj() )
-//              pObj->SetEmptyPresObj( FALSE );
-        }
-        else
-        {
-            sal_Bool bVertical = pOutlinerParaObject ? pOutlinerParaObject->IsVertical() : sal_False;
-
-            // set objects style sheet on empty outliner
-            SfxStyleSheetPool* pPool = (SfxStyleSheetPool*)pObj->GetModel()->GetStyleSheetPool();
-            if( pPool )
-                pOutliner->SetStyleSheetPool( pPool );
-
-            SfxStyleSheet* pStyleSheet = pObj->GetPage()->GetTextStyleSheetForObject( pObj );
-            if( pStyleSheet )
-                pOutliner->SetStyleSheet( 0, pStyleSheet );
-
-            if( bVertical )
-                pOutliner->SetVertical( sal_True );
-        }
-
-        bDataValid = TRUE;
-    }
-
-    return pTextForwarder;
+    if( ! osl_decrementInterlockedCount( &maRefCount ) )
+        delete this;
 }
 
 //------------------------------------------------------------------------
-void SvxTextEditSource::UpdateData()
-{
-    if( pOutliner && pObj && !bDestroyed )
-    {
-        if( pOutliner->GetParagraphCount() != 1 || pOutliner->GetEditEngine().GetTextLen( 0 ) )
-            pObj->SetOutlinerParaObject( pOutliner->CreateParaObject() );
-        else
-            pObj->SetOutlinerParaObject( NULL );
 
-        if( pObj->IsEmptyPresObj() )
-            pObj->SetEmptyPresObj(sal_False);
-    }
-}
-
-//------------------------------------------------------------------------
-void SvxTextEditSource::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
 
     if( pSdrHint )
     {
         if( pSdrHint->GetKind() == HINT_OBJCHG )
-            bDataValid = FALSE;                     // Text muss neu geholt werden
+            mbDataValid = FALSE;                        // Text muss neu geholt werden
         if( pSdrHint->GetKind() == HINT_OBJREMOVED )
         {
-            if( pObj == pSdrHint->GetObject() )
+            if( mpObject == pSdrHint->GetObject() )
             {
-                pObj = NULL;
-                bDestroyed = TRUE;
+                mpObject = NULL;
+                mbDestroyed = TRUE;
             }
         }
         else if( pSdrHint->GetKind() == HINT_MODELCLEARED ||
                  pSdrHint->GetKind() == HINT_OBJLISTCLEARED )
         {
-            if( pObj )
-                EndListening( *pObj->GetModel() );
-            pObj = NULL;
-            bDestroyed = TRUE;
+            if( mpObject )
+                EndListening( *mpObject->GetModel() );
+            mpObject = NULL;
+            mbDestroyed = TRUE;
         }
     }
 
-    if( bDestroyed )
+    if( mbDestroyed )
     {
-        delete pTextForwarder;
-        delete pOutliner;
-        pOutliner = NULL;
+        if( mpTextForwarder )
+        {
+            delete mpTextForwarder;
+            mpTextForwarder = NULL;
+        }
 
-        pTextForwarder = NULL;
+        if( mpOutliner )
+        {
+            delete mpOutliner;
+            mpOutliner = NULL;
+        }
     }
 }
 
+//------------------------------------------------------------------------
 
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
+#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
+SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
+{
+    if( mbDestroyed || mpObject == NULL )
+        return NULL;
+
+    if (!mpTextForwarder)
+    {
+        if( mpOutliner == NULL )
+        {
+            SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+            USHORT nOutlMode = OUTLINERMODE_TEXTOBJECT;
+            if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_OUTLINETEXT )
+                nOutlMode = OUTLINERMODE_OUTLINEOBJECT;
+            SdrModel* pModel = mpObject->GetModel();
+            mpOutliner = SdrMakeOutliner( nOutlMode, pModel );
+            Outliner& aDrawOutliner = pModel->GetDrawOutliner();
+            mpOutliner->SetCalcFieldValueHdl( aDrawOutliner.GetCalcFieldValueHdl() );
+
+            if( mbIsLocked )
+            {
+                ((EditEngine*)&(mpOutliner->GetEditEngine()))->SetUpdateMode( sal_False );
+                mbOldUndoMode = ((EditEngine*)&(mpOutliner->GetEditEngine()))->IsUndoEnabled();
+                ((EditEngine*)&(mpOutliner->GetEditEngine()))->EnableUndo( sal_False );
+            }
+
+// -
+            css::uno::Reference< css::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+            css::uno::Reference< css::linguistic2::XLinguServiceManager > xLinguServiceManager(
+                xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))), css::uno::UNO_QUERY );
+
+            if ( xLinguServiceManager.is() )
+            {
+                css::uno::Reference< css::linguistic2::XHyphenator > xHyphenator( xLinguServiceManager->getHyphenator(), css::uno::UNO_QUERY );
+                if( xHyphenator.is() )
+                    mpOutliner->SetHyphenator( xHyphenator );
+            }
+// -
+        }
+
+        mpTextForwarder = new SvxOutlinerForwarder( *mpOutliner );
+    }
+
+    if( mpObject && !mbDataValid )
+    {
+        OutlinerParaObject* mpOutlinerParaObject = NULL;
+        BOOL bTextEditActive = FALSE;
+        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+        if( pTextObj )
+            mpOutlinerParaObject = pTextObj->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
+
+        if( mpOutlinerParaObject )
+            bTextEditActive = TRUE; // text edit active
+        else
+            mpOutlinerParaObject = mpObject->GetOutlinerParaObject();
+
+        if( mpOutlinerParaObject && ( bTextEditActive || !mpObject->IsEmptyPresObj() || mpObject->GetPage()->IsMasterPage() ) )
+        {
+            mpOutliner->SetText( *mpOutlinerParaObject );
+
+//          if( mpObject->IsEmptyPresObj() )
+//              mpObject->SetEmptyPresObj( FALSE );
+        }
+        else
+        {
+            sal_Bool bVertical = mpOutlinerParaObject ? mpOutlinerParaObject->IsVertical() : sal_False;
+
+            // set objects style sheet on empty outliner
+            SfxStyleSheetPool* pPool = (SfxStyleSheetPool*)mpObject->GetModel()->GetStyleSheetPool();
+            if( pPool )
+                mpOutliner->SetStyleSheetPool( pPool );
+
+            SfxStyleSheet* pStyleSheet = mpObject->GetPage()->GetTextStyleSheetForObject( mpObject );
+            if( pStyleSheet )
+                mpOutliner->SetStyleSheet( 0, pStyleSheet );
+
+            if( bVertical )
+                mpOutliner->SetVertical( sal_True );
+        }
+
+        // evtually we have to set the border attributes
+        if (mpOutliner->GetParagraphCount()==1)
+        {
+            // if we only have one paragraph we check if it is empty
+            XubString aStr( mpOutliner->GetText( mpOutliner->GetParagraph( 0 ) ) );
+
+            if(!aStr.Len())
+            {
+                // its empty, so we have to force the outliner to initialise itself
+                mpOutliner->SetText( String(), mpOutliner->GetParagraph( 0 ) );
+
+                if(mpObject->GetStyleSheet())
+                    mpOutliner->SetStyleSheet( 0, mpObject->GetStyleSheet());
+
+                // Beim setzen der harten Attribute an den ersten Absatz muss
+                // der Parent pOutlAttr (=die Vorlage) temporaer entfernt
+                // werden, da sonst bei SetParaAttribs() auch alle in diesem
+                // Parent enthaltenen Items hart am Absatz attributiert werden.
+                // -> BugID 22467
+                const SfxItemSet& rSet = mpObject->GetItemSet();
+                SdrOutlinerSetItem aOutlSetItem(rSet.GetPool());
+                aOutlSetItem.GetItemSet().Put(rSet);
+                const SfxItemSet* pTmpSet = &aOutlSetItem.GetItemSet();
+                const SfxItemSet* pParentMerk = pTmpSet->GetParent();
+                ((SfxItemSet*)pTmpSet)->SetParent(NULL);
+                mpOutliner->SetParaAttribs(0,*pTmpSet);
+                ((SfxItemSet*)pTmpSet)->SetParent(pParentMerk);
+            }
+        }
+
+        mbDataValid = TRUE;
+    }
+
+    return mpTextForwarder;
+}
+
+//------------------------------------------------------------------------
+
+void SvxTextEditSourceImpl::UpdateData()
+{
+    if( mbIsLocked )
+    {
+        mbNeedsUpdate = sal_True;
+    }
+    else
+    {
+        if( mpOutliner && mpObject && !mbDestroyed )
+        {
+            if( mpOutliner->GetParagraphCount() != 1 || mpOutliner->GetEditEngine().GetTextLen( 0 ) )
+                mpObject->SetOutlinerParaObject( mpOutliner->CreateParaObject() );
+            else
+                mpObject->SetOutlinerParaObject( NULL );
+
+            if( mpObject->IsEmptyPresObj() )
+                mpObject->SetEmptyPresObj(sal_False);
+        }
+    }
+}
+
+void SvxTextEditSourceImpl::lock()
+{
+    mbIsLocked = sal_True;
+    if( mpOutliner )
+    {
+        ((EditEngine*)&(mpOutliner->GetEditEngine()))->SetUpdateMode( sal_False );
+        mbOldUndoMode = ((EditEngine*)&(mpOutliner->GetEditEngine()))->IsUndoEnabled();
+        ((EditEngine*)&(mpOutliner->GetEditEngine()))->EnableUndo( sal_False );
+    }
+}
+
+void SvxTextEditSourceImpl::unlock()
+{
+    mbIsLocked = sal_False;
+
+    if( mbNeedsUpdate )
+    {
+        UpdateData();
+        mbNeedsUpdate = sal_False;
+    }
+
+    if( mpOutliner )
+    {
+        ((EditEngine*)&(mpOutliner->GetEditEngine()))->SetUpdateMode( sal_True );
+        ((EditEngine*)&(mpOutliner->GetEditEngine()))->EnableUndo( mbOldUndoMode );
+    }
+}
+
+//------------------------------------------------------------------------
+
+// --------------------------------------------------------------------
+// SvxTextEditSource
+// --------------------------------------------------------------------
+
+SvxTextEditSource::SvxTextEditSource( SdrObject* pObject )
+{
+    mpImpl = new SvxTextEditSourceImpl( pObject );
+    mpImpl->acquire();
+}
+
+// --------------------------------------------------------------------
+
+SvxTextEditSource::SvxTextEditSource( SvxTextEditSourceImpl* pImpl )
+{
+    mpImpl = pImpl;
+    mpImpl->acquire();
+}
+
+//------------------------------------------------------------------------
+SvxTextEditSource::~SvxTextEditSource()
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    mpImpl->release();
+}
+
+//------------------------------------------------------------------------
+SvxEditSource* SvxTextEditSource::Clone() const
+{
+    return new SvxTextEditSource( mpImpl );
+}
+
+//------------------------------------------------------------------------
+SvxTextForwarder* SvxTextEditSource::GetTextForwarder()
+{
+    if( mpImpl )
+        return mpImpl->GetTextForwarder();
+    else
+        return NULL;
+}
+
+//------------------------------------------------------------------------
+void SvxTextEditSource::UpdateData()
+{
+    if( mpImpl )
+        mpImpl->UpdateData();
+}
+
+SdrObject* SvxTextEditSource::GetSdrObject() const
+{
+    if( mpImpl )
+        return mpImpl->GetSdrObject();
+    else
+        return NULL;
+}
+
+void SvxTextEditSource::lock()
+{
+    if( mpImpl )
+        mpImpl->lock();
+}
+
+void SvxTextEditSource::unlock()
+{
+    if( mpImpl )
+        mpImpl->unlock();
+}
 
