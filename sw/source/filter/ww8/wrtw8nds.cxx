@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:43:39 $
+ *  last change: $Author: cmc $ $Date: 2001-02-23 09:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,13 +84,18 @@
 #ifndef _SVX_FONTITEM_HXX //autogen wg. SvxFontItem
 #include <svx/fontitem.hxx>
 #endif
+#ifndef _SVX_FHGTITEM_HXX
+#include <svx/fhgtitem.hxx>
+#endif
 #ifndef _SVX_ULSPITEM_HXX //autogen wg. SvxULSpaceItem
 #include <svx/ulspitem.hxx>
 #endif
 #ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
 #endif
-
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
 #endif
@@ -181,6 +186,17 @@
 #ifndef SW_FMTLINE_HXX
 #include <fmtline.hxx>
 #endif
+#ifndef _FMTRUBY_HXX
+#include <fmtruby.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
+#ifndef _TXTATR_HXX
+#include <txtatr.hxx>
+#endif
+
+using namespace ::com::sun::star::i18n;
 
 /*  */
 
@@ -229,6 +245,7 @@ class WW8_SwAttrIter : public WW8_AttrIter
     void OutSwFmtINetFmt( const SwFmtINetFmt& rAttr, BOOL bStart );
     void OutSwFmtRefMark( const SwFmtRefMark& rAttr, BOOL bStart );
     void OutSwTOXMark( const SwTOXMark& rAttr, BOOL bStart );
+    void OutSwFmtRuby( const SwFmtRuby& rRuby, BOOL bStart);
 
 public:
     WW8_SwAttrIter( SwWW8Writer& rWr, const SwTxtNode& rNd );
@@ -535,6 +552,120 @@ const SfxPoolItem& WW8_SwAttrIter::GetItem( USHORT nWhich ) const
     return *pRet;
 }
 
+void WW8_SwAttrIter::OutSwFmtRuby( const SwFmtRuby& rRuby, BOOL bStart)
+{
+    if( bStart )
+    {
+        String aStr(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(
+            " EQ \\* jc")));
+        sal_Int32 nJC=0;
+        sal_Char cDirective=0;
+        switch(rRuby.GetAdjustment())
+        {
+            case 0:
+                nJC = 3;
+                cDirective = 'l';
+                break;
+            case 1:
+                //defaults to 0
+                break;
+            case 2:
+                nJC = 4;
+                cDirective = 'r';
+                break;
+            case 3:
+                nJC = 1;
+                cDirective = 'd';
+                break;
+            case 4:
+                nJC = 2;
+                cDirective = 'd';
+                break;
+            default:
+                ASSERT(!this,"Unhandled Ruby justication code");
+                break;
+        }
+        aStr += String::CreateFromInt32(nJC);
+
+        /*
+         MS needs to know the name and size of the font used in the ruby item,
+         but we coud have written it in a mixture of asian and western
+         scripts, and each of these can be a different font and size than the
+         other, so we make a guess based upon the first character of the text,
+         defaulting to asian.
+         */
+        USHORT nScript;
+        if( pBreakIt->xBreak.is() )
+            nScript = pBreakIt->xBreak->getScriptType( rRuby.GetText(), 0);
+        else
+            nScript = ScriptType::ASIAN;
+
+        const SwTxtRuby* pRubyTxt = rRuby.GetTxtRuby();
+        const SwCharFmt* pFmt = pRubyTxt->GetCharFmt();
+        const SvxFontItem *pItem;
+        const SvxFontHeightItem *pHeightItem;
+
+        if (pFmt)
+        {
+            const SwAttrSet& rSet = pFmt->GetAttrSet();
+            pItem  = &(const SvxFontItem&)rSet.Get(GetWhichOfScript(
+                RES_CHRATR_FONT,nScript));
+
+            pHeightItem = &(const SvxFontHeightItem&)rSet.Get(
+                GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript));
+        }
+        else
+        {
+            /*Get document defaults if no formatting on ruby text*/
+            const SfxItemPool *pPool = rNd.GetSwAttrSet().GetPool();
+            pItem  = &(const SvxFontItem&)pPool->GetDefaultItem(
+                GetWhichOfScript(RES_CHRATR_FONT,nScript));
+
+            pHeightItem = &(const SvxFontHeightItem&)pPool->GetDefaultItem(
+                GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript));
+        }
+        long nHeight = (pHeightItem->GetHeight() + 5)/10;
+
+        aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM(
+            " \\* \"Font:"));
+        aStr.Append(pItem->GetFamilyName());
+        aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM(
+            "\" \\* hps"));
+        aStr += String::CreateFromInt32(nHeight);
+        aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM(
+            " \\o"));
+        if (cDirective)
+        {
+            aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\\a"));
+            aStr.Append(cDirective);
+        }
+        aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM("(\\s\\up "));
+
+
+        if( pBreakIt->xBreak.is() )
+            nScript = pBreakIt->xBreak->getScriptType( rNd.GetTxt(),
+                *(pRubyTxt->GetStart()));
+        else
+            nScript = ScriptType::ASIAN;
+
+        const SwAttrSet& rSet = rNd.GetSwAttrSet();
+        const SvxFontHeightItem &rHeightItem  =
+            (const SvxFontHeightItem&)rSet.Get(
+            GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript));
+        nHeight = (rHeightItem.GetHeight() + 10)/20-1;
+        aStr += String::CreateFromInt32(nHeight);
+        aStr += '(';
+        aStr += rRuby.GetText();
+        aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM("),"));
+        rWrt.OutField( 0, 49, aStr, WRITEFIELD_START | WRITEFIELD_CMD_START);
+    }
+    else
+    {
+        rWrt.WriteChar(')');
+        rWrt.OutField( 0, 49, aEmptyStr, WRITEFIELD_END | WRITEFIELD_CLOSE );
+    }
+}
+
 void WW8_SwAttrIter::OutSwFmtINetFmt( const SwFmtINetFmt& rINet, BOOL bStart )
 {
     if( bStart )
@@ -816,6 +947,17 @@ BOOL WW8_SwAttrIter::OutAttrWithRange( xub_StrLen nPos )
                                                   : nPos == *pHt->GetStart())
                     OutSwTOXMark( (SwTOXMark&)*pItem, FALSE );
                 break;
+
+            case RES_TXTATR_CJK_RUBY:
+                if( nPos == *pHt->GetStart() )
+                {
+                    OutSwFmtRuby( (SwFmtRuby&)*pItem, TRUE );
+                    bRet = TRUE;
+                }
+                if( 0 != ( pEnd = pHt->GetEnd() ) && nPos == *pEnd )
+                    OutSwFmtRuby( (SwFmtRuby&)*pItem, FALSE );
+                break;
+
             }
         }
         nTmpSwPos = 0;      // HasTextItem nur in dem obigen Bereich erlaubt
@@ -1863,11 +2005,14 @@ SwNodeFnTab aWW8NodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8nds.cxx,v 1.3 2000-10-20 13:43:39 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8nds.cxx,v 1.4 2001-02-23 09:55:06 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/10/20 13:43:39  jp
+      use correct INetURL-Decode enum
+
       Revision 1.2  2000/10/09 17:58:48  jp
       Bug #78395#: don't write UniCode by a W95 export
 
