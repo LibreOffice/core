@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:29:09 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,8 @@
 #include <svx/svdouno.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/outlobj.hxx>
+#include <svx/svdocapt.hxx>
+
 
 
 
@@ -170,9 +172,38 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
         if ( pHdl!=NULL || pView->IsMarkedHit(aMDPos) )
         {
-            aDragTimer.Start();
-            pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
-            bReturn = TRUE;
+            // Determine if this is the tail of a SdrCaptionObj i.e.
+            // we need to disable the drag option on the tail of a note
+            // object. Also, disable the ability to use the circular
+            // drag of a note object.
+            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+            if( rMarkList.GetMarkCount() == 1 )
+            {
+                SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+                if( pObj && pObj->ISA( SdrCaptionObj )&& pObj->GetLayer() == SC_LAYER_INTERN)
+                {
+                    // move using the valid caption handles for note text box.
+                    if(pHdl && (pHdl->GetKind() != HDL_POLY && pHdl->GetKind() != HDL_CIRC))
+                    {
+                        aDragTimer.Start();
+                        pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
+                        bReturn = TRUE;
+                    }
+                    // move the complete note box.
+                    else if(!pHdl)
+                    {
+                        aDragTimer.Start();
+                        pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
+                        bReturn = TRUE;
+                    }
+                }
+                else
+                {
+                    aDragTimer.Start();
+                    pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
+                    bReturn = TRUE;
+                }
+            }
         }
         else
         {
@@ -223,6 +254,10 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 if ( !rMEvt.IsShift() )
                     pView->UnmarkAll();
 
+                // if a comment: unlock the internal layer here.
+                // re-lock in ScDrawView::MarkListHasChanged()
+                TestComment( pView->GetPageViewPvNum(0), aMDPos );
+
                 if ( pView->MarkObj(aMDPos, -2, FALSE, rMEvt.IsMod1()) )
                 {
                     //*********************************************************
@@ -261,8 +296,6 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             }
         }
 
-        if ( !bReturn )
-            bReturn = TestComment( pView->GetPageViewPvNum(0), aMDPos );
     }
 
     if (!bIsInDragMode)
@@ -353,6 +386,16 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             ******************************************************************/
             pView->EndDragObj( rMEvt.IsMod1() );
             pView->ForceMarkedToAnotherPage();
+
+            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+            if (rMarkList.GetMarkCount() == 1)
+            {
+                  SdrMark* pMark = rMarkList.GetMark(0);
+                  SdrObject* pObj = pMark->GetObj();
+                  FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
+                  FuText* pText = static_cast<FuText*>(pPoor);
+                pText->StopDragMode(pObj );
+            }
             bReturn = TRUE;
         }
         else if (pView->IsAction() )
