@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-28 14:24:01 $
+#   last change: $Author: kz $ $Date: 2004-02-25 17:44:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,19 +78,8 @@ SLOFILES=           \
                     $(SLO)$/targetfinder.obj						\
                     $(SLO)$/menumanager.obj							\
                     $(SLO)$/bmkmenu.obj								\
-                    $(SLO)$/menuconfiguration.obj					\
-                    $(SLO)$/xmlnamespaces.obj						\
-                    $(SLO)$/toolboxconfiguration.obj				\
-                    $(SLO)$/toolboxdocumenthandler.obj				\
-                    $(SLO)$/toolboxlayoutdocumenthandler.obj		\
                     $(SLO)$/droptargetlistener.obj					\
-                    $(SLO)$/statusbarconfiguration.obj				\
-                    $(SLO)$/statusbardocumenthandler.obj			\
-                    $(SLO)$/eventsconfiguration.obj					\
-                    $(SLO)$/eventsdocumenthandler.obj				\
                     $(SLO)$/converter.obj							\
-                    $(SLO)$/imagesconfiguration.obj					\
-                    $(SLO)$/imagesdocumenthandler.obj				\
                     $(SLO)$/actiontriggerpropertyset.obj			\
                     $(SLO)$/actiontriggerseparatorpropertyset.obj	\
                     $(SLO)$/actiontriggercontainer.obj				\
@@ -101,7 +90,8 @@ SLOFILES=           \
                     $(SLO)$/addonsoptions.obj						\
                     $(SLO)$/fwkresid.obj                            \
                     $(SLO)$/colorlistener.obj                       \
-                    $(SLO)$/framelistanalyzer.obj
+                    $(SLO)$/framelistanalyzer.obj                   \
+                    $(SLO)$/sfxhelperfunctions.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\
