@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-26 17:02:35 $
+ *  last change: $Author: rt $ $Date: 2004-12-03 14:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,7 +490,11 @@ void ODocumentDefinition::closeObject()
         }
         m_xEmbeddedObject = NULL;
         if ( m_pClientHelper )
+        {
             m_pClientHelper->resetClient(NULL);
+            m_pClientHelper->release();
+            m_pClientHelper = NULL;
+        }
     }
 }
 // -----------------------------------------------------------------------------
@@ -986,7 +990,10 @@ void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClass
                 if ( m_xEmbeddedObject.is() )
                 {
                     if ( !m_pClientHelper )
+                    {
                         m_pClientHelper = new OEmbeddedClientHelper(this);
+                        m_pClientHelper->acquire();
+                    }
                     Reference<XEmbeddedClient> xClient = m_pClientHelper;
                     m_xEmbeddedObject->setClientSite(xClient);
                 }
