@@ -5,7 +5,7 @@
 Public sMSTemplateCheckbox(2) As String
 Public sMSDocumentCheckbox(2) As String
 Public sSODocumentCheckbox(4) As String
-Public sSOHelperdocuments(1) As String
+Public sSOHelperdocuments(1,1) As String
 Public sTemplateCheckbox(SBMAXAPPLCOUNT-1) As String
 Public sDocumentCheckbox(SBMAXAPPLCOUNT-1) As String
 Public sTemplateGroupName As String
@@ -38,6 +38,7 @@ Public sSumSODocuments(4) as String
 Public sSumSOTemplates(4) as String
 Public sSumMSDocuments(3) as String
 Public sSumMSTemplates(3) as String
+Public ModuleList(3) as String
 
 
 Sub LoadLanguage()
@@ -63,8 +64,14 @@ Sub LoadLanguage()
 		GetApplResourceArray(2013, 5, sSODocumentCheckBox())
 
 		&apos;StarOffice Applicationnames
-		GetApplResourceArray(2017,2, sSOHelperDocuments())		
 
+		sSOHelperDocuments(0,0) = GetResText(2017)
+		sSOHelperDocuments(0,1) = &quot;com.sun.star.text.GlobalDocument&quot;
+		sSOHelperDocuments(1,0) = GetResText(2018)
+		sSOHelperDocuments(1,1) = &quot;com.sun.star.formula.FormulaProperties&quot;
+		
+		GetApplResourceArray(2017,2, sSOHelperDocuments())		
+		
 		sContainerName(0) = GetResText(1030)
 
 		sContainerName(1) = &quot;StarOffice&quot;
@@ -103,18 +110,22 @@ Sub LoadLanguage()
 		GetApplResourceArray(3200, 3, sSumMSDocuments())
 		GetApplResourceArray(3210, 3, sSumMSTemplates())
 		With ImportDialog
-			sImportLabel = GetResText(1033) 
-			sExportLabel = GetResText(1034)	
+			sImportLabel = GetResText(1033)
+			sExportLabel = GetResText(1034)
 			sSearchInSubDir = GetResText(1022)
-			.TemplateSearchSubDir.Label = sSearchInSubDir
-			.DocumentImportLabel.Label = sImportLabel
-			.DocumentExportLabel.Label = sExportLabel
-			.DocumentSearchSubDir.Label = sSearchInSubDir
-			.TemplateImportLabel.Label = sImportLabel	
-			.TemplateExportLabel.Label = sExportLabel	
-			.chkLogfile.Label = GetResText(2032)	
+			.chkTemplateSearchSubDir.Label = sSearchInSubDir
+			.lblDocumentImport.Label = sImportLabel
+			.lblDocumentExport.Label = sExportLabel
+			.chkDocumentSearchSubDir.Label = sSearchInSubDir
+			.lblTemplateImport.Label = sImportLabel
+			.lblTemplateExport.Label = sExportLabel
+			.chkLogfile.Label = GetResText(2032)
 			.chkLogfile.Helptext = GetResText(2033)
-		End With		
+		End With
+		ModuleList(0) = &quot;com.sun.star.text.TextDocument&quot;
+		ModuleList(1) = &quot;com.sun.star.sheet.SpreadsheetDocument&quot;
+		ModuleList(2) = &quot;com.sun.star.drawing.DrawingDocument/com.sun.star.presentation.PresentationDocument&quot;
+		ModuleList(3) = &quot;com.sun.star.formula.FormulaProperties/com.sun.star.text.GlobalDocument&quot;
 	End If
 End Sub
 

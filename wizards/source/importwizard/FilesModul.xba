@@ -207,9 +207,9 @@ Dim sOldExtension as String
 			End If
 		Next i
 	End If
-	ImportDialog.cbCancel.Label = sCloseButton
-	ImportDialog.cbGoOn.Label = sReady
-	ImportDialog.cbGoOn.Enabled = True
+	ImportDialog.cmdCancel.Label = sCloseButton
+	ImportDialog.cmdGoOn.Label = sReady
+	ImportDialog.cmdGoOn.Enabled = True
 	bConversionIsRunnig = False
 	Exit Sub
 RTError:

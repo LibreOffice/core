@@ -12,9 +12,13 @@ Public bSetFonts as Boolean
 &apos; If the ProgressPage ist already on Top The Dialog will be immediately closed when this flag is
 &apos; set to False
 Public bConversionIsRunnig as Boolean
+Public oFactoriesAccess as Object
 
 Sub Main()
 Dim RetValue as Integer
+	If Not bDebugWizard Then
+		On Local Error Goto RTError
+	End If
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	bSetFonts = False
 	bConversionIsRunnig = False
@@ -24,9 +28,7 @@ Dim RetValue as Integer
 	End If
 	sCRLF = CHR(10) &amp; CHR(13)
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
-	If Not bDebugWizard Then
-		On Error Goto RTError
-	End If
+	oFactoriesAccess = GetRegistryKeyContent(&quot;org.openoffice.Setup/Office/Factories&quot;)
 	SOBitmapPath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
 	SOWorkPath = GetPathSettings(&quot;Work&quot;, False)
 	SOTemplatePath = GetPathSettings(&quot;Template&quot;,False,1)
@@ -36,11 +38,12 @@ Dim RetValue as Integer
 	ImportDialogArea = LoadDialog(&quot;ImportWizard&quot;,&quot;ImportDialog&quot;)
 	ImportDialog = ImportDialogArea.Model
 	LoadLanguage()
+	WizardMode = SBXMLMODE
+	MaxApplCount = 4
 	FillStep_Welcome()
 	RepaintHeaderPreview()
-	SetStates()
-	ImportDialog.cbGoOn.DefaultButton = True
-	ImportDialogArea.GetControl(&quot;OptSODocuments&quot;).SetFocus() 
+	ImportDialog.cmdGoOn.DefaultButton = True
+	ImportDialogArea.GetControl(&quot;optSODocuments&quot;).SetFocus()
 	RetValue = ImportDialogArea.Execute()
 	If RetValue = 0 Then
 		CallCancelTask()
@@ -49,17 +52,7 @@ Dim RetValue as Integer
 	End
 	Exit Sub
 RTError:
-&apos;	Msgbox sRTErrorDesc, 16, sRTErrorHeader
-End Sub
-
-
-Sub SetStates
-	With ImportDialog
-		.OptSODocuments.State = 1
-	    .OptMSDocuments.State = 0
-		.TemplateCheckbox.State = 1
-		.DocumentPathCheckbox.State = 0
-	End With
+	Msgbox sRTErrorDesc, 16, sRTErrorHeader
 End Sub
 
 
@@ -95,7 +88,7 @@ Dim iCurStep as Integer
 		Case 4
 			CancelTask(True)
 	End Select
-	ImportDialog.cbGoOn.DefaultButton = True
+	ImportDialog.cmdGoOn.DefaultButton = True
 	RepaintHeaderPreview()	
 	Exit Sub
 RTError:
@@ -103,7 +96,7 @@ RTError:
 End Sub
 
 
-Sub PrevStep
+Sub PrevStep()
 Dim iCurStep as Integer
 	If Not bDebugWizard Then
 		On Error Goto RTError
@@ -112,7 +105,7 @@ Dim iCurStep as Integer
 	iCurStep = ImportDialog.Step
 	Select Case iCurStep
 		Case 4
-			ImportDialog.cbCancel.Label = sCancelButton
+			ImportDialog.cmdCancel.Label = sCancelButton
 			FillStep_Summary()
 		Case 3
 			FillStep_InputPaths(Applcount-1, False)
@@ -126,7 +119,7 @@ Dim iCurStep as Integer
 				bDoKeepApplValues = True
 			End If
 	End Select
-	ImportDialog.cbGoOn.DefaultButton = True
+	ImportDialog.cmdGoOn.DefaultButton = True
 	RepaintHeaderPreview()	
 	Exit Sub
 RTError:
@@ -147,7 +140,7 @@ Sub CancelTask(bCloseDialog as Boolean)
 			bCancelTask = True
 		Else
 			bCancelTask = False
-			ImportDialog.cbCancel.Enabled = True
+			ImportDialog.cmdCancel.Enabled = True
 		End If
 	Else
 		ImportDialogArea.EndExecute()	
@@ -164,9 +157,12 @@ Sub RepaintHeaderPreview()
 Dim Bitmap As Object
 Dim CurStep as Integer
 Dim sBitmapPath as String
+Dim LocPrefix as String
 	CurStep = ImportDialog.Step
+	LocPrefix = WizardMode
+	LocPrefix = ReplaceString(LocPrefix,&quot;XML&quot;, &quot;SO&quot;)
 	If CurStep = 2 Then
-		sBitmapPath = SOBitmapPath &amp; WizardMode &amp; &quot;-Import_&quot; &amp; CurStep &amp; &quot;-&quot; &amp; Applications(CurOffice,SBAPPLKEY) + 1 &amp; &quot;.bmp&quot;
+		sBitmapPath = SOBitmapPath &amp; LocPrefix &amp; &quot;-Import_&quot; &amp; CurStep &amp; &quot;-&quot; &amp; Applications(CurOffice,SBAPPLKEY) + 1 &amp; &quot;.bmp&quot;
 	Else
 		sBitmapPath = SOBitmapPath &amp; &quot;Import_&quot; &amp; CurStep &amp; &quot;.bmp&quot;
 	End If
@@ -174,19 +170,55 @@ Dim sBitmapPath as String
 End Sub
 
 
+Sub CheckModuleInstallation()
+Dim i as Integer
+	For i = 1 To MaxApplCount
+		ImportDialogArea.GetControl(&quot;chk&quot; &amp; WizardMode &amp; &quot;Application&quot; &amp; i).Model.Enabled = Abs(CheckInstalledModule(i-1))
+	Next i
+End Sub
+
+
+Function CheckInstalledModule(Index as Integer) as Boolean
+Dim ModuleName as String
+Dim NameList() as String
+Dim MaxIndex as Integer
+Dim i as Integer
+	ModuleName = ModuleList(Index)
+	If Instr(1,ModuleName,&quot;/&quot;) &lt;&gt; 0 Then
+		NameList() = ArrayoutOfString(ModuleName,&quot;/&quot;, MaxIndex)
+		For i = 0 To MaxIndex
+			If oFactoriesAccess.HasByName(NameList(i)) Then
+				CheckInstalledModule() = True
+				Exit Function
+			End If
+		Next i
+		CheckInstalledModule() = False
+	Else
+		CheckInstalledModule() = oFactoriesAccess.HasByName(ModuleName)
+	End If
+End Function
+
+
 Sub ToggleCheckboxes(oEvent as Object)
 Dim bMSEnable as Boolean
-	bMSEnable = oEvent.Source.Model.Tag = &quot;MS&quot;
-	With ImportDialog
-		.ChkFirstSOApplication.Enabled = Not bMSEnable
-		.ChkSecondSOApplication.Enabled = Not bMSEnable
-		.ChkThirdSOApplication.Enabled = Not bMSEnable
-		.ChkFourthSOApplication.Enabled = Not bMSEnable
-		.ChkFirstMSApplication.Enabled = bMSEnable
-		.ChkSecondMSApplication.Enabled = bMSEnable
-		.ChkThirdMSApplication.Enabled = bMSEnable
-		.WelcomeTextLabel2.Enabled = bMSEnable
+	WizardMode = oEvent.Source.Model.Tag
+	bMSEnable = WizardMode = &quot;MS&quot;
+	If WizardMode = &quot;MS&quot; Then
+		MaxApplCount = 3
+	Else
+		MaxApplCount = 4
+	End If
+	With ImportDialogArea
+		.GetControl(&quot;chkSOApplication1&quot;).Model.Enabled = Not bMSEnable
+		.GetControl(&quot;chkSOApplication2&quot;).Model.Enabled = Not bMSEnable
+		.GetControl(&quot;chkSOApplication3&quot;).Model.Enabled = Not bMSEnable
+		.GetControl(&quot;chkSOApplication4&quot;).Model.Enabled = Not bMSEnable
+		.GetControl(&quot;chkMSApplication1&quot;).Model.Enabled = bMSEnable
+		.GetControl(&quot;chkMSApplication2&quot;).Model.Enabled = bMSEnable
+		.GetControl(&quot;chkMSApplication3&quot;).Model.Enabled = bMSEnable
 	End With
+	CheckModuleInstallation()
+	ImportDialog.WelcomeTextLabel2.Enabled = bMSEnable
 	bDoKeepApplValues = False
 	ToggleNextButton()
 End Sub
@@ -200,18 +232,18 @@ Dim i as Integer
 	Select Case iCurStep
 		Case 1
 			With ImportDialog
-				If .OptMSDocuments.State = 1 Then
-          			bDoEnable = .ChkFirstMSApplication.State = 1 Or .ChkSecondMSApplication.State = 1 Or .ChkThirdMSApplication.State = 1
+				If .optMSDocuments.State = 1 Then
+          			bDoEnable = .chkMSApplication1.State = 1 Or .chkMSApplication2.State = 1 Or .chkMSApplication3.State = 1
 				Else
-          			bDoEnable = .ChkFirstSOApplication.State = 1 Or .ChkSecondSOApplication.State = 1 Or .ChkThirdSOApplication.State = 1 Or .ChkFourthSOApplication.State = 1
+          			bDoEnable = .chkSOApplication1.State = 1 Or .chkSOApplication2.State = 1 Or .chkSOApplication3.State = 1 Or .chkSOApplication4.State = 1
 				End If
 			End With
 			bDoKeepApplValues = False
 		Case 2
-			bDoEnable = CheckControlPath(ImportDialog.TemplateCheckbox, ImportDialog.TemplateImportPath, True)
-			bDoEnable = CheckControlPath(ImportDialog.DocumentPathCheckbox, ImportDialog.DocumentImportPath, bDoEnable)
+			bDoEnable = CheckControlPath(ImportDialog.chkTemplatePath, ImportDialog.txtTemplateImportPath, True)
+			bDoEnable = CheckControlPath(ImportDialog.chkDocumentPath, ImportDialog.txtDocumentImportPath, bDoEnable)
 	End Select
-	ImportDialog.cbGoOn.Enabled = bDoEnable
+	ImportDialog.cmdGoOn.Enabled = bDoEnable
 End Sub
 
 

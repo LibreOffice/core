@@ -2,7 +2,7 @@
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="DialogModul" script:language="StarBasic">Option Explicit
 
-Public Const bDebugWizard=True
+Public Const bDebugWizard = False
 
 Public Const SBFIRSTAPPLCHECKED = 0
 Public Const SBSECONDAPPLCHECKED = 1
@@ -10,7 +10,7 @@ Public Const SBTHIRDAPPLCHECKED = 2
 Public Const SBFOURTHAPPLCHECKED = 3
 Public WizardMode as String
 Public Const SBMICROSOFTMODE = &quot;MS&quot;
-Public Const SBXMLMODE = &quot;XML&quot;
+Public Const SBXMLMODE = &quot;SO&quot;
 &apos; The absolute maximal Number of possible Applications
 Public Const Twip = 425
 Public Const SBMAXAPPLCOUNT = 4
@@ -37,7 +37,6 @@ Public XMLFilterName(7,2)
 &apos; XMLFilterName(x,1) = &quot;swriter: StarWriter 5.0&quot; 	&apos; the filtername of the target-format
 &apos; XMLFilterName(x,2) = &quot;sxw&quot; 						&apos; the target extension
 
-Public ChkApplication(SBMAXAPPLCOUNT-1) as Object
 Public Applications(SBMAXAPPLCOUNT-1,9)
 
 Public Const SBAPPLCONVERT = 0
@@ -70,56 +69,56 @@ Dim i as Integer
 &apos;	bDoKeepApplValues = False
 	ImportDialogArea.Title = sTitle
 	With ImportDialog
-		.cbHelp.Label = sHelpButton
-		.cbCancel.Label = sCancelButton
-		.cbBack.Label = sBackButton
-		.cbGoOn.Label = sNextButton
+		.cmdHelp.Label = sHelpButton
+		.cmdCancel.Label = sCancelButton
+		.cmdBack.Label = sBackButton
+		.cmdGoOn.Label = sNextButton
 		.WelcomeTextLabel.Label = sWelcomeTextLabel1
 		.WelcomeTextLabel2.Label = sWelcomeTextLabel2
 		.WelcomeTextLabel3.Label = sWelcomeTextLabel3
 
-		.OptMSDocuments.Label = sContainerName(0)
-		.ChkFirstMSApplication.Label = sMsDocumentCheckbox(0)
-		.ChkSecondMSApplication.Label = sMsDocumentCheckbox(1)
-		.ChkThirdMSApplication.Label = sMsDocumentCheckbox(2)
+		.optMSDocuments.Label = sContainerName(0)
+		.chkMSApplication1.Label = sMsDocumentCheckbox(0)
+		.chkMSApplication2.Label = sMsDocumentCheckbox(1)
+		.chkMSApplication3.Label = sMsDocumentCheckbox(2)
 
-		.OptSODocuments.Label = sContainerName(1)
-		.ChkFirstSOApplication.Label = sSODocumentCheckbox(0)
-		.ChkSecondSOApplication.Label = sSODocumentCheckbox(1)
-		.ChkThirdSOApplication.Label = sSODocumentCheckbox(2)
-		.ChkFourthSOApplication.Label = sSODocumentCheckbox(3)
-		.cbBack.Enabled = False
+		.optSODocuments.Label = sContainerName(1)
+		.chkSOApplication1.Label = sSODocumentCheckbox(0)
+		.chkSOApplication2.Label = sSODocumentCheckbox(1)
+		.chkSOApplication3.Label = sSODocumentCheckbox(2)
+		.chkSOApplication4.Label = sSODocumentCheckbox(3)
+		.cmdBack.Enabled = False
 		.Step = 1
 	End With
+	CheckModuleInstallation()		
 	ToggleNextButton()
 End Sub
 
 
 Sub FillStep_InputPaths(OfficeIndex as Integer, bStartup as Boolean)
 Dim Index as Integer
+Dim oNullObject as Object
 	If bStartup And Not bDoKeepApplValues Then
-	    If ImportDialog.OptMSDocuments.State = 1 Then
+	    If ImportDialog.optMSDocuments.State = 1 Then
 			SetupMSConfiguration()
 		Else
 			SetupXMLConfiguration()
 		End If
-		&apos; TemplateCheckBox-Captions
+		&apos; chkTemplatePath-Captions
 		GetApplResourceArray(1009 + iApplSection, ApplCount, sTemplateCheckBox())
 		&apos; DocumentCheckbox- Captions
 		GetApplResourceArray(1009 + iApplSection + ApplCount, ApplCount, sDocumentCheckBox())
-		AssignCheckboxObjects()
 		FillUpApplicationList()
 	End If
 	CurOffice = OfficeIndex
 	Index = Applications(CurOffice,SBAPPLKEY)
 	InitializePathsforCurrentApplication(Index)
 	With ImportDialog
-		.TemplateCheckbox.Label = sTemplateCheckbox(Index)
-    	.DocumentPathCheckbox.State = Abs(Applications(CurOffice,SBDOCCONVERT))
-		SetEnabledDocument_InputPath()    	
-    	.DocumentSearchSubDir.State = Abs(Applications(CurOffice,SBDOCRECURSIVE))
-		.DocumentImportPath.Text = ConvertFromUrl(Applications(CurOffice,SBDOCSOURCE))
-		.DocumentExportPath.Text = ConvertFromUrl(Applications(CurOffice,SBDOCTARGET))
+		.chkTemplatePath.Label = sTemplateCheckbox(Index)
+    	.chkDocumentPath.State = Abs(Applications(CurOffice,SBDOCCONVERT))
+    	.chkDocumentSearchSubDir.State = Abs(Applications(CurOffice,SBDOCRECURSIVE))
+		.txtDocumentImportPath.Text = ConvertFromUrl(Applications(CurOffice,SBDOCSOURCE))
+		.txtDocumentExportPath.Text = ConvertFromUrl(Applications(CurOffice,SBDOCTARGET))
 		.hlnDocuments.Label = sProgressMoreDocs
 		If WizardMode = SBXMLMODE Then
 			ImportDialogArea.Title = sTitle &amp; &quot; - &quot; &amp; sSODocumentCheckBox(Index)
@@ -129,20 +128,25 @@ Dim Index as Integer
 		If WizardMode = SBXMLMODE AND Index = 3 Then
 			&apos; Note: SO-Helper Applications are partly treated like templates although they only have documents
 			.hlnTemplates.Label = sProgressMoreDocs
-			.TemplateCheckbox.Label = sSOHelperDocuments(0)
-			.DocumentPathCheckbox.Label = sSOHelperDocuments(1)
+			.chkTemplatePath.Label = sSOHelperDocuments(0,0)
+			.chkTemplatePath.Enabled = oFactoriesAccess.HasByName(sSOHelperDocuments(0,1))
+			.chkDocumentPath.Label = sSOHelperDocuments(1,0)
+			.chkDocumentPath.Enabled = oFactoriesAccess.HasByName(sSOHelperDocuments(1,1))
 		Else
-			.TemplateCheckbox.Label = sTemplateCheckbox(Index)
-			.DocumentPathCheckbox.Label = sDocumentCheckbox(Index)
+			.chkTemplatePath.Enabled = True
+			.chkDocumentPath.Enabled = True
+			.chkTemplatePath.Label = sTemplateCheckbox(Index)
+			.chkDocumentPath.Label = sDocumentCheckbox(Index)
 			.hlnTemplates.Label = sProgressMoreTemplates
 		End If
-		.TemplateCheckbox.State = Abs(Applications(CurOffice,SBTEMPLCONVERT))
-		SetEnabledTemplate_InputPath()
-		.TemplateSearchSubDir.State = Abs(Applications(CurOffice,SBTEMPLRECURSIVE))
-		.TemplateImportPath.Text = ConvertFromUrl(Applications(CurOffice,SBTEMPLSOURCE))
-		.TemplateExportPath.Text = ConvertFromUrl(Applications(CurOffice,SBTEMPLTARGET))
-		.cbGoOn.Label = sNextButton
-		.cbBack.Enabled = True
+		.chkTemplatePath.State = Abs(Applications(CurOffice,SBTEMPLCONVERT))
+		ToggleInputPaths(oNullObject,&quot;Template&quot;)
+		ToggleInputPaths(oNullObject,&quot;Document&quot;)		
+		.chkTemplateSearchSubDir.State = Abs(Applications(CurOffice,SBTEMPLRECURSIVE))
+		.txtTemplateImportPath.Text = ConvertFromUrl(Applications(CurOffice,SBTEMPLSOURCE))
+		.txtTemplateExportPath.Text = ConvertFromUrl(Applications(CurOffice,SBTEMPLTARGET))
+		.cmdGoOn.Label = sNextButton
+		.cmdBack.Enabled = True
 		ImportDialog.Step = 2
 	End With
 	ToggleNextButton()
@@ -155,8 +159,12 @@ Dim a as Integer
 Dim BoolValue as Boolean
 	If Not bDoKeepApplValues Then
 		a = 0
-		For i = 0 To ApplCount - 1
-			BoolValue = ChkApplication(i).State = 1
+		For i = 1 To ApplCount
+		    If ImportDialog.optMSDocuments.State = 1 Then
+				BoolValue = ImportDialogArea.GetControl(&quot;chkMSApplication&quot; &amp; i).Model.State = 1
+			Else
+				BoolValue = ImportDialogArea.GetControl(&quot;chkSOApplication&quot; &amp; i).Model.State = 1
+			End If
 			Applications(a,SBAPPLCONVERT) = BoolValue
 			Applications(a,SBDOCCONVERT) = BoolValue
 			Applications(a,SBDOCRECURSIVE) = BoolValue
@@ -166,8 +174,8 @@ Dim BoolValue as Boolean
 			Applications(a,SBTEMPLRECURSIVE) = BoolValue
 			Applications(a,SBTEMPLSOURCE) = &quot;&quot; 			&apos; GetTemplateDefaultPath(i)
 			Applications(a,SBTEMPLTARGET) = &quot;&quot; 			&apos; GetTargetTemplatePath(i)
-			Applications(a,SBAPPLKEY) = i
-			If ChkApplication(i).State = 1 Then 
+			Applications(a,SBAPPLKEY) = i-1
+			If BoolValue Then 
 				a = a + 1
 			End If
 		Next i
@@ -196,49 +204,36 @@ End Sub
 
 
 Sub SaveStep_InputPath()
-	Applications(CurOffice,SBDOCCONVERT)  = ImportDialog.DocumentPathCheckbox.State = 1
-	Applications(CurOffice,SBDOCRECURSIVE)  = ImportDialog.DocumentSearchSubDir.State = 1
-	Applications(CurOffice,SBDOCSOURCE)  = ConvertToURL(ImportDialog.DocumentImportPath.Text)
-	Applications(CurOffice,SBDOCTARGET) = ConvertToUrl(ImportDialog.DocumentExportPath.Text)
-    Applications(CurOffice,SBTEMPLCONVERT) = ImportDialog.TemplateCheckbox.State = 1
-    Applications(CurOffice,SBTEMPLRECURSIVE) = ImportDialog.TemplateSearchSubDir.State = 1
-	Applications(CurOffice,SBTEMPLSOURCE) = ConvertToURL(ImportDialog.TemplateImportPath.Text)
-	Applications(CurOffice,SBTEMPLTARGET) = ConvertToURL(ImportDialog.TemplateExportPath.Text)
+	Applications(CurOffice,SBDOCCONVERT)  = ImportDialog.chkDocumentPath.State = 1
+	Applications(CurOffice,SBDOCRECURSIVE)  = ImportDialog.chkDocumentSearchSubDir.State = 1
+	Applications(CurOffice,SBDOCSOURCE)  = ConvertToURL(ImportDialog.txtDocumentImportPath.Text)
+	Applications(CurOffice,SBDOCTARGET) = ConvertToUrl(ImportDialog.txtDocumentExportPath.Text)
+    Applications(CurOffice,SBTEMPLCONVERT) = ImportDialog.chkTemplatePath.State = 1
+    Applications(CurOffice,SBTEMPLRECURSIVE) = ImportDialog.chkTemplateSearchSubDir.State = 1
+	Applications(CurOffice,SBTEMPLSOURCE) = ConvertToURL(ImportDialog.txtTemplateImportPath.Text)
+	Applications(CurOffice,SBTEMPLTARGET) = ConvertToURL(ImportDialog.txtTemplateExportPath.Text)
 End Sub
 
 
-Sub SetEnabledTemplate_InputPath()
+Sub ToggleInputPaths(aEvent as Object, Optional sDocType)
 Dim bDoEnable as Boolean
-	With ImportDialog
-    	bDoEnable = .TemplateCheckbox.State = 1
-		.TemplateImportLabel.Enabled = bDoEnable
-		.TemplateExportLabel.Enabled = bDoEnable
-		.TemplateImportPath.Enabled = bDoEnable
-		.TemplateExportPath.Enabled = bDoEnable
-		.TemplateSearchSubDir.Enabled = bDoEnable
-		.TemplateImportPath.Enabled = bDoEnable
-		.Button1.Enabled = bDoEnable
-		.Button2.Enabled = bDoEnable
-		If Not bDoEnable Then
-			.cbGoOn.Enabled = .DocumentPathCheckbox.State = 1
-		Else
-			.cbGoOn.Enabled = True
-		End If
-	End With
-End Sub
-
-
-Sub SetEnabledDocument_InputPath()
-Dim bDoEnable as Boolean
-	With ImportDialog
-    	bDoEnable = .DocumentPathCheckbox.State = 1
-		.DocumentImportLabel.Enabled = bDoEnable
-		.DocumentExportLabel.Enabled = bDoEnable
-		.DocumentSearchSubDir.Enabled = bDoEnable
-		.DocumentImportPath.Enabled = bDoEnable
-		.DocumentExportPath.Enabled = bDoEnable
-		.Button3.Enabled = bDoEnable
-		.Button4.Enabled = bDoEnable
+Dim sLocDocType as String
+Dim oCheckBox as Object
+	If IsEmpty(aEvent) Then
+		sLocDocType = aEvent.Source.Model.Tag
+	Else
+		sLocDocType = sDocType
+	End If
+	With ImportDialogArea
+		oCheckBox = .GetControl(&quot;chk&quot; &amp; sLocDocType &amp; &quot;Path&quot;).Model
+    	bDoEnable = oCheckBox.State = 1 And oCheckBox.Enabled
+		.GetControl(&quot;lbl&quot; &amp; sLocDocType &amp; &quot;Import&quot;).Model.Enabled = bDoEnable
+		.GetControl(&quot;lbl&quot; &amp; sLocDocType &amp; &quot;Export&quot;).Model.Enabled = bDoEnable
+		.GetControl(&quot;txt&quot; &amp; sLocDocType &amp; &quot;ImportPath&quot;).Model.Enabled = bDoEnable
+		.GetControl(&quot;txt&quot; &amp; sLocDocType &amp; &quot;ExportPath&quot;).Model.Enabled = bDoEnable
+		.GetControl(&quot;chk&quot; &amp; sLocDocType &amp; &quot;SearchSubDir&quot;).Model.Enabled = bDoEnable
+		.GetControl(&quot;cmd&quot; &amp; sLocDocType &amp; &quot;Import&quot;).Model.Enabled = bDoEnable
+		.GetControl(&quot;cmd&quot; &amp; sLocDocType &amp; &quot;Export&quot;).Model.Enabled = bDoEnable
 	End With
 	ToggleNextButton()
 End Sub
@@ -297,8 +292,8 @@ Sub FillStep_Summary()
 	ImportDialogArea.Title = sTitle
 	With ImportDialog
 		.SummaryTextbox.Text = MakeSummaryString()
-		.cbGoOn.Enabled = .SummaryTextbox.Text &lt;&gt; &quot;&quot;
-		.cbGoOn.Label = sBeginButton
+		.cmdGoOn.Enabled = .SummaryTextbox.Text &lt;&gt; &quot;&quot;
+		.cmdGoOn.Label = sBeginButton
 		.SummaryHeaderLabel.Label = sSummaryHeader
 		.Step = 3
 	End With
@@ -307,8 +302,8 @@ End Sub
 
 Sub FillStep_Progress()
 	With ImportDialog
-		.cbBack.Enabled = False
-		.cbGoOn.Enabled = False
+		.cmdBack.Enabled = False
+		.cmdGoOn.Enabled = False
 	    .hlnProgress.Label = sProgressPage_1
 	    .LabelRetrieval.FontWeight = com.sun.star.awt.FontWeight.BOLD
    	 	.LabelRetrieval.Label = sProgressPage_2
@@ -416,28 +411,12 @@ Dim sPath as String
 End Function
 
 
-Sub AssignCheckboxObjects()
-	With ImportDialog
-    	If .OptSODocuments.State = 1 Then
-			Set ChkApplication(0) = .ChkFirstSOApplication
-			Set ChkApplication(1) = .ChkSecondSOApplication
-			Set ChkApplication(2) = .ChkThirdSOApplication
-			Set ChkApplication(3) = .ChkFourthSOApplication
-		Else
-			Set ChkApplication(0) = .ChkFirstMSApplication
-			Set ChkApplication(1) = .ChkSecondMSApplication
-			Set ChkApplication(2) = .ChkThirdMSApplication
-		End If
-	End With
-End Sub
-
-
 Function CheckInputPaths() as Boolean
 Dim bChangePage as Boolean
-	bChangePage = CheckTextBoxPath(ImportDialog.TemplateImportPath, True, False)
-	bChangePage = CheckTextBoxPath(ImportDialog.TemplateExportPath, bChangePage, True)
-	bChangePage = CheckTextBoxPath(ImportDialog.DocumentImportPath, bChangePage, False)
-	bChangePage = CheckTextBoxPath(ImportDialog.DocumentExportPath, bChangePage, True)
+	bChangePage = CheckTextBoxPath(ImportDialog.txtTemplateImportPath, True, False)
+	bChangePage = CheckTextBoxPath(ImportDialog.txtTemplateExportPath, bChangePage, True)
+	bChangePage = CheckTextBoxPath(ImportDialog.txtDocumentImportPath, bChangePage, False)
+	bChangePage = CheckTextBoxPath(ImportDialog.txtDocumentExportPath, bChangePage, True)
 	CheckInputPaths = bChangePage
 End Function
 
