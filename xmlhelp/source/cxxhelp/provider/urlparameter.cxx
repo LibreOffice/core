@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 17:27:28 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:17:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,14 +87,23 @@
 #ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
 #endif
+#ifdef SYSTEM_SABLOT
+#include <sablot.h>
+#include <shandler.h>
+#else
 #ifndef SablotHIncl
 #include <sablot/sablot.h>
 #endif
 #ifndef ShandlerHIncl
 #include <sablot/shandler.h>
 #endif
+#endif
+#ifdef SYSTEM_DB3
+#include <db3/db_cxx.h>
+#else
 #ifndef _DB_CXX_H_
 #include <berkeleydb/db_cxx.h>
+#endif
 #endif
 #ifndef _URLPARAMETER_HXX_
 #include <provider/urlparameter.hxx>
@@ -914,12 +923,21 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             RTL_TEXTENCODING_ASCII_US/*osl_getThreadTextEncoding()*/);
         xslURLascii += "main_transform.xsl";
 
+#ifdef SYSTEM_SABLOT
+        SablotRunProcessor( p,
+                            xslURLascii.getStr(),
+                            "vnd.sun.star.pkg:/",
+                            "vnd.sun.star.resultat:/",
+                            parameter,
+                            0);
+#else
         SablotRunProcessor( p,
                             const_cast<char*>(xslURLascii.getStr()),
                             "vnd.sun.star.pkg:/",
                             "vnd.sun.star.resultat:/",
                             const_cast<char**>(parameter),
-                            0 );
+                            0);
+#endif
 
         SablotDestroyProcessor( p );
     }
