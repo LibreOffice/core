@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:45:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_SDB_XOFFICEDATABASEDOCUMENT_HPP_
+#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
+#endif
 #ifndef DBA_XMLFILTER_HXX
 #include "xmlfilter.hxx"
 #endif
@@ -394,8 +396,10 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         OSL_ENSURE(xStorage.is(),"No Storage for read!");
         if ( xStorage.is() )
         {
-            Reference<XPropertySet> xProp(GetModel(),UNO_QUERY);
-            Reference< XNumberFormatsSupplier > xNum(xProp->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER),UNO_QUERY);
+            Reference<sdb::XOfficeDatabaseDocument> xOfficeDoc(GetModel(),UNO_QUERY_THROW);
+            m_xDataSource.set(xOfficeDoc->getDataSource(),UNO_QUERY_THROW);
+            OSL_ENSURE(m_xDataSource.is(),"DataSource is NULL!");
+            Reference< XNumberFormatsSupplier > xNum(m_xDataSource->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER),UNO_QUERY);
             SetNumberFormatsSupplier(xNum);
 
 
@@ -511,7 +515,7 @@ void ODBFilter::SetConfigurationSettings(const Sequence<PropertyValue>& aConfigP
         {
             Sequence<PropertyValue> aWindows;
             pIter->Value >>= aWindows;
-            Reference<XPropertySet> xProp(GetModel(),UNO_QUERY);
+            Reference<XPropertySet> xProp(getDataSource());
             if ( xProp.is() )
                 xProp->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aWindows));
         }
