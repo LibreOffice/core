@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLLineNumberingImportContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-25 11:35:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ enum LineNumberingToken
     XML_TOK_LINENUMBERING_STYLE_NAME,
     XML_TOK_LINENUMBERING_NUMBER_LINES,
     XML_TOK_LINENUMBERING_COUNT_EMPTY_LINES,
-    XML_TOK_LINENUMBERING_COUNT_IN_FLOATING_FRAMES,
+    XML_TOK_LINENUMBERING_COUNT_IN_TEXT_BOXES,
     XML_TOK_LINENUMBERING_RESTART_NUMBERING,
     XML_TOK_LINENUMBERING_OFFSET,
     XML_TOK_LINENUMBERING_NUM_FORMAT,
