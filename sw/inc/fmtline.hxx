@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtline.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 18:06:05 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 17:57:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,14 +105,11 @@ public:
     void SetCountLines( BOOL b )     { bCountLines = b;    }
 };
 
-#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
-// GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SwFmtLineNumber &SwAttrSet::GetLineNumber(BOOL bInP) const
     { return (const SwFmtLineNumber&)Get( RES_LINENUMBER,bInP); }
 
 inline const SwFmtLineNumber &SwFmt::GetLineNumber(BOOL bInP) const
     { return aSet.GetLineNumber(bInP); }
-#endif
 
 #endif
 
