@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:51:05 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,8 +990,22 @@ sal_Bool SvxFontHeightItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         {
             drafts::com::sun::star::frame::status::FontHeight aFontHeight;
 
-            aFontHeight.Height = (float)( nHeight / 20.0 );
-            aFontHeight.Prop <<= (sal_Int16)(SFX_MAPUNIT_RELATIVE == ePropUnit ? nProp : 100);
+            //  Point (also Twips) sind gefragt,
+            //  also umrechnen, wenn CONVERT_TWIPS nicht gesetzt ist
+            if( bConvert )
+            {
+                long nTwips = bConvert ? nHeight : MM100_TO_TWIP(nHeight);
+                aFontHeight.Height = (float)( nTwips / 20.0 );
+            }
+            else
+            {
+                double fPoints = MM100_TO_TWIP((long)nHeight) / 20.0;
+                float fRoundPoints =
+                    static_cast<float>(::rtl::math::round(fPoints, 1));
+                aFontHeight.Height = fRoundPoints;
+            }
+
+            aFontHeight.Prop = (sal_Int16)(SFX_MAPUNIT_RELATIVE == ePropUnit ? nProp : 100);
 
             float fRet = (float)(short)nProp;
             switch( ePropUnit )
