@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:41:57 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ TabPage TP_REDLINE_OPT
         Text[ japanese ] = "‘}“ü";
         Text[ korean ] = "Insert";
         Text[ chinese_simplified ] = "²åÈë";
-        Text[ chinese_traditional ] = "Insert";
+        Text[ chinese_traditional ] = "´¡¤J";
         Text[ turkish ] = "Insert";
         Text[ arabic ] = "Insert";
         Text[ catalan ] = "Insert";
@@ -575,7 +575,7 @@ TabPage TP_REDLINE_OPT
         Text[ japanese ] = "íœ";
         Text[ korean ] = "Delete";
         Text[ chinese_simplified ] = "É¾³ı";
-        Text[ chinese_traditional ] = "Delete";
+        Text[ chinese_traditional ] = "§R°£";
         Text[ turkish ] = "Delete";
         Text[ arabic ] = "Delete";
         Text[ catalan ] = "Delete";
@@ -599,7 +599,7 @@ TabPage TP_REDLINE_OPT
         Text[ polish ] = "Atrybuty";
         Text[ portuguese_brazilian ] = "Attributes";
         Text[ japanese ] = "‘®«";
-        Text[ korean ] = "¼Ó¼º";
+        Text[ korean ] = "¼Ó¼º!";
         Text[ chinese_simplified ] = "ÊôĞÔ";
         Text[ chinese_traditional ] = "Äİ©Ê";
         Text[ turkish ] = "Attributes";
@@ -635,7 +635,7 @@ TabPage TP_REDLINE_OPT
         Text[ japanese ] = "F";
         Text[ korean ] = "»ö»ó";
         Text[ chinese_simplified ] = "²ÊÉ«";
-        Text[ chinese_traditional ] = "ÃC¦â";
+        Text[ chinese_traditional ] = "±m¦â";
         Text[ turkish ] = "Color";
         Text[ arabic ] = "Çááæä";
         Text[ catalan ] = "Color";
@@ -698,7 +698,7 @@ TabPage TP_REDLINE_OPT
         Text[ japanese ] = "‘®«‚Ì•ÏX";
         Text[ korean ] = "Attributes changed";
         Text[ chinese_simplified ] = "ÊôĞÔ¸ü¸Ä";
-        Text[ chinese_traditional ] = "Attributes changed";
+        Text[ chinese_traditional ] = "Äİ©ÊÅÜ§ó";
         Text[ turkish ] = "Attributes changed";
         Text[ arabic ] = "Attributes changed";
         Text[ catalan ] = "Attributes changed";
@@ -758,7 +758,7 @@ TabPage TP_REDLINE_OPT
         Text[ japanese ] = "F";
         Text[ korean ] = "»ö»ó";
         Text[ chinese_simplified ] = "²ÊÉ«";
-        Text[ chinese_traditional ] = "ÃC¦â";
+        Text[ chinese_traditional ] = "±m¦â";
         Text[ turkish ] = "Color";
         Text[ arabic ] = "Çááæä";
         Text[ catalan ] = "Color";
@@ -1138,4 +1138,5 @@ TabPage TP_REDLINE_OPT
         Text[ finnish ] = "[Ei mitään]";
     };
 };
+
 
