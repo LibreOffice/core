@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBackgroundImageContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2002-08-29 17:46:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:22:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ enum SvXMLTokenMapAttrs
     XML_TOK_BGIMG_POSITION,
     XML_TOK_BGIMG_REPEAT,
     XML_TOK_BGIMG_FILTER,
-    XML_TOK_BGIMG_TRANSPARENCY,
+    XML_TOK_BGIMG_OPACITY,
     XML_TOK_NGIMG_END=XML_TOK_UNKNOWN
 };
 
@@ -122,7 +122,7 @@ static __FAR_DATA SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
     { XML_NAMESPACE_STYLE, XML_POSITION,    XML_TOK_BGIMG_POSITION  },
     { XML_NAMESPACE_STYLE, XML_REPEAT,      XML_TOK_BGIMG_REPEAT    },
     { XML_NAMESPACE_STYLE, XML_FILTER_NAME, XML_TOK_BGIMG_FILTER    },
-    { XML_NAMESPACE_DRAW,  XML_TRANSPARENCY,XML_TOK_BGIMG_TRANSPARENCY },
+    { XML_NAMESPACE_DRAW,  XML_OPACITY,     XML_TOK_BGIMG_OPACITY   },
     XML_TOKEN_MAP_END
 };
 
@@ -363,14 +363,14 @@ void XMLBackgroundImageContext::ProcessAttrs(
         case XML_TOK_BGIMG_FILTER:
             sFilter = rValue;
             break;
-        case XML_TOK_BGIMG_TRANSPARENCY:
+        case XML_TOK_BGIMG_OPACITY:
             {
                 sal_Int32 nTmp;
                 // convert from percent and clip
                 if( SvXMLUnitConverter::convertPercent( nTmp, rValue ) )
                 {
                     if( (nTmp >= 0) && (nTmp <= 100) )
-                        nTransparency = static_cast<sal_Int8>( nTmp );
+                        nTransparency = static_cast<sal_Int8>( 100-nTmp );
                 }
             }
             break;
