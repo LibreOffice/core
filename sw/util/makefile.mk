@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: csaba $ $Date: 2000-10-16 15:13:32 $
+#   last change: $Author: kz $ $Date: 2000-10-24 15:57:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -198,7 +198,8 @@ SHL2STDLIBS= \
     $(SCLIB) \
     $(UCBHELPERLIB) \
     $(XMLOFFLIB) \
-    $(BASCTLLIB)
+    $(BASCTLLIB) \
+    $(COMPHELPERLIB)
 
 
 .IF "$(GUI)" ==	"UNX"
