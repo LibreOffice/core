@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcu,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:48:16 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,14 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data oor:name="Writer" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<oor:component-data oor:name="Writer" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <node oor:name="AutoFunction" install:module="cjk">
+    <node oor:name="Completion">
+      <prop oor:name="Enable">
+        <value>false</value>
+      </prop>
+    </node>
+  </node>
   <node oor:name="Insert">
     <node oor:name="Caption">
       <node oor:name="WriterObject">
