@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbx_ww.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:48:58 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ FloatingWindow RID_ZOOM
     Text [ spanish ] = "Escala" ;
     Text [ danish ] = "Zoom" ;
     Text [ swedish ] = "Zooma" ;
-    Text [ finnish ] = "Zoom" ;
+    Text [ finnish ] = "Zoomaa" ;
     Text [ english_us ] = "Zoom" ;
     ToolBox RID_ZOOM_TBX
     {
@@ -241,7 +241,7 @@ FloatingWindow RID_CHOOSE_MODE
     Text [ spanish ] = "Efectos" ;
     Text [ danish ] = "Effekter" ;
     Text [ swedish ] = "Effekter" ;
-    Text [ finnish ] = "Effects" ;
+    Text [ finnish ] = "Tehosteet" ;
     Text [ english_us ] = "Effects" ;
     ToolBox RID_CHOOSE_MODE_TBX
     {
@@ -399,6 +399,7 @@ FloatingWindow RID_TEXT
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto";
+    Text[ finnish ] = "Teksti";
 };
 FloatingWindow RID_RECTANGLES
 {
@@ -498,6 +499,7 @@ FloatingWindow RID_RECTANGLES
     Text[ turkish ] = "Dikdörtgenler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Rectángulos";
+    Text[ finnish ] = "Suorakulmiot";
 };
 FloatingWindow RID_ELLIPSES
 {
@@ -625,6 +627,7 @@ FloatingWindow RID_ELLIPSES
     Text[ turkish ] = "Elipsler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Elipses";
+    Text[ finnish ] = "Ellipsit";
 };
 FloatingWindow RID_LINES
 {
@@ -717,6 +720,7 @@ FloatingWindow RID_LINES
     Text[ turkish ] = "Eðri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Curvas";
+    Text[ finnish ] = "Käyrät";
 };
 FloatingWindow RID_ARROWS
 {
@@ -834,6 +838,7 @@ FloatingWindow RID_ARROWS
     Text[ turkish ] = "Çizgiler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Líneas";
+    Text[ finnish ] = "Rivit";
 };
 FloatingWindow RID_3D_OBJECTS
 {
@@ -926,6 +931,7 @@ FloatingWindow RID_3D_OBJECTS
     Text[ turkish ] = "3B nesneler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objetos 3D";
+    Text[ finnish ] = "Kolmiulotteiset objektit";
 };
 FloatingWindow RID_CONNECTORS
 {
@@ -1173,6 +1179,7 @@ FloatingWindow RID_CONNECTORS
     Text[ turkish ] = "Baðlayýcýlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Conector";
+    Text[ finnish ] = "Liittimet";
 };
 FloatingWindow RID_INSERT
 {
@@ -1287,6 +1294,7 @@ FloatingWindow RID_INSERT
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar";
+    Text[ finnish ] = "Lisää";
 };
 FloatingWindow RID_POSITION
 {
@@ -1367,6 +1375,7 @@ FloatingWindow RID_POSITION
     Text[ turkish ] = "Sýralama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Posición";
+    Text[ finnish ] = "Järjestä";
 };
 
 
