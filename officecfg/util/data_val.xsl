@@ -3,9 +3,9 @@
  *
  *  $RCSfile: data_val.xsl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 22:58:22 $
+ *  last change: $Author: jb $ $Date: 2002-07-04 07:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,11 @@
 			</xsl:when>
 			<!-- is the node extensible ? -->
 			<xsl:when test="$context/@oor:extensible='true'">
-				<xsl:apply-templates select="prop" mode="extensible"/>				
+				<xsl:for-each select="prop">						
+					<xsl:apply-templates select="." mode="extensible">				
+					    <xsl:with-param name="context" select="$context/*[@oor:name = current()/@oor:name]"/>																					
+				    </xsl:apply-templates>
+				</xsl:for-each>
 			</xsl:when>
 			<xsl:otherwise>	
 				<xsl:for-each select="node|prop">						
@@ -152,7 +156,10 @@
 		
 
 		<xsl:if test="not ($context)">
-			<xsl:message terminate="yes">ERROR: Property '<xsl:value-of select="$path"/>' does not exist in schema!</xsl:message>
+			<xsl:message terminate="yes">ERROR: Property '<xsl:value-of select="$path"/>' does not exist in schema !</xsl:message>
+		</xsl:if>
+		<xsl:if test="@oor:op">
+			<xsl:message terminate="yes">ERROR: Property '<xsl:value-of select="$path"/>' has unexpected operation '<xsl:value-of select="@oor:op"/>' !</xsl:message>
 		</xsl:if>
 		
 	</xsl:template>
@@ -161,12 +168,26 @@
 <!-- * prop (mode:extensible)				*** -->
 <!-- ****************************************** -->
 	<xsl:template match="prop" mode="extensible">
+		<xsl:param name = "context"/>
 		<xsl:variable name = "path">
 			<xsl:call-template name="collectPath"/>
 		</xsl:variable>
-		<xsl:if test="not (@oor:type)">
-			<xsl:message terminate="yes">ERROR: Property '<xsl:value-of select="$path"/>' does not have a type!</xsl:message>
-		</xsl:if>		
+
+        <xsl:choose>
+            <xsl:when test="not(@oor:op)">
+		        <xsl:if test="not ($context)">
+			        <xsl:message terminate="yes">ERROR: Property '<xsl:value-of select="$path"/>' does not exist in schema!</xsl:message>
+		        </xsl:if>
+		    </xsl:when>		
+            <xsl:when test="@oor:op='replace'">
+		        <xsl:if test="not (@oor:type)">
+			        <xsl:message terminate="yes">ERROR: Property '<xsl:value-of select="$path"/>' does not have a type!</xsl:message>
+		        </xsl:if>		
+		    </xsl:when>		
+		    <xsl:otherwise>		
+			    <xsl:message terminate="yes">ERROR: Property '<xsl:value-of select="$path"/>' has unexpected operation '<xsl:value-of select="@oor:op"/>'!</xsl:message>
+		    </xsl:otherwise>		
+        </xsl:choose>
 	</xsl:template>
 
 
