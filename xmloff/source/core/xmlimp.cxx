@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2000-11-14 10:13:10 $
+ *  last change: $Author: cmc $ $Date: 2000-11-14 10:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ sal_Char __READONLY_DATA sXML_np__meta[] = "_meta";
 sal_Char __READONLY_DATA sXML_np__number[] = "_number";
 sal_Char __READONLY_DATA sXML_np__svg[] = "_svg";
 sal_Char __READONLY_DATA sXML_np__chart[] = "_chart";
-sal_Char __READONLY_DATA sXML_np__math[] = "_chart";
+sal_Char __READONLY_DATA sXML_np__math[] = "_math";
 
 sal_Char __READONLY_DATA sXML_np__fo_old[] = "__fo";
 sal_Char __READONLY_DATA sXML_np__xlink_old[] = "__xlink";
