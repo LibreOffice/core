@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-11 07:49:38 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:20:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@
     Text [ swedish ] = "Döl~j" ; \
     Text [ dutch ] = "~Verbergen" ; \
     Text [ spanish ] = "~Ocultar" ; \
-    Text [ english_us ] = "~Hidden" ; \
+    Text [ english_us ] = "H~idden" ; \
     Text[ chinese_simplified ] = "ÒşÈë(~H)";    \
     Text[ russian ] = "Ñêğûòü"; \
     Text[ polish ] = "Ukryj";   \
@@ -152,9 +152,9 @@
     Text [ dutch ] = "Koppeling" ; \
     Text [ swedish ] = "Länk" ; \
     Text [ danish ] = "Kæde" ; \
-    Text [ portuguese_brazilian ] = "Verknüpfung" ; \
+    Text [ portuguese_brazilian ] = "Verkn?fung" ; \
     Text [ portuguese ] = "Ligação" ; \
-    Text[ chinese_simplified ] = "Á´½Ó(L)";    \
+    Text[ chinese_simplified ] = "Á´½Ó";    \
     Text[ russian ] = "Ñâÿçü"; \
     Text[ polish ] = "£¹cze";   \
     Text[ japanese ] = "Øİ¸(L)";   \
@@ -163,7 +163,7 @@
     Text[ greek ] = "Óıíäåóç"; \
     Text[ korean ] = "¿¬°á(L)";    \
     Text[ turkish ] = "Bağlantı";   \
-    Text[ finnish ] = "Verknüpfung";    \
+    Text[ finnish ] = "Linkki"; \
     Text[ catalan ] = "Link";
 
 #define CB_FILE_TEXT\
@@ -181,13 +181,14 @@
     Text[ danish ] = "Kæde";    \
     Text[ swedish ] = "~Länka"; \
     Text[ polish ] = "~Po³¹cz"; \
-    Text[ portuguese_brazilian ] = "~Verknüpfung";  \
+    Text[ portuguese_brazilian ] = "~Verkn?fung";   \
     Text[ japanese ] = "Øİ¸(~L)";   \
-    Text[ chinese_simplified ] = "Á´½Ó(~L)";    \
+    Text[ chinese_simplified ] = "Á´½Ó";    \
     Text[ chinese_traditional ] = "±¶®|";   \
     Text[ turkish ] = "Bağlantı";   \
     Text[ arabic ] = "ÇÑÊÈÇØ";  \
-    Text[ catalan ] = "~Vínculo";
+    Text[ catalan ] = "~Vínculo";   \
+    Text[ korean ] = "¿¬°á(~L)";
 
 #define CB_DDE_TEXT \
     Text = "~DDE" ; \
@@ -272,7 +273,7 @@
     Text[ dutch ] = "Verbergen"; \
     Text[ french ] = "Masquer"; \
     Text[ spanish ] = "Ocultar"; \
-    Text[ finnish ] = "Verstecken"; \
+    Text[ finnish ] = "Piilota"; \
     Text[ italian ] = "Hide"; \
     Text[ danish ] = "Hide"; \
     Text[ swedish ] = "Dölj"; \
@@ -280,7 +281,7 @@
     Text[ portuguese_brazilian ] = "Hide"; \
     Text[ japanese ] = "‰B‚·"; \
     Text[ korean ] = "Hide"; \
-    Text[ chinese_simplified ] = "Hide"; \
+    Text[ chinese_simplified ] = "ÒşÈë"; \
     Text[ chinese_traditional ] = "Áô¤J"; \
     Text[ turkish ] = "Hide"; \
     Text[ arabic ] = "Hide"; \
@@ -291,7 +292,7 @@
     Text [ English ] = "Options" ; \
     Text [ norwegian ] = "Options" ; \
     Text [ italian ] = "Opzioni" ; \
-    Text [ portuguese_brazilian ] = "Opções" ; \
+    Text [ portuguese_brazilian ] = "Op??s" ; \
     Text [ portuguese ] = "Opções" ; \
     Text [ finnish ] = "Asetukset" ; \
     Text [ danish ] = "Indstillinger" ; \
@@ -329,7 +330,7 @@
     Text[ portuguese_brazilian ] = "Write protection";  \
     Text[ japanese ] = "‘‚«‚İ•ÛŒì";  \
     Text[ korean ] = "Write protection";    \
-    Text[ chinese_simplified ] = "Write protection";    \
+    Text[ chinese_simplified ] = "·À¸²Ğ´";  \
     Text[ chinese_traditional ] = "¨¾ÂĞ¼g"; \
     Text[ turkish ] = "Write protection";   \
     Text[ arabic ] = "Write protection";    \
@@ -353,7 +354,7 @@
     Text[ portuguese_brazilian ] = "With password"; \
     Text[ japanese ] = "Êß½Ü°ÄŞ‚ğg—p"; \
     Text[ korean ] = "With password";   \
-    Text[ chinese_simplified ] = "With password";   \
+    Text[ chinese_simplified ] = "²ÉÓÃÃÜÂë";    \
     Text[ chinese_traditional ] = "ªş¥[±K½X";   \
     Text[ turkish ] = "With password";  \
     Text[ arabic ] = "With password";   \
@@ -374,7 +375,7 @@ ModalDialog MD_EDIT_REGION
     Text [ English ] = "Edit Sections" ;
     Text [ norwegian ] = "Redigere Områder" ;
     Text [ italian ] = "Modifica sezioni" ;
-    Text [ portuguese_brazilian ] = "Editar Seções" ;
+    Text [ portuguese_brazilian ] = "Editar Se??s" ;
     Text [ portuguese ] = "Editar secções" ;
     Text [ finnish ] = "Muokkaa osioita" ;
     Text [ danish ] = "Rediger områder" ;
@@ -393,16 +394,16 @@ ModalDialog MD_EDIT_REGION
         Text [ English ] = "section" ;
         Text [ norwegian ] = "section" ;
         Text [ italian ] = "Sezione" ;
-        Text [ portuguese_brazilian ] = "seção" ;
+        Text [ portuguese_brazilian ] = "se??o" ;
         Text [ portuguese ] = "Secção" ;
-        Text [ finnish ] = "Bereich" ;
+        Text [ finnish ] = "Osio" ;
         Text [ danish ] = "Område" ;
         Text [ french ] = "Section" ;
         Text [ swedish ] = "Område" ;
         Text [ dutch ] = "Bereik" ;
         Text [ spanish ] = "Área" ;
         Text [ english_us ] = "Section" ;
-        Text[ chinese_simplified ] = "·ÖÀà";
+        Text[ chinese_simplified ] = "ÇøÓò";
         Text[ russian ] = "Îáëàñòü";
         Text[ polish ] = "Obszar";
         Text[ japanese ] = "”ÍˆÍ";
@@ -704,7 +705,7 @@ String STR_REG_DUPLICATE
     Text [ English ] = "Section name changed:" ;
     Text [ norwegian ] = "Section name changed:" ;
     Text [ italian ] = "Nome sezione modificato:" ;
-    Text [ portuguese_brazilian ] = "Nome da seção alterado:" ;
+    Text [ portuguese_brazilian ] = "Nome da se??o alterado:" ;
     Text [ portuguese ] = "Nome da secção mudou:" ;
     Text [ finnish ] = "Osion nimi muutettu:" ;
     Text [ danish ] = "Områdenavn ændret:" ;
@@ -730,7 +731,7 @@ String STR_INFO_DUPLICATE
     Text [ English ] = "Duplicate section name" ;
     Text [ norwegian ] = "Duplicate section name" ;
     Text [ italian ] = "Nome area doppio" ;
-    Text [ portuguese_brazilian ] = "Nome da seção duplo" ;
+    Text [ portuguese_brazilian ] = "Nome da se??o duplo" ;
     Text [ portuguese ] = "Nome de secção duplo" ;
     Text [ finnish ] = "Kopioi osion nimi" ;
     Text [ danish ] = "Dobbelt områdenavn" ;
@@ -764,10 +765,10 @@ QueryBox QB_CONNECT
     Message [ swedish ] = "En filförbindelse raderar det aktuella innehållet i området. Förbinda ändå?" ;
     Message [ danish ] = "En filforbindelse sletter områdets aktuelle indhold. Vil du forbinde alligevel?" ;
     Message [ portuguese ] = "Uma ligação de ficheiros elimina o conteúdo da actual secção. Mesmo assim, ligar?" ;
-    Message [ portuguese_brazilian ] = "Eine Dateiverbindung löscht den aktuellen Inhalt des Bereichs. Trotzdem verbinden ?" ;
+    Message [ portuguese_brazilian ] = "Eine Dateiverbindung l?cht den aktuellen Inhalt des Bereichs. Trotzdem verbinden ?" ;
     Message[ chinese_simplified ] = "Ê¹ÓÃÎÄ¼şÁ¬½Ó»áÉ¾³ıµ±Ç°ÇøÓòÄÚµÄÄÚÈİ¡£Äú»¹ÊÇÒªÖ´ĞĞÁ¬½ÓÃüÁî£¿";
     Message[ russian ] = "Ñâÿçü ôàéëîâ óäàëèò òåêóùåå ñîäåğæèìîå îáëàñòè. Ñâÿçàòü íåñìîòğÿ íà ıòî ?";
-    Message[ polish ] = "Po³¹czenie pliku usunie aktualn¹ zawartoœæ obszaru. Mimo to po³¹czyæ?";
+    Message[ polish ] = "Po³¹czenie pliku usunie aktualn¹ zawarto?æ obszaru. Mimo to po³¹czyæ?";
     Message[ japanese ] = "Ì§²Ù‚ÌÚ‘±‚ÍŒ»İ‚Ì”ÍˆÍ“à—e‚ğíœ‚µ‚Ü‚·BÚ‘±‚µ‚Ä‚à‚©‚Ü‚¢‚Ü‚¹‚ñ‚©B";
     Message[ chinese_traditional ] = "¨Ï¥ÎÀÉ®×³sµ²·|§R°£°Ï°ì¤º·í«eªº¤º®e¡C±zÁÙ¬O­n°õ¦æ³sµ²¡H";
     Message[ arabic ] = "ÓíÄÏí ÇÊÕÇá Çáãáİ Åáì ÍĞİ ÇáãÍÊæíÇÊ ÇáÍÇáíÉ. åá ÊÑíÏ ÇáÇÊÕÇá Úáì ÇáÑÛã ãä Ğáß¿";
@@ -812,7 +813,7 @@ InfoBox REG_WRONG_PASSWD_REPEAT
     Message [ English ] = "The password has not been set." ;
     Message [ portuguese ] = "A senha não foi especificada." ;
     Message [ english_us ] = "The password has not been set." ;
-    Message [ portuguese_brazilian ] = "Das Paßwort wurde nicht gesetzt." ;
+    Message [ portuguese_brazilian ] = "Das Pa?wort wurde nicht gesetzt." ;
     Message [ swedish ] = "Lösenordet har inte angivits." ;
     Message [ danish ] = "Adgangskoden blev ikke indtastet." ;
     Message [ italian ] = "La password non è stata impostata." ;
@@ -839,7 +840,7 @@ TabDialog DLG_INSERT_SECTION
     Text [ English ] = "Insert Sections" ;
     Text [ norwegian ] = "Insert Sections" ;
     Text [ italian ] = "Inserisci sezioni" ;
-    Text [ portuguese_brazilian ] = "Inserir Seções" ;
+    Text [ portuguese_brazilian ] = "Inserir Se??s" ;
     Text [ portuguese ] = "Inserir secção" ;
     Text [ finnish ] = "Lisää osio" ;
     Text [ danish ] = "Indsæt område" ;
@@ -1038,7 +1039,7 @@ TabPage TP_INSERT_SECTION
         Text[ greek ] = "Íİïò ôïìİáò";
         Text[ korean ] = "»õ ±¸¿ª";
         Text[ turkish ] = "Yeni bölüm";
-        Text[ finnish ] = "Neuer Bereich";
+        Text[ finnish ] = "Uusi osio";
         Text[ catalan ] = "New section";
     };
     ComboBox ED_RNAME
@@ -1152,7 +1153,7 @@ TabPage TP_INSERT_SECTION
         Text[ portuguese_brazilian ] = "Pro~tegido";
         Text[ japanese ] = "‘‚«‚İ•ÛŒì(~P)";
         Text[ korean ] = "º¸È£(~P)";
-        Text[ chinese_simplified ] = "ÊÜ±£»¤µÄ(~P)";
+        Text[ chinese_simplified ] = "±£»¤";
         Text[ chinese_traditional ] = "«OÅ@";
         Text[ turkish ] = "Korumalı";
         Text[ arabic ] = "ãÍãí";
@@ -1355,7 +1356,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ chinese_traditional ] = "µù¸}";
         Text[ arabic ] = "ÍæÇÔí ÓİáíÉ";
         Text[ turkish ] = "Altbilgi";
-        Text[ finnish ] = "Fußnoten";
+        Text[ finnish ] = "Alaviitteet";
         Text[ catalan ] = "Footnotes";
     };
     CheckBox CB_FTN_AT_TXTEND
@@ -1538,7 +1539,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text [ ENGLISH ] = "Behind" ;
         Text [ norwegian ] = "Bak" ;
         Text [ italian ] = "D~ietro" ;
-        Text [ portuguese_brazilian ] = "Atrás" ;
+        Text [ portuguese_brazilian ] = "Atr?s" ;
         Text [ portuguese ] = "A~trás" ;
         Text [ finnish ] = "Jäl~keen" ;
         Text [ danish ] = "Efter" ;
@@ -1595,7 +1596,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ chinese_traditional ] = "§Àµù";
         Text[ arabic ] = "ÊÚáíŞÇÊ ÎÊÇãíÉ";
         Text[ turkish ] = "Sonnot";
-        Text[ finnish ] = "Endnoten";
+        Text[ finnish ] = "Loppuviitteet";
         Text[ catalan ] = "Endnotes";
     };
     CheckBox CB_END_AT_TXTEND
@@ -1789,7 +1790,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text [ ENGLISH ] = "Behind" ;
         Text [ norwegian ] = "Bak" ;
         Text [ italian ] = "Dietro" ;
-        Text [ portuguese_brazilian ] = "Atrás" ;
+        Text [ portuguese_brazilian ] = "Atr?s" ;
         Text [ portuguese ] = "A~trás" ;
         Text [ finnish ] = "Jäl~keen" ;
         Text [ danish ] = "Efter" ;
