@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 20:28:14 $
+#   last change: $Author: rt $ $Date: 2004-09-08 16:33:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,14 @@ TARGET=so_stlport
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+
+.IF "$(USE_SYSTEM_STL)"=="YES"
+$(INCCOM)$/stlport$/hash_map : systemstl/hash_map
+        @echo "You choose to build without stlport, so some headers will be used to bring the sgi extensions into the std namespace"
+        +-$(MKDIR) $(INCCOM)$/stlport
+       +$(COPY) systemstl/* $(INCCOM)$/stlport
+.ENDIF
+
 
 # --- Files --------------------------------------------------------
 .EXPORT : CC CXX
