@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-01-24 03:39:58 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-25 05:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,8 +286,6 @@ BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
 
                 if ( pGraphics->maGraphicsData.mnOSStatus == noErr )
                 {
-                    ULONG nBMPScanlineFormat = 0;
-
                     pBuffer = new BitmapBuffer();
 
                     if ( pBuffer != NULL )
@@ -317,9 +315,7 @@ BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
                                 break;
                         } // switch
 
-                        nBMPScanlineFormat = BMP_SCANLINE_FORMAT( pBuffer->mnFormat );
-
-                        if ( nBMPScanlineFormat )
+                        if ( BMP_SCANLINE_FORMAT( pBuffer->mnFormat ) )
                         {
                             GWorldFlags  nGWorldFlags = noErr;
 
@@ -384,11 +380,13 @@ BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
                         {
                             UnlockPortBits( pGraphics->maGraphicsData.mpCGrafPort );
 
-                            ReleaseBuffer( pBuffer, TRUE );
+                            ReleaseGraphics( pGraphics );
+
+                            delete pBuffer;
                         } // else
                     } // if
 
-                    if ( nBMPScanlineFormat )
+                    if ( pGraphics != NULL )
                     {
                         UnlockPortBits( pGraphics->maGraphicsData.mpCGrafPort );
                     } // if
@@ -398,7 +396,10 @@ BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
             // Release the SalGraphics so that others can get a
             // handle to it in future GetGraphics() calls
 
-            ReleaseGraphics( pGraphics );
+            if ( pGraphics != NULL )
+            {
+                ReleaseGraphics( pGraphics );
+            } // if
         } // if
     } // if
 
