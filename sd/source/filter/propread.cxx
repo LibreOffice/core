@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propread.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2002-01-11 11:48:06 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 13:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ struct PropEntry
 
                         PropEntry( UINT32 nId, const BYTE* pBuf, UINT32 nBufSize );
                         PropEntry( const PropEntry& rProp );
-                        ~PropEntry() { delete mpBuf; } ;
+                        ~PropEntry() { delete[] mpBuf; } ;
 
     const PropEntry&    operator=(const PropEntry& rPropEntry);
 };
@@ -101,7 +101,7 @@ const PropEntry& PropEntry::operator=(const PropEntry& rPropEntry)
 {
     if ( this != &rPropEntry )
     {
-        delete mpBuf;
+        delete[] mpBuf;
         mnId = rPropEntry.mnId;
         mnSize = rPropEntry.mnSize;
         mpBuf = new BYTE[ mnSize ];
@@ -115,7 +115,7 @@ const PropEntry& PropEntry::operator=(const PropEntry& rPropEntry)
 void PropItem::Clear()
 {
     Seek( STREAM_SEEK_TO_BEGIN );
-    delete SwitchBuffer();
+    delete[] SwitchBuffer();
 }
 
 //  -----------------------------------------------------------------------
@@ -174,7 +174,7 @@ BOOL PropItem::Read( String& rString, UINT32 nStringType, BOOL bAlign, sal_uInt1
                         rString = String();
                     bRetValue = TRUE;
                 }
-                delete pString;
+                delete[] pString;
             }
             if ( bAlign )
                 SeekRel( ( 4 - ( nSize & 3 ) ) & 3 );       // dword align
@@ -196,7 +196,7 @@ BOOL PropItem::Read( String& rString, UINT32 nStringType, BOOL bAlign, sal_uInt1
                         rString = String();
                     bRetValue = TRUE;
                 }
-                delete pString;
+                delete[] pString;
             }
             if ( bAlign && ( nSize & 1 ) )
                 SeekRel( 2 );                           // dword align
@@ -215,7 +215,7 @@ PropItem& PropItem::operator=( PropItem& rPropItem )
     if ( this != &rPropItem )
     {
         Seek( STREAM_SEEK_TO_BEGIN );
-        delete SwitchBuffer();
+        delete[] SwitchBuffer();
 
         UINT32 nPos = rPropItem.Tell();
         rPropItem.Seek( STREAM_SEEK_TO_END );
@@ -394,7 +394,7 @@ BOOL Section::GetDictionary( Dictionary& rDict )
                         aStream >> pWString[ i ];
                     aString = String( pWString, nSize - 1 );
                 }
-                delete pString;
+                delete[] pString;
                 if ( !aString.Len() )
                     break;
                 aDict.AddProperty( nId, aString );
@@ -526,7 +526,7 @@ void Section::Read( SvStorageStream *pStrm )
                 BYTE* pBuf = new BYTE[ nPropSize ];
                 pStrm->Read( pBuf, nPropSize );
                 AddProperty( nPropId, pBuf, nPropSize );
-                delete pBuf;
+                delete[] pBuf;
             }
         }
         else
@@ -544,7 +544,7 @@ void Section::Read( SvStorageStream *pStrm )
             BYTE* pBuf = new BYTE[ nSize ];
             pStrm->Read( pBuf, nSize );
             AddProperty( 0xffffffff, pBuf, nSize );
-            delete pBuf;
+            delete[] pBuf;
         }
         pStrm->Seek( nCurrent );
     }
@@ -642,7 +642,7 @@ void PropRead::Read()
             AddSection( aSection );
             mpSvStream->Seek( nCurrent );
         }
-        delete pSectCLSID;
+        delete[] pSectCLSID;
     }
 }
 

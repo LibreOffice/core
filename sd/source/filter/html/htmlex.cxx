@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-18 15:04:35 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 13:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,10 +504,10 @@ HtmlExport::~HtmlExport()
         }
     }
 
-    delete m_pImageFiles;
-    delete m_pHTMLFiles;
-    delete m_pPageNames;
-    delete m_pTextFiles;
+    delete[] m_pImageFiles;
+    delete[] m_pHTMLFiles;
+    delete[] m_pPageNames;
+    delete[] m_pTextFiles;
 }
 
 /** get common export parameters from item set */
@@ -2888,7 +2888,7 @@ void HtmlExport::SmoothBitmap( BitmapEx& aBmp, Color aBackCol ) const
         }
     }
 
-    delete pAlpha;
+    delete[] pAlpha;
     aMask.ReleaseAccess( pMAcc );
     aSrcBmp.ReleaseAccess( pRAcc );
     aDstBmp.ReleaseAccess( pWAcc );
