@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtexp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:38:38 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,9 +111,7 @@
 #include "xmloff/nmspmap.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include "xmloff/xmlkywd.hxx"
-#endif
+#include "xmloff/xmltoken.hxx"
 
 #ifndef _XMLOFF_XMLMETAE_HXX
 #include "xmloff/xmlmetae.hxx"
@@ -389,8 +387,6 @@ sal_Bool SvxXMLXTableExportComponent::exportTable() throw()
 
         do
         {
-            const OUString sWS( RTL_CONSTASCII_USTRINGPARAM( sXML_WS ) );
-
             if( !mxTable.is() )
                 break;
 
@@ -486,16 +482,16 @@ SvxXMLColorEntryExporter::~SvxXMLColorEntryExporter()
 
 void SvxXMLColorEntryExporter::exportEntry( const OUString& rStrName, const Any& rValue )
 {
-    mrExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_name, rStrName );
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
 
     sal_Int32 nColor;
     rValue >>= nColor;
 
     OUStringBuffer aOut;
     mrExport.GetMM100UnitConverter().convertColor( aOut, nColor );
-    mrExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_color, aOut.makeStringAndClear() );
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_COLOR, aOut.makeStringAndClear() );
 
-    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW, sXML_color, sal_True, sal_True );
+    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW, XML_COLOR, sal_True, sal_True );
 }
 
 ///////////////////////////////////////////////////////////////////////
