@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.23 $
-# Date:        $Date: 2004-10-11 13:48:47 $
+# Version:     $Revision: 1.24 $
+# Date:        $Date: 2004-10-27 15:23:18 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -49,8 +49,6 @@ my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment, $commen
 #-------------------------------------------------
 #
 # Platform independent constant values.
-my @LANGUAGES = ("ARAB", "CAT", "CHINSIM", "CHINTRAD", "CZECH", "DAN", "DTCH", "ENUS", "FREN", "GREEK", "HUNG", "ITAL",
-"JAPN", "KOREAN", "POL", "PORT", "PORTBR", "RUSS", "SLOVAK", "SLOVENIAN", "SPAN", "SWED", "TURK", "FINN", "ESTONIAN" ); 
 my @DICTIONARIES = ("DADK", "DEDE", "ENGB", "ENUS", "ITIT", "RURU" );
 my ( $CALL_CDECL, $COMMON_OUTDIR, $NO_SRS_PATCH, $BIG_GOODIES, $BMP_WRITES_FLAG, 
      $common_build, $MK_UNROLL, $NO_REC_RES, $SO3, $SOLAR_JAVA, 
@@ -1382,27 +1380,8 @@ else
    }
 }
 # Languages
-if ('@WITH_LANG@' =~ m/ALL,/s)
-{
-   foreach $language (@LANGUAGES)
-   {
-      ToFile( "RES_$language",     "TRUE",          "e" );
-   }
-}
-else
-{	
-   foreach $language (@LANGUAGES)
-   {   if ('@WITH_LANG@' =~ m/$language,/s || $language eq "ENUS" )
-       {
-           ToFile( "RES_$language",   "TRUE",          "e" );
-       }
-       else
-       {   my $val;
-           undef $val;
-           ToFile( "RES_$language",     $val,          "e" );
-       }
-   }
-}
+ToFile( "WITH_LANG",         "@WITH_LANG@",      "e" );
+
 ToFile( "CALL_CDECL",        $CALL_CDECL,        "e" );
 ToFile( "COMMON_OUTDIR",     $COMMON_OUTDIR,     "e" );
 ToFile( "common_build",      $common_build,      "e" );
