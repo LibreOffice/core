@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uuid.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-26 13:34:01 $
+ *  last change: $Author: jbu $ $Date: 2001-10-24 10:51:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,18 +66,21 @@
 #include <rtl/string.h>
 
 /**
-    (from <draft-leach-uuids-guids-01.txt> )
-    Specification
+   @HTML
+   @file
+   Specification (from draft-leach-uuids-guids-01.txt )
 
-    A UUID is an identifier that is unique across both space and time,
-    with respect to the space of all UUIDs. To be precise, the UUID
-    consists of a finite bit space. Thus the time value used for
-    constructing a UUID is limited and will roll over in the future
-    (approximately at A.D. 3400, based on the specified algorithm). A
-    UUID can be used for multiple purposes, from tagging objects with an
-    extremely short lifetime, to reliably identifying very persistent
-    objects across a network.
+   <p>
+   A UUID is an identifier that is unique across both space and time,
+   with respect to the space of all UUIDs. To be precise, the UUID
+   consists of a finite bit space. Thus the time value used for
+   constructing a UUID is limited and will roll over in the future
+   (approximately at A.D. 3400, based on the specified algorithm). A
+   UUID can be used for multiple purposes, from tagging objects with an
+   extremely short lifetime, to reliably identifying very persistent
+   objects across a network.
 
+   <p>
     The generation of UUIDs does not require that a registration
     authority be contacted for each identifier. Instead, it requires a
     unique value over space for each UUID generator. This spatially
@@ -91,11 +94,9 @@
 extern "C" {
 #endif
 
-/**
-    Generates a new UUID (Universally Unique IDentifier).
+/** Generates a new UUID (Universally Unique IDentifier).
     If available, the ethernetaddress of a networkcard is used, otherwise
     a 6 Byte random number is generated( for which rtlRandomPool is used ).
-
 
     @param pTargetUUID          pointer to at least 16 bytes of memory. After the call it contains
                                 the newly generated uuid in network byte order.
@@ -106,48 +107,60 @@ extern "C" {
                                 Set pPredecessorUUID to 0 if no predecessor is available.
                                 The caller is responsible for making the value persistent
                                 (if desired).
-    @param bUseEthernetAddress  if sal_True, the generator uses the ethernet address of a
-                                network card (if available). <br>
-                                if sal_False, the generator generates a new 6-Byte random
+    @param bUseEthernetAddress  if <code>sal_True</code>, the generator uses the ethernet
+                                address of a network card (if available).
+                                if <code>sal_False</code>, the generator generates a new
+                                6-Byte random
                                 value each time it is called with pPredecessorUUID = 0.
  */
 void SAL_CALL rtl_createUuid( sal_uInt8 *pTargetUUID ,
                               const sal_uInt8 *pPredecessorUUID,
                               sal_Bool bUseEthernetAddress );
 
-/**
-    uid_compare --  Compare two UUID's "lexically" and return
-          -1   u1 is lexically before u2
-           0   u1 is equal to u2
-           1   u1 is lexically after u2
+/** Compare two UUID's lexically
 
+    <p>
     Note:   lexical ordering is not temporal ordering!
+    <p>
     Note:   For equalnesschecking, a memcmp(pUUID1,pUUID2,16) is more efficient
+
+    @return
+    <ul>
+    <li>-1   u1 is lexically before u2
+    <li>0   u1 is equal to u2
+    <li>1   u1 is lexically after u2
+    </ul>
+
  */
 sal_Int32 SAL_CALL rtl_compareUuid( const sal_uInt8 *pUUID1 , const sal_uInt8 *pUUID2 );
 
-/**
-    The version 3 UUID is meant for generating UUIDs from "names" that
-    are drawn from, and unique within, some "name space". Some examples
+/** Creates named UUIDs.
+
+    <p>
+    The version 3 UUID is meant for generating UUIDs from <em>names</em> that
+    are drawn from, and unique within, some <em>name space</em>. Some examples
     of names (and, implicitly, name spaces) might be DNS names, URLs, ISO
     Object IDs (OIDs), reserved words in a programming language, or X.500
     Distinguished Names (DNs); thus, the concept of name and name space
     should be broadly construed, and not limited to textual names.
 
+    <p>
     The requirements for such UUIDs are as follows:
 
-    - The UUIDs generated at different times from the same name in the
-      same namespace MUST be equal
+    <ul>
+    <li> The UUIDs generated at different times from the same name in the
+         same namespace MUST be equal
 
-    - The UUIDs generated from two different names in the same namespace
-      should be different (with very high probability)
+    <li> The UUIDs generated from two different names in the same namespace
+         should be different (with very high probability)
 
-    - The UUIDs generated from the same name in two different namespaces
-      should be different with (very high probability)
+    <li> The UUIDs generated from the same name in two different namespaces
+         should be different with (very high probability)
 
-    - If two UUIDs that were generated from names are equal, then they
-      were generated from the same name in the same namespace (with very
-      high probability).
+    <li> If two UUIDs that were generated from names are equal, then they
+         were generated from the same name in the same namespace (with very
+         high probability).
+    </ul>
 
     @param pTargetUUID pointer to at least 16 bytes of memory. After the call
                        it contains the newly generated uuid in network byte order.
@@ -164,11 +177,16 @@ void SAL_CALL rtl_createNamedUuid(
 
 
 
-/**
+/*
     Predefined Namespaces
     (Use them the following way : sal_uInt8 aNsDNS[16])  = RTL_UUID_NAMESPACE_DNS;
  */
-/* 6ba7b810-9dad-11d1-80b4-00c04fd430c8 */
+/** namesapce DNS
+
+    <p>
+    (Use them the following way : sal_uInt8 aNsDNS[16])  = RTL_UUID_NAMESPACE_DNS;
+    <p>
+   6ba7b810-9dad-11d1-80b4-00c04fd430c8 */
 #define RTL_UUID_NAMESPACE_DNS {\
       0x6b,0xa7,0xb8,0x10,\
       0x9d,0xad,\
@@ -176,7 +194,10 @@ void SAL_CALL rtl_createNamedUuid(
       0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8\
     }
 
-/* 6ba7b811-9dad-11d1-80b4-00c04fd430c8 */
+/** namespace URL
+
+   <p>
+   6ba7b811-9dad-11d1-80b4-00c04fd430c8 */
 #define RTL_UUID_NAMESPACE_URL { \
       0x6b, 0xa7, 0xb8, 0x11,\
       0x9d, 0xad,\
@@ -184,7 +205,10 @@ void SAL_CALL rtl_createNamedUuid(
       0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8\
     }
 
-/* 6ba7b812-9dad-11d1-80b4-00c04fd430c8 */
+/** namespace oid
+
+    <p>
+    6ba7b812-9dad-11d1-80b4-00c04fd430c8 */
 #define RTL_UUID_NAMESPACE_OID {\
       0x6b, 0xa7, 0xb8, 0x12,\
       0x9d, 0xad,\
@@ -192,7 +216,10 @@ void SAL_CALL rtl_createNamedUuid(
       0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8\
     }
 
-/* 6ba7b814-9dad-11d1-80b4-00c04fd430c8 */
+/** namespace X500
+
+    <p>
+    6ba7b814-9dad-11d1-80b4-00c04fd430c8 */
 #define RTL_UUID_NAMESPACE_X500 {\
       0x6b, 0xa7, 0xb8, 0x14,\
       0x9d, 0xad,\
@@ -201,7 +228,7 @@ void SAL_CALL rtl_createNamedUuid(
     }
 
 
-/**
+/*
     This macro must have a value below the system time resolution of the
     system. The uuid routines use this value  as an upper limit for adding ticks to the
     the predecessor time value if system times are equal.

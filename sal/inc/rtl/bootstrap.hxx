@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2001-08-30 11:51:36 $
+ *  last change: $Author: jbu $ $Date: 2001-10-24 10:51:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,28 +70,29 @@ namespace rtl
         void * _handle;
     public:
         /**
-           @see rtl_bootstrap_setIniFileName
+           @see rtl_bootstrap_setIniFileName()
          */
         static inline void SAL_CALL setIniFilename( const ::rtl::OUString &sFile );
 
-        /**
+        /** Retrieves a bootstrap parameter
            @param sName name of the bootstrap value. case insensitive.
            @param outValue (out parameter). On success contains the value, otherwise
                   an empty string.
            @return sal_False, if no value could be retrieved, otherwise sal_True
-           @see rtl_bootstrap_get
+           @see rtl_bootstrap_get()
          */
         static inline sal_Bool get(
             const ::rtl::OUString &sName,
             ::rtl::OUString &outValue );
 
-        /**
+        /** Retrieves a bootstrap parameter
+
            @param sName name of the bootstrap value. case insensitive.
            @param outValue (out parameter). Contains the value associated with sName.
            @param aDefault if none of the other methods retrieved a value, outValue
                            is assigned to a Default.
 
-           @see rtl_bootstrap_get
+           @see rtl_bootstrap_get()
          */
         static inline void get(
             const ::rtl::OUString &sName,
@@ -100,17 +101,40 @@ namespace rtl
 
 
         inline Bootstrap();
+
+        /** Opens a bootstrap argment container
+            @see rtl_bootstrap_args_open()
+         */
         inline Bootstrap(const OUString & iniName);
+
+        /** Closes a bootstrap argument container
+            @see rtl_bootstrap_args_close()
+        */
         inline ~Bootstrap();
+
+        /** Retrieves a bootstrap argument.
+
+            It is first tried to retrieve the value via the global function
+            and second via the special bootstrap container.
+            @see rtl_bootstrap_get_from_handle()
+        */
 
         inline sal_Bool getFrom(const ::rtl::OUString &sName,
                                 ::rtl::OUString &outValue) const;
 
+        /** Retrieves a bootstrap argument.
 
+            It is first tried to retrieve the value via the global function
+            and second via the special bootstrap container.
+            @see rtl_bootstrap_get_from_handle()
+        */
         inline void getFrom(const ::rtl::OUString &sName,
                             ::rtl::OUString &outValue,
                             const ::rtl::OUString &aDefault) const;
 
+        /** Retrieves the name of the underlying ini-file.
+            @see rtl_bootstrap_get_iniName_from_handle()
+         */
         inline void getIniName(::rtl::OUString & iniName) const;
 
     };
