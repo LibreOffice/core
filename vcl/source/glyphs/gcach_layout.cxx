@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:10:12 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,6 +488,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
         // convert results to GlyphItems
         int nFilteredRunGlyphCount = 0;
         const IcuPosition* pPos = pGlyphPositions;
+        int nLastCharPos = -1;
         for( int i = 0; i < nRawRunGlyphCount; ++i, ++pPos )
         {
             int nGlyphIndex = pIcuGlyphs[i];
@@ -504,6 +505,14 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
                     continue;
             }
 
+            // if ICU feeds us a character index sequence like [1,0,1] (which
+            // is completely valid), smooth out the sequence so that our cluster
+            // detection routines work better. The best knowledge where the
+            // cluster boundaries are should be provided by the layout engine...
+            if( nLastCharPos != -1 )
+                if( (nCharPos < nLastCharPos) ^ bRightToLeft )
+                    nCharPos = nLastCharPos;
+
             // apply vertical flags, etc.
             sal_Unicode aChar = rArgs.mpStr[ nCharPos ];
             nGlyphIndex = rFont.FixupGlyphIndex( nGlyphIndex, aChar );
@@ -511,12 +520,19 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             aNewPos = Point( (int)(pPos->fX+0.5), (int)(pPos->fY+0.5) );
             const GlyphMetric& rGM = rFont.GetGlyphMetric( nGlyphIndex );
             int nGlyphWidth = rGM.GetCharWidth();
-            long nGlyphFlags = (nGlyphWidth > 0) ? 0 : GlyphItem::IS_IN_CLUSTER;
+
+            // heuristic to detect group clusters using the "smoothed" char positions
+            long nGlyphFlags = 0;
+            if( nLastCharPos != -1 )
+                if( (nCharPos == nLastCharPos) || (nGlyphWidth == 0) )
+                    nGlyphFlags = GlyphItem::IS_IN_CLUSTER;
             if( bRightToLeft )
                 nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
+
             GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
             rLayout.AppendGlyph( aGI );
             ++nFilteredRunGlyphCount;
+            nLastCharPos = nCharPos;
         }
         aNewPos = Point( (int)(pPos->fX+0.5), (int)(pPos->fY+0.5) );
         nGlyphCount += nFilteredRunGlyphCount;
