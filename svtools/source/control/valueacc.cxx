@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueacc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: af $ $Date: 2002-11-25 12:49:49 $
+ *  last change: $Author: af $ $Date: 2002-12-03 14:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ sal_Int32 SAL_CALL ValueSetAcc::getAccessibleIndexInParent()
 sal_Int16 SAL_CALL ValueSetAcc::getAccessibleRole()
     throw (uno::RuntimeException)
 {
-    return accessibility::AccessibleRole::UNKNOWN;
+    return accessibility::AccessibleRole::LIST;
 }
 
 // -----------------------------------------------------------------------------
@@ -337,7 +337,14 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueSetAcc::ge
 uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueSetAcc::getAccessibleStateSet()
     throw (uno::RuntimeException)
 {
-    return uno::Reference< accessibility::XAccessibleStateSet >();
+    ::utl::AccessibleStateSetHelper* pStateSet = new ::utl::AccessibleStateSetHelper();
+
+    // Set some states.
+    pStateSet->AddState (accessibility::AccessibleStateType::ENABLED);
+    pStateSet->AddState (accessibility::AccessibleStateType::SHOWING);
+    pStateSet->AddState (accessibility::AccessibleStateType::VISIBLE);
+
+    return pStateSet;
 }
 
 // -----------------------------------------------------------------------------
@@ -848,7 +855,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
 sal_Int16 SAL_CALL ValueItemAcc::getAccessibleRole()
     throw (uno::RuntimeException)
 {
-    return accessibility::AccessibleRole::UNKNOWN;
+    return accessibility::AccessibleRole::LISTITEM;
 }
 
 // -----------------------------------------------------------------------------
@@ -902,6 +909,10 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueItemAcc::getA
 
     if( mpParent )
     {
+        pStateSet->AddState (accessibility::AccessibleStateType::ENABLED);
+        pStateSet->AddState (accessibility::AccessibleStateType::SHOWING);
+        pStateSet->AddState (accessibility::AccessibleStateType::VISIBLE);
+
         // SELECTABLE
         pStateSet->AddState( accessibility::AccessibleStateType::SELECTABLE );
         pStateSet->AddState( accessibility::AccessibleStateType::FOCUSABLE );
@@ -1111,7 +1122,11 @@ sal_Int32 SAL_CALL ValueItemAcc::getForeground(  )
 sal_Int32 SAL_CALL ValueItemAcc::getBackground(  )
     throw (uno::RuntimeException)
 {
-    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+    UINT32 nColor;
+    if (mpParent->meType == VALUESETITEM_COLOR)
+        nColor = mpParent->maColor.GetColor();
+    else
+        nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
 
