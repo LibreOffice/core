@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-17 09:11:33 $
+ *  last change: $Author: fme $ $Date: 2001-08-30 11:28:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,6 +535,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         // recursively and must add the x-position
                         // of the multi-portion.
                         xub_StrLen nOldStart = nStart;
+                        SwTwips nOldY = nY;
                         BYTE nOldProp = GetPropFont();
                         nStart = aInf.GetIdx();
                         SwLineLayout* pOldCurr = pCurr;
@@ -635,6 +636,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             SwDoubleLinePortion::ResetSpaceAdd( pCurr );
                         pCurr = pOldCurr;
                         nStart = nOldStart;
+                        nY = nOldY;
                         bPrev = sal_False;
 
                         return;
