@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessiblePageHeader.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $
+ *  last change: $Author: pjunck $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ public class ScAccessiblePageHeader extends TestCase {
             (xRoot, AccessibleRole.HEADER, "");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
-//        at.printAccessibleTree(log, xRoot);
+        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
