@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-30 14:27:05 $
+#   last change: $Author: hjs $ $Date: 2002-02-18 11:12:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,6 +141,7 @@ $(DEF$(TNR)TARGETN) .PHONY : \
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
+.IF "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
@@ -148,6 +149,7 @@ $(DEF$(TNR)TARGETN) .PHONY : \
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
     ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF				# "$(DEFLIB$(TNR)NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)

@@ -38,6 +38,7 @@ $(DEF1TARGETN) .PHONY : \
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
+.IF "$(DEFLIB1NAME)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
@@ -45,6 +46,7 @@ $(DEF1TARGETN) .PHONY : \
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
     ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF				# "$(DEFLIB1NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
@@ -214,6 +216,7 @@ $(DEF2TARGETN) .PHONY : \
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
+.IF "$(DEFLIB2NAME)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
@@ -221,6 +224,7 @@ $(DEF2TARGETN) .PHONY : \
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
     ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF				# "$(DEFLIB2NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
@@ -390,6 +394,7 @@ $(DEF3TARGETN) .PHONY : \
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
+.IF "$(DEFLIB3NAME)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
@@ -397,6 +402,7 @@ $(DEF3TARGETN) .PHONY : \
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
     ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF				# "$(DEFLIB3NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
@@ -566,6 +572,7 @@ $(DEF4TARGETN) .PHONY : \
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
+.IF "$(DEFLIB4NAME)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
@@ -573,6 +580,7 @@ $(DEF4TARGETN) .PHONY : \
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
     ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF				# "$(DEFLIB4NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
@@ -742,6 +750,7 @@ $(DEF5TARGETN) .PHONY : \
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
+.IF "$(DEFLIB5NAME)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
@@ -749,6 +758,7 @@ $(DEF5TARGETN) .PHONY : \
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
     ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF				# "$(DEFLIB5NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
@@ -918,6 +928,7 @@ $(DEF6TARGETN) .PHONY : \
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
+.IF "$(DEFLIB6NAME)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
@@ -925,6 +936,7 @@ $(DEF6TARGETN) .PHONY : \
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
     ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF				# "$(DEFLIB6NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
@@ -1094,6 +1106,7 @@ $(DEF7TARGETN) .PHONY : \
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
+.IF "$(DEFLIB7NAME)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
@@ -1101,6 +1114,7 @@ $(DEF7TARGETN) .PHONY : \
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
     ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF				# "$(DEFLIB7NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
@@ -1270,6 +1284,7 @@ $(DEF8TARGETN) .PHONY : \
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
+.IF "$(DEFLIB8NAME)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
@@ -1277,6 +1292,7 @@ $(DEF8TARGETN) .PHONY : \
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
     ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF				# "$(DEFLIB8NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
@@ -1446,6 +1462,7 @@ $(DEF9TARGETN) .PHONY : \
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
+.IF "$(DEFLIB9NAME)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
@@ -1453,6 +1470,7 @@ $(DEF9TARGETN) .PHONY : \
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
     ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF				# "$(DEFLIB9NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
@@ -1622,6 +1640,7 @@ $(DEF10TARGETN) .PHONY : \
 # %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
+.IF "$(DEFLIB10NAME)"!=""
 .IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
@@ -1629,6 +1648,7 @@ $(DEF10TARGETN) .PHONY : \
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
     ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF				# "$(DEFLIB10NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
     +-attrib -r defs\$(OUTPATH)
