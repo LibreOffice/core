@@ -1,0 +1,9 @@
+#i23307#
+osl_Pipe.getError.getError_001 wntmsci
+osl_Pipe.getError.getError_002 wntmsci
+
+osl_StreamPipe.recv.recv_002 wntmsci unxsols
+# osl_Pipe.ctors.ctors_acquire wntmsci
+
+#i27889#
+osl_Pipe.ctors.ctors_no_acquire wntmsci
