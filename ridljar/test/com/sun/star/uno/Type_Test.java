@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type_Test.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-09 10:16:52 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:26:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,12 +74,13 @@ public final class Type_Test extends ComplexTestCase {
         assure("BYTE", new Type("byte").getZClass() == byte.class);
         assure("SHORT", new Type("short").getZClass() == short.class);
         assure("UNSIGNED SHORT",
-               new Type("unsigned short").getZClass() == null);
+               new Type("unsigned short").getZClass() == short.class);
         assure("LONG", new Type("long").getZClass() == int.class);
-        assure("UNSIGNED LONG", new Type("unsigned long").getZClass() == null);
+        assure("UNSIGNED LONG",
+               new Type("unsigned long").getZClass() == int.class);
         assure("HYPER", new Type("hyper").getZClass() == long.class);
         assure("UNSIGNED HYPER",
-               new Type("unsigned hyper").getZClass() == null);
+               new Type("unsigned hyper").getZClass() == long.class);
         assure("FLOAT", new Type("float").getZClass() == float.class);
         assure("DOUBLE", new Type("double").getZClass() == double.class);
         assure("CHAR", new Type("char").getZClass() == char.class);
@@ -118,6 +119,11 @@ public final class Type_Test extends ComplexTestCase {
                new Type("com.sun.star.uno.XComponentContext",
                         TypeClass.INTERFACE).getZClass()
                == XComponentContext.class);
+
+        assure(new Type(boolean.class).getZClass() == boolean.class);
+        assure(new Type(Boolean.class).getZClass() == boolean.class);
+        assure(new Type(boolean[].class).getZClass() == boolean[].class);
+        assure(new Type(Boolean[].class).getZClass() == boolean[].class);
     }
 
     public void testIsSupertypeOf() {
