@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-18 11:36:42 $
+ *  last change: $Author: pb $ $Date: 2001-06-19 06:28:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1059,6 +1059,7 @@ struct SvtTmplDlg_Impl
 {
     SvtTemplateWindow*  pWin;
     String              aTitle;
+    Timer               aUpdateTimer;
 
     SvtTmplDlg_Impl( Window* pParent ) : pWin( new SvtTemplateWindow( pParent ) ) {}
     ~SvtTmplDlg_Impl() { delete pWin; }
@@ -1101,6 +1102,10 @@ SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* pParent ) :
 
     SelectHdl_Impl( NULL );
     NewFolderHdl_Impl( NULL );
+
+    pImpl->aUpdateTimer.SetTimeout( 100 );
+    pImpl->aUpdateTimer.SetTimeoutHdl( LINK( this, SvtDocumentTemplateDialog, UpdateHdl_Impl ) );
+    pImpl->aUpdateTimer.Start();
 }
 
 SvtDocumentTemplateDialog::~SvtDocumentTemplateDialog()
@@ -1141,5 +1146,20 @@ IMPL_LINK ( SvtDocumentTemplateDialog , OKHdl_Impl, PushButton *, pBtn )
         EndDialog( RET_OK );
     }
     return 0;
+}
+
+IMPL_LINK ( SvtDocumentTemplateDialog , UpdateHdl_Impl, Timer *, EMPTYARG )
+{
+    UpdateDocumentTemplates_Impl();
+    return 0;
+}
+
+void SvtDocumentTemplateDialog::UpdateDocumentTemplates_Impl()
+{
+    ::rtl::OUString aService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.DocumentTemplates" ) );
+    Reference< XDocumentTemplates > xTemplates(
+        ::comphelper::getProcessServiceFactory()->createInstance( aService ), UNO_QUERY );
+    if ( xTemplates.is() )
+        xTemplates->update();
 }
 
