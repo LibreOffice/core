@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-11 12:21:49 $
+ *  last change: $Author: ama $ $Date: 2000-10-30 15:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -846,6 +846,8 @@ SwCntntNotify::~SwCntntNotify()
                         case REL_PG_FRAME:      aPos.Y() = pPage->Frm().Top(); break;
                         case REL_PG_PRTAREA:    aPos.Y() = pPage->Frm().Top();
                                                 aPos.Y() += pPage->Prt().Top(); break;
+                        case PRTAREA:           aPos.Y() = pCnt->Frm().Top();
+                                                aPos.Y() += pCnt->Prt().Top(); break;
                         case FRAME:             aPos.Y() = pCnt->Frm().Top(); break;
                         default:
                             bSetPos = FALSE;
@@ -864,7 +866,7 @@ SwCntntNotify::~SwCntntNotify()
                         case REL_PG_FRAME:      aPos.X() = pPage->Frm().Left(); break;
                         case REL_PG_PRTAREA:    aPos.X() = pPage->Frm().Left();
                                                 aPos.X() += pPage->Prt().Left();    break;
-
+                        case PRTAREA:
                         case FRAME:
                             // da es fuer den WW95/97 Import ist und die
                             // Horizontal nur Spalten kennen, muss hier die
