@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-12 07:31:29 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,13 +112,13 @@ TabPage TP_REDLINE_OPT
         Text = "A~ttribute" ;
         Text [ English ] = "Attributes" ;
         Text[ english_us ] = "Attributes";
-        Text[ portuguese ] = "Attributes";
+        Text[ portuguese ] = "A~tributos";
         Text[ russian ] = "ΐςπθασςϋ";
         Text[ greek ] = "Ιδιό~τητες";
-        Text[ dutch ] = "Attributes";
+        Text[ dutch ] = "~Attributen";
         Text[ french ] = "A~ttributs";
         Text[ spanish ] = "~Atributos";
-        Text[ italian ] = "Attributes";
+        Text[ italian ] = "Attributi";
         Text[ danish ] = "Attributes";
         Text[ swedish ] = "A~ttribut";
         Text[ polish ] = "Atrybuty";
@@ -227,26 +227,26 @@ TabPage TP_REDLINE_OPT
         < "Πλάγια" ; > ;
         < "Υπογράμμιση" ; > ;
         < "Διπλή υπογράμμιση" ; > ;
+        < "Διακριτή διαγραφή" ; > ;
         < "Κεφαλαία" ; > ;
-        < "Πεζοί χαρακτήρες" ; > ;
+        < "Πεζά" ; > ;
         < "Μικρά κεφαλαία" ; > ;
         < "Γραμματοσειρά τίτλου" ; > ;
         < "Χρώμα φόντου" ; > ;
-        < "Hintergrundfarbe" ; > ;
     };
     StringList [ dutch ] =
     {
             < "[Geen]" ; > ;
         < "Vet" ; > ;
         < "Cursief" ; > ;
-        < "Onderstrepen" ; > ;
+        < "Onderstreept" ; > ;
         < "Dubbel onderstrepen" ; > ;
+        < "Doorstrepen" ; > ;
         < "Hoofdletters" ; > ;
         < "Kleine letters" ; > ;
-        < "Kapitalen" ; > ;
-        < "Titelschrift" ; > ;
+        < "Klein-kapitaal" ; > ;
+        < "Letterype titel" ; > ;
         < "Achtergrondkleur" ; > ;
-        < "Hintergrundfarbe" ; > ;
     };
     StringList [ french ] =
     {
@@ -283,12 +283,12 @@ TabPage TP_REDLINE_OPT
         < "Corsivo" ; > ;
         < "Sottolineato" ; > ;
         < "Sottolineatura doppia" ; > ;
+        < "Barrato" ; > ;
         < "Maiuscolo" ; > ;
-        < "Minuscolo" ; > ;
+        < "Maiuscoletto" ; > ;
         < "Maiuscoletto" ; > ;
         < "Carattere del titolo" ; > ;
         < "Colore di sfondo" ; > ;
-        < "Hintergrundfarbe" ; > ;
     };
     StringList [ danish ] =
     {
@@ -325,12 +325,12 @@ TabPage TP_REDLINE_OPT
         < "Kursywa" ; > ;
         < "Podkrelenie" ; > ;
         < "Podwσjne podkrelenie" ; > ;
+        < "Przekrelenie" ; > ;
         < "Wersaliki" ; > ;
         < "Ma³e litery" ; > ;
         < "Kapitaliki" ; > ;
-        < "Czcionka tytu³owa" ; > ;
+        < "Czcionka tytu³u" ; > ;
         < "Kolor t³a" ; > ;
-        < "Hintergrundfarbe" ; > ;
     };
     StringList [ portuguese_brazilian ] =
     {
@@ -442,7 +442,7 @@ TabPage TP_REDLINE_OPT
         Text [ portuguese_brazilian ] = "Farbe" ;
         Text [ swedish ] = "~Fδrg" ;
         Text [ danish ] = "Farve" ;
-        Text [ italian ] = "Colore" ;
+        Text [ italian ] = "~Colore" ;
         Text [ spanish ] = "~Color" ;
         Text [ french ] = "~Couleur" ;
         Text [ dutch ] = "~Kleur" ;
@@ -475,10 +475,10 @@ TabPage TP_REDLINE_OPT
         Text[ portuguese ] = "Insert";
         Text[ russian ] = "Βρςΰβθςό";
         Text[ greek ] = "Εισαγωγή";
-        Text[ dutch ] = "Insert";
+        Text[ dutch ] = "Invoegen";
         Text[ french ] = "Insιrer";
         Text[ spanish ] = "Insertar";
-        Text[ italian ] = "Insert";
+        Text[ italian ] = "Inserisci";
         Text[ danish ] = "Insert";
         Text[ swedish ] = "Infoga";
         Text[ polish ] = "Wstaw";
@@ -497,13 +497,13 @@ TabPage TP_REDLINE_OPT
         Text = "A~ttribute" ;
         Text [ English ] = "Attributes" ;
         Text[ english_us ] = "Attributes";
-        Text[ portuguese ] = "Attributes";
+        Text[ portuguese ] = "A~tributos";
         Text[ russian ] = "ΐςπθασςϋ";
         Text[ greek ] = "Ιδιό~τητες";
-        Text[ dutch ] = "Attributes";
+        Text[ dutch ] = "~Attributen";
         Text[ french ] = "A~ttributs";
         Text[ spanish ] = "~Atributos";
-        Text[ italian ] = "Attributes";
+        Text[ italian ] = "Attributi";
         Text[ danish ] = "Attributes";
         Text[ swedish ] = "A~ttribut";
         Text[ polish ] = "Atrybuty";
@@ -529,13 +529,13 @@ TabPage TP_REDLINE_OPT
         Text = "~Farbe" ;
         Text [ English ] = "Color" ;
         Text[ english_us ] = "Color";
-        Text[ portuguese ] = "Color";
+        Text[ portuguese ] = "~Cor";
         Text[ russian ] = "Φβες";
         Text[ greek ] = "Χρώμα";
-        Text[ dutch ] = "Color";
+        Text[ dutch ] = "~Kleur";
         Text[ french ] = "~Couleur";
         Text[ spanish ] = "~Color";
-        Text[ italian ] = "Color";
+        Text[ italian ] = "~Colore";
         Text[ danish ] = "Color";
         Text[ swedish ] = "~Fδrg";
         Text[ polish ] = "Kolor";
@@ -565,10 +565,10 @@ TabPage TP_REDLINE_OPT
         Text[ portuguese ] = "Delete";
         Text[ russian ] = "Σδΰλθςό";
         Text[ greek ] = "Διαγραφή";
-        Text[ dutch ] = "Delete";
+        Text[ dutch ] = "Wissen";
         Text[ french ] = "Supprimer";
         Text[ spanish ] = "Eliminar";
-        Text[ italian ] = "Delete";
+        Text[ italian ] = "Elimina";
         Text[ danish ] = "Delete";
         Text[ swedish ] = "Radera";
         Text[ polish ] = "Usuρ";
@@ -587,10 +587,10 @@ TabPage TP_REDLINE_OPT
         Text = "A~ttribute" ;
         Text [ English ] = "Attributes" ;
         Text[ english_us ] = "Attributes";
-        Text[ portuguese ] = "Attributes";
+        Text[ portuguese ] = "A~tributos";
         Text[ russian ] = "ΐςπθασςϋ";
         Text[ greek ] = "Ιδιό~τητες";
-        Text[ dutch ] = "Attributes";
+        Text[ dutch ] = "~Attributen";
         Text[ french ] = "A~ttributs";
         Text[ spanish ] = "~Atributos";
         Text[ italian ] = "Attributes";
@@ -619,13 +619,13 @@ TabPage TP_REDLINE_OPT
         Text = "~Farbe" ;
         Text [ English ] = "Color" ;
         Text[ english_us ] = "Color";
-        Text[ portuguese ] = "Color";
+        Text[ portuguese ] = "~Cor";
         Text[ russian ] = "Φβες";
         Text[ greek ] = "Χρώμα";
-        Text[ dutch ] = "Color";
+        Text[ dutch ] = "~Kleur";
         Text[ french ] = "~Couleur";
         Text[ spanish ] = "~Color";
-        Text[ italian ] = "Color";
+        Text[ italian ] = "~Colore";
         Text[ danish ] = "Color";
         Text[ swedish ] = "~Fδrg";
         Text[ polish ] = "Kolor";
@@ -655,10 +655,10 @@ TabPage TP_REDLINE_OPT
         Text[ portuguese ] = "Attributes";
         Text[ russian ] = "ΐςπθασςϋ";
         Text[ greek ] = "Ιδιότητες";
-        Text[ dutch ] = "Attributes";
+        Text[ dutch ] = "Attributen";
         Text[ french ] = "Attributs";
         Text[ spanish ] = "Atributos";
-        Text[ italian ] = "Attributes";
+        Text[ italian ] = "Attributi";
         Text[ danish ] = "Attributes";
         Text[ swedish ] = "Attribut";
         Text[ polish ] = "Atrybuty";
@@ -702,7 +702,7 @@ TabPage TP_REDLINE_OPT
         Size = MAP_APPFONT ( 48 , 8 ) ;
         Text = "Ma~rkierung" ;
         Text [ English ] = "Mark" ;
-        Text [ portuguese ] = "Marca" ;
+        Text [ portuguese ] = "Ma~rca" ;
         Text [ english_us ] = "Mar~k" ;
         Text [ portuguese_brazilian ] = "Markierung" ;
         Text [ swedish ] = "Ma~rkering" ;
@@ -710,7 +710,7 @@ TabPage TP_REDLINE_OPT
         Text [ italian ] = "Contrassegno" ;
         Text [ spanish ] = "~Marca" ;
         Text [ french ] = "Ma~rque" ;
-        Text [ dutch ] = "Markering" ;
+        Text [ dutch ] = "Ma~rkering" ;
         Text[ chinese_simplified ] = "±κΌΗ(~K)";
         Text[ russian ] = "Βϋδελενθε";
         Text[ polish ] = "Zaznaczenie";
@@ -910,8 +910,8 @@ TabPage TP_REDLINE_OPT
         Text [ italian ] = "Colore" ;
         Text [ spanish ] = "~Color" ;
         Text [ french ] = "~Couleur" ;
-        Text [ dutch ] = "Kleur" ;
-        Text [ portuguese ] = "Cor" ;
+        Text [ dutch ] = "~Kleur" ;
+        Text [ portuguese ] = "Co~r" ;
         Text[ chinese_simplified ] = "ΡΥΙ«(~C)";
         Text[ russian ] = "Φβες";
         Text[ polish ] = "Kolor";
