@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Security.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 14:51:32 $
+ *  last change: $Author: rt $  $Date: 2004-05-03 09:02:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,9 +354,9 @@ namespace osl_Security
                 rtl::OUString suPassword;
                 rtl::OUString suFileServer;
                 ::osl::Security aSec;
-                oslSecurity *pSec = aSec.getHandle();
+                oslSecurity pSec = aSec.getHandle();
 
-                oslSecurityError erg = osl_loginUserOnFileServer(suUserName.pData, suPassword.pData, suFileServer.pData, pSec);
+                oslSecurityError erg = osl_loginUserOnFileServer(suUserName.pData, suPassword.pData, suFileServer.pData, &pSec);
 
                 CPPUNIT_ASSERT_MESSAGE( "empty function.", erg == osl_Security_E_UserUnknown );
             }
