@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2001-04-09 08:35:05 $
+ *  last change: $Author: mtg $ $Date: 2001-04-11 10:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2094,6 +2094,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             aRequest.AppendItem(SfxUInt16Item( SID_ATTR_YEAR2000, static_cast < sal_uInt16 > ( nYear ) ) );
             pDocShell->Execute ( aRequest );
         }
+        break;
         case WID_DOC_AUTOMATIC_CONTROL_FOCUS:
         {
             SwDrawDocument * pDrawDoc;
@@ -2132,6 +2133,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
                 pDrawDoc->SetOpenInDesignMode ( bMode );
             }
         }
+        break;
         case WID_DOC_APPLY_USER_DATA:
         {
             SfxDocumentInfo& rInfo = pDocShell->GetDocInfo();
@@ -2331,6 +2333,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
                 bMode = sal_True;
             aAny.setValue(&bMode, ::getBooleanCppuType());
         }
+        break;
         case WID_DOC_APPLY_USER_DATA:
         {
             SfxDocumentInfo &rInfo = pDocShell->GetDocInfo();
@@ -2540,6 +2543,7 @@ PropertyState SAL_CALL SwXTextDocument::getPropertyState( const OUString& rPrope
                    pDrawDoc->GetOpenInDesignMode())
                 eRet = PropertyState_DEFAULT_VALUE;
         }
+        break;
         case WID_DOC_APPLY_USER_DATA:
         {
             SfxDocumentInfo &rInfo = pDocShell->GetDocInfo();
