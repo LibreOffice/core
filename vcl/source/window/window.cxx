@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.207 $
+ *  $Revision: 1.208 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:23:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -838,7 +838,14 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         else
             pFrame = pSVData->mpDefInst->CreateFrame( pParentFrame, nFrameStyle );
         if ( !pFrame )
-            GetpApp()->Exception( EXC_SYSOBJNOTCREATED );
+        {
+            // do not abort but throw an exception, may be the current thread terminates anyway (plugin-scenario)
+            throw ::com::sun::star::uno::RuntimeException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "Could not create system window!" ) ),
+                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
+            //GetpApp()->Exception( EXC_SYSOBJNOTCREATED );
+        }
+
         pFrame->SetCallback( this, ImplWindowFrameProc );
 
         // set window frame data
