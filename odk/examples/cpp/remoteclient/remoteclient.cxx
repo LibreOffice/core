@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remoteclient.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:08:36 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:51:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -41,8 +41,6 @@
 #include <stdio.h>
 #include <osl/mutex.hxx>
 #include <cppuhelper/factory.hxx>
-
-#include <cppuhelper/servicefactory.hxx>
 
 #include <com/sun/star/uno/XNamingService.hpp>
 
