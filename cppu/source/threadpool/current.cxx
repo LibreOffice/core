@@ -2,9 +2,9 @@
  *
  *  $RCSfile: current.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:27:47 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 14:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,9 @@
 #include "osl/mutex.hxx"
 
 #include "uno/environment.hxx"
-#include "uno/mapping.hxx"
+#include "uno/mapping.h"
+#include "uno/lbnames.h"
+#include "typelib/typedescription.h"
 
 #include "current.hxx"
 
@@ -103,7 +105,7 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
                 RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XCurrentContext::getValueByName") );
             typelib_typedescriptionreference_new(
                 &pMembers[0],
-                (typelib_TypeClass)::com::sun::star::uno::TypeClass_INTERFACE_METHOD,
+                typelib_TypeClass_INTERFACE_METHOD,
                 sMethodName0.pData );
             typelib_typedescription_newInterface(
                 &pTD,
@@ -388,11 +390,14 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
         p_source_env = source_env.get();
     }
 
-    Mapping mapping( p_source_env, target_env.get() );
-    OSL_ASSERT( mapping.is() );
-    if (! mapping.is())
+    uno_Mapping * mapping = 0;
+    uno_getMapping( &mapping, p_source_env, target_env.get(), 0 );
+    OSL_ASSERT( mapping != 0 );
+    if (! mapping)
         return sal_False;
-    mapping.mapInterface(
+    (*mapping->mapInterface)(
+        mapping,
         ppCurrentContext, pId->pCurrentContext, ::cppu::get_type_XCurrentContext() );
+    (*mapping->release)( mapping );
     return sal_True;
 }

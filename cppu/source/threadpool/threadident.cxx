@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadident.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:08 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 14:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,6 @@
 #include <rtl/byteseq.hxx>
 
 #include <uno/threadpool.h>
-
-#include <com/sun/star/uno/Sequence.hxx>
 
 #include "current.hxx"
 

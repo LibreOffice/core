@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:29:49 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 14:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,8 @@
 #include "osl/interlck.h"
 
 #include "uno/dispatcher.h"
-#include "uno/mapping.hxx"
+#include "uno/mapping.h"
+#include "uno/lbnames.h"
 #include "uno/environment.hxx"
 
 #include "typelib/typedescription.h"
@@ -86,6 +87,65 @@ using namespace com::sun::star::uno;
 
 namespace cppu
 {
+
+class Mapping
+{
+    uno_Mapping * _pMapping;
+
+public:
+    inline Mapping(
+        uno_Environment * pFrom, uno_Environment * pTo,
+        const ::rtl::OUString & rAddPurpose = ::rtl::OUString() )
+        SAL_THROW( () );
+    inline Mapping( uno_Mapping * pMapping = 0 ) SAL_THROW( () );
+    inline Mapping( const Mapping & rMapping ) SAL_THROW( () );
+    inline ~Mapping() SAL_THROW( () );
+    inline Mapping & SAL_CALL operator = ( uno_Mapping * pMapping ) SAL_THROW( () );
+    inline Mapping & SAL_CALL operator = ( const Mapping & rMapping ) SAL_THROW( () )
+        { return operator = ( rMapping._pMapping ); }
+    inline uno_Mapping * SAL_CALL get() const SAL_THROW( () )
+        { return _pMapping; }
+    inline sal_Bool SAL_CALL is() const SAL_THROW( () )
+        { return (_pMapping != 0); }
+};
+//__________________________________________________________________________________________________
+inline Mapping::Mapping(
+    uno_Environment * pFrom, uno_Environment * pTo, const ::rtl::OUString & rAddPurpose )
+    SAL_THROW( () )
+    : _pMapping( 0 )
+{
+    uno_getMapping( &_pMapping, pFrom, pTo, rAddPurpose.pData );
+}
+//__________________________________________________________________________________________________
+inline Mapping::Mapping( uno_Mapping * pMapping ) SAL_THROW( () )
+    : _pMapping( pMapping )
+{
+    if (_pMapping)
+        (*_pMapping->acquire)( _pMapping );
+}
+//__________________________________________________________________________________________________
+inline Mapping::Mapping( const Mapping & rMapping ) SAL_THROW( () )
+    : _pMapping( rMapping._pMapping )
+{
+    if (_pMapping)
+        (*_pMapping->acquire)( _pMapping );
+}
+//__________________________________________________________________________________________________
+inline Mapping::~Mapping() SAL_THROW( () )
+{
+    if (_pMapping)
+        (*_pMapping->release)( _pMapping );
+}
+//__________________________________________________________________________________________________
+inline Mapping & Mapping::operator = ( uno_Mapping * pMapping ) SAL_THROW( () )
+{
+    if (pMapping)
+        (*pMapping->acquire)( pMapping );
+    if (_pMapping)
+        (*_pMapping->release)( _pMapping );
+    _pMapping = pMapping;
+    return *this;
+}
 
 //==================================================================================================
 struct MappingEntry
