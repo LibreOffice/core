@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsecctrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:07:21 $
+ *  last change: $Author: obo $ $Date: 2004-09-13 08:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ private:
 public:
     SFX_DECL_STATUSBAR_CONTROL();
 
-    XmlSecStatusBarControl( USHORT _nId, StatusBar& _rStb, SfxBindings& _rBind );
+    XmlSecStatusBarControl( USHORT _nSlotId, USHORT _nId, StatusBar& _rStb );
     ~XmlSecStatusBarControl();
 
     virtual void    StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsecctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:15:06 $
+ *  last change: $Author: obo $ $Date: 2004-09-13 08:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 #include "dialogs.hrc"
 #include "dialmgr.hxx"
 #include "xmlsecctrl.hxx"
+#include <tools/urlobj.hxx>
 
 #define PAINT_OFFSET    5
 
@@ -130,8 +131,8 @@ struct XmlSecStatusBarControl::XmlSecStatusBarControl_Impl
 };
 
 
-XmlSecStatusBarControl::XmlSecStatusBarControl( USHORT _nId, StatusBar& _rStb, SfxBindings& _rBind )
-    :SfxStatusBarControl( _nId, _rStb, _rBind )
+XmlSecStatusBarControl::XmlSecStatusBarControl( USHORT _nSlotId,  USHORT _nId, StatusBar& _rStb )
+    :SfxStatusBarControl( _nSlotId, _nId, _rStb )
 
     ,mpImpl( new XmlSecStatusBarControl_Impl )
 {
@@ -178,8 +179,16 @@ void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
         PopupMenu aPopupMenu( ResId( RID_SVXMNU_XMLSECSTATBAR, DIALOG_MGR() ) );
         if( aPopupMenu.Execute( &GetStatusBar(), rCEvt.GetMousePosPixel() ) )
         {
-            SfxUInt16Item aItem( SID_SIGNATURE, 0 );
-            GetBindings().GetDispatcher()->Execute( SID_SIGNATURE, SFX_CALLMODE_RECORD, &aItem, 0L );
+            ::com::sun::star::uno::Any a;
+            SfxUInt16Item aState( GetSlotId(), 0 );
+            INetURLObject aObj( m_aCommandURL );
+
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
+            aArgs[0].Name  = aObj.GetURLPath();
+            aState.QueryValue( a );
+            aArgs[0].Value = a;
+
+            execute( aArgs );
         }
     }
     else
