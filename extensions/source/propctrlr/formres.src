@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-03 14:00:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,27 @@ String RID_STR_ALIGN
     Text [ de ] = "Ausrichtung" ;
     Text [ en-US ] = "Alignment" ;
 };
+String RID_STR_VERTICAL_ALIGN
+{
+    Text = "Vert. Alignment" ;
+    // no translation so far, this property is still experimental and not visible by default
+};
+Resource RID_RSC_ENUM_VERTICAL_ALIGN
+{
+    // no translation so far, this property is still experimental and not visible by default
+    String 1
+    {
+        Text = "Top";
+    };
+    String 2
+    {
+        Text = "Middle";
+    };
+    String 3
+    {
+        Text = "Bottom";
+    };
+};
 String RID_STR_IMAGEPOSITION
 {
     Text [ de ] = "Grafik-Ausrichtung";
@@ -345,7 +366,7 @@ String RID_STR_LISTSOURCETYPE
 String RID_STR_CURSORSOURCE
 {
     Text [ de ] = "Inhalt" ;
-    Text [ en-US ] = "Content";
+    Text [ en-US ] = "Content" ;
 };
 String RID_STR_CURSORSOURCETYPE
 {
@@ -614,7 +635,7 @@ String RID_STR_ENUM_NAVIGATION
 };
 String RID_STR_ENUM_SUBMIT_TARGET
 {
-    Text [ de ] = "_blank;_parent;_self;_top" ;
+    Text = "_blank;_parent;_self;_top" ;
 };
 String RID_STR_EVT_APPROVEPARAMETER
 {
