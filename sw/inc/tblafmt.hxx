@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblafmt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,87 +297,4 @@ public:
     BOOL Save() const;
 };
 
-
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/inc/tblafmt.hxx,v 1.1.1.1 2000-09-18 17:14:28 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.22  2000/09/18 16:03:31  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.21  2000/09/08 13:24:29  willem.vandorp
-      Header and footer replaced
-
-      Revision 1.20  1999/10/11 15:23:51  jp
-      TableautoFormatnames with resource ids
-
-      Revision 1.19  1998/09/29 08:12:48  NN
-      #53381# bei Zahlformat Systemsprache beim Erzeugen mitspeichern
-
-
-      Rev 1.18   29 Sep 1998 10:12:48   NN
-   #53381# bei Zahlformat Systemsprache beim Erzeugen mitspeichern
-
-      Rev 1.17   15 Sep 1998 21:23:02   ER
-   #47738# gedrehter Text in Tabellen-AutoFormat
-
-      Rev 1.16   02 Jun 1998 10:35:02   JP
-   TabellenAutoFormat: Load/Save ohne Stream - erzeugen diesen selbst
-
-      Rev 1.15   14 May 1998 15:16:48   JP
-   neu: Numberformat vom Boxen unterstuetzen
-
-      Rev 1.14   12 May 1998 23:34:52   JP
-   neu: Zuweisungsoperator fuer SwTableAutoFmt
-
-      Rev 1.13   04 Sep 1997 09:02:58   MA
-   includes
-
-      Rev 1.12   09 Aug 1997 12:45:06   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.11   07 Aug 1997 14:43:12   OM
-   Headerfile-Umstellung
-
-      Rev 1.10   24 Jun 1996 18:35:28   MA
-   includes
-
-      Rev 1.9   13 Dec 1995 09:55:02   MA
-   opt: Bessere Defaults fuer Arrays
-
-      Rev 1.8   11 Dec 1995 13:38:48   HJS
-   anpassung fuer unix
-
-      Rev 1.7   30 Nov 1995 20:22:30   JP
-   DefaultTblAutoFmt erst auf Bedarf anlegen
-
-      Rev 1.6   31 Jul 1995 10:17:50   AMA
-   International-Umstellung wg. Update 253
-
-      Rev 1.5   20 Jul 1995 19:39:48   JP
-   Aederung fuer gemeinsamen Import/Export der Tabellen-Autoformatierung von Calc/Writer
-
-      Rev 1.4   10 Jun 1995 16:05:20   JP
-   Save/Load nochmals umgestellt
-
-      Rev 1.3   10 Jun 1995 12:51:26   JP
-   SwBoxAutoFmt::Load - Load-Version mit geben
-
-      Rev 1.2   06 Mar 1995 05:07:02   JP
-   Load & Save als Dummy
-
-      Rev 1.1   04 Mar 1995 20:42:22   JP
-   Adjust nachgetragen
-
-      Rev 1.0   04 Mar 1995 15:46:14   JP
-   Initial revision.
-
-*************************************************************************/
-    // #ifndef _...
 #endif

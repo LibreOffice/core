@@ -2,9 +2,9 @@
  *
  *  $RCSfile: index.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:26 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,59 +260,5 @@ inline SwIndex& SwIndex::operator=( xub_StrLen nWert )
 // PRODUCT
 #endif
 
-
-/******************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/inc/index.hxx,v 1.1.1.1 2000-09-18 17:14:26 hr Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.67  2000/09/18 16:03:22  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.66  2000/09/08 13:24:17  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.65  2000/04/12 13:53:23  jp
-    Unicode changes
-
-    Revision 1.64  1999/02/25 08:20:48  JP
-    Task #62314#: Asynchrone DDE-Links/-Requests
-
-
-      Rev 1.63   25 Feb 1999 09:20:48   JP
-   Task #62314#: Asynchrone DDE-Links/-Requests
-
-      Rev 1.62   27 Nov 1997 09:20:28   JP
-   neu: SwIndexReg::MoveTo - move alle Indiezies aus einem Array ins andere
-
-      Rev 1.61   11 Nov 1997 20:36:48   JP
-   SwIndexReg CTOR/DTOR jetzt public
-
-      Rev 1.60   10 Oct 1997 14:03:20   JP
-   SwRange wird nicht mehr benoetigt
-
-      Rev 1.59   09 Oct 1997 15:11:50   JP
-   Umstellung NodeIndex/-Array/BigPtrArray
-
-      Rev 1.58   07 Aug 1997 14:41:26   OM
-   Headerfile-Umstellung
-
-      Rev 1.57   18 Jul 1997 12:21:20   MA
-   includes
-
-      Rev 1.56   08 Nov 1995 15:47:10   MA
-   opt: operatoren entfernt
-
-      Rev 1.55   25 Jun 1995 16:49:20   JP
-   Unter Windows nun auch den neuen Index
-
-      Rev 1.54   09 May 1995 08:44:28   KH
-   #ifdef MAC -> #ifdef CFRONT
-
-*******************************************************************/
 
 #endif

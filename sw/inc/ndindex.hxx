@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndindex.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: os $ $Date: 2001-09-28 07:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,29 +284,5 @@ inline SwNode* SwNodes::operator[]( const SwNodeIndex& rIdx ) const
     return &rIdx.GetNode();
 }
 
-
-/******************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/inc/ndindex.hxx,v 1.1.1.1 2000-09-18 17:14:27 hr Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/09/18 16:03:23  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.2  2000/09/08 13:24:18  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.1  1997/10/09 13:12:34  JP
-    Umstellung NodeIndex/-Array/BigPtrArray
-
-
-      Rev 1.0   09 Oct 1997 15:12:34   JP
-   Umstellung NodeIndex/-Array/BigPtrArray
-
-*******************************************************************/
 
 #endif
