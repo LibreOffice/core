@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tra $ $Date: 2002-09-24 13:36:52 $
+ *  last change: $Author: tra $ $Date: 2002-11-26 09:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -798,6 +798,10 @@ void SAL_CALL CWinFileOpenImpl::onInitDone()
 
     m_CustomControls->SetFont(
         reinterpret_cast<HFONT>(SendMessageA(m_hwndFileOpenDlg, WM_GETFONT, 0, 0)));
+
+    // resume event notification that was
+    // defered in onInitDialog
+    m_FilePicker->resumeEventNotification();
 
     // call the parent function to center the
     // dialog to it's parent
