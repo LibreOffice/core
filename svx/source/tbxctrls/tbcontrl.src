@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 06:26:42 $
+ *  last change: $Author: rt $ $Date: 2001-05-16 15:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ String RID_SVXSTR_TRANSPARENT
     Text [ swedish ] = "Transparent" ;
     Text [ danish ] = "Ingen fyld" ;
     Text [ portuguese ] = "Sem preenchimento" ;
-    Text [ portuguese_brazilian ] = "Keine Füllung" ;
+    Text [ portuguese_brazilian ] = "Keine F?lung" ;
     Text[ chinese_simplified ] = "²»Ìî³ä";
     Text[ russian ] = "Áåç çàëèâêè";
     Text[ polish ] = "Brak wype³nienia";
@@ -114,7 +114,7 @@ String RID_SVXSTR_FILLPATTERN
     Text [ ENGLISH ] = "Pattern" ;
     Text [ norwegian ] = "Mønster" ;
     Text [ italian ] = "Modello" ;
-    Text [ portuguese_brazilian ] = "Padrão" ;
+    Text [ portuguese_brazilian ] = "Padr?o" ;
     Text [ portuguese ] = "Modelo" ;
     Text [ finnish ] = "Kuvio" ;
     Text [ danish ] = "Mønster" ;
