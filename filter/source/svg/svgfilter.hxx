@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgfilter.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:59:57 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,7 @@ using namespace ::std;
 // - SVGExport -
 // -------------
 
+// #110680#
 class SVGExport : public SvXMLExport
 {
 private:
@@ -204,7 +205,9 @@ protected:
 
 public:
 
-                            SVGExport( const Reference< XDocumentHandler >& rxHandler );
+    SVGExport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        const Reference< XDocumentHandler >& rxHandler );
     virtual                 ~SVGExport();
 };
 
