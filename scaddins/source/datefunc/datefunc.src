@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datefunc.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:02:00 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Berechnet die Anzahl der Wochen in einem bestimmten Zeitraum.";
             Text[ hindi ] = "निर्दिष्ट अवधि में रहनेवाला सप्ताह की संख्या को गणना करता है";
             Text[ slovak ] = "Vráti počet týždňov v zadanom období";
+            Text[ hungarian ] = "Kiszámítja az adott időszakba eső hetek számát.";
+            Text[ slovenian ] = "Izračuna število tednov v določenem obdobju";
         };
         String 2 // name of parameter 1         DiffWeeks
         {
@@ -128,6 +130,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Ausgangsdatum";
             Text[ hindi ] = "प्रारंभ दिनांक";
             Text[ slovak ] = "Počiatočný dátum";
+            Text[ hungarian ] = "kezdő dátum";
+            Text[ slovenian ] = "Začetni datum";
         };
         String 3 // description of parameter 1  DiffWeeks
         {
@@ -159,6 +163,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Erster Tag des Zeitraums.";
             Text[ hindi ] = "अवधि का पहिला दिन";
             Text[ slovak ] = "Prvý deň obdobia";
+            Text[ hungarian ] = "Az időszak első napja.";
+            Text[ slovenian ] = "Prvi dan obdobja";
         };
         String 4 // name of parameter 2         DiffWeeks
         {
@@ -190,6 +196,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Enddatum";
             Text[ hindi ] = "अंतिम दिनांक";
             Text[ slovak ] = "Koncový dátum";
+            Text[ hungarian ] = "befejező dátum";
+            Text[ slovenian ] = "Končni datum";
         };
         String 5 // description of parameter 2  DiffWeeks
         {
@@ -221,6 +229,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Letzter Tag des Zeitraums.";
             Text[ hindi ] = "अवधि का अंतिम दिन";
             Text[ slovak ] = "Posledný deň obdobia";
+            Text[ hungarian ] = "Az időszak utolsó napja.";
+            Text[ slovenian ] = "Zadnji dan obdobja";
         };
         String 6 // name of parameter 3         DiffWeeks
         {
@@ -252,6 +262,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "‮סוג‬";
             Text[ hindi ] = "वर्ग";
             Text[ slovak ] = "Typ";
+            Text[ hungarian ] = "típus";
+            Text[ slovenian ] = "Vrsta";
         };
         String 7 // description of parameter 3  DiffWeeks
         {
@@ -267,7 +279,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Tipo de calculaci�n: Tipo=0 significa el n�mero de semanas y Tipo=1 el n�mero de semanas del calendario.";
             Text[ finnish ] = "Laskennan laji: 0 on aikav�li, 1 tarkoittaa kalenteriviikkoja";
             Text[ italian ] = "Tipo di calcolo: Tipo=0 indica il numero di settimane nell'intervallo, tipo=1 indica la settimana.";
-            Text[ danish ] = "Beregningstype: Type=0 for ugeantal i intervallet, type=1 for kalenderuger.";
+            Text[ danish ] = "Beregningstype: Type = 0 for ugeantal i intervallet, Type = 1 for kalenderuger.";
             Text[ swedish ] = "Typ av ber�kning: typ=0 f�r veckoantal i intervallet, typ=1 f�r kalenderveckor.";
             Text[ polish ] = "Rodzaj obliczania: Typ=0 oznacza liczb� tygodni, Typ=1 - tygodnie kalendarzowe.";
             Text[ portuguese_brazilian ] = "Tipo de c�lculo: Tipo=0 significa intervalo de tempo; Tipo=1 significa semanas do calend�rio.";
@@ -283,6 +295,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Art der Berechnung: Art=0 für Wochenanzahl im Intervall, Art=1 für Kalenderwochen.";
             Text[ hindi ] = "गणना करने का वर्ग: वर्ग=0 का अर्थ समय का अंतराल है, वर्ग=1 का अर्थ केलन्डर सप्ताह है ।";
             Text[ slovak ] = "Typ výpočtu: Typ=0 určuje časový interval, Typ=1 znamená kalendárne týždne.";
+            Text[ hungarian ] = "A számítás típusa. Ha a típus 0, akkor időszakot, ha pedig 1, akkor naptári hetet használ a függvény a számításhoz.";
+            Text[ slovenian ] = "Vrsta izračuna: Vrsta=0 je časovni interval, Vrsta=1 so koledarski tedni";
         };
     };
 
@@ -318,6 +332,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Berechnet die Anzahl der Monate in einem bestimmten Zeitraum.";
             Text[ hindi ] = "निर्दिष्ट अवधि में मासों की संख्या को निर्धार करता है ।";
             Text[ slovak ] = "Vráti počet mesiacov v zadanom období.";
+            Text[ hungarian ] = "Meghatározza a hónapok számát egy adott időszakban.";
+            Text[ slovenian ] = "Določi število mesecev v določenem obdobju";
         };
         String 2 // name of parameter 1         DiffMonths
         {
@@ -349,6 +365,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Ausgangsdatum";
             Text[ hindi ] = "प्रारंभ दिनांक";
             Text[ slovak ] = "Počiatočný dátum";
+            Text[ hungarian ] = "kezdő dátum";
+            Text[ slovenian ] = "Začetni datum";
         };
         String 3 // description of parameter 1  DiffMonths
         {
@@ -380,6 +398,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Erster Tag des Zeitraums.";
             Text[ hindi ] = "अवधि का पहिला दिन ।";
             Text[ slovak ] = "Prvý deň obdobia.";
+            Text[ hungarian ] = "Az időszak első napja.";
+            Text[ slovenian ] = "Prvi dan obdobja";
         };
         String 4 // name of parameter 2         DiffMonths
         {
@@ -411,6 +431,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Enddatum";
             Text[ hindi ] = "अंतिम दिनांक";
             Text[ slovak ] = "Koncový dátum";
+            Text[ hungarian ] = "befejező dátum";
+            Text[ slovenian ] = "Končni datum";
         };
         String 5 // description of parameter 2  DiffMonths
         {
@@ -442,6 +464,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Letzter Tag des Zeitraums.";
             Text[ hindi ] = "अवधि का अंतिम दिन ।";
             Text[ slovak ] = "Posledný deň obdobia.";
+            Text[ hungarian ] = "Az időszak utolsó napja.";
+            Text[ slovenian ] = "Zadnji dan obdobja";
         };
         String 6 // name of parameter 3         DiffMonths
         {
@@ -473,6 +497,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "‮סוג‬";
             Text[ hindi ] = "वर्ग";
             Text[ slovak ] = "Typ";
+            Text[ hungarian ] = "típus";
+            Text[ slovenian ] = "Vrsta";
         };
         String 7 // description of parameter 3  DiffMonths
         {
@@ -488,7 +514,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Tipo de calculaci�n: Tipo=0 para el n�mero de meses, Tipo=1 para el mes del calendario.";
             Text[ finnish ] = "Laskennan laji: 0 on aikav�li, 1 tarkoittaa kalenterikuukausia";
             Text[ italian ] = "Tipo di calcolo: Tipo=0 indica il numero di mesi dell'intervallo, tipo=1 indica il mese.";
-            Text[ danish ] = "Beregningstype: Type=0 for m�nedsantal i intervallet, type=1 for kalenderm�neder.";
+            Text[ danish ] = "Beregningstype: Type = 0 for m�nedsantal i intervallet, Type = 1 for kalenderm�neder.";
             Text[ swedish ] = "Typ av ber�kning: typ=0 f�r m�nadsantal i intervallet, typ=1 f�r kalenderm�nader.";
             Text[ polish ] = "Rodzaj obliczania: Typ=0 oznacza liczb� miesi�cy, Typ=1 - miesi�ce kalendarzowe.";
             Text[ portuguese_brazilian ] = "Tipo de c�lculo: Tipo=0 significa intervalo de tempo; Tipo=1 significa meses do calend�rio.";
@@ -504,6 +530,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Art der Berechnung: Art=0 für Monatsanzahl im Intervall, Art=1 für Kalendermonate.";
             Text[ hindi ] = "गणना करने का वर्ग: वर्ग=0 का अर्थ समय का अंतराल है, वर्ग=1 का अर्थ केलन्डर मास है ।";
             Text[ slovak ] = "Typ výpočtu: Typ=0 určuje časový interval, Typ=1 znamená kalendárne mesiace.";
+            Text[ hungarian ] = "A számítás típusa. Ha a típus 0, akkor időintervallum, ha pedig 1, akkor naptári hónapok szerint történik a számítás.";
+            Text[ slovenian ] = "Vrsta izračuna: Vrsta=0 je časovni interval, Vrsta=1 so koledarski meseci";
         };
     };
 
@@ -539,6 +567,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Berechnet die Anzahl der Jahre in einem bestimmten Zeitraum.";
             Text[ hindi ] = "निर्दिष्ट अवधि में रहनेवाला वर्षों की संख्या को गणना करता है";
             Text[ slovak ] = "Vráti počet rokov v zadanom období.";
+            Text[ hungarian ] = "Kiszámítja az évek számát a megadott időtartamban.";
+            Text[ slovenian ] = "Izračuna število let v določenem obdobju";
         };
         String 2 // name of parameter 1         DiffYears
         {
@@ -570,6 +600,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Ausgangsdatum";
             Text[ hindi ] = "प्रारंभ दिनांक";
             Text[ slovak ] = "Počiatočný dátum";
+            Text[ hungarian ] = "kezdő dátum";
+            Text[ slovenian ] = "Začetni datum";
         };
         String 3 // description of parameter 1  DiffYears
         {
@@ -601,6 +633,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Erster Tag des Zeitraums.";
             Text[ hindi ] = "अवधि का पहिला दिन";
             Text[ slovak ] = "Prvý deň obdobia";
+            Text[ hungarian ] = "Az időszak első napja.";
+            Text[ slovenian ] = "Prvi dan obdobja";
         };
         String 4 // name of parameter 2         DiffYears
         {
@@ -632,6 +666,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Enddatum";
             Text[ hindi ] = "अंतिम दिनांक";
             Text[ slovak ] = "Koncový dátum";
+            Text[ hungarian ] = "befejező dátum";
+            Text[ slovenian ] = "Končni datum";
         };
         String 5 // description of parameter 2  DiffYears
         {
@@ -663,6 +699,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Letzter Tag des Zeitraums.";
             Text[ hindi ] = "अवधि का अंतिम दिन";
             Text[ slovak ] = "Posledný deň obdobia";
+            Text[ hungarian ] = "Az időszak utolsó napja.";
+            Text[ slovenian ] = "Zadnji dan obdobja";
         };
         String 6 // name of parameter 3         DiffYears
         {
@@ -694,6 +732,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "‮סוג‬";
             Text[ hindi ] = "वर्ग";
             Text[ slovak ] = "Typ";
+            Text[ hungarian ] = "típus";
+            Text[ slovenian ] = "Vrsta";
         };
         String 7 // description of parameter 3  DiffYears
         {
@@ -709,7 +749,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Tipo de calculaci�n: Tipo=0 significa el n�mero de a�o, Tipo=1 los a�os del calendario.";
             Text[ finnish ] = "Laskennan laji: 0 on aikav�li, 1 tarkoittaa kalenterivuosia";
             Text[ italian ] = "Tipo di calcolo: Tipo=0 indica il numero di anni dell'intervallo, tipo=1 indica l'anno solare.";
-            Text[ danish ] = "Beregningstype: Type=0 for �rsantal i intervallet, type=1 for kalender�r.";
+            Text[ danish ] = "Beregningstype: Type = 0 for �rsantal i intervallet, Type = 1 for kalender�r.";
             Text[ swedish ] = "Typ av ber�kning: typ=0 f�r �rsantal i intervallet, typ=1 f�r kalender�r.";
             Text[ polish ] = "Rodzaj obliczania : Typ=0 oznacza liczb� lat, Typ=1 - lata kalendarzowe.";
             Text[ portuguese_brazilian ] = "Tipo de c�lculo: Tipo=0 significa intervalo de tempo; Tipo=1 significa anos do calend�rio.";
@@ -725,6 +765,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Art der Berechnung: Art=0 für Jahresanzahl im Intervall, Art=1 für Kalenderjahre.";
             Text[ hindi ] = "गणना करने का वर्ग: वर्ग=0 का अर्थ समय का अंतराल है, वर्ग=1 का अर्थ केलन्डर वर्ष है ।";
             Text[ slovak ] = "Typ výpočtu: Typ=0 určuje časový interval, Typ=1 znamená kalendárne roky.";
+            Text[ hungarian ] = "A számítás típusa. Ha a típus 0, akkor időintervallum, ha pedig 1, akkor naptári év a számítás típusa.";
+            Text[ slovenian ] = "Vrsta izračuna: Vrsta=0 je časovni interval, Vrsta=1 so koledarska leta";
         };
     };
 
@@ -760,6 +802,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Gibt 1 (WAHR) zurück, wenn das angegebene Datum in einem Schaltjahr liegt, sonst 0 (FALSCH).";
             Text[ hindi ] = "अगर दिनांक अधिकवर्ष का एक दिन है तो 1 (TRUE) को वापस करता है, नहीं तो 0 (FALSE).";
             Text[ slovak ] = "Vráti 1 (TRUE) ak dátum je dňom v prestupnom roku, inak vráti 0 (FALSE).";
+            Text[ hungarian ] = "1-et (IGAZ) ad vissza, ha a dátum szökőévben van, különben 0-t (HAMIS értéket).";
+            Text[ slovenian ] = "Vrne 1 (VELJA), če je datum v prestopnem letu, drugače vrne 0 (NE VELJA)";
         };
         String 2 // name of parameter 1         IsLeapYear
         {
@@ -791,6 +835,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "‮תאריך‬";
             Text[ hindi ] = "दिनांक";
             Text[ slovak ] = "Dátum";
+            Text[ hungarian ] = "dátum";
+            Text[ slovenian ] = "Datum";
         };
         String 3 // description of parameter 1  IsLeapYear
         {
@@ -822,6 +868,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Ein beliebiger Tag im gewünschten Jahr.";
             Text[ hindi ] = "उद्देशित वर्ष का किसी एक दिन";
             Text[ slovak ] = "Akýkoľvek deň v požadovanom roku";
+            Text[ hungarian ] = "A kért év bármely napja.";
+            Text[ slovenian ] = "Katerikoli dan izbranega leta";
         };
     };
 
@@ -857,6 +905,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Gibt die Anzahl der Tage des Monats zurück, in dem das angegebene Datum liegt.";
             Text[ hindi ] = "प्रविष्ट की हुयी दिनांक का मास में रहनेवाला दिनों की संख्या को वापस करता है";
             Text[ slovak ] = "Vráti počet dní v mesiaci, do ktorého patrí zadaný dátum";
+            Text[ hungarian ] = "A megadott dátum hónapjában előforduló napok számát adja meg.";
+            Text[ slovenian ] = "Vrne število dni v mesecu, v katerem je tudi navedeni datum";
         };
         String 2 // name of parameter 1         DaysInMonth
         {
@@ -888,6 +938,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "‮תאריך‬";
             Text[ hindi ] = "दिनांक";
             Text[ slovak ] = "Dátum";
+            Text[ hungarian ] = "dátum";
+            Text[ slovenian ] = "Datum";
         };
         String 3 // description of parameter 1  DaysInMonth
         {
@@ -919,6 +971,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Ein beliebiger Tag im gewünschten Monat.";
             Text[ hindi ] = "उद्देशित मास का किसी एक दिन";
             Text[ slovak ] = "Akýkoľvek deň v požadovanom mesiaci";
+            Text[ hungarian ] = "A dátum, amelyből a függvény kiszámítja a hónap napjainak számát.";
+            Text[ slovenian ] = "Katerikoli dan izbranega meseca";
         };
     };
 
@@ -954,6 +1008,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Gibt die Anzahl der Tage des Jahres zurück, in dem das angegebene Datum liegt.";
             Text[ hindi ] = "प्रविष्ट की हुयी दिनांक का वर्ष में रहनेवाला दिनों की संख्या को वापस करता है ।";
             Text[ slovak ] = "Vráti počet dní v roku, do ktorého patrí zadaný dátum.";
+            Text[ hungarian ] = "A megadott dátumban szereplő év napjainak számát adja eredményül.";
+            Text[ slovenian ] = "Vrne število dni v letu, v katerem je tudi navedeni datum";
         };
         String 2 // name of parameter 1         DaysInYear
         {
@@ -985,6 +1041,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "‮תאריך‬";
             Text[ hindi ] = "दिनांक";
             Text[ slovak ] = "Dátum";
+            Text[ hungarian ] = "dátum";
+            Text[ slovenian ] = "Datum";
         };
         String 3 // description of parameter 1  DaysInYear
         {
@@ -1016,6 +1074,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Ein beliebiger Tag im gewünschten Jahr.";
             Text[ hindi ] = "उद्देशित वर्ष का किसी एक दिन";
             Text[ slovak ] = "Akýkoľvek deň v požadovanom roku";
+            Text[ hungarian ] = "A dátum, amelynél az évben szereplő napok számát adja eredményül a függvény.";
+            Text[ slovenian ] = "Katerikoli dan izbranega leta";
         };
     };
 
@@ -1051,6 +1111,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Gibt die Anzahl der Wochen des Jahres zurück, in dem das angegebene Datum liegt.";
             Text[ hindi ] = "प्रविष्ट की हुयी दिनांक का वर्ष में रहनेवाला सप्ताहों की संख्या को वापस करता है";
             Text[ slovak ] = "Vráti počet týždňov v roku, do ktorého patrí zadaný dátum";
+            Text[ hungarian ] = "Megadja, hogy a beírt dátum az év hányadik hetében van.";
+            Text[ slovenian ] = "Vrne število tednov v letu, v katerem je tudi navedeni datum";
         };
         String 2 // name of parameter 1         WeeksInYear
         {
@@ -1082,6 +1144,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "‮תאריך‬";
             Text[ hindi ] = "दिनांक";
             Text[ slovak ] = "Dátum";
+            Text[ hungarian ] = "dátum";
+            Text[ slovenian ] = "Datum";
         };
         String 3 // description of parameter 1  WeeksInYear
         {
@@ -1113,6 +1177,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Ein beliebiger Tag im gewünschten Jahr.";
             Text[ hindi ] = "उद्देशित वर्ष का किसी एक दिन";
             Text[ slovak ] = "Akýkoľvek deň v požadovanom roku";
+            Text[ hungarian ] = "A kért év bármely napja.";
+            Text[ slovenian ] = "Katerikoli dan izbranega leta";
         };
     };
 
@@ -1148,6 +1214,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Verschlüsselt oder entschlüsselt einen Text mit Hilfe des ROT13-Algorithmus.";
             Text[ hindi ] = "ROT13 सिद्धांत को उपयोग करके टेक्स्ट् को ऐनक्रिप्ट् अथवा डिक्रिप्ट् करता है";
             Text[ slovak ] = "Šifruje alebo dešifruje text s použitím algoritmu ROT13";
+            Text[ hungarian ] = "Titkosít vagy visszafejt egy szöveget a ROT13 algoritmussal.";
+            Text[ slovenian ] = "Šifrira ali dešifrira besedilo s pomočjo algoritma ROT13";
         };
         String 2 // name of parameter 1         Rot13
         {
@@ -1179,6 +1247,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "‮טקסט‬";
             Text[ hindi ] = "टेक्स्ट्";
             Text[ slovak ] = "Text";
+            Text[ hungarian ] = "szöveg";
+            Text[ slovenian ] = "Besedilo";
         };
         String 3 // description of parameter 1  Rot13
         {
@@ -1210,6 +1280,8 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ hebrew ] = "Zu verschlüsselnder oder verschlüsselter Text.";
             Text[ hindi ] = "टेक्स्ट् को ऐनक्रिप्ट् करना है अथवा टेक्स्ट् को पहिले से ही ऐनक्रिप्ट् किया है";
             Text[ slovak ] = "Text, ktorý má byť šifrovaný, alebo už zašifrovaný text";
+            Text[ hungarian ] = "Titkosítandó vagy már titkosított szöveg";
+            Text[ slovenian ] = "Besedilo za šifriranje ali besedilo, ki je že šifrirano";
         };
     };
 };
@@ -1247,6 +1319,8 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ hebrew ] = "WOCHEN";
         Text[ hindi ] = "WEEKS";
         Text[ slovak ] = "WEEKS";
+        Text[ hungarian ] = "WEEKS";
+        Text[ slovenian ] = "WEEKS";
     };
     String DATE_FUNCNAME_DiffMonths
     {
@@ -1278,6 +1352,8 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ hebrew ] = "MONATE";
         Text[ hindi ] = "MONTHS";
         Text[ slovak ] = "MONTHS";
+        Text[ hungarian ] = "MONTHS";
+        Text[ slovenian ] = "MONTHS";
     };
     String DATE_FUNCNAME_DiffYears
     {
@@ -1293,7 +1369,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ spanish ] = "A�OS";
         Text[ finnish ] = "VUODET";
         Text[ italian ] = "ANNI";
-        Text[ danish ] = "�R";
+        Text[ danish ] = "�R.INTERVAL";
         Text[ swedish ] = "ANTAL�R";
         Text[ polish ] = "YEARS";
         Text[ portuguese_brazilian ] = "ANOS";
@@ -1309,6 +1385,8 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ hebrew ] = "JAHRE";
         Text[ hindi ] = "YEARS";
         Text[ slovak ] = "YEARS";
+        Text[ hungarian ] = "YEARS";
+        Text[ slovenian ] = "YEARS";
     };
     String DATE_FUNCNAME_IsLeapYear
     {
@@ -1324,7 +1402,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ spanish ] = "ESA�OBISIESTO";
         Text[ finnish ] = "ONKARK_VUOSI";
         Text[ italian ] = "ANNO.BISESTILE";
-        Text[ danish ] = "ERSKUD�R";
+        Text[ danish ] = "ER.SKUD�R";
         Text[ swedish ] = "�RSKOTT�R";
         Text[ polish ] = "ISLEAPYEAR";
         Text[ portuguese_brazilian ] = "�ANOBISSEXTO";
@@ -1340,6 +1418,8 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ hebrew ] = "ISTSCHALTJAHR";
         Text[ hindi ] = "ISLEAPYEAR";
         Text[ slovak ] = "ISLEAPYEAR";
+        Text[ hungarian ] = "ISLEAPYEAR";
+        Text[ slovenian ] = "ISLEAPYEAR";
     };
     String DATE_FUNCNAME_DaysInMonth
     {
@@ -1355,7 +1435,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ spanish ] = "D�ASENMES";
         Text[ finnish ] = "P�IV�T_KUUKAUSI";
         Text[ italian ] = "GIORNI.MESE";
-        Text[ danish ] = "DAGEM�NED";
+        Text[ danish ] = "DAGEIM�NED";
         Text[ swedish ] = "DAGARIM�NADEN";
         Text[ polish ] = "DAYSINMONTH";
         Text[ portuguese_brazilian ] = "DIASNOMES";
@@ -1371,6 +1451,8 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ hebrew ] = "TAGEIMMONAT";
         Text[ hindi ] = "DAYSINMONTH";
         Text[ slovak ] = "DAYSINMONTH";
+        Text[ hungarian ] = "DAYSINMONTH";
+        Text[ slovenian ] = "DAYSINMONTH";
     };
     String DATE_FUNCNAME_DaysInYear
     {
@@ -1386,7 +1468,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ spanish ] = "D�ASENA�O";
         Text[ finnish ] = "P�IV�T_VUOSI";
         Text[ italian ] = "GIORNI.ANNO";
-        Text[ danish ] = "DAGE�R";
+        Text[ danish ] = "DAGEI�R";
         Text[ swedish ] = "DAGARP��RET";
         Text[ polish ] = "DAYSINYEAR";
         Text[ portuguese_brazilian ] = "DIASNOANO";
@@ -1402,6 +1484,8 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ hebrew ] = "TAGEIMJAHR";
         Text[ hindi ] = "DAYSINYEAR";
         Text[ slovak ] = "DAYSINYEAR";
+        Text[ hungarian ] = "DAYSINYEAR";
+        Text[ slovenian ] = "DAYSINYEAR";
     };
     String DATE_FUNCNAME_WeeksInYear
     {
@@ -1417,7 +1501,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ spanish ] = "SEMANASENA�O";
         Text[ finnish ] = "VIIKOT_VUOSI";
         Text[ italian ] = "SETTIMANE.ANNO";
-        Text[ danish ] = "UGER�R";
+        Text[ danish ] = "UGERI�R";
         Text[ swedish ] = "VECKORPER�R";
         Text[ polish ] = "WEEKSINYEAR";
         Text[ portuguese_brazilian ] = "SEMANASNOANO";
@@ -1433,6 +1517,8 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ hebrew ] = "WOCHENIMJAHR";
         Text[ hindi ] = "WEEKSINYEAR";
         Text[ slovak ] = "WEEKSINYEAR";
+        Text[ hungarian ] = "WEEKSINYEAR";
+        Text[ slovenian ] = "WEEKSINYEAR";
     };
     String DATE_FUNCNAME_Rot13
     {
@@ -1464,6 +1550,8 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ hebrew ] = "ROT13";
         Text[ hindi ] = "ROT13";
         Text[ slovak ] = "ROT13";
+        Text[ hungarian ] = "ROT13";
+        Text[ slovenian ] = "ROT13";
     };
 };
 
@@ -1536,6 +1624,7 @@ Resource RID_DATE_DEFFUNCTION_NAMES
         };
     };
 };
+
 
 
 
