@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScCellsEnumeration.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 15:31:04 $
+ *  last change:$Date: 2003-05-27 13:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sc;
 
 import com.sun.star.container.XEnumerationAccess;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
@@ -104,7 +105,7 @@ public class ScCellsEnumeration extends TestCase {
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a Spreadsheet document" );
