@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:52:06 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 09:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,6 +463,23 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     return nOffsets;
 }
 
+
+/* #117718# For a given Module name return its type,
+ * Form, Class, Normal or Unknown
+ *
+*/
+
+ModuleType VBA_Impl::GetModuleType( const UniString& rModuleName )
+{
+    ModuleTypeHash::iterator iter = mhModHash.find( rModuleName );
+    ModuleTypeHash::iterator iterEnd = mhModHash.end();
+    if ( iter != iterEnd )
+    {
+        return iter->second;
+    }
+    return Unknown;
+}
+
 bool VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
 {
     /* beginning test for vba stuff */
@@ -487,6 +504,58 @@ bool VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
         {
             if (ReadVBAProject(xVBA))
                 bRet = true;
+        }
+        /* #117718#
+         * Information regarding the type of module is contained in the
+         * "PROJECT" stream, this stream consists of a number of ascii lines
+         * entries are of the form Key=Value, the ones that we are interested
+         * in have the keys; Class, BaseClass & Module indicating the module
+         * ( value ) is either a Class Module, Form Module or a plain VB Module.        */
+        SvStorageStreamRef xProject = xMacros->OpenSotStream( String(
+                                               RTL_CONSTASCII_STRINGPARAM( "PROJECT" ),
+                                               RTL_TEXTENCODING_MS_1252 ) );
+        SvStorageStream* pStp = xProject;
+        int i = 0;
+        UniString tmp;
+        UniString sThisDoc( RTL_CONSTASCII_STRINGPARAM( "ThisDocument" ),
+                                        RTL_TEXTENCODING_MS_1252 );
+        UniString sModule( RTL_CONSTASCII_STRINGPARAM( "Module" ),
+                                        RTL_TEXTENCODING_MS_1252 );
+        UniString sClass( RTL_CONSTASCII_STRINGPARAM( "Class" ),
+                                        RTL_TEXTENCODING_MS_1252 );
+        UniString sBaseClass( RTL_CONSTASCII_STRINGPARAM( "BaseClass" ),
+                                        RTL_TEXTENCODING_MS_1252 );
+        mhModHash[ sThisDoc ] = Class;
+        while ( pStp->ReadByteStringLine( tmp, meCharSet ) )
+        {
+            xub_StrLen index = tmp.Search( '=' );
+            if ( index != STRING_NOTFOUND )
+            {
+                String key = tmp.Copy( 0, index  );
+                String value = tmp.Copy( index + 1 );
+                if ( key == sClass )
+                {
+                    mhModHash[ value ] = Class;
+                    OSL_TRACE("Module %s is of type Class",
+                        ::rtl::OUStringToOString( value ,
+                            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                }
+                else if ( key == sBaseClass )
+                {
+                    mhModHash[ value ] =  Form;
+                    OSL_TRACE("Module %s is of type Form",
+                        ::rtl::OUStringToOString( value ,
+                            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                }
+                else if ( key == sModule )
+                {
+                    mhModHash[ value ] = Normal;
+                    OSL_TRACE("Module %s is of type Normal VBA",
+                        ::rtl::OUStringToOString( value ,
+                            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                }
+
+            }
         }
     }
     /* end test for vba stuff */
