@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:33:17 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #include <unotools/intlwrapper.hxx>
 #endif
 
+#ifndef _UNOTOOLS_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
 #ifndef _CONFIG_HXX
 #include <tools/config.hxx>
 #endif
@@ -523,6 +526,59 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_CONFIGACCEL:
         case SID_CONFIGEVENT:
         {
+            // Check configuration to see whether new Configure dialog
+            // should be shown.
+            Any value;
+            sal_Bool tmp;
+
+            value = ::utl::ConfigManager::GetConfigManager()->GetLocalProperty(
+                ::rtl::OUString::createFromAscii(
+            "Office.Scripting/ScriptDisplaySettings/UseNewToolsConfigure" ) );
+
+            value >>= tmp;
+
+            if (tmp == sal_True) {
+                SfxAbstractDialogFactory* pFact =
+                    SfxAbstractDialogFactory::Create();
+
+                if ( pFact )
+                {
+                    SFX_REQUEST_ARG(rReq, pStringItem,
+                        SfxStringItem, SID_CONFIG, sal_False);
+
+                    SfxItemSet aSet(
+                        GetPool(), SID_CONFIG, SID_CONFIG );
+
+                    if ( pStringItem )
+                    {
+                        aSet.Put( SfxStringItem(
+                            SID_CONFIG, pStringItem->GetValue() ) );
+                    }
+
+                    SfxAbstractTabDialog* pDlg = pFact->CreateTabDialog(
+                        ResId( RID_SVXDLG_CUSTOMIZE ),
+                        NULL, &aSet, pViewFrame );
+
+                      if ( pDlg )
+                    {
+                        const short nRet = pDlg->Execute();
+
+                        for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst();
+                              pFrame;
+                              pFrame = SfxViewFrame::GetNext( *pFrame ) )
+                        {
+                            pFrame->GetDispatcher()->Update_Impl( TRUE );
+                        }
+
+                        if ( nRet )
+                            bDone = TRUE;
+
+                        delete pDlg;
+                    }
+                }
+            }
+            else
+            {
             SfxItemSet aSet( GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM );
             SfxConfigDialog *pDlg = new SfxConfigDialog( NULL, &aSet, pViewFrame );
 
@@ -570,6 +626,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             }
 
             delete pDlg;
+            }
+
             break;
         }
 
@@ -1181,7 +1239,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             ::rtl::OUString aLang( aLanguage );
             OSL_TRACE("SfxApplication::OfaExec_Impl: about to create dialog for: %s", ::rtl::OUStringToOString( aLang , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
             // not sure about the Window*
-            VclAbstractDialog* pDlg = pFact->CreateSvxScriptOrgDialog( GetTopWindow(), aLanguage, ResId( RID_DLG_SCRIPTORGANIZER ) );
+            VclAbstractDialog* pDlg = pFact->CreateSvxScriptOrgDialog( GetTopWindow(), aLanguage );
             if( pDlg )
             {
                 pDlg->Execute();
