@@ -2,9 +2,9 @@
  *
  *  $RCSfile: command.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:58 $
+ *  last change: $Author: nf $ $Date: 2000-09-25 11:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include "stream.hxx"
 #include "command.hxx"
 #include "debug.hxx"
+#include "appdef.hxx"
 
 #include <iostream.h>
 #include <string.h>
@@ -388,7 +389,13 @@ CCommand::CCommand( ByteString &rString )
 #else
     aCommandLine += " -c ";
 #endif
-    aCommandLine += rString;
+
+    ByteString sCmd( rString.GetToken( 0, ' ' ));
+    ByteString sParam( rString.Copy( sCmd.Len()));
+
+    aCommandLine += Search( thePath, sCmd );
+    aCommandLine += sParam;
+
     ImplInit();
 }
 
@@ -406,8 +413,13 @@ CCommand::CCommand( const char *pChar )
 #else
     aCommandLine += " -c ";
 #endif
-    aCommandLine += pChar;
+    ByteString rString( pChar );
 
+    ByteString sCmd( rString.GetToken( 0, ' ' ));
+    ByteString sParam( rString.Copy( sCmd.Len()));
+
+    aCommandLine += Search( thePath, sCmd );
+    aCommandLine += sParam;
 
     ImplInit();
 }
@@ -529,26 +541,27 @@ CCommand::operator const int()
 }
 
 /*****************************************************************************/
-ByteString CCommand::Search(ByteString sEnv, ByteString sItem)
+ByteString CCommand::Search(ByteString aEnv, ByteString sItem)
 /*****************************************************************************/
 {
-    FILE *fp;
-    ByteString aEntry, sReturn;
-
     // default wird eine Shell im Path gesucht,
     // wenn aber compsec gestzt ist holen wir uns die
     // Shell von dort
-
     if ( sItem == COMMAND_SHELL )
     {
-        ByteString aComspec = getenv( "COMSPEC" );
+        ByteString aComspec = GetEnv( "COMSPEC" );
         if ( aComspec != "" )
             return aComspec;
     }
 
-    ByteString sEnvironment = getenv(sEnv.GetBuffer() );
+    ByteString aEntry, sReturn;
+    ByteString sEnv( aEnv );
+    ByteString sEnvironment = GetEnv( sEnv.GetBuffer());
     ULONG nCount = sEnvironment.GetTokenCount( cPathSeperator );
-    for ( ULONG i=0; i<nCount; i++ )
+
+    BOOL bFound = FALSE;
+
+    for ( ULONG i=0; i<nCount && !bFound; i++ )
     {
         aEntry = sEnvironment.GetToken(i, cPathSeperator );
 #ifndef UNX
@@ -557,19 +570,20 @@ ByteString CCommand::Search(ByteString sEnv, ByteString sItem)
         aEntry += '/';
 #endif
         aEntry += sItem;
-        if (( fp = fopen( aEntry.GetBuffer(), "r" )) != NULL )
-        {
+
+        String sEntry( aEntry, RTL_TEXTENCODING_ASCII_US );
+        DirEntry aDirEntry( sEntry );
+        if ( aDirEntry.Exists()) {
             sReturn = aEntry;
-            fclose(fp);
-            break;
+            bFound = TRUE;
         }
     }
-    if ( sReturn == "" )
+    if ( !bFound )
     {
         sEnv = sEnv.ToUpperAscii();
-        ByteString sEnvironment = getenv(sEnv.GetBuffer() );
+        ByteString sEnvironment = GetEnv(sEnv.GetBuffer() );
         ULONG nCount = sEnvironment.GetTokenCount( cPathSeperator );
-        for ( ULONG i=0; i<nCount; i++ )
+        for ( ULONG i=0; i<nCount && !bFound; i++ )
         {
             aEntry = sEnvironment.GetToken(i, cPathSeperator );
 #ifndef UNX
@@ -578,11 +592,12 @@ ByteString CCommand::Search(ByteString sEnv, ByteString sItem)
             aEntry += '/';
 #endif
             aEntry += sItem;
-            if (( fp = fopen( aEntry.GetBuffer(), "r" )) != NULL )
-            {
+
+            String sEntry( aEntry, RTL_TEXTENCODING_ASCII_US );
+            DirEntry aDirEntry( sEntry );
+            if ( aDirEntry.Exists()) {
                 sReturn = aEntry;
-                fclose(fp);
-                break;
+                bFound = TRUE;
             }
         }
     }
