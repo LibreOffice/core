@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCompoundTypeDescription.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,12 @@
 //=============================================================================
 
 /** Reflects a compound type, i.e. a struct or exception.
+
+    <p>For struct types, this type is superseded by
+    <type>XStructTypeDescription</type>, which supports polymorphic struct
+    types.</p>
 */
-interface XCompoundTypeDescription: com::sun::star::reflection::XTypeDescription
+published interface XCompoundTypeDescription: com::sun::star::reflection::XTypeDescription
 {
     /** Returns the type of the base type of the compound type.
         If the compound does not have a base type, the method returns a null interface.
@@ -85,6 +89,12 @@ interface XCompoundTypeDescription: com::sun::star::reflection::XTypeDescription
     com::sun::star::reflection::XTypeDescription getBaseType();
 
     /** Returns the member types of the struct/exception in IDL declaration order.
+
+        <p>For a polymorphic struct type template, a member of parameterized
+        type is represented by an instance of
+        <type scope="com::sun::star::reflection::">XTypeDescription</type> whose
+        type class is <code>UNKNOWN</code> and whose name is the name of the
+        type parameter.</p>
 
         @return
                 members of struct/exception
