@@ -8,7 +8,7 @@ module com {  module sun {  module star {  module xml { module dom {
     service DocumentBuilder
     {
         interface XDocumentBuilder;
-    }
+    };
 };};};};};
 #endif
 
