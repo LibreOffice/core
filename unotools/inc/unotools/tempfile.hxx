@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-12 15:58:59 $
+ *  last change: $Author: mba $ $Date: 2000-10-30 13:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,26 @@
 namespace utl
 {
 
+class LocalFileHelper
+{
+public:
+                    /**
+                    Converts a "physical" file name into a "UCB compatible" URL ( if possible ).
+                    If no UCP is available for the local file system, sal_False and an empty URL is returned.
+                    Returning sal_True and an empty URL means that the URL doesn't point to a local file.
+                    */
+    static sal_Bool   ConvertPhysicalNameToURL( const String& rName, String& rReturn );
+
+                    /**
+                    Converts a "UCB compatible" URL into a "physical" file name.
+                    If no UCP is available for the local file system, sal_False and an empty file name is returned,
+                    otherwise sal_True and a valid URL, because a file name can always be converted if a UCP for the local
+                    file system is present ( watch: this doesn't mean that this file really exists! )
+                    */
+    static sal_Bool   ConvertURLToPhysicalName( const String& rName, String& rReturn );
+
+};
+
 struct TempFile_Impl;
 
 /**
@@ -77,7 +97,7 @@ struct TempFile_Impl;
     Creating a UCB content on a TempFile is only possible if a UCP for the local file system is present.
     TempFiles can always be accessed by SvFileStreams or Sot/SvStorages using the "physical" file name ( not the URL, because
     this may be a non-file URL, see below ), but if a UCB content can be created, it is also possible to take the URL and use
-    the UCB helper classes for streams.
+    the UCB helper classes for streams. For convenience use UcbStreamHelper.
     A Tempfile always has a "physical" file name ( a file name in the local computers host notation ) but it has a
     "UCB compatible" URL only if a UCP for the local file system exists. This URL may have its own URL scheme
     ( not neccessarily "file://" ! ). The TempFile class methods take this into account, but other simple conversions like
@@ -151,16 +171,10 @@ public:
                     /**
                     Only create a "physical" file name for a temporary file that would be valid at that moment.
                     Should only be used for 3rd party code with a file name interface that wants to create the file by itself.
-                    If you want to convert this URL into a file name, always use the static method below, but never use any
-                    external conversion functions.
+                    If you want to convert file name into a URL, always use class LocalFileHelper, but never use any
+                    conversion functions of osl.
                     */
     static String   CreateTempName( const String* pParent=NULL );
-
-                    /**
-                    Converts a "physical" file name into a "UCB compatible" URL ( if possible ).
-                    If no UCP is available for the local file system, an empty URL is returned.
-                    */
-    static String   ConvertURLToPhysicalName( const String& rName );
 
                     /**
                     The TempNameBaseDirectory is a subfolder in the folder that is passed as a "physical" file name in the

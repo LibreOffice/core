@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-12 15:59:19 $
+ *  last change: $Author: mba $ $Date: 2000-10-30 13:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,11 @@
 
 #include <unotools/tempfile.hxx>
 
+#include <ucbhelper/Fileidentifierconverter.hxx>
+#include <ucbhelper/contentbroker.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
+#include <osl/socket.h>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
 #include <stdio.h>
@@ -77,6 +80,7 @@ static ::rtl::OUString aTempNameBase_Impl;
 struct TempFile_Impl
 {
     String      aName;
+    String      aURL;
     sal_Bool    bIsDirectory;
 };
 
@@ -86,20 +90,33 @@ String ConstructTempDir_Impl( const String* pParent )
     String aName;
     if ( pParent && pParent->Len() )
     {
-        // if parent given try to use it
-        rtl::OUString aTmp( *pParent );
-        rtl::OUString aRet;
-
-        // test for valid filename
-        if ( FileBase::getNormalizedPathFromFileURL( aTmp, aRet ) == FileBase::E_None )
+        ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+        if ( pBroker )
         {
-            ::osl::DirectoryItem aItem;
-            sal_Int32 i = aRet.getLength();
-            if ( aRet[i-1] == '/' )
-                i--;
+            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
+                    pBroker->getContentProviderManagerInterface();
 
-            if ( DirectoryItem::get( ::rtl::OUString( aRet, i ), aItem ) == FileBase::E_None )
-                aName = aRet;
+            // if parent given try to use it
+            rtl::OUString aTmp( *pParent );
+            rtl::OUString aHost;
+            osl_getLocalHostname( &aHost.pData );
+
+            // test for valid filename
+            rtl::OUString aRet = ::ucb::getNormalizedPathFromFileURL( xManager, aTmp, aHost );
+            if ( aRet.getLength() )
+            {
+                ::osl::DirectoryItem aItem;
+                sal_Int32 i = aRet.getLength();
+                if ( aRet[i-1] == '/' )
+                    i--;
+
+                if ( DirectoryItem::get( ::rtl::OUString( aRet, i ), aItem ) == FileBase::E_None )
+                    aName = aRet;
+            }
+        }
+        else
+        {
+            DBG_WARNING( "::unotools::TempFile : UCB not present or not initialized!" );
         }
     }
 
@@ -281,18 +298,15 @@ String TempFile::GetFileName() const
 
 String TempFile::GetURL() const
 {
-    rtl::OUString aTmp;
-    FileBase::getFileURLFromNormalizedPath( pImp->aName, aTmp );
-    return aTmp;
-}
+    if ( !pImp->aURL.Len() )
+    {
+        String aTmp;
+        LocalFileHelper::ConvertPhysicalNameToURL( GetFileName(), aTmp );
+        pImp->aURL = aTmp;
+    }
 
-String TempFile::ConvertURLToPhysicalName( const String& rName )
-{
-    rtl::OUString aTmp;
-    FileBase::getFileURLFromNormalizedPath( rName, aTmp );
-    return aTmp;
+    return pImp->aURL;
 }
-
 
 String TempFile::SetTempNameBaseDirectory( const String &rBaseName )
 {
@@ -322,6 +336,49 @@ String TempFile::GetTempNameBaseDirectory()
     rtl::OUString aTmp;
     FileBase::getSystemPathFromNormalizedPath( aTempNameBase_Impl, aTmp );
     return aTmp;
+}
+
+sal_Bool LocalFileHelper::ConvertPhysicalNameToURL( const String& rName, String& rReturn )
+{
+    ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+    if ( !pBroker )
+    {
+        DBG_WARNING( "::unotools::TempFile : UCB not present or not initialized!" );
+        return sal_False;
+    }
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
+                pBroker->getContentProviderManagerInterface();
+
+    rtl::OUString aHost;
+    osl_getLocalHostname( &aHost.pData );
+
+    ::rtl::OUString aTmp;
+    FileBase::normalizePath( rName, aTmp );
+    rtl::OUString aRet = ::ucb::getFileURLFromNormalizedPath( xManager, aHost, aTmp );
+    rReturn = aRet;
+    return sal_True;
+}
+
+sal_Bool LocalFileHelper::ConvertURLToPhysicalName( const String& rName, String& rReturn )
+{
+    ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
+    if ( !pBroker )
+    {
+        DBG_WARNING( "::unotools::TempFile : UCB not present or not initialized!" );
+        return sal_False;
+    }
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
+                pBroker->getContentProviderManagerInterface();
+
+    rtl::OUString aHost;
+    osl_getLocalHostname( &aHost.pData );
+    rtl::OUString aRet = ::ucb::getNormalizedPathFromFileURL( xManager, aHost, rName );
+    ::rtl::OUString aTmp;
+    FileBase::getSystemPathFromNormalizedPath( aRet, aTmp );
+    rReturn = aTmp;
+    return sal_True;
 }
 
 };

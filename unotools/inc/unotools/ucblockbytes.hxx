@@ -7,8 +7,17 @@
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XOutputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
+#include <com/sun/star/io/XStream.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
 #include <com/sun/star/ucb/XContent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
 #endif
 
 #include <vos/thread.hxx>
@@ -62,7 +71,9 @@ class UcbLockBytes : public virtual SvLockBytes
     String                  m_aRealURL;
     DateTime                m_aExpireDate;
 
-    NS_UNO::Reference < NS_IO::XInputStream > m_xInputStream;
+    NS_UNO::Reference < NS_IO::XInputStream >  m_xInputStream;
+    NS_UNO::Reference < NS_IO::XOutputStream > m_xOutputStream;
+    NS_UNO::Reference < NS_IO::XSeekable >     m_xSeekable;
     CommandThread_Impl*     m_pCommandThread;
     UcbLockBytesHandlerRef  m_xHandler;
 
@@ -82,8 +93,12 @@ protected:
 
 public:
 
-    static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_UCB::XContent > xContent, UcbLockBytesHandler* pHandler=0 );
-    static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_IO::XInputStream > xContent, UcbLockBytesHandler* pHandler=0 );
+    static UcbLockBytesRef  CreateInOutputLockBytes( const NS_UNO::Reference < NS_UCB::XContent > xContent,
+                                            UcbLockBytesHandler* pHandler=0 );
+    static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_UCB::XContent > xContent,
+                                            UcbLockBytesHandler* pHandler=0 );
+    static UcbLockBytesRef  CreateInputLockBytes( const NS_UNO::Reference < NS_IO::XInputStream > xContent,
+                                            UcbLockBytesHandler* pHandler=0 );
 
     // SvLockBytes
     virtual void            SetSynchronMode (BOOL bSynchron);
@@ -108,6 +123,7 @@ public:
 
 #if __PRIVATE
     sal_Bool                setInputStream_Impl( const NS_UNO::Reference < NS_IO::XInputStream > &rxInputStream );
+    sal_Bool                setStream_Impl( const NS_UNO::Reference < NS_IO::XStream > &rxStream );
     void                    terminate_Impl (void);
 
     NS_UNO::Reference < NS_IO::XInputStream > getInputStream_Impl() const
