@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:07:09 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,6 +366,8 @@ TabDialog DLG_FLD_INSERT
     Text[ hindi ] = "क्षेत्र";
     Text[ slovak ] = "Polia";
 };
+
+
 
 
 
