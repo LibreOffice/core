@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-24 17:06:09 $
+ *  last change: $Author: mib $ $Date: 2001-07-25 07:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1830,7 +1830,7 @@ void XMLImpSpanContext_Impl::Characters( const OUString& rChars )
     OUString sChars =
         GetImport().GetTextImport()->ConvertStarFonts( rChars, sStyleName,
                                                        nStarFontsConvFlags,
-                                                       sal_False );
+                                                       sal_False, GetImport() );
     GetImport().GetTextImport()->InsertString( sChars, rIgnoreLeadingSpace );
 #else
     GetImport().GetTextImport()->InsertString( rChars, rIgnoreLeadingSpace );
@@ -2041,7 +2041,7 @@ void XMLParaContext::Characters( const OUString& rChars )
     OUString sChars =
         GetImport().GetTextImport()->ConvertStarFonts( rChars, sStyleName,
                                                        nStarFontsConvFlags,
-                                                       sal_True );
+                                                       sal_True, GetImport() );
     GetImport().GetTextImport()->InsertString( sChars, bIgnoreLeadingSpace );
 #else
     GetImport().GetTextImport()->InsertString( rChars, bIgnoreLeadingSpace );

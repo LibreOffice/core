@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: mib $ $Date: 2001-07-25 07:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,10 +452,10 @@ void XMLTextStyleContext::FillPropertySet(
                 rAny >>= sFontName;
                 if ( sFontName.getLength() > 0 )
                 {
-                    if ( sFontName.equalsAsciiL(
-                                  RTL_CONSTASCII_STRINGPARAM("StarBats" ) ) ||
-                         sFontName.equalsAsciiL(
-                                  RTL_CONSTASCII_STRINGPARAM("StarMath" ) ) )
+                    OUString sStarBats( RTL_CONSTASCII_USTRINGPARAM("StarBats" ) );
+                    OUString sStarMath( RTL_CONSTASCII_USTRINGPARAM("StarMath" ) );
+                    if ( sFontName.equalsIgnoreAsciiCase( sStarBats ) ||
+                         sFontName.equalsIgnoreAsciiCase( sStarMath ) )
                     {
                         // construct new value
                         sFontName = OUString(

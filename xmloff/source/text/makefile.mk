@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: thb $ $Date: 2001-07-24 17:06:09 $
+#   last change: $Author: mib $ $Date: 2001-07-25 07:09:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+CDEFS += -DCONV_STAR_FONTS
 
 # --- Files --------------------------------------------------------
 

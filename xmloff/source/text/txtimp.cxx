@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-24 17:06:09 $
+ *  last change: $Author: mib $ $Date: 2001-07-25 07:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1006,35 +1006,11 @@ void XMLTextImportHelper::DeleteParagraph()
 }
 
 #ifdef CONV_STAR_FONTS
-sal_Unicode lcl_xmloff_convFromStarBats( sal_Unicode c )
-{
-    sal_Unicode cNew = c;
-    switch( c )
-    {
-    case 0xf095:    cNew = 0x2022;      break;
-    case 0xf05d:    cNew = 0x278a;      break;
-    case 0xf05e:    cNew = 0x278b;      break;
-    case 0xf05f:    cNew = 0x278c;      break;
-    }
-
-    return cNew;
-}
-sal_Unicode lcl_xmloff_convFromStarMath( sal_Unicode c )
-{
-    sal_Unicode cNew = c;
-    switch( c )
-    {
-    case 0xf09c:    cNew = 0x2227;      break;
-    case 0xf09d:    cNew = 0x2228;      break;
-    }
-
-    return cNew;
-}
-
 OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
                                                 const OUString& rStyleName,
                                                 sal_uInt8& rFlags,
-                                                 sal_Bool bPara ) const
+                                                 sal_Bool bPara,
+                                                SvXMLImport& rImport ) const
 {
     OUStringBuffer sChars( rChars );
     sal_Bool bConverted = sal_False;
@@ -1077,9 +1053,11 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
                                     rFlags &= ~(CONV_FROM_STAR_BATS|CONV_FROM_STAR_MATH);
                                     OUString sFontName;
                                     rProp.maValue >>= sFontName;
-                                    if( sFontName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("StarBats" ) ) )
+                                    OUString sStarBats( RTL_CONSTASCII_USTRINGPARAM("StarBats" ) );
+                                    OUString sStarMath( RTL_CONSTASCII_USTRINGPARAM("StarMath" ) );
+                                    if( sFontName.equalsIgnoreAsciiCase( sStarBats  ) )
                                         rFlags |= CONV_FROM_STAR_BATS;
-                                    else if( sFontName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("StarMath" ) ) )
+                                    else if( sFontName.equalsIgnoreAsciiCase( sStarMath ) )
                                         rFlags |= CONV_FROM_STAR_MATH;
                                     break;
                                 }
@@ -1093,12 +1071,12 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
             }
             if( (rFlags & CONV_FROM_STAR_BATS ) != 0 )
             {
-                sChars.setCharAt( i, lcl_xmloff_convFromStarBats( c ) );
+                sChars.setCharAt( i, rImport.ConvStarBatsCharToStarSymbol( c ) );
                 bConverted = sal_True;
             }
             else if( (rFlags & CONV_FROM_STAR_MATH ) != 0 )
             {
-                sChars.setCharAt( i, lcl_xmloff_convFromStarMath( c ) );
+                sChars.setCharAt( i, rImport.ConvStarMathCharToStarSymbol( c ) );
                 bConverted = sal_True;
             }
         }
