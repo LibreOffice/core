@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-02-28 17:04:32 $
+ *  last change: $Author: os $ $Date: 2002-05-06 10:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1389,7 +1389,9 @@ void SwContentTree::Display( sal_Bool bActive )
 {
     if(!bIsImageListInitialized)
     {
-        aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        USHORT nResId = rStyleSettings.GetHighContrastMode() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
+        aEntryImages = ImageList(SW_RES(nResId));
         bIsImageListInitialized = sal_True;
     }
     // erst den selektierten Eintrag auslesen, um ihn spaeter evtl. wieder
@@ -3233,6 +3235,22 @@ void SwContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFl
     }
     else
         SvLBoxString::Paint( rPos, rDev, nFlags, pEntry);
+}
+/* -----------------------------06.05.2002 10:20------------------------------
+
+ ---------------------------------------------------------------------------*/
+void    SwContentTree::DataChanged( const DataChangedEvent& rDCEvt )
+{
+  if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        USHORT nResId = rStyleSettings.GetHighContrastMode() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
+        aEntryImages = ImageList(SW_RES(nResId));
+        FindActiveTypeAndRemoveUserData();
+        Display(sal_True);
+    }
+    Window::DataChanged( rDCEvt );
 }
 
 
