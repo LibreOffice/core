@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-21 16:21:37 $
+#   last change: $Author: rt $ $Date: 2004-08-23 08:49:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,10 +102,11 @@ SLOFILES =  \
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 
 LIB1OBJFILES =  \
-        $(SLO)$/macassgn.obj \
         $(SLO)$/regionsw.obj \
         $(SLO)$/swabstdlg.obj \
         $(SLO)$/swwrtshitem.obj
+
+#		$(SLO)$/macassgn.obj \
 
 # --- Tagets -------------------------------------------------------
 
