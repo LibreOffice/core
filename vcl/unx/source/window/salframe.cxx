@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-17 15:26:56 $
+ *  last change: $Author: pl $ $Date: 2001-07-18 10:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1131,8 +1131,7 @@ void SalFrameData::SetSize( const Size &rSize )
         if( ! ( nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) ) )
             MarkWindowAsGoodPositioned( XtWindow( hShell_ ) );
 
-        aPosSize_.Right()   = aPosSize_.Left() + rSize.Width()  - 1;
-        aPosSize_.Bottom()  = aPosSize_.Top()  + rSize.Height() - 1;
+        aPosSize_.SetSize( rSize );
 
         // allow the external status window to reposition
         if (mbInputFocus && mpInputContext != NULL)
@@ -1141,6 +1140,9 @@ void SalFrameData::SetSize( const Size &rSize )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 void SalFrameData::SetPosSize( const Rectangle &rPosSize )
 {
     XWindowChanges values;
@@ -1149,7 +1151,7 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
     values.width    = rPosSize.GetWidth();
     values.height   = rPosSize.GetHeight();
 
-    if ( !values.width || !values.height )
+    if ( !values.width || !values.height || aPosSize_ == rPosSize )
         return;
 
     if( ! ( nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) ) )
@@ -1188,11 +1190,8 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
     XMoveResizeWindow( GetXDisplay(), GetShellWindow(), values.x, values.y, values.width, values.height );
     XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, values.width, values.height );
 
-    if ( aPosSize_ != rPosSize )
-    {
-        aPosSize_ = rPosSize;
-        Call ( SALEVENT_RESIZE, NULL );
-    }
+    aPosSize_ = rPosSize;
+    Call ( SALEVENT_RESIZE, NULL );
 
     // allow the external status window to reposition
     if (mbInputFocus && mpInputContext != NULL)
@@ -2779,26 +2778,6 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                 if( pEvent->xmap.window == XtWindow( hShell_ ) ||
                     pEvent->xmap.window == XtWindow( hComposite_ ) )
                 {
-                    /*
-                     *  update position & size here
-                     *  WM may have moved/sized us
-                     */
-                    int x, y;
-                    unsigned int w, h, bw, d;
-                    XLIB_Window aRoot, aChild;
-                    XGetGeometry( GetXDisplay(), GetWindow(),
-                                  &aRoot,
-                                  &x, &y, &w, &h, &bw, &d );
-                    aPosSize_.SetSize( Size( w, h ) );
-                    if( XTranslateCoordinates( GetXDisplay(),
-                                               GetWindow(),
-                                               aRoot,
-                                               0, 0,
-                                               &x, &y, &aChild ) )
-                    {
-                        aPosSize_.Left() = x;
-                        aPosSize_.Top() = y;
-                    }
                     bMapped_   = TRUE;
                     bViewable_ = TRUE;
                     nRet = TRUE;
