@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-09 16:17:35 $
+ *  last change: $Author: cd $ $Date: 2001-11-21 14:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,12 @@
 #ifndef _COM_SUN_STAR_CONFIGURATION_INSTALLATIONINCOMPLETEEXCEPTION_HPP_
 #include <com/sun/star/configuration/InstallationIncompleteException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_EXECUTABLEDIALOGRESULTS_HPP_
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#endif
 
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
@@ -223,6 +229,9 @@
 #ifndef _RTL_STRBUF_HXX_
 #include <rtl/strbuf.hxx>
 #endif
+#ifndef _RTL_BOOTSTRAP_HXX_
+#include <rtl/bootstrap.hxx>
+#endif
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
@@ -246,6 +255,9 @@
 #endif
 #ifndef _UTL_BOOTSTRAP_HXX
 #include <unotools/bootstrap.hxx>
+#endif
+#ifndef _VOS_PROFILE_HXX_
+#include <vos/profile.hxx>
 #endif
 
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII##))
@@ -275,7 +287,78 @@ static oslModule            aTestToolModule     = 0;
 // ----------------------------------------------------------------------------
 
 char const INSTALLER_INITFILENAME[] = "initialize.ini";
+#ifndef BUILD_SOSL
+char const OEM_PRELOAD_SECTION[]    = "Bootstrap";
+char const OEM_PRELOAD[]            = "Preload";
+#endif
 
+// ----------------------------------------------------------------------------
+
+#ifndef BUILD_SOSL
+sal_Bool IsOEMPreload()
+{
+    if ( !Application::IsRemoteServer() )
+    {
+        OUString aSofficeIniFileURL;
+
+        Bootstrap().getIniName( aSofficeIniFileURL );
+        if ( aSofficeIniFileURL.getLength() > 0 )
+        {
+            OProfile aProfile( aSofficeIniFileURL );
+            sal_Bool bResult = aProfile.readBool( OEM_PRELOAD_SECTION, OEM_PRELOAD, sal_False );
+            aProfile.close();
+
+            return bResult;
+        }
+    }
+
+    return sal_False;
+}
+
+// reset preload flag in soffice.ini/sofficerc file
+void ResetOEMPreload()
+{
+    OUString aSofficeIniFileURL;
+
+    Bootstrap().getIniName( aSofficeIniFileURL );
+    if ( aSofficeIniFileURL.getLength() > 0 )
+    {
+        OProfile aProfile( aSofficeIniFileURL );
+        aProfile.writeBool( OEM_PRELOAD_SECTION, OEM_PRELOAD, sal_False );
+        aProfile.flush();
+        aProfile.close();
+    }
+}
+
+// check OEM preload
+sal_Bool CheckOEMPreload()
+{
+    try
+    {
+        Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
+
+        // create OEM preload service
+        Reference < com::sun::star::ui::dialogs::XExecutableDialog > xDialog( xSMgr->createInstance(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.preload.OEMPreloadWizard" ) ) ), UNO_QUERY );
+
+        if ( xDialog.is() )
+        {
+            // execute OEM preload dialog and check return value
+            sal_Int16 nResult = xDialog->execute();
+            if ( nResult != com::sun::star::ui::dialogs::ExecutableDialogResults::OK )
+                return sal_False;
+            else
+                ResetOEMPreload();
+        }
+    }
+    catch ( RuntimeException& )
+    {
+    }
+
+    return sal_True;
+}
+
+#endif
 
 // ----------------------------------------------------------------------------
 
@@ -1164,6 +1247,7 @@ void Desktop::Main()
         //StartSetup( DEFINE_CONST_UNICODE("-repair") );
         //_exit(666);
     }
+
 #endif
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
     SetAppName( DEFINE_CONST_UNICODE("soffice") );
@@ -1264,6 +1348,29 @@ void Desktop::Main()
                                         UNO_QUERY );
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} createInstance com.sun.star.office.OfficeWrapper" );
 
+        sal_Bool bTerminateRequested = sal_False;
+
+#ifndef BUILD_SOSL
+        // preload function depends on an initialized sfx application!
+        if ( IsOEMPreload() )
+        {
+            if ( !CheckOEMPreload() )
+            {
+                try
+                {
+                    bTerminateRequested = sal_True;
+                    Reference< XDesktop > xDesktop( xSMgr->createInstance(
+                                                                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))),
+                                                                UNO_QUERY );
+                    xDesktop->terminate();
+                }
+                catch( ::com::sun::star::uno::Exception& )
+                {
+                }
+            }
+        }
+#endif
+
         {
             Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_DIALOG );
 
@@ -1273,25 +1380,28 @@ void Desktop::Main()
 
             InitTestToolLib();
 
-            try
+            if ( !bTerminateRequested )
             {
-                // the shutdown icon sits in the systray and allows the user to keep
-                // the office instance running for quicker restart
-                // this will only be activated if -quickstart was specified on cmdline
-                RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) createInstance com.sun.star.office.Quickstart" );
+                try
+                {
+                    // the shutdown icon sits in the systray and allows the user to keep
+                    // the office instance running for quicker restart
+                    // this will only be activated if -quickstart was specified on cmdline
+                    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) createInstance com.sun.star.office.Quickstart" );
 
-                sal_Bool bQuickstart = pCmdLineArgs->IsQuickstart();
-                Sequence< Any > aSeq( 1 );
-                aSeq[0] <<= bQuickstart;
+                    sal_Bool bQuickstart = pCmdLineArgs->IsQuickstart();
+                    Sequence< Any > aSeq( 1 );
+                    aSeq[0] <<= bQuickstart;
 
-                // Try to instanciate quickstart service. This service is not mandatory, so
-                // do nothing if service is not available.
-                Reference < XComponent > xQuickstart( xSMgr->createInstanceWithArguments(
-                                                        DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" ), aSeq ),
-                                                      UNO_QUERY );
-            }
-            catch( ::com::sun::star::uno::Exception& )
-            {
+                    // Try to instanciate quickstart service. This service is not mandatory, so
+                    // do nothing if service is not available.
+                    Reference < XComponent > xQuickstart( xSMgr->createInstanceWithArguments(
+                                                            DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" ), aSeq ),
+                                                          UNO_QUERY );
+                }
+                catch( ::com::sun::star::uno::Exception& )
+                {
+                }
             }
 
             if ( pCmdLineArgs->IsPlugin() )
