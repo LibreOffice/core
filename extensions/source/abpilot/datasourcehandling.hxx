@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasourcehandling.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 08:04:05 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,25 +207,31 @@ namespace abp
         /// disconnects from the data source (i.e. disposes the UNO connection hold internally)
         void        disconnect( ) SAL_THROW (( ));
 
+        /// stores the database file
+        void        store() SAL_THROW (( ));
+
+        /// register the data source under the given name in the configuration
+        void        registerDataSource( const ::rtl::OUString& _sRegisteredDataSourceName )  SAL_THROW (( ));
+
         // ----------------------------------------------------------------
         /** retrieves the tables names from the connection
             <p>to be called when <method>isConnection</method> returns <TRUE/> only</p>
         */
         const StringBag&    getTableNames() const SAL_THROW (( ));
 
+        /// return the intern data source object
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDataSource() const SAL_THROW (( ));
+
+
         // ----------------------------------------------------------------
         /** set a new data source.
             <p>Available to selected clients only</p>
         */
         void        setDataSource(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDS,
-            PackageAccessControl
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDS
+            ,const ::rtl::OUString& _sName
+            ,PackageAccessControl
         );
-
-    protected:
-        /// a unsafe version of getName()
-        ::rtl::OUString
-                    implGetName() const SAL_THROW (( ::com::sun::star::uno::Exception ));
 
     private:
         ODataSource( ); // never implemented
