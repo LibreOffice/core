@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-23 08:00:01 $
+ *  last change: $Author: abi $ $Date: 2002-10-24 11:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,9 +426,8 @@ Any SAL_CALL FTPContent::execute(
                 ucbhelper::cancelCommandExecution(
                     aRet,
                     Environment);
-            } else if(action == THROWQUOTE) {
-
-            } else if(action == THROWGENERAL) {
+            } else if(action == THROWQUOTE ||
+                      action == THROWGENERAL) {
                 ucbhelper::cancelCommandExecution(
                     IOErrorCode_GENERAL,
                     Sequence<Any>(0),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-23 08:00:09 $
+ *  last change: $Author: abi $ $Date: 2002-10-24 11:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,23 +544,18 @@ std::vector<FTPDirentry> FTPURL::list(
                 sal_Bool(aDirEntry.m_nMode&INETCOREFTP_FILEMODE_ISDIR);
             switch(nMode) {
                 case OpenMode::DOCUMENTS:
-                if(!isDir) {
+                    if(!isDir)
+                        resvec.push_back(aDirEntry);
+                    break;
+                case OpenMode::FOLDERS:
+                    if(isDir)
+                        resvec.push_back(aDirEntry);
+                    break;
+                default:
                     resvec.push_back(aDirEntry);
-                    aDirEntry.clear();
-                }
-                break;
-            case OpenMode::FOLDERS:
-                if(isDir) {
-                    resvec.push_back(aDirEntry);
-                    aDirEntry.clear();
-                }
-                break;
-            default:
-                resvec.push_back(aDirEntry);
-                aDirEntry.clear();
             };
         }
-
+        aDirEntry.clear();
         p1 = p2 + 1;
     }
 
@@ -752,11 +747,14 @@ void FTPURL::mkdir(bool ReplaceExisting) const
     CURL *curl = m_pFCP->handle();
     SET_CONTROL_CONTAINER;
     curl_easy_setopt(curl,CURLOPT_NOBODY,TRUE);       // no data => no transfer
+    curl_easy_setopt(curl,CURLOPT_QUOTE,0);
 
     // post request
     curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
 
     rtl::OUString url(parent(true));
+    if(1+url.lastIndexOf(sal_Unicode('/')) != url.getLength())
+        url += rtl::OUString::createFromAscii("/");
     SET_URL(url);
 
     CURLcode err = curl_easy_perform(curl);
