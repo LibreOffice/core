@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strimp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:09 $
+ *  last change: $Author: jp $ $Date: 2000-09-25 18:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ inline void ImplDeleteData( STRINGDATA* pStrData )
 
 static STRINGDATA* _ImplCopyData( STRINGDATA* pData )
 {
-    xub_StrLen      nSize       = sizeof(STRINGDATA)+(pData->mnLen*sizeof( STRCODE ));
+    unsigned int    nSize       = sizeof(STRINGDATA)+(pData->mnLen*sizeof( STRCODE ));
     STRINGDATA*     pNewData    = (STRINGDATA*)rtl_allocateMemory( nSize );
     memcpy( pNewData, pData, nSize );
     pNewData->mnRefCount = 1;
