@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 10:27:20 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ using namespace ::vcl;
 // =======================================================================
 
 static void ImplRotatePos( long nOriginX, long nOriginY, long& rX, long& rY,
-                           short nOrientation )
+                           int nOrientation )
 {
     if ( (nOrientation >= 0) && !(nOrientation % 900) )
     {
@@ -1840,6 +1840,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
 
     const ImplCvtChar*      pConvertFontTab = NULL;
     ImplFontData*           pFontData = NULL;
+
     ImplDevFontListData*    pFoundData;
     String                  aSearchName;
     USHORT                  nSubstFlags1 = FONT_SUBSTITUTE_ALWAYS;
@@ -2847,33 +2848,12 @@ BOOL OutputDevice::ImplIsUnderlineAbove( const Font& rFont )
     if ( !rFont.IsVertical() )
         return FALSE;
 
-    LanguageType eLang = rFont.GetLanguage();
-    // In all Chinese Languages the underline is left
-    if ( (eLang == LANGUAGE_CHINESE)                ||
-         (eLang == LANGUAGE_CHINESE_TRADITIONAL)    ||
-         (eLang == LANGUAGE_CHINESE_SIMPLIFIED)     ||
-         (eLang == LANGUAGE_CHINESE_HONGKONG)       ||
-         (eLang == LANGUAGE_CHINESE_SINGAPORE)      ||
-         (eLang == LANGUAGE_CHINESE_MACAU)          ||
-         (eLang == LANGUAGE_KOREAN)                 ||
-         (eLang == LANGUAGE_KOREAN_JOHAB) )
-        return FALSE;
-    else
-    {
-        eLang = rFont.GetCJKContextLanguage();
-        // In all Chinese Languages the underline is left
-        if ( (eLang == LANGUAGE_CHINESE)                ||
-             (eLang == LANGUAGE_CHINESE_TRADITIONAL)    ||
-             (eLang == LANGUAGE_CHINESE_SIMPLIFIED)     ||
-             (eLang == LANGUAGE_CHINESE_HONGKONG)       ||
-             (eLang == LANGUAGE_CHINESE_SINGAPORE)      ||
-             (eLang == LANGUAGE_CHINESE_MACAU)          ||
-             (eLang == LANGUAGE_KOREAN)                 ||
-             (eLang == LANGUAGE_KOREAN_JOHAB) )
-            return FALSE;
-    }
+    if( (LANGUAGE_JAPANESE == rFont.GetLanguage())
+    ||  (LANGUAGE_JAPANESE == rFont.GetCJKContextLanguage()) )
+        // the underline is right for Japanese only
+        return TRUE;
 
-    return TRUE;
+    return FALSE;
 }
 
 // =======================================================================
@@ -3128,14 +3108,14 @@ int OutputDevice::ImplNewFont()
     else if ( eAlign == ALIGN_TOP )
     {
         mnTextOffX = 0;
-        mnTextOffY = pFontEntry->maMetric.mnAscent+mnEmphasisAscent;
+        mnTextOffY = +pFontEntry->maMetric.mnAscent + mnEmphasisAscent;
         if ( pFontEntry->mnOrientation )
             ImplRotatePos( 0, 0, mnTextOffX, mnTextOffY, pFontEntry->mnOrientation );
     }
     else // eAlign == ALIGN_BOTTOM
     {
         mnTextOffX = 0;
-        mnTextOffY = -pFontEntry->maMetric.mnDescent+mnEmphasisDescent;
+        mnTextOffY = -pFontEntry->maMetric.mnDescent + mnEmphasisDescent;
         if ( pFontEntry->mnOrientation )
             ImplRotatePos( 0, 0, mnTextOffX, mnTextOffY, pFontEntry->mnOrientation );
     }
@@ -3486,6 +3466,9 @@ void OutputDevice::ImplInitTextLineSize()
         }
         else
             pFontEntry->maMetric.mnWUnderlineSize = ((nWCalcSize*50)+50) / 100;
+         // #109280# the following line assures that wavelnes are never placed below the descent, however
+         // for most fonts the waveline then is drawn into the text, so we better keep the old solution
+         // pFontEntry->maMetric.mnWUnderlineOffset     = pFontEntry->maMetric.mnDescent + 1 - pFontEntry->maMetric.mnWUnderlineSize;
         pFontEntry->maMetric.mnWUnderlineOffset     = nUnderlineOffset;
     }
 
@@ -5297,10 +5280,10 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
     // initialize font if needed to get text offsets
     // TODO: only needed for mnTextOff!=(0,0)
     if( mbNewFont )
-        if( !(const_cast<OutputDevice&>(*this).ImplNewFont()) )
+        if( !ImplNewFont() )
             return;
     if( mbInitFont )
-        const_cast<OutputDevice&>(*this).ImplInitFont();
+        ImplInitFont();
 
     Point aPos = ImplLogicToDevicePixel( rPos );
     nWidth = ImplLogicWidthToDevicePixel( nWidth );
@@ -5371,7 +5354,14 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
     else // WAVE_FLAT
         nWaveHeight = 1;
 
-    ImplDrawWaveLine( nStartX, nStartY, nStartX, nStartY,
+     // #109280# make sure the waveline does not exceed the descent to avoid paint problems
+     ImplFontEntry*  pFontEntry = mpFontEntry;
+     if ( !pFontEntry->maMetric.mnWUnderlineSize )
+         ImplInitTextLineSize();
+     if( nWaveHeight > pFontEntry->maMetric.mnWUnderlineSize )
+         nWaveHeight = pFontEntry->maMetric.mnWUnderlineSize;
+
+     ImplDrawWaveLine( nStartX, nStartY, nStartX, nStartY,
                       nEndX-nStartX, nWaveHeight, 1,
                       nOrientation, GetLineColor() );
 #else
@@ -5775,8 +5765,8 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     else
     {
         // disable CTL for non-CTL text
-        const xub_Unicode* pStr = aStr.GetBuffer() + nMinIndex;
-        const xub_Unicode* pEnd = aStr.GetBuffer() + nEndIndex;
+        const sal_Unicode* pStr = aStr.GetBuffer() + nMinIndex;
+        const sal_Unicode* pEnd = aStr.GetBuffer() + nEndIndex;
         for( ; pStr < pEnd; ++pStr )
             if( ((*pStr >= 0x0590) && (*pStr < 0x10A0))
             ||  ((*pStr >= 0x1700) && (*pStr < 0x1900))
@@ -5790,9 +5780,9 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     if( meTextLanguage ) //TODO: (mnTextLayoutMode & TEXT_LAYOUT_SUBSTITUTE_DIGITS)
     {
         // disable character localization when no digits used
-        const xub_Unicode* pBase = aStr.GetBuffer();
-        const xub_Unicode* pStr = pBase + nMinIndex;
-        const xub_Unicode* pEnd = pBase + nEndIndex;
+        const sal_Unicode* pBase = aStr.GetBuffer();
+        const sal_Unicode* pStr = pBase + nMinIndex;
+        const sal_Unicode* pEnd = pBase + nEndIndex;
         for( ; pStr < pEnd; ++pStr )
         {
             // TODO: are there non-digit localizations?
@@ -5841,8 +5831,40 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         // convert from logical units to font units using a temporary array
         long* pTempDXAry = (long*)alloca( nLength * sizeof(long) );
 
-        for( int i = 0; i < nLength; ++i )
-            pTempDXAry[i] = ImplLogicWidthToDevicePixel( pDXArray[i] );
+        // using base position for better rounding a.k.a. "dancing characters"
+        if( (nOrientation == 0) || (nOrientation == 1800) )
+        {
+            int nPixelXOfs = ImplLogicWidthToDevicePixel( rLogicalPos.X() );
+            for( int i = 0; i < nLength; ++i )
+                pTempDXAry[i] = ImplLogicWidthToDevicePixel( rLogicalPos.X() + pDXArray[i] ) - nPixelXOfs;
+        }
+        else if( (nOrientation == 900) || (nOrientation == 2700) )
+        {
+            int nPixelYOfs = ImplLogicHeightToDevicePixel( rLogicalPos.Y() );
+            for( int i = 0; i < nLength; ++i )
+                pTempDXAry[i] = ImplLogicHeightToDevicePixel( rLogicalPos.Y() + pDXArray[i] ) - nPixelYOfs;
+        }
+        else
+        {
+            static int nOldOrientation = 0;
+            static double fAbsCos = 1.0, fAbsSin = 0.0;
+            if( nOldOrientation != nOrientation )
+            {
+                nOldOrientation = nOrientation;
+                fAbsCos = fabs( cos( nOrientation*F_PI1800 ) );
+                fAbsSin = fabs( sin( nOrientation*F_PI1800 ) );
+            }
+
+            int nPixelXOfs = ImplLogicWidthToDevicePixel( rLogicalPos.X() );
+            int nPixelYOfs = ImplLogicHeightToDevicePixel( rLogicalPos.Y() );
+            for( int i = 0; i < nLength; ++i )
+            {
+                int nX = ImplLogicWidthToDevicePixel( rLogicalPos.X() + pDXArray[i] ) - nPixelXOfs;
+                int nY = ImplLogicHeightToDevicePixel( rLogicalPos.Y() + pDXArray[i] ) - nPixelYOfs;
+                pTempDXAry[i] = (long)(fAbsCos * nX + fAbsSin * nY + 0.5);
+            }
+        }
+
         pDXArray = pTempDXAry;
     }
     aLayoutArgs.SetDXArray( pDXArray );
@@ -5861,21 +5883,15 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         pSalLayout = NULL;
     }
 
-    ImplLayoutArgs aMultiArgs = aLayoutArgs;
-#ifdef WNT
-    // TODO: reenable multi glyph fallback on Win32 which got disabled for Beta2
-    if( (aLayoutArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED)
-#else
-    if( 1
-#endif
+    ImplLayoutRuns aLayoutRuns = aLayoutArgs.maRuns;
     // do glyph fallback if needed
     // #105768# avoid fallback for very small font sizes
-    &&  mpFontEntry && (mpFontEntry->maFontSelData.mnHeight >= 6)
-    && (pSalLayout && aMultiArgs.PrepareFallback()) )
+    if( mpFontEntry && (mpFontEntry->maFontSelData.mnHeight >= 6)
+    && (pSalLayout && aLayoutArgs.PrepareFallback()) )
     {
         // prepare multi level glyph fallback
         MultiSalLayout* pMultiSalLayout = NULL;
-        aMultiArgs.mnFlags |= SAL_LAYOUT_FOR_FALLBACK;
+        aLayoutArgs.mnFlags |= SAL_LAYOUT_FOR_FALLBACK;
 
         ImplFontSelectData aFontSelData = mpFontEntry->maFontSelData;
         Size aFontSize( mpFontEntry->maFontSelData.mnWidth, mpFontEntry->maFontSelData.mnHeight );
@@ -5901,15 +5917,16 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
             pFallbackFont->mnSetFontFlags = mpGraphics->SetFont( &aFontSelData, nLevel );
 
             // create and add fallback layout to multilayout
-            aMultiArgs.ResetPos();
-            SalLayout* pFallback = mpGraphics->GetTextLayout( aMultiArgs, nLevel );
+            aLayoutArgs.ResetPos();
+            SalLayout* pFallback = mpGraphics->GetTextLayout( aLayoutArgs, nLevel );
             if( pFallback )
             {
-                if( pFallback->LayoutText( aMultiArgs ) )
+                if( pFallback->LayoutText( aLayoutArgs ) )
                 {
                     if( !pMultiSalLayout )
                         pMultiSalLayout = new MultiSalLayout( *pSalLayout );
-                    pMultiSalLayout->AddFallback( *pFallback, aFontSelData.mpFontData );
+                    pMultiSalLayout->AddFallback( *pFallback,
+                        aLayoutArgs.maRuns, aFontSelData.mpFontData );
                 }
                 else
                     pFallback->Release();
@@ -5918,17 +5935,12 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
             mpFontCache->Release( pFallbackFont );
 
             // break when this fallback was sufficient
-            if( !aMultiArgs.PrepareFallback() )
+            if( !aLayoutArgs.PrepareFallback() )
                 break;
         }
 
-        if( pMultiSalLayout )
-        {
-            aMultiArgs = aLayoutArgs;
-            aMultiArgs.PrepareFallback();
-            pMultiSalLayout->LayoutText( aMultiArgs );
+        if( pMultiSalLayout && pMultiSalLayout->LayoutText( aLayoutArgs ) )
             pSalLayout = pMultiSalLayout;
-        }
 
         // restore orig font settings
         pSalLayout->InitFont();
@@ -5937,6 +5949,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     if( pSalLayout )
     {
         // position, justify, etc. the layout
+        aLayoutArgs.maRuns = aLayoutRuns;
         pSalLayout->AdjustLayout( aLayoutArgs );
         pSalLayout->DrawBase() = aPixelPos;
         // adjust to right alignment if necessary
@@ -6041,6 +6054,7 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rStr, long nTextWidth,
         nTextPixelWidth -= nHyphenatorPixelWidth;
         if( nExtraPixelWidth > 0 )
             nTextPixelWidth -= nExtraPixelWidth;
+
         rHyphenatorPos = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
 
         if( rHyphenatorPos > nRetVal )
@@ -7648,3 +7662,4 @@ xub_StrLen OutputDevice::HasGlyphs( const Font& rTempFont, const String& rStr,
 }
 
 // -----------------------------------------------------------------------
+
