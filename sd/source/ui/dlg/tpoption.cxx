@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:45:24 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,11 @@
 #include "tpoption.hrc"
 #include "tpoption.hxx"
 #include "strings.hrc"
-
+#include "app.hrc" //CHINA001
+#ifndef _SFXINTITEM_HXX //CHINA001
+#include <svtools/intitem.hxx> //CHINA001
+#endif //CHINA001
+#include <sfx2/request.hxx> //CHINA001
 #define DLGWIN this->GetParent()->GetParent()
 
 using namespace ::com::sun::star;
@@ -923,5 +927,18 @@ void SdTpOptionsMisc::UpdateCompatibilityControls (void)
     aTxtCompatibility.Enable (bIsEnabled);
     aCbxCompatibility.Enable(bIsEnabled);
     aCbxUsePrinterMetrics.Enable (bIsEnabled);
+}
+
+void SdTpOptionsMisc::PageCreated (SfxAllItemSet aSet) //add CHINA001
+{
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_SDMODE_FLAG,sal_False);
+    if (pFlagItem)
+    {
+        UINT32 nFlags=pFlagItem->GetValue();
+        if ( ( nFlags & SD_DRAW_MODE ) == SD_DRAW_MODE )
+            SetDrawMode();
+        if ( ( nFlags & SD_IMPRESS_MODE ) == SD_IMPRESS_MODE )
+            SetImpressMode();
+    }
 }
 
