@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:42:28 $
+ *  last change: $Author: fs $ $Date: 2000-10-27 08:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,9 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
 #endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
@@ -163,7 +166,8 @@ typedef ::cppu::ImplHelper6 <   ::com::sun::star::lang::XServiceInfo,
                                 ::com::sun::star::sdb::XQueryDefinitionsSupplier
                             >   ODatabaseSource_Base;
 
-class ODatabaseSource   :public connectivity::OBaseMutex
+class ODatabaseSource
+                    :public ::comphelper::OBaseMutex
                     ,public OSubComponent
                     ,public OContainerElement
                     ,public OConfigurationFlushable
