@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: checkxml.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2005-02-04 15:36:21 $
+#   last change: $Author: obo $ $Date: 2005-02-09 08:59:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 my
 $is_debug=0;
 my $err = 0;
-my $path = $ENV{'SOLARVER'} . '/' . $ENV{'INPATH'} . '/xml/';
+my $path = $ENV{'SOLARVERSION'} . '/' . $ENV{'INPATH'} . '/xml/';
 #Path of the directory from which the recursion starts (must have ending '/').
 print "Checking:$path\n";
 
