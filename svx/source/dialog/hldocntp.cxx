@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:15:03 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,20 +153,12 @@ sal_Bool SvxHyperlinkNewDocTp::ImplGetURLObject( const String& rPath, const Stri
         aURLObject.SetURL( rPath );
         if ( aURLObject.GetProtocol() == INET_PROT_NOT_VALID )      // test if the source is already a valid url
         {                                                           // if not we have to create a url from a physical file name
-            String aNewURL;
-            if ( !rBase.Len() )
-                utl::LocalFileHelper::ConvertPhysicalNameToURL( rPath, aNewURL );
-            else
-                utl::LocalFileHelper::ConvertSystemPathToURL( rPath, rBase, aNewURL );
-            if ( aNewURL.Len() )
-                aURLObject = INetURLObject( aNewURL );
-            else
-            {
-                aURLObject.SetSmartURL( SvtPathOptions().GetWorkPath() );
-                if( !aURLObject.hasFinalSlash() )
-                    aURLObject.setFinalSlash();
-                aURLObject.Append( rPath );
-            }
+            bool wasAbs;
+            INetURLObject base(rBase);
+            base.setFinalSlash();
+            aURLObject = base.smartRel2Abs(
+                rPath, wasAbs, true, INetURLObject::ENCODE_ALL,
+                RTL_TEXTENCODING_UTF8, true);
         }
         bIsValidURL = aURLObject.GetProtocol() != INET_PROT_NOT_VALID;
         if ( bIsValidURL )
