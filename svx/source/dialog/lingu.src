@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lingu.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:00:10 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 07:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,7 +517,7 @@ String RID_SVXSTR_DIC_ERR_UNKNOWN
     Text[ polish ] = "Z nieznanej przyczyny\nwyrazu nie mo¿na by³o przej¹æ do s³ownika.";
     Text[ portuguese_brazilian ] = "Failed to add word to dictionary\n for an unknown reason.";
     Text[ japanese ] = "’PŒê‚ÍŒ´ˆö‚ª•s–¾‚È‚Ü‚Ü\n«‘‚É’Ç‰Á‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
-    Text[ korean ] = "ÀÌ ´Ü¾î´Â ¾Ë·Á ÁöÁö ¾ÊÀº ÀÌÀ¯·Î ÀÎÇØ\n»çÀü¿¡ Ãß°¡ÇÒ ¼ö ¾ø¾ú½À´Ï´Ù.";
+    Text[ korean ] = "ÀÌ ´Ü¾î´Â ¾Ë·ÁÁöÁö ¾ÊÀº ÀÌÀ¯·Î ÀÎÇØ\n»çÀü¿¡ Ãß°¡ÇÒ ¼ö ¾ø¾ú½À´Ï´Ù.";
     Text[ chinese_simplified ] = "Õâ¸ö×ÖÎŞ·¨Ìí¼Óµ½´ÊµäÖĞÈ¥,Ô­Òò²»Ã÷¡£";
     Text[ chinese_traditional ] = "¦r¨åµLªk¦¬¿ı³o­Ó¦r¡A­ì¦]¤£©ú¡C";
     Text[ arabic ] = "ÊÚĞÑ ÅÖÇİÉ ÇáßáãÉ Åáì ÇáŞÇãæÓ\náÓÈÈ ÛíÑ ãÚÑæİ.";
