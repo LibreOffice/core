@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpopt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-05 06:09:20 $
+ *  last change: $Author: os $ $Date: 2002-05-27 08:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ static sal_Int32           nRefCount = 0;
 #define AGENT_RETRYLIMIT    4
 #define LOCALE              5
 #define SYSTEM              6
-//#define WELCOMESCREEN 7
+#define STYLESHEET          7
 
 class SvtHelpOptions_Impl : public utl::ConfigItem
 {
@@ -113,6 +113,7 @@ class SvtHelpOptions_Impl : public utl::ConfigItem
     sal_Bool        bWelcomeScreen;
     String          aLocale;
     String          aSystem;
+    String          sHelpStyleSheet;
 
     DECLARE_STL_USTRINGACCESS_MAP( sal_Int32, MapString2Int );
     MapString2Int   aURLIgnoreCounters;
@@ -149,6 +150,9 @@ public:
     String          GetLocale() const                       { return aLocale; }
     String          GetSystem() const                       { return aSystem; }
 
+    const String&   GetHelpStyleSheet()const{return sHelpStyleSheet;}
+    void            SetHelpStyleSheet(const String& rStyleSheet){sHelpStyleSheet = rStyleSheet; SetModified();}
+
 protected:
     void    implLoadURLCounters();
     void    implSaveURLCounters();
@@ -167,6 +171,7 @@ static Sequence< OUString > GetPropertyNames()
         "HelpAgent/RetryLimit",
         "Locale",
         "System",
+        "HelpStyleSheet",
 //      "HowTo/Show"
     };
 
@@ -250,7 +255,9 @@ SvtHelpOptions_Impl::SvtHelpOptions_Impl()
                         case SYSTEM:
                             aSystem = aTmpStr;
                             break;
-
+                        case STYLESHEET :
+                            sHelpStyleSheet = aTmpStr;
+                        break;
                         default:
                             DBG_ERRORFILE( "Wrong Member!" );
                             break;
@@ -535,6 +542,10 @@ void SvtHelpOptions_Impl::Commit()
             case SYSTEM:
                 pValues[nProp] <<= ::rtl::OUString(aSystem);
                 break;
+            case STYLESHEET :
+                pValues[nProp] <<= ::rtl::OUString(sHelpStyleSheet);
+            break;
+
         }
     }
 
@@ -751,5 +762,15 @@ String SvtHelpOptions::GetLocale() const
 String SvtHelpOptions::GetSystem() const
 {
     return pImp->GetSystem();
+}
+
+const String&   SvtHelpOptions::GetHelpStyleSheet()const
+{
+    return pImp->GetHelpStyleSheet();
+}
+
+void  SvtHelpOptions::SetHelpStyleSheet(const String& rStyleSheet)
+{
+    pImp->SetHelpStyleSheet(rStyleSheet);
 }
 
