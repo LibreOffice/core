@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 14:29:44 $
+ *  last change: $Author: hr $ $Date: 2000-10-31 15:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,6 @@
 #endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _SDB_SDBSTAT_HXX
-#include <sdb/sdbstat.hxx>
 #endif
 
 #ifndef _SWMODULE_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-30 20:30:08 $
+ *  last change: $Author: hr $ $Date: 2000-10-31 15:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 
 #ifndef _SOT_STORINFO_HXX
 #include <sot/storinfo.hxx>
+#endif
+#ifndef _SVSTOR_HXX
+#include <so3/svstor.hxx>
 #endif
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
@@ -777,6 +780,9 @@ void SwDocShell::SubInitNew()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/10/30 20:30:08  jp
+    Bug #79779#: BrushGraphicCache removed
+
     Revision 1.3  2000/10/09 18:15:05  jp
     Bug #78395#: set fontcharset to systemcharset
 
