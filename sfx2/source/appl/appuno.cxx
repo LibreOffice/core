@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-11 17:33:30 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,6 @@ static const String sDontEdit       = String::CreateFromAscii( "DontEdit"       
 static const String sSilent         = String::CreateFromAscii( "Silent"         );
 static const String sJumpMark       = String::CreateFromAscii( "JumpMark"       );
 static const String sFileName       = String::CreateFromAscii( "FileName"       );
-static const String sOrigURL        = String::CreateFromAscii( "OriginalURL"    );
 static const String sSalvageURL     = String::CreateFromAscii( "SalvagedFile"   );
 static const String sStatusInd      = String::CreateFromAscii( "StatusIndicator" );
 static const String sModel          = String::CreateFromAscii( "Model" );
@@ -723,14 +722,6 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_FILE_NAME, sVal ) );
                 }
-                else if ( aName == sOrigURL )
-                {
-                    ::rtl::OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for OrigURL" )
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_ORIGURL, sVal ) );
-                }
                 else if ( aName == sSalvageURL )
                 {
                     ::rtl::OUString sVal;
@@ -934,8 +925,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_INTERACTIONHANDLER ) == SFX_ITEM_SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_ORIGURL ) == SFX_ITEM_SET )
-                nAdditional++;
             if ( rSet.GetItemState( SID_DOC_SALVAGE ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_CONTENT ) == SFX_ITEM_SET )
@@ -1097,8 +1086,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         continue;
                     if ( nId == SID_TARGETNAME )
                         continue;
-                    if ( nId == SID_ORIGURL )
-                        continue;
                     if ( nId == SID_DOC_SALVAGE )
                         continue;
                     if ( nId == SID_CONTENTTYPE )
@@ -1128,8 +1115,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
 
                     // used only internally
                     if ( nId == SID_SAVETO )
-                        continue;
-                    if ( nId == SID_VIEW )
                         continue;
                 }
 
@@ -1375,11 +1360,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_TARGETNAME, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = sFrameName;
-                pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
-            }
-            if ( rSet.GetItemState( SID_ORIGURL, sal_False, &pItem ) == SFX_ITEM_SET )
-            {
-                pValue[nActProp].Name = sOrigURL;
                 pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
             }
             if ( rSet.GetItemState( SID_DOC_SALVAGE, sal_False, &pItem ) == SFX_ITEM_SET )
