@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkbase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-12 12:47:21 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,9 @@ using namespace rtl;
 #define JAVASETTINGS_XML "javasettings.xml"
 #define VENDORSETTINGS "javavendors.xml"
 
-#define UNO_JAVA_JFW_PLUGIN "UNO_JAVA_JFW_PLUGIN"
 #define UNO_JAVA_JFW_PARAMETER "UNO_JAVA_JFW_PARAMETER_"
 #define UNO_JAVA_JFW_JREHOME "UNO_JAVA_JFW_JREHOME"
 #define UNO_JAVA_JFW_ENV_JREHOME "UNO_JAVA_JFW_ENV_JREHOME"
-#define UNO_JAVA_JFW_DISABLE "UNO_JAVA_JFW_DISABLE"
 #define UNO_JAVA_JFW_CLASSPATH "UNO_JAVA_JFW_CLASSPATH"
 #define UNO_JAVA_JFW_ENV_CLASSPATH "UNO_JAVA_JFW_ENV_CLASSPATH"
 #define UNO_JAVA_JFW_CLASSPATH_URLS "UNO_JAVA_JFW_CLASSPATH_URLS"
@@ -98,11 +96,15 @@ VendorSettings::VendorSettings()
 {
     OString sMsgExc("[Java framework] Error in constructor "
                          "VendorSettings::VendorSettings() (fwkbase.cxx)");
-            //Prepare the xml document and context
-    //If getVendorSettingsPath returns an empty string than
-    //the default javavendors.xml cannot be found
-    //todo
+    //Prepare the xml document and context
     OString sSettingsPath = jfw::getVendorSettingsPath();
+    if (sSettingsPath.getLength() == 0)
+    {
+        OString sMsg("[Java framework] A vendor settings file was not specified."
+               "Check the bootstrap parameter " UNO_JAVA_JFW_VENDOR_SETTINGS ".");
+        OSL_ENSURE(0, sMsg.getStr());
+        throw FrameworkException(JFW_E_CONFIGURATION, sMsg);
+    }
     if (sSettingsPath.getLength() > 0)
     {
         m_xmlDocVendorSettings = xmlParseFile(sSettingsPath.getStr());
@@ -125,27 +127,7 @@ std::vector<PluginLibrary> VendorSettings::getPluginData()
 {
     OString sExcMsg("[Java framework] Error in function VendorSettings::getVendorPluginURLs "
                          "(fwkbase.cxx).");
-
-    //Check if the plugin data is overriden by the bootstrap variable
-    //UNO_JAVA_JFW_PLUGIN
     std::vector<PluginLibrary> vecPlugins;
-    OUString sPlugin = BootParams::getPlugin();
-    if (sPlugin.getLength() > 0)
-    {
-        PluginLibrary lib = PluginLibrary(OUString(), sPlugin);
-        vecPlugins.push_back(lib);
-        return vecPlugins;
-    }
-
-    //If there is no bootstrap variable UNO_JAVA_JFW_PLUGIN then
-    //there must be a javavendors.xml
-    if (! m_xmlDocVendorSettings)
-    {
-        throw FrameworkException(
-            JFW_E_CONFIGURATION,
-            OString("[Java framework] Could not find javavendors.xml"));
-    }
-    //get the nodeset for the library elements
     CXPathObjectPtr result(xmlXPathEvalExpression(
         (xmlChar*)"/jf:javaSelection/jf:plugins/jf:library",
         m_xmlPathContextVendorSettings));
@@ -189,20 +171,7 @@ std::vector<PluginLibrary> VendorSettings::getPluginData()
 
 VersionInfo VendorSettings::getVersionInformation(const rtl::OUString & sVendor)
 {
-    //Version information are only available if the javavendors.xml is specified
-    //and no bootstap variable UNO_JAVA_JFW_PLUGIN is set. If it is set then
-    //it is not known what vendors it represents.
-    OUString sPlugin = BootParams::getPlugin();
-    if (sPlugin.getLength() > 0)
-        return VersionInfo();
-
-    //If there is no bootstrap variable UNO_JAVA_JFW_PLUGIN then
-    //there must be a javavendors.xml
-    if (! m_xmlDocVendorSettings)
-        throw FrameworkException(
-            JFW_E_CONFIGURATION,
-            OString("[Java framework] Could not find javavendors.xml"));
-
+    OSL_ASSERT(sVendor.getLength() > 0);
     VersionInfo aVersionInfo;
     OString osVendor = OUStringToOString(sVendor, RTL_TEXTENCODING_UTF8);
     //Get minVersion
@@ -284,20 +253,6 @@ VersionInfo VendorSettings::getVersionInformation(const rtl::OUString & sVendor)
 
 std::vector<OUString> VendorSettings::getSupportedVendors()
 {
-    //This information is only available if the javavendors.xml is specified
-    //and no bootstap variable UNO_JAVA_JFW_PLUGIN is set. If it is set then
-    //it is not known what vendors it represents.
-    OUString sPlugin = BootParams::getPlugin();
-    if (sPlugin.getLength() > 0)
-        return std::vector<OUString>();
-
-    //If there is no bootstrap variable UNO_JAVA_JFW_PLUGIN then
-    //there must be a javavendors.xml
-    if (! m_xmlDocVendorSettings)
-        throw FrameworkException(
-            JFW_E_CONFIGURATION,
-            OString("[Java framework] Could not find javavendors.xml"));
-
     std::vector<rtl::OUString> vecVendors;
     //get the nodeset for the library elements
     jfw::CXPathObjectPtr result;
@@ -326,18 +281,7 @@ std::vector<OUString> VendorSettings::getSupportedVendors()
 
 OUString VendorSettings::getPluginLibrary(const OUString& sVendor)
 {
-    OUString sPlugin = BootParams::getPlugin();
-    if (sPlugin.getLength() > 0)
-    {
-        return sPlugin;
-    }
-
-    if (! m_xmlDocVendorSettings)
-    {
-        throw FrameworkException(
-            JFW_E_CONFIGURATION,
-            OString("[Java framework] Could not find javavendors.xml"));
-    }
+    OSL_ASSERT(sVendor.getLength() > 0);
 
     OString sExcMsg("[Java framework] Error in function getPluginLibrary (fwkutil.cxx).");
     OString sVendorsPath = getVendorSettingsPath();
@@ -371,70 +315,6 @@ OUString VendorSettings::getPluginLibrary(const OUString& sVendor)
     }
     return sUrl;
 }
-//========================================================================================
-rtl::OUString BootParams::getPlugin()
-{
-    rtl::OUString sPlugin;
-    getBootstrap().getFrom(
-        OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_PLUGIN)),
-        sPlugin);
-    if (sPlugin.getLength() > 0)
-    {
-        //check if UNO_JAVA_JFW_VENDOR_SETTINGS is set.
-        rtl::OUString sVendor;
-        if (getBootstrap().getFrom(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_VENDOR_SETTINGS)),
-                              sVendor) == sal_True)
-        {
-            throw FrameworkException(
-                JFW_E_CONFIGURATION,
-                rtl::OString("[Java framework] Both bootstrap parameter "
-                             UNO_JAVA_JFW_VENDOR_SETTINGS" and "
-                             UNO_JAVA_JFW_PLUGIN" are set. However only one of them can be set."
-                             "Check bootstrap parameters: environment variables, command line "
-                             "arguments, rc/ini files for executable and java framework library."));
-        }
-
-        jfw::FileStatus s = checkFileURL(sPlugin);
-        if (s == jfw::FILE_INVALID || s == jfw::FILE_DOES_NOT_EXIST)
-        {
-            throw FrameworkException(
-                JFW_E_CONFIGURATION,
-                rtl::OString("[Java framework] Invalid value for bootstrap variable: "
-                             UNO_JAVA_JFW_PLUGIN "."));
-        }
-
-#if OSL_DEBUG_LEVEL >=2
-        rtl::OString sValue = rtl::OUStringToOString(sPlugin, osl_getThreadTextEncoding());
-        fprintf(stderr,"[Java framework] Using bootstrap parameter "
-                UNO_JAVA_JFW_PLUGIN" = %s.\n", sValue.getStr());
-#endif
-    }
-    return sPlugin;
-}
-
-
-bool BootParams::getDisable()
-{
-    rtl::OUString sValue;
-    getBootstrap().getFrom(
-        OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_DISABLE)),
-        sValue);
-    if (sValue.getLength() > 0)
-    {
-#if OSL_DEBUG_LEVEL >=2
-        rtl::OString s = rtl::OUStringToOString(sValue, osl_getThreadTextEncoding());
-        fprintf(stderr,"[Java framework] Using bootstrap parameter "
-                UNO_JAVA_JFW_DISABLE" = %s.\n", s.getStr());
-#endif
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
 
 std::vector<OString> BootParams::getVMParameters()
 {
@@ -531,7 +411,7 @@ rtl::OString BootParams::getClasspath()
         }
 #if OSL_DEBUG_LEVEL >=2
         fprintf(stderr,"[Java framework] Using bootstrap parameter "
-            UNO_JAVA_JFW_ENV_CLASSPATH " and class path is: \n = %s.\n", pCp ? pCp : "");
+            UNO_JAVA_JFW_ENV_CLASSPATH " and class path is:\n %s.\n", pCp ? pCp : "");
 #endif
     }
 
@@ -545,20 +425,6 @@ rtl::OUString BootParams::getVendorSettings()
         RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_VENDOR_SETTINGS));
     if (getBootstrap().getFrom(sName ,sVendor) == sal_True)
     {
-        //check if UNO_JAVA_JFW_PLUGIN is set.
-        rtl::OUString sPlugin;
-        if (getBootstrap().getFrom(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_PLUGIN)),
-                              sPlugin) == sal_True)
-        {
-            throw FrameworkException(
-                JFW_E_CONFIGURATION,
-                rtl::OString("[Java framework] Both bootstrap parameter "
-                             UNO_JAVA_JFW_VENDOR_SETTINGS" and "
-                             UNO_JAVA_JFW_PLUGIN" are set. However only one of them can be set."
-                             "Check bootstrap parameters: environment variables, command line "
-                             "arguments, rc/ini files for executable and java framework library."));
-        }
         //check the value of the bootstrap variable
         jfw::FileStatus s = checkFileURL(sVendor);
         if (s != FILE_OK)
@@ -696,64 +562,17 @@ JFW_MODE getMode()
                         RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_ENV_CLASSPATH));
                     if (aBoot.getFrom(sEnvClasspath, sValue) == sal_False)
                     {
-                        rtl::OUString sParams(
-                            RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_PLUGIN));
+                        rtl::OUString sParams = rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_PARAMETER)) +
+                            rtl::OUString::valueOf((sal_Int32)1);
                         if (aBoot.getFrom(sParams, sValue) == sal_False)
                         {
-                            rtl::OUString sParams = rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_PARAMETER)) +
-                                rtl::OUString::valueOf((sal_Int32)1);
-                            if (aBoot.getFrom(sParams, sValue) == sal_False)
-                            {
-                                rtl::OUString sDisable = rtl::OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_DISABLE));
-                                if (aBoot.getFrom(sDisable, sValue) == sal_False)
-                                {
-                                    bDirectMode = false;
-                                }
-                            }
+                            bDirectMode = false;
                         }
                     }
                 }
             }
         }
-//        bool bAppMode = true;
-
-        //check if either of the "application mode" bootstrap variables is set
-  //       rtl::OUString sUser(
-//             RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_USER_DATA));
-//         if (aBoot.getFrom(sUser, sValue) == sal_False)
-//         {
-//             rtl::OUString sShare(
-//                 RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_SHARED_DATA));
-//             if (aBoot.getFrom(sShare, sValue) == sal_False)
-//             {
-//                 rtl::OUString sClassPath(
-//                     RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_CLASSPATH_URLS));
-//                 if (aBoot.getFrom(sClassPath, sValue) == sal_False)
-//                 {
-
-//                     bAppMode = false;
-//                 }
-//             }
-//         }
-
-//         if (bDirectMode && bAppMode)
-//         {
-//             throw FrameworkException(
-//                 JFW_E_CONFIGURATION,
-//                 rtl::OString("[Java framework] Bootstrap variables for application mode "
-//                              "and direct mode are set. Mixing these variables is not "
-//                              "allowed."));
-//         }
-//         else if (bDirectMode)
-//         {
-//             g_mode = JFW_MODE_DIRECT;
-//         }
-//         else
-//         {
-//             g_mode = JFW_MODE_APPLICATION;
-//         }
 
         if (bDirectMode)
             g_mode = JFW_MODE_DIRECT;
