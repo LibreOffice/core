@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-13 11:19:47 $
+ *  last change: $Author: nn $ $Date: 2001-02-14 19:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,10 @@ public:
     virtual sal_Bool    WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
                                         const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     virtual void        ObjectReleased();
+
+    SdrModel*           GetModel()  { return pModel; }
+
+    static ScDrawTransferObj* GetOwnClipboard();
 };
 
 #endif
