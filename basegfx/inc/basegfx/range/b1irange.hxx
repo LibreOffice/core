@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b1irange.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:35:01 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,12 @@ namespace basegfx
         {
         }
 
+        B1IRange(sal_Int32 nStartValue1, sal_Int32 nStartValue2)
+        :   maRange(nStartValue1)
+        {
+            expand(nStartValue2);
+        }
+
         B1IRange(const B1IRange& rRange)
         :   maRange(rRange.maRange)
         {
@@ -156,6 +162,11 @@ namespace basegfx
         void expand(const B1IRange& rRange)
         {
             maRange.expand(rRange.maRange);
+        }
+
+        void intersect(const B1IRange& rRange)
+        {
+            maRange.intersect(rRange.maRange);
         }
 
         void grow(sal_Int32 nValue)
