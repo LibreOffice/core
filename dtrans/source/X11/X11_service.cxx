@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_service.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-25 10:50:58 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 11:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,8 @@ public:
     /*
      *  XSingleServiceFactory
      */
-    virtual Reference< XInterface > createInstance();
-    virtual Reference< XInterface > createInstanceWithArguments( const Sequence< Any >& rArgs );
+    virtual Reference< XInterface > createInstance() throw();
+    virtual Reference< XInterface > createInstanceWithArguments( const Sequence< Any >& rArgs ) throw();
 };
 
 // ------------------------------------------------------------------------
@@ -129,14 +129,14 @@ X11ClipboardFactory::~X11ClipboardFactory()
 
 // ------------------------------------------------------------------------
 
-Reference< XInterface > X11ClipboardFactory::createInstance()
+Reference< XInterface > X11ClipboardFactory::createInstance() throw()
 {
     return createInstanceWithArguments( Sequence< Any >() );
 }
 
 // ------------------------------------------------------------------------
 
-Reference< XInterface > X11ClipboardFactory::createInstanceWithArguments( const Sequence< Any >& arguments )
+Reference< XInterface > X11ClipboardFactory::createInstanceWithArguments( const Sequence< Any >& arguments ) throw()
 {
     OUString aDisplayName;
     Atom nSelection;

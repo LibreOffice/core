@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_droptarget.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-16 14:37:50 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 11:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ DropTarget::~DropTarget()
 
 // --------------------------------------------------------------------------
 
-void DropTarget::initialize( const Sequence< Any >& arguments )
+void DropTarget::initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception )
 {
     if( arguments.getLength() > 1 )
     {
@@ -115,7 +115,7 @@ void DropTarget::initialize( const Sequence< Any >& arguments )
 
 // --------------------------------------------------------------------------
 
-void DropTarget::addDropTargetListener( const Reference< XDropTargetListener >& xListener )
+void DropTarget::addDropTargetListener( const Reference< XDropTargetListener >& xListener ) throw()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
@@ -124,7 +124,7 @@ void DropTarget::addDropTargetListener( const Reference< XDropTargetListener >& 
 
 // --------------------------------------------------------------------------
 
-void DropTarget::removeDropTargetListener( const Reference< XDropTargetListener >& xListener )
+void DropTarget::removeDropTargetListener( const Reference< XDropTargetListener >& xListener ) throw()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
@@ -133,14 +133,14 @@ void DropTarget::removeDropTargetListener( const Reference< XDropTargetListener 
 
 // --------------------------------------------------------------------------
 
-sal_Bool DropTarget::isActive()
+sal_Bool DropTarget::isActive() throw()
 {
     return m_bActive;
 }
 
 // --------------------------------------------------------------------------
 
-void DropTarget::setActive( sal_Bool active )
+void DropTarget::setActive( sal_Bool active ) throw()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
@@ -149,14 +149,14 @@ void DropTarget::setActive( sal_Bool active )
 
 // --------------------------------------------------------------------------
 
-sal_Int8 DropTarget::getDefaultActions()
+sal_Int8 DropTarget::getDefaultActions() throw()
 {
     return m_nDefaultActions;
 }
 
 // --------------------------------------------------------------------------
 
-void DropTarget::setDefaultActions( sal_Int8 actions )
+void DropTarget::setDefaultActions( sal_Int8 actions ) throw()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
@@ -165,7 +165,7 @@ void DropTarget::setDefaultActions( sal_Int8 actions )
 
 // --------------------------------------------------------------------------
 
-void DropTarget::drop( const DropTargetDropEvent& dtde )
+void DropTarget::drop( const DropTargetDropEvent& dtde ) throw()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
@@ -181,7 +181,7 @@ void DropTarget::drop( const DropTargetDropEvent& dtde )
 
 // --------------------------------------------------------------------------
 
-void DropTarget::dragEnter( const DropTargetDragEnterEvent& dtde )
+void DropTarget::dragEnter( const DropTargetDragEnterEvent& dtde ) throw()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
@@ -197,7 +197,7 @@ void DropTarget::dragEnter( const DropTargetDragEnterEvent& dtde )
 
 // --------------------------------------------------------------------------
 
-void DropTarget::dragExit( const DropTargetEvent& dte )
+void DropTarget::dragExit( const DropTargetEvent& dte ) throw()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
@@ -213,7 +213,7 @@ void DropTarget::dragExit( const DropTargetEvent& dte )
 
 // --------------------------------------------------------------------------
 
-void DropTarget::dragOver( const DropTargetDragEvent& dtde )
+void DropTarget::dragOver( const DropTargetDragEvent& dtde ) throw()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
@@ -229,7 +229,7 @@ void DropTarget::dragOver( const DropTargetDragEvent& dtde )
 
 // --------------------------------------------------------------------------
 
-void DropTarget::dropActionChanged( const DropTargetDragEvent& dtde )
+void DropTarget::dropActionChanged( const DropTargetDragEvent& dtde ) throw()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
@@ -249,14 +249,14 @@ void DropTarget::dropActionChanged( const DropTargetDragEvent& dtde )
 
 // ------------------------------------------------------------------------
 
-OUString DropTarget::getImplementationName(  )
+OUString DropTarget::getImplementationName() throw()
 {
     return OUString::createFromAscii(XDND_DROPTARGET_IMPLEMENTATION_NAME);
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool DropTarget::supportsService( const OUString& ServiceName )
+sal_Bool DropTarget::supportsService( const OUString& ServiceName ) throw()
 {
     Sequence < OUString > SupportedServicesNames = Xdnd_dropTarget_getSupportedServiceNames();
 
@@ -269,7 +269,7 @@ sal_Bool DropTarget::supportsService( const OUString& ServiceName )
 
 // ------------------------------------------------------------------------
 
-Sequence< OUString > DropTarget::getSupportedServiceNames()
+Sequence< OUString > DropTarget::getSupportedServiceNames() throw()
 {
     return Xdnd_dropTarget_getSupportedServiceNames();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_dndcontext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-09 16:37:26 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 11:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,9 @@ namespace x11 {
         virtual ~DropTargetDropContext();
 
         // XDropTargetDropContext
-        virtual void SAL_CALL acceptDrop( sal_Int8 dragOperation );
-        virtual void SAL_CALL rejectDrop();
-        virtual void SAL_CALL dropComplete( sal_Bool success );
+        virtual void SAL_CALL acceptDrop( sal_Int8 dragOperation ) throw();
+        virtual void SAL_CALL rejectDrop() throw();
+        virtual void SAL_CALL dropComplete( sal_Bool success ) throw();
     };
 
     class DropTargetDragContext :
@@ -119,8 +119,8 @@ namespace x11 {
         virtual ~DropTargetDragContext();
 
         // XDropTargetDragContext
-        virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation );
-        virtual void SAL_CALL rejectDrag();
+        virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation ) throw();
+        virtual void SAL_CALL rejectDrag() throw();
     };
 
     class DragSourceContext :
@@ -137,10 +137,10 @@ namespace x11 {
         virtual ~DragSourceContext();
 
         // XDragSourceContext
-        virtual sal_Int32   SAL_CALL getCurrentCursor();
-        virtual void        SAL_CALL setCursor( sal_Int32 cursorId );
-        virtual void        SAL_CALL setImage( sal_Int32 imageId );
-        virtual void        SAL_CALL transferablesFlavorsChanged();
+        virtual sal_Int32   SAL_CALL getCurrentCursor() throw();
+        virtual void        SAL_CALL setCursor( sal_Int32 cursorId ) throw();
+        virtual void        SAL_CALL setImage( sal_Int32 imageId ) throw();
+        virtual void        SAL_CALL transferablesFlavorsChanged() throw();
     };
 } // namespace
 

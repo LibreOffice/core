@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_transferable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-14 08:45:46 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 11:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef DEBUG
+#include <stdio.h>
+#endif
 
 #include <X11_transferable.hxx>
 #include <X11/Xatom.h>

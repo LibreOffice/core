@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_dndcontext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-09 16:37:26 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 11:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,17 +84,17 @@ DropTargetDropContext::~DropTargetDropContext()
 {
 }
 
-void DropTargetDropContext::acceptDrop( sal_Int8 dragOperation )
+void DropTargetDropContext::acceptDrop( sal_Int8 dragOperation ) throw()
 {
     m_rManager.accept( dragOperation, m_aDropWindow, m_nTimestamp );
 }
 
-void DropTargetDropContext::rejectDrop()
+void DropTargetDropContext::rejectDrop() throw()
 {
     m_rManager.reject( m_aDropWindow, m_nTimestamp );
 }
 
-void DropTargetDropContext::dropComplete( sal_Bool success )
+void DropTargetDropContext::dropComplete( sal_Bool success ) throw()
 {
     m_rManager.dropComplete( success, m_aDropWindow, m_nTimestamp );
 }
@@ -119,12 +119,12 @@ DropTargetDragContext::~DropTargetDragContext()
 {
 }
 
-void DropTargetDragContext::acceptDrag( sal_Int8 dragOperation )
+void DropTargetDragContext::acceptDrag( sal_Int8 dragOperation ) throw()
 {
     m_rManager.accept( dragOperation, m_aDropWindow, m_nTimestamp );
 }
 
-void DropTargetDragContext::rejectDrag()
+void DropTargetDragContext::rejectDrag() throw()
 {
     m_rManager.reject( m_aDropWindow, m_nTimestamp );
 }
@@ -148,22 +148,22 @@ DragSourceContext::~DragSourceContext()
 {
 }
 
-sal_Int32 DragSourceContext::getCurrentCursor()
+sal_Int32 DragSourceContext::getCurrentCursor() throw()
 {
     return m_rManager.getCurrentCursor();
 }
 
-void DragSourceContext::setCursor( sal_Int32 cursorId )
+void DragSourceContext::setCursor( sal_Int32 cursorId ) throw()
 {
     m_rManager.setCursor( cursorId, m_aDropWindow, m_nTimestamp );
 }
 
-void DragSourceContext::setImage( sal_Int32 imageId )
+void DragSourceContext::setImage( sal_Int32 imageId ) throw()
 {
     m_rManager.setImage( imageId, m_aDropWindow, m_nTimestamp );
 }
 
-void DragSourceContext::transferablesFlavorsChanged()
+void DragSourceContext::transferablesFlavorsChanged() throw()
 {
     m_rManager.transferablesFlavorsChanged();
 }

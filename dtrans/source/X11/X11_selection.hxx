@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-22 17:47:46 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 11:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,28 +148,28 @@ namespace x11 {
         virtual ~DropTarget();
 
         // convenience functions that loop over listeners
-        void dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtde );
-        void dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte );
-        void dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde );
-        void dropActionChanged( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde );
-        void drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& dtde );
+        void dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtde ) throw();
+        void dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw();
+        void dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw();
+        void dropActionChanged( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw();
+        void drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& dtde ) throw();
 
         // XInitialization
-        virtual void        SAL_CALL initialize( const Sequence< Any >& args );
+        virtual void        SAL_CALL initialize( const Sequence< Any >& args ) throw ( ::com::sun::star::uno::Exception );
 
         // XDropTarget
-        virtual void        SAL_CALL addDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& );
-        virtual void        SAL_CALL removeDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& );
-        virtual sal_Bool    SAL_CALL isActive();
-        virtual void        SAL_CALL setActive( sal_Bool active );
-        virtual sal_Int8    SAL_CALL getDefaultActions();
-        virtual void        SAL_CALL setDefaultActions( sal_Int8 actions );
+        virtual void        SAL_CALL addDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw();
+        virtual void        SAL_CALL removeDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw();
+        virtual sal_Bool    SAL_CALL isActive() throw();
+        virtual void        SAL_CALL setActive( sal_Bool active ) throw();
+        virtual sal_Int8    SAL_CALL getDefaultActions() throw();
+        virtual void        SAL_CALL setDefaultActions( sal_Int8 actions ) throw();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName();
-        virtual sal_Bool    SAL_CALL supportsService( const ::rtl::OUString& ServiceName );
+        virtual ::rtl::OUString SAL_CALL getImplementationName() throw();
+        virtual sal_Bool    SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw();
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
-                            SAL_CALL getSupportedServiceNames();
+                            SAL_CALL getSupportedServiceNames() throw();
     };
 
     class SelectionManagerHolder :
@@ -187,23 +187,23 @@ namespace x11 {
         virtual ~SelectionManagerHolder();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName();
-        virtual sal_Bool    SAL_CALL supportsService( const ::rtl::OUString& ServiceName );
+        virtual ::rtl::OUString SAL_CALL getImplementationName() throw();
+        virtual sal_Bool    SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw();
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
-                            SAL_CALL getSupportedServiceNames();
+                            SAL_CALL getSupportedServiceNames() throw();
 
         // XInitialization
-        virtual void        SAL_CALL initialize( const Sequence< Any >& arguments );
+        virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception );
 
         // XDragSource
-        virtual sal_Bool    SAL_CALL isDragImageSupported();
-        virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction );
+        virtual sal_Bool    SAL_CALL isDragImageSupported() throw();
+        virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction ) throw();
         virtual void        SAL_CALL startDrag(
             const ::com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
             sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
             const Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
             const Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
-            );
+            ) throw();
 
     };
 
@@ -481,25 +481,25 @@ namespace x11 {
         void transferablesFlavorsChanged();
 
         // XInitialization
-        virtual void        SAL_CALL initialize( const Sequence< Any >& arguments );
+        virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception );
 
         // XEventHandler
-        virtual sal_Bool    SAL_CALL handleEvent( const Any& event );
+        virtual sal_Bool    SAL_CALL handleEvent( const Any& event ) throw();
 
         // XDragSource
-        virtual sal_Bool    SAL_CALL isDragImageSupported();
-        virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction );
+        virtual sal_Bool    SAL_CALL isDragImageSupported() throw();
+        virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction ) throw();
         virtual void        SAL_CALL startDrag(
             const ::com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
             sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
             const Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
             const Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
-            );
+            ) throw();
 
         // SelectionAdaptor for XdndSelection Drag (we are drag source)
-        virtual Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable();
-        virtual void clearTransferable();
-        virtual void fireContentsChanged();
+        virtual Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable() throw();
+        virtual void clearTransferable() throw();
+        virtual void fireContentsChanged() throw();
     };
 
 // ------------------------------------------------------------------------

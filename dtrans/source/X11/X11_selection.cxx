@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-03 17:48:11 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 11:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ Cursor SelectionManager::createCursor( const char* pPointerData, const char* pMa
     return aCursor;
 }
 
-void SelectionManager::initialize( const Sequence< Any >& arguments )
+void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::com::sun::star::uno::Exception)
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -2004,14 +2004,14 @@ void SelectionManager::reject( Window aDropWindow, Time aTimestamp )
  *  XDragSource
  */
 
-sal_Bool SelectionManager::isDragImageSupported()
+sal_Bool SelectionManager::isDragImageSupported() throw()
 {
     return sal_False;
 }
 
 // ------------------------------------------------------------------------
 
-sal_Int32 SelectionManager::getDefaultCursor( sal_Int8 dragAction )
+sal_Int32 SelectionManager::getDefaultCursor( sal_Int8 dragAction ) throw()
 {
     Cursor aCursor = m_aNoneCursor;
     if( dragAction & DNDConstants::ACTION_MOVE )
@@ -2259,7 +2259,7 @@ void SelectionManager::startDrag(
     sal_Int32 image,
     const Reference< XTransferable >& transferable,
     const Reference< XDragSourceListener >& listener
-    )
+    ) throw()
 {
 #ifdef DEBUG
     fprintf( stderr, "startDrag( sourceActions = %x )\n", (int)sourceActions );
@@ -2765,7 +2765,7 @@ void SelectionManager::run( void* pThis )
 
 // ------------------------------------------------------------------------
 
-sal_Bool SelectionManager::handleEvent( const Any& event )
+sal_Bool SelectionManager::handleEvent( const Any& event ) throw()
 {
     Sequence< sal_Int8 > aSeq;
     event >>= aSeq;
@@ -2847,21 +2847,21 @@ void SelectionManager::deregisterDropTarget( Window aWindow )
  *  SelectionAdaptor
  */
 
-Reference< XTransferable > SelectionManager::getTransferable()
+Reference< XTransferable > SelectionManager::getTransferable() throw()
 {
     return m_xDragSourceTransferable;
 }
 
 // ------------------------------------------------------------------------
 
-void SelectionManager::clearTransferable()
+void SelectionManager::clearTransferable() throw()
 {
     m_xDragSourceTransferable.clear();
 }
 
 // ------------------------------------------------------------------------
 
-void SelectionManager::fireContentsChanged()
+void SelectionManager::fireContentsChanged() throw()
 {
 }
 
@@ -2887,7 +2887,7 @@ SelectionManagerHolder::~SelectionManagerHolder()
 
 // ------------------------------------------------------------------------
 
-void SelectionManagerHolder::initialize( const Sequence< Any >& arguments )
+void SelectionManagerHolder::initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception )
 {
     OUString aDisplayName;
 
@@ -2911,14 +2911,14 @@ void SelectionManagerHolder::initialize( const Sequence< Any >& arguments )
  *  XDragSource
  */
 
-sal_Bool SelectionManagerHolder::isDragImageSupported()
+sal_Bool SelectionManagerHolder::isDragImageSupported() throw()
 {
     return m_xRealDragSource.is() ? m_xRealDragSource->isDragImageSupported() : sal_False;
 }
 
 // ------------------------------------------------------------------------
 
-sal_Int32 SelectionManagerHolder::getDefaultCursor( sal_Int8 dragAction )
+sal_Int32 SelectionManagerHolder::getDefaultCursor( sal_Int8 dragAction ) throw()
 {
     return m_xRealDragSource.is() ? m_xRealDragSource->getDefaultCursor( dragAction ) : 0;
 }
@@ -2930,7 +2930,7 @@ void SelectionManagerHolder::startDrag(
     sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
     const Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
     const Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
-    )
+    ) throw()
 {
     if( m_xRealDragSource.is() )
         m_xRealDragSource->startDrag( trigger, sourceActions, cursor, image, transferable, listener );
@@ -2944,14 +2944,14 @@ void SelectionManagerHolder::startDrag(
 
 // ------------------------------------------------------------------------
 
-OUString SelectionManagerHolder::getImplementationName(  )
+OUString SelectionManagerHolder::getImplementationName() throw()
 {
     return OUString::createFromAscii(XDND_IMPLEMENTATION_NAME);
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool SelectionManagerHolder::supportsService( const OUString& ServiceName )
+sal_Bool SelectionManagerHolder::supportsService( const OUString& ServiceName ) throw()
 {
     Sequence < OUString > SupportedServicesNames = Xdnd_getSupportedServiceNames();
 
@@ -2964,7 +2964,7 @@ sal_Bool SelectionManagerHolder::supportsService( const OUString& ServiceName )
 
 // ------------------------------------------------------------------------
 
-Sequence< OUString > SelectionManagerHolder::getSupportedServiceNames()
+Sequence< OUString > SelectionManagerHolder::getSupportedServiceNames() throw()
 {
     return Xdnd_getSupportedServiceNames();
 }

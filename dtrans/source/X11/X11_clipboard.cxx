@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_clipboard.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-25 10:50:58 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 11:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,7 @@ sal_Bool SAL_CALL X11Clipboard::supportsService( const OUString& ServiceName )
 
 // ------------------------------------------------------------------------
 
-void SAL_CALL X11Clipboard::initialize( const Sequence< Any >& rArgs )
+void SAL_CALL X11Clipboard::initialize( const Sequence< Any >& rArgs ) throw( ::com::sun::star::uno::Exception )
 {
 }
 
