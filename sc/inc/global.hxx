@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:08:07 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #endif
 #ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
+#endif
+
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
 #endif
 
 class ImageList;
@@ -561,10 +565,15 @@ public:
     static const CharClass*     pCharClass;
     // for faster access a pointer to the single instance provided by SvtSysLocale
     static const LocaleDataWrapper* pLocaleData;
+SC_DLLPUBLIC    static const LocaleDataWrapper* GetpLocaleData();
+
     static CalendarWrapper*     pCalendar;
     static CollatorWrapper*     pCollator;
     static CollatorWrapper*     pCaseCollator;
+
     static ::utl::TransliterationWrapper* pTransliteration;
+SC_DLLPUBLIC    static ::utl::TransliterationWrapper* GetpTransliteration(); //CHINA001
+
     static ::utl::TransliterationWrapper* pCaseTransliteration;
     static IntlWrapper*         pScIntlWrapper;
     static LanguageType         eLnge;
@@ -573,13 +582,13 @@ public:
     static void                 SetClipDocName( const String& rNew );
     static const SvxSearchItem& GetSearchItem();
     static void                 SetSearchItem( const SvxSearchItem& rNew );
-    static ScAutoFormat*        GetAutoFormat();
+SC_DLLPUBLIC    static ScAutoFormat*        GetAutoFormat();
     static void                 ClearAutoFormat(); //BugId 54209
     static FuncCollection*      GetFuncCollection();
     static ScUnoAddInCollection* GetAddInCollection();
-    static ScUserList*          GetUserList();
+SC_DLLPUBLIC    static ScUserList*          GetUserList();
     static void                 SetUserList( const ScUserList* pNewList );
-    static const String&        GetRscString( USHORT nIndex );
+SC_DLLPUBLIC    static const String&        GetRscString( USHORT nIndex );
     static void                 OpenURL( const String& rURL, const String& rTarget );
     static String               GetAbsDocName( const String& rFileName,
                                                 SfxObjectShell* pShell );
@@ -612,7 +621,7 @@ public:
     static SvxBrushItem*    GetButtonBrushItem();
     static SvxBrushItem*    GetEmbeddedBrushItem()  { return pEmbeddedBrushItem; }
     static SvxBrushItem*    GetProtectedBrushItem() { return pProtectedBrushItem; }
-       static const String& GetEmptyString();
+SC_DLLPUBLIC       static const String& GetEmptyString();
     static const String&    GetScDocString();
 
     /** Returns the specified image list with outline symbols.
@@ -650,17 +659,17 @@ public:
         @param cSep  The character to separate the tokens.
         @param nSepCount  Specifies how often cSep is inserted between two tokens.
         @param bForceSep  true = Always insert separator; false = Only, if not at begin or end. */
-    static void             AddToken(
+SC_DLLPUBLIC    static void             AddToken(
                                 String& rTokenList, const String& rToken,
                                 sal_Unicode cSep, xub_StrLen nSepCount = 1,
                                 bool bForceSep = false );
 
     /** Returns true, if the first and last character of the string is cQuote. */
-    static bool             IsQuoted( const String& rString, sal_Unicode cQuote = '"' );
+SC_DLLPUBLIC    static bool             IsQuoted( const String& rString, sal_Unicode cQuote = '"' );
     /** Inserts the character cQuote at beginning and end of rString. */
-    static void             AddQuotes( String& rString, sal_Unicode cQuote = '"' );
+SC_DLLPUBLIC    static void             AddQuotes( String& rString, sal_Unicode cQuote = '"' );
     /** Erases the character cQuote from rString, if it exists at beginning AND end. */
-    static void             EraseQuotes( String& rString, sal_Unicode cQuote = '"' );
+SC_DLLPUBLIC    static void             EraseQuotes( String& rString, sal_Unicode cQuote = '"' );
 
 
     static  CharSet         GetCharsetValue( const String& rCharSet );
@@ -981,7 +990,7 @@ struct ScQueryEntry
     void            Store(SvStream& rStream) const;
 };
 
-struct ScQueryParam
+struct SC_DLLPUBLIC ScQueryParam
 {
     SCCOL           nCol1;
     SCROW           nRow1;
@@ -1026,7 +1035,7 @@ public:
 
 // -----------------------------------------------------------------------
 
-struct ScSubTotalParam
+struct SC_DLLPUBLIC ScSubTotalParam
 {
     SCCOL           nCol1;          // Selektierter Bereich
     SCROW           nRow1;
