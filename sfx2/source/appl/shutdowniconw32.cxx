@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hro $ $Date: 2001-07-30 16:22:18 $
+ *  last change: $Author: hro $ $Date: 2001-08-20 12:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,6 +589,11 @@ void OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis)
     ncm.cbSize = sizeof(ncm);
 
     SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, (PVOID) &ncm, 0);
+
+    // Print default menu entry with bold font
+    if ( lpdis->itemState & ODS_DEFAULT )
+        ncm.lfMenuFont.lfWeight = FW_BOLD;
+
     hfntOld = (HFONT) SelectObject(lpdis->hDC, (HFONT) CreateFontIndirect( &ncm.lfMenuFont ));
 
 
