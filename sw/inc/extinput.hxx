@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extinput.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:25 $
+ *  last change: $Author: jp $ $Date: 2000-11-15 15:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,6 @@
 #endif
 
 class CommandExtTextInputData;
-class CommandExtTextInputPosData;
 class Font;
 
 class SwExtTextInput : public SwPaM
@@ -82,11 +81,9 @@ public:
     virtual ~SwExtTextInput();
 
     void SetInputData( const CommandExtTextInputData& rData );
-    Rectangle* GetPosInputData( const CommandExtTextInputPosData& rFill,
-                                const Point* pLayPos = 0 ) const;
     void InvalidateRange();
     void SetFontForPos( USHORT nPos, Font& rFont );
-    const SvUShorts& GetAttrs() const               { return aAttrs; }
+    const SvUShorts& GetAttrs() const   { return aAttrs; }
     BOOL IsInsText() const              { return bInsText; }
     void SetInsText( BOOL bFlag )       { bInsText = bFlag; }
 };

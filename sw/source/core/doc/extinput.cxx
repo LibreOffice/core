@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extinput.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: jp $ $Date: 2000-11-15 15:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,44 +152,6 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
         if( rData.GetTextAttr() )
             aAttrs.Insert( rData.GetTextAttr(), rData.GetText().Len(), 0 );
     }
-}
-
-Rectangle* SwExtTextInput::GetPosInputData(
-                                const CommandExtTextInputPosData& rFill,
-                                const Point* pLayPos ) const
-{
-    Rectangle* pRet = 0;
-    SwTxtNode* pTNd = GetPoint()->nNode.GetNode().GetTxtNode();
-    if( pTNd )
-    {
-        Point aPt;
-        if( pLayPos )
-            aPt = *pLayPos;
-
-        const SwCntntFrm* pFrm = pTNd->GetFrm( &aPt, 0, FALSE );
-        if( pFrm )
-        {
-            xub_StrLen nEndCnt = GetPoint()->nContent.GetIndex(),
-                        nSttCnt = GetMark()->nContent.GetIndex();
-            if( nEndCnt < nSttCnt )
-            {
-                xub_StrLen n = nEndCnt; nEndCnt = nSttCnt; nSttCnt = n;
-            }
-
-            xub_StrLen nLen = rFill.GetChars();
-            pRet = new Rectangle[ nLen ];
-
-            SwPosition aPos( *GetPoint() );
-            SwRect aRect;
-            for( xub_StrLen n = rFill.GetFirstPos(); n < nLen; ++n )
-            {
-                aPos.nContent = nSttCnt + n;
-                pFrm->GetCharRect( aRect, aPos );
-                pRet[ n ] = aRect.SVRect();
-            }
-        }
-    }
-    return pRet;
 }
 
 void SwExtTextInput::SetFontForPos( USHORT nPos, Font& rFont )
