@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: tbe $ $Date: 2002-08-19 16:17:47 $
+ *  last change: $Author: fs $ $Date: 2002-08-27 12:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,12 +588,12 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
     }
     mxAccessibleContext = ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >();
 
-    if ( GetWindow() && !mbDisposing )
+    if ( !mbDisposing )
     {
         mbDisposing = sal_True;
 
         ::com::sun::star::lang::EventObject aObj;
-        aObj.Source = (::cppu::OWeakObject*)this;
+        aObj.Source = static_cast< ::cppu::OWeakObject* >( this );
 
         maEventListeners.disposeAndClear( aObj );
         maFocusListeners.disposeAndClear( aObj );
@@ -605,10 +605,13 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
         maContainerListeners.disposeAndClear( aObj );
         maTopWindowListeners.disposeAndClear( aObj );
 
-        OutputDevice* pOutDev = GetOutputDevice();
-        SetWindow( NULL );  // Damit ggf. Handler abgemeldet werden (virtuell).
-        SetOutputDevice( pOutDev );
-        DestroyOutputDevice();
+        if ( GetWindow() )
+        {
+            OutputDevice* pOutDev = GetOutputDevice();
+            SetWindow( NULL );  // Damit ggf. Handler abgemeldet werden (virtuell).
+            SetOutputDevice( pOutDev );
+            DestroyOutputDevice();
+        }
 
         mbDisposing = sal_False;
     }
