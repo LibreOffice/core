@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collator_unicode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:43:32 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 13:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/XCollator.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <cppuhelper/implbase1.hxx>
+#include <unicode/tblcoll.h>
 
 //      ----------------------------------------------------
 //      class Collator_Unicode
@@ -80,13 +80,13 @@ public:
     // Destructor
     ~Collator_Unicode();
 
-    virtual sal_Int32 SAL_CALL compareSubstring( const rtl::OUString& s1, sal_Int32 off1, sal_Int32 len1,
+    sal_Int32 SAL_CALL compareSubstring( const rtl::OUString& s1, sal_Int32 off1, sal_Int32 len1,
         const rtl::OUString& s2, sal_Int32 off2, sal_Int32 len2) throw(com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL compareString( const rtl::OUString& s1, const rtl::OUString& s2)
+    sal_Int32 SAL_CALL compareString( const rtl::OUString& s1, const rtl::OUString& s2)
         throw(com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL loadCollatorAlgorithm( const rtl::OUString& impl, const lang::Locale& rLocale,
+    sal_Int32 SAL_CALL loadCollatorAlgorithm( const rtl::OUString& impl, const lang::Locale& rLocale,
         sal_Int32 collatorOptions) throw(com::sun::star::uno::RuntimeException);
 
 
@@ -106,11 +106,32 @@ public:
     virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw( com::sun::star::uno::RuntimeException );
 
 protected:
-    sal_Char *implementationName;
-    com::sun::star::lang::Locale aLocale;
-    TransliterationModules tranModules;
+    const sal_Char *implementationName;
+    const sal_uInt8 *rulesImage;
+private:
+    RuleBasedCollator *collator;
 };
 
+#define COLLATOR( algorithm ) \
+class Collator_##algorithm : public Collator_Unicode {\
+public:\
+    Collator_##algorithm(); \
+};
+
+COLLATOR( zh_pinyin )
+COLLATOR( zh_radical )
+COLLATOR( zh_stroke )
+COLLATOR( zh_charset )
+COLLATOR( zh_zhuyin )
+COLLATOR( zh_TW_radical )
+COLLATOR( zh_TW_stroke )
+COLLATOR( zh_TW_charset )
+COLLATOR( ko_dict )
+COLLATOR( ko_charset )
+COLLATOR( ja_charset )
+COLLATOR( ja_phonetic_alphanumeric_first )
+COLLATOR( ja_phonetic_alphanumeric_last )
+#undef COLLATOR
 } } } }
 
 #endif
