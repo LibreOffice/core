@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-04 15:57:12 $
+ *  last change: $Author: nn $ $Date: 2002-11-20 14:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,7 @@
 #include "inputopt.hxx"
 #include "warnbox.hxx"
 #include "drwlayer.hxx"
+#include "editable.hxx"
 
 using namespace com::sun::star;
 
@@ -256,9 +257,10 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc, BOOL bIncludeObjects )
 {
     UpdateInputLine();
 
-    if (!SelectionEditable())                   // Bereich editierbar?
+    ScEditableTester aTester( this );
+    if (!aTester.IsEditable())                  // selection editable?
     {
-        ErrorMessage( STR_PROTECTIONERR );
+        ErrorMessage( aTester.GetMessageId() );
         return;
     }
 
@@ -820,9 +822,10 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
 
         //  Test auf Zellschutz
 
-    if (!pDoc->IsBlockEditable( nStartTab, nStartCol,nStartRow, nUndoEndCol,nUndoEndRow ))
+    ScEditableTester aTester( pDoc, nStartTab, nStartCol,nStartRow, nUndoEndCol,nUndoEndRow );
+    if (!aTester.IsEditable())
     {
-        ErrorMessage(STR_PROTECTIONERR);
+        ErrorMessage(aTester.GetMessageId());
         delete pTransClip;
         return FALSE;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-20 10:07:33 $
+ *  last change: $Author: nn $ $Date: 2002-11-20 14:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #include "cellsh.hxx"
 #include "attrdlg.hrc"      // TP_ALIGNMENT
 #include "inputhdl.hxx"
+#include "editable.hxx"
 
 #define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
 
@@ -820,9 +821,10 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                         if ( pDlg->Execute() == RET_OK )
                         {
-                            if ( !pTabViewShell->SelectionEditable() )
+                            ScEditableTester aTester( pTabViewShell );
+                            if ( !aTester.IsEditable() )
                             {
-                                pTabViewShell->ErrorMessage(STR_PROTECTIONERR);
+                                pTabViewShell->ErrorMessage(aTester.GetMessageId());
                             }
                             else
                             {

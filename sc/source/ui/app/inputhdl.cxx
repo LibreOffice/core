@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-18 18:33:15 $
+ *  last change: $Author: nn $ $Date: 2002-11-20 14:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@
 #include "inputopt.hxx"
 #include "cell.hxx"             // fuer Formel-Preview
 #include "compiler.hxx"         // fuer Formel-Preview
+#include "editable.hxx"
 
 #define _INPUTHDL_CXX
 #include "inputhdl.hxx"
@@ -1484,10 +1485,15 @@ BOOL ScInputHandler::StartTable( sal_Unicode cTyped, BOOL bFromCommand )
             SyncViews();
 
             ScDocument* pDoc = pActiveViewSh->GetViewData()->GetDocShell()->GetDocument();
-            if ( pDoc->IsSelectionOrBlockEditable( aCursorPos.Tab(),
-                                        aCursorPos.Col(),aCursorPos.Row(),
-                                        aCursorPos.Col(),aCursorPos.Row(),
-                                        pActiveViewSh->GetViewData()->GetMarkData() ) )
+
+            const ScMarkData& rMark = pActiveViewSh->GetViewData()->GetMarkData();
+            ScEditableTester aTester;
+            if ( rMark.IsMarked() || rMark.IsMultiMarked() )
+                aTester.TestSelection( pDoc, rMark );
+            else
+                aTester.TestSelectedBlock( pDoc, aCursorPos.Col(),aCursorPos.Row(),
+                                                 aCursorPos.Col(),aCursorPos.Row(), rMark );
+            if ( aTester.IsEditable() )
             {
                 // UpdateMode is enabled again in ScViewData::SetEditEngine (and not needed otherwise)
                 pEngine->SetUpdateMode( FALSE );
@@ -1609,7 +1615,7 @@ BOOL ScInputHandler::StartTable( sal_Unicode cTyped, BOOL bFromCommand )
                         bCommandErrorShown = TRUE;
 
                     pActiveViewSh->GetActiveWin()->GrabFocus();
-                    pActiveViewSh->ErrorMessage(STR_PROTECTIONERR);
+                    pActiveViewSh->ErrorMessage(aTester.GetMessageId());
                 }
             }
         }

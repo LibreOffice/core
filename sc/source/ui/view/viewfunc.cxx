@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-21 11:29:16 $
+ *  last change: $Author: nn $ $Date: 2002-11-20 14:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@
 #include "appoptio.hxx"
 #include "dociter.hxx"
 #include "sizedev.hxx"
+#include "editable.hxx"
 
 //==================================================================
 
@@ -408,7 +409,8 @@ void ScViewFunc::EnterData( USHORT nCol, USHORT nRow, USHORT nTab, const String&
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocShellModificator aModificator( *pDocSh );
 
-    if (pDoc->IsSelectedBlockEditable( nCol,nRow, nCol,nRow, rMark ))
+    ScEditableTester aTester( pDoc, nCol,nRow, nCol,nRow, rMark );
+    if (aTester.IsEditable())
     {
         BOOL bEditDeleted = FALSE;
         BYTE nOldScript = 0;
@@ -651,7 +653,7 @@ void ScViewFunc::EnterData( USHORT nCol, USHORT nRow, USHORT nTab, const String&
     }
     else
     {
-        ErrorMessage(STR_PROTECTIONERR);
+        ErrorMessage(aTester.GetMessageId());
         PaintArea( nCol, nRow, nCol, nRow );        // da steht evtl. noch die Edit-Engine
     }
 }
@@ -669,7 +671,8 @@ void ScViewFunc::EnterData( USHORT nCol, USHORT nRow, USHORT nTab, const double&
     {
         ScDocShellModificator aModificator( *pDocSh );
 
-        if (pDoc->IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
+        ScEditableTester aTester( pDoc, nTab, nCol,nRow, nCol,nRow );
+        if (aTester.IsEditable())
         {
             ScBaseCell* pOldCell;
             pDoc->GetCell( nCol, nRow, nTab, pOldCell );
@@ -704,7 +707,7 @@ void ScViewFunc::EnterData( USHORT nCol, USHORT nRow, USHORT nTab, const double&
             aModificator.SetDocumentModified();
         }
         else
-            ErrorMessage(STR_PROTECTIONERR);
+            ErrorMessage(aTester.GetMessageId());
     }
 }
 
@@ -719,7 +722,8 @@ void ScViewFunc::EnterData( USHORT nCol, USHORT nRow, USHORT nTab, const EditTex
 
     ScDocShellModificator aModificator( *pDocSh );
 
-    if (pDoc->IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
+    ScEditableTester aTester( pDoc, nTab, nCol,nRow, nCol,nRow );
+    if (aTester.IsEditable())
     {
         //
         //      Test auf Attribute
@@ -842,7 +846,7 @@ void ScViewFunc::EnterData( USHORT nCol, USHORT nRow, USHORT nTab, const EditTex
     }
     else
     {
-        ErrorMessage(STR_PROTECTIONERR);
+        ErrorMessage(aTester.GetMessageId());
         PaintArea( nCol, nRow, nCol, nRow );        // da steht evtl. noch die Edit-Engine
     }
 }
@@ -1695,7 +1699,7 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
         if ( !(bOnlyNotBecauseOfMatrix &&
                 ((nFlags & (IDF_ATTRIB | IDF_EDITATTR)) == nFlags)) )
         {
-            ErrorMessage(STR_PROTECTIONERR);
+            ErrorMessage(bOnlyNotBecauseOfMatrix ? STR_MATRIXFRAGMENTERR : STR_PROTECTIONERR);
             return;
         }
     }

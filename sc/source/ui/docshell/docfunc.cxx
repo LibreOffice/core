@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-13 07:32:53 $
+ *  last change: $Author: nn $ $Date: 2002-11-20 14:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@
 #include "scmod.hxx"
 #include "inputhdl.hxx"
 #include "inputwin.hxx"
+#include "editable.hxx"
 
 using namespace com::sun::star;
 
@@ -556,10 +557,12 @@ BOOL ScDocFunc::DeleteContents( const ScMarkData& rMark, USHORT nFlags,
 
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
-    if (!pDoc->IsSelectionEditable(rMark))
+
+    ScEditableTester aTester( pDoc, rMark );
+    if (!aTester.IsEditable())
     {
         if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
+            rDocShell.ErrorMessage(aTester.GetMessageId());
         return FALSE;
     }
 
@@ -684,10 +687,11 @@ BOOL ScDocFunc::TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
 
-    if (!pDoc->IsSelectionEditable(rMark))
+    ScEditableTester aTester( pDoc, rMark );
+    if (!aTester.IsEditable())
     {
         if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
+            rDocShell.ErrorMessage(aTester.GetMessageId());
         return FALSE;
     }
 
@@ -735,10 +739,11 @@ BOOL ScDocFunc::SetNormalString( const ScAddress& rPos, const String& rText, BOO
     ScDocument* pDoc = rDocShell.GetDocument();
 
     BOOL bUndo(pDoc->IsUndoEnabled());
-    if (!pDoc->IsBlockEditable( rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() ))
+    ScEditableTester aTester( pDoc, rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() );
+    if (!aTester.IsEditable())
     {
         if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
+            rDocShell.ErrorMessage(aTester.GetMessageId());
         return FALSE;
     }
 
@@ -792,10 +797,11 @@ BOOL ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi 
     ScDocShellModificator aModificator( rDocShell );
     ScDocument* pDoc = rDocShell.GetDocument();
     BOOL bUndo (pDoc->IsUndoEnabled());
-    if (!pDoc->IsBlockEditable( rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() ))
+    ScEditableTester aTester( pDoc, rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() );
+    if (!aTester.IsEditable())
     {
         if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
+            rDocShell.ErrorMessage(aTester.GetMessageId());
         pNewCell->Delete();
         return FALSE;
     }
@@ -1034,10 +1040,11 @@ BOOL ScDocFunc::SetNoteText( const ScAddress& rPos, const String& rText, BOOL bA
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument* pDoc = rDocShell.GetDocument();
-    if (!pDoc->IsBlockEditable( rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() ))
+    ScEditableTester aTester( pDoc, rPos.Tab(), rPos.Col(),rPos.Row(), rPos.Col(),rPos.Row() );
+    if (!aTester.IsEditable())
     {
         if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
+            rDocShell.ErrorMessage(aTester.GetMessageId());
         return FALSE;
     }
 
@@ -1265,11 +1272,11 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, InsCellCmd eCmd,
 
     USHORT nEditTestEndX = (eCmd==INS_INSCOLS) ? MAXCOL : nMergeTestEndX;
     USHORT nEditTestEndY = (eCmd==INS_INSROWS) ? MAXROW : nMergeTestEndY;
-    if (!pDoc->IsBlockEditable( nTab, nMergeTestStartX,nMergeTestStartY,
-                                        nEditTestEndX,nEditTestEndY ))
+    ScEditableTester aTester( pDoc, nTab, nMergeTestStartX,nMergeTestStartY, nEditTestEndX,nEditTestEndY );
+    if (!aTester.IsEditable())
     {
         if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
+            rDocShell.ErrorMessage(aTester.GetMessageId());
         return FALSE;
     }
 
@@ -1482,10 +1489,11 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, DelCellCmd eCmd, BOOL bRecor
     if ( eCmd==DEL_DELCOLS || eCmd==DEL_CELLSLEFT ) nEditTestEndX = MAXCOL;
     USHORT nEditTestEndY = nUndoEndY;
     if ( eCmd==DEL_DELROWS || eCmd==DEL_CELLSUP ) nEditTestEndY = MAXROW;
-    if (!pDoc->IsBlockEditable( nTab, nUndoStartX,nUndoStartY,nEditTestEndX,nEditTestEndY ))
+    ScEditableTester aTester( pDoc, nTab, nUndoStartX,nUndoStartY,nEditTestEndX,nEditTestEndY );
+    if (!aTester.IsEditable())
     {
         if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
+            rDocShell.ErrorMessage(aTester.GetMessageId());
         return FALSE;
     }
 
@@ -1765,17 +1773,17 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     //  Test auf Zellschutz
 
-    BOOL bOk = TRUE;
-    for (nTab=nDestTab; nTab<=nDestEndTab && bOk; nTab++)
-        bOk = pDoc->IsBlockEditable( nTab, nDestCol,nDestRow, nUndoEndCol,nUndoEndRow );
+    ScEditableTester aTester;
+    for (nTab=nDestTab; nTab<=nDestEndTab; nTab++)
+        aTester.TestBlock( pDoc, nTab, nDestCol,nDestRow, nUndoEndCol,nUndoEndRow );
     if (bCut)
-        for (nTab=nStartTab; nTab<=nEndTab && bOk; nTab++)
-            bOk = pDoc->IsBlockEditable( nTab, nStartCol,nStartRow, nEndCol,nEndRow );
+        for (nTab=nStartTab; nTab<=nEndTab; nTab++)
+            aTester.TestBlock( pDoc, nTab, nStartCol,nStartRow, nEndCol,nEndRow );
 
-    if (!bOk)
+    if (!aTester.IsEditable())
     {
         if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
+            rDocShell.ErrorMessage(aTester.GetMessageId());
         delete pClipDoc;
         return FALSE;
     }
@@ -2618,10 +2626,11 @@ BOOL ScDocFunc::ClearItems( const ScMarkData& rMark, const USHORT* pWhich, BOOL 
 
     ScDocument* pDoc = rDocShell.GetDocument();
     BOOL bUndo (pDoc->IsUndoEnabled());
-    if (!pDoc->IsSelectionEditable(rMark))
+    ScEditableTester aTester( pDoc, rMark );
+    if (!aTester.IsEditable())
     {
         if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
+            rDocShell.ErrorMessage(aTester.GetMessageId());
         return FALSE;
     }
 
@@ -2658,10 +2667,11 @@ BOOL ScDocFunc::ChangeIndent( const ScMarkData& rMark, BOOL bIncrement, BOOL bAp
 
     ScDocument* pDoc = rDocShell.GetDocument();
     BOOL bUndo(pDoc->IsUndoEnabled());
-    if (!pDoc->IsSelectionEditable(rMark))
+    ScEditableTester aTester( pDoc, rMark );
+    if (!aTester.IsEditable())
     {
         if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
+            rDocShell.ErrorMessage(aTester.GetMessageId());
         return FALSE;
     }
 
@@ -2732,8 +2742,8 @@ BOOL ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
     }
 
     ScAutoFormat* pAutoFormat = ScGlobal::GetAutoFormat();
-    if ( pAutoFormat && nFormatNo < pAutoFormat->GetCount() &&
-            pDoc->IsSelectedBlockEditable( nStartCol,nStartRow, nEndCol,nEndRow, aMark ) )
+    ScEditableTester aTester( pDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
+    if ( pAutoFormat && nFormatNo < pAutoFormat->GetCount() && aTester.IsEditable() )
     {
         WaitObject aWait( rDocShell.GetDialogParent() );
 
@@ -2811,7 +2821,7 @@ BOOL ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
         aModificator.SetDocumentModified();
     }
     else if (!bApi)
-        rDocShell.ErrorMessage(STR_PROTECTIONERR);
+        rDocShell.ErrorMessage(aTester.GetMessageId());
 
     return bSuccess;
 }
@@ -2843,7 +2853,8 @@ BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
             aMark.SelectTable( nTab, TRUE );
     }
 
-    if ( pDoc->IsSelectedBlockEditable( nStartCol,nStartRow, nEndCol,nEndRow, aMark ) )
+    ScEditableTester aTester( pDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
+    if ( aTester.IsEditable() )
     {
         WaitObject aWait( rDocShell.GetDialogParent() );
 
@@ -2890,7 +2901,7 @@ BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
         bSuccess = TRUE;
     }
     else if (!bApi)
-        rDocShell.ErrorMessage(STR_PROTECTIONERR);
+        rDocShell.ErrorMessage(aTester.GetMessageId());
 
     return bSuccess;
 }
@@ -2923,7 +2934,8 @@ BOOL ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
             aMark.SelectTable( nTab, TRUE );
     }
 
-    if ( pDoc->IsSelectedBlockEditable( nStartCol,nStartRow, nEndCol,nEndRow, aMark ) )
+    ScEditableTester aTester( pDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
+    if ( aTester.IsEditable() )
     {
         WaitObject aWait( rDocShell.GetDialogParent() );
         pDoc->SetDirty( rRange );
@@ -2950,7 +2962,7 @@ BOOL ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
         bSuccess = TRUE;
     }
     else if (!bApi)
-        rDocShell.ErrorMessage(STR_PROTECTIONERR);
+        rDocShell.ErrorMessage(aTester.GetMessageId());
 
     return bSuccess;
 }
@@ -2995,7 +3007,8 @@ BOOL ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
             aMark.SelectTable( nTab, TRUE );
     }
 
-    if ( pDoc->IsSelectedBlockEditable( nStartCol,nStartRow, nEndCol,nEndRow, aMark ) )
+    ScEditableTester aTester( pDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
+    if ( aTester.IsEditable() )
     {
         WaitObject aWait( rDocShell.GetDialogParent() );
 
@@ -3062,7 +3075,7 @@ BOOL ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
         bSuccess = TRUE;
     }
     else if (!bApi)
-        rDocShell.ErrorMessage(STR_PROTECTIONERR);
+        rDocShell.ErrorMessage(aTester.GetMessageId());
 
     return bSuccess;
 }
@@ -3095,7 +3108,8 @@ BOOL ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
             aMark.SelectTable( nTab, TRUE );
     }
 
-    if ( pDoc->IsSelectedBlockEditable( nStartCol,nStartRow, nEndCol,nEndRow, aMark ) )
+    ScEditableTester aTester( pDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
+    if ( aTester.IsEditable() )
     {
         WaitObject aWait( rDocShell.GetDialogParent() );
 
@@ -3180,7 +3194,7 @@ BOOL ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
         bSuccess = TRUE;
     }
     else if (!bApi)
-        rDocShell.ErrorMessage(STR_PROTECTIONERR);
+        rDocShell.ErrorMessage(aTester.GetMessageId());
 
     return bSuccess;
 }
@@ -3251,14 +3265,19 @@ BOOL ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark,
     //!     Quellbereich darf geschuetzt sein !!!
     //!     aber kein Matrixfragment enthalten !!!
 
-    if ( !pDoc->IsBlockEditable(aDestArea.aStart.Tab(),
-                        aDestArea.aStart.Col(), aDestArea.aStart.Row(),
-                        aDestArea.aEnd.Col(), aDestArea.aEnd.Row())
-      || pDoc->HasSelectedBlockMatrixFragment( nStartCol, nStartRow,
+    ScEditableTester aTester( pDoc, aDestArea );
+    if ( !aTester.IsEditable() )
+    {
+        if (!bApi)
+            rDocShell.ErrorMessage(aTester.GetMessageId());
+        return FALSE;
+    }
+
+    if ( pDoc->HasSelectedBlockMatrixFragment( nStartCol, nStartRow,
             nEndCol, nEndRow, aMark ) )
     {
         if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
+            rDocShell.ErrorMessage(STR_MATRIXFRAGMENTERR);
         return FALSE;
     }
 
@@ -3321,10 +3340,11 @@ BOOL ScDocFunc::MergeCells( const ScRange& rRange, BOOL bContents, BOOL bRecord,
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
 
-    if (!pDoc->IsBlockEditable( nTab, nStartCol, nStartRow, nEndCol, nEndRow ))
+    ScEditableTester aTester( pDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow );
+    if (!aTester.IsEditable())
     {
         if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
+            rDocShell.ErrorMessage(aTester.GetMessageId());
         return FALSE;
     }
 
@@ -3446,7 +3466,8 @@ BOOL ScDocFunc::SetNote( const ScAddress& rPos, const ScPostIt& rNote, BOOL bApi
 
     ScDocument* pDoc = rDocShell.GetDocument();
     BOOL bUndo (pDoc->IsUndoEnabled());
-    if (pDoc->IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
+    ScEditableTester aTester( pDoc, nTab, nCol,nRow, nCol,nRow );
+    if (aTester.IsEditable())
     {
         pDoc->SetNote( nCol, nRow, nTab, rNote );
 
@@ -3463,7 +3484,7 @@ BOOL ScDocFunc::SetNote( const ScAddress& rPos, const ScPostIt& rNote, BOOL bApi
         bDone = TRUE;
     }
     else if (!bApi)
-        rDocShell.ErrorMessage(STR_PROTECTIONERR);
+        rDocShell.ErrorMessage(aTester.GetMessageId());
 
     return bDone;
 }
@@ -3682,7 +3703,8 @@ BOOL ScDocFunc::InsertNameList( const ScAddress& rStartPos, BOOL bApi )
         USHORT nEndCol = nStartCol + 1;
         USHORT nEndRow = nStartRow + nValidCount - 1;
 
-        if (pDoc->IsBlockEditable( nTab, nStartCol,nStartRow, nEndCol,nEndRow ))
+        ScEditableTester aTester( pDoc, nTab, nStartCol,nStartRow, nEndCol,nEndRow );
+        if (aTester.IsEditable())
         {
             if (bRecord)
             {
@@ -3748,7 +3770,7 @@ BOOL ScDocFunc::InsertNameList( const ScAddress& rStartPos, BOOL bApi )
             bDone = TRUE;
         }
         else if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
+            rDocShell.ErrorMessage(aTester.GetMessageId());
     }
     return bDone;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocfun.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2002-08-08 13:02:40 $
+ *  last change: $Author: nn $ $Date: 2002-11-20 14:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #include "dpobject.hxx"
 #include "dociter.hxx"      // for lcl_EmptyExcept
 #include "cell.hxx"         // for lcl_EmptyExcept
+#include "editable.hxx"
 
 // -----------------------------------------------------------------
 
@@ -463,11 +464,12 @@ BOOL ScDBDocFunc::Sort( USHORT nTab, const ScSortParam& rSortParam,
             pDestData->GetArea(aOldDest);
     }
 
-    if (!pDoc->IsBlockEditable(nTab, aLocalParam.nCol1,aLocalParam.nRow1,
-                                        aLocalParam.nCol2,aLocalParam.nRow2))
+    ScEditableTester aTester( pDoc, nTab, aLocalParam.nCol1,aLocalParam.nRow1,
+                                        aLocalParam.nCol2,aLocalParam.nRow2 );
+    if (!aTester.IsEditable())
     {
         if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
+            rDocShell.ErrorMessage(aTester.GetMessageId());
         return FALSE;
     }
 
@@ -686,11 +688,12 @@ BOOL ScDBDocFunc::Query( USHORT nTab, const ScQueryParam& rQueryParam,
         aLocalParam.MoveToDest();
         nDestTab = rQueryParam.nDestTab;
 
-        if (!pDoc->IsBlockEditable(nDestTab, aLocalParam.nCol1,aLocalParam.nRow1,
-                                                aLocalParam.nCol2,aLocalParam.nRow2))
+        ScEditableTester aTester( pDoc, nDestTab, aLocalParam.nCol1,aLocalParam.nRow1,
+                                                aLocalParam.nCol2,aLocalParam.nRow2);
+        if (!aTester.IsEditable())
         {
             if (!bApi)
-                rDocShell.ErrorMessage(STR_PROTECTIONERR);
+                rDocShell.ErrorMessage(aTester.GetMessageId());
             return FALSE;
         }
 
@@ -966,10 +969,11 @@ BOOL ScDBDocFunc::DoSubTotals( USHORT nTab, const ScSubTotalParam& rParam,
         return FALSE;
     }
 
-    if (!pDoc->IsBlockEditable( nTab, 0,rParam.nRow1+1, MAXCOL,MAXROW ))
+    ScEditableTester aTester( pDoc, nTab, 0,rParam.nRow1+1, MAXCOL,MAXROW );
+    if (!aTester.IsEditable())
     {
         if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);
+            rDocShell.ErrorMessage(aTester.GetMessageId());
         return FALSE;
     }
 
@@ -1111,13 +1115,6 @@ BOOL ScDBDocFunc::DoSubTotals( USHORT nTab, const ScSubTotalParam& rParam,
 
 //==================================================================
 
-BOOL lcl_BlockEditable( ScDocument* pDoc, const ScRange& rRange )
-{
-    return pDoc->IsBlockEditable( rRange.aStart.Tab(),
-                                  rRange.aStart.Col(), rRange.aStart.Row(),
-                                  rRange.aEnd.Col(), rRange.aEnd.Row() );
-}
-
 BOOL lcl_EmptyExcept( ScDocument* pDoc, const ScRange& rRange, const ScRange& rExcept )
 {
     ScCellIterator aIter( pDoc, rRange );
@@ -1164,8 +1161,9 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     if ( pOldObj && !nErrId )
     {
         ScRange aOldOut = pOldObj->GetOutRange();
-        if ( !lcl_BlockEditable( pDoc, aOldOut ) )
-            nErrId = STR_PROTECTIONERR;
+        ScEditableTester aTester( pDoc, aOldOut );
+        if ( !aTester.IsEditable() )
+            nErrId = aTester.GetMessageId();
     }
     if ( pNewObj && !nErrId )
     {
@@ -1174,8 +1172,9 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
         //  (start of output range in pNewObj is valid)
 
         ScRange aNewStart( pNewObj->GetOutRange().aStart );
-        if ( !lcl_BlockEditable( pDoc, aNewStart ) )
-            nErrId = STR_PROTECTIONERR;
+        ScEditableTester aTester( pDoc, aNewStart );
+        if ( !aTester.IsEditable() )
+            nErrId = aTester.GetMessageId();
     }
 
     ScDPObject* pDestObj = NULL;
@@ -1271,16 +1270,20 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                     bUndoSelf = TRUE;
                     nErrId = STR_PIVOT_ERROR;
                 }
-                else if ( !lcl_BlockEditable( pDoc, aNewOut ) )
+                else
                 {
-                    //  destination area isn't editable
-                    //! reverse everything done so far, don't proceed
+                    ScEditableTester aTester( pDoc, aNewOut );
+                    if ( !aTester.IsEditable() )
+                    {
+                        //  destination area isn't editable
+                        //! reverse everything done so far, don't proceed
 
-                    //  quick solution: proceed to end, use undo action
-                    //  to reverse everything:
-                    DBG_ASSERT( bRecord, "DataPilotUpdate: can't undo" );
-                    bUndoSelf = TRUE;
-                    nErrId = STR_PROTECTIONERR;
+                        //  quick solution: proceed to end, use undo action
+                        //  to reverse everything:
+                        DBG_ASSERT( bRecord, "DataPilotUpdate: can't undo" );
+                        bUndoSelf = TRUE;
+                        nErrId = aTester.GetMessageId();
+                    }
                 }
 
                 //  test if new output area is empty except for old area

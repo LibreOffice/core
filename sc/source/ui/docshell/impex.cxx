@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: er $ $Date: 2002-08-07 14:55:48 $
+ *  last change: $Author: nn $ $Date: 2002-11-20 14:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ class StarBASIC;
 #include "docoptio.hxx"
 #include "progress.hxx"
 #include "scitems.hxx"
+#include "editable.hxx"
 
 #include "impex.hxx"
 
@@ -253,14 +254,16 @@ BOOL ScImportExport::IsFormatSupported( ULONG nFormat )
 
 BOOL ScImportExport::StartPaste()
 {
-    if ( !bAll && !pDoc->IsBlockEditable
-        ( aRange.aStart.Tab(), aRange.aStart.Col(),aRange.aStart.Row(),
-                                  aRange.aEnd.Col(),aRange.aEnd.Row() ) )
+    if ( !bAll )
     {
-        InfoBox aInfoBox(Application::GetDefDialogParent(),
-                            ScGlobal::GetRscString( STR_PROTECTIONERR ) );
-        aInfoBox.Execute();
-        return FALSE;
+        ScEditableTester aTester( pDoc, aRange );
+        if ( !aTester.IsEditable() )
+        {
+            InfoBox aInfoBox(Application::GetDefDialogParent(),
+                                ScGlobal::GetRscString( aTester.GetMessageId() ) );
+            aInfoBox.Execute();
+            return FALSE;
+        }
     }
     if( bUndo && pDocSh && pDoc->IsUndoEnabled())
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-01 16:42:35 $
+ *  last change: $Author: nn $ $Date: 2002-11-20 14:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@
 #include "tabvwsh.hxx"
 #include "impex.hxx"
 #include "editutil.hxx"
+#include "editable.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -252,9 +253,10 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
     }
     nTab = GetViewData()->GetTabNo();
 
-    if (!pDoc->IsSelectedBlockEditable( nCol, nRow, nCol, nRow, rMark ))
+    ScEditableTester aTester( pDoc, nCol, nRow, nCol, nRow, rMark );
+    if (!aTester.IsEditable())
     {
-        ErrorMessage(STR_PROTECTIONERR);
+        ErrorMessage(aTester.GetMessageId());
         delete pEditSel;
         return;
     }
@@ -397,11 +399,15 @@ void ScViewFunc::DoSpellingChecker( BOOL bRecord )
 
     rMark.MarkToMulti();
     BOOL bMarked = rMark.IsMultiMarked();
-    if (bMarked && !pDoc->IsSelectionEditable(rMark))
+    if (bMarked)
     {
-        ErrorMessage(STR_PROTECTIONERR);
-        delete pEditSel;
-        return;
+        ScEditableTester aTester( pDoc, rMark );
+        if (!aTester.IsEditable())
+        {
+            ErrorMessage(aTester.GetMessageId());
+            delete pEditSel;
+            return;
+        }
     }
 
     ScDocument* pUndoDoc = NULL;

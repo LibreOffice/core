@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-23 08:56:50 $
+ *  last change: $Author: nn $ $Date: 2002-11-20 14:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@
 #include "drwtrans.hxx"
 #include "linkarea.hxx"
 #include "docfunc.hxx"
+#include "editable.hxx"
 
 #include "globstr.hrc"
 
@@ -377,7 +378,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
                 else
                 {
-                    if (pTabViewShell->SelectionEditable())
+                    ScEditableTester aTester( pTabViewShell );
+                    if (aTester.IsEditable())
                     {
                         ScDeleteContentsDlg* pDlg = new ScDeleteContentsDlg(    pTabViewShell->GetDialogParent() );
                         ScDocument* pDoc = GetViewData()->GetDocument();
@@ -391,7 +393,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         delete pDlg;
                     }
                     else
-                        pTabViewShell->ErrorMessage(STR_PROTECTIONERR);
+                        pTabViewShell->ErrorMessage(aTester.GetMessageId());
                 }
 
                 if( nFlags != IDF_NONE )
@@ -1163,7 +1165,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                     else
                     {
-                        if (pTabViewShell->SelectionEditable())
+                        ScEditableTester aTester( pTabViewShell );
+                        if (aTester.IsEditable())
                         {
                             ScInsertContentsDlg* pDlg = new ScInsertContentsDlg( pTabViewShell->GetDialogParent() );
                             pDlg->SetOtherDoc( bOtherDoc );
@@ -1209,7 +1212,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             delete pDlg;
                         }
                         else
-                            pTabViewShell->ErrorMessage(STR_PROTECTIONERR);
+                            pTabViewShell->ErrorMessage(aTester.GetMessageId());
                     }
 
                     if( nFlags != IDF_NONE )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-19 15:07:16 $
+ *  last change: $Author: nn $ $Date: 2002-11-20 14:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@
 #include "undocell.hxx"
 #include "undotab.hxx"
 #include "sizedev.hxx"
+#include "editable.hxx"
 
 
 // STATIC DATA ---------------------------------------------------------------
@@ -792,9 +793,10 @@ BOOL ScViewFunc::MergeCells( BOOL bApi, BOOL& rDoContents, BOOL bRecord )
 {
     //  Editable- und Verschachtelungs-Abfrage muss vorneweg sein (auch in DocFunc),
     //  damit dann nicht die Inhalte-QueryBox kommt
-    if (!SelectionEditable())
+    ScEditableTester aTester( this );
+    if (!aTester.IsEditable())
     {
-        ErrorMessage(STR_PROTECTIONERR);
+        ErrorMessage(aTester.GetMessageId());
         return FALSE;
     }
 
@@ -972,9 +974,11 @@ void ScViewFunc::FillAuto( FillDir eDir, USHORT nStartCol, USHORT nStartRow,
 
 void ScViewFunc::FillTab( USHORT nFlags, USHORT nFunction, BOOL bSkipEmpty, BOOL bAsLink )
 {
-    if (!SelectionEditable())           //! vordere Tabelle darf geschuetzt sein !!!
+    //! allow source sheet to be protected
+    ScEditableTester aTester( this );
+    if (!aTester.IsEditable())
     {
-        ErrorMessage(STR_PROTECTIONERR);
+        ErrorMessage(aTester.GetMessageId());
         return;
     }
 
@@ -1426,9 +1430,10 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
     USHORT nDestRow = rParam.aRefVariableCell.Row();
     USHORT nDestTab = rParam.aRefVariableCell.Tab();
 
-    if (!pDoc->IsBlockEditable(nDestTab, nDestCol,nDestRow, nDestCol,nDestRow))
+    ScEditableTester aTester( pDoc, nDestTab, nDestCol,nDestRow, nDestCol,nDestRow );
+    if (!aTester.IsEditable())
     {
-        ErrorMessage(STR_PROTECTIONERR);
+        ErrorMessage(aTester.GetMessageId());
         return;
     }
 
@@ -1536,9 +1541,10 @@ void ScViewFunc::MakeScenario( const String& rName, const String& rComment,
 
 void ScViewFunc::ExtendScenario()
 {
-    if (!SelectionEditable())
+    ScEditableTester aTester( this );
+    if (!aTester.IsEditable())
     {
-        ErrorMessage(STR_PROTECTIONERR);
+        ErrorMessage(aTester.GetMessageId());
         return;
     }
 
@@ -2472,9 +2478,10 @@ void ScViewFunc::HideTable( USHORT nTab )
 
 void ScViewFunc::InsertSpecialChar( const String& rStr, const Font& rFont )
 {
-    if (!SelectionEditable())
+    ScEditableTester aTester( this );
+    if (!aTester.IsEditable())
     {
-        ErrorMessage(STR_PROTECTIONERR);
+        ErrorMessage(aTester.GetMessageId());
         return;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:34:07 $
+ *  last change: $Author: nn $ $Date: 2002-11-20 14:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #include "dpobject.hxx"
 #include "dpsave.hxx"
 #include "dbdocfun.hxx"
+#include "editable.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -407,9 +408,10 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, BOOL bRecord,
         return;
     }
 
-    if (!pDoc->IsBlockEditable( nTab, 0,rParam.nRow1+1, MAXCOL,MAXROW ))
+    ScEditableTester aTester( pDoc, nTab, 0,rParam.nRow1+1, MAXCOL,MAXROW );
+    if (!aTester.IsEditable())
     {
-        ErrorMessage(STR_PROTECTIONERR);
+        ErrorMessage(aTester.GetMessageId());
         return;
     }
 

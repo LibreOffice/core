@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2002-08-08 13:02:40 $
+ *  last change: $Author: nn $ $Date: 2002-11-20 14:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 #include "docpool.hxx"
 #include "attrib.hxx"
 #include "dbdocutl.hxx"
+#include "editable.hxx"
 
 using namespace com::sun::star;
 
@@ -516,9 +517,15 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
     if (bSuccess)
     {
         //  old and new range editable?
-        if ( !pDoc->IsBlockEditable(nTab, rParam.nCol1,rParam.nRow1,rParam.nCol2,rParam.nRow2) ||
-             !pDoc->IsBlockEditable(nTab, rParam.nCol1,rParam.nRow1,nEndCol,nEndRow) ||
-             pDoc->GetChangeTrack() != NULL )
+        ScEditableTester aTester;
+        aTester.TestBlock( pDoc, nTab, rParam.nCol1,rParam.nRow1,rParam.nCol2,rParam.nRow2 );
+        aTester.TestBlock( pDoc, nTab, rParam.nCol1,rParam.nRow1,nEndCol,nEndRow );
+        if ( !aTester.IsEditable() )
+        {
+            nErrStringId = aTester.GetMessageId();
+            bSuccess = FALSE;
+        }
+        else if ( pDoc->GetChangeTrack() != NULL )
         {
             nErrStringId = STR_PROTECTIONERR;
             bSuccess = FALSE;

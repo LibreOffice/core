@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2002-08-08 13:05:31 $
+ *  last change: $Author: nn $ $Date: 2002-11-20 14:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #include "globstr.hrc"
 #include "global.hxx"
 #include "dbdocfun.hxx"
+#include "editable.hxx"
 
 //==================================================================
 
@@ -437,10 +438,11 @@ BOOL ScDBFunc::ImportData( const ScImportParam& rParam, BOOL bRecord )
     BOOL bSuccess = FALSE;
 
     ScDocument* pDoc = GetViewData()->GetDocument();
-    if ( !pDoc->IsBlockEditable( GetViewData()->GetTabNo(), rParam.nCol1,rParam.nRow1,
-                                                            rParam.nCol2,rParam.nRow2 ) )
+    ScEditableTester aTester( pDoc, GetViewData()->GetTabNo(), rParam.nCol1,rParam.nRow1,
+                                                            rParam.nCol2,rParam.nRow2 );
+    if ( !aTester.IsEditable() )
     {
-        ErrorMessage(STR_PROTECTIONERR);
+        ErrorMessage(aTester.GetMessageId());
         return FALSE;
     }
 
