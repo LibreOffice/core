@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TKeyColumns.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:01:21 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ OKeyColumnsHelper::OKeyColumnsHelper(   OTableKeyHelper* _pKey,
 {
 }
 // -------------------------------------------------------------------------
-Reference< XNamed > OKeyColumnsHelper::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OKeyColumnsHelper::createObject(const ::rtl::OUString& _rName)
 {
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
     ::rtl::OUString aSchema,aTable;
@@ -135,7 +135,7 @@ Reference< XNamed > OKeyColumnsHelper::createObject(const ::rtl::OUString& _rNam
         }
     }
 
-    Reference< XNamed > xRet;
+    sdbcx::ObjectType xRet;
 
     // now describe the column _rName and set his related column
     xResult = m_pKey->getTable()->getMetaData()->getColumns(
@@ -193,14 +193,11 @@ void OKeyColumnsHelper::impl_refresh() throw(::com::sun::star::uno::RuntimeExcep
     m_pKey->refreshColumns();
 }
 // -----------------------------------------------------------------------------
-Reference< XNamed > OKeyColumnsHelper::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+sdbcx::ObjectType OKeyColumnsHelper::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    OKeyColumn* pColumn = new OKeyColumn(isCaseSensitive());
-    Reference<XPropertySet> xProp = pColumn;
+    Reference<XPropertySet> xProp = new OKeyColumn(isCaseSensitive());
     ::comphelper::copyProperties(_xDescriptor,xProp);
-    Reference< XNamed > xName(xProp,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName;
+    return xProp;
 }
 // -----------------------------------------------------------------------------
 
