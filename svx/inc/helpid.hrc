@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-01 13:56:46 $
+ *  last change: $Author: os $ $Date: 2000-12-14 13:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,11 +478,15 @@
 #define HID_GALLERY_NEWTHEME                    (HID_SVX_START + 390)
 #define HID_GALLERY_THEMELIST                   (HID_SVX_START + 391)
 
+#define HID_SVX_PROPBRW                         (HID_SVX_START + 392)
+#define HID_SVXDLG_PROPBRW                      (HID_SVX_START + 393)
+#define HID_SVX_DLG_LABELCONTROL                (HID_SVX_START + 394)
+
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
 // -----------------------------------------------------------------------
 
-#define ACT_SVX_HID_END     HID_SVXPAGE_PARA_ASIAN
+#define ACT_SVX_HID_END         HID_SVX_DLG_LABELCONTROL
 
 #if ACT_SVX_HID_END > HID_SVX_END
 #error Resource-Ueberlauf in #line, #file
