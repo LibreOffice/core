@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-10 15:56:25 $
+ *  last change: $Author: nn $ $Date: 2001-01-12 19:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include <tools/isolang.hxx>
 #include <tools/debug.hxx>
 #include <tools/solmath.hxx>
+#include <unotools/calendarwrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustrbuf.hxx>
@@ -81,6 +82,7 @@
 #include "attrlist.hxx"
 #include "nmspmap.hxx"
 #include "families.hxx"
+#include "xmlnumfi.hxx"     // SvXMLNumFmtDefaults
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -381,13 +383,14 @@ void SvXMLNumFmtExport::WriteTextContentElement_Impl()
 
 //  date elements
 
-void SvXMLNumFmtExport::WriteDayElement_Impl( sal_Bool bLong )
+void SvXMLNumFmtExport::WriteDayElement_Impl( const OUString& rCalendar, sal_Bool bLong )
 {
     FinishTextElement_Impl();
 
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_day ) );
 
+    AddCalendarAttr_Impl( rCalendar ); // adds to pAttrList
     AddStyleAttr_Impl( bLong );     // adds to pAttrList
 
     xHandler->ignorableWhitespace( sWS );
@@ -397,13 +400,14 @@ void SvXMLNumFmtExport::WriteDayElement_Impl( sal_Bool bLong )
     pAttrList->Clear();
 }
 
-void SvXMLNumFmtExport::WriteMonthElement_Impl( sal_Bool bLong, sal_Bool bText )
+void SvXMLNumFmtExport::WriteMonthElement_Impl( const OUString& rCalendar, sal_Bool bLong, sal_Bool bText )
 {
     FinishTextElement_Impl();
 
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_month ) );
 
+    AddCalendarAttr_Impl( rCalendar ); // adds to pAttrList
     AddStyleAttr_Impl( bLong );     // adds to pAttrList
     AddTextualAttr_Impl( bText );   // adds to pAttrList
 
@@ -414,13 +418,14 @@ void SvXMLNumFmtExport::WriteMonthElement_Impl( sal_Bool bLong, sal_Bool bText )
     pAttrList->Clear();
 }
 
-void SvXMLNumFmtExport::WriteYearElement_Impl( sal_Bool bLong )
+void SvXMLNumFmtExport::WriteYearElement_Impl( const OUString& rCalendar, sal_Bool bLong )
 {
     FinishTextElement_Impl();
 
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_year ) );
 
+    AddCalendarAttr_Impl( rCalendar ); // adds to pAttrList
     AddStyleAttr_Impl( bLong );     // adds to pAttrList
 
     xHandler->ignorableWhitespace( sWS );
@@ -430,13 +435,14 @@ void SvXMLNumFmtExport::WriteYearElement_Impl( sal_Bool bLong )
     pAttrList->Clear();
 }
 
-void SvXMLNumFmtExport::WriteEraElement_Impl( sal_Bool bLong )
+void SvXMLNumFmtExport::WriteEraElement_Impl( const OUString& rCalendar, sal_Bool bLong )
 {
     FinishTextElement_Impl();
 
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_era ) );
 
+    AddCalendarAttr_Impl( rCalendar ); // adds to pAttrList
     AddStyleAttr_Impl( bLong );     // adds to pAttrList
 
     xHandler->ignorableWhitespace( sWS );
@@ -446,13 +452,14 @@ void SvXMLNumFmtExport::WriteEraElement_Impl( sal_Bool bLong )
     pAttrList->Clear();
 }
 
-void SvXMLNumFmtExport::WriteDayOfWeekElement_Impl( sal_Bool bLong )
+void SvXMLNumFmtExport::WriteDayOfWeekElement_Impl( const OUString& rCalendar, sal_Bool bLong )
 {
     FinishTextElement_Impl();
 
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_day_of_week ) );
 
+    AddCalendarAttr_Impl( rCalendar ); // adds to pAttrList
     AddStyleAttr_Impl( bLong );     // adds to pAttrList
 
     xHandler->ignorableWhitespace( sWS );
@@ -462,24 +469,28 @@ void SvXMLNumFmtExport::WriteDayOfWeekElement_Impl( sal_Bool bLong )
     pAttrList->Clear();
 }
 
-void SvXMLNumFmtExport::WriteWeekElement_Impl()
+void SvXMLNumFmtExport::WriteWeekElement_Impl( const OUString& rCalendar )
 {
     FinishTextElement_Impl();
 
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_week_of_year ) );
+
+    AddCalendarAttr_Impl( rCalendar ); // adds to pAttrList
+
     xHandler->ignorableWhitespace( sWS );
     xHandler->startElement( sElem, xAttrList );
     xHandler->endElement( sElem );
 }
 
-void SvXMLNumFmtExport::WriteQuarterElement_Impl( sal_Bool bLong )
+void SvXMLNumFmtExport::WriteQuarterElement_Impl( const OUString& rCalendar, sal_Bool bLong )
 {
     FinishTextElement_Impl();
 
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_quarter ) );
 
+    AddCalendarAttr_Impl( rCalendar ); // adds to pAttrList
     AddStyleAttr_Impl( bLong );     // adds to pAttrList
 
     xHandler->ignorableWhitespace( sWS );
@@ -831,6 +842,140 @@ void SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
 
 //-------------------------------------------------------------------------
 
+//  test if all date elements match the system settings
+
+sal_Bool lcl_MatchesSystemDate( SvNumberformat& rFormat, sal_uInt16 nPart, sal_Bool bLongSysDate )
+{
+    sal_Bool bMatch = sal_True;
+    International aIntl( rFormat.GetLanguage() );
+
+    //  loop through elements (only look for date elements that depend on style attribute)
+
+    sal_uInt16 nPos = 0;
+    sal_Bool bEnd = sal_False;
+    while ( bMatch && !bEnd )
+    {
+        short nElemType = rFormat.GetNumForType( nPart, nPos, sal_False );
+        switch ( nElemType )
+        {
+            case 0:
+                bEnd = sal_True;                // end of format reached
+                break;
+
+            case NF_KEY_D:                      // short day
+                if ( SvXMLNumFmtDefaults::IsSystemLongDay( aIntl, bLongSysDate ) )
+                    bMatch = sal_False;
+                break;
+
+            case NF_KEY_DD:                     // long day
+                if ( !SvXMLNumFmtDefaults::IsSystemLongDay( aIntl, bLongSysDate ) )
+                    bMatch = sal_False;
+                break;
+
+            case NF_KEY_DDD:                    // short day of week
+            case NF_KEY_NN:
+            case NF_KEY_AAA:
+                if ( SvXMLNumFmtDefaults::IsSystemLongDayOfWeek( aIntl, bLongSysDate ) )
+                    bMatch = sal_False;
+                break;
+
+            case NF_KEY_DDDD:                   // long day of week
+            case NF_KEY_NNN:
+            case NF_KEY_NNNN:
+            case NF_KEY_AAAA:
+                if ( !SvXMLNumFmtDefaults::IsSystemLongDayOfWeek( aIntl, bLongSysDate ) )
+                    bMatch = sal_False;
+                break;
+
+            case NF_KEY_M:                      // short numerical month
+                if ( SvXMLNumFmtDefaults::IsSystemLongMonth( aIntl, bLongSysDate ) ||
+                     SvXMLNumFmtDefaults::IsSystemTextualMonth( aIntl, bLongSysDate ) )
+                    bMatch = sal_False;
+                break;
+
+            case NF_KEY_MM:                     // long numerical month
+                if ( !SvXMLNumFmtDefaults::IsSystemLongMonth( aIntl, bLongSysDate ) ||
+                     SvXMLNumFmtDefaults::IsSystemTextualMonth( aIntl, bLongSysDate ) )
+                    bMatch = sal_False;
+                break;
+
+            case NF_KEY_MMM:                    // short textual month
+            case NF_KEY_MMMMM:                  //! (first letter)
+                if ( SvXMLNumFmtDefaults::IsSystemLongMonth( aIntl, bLongSysDate ) ||
+                     !SvXMLNumFmtDefaults::IsSystemTextualMonth( aIntl, bLongSysDate ) )
+                    bMatch = sal_False;
+                break;
+
+            case NF_KEY_MMMM:                   // long textual month
+                if ( !SvXMLNumFmtDefaults::IsSystemLongMonth( aIntl, bLongSysDate ) ||
+                     !SvXMLNumFmtDefaults::IsSystemTextualMonth( aIntl, bLongSysDate ) )
+                    bMatch = sal_False;
+                break;
+
+            case NF_KEY_YY:                     // short year
+            case NF_KEY_EEC:
+                if ( SvXMLNumFmtDefaults::IsSystemLongYear( aIntl, bLongSysDate ) )
+                    bMatch = sal_False;
+                break;
+
+            case NF_KEY_YYYY:                   // long year
+            case NF_KEY_EC:
+            case NF_KEY_R:
+                if ( !SvXMLNumFmtDefaults::IsSystemLongYear( aIntl, bLongSysDate ) )
+                    bMatch = sal_False;
+                break;
+
+            case NF_KEY_G:                      // short era
+            case NF_KEY_GG:
+                if ( SvXMLNumFmtDefaults::IsSystemLongEra( aIntl, bLongSysDate ) )
+                    bMatch = sal_False;
+                break;
+
+            case NF_KEY_GGG:                    // long era
+            case NF_KEY_RR:
+                if ( !SvXMLNumFmtDefaults::IsSystemLongEra( aIntl, bLongSysDate ) )
+                    bMatch = sal_False;
+                break;
+
+            // quarter isn't changed by format-source
+        }
+        ++nPos;
+    }
+
+    return bMatch;
+}
+
+//-------------------------------------------------------------------------
+
+OUString lcl_GetDefaultCalendar( SvNumberFormatter* pFormatter, LanguageType nLang )
+{
+    //  get name of first non-gregorian calendar for the language
+
+    OUString aCalendar;
+    CalendarWrapper* pCalendar = pFormatter->GetCalendar();
+    if (pCalendar)
+    {
+        String sLangStr, sCountry;
+        ConvertLanguageToIsoNames( nLang, sLangStr, sCountry );
+        lang::Locale aLocale( sLangStr, sCountry, OUString() );
+
+        uno::Sequence<OUString> aCals = pCalendar->getAllCalendars( aLocale );
+        sal_Int32 nCnt = aCals.getLength();
+        sal_Bool bFound = sal_False;
+        for ( sal_Int32 j=0; j < nCnt && !bFound; j++ )
+        {
+            if ( !aCals[j].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("gregorian") ) )
+            {
+                aCalendar = aCals[j];
+                bFound = sal_True;
+            }
+        }
+    }
+    return aCalendar;
+}
+
+//-------------------------------------------------------------------------
+
 //
 //  export one part (condition)
 //
@@ -944,6 +1089,9 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                          eBuiltIn == NF_DATE_SYSTEM_LONG  ||
                          eBuiltIn == NF_DATETIME_SYSTEM_SHORT_HHMM ) && rFormat.GetComment().Len();
     BOOL bLongSysDate = ( eBuiltIn == NF_DATE_SYSTEM_LONG ) && rFormat.GetComment().Len();
+    //  test if all date elements match the system settings
+    if ( bSystemDate && !lcl_MatchesSystemDate( rFormat, nPart, bLongSysDate ) )
+        bSystemDate = sal_False;
     if ( bSystemDate )
     {
         sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
@@ -998,6 +1146,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
         sal_Bool bCurrFound  = sal_False;
         sal_Int32 nExpDigits = 0;
         OUString sCurrExt;
+        OUString aCalendar;
         sal_uInt16 nPos = 0;
         sal_Bool bEnd = sal_False;
         while (!bEnd)
@@ -1026,13 +1175,22 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                     if (pElemStr)
                         sCurrExt = *pElemStr;
                     break;
+
+                // E, EE, R, RR: select non-gregorian calendar
+                // AAA, AAAA: calendar is switched at the position of the element
+                case NF_KEY_EC:
+                case NF_KEY_EEC:
+                case NF_KEY_R:
+                case NF_KEY_RR:
+                    if (!aCalendar.getLength())
+                        aCalendar = lcl_GetDefaultCalendar( pFormatter, nLang );
+                    break;
             }
             ++nPos;
         }
 
         //  second loop to write elements
 
-        OUString aCalendar;
         sal_Bool bNumWritten = sal_False;
         short nPrevType = 0;
         nPos = 0;
@@ -1148,9 +1306,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                 case NF_KEY_D:
                 case NF_KEY_DD:
                     {
-                        AddCalendarAttr_Impl( aCalendar );      // adds to pAttrList
                         sal_Bool bLong = ( nElemType == NF_KEY_DD );
-                        WriteDayElement_Impl( bSystemDate ? bLongSysDate : bLong );
+                        WriteDayElement_Impl( aCalendar, ( bSystemDate ? bLongSysDate : bLong ) );
                     }
                     break;
                 case NF_KEY_DDD:
@@ -1161,10 +1318,17 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                 case NF_KEY_AAA:
                 case NF_KEY_AAAA:
                     {
-                        AddCalendarAttr_Impl( aCalendar );      // adds to pAttrList
+                        OUString aCalAttr = aCalendar;
+                        if ( nElemType == NF_KEY_AAA || nElemType == NF_KEY_AAAA )
+                        {
+                            //  calendar attribute for AAA and AAAA is switched only for this element
+                            if (!aCalAttr.getLength())
+                                aCalAttr = lcl_GetDefaultCalendar( pFormatter, nLang );
+                        }
+
                         sal_Bool bLong = ( nElemType == NF_KEY_NNN || nElemType == NF_KEY_NNNN ||
                                            nElemType == NF_KEY_DDDD || nElemType == NF_KEY_AAAA );
-                        WriteDayOfWeekElement_Impl( bSystemDate ? bLongSysDate : bLong );
+                        WriteDayOfWeekElement_Impl( aCalAttr, ( bSystemDate ? bLongSysDate : bLong ) );
                         if ( nElemType == NF_KEY_NNNN )
                         {
                             //  write additional text element for separator
@@ -1179,11 +1343,10 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                 case NF_KEY_MMMM:
                 case NF_KEY_MMMMM:      //! first letter of month name, no attribute available
                     {
-                        AddCalendarAttr_Impl( aCalendar );      // adds to pAttrList
                         sal_Bool bLong = ( nElemType == NF_KEY_MM  || nElemType == NF_KEY_MMMM );
                         sal_Bool bText = ( nElemType == NF_KEY_MMM || nElemType == NF_KEY_MMMM ||
                                             nElemType == NF_KEY_MMMMM );
-                        WriteMonthElement_Impl( ( bSystemDate ? bLongSysDate : bLong ), bText );
+                        WriteMonthElement_Impl( aCalendar, ( bSystemDate ? bLongSysDate : bLong ), bText );
                     }
                     break;
                 case NF_KEY_YY:
@@ -1193,11 +1356,10 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                 case NF_KEY_R:      //! R acts as EE, no attribute available
                     {
                         //! distinguish EE and R
-                        //! add calendar attribute for E and EE and R?
-                        AddCalendarAttr_Impl( aCalendar );      // adds to pAttrList
+                        //  calendar attribute for E and EE and R is set in first loop
                         sal_Bool bLong = ( nElemType == NF_KEY_YYYY || nElemType == NF_KEY_EEC ||
                                             nElemType == NF_KEY_R );
-                        WriteYearElement_Impl( bSystemDate ? bLongSysDate : bLong );
+                        WriteYearElement_Impl( aCalendar, ( bSystemDate ? bLongSysDate : bLong ) );
                     }
                     break;
                 case NF_KEY_G:
@@ -1206,28 +1368,24 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                 case NF_KEY_RR:     //! RR acts as GGGEE, no attribute available
                     {
                         //! distinguish GG and GGG and RR
-                        AddCalendarAttr_Impl( aCalendar );      // adds to pAttrList
                         sal_Bool bLong = ( nElemType == NF_KEY_GGG || nElemType == NF_KEY_RR );
-                        WriteEraElement_Impl( bSystemDate ? bLongSysDate : bLong );
+                        WriteEraElement_Impl( aCalendar, ( bSystemDate ? bLongSysDate : bLong ) );
                         if ( nElemType == NF_KEY_RR )
                         {
-                            //! add calendar attribute for RR?
-                            AddCalendarAttr_Impl( aCalendar );      // adds to pAttrList
-                            WriteYearElement_Impl( bSystemDate ? bLongSysDate : sal_True );
+                            //  calendar attribute for RR is set in first loop
+                            WriteYearElement_Impl( aCalendar, ( bSystemDate ? bLongSysDate : sal_True ) );
                         }
                     }
                     break;
                 case NF_KEY_Q:
                 case NF_KEY_QQ:
                     {
-                        AddCalendarAttr_Impl( aCalendar );      // adds to pAttrList
                         sal_Bool bLong = ( nElemType == NF_KEY_QQ );
-                        WriteQuarterElement_Impl( bSystemDate ? bLongSysDate : bLong );
+                        WriteQuarterElement_Impl( aCalendar, ( bSystemDate ? bLongSysDate : bLong ) );
                     }
                     break;
                 case NF_KEY_WW:
-                    AddCalendarAttr_Impl( aCalendar );      // adds to pAttrList
-                    WriteWeekElement_Impl();
+                    WriteWeekElement_Impl( aCalendar );
                     break;
 
                 // time elements (bSystemDate is not used):
