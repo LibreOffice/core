@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:57:34 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2265,6 +2265,39 @@ RTLFUNC(CompatibilityMode)
         pINST->EnableCompatibility( rPar.Get(1)->GetBool() );
 }
 
+RTLFUNC(Input)
+{
+    // 2 parameters needed
+    if ( rPar.Count() < 3 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    USHORT nByteCount  = rPar.Get(1)->GetUShort();
+    INT16  nFileNumber = rPar.Get(2)->GetInteger();
+
+    SbiIoSystem* pIosys = pINST->GetIoSystem();
+    SbiStream* pSbStrm = pIosys->GetStream( nFileNumber );
+    if ( !pSbStrm || !(pSbStrm->GetMode() & (SBSTRM_BINARY | SBSTRM_INPUT)) )
+    {
+        StarBASIC::Error( SbERR_BAD_CHANNEL );
+        return;
+    }
+
+    ByteString aByteBuffer;
+    SbError err = pSbStrm->Read( aByteBuffer, nByteCount, true );
+    if( !err )
+        err = pIosys->GetError();
+
+    if( err )
+    {
+        StarBASIC::Error( err );
+        return;
+    }
+    rPar.Get(0)->PutString( String( aByteBuffer, gsl_getSystemTextEncoding() ) );
+}
+
 // #115824
 RTLFUNC(Me)
 {
@@ -2280,4 +2313,3 @@ RTLFUNC(Me)
         refVar->PutObject( pClassModuleObject );
     }
 }
-
