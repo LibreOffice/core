@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.163 $
+#   $Revision: 1.164 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:26:49 $
+#   last change: $Author: vg $ $Date: 2005-02-16 15:42:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -941,10 +941,8 @@ ILIB!:=$(SOLARROOT)$/udk$/$(UDKVERSION)$/$(OUTPATH)$/lib;$(ILIB)
 
 # needs to be expanded!!!
 
-# NETBSD_SDO
-.IF "$(OS)"=="NETBSD"
-LIB:=	$(LB) $(SLB) $(ILIB)
-.ELSE
+# extend library path for MS Compiler
+.IF "$(COM)"=="MSC"
 LIB:=$(LB);$(SLB);$(ILIB)
 .ENDIF
 
