@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pb $ $Date: 2001-05-07 10:32:43 $
+#   last change: $Author: pb $ $Date: 2001-05-21 11:13:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,7 +113,8 @@ SLOFILES=   $(SLO)$/svtabbx.obj		\
             $(SLO)$/templwin.obj
 
 EXCEPTIONSFILES=\
-            $(SLO)$/fileview.obj
+            $(SLO)$/fileview.obj	\
+            $(SLO)$/templwin.obj
 
 # Fuer das Setup bauen wir noch mal statisch
 .IF "$(VCSID)" != "OV"
