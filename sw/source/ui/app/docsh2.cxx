@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-09 12:41:46 $
+ *  last change: $Author: jp $ $Date: 2001-08-23 14:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -828,6 +828,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 if( nSlotId )
                 {
+                    //JP 23.8.2001: Bug 91360 - PagePreView in the WebDocShell
+                    //              is found under Id ViewShell2.
+                    if( ISA(SwWebDocShell) && SID_VIEWSHELL1 == nSlotId )
+                        nSlotId = SID_VIEWSHELL2;
+
                     if( pView && pView->GetDocShell() == this )
                         pTmpFrm = pView->GetViewFrame();
                     else
