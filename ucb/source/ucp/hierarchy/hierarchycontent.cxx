@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-19 14:55:17 $
+ *  last change: $Author: kso $ $Date: 2001-05-04 10:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -817,7 +817,8 @@ void HierarchyContent::setKind(
 }
 
 //=========================================================================
-Reference< XContentIdentifier > HierarchyContent::getIdentifierFromTitle()
+Reference< XContentIdentifier > HierarchyContent::makeNewIdentifier(
+                                                    const OUString& rTitle )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -835,12 +836,12 @@ Reference< XContentIdentifier > HierarchyContent::getIdentifierFromTitle()
     if ( nPos == -1 )
     {
         VOS_ENSURE( sal_False,
-                    "HierarchyContent::getIdentifierFromTitle - Invalid URL!" );
+                    "HierarchyContent::makeNewIdentifier - Invalid URL!" );
         return Reference< XContentIdentifier >();
     }
 
     OUString aNewURL = aURL.copy( 0, nPos + 1 );
-    aNewURL += HierarchyContentProvider::encodeSegment( m_aProps.aTitle );
+    aNewURL += HierarchyContentProvider::encodeSegment( rTitle );
 
     return Reference< XContentIdentifier >(
                            new ::ucb::ContentIdentifier( m_xSMgr, aNewURL ) );
@@ -1146,6 +1147,7 @@ void HierarchyContent::setPropertyValues(
     sal_Bool bTriedToGetAdditonalPropSet = sal_False;
 
     sal_Bool bExchange = sal_False;
+    OUString aNewTitle;
 
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
@@ -1173,23 +1175,12 @@ void HierarchyContent::setPropertyValues(
                 {
                     if ( aNewValue != m_aProps.aTitle )
                     {
-                        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
                         // modified title -> modified URL -> exchange !
                         if ( m_eState == PERSISTENT )
                             bExchange = sal_True;
 
-                        aEvent.PropertyName = rValue.Name;
-                        aEvent.OldValue     = makeAny( m_aProps.aTitle );
-                        aEvent.NewValue     = makeAny( aNewValue );
-
-                        aChanges.getArray()[ nChanged ] = aEvent;
-
-                        m_aProps.aTitle = aNewValue;
-                        m_aProps.aName
-                            = HierarchyContentProvider::encodeSegment(
-                                                                aNewValue );
-                        nChanged++;
+                        // new value will be set later...
+                        aNewTitle = aNewValue;
                     }
                 }
             }
@@ -1208,8 +1199,6 @@ void HierarchyContent::setPropertyValues(
                     {
                         if ( aNewValue != m_aProps.aTargetURL )
                         {
-                            osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
                             aEvent.PropertyName = rValue.Name;
                             aEvent.OldValue = makeAny( m_aProps.aTargetURL );
                             aEvent.NewValue = makeAny( aNewValue );
@@ -1268,12 +1257,10 @@ void HierarchyContent::setPropertyValues(
         }
     }
 
-    // @@@ What, if exchange fails??? Rollback of Title prop? Old title is
-    //     contained in aChanges...
     if ( bExchange )
     {
         Reference< XContentIdentifier > xOldId = m_xIdentifier;
-        Reference< XContentIdentifier > xNewId = getIdentifierFromTitle();
+        Reference< XContentIdentifier > xNewId = makeNewIdentifier( aNewTitle );
 
         aGuard.clear();
         if ( exchangeIdentity( xNewId ) )
@@ -1287,6 +1274,24 @@ void HierarchyContent::setPropertyValues(
                             xNewId->getContentIdentifier(),
                             sal_True );
         }
+        else
+        {
+            // Do not set new title!
+            aNewTitle = OUString();
+        }
+    }
+
+    if ( aNewTitle.getLength() )
+    {
+        aEvent.PropertyName = OUString::createFromAscii( "Title" );
+        aEvent.OldValue     = makeAny( m_aProps.aTitle );
+        aEvent.NewValue     = makeAny( aNewTitle );
+
+        m_aProps.aTitle = aNewTitle;
+        m_aProps.aName  = HierarchyContentProvider::encodeSegment( aNewTitle );
+
+        aChanges.getArray()[ nChanged ] = aEvent;
+        nChanged++;
     }
 
     if ( nChanged > 0 )
@@ -1296,6 +1301,8 @@ void HierarchyContent::setPropertyValues(
             storeData();
 
         aChanges.realloc( nChanged );
+
+        aGuard.clear();
         notifyPropertiesChange( aChanges );
     }
 }
@@ -1330,7 +1337,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve )
 
     // Assemble new content identifier...
 
-    Reference< XContentIdentifier > xId = getIdentifierFromTitle();
+    Reference< XContentIdentifier > xId = makeNewIdentifier( m_aProps.aTitle );
     if ( !xId.is() )
         throw CommandAbortedException();
 

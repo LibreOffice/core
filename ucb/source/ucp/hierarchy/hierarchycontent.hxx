@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-19 14:55:17 $
+ *  last change: $Author: kso $ $Date: 2001-05-04 10:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ private:
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::ucb::XContentIdentifier >
-    getIdentifierFromTitle();
+    makeNewIdentifier( const rtl::OUString& rTitle );
 
     typedef vos::ORef< HierarchyContent > HierarchyContentRef;
     typedef std::list< HierarchyContentRef > HierarchyContentRefList;
