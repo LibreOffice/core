@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2002-05-27 13:02:31 $
+ *  last change: $Author: os $ $Date: 2002-05-29 10:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1956,6 +1956,9 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
         }
         delete pSSetItem;
     }
+    else
+        GetView().GetViewFrame()->GetDispatcher()->Execute( SID_CHAR_DLG, FALSE);
+
 }
 
 /*--------------------------------------------------------------------
