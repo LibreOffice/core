@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:54:46 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,10 @@ public:
 
     sal_Bool setAlienAttributes( const com::sun::star::uno::Any& rAttributes );
     void getAlienAttributes( com::sun::star::uno::Any& rAttributes );
+
+    /** Set the name of the page and broadcast a model change.
+    */
+    virtual void SetName (const String& rName);
 
     sd::HeaderFooterSettings& getHeaderFooterSettings();
 
