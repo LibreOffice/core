@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterStyleMap.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-06 12:38:11 $
+ *  last change: $Author: sab $ $Date: 2002-04-23 13:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,14 +110,14 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     MAP( "BackGraphicLocation",     XML_NAMESPACE_STYLE,    XML_POSITION,                   XML_TYPE_BUILDIN_CMP_ONLY | MID_FLAG_SPECIAL_ITEM,      CTF_PM_GRAPHICPOSITION ),
     MAP( "BackGraphicFilter",       XML_NAMESPACE_STYLE,    XML_FILTER_NAME,                XML_TYPE_STRING | MID_FLAG_SPECIAL_ITEM,                CTF_PM_GRAPHICFILTER ),
     MAP( "BackGraphicURL",          XML_NAMESPACE_STYLE,    XML_BACKGROUND_IMAGE,           XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM,                CTF_PM_GRAPHICURL ),
-    MAP( "PrintAnnotations",        XML_NAMESPACE_STYLE,    XML_PRINT,                      XML_PM_TYPE_PRINTANNOTATIONS | MID_FLAG_MULTI_PROPERTY,                         0 ),
-    MAP( "PrintCharts",             XML_NAMESPACE_STYLE,    XML_PRINT,                      XML_PM_TYPE_PRINTCHARTS | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE,   0 ),
-    MAP( "PrintDrawing",            XML_NAMESPACE_STYLE,    XML_PRINT,                      XML_PM_TYPE_PRINTDRAWING | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE,  0 ),
-    MAP( "PrintFormulas",           XML_NAMESPACE_STYLE,    XML_PRINT,                      XML_PM_TYPE_PRINTFORMULAS | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE, 0 ),
-    MAP( "PrintGrid",               XML_NAMESPACE_STYLE,    XML_PRINT,                      XML_PM_TYPE_PRINTGRID | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE,     0 ),
-    MAP( "PrintHeaders",            XML_NAMESPACE_STYLE,    XML_PRINT,                      XML_PM_TYPE_PRINTHEADERS | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE,  0 ),
-    MAP( "PrintObjects",            XML_NAMESPACE_STYLE,    XML_PRINT,                      XML_PM_TYPE_PRINTOBJECTS | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE,  0 ),
-    MAP( "PrintZeroValues",         XML_NAMESPACE_STYLE,    XML_PRINT,                      XML_PM_TYPE_PRINTZEROVALUES | MID_FLAG_MERGE_ATTRIBUTE,                         0 ),
+    MAP( "PrintAnnotations",        XML_NAMESPACE_STYLE,    XML_PRINT,                      XML_PM_TYPE_PRINTANNOTATIONS | MID_FLAG_MULTI_PROPERTY,                         CTF_PM_PRINT_ANNOTATIONS ),
+    MAP( "PrintCharts",             XML_NAMESPACE_STYLE,    XML_PRINT,                      XML_PM_TYPE_PRINTCHARTS | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE,   CTF_PM_PRINT_CHARTS ),
+    MAP( "PrintDrawing",            XML_NAMESPACE_STYLE,    XML_PRINT,                      XML_PM_TYPE_PRINTDRAWING | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE,  CTF_PM_PRINT_DRAWING ),
+    MAP( "PrintFormulas",           XML_NAMESPACE_STYLE,    XML_PRINT,                      XML_PM_TYPE_PRINTFORMULAS | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE, CTF_PM_PRINT_FORMULAS ),
+    MAP( "PrintGrid",               XML_NAMESPACE_STYLE,    XML_PRINT,                      XML_PM_TYPE_PRINTGRID | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE,     CTF_PM_PRINT_GRID ),
+    MAP( "PrintHeaders",            XML_NAMESPACE_STYLE,    XML_PRINT,                      XML_PM_TYPE_PRINTHEADERS | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE,  CTF_PM_PRINT_HEADERS ),
+    MAP( "PrintObjects",            XML_NAMESPACE_STYLE,    XML_PRINT,                      XML_PM_TYPE_PRINTOBJECTS | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE,  CTF_PM_PRINT_OBJECTS ),
+    MAP( "PrintZeroValues",         XML_NAMESPACE_STYLE,    XML_PRINT,                      XML_PM_TYPE_PRINTZEROVALUES | MID_FLAG_MERGE_ATTRIBUTE,                         CTF_PM_PRINT_ZEROVALUES ),
     MAP( "PrintDownFirst",          XML_NAMESPACE_STYLE,    XML_PRINT_PAGE_ORDER,           XML_PM_TYPE_PRINTPAGEORDER,                             0 ),
     MAP( "FirstPageNumber",         XML_NAMESPACE_STYLE,    XML_FIRST_PAGE_NUMBER,          XML_PM_TYPE_FIRSTPAGENUMBER,                            0 ),
     MAP( "PageScale",               XML_NAMESPACE_STYLE,    XML_SCALE_TO,                   XML_TYPE_NUMBER16,                                      CTF_PM_SCALETO ),
