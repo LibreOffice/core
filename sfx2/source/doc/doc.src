@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-11 10:08:55 $
+ *  last change: $Author: kz $ $Date: 2002-09-13 08:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2022,7 +2022,7 @@ String STR_DOCTYPENAME_SD
     Text[ polish ] = "Rysunek";
     Text[ portuguese_brazilian ] = "Drawing";
     Text[ japanese ] = "図形描画";
-    Text[ korean ] = "그림";
+    Text[ korean ] = "그리기";
     Text[ chinese_simplified ] = "绘图";
     Text[ chinese_traditional ] = "繪圖文件";
     Text[ turkish ] = "�izim";
@@ -2404,6 +2404,11 @@ String STR_EXPORTASPDF_TITLE
     Text = "Exportieren als PDF";
     Text [english] = "Export as PDF";
     Text [english_us] = "Export as PDF";
+    Text[ spanish ] = "Exportar como PDF";
+    Text[ swedish ] = "Exportera som PDF";
+    Text[ japanese ] = "PDF としてエクスポート";
+    Text[ korean ] = "PDF로 내보내기";
+    Text[ chinese_simplified ] = "输出成 PDF";
 };
 
 String STR_EXPORTWITHCFGBUTTON
@@ -2411,6 +2416,11 @@ String STR_EXPORTWITHCFGBUTTON
     Text = "Exportieren..." ;
     Text [english] = "Export..." ;
     Text [english_us] = "Export...";
+    Text[ spanish ] = "Exportar...";
+    Text[ swedish ] = "Exportera...";
+    Text[ japanese ] = "エクスポート...";
+    Text[ korean ] = "내보내기...";
+    Text[ chinese_simplified ] = "输出...";
 };
 
 String STR_EXPORTBUTTON
@@ -2418,6 +2428,11 @@ String STR_EXPORTBUTTON
     Text = "Exportieren" ;
     Text [english] = "Export" ;
     Text [english_us] = "Export" ;
+    Text[ spanish ] = "Exportar";
+    Text[ swedish ] = "Exportera";
+    Text[ japanese ] = "エクスポート";
+    Text[ korean ] = "내보내기";
+    Text[ chinese_simplified ] = "输出";
 };
 
 String RID_SVXSTR_SECURITY_ADDPATH
