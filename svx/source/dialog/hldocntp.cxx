@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-20 09:42:34 $
+ *  last change: $Author: sj $ $Date: 2001-05-29 14:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,23 +70,11 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
-#ifndef _UCBHELPER_CONTENTBROKER_HXX
-#include <ucbhelper/contentbroker.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
-#include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
-#include <com/sun/star/ucb/XContentAccess.hpp>
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
 #include <com/sun/star/uno/Exception.hpp>
@@ -108,6 +96,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_DYNAMICMENUOPTIONS_HXX
+#include <svtools/dynamicmenuoptions.hxx>
 #endif
 
 #include "hyperdlg.hrc"
@@ -233,89 +224,50 @@ void SvxHyperlinkNewDocTp::ReadURLFile( const String& rFile, String& rTitle, Str
 void SvxHyperlinkNewDocTp::FillDocumentList ()
 {
     EnterWait();
-    SvtPathOptions aPathOpt;
-    String aStrDirName( aPathOpt.GetNewMenuPath() );
-    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aStrDirName, aStrDirName );
-    INetURLObject aFolderObj( aStrDirName );
-    try
+
+    uno::Sequence< uno::Sequence< beans::PropertyValue > >
+        aDynamicMenuEntries( SvtDynamicMenuOptions().GetMenu( E_NEWMENU ) );
+
+    sal_uInt32 i, nCount = aDynamicMenuEntries.getLength();
+    for ( i = 0; i < nCount; i++ )
     {
-        ::ucb::Content aCnt( aFolderObj.GetMainURL(), uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-        uno::Reference< sdbc::XResultSet > xResultSet;
-        uno::Sequence< OUString > aProps(1);
-        OUString* pProps = aProps.getArray();
-        pProps[0] == OUString::createFromAscii( "Url" );
+        uno::Sequence< beans::PropertyValue >& rDynamicMenuEntry = aDynamicMenuEntries[ i ];
 
-        try
+        rtl::OUString aDocumentUrl, aTitle, aImageId, aTargetName;
+
+           for ( int i = 0; i < rDynamicMenuEntry.getLength(); i++ )
         {
-            xResultSet = aCnt.createCursor( aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
+            if ( rDynamicMenuEntry[ i ].Name == DYNAMICMENU_PROPERTYNAME_URL )
+                rDynamicMenuEntry[ i ].Value >>= aDocumentUrl;
+            else if ( rDynamicMenuEntry[i].Name == DYNAMICMENU_PROPERTYNAME_TITLE )
+                rDynamicMenuEntry[i].Value >>= aTitle;
+            else if ( rDynamicMenuEntry[i].Name == DYNAMICMENU_PROPERTYNAME_IMAGEIDENTIFIER )
+                rDynamicMenuEntry[i].Value >>= aImageId;
+            else if ( rDynamicMenuEntry[i].Name == DYNAMICMENU_PROPERTYNAME_TARGETNAME )
+                rDynamicMenuEntry[i].Value >>= aTargetName;
         }
-        catch ( uno::Exception )
+
+        // Insert into listbox
+        if ( aDocumentUrl.getLength() )
         {
-            DBG_ERRORFILE( "Hyperlink-dialog:'New Document':create cursor failed!" );
-        }
-
-        if ( xResultSet.is() )
-        {
-            uno::Reference< com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
-            try
+            const SfxObjectFactory* pFactory = SfxObjectFactory::GetFactory ( aDocumentUrl );
+            if ( pFactory )
             {
-                while ( xResultSet->next() )
-                {
-                    String aFileURL = xContentAccess->queryContentIdentifierString();
+                // insert doc-name and image
 
-                    String aTitle;
-                    String aURL;
-                    BOOL bShowAsFolder;
-                    sal_Int32 nIconId;
+                String aTitleName( aTitle );
+                aTitleName.Erase( aTitleName.Search( (sal_Unicode)'~' ), 1 );
 
-                    ::utl::LocalFileHelper::ConvertURLToPhysicalName( aFileURL, aFileURL );
-                    ReadURLFile( aFileURL, aTitle, aURL, nIconId, &bShowAsFolder);//, nImageId );
+                sal_Int16 nPos = maLbDocTypes.InsertEntry ( aTitleName );
 
-                    if( aURL.Len() && aTitle.Len() && !aURL.EqualsAscii("private:separator") &&
-                        aURL.SearchAscii( "slot" ) == STRING_NOTFOUND && aURL.SearchAscii( "?" ) == STRING_NOTFOUND )
-                    {
-                        if ( aTitle.GetChar(0) == '_' && aTitle.GetChar(3) == '_' )
-                            aTitle = aTitle.Erase( 0, 4 );
-
-                        sal_Char const sTilde[] = "~";
-                        aTitle.Erase ( aTitle.SearchAscii( sTilde ), 1 );
-
-                        aURL = aPathOpt.SubstituteVariable( aURL );
-
-                        if( !bShowAsFolder )
-                        {
-                            USHORT nTitleLen = aTitle.Len();
-                            if( nTitleLen > 4  && aTitle.GetChar(nTitleLen-4) == '.' && aURL.EqualsAscii( "file:",0,5 ) )
-                                aTitle.Erase( nTitleLen-4 );
-
-                            // Insert into listbox
-                            const SfxObjectFactory* pFactory = SfxObjectFactory::GetFactory ( aURL );
-                            if ( pFactory )
-                            {
-                                // insert doc-name and image
-                                int nPos = maLbDocTypes.InsertEntry ( aTitle );//, aImage );
-
-                                // insert private-url and default-extension as user-data
-                                String aStrDefExt ( pFactory->GetFilter (0)->GetDefaultExtension () );
-                                DocumentTypeData *pTypeData = new DocumentTypeData ( aURL,
-                                                                  aStrDefExt.Copy( 2, aStrDefExt.Len() ) );
-                                maLbDocTypes.SetEntryData ( nPos, pTypeData );
-                            }
-                        }
-                    }
-                }
-            }
-            catch ( uno::Exception )
-            {
-                DBG_ERRORFILE( "Hyperlink-dialog:'New Document':Retrieve fileinfos failed!" );
+                // insert private-url and default-extension as user-data
+                String aStrDefExt( pFactory->GetFilter ( 0 )->GetDefaultExtension () );
+                DocumentTypeData *pTypeData = new DocumentTypeData ( aDocumentUrl,
+                                                  aStrDefExt.Copy( 2, aStrDefExt.Len() ) );
+                maLbDocTypes.SetEntryData ( nPos, pTypeData );
             }
         }
     }
-    catch( uno::Exception )
-    {
-        DBG_ERRORFILE( "Hyperlink-dialog:'New Document':Fill listfield failed!" );
-    }
-
     maLbDocTypes.SelectEntryPos ( 0 );
 
     LeaveWait();
