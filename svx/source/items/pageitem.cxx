@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pageitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-22 12:03:50 $
+ *  last change: $Author: nn $ $Date: 2002-12-09 13:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,7 @@ sal_Bool SvxPageItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 sal_Int32 nValue;
                 if(!(rVal >>= nValue))
                     return sal_False;
-                eLayout = (style::PageStyleLayout)eLayout;
+                eLayout = (style::PageStyleLayout)nValue;
             }
             eUse &= 0xfff0;
             switch( eLayout )
