@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-26 09:31:53 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 09:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ private:
 
 struct SwTOXCustom : public SwTOXSortTabBase
 {
-    SwTOXCustom( const String& rKey, USHORT nLevel,
+    SwTOXCustom( const String& rKey, const String& rReading, USHORT nLevel,
                  const SwTOXInternational& rIntl,
                  const ::com::sun::star::lang::Locale& rLocale );
 
@@ -246,6 +246,7 @@ private:
     virtual void _GetText( String&, String& );
 
     String  aKey;
+    String  sReading;
     USHORT  nLev;
 };
 
