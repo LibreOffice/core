@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaImportComponent.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 10:31:04 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,8 +136,10 @@ void SvXMLMetaDocumentContext::EndElement()
 
 //===========================================================================
 
-XMLMetaImportComponent::XMLMetaImportComponent() throw() :
-    SvXMLImport()
+// #110680#
+XMLMetaImportComponent::XMLMetaImportComponent(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory) throw()
+:   SvXMLImport(xServiceFactory)
 {
 }
 
@@ -189,7 +191,9 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaImportComponent_createInstance
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new XMLMetaImportComponent;
+    // #110680#
+    // return (cppu::OWeakObject*)new XMLMetaImportComponent;
+    return (cppu::OWeakObject*)new XMLMetaImportComponent(rSMgr);
 }
 
 
