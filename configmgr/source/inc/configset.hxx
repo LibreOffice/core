@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:15:30 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 
 #include "apitypes.hxx"
 #include "configexcept.hxx"
-#include "noderef.hxx"
 #include "template.hxx"
+#include "noderef.hxx"
 
 #include <vos/ref.hxx>
 #include <memory>
@@ -82,6 +82,8 @@ namespace configmgr
     {
 //-----------------------------------------------------------------------------
 
+        class ElementRef;
+        class ElementTree;
         //---------------------------------------------------------------------
         class Name;
         class AbsolutePath;
@@ -92,8 +94,6 @@ namespace configmgr
         typedef com::sun::star::uno::Reference<com::sun::star::script::XTypeConverter>  UnoTypeConverter;
         //---------------------------------------------------------------------
 
-        class NodeRef;
-        class Tree;
         class ElementTreeImpl;
         typedef vos::ORef<ElementTreeImpl> ElementTreeHolder;
 
@@ -101,6 +101,24 @@ namespace configmgr
         class Template;
         typedef vos::ORef<Template> TemplateHolder;
 //-----------------------------------------------------------------------------
+        /// identifies a <type>Node</type> that is a element of a Container ("set").
+        class ElementRef
+        {
+            ElementTreeHolder m_aTreeHolder;
+        public:
+            explicit ElementRef(ElementTreeImpl* pTree);
+            ElementRef(ElementRef const& aOther);
+            ElementRef& operator=(ElementRef const& aOther);
+            ~ElementRef();
+
+            bool isValid() const;
+
+            Name getName() const;
+
+            ElementTree getElementTree() const;
+        };
+//-----------------------------------------------------------------------------
+
         /// provides information about a <type>Node</type> that is a element of a Container ("set").
         class ElementTree
         {
@@ -184,12 +202,12 @@ namespace configmgr
 
             NodeChange validateInsertElement (Name const& aName, ElementTree const& aNewElement);
 
-            NodeChange validateReplaceElement(Tree const& aElementTree, NodeRef const& aElementNode, ElementTree const& aNewElement);
+            NodeChange validateReplaceElement(ElementRef const& aElement, ElementTree const& aNewElement);
 
-            NodeChange validateRemoveElement (Tree const& aElementTree, NodeRef const& aElementNode);
+            NodeChange validateRemoveElement (ElementRef const& aElement);
         private:
             void        implValidateSet();
-            Name        implValidateElement(Tree const& aTree, NodeRef const& aNode);
+            Name        implValidateElement(ElementRef const& aElement);
             void        implValidateTree(ElementTree const& aElementTree);
         };
 //-----------------------------------------------------------------------------
@@ -206,17 +224,19 @@ namespace configmgr
 
             NodeChange validateInsertElement (Name const& aName, UnoAny const& aNewValue);
 
-            NodeChange validateReplaceElement(Tree const& aElementTree, NodeRef const& aElementNode, UnoAny const& aNewValue);
+            NodeChange validateReplaceElement(ElementRef const& aElement, UnoAny const& aNewValue);
 
-            NodeChange validateRemoveElement (Tree const& aElementTree, NodeRef const& aElementNode);
+            NodeChange validateRemoveElement (ElementRef const& aElement);
         private:
+            typedef Tree ElementNodeRef;
             void implValidateSet();
-            Name implValidateElement(Tree const& aTree, NodeRef const& aNode);
-            UnoAny implValidateValue(NodeRef const& aElementNode, UnoAny const& aValue);
+            Name implValidateElement(ElementRef const& aElement);
+            UnoAny implValidateValue(ElementNodeRef const& aElementTree, UnoAny const& aValue);
             UnoAny implValidateValue(UnoAny const& aValue);
 
-            ElementTreeHolder makeValueElement(Name const& aName, NodeRef const& aElementNode, UnoAny const& aValue);
+            ElementTreeHolder makeValueElement(Name const& aName, ElementNodeRef const& aElementTree, UnoAny const& aValue);
             ElementTreeHolder makeValueElement(Name const& aName, UnoAny const& aValue);
+            static ElementNodeRef extractElementNode(ElementRef const& aElement);
         };
 //-----------------------------------------------------------------------------
     }

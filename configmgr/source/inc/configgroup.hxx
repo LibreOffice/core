@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configgroup.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 17:32:36 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,17 +95,20 @@ namespace configmgr
         public:
             GroupUpdater(Tree const& aParentTree, NodeRef const& aGroupNode, UnoTypeConverter const& xConverter);
 
-            NodeChange validateSetDefault(NodeRef const& aValueNode);
+            NodeChange validateSetDefault(AnyNodeRef const& aNode);
 
-            NodeChange validateSetValue(NodeRef const& aValueNode, UnoAny const& newValue );
+            NodeChange validateSetDefault(ValueRef const& aValueNode);
 
-            NodeChange validateSetDeepValue(Tree const& aNestedTree, NodeRef const& aNestedNode,
+            NodeChange validateSetValue(ValueRef const& aValueNode, UnoAny const& newValue );
+
+            NodeChange validateSetDeepValue(Tree const& aNestedTree, ValueRef const& aNestedValueNode,
                                             RelativePath const& aRelPath,UnoAny const& newValue);
 
         private:
-            void implValidateTree(Tree const& aTree, NodeRef const& aNode) const;
-            void implValidateNode(Tree const& aTree, NodeRef const& aNode) const;
-            UnoAny implValidateValue(NodeRef const& aNode, UnoAny const& aValue) const;
+            void implValidateTree(Tree const& aTree) const;
+            void implValidateGroup(Tree const& aTree, NodeRef const& aNode) const;
+            void implValidateNode(Tree const& aTree, ValueRef const& aNode) const;
+            UnoAny implValidateValue(Tree const& aTree, ValueRef const& aNode, UnoAny const& aValue) const;
         };
 //-----------------------------------------------------------------------------
         bool convertCompatibleValue(UnoTypeConverter const& xConverter, uno::Any& rConverted,
