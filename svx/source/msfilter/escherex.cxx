@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:10:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1801,7 +1801,7 @@ sal_Bool EscherPropertyContainer::CreateConnectorProperties(
                     {
                         aEndPoint = *(::com::sun::star::awt::Point*)aAny.getValue();
 
-                        rShapeFlags = SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT;
+                        rShapeFlags = SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT | SHAPEFLAG_CONNECTOR;
                         rGeoRect = ::com::sun::star::awt::Rectangle( aStartPoint.X, aStartPoint.Y,
                                                             ( aEndPoint.X - aStartPoint.X ) + 1, ( aEndPoint.Y - aStartPoint.Y ) + 1 );
                         if ( rGeoRect.Height < 0 )          // justify
@@ -1869,7 +1869,6 @@ sal_Bool EscherPropertyContainer::CreateConnectorProperties(
                             case ::com::sun::star::drawing::ConnectorType_LINE :
                             case ::com::sun::star::drawing::ConnectorType_LINES :   // Connector 2->5
                             {
-                                rShapeFlags |= SHAPEFLAG_CONNECTOR;
                                 rShapeType = ESCHER_ShpInst_StraightConnector1;
                                 AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleStraight );
                             }
@@ -3953,7 +3952,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( sal_Bool bFirst )
 
     String aString( (::rtl::OUString)aXShape->getShapeType() );
     ByteString aType( aString, RTL_TEXTENCODING_UTF8 );
-    aType.Erase( 0, 19 );   // "smart.com.sun.star." entfernen
+    aType.Erase( 0, 13 );   // removing "com.sun.star."
     sal_uInt16 nPos = aType.Search( "Shape" );
     aType.Erase( nPos, 5 );
 
