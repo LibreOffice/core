@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:14:15 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 09:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
