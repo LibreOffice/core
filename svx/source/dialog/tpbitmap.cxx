@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpbitmap.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:55:09 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,13 +278,13 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet& rSet )
             aURL.Append( pBitmapList->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-            if( aURL.getBase().Len() > 18 )
+            if( aURL.getBase().getLength() > 18 )
             {
-                aString += aURL.getBase().Copy( 0, 15 );
+                aString += String(aURL.getBase()).Copy( 0, 15 );
                 aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
             }
             else
-                aString += aURL.getBase();
+                aString += String(aURL.getBase());
 
             if( *pPageType == PT_BITMAP && *pPos != LISTBOX_ENTRY_NOTFOUND )
             {
@@ -812,7 +812,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
             //CHINA001 SvxNameDialog*  pDlg = new SvxNameDialog( DLGWIN, aURL.GetName().GetToken( 0, '.' ), aDesc );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aURL.GetName().GetToken( 0, '.' ), aDesc, ResId(RID_SVXDLG_NAME) );
+            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, String(aURL.GetName()).GetToken( 0, '.' ), aDesc, ResId(RID_SVXDLG_NAME) );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             nError = RID_SVXSTR_WARN_NAME_DUPLICATE;
 
@@ -1054,13 +1054,13 @@ IMPL_LINK( SvxBitmapTabPage, ClickLoadHdl_Impl, void *, p )
                     String aString( ResId( RID_SVXSTR_TABLE, pMgr ) );
                     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
-                    if ( aURL.getBase().Len() > 18 )
+                    if ( aURL.getBase().getLength() > 18 )
                     {
-                        aString += aURL.getBase().Copy( 0, 15 );
+                        aString += String(aURL.getBase()).Copy( 0, 15 );
                         aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
                     }
                     else
-                        aString += aURL.getBase();
+                        aString += String(aURL.getBase());
 
                     // Flag fuer gewechselt setzen
                     *pnBitmapListState |= CT_CHANGED;
@@ -1109,7 +1109,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickSaveHdl_Impl, void *, p )
     {
         aFile.Append( pBitmapList->GetName() );
 
-        if( !aFile.getExtension().Len() )
+        if( !aFile.getExtension().getLength() )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sob" ) ) );
     }
 
@@ -1132,13 +1132,13 @@ IMPL_LINK( SvxBitmapTabPage, ClickSaveHdl_Impl, void *, p )
             String aString( SVX_RES( RID_SVXSTR_TABLE ) );
             aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
-            if ( aURL.getBase().Len() > 18 )
+            if ( aURL.getBase().getLength() > 18 )
             {
-                aString += aURL.getBase().Copy( 0, 15 );
+                aString += String(aURL.getBase()).Copy( 0, 15 );
                 aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
             }
             else
-                aString += aURL.getBase();
+                aString += String(aURL.getBase());
 
             // Flag fuer gespeichert setzen
             *pnBitmapListState |= CT_SAVED;
