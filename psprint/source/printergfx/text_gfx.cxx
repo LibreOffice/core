@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.7 $
+  *  $Revision: 1.8 $
   *
-  *  last change: $Author: pl $ $Date: 2001-06-08 16:32:30 $
+  *  last change: $Author: pl $ $Date: 2001-06-13 13:09:46 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -429,45 +429,46 @@ PrinterGfx::drawText(
     switch (eType)
     {
         case fonttype::Type1:
-        {
             PSUploadPS1Font (mnFontID);
-        }
-        /* no break */
-
         case fonttype::TrueType:
-            if( mrFontMgr.isFontDownloadingAllowed( mnFontID ) )
+            // not nice but necessary since both fonttype::Type1 and
+            // fonttype::TrueType rely on not breaking here
+            if( eType == fonttype::TrueType )
             {
-                // search for a glyph set matching the set font
-                std::list< GlyphSet >::iterator aIter;
-                for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); aIter++)
-                    if (   ((*aIter).GetFontID()  == mnFontID)
-                           && ((*aIter).IsVertical() == mbTextVertical))
-                    {
-                        (*aIter).DrawText (*this, rPoint, pStr, nLen, pDeltaArray);
-                        break;
-                    }
-
-                // not found ? create a new one
-                if (aIter == maPS3Font.end())
+                if( mrFontMgr.isFontDownloadingAllowed( mnFontID ) )
                 {
-                    maPS3Font.push_back (GlyphSet(mnFontID, mbTextVertical));
-                    maPS3Font.back().DrawText (*this, rPoint, pStr, nLen, pDeltaArray);
+                    // search for a glyph set matching the set font
+                    std::list< GlyphSet >::iterator aIter;
+                    for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); aIter++)
+                        if (   ((*aIter).GetFontID()  == mnFontID)
+                               && ((*aIter).IsVertical() == mbTextVertical))
+                        {
+                            (*aIter).DrawText (*this, rPoint, pStr, nLen, pDeltaArray);
+                            break;
+                        }
+
+                    // not found ? create a new one
+                    if (aIter == maPS3Font.end())
+                    {
+                        maPS3Font.push_back (GlyphSet(mnFontID, mbTextVertical));
+                        maPS3Font.back().DrawText (*this, rPoint, pStr, nLen, pDeltaArray);
+                    }
+                    break;
                 }
-                break;
-            }
-            else
-            {
-                // treat it like a builtin font in case a user has that font
-                // also in the printer. This is not so unlikely as it may seem;
-                // no print embedding licensed fonts are often used (or so
-                // they say) in companies:
-                // they are installed on displays and printers, but get not
-                // embedded in print files or documents because they are not
-                // licensed for use outside the company.
-                rtl::OString aMessage( "The font " );
-                aMessage += rtl::OUStringToOString( mrFontMgr.getPSName(mnFontID), RTL_TEXTENCODING_ASCII_US );
-                aMessage += " could not be downloaded\nbecause its license does not allow for that";
-                PSComment( aMessage.getStr() );
+                else
+                {
+                    // treat it like a builtin font in case a user has that font
+                    // also in the printer. This is not so unlikely as it may seem;
+                    // no print embedding licensed fonts are often used (or so
+                    // they say) in companies:
+                    // they are installed on displays and printers, but get not
+                    // embedded in print files or documents because they are not
+                    // licensed for use outside the company.
+                    rtl::OString aMessage( "The font " );
+                    aMessage += rtl::OUStringToOString( mrFontMgr.getPSName(mnFontID), RTL_TEXTENCODING_ASCII_US );
+                    aMessage += " could not be downloaded\nbecause its license does not allow for that";
+                    PSComment( aMessage.getStr() );
+                }
             }
         case fonttype::Builtin:
         {
