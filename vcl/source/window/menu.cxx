@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 12:48:19 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,7 +467,6 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
     BOOL            IsTopmostApplicationMenu();
-    BOOL            registerAccessibleParent();
 };
 
 // To get the transparent mouse-over look, the closer is actually a toolbox
@@ -1817,31 +1816,31 @@ void Menu::SelectItem( USHORT nItemId )
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > Menu::GetAccessible()
 {
-    if ( !mxAccessible.is() )
+    // Since PopupMenu are sometimes shared by different instances of MenuBar, the mxAccessible member gets
+    // overwritten and may contain a disposed object when the initial menubar gets set again. So use the
+    // mxAccessible member only for sub menus.
+    if ( pStartedFrom )
     {
-        if ( pStartedFrom )
+        for ( sal_uInt16 i = 0, nCount = pStartedFrom->GetItemCount(); i < nCount; ++i )
         {
-            for ( sal_uInt16 i = 0, nCount = pStartedFrom->GetItemCount(); i < nCount; ++i )
+            sal_uInt16 nItemId = pStartedFrom->GetItemId( i );
+            if ( static_cast< Menu* >( pStartedFrom->GetPopupMenu( nItemId ) ) == this )
             {
-                sal_uInt16 nItemId = pStartedFrom->GetItemId( i );
-                if ( static_cast< Menu* >( pStartedFrom->GetPopupMenu( nItemId ) ) == this )
+                ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xParent = pStartedFrom->GetAccessible();
+                if ( xParent.is() )
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xParent = pStartedFrom->GetAccessible();
-                    if ( xParent.is() )
-                    {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > xParentContext( xParent->getAccessibleContext() );
-                        if ( xParentContext.is() )
-                            mxAccessible = xParentContext->getAccessibleChild( i );
-                    }
+                    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > xParentContext( xParent->getAccessibleContext() );
+                    if ( xParentContext.is() )
+                        return xParentContext->getAccessibleChild( i );
                 }
             }
         }
-        else
-        {
-            UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
-            if ( pWrapper )
-                mxAccessible = pWrapper->CreateAccessible( this, bIsMenuBar );
-        }
+    }
+    else if ( !mxAccessible.is() )
+    {
+        UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
+        if ( pWrapper )
+            mxAccessible = pWrapper->CreateAccessible( this, bIsMenuBar );
     }
 
     return mxAccessible;
@@ -2811,8 +2810,6 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
         aSz.Height() = ImplCalcHeight( nEntries );
     }
 
-    BOOL bNativeFrameRegistered = FALSE;  // accessibility registration
-
     pWin->SetFocusId( nFocusId );
     pWin->SetOutputSizePixel( aSz );
     // #102158# menues must never grab the focus, otherwise
@@ -2824,8 +2821,6 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     if ( GetItemCount() )
     {
         pWin->StartPopupMode( aRect, nPopupModeFlags | FLOATWIN_POPUPMODE_GRABFOCUS );
-        bNativeFrameRegistered = pWin->registerAccessibleParent();
-        // notify parent, needed for accessibility
         if( pSFrom )
         {
             USHORT aPos;
@@ -4066,26 +4061,6 @@ BOOL MenuFloatingWindow::IsTopmostApplicationMenu()
     return (!pMenu->pStartedFrom) ? TRUE : FALSE;
 }
 
-BOOL MenuFloatingWindow::registerAccessibleParent()
-{
-    if( !IsTopmostApplicationMenu() )
-        return FALSE;
-    {
-        // register frame and make sure our top-window listeners are notified,
-        // otherwise AT tools cannot register to the frame (they rely on an windowOpened
-        // after registration which is triggered by VCLEVENT_WINDOW_SHOW)
-        // we must register after the menu window is visible (StartPopupMode), otherwise it cannot
-        // answer important accessibility request
-        if( mpBorderWindow )
-        {
-            ImplCallEventListeners( VCLEVENT_WINDOW_SHOW );
-            return TRUE;
-        }
-        else
-            return FALSE;
-    }
-}
-
 MenuBarWindow::MenuBarWindow( Window* pParent ) :
     Window( pParent, 0 ),
     aCloser( this ),
@@ -4129,8 +4104,6 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
 
 MenuBarWindow::~MenuBarWindow()
 {
-    // free the reference to the accessible component
-    SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >() );
 }
 
 void MenuBarWindow::SetMenu( MenuBar* pMen )
