@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: rt $ $Date: 2003-11-24 17:04:37 $
+#   last change: $Author: rt $ $Date: 2004-01-05 11:34:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,37 @@ LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=30
 .ENDIF
 RSCLOCINC+=-I$(PRJ)$/source$/svdraw
 
+SHL4TARGET= cui$(UPD)$(DLLPOSTFIX)
+SHL4VERSIONMAP= cui.map
+SHL4IMPLIB=icui
+DEF4NAME= $(SHL4TARGET)
+SHL4DEF=$(MISC)$/$(SHL4TARGET).def
+SHL4LIBS=   $(SLB)$/cui.lib
+SHL4OBJS= \
+        $(SLO)$/cuiexp.obj     \
+        $(SLO)$/dlgfact.obj
+
+SHL4STDLIBS = \
+            $(SVXLIB) \
+            $(SFX2LIB) \
+            $(GOODIESLIB) \
+            $(SO2LIB) \
+            $(SVTOOLLIB) \
+            $(TKLIB) \
+            $(VCLLIB) \
+            $(SVLLIB) \
+            $(SOTLIB) \
+            $(UNOTOOLSLIB) \
+            $(TOOLSLIB) \
+            $(COMPHELPERLIB) \
+            $(UCBHELPERLIB)	\
+            $(CPPUHELPERLIB)	\
+            $(CPPULIB) \
+            $(VOSLIB) \
+            $(SALLIB) \
+            $(ICUUCLIB)
+
+
 # --- Svx - DLL ----------
 
 HELPIDFILES=    ..$/inc$/helpid.hrc
@@ -139,7 +170,7 @@ SHL2IMPLIB= dl
 SVXLOKAL+=	$(LB)$/dl.lib
 SHL2BASE  = 0x1db00000
 SHL2STDLIBS= \
-            $(LB)$/svx.lib \
+            $(SVXLIB) \
             $(SALLIB) \
             $(VOSLIB) \
             $(TOOLSLIB) \
@@ -214,23 +245,6 @@ LIB1FILES       = \
             $(LIBPRE) $(SLB)$/gal.lib		\
             $(LIBPRE) $(SLB)$/accessibility.lib
 
-
-.IF "$(SVXLIGHT)" != ""
-LIB3TARGET= $(LB)$/svxl.lib
-LIB3ARCHIV= $(LB)$/libsvxl.a
-LIB3FILES=  \
-            $(LB)$/sxl_editeng.lib \
-            $(LB)$/sxl_engine3d.lib \
-            $(LB)$/sxl_form.lib \
-            $(LB)$/sxl_items.lib \
-            $(LB)$/sxl_outliner.lib \
-            $(LB)$/sxl_svdraw.lib \
-            $(LB)$/sxl_xout.lib \
-            $(LB)$/sxl_options.lib \
-            $(LB)$/sxl_xml.lib \
-            $(LB)$/sxl_unoedit.lib \
-            $(LB)$/sxl_unodraw.lib
-.ENDIF
 
 .IF "$(BIG_SVX)"==""
 LIB2TARGET      =$(SLB)$/dl.lib
