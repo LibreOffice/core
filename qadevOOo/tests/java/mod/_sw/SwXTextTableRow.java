@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextTableRow.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:54:33 $
+ *  last change:$Date: 2004-01-05 20:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ public class SwXTextTableRow extends TestCase {
 
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
         log.println( "    disposing xTextDoc " );
-        xTextDoc.dispose();
+        util.DesktopTools.closeDoc(xTextDoc);
     }
 
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
