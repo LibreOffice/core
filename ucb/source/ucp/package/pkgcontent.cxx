@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-04 10:51:25 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 10:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,8 @@ ContentProperties::ContentProperties( const OUString& rContentType )
 #if SUPD>614
   nSize( 0 ),
   bCompressed( sal_True ),
-  bEncrypted( sal_False )
+  bEncrypted( sal_False ),
+  bHasEncryptedEntries( sal_False )
 #else
   nSize( 0 )
 #endif
@@ -833,6 +834,15 @@ Reference< XRow > Content::getPropertyValues(
                 else
                     xRow->appendVoid( rProp );
             }
+            else if ( rProp.Name.compareToAscii( "HasEncryptedEntries" ) == 0 )
+            {
+                // Property only available for root folder.
+                PackageUri aURI( rContentId );
+                if ( aURI.getPath().compareToAscii( "/" ) == 0 )
+                    xRow->appendBoolean( rProp, rData.bHasEncryptedEntries );
+                else
+                    xRow->appendVoid( rProp );
+            }
 #else
             else if ( rProp.Name.compareToAscii( "Size" ) == 0 )
             {
@@ -929,6 +939,18 @@ Reference< XRow > Content::getPropertyValues(
                           getCppuBooleanType(),
                           PropertyAttribute::BOUND ),
                 rData.bEncrypted );
+        }
+        // Properties only available for root folder.
+        PackageUri aURI( rContentId );
+        if ( aURI.getPath().compareToAscii( "/" ) == 0 )
+        {
+            xRow->appendBoolean(
+                Property( OUString::createFromAscii( "HasEncryptedEntries" ),
+                          -1,
+                          getCppuBooleanType(),
+                          PropertyAttribute::BOUND
+                            | PropertyAttribute::READONLY ),
+                rData.bHasEncryptedEntries );
         }
 #else
         xRow->appendLong   (
@@ -1086,6 +1108,10 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
                     }
                 }
             }
+        }
+        else if ( rValue.Name.compareToAscii( "HasEncryptedEntries" ) == 0 )
+        {
+            // Read-only property!
         }
         else if ( rValue.Name.compareToAscii( "EncryptionKey" ) == 0 )
         {
@@ -1883,6 +1909,51 @@ sal_Bool Content::loadData( ContentProvider* pProvider,
     rxPackage = pProvider->createPackage( rURI.getPackage() );
     if ( !rxPackage.is() )
         return sal_False;
+
+#if SUPD>614
+    if ( rURI.getPath().compareToAscii( "/" ) == 0 )
+    {
+        // Properties available only from package
+        Reference< XPropertySet > xPackagePropSet( rxPackage, UNO_QUERY );
+
+        OSL_ENSURE( xPackagePropSet.is(),
+                    "Content::loadData - "
+                    "Got no XPropertySet interface from package!" );
+
+        if ( xPackagePropSet.is() )
+        {
+            // HasEncryptedEntries ( only avalibale at root folder )
+            try
+            {
+                Any aHasEncryptedEntries
+                    = xPackagePropSet->getPropertyValue(
+                        OUString::createFromAscii( "HasEncryptedEntries" ) );
+                if ( !( aHasEncryptedEntries >>= rProps.bHasEncryptedEntries ) )
+                {
+                    VOS_ENSURE( sal_False,
+                                "Content::loadData - "
+                                "Got no HasEncryptedEntries value!" );
+                    return sal_False;
+                }
+            }
+            catch ( UnknownPropertyException & )
+            {
+                VOS_ENSURE( sal_False,
+                            "Content::loadData - "
+                            "Got no HasEncryptedEntries value!" );
+                return sal_False;
+            }
+            catch ( WrappedTargetException & )
+            {
+                VOS_ENSURE( sal_False,
+                            "Content::loadData - "
+                            "Got no HasEncryptedEntries value!" );
+                return sal_False;
+            }
+
+        }
+     }
+#endif
 
     if ( !rxPackage->hasByHierarchicalName( rURI.getPath() ) )
         return sal_False;

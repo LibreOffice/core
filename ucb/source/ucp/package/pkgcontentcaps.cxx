@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontentcaps.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-27 14:55:16 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 10:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #if SUPD>614
     Compressed                    x
     Encrypted                     x
+    HasEncryptedEntries   x (root folder only)
 #endif
 
     getCommandInfo        x       x
@@ -144,55 +145,123 @@ Sequence< Property > Content::getProperties(
 
     if ( isFolder() )
     {
-        //=================================================================
-        //
-        // Folder: Supported properties
-        //
-        //=================================================================
-
-        static Property aFolderPropertyInfoTable[] =
+        if ( m_aUri.getPath().compareToAscii( "/" ) == 0 )
         {
-            ///////////////////////////////////////////////////////////////
-            // Required properties
-            ///////////////////////////////////////////////////////////////
-            Property(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
-                -1,
-                getCppuType( static_cast< const OUString * >( 0 ) ),
-                PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            ),
-            Property(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
-                -1,
-                getCppuBooleanType(),
-                PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            ),
-            Property(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
-                -1,
-                getCppuBooleanType(),
-                PropertyAttribute::BOUND | PropertyAttribute::READONLY
-            ),
-            Property(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
-                -1,
-                getCppuType( static_cast< const OUString * >( 0 ) ),
-                PropertyAttribute::BOUND
-            ),
-            ///////////////////////////////////////////////////////////////
-            // Optional standard properties
-            ///////////////////////////////////////////////////////////////
-            Property(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
-                -1,
-                getCppuType( static_cast< const OUString * >( 0 ) ),
-                PropertyAttribute::BOUND
-            )
-            ///////////////////////////////////////////////////////////////
-            // New properties
-            ///////////////////////////////////////////////////////////////
-        };
-        return Sequence< Property >( aFolderPropertyInfoTable, 5 );
+            //=================================================================
+            //
+            // Root Folder: Supported properties
+            //
+            //=================================================================
+
+            static Property aRootFolderPropertyInfoTable[] =
+            {
+                ///////////////////////////////////////////////////////////////
+                // Required properties
+                ///////////////////////////////////////////////////////////////
+                Property(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
+                    -1,
+                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    PropertyAttribute::BOUND | PropertyAttribute::READONLY
+                ),
+                Property(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
+                    -1,
+                    getCppuBooleanType(),
+                    PropertyAttribute::BOUND | PropertyAttribute::READONLY
+                ),
+                Property(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
+                    -1,
+                    getCppuBooleanType(),
+                    PropertyAttribute::BOUND | PropertyAttribute::READONLY
+                ),
+                Property(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+                    -1,
+                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    PropertyAttribute::BOUND
+                ),
+                ///////////////////////////////////////////////////////////////
+                // Optional standard properties
+                ///////////////////////////////////////////////////////////////
+                Property(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
+                    -1,
+                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    PropertyAttribute::BOUND
+#if SUPD>614
+                ),
+                ///////////////////////////////////////////////////////////////
+                // New properties
+                ///////////////////////////////////////////////////////////////
+                Property(
+                    OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "HasEncryptedEntries" ) ),
+                    -1,
+                    getCppuBooleanType(),
+                    PropertyAttribute::BOUND | PropertyAttribute::READONLY
+#endif
+                )
+            };
+#if SUPD>614
+            return Sequence< Property >( aRootFolderPropertyInfoTable, 6 );
+#else
+            return Sequence< Property >( aRootFolderPropertyInfoTable, 5 );
+#endif
+        }
+        else
+        {
+            //=================================================================
+            //
+            // Folder: Supported properties
+            //
+            //=================================================================
+
+            static Property aFolderPropertyInfoTable[] =
+            {
+                ///////////////////////////////////////////////////////////////
+                // Required properties
+                ///////////////////////////////////////////////////////////////
+                Property(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
+                    -1,
+                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    PropertyAttribute::BOUND | PropertyAttribute::READONLY
+                ),
+                Property(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
+                    -1,
+                    getCppuBooleanType(),
+                    PropertyAttribute::BOUND | PropertyAttribute::READONLY
+                ),
+                Property(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
+                    -1,
+                    getCppuBooleanType(),
+                    PropertyAttribute::BOUND | PropertyAttribute::READONLY
+                ),
+                Property(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+                    -1,
+                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    PropertyAttribute::BOUND
+                ),
+                ///////////////////////////////////////////////////////////////
+                // Optional standard properties
+                ///////////////////////////////////////////////////////////////
+                Property(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
+                    -1,
+                    getCppuType( static_cast< const OUString * >( 0 ) ),
+                    PropertyAttribute::BOUND
+                )
+                ///////////////////////////////////////////////////////////////
+                // New properties
+                ///////////////////////////////////////////////////////////////
+            };
+            return Sequence< Property >( aFolderPropertyInfoTable, 5 );
+        }
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-27 13:19:44 $
+ *  last change: $Author: kso $ $Date: 2001-05-16 10:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,21 +123,23 @@ namespace package_ucp
 
 struct ContentProperties
 {
-    ::rtl::OUString  aTitle;       // Title
-    ::rtl::OUString  aContentType; // ContentType
-    sal_Bool         bIsDocument;  // IsDocument
-    sal_Bool         bIsFolder;    // IsFolder
-    ::rtl::OUString  aMediaType;   // MediaType
-    sal_Int64        nSize;        // Size
+    ::rtl::OUString  aTitle;                // Title
+    ::rtl::OUString  aContentType;          // ContentType
+    sal_Bool         bIsDocument;           // IsDocument
+    sal_Bool         bIsFolder;             // IsFolder
+    ::rtl::OUString  aMediaType;            // MediaType
+    sal_Int64        nSize;                 // Size
 #if SUPD>614
-    sal_Bool         bCompressed;  // Compressed
-    sal_Bool         bEncrypted;   // Encrypted
+    sal_Bool         bCompressed;           // Compressed
+    sal_Bool         bEncrypted;            // Encrypted
+    sal_Bool         bHasEncryptedEntries;  // HasEncryptedEntries
 #endif
 
 #if SUPD>614
     ContentProperties()
     : bIsDocument( sal_True ), bIsFolder( sal_False ), nSize( 0 ),
-      bCompressed( sal_True ), bEncrypted( sal_False ) {}
+      bCompressed( sal_True ), bEncrypted( sal_False ),
+      bHasEncryptedEntries( sal_False ) {}
 #else
     ContentProperties()
     : bIsDocument( sal_True ), bIsFolder( sal_False ), nSize( 0 ) {}
