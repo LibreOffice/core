@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: pb $ $Date: 2002-11-21 08:17:27 $
+ *  last change: $Author: pb $ $Date: 2002-11-26 10:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,6 +393,28 @@ String SvTreeListBox::GetEntryText(SvLBoxEntry* pEntry) const
     SvLBoxString* pItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
     DBG_ASSERT( pEntry, "SvTreeListBox::GetEntryText(): item not found" )
     return pItem->GetText();
+}
+
+String SvTreeListBox::SearchEntryText( SvLBoxEntry* pEntry ) const
+{
+    DBG_CHKTHIS(SvTreeListBox,0);
+    DBG_ASSERT( pEntry, "SvTreeListBox::SearchEntryText(): no entry" )
+    String sRet;
+    USHORT nCount = pEntry->ItemCount();
+    USHORT nCur = 0;
+    SvLBoxItem* pItem;
+    while( nCur < nCount )
+    {
+        pItem = pEntry->GetItem( nCur );
+        if ( pItem->IsA() == SV_ITEM_ID_LBOXSTRING &&
+             static_cast<SvLBoxString*>( pItem )->GetText().Len() > 0 )
+        {
+            sRet = static_cast<SvLBoxString*>( pItem )->GetText();
+            break;
+        }
+        nCur++;
+    }
+    return sRet;
 }
 
 const Image& SvTreeListBox::GetExpandedEntryBmp(SvLBoxEntry* pEntry, BmpColorMode _eMode) const
