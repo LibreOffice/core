@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-03 09:20:10 $
+ *  last change: $Author: mba $ $Date: 2001-05-14 14:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,11 +768,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 SfxDocumentInfo *pInfo = new SfxDocumentInfo;
                 pInfo->CopyUserData(GetDocInfo());
                 pInfo->SetTitle( aTemplateName );
-#if SUPD<613//MUSTINI
-                pInfo->SetChanged( SfxStamp(SFX_INIMANAGER()->GetUserFullName()));
-#else
                 pInfo->SetChanged( SfxStamp(SvtUserOptions().GetFullName()));
-#endif
                 SvStorageRef aRef = aMedium.GetStorage();
                 if ( aRef.Is() )
                 {
@@ -801,7 +797,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             ErrorHandler::HandleError(lErr);
             ResetError();
             delete pTemplates;
-            HACK(warum qualifiziert? SfxObjectShell::) DoSaveCompleted();
+            DoSaveCompleted( aMedium.GetStorage() );
             SetTemplateConfig( bHasTemplateConfig );
             SetModified(bModified);
             rReq.SetReturnValue( SfxBoolItem( 0, bOK ) );
