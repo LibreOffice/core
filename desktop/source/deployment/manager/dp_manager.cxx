@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-07 10:52:42 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
 
         if (!that->m_readOnly && logFile.getLength() > 0)
         {
-            Any any_logFile( makeAny(logFile) );
+            const Any any_logFile(logFile);
             that->m_xLogFile.set(
                 that->m_xComponentContext->getServiceManager()
                 ->createInstanceWithArgumentsAndContext(
@@ -601,9 +601,8 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
     try {
         ::ucb::Content sourceContent;
         create_ucb_content( &sourceContent, url, xCmdEnv ); // throws exc
-        const OUString title( extract_throw<OUString>(
-                                  sourceContent.getPropertyValue(
-                                      StrTitle::get() ) ) );
+        const OUString title( sourceContent.getPropertyValue(
+                                  StrTitle::get() ).get<OUString>() );
         const OUString title_enc( ::rtl::Uri::encode(
                                       title, rtl_UriCharClassPchar,
                                       rtl_UriEncodeIgnoreEscapes,
@@ -621,12 +620,12 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
             {
                 // package already deployed, interact --force:
                 Any nameClashResolveRequest(
-                    makeAny( NameClashResolveRequest(
-                                 getResourceString(
-                                     RID_STR_PACKAGE_ALREADY_ADDED ) + title,
-                                 static_cast<OWeakObject *>(this),
-                                 task::InteractionClassification_QUERY,
-                                 getDeployPath(title), title, OUString() ) ) );
+                    NameClashResolveRequest(
+                        getResourceString(
+                            RID_STR_PACKAGE_ALREADY_ADDED ) + title,
+                        static_cast<OWeakObject *>(this),
+                        task::InteractionClassification_QUERY,
+                        getDeployPath(title), title, OUString() ) );
                 bool replace = false, abort = false;
                 if (! interactContinuation(
                         nameClashResolveRequest,
@@ -669,7 +668,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
                 ::ucb::Content docContent(
                     makeURL( m_context, title_enc ), xCmdEnv );
                 docContent.setPropertyValue(
-                    OUSTR("MediaType"), makeAny(mediaType) );
+                    OUSTR("MediaType"), Any(mediaType) );
 
                 // xxx todo: obsolete in the future
                 try {
@@ -699,15 +698,15 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
         throw;
     }
     catch (CommandFailedException & exc) {
-        logIntern( makeAny(exc) );
+        logIntern( Any(exc) );
         throw;
     }
     catch (CommandAbortedException & exc) {
-        logIntern( makeAny(exc) );
+        logIntern( Any(exc) );
         throw;
     }
     catch (deployment::DeploymentException & exc) {
-        logIntern( makeAny(exc) );
+        logIntern( Any(exc) );
         throw;
     }
     catch (Exception &) {
@@ -769,15 +768,15 @@ void PackageManagerImpl::removePackage(
         throw;
     }
     catch (CommandFailedException & exc) {
-        logIntern( makeAny(exc) );
+        logIntern( Any(exc) );
         throw;
     }
     catch (CommandAbortedException & exc) {
-        logIntern( makeAny(exc) );
+        logIntern( Any(exc) );
         throw;
     }
     catch (deployment::DeploymentException & exc) {
-        logIntern( makeAny(exc) );
+        logIntern( Any(exc) );
         throw;
     }
     catch (Exception &) {
@@ -893,15 +892,15 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage(
         throw;
     }
     catch (CommandFailedException & exc) {
-        logIntern( makeAny(exc) );
+        logIntern( Any(exc) );
         throw;
     }
     catch (lang::IllegalArgumentException & exc) {
-        logIntern( makeAny(exc) );
+        logIntern( Any(exc) );
         throw;
     }
     catch (deployment::DeploymentException & exc) {
-        logIntern( makeAny(exc) );
+        logIntern( Any(exc) );
         throw;
     }
     catch (Exception &) {
@@ -938,15 +937,15 @@ PackageManagerImpl::getDeployedPackages(
         throw;
     }
     catch (CommandFailedException & exc) {
-        logIntern( makeAny(exc) );
+        logIntern( Any(exc) );
         throw;
     }
     catch (CommandAbortedException & exc) {
-        logIntern( makeAny(exc) );
+        logIntern( Any(exc) );
         throw;
     }
     catch (deployment::DeploymentException & exc) {
-        logIntern( makeAny(exc) );
+        logIntern( Any(exc) );
         throw;
     }
     catch (Exception &) {
@@ -1008,15 +1007,15 @@ void PackageManagerImpl::reinstallDeployedPackages(
         throw;
     }
     catch (CommandFailedException & exc) {
-        logIntern( makeAny(exc) );
+        logIntern( Any(exc) );
         throw;
     }
     catch (CommandAbortedException & exc) {
-        logIntern( makeAny(exc) );
+        logIntern( Any(exc) );
         throw;
     }
     catch (deployment::DeploymentException & exc) {
-        logIntern( makeAny(exc) );
+        logIntern( Any(exc) );
         throw;
     }
     catch (Exception &) {
