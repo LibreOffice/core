@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 11:56:42 $
+ *  last change: $Author: fs $ $Date: 2001-08-16 10:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,43 +156,39 @@ namespace dbaui
     // ==========
     // attributes
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >             m_xRowSet;  // our rowset
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >      m_xGridModel;   // the model of our grid
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
-
-        ::osl::Mutex            m_aAsyncLoadSafety;     // for multi-thread access to our members
-        // members for asynchronous load operations
-        ::vos::OThread*         m_pLoadThread;          // the thread wherein the form is loaded
-        sal_uInt32              m_nPendingLoadFinished; // the event used to tell ourself that the load is finished
-        sal_Bool                m_bClosingKillOpen;     // are we killing the load thread because we are to be suspended ?
-
-        OAsyncronousLink        m_aAsyncGetCellFocus;
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >        m_xParser;              // for sorting 'n filtering
-        String      m_sStateSaveRecord;
-        String      m_sStateUndoRecord;
-
-        sal_uInt16  m_nFormActionNestingLevel;  // see enter-/leaveFormAction
-        bool        m_bErrorOccured;            // dito
-
         // for implementing the XFormController
         class FormControllerImpl;
         friend class FormControllerImpl;
-        FormControllerImpl*         m_pFormControllerImpl;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >
-                                    m_xFormControllerImpl;
 
-    protected:
-            // the RecordStatus of the form is insufficient for deciding whether the current record is modified
-            // because it doesn't reflect the state of the current cell
-        sal_Bool                    m_bLoadCanceled : 1;        // the load was canceled somehow
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >             m_xRowSet;      // our rowset
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >      m_xGridModel;   // the model of our grid
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >         m_xFormControllerImpl;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    m_xParser;      // for sorting 'n filtering
+
+        AutoTimer               m_aInvalidateClipboard;             // for testing the state of the CUT/COPY/PASTE-slots
+        TransferableDataHelper  m_aSystemClipboard;
+
+        ::osl::Mutex            m_aAsyncLoadSafety;     // for multi-thread access to our members
+
+        OAsyncronousLink        m_aAsyncGetCellFocus;
 
         String                  m_sLoadStopperCaption;
             // If the data source is loaded asynchronously a stopper is created (which will result in activation of
             // the office's red button). This string is used as caption for the stopper.
-        AutoTimer               m_aInvalidateClipboard;             // for testing the state of the CUT/COPY/PASTE-slots
-        TransferableDataHelper  m_aSystemClipboard;
+        String                  m_sStateSaveRecord;
+        String                  m_sStateUndoRecord;
 
+        // members for asynchronous load operations
+        ::vos::OThread*         m_pLoadThread;          // the thread wherein the form is loaded
+        FormControllerImpl*     m_pFormControllerImpl;  // implementing the XFormController
+
+        sal_uInt32              m_nPendingLoadFinished;         // the event used to tell ourself that the load is finished
+        sal_uInt16              m_nFormActionNestingLevel;      // see enter-/leaveFormAction
+
+        sal_Bool                m_bLoadCanceled : 1;            // the load was canceled somehow
+        sal_Bool                m_bClosingKillOpen : 1;         // are we killing the load thread because we are to be suspended ?
+        sal_Bool                m_bErrorOccured : 1;            // see enter-/leaveFormAction
 
         class FormErrorHelper
         {
@@ -214,6 +210,7 @@ namespace dbaui
         sal_Bool    isValid() const         { return m_xRowSet.is() && m_xGridModel.is(); }
         sal_Bool    isValidCursor() const;  // checks the ::com::sun::star::data::XDatabaseCursor-interface of m_xRowSet
         sal_Bool    isLoaded() const;
+        sal_Bool    loadingCancelled() const { return m_bLoadCanceled; }
 
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    getParser() const { return m_xParser; }
