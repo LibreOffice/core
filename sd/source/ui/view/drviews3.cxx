@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-18 13:45:55 $
+ *  last change: $Author: dl $ $Date: 2001-08-20 11:22:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,6 +489,12 @@ void __EXPORT SdDrawViewShell::ExecCtrl(SfxRequest& rReq)
             rReq.Done();
         }
         break;
+
+        case SID_OPT_LOCALE_CHANGED:
+        {
+            pWindow->Invalidate();
+            rReq.Done();
+        }
 
         default:
         break;

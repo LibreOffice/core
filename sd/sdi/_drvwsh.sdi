@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _drvwsh.sdi,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-12 13:50:35 $
+ *  last change: $Author: dl $ $Date: 2001-08-20 11:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2190,6 +2190,11 @@ interface DrawView : View
     [
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
+    ]
+    SID_OPT_LOCALE_CHANGED // ole : no, status : ?
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetCtrlState ;
     ]
 }
 

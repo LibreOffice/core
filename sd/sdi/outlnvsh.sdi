@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.sdi,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-12 13:51:33 $
+ *  last change: $Author: dl $ $Date: 2001-08-20 11:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,6 +502,11 @@ interface OutlineView : View
     SID_TRANSLITERATE_KATAGANA // ole : no, status : ?
     [
         ExecMethod = FuSupport ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_OPT_LOCALE_CHANGED // ole : no, status : ?
+    [
+        ExecMethod = ExecCtrl ;
         StateMethod = GetCtrlState ;
     ]
 }

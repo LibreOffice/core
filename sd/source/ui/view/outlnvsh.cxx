@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-19 20:32:39 $
+ *  last change: $Author: dl $ $Date: 2001-08-20 11:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,6 +552,12 @@ void SdOutlineViewShell::ExecCtrl(SfxRequest &rReq)
             Invalidate();
             rReq.Done();
             break;
+        }
+
+        case SID_OPT_LOCALE_CHANGED:
+        {
+            pOlView->GetOutliner()->UpdateFields();
+            rReq.Done();
         }
 
         default:
