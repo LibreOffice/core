@@ -2,9 +2,9 @@
  *
  *  $RCSfile: d_token.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:44:28 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ class DT_TextToken : public DT_Dsapi
     const char *        GetText() const         { return sText; }
 
   private:
-    udmstri             sText;
+    String              sText;
 };
 
 class DT_MLTag : public DT_Dsapi
@@ -265,6 +265,17 @@ class DT_ParameterAtTag : public DT_AtTag
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
 };
+
+class DT_SinceAtTag : public DT_AtTag
+{
+  public:
+                        DT_SinceAtTag()     :   DT_AtTag("Since version") {}
+
+    virtual void        DisplayAt(
+                            DocumentationDisplay &
+                                                o_rDisplay ) const;
+};
+
 
 }   // namespace dsapi
 }   // namespace csi
