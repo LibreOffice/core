@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-17 11:38:53 $
+ *  last change: $Author: ama $ $Date: 2001-11-05 13:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,8 @@ void SwLayAction::PaintCntnt( const SwCntntFrm *pCnt,
     if ( pCnt->IsCompletePaint() || !pCnt->IsTxtFrm() )
     {
         SwRect aPaint( pCnt->PaintArea() );
-        aPaint.Union( rOldRect );
+        if( rOldRect.HasArea() )
+            aPaint.Union( rOldRect );
         if ( !_PaintCntnt( pCnt, pPage, aPaint ) )
             pCnt->ResetCompletePaint();
     }

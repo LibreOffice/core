@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-11-02 15:41:45 $
+ *  last change: $Author: ama $ $Date: 2001-11-05 13:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,8 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
             {
                 SwRootFrm* pLayout = GetLayout();
 
+                Imp()->pRegion = NULL;
+
                 //Erst Invert dann Compress, niemals andersherum!
                 pRegion->Invert();
 
@@ -365,6 +367,7 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                         pLayout->Paint( aRect );
                 }
                 delete pVout;
+                delete pRegion;
                 Imp()->DelRegions();
             }
             if( bShowCrsr )
