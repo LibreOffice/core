@@ -108,7 +108,7 @@ class ShutdownIcon :    public ShutdownIconServiceBase
             throw(::com::sun::star::uno::RuntimeException);
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event );
+        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw (com::sun::star::uno::RuntimeException);
 
         // XTerminateListener
         virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& aEvent )

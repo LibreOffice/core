@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hro $ $Date: 2001-11-01 08:55:00 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 15:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,6 +367,7 @@ void SAL_CALL ShutdownIcon::disposing( const ::com::sun::star::lang::EventObject
 // XStatusListener
 
 void SAL_CALL ShutdownIcon::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
+    throw(::com::sun::star::uno::RuntimeException)
 {
 }
 
