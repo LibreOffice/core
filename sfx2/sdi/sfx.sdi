@@ -1343,7 +1343,7 @@ SfxUInt32Item BuildVersion SID_BUILD_VERSION
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem StopBrowse SID_BROWSE_STOP
+SfxVoidItem Stop SID_BROWSE_STOP
 ()
 [
     /* flags: */
@@ -7283,60 +7283,6 @@ SfxVoidItem SelectAll SID_SELECTALL
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_EDIT;
-]
-
-//--------------------------------------------------------------------------
-SfxStringItem SelectionText SID_SELECTION_TEXT
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = TRUE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
-//--------------------------------------------------------------------------
-SfxStringItem SelectionTextExt SID_SELECTION_TEXT_EXT
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = TRUE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
 ]
 
 //--------------------------------------------------------------------------

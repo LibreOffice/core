@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-19 17:54:02 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 13:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1048,30 +1048,6 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
                 break;
             }
 
-            case SID_ACTIVEMODULE:
-            {
-                SfxShell *pSh = GetActiveModule();
-                if ( !pSh )
-                    pSh = this;
-                rSet.Put( SfxObjectItem( SID_ACTIVEMODULE, pSh ) );
-                break;
-            }
-
-            case SID_ACTIVEWINDOW:
-                rSet.Put( SfxObjectItem( SID_ACTIVEWINDOW, pFrame ) );
-                break;
-
-            case SID_SELECTION:
-                break;
-
-            case SID_WIN_POSSIZE:
-            {
-                break;
-            }
-
-            case SID_CAPTION:
-                break;
-
             case SID_PROGFILENAME:
                 rSet.Put( SfxStringItem( SID_PROGFILENAME, Application::GetAppFileName() ) );
                 break;
@@ -1082,9 +1058,6 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
 
             case SID_ATTR_UNDO_COUNT:
                 rSet.Put( SfxUInt16Item( SID_ATTR_UNDO_COUNT, SvtUndoOptions().GetUndoCount() ) );
-                break;
-
-            case SID_WIN_VISIBLE:
                 break;
 
             case SID_ON_STARTAPP:

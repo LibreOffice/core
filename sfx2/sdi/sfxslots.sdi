@@ -2,7 +2,7 @@
     module StarApplicationFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2002-04-17 12:40:02 $ $Revision: 1.4 $
+    $Author: mba $ $Date: 2002-05-27 13:49:06 $ $Revision: 1.5 $
     $Logfile:   T:/sfx2/sdi/sfxslots.sdv  $ $Workfile:   SFXSLOTS.SDI  $
 =========================================================================*/
 
@@ -17,24 +17,22 @@ TypeLibFile( "sfxslots.tlb" )
 ]
 {
     item void       SfxVoidItem;
-        item BOOL       SfxBoolItem;
+    item BOOL       SfxBoolItem;
     item INT32      SfxUInt16Item;
     item INT16      SfxInt16Item;
     item INT32      SfxUInt32Item;
     item INT32      SfxInt32Item;
     item String     SfxStringItem;
-    item INT16      SfxByteItem;
-
+    item BYTE       SfxByteItem;
     item INT16      SfxEnumItem;
     item INT16      SfxAllEnumItem;
+    item INT16      TbxImageItem;
 
-    item SbxObject  SfxObjectItem;
-
+    item String     SbxItem;                //! Dummy
+    item String     SfxObjectItem;          //! Dummy
     item String     SfxTemplateItem;        //! Dummy
-        item String     SfxMacroInfoItem;       //! Dummy
-        item String     SfxImageItem;           //! Dummy
-
-    item BOOL       SfxBoolItem;
+    item String     SfxMacroInfoItem;       //! Dummy
+    item String     SfxImageItem;           //! Dummy
 
     struct Point
     {
@@ -55,16 +53,16 @@ TypeLibFile( "sfxslots.tlb" )
     struct DocInfo
     {
         String      Author             MID_DOCINFO_AUTHOR;
-                INT32           CreationDate       MID_DOCINFO_CREATIONDATE;
-                INT32           CreationTime       MID_DOCINFO_CREATIONTIME;
+        INT32       CreationDate       MID_DOCINFO_CREATIONDATE;
+        INT32       CreationTime       MID_DOCINFO_CREATIONTIME;
         String      Description        MID_DOCINFO_DESCRIPTION;
         String      FileName           MID_DOCINFO_FILENAME;
-                INT32           Revision                   MID_DOCINFO_REVISION;
-                INT32           EditTime                   MID_DOCINFO_EDITTIME;
+        INT32       Revision           MID_DOCINFO_REVISION;
+        INT32       EditTime           MID_DOCINFO_EDITTIME;
         String      KeyWords           MID_DOCINFO_KEYWORDS;
         String      ModificationAuthor MID_DOCINFO_MODIFICATIONAUTHOR;
-                INT32           ModificationDate   MID_DOCINFO_MODIFICATIONDATE;
-                INT32           ModificationTime   MID_DOCINFO_MODIFICATIONTIME;
+        INT32       ModificationDate   MID_DOCINFO_MODIFICATIONDATE;
+        INT32       ModificationTime   MID_DOCINFO_MODIFICATIONTIME;
         String      Subject            MID_DOCINFO_SUBJECT;
         String      Template           MID_DOCINFO_TEMPLATE;
         String      Title              MID_DOCINFO_TITLE;
@@ -78,10 +76,6 @@ TypeLibFile( "sfxslots.tlb" )
         String      Field4             MID_DOCINFO_FIELD4;
     };
     item DocInfo SfxDocumentInfoItem;
-
-    item    String          SbxItem;
-
-    item    INT16           TbxImageItem;
 
     struct SvxSearch
     {
@@ -101,7 +95,6 @@ TypeLibFile( "sfxslots.tlb" )
         BOOL        Pattern         MID_SEARCH_PATTERN;
     };
     item SvxSearch SvxSearchItem;
-
 
     include "sfx.sdi"
     include "object.sdi"
