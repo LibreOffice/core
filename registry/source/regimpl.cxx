@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jsc $ $Date: 2001-07-23 15:43:28 $
+ *  last change: $Author: jsc $ $Date: 2001-11-09 10:51:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,29 +391,27 @@ static sal_Bool dumpType(RegistryTypeReader& reader, const OString& sIndent)
             switch (reader.getReferenceType(i))
             {
                 case RT_REF_INVALID:
-                    fprintf(stdout, "%s  type=INVALID\n", indent);
+                     fprintf(stdout, "%s  type=INVALID\n", indent);
                     break;
                 case RT_REF_SUPPORTS:
-                    {
-                        fprintf(stdout, "%s  type=supported interface\n", indent);
-                        if (reader.getReferenceAccess(i) == RT_ACCESS_OPTIONAL)
-                        {
-                            fprintf(stdout, "%s  access=optional\n", indent);
-                        }
-                    }
+                     fprintf(stdout, "%s  type=supported interface\n", indent);
                     break;
                 case RT_REF_OBSERVES:
-                    fprintf(stdout, "%s  type=observed interface\n", indent);
+                     fprintf(stdout, "%s  type=observed interface\n", indent);
                     break;
                 case RT_REF_EXPORTS:
-                    fprintf(stdout, "%s  type=exported service\n", indent);
+                     fprintf(stdout, "%s  type=exported service\n", indent);
                     break;
                 case RT_REF_NEEDS:
-                    fprintf(stdout, "%s  type=needed service\n", indent);
+                     fprintf(stdout, "%s  type=needed service\n", indent);
                     break;
                 default:
                     fprintf(stdout, "%s  type=<unknown>\n", indent);
                     break;
+            }
+            if (reader.getReferenceAccess(i) == RT_ACCESS_OPTIONAL)
+            {
+                fprintf(stdout, "%s  access=optional\n", indent);
             }
 
             fprintf(stdout, "%s  Doku: \"%s\"\n", indent,
