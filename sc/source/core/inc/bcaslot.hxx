@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bcaslot.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:16 $
+ *  last change: $Author: er $ $Date: 2002-11-27 21:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,9 +137,10 @@ public:
     void                EndListeningArea( const ScRange& rRange,
                                             SfxListener* pListener,
                                             ScBroadcastArea*& rpArea );
-    BOOL                AreaBroadcast( const ScAddress& rAddress,
-                                        const ScHint& rHint ) const;
+    BOOL                AreaBroadcast( const ScHint& rHint ) const;
         // return: mindestens ein Broadcast gewesen
+    BOOL                AreaBroadcastInRange( const ScRange& rRange,
+                                              const ScHint& rHint ) const;
     void                DelBroadcastAreasInRange( const ScRange& rRange );
     void                UpdateRemove( UpdateRefMode eUpdateRefMode,
                                         const ScRange& rRange,
@@ -179,9 +180,9 @@ public:
                                             SfxListener* pListener );
     void                EndListeningArea( const ScRange& rRange,
                                             SfxListener* pListener );
-    BOOL                AreaBroadcast( const ScAddress& rAddress,
-                                        const ScHint& rHint ) const;
+    BOOL                AreaBroadcast( const ScHint& rHint ) const;
         // return: mindestens ein Broadcast gewesen
+    BOOL                AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHint ) const;
     void                DelBroadcastAreasInRange( const ScRange& rRange );
     void                UpdateBroadcastAreas( UpdateRefMode eUpdateRefMode,
                                             const ScRange& rRange,
