@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-29 17:46:18 $
+ *  last change: $Author: obr $ $Date: 2002-04-30 15:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,6 +693,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
         mpFrameData->mbSysObjFocus      = FALSE;
         mpFrameData->maPaintTimer.SetTimeout( 30 );
         mpFrameData->maPaintTimer.SetTimeoutHdl( LINK( this, Window, ImplHandlePaintHdl ) );
+        mpFrameData->mbInternalDragGestureRecognizer = FALSE;
     }
 
     // init data
@@ -7119,8 +7120,21 @@ Reference< XDropTarget > Window::GetDropTarget()
 
                     try
                     {
-                        OSL_TRACE( "adding droptarget listener" );
+//                        OSL_TRACE( "adding droptarget listener" );
                         mpFrameData->mxDropTarget->addDropTargetListener( mpFrameData->mxDropTargetListener );
+
+                        // register also as drag gesture listener if directly supported by drag source
+                        Reference< XDragGestureRecognizer > xDragGestureRecognizer =
+                            Reference< XDragGestureRecognizer > (mpFrameData->mxDragSource, UNO_QUERY);
+
+                        if( xDragGestureRecognizer.is() )
+                        {
+                            xDragGestureRecognizer->addDragGestureListener(
+                                Reference< XDragGestureListener > (mpFrameData->mxDropTargetListener, UNO_QUERY));
+                        }
+                        else
+                            mpFrameData->mbInternalDragGestureRecognizer = TRUE;
+
                     }
 
                     catch( RuntimeException exc )
