@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-17 03:23:31 $
+ *  last change: $Author: pluby $ $Date: 2000-11-19 02:37:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ struct SalFrameData
     VCLWINDOW               mhWnd;                  // Window handle
     SalGraphics*            mpGraphics;             // current frame graphics
     SalFrame*               mpNextFrame;            // pointer to next frame
+    SalFrame*               mpParent;               // pointer to parent frame
     void*                   mpInst;                 // instance handle for callback
     SALFRAMEPROC            mpProc;                 // callback proc
     struct SystemEnvData    maSysData;              // system data

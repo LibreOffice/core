@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-11-18 03:31:47 $
+ *  last change: $Author: pluby $ $Date: 2000-11-19 02:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,15 +137,29 @@ SalFrame::~SalFrame()
 
 SalGraphics* SalFrame::GetGraphics()
 {
+    if ( maFrameData.mbGraphics )
+        return NULL;
+
     if ( !maFrameData.mpGraphics )
     {
-        VCLVIEW hView = VCLWindow_contentView( maFrameData.mhWnd );
+        VCLVIEW hView;
+        SalFrame *pFrame = this;
+
+        // Search for the parent SalFrame that has a native window and
+        // use that window to get an NSView
+        while ( !pFrame->maFrameData.mhWnd ) {
+            pFrame = pFrame->maFrameData.mpParent;
+            if ( !pFrame )
+                break;
+        }
+        hView = VCLWindow_contentView( pFrame->maFrameData.mhWnd );
+
         if ( hView )
         {
             SalData* pSalData = GetSalData();
             maFrameData.mpGraphics = new SalGraphics;
             maFrameData.mpGraphics->maGraphicsData.mhDC      = hView;
-            maFrameData.mpGraphics->maGraphicsData.mhWnd     = maFrameData.mhWnd;
+            maFrameData.mpGraphics->maGraphicsData.mhWnd     = pFrame->maFrameData.mhWnd;
             maFrameData.mpGraphics->maGraphicsData.mbPrinter = FALSE;
             maFrameData.mpGraphics->maGraphicsData.mbVirDev  = FALSE;
             maFrameData.mpGraphics->maGraphicsData.mbWindow  = TRUE;

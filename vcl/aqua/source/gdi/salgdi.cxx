@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-11-18 03:31:46 $
+ *  last change: $Author: pluby $ $Date: 2000-11-19 02:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
 #endif
+#ifndef _SV_OUTFONT_HXX
+#include <outfont.hxx>
+#endif
 #ifndef _SV_VCLGRAPHICS_H
 #include <VCLGraphics.h>
 #endif
@@ -90,12 +93,30 @@ SalGraphics::~SalGraphics()
 
 void SalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 {
+    if ( maGraphicsData.mhWnd ) {
+        VCLGraphics_GetScreenResolution( maGraphicsData.mhWnd,
+            &rDPIX, &rDPIY );
+    }
+    else {
+        // Stub code: we only support screen resolution right now
+        rDPIX = 0;
+        rDPIY = 0;
+    }
 }
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::GetScreenFontResolution( long& rDPIX, long& rDPIY )
 {
+    if ( maGraphicsData.mhWnd ) {
+        VCLGraphics_GetScreenResolution( maGraphicsData.mhWnd,
+            &rDPIX, &rDPIY );
+    }
+    else {
+        // Stub code: we only support screen resolution right now
+        rDPIX = 0;
+        rDPIY = 0;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -407,6 +428,13 @@ ULONG SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
 
 void SalGraphics::GetDevFontList( ImplDevFontList* pList )
 {
+    // Stub code: we have not yet written any interfaces to native fonts.
+    // However, we need to create at least one fake font to continue our
+    // porting.
+    ImplFontData *pFontData = new ImplFontData;
+    pFontData->mnWidth = 10;
+    pFontData->mnHeight = 10;
+    pList->Add( pFontData );
 }
 
 // -----------------------------------------------------------------------

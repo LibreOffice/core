@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-17 07:34:48 $
+ *  last change: $Author: pluby $ $Date: 2000-11-19 02:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,15 +202,13 @@ SalFrame* SalInstance::CreateChildFrame( SystemParentData* pSystemParentData, UL
 
 SalFrame* SalInstance::CreateFrame( SalFrame* pParent, ULONG nSalFrameStyle )
 {
-     // Stub code: Mac OS X does not support child windows so retrun NULL until
-    // we figure how to implement a good substitute for a child window
-    if ( pParent )
-        return NULL;
-
     SalFrame *pFrame = new SalFrame;
 
-    pFrame->maFrameData.mhWnd = VCLWindow_new( nSalFrameStyle, NULL, pFrame,
-        &(pFrame->maFrameData) );
+    pFrame->maFrameData.mpParent = pParent;
+
+    // Create the native window
+    pFrame->maFrameData.mhWnd = VCLWindow_new( nSalFrameStyle, NULL,
+        pFrame, &(pFrame->maFrameData) );
 
     return pFrame;
 }
@@ -226,13 +224,18 @@ void SalInstance::DestroyFrame( SalFrame* pFrame )
 
 SalObject* SalInstance::CreateObject( SalFrame* pParent )
 {
-    return NULL;
+    SalObject *pObject = new SalObject;
+
+    pObject->maObjectData.mhWnd = pParent->maFrameData.mhWnd;
+
+    return pObject;
 }
 
 // -----------------------------------------------------------------------
 
 void SalInstance::DestroyObject( SalObject* pObject )
 {
+    delete ( pObject );
 }
 
 void SalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )

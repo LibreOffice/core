@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:34 $
+ *  last change: $Author: pluby $ $Date: 2000-11-19 02:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,12 @@
 #include <salobj.hxx>
 #endif
 
+// =======================================================================
+
+static long ImplSalObjectCallbackDummy( void*, SalObject*, USHORT, const void* )
+{
+    return 0;
+}
 
 // =======================================================================
 
@@ -82,7 +88,7 @@ SalObject::SalObject()
     maObjectData.mhLastFocusWnd     = 0;
     maObjectData.maSysData.nSize    = sizeof( SystemEnvData );
     maObjectData.mpInst             = NULL;
-    maObjectData.mpProc             = NULL;
+    maObjectData.mpProc             = ImplSalObjectCallbackDummy;
 
     // Insert object in objectlist
     maObjectData.mpNextObject = pSalData->mpFirstObject;
