@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:54:25 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 #include <basidesh.hxx>
 #include <idetemp.hxx>
 #include <helpid.hrc>
+#include <bastype2.hxx>
 
 #ifndef _SVDVIEW_HXX
 #include <svx/svdview.hxx>
@@ -132,10 +133,9 @@ using namespace ::com::sun::star::io;
 
 TYPEINIT1( DialogWindow, IDEBaseWindow );
 
-DialogWindow::DialogWindow( Window* pParent, StarBASIC* pBasic,
-    SfxObjectShell* pShell, String aLibName, String aName,
+DialogWindow::DialogWindow( Window* pParent, SfxObjectShell* pShell, String aLibName, String aName,
     const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xDialogModel )
-        :IDEBaseWindow( pParent, pBasic, pShell, aLibName, aName )
+        :IDEBaseWindow( pParent, pShell, aLibName, aName )
         ,pUndoMgr(NULL)
 {
     InitSettings( TRUE, TRUE, TRUE );
@@ -167,7 +167,7 @@ DialogWindow::DialogWindow( Window* pParent, StarBASIC* pBasic,
 }
 
 DialogWindow::DialogWindow( DialogWindow* pOrgWin ) :
-        IDEBaseWindow( pOrgWin->GetParent(), pOrgWin->GetBasic(), pOrgWin->GetShell(), pOrgWin->GetLibName(), pOrgWin->GetName() )
+        IDEBaseWindow( pOrgWin->GetParent(), pOrgWin->GetShell(), pOrgWin->GetLibName(), pOrgWin->GetName() )
 {
     DBG_ERROR( "Dieser CTOR ist nicht erlaubt!" );
 }
@@ -728,6 +728,14 @@ String DialogWindow::GetTitle()
     return GetName();
 }
 
+BasicEntryDescriptor DialogWindow::CreateEntryDescriptor()
+{
+    SfxObjectShell* pShell( GetShell() );
+    String aLibName( GetLibName() );
+    LibraryLocation eLocation = BasicIDE::GetLibraryLocation( pShell, aLibName );
+    return BasicEntryDescriptor( pShell, eLocation, aLibName, GetName(), OBJ_TYPE_DIALOG );
+}
+
 void DialogWindow::SetReadOnly( BOOL b )
 {
     if ( pEditor )
@@ -793,7 +801,7 @@ void DialogWindow::StoreData()
 void DialogWindow::Deactivating()
 {
     if ( IsModified() )
-        BasicIDE::MarkDocShellModified( GetBasic() );
+        BasicIDE::MarkDocShellModified( GetShell() );
 }
 
 void DialogWindow::PrintData( Printer* pPrinter )
