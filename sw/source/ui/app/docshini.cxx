@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-28 15:22:17 $
+ *  last change: $Author: jp $ $Date: 2000-10-09 18:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,8 @@ void lcl_SetColl(SwDoc* pDoc, sal_uInt16 nType,
     const SfxFont* pFnt = pPrt ? pPrt->GetFontByName(rStyle): 0;
     if(!pFnt)
     {
-        pFnt = new SfxFont(FAMILY_DONTKNOW, rStyle);
+        pFnt = new SfxFont( FAMILY_DONTKNOW, rStyle, PITCH_DONTKNOW,
+                            ::gsl_getSystemTextEncoding() );
         bDelete = sal_True;
     }
     SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool(nType);
@@ -291,7 +292,8 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
             const SfxFont* pFnt = pPrt ? pPrt->GetFontByName(sEntry): 0;
             if(!pFnt)
             {
-                pFnt = new SfxFont(FAMILY_DONTKNOW, sEntry);
+                pFnt = new SfxFont( FAMILY_DONTKNOW, sEntry, PITCH_DONTKNOW,
+                                    ::gsl_getSystemTextEncoding() );
                 bDelete = sal_True;
             }
             pDoc->SetDefault(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
@@ -777,6 +779,9 @@ void SwDocShell::SubInitNew()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/09/28 15:22:17  os
+    use of configuration service in view options
+
     Revision 1.1.1.1  2000/09/18 17:14:31  hr
     initial import
 
