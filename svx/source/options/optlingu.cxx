@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-11 09:21:49 $
+ *  last change: $Author: tl $ $Date: 2001-06-11 11:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1611,6 +1611,29 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
         SvxEditModulesDlg   aDlg( this, *pLinguData );
         if (aDlg.Execute() != RET_OK)
             *pLinguData = aOldLinguData;
+
+        // evaluate new status of 'bConfigured' flag
+        ULONG nLen = pLinguData->GetDisplayServiceCount();
+        for (ULONG i = 0;  i < nLen;  ++i)
+            pLinguData->GetDisplayServiceArray().Get(i)->bConfigured = FALSE;
+        const Locale* pAllLocales = pLinguData->GetAllSupportedLocales().getConstArray();
+        INT32 nLocales = pLinguData->GetAllSupportedLocales().getLength();
+        for (INT32 k = 0;  k < nLocales;  ++k)
+        {
+            INT16 nLang = SvxLocaleToLanguage( pAllLocales[k] );
+            Sequence< OUString > *pNames;
+            pNames = pLinguData->GetSpellTable().Get( nLang );
+            if (pNames)
+                pLinguData->SetChecked( *pNames );
+            pNames = pLinguData->GetHyphTable().Get( nLang );
+            if (pNames)
+                pLinguData->SetChecked( *pNames );
+            pNames = pLinguData->GetThesTable().Get( nLang );
+            if (pNames)
+                pLinguData->SetChecked( *pNames );
+        }
+
+        // show new status of modules
         UpdateModulesBox_Impl();
     }
     else if (&aLinguDicsNewPB == pBtn)
@@ -2115,7 +2138,8 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         pEntry->SetUserData( (void *)pUserData );
         pModel->Insert( pEntry );
 
-        Sequence<OUString> aSpellSrvc = xMgr->getConfiguredServices(C2U(cSpell), aCurLocale);
+        const Sequence< OUString > *pSpellSrvc =
+                rLinguData.GetSpellTable().Get( eCurLanguage );
         sal_Int32 nLocalIndex = 0;  // index relative to parent
         for (n = 0;  n < nDispSrvcCount;  ++n)
         {
@@ -2125,7 +2149,8 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
             {
                 String aTxt( pInfo->sDisplayName );
                 SvLBoxEntry* pEntry = CreateEntry( aTxt, CBCOL_FIRST );
-                BOOL bChecked = lcl_SeqGetEntryPos( aSpellSrvc, rImplName ) >= 0;
+                BOOL bChecked = pSpellSrvc ?
+                        lcl_SeqGetEntryPos( *pSpellSrvc, rImplName ) >= 0 : FALSE;
                 lcl_SetCheckButton( pEntry, bChecked );
                 pUserData = new ModuleUserData_Impl( rImplName, FALSE,
                                         bChecked, TYPE_SPELL, (BYTE)nLocalIndex++ );
@@ -2142,7 +2167,8 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         pEntry->SetUserData( (void *)pUserData );
         pModel->Insert( pEntry );
 
-        Sequence<OUString> aHyphSrvc = xMgr->getConfiguredServices(C2U(cHyph), aCurLocale);
+        const Sequence< OUString > *pHyphSrvc = pHyphSrvc =
+                rLinguData.GetHyphTable().Get( eCurLanguage );
         nLocalIndex = 0;
         for (n = 0;  n < nDispSrvcCount;  ++n)
         {
@@ -2152,7 +2178,8 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
             {
                 String aTxt( pInfo->sDisplayName );
                 SvLBoxEntry* pEntry = CreateEntry( aTxt, CBCOL_FIRST );
-                BOOL bChecked = lcl_SeqGetEntryPos( aHyphSrvc, rImplName ) >= 0;
+                BOOL bChecked = pHyphSrvc ?
+                        lcl_SeqGetEntryPos( *pHyphSrvc, rImplName ) >= 0 : FALSE;
                 lcl_SetCheckButton( pEntry, bChecked );
                 pUserData = new ModuleUserData_Impl( rImplName, FALSE,
                                         bChecked, TYPE_HYPH, (BYTE)nLocalIndex++ );
@@ -2169,7 +2196,8 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         pEntry->SetUserData( (void *)pUserData );
         pModel->Insert( pEntry );
 
-        Sequence<OUString> aThesSrvc = xMgr->getConfiguredServices(C2U(cThes), aCurLocale);
+        const Sequence< OUString > *pThesSrvc = pHyphSrvc =
+                rLinguData.GetThesTable().Get( eCurLanguage );
         nLocalIndex = 0;
         for (n = 0;  n < nDispSrvcCount;  ++n)
         {
@@ -2179,7 +2207,8 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
             {
                 String aTxt( pInfo->sDisplayName );
                 SvLBoxEntry* pEntry = CreateEntry( aTxt, CBCOL_FIRST );
-                BOOL bChecked = lcl_SeqGetEntryPos( aThesSrvc, rImplName ) >= 0;
+                BOOL bChecked = pThesSrvc ?
+                        lcl_SeqGetEntryPos( *pThesSrvc, rImplName ) >= 0 : FALSE;
                 lcl_SetCheckButton( pEntry, bChecked );
                 pUserData = new ModuleUserData_Impl( rImplName, FALSE,
                                         bChecked, TYPE_THES, (BYTE)nLocalIndex++ );
