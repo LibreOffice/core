@@ -2,9 +2,9 @@
  *
  *  $RCSfile: task.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-05-02 12:56:40 $
+ *  last change: $Author: mba $ $Date: 2001-08-27 16:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,6 +599,8 @@ class Task  :   public css::frame::XTask    ,   // => XFrame => XComponent
     private:
 
         DECL_LINK( Close_Impl, void* );
+
+        void    impl_SaveWindowAttributes();
 
 /*      sal_Bool impl_tryToChangeProperty(          sal_Bool            bProperty       ,
                                             const   css::uno::Any&      aValue          ,
