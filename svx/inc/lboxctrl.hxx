@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-25 09:34:30 $
+ *  last change: $Author: tl $ $Date: 2001-04-25 13:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@ protected:
     String                  aActionStr;
     SvxPopupWindowListBox * pPopupWin;
     USHORT                  nItemId;
+
+    void    Impl_SetInfo( USHORT nCount );
 
     DECL_LINK( PopupModeEndHdl, void * );
     DECL_LINK( SelectHdl, void * );
