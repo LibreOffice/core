@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-24 07:15:45 $
+ *  last change: $Author: tra $ $Date: 2002-11-11 15:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,17 +126,89 @@ namespace /* private */
     const sal_Bool MANUAL_RESET                     = sal_True;
     const sal_Bool AUTO_RESET                       = sal_False;
     const sal_Bool INIT_NONSIGNALED                 = sal_False;
-}
 
-//----------------------------------------------------------------
-// we use one condition for every request
-//----------------------------------------------------------------
+    //------------------------------------------------------
+    /*  Cannot use osl conditions because they are blocking
+        without waking up on messages sent by another thread
+        this leads to deadlocks because we are blocking the
+        communication between inter-thread marshalled COM
+        pointers.
+        COM Proxy-Stub communication uses SendMessages for
+        synchronization purposes.
+    */
+    class Win32Condition
+    {
+        public:
+            // ctor
+            Win32Condition()
+            {
+                m_hEvent = CreateEvent(
+                    0,      /* no security */
+                    true,   /* manual reset */
+                    false,  /* initial state not signaled */
+                    0);     /* automatic name */
+            }
 
-typedef struct _MsgCtx
-{
-    Condition   aCondition;
-    HRESULT     hr;
-} MsgCtx;
+            // dtor
+            ~Win32Condition()
+            {
+                CloseHandle(m_hEvent);
+            }
+
+            // wait infinite for event be signaled
+            // leave messages sent through
+            void wait()
+            {
+                while(1)
+                {
+                    DWORD dwResult =
+                        MsgWaitForMultipleObjects(1, &m_hEvent, FALSE, INFINITE, QS_SENDMESSAGE);
+
+                       switch (dwResult)
+                    {
+                        case WAIT_OBJECT_0:
+                            return;
+
+                        case WAIT_OBJECT_0 + 1:
+                        {
+                            /* PeekMessage processes all messages in the SendMessage
+                               queue that's what we want, messages from the PostMessage
+                               queue stay untouched */
+                            MSG msg;
+                               PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE | PM_QS_SENDMESSAGE);
+
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // reset the event
+            void set()
+            {
+                SetEvent(m_hEvent);
+            }
+
+        private:
+            HANDLE m_hEvent;
+
+        // prevent copy/assignment
+        private:
+            Win32Condition(const Win32Condition&);
+            Win32Condition& operator=(const Win32Condition&);
+    };
+
+    //------------------------------------------
+    // we use one condition for every request
+    //------------------------------------------
+
+    struct MsgCtx
+    {
+        Win32Condition  aCondition;
+        HRESULT         hr;
+    };
+
+} /* namespace private */
 
 //----------------------------------------------------------------
 //  static member initialization
