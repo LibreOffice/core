@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: bm $ $Date: 2001-10-24 15:54:16 $
+ *  last change: $Author: bm $ $Date: 2001-10-25 15:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
+
 #ifndef _GLOBNAME_HXX
 #include <tools/globname.hxx>
 #endif
@@ -268,12 +272,16 @@ void SchXMLExportHelper::exportAutoStyles()
 
 void SchXMLExportHelper::collectAutoStyles( uno::Reference< chart::XChartDocument > rChartDoc )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogContext, "xmloff", "bm93744", "::SchXMLExportHelper::collectAutoStyles" );
+
     parseDocument( rChartDoc, sal_False );
 }
 
 void SchXMLExportHelper::exportChart( uno::Reference< chart::XChartDocument > rChartDoc,
                                       sal_Bool bIncludeTable )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogContext, "xmloff", "bm93744", "::SchXMLExportHelper::exportChart" );
+
     parseDocument( rChartDoc, sal_True, bIncludeTable );
     DBG_ASSERT( maAutoStyleNameQueue.empty(), "There are still remaining autostyle names in the queue" );
 }
@@ -890,7 +898,7 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
                     // get string by value
                     fData = pData[ nSeries ];
 
-                        // convert NaN
+                    // convert NaN
                     if( bConvertNaN &&  // implies xChartData.is()
                         xChartData->isNotANumber( fData ))
                         fData = fSolarNaN;
@@ -898,13 +906,13 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
                     SvXMLUnitConverter::convertDouble( msStringBuffer, fData );
                     msString = msStringBuffer.makeStringAndClear();
 
-                        // <table:table-cell>
+                    // <table:table-cell>
                     mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_VALUE_TYPE, XML_FLOAT );
                     mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_VALUE, msString );
                     SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True );
 
                     // <text:p>
-                    exportText( msString );
+                    exportText( msString, false ); // do not convert tabs and lfs
                 }
             }
         }
@@ -1759,7 +1767,9 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
         OUString (RTL_CONSTASCII_USTRINGPARAM ("HasZAxisHelpGrid")), bHasZAxisMinorGrid);
 
     if ( ! aDiagramProperties.GetProperties ())
+    {
         DBG_WARNING ("Required properties not found in Chart diagram");
+    }
 #endif
 
     SvXMLElementExport* pAxis = NULL;
@@ -2274,52 +2284,59 @@ void SchXMLExportHelper::AddAutoStyleAttribute( const std::vector< XMLPropertySt
     }
 }
 
-void SchXMLExportHelper::exportText( const ::rtl::OUString& rText )
+void SchXMLExportHelper::exportText( const ::rtl::OUString& rText, bool bConvertTabsLFs )
 {
-    sal_Int32 nStartPos = 0;
-    sal_Int32 nEndPos = rText.getLength();
-    sal_Unicode cChar;
-
     SvXMLElementExport aPara( mrExport, XML_NAMESPACE_TEXT,
                               ::xmloff::token::GetXMLToken( ::xmloff::token::XML_P ),
                               sal_True, sal_False );
 
-    for( sal_Int32 nPos = 0; nPos < nEndPos; nPos++ )
+    if( bConvertTabsLFs )
     {
-        cChar = rText[ nPos ];
-        switch( cChar )
+        sal_Int32 nStartPos = 0;
+        sal_Int32 nEndPos = rText.getLength();
+        sal_Unicode cChar;
+
+        for( sal_Int32 nPos = 0; nPos < nEndPos; nPos++ )
         {
-            case 0x0009:        // tabulator
-                {
-                    if( nPos > nStartPos )
-                        mrExport.GetDocHandler()->characters( rText.copy( nStartPos, (nPos - nStartPos)) );
-                    nStartPos = nPos + 1;
+            cChar = rText[ nPos ];
+            switch( cChar )
+            {
+                case 0x0009:        // tabulator
+                    {
+                        if( nPos > nStartPos )
+                            mrExport.GetDocHandler()->characters( rText.copy( nStartPos, (nPos - nStartPos)) );
+                        nStartPos = nPos + 1;
 
-                    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_TEXT,
-                                              ::xmloff::token::GetXMLToken( ::xmloff::token::XML_TAB_STOP ),
-                                              sal_False, sal_False );
-                }
-                break;
+                        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_TEXT,
+                                                  ::xmloff::token::GetXMLToken( ::xmloff::token::XML_TAB_STOP ),
+                                                  sal_False, sal_False );
+                    }
+                    break;
 
-            case 0x000A:        // linefeed
-                {
-                    if( nPos > nStartPos )
-                        mrExport.GetDocHandler()->characters( rText.copy( nStartPos, (nPos - nStartPos)) );
-                    nStartPos = nPos + 1;
+                case 0x000A:        // linefeed
+                    {
+                        if( nPos > nStartPos )
+                            mrExport.GetDocHandler()->characters( rText.copy( nStartPos, (nPos - nStartPos)) );
+                        nStartPos = nPos + 1;
 
-                    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_TEXT,
-                                              ::xmloff::token::GetXMLToken( ::xmloff::token::XML_LINE_BREAK ),
-                                              sal_False, sal_False );
-                }
-                break;
+                        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_TEXT,
+                                                  ::xmloff::token::GetXMLToken( ::xmloff::token::XML_LINE_BREAK ),
+                                                  sal_False, sal_False );
+                    }
+                    break;
+            }
+        }
+        if( nEndPos > nStartPos )
+        {
+            if( nStartPos == 0 )
+                mrExport.GetDocHandler()->characters( rText );
+            else
+                mrExport.GetDocHandler()->characters( rText.copy( nStartPos, (nEndPos - nStartPos)) );
         }
     }
-    if( nEndPos > nStartPos )
+    else // do not convert tabs and linefeeds (eg for numbers coming from unit converter)
     {
-        if( nStartPos == 0 )
-            mrExport.GetDocHandler()->characters( rText );
-        else
-            mrExport.GetDocHandler()->characters( rText.copy( nStartPos, (nEndPos - nStartPos)) );
+        mrExport.GetDocHandler()->characters( rText );
     }
 }
 
