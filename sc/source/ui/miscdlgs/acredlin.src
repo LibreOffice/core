@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:26:58 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -889,4 +889,5 @@ Menu RID_POPUP_CHANGES
         };
     };
 };
+
 
