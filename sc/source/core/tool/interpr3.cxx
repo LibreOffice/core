@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:36:51 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:35:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1861,12 +1861,12 @@ void ScInterpreter::ScKurt()
     BYTE nParamCount = GetByte();
     if ( !MustHaveParamCountMin( nParamCount, 1 ) )
         return;
-    USHORT SaveSP = sp;
     USHORT i;
     double fSum    = 0.0;
-    double fSumSqr = 0.0;
+    double vSum    = 0.0;
+    std::vector<double> values;
     double fCount  = 0.0;
-    double fVal;
+    double fVal = 0.0;
     ScAddress aAdr;
     ScRange aRange;
     for (i = 0; i < nParamCount; i++)
@@ -1877,7 +1877,7 @@ void ScInterpreter::ScKurt()
             {
                 fVal = GetDouble();
                 fSum += fVal;
-                fSumSqr += fVal*fVal;
+                values.push_back(fVal);
                 fCount++;
             }
                 break;
@@ -1889,7 +1889,7 @@ void ScInterpreter::ScKurt()
                 {
                     fVal = GetCellValue( aAdr, pCell );
                     fSum += fVal;
-                    fSumSqr += fVal*fVal;
+                    values.push_back(fVal);
                     fCount++;
                 }
             }
@@ -1902,13 +1902,13 @@ void ScInterpreter::ScKurt()
                 if (aValIter.GetFirst(fVal, nErr))
                 {
                     fSum += fVal;
-                    fSumSqr += fVal*fVal;
+                    values.push_back(fVal);
                     fCount++;
                     SetError(nErr);
                     while ((nErr == 0) && aValIter.GetNext(fVal, nErr))
                     {
                         fSum += fVal;
-                        fSumSqr += fVal*fVal;
+                        values.push_back(fVal);
                         fCount++;
                     }
                     SetError(nErr);
@@ -1927,7 +1927,7 @@ void ScInterpreter::ScKurt()
                         {
                             fVal = pMat->GetDouble(i);
                             fSum += fVal;
-                            fSumSqr += fVal*fVal;
+                values.push_back(fVal);
                             fCount++;
                         }
                     }
@@ -1938,7 +1938,7 @@ void ScInterpreter::ScKurt()
                             {
                                 fVal = pMat->GetDouble(i);
                                 fSum += fVal;
-                                fSumSqr += fVal*fVal;
+                values.push_back(fVal);
                                 fCount++;
                             }
                     }
@@ -1950,76 +1950,39 @@ void ScInterpreter::ScKurt()
             break;
         }
     }
+
     if (nGlobalError)
     {
         PushInt(0);
         return;
     }
+
     double fMean = fSum / fCount;
-    double fSSqr = (fSumSqr - fSum*fSum/fCount)/(fCount-1.0);
-    sp = SaveSP;
-    fSum = 0.0;
-    // #55733# GCC Optimierungsfehler, GPF wenn die 4.0 als Konstante an pow()
-    // uebergeben wird, auch ein "const double fPow = 4.0;" GPF't,
-    double fPow = 4.0;
-    for (i = 0; i < nParamCount; i++)
+
+    for (i = 0; i < values.size(); i++)
+        vSum += (values[i] - fMean) * (values[i] - fMean);
+
+    double fStdDev = sqrt(vSum / (fCount - 1.0));
+    double dx = 0.0;
+    double xpower4 = 0.0;
+
+    if (fStdDev == 0)
     {
-        switch (GetStackType())
-        {
-            case svDouble :
-                fSum += pow(GetDouble()-fMean,fPow);
-                break;
-            case svSingleRef :
-            {
-                PopSingleRef( aAdr );
-                ScBaseCell* pCell = GetCell( aAdr );
-                if (HasCellValueData(pCell))
-                    fSum += pow(GetCellValue( aAdr, pCell ) - fMean, fPow);
-            }
-            break;
-            case svDoubleRef :
-            {
-                PopDoubleRef( aRange );
-                USHORT nErr = 0;
-                ScValueIterator aValIter(pDok, aRange);
-                if (aValIter.GetFirst(fVal, nErr))
-                {
-                    fSum += pow(fVal - fMean, fPow);
-                    while (aValIter.GetNext(fVal, nErr))
-                         fSum += pow(fVal - fMean, fPow);
-                }
-            }
-            break;
-            case svMatrix :
-            {
-                ScMatrixRef pMat = PopMatrix();
-                if (pMat)
-                {
-                    SCSIZE nCount = pMat->GetElementCount();
-                    if (pMat->IsNumeric())
-                    {
-                        for (SCSIZE i = 0; i < nCount; i++)
-                        {
-                            fSum += pow(pMat->GetDouble(i) - fMean, fPow);
-                        }
-                    }
-                    else
-                    {
-                        for (SCSIZE i = 0; i < nCount; i++)
-                        {
-                            if (!pMat->IsString(i))
-                                fSum += pow(pMat->GetDouble(i) - fMean, fPow);
-                        }
-                    }
-                }
-            }
-            break;
-            default : SetError(errIllegalParameter); break;
-        }
+        SetError(errIllegalArgument);
+        return;
     }
-    PushDouble(fCount*(fCount+1.0)/((fCount-1.0)*(fCount-2.0)*(fCount-3.0))
-               *fSum/(fSSqr*fSSqr)
-               - 3.0*(fCount-1.0)*(fCount-1.0)/((fCount-2.0)*(fCount-3.0)));
+
+    for (i = 0; i < values.size(); i++)
+    {
+        dx = (values[i] - fMean) / fStdDev;
+        xpower4 = xpower4 + (dx * dx * dx * dx);
+    }
+
+    double k_d = (fCount - 2.0) * (fCount - 3.0);
+    double k_l = fCount * (fCount + 1.0) / ((fCount - 1.0) * k_d);
+    double k_t = 3.0 * (fCount - 1.0) * (fCount - 1.0) / k_d;
+
+    PushDouble(xpower4 * k_l - k_t);
 }
 
 void ScInterpreter::ScHarMean()
@@ -2146,6 +2109,7 @@ void ScInterpreter::ScGeoMean()
     double nValCount = 0.0;
     ScAddress aAdr;
     ScRange aRange;
+
     for (short i = 0; i < nParamCount && (nGlobalError == 0); i++)
     {
         switch (GetStackType())
@@ -2217,9 +2181,9 @@ void ScInterpreter::ScGeoMean()
                     SCSIZE nCount = pMat->GetElementCount();
                     if (pMat->IsNumeric())
                     {
-                        for (SCSIZE i = 0; i < nCount; i++)
+                        for (SCSIZE ui = 0; ui < nCount; ui++)
                         {
-                            double x = pMat->GetDouble(i);
+                            double x = pMat->GetDouble(ui);
                             if (x > 0.0)
                             {
                                 nVal += log(x);
@@ -2231,10 +2195,10 @@ void ScInterpreter::ScGeoMean()
                     }
                     else
                     {
-                        for (SCSIZE i = 0; i < nCount; i++)
-                            if (!pMat->IsString(i))
+                        for (SCSIZE ui = 0; ui < nCount; ui++)
+                            if (!pMat->IsString(ui))
                             {
-                                double x = pMat->GetDouble(i);
+                                double x = pMat->GetDouble(ui);
                                 if (x > 0.0)
                                 {
                                     nVal += log(x);
@@ -2251,7 +2215,7 @@ void ScInterpreter::ScGeoMean()
         }
     }
     if (nGlobalError == 0)
-        PushDouble(exp(nVal/(double)nValCount));
+        PushDouble(exp(nVal / nValCount));
     else
         PushInt(0);
 }
@@ -2275,12 +2239,12 @@ void ScInterpreter::ScSkew()
     BYTE nParamCount = GetByte();
     if ( !MustHaveParamCountMin( nParamCount, 1 )  )
         return;
-    USHORT SaveSP = sp;
     USHORT i;
     double fSum    = 0.0;
-    double fSumSqr = 0.0;
+    double vSum    = 0.0;
+    std::vector<double> values;
     double fCount  = 0.0;
-    double fVal;
+    double fVal = 0.0;
     ScAddress aAdr;
     ScRange aRange;
     for (i = 0; i < nParamCount; i++)
@@ -2291,7 +2255,7 @@ void ScInterpreter::ScSkew()
             {
                 fVal = GetDouble();
                 fSum += fVal;
-                fSumSqr += fVal*fVal;
+                values.push_back(fVal);
                 fCount++;
             }
                 break;
@@ -2303,7 +2267,7 @@ void ScInterpreter::ScSkew()
                 {
                     fVal = GetCellValue( aAdr, pCell );
                     fSum += fVal;
-                    fSumSqr += fVal*fVal;
+                    values.push_back(fVal);
                     fCount++;
                 }
             }
@@ -2316,13 +2280,13 @@ void ScInterpreter::ScSkew()
                 if (aValIter.GetFirst(fVal, nErr))
                 {
                     fSum += fVal;
-                    fSumSqr += fVal*fVal;
+                    values.push_back(fVal);
                     fCount++;
                     SetError(nErr);
                     while ((nErr == 0) && aValIter.GetNext(fVal, nErr))
                     {
                         fSum += fVal;
-                        fSumSqr += fVal*fVal;
+                        values.push_back(fVal);
                         fCount++;
                     }
                     SetError(nErr);
@@ -2341,7 +2305,7 @@ void ScInterpreter::ScSkew()
                         {
                             fVal = pMat->GetDouble(i);
                             fSum += fVal;
-                            fSumSqr += fVal*fVal;
+                values.push_back(fVal);
                             fCount++;
                         }
                     }
@@ -2352,7 +2316,7 @@ void ScInterpreter::ScSkew()
                             {
                                 fVal = pMat->GetDouble(i);
                                 fSum += fVal;
-                                fSumSqr += fVal*fVal;
+                values.push_back(fVal);
                                 fCount++;
                             }
                     }
@@ -2364,72 +2328,35 @@ void ScInterpreter::ScSkew()
             break;
         }
     }
+
     if (nGlobalError)
     {
         PushInt(0);
         return;
     }
+
     double fMean = fSum / fCount;
-    double fSSqr = (fSumSqr - fSum*fSum/fCount)/(fCount-1.0);
-    sp = SaveSP;
-    fSum = 0.0;
-    double fPow = 3.0;      // vorsichtshalber wg. #55733#, siehe ScKurt()
-    for (i = 0; i < nParamCount; i++)
+
+    for (i = 0; i < values.size(); i++)
+        vSum += (values[i] - fMean) * (values[i] - fMean);
+
+    double fStdDev = sqrt(vSum / (fCount - 1.0));
+    double dx = 0.0;
+    double xcube = 0.0;
+
+    if (fStdDev == 0)
     {
-        switch (GetStackType())
-        {
-            case svDouble :
-                fSum += pow(GetDouble()-fMean,fPow);
-                break;
-            case svSingleRef :
-            {
-                PopSingleRef( aAdr );
-                ScBaseCell* pCell = GetCell( aAdr );
-                if (HasCellValueData(pCell))
-                    fSum += pow(GetCellValue( aAdr, pCell ) - fMean, fPow);
-            }
-            break;
-            case svDoubleRef :
-            {
-                PopDoubleRef( aRange );
-                USHORT nErr = 0;
-                ScValueIterator aValIter(pDok, aRange);
-                if (aValIter.GetFirst(fVal, nErr))
-                {
-                    fSum += pow(fVal - fMean, fPow);
-                    while (aValIter.GetNext(fVal, nErr))
-                         fSum += pow(fVal - fMean, fPow);
-                }
-            }
-            break;
-            case svMatrix :
-            {
-                ScMatrixRef pMat = PopMatrix();
-                if (pMat)
-                {
-                    SCSIZE nCount = pMat->GetElementCount();
-                    if (pMat->IsNumeric())
-                    {
-                        for (SCSIZE i = 0; i < nCount; i++)
-                        {
-                            fSum += pow(pMat->GetDouble(i) - fMean, fPow);
-                        }
-                    }
-                    else
-                    {
-                        for (SCSIZE i = 0; i < nCount; i++)
-                        {
-                            if (!pMat->IsString(i))
-                                fSum += pow(pMat->GetDouble(i) - fMean, fPow);
-                        }
-                    }
-                }
-            }
-            break;
-            default : SetError(errIllegalParameter); break;
-        }
+        SetError(errIllegalArgument);
+        return;
     }
-    PushDouble(fCount/((fCount-1.0)*(fCount-2.0))*fSum/(fSSqr*sqrt(fSSqr)));
+
+    for (i = 0; i < values.size(); i++)
+    {
+        dx = (values[i] - fMean) / fStdDev;
+        xcube = xcube + (dx * dx * dx);
+    }
+
+    PushDouble(((xcube * fCount) / (fCount - 1.0)) / (fCount - 2.0));
 }
 
 void ScInterpreter::ScMedian()
