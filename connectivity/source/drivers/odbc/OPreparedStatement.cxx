@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-08 10:56:50 $
+ *  last change: $Author: fs $ $Date: 2000-11-08 15:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,12 +158,8 @@ void SAL_CALL OPreparedStatement::close(  ) throw(SQLException, RuntimeException
 
     try {
         clearWarnings ();
-        if (m_aStatementHandle != SQL_NULL_HSTMT)
-        {
-            N3SQLFreeStmt (m_aStatementHandle, SQL_DROP);
-            m_aStatementHandle = SQL_NULL_HSTMT;
-            FreeParams();
-        }
+        OStatement_BASE2::close();
+        FreeParams();
     }
     catch (SQLException & ex) {
         // If we get an error, ignore
