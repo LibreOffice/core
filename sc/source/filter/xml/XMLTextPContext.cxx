@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextPContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-11 18:31:08 $
+ *  last change: $Author: sab $ $Date: 2001-01-15 14:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ SvXMLImportContext *ScXMLTextPContext::CreateChildContext( USHORT nTempPrefix,
     if (pTextPContext)
     {
         if (!bWasContext)
-            pTextPContext->Characters(sOUText);
+            pTextPContext->Characters(sOUText.makeStringAndClear());
         pContext = pTextPContext->CreateChildContext(nTempPrefix, rLName, xTempAttrList);
     }
 
@@ -133,7 +133,7 @@ SvXMLImportContext *ScXMLTextPContext::CreateChildContext( USHORT nTempPrefix,
 void ScXMLTextPContext::Characters( const ::rtl::OUString& rChars )
 {
     if (!pTextPContext)
-        sOUText += rChars;
+        sOUText.append(rChars);
     else
         pTextPContext->Characters(rChars);
 }
@@ -141,7 +141,7 @@ void ScXMLTextPContext::Characters( const ::rtl::OUString& rChars )
 void ScXMLTextPContext::EndElement()
 {
     if (!pTextPContext)
-        GetScImport().GetTextImport()->GetCursor()->setString(sOUText);
+        GetScImport().GetTextImport()->GetCursor()->setString(sOUText.makeStringAndClear());
     else
     {
         pTextPContext->EndElement();

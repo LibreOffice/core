@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextPContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-01-04 15:34:11 $
+ *  last change: $Author: sab $ $Date: 2001-01-15 14:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 class ScXMLImport;
 
@@ -73,7 +76,7 @@ class ScXMLTextPContext : public SvXMLImportContext
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList> xAttrList;
     SvXMLImportContext *pTextPContext;
     rtl::OUString   sLName;
-    rtl::OUString   sOUText;
+    rtl::OUStringBuffer sOUText;
     USHORT          nPrefix;
     sal_Bool        bIsOwn;
 
