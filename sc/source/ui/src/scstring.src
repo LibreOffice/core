@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-22 10:22:59 $
+ *  last change: $Author: kz $ $Date: 2002-05-03 01:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ String SCSTR_APPLICATION
     Text[ catalan ] = "%PRODUCTNAME Calc 6.0";
     Text[ finnish ] = "%PRODUCTNAME Calc 6.0";
     Text[ language_user1 ] = " ";
+    Text[ thai ] = "%PRODUCTNAME Calc 6.0";
 };
 String SCSTR_50_APPLICATION
 {
@@ -129,6 +130,7 @@ String SCSTR_50_APPLICATION
     Text[ turkish ] = "StarCalc 5.0";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "StarCalc 5.0";
+    Text[ thai ] = "StarCalc  5.0";
 };
 String SCSTR_40_APPLICATION
 {
@@ -156,6 +158,7 @@ String SCSTR_40_APPLICATION
     Text[ turkish ] = "StarCalc 4.0";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "StarCalc 4.0";
+    Text[ thai ] = "StarCalc 4.0";
 };
 String SCSTR_30_APPLICATION
 {
@@ -183,6 +186,7 @@ String SCSTR_30_APPLICATION
     Text[ turkish ] = "StarCalc 3.0";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "StarCalc 3.0";
+    Text[ thai ] = "StarCalc 3.0";
 };
 String SCSTR_LONG_SCDOC_NAME
 {
@@ -209,6 +213,7 @@ String SCSTR_LONG_SCDOC_NAME
     Text[ catalan ] = "%PRODUCTNAME 6.0 Fulla de c�lcul";
     Text[ finnish ] = "%PRODUCTNAME 6,0 -laskentataulukko";
     Text[ language_user1 ] = " ";
+    Text[ thai ] = "กระดาษคำนวณ %PRODUCTNAME 6.0 ";
 };
 String SCSTR_50_LONG_DOCNAME
 {
@@ -235,6 +240,7 @@ String SCSTR_50_LONG_DOCNAME
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 5.0 Fulla de c�lcul";
     Text[ finnish ] = "%PRODUCTNAME 5.0 -laskentataulukko";
+    Text[ thai ] = "กระดาษคำนวณ %PRODUCTNAME 5.0 ";
 };
 String SCSTR_40_LONG_DOCNAME
 {
@@ -261,6 +267,7 @@ String SCSTR_40_LONG_DOCNAME
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 4.0 Fulla de c�lcul";
     Text[ finnish ] = "%PRODUCTNAME 4,0 -laskentataulukko";
+    Text[ thai ] = "กระดาษคำนวณ %PRODUCTNAME 4.0 ";
 };
 String SCSTR_30_LONG_DOCNAME
 {
@@ -287,6 +294,7 @@ String SCSTR_30_LONG_DOCNAME
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Full de c�lcul StarCalc 3.0";
     Text[ finnish ] = "StarCalc 3.0 -laskentataulukko";
+    Text[ thai ] = "กระดาษคำนวณ StarCalc 3.0 ";
 };
 String SCSTR_SHORT_SCDOC_NAME
 {
@@ -314,6 +322,7 @@ String SCSTR_SHORT_SCDOC_NAME
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Full de c�lcul";
+    Text[ thai ] = "กระดาษคำนวณ";
 };
 String SCSTR_HUMAN_SCDOC_NAME
 {
@@ -341,6 +350,7 @@ String SCSTR_HUMAN_SCDOC_NAME
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Full de c�lcul";
+    Text[ thai ] = "กระดาษคำนวณ";
 };
 
 String SCSTR_DOCSHELL
@@ -369,6 +379,7 @@ String SCSTR_DOCSHELL
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Full";
+    Text[ thai ] = "แผ่นงาน";
 };
 
 String SCSTR_TABVIEWSHELL
@@ -397,6 +408,7 @@ String SCSTR_TABVIEWSHELL
     Text[ turkish ] = "H�cre";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cel�les";
+    Text[ thai ] = "เซลล์";
 };
 
 String SCSTR_CELLSHELL
@@ -424,6 +436,7 @@ String SCSTR_CELLSHELL
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Funcions de cel�la";
     Text[ finnish ] = "Solujen funktiot";
+    Text[ thai ] = "ฟังก์ชั่นสำหรับเซลล์";
 };
 
 String SCSTR_FORMATSHELL
@@ -451,6 +464,7 @@ String SCSTR_FORMATSHELL
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Formats de les cel�les";
     Text[ finnish ] = "Solujen muodot";
+    Text[ thai ] = "รูปแบบสำหรับเซลล์";
 };
 
 
@@ -480,6 +494,7 @@ String SCSTR_DRAWSHELL
     Text[ turkish ] = "Grafik nesnesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objectes gr�fics";
+    Text[ thai ] = "วัตถุกราฟิค";
 };
 
 String SCSTR_DRAWTEXTSHELL
@@ -508,6 +523,7 @@ String SCSTR_DRAWTEXTSHELL
     Text[ turkish ] = "Metin nesnesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objectes de text";
+    Text[ thai ] = "วัตถุข้อความ";
 };
 
 String SCSTR_DRAWFORMSHELL
@@ -535,6 +551,7 @@ String SCSTR_DRAWFORMSHELL
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objectes del formulari";
     Text[ finnish ] = "Lomakeobjektit";
+    Text[ thai ] = "จากวัตถุ";
 };
 
 String SCSTR_CHARTSHELL
@@ -561,6 +578,7 @@ String SCSTR_CHARTSHELL
     Text[ turkish ] = "�ema nesnesi";
     Text[ catalan ] = "Objectes del diagrama";
     Text[ finnish ] = "Kaavio-objektit";
+    Text[ thai ] = "วัตถุแผนภูมิ";
 };
 
 String SCSTR_OLEOBJECTSHELL
@@ -588,6 +606,7 @@ String SCSTR_OLEOBJECTSHELL
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objectes OLE";
     Text[ finnish ] = "OLE-objektit";
+    Text[ thai ] = "วัตถุ OLE ";
 };
 
 String SCSTR_GRAPHICSHELL
@@ -614,6 +633,7 @@ String SCSTR_GRAPHICSHELL
     Text[ turkish ] = "Grafik";
     Text[ catalan ] = "Gr�fics";
     Text[ finnish ] = "Kuvat";
+    Text[ thai ] = "กราฟิค";
 };
 String SCSTR_PAGEBREAKSHELL
 {
@@ -640,6 +660,7 @@ String SCSTR_PAGEBREAKSHELL
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Salt de p�gina";
     Text[ finnish ] = "Sivunvaihto";
+    Text[ thai ] = "ตัวแบ่งหน้า";
 };
 
 String SCSTR_EDITSHELL
@@ -668,6 +689,7 @@ String SCSTR_EDITSHELL
     Text[ turkish ] = "Metin d�zenleme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Edici� del text";
+    Text[ thai ] = "แก้ไขข้อความ";
 };
 
 String SCSTR_PREVIEWSHELL
@@ -696,6 +718,7 @@ String SCSTR_PREVIEWSHELL
     Text[ turkish ] = "Bask� �nizleme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Exemple d'impressi�";
+    Text[ thai ] = "แสดงตัวอย่างก่อนพิมพ์";
 };
 
 String SCSTR_PIVOTSHELL
@@ -724,6 +747,7 @@ String SCSTR_PIVOTSHELL
     Text[ turkish ] = "Veri pilotu tablosu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Taules del DataPilot";
+    Text[ thai ] = "ตาราง Data Pilot";
 };
 
 String SCSTR_AUDITSHELL
@@ -752,6 +776,7 @@ String SCSTR_AUDITSHELL
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mode d'emplenament Detective";
     Text[ finnish ] = "Havainnoiva t�ytt�tila";
+    Text[ thai ] = "โหมดเติมแบบตรวจหา";
 };
 
  // -----------------------------------------------------------------------
@@ -783,6 +808,7 @@ String STR_ROWHEIGHT
     Text[ turkish ] = "Y�kseklik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Al�ada";
+    Text[ thai ] = "ความสูง";
 };
 String STR_OPT_ROWHEIGHT
 {
@@ -810,6 +836,7 @@ String STR_OPT_ROWHEIGHT
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Afegeix";
+    Text[ thai ] = "เพิ่ม";
 };
 String STR_ROWHEIGHT_TITLE
 {
@@ -838,6 +865,7 @@ String STR_ROWHEIGHT_TITLE
     Text[ turkish ] = "Sat�r y�ksekli�i";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Al�ada de la fila";
+    Text[ thai ] = "ความยาวแถว";
 };
 String STR_OPT_ROWHEIGHT_TITLE
 {
@@ -866,6 +894,7 @@ String STR_OPT_ROWHEIGHT_TITLE
     Text[ turkish ] = "Optimum sat�r y�ksekli�i";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Al�ada �ptima de la fila";
+    Text[ thai ] = "ความยาวแถวที่เหมาะที่สุด";
 };
 String STR_COLWIDTH
 {
@@ -893,6 +922,7 @@ String STR_COLWIDTH
     Text[ turkish ] = "Geni�lik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Amplada";
+    Text[ thai ] = "ความกว้าง";
 };
 String STR_OPT_COLWIDTH
 {
@@ -920,6 +950,7 @@ String STR_OPT_COLWIDTH
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Afegeix";
+    Text[ thai ] = "เพิ่ม";
 };
 String STR_COLWIDTH_TITLE
 {
@@ -947,6 +978,7 @@ String STR_COLWIDTH_TITLE
     Text[ turkish ] = "S�tun geni�li�i";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Amplada de la columna";
+    Text[ thai ] = "ความกว้างคอลัมน์";
 };
 String STR_OPT_COLWIDTH_TITLE
 {
@@ -974,6 +1006,7 @@ String STR_OPT_COLWIDTH_TITLE
     Text[ turkish ] = "Optimum s�tun geni�li�i";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Amplada �ptima de la columna";
+    Text[ thai ] = "ความกว้างคอลัมน์ที่เหมาะที่สุด";
 };
 String SCSTR_UNDEFINED
 {
@@ -1001,6 +1034,7 @@ String SCSTR_UNDEFINED
     Text[ turkish ] = "- tan�mlanmam�� -";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "- no definit -";
+    Text[ thai ] = "- ไม่กำหนด -";
 };
 String SCSTR_NONE
 {
@@ -1028,6 +1062,7 @@ String SCSTR_NONE
     Text[ turkish ] = "- yok -";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "- cap -";
+    Text[ thai ] = "- ไม่มี -";
 };
 String SCSTR_EMPTY
 {
@@ -1055,6 +1090,7 @@ String SCSTR_EMPTY
     Text[ turkish ] = "- bo� -";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "- buit -";
+    Text[ thai ] = "- ว่าง -";
 };
 String SCSTR_NOTEMPTY
 {
@@ -1082,6 +1118,7 @@ String SCSTR_NOTEMPTY
     Text[ turkish ] = "- bo� de�il -";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "- no buit -";
+    Text[ thai ] = "- ไม่ว่าง -";
 };
 String SCSTR_NEWTABLE
 {
@@ -1109,6 +1146,7 @@ String SCSTR_NEWTABLE
     Text[ turkish ] = "- yeni tablo -";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "- full nou -";
+    Text[ thai ] = "- แผ่นงานใหม่ -";
 };
 String SCSTR_ALL
 {
@@ -1136,6 +1174,7 @@ String SCSTR_ALL
     Text[ turkish ] = "- t�m� -";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "- tot -";
+    Text[ thai ] = "- ทั้งหมด -";
 };
 String SCSTR_STDFILTER
 {
@@ -1162,6 +1201,7 @@ String SCSTR_STDFILTER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "- Est�ndard -";
     Text[ finnish ] = "- Vakio -";
+    Text[ thai ] = "- มาตรฐาน -";
 };
 String SCSTR_TOP10FILTER
 {
@@ -1188,6 +1228,7 @@ String SCSTR_TOP10FILTER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "- Top 10 -";
     Text[ finnish ] = "- Top 10 -";
+    Text[ thai ] = "- ท็อปเท็น -";
 };
 String SCSTR_NONAME
 {
@@ -1215,6 +1256,7 @@ String SCSTR_NONAME
     Text[ turkish ] = "bilinmeyen";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "sense nom";
+    Text[ thai ] = "ไม่มีชื่อ";
 };
 String SCSTR_COLUMN
 {
@@ -1238,10 +1280,11 @@ String SCSTR_COLUMN
     Text[ chinese_traditional ] = "欄";
     Text[ arabic ] = "������";
     Text[ greek ] = "�����";
-    Text[ korean ] = "단";
+    Text[ korean ] = "열";
     Text[ turkish ] = "S�tun";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Columna";
+    Text[ thai ] = "คอลัมน์";
 };
 String SCSTR_ROW
 {
@@ -1269,6 +1312,7 @@ String SCSTR_ROW
     Text[ turkish ] = "Sat�r";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fila";
+    Text[ thai ] = "แถว";
 };
 String SCSTR_NEW
 {
@@ -1296,6 +1340,7 @@ String SCSTR_NEW
     Text[ turkish ] = "~Yeni";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Nou";
+    Text[ thai ] = "ใ~หม่";
 };
 String SCSTR_ADD
 {
@@ -1324,6 +1369,7 @@ String SCSTR_ADD
     Text[ turkish ] = "~Ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Afegeix";
+    Text[ thai ] = "เ~พิ่ม";
 };
 String SCSTR_REMOVE
 {
@@ -1352,6 +1398,7 @@ String SCSTR_REMOVE
     Text[ turkish ] = "~Sil";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Suprimeix";
+    Text[ thai ] = "~ลบ";
 };
 String SCSTR_CANCEL
 {
@@ -1379,6 +1426,7 @@ String SCSTR_CANCEL
     Text[ turkish ] = "~�ptal";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "cance~l�la";
+    Text[ thai ] = "ยกเลิ~ก";
 };
 String SCSTR_MODIFY
 {
@@ -1407,6 +1455,7 @@ String SCSTR_MODIFY
     Text[ turkish ] = "~De�i�tir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modif~ica";
+    Text[ thai ] = "ดัดแปล~ง";
 };
 
 
@@ -1436,6 +1485,7 @@ String SCSTR_SHOWTABLE
     Text[ turkish ] = "Tabloyu g�r�nt�le";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mostra el full";
+    Text[ thai ] = "แสดงแผ่นงาน";
 };
 String SCSTR_HIDDENTABLES
 {
@@ -1463,6 +1513,7 @@ String SCSTR_HIDDENTABLES
     Text[ turkish ] = "Gizlenmi� tablolar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fulls ocults";
+    Text[ thai ] = "ซ่อนแผ่นงาน";
 };
 String SCSTR_SELECTDB
 {
@@ -1491,6 +1542,7 @@ String SCSTR_SELECTDB
     Text[ turkish ] = "Veritaban� aral���n� se�";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Seleccioneu l'�rea de la base de dades";
+    Text[ thai ] = "เลือกช่วงฐานข้อมูล";
 };
 String SCSTR_AREAS
 {
@@ -1518,6 +1570,7 @@ String SCSTR_AREAS
     Text[ turkish ] = "Aral�klar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "�rees";
+    Text[ thai ] = "ช่วง";
 };
 String SCSTR_TABLE
 {
@@ -1545,6 +1598,7 @@ String SCSTR_TABLE
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Full";
+    Text[ thai ] = "แผ่นงาน";
 };
 String SCSTR_NAME
 {
@@ -1572,6 +1626,7 @@ String SCSTR_NAME
     Text[ turkish ] = "Ad";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nom";
+    Text[ thai ] = "ชื่อ";
 };
 String SCSTR_INSTABLE
 {
@@ -1600,6 +1655,7 @@ String SCSTR_INSTABLE
     Text[ turkish ] = "Tablo ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insereix un full";
+    Text[ thai ] = "แทรกแผ่นงาน";
 };
 String SCSTR_APDTABLE
 {
@@ -1628,6 +1684,7 @@ String SCSTR_APDTABLE
     Text[ turkish ] = "Tablo ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Afegeix un full";
+    Text[ thai ] = "ผนวกแผ่นงาน";
 };
 String SCSTR_RENAMETAB
 {
@@ -1654,6 +1711,7 @@ String SCSTR_RENAMETAB
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Reanomena el full";
     Text[ finnish ] = "Nime� lomake uudelleen";
+    Text[ thai ] = "เปลี่ยนชื่อแผ่นงาน";
 };
 String SCSTR_RENAMEOBJECT
 {
@@ -1679,6 +1737,7 @@ String SCSTR_RENAMEOBJECT
     Text[ turkish ] = "Name Object";
     Text[ arabic ] = "Name Object";
     Text[ catalan ] = "Name Object";
+    Text[ thai ] = "Name object";
 };
 String STR_INSERTGRAPHIC
 {
@@ -1707,6 +1766,7 @@ String STR_INSERTGRAPHIC
     Text[ turkish ] = "Grafik ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insereix gr�fics";
+    Text[ thai ] = "แทรกกราฟิค";
 };
 
  //      Attribute
@@ -1737,6 +1797,7 @@ String SCSTR_HOR_JUSTIFY_LEFT
     Text[ turkish ] = "Sola hizala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Alinea a l'esquerra";
+    Text[ thai ] = "จัดตำแหน่งซ้าย";
 };
 String SCSTR_HOR_JUSTIFY_CENTER
 {
@@ -1764,6 +1825,7 @@ String SCSTR_HOR_JUSTIFY_CENTER
     Text[ turkish ] = "Yatay ortala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Centrat horitzontalment";
+    Text[ thai ] = "แนวนอนตรงกลาง";
 };
 String SCSTR_HOR_JUSTIFY_RIGHT
 {
@@ -1791,6 +1853,7 @@ String SCSTR_HOR_JUSTIFY_RIGHT
     Text[ turkish ] = "Sa�a hizala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Alinea a la dreta";
+    Text[ thai ] = "จัดตำแหน่งขวา";
 };
 String SCSTR_HOR_JUSTIFY_BLOCK
 {
@@ -1818,6 +1881,7 @@ String SCSTR_HOR_JUSTIFY_BLOCK
     Text[ turkish ] = "�ki yana yasla";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Justifica";
+    Text[ thai ] = "ชิดขอบ";
 };
 String SCSTR_HOR_JUSTIFY_REPEAT
 {
@@ -1845,6 +1909,7 @@ String SCSTR_HOR_JUSTIFY_REPEAT
     Text[ turkish ] = "Hizalamay� yinele";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Repeteix l'alineaci�";
+    Text[ thai ] = "จัดตำแหน่งซ้ำ";
 };
 String SCSTR_HOR_JUSTIFY_STANDARD
 {
@@ -1872,6 +1937,7 @@ String SCSTR_HOR_JUSTIFY_STANDARD
     Text[ korean ] = "기본 수평 맞춤";
     Text[ turkish ] = "Standart yatay hizalama";
     Text[ catalan ] = "Alineaci� horitzontal per defecte";
+    Text[ thai ] = "ค่าเริ่มต้นการจัดตำแหน่งแนวนอน";
 };
 String SCSTR_VER_JUSTIFY_TOP
 {
@@ -1899,6 +1965,7 @@ String SCSTR_VER_JUSTIFY_TOP
     Text[ turkish ] = "Yukar� hizala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Alinea a la part superior";
+    Text[ thai ] = "จัดตำแหน่งชิดด้านบน";
 };
 String SCSTR_VER_JUSTIFY_CENTER
 {
@@ -1926,6 +1993,7 @@ String SCSTR_VER_JUSTIFY_CENTER
     Text[ turkish ] = "Dikey ortala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Centrat verticalment";
+    Text[ thai ] = "แนวตั้งตรงกลาง";
 };
 String SCSTR_VER_JUSTIFY_BOTTOM
 {
@@ -1953,6 +2021,7 @@ String SCSTR_VER_JUSTIFY_BOTTOM
     Text[ turkish ] = "A�a�� hizala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Alinea a la part inferior";
+    Text[ thai ] = "จัดตำแหน่งชิดด้านล่าง";
 };
 String SCSTR_VER_JUSTIFY_STANDARD
 {
@@ -1980,6 +2049,7 @@ String SCSTR_VER_JUSTIFY_STANDARD
     Text[ turkish ] = "Standart dikey hizalama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Alineaci� vertical per defecte";
+    Text[ thai ] = "ค่าเริ่มต้นการจัดตำแหน่งแนวตั้ง";
 };
 String SCSTR_ORIENTATION_TOPBOTTOM
 {
@@ -2007,6 +2077,7 @@ String SCSTR_ORIENTATION_TOPBOTTOM
     Text[ turkish ] = "Yukardan a�a��";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "De dalt a baix";
+    Text[ thai ] = "บนลงล่าง";
 };
 String SCSTR_ORIENTATION_BOTTOMTOP
 {
@@ -2034,6 +2105,7 @@ String SCSTR_ORIENTATION_BOTTOMTOP
     Text[ turkish ] = "A�a��dan yukar�ya";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "De baix a dalt";
+    Text[ thai ] = "ล่างขึ้นบน";
 };
 String SCSTR_ORIENTATION_STANDARD
 {
@@ -2061,6 +2133,7 @@ String SCSTR_ORIENTATION_STANDARD
     Text[ turkish ] = "Standart metin y�n�";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Orientaci� per defecte";
+    Text[ thai ] = "ค่าเริ่มต้นการวางตำแหน่ง";
 };
 
 String SCSTR_PROTECTDOC
@@ -2090,6 +2163,7 @@ String SCSTR_PROTECTDOC
     Text[ turkish ] = "Belgeyi koru";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Protegeix el document";
+    Text[ thai ] = "ป้องกันเอกสาร";
 };
 String SCSTR_UNPROTECTDOC
 {
@@ -2117,6 +2191,7 @@ String SCSTR_UNPROTECTDOC
     Text[ turkish ] = "Belge korumas�n� kald�r";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desprotegeix el document";
+    Text[ thai ] = "ไม่ป้องกันเอกสาร";
 };
 String SCSTR_PROTECTTAB
 {
@@ -2144,6 +2219,7 @@ String SCSTR_PROTECTTAB
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Protegeix el full";
     Text[ finnish ] = "Suojaa lomake";
+    Text[ thai ] = "ป้องกันแผ่นงาน";
 };
 String SCSTR_UNPROTECTTAB
 {
@@ -2170,6 +2246,7 @@ String SCSTR_UNPROTECTTAB
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desprotegeix el full";
     Text[ finnish ] = "Poista lomakkeen suojaus";
+    Text[ thai ] = "ไม่ป้องกันแผ่นงาน";
 };
 String SCSTR_CHG_PROTECT
 {
@@ -2196,6 +2273,7 @@ String SCSTR_CHG_PROTECT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Protegeix el rastreig";
     Text[ finnish ] = "~Suojaa tietueet";
+    Text[ thai ] = "ป้องกันการติดตาม";
 };
 String SCSTR_CHG_UNPROTECT
 {
@@ -2222,6 +2300,7 @@ String SCSTR_CHG_UNPROTECT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desprotegeix el rastreig";
     Text[ finnish ] = "Poista tietueiden suojaus";
+    Text[ thai ] = "ไม่ป้องกันการติดตาม";
 };
 String SCSTR_PASSWORD
 {
@@ -2249,6 +2328,7 @@ String SCSTR_PASSWORD
     Text[ turkish ] = "�ifre:";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Contrasenya:";
+    Text[ thai ] = "รหัสผ่าน:";
 };
 String SCSTR_PASSWORDOPT
 {
@@ -2276,6 +2356,7 @@ String SCSTR_PASSWORDOPT
     Text[ turkish ] = "�ifre (iste�e ba�l�):";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Contrasenya (opcional):";
+    Text[ thai ] = "รหัสผ่าน (เลือกได้):";
 };
 
 String SCSTR_WRONGPASSWORD
@@ -2304,6 +2385,7 @@ String SCSTR_WRONGPASSWORD
     Text[ turkish ] = "�ifre yanl��";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Contrasenya incorrecta";
+    Text[ thai ] = "รหัสผ่านไม่ภูกต้อง";
 };
 
 String SCSTR_END
@@ -2332,6 +2414,7 @@ String SCSTR_END
     Text[ turkish ] = "~Son";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Fi";
+    Text[ thai ] = "~สิ้นสุด";
 };
 
 String SCSTR_STAT_PRINT
@@ -2360,6 +2443,7 @@ String SCSTR_STAT_PRINT
     Text[ turkish ] = "Yazd�r...";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "S'est� imprimint...";
+    Text[ thai ] = "กำลังพิมพ์...";
 };
 
 String SCSTR_UNKNOWN
@@ -2388,6 +2472,7 @@ String SCSTR_UNKNOWN
     Text[ turkish ] = "Bilinmiyor";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desconegut";
+    Text[ thai ] = "ไม่รู้จัก";
 };
 
 String SCSTR_CHAR_ATTRS
@@ -2416,6 +2501,7 @@ String SCSTR_CHAR_ATTRS
     Text[ turkish ] = "Yaz�tipi �znitelikleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Atributs de la lletra";
+    Text[ thai ] = "คุณลักษณะตัวอักษร";
 };
 
 
@@ -2446,6 +2532,7 @@ String SCSTR_CLPBRD_CLEAR
     Text[ turkish ] = "Panoya b�y�k miktarda veri aktard�n�z.\nPano i�eri�ini ba�ka uygulamalarda kullanmak istiyor musunuz?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Heu desat una gran quantitat de dades al porta-retalls.\nVoleu que el contingut del porta-retalls quedi disponible per a altres aplicacions?";
+    Text[ thai ] = "คุณมีข้อมูลจำนวนมากบันทึกในคลิปบอร์ด\nคุณต้องการให้เนื้อหาของคลิปบอร์ดใช้ได้ในโปรแกรมประยุกต์อื่นหรือไม่?";
 };
 
 String SCSTR_CFG_APP
@@ -2473,6 +2560,7 @@ String SCSTR_CFG_APP
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opcions del sistema";
     Text[ finnish ] = "J�rjestelm�asetukset";
+    Text[ thai ] = "ตัวเลือกระบบ";
 };
 
 String SCSTR_CFG_DOC
@@ -2500,6 +2588,7 @@ String SCSTR_CFG_DOC
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opcions del document";
     Text[ finnish ] = "Asiakirja-asetukset";
+    Text[ thai ] = "ตัวเลือกเอกสาร";
 };
 
 String SCSTR_CFG_VIEW
@@ -2527,6 +2616,7 @@ String SCSTR_CFG_VIEW
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opcions de visualitzaci�";
     Text[ finnish ] = "N�ytt�asetukset";
+    Text[ thai ] = "ตัวเลือกมุมมอง";
 };
 
 String SCSTR_CFG_INPUT
@@ -2554,6 +2644,7 @@ String SCSTR_CFG_INPUT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opcions d'entrada";
     Text[ finnish ] = "Sy�tt�asetukset";
+    Text[ thai ] = "ตัวเลือกข้อมูลเข้า";
 };
 
 String SCSTR_CFG_SPELLCHECK
@@ -2581,6 +2672,7 @@ String SCSTR_CFG_SPELLCHECK
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opcions de la verificaci� ortogr�fica";
     Text[ finnish ] = "Oikeinkirjoituksen asetukset";
+    Text[ thai ] = "ตัวเลือกการสะกด";
 };
 
 String SCSTR_CFG_PRINT
@@ -2608,6 +2700,7 @@ String SCSTR_CFG_PRINT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opcions d'impressi�";
     Text[ finnish ] = "Tulostusasetukset";
+    Text[ thai ] = "ตัวเลือกการพิมพ์";
 };
 
 String SCSTR_CFG_NAVIPI
@@ -2635,6 +2728,7 @@ String SCSTR_CFG_NAVIPI
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Par�metres del navegador";
     Text[ finnish ] = "Navigaattorin asetukset";
+    Text[ thai ] = "ตั้งค่าตัวนำทาง";
 };
 
 String SCSTR_MINIMUM
@@ -2662,6 +2756,7 @@ String SCSTR_MINIMUM
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~M�nim";
     Text[ finnish ] = "~V�hint��n";
+    Text[ thai ] = "~น้อยที่สุด";
 };
 String SCSTR_MAXIMUM
 {
@@ -2688,6 +2783,7 @@ String SCSTR_MAXIMUM
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~M�xim";
     Text[ finnish ] = "~Enint��n";
+    Text[ thai ] = "~มากที่สุด";
 };
 String SCSTR_VALUE
 {
@@ -2714,6 +2810,7 @@ String SCSTR_VALUE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Valor";
     Text[ finnish ] = "~Arvo";
+    Text[ thai ] = "~ค่า";
 };
 
  // fuer Dialoge:
@@ -2743,6 +2840,7 @@ String SCSTR_CHARSET_USER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sistema";
     Text[ finnish ] = "J�rjestelm�";
+    Text[ thai ] = "ระบบ";
 };
 
 String SCSTR_COLUMN_USER
@@ -2771,6 +2869,7 @@ String SCSTR_COLUMN_USER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Est�ndard;Text;Data (DMA);Data (MDA);Data (AMD);Angl�s (US);Ocultar";
     Text[ finnish ] = "Vakio;Teksti;P�iv�m��r� (PKV);P�iv�m��r� (KPV);P�iv�m��r� (VKP);Englanti (USA);Piilota";
+    Text[ thai ] = "มาตรฐาน;ข้อความ;วันที่ (วดป);วันที่ (ดวป);วันที่ (ปดว);อเมริกัน อังกฤษ;ซ่อน";
 };
 
 String SCSTR_FIELDSEP
@@ -2799,6 +2898,7 @@ String SCSTR_FIELDSEP
     Text[ language_user1 ] = " ";
     Text[ turkish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Bo�luk}\t32";
     Text[ catalan ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{buit}\t32";
+    Text[ thai ] = ",\t44\t;\t59\t:\t58\t{ระยะกั้น}\t9\t{ช่องว่าง}\t32 ";
 };
 
 String SCSTR_TEXTSEP
@@ -2831,6 +2931,7 @@ String SCSTR_FORMULA_AUTOCORRECTION
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME Calc ha trobat un error en la f�rmula.\nVols acceptar la proposta de correcci�?\n\n";
     Text[ finnish ] = "%PRODUCTNAME Calc havaitsi virheen annetussa kaavassa.\nHyv�ksytk� ehdotetun korjauksen?\n\n";
+    Text[ thai ] = "พบข้อผิดพลาด %PRODUCTNAME Calc ในสูตรที่ใส่เข้าไป\nคุณต้องการยอมรับการแก้ไขข้อผิดพลาดที่เสนอข้างล่างหรือไม่?\n\n";
 };
 
 //! the graphics filter error strings should be moved to svx or offapp!
@@ -2863,6 +2964,7 @@ String SCSTR_GRFILTER_OPENERROR
     Text[ turkish ] = "Grafik dosyas� a��lam�yor";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No es pot obrir el fitxer gr�fic";
+    Text[ thai ] = "ไม่สามารถเปิดแฟ้มกราฟิคได้";
 };
 String SCSTR_GRFILTER_IOERROR
 {
@@ -2892,6 +2994,7 @@ String SCSTR_GRFILTER_IOERROR
     Text[ turkish ] = "Grafik dosyas� okunam�yor";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No es pot llegir el fitxer gr�fic";
+    Text[ thai ] = "ไม่สามารถอ่านแฟ้มกราฟิคได้";
 };
 String SCSTR_GRFILTER_FORMATERROR
 {
@@ -2921,6 +3024,7 @@ String SCSTR_GRFILTER_FORMATERROR
     Text[ turkish ] = "Bilinmeyen grafik dosyas�";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El format de la imatge �s desconegut";
+    Text[ thai ] = "ไม่รู้จักรูปแบบกราฟิค";
 };
 String SCSTR_GRFILTER_VERSIONERROR
 {
@@ -2950,6 +3054,7 @@ String SCSTR_GRFILTER_VERSIONERROR
     Text[ turkish ] = "Bu grafik dosyas� s�r�m� desteklenmiyor";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Aquesta versi� del fitxer gr�fic no �s soportada";
+    Text[ thai ] = "ไม่สนับสนุนเวอร์ชั่นแฟ้มกราฟิคนี้";
 };
 String SCSTR_GRFILTER_FILTERERROR
 {
@@ -2979,6 +3084,7 @@ String SCSTR_GRFILTER_FILTERERROR
     Text[ turkish ] = "Grafik filtresi bulunamad�";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No s'ha trobat el filtre d'imatge";
+    Text[ thai ] = "ไม่พบตัวกรองกราฟิค";
 };
 String SCSTR_GRFILTER_TOOBIG
 {
@@ -3008,6 +3114,7 @@ String SCSTR_GRFILTER_TOOBIG
     Text[ turkish ] = "Grafi�in eklenmesi i�in yeterli bellek yok";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No hi ha prou mem�ria per a insertar la imatge";
+    Text[ thai ] = "หน่วยความจำไม่พอที่จะแทรกกราฟิค";
 };
 String SCSTR_UNDO_GRAFFILTER
 {
@@ -3033,6 +3140,7 @@ String SCSTR_UNDO_GRAFFILTER
     Text[ turkish ] = "Grafik filtresi";
     Text[ catalan ] = "Filtre d'imatge";
     Text[ finnish ] = "Grafiikkasuodatin";
+    Text[ thai ] = "ตัวกรองกราฟิค";
 };
 
 // #98185#
@@ -3063,6 +3171,7 @@ String STR_CAPTION_DEFAULT_TEXT
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Teksti";
     Text[ catalan ] = "Text";
+    Text[ thai ] = "ข้อความ";
 };
 
 
