@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-07 07:52:37 $
+ *  last change: $Author: mib $ $Date: 2001-06-12 11:36:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2326,7 +2326,7 @@ BOOL SwFmtLineNumber::PutValue( const uno::Any& rVal, BYTE nMemberId )
             break;
         case MID_LINENUMBER_STARTVALUE:
         {
-            sal_Int16 nVal;
+            sal_Int32 nVal;
             if(rVal >>= nVal)
                 SetStartValue( nVal );
             else
