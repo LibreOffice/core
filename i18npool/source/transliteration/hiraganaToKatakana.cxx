@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hiraganaToKatakana.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 10:54:46 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:01:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,27 +71,22 @@ using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-hiraganaToKatakana::hiraganaToKatakana()
-{
-    transliterationName = "hiraganaToKatakana";
-    implementationName = "com.sun.star.i18n.Transliteration.HIRAGANA_KATAKANA";
-}
-
 // see http://charts.unicode.org/Web/U3040.html Hiragana (U+3040..U+309F)
 // see http://charts.unicode.org/Web/U30A0.html Katakana (U+30A0..U+30FF)
 static sal_Unicode toKatakana (const sal_Unicode c) {
-    if (0x3040 <= c && c <= 0x3094 || 0x309d <= c && c <= 0x309f) { // 3040 - 309F HIRAGANA LETTER
-        // shift code point by 0x0060
-        return c + (0x30a0 - 0x3040);
-    }
-    return c;
+        if (0x3040 <= c && c <= 0x3094 || 0x309d <= c && c <= 0x309f) { // 3040 - 309F HIRAGANA LETTER
+            // shift code point by 0x0060
+            return c + (0x30a0 - 0x3040);
+        }
+        return c;
 }
 
-OUString SAL_CALL
-hiraganaToKatakana::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
-    throw(RuntimeException)
+hiraganaToKatakana::hiraganaToKatakana()
 {
-    return transliteration_OneToOne::transliterate( inStr, startPos, nCount, offset, (TransFunc) toKatakana );
+        func = toKatakana;
+        table = 0;
+        transliterationName = "hiraganaToKatakana";
+        implementationName = "com.sun.star.i18n.Transliteration.HIRAGANA_KATAKANA";
 }
 
 } } } }

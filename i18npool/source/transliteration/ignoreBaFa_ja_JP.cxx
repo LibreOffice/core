@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ignoreBaFa_ja_JP.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 10:54:46 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,89 +70,21 @@ using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-OUString SAL_CALL
-ignoreBaFa_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
-  throw(RuntimeException)
+static Mapping BaFa[] = {
+        { 0x30F4, 0x30A1, 0x30D0 },
+        { 0x3094, 0x3041, 0x3070 },
+        { 0x30D5, 0x30A1, 0x30CF },
+        { 0x3075, 0x3041, 0x306F },
+        { 0, 0, 0 }
+};
+
+ignoreBaFa_ja_JP::ignoreBaFa_ja_JP()
 {
-  // Create a string buffer which can hold nCount + 1 characters.
-  // The reference count is 0 now.
-  rtl_uString * newStr = x_rtl_uString_new_WithLength( nCount ); // defined in x_rtl_ustring.h
-  sal_Unicode * dst = newStr->buffer;
-  const sal_Unicode * src = inStr.getStr() + startPos;
-
-  // Allocate nCount length to offset argument.
-  offset.realloc( nCount );
-  sal_Int32 *p = offset.getArray();
-  sal_Int32 position = startPos;
-
-  //
-  sal_Unicode previousChar = *src ++;
-  sal_Unicode currentChar;
-
-  // Translation
-  while (-- nCount > 0) {
-    currentChar = *src ++;
-
-    if (previousChar == 0x30F4 &&  // KATAKANA LETTER VU
-    currentChar  == 0x30A1 ) { // KATAKANA LETTER SMALL A
-      position ++;
-      *p ++ = position;
-      position ++;
-      *dst ++ = 0x30D0;            // KATAKANA LETTER BA
-      previousChar = *src ++;
-      nCount --;
-      continue;
-    }
-
-    if (previousChar == 0x3094 &&  // HIRAGANA LETTER VU
-    currentChar  == 0x3041 ) { // HIRAGANA LETTER SMALL A
-      position ++;
-      *p ++ = position;
-      position ++;
-      *dst ++ = 0x3070;            // HIRAGANA LETTER BA
-      previousChar = *src ++;
-      nCount --;
-      continue;
-    }
-
-    if (previousChar == 0x30D5 &&  // KATAKANA LETTER HU
-    currentChar  == 0x30A1 ) { // KATAKANA LETTER SMALL A
-      position ++;
-      *p ++ = position;
-      position ++;
-      *dst ++ = 0x30CF;            // KATAKANA LETTER HA
-      previousChar = *src ++;
-      nCount --;
-      continue;
-    }
-
-    if (previousChar == 0x3075 &&  // HIRAGANA LETTER HU
-    currentChar  == 0x3041 ) { // HIRAGANA LETTER SMALL A
-      position ++;
-      *p ++ = position;
-      position ++;
-      *dst ++ = 0x306F;            // HIRAGANA LETTER HA
-      previousChar = *src ++;
-      nCount --;
-      continue;
-    }
-
-    *p ++ = position;
-    position ++;
-    *dst ++ = previousChar;
-    previousChar = currentChar;
-  }
-
-  if (nCount == 0) {
-    *p = position;
-    *dst ++ = previousChar;
-  }
-
-  *dst = (sal_Unicode) 0;
-
-  newStr->length = sal_Int32(dst - newStr->buffer);
-  offset.realloc(newStr->length);
-  return OUString( newStr ); // defined in rtl/usrting. The reference count is increased from 0 to 1.
+        func = (TransFunc) 0;
+        table = 0;
+        map = BaFa;
+        transliterationName = "ignoreBaFa_ja_JP";
+        implementationName = "com.sun.star.i18n.Transliteration.ignoreBaFa_ja_JP";
 }
 
 } } } }
