@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-21 12:56:17 $
+ *  last change: $Author: mtg $ $Date: 2001-10-09 14:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,7 +633,7 @@ uno::Sequence< beans::PropertyState > SwXTextPortion::getPropertyStates(
     SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
     if(!pUnoCrsr)
         throw RuntimeException();
-    Sequence< PropertyState > aRet = SwXTextCursor::GetPropertyStates(*pUnoCrsr, aPropSet, rPropertyNames);
+    Sequence< PropertyState > aRet = SwXTextCursor::GetPropertyStates(*pUnoCrsr, aPropSet, rPropertyNames, SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION);
 
     if(GetTextPortionType() == PORTION_RUBY_START)
     {
