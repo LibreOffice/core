@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-14 17:32:57 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:23:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,7 +575,7 @@ TabPage TP_LINENUMBERING
         Text[ chinese_simplified ] = "Ã¿";
         Text[ russian ] = "Âñå";
         Text[ polish ] = "Co";
-        Text[ japanese ] = "‚·‚×‚Ä";
+        Text[ japanese ] = "ŠÔŠu";
         Text[ chinese_traditional ] = "¨C";
         Text[ arabic ] = "ßá";
         Text[ language_user1 ] = " ";
@@ -793,5 +793,6 @@ TabPage TP_LINENUMBERING
     Text[ catalan ] = "Numeración de líneas";
     Text[ finnish ] = "Rivien numerointi";
 };
+
 
 
