@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testoffice.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:29:49 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,17 +266,17 @@ int main( int argc, char *argv[] )
 
         Reference < XConnector > rConnector(
             createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Connector")),
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("connectr")),
+                             OUString( RTL_CONSTASCII_USTRINGPARAM("connector.uno" SAL_DLLEXTENSION)),
                              rSMgr ),
             UNO_QUERY );
 
         createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.Bridge.iiop")),
-                         OUString( RTL_CONSTASCII_USTRINGPARAM("remotebridge")),
+                         OUString( RTL_CONSTASCII_USTRINGPARAM("remotebridge.uno" SAL_DLLEXTENSION)),
                          rSMgr );
 
         Reference < XBridgeFactory > rFactory(
             createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.BridgeFactory")),
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("brdgfctr")),
+                             OUString( RTL_CONSTASCII_USTRINGPARAM("bridgefac.uno" SAL_DLLEXTENSION)),
                              rSMgr ),
             UNO_QUERY );
 
