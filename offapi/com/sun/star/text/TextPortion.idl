@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextPortion.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 00:21:03 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ published service TextPortion
     [optional] interface ::com::sun::star::container::XContentEnumerationAccess;
 
     /** gives access to a sequence of properties.
-        @since 112405
+        @since OOo 2.0.0
      */
     [optional] interface ::com::sun::star::beans::XTolerantMultiPropertySet;
 
