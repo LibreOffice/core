@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InputStreamToXInputStreamAdapter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:29:18 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 11:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ public class InputStreamToXInputStreamAdapter implements XInputStream {
             // must <= len.
             //
             if (bytesRead <= 0) {
-                return(-1);
+                return(0);
         }
         return ((int)bytesRead);
 
@@ -157,7 +157,7 @@ public class InputStreamToXInputStreamAdapter implements XInputStream {
             // must <= len.
             //
             if (bytesRead <= 0) {
-                return(-1);
+                return(0);
         }
         return ((int)bytesRead);
 
