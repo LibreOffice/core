@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:43:08 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
         // mark request as user interaction from outside
         aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:OpenEvent");
 
-        String aName( aDispatchRequest.aURL );
+        String aName( GetURL_Impl( aDispatchRequest.aURL ) );
         ::rtl::OUString aTarget( RTL_CONSTASCII_USTRINGPARAM("_default") );
 
         if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
