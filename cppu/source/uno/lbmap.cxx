@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:29 $
+ *  last change: $Author: hjs $ $Date: 2001-01-15 17:29:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,7 +604,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_getMappingByName(
         OSL_ENSHURE( pETo, "### cannot get target environment!" );
         if (pETo)
         {
-            uno_getMapping( ppMapping, pEFrom, pETo, pAddPurpose );
+            ::uno_getMapping( ppMapping, pEFrom, pETo, pAddPurpose );
             (*pETo->release)( pETo );
         }
         (*pEFrom->release)( pEFrom );

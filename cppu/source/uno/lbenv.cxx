@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:29 $
+ *  last change: $Author: hjs $ $Date: 2001-01-15 17:29:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,7 +681,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_dumpEnvironmentByName(
     uno_getEnvironment( &pEnv, pEnvTypeName, 0 );
     if (pEnv)
     {
-        uno_dumpEnvironment( stream, pEnv, pFilter );
+        ::uno_dumpEnvironment( stream, pEnv, pFilter );
         (*pEnv->release)( pEnv );
     }
     else
