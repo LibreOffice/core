@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.13 $
+*  $Revision: 1.14 $
 *
-*  last change: $Author: rt $ $Date: 2004-05-26 20:11:00 $
+*  last change: $Author: rt $ $Date: 2004-05-28 10:20:08 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -514,6 +514,13 @@ File gid_File_Images_Zip
     Dir = gid_Dir_Share_Config;
     Name = "images.zip";
     Styles = (PACKED,SETUPZIP);
+End
+
+File gid_File_Images_Zip_Setup
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+    Name = "images2.zip";
+    Styles = (ARCHIVE,SETUPZIP);
 End
 
 File gid_File_Inethist_Dat_Delete_Only
