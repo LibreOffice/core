@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-07 14:48:45 $
+ *  last change: $Author: hr $ $Date: 2001-12-10 18:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -858,7 +858,8 @@ SEQUENCE < DISPATCHINFORMATION > SAL_CALL SfxBaseController::getConfigurableDisp
 #endif
 
 
-void SAL_CALL SfxBaseController::registerContextMenuInterceptor( const REFERENCE< XCONTEXTMENUINTERCEPTOR >& xInterceptor )
+void SAL_CALL SfxBaseController::registerContextMenuInterceptor( const REFERENCE< XCONTEXTMENUINTERCEPTOR >& xInterceptor ) throw( RUNTIMEEXCEPTION )
+
 {
     m_pData->m_aInterceptorContainer.addInterface( xInterceptor );
 
@@ -867,7 +868,8 @@ void SAL_CALL SfxBaseController::registerContextMenuInterceptor( const REFERENCE
         m_pData->m_pViewShell->AddContextMenuInterceptor_Impl( xInterceptor );
 }
 
-void SAL_CALL SfxBaseController::releaseContextMenuInterceptor( const REFERENCE< XCONTEXTMENUINTERCEPTOR >& xInterceptor )
+void SAL_CALL SfxBaseController::releaseContextMenuInterceptor( const REFERENCE< XCONTEXTMENUINTERCEPTOR >& xInterceptor ) throw( RUNTIMEEXCEPTION )
+
 {
     m_pData->m_aInterceptorContainer.removeInterface( xInterceptor );
 
