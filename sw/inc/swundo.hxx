@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swundo.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 13:59:25 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:51:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ enum SwUndoStdId
     UNDO_OUTLINE_LR,                        // 20
     UNDO_OUTLINE_UD,                        // 21
     UNDO_INSNUM,                            // 22
-    UNDO_NUMUPDOWN,                         // 23
+    UNDO_NUMUP,                             // 23
     UNDO_MOVENUM,                           // 24
     UNDO_INSDRAWFMT,                        // 25
     UNDO_NUMORNONUM,                        // 26
@@ -169,7 +169,26 @@ enum SwUndoStdId
     UNDO_DELETE_PAGEDESC,                           // 92
     UNDO_HEADER_FOOTER,                           // 93 #i7983#
     UNDO_FIELD,                             // 94 #111840#
-    UNDO_STD_END= UNDO_FIELD                            // 94
+    UNDO_TXTFMTCOL_CREATE,                   // 95
+    UNDO_TXTFMTCOL_DELETE,                   // 96
+    UNDO_TXTFMTCOL_RENAME, // 97
+    UNDO_CHARFMT_CREATE, // 98
+    UNDO_CHARFMT_DELETE, // 99
+    UNDO_CHARFMT_RENAME, // 100
+    UNDO_FRMFMT_CREATE, // 101
+    UNDO_FRMFMT_DELETE, // 102
+    UNDO_FRMFMT_RENAME, // 103
+    UNDO_NUMRULE_CREATE,// 104
+    UNDO_NUMRULE_DELETE,// 105
+    UNDO_NUMRULE_RENAME,// 106
+    UNDO_BOOKMARK_RENAME, // 107
+    UNDO_INDEX_ENTRY_INSERT, // 108
+    UNDO_INDEX_ENTRY_DELETE, // 109
+    UNDO_COL_DELETE, // 110
+    UNDO_ROW_DELETE, // 111
+    UNDO_RENAME_PAGEDESC, // 112
+    UNDO_NUMDOWN, // 113
+    UNDO_STD_END= UNDO_NUMDOWN
 };
 
 
@@ -197,7 +216,7 @@ SV_DECL_PTRARR_DEL( SwUndoIds, SwUndoIdAndNamePtr, INIT_UNDOIDS, GROW_UNDOIDS )
 // Undo-Ids fuer die UI-Seite
 enum SwUIUndoIds
 {
-    UIUNDO_REPLACE             =  UNDO_STD_END,
+    UIUNDO_REPLACE             =  UNDO_STD_END + 1,
     UIUNDO_INSERT_PAGE_BREAK,
     UIUNDO_INSERT_COLUMN_BREAK,
     UIUNDO_PLAY_MACRO,
@@ -209,7 +228,8 @@ enum SwUIUndoIds
     UIUNDO_INSERT_FOOTNOTE,
     UIUNDO_INSERT_URLBTN,
     UIUNDO_INSERT_URLTXT,
-    UIUNDO_DELETE_INVISIBLECNTNT
+    UIUNDO_DELETE_INVISIBLECNTNT,
+    UIUNDO_REPLACE_STYLE
 };
 
 
