@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-22 09:31:09 $
+ *  last change: $Author: tl $ $Date: 2002-12-09 13:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,13 +316,6 @@ void SAL_CALL SmGraphicAccessible::grabFocus()
         throw RuntimeException();
 
     pWin->GrabFocus();
-}
-
-uno::Any SAL_CALL SmGraphicAccessible::getAccessibleKeyBinding()
-    throw (RuntimeException)
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    return uno::Any();
 }
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getForeground()
@@ -1630,13 +1623,6 @@ void SAL_CALL SmEditAccessible::grabFocus(  )
         throw RuntimeException();
 
     pWin->GrabFocus();
-}
-
-uno::Any SAL_CALL SmEditAccessible::getAccessibleKeyBinding(  )
-    throw (RuntimeException)
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    return uno::Any();
 }
 
 sal_Int32 SAL_CALL SmEditAccessible::getForeground()
