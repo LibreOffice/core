@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionPool.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-05 10:42:01 $
+ *  last change: $Author: fs $ $Date: 2001-06-05 12:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,10 +162,8 @@ Reference< XConnection > SAL_CALL OConnectionPool::getConnection( const ::rtl::O
         {
             if(!aIter->second.aProps.size())
                 xConnection = getPooledConnection(aIter);
-
-            ++aIter;
         }
-        while ((aIter != aThisURLConns.second) && !xConnection.is());
+        while ((aIter++ != aThisURLConns.second) && !xConnection.is());
     }
     if(!xConnection.is())
         xConnection = createNewConnection(_rURL,Sequence< PropertyValue >());
@@ -193,10 +191,8 @@ Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const 
         {
             if(checkSequences(aIter->second.aProps,aMap))
                 xConnection = getPooledConnection(aIter);
-
-            ++aIter;
         }
-        while ((aIter != aThisURLConns.second) && !xConnection.is());
+        while ((aIter++ != aThisURLConns.second) && !xConnection.is());
     }
     if(!xConnection.is())
         xConnection = createNewConnection(_rURL,_rInfo);
