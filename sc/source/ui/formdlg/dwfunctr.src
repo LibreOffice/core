@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-12 07:28:09 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,6 +499,22 @@ DockingWindow FID_FUNCTION_BOX
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Última utilización" ; Default ; > ;
+        < "Todas" ; Default ; > ;
+        < "Base de datos" ; Default ; > ;
+        < "Fecha&Hora" ; Default ; > ;
+        < "Finanzas" ; Default ; > ;
+        < "Información" ; Default ; > ;
+        < "Lógico" ; Default ; > ;
+        < "Matemáticas" ; Default ; > ;
+        < "Matriz" ; Default ; > ;
+        < "Estadística" ; Default ; > ;
+        < "Hoja de cálculo" ; Default ; > ;
+        < "Texto" ; Default ; > ;
+        < "Add In" ; Default ; > ;
+    };
     };
     ListBox DDLB_FUNC
     {
@@ -575,6 +591,7 @@ DockingWindow FID_FUNCTION_BOX
         QuickHelpText[ korean ] = "°è»ê¡¡½ÃÆ®¿¡¡¡ÇÔ¼ö¡¡»ðÀÔ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Funktion in Rechenblatt einfügen";
+        QuickHelpText[ catalan ] = "Insertar la función en la hoja de cálculo";
     };
     Text [ english_us ] = "Functions" ;
     Text [ portuguese_brazilian ] = "Funktionen" ;
@@ -597,5 +614,6 @@ DockingWindow FID_FUNCTION_BOX
     Text[ korean ] = "ÇÔ¼ö";
     Text[ turkish ] = "Fonksiyon";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Funciones";
 };
  // ********************************************************************** EOF
