@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:40:34 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -718,7 +718,7 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
                     SwTxtFmtColl* pColl = pWrtShell->GetTxtCollFromPool ( RES_POOLCOLL_LABEL_ABB );
                     SwFieldType* pType = pWrtShell->GetDoc()->GetFldType( RES_SETEXPFLD, pColl->GetName() );
                     sal_uInt16 nId = pWrtShell->GetDoc()->GetFldTypes()->GetPos( pType );
-                    pWrtShell->InsertLabel( LTYPE_OBJECT, aEmptyStr, FALSE, nId, aEmptyStr );
+                    pWrtShell->InsertLabel( LTYPE_OBJECT, aEmptyStr, aEmptyStr, FALSE, nId, aEmptyStr );
                     pWrtShell->SwFEShell::SetFlyName( sTeamCredits );
                     pWrtShell->SwFEShell::SelectObj ( Point ( ULONG_MAX, ULONG_MAX ) );
                     pWrtShell->EnterStdMode();
