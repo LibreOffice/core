@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-18 14:30:48 $
+ *  last change: $Author: pl $ $Date: 2002-11-20 14:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,12 +78,10 @@
 #include <rmoutdev.hxx>
 #endif
 #include <osl/thread.h>
+#include <osl/file.h>
 #include <rtl/crc.h>
 
 #include "implncvt.hxx"
-
-// TODO: replace DirEntry by osl_createTempFile as soon as that exists
-#include <tools/fsys.hxx>
 
 #include <math.h>
 #ifdef WNT
@@ -1819,12 +1817,8 @@ sal_Int32 PDFWriterImpl::emitFonts()
 
     std::map< sal_Int32, sal_Int32 > aFontIDToObject;
 
-    // TODO: as soon as osl provides osl_createTempFile replace the DirEntry
     OUString aTmpName;
-    DirEntry aEntry;
-    OUString aSyspath = aEntry.TempName().GetFull();
-    osl_getFileURLFromSystemPath( aSyspath.pData, &aTmpName.pData );
-
+    osl_createTempFile( NULL, NULL, &aTmpName.pData );
     for( FontSubsetData::iterator it = m_aSubsets.begin(); it != m_aSubsets.end(); ++it )
     {
         for( FontEmitList::iterator lit = it->second.m_aSubsets.begin(); lit != it->second.m_aSubsets.end(); ++lit )
@@ -1964,9 +1958,9 @@ sal_Int32 PDFWriterImpl::emitFonts()
 
                 aFontIDToObject[ lit->m_nFontID ] = nFontObject;
             }
-            osl_removeFile( aTmpName.pData );
         }
     }
+    osl_removeFile( aTmpName.pData );
 
     // emit embedded fonts
     for( std::map< ImplFontData*, sal_Int32 >::iterator eit = m_aEmbeddedFonts.begin(); eit != m_aEmbeddedFonts.end(); ++eit )
