@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invader1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,13 +173,13 @@ void MyWindow::Kollision()
                 bWaitDlg = TRUE;
                 pBox = new MessBox(GetParent(),WinBits(WB_OK),String(ResId(STR_APP_TITLE,GetResMgr())),aString);
                 ProgStatus=FALSE;
-                SetBackgroundBrush(Brush(COL_WHITE,BRUSH_SOLID));
+                SetBackground(Wallpaper( Color( COL_WHITE ) ) );
 
                 aWaitDlgTimer.Start();
                 return;
             }
 
-            SetBackgroundBrush(BRUSH_NULL);
+            SetBackground();
             ProgStatus=TRUE;
             delete pBox;
             pBox = 0L;
@@ -208,7 +208,7 @@ void MyWindow::Kollision()
                 pBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,GetResMgr())),aString);
                 aDummyStatus = ProgStatus;
                 //ProgStatus=FALSE;
-                SetBackgroundBrush(Brush(COL_WHITE,BRUSH_SOLID));
+                SetBackground(Wallpaper( Color( COL_WHITE ) ) );
 
                 aWaitDlgTimer.Start();
 
@@ -229,7 +229,7 @@ void MyWindow::Kollision()
                     nTimeOut = TIMELOW;
             }
 
-            SetBackgroundBrush(BRUSH_NULL);
+            SetBackground();
             //ProgStatus=aDummyStatus;
             delete pBox;
             pBox = 0L;
@@ -251,12 +251,12 @@ void MyWindow::Kollision()
                         {
                             pBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,GetResMgr())),aString);
                             Paint(Rectangle(Point(0,0),Point(640,480)));
-                            SetBackgroundBrush(Brush(COL_WHITE,BRUSH_SOLID));
+                            SetBackground(Wallpaper( Color( COL_WHITE ) ) );
 
                             aWaitDlgTimer.Start();
                         }
 
-                        SetBackgroundBrush(BRUSH_NULL);
+                        SetBackground();
                         delete pBox;
                         pBox = 0L;
                         GrabFocus();
