@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:33:34 $
+ *  last change: $Author: rt $ $Date: 2001-06-16 21:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   solvrdlg.src  $
- //   $Author: kz $
- //     $Date: 2001-06-13 23:33:34 $
- // $Revision: 1.15 $
+ //   $Author: rt $
+ //     $Date: 2001-06-16 21:59:37 $
+ // $Revision: 1.16 $
  //  $Logfile:   T:/sc/source/ui/src/solvrdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -270,7 +270,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ norwegian ] = "Variabler" ;
         Text [ italian ] = "Preimpostazioni" ;
         Text [ portuguese_brazilian ] = "Vari?veis" ;
-        Text [ portuguese ] = "Definir variáveis" ;
+        Text [ portuguese ] = "Predefinições" ;
         Text [ finnish ] = "Määritä oletusarvot" ;
         Text [ danish ] = "Forudindstillinger" ;
         Text [ french ] = "Définitions" ;
@@ -431,5 +431,6 @@ ModelessDialog RID_SCDLG_SOLVER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Buscar valor destino";
 };
+
 
 
