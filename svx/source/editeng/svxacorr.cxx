@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:50:26 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #define ITEMID_CHARSETCOLOR 0
 #define ITEMID_COLOR        0
 
+#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
+#include <com/sun/star/io/XStream.hpp>
+#endif
+
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
@@ -82,7 +86,6 @@
 #ifndef _STORINFO_HXX //autogen
 #include <sot/storinfo.hxx>
 #endif
-#include <sot/storage.hxx>
 #ifndef _SFX_DOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
@@ -137,6 +140,9 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svxids.hrc>
 #endif
+
+#include <sot/storage.hxx>
+#include <comphelper/storagehelper.hxx>
 
 #include "udlnitem.hxx"
 #include "wghtitem.hxx"
@@ -1631,19 +1637,17 @@ BOOL SvxAutoCorrect::DeleteText( const String& rShort, LanguageType eLang )
 
     //  - return den Ersetzungstext (nur fuer SWG-Format, alle anderen
     //      koennen aus der Wortliste herausgeholt werden!)
-BOOL SvxAutoCorrect::GetLongText( SvStorageRef&, const String& , String& )
+BOOL SvxAutoCorrect::GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String& rFileName, const String& , String& )
 {
     return FALSE;
 }
 
     //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)
-BOOL SvxAutoCorrect::PutText( SvStorage&, const String&, SfxObjectShell&,
+BOOL SvxAutoCorrect::PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String& rFileName, const String&, SfxObjectShell&,
                                 String& )
 {
     return FALSE;
 }
-
-
 
 void EncryptBlockName_Imp( String& rName )
 {
@@ -2002,82 +2006,11 @@ BOOL SvxAutoCorrectLanguageLists::IsFileChanged_Imp()
     }
     return bRet;
 }
-/* -----------------18.11.98 11:26-------------------
- *
- * --------------------------------------------------*/
-void SvxAutoCorrectLanguageLists::LoadExceptList_Imp(
-                                        SvStringsISortDtor*& rpLst,
-                                        const sal_Char* pStrmName,
-                                        SvStorageRef &rStg)
-{
-    if( rpLst )
-        rpLst->DeleteAndDestroy( 0, rpLst->Count() );
-    else
-        rpLst = new SvStringsISortDtor( 16, 16 );
 
-    {
-
-        String sStrmName( pStrmName, RTL_TEXTENCODING_MS_1252 );
-        String sTmp( sStrmName );
-
-        if( rStg.Is() && ( rStg->IsStream( sStrmName ) ||
-            // "alte" Listen konvertieren!
-            ( pCplStt_ExcptLst == rpLst &&
-                rStg->IsStream( sTmp.AssignAscii( "ExceptionList" ))) ))
-        {
-            SvStorageStreamRef xStrm = rStg->OpenSotStream( sTmp,
-                ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE ) );
-            if( SVSTREAM_OK != xStrm->GetError())
-            {
-                xStrm.Clear();
-                rStg.Clear();
-                RemoveStream_Imp( sStrmName );
-            }
-            else
-            {
-                xStrm->SetBufferSize( 8192 );
-
-                BYTE cLen, cSet;
-                USHORT nVersion, nCount;
-                *xStrm >> cLen >> nVersion >> cSet >> nCount;
-
-                for( USHORT i = 0; i < nCount; ++i)
-                {
-                    String* pNew = new String;
-                    xStrm->ReadByteString( *pNew, cSet );
-
-                    if( xStrm->IsEof() || SVSTREAM_OK != xStrm->GetError() )
-                    {
-//                      nErr = ( pExceptLst->GetError() == SVSTREAM_OK )
-//                                  ? 0 : ERR_SWG_READ_ERROR;
-                        xStrm.Clear();
-                        delete pNew;
-                        break;
-                    }
-
-                    if( !rpLst->Insert( pNew ) )
-                        delete pNew;
-                }
-
-                if( sTmp != sStrmName )
-                {
-                    xStrm.Clear();
-                    rStg.Clear();
-                    RemoveStream_Imp( sTmp );
-                }
-            }
-        }
-
-        // Zeitstempel noch setzen
-        FStatHelper::GetModifiedDateTimeOfFile( sShareAutoCorrFile,
-                                        &aModifiedDate, &aModifiedTime );
-        aLastCheckTime = Time();
-    }
-}
 void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
                                         SvStringsISortDtor*& rpLst,
                                         const sal_Char* pStrmName,
-                                        SvStorageRef &rStg)
+                                        SotStorageRef& rStg)
 {
     if( rpLst )
         rpLst->DeleteAndDestroy( 0, rpLst->Count() );
@@ -2168,7 +2101,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
 void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                             const SvStringsISortDtor& rLst,
                             const sal_Char* pStrmName,
-                            SvStorageRef &rStg,
+                            SotStorageRef &rStg,
                             BOOL bConvert )
 {
     if( rStg.Is() )
@@ -2181,7 +2114,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
         }
         else
         {
-            SvStorageStreamRef xStrm = rStg->OpenSotStream( sStrmName,
+            SotStorageStreamRef xStrm = rStg->OpenSotStream( sStrmName,
                     ( STREAM_READ | STREAM_WRITE | STREAM_SHARE_DENYWRITE ) );
             if( xStrm.Is() )
             {
@@ -2246,169 +2179,23 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
     else
         pAutocorr_List = new SvxAutocorrWordList( 16, 16 );
 
-    SotStorageRef xStg = new SotStorage( sShareAutoCorrFile, STREAM_READ | STREAM_SHARE_DENYNONE, TRUE );
-
     SvStringsDtor aRemoveArr;
-    String aWordListName( pImplAutocorr_ListStr, RTL_TEXTENCODING_MS_1252 );
-    String aXMLWordListName( pXMLImplAutocorr_ListStr, RTL_TEXTENCODING_MS_1252 );
-    if( xStg.Is() && xStg->IsStream( aWordListName ) )
+    try
     {
-        SvStorageStreamRef xStrm = xStg->OpenSotStream( aWordListName,
-            ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE ) );
-        if( SVSTREAM_OK != xStrm->GetError())
+        uno::Reference < embed::XStorage > xStg = comphelper::OStorageHelper::GetStorageFromURL( sShareAutoCorrFile, embed::ElementModes::READ );
+        String aXMLWordListName( pXMLImplAutocorr_ListStr, RTL_TEXTENCODING_MS_1252 );
+        uno::Reference < io::XStream > xStrm = xStg->openStreamElement( aXMLWordListName, embed::ElementModes::READ );
+        Reference< lang::XMultiServiceFactory > xServiceFactory = comphelper::getProcessServiceFactory();
+
+        xml::sax::InputSource aParserInput;
+        aParserInput.sSystemId = aXMLWordListName;
+        aParserInput.aInputStream = xStrm->getInputStream();
+
+        // get parser
+        Reference< XInterface > xXMLParser = xServiceFactory->createInstance( OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
+        DBG_ASSERT( xXMLParser.is(), "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
+        if( xXMLParser.is() )
         {
-            xStrm.Clear();
-            xStg.Clear();
-            RemoveStream_Imp( aWordListName );
-        }
-        else
-        {
-            xStrm->SetBufferSize( 8192 );
-
-//!!!!!!!!!!!!!
-            // JP 10.10.96: AutocorrDatei vom Writer hat in einer alten
-            //              Version keine CharSet Information sondern
-            //              beginnt sofort mit einem String.
-            //              Diese Dateien koennen wir ERSTMAL nicht
-            //              verarbeiten.
-//!!!!!!!!!!!!!
-            String sShort, sLong;
-            xStrm->ReadByteString( sShort, RTL_TEXTENCODING_MS_1252 );
-            if( !sShort.Len() )
-            {
-                // neuer Stream (mit Header)
-                ULONG nOld = xStrm->Tell();
-
-                BYTE cLen, cSet;
-                USHORT nVersion;
-                *xStrm >> cLen >> nVersion >> cSet;
-
-                SvStorageInfoList* pInfoList = 0;
-                if( WORDLIST_VERSION_358 > nVersion )
-                {
-                    pInfoList = new SvStorageInfoList;
-                    xStg->FillInfoList( pInfoList );
-                }
-
-                ULONG nNew = xStrm->Tell();
-                nOld += cLen;
-                if( nOld != nNew )
-                    xStrm->Seek( nOld );
-
-                TransliterationWrapper& rCmp = GetIgnoreTranslWrapper();
-
-                // dann lese mal alle Ersetzungen:
-                while( TRUE )
-                {
-                    xStrm->ReadByteString( sShort, cSet ).
-                           ReadByteString( sLong, cSet );
-                    if( xStrm->IsEof() ||  SVSTREAM_OK != xStrm->GetError() )
-                        break;
-
-                    BOOL bOnlyTxt = !rCmp.isEqual( sShort, sLong );
-                    if( !bOnlyTxt )
-                    {
-                        String sLongSave( sLong );
-                        if( !rAutoCorrect.GetLongText( xStg, sShort, sLong ) &&
-                            sLongSave.Len() )
-                        {
-                            sLong = sLongSave;
-                            bOnlyTxt = TRUE;
-                        }
-                    }
-
-                    SvxAutocorrWordPtr pNew = new SvxAutocorrWord(
-                                                sShort, sLong, bOnlyTxt );
-
-                    if( !pAutocorr_List->Insert( pNew ) )
-                        delete pNew;
-
-                    if( pInfoList )
-                    {
-                        // dann ggfs aus den alten Storages die
-                        // ueberfluessigen Streams entfernen
-                        EncryptBlockName_Imp( sShort );
-                        const SvStorageInfo* pInfo = pInfoList->Get( sShort );
-                        if( pInfo && ( pInfo->IsStream() ||
-                            (bOnlyTxt && pInfo->IsStorage() ) ))
-                        {
-                            String* pNew = new String( sShort );
-                            aRemoveArr.Insert( pNew, aRemoveArr.Count() );
-                        }
-                    }
-                }
-                if( pInfoList )
-                    delete pInfoList;
-            }
-        }
-
-
-        if( aRemoveArr.Count() && sShareAutoCorrFile == sUserAutoCorrFile )
-        {
-            xStrm.Clear();
-            xStg.Clear();
-            xStg = new SvStorage( sShareAutoCorrFile,
-                                STREAM_STD_READWRITE, STORAGE_TRANSACTED );
-
-            if( xStg.Is() && SVSTREAM_OK == xStg->GetError() )
-            {
-                String* pStr;
-                for( USHORT n = aRemoveArr.Count(); n; )
-                    if( xStg->IsContained( *( pStr = aRemoveArr[ --n ] ) ) )
-                        xStg->Remove( *pStr  );
-
-                // die neue Liste mit der neuen Versionsnummer speichern
-                MakeBlocklist_Imp( *xStg );
-                xStg->Commit();
-            }
-        }
-
-        // Zeitstempel noch setzen
-        FStatHelper::GetModifiedDateTimeOfFile( sShareAutoCorrFile,
-                                        &aModifiedDate, &aModifiedTime );
-        aLastCheckTime = Time();
-    }
-    else if( xStg.Is() && xStg->IsStream( aXMLWordListName ) )
-    {
-        SvStorageStreamRef xStrm = xStg->OpenSotStream( aXMLWordListName,
-            ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE ) );
-        if( SVSTREAM_OK != xStrm->GetError())
-        {
-            xStrm.Clear();
-            xStg.Clear();
-            RemoveStream_Imp( aWordListName );
-        }
-        else
-        {
-            Reference< lang::XMultiServiceFactory > xServiceFactory =
-                comphelper::getProcessServiceFactory();
-            DBG_ASSERT( xServiceFactory.is(),
-                "XMLReader::Read: got no service manager" );
-            if( !xServiceFactory.is() )
-            {
-                // Throw an exception ?
-            }
-
-            xml::sax::InputSource aParserInput;
-            aParserInput.sSystemId = aXMLWordListName;
-
-            xStrm->Seek( 0L );
-            xStrm->SetBufferSize( 8 * 1024 );
-            aParserInput.aInputStream = new utl::OInputStreamWrapper( *xStrm );
-
-            // get parser
-            Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-                OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
-            DBG_ASSERT( xXMLParser.is(),
-                "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
-            if( !xXMLParser.is() )
-            {
-                // Maybe throw an exception?
-            }
-
-            // get filter
-            // #110680#
-            // Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLAutoCorrectImport( pAutocorr_List, rAutoCorrect, xStg );
             Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLAutoCorrectImport( xServiceFactory, pAutocorr_List, rAutoCorrect, xStg );
 
             // connect parser and filter
@@ -2416,50 +2203,18 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
             xParser->setDocumentHandler( xFilter );
 
             // parse
-            try
-            {
-                xParser->parseStream( aParserInput );
-            }
-            catch( xml::sax::SAXParseException&  )
-            {
-                // re throw ?
-            }
-            catch( xml::sax::SAXException&  )
-            {
-                // re throw ?
-            }
-            catch( io::IOException& )
-            {
-                // re throw ?
-            }
+            xParser->parseStream( aParserInput );
         }
-
-
-        if( aRemoveArr.Count() && sShareAutoCorrFile == sUserAutoCorrFile )
-        {
-            xStrm.Clear();
-            xStg.Clear();
-            xStg = new SvStorage( sShareAutoCorrFile,
-                                STREAM_STD_READWRITE, STORAGE_TRANSACTED );
-
-            if( xStg.Is() && SVSTREAM_OK == xStg->GetError() )
-            {
-                String* pStr;
-                for( USHORT n = aRemoveArr.Count(); n; )
-                    if( xStg->IsContained( *( pStr = aRemoveArr[ --n ] ) ) )
-                        xStg->Remove( *pStr  );
-
-                // die neue Liste mit der neuen Versionsnummer speichern
-                MakeBlocklist_Imp( *xStg );
-                xStg->Commit();
-            }
-        }
-
-        // Zeitstempel noch setzen
-        FStatHelper::GetModifiedDateTimeOfFile( sShareAutoCorrFile,
-                                        &aModifiedDate, &aModifiedTime );
-        aLastCheckTime = Time();
     }
+    catch ( uno::Exception& )
+    {
+    }
+
+    // Zeitstempel noch setzen
+    FStatHelper::GetModifiedDateTimeOfFile( sShareAutoCorrFile,
+                                    &aModifiedDate, &aModifiedTime );
+    aLastCheckTime = Time();
+
     return pAutocorr_List;
 }
 
@@ -2554,8 +2309,6 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadCplSttExceptList()
     String sTemp ( RTL_CONSTASCII_USTRINGPARAM ( pXMLImplCplStt_ExcptLstStr ) );
     if( xStg.Is() && xStg->IsContained( sTemp ) )
         LoadXMLExceptList_Imp( pCplStt_ExcptLst, pXMLImplCplStt_ExcptLstStr, xStg );
-    else
-        LoadExceptList_Imp( pCplStt_ExcptLst, pImplCplStt_ExcptLstStr, xStg );
 
     return pCplStt_ExcptLst;
 }
@@ -2603,8 +2356,6 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadWrdSttExceptList()
     String sTemp ( RTL_CONSTASCII_USTRINGPARAM ( pXMLImplWrdStt_ExcptLstStr ) );
     if( xStg.Is() && xStg->IsContained( sTemp ) )
         LoadXMLExceptList_Imp( pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr, xStg );
-    else
-        LoadExceptList_Imp( pWrdStt_ExcptLst, pImplWrdStt_ExcptLstStr, xStg );
     return pWrdStt_ExcptLst;
 }
 /* -----------------18.11.98 11:26-------------------
@@ -2734,9 +2485,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             String sXMLSentence ( RTL_CONSTASCII_USTRINGPARAM ( pXMLImplCplStt_ExcptLstStr ) );
             SvStringsISortDtor  *pTmpWordList = NULL;
 
-            if (xSrcStg->IsContained( sWord ) )
-                LoadExceptList_Imp( pTmpWordList, pImplWrdStt_ExcptLstStr, xSrcStg );
-            else if (xSrcStg->IsContained( sXMLWord ) )
+            if (xSrcStg->IsContained( sXMLWord ) )
                 LoadXMLExceptList_Imp( pTmpWordList, pXMLImplWrdStt_ExcptLstStr, xSrcStg );
 
             if (pTmpWordList)
@@ -2747,9 +2496,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             }
 
 
-            if (xSrcStg->IsContained( sSentence ) )
-                LoadExceptList_Imp( pTmpWordList, pImplCplStt_ExcptLstStr, xSrcStg );
-            else if (xSrcStg->IsContained( sXMLSentence ) )
+            if (xSrcStg->IsContained( sXMLSentence ) )
                 LoadXMLExceptList_Imp( pTmpWordList, pXMLImplCplStt_ExcptLstStr, xSrcStg );
 
             if (pTmpWordList)
@@ -2956,30 +2703,34 @@ BOOL SvxAutoCorrectLanguageLists::PutText( const String& rShort,
 
     MakeUserStorage_Impl();
 
+    BOOL bRet = FALSE;
     String sLong;
-    SotStorageRef xStg = new SotStorage( sUserAutoCorrFile, STREAM_READWRITE, TRUE );
-    BOOL bRet = xStg.Is() && SVSTREAM_OK == xStg->GetError();
-
-    if( bRet )
+    try
     {
+        uno::Reference < embed::XStorage > xStg = comphelper::OStorageHelper::GetStorageFromURL( sUserAutoCorrFile, embed::ElementModes::READWRITE );
 //      String aName( rShort );
 //      EncryptBlockName_Imp( aName );
 //      bRet = PutText( *xStg, aName, rShell, sLong );
-        bRet = rAutoCorrect.PutText( *xStg, rShort, rShell, sLong );
+        bRet = rAutoCorrect.PutText( xStg, sUserAutoCorrFile, rShort, rShell, sLong );
+        xStg = 0;
+
+        // die Wortliste aktualisieren
+        if( bRet )
+        {
+            SvxAutocorrWord* pNew = new SvxAutocorrWord( rShort, sLong, FALSE );
+            if( pAutocorr_List->Insert( pNew ) )
+            {
+                SotStorageRef xStor = new SotStorage( sUserAutoCorrFile, STREAM_READWRITE, TRUE );
+                MakeBlocklist_Imp( *xStor );
+            }
+            else
+                delete pNew;
+        }
+    }
+    catch ( uno::Exception& )
+    {
     }
 
-    // die Wortliste aktualisieren
-    if( bRet )
-    {
-        SvxAutocorrWord* pNew = new SvxAutocorrWord( rShort, sLong, FALSE );
-        if( pAutocorr_List->Insert( pNew ) )
-        {
-            MakeBlocklist_Imp( *xStg );
-            xStg = 0;
-        }
-        else
-            delete pNew;
-    }
     return bRet;
 }
 
