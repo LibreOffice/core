@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-20 18:08:27 $
+ *  last change: $Author: mib $ $Date: 2002-02-27 09:39:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,18 +383,13 @@ void SwFrm::CheckDirChange()
 
 SwFrm::~SwFrm()
 {
-    ViewShell *pVSh = GetShell();
-    ASSERT( pVSh || (!pVSh && FindRootFrm()),
-            "no shell: accessible object might get invalid" );
-    if( pVSh )
+    if( IsAccessibleFrm() )
     {
-        ViewShell *pTmp = pVSh;
-        do
-        {
-            if( pTmp->Imp()->IsAccessible() )
-                pTmp->Imp()->GetAccessibleMap().DisposeFrm( this );
-            pTmp = (ViewShell*)pTmp->GetNext();
-        } while ( pTmp != pVSh );
+        ViewShell *pVSh = GetShell();
+        ASSERT( pVSh || (!pVSh && FindRootFrm()),
+                "no shell: accessible object might get invalid" );
+        if( pVSh )
+            pVSh->Imp()->DisposeAccessibleFrm( this );
     }
 
     if( pDrawObjs )

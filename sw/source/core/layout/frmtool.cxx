@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-20 18:08:27 $
+ *  last change: $Author: mib $ $Date: 2002-02-27 09:39:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,16 +307,11 @@ SwFrmNotify::~SwFrmNotify()
     if ( bAbsP || bPrtP || bFrmS || bPrtS )
 #endif
     {
-        ViewShell *pVSh  = pFrm->GetShell();
-        if( pVSh )
+        if( pFrm->IsAccessibleFrm() )
         {
-            ViewShell *pTmp = pVSh;
-            do
-            {
-                if( pTmp->Imp()->IsAccessible() )
-                    pTmp->Imp()->GetAccessibleMap().MoveFrm( pFrm, aFrm );
-                pTmp = (ViewShell*)pTmp->GetNext();
-            } while ( pTmp != pVSh );
+            ViewShell *pVSh  = pFrm->GetShell();
+            if( pVSh )
+                pVSh->Imp()->MoveAccessibleFrm( pFrm, aFrm );
         }
 
         //Auch die Flys wollen etwas von den Veraenderungen mitbekommen,
