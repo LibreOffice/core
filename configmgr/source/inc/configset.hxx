@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:30:47 $
+ *  last change: $Author: mh $ $Date: 2001-02-02 18:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include "template.hxx"
 
 #include <vos/ref.hxx>
-#include <stl/memory>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
     namespace script { class XTypeConverter; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 16:11:12 $
+ *  last change: $Author: mh $ $Date: 2001-02-02 18:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 
 #include "apitypes.hxx"
 #include "configexcept.hxx"
-#include <stl/vector>
+#include <vector>
 
 namespace configmgr
 {

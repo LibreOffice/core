@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 09:10:20 $
+ *  last change: $Author: mh $ $Date: 2001-02-02 18:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 
 #include "apitypes.hxx"
 #include "configexcept.hxx"
-#include <stl/vector>
+#include <vector>
 
 namespace configmgr
 {
