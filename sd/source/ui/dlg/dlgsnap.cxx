@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsnap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-21 13:56:13 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,9 @@
 
 #include "dlgsnap.hrc"
 #include "sdattr.hxx"
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
 #include "dlgsnap.hxx"
@@ -84,24 +86,26 @@
 |*
 \************************************************************************/
 
-SdSnapLineDlg::SdSnapLineDlg(Window* pWindow, const SfxItemSet& rInAttrs,
-                             SdView* pView) :
-    ModalDialog (pWindow, SdResId(DLG_SNAPLINE)),
-    aFtX        (this, SdResId(FT_X)),
-    aFtY        (this, SdResId(FT_Y)),
-    aMtrFldX    (this, SdResId(MTR_FLD_X)),
-    aMtrFldY    (this, SdResId(MTR_FLD_Y)),
-    aFlPos      (this, SdResId(FL_POSITION)),
-    aFlDir      (this, SdResId(FL_DIRECTION)),
-    aRbHorz     (this, SdResId(RB_HORIZONTAL)),
-    aRbVert     (this, SdResId(RB_VERTICAL)),
-    aRbPoint    (this, SdResId(RB_POINT)),
-    aBtnOK      (this, SdResId(BTN_OK)),
-    aBtnCancel  (this, SdResId(BTN_CANCEL)),
-    aBtnHelp    (this, SdResId(BTN_HELP)),
-    aBtnDelete  (this, SdResId(BTN_DELETE)),
-    eUIUnit(pView->GetDoc()->GetUIUnit()),
-    aUIScale(pView->GetDoc()->GetUIScale())
+SdSnapLineDlg::SdSnapLineDlg(
+    ::Window* pWindow,
+    const SfxItemSet& rInAttrs,
+    ::sd::View* pView)
+    : ModalDialog (pWindow, SdResId(DLG_SNAPLINE)),
+      aFtX        (this, SdResId(FT_X)),
+      aFtY        (this, SdResId(FT_Y)),
+      aMtrFldX    (this, SdResId(MTR_FLD_X)),
+      aMtrFldY    (this, SdResId(MTR_FLD_Y)),
+      aFlPos      (this, SdResId(FL_POSITION)),
+      aFlDir      (this, SdResId(FL_DIRECTION)),
+      aRbHorz     (this, SdResId(RB_HORIZONTAL)),
+      aRbVert     (this, SdResId(RB_VERTICAL)),
+      aRbPoint    (this, SdResId(RB_POINT)),
+      aBtnOK      (this, SdResId(BTN_OK)),
+      aBtnCancel  (this, SdResId(BTN_CANCEL)),
+      aBtnHelp    (this, SdResId(BTN_HELP)),
+      aBtnDelete  (this, SdResId(BTN_DELETE)),
+      eUIUnit(pView->GetDoc()->GetUIUnit()),
+      aUIScale(pView->GetDoc()->GetUIScale())
 {
     aRbPoint.SetModeImage( Image( SdResId( BMP_POINT_H ) ), BMP_COLOR_HIGHCONTRAST );
     aRbVert.SetModeImage( Image( SdResId( BMP_VERTICAL_H ) ), BMP_COLOR_HIGHCONTRAST );
