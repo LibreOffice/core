@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DResultSet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-09 12:30:30 $
+ *  last change: $Author: oj $ $Date: 2000-10-11 09:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ Any SAL_CALL ODbaseResultSet::queryInterface( const Type & rType ) throw(Runtime
 Any SAL_CALL ODbaseResultSet::getBookmark(  ) throw( SQLException,  RuntimeException)
 {
      ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet::rBHelper.bDisposed)
+    if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
     return makeAny((sal_Int32)(*m_aRow)[0]);
@@ -149,7 +149,7 @@ Any SAL_CALL ODbaseResultSet::getBookmark(  ) throw( SQLException,  RuntimeExcep
 sal_Bool SAL_CALL ODbaseResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet::rBHelper.bDisposed)
+    if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
     m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
@@ -160,7 +160,7 @@ sal_Bool SAL_CALL ODbaseResultSet::moveToBookmark( const  Any& bookmark ) throw(
 sal_Bool SAL_CALL ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows ) throw( SQLException,  RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet::rBHelper.bDisposed)
+    if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
     m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
@@ -172,7 +172,7 @@ sal_Bool SAL_CALL ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark,
 sal_Int32 SAL_CALL ODbaseResultSet::compareBookmarks( const  Any& first, const  Any& second ) throw( SQLException,  RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet::rBHelper.bDisposed)
+    if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
     return (first == second) ? 0 : 2;
@@ -186,7 +186,7 @@ sal_Bool SAL_CALL ODbaseResultSet::hasOrderedBookmarks(  ) throw( SQLException, 
 sal_Int32 SAL_CALL ODbaseResultSet::hashBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet::rBHelper.bDisposed)
+    if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
     return connectivity::getINT32(bookmark);
@@ -196,7 +196,7 @@ sal_Int32 SAL_CALL ODbaseResultSet::hashBookmark( const  Any& bookmark ) throw( 
 Sequence< sal_Int32 > SAL_CALL ODbaseResultSet::deleteRows( const  Sequence<  Any >& rows ) throw( SQLException,  RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (OResultSet::rBHelper.bDisposed)
+    if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
     return Sequence< sal_Int32 >();
