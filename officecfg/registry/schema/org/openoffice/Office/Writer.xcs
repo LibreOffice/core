@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 10:51:12 $
+ *  last change: $: vg $ $Date: 2004-05-19 13:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2137,6 +2137,198 @@
 					<desc xml:lang="sl">Specifies the language of the user-defined number format.</desc>
 				</info>
 			</prop>
+		</group>
+		<group oor:name="BusinessLetterElementLocation" >
+			<info>
+				<author>TV</author>
+				<desc xml:lang="en-US">Specifies settings a pre-printed Business Letter Paper within the Letter Wizard.</desc>
+			</info>
+			<prop oor:type="xs:boolean" oor:name="Display">
+				<info>
+					<desc xml:lang="en-US">Enables the Element.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:double" oor:name="Width">
+				<info>
+					<desc xml:lang="en-US">Width.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:double" oor:name="Height">
+				<info>
+					<desc xml:lang="en-US">Height.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:double" oor:name="X">
+				<info>
+					<desc xml:lang="en-US">X-Position.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:double" oor:name="Y">
+				<info>
+					<desc xml:lang="en-US">Y-Position.</desc>
+				</info>
+			</prop>
+		</group>
+		<group oor:name="LetterControls" >
+			<info>
+				<author>TV</author>
+				<desc xml:lang="en-US">Specifies settings for a Letter Wizard type.</desc>
+			</info>
+			<prop oor:type="xs:int" oor:name="Style">
+				<info>
+					<desc xml:lang="en-US">Style of the Letter.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean"  oor:name="BusinessPaper">
+				<info>
+					<desc xml:lang="en-US">Enables Business Paper.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean"  oor:name="PaperCompanyAddressReceiverField">
+				<info>
+					<desc xml:lang="en-US">Enables the the Sender Address Line in the Receiver Field for Business Paper.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean"  oor:name="PaperFooter">
+				<info>
+					<desc xml:lang="en-US">Enables a Footer.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:double"  oor:name="PaperFooterHeight">
+				<info>
+					<desc xml:lang="en-US">Height of the Footer.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:int"  oor:name="Norm">
+				<info>
+					<desc xml:lang="en-US">Norm of the Letter.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean" oor:name="PrintCompanyLogo">
+				<info>
+					<desc xml:lang="en-US">Enables Company Logo.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean" oor:name="PrintCompanyAddressReceiverField">
+				<info>
+					<desc xml:lang="en-US">Enables the Sender Address in the Receiver Field.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean" oor:name="PrintLetterSigns">
+				<info>
+					<desc xml:lang="en-US">Enables the Letter Signs.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean" oor:name="PrintSubjectLine">
+				<info>
+					<desc xml:lang="en-US">Enables the Subject line.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean" oor:name="PrintSalutation">
+				<info>
+					<desc xml:lang="en-US">Enables the Salutation.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean" oor:name="PrintBendMarks">
+				<info>
+					<desc xml:lang="en-US">Enables the Bend Marks.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean" oor:name="PrintGreeting">
+				<info>
+					<desc xml:lang="en-US">Enables the Greeting.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean" oor:name="PrintFooter">
+				<info>
+					<desc xml:lang="en-US">Enables the Footer.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:int" oor:name="Salutation">
+				<info>
+					<desc xml:lang="en-US">Type of the salutation.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:int" oor:name="Greeting">
+				<info>
+					<desc xml:lang="en-US">Type of the greeting.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:int" oor:name="SenderAddressType">
+				<info>
+					<desc xml:lang="en-US">Type of the sender address.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:string" oor:name="SenderCompanyName">
+				<info>
+					<desc xml:lang="en-US">Sender Company Name.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:string" oor:name="SenderStreet">
+				<info>
+					<desc xml:lang="en-US">Sender Street.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:string" oor:name="SenderPostCode">
+				<info>
+					<desc xml:lang="en-US">Sender PostCode.</desc>
+				</info>
+			</prop>
+                        <prop oor:type="xs:string" oor:name="SenderState">
+                                <info>
+                                        <desc xml:lang="en-US">Sender State.</desc>
+                                </info>
+                        </prop>
+			<prop oor:type="xs:string" oor:name="SenderCity">
+				<info>
+					<desc xml:lang="en-US">Sender City.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:int" oor:name="ReceiverAddressType">
+				<info>
+					<desc xml:lang="en-US">Receiver Address Type.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:string" oor:name="Footer">
+				<info>
+					<desc xml:lang="en-US">Content of the Footer.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean" oor:name="FooterOnlySecondPage">
+				<info>
+					<desc xml:lang="en-US">Enables that the Footer is only displayed of the Second and following pages.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:boolean" oor:name="FooterPageNumbers">
+				<info>
+					<desc xml:lang="en-US">Add a page number to the footer.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:int" oor:name="CreationType">
+				<info>
+					<desc xml:lang="en-US">Defines how the template is loaded after completion.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:string" oor:name="TemplateName">
+				<info>
+					<desc xml:lang="en-US">Template Name.</desc>
+				</info>
+			</prop>
+			<prop oor:type="xs:string" oor:name="TemplatePath">
+				<info>
+					<desc xml:lang="en-US">Template Path.</desc>
+				</info>
+			</prop>
+			<node-ref oor:node-type="BusinessLetterElementLocation" oor:name="CompanyLogo">
+				<info>
+					<desc xml:lang="en-US">Position of the Business Paper Company Logo.</desc>
+				</info>
+			</node-ref>
+			<node-ref oor:node-type="BusinessLetterElementLocation" oor:name="CompanyAddress">
+				<info>
+					<desc xml:lang="en-US">Position of the Business Paper Company Address.</desc>
+				</info>
+			</node-ref>
 		</group>
 	</templates>
 	<component>
@@ -51093,6 +51285,37 @@
 					</constraints>
 					<value>0</value>
 				</prop>
+			</group>
+		</group>
+		<group oor:name="Wizards" >
+			<info>
+				<author>TV</author>
+				<desc xml:lang="en-US">Specifies settings for the Writer Wizards.</desc>
+			</info>
+			<group oor:name="Letter" >
+				<info>
+					<desc xml:lang="en-US">Specifies settings for the Letter Wizard.</desc>
+				</info>
+				<prop oor:type="xs:int" oor:name="LetterType">
+					<info>
+						<desc xml:lang="en-US">The type of the Letter</desc>
+					</info>
+				</prop>
+				<node-ref oor:node-type="LetterControls" oor:name="BusinessLetter">
+					<info>
+						<desc xml:lang="en-US">Reference to the LetterControls template for a Business Letter</desc>
+					</info>
+				</node-ref>
+				<node-ref oor:node-type="LetterControls" oor:name="PrivateOfficialLetter">
+					<info>
+						<desc xml:lang="en-US">Reference to the LetterControls template for a Private Official Letter</desc>
+					</info>
+				</node-ref>
+				<node-ref oor:node-type="LetterControls" oor:name="PrivateLetter">
+					<info>
+						<desc xml:lang="en-US">Reference to the LetterControls template for a Private Letter</desc>
+					</info>
+				</node-ref>
 			</group>
 		</group>
 	</component>
