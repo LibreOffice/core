@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-27 07:17:16 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 11:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@
 #include <connectivity/dbtools.hxx>
 #endif
 
+using namespace dbaui;
+DBG_NAME(OAdabasStatistics);
 namespace dbaui
 {
     using namespace dbtools;
@@ -106,7 +108,7 @@ namespace dbaui
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::lang;
 
-DBG_NAME(OAdabasStatistics);
+
 
 OAdabasStatistics::OAdabasStatistics( Window* pParent,
                                      const ::rtl::OUString& _rUser,
