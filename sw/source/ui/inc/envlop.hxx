@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-16 09:32:52 $
+ *  last change: $Author: fs $ $Date: 2002-07-19 14:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@ public:
 
      SwEnvPreview(SfxTabPage* pParent, const ResId& rResID);
     ~SwEnvPreview();
+
+protected:
+    virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };
 
 // class SwEnvDlg -----------------------------------------------------------
