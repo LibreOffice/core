@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:59:11 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,7 +774,8 @@ void SdModule::OutlineToImpress (SfxRequest& rRequest)
                     if (pOutlineShell != NULL)
                     {
                         SvStream* pStream = (SvStream*) pBytes->GetStream();
-                        if ( pOutlineShell->Read(*pStream, EE_FORMAT_RTF) == 0 )
+                        // mba: the stream can't contain any relative URLs, because we don't have any information about a BaseURL!
+                        if ( pOutlineShell->Read(*pStream, String(), EE_FORMAT_RTF) == 0 )
                         {
                             // Remove the first empty pages
                             USHORT nPageCount = pDoc->GetPageCount();
