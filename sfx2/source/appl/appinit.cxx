@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:48:54 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 09:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,9 +384,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
     pAppData->aLateInitTimer.SetTimeoutHdl( LINK( this, SfxApplication, LateInitTimerHdl_Impl ) );
     pAppData->aLateInitTimer.Start();
 
-/*! (pb) no help at this time
-    Application::PostUserEvent( LINK( this, SfxApplication, StartWelcomeScreenHdl_Impl ) );
-*/
     return sal_True;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-09 11:36:33 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 09:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,57 +511,6 @@ IMPL_LINK( SfxApplication, LateInitTimerHdl_Impl, void*, pvoid)
 }
 
 //-------------------------------------------------------------------------
-
-IMPL_LINK( SfxApplication, StartWelcomeScreenHdl_Impl, void*, EMPTYARG )
-{
-/*
-    // User-Event kommt zu schnell, also 0,5s warten, wenn er nicht sowieso schon da ist.
-    static Timer* pTimer = NULL;
-    if ( !pTimer && !SFX_APP()->GetHelpPI() )
-    {
-        pTimer = new Timer;
-        pTimer->SetTimeout( 500 );
-        pTimer->SetTimeoutHdl( LINK( this, SfxApplication, StartWelcomeScreenHdl_Impl ) );
-        pTimer->Start();
-        return 0;
-    }
-
-    delete pTimer;
-    pTimer = NULL;
-
-    if ( SvtHelpOptions().IsWelcomeScreen() )
-    {
-        ULONG nId = 0;
-        Config aConfig( SfxHelp_Impl::GetHelpAgentConfig() );
-        ImplSetLanguageGroup( aConfig, String::CreateFromAscii("WelcomeScreen"), TRUE );
-        USHORT nTips = aConfig.GetKeyCount();
-        for ( USHORT nTip = 0; nTip < nTips; nTip++ )
-        {
-            if ( (BOOL)(USHORT)(aConfig.ReadKey( nTip ).ToInt32()) )
-            {
-                nId = aConfig.GetKeyName( nTip ).ToInt32();
-                break;
-            }
-        }
-
-        if ( nId )
-        {
-            SetChildWindow( SID_TIPWINDOW, TRUE );
-
-            // Das muss irgendwie in den ctor des Fensters
-            String aHFile( "tips.svh" );
-            SfxHelp::ShowHelp( nId, TRUE, aHFile, TRUE );
-            SfxHelpPI* pHelpPI = SFX_APP()->GetHelpPI();
-            if ( pHelpPI )
-            {
-                pHelpPI->SetWelcomeMode( TRUE );
-                aConfig.WriteKey( nId, (USHORT)0 ); // gleich als gelesen flaggen
-            }
-        }
-    }
- */
-    return 1;
-}
 
 //-------------------------------------------------------------------------
 
