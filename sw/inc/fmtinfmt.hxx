@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtinfmt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 08:26:16 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:34:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,12 +69,17 @@
 #include <svtools/poolitem.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 class SvxMacro;
 class SvxMacroTableDtor;
 class IntlWrapper;
+
 // ATT_INETFMT *********************************************
 
-class SwFmtINetFmt: public SfxPoolItem
+class SW_DLLPUBLIC SwFmtINetFmt: public SfxPoolItem
 {
     friend class SwTxtINetFmt;
 
