@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-22 10:27:07 $
+ *  last change: $Author: oj $ $Date: 2002-05-23 06:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,10 +528,10 @@ namespace
                     _nScrollY = aUpperLeft.Y() - TABWIN_SPACING_Y;
             }
 
-            if (_nScrollX)
+            if (aSize.Width() > _rSize.Width() && _nScrollX)
                 bVisbile = isScrollAllowed(_pView,_nScrollX, TRUE);
 
-            if (_nScrollY)
+            if (aSize.Height() > _rSize.Height() && _nScrollY)
                 bVisbile = bVisbile && isScrollAllowed(_pView,_nScrollY, FALSE);
 
             if( (_rPoint.X() + _rSize.Width() +_nScrollX + 1) >= _pView->GetHScrollBar()->GetRangeMax() )
