@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: mtg $ $Date: 2001-08-01 12:46:41 $
+#   last change: $Author: mtg $ $Date: 2001-08-01 12:58:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,7 @@ SLOFILES=\
                         $(SLO)$/ucbhelper.obj 		\
                         $(SLO)$/ucbstreamhelper.obj \
                         $(SLO)$/tempfile.obj		\
-                        $(SLO)$/XTempFile.obj
+                        $(SLO)$/xtempfile.obj
 
 # --- Targets ----------------------------------
 
