@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 10:03:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,6 +546,15 @@ ULONG SwReader::Read( const Reader& rOptions )
 
     if( pCrsr )                 // das Doc ist jetzt modifiziert
         pDoc->SetModified();
+    // --> OD 2005-02-11 #i38810# - If links have been updated, the document
+    // have to be modified. During update of links the OLE link at the document
+    // isn't set. Thus, the document's modified state has to be set again after
+    // the OLE link is restored - see above <pDoc->SetOle2Link( aOLELink )>.
+    if ( pDoc->LinksUpdated() )
+    {
+        pDoc->SetModified();
+    }
+    // <--
 
     if( po == ReadSw3 )         // am Sw3-Reader noch den pIo-Pointer "loeschen"
         ((Sw3Reader*)po)->SetSw3Io( 0 );
@@ -1096,8 +1105,14 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
     {
         delete pPam;            // loesche den hier erzeugten Pam
         // Alles erfolgreich geschrieben? Sag' das dem Dokument!
-        if( !IsError( nError ) && !pDoc )
+        if ( !IsError( nError ) && !pDoc )
+        {
             rDoc.ResetModified();
+            // --> OD 2005-02-11 #i38810# - reset also flag, that indicates
+            // updated links
+            rDoc.SetLinksUpdated( sal_False );
+            // <-
+        }
     }
 
     if ( pDoc )
