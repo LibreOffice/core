@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-30 11:28:24 $
+ *  last change: $Author: dr $ $Date: 2001-08-15 09:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,7 @@ RootData::RootData( void )
     nLastCond = 0;
 
     pRootStorage = NULL;
+    pAddInNameTranslator = NULL;
     pTabBuffer = NULL;
     pTabId = NULL;
     pUserBViewList = NULL;
@@ -252,6 +253,8 @@ RootData::~RootData()
     delete pExtNameBuff;
     delete pXF_Buffer;
 
+    if( pAddInNameTranslator )
+        delete pAddInNameTranslator;
     if( pTabBuffer )
         delete pTabBuffer;
     if( pScNameList )
