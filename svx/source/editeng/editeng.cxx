@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-05 11:05:15 $
+ *  last change: $Author: mt $ $Date: 2000-12-05 14:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -872,14 +872,6 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
             break;
             default:
             {
-                #if defined(DBG_UTIL) || defined(DEBUG)
-                    if ( ( rKeyEvent.GetKeyCode().GetCode() == KEY_V ) && rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
-                    {
-                        SetVertical( !IsVertical() );
-                        pEditView->pImpEditView->SetVisDocStartPos( Point() );
-                        pEditView->GetWindow()->Invalidate();
-                    }
-                #endif
                 if ( !bReadOnly && IsSimpleCharInput( rKeyEvent ) )
                 {
                     xub_Unicode nCharCode = rKeyEvent.GetCharCode();
