@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:09:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,9 +356,10 @@ void ORelationController::impl_initialize( const Sequence< Any >& aArguments )
         {
             String sTitle(ModuleRes(STR_RELATIONDESIGN));
             sTitle.Erase(0,3);
-            OSQLMessageBox aDlg(getView(),sTitle,ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE));
+            OSQLMessageBox aDlg(NULL,sTitle,ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE));
             aDlg.Execute();
         }
+        disconnect();
         throw SQLException();
     }
 
