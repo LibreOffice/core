@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: sb $ $Date: 2001-10-08 14:05:01 $
+#   last change: $Author: as $ $Date: 2002-04-05 06:54:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,7 @@ IDLFILES=\
     CellProtection.idl\
     ChangesEvent.idl\
     ChangesSet.idl \
+    CloseVetoException.idl\
     color.idl\
     Date.idl\
     DateTime.idl\
@@ -109,6 +110,9 @@ IDLFILES=\
     XChangesNotifier.idl \
     XChangesSet.idl	\
     XCloneable.idl\
+    XCloseable.idl\
+    XCloseBroadcaster.idl\
+    XCloseListener.idl\
     XFlushable.idl\
     XFlushListener.idl\
     XImportable.idl\
