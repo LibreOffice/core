@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:49:34 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:45:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -960,8 +960,8 @@ void ImplNoBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeight
 
 // -----------------------------------------------------------------------
 
-void ImplNoBorderWindowView::GetBorder( long& rLeftBorder, long& rTopBorder,
-                                        long& rRightBorder, long& rBottomBorder ) const
+void ImplNoBorderWindowView::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
+                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const
 {
     rLeftBorder     = 0;
     rTopBorder      = 0;
@@ -1035,8 +1035,8 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
 
 // -----------------------------------------------------------------------
 
-void ImplSmallBorderWindowView::GetBorder( long& rLeftBorder, long& rTopBorder,
-                                           long& rRightBorder, long& rBottomBorder ) const
+void ImplSmallBorderWindowView::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
+                                           sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const
 {
     rLeftBorder     = mnLeftBorder;
     rTopBorder      = mnTopBorder;
@@ -1402,8 +1402,8 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
 
 // -----------------------------------------------------------------------
 
-void ImplStdBorderWindowView::GetBorder( long& rLeftBorder, long& rTopBorder,
-                                         long& rRightBorder, long& rBottomBorder ) const
+void ImplStdBorderWindowView::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
+                                         sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const
 {
     rLeftBorder     = maFrameData.mnLeftBorder;
     rTopBorder      = maFrameData.mnTopBorder;
@@ -1820,10 +1820,10 @@ void ImplBorderWindow::Resize()
 
         if ( mpMenuBarWindow )
         {
-            long nLeftBorder;
-            long nTopBorder;
-            long nRightBorder;
-            long nBottomBorder;
+            sal_Int32 nLeftBorder;
+            sal_Int32 nTopBorder;
+            sal_Int32 nRightBorder;
+            sal_Int32 nBottomBorder;
             long nMenuHeight = mpMenuBarWindow->GetSizePixel().Height();
             if ( mbMenuHide )
             {
@@ -1918,10 +1918,10 @@ void ImplBorderWindow::InitView()
 
 void ImplBorderWindow::UpdateView( BOOL bNewView, const Size& rNewOutSize )
 {
-    long nLeftBorder;
-    long nTopBorder;
-    long nRightBorder;
-    long nBottomBorder;
+    sal_Int32 nLeftBorder;
+    sal_Int32 nTopBorder;
+    sal_Int32 nRightBorder;
+    sal_Int32 nBottomBorder;
     Size aOldSize = GetSizePixel();
     Size aOutputSize = rNewOutSize;
 
@@ -1964,10 +1964,10 @@ void ImplBorderWindow::InvalidateBorder()
     if ( IsReallyVisible() )
     {
         // Nur wenn wir einen Border haben, muessen wir auch invalidieren
-        long nLeftBorder;
-        long nTopBorder;
-        long nRightBorder;
-        long nBottomBorder;
+        sal_Int32 nLeftBorder;
+        sal_Int32 nTopBorder;
+        sal_Int32 nRightBorder;
+        sal_Int32 nBottomBorder;
         mpBorderView->GetBorder( nLeftBorder, nTopBorder, nRightBorder, nBottomBorder );
         if ( nLeftBorder || nTopBorder || nRightBorder || nBottomBorder )
         {
@@ -2105,8 +2105,8 @@ void ImplBorderWindow::SetMenuBarMode( BOOL bHide )
 
 // -----------------------------------------------------------------------
 
-void ImplBorderWindow::GetBorder( long& rLeftBorder, long& rTopBorder,
-                                  long& rRightBorder, long& rBottomBorder ) const
+void ImplBorderWindow::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
+                                  sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const
 {
     mpBorderView->GetBorder( rLeftBorder, rTopBorder, rRightBorder, rBottomBorder );
     if ( mpMenuBarWindow && !mbMenuHide )
