@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-14 12:07:00 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ public:
 
     inline SwAttrHandler& GetAttrHandler() { return aAttrHandler; }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     void Dump( SvStream &rOS ) const;
 #endif
 };
