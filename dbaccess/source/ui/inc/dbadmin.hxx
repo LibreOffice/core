@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 08:00:23 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 08:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,6 +524,12 @@ public:
     // SfxTabDialog overridables
     virtual short Execute();
 
+    /** select a data source given by name<p/>
+        This method is used by the UNO wrapper for the dialog to set the initial selection.<br/>
+        If no data source with the given name exists, nothing is changed at all.
+    */
+    void selectDataSource(const ::rtl::OUString& _rName);
+
     /** create and return an item set for use with the dialog.
         @param      _pTypeCollection        pointer to an <type>ODatasourceMap</type>. May be NULL, in this case
                                             the pool will not contain a typecollection default.
@@ -626,6 +632,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/10/30 08:00:23  fs
+ *  +getDatasourceType / +getRelevantItems / +hasAuthentication
+ *
  *  Revision 1.2  2000/10/26 07:33:19  fs
  *  fillDatasourceInfo
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 15:24:02 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 08:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -717,6 +717,13 @@ short ODbAdminDialog::Execute()
     m_aDatasources.clear();
 
     return nResult;
+}
+
+//-------------------------------------------------------------------------
+void ODbAdminDialog::selectDataSource(const ::rtl::OUString& _rName)
+{
+    if (m_aDatasources.exists(_rName))
+        implSelectDatasource(_rName);
 }
 
 //-------------------------------------------------------------------------
@@ -2171,6 +2178,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2000/10/30 15:24:02  fs
+ *  getCurrent...: add user property value if not empty only
+ *
  *  Revision 1.13  2000/10/30 13:00:37  fs
  *  #79823# ODatasourceSelector: +(WB_TABSTOP | WB_DIALOGCONTROL)
  *
