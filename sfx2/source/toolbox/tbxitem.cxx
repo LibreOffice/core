@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2002-04-12 13:12:05 $
+ *  last change: $Author: cd $ $Date: 2002-04-19 07:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,12 +648,13 @@ SfxAppToolBoxControl_Impl::SfxAppToolBoxControl_Impl
     aTimer.SetTimeoutHdl( LINK( this, SfxAppToolBoxControl_Impl, Timeout ) );
     rBox.SetHelpId( nId, HID_TBXCONTROL_FILENEW );
     rBox.SetItemBits( nId,  rBox.GetItemBits( nId ) | TIB_DROPDOWN);
-    SetImage( String() );
 
     // Determine the current background color of the menus
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_bWasHiContrastMode    = rSettings.GetMenuColor().IsDark();
     m_bShowMenuImages       = SvtMenuOptions().IsMenuIconsEnabled();
+
+    SetImage( String() );
 }
 
 SfxAppToolBoxControl_Impl::~SfxAppToolBoxControl_Impl()
@@ -670,7 +671,10 @@ void SfxAppToolBoxControl_Impl::SetImage( const String &rURL )
         aURL += String::CreateFromAscii(SfxObjectFactory::GetDefaultFactory().GetShortName());
     }
 
-    GetToolBox().SetItemImage( GetId(), SvFileInformationManager::GetImage( INetURLObject( aURL ), FALSE, m_bWasHiContrastMode ) );
+    GetToolBox().SetItemImage( GetId(),
+                               SvFileInformationManager::GetImage( INetURLObject( aURL ),
+                               FALSE,
+                                GetToolBox().GetBackground().GetColor().IsDark() ) );
 }
 
 void SfxAppToolBoxControl_Impl::StateChanged
