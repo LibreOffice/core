@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:43:12 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,7 +690,7 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
 SfxItemPool& ScDocument::GetNoteItemPool()
 {
     if ( !pNoteItemPool )
-        pNoteItemPool = new SfxItemPool( *(static_cast<SfxItemPool*>(SdrObject::GetGlobalDrawObjectItemPool() )));
+        pNoteItemPool = new SfxItemPool(SdrObject::GetGlobalDrawObjectItemPool());
     return *pNoteItemPool;
 }
 
@@ -870,7 +870,9 @@ BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
                     ++nTab;
                     break;
                 case SCID_DRAWING:
-                    LoadDrawLayer(rStream);
+                    //BFS03
+                    DBG_ERROR("ScDocument::LoadDrawLayer() no longer supported, binary loading removed (!)");
+//BFS03                 LoadDrawLayer(rStream);
                     break;
                 case SCID_DDELINKS:
                     LoadDdeLinks(rStream);
@@ -1286,8 +1288,9 @@ BOOL ScDocument::Save( SvStream& rStream, ScProgress* pProgress ) const
 
         if (pDrawLayer)
         {
-            rStream << (USHORT) SCID_DRAWING;
-            StoreDrawLayer(rStream);
+            DBG_ERROR("ScDocument::StoreDrawLayer() no longer supported, binary saving removed (!)");
+//BFS03         rStream << (USHORT) SCID_DRAWING;
+//BFS03         StoreDrawLayer(rStream);
         }
 
         //  Collections
