@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:16:23 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7421,7 +7421,7 @@ String RID_SVXITEMS_HNGPNCT_OFF
     Text[ russian ] = "Αεη βθρÿχει οσνκςσΰφθθ β κξνφε ρςπξκθ";
     Text[ greek ] = "Να μην προεξέχουν τα σημεία στίξης στο τέλος της γραμμής";
     Text[ dutch ] = "Geen hangende interpunctie aan regeleinde.";
-    Text[ french ] = "Pas de ponctuation nιgative en fin de ligne";
+    Text[ french ] = "Pas de ponctuation en retrait en fin de ligne";
     Text[ spanish ] = "Sin puntuaciσn suspendida al final de lνnea";
     Text[ italian ] = "Nessuna interpunzione a fine riga";
     Text[ danish ] = "No hanging punctuation at line end";
@@ -7444,7 +7444,7 @@ String RID_SVXITEMS_HNGPNCT_ON
     Text[ russian ] = "Βθρÿχΰÿ οσνκςσΰφθÿ β κξνφε ρςπξκθ";
     Text[ greek ] = "Να επιτρέπεται η προεξοχή των σημείων στίξης στο τέλος της γραμμής";
     Text[ dutch ] = "Hangende interpunctie aan regeleinde";
-    Text[ french ] = "Ponctuation nιgative en fin de ligne";
+    Text[ french ] = "Ponctuation en retrait en fin de ligne";
     Text[ spanish ] = "Puntuaciσn libre al final de lνnea";
     Text[ italian ] = "Interpunzione a fine riga";
     Text[ danish ] = "Hanging punctuation at line end";
