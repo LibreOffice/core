@@ -127,6 +127,7 @@
     <type> com.sun.star.container.XNameContainer               </type>
     <type> com.sun.star.io.XActiveDataSink                     </type>
     <type> com.sun.star.io.XOutputStream                       </type>
+    <type> com.sun.star.io.XSeekable                           </type>
     <type> com.sun.star.lang.IllegalArgumentException          </type>
     <type> com.sun.star.lang.XComponent                        </type>
     <type> com.sun.star.lang.XInitialization                   </type>
