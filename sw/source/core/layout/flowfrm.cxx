@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:33:16 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 13:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,8 +249,14 @@ void SwFlowFrm::CheckKeep()
 
 BOOL SwFlowFrm::IsKeep( const SwBorderAttrs &rAttrs ) const
 {
-    BOOL bKeep = !rThis.IsInFtn() && rAttrs.GetAttrSet().GetKeep().GetValue();
-    //Keep Zaehlt nicht wenn die Umbrueche dagegen sprechen.
+    // 1. The keep attribute is ignored inside footnotes
+    // 2. For compatibility reasons, the keep attribute is
+    //    ignored for frames inside table cells
+    BOOL bKeep = !rThis.IsInFtn() &&
+                 ( !rThis.IsInTab() || rThis.IsTabFrm() ) &&
+                 rAttrs.GetAttrSet().GetKeep().GetValue();
+
+    // Ignore keep attribute if there are break situations:
     if ( bKeep )
     {
         switch ( rAttrs.GetAttrSet().GetBreak().GetBreak() )
@@ -609,7 +615,7 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
           !(pSct = pOldParent->FindSctFrm())->ContainsCntnt() ) )
             pSct->DelEmpty( FALSE );
     // In einem spaltigen Bereich rufen wir lieber kein Calc "von unten"
-    if( !rThis.IsInSct() )
+    if( !rThis.IsInSct() && ( !rThis.IsInTab() || rThis.IsTabFrm() ) )
         rThis.GetUpper()->Calc();
     else if( rThis.GetUpper()->IsSctFrm() )
     {
@@ -662,6 +668,7 @@ BOOL SwFlowFrm::IsAnFollow( const SwFlowFrm *pAssumed ) const
     return FALSE;
 }
 
+
 /*************************************************************************
 |*
 |*  SwFlowFrm::FindMaster()
@@ -671,52 +678,92 @@ BOOL SwFlowFrm::IsAnFollow( const SwFlowFrm *pAssumed ) const
 |*
 |*************************************************************************/
 
-
-SwFlowFrm *SwFlowFrm::FindMaster()
+SwTxtFrm* SwCntntFrm::FindMaster() const
 {
-    ASSERT( IsFollow(), "FindMaster und kein Follow." );
+    ASSERT( IsFollow(), "SwCntntFrm::FindMaster(): !IsFollow" );
 
-    SwCntntFrm *pCnt;
-    BOOL bCntnt;
-    if ( rThis.IsCntntFrm() )
-    {
-        pCnt = (SwCntntFrm*)&rThis;
-        pCnt = pCnt->GetPrevCntntFrm();
-
-        bCntnt = TRUE;
-    }
-    else if( rThis.IsTabFrm() )
-    {
-        pCnt = rThis.GetPrevCntntFrm();
-
-#ifndef PRODUCT
-        SwCntntFrm* pTmpCnt = ((SwLayoutFrm&)rThis).ContainsCntnt();
-        ASSERT( ! pTmpCnt || pTmpCnt->GetPrevCntntFrm() == pCnt,
-                "Two different results for the master of a table?" )
-#endif
-
-        bCntnt = FALSE;
-    }
-    else
-    {
-        ASSERT( rThis.IsSctFrm(), "FindMaster: Funny FrameTyp" );
-        return ((SwSectionFrm&)rThis).FindSectionMaster();
-    }
+    const SwCntntFrm* pCnt = GetPrevCntntFrm();
 
     while ( pCnt )
     {
-        if ( bCntnt )
+        if ( pCnt->HasFollow() && pCnt->GetFollow() == this )
         {
-            if ( pCnt->HasFollow() && pCnt->GetFollow() == this )
-                return pCnt;
-        }
-        else
-        {   SwTabFrm  *pTab = pCnt->FindTabFrm();
-            if ( pTab && pTab->GetFollow() == this )
-                return pTab;
+            ASSERT( pCnt->IsTxtFrm(), "NoTxtFrm with follow found" )
+            return (SwTxtFrm*)pCnt;
         }
         pCnt = pCnt->GetPrevCntntFrm();
     }
+
+    ASSERT( FALSE, "Follow ist lost in Space." );
+    return 0;
+}
+
+SwSectionFrm* SwSectionFrm::FindMaster() const
+{
+    ASSERT( IsFollow(), "SwSectionFrm::FindMaster(): !IsFollow" );
+
+    SwClientIter aIter( *pSection->GetFmt() );
+    SwClient *pLast = aIter.GoStart();
+
+    while ( pLast )
+    {
+        if ( pLast->ISA( SwFrm ) )
+        {
+            ASSERT( ((SwFrm*)pLast)->IsSctFrm(),
+                    "Non-section frame registered in section format" )
+            SwSectionFrm* pSect = (SwSectionFrm*)pLast;
+            if( pSect->GetFollow() == this )
+                return pSect;
+        }
+        pLast = aIter++;
+    }
+
+    ASSERT( FALSE, "Follow ist lost in Space." );
+    return 0;
+}
+
+SwTabFrm* SwTabFrm::FindMaster( bool bFirstMaster ) const
+{
+    ASSERT( IsFollow(), "SwTabFrm::FindMaster(): !IsFollow" );
+
+    SwClientIter aIter( *GetTable()->GetFrmFmt() );
+    SwClient* pLast = aIter.GoStart();
+
+    while ( pLast )
+    {
+        if ( pLast->ISA( SwFrm ) )
+        {
+            ASSERT( ((SwFrm*)pLast)->IsTabFrm(),
+                    "Non-table frame registered in table format" )
+            SwTabFrm* pTab = (SwTabFrm*)pLast;
+
+            if ( bFirstMaster )
+            {
+                //
+                // Optimization. This makes code like this obsolete:
+                // while ( pTab->IsFollow() )
+                //     pTab = pTab->FindMaster();
+                //
+                if ( !pTab->IsFollow() )
+                {
+                    SwTabFrm* pNxt = pTab;
+                    while ( pNxt )
+                    {
+                        if ( pNxt->GetFollow() == this )
+                            return pTab;
+                        pNxt = pNxt->GetFollow();
+                    }
+                }
+            }
+            else
+            {
+                if ( pTab->GetFollow() == this )
+                    return pTab;
+            }
+        }
+        pLast = aIter++;
+    }
+
     ASSERT( FALSE, "Follow ist lost in Space." );
     return 0;
 }
@@ -739,7 +786,7 @@ const SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, BOOL bFwd,
                                    const SwFrm *pAnch ) const
 {
     //Ohne Fluss kein genuss...
-    if ( IsInTab() || !(IsInDocBody() || IsInFtn() || IsInFly()) )
+    if ( !(IsInDocBody() || IsInFtn() || IsInFly()) )
         return 0;
 
     const SwFrm *pLeaf = this;
@@ -778,8 +825,13 @@ SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, BOOL bFwd )
 {
     if ( IsInFtn() )
         return bFwd ? GetNextFtnLeaf( eMakePage ) : GetPrevFtnLeaf( eMakePage );
+
+    if ( IsInTab() && !IsTabFrm() )
+        return bFwd ? GetNextCellLeaf( eMakePage ) : GetPrevCellLeaf( eMakePage );
+
     if ( IsInSct() )
         return bFwd ? GetNextSctLeaf( eMakePage ) : GetPrevSctLeaf( eMakePage );
+
     return bFwd ? GetNextLeaf( eMakePage ) : GetPrevLeaf( eMakePage );
 }
 
@@ -887,10 +939,8 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
         SwCntntFrm* pTmp = ((SwTabFrm*)this)->FindLastCntnt();
         if ( pTmp )
             pLayLeaf = pTmp->GetUpper();
-        else
-            pLayLeaf = GetNextLayoutLeaf();
     }
-    else
+    if ( !pLayLeaf )
         pLayLeaf = GetNextLayoutLeaf();
 
     SwLayoutFrm *pOldLayLeaf = 0;           //Damit bei neu erzeugten Seiten
@@ -1158,6 +1208,7 @@ BOOL SwFlowFrm::IsPageBreak( BOOL bAct ) const
 {
     const SwAttrSet *pSet;
     if ( !IsFollow() && rThis.IsInDocBody() &&
+         ( !rThis.IsInTab() || rThis.IsTabFrm() ) &&
          !(pSet = rThis.GetAttrSet())->GetDoc()->IsBrowseMode() )
     {
         //Vorgaenger ermitteln
@@ -1541,6 +1592,11 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
             bNoFwd = !pBoss->IsInSct() || ( !pBoss->Lower()->GetNext() &&
                      !pBoss->GetPrev() );
         }
+        if ( !rThis.IsTabFrm() && rThis.IsInTab() &&
+            ( NULL != rThis.IsInSplitTableRow() ) )
+        {
+            bNoFwd = FALSE;
+        }
         if( bNoFwd )
         {
             //Fuer PageBreak ist das Moven erlaubt, wenn der Frm nicht
@@ -1583,7 +1639,8 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
                     pSect->ColUnlock();
             }
         }
-        else
+        // Do not calculate split cell frames.
+        else if ( !pNewUpper->IsCellFrm() || ((SwLayoutFrm*)pNewUpper)->Lower() )
             pNewUpper->Calc();
 
         SwFtnBossFrm *pNewBoss = pNewUpper->FindFtnBossFrm();
@@ -1605,7 +1662,8 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
                 (pOldBoss->Frm().*fnRect->fnGetBottom)() );
             SwCntntFrm* pStart = rThis.IsCntntFrm() ?
                 (SwCntntFrm*)&rThis : ((SwLayoutFrm&)rThis).ContainsCntnt();
-            ASSERT( pStart, "MoveFwd: Missing Content" );
+            ASSERT( pStart || ( rThis.IsTabFrm() && !((SwTabFrm&)rThis).Lower() ),
+                    "MoveFwd: Missing Content" );
             SwLayoutFrm* pBody = pStart ? ( pStart->IsTxtFrm() ?
                 (SwLayoutFrm*)((SwTxtFrm*)pStart)->FindBodyFrm() : 0 ) : 0;
             if( pBody )
