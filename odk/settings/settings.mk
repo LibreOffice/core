@@ -101,8 +101,8 @@ CC_FLAGS+=-Zi
 endif
 
 CC_INCLUDES=-I. -I$(OUT)/inc/examples -I$(PRJ)/include
-STL_INCLUDES=-I$(OO_SDK_HOME)/include/stl
-SDK_JAVA_INCLUDES = -I$(OO_SDK_JAVA_HOME)/include -I$(OO_SDK_JAVA_HOME)/include/win32
+STL_INCLUDES=-I"$(OO_SDK_HOME)/include/stl"
+SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/include/win32"
 
 # define for used compiler necessary for UNO
 # -DCPPU_ENV=msci -- windows msvc 4.x - 7.x
@@ -118,7 +118,7 @@ LIBRARY_LINK_FLAGS+=/DEBUG
 EXE_LINK_FLAGS+=/DEBUG
 endif
 
-LINK_JAVA_LIBS=/LIBPATH:$(OO_SDK_JAVA_HOME)/lib
+LINK_JAVA_LIBS=/LIBPATH:"$(OO_SDK_JAVA_HOME)/lib"
 
 
 # use this for release version
@@ -195,8 +195,8 @@ ifeq "$(DEBUG)" "yes"
 CC_FLAGS+=-g
 endif
 CC_INCLUDES=-I. -I$(OUT)/inc/examples -I$(PRJ)/include
-STL_INCLUDES=-I$(OO_SDK_HOME)/include/stl
-SDK_JAVA_INCLUDES = -I$(OO_SDK_JAVA_HOME)/include -I$(OO_SDK_JAVA_HOME)/include/solaris
+STL_INCLUDES=-I"$(OO_SDK_HOME)/include/stl"
+SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/include/solaris"
 
 # define for used compiler necessary for UNO
 # -DCPPU_ENV=sunpro5 -- sunpro cc 5.x solaris sparc/intel
@@ -204,15 +204,15 @@ SDK_JAVA_INCLUDES = -I$(OO_SDK_JAVA_HOME)/include -I$(OO_SDK_JAVA_HOME)/include/
 CC_DEFINES=-DUNX -DSOLARIS -DSPARC -DCPPU_ENV=sunpro5
 CC_OUTPUT_SWITCH=-o 
 
-LIBRARY_LINK_FLAGS=-w -mt -z combreloc -PIC -temp=/tmp '-R $$ORIGIN' -z text -z defs -norunpath -G -Bdirect -Bdynamic -lpthread -lCrun -lc -lm
+LIBRARY_LINK_FLAGS=-w -mt -z combreloc -PIC -temp=/tmp '-R $$ORIGIN' -z text -norunpath -G -Bdirect -Bdynamic -lpthread -lCrun -lc -lm
 # means if used CC is lower then version 5.5 use option -instance=static
 ifeq ($(OO_SDK_CC_55_OR_HIGHER),)
 LIBRARY_LINK_FLAGS+=-instances=static
 endif
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -M $(PRJ)/settings/component.uno.map
 
-LINK_LIBS=-L$(OUT)/lib -L$(PRJ)/$(PLATFORM)/lib -L$(OFFICE_PROGRAM_PATH)
-LINK_JAVA_LIBS=-L$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)
+LINK_LIBS=-L$(OUT)/lib -L$(PRJ)/$(PLATFORM)/lib -L"$(OFFICE_PROGRAM_PATH)"
+LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
 
 endif
 
@@ -301,10 +301,10 @@ ifeq "$(PROCTYPE)" "ppc"
 CC_FLAGS+=-fPIC
 endif
 
-SDK_JAVA_INCLUDES = -I$(OO_SDK_JAVA_HOME)/include -I$(OO_SDK_JAVA_HOME)/include/linux
+SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/include/linux"
 CC_INCLUDES=-I. -I$(OUT)/inc/examples -I$(PRJ)/include
-STL_INCLUDES=-I$(OO_SDK_HOME)/include/stl
-CC_DEFINES=-DUNX -DGCC -DLINUX -DCPPU_ENV=$(CPPU_ENV)
+STL_INCLUDES=-I"$(OO_SDK_HOME)/include/stl"
+CC_DEFINES=-DUNX -DGCC -DLINUX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH)
 
 # define for used compiler necessary for UNO
 #-DCPPU_ENV=gcc2 -- gcc 2.91/2.95
@@ -320,8 +320,8 @@ endif
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -Wl,--version-script,$(PRJ)/settings/component.uno.map
 
 EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs
-LINK_LIBS=-L$(OUT)/lib -L$(PRJ)/$(PLATFORM)/lib -L$(OFFICE_PROGRAM_PATH)
-LINK_JAVA_LIBS=-L$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)
+LINK_LIBS=-L$(OUT)/lib -L$(PRJ)/$(PLATFORM)/lib -L"$(OFFICE_PROGRAM_PATH)"
+LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
 
 endif
 
@@ -393,8 +393,8 @@ endif
 
 SDK_JAVA_INCLUDES = -I/System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers -I/System/Library/Frameworks/JavaVM.framework/Headers
 CC_INCLUDES=-I. -I$(OUT)/inc/examples -I$(PRJ)/include
-STL_INCLUDES=-I$(OO_SDK_HOME)/include/stl
-CC_DEFINES=-DUNX -DGCC -DMACOSX -DCPPU_ENV=$(CPPU_ENV)
+STL_INCLUDES=-I"$(OO_SDK_HOME)/include/stl"
+CC_DEFINES=-DUNX -DGCC -DMACOSX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH)
 
 CC_OUTPUT_SWITCH=-o
 
@@ -405,7 +405,7 @@ COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 #-Wl,--version-script,$(PRJ)/settings/component.uno.map
 
 #EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs
-LINK_LIBS=-L$(OUT)/lib -L$(PRJ)/$(PLATFORM)/lib -L$(OFFICE_PROGRAM_PATH)
+LINK_LIBS=-L$(OUT)/lib -L$(PRJ)/$(PLATFORM)/lib -L"$(OFFICE_PROGRAM_PATH)"
 LINK_JAVA_LIBS=-framework JavaVM
 
 endif
@@ -482,10 +482,10 @@ else
 CC_FLAGS=-c -O -fPIC -DPIC $(PTHREAD_CFLAGS)
 endif
 
-SDK_JAVA_INCLUDES = -I$(OO_SDK_JAVA_HOME)/include -I$(OO_SDK_JAVA_HOME)/include/freebsd
+SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/include/freebsd"
 CC_INCLUDES=-I. -I$(OUT)/inc/examples -I$(PRJ)/include
-STL_INCLUDES=-I$(OO_SDK_HOME)/include/stl
-CC_DEFINES=-DUNX -DGCC -DFREEBSD -DCPPU_ENV=$(CPPU_ENV)
+STL_INCLUDES=-I"$(OO_SDK_HOME)/include/stl"
+CC_DEFINES=-DUNX -DGCC -DFREEBSD -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH)
 
 CC_OUTPUT_SWITCH=-o
 
@@ -494,7 +494,7 @@ COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -Wl,--version-script,$(PRJ)/settings/compo
 
 EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined 
 #EXE_LINK_FLAGS+=-Wl,-export-dynamic -Wl,-z,defs
-LINK_LIBS=-L$(OUT)/lib -L$(PRJ)/$(PLATFORM)/lib -L$(OFFICE_PROGRAM_PATH) $(PTHREAD_LIBS)
-LINK_JAVA_LIBS=-L$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)
+LINK_LIBS=-L$(OUT)/lib -L$(PRJ)/$(PLATFORM)/lib -L"$(OFFICE_PROGRAM_PATH)" $(PTHREAD_LIBS)
+LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
 
 endif
