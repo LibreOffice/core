@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XChartDataArray.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:19:59 $
+ *  last change:$Date: 2003-11-18 16:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,13 @@
 
 package ifc.chart;
 
+import com.sun.star.beans.XPropertySet;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
 
 import com.sun.star.chart.XChartDataArray;
+import com.sun.star.uno.UnoRuntime;
 
 /**
 * Testing <code>com.sun.star.chart.XChartDataArray</code>
@@ -87,6 +89,34 @@ public class _XChartDataArray extends MultiMethodTest {
     String[] colDscs = new String[3];
     String[] rowDscs = new String[3];
     double[][] data = null;
+    private boolean mbExcludeSetRowAndSetColumn = false;
+    private String msExcludeMessage;
+
+    protected void before() {
+        Object o = tEnv.getObjRelation("CRDESC");
+        if (o != null) {
+            mbExcludeSetRowAndSetColumn = true;
+            msExcludeMessage = (String)o;
+        }
+        if (!mbExcludeSetRowAndSetColumn) {
+            XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, oObj);
+            if(xProp != null) {
+                try {
+                    boolean columnAsLabel = ((Boolean)xProp.getPropertyValue("ChartColumnAsLabel")).booleanValue();
+                    boolean rowAsLabel = ((Boolean)xProp.getPropertyValue("ChartRowAsLabel")).booleanValue();
+                    if (!columnAsLabel) {
+                        xProp.setPropertyValue("ChartColumnAsLabel", Boolean.TRUE);
+                    }
+                    if (!rowAsLabel) {
+                        xProp.setPropertyValue("ChartRowAsLabel", Boolean.TRUE);
+                    }
+                }
+                catch(Exception e) {
+                    // ignore
+                }
+            }
+        }
+    }
 
     /**
     * Test calls the method and restores new values. <p>
@@ -96,9 +126,8 @@ public class _XChartDataArray extends MultiMethodTest {
         bResult = true;
 
         colDscs = oObj.getColumnDescriptions();
-        Object crdesc = tEnv.getObjRelation("CRDESC");
-        if (crdesc != null) {
-            log.println(crdesc);
+        if (mbExcludeSetRowAndSetColumn) {
+            log.println(msExcludeMessage);
             throw new StatusException(Status.skipped(true));
         }
         for (int i = 0; i < colDscs.length; i++) {
@@ -121,9 +150,8 @@ public class _XChartDataArray extends MultiMethodTest {
         bResult = true;
 
         rowDscs = oObj.getRowDescriptions();
-        Object crdesc = tEnv.getObjRelation("CRDESC");
-        if (crdesc != null) {
-            log.println(crdesc);
+        if (mbExcludeSetRowAndSetColumn) {
+            log.println(msExcludeMessage);
             throw new StatusException(Status.skipped(true));
         }
         for (int i = 0; i < rowDscs.length; i++) {
@@ -229,6 +257,10 @@ public class _XChartDataArray extends MultiMethodTest {
         }
 
         tRes.tested("getData()", bResult);
+    }
+
+    protected void after() {
+        disposeEnvironment();
     }
 }
 
