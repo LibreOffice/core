@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-12 11:39:49 $
+ *  last change: $Author: mt $ $Date: 2002-08-22 10:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2135,7 +2135,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
         {
             if ( bConsiderLanguage )
             {
-                nLanguage = GetLanguage( EditPaM( pNode, nCurrentStart ), &nCurrentEnd );
+                nLanguage = GetLanguage( EditPaM( pNode, nCurrentStart+1 ), &nCurrentEnd );
                 if ( nCurrentEnd > nEndPos )
                     nCurrentEnd = nEndPos;
             }
@@ -2168,11 +2168,11 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 // Change text without loosing the attributes
                 USHORT nCharsAfterTransliteration = aOffsets.getLength();
                 const long* pOffsets = aOffsets.getConstArray();
-                USHORT nCurrentPos = nCurrentStart;
                 short nDiffs = 0;
                 for ( USHORT n = 0; n < nCharsAfterTransliteration; n++ )
                 {
-                    short nDiff = (n-nDiffs) - pOffsets[n];
+                    USHORT nCurrentPos = nCurrentStart+n;
+                    short nDiff = (nCurrentPos-nDiffs) - pOffsets[n];
 
                     if ( !nDiff )
                     {
@@ -2194,9 +2194,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                         GetEditDoc().InsertText( EditPaM( pNode, nCurrentPos ), aNewText.GetChar(n) );
 
                     }
-
                     nDiffs += nDiff;
-                    nCurrentPos++;
                 }
 
                 if ( nNode == nEndNode )
