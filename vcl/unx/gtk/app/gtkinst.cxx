@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkinst.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:53:34 $
+ *  last change: $Author: obo $ $Date: 2004-02-25 10:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <salframe.h>
 #include <plugins/gtk/gtkframe.hxx>
 #include <plugins/gtk/gtkobject.hxx>
+
+#if OSL_DEBUG_LEVEL > 1
+#include <cstdio>
+#endif
 
 GtkHookedYieldMutex::GtkHookedYieldMutex()
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:54:05 $
+ *  last change: $Author: obo $ $Date: 2004-02-25 10:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,12 @@
 #include <X11/Xatom.h>
 #include <postx.h>
 
-// Unfortunate:
 #include <dlfcn.h>
 #include <soicon.hxx>
+
+#if OSL_DEBUG_LEVEL > 1
+#include <cstdio>
+#endif
 
 static USHORT GetModCode( guint state )
 {
