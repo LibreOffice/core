@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2002-08-26 09:30:07 $
+ *  last change: $Author: od $ $Date: 2002-08-28 13:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,6 +285,15 @@
 #endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
+#endif
+/// OD 22.08.2002 #99657#
+///     include definition of class SvxBrushItem and GraphicObject
+///     in order to determine, if background is transparent.
+#ifndef _SVX_BRSHITEM_HXX
+#include <svx/brshitem.hxx>
+#endif
+#ifndef _GRFMGR_HXX
+#include <goodies/grfmgr.hxx>
 #endif
 
 #ifndef _CMDID_H
@@ -2923,6 +2932,45 @@ sal_Bool SwFlyFrmFmt::GetInfo( SfxPoolItem& rInfo ) const
         return SwFrmFmt::GetInfo( rInfo );
     }
     return sal_True;
+}
+
+/** SwFlyFrmFmt::IsBackgroundTransparent - for #99657#
+
+    OD 22.08.2002 - overloading virtual method and its default implementation,
+    because format of fly frame provides transparent backgrounds.
+    Method determines, if background of fly frame has to be drawn transparent.
+
+    @author OD
+
+    @return true, if background color is transparent, but not "no fill"
+    or the transparency of a existing background graphic is set.
+*/
+const sal_Bool SwFlyFrmFmt::IsBackgroundTransparent() const
+{
+    sal_Bool bReturn = sal_False;
+
+    /// NOTE: If background color is "no fill"/"auto fill" (COL_TRANSPARENT),
+    ///     it isn't drawn transparent, because in this case, it "inherites"
+    ///     the background color of its anchor, if there is no background
+    ///     graphic.
+    if ( (GetBackground().GetColor().GetTransparency() != 0) &&
+         (GetBackground().GetColor() != COL_TRANSPARENT)
+       )
+    {
+        bReturn = sal_True;
+    }
+    else
+    {
+        GraphicObject *pTmpGrf = (GraphicObject*)GetBackground().GetGraphicObject();
+        if ( (pTmpGrf) &&
+             (pTmpGrf->GetAttr().GetTransparency() != 0)
+           )
+        {
+            bReturn = sal_True;
+        }
+    }
+
+    return bReturn;
 }
 
 //  class SwDrawFrmFmt
