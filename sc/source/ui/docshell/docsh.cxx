@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:07:57 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:29:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #include <unotools/charclass.hxx>
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
+#endif
+#ifndef SC_CHGTRACK_HXX
+#include "chgtrack.hxx"
 #endif
 
 #ifndef _SFXREQUEST_HXX
@@ -541,6 +544,41 @@ BOOL ScDocShell::SaveCalc( SvStorage* pStor )           // Calc 3, 4 or 5 file
     delete pProgress;
 
     return bRet;
+}
+
+sal_uInt16 ScDocShell::GetHiddenInformationState( sal_uInt16 nStates )
+{
+    // get global state like HIDDENINFORMATION_DOCUMENTVERSIONS
+    sal_uInt16 nState = SfxObjectShell::GetHiddenInformationState( nStates );
+
+    if ( nStates & HIDDENINFORMATION_RECORDEDCHANGES )
+    {
+        if ( aDocument.GetChangeTrack() && aDocument.GetChangeTrack()->GetFirst() )
+          nState |= HIDDENINFORMATION_RECORDEDCHANGES;
+    }
+    if ( nStates & HIDDENINFORMATION_NOTES )
+    {
+        SCTAB nTableCount = aDocument.GetTableCount();
+        SCTAB nTable = 0;
+        sal_Bool bFound(sal_False);
+        while ( nTable < nTableCount && !bFound )
+        {
+            ScCellIterator aCellIter( &aDocument, 0,0, nTable, MAXCOL,MAXROW, nTable );
+            ScBaseCell* pCell = aCellIter.GetFirst();
+            while (pCell && !bFound)
+            {
+                if (pCell->GetNotePtr())
+                    bFound = sal_True;
+                pCell = aCellIter.GetNext();
+            }
+            nTable++;
+        }
+
+        if (bFound)
+            nState |= HIDDENINFORMATION_NOTES;
+    }
+
+    return nState;
 }
 
 void ScDocShell::BeforeXMLLoading()
