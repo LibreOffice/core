@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:41 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,17 +102,17 @@
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRelationType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETABLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleTable.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETABLE_HPP_
+#include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #endif
 
 #ifndef _RTL_UUID_H_
@@ -130,7 +130,7 @@
 #include <float.h>
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -143,7 +143,7 @@ ScAccessibleCell::ScAccessibleCell(
         ScAccessibleDocument* pAccDoc)
     :
     ScAccessibleCellBase(rxParent, GetDocument(pViewShell), rCellAddress, nIndex),
-    accessibility::AccessibleStaticTextBase(CreateEditSource(pViewShell, rCellAddress, eSplitPos)),
+        ::accessibility::AccessibleStaticTextBase(CreateEditSource(pViewShell, rCellAddress, eSplitPos)),
     mpViewShell(pViewShell),
     meSplitPos(eSplitPos),
     mpAccDoc(pAccDoc)
@@ -209,11 +209,11 @@ void SAL_CALL ScAccessibleCell::release()
 
     //=====  XAccessibleComponent  ============================================
 
-uno::Reference< XAccessible > SAL_CALL ScAccessibleCell::getAccessibleAt(
+uno::Reference< XAccessible > SAL_CALL ScAccessibleCell::getAccessibleAtPoint(
         const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
-    return AccessibleStaticTextBase::getAccessibleAt(rPoint);
+    return AccessibleStaticTextBase::getAccessibleAtPoint(rPoint);
 }
 
 void SAL_CALL ScAccessibleCell::grabFocus(  )
@@ -314,8 +314,8 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
             pStateSet->AddState(AccessibleStateType::RESIZABLE);
         }
         pStateSet->AddState(AccessibleStateType::ENABLED);
-        pStateSet->AddState(AccessibleStateType::MULTILINE);
-        pStateSet->AddState(AccessibleStateType::MULTISELECTABLE);
+        pStateSet->AddState(AccessibleStateType::MULTI_LINE);
+        pStateSet->AddState(AccessibleStateType::MULTI_SELECTABLE);
         if (IsOpaque(xParentStates))
             pStateSet->AddState(AccessibleStateType::OPAQUE);
         pStateSet->AddState(AccessibleStateType::SELECTABLE);
@@ -363,7 +363,7 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
     aSequence.realloc(nOldSize + 1);
     ::rtl::OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.sheet.AccessibleCell"));
+    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.AccessibleCell"));
 
     return aSequence;
 }
