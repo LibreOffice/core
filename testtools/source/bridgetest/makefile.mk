@@ -23,7 +23,7 @@ GIVE_EXEC_RIGHTS=@echo
 .ELSE
 MY_DLLPOSTFIX=.so
 MY_DLLPREFIX=lib
-DESTDIR=$(LIB)
+DESTDIR=$(OUT)$/lib
 BATCH_INPROCESS=bridgetest_inprocess
 GIVE_EXEC_RIGHTS=chmod +x 
 .ENDIF
@@ -103,6 +103,7 @@ ALL : \
 .INCLUDE :	target.mk
 
 $(DESTDIR)$/uno_types.rdb : $(SOLARBINDIR)$/udkapi.rdb
+    echo $(DESTDIR)
     $(GNUCOPY) -p $? $@
 
 $(DESTDIR)$/bridgetest_inprocess$(BATCH_SUFFIX) : bridgetest_inprocess
