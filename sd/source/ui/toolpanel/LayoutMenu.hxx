@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LayoutMenu.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:33:38 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:31:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,14 @@ private:
         items.
     */
     int CalculateRowCount (const Size& rItemSize, int nColumnCount);
+
+    /** Fill the value set with the layouts that are applicable to the
+        current main view shell.
+    */
     void Fill (void);
+
+    /** Remove all items from the value set.
+    */
     void Clear (void);
 
     /** Assign the given layout to all selected slides of a slide sorter.
@@ -193,9 +200,19 @@ private:
     */
     void InsertPageWithLayout (AutoLayout aLayout);
 
+    /** Create an SID_INSERTPAGE request.  The parameters are set so that
+        the given layout is assigned to the current page of the main view
+        shell.
+    */
     SfxRequest CreateRequest (
         USHORT nSlotId,
         AutoLayout aLayout);
+
+    /** Return </TRUE> when the main view shell supports a master page mode
+        (true for the edit view, notes view, and handout view) and has it
+        turned on.
+    */
+    bool IsMainViewInMasterPageMode (void);
 
     /** When clicked then set the current page of the view in the center pane.
     */
