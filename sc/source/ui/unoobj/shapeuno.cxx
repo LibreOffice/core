@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeuno.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:50:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,13 +272,13 @@ ScDocument* lcl_GetDocument( SdrObject* pObj )
     return NULL;
 }
 
-BOOL lcl_GetPageNum( SdrPage* pPage, SdrModel& rModel, USHORT& rNum )
+BOOL lcl_GetPageNum( SdrPage* pPage, SdrModel& rModel, SCTAB& rNum )
 {
     USHORT nCount = rModel.GetPageCount();
     for (USHORT i=0; i<nCount; i++)
         if ( rModel.GetPage(i) == pPage )
         {
-            rNum = i;
+            rNum = static_cast<SCTAB>(i);
             return TRUE;
         }
 
@@ -302,7 +302,7 @@ BOOL lcl_GetCaptionPoint( uno::Reference< drawing::XShape >& xShape, awt::Point&
     return bReturn;
 }
 
-ScRange lcl_GetAnchorCell( uno::Reference< drawing::XShape >& xShape, ScDocument* pDoc, USHORT nTab,
+ScRange lcl_GetAnchorCell( uno::Reference< drawing::XShape >& xShape, ScDocument* pDoc, SCTAB nTab,
                           awt::Point& rUnoPoint, awt::Size& rUnoSize, awt::Point& rCaptionPoint )
 {
     ScRange aReturn;
@@ -337,7 +337,7 @@ ScRange lcl_GetAnchorCell( uno::Reference< drawing::XShape >& xShape, ScDocument
     return aReturn;
 }
 
-awt::Point lcl_GetRelativePos( uno::Reference< drawing::XShape >& xShape, ScDocument* pDoc, USHORT nTab, ScRange& rRange,
+awt::Point lcl_GetRelativePos( uno::Reference< drawing::XShape >& xShape, ScDocument* pDoc, SCTAB nTab, ScRange& rRange,
                               awt::Size& rUnoSize, awt::Point& rCaptionPoint)
 {
     awt::Point aUnoPoint;
@@ -390,7 +390,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
                         {
                             ScDocShell* pDocSh = (ScDocShell*)pObjSh;
 
-                            USHORT nTab = 0;
+                            SCTAB nTab = 0;
                             if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
                             {
                                 table::CellRangeAddress aAddress = xRangeAdd->getRangeAddress();
@@ -408,8 +408,8 @@ void SAL_CALL ScShapeObj::setPropertyValue(
                                             aAddress.StartColumn == aAddress.EndColumn, "here should be a XCell");
                                         ScDrawLayer::SetAnchor(pObj, SCA_CELL);
                                     }
-                                    Rectangle aRect(pDoc->GetMMRect( static_cast<USHORT>(aAddress.StartColumn), static_cast<USHORT>(aAddress.StartRow),
-                                        static_cast<USHORT>(aAddress.EndColumn), static_cast<USHORT>(aAddress.EndRow), aAddress.Sheet ));
+                                    Rectangle aRect(pDoc->GetMMRect( static_cast<SCCOL>(aAddress.StartColumn), static_cast<SCROW>(aAddress.StartRow),
+                                        static_cast<SCCOL>(aAddress.EndColumn), static_cast<SCROW>(aAddress.EndRow), aAddress.Sheet ));
                                     uno::Reference<drawing::XShape> xShape( mxShapeAgg, uno::UNO_QUERY );
                                     if (xShape.is())
                                     {
@@ -504,7 +504,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
                 SdrPage* pPage = pObj->GetPage();
                 if ( pModel && pPage )
                 {
-                    USHORT nTab = 0;
+                    SCTAB nTab = 0;
                     if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
                     {
                         ScDocument* pDoc = pModel->GetDocument();
@@ -600,7 +600,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
                 SdrPage* pPage = pObj->GetPage();
                 if ( pModel && pPage )
                 {
-                    USHORT nTab = 0;
+                    SCTAB nTab = 0;
                     if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
                     {
                         ScDocument* pDoc = pModel->GetDocument();
@@ -683,7 +683,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyNa
                 ScDocument* pDoc = pModel->GetDocument();
                 if ( pDoc )
                 {
-                    USHORT nTab = 0;
+                    SCTAB nTab = 0;
                     if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
                     {
                         SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
@@ -744,7 +744,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyNa
                 ScDocument* pDoc = pModel->GetDocument();
                 if ( pDoc )
                 {
-                    USHORT nTab = 0;
+                    SCTAB nTab = 0;
                     if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
                     {
                         uno::Reference<drawing::XShape> xShape( mxShapeAgg, uno::UNO_QUERY );
@@ -803,7 +803,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyNa
                 ScDocument* pDoc = pModel->GetDocument();
                 if ( pDoc )
                 {
-                    USHORT nTab = 0;
+                    SCTAB nTab = 0;
                     if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
                     {
                         uno::Reference<drawing::XShape> xShape( mxShapeAgg, uno::UNO_QUERY );
@@ -1019,7 +1019,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getAnchor() throw(uno::Run
                 {
                     ScDocShell* pDocSh = (ScDocShell*)pObjSh;
 
-                    USHORT nTab = 0;
+                    SCTAB nTab = 0;
                     if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
                     {
                         Point aPos = pObj->GetCurrentBoundRect().TopLeft();
