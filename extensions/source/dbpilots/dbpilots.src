@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpilots.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2001-08-29 09:16:33 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 20:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,9 @@ String RID_STR_COULDNOTOPENTABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2001/08/29 09:16:33  vg
+ *  Merge SRC638: 29.08.01 - 11:16:54
+ *
  *  Revision 1.21  2001/08/24 20:40:52  kz
  *  Merge SRC638: 08/24/01 - 22:41:27
  *
@@ -290,6 +293,7 @@ String RID_STR_COULDNOTOPENTABLE
  *
  *  Revision 1.0 14.02.01 10:47:53  fs
  ************************************************************************/
+
 
 
 
