@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:35:39 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,10 +203,10 @@ struct SfxDocumentInfoObject_Impl
 
 SfxDocumentInfoObject::SfxDocumentInfoObject( sal_Bool bStandalone )
     : _aPropSet( aDocInfoPropertyMap_Impl )
-    , _pInfo( NULL )
-    , _pFilter( NULL )
     , _bStandalone( bStandalone )
     , _pImp( new SfxDocumentInfoObject_Impl( NULL ) )
+    , _pInfo( NULL )
+    , _pFilter( NULL )
 {
 }
 
@@ -214,10 +214,10 @@ SfxDocumentInfoObject::SfxDocumentInfoObject( sal_Bool bStandalone )
 
 SfxDocumentInfoObject::SfxDocumentInfoObject( SfxObjectShell *pObjSh )
     : _aPropSet( aDocInfoPropertyMap_Impl )
-    , _pInfo( 0 )
-    , _pFilter( NULL )
     , _bStandalone( sal_False )
     , _pImp( new SfxDocumentInfoObject_Impl( pObjSh ) )
+    , _pInfo( 0 )
+    , _pFilter( NULL )
 {
     if ( pObjSh )
     {
