@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-06 05:21:32 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 15:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,15 +282,14 @@ void SwXMLExport::_ExportAutoStyles()
     // exported in _ExportContent
     if( (getExportFlags() & EXPORT_CONTENT) != 0 )
     {
-    GetTextParagraphExport()->exportUsedDeclarations( sal_False );
+        GetTextParagraphExport()->exportUsedDeclarations( sal_False );
         GetTextParagraphExport()->exportTrackedChanges( sal_True );
         Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
         Reference < XText > xText = xTextDoc->getText();
 
-        GetTextParagraphExport()->collectFrameBoundToPageAutoStyles( bShowProgress );
-        GetTextParagraphExport()->collectTextAutoStyles( xText, bShowProgress );
-
         // collect form autostyle
+        // (do this before collectTextAutoStyles, 'cause the shapes need the results of the work
+        // done by examineForms)
         Reference<XDrawPageSupplier> xDrawPageSupplier( GetModel(), UNO_QUERY );
         if (xDrawPageSupplier.is() && GetFormExport().is())
         {
@@ -298,6 +297,9 @@ void SwXMLExport::_ExportAutoStyles()
             if (xPage.is())
                 GetFormExport()->examineForms(xPage);
         }
+
+        GetTextParagraphExport()->collectFrameBoundToPageAutoStyles( bShowProgress );
+        GetTextParagraphExport()->collectTextAutoStyles( xText, bShowProgress );
     }
 
     GetTextParagraphExport()->exportTextAutoStyles();
@@ -384,6 +386,8 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap) const
 {
+    SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap);
+
     if( XML_STYLE_FAMILY_TEXT_PARAGRAPH == nFamily )
     {
         for( ::std::vector< XMLPropertyState >::const_iterator
