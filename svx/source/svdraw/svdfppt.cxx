@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-08 14:20:44 $
+ *  last change: $Author: sj $ $Date: 2002-05-30 14:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1097,7 +1097,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         PPTTextObj aTextObj( rSt, (SdrPowerPointImport&)*this, rPersistEntry, &rObjData );
         if ( ( aTextObj.Count() || aTextObj.GetOEPlaceHolderAtom() ) )
         {
-            INT32 nTextRotationAngle = ( rObjData.nSpFlags & SP_FFLIPV ) ? 18000 : 0;       // #72116# vertical flip
+            INT32 nTextRotationAngle = 0;
             if ( IsProperty( DFF_Prop_txflTextFlow ) )
             {
                 MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow ) & 0xFFFF );
@@ -1113,16 +1113,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     break;
 //                  case mso_txflHorzN :                    // Horizontal non-@, normal
 //                  case mso_txflHorzA :                    // Horizontal @-font, normal
-                }
-                if ( nTextRotationAngle )
-                {
-                    Point nCenter( rTextRect.Center() );
-                    long nDX = rTextRect.Right() - rTextRect.Left();
-                    long nDY = rTextRect.Bottom() - rTextRect.Top();
-                    rTextRect.Left()       = nCenter.X() - nDY/2;
-                    rTextRect.Top()        = nCenter.Y() - nDX/2;
-                    rTextRect.Right()      = rTextRect.Left() + nDY;
-                    rTextRect.Bottom()     = rTextRect.Top()  + nDX;
                 }
             }
             nTextRotationAngle -= GetPropertyValue( DFF_Prop_cdirFont, mso_cdir0 ) * 9000;
@@ -1195,11 +1185,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             }
             pTObj = new SdrRectObj( eTextKind );
             pTObj->SetModel( pSdrModel );
-            if ( nTextRotationAngle )
-            {
-                double a = nTextRotationAngle * nPi180;
-                pTObj->NbcRotate( rTextRect.Center(), nTextRotationAngle, sin( a ), cos( a ) );
-            }
             SfxItemSet aSet( pSdrModel->GetItemPool() );
             if ( !pRet )
                 ((SdrEscherImport*)this)->ApplyAttributes( rSt, aSet, pTObj );
@@ -1413,11 +1398,18 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
             if ( pTObj )
             {   // rotate text with shape ?
-                if ( mnFix16Angle )
+                sal_Int32 nAngle = ( rObjData.nSpFlags & SP_FFLIPV ) ? -mnFix16Angle : mnFix16Angle;    // #72116# vertical flip -> rotate by using the other way
+                nAngle += nTextRotationAngle;
+
+                if ( rObjData.nSpFlags & SP_FFLIPV )
                 {
-                    INT32 nAngle = ( rObjData.nSpFlags & SP_FFLIPV ) ? -mnFix16Angle : mnFix16Angle;    // #72116# vertical flip -> rotate by using the other way
-                    if ( rObjData.nSpFlags & SP_FFLIPH )
-                        nAngle = 180 - nAngle;
+                    double a = 18000 * nPi180;
+                    pTObj->Rotate( rTextRect.Center(), 18000, sin( a ), cos( a ) );
+                }
+                if ( rObjData.nSpFlags & SP_FFLIPH )
+                    nAngle = 36000 - nAngle;
+                if ( nAngle )
+                {
                     double a = nAngle * nPi180;
                     pTObj->NbcRotate( rObjData.rBoundRect.Center(), nAngle, sin( a ), cos( a ) );
                 }
