@@ -1,0 +1,3 @@
+so	soltools								usr1	-	all	so_usr1 NULL
+so	soltools\ldump							nmake	-	n	so_ldump NULL
+so	soltools\mkdepend						nmake	-	all	so_mkdep NULL

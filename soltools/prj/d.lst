@@ -1,0 +1,3 @@
+..\%__SRC%\bin\ldump.exe %_DEST%\bin%_EXT%\ldump.exe
+..\%__SRC%\bin\makedepend.exe %_DEST%\bin%_EXT%\makedepend.exe
+..\%__SRC%\bin\makedepend %_DEST%\bin%_EXT%\makedepend
