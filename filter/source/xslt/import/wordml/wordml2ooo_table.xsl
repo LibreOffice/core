@@ -49,7 +49,7 @@
    All Rights Reserved.
 
    Contributor(s): _______________________________________
-
+   
  -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="w wx aml o dt  v">
     <xsl:template match="w:style[@w:type='table']" mode="table">
@@ -67,9 +67,8 @@
     </xsl:template>
     <xsl:template match="w:tblPr" mode="style">
         <xsl:element name="style:style">
-
-            <xsl:attribute name="style:name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/></xsl:attribute>
-
+            <xsl:attribute name="style:name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>
+            </xsl:attribute>
             <xsl:attribute name="style:family">table</xsl:attribute>
             <xsl:if test="w:tblStyle">
                 <xsl:attribute name="style:parent-style-name">
@@ -203,8 +202,8 @@
         <!-- the following style is for conveting Word table text wrapping to SO Writer. Since SO Writer has no table text wrapping feature, so we use the draw:text-box as a container and put the table in draw:text-box -->
         <xsl:if test="w:tblpPr">
             <xsl:element name="style:style">
-
-                <xsl:attribute name="style:name">TableFrame<xsl:number count="w:tblpPr" from="/w:wordDocument/w:body" level="any" format="1"/></xsl:attribute>
+                <xsl:attribute name="style:name">TableFrame<xsl:number count="w:tblpPr" from="/w:wordDocument/w:body" level="any" format="1"/>
+                </xsl:attribute>
                 <xsl:attribute name="style:family">graphic</xsl:attribute>
                 <xsl:attribute name="style:parent-style-name">
                     <xsl:value-of select=" 'Frame' "/>
@@ -373,8 +372,8 @@
     <xsl:template match="w:gridCol" mode="style">
         <xsl:element name="style:style">
             <xsl:attribute name="style:family">table-column</xsl:attribute>
-
-            <xsl:attribute name="style:name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>.C<xsl:number count="w:gridCol" from="/w:wordDocument/w:body" level="single" format="1"/></xsl:attribute>
+            <xsl:attribute name="style:name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>.C<xsl:number count="w:gridCol" from="/w:wordDocument/w:body" level="single" format="1"/>
+            </xsl:attribute>
             <xsl:element name="style:table-column-properties">
                 <xsl:variable name="column_width">
                     <xsl:call-template name="ConvertMeasure">
@@ -392,8 +391,8 @@
         <!-- to generate style:style of table-row height.  -->
         <xsl:element name="style:style">
             <xsl:attribute name="style:family">table-row</xsl:attribute>
-
-            <xsl:attribute name="style:name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>.R<xsl:number count="w:tr" from="/w:wordDocument/w:body" level="single" format="1"/></xsl:attribute>
+            <xsl:attribute name="style:name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>.R<xsl:number count="w:tr" from="/w:wordDocument/w:body" level="single" format="1"/>
+            </xsl:attribute>
             <xsl:element name="style:table-row-properties">
                 <xsl:choose>
                     <xsl:when test="w:trHeight/@w:val">
@@ -413,8 +412,8 @@
     </xsl:template>
     <xsl:template match="w:tcPr" mode="style">
         <style:style>
-
-            <xsl:attribute name="style:name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>.R<xsl:number count="w:tr" from="/w:wordDocument/w:body" level="single" format="1"/>C<xsl:number count="w:tc" from="/w:wordDocument/w:body" level="single" format="1"/></xsl:attribute>
+            <xsl:attribute name="style:name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>.R<xsl:number count="w:tr" from="/w:wordDocument/w:body" level="single" format="1"/>C<xsl:number count="w:tc" from="/w:wordDocument/w:body" level="single" format="1"/>
+            </xsl:attribute>
             <xsl:attribute name="style:family">table-cell</xsl:attribute>
             <xsl:variable name="rootStyle" select="ancestor::w:tbl/w:tblPr/w:tblStyle/@w:val"/>
             <xsl:variable name="rootStyleNode" select="/w:wordDocument/w:styles/w:style[@w:styleId = $rootStyle]"/>
@@ -1179,9 +1178,12 @@
                 <!-- if the table is surrounded by text then put the table into a draw:text-box -->
                 <xsl:element name="text:p">
                     <xsl:element name="draw:frame">
-
-                        <xsl:attribute name="draw:style-name"><xsl:text>TableFrame</xsl:text><xsl:number count="w:tblpPr" from="/w:wordDocument/w:body" level="any" format="1"/></xsl:attribute>
-                        <xsl:attribute name="draw:name">TableFr<xsl:number count="w:tblpPr" from="/w:wordDocument/w:body" level="any" format="1"/></xsl:attribute>
+                        <xsl:attribute name="draw:style-name">
+                            <xsl:text>TableFrame</xsl:text>
+                            <xsl:number count="w:tblpPr" from="/w:wordDocument/w:body" level="any" format="1"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="draw:name">TableFr<xsl:number count="w:tblpPr" from="/w:wordDocument/w:body" level="any" format="1"/>
+                        </xsl:attribute>
                         <xsl:variable name="tbl_anchor_type">
                             <xsl:choose>
                                 <xsl:when test="name(..) = 'w:tc' ">
@@ -1229,13 +1231,13 @@
                         </xsl:if>
                         <!--create table in draw:text-box to produce table wrapping text effect-->
                         <xsl:element name="draw:text-box">
-
-                        <xsl:element name="table:table">
-                            <xsl:if test="w:tblPr">
-                                <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/></xsl:attribute>
-                            </xsl:if>
-                            <xsl:apply-templates select="w:tblGrid | w:tr"/>
-                        </xsl:element>
+                            <xsl:element name="table:table">
+                                <xsl:if test="w:tblPr">
+                                    <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>
+                                    </xsl:attribute>
+                                </xsl:if>
+                                <xsl:apply-templates select="w:tblGrid | w:tr"/>
+                            </xsl:element>
                         </xsl:element>
                     </xsl:element>
                     <!--draw:text-box end  -->
@@ -1246,8 +1248,8 @@
                 <!-- if the table is not surrounded by text then put the table into a draw:text-box -->
                 <xsl:element name="table:table">
                     <xsl:if test="w:tblPr">
-
-                        <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/></xsl:attribute>
+                        <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>
+                        </xsl:attribute>
                     </xsl:if>
                     <xsl:apply-templates select="w:tblGrid | w:tr"/>
                 </xsl:element>
@@ -1259,24 +1261,24 @@
     </xsl:template>
     <xsl:template match="w:gridCol">
         <xsl:element name="table:table-column">
-
-            <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>.C<xsl:number count="w:gridCol" from="/w:wordDocument/w:body" level="single" format="1"/></xsl:attribute>
+            <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>.C<xsl:number count="w:gridCol" from="/w:wordDocument/w:body" level="single" format="1"/>
+            </xsl:attribute>
         </xsl:element>
     </xsl:template>
     <xsl:template match="w:tr">
         <xsl:element name="table:table-row">
             <!-- generate row in table and add attribute of table:style-name if the style:style exists. cp tom chen. -->
             <xsl:if test="w:trPr/w:trHeight">
-
-                <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>.R<xsl:number count="w:tr" from="/w:wordDocument/w:body" level="single" format="1"/></xsl:attribute>
+                <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>.R<xsl:number count="w:tr" from="/w:wordDocument/w:body" level="single" format="1"/>
+                </xsl:attribute>
             </xsl:if>
             <xsl:apply-templates select="w:tc"/>
         </xsl:element>
     </xsl:template>
     <xsl:template match="w:tc">
         <xsl:element name="table:table-cell">
-
-            <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>.R<xsl:number count="w:tr" from="/w:wordDocument/w:body" level="single" format="1"/>C<xsl:number count="w:tc" from="/w:wordDocument/w:body" level="single" format="1"/></xsl:attribute>
+            <xsl:attribute name="table:style-name">Table<xsl:number count="w:tbl" from="/w:wordDocument/w:body" level="any" format="1"/>.R<xsl:number count="w:tr" from="/w:wordDocument/w:body" level="single" format="1"/>C<xsl:number count="w:tc" from="/w:wordDocument/w:body" level="single" format="1"/>
+            </xsl:attribute>
             <xsl:if test="w:tcPr/w:gridSpan and w:tcPr/w:gridSpan/@w:val &gt; 0">
                 <xsl:attribute name="table:number-columns-spanned">
                     <xsl:value-of select="w:tcPr/w:gridSpan/@w:val"/>

@@ -49,7 +49,7 @@
    All Rights Reserved.
 
    Contributor(s): _______________________________________
-
+   
  -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="w wx aml o dt  v">
     <xsl:template name="create-default-paragraph-styles">
@@ -258,7 +258,6 @@
         </xsl:if>
     </xsl:template>
     <xsl:template match="w:pPr">
-        <!-- xsl:apply-templates select="w:rPr"/ -->
         <xsl:if test="w:ind/@w:left">
             <xsl:attribute name="fo:margin-left">
                 <xsl:call-template name="ConvertMeasure">
@@ -285,8 +284,15 @@
         </xsl:if>
         <!-- bi-directional support-->
         <xsl:if test="w:bidi">
-            <xsl:attribute name="style:writing-mode">rl-tb</xsl:attribute>
-            <xsl:attribute name="fo:text-align">end</xsl:attribute>
+            <xsl:choose>
+                <xsl:when test="w:bidi/@w:val = 'off'">
+                    <xsl:attribute name="fo:text-align">start</xsl:attribute>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:attribute name="style:writing-mode">rl-tb</xsl:attribute>
+                    <xsl:attribute name="fo:text-align">end</xsl:attribute>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <xsl:if test="w:jc">
             <xsl:choose>
@@ -295,7 +301,7 @@
                 </xsl:when>
                 <xsl:when test="w:jc/@w:val = 'left'">
                     <xsl:choose>
-                        <xsl:when test="w:bidi">
+                        <xsl:when test="w:bidi and not(w:bidi/@w:val = 'off')">
                             <xsl:attribute name="fo:text-align">end</xsl:attribute>
                         </xsl:when>
                         <xsl:otherwise>
@@ -305,7 +311,7 @@
                 </xsl:when>
                 <xsl:when test="w:jc/@w:val = 'right'">
                     <xsl:choose>
-                        <xsl:when test="w:bidi">
+                        <xsl:when test="w:bidi and not(w:bidi/@w:val = 'off')">
                             <xsl:attribute name="fo:text-align">start</xsl:attribute>
                         </xsl:when>
                         <xsl:otherwise>
@@ -502,24 +508,25 @@
                         </xsl:choose>
                         <!-- Detect leader chars in tabs (rp) -->
                         <xsl:choose>
-                           <xsl:when test="@w:leader = 'hyphen'">
-                           	<xsl:attribute name="style:leader-style">solid</xsl:attribute>
-                           	<xsl:attribute name="style:leader-text">-</xsl:attribute>
-                           </xsl:when>
-                           <xsl:when test="@w:leader = 'underscore'">
-                           	<xsl:attribute name="style:leader-style">solid</xsl:attribute>
-                           	<xsl:attribute name="style:leader-text">_</xsl:attribute>
-                           </xsl:when>
-                           <xsl:when test="@w:leader = 'dot'">
-                            	<xsl:attribute name="style:leader-style">dotted</xsl:attribute>
-                           	<xsl:attribute name="style:leader-text">.</xsl:attribute>
-                           </xsl:when>
-                       </xsl:choose>
-                         <!-- end leader chars (rp) -->
+                            <xsl:when test="@w:leader = 'hyphen'">
+                                <xsl:attribute name="style:leader-style">solid</xsl:attribute>
+                                <xsl:attribute name="style:leader-text">-</xsl:attribute>
+                            </xsl:when>
+                            <xsl:when test="@w:leader = 'underscore'">
+                                <xsl:attribute name="style:leader-style">solid</xsl:attribute>
+                                <xsl:attribute name="style:leader-text">_</xsl:attribute>
+                            </xsl:when>
+                            <xsl:when test="@w:leader = 'dot'">
+                                <xsl:attribute name="style:leader-style">dotted</xsl:attribute>
+                                <xsl:attribute name="style:leader-text">.</xsl:attribute>
+                            </xsl:when>
+                        </xsl:choose>
+                        <!-- end leader chars (rp) -->
                     </xsl:element>
                 </xsl:for-each>
             </xsl:element>
         </xsl:if>
+        <xsl:apply-templates select="w:rPr" mode="paragraph-properties"/>
     </xsl:template>
     <xsl:template match="w:rPr" mode="style">
         <xsl:element name="style:style">
@@ -799,6 +806,13 @@
             </xsl:if>
         </xsl:if>
     </xsl:template>
+    <xsl:template match="w:rPr" mode="paragraph-properties">
+        <!--  right-to-left support-->
+        <xsl:if test="w:rtl and not(w:rtl/@w:val = 'off')">
+            <xsl:attribute name="style:writing-mode">rl-tb</xsl:attribute>
+            <xsl:attribute name="fo:text-align">end</xsl:attribute>
+        </xsl:if>
+    </xsl:template>
     <xsl:template match="w:p">
         <xsl:choose>
             <!-- because word treats page breaks as separate tags, we must split some paragraphs up so that we can
@@ -819,7 +833,7 @@
         <xsl:for-each select="$textruns-with-break">
             <xsl:variable name="break-position" select="position()"/>
             <xsl:call-template name="create-sub-paragraph">
-            <!-- added following-sibling::w:fldSimple | following-sibling::w:hlink | following-sibling::aml:annotation to enable these elements to be processed when there are breaks happen  G.Yang -->
+                <!-- added following-sibling::w:fldSimple | following-sibling::w:hlink | following-sibling::aml:annotation to enable these elements to be processed when there are breaks happen  G.Yang -->
                 <xsl:with-param name="textruns" select="following-sibling::w:r[not(w:br/@w:type='page' or w:br/@w:type='column') and (count(preceding::w:r[w:br/@w:type='page' or w:br/@w:type='column']) = $break-position)] | following-sibling::w:fldSimple[count(preceding::w:r[w:br/@w:type='page' or w:br/@w:type='column']) = $break-position] | following-sibling::w:hlink[count(preceding::w:r[w:br/@w:type='page' or w:br/@w:type='column']) = $break-position] | following-sibling::aml:annotation[count(preceding::w:r[w:br/@w:type='page' or w:br/@w:type='column']) = $break-position] "/>
                 <xsl:with-param name="textruns-with-break" select="current()"/>
             </xsl:call-template>
