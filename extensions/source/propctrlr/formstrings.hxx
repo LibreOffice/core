@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:03:19 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 11:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,9 +240,9 @@ namespace pcr
     PCR_CONSTASCII_STRING( SERVICE_DRAWING_DOCUMENT,        "com.sun.star.drawing.DrawingDocument" );
     PCR_CONSTASCII_STRING( SERVICE_PRESENTATION_DOCUMENT,   "com.sun.star.presentation.PresentationDocument" );
 
-    PCR_CONSTASCII_STRING( SERVICE_SHEET_CELL_BINDING,      "drafts.com.sun.star.table.CellValueBinding" );
-    PCR_CONSTASCII_STRING( SERVICE_SHEET_CELL_INT_BINDING,  "drafts.com.sun.star.table.ListPositionCellBinding" );
-    PCR_CONSTASCII_STRING( SERVICE_SHEET_CELLRANGE_LISTSOURCE, "drafts.com.sun.star.table.CellRangeListSource" );
+    PCR_CONSTASCII_STRING( SERVICE_SHEET_CELL_BINDING,      "com.sun.star.table.CellValueBinding" );
+    PCR_CONSTASCII_STRING( SERVICE_SHEET_CELL_INT_BINDING,  "com.sun.star.table.ListPositionCellBinding" );
+    PCR_CONSTASCII_STRING( SERVICE_SHEET_CELLRANGE_LISTSOURCE, "com.sun.star.table.CellRangeListSource" );
     PCR_CONSTASCII_STRING( SERVICE_ADDRESS_CONVERSION,      "com.sun.star.table.CellAddressConversion" );
     PCR_CONSTASCII_STRING( SERVICE_RANGEADDRESS_CONVERSION, "com.sun.star.table.CellRangeAddressConversion" );
 
