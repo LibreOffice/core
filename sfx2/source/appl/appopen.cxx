@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 07:33:55 $
+ *  last change: $Author: mba $ $Date: 2002-07-18 09:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,8 @@ void SetTemplate_Impl( SvStorage *pStorage,
 
 ULONG CheckPasswd_Impl
 (
-    Window *pWin,       // Parent des Dialogs
+    //Window *pWin,       // Parent des Dialogs
+    SfxObjectShell* pDoc,
     SfxItemPool &rPool, // Pool, falls ein Set erzeugt werden mus
     SfxMedium *pFile    // das Medium, dessen Passwort gfs. erfragt werden soll
 )
@@ -382,6 +383,7 @@ ULONG CheckPasswd_Impl
 
             if ( bIsEncrypted )
             {
+                Window* pWin = pDoc ? pDoc->GetDialogParent( pFile ) : NULL;
                 if ( pWin )
                     pWin->Show();
                 SfxPasswordDialog *pDlg = new SfxPasswordDialog(pWin);

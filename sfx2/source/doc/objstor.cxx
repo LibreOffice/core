@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-10 16:27:51 $
+ *  last change: $Author: mba $ $Date: 2002-07-18 09:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@
 #define S2BS(s) ByteString( s, RTL_TEXTENCODING_MS_1252 )
 
 
-extern sal_uInt32 CheckPasswd_Impl( Window*, SfxItemPool&, SfxMedium* );
+extern sal_uInt32 CheckPasswd_Impl( SfxObjectShell*, SfxItemPool&, SfxMedium* );
 
 
 using namespace ::com::sun::star::container;
@@ -2147,7 +2147,7 @@ sal_Bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
 
         // Password
         SFX_ITEMSET_ARG( rMedium.GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, sal_False );
-        if ( pPasswdItem || ERRCODE_IO_ABORT != CheckPasswd_Impl( GetDialogParent( &rMedium ), SFX_APP()->GetPool(), pMedium ) )
+        if ( pPasswdItem || ERRCODE_IO_ABORT != CheckPasswd_Impl( this, SFX_APP()->GetPool(), pMedium ) )
         {
             String aPasswd;
             if ( GetPasswd_Impl(pMedium->GetItemSet(), aPasswd) )
