@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-15 21:49:28 $
+ *  last change: $Author: pluby $ $Date: 2000-11-15 23:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,9 @@
 #include <VCLWindow.h>
 #endif
 
-#if SUPD >= 612
+#if defined __cplusplus || SUPD >= 612
 
-#ifdef  __cplusplus
+#ifdef __cplusplus
 
 #ifdef _VOS_NO_NAMESPACE
 class OMutex;
@@ -113,6 +113,6 @@ public:
     USHORT              mnYieldWaitCount;       // Wait-Count
 };
 
-#endif // SUPD >= 612
+#endif // __cplusplus || SUPD >= 612
 
 #endif // _SV_SALINST_H
