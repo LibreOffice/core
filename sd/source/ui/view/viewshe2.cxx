@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-14 15:54:46 $
+ *  last change: $Author: cl $ $Date: 2001-05-22 15:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1383,7 +1383,7 @@ static rtl::OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
     return aLines.makeStringAndClear();
 }
 
-#define NUM_VIEW_SETTINGS 50
+#define NUM_VIEW_SETTINGS 53
 void SdViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
 {
     rSequence.realloc ( NUM_VIEW_SETTINGS );
@@ -1584,10 +1584,21 @@ void SdViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::co
 
     {
         const Rectangle aVisArea = pFrameView->GetVisArea();
-        awt::Rectangle aRect( aVisArea.Left(), aVisArea.Top(), aVisArea.GetWidth(), aVisArea.GetHeight() );
 
-        pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_VisArea ) );
-        pValue->Value <<= aRect;
+        pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_VisibleAreaTop ) );
+        pValue->Value <<= (sal_Int32)aVisArea.Top();
+        pValue++;nIndex++;
+
+        pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_VisibleAreaLeft ) );
+        pValue->Value <<= (sal_Int32)aVisArea.Left();
+        pValue++;nIndex++;
+
+        pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_VisibleAreaWidth ) );
+        pValue->Value <<= (sal_Int32)aVisArea.GetWidth();
+        pValue++;nIndex++;
+
+        pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_VisibleAreaHeight ) );
+        pValue->Value <<= (sal_Int32)aVisArea.GetHeight();
         pValue++;nIndex++;
     }
 
@@ -1883,12 +1894,45 @@ void SdViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence <
                     pFrameView->SetViewShEditMode( (EditMode)nInt32, PK_HANDOUT );
                 }
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_VisArea ) ) )
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_VisibleAreaTop ) ) )
             {
-                awt::Rectangle aRect;
-                if( pValue->Value >>= aRect )
+                sal_Int32 nTop;
+                if( pValue->Value >>= nTop )
                 {
-                    Rectangle aVisArea( aRect.X, aRect.Y, aRect.X + aRect.Width - 1, aRect.Y + aRect.Height - 1 );
+                    Rectangle aVisArea( pFrameView->GetVisArea() );
+                    aVisArea.nBottom += nTop - aVisArea.nTop;
+                    aVisArea.nTop = nTop;
+                    pFrameView->SetVisArea( aVisArea );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_VisibleAreaLeft ) ) )
+            {
+                sal_Int32 nLeft;
+                if( pValue->Value >>= nLeft )
+                {
+                    Rectangle aVisArea( pFrameView->GetVisArea() );
+                    aVisArea.nRight += nLeft - aVisArea.nLeft;
+                    aVisArea.nLeft = nLeft;
+                    pFrameView->SetVisArea( aVisArea );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_VisibleAreaWidth ) ) )
+            {
+                sal_Int32 nWidth;
+                if( pValue->Value >>= nWidth )
+                {
+                    Rectangle aVisArea( pFrameView->GetVisArea() );
+                    aVisArea.nRight = aVisArea.nLeft + nWidth - 1;
+                    pFrameView->SetVisArea( aVisArea );
+                }
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_VisibleAreaHeight ) ) )
+            {
+                sal_Int32 nHeight;
+                if( pValue->Value >>= nHeight )
+                {
+                    Rectangle aVisArea( pFrameView->GetVisArea() );
+                    aVisArea.nBottom = nHeight + aVisArea.nTop - 1;
                     pFrameView->SetVisArea( aVisArea );
                 }
             }

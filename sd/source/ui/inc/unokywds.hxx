@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unokywds.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-16 13:41:44 $
+ *  last change: $Author: cl $ $Date: 2001-05-22 15:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,11 @@ SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidthYDenominator,      "GridSnapWidthYD
 SD_CONSTASCII_ACTION( sUNO_View_VisibleLayers,                  "VisibleLayers" );
 SD_CONSTASCII_ACTION( sUNO_View_PrintableLayers,                "PrintableLayers" );
 SD_CONSTASCII_ACTION( sUNO_View_LockedLayers,                   "LockedLayers" );
+
+SD_CONSTASCII_ACTION( sUNO_View_VisibleAreaTop,                 "VisibleAreaTop" );
+SD_CONSTASCII_ACTION( sUNO_View_VisibleAreaLeft,                "VisibleAreaLeft" );
+SD_CONSTASCII_ACTION( sUNO_View_VisibleAreaWidth,               "VisibleAreaWidth" );
+SD_CONSTASCII_ACTION( sUNO_View_VisibleAreaHeight,              "VisibleAreaHeight" );
 
 #endif
 
