@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userdat.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:17:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include "global.hxx"
 #endif
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 
 //-------------------------------------------------------------------------
 
@@ -101,7 +105,7 @@ class ScDrawObjData : public SdrObjUserData
     virtual void WriteData(SvStream& rOut);
     virtual void ReadData(SvStream& rIn);
 public:
-    ScTripel aStt, aEnd;
+    ScAddress aStt, aEnd;
     BOOL bValidStart, bValidEnd;
     ScDrawObjData();
     ScDrawObjData( const ScDrawObjData& );
