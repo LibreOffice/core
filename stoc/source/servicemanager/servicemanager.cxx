@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:37:14 $
+ *  last change: $Author: dbo $ $Date: 2001-05-10 14:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,12 @@
 #include <cppuhelper/typeprovider.hxx>
 #endif
 
+#include <cppuhelper/component_context.hxx>
+#include <cppuhelper/bootstrap.hxx>
+
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -110,7 +114,9 @@
 #include <com/sun/star/container/XElementAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::registry;
@@ -349,6 +355,7 @@ struct OServiceManagerMutex
 
 class OServiceManager
     : public XMultiServiceFactory
+    , public XMultiComponentFactory
     , public XSet
     , public XContentEnumerationAccess
     , public XServiceInfo
@@ -356,7 +363,7 @@ class OServiceManager
     , public OComponentHelper
 {
 public:
-    OServiceManager();
+    OServiceManager( Reference< XComponentContext > const & xContext );
     ~OServiceManager();
 
     virtual Any SAL_CALL queryInterface( const Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -372,6 +379,18 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(::com::sun::star::uno::RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
     static Sequence< OUString > getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
+
+    // XMultiComponentFactory
+    virtual Reference< XInterface > SAL_CALL createInstanceWithContext(
+        OUString const & rServiceSpecifier, Reference< XComponentContext > const & xContext )
+        throw (Exception, RuntimeException);
+    virtual Reference< XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
+        OUString const & rServiceSpecifier,
+        Sequence< Any > const & rArguments,
+        Reference< XComponentContext > const & xContext )
+        throw (Exception, RuntimeException);
+//      virtual Sequence< OUString > SAL_CALL getAvailableServiceNames()
+//          throw (RuntimeException);
 
     // XMultiServiceFactory
     virtual Sequence< OUString > SAL_CALL getAvailableServiceNames() throw(::com::sun::star::uno::RuntimeException);
@@ -407,10 +426,12 @@ public:
 protected:
     sal_Bool haveFactoryWithThisImplementation(const OUString& aImplName);
 
-    virtual Reference<XSingleServiceFactory >   queryServiceFactory(const OUString& aServiceName);
-private:
+    virtual Reference< XInterface > queryServiceFactory(const OUString& aServiceName);
 
+    Reference< XComponentContext >  m_xContext;
+private:
     Reference<XEventListener >      getFactoryListener();
+
 
     HashMultimap_OWString_Interface m_ServiceMap;
     HashSet_Ref                     m_ImplementationMap;
@@ -421,8 +442,9 @@ private:
 /**
  * Create a ServiceManager
  */
-OServiceManager::OServiceManager()
+OServiceManager::OServiceManager( Reference< XComponentContext > const & xContext )
     : OComponentHelper( m_mutex )
+    , m_xContext( xContext )
 {
 }
 
@@ -470,6 +492,8 @@ void OServiceManager::dispose()
         m_ImplementationNameMap = HashMap_OWString_Interface();
     }
 
+    m_xContext.clear();
+
     // not only the Event should hold the object
     OSL_ASSERT( m_refCount != 1 );
 }
@@ -485,6 +509,7 @@ Sequence< Type > OServiceManager::getTypes()
         if (! s_pTypes)
         {
             static OTypeCollection s_aTypes(
+                ::getCppuType( (const Reference< XMultiComponentFactory > *)0 ),
                 ::getCppuType( (const Reference< XMultiServiceFactory > *)0 ),
                 ::getCppuType( (const Reference< XSet > *)0 ),
                 ::getCppuType( (const Reference< XContentEnumerationAccess > *)0 ),
@@ -526,6 +551,7 @@ Any OServiceManager::queryInterface( const Type & rType )
 {
     Any aRet( ::cppu::queryInterface(
         rType,
+        static_cast< XMultiComponentFactory * >( this ),
         static_cast< XMultiServiceFactory * >( this ),
         static_cast< XServiceInfo * >( this ),
         static_cast< XContentEnumerationAccess *>( this ),
@@ -562,7 +588,72 @@ Sequence< OUString > OServiceManager::getAvailableServiceNames( HashSet_OWString
     return aNames;
 }
 
-// XMultiServiceFactory, XContentEnumeration
+// XMultiComponentFactory
+Reference< XInterface > OServiceManager::createInstanceWithContext(
+    OUString const & rServiceSpecifier, Reference< XComponentContext > const & xContext )
+    throw (Exception, RuntimeException)
+{
+    Reference< XInterface > xRet;
+
+    Reference< XInterface > xFactory( queryServiceFactory( rServiceSpecifier ) );
+    if (xFactory.is())
+    {
+        Reference< XSingleComponentFactory > xFac( xFactory, UNO_QUERY );
+        if (xFac.is())
+        {
+            xRet = xFac->createInstanceWithContext( xContext );
+        }
+        else
+        {
+            Reference< XSingleServiceFactory > xFac( xFactory, UNO_QUERY );
+            if (xFac.is())
+            {
+#ifdef DEBUG
+                OString aStr( OUStringToOString( rServiceSpecifier, RTL_TEXTENCODING_ASCII_US ) );
+                OSL_TRACE( "### ignoring given context raising service %s !!!\n", aStr.getStr() );
+#endif
+                xRet = xFac->createInstance();
+            }
+        }
+    }
+
+    return xRet;
+}
+// XMultiComponentFactory
+Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
+    OUString const & rServiceSpecifier,
+    Sequence< Any > const & rArguments,
+    Reference< XComponentContext > const & xContext )
+    throw (Exception, RuntimeException)
+{
+    Reference< XInterface > xRet;
+
+    Reference< XInterface > xFactory( queryServiceFactory( rServiceSpecifier ) );
+    if (xFactory.is())
+    {
+        Reference< XSingleComponentFactory > xFac( xFactory, UNO_QUERY );
+        if (xFac.is())
+        {
+            xRet = xFac->createInstanceWithArgumentsAndContext( rArguments, xContext );
+        }
+        else
+        {
+            Reference< XSingleServiceFactory > xFac( xFactory, UNO_QUERY );
+            if (xFac.is())
+            {
+#ifdef DEBUG
+                OString aStr( OUStringToOString( rServiceSpecifier, RTL_TEXTENCODING_ASCII_US ) );
+                OSL_TRACE( "### ignoring given context raising service %s !!!\n", aStr.getStr() );
+#endif
+                xRet = xFac->createInstanceWithArguments( rArguments );
+            }
+        }
+    }
+
+    return xRet;
+}
+
+// XMultiServiceFactory, XMultiComponentFactory, XContentEnumeration
 Sequence< OUString > OServiceManager::getAvailableServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -572,66 +663,20 @@ Sequence< OUString > OServiceManager::getAvailableServiceNames()
 }
 
 // XMultibleServiceFactory
-Reference<XInterface > OServiceManager::createInstance(const OUString& ServiceSpecifier )
+Reference<XInterface > OServiceManager::createInstance(
+    const OUString& rServiceSpecifier )
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
-    ClearableMutexGuard aGuard( m_mutex );
-
-    Reference<XSingleServiceFactory > xFactory( queryServiceFactory( ServiceSpecifier ) );
-
-    Reference<XInterface > xRet;
-    if( xFactory.is() )
-    {
-        aGuard.clear();
-        xRet = xFactory->createInstance();
-    }
-    return xRet;
+    return createInstanceWithContext( rServiceSpecifier, m_xContext );
 }
 
 // XMultibleServiceFactory
-Reference<XInterface > OServiceManager::createInstanceWithArguments
-(
-    const OUString& ServiceSpecifier,
-    const Sequence<Any >& Arguments
-)
+Reference<XInterface > OServiceManager::createInstanceWithArguments(
+    const OUString& rServiceSpecifier,
+    const Sequence<Any >& rArguments )
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
-    ClearableMutexGuard aGuard( m_mutex );
-    Reference<XInterface > xRet;
-    Reference<XSingleServiceFactory > xFactory( queryServiceFactory( ServiceSpecifier ) );
-    aGuard.clear();
-
-    if( xFactory.is() )
-    {
-        // single service factory found
-        if( Arguments.getLength() )
-            xRet = xFactory->createInstanceWithArguments( Arguments );
-        else
-            xRet = xFactory->createInstance();
-    }
-//      else if( Arguments.getLength()
-//        && !Arguments.getConstArray()[0].hasValue() )
-//      {
-        // JSC: muss noch mal ueberdacht werden !!!!
-        /*
-        // multible service factory found
-        XMultiServiceFactoryRef xFactory( xProv, USR_QUERY );
-        if( xFactory.is() )
-        {
-            OUString aNextServiceSpecifier = Arguments.getConstArray()[0].getString();
-            // Remove the first element from the argument list
-            Sequence<UsrAny> aNewArgs = Arguments;
-            SequenceRemoveElementAt( aNewArgs, 0 );
-            // create instance
-            if( aNewArgs.getLen() )
-                xRet = xFactory->createInstanceWithArguments( aNextServiceSpecifier, aNewArgs );
-            else
-                xRet = xFactory->createInstance( aNextServiceSpecifier );
-        }
-        */
-//      }
-
-    return xRet;
+    return createInstanceWithArgumentsAndContext( rServiceSpecifier, rArguments, m_xContext );
 }
 
 // XServiceInfo
@@ -670,25 +715,24 @@ Sequence< OUString > OServiceManager::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-Reference<XSingleServiceFactory > OServiceManager::queryServiceFactory(const OUString& aServiceName)
+Reference< XInterface > OServiceManager::queryServiceFactory( const OUString& aServiceName )
 {
     MutexGuard aGuard( m_mutex );
-    Reference<XSingleServiceFactory > xRet;
 
-    HashMultimap_OWString_Interface::iterator aMultiIt =
-        ((OServiceManager*)this)->m_ServiceMap.find( aServiceName );
-    if( aMultiIt == ((OServiceManager*)this)->m_ServiceMap.end() )
+    Reference< XInterface > xRet;
+
+    HashMultimap_OWString_Interface::iterator aMultiIt = m_ServiceMap.find( aServiceName );
+    if( aMultiIt == m_ServiceMap.end() )
     {
         // no service found, look for an implementation
-        HashMap_OWString_Interface::iterator aIt =
-            ((OServiceManager*)this)->m_ImplementationNameMap.find( aServiceName );
-        if( aIt != ((OServiceManager*)this)->m_ImplementationNameMap.end() )
+        HashMap_OWString_Interface::iterator aIt = m_ImplementationNameMap.find( aServiceName );
+        if( aIt != m_ImplementationNameMap.end() )
             // an implementation found
-            xRet = Reference<XSingleServiceFactory >::query( (*aIt).second );
+            xRet = (*aIt).second;
     }
     else
     {
-        xRet = Reference<XSingleServiceFactory >::query( (*aMultiIt).second );
+        xRet = (*aMultiIt).second;
     }
 
     return xRet;
@@ -698,11 +742,11 @@ Reference<XSingleServiceFactory > OServiceManager::queryServiceFactory(const OUS
 Reference<XEnumeration > OServiceManager::createContentEnumeration(const OUString& aServiceName)
     throw(::com::sun::star::uno::RuntimeException)
 {
-    MutexGuard aGuard( ((OServiceManager *)this)->m_mutex );
+    MutexGuard aGuard( m_mutex );
 
     // get all factories
-    pair<HashMultimap_OWString_Interface::iterator, HashMultimap_OWString_Interface::iterator>
-        p = ((OServiceManager *)this)->m_ServiceMap.equal_range( aServiceName );
+    pair<HashMultimap_OWString_Interface::iterator, HashMultimap_OWString_Interface::iterator> p =
+        m_ServiceMap.equal_range( aServiceName );
 
     if( p.first == p.second )
         // nothing
@@ -713,8 +757,8 @@ Reference<XEnumeration > OServiceManager::createContentEnumeration(const OUStrin
     HashMultimap_OWString_Interface::iterator next = p.first;
     while( next != p.second )
     {
-        nLen++;
-        next++;
+        ++nLen;
+        ++next;
     }
 
     Sequence< Reference<XInterface > > aFactories( nLen );
@@ -723,7 +767,7 @@ Reference<XEnumeration > OServiceManager::createContentEnumeration(const OUStrin
     while( p.first != p.second )
     {
         pArray[i++] = (*p.first).second;
-        p.first++;
+        ++p.first;
     }
     return new ServiceEnumeration_Impl( aFactories );
 }
@@ -769,16 +813,22 @@ void OServiceManager::insert( const Any & Element )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
 {
     if( Element.getValueTypeClass() != TypeClass_INTERFACE )
-        throw IllegalArgumentException();
+    {
+        throw IllegalArgumentException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("no interface given!") ),
+            Reference< XInterface >(), 0 );
+    }
     Reference<XInterface > xEle( *(Reference<XInterface >*)Element.getValue(), UNO_QUERY );
-    if( !xEle.is() )
-        throw IllegalArgumentException();
 
     {
     MutexGuard aGuard( m_mutex );
     HashSet_Ref::iterator aIt = m_ImplementationMap.find( xEle );
     if( aIt != m_ImplementationMap.end() )
-        throw ElementExistException();
+    {
+        throw ElementExistException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("element already exists!") ),
+            Reference< XInterface >() );
+    }
 
     // put into the implementation hashmap
     m_ImplementationMap.insert( xEle );
@@ -799,8 +849,10 @@ void OServiceManager::insert( const Any & Element )
         Sequence< OUString > aServiceNames = xSF->getSupportedServiceNames();
         const OUString * pArray = aServiceNames.getConstArray();
         for( sal_Int32 i = 0; i < aServiceNames.getLength(); i++ )
-            m_ServiceMap.insert( HashMultimap_OWString_Interface::value_type( pArray[i],
-                                *(Reference<XInterface > *)Element.getValue() ) );
+        {
+            m_ServiceMap.insert( HashMultimap_OWString_Interface::value_type(
+                pArray[i], *(Reference<XInterface > *)Element.getValue() ) );
+        }
     }
     }
     // add the disposing listener to the factory
@@ -812,10 +864,7 @@ void OServiceManager::insert( const Any & Element )
 // helper function
 sal_Bool OServiceManager::haveFactoryWithThisImplementation(const OUString& aImplName)
 {
-    if( m_ImplementationNameMap.find(aImplName) != m_ImplementationNameMap.end())
-        return sal_True;
-    else
-        return sal_False;
+    return ( m_ImplementationNameMap.find(aImplName) != m_ImplementationNameMap.end());
 }
 
 // XSet
@@ -825,10 +874,12 @@ void OServiceManager::remove( const Any & Element )
            ::com::sun::star::uno::RuntimeException)
 {
     if( Element.getValueTypeClass() != TypeClass_INTERFACE )
-        throw IllegalArgumentException();
-    Reference<XInterface > xEle = *(Reference<XInterface > *)Element.getValue();
-    if( !xEle.is() )
-        throw IllegalArgumentException();
+    {
+        throw IllegalArgumentException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("no interface given!") ),
+            Reference< XInterface >(), 0 );
+    }
+    Reference<XInterface > xEle( *(Reference<XInterface >*)Element.getValue(), UNO_QUERY );
 
     // remove the disposing listener from the factory
     Reference<XComponent > xComp( Reference<XComponent >::query( xEle ) );
@@ -838,7 +889,11 @@ void OServiceManager::remove( const Any & Element )
     MutexGuard aGuard( m_mutex );
     HashSet_Ref::iterator aIt = m_ImplementationMap.find( xEle );
     if( aIt == m_ImplementationMap.end() )
-        throw NoSuchElementException();
+    {
+        throw NoSuchElementException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("element is not in!") ),
+            Reference< XInterface >() );
+    }
 
     // remove from the implementation map
     m_ImplementationMap.erase( aIt );
@@ -869,7 +924,7 @@ void OServiceManager::remove( const Any & Element )
                     m_ServiceMap.erase( p.first );
                     break;
                 }
-                p.first++;
+                ++p.first;
             }
         }
     }
@@ -884,7 +939,7 @@ class ORegistryServiceManager
     , public OServiceManager
 {
 public:
-    ORegistryServiceManager();
+    ORegistryServiceManager( Reference< XComponentContext > const & xContext );
     ~ORegistryServiceManager();
 
     Any SAL_CALL queryInterface( const Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -938,13 +993,13 @@ public:
 
 protected:
     //OServiceManager
-    Reference<XSingleServiceFactory > queryServiceFactory(const OUString& aServiceName);
+    Reference< XInterface > queryServiceFactory(const OUString& aServiceName);
 private:
 
     Reference<XRegistryKey >        getRootKey();
-    Reference<XSingleServiceFactory > loadWithImplementationName( const OUString & rImplName );
+    Reference<XInterface > loadWithImplementationName( const OUString & rImplName );
     Sequence<OUString>          getFromServiceName(const OUString& serviceName);
-    Reference<XSingleServiceFactory > loadWithServiceName( const OUString & rImplName );
+    Reference<XInterface > loadWithServiceName( const OUString & rImplName );
     void                        fillAllNamesFromRegistry( HashSet_OWString & );
 
     sal_Bool                    m_searchedRegistry;
@@ -955,8 +1010,9 @@ private:
 /**
  * Create a ServiceManager
  */
-ORegistryServiceManager::ORegistryServiceManager()
-    : m_searchedRegistry(sal_False)
+ORegistryServiceManager::ORegistryServiceManager( Reference< XComponentContext > const & xContext )
+    : OServiceManager( xContext )
+    , m_searchedRegistry(sal_False)
 {
 }
 
@@ -968,7 +1024,8 @@ ORegistryServiceManager::~ORegistryServiceManager()
 }
 
 // OComponentHelper
-void ORegistryServiceManager::dispose()throw(::com::sun::star::uno::RuntimeException)
+void ORegistryServiceManager::dispose()
+    throw(::com::sun::star::uno::RuntimeException)
 {
     OServiceManager::dispose();
     // dispose
@@ -1021,34 +1078,35 @@ Sequence< sal_Int8 > ORegistryServiceManager::getImplementationId()
 
 Reference<XRegistryKey > ORegistryServiceManager::getRootKey()
 {
-    MutexGuard aGuard( m_mutex );
+    if( !m_xRootKey.is() )
     {
+        MutexGuard aGuard( m_mutex );
         //  DefaultRegistry suchen !!!!
         if( !m_xRegistry.is() && !m_searchedRegistry )
         {
             // merken, es wird nur einmal gesucht
             m_searchedRegistry = sal_True;
 
-            Reference<XSingleServiceFactory > xFact = queryServiceFactory(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.DefaultRegistry") ) );
-            if ( xFact.is() )
-            {
-                m_xRegistry = Reference<XSimpleRegistry >::query( xFact->createInstance() );
-            }
+            m_xRegistry.set(
+                createInstanceWithContext(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.DefaultRegistry") ),
+                    m_xContext ),
+                UNO_QUERY );
         }
-
         if( m_xRegistry.is() && !m_xRootKey.is() )
             m_xRootKey = m_xRegistry->getRootKey();
-        return m_xRootKey;
     }
+
+    return m_xRootKey;
 }
 
 /**
  * Create a service provider from the registry with an implementation name
  */
-Reference<XSingleServiceFactory > ORegistryServiceManager::loadWithImplementationName(const OUString& name)
+Reference<XInterface > ORegistryServiceManager::loadWithImplementationName(
+    const OUString& name )
 {
-    Reference<XSingleServiceFactory > ret;
+    Reference<XInterface > ret;
 
     Reference<XRegistryKey > xRootKey = getRootKey();
     if( !xRootKey.is() )
@@ -1062,20 +1120,21 @@ Reference<XSingleServiceFactory > ORegistryServiceManager::loadWithImplementatio
         if( xImpKey.is() )
         {
             ret = createSingleRegistryFactory( this, name, xImpKey );
-            Any a( &ret, ::getCppuType( (const Reference<XInterface > *)0 ) );
-            insert( a );
+            insert( makeAny( ret ) );
         }
     }
     catch (InvalidRegistryException &)
     {
     }
+
     return ret;
 }
 
 /**
  * Return all implementation out of the registry.
  */
-Sequence<OUString> ORegistryServiceManager::getFromServiceName(const OUString& serviceName)
+Sequence<OUString> ORegistryServiceManager::getFromServiceName(
+    const OUString& serviceName )
 {
     Reference<XRegistryKey > xRootKey = getRootKey();
     if( !xRootKey.is() )
@@ -1101,11 +1160,16 @@ Sequence<OUString> ORegistryServiceManager::getFromServiceName(const OUString& s
 /**
  * Create a service provider from the registry
  */
-Reference<XSingleServiceFactory > ORegistryServiceManager::loadWithServiceName(const OUString& serviceName)
+Reference<XInterface > ORegistryServiceManager::loadWithServiceName(
+    const OUString& serviceName )
 {
     Sequence<OUString> implEntries = getFromServiceName( serviceName );
     for (sal_Int32 i = 0; i < implEntries.getLength(); i++)
-        return loadWithImplementationName( implEntries.getConstArray()[i] );
+    {
+        Reference< XInterface > x( loadWithImplementationName( implEntries.getConstArray()[i] ) );
+        if (x.is())
+            return x;
+    }
 
     return Reference<XSingleServiceFactory >();
 }
@@ -1153,20 +1217,27 @@ Any ORegistryServiceManager::queryInterface( const Type & rType )
 void ORegistryServiceManager::initialize(const Sequence< Any >& Arguments)
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
-    if( Arguments.getLength() == 0 )
-        return;
-    if( Arguments.getLength() != 1
-      || Arguments.getConstArray()[0].getValueTypeClass() != TypeClass_INTERFACE )
-        throw IllegalArgumentException();
-
-    Reference<XSimpleRegistry > xRef( Reference<XSimpleRegistry >::query(
-        *(Reference<XInterface > *)Arguments.getConstArray()[0].getValue() ) );
-    if( !xRef.is() )
-        throw IllegalArgumentException();
+    // read out default context to be used for components
+    // => bootstrap problem: first service manager has to be instanced without context,
+    // default context for createInstance() (!= createInstanceWithContext()) calls
+    // gets this context
 
     MutexGuard aGuard( m_mutex );
-    m_xRegistry = xRef;
-    m_xRootKey = Reference<XRegistryKey >();
+    if (Arguments.getLength() > 0)
+    {
+        m_xRootKey.clear();
+        Arguments[ 0 ] >>= m_xRegistry;
+    }
+
+    if (!m_xContext.is() && (Arguments.getLength() > 1))
+    {
+        Arguments[ 1 ] >>= m_xContext;
+    }
+
+    // to find all bootstrapping processes to be fixed...
+    static bool s_init = false;
+    OSL_ENSURE( !s_init, "### second init of service manager!" );
+    s_init = true;
 }
 
 // XMultiServiceFactory, XContentEnumeration
@@ -1208,15 +1279,16 @@ Sequence< OUString > ORegistryServiceManager::getSupportedServiceNames_Static()
 }
 
 // OServiceManager
-Reference<XSingleServiceFactory > ORegistryServiceManager::queryServiceFactory(const OUString& aServiceName)
+Reference< XInterface > ORegistryServiceManager::queryServiceFactory(
+    const OUString& aServiceName )
 {
-    Reference<XSingleServiceFactory > xRet = OServiceManager::queryServiceFactory( aServiceName );
+    Reference< XInterface > xRet = OServiceManager::queryServiceFactory( aServiceName );
     if( !xRet.is() )
     {
         MutexGuard aGuard( m_mutex );
-        xRet = ((ORegistryServiceManager *)this)->loadWithServiceName( aServiceName );
+        xRet = loadWithServiceName( aServiceName );
         if( !xRet.is() )
-            xRet = ((ORegistryServiceManager *)this)->loadWithImplementationName( aServiceName );
+            xRet = loadWithImplementationName( aServiceName );
     }
 
     return xRet;
@@ -1268,9 +1340,18 @@ Any ORegistryServiceManager::getPropertyValue(const OUString& PropertyName)
         MutexGuard aGuard( m_mutex );
         if( m_xRegistry.is() )
         {
-            ret = Any( &m_xRegistry, ::getCppuType( (const Reference<XSimpleRegistry > *)0 ) );
+            ret = makeAny( m_xRegistry );
         }
-    } else
+    }
+    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DefaultContext") ))
+    {
+        MutexGuard aGuard( m_mutex );
+        if( m_xContext.is() )
+        {
+            ret = makeAny( m_xContext );
+        }
+    }
+    else
     {
         UnknownPropertyException except;
         except.Message = OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager : unknown property " ) );
@@ -1313,18 +1394,20 @@ void ORegistryServiceManager::removeVetoableChangeListener(const OUString& Prope
 /**
  * Create the ServiceManager
  */
-static Reference<XInterface > SAL_CALL OServiceManager_CreateInstance(const Reference<XMultiServiceFactory > & rSMgr)
+static Reference<XInterface > SAL_CALL OServiceManager_CreateInstance(
+    const Reference< XComponentContext > & xContext )
 {
-    return Reference<XInterface >( SAL_STATIC_CAST( XInterface *, SAL_STATIC_CAST( OWeakObject *, new OServiceManager() ) ) );
+    return Reference<XInterface >( SAL_STATIC_CAST( XInterface *, SAL_STATIC_CAST( OWeakObject *, new OServiceManager( xContext ) ) ) );
 }
 
 /**
  * Create the ServiceManager
  */
-static Reference<XInterface > SAL_CALL ORegistryServiceManager_CreateInstance(const Reference<XMultiServiceFactory > & rSMgr)
+static Reference<XInterface > SAL_CALL ORegistryServiceManager_CreateInstance(
+    const Reference< XComponentContext > & xContext )
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
-    return Reference<XInterface >( SAL_STATIC_CAST( XInterface *, SAL_STATIC_CAST( OWeakObject *, new ORegistryServiceManager() ) ) );
+    return Reference<XInterface >( SAL_STATIC_CAST( XInterface *, SAL_STATIC_CAST( OWeakObject *, new ORegistryServiceManager( xContext ) ) ) );
 }
 
 } // namespace
@@ -1391,22 +1474,20 @@ sal_Bool SAL_CALL component_writeInfo(
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    Reference< XSingleServiceFactory > xFactory;
+    Reference< XInterface > xFactory;
 
     if (stoc_smgr::OServiceManager::getImplementationName_Static().compareToAscii( pImplName ) == 0)
     {
-        xFactory = createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            stoc_smgr::OServiceManager::getImplementationName_Static(),
+        xFactory = createSingleComponentFactory(
             stoc_smgr::OServiceManager_CreateInstance,
+            stoc_smgr::OServiceManager::getImplementationName_Static(),
             stoc_smgr::OServiceManager::getSupportedServiceNames_Static() );
     }
-    if (stoc_smgr::ORegistryServiceManager::getImplementationName_Static().compareToAscii( pImplName ) == 0)
+    else if (stoc_smgr::ORegistryServiceManager::getImplementationName_Static().compareToAscii( pImplName ) == 0)
     {
-        xFactory = createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            stoc_smgr::ORegistryServiceManager::getImplementationName_Static(),
+        xFactory = createSingleComponentFactory(
             stoc_smgr::ORegistryServiceManager_CreateInstance,
+            stoc_smgr::ORegistryServiceManager::getImplementationName_Static(),
             stoc_smgr::ORegistryServiceManager::getSupportedServiceNames_Static() );
     }
 
