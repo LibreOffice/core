@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AView.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:21 $
+ *  last change: $Author: oj $ $Date: 2000-10-09 11:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
 #include "ado/Awrapado.hxx"
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 // -------------------------------------------------------------------------
 using namespace connectivity::ado;
@@ -154,7 +154,7 @@ Any SAL_CALL OAdoView::queryInterface( const Type & rType ) throw(RuntimeExcepti
 {
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > *)0 ));
 
-    return ::utl::concatSequences(aTypes.getTypes(),OAdoView::getTypes());
+    return ::comphelper::concatSequences(aTypes.getTypes(),OAdoView::getTypes());
 }
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OAdoView::getUnoTunnelImplementationId()
