@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objface.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:39:07 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 10:27:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,10 +685,7 @@ SfxObjectUI_Impl* CreateObjectBarUI_Impl( USHORT nPos, const ResId& rResId, ULON
         aResId.SetRT(RSC_STRING);
         aResId.SetResMgr(rResId.GetResMgr());
         if ( !Resource::GetResManager()->IsAvailable(aResId) )
-        {
-            DBG_ERROR("Der Objectbar-Name fehlt in der Resource!");
             pUI->pName = new String (DEFINE_CONST_UNICODE("NoName"));
-        }
         else
             pUI->pName = new String(aResId);
     }
