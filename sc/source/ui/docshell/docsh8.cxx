@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-30 11:45:28 $
+ *  last change: $Author: nn $ $Date: 2000-11-03 13:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 
 #include "scerrors.hxx"
 #include "docsh.hxx"
@@ -208,7 +209,8 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
         DBG_ASSERT( xConnection.is(), "can't get Connection" );
         if (!xConnection.is()) return SCERR_IMPORT_CONNECT;
 
-        long nRowCount = lcl_GetRowCount( xConnection, aTabName );
+//!     long nRowCount = lcl_GetRowCount( xConnection, aTabName );
+        long nRowCount = 0;
         if ( nRowCount < 0 )
         {
             DBG_ERROR("can't get row count");
@@ -217,64 +219,33 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
 
         ScProgress aProgress( this, ScGlobal::GetRscString( STR_LOAD_DOC ), nRowCount );
 
-        uno::Reference<sdbc::XResultSet> xResSet;
-        BOOL bUseStatement = FALSE;
-        if (bUseStatement)
-        {
-            uno::Reference<sdbc::XStatement> xStatement = xConnection->createStatement();
-            DBG_ASSERT( xStatement.is(), "can't get Statement" );
-            if (!xStatement.is()) return SCERR_IMPORT_CONNECT;
+        uno::Reference<sdbc::XRowSet> xRowSet( xFactory->createInstance(
+                            rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
+                            uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
+        DBG_ASSERT( xRowProp.is(), "can't get RowSet" );
+        if (!xRowProp.is()) return SCERR_IMPORT_CONNECT;
 
-            String aQuoteStr;
-            uno::Reference<sdbc::XDatabaseMetaData> xDBMeta = xConnection->getMetaData();
-            if (xDBMeta.is())
-                aQuoteStr = xDBMeta->getIdentifierQuoteString();
+        sal_Int32 nType = sdb::CommandType::TABLE;
+        uno::Any aAny;
 
-            //! don't encode blanks etc.
+        aAny <<= xConnection;
+        xRowProp->setPropertyValue(
+                    rtl::OUString::createFromAscii(SC_DBPROP_ACTIVECONNECTION), aAny );
 
-            String aSql = String::CreateFromAscii("select * from ");
-            aSql += aQuoteStr;
-            aSql += aTabName;
-            aSql += aQuoteStr;
+        aAny <<= nType;
+        xRowProp->setPropertyValue(
+                    rtl::OUString::createFromAscii(SC_DBPROP_COMMANDTYPE), aAny );
 
-            xResSet = xStatement->executeQuery( aSql );
-            DBG_ASSERT( xResSet.is(), "can't get ResultSet" );
-            if (!xResSet.is()) return SCERR_IMPORT_CONNECT;
-        }
-        else
-        {
-            //! this doesn't work?
+        aAny <<= rtl::OUString( aTabName );
+        xRowProp->setPropertyValue(
+                    rtl::OUString::createFromAscii(SC_DBPROP_COMMAND), aAny );
 
-            uno::Reference<sdbc::XRowSet> xRowSet( xFactory->createInstance(
-                                rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
-                                uno::UNO_QUERY);
-            uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
-            DBG_ASSERT( xRowProp.is(), "can't get RowSet" );
-            if (!xRowProp.is()) return SCERR_IMPORT_CONNECT;
-
-            sal_Int32 nType = sdb::CommandType::TABLE;
-            uno::Any aAny;
-
-            aAny <<= xConnection;
-            xRowProp->setPropertyValue(
-                        rtl::OUString::createFromAscii(SC_DBPROP_ACTIVECONNECTION), aAny );
-
-            aAny <<= nType;
-            xRowProp->setPropertyValue(
-                        rtl::OUString::createFromAscii(SC_DBPROP_COMMANDTYPE), aAny );
-
-            aAny <<= rtl::OUString( aTabName );
-            xRowProp->setPropertyValue(
-                        rtl::OUString::createFromAscii(SC_DBPROP_COMMAND), aAny );
-
-            xRowSet->execute();
-
-            xResSet = xRowSet.get();
-        }
+        xRowSet->execute();
 
         long nColCount = 0;
         uno::Reference<sdbc::XResultSetMetaData> xMeta;
-        uno::Reference<sdbc::XResultSetMetaDataSupplier> xMetaSupp( xResSet, uno::UNO_QUERY );
+        uno::Reference<sdbc::XResultSetMetaDataSupplier> xMetaSupp( xRowSet, uno::UNO_QUERY );
         if ( xMetaSupp.is() )
             xMeta = xMetaSupp->getMetaData();
         if ( xMeta.is() )
@@ -289,7 +260,7 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
         if ( nColCount > 0 )
             aDocument.DoColResize( 0, 0, nColCount - 1, nRowCount + 1 );
 
-        uno::Reference<sdbc::XRow> xRow( xResSet, uno::UNO_QUERY );
+        uno::Reference<sdbc::XRow> xRow( xRowSet, uno::UNO_QUERY );
         DBG_ASSERT( xRow.is(), "can't get Row" );
         if (!xRow.is()) return SCERR_IMPORT_CONNECT;
 
@@ -340,7 +311,7 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
 
         USHORT nRow = 1;        // 0 is column titles
         BOOL bEnd = FALSE;
-        while ( !bEnd && xResSet->next() )
+        while ( !bEnd && xRowSet->next() )
         {
             if ( nRow <= MAXROW )
             {
@@ -363,6 +334,10 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
             if ( nRowCount )
                 aProgress.SetStateOnPercent( nRow );
         }
+
+        uno::Reference<lang::XComponent> xComponent( xRowSet, uno::UNO_QUERY );
+        if (xComponent.is())
+            xComponent->dispose();
     }
     catch ( sdbc::SQLException& )
     {
@@ -983,6 +958,10 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
                 break;
             }
         }
+
+        uno::Reference<lang::XComponent> xComponent( xRowSet, uno::UNO_QUERY );
+        if (xComponent.is())
+            xComponent->dispose();
     }
     catch ( sdbc::SQLException& )
     {
