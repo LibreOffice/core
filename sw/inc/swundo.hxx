@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swundo.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 09:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,8 +105,8 @@ enum SwUndoStdId
     UNDO_DONTEXPAND,                        // 36
     UNDO_AUTOCORRECT,                       // 37
     UNDO_MERGE_TABLE,                       // 38
+    UNDO_TRANSLITERATE,                     // 39
 
-    UNDO_REPEAT_DUMMY_3,                    // 39
     UNDO_REPEAT_DUMMY_4,                    // 40
     UNDO_REPEAT_DUMMY_5,                    // 41
     UNDO_REPEAT_DUMMY_6,                    // 42

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-13 14:33:19 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 09:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,9 @@ public:
 
     // Voellig private Methode. Nur fuer JOE's-Wizzards
     BOOL DelFullPara();
+
+    // change text to Upper/Lower/Hiragana/Katagana/...
+    void TransliterateText( sal_uInt32 nType );
 
     // loesche den nicht sichtbaren Content aus dem Document, wie z.B.:
     // versteckte Bereiche, versteckte Absaetze

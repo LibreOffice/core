@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 09:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ class SwFtnInfo;
 class SwEndNoteInfo;
 class SwNodeIndex;
 class SwNodeRange;
+class SwFmtAnchor;
 
 struct SwUndoGroupObjImpl;
 class SdrMarkList;
@@ -134,6 +135,14 @@ class SwTblToTxtSaves;
 class SwRedlineData;
 class SwRedlineSaveData;
 class SwRedline;
+
+namespace utl {
+    class TransliterationWrapper;
+};
+
+namespace com { namespace sun { namespace star { namespace uno {
+    template < class > class Sequence;
+}}}}
 
 #ifndef PRODUCT
 class Writer;
@@ -1485,6 +1494,28 @@ public:
     virtual void Redo( SwUndoIter& );
 };
 
+
+//--------------------------------------------------------------------
+
+struct _UndoTransliterate_Data;
+class SwUndoTransliterate : public SwUndo, public SwUndRng
+{
+    _UndoTransliterate_Data *pData, *pLastData;
+    sal_uInt32 nType;
+
+public:
+    SwUndoTransliterate( const SwPaM& rPam,
+                            const utl::TransliterationWrapper& rTrans );
+    virtual ~SwUndoTransliterate();
+
+    virtual void Undo( SwUndoIter& rUndoIter );
+    virtual void Redo( SwUndoIter& rUndoIter );
+    virtual void Repeat( SwUndoIter& rUndoIter );
+
+    void AddChanges( const SwTxtNode& rTNd, xub_StrLen nStart, xub_StrLen nLen,
+                     ::com::sun::star::uno::Sequence <long>& rOffsets );
+    BOOL HasData() const {return 0 != pData; }
+};
 
 //--------------------------------------------------------------------
 

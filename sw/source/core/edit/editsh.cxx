@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-28 20:34:53 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 09:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,12 @@
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
 #endif
 
 #ifndef _SWWAIT_HXX
@@ -1090,4 +1096,17 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
 }
 
 
+void SwEditShell::TransliterateText( sal_uInt32 nType )
+{
+    utl::TransliterationWrapper aTrans(
+                        ::comphelper::getProcessServiceFactory(), nType );
+    StartAllAction();
+    SET_CURR_SHELL( this );
+    FOREACHPAM_START( this )
+
+        GetDoc()->TransliterateText( *PCURCRSR, aTrans );
+
+    FOREACHPAM_END()
+    EndAllAction();
+}
 

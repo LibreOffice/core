@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-06 12:26:05 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 09:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,10 @@ struct SwDocStat;
 struct SwHash;
 struct SwSortOptions;
 struct SwDefTOXBase_Impl;
+
+namespace utl {
+    class TransliterationWrapper;
+};
 
 //PageDescriptor-Schnittstelle, Array hier wegen inlines.
 typedef SwPageDesc* SwPageDescPtr;
@@ -901,6 +905,9 @@ public:
         //Textnode. Der Text wird kopiert.
     sal_Bool Insert( const SwPaM &rRg, const String &,
                      sal_Bool bHintExpand = sal_True );
+
+    // change text to Upper/Lower/Hiragana/Katagana/...
+    void TransliterateText( const SwPaM& rPaM, utl::TransliterationWrapper& );
 
         //Einfuegen einer Grafik, Formel. Die XXXX werden kopiert.
     SwFlyFrmFmt* Insert(const SwPaM &rRg,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-13 14:32:08 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 09:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,14 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
-#include <com/sun/star/i18n/WordType.hpp>
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
+#include <com/sun/star/i18n/WordType.hdl>
+#endif
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
 #endif
 
 #ifndef _SPLARGS_HXX
@@ -154,6 +160,12 @@
 #endif
 #ifndef _CRSTATE_HXX
 #include <crstate.hxx>
+#endif
+#ifndef _UNDOBJ_HXX
+#include <undobj.hxx>
+#endif
+#ifndef _TXATRITR_HXX
+#include <txatritr.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -428,9 +440,11 @@ XubString SwTxtNode::GetCurWord( xub_StrLen nPos )
                     aText, nPos, pBreakIt->GetLocale( GetLang( nPos ) ),
                     WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/, TRUE );
 
-    if( aBndry.endPos != aBndry.startPos && IsSymbol( aBndry.startPos ) )
+    if( aBndry.endPos != aBndry.startPos &&
+        IsSymbol( (xub_StrLen)aBndry.startPos ) )
         aBndry.endPos = aBndry.startPos;
-    return aText.Copy( aBndry.startPos, aBndry.endPos - aBndry.startPos );
+    return aText.Copy( (xub_StrLen)aBndry.startPos,
+                        (xub_StrLen)(aBndry.endPos - aBndry.startPos) );
 }
 
 
@@ -536,10 +550,10 @@ BOOL SwScanner::NextWord( LanguageType aLang )
             if( bReverse )
             {
                 if( nEndPos > aBound.startPos )
-                    nEndPos = aBound.startPos;
+                    nEndPos = (xub_StrLen)aBound.startPos;
             }
             else if( nEndPos < aBound.endPos && nEndPos > aBound.startPos )
-                nEndPos = aBound.endPos;
+                nEndPos = (xub_StrLen)aBound.endPos;
         }
     }
     if( !bStart )
@@ -554,7 +568,7 @@ BOOL SwScanner::NextWord( LanguageType aLang )
     else
         bStart = FALSE;
 
-    nBegin = aBound.startPos;
+    nBegin = (xub_StrLen)aBound.startPos;
     nLen = aBound.endPos - nBegin;
     if( !nLen )
         return FALSE;
@@ -1019,5 +1033,66 @@ void SwLinguStatistik::Flush()
 }
 
 #endif
+
+// change text to Upper/Lower/Hiragana/Katagana/...
+void SwTxtNode::TransliterateText( utl::TransliterationWrapper& rTrans,
+        xub_StrLen nStart, xub_StrLen nEnd, SwUndoTransliterate* pUndo )
+{
+    if( nStart < nEnd )
+    {
+        SwLanguageIterator* pIter;
+        if( rTrans.needLanguageForTheMode() )
+            pIter = new SwLanguageIterator( *this, nStart );
+        else
+            pIter = 0;
+
+        xub_StrLen nEndPos;
+        sal_uInt16 nLang;
+        do {
+            if( pIter )
+            {
+                nLang = pIter->GetLanguage();
+                nEndPos = pIter->GetChgPos();
+                if( nEndPos > nEnd )
+                    nEndPos = nEnd;
+            }
+            else
+            {
+                nLang = LANGUAGE_SYSTEM;
+                nEndPos = nEnd;
+            }
+            xub_StrLen nLen = nEndPos - nStart;
+
+            Sequence <long> aOffsets;
+            Sequence <long>* pOffsets = pUndo ? &aOffsets : 0;
+
+            String sChgd( rTrans.transliterate( aText, nLang, nStart, nLen,
+                                            pOffsets ));
+
+            ASSERT( nLen == sChgd.Len(), "transliterate add/remove characters" );
+            if( nLen == sChgd.Len() && !aText.Equals( sChgd, nStart, nLen ))
+            {
+                if( pUndo )
+                    pUndo->AddChanges( *this, nStart, nLen, aOffsets );
+                ReplaceTextOnly( nStart, sChgd );
+            }
+            nStart = nEndPos;
+        } while( nEndPos < nEnd && pIter && pIter->Next() );
+        delete pIter;
+    }
+}
+
+void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, const XubString& rText )
+{
+    aText.Replace( nPos, rText.Len(), rText );
+
+    // notify the layout!
+    SwDelTxt aDelHint( nPos, rText.Len() );
+    SwModify::Modify( 0, &aDelHint );
+
+    SwInsTxt aHint( nPos, rText.Len() );
+    SwModify::Modify( 0, &aHint );
+}
+
 
 

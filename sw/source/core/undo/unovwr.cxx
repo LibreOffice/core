@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unovwr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 10:47:36 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 09:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,12 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
+#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#include <unotools/transliterationwrapper.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -94,6 +100,9 @@
 #include <docary.hxx>
 #endif
 
+
+using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::uno;
 
 //------------------------------------------------------------------
 
@@ -377,15 +386,156 @@ void SwUndoOverwrite::Redo( SwUndoIter& rUndoIter )
     }
 }
 
+//------------------------------------------------------------
+
+struct _UndoTransliterate_Data
+{
+    struct _SeqOfPosAndChar
+    {
+        xub_StrLen nPos;
+        sal_Unicode cChar;
+    };
+
+    _UndoTransliterate_Data* pNext;
+    ULONG nNdIdx;
+    xub_StrLen nDataLen;
+    union {
+        sal_Unicode* pStr;
+        _SeqOfPosAndChar* pSeq;
+    } aData;
+
+    xub_StrLen nStart;
+    sal_Bool bStr;
+
+    _UndoTransliterate_Data() : pNext( 0 ) {}
+    ~_UndoTransliterate_Data() { delete aData.pStr; }
+
+    void SetChangeAtNode( SwDoc& rDoc );
+};
+
+SwUndoTransliterate::SwUndoTransliterate( const SwPaM& rPam,
+                            const utl::TransliterationWrapper& rTrans )
+    : SwUndo( UNDO_TRANSLITERATE ), SwUndRng( rPam ),
+    nType( rTrans.getType() ), pData( 0 ), pLastData( 0 )
+{
+}
+
+SwUndoTransliterate::~SwUndoTransliterate()
+{
+    _UndoTransliterate_Data* pD = pData;
+    while( pD )
+    {
+        pData = pD;
+        pD = pD->pNext;
+        delete pData;
+    }
+}
+
+void SwUndoTransliterate::Undo( SwUndoIter& rUndoIter )
+{
+    SwDoc& rDoc = rUndoIter.GetDoc();
+    BOOL bUndo = rDoc.DoesUndo();
+    rDoc.DoUndo( FALSE );
+
+    for( _UndoTransliterate_Data* pD = pData; pD; pD = pD->pNext )
+        pD->SetChangeAtNode( rDoc );
+
+    rDoc.DoUndo( bUndo );
+    SetPaM( rUndoIter, TRUE );
+}
+
+void SwUndoTransliterate::Redo( SwUndoIter& rUndoIter )
+{
+/* ??? */   rUndoIter.SetUpdateAttr( TRUE );
+
+    SetPaM( *rUndoIter.pAktPam );
+    Repeat( rUndoIter );
+}
+
+void SwUndoTransliterate::Repeat( SwUndoIter& rUndoIter )
+{
+    SwPaM& rPam = *rUndoIter.pAktPam;
+    SwDoc& rDoc = rUndoIter.GetDoc();
+
+    utl::TransliterationWrapper aTrans(
+                        ::comphelper::getProcessServiceFactory(), nType );
+    rDoc.TransliterateText( rPam, aTrans );
+
+    rUndoIter.pLastUndoObj = this;
+}
+
+void SwUndoTransliterate::AddChanges( const SwTxtNode& rTNd,
+                    xub_StrLen nStart, xub_StrLen nLen,
+                     ::com::sun::star::uno::Sequence <long>& rOffsets )
+{
+    _UndoTransliterate_Data* pNew = new _UndoTransliterate_Data;
+    if( pData )
+        pLastData->pNext = pNew;
+    else
+        pData = pNew;
+    pLastData = pNew;
+
+    pNew->nNdIdx = rTNd.GetIndex();
+    pNew->nStart = nStart;
+    const String& rOrig = rTNd.GetTxt();
+
+    // where did we need less memory ?
+    if( ( nLen * sizeof( sal_Unicode )) >
+        ( rOffsets.getLength() *
+            sizeof( _UndoTransliterate_Data::_SeqOfPosAndChar ) ) )
+    {
+        pNew->bStr = sal_False;
+        pNew->nDataLen = (xub_StrLen)rOffsets.getLength();
+        pNew->aData.pSeq = new _UndoTransliterate_Data::_SeqOfPosAndChar[ pNew->nDataLen ];
+        _UndoTransliterate_Data::_SeqOfPosAndChar* p = pNew->aData.pSeq;
+        for( xub_StrLen n = 0, nEnd = pNew->nDataLen; n < nEnd; ++n, ++p )
+        {
+            p->nPos = (xub_StrLen)rOffsets[ n ];
+            p->cChar = rOrig.GetChar( p->nPos );
+        }
+    }
+    else
+    {
+        pNew->bStr = sal_True;
+        pNew->nDataLen = nLen;
+        pNew->aData.pStr = new sal_Unicode[ pNew->nDataLen ];
+        memcpy( pNew->aData.pStr, rOrig.GetBuffer() + nStart,
+                pNew->nDataLen * sizeof( sal_Unicode ) );
+    }
+}
+
+void _UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
+{
+    SwTxtNode* pTNd = rDoc.GetNodes()[ nNdIdx ]->GetTxtNode();
+    if( pTNd )
+    {
+        String sChgd;
+        if( bStr )
+            sChgd.Append( aData.pStr, nDataLen );
+        else
+        {
+            sChgd = pTNd->GetTxt().Copy( nStart, nDataLen );
+            _SeqOfPosAndChar* p = aData.pSeq;
+            for( xub_StrLen n = 0; n < nDataLen; ++n, ++p )
+                sChgd.SetChar( p->nPos - nStart, p->cChar );
+        }
+        pTNd->ReplaceTextOnly( nStart, sChgd );
+    }
+}
+
+
 /*************************************************************************
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unovwr.cxx,v 1.4 2000-11-06 10:47:36 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unovwr.cxx,v 1.5 2000-12-21 09:29:24 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/06 10:47:36  jp
+      use new flag from the txtnode for textattribut expansion
+
       Revision 1.3  2000/10/26 11:24:24  jp
       for bug #78848#: don't call DeleteRedline
 

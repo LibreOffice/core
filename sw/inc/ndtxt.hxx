@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 09:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,17 @@
 #include <errhdl.hxx>
 #endif
 
+namespace utl {
+    class TransliterationWrapper;
+};
+
 class SwNumRules;
 class SwTxtFmtColl;
 class SwCntntFrm;
 class SwTxtFld;          // Fuer GetTxtFld()
 class SwAttrSet;
+class SwUndoTransliterate;
+
 
 struct SwSpellArgs;     // fuer Spell()
 class SwInterHyphInfo;  // Hyphenate(), splargs.hxx
@@ -218,6 +224,7 @@ public:
     // ersetze im String an Position nIdx das Zeichen
     void Replace( const SwIndex& rStart, xub_Unicode cCh );
     void Replace( const SwIndex& rStart, xub_StrLen nLen, const XubString& rText );
+    void ReplaceTextOnly( xub_StrLen nPos, const XubString& rText );
 
     // virtuelle Methoden aus dem CntntNode
     virtual SwCntntFrm *MakeFrm();
@@ -325,6 +332,11 @@ public:
                         BOOL bNegativ = FALSE );
 
     FASTBOOL IsInSymbolFont( USHORT xub_StrLen ) const;
+
+    // change text to Upper/Lower/Hiragana/Katagana/...
+    void TransliterateText( utl::TransliterationWrapper& rTrans,
+                            xub_StrLen nStart, xub_StrLen nEnd,
+                            SwUndoTransliterate* pUndo = 0 );
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtNode)
 };

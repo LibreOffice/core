@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-19 11:31:55 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 09:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
+#include <com/sun/star/i18n/WordType.hdl>
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
@@ -174,11 +177,15 @@
 #ifndef _UNDOBJ_HXX
 #include <undobj.hxx>
 #endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
 
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::rtl;
+using namespace ::com::sun::star::i18n;
 //using namespace ::utl;
 
 #define S2U(rString) OUString::createFromAscii(rString)
@@ -2259,5 +2266,73 @@ sal_Bool SwDoc::DelFullPara( SwPaM& rPam )
     return sal_True;
 }
 
+
+void SwDoc::TransliterateText( const SwPaM& rPaM,
+                                utl::TransliterationWrapper& rTrans )
+{
+    SwUndoTransliterate* pUndo;
+    if( DoesUndo() )
+        pUndo = new SwUndoTransliterate( rPaM, rTrans );
+    else
+        pUndo = 0;
+
+    const SwPosition* pStt = rPaM.Start(),
+                    * pEnd = pStt == rPaM.GetPoint() ? rPaM.GetMark()
+                                                     : rPaM.GetPoint();
+    ULONG nSttNd = pStt->nNode.GetIndex(), nEndNd = pEnd->nNode.GetIndex();
+    xub_StrLen nSttCnt = pStt->nContent.GetIndex(),
+               nEndCnt = pEnd->nContent.GetIndex();
+
+    SwTxtNode* pTNd = pStt->nNode.GetNode().GetTxtNode();
+    if( pStt == pEnd && pTNd )                  // no region ?
+    {
+        Boundary aBndry;
+        if( pBreakIt->xBreak.is() )
+            aBndry = pBreakIt->xBreak->getWordBoundary(
+                        pTNd->GetTxt(), nSttCnt,
+                        pBreakIt->GetLocale( pTNd->GetLang( nSttCnt ) ),
+                        WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
+                        TRUE );
+
+        if( aBndry.startPos < nSttCnt && nSttCnt < aBndry.endPos )
+        {
+            nSttCnt = (xub_StrLen)aBndry.startPos;
+            nEndCnt = (xub_StrLen)aBndry.endPos;
+        }
+    }
+
+    if( nSttNd != nEndNd )
+    {
+        SwNodeIndex aIdx( pStt->nNode );
+        if( nSttCnt )
+        {
+            aIdx++;
+            if( pTNd )
+                pTNd->TransliterateText( rTrans, nSttCnt,
+                                            pTNd->GetTxt().Len(), pUndo );
+        }
+
+        for( ; aIdx.GetIndex() < nEndNd; aIdx++ )
+            if( 0 != ( pTNd = aIdx.GetNode().GetTxtNode() ))
+                pTNd->TransliterateText( rTrans, 0, pTNd->GetTxt().Len(),
+                                        pUndo );
+
+        if( nEndCnt && 0 != ( pTNd = pEnd->nNode.GetNode().GetTxtNode() ))
+            pTNd->TransliterateText( rTrans, 0, nEndCnt, pUndo );
+    }
+    else if( pTNd && nSttCnt < nEndCnt )
+        pTNd->TransliterateText( rTrans, nSttCnt, nEndCnt, pUndo );
+
+    if( pUndo )
+    {
+        if( pUndo->HasData() )
+        {
+            ClearRedo();
+            AppendUndo( pUndo );
+        }
+        else
+            delete pUndo;
+    }
+}
 
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+#   last change: $Author: jp $ $Date: 2000-12-21 09:32:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,6 +106,7 @@ CXXFILES = \
         swfont.cxx \
         thints.cxx \
         txatbase.cxx \
+        txatritr.cxx \
         txtatr0.cxx \
         txtatr1.cxx \
         txtatr2.cxx \
@@ -130,6 +131,7 @@ SLOFILES =  \
         $(SLO)$/swfont.obj \
         $(SLO)$/thints.obj \
         $(SLO)$/txatbase.obj \
+        $(SLO)$/txatritr.obj \
         $(SLO)$/txtatr0.obj \
         $(SLO)$/txtatr1.obj \
         $(SLO)$/txtatr2.obj \
