@@ -1,0 +1,10 @@
+# Comment line
+# Pack.lst: Contains the packaging information for the update packaging process.
+# Syntax: Product, list of platforms, list of languages, target	(Separator: spaces)
+# Syntax for list of languages: One multilingual installation set uses separator ","
+# (Example: "en-US,de" creates english-german multilingual installation set)  
+# Different installation sets use the "|" as separator
+
+# Product       List_of_platforms                                                   List_of_languages   Target
+
+OpenOffice      unxsols4.pro,unxsoli4.pro,unxlngi5.pro,unxsols4,unxlngi5,wntmsci10.pro,wntmsci10   en-US|de   openoffice
