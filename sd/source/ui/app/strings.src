@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-16 21:25:36 $
+ *  last change: $Author: kz $ $Date: 2002-01-24 21:10:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4877,7 +4877,7 @@ String STR_ASK_DELETE_LAYER
     Text [ italian ] = "Volete davvero eliminare il livello $?\nNota: verranno eliminati anche tutti gli oggetti presenti sul livello!" ;
     Text [ spanish ] = "¿Desea realmente eliminar la capa '$'?\nAdvertencia: Se eliminarán también todos los objetos incluidos en la misma." ;
     Text [ french ] = "Voulez-vous vraiment supprimer la couche '$' ?\nAttention : tous les objets sur cette couche seront également supprimés !" ;
-    Text [ swedish ] = "Vill Du verkligen radera nivå '$'?\nAlla objekt på denna nivå kommer också att raderas!" ;
+    Text [ swedish ] = "Vill du verkligen radera nivå '$'?\nAlla objekt på den här nivån kommer också att raderas!" ;
     Text [ danish ] = "Er du sikker på, at du vil slette niveau '$'?\nBemærk: Alle objekter på dette niveau bliver ligeledes slettet!" ;
     Text [ portuguese_brazilian ] = "Wollen Sie die Ebene $ wirklich l?chen?\nHinweis: Alle Objekte auf dieser Ebene werden ebenfalls gel?cht!" ;
     Text [ portuguese ] = "Eliminar realmente o nível '$'?\nAtenção: todos os objectos deste nível serão também eliminados!" ;
@@ -6014,7 +6014,7 @@ String STR_REMOVE_LINK
     Text [ finnish ] = "Kuva on linkitetty asiakirjaan. \nHaluatko poistaa kuvan linkityksen, jotta voit muokata kuvaa?" ;
     Text [ danish ] = "Denne grafik er kædet til dokumentet. \nVil du ophæve kæden for at redigere grafikken." ;
     Text [ french ] = "Cette image est liée au document.\nSouhaitez-vous supprimer le lien pour modifier l'image ?" ;
-    Text [ swedish ] = "Det här grafikobjektet är länkat till dokumentet.\nVill du upphäva länken för att redigera grafikobjektet?" ;
+    Text [ swedish ] = "Det här grafikobjektet är länkat till dokumentet.\nVill du upphäva länken så att du kan redigera grafikobjektet?" ;
     Text [ dutch ] = "Deze afbeelding is met het document gekoppeld. \nWilt u de koppeling opheffen om de afbeelding te bewerken?" ;
     Text [ spanish ] = "Esta imagen está vinculada al documento. \n¿Desea eliminar el vínculo para editar la imagen?" ;
     Text[ chinese_simplified ] = "è¿™ä¸ªå›¾å½¢æ˜¯å’Œæ–‡æ¡£é“¾æ¥çš„ã€‚ \næ‚¨è¦å–æ¶ˆè¿™ä¸ªé“¾æ¥ï¼Œç¼–è¾‘è¿™ä¸ªå›¾å½¢å—ï¼Ÿ";
@@ -6908,7 +6908,7 @@ String STR_WARN_SCALE_FAIL
     Text [ spanish ] = "La escala introducida no es válida.\n¿Desea introducir una nueva?" ;
     Text [ french ] = "L'échelle spécifiée est incorrecte.\nVoulez-vous en insérer une autre ?" ;
     Text [ dutch ] = "De opgegeven schaal is ongeldig.\nWilt u een nieuwe opgeven?" ;
-    Text [ swedish ] = "Den angivna skalan är ogiltig.\nVill Du mata in en ny?" ;
+    Text [ swedish ] = "Den angivna skalan är ogiltig.\nVill du ange en ny?" ;
     Text [ danish ] = "Den angivne målestok er ugyldig.\nVil du indtasteen ny?" ;
     Text [ portuguese ] = "A escala indicada não é válida. \nIntroduzir outra?" ;
     Text [ portuguese_brazilian ] = "Der eingegebene Ma?stab ist ung?tig.\nWollen Sie einen neuen eingeben?" ;
@@ -9479,7 +9479,7 @@ String STR_EFFECT_DISSOLVE
     Text [ italian ] = "Risolvi" ;
     Text [ spanish ] = "Disolver" ;
     Text [ french ] = "Dissoudre" ;
-    Text [ swedish ] = "Upplösa" ;
+    Text [ swedish ] = "Lös upp" ;
     Text [ danish ] = "Opløs" ;
     Text [ portuguese ] = "Resolver" ;
     Text [ portuguese_brazilian ] = "Aufl?en" ;
@@ -11934,7 +11934,7 @@ String STR_RELEASE_GRAPHICLINK
     Text [ finnish ] = "Kuva on linkitetty asiakirjaan. Haluatko poistaa kuvan linkityksen, jotta voit muokata kuvaa?" ;
     Text [ danish ] = "Denne grafik er kædet til dokumentet. Vil du ophæve kæden for at redigere grafikken." ;
     Text [ french ] = "Cette image est liée au document. Désirez-vous supprimer le lien pour pouvoir éditer l'image ?" ;
-    Text [ swedish ] = "Denna grafik är länkad till ett dokument. Vill Du upphäva länken för att kunna redigera grafiken?" ;
+    Text [ swedish ] = "Det här grafikobjektet är länkat till ett dokument. Vill du upphäva länken så att du kan redigera grafikobjektet?" ;
     Text [ dutch ] = "Deze afbeelding is met het document gekoppeld. Wilt u de koppeling opheffen om de afbeelding te bewerken?" ;
     Text [ spanish ] = "La imagen está vinculada al documento. ¿Desea usted deshacer el vínculo para editar la imagen?" ;
     Text[ chinese_simplified ] = "è¿™ä¸ªå›¾å½¢æ˜¯å’Œæ–‡æ¡£é“¾æ¥çš„ã€‚æ‚¨è¦å–æ¶ˆè¿™ä¸ªé“¾æ¥ï¼Œç¼–è¾‘è¿™ä¸ªå›¾å½¢å—ï¼Ÿ";
@@ -12031,7 +12031,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_60
     Text [ ENGLISH ] = "StarOffice 6.0 Presentation" ;
     Text [ english_us ] = "%PRODUCTNAME 6.0 Presentation" ;
     Text [ dutch ] = "%PRODUCTNAME 6.0 Presentatie" ;
-    Text [ swedish ] = "%PRODUCTNAME 6.0 presentation" ;
+    Text [ swedish ] = "%PRODUCTNAME 6.0-presentation" ;
     Text [ danish ] = "%PRODUCTNAME 6.0 præsentation" ;
     Text [ italian ] = "Presentazione %PRODUCTNAME 6.0" ;
     Text [ spanish ] = "%PRODUCTNAME 6.0 Presentación" ;
@@ -12082,7 +12082,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_40
     Text [ ENGLISH ] = "StarOffice 4.0 Presentation" ;
     Text [ english_us ] = "%PRODUCTNAME 4.0 Presentation" ;
     Text [ dutch ] = "%PRODUCTNAME 4.0 Presentatie" ;
-    Text [ swedish ] = "%PRODUCTNAME 4.0 presentation" ;
+    Text [ swedish ] = "%PRODUCTNAME 4.0-presentation" ;
     Text [ danish ] = "%PRODUCTNAME 4.0 præsentation" ;
     Text [ italian ] = "Grafica / presentazione %PRODUCTNAME 4.0" ;
     Text [ spanish ] = "%PRODUCTNAME 4.0 Presentación" ;
@@ -12108,7 +12108,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_31
     Text [ ENGLISH ] = "StarOffice 3.0 Graphic / Presentation" ;
     Text [ english_us ] = "Graphics/presentation (%PRODUCTNAME 3.0)" ;
     Text [ dutch ] = "%PRODUCTNAME 3.0 Afbeelding / Presentatie" ;
-    Text [ swedish ] = "%PRODUCTNAME 3.0 grafik/presentation" ;
+    Text [ swedish ] = "%PRODUCTNAME 3.0-grafik/presentation" ;
     Text [ danish ] = "%PRODUCTNAME 3.0 grafik / præsentation" ;
     Text [ italian ] = "Grafica / presentazione %PRODUCTNAME 3.0" ;
     Text [ spanish ] = "%PRODUCTNAME 3.0 Imagen / Presentación" ;
@@ -12159,7 +12159,7 @@ String STR_GRAPHIC_DOCUMENT_FULLTYPE_50
     Text [ english_us ] = "Drawing (%PRODUCTNAME 5.0)" ;
     Text [ portuguese ] = "Desenho (%PRODUCTNAME 5.0)" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME 5.0 Zeichnung" ;
-    Text [ swedish ] = "%PRODUCTNAME 5.0 Teckning" ;
+    Text [ swedish ] = "%PRODUCTNAME 5.0-teckning" ;
     Text [ danish ] = "%PRODUCTNAME 5.0 tegning" ;
     Text [ italian ] = "Disegno %PRODUCTNAME 5.0" ;
     Text [ spanish ] = "PRODUCTNAME 5.0 Dibujo" ;
@@ -12184,7 +12184,7 @@ String STR_GRAPHIC_DOCUMENT_FULLTYPE_60
     Text [ english_us ] = "%PRODUCTNAME 6.0 Drawing" ;
     Text [ portuguese ] = "%PRODUCTNAME 6.0 Desenho" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Zeichnung" ;
-    Text [ swedish ] = "%PRODUCTNAME 6.0 teckning" ;
+    Text [ swedish ] = "%PRODUCTNAME 6.0-teckning" ;
     Text [ danish ] = "%PRODUCTNAME 6.0 tegning" ;
     Text [ italian ] = "Disegno %PRODUCTNAME 6.0" ;
     Text [ spanish ] = "PRODUCTNAME 6.0 Dibujo" ;
@@ -12729,7 +12729,7 @@ String STR_HTMLEXP_NOFRAMES
     Text[ portuguese ] = "O seu browser não suporta frames";
     Text[ danish ] = "Din browser understøtter desværre ingen frames";
     Text[ french ] = "Votre Browser ne supporte pas les frames";
-    Text[ swedish ] = "Tyvärr stödjer Din browser inga ramar";
+    Text[ swedish ] = "Tyvärr stödjer din webbläsare inga ramar";
     Text[ dutch ] = "Uw browser ondersteunt helaas geen frames";
     Text[ spanish ] = "Lamentablemente su navegador no acepta Frames";
     Text[ english_us ] = "Unfortunately your browser does not support floating frames.";
