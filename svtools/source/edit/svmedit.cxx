@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-23 12:59:18 $
+ *  last change: $Author: sb $ $Date: 2002-07-23 13:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -914,9 +914,7 @@ TextWindow::GetComponentInterface(BOOL bCreate)
         Window::GetComponentInterface(false));
     if (!xPeer.is() && bCreate)
     {
-        xPeer = new ::svtools::TextWindowAccessibility(this,
-                                                       *GetTextEngine(),
-                                                       *GetTextView());
+        xPeer = new ::svtools::TextWindowAccessibility(*GetTextView());
         SetComponentInterface(xPeer);
     }
     return xPeer;
