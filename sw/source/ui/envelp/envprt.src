@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:44:10 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ TabPage TP_ENV_PRT
         Text[ korean ] = "À§¿¡¼­ºÎÅÍ ÀÎ¼â(~P)";
         Text[ turkish ] = "Üstten yazdýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Imprimir r~everso";
     };
     RadioButton BTN_BOTTOM
     {
@@ -171,6 +172,7 @@ TabPage TP_ENV_PRT
         Text[ korean ] = "¾Æ·¡¿¡¼­ºÎÅÍ ÀÎ¼â(~B)";
         Text[ turkish ] = "Alttan yazdýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Imprimir ~anverso";
     };
     FixedText TXT_RIGHT
     {
@@ -200,6 +202,7 @@ TabPage TP_ENV_PRT
         Text[ korean ] = "¿À¸¥ÂÊÀ¸·Î ÀÌµ¿(~S)";
         Text[ turkish ] = "S~aða";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Hacia la ~derecha";
     };
     MetricField FLD_RIGHT
     {
@@ -246,6 +249,7 @@ TabPage TP_ENV_PRT
         Text[ korean ] = "¾Æ·¡·Î ÀÌµ¿(~D)";
         Text[ turkish ] = "~Aþaðý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Hacia a~bajo";
     };
     MetricField FLD_DOWN
     {
@@ -292,6 +296,7 @@ TabPage TP_ENV_PRT
         Text[ korean ] = "- ÇÁ¸°ÅÍ°¡ ¼³Ä¡µÇÁö ¾Ê¾Ò½À´Ï´Ù. -";
         Text[ turkish ] = "- Kurulu yazýcý yok -";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "- No hay instalada ninguna impresora -";
     };
     PushButton BTN_PRTSETUP
     {
@@ -319,6 +324,7 @@ TabPage TP_ENV_PRT
         Text[ greek ] = "~ÅãêáôÜóôáóç...";
         Text[ korean ] = "¼Â¾÷...";
         Text[ turkish ] = "Ayarlar...";
+        Text[ catalan ] = "Configurar...";
     };
 };
  // Bitmaps ******************************************************************
