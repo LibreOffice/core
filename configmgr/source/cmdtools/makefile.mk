@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-31 14:56:48 $
+#   last change: $Author: obo $ $Date: 2004-11-17 12:56:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,6 +111,10 @@ APP1OBJS=	\
     $(OBJ)$/trivialbufferedfile.obj \
     $(OBJ)$/configimport.obj \
     $(OBJ)$/unomain.obj 
+
+# --- Scripts ------------------------------------------------------
+
+UNIXTEXT = $(MISC)/configimport.sh
 
 .INCLUDE :  target.mk
 
