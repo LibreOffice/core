@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-08 13:23:38 $
+ *  last change: $Author: mib $ $Date: 2002-05-03 12:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,9 +310,12 @@ SwFrmNotify::~SwFrmNotify()
 #ifdef ACCESSIBLE_LAYOUT
         if( pFrm->IsAccessibleFrm() )
         {
-            ViewShell *pVSh  = pFrm->GetShell();
-            if( pVSh )
-                pVSh->Imp()->MoveAccessibleFrm( pFrm, aFrm );
+            SwRootFrm *pRootFrm = pFrm->FindRootFrm();
+            if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
+                pRootFrm->GetCurrShell() )
+            {
+                pRootFrm->GetCurrShell()->Imp()->MoveAccessibleFrm( pFrm, aFrm );
+            }
         }
 #endif
 
@@ -425,9 +428,12 @@ SwFrmNotify::~SwFrmNotify()
 #ifdef ACCESSIBLE_LAYOUT
     else if( pFrm->IsTxtFrm() && bValidSize != pFrm->GetValidSizeFlag() )
     {
-        ViewShell *pVSh  = pFrm->GetShell();
-        if( pVSh )
-            pVSh->Imp()->InvalidateAccessibleFrmContent( pFrm );
+        SwRootFrm *pRootFrm = pFrm->FindRootFrm();
+        if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
+            pRootFrm->GetCurrShell() )
+        {
+            pRootFrm->GetCurrShell()->Imp()->InvalidateAccessibleFrmContent( pFrm );
+        }
     }
 #endif
 }

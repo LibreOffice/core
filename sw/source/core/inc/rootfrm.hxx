@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rootfrm.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2002-03-15 11:47:04 $
+ *  last change: $Author: mib $ $Date: 2002-05-03 12:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,9 @@ class SwRootFrm: public SwLayoutFrm
     SwDestroyList* pDestroy;
 
     USHORT  nPhyPageNums;           //Anzahl der Seiten.
+#ifdef ACCESSIBLE_LAYOUT
+    sal_uInt16 nAccessibleShells;   // Number of accessible shells
+#endif
 
     void ImplCalcBrowseWidth();
     void ImplInvalidateBrowseWidth();
@@ -313,6 +316,12 @@ public:
 
     void SetCallbackActionEnabled( BOOL b ) { bCallbackActionEnabled = b; }
     BOOL IsCallbackActionEnabled() const    { return bCallbackActionEnabled; }
+
+#ifdef ACCESSIBLE_LAYOUT
+    sal_Bool IsAnyShellAccessible() const { return nAccessibleShells > 0; }
+    void AddAccessibleShell() { ++nAccessibleShells; }
+    void RemoveAccessibleShell() { --nAccessibleShells; }
+#endif
 };
 
 inline long SwRootFrm::GetBrowseWidth() const

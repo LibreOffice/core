@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-12 14:44:09 $
+ *  last change: $Author: mib $ $Date: 2002-05-03 12:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1697,17 +1697,38 @@ void MA_FASTCALL lcl_ValidateLowers( SwLayoutFrm *pLay, const SwTwips nOfst,
         while ( pLow != pRow )
             pLow = pLow->GetNext();
 
+#ifdef ACCESSIBLE_LAYOUT
+    SwRootFrm *pRootFrm = 0;
+#endif
+
     while ( pLow )
     {
         if ( !bResetOnly )
         {
+#ifdef ACCESSIBLE_LAYOUT
+            SwRect aOldFrm( pLow->Frm() );
+#endif
             pLow->Frm().Pos().Y() += nOfst;
+#ifdef ACCESSIBLE_LAYOUT
+            if( pLow->IsAccessibleFrm() )
+            {
+                if( !pRootFrm )
+                    pRootFrm = pPage->FindRootFrm();
+                if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
+                    pRootFrm->GetCurrShell() )
+                {
+                    pRootFrm->GetCurrShell()->Imp()->MoveAccessibleFrm( pLow, aOldFrm );
+                }
+            }
+#endif
 //#55435# schon hier wuerden die zeichengeb. Rahmen formatiert und dann unten
 //faelschlich noch einmal verschoben.
             //pLow->Calc();
         }
         if ( pLow->IsLayoutFrm() )
+        {
             ::lcl_ValidateLowers( (SwLayoutFrm*)pLow, nOfst, 0, pPage, bResetOnly);
+        }
         else
         {
             pLow->ResetCompletePaint();

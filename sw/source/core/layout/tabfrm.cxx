@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-24 15:21:21 $
+ *  last change: $Author: mib $ $Date: 2002-05-03 12:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1733,20 +1733,43 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
                 pFrm = pFrm->GetNext();
             }
 
+#ifdef ACCESSIBLE_LAYOUT
+            SwRect aOldFrm( Frm() );
+#endif
             nHeight = (Frm().*fnRect->fnGetHeight)();
             (Frm().*fnRect->fnSetHeight)( nHeight + nDist );
             if( IsVertical() && !IsReverse() )
                 Frm().Pos().X() -= nDist;
             if ( nReal < nDist )
                 GetUpper()->Grow( nDist - (nReal>0 ? nReal : 0), bTst, bInfo );
+
+#ifdef ACCESSIBLE_LAYOUT
+            SwRootFrm *pRootFrm = FindRootFrm();
+            if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
+                pRootFrm->GetCurrShell() )
+            {
+                pRootFrm->GetCurrShell()->Imp()->MoveAccessibleFrm( this, aOldFrm );
+            }
+#endif
         }
         else
         {
             ASSERT( !this, "Table without Upper" );
+#ifdef ACCESSIBLE_LAYOUT
+            SwRect aOldFrm( Frm() );
+#endif
             nHeight = (Frm().*fnRect->fnGetHeight)();
             (Frm().*fnRect->fnSetHeight)( nHeight + nDist );
             if( IsVertical() && !IsReverse() )
                 Frm().Pos().X() -= nDist;
+#ifdef ACCESSIBLE_LAYOUT
+            SwRootFrm *pRootFrm = FindRootFrm();
+            if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
+                pRootFrm->GetCurrShell() )
+            {
+                pRootFrm->GetCurrShell()->Imp()->MoveAccessibleFrm( this, aOldFrm );
+            }
+#endif
 #else
             SwTwips nReal = GetUpper()->Prt().SSize().*pDirection;
             SwFrm *pFrm = GetUpper()->Lower();
@@ -2665,6 +2688,9 @@ void SwRowFrm::AdjustCells( const SwTwips nHeight, const BOOL bHeight )
     SwFrm *pFrm = Lower();
     if ( bHeight )
     {
+#ifdef ACCESSIBLE_LAYOUT
+        SwRootFrm *pRootFrm = 0;
+#endif
 #ifdef VERTICAL_LAYOUT
         SWRECTFN( this )
         while ( pFrm )
@@ -2672,7 +2698,19 @@ void SwRowFrm::AdjustCells( const SwTwips nHeight, const BOOL bHeight )
             long nDiff = nHeight - (pFrm->Frm().*fnRect->fnGetHeight)();
             if( nDiff )
             {
+#ifdef ACCESSIBLE_LAYOUT
+                SwRect aOldFrm( pFrm->Frm() );
+#endif
                 (pFrm->Frm().*fnRect->fnAddBottom)( nDiff );
+#ifdef ACCESSIBLE_LAYOUT
+                if( !pRootFrm )
+                    pRootFrm = FindRootFrm();
+                if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
+                    pRootFrm->GetCurrShell() )
+                {
+                    pRootFrm->GetCurrShell()->Imp()->MoveAccessibleFrm( pFrm, aOldFrm );
+                }
+#endif
 #else
         while ( pFrm )
         {   if ( pFrm->Frm().Height() != nHeight )
@@ -2993,9 +3031,12 @@ SwCellFrm::~SwCellFrm()
 #ifdef ACCESSIBLE_LAYOUT
         // At this stage the lower frames aren't destroyed already,
         // therfor we have to do a recursive dispose.
-        ViewShell *pVSh = GetShell();
-        if( pVSh )
-            pVSh->Imp()->DisposeAccessibleFrm( this, sal_True );
+        SwRootFrm *pRootFrm = FindRootFrm();
+        if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
+            pRootFrm->GetCurrShell() )
+        {
+            pRootFrm->GetCurrShell()->Imp()->DisposeAccessibleFrm( this, sal_True );
+        }
 #endif
         pMod->Remove( this );           // austragen,
         if( !pMod->GetDepends() )

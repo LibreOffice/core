@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-13 12:58:32 $
+ *  last change: $Author: mib $ $Date: 2002-05-03 12:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,6 +519,9 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     nPhyPageNums( 0 ),
     pDrawPage( 0 ),
     nBrowseWidth( MM50*4 )  //2cm Minimum
+#ifdef ACCESSIBLE_LAYOUT
+    ,nAccessibleShells( 0 )
+#endif
 {
     nType = FRMC_ROOT;
     bIdleFormat = bTurboAllowed = bAssertFlyPages = bIsNewLayout = TRUE;
@@ -626,6 +629,10 @@ SwRootFrm::~SwRootFrm()
         (*pCurrShells)[i]->pRoot = 0;
 
     delete pCurrShells;
+
+#ifdef ACCESSIBLE_LAYOUT
+    ASSERT( 0==nAccessibleShells, "Some accessible shells are left" );
+#endif
 }
 
 /*************************************************************************

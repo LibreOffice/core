@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-24 15:24:16 $
+ *  last change: $Author: mib $ $Date: 2002-05-03 12:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -958,7 +958,7 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                                 GetFmt()->GetDoc()->GetHellId();
             GetVirtDrawObj()->SetLayer( nId );
 #ifdef ACCESSIBLE_LAYOUT
-            if( pSh )
+            if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
             {
                 pSh->Imp()->DisposeAccessibleFrm( this );
                 pSh->Imp()->AddAccessibleFrm( this );

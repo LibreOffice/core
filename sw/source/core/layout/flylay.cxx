@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:14:23 $
+ *  last change: $Author: mib $ $Date: 2002-05-03 12:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,8 +617,13 @@ void SwPageFrm::AppendFly( SwFlyFrm *pNew )
         // Notify accessible layout. That's required at this place for
         // frames only where the anchor is moved. Creation of new frames
         // is additionally handled by the SwFrmNotify class.
-        if( GetShell() )
-            GetShell()->Imp()->AddAccessibleFrm( pNew );
+        if( GetUpper() &&
+            static_cast< SwRootFrm * >( GetUpper() )->IsAnyShellAccessible() &&
+             static_cast< SwRootFrm * >( GetUpper() )->GetCurrShell() )
+        {
+            static_cast< SwRootFrm * >( GetUpper() )->GetCurrShell()->Imp()
+                                      ->AddAccessibleFrm( pNew );
+        }
 #endif
 
     }
@@ -672,8 +677,13 @@ void SwPageFrm::RemoveFly( SwFlyFrm *pToRemove )
     // Notify accessible layout. That's required at this place for
     // frames only where the anchor is moved. Creation of new frames
     // is additionally handled by the SwFrmNotify class.
-    if( GetShell() )
-        GetShell()->Imp()->DisposeAccessibleFrm( pToRemove, sal_True );
+    if( GetUpper() &&
+        static_cast< SwRootFrm * >( GetUpper() )->IsAnyShellAccessible() &&
+        static_cast< SwRootFrm * >( GetUpper() )->GetCurrShell() )
+    {
+        static_cast< SwRootFrm * >( GetUpper() )->GetCurrShell()->Imp()
+                                  ->DisposeAccessibleFrm( pToRemove, sal_True );
+    }
 #endif
 
     //Collections noch nicht loeschen. Das passiert am Ende
@@ -722,8 +732,13 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
     // Notify accessible layout. That's required at this place for
     // frames only where the anchor is moved. Creation of new frames
     // is additionally handled by the SwFrmNotify class.
-    if( GetShell() )
-        GetShell()->Imp()->DisposeAccessibleFrm( pToMove, sal_True );
+    if( GetUpper() &&
+        static_cast< SwRootFrm * >( GetUpper() )->IsAnyShellAccessible() &&
+        static_cast< SwRootFrm * >( GetUpper() )->GetCurrShell() )
+    {
+        static_cast< SwRootFrm * >( GetUpper() )->GetCurrShell()->Imp()
+                                  ->DisposeAccessibleFrm( pToMove, sal_True );
+    }
 #endif
 
     //Die FlyColl kann bereits weg sein, weil der DTor der Seite
@@ -752,8 +767,13 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
     // Notify accessible layout. That's required at this place for
     // frames only where the anchor is moved. Creation of new frames
     // is additionally handled by the SwFrmNotify class.
-    if( GetShell() )
-        GetShell()->Imp()->AddAccessibleFrm( pToMove );
+    if( GetUpper() &&
+        static_cast< SwRootFrm * >( GetUpper() )->IsAnyShellAccessible() &&
+        static_cast< SwRootFrm * >( GetUpper() )->GetCurrShell() )
+    {
+        static_cast< SwRootFrm * >( GetUpper() )->GetCurrShell()->Imp()
+                                  ->AddAccessibleFrm( pToMove );
+    }
 #endif
 }
 

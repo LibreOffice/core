@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ama $ $Date: 2002-03-28 11:56:42 $
+ *  last change: $Author: mib $ $Date: 2002-05-03 12:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2449,12 +2449,20 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
             nMin = 0;
     }
 
+#ifdef ACCESSIBLE_LAYOUT
+    SwRect aOldFrm( Frm() );
+    sal_Bool bMoveAccFrm = sal_False;
+#endif
+
     BOOL bChgPos = IsVertical() && !IsReverse();
     if ( !bTst )
     {
         (Frm().*fnRect->fnSetHeight)( nFrmHeight + nDist );
         if( bChgPos )
             Frm().Pos().X() -= nDist;
+#ifdef ACCESSIBLE_LAYOUT
+        bMoveAccFrm = sal_True;
+#endif
     }
 
     SwTwips nReal = nDist - nMin;
@@ -2515,6 +2523,9 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                                           - nDist );
             if( bChgPos )
                 Frm().Pos().X() += nDist;
+#ifdef ACCESSIBLE_LAYOUT
+            bMoveAccFrm = sal_True;
+#endif
         }
 
         if ( nReal )
@@ -2542,6 +2553,18 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                 SetCompletePaint();
         }
     }
+
+#ifdef ACCESSIBLE_LAYOUT
+    if( bMoveAccFrm && IsAccessibleFrm() )
+    {
+        SwRootFrm *pRootFrm = FindRootFrm();
+        if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
+            pRootFrm->GetCurrShell() )
+        {
+            pRootFrm->GetCurrShell()->Imp()->MoveAccessibleFrm( this, aOldFrm );
+        }
+    }
+#endif
     return nReal;
 }
 #else
@@ -2722,12 +2745,20 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
     if( nReal <= 0 )
         return nDist;
 
+#ifdef ACCESSIBLE_LAYOUT
+    SwRect aOldFrm( Frm() );
+    sal_Bool bMoveAccFrm = sal_False;
+#endif
+
     SwTwips nRealDist = nReal;
     if ( !bTst )
     {
         (Frm().*fnRect->fnSetHeight)( nFrmHeight - nReal );
         if( bChgPos )
             Frm().Pos().X() += nReal;
+#ifdef ACCESSIBLE_LAYOUT
+        bMoveAccFrm = sal_True;
+#endif
     }
 
     BYTE nAdjust = GetUpper() && GetUpper()->IsFtnBossFrm() ?
@@ -2748,6 +2779,9 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                                             + nRealDist - nReal );
                 if( bChgPos )
                     Frm().Pos().X() += nRealDist - nReal;
+#ifdef ACCESSIBLE_LAYOUT
+                ASSERT( !IsAccessibleFrm(), "bMoveAccFrm has to be set!" );
+#endif
             }
         }
     }
@@ -2760,6 +2794,9 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                                           + nReal - nTmp );
             if( bChgPos )
                 Frm().Pos().X() += nTmp - nReal;
+#ifdef ACCESSIBLE_LAYOUT
+            ASSERT( !IsAccessibleFrm(), "bMoveAccFrm has to be set!" );
+#endif
             nReal = nTmp;
         }
     }
@@ -2771,6 +2808,18 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
             && nReal < nShrink )
             AdjustNeighbourhood( nReal - nShrink );
     }
+
+#ifdef ACCESSIBLE_LAYOUT
+    if( bMoveAccFrm && IsAccessibleFrm() )
+    {
+        SwRootFrm *pRootFrm = FindRootFrm();
+        if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
+            pRootFrm->GetCurrShell() )
+        {
+            pRootFrm->GetCurrShell()->Imp()->MoveAccessibleFrm( this, aOldFrm );
+        }
+    }
+#endif
 #else
 SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, const SzPtr pDirection,
                                 BOOL bTst, BOOL bInfo )

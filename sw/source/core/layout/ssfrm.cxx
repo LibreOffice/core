@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 14:03:47 $
+ *  last change: $Author: mib $ $Date: 2002-05-03 12:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,11 +383,15 @@ SwFrm::~SwFrm()
 #ifdef ACCESSIBLE_LAYOUT
     if( IsAccessibleFrm() && GetDep() )
     {
-        ViewShell *pVSh = GetShell();
-        if( pVSh && pVSh->Imp() )
+        SwRootFrm *pRootFrm = FindRootFrm();
+        if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
         {
-            ASSERT( !GetLower(), "Lowers should be dispose already!" );
-            pVSh->Imp()->DisposeAccessibleFrm( this );
+            ViewShell *pVSh = pRootFrm->GetCurrShell();
+            if( pVSh && pVSh->Imp() )
+            {
+                ASSERT( !GetLower(), "Lowers should be dispose already!" );
+                pVSh->Imp()->DisposeAccessibleFrm( this );
+            }
         }
     }
 #endif
