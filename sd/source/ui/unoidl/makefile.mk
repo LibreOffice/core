@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2001-08-10 10:50:40 $
+#   last change: $Author: cl $ $Date: 2001-08-24 11:55:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,6 @@ SLOFILES =      \
         $(SLO)$/unopool.obj \
         $(SLO)$/UnoDocumentSettings.obj \
         $(SLO)$/facreg.obj \
-        $(SLO)$/UnoGraphicExporter.obj \
         $(SLO)$/unomodel.obj    \
         $(SLO)$/unopage.obj     \
         $(SLO)$/unoiview.obj    \
