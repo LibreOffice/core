@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:13:30 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ class ScXMLExport : public SvXMLExport
     ScMyOpenCloseColumnRowGroup*        pGroupRows;
     ScMyDefaultStyles*                  pDefaults;
     ScChartListener*                    pChartListener;
+    const ScMyCell*                     pCurrentCell;
 
     ScMyMergedRangesContainer*  pMergedRangesContainer;
     ScMyValidationsContainer*   pValidationsContainer;
@@ -214,7 +215,7 @@ class ScXMLExport : public SvXMLExport
 
     void WriteCell (ScMyCell& aCell);
     void WriteAreaLink(const ScMyCell& rMyCell);
-    void WriteAnnotation(const ScMyCell& rMyCell);
+    void WriteAnnotation(ScMyCell& rMyCell);
     void WriteDetective(const ScMyCell& rMyCell);
     void ExportShape(const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape, com::sun::star::awt::Point* pPoint);
     void WriteShapes(const ScMyCell& rMyCell);
@@ -269,6 +270,8 @@ public:
     void GetChangeTrackViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);
     virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);
     virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);
+
+    virtual void exportAnnotationMeta( const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape);
 
     void CreateSharedData(const sal_Int32 nTableCount);
     void SetSharedData(ScMySharedData* pTemp) { pSharedData = pTemp; }
