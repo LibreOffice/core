@@ -2,9 +2,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:44:52 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,9 @@
 #ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
 #endif
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
+#endif
 
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 extern void ClearFEShellTabCols();
@@ -307,7 +310,8 @@ USHORT __FAR_DATA aSave_BoxCntntSet[] = {
 SwUndoInsTbl::SwUndoInsTbl( const SwPosition& rPos, USHORT nCl, USHORT nRw,
                             USHORT nAdj, const SwInsertTableOptions& rInsTblOpts,
                             const SwTableAutoFmt* pTAFmt,
-                            const SvUShorts* pColArr )
+                            const SvUShorts* pColArr,
+                            const String & rName)
     : SwUndo( UNDO_INSTABLE ), nSttNode( rPos.nNode.GetIndex() ),
     nRows( nRw ), nCols( nCl ), nAdjust( nAdj ), pDDEFldType( 0 ),
     aInsTblOpts( rInsTblOpts ), pColWidth( 0 ), pRedlData( 0 ), pAutoFmt( 0 )
@@ -327,6 +331,8 @@ SwUndoInsTbl::SwUndoInsTbl( const SwPosition& rPos, USHORT nCl, USHORT nRw,
         pRedlData = new SwRedlineData( REDLINE_INSERT, rDoc.GetRedlineAuthor() );
         SetRedlineMode( rDoc.GetRedlineMode() );
     }
+
+    sTblNm = rName;
 }
 
 
@@ -337,8 +343,6 @@ SwUndoInsTbl::~SwUndoInsTbl()
     delete pRedlData;
     delete pAutoFmt;
 }
-
-
 
 void SwUndoInsTbl::Undo( SwUndoIter& rUndoIter )
 {
@@ -434,6 +438,17 @@ void SwUndoInsTbl::Repeat( SwUndoIter& rUndoIter )
     rUndoIter.GetDoc().InsertTable( aInsTblOpts, *rUndoIter.pAktPam->GetPoint(),
                                         nRows, nCols, (SwHoriOrient)nAdjust,
                                         pAutoFmt, pColWidth );
+}
+
+SwRewriter SwUndoInsTbl::GetRewriter() const
+{
+    SwRewriter aRewriter;
+
+    aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_START_QUOTE));
+    aRewriter.AddRule(UNDO_ARG2, sTblNm);
+    aRewriter.AddRule(UNDO_ARG3, SW_RES(STR_END_QUOTE));
+
+    return aRewriter;
 }
 
 // -----------------------------------------------------
@@ -772,6 +787,7 @@ SwUndoTxtToTbl::~SwUndoTxtToTbl()
 void SwUndoTxtToTbl::Undo( SwUndoIter& rUndoIter )
 {
     SwDoc& rDoc = rUndoIter.GetDoc();
+
     ULONG nTblNd = nSttNode;
     if( nSttCntnt )
         ++nTblNd;       // Node wurde vorher gesplittet
