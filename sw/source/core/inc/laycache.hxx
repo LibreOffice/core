@@ -2,9 +2,9 @@
  *
  *  $RCSfile: laycache.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-29 12:41:34 $
+ *  last change: $Author: fme $ $Date: 2002-09-18 07:18:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,10 @@ public:
     sal_Bool IsLocked() const { return nLockCount > 0; }
     USHORT& GetLockCount() { return nLockCount; }
     SwLayCacheImpl *LockImpl()
-        { if( nLockCount & 0x8000 ) return NULL; ++nLockCount; return pImpl; }
+        { if( nLockCount & 0x8000 ) return NULL;
+          if ( pImpl )
+            ++nLockCount;
+          return pImpl; }
     void UnlockImpl() { --nLockCount; }
 
 #ifndef PRODUCT
