@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-25 11:39:23 $
+ *  last change: $Author: ssa $ $Date: 2002-11-25 17:09:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1025,7 +1025,8 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
 #ifdef REMOTE_APPSERVER
         if ( aKeyCode.IsShift() && aKeyCode.IsMod2() && (aKeyCode.GetCode() == KEY_D) )
 #else
-        if ( aKeyCode.IsShift() && aKeyCode.IsMod1() && (aKeyCode.GetCode() == KEY_D) )
+        // #105224# use Ctrl-Alt-Shift-D, Ctrl-Shift-D must be useable by app
+        if ( aKeyCode.IsShift() && aKeyCode.IsMod1() && aKeyCode.IsMod2() && (aKeyCode.GetCode() == KEY_D) )
 #endif
         {
             DBGGUI_START();
@@ -1964,6 +1965,16 @@ static void ImplHandleSalKeyMod( Window* pWindow, SalKeyModEvent* pEvent )
         nNewCode |= pWindow->mpFrameData->mnMouseCode & ~(KEY_SHIFT | KEY_MOD1 | KEY_MOD2);
         pWindow->mpFrameWindow->ImplCallMouseMove( nNewCode, TRUE );
     }
+
+    // #105224# send commandevent to allow special treatment of Ctrl-LeftShift/Ctrl-RightShift etc.
+
+    // find window
+    Window* pChild = ImplGetKeyInputWindow( pWindow );
+    if ( !pChild )
+        return;
+
+    CommandModKeyData data( pEvent->mnModKeyCode );
+    ImplCallCommand( pChild, COMMAND_MODKEYCHANGE, &data );
 }
 
 // -----------------------------------------------------------------------

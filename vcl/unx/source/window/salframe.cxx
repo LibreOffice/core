@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-21 11:54:53 $
+ *  last change: $Author: ssa $ $Date: 2002-11-25 17:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2432,6 +2432,21 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
             if ( (nKeySym == XK_Alt_L)     || (nKeySym == XK_Alt_R) )
                 nModCode |= KEY_MOD2;
         }
+
+        // #105224# extended modkey event to distinguish right/left modifiers
+        aModEvt.mnModKeyCode = 0;
+        if ( nKeySym == XK_Control_L )
+            aModEvt.mnModKeyCode |= MODKEY_LMOD1;
+        if ( nKeySym == XK_Control_R )
+            aModEvt.mnModKeyCode |= MODKEY_RMOD1;
+        if ( nKeySym == XK_Alt_L )
+            aModEvt.mnModKeyCode |= MODKEY_LMOD2;
+        if ( nKeySym == XK_Alt_R )
+            aModEvt.mnModKeyCode |= MODKEY_RMOD2;
+        if ( nKeySym == XK_Shift_L )
+            aModEvt.mnModKeyCode |= MODKEY_LSHIFT;
+        if ( nKeySym == XK_Shift_R )
+            aModEvt.mnModKeyCode |= MODKEY_RSHIFT;
 
         aModEvt.mnCode = nModCode;
         aModEvt.mnTime = pEvent->time;

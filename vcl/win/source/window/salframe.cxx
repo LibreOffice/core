@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-25 11:16:41 $
+ *  last change: $Author: ssa $ $Date: 2002-11-25 17:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3365,6 +3365,20 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             SalKeyModEvent aModEvt;
             aModEvt.mnTime = GetMessageTime();
             aModEvt.mnCode = nModCode;
+            aModEvt.mnModKeyCode = 0;
+            if( GetKeyState( VK_LSHIFT )  & 0x8000 )
+                aModEvt.mnModKeyCode |= MODKEY_LSHIFT;
+            if( GetKeyState( VK_RSHIFT )  & 0x8000 )
+                aModEvt.mnModKeyCode |= MODKEY_RSHIFT;
+            if( GetKeyState( VK_LCONTROL ) & 0x8000 )
+                aModEvt.mnModKeyCode |= MODKEY_LMOD1;
+            if( GetKeyState( VK_RCONTROL ) & 0x8000 )
+                aModEvt.mnModKeyCode |= MODKEY_RMOD1;
+            if( GetKeyState( VK_LMENU )  & 0x8000 )
+                aModEvt.mnModKeyCode |= MODKEY_LMOD2;
+            if( GetKeyState( VK_RMENU )  & 0x8000 )
+                aModEvt.mnModKeyCode |= MODKEY_RMOD2;
+
             return pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
                                                SALEVENT_KEYMODCHANGE, &aModEvt );
         }
