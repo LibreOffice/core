@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.108 $
+#   $Revision: 1.109 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-27 16:15:36 $
+#   last change: $Author: hjs $ $Date: 2002-03-27 16:26:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2079,6 +2079,9 @@ $(OBJFILES) : $(UNOUCRHEADER)
 .ENDIF			# "$(OBJFILES)"!=""
 .IF "$(SLOFILES)"!=""
 $(SLOFILES) : $(UNOUCRHEADER)
+.ENDIF			# "$(SLOFILES)"!=""
+.IF "$(DEPOBJFILES)"!=""
+$(DEPOBJFILES) : $(UNOUCRHEADER)
 .ENDIF			# "$(SLOFILES)"!=""
 $(UNOUCRTARGET) : $(UNOUCRDEP)
 .IF "$(XML2MK_FILES)"!=""
