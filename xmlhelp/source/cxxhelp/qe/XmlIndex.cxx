@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XmlIndex.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: abi $ $Date: 2002-02-06 12:10:31 $
+ *  last change: $Author: abi $ $Date: 2002-10-31 14:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ XmlIndex::XmlIndex( const rtl::OUString& indexDir )
 
         // Determine index in file
         int idx[NAMECOUNT];
-        int linkNamesL_ = NAMECOUNT;
+        /*int*/ linkNamesL_ = NAMECOUNT;
         for( i = 0; i < NAMECOUNT; ++i )
             if( ( idx[i] = aStr.indexOf( LN[i] ) ) == -1 ) {
                 idx[i] = UNREACHABLEPLACE;
@@ -312,9 +312,9 @@ XmlIndex::XmlIndex( const rtl::OUString& indexDir )
 
 
     {
-        contextTables_ = new ContextTables( contextsOffsets_,
-                                            contextsDataL_,contextsData_,
-                                            linkNamesL_,linkNames_ );
+        contextTables_ = new ContextTables(contextsOffsets_,
+                                           contextsDataL_,contextsData_,
+                                           linkNamesL_,linkNames_ );
     }
 }
 
