@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:04:12 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,7 @@
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
 #endif
+#include <sfx2/objface.hxx>
 
 #ifndef _FMTURL_HXX //autogen
 #include <fmturl.hxx>
