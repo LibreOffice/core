@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-30 08:11:24 $
+ *  last change: $Author: mba $ $Date: 2002-06-25 16:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,6 +508,7 @@ void SfxWorkWindow::DeleteControllers_Impl()
     // ObjectBars werden alle auf einmal released, da sie einen
     // festen zusammenh"angenden  Bereich im Array pChilds belegen
     pChilds->Remove(0, SFX_OBJECTBAR_MAX);
+    bSorted = FALSE;
 
     nChilds = 0;
 }
