@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:22:56 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 14:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,6 +507,64 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
         }
         return sal_False;
     }
+}
+
+/** determine top of line for given position in the text frame
+
+    OD 11.11.2003 #i22341#
+    OD 2004-02-02 - adjustment
+    Top of first paragraph line is the top of the paragraph.
+
+    @author OD
+*/
+bool SwTxtFrm::GetTopOfLine( SwTwips& _onTopOfLine,
+                             const SwPosition& _rPos ) const
+{
+    bool bRet = true;
+
+    // get position offset
+    xub_StrLen nOffset = _rPos.nContent.GetIndex();
+
+    if ( GetTxt().Len() < nOffset )
+    {
+        bRet = false;
+    }
+    else
+    {
+        SWRECTFN( this )
+        if ( IsEmpty() || !(Prt().*fnRect->fnGetHeight)() )
+        {
+            _onTopOfLine = (this->Frm().*fnRect->fnGetTop)();
+        }
+        else
+        {
+            // determine formatted text frame that contains the requested position
+            SwTxtFrm* pFrm = &(const_cast<SwTxtFrm*>(this)->GetFrmAtOfst( nOffset ));
+            pFrm->GetFormatted();
+            // assure that text frame is in a horizontal layout
+            SWREFRESHFN( pFrm )
+            SwFrmSwapper aSwapper( pFrm, sal_True );
+            // determine text line that contains the requested position
+            SwTxtSizeInfo aInf( pFrm );
+            SwTxtCursor aLine( pFrm, &aInf );
+            aLine.CharCrsrToLine( nOffset );
+            // determine top of line
+            if ( !aLine.GetPrevLine() )
+            {
+                _onTopOfLine = (pFrm->Frm().*fnRect->fnGetTop)();
+            }
+            else
+            {
+                _onTopOfLine = aLine.Y();
+                if ( bVert )
+                {
+                    _onTopOfLine = pFrm->SwitchHorizontalToVertical( _onTopOfLine );
+                }
+            }
+        }
+    }
+
+    return bRet;
 }
 
 /*************************************************************************
