@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:16:02 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,10 @@
 // OD 16.04.2003 #i13147# - for <SwFlyFrm::GetContour(..)>
 #ifndef _NDGRF_HXX
 #include <ndgrf.hxx>
+#endif
+// OD 31.07.2003 #110978#
+#ifndef _ANCHOREDOBJECTPOSITION_HXX
+#include <anchoredobjectposition.hxx>
 #endif
 
 #include "doc.hxx"
@@ -782,6 +786,8 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
     {
         case RES_VERT_ORIENT:
         case RES_HORI_ORIENT:
+        // OD 22.09.2003 #i18732# - consider new option 'follow text flow'
+        case RES_FOLLOW_TEXT_FLOW:
             //Achtung! _immer_ Aktion in ChgRePos() mitpflegen.
             rInvFlags |= 0x09;
             break;
@@ -1583,7 +1589,18 @@ void CalcCntnt( SwLayoutFrm *pLay,
 void SwFlyFrm::MakeFlyPos()
 {
     if ( !bValidPos )
-    {   bValidPos = TRUE;
+    {
+        bValidPos = TRUE;
+
+        // OD 07.08.2003 #110978# - use new class to position object
+        objectpositioning::SwAnchoredObjectPosition
+                aObjPositioning( objectpositioning::TO_LAYOUT, *GetVirtDrawObj() );
+        aObjPositioning.CalcPosition();
+
+        SWRECTFN( GetAnchor() );
+        aFrm.Pos( aObjPositioning.GetRelPos() );
+        aFrm.Pos() += (GetAnchor()->Frm().*fnRect->fnGetPos)();
+        /*
         GetAnchor()->Calc();
         SWRECTFN( GetAnchor() );
             //Die Werte in den Attributen muessen ggf. upgedated werden,
@@ -1792,6 +1809,7 @@ void SwFlyFrm::MakeFlyPos()
         {   aHori.SetPos( nRelX );
             bHoriChgd = TRUE;
         }
+
         //Die Absolute Position ergibt sich aus der absoluten Position des
         //Ankers plus der relativen Position.
         aFrm.Pos( aRelPos );
@@ -1805,6 +1823,7 @@ void SwFlyFrm::MakeFlyPos()
         if ( bHoriChgd )
             pFmt->SetAttr( aHori );
         pFmt->UnlockModify();
+        */
     }
 }
 
@@ -1816,7 +1835,6 @@ void SwFlyFrm::MakeFlyPos()
 |*  Letzte Aenderung    MA 23. Jun. 93
 |*
 |*************************************************************************/
-
 void SwFlyFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 {
 
@@ -1824,14 +1842,12 @@ void SwFlyFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
     {
         bValidPrtArea = TRUE;
 
-        //Position einstellen.
-        aPrt.Left( rAttrs.CalcLeftLine() );
-        aPrt.Top ( rAttrs.CalcTopLine()  );
-
-        //Sizes einstellen; die Groesse gibt der umgebende Frm vor, die
-        //die Raender werden einfach abgezogen.
-        aPrt.Width ( aFrm.Width() - (rAttrs.CalcRightLine() + aPrt.Left()) );
-        aPrt.Height( aFrm.Height()- (aPrt.Top() + rAttrs.CalcBottomLine()));
+        // OD 31.07.2003 #110978# - consider vertical layout
+        SWRECTFN( this )
+        (this->*fnRect->fnSetXMargins)( rAttrs.CalcLeftLine(),
+                                        rAttrs.CalcRightLine() );
+        (this->*fnRect->fnSetYMargins)( rAttrs.CalcTopLine(),
+                                        rAttrs.CalcBottomLine() );
     }
 }
 
