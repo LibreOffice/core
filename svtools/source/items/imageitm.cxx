@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imageitm.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-12 10:42:12 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #include "imageitm.hxx"
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+
 TYPEINIT1( SfxImageItem, SfxInt16Item );
 
 struct SfxImageItem_Impl
@@ -113,12 +117,33 @@ int SfxImageItem::operator==( const SfxPoolItem& rItem ) const
 
 BOOL SfxImageItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
-    return SfxInt16Item::QueryValue( rVal, 0 );
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq( 4 );
+    aSeq[0] = ::com::sun::star::uno::makeAny( GetValue() );
+    aSeq[1] = ::com::sun::star::uno::makeAny( pImp->nAngle );
+    aSeq[2] = ::com::sun::star::uno::makeAny( pImp->bMirrored );
+    aSeq[3] = ::com::sun::star::uno::makeAny( rtl::OUString( pImp->aURL ));
+
+    rVal = ::com::sun::star::uno::makeAny( aSeq );
+    return TRUE;
 }
 
 BOOL SfxImageItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-    return SfxInt16Item::PutValue( rVal, 0 );
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq;
+    if (( rVal >>= aSeq ) && ( aSeq.getLength() == 4 ))
+    {
+        sal_Int16     nVal;
+        rtl::OUString aURL;
+        if ( aSeq[0] >>= nVal )
+            SetValue( nVal );
+        aSeq[1] >>= pImp->nAngle;
+        aSeq[2] >>= pImp->bMirrored;
+        if ( aSeq[3] >>= aURL )
+            pImp->aURL = aURL;
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 void SfxImageItem::SetRotation( long nValue )
