@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menuconfiguration.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-02 05:41:11 $
+ *  last change: $Author: mba $ $Date: 2001-05-10 07:43:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,11 @@
 
 #include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
+
+const USHORT START_ITEMID_PICKLIST      = 4500;
+const USHORT END_ITEMID_PICKLIST        = 4599;
+const USHORT START_ITEMID_WINDOWLIST    = 4600;
+const USHORT END_ITEMID_WINDOWLIST      = 4699;
 
 namespace framework
 {
