@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 10:53:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_UNDOBLK_HXX
 #define SC_UNDOBLK_HXX
 
@@ -70,6 +69,9 @@
 #endif
 #ifndef SC_VIEWUTIL_HXX
 #include "viewutil.hxx"
+#endif
+#ifndef SC_SPELLPARAM_HXX
+#include "spellparam.hxx"
 #endif
 
 class ScDocShell;
@@ -597,7 +599,7 @@ public:
                                 ScDocShell* pNewDocShell, const ScMarkData& rMark,
                                 SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScDocument* pNewUndoDoc,
                                 SCCOL nNewX, SCROW nNewY, SCTAB nNewZ, ScDocument* pNewRedoDoc,
-                                ScConversionType eConvType );
+                                const ScConversionParam& rConvParam );
     virtual                 ~ScUndoConversion();
 
     virtual void            Undo();
@@ -615,7 +617,7 @@ private:
     ScDocument*             pRedoDoc;           // Blockmarkierung und neue Daten
     ULONG                   nStartChangeAction;
     ULONG                   nEndChangeAction;
-    ScConversionType        meConvType;
+    ScConversionParam       maConvParam;        /// Conversion type and parameters.
 
     void                    DoChange( ScDocument* pRefDoc, const ScAddress& rCursorPos );
     void                    SetChangeTrack();
