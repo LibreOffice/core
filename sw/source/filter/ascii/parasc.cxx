@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-23 15:28:47 $
+ *  last change: $Author: cmc $ $Date: 2002-11-13 09:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -775,6 +775,9 @@ ULONG SwASCIIParser::ReadChars()
             rInput.SeekRel(-(long(nOrig)));
         pUseMe=&aEmpty;
     }
+
+    if (RTL_TEXTENCODING_DONTKNOW == pUseMe->GetCharSet())
+        pUseMe->SetCharSet(RTL_TEXTENCODING_ASCII_US);
 
     rtl_TextToUnicodeConverter hConverter=0;
     rtl_TextToUnicodeContext hContext=0;
