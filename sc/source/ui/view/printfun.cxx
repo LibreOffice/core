@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:55:25 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@
 #include "printopt.hxx"
 #include "prevloc.hxx"
 #include "scmod.hxx"
+#include "drwlayer.hxx"
 
 #define _PRINTFUN_CXX
 #include "printfun.hxx"
@@ -575,6 +576,18 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrint
     aOutputData.SetShowNullValues(bNullVal);
     aOutputData.SetShowFormulas(bFormula);
 
+    // #114135#
+    ScDrawLayer* pModel = pDoc->GetDrawLayer();
+    FmFormView* pDrawView = NULL;
+
+    if( pModel )
+    {
+        pDrawView = new FmFormView( pModel, pDev );
+        pDrawView->ShowPagePgNum( nTab, Point() );
+        pDrawView->SetPrintPreview( TRUE );
+        aOutputData.SetDrawView( pDrawView );
+    }
+
     //! SetUseStyleColor ??
 
     if ( bMetaFile && pDev->GetOutDevType() == OUTDEV_VIRDEV )
@@ -647,6 +660,9 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrint
     for (i=0; i<nArrCount; i++)
         delete[] pRowInfo[i].pCellInfo;
     delete[] pRowInfo;
+
+    // #114135#
+    delete pDrawView;
 }
 
 //
@@ -1599,6 +1615,9 @@ void ScPrintFunc::PrintArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
 
     ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, pRowInfo, nArrCount, pDoc, nPrintTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nScaleX, nScaleY );
+
+    // #114135#
+    aOutputData.SetDrawView( pDrawView );
 
     // #109985#
     // test if all paint parts are hidden, then a paint is not necessary at all
