@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: os $ $Date: 2002-01-10 13:40:48 $
+ *  last change: $Author: jp $ $Date: 2002-02-05 14:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1464,31 +1464,26 @@ void SwXDocumentIndexMark::setMarkEntry(const OUString& rIndexEntry) throw( Runt
         m_pDoc->Delete(pCurMark);
         m_pTOXMark = pCurMark = 0;
 
+        SwTxtAttr* pTxtAttr = 0;
         sal_Bool bInsAtPos = aMark.IsAlternativeText();
         const SwPosition *pStt = aPam.Start(),
                             *pEnd = aPam.End();
-        SwUnoCrsr* pCrsr = 0;
         if( bInsAtPos )
         {
             SwPaM aTmp( *pStt );
             m_pDoc->Insert( aTmp, aMark, 0 );
-            pCrsr = m_pDoc->CreateUnoCrsr( *aTmp.Start() );
-            pCrsr->Left(1);
+            pTxtAttr = pStt->nNode.GetNode().GetTxtNode()->GetTxtAttr(
+                        pStt->nContent.GetIndex()-1, RES_TXTATR_TOXMARK);
         }
         else if( *pEnd != *pStt )
         {
             m_pDoc->Insert( aPam, aMark, SETATTR_DONTEXPAND );
-            pCrsr = m_pDoc->CreateUnoCrsr( *aPam.Start() );
+            pTxtAttr = pStt->nNode.GetNode().GetTxtNode()->GetTxtAttr(
+                                pStt->nContent, RES_TXTATR_TOXMARK);
         }
         //und sonst - Marke geloescht?
-
-        if(pCrsr)
-        {
-            SwTxtAttr* pTxtAttr = pCrsr->GetNode()->GetTxtNode()->GetTxtAttr(
-                        pCrsr->GetPoint()->nContent, RES_TXTATR_TOXMARK);
-            if(pTxtAttr)
-                m_pTOXMark = &pTxtAttr->GetTOXMark();
-        }
+        if(pTxtAttr)
+            m_pTOXMark = &pTxtAttr->GetTOXMark();
     }
     else if(bIsDescriptor)
     {
@@ -1584,19 +1579,19 @@ void SwXDocumentIndexMark::attachToRange(const Reference< text::XTextRange > & x
         // Marks ohne Alternativtext ohne selektierten Text koennen nicht eingefuegt werden,
         // deshalb hier ein Leerzeichen - ob das die ideale Loesung ist?
         if(!bMark && !aMark.GetAlternativeText().Len())
-            aMark.SetAlternativeText(String::CreateFromAscii(" "));
+            aMark.SetAlternativeText( String(' ') );
         pDoc->Insert(aPam, aMark, SETATTR_DONTEXPAND);
-        if(bMark && *aPam.GetPoint() > *aPam.GetMark())
+        if( bMark && *aPam.GetPoint() > *aPam.GetMark())
             aPam.Exchange();
-        SwUnoCrsr* pCrsr = pDoc->CreateUnoCrsr( *aPam.Start() );
-        if(!bMark)
-        {
-            pCrsr->SetMark();
-            pCrsr->Left(1);
-        }
-        SwTxtAttr* pTxtAttr = pCrsr->GetNode()->GetTxtNode()->GetTxtAttr(
-                        pCrsr->GetPoint()->nContent, RES_TXTATR_TOXMARK);
-        delete pCrsr;
+
+        SwTxtAttr* pTxtAttr = 0;
+        if( bMark )
+            pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttr(
+                            aPam.GetPoint()->nContent, RES_TXTATR_TOXMARK );
+        else
+            pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttr(
+                aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_TOXMARK );
+
         if(pTxtAttr)
         {
             m_pTOXMark = &pTxtAttr->GetTOXMark();
@@ -1764,32 +1759,29 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
             sal_Bool bInsAtPos = aMark.IsAlternativeText();
             const SwPosition *pStt = aPam.Start(),
                                 *pEnd = aPam.End();
-            SwUnoCrsr* pCrsr = 0;
+
+            SwTxtAttr* pTxtAttr = 0;
             if( bInsAtPos )
             {
                 SwPaM aTmp( *pStt );
                 pLocalDoc->Insert( aTmp, aMark, 0 );
-                pCrsr = pLocalDoc->CreateUnoCrsr( *aTmp.Start() );
-                pCrsr->Left(1);
+                pTxtAttr = pStt->nNode.GetNode().GetTxtNode()->GetTxtAttr(
+                        pStt->nContent.GetIndex()-1, RES_TXTATR_TOXMARK );
             }
             else if( *pEnd != *pStt )
             {
                 pLocalDoc->Insert( aPam, aMark, SETATTR_DONTEXPAND );
-                pCrsr = pLocalDoc->CreateUnoCrsr( *aPam.Start() );
+                pTxtAttr = pStt->nNode.GetNode().GetTxtNode()->GetTxtAttr(
+                                pStt->nContent, RES_TXTATR_TOXMARK );
             }
             m_pDoc = pLocalDoc;
             //und sonst - Marke geloescht?
 
-            if(pCrsr)
+            if(pTxtAttr)
             {
-                SwTxtAttr* pTxtAttr = pCrsr->GetNode()->GetTxtNode()->GetTxtAttr(
-                            pCrsr->GetPoint()->nContent, RES_TXTATR_TOXMARK);
-                if(pTxtAttr)
-                {
-                    m_pTOXMark = &pTxtAttr->GetTOXMark();
-                    m_pDoc->GetUnoCallBack()->Add(this);
-                    pType->Add(&aTypeDepend);
-                }
+                m_pTOXMark = &pTxtAttr->GetTOXMark();
+                m_pDoc->GetUnoCallBack()->Add(this);
+                pType->Add(&aTypeDepend);
             }
         }
     }
