@@ -3,7 +3,5 @@ jh	javaunohelper								usr1	-	all	jh_mkout NULL
 jh	javaunohelper\com\sun\star\comp\helper		nmake	-	all	jh_helper NULL
 jh	javaunohelper\com\sun\star\lib\uno\adapter	nmake	-	all	jh_adapter NULL
 jh	javaunohelper\com\sun\star\lib\uno\helper	nmake	-	all	jh_libhelp NULL
-jh	javaunohelper\com\sun\star\lib\loader		nmake	-	all	jh_loader NULL
 jh	javaunohelper\source						nmake	-	all	jh_source NULL
-jh	javaunohelper\source\win\unowinreg			nmake	-	n	jh_unowinreg NULL
 jh	javaunohelper\util							nmake	-	all	jh_util jh_helper jh_source jh_adapter jh_libhelp NULL
