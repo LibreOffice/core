@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.78 $
+*  $Revision: 1.79 $
 *
-*  last change: $Author: kz $ $Date: 2005-01-21 12:14:03 $
+*  last change: $Author: obo $ $Date: 2005-01-24 12:24:19 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -534,12 +534,6 @@ File gid_File_Lib_Dict_Zh
     Dir = gid_Dir_Program;
     Styles = (PACKED);
 End
-
-#ifdef WNT
-
-STD_LIB_FILE( gid_File_Lib_Dl , dl)
-
-#endif
 
 File gid_File_Lib_Dlgprov
     TXT_FILE_BODY;
