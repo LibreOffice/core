@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 12:18:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,8 +197,10 @@ String::operator=( const self & i_rStr )
 String &
 String::operator=( const char * i_str )
 {
+    const S_Data *
+        pTemp = new S_Data(i_str);
     pd->Release();
-    pd = new S_Data(i_str, strlen(i_str));
+    pd = pTemp;
 
     return *this;
 }
@@ -216,31 +218,41 @@ String::assign( const self &        i_rStr,
                 position_type       i_nStartPosition,
                 size_type           i_nLength )
 {
+    const S_Data *
+        pTemp = new S_Data( str_from_StringOffset(i_rStr, i_nStartPosition),
+                            i_nLength );
     pd->Release();
-    pd = new S_Data( str_from_StringOffset(i_rStr, i_nStartPosition), i_nLength );
+    pd = pTemp;
 }
 
 void
 String::assign( const char *        i_str )
 {
+    const S_Data *
+        pTemp = new S_Data( i_str );
     pd->Release();
-    pd = new S_Data( i_str );
+    pd = pTemp;
 }
 
 void
 String::assign( const char *        i_str,
                 size_type           i_nLength )
 {
+    const S_Data *
+        pTemp = new S_Data( i_str, i_nLength );
     pd->Release();
-    pd = new S_Data( i_str, i_nLength );
+    pd = pTemp;
 }
 
 void
 String::assign( const_iterator      i_itBegin,
                 const_iterator      i_itEnd )
 {
+    const S_Data *
+        pTemp = new S_Data( i_itBegin,
+                            size_type(i_itEnd - i_itBegin) );
     pd->Release();
-    pd = new S_Data( i_itBegin, size_type(i_itEnd - i_itBegin) );
+    pd = pTemp;
 }
 
 
