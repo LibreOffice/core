@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fields.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:04:24 $
+ *  last change: $Author: obo $ $Date: 2004-01-16 15:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>   //ASSERT (use our own ww header later for asserts)
 #endif
+
+#include <stddef.h>
 
 namespace ww
 {
