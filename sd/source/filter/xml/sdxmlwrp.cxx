@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-02 16:48:32 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 17:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,17 +129,23 @@ XML_STRING( sXML_styleStreamName, "style.xml" );
 XML_STRING( sXML_contentStreamName, "content.xml" );
 XML_STRING( sXML_oldContentStreamName, "Content.xml" );
 
-XML_STRING( sXML_export_meta_service, "com.sun.star.office.sax.exporter.MetaInformation" );
-XML_STRING( sXML_export_draw_styles_service, "com.sun.star.office.sax.exporter.Draw.Styles" );
-XML_STRING( sXML_export_impress_styles_service, "com.sun.star.office.sax.exporter.Draw.Styles" );
-XML_STRING( sXML_export_draw_content_service, "com.sun.star.office.sax.exporter.Draw.Content" );
-XML_STRING( sXML_export_impress_content_service, "com.sun.star.office.sax.exporter.Draw.Content" );
+XML_STRING( sXML_export_impress_meta_service, "com.sun.star.comp.Impress.XMLMetaExporter" );
+XML_STRING( sXML_export_impress_styles_service, "com.sun.star.comp.Impress.XMLStylesExporter" );
+XML_STRING( sXML_export_impress_content_service, "com.sun.star.comp.Impress.XMLContentExporter" );
 
-XML_STRING( sXML_import_meta_service, "com.sun.star.office.sax.importer.MetaInformation" );
-XML_STRING( sXML_import_draw_styles_service, "com.sun.star.office.sax.importer.Draw.Styles" );
-XML_STRING( sXML_import_impress_styles_service, "com.sun.star.office.sax.importer.Draw.Styles" );
-XML_STRING( sXML_import_draw_content_service, "com.sun.star.office.sax.importer.Draw.Content" );
-XML_STRING( sXML_import_impress_content_service, "com.sun.star.office.sax.importer.Draw.Content" );
+XML_STRING( sXML_export_draw_meta_service, "com.sun.star.comp.Draw.XMLMetaExporter" );
+XML_STRING( sXML_export_draw_styles_service, "com.sun.star.comp.Draw.XMLStylesExporter" );
+XML_STRING( sXML_export_draw_content_service, "com.sun.star.comp.Draw.XMLContentExporter" );
+
+XML_STRING( sXML_import_impress_service, "com.sun.star.comp.Impress.XMLImporter" );
+XML_STRING( sXML_import_impress_meta_service, "com.sun.star.comp.Impress.XMLMetaImporter" );
+XML_STRING( sXML_import_impress_styles_service, "com.sun.star.comp.Impress.XMLStylesImporter" );
+XML_STRING( sXML_import_impress_content_service, "com.sun.star.comp.Impress.XMLContentImporter" );
+
+XML_STRING( sXML_import_draw_service, "com.sun.star.comp.Draw.XMLImporter" );
+XML_STRING( sXML_import_draw_meta_service, "com.sun.star.comp.Draw.XMLMetaImporter" );
+XML_STRING( sXML_import_draw_styles_service, "com.sun.star.comp.Draw.XMLStylesImporter" );
+XML_STRING( sXML_import_draw_content_service, "com.sun.star.comp.Draw.XMLContentImporter" );
 
 struct XML_SERVICEMAP
 {
@@ -232,15 +238,18 @@ sal_Bool SdXMLFilter::Import()
 
             uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY );
 
-            XML_SERVICEMAP aServices[3];
-            aServices[0].mpService = IsDraw() ? sXML_import_draw_styles_service : sXML_import_impress_styles_service;
-            aServices[0].mpStream  = sXML_styleStreamName;
+            XML_SERVICEMAP aServices[4];
+            aServices[0].mpService = IsDraw() ? sXML_import_draw_meta_service : sXML_import_impress_meta_service;
+            aServices[0].mpStream  = sXML_metaStreamName;
 
-            aServices[1].mpService = IsDraw() ? sXML_import_draw_content_service : sXML_import_impress_content_service;
-            aServices[1].mpStream  = sXML_contentStreamName;
+            aServices[1].mpService = IsDraw() ? sXML_import_draw_styles_service : sXML_import_impress_styles_service;
+            aServices[1].mpStream  = sXML_styleStreamName;
 
-            aServices[2].mpService = NULL;
-            aServices[2].mpStream  = NULL;
+            aServices[2].mpService = IsDraw() ? sXML_import_draw_content_service : sXML_import_impress_content_service;
+            aServices[2].mpStream  = sXML_contentStreamName;
+
+            aServices[3].mpService = NULL;
+            aServices[3].mpStream  = NULL;
 
             XML_SERVICEMAP* pServices;
             for( pServices = aServices; pServices->mpService; pServices++ )
@@ -260,6 +269,7 @@ sal_Bool SdXMLFilter::Import()
                         if( pServices->mpStream == sXML_contentStreamName )
                         {
                             aStreamName = String( RTL_CONSTASCII_USTRINGPARAM( sXML_oldContentStreamName ) );
+                            pServices->mpService = IsDraw() ? sXML_import_draw_service : sXML_import_impress_service;
                             if( !pStorage->IsStream( aStreamName ) )
                             {
                                 continue;
@@ -370,7 +380,6 @@ sal_Bool SdXMLFilter::Import()
 
 sal_Bool SdXMLFilter::Export()
 {
-    sal_Bool bMetaRet = FALSE;
     sal_Bool bDocRet = FALSE;
 
     try
@@ -416,48 +425,6 @@ sal_Bool SdXMLFilter::Export()
         pProps[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ) );
         pProps[0].Value <<= OUString( mrMedium.GetName() );
 
-        // meta export
-        {
-            uno::Reference<io::XOutputStream> xMetaOut;
-            SvStorageStreamRef xMetaStream;
-
-            if( pStorage )
-            {
-                OUString sMetaName( RTL_CONSTASCII_USTRINGPARAM( sXML_metaStreamName ) );
-                xMetaStream = pStorage->OpenStream( sMetaName,
-                                          STREAM_WRITE | STREAM_SHARE_DENYWRITE );
-                xMetaStream->SetBufferSize( 16*1024 );
-                xMetaOut = new utl::OOutputStreamWrapper( *xMetaStream );
-            }
-            else
-            {
-                xMetaOut = mrMedium.GetDataSink();
-            }
-
-            uno::Reference<io::XActiveDataSource> xMetaSrc( xWriter, uno::UNO_QUERY );
-            xMetaSrc->setOutputStream( xMetaOut );
-
-            uno::Sequence<uno::Any> aMetaArgs(1);
-            uno::Any* pMetaArgs = aMetaArgs.getArray();
-            pMetaArgs[0] <<= xHandler;
-
-            uno::Reference<document::XFilter> xMetaFilter( xServiceFactory->createInstanceWithArguments( OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_export_meta_service ) ), aMetaArgs ), uno::UNO_QUERY );
-            DBG_ASSERT( xMetaFilter.is(), "can't get Meta exporter" );
-
-            uno::Reference<document::XExporter> xMetaExporter( xMetaFilter, uno::UNO_QUERY );
-            uno::Reference<lang::XComponent> xMetaComponent( mxModel, uno::UNO_QUERY );
-            if (xMetaExporter.is())
-                xMetaExporter->setSourceDocument( xMetaComponent );
-
-            if ( xMetaFilter.is() )
-            {
-                bMetaRet = xMetaFilter->filter( aDescriptor );
-
-                if (bMetaRet && xMetaStream.Is())
-                    xMetaStream->Commit();
-            }
-        }
-
         {
             uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
             SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
@@ -490,15 +457,18 @@ sal_Bool SdXMLFilter::Export()
 
             uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY );
 
-            XML_SERVICEMAP aServices[3];
-            aServices[0].mpService = IsDraw() ? sXML_export_draw_styles_service : sXML_export_impress_styles_service;
-            aServices[0].mpStream  = sXML_styleStreamName;
+            XML_SERVICEMAP aServices[4];
+            aServices[0].mpService = IsDraw() ? sXML_export_draw_meta_service : sXML_export_impress_meta_service;
+            aServices[0].mpStream  = sXML_metaStreamName;
 
-            aServices[1].mpService = IsDraw() ? sXML_export_draw_content_service : sXML_export_impress_content_service;
-            aServices[1].mpStream  = sXML_contentStreamName;
+            aServices[1].mpService = IsDraw() ? sXML_export_draw_styles_service : sXML_export_impress_styles_service;
+            aServices[1].mpStream  = sXML_styleStreamName;
 
-            aServices[2].mpService = NULL;
-            aServices[2].mpStream  = NULL;
+            aServices[2].mpService = IsDraw() ? sXML_export_draw_content_service : sXML_export_impress_content_service;
+            aServices[2].mpStream  = sXML_contentStreamName;
+
+            aServices[3].mpService = NULL;
+            aServices[3].mpStream  = NULL;
 
             XML_SERVICEMAP* pServices = aServices;
 
@@ -548,7 +518,7 @@ sal_Bool SdXMLFilter::Export()
 
                 pServices++;
             }
-            while( pServices->mpService );
+            while( bDocRet && pServices->mpService );
 
             if( pGraphicHelper )
                 SvXMLGraphicHelper::Destroy( pGraphicHelper );
@@ -564,7 +534,8 @@ sal_Bool SdXMLFilter::Export()
         aError += ByteString( String( e.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
 #endif
+        bDocRet = sal_False;
     }
 
-    return bMetaRet && bDocRet;
+    return bDocRet;
 }
