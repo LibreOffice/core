@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:02:26 $
+ *  last change: $Author: dr $ $Date: 2001-06-15 12:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,69 +62,6 @@
 #define _SVX_CHARDLG_HRC
 
 // defines ------------------------------------------------------------------
-
-// StandardPage -------------------------------------------------------------
-
-#define FT_FONT         10
-#define LB_FONT         11
-#define FT_STYLE        12
-#define LB_STYLE        13
-#define FT_SIZE         14
-#define LB_SIZE         15
-
-#define BTN_OUTLINE     20
-#define BTN_SHADOW      21
-#define BTN_UNDERLINE   22
-#define BTN_STRIKEOUT   23
-#define GB_CASEMAP      24
-
-#define FT_COLOR        30
-#define LB_COLOR        31
-#define FT_LANGUAGE     32
-#define LB_LANGUAGE     33
-#define FT_FONTTYPE     34  // auch fuer ExtendedPage
-#define FT_FILLCOLOR    35
-#define LB_FILLCOLOR    36
-#define STR_TRANSPARENT 37
-#define STR_NOSTYLE     38
-
-#define WIN_EXAMPLE     40  // auch fuer ExtendedPage
-#define GB_EXAMPLE      41  // auch fuer ExtendedPage
-
-// ExtendedPage -------------------------------------------------------------
-
-#define BTN_NONE        50
-#define BTN_CAPS        51
-#define BTN_LOWERCASE   52
-#define BTN_SMALLCAPS   53
-#define BTN_TITEL       54
-#define GB_EFFECT       55
-#define LB_CAPS         56
-
-#define BTN_HIGH        60
-#define BTN_NORMAL      61
-#define BTN_DEEP        62
-#define GB_POSITION     63
-
-#define FT_ESCDEEPHIGH  70
-#define ED_ESCDEEPHIGH  71
-#define FT_ESCRELSIZE   72
-#define ED_ESCRELSIZE   73
-#define GB_POSEXT       74
-#define CB_AUTOPOS      75
-
-#define LB_KERNING      80
-#define FT_KERNING      81
-#define ED_KERNING      82
-#define BTN_AUTOKERN    83
-#define GB_KERNING      84
-
-#define FT_UNDERLINECNT 90
-#define LB_UNDERLINECNT 91
-#define FT_STRIKEOUTCNT 92
-#define LB_STRIKEOUTCNT 93
-#define CB_WORD         94
-#define CB_FLASH        95
 
 // NamePage -----------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 15:48:28 $
+ *  last change: $Author: dr $ $Date: 2001-06-15 12:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,10 @@ TabPage RID_SVXPAGE_GRFCROP
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    GroupBox GB_CROP
+    FixedLine FL_CROP
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 164 , 56 ) ;
+        Size = MAP_APPFONT ( 164 , 8 ) ;
         Text = "Zuschneiden" ;
         Text [ ENGLISH ] = "Crop" ;
         Text [ english_us ] = "Crop" ;
@@ -106,8 +106,8 @@ TabPage RID_SVXPAGE_GRFCROP
     };
     FixedText FT_LEFT
     {
-        Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 21 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 28 , 8 ) ;
         Text = "~Links" ;
         Text [ ENGLISH ] = "~Left" ;
         Text [ dutch ] = "~Links" ;
@@ -134,7 +134,7 @@ TabPage RID_SVXPAGE_GRFCROP
     MetricField MF_LEFT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 38 , 14 ) ;
+        Pos = MAP_APPFONT ( 42 , 42 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Text = "12,99" ;
         TabStop = TRUE ;
@@ -151,8 +151,8 @@ TabPage RID_SVXPAGE_GRFCROP
     };
     FixedText FT_RIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 32 ) ;
-        Size = MAP_APPFONT ( 21 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 60 ) ;
+        Size = MAP_APPFONT ( 28 , 8 ) ;
         Left = TRUE ;
         Text = "~Rechts" ;
         Text [ ENGLISH ] = "Right" ;
@@ -180,7 +180,7 @@ TabPage RID_SVXPAGE_GRFCROP
     MetricField MF_RIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 38 , 30 ) ;
+        Pos = MAP_APPFONT ( 42 , 58 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -196,8 +196,8 @@ TabPage RID_SVXPAGE_GRFCROP
     };
     FixedText FT_TOP
     {
-        Pos = MAP_APPFONT ( 97 , 16 ) ;
-        Size = MAP_APPFONT ( 21 , 8 ) ;
+        Pos = MAP_APPFONT ( 94 , 44 ) ;
+        Size = MAP_APPFONT ( 28 , 8 ) ;
         Text = "~Oben" ;
         Text [ ENGLISH ] = "Top" ;
         Text [ english_us ] = "~Top" ;
@@ -224,7 +224,7 @@ TabPage RID_SVXPAGE_GRFCROP
     MetricField MF_TOP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 123 , 14 ) ;
+        Pos = MAP_APPFONT ( 124 , 42 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Text = "12,99" ;
         TabStop = TRUE ;
@@ -241,8 +241,8 @@ TabPage RID_SVXPAGE_GRFCROP
     };
     FixedText FT_BOTTOM
     {
-        Pos = MAP_APPFONT ( 97 , 32 ) ;
-        Size = MAP_APPFONT ( 21 , 8 ) ;
+        Pos = MAP_APPFONT ( 94 , 60 ) ;
+        Size = MAP_APPFONT ( 28 , 8 ) ;
         Left = TRUE ;
         Text = "~Unten" ;
         Text [ ENGLISH ] = "Bottom" ;
@@ -270,7 +270,7 @@ TabPage RID_SVXPAGE_GRFCROP
     MetricField MF_BOTTOM
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 123 , 30 ) ;
+        Pos = MAP_APPFONT ( 124 , 58 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -286,10 +286,10 @@ TabPage RID_SVXPAGE_GRFCROP
     };
     RadioButton RB_SIZECONST
     {
-        Pos = MAP_APPFONT ( 12 , 46 ) ;
-        Size = MAP_APPFONT ( 74 , 10 ) ;
-        Text = "Größe beibehal~ten" ;
-        Text [ ENGLISH ] = "Keep size" ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 152 , 10 ) ;
+        Text = "Bildgröße beibehal~ten" ;
+        Text [ ENGLISH ] = "Keep image si~ze" ;
         Text [ english_us ] = "Keep si~ze" ;
         Text [ italian ] = "Mantieni dimensione" ;
         Text [ spanish ] = "~Mantener el tamaño" ;
@@ -313,11 +313,11 @@ TabPage RID_SVXPAGE_GRFCROP
     };
     RadioButton RB_ZOOMCONST
     {
-        Pos = MAP_APPFONT ( 88 , 46 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 152 , 10 ) ;
         Check = TRUE ;
-        Text = "~Maßstab beibehalten" ;
-        Text [ ENGLISH ] = "Keep Zoom" ;
+        Text = "~Skalierung beibehalten" ;
+        Text [ ENGLISH ] = "Keep ~scale" ;
         Text [ english_us ] = "Keep ~scale" ;
         Text [ italian ] = "Mantieni scala" ;
         Text [ spanish ] = "Mantener la ~escala" ;
@@ -339,45 +339,18 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ catalan ] = "Mantener la ~escala";
         Text[ finnish ] = "Säilytä ~skaala";
     };
-    GroupBox GB_EXAMPLE
-    {
-        Pos = MAP_APPFONT ( 176 , 3 ) ;
-        Size = MAP_APPFONT ( 79 , 101 ) ;
-        Text = "Vorschau" ;
-        Text [ ENGLISH ] = "Example" ;
-        Text [ norwegian ] = "Eksempel" ;
-        Text [ italian ] = "Anteprima" ;
-        Text [ portuguese_brazilian ] = "Exemplo" ;
-        Text [ portuguese ] = "Previsualizar" ;
-        Text [ finnish ] = "Esikatselu" ;
-        Text [ danish ] = "Eksempel" ;
-        Text [ french ] = "Aperçu" ;
-        Text [ swedish ] = "Förhandsvisning" ;
-        Text [ dutch ] = "Voorbeeld" ;
-        Text [ spanish ] = "Previsualización" ;
-        Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ russian ] = "Ïðîñìîòð";
-        Text[ polish ] = "Podgl¹d";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ arabic ] = "ÇáãÚÇíäÉ";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ korean ] = "¹Ì¸®º¸±â";
-        Text[ turkish ] = "Önizleme";
-        Text[ catalan ] = "Previsualización";
-    };
     Window WN_BSP
     {
-        Pos = MAP_APPFONT ( 180 , 12 ) ;
-        Size = MAP_APPFONT ( 71 , 89 ) ;
+        Pos = MAP_APPFONT ( 176 , 6 ) ;
+        Size = MAP_APPFONT ( 78 , 78 ) ;
+        Border = TRUE ;
     };
-    GroupBox GB_ZOOM
+    FixedLine FL_ZOOM
     {
-        Pos = MAP_APPFONT ( 6, 62 ) ;
-        Size = MAP_APPFONT ( 164 , 42 ) ;
-        Text = "Maßstab" ;
-        Text [ ENGLISH ] = "Zoom" ;
+        Pos = MAP_APPFONT ( 6, 76 ) ;
+        Size = MAP_APPFONT ( 164 , 8 ) ;
+        Text = "Skalierung" ;
+        Text [ ENGLISH ] = "Scale" ;
         Text [ english_us ] = "Scale" ;
         Text [ italian ] = "Scala" ;
         Text [ spanish ] = "Escala" ;
@@ -402,10 +375,10 @@ TabPage RID_SVXPAGE_GRFCROP
     FixedText FT_WIDTHZOOM
     {
         Left = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 75 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 89 ) ;
+        Size = MAP_APPFONT ( 28 , 8 ) ;
         Text = "Bre~ite" ;
-        Text [ ENGLISH ] = "~Width" ;
+        Text [ ENGLISH ] = "W~idth" ;
         Text [ norwegian ] = "~Bredde" ;
         Text [ italian ] = "Largh." ;
         Text [ portuguese_brazilian ] = "~Largura" ;
@@ -416,7 +389,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ swedish ] = "Br~edd" ;
         Text [ dutch ] = "B~reedte" ;
         Text [ spanish ] = "A~ncho" ;
-        Text [ english_us ] = "~Width" ;
+        Text [ english_us ] = "W~idth" ;
         Text[ chinese_simplified ] = "¿í(~W)";
         Text[ russian ] = "Øèðèíà";
         Text[ polish ] = "Szer.";
@@ -431,7 +404,7 @@ TabPage RID_SVXPAGE_GRFCROP
     MetricField MF_WIDTHZOOM
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 123 , 73 ) ;
+        Pos = MAP_APPFONT ( 42 , 87 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Text = "12,99" ;
         TabStop = TRUE ;
@@ -450,10 +423,10 @@ TabPage RID_SVXPAGE_GRFCROP
     };
     FixedText FT_HEIGHTZOOM
     {
-        Pos = MAP_APPFONT ( 12 , 91) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 105 ) ;
+        Size = MAP_APPFONT ( 28 , 8 ) ;
         Text = "H~öhe" ;
-        Text [ ENGLISH ] = "H~eight" ;
+        Text [ ENGLISH ] = "Hei~ght" ;
         Text [ norwegian ] = "H~eight" ;
         Text [ italian ] = "Altezza" ;
         Text [ portuguese_brazilian ] = "A~ltura" ;
@@ -464,7 +437,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ swedish ] = "H~öjd" ;
         Text [ dutch ] = "H~oogte" ;
         Text [ spanish ] = "A~ltura" ;
-        Text [ english_us ] = "H~eight" ;
+        Text [ english_us ] = "Hei~ght" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "¸ß(~E)";
         Text[ russian ] = "Âûñîòà";
@@ -480,7 +453,7 @@ TabPage RID_SVXPAGE_GRFCROP
     MetricField MF_HEIGHTZOOM
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 123 , 89 ) ;
+        Pos = MAP_APPFONT ( 42 , 103 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -496,12 +469,12 @@ TabPage RID_SVXPAGE_GRFCROP
         CustomUnitText = "%" ;
         SpinSize = 10 ;
     };
-    GroupBox GB_SIZE
+    FixedLine FL_SIZE
     {
-        Pos = MAP_APPFONT ( 6 , 107 ) ;
-        Size = MAP_APPFONT ( 249 , 48 ) ;
-        Text = "Größe" ;
-        Text [ ENGLISH ] = "Size" ;
+        Pos = MAP_APPFONT ( 6 , 121 ) ;
+        Size = MAP_APPFONT ( 164 , 8 ) ;
+        Text = "Bildgröße" ;
+        Text [ ENGLISH ] = "Image size" ;
         Text [ norwegian ] = "Størrelse" ;
         Text [ italian ] = "Dimensione" ;
         Text [ portuguese_brazilian ] = "Tamanho" ;
@@ -526,8 +499,8 @@ TabPage RID_SVXPAGE_GRFCROP
     };
     FixedText FT_WIDTH
     {
-        Pos = MAP_APPFONT ( 12 , 120 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 134 ) ;
+        Size = MAP_APPFONT ( 28 , 8 ) ;
         Left = TRUE ;
         Text = "~Breite" ;
         Text [ ENGLISH ] = "~Width" ;
@@ -556,7 +529,7 @@ TabPage RID_SVXPAGE_GRFCROP
     MetricField MF_WIDTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 123 , 118 ) ;
+        Pos = MAP_APPFONT ( 42 , 132 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Text = "12,99" ;
         TabStop = TRUE ;
@@ -573,8 +546,8 @@ TabPage RID_SVXPAGE_GRFCROP
     };
     FixedText FT_HEIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 136 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 150 ) ;
+        Size = MAP_APPFONT ( 28 , 8 ) ;
         Left = TRUE ;
         Text = "Höh~e" ;
         Text [ ENGLISH ] = "H~eight" ;
@@ -603,7 +576,7 @@ TabPage RID_SVXPAGE_GRFCROP
     MetricField MF_HEIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 123 , 134 ) ;
+        Pos = MAP_APPFONT ( 42 , 148 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -619,17 +592,16 @@ TabPage RID_SVXPAGE_GRFCROP
     };
     FixedText FT_ORIG_SIZE
     {
-        Center = TRUE;
-        Pos = MAP_APPFONT ( 178 , 120 ) ;
+        Pos = MAP_APPFONT ( 176 , 132 ) ;
         Size = MAP_APPFONT ( 74 , 8 ) ;
     };
     PushButton PB_ORGSIZE
     {
-        Pos = MAP_APPFONT ( 190 , 133 ) ;
+        Pos = MAP_APPFONT ( 176 , 143 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text = "Ori~ginalgröße" ;
-        Text [ ENGLISH ] = "Real Size" ;
+        Text [ ENGLISH ] = "~Original size" ;
         Text [ english_us ] = "~Original Size" ;
         Text [ italian ] = "Dimens. ori~ginale" ;
         Text [ spanish ] = "Tamaño ori~ginal" ;

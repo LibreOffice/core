@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:27:40 $
+ *  last change: $Author: dr $ $Date: 2001-06-15 12:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
 #ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
 #endif
@@ -107,8 +104,9 @@ class SvxGrfCropPage : public SfxTabPage
         const Graphic& GetGraphic() const       { return aGrf; }
     };
 
-
-    GroupBox        aCropGB;
+    FixedLine       aCropFL;
+    RadioButton     aZoomConstRB;
+    RadioButton     aSizeConstRB;
     FixedText       aLeftFT;
     MetricField     aLeftMF;
     FixedText       aRightFT;
@@ -117,16 +115,14 @@ class SvxGrfCropPage : public SfxTabPage
     MetricField     aTopMF;
     FixedText       aBottomFT;
     MetricField     aBottomMF;
-    RadioButton     aSizeConstRB;
-    RadioButton     aZoomConstRB;
 
-    GroupBox        aZoomGB;
+    FixedLine       aZoomFL;
     FixedText       aWidthZoomFT;
     MetricField     aWidthZoomMF;
     FixedText       aHeightZoomFT;
     MetricField     aHeightZoomMF;
 
-    GroupBox        aSizeGB;
+    FixedLine       aSizeFL;
     FixedText       aWidthFT;
     MetricField     aWidthMF;
     FixedText       aHeightFT;
@@ -136,7 +132,6 @@ class SvxGrfCropPage : public SfxTabPage
 
     // Example
     SvxCropExample  aExampleWN;
-    GroupBox        aExampleGB;
 
 
     Timer           aTimer;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _bmpmask.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:06 $
+ *  last change: $Author: dr $ $Date: 2001-06-15 12:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,6 +469,7 @@ SvxBmpMask::SvxBmpMask( SfxBindings *pBindinx,
     aLbColor2.SetGetFocusHdl( LINK( pData, MaskData, FocusLbHdl ) );
     aLbColor3.SetGetFocusHdl( LINK( pData, MaskData, FocusLbHdl ) );
     aLbColor4.SetGetFocusHdl( LINK( pData, MaskData, FocusLbHdl ) );
+    aLbColorTrans.Disable();
 
     aSp1.SetValue( 10 );
     aSp2.SetValue( 10 );

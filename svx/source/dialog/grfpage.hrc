@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: dr $ $Date: 2001-06-15 12:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,9 @@
 #define FT_TOP              7
 #define FT_WIDTH            8
 #define FT_WIDTHZOOM        9
-#define GB_CROP             10
-#define GB_EXAMPLE          11
-#define GB_SIZE             12
-#define GB_ZOOM             13
+#define FL_CROP             10
+#define FL_SIZE             12
+#define FL_ZOOM             13
 #define MF_BOTTOM           14
 #define MF_HEIGHT           15
 #define MF_HEIGHTZOOM       16

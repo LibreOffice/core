@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-14 16:14:56 $
+ *  last change: $Author: dr $ $Date: 2001-06-15 12:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ void SvxSearchFormatDialog::PageCreated( USHORT nId, SfxTabPage& rPage )
 {
     switch ( nId )
     {
-        case RID_SVXPAGE_CHAR_STD:
+        case RID_SVXPAGE_CHAR_NAME:
         {
             const FontList* pAppFontList = 0;
             SfxObjectShell* pSh = SfxObjectShell::Current();
@@ -149,9 +149,9 @@ void SvxSearchFormatDialog::PageCreated( USHORT nId, SfxTabPage& rPage )
             }
 
             if ( pList )
-                ( (SvxCharStdPage&)rPage ).
+                ( (SvxCharNamePage&)rPage ).
                     SetFontList( SvxFontListItem( pList ) );
-            ( (SvxCharStdPage&)rPage ).EnableSearchMode();
+            ( (SvxCharNamePage&)rPage ).EnableSearchMode();
             break;
         }
 

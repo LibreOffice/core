@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:27:40 $
+ *  last change: $Author: dr $ $Date: 2001-06-15 12:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,17 +128,17 @@ inline long lcl_GetValue( MetricField& rMetric, FieldUnit eUnit )
 
 SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
     : SfxTabPage( pParent,  SVX_RES( RID_SVXPAGE_GRFCROP ), rSet ),
-    aSizeGB(        this, ResId( GB_SIZE    )),
+    aSizeFL(        this, ResId( FL_SIZE    )),
     aWidthFT(       this, ResId( FT_WIDTH   )),
     aWidthMF(       this, ResId( MF_WIDTH   )),
     aHeightFT(      this, ResId( FT_HEIGHT  )),
     aHeightMF(      this, ResId( MF_HEIGHT  )),
-    aZoomGB(        this, ResId( GB_ZOOM    )),
+    aZoomFL(        this, ResId( FL_ZOOM    )),
     aWidthZoomFT(   this, ResId( FT_WIDTHZOOM )),
     aWidthZoomMF(   this, ResId( MF_WIDTHZOOM )),
     aHeightZoomFT(  this, ResId( FT_HEIGHTZOOM)),
     aHeightZoomMF(  this, ResId( MF_HEIGHTZOOM)),
-    aCropGB(        this, ResId( GB_CROP    )),
+    aCropFL(        this, ResId( FL_CROP    )),
     aLeftFT(        this, ResId( FT_LEFT    )),
     aLeftMF(        this, ResId( MF_LEFT    )),
     aRightFT(       this, ResId( FT_RIGHT   )),
@@ -150,7 +150,6 @@ SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
     aSizeConstRB(   this, ResId( RB_SIZECONST)),
     aZoomConstRB(   this, ResId( RB_ZOOMCONST)),
     aExampleWN(     this, ResId( WN_BSP     )),
-    aExampleGB(     this, ResId( GB_EXAMPLE )),
     aOrigSizeFT(    this, ResId(FT_ORIG_SIZE)),
     aOrigSizePB(    this, ResId( PB_ORGSIZE )),
     pLastCropField(0),
@@ -161,7 +160,7 @@ SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
 
     SetExchangeSupport();
 
-    // set the correct Metrik
+    // set the correct metric
     const FieldUnit eMetric = GetModuleFieldUnit( &rSet );
 
     SetFieldUnit( aWidthMF, eMetric );
@@ -852,16 +851,21 @@ SvxGrfCropPage::SvxCropExample::SvxCropExample( Window* pPar,
                             MapMode( MAP_TWIP ), GetMapMode() ))
 
 {
+    SetBorderStyle( WINDOW_BORDER_MONO );
 }
 
 void SvxGrfCropPage::SvxCropExample::Paint( const Rectangle& rRect )
 {
     Size aWinSize( PixelToLogic(GetOutputSizePixel() ));
-    SetLineColor( Color( COL_GRAY ));
+    SetLineColor();
+    SetFillColor( Color( COL_WHITE ) );
+    SetRasterOp( ROP_OVERPAINT );
+    DrawRect( Rectangle( Point(), aWinSize ) );
+
+    SetLineColor( Color( COL_WHITE ) );
     Rectangle aRect(Point((aWinSize.Width() - aFrameSize.Width())/2,
                           (aWinSize.Height() - aFrameSize.Height())/2),
                           aFrameSize );
-    SetRasterOp( ROP_OVERPAINT );
     aGrf.Draw( this,  aRect.TopLeft(), aRect.GetSize() );
 
     Size aSz( 2, 0 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:14:51 $
+ *  last change: $Author: dr $ $Date: 2001-06-15 12:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     Hide = TRUE ;
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 163 , 133 ) ;
+    Size = MAP_APPFONT ( 163 , 126 ) ;
     Text = "Pipette" ;
     Text [ ENGLISH ] = "Eyedropper" ;
     Sizeable = FALSE ;
@@ -82,10 +82,10 @@ DockingWindow RID_SVXDLG_BMPMASK
     Zoomable = TRUE ;
     Dockable = TRUE ;
     EnableResizing = TRUE ;
-    GroupBox GRP_Q
+    FixedLine GRP_Q
     {
-        Pos = MAP_APPFONT ( 6 , 23 ) ;
-        Size = MAP_APPFONT ( 151 , 104 ) ;
+        Pos = MAP_APPFONT ( 6 , 26 ) ;
+        Size = MAP_APPFONT ( 151 , 8 ) ;
         Text = "Farben" ;
         Text [ ENGLISH ] = "Colors" ;
         Text [ dutch ] = "Kleuren" ;
@@ -112,8 +112,8 @@ DockingWindow RID_SVXDLG_BMPMASK
     };
     FixedText FT_1
     {
-        Pos = MAP_APPFONT ( 12 , 34 ) ;
-        Size = MAP_APPFONT ( 38 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 37 ) ;
+        Size = MAP_APPFONT ( 38 , 8 ) ;
         Text = "Quellfarbe" ;
         Text [ ENGLISH ] = "Source color" ;
         Text [ dutch ] = "Uitgangskleur" ;
@@ -140,8 +140,8 @@ DockingWindow RID_SVXDLG_BMPMASK
     };
     FixedText FT_2
     {
-        Pos = MAP_APPFONT ( 51 , 34 ) ;
-        Size = MAP_APPFONT ( 35 , 12 ) ;
+        Pos = MAP_APPFONT ( 51 , 37 ) ;
+        Size = MAP_APPFONT ( 35 , 8 ) ;
         Text = "Toleranz" ;
         Text [ ENGLISH ] = "Tolerance" ;
         Text [ english_us ] = "Tolerance" ;
@@ -168,8 +168,8 @@ DockingWindow RID_SVXDLG_BMPMASK
     };
     FixedText FT_3
     {
-        Pos = MAP_APPFONT ( 87 , 34 ) ;
-        Size = MAP_APPFONT ( 64 , 12 ) ;
+        Pos = MAP_APPFONT ( 87 , 37 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
         Text = "Ersetzen durch..." ;
         Text [ ENGLISH ] = "Replace with..." ;
         Text [ english_us ] = "Replace with..." ;
@@ -196,41 +196,41 @@ DockingWindow RID_SVXDLG_BMPMASK
     };
     CheckBox CBX_1
     {
-        Pos = MAP_APPFONT ( 12 , 49 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 50 ) ;
+        Size = MAP_APPFONT ( 10 , 10 ) ;
         TabStop = TRUE ;
     };
     CheckBox CBX_2
     {
-        Pos = MAP_APPFONT ( 12 , 64 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 65 ) ;
+        Size = MAP_APPFONT ( 10 , 10 ) ;
         TabStop = TRUE ;
     };
     CheckBox CBX_3
     {
-        Pos = MAP_APPFONT ( 12 , 79 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 80 ) ;
+        Size = MAP_APPFONT ( 10 , 10 ) ;
         TabStop = TRUE ;
     };
     CheckBox CBX_4
     {
-        Pos = MAP_APPFONT ( 12 , 94 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 95 ) ;
+        Size = MAP_APPFONT ( 10 , 10 ) ;
         TabStop = TRUE ;
     };
     Control QCOL_1
     {
         HelpId = HID_BMPMASK_CTL_QCOL_1 ;
-        Pos = MAP_APPFONT ( 24 , 49 ) ;
+        Pos = MAP_APPFONT ( 24 , 48 ) ;
         Size = MAP_APPFONT ( 24 , 57 ) ;
         Border = TRUE ;
     };
     CheckBox CBX_TRANS
     {
-        Pos = MAP_APPFONT ( 12 , 109 ) ;
-        Size = MAP_APPFONT ( 67 , 12 ) ;
-        Text = "Transparenz" ;
-        Text [ ENGLISH ] = "Transparency" ;
+        Pos = MAP_APPFONT ( 12 , 110 ) ;
+        Size = MAP_APPFONT ( 71 , 10 ) ;
+        Text = "~Transparenz" ;
+        Text [ ENGLISH ] = "~Transparency" ;
         TabStop = TRUE ;
         Text [ english_us ] = "Tr~ansparency" ;
         Text [ italian ] = "Trasparenza" ;
@@ -257,8 +257,8 @@ DockingWindow RID_SVXDLG_BMPMASK
     MetricField SP_1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 51 , 49 ) ;
-        Size = MAP_APPFONT ( 28 , 12 ) ;
+        Pos = MAP_APPFONT ( 51 , 48 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -271,8 +271,8 @@ DockingWindow RID_SVXDLG_BMPMASK
     MetricField SP_2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 51 , 64 ) ;
-        Size = MAP_APPFONT ( 28 , 12 ) ;
+        Pos = MAP_APPFONT ( 51 , 63 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -285,8 +285,8 @@ DockingWindow RID_SVXDLG_BMPMASK
     MetricField SP_3
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 51 , 79 ) ;
-        Size = MAP_APPFONT ( 28 , 12 ) ;
+        Pos = MAP_APPFONT ( 51 , 78 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -299,8 +299,8 @@ DockingWindow RID_SVXDLG_BMPMASK
     MetricField SP_4
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 51 , 94 ) ;
-        Size = MAP_APPFONT ( 28 , 12 ) ;
+        Pos = MAP_APPFONT ( 51 , 93 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -314,8 +314,8 @@ DockingWindow RID_SVXDLG_BMPMASK
     {
         Pos = MAP_APPFONT ( 93 , 6 ) ;
         Size = MAP_APPFONT ( 64 , 14 ) ;
-        Text = "Ersetzen" ;
-        Text [ ENGLISH ] = "Replace" ;
+        Text = "~Ersetzen" ;
+        Text [ ENGLISH ] = "~Replace" ;
         Text [ dutch ] = "Vervangen" ;
         Text [ english_us ] = "~Replace" ;
         Text [ italian ] = "Sostituisci" ;
@@ -341,7 +341,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     ListBox LB_1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 87 , 49 ) ;
+        Pos = MAP_APPFONT ( 87 , 48 ) ;
         Size = MAP_APPFONT ( 64 , 75 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -350,7 +350,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     ListBox LB_2
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 87 , 64 ) ;
+        Pos = MAP_APPFONT ( 87 , 63 ) ;
         Size = MAP_APPFONT ( 64 , 75 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -359,7 +359,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     ListBox LB_3
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 87 , 79 ) ;
+        Pos = MAP_APPFONT ( 87 , 78 ) ;
         Size = MAP_APPFONT ( 64 , 75 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -368,7 +368,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     ListBox LB_4
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 87 , 94 ) ;
+        Pos = MAP_APPFONT ( 87 , 93 ) ;
         Size = MAP_APPFONT ( 64 , 75 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -377,7 +377,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     ListBox LB_TRANS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 87 , 109 ) ;
+        Pos = MAP_APPFONT ( 87 , 108 ) ;
         Size = MAP_APPFONT ( 64 , 75 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -386,7 +386,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     ToolBox TBX_PIPETTE
     {
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Pos = MAP_APPFONT ( 6 , 7 ) ;
         ItemList =
         {
             ToolBoxItem
@@ -429,7 +429,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     {
         HelpId = HID_BMPMASK_CTL_PIPETTE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 23 , 6 ) ;
+        Pos = MAP_APPFONT ( 22 , 6 ) ;
         Size = MAP_APPFONT ( 43 , 14 ) ;
     };
     Text [ english_us ] = "Eyedropper" ;
