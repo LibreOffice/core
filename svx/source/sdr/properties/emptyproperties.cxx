@@ -2,9 +2,9 @@
  *
  *  $RCSfile: emptyproperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:50:03 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,9 @@ namespace sdr
         :   BaseProperties(rProps, rObj),
             mpEmptyItemSet(0L)
         {
-            DBG_ASSERT(sal_False, "EmptyProperties::EmptyProperties() copy constructor should never be called (!)");
+            // #115593#
+            // do not gererate an assert, else derivations like PageProperties will generate an assert
+            // using the Clone() operator path.
         }
 
         EmptyProperties::~EmptyProperties()
