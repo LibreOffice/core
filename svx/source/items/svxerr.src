@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-19 21:09:32 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 21:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,7 @@ Resource RID_SVXERRCODE
         Text[ dutch ] = "Een thesaurus voor de ingestelde taal is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal";
         Text[ chinese_simplified ] = "您所设定的语言没有相应的词典。\n请您检查安装，如有必要，请您安装所要使用的语言版本。";
         Text[ greek ] = "��� ������� ���������� �������� ������ ��� ��� ���������� \n������. �������� ������� ��� ����������� ���, �� ���������, ��������� ��� ����� ";
-        Text[ korean ] = "설정된 언어에 대한 동의어 사전을 이용할 수 없습니다.\n설치 상태를 검사한 다음 필요하다면 원하는 언어를 설치하십시오";
+        Text[ korean ] = "설정된 언어에 대한 동의어 사전을 사용할 수 없습니다.\n설치 상태를 검사한 다음 필요하면 원하는 언어를 설치하십시오";
         Text[ turkish ] = "Ayarlanan dile ili�kin e�anlaml�lar mevcut de�il.\nL�tfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No hay ning�n diccionario de sin�nimos disponible para el idioma seleccionado.\nExamine por favor su instalaci�n e instale en caso dado el idioma deseado.";
@@ -291,11 +291,11 @@ Resource RID_SVXERRCODE
         TEXT[ finnish ] = "$(ARG1) ei ole k?ytett?viss? oikeinkirjoituksen tarkistusta varten.\nTarkista asennetut osat ja asenna haluttu kieli.\n";
         TEXT[ italian ] = "$(ARG1) non � supportato per il controllo oppure non � attivato al momento.\nControllate l'installazione ed installate, se necessario, la lingua desiderata\noppure impostate il modulo linquistico corrispondente in 'Strumenti - Opzioni - Impostazioni lingua - Linguistica'.";
         TEXT[ danish ] = "$(ARG1) st�r ikke til r�dighed for kontrollen.\nKontroller venligst din installation og installer i givet fald det �nskede sprog.";
-        TEXT[ swedish ] = "$(ARG1) underst�ds inte av kontrollen resp., �r inte aktiverat f�r n�rvarande.\nKontrollera installationen och installera eventuellt den n�dv�ndiga spr�kmodulen\nresp. aktivera motsvarande spr�kmodul i \"Verktyg - Alternativ - Spr�kinst�llningar - Lingvistik\".";
+        TEXT[ swedish ] = "$(ARG1) st�ds inte av kontrollen resp., �r inte aktiverat f�r n�rvarande.\nKontrollera installationen och installera eventuellt den n�dv�ndiga spr�kmodulen\nresp. aktivera motsvarande spr�kmodul under \"Verktyg - Alternativ - Spr�kinst�llningar - Lingvistik\".";
         TEXT[ polish ] = "$(ARG1) nie jest obs�ugiwany przez funkcj� sprawdzania pisowni lub nie zosta� uaktywniony.\nNale�y sprawdzi� instalacj� i zainstalowa� ewentualnie wymagany modu� j�zyka\nlub uaktywni� go po wybraniu sekwencji 'Narz�dzia - Opcje - Konfiguracja j�zyk�w - Pisownia'.";
         TEXT[ portuguese_brazilian ] = "$(ARG1) ist f? die Pr?ung nicht verf?bar.\n?berpr?en Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gew?schte Sprache.";
         TEXT[ japanese ] = "$(ARG1)のｽﾍﾟﾙﾁｪｯｸは支援されていません。あるいは現在ｱｸﾃｨﾌﾞではありません。\nｲﾝｽﾄｰﾙされているﾌﾟﾛｸﾞﾗﾑをﾁｪｯｸして、必要に応じてｽﾍﾟﾙﾁｪｯｸに必要な言語をｲﾝｽﾄ-ﾙするか、\nﾒﾆｭｰ ﾂｰﾙ → ｵﾌﾟｼｮﾝ → 言語設定 → 文章校正で必要な言語ﾓｼﾞｭｰﾙをｵﾝにします。";
-        TEXT[ korean ] = "$(ARG1)을(를) 맞춤법 검사에 이용할 수 없습니다.\n 사용자의 설치를 점검한 다음, 필요시 요구되는  언어를 설치하십시오.";
+        TEXT[ korean ] = "$(ARG1)을(를) 맞춤법 검사에 이용할 수 없습니다.\n 사용자의 설치를 점검한 다음 필요하면 사용할 언어를 설치하십시오.";
         TEXT[ chinese_simplified ] = "$(ARG1)不支持拼写检查功能或者目前未启用该功能。\n请您检查安装，如有必要请安装所需的语言模块\n或者借助菜单命令“工具 - 选项... - 语言设定 - 语言规则”启用相应的语言模块。";
         TEXT[ chinese_traditional ] = "$(ARG1) 不受支援或沒有被啓動。\n請檢查程式的安裝。若有必要請安裝所需的語言模塊或按功能表<工具> - <選項> ，在<語言規則>處設定要用的語言模塊。";
         TEXT[ turkish ] = "$(ARG1) yaz�m denetiminde kullan�lam�yor.\nL�tfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
@@ -518,7 +518,7 @@ Resource RID_SVXERRCODE
         Text[ polish ] = "Warstwa formularza nie zosta�a za�adowana, poniewa� nie mo�na by�o utworzy� wymaganych serwis�w IO (stardiv.uno.io.*)";
         Text[ portuguese_brazilian ] = "The form layer wasn't loaded as neccessary io-services (stardiv.uno.io.*) could not be instantiated";
         Text[ japanese ] = "IOｻｰﾋﾞｽ(stardiv.uno.io.*)がｲﾝｽﾄｰﾙできなかったため、ﾌｫｰﾑ層は読み込まれませんでした。";
-        Text[ korean ] = "필요한 IO서비스(stardiv.uno.io.*)를 인스턴스생성하지 못했기 때문에 폼 계층이 로드되지 않았습니다.";
+        Text[ korean ] = "필요한 IO 서비스(stardiv.uno.io.*)의 인스턴스를 생성하지 못했으므로 양식 계층이 로드되지 않았습니다.";
         Text[ chinese_simplified ] = "因为无法安装需要的 IO 服务(stardiv.uno.io.*)，所以不能装入表单分层信息";
         Text[ chinese_traditional ] = "因為沒有安裝必要的 IO 服務(stardiv.uno.io.*)而無法載入表單層次。";
         Text[ arabic ] = "�� ��� ����� ���� ��������ɡ �� ���� ����� ����� IO ������� (stardiv.uno.io.*)";
@@ -543,7 +543,7 @@ Resource RID_SVXERRCODE
         Text[ polish ] = "Warstwa formularza nie zosta�a zapisana, poniewa� nie mo�na by�o utworzy� wymaganych serwis�w IO (stardiv.uno.io.*)";
         Text[ portuguese_brazilian ] = "The form layer wasn't written as neccessary io-services (stardiv.uno.io.*) could not be instantiated";
         Text[ japanese ] = "IOｻｰﾋﾞｽ(stardiv.uno.io.*)がｲﾝｽﾄｰﾙできなかったため、ﾌｫｰﾑ層は書きこめませんでした。";
-        Text[ korean ] = "필요한 IO서비스(stardiv.uno.io.*)를 인스턴스생성하지 못했기 때문에 폼 계층이 기록되지 않았습니다.";
+        Text[ korean ] = "필요한 IO 서비스(stardiv.uno.io.*)의 인스턴스를 생성하지 못했으므로 양식 계층이 작성되지 않았습니다.";
         Text[ chinese_simplified ] = "因为无法安装需要的 IO 服务(stardiv.uno.io.*)，所以不能写入表单分层信息";
         Text[ chinese_traditional ] = "因為沒有安裝必要的 IO 服務(stardiv.uno.io.*)而無法寫入表單層次。";
         Text[ arabic ] = "�� ��� ����� ���� ��������ɡ �� ���� ����� ����� IO ������� (stardiv.uno.io.*)";
@@ -618,7 +618,7 @@ Resource RID_SVXERRCODE
         Text[ polish ] = "Wyst�pi� b��d przy odczycie wypunktowania. Nie mo�na by�o za�adowa� wszystkich wypunktowa�.";
         Text[ portuguese_brazilian ] = "There occurred an error during reading a bullet. Not all Bullets coud be read correctly";
         Text[ japanese ] = "箇条書きを読み込むときにｴﾗｰが発生しました。すべての箇条書きは読み込めませんでした。";
-        Text[ korean ] = "글머리기호를 읽을 때 오류가 발생했습니다. 글머리기호를 모두 로드하지는 못했습니다.";
+        Text[ korean ] = "글머리 기호를 읽을 때 오류가 발생했습니다. 글머리 기호를 모두 로드하지는 못했습니다.";
         Text[ chinese_simplified ] = "在读取一个项目符号时发生错误。无法装入全部的项目符号。";
         Text[ chinese_traditional ] = "在讀取一個項目符號時發生錯誤。無法載入所有的項目符號。";
         Text[ arabic ] = "��� ��� ����� ����� ���� ������ �������. ���� ����� �� ������ �������.";
@@ -646,7 +646,7 @@ Resource RID_SVXERRCODE
         TEXT[ polish ] = "Wszelkie modyfikacje dotycz�ce Basic Code dokumentu b�d� anulowane. Zapisany zostanie za to oryginalny kod makro VBA.";
         TEXT[ portuguese_brazilian ] = "The Basic-Code is modified and so it can not be saved as original.";
         TEXT[ japanese ] = "Basic Code ﾄﾞｷｭﾒﾝﾄのすべての変更は失われました。ｵﾘｼﾞﾅﾙの VBA Makrocodeがその代りに保存されます。";
-        TEXT[ korean ] = "Basic-Code에 대한 모든 변경사항은 상실됩니다.  대신 VBA 매크로 코드가 저장됩니다.";
+        TEXT[ korean ] = "Basic 코드에 대한 모든 변경 사항은 손실됩니다.  대신 VBA  매크로 코드가 저장됩니다.";
         TEXT[ chinese_simplified ] = "丢失了对Basic Code文档进行的更改。存盘的只是源VBA宏码。";
         TEXT[ chinese_traditional ] = "文件的 Basic 碼所有變更已經流失。已經儲存源 VBA 巨集。";
         TEXT[ turkish ] = "Basic Code belgesindeki t�m de�i�iklikler kaybolacak. Bunun yerine orjinal VBA Macrocode kaydedilecek.";
@@ -672,7 +672,7 @@ Resource RID_SVXERRCODE
         TEXT[ polish ] = "Zawarty w dokumencie oryginalny VBA Basic Code nie zostanie zapisany.";
         TEXT[ portuguese_brazilian ] = "The original VBA basic code contained in the document will no be saved.";
         TEXT[ japanese ] = "ﾄﾞｷｭﾒﾝﾄに含まれているｵﾘｼﾞﾅﾙの VBA Basic Code は保存されません。";
-        TEXT[ korean ] = "문서에 포함되어 있는 원래 VBA basic code는  저장되지 않습니다.";
+        TEXT[ korean ] = "문서에 포함되어 있는 원래 VBA 기본 코드는  저장되지 않습니다.";
         TEXT[ chinese_simplified ] = "不会存盘文档中含有的源VBA Basic Code。";
         TEXT[ chinese_traditional ] = "文件含有的源 VBA basic 碼不會被儲存。";
         TEXT[ turkish ] = "Belgede bulunan ilk VBA basic kodu kaydedilmeyecek.";
@@ -682,6 +682,7 @@ Resource RID_SVXERRCODE
     };
 };
  // ********************************************************************** EOF
+
 
 
 
