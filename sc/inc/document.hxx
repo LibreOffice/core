@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: er $ $Date: 2001-02-14 14:21:05 $
+ *  last change: $Author: nn $ $Date: 2001-02-16 16:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@ class ScTokenArray;
 class ScValidationData;
 class ScValidationDataList;
 class ScViewOptions;
+class StrCollection;
 class TypedStrCollection;
 class ScChangeTrack;
 class ScFieldEditEngine;
@@ -352,6 +353,7 @@ private:
     ScFormulaCell*      pEOFormulaTrack;                // BrodcastTrack Ende, letzte Zelle
     ScBroadcastAreaSlotMachine* pBASM;                  // BroadcastAreas
     ScChartListenerCollection* pChartListenerCollection;
+    StrCollection*      pOtherObjects;                  // non-chart OLE objects
     SvMemoryStream*     pClipData;
     ScDetOpList*        pDetOpList;
     ScChangeTrack*      pChangeTrack;

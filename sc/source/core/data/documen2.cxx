@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-02-14 14:22:11 $
+ *  last change: $Author: nn $ $Date: 2001-02-16 16:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,6 +347,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         bChartListenerCollectionNeedsUpdate( FALSE ),
         bHasForcedFormulas( FALSE ),
         nVisSpellState( 0 ),
+        pOtherObjects( NULL ),
         pClipData( NULL ),
         nFormulaCodeInTree(0),
         nInterpretLevel(0),
@@ -531,6 +532,7 @@ ScDocument::~ScDocument()
 
     DeleteColorTable();
     delete pScriptTypeData;
+    delete pOtherObjects;
 }
 
 void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-09 18:05:08 $
+ *  last change: $Author: nn $ $Date: 2001-02-16 16:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -625,6 +625,16 @@ SchMemChart* ScDocument::FindChartData(const String& rName, BOOL bForModify)
 }
 
 
+BOOL lcl_StringInCollection( const StrCollection* pColl, const String& rStr )
+{
+    if ( !pColl )
+        return FALSE;
+
+    StrData aData( rStr );
+    USHORT nDummy;
+    return pColl->Search( &aData, nDummy );
+}
+
 void ScDocument::UpdateChartListenerCollection()
 {
     bChartListenerCollectionNeedsUpdate = FALSE;
@@ -648,27 +658,35 @@ void ScDocument::UpdateChartListenerCollection()
                 {
                     if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
                     {
-                        aCLSearcher.SetString( ((SdrOle2Obj*)pObject)->GetName() );
+                        String aObjName = ((SdrOle2Obj*)pObject)->GetName();
+                        aCLSearcher.SetString( aObjName );
                         USHORT nIndex;
                         if ( pChartListenerCollection->Search( &aCLSearcher, nIndex ) )
                         {
                             ((ScChartListener*) (pChartListenerCollection->
                                 At( nIndex )))->SetUsed( TRUE );
                         }
+                        else if ( lcl_StringInCollection( pOtherObjects, aObjName ) )
+                        {
+                            // non-chart OLE object -> don't touch
+                        }
                         else
                         {
-                            //  SchDLL::GetChartData zieht sofort die Chart-DLL an,
-                            //  darum vorher SchModuleDummy::HasID testen!
+                            //  SchDLL::GetChartData always loads the chart dll,
+                            //  so SchModuleDummy::HasID must be tested before
 
+                            BOOL bIsChart = FALSE;
                             SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
                             if ( aIPObj.Is() && SchModuleDummy::HasID( *aIPObj->GetSvFactory() ) )
                             {
                                 SchMemChart* pChartData = SchDLL::GetChartData(aIPObj);
                                 if ( pChartData )
                                 {
+                                    bIsChart = TRUE;
+
                                     ScChartArray aArray( this, *pChartData );
                                     ScChartListener* pCL = new ScChartListener(
-                                        ((SdrOle2Obj*)pObject)->GetName(),
+                                        aObjName,
                                         this, aArray.GetRangeList() );
                                     pChartListenerCollection->Insert( pCL );
                                     pCL->StartListeningTo();
@@ -707,6 +725,17 @@ void ScDocument::UpdateChartListenerCollection()
 #endif
 #endif
                                 }
+                            }
+                            if (!bIsChart)
+                            {
+                                //  put into list of other ole objects, so the object doesn't have to
+                                //  be swapped in the next time UpdateChartListenerCollection is called
+                                //! remove names when objects are no longer there?
+                                //  (object names aren't used again before reloading the document)
+
+                                if (!pOtherObjects)
+                                    pOtherObjects = new StrCollection;
+                                pOtherObjects->Insert( new StrData( aObjName ) );
                             }
                         }
                     }
