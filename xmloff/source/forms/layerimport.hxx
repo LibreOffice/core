@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-02 15:58:22 $
+ *  last change: $Author: fs $ $Date: 2001-01-24 09:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,12 +160,14 @@ namespace xmloff
             const ::rtl::OUString& _rReferringControls);
 
         // IFormsImportContext
-        virtual IControlIdMap&          getControlIdMap();
-        virtual OAttribute2Property&    getAttributeMap();
+        virtual IControlIdMap&              getControlIdMap();
+        virtual OAttribute2Property&        getAttributeMap();
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                        getServiceFactory();
-        virtual SvXMLImport&            getGlobalContext();
-        const SvXMLStyleContext*        getStyleElement(const ::rtl::OUString& _rStyleName) const;
+                                            getServiceFactory();
+        virtual SvXMLImport&                getGlobalContext();
+        virtual const SvXMLStyleContext*    getStyleElement(const ::rtl::OUString& _rStyleName) const;
+        virtual void                        enterEventContext();
+        virtual void                        leaveEventContext();
 
     protected:
         OFormLayerXMLImport_Impl(SvXMLImport& _rImporter);
@@ -216,6 +218,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/01/02 15:58:22  fs
+ *  event ex- & import
+ *
  *  Revision 1.4  2000/12/18 15:14:35  fs
  *  some changes ... now exporting/importing styles
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-02 15:58:22 $
+ *  last change: $Author: fs $ $Date: 2001-01-24 09:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,9 +287,6 @@ namespace xmloff
         ::vos::ORef< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper(aControlStyleProperties, m_xPropertyHandlerFactory.getBodyPtr());
         m_xImportMapper = new SvXMLImportPropertyMapper(xStylePropertiesMapper.getBodyPtr());
 
-        // add our event table to the event import helper
-        m_rImporter.GetEventImport().AddTranslationTable(g_pFormsEventTranslation);
-
         // 'initialize'
         m_aCurrentPageIds = m_aControlIds.end();
     }
@@ -322,6 +319,21 @@ namespace xmloff
     SvXMLImport& OFormLayerXMLImport_Impl::getGlobalContext()
     {
         return m_rImporter;
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLImport_Impl::enterEventContext()
+    {
+        // install our own translation table. We need to disable the other tables because of name conflicts.
+        m_rImporter.GetEventImport().PushTranslationTable();
+        m_rImporter.GetEventImport().AddTranslationTable(g_pFormsEventTranslation);
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLImport_Impl::leaveEventContext()
+    {
+        // install the original event tables.
+        m_rImporter.GetEventImport().PopTranslationTable();
     }
 
     //---------------------------------------------------------------------
@@ -493,6 +505,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/01/02 15:58:22  fs
+ *  event ex- & import
+ *
  *  Revision 1.5  2000/12/19 12:13:57  fs
  *  some changes ... now the exported styles are XSL conform
  *
