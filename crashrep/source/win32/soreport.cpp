@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soreport.cpp,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 15:16:35 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <psapi.h>
 
 #include <shellapi.h>
+#include <shlobj.h>
 
 #define _UNICODE
 #include <tchar.h>
@@ -136,6 +137,8 @@ CHAR    g_szReportFileNameA[MAX_PATH] = "";
 
 
 bool    g_bNoUserInterface = false;
+bool    g_bSendReport = false;
+bool    g_bLoadReport = false;
 
 #define REPORT_SERVER   g_szReportServerA
 #define REPORT_PORT     g_uReportPort
@@ -172,6 +175,50 @@ static FILE *_tmpfile(void)
                 fp = _fdopen( fd, "w+b" );
             }
         }
+    }
+
+    return fp;
+}
+//***************************************************************************
+
+#define SOFFICE_USER_PATH   "StarOffice8\\user\\crashdata"
+
+static BOOL GetCrashDataPath( LPTSTR szBuffer )
+{
+    if ( SHGetSpecialFolderPath( NULL, szBuffer, CSIDL_APPDATA, TRUE ) )
+    {
+        if ( szBuffer[0] && '\\' != szBuffer[_tcslen(szBuffer)-1] )
+            _tcscat( szBuffer, _T("\\") );
+
+        _tcscat( szBuffer, _T(SOFFICE_USER_PATH) );
+
+        CreateDirectory( szBuffer, NULL );
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+
+static FILE *_open_reportfile( const char *lpExt, const char *lpMode )
+{
+    FILE    *fp = NULL;
+    CHAR    szAppDataPath[MAX_PATH] = "";
+
+    if ( SHGetSpecialFolderPathA( NULL, szAppDataPath, CSIDL_APPDATA, TRUE ) )
+    {
+        if ( szAppDataPath[0] && '\\' != szAppDataPath[strlen(szAppDataPath)-1] )
+            strcat( szAppDataPath, "\\" );
+
+        strcat( szAppDataPath, SOFFICE_USER_PATH );
+
+        CreateDirectoryA( szAppDataPath, NULL );
+
+        strcat( szAppDataPath, "\\crashdat" );
+        strcat( szAppDataPath, lpExt );
+
+        fp = fopen( szAppDataPath, lpMode );
     }
 
     return fp;
@@ -1760,6 +1807,35 @@ bool WriteChecksumFile( FILE *fchksum, const hash_map< string, string >& rLibrar
 
 //***************************************************************************
 
+BOOL FindDumpFile()
+{
+    TCHAR   szFileName[MAX_PATH];
+
+    if ( GetCrashDataPath( szFileName ) )
+    {
+        _tcscat( szFileName, _T("\\crashdat.dmp") );
+
+        HANDLE  hFile =  CreateFile(
+            szFileName,
+            GENERIC_READ,
+            0, NULL,
+            OPEN_EXISTING,
+            FILE_ATTRIBUTE_NORMAL, NULL );
+
+        if ( hFile )
+        {
+            CloseHandle( hFile );
+
+            WideCharToMultiByte( CP_ACP, 0, szFileName, -1, g_szDumpFileNameA, MAX_PATH, NULL, NULL );
+            _tcscpy( g_szDumpFileName, szFileName );
+
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
 BOOL WriteDumpFile( DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers, DWORD dwThreadId )
 {
     BOOL    fSuccess = FALSE;
@@ -1789,13 +1865,22 @@ BOOL WriteDumpFile( DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers, D
     {
         TCHAR   szTempPath[MAX_PATH];
 
-        if ( GetTempPath( elementsof(szTempPath), szTempPath ) )
+//      if ( GetTempPath( elementsof(szTempPath), szTempPath ) )
+        if ( GetCrashDataPath( szTempPath ) )
         {
             TCHAR   szFileName[MAX_PATH];
 
-            if ( GetTempFileName( szTempPath, TEXT("DMP"), 0, szFileName ) )
+//          if ( GetTempFileName( szTempPath, TEXT("DMP"), 0, szFileName ) )
+            _tcscpy( szFileName, szTempPath );
+            _tcscat( szFileName, _T("\\crashdat.dmp") );
             {
-                HANDLE  hFile =  CreateFile( szFileName, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+                HANDLE  hFile =  CreateFile(
+                    szFileName,
+                    GENERIC_READ | GENERIC_WRITE,
+                    0, NULL,
+//                  OPEN_EXISTING,
+                    CREATE_ALWAYS,
+                    FILE_ATTRIBUTE_NORMAL, NULL );
 
                 if ( hFile )
                 {
@@ -1957,6 +2042,16 @@ static bool ParseCommandArgs( LPDWORD pdwProcessId, PEXCEPTION_POINTERS* ppExcep
         {
             g_bNoUserInterface = true;
         }
+        else if ( 0 == _tcsicmp( argv[argn], _T("-send") ) ||
+                  0 == _tcsicmp( argv[argn], _T("/send") ) )
+        {
+            g_bSendReport = true;
+        }
+        else if ( 0 == _tcsicmp( argv[argn], _T("-load") ) ||
+                  0 == _tcsicmp( argv[argn], _T("/load") ) )
+        {
+            g_bLoadReport = true;
+        }
         else // treat parameter as image path
         {
             TCHAR   szImagePath[MAX_PATH];
@@ -1974,7 +2069,7 @@ static bool ParseCommandArgs( LPDWORD pdwProcessId, PEXCEPTION_POINTERS* ppExcep
         }
     }
 
-    if ( !*pdwProcessId )
+    if ( !*pdwProcessId && !g_bLoadReport )
     {
         TCHAR   szImagePath[MAX_PATH];
         LPTSTR  lpImageName;
@@ -2661,47 +2756,103 @@ int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE, LPTSTR lpCmdLine, int )
     Params.ReadFromRegistry();
     Params.ReadFromEnvironment();
 
-    if ( ReadBootstrapParams( Params ) && ParseCommandArgs( &dwProcessId, &pExceptionPointers, &dwThreadId ) && dwProcessId )
+    if ( ReadBootstrapParams( Params ) &&
+        ParseCommandArgs( &dwProcessId, &pExceptionPointers, &dwThreadId ) )
     {
-        if ( WriteDumpFile( dwProcessId, pExceptionPointers, dwThreadId ) )
+        bool    bGotDumpFile;
+
+        if ( g_bLoadReport )
+            bGotDumpFile = FindDumpFile();
+        else
+            bGotDumpFile = WriteDumpFile( dwProcessId, pExceptionPointers, dwThreadId );
+
+        if( bGotDumpFile )
         {
             hash_map< string, string > aLibraries;
 
-            g_fpStackFile = _tmpfile();
-            WriteStackFile( g_fpStackFile, aLibraries, dwProcessId, pExceptionPointers );
-
-            g_fpChecksumFile = _tmpfile();
-            WriteChecksumFile( g_fpChecksumFile, aLibraries );
-
-            InitCommonControls();
-
-            if ( !g_bNoUserInterface && InitRichEdit() )
+            if ( g_bLoadReport )
             {
-
-                INT_PTR result = DialogBoxParam( hInstance, MAKEINTRESOURCE(IDD_DIALOG_FRAME), NULL, DialogProc, (LPARAM)&Params );
-
-                if ( result > 0 )
-                {
-                    exitcode = 0;
-                }
-                DeinitRichEdit();
+                g_fpStackFile = _open_reportfile( ".stk", "rb" );
+                g_fpChecksumFile = _open_reportfile( ".chk", "rb" );
             }
             else
             {
-                WriteCommentFile( Params.sComment.c_str() );
+                if ( g_bSendReport )
+                {
+                    g_fpStackFile = _tmpfile();
+                    g_fpChecksumFile = _tmpfile();
+                }
+                else
+                {
+                    g_fpStackFile = _open_reportfile( ".stk", "w+b" );
+                    g_fpChecksumFile = _open_reportfile( ".chk", "w+b" );
+
+                    FILE    *fpUnsent = _open_reportfile( ".lck", "w+b" );
+                    if ( fpUnsent )
+                    {
+                        fprintf( fpUnsent, "Unsent\r\n" );
+                        fclose( fpUnsent );
+                    }
+                }
+
+                WriteStackFile( g_fpStackFile, aLibraries, dwProcessId, pExceptionPointers );
+                WriteChecksumFile( g_fpChecksumFile, aLibraries );
                 WriteReportFile( &Params );
-                if ( SendCrashReport( NULL, Params ) )
-                    exitcode = 0;
+
+                FILE    *fpPreview = _open_reportfile( ".prv", "w+b" );
+
+                if ( fpPreview )
+                {
+                    FILE     *fp = fopen( g_szReportFileNameA, "rb" );
+                    if ( fp )
+                    {
+                        fcopy( fp, fpPreview );
+                        fclose( fp );
+                    }
+                    fclose( fpPreview );
+                }
             }
 
+            if ( g_bSendReport )
+            {
+                InitCommonControls();
 
-            if ( g_szReportFileNameA[0] )
-                DeleteFileA( g_szReportFileNameA );
+                // Actually this should never be true anymore
+                if ( !g_bNoUserInterface && InitRichEdit() )
+                {
 
-            if ( g_szCommentFileNameA[0] )
-                DeleteFileA( g_szCommentFileNameA );
+                    INT_PTR result = DialogBoxParam( hInstance, MAKEINTRESOURCE(IDD_DIALOG_FRAME), NULL, DialogProc, (LPARAM)&Params );
 
-            DeleteFileA( g_szDumpFileNameA );
+                    if ( result > 0 )
+                    {
+                        exitcode = 0;
+                    }
+                    DeinitRichEdit();
+                }
+                else
+                {
+                    WriteCommentFile( Params.sComment.c_str() );
+                    WriteReportFile( &Params );
+                    if ( SendCrashReport( NULL, Params ) )
+                        exitcode = 0;
+                }
+
+
+                if ( g_szReportFileNameA[0] )
+                    DeleteFileA( g_szReportFileNameA );
+
+                if ( g_szCommentFileNameA[0] )
+                    DeleteFileA( g_szCommentFileNameA );
+            }
+            else
+            {
+                if ( g_szReportFileNameA[0] )
+                    DeleteFileA( g_szReportFileNameA );
+                exitcode = 0;
+            }
+
+            if ( g_szDumpFileNameA[0] && g_bSendReport )
+                    DeleteFileA( g_szDumpFileNameA );
 
             if ( g_fpStackFile )
                 fclose( g_fpStackFile );
