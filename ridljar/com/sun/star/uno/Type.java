@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:25:41 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:40:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,11 +361,6 @@ public class Type {
     /**
      * Constructs a new <code>Type</code> with the given type name.
      *
-     * <p>TODO:  This constructor is dangerous, as it can create a
-     * <code>Type</code> with an <code>UNKNOWN</code> type class.  It would be
-     * better if this constructor threw a <code>IllegalArgumentException</code>
-     * instead.</p>
-     *
      * @param typeName the name of this type; must not be <code>null</code>.
      *     For simple types (<code>VOID</code>, <code>BOOLEAN</code>,
      *     <code>CHAR</code>, <code>BYTE</code>, <code>SHORT</code>,
@@ -376,6 +371,12 @@ public class Type {
      *     for other types, the type class is set to <code>UNKNOWN</code>.
      *
      * @since UDK3.0
+     *
+     * @deprecated This constructor is deprecated as of UDK3.2.  Using it is
+     * dangerous, as it can create a <code>Type</code> with an
+     * <code>UNKNOWN</code> type class.  One of the other constructors like
+     * <code>Type(Class)</code> or <code>Type(String, TypeClass)</code> should
+     * be used instead.
      */
     public Type(String typeName) {
         TypeClass tc = TypeClass.UNKNOWN;
