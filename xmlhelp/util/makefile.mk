@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 18:07:36 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:18:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,9 +78,6 @@ NO_BSYMBOLIC=TRUE
 
 .IF "$(GUI)"=="WNT"
 CFLAGS+=-GR
-.ENDIF
-.IF "$(COM)"=="GCC"
-CFLAGSCXX+=-frtti
 .ENDIF
 
 .IF "$(SABLOT3RDLIB)"==""
