@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-03 17:40:42 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,9 +233,10 @@ void TabControl::ImplInitSettings( BOOL bFont,
     if ( bBackground )
     {
         Window* pParent = GetParent();
-        if ( (pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
+        if ( !IsControlBackground() &&
+            (pParent->IsChildTransparentModeEnabled()
             || IsNativeControlSupported(CTRL_TAB_PANE, PART_ENTIRE_CONTROL)
-            || IsNativeControlSupported(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL) )
+            || IsNativeControlSupported(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL) ) )
 
         {
             // set transparent mode for NWF tabcontrols to have
