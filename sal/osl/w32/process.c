@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obr $ $Date: 2001-09-11 15:42:26 $
+ *  last change: $Author: obr $ $Date: 2001-09-12 11:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/security.h>
+#include <osl/nlsupport.h>
 #include <osl/mutex.h>
 
 #include "procimpl.h"
@@ -105,6 +106,10 @@ oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
 oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale )
 {
     osl_acquireMutex( *osl_getGlobalMutex() );
+
+    /* check if locale is supported */
+    if( RTL_TEXTENCODING_DONTKNOW == osl_getTextEncodingFromLocale( pLocale ) )
+        return osl_Process_E_Unknown;
 
     /* just remember the locale here */
     theProcessLocale = pLocale;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-09-11 15:42:26 $
+ *  last change: $Author: obr $ $Date: 2001-09-12 11:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,6 @@
 #include <windows.h>
 #include <wchar.h>
 
-#include <systools/win32/kernel9x.h>
-
 #include <osl/mutex.h>
 #include <osl/nlsupport.h>
 #include <osl/diagnose.h>
@@ -115,7 +113,6 @@ BOOL CALLBACK EnumLocalesProcA( LPSTR lpLocaleStringA )
         unicode only lcid
     */
     if( GetLocaleInfo( localeId, LOCALE_SISO639LANGNAME , langCode, 4 ) )
-
     {
         WCHAR ctryCode[4];
 
@@ -225,8 +222,8 @@ rtl_TextEncoding GetTextEncodingFromLCID( LCID localeId )
     rtl_TextEncoding Encoding = RTL_TEXTENCODING_DONTKNOW;
     WCHAR ansiCP[6];
 
-    /* query ansi codepage for that locale */
-    if( GetLocaleInfo( localeId, LOCALE_IDEFAULTANSICODEPAGE, ansiCP, 6 ) )
+    /* query ansi codepage for given locale */
+    if( localeId && GetLocaleInfo( localeId, LOCALE_IDEFAULTANSICODEPAGE, ansiCP, 6 ) )
     {
         /* if GetLocaleInfo returns "0", it is a UNICODE only locale */
         if( 0 != wcscmp( ansiCP, L"0" ) )
@@ -292,8 +289,7 @@ rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
         return GetTextEncodingFromLCID( params.Locale );
     }
 
-    /* use the users default locale */
-    return GetTextEncodingFromLCID( GetUserDefaultLCID() );
+    return RTL_TEXTENCODING_DONTKNOW;
 }
 
 /*****************************************************************************/
