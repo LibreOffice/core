@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-02-25 17:54:42 $
+#   last change: $Author: rt $ $Date: 2004-09-20 10:09:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,8 +84,10 @@ SLOFILES=		$(SLO)$/attributelist.obj							\
                 $(SLO)$/toolboxconfiguration.obj			\
                 $(SLO)$/toolboxdocumenthandler.obj			\
                 $(SLO)$/toolboxlayoutdocumenthandler.obj	\
-                $(SLO)$/saxnamespacefilter.obj						\
-                $(SLO)$/xmlnamespaces.obj
+                $(SLO)$/saxnamespacefilter.obj				\
+                $(SLO)$/xmlnamespaces.obj                   \
+                $(SLO)$/acceleratorconfigurationreader.obj  \
+                $(SLO)$/acceleratorconfigurationwriter.obj
 
 # --- Targets ------------------------------------------------------
 
