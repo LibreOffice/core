@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-04 08:09:11 $
+ *  last change: $Author: fs $ $Date: 2002-10-04 08:10:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -946,11 +946,6 @@ void SAL_CALL OInterfaceContainer::insertByName(const ::rtl::OUString& _rName, c
 
     ::std::auto_ptr< ElementDescription > aElementMetaData( createElementMetaData() );
     DBG_ASSERT( aElementMetaData.get(), "OInterfaceContainer::insertByName: createElementMetaData returned nonsense!" );
-
-    if ( getCount() == 2969 )
-    {
-        sal_Int32 nDummy = 0;
-    }
 
     // ensure the correct name of the element
     try
