@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:36 $
+ *  last change: $Author: dl $ $Date: 2000-11-24 17:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@
 #include <vcl/cursor.hxx>
 #endif
 
+#include "scripttypeitem.hxx"
 #include "svditext.hxx"
 #include "svdoutl.hxx"
 #include "svdxout.hxx"
@@ -1272,6 +1273,26 @@ void SdrObjEditView::ImpMakeTextCursorAreaVisible()
     }
 }
 
+USHORT SdrObjEditView::GetScriptType() const
+{
+    USHORT nScriptType = SCRIPTTYPE_LATIN;
+
+    if( IsTextEdit() )
+    {
+        if( pTextEditObj->GetOutlinerParaObject() )
+            /* nScriptType = pTextEditObj->GetOutlinerParaObject()->GetScriptType(); */
+
+        if(pTextEditOutlinerView)
+            nScriptType = pTextEditOutlinerView->GetSelectedScriptType();
+    }
+//  else
+//  {
+//        return SdrGlueEditView::GetAttributes(rTargetSet, bOnlyHardAttr);
+//  }
+
+    return nScriptType;
+}
+
 /* new interface src537 */
 BOOL SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr) const
 {
@@ -1281,12 +1302,16 @@ BOOL SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr) c
         DBG_ASSERT(pTextEditOutliner!=NULL,"SdrObjEditView::GetAttributes(): pTextEditOutliner=NULL");
 
 //-/        pTextEditObj->TakeAttributes(rTargetSet, TRUE, bOnlyHardAttr);
-        rTargetSet.Put(pTextEditObj->GetItemSet());
+        rTargetSet.Put( pTextEditObj->GetItemSet() );
+
+        if( pTextEditObj->GetOutlinerParaObject() )
+            rTargetSet.Put( SvxScriptTypeItem( /* pTextEditObj->GetOutlinerParaObject()->GetScriptType() */ SCRIPTTYPE_LATIN ) );
 
         if(pTextEditOutlinerView)
         {
             // FALSE= InvalidItems nicht al Default, sondern als "Loecher" betrachten
             rTargetSet.Put(pTextEditOutlinerView->GetAttribs(), FALSE);
+            rTargetSet.Put( SvxScriptTypeItem( pTextEditOutlinerView->GetSelectedScriptType() ), FALSE );
         }
 
         if(aMark.GetMarkCount()==1 && aMark.GetMark(0)->GetObj()==pTextEditObj)
@@ -1310,20 +1335,28 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
     SfxItemSet* pModifiedSet=NULL;
     const SfxItemSet* pSet=&rSet;
     const SvxAdjustItem* pParaJust=NULL;
-    if (!bTextEdit) {
+
+    if (!bTextEdit)
+    {
         // Kein TextEdit aktiv -> alle Items ans Zeichenobjekt
         bRet=SdrGlueEditView::SetAttributes(*pSet,bReplaceAll);
-    } else {
+    }
+    else
+    {
 #ifdef DBG_UTIL
         {
             BOOL bHasEEFeatureItems=FALSE;
             SfxItemIter aIter(rSet);
             const SfxPoolItem* pItem=aIter.FirstItem();
-            while (!bHasEEFeatureItems && pItem!=NULL) {
-                if (!IsInvalidItem(pItem)) {
+            while (!bHasEEFeatureItems && pItem!=NULL)
+            {
+                if (!IsInvalidItem(pItem))
+                {
                     USHORT nW=pItem->Which();
-                    if (nW>=EE_FEATURE_START && nW<=EE_FEATURE_END) bHasEEFeatureItems=TRUE;
+                    if (nW>=EE_FEATURE_START && nW<=EE_FEATURE_END)
+                        bHasEEFeatureItems=TRUE;
                 }
+
                 pItem=aIter.NextItem();
             }
 
@@ -1335,6 +1368,7 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
             }
         }
 #endif
+
         BOOL bOnlyEEItems;
         BOOL bNoEEItems=!SearchOutlinerItems(*pSet,bReplaceAll,&bOnlyEEItems);
         // alles selektiert? -> Attrs auch an den Rahmen
