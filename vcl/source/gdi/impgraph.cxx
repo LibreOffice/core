@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:43:06 $
+ *  last change: $Author: svesik $ $Date: 2004-04-20 13:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,7 +488,7 @@ BOOL ImpGraphic::ImplIsAnimated() const
 
 // ------------------------------------------------------------------------
 
-Bitmap ImpGraphic::ImplGetBitmap( const Size* pSizePixel ) const
+Bitmap ImpGraphic::ImplGetBitmap( const Size* pSizePixel, BOOL bUnlimited ) const
 {
     Bitmap aRetBmp;
 
@@ -521,7 +521,7 @@ Bitmap ImpGraphic::ImplGetBitmap( const Size* pSizePixel ) const
             aSizePix = *pSizePixel;
         }
 
-        if( aSizePix.Width() && aSizePix.Height() &&
+        if( aSizePix.Width() && aSizePix.Height() && !bUnlimited &&
             ( aSizePix.Width() > GRAPHIC_MTFTOBMP_MAXEXT || aSizePix.Height() > GRAPHIC_MTFTOBMP_MAXEXT ) )
         {
             const Size  aOldSizePix( aSizePix );
@@ -554,7 +554,7 @@ Bitmap ImpGraphic::ImplGetBitmap( const Size* pSizePixel ) const
 
 // ------------------------------------------------------------------------
 
-BitmapEx ImpGraphic::ImplGetBitmapEx( const Size* pSizePixel ) const
+BitmapEx ImpGraphic::ImplGetBitmapEx( const Size* pSizePixel, BOOL bUnlimited ) const
 {
     BitmapEx aRetBmpEx;
 
@@ -568,7 +568,7 @@ BitmapEx ImpGraphic::ImplGetBitmapEx( const Size* pSizePixel ) const
     else if( ( meType != GRAPHIC_DEFAULT ) && ImplIsSupportedGraphic() )
     {
         const ImpGraphic aMonoMask( maMetaFile.GetMonochromeMtf( COL_BLACK ) );
-        aRetBmpEx = BitmapEx( ImplGetBitmap( pSizePixel ), aMonoMask.ImplGetBitmap( pSizePixel ) );
+        aRetBmpEx = BitmapEx( ImplGetBitmap( pSizePixel, bUnlimited ), aMonoMask.ImplGetBitmap( pSizePixel, bUnlimited ) );
     }
 
     return aRetBmpEx;
