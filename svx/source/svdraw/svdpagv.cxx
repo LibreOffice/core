@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:12:52 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,7 +790,7 @@ void SdrPageViewWindow::Redraw(const Region& rReg, sal_uInt16 nPaintMode,
     SdrModel* pModel = (SdrModel*)rView.GetModel();
     pModel->SetPaintingPageView(&mrPageView);
 
-    ExtOutputDevice* pXOut = rView.GetExtendedOutputDevice();
+    XOutputDevice* pXOut = rView.GetExtendedOutputDevice();
     sal_Bool bTextEdit(rView.IsTextEdit() && rView.GetTextEditPageView() == &mrPageView);
     pXOut->SetOffset(mrPageView.GetOffset());
 
@@ -849,7 +849,8 @@ void SdrPageViewWindow::Redraw(const Region& rReg, sal_uInt16 nPaintMode,
             // Draw/Impress
             // #114898#
             aDisplayInfo.SetPreRenderingAllowed(rView.IsBufferedOutputAllowed());
-            aDisplayInfo.SetPagePainting(sal_True);
+//BFS09         aDisplayInfo.SetPagePainting(sal_True);
+            aDisplayInfo.SetPagePainting(rView.IsPagePaintingAllowed());
         }
 
         // keep draw hierarchy up-to-date
@@ -2111,73 +2112,73 @@ void SdrPageView::CheckAktGroup()
     }
 }
 
-SvStream& operator<<(SvStream& rOut, const SdrPageView& rPageView)
-{
-    SdrIOHeader aHead(rOut,STREAM_WRITE,SdrIOPgVwID);
-    {
-        if (rPageView.GetPage()!=NULL) {
-            SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_PAGVIEW);
-            rOut<<BOOL(rPageView.IsVisible());
-            rOut<<BOOL(rPageView.GetPage()->IsMasterPage());
-            rOut<<rPageView.GetPage()->GetPageNum();
-            rOut<<rPageView.aOfs;
-            rOut<<rPageView.aPgOrg;
-        }
-    } {
-        SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_PAGVLAYER);
-        rOut<<rPageView.aLayerVisi;
-        rOut<<rPageView.aLayerLock;
-        rOut<<rPageView.aLayerPrn;
-    } {
-        SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_PAGVHELPLINES);
-        rOut<<rPageView.aHelpLines;
-    }
-    //if (GetAktGroup()!=NULL) {
-    //    // ...
-    //    //rOut<<aAktGroup;
-    //}
-    return rOut;
-}
+//BFS01SvStream& operator<<(SvStream& rOut, const SdrPageView& rPageView)
+//BFS01{
+//BFS01 SdrIOHeader aHead(rOut,STREAM_WRITE,SdrIOPgVwID);
+//BFS01 {
+//BFS01     if (rPageView.GetPage()!=NULL) {
+//BFS01         SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_PAGVIEW);
+//BFS01         rOut<<BOOL(rPageView.IsVisible());
+//BFS01         rOut<<BOOL(rPageView.GetPage()->IsMasterPage());
+//BFS01         rOut<<rPageView.GetPage()->GetPageNum();
+//BFS01         rOut<<rPageView.aOfs;
+//BFS01         rOut<<rPageView.aPgOrg;
+//BFS01     }
+//BFS01 } {
+//BFS01     SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_PAGVLAYER);
+//BFS01     rOut<<rPageView.aLayerVisi;
+//BFS01     rOut<<rPageView.aLayerLock;
+//BFS01     rOut<<rPageView.aLayerPrn;
+//BFS01 } {
+//BFS01     SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_PAGVHELPLINES);
+//BFS01     rOut<<rPageView.aHelpLines;
+//BFS01 }
+//BFS01 //if (GetAktGroup()!=NULL) {
+//BFS01 //    // ...
+//BFS01 //    //rOut<<aAktGroup;
+//BFS01 //}
+//BFS01 return rOut;
+//BFS01}
 
-SvStream& operator>>(SvStream& rIn, SdrPageView& rPageView)
-{
-    if (rIn.GetError()!=0) return rIn;
-    SdrIOHeader aHead(rIn,STREAM_READ);
-    while (aHead.GetBytesLeft()>0 && rIn.GetError()==0 && !rIn.IsEof()) {
-        SdrNamedSubRecord aSubRecord(rIn,STREAM_READ);
-        if (aSubRecord.GetInventor()==SdrInventor) {
-            switch (aSubRecord.GetIdentifier()) {
-                case SDRIORECNAME_PAGVIEW: {
-                    sal_Bool bVisible;
-                    BOOL bMaster;
-                    USHORT nPgNum;
-                    rIn>>bVisible;
-                    rPageView.mbVisible = bVisible;
-                    rIn>>bMaster;
-                    rIn>>nPgNum;
-                    rIn>>rPageView.aOfs;
-                    rIn>>rPageView.aPgOrg;
-                    SdrModel* pMod=rPageView.GetView().GetModel();
-                    if (!bMaster) rPageView.mpPage=pMod->GetPage(nPgNum);
-                    else rPageView.mpPage=pMod->GetMasterPage(nPgNum);
-                    rPageView.pAktList=rPageView.GetPage();
-                } break;
-                case SDRIORECNAME_PAGVLAYER: {
-                    rIn>>rPageView.aLayerVisi;
-                    rIn>>rPageView.aLayerLock;
-                    rIn>>rPageView.aLayerPrn;
-                } break;
-                case SDRIORECNAME_PAGVHELPLINES: {
-                    rIn>>rPageView.aHelpLines;
-                } break;
-                case SDRIORECNAME_PAGVAKTGROUP: {
-                    //rIn>>aAktGroup; fehlende Implementation!
-                } break;
-            }
-        }
-    }
-    return rIn;
-}
+//BFS01SvStream& operator>>(SvStream& rIn, SdrPageView& rPageView)
+//BFS01{
+//BFS01 if (rIn.GetError()!=0) return rIn;
+//BFS01 SdrIOHeader aHead(rIn,STREAM_READ);
+//BFS01 while (aHead.GetBytesLeft()>0 && rIn.GetError()==0 && !rIn.IsEof()) {
+//BFS01     SdrNamedSubRecord aSubRecord(rIn,STREAM_READ);
+//BFS01     if (aSubRecord.GetInventor()==SdrInventor) {
+//BFS01         switch (aSubRecord.GetIdentifier()) {
+//BFS01             case SDRIORECNAME_PAGVIEW: {
+//BFS01                 sal_Bool bVisible;
+//BFS01                 BOOL bMaster;
+//BFS01                 USHORT nPgNum;
+//BFS01                 rIn>>bVisible;
+//BFS01                 rPageView.mbVisible = bVisible;
+//BFS01                 rIn>>bMaster;
+//BFS01                 rIn>>nPgNum;
+//BFS01                 rIn>>rPageView.aOfs;
+//BFS01                 rIn>>rPageView.aPgOrg;
+//BFS01                 SdrModel* pMod=rPageView.GetView().GetModel();
+//BFS01                 if (!bMaster) rPageView.mpPage=pMod->GetPage(nPgNum);
+//BFS01                 else rPageView.mpPage=pMod->GetMasterPage(nPgNum);
+//BFS01                 rPageView.pAktList=rPageView.GetPage();
+//BFS01             } break;
+//BFS01             case SDRIORECNAME_PAGVLAYER: {
+//BFS01                 rIn>>rPageView.aLayerVisi;
+//BFS01                 rIn>>rPageView.aLayerLock;
+//BFS01                 rIn>>rPageView.aLayerPrn;
+//BFS01             } break;
+//BFS01             case SDRIORECNAME_PAGVHELPLINES: {
+//BFS01                 rIn>>rPageView.aHelpLines;
+//BFS01             } break;
+//BFS01             case SDRIORECNAME_PAGVAKTGROUP: {
+//BFS01                 //rIn>>aAktGroup; fehlende Implementation!
+//BFS01             } break;
+//BFS01         }
+//BFS01     }
+//BFS01 }
+//BFS01 return rIn;
+//BFS01}
 
 // #103834# Set background color for svx at SdrPageViews
 void SdrPageView::SetApplicationBackgroundColor(Color aBackgroundColor)
