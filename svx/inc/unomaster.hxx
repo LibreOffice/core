@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomaster.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-04 16:01:42 $
+ *  last change: $Author: obo $ $Date: 2001-12-07 17:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,3 +102,4 @@ public:
 };
 
 #endif
+
