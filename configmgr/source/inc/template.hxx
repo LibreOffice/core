@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 09:01:47 $
+ *  last change: $Author: jb $ $Date: 2001-03-12 14:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,10 +140,13 @@ namespace configmgr
             Name            getName() const { return m_aName; }
 
         /// get the package name of the template
-            Name            getPackage() const { return m_aModule; }
+            Name            getModule() const { return m_aModule; }
 
         /// find the template for the given path (instance type may be unknown)
-            static TemplateHolder fromPath(OUString const& sName, TemplateProvider const& aProvider);
+        //  static TemplateHolder fromPath(OUString const& sName, TemplateProvider const& aProvider);
+
+        /// find the template for the given path (instance type may be unknown)
+            static TemplateHolder fromNames(OUString const& sName, OUString const& sModule, TemplateProvider const& aProvider);
 
             friend class TemplateImplHelper;
         };
@@ -151,7 +154,9 @@ namespace configmgr
         /// make a template instance that matches the given (simple) type
         TemplateHolder makeSimpleTemplate(UnoType const& aType, Attributes const& aAttrs, TemplateProvider const& aProvider);
         /// make a template instance that matches the given path. Assume that it represents a (complex) tree structure.
-        TemplateHolder makeTreeTemplate(OUString const& sPath, TemplateProvider const& aProvider);
+        //TemplateHolder makeTreeTemplate(OUString const& sPath, TemplateProvider const& aProvider);
+        /// make a template instance that matches the given path. Assume that it represents a (complex) tree structure.
+        TemplateHolder makeTreeTemplate(OUString const& sName, OUString const& sModule, TemplateProvider const& aProvider);
         /// make a template instance that matches the elements of the given set. Ensures that the element type is known
         TemplateHolder makeSetElementTemplate(ISubtree const& aSet, TemplateProvider const& aProvider);
 //-----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-20 12:14:20 $
+ *  last change: $Author: jb $ $Date: 2001-03-12 14:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@ namespace configmgr
         sal_Int16           m_nLevel;                   /// determines if everything is read
         ::rtl::OUString     m_sId;
         ::rtl::OUString     m_sTemplateName;            /// path of the template for child instantiation
+        ::rtl::OUString     m_sTemplateModule;          /// module of the template for child instantiation
 
         virtual INode* doGetChild(rtl::OUString const& name) const = 0;
 
@@ -159,17 +160,29 @@ namespace configmgr
         :INode(other)
         ,m_nLevel(other.m_nLevel)
         ,m_sTemplateName(other.m_sTemplateName)
+        ,m_sTemplateModule(other.m_sTemplateModule)
         ,m_sId() // do not copy ID while cloning !
         {}
 
     public:
         // subtree does current not support attributes in the right way
         // ISubtree(const configuration::Attributes& _rAttrs) : INode(_rAttrs), m_nLevel(0) {}
-        ISubtree(const rtl::OUString& aName, const rtl::OUString& _rTemplate,
+
+        // Ctor for group trees
+        ISubtree(const rtl::OUString& aName, const configuration::Attributes& _rAttrs)
+            :INode(aName, _rAttrs)
+            ,m_nLevel(0)
+            {}
+
+        // Ctor for set trees
+        ISubtree(const rtl::OUString& aName,
+                 const rtl::OUString& _rTemplateName,
+                 const rtl::OUString& _rTemplateModule,
                  const configuration::Attributes& _rAttrs)
             :INode(aName, _rAttrs)
             ,m_nLevel(0)
-            ,m_sTemplateName(_rTemplate){}
+            ,m_sTemplateName(_rTemplateName)
+            ,m_sTemplateModule(_rTemplateModule){}
 
         bool            hasId() const           { return m_sId.getLength() != 0; }
         ::rtl::OUString getId() const           { return m_sId; }
@@ -185,7 +198,8 @@ namespace configmgr
         void setLevel(sal_Int16);
 
         bool                isSetNode() const { return m_sTemplateName.getLength() != 0; }
-        ::rtl::OUString     getChildTemplateName() const { return m_sTemplateName; }
+        ::rtl::OUString     getElementTemplateName() const { return m_sTemplateName; }
+        ::rtl::OUString     getElementTemplateModule() const { return m_sTemplateModule; }
 
         virtual INode* addChild(std::auto_ptr<INode> node) =0;                      // takes ownership
         virtual ::std::auto_ptr<INode> removeChild(rtl::OUString const& name) =0;   // releases ownership

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-17 15:02:30 $
+ *  last change: $Author: jb $ $Date: 2001-03-12 14:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,6 +323,7 @@ namespace configmgr
         typedef ::std::map< ::rtl::OUString,Change* > Children;
         Children                    m_aChanges;
         ::rtl::OUString             m_sTemplateName;            /// path of the template for child instantiation
+        ::rtl::OUString             m_sTemplateModule;          /// module of the template for child instantiation
         configuration::Attributes   m_aAttributes;
 
         // don't create CopyCTor automatically
@@ -343,20 +344,32 @@ namespace configmgr
         typedef argument::NoChildCopy NoChildCopy;
 
         SubtreeChange(const rtl::OUString& _rName,
-                      const rtl::OUString& _rTemplate,
                       const configuration::Attributes& _rAttr)
             :Change(_rName)
             ,m_aAttributes(_rAttr)
-            ,m_sTemplateName(_rTemplate){}
+        {}
+
+        SubtreeChange(const rtl::OUString& _rName,
+                      const rtl::OUString& _rTemplateName,
+                      const rtl::OUString& _rTemplateModule,
+                      const configuration::Attributes& _rAttr)
+            :Change(_rName)
+            ,m_sTemplateName(_rTemplateName)
+            ,m_sTemplateModule(_rTemplateModule)
+            ,m_aAttributes(_rAttr)
+        {}
 
         SubtreeChange(const ISubtree& _rTree)
             :Change(_rTree.getName())
             ,m_aAttributes(_rTree.getAttributes())
-            ,m_sTemplateName(_rTree.getChildTemplateName()){}
+            ,m_sTemplateName(_rTree.getElementTemplateName())
+            ,m_sTemplateModule(_rTree.getElementTemplateModule())
+        {}
 
         SubtreeChange(const SubtreeChange& _rChange, NoChildCopy)
             :Change(_rChange)
-            ,m_sTemplateName(_rChange.getChildTemplateName())
+            ,m_sTemplateName(_rChange.getElementTemplateName())
+            ,m_sTemplateModule(_rChange.getElementTemplateModule())
             ,m_aAttributes(_rChange.getAttributes()){}
 
         ~SubtreeChange();
@@ -371,8 +384,12 @@ namespace configmgr
         const configuration::Attributes& getAttributes() const {return m_aAttributes;}
 
         bool            isSetNodeChange() const { return m_sTemplateName.getLength() != 0; }
-        rtl::OUString   getChildTemplateName() const { return m_sTemplateName; }
-        void            setChildTemplateName(const rtl::OUString& _rName) { m_sTemplateName = _rName; }
+
+        rtl::OUString   getElementTemplateName() const { return m_sTemplateName; }
+        rtl::OUString   getElementTemplateModule() const { return m_sTemplateModule; }
+
+        void            setElementTemplate(const rtl::OUString& _rName, const rtl::OUString& _rModule)
+        { m_sTemplateName = _rName; m_sTemplateModule = _rModule; }
 
         sal_Int32                   size() const { return m_aChanges.size(); }
         uno::Sequence< rtl::OUString >  elementNames() const;
@@ -472,7 +489,7 @@ namespace configmgr
     class SubtreeChangeReferrer : public SubtreeChange
     {
         // no explicit construction
-        SubtreeChangeReferrer() : SubtreeChange(::rtl::OUString(), ::rtl::OUString(), configuration::Attributes()) { }
+        SubtreeChangeReferrer() : SubtreeChange(::rtl::OUString(), configuration::Attributes()) { }
 
     public:
         SubtreeChangeReferrer(const SubtreeChange& _rSource);
