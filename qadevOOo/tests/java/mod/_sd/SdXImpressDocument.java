@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdXImpressDocument.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-01-05 19:40:20 $
+ *  last change:$Date: 2004-11-02 12:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,13 +60,18 @@
  ************************************************************************/
 package mod._sd;
 
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.drawing.XShape;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.view.PrintJobEvent;
+import com.sun.star.view.XPrintable;
 import com.sun.star.view.XSelectionSupplier;
+import ifc.view._XPrintJobBroadcaster;
+import java.io.File;
 
 import java.io.PrintWriter;
 
@@ -74,9 +79,11 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
+import share.LogWriter;
 
 import util.DrawTools;
 import util.SOfficeFactory;
+import util.utils;
 
 
 /**
@@ -191,6 +198,16 @@ public class SdXImpressDocument extends TestCase {
         tEnv.addObjRelation("SELSUPP", sel);
         tEnv.addObjRelation("TOSELECT", aShape);
 
+        // create object relation for XPrintJobBroadcaster
+        String fileName = utils.getOfficeTempDirSys((XMultiServiceFactory) Param.getMSF())+"printfile.prt" ;
+        File f = new File(fileName);
+        if (f.exists()) {
+            f.delete();
+        }
+        _XPrintJobBroadcaster.MyPrintJobListener listener = new _XPrintJobBroadcaster.MyPrintJobListener(xImpressDoc, fileName);
+        tEnv.addObjRelation("XPrintJobBroadcaster.XPrintJobListener", listener);
+
         return tEnv;
     } // finish method getTestEnvironment
+
 } // finish class SdDrawPage
