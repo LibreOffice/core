@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-23 10:29:27 $
+ *  last change: $Author: cmc $ $Date: 2002-09-27 10:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1610,6 +1610,8 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
     {
         if (!maFontSrcCharSets.empty())
             eSrcCharSet = maFontSrcCharSets.top();
+        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1))
+            eSrcCharSet = pCollA[nCharFmt].eFontSrcCharSet;
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
             eSrcCharSet = pCollA[nAktColl].eFontSrcCharSet;
     }
