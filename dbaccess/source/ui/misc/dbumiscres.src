@@ -2,9 +2,9 @@
 *
 *  $RCSfile: dbumiscres.src,v $
 *
-*  $Revision: 1.59 $
+*  $Revision: 1.60 $
 *
-*  last change: $Author: vg $ $Date: 2003-12-17 15:19:43 $
+*  last change: $Author: obo $ $Date: 2004-04-27 10:43:00 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -92,7 +92,7 @@ String STR_CONNUINAMES
     Text[ polish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Arkusz kalkulacyjny;Ksi��ka adresowa";
     Text[ japanese ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;テキストファイル;表計算ドキュメント;アドレス帳";
     Text[ korean ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;텍스트;스프레드시트;주소록";
-    Text[ chinese_simplified ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;文字;工作表;通讯簿";
+    Text[ chinese_simplified ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;文字;工作表文档;通讯簿";
     Text[ chinese_traditional ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;文字;工作表文件;通訊錄";
     Text[ turkish ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Metin;Hesap �izelgesi;Adres defteri";
     Text[ arabic ] = "Adabas;JDBC;ODBC;dBase;ADO;��;����� �����";
