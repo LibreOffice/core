@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 14:39:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,11 @@
 #include <connectivity/dbexception.hxx>
 #endif
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
-#else /* _DEBUG */
+#else /* OSL_DEBUG_LEVEL */
 # define OUtoCStr( x ) ("dummy")
-#endif /* _DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
 
 extern "C" void*  SAL_CALL OMozabConnection_CreateInstance(void* _pDriver)
 {
