@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh5.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:12:47 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,7 @@ BOOL ScDocShell::IsEditable() const
     return !IsReadOnly() || aDocument.IsImportingXML();
 }
 
-void ScDocShell::DBAreaDeleted( USHORT nTab, USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 )
+void ScDocShell::DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 )
 {
     ScDocShellModificator aModificator( *this );
     aDocument.RemoveFlagsTab( nX1, nY1, nX2, nY1, nTab, SC_MF_AUTO );
@@ -257,7 +257,7 @@ void ScDocShell::DBAreaDeleted( USHORT nTab, USHORT nX1, USHORT nY1, USHORT nX2,
     aModificator.SetDocumentModified();
 }
 
-ScDBData* lcl_GetDBNearCursor( ScDBCollection* pColl, USHORT nCol, USHORT nRow, USHORT nTab )
+ScDBData* lcl_GetDBNearCursor( ScDBCollection* pColl, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     //! nach document/dbcolect verschieben
 
@@ -268,7 +268,9 @@ ScDBData* lcl_GetDBNearCursor( ScDBCollection* pColl, USHORT nCol, USHORT nRow, 
     ScDBData* pNearData = NULL;
     USHORT nCount = pColl->GetCount();
     String aNoName = ScGlobal::GetRscString( STR_DB_NONAME );
-    USHORT nAreaTab, nStartCol, nStartRow, nEndCol, nEndRow;
+    SCTAB nAreaTab;
+    SCCOL nStartCol, nEndCol;
+    SCROW nStartRow, nEndRow;
     for (USHORT i = 0; i < nCount; i++)
     {
         ScDBData* pDB = (*pColl)[i];
@@ -294,16 +296,16 @@ ScDBData* lcl_GetDBNearCursor( ScDBCollection* pColl, USHORT nCol, USHORT nRow, 
 
 ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, BOOL bForceMark )
 {
-    USHORT nCol = rMarked.aStart.Col();
-    USHORT nRow = rMarked.aStart.Row();
-    USHORT nTab = rMarked.aStart.Tab();
+    SCCOL nCol = rMarked.aStart.Col();
+    SCROW nRow = rMarked.aStart.Row();
+    SCTAB nTab = rMarked.aStart.Tab();
 
-    USHORT nStartCol = nCol;
-    USHORT nStartRow = nRow;
-    USHORT nStartTab = nTab;
-    USHORT nEndCol = rMarked.aEnd.Col();
-    USHORT nEndRow = rMarked.aEnd.Row();
-    USHORT nEndTab = rMarked.aEnd.Tab();
+    SCCOL nStartCol = nCol;
+    SCROW nStartRow = nRow;
+    SCTAB nStartTab = nTab;
+    SCCOL nEndCol = rMarked.aEnd.Col();
+    SCROW nEndRow = rMarked.aEnd.Row();
+    SCTAB nEndTab = rMarked.aEnd.Tab();
 
     //  Wegen #49655# nicht einfach GetDBAtCursor: Der zusammenhaengende Datenbereich
     //  fuer "unbenannt" (GetDataArea) kann neben dem Cursor legen, also muss auch ein
@@ -320,11 +322,11 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, BOOL
     {
         //      Bereich nehmen, wenn nichts anderes markiert
 
-        USHORT nDummy;
-        USHORT nOldCol1;
-        USHORT nOldRow1;
-        USHORT nOldCol2;
-        USHORT nOldRow2;
+        SCTAB nDummy;
+        SCCOL nOldCol1;
+        SCROW nOldRow1;
+        SCCOL nOldCol2;
+        SCROW nOldRow2;
         pData->GetArea( nDummy, nOldCol1,nOldRow1, nOldCol2,nOldRow2 );
         BOOL bIsNoName = ( pData->GetName() == ScGlobal::GetRscString( STR_DB_NONAME ) );
 
@@ -401,11 +403,11 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, BOOL
         {
             pNoNameData = (*pColl)[nNoNameIndex];
 
-            USHORT nOldX1;                                  // alten Bereich sauber wegnehmen
-            USHORT nOldY1;                                  //! (UNDO ???)
-            USHORT nOldX2;
-            USHORT nOldY2;
-            USHORT nOldTab;
+            SCCOL nOldX1;                                   // alten Bereich sauber wegnehmen
+            SCROW nOldY1;                                   //! (UNDO ???)
+            SCCOL nOldX2;
+            SCROW nOldY2;
+            SCTAB nOldTab;
             pNoNameData->GetArea( nOldTab, nOldX1, nOldY1, nOldX2, nOldY2 );
             DBAreaDeleted( nOldTab, nOldX1, nOldY1, nOldX2, nOldY2 );
 
@@ -473,7 +475,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, BOOL
         //  Hoehen anpassen
         //! mit docfunc zusammenfassen
 
-BOOL ScDocShell::AdjustRowHeight( USHORT nStartRow, USHORT nEndRow, USHORT nTab )
+BOOL ScDocShell::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab )
 {
     ScSizeDeviceProvider aProv(this);
     Fraction aZoom(1,1);
@@ -491,8 +493,8 @@ void ScDocShell::UpdateAllRowHeights()
 
     ScSizeDeviceProvider aProv(this);
     Fraction aZoom(1,1);
-    USHORT nTabCnt = aDocument.GetTableCount();
-    for (USHORT nTab=0; nTab<nTabCnt; nTab++)
+    SCTAB nTabCnt = aDocument.GetTableCount();
+    for (SCTAB nTab=0; nTab<nTabCnt; nTab++)
         aDocument.SetOptimalHeight( 0,MAXROW, nTab,0, aProv.GetDevice(),
                                     aProv.GetPPTX(),aProv.GetPPTY(), aZoom,aZoom, FALSE );
 }
@@ -555,14 +557,14 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, BOOL bRecord )
     ScConsData aData;
 
     USHORT nPos;
-    USHORT nColSize = 0;
-    USHORT nRowSize = 0;
+    SCCOL nColSize = 0;
+    SCROW nRowSize = 0;
     BOOL bErr = FALSE;
     for (nPos=0; nPos<rParam.nDataAreaCount; nPos++)
     {
         ScArea* pArea = rParam.ppDataAreas[nPos];
-        nColSize = Max( nColSize, USHORT( pArea->nColEnd - pArea->nColStart + 1 ) );
-        nRowSize = Max( nRowSize, USHORT( pArea->nRowEnd - pArea->nRowStart + 1 ) );
+        nColSize = Max( nColSize, SCCOL( pArea->nColEnd - pArea->nColStart + 1 ) );
+        nRowSize = Max( nRowSize, SCROW( pArea->nRowEnd - pArea->nRowStart + 1 ) );
 
                                         // Test, ob Quelldaten verschoben wuerden
         if (rParam.bReferenceData)
@@ -607,11 +609,11 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, BOOL bRecord )
     }
 
     aData.GetSize( nColSize, nRowSize );
-    if (bRecord && nColSize && nRowSize)
+    if (bRecord && nColSize > 0 && nRowSize > 0)
     {
         ScDBData* pUndoData = pDestData ? new ScDBData(*pDestData) : NULL;
 
-        USHORT nDestTab = rParam.nTab;
+        SCTAB nDestTab = rParam.nTab;
         ScArea aDestArea( rParam.nTab, rParam.nCol, rParam.nRow,
                             rParam.nCol+nColSize-1, rParam.nRow+nRowSize-1 );
         if (rParam.bByCol) ++aDestArea.nColEnd;
@@ -619,8 +621,8 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, BOOL bRecord )
 
         if (rParam.bReferenceData)
         {
-            USHORT nTabCount = aDocument.GetTableCount();
-            USHORT nInsertCount = aData.GetInsertCount();
+            SCTAB nTabCount = aDocument.GetTableCount();
+            SCROW nInsertCount = aData.GetInsertCount();
 
             // alte Outlines
             ScOutlineTable* pTable = aDocument.GetOutlineTable( nDestTab );
@@ -679,10 +681,10 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, BOOL bRecord )
 
     aData.OutputToDocument( &aDocument, rParam.nCol, rParam.nRow, rParam.nTab );
 
-    USHORT nPaintStartCol = rParam.nCol;
-    USHORT nPaintStartRow = rParam.nRow;
-    USHORT nPaintEndCol = nPaintStartCol + nColSize - 1;
-    USHORT nPaintEndRow = nPaintStartRow + nRowSize - 1;
+    SCCOL nPaintStartCol = rParam.nCol;
+    SCROW nPaintStartRow = rParam.nRow;
+    SCCOL nPaintEndCol = nPaintStartCol + nColSize - 1;
+    SCROW nPaintEndRow = nPaintStartRow + nRowSize - 1;
     USHORT nPaintFlags = PAINT_GRID;
     if (rParam.bByCol)
         ++nPaintEndRow;
@@ -707,13 +709,13 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, BOOL bRecord )
     aModificator.SetDocumentModified();
 }
 
-void ScDocShell::UseScenario( USHORT nTab, const String& rName, BOOL bRecord )
+void ScDocShell::UseScenario( SCTAB nTab, const String& rName, BOOL bRecord )
 {
     if (!aDocument.IsScenario(nTab))
     {
-        USHORT  nTabCount = aDocument.GetTableCount();
-        USHORT  nSrcTab = USHRT_MAX;
-        USHORT  nEndTab = nTab;
+        SCTAB   nTabCount = aDocument.GetTableCount();
+        SCTAB   nSrcTab = SCTAB_MAX;
+        SCTAB   nEndTab = nTab;
         String aCompare;
         while ( nEndTab+1 < nTabCount && aDocument.IsScenario(nEndTab+1) )
         {
@@ -725,7 +727,7 @@ void ScDocShell::UseScenario( USHORT nTab, const String& rName, BOOL bRecord )
                     nSrcTab = nEndTab;      // gefunden
             }
         }
-        if (nSrcTab <= MAXTAB)
+        if (ValidTab(nSrcTab))
         {
             if ( aDocument.TestCopyScenario( nSrcTab, nTab ) )          // Zellschutz testen
             {
@@ -734,10 +736,10 @@ void ScDocShell::UseScenario( USHORT nTab, const String& rName, BOOL bRecord )
                 aDocument.MarkScenario( nSrcTab, nTab, aScenMark );
                 ScRange aMultiRange;
                 aScenMark.GetMultiMarkArea( aMultiRange );
-                USHORT nStartCol = aMultiRange.aStart.Col();
-                USHORT nStartRow = aMultiRange.aStart.Row();
-                USHORT nEndCol = aMultiRange.aEnd.Col();
-                USHORT nEndRow = aMultiRange.aEnd.Row();
+                SCCOL nStartCol = aMultiRange.aStart.Col();
+                SCROW nStartRow = aMultiRange.aStart.Row();
+                SCCOL nEndCol = aMultiRange.aEnd.Col();
+                SCROW nEndRow = aMultiRange.aEnd.Row();
 
                 if (bRecord)
                 {
@@ -747,7 +749,7 @@ void ScDocShell::UseScenario( USHORT nTab, const String& rName, BOOL bRecord )
                     aDocument.CopyToDocument( nStartCol,nStartRow,nTab,
                                     nEndCol,nEndRow,nTab, IDF_ALL,TRUE, pUndoDoc, &aScenMark );
                     //  Szenarien
-                    for (USHORT i=nTab+1; i<=nEndTab; i++)
+                    for (SCTAB i=nTab+1; i<=nEndTab; i++)
                     {
                         pUndoDoc->SetScenario( i, TRUE );
                         String aComment;
@@ -796,7 +798,7 @@ void ScDocShell::UseScenario( USHORT nTab, const String& rName, BOOL bRecord )
         DBG_ERROR( "UseScenario auf Szenario-Blatt" );
 }
 
-void ScDocShell::ModifyScenario( USHORT nTab, const String& rName, const String& rComment,
+void ScDocShell::ModifyScenario( SCTAB nTab, const String& rName, const String& rComment,
                                     const Color& rColor, USHORT nFlags )
 {
     //  Undo
@@ -826,14 +828,14 @@ void ScDocShell::ModifyScenario( USHORT nTab, const String& rName, const String&
         pBindings->Invalidate( SID_SELECT_SCENARIO );
 }
 
-USHORT ScDocShell::MakeScenario( USHORT nTab, const String& rName, const String& rComment,
+SCTAB ScDocShell::MakeScenario( SCTAB nTab, const String& rName, const String& rComment,
                                     const Color& rColor, USHORT nFlags,
                                     ScMarkData& rMark, BOOL bRecord )
 {
     rMark.MarkToMulti();
     if (rMark.IsMultiMarked())
     {
-        USHORT nNewTab = nTab + 1;
+        SCTAB nNewTab = nTab + 1;
         while (aDocument.IsScenario(nNewTab))
             ++nNewTab;
 
@@ -892,7 +894,7 @@ USHORT ScDocShell::MakeScenario( USHORT nTab, const String& rName, const String&
     return nTab;
 }
 
-BOOL ScDocShell::MoveTable( USHORT nSrcTab, USHORT nDestTab, BOOL bCopy, BOOL bRecord )
+BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRecord )
 {
     ScDocShellModificator aModificator( *this );
 
@@ -908,7 +910,7 @@ BOOL ScDocShell::MoveTable( USHORT nSrcTab, USHORT nDestTab, BOOL bCopy, BOOL bR
         }
         else
         {
-            USHORT nAdjSource = nSrcTab;
+            SCTAB nAdjSource = nSrcTab;
             if ( nDestTab <= nSrcTab )
                 ++nAdjSource;               // new position of source table after CopyTab
 
@@ -917,8 +919,8 @@ BOOL ScDocShell::MoveTable( USHORT nSrcTab, USHORT nDestTab, BOOL bCopy, BOOL bR
 
             if (bRecord)
             {
-                SvUShorts aSrcList;
-                SvUShorts aDestList;
+                SvShorts aSrcList;
+                SvShorts aDestList;
                 aSrcList.Insert(nSrcTab,0);
                 aDestList.Insert(nDestTab,0);
                 GetUndoManager()->AddUndoAction(
@@ -946,8 +948,8 @@ BOOL ScDocShell::MoveTable( USHORT nSrcTab, USHORT nDestTab, BOOL bCopy, BOOL bR
             return FALSE;
         else if (bRecord)
         {
-            SvUShorts aSrcList;
-            SvUShorts aDestList;
+            SvShorts aSrcList;
+            SvShorts aDestList;
             aSrcList.Insert(nSrcTab,0);
             aDestList.Insert(nDestTab,0);
             GetUndoManager()->AddUndoAction(
