@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:30 $
+ *  last change: $Author: af $ $Date: 2001-02-07 10:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ TabPage RID_SFX_TP_MACROASSIGN
      // HelpID = HID_MACROASSIGN ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 176 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Makro zuweisen" ;
     Text [ English ] = "Assign macro" ;
     Text [ english_us ] = "Assign Macro" ;
@@ -108,7 +108,7 @@ TabPage RID_SFX_TP_MACROASSIGN
     Control LB_EVENT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 180 , 51 ) ;
         TabStop = TRUE ;
         ClipChildren = TRUE ;
@@ -117,15 +117,15 @@ TabPage RID_SFX_TP_MACROASSIGN
     };
     GroupBox GB_MACRO
     {
-        Pos = MAP_APPFONT ( 6 , 77 ) ;
-        Size = MAP_APPFONT ( 248 , 93 ) ;
+        Pos = MAP_APPFONT ( 6 , 74  ) ;
+        Size = MAP_APPFONT ( 248 , 105 ) ;
         Group = TRUE ;
     };
     Control LB_GROUP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 88 ) ;
-        Size = MAP_APPFONT ( 111 , 76 ) ;
+        Pos = MAP_APPFONT ( 12 , 85  ) ;
+        Size = MAP_APPFONT ( 111 , 88 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         HelpId = HID_MACRO_GROUP ;
@@ -133,15 +133,15 @@ TabPage RID_SFX_TP_MACROASSIGN
     Control LB_MACROS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 129 , 88 ) ;
-        Size = MAP_APPFONT ( 119 , 76 ) ;
+        Pos = MAP_APPFONT ( 129 , 85  ) ;
+        Size = MAP_APPFONT ( 119 , 88 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         HelpId = HID_MACRO_MACROS ;
     };
     PushButton PB_ASSIGN
     {
-        Pos = MAP_APPFONT ( 204 , 6 ) ;
+        Pos = MAP_APPFONT ( 204 , 6  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
          // ### ACHTUNG: Neuer Text in Resource? Z~uweisen : Zuweisen
         Text = "Z~uweisen" ;
@@ -169,7 +169,7 @@ TabPage RID_SFX_TP_MACROASSIGN
     };
     PushButton PB_DELETE
     {
-        Pos = MAP_APPFONT ( 204 , 23 ) ;
+        Pos = MAP_APPFONT ( 204 , 24  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Aufheben" ;
         Text [ English ] = "~Dismiss" ;
@@ -196,7 +196,7 @@ TabPage RID_SFX_TP_MACROASSIGN
     };
     ListBox LB_SCRIPTTYPE
     {
-        Pos = MAP_APPFONT ( 204 , 43 ) ;
+        Pos = MAP_APPFONT ( 204 , 42  ) ;
         Size = MAP_APPFONT ( 50 , 30 ) ;
         Text = "~Scriptsprache" ;
         TabStop = TRUE ;
@@ -262,8 +262,8 @@ TabPage RID_SFX_TP_MACROASSIGN
     MultiLineEdit ED_JAVASCRIPT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 88 ) ;
-        Size = MAP_APPFONT ( 236 , 76 ) ;
+        Pos = MAP_APPFONT ( 12 , 85  ) ;
+        Size = MAP_APPFONT ( 236 , 88 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         VScroll = TRUE ;
@@ -286,7 +286,7 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
      // HelpID = HID_MACROASSIGN ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Makro zuweisen" ;
     Text [ English ] = "Assign macro" ;
     Text [ english_us ] = "Assign Macro" ;
@@ -300,8 +300,8 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
     Text [ portuguese ] = "Atribuir macro" ;
     GroupBox GB_EVENT
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 192 , 57 ) ;
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 192 , 63 ) ;
         Text = "Ereignis" ;
         Text [ ENGLISH ] = "Event" ;
         Group = TRUE ;
@@ -327,8 +327,8 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
     Control LB_EVENT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 180 , 40 ) ;
+        Pos = MAP_APPFONT ( 12 , 14  ) ;
+        Size = MAP_APPFONT ( 180 , 46 ) ;
         TabStop = TRUE ;
         ClipChildren = TRUE ;
         Disable = TRUE ;
@@ -336,7 +336,7 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
     };
     PushButton PB_ASSIGN
     {
-        Pos = MAP_APPFONT ( 204 , 6 ) ;
+        Pos = MAP_APPFONT ( 204 , 6  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
          // ### ACHTUNG: Neuer Text in Resource? Z~uweisen : Zuweisen
         Text = "Z~uweisen" ;
@@ -364,7 +364,7 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
     };
     PushButton PB_DELETE
     {
-        Pos = MAP_APPFONT ( 204 , 23 ) ;
+        Pos = MAP_APPFONT ( 204 , 24  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Aufheben" ;
         Text [ English ] = "~Dismiss" ;
@@ -391,7 +391,7 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
     };
     ListBox LB_SCRIPTTYPE
     {
-        Pos = MAP_APPFONT ( 204 , 43 ) ;
+        Pos = MAP_APPFONT ( 204 , 42  ) ;
         Size = MAP_APPFONT ( 50 , 30 ) ;
         Text = "~Scriptsprache" ;
         TabStop = TRUE ;
@@ -400,15 +400,15 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
     };
     GroupBox GB_MACRO
     {
-        Pos = MAP_APPFONT ( 6 , 66 ) ;
-        Size = MAP_APPFONT ( 248 , 63 ) ;
+        Pos = MAP_APPFONT ( 6 , 69  ) ;
+        Size = MAP_APPFONT ( 248 , 110 ) ;
         Group = TRUE ;
     };
     Control LB_GROUP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 77 ) ;
-        Size = MAP_APPFONT ( 111 , 44 ) ;
+        Pos = MAP_APPFONT ( 12 , 80  ) ;
+        Size = MAP_APPFONT ( 111 , 93 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         HelpId = HID_MACRO_GROUP ;
@@ -416,8 +416,8 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
     Control LB_MACROS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 129 , 77 ) ;
-        Size = MAP_APPFONT ( 119 , 44 ) ;
+        Pos = MAP_APPFONT ( 129 , 80  ) ;
+        Size = MAP_APPFONT ( 119 , 93 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         HelpId = HID_MACRO_MACROS ;
@@ -481,8 +481,8 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
     MultiLineEdit ED_JAVASCRIPT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 77 ) ;
-        Size = MAP_APPFONT ( 236 , 44 ) ;
+        Pos = MAP_APPFONT ( 12 , 80  ) ;
+        Size = MAP_APPFONT ( 236 , 93 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         VScroll = TRUE ;
@@ -500,3 +500,6 @@ TabPage RID_SFX_SMALLTP_MACROASSIGN
     Text[ greek ] = "Αντιστοίχιση μακροεντολής";
     Text[ korean ] = "Assign Macro";
 };
+
+
+
