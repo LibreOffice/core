@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dl $ $Date: 2001-11-23 13:32:36 $
+ *  last change: $Author: sj $ $Date: 2002-02-14 17:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,41 +281,41 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                     SdrPageView* pPV = pViewSh->GetDoc()->GetPaintingPageView();
 
                     if (pPV)
-                    {
                         pPage = (SdPage*) pPV->GetPage();
-                    }
 
-                    if (pPage && pPage->GetPageKind() != PK_HANDOUT)
+                    if ( pPage )
                     {
-                        // Keine Handzettelseite
-                        nPgNum = (pPage->GetPageNum() + 1) / 2;
-                    }
-                    else
-                    {
-                        // Handzettelseite
-                        const SdrTextObj* pTextObj = pViewSh->GetDoc()->GetFormattingTextObj();
-
-                        if (pTextObj && pTextObj->GetPage())
+                        if ( pPage->GetPageKind() != PK_HANDOUT )
                         {
-                            if (((SdPage*) pTextObj->GetPage())->GetPageKind() == PK_HANDOUT)
+                            // Keine Handzettelseite
+                            nPgNum = (pPage->GetPageNum() + 1) / 2;
+                        }
+                        else
+                        {
+                            // Handzettelseite
+                            const SdrTextObj* pTextObj = pViewSh->GetDoc()->GetFormattingTextObj();
+
+                            if (pTextObj && pTextObj->GetPage())
                             {
-                                // Handzettelseite
-                                nPgNum = pViewSh->GetPrintedHandoutPageNum();
-                            }
-                            else if ( pPV && pPV->GetPaintingPageObj() )
-                            {
-                                // Textobjekt innerhalb eines Seitendarstellungsobjekts
-                                nPgNum = (pPV->GetPaintingPageObj()->GetPageNum() - 1) / 2 + 1;
-                            }
-                            else
-                            {
-                                // Textobjekt innerhalb eines Seitendarstellungsobjekts
-                                nPgNum = (pTextObj->GetPage()->GetPageNum() - 1) / 2 + 1;
+                                if (((SdPage*) pTextObj->GetPage())->GetPageKind() == PK_HANDOUT)
+                                {
+                                    // Handzettelseite
+                                    nPgNum = pViewSh->GetPrintedHandoutPageNum();
+                                }
+                                else if ( pPV && pPV->GetPaintingPageObj() )
+                                {
+                                    // Textobjekt innerhalb eines Seitendarstellungsobjekts
+                                    nPgNum = (pPV->GetPaintingPageObj()->GetPageNum() - 1) / 2 + 1;
+                                }
+                                else
+                                {
+                                    // Textobjekt innerhalb eines Seitendarstellungsobjekts
+                                    nPgNum = (pTextObj->GetPage()->GetPageNum() - 1) / 2 + 1;
+                                }
                             }
                         }
                     }
                 }
-
                 aRepresentation = pViewSh->GetDoc()->CreatePageNumValue(nPgNum);
             }
 
