@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selectdbtabledialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-29 09:32:37 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,10 +143,10 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
     m_aTableLB.SetPosSizePixel(aLBPos, aLBSize);
 
     Size aSz(m_aTableHB.GetOutputSizePixel());
-    m_aTableHB.InsertItem( 0, m_sName,
+    m_aTableHB.InsertItem( 1, m_sName,
                             aSz.Width()/2,
                             HIB_LEFT | HIB_VCENTER /*| HIB_CLICKABLE | HIB_UPARROW */);
-    m_aTableHB.InsertItem( 1, m_sType,
+    m_aTableHB.InsertItem( 2, m_sType,
                             aSz.Width()/2,
                             HIB_LEFT | HIB_VCENTER /*| HIB_CLICKABLE | HIB_UPARROW */);
     m_aTableHB.SetHelpId(HID_MM_ADDRESSLIST_HB );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: customizeaddresslistdialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-29 09:30:34 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,16 +168,18 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
         }
         else
         {
+            if ( m_aFieldsLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
+                ++nPos; // append the new entry behind the selected
             //add the new column
-            sal_uInt32 nInsertPos = nPos + 1;
-            m_pNewData->aDBColumnHeaders.insert(m_pNewData->aDBColumnHeaders.begin() + nInsertPos, sNew);
+            m_pNewData->aDBColumnHeaders.insert(m_pNewData->aDBColumnHeaders.begin() + nPos, sNew);
             //add a new entry into all data arrays
             String sTemp;
             ::std::vector< ::std::vector< ::rtl::OUString > >::iterator aDataIter;
             for( aDataIter = m_pNewData->aDBData.begin(); aDataIter != m_pNewData->aDBData.end(); ++aDataIter)
-                aDataIter->insert(aDataIter->begin() + nInsertPos, sTemp);
+                aDataIter->insert(aDataIter->begin() + nPos, sTemp);
 
         }
+
         m_aFieldsLB.InsertEntry(sNew, nPos);
         m_aFieldsLB.SelectEntryPos(nPos);
     }
