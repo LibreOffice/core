@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:00 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:25:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,23 +900,44 @@ void GalleryBrowser2::ImplUpdateInfoBar()
 
 ULONG GalleryBrowser2::ImplGetSelectedItemId( const Point* pSelPos, Point& rSelPos )
 {
-    const Size                  aOutputSizePixel( GetOutputSizePixel() );
-    const GalleryBrowserMode    eValidMode = ( ( GALLERYBROWSERMODE_PREVIEW == GetMode() ) ? meLastMode : GetMode() );
-    ULONG                       nRet = 0;
+    const Size  aOutputSizePixel( GetOutputSizePixel() );
+    ULONG       nRet = 0;
 
-    if( GALLERYBROWSERMODE_ICON == eValidMode )
+    if( GALLERYBROWSERMODE_PREVIEW == GetMode() )
     {
-        nRet = pSelPos ? mpIconView->GetItemId( *pSelPos ) : mpIconView->GetSelectItemId();
-        rSelPos = pSelPos ? GetPointerPosPixel() : mpIconView->GetItemRect( (USHORT) nRet ).Center();
+        nRet = ( ( GALLERYBROWSERMODE_ICON == meLastMode ) ? mpIconView->GetSelectItemId() : ( mpListView->FirstSelectedRow() + 1 ) );
+
+        if( pSelPos )
+            rSelPos = GetPointerPosPixel();
+        else
+            rSelPos = Point( aOutputSizePixel.Width() >> 1, aOutputSizePixel.Height() >> 1 );
+    }
+    else if( GALLERYBROWSERMODE_ICON == GetMode() )
+    {
+        if( pSelPos )
+        {
+            nRet = mpIconView->GetItemId( *pSelPos );
+            rSelPos = GetPointerPosPixel();
+        }
+        else
+        {
+            nRet = mpIconView->GetSelectItemId();
+            rSelPos = mpIconView->GetItemRect( (USHORT) nRet ).Center();
+        }
     }
     else
     {
-        nRet = ( pSelPos ? mpListView->GetRowAtYPosPixel( pSelPos->Y() ) : mpListView->FirstSelectedRow() ) + 1;
-        rSelPos = pSelPos ? GetPointerPosPixel() : mpListView->GetFieldRectPixel( (USHORT) nRet, 1 ).Center();
+        if( pSelPos )
+        {
+            nRet = mpListView->GetRowAtYPosPixel( pSelPos->Y() ) + 1;
+            rSelPos = GetPointerPosPixel();
+        }
+        else
+        {
+            nRet = mpListView->FirstSelectedRow() + 1;
+            rSelPos = mpListView->GetFieldRectPixel( (USHORT) nRet, 1 ).Center();
+        }
     }
-
-    if( !pSelPos && ( GALLERYBROWSERMODE_PREVIEW == GetMode() ) )
-        rSelPos = Point( aOutputSizePixel.Width() >> 1, aOutputSizePixel.Height() >> 1 );
 
     rSelPos.X() = Max( Min( rSelPos.X(), aOutputSizePixel.Width() - 1L ), 0L );
     rSelPos.Y() = Max( Min( rSelPos.Y(), aOutputSizePixel.Height() - 1L ), 0L );
