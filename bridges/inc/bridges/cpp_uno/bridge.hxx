@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridge.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-29 10:37:37 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _OSL_PROCESS_H_
-#include <osl/process.h>
 #endif
 #ifndef _RTL_PROCESS_H_
 #include <rtl/process.h>
@@ -458,21 +455,9 @@ inline const ::rtl::OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW
         {
             ::rtl::OUStringBuffer aRet( 64 );
             aRet.appendAscii( RTL_CONSTASCII_STRINGPARAM("];") );
-            // pid
-            oslProcessInfo info;
-            info.Size = sizeof(oslProcessInfo);
-            if (::osl_getProcessInfo( 0, osl_Process_IDENTIFIER, &info ) == osl_Process_E_None)
-            {
-                aRet.append( (sal_Int64)info.Ident, 16 );
-            }
-            else
-            {
-                aRet.appendAscii( RTL_CONSTASCII_STRINGPARAM("unknown process id") );
-            }
             // good guid
             sal_uInt8 ar[16];
             ::rtl_getGlobalProcessId( ar );
-            aRet.append( (sal_Unicode)';' );
             for ( sal_Int32 i = 0; i < 16; ++i )
             {
                 aRet.append( (sal_Int32)ar[i], 16 );
@@ -513,11 +498,13 @@ inline void SAL_CALL cppu_cppenv_computeObjectIdentifier(
                 ::rtl::OUStringBuffer oid( 64 );
                 oid.append( (sal_Int64)xHome.get(), 16 );
                 oid.append( (sal_Unicode)';' );
-                // environment[context]
-                oid.append( ((uno_Environment *)pEnv)->pTypeName );
+                // ;environment[context]
+                oid.append(
+                    *reinterpret_cast< ::rtl::OUString const * >(
+                        &((uno_Environment *) pEnv)->pTypeName ) );
                 oid.append( (sal_Unicode)'[' );
                 oid.append( (sal_Int64)((uno_Environment *)pEnv)->pContext, 16 );
-                // process;good guid
+                // ];good guid
                 oid.append( cppu_cppenv_getStaticOIdPart() );
                 ::rtl::OUString aRet( oid.makeStringAndClear() );
                 ::rtl_uString_acquire( *ppOId = aRet.pData );
@@ -525,6 +512,7 @@ inline void SAL_CALL cppu_cppenv_computeObjectIdentifier(
         }
         catch (::com::sun::star::uno::RuntimeException &)
         {
+            OSL_ENSURE( 0, "### RuntimeException occured udring queryInterface()!" );
         }
     }
 }
