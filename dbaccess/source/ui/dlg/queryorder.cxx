@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:11:29 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,8 +111,7 @@ DBG_NAME(DlgOrderCrit);
 DlgOrderCrit::DlgOrderCrit( Window * pParent,
                             const Reference< XConnection>& _rxConnection,
                             const Reference< XSQLQueryComposer>& _rxQueryComposer,
-                            const Reference< XNameAccess>& _rxCols,
-                            const Reference< XPropertySet >& _xColumn)
+                            const Reference< XNameAccess>& _rxCols)
              :ModalDialog( pParent, ModuleRes(DLG_ORDERCRIT) )
             ,aLB_ORDERFIELD1(   this, ResId( LB_ORDERFIELD1 ) )
             ,aLB_ORDERVALUE1(   this, ResId( LB_ORDERVALUE1 ) )
@@ -183,9 +182,6 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
     }
 
     m_sOrgOrder = m_xQueryComposer->getOrder();
-
-    if ( _xColumn.is() )
-        m_xQueryComposer->appendOrderByColumn(_xColumn,sal_True);
 
     SetOrderList( m_xQueryComposer->getOrder() );
     EnableLines();
