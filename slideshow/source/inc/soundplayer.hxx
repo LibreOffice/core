@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soundplayer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:21:49 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #include <rtl/ustring.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
-#endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HXX_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
@@ -83,6 +80,9 @@
 #include <boost/shared_ptr.hpp>
 #endif
 
+#include "pauseeventhandler.hxx"
+#include "eventmultiplexer.hxx"
+
 
 /* Definition of SoundPlayer class */
 
@@ -90,9 +90,12 @@ namespace presentation
 {
     namespace internal
     {
-        /** Little class that plays a sound from a URL
+        /** Little class that plays a sound from a URL.
+            TODO:
+            Must be explicitly disposed (as long as enable_shared_ptr_from_this
+            isn't available)!
          */
-        class SoundPlayer
+        class SoundPlayer : public PauseEventHandler
         {
         public:
             /** Create a sound player object.
@@ -108,11 +111,13 @@ namespace presentation
                 the sound file is invalid, or not supported by the
                 player service.
              */
-            SoundPlayer( const ::rtl::OUString&                             rSoundURL,
-                         const ::com::sun::star::uno::Reference<
-                                 ::com::sun::star::uno::XComponentContext>& rComponentContext );
+            static ::boost::shared_ptr<SoundPlayer> create(
+                EventMultiplexer & rEventMultiplexer,
+                const ::rtl::OUString& rSoundURL,
+                const ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XComponentContext>& rComponentContext );
 
-            ~SoundPlayer();
+            virtual ~SoundPlayer();
 
             /** Query duration of sound playback.
 
@@ -126,7 +131,22 @@ namespace presentation
             bool startPlayback();
             bool stopPlayback();
 
+            // PauseEventHandler:
+            virtual bool handlePause( bool bPauseShow );
+            // Disposable:
+            virtual void dispose();
+
         private:
+            SoundPlayer(
+                EventMultiplexer & rEventMultiplexer,
+                const ::rtl::OUString& rSoundURL,
+                const ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XComponentContext>& rComponentContext );
+
+            EventMultiplexer & mrEventMultiplexer;
+            // TODO(Q3): obsolete when boost::enable_shared_ptr_from_this
+            //           is available
+            ::boost::shared_ptr<SoundPlayer> mThis;
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > mxPlayer;
         };
 
