@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: aw $ $Date: 2001-02-07 16:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1209,7 +1209,9 @@ void SdrModel::TakeMetricStr(long nVal, XubString& rStr, FASTBOOL bNoUnitChars) 
         nKomma = 0;
     }
 
-    if(nKomma > 0 && rStr.Len() < nKomma)
+    // #83257# the second condition needs to be <= since inside this loop
+    // also the leading zero is inserted.
+    if(nKomma > 0 && rStr.Len() <= nKomma)
     {
         // Fuer Komma evtl. vorne Nullen dran
         sal_Int32 nAnz(nKomma - rStr.Len());
