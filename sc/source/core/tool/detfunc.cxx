@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:56:45 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,12 +927,11 @@ SdrObject* ScDetectiveFunc::DrawCaption( SCCOL nCol, SCROW nRow, const String& r
      }
 
     if (bHasUserText)
+    {
         pCaption->AdjustTextFrameWidthAndHeight( aTextRect, TRUE, TRUE );
-    else
-        pCaption->AdjustTextFrameWidthAndHeight( aTextRect, TRUE, FALSE );
+        aTextRect = pCaption->GetLogicRect();
+    }
 
-    // InsertObject() modifies the rectangle as 'fit height to text' is set by default.
-    aTextRect = pCaption->GetLogicRect();
     aCellNote.SetRectangle(aTextRect);
     pDoc->SetNote( nCol, nRow, nTab, aCellNote );
 
