@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-09 15:37:56 $
+ *  last change: $Author: cd $ $Date: 2001-11-19 12:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 
 #include <string>       // prevent clash between STLport 3.2.1 and C50 compiler includes
 #include <algorithm>
+#include <time.h>
 
 #ifndef __FRAMEWORK_HELPER_STATUSINDICATORFACTORY_HXX_
 #include <helper/statusindicatorfactory.hxx>
@@ -130,6 +131,10 @@
 #include <vos/mutex.hxx>
 #endif
 
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -147,6 +152,17 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 //  declarations
 //_________________________________________________________________________________________________________________
+
+#define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
+
+sal_uInt32 Get10ThSec()
+{
+    sal_uInt32 n10Ticks = 10 * (sal_uInt32)clock();
+
+    return n10Ticks / CLOCKS_PER_SEC;
+}
+
+sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  /// static counter for rescheduling
 
 //*****************************************************************************************************************
 //  XInterface
@@ -445,14 +461,11 @@ void StatusIndicatorFactory::start( const css::uno::Reference< css::task::XStatu
     try
     {
 
-        {
-            // Create status indicator window to shared it for all created indictaor objects by this factory.
-            vos::OGuard aGuard( Application::GetSolarMutex() );
-            if( m_pStatusBar == NULL )
-                m_pStatusBar = new StatusBar( VCLUnoHelper::GetWindow( m_xParentWindow ), WB_3DLOOK|WB_BORDER );
-        }
-
         vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        // Create status indicator window to shared it for all created indictaor objects by this factory.
+        if( m_pStatusBar == NULL )
+            m_pStatusBar = new StatusBar( VCLUnoHelper::GetWindow( m_xParentWindow ), WB_3DLOOK|WB_BORDER );
 
         Window* pParentWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
         if ( pParentWindow )
@@ -470,13 +483,14 @@ void StatusIndicatorFactory::start( const css::uno::Reference< css::task::XStatu
         m_xParentWindow->setVisible   ( sal_True      );
         m_pStatusBar->Show();
         m_pStatusBar->StartProgressMode( sText );
+        m_nStartTime = Get10ThSec();
     }
     catch( css::uno::RuntimeException& )
     {
     }
 
     aLock.unlock();
-    Application::Yield();
+    reschedule();
 }
 
 /*-************************************************************************************************************//**
@@ -537,14 +551,13 @@ void StatusIndicatorFactory::end( const css::uno::Reference< css::task::XStatusI
                 }
 
                 m_pStatusBar->Show( sal_False );
+
                 // Destroy shared status indicator.
                 // Attention: Don't do it after destroying of parent or indicator window!
                 // Otherwhise vcl say: "parent with living child destroyed ..."
-                {
-                    vos::OGuard aGuard( Application::GetSolarMutex() );
-                    delete m_pStatusBar;
-                    m_pStatusBar = NULL;
-                }
+                delete m_pStatusBar;
+                m_pStatusBar = NULL;
+
                 m_xActiveIndicator = css::uno::Reference< css::task::XStatusIndicator >();
             }
         }
@@ -554,7 +567,7 @@ void StatusIndicatorFactory::end( const css::uno::Reference< css::task::XStatusI
     }
 
     aLock.unlock();
-    Application::Yield();
+    reschedule();
 }
 
 /*-************************************************************************************************************//**
@@ -606,7 +619,7 @@ void StatusIndicatorFactory::reset( const css::uno::Reference< css::task::XStatu
     }
 
     aLock.unlock();
-    Application::Yield();
+    reschedule();
 }
 
 //*****************************************************************************************************************
@@ -636,7 +649,7 @@ void StatusIndicatorFactory::setText( const css::uno::Reference< css::task::XSta
     }
 
     aLock.unlock();
-    Application::Yield();
+    reschedule();
 }
 
 //*****************************************************************************************************************
@@ -651,24 +664,60 @@ void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XSt
     ResetableGuard aLock( m_aLock );
 
     IndicatorStack::iterator pItem = ::std::find( m_aStack.begin(), m_aStack.end(), xChild );
+
+    USHORT nOldPercentage = (USHORT)( ::std::min( (( pItem->m_nValue * 100 )/ ::std::max( pItem->m_nRange, (sal_Int32)1 ) ), (sal_Int32)100 ));
     pItem->m_nValue = nValue;
 
     if( xChild == m_xActiveIndicator )
     {
         try
         {
-            USHORT nPercentage = (USHORT)( ::std::min( (( nValue * 100 )/ ::std::max( pItem->m_nRange, (sal_Int32)1 ) ), (sal_Int32)100 ));
+            USHORT nNewPercentage = (USHORT)( ::std::min( (( nValue * 100 )/ ::std::max( pItem->m_nRange, (sal_Int32)1 ) ), (sal_Int32)100 ));
 
-            vos::OGuard aGuard( Application::GetSolarMutex() );
-            m_pStatusBar->SetProgressValue( nPercentage );
+            // Set new value only if its new! StatusBar implementation redraws despite the fact
+            // that the value isn't new!!!
+            if ( nNewPercentage != nOldPercentage )
+            {
+                vos::OGuard aGuard( Application::GetSolarMutex() );
+                m_pStatusBar->SetProgressValue( nNewPercentage );
+            }
         }
         catch( css::uno::RuntimeException& )
         {
         }
     }
 
+    // We start rescheduling only after 1 second - this code was successfully introduced by the sfx2
+    // implementation of the progress bar.
+    sal_Bool bReschedule = (( Get10ThSec() - m_nStartTime ) > TIMEOUT_START_RESCHEDULE );
+
     aLock.unlock();
-    Application::Yield();
+
+    if ( bReschedule )
+        reschedule();
+}
+
+/*-************************************************************************************************************//**
+    @interface  -
+    @short      helper to optimize the reschedule scheme of the status indicator
+    @descr      This is a helper implementation to call reschedule only if are not running inside
+                our own reschedule call.
+
+    @param      -
+    @return     -
+
+    @onerror    -
+    @threadsafe yes
+*//*-*************************************************************************************************************/
+
+void StatusIndicatorFactory::reschedule()
+{
+    if ( m_nInReschedule == 0 )
+    {
+        ++m_nInReschedule;
+        Application::Reschedule();
+        --m_nInReschedule;
+    }
 }
 
 /*-************************************************************************************************************//**

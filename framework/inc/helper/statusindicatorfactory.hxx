@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2001-10-18 13:53:23 $
+ *  last change: $Author: cd $ $Date: 2001-11-19 12:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,7 @@ class StatusIndicatorFactory   :   public  css::task::XStatusIndicatorFactory  ,
     //-------------------------------------------------------------------------------------------------------------
     private:
         void implts_recalcLayout();
+        void reschedule();
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
@@ -317,7 +318,7 @@ class StatusIndicatorFactory   :   public  css::task::XStatusIndicatorFactory  ,
     //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
     private:
-
+        static sal_Int32                                        m_nInReschedule             ;   /// static counter for rescheduling
         IndicatorStack                                          m_aStack                    ;   /// stack with all current indicator childs
         StatusBar*                                              m_pStatusBar                ;   /// status bar as progress bar
         css::uno::Reference< css::lang::XMultiServiceFactory >  m_xFactory                  ;   /// uno service manager to create new services
@@ -325,6 +326,7 @@ class StatusIndicatorFactory   :   public  css::task::XStatusIndicatorFactory  ,
 
         css::uno::Reference< css::task::XStatusIndicator >      m_xActiveIndicator          ;   /// most active indicator child, which could work with our shared indicator window only
         css::uno::Reference< css::awt::XWindow >                m_xParentWindow             ;   /// we are listener on this window to resize shared statrus indicator
+        long                                                    m_nStartTime                ;   /// time where there last start call was made
 
 };      //  class StatusIndicatorFactory
 
