@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.53 2003-03-27 18:19:53 hr Exp $
+	$Id: text.mod,v 1.54 2003-04-17 13:16:02 vg Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -85,7 +85,7 @@
 				   text:text-input |
 				   text:database-display |
 				   text:database-next |
-				   text:database-row-select |
+				   text:database-select |
 				   text:database-row-number |
 				   text:database-name |
 				   text:initial-creator |
@@ -433,23 +433,26 @@
 <!ATTLIST text:database-display %database-table;>
 <!ATTLIST text:database-display text:column-name %string; #REQUIRED>
 <!ATTLIST text:database-display style:data-style-name %styleName; #IMPLIED>
+<!ATTLIST text:database-display text:display (none|value) #IMPLIED>
 
 <!ELEMENT text:database-next (#PCDATA)>
 <!ATTLIST text:database-next %database-table;>
 <!ATTLIST text:database-next text:condition %formula; #IMPLIED>
 
-<!ELEMENT text:database-row-select (#PCDATA)>
-<!ATTLIST text:database-row-select %database-table;>
-<!ATTLIST text:database-row-select text:condition %formula; #IMPLIED>
-<!ATTLIST text:database-row-select text:row-number %integer; #REQUIRED>
+<!ELEMENT text:database-select (#PCDATA)>
+<!ATTLIST text:database-select %database-table;>
+<!ATTLIST text:database-select text:condition %formula; #IMPLIED>
+<!ATTLIST text:database-select text:row-number %integer; #REQUIRED>
 
 <!ELEMENT text:database-row-number (#PCDATA)>
 <!ATTLIST text:database-row-number %database-table;>
 <!ATTLIST text:database-row-number %numFormat;>
 <!ATTLIST text:database-row-number text:value %integer; #IMPLIED>
+<!ATTLIST text:database-row-number text:display (none|value) #IMPLIED>
 
 <!ELEMENT text:database-name (#PCDATA)>
 <!ATTLIST text:database-name %database-table;>
+<!ATTLIST text:database-name text:display (none|value) #IMPLIED>
 
 <!ELEMENT text:initial-creator (#PCDATA)>
 <!ATTLIST text:initial-creator text:fixed %boolean; "false">
