@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionWrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-23 09:57:44 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,8 +276,8 @@ void OConnectionWeakWrapper::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    m_xConnection = NULL;
     OConnectionWeakWrapper_BASE::disposing();
+    OConnectionWrapper::disposing();
 }
 // -----------------------------------------------------------------------------
 // com::sun::star::lang::XUnoTunnel
