@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:29:48 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,8 @@ OSQLParseTreeIterator::OSQLParseTreeIterator(const Reference< XNameAccess>& _xTa
                                              const OSQLParser* _pParser)
     : m_xTables(_xTables)
     , m_xDatabaseMetaData(_xDatabaseMetaData)
-    , m_aTables(_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers())
-    , m_aCaseEqual(_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers())
+    , m_aTables(_xDatabaseMetaData.is() && _xDatabaseMetaData->storesMixedCaseQuotedIdentifiers())
+    , m_aCaseEqual(_xDatabaseMetaData.is() && _xDatabaseMetaData->storesMixedCaseQuotedIdentifiers())
     ,m_pParser(_pParser)
 {
 //  m_aSelectColumns = new OSQLColumns();// must be done because we need an empty column at zero
@@ -259,28 +259,31 @@ void OSQLParseTreeIterator::traverseOneTableName(const OSQLParseNode * pTableNam
                 sTableTypes[1] = s_sTableTypeTable;
                 sTableTypes[2] = sWildcard; // just to be sure to include anything else ....
 
-                Reference< XResultSet> xRes = m_xDatabaseMetaData->getTables(aCatalog,aSchema,aTableName,sTableTypes);
-                aComposedName = ::rtl::OUString(); // now clear the name to avoid reassignment
-                if(xRes.is() && xRes->next())
+                if ( m_xDatabaseMetaData.is() )
                 {
-                    ::rtl::OUString sCatalog, sSchema, sName;
-                    Reference< XRow > xCurrentRow(xRes, UNO_QUERY);
-                    sCatalog    = xCurrentRow->getString(1);
-                    if(xCurrentRow->wasNull())
-                        sCatalog= ::rtl::OUString();
+                    Reference< XResultSet> xRes = m_xDatabaseMetaData->getTables(aCatalog,aSchema,aTableName,sTableTypes);
+                    aComposedName = ::rtl::OUString(); // now clear the name to avoid reassignment
+                    if(xRes.is() && xRes->next())
+                    {
+                        ::rtl::OUString sCatalog, sSchema, sName;
+                        Reference< XRow > xCurrentRow(xRes, UNO_QUERY);
+                        sCatalog    = xCurrentRow->getString(1);
+                        if(xCurrentRow->wasNull())
+                            sCatalog= ::rtl::OUString();
 
-                    sSchema     = xCurrentRow->getString(2);
-                    if(xCurrentRow->wasNull())
-                        sSchema= ::rtl::OUString();
-                    sName       = xCurrentRow->getString(3);
-                    if(xCurrentRow->wasNull())
-                        sName= ::rtl::OUString();
-                    ::dbtools::composeTableName(m_xDatabaseMetaData, sCatalog,
-                                                                     sSchema,
-                                                                     sName,
-                                                                     aComposedName,
-                                                                     sal_False,
-                                                                     ::dbtools::eInDataManipulation);
+                        sSchema     = xCurrentRow->getString(2);
+                        if(xCurrentRow->wasNull())
+                            sSchema= ::rtl::OUString();
+                        sName       = xCurrentRow->getString(3);
+                        if(xCurrentRow->wasNull())
+                            sName= ::rtl::OUString();
+                        ::dbtools::composeTableName(m_xDatabaseMetaData, sCatalog,
+                                                                        sSchema,
+                                                                        sName,
+                                                                        aComposedName,
+                                                                        sal_False,
+                                                                        ::dbtools::eInDataManipulation);
+                    }
                 }
             }
             if(m_xTables->hasByName(aComposedName)) // the name can be changed before
@@ -1159,7 +1162,7 @@ void OSQLParseTreeIterator::traverseOnePredicate(
                                                             DataType::VARCHAR,
                                                             sal_False,
                                                             sal_False,
-                                                            m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
+                                                            m_xDatabaseMetaData.is() && m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
                     pColumn->setName(rValue);
                     pColumn->setRealName(rValue);
                     m_aParameters->push_back(pColumn);
@@ -1262,7 +1265,7 @@ void OSQLParseTreeIterator::appendColumns(const ::rtl::OUString& _rTableAlias,co
     const ::rtl::OUString* pBegin = aColNames.getConstArray();
     const ::rtl::OUString* pEnd = pBegin + aColNames.getLength();
 
-    sal_Bool bCase = m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers();
+    sal_Bool bCase = m_xDatabaseMetaData.is() && m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers();
     for(;pBegin != pEnd;++pBegin)
     {
 
