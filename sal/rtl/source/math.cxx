@@ -2,9 +2,9 @@
  *
  *  $RCSfile: math.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-04 15:25:01 $
+ *  last change: $Author: sb $ $Date: 2002-11-05 10:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,8 +175,10 @@ struct UStringTraits
 #pragma optimize("g",off)
 #endif // WIN, MSC, WNT
 
-template< typename T >
-inline void doubleToString(typename T::String ** pResult,
+// Solaris C++ 5.2 compiler has problems when "StringT ** pResult" is
+// "typename T::String ** pResult" instead:
+template< typename T, typename StringT >
+inline void doubleToString(StringT ** pResult,
                            sal_Int32 * pResultCapacity, sal_Int32 nResultOffset,
                            double fValue, rtl_math_StringFormat eFormat,
                            sal_Int32 nDecPlaces, typename T::Char cDecSeparator,
@@ -531,10 +533,9 @@ void SAL_CALL rtl_math_doubleToString(rtl_String ** pResult,
                                       sal_Bool bEraseTrailingDecZeros)
     SAL_THROW_EXTERN_C()
 {
-    doubleToString< StringTraits >(pResult, pResultCapacity, nResultOffset,
-                                   fValue, eFormat, nDecPlaces, cDecSeparator,
-                                   pGroups, cGroupSeparator,
-                                   bEraseTrailingDecZeros);
+    doubleToString< StringTraits, StringTraits::String >(
+        pResult, pResultCapacity, nResultOffset, fValue, eFormat, nDecPlaces,
+        cDecSeparator, pGroups, cGroupSeparator, bEraseTrailingDecZeros);
 }
 
 void SAL_CALL rtl_math_doubleToUString(rtl_uString ** pResult,
@@ -548,15 +549,14 @@ void SAL_CALL rtl_math_doubleToUString(rtl_uString ** pResult,
                                        sal_Bool bEraseTrailingDecZeros)
     SAL_THROW_EXTERN_C()
 {
-    doubleToString< UStringTraits >(pResult, pResultCapacity, nResultOffset,
-                                    fValue, eFormat, nDecPlaces, cDecSeparator,
-                                    pGroups, cGroupSeparator,
-                                    bEraseTrailingDecZeros);
+    doubleToString< UStringTraits, UStringTraits::String >(
+        pResult, pResultCapacity, nResultOffset, fValue, eFormat, nDecPlaces,
+        cDecSeparator, pGroups, cGroupSeparator, bEraseTrailingDecZeros);
 }
 
 #if defined WIN || (defined MSC && defined WNT)
 #pragma optimize("",on)
-#endif
+#endif // WIN, MSC, WNT
 
 namespace {
 
