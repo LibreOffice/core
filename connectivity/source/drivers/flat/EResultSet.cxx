@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EResultSet.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:01:55 $
+ *  last change: $Author: hr $ $Date: 2001-10-18 12:17:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,12 +215,12 @@ IPropertyArrayHelper & OFlatResultSet::getInfoHelper()
     return *OFlatResultSet_BASE3::getArrayHelper();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFlatResultSet::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OFlatResultSet::acquire() throw()
 {
     OFlatResultSet_BASE2::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFlatResultSet::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OFlatResultSet::release() throw()
 {
     OFlatResultSet_BASE2::release();
 }
