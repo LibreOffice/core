@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:06:26 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@ ModalDialog DLG_RENAME_XNAMED
         Text[ hebrew ] = "Neuer Name";
         Text[ hindi ] = "नया नाम";
         Text[ slovak ] = "Nový názov";
+        Text[ hungarian ] = "Új név";
+        Text[ slovenian ] = "Novo ime";
     };
     Edit ED_NEW_NAME
     {
@@ -143,6 +145,8 @@ ModalDialog DLG_RENAME_XNAMED
         Text[ hebrew ] = "Name ändern";
         Text[ hindi ] = "नाम बदलो";
         Text[ slovak ] = "Zmeniť názov";
+        Text[ hungarian ] = "Válasszon nevet";
+        Text[ slovenian ] = "Spremeni ime";
     };
     OKButton PB_OK
     {
@@ -192,6 +196,8 @@ ModalDialog DLG_RENAME_XNAMED
     Text[ hebrew ] = "Objekt umbenennen:";
     Text[ hindi ] = "वस्तु को पुनः नाम दो: ";
     Text[ slovak ] = "Premenovať objekt:";
+    Text[ hungarian ] = "Objektum átnevezése:";
+    Text[ slovenian ] = "Preimenuj predmet:";
 };
 String STR_SERVICE_UNAVAILABLE
 {
@@ -223,6 +229,8 @@ String STR_SERVICE_UNAVAILABLE
     Text[ hebrew ] = "Der folgende Service ist nicht verfügbar:";
     Text[ hindi ] = "निम्नलिखित सेवा उपलब्ध नहीं है: ";
     Text[ slovak ] = "Táto služba nie je dostupná: ";
+    Text[ hungarian ] = "A következő szolgáltatás nem érhető el:";
+    Text[ slovenian ] = "Sledeča storitev ni na voljo:";
 };
 Resource RES_FRMEX_MENU
 {
@@ -297,8 +305,8 @@ Resource RES_FRMEX_MENU
     ItemList [ danish ] =
     {
             < "~M�lestok" ;         ST_MENU_ZOOM; > ;
-        < "Opad" ;  ST_MENU_UP;     > ;
-        < "Nedad" ;     ST_MENU_DOWN; > ;
+        < "~Opad" ;     ST_MENU_UP;     > ;
+        < "~Nedad" ;    ST_MENU_DOWN; > ;
     };
     ItemList [ swedish ] =
     {
@@ -396,8 +404,21 @@ Resource RES_FRMEX_MENU
         < "~Hore" ;     ST_MENU_UP;     > ;
         < "~Dole" ;     ST_MENU_DOWN; > ;
     };
+    ItemList [ hungarian ] =
+    {
+         < "~Nagyítás" ;      ST_MENU_ZOOM; > ;
+        < "~Felfelé" ;     ST_MENU_UP;     > ;
+        < "~Lefelé" ;  ST_MENU_DOWN; > ;
+    };
+    ItemList [ slovenian ] =
+    {
+         < "~Zoom" ;        ST_MENU_ZOOM; > ;
+        < "Navzg~or" ;  ST_MENU_UP;     > ;
+        < "Navz~dol" ;  ST_MENU_DOWN; > ;
+    };
     };
 };
+
 
 
 
