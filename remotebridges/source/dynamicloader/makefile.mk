@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:36:03 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:42:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,14 +63,15 @@
 PRJ=..$/..
 
 PRJNAME=remotebridges
-TARGET=dynamicloader
+TARGET = dynamicloader.uno
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
-COMP1TYPELIST=$(TARGET)
+COMP1TYPELIST = dynamicloader
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+DLLPRE =
 
 # ------------------------------------------------------------------
 
@@ -84,11 +85,11 @@ UNOUCROUT=$(OUT)$/inc
 # adding to inludepath
 INCPRE+=$(UNOUCROUT)
 
-
 SLOFILES= \
     $(SLO)$/dynamicloader.obj
 
 SHL1TARGET= $(TARGET)
+SHL1VERSIONMAP = $(SOLARENV)$/src$/component.map
 
 SHL1STDLIBS=\
         $(CPPUHELPERLIB) 	\
