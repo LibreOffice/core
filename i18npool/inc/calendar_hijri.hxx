@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_hijri.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:57:44 $
+ *  last change: $Author: khong $ $Date: 2002-08-06 18:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,8 @@ public:
     Calendar_hijri();
 
 protected:
-    sal_Bool SAL_CALL convertValue( sal_Int16 fieldIndex ) throw(com::sun::star::uno::RuntimeException);
+    void SAL_CALL mapToGregorian() throw(com::sun::star::uno::RuntimeException);
+    void SAL_CALL mapFromGregorian() throw(com::sun::star::uno::RuntimeException);
 
     // radians per degree (pi/180)
     static const double RadPerDeg;

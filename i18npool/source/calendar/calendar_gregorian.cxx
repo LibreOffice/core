@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2002-07-26 16:01:40 $
+ *  last change: $Author: khong $ $Date: 2002-08-06 18:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <stdio.h>
+#include <strings.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -81,15 +82,23 @@ static UErrorCode status; // status is shared in all calls to Calendar, it has t
 
 Calendar_gregorian::Calendar_gregorian()
 {
-    body = icu::Calendar::createInstance(status = U_ZERO_ERROR);
-    if (!body || !U_SUCCESS(status)) throw ERROR;
-
     cCalendar = "com.sun.star.i18n.Calendar_gregorian";
-    eraArray = NULL;
-    // init. fieldSet[]
-    fieldSet = fieldGet = 0;
+    init(NULL);
 }
 
+Calendar_gregorian::Calendar_gregorian(Era *_eraArray)
+{
+    init(_eraArray);
+}
+
+void SAL_CALL Calendar_gregorian::init(Era *_eraArray) throw(RuntimeException)
+{
+    body = icu::Calendar::createInstance(status = U_ZERO_ERROR);
+    if (!body || !U_SUCCESS(status)) throw ERROR;
+    eraArray = _eraArray;
+    // init. fieldValue[]
+    getValue();
+}
 
 Calendar_gregorian::~Calendar_gregorian()
 {
@@ -101,37 +110,34 @@ Calendar_hanja_yoil::Calendar_hanja_yoil()
     cCalendar = "com.sun.star.i18n.Calendar_hanja_yoil";
 }
 
-Calendar_gengou::Calendar_gengou()
+static Era gengou_eraArray[] = {
+    {1868,  1,  1},
+    {1912,  7, 30},
+    {1926, 12, 25},
+    {1989,  1,  8},
+    {0, 0,  0}
+};
+Calendar_gengou::Calendar_gengou() : Calendar_gregorian(gengou_eraArray)
 {
-    static Era _eraArray[] = {
-        {1868,  1,  1},
-        {1912,  7, 30},
-        {1926, 12, 25},
-        {1989,  1,  8},
-        {0, 0,  0}
-    };
     cCalendar = "com.sun.star.i18n.Calendar_gengou";
-    eraArray = _eraArray;
 }
 
-Calendar_ROC::Calendar_ROC()
+static Era ROC_eraArray[] = {
+    {1912, 1, 1},
+    {0, 0,  0}
+};
+Calendar_ROC::Calendar_ROC() : Calendar_gregorian(ROC_eraArray)
 {
-    static Era _eraArray[] = {
-        {1912, 1, 1},
-        {0, 0,  0}
-    };
     cCalendar = "com.sun.star.i18n.Calendar_ROC";
-    eraArray = _eraArray;
 }
 
-Calendar_buddhist::Calendar_buddhist()
+static Era buddhist_eraArray[] = {
+    {-542, 1, 1},
+    {0, 0,  0}
+};
+Calendar_buddhist::Calendar_buddhist() : Calendar_gregorian(buddhist_eraArray)
 {
-    static Era _eraArray[] = {
-        {-542, 1, 1},
-        {0, 0,  0}
-    };
     cCalendar = "com.sun.star.i18n.Calendar_buddhist";
-    eraArray = _eraArray;
 }
 
 void SAL_CALL
@@ -150,9 +156,9 @@ Calendar_gregorian::loadCalendar( const OUString& uniqueID, const com::sun::star
 void SAL_CALL
 Calendar_gregorian::setDateTime( double timeInDays ) throw(RuntimeException)
 {
-    fieldGet = 0;
     body->setTime(timeInDays * U_MILLIS_PER_DAY, status = U_ZERO_ERROR);
     if ( !U_SUCCESS(status) ) throw ERROR;
+    getValue();
 }
 
 double SAL_CALL
@@ -161,6 +167,52 @@ Calendar_gregorian::getDateTime() throw(RuntimeException)
     double r = body->getTime(status = U_ZERO_ERROR);
     if ( !U_SUCCESS(status) ) throw ERROR;
     return r / U_MILLIS_PER_DAY;
+}
+
+// map field value from gregorian calendar to other calendar, it can be overwritten by derived class.
+// By using eraArray, it can take care Japanese and Taiwan ROC calendar.
+void SAL_CALL
+Calendar_gregorian::mapFromGregorian() throw(RuntimeException)
+{
+    if (eraArray) {
+        sal_Int16 e, y, m, d;
+
+        e = fieldValue[CalendarFieldIndex::ERA];
+        y = fieldValue[CalendarFieldIndex::YEAR];
+        m = fieldValue[CalendarFieldIndex::DAY_OF_MONTH] + 1;
+        d = fieldValue[CalendarFieldIndex::DAY_OF_MONTH];
+
+        // since the year is reversed for first era, it is reversed again here for Era compare.
+        if (e == 0)
+        y = 1 - y;
+
+        for (e = 0; eraArray[e].year; e++)
+        if ((y != eraArray[e].year) ? y < eraArray[e].year :
+            (m != eraArray[e].month) ? m < eraArray[e].month : d < eraArray[e].day)
+            break;
+
+        fieldValue[CalendarFieldIndex::ERA] = e;
+        fieldValue[CalendarFieldIndex::YEAR] =
+        (e == 0) ? (eraArray[0].year - y) : (y - eraArray[e-1].year + 1);
+    }
+}
+
+#define FIELDS  ((1 << CalendarFieldIndex::ERA) | (1 << CalendarFieldIndex::YEAR))
+// map field value from other calendar to gregorian calendar, it can be overwritten by derived class.
+// By using eraArray, it can take care Japanese and Taiwan ROC calendar.
+void SAL_CALL Calendar_gregorian::mapToGregorian() throw(RuntimeException)
+{
+    if (eraArray && (fieldSet & FIELDS)) {
+        sal_Int16 y, e = fieldValue[CalendarFieldIndex::ERA];
+        if (e == 0)
+        y = eraArray[0].year - fieldValue[CalendarFieldIndex::YEAR];
+        else
+        y = eraArray[e-1].year + fieldValue[CalendarFieldIndex::YEAR] - 1;
+
+        fieldSetValue[CalendarFieldIndex::ERA] = y <= 0 ? 0 : 1;
+        fieldSetValue[CalendarFieldIndex::YEAR] = (y <= 0 ? 1 - y : y);
+        fieldSet |= FIELDS;
+    }
 }
 
 static icu::Calendar::EDateFields fieldNameConverter(sal_Int16 fieldIndex) throw(RuntimeException)
@@ -191,65 +243,28 @@ static icu::Calendar::EDateFields fieldNameConverter(sal_Int16 fieldIndex) throw
 void SAL_CALL
 Calendar_gregorian::setValue( sal_Int16 fieldIndex, sal_Int16 value ) throw(RuntimeException)
 {
-    fieldGet = 0;
-    fieldSet |= 1 << fieldIndex;
-    fieldSetValue[fieldIndex] = value; // save the value for isValid() checking
-
-    // convert minutes to millisecond for ZONE and DST.
-    if (fieldIndex == CalendarFieldIndex::ZONE_OFFSET || fieldIndex == CalendarFieldIndex::DST_OFFSET)
-        body->set(fieldNameConverter(fieldIndex), (sal_Int32) value * 60000);
-    else
-        body->set(fieldNameConverter(fieldIndex), value);
+    fieldSet |= (1 << fieldIndex);
+    fieldValue[fieldIndex] = value;
 }
 
-// convert field value from gregorian calendar to other calendar, it can be overwritten by derived class.
-// By using eraArray, it can take care Japanese and Taiwan ROC calendar.
-sal_Bool SAL_CALL
-Calendar_gregorian::convertValue( sal_Int16 fieldIndex ) throw(RuntimeException)
+void SAL_CALL
+Calendar_gregorian::setValue() throw(RuntimeException)
 {
-    if (eraArray && ((1 << fieldIndex) & (1 << CalendarFieldIndex::ERA |
-                        1 << CalendarFieldIndex::YEAR))) {
-        Era era;
-
-        if ( !U_SUCCESS(status) ) throw ERROR;
-        era.year = body->get(icu::Calendar::YEAR, status = U_ZERO_ERROR);
-        if ( !U_SUCCESS(status) ) throw ERROR;
-        era.month = body->get(icu::Calendar::MONTH, status = U_ZERO_ERROR) + 1;
-        if ( !U_SUCCESS(status) ) throw ERROR;
-        era.day = body->get(icu::Calendar::DAY_OF_MONTH, status = U_ZERO_ERROR);
-        if ( !U_SUCCESS(status) ) throw ERROR;
-
-        sal_Int16 i = body->get(icu::Calendar::ERA, status = U_ZERO_ERROR);
-        if ( !U_SUCCESS(status) ) throw ERROR;
-
-        // since the year is reversed for first era, it is reversed again here for Era compare.
-        if (i == 0)
-        era.year = 1 - era.year;
-
-        for (i = 0; eraArray[i].year; i++)
-        if (era < eraArray[i])
-            break;
-
-        fieldGetValue[CalendarFieldIndex::ERA] = i;
-        fieldGetValue[CalendarFieldIndex::MONTH] = era.month - 1;
-        fieldGetValue[CalendarFieldIndex::DAY_OF_MONTH] = (sal_Int16)era.day;
-        fieldGetValue[CalendarFieldIndex::YEAR] =
-        (i == 0) ? (eraArray[0].year - era.year) : (era.year - eraArray[i-1].year + 1);
-        fieldGet |= (1 << CalendarFieldIndex::ERA) |
-            (1 << CalendarFieldIndex::YEAR) |
-            (1 << CalendarFieldIndex::MONTH) |
-            (1 << CalendarFieldIndex::DAY_OF_MONTH);
-        return sal_True;
+    memcpy(fieldSetValue, fieldValue, sizeof(fieldValue));
+    mapToGregorian();
+    for (sal_Int16 fieldIndex = 0; fieldIndex < CalendarFieldIndex::FIELD_COUNT; fieldIndex++) {
+        if (fieldSet & (1 << fieldIndex)) {
+        if (fieldIndex == CalendarFieldIndex::ZONE_OFFSET || fieldIndex == CalendarFieldIndex::DST_OFFSET)
+            body->set(fieldNameConverter(fieldIndex), (sal_Int32) fieldSetValue[fieldIndex] * 60000);
+        else
+            body->set(fieldNameConverter(fieldIndex), fieldSetValue[fieldIndex]);
+        }
     }
-    return sal_False;
 }
 
-sal_Int16 SAL_CALL
-Calendar_gregorian::getValue( sal_Int16 fieldIndex ) throw(RuntimeException)
+void SAL_CALL Calendar_gregorian::getValue() throw(RuntimeException)
 {
-    if (fieldGet & (1 << fieldIndex)) return fieldGetValue[fieldIndex];
-
-    if (! convertValue(fieldIndex)) {
+    for (sal_Int16 fieldIndex = 0; fieldIndex < CalendarFieldIndex::FIELD_COUNT; fieldIndex++) {
         sal_Int32 value = body->get(fieldNameConverter(fieldIndex), status = U_ZERO_ERROR);
         if ( !U_SUCCESS(status) ) throw ERROR;
 
@@ -257,44 +272,49 @@ Calendar_gregorian::getValue( sal_Int16 fieldIndex ) throw(RuntimeException)
         if (fieldIndex == CalendarFieldIndex::ZONE_OFFSET || fieldIndex == CalendarFieldIndex::DST_OFFSET)
         value /= 60000;
 
-        fieldGetValue[fieldIndex] = (sal_Int16) value;
-        fieldGet |= (1 << fieldIndex);
+        fieldValue[fieldIndex] = (sal_Int16) value;
 
         // offset 1 since the value for week start day SunDay is different between Calendar and Weekdays.
         if ( fieldIndex == CalendarFieldIndex::DAY_OF_WEEK )
-        fieldGetValue[fieldIndex]--; // icu::Calendar::SUNDAY:/* == 1 */ ==> Weekdays::SUNDAY /* ==0 */
+        fieldValue[fieldIndex]--; // icu::Calendar::SUNDAY:/* == 1 */ ==> Weekdays::SUNDAY /* ==0 */
+    }
+    mapFromGregorian();
+    fieldSet = 0;
+}
+
+sal_Int16 SAL_CALL
+Calendar_gregorian::getValue( sal_Int16 fieldIndex ) throw(RuntimeException)
+{
+    if (fieldSet)  {
+        setValue();
+        getValue();
     }
 
-    return fieldGetValue[fieldIndex];
+    return fieldValue[fieldIndex];
 }
 
 void SAL_CALL
 Calendar_gregorian::addValue( sal_Int16 fieldIndex, sal_Int32 value ) throw(RuntimeException)
 {
     // since ZONE and DST could not be add, we don't need to convert value here
-
-    fieldGet = 0;
     body->add(fieldNameConverter(fieldIndex), value, status = U_ZERO_ERROR);
     if ( !U_SUCCESS(status) ) throw ERROR;
+    getValue();
 }
 
 sal_Bool SAL_CALL
 Calendar_gregorian::isValid() throw(RuntimeException)
 {
-    sal_Bool result = sal_True;
-    for ( int i = 0; i < CalendarFieldIndex::FIELD_COUNT; i++ ) {
+    setValue();
+    for ( sal_Int16 fieldIndex = 0; fieldIndex < CalendarFieldIndex::FIELD_COUNT; fieldIndex++ ) {
         // compare only with fields that are set and reset fieldSet[]
-        if (fieldSet & (1 << i)) {
-        fieldSet &= ~(1 << i);
-        if (result) {
-            // Side-effect: fFields[i] is updated
-            sal_Int32 value = body->get(fieldNameConverter(i), status = U_ZERO_ERROR);
-            if (U_FAILURE(status) || value != fieldSetValue[i])
-            result = sal_False;
-        }
+        if (fieldSet & (1 << fieldIndex)) {
+        sal_Int32 value = body->get(fieldNameConverter(fieldIndex), status = U_ZERO_ERROR);
+        if (U_FAILURE(status) || value != fieldValue[fieldIndex])
+            return sal_False;
         }
     }
-    return result;
+    return true;
 }
 
 // NativeNumberMode has different meaning between Number and Calendar for Asian locales.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_hijri.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 16:56:56 $
+ *  last change: $Author: khong $ $Date: 2002-08-06 18:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,52 +100,24 @@ Calendar_hijri::Calendar_hijri()
     cCalendar = "com.sun.star.i18n.Calendar_hijri";
 }
 
-#define FIELDS (1 << CalendarFieldIndex::ERA | \
-        1 << CalendarFieldIndex::DAY_OF_MONTH | \
-        1 << CalendarFieldIndex::MONTH | \
-        1 << CalendarFieldIndex::YEAR)
-
-// convert field value from gregorian calendar to other calendar, it can be overwritten by derived class.
-sal_Bool SAL_CALL
-Calendar_hijri::convertValue( sal_Int16 fieldIndex ) throw(RuntimeException)
+// TODO!!!
+// map field value from other calendar to gregorian calendar, it should be implemented.
+void SAL_CALL Calendar_hijri::mapToGregorian() throw(RuntimeException)
 {
-    if ((1 << fieldIndex) & FIELDS) {
-        sal_Int32 month, day, year, era = 1;
+}
 
-        // Get Hijri date
-        getHijri(&day, &month, &year);
+// map field value from gregorian calendar to other calendar, it can be overwritten by derived class.
+void SAL_CALL Calendar_hijri::mapFromGregorian() throw(RuntimeException)
+{
+    sal_Int32 month, day, year;
 
-        if ( year < 1 ) {
-            era = 0;
-        }
+    // Get Hijri date
+    getHijri(&day, &month, &year);
 
-        fieldGetValue[CalendarFieldIndex::DAY_OF_MONTH] = (sal_Int16)day;
-        fieldGetValue[CalendarFieldIndex::MONTH] = month - 1;
-        fieldGetValue[CalendarFieldIndex::YEAR] = (sal_Int16)year;
-        fieldGetValue[CalendarFieldIndex::ERA] = (sal_Int16)era;
-        fieldGet |= FIELDS;
-        /*
-        switch ( fieldIndex ) {
-            case CalendarFieldIndex::DAY_OF_MONTH:
-                return(day);
-                break;
-
-            case CalendarFieldIndex::MONTH:
-                return(month - 1);  // Month 0..11
-                break;
-
-            case CalendarFieldIndex::YEAR:
-                return(year);
-                break;
-
-            case CalendarFieldIndex::ERA:
-                return(era);
-                break;
-        }
-        */
-        return sal_True;
-    }
-    return sal_False;
+    fieldValue[CalendarFieldIndex::DAY_OF_MONTH] = (sal_Int16)day;
+    fieldValue[CalendarFieldIndex::MONTH] = month - 1;
+    fieldValue[CalendarFieldIndex::YEAR] = (sal_Int16)year;
+    fieldValue[CalendarFieldIndex::ERA] = (sal_Int16) year < 1 ? 0 : 1;
 }
 
 //

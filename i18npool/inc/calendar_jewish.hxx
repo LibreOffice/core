@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_jewish.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-12 17:29:36 $
+ *  last change: $Author: khong $ $Date: 2002-08-06 18:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,8 @@ public:
     virtual rtl::OUString SAL_CALL getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) throw (com::sun::star::uno::RuntimeException);
 
 protected:
-    sal_Bool SAL_CALL convertValue( sal_Int16 fieldIndex ) throw(com::sun::star::uno::RuntimeException);
+    void SAL_CALL mapToGregorian() throw(com::sun::star::uno::RuntimeException);
+    void SAL_CALL mapFromGregorian() throw(com::sun::star::uno::RuntimeException);
 };
 
 } } } }

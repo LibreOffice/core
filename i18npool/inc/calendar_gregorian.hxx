@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-12 17:29:34 $
+ *  last change: $Author: khong $ $Date: 2002-08-06 18:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,12 +71,19 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
+struct Era {
+    sal_Int32 year;
+    sal_Int32 month;
+    sal_Int32 day;
+};
+
 class Calendar_gregorian : public CalendarImpl
 {
 public:
 
     // Constructors
     Calendar_gregorian();
+    Calendar_gregorian(Era *_eraArray);
 
     /**
     * Destructor
@@ -101,26 +108,19 @@ public:
     virtual com::sun::star::uno::Sequence < rtl::OUString > SAL_CALL getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException);
 
 protected:
+    Era *eraArray;
     icu::Calendar *body;
     NativeNumberSupplier aNatNum;
-    struct Era {
-    sal_Int32 year;
-    sal_Int32 month;
-    sal_Int32 day;
-    };
-    Era *eraArray;
     sal_Char* cCalendar;
-    sal_uInt32 fieldGet;
-    sal_Int16 fieldGetValue[CalendarFieldIndex::FIELD_COUNT];
     sal_uInt32 fieldSet;
+    sal_Int16 fieldValue[CalendarFieldIndex::FIELD_COUNT];
     sal_Int16 fieldSetValue[CalendarFieldIndex::FIELD_COUNT];
-    virtual sal_Bool SAL_CALL convertValue( sal_Int16 fieldIndex ) throw(com::sun::star::uno::RuntimeException);
-
+    virtual void SAL_CALL mapToGregorian() throw(com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL mapFromGregorian() throw(com::sun::star::uno::RuntimeException);
+    void SAL_CALL getValue() throw(com::sun::star::uno::RuntimeException);
 private:
-    friend sal_Bool operator < (const Era& era1, const Era& era2) {
-    return (era1.year != era2.year) ? era1.year < era2.year :
-        (era1.month != era2.month) ? era1.month < era2.month : era1.day < era2.day;
-    };
+    void SAL_CALL setValue() throw(com::sun::star::uno::RuntimeException);
+    void SAL_CALL init(Era *_eraArray) throw(com::sun::star::uno::RuntimeException);
 };
 
 //  ----------------------------------------------------
