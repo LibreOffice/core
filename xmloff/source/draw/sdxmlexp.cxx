@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-08 12:16:21 $
+ *  last change: $Author: cl $ $Date: 2000-11-08 16:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1512,14 +1512,12 @@ void SdXMLExport::ImpWriteDrawPageInfos()
                         else
                             xPropSet = xPropSet1;
 
-                        const UniReference< XMLPropertySetMapper > aMapperRef( GetPresPagePropsMapper() );
+                        const UniReference< SvXMLExportPropertyMapper > aMapperRef( GetPresPagePropsMapper() );
                         std::vector< XMLPropertyState > xPropStates( aMapperRef->Filter( xPropSet ) );
 
                         if(xPropStates.size())
                         {
-                            ImpPresPageDrawStylePropMapper aExpPropMapper(aMapperRef);
-
-                            aExpPropMapper.exportXML(GetDocHandler(), xPropStates,
+                            aMapperRef->exportXML(GetDocHandler(), xPropStates,
                                 GetMM100UnitConverter(), GetNamespaceMap());
                         }
                     }
@@ -1546,7 +1544,7 @@ void SdXMLExport::ImpWritePresentationStyles()
                 {
                     XMLStyleExport aStEx(*this,
                         OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_drawpool)), GetAutoStylePool().get());
-                    const UniReference< XMLPropertySetMapper > aMapperRef = GetPropertySetMapper();
+                    const UniReference< SvXMLExportPropertyMapper > aMapperRef( GetPropertySetMapper() );
 
                     OUString aPrefix = xNamed->getName();
                     aPrefix += OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
