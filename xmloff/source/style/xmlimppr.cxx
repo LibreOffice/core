@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-16 09:09:30 $
+ *  last change: $Author: mib $ $Date: 2001-11-13 17:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,7 @@ void SvXMLImportPropertyMapper::importXML(
         // Otherwise GetEntryIndex will start with the next position specified.
         sal_Int32 nIndex =  nStartIdx - 1;
         sal_uInt32 nFlags = 0;  // flags of actual property map entry
+        sal_Bool bFound = sal_False;
         do
         {
             // find an entry for this attribute
@@ -296,40 +297,27 @@ void SvXMLImportPropertyMapper::importXML(
                         }
                     }
                 }
+                bFound = sal_True;
             }
-            else
+            else if( !bFound )
             {
-                if( XML_NAMESPACE_NONE == nPrefix || XML_NAMESPACE_UNKNOWN == nPrefix ||
-                   (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) != 0 )
+                if( !xAttrContainer.is() )
                 {
-                    if( !xAttrContainer.is() )
+                    // add an unknown attribute container to the properties
+                    Reference< XNameContainer > xNew( SvUnoAttributeContainer_CreateInstance(), UNO_QUERY );
+                    xAttrContainer = xNew;
+
+                    // find map entry and create new property state
+                    nIndex = maPropMapper->FindEntryIndex( "UserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+                    if( -1 == nIndex )
+                        nIndex = maPropMapper->FindEntryIndex( "ParaUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+                    if( -1 == nIndex )
+                        nIndex = maPropMapper->FindEntryIndex( "TextUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+
+                    OSL_ENSURE( nIndex != -1,
+                                "not able to store alien attribute");
+                    if( nIndex != -1 )
                     {
-                        // add an unknown attribute container to the properties
-                        Reference< XNameContainer > xNew( SvUnoAttributeContainer_CreateInstance(), UNO_QUERY );
-                        xAttrContainer = xNew;
-
-                        // find map entry and create new property state
-                        sal_Int32 nTextIndex = maPropMapper->FindEntryIndex( "TextUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
-                        sal_Int32 nUserIndex = maPropMapper->FindEntryIndex( "UserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
-                        sal_Int32 nShapeIndex = maPropMapper->FindEntryIndex( "ShapeUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
-
-                        if ((nTextIndex > -1) && (nUserIndex > -1))
-                            nIndex = (nTextIndex < nUserIndex) ? nTextIndex : nUserIndex;
-                        else if (nTextIndex > -1)
-                            nIndex = nTextIndex;
-                        else if (nUserIndex > -1)
-                            nIndex = nUserIndex;
-                        else
-                            nIndex = nShapeIndex;
-
-                        if( (nIndex != nShapeIndex) && (nShapeIndex > -1) && (nShapeIndex < nIndex))
-                            nIndex = nShapeIndex;
-
-                        if( nIndex == -1 )
-                        {
-                            DBG_ERROR("not able to store alien attribute");
-                        }
-
                         Any aAny;
                         aAny <<= xAttrContainer;
                         XMLPropertyState aNewProperty( nIndex, aAny );
@@ -337,27 +325,27 @@ void SvXMLImportPropertyMapper::importXML(
                         // push it on our stack so we export it later
                         rProperties.push_back( aNewProperty );
                     }
+                }
 
-                    if( xAttrContainer.is() )
+                if( xAttrContainer.is() )
+                {
+                    AttributeData aData;
+                    aData.Type = GetXMLToken( XML_CDATA );
+                    aData.Value = rValue;
+
+                    OUStringBuffer sName;
+                    if( XML_NAMESPACE_NONE != nPrefix )
                     {
-                        AttributeData aData;
-                        aData.Type = GetXMLToken( XML_CDATA );
-                        aData.Value = rValue;
-
-                        OUStringBuffer sName;
-                        if( XML_NAMESPACE_NONE != nPrefix )
-                        {
-                            sName.append( aPrefix );
-                            sName.append( sal_Unicode(':') );
-                            aData.Namespace = aNamespace;
-                        }
-
-                        sName.append( aLocalName );
-
-                        Any aAny;
-                        aAny <<= aData;
-                        xAttrContainer->insertByName( sName.makeStringAndClear(), aAny );
+                        sName.append( aPrefix );
+                        sName.append( sal_Unicode(':') );
+                        aData.Namespace = aNamespace;
                     }
+
+                    sName.append( aLocalName );
+
+                    Any aAny;
+                    aAny <<= aData;
+                    xAttrContainer->insertByName( sName.makeStringAndClear(), aAny );
                 }
             }
         }
