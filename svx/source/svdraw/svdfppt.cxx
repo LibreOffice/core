@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:30:43 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1964,11 +1964,11 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
                 if ( pObjStor )
                 {
                     SvStorageRef xObjStor( new SvStorage( pObjStor ) );
-                    if ( xObjStor.Is() )
+                    if ( xObjStor.Is() && !xObjStor->GetError() )
                     {
                         if ( xObjStor->GetClassName() == SvGlobalName() )
                         {
-                            ClsId aId( pObjStor-> GetClassId() );
+                            ClsId aId( pObjStor->GetClassId() );
                             xObjStor->SetClass( SvGlobalName( aId.n1, aId.n2, aId.n3, aId.n4, aId.n5, aId.n6, aId.n7, aId.n8, aId.n9, aId.n10, aId.n11 ),
                                 pObjStor->GetFormat(), pObjStor->GetUserName() );
                         }
