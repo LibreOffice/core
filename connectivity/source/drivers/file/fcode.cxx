@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-04 06:37:48 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 07:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@ void OOperandRow::bindValue(OValueRow _pRow)
 {
     OSL_ENSURE(_pRow.isValid(),"NO EMPTY row allowed!");
     m_pRow = _pRow;
+    OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->size(),"Invalid RowPos is >= vector.size()");
     (*m_pRow)[m_nRowPos].setBound(sal_True);
 }
 // -----------------------------------------------------------------------------

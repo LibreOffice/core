@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-16 08:43:11 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 07:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,8 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
     OSL_ENSURE(pOperand, "StackFehler");
     if (IS_TYPE(OOperandResult,pOperand))
         delete pOperand;
+    else
+        OSL_ENSURE(0,"Illegal here!");
 
     rParameterColumns = aNewParamColumns;
     //  m_aCompiler.setParameterColumns(rParameterColumns);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-27 15:21:10 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 07:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,8 +134,8 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(
     ,rBHelper(OStatement_BASE::rBHelper)
     ,m_pConnection(_pConnection)
     ,m_pParseTree(NULL)
-    ,m_aSQLIterator(_pConnection->createCatalog()->getTables(),_pConnection->getMetaData(),NULL)
     ,m_aParser(_pConnection->getDriver()->getFactory())
+    ,m_aSQLIterator(_pConnection->createCatalog()->getTables(),_pConnection->getMetaData(),NULL,&m_aParser)
     ,m_nMaxFieldSize(0)
     ,m_nMaxRows(0)
     ,m_nQueryTimeOut(0)
@@ -503,8 +503,15 @@ void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException,
         m_aSQLIterator.setParseTree(m_pParseTree);
         m_aSQLIterator.traverseAll();
         const OSQLTables& xTabs = m_aSQLIterator.getTables();
+
         if ( xTabs.empty() )
-            throw SQLException(::rtl::OUString::createFromAscii("No valid tables found in SQL statement!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
+            throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid. It contains no valid table."),
+                                        static_cast<XWeak*>(this),
+                                        makeAny(m_aSQLIterator.getWarning()));
+        if ( xTabs.size() > 1 || m_aSQLIterator.getWarning().Message.getLength() )
+            throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid. It contains more than one table."),
+                                        static_cast<XWeak*>(this),
+                                        makeAny(m_aSQLIterator.getWarning()));
 
         // at this moment we support only one table per select statement
         Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xTabs.begin()->second,UNO_QUERY);
@@ -512,7 +519,7 @@ void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException,
         {
             if(m_pTable)
                 m_pTable->release();
-            m_pTable = (OFileTable*)xTunnel->getSomething(OFileTable::getUnoTunnelImplementationId());
+            m_pTable = reinterpret_cast<OFileTable*>(xTunnel->getSomething(OFileTable::getUnoTunnelImplementationId()));
             if(m_pTable)
                 m_pTable->acquire();
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: hjs $ $Date: 2002-02-06 11:18:24 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 07:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1239,6 +1239,10 @@ BOOL OResultSet::OpenImpl()
                                         static_cast<XWeak*>(this),
                                         makeAny(m_aSQLIterator.getWarning())
                                     );
+        if ( xTabs.size() > 1 || m_aSQLIterator.getWarning().Message.getLength() )
+            throwGenericSQLException(   ::rtl::OUString::createFromAscii("The statement is invalid. it contains more than one table."),
+                                        static_cast<XWeak*>(this),
+                                        makeAny(m_aSQLIterator.getWarning()));
 
         OSQLTable xTable = xTabs.begin()->second;
         m_xColumns = m_aSQLIterator.getSelectColumns();
