@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:40:47 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -845,27 +845,6 @@ ModalDialog DLG_MAILMERGE
         Pos = MAP_APPFONT ( 318 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text[ chinese_simplified ] = "ι‚®δ»¶εεΉ¶";
-    Text[ russian ] = "Πΰρρϋλκΰ οθρεμ...";
-    Text[ polish ] = "List seryjny";
-    Text[ japanese ] = "ε·®γ—θΎΌγΏε°ε·";
-    Text[ chinese_traditional ] = "εδ½µε—ε°";
-    Text[ arabic ] = "ΞΨΗΘ γΣαΣα";
-    Text[ greek ] = "Εγκύκλιος επιστολή";
-    Text[ korean ] = "νΈμ§€ μ–‘μ‹";
-    Text[ turkish ] = "Standart mektup";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Carta formulari";
-    Text[ thai ] = "ΰΉΰΈΰΈΰΈΰΈ”ΰΈ«ΰΈ΅ΰΈ²ΰΈΆ";
-    Text[ english_us ] = "Form Letter";
-    Text[ portuguese ] = "Carta em sιrie";
-    Text[ dutch ] = "Standaardbrief";
-    Text[ french ] = "Lettre type";
-    Text[ spanish ] = "Carta en serie";
-    Text[ finnish ] = "Joukkokirje";
-    Text[ italian ] = "Stampa in serie";
-    Text[ danish ] = "Brevfletning";
-    Text[ swedish ] = "Kopplad utskrift";
 };
 
 ModalDialog DLG_MERGE_CREATE
