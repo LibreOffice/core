@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:09:16 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,10 @@
 #include "porlay.hxx"   // SetFly
 #include "inftxt.hxx"   // SwTxtPaintInfo
 #include "frmsh.hxx"
+// OD 29.07.2003 #110978#
+#ifndef _ANCHOREDOBJECTPOSITION_HXX
+#include <anchoredobjectposition.hxx>
+#endif
 
 /*************************************************************************
  *                class SwFlyPortion
@@ -370,10 +374,12 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
  * Es werden die Masze vom pFly->OutRect() eingestellt.
  * Es erfolgt ein SetBase() !
  *************************************************************************/
+// OD 29.07.2003 #110978# - use new datatype for parameter <nFlags>
 SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
                                   SwFlyInCntFrm *pFly, const Point &rBase,
                                   long nLnAscent, long nLnDescent,
-                                  long nFlyAsc, long nFlyDesc, sal_uInt8 nFlags ) :
+                                  long nFlyAsc, long nFlyDesc,
+                                  objectpositioning::AsCharFlags nFlags ) :
     pContact( pFly ),
     bDraw( sal_False ),
     bMax( sal_False ),
@@ -381,15 +387,17 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
 {
     ASSERT( pFly, "SwFlyCntPortion::SwFlyCntPortion: no SwFlyInCntFrm!" );
     nLineLength = 1;
-    nFlags |= SETBASE_ULSPACE | SETBASE_INIT;
+    nFlags |= AS_CHAR_ULSPACE | AS_CHAR_INIT;
     SetBase( rFrm, rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags );
     SetWhichPor( POR_FLYCNT );
 }
 
+// OD 29.07.2003 #110978# - use new datatype for parameter <nFlags>
 SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
                                   SwDrawContact *pDrawContact, const Point &rBase,
-                                  long nLnAscent, long nLnDescent, long nFlyAsc,
-                                  long nFlyDesc, sal_uInt8 nFlags ) :
+                                  long nLnAscent, long nLnDescent,
+                                  long nFlyAsc, long nFlyDesc,
+                                  objectpositioning::AsCharFlags nFlags ) :
     pContact( pDrawContact ),
     bDraw( sal_True ),
     bMax( sal_False ),
@@ -398,7 +406,7 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
     ASSERT( pDrawContact, "SwFlyCntPortion::SwFlyCntPortion: no SwDrawContact!" );
     if( !pDrawContact->GetAnchor() )
     {
-        if( nFlags & SETBASE_QUICK )
+        if( nFlags & AS_CHAR_QUICK )
         {
             Point aAnchorPos = pDrawContact->GetMaster()->GetAnchorPos();
             pDrawContact->ConnectToLayout();
@@ -408,7 +416,7 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
             pDrawContact->ConnectToLayout();
     }
     nLineLength = 1;
-    nFlags |= SETBASE_ULSPACE | SETBASE_INIT;
+    nFlags |= AS_CHAR_ULSPACE | AS_CHAR_INIT;
 
     SetBase( rFrm, rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags );
 
@@ -431,27 +439,18 @@ const SwFrmFmt *SwFlyCntPortion::GetFrmFmt() const
  * pFly->GetRelPos().Y() bezeichnet die relative Position zur Baseline.
  * Bei 0 liegt der obere Rand des FlyCnt auf der Baseline der Zeile.
  *************************************************************************/
-
+// OD 29.07.2003 #110978# - use new datatype for parameter <nFlags>
 void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
-                               long nLnAscent, long nLnDescent, long nFlyAsc,
-                               long nFlyDesc, sal_uInt8 nFlags )
+                               long nLnAscent, long nLnDescent,
+                               long nFlyAsc, long nFlyDesc,
+                               objectpositioning::AsCharFlags nFlags )
 {
-    // Note: rBase is an absolute value
-    SWAP_IF_SWAPPED( (&rFrm ) )
-    SWRECTFN( (&rFrm ) )
-    Point aBase( rBase );
-    const SwFrmFmt* pFmt = GetFrmFmt();
-    const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
-    const SwVertOrient eOri = rVert.GetVertOrient();
-    const SvxLRSpaceItem &rLRSpace = pFmt->GetLRSpace();
-    const SvxULSpaceItem &rULSpace = pFmt->GetULSpace();
+    // Note: rBase have to be an absolute value
 
-    //Die vertikale Position wird berechnet, die relative horizontale
-    //Position ist stets 0.
-
-    SdrObject *pSdrObj;
-    SwRect aBoundRect;
-    long nOldWidth;
+    // OD 29.07.2003 #110978# - use new class to position object
+    sal_uInt8 nLineAlignment = 0;
+    // determine drawing object
+    SdrObject* pSdrObj = 0L;
     if( bDraw )
     {
         // OD 20.06.2003 #108784# - determine drawing object ('master' or 'virtual')
@@ -462,253 +461,26 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
             ASSERT( false, "SwFlyCntPortion::SetBase(..) - No drawing object found by <GetDrawContact()->GetDrawObjectByAnchorFrm( rFrm )>" );
             pSdrObj = GetDrawContact()->GetMaster();
         }
-        aBoundRect = pSdrObj->GetCurrentBoundRect();
     }
     else
     {
-        aBoundRect = GetFlyFrm()->Frm();
-        nOldWidth = aBoundRect.Width();
+        pSdrObj = GetFlyFrm()->GetVirtDrawObj();
     }
+    // position object
+    objectpositioning::SwAnchoredObjectPosition aObjPositioning( objectpositioning::AS_CHAR, *pSdrObj );
+    aObjPositioning.CalcPosition( rBase, nFlags,
+                                  nLnAscent, nLnDescent, nFlyAsc, nFlyDesc,
+                                  nLineAlignment );
 
-    nOldWidth = (aBoundRect.*fnRect->fnGetWidth)();
-
-    long nLRSpaceLeft, nLRSpaceRight, nULSpaceUpper, nULSpaceLower;
-    if ( rFrm.IsVertical() )
-    {
-        // Seems to be easier to do it all the horizontal way
-        // So, from now on think horizontal.
-        rFrm.SwitchVerticalToHorizontal( aBoundRect );
-        rFrm.SwitchVerticalToHorizontal( aBase );
-
-        // convert the spacing values
-        nLRSpaceLeft = rULSpace.GetUpper();
-        nLRSpaceRight = rULSpace.GetLower();
-        nULSpaceUpper = rLRSpace.GetRight();
-        nULSpaceLower = rLRSpace.GetLeft();
-    }
+    aRef = aObjPositioning.GetAnchorPos();
+    SetAlign( nLineAlignment );
+    if( nFlags & AS_CHAR_ROTATE )
+        SvXSize( aObjPositioning.GetObjBoundRectInclSpacing().SSize() );
     else
-    {
-        if ( rFrm.IsRightToLeft() )
-        {
-            nLRSpaceLeft = rLRSpace.GetRight();
-            nLRSpaceRight = rLRSpace.GetLeft();
-        }
-        else
-        {
-            nLRSpaceLeft = rLRSpace.GetLeft();
-            nLRSpaceRight = rLRSpace.GetRight();
-        }
-
-        nULSpaceUpper = rULSpace.GetUpper();
-        nULSpaceLower = rULSpace.GetLower();
-    }
-
-    if( nFlags & SETBASE_ULSPACE )
-        aBase.X() += nLRSpaceLeft;
-    aBase.Y() += nULSpaceUpper;
-
-    if( bDraw )
-    {
-        SwRect aSnapRect = pSdrObj->GetSnapRect();
-        if ( rFrm.IsVertical() )
-            rFrm.SwitchVerticalToHorizontal( aSnapRect );
-
-        if( nFlags & SETBASE_ULSPACE )
-            aBase.X() += aSnapRect.Left() - aBoundRect.Left();
-        aBase.Y() += aSnapRect.Top() - aBoundRect.Top();
-    }
-
-    aBoundRect.Left( aBoundRect.Left() - nLRSpaceLeft );
-    aBoundRect.Width( aBoundRect.Width() + nLRSpaceRight );
-    aBoundRect.Top( aBoundRect.Top() - nULSpaceUpper );
-    aBoundRect.Height( aBoundRect.Height() + nULSpaceLower );
-
-    SwTwips nBoundHeight = ( nFlags & SETBASE_ROTATE ) ?
-                            aBoundRect.Width() : aBoundRect.Height();
-    SwTwips nRelPos = 0;
-    if ( eOri == VERT_NONE )
-        nRelPos = rVert.GetPos();
-    else
-    {
-        nRelPos = 0;
-        if ( eOri == VERT_CENTER )
-            nRelPos -= nBoundHeight /  2;
-        else if ( eOri == VERT_TOP )
-            nRelPos -= nBoundHeight;
-        else if ( eOri == VERT_BOTTOM )
-            ;
-        else if ( eOri == VERT_CHAR_CENTER )
-            nRelPos -= ( nBoundHeight + nLnAscent - nLnDescent ) / 2;
-        else if ( eOri == VERT_CHAR_TOP )
-            nRelPos -= nLnAscent;
-        else if ( eOri == VERT_CHAR_BOTTOM )
-            nRelPos += nLnDescent - nBoundHeight;
-        else
-        {
-            if( nBoundHeight >= nFlyAsc + nFlyDesc )
-            {
-                // wenn ich genauso gross bin wie die Zeile, brauche ich mich
-                // nicht an der Zeile nicht weiter ausrichten, ich lasse
-                // dann auch den max. Ascent der Zeile zunaechst unveraendert
-                nRelPos -= nFlyAsc;
-                if ( eOri == VERT_LINE_CENTER )
-                    SetAlign( 2 );
-                else if ( eOri == VERT_LINE_TOP )
-                    SetAlign( 1 );
-                else if ( eOri == VERT_LINE_BOTTOM )
-                    SetAlign( 3 );
-            }
-            else if ( eOri == VERT_LINE_CENTER )
-            {
-                nRelPos -= ( nBoundHeight +nFlyAsc -nFlyDesc ) / 2;
-                SetAlign( 2 );
-            }
-            else if ( eOri == VERT_LINE_TOP )
-            {
-                nRelPos -= nFlyAsc;
-                SetAlign( 1 );
-            }
-            else if ( eOri == VERT_LINE_BOTTOM )
-            {
-                nRelPos += nFlyDesc - nBoundHeight;
-                SetAlign( 3 );
-            }
-        }
-    }
-
-    if( nFlags & SETBASE_INIT && nRelPos < 0 && nFlyAsc < -nRelPos )
-    {
-        if( nFlags & SETBASE_ROTATE )
-            aBase.X() -= nFlyAsc + nRelPos;
-        else
-            aBase.Y() -= nFlyAsc + nRelPos;
-    }
-
-    if( nFlags & SETBASE_BIDI )
-        aBase.X() -= aBoundRect.Width();
-
-    Point aRelPos;
-    if( nFlags & SETBASE_ROTATE )
-    {
-        if( nFlags & SETBASE_REVERSE )
-            aRelPos.X() = -nRelPos - aBoundRect.Width();
-        else
-        {
-            aRelPos.X() = nRelPos;
-            aRelPos.Y() = -aBoundRect.Height();
-        }
-    }
-    else
-        aRelPos.Y() = nRelPos;
-    if( bDraw )
-    {
-        if( !( nFlags & SETBASE_QUICK ) )
-        {
-            if( rVert.GetPos() != nRelPos && eOri != VERT_NONE )
-            {
-                // Das aRelPos wird gepflegt, weil sonst SwDrawContact::_Changed
-                // auf die Idee kommen koennte, auf VERT_NONE umzuschalten.
-                SwFmtVertOrient aVert( rVert );
-                aVert.SetPos( nRelPos );
-                ((SwFrmFmt*)pFmt)->LockModify();
-                ((SwFrmFmt*)pFmt)->SetAttr( aVert );
-                ((SwFrmFmt*)pFmt)->UnlockModify();
-            }
-            Point aAnchorBase( aBase );
-            if ( rFrm.IsRightToLeft() )
-            {
-                rFrm.SwitchLTRtoRTL( aAnchorBase );
-                aAnchorBase.X() -= nOldWidth;
-            }
-            if ( rFrm.IsVertical() )
-                rFrm.SwitchHorizontalToVertical( aAnchorBase );
-
-            // OD 20.06.2003 #108784# - consider 'virtual' drawing objects
-            if ( pSdrObj->ISA(SwDrawVirtObj) )
-            {
-                SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pSdrObj);
-
-                pDrawVirtObj->NbcSetAnchorPos( aAnchorBase );
-                pDrawVirtObj->AdjustRelativePosToReference();
-            }
-            else
-            {
-                // There used to be a ImpSetAnchorPos here. Very dangerous
-                // for group object.
-                pSdrObj->NbcSetAnchorPos( aAnchorBase );
-                // OD 20.06.2003 #108784# - correct movement of 'virtual' drawing
-                // objects caused by the <SetAnchorPos(..)> of the 'master' drawing object.
-                GetDrawContact()->CorrectRelativePosOfVirtObjs();
-            }
-
-            SwRect aSnapRect = pSdrObj->GetSnapRect();
-
-            if ( rFrm.IsVertical() )
-                rFrm.SwitchVerticalToHorizontal( aSnapRect );
-
-            Point aDiff;
-            if ( rFrm.IsRightToLeft() )
-                aDiff = aRelPos + aAnchorBase - aSnapRect.TopLeft();
-            else
-                aDiff = aRelPos + aBase - aSnapRect.TopLeft();
-
-            if ( rFrm.IsVertical() )
-                aDiff = Point( -aDiff.Y(), aDiff.X() );
-
-            // OD 20.06.2003 #108784# - consider 'virtual' drawing objects
-            if ( !pSdrObj->ISA(SwDrawVirtObj) )
-            {
-                // #80046# here a Move() is necessary, a NbcMove() is NOT ENOUGH(!)
-                pSdrObj->Move( Size( aDiff.X(), aDiff.Y() ) );
-                // OD 23.06.2003 #108784# - correct movement of 'virtual' drawing
-                // objects caused by the <Move(..)> of the 'master' drawing object
-                GetDrawContact()->MoveOffsetOfVirtObjs( Size( -aDiff.X(), -aDiff.Y() ) );
-            }
-        }
-
-        if ( rFrm.IsVertical() )
-            rFrm.SwitchHorizontalToVertical( aBase );
-    }
-    else
-    {
-        Point aRelAttr;
-        if ( rFrm.IsRightToLeft() )
-        {
-            rFrm.SwitchLTRtoRTL( aBase );
-            aBase.X() -= nOldWidth;
-        }
-        if ( rFrm.IsVertical() )
-        {
-            rFrm.SwitchHorizontalToVertical( aBase );
-            aRelAttr = Point( -nRelPos, 0 );
-            aRelPos = Point( -aRelPos.Y(), aRelPos.X() );
-        }
-        else
-            aRelAttr = Point( 0, nRelPos );
-
-        if ( !(nFlags & SETBASE_QUICK) && (aBase != GetFlyFrm()->GetRefPoint() ||
-                         aRelAttr != GetFlyFrm()->GetCurRelPos()) )
-        {
-            GetFlyFrm()->SetRefPoint( aBase, aRelAttr, aRelPos );
-            if( nOldWidth != (GetFlyFrm()->Frm().*fnRect->fnGetWidth)() )
-            {
-                aBoundRect = GetFlyFrm()->Frm();
-                aBoundRect.Left( aBoundRect.Left() - rLRSpace.GetLeft() );
-                aBoundRect.Width( aBoundRect.Width() + rLRSpace.GetRight() );
-                aBoundRect.Top( aBoundRect.Top() - rULSpace.GetUpper() );
-                aBoundRect.Height( aBoundRect.Height() + rULSpace.GetLower() );
-            }
-        }
-        ASSERT( (GetFlyFrm()->Frm().*fnRect->fnGetHeight)(),
-            "SwFlyCntPortion::SetBase: flyfrm has an invalid height" );
-    }
-    aRef = aBase;
-    if( nFlags & SETBASE_ROTATE )
-        SvXSize( aBoundRect.SSize() );
-    else
-        SvLSize( aBoundRect.SSize() );
+        SvLSize( aObjPositioning.GetObjBoundRectInclSpacing().SSize() );
     if( Height() )
     {
+        SwTwips nRelPos = aObjPositioning.GetRelPosY();
         if ( nRelPos < 0 )
         {
             nAscent = Abs( int( nRelPos ) );
@@ -726,8 +498,6 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
         Height( 1 );
         nAscent = 0;
     }
-
-    UNDO_SWAP( ( &rFrm ) )
 }
 
 /*************************************************************************
