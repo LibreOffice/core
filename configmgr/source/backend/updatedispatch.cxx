@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedispatch.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:19:00 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 16:25:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,7 @@ data::SetVisitor::Result UpdateDispatcher::handle(data::ValueNodeAccess const& _
         OUString aLocale;
         OSL_VERIFY(testReplacedAndGetName(_aNode,aLocale)); // "Adding a localized subvalue but not as root of element tree"
 
-        if (aLocale.getLength() && aLocale != localehelper::getDefaultLocale())
+        if (aLocale.getLength() && ! localehelper::isDefaultLanguage(aLocale))
         {
             m_xUpdateHandler->setPropertyValueForLocale( _aNode.getValue(), aLocale );
         }
