@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-25 08:28:43 $
+ *  last change: $Author: fs $ $Date: 2002-03-14 15:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,8 @@ namespace dbaui
 
         sal_Bool adjustUTF8(const SfxItemSet& _rSet);
             // returns sal_True if with the settings in _rSet, a charset UTF-8 is allowed
+        sal_Bool adjustBig5(const SfxItemSet& _rSet);
+            // returns sal_True if with the settings in _rSet, a charset Big5-HKSCS is allowed
     };
 
     //========================================================================
@@ -316,6 +318,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/06/25 08:28:43  oj
+ *  #88699# new control for ldap rowcount
+ *
  *  Revision 1.6  2001/05/29 13:11:52  oj
  *  #87149# addressbook ui impl
  *

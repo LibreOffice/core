@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-14 10:22:18 $
+ *  last change: $Author: fs $ $Date: 2002-03-14 15:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ namespace dbaui
             m_pCharsetLabel = new FixedText(this, ResId(FT_CHARSET));
             m_pCharset = new ListBox(this, ResId(LB_CHARSET));
             m_pCharset->SetSelectHdl(getControlModifiedLink());
+            m_pCharset->SetDropDownLineCount( 14 );
 
             sal_Bool bCJKEnabled = SvtCJKOptions().IsAnyEnabled();
 
@@ -190,36 +191,52 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
-    sal_Bool OCommonBehaviourTabPage::adjustUTF8(const SfxItemSet& _rSet)
+    namespace
     {
-        // determine the type of the current URL
-        DATASOURCE_TYPE eDSType = DST_UNKNOWN;
-
-        SFX_ITEMSET_GET(_rSet, pConnectUrl, SfxStringItem, DSID_CONNECTURL, sal_True);
-        SFX_ITEMSET_GET(_rSet, pTypesItem, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
-        ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
-        if (pTypeCollection && pConnectUrl && pConnectUrl->GetValue().Len())
-            eDSType = pTypeCollection->getType(pConnectUrl->GetValue());
-
-        // is UTF8 allowed?
-        const sal_Bool bAllowUTF8 = (DST_DBASE != eDSType) && (DST_TEXT != eDSType);
-
-        // get the display name for UTF8 to check if we currently include it in the list
-        OCharsetDisplay::const_iterator aUTF8Pos = m_aCharsets.find(RTL_TEXTENCODING_UTF8);
-        DBG_ASSERT( m_aCharsets.end() != aUTF8Pos, "OCommonBehaviourTabPage::adjustUTF8: invalid charset map!" );
-        if ( m_aCharsets.end() != aUTF8Pos )
+        sal_Bool implAdjust( const SfxItemSet& _rSet, const rtl_TextEncoding _eEncoding,
+            const OCharsetDisplay& _rMap, ListBox* _pCharsets, sal_Bool _bAllowInGeneral = sal_True )
         {
-            String sDisplayName = (*aUTF8Pos).getDisplayName();
-            const sal_Bool bHaveUTF8 = LISTBOX_ENTRY_NOTFOUND != m_pCharset->GetEntryPos( sDisplayName );
-            if ( bAllowUTF8 != bHaveUTF8 )
-            {   // really need to adjust the list
-                if ( !bAllowUTF8 )
-                    m_pCharset->RemoveEntry( sDisplayName );
-                else
-                    m_pCharset->InsertEntry( sDisplayName );
+            // determine the type of the current URL
+            DATASOURCE_TYPE eDSType = DST_UNKNOWN;
+
+            SFX_ITEMSET_GET(_rSet, pConnectUrl, SfxStringItem, DSID_CONNECTURL, sal_True);
+            SFX_ITEMSET_GET(_rSet, pTypesItem, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
+            ODsnTypeCollection* pTypeCollection = pTypesItem ? pTypesItem->getCollection() : NULL;
+            if (pTypeCollection && pConnectUrl && pConnectUrl->GetValue().Len())
+                eDSType = pTypeCollection->getType(pConnectUrl->GetValue());
+
+            // is the given encoding allowed?
+            const sal_Bool bAllowIt = _bAllowInGeneral && (DST_DBASE != eDSType) && (DST_TEXT != eDSType);
+
+            // get the display name for UTF8 to check if we currently include it in the list
+            OCharsetDisplay::const_iterator aEncodingPos = _rMap.find( _eEncoding );
+            DBG_ASSERT( _rMap.end() != aEncodingPos, "OCommonBehaviourTabPage::implAdjust: invalid charset map!" );
+            if ( _rMap.end() != aEncodingPos )
+            {
+                String sDisplayName = (*aEncodingPos).getDisplayName();
+                const sal_Bool bHaveIt = LISTBOX_ENTRY_NOTFOUND != _pCharsets->GetEntryPos( sDisplayName );
+                if ( bAllowIt != bHaveIt )
+                {   // really need to adjust the list
+                    if ( !bAllowIt )
+                        _pCharsets->RemoveEntry( sDisplayName );
+                    else
+                        _pCharsets->InsertEntry( sDisplayName );
+                }
             }
+            return bAllowIt;
         }
-        return bAllowUTF8;
+    }
+
+    // -----------------------------------------------------------------------
+    sal_Bool OCommonBehaviourTabPage::adjustBig5( const SfxItemSet& _rSet )
+    {
+        return implAdjust( _rSet, RTL_TEXTENCODING_BIG5_HKSCS, m_aCharsets, m_pCharset, SvtCJKOptions().IsAnyEnabled() );
+    }
+
+    // -----------------------------------------------------------------------
+    sal_Bool OCommonBehaviourTabPage::adjustUTF8( const SfxItemSet& _rSet )
+    {
+        return implAdjust( _rSet, RTL_TEXTENCODING_UTF8, m_aCharsets, m_pCharset );
     }
 
     // -----------------------------------------------------------------------
@@ -264,17 +281,24 @@ namespace dbaui
             if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
             {
                 sal_Bool bAllowUTF8 = adjustUTF8(_rSet);
+                sal_Bool bAllowBig5 = adjustBig5(_rSet);
 
                 OCharsetDisplay::const_iterator aFind = m_aCharsets.find(pCharsetItem->GetValue(), OCharsetDisplay::IANA());
                 if (aFind == m_aCharsets.end())
                 {
-                    DBG_ERROR("OCommonBehaviourTabPage::implInitControls: unjknown charset falling back to system language!");
+                    DBG_ERROR("OCommonBehaviourTabPage::implInitControls: unknown charset falling back to system language!");
                     aFind = m_aCharsets.find(RTL_TEXTENCODING_DONTKNOW);
                     // fallback: system language
                 }
 
-                if (!bAllowUTF8 && (RTL_TEXTENCODING_UTF8 == (*aFind).getEncoding()))
-                {   // the current char set is UTF-8, but it's not allowed for the current URL
+                if  (   (   !bAllowUTF8
+                        &&  ( RTL_TEXTENCODING_UTF8 == (*aFind).getEncoding() )
+                        )
+                    ||  (   !bAllowBig5
+                        &&  ( RTL_TEXTENCODING_BIG5_HKSCS == (*aFind).getEncoding() )
+                        )
+                    )
+                {   // the current char set is UTF-8 or Big5, but it's not allowed for the current URL
                     aFind = m_aCharsets.find(RTL_TEXTENCODING_DONTKNOW);
                 }
 
@@ -1167,6 +1191,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2002/03/14 10:22:18  fs
+ *  #97788# allow Big5-HKSCS only if asian functionallity is enabled
+ *
  *  Revision 1.9  2001/08/30 15:14:33  fs
  *  #91731# adjustUTF : InsertEntry instead of RemoveEntry
  *
