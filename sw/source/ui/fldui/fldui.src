@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:41:17 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 07:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -764,7 +764,7 @@ String STR_COMBINED_CHARS
     TEXT[ polish ] = "Kombinacja znaków";
     TEXT[ portuguese_brazilian ] = "Combine characters";
     TEXT[ japanese ] = "‘g‚İ•¶š";
-    TEXT[ korean ] = "Combine characters";
+    TEXT[ korean ] = "¹®ÀÚ °áÇÕ";
     TEXT[ chinese_simplified ] = "×Ö·û×éºÏ";
     TEXT[ chinese_traditional ] = "¦r¤¸²Õ¦X";
     TEXT[ turkish ] = "Combine characters";
@@ -2166,7 +2166,7 @@ String FMT_CHAPTER_NAME
     TEXT[ chinese_simplified ] = "ÕÂÃû³Æ";
     TEXT[ russian ] = "Íàçâàíèå ãëàâû";
     TEXT[ polish ] = "Nazwa rozdzia³u";
-    TEXT[ japanese ] = "Í‚Ì–¼Ì";
+    TEXT[ japanese ] = "Í–¼";
     TEXT[ language_user1 ] = " ";
     TEXT[ chinese_traditional ] = "³¹¦WºÙ";
     TEXT[ arabic ] = "ÇÓã ÇáİÕá";
@@ -2244,7 +2244,7 @@ String FMT_CHAPTER_NAMENO
     Text[ chinese_simplified ] = "ÕÂ±àºÅºÍÃû³Æ";
     Text[ russian ] = "Íàçâàíèå è íîìåğ ãëàâû";
     Text[ polish ] = "Numer i nazwa rozdzia³u";
-    Text[ japanese ] = "Í”Ô†‚Æ–¼Ì";
+    Text[ japanese ] = "Í”Ô†‚ÆÍ–¼";
     Text[ chinese_traditional ] = "³¹½s¸¹©M¦WºÙ";
     Text[ arabic ] = "ÑŞã æÇÓã ÇáİÕá";
     Text[ greek ] = "Áñéèìüò êåöáëáßïõ êáé üíïìá";
@@ -3357,13 +3357,13 @@ String STR_COMBCHRS_FT
     TEXT[ polish ] = "Znaki";
     TEXT[ portuguese_brazilian ] = "Ch~aracters";
     TEXT[ japanese ] = "•¶š(~A)";
-    TEXT[ korean ] = "Ch~aracters";
+    TEXT[ korean ] = "¹®ÀÚ";
     TEXT[ chinese_simplified ] = "×Ö·û(~A)";
     TEXT[ chinese_traditional ] = "¦r¤¸(~A)";
     TEXT[ turkish ] = "Ch~aracters";
     TEXT[ arabic ] = "ÃÍÑİ";
     TEXT[ catalan ] = "C~arácter";
-    TEXT[ finnish ] = "Ze~ichen";
+    TEXT[ finnish ] = "Merkki";
 };
 String STR_SETNO
 {
