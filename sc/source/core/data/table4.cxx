@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table4.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-19 13:29:37 $
+ *  last change: $Author: er $ $Date: 2002-07-03 18:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ short lcl_DecompValueString( String& aValue, long& nVal, USHORT* pMinDigits = NU
     xub_StrLen nNum = 0;
     if ( p[nNum] == '-' )
         nNum = nNeg = 1;
-    while ( CharClass::isAsciiNumeric( p[nNum] ) )
+    while ( p[nNum] && CharClass::isAsciiNumeric( p[nNum] ) )
         nNum++;
     if ( nNum > nNeg )
     {   // number at the beginning
