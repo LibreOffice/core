@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-08 14:55:41 $
+ *  last change: $Author: fs $ $Date: 2001-08-08 15:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ namespace abp
         m_pNextPage->SetHelpId(HID_ABSPILOT_NEXT);
         m_pCancel->SetHelpId(HID_ABSPILOT_CANCEL);
         m_pFinish->SetHelpId(HID_ABSPILOT_FINISH);
+        m_pHelp->SetUniqueId(UID_ABSPILOT_HELP);
 
         m_pCancel->SetClickHdl( LINK( this, OAddessBookSourcePilot, OnCancelClicked) );
 
@@ -440,6 +441,9 @@ namespace abp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/08/08 14:55:41  fs
+ *  #90716# layout changes
+ *
  *  Revision 1.2  2001/08/02 10:45:28  fs
  *  #88530# layout changes
  *
