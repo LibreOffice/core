@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:27:07 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,143 +62,27 @@
 #include "svtools.hrc"
 String STR_SVT_CALENDAR_DAY
 {
-    Text = "Tag" ;
-    Text [ ENGLISH ] = "Day" ;
-    Text [ english_us ] = "Day" ;
-    Text [ italian ] = "Giorno" ;
-    Text [ spanish ] = "Día" ;
-    Text [ french ] = "Jour" ;
-    Text [ dutch ] = "Dag" ;
-    Text [ swedish ] = "Dag" ;
-    Text [ danish ] = "Dag" ;
-    Text [ portuguese_brazilian ] = "Dia" ;
-    Text [ portuguese ] = "Dia" ;
-    Text[ chinese_simplified ] = "å¤©";
-    Text[ russian ] = "Äåíü";
-    Text[ polish ] = "dzieñ";
-    Text[ japanese ] = "æ—¥";
-    Text[ chinese_traditional ] = "å¤©";
-    Text[ arabic ] = "íæã";
-    Text[ dutch ] = "Dag";
-    Text[ chinese_simplified ] = "å¤©";
-    Text[ greek ] = "Çìİñá";
-    Text[ korean ] = "ì¼";
-    Text[ turkish ] = "Gün";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Dia";
-    Text[ finnish ] = "Päivä";
-    Text[ thai ] = "à¸§à¸±à¸™";
-    Text[ czech ] = "Den";
-    Text[ hebrew ] = "â€®×™×•×â€¬";
-    Text[ hindi ] = "à¤¦à¤¿à¤¨";
-    Text[ slovak ] = "DeÅˆ";
-    Text[ hungarian ] = "Nap";
-    Text[ slovenian ] = "Dan";
+    Text [ de ] = "Tag" ;
+    Text [ en-US ] = "Day" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SVT_CALENDAR_WEEK
 {
-    Text = "Woche" ;
-    Text [ ENGLISH ] = "Week" ;
-    Text [ dutch ] = "Week" ;
-    Text [ english_us ] = "Week" ;
-    Text [ italian ] = "Settim." ;
-    Text [ spanish ] = "Semana" ;
-    Text [ french ] = "Semaine" ;
-    Text [ swedish ] = "Vecka" ;
-    Text [ danish ] = "Uge" ;
-    Text [ portuguese ] = "Semana" ;
-    Text [ portuguese_brazilian ] = "Semana" ;
-    Text[ chinese_simplified ] = "å‘¨";
-    Text[ russian ] = "Íåäåëÿ";
-    Text[ polish ] = "tydzieñ";
-    Text[ japanese ] = "é€±";
-    Text[ chinese_traditional ] = "é€±";
-    Text[ arabic ] = "ÃÓÈæÚ";
-    Text[ dutch ] = "Week";
-    Text[ chinese_simplified ] = "å‘¨";
-    Text[ greek ] = "ÅâäïìÜäá";
-    Text[ korean ] = "ì£¼";
-    Text[ turkish ] = "Hafta";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Setmana";
-    Text[ finnish ] = "Viikko";
-    Text[ thai ] = "à¸ªà¸±à¸›à¸”à¸²à¸«à¹Œ";
-    Text[ czech ] = "TÃ½den";
-    Text[ hebrew ] = "â€®×©×‘×•×¢â€¬";
-    Text[ hindi ] = "à¤¸à¤ªà¥à¤¤à¤¾à¤¹";
-    Text[ slovak ] = "TÃ½Å¾deÅˆ";
-    Text[ hungarian ] = "HÃ©t";
-    Text[ slovenian ] = "Teden";
+    Text [ de ] = "Woche" ;
+    Text [ en-US ] = "Week" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SVT_CALENDAR_TODAY
 {
-    Text = "Heute" ;
-    Text [ ENGLISH ] = "Today" ;
-    Text [ portuguese ] = "Hoje" ;
-    Text [ english_us ] = "Today" ;
-    Text [ portuguese_brazilian ] = "Hoje" ;
-    Text [ swedish ] = "Idag" ;
-    Text [ danish ] = "I dag" ;
-    Text [ italian ] = "Oggi" ;
-    Text [ spanish ] = "Hoy" ;
-    Text [ french ] = "Aujourd'hui" ;
-    Text [ dutch ] = "Vandaag" ;
-    Text[ chinese_simplified ] = "ä»Šå¤©";
-    Text[ russian ] = "Ñåãîäíÿ";
-    Text[ polish ] = "dzisiaj";
-    Text[ japanese ] = "ä»Šæ—¥";
-    Text[ chinese_traditional ] = "ä»Šå¤©";
-    Text[ arabic ] = "Çáíæã";
-    Text[ dutch ] = "Vandaag";
-    Text[ chinese_simplified ] = "ä»Šå¤©";
-    Text[ greek ] = "ÓŞìåñá";
-    Text[ korean ] = "ì˜¤ëŠ˜";
-    Text[ turkish ] = "Bugün";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Avui";
-    Text[ finnish ] = "Tänään";
-    Text[ thai ] = "à¸§à¸±à¸™à¸™à¸µà¹‰";
-    Text[ czech ] = "Dnes";
-    Text[ hebrew ] = "â€®×”×™×•×â€¬";
-    Text[ hindi ] = "à¤†à¤œ à¤•à¤¾ à¤¦à¤¿à¤¨";
-    Text[ slovak ] = "Dnes";
-    Text[ hungarian ] = "Ma";
-    Text[ slovenian ] = "Danes";
+    Text [ de ] = "Heute" ;
+    Text [ en-US ] = "Today" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SVT_CALENDAR_NONE
 {
-    Text = "Keines" ;
-    Text [ ENGLISH ] = "None" ;
-    Text [ portuguese ] = "Nenhum" ;
-    Text [ english_us ] = "None" ;
-    Text [ portuguese_brazilian ] = "Nenhum" ;
-    Text [ swedish ] = "Ingen" ;
-    Text [ danish ] = "Ingen" ;
-    Text [ italian ] = "Senza" ;
-    Text [ spanish ] = "Ninguno" ;
-    Text [ french ] = "Aucun(e)" ;
-    Text [ dutch ] = "Geen" ;
-    Text[ chinese_simplified ] = "æ— ";
-    Text[ russian ] = "Ïóñòî";
-    Text[ polish ] = "brak";
-    Text[ japanese ] = "ãªã—";
-    Text[ chinese_traditional ] = "ç„¡";
-    Text[ arabic ] = "ÈÏæä";
-    Text[ dutch ] = "Geen";
-    Text[ chinese_simplified ] = "æ— ";
-    Text[ greek ] = "Êáíİíá";
-    Text[ korean ] = "ì—†ìŒ";
-    Text[ turkish ] = "Yok";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cap";
-    Text[ finnish ] = "Ei mitään";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µ";
-    Text[ czech ] = "Nic";
-    Text[ hebrew ] = "â€®×œ×œ×â€¬";
-    Text[ hindi ] = "à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚";
-    Text[ slovak ] = "Å½iadne";
-    Text[ hungarian ] = "Nincs";
-    Text[ slovenian ] = "Brez";
+    Text [ de ] = "Keines" ;
+    Text [ en-US ] = "None" ;
+    Text [ x-comment ] = " ";
 };
 
 
