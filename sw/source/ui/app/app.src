@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:23:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3453,9 +3453,8 @@ WarningBox MSG_DATA_SOURCES_UNAVAILABLE
 {
     HelpId = HID_DATA_SOURCES_UNAVAILABLE;
     Buttons = WB_OK;
-    DefButton = WB_DEF_YES ;
-    Message = "Es wurde noch keine Datenquelle eingerichtet. Sie benötigen eine Datenquelle, um Daten (z.B. Namen und Adressen aus einer Datenbenk) an die Felder zu liefern?";
-    Message[english_us] = "No data source has been set up yet. You need a data source, such as a database, to supply data (for example, names and addresses) for the fields?";
+    Message = "Es wurde noch keine Datenquelle eingerichtet. Sie benötigen eine Datenquelle, um Daten (z.B. Namen und Adressen aus einer Datenbank) an die Felder zu liefern.";
+    Message[english_us] = "No data source has been set up yet. You need a data source, such as a database, to supply data (for example, names and addresses) for the fields.";
     Message[ portuguese ] = "There is no data source available.\nDo you want to establish a data source connnection?";
     Message[ russian ] = "There is no data source available.\nDo you want to establish a data source connnection?";
     Message[ spanish ] = "There is no data source available.\nDo you want to establish a data source connnection?";
@@ -3585,7 +3584,13 @@ ToolBox RID_MODULE_TOOLBOX
     Scroll = TRUE ;
 };
 
-
+WarningBox MSG_DISABLE_READLINE_QUESTION
+{
+    BUTTONS = WB_YES_NO;
+    DEFBUTTON = WB_DEF_YES ;
+    Message = "Im aktuellen Dokument werden Änderungen aufgezeichnet aber nicht als Solche angezeigt. In umfangreichen Dokumenten, kann es dadurch zu Verzögerungen beim Bearbeiten des Dokumentes kommen. Wollen Sie die Änderungen anzeigen, um Wartezeiten zu vermeiden?";
+    Message [ english_us ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
+};
 
 
 
