@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.11 $
+*  $Revision: 1.12 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-08-19 11:38:28 $
+*  last change: $Author: dfoster $ $Date: 2003-10-17 11:22:23 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -83,8 +83,8 @@ namespace scripting_protocolhandler
 
 const sal_Char * const MYSERVICENAME = "com.sun.star.frame.ProtocolHandler";
 const sal_Char * const MYIMPLNAME = "com.sun.star.comp.ScriptProtocolHandler";
-const sal_Char * MYSCHEME = "script:";
-const sal_Int32 MYSCHEME_LEN = 7;
+const sal_Char * MYSCHEME = "vnd.sun.star.script:";
+const sal_Int32 MYSCHEME_LEN = 20;
 
 void SAL_CALL ScriptProtocolHandler::initialize(
     const css::uno::Sequence < css::uno::Any >& aArguments )

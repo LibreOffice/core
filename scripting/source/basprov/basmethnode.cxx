@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmethnode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: npower $ $Date: 2003-10-15 08:35:31 $
+ *  last change: $Author: dfoster $ $Date: 2003-10-17 11:22:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,10 @@ namespace basprov
     BasicMethodNodeImpl::BasicMethodNodeImpl( SbMethod* pMethod, bool isAppScript )
         :m_pMethod( pMethod ), m_bIsAppScript( isAppScript )
     {
-        // TO DO ( needs changing to vnd...script::// syntax )
         String sModName = m_pMethod->GetModule()->GetName();
         String sLibName = m_pMethod->GetModule()->GetParent()->GetName();
         String sMethName = m_pMethod->GetName();
-        String sTmp = String::CreateFromAscii("script://");
+        String sTmp = String::CreateFromAscii("vnd.sun.star.script://");
         sTmp += sLibName;
         sTmp += '.';
         sTmp += sModName;
