@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2000-10-10 12:57:06 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ public:
 
     void Optimize();                // Baumabgleich
 
-    void Gen();                     // Ausgabe eines Nodes
+    void Gen( BOOL bParam0Allowed = FALSE );    // Ausgabe eines Nodes
 };
 
 class SbiExpression {                // der Ausdruck:
@@ -202,7 +202,7 @@ public:
     SbiExprNode* GetExprNode()      { return pExpr; }
     SbxDataType GetType()           { return pExpr->GetType();    }
     void SetType( SbxDataType eType){ pExpr->eType = eType;       }
-    void Gen();
+    void Gen( BOOL bParam0Allowed = FALSE );
 };
 
 class SbiConstExpression : public SbiExpression {
