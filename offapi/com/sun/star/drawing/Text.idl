@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Text.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:25 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:20:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 /** This abstract service specifies the general characteristics of an optional
     text inside a <type>Shape</type>.
  */
-service Text
+published service Text
 {
     /** With this interface you can modify the text of this
                 <type>Shape<type>.
