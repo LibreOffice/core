@@ -1,0 +1,23 @@
+sd	sd	:	offmgr sc NULL
+sd	sd										usr1	-	all	sd_mkout NULL
+sd	sd\inc									get		-	all	sd_inc NULL
+sd	sd\prj									get		-	all	sd_prj NULL
+sd	sd\jobs									get		-	all	sd_jobs NULL
+sd	sd\source\ui\inc						get		-	all	sd_sinc NULL
+sd	sd\res									get		-	all	sd_res NULL
+sd	sd\res\imagelst							get		-	all	sd_resil NULL
+sd	sd\sdi									nmake	-	all	sd_sdi NULL
+sd	sd\source\ui\func						nmake	-	all	sd_func sd_sdi NULL
+sd	sd\source\ui\view						nmake	-	all	sd_view sd_sdi NULL
+sd	sd\source\ui\app						nmake	-	all	sd_app sd_sdi NULL
+sd	sd\source\ui\dlg						nmake	-	all	sd_dlg sd_sdi NULL
+sd	sd\source\core							nmake	-	all	sd_core sd_sdi NULL
+sd	sd\source\ui\docshell					nmake	-	all	sd_docsh sd_sdi NULL
+sd	sd\source\ui\unoidl						nmake	-	all	sd_unid sd_sdi NULL
+sd	sd\source\filter						nmake	-	all	sd_filt sd_sdi NULL
+sd	sd\source\filter\bin					nmake	-	all	sd_bin NULL
+sd	sd\source\filter\cgm					nmake	-	all	sd_cgm NULL
+sd	sd\source\filter\eppt					nmake	-	all	sd_eppt NULL
+sd	sd\source\filter\grf					nmake	-	all	sd_grf NULL
+sd	sd\source\filter\xml					nmake	-	all	sd_xml NULL
+sd	sd\util									nmake	-	all	sd_util sd_app sd_bin sd_cgm sd_core sd_dlg sd_docsh sd_eppt sd_filt sd_func sd_grf sd_unid sd_view sd_xml NULL
