@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:19:08 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,8 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>
                     m_xConnection;
         String      m_sCurrentlyEditing;
+        ::rtl::OUString
+                    m_sDataSourceName;
 
     public:
         OLinkedDocumentsAccess(
@@ -117,6 +119,7 @@ namespace dbaui
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainer
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
+            ,const ::rtl::OUString& _sDataSourceName
             );
 
         enum EOpenMode
@@ -126,6 +129,8 @@ namespace dbaui
             OPEN_FORMAIL
         };
 
+        sal_Bool isConnected() const { return m_xConnection.is(); }
+
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       open(const ::rtl::OUString& _rLinkName
                                                                                     ,::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition
                                                                                     , EOpenMode _eOpenMode = OPEN_NORMAL);
@@ -133,29 +138,26 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       newForm(sal_Int32 _nNewFormId
                                 ,::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition);
 
-        sal_Bool        newFormWithPilot(
-                            const String& _rDataSourceName,
-                            const sal_Int32 _nCommandType,
-                            const String& _rObjectName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
-                        );
-        sal_Bool        newReportWithPilot(
-                            const String& _rDataSourceName,
-                            const sal_Int32 _nCommandType,
-                            const String& _rObjectName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
-                        );
-        sal_Bool        newQueryWithPilot(
-                            const String& _rDataSourceName,
-                            const sal_Int32 _nCommandType,
-                            const String& _rObjectName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+        void    newWithPilot(
+                            const char* _pWizardService
+                            ,const sal_Int32 _nCommandType = -1
+                            ,const ::rtl::OUString& _rObjectName = ::rtl::OUString()
                         );
 
-        sal_Bool        newTableWithPilot(
-                            const String& _rDataSourceName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+        void    newFormWithPilot(
+                            const sal_Int32 _nCommandType = -1
+                            ,const ::rtl::OUString& _rObjectName = ::rtl::OUString()
                         );
+        void    newReportWithPilot(
+                            const sal_Int32 _nCommandType = -1
+                            ,const ::rtl::OUString& _rObjectName = ::rtl::OUString()
+                        );
+        void    newQueryWithPilot(
+                            const sal_Int32 _nCommandType = -1
+                            ,const ::rtl::OUString& _rObjectName = ::rtl::OUString()
+                        );
+
+        void    newTableWithPilot();
 
         enum RESULT
         {
