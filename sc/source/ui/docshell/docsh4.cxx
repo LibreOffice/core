@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:04:13 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1906,6 +1906,7 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
             long nTabStart = 0;
             long nDisplayStart = 0;
             long nAttrPage = 1;
+            long nPrinted = 0;
 
             for ( nTab=0; nTab<nTabCount; nTab++ )
             {
@@ -1926,7 +1927,7 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
 
                     ScPrintFunc aPrintFunc( this, pPrinter, nTab, nAttrPage, nTotalPages, pMarkedRange, &aOptions );
                     aPrintFunc.SetDrawView( pDrawView );
-                    aPrintFunc.DoPrint( aPageRanges, nTabStart, nDisplayStart, TRUE, &rProgress, NULL );
+                    nPrinted += aPrintFunc.DoPrint( aPageRanges, nTabStart, nDisplayStart, TRUE, &rProgress, NULL );
 
                     nTabStart += aPageArr[nTab];
                     if ( aDocument.NeedPageResetAfterTab(nTab) )
@@ -1937,6 +1938,17 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
 
                     delete pDrawView;
                 }
+            }
+
+            if ( n+1 < nCollateCopies && pPrinter->GetDuplexMode() == DUPLEX_ON && ( nPrinted % 2 ) == 1 )
+            {
+                // #105584# when several collated copies are printed in duplex mode, and there is
+                // an odd number of pages, print an empty page between copies, so the first page of
+                // the second copy isn't printed on the back of the last page of the first copy.
+                // (same as in Writer ViewShell::Prt)
+
+                pPrinter->StartPage();
+                pPrinter->EndPage();
             }
         }
     }
