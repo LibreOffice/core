@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-12 16:07:02 $
+ *  last change: $Author: dr $ $Date: 2002-11-20 08:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,6 +356,13 @@
 
 #define HID_SELECTTABLES        ( HID_SC_OTHER_START + 2 )
 #define HID_SC_REPLCELLSWARN    ( HID_SC_OTHER_START + 3 )
+
+// data pilot layout dialog
+#define HID_SC_DPLAY_PAGE       ( HID_SC_OTHER_START + 4 )
+#define HID_SC_DPLAY_COLUMN     ( HID_SC_OTHER_START + 5 )
+#define HID_SC_DPLAY_ROW        ( HID_SC_OTHER_START + 6 )
+#define HID_SC_DPLAY_DATA       ( HID_SC_OTHER_START + 7 )
+#define HID_SC_DPLAY_SELECT     ( HID_SC_OTHER_START + 8 )
 
 // Analysis Addin Functions (max.120) ----------------------------------------
 #define HID_AAI_FUNC_WORKDAY        ( HID_SC_AAI_FUNCS_START )

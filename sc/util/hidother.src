@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-23 14:53:06 $
+ *  last change: $Author: dr $ $Date: 2002-11-20 08:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,12 @@ hidspecial HID_SCDLG_LINKAREAURL { HelpID = HID_SCDLG_LINKAREAURL; };
 hidspecial HID_SC_RENAME_OBJECT  { HelpID = HID_SC_RENAME_OBJECT; };
 hidspecial HID_SELECTTABLES      { HelpId = HID_SELECTTABLES; };
 hidspecial HID_SC_REPLCELLSWARN  { HelpId = HID_SC_REPLCELLSWARN; };
+
+hidspecial HID_SC_DPLAY_COLUMN   { HelpId = HID_SC_DPLAY_COLUMN; };
+hidspecial HID_SC_DPLAY_ROW      { HelpId = HID_SC_DPLAY_ROW };
+hidspecial HID_SC_DPLAY_DATA     { HelpId = HID_SC_DPLAY_DATA };
+hidspecial HID_SC_DPLAY_SELECT   { HelpId = HID_SC_DPLAY_SELECT };
+
 
 //  2. Seite Funktionsautopilot: nur als Unique-IDs
 

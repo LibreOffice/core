@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-21 17:48:52 $
+ *  last change: $Author: dr $ $Date: 2002-11-20 08:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,6 +349,11 @@ void __EXPORT ScDPLayoutDlg::Init()
     aBtnDetectCat   .Check( thePivotData.bDetectCategories );
     aBtnTotalCol    .Check( thePivotData.bMakeTotalCol );
     aBtnTotalRow    .Check( thePivotData.bMakeTotalRow );
+
+    aWndCol.SetHelpId( HID_SC_DPLAY_COLUMN );
+    aWndRow.SetHelpId( HID_SC_DPLAY_ROW );
+    aWndData.SetHelpId( HID_SC_DPLAY_DATA );
+    aWndSelect.SetHelpId( HID_SC_DPLAY_SELECT );
 
     InitFocus();
 
