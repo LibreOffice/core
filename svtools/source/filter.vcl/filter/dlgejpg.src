@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgejpg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:31:08 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,15 +65,8 @@ ModalDialog DLG_EXPORT_JPG
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 159 , 92 ) ;
-    Text = "JPEG Optionen" ;
-    Text [ ENGLISH ] = "JPEG Optionen" ;
-    Text [ english_us ] = "JPEG Options" ;
-    Text [ italian ] = "Opzioni JPEG" ;
-    Text [ spanish ] = "Opciones JPEG" ;
-    Text [ french ] = "Options JPEG" ;
-    Text [ dutch ] = "JPEG-opties" ;
-    Text [ swedish ] = "JPEG-alternativ" ;
-    Text [ danish ] = "JPEG-indstillinger" ;
+    Text [ de ] = "JPEG Optionen" ;
+    Text [ en-US ] = "JPEG Options" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     OKButton BTN_OK
@@ -99,75 +92,17 @@ ModalDialog DLG_EXPORT_JPG
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text = "Qualität" ;
-        Text [ ENGLISH ] = "Quality" ;
-        Text [ english_us ] = "Quality" ;
-        Text [ italian ] = "Qualità" ;
-        Text [ spanish ] = "Calidad" ;
-        Text [ french ] = "Qualité" ;
-        Text [ dutch ] = "Kwaliteit" ;
-        Text [ swedish ] = "Kvalitet" ;
-        Text [ danish ] = "Kvalitet" ;
-        Text [ portuguese_brazilian ] = "Qualidade" ;
-        Text [ portuguese ] = "Qualidade" ;
-        Text[ chinese_simplified ] = "è´¨é‡";
-        Text[ russian ] = "Êà÷åñòâî";
-        Text[ polish ] = "Jakoœæ";
-        Text[ japanese ] = "ç”»åƒå“è³ª";
-        Text[ chinese_traditional ] = "å“è³ª";
-        Text[ arabic ] = "ÇáÌæÏÉ";
-        Text[ dutch ] = "Kwaliteit";
-        Text[ chinese_simplified ] = "è´¨é‡";
-        Text[ greek ] = "Ğïéüôçôá";
-        Text[ korean ] = "í™”ì§ˆ";
-        Text[ turkish ] = "Kalite";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Qualitat";
-        Text[ finnish ] = "Laatu";
-        Text[ thai ] = "à¸„à¸¸à¸“à¸ à¸²à¸";
-        Text[ czech ] = "Kvalita";
-        Text[ hebrew ] = "â€®××™×›×•×ªâ€¬";
-        Text[ hindi ] = "à¤—à¥à¤£";
-        Text[ slovak ] = "Kvalita";
-        Text[ hungarian ] = "MinÅ‘sÃ©g";
-        Text[ slovenian ] = "Kakovost";
+        Text [ de ] = "Qualität" ;
+        Text [ en-US ] = "Quality" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FI_DESCR
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 81 , 16 ) ;
-        Text = "1: min. Qualität\n100: max. Qualität" ;
-        Text [ ENGLISH ] = "1: min. quality\n100: max. quality" ;
-        Text [ english_us ] = "1: min. quality\n100: max. quality" ;
-        Text [ italian ] = "1: min. qualità\n100: max. qualità" ;
-        Text [ spanish ] = "1: mín. calidad\n100: máx. calidad" ;
-        Text [ french ] = "1 : qualité min.\n100 : qualité max." ;
-        Text [ dutch ] = "1: min. kwaliteit\n100: max. kwaliteit" ;
-        Text [ swedish ] = "1: min. kvalitet\n100: max. kvalitet" ;
-        Text [ danish ] = "1: min. kvalitet\n100: maks. kvalitet" ;
-        Text [ portuguese_brazilian ] = "1: min. qualidade\n100: max. qualidade" ;
-        Text [ portuguese ] = "1: min. qualidade\n100: max. qualidade" ;
-        Text[ chinese_simplified ] = "1: æœ€å·®è´¨é‡ \n100: æœ€ä½³è´¨é‡";
-        Text[ russian ] = "1: íèçêîå êà÷åñòâî\\: âûñîêîå êà÷åñòâî";
-        Text[ polish ] = "1: najgorsza\n100: najlepsza";
-        Text[ japanese ] = "1: æœ€ä½\n100: æœ€é«˜";
-        Text[ chinese_traditional ] = "1: æœ€å·®å“è³ª \n100: æœ€ä½³å“è³ª";
-        Text[ arabic ] = "0: ÇáÍÏ ÇáÃÏäì ááÌæÏÉ\n100: ÇáÍÏ ÇáÃŞÕì ááÌæÏÉ";
-        Text[ dutch ] = "1: min. kwaliteit\n100: max. kwaliteit";
-        Text[ chinese_simplified ] = "1: æœ€å·®è´¨é‡ \n100: æœ€ä½³è´¨é‡";
-        Text[ greek ] = "1: åëÜ÷éóôç ğïéüôçôá\n100: ìİãéóôç ğïéüôçôá";
-        Text[ korean ] = "1: ìµœì†Œ í’ˆì§ˆ\n100: ìµœëŒ€ í’ˆì§ˆ";
-        Text[ turkish ] = "1: dk.  kalite\n 100: dk. kalite";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "0: mín. qualitat\n100: màx. qualitat";
-        Text[ finnish ] = "1: vähimmäislaatu \n100: enimmäislaatu";
-        Text[ thai ] = "1: à¸„à¸¸à¸“à¸ à¸²à¸à¸•à¹ˆà¸³à¸ªà¸¸à¸”\n100: à¸„à¸¸à¸“à¸ à¸²à¸à¸ªà¸¹à¸‡à¸ªà¸¸à¸”";
-        Text[ czech ] = "1: min. kvalita\n100: max. kvalita";
-        Text[ hebrew ] = "â€®1 - ××™×›×•×ª ××–×¢×¨×™×ª\n100 - ××™×›×•×ª ××™×¨×‘×™×ªâ€¬";
-        Text[ hindi ] = "1: min. quality\n100: max. quality";
-        Text[ slovak ] = "1: min. kvalita\n100: max. kvalita";
-        Text[ hungarian ] = "1: legrosszabb minÅ‘sÃ©g \n100: legjobb minÅ‘sÃ©g";
-        Text[ slovenian ] = "1: min. kakovost\n100: maks. kakovost";
+        Text [ de ] = "1: min. Qualität\n100: max. Qualität" ;
+        Text [ en-US ] = "1: min. quality\n100: max. quality" ;
+        Text [ x-comment ] = " ";
     };
     NumericField NUM_FLD_QUALITY
     {
@@ -186,138 +121,29 @@ ModalDialog DLG_EXPORT_JPG
     {
         Pos = MAP_APPFONT ( 6 , 51 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text = "Farbauflösung" ;
-        Text [ ENGLISH ] = "Color resolution" ;
-        Text [ english_us ] = "Color resolution" ;
-        Text [ portuguese_brazilian ] = "Resolução de cores" ;
-        Text [ swedish ] = "Färgupplösning" ;
-        Text [ danish ] = "Farveopløsning" ;
-        Text [ italian ] = "Profondità cromatica" ;
-        Text [ spanish ] = "Resolución del color" ;
-        Text [ french ] = "Résolution couleur" ;
-        Text [ dutch ] = "Kleurdichtheid" ;
-        Text [ portuguese ] = "Resolução de cores" ;
-        Text[ chinese_simplified ] = "é¢œè‰²åˆ†è¾¨ç‡";
-        Text[ russian ] = "Ãëóáèíà öâåòà";
-        Text[ polish ] = "Rozdzielczoœæ kolorów";
-        Text[ japanese ] = "è‰²ã®è§£åƒåº¦";
-        Text[ chinese_traditional ] = "é¡è‰²è§£æåº¦";
-        Text[ arabic ] = "ÇÓÊÈÇäÉ Çááæä";
-        Text[ dutch ] = "Kleurdichtheid";
-        Text[ chinese_simplified ] = "é¢œè‰²åˆ†è¾¨ç‡";
-        Text[ greek ] = "ÁíÜëõóç ÷ñùìÜôùí";
-        Text[ korean ] = "ìƒ‰ í•´ìƒë„";
-        Text[ turkish ] = "Renk çözünürlüğü";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Resolució del color";
-        Text[ finnish ] = "Väritarkkuus";
-        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¸‚à¸­à¸‡à¸ªà¸µ";
-        Text[ czech ] = "PoÄet barev";
-        Text[ hebrew ] = "â€®×¨×–×•×œ×•×¦×™×ª ×”×¦×‘×¢â€¬";
-        Text[ hindi ] = "à¤°à¤‚à¤— à¤•à¤¾ à¤°à¥‡à¤œà¥‰à¤²à¥à¤¯à¥‚à¤¶à¤¨à¥";
-        Text[ slovak ] = "PoÄet farieb";
-        Text[ hungarian ] = "SzÃ­nfelbontÃ¡s";
-        Text[ slovenian ] = "Barvna loÄljivost";
+        Text [ de ] = "Farbauflösung" ;
+        Text [ en-US ] = "Color resolution" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_GRAY
     {
         Pos = MAP_APPFONT ( 12 , 62 ) ;
         Size = MAP_APPFONT ( 81 , 10 ) ;
         TabStop = TRUE ;
-        Text = "Graustufen" ;
-        Text [ ENGLISH ] = "Grayscales" ;
-        Text [ english_us ] = "Grayscale" ;
-        Text [ portuguese ] = "Tons de cinzento" ;
-        Text [ portuguese_brazilian ] = "Tons de cinza" ;
-        Text [ swedish ] = "Gråskalor" ;
-        Text [ danish ] = "Gråtoner" ;
-        Text [ italian ] = "Toni di grigio" ;
-        Text [ spanish ] = "Escala de grises" ;
-        Text [ french ] = "Niveaux de gris" ;
-        Text [ dutch ] = "Grijswaarden" ;
-        Text[ chinese_simplified ] = "ç°åº¦";
-        Text[ russian ] = "Îòòåíêè ñåğîãî";
-        Text[ polish ] = "Odcienie szaroœci";
-        Text[ japanese ] = "ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«";
-        Text[ chinese_traditional ] = "ç°éš";
-        Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
-        Text[ dutch ] = "Grijswaarden";
-        Text[ chinese_simplified ] = "ç°åº¦";
-        Text[ greek ] = "ÄéáâÜèìéóç ôïõ ãêñé";
-        Text[ korean ] = "íšŒìƒ‰ì¡°";
-        Text[ turkish ] = "Gri tonlama";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Escala de grisos";
-        Text[ finnish ] = "Harmaasävy";
-        Text[ thai ] = "à¸ªà¹€à¸à¸¥à¸ªà¸µà¹€à¸—à¸²";
-        Text[ czech ] = "StupnÄ› Å¡edi";
-        Text[ hebrew ] = "â€®×¡×•×œ× ×”××¤×•×¨â€¬";
-        Text[ hindi ] = "à¤—à¥à¤°à¥‡à¤¸à¥à¤•à¥‡à¤²à¥";
-        Text[ slovak ] = "Stupne Å¡edej";
-        Text[ hungarian ] = "SzÃ¼rkeÃ¡rnyalatos";
-        Text[ slovenian ] = "Sivine";
+        Text [ de ] = "Graustufen" ;
+        Text [ en-US ] = "Grayscale" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_RGB
     {
         Pos = MAP_APPFONT ( 12 , 76 ) ;
         Size = MAP_APPFONT ( 81 , 10 ) ;
         TabStop = TRUE ;
-        Text = "Echtfarben" ;
-        Text [ ENGLISH ] = "TrueColors" ;
-        Text [ english_us ] = "True Colors" ;
-        Text [ portuguese ] = "Cores reais" ;
-        Text [ portuguese_brazilian ] = "Cores Reais" ;
-        Text [ swedish ] = "True Colors" ;
-        Text [ danish ] = "Ægte farver" ;
-        Text [ italian ] = "Colori reali" ;
-        Text [ spanish ] = "Colores reales" ;
-        Text [ french ] = "Vraies couleurs (True color)" ;
-        Text [ dutch ] = "Ware kleuren" ;
-        Text[ chinese_simplified ] = "ä»¿çœŸè‰²";
-        Text[ russian ] = "Èñòèííûé öâåò";
-        Text[ polish ] = "True Colors";
-        Text[ japanese ] = "True Color";
-        Text[ chinese_traditional ] = "å…¨å½©";
-        Text[ arabic ] = "ÃáæÇä ÍŞíŞíÉ";
-        Text[ dutch ] = "Ware kleuren";
-        Text[ chinese_simplified ] = "ä»¿çœŸè‰²";
-        Text[ greek ] = "ÖõóéêÜ ÷ñşìáôá";
-        Text[ korean ] = "íŠ¸ë£¨ ì»¬ëŸ¬";
-        Text[ turkish ] = "Gerçek renkler";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Colors reals";
-        Text[ finnish ] = "True Color -värit";
-        Text[ thai ] = "à¸ªà¸µà¸ˆà¸£à¸´à¸‡";
-        Text[ czech ] = "PravÃ© barvy";
-        Text[ hebrew ] = "â€®×¦×‘×¢ ×××™×ª×™â€¬";
-        Text[ hindi ] = "True Colors";
-        Text[ slovak ] = "SkutoÄnÃ© farby";
-        Text[ hungarian ] = "True Color";
-        Text[ slovenian ] = "True colors";
+        Text [ de ] = "Echtfarben" ;
+        Text [ en-US ] = "True Colors" ;
+        Text [ x-comment ] = " ";
     };
-    Text [ portuguese_brazilian ] = "Opções JPEG" ;
-    Text [ portuguese ] = "Opções JPEG" ;
-    Text[ chinese_simplified ] = "JPEG é€‰é¡¹";
-    Text[ russian ] = "Ïàğàìåòğû JPEG";
-    Text[ polish ] = "Opcje JPEG";
-    Text[ japanese ] = "JPEG ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-    Text[ chinese_traditional ] = "JPEG é¸é …";
-    Text[ arabic ] = "ÎíÇÑÇÊJPEG ";
-    Text[ dutch ] = "JPEG-opties";
-    Text[ chinese_simplified ] = "JPEG é€‰é¡¹";
-    Text[ greek ] = "Åğéëïãİò JPEG";
-    Text[ korean ] = "JPEG ì˜µì…˜";
-    Text[ turkish ] = "JPEG seçenekleri";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Opcions JPEG";
-    Text[ finnish ] = "JPEG-vientiasetukset";
-    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸ JPEG ";
-    Text[ czech ] = "MoÅ¾nosti JPEG";
-    Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ª â€¬JPEG";
-    Text[ hindi ] = "JPEG à¤µà¤¿à¤•à¤²à¥à¤ª";
-    Text[ slovak ] = "Nastavenia JPEG";
-    Text[ hungarian ] = "JPEG-beÃ¡llÃ­tÃ¡sok";
-    Text[ slovenian ] = "MoÅ¾nosti za obliko zapisa JPEG";
+    Text [ x-comment ] = " ";
 };
 
 
