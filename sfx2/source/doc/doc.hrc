@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-04 10:33:42 $
+ *  last change: $Author: mba $ $Date: 2001-12-17 14:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,11 @@
 #define DLOAD_TEXT 4
 #define DLOAD_CANCEL 1
 
+#define DLG_MACROQUERY                      (RID_SFX_DOC_START+87)
+#define BTN_OK                              (RID_SFX_DOC_START+88)
+#define BTN_CANCEL                          (RID_SFX_DOC_START+89)
+#define FT_OK                               (RID_SFX_DOC_START+90)
+#define FT_CANCEL                           (RID_SFX_DOC_START+91)
 
 #endif
 

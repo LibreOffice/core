@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-13 10:05:15 $
+ *  last change: $Author: mba $ $Date: 2001-12-17 14:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,7 @@ using namespace ::com::sun::star::ucb;
 #include "macrconf.hxx"
 #include "docfac.hxx"
 #include "helper.hxx"
+#include "doc.hrc"
 
 // class SfxHeaderAttributes_Impl ----------------------------------------
 
@@ -1163,7 +1164,8 @@ ErrCode SfxObjectShell::CallBasic( const String& rMacro,
     const String& rBasic, SbxObject* pVCtrl, SbxArray* pArgs,
     SbxValue* pRet )
 {
-    if ( !IsSecure() )
+    AdjustMacroMode( String() );
+    if ( pImp->nMacroMode == eNEVER_EXECUTE )
         return ERRCODE_IO_ACCESSDENIED;
 
     SfxApplication* pApp = SFX_APP();
@@ -1518,3 +1520,43 @@ void SfxObjectShell::Invalidate( USHORT nId )
         Invalidate_Impl( pFrame->GetBindings(), nId );
 }
 
+void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
+{
+    SvtSecurityOptions aOpt;
+
+    // eFROM_LIST is uninitialized default
+    if ( pImp->nMacroMode == eFROM_LIST )
+        // get setting from configuration
+        pImp->nMacroMode = aOpt.GetBasicMode();
+
+    if ( pImp->nMacroMode == eFROM_LIST )
+    {
+        // user was not asked before
+        // ask one time and store result for all future calls
+        sal_Bool bWarn = aOpt.IsWarningEnabled();
+        sal_Bool bConfirm = aOpt.IsConfirmationEnabled();
+        sal_Bool bSecure = IsSecure();
+        if ( bSecure && bWarn || !bSecure && bConfirm )
+        {
+            QueryBox aBox( NULL, SfxResId( DLG_MACROQUERY ) );
+            aBox.SetButtonText( aBox.GetButtonId(0), String( SfxResId(BTN_OK) ) );
+            aBox.SetButtonText( aBox.GetButtonId(1), String( SfxResId(BTN_CANCEL) ) );
+            String aText = aBox.GetMessText();
+            if ( bSecure )
+            {
+                aBox.SetFocusButton( aBox.GetButtonId(0) );
+                aText.SearchAndReplace( String::CreateFromAscii("$(TEXT)"), String( SfxResId(FT_OK) ) );
+            }
+            else
+            {
+                aBox.SetFocusButton( aBox.GetButtonId(1) );
+                aText.SearchAndReplace( String::CreateFromAscii("$(TEXT)"), String( SfxResId(FT_CANCEL) ) );
+            }
+
+            aBox.SetMessText( aText );
+            bSecure = ( aBox.Execute() == RET_OK );
+        }
+
+        pImp->nMacroMode = bSecure ? eALWAYS_EXECUTE : eNEVER_EXECUTE;
+    }
+}

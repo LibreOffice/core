@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-22 10:50:56 $
+ *  last change: $Author: mba $ $Date: 2001-12-17 14:24:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include <tools/datetime.hxx>
 #endif
 
+#include <svtools/securityoptions.hxx>
 #include "objsh.hxx"
 #include "bitset.hxx"
 
@@ -164,6 +165,7 @@ struct SfxObjectShell_Impl
     sal_Bool                bInCloseEvent;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >             xModel;
     sal_uInt16              nStyleFilter;
+    sal_Int16                nMacroMode;
 
     SfxObjectShell_Impl() :
         pAccMgr(0),
@@ -222,6 +224,7 @@ struct SfxObjectShell_Impl
         bInCloseEvent( sal_False ),
         bLoadingWindows( sal_False )
         , nStyleFilter( 0 )
+        , nMacroMode( eFROM_LIST )
     {}
     ~SfxObjectShell_Impl();
 

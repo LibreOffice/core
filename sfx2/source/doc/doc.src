@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 17:58:20 $
+ *  last change: $Author: mba $ $Date: 2001-12-17 14:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2149,6 +2149,109 @@ String STR_OPENOBJECT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Abrir";
     Text[ finnish ] = "~Avaa";
+};
+
+QueryBox DLG_MACROQUERY
+{
+    Buttons = WB_OK_CANCEL;
+    Title = "Makro ausführen" ;
+    Title [ english ] = "Execute Macro" ;
+    Title [ english_us ] = "Execute Macro" ;
+    Title [ french ] = "Exécuter une macro" ;
+    Title[ italian ] = "Esegui macro";
+    Title[ portuguese_brazilian ] = "Makro ausf?ren";
+    Title[ portuguese ] = "Executar macro";
+    Title[ danish ] = "Udfør makro";
+    Title[ swedish ] = "Utför makro";
+    Title[ dutch ] = "Macro uitvoeren";
+    Title[ spanish ] = "Ejecutar macro";
+    Title[ chinese_simplified ] = "æ‰§è¡Œå®";
+    Title[ russian ] = "Âûïîëíèòü ìàêğîñ";
+    Title[ polish ] = "Wykonaj makro";
+    Title[ japanese ] = "ï¾ï½¸ï¾›ã®å®Ÿè¡Œ";
+    Title[ chinese_traditional ] = "åŸ·è¡Œå·¨é›†";
+    Title[ arabic ] = "ÊäİíĞ ÇáãÇßÑæ";
+    Title[ dutch ] = "Macro uitvoeren";
+    Title[ chinese_simplified ] = "æ‰§è¡Œå®";
+    Title[ greek ] = "Åêôİëåóç ìáêñïåíôïëşí";
+    Title[ korean ] = "ë§¤í¬ë¡œ ì‹¤í–‰";
+    Title[ turkish ] = "Makroyu çalıştır";
+    Title[ language_user1 ] = " ";
+    Title[ catalan ] = "Ejecutar macro";
+    Title[ finnish ] = "Suorita makro";
+
+    Message = "Dieses Dokument enthält Makros. $(TEXT)";
+    Message [English] = "Dieses Dokument enthält Makros. $(TEXT)";
+    Message [English_us] = "Dieses Dokument enthält Makros. $(TEXT)";
+};
+
+String BTN_OK
+{
+    Text = "Ausführen" ;
+    Text [ ENGLISH ] = "Execute" ;
+    Text [ portuguese ] = "Executar" ;
+    Text [ english_us ] = "Execute" ;
+    Text [ portuguese_brazilian ] = "Ausf?ren" ;
+    Text [ swedish ] = "Utför" ;
+    Text [ danish ] = "Udfør" ;
+    Text [ italian ] = "Esegui" ;
+    Text [ spanish ] = "Ejecutar" ;
+    Text [ french ] = "Exécuter" ;
+    Text [ dutch ] = "Uitvoeren" ;
+    Text[ chinese_simplified ] = "æ‰§è¡Œ";
+    Text[ russian ] = "Âûïîëíèòü";
+    Text[ polish ] = "Wykonaj";
+    Text[ japanese ] = "å®Ÿè¡Œ";
+    Text[ chinese_traditional ] = "åŸ·è¡Œ";
+    Text[ arabic ] = "ÊäİíĞ";
+    Text[ dutch ] = "Uitvoeren";
+    Text[ chinese_simplified ] = "æ‰§è¡Œ";
+    Text[ greek ] = "Åêôİëåóç";
+    Text[ korean ] = "ì‹¤í–‰";
+    Text[ turkish ] = "Çalıştır";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ejecutar";
+    Text[ finnish ] = "Suorita";
+};
+String BTN_CANCEL
+{
+    Text = "Nicht Ausführen" ;
+    Text [ ENGLISH ] = "Don't execute" ;
+    Text [ english_us ] = "Don't execute" ;
+    Text [ portuguese_brazilian ] = "Nicht Ausf?ren" ;
+    Text [ swedish ] = "Utför inte" ;
+    Text [ danish ] = "Udfør ikke" ;
+    Text [ italian ] = "Non eseguire" ;
+    Text [ spanish ] = "No ejecutar" ;
+    Text [ french ] = "Ne pas exécuter" ;
+    Text [ dutch ] = "Niet uitvoeren" ;
+    Text [ portuguese ] = "Não executar" ;
+    Text[ chinese_simplified ] = "ä¸æ‰§è¡Œ";
+    Text[ russian ] = "Íå âûïîëíÿòü";
+    Text[ polish ] = "Nie wykonuj";
+    Text[ japanese ] = "å®Ÿè¡Œã—ãªã„";
+    Text[ chinese_traditional ] = "ä¸è¦åŸ·è¡Œ";
+    Text[ arabic ] = "ÚÏã ÇáÊäİíĞ";
+    Text[ dutch ] = "Niet uitvoeren";
+    Text[ chinese_simplified ] = "ä¸æ‰§è¡Œ";
+    Text[ greek ] = "Íá ìçí åêôåëåóôåß";
+    Text[ korean ] = "ì‹¤í–‰ ì•ˆí•¨";
+    Text[ turkish ] = "Çalıştırma";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No ejecutar";
+    Text[ finnish ] = "Älä suorita";
+};
+String FT_CANCEL
+{
+    Text = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgeführt werden. Möchten Sie sie trotzdem ausführen?";
+    Text [english] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgeführt werden. Möchten Sie sie trotzdem ausführen?";
+    Text [english_us] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgeführt werden. Möchten Sie sie trotzdem ausführen?";
+};
+String FT_OK
+{
+    Text = "Möchten Sie erlauben, dass diese Makros ausgeführt werden?";
+    Text [english] = "Möchten Sie erlauben, dass diese Makros ausgeführt werden?";
+    Text [english_us] = "Möchten Sie erlauben, dass diese Makros ausgeführt werden?";
 };
 
 // ******************************************************************* EOF
