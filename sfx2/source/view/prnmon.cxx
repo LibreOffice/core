@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:59:29 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,9 @@
 
 #include <svtools/printwarningoptions.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "prnmon.hxx"
 #include "viewsh.hxx"
@@ -224,15 +226,15 @@ SfxPrintProgress_Impl::SfxPrintProgress_Impl( SfxViewShell* pTheViewShell,
     pViewShell          ( pTheViewShell ),
     pPrinter            ( pThePrinter ),
     pOldPrinter         ( NULL ),
+    nLastPage           ( 0 ),
     bRunning            ( TRUE ),
-    bDeleteOnEndPrint   ( FALSE ),
     bCancel             ( FALSE ),
+    bDeleteOnEndPrint   ( FALSE ),
     bCallbacks          ( FALSE ),
     bOldEnablePrintFile ( FALSE ),
     bOldFlag            ( TRUE ),
     bRestoreFlag        ( FALSE ),
     bAborted            ( FALSE ),
-    nLastPage           ( 0 ),
     aDeleteLink         ( STATIC_LINK( this, SfxPrintProgress_Impl, DeleteHdl ) )
 
 {
