@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 15:10:29 $
+#   last change: $Author: vg $ $Date: 2003-10-06 17:03:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,7 +120,7 @@ PYTHONCORELINK2=$(OUT)$/lib$/$(DLLPRE)python$(DLLPOST)
 BUILD_DIR=$(DSP_DIR)
 CONFIGURE_DIR=$(DSP_DIR)
 
-.IF "$(COMEX)"=="8"
+.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
 CONFIGURE_ACTION=wdevenv pcbuild Release
 BUILD_ACTION=devenv /build Release /project winsound pcbuild.sln /useenv \
     $(BUILD_ACTION_SEP) devenv /build Release /project winreg pcbuild.sln /useenv \
