@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-28 15:14:18 $
+ *  last change: $Author: mt $ $Date: 2002-06-10 16:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2206,15 +2206,13 @@ void Outliner::ImplBlockInsertionCallbacks( BOOL b )
         if ( !bBlockInsCallback )
         {
             // Call blocked notify events...
-            USHORT nCount = pEditEngine->aNotifyCache.Count();
-            if ( nCount )
+            while ( pEditEngine->aNotifyCache.Count() )
             {
-                for ( USHORT n = 0; n < nCount; n++ )
-                {
-                    EENotify* pNotify = pEditEngine->aNotifyCache[n];
-                    pEditEngine->aOutlinerNotifyHdl.Call( pNotify );
-                }
-                pEditEngine->aNotifyCache.DeleteAndDestroy( 0, nCount );
+                EENotify* pNotify = pEditEngine->aNotifyCache[0];
+                // Remove from list before calling, maybe we enter LeaveBlockNotifications while calling the handler...
+                pEditEngine->aNotifyCache.Remove( 0 );
+                pEditEngine->aOutlinerNotifyHdl.Call( pNotify );
+                delete pNotify;
             }
         }
     }

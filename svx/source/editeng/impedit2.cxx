@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: mt $ $Date: 2002-06-03 13:53:11 $
+ *  last change: $Author: mt $ $Date: 2002-06-10 16:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1611,6 +1611,7 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
     ParaPortion* pRightPortion = FindParaPortion( pRight );
     DBG_ASSERT( pLeftPortion, "Blinde Portion in ImpConnectParagraphs(1)" );
     DBG_ASSERT( pRightPortion, "Blinde Portion in ImpConnectParagraphs(2)" );
+    DBG_ASSERT( nParagraphTobeDeleted == GetParaPortions().GetPos( pRightPortion ), "NodePos != PortionPos?" );
 
 #ifndef SVX_LIGHT
     if ( GetStatus().DoOnlineSpelling() )
@@ -1634,15 +1635,15 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
     }
 #endif
 
-    EditPaM aPaM = aEditDoc.ConnectParagraphs( pLeft, pRight );
     if ( IsCallParaInsertedOrDeleted() )
         GetEditEnginePtr()->ParagraphDeleted( nParagraphTobeDeleted );
 
-    pLeftPortion->MarkSelectionInvalid( aPaM.GetIndex(), pLeft->Len() );
-
-    DBG_ASSERT( nParagraphTobeDeleted == GetParaPortions().GetPos( pRightPortion ), "NodePos != PortionPos?" );
+    EditPaM aPaM = aEditDoc.ConnectParagraphs( pLeft, pRight );
     GetParaPortions().Remove( nParagraphTobeDeleted );
     delete pRightPortion;
+
+    pLeftPortion->MarkSelectionInvalid( aPaM.GetIndex(), pLeft->Len() );
+
     // der rechte Node wird von EditDoc::ConnectParagraphs() geloescht.
 
     if ( GetTextRanger() )
@@ -3413,15 +3414,13 @@ void ImpEditEngine::LeaveBlockNotifications()
     if ( !nBlockNotifications )
     {
         // Call blocked notify events...
-        USHORT nCount = aNotifyCache.Count();
-        if ( nCount )
+        while ( aNotifyCache.Count() )
         {
-            for ( USHORT n = 0; n < nCount; n++ )
-            {
-                EENotify* pNotify = aNotifyCache[n];
-                GetNotifyHdl().Call( pNotify );
-            }
-            aNotifyCache.DeleteAndDestroy( 0, nCount );
+            EENotify* pNotify = aNotifyCache[0];
+            // Remove from list before calling, maybe we enter LeaveBlockNotifications while calling the handler...
+            aNotifyCache.Remove( 0 );
+            GetNotifyHdl().Call( pNotify );
+            delete pNotify;
         }
     }
 }
