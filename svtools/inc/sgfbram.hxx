@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgfbram.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:53 $
+ *  last change: $Author: sj $ $Date: 2002-07-03 10:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,16 +62,8 @@
 #ifndef _SGFBRAM_HXX
 #define _SGFBRAM_HXX
 
-// die folgenden Zeilen kînnen raus, sobald das auch im WNT-Update verfÅgbar ist:
-#if defined(WNT)
-typedef void                INT64;
-typedef void                UINT64;
-typedef long                INT32;
-typedef unsigned long       UINT32;
-typedef short               INT16;
-typedef unsigned short      UINT16;
-typedef char                INT8;
-typedef unsigned char       UINT8;
+#ifndef _SOLAR_H
+#include <tools/solar.h>
 #endif
 
 #define SgfBitImag0   1 /* Bitmap                      */
