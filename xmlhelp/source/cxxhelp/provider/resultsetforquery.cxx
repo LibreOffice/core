@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultsetforquery.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2001-08-23 11:39:42 $
+ *  last change: $Author: abi $ $Date: 2001-12-03 13:34:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,16 @@
 #ifndef _XMLSEARCH_QE_QUERYPROCESSOR_HXX_
 #include <qe/QueryProcessor.hxx>
 #endif
+#ifndef INCLUDED_STL_ALGORITHM
+#include <algorithm>
+#define INCLUDED_STL_ALGORITHM
+#endif
 #ifndef INCLUDED_STL_SET
 #include <set>
 #define INCLUDED_STL_SET
 #endif
 
+using namespace std;
 using namespace chelp;
 using namespace xmlsearch::excep;
 using namespace xmlsearch::qe;
@@ -101,7 +106,8 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
       m_aURLParameter( aURLParameter ),
       m_pDatabases( pDatabases )
 {
-    std::vector< rtl::OUString > queryList;
+    unsigned int i;
+    vector< vector< rtl::OUString > > queryList;
 
     {
         sal_Int32 idx;
@@ -112,7 +118,9 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
             if( idx == -1 )
                 idx = query.getLength();
 
-            queryList.push_back( query.copy( 0,idx ) );
+            vector< rtl::OUString > currentQuery;
+            currentQuery.push_back( query.copy( 0,idx ) );
+            queryList.push_back( currentQuery );
             query = query.copy( 1 + idx );
         }
     }
@@ -132,18 +140,51 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
 
     sal_Int32 hitCount = m_aURLParameter.get_hitCount();
 
-    QueryStatement queryStatement( hitCount,queryList,scope );
-    QueryResults *queryResults = 0;
+    QueryResults* queryResults = 0;
+    QueryHitIterator* it = 0;
+    set< rtl::OUString > aSet,aCurrent,aResultSet;
 
     try
     {
-        QueryProcessor queryProcessor( m_pDatabases->getInstallPathAsURL()                    +
-                                       m_pDatabases->lang( m_aURLParameter.get_language() )   +
-                                       rtl::OUString::createFromAscii( "/" )                  +
-                                       m_aURLParameter.get_module()                           +
-                                       rtl::OUString::createFromAscii( ".idx/" ) );
+        rtl::OUString idxDir =
+            m_pDatabases->getInstallPathAsURL()                    +
+            m_pDatabases->lang( m_aURLParameter.get_language() )   +
+            rtl::OUString::createFromAscii( "/" )                  +
+            m_aURLParameter.get_module()                           +
+            rtl::OUString::createFromAscii( ".idx/" );
 
-        queryResults = queryProcessor.processQuery( queryStatement );
+        for( i = 0; i < queryList.size(); ++i )
+        {
+            QueryProcessor queryProcessor(idxDir);
+            QueryStatement queryStatement(hitCount,queryList[i],scope);
+            queryResults = queryProcessor.processQuery( queryStatement );
+
+            it = 0;
+            if( queryResults )
+                it = queryResults->makeQueryHitIterator();
+
+            aSet.clear();
+            while( it && it->next() )
+            {
+                QueryHitData* qhd = it->getHit( 0 /*PrefixTranslator*/ );
+                if(qhd)
+                    aSet.insert(qhd->getDocument());
+            }
+
+            delete it;  // deletes also queryResults[i]
+
+            // intersect
+            if( i == 0 )
+                aResultSet = aSet;
+            else
+            {
+                aCurrent = aResultSet;
+                aResultSet.clear();
+                set_intersection( aSet.begin(),aSet.end(),
+                                  aCurrent.begin(),aCurrent.end(),
+                                  inserter(aResultSet,aResultSet.begin()));
+            }
+        }
     }
     catch( IOException )
     {
@@ -152,23 +193,12 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
     sal_Int32 replIdx = rtl::OUString::createFromAscii( "#HLP#" ).getLength();
     rtl::OUString replWith = rtl::OUString::createFromAscii( "vnd.sun.star.help://" );
 
-    QueryHitIterator* it = 0;
-    if( queryResults )
-        it = queryResults->makeQueryHitIterator();
-
-    rtl::OUString aStr;
-    std::set< rtl::OUString > aSet;
-
-    while( it && it->next() )
+    set< rtl::OUString >::const_iterator set_it = aResultSet.begin();
+    while( set_it != aResultSet.end() )
     {
-        QueryHitData* qhd = it->getHit( 0 );
-        if( qhd &&
-            aSet.insert(qhd->getDocument()).second )
-        {
-            m_aPath.push_back( replWith + (qhd->getDocument()).copy( replIdx ) );
-        }
+          m_aPath.push_back(replWith + set_it->copy(replIdx));
+        ++set_it;
     }
-    delete it;  // deletes also queryResults
 
     m_aItems.resize( m_aPath.size() );
     m_aIdents.resize( m_aPath.size() );
