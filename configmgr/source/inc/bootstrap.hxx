@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 09:16:09 $
+ *  last change: $Author: jb $ $Date: 2001-11-02 12:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,10 @@
 #include <rtl/ustring.hxx>
 #endif
 
+#ifndef INCLUDED_MAP
 #include <map>
+#define INCLUDED_MAP
+#endif
 
 namespace osl {
     class Profile;
@@ -96,7 +99,6 @@ namespace configmgr
     namespace uno = ::com::sun::star::uno;
     namespace lang = ::com::sun::star::lang;
     using ::rtl::OUString;
-    using ::rtl::OString;
 
     // ===================================================================================
     #define PORTAL_SESSION_IDENTIFIER           "portal"
@@ -118,12 +120,13 @@ namespace configmgr
             SO_UNKNOWN,
             SO_FALLBACK,
             SO_INIFILE,
-            SO_OVERRIDE,
+            SO_BOOTSTRAP,
             SO_DEFAULT,
+            SO_OVERRIDE,
             SO_ADJUSTMENT,
             SO_MANUAL
         };
-        typedef OString Name;
+        typedef OUString Name;
 
         // a single setting
         class Setting
@@ -163,9 +166,6 @@ namespace configmgr
         /// merge the given overrides into the object itself
         void mergeOverrides(const Settings& _rOverrides);
 
-        // add settings
-        void override(const uno::Sequence< uno::Any >& _rOverrides, Origin _eOrigin = SO_OVERRIDE);
-
         // check setting existence
         sal_Bool        haveSetting(Name const& _pName) const;
         Origin          getOrigin(Name const& _pName) const;
@@ -183,6 +183,10 @@ namespace configmgr
         Iterator end()      const { return m_aImpl.end(); }
 
         void swap(Settings& _rOther) { m_aImpl.swap(_rOther.m_aImpl); }
+
+    private:
+        void implAddOverrides(const uno::Sequence< uno::Any >& _rOverrides, Origin _eOrigin);
+        bool implExtractOverride(const uno::Any & _rOverride, Name& _rName, uno::Any& _rValue);
     };
 
     class ConnectionSettings
@@ -197,16 +201,17 @@ namespace configmgr
                             Settings::Origin _eOrigin = Settings::SO_OVERRIDE);
 
         /// merge the given overrides into the object itself
-        void mergeOverrides(const Settings& _rOverrides);
+        void mergeOverrides(const Settings& _rOverrides)
+        {
+            implMergeOverrides(_rOverrides);
+            implNormalizeSettings();
+        }
+
         /// merge the given overrides into the object itself
         void mergeOverrides(const ConnectionSettings& _rOverrides)
-        { mergeOverrides(_rOverrides.m_aSettings); }
-
-        void loadFromInifile(osl::Profile & rProfile,
-                             Settings::Origin _eOrigin = Settings::SO_INIFILE);
-
-        void fillFromInifile(osl::Profile & rProfile,
-                             Settings::Origin _eOrigin = Settings::SO_INIFILE);
+        {
+            implMergeOverrides(_rOverrides.m_aSettings);
+        }
 
         bool validate();
 
@@ -275,37 +280,31 @@ namespace configmgr
             uno::Reference< lang::XMultiServiceFactory > const& _rxServiceMgr) const;
 
         void swap(ConnectionSettings& _rOther) { m_aSettings.swap(_rOther.m_aSettings); }
-    protected:
 
+    private:
         bool checkSettings() const;
 
         /** @return <TRUE/> if the setting exists and is a valid path
         */
-        sal_Bool isValidPathSetting(Settings::Name const& _pSetting) const;
-        sal_Bool implPutSystemPathSetting(Settings::Name const& _pSetting, OUString const& _sSystemPath, Settings::Origin _eOrigin);
-        sal_Bool implNormalizePathSetting(Settings::Name const& _pSetting);
-
-        // translate old settings, which exist for compatiblity only, into new ones
-        void implTranslateCompatibilitySettings();
+        // sal_Bool isValidPathSetting(Settings::Name const& _pSetting) const;
 
         // if we do not already have the given config path setting, ensure that it exists (calculated relative to a given path)
-        sal_Bool ensureConfigPath(Settings::Name const& _pSetting, const OUString& _rBasePath);
+        //sal_Bool ensureConfigPath(Settings::Name const& _pSetting, const OUString& _rBasePath);
 
-        // if we do not already have path settings, ensure that they exists (in an office install)
-        sal_Bool implAdjustToInstallation(const OUString& _rShareDataPath, const OUString& _rUserDataPath);
+        /// merge the given overrides into the object itself
+        void implMergeOverrides(const Settings& _rOverrides);
 
-    private:
+        // ensure that the named setting is a valid file URL
+        bool implNormalizePathSetting(Settings::Name const& _pSetting);
 
-        // collect settings from the sregistry, put them into m_aSettings
-        void implCollectSRegistrySetting(osl::Profile & rProfile, Settings::Origin _eOrigin);
+        // normalize the server and port settings
+        void implNormalizeRemoteServer();
 
-        static OUString     getProfileStringItem(osl::Profile & rProfile, OString const& _pSection, OString const& _pKey, rtl_TextEncoding _nEncoding);
-        static sal_Int32    getProfileIntItem(osl::Profile & rProfile, OString const& _pSection, OString const& _pKey);
+        // transform settings that are accepted for compatibility reasons to their normal form
+        void implNormalizeSettings();
 
-        // ensures that m_aImpl contains a session type
-        void implDetermineSessionType();
-        // clear items which are not relevant because of the session type origin
-        void implClearIrrelevantItems();
+        // tries to ensure that a session type is set
+        bool implDetermineSessionType();
 
     // convenience wrappers for Settings members
     public:
@@ -339,10 +338,14 @@ namespace configmgr
             bootstrap();
         }
 
+        void raiseBootstrapException( uno::Reference< uno::XInterface > const & xContext ) const;
+    private:
         void bootstrap();
+
+        struct Impl;
+        friend struct Impl;
     };
 
-    extern void raiseBootstrapException( class BootstrapSettings const& rBootstrapData, uno::Reference< uno::XInterface > xContext );
 // ===================================================================================
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 09:16:11 $
+ *  last change: $Author: jb $ $Date: 2001-11-02 12:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #include "tracer.hxx"
 #endif
 
-#ifndef _UTL_BOOTSTRAP_HXX
-#include <unotools/bootstrap.hxx>
+#ifndef _RTL_BOOTSTRAP_HXX_
+#include <rtl/bootstrap.hxx>
 #endif
 
 #ifndef _RTL_USTRING_HXX_
@@ -84,21 +84,15 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
-#ifndef _RTL_STRING_HXX_
-#include <rtl/string.hxx>
-#endif
 
-#ifndef _OSL_PROFILE_HXX_
-#include <osl/profile.hxx>
-#endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-#ifndef _OSL_THREAD_H_
-#include <osl/thread.h>
 #endif
 
 #ifndef _COM_SUN_STAR_CONFIGURATION_MISSINGBOOTSTRAPFILEEXCEPTION_HPP_
@@ -113,23 +107,59 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 
 // ---------------------------------------------------------------------------------------
-#define CONFIGURATION_PROFILE_NAME      SAL_CONFIGFILE( "sregistry" )
+#define BOOTSTRAP_CONFIGMGR_DATA            SAL_CONFIGFILE("configmgr")
+// ---------------------------------------------------------------------------------------
+// configuration bootstrap items
+#define BOOTSTRAP_ITEM_SERVERTYPE           "CFG_ServerType"
+#define BOOTSTRAP_ITEM_LOCALE               "CFG_Locale"
+#define BOOTSTRAP_ITEM_ASYNCENABLE          "CFG_EnableAsync"
 
+#define BOOTSTRAP_ITEM_SOURCE_PATH          "CFG_BaseDataURL"
+#define BOOTSTRAP_ITEM_UPDATE_PATH          "CFG_UserDataURL"
+
+#define BOOTSTRAP_ITEM_SERVER               "CFG_Server"
+#define BOOTSTRAP_ITEM_TIMEOUT              "CFG_Timeout_ms"
+
+#define BOOTSTRAP_ITEM_USER                 "CFG_User"
+#define BOOTSTRAP_ITEM_PASSWORD             "CFG_Password"
+
+#define BOOTSTRAP_ITEM_PROFILE_NAME         "CFG_INIFILE"
+
+// ---------------------------------------------------------------------------------------
+// default bootstrap values from an INI ('sregistryrc')
+#define BOOTSTRAP_FROM_PROFILE(sect,key) "${$" BOOTSTRAP_ITEM_PROFILE_NAME ":" sect ":" key "}"
+
+#define BOOTSTRAP_SERVERTYPE_FROM_PROFILE   BOOTSTRAP_FROM_PROFILE(SREGISTRY_SECTION_CONFIGURATION,SREGISTRY_KEY_SERVERTYPE)
+#define BOOTSTRAP_LOCALE_FROM_PROFILE       BOOTSTRAP_FROM_PROFILE(SREGISTRY_SECTION_CONFIGURATION,SREGISTRY_KEY_LOCALE)
+#define BOOTSTRAP_ASYNCENABLE_FROM_PROFILE  BOOTSTRAP_FROM_PROFILE(SREGISTRY_SECTION_CONFIGURATION,SREGISTRY_KEY_ASYNC)
+
+#define BOOTSTRAP_SERVER_FROM_PROFILE       BOOTSTRAP_FROM_PROFILE(SREGISTRY_SECTION_REMOTE,SREGISTRY_KEY_SERVER)
+#define BOOTSTRAP_TIMEOUT_FROM_PROFILE      BOOTSTRAP_FROM_PROFILE(SREGISTRY_SECTION_REMOTE,SREGISTRY_KEY_TIMEOUT)
+
+#define BOOTSTRAP_BASEPATH_FROM_PROFILE     BOOTSTRAP_FROM_PROFILE(SREGISTRY_SECTION_LOCAL,SREGISTRY_KEY_SOURCEPATH)
+#define BOOTSTRAP_DATAPATH_FROM_PROFILE     BOOTSTRAP_FROM_PROFILE(SREGISTRY_SECTION_LOCAL,SREGISTRY_KEY_UPDATEPATH)
+
+#define BOOTSTRAP_USER_FROM_PROFILE         BOOTSTRAP_FROM_PROFILE(SREGISTRY_SECTION_AUTHENTICATION,SREGISTRY_KEY_USER)
+#define BOOTSTRAP_PASSWORD_FROM_PROFILE     BOOTSTRAP_FROM_PROFILE(SREGISTRY_SECTION_AUTHENTICATION,SREGISTRY_KEY_PASSWORD)
+
+// ---------------------------------------------------------------------------------------
+// sections and entries of srgeistryrc
 #define SREGISTRY_SECTION_CONFIGURATION     "configuration"
 #define SREGISTRY_KEY_SERVERTYPE            "servertype"
-#define SREGISTRY_KEY_LOCALE                "DefaultLocale"
-#define SREGISTRY_KEY_ASYNC                 "EnableAsyncUpdates"
+#define SREGISTRY_KEY_SESSIONCLASS          "service"
+#define SREGISTRY_KEY_LOCALE                "locale"
+#define SREGISTRY_KEY_ASYNC                 "enable_async"
+
 #define SREGISTRY_SECTION_REMOTE            "RemoteRegistry"
 #define SREGISTRY_KEY_SERVER                "Server"
 #define SREGISTRY_KEY_TIMEOUT               "Timeout"
+
 #define SREGISTRY_SECTION_LOCAL             "LocalRegistry"
 #define SREGISTRY_KEY_SOURCEPATH            "sourcepath"
 #define SREGISTRY_KEY_UPDATEPATH            "updatepath"
+
 #define SREGISTRY_SECTION_AUTHENTICATION    "Authentication"
 #define SREGISTRY_KEY_USER                  "User"
 #define SREGISTRY_KEY_PASSWORD              "Password"
@@ -149,19 +179,20 @@
 #define SETTING_SOURCEPATH                  "sourcepath"
 #define SETTING_UPDATEPATH                  "updatepath"
 #define SETTING_REINITIALIZE                "reinitialize"
-// 'option' settings
+// authentication settings
 #define SETTING_USER                        "user"
 #define SETTING_PASSWORD                    "password"
+// 'option' settings
 #define SETTING_LOCALE                      "locale"
 #define SETTING_ASYNC                       "lazywrite"
-// deprecated and obsolete
-#define SETTING_ROOTPATH                    "rootpath"
 
 // ---------------------------------------------------------------------------------------
 #define SERVICE_USERSESSION                 "configuration"
 #define SERVICE_ADMINSESSION                "adminconfiguration"
 // ---------------------------------------------------------------------------------------
-
+#define NAME( N ) OUString(RTL_CONSTASCII_USTRINGPARAM(N))
+#define ITEM( N ) OUString(RTL_CONSTASCII_USTRINGPARAM(N))
+// ---------------------------------------------------------------------------------------
 namespace configmgr
 {
     using namespace ::com::sun::star::uno;
@@ -207,7 +238,7 @@ namespace configmgr
 
         sal_Bool bSuccess = this->m_aValue >>= sReturn;
 
-        OSL_ENSURE(bSuccess, "Settings::Setting::toString: setting is not a string!");
+        OSL_ENSURE(bSuccess || !this->m_aValue.hasValue(), "Settings::Setting::toString: setting is not a string!");
 
         return sReturn;
     }
@@ -224,10 +255,10 @@ namespace configmgr
             if (this->m_aValue >>= sValue)
             {
                 nReturn = sValue.toInt32();
-                bSuccess = (nReturn != 0);
+                bSuccess = (nReturn != 0 );
             }
         }
-        OSL_ENSURE(bSuccess, "Settings::getIntSetting: setting is not an integer!");
+        OSL_ENSURE(bSuccess || !this->m_aValue.hasValue(), "Settings::getIntSetting: setting is not an integer!");
         return nReturn;
     }
 
@@ -271,6 +302,7 @@ namespace configmgr
 
         default:
             OSL_ENSURE(false, "Settings::Setting::toBool: setting is not a boolean!");
+        case uno::TypeClass_VOID: // don't assert, if no value
             break;
         }
 
@@ -285,7 +317,7 @@ namespace configmgr
 // ---------------------------------------------------------------------------------------
     Settings::Settings(const Sequence< Any >& _rOverrides, Origin _eOrigin)
     {
-        override(_rOverrides,_eOrigin);
+        implAddOverrides(_rOverrides,_eOrigin);
     }
 
 // ---------------------------------------------------------------------------------------
@@ -298,29 +330,59 @@ namespace configmgr
     }
 
 // ---------------------------------------------------------------------------------------
-    void Settings::override(const Sequence< Any >& _rOverrides, Origin _eOrigin)
+    void Settings::implAddOverrides(const Sequence< Any >& _rOverrides, Origin _eOrigin)
     {
         // transfer the runtime overrides
         const sal_Int32 nCount = _rOverrides.getLength();
         OSL_ENSURE(0 <= nCount && nCount <= 0x7FFF, "Unexpected number of arguments");
 
-        PropertyValue aCurrentArg;
+        Any const * pOverrides = _rOverrides.getConstArray();
         for (sal_Int32 nArg = 0; nArg < nCount; ++nArg)
         {
-            // it must be a PropertyValue (with ascii name)
-            if (_rOverrides[nArg] >>= aCurrentArg)
-            {
-                OString aAsciiName = rtl::OUStringToOString(aCurrentArg.Name, RTL_TEXTENCODING_ASCII_US );
-                putSetting(aAsciiName, Setting(aCurrentArg.Value, _eOrigin));
+            OUString sName;
+            Any aValue;
 
-                CFG_TRACE_INFO("provider bootstrapping: runtime parameter: %s", aAsciiName.getStr());
+            if ( implExtractOverride(pOverrides[nArg],sName,aValue) )
+            {
+                putSetting(sName, Setting(aValue, _eOrigin));
+                CFG_TRACE_INFO("provider bootstrapping: runtime parameter: %s", OUSTRING2ASCII(sName));
             }
             else
             {
-                CFG_TRACE_ERROR("provider bootstrapping: illegal parameter of type %s", OUSTRING2ASCII(_rOverrides[nArg].getValueType().getTypeName()));
-                throw IllegalArgumentException(OUString::createFromAscii("Configuration: Provider Creation Argument is not a com.sun.star.beans.PropertyValue."), NULL, sal_Int16(nArg));
+                CFG_TRACE_ERROR("provider bootstrapping: illegal parameter of type %s", OUSTRING2ASCII(pOverrides[nArg].getValueType().getTypeName()));
+                throw IllegalArgumentException(OUString::createFromAscii("Configuration: Provider Creation Argument is not a com.sun.star.beans.PropertyValue or NameValue."), NULL, sal_Int16(nArg));
             }
         }
+    }
+
+// ---------------------------------------------------------------------------------------
+    bool Settings::implExtractOverride(const Any & _rOverride, Name& _rName, Any& _rValue)
+    {
+        {
+            PropertyValue aCurrentArgPV;
+            // it must be a PropertyValue
+            if (_rOverride >>= aCurrentArgPV)
+            {
+                _rName  = aCurrentArgPV.Name;
+                _rValue = aCurrentArgPV.Value;
+
+                return true;
+            }
+        }
+        #if 0
+        {
+            NamedValue aCurrentArgNV;
+            // or a NamedValue
+            if (_rOverride >>= aCurrentArgNV)
+            {
+                _rName  = aCurrentArgNV.Name;
+                _rValue = aCurrentArgNV.Value;
+
+                return true;
+            }
+        }
+        #endif
+        return false;
     }
 
 // ---------------------------------------------------------------------------------------
@@ -446,53 +508,59 @@ namespace configmgr
                                             Settings::Origin _eOrigin)
     : m_aSettings(_rOverrides, _eOrigin)
     {
-
-        // translate old compatibility settings
-        implTranslateCompatibilitySettings();
-
-        implNormalizePathSetting(SETTING_SOURCEPATH);
-        implNormalizePathSetting(SETTING_UPDATEPATH);
+        // translate compatibility and special settings
+        implNormalizeSettings();
     }
 
 // ---------------------------------------------------------------------------------------
     void ConnectionSettings::setSessionType(const OUString& _rSessionIdentifier, Settings::Origin _eOrigin)
     {
-        putSetting(SETTING_SERVERTYPE, Settings::Setting(_rSessionIdentifier, _eOrigin));
-        OSL_ENSURE(haveSetting(SETTING_SERVERTYPE), "Settings::setSessionType: could not set session type!");
+        putSetting(NAME(SETTING_SERVERTYPE), Settings::Setting(_rSessionIdentifier, _eOrigin));
     }
 
 // ---------------------------------------------------------------------------------------
     void ConnectionSettings::setService(const OUString& _rService, Settings::Origin _eOrigin)
     {
-        putSetting(SETTING_SERVICE, Settings::Setting(_rService, _eOrigin));
-        OSL_ENSURE(haveSetting(SETTING_SERVICE), "Settings::setService: could not set service type!");
+        putSetting(NAME(SETTING_SERVICE), Settings::Setting(_rService, _eOrigin));
     }
 
 // ---------------------------------------------------------------------------------------
-    sal_Bool ConnectionSettings::isSessionTypeKnown() const { return haveSetting(SETTING_SERVERTYPE); }
-    sal_Bool ConnectionSettings::hasUser() const            { return haveSetting(SETTING_USER); }
-    sal_Bool ConnectionSettings::hasPassword() const        { return haveSetting(SETTING_PASSWORD); }
-    sal_Bool ConnectionSettings::hasLocale() const          { return haveSetting(SETTING_LOCALE); }
-    sal_Bool ConnectionSettings::hasServer() const          { return haveSetting(SETTING_SERVER); }
-    sal_Bool ConnectionSettings::hasService() const         { return haveSetting(SETTING_SERVICE); }
-    sal_Bool ConnectionSettings::hasPort() const            { return haveSetting(SETTING_PORT); }
-    sal_Bool ConnectionSettings::hasTimeout() const         { return haveSetting(SETTING_TIMEOUT); }
-    sal_Bool ConnectionSettings::hasAsyncSetting() const    { return haveSetting(SETTING_ASYNC); }
-    sal_Bool ConnectionSettings::hasReinitializeFlag() const { return haveSetting(SETTING_REINITIALIZE); }
+    sal_Bool ConnectionSettings::isSessionTypeKnown() const { return haveSetting(NAME(SETTING_SERVERTYPE)); }
+    sal_Bool ConnectionSettings::hasUser() const            { return haveSetting(NAME(SETTING_USER)); }
+    sal_Bool ConnectionSettings::hasPassword() const        { return haveSetting(NAME(SETTING_PASSWORD)); }
+    sal_Bool ConnectionSettings::hasLocale() const          { return haveSetting(NAME(SETTING_LOCALE)); }
+    sal_Bool ConnectionSettings::hasServer() const          { return haveSetting(NAME(SETTING_SERVER)); }
+    sal_Bool ConnectionSettings::hasService() const         { return haveSetting(NAME(SETTING_SERVICE)); }
+    sal_Bool ConnectionSettings::hasPort() const            { return haveSetting(NAME(SETTING_PORT)); }
+    sal_Bool ConnectionSettings::hasTimeout() const         { return haveSetting(NAME(SETTING_TIMEOUT)); }
+    sal_Bool ConnectionSettings::hasAsyncSetting() const    { return haveSetting(NAME(SETTING_ASYNC)); }
+    sal_Bool ConnectionSettings::hasReinitializeFlag() const { return haveSetting(NAME(SETTING_REINITIALIZE)); }
 
 // ---------------------------------------------------------------------------------------
-    OUString    ConnectionSettings::getSessionType() const  { return m_aSettings.getStringSetting(SETTING_SERVERTYPE); }
-    OUString    ConnectionSettings::getUser() const         { return m_aSettings.getStringSetting(SETTING_USER); }
-    OUString    ConnectionSettings::getPassword() const     { return m_aSettings.getStringSetting(SETTING_PASSWORD); }
-    OUString    ConnectionSettings::getLocale() const       { return m_aSettings.getStringSetting(SETTING_LOCALE); }
-    OUString    ConnectionSettings::getSourcePath() const   { return m_aSettings.getStringSetting(SETTING_SOURCEPATH); }
-    OUString    ConnectionSettings::getUpdatePath() const   { return m_aSettings.getStringSetting(SETTING_UPDATEPATH); }
-    OUString    ConnectionSettings::getServer() const       { return m_aSettings.getStringSetting(SETTING_SERVER); }
-    OUString    ConnectionSettings::getService() const      { return m_aSettings.getStringSetting(SETTING_SERVICE); }
-    sal_Int32   ConnectionSettings::getPort() const         { return m_aSettings.getIntSetting(SETTING_PORT); }
-    sal_Int32   ConnectionSettings::getTimeout() const      { return m_aSettings.getIntSetting(SETTING_TIMEOUT); }
-    sal_Bool ConnectionSettings::getAsyncSetting() const    { return m_aSettings.getBoolSetting(SETTING_ASYNC); }
-    sal_Bool ConnectionSettings::getReinitializeFlag() const { return m_aSettings.getBoolSetting(SETTING_REINITIALIZE); }
+    OUString    ConnectionSettings::getSessionType() const  { return m_aSettings.getStringSetting(NAME(SETTING_SERVERTYPE)); }
+    OUString    ConnectionSettings::getUser() const         { return m_aSettings.getStringSetting(NAME(SETTING_USER)); }
+    OUString    ConnectionSettings::getPassword() const     { return m_aSettings.getStringSetting(NAME(SETTING_PASSWORD)); }
+    OUString    ConnectionSettings::getLocale() const       { return m_aSettings.getStringSetting(NAME(SETTING_LOCALE)); }
+    OUString    ConnectionSettings::getSourcePath() const   { return m_aSettings.getStringSetting(NAME(SETTING_SOURCEPATH)); }
+    OUString    ConnectionSettings::getUpdatePath() const   { return m_aSettings.getStringSetting(NAME(SETTING_UPDATEPATH)); }
+    OUString    ConnectionSettings::getServer() const       { return m_aSettings.getStringSetting(NAME(SETTING_SERVER)); }
+    OUString    ConnectionSettings::getService() const      { return m_aSettings.getStringSetting(NAME(SETTING_SERVICE)); }
+    sal_Int32   ConnectionSettings::getPort() const         { return m_aSettings.getIntSetting(NAME(SETTING_PORT)); }
+    sal_Int32   ConnectionSettings::getTimeout() const      { return m_aSettings.getIntSetting(NAME(SETTING_TIMEOUT)); }
+    sal_Bool ConnectionSettings::getAsyncSetting() const    { return m_aSettings.getBoolSetting(NAME(SETTING_ASYNC)); }
+    sal_Bool ConnectionSettings::getReinitializeFlag() const { return m_aSettings.getBoolSetting(NAME(SETTING_REINITIALIZE)); }
+
+// ---------------------------------------------------------------------------------------
+    sal_Bool ConnectionSettings::isSourcePathValid() const
+    {
+        return haveSetting(NAME(SETTING_SOURCEPATH));
+    }
+
+// ---------------------------------------------------------------------------------------
+    sal_Bool ConnectionSettings::isUpdatePathValid() const
+    {
+        return haveSetting(NAME(SETTING_UPDATEPATH));
+    }
 
 // ---------------------------------------------------------------------------------------
     static inline bool isValidFileURL(OUString const& _sFileURL)
@@ -501,101 +569,91 @@ namespace configmgr
 
         OUString sSystemPath;
         return _sFileURL.getLength() && (File::E_None == File::getSystemPathFromFileURL(_sFileURL, sSystemPath));
-   }
-// ---------------------------------------------------------------------------------------
-    sal_Bool ConnectionSettings::isValidPathSetting(Settings::Name const& _sSetting) const
-    {
-        return haveSetting(_sSetting) &&
-                isValidFileURL(m_aSettings.getStringSetting(_sSetting));
     }
-
 // ---------------------------------------------------------------------------------------
-    sal_Bool ConnectionSettings::isSourcePathValid() const
-    {
-        return isValidPathSetting(SETTING_SOURCEPATH);
-    }
-
-// ---------------------------------------------------------------------------------------
-    sal_Bool ConnectionSettings::isUpdatePathValid() const
-    {
-        return isValidPathSetting(SETTING_UPDATEPATH);
-    }
-
-// ---------------------------------------------------------------------------------------
-    sal_Bool ConnectionSettings::implPutSystemPathSetting(Settings::Name const& _pSetting, OUString const& _sSystemPath, Settings::Origin _eOrigin)
+    static
+    bool implEnsureAbsoluteURL(OUString & _rsURL) // also strips embedded dots etc.
     {
         using osl::File;
 
-        OUString sFileURL;
+        OUString sBasePath = _rsURL;
+        OSL_VERIFY(osl_Process_E_None == osl_getProcessWorkingDir(&sBasePath.pData));
 
-        bool bOK = _sSystemPath.getLength() &&  (File::E_None == File::getFileURLFromSystemPath(_sSystemPath, sFileURL));
-
-        if (!bOK)
+        OUString sAbsolute;
+        if ( File::E_None == File::getAbsoluteFileURL(sBasePath, _rsURL, sAbsolute))
         {
-            bOK = isValidFileURL(_sSystemPath);
-            if (bOK)
-                sFileURL = _sSystemPath;
-        }
-        if (bOK)
-        {
-            putSetting(_pSetting, Settings::Setting(sFileURL, _eOrigin));
+            _rsURL = sAbsolute;
+            return true;
         }
         else
         {
-            if (_sSystemPath.getLength() != 0)
-                CFG_TRACE_ERROR_NI("provider bootstrapping: could not normalize a given path (setting: %s, value: %s)", _pSetting.getStr(), OUSTRING2ASCII(_sSystemPath));
-            clearSetting(_pSetting);
+            OSL_ENSURE(false, "Could not get absolute file URL for valid URL");
+            return false;
         }
-
-        return bOK;
     }
-
 // ---------------------------------------------------------------------------------------
-    sal_Bool ConnectionSettings::implNormalizePathSetting(Settings::Name const& _pSetting)
+
+    static
+    bool implNormalizeURL(OUString const & _sPathOrURL, OUString& _rsURL)
     {
         using osl::File;
 
-        sal_Bool bOK = haveSetting(_pSetting);
-        if (bOK)
+        OUString sOther;
+
+        bool bURL = false;
+
+        // if empty, clear _rsURL, but return false
+        if (_sPathOrURL.getLength() == 0)
         {
-            Settings::Setting aSetting = getSetting(_pSetting);
-
-            OUString sRawPath = aSetting.toString();
-            OUString sNormalized;
-
-            bOK = (File::E_None == File::getFileURLFromSystemPath(sRawPath, sNormalized));
-            if (bOK)
-            {
-                putSetting(_pSetting, Settings::Setting(sNormalized,aSetting.origin()) );
-            }
-            else if (!isValidFileURL(sRawPath))
-            {
-                CFG_TRACE_WARNING_NI("provider bootstrapping: could not normalize a given path (setting: %s, value: %s)", _pSetting.getStr(), OUSTRING2ASCII(sRawPath));
-                //clearSetting(_pSetting);
-            }
+            _rsURL = _sPathOrURL;
+            bURL = false;
         }
-        return bOK;
+
+        // check if it already was normalized
+        else if ( File::E_None == File::getSystemPathFromFileURL(_sPathOrURL, sOther) )
+        {
+            _rsURL = _sPathOrURL;
+            bURL = true;
+        }
+
+        // allow for system pathes
+        else if ( File::E_None == File::getFileURLFromSystemPath(_sPathOrURL, sOther) )
+        {
+            CFG_TRACE_WARNING_NI("provider bootstrapping: URL was specified as system path '%s'.", OUSTRING2ASCII(_sPathOrURL));
+            _rsURL = sOther;
+            bURL = true;
+        }
+
+        else
+            bURL = false;
+
+        return bURL && implEnsureAbsoluteURL(_rsURL);
     }
-
 // ---------------------------------------------------------------------------------------
-    void ConnectionSettings::loadFromInifile( osl::Profile & rProfile, Settings::Origin _eOrigin )
+    bool ConnectionSettings::implNormalizePathSetting(Settings::Name const& _pSetting)
     {
-        implCollectSRegistrySetting(rProfile,_eOrigin);
+        using osl::File;
 
-        // translate old compatibility settings
-        implTranslateCompatibilitySettings();
-    }
+        if (!haveSetting(_pSetting))
+            return false;
 
-// ---------------------------------------------------------------------------------------
-    void ConnectionSettings::fillFromInifile( osl::Profile & rProfile, Settings::Origin _eOrigin )
-    {
-        // use existing settings as overrides
-        Settings aOldValues;
-        m_aSettings.swap(aOldValues);
+        Settings::Setting aSetting = getSetting(_pSetting);
 
-        loadFromInifile(rProfile,_eOrigin);
+        OUString const sValue = aSetting.toString();
 
-        mergeOverrides(aOldValues);
+        OUString sNormalized;
+
+        if ( implNormalizeURL(sValue,sNormalized) )
+        {
+            putSetting(_pSetting, Settings::Setting(sNormalized,aSetting.origin()) );
+            return true;
+        }
+        else
+        {
+            CFG_TRACE_ERROR_NI("provider bootstrapping: could not normalize URL (setting: %s, value: %s).", OUSTRING2ASCII(_pSetting), OUSTRING2ASCII(sValue));
+            clearSetting(_pSetting);
+            return false;
+        }
     }
 
 // ---------------------------------------------------------------------------------------
@@ -615,7 +673,7 @@ namespace configmgr
             bool bRecognized = false;
             for (sal_Int32 i=0; i<cKnownSettingsCount; ++i)
             {
-                if (aCheck->first.equals(pKnownSettings[i]))
+                if (aCheck->first.equalsAscii(pKnownSettings[i]))
                 {
                     bRecognized = true;
                     break;
@@ -624,7 +682,7 @@ namespace configmgr
 
             if (!bRecognized)
             {
-                OSL_ENSURE(bRecognized, OString("ConnectionSettings: unrecognized parameter: ").concat(aCheck->first).getStr() );
+                OSL_ENSURE(bRecognized, "Configuration: unknown provider parameter\n");
                 CFG_TRACE_WARNING_NI("provider bootstrapping: unrecognized parameter found: %s", aCheck->first.getStr() );
                 bCheckResult = false;
             }
@@ -642,10 +700,7 @@ namespace configmgr
         // determine the session type
         implDetermineSessionType();
 
-        // remove unneccessary items
-        implClearIrrelevantItems();
-
-        return isComplete( getSessionType() );
+        return implDetermineSessionType() && isComplete( getSessionType() );
     }
 
 // ---------------------------------------------------------------------------------------
@@ -684,193 +739,110 @@ namespace configmgr
     }
 
 // ---------------------------------------------------------------------------------------
-    void ConnectionSettings::mergeOverrides(const Settings& _rOverrides)
+    void ConnectionSettings::implMergeOverrides(const Settings& _rOverrides)
     {
         // update path validity depends on data in its base source path
-        if (_rOverrides.haveSetting(SETTING_SOURCEPATH))
+        if (_rOverrides.haveSetting(NAME(SETTING_SOURCEPATH)))
         {
-            this->clearSetting(SETTING_SOURCEPATH);
-            this->clearSetting(SETTING_UPDATEPATH);
+            this->clearSetting(NAME(SETTING_SOURCEPATH));
+            this->clearSetting(NAME(SETTING_UPDATEPATH));
+        }
+
+        // port is only valid relative to server (and may even be part of the server setting)
+        if (_rOverrides.haveSetting(NAME(SETTING_SERVER)))
+        {
+            this->clearSetting(NAME(SETTING_SERVER));
+            this->clearSetting(NAME(SETTING_PORT));
         }
 
         // if changing the user, password must be changed as well
-        if (_rOverrides.haveSetting(SETTING_USER))
+        if (_rOverrides.haveSetting(NAME(SETTING_USER)))
         {
-            this->clearSetting(SETTING_USER);
-            this->clearSetting(SETTING_PASSWORD);
+            this->clearSetting(NAME(SETTING_USER));
+            this->clearSetting(NAME(SETTING_PASSWORD));
         }
 
-        // do it
         m_aSettings.mergeOverrides(_rOverrides);
-
-        // translate old compatibility settings
-        implTranslateCompatibilitySettings();
     }
 
 // ---------------------------------------------------------------------------------------
-    sal_Bool ConnectionSettings::ensureConfigPath(Settings::Name const& _pSetting, const OUString& _rBasePath)
+    void ConnectionSettings::implNormalizeRemoteServer()
     {
-        // check if the existing setting value is a valid path
-        if (isValidPathSetting(_pSetting))
-            // nothing to do
-            return true;
+        Settings::Name const sServerSetting = NAME(SETTING_SERVER);
+        Settings::Name const sPortSetting = NAME(SETTING_PORT);
 
-        if (_rBasePath.getLength() == 0)
+        if (haveSetting(sServerSetting) && !haveSetting(sPortSetting))
         {
-            OSL_ENSURE(false,OString("No base path found for setting: ").concat( _pSetting ). getStr());
-            return false;
-        }
+            Settings::Setting aServerData = getSetting(sServerSetting);
 
-        // use the name given, plus config/registry
-        OUString sDirectory(_rBasePath);
+            OUString sServerAndPort = aServerData.toString();
 
-        sDirectory += OUString(RTL_CONSTASCII_USTRINGPARAM("/config/registry"));
-
-        putSetting(_pSetting, Settings::Setting(sDirectory, Settings::SO_FALLBACK));
-
-        CFG_TRACE_INFO("provider bootstrapping: set fallback path for %s to %s", _pSetting.getStr(), OUSTRING2ASCII(sDirectory));
-        return isValidPathSetting(_pSetting);
-    }
-
-// ---------------------------------------------------------------------------------------
-    // if we do not already have path settings, ensure that they exists (in an office install)
-    sal_Bool ConnectionSettings::implAdjustToInstallation(const OUString& _sShareDataPath, const OUString& _sUserDataPath)
-    {
-        // if we do not already have a source path setting, create one from the base install path
-        sal_Bool bSuccess = ensureConfigPath(SETTING_SOURCEPATH, _sShareDataPath);
-        if (bSuccess)
-        {
-            // set update path only if source path could be set
-
-            // if we do not already have a update path setting, create one from the user install path
-            ensureConfigPath(SETTING_UPDATEPATH, _sUserDataPath);
-        }
-        return bSuccess;
-    }
-
-// ---------------------------------------------------------------------------------------
-    void ConnectionSettings::implCollectSRegistrySetting(osl::Profile & rProfile, Settings::Origin eOrigin)
-    {
-        rtl_TextEncoding const nExtEncoding = osl_getThreadTextEncoding();
-        rtl_TextEncoding const nIntEncoding = RTL_TEXTENCODING_ASCII_US;
-
-        typedef Settings::Setting Setting;
-
-        // session type
-        OUString sSessionType = getProfileStringItem(rProfile, SREGISTRY_SECTION_CONFIGURATION, SREGISTRY_KEY_SERVERTYPE, nIntEncoding);
-        if (sSessionType.getLength())
-        {
-            CFG_TRACE_INFO("provider bootstrapping: session type as found in the sregistry: %s", OUSTRING2ASCII(sSessionType));
-            putSetting(SETTING_SERVERTYPE, Setting(sSessionType, eOrigin));
-        }
-        else
-        {
-            CFG_TRACE_WARNING("provider bootstrapping: no session type found in the sregistry");
-        }
-
-        // common provider settings
-        OUString sLocale = getProfileStringItem(rProfile, SREGISTRY_SECTION_CONFIGURATION, SREGISTRY_KEY_LOCALE, nIntEncoding);
-        OUString sAsync  = getProfileStringItem(rProfile, SREGISTRY_SECTION_CONFIGURATION, SREGISTRY_KEY_ASYNC, nIntEncoding);
-
-        if (sLocale.getLength())    putSetting(SETTING_LOCALE, Setting(sLocale, eOrigin));
-        if (sAsync.getLength())     putSetting(SETTING_ASYNC, Setting(sAsync, eOrigin));
-
-        // authentication data
-        OUString sUser      = getProfileStringItem(rProfile, SREGISTRY_SECTION_AUTHENTICATION, SREGISTRY_KEY_USER, nExtEncoding);
-        OUString sPassword  = getProfileStringItem(rProfile, SREGISTRY_SECTION_AUTHENTICATION, SREGISTRY_KEY_PASSWORD, nExtEncoding);
-
-        if (sUser.getLength())      putSetting(SETTING_USER,        Setting(sUser, eOrigin));
-        if (sPassword.getLength())  putSetting(SETTING_PASSWORD,    Setting(sPassword, eOrigin));
-
-        // local session settings
-        OUString sSourcePath    = getProfileStringItem(rProfile, SREGISTRY_SECTION_LOCAL, SREGISTRY_KEY_SOURCEPATH, nExtEncoding);
-        OUString sUpdatePath    = getProfileStringItem(rProfile, SREGISTRY_SECTION_LOCAL, SREGISTRY_KEY_UPDATEPATH, nExtEncoding);
-
-        implPutSystemPathSetting(SETTING_SOURCEPATH, sSourcePath, eOrigin);
-        implPutSystemPathSetting(SETTING_UPDATEPATH, sUpdatePath, eOrigin);
-
-        // remote session settings
-        OUString sServerAndPort = getProfileStringItem(rProfile, SREGISTRY_SECTION_REMOTE, SREGISTRY_KEY_SERVER, nExtEncoding);
-        sal_Int32 nTimeout      = getProfileIntItem(rProfile, SREGISTRY_SECTION_REMOTE, SREGISTRY_KEY_TIMEOUT);
-
-        if (sServerAndPort.getLength())
-        {   // there was such an entry
-            const int nColon = sServerAndPort.lastIndexOf(':');
+            // there was such an entry
+            const sal_Int32 nColon = sServerAndPort.lastIndexOf(':');
             if (0 <= nColon)
             {
-                putSetting(SETTING_SERVER,  Setting(sServerAndPort.copy(0, nColon), eOrigin));
-                putSetting(SETTING_PORT,    Setting(sServerAndPort.copy(nColon+1).toInt32(), eOrigin));
+                if (sal_Int32 nPort = sServerAndPort.copy(nColon+1).toInt32())
+                {
+                    OUString sServer = sServerAndPort.copy(0, nColon);
+
+                    Settings::Origin eOrigin = aServerData.origin();
+                    putSetting(sServerSetting,  Settings::Setting(sServer, eOrigin));
+                    putSetting(sPortSetting,    Settings::Setting(nPort, eOrigin));
+                }
+            }
+        }
+
+    }
+// ---------------------------------------------------------------------------------------
+    void ConnectionSettings::implNormalizeSettings()
+    {
+        implNormalizePathSetting(NAME(SETTING_SOURCEPATH));
+        implNormalizePathSetting(NAME(SETTING_UPDATEPATH));
+
+        implNormalizeRemoteServer();
+    }
+
+// ---------------------------------------------------------------------------------------
+    bool ConnectionSettings::implDetermineSessionType()
+    {
+        Settings::Name const sSettingServertype = NAME(SETTING_SERVERTYPE);
+        if (!haveSetting(sSettingServertype))
+        {   // we already have the setting
+            CFG_TRACE_INFO("provider bootstrapping: no session type. looking for fallback");
+
+            char const * psSessionType = NULL;
+            if (haveSetting(NAME(SETTING_SOURCEPATH)) && haveSetting(NAME(SETTING_UPDATEPATH)))
+            {
+                psSessionType = LOCAL_SESSION_IDENTIFIER;
+            }
+            else if (haveSetting(NAME(SETTING_SERVER)))
+            {
+                psSessionType = REMOTE_SESSION_IDENTIFIER;
+            }
+            else if (haveSetting(NAME(SETTING_SERVICE)))
+            {
+                psSessionType = PORTAL_SESSION_IDENTIFIER;
             }
             else
-                putSetting(SETTING_SERVER, Setting(sServerAndPort, eOrigin));
+            {
+                CFG_TRACE_WARNING_NI("provider bootstrapping: cannot determine session type"
+                                     "- using deprecated fallback to '"PORTAL_SESSION_IDENTIFIER"'");
+                psSessionType = PORTAL_SESSION_IDENTIFIER;
+            }
+
+            if (!psSessionType)
+            {
+                CFG_TRACE_WARNING_NI("provider bootstrapping: cannot determine session type");
+                return false;
+            }
+
+            OUString sSessionType = OUString::createFromAscii(psSessionType);
+            putSetting(sSettingServertype, Settings::Setting(sSessionType, Settings::SO_FALLBACK));
         }
+        CFG_TRACE_INFO_NI("provider bootstrapping: using session type: %s",
+                        OUSTRING2ASCII(m_aSettings.getStringSetting(sSettingServertype)));
 
-        if (nTimeout) putSetting(SETTING_TIMEOUT, Setting(nTimeout, eOrigin));
-
-    }
-
-// ---------------------------------------------------------------------------------------
-    void ConnectionSettings::implTranslateCompatibilitySettings()
-    {
-        // the former "rootpath" is the "updatepath" now
-        if (isValidPathSetting(SETTING_ROOTPATH))
-        {
-            OSL_ENSURE(!isValidPathSetting(SETTING_UPDATEPATH), "Error: Settings have both 'updatepath' and 'rootpath'");
-            OSL_ENSURE(false, "Error: Setting 'rootpath' is obsolete");
-            // it survived the normalizing
-            putSetting(SETTING_UPDATEPATH, getSetting(SETTING_ROOTPATH));
-            clearSetting(SETTING_ROOTPATH);
-        }
-    }
-
-// ---------------------------------------------------------------------------------------
-    void ConnectionSettings::implDetermineSessionType()
-    {
-        if (haveSetting(SETTING_SERVERTYPE))
-        {   // we already have the setting
-            CFG_TRACE_INFO("provider bootstrapping: using session type: %s",
-                            OUSTRING2ASCII(m_aSettings.getStringSetting(SETTING_SERVERTYPE)));
-
-        }
-        else
-        {
-            CFG_TRACE_INFO("provider bootstrapping: no session type. trying portal session as fallback");
-
-            OUString sSessionType = OUString::createFromAscii(PORTAL_SESSION_IDENTIFIER);
-            putSetting(SETTING_SERVERTYPE, Settings::Setting(sSessionType, Settings::SO_FALLBACK));
-        }
-    }
-
-// ---------------------------------------------------------------------------------------
-    OUString ConnectionSettings::getProfileStringItem(osl::Profile & rProfile, OString const& _pSection, OString const& _pKey, rtl_TextEncoding _nEncoding)
-    {
-        OString sEntry = rProfile.readString( _pSection, _pKey, rtl::OString() );
-
-        return rtl::OStringToOUString(sEntry, _nEncoding);
-    }
-
-// ---------------------------------------------------------------------------------------
-    sal_Int32 ConnectionSettings::getProfileIntItem(osl::Profile & rProfile, OString const& _pSection, OString const& _pKey)
-    {
-        OString sValue = rProfile.readString( _pSection, _pKey, rtl::OString() );
-
-        return sValue.getLength() ? sValue.toInt32() : 0;
-    }
-
-// ---------------------------------------------------------------------------------------
-    void ConnectionSettings::implClearIrrelevantItems()
-    {
-        if (!isSessionTypeKnown()) return;
-
-        if (m_aSettings.getOrigin(SETTING_SERVERTYPE) == Settings::SO_OVERRIDE)
-        {   // the session type is a runtime override
-            // clear the user if it's origin is SREGISTRY
-            if (m_aSettings.getOrigin(SETTING_USER) == Settings::SO_INIFILE)
-                clearSetting(SETTING_USER);
-            // same for the password
-            if (m_aSettings.getOrigin(SETTING_PASSWORD) == Settings::SO_INIFILE)
-                clearSetting(SETTING_PASSWORD);
-        }
+        return true;
     }
 
 // ---------------------------------------------------------------------------------------
@@ -917,9 +889,9 @@ namespace configmgr
 
     sal_Bool ConnectionSettings::isAdminSession() const
     {
-        OSL_ENSURE(haveSetting(SETTING_SESSIONCLASS),"Cannot determine session class");
+        OSL_ENSURE(haveSetting(NAME(SETTING_SESSIONCLASS)),"Cannot determine session class");
 
-        return getSetting(SETTING_SESSIONCLASS).toString().equalsAscii(SERVICE_ADMINSESSION);
+        return getSetting(NAME(SETTING_SESSIONCLASS)).toString().equalsAscii(SERVICE_ADMINSESSION);
 
     }
 // ---------------------------------------------------------------------------------------
@@ -941,11 +913,11 @@ namespace configmgr
         if ( !hasAsyncSetting() )
         {
             Any aDefaultAsync = makeAny(sal_Bool(true));
-            putSetting( SETTING_ASYNC, Settings::Setting(aDefaultAsync, Settings::SO_DEFAULT) );
+            putSetting( NAME(SETTING_ASYNC), Settings::Setting(aDefaultAsync, Settings::SO_DEFAULT) );
             OSL_ASSERT( hasAsyncSetting() && getAsyncSetting() );
         }
 
-        putSetting(SETTING_SESSIONCLASS,Settings::Setting(sService, Settings::SO_DEFAULT));
+        putSetting(NAME(SETTING_SESSIONCLASS),Settings::Setting(sService, Settings::SO_DEFAULT));
     }
 
 // ---------------------------------------------------------------------------------------
@@ -979,7 +951,7 @@ namespace configmgr
         if ( !hasAsyncSetting() )
         {
             Any aDefaultNoAsync = makeAny(sal_Bool(false));
-            putSetting( SETTING_ASYNC, Settings::Setting(aDefaultNoAsync, Settings::SO_DEFAULT) );
+            putSetting( NAME(SETTING_ASYNC), Settings::Setting(aDefaultNoAsync, Settings::SO_DEFAULT) );
             OSL_ASSERT( hasAsyncSetting() && !getAsyncSetting() );
         }
 
@@ -989,7 +961,7 @@ namespace configmgr
             this->setAnyLocale(Settings::SO_DEFAULT);
         }
 
-        putSetting(SETTING_SESSIONCLASS,Settings::Setting(sService, Settings::SO_DEFAULT));
+        putSetting(NAME(SETTING_SESSIONCLASS),Settings::Setting(sService, Settings::SO_DEFAULT));
     }
 
 // ---------------------------------------------------------------------------------------
@@ -998,7 +970,7 @@ namespace configmgr
         rtl::OUString sAnyLocale;
         localehelper::getAnyLocale( sAnyLocale );
 
-        this->putSetting(SETTING_LOCALE, Settings::Setting(sAnyLocale, _eOrigin));
+        this->putSetting( NAME(SETTING_LOCALE), Settings::Setting(sAnyLocale, _eOrigin));
     }
 // ---------------------------------------------------------------------------------------
     void ConnectionSettings::setUserSession(const OUString& _rRemoteServiceName)
@@ -1128,162 +1100,46 @@ namespace configmgr
 // ---------------------------------------------------------------------------------------
 namespace {
 // ---------------------------------------------------------------------------------------
-
-    static
-    utl::Bootstrap::PathStatus locateConfigProfile(OUString& _rProfileFile)
-    {
-        using utl::Bootstrap;
-        using namespace osl;
-
-        Bootstrap::PathStatus eResult = Bootstrap::locateUserData(_rProfileFile);
-
-        if (eResult <= Bootstrap::PATH_VALID)
-        {
-            // the name of our very personal ini file
-            const OUString sIniName(RTL_CONSTASCII_USTRINGPARAM("/"CONFIGURATION_PROFILE_NAME));
-
-            _rProfileFile += sIniName;
-
-            if (eResult == Bootstrap::PATH_EXISTS)
-            {
-                DirectoryItem aItem;
-                if (DirectoryItem::E_None != DirectoryItem::get(_rProfileFile,aItem))
-                    eResult = Bootstrap::PATH_VALID; // at least that should be the case
-            }
-        }
-
-        return eResult;
-    }
-// ---------------------------------------------------------------------------------------
-
-    static
-    bool locateBootstrapFiles(OUString& _rShareDataURL, OUString& _rUserDataURL, OUString& _rProfileFile)
-    {
-        using utl::Bootstrap;
-        Bootstrap::locateSharedData(_rShareDataURL);
-        Bootstrap::locateUserData(_rUserDataURL);
-        return locateConfigProfile(_rProfileFile) == Bootstrap::PATH_EXISTS;
-    }
-
-// ---------------------------------------------------------------------------------------
-
 // error handling
 // ---------------------------------------------------------------------------------------
     enum BootstrapResult
     {
         BOOTSTRAP_DATA_OK,
-        INCOMPLETE_INSTALLATION,
+        INCOMPLETE_BOOTSTRAP_DATA,
+        INCOMPLETE_BOOTSTRAP_FILE,
         MISSING_BOOTSTRAP_FILE,
-        INVALID_BOOTSTRAP_DATA,
         BOOTSTRAP_FAILURE
     };
 // ---------------------------------------------------------------------------------------
-
     static
-    OUString buildConfigBootstrapError( OUString const& _sIniName, sal_Char const* _sWhat)
+    OUString getFallbackErrorMessage( BootstrapResult _rc )
     {
-        rtl::OUStringBuffer sMessage;
+        OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("The program cannot start. "));
 
-        sMessage.appendAscii(RTL_CONSTASCII_STRINGPARAM("The program cannot start. "));
-        sMessage.appendAscii(RTL_CONSTASCII_STRINGPARAM("The configuration file "));
-        sMessage.appendAscii(RTL_CONSTASCII_STRINGPARAM(" '")).append(_sIniName).appendAscii(RTL_CONSTASCII_STRINGPARAM("' "));
-        sMessage.appendAscii(_sWhat).appendAscii(". ");
-
-        return sMessage.makeStringAndClear();
-    }
-// ---------------------------------------------------------------------------------------
-
-    static
-    BootstrapResult getConfigBootstrapError( OUString& _rMessage, OUString& _rIniFile )
-    {
-        using utl::Bootstrap;
-
-        BootstrapResult eResult = BOOTSTRAP_DATA_OK;
-
-       // this is called only for invalid config bootstrap; if we got here, sregistry must be the cause
-        Bootstrap::PathStatus eStatus = locateConfigProfile(_rIniFile);
-
-        switch( eStatus )
+        switch (_rc)
         {
-        case Bootstrap::PATH_EXISTS:
-            _rMessage = buildConfigBootstrapError(_rIniFile.copy(1+_rIniFile.lastIndexOf('/')),"is corrupt");
-            eResult = INVALID_BOOTSTRAP_DATA;
+        case MISSING_BOOTSTRAP_FILE:
+            sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("A main configuration file is missing"));
             break;
 
-        case Bootstrap::PATH_VALID:
-            _rMessage = buildConfigBootstrapError(_rIniFile.copy(1+_rIniFile.lastIndexOf('/')),"is missing");
-            eResult = MISSING_BOOTSTRAP_FILE;
+        case INCOMPLETE_BOOTSTRAP_FILE:
+            sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("A main configuration file is invalid"));
             break;
 
-        case Bootstrap::DATA_INVALID:
-            _rMessage = buildConfigBootstrapError(_rIniFile,"is missing (invalid path)");
-            eResult = BOOTSTRAP_FAILURE;
+        case INCOMPLETE_BOOTSTRAP_DATA:
+            sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Required bootstrap data is not available"));
             break;
 
         default:
-            OSL_ENSURE(false, "Unexpected error state in configuration ");
-            eResult = BOOTSTRAP_DATA_OK;
-        }
-
-        return eResult;
-    }
-// ---------------------------------------------------------------------------------------
-
-    static
-    BootstrapResult getBootstrapErrorMessage( OUString& _rMessage, OUString& _rIniFile )
-    {
-        using utl::Bootstrap;
-
-        BootstrapResult eResult = BOOTSTRAP_FAILURE;
-
-        switch ( Bootstrap::checkBootstrapStatus( _rMessage ) )
-        {
-        case Bootstrap::MISSING_USER_INSTALL:
-            eResult = INCOMPLETE_INSTALLATION;
+            sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Unexpected bootstrap failure"));
             break;
 
-        case Bootstrap::INVALID_USER_INSTALL:
-        case Bootstrap::INVALID_BASE_INSTALL:
-            switch ( Bootstrap::locateBootstrapFile(_rIniFile) )
-            {
-            case Bootstrap::PATH_EXISTS:
-                {
-                    OUString sVersionFile;
-                    switch ( Bootstrap::locateVersionFile(sVersionFile)  )
-                    {
-                    case Bootstrap::PATH_EXISTS:
-                        _rIniFile = sVersionFile;
-                        eResult = INVALID_BOOTSTRAP_DATA;
-                        break;
-
-                    case Bootstrap::PATH_VALID: OSL_ASSERT(false); // should be MISSING_USER_INSTALL
-                        _rIniFile = sVersionFile;
-                        eResult = MISSING_BOOTSTRAP_FILE;
-                        break;
-
-                    default:
-                        eResult = INVALID_BOOTSTRAP_DATA;
-                        break;
-                    }
-                }
-                break;
-
-            case Bootstrap::PATH_VALID:
-                eResult = MISSING_BOOTSTRAP_FILE;
-                break;
-
-            default:
-                eResult = BOOTSTRAP_FAILURE;
-                break;
-            }
-            break;
-
-        case Bootstrap::DATA_OK:
-            eResult = getConfigBootstrapError(_rMessage,_rIniFile);
+        case BOOTSTRAP_DATA_OK:
             break;
         }
+        sMessage += OUString(RTL_CONSTASCII_USTRINGPARAM(" (No detailed error message available.)"));
 
-        return eResult;
+        return sMessage;
     }
 // ---------------------------------------------------------------------------------------
 
@@ -1296,28 +1152,7 @@ namespace {
         {
             OSL_ENSURE(false, "Bootstrap error message missing");
 
-            switch (_rc)
-            {
-            case MISSING_BOOTSTRAP_FILE:
-                sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("A main configuration file is missing"));
-                break;
-
-            case INVALID_BOOTSTRAP_DATA:
-                sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("A main configuration file is corrupted"));
-                break;
-
-            case INCOMPLETE_INSTALLATION:
-                sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("The personal configuration is missing"));
-                break;
-
-            default:
-                sMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Unexpected bootstrap failure"));
-                break;
-
-            case BOOTSTRAP_DATA_OK:
-                break;
-            }
-            sMessage += OUString(RTL_CONSTASCII_USTRINGPARAM(" (No detailed error message available.)"));
+            sMessage = getFallbackErrorMessage(_rc);
         }
 
         using namespace com::sun::star::configuration;
@@ -1328,13 +1163,11 @@ namespace {
         case MISSING_BOOTSTRAP_FILE:
             throw MissingBootstrapFileException(sMessage, _xContext, _sURL);
 
-        case INVALID_BOOTSTRAP_DATA:
+        case INCOMPLETE_BOOTSTRAP_FILE:
             throw InvalidBootstrapFileException(sMessage, _xContext, _sURL);
 
-        case INCOMPLETE_INSTALLATION:
-            throw InstallationIncompleteException(sMessage, _xContext);
-
         default: OSL_ENSURE(false, "Undefined BootstrapResult code");
+        case INCOMPLETE_BOOTSTRAP_DATA:
         case BOOTSTRAP_FAILURE:
             throw CannotLoadConfigurationException(sMessage, _xContext);
 
@@ -1348,12 +1181,76 @@ namespace {
 // ---------------------------------------------------------------------------------------
 // bootstrapping
 // ---------------------------------------------------------------------------------------
-    void raiseBootstrapException( BootstrapSettings const& _rBootstrapData, Reference< XInterface > _xContext )
+// ---------------------------------------------------------------------------------------
+// class BootstrapSettings::Impl
+// ---------------------------------------------------------------------------------------
+    struct BootstrapSettings::Impl
     {
-        if (!_rBootstrapData.valid)
+        Impl();
+
+        bool hasInifile() const;
+        bool getInifile(OUString& _rInifile) const;
+        bool hasExistingInifile() const;
+
+        void collectSettings(Settings& _rSettings);
+        void collectDefaultsFromINI(Settings& _rSettings);
+        void adjustToInstallation(Settings& _rSettings);
+
+        void addSetting(Settings& _rSettings,Settings::Name const & _sSetting, OUString const& _sBootstrapItem);
+        void addWithDefault(Settings& _rSettings,Settings::Name const & _sSetting, OUString const& _sBootstrapItem, OUString const& _sDefault);
+        void maybeAddWithDefault(Settings& _rSettings,Settings::Name const & _sSetting, OUString const& _sBootstrapItem, OUString const& _sDefault);
+
+        BootstrapResult getBootstrapErrorMessage(ConnectionSettings const& _rSettings, OUString& _rMessage, OUString& _rIniFile ) const;
+
+        static bool urlExists(OUString const& _sURL);
+
+        rtl::Bootstrap m_data;
+    };
+
+// ---------------------------------------------------------------------------------------
+
+    void BootstrapSettings::bootstrap()
+    {
+        CFG_TRACE_INFO("provider bootstrapping: collecting bootstrap setting");
+
+        Impl aBootstrapper;
+
+        aBootstrapper.collectSettings(this->settings.m_aSettings);
+
+        if ( aBootstrapper.hasExistingInifile() )
+            aBootstrapper.collectDefaultsFromINI(this->settings.m_aSettings);
+
+        this->settings.implNormalizeSettings();
+
+        this->valid = this->settings.implDetermineSessionType();
+
+        aBootstrapper.adjustToInstallation(this->settings.m_aSettings);
+        this->settings.implNormalizeSettings();
+
+        if (this->valid)
+        {
+            this->valid = this->settings.isComplete();
+
+            if (!this->valid)
+                CFG_TRACE_WARNING_NI("provider bootstrapping: bootstrap data is incomplete");
+        }
+        else
+        {
+            CFG_TRACE_WARNING_NI("provider bootstrapping: could not collect bootstrap data");
+
+            if (!this->settings.implDetermineSessionType())
+                CFG_TRACE_ERROR_NI("provider bootstrapping: no default session available");
+        }
+    }
+// ---------------------------------------------------------------------------------------
+
+    void BootstrapSettings::raiseBootstrapException(Reference< XInterface > const & _xContext ) const
+    {
+        if (!this->valid)
         {
             OUString sMessage,sURL;
-            BootstrapResult rc = getBootstrapErrorMessage(sMessage,sURL);
+
+            BootstrapResult rc = Impl().getBootstrapErrorMessage(this->settings,sMessage,sURL);
 
             impl_raiseBootstrapException(rc,sMessage,sURL,_xContext);
 
@@ -1363,40 +1260,230 @@ namespace {
             OSL_ENSURE(false, "cannot detect bootstrap error");
         }
     }
-
 // ---------------------------------------------------------------------------------------
-    void BootstrapSettings::bootstrap()
+
+    BootstrapSettings::Impl::Impl()
+    : m_data(ITEM(BOOTSTRAP_CONFIGMGR_DATA))
     {
-        // try to locate the sregistry.ini
-        OUString sShareURL, sUserURL, sInifile;
-
-        CFG_TRACE_INFO("provider bootstrapping: trying to locate the installation and the ini file");
-
-        if ( locateBootstrapFiles( sShareURL, sUserURL, sInifile ) )
+    }
+// ---------------------------------------------------------------------------------------
+    inline
+    bool BootstrapSettings::Impl::urlExists(OUString const& _sURL)
+    {
+        osl::DirectoryItem aCheck;
+        return (osl::DirectoryItem::get(_sURL,aCheck) == osl::DirectoryItem::E_None);
+    }
+// ---------------------------------------------------------------------------------------
+    inline
+    bool BootstrapSettings::Impl::getInifile(OUString& _rInifile) const
+    {
+        if (m_data.getFrom(ITEM(BOOTSTRAP_ITEM_PROFILE_NAME),_rInifile))
         {
-            CFG_TRACE_INFO_NI("provider bootstrapping: located an ini file: %s", OUSTRING2ASCII( sInifile));
-
-            osl::Profile aSRegistryIni( sInifile );
-
-            this->settings.loadFromInifile( aSRegistryIni );
-
-            // try to locate the local stuff anyways
-            this->settings.implAdjustToInstallation(sShareURL,sUserURL);
-
-            this->valid = settings.isComplete();
-
-            if (!this->valid)
-                CFG_TRACE_WARNING_NI("provider bootstrapping: data from ini file is incomplete or corrupt");
+            return true;
         }
         else
         {
-            CFG_TRACE_WARNING_NI("provider bootstrapping: could not locate ini file - using fallback bootstrap ['%s' was missing or invalid].", OUSTRING2ASCII( sInifile));
-
-            this->settings.implAdjustToInstallation(sShareURL,sUserURL);
-
-            this->valid = false;
+            return false;
         }
     }
+// ---------------------------------------------------------------------------------------
+
+    bool BootstrapSettings::Impl::hasInifile() const
+    {
+        OUString sInifile;
+        bool bResult = getInifile(sInifile);
+        return bResult;
+    }
+// ---------------------------------------------------------------------------------------
+
+    bool BootstrapSettings::Impl::hasExistingInifile() const
+    {
+        OUString sInifile;
+        if ( getInifile(sInifile) )
+        {
+            if (urlExists(sInifile))
+            {
+                CFG_TRACE_INFO_NI("provider bootstrapping: using configuration INI file '%'", OUSTRING2ASCII(sInifile));
+                return true;
+            }
+            else
+                CFG_TRACE_WARNING_NI("provider bootstrapping: specified configuration INI file '%s' does not exist", OUSTRING2ASCII(sInifile));
+        }
+        else
+            CFG_TRACE_INFO_NI("provider bootstrapping: no configuration INI file specified");
+
+        return false;
+    }
+// ---------------------------------------------------------------------------------------
+
+    void BootstrapSettings::Impl::addWithDefault(Settings& _rSettings,Settings::Name const & _sSetting, OUString const& _sBootstrapItem, OUString const& _sDefault)
+    {
+        OUString sValue;
+        m_data.getFrom(_sBootstrapItem, sValue, _sDefault);
+        if (sValue.getLength())
+            _rSettings.putSetting( _sSetting, Settings::Setting(sValue, Settings::SO_INIFILE) );
+    }
+// ---------------------------------------------------------------------------------------
+
+    void BootstrapSettings::Impl::addSetting(Settings& _rSettings,Settings::Name const & _sSetting, OUString const& _sBootstrapItem)
+    {
+        OUString sValue;
+        if (m_data.getFrom(_sBootstrapItem,sValue))
+        {
+            _rSettings.putSetting(_sSetting,Settings::Setting(sValue, Settings::SO_BOOTSTRAP) );
+        }
+    }
+// ---------------------------------------------------------------------------------------
+
+    inline
+    void BootstrapSettings::Impl::maybeAddWithDefault(Settings& _rSettings,Settings::Name const & _sSetting, OUString const& _sBootstrapItem, OUString const& _sDefault)
+    {
+        if (!_rSettings.haveSetting(_sSetting))
+        {
+            addWithDefault(_rSettings,_sSetting,_sBootstrapItem,_sDefault);
+        }
+    }
+// ---------------------------------------------------------------------------------------
+
+    void BootstrapSettings::Impl::collectDefaultsFromINI(Settings& _rSettings)
+    {
+        OUString sDummy;
+        maybeAddWithDefault(_rSettings, NAME(SETTING_SERVERTYPE), ITEM(BOOTSTRAP_ITEM_SERVERTYPE),  ITEM(BOOTSTRAP_SERVERTYPE_FROM_PROFILE) );
+        maybeAddWithDefault(_rSettings, NAME(SETTING_LOCALE),     ITEM(BOOTSTRAP_ITEM_LOCALE),      ITEM(BOOTSTRAP_LOCALE_FROM_PROFILE) );
+        maybeAddWithDefault(_rSettings, NAME(SETTING_ASYNC),      ITEM(BOOTSTRAP_ITEM_ASYNCENABLE), ITEM(BOOTSTRAP_ASYNCENABLE_FROM_PROFILE) );
+        maybeAddWithDefault(_rSettings, NAME(SETTING_SOURCEPATH), ITEM(BOOTSTRAP_ITEM_SOURCE_PATH), ITEM(BOOTSTRAP_BASEPATH_FROM_PROFILE) );
+        maybeAddWithDefault(_rSettings, NAME(SETTING_UPDATEPATH), ITEM(BOOTSTRAP_ITEM_UPDATE_PATH), ITEM(BOOTSTRAP_DATAPATH_FROM_PROFILE) );
+        maybeAddWithDefault(_rSettings, NAME(SETTING_SERVER),     ITEM(BOOTSTRAP_ITEM_SERVER),      ITEM(BOOTSTRAP_SERVER_FROM_PROFILE) );
+        maybeAddWithDefault(_rSettings, NAME(SETTING_TIMEOUT),    ITEM(BOOTSTRAP_ITEM_TIMEOUT),     ITEM(BOOTSTRAP_TIMEOUT_FROM_PROFILE) );
+        maybeAddWithDefault(_rSettings, NAME(SETTING_USER),       ITEM(BOOTSTRAP_ITEM_USER),        ITEM(BOOTSTRAP_USER_FROM_PROFILE) );
+        maybeAddWithDefault(_rSettings, NAME(SETTING_PASSWORD),   ITEM(BOOTSTRAP_ITEM_PASSWORD),    ITEM(BOOTSTRAP_PASSWORD_FROM_PROFILE) );
+
+    }
+// ---------------------------------------------------------------------------------------
+
+    void BootstrapSettings::Impl::collectSettings(Settings& _rSettings)
+    {
+        addSetting(_rSettings, NAME(SETTING_SERVERTYPE), ITEM(BOOTSTRAP_ITEM_SERVERTYPE) );
+        addSetting(_rSettings, NAME(SETTING_LOCALE),     ITEM(BOOTSTRAP_ITEM_LOCALE) );
+        addSetting(_rSettings, NAME(SETTING_ASYNC),      ITEM(BOOTSTRAP_ITEM_ASYNCENABLE) );
+        addSetting(_rSettings, NAME(SETTING_SOURCEPATH), ITEM(BOOTSTRAP_ITEM_SOURCE_PATH) );
+        addSetting(_rSettings, NAME(SETTING_UPDATEPATH), ITEM(BOOTSTRAP_ITEM_UPDATE_PATH) );
+        addSetting(_rSettings, NAME(SETTING_SERVER),     ITEM(BOOTSTRAP_ITEM_SERVER) );
+        addSetting(_rSettings, NAME(SETTING_TIMEOUT),    ITEM(BOOTSTRAP_ITEM_TIMEOUT) );
+        addSetting(_rSettings, NAME(SETTING_USER),       ITEM(BOOTSTRAP_ITEM_USER) );
+        addSetting(_rSettings, NAME(SETTING_PASSWORD),   ITEM(BOOTSTRAP_ITEM_PASSWORD) );
+    }
+// ---------------------------------------------------------------------------------------
+    static inline void getDirWithDefault(
+                    rtl::Bootstrap& _rData,
+                    OUString const& _sItem,
+                    OUString& _sResult,
+                    OUString const& _sDefault
+                )
+    {
+        _rData.getFrom(_sItem,_sResult,_sDefault);
+    }
+    //----------------------------------------
+    #define BOOTSTRAP_ITEM_SHAREDIR        "$BaseInstallation/share"
+    #define BOOTSTRAP_ITEM_USERDIR         "$UserInstallation/user"
+    #define CONFIGURATION_STANDARDPATH     "config/registry"
+    #define BOOTSTRAP_BASEPATH_DEFAULT     ITEM(BOOTSTRAP_ITEM_SHAREDIR"/"CONFIGURATION_STANDARDPATH)
+    #define BOOTSTRAP_DATAPATH_DEFAULT     ITEM(BOOTSTRAP_ITEM_USERDIR "/"CONFIGURATION_STANDARDPATH)
+
+// ---------------------------------------------------------------------------------------
+
+    static inline OUString getDefaultSourcePath(rtl::Bootstrap& _rData)
+    {
+        OUString sResult;
+
+        getDirWithDefault(_rData,ITEM(BOOTSTRAP_ITEM_SOURCE_PATH),sResult,BOOTSTRAP_BASEPATH_DEFAULT);
+
+        return sResult;
+    }
+// ---------------------------------------------------------------------------------------
+
+    static inline OUString getDefaultUpdatePath(rtl::Bootstrap& _rData)
+    {
+        OUString sResult;
+
+        getDirWithDefault(_rData,ITEM(BOOTSTRAP_ITEM_UPDATE_PATH),sResult,BOOTSTRAP_DATAPATH_DEFAULT);
+
+        return sResult;
+    }
+// ---------------------------------------------------------------------------------------
+    // if we do not already have path settings, try to use the defaults (of an office install)
+    void BootstrapSettings::Impl::adjustToInstallation(Settings& _rSettings)
+    {
+        // if we do not already have a source path setting, create one from the base install path
+        Settings::Name const sSourceSetting = NAME(SETTING_SOURCEPATH);
+        if (!_rSettings.haveSetting(sSourceSetting))
+        {
+            OUString aSourcePath = getDefaultSourcePath(m_data);
+
+            if (isValidFileURL(aSourcePath) && urlExists(aSourcePath))
+            {
+                _rSettings.putSetting(sSourceSetting,Settings::Setting(aSourcePath,Settings::SO_DEFAULT));
+
+                // and then  also try to update the Update-path
+                Settings::Name const sUpdateSetting = NAME(SETTING_UPDATEPATH);
+                if (!_rSettings.haveSetting(sUpdateSetting))
+                {
+                    OUString aUpdatePath = getDefaultUpdatePath(m_data);
+
+                    if (isValidFileURL(aUpdatePath))
+                        _rSettings.putSetting(sUpdateSetting,Settings::Setting(aUpdatePath,Settings::SO_DEFAULT));
+                }
+            }
+        }
+    }
+// ---------------------------------------------------------------------------------------
+
+    static
+    OUString buildBootstrapError( sal_Char const* _sWhat, OUString const& _sName, sal_Char const* _sHow)
+    {
+        rtl::OUStringBuffer sMessage;
+
+        sMessage.appendAscii(RTL_CONSTASCII_STRINGPARAM("The program cannot start. "));
+        sMessage.appendAscii(_sWhat);
+        sMessage.appendAscii(RTL_CONSTASCII_STRINGPARAM(" '")).append(_sName).appendAscii(RTL_CONSTASCII_STRINGPARAM("' "));
+        sMessage.appendAscii(_sHow).appendAscii(". ");
+
+        return sMessage.makeStringAndClear();
+    }
+// ---------------------------------------------------------------------------------------
+
+    BootstrapResult BootstrapSettings::Impl::getBootstrapErrorMessage(ConnectionSettings const & _rSettings, OUString& _rMessage, OUString& _rIniFile ) const
+    {
+        BootstrapResult eResult = BOOTSTRAP_DATA_OK;
+
+        if ( this->getInifile(_rIniFile) )
+        {
+            if ( urlExists(_rIniFile) )
+            {
+                _rMessage = buildBootstrapError("The configuration file ",_rIniFile.copy(1+_rIniFile.lastIndexOf('/')),"is invalid");
+                eResult = INCOMPLETE_BOOTSTRAP_FILE;
+            }
+            else
+            {
+                _rMessage = buildBootstrapError("The configuration file ",_rIniFile.copy(1+_rIniFile.lastIndexOf('/')),"is missing");
+                eResult = MISSING_BOOTSTRAP_FILE;
+            }
+        }
+        else if (!_rSettings.isSessionTypeKnown())
+        {
+            _rMessage = buildBootstrapError("Needed information to access",OUString::createFromAscii("application"),"configuration data is missing");
+            eResult = BOOTSTRAP_FAILURE;
+        }
+        else if (!_rSettings.isComplete() )
+        {
+             _rMessage = buildBootstrapError("Needed information to access",_rSettings.getSessionType(), "configuration data is missing");
+            eResult = INCOMPLETE_BOOTSTRAP_DATA;
+        }
+
+        return eResult;
+    }
+// ---------------------------------------------------------------------------------------
+
 // ---------------------------------------------------------------------------------------
 } // namespace configmgr
 
