@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dflyobj.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:33:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,7 @@ SdrObject* __EXPORT SwVirtFlyDrawObj::CheckHit( const Point& rPnt, USHORT nTol,
                 if ( pShell )
                 {
                     const SdrMarkList &rMrkList = pShell->
-                                            Imp()->GetDrawView()->GetMarkList();
+                                            Imp()->GetDrawView()->GetMarkedObjectList();
                     for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
                         if ( long(this) == long(rMrkList.GetMark(i)->GetObj()) )
                             return (SdrObject*)this;
