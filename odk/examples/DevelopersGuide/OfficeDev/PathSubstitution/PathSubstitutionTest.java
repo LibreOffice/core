@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PathSubstitutionTest.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:02:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:48:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,7 +38,6 @@
  *
  *************************************************************************/
 
-import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
@@ -46,16 +45,8 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.PropertyValue;
 
 import com.sun.star.util.XStringSubstitution;
-import com.sun.star.frame.TerminationVetoException;
-import com.sun.star.frame.XTerminateListener;
-/*
- * PathSubstitutionTest.java
- *
- * Created on 26. March 2003, 08:22
- */
 
 /*
- *
  * @author  Carsten Driesner
  */
 public class PathSubstitutionTest extends java.lang.Object {
@@ -79,21 +70,10 @@ public class PathSubstitutionTest extends java.lang.Object {
         XStringSubstitution xPathSubstService = null;
 
         try {
-            // connect
-            XComponentContext xLocalContext =
-                com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(null);
-            XMultiComponentFactory xLocalServiceManager = xLocalContext.getServiceManager();
-            Object urlResolver  = xLocalServiceManager.createInstanceWithContext(
-                "com.sun.star.bridge.UnoUrlResolver", xLocalContext );
-            XUnoUrlResolver xUnoUrlResolver = (XUnoUrlResolver) UnoRuntime.queryInterface(
-                XUnoUrlResolver.class, urlResolver );
-            Object initialObject = xUnoUrlResolver.resolve(
-                "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager" );
-            XPropertySet xPropertySet = (XPropertySet)UnoRuntime.queryInterface(
-                XPropertySet.class, initialObject);
-            Object context = xPropertySet.getPropertyValue("DefaultContext");
-            xRemoteContext = (XComponentContext)UnoRuntime.queryInterface(
-                XComponentContext.class, context);
+            // get the remote office context. If necessary a new office
+            // process is started
+            xRemoteContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+            System.out.println("Connected to a running office ...");
             xRemoteServiceManager = xRemoteContext.getServiceManager();
 
             Object pathSubst = xRemoteServiceManager.createInstanceWithContext(
@@ -124,7 +104,7 @@ public class PathSubstitutionTest extends java.lang.Object {
                                             " value=" + aValue );
                 }
                 catch ( com.sun.star.container.NoSuchElementException e) {
-                    System.out.println( "NoSuchElementException has been thrown accessing "+predefinedPathVariables[i]);
+                    System.err.println( "NoSuchElementException has been thrown accessing "+predefinedPathVariables[i]);
                 }
             }
 
@@ -138,7 +118,7 @@ public class PathSubstitutionTest extends java.lang.Object {
                 System.out.println( "Resubstituted path="+aResubstPath );
             }
             catch ( com.sun.star.container.NoSuchElementException e ) {
-                    System.out.println( "NoSuchElementException has been thrown accessing "+predefinedPathVariables[0]);
+                System.err.println( "NoSuchElementException has been thrown accessing "+predefinedPathVariables[0]);
             }
         }
     }
