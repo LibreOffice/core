@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-23 23:38:23 $
+#   last change: $Author: pluby $ $Date: 2001-03-23 23:46:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,8 +91,7 @@ SLOFILES=\
     $(SLO)$/Cservices.obj			\
     $(SLO)$/CDriver.obj
 
-.IF "$(OS)"=="MACOSX"
-.ELSE
+.IF "$(OS)"!="MACOSX"
 SHL1VERSIONMAP= $(TARGET).map
 .ENDIF
 # --- Library -----------------------------------
