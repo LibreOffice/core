@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 13:10:57 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 11:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,6 +410,18 @@ sal_Bool Bootstrap_Impl::getValue(
         if (last_slash >= 0)
             iniPath = _iniName.copy( 0, last_slash );
         rtl_uString_assign( ppValue, iniPath.pData );
+        further_macro_expansion = false;
+    }
+    else if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("_OS") ))
+    {
+        OUString val( RTL_CONSTASCII_USTRINGPARAM(THIS_OS) );
+        rtl_uString_assign( ppValue, val.pData );
+        further_macro_expansion = false;
+    }
+    else if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("_ARCH") ))
+    {
+        OUString val( RTL_CONSTASCII_USTRINGPARAM(THIS_ARCH) );
+        rtl_uString_assign( ppValue, val.pData );
         further_macro_expansion = false;
     }
     else
