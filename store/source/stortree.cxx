@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stortree.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:32 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 21:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,12 +54,12 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
-#define _STORE_STORTREE_CXX "$Revision: 1.1.1.1 $"
+#define _STORE_STORTREE_CXX "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -69,21 +69,18 @@
 #include <rtl/memory.h>
 #endif
 
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
-#ifndef _VOS_MACROS_HXX_
-#include <vos/macros.hxx>
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
 #endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
 #ifndef _STORE_TYPES_H_
 #include <store/types.h>
-#endif
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
 #endif
 
 #ifndef _STORE_STORBASE_HXX
@@ -93,9 +90,7 @@
 #include <stortree.hxx>
 #endif
 
-#ifdef _USE_NAMESPACE
 using namespace store;
-#endif
 
 /*========================================================================
  *
@@ -287,7 +282,7 @@ storeError OStoreBTreeNodeObject::split (
     OStoreBTreeNodeData   &rPageL,
     OStoreBTreeNodeData   &rPageR,
     OStorePageBIOS        &rBIOS,
-    NAMESPACE_VOS(IMutex) *pMutex)
+    osl::Mutex            *pMutex)
 {
     // Check usage.
     if (!rPageL.querySplit())
@@ -328,7 +323,7 @@ storeError OStoreBTreeNodeObject::split (
     if (eErrCode != store_E_None)
     {
         // Must not happen.
-        VOS_TRACE("OStoreBTreeNodeObject::split(): save() failed");
+        OSL_TRACE("OStoreBTreeNodeObject::split(): save() failed");
 
         // Release Lock and Leave.
         rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
@@ -349,7 +344,7 @@ storeError OStoreBTreeNodeObject::split (
     if (eErrCode != store_E_None)
     {
         // Must not happen.
-        VOS_TRACE("OStoreBTreeNodeObject::split(): save() failed");
+        OSL_TRACE("OStoreBTreeNodeObject::split(): save() failed");
 
         // Release Lock and Leave.
         rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
@@ -376,7 +371,7 @@ storeError OStoreBTreeNodeObject::remove (
     OStoreBTreeNodeData   &rPageR,
 #endif /* NYI */
     OStorePageBIOS        &rBIOS,
-    NAMESPACE_VOS(IMutex) *pMutex)
+    osl::Mutex            *pMutex)
 {
     // Enter.
     STORE_METHOD_ENTER(pMutex);
@@ -424,7 +419,7 @@ storeError OStoreBTreeNodeObject::remove (
         if (eErrCode != store_E_None)
         {
             // Must not happen.
-            VOS_TRACE("OStoreBTreeNodeObject::remove(): load() failed");
+            OSL_TRACE("OStoreBTreeNodeObject::remove(): load() failed");
 
             // Release Lock and Leave.
             rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
@@ -500,7 +495,7 @@ storeError OStoreBTreeNodeObject::remove (
         if (eErrCode != store_E_None)
         {
             // Must not happen.
-            VOS_TRACE("OStoreBTreeNodeObject::remove(): save() failed");
+            OSL_TRACE("OStoreBTreeNodeObject::remove(): save() failed");
 
             // Release Lock and Leave.
             rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
@@ -524,7 +519,7 @@ storeError OStoreBTreeNodeObject::remove (
 storeError OStoreBTreeRootObject::change (
     OStoreBTreeNodeData   &rPageL,
     OStorePageBIOS        &rBIOS,
-    NAMESPACE_VOS(IMutex) *pMutex)
+    osl::Mutex            *pMutex)
 {
     // Enter.
     STORE_METHOD_ENTER(pMutex);
@@ -561,7 +556,7 @@ storeError OStoreBTreeRootObject::change (
     if (eErrCode != store_E_None)
     {
         // Must not happen.
-        VOS_TRACE("OStoreBTreeRootObject::change(): save() failed");
+        OSL_TRACE("OStoreBTreeRootObject::change(): save() failed");
 
         // Release Lock and Leave.
         rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
@@ -585,7 +580,7 @@ storeError OStoreBTreeRootObject::split (
     OStoreBTreeNodeData   &rPageL,
     OStoreBTreeNodeData   &rPageR,
     OStorePageBIOS        &rBIOS,
-    NAMESPACE_VOS(IMutex) *pMutex)
+    osl::Mutex            *pMutex)
 {
     // Check usage.
     if (!querySplit())

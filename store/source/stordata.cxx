@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stordata.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:32 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 20:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,32 +54,29 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
-#define _STORE_STORDATA_CXX_ "$Revision: 1.1.1.1 $"
+#define _STORE_STORDATA_CXX_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
 
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
-#ifndef _VOS_MACROS_HXX_
-#include <vos/macros.hxx>
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
 #endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
 #ifndef _STORE_TYPES_H_
 #include <store/types.h>
-#endif
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
 #endif
 
 #ifndef _STORE_STORBASE_HXX_
@@ -89,9 +86,7 @@
 #include <stordata.hxx>
 #endif
 
-#ifdef _USE_NAMESPACE
 using namespace store;
-#endif
 
 /*========================================================================
  *
@@ -131,7 +126,7 @@ void OStoreIndirectionPageData::swap (const D& rDescr)
 
     sal_uInt16 i, n = capacityCount (rDescr);
     for (i = 0; i < n; i++)
-        m_pData[i] = VOS_SWAPDWORD(m_pData[i]);
+        m_pData[i] = OSL_SWAPDWORD(m_pData[i]);
 #endif /* OSL_BIGENDIAN */
 }
 
@@ -179,7 +174,7 @@ storeError OStoreIndirectionPageObject::get (
     sal_uInt16             nSingle,
     OStoreDataPageObject  &rData,
     OStorePageBIOS        &rBIOS,
-    NAMESPACE_VOS(IMutex) *pMutex)
+    osl::Mutex            *pMutex)
 {
     // Enter.
     STORE_METHOD_ENTER(pMutex);
@@ -210,7 +205,7 @@ storeError OStoreIndirectionPageObject::get (
     page                 *&rpSingle,
     OStoreDataPageObject  &rData,
     OStorePageBIOS        &rBIOS,
-    NAMESPACE_VOS(IMutex) *pMutex)
+    osl::Mutex            *pMutex)
 {
     // Enter.
     STORE_METHOD_ENTER(pMutex);
@@ -257,7 +252,7 @@ storeError OStoreIndirectionPageObject::get (
     page                 *&rpSingle,
     OStoreDataPageObject  &rData,
     OStorePageBIOS        &rBIOS,
-    NAMESPACE_VOS(IMutex) *pMutex)
+    osl::Mutex            *pMutex)
 {
     // Enter.
     STORE_METHOD_ENTER(pMutex);
@@ -301,7 +296,7 @@ storeError OStoreIndirectionPageObject::put (
     sal_uInt16             nSingle,
     OStoreDataPageObject  &rData,
     OStorePageBIOS        &rBIOS,
-    NAMESPACE_VOS(IMutex) *pMutex)
+    osl::Mutex            *pMutex)
 {
     // Enter.
     STORE_METHOD_ENTER(pMutex);
@@ -348,7 +343,7 @@ storeError OStoreIndirectionPageObject::put (
     page                 *&rpSingle,
     OStoreDataPageObject  &rData,
     OStorePageBIOS        &rBIOS,
-    NAMESPACE_VOS(IMutex) *pMutex)
+    osl::Mutex            *pMutex)
 {
     // Enter.
     STORE_METHOD_ENTER(pMutex);
@@ -414,7 +409,7 @@ storeError OStoreIndirectionPageObject::put (
     page                 *&rpSingle,
     OStoreDataPageObject  &rData,
     OStorePageBIOS        &rBIOS,
-    NAMESPACE_VOS(IMutex) *pMutex)
+    osl::Mutex            *pMutex)
 {
     // Enter.
     STORE_METHOD_ENTER(pMutex);
@@ -477,7 +472,7 @@ storeError OStoreIndirectionPageObject::truncate (
     sal_uInt16             nSingle,
     OStoreDataPageObject  &rData,
     OStorePageBIOS        &rBIOS,
-    NAMESPACE_VOS(IMutex) *pMutex)
+    osl::Mutex            *pMutex)
 {
     // Enter.
     STORE_METHOD_ENTER(pMutex);
@@ -524,7 +519,7 @@ storeError OStoreIndirectionPageObject::truncate (
         if (eErrCode != store_E_None)
         {
             // Must not happen.
-            VOS_TRACE("OStoreIndirectionPageObject::truncate(): save failed");
+            OSL_TRACE("OStoreIndirectionPageObject::truncate(): save failed");
 
             // Release Lock and Leave.
             rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
@@ -546,7 +541,7 @@ storeError OStoreIndirectionPageObject::truncate (
     page                 *&rpSingle,
     OStoreDataPageObject  &rData,
     OStorePageBIOS        &rBIOS,
-    NAMESPACE_VOS(IMutex) *pMutex)
+    osl::Mutex            *pMutex)
 {
     // Acquire Mutex.
     STORE_METHOD_ENTER(pMutex);
@@ -676,7 +671,7 @@ storeError OStoreIndirectionPageObject::truncate (
         if (eErrCode != store_E_None)
         {
             // Must not happen.
-            VOS_TRACE("OStoreIndirectionPageObject::truncate(): save failed");
+            OSL_TRACE("OStoreIndirectionPageObject::truncate(): save failed");
 
             // Release Lock and Leave.
             rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
@@ -700,7 +695,7 @@ storeError OStoreIndirectionPageObject::truncate (
     page                 *&rpSingle,
     OStoreDataPageObject  &rData,
     OStorePageBIOS        &rBIOS,
-    NAMESPACE_VOS(IMutex) *pMutex)
+    osl::Mutex            *pMutex)
 {
     // Enter.
     STORE_METHOD_ENTER(pMutex);
@@ -833,7 +828,7 @@ storeError OStoreIndirectionPageObject::truncate (
         if (eErrCode != store_E_None)
         {
             // Must not happen.
-            VOS_TRACE("OStoreIndirectionPageObject::truncate(): save failed");
+            OSL_TRACE("OStoreIndirectionPageObject::truncate(): save failed");
 
             // Release Lock and Leave.
             rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
@@ -883,13 +878,13 @@ void OStoreDirectoryDataBlock::LinkTable::swap (void)
 #ifdef OSL_BIGENDIAN
     sal_Int32 i;
     for (i = 0; i < STORE_LIMIT_DATAPAGE_DIRECT; i++)
-        m_pDirect[i] = VOS_SWAPDWORD(m_pDirect[i]);
+        m_pDirect[i] = OSL_SWAPDWORD(m_pDirect[i]);
     for (i = 0; i < STORE_LIMIT_DATAPAGE_SINGLE; i++)
-        m_pSingle[i] = VOS_SWAPDWORD(m_pSingle[i]);
+        m_pSingle[i] = OSL_SWAPDWORD(m_pSingle[i]);
     for (i = 0; i < STORE_LIMIT_DATAPAGE_DOUBLE; i++)
-        m_pDouble[i] = VOS_SWAPDWORD(m_pDouble[i]);
+        m_pDouble[i] = OSL_SWAPDWORD(m_pDouble[i]);
     for (i = 0; i < STORE_LIMIT_DATAPAGE_TRIPLE; i++)
-        m_pTriple[i] = VOS_SWAPDWORD(m_pTriple[i]);
+        m_pTriple[i] = OSL_SWAPDWORD(m_pTriple[i]);
 #endif /* OSL_BIGENDIAN */
 }
 
@@ -972,7 +967,7 @@ OStoreDirectoryPageObject::scope (
 
         // Verify reduction.
         n = index1 * nCapacity + index0;
-        VOS_POSTCOND(n == nPage, "wrong math on indirect indices");
+        OSL_POSTCOND(n == nPage, "wrong math on indirect indices");
         if (n != nPage)
             return page::SCOPE_UNKNOWN;
 
@@ -1004,7 +999,7 @@ OStoreDirectoryPageObject::scope (
         // Verify reduction.
         n = index2 * nCapacity * nCapacity +
             index1 * nCapacity + index0;
-        VOS_POSTCOND(n == nPage, "wrong math on double indirect indices");
+        OSL_POSTCOND(n == nPage, "wrong math on double indirect indices");
         if (n != nPage)
             return page::SCOPE_UNKNOWN;
 
@@ -1042,7 +1037,7 @@ OStoreDirectoryPageObject::scope (
         n = index3 * nCapacity * nCapacity * nCapacity +
             index2 * nCapacity * nCapacity +
             index1 * nCapacity + index0;
-        VOS_POSTCOND(n == nPage, "wrong math on triple indirect indices");
+        OSL_POSTCOND(n == nPage, "wrong math on triple indirect indices");
         if (n != nPage)
             return page::SCOPE_UNKNOWN;
 
@@ -1070,7 +1065,7 @@ storeError OStoreDirectoryPageObject::get (
     indirect             *&rpTriple,
     OStoreDataPageObject  &rData,
     OStorePageBIOS        &rBIOS,
-    NAMESPACE_VOS(IMutex) *pMutex)
+    osl::Mutex            *pMutex)
 {
     // Enter.
     STORE_METHOD_ENTER(pMutex);
@@ -1172,7 +1167,7 @@ storeError OStoreDirectoryPageObject::get (
     else
     {
         // Unknown scope.
-        VOS_TRACE("OStoreDirectoryPageObject::get(): scope failed");
+        OSL_TRACE("OStoreDirectoryPageObject::get(): scope failed");
         eErrCode = store_E_Unknown;
     }
 
@@ -1190,7 +1185,7 @@ storeError OStoreDirectoryPageObject::put (
     indirect             *&rpTriple,
     OStoreDataPageObject  &rData,
     OStorePageBIOS        &rBIOS,
-    NAMESPACE_VOS(IMutex) *pMutex)
+    osl::Mutex            *pMutex)
 {
     // Enter.
     STORE_METHOD_ENTER(pMutex);
@@ -1323,7 +1318,7 @@ storeError OStoreDirectoryPageObject::put (
     else
     {
         // Unknown scope.
-        VOS_TRACE("OStoreDirectoryPageObject::put(): scope failed");
+        OSL_TRACE("OStoreDirectoryPageObject::put(): scope failed");
         eErrCode = store_E_Unknown;
     }
 
@@ -1341,7 +1336,7 @@ storeError OStoreDirectoryPageObject::truncate (
     indirect             *&rpTriple,
     OStoreDataPageObject  &rData,
     OStorePageBIOS        &rBIOS,
-    NAMESPACE_VOS(IMutex) *pMutex)
+    osl::Mutex            *pMutex)
 {
     // Enter.
     STORE_METHOD_ENTER(pMutex);
@@ -1567,7 +1562,7 @@ storeError OStoreDirectoryPageObject::truncate (
     else
     {
         // Unknown scope.
-        VOS_TRACE("OStoreDirectoryPageObject::put(): scope failed");
+        OSL_TRACE("OStoreDirectoryPageObject::put(): scope failed");
         eErrCode = store_E_Unknown;
     }
 
@@ -1586,7 +1581,7 @@ storeError OStoreDirectoryPageObject::truncate (
     indirect             *&rpTriple,
     OStoreDataPageObject  &rData,
     OStorePageBIOS        &rBIOS,
-    NAMESPACE_VOS(IMutex) *pMutex)
+    osl::Mutex            *pMutex)
 {
     // Enter.
     STORE_METHOD_ENTER(pMutex);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: object.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:32 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 20:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,43 +54,50 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
-#define _STORE_OBJECT_CXX_ "$Revision: 1.1.1.1 $"
+#define _STORE_OBJECT_CXX_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
 
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
+#ifndef _RTL_ALLOC_H_
+#include <rtl/alloc.h>
 #endif
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
+
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+#ifndef _OSL_INTERLCK_H_
+#include <osl/interlck.h>
+#endif
+
 #ifndef _STORE_OBJECT_HXX_
 #include <store/object.hxx>
 #endif
 
-#ifdef _USE_NAMESPACE
-using namespace store;
-#endif
+namespace store
+{
 
 /*========================================================================
  *
  * OStoreObject implementation.
  *
  *======================================================================*/
-VOS_IMPLEMENT_CLASSINFO(
-    VOS_CLASSNAME (OStoreObject, store),
-    VOS_NAMESPACE (OStoreObject, store),
-    VOS_NAMESPACE (OObject, vos),
-    0);
+const sal_uInt32 OStoreObject::m_nTypeId = sal_uInt32(0x58190322);
 
 /*
  * OStoreObject.
  */
 OStoreObject::OStoreObject (void)
+    : m_nRefCount (0)
 {
 }
 
@@ -99,5 +106,54 @@ OStoreObject::OStoreObject (void)
  */
 OStoreObject::~OStoreObject (void)
 {
+    OSL_ASSERT(m_nRefCount == 0);
 }
 
+/*
+ * operator new.
+ */
+void* OStoreObject::operator new (size_t n)
+{
+    return rtl_allocateMemory (n);
+}
+
+/*
+ * operator delete.
+ */
+void OStoreObject::operator delete (void *p)
+{
+    rtl_freeMemory (p);
+}
+
+/*
+ * isKindOf.
+ */
+sal_Bool SAL_CALL OStoreObject::isKindOf (sal_uInt32 nTypeId)
+{
+    return (nTypeId == m_nTypeId);
+}
+
+/*
+ * acquire.
+ */
+oslInterlockedCount SAL_CALL OStoreObject::acquire (void)
+{
+    oslInterlockedCount result = osl_incrementInterlockedCount (&m_nRefCount);
+    return (result);
+}
+
+/*
+ * release.
+ */
+oslInterlockedCount SAL_CALL OStoreObject::release (void)
+{
+    oslInterlockedCount result = osl_decrementInterlockedCount (&m_nRefCount);
+    if (result == 0)
+    {
+        // Last reference released.
+        delete this;
+    }
+    return (result);
+}
+
+} // namespace store

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storlckb.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:32 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 21:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,13 +54,13 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
 #ifndef _STORE_STORLCKB_HXX_
-#define _STORE_STORLCKB_HXX_ "$Revision: 1.1.1.1 $"
+#define _STORE_STORLCKB_HXX_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -72,10 +72,10 @@
 #ifndef _RTL_USTRING_H_
 #include <rtl/ustring.h>
 #endif
-
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
+
 #ifndef _STORE_OBJECT_HXX_
 #include <store/object.hxx>
 #endif
@@ -90,9 +90,8 @@
 #include <storpage.hxx>
 #endif
 
-#ifdef _USE_NAMESPACE
-namespace store {
-#endif
+namespace store
+{
 
 struct OStoreDataPageData;
 struct OStoreDirectoryPageData;
@@ -103,10 +102,8 @@ struct OStoreIndirectionPageData;
  * OStoreDirectory interface.
  *
  *======================================================================*/
-class OStoreDirectory : public NAMESPACE_STORE(OStoreObject)
+class OStoreDirectory : public store::OStoreObject
 {
-    VOS_DECLARE_CLASSINFO (VOS_NAMESPACE (OStoreDirectory, store));
-
 public:
     /** Construction.
      */
@@ -133,15 +130,28 @@ public:
     storeError iterate (
         storeFindData &rFindData);
 
+    /** IStoreHandle.
+     */
+    virtual sal_Bool SAL_CALL isKindOf (sal_uInt32 nTypeId);
+
 protected:
-    /** Destruction (OReference).
+    /** Destruction.
      */
     virtual ~OStoreDirectory (void);
 
 private:
+    /** IStoreHandle TypeId.
+     */
+    static const sal_uInt32 m_nTypeId;
+
+    /** IStoreHandle query() template function specialization.
+     */
+    friend inline OStoreDirectory*
+    SAL_CALL query (IStoreHandle *pHandle, OStoreDirectory*);
+
     /** Representation.
      */
-    NAMESPACE_VOS(ORef)<OStorePageManager> m_xManager;
+    rtl::Reference<OStorePageManager> m_xManager;
 
     typedef OStoreDirectoryPageData inode;
     inode                     *m_pNode;
@@ -156,17 +166,26 @@ private:
     OStoreDirectory& operator= (const OStoreDirectory&);
 };
 
+inline OStoreDirectory*
+SAL_CALL query (IStoreHandle *pHandle, OStoreDirectory*)
+{
+    if (pHandle && pHandle->isKindOf (OStoreDirectory::m_nTypeId))
+    {
+        // Handle is kind of OStoreDirectory.
+        return static_cast<OStoreDirectory*>(pHandle);
+    }
+    return 0;
+}
+
 /*========================================================================
  *
  * OStoreLockBytes interface.
  *
  *======================================================================*/
 class OStoreLockBytes :
-    public NAMESPACE_STORE(OStoreObject),
-    public NAMESPACE_STORE(ILockBytes)
+    public store::OStoreObject,
+    public store::ILockBytes
 {
-    VOS_DECLARE_CLASSINFO (VOS_NAMESPACE (OStoreLockBytes, store));
-
 public:
     /** Construction.
      */
@@ -247,11 +266,14 @@ public:
         sal_uInt32 nOffset,
         sal_uInt32 nBytes);
 
+    /** IStoreHandle.
+     */
+    virtual sal_Bool SAL_CALL isKindOf (sal_uInt32 nMagic);
+
     /** Delegate multiple inherited IReference.
      */
-    virtual RefCount SAL_CALL acquire (void);
-    virtual RefCount SAL_CALL release (void);
-    virtual RefCount SAL_CALL referenced (void) const;
+    virtual oslInterlockedCount SAL_CALL acquire (void);
+    virtual oslInterlockedCount SAL_CALL release (void);
 
 protected:
     /** Destruction (OReference).
@@ -259,9 +281,18 @@ protected:
     virtual ~OStoreLockBytes (void);
 
 private:
+    /** IStoreHandle TypeId.
+     */
+    static const sal_uInt32 m_nTypeId;
+
+    /** IStoreHandle query() template specialization.
+     */
+    friend inline OStoreLockBytes*
+    SAL_CALL query (IStoreHandle *pHandle, OStoreLockBytes*);
+
     /** Representation.
      */
-    NAMESPACE_VOS(ORef)<OStorePageManager> m_xManager;
+    rtl::Reference<OStorePageManager> m_xManager;
 
     typedef OStoreDataPageData        data;
     typedef OStoreDirectoryPageData   inode;
@@ -283,14 +314,24 @@ private:
     OStoreLockBytes& operator= (const OStoreLockBytes&);
 };
 
+inline OStoreLockBytes*
+SAL_CALL query (IStoreHandle *pHandle, OStoreLockBytes*)
+{
+    if (pHandle && pHandle->isKindOf (OStoreLockBytes::m_nTypeId))
+    {
+        // Handle is kind of OStoreLockBytes.
+        return static_cast<OStoreLockBytes*>(pHandle);
+    }
+    return 0;
+}
+
 /*========================================================================
  *
  * The End.
  *
  *======================================================================*/
-#ifdef _USE_NAMESPACE
-}
-#endif
+
+} // namespace store
 
 #endif /* !_STORE_STORLCKB_HXX_ */
 

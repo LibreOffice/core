@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stortree.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:32 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 21:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,13 +54,13 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
 #ifndef _STORE_STORTREE_HXX
-#define _STORE_STORTREE_HXX "$Revision: 1.1.1.1 $"
+#define _STORE_STORTREE_HXX "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -70,27 +70,23 @@
 #include <rtl/memory.h>
 #endif
 
-#ifndef _VOS_MACROS_HXX_
-#include <vos/macros.hxx>
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
 #endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
 #ifndef _STORE_TYPES_H_
 #include <store/types.h>
-#endif
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
 #endif
 
 #ifndef _STORE_STORBASE_HXX
 #include <storbase.hxx>
 #endif
 
-#ifdef _USE_NAMESPACE
-namespace store {
-#endif
+namespace store
+{
 
 /*========================================================================
  *
@@ -154,7 +150,7 @@ struct OStoreBTreeEntry
 #ifdef OSL_BIGENDIAN
         m_aKey.swap();
         m_aLink.swap();
-        m_nAttrib = VOS_SWAPDWORD(m_nAttrib);
+        m_nAttrib = OSL_SWAPDWORD(m_nAttrib);
 #endif /* OSL_BIGENDIAN */
     }
 };
@@ -166,7 +162,7 @@ struct OStoreBTreeEntry
  *======================================================================*/
 #define STORE_MAGIC_BTREENODE 0x58190322UL
 
-struct OStoreBTreeNodeData : public NAMESPACE_STORE(OStorePageData)
+struct OStoreBTreeNodeData : public store::OStorePageData
 {
     typedef OStorePageData      base;
     typedef OStoreBTreeNodeData self;
@@ -263,7 +259,7 @@ struct OStoreBTreeNodeData : public NAMESPACE_STORE(OStorePageData)
         nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
         nCRC32 = G::crc32 (nCRC32, m_pData, capacity(rDescr));
 #ifdef OSL_BIGENDIAN
-        nCRC32 = VOS_SWAPDWORD(nCRC32);
+        nCRC32 = OSL_SWAPDWORD(nCRC32);
 #endif /* OSL_BIGENDIAN */
         m_aGuard.m_nCRC32 = nCRC32;
     }
@@ -276,7 +272,7 @@ struct OStoreBTreeNodeData : public NAMESPACE_STORE(OStorePageData)
         nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
         nCRC32 = G::crc32 (nCRC32, m_pData, capacity(rDescr));
 #ifdef OSL_BIGENDIAN
-        nCRC32 = VOS_SWAPDWORD(nCRC32);
+        nCRC32 = OSL_SWAPDWORD(nCRC32);
 #endif /* OSL_BIGENDIAN */
         if (m_aGuard.m_nCRC32 != nCRC32)
             return store_E_InvalidChecksum;
@@ -333,8 +329,7 @@ struct OStoreBTreeNodeData : public NAMESPACE_STORE(OStorePageData)
  * OStoreBTreeNodeObject.
  *
  *======================================================================*/
-class OStoreBTreeNodeObject :
-    public NAMESPACE_STORE(OStorePageObject)
+class OStoreBTreeNodeObject : public store::OStorePageObject
 {
     typedef OStorePageObject      base;
     typedef OStoreBTreeNodeObject self;
@@ -365,7 +360,7 @@ public:
         OStoreBTreeNodeData   &rPageL,
         OStoreBTreeNodeData   &rPageR,
         OStorePageBIOS        &rBIOS,
-        NAMESPACE_VOS(IMutex) *pMutex = NULL);
+        osl::Mutex            *pMutex = NULL);
 
     /** remove (down to leaf node, recursive).
     */
@@ -377,7 +372,7 @@ public:
         OStoreBTreeNodeData   &rPageR,
 #endif  /* NYI */
         OStorePageBIOS        &rBIOS,
-        NAMESPACE_VOS(IMutex) *pMutex = NULL);
+        osl::Mutex            *pMutex = NULL);
 
 private:
     /** Representation.
@@ -400,8 +395,7 @@ inline sal_Bool OStoreBTreeNodeObject::querySplit (void) const
  * OStoreBTreeRootObject.
  *
  *======================================================================*/
-class OStoreBTreeRootObject :
-    public NAMESPACE_STORE(OStoreBTreeNodeObject)
+class OStoreBTreeRootObject : public store::OStoreBTreeNodeObject
 {
     typedef OStoreBTreeNodeObject base;
     typedef OStoreBTreeNodeData   page;
@@ -418,7 +412,7 @@ public:
         OStoreBTreeNodeData   &rPageL,
         OStoreBTreeNodeData   &rPageR,
         OStorePageBIOS        &rBIOS,
-        NAMESPACE_VOS(IMutex) *pMutex = NULL);
+        osl::Mutex            *pMutex = NULL);
 
 private:
     /** Representation.
@@ -430,7 +424,7 @@ private:
     storeError change (
         OStoreBTreeNodeData   &rPageL,
         OStorePageBIOS        &rBIOS,
-        NAMESPACE_VOS(IMutex) *pMutex = NULL);
+        osl::Mutex            *pMutex = NULL);
 };
 
 inline OStoreBTreeRootObject::OStoreBTreeRootObject (page& rPage)
@@ -443,9 +437,8 @@ inline OStoreBTreeRootObject::OStoreBTreeRootObject (page& rPage)
  * The End.
  *
  *======================================================================*/
-#ifdef _USE_NAMESPACE
-}
-#endif
+
+} // namespace store
 
 #endif /* !_STORE_STORTREE_HXX */
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stordata.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:32 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 20:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,13 +54,13 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
 #ifndef _STORE_STORDATA_HXX_
-#define _STORE_STORDATA_HXX_ "$Revision: 1.1.1.1 $"
+#define _STORE_STORDATA_HXX_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -70,27 +70,23 @@
 #include <rtl/memory.h>
 #endif
 
-#ifndef _VOS_MACROS_HXX_
-#include <vos/macros.hxx>
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
 #endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
 #ifndef _STORE_TYPES_H_
 #include <store/types.h>
-#endif
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
 #endif
 
 #ifndef _STORE_STORBASE_HXX_
 #include <storbase.hxx>
 #endif
 
-#ifdef _USE_NAMESPACE
-namespace store {
-#endif
+namespace store
+{
 
 /*========================================================================
  *
@@ -99,8 +95,7 @@ namespace store {
  *======================================================================*/
 #define STORE_MAGIC_DATAPAGE 0x94190310UL
 
-struct OStoreDataPageData :
-    public NAMESPACE_STORE(OStorePageData)
+struct OStoreDataPageData : public store::OStorePageData
 {
     typedef OStorePageData       base;
     typedef OStoreDataPageData   self;
@@ -165,8 +160,7 @@ struct OStoreDataPageData :
  * OStoreDataPageObject.
  *
  *======================================================================*/
-class OStoreDataPageObject :
-    public NAMESPACE_STORE(OStorePageObject)
+class OStoreDataPageObject : public store::OStorePageObject
 {
     typedef OStorePageObject   base;
     typedef OStoreDataPageData page;
@@ -194,8 +188,7 @@ inline OStoreDataPageObject::OStoreDataPageObject (page& rPage)
  *======================================================================*/
 #define STORE_MAGIC_INDIRECTPAGE 0x89191107UL
 
-struct OStoreIndirectionPageData :
-    public NAMESPACE_STORE(OStorePageData)
+struct OStoreIndirectionPageData : public store::OStorePageData
 {
     typedef OStorePageData            base;
     typedef OStoreIndirectionPageData self;
@@ -261,7 +254,7 @@ struct OStoreIndirectionPageData :
         nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
         nCRC32 = G::crc32 (nCRC32, m_pData, capacity(rDescr));
 #ifdef OSL_BIGENDIAN
-        nCRC32 = VOS_SWAPDWORD(nCRC32);
+        nCRC32 = OSL_SWAPDWORD(nCRC32);
 #endif /* OSL_BIGENDIAN */
         m_aGuard.m_nCRC32 = nCRC32;
     }
@@ -274,7 +267,7 @@ struct OStoreIndirectionPageData :
         nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
         nCRC32 = G::crc32 (nCRC32, m_pData, capacity(rDescr));
 #ifdef OSL_BIGENDIAN
-        nCRC32 = VOS_SWAPDWORD(nCRC32);
+        nCRC32 = OSL_SWAPDWORD(nCRC32);
 #endif /* OSL_BIGENDIAN */
         if (m_aGuard.m_nCRC32 != nCRC32)
             return store_E_InvalidChecksum;
@@ -288,8 +281,7 @@ struct OStoreIndirectionPageData :
  * OStoreIndirectionPageObject.
  *
  *======================================================================*/
-class OStoreIndirectionPageObject :
-    public NAMESPACE_STORE(OStorePageObject)
+class OStoreIndirectionPageObject : public store::OStorePageObject
 {
     typedef OStorePageObject          base;
     typedef OStoreIndirectionPageData page;
@@ -313,7 +305,7 @@ public:
         sal_uInt16             nSingle,
         OStoreDataPageObject  &rData,
         OStorePageBIOS        &rBIOS,
-        NAMESPACE_VOS(IMutex) *pMutex = NULL);
+        osl::Mutex            *pMutex = NULL);
 
     storeError get (
         sal_uInt16             nDouble,
@@ -321,7 +313,7 @@ public:
         page                 *&rpSingle,
         OStoreDataPageObject  &rData,
         OStorePageBIOS        &rBIOS,
-        NAMESPACE_VOS(IMutex) *pMutex = NULL);
+        osl::Mutex            *pMutex = NULL);
 
     storeError get (
         sal_uInt16             nTriple,
@@ -331,7 +323,7 @@ public:
         page                 *&rpSingle,
         OStoreDataPageObject  &rData,
         OStorePageBIOS        &rBIOS,
-        NAMESPACE_VOS(IMutex) *pMutex = NULL);
+        osl::Mutex            *pMutex = NULL);
 
     /** put (indirect data page).
     */
@@ -339,7 +331,7 @@ public:
         sal_uInt16             nSingle,
         OStoreDataPageObject  &rData,
         OStorePageBIOS        &rBIOS,
-        NAMESPACE_VOS(IMutex) *pMutex = NULL);
+        osl::Mutex            *pMutex = NULL);
 
     storeError put (
         sal_uInt16             nDouble,
@@ -347,7 +339,7 @@ public:
         page                 *&rpSingle,
         OStoreDataPageObject  &rData,
         OStorePageBIOS        &rBIOS,
-        NAMESPACE_VOS(IMutex) *pMutex = NULL);
+        osl::Mutex            *pMutex = NULL);
 
     storeError put (
         sal_uInt16             nTriple,
@@ -357,7 +349,7 @@ public:
         page                 *&rpSingle,
         OStoreDataPageObject  &rData,
         OStorePageBIOS        &rBIOS,
-        NAMESPACE_VOS(IMutex) *pMutex = NULL);
+        osl::Mutex            *pMutex = NULL);
 
     /** truncate (indirect data page).
     */
@@ -365,7 +357,7 @@ public:
         sal_uInt16             nSingle,
         OStoreDataPageObject  &rData,
         OStorePageBIOS        &rBIOS,
-        NAMESPACE_VOS(IMutex) *pMutex = NULL);
+        osl::Mutex            *pMutex = NULL);
 
     storeError truncate (
         sal_uInt16             nDouble,
@@ -373,7 +365,7 @@ public:
         page                 *&rpSingle,
         OStoreDataPageObject  &rData,
         OStorePageBIOS        &rBIOS,
-        NAMESPACE_VOS(IMutex) *pMutex = NULL);
+        osl::Mutex            *pMutex = NULL);
 
     storeError truncate (
         sal_uInt16             nTriple,
@@ -383,7 +375,7 @@ public:
         page                 *&rpSingle,
         OStoreDataPageObject  &rData,
         OStorePageBIOS        &rBIOS,
-        NAMESPACE_VOS(IMutex) *pMutex = NULL);
+        osl::Mutex            *pMutex = NULL);
 
 private:
     /** Representation.
@@ -494,7 +486,7 @@ struct OStoreDirectoryDataBlock
 #ifdef OSL_BIGENDIAN
         m_aGuard.swap();
         m_aTable.swap();
-        m_nDataLen = VOS_SWAPDWORD(m_nDataLen);
+        m_nDataLen = OSL_SWAPDWORD(m_nDataLen);
 #endif /* OSL_BIGENDIAN */
     }
 
@@ -506,7 +498,7 @@ struct OStoreDirectoryDataBlock
         nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
         nCRC32 = G::crc32 (nCRC32, &m_aTable, size() - sizeof(G));
 #ifdef OSL_BIGENDIAN
-        nCRC32 = VOS_SWAPDWORD(nCRC32);
+        nCRC32 = OSL_SWAPDWORD(nCRC32);
 #endif /* OSL_BIGENDIAN */
         m_aGuard.m_nCRC32 = nCRC32;
     }
@@ -519,7 +511,7 @@ struct OStoreDirectoryDataBlock
         nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
         nCRC32 = G::crc32 (nCRC32, &m_aTable, size() - sizeof(G));
 #ifdef OSL_BIGENDIAN
-        nCRC32 = VOS_SWAPDWORD(nCRC32);
+        nCRC32 = OSL_SWAPDWORD(nCRC32);
 #endif /* OSL_BIGENDIAN */
         if (m_aGuard.m_nCRC32 != nCRC32)
             return store_E_InvalidChecksum;
@@ -611,8 +603,7 @@ struct OStoreDirectoryDataBlock
  *======================================================================*/
 #define STORE_MAGIC_DIRECTORYPAGE 0x62190120UL
 
-struct OStoreDirectoryPageData :
-    public NAMESPACE_STORE(OStorePageData)
+struct OStoreDirectoryPageData : public store::OStorePageData
 {
     typedef OStorePageData           base;
     typedef OStoreDirectoryPageData  self;
@@ -767,8 +758,7 @@ struct OStoreDirectoryPageData :
  * OStoreDirectoryPageObject.
  *
  *======================================================================*/
-class OStoreDirectoryPageObject :
-    public NAMESPACE_STORE(OStorePageObject)
+class OStoreDirectoryPageObject : public store::OStorePageObject
 {
     typedef OStorePageObject          base;
     typedef OStoreDirectoryPageData   page;
@@ -874,7 +864,7 @@ public:
         indirect             *&rpTriple,
         OStoreDataPageObject  &rData,
         OStorePageBIOS        &rBIOS,
-        NAMESPACE_VOS(IMutex) *pMutex = NULL);
+        osl::Mutex            *pMutex = NULL);
 
     /** put (external data page).
     */
@@ -885,7 +875,7 @@ public:
         indirect             *&rpTriple,
         OStoreDataPageObject  &rData,
         OStorePageBIOS        &rBIOS,
-        NAMESPACE_VOS(IMutex) *pMutex = NULL);
+        osl::Mutex            *pMutex = NULL);
 
     /** truncate (external data page).
     */
@@ -896,7 +886,7 @@ public:
         indirect             *&rpTriple,
         OStoreDataPageObject  &rData,
         OStorePageBIOS        &rBIOS,
-        NAMESPACE_VOS(IMutex) *pMutex = NULL);
+        osl::Mutex            *pMutex = NULL);
 
 private:
     /** Representation.
@@ -913,7 +903,7 @@ private:
         indirect             *&rpTriple,
         OStoreDataPageObject  &rData,
         OStorePageBIOS        &rBIOS,
-        NAMESPACE_VOS(IMutex) *pMutex = NULL);
+        osl::Mutex            *pMutex = NULL);
 };
 
 inline OStoreDirectoryPageObject::OStoreDirectoryPageObject (page& rPage)
@@ -926,9 +916,8 @@ inline OStoreDirectoryPageObject::OStoreDirectoryPageObject (page& rPage)
  * The End.
  *
  *======================================================================*/
-#ifdef _USE_NAMESPACE
-}
-#endif
+
+} // namespace store
 
 #endif /* !_STORE_STORDATA_HXX_ */
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storbase.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:32 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 20:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,15 +54,15 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
-#define _STORE_STORBASE_CXX_ "$Revision: 1.1.1.1 $"
+#define _STORE_STORBASE_CXX_ "$Revision: 1.2 $"
 
-#ifndef __STL_USE_NEWALLOC
-#define __STL_USE_NEWALLOC 1
+#ifndef __ALGORITHM__
+#include <algorithm>
 #endif
 #ifndef __UTILITY__
 #include <utility>
@@ -81,22 +81,22 @@
 #ifndef _RTL_MEMORY_H_
 #include <rtl/memory.h>
 #endif
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
 
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
 #endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
 #ifndef _STORE_TYPES_H_
 #include <store/types.h>
-#endif
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
 #endif
 #ifndef _STORE_OBJECT_HXX_
 #include <store/object.hxx>
@@ -109,9 +109,7 @@
 #include <storbase.hxx>
 #endif
 
-#ifdef _USE_NAMESPACE
 using namespace store;
-#endif
 
 /*========================================================================
  *
@@ -121,7 +119,7 @@ using namespace store;
 /*
  * CRC polynomial 0xEDB88320.
  */
-const sal_uInt32 NAMESPACE_STORE(OStorePageGuard)::m_pTable[] =
+const sal_uInt32 store::OStorePageGuard::m_pTable[] =
 {
     /* 0 */
     0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA,
@@ -396,10 +394,10 @@ struct OStoreSuperBlock
         m_aGuard.swap();
         m_aDescr.swap();
 
-        m_nMarked = VOS_SWAPDWORD(m_nMarked);
+        m_nMarked = OSL_SWAPDWORD(m_nMarked);
         m_aMarked.swap();
 
-        m_nUnused = VOS_SWAPDWORD(m_nUnused);
+        m_nUnused = OSL_SWAPDWORD(m_nUnused);
         m_aUnused.swap();
 #endif /* OSL_BIGENDIAN */
     }
@@ -412,7 +410,7 @@ struct OStoreSuperBlock
         nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
         nCRC32 = G::crc32 (nCRC32, &m_aDescr, size() - sizeof(G));
 #ifdef OSL_BIGENDIAN
-        nCRC32 = VOS_SWAPDWORD(nCRC32);
+        nCRC32 = OSL_SWAPDWORD(nCRC32);
 #endif /* OSL_BIGENDIAN */
         m_aGuard.m_nCRC32 = nCRC32;
     }
@@ -423,7 +421,7 @@ struct OStoreSuperBlock
     {
         sal_uInt32 nMagic = m_aGuard.m_nMagic;
 #ifdef OSL_BIGENDIAN
-        nMagic = VOS_SWAPDWORD(nMagic);
+        nMagic = OSL_SWAPDWORD(nMagic);
 #endif /* OSL_BIGENDIAN */
         if (nMagic != STORE_MAGIC_SUPERBLOCK)
             store_E_WrongFormat;
@@ -432,7 +430,7 @@ struct OStoreSuperBlock
         nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
         nCRC32 = G::crc32 (nCRC32, &m_aDescr, size() - sizeof(G));
 #ifdef OSL_BIGENDIAN
-        nCRC32 = VOS_SWAPDWORD(nCRC32);
+        nCRC32 = OSL_SWAPDWORD(nCRC32);
 #endif /* OSL_BIGENDIAN */
         if (m_aGuard.m_nCRC32 != nCRC32)
             return store_E_InvalidChecksum;
@@ -477,7 +475,7 @@ struct OStoreStateBlock
     void swap (void)
     {
 #ifdef OSL_BIGENDIAN
-        m_nState = VOS_SWAPDWORD(m_nState);
+        m_nState = OSL_SWAPDWORD(m_nState);
 #endif /* OSL_BIGENDIAN */
     }
 
@@ -516,9 +514,8 @@ struct OStoreStateBlock
  * OStoreSuperBlockPage interface.
  *
  *======================================================================*/
-#ifdef _USE_NAMESPACE
-namespace store {
-#endif
+namespace store
+{
 
 struct OStoreSuperBlockPage
 {
@@ -622,9 +619,7 @@ struct OStoreSuperBlockPage
         OStorePageBIOS &rBIOS);
 };
 
-#ifdef _USE_NAMESPACE
-}
-#endif
+} // namespace store
 
 /*========================================================================
  *
@@ -825,7 +820,7 @@ storeError OStoreSuperBlockPage::verify (OStorePageBIOS &rBIOS)
         else
         {
             // Double Failure.
-            VOS_TRACE("OStoreSuperBlockPage::verify(): double failure.\n");
+            OSL_TRACE("OStoreSuperBlockPage::verify(): double failure.\n");
         }
     }
 
@@ -843,18 +838,16 @@ storeError OStoreSuperBlockPage::verify (OStorePageBIOS &rBIOS)
  * OStorePageACL.
  *
  *======================================================================*/
-typedef sal_uInt32                        key_type;
-typedef sal_uInt32                        val_type;
+typedef sal_uInt32              key_type;
+typedef sal_uInt32              val_type;
 
-typedef NAMESPACE_STD(hash)<key_type>     key_hash;
-typedef NAMESPACE_STD(equal_to)<key_type> key_cmp;
+typedef std::hash<key_type>     key_hash;
+typedef std::equal_to<key_type> key_cmp;
 
-typedef NAMESPACE_STD(hash_map)
-    <key_type, val_type, key_hash, key_cmp> map_type;
+typedef std::hash_map<key_type, val_type, key_hash, key_cmp> map_type;
 
-#ifdef _USE_NAMESPACE
-namespace store {
-#endif
+namespace store
+{
 
 struct OStorePageACL : public map_type
 {
@@ -869,21 +862,13 @@ struct OStorePageACL : public map_type
     {}
 };
 
-#ifdef _USE_NAMESPACE
-}
-#endif
+} // namespace store
 
 /*========================================================================
  *
  * OStorePageBIOS implementation.
  *
  *======================================================================*/
-VOS_IMPLEMENT_CLASSINFO(
-    VOS_CLASSNAME (OStorePageBIOS, store),
-    VOS_NAMESPACE (OStorePageBIOS, store),
-    VOS_NAMESPACE (OStoreObject, store),
-    0);
-
 /*
  * OStorePageBIOS.
  */
@@ -927,10 +912,10 @@ storeError OStorePageBIOS::verify (SuperPage *&rpSuper)
 
         // Check SuperBlock state.
         if (rpSuper->m_aState.closePending())
-            VOS_TRACE("OStorePageBIOS::verify(): close pending.\n");
+            OSL_TRACE("OStorePageBIOS::verify(): close pending.\n");
 
         if (rpSuper->m_aState.flushPending())
-            VOS_TRACE("OStorePageBIOS::verify(): flush pending.\n");
+            OSL_TRACE("OStorePageBIOS::verify(): flush pending.\n");
     }
 
     // Verify SuperBlock page (with repair).
@@ -970,7 +955,7 @@ storeError OStorePageBIOS::initialize (
     storeAccessMode  eAccessMode)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
 
     // Check arguments.
     storeError eErrCode = store_E_InvalidParameter;
@@ -1025,20 +1010,20 @@ storeError OStorePageBIOS::initialize (
 storeError OStorePageBIOS::create (sal_uInt16 nPageSize)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
 
     // Check precond.
-    if (!m_xLockBytes.isValid())
+    if (!m_xLockBytes.is())
         return store_E_InvalidAccess;
     if (!m_bWriteable)
         return store_E_AccessViolation;
 
     // Check PageSize.
     sal_uInt16 nMinSize = SuperPage::size();
-    nMinSize  = VOS_MAX(nMinSize, STORE_MINIMUM_PAGESIZE);
+    nMinSize  = std::max (nMinSize, STORE_MINIMUM_PAGESIZE);
 
-    nPageSize = VOS_MAX(nPageSize, nMinSize);
-    nPageSize = VOS_MIN(nPageSize, STORE_MAXIMUM_PAGESIZE);
+    nPageSize = std::max (nPageSize, nMinSize);
+    nPageSize = std::min (nPageSize, STORE_MAXIMUM_PAGESIZE);
 
     sal_uInt16 nRemSize = nPageSize % nMinSize;
     if (nRemSize)
@@ -1076,7 +1061,7 @@ storeError OStorePageBIOS::create (sal_uInt16 nPageSize)
 
     // Commit.
     eErrCode = m_xLockBytes->flush();
-    VOS_POSTCOND(
+    OSL_POSTCOND(
         eErrCode == store_E_None,
         "OStorePageBIOS::create(): flush failed");
     if (eErrCode == store_E_None)
@@ -1096,13 +1081,13 @@ storeError OStorePageBIOS::create (sal_uInt16 nPageSize)
 storeError OStorePageBIOS::getPageSize (sal_uInt16 &rnPageSize)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
 
     // Initialize [out] param.
     rnPageSize = 0;
 
     // Check precond.
-    if (!m_xLockBytes.isValid())
+    if (!m_xLockBytes.is())
         return store_E_InvalidAccess;
 
     // Load SuperBlock and require good health.
@@ -1123,11 +1108,11 @@ storeError OStorePageBIOS::acquireLock (
     sal_uInt32 nAddr, sal_uInt32 nSize)
 {
     // Check precond.
-    if (!m_xLockBytes.isValid())
+    if (!m_xLockBytes.is())
         return store_E_InvalidAccess;
 
     // Check Address.
-    VOS_PRECOND(
+    OSL_PRECOND(
         nAddr != STORE_PAGE_NULL,
         "OStorePageBIOS::acquireLock(): invalid Address");
     if (nAddr == STORE_PAGE_NULL)
@@ -1149,11 +1134,11 @@ storeError OStorePageBIOS::releaseLock (
     sal_uInt32 nAddr, sal_uInt32 nSize)
 {
     // Check precond.
-    if (!m_xLockBytes.isValid())
+    if (!m_xLockBytes.is())
         return store_E_InvalidAccess;
 
     // Check Address.
-    VOS_PRECOND(
+    OSL_PRECOND(
         nAddr != STORE_PAGE_NULL,
         "OStorePageBIOS::releaseLock(): invalid Address");
     if (nAddr == STORE_PAGE_NULL)
@@ -1175,18 +1160,18 @@ storeError OStorePageBIOS::read (
     sal_uInt32 nAddr, void *pData, sal_uInt32 nSize)
 {
     // Check precond.
-    if (!m_xLockBytes.isValid())
+    if (!m_xLockBytes.is())
         return store_E_InvalidAccess;
 
     // Check Address.
-    VOS_PRECOND(
+    OSL_PRECOND(
         nAddr != STORE_PAGE_NULL,
         "OStorePageBIOS::read(): invalid Address");
     if (nAddr == STORE_PAGE_NULL)
         return store_E_CantSeek;
 
     // Check Data.
-    VOS_PRECOND(pData, "OStorePageBIOS::read(): no Data");
+    OSL_PRECOND(pData, "OStorePageBIOS::read(): no Data");
     if (pData == NULL)
         return store_E_InvalidParameter;
 
@@ -1212,20 +1197,20 @@ storeError OStorePageBIOS::write (
     sal_uInt32 nAddr, const void *pData, sal_uInt32 nSize)
 {
     // Check precond.
-    if (!m_xLockBytes.isValid())
+    if (!m_xLockBytes.is())
         return store_E_InvalidAccess;
     if (!m_bWriteable)
         return store_E_AccessViolation;
 
     // Check Address.
-    VOS_PRECOND(
+    OSL_PRECOND(
         nAddr != STORE_PAGE_NULL,
         "OStorePageBIOS::write(): invalid Address");
     if (nAddr == STORE_PAGE_NULL)
         return store_E_CantSeek;
 
     // Check Data.
-    VOS_PRECOND(pData, "OStorePageBIOS::write(): no Data");
+    OSL_PRECOND(pData, "OStorePageBIOS::write(): no Data");
     if (pData == NULL)
         return store_E_InvalidParameter;
 
@@ -1261,10 +1246,10 @@ storeError OStorePageBIOS::acquirePage (
     const OStorePageDescriptor& rDescr, storeAccessMode eMode)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
 
     // Check precond.
-    if (!m_xLockBytes.isValid())
+    if (!m_xLockBytes.is())
         return store_E_InvalidAccess;
 
     // Check access mode.
@@ -1288,7 +1273,7 @@ storeError OStorePageBIOS::acquirePage (
     else
     {
         // Insert new entry.
-        typedef NAMESPACE_STD(pair)<const sal_uInt32, sal_uInt32> map_entry;
+        typedef std::pair<const sal_uInt32, sal_uInt32> map_entry;
         m_pAcl->insert (map_entry (rDescr.m_nAddr, 1));
     }
 
@@ -1305,10 +1290,10 @@ storeError OStorePageBIOS::releasePage (
     const OStorePageDescriptor& rDescr, storeAccessMode eMode)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
 
     // Check precond.
-    if (!m_xLockBytes.isValid())
+    if (!m_xLockBytes.is())
         return store_E_InvalidAccess;
 
     // Check access control list.
@@ -1338,7 +1323,7 @@ storeError OStorePageBIOS::releasePage (
 sal_uInt32 OStorePageBIOS::getRefererCount (void)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
 
     // Obtain total referer count.
     if (m_pAcl)
@@ -1355,10 +1340,10 @@ storeError OStorePageBIOS::allocate (
     OStorePageObject& rPage, Allocation eAlloc)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
 
     // Check precond.
-    if (!m_xLockBytes.isValid())
+    if (!m_xLockBytes.is())
         return store_E_InvalidAccess;
     if (!m_bWriteable)
         return store_E_AccessViolation;
@@ -1396,7 +1381,7 @@ storeError OStorePageBIOS::allocate (
             }
 
             // Verify FreeList head.
-            VOS_PRECOND(
+            OSL_PRECOND(
                 aPageHead.m_aUnused.m_nAddr != STORE_PAGE_NULL,
                 "OStorePageBIOS::allocate(): page not free");
             if (aPageHead.m_aUnused.m_nAddr == STORE_PAGE_NULL)
@@ -1439,7 +1424,7 @@ storeError OStorePageBIOS::allocate (
             m_pSuper->m_aSuperOne = m_pSuper->m_aSuperTwo;
 
             eErrCode = m_pSuper->save (*this);
-            VOS_POSTCOND(
+            OSL_POSTCOND(
                 eErrCode == store_E_None,
                 "OStorePageBIOS::allocate(): SuperBlock save failed");
 
@@ -1480,7 +1465,9 @@ storeError OStorePageBIOS::allocate (
         }
 
         // Resize.
-        sal_uInt32 nAlign = VOS_MIN(nAddr, STORE_MAXIMUM_PAGESIZE);
+        sal_uInt32 nAlign = STORE_MAXIMUM_PAGESIZE;
+
+        nAlign = std::min (nAddr, nAlign);
         nAddr = ((nAddr + nAlign) / nAlign) * nAlign;
 
         eErrCode = m_xLockBytes->setSize (nAddr);
@@ -1507,7 +1494,7 @@ storeError OStorePageBIOS::allocate (
     m_pSuper->m_aSuperOne = m_pSuper->m_aSuperTwo;
 
     eErrCode = m_pSuper->save (*this);
-    VOS_POSTCOND(
+    OSL_POSTCOND(
         eErrCode == store_E_None,
         "OStorePageBIOS::allocate(): SuperBlock save failed");
 
@@ -1522,10 +1509,10 @@ storeError OStorePageBIOS::allocate (
 storeError OStorePageBIOS::free (OStorePageObject& rPage)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
 
     // Check precond.
-    if (!m_xLockBytes.isValid())
+    if (!m_xLockBytes.is())
         return store_E_InvalidAccess;
     if (!m_bWriteable)
         return store_E_AccessViolation;
@@ -1572,7 +1559,7 @@ storeError OStorePageBIOS::free (OStorePageObject& rPage)
     m_pSuper->m_aSuperOne = m_pSuper->m_aSuperTwo;
 
     eErrCode = m_pSuper->save (*this);
-    VOS_POSTCOND(
+    OSL_POSTCOND(
         eErrCode == store_E_None,
         "OStorePageBIOS::free(): SuperBlock save failed");
 
@@ -1587,10 +1574,10 @@ storeError OStorePageBIOS::free (OStorePageObject& rPage)
 storeError OStorePageBIOS::load (OStorePageObject& rPage)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
 
     // Check precond.
-    if (!m_xLockBytes.isValid())
+    if (!m_xLockBytes.is())
         return store_E_InvalidAccess;
 
     // Save PageDescriptor.
@@ -1639,10 +1626,10 @@ storeError OStorePageBIOS::load (OStorePageObject& rPage)
 storeError OStorePageBIOS::save (OStorePageObject& rPage)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
 
     // Check precond.
-    if (!m_xLockBytes.isValid())
+    if (!m_xLockBytes.is())
         return store_E_InvalidAccess;
     if (!m_bWriteable)
         return store_E_AccessViolation;
@@ -1658,7 +1645,7 @@ storeError OStorePageBIOS::save (OStorePageObject& rPage)
 storeError OStorePageBIOS::close (void)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
 
     // Check access control list.
     if (m_pAcl)
@@ -1668,7 +1655,7 @@ storeError OStorePageBIOS::close (void)
         {
             // Report remaining referer count.
             sal_uInt32 k = m_pAcl->m_nRefCount;
-            VOS_TRACE("OStorePageBIOS::close(): referer count: %d\n", k);
+            OSL_TRACE("OStorePageBIOS::close(): referer count: %d\n", k);
         }
         __STORE_DELETEZ (m_pAcl);
     }
@@ -1682,11 +1669,11 @@ storeError OStorePageBIOS::close (void)
     }
 
     // Check LockBytes.
-    if (m_xLockBytes.isValid())
+    if (m_xLockBytes.is())
     {
         // Release LockBytes.
         m_xLockBytes->flush();
-        m_xLockBytes.unbind();
+        m_xLockBytes.clear();
     }
     return store_E_None;
 }
@@ -1698,10 +1685,10 @@ storeError OStorePageBIOS::close (void)
 storeError OStorePageBIOS::flush (void)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
 
     // Check precond.
-    if (!m_xLockBytes.isValid())
+    if (!m_xLockBytes.is())
         return store_E_InvalidAccess;
 
     // Check mode and state.
@@ -1710,13 +1697,13 @@ storeError OStorePageBIOS::flush (void)
 
     // Flush SuperBlock page.
     storeError eErrCode = m_pSuper->flush (*this);
-    VOS_POSTCOND(
+    OSL_POSTCOND(
         eErrCode == store_E_None,
         "OStorePageBIOS::flush(): SuperBlock flush failed");
 
     // Flush LockBytes.
     eErrCode = m_xLockBytes->flush();
-    VOS_POSTCOND(
+    OSL_POSTCOND(
         eErrCode == store_E_None,
         "OStorePageBIOS::flush(): LockBytes flush failed");
     if (eErrCode == store_E_None)
@@ -1734,13 +1721,13 @@ storeError OStorePageBIOS::flush (void)
 storeError OStorePageBIOS::size (sal_uInt32 &rnSize)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
 
     // Initialize [out] param.
     rnSize = 0;
 
     // Check precond.
-    if (!m_xLockBytes.isValid())
+    if (!m_xLockBytes.is())
         return store_E_InvalidAccess;
 
     // Obtain LockBytes size.
@@ -1755,7 +1742,7 @@ storeError OStorePageBIOS::scanBegin (
     ScanContext &rCtx, sal_uInt32 nMagic)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
 
     // Initialize [out] param.
     rCtx.m_aDescr = OStorePageDescriptor(0, 0, 0);
@@ -1763,7 +1750,7 @@ storeError OStorePageBIOS::scanBegin (
     rCtx.m_nMagic = nMagic;
 
     // Check precond.
-    if (!m_xLockBytes.isValid())
+    if (!m_xLockBytes.is())
         return store_E_InvalidAccess;
 
     // Check SuperBlock page.
@@ -1771,7 +1758,7 @@ storeError OStorePageBIOS::scanBegin (
     if (eErrCode != store_E_None)
     {
         // Damaged. Determine page size (NYI).
-        VOS_TRACE ("OStorePageBIOS::scanBegin(): damaged.\n");
+        OSL_TRACE ("OStorePageBIOS::scanBegin(): damaged.\n");
         return eErrCode;
     }
 
@@ -1796,10 +1783,10 @@ storeError OStorePageBIOS::scanNext (
     ScanContext &rCtx, OStorePageObject &rPage)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
 
     // Check precond.
-    if (!m_xLockBytes.isValid())
+    if (!m_xLockBytes.is())
         return store_E_InvalidAccess;
 
     // Setup PageHead.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filelckb.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-02-26 14:24:25 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 20:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,13 @@
  *
  ************************************************************************/
 
-#define _STORE_FILELCKB_CXX_ "$Revision: 1.2 $"
+#define _STORE_FILELCKB_CXX_ "$Revision: 1.3 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
+#endif
+#ifndef _SAL_MACROS_H_
+#include <sal/macros.h>
 #endif
 
 #ifndef _RTL_STRING_HXX_
@@ -76,9 +79,6 @@
 #include <osl/thread.h>
 #endif
 
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
-#endif
 #ifndef _STORE_OBJECT_HXX_
 #include <store/object.hxx>
 #endif
@@ -93,10 +93,7 @@
 #include <store/types.h>
 #endif
 
-#ifdef _USE_NAMESPACE
-using namespace rtl;
 using namespace store;
-#endif
 
 /*========================================================================
  *
@@ -325,9 +322,8 @@ inline void OMappingDescriptor_Impl::cleanup (void)
  * OFileLockBytes_Impl interface.
  *
  *======================================================================*/
-#ifdef _USE_NAMESPACE
-namespace store {
-#endif
+namespace store
+{
 
 class OFileLockBytes_Impl
 {
@@ -379,9 +375,7 @@ public:
     storeError stat (sal_uInt32 &rnSize);
 };
 
-#ifdef _USE_NAMESPACE
-}
-#endif
+} // namespace store
 
 /*========================================================================
  *
@@ -506,7 +500,7 @@ inline storeError OFileLockBytes_Impl::create (
 inline storeError OFileLockBytes_Impl::create (
     rtl_uString *pFilename, storeAccessMode eAccessMode)
 {
-    OString aFilename (
+    rtl::OString aFilename (
         pFilename->buffer,
         pFilename->length,
         osl_getThreadTextEncoding());
@@ -624,7 +618,7 @@ inline storeError OFileLockBytes_Impl::readAt (
         if (!(nOffset < m_nSize))
             return store_E_None;
 
-        nBytes = VOS_MIN(nOffset + nBytes, m_nSize) - nOffset;
+        nBytes = SAL_MIN(nOffset + nBytes, m_nSize) - nOffset;
         if (!(nBytes > 0))
             return store_E_None;
 
@@ -741,19 +735,13 @@ inline storeError OFileLockBytes_Impl::stat (sal_uInt32 &rnSize)
  * OFileLockBytes implementation.
  *
  *======================================================================*/
-VOS_IMPLEMENT_CLASSINFO(
-    VOS_CLASSNAME (OFileLockBytes, store),
-    VOS_NAMESPACE (OFileLockBytes, store),
-    VOS_NAMESPACE (OStoreObject, store),
-    0);
-
 /*
  * OFileLockBytes.
  */
 OFileLockBytes::OFileLockBytes (void)
 {
     // Acquire exclusive access.
-    osl::Guard<osl::Mutex> aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
     m_pImpl = new OFileLockBytes_Impl();
 }
 
@@ -763,15 +751,14 @@ OFileLockBytes::OFileLockBytes (void)
 OFileLockBytes::~OFileLockBytes (void)
 {
     // Acquire exclusive access.
-    osl::Guard<osl::Mutex> aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
     delete m_pImpl;
 }
 
 /*
  * acquire.
  */
-NAMESPACE_VOS(IReference)::RefCount
-SAL_CALL OFileLockBytes::acquire (void)
+oslInterlockedCount SAL_CALL OFileLockBytes::acquire (void)
 {
     return OStoreObject::acquire();
 }
@@ -779,19 +766,9 @@ SAL_CALL OFileLockBytes::acquire (void)
 /*
  * release.
  */
-NAMESPACE_VOS(IReference)::RefCount
-SAL_CALL OFileLockBytes::release (void)
+oslInterlockedCount SAL_CALL OFileLockBytes::release (void)
 {
     return OStoreObject::release();
-}
-
-/*
- * referenced.
- */
-NAMESPACE_VOS(IReference)::RefCount
-SAL_CALL OFileLockBytes::referenced (void) const
-{
-    return OStoreObject::referenced();
 }
 
 /*
@@ -802,7 +779,7 @@ storeError OFileLockBytes::create (
     storeAccessMode  eAccessMode)
 {
     // Acquire exclusive access.
-    osl::Guard<osl::Mutex> aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
 
     if (pFilename)
         return m_pImpl->create (pFilename, eAccessMode);
@@ -823,7 +800,7 @@ storeError OFileLockBytes::readAt (
     rnDone = 0;
 
     // Acquire exclusive access.
-    osl::Guard<osl::Mutex> aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
     if (m_pImpl->isValid())
         return m_pImpl->readAt (nOffset, pBuffer, nBytes, rnDone);
     else
@@ -843,7 +820,7 @@ storeError OFileLockBytes::writeAt (
     rnDone = 0;
 
     // Acquire exclusive access.
-    osl::Guard<osl::Mutex> aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
     if (m_pImpl->isValid())
         return m_pImpl->writeAt (nOffset, pBuffer, nBytes, rnDone);
     else
@@ -856,7 +833,7 @@ storeError OFileLockBytes::writeAt (
 storeError OFileLockBytes::flush (void)
 {
     // Acquire exclusive access.
-    osl::Guard<osl::Mutex> aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
     if (m_pImpl->isValid())
         return m_pImpl->sync();
     else
@@ -869,7 +846,7 @@ storeError OFileLockBytes::flush (void)
 storeError OFileLockBytes::setSize (sal_uInt32 nSize)
 {
     // Acquire exclusive access.
-    osl::Guard<osl::Mutex> aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
     if (m_pImpl->isValid())
         return m_pImpl->resize (nSize);
     else
@@ -885,7 +862,7 @@ storeError OFileLockBytes::stat (sal_uInt32 &rnSize)
     rnSize = 0;
 
     // Acquire exclusive access.
-    osl::Guard<osl::Mutex> aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
     if (m_pImpl->isValid())
         return m_pImpl->stat (rnSize);
     else
@@ -899,7 +876,7 @@ storeError OFileLockBytes::lockRange (
     sal_uInt32 nOffset, sal_uInt32 nBytes)
 {
     // Acquire exclusive access.
-    osl::Guard<osl::Mutex> aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
     if (m_pImpl->isValid())
         return store_E_None; // E_Unsupported
     else
@@ -913,7 +890,7 @@ storeError OFileLockBytes::unlockRange (
     sal_uInt32 nOffset, sal_uInt32 nBytes)
 {
     // Acquire exclusive access.
-    osl::Guard<osl::Mutex> aGuard (m_aMutex);
+    osl::MutexGuard aGuard (m_aMutex);
     if (m_pImpl->isValid())
         return store_E_None; // E_Unsupported
     else

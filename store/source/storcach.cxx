@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storcach.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:32 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 20:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,12 +54,12 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
-#define _STORE_STORCACH_CXX "$Revision: 1.1.1.1 $"
+#define _STORE_STORCACH_CXX "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -69,18 +69,15 @@
 #include <rtl/memory.h>
 #endif
 
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
 #ifndef _STORE_TYPES_H_
 #include <store/types.h>
-#endif
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
 #endif
 
 #ifndef _STORE_STORBASE_HXX_
@@ -90,11 +87,7 @@
 #include <storcach.hxx>
 #endif
 
-#include <string.h>
-
-#ifdef _USE_NAMESPACE
 using namespace store;
-#endif
 
 /*========================================================================
  *
@@ -104,9 +97,9 @@ using namespace store;
 /*
  * __store_memcpy.
  */
+#include <string.h>
 inline void __store_memcpy (void *dst, const void *src, sal_uInt32 n)
 {
-    // rtl_copyMemory (dst, src, n);
     ::memcpy (dst, src, n);
 }
 
@@ -115,9 +108,8 @@ inline void __store_memcpy (void *dst, const void *src, sal_uInt32 n)
  * OStorePageCacheEntry.
  *
  *======================================================================*/
-#ifdef _USE_NAMESPACE
-namespace store {
-#endif
+namespace store
+{
 
 struct OStorePageCacheEntry
 {
@@ -135,11 +127,12 @@ struct OStorePageCacheEntry
     /** Construction.
     */
     OStorePageCacheEntry (const D& rDescr, const data& rData)
-        : m_aDescr (rDescr), m_pData (NULL), m_pNext (this), m_pPrev (this)
+        : m_aDescr (rDescr)
     {
         sal_uInt16 nSize = m_aDescr.m_nSize;
         m_pData = new(nSize) data(nSize);
         __store_memcpy (m_pData, &rData, nSize);
+        m_pNext = m_pPrev = this;
     }
 
     /** Data assignment.
@@ -247,9 +240,7 @@ struct OStorePageCacheEntry
     }
 };
 
-#ifdef _USE_NAMESPACE
-}
-#endif
+} // namespace store
 
 /*========================================================================
  *
@@ -396,7 +387,7 @@ void OStorePageCache::move (sal_uInt16 nSI, sal_uInt16 nDI)
     m_pData[nDI]->index(nDI);
 
 #if 0  /* DEBUG */
-    VOS_POSTCOND(
+    OSL_POSTCOND(
         __store_check_entry(&m_pData[0], m_nUsed),
         "OStorePageCache::move(): check_entry() failed");
 #endif /* DEBUG */
@@ -413,7 +404,7 @@ storeError OStorePageCache::insert (
     InsertMode                  eMode)
 {
 #if 0  /* DEBUG */
-    VOS_PRECOND(
+    OSL_PRECOND(
         __store_check_entry(&m_pData[0], m_nUsed),
         "OStorePageCache::insert(): check_entry() failed");
 #endif /* DEBUG */
@@ -514,7 +505,7 @@ storeError OStorePageCache::load (
     const OStorePageDescriptor &rDescr,
     OStorePageData             &rData,
     OStorePageBIOS             &rBIOS,
-    NAMESPACE_VOS(IMutex)      *pMutex)
+    osl::Mutex                 *pMutex)
 {
     // Enter.
     STORE_METHOD_ENTER(pMutex);
@@ -567,7 +558,7 @@ storeError OStorePageCache::update (
     const OStorePageDescriptor &rDescr,
     const OStorePageData       &rData,
     OStorePageBIOS             &rBIOS,
-    NAMESPACE_VOS(IMutex)      *pMutex,
+    osl::Mutex                 *pMutex,
     UpdateMode                  eMode)
 {
     // Enter.
@@ -624,7 +615,7 @@ storeError OStorePageCache::update (
  */
 storeError OStorePageCache::invalidate (
     const OStorePageDescriptor &rDescr,
-    NAMESPACE_VOS(IMutex)      *pMutex)
+    osl::Mutex                 *pMutex)
 {
     // Enter.
     STORE_METHOD_ENTER(pMutex);
@@ -661,8 +652,8 @@ storeError OStorePageCache::invalidate (
  * flush.
  */
 storeError OStorePageCache::flush (
-    OStorePageBIOS        &rBIOS,
-    NAMESPACE_VOS(IMutex) *pMutex)
+    OStorePageBIOS &rBIOS,
+    osl::Mutex     *pMutex)
 {
     // Enter.
     STORE_METHOD_ENTER(pMutex);
@@ -679,7 +670,7 @@ storeError OStorePageCache::flush (
             // Write page.
             storeError eErrCode = rBIOS.write (
                 aDescr.m_nAddr, m_pData[i]->m_pData, aDescr.m_nSize);
-            VOS_POSTCOND(
+            OSL_POSTCOND(
                 eErrCode == store_E_None,
                 "OStorePageCache::flush(): write() failed");
 

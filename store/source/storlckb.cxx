@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storlckb.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:32 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 21:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,15 +54,18 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
-#define _STORE_STORLCKB_CXX_ "$Revision: 1.1.1.1 $"
+#define _STORE_STORLCKB_CXX_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
+#endif
+#ifndef _SAL_MACROS_H_
+#include <sal/macros.h>
 #endif
 
 #ifndef _RTL_MEMORY_H_
@@ -74,19 +77,16 @@
 #ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
 #endif
-
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
+
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
 #ifndef _STORE_TYPES_H_
 #include <store/types.h>
-#endif
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
 #endif
 #ifndef _STORE_OBJECT_HXX_
 #include <store/object.hxx>
@@ -109,10 +109,7 @@
 #include <storlckb.hxx>
 #endif
 
-#ifdef _USE_NAMESPACE
-using namespace rtl;
 using namespace store;
-#endif
 
 /*========================================================================
  *
@@ -219,11 +216,7 @@ static storeError __store_iget (
  * OStoreDirectory implementation.
  *
  *======================================================================*/
-VOS_IMPLEMENT_CLASSINFO(
-    VOS_CLASSNAME (OStoreDirectory, store),
-    VOS_NAMESPACE (OStoreDirectory, store),
-    VOS_NAMESPACE (OStoreObject, store),
-    0);
+const sal_uInt32 OStoreDirectory::m_nTypeId = sal_uInt32(0x89191107);
 
 /*
  * OStoreDirectory.
@@ -242,9 +235,9 @@ OStoreDirectory::OStoreDirectory (void)
  */
 OStoreDirectory::~OStoreDirectory (void)
 {
-    if (m_xManager.isValid())
+    if (m_xManager.is())
     {
-        NAMESPACE_VOS(OGuard) aGuard (*m_xManager);
+        osl::MutexGuard aGuard (*m_xManager);
         if (m_pNode)
         {
             m_xManager->releasePage (m_aDescr, store_AccessReadOnly);
@@ -252,6 +245,14 @@ OStoreDirectory::~OStoreDirectory (void)
     }
     delete m_pNode;
     rtl_destroyTextToUnicodeConverter (m_hTextCvt);
+}
+
+/*
+ * isKindOf.
+ */
+sal_Bool SAL_CALL OStoreDirectory::isKindOf (sal_uInt32 nTypeId)
+{
+    return (nTypeId == m_nTypeId);
 }
 
 /*
@@ -263,14 +264,14 @@ storeError OStoreDirectory::create (
     rtl_uString       *pName,
     storeAccessMode    eMode)
 {
-    NAMESPACE_VOS(ORef)<OStorePageManager> xManager (pManager);
-    if (!xManager.isValid())
+    rtl::Reference<OStorePageManager> xManager (pManager);
+    if (!xManager.is())
         return store_E_InvalidAccess;
 
     if (!(pPath && pName))
         return store_E_InvalidParameter;
 
-    NAMESPACE_VOS(OGuard) aGuard (*xManager);
+    osl::MutexGuard aGuard (*xManager);
     storeError eErrCode = xManager->getPageSize (m_aDescr.m_nSize);
     if (eErrCode != store_E_None)
         return eErrCode;
@@ -280,8 +281,8 @@ storeError OStoreDirectory::create (
     if (!m_pNode)
         return store_E_OutOfMemory;
 
-    OString aPath (pPath->buffer, pPath->length, RTL_TEXTENCODING_UTF8);
-    OString aName (pName->buffer, pName->length, RTL_TEXTENCODING_UTF8);
+    rtl::OString aPath (pPath->buffer, pPath->length, RTL_TEXTENCODING_UTF8);
+    rtl::OString aName (pName->buffer, pName->length, RTL_TEXTENCODING_UTF8);
 
     eErrCode = __store_iget (
         *xManager, *m_pNode, STORE_ATTRIB_ISDIR,
@@ -316,7 +317,7 @@ storeError OStoreDirectory::create (
  */
 storeError OStoreDirectory::iterate (storeFindData &rFindData)
 {
-    if (!m_xManager.isValid())
+    if (!m_xManager.is())
         return store_E_InvalidAccess;
 
     storeError eErrCode = store_E_NoMoreFiles;
@@ -324,7 +325,7 @@ storeError OStoreDirectory::iterate (storeFindData &rFindData)
         return eErrCode;
 
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard (*m_xManager);
+    osl::MutexGuard aGuard (*m_xManager);
 
     // Check TextConverter.
     if (m_hTextCvt == NULL)
@@ -387,11 +388,7 @@ storeError OStoreDirectory::iterate (storeFindData &rFindData)
  * OStoreLockBytes implementation.
  *
  *======================================================================*/
-VOS_IMPLEMENT_CLASSINFO(
-    VOS_CLASSNAME (OStoreLockBytes, store),
-    VOS_NAMESPACE (OStoreLockBytes, store),
-    VOS_NAMESPACE (OStoreObject, store),
-    0);
+const sal_uInt32 OStoreLockBytes::m_nTypeId = sal_uInt32(0x94190310);
 
 /*
  * OStoreLockBytes.
@@ -413,9 +410,9 @@ OStoreLockBytes::OStoreLockBytes (void)
  */
 OStoreLockBytes::~OStoreLockBytes (void)
 {
-    if (m_xManager.isValid())
+    if (m_xManager.is())
     {
-        NAMESPACE_VOS(OGuard) aGuard (*m_xManager);
+        osl::MutexGuard aGuard (*m_xManager);
         if (m_pNode)
         {
             OStorePageDescriptor aDescr (m_pNode->m_aDescr);
@@ -435,10 +432,17 @@ OStoreLockBytes::~OStoreLockBytes (void)
 }
 
 /*
+ * isKindOf.
+ */
+sal_Bool SAL_CALL OStoreLockBytes::isKindOf (sal_uInt32 nTypeId)
+{
+    return (nTypeId == m_nTypeId);
+}
+
+/*
  * acquire.
  */
-NAMESPACE_VOS(IReference)::RefCount
-SAL_CALL OStoreLockBytes::acquire (void)
+oslInterlockedCount SAL_CALL OStoreLockBytes::acquire (void)
 {
     return OStoreObject::acquire();
 }
@@ -446,19 +450,9 @@ SAL_CALL OStoreLockBytes::acquire (void)
 /*
  * release.
  */
-NAMESPACE_VOS(IReference)::RefCount
-SAL_CALL OStoreLockBytes::release (void)
+oslInterlockedCount SAL_CALL OStoreLockBytes::release (void)
 {
     return OStoreObject::release();
-}
-
-/*
- * referenced.
- */
-NAMESPACE_VOS(IReference)::RefCount
-SAL_CALL OStoreLockBytes::referenced (void) const
-{
-    return OStoreObject::referenced();
 }
 
 /*
@@ -470,14 +464,14 @@ storeError OStoreLockBytes::create (
     rtl_uString       *pName,
     storeAccessMode    eMode)
 {
-    NAMESPACE_VOS(ORef)<OStorePageManager> xManager (pManager);
-    if (!xManager.isValid())
+    rtl::Reference<OStorePageManager> xManager (pManager);
+    if (!xManager.is())
         return store_E_InvalidAccess;
 
     if (!(pPath && pName))
         return store_E_InvalidParameter;
 
-    NAMESPACE_VOS(OGuard) aGuard (*xManager);
+    osl::MutexGuard aGuard (*xManager);
     storeError eErrCode = xManager->getPageSize (m_nPageSize);
     if (eErrCode != store_E_None)
         return eErrCode;
@@ -487,8 +481,8 @@ storeError OStoreLockBytes::create (
     if (!m_pNode)
         return store_E_OutOfMemory;
 
-    OString aPath (pPath->buffer, pPath->length, RTL_TEXTENCODING_UTF8);
-    OString aName (pName->buffer, pName->length, RTL_TEXTENCODING_UTF8);
+    rtl::OString aPath (pPath->buffer, pPath->length, RTL_TEXTENCODING_UTF8);
+    rtl::OString aName (pName->buffer, pName->length, RTL_TEXTENCODING_UTF8);
 
     eErrCode = __store_iget (
         *xManager, *m_pNode, STORE_ATTRIB_ISFILE,
@@ -537,7 +531,7 @@ storeError OStoreLockBytes::readAt (
 {
     rnDone = 0;
 
-    if (!m_xManager.isValid())
+    if (!m_xManager.is())
         return store_E_InvalidAccess;
 
     if (!pBuffer)
@@ -546,7 +540,7 @@ storeError OStoreLockBytes::readAt (
         return store_E_None;
 
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard (*m_xManager);
+    osl::MutexGuard aGuard (*m_xManager);
 
     // Determine data length.
     OStoreDirectoryPageObject aPage (*m_pNode);
@@ -566,7 +560,9 @@ storeError OStoreLockBytes::readAt (
             // Read from inode page (internal scope).
             inode::ChunkDescriptor aDescr (
                 nOffset, m_pNode->capacity());
-            sal_uInt32 nLength = VOS_MIN (aDescr.m_nLength, nBytes);
+
+            sal_uInt32 nLength = sal_uInt32(aDescr.m_nLength);
+            nLength = SAL_MIN(nLength, nBytes);
 
             rtl_copyMemory (
                 &pData[rnDone],
@@ -589,7 +585,9 @@ storeError OStoreLockBytes::readAt (
 
             inode::ChunkDescriptor aDescr (
                 nOffset - m_pNode->capacity(), m_pData->capacity());
-            sal_uInt32 nLength = VOS_MIN (aDescr.m_nLength, nBytes);
+
+            sal_uInt32 nLength = sal_uInt32(aDescr.m_nLength);
+            nLength = SAL_MIN(nLength, nBytes);
 
             storeError eErrCode = aPage.get (
                 aDescr.m_nPage, m_pSingle, m_pDouble, m_pTriple,
@@ -633,7 +631,7 @@ storeError OStoreLockBytes::writeAt (
 {
     rnDone = 0;
 
-    if (!m_xManager.isValid())
+    if (!m_xManager.is())
         return store_E_InvalidAccess;
     if (!m_bWriteable)
         return store_E_AccessViolation;
@@ -644,7 +642,7 @@ storeError OStoreLockBytes::writeAt (
         return store_E_None;
 
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard (*m_xManager);
+    osl::MutexGuard aGuard (*m_xManager);
 
     // Write data.
     OStoreDirectoryPageObject aPage (*m_pNode);
@@ -660,7 +658,9 @@ storeError OStoreLockBytes::writeAt (
             // Write to inode page (internal scope).
             inode::ChunkDescriptor aDescr (
                 nOffset, m_pNode->capacity());
-            sal_uInt32 nLength = VOS_MIN (aDescr.m_nLength, nBytes);
+
+            sal_uInt32 nLength = sal_uInt32(aDescr.m_nLength);
+            nLength = SAL_MIN(nLength, nBytes);
 
             rtl_copyMemory (
                 &m_pNode->m_pData[aDescr.m_nOffset],
@@ -689,8 +689,8 @@ storeError OStoreLockBytes::writeAt (
 
             inode::ChunkDescriptor aDescr (
                 nOffset - m_pNode->capacity(), m_pData->capacity());
-            sal_uInt32 nLength = aDescr.m_nLength;
 
+            sal_uInt32 nLength = sal_uInt32(aDescr.m_nLength);
             if ((aDescr.m_nOffset > 0) || (nBytes < nLength))
             {
                 // Unaligned. Need to load/create data page.
@@ -709,7 +709,7 @@ storeError OStoreLockBytes::writeAt (
             }
 
             // Modify data page.
-            nLength = VOS_MIN (nLength, nBytes);
+            nLength = SAL_MIN(nLength, nBytes);
 
             rtl_copyMemory (
                 &m_pData->m_pData[aDescr.m_nOffset],
@@ -745,7 +745,7 @@ storeError OStoreLockBytes::writeAt (
  */
 storeError OStoreLockBytes::flush (void)
 {
-    if (!m_xManager.isValid())
+    if (!m_xManager.is())
         return store_E_InvalidAccess;
 
     return m_xManager->flush();
@@ -756,13 +756,13 @@ storeError OStoreLockBytes::flush (void)
  */
 storeError OStoreLockBytes::setSize (sal_uInt32 nSize)
 {
-    if (!m_xManager.isValid())
+    if (!m_xManager.is())
         return store_E_InvalidAccess;
     if (!m_bWriteable)
         return store_E_AccessViolation;
 
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard (*m_xManager);
+    osl::MutexGuard aGuard (*m_xManager);
 
     // Determine current length.
     OStoreDirectoryPageObject aPage (*m_pNode);
@@ -843,7 +843,7 @@ storeError OStoreLockBytes::stat (sal_uInt32 &rnSize)
 {
     rnSize = 0;
 
-    if (!m_xManager.isValid())
+    if (!m_xManager.is())
         return store_E_InvalidAccess;
 
     rnSize = m_pNode->m_aDataBlock.m_nDataLen;

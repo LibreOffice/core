@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storbase.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:32 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 20:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,13 +54,13 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
 #ifndef _STORE_STORBASE_HXX_
-#define _STORE_STORBASE_HXX_ "$Revision: 1.1.1.1 $"
+#define _STORE_STORBASE_HXX_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -75,22 +75,19 @@
 #ifndef _RTL_STRING_H_
 #include <rtl/string.h>
 #endif
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
 
-#ifndef _VOS_MACROS_HXX_
-#include <vos/macros.hxx>
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
 #endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
-#endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
 #ifndef _STORE_TYPES_H_
 #include <store/types.h>
-#endif
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
 #endif
 #ifndef _STORE_OBJECT_HXX_
 #include <store/object.hxx>
@@ -103,9 +100,8 @@
 #define __STORE_DELETEZ(p) (delete p, p = 0)
 #endif
 
-#ifdef _USE_NAMESPACE
-namespace store {
-#endif
+namespace store
+{
 
 /*========================================================================
  *
@@ -151,8 +147,8 @@ struct OStorePageGuard
     void swap (void)
     {
 #ifdef OSL_BIGENDIAN
-        m_nMagic = VOS_SWAPDWORD(m_nMagic);
-        m_nCRC32 = VOS_SWAPDWORD(m_nCRC32);
+        m_nMagic = OSL_SWAPDWORD(m_nMagic);
+        m_nCRC32 = OSL_SWAPDWORD(m_nCRC32);
 #endif /* OSL_BIGENDIAN */
     }
 
@@ -236,9 +232,9 @@ struct OStorePageDescriptor
     void swap (void)
     {
 #ifdef OSL_BIGENDIAN
-        m_nAddr = VOS_SWAPDWORD(m_nAddr);
-        m_nSize = VOS_SWAPWORD(m_nSize);
-        m_nUsed = VOS_SWAPWORD(m_nUsed);
+        m_nAddr = OSL_SWAPDWORD(m_nAddr);
+        m_nSize = OSL_SWAPWORD(m_nSize);
+        m_nUsed = OSL_SWAPWORD(m_nUsed);
 #endif /* OSL_BIGENDIAN */
     }
 };
@@ -293,8 +289,8 @@ struct OStorePageKey
     void swap (void)
     {
 #ifdef OSL_BIGENDIAN
-        m_nLow  = VOS_SWAPDWORD(m_nLow);
-        m_nHigh = VOS_SWAPDWORD(m_nHigh);
+        m_nLow  = OSL_SWAPDWORD(m_nLow);
+        m_nHigh = OSL_SWAPDWORD(m_nHigh);
 #endif /* OSL_BIGENDIAN */
     }
 };
@@ -358,7 +354,7 @@ struct OStorePageLink
     void swap (void)
     {
 #ifdef OSL_BIGENDIAN
-        m_nAddr = VOS_SWAPDWORD(m_nAddr);
+        m_nAddr = OSL_SWAPDWORD(m_nAddr);
 #endif /* OSL_BIGENDIAN */
     }
 };
@@ -420,7 +416,7 @@ struct OStorePageNameBlock
 #ifdef OSL_BIGENDIAN
         m_aGuard.swap();
         m_aKey.swap();
-        m_nAttrib = VOS_SWAPDWORD(m_nAttrib);
+        m_nAttrib = OSL_SWAPDWORD(m_nAttrib);
 #endif /* OSL_BIGENDIAN */
     }
 
@@ -432,7 +428,7 @@ struct OStorePageNameBlock
         nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
         nCRC32 = G::crc32 (nCRC32, &m_aKey, size() - sizeof(G));
 #ifdef OSL_BIGENDIAN
-        nCRC32 = VOS_SWAPDWORD(nCRC32);
+        nCRC32 = OSL_SWAPDWORD(nCRC32);
 #endif /* OSL_BIGENDIAN */
         m_aGuard.m_nCRC32 = nCRC32;
     }
@@ -445,7 +441,7 @@ struct OStorePageNameBlock
         nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
         nCRC32 = G::crc32 (nCRC32, &m_aKey, size() - sizeof(G));
 #ifdef OSL_BIGENDIAN
-        nCRC32 = VOS_SWAPDWORD(nCRC32);
+        nCRC32 = OSL_SWAPDWORD(nCRC32);
 #endif /* OSL_BIGENDIAN */
         if (m_aGuard.m_nCRC32 != nCRC32)
             return store_E_InvalidChecksum;
@@ -576,7 +572,7 @@ struct OStorePageData
         nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
         nCRC32 = G::crc32 (nCRC32, &m_aDescr, size() - sizeof(G));
 #ifdef OSL_BIGENDIAN
-        nCRC32 = VOS_SWAPDWORD(nCRC32);
+        nCRC32 = OSL_SWAPDWORD(nCRC32);
 #endif /* OSL_BIGENDIAN */
         m_aGuard.m_nCRC32 = nCRC32;
     }
@@ -589,7 +585,7 @@ struct OStorePageData
         nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
         nCRC32 = G::crc32 (nCRC32, &m_aDescr, size() - sizeof(G));
 #ifdef OSL_BIGENDIAN
-        nCRC32 = VOS_SWAPDWORD(nCRC32);
+        nCRC32 = OSL_SWAPDWORD(nCRC32);
 #endif /* OSL_BIGENDIAN */
         if (m_aGuard.m_nCRC32 != nCRC32)
             return store_E_InvalidChecksum;
@@ -698,18 +694,16 @@ inline void OStorePageObject::location (sal_uInt32 nAddr)
 struct OStoreSuperBlockPage;
 struct OStorePageACL;
 
-class OStorePageBIOS : public NAMESPACE_STORE(OStoreObject)
+class OStorePageBIOS : public store::OStoreObject
 {
-    VOS_DECLARE_CLASSINFO (VOS_NAMESPACE (OStorePageBIOS, store));
-
 public:
     /** Construction.
      */
     OStorePageBIOS (void);
 
-    /** Conversion into IMutex&
+    /** Conversion into Mutex&
      */
-    inline operator NAMESPACE_VOS(IMutex)& (void) const;
+    inline operator osl::Mutex& (void) const;
 
     /** Initialization.
      *  @param  pLockBytes [in]
@@ -856,15 +850,15 @@ protected:
 private:
     /** Representation.
      */
-    NAMESPACE_VOS(ORef)<ILockBytes>  m_xLockBytes;
-    NAMESPACE_VOS(OMutex)            m_aMutex;
-    OStorePageACL                   *m_pAcl;
+    rtl::Reference<ILockBytes>    m_xLockBytes;
+    osl::Mutex                    m_aMutex;
+    OStorePageACL                *m_pAcl;
 
-    typedef OStoreSuperBlockPage     SuperPage;
-    SuperPage                       *m_pSuper;
+    typedef OStoreSuperBlockPage  SuperPage;
+    SuperPage                    *m_pSuper;
 
-    sal_Bool                         m_bModified  : 1;
-    sal_Bool                         m_bWriteable : 1;
+    sal_Bool                      m_bModified  : 1;
+    sal_Bool                      m_bWriteable : 1;
 
     /** SuperBlock verification and repair.
      */
@@ -877,9 +871,9 @@ private:
     OStorePageBIOS& operator= (const OStorePageBIOS&);
 };
 
-inline OStorePageBIOS::operator NAMESPACE_VOS(IMutex)& (void) const
+inline OStorePageBIOS::operator osl::Mutex& (void) const
 {
-    return (NAMESPACE_VOS(IMutex)&)m_aMutex;
+    return (osl::Mutex&)m_aMutex;
 }
 inline sal_Bool OStorePageBIOS::isModified (void) const
 {
@@ -891,7 +885,7 @@ inline sal_Bool OStorePageBIOS::isWriteable (void) const
 }
 inline sal_Bool OStorePageBIOS::isValid (void) const
 {
-    return m_xLockBytes.isValid();
+    return m_xLockBytes.is();
 }
 
 inline OStorePageBIOS::ScanContext::ScanContext (void)
@@ -908,9 +902,8 @@ inline sal_Bool OStorePageBIOS::ScanContext::isValid (void) const
  * The End.
  *
  *======================================================================*/
-#ifdef _USE_NAMESPACE
-}
-#endif
+
+} // namespace store
 
 #endif /* !_STORE_STORBASE_HXX_ */
 

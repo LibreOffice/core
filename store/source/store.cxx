@@ -2,9 +2,9 @@
  *
  *  $RCSfile: store.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:32 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 20:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,12 +54,12 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
-#define _STORE_STORE_CXX_ "$Revision: 1.1.1.1 $"
+#define _STORE_STORE_CXX_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -71,19 +71,12 @@
 #ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
 #endif
-
-#ifndef _VOS_OBJECT_HXX_
-#include <vos/object.hxx>
-#endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
 
 #ifndef _STORE_STORE_H_
 #include <store/store.h>
-#endif
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
 #endif
 #ifndef _STORE_OBJECT_HXX_
 #include <store/object.hxx>
@@ -105,12 +98,10 @@
 #include <storlckb.hxx>
 #endif
 
-#ifdef _USE_NAMESPACE
-using namespace rtl;
-using namespace store;
-#endif
+using rtl::Reference;
+using rtl::OString;
 
-typedef NAMESPACE_VOS(ORef)<OStorePageManager> OStorePageManagerRef;
+using namespace store;
 
 /*========================================================================
  *
@@ -120,32 +111,30 @@ typedef NAMESPACE_VOS(ORef)<OStorePageManager> OStorePageManagerRef;
 /*
  * store_acquireHandle.
  */
-storeError SAL_CALL store_acquireHandle (storeHandle Handle)
+storeError SAL_CALL store_acquireHandle (
+    storeHandle Handle
+) SAL_THROW_EXTERN_C()
 {
-    OStoreObject *pObj = (OStoreObject*)Handle;
-    if (!pObj)
+    IStoreHandle *pHandle = static_cast<IStoreHandle*>(Handle);
+    if (!pHandle)
         return store_E_InvalidHandle;
 
-    if (!pObj->isKindOf (VOS_CLASSINFO (OStoreObject)))
-        return store_E_InvalidHandle;
-
-    pObj->acquire();
+    pHandle->acquire();
     return store_E_None;
 }
 
 /*
  * store_releaseHandle.
  */
-storeError SAL_CALL store_releaseHandle (storeHandle Handle)
+storeError SAL_CALL store_releaseHandle (
+    storeHandle Handle
+) SAL_THROW_EXTERN_C()
 {
-    OStoreObject *pObj = (OStoreObject*)Handle;
-    if (!pObj)
+    IStoreHandle *pHandle = static_cast<IStoreHandle*>(Handle);
+    if (!pHandle)
         return store_E_InvalidHandle;
 
-    if (!pObj->isKindOf (VOS_CLASSINFO (OStoreObject)))
-        return store_E_InvalidHandle;
-
-    pObj->release();
+    pHandle->release();
     return store_E_None;
 }
 
@@ -159,18 +148,19 @@ storeError SAL_CALL store_releaseHandle (storeHandle Handle)
  */
 storeError SAL_CALL store_createMemoryFile (
     sal_uInt16       nPageSize,
-    storeFileHandle *phFile)
+    storeFileHandle *phFile
+) SAL_THROW_EXTERN_C()
 {
     if (!phFile)
         return store_E_InvalidParameter;
     *phFile = NULL;
 
-    NAMESPACE_VOS(ORef)<OMemoryLockBytes> xLockBytes (new OMemoryLockBytes());
-    if (!xLockBytes.isValid())
+    Reference<OMemoryLockBytes> xLockBytes (new OMemoryLockBytes());
+    if (!xLockBytes.is())
         return store_E_OutOfMemory;
 
-    NAMESPACE_VOS(ORef)<OStorePageManager> xManager (new OStorePageManager());
-    if (!xManager.isValid())
+    Reference<OStorePageManager> xManager (new OStorePageManager());
+    if (!xManager.is())
         return store_E_OutOfMemory;
 
     storeError eErrCode = xManager->initialize (
@@ -191,7 +181,8 @@ storeError SAL_CALL store_openFile (
     rtl_uString     *pFilename,
     storeAccessMode  eAccessMode,
     sal_uInt16       nPageSize,
-    storeFileHandle *phFile)
+    storeFileHandle *phFile
+) SAL_THROW_EXTERN_C()
 {
     if (phFile)
         *phFile = NULL;
@@ -199,16 +190,16 @@ storeError SAL_CALL store_openFile (
     if (!(pFilename && phFile))
         return store_E_InvalidParameter;
 
-    NAMESPACE_VOS(ORef)<OFileLockBytes> xLockBytes (new OFileLockBytes());
-    if (!xLockBytes.isValid())
+    Reference<OFileLockBytes> xLockBytes (new OFileLockBytes());
+    if (!xLockBytes.is())
         return store_E_OutOfMemory;
 
     storeError eErrCode = xLockBytes->create (pFilename, eAccessMode);
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    NAMESPACE_VOS(ORef)<OStorePageManager> xManager (new OStorePageManager());
-    if (!xManager.isValid())
+    Reference<OStorePageManager> xManager (new OStorePageManager());
+    if (!xManager.is())
         return store_E_OutOfMemory;
 
     eErrCode = xManager->initialize (&*xLockBytes, eAccessMode, nPageSize);
@@ -224,30 +215,30 @@ storeError SAL_CALL store_openFile (
 /*
  * store_closeFile.
  */
-storeError SAL_CALL store_closeFile (storeFileHandle Handle)
+storeError SAL_CALL store_closeFile (
+    storeFileHandle Handle
+) SAL_THROW_EXTERN_C()
 {
-    OStorePageManager *pObj = (OStorePageManager*)Handle;
-    if (!pObj)
+    OStorePageManager *pManager =
+        OStoreHandle<OStorePageManager>::query (Handle);
+    if (!pManager)
         return store_E_InvalidHandle;
 
-    if (!pObj->isKindOf (VOS_CLASSINFO (OStorePageManager)))
-        return store_E_InvalidHandle;
-
-    pObj->close();
-    pObj->release();
+    pManager->close();
+    pManager->release();
     return store_E_None;
 }
 
 /*
  * store_flushFile.
  */
-storeError SAL_CALL store_flushFile (storeFileHandle Handle)
+storeError SAL_CALL store_flushFile (
+    storeFileHandle Handle
+) SAL_THROW_EXTERN_C()
 {
-    OStorePageManagerRef xManager ((OStorePageManager*)Handle);
-    if (!xManager.isValid())
-        return store_E_InvalidHandle;
-
-    if (!xManager->isKindOf (VOS_CLASSINFO (OStorePageManager)))
+    OStoreHandle<OStorePageManager> xManager (
+        OStoreHandle<OStorePageManager>::query (Handle));
+    if (!xManager.is())
         return store_E_InvalidHandle;
 
     return xManager->flush();
@@ -257,13 +248,13 @@ storeError SAL_CALL store_flushFile (storeFileHandle Handle)
  * store_getFileRefererCount.
  */
 storeError SAL_CALL store_getFileRefererCount (
-    storeFileHandle Handle, sal_uInt32 *pnRefCount)
+    storeFileHandle  Handle,
+    sal_uInt32      *pnRefCount
+) SAL_THROW_EXTERN_C()
 {
-    OStorePageManagerRef xManager ((OStorePageManager*)Handle);
-    if (!xManager.isValid())
-        return store_E_InvalidHandle;
-
-    if (!xManager->isKindOf (VOS_CLASSINFO (OStorePageManager)))
+    OStoreHandle<OStorePageManager> xManager (
+        OStoreHandle<OStorePageManager>::query (Handle));
+    if (!xManager.is())
         return store_E_InvalidHandle;
 
     if (!pnRefCount)
@@ -277,13 +268,13 @@ storeError SAL_CALL store_getFileRefererCount (
  * store_getFileSize.
  */
 storeError SAL_CALL store_getFileSize (
-    storeFileHandle Handle, sal_uInt32 *pnSize)
+    storeFileHandle  Handle,
+    sal_uInt32      *pnSize
+) SAL_THROW_EXTERN_C()
 {
-    OStorePageManagerRef xManager ((OStorePageManager*)Handle);
-    if (!xManager.isValid())
-        return store_E_InvalidHandle;
-
-    if (!xManager->isKindOf (VOS_CLASSINFO (OStorePageManager)))
+    OStoreHandle<OStorePageManager> xManager (
+        OStoreHandle<OStorePageManager>::query (Handle));
+    if (!xManager.is())
         return store_E_InvalidHandle;
 
     if (!pnSize)
@@ -297,27 +288,28 @@ storeError SAL_CALL store_getFileSize (
  */
 storeError SAL_CALL store_rebuildFile (
     rtl_uString *pSrcFilename,
-    rtl_uString *pDstFilename)
+    rtl_uString *pDstFilename
+) SAL_THROW_EXTERN_C()
 {
     storeError eErrCode = store_E_None;
 
     if (!(pSrcFilename && pDstFilename))
         return store_E_InvalidParameter;
 
-    OStorePageManagerRef xManager (new OStorePageManager());
-    if (!xManager.isValid())
+    Reference<OStorePageManager> xManager (new OStorePageManager());
+    if (!xManager.is())
         return store_E_OutOfMemory;
 
-    NAMESPACE_VOS(ORef)<OFileLockBytes> xSrcLB (new OFileLockBytes());
-    if (!xSrcLB.isValid())
+    Reference<OFileLockBytes> xSrcLB (new OFileLockBytes());
+    if (!xSrcLB.is())
         return store_E_OutOfMemory;
 
     eErrCode = xSrcLB->create (pSrcFilename, store_AccessReadOnly);
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    NAMESPACE_VOS(ORef)<OFileLockBytes> xDstLB (new OFileLockBytes());
-    if (!xDstLB.isValid())
+    Reference<OFileLockBytes> xDstLB (new OFileLockBytes());
+    if (!xDstLB.is())
         return store_E_OutOfMemory;
 
     eErrCode = xDstLB->create (pDstFilename, store_AccessCreate);
@@ -332,8 +324,6 @@ storeError SAL_CALL store_rebuildFile (
  * storeDirectoryHandle implementation.
  *
  *======================================================================*/
-typedef NAMESPACE_VOS(ORef)<OStoreDirectory> OStoreDirectoryRef;
-
 /*
  * store_openDirectory.
  */
@@ -342,24 +332,23 @@ storeError SAL_CALL store_openDirectory (
     rtl_uString          *pPath,
     rtl_uString          *pName,
     storeAccessMode       eAccessMode,
-    storeDirectoryHandle *phDirectory)
+    storeDirectoryHandle *phDirectory
+) SAL_THROW_EXTERN_C()
 {
     storeError eErrCode = store_E_None;
     if (phDirectory)
         *phDirectory = NULL;
 
-    OStorePageManagerRef xManager ((OStorePageManager*)hFile);
-    if (!xManager.isValid())
-        return store_E_InvalidHandle;
-
-    if (!xManager->isKindOf (VOS_CLASSINFO (OStorePageManager)))
+    OStoreHandle<OStorePageManager> xManager (
+        OStoreHandle<OStorePageManager>::query (hFile));
+    if (!xManager.is())
         return store_E_InvalidHandle;
 
     if (!(pPath && pName && phDirectory))
         return store_E_InvalidParameter;
 
-    OStoreDirectoryRef xDirectory (new OStoreDirectory());
-    if (!xDirectory.isValid())
+    Reference<OStoreDirectory> xDirectory (new OStoreDirectory());
+    if (!xDirectory.is())
         return store_E_OutOfMemory;
 
     eErrCode = xDirectory->create (&*xManager, pPath, pName, eAccessMode);
@@ -375,16 +364,16 @@ storeError SAL_CALL store_openDirectory (
 /*
  * store_closeDirectory.
  */
-storeError SAL_CALL store_closeDirectory (storeDirectoryHandle Handle)
+storeError SAL_CALL store_closeDirectory (
+    storeDirectoryHandle Handle
+) SAL_THROW_EXTERN_C()
 {
-    OStoreDirectory *pObj = (OStoreDirectory*)Handle;
-    if (!pObj)
+    OStoreDirectory *pDirectory =
+        OStoreHandle<OStoreDirectory>::query (Handle);
+    if (!pDirectory)
         return store_E_InvalidHandle;
 
-    if (!pObj->isKindOf (VOS_CLASSINFO (OStoreDirectory)))
-        return store_E_InvalidHandle;
-
-    pObj->release();
+    pDirectory->release();
     return store_E_None;
 }
 
@@ -393,13 +382,12 @@ storeError SAL_CALL store_closeDirectory (storeDirectoryHandle Handle)
  */
 storeError SAL_CALL store_findFirst (
     storeDirectoryHandle  Handle,
-    storeFindData        *pFindData)
+    storeFindData        *pFindData
+) SAL_THROW_EXTERN_C()
 {
-    OStoreDirectoryRef xDirectory ((OStoreDirectory*)Handle);
-    if (!xDirectory.isValid())
-        return store_E_InvalidHandle;
-
-    if (!xDirectory->isKindOf (VOS_CLASSINFO (OStoreDirectory)))
+    OStoreHandle<OStoreDirectory> xDirectory (
+        OStoreHandle<OStoreDirectory>::query (Handle));
+    if (!xDirectory.is())
         return store_E_InvalidHandle;
 
     if (!pFindData)
@@ -418,13 +406,12 @@ storeError SAL_CALL store_findFirst (
  */
 storeError SAL_CALL store_findNext (
     storeDirectoryHandle  Handle,
-    storeFindData        *pFindData)
+    storeFindData        *pFindData
+) SAL_THROW_EXTERN_C()
 {
-    OStoreDirectoryRef xDirectory ((OStoreDirectory*)Handle);
-    if (!xDirectory.isValid())
-        return store_E_InvalidHandle;
-
-    if (!xDirectory->isKindOf (VOS_CLASSINFO (OStoreDirectory)))
+    OStoreHandle<OStoreDirectory> xDirectory (
+        OStoreHandle<OStoreDirectory>::query (Handle));
+    if (!xDirectory.is())
         return store_E_InvalidHandle;
 
     if (!pFindData)
@@ -444,8 +431,6 @@ storeError SAL_CALL store_findNext (
  * storeStreamHandle implementation.
  *
  *======================================================================*/
-typedef NAMESPACE_VOS(ORef)<OStoreLockBytes> OStoreLockBytesRef;
-
 /*
  * store_openStream
  */
@@ -454,24 +439,23 @@ storeError SAL_CALL store_openStream (
     rtl_uString       *pPath,
     rtl_uString       *pName,
     storeAccessMode    eAccessMode,
-    storeStreamHandle *phStream)
+    storeStreamHandle *phStream
+) SAL_THROW_EXTERN_C()
 {
     storeError eErrCode = store_E_None;
     if (phStream)
         *phStream = NULL;
 
-    OStorePageManagerRef xManager ((OStorePageManager*)hFile);
-    if (!xManager.isValid())
-        return store_E_InvalidHandle;
-
-    if (!xManager->isKindOf (VOS_CLASSINFO (OStorePageManager)))
+    OStoreHandle<OStorePageManager> xManager (
+        OStoreHandle<OStorePageManager>::query (hFile));
+    if (!xManager.is())
         return store_E_InvalidHandle;
 
     if (!(pPath && pName && phStream))
         return store_E_InvalidParameter;
 
-    OStoreLockBytesRef xLockBytes (new OStoreLockBytes());
-    if (!xLockBytes.isValid())
+    Reference<OStoreLockBytes> xLockBytes (new OStoreLockBytes());
+    if (!xLockBytes.is())
         return store_E_OutOfMemory;
 
     eErrCode = xLockBytes->create (&*xManager, pPath, pName, eAccessMode);
@@ -487,16 +471,16 @@ storeError SAL_CALL store_openStream (
 /*
  * store_closeStream.
  */
-storeError SAL_CALL store_closeStream (storeStreamHandle Handle)
+storeError SAL_CALL store_closeStream (
+    storeStreamHandle Handle
+) SAL_THROW_EXTERN_C()
 {
-    OStoreLockBytes *pObj = (OStoreLockBytes*)Handle;
-    if (!pObj)
+    OStoreLockBytes *pLockBytes =
+        OStoreHandle<OStoreLockBytes>::query (Handle);
+    if (!pLockBytes)
         return store_E_InvalidHandle;
 
-    if (!pObj->isKindOf (VOS_CLASSINFO (OStoreLockBytes)))
-        return store_E_InvalidHandle;
-
-    pObj->release();
+    pLockBytes->release();
     return store_E_None;
 }
 
@@ -508,13 +492,12 @@ storeError SAL_CALL store_readStream (
     sal_uInt32         nOffset,
     void              *pBuffer,
     sal_uInt32         nBytes,
-    sal_uInt32        *pnDone)
+    sal_uInt32        *pnDone
+) SAL_THROW_EXTERN_C()
 {
-    OStoreLockBytesRef xLockBytes ((OStoreLockBytes*)Handle);
-    if (!xLockBytes.isValid())
-        return store_E_InvalidHandle;
-
-    if (!xLockBytes->isKindOf (VOS_CLASSINFO (OStoreLockBytes)))
+    OStoreHandle<OStoreLockBytes> xLockBytes (
+        OStoreHandle<OStoreLockBytes>::query (Handle));
+    if (!xLockBytes.is())
         return store_E_InvalidHandle;
 
     if (!(pBuffer && pnDone))
@@ -531,13 +514,12 @@ storeError SAL_CALL store_writeStream (
     sal_uInt32         nOffset,
     const void        *pBuffer,
     sal_uInt32         nBytes,
-    sal_uInt32        *pnDone)
+    sal_uInt32        *pnDone
+) SAL_THROW_EXTERN_C()
 {
-    OStoreLockBytesRef xLockBytes ((OStoreLockBytes*)Handle);
-    if (!xLockBytes.isValid())
-        return store_E_InvalidHandle;
-
-    if (!xLockBytes->isKindOf (VOS_CLASSINFO (OStoreLockBytes)))
+    OStoreHandle<OStoreLockBytes> xLockBytes (
+        OStoreHandle<OStoreLockBytes>::query (Handle));
+    if (!xLockBytes.is())
         return store_E_InvalidHandle;
 
     if (!(pBuffer && pnDone))
@@ -549,13 +531,13 @@ storeError SAL_CALL store_writeStream (
 /*
  * store_flushStream.
  */
-storeError SAL_CALL store_flushStream (storeStreamHandle Handle)
+storeError SAL_CALL store_flushStream (
+    storeStreamHandle Handle
+) SAL_THROW_EXTERN_C()
 {
-    OStoreLockBytesRef xLockBytes ((OStoreLockBytes*)Handle);
-    if (!xLockBytes.isValid())
-        return store_E_InvalidHandle;
-
-    if (!xLockBytes->isKindOf (VOS_CLASSINFO (OStoreLockBytes)))
+    OStoreHandle<OStoreLockBytes> xLockBytes (
+        OStoreHandle<OStoreLockBytes>::query (Handle));
+    if (!xLockBytes.is())
         return store_E_InvalidHandle;
 
     return xLockBytes->flush();
@@ -565,13 +547,13 @@ storeError SAL_CALL store_flushStream (storeStreamHandle Handle)
  * store_getStreamSize.
  */
 storeError SAL_CALL store_getStreamSize (
-    storeStreamHandle Handle, sal_uInt32 *pnSize)
+    storeStreamHandle  Handle,
+    sal_uInt32        *pnSize
+) SAL_THROW_EXTERN_C()
 {
-    OStoreLockBytesRef xLockBytes ((OStoreLockBytes*)Handle);
-    if (!xLockBytes.isValid())
-        return store_E_InvalidHandle;
-
-    if (!xLockBytes->isKindOf (VOS_CLASSINFO (OStoreLockBytes)))
+    OStoreHandle<OStoreLockBytes> xLockBytes (
+        OStoreHandle<OStoreLockBytes>::query (Handle));
+    if (!xLockBytes.is())
         return store_E_InvalidHandle;
 
     if (!pnSize)
@@ -584,13 +566,13 @@ storeError SAL_CALL store_getStreamSize (
  * store_setStreamSize.
  */
 storeError SAL_CALL store_setStreamSize (
-    storeStreamHandle Handle, sal_uInt32 nSize)
+    storeStreamHandle Handle,
+    sal_uInt32        nSize
+) SAL_THROW_EXTERN_C()
 {
-    OStoreLockBytesRef xLockBytes ((OStoreLockBytes*)Handle);
-    if (!xLockBytes.isValid())
-        return store_E_InvalidHandle;
-
-    if (!xLockBytes->isKindOf (VOS_CLASSINFO (OStoreLockBytes)))
+    OStoreHandle<OStoreLockBytes> xLockBytes (
+        OStoreHandle<OStoreLockBytes>::query (Handle));
+    if (!xLockBytes.is())
         return store_E_InvalidHandle;
 
     return xLockBytes->setSize (nSize);
@@ -610,17 +592,16 @@ storeError SAL_CALL store_attrib (
     rtl_uString    *pName,
     sal_uInt32      nMask1,
     sal_uInt32      nMask2,
-    sal_uInt32     *pnAttrib)
+    sal_uInt32     *pnAttrib
+) SAL_THROW_EXTERN_C()
 {
     storeError eErrCode = store_E_None;
     if (pnAttrib)
         *pnAttrib = 0;
 
-    OStorePageManagerRef xManager ((OStorePageManager*)Handle);
-    if (!xManager.isValid())
-        return store_E_InvalidHandle;
-
-    if (!xManager->isKindOf (VOS_CLASSINFO (OStorePageManager)))
+    OStoreHandle<OStorePageManager> xManager (
+        OStoreHandle<OStorePageManager>::query (Handle));
+    if (!xManager.is())
         return store_E_InvalidHandle;
 
     if (!(pPath && pName))
@@ -649,15 +630,14 @@ storeError SAL_CALL store_attrib (
 storeError SAL_CALL store_link (
     storeFileHandle Handle,
     rtl_uString *pSrcPath, rtl_uString *pSrcName,
-    rtl_uString *pDstPath, rtl_uString *pDstName)
+    rtl_uString *pDstPath, rtl_uString *pDstName
+) SAL_THROW_EXTERN_C()
 {
     storeError eErrCode = store_E_None;
 
-    OStorePageManagerRef xManager ((OStorePageManager*)Handle);
-    if (!xManager.isValid())
-        return store_E_InvalidHandle;
-
-    if (!xManager->isKindOf (VOS_CLASSINFO (OStorePageManager)))
+    OStoreHandle<OStorePageManager> xManager (
+        OStoreHandle<OStorePageManager>::query (Handle));
+    if (!xManager.is())
         return store_E_InvalidHandle;
 
     if (!(pSrcPath && pSrcName))
@@ -700,15 +680,14 @@ storeError SAL_CALL store_link (
 storeError SAL_CALL store_symlink (
     storeFileHandle Handle,
     rtl_uString *pSrcPath, rtl_uString *pSrcName,
-    rtl_uString *pDstPath, rtl_uString *pDstName)
+    rtl_uString *pDstPath, rtl_uString *pDstName
+) SAL_THROW_EXTERN_C()
 {
     storeError eErrCode = store_E_None;
 
-    OStorePageManagerRef xManager ((OStorePageManager*)Handle);
-    if (!xManager.isValid())
-        return store_E_InvalidHandle;
-
-    if (!xManager->isKindOf (VOS_CLASSINFO (OStorePageManager)))
+    OStoreHandle<OStorePageManager> xManager (
+        OStoreHandle<OStorePageManager>::query (Handle));
+    if (!xManager.is())
         return store_E_InvalidHandle;
 
     if (!(pSrcPath && pSrcName))
@@ -744,15 +723,14 @@ storeError SAL_CALL store_symlink (
 storeError SAL_CALL store_rename (
     storeFileHandle Handle,
     rtl_uString *pSrcPath, rtl_uString *pSrcName,
-    rtl_uString *pDstPath, rtl_uString *pDstName)
+    rtl_uString *pDstPath, rtl_uString *pDstName
+) SAL_THROW_EXTERN_C()
 {
     storeError eErrCode = store_E_None;
 
-    OStorePageManagerRef xManager ((OStorePageManager*)Handle);
-    if (!xManager.isValid())
-        return store_E_InvalidHandle;
-
-    if (!xManager->isKindOf (VOS_CLASSINFO (OStorePageManager)))
+    OStoreHandle<OStorePageManager> xManager (
+        OStoreHandle<OStorePageManager>::query (Handle));
+    if (!xManager.is())
         return store_E_InvalidHandle;
 
     if (!(pSrcPath && pSrcName))
@@ -788,15 +766,14 @@ storeError SAL_CALL store_rename (
 storeError SAL_CALL store_remove (
     storeFileHandle Handle,
     rtl_uString    *pPath,
-    rtl_uString    *pName)
+    rtl_uString    *pName
+) SAL_THROW_EXTERN_C()
 {
     storeError eErrCode = store_E_None;
 
-    OStorePageManagerRef xManager ((OStorePageManager*)Handle);
-    if (!xManager.isValid())
-        return store_E_InvalidHandle;
-
-    if (!xManager->isKindOf (VOS_CLASSINFO (OStorePageManager)))
+    OStoreHandle<OStorePageManager> xManager (
+        OStoreHandle<OStorePageManager>::query (Handle));
+    if (!xManager.is())
         return store_E_InvalidHandle;
 
     if (!(pPath && pName))

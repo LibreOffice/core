@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storcach.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:32 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 20:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,35 +54,28 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
 #ifndef _STORE_STORCACH_HXX
-#define _STORE_STORCACH_HXX "$Revision: 1.1.1.1 $"
+#define _STORE_STORCACH_HXX "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
 
-#ifndef _VOS_MACROS_HXX_
-#include <vos/macros.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX
-#include <vos/mutex.hxx>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
 #ifndef _STORE_TYPES_H_
 #include <store/types.h>
 #endif
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
-#endif
 
-#ifdef _USE_NAMESPACE
-namespace store {
-#endif
+namespace store
+{
 
 struct OStorePageDescriptor;
 struct OStorePageData;
@@ -119,7 +112,7 @@ public:
         const OStorePageDescriptor &rDescr,
         OStorePageData             &rData,
         OStorePageBIOS             &rBIOS,
-        NAMESPACE_VOS(IMutex)      *pMutex = NULL);
+        osl::Mutex                 *pMutex = NULL);
 
     /** update.
     */
@@ -133,20 +126,20 @@ public:
         const OStorePageDescriptor &rDescr,
         const OStorePageData       &rData,
         OStorePageBIOS             &rBIOS,
-        NAMESPACE_VOS(IMutex)      *pMutex = NULL,
+        osl::Mutex                 *pMutex = NULL,
         UpdateMode                  eMode  = UPDATE_WRITE_THROUGH);
 
     /** invalidate.
     */
     storeError invalidate (
         const OStorePageDescriptor &rDescr,
-        NAMESPACE_VOS(IMutex)      *pMutex = NULL);
+        osl::Mutex                 *pMutex = NULL);
 
     /** flush.
     */
     storeError flush (
-        OStorePageBIOS        &rBIOS,
-        NAMESPACE_VOS(IMutex) *pMutex = NULL);
+        OStorePageBIOS &rBIOS,
+        osl::Mutex     *pMutex = NULL);
 
     /** hitRatio [nHit / (nHit + nMissed)].
      */
@@ -223,9 +216,8 @@ inline double OStorePageCache::usageRatio (void) const
  * The End.
  *
  *======================================================================*/
-#ifdef _USE_NAMESPACE
-}
-#endif
+
+} // namespace store
 
 #endif /* !_STORE_STORCACH_HXX */
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-22 22:54:39 $
+#   last change: $Author: mhu $ $Date: 2001-03-13 21:07:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,10 +97,10 @@ SHL1IMPLIB= 	istore
 SHL1VERSIONMAP=	$(TARGET).map
 .ENDIF
 
-SHL1STDLIBS=	$(VOSLIB) $(SALLIB)
+SHL1STDLIBS=	$(SALLIB)
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-SHL1DEPN=	$(L)$/ivos.lib $(L)$/isal.lib
+SHL1DEPN=	$(L)$/isal.lib
 SHL1LIBS=	$(SLB)$/store.lib
 
 # --- Def-File ---
