@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipcx.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 15:47:25 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:28:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,8 +253,9 @@ void PCXReader::ImplReadHeader()
 void PCXReader::ImplReadBody()
 {
     BYTE    *pPlane[ 4 ], * pDest, * pSource1, * pSource2, * pSource3, *pSource4;
-    ULONG   i, nx, ny, np, nCount, nUsedLineSize, nLineSize, nPercent, nLastPercent;
-    BYTE    nDat, nCol;
+    ULONG   i, nx, ny, np, nCount, nUsedLineSize, nLineSize, nPercent;
+    ULONG   nLastPercent = 0;
+    BYTE    nDat, nCol = 0;
 
     nUsedLineSize = (ULONG)( ( ( nWidth * (ULONG)nDestBitsPerPixel ) + 7 ) >> 3 );
     nLineSize = ( nUsedLineSize + 3 ) & 0xfffc;
@@ -455,8 +456,9 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
 }
 
 //================== ein bischen Muell fuer Windows ==========================
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifdef WIN
 
