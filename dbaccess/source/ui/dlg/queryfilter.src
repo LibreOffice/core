@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 15:17:28 $
+ *  last change: $Author: kz $ $Date: 2001-08-10 21:06:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,6 +534,7 @@ ModalDialog DLG_FILTERCRIT
     Text[ catalan ] = "Filtro";
     Text[ finnish ] = "Suodatin";
 };
+
 
 
 
