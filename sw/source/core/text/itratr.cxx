@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:09:00 $
+ *  last change: $Author: rt $ $Date: 2004-02-10 14:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -975,14 +975,20 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
             WordType::DICTIONARY_WORD, sal_True );
 
         if ( nStt == aBound.startPos )
+        {
             // cursor is at left or right border of word
+            pOut->SetMapMode( aOldMap );
             return 100;
+        }
 
         nStt = (xub_StrLen)aBound.startPos;
         nEnd = (xub_StrLen)aBound.endPos;
 
         if ( nStt == nEnd )
+        {
+            pOut->SetMapMode( aOldMap );
             return 100;
+        }
     }
 
     SwScriptInfo aScriptInfo;
