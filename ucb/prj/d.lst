@@ -15,6 +15,7 @@
 
 ..\%__SRC%\bin\ucp*.dll %_DEST%\bin%_EXT%\ucp*.dll
 ..\%__SRC%\lib\libucp*.so %_DEST%\lib%_EXT%\libucp*.so
+..\%__SRC%\lib\libucp*.dylib %_DEST%\lib%_EXT%\libucp*.dylib
 ..\%__SRC%\misc\ucp*.map %_DEST%\bin%_EXT%\ucp*.map
 ..\%__SRC%\misc\ucp*.sym %_DEST%\bin%_EXT%\ucp*.sym
 
