@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-04 15:39:20 $
+ *  last change: $Author: dl $ $Date: 2001-05-10 16:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,9 +725,36 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
 
             if(pDefSS)
             {
-                // #85778# NbcSetStyleSheet is the safer method.
-                // old version: AddStyleSheet(pDefSS, TRUE);
-                NbcSetStyleSheet(pDefSS, TRUE);
+                SfxItemPool* pPool = GetItemPool();
+                if ( pPool )
+                {
+                    // Take hard attributes
+                    SfxItemSet aSet(*pPool,
+                        SDRATTR_START,SDRATTR_NOTPERSIST_FIRST-1,
+                        SDRATTR_NOTPERSIST_LAST+1, SDRATTR_END,
+                        EE_ITEMS_START,EE_ITEMS_END,
+                        0,0);
+
+                    SfxWhichIter aIter( GetItemSet() );
+                    sal_uInt16 nWhich( aIter.FirstWhich() );
+                    const SfxPoolItem* pItem = NULL;
+
+                    while( nWhich )
+                    {
+                        if( SFX_ITEM_SET == GetItemSet().GetItemState(nWhich, FALSE, &pItem) )
+                            aSet.Put( *pItem->Clone() );
+
+                        nWhich = aIter.NextWhich();
+                    }
+
+                    // Set the StyleSheet
+                    NbcSetStyleSheet(pDefSS, TRUE);
+
+                    // Set the hard attributes
+                    SetItemSet( aSet );
+                  }
+                else
+                    NbcSetStyleSheet(pDefSS, TRUE);
             }
         }
     }
@@ -1274,5 +1301,35 @@ BOOL SdrAttrObj::HasLine() const
 {
     return ((XLineStyleItem&)(GetItem(XATTR_LINESTYLE))).GetValue()!=XLINE_NONE;
 }
+
+void SdrAttrObj::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
+{
+    SfxItemPool* pPool = GetItemPool();
+    if ( pPool && mpStyleSheet )
+    {
+        // Get StyleSheet attributes
+        SfxItemSet aSet(*pPool,
+            SDRATTR_START,SDRATTR_NOTPERSIST_FIRST-1,
+            SDRATTR_NOTPERSIST_LAST+1, SDRATTR_END,
+            EE_ITEMS_START,EE_ITEMS_END,
+            0,0);
+
+        SfxWhichIter aIter( mpStyleSheet->GetItemSet() );
+        sal_uInt16 nWhich( aIter.FirstWhich() );
+        const SfxPoolItem* pItem = NULL;
+
+        while( nWhich )
+        {
+            if( SFX_ITEM_SET == mpStyleSheet->GetItemSet().GetItemState(nWhich, FALSE, &pItem) )
+                aSet.Put( *pItem->Clone() );
+
+            nWhich = aIter.NextWhich();
+        }
+
+        // Set StyleSheet attributes as hard attributes
+        SetItemSet( aSet );
+      }
+}
+
 
 
