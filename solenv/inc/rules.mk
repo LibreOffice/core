@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-09 11:57:55 $
+#   last change: $Author: hjs $ $Date: 2001-02-09 18:29:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -292,135 +292,138 @@ $(SLO)$/%.obj : %.m
 .ENDIF		"$(OS)"=="MACOSX"
 
 # dependencies c / c++
+.IF "$(verbose)"==""
+noout=>& $(NULLDEV)
+.ENDIF
 
 $(MISC)$/s_%.dpcc : %.c
-    @echo ------------------------------
-    @echo Making: $@
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
 
 $(MISC)$/o_%.dpcc : %.c
-    @echo ------------------------------
-    @echo Making: $@
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
 
 $(MISC)$/s_%.dpcc : %.cxx
-    @echo ------------------------------
-    @echo Making: $@
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
    
 $(MISC)$/o_%.dpcc : %.cxx
-    @echo ------------------------------
-    @echo Making: $@
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
    
 $(MISC)$/s_%.dpcc : %.cpp
-    @echo ------------------------------
-    @echo Making: $@
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
    
 $(MISC)$/o_%.dpcc : %.cpp
-    @echo ------------------------------
-    @echo Making: $@
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
    
 $(MISC)$/s_%.dpcc : $(MISCX)$/%.c
-    @echo ------------------------------
-    @echo Making: $@
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
    
 $(MISC)$/o_%.dpcc : $(MISCX)$/%.c
-    @echo ------------------------------
-    @echo Making: $@
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
    
 $(MISC)$/s_%.dpcc : $(MISCX)$/%.cxx
-    @echo ------------------------------
-    @echo Making: $@
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
    
 $(MISC)$/o_%.dpcc : $(MISCX)$/%.cxx
-    @echo ------------------------------
-    @echo Making: $@
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
    
 # dependencies objective-c
 
 $(MISC)$/s_%.dpcc : %.m
-    @echo ------------------------------
-    @echo Making: $@
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
    
 $(MISC)$/o_%.dpcc : %.m
-    @echo ------------------------------
-    @echo Making: $@
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
    
 $(MISC)$/s_%.dpcc : $(MISCX)$/%.m
-    @echo ------------------------------
-    @echo Making: $@
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
    
 $(MISC)$/o_%.dpcc : $(MISCX)$/%.m
-    @echo ------------------------------
-    @echo Making: $@
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHOBJFLAGSU:s/-f/-x/) $(CFLAGSOBJ:s/-f/-x/) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
     @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
 
 # dependency dummy for *.s files
 
 $(MISC)$/s_%.dpcc : %.s
-    @echo ------------------------------
-    @echo Making: $@
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-    makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+    @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
 
 
 # dependencies script files
 
 $(MISC)$/%.dpcc :
-    @echo ------------------------------
-    @echo Making: $@
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
     @+-$(MKDIR) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))} >& $(NULLDEV)
-    makedepend -f - -p$(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/ -o.par -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) -DDLLSUFFIX=$(DLLSUFFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(*:b).scp > $@
+    @makedepend -f - -p$(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/ -o.par -D{$(subst,$(@:d:d:d:u), $(@:d:d:u))}_PRODUCT $(CDEFS) -DDLLSUFFIX=$(DLLSUFFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(*:b).scp > $@
     @+echo $@ : $(PAR)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).par  >> $@
 
 # dependencies rc files (native resources for windows)
 
 $(MISC)$/%.dprc : 
-    @echo ------------------------------
-    @echo Making: $@
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
     @+-$(MKDIR) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))} >& $(NULLDEV)
-    makedepend -f - -p$(RES)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/ -o.res $(RCLANGFLAGS_{$(subst,$(@:d:d:d:u), $(@:d:d:u))}:u:s/ //) $(CDEFS) -DDLLSUFFIX=$(DLLSUFFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(*:b).rc >> $@
+    @makedepend -f - -p$(RES)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/ -o.res $(RCLANGFLAGS_{$(subst,$(@:d:d:d:u), $(@:d:d:u))}:u:s/ //) $(CDEFS) -DDLLSUFFIX=$(DLLSUFFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(*:b).rc >> $@
     @+echo $@ : $(RES)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).res  >> $@
 
 .IF "$(MAKEFILERC)"==""
