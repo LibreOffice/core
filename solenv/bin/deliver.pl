@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.78 $
+#   $Revision: 1.79 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-14 11:33:44 $
+#   last change: $Author: vg $ $Date: 2005-03-23 15:58:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.78 $ ';
+$id_str = ' $Revision: 1.79 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -121,6 +121,8 @@ $common_dest        = 0;            # common tree on solver
 @hedabu_list        = ();           # files which have to be filtered through hedabu
 @zip_list           = ();           # files which have to be zipped
 @common_zip_list    = ();           # common files which have to be zipped
+@log_list           = ();           # LoL for logging all copy and link actions
+@common_log_list    = ();           # LoL for logging all copy and link actions in common_dest
 
 $files_copied       = 0;            # statistics
 $files_unchanged    = 0;            # statistics
@@ -129,6 +131,7 @@ $opt_force          = 0;            # option force copy
 $opt_minor          = 0;            # option deliver in minor
 $opt_check          = 0;            # do actually execute any action
 $opt_zip            = 0;            # create an additional zip file
+$opt_log            = 1;            # create an additional log file
 $opt_link           = 0;            # hard link files into the solver to save disk space
 $opt_deloutput      = 0;            # delete the output tree for the project once successfully delivered
 
@@ -136,6 +139,7 @@ $strip = 'strip' if (($ENV{COM} ne 'MSC') && (((defined $ENV{ENABLE_SYMBOLS}) &&
 
 $upd           = $ENV{'UPD'};
 ($gui       = lc($ENV{GUI}))        || die "can't determine GUI";
+$tempcounter        = 0;
 
 # zip is default for RE
 $opt_zip = 1 if ( defined($ENV{UPDATER}) && $ENV{UPDATER} eq 'YES' && defined($ENV{DELIVER_TO_ZIP}) );
@@ -159,6 +163,7 @@ parse_dlst();
 walk_action_data();
 walk_hedabu_list();
 zip_files() if $opt_zip;
+write_log() if $opt_log;
 delete_output() if $opt_deloutput;
 print_stats();
 
@@ -191,7 +196,7 @@ sub do_copy
         glob_and_copy($from, $to, $touch);
     }
 
-    if ( $common_build ) {
+    if ( $common_build && ( $line !~ /%COMMON_OUTDIR%/ ) ) {
         $line =~ s/%__SRC%/%COMMON_OUTDIR%/ig;
         if ( $line =~ /%COMMON_OUTDIR%/ ) {
             $line =~ s/%_DEST%/%COMMON_DEST%/ig;
@@ -330,6 +335,7 @@ sub do_linklib
                 }
                 else {
                     push_on_ziplist($symlib) if $opt_zip;
+                    push_on_loglist("LINK", "$lib", "$symlib") if $opt_log;
                 }
             }
         }
@@ -390,6 +396,7 @@ sub do_symlink
         }
         else {
             push_on_ziplist($to) if $opt_zip;
+            push_on_loglist("LINK", "$from", "$to") if $opt_log;
         }
     }
 }
@@ -419,6 +426,7 @@ sub parse_options
         $arg =~ /^-delete$/ and $opt_delete = 1 and next;
         $arg =~ /^-link$/ and $ENV{GUI} ne 'WNT' and $opt_link = 1 and next;
         $arg =~ /^-deloutput$/ and $opt_deloutput = 1 and next;
+        $arg =~ /^-debug$/  and $is_debug   = 1 and next;
         print_error("invalid option $arg") if ( $arg =~ /^-/ );
         if ( $arg =~ /^-/ || $#ARGV > -1 ) {
             usage();
@@ -511,6 +519,8 @@ sub init_globals
         $dest = "$solarversion/$inpath" if ( !$dest );
         $common_dest = $dest;
     }
+    $dest =~ s#\\#/#g;
+    $common_dest =~ s#\\#/#g;
 
     # the following macros are obsolete, will be flagged as error
     # %__WORKSTAMP%
@@ -729,6 +739,7 @@ sub copy_if_newer
 
     print "testing $from, $to\n" if $is_debug;
     push_on_ziplist($to) if $opt_zip;
+    push_on_loglist("COPY", "$from", "$to") if $opt_log;
     return 0 unless ($from_stat_ref = is_newer($from, $to, $touch));
 
     if ( $opt_delete ) {
@@ -977,6 +988,7 @@ sub hedabu_if_newer
     my ($from_stat_ref, $header);
 
     push_on_ziplist($to) if $opt_zip;
+    push_on_loglist("HEDABU", "$from", "$to") if $opt_log;
 
     if ( $opt_delete ) {
         print "REMOVE: $to\n";
@@ -1028,8 +1040,6 @@ sub push_on_ziplist
     my $file = shift;
     return if ( $opt_check );
     # strip $dest from path since we don't want to record it in zip file
-    $dest =~ s#\\#/#g;
-    $common_dest =~ s#\\#/#g;
     if ( $file =~ s#^$dest/##o ) {
         if ( $opt_minor ){
             # strip minor from path
@@ -1049,9 +1059,46 @@ sub push_on_ziplist
     }
 }
 
+sub push_on_loglist
+{
+    my @entry = @_;
+    return 0 if ( $opt_check );
+    return -1 if ( $#entry != 2 );
+    if (( $entry[0] eq "COPY" ) || ( $entry[0] eq "HEDABU" )) {
+        return 0 if ( ! -e $entry[1] );
+        # make 'from' relative to source root
+        $entry[1] = $module . "/prj/" . $entry[1];
+        $entry[1] =~ s/^$module\/prj\/\.\./$module/;
+    }
+    # platform or common tree?
+    my $common;
+    if ( $entry[2] =~ /^$common_dest/ ) {
+        $common = 1;
+    } elsif ( $entry[2] =~ /^$dest/ ) {
+        $common = 0;
+    } else {
+        warn "Neither common nor platform tree?";
+        return;
+    }
+    # make 'to' relative to SOLARVERSION
+    my $solarversion  = $ENV{'SOLARVERSION'};
+    $solarversion =~ s#\\#/#g;
+    $entry[2] =~ s/^$solarversion\///;
+    # strip minor from 'to'
+    my $ext = "%_EXT%";
+    $ext = expand_macros($ext);
+    $entry[2] =~ s#$ext([\\\/])#$1#o;
+
+    if ( $common ) {
+        push @common_log_list, [@entry];
+    } else {
+        push @log_list, [@entry];
+    }
+    return 1;
+}
+
 sub zip_files
 {
-    my $file;
     my $zipexe = 'zip';
     $zipexe .= ' -y' unless  $^O eq 'MSWin32';
 
@@ -1065,6 +1112,9 @@ sub zip_files
     $list_ref{$platform_zip_file} = \@zip_list;
     $list_ref{$common_zip_file}   = \@common_zip_list;
 
+    my $ext = "%_EXT%";
+    $ext = expand_macros($ext);
+
     my @zipfiles;
     $zipfiles[0] = $platform_zip_file;
     if ( $common_build ) {
@@ -1073,25 +1123,123 @@ sub zip_files
     foreach my $zip_file ( @zipfiles ) {
         print "ZIP: updating $zip_file\n";
         next if ( $opt_check );
+
+        my $work_file = "";
+        if ( $ext) {
+            # We are delivering into a minor. Zip files must not contain the
+            # minor extension, so we have to pre and post process it.
+            #
+            # Pre process: add minor extension to path, create working copy in
+            # temp directory.
+            $work_file = get_tempfilename() . ".zip";
+            die "Error: temp file $work_file already exists" if ( -e $work_file);
+            zipped_path_extension($zip_file, $work_file, $ext, 1) if ( -e $zip_file );
+        } else {
+            # No pre processing necessary, working directly on solver.
+            $work_file = $zip_file;
+        }
+
         # zip content has to be relative to $dest_dir
-        chdir($dest_dir{$zip_file});
+        chdir($dest_dir{$zip_file}) or die "Error: cannot chdir into $dest_dir{$zip_file}";
         my $this_ref = $list_ref{$zip_file};
         if ( $opt_delete ) {
-            open(ZIP, "| $zipexe -q -o -d -@ $zip_file");
+            open(ZIP, "| $zipexe -q -o -d -@ $work_file") or die "error opening zip file";
             foreach $file ( @$this_ref ) {
                 print "ZIP: removing $file from $platform_zip_file\n" if $is_debug;
                 print ZIP "$file\n";
             }
             close(ZIP);
         } else {
-            open(ZIP, "| $zipexe -q -o -u -@ $zip_file");
+            open(ZIP, "| $zipexe -q -o -u -@ $work_file") or die "error opening zip file";
             foreach $file ( @$this_ref ) {
                 print "ZIP: adding $file to $zip_file\n" if $is_debug;
                 print ZIP "$file\n";
             }
             close(ZIP);
         }
+        if ( $ext ) {
+            # Post process: strip minor from stored path again
+            zipped_path_extension($work_file, $zip_file, $ext, 0);
+            if (( -e $work_file ) && ($work_file ne $zip_file)) {
+                unlink $work_file;
+            }
+        }
     }
+}
+
+sub zipped_path_extension
+# add given extension to or strip it from stored path
+{
+    require Archive::Zip; import Archive::Zip;
+    my ($from, $to, $extension, $with_ext) = @_;
+
+    $zip = Archive::Zip->new();
+    if ( -e $from) {
+        die 'Error: zip read error' unless $zip->read( $from) == 0;
+        my $name;
+        my $newmember;
+        my $DateTime = 0;
+        foreach my $member ( $zip->members() ) {
+            $name = $member->fileName();
+            if ( $with_ext ) {
+                if ( $name !~ m#$extension/# ) {
+                    $name =~ s#^(.*?)/#$1$extension/#o;
+                }
+            } else {
+                $name =~ s#^(.*?)$extension/#$1/#o;
+            }
+            $member->fileName( $name );
+            if ( $member->lastModTime() ) {
+                if ( $DateTime < $member->lastModTime() ) {
+                    $DateTime = $member->lastModTime();
+                }
+            }
+        }
+        if ( -e $to ) {
+            die 'Error: zip write error' unless $zip->overwrite( ) == 0;
+            File::Copy::move( $from, $to) or die "Error $!: cannot move $from $to";
+        } else {
+            die 'Error: zip write error' unless $zip->writeToFileNamed( $to ) == 0;
+        }
+        utime $DateTime, $DateTime, $to;
+    } else {
+        die "Error: file $from does not exist";
+    }
+    return;
+}
+
+sub get_tempfilename
+{
+    my $temp_dir = shift;
+    $temp_dir = ( -d '/tmp' ? '/tmp' : $ENV{TMPDIR} || $ENV{TEMP} || '.' )
+            unless defined($temp_dir);
+     if ( ! -d $temp_dir ) {
+        die "no temp directory $temp_dir\n";
+    }
+    my $base_name = sprintf( "%d-%di-%d", $$, time(), $tempcounter++ );
+    return "$temp_dir/$base_name";
+}
+
+sub write_log
+{
+    return if $opt_delete;
+    my %log_file;
+    $log_file{\@log_list} = "%_DEST%/inc%_EXT%/$module/deliver.log";
+    $log_file{\@common_log_list} = "%COMMON_DEST%/inc%_EXT%/$module/deliver.log";
+
+    my @logs = ( \@log_list );
+    push @logs, ( \@common_log_list ) if ( $common_build );
+    foreach my $log ( @logs ) {
+        $log_file{$log} = expand_macros( $log_file{$log} );
+        print "LOG: writing $log_file{$log}\n";
+        next if ( $opt_check );
+        open( LOGFILE, "> $log_file{$log}" ) or warn "Error: could not open log file.";
+        foreach my $item ( @$log ) {
+            print LOGFILE "@$item\n";
+        }
+        close( LOGFILE );
+    }
+    return;
 }
 
 sub delete_output
