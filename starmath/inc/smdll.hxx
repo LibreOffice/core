@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smdll.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:24 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:51:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,15 @@
 #ifndef SMDLL_HXX
 #define SMDLL_HXX
 
-#define SMDLL   1
-
-#ifndef _SMDLL0_HXX
-#include <smdll0.hxx>
-#endif
 #ifndef _TOOLS_RESID_HXX //autogen
 #include <tools/resid.hxx>
 #endif
 #ifndef _SFXDEFS_HXX
 #include <sfx2/sfxdefs.hxx>
+#endif
+
+#ifndef _SMMOD_HXX
+#include "smmod.hxx"
 #endif
 
 class SmData;
@@ -81,28 +80,12 @@ class SmDLL
 {
     static BOOL bInitialized;
 public:
-    SmDLL();
-    ~SmDLL();
-
     static void Init();
-    static void LibInit();
     static void Exit();
-    static void LibExit();
 
     static ULONG DetectFilter( SfxMedium& rMedium, const SfxFilter **ppFilter,
                                SfxFilterFlags nMust, SfxFilterFlags nDont );
 };
-
-#ifdef SMDLL
-class SmResId : public ResId
-{
-public:
-    SmResId(USHORT nId) :
-        ResId(nId, SM_MOD()->GetResMgr())
-    {
-    }
-};
-#endif
 
 #endif
 
