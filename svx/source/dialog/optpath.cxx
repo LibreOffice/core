@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpath.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:16:11 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,9 +194,9 @@ String Convert_Impl( const String& rValue )
     return aReturn;
 }
 
-// class SvxPathControl_Impl ---------------------------------------------
+// class SvxControlFocusHelper ---------------------------------------------
 
-long SvxPathControl_Impl::Notify( NotifyEvent& rNEvt )
+long SvxControlFocusHelper::Notify( NotifyEvent& rNEvt )
 {
     long nRet = Control::Notify( rNEvt );
 
