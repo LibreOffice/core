@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:33:50 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,9 @@
 #endif
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
+#endif
+#ifndef _SFXSTRITEM_HXX //autogen
+#include <svtools/stritem.hxx>
 #endif
 
 #ifndef _CMDID_H
@@ -577,6 +580,28 @@ void SwView::GetDrawState(SfxItemSet &rSet)
             rSet.Put( SfxBoolItem(nWhich, nDrawSfxId == nWhich ||
                                           nFormSfxId == nWhich));
             break;
+
+        case SID_FONTWORK_GALLERY_FLOATER :
+        {
+            if ( bWeb )
+                rSet.DisableItem( nWhich );
+        }
+        break;
+
+        case SID_DRAWTBX_CS_BASIC :
+        case SID_DRAWTBX_CS_SYMBOL :
+        case SID_DRAWTBX_CS_ARROW :
+        case SID_DRAWTBX_CS_FLOWCHART :
+        case SID_DRAWTBX_CS_CALLOUT :
+        case SID_DRAWTBX_CS_STAR :
+        {
+            if ( bWeb )
+                rSet.DisableItem( nWhich );
+            else
+                rSet.Put(SfxStringItem(nWhich, aCurrShapeEnumCommand[ nWhich - SID_DRAWTBX_CS_BASIC ] ));
+        }
+        break;
+
         }
 }
 
