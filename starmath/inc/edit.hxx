@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:58:11 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:07:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,6 @@ class SmEditWindow : public Window, public DropTargetHelper
     Timer           aModifyTimer,
                     aCursorMoveTimer;
     ESelection      aOldSelection;
-    ESelection      aActiveSelection;   // to be restored/saved on
-                                        // activation/deactivation of the window
 
     virtual void KeyInput(const KeyEvent& rKEvt);
     virtual void Command(const CommandEvent& rCEvt);
