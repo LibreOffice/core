@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:44:12 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 11:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,6 +335,110 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ slovak ] = "Odsadenie a riadkovanie";
                 Text[ hungarian ] = "Beh√∫z√°s √©s t√©rk√∂z";
                 Text[ slovenian ] = "Zamiki in razmiki";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_ALIGN_PARAGRAPH ;
+                Text = "Ausrichtung" ;
+                Text [ ENGLISH ] = "Alignment" ;
+                PageResID = RID_SVXPAGE_ALIGN_PARAGRAPH ;
+                Text [ english_us ] = "Alignment" ;
+                Text [ portuguese ] = "Alinhamento" ;
+                Text [ swedish ] = "Justering" ;
+                Text [ danish ] = "Justering" ;
+                Text [ italian ] = "Allineamento" ;
+                Text [ spanish ] = "AlineaciÛn" ;
+                Text [ french ] = "Alignement" ;
+                Text [ dutch ] = "Uitlijning" ;
+                Text [ portuguese_brazilian ] = "Alinhamento" ;
+                Text[ chinese_simplified ] = "ÂØπÈΩê";
+                Text[ russian ] = "¬˚‡‚ÌË‚‡ÌËÂ";
+                Text[ polish ] = "WyrÛwnanie";
+                Text[ japanese ] = "ÈÖçÁΩÆ";
+                Text[ chinese_traditional ] = "Â∞çÈΩä";
+                Text[ greek ] = "”ÙÔﬂ˜ÈÛÁ";
+                Text[ korean ] = "ÎßûÏ∂§";
+                Text[ arabic ] = "„Õ«–«…";
+                Text[ turkish ] = "Hizalama";
+                Text[ catalan ] = "Alineament";
+                Text[ finnish ] = "Tasaus";
+                Text[ thai ] = "‡∏à‡∏±‡∏î‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á";
+                Text[ czech ] = "Zarovn√°n√≠";
+                Text[ hebrew ] = "‚ÄÆ◊ô◊©◊ï◊®‚Ä¨";
+                Text[ hindi ] = "‡§™‡§Ç‡§ï‡•ç‡§§‡§ø‡§ï‡§∞‡§£";
+                Text[ slovak ] = "Zarovnanie";
+                Text[ hungarian ] = "Igaz√≠t√°s";
+                Text[ slovenian ] = "Poravnava";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_PARA_ASIAN ;
+                PageResID = RID_SVXPAGE_PARA_ASIAN ;
+                Text = "Asiatische Typographie" ;
+                Text [ ENGLISH ] = "Asian typography" ;
+                Text[ english_us ] = "Asian Typography";
+                Text[ portuguese ] = "Tipografia asi·tica";
+                Text[ russian ] = "¿ÁË‡ÚÒÍÓÂ ÓÙÓÏÎÂÌËÂ";
+                Text[ greek ] = "¡ÛÈ·ÙÈÍﬁ ÙıÔ„Ò·ˆﬂ·";
+                Text[ dutch ] = "Aziatische typografie";
+                Text[ french ] = "Typographie asiatique";
+                Text[ spanish ] = "TipografÌa asi·tica";
+                Text[ italian ] = "Tipografia asiatica";
+                Text[ danish ] = "Asiatisk typografi";
+                Text[ swedish ] = "Asiatisk typografi";
+                Text[ polish ] = "Typografia azjatycka";
+                Text[ portuguese_brazilian ] = "Tipografia asi·tica";
+                Text[ japanese ] = "Êó•Êú¨Ë™ûÊñá„ÅÆ‰ΩìË£Å";
+                Text[ korean ] = "ÌïúÍ∏Ä ÏûÖÎ†• Ï≤¥Í≥Ñ";
+                Text[ chinese_simplified ] = "‰∏≠Êó•Èü©ÊñáÂ≠ó";
+                Text[ chinese_traditional ] = "‰∏≠Êó•ÈüìÊñáÂ≠ó";
+                Text[ turkish ] = "Asya tipi tipografi";
+                Text[ arabic ] = "√”·Ê» «·ÿ»«⁄… «·¬”ÌÊÌ…";
+                Text[ catalan ] = "Tipografia asi‡tica";
+                Text[ finnish ] = "Aasialaiset merkit";
+                Text[ thai ] = "‡∏Å‡∏≤‡∏£‡∏û‡∏¥‡∏°‡∏û‡πå‡πÅ‡∏ö‡∏ö‡πÄ‡∏≠‡πÄ‡∏ä‡∏µ‡∏¢";
+                Text[ czech ] = "Asijsk√° typografie";
+                Text[ hebrew ] = "Asiatische Typographie";
+                Text[ hindi ] = "‡§ê‡§∂‡§ø‡§Ø‡§® ‡§ü‡§á‡§™‡•ã‡§ó‡•ç‡§∞‡§´‡•Ä";
+                Text[ slovak ] = "√Åzijsk√° typografia";
+                Text[ hungarian ] = "√Åzsiai tipogr√°fia";
+                Text[ slovenian ] = "Azijska tipografija";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_TABULATOR ;
+                Text = "Tabulator" ;
+                Text [ ENGLISH ] = "Paragraph (Tabs)" ;
+                Text [ norwegian ] = "Avsnitt (Tabulatorer)" ;
+                Text [ italian ] = "Tabulazione" ;
+                Text [ portuguese_brazilian ] = "TabulaÁ„o" ;
+                Text [ portuguese ] = "TabulaÁ„o" ;
+                Text [ finnish ] = "Sarkaimet" ;
+                Text [ danish ] = "Tabulator" ;
+                Text [ french ] = "Tabulation" ;
+                Text [ swedish ] = "Tabulator" ;
+                Text [ dutch ] = "Tab" ;
+                Text [ spanish ] = "Tabulador" ;
+                Text [ english_us ] = "Tabs" ;
+                PageResID = RID_SVXPAGE_TABULATOR ;
+                Text[ chinese_simplified ] = "Âà∂Ë°®Á¨¶";
+                Text[ russian ] = "“‡·ÛÎˇˆËˇ";
+                Text[ polish ] = "Tabulatory";
+                Text[ japanese ] = "„Çø„Éñ";
+                Text[ chinese_traditional ] = "ÂÆö‰ΩçÈçµ";
+                Text[ greek ] = "”ÙÁÎÔË›ÙÁÚ";
+                Text[ korean ] = "ÌÉ≠";
+                Text[ arabic ] = "⁄·«„… ÃœÊ·…";
+                Text[ turkish ] = "Sekmeler";
+                Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Pestanyes";
+                Text[ thai ] = "‡∏£‡∏∞‡∏¢‡∏∞‡∏Å‡∏±‡πâ‡∏ô";
+                Text[ czech ] = "Tabul√°tory";
+                Text[ hebrew ] = "Tabulator";
+                Text[ hindi ] = "‡§ü‡•â‡§¨‡•ç‡§∏";
+                Text[ slovak ] = "Tabul√°tory";
+                Text[ hungarian ] = "Tabul√°torok";
+                Text[ slovenian ] = "Tabulatorji";
             };
         };
     };
@@ -717,6 +821,110 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ slovak ] = "Prisp√¥sobi≈•";
                 Text[ hungarian ] = "Testreszab√°s";
                 Text[ slovenian ] = "Po meri";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_ALIGN_PARAGRAPH ;
+                Text = "Ausrichtung" ;
+                Text [ ENGLISH ] = "Alignment" ;
+                PageResID = RID_SVXPAGE_ALIGN_PARAGRAPH ;
+                Text [ english_us ] = "Alignment" ;
+                Text [ portuguese ] = "Alinhamento" ;
+                Text [ swedish ] = "Justering" ;
+                Text [ danish ] = "Justering" ;
+                Text [ italian ] = "Allineamento" ;
+                Text [ spanish ] = "AlineaciÛn" ;
+                Text [ french ] = "Alignement" ;
+                Text [ dutch ] = "Uitlijning" ;
+                Text [ portuguese_brazilian ] = "Alinhamento" ;
+                Text[ chinese_simplified ] = "ÂØπÈΩê";
+                Text[ russian ] = "¬˚‡‚ÌË‚‡ÌËÂ";
+                Text[ polish ] = "WyrÛwnanie";
+                Text[ japanese ] = "ÈÖçÁΩÆ";
+                Text[ chinese_traditional ] = "Â∞çÈΩä";
+                Text[ greek ] = "”ÙÔﬂ˜ÈÛÁ";
+                Text[ korean ] = "ÎßûÏ∂§";
+                Text[ arabic ] = "„Õ«–«…";
+                Text[ turkish ] = "Hizalama";
+                Text[ catalan ] = "Alineament";
+                Text[ finnish ] = "Tasaus";
+                Text[ thai ] = "‡∏à‡∏±‡∏î‡∏ï‡∏≥‡πÅ‡∏´‡∏ô‡πà‡∏á";
+                Text[ czech ] = "Zarovn√°n√≠";
+                Text[ hebrew ] = "‚ÄÆ◊ô◊©◊ï◊®‚Ä¨";
+                Text[ hindi ] = "‡§™‡§Ç‡§ï‡•ç‡§§‡§ø‡§ï‡§∞‡§£";
+                Text[ slovak ] = "Zarovnanie";
+                Text[ hungarian ] = "Igaz√≠t√°s";
+                Text[ slovenian ] = "Poravnava";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_PARA_ASIAN ;
+                PageResID = RID_SVXPAGE_PARA_ASIAN ;
+                Text = "Asiatische Typographie" ;
+                Text [ ENGLISH ] = "Asian typography" ;
+                Text[ english_us ] = "Asian Typography";
+                Text[ portuguese ] = "Tipografia asi·tica";
+                Text[ russian ] = "¿ÁË‡ÚÒÍÓÂ ÓÙÓÏÎÂÌËÂ";
+                Text[ greek ] = "¡ÛÈ·ÙÈÍﬁ ÙıÔ„Ò·ˆﬂ·";
+                Text[ dutch ] = "Aziatische typografie";
+                Text[ french ] = "Typographie asiatique";
+                Text[ spanish ] = "TipografÌa asi·tica";
+                Text[ italian ] = "Tipografia asiatica";
+                Text[ danish ] = "Asiatisk typografi";
+                Text[ swedish ] = "Asiatisk typografi";
+                Text[ polish ] = "Typografia azjatycka";
+                Text[ portuguese_brazilian ] = "Tipografia asi·tica";
+                Text[ japanese ] = "Êó•Êú¨Ë™ûÊñá„ÅÆ‰ΩìË£Å";
+                Text[ korean ] = "ÌïúÍ∏Ä ÏûÖÎ†• Ï≤¥Í≥Ñ";
+                Text[ chinese_simplified ] = "‰∏≠Êó•Èü©ÊñáÂ≠ó";
+                Text[ chinese_traditional ] = "‰∏≠Êó•ÈüìÊñáÂ≠ó";
+                Text[ turkish ] = "Asya tipi tipografi";
+                Text[ arabic ] = "√”·Ê» «·ÿ»«⁄… «·¬”ÌÊÌ…";
+                Text[ catalan ] = "Tipografia asi‡tica";
+                Text[ finnish ] = "Aasialaiset merkit";
+                Text[ thai ] = "‡∏Å‡∏≤‡∏£‡∏û‡∏¥‡∏°‡∏û‡πå‡πÅ‡∏ö‡∏ö‡πÄ‡∏≠‡πÄ‡∏ä‡∏µ‡∏¢";
+                Text[ czech ] = "Asijsk√° typografie";
+                Text[ hebrew ] = "Asiatische Typographie";
+                Text[ hindi ] = "‡§ê‡§∂‡§ø‡§Ø‡§® ‡§ü‡§á‡§™‡•ã‡§ó‡•ç‡§∞‡§´‡•Ä";
+                Text[ slovak ] = "√Åzijsk√° typografia";
+                Text[ hungarian ] = "√Åzsiai tipogr√°fia";
+                Text[ slovenian ] = "Azijska tipografija";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_TABULATOR ;
+                Text = "Tabulator" ;
+                Text [ ENGLISH ] = "Paragraph (Tabs)" ;
+                Text [ norwegian ] = "Avsnitt (Tabulatorer)" ;
+                Text [ italian ] = "Tabulazione" ;
+                Text [ portuguese_brazilian ] = "TabulaÁ„o" ;
+                Text [ portuguese ] = "TabulaÁ„o" ;
+                Text [ finnish ] = "Sarkaimet" ;
+                Text [ danish ] = "Tabulator" ;
+                Text [ french ] = "Tabulation" ;
+                Text [ swedish ] = "Tabulator" ;
+                Text [ dutch ] = "Tab" ;
+                Text [ spanish ] = "Tabulador" ;
+                Text [ english_us ] = "Tabs" ;
+                PageResID = RID_SVXPAGE_TABULATOR ;
+                Text[ chinese_simplified ] = "Âà∂Ë°®Á¨¶";
+                Text[ russian ] = "“‡·ÛÎˇˆËˇ";
+                Text[ polish ] = "Tabulatory";
+                Text[ japanese ] = "„Çø„Éñ";
+                Text[ chinese_traditional ] = "ÂÆö‰ΩçÈçµ";
+                Text[ greek ] = "”ÙÁÎÔË›ÙÁÚ";
+                Text[ korean ] = "ÌÉ≠";
+                Text[ arabic ] = "⁄·«„… ÃœÊ·…";
+                Text[ turkish ] = "Sekmeler";
+                Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Pestanyes";
+                Text[ thai ] = "‡∏£‡∏∞‡∏¢‡∏∞‡∏Å‡∏±‡πâ‡∏ô";
+                Text[ czech ] = "Tabul√°tory";
+                Text[ hebrew ] = "Tabulator";
+                Text[ hindi ] = "‡§ü‡•â‡§¨‡•ç‡§∏";
+                Text[ slovak ] = "Tabul√°tory";
+                Text[ hungarian ] = "Tabul√°torok";
+                Text[ slovenian ] = "Tabulatorji";
             };
         };
     };
