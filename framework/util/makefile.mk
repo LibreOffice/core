@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: as $ $Date: 2001-03-19 09:10:52 $
+#   last change: $Author: avy $ $Date: 2001-03-22 08:46:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,9 +66,9 @@ TARGET=				fwk
 USE_DEFFILE=		TRUE
 ENABLE_EXCEPTIONS=	TRUE
 NO_BSYMBOLIC=		TRUE
-COMP1TYPELIST=		fwk
-COMP2TYPELIST=		fwl
-COMP3TYPELIST=		lgd
+#COMP1TYPELIST=		fwk
+#COMP2TYPELIST=		fwl
+#COMP3TYPELIST=		lgd
 
 # --- Settings -----------------------------------------------------
 
@@ -86,8 +86,7 @@ LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 SHL1TARGET=		$(FRAMEWORK_TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=		i$(TARGET)$(UPD)$(DLLPOSTFIX)
 
-SHL1OBJS=		$(SLO)$/registerservices.obj		\
-                $(SLO)$/fwk_description.obj
+SHL1OBJS=		$(SLO)$/registerservices.obj    
 
 SHL1LIBS=		$(SLB)$/fwk_services.lib			\
                 $(SLB)$/fwk_helper.lib				\
@@ -117,7 +116,6 @@ SHL2TARGET=		fwl$(UPD)$(DLLPOSTFIX)
 SHL2IMPLIB=		ifwl$(UPD)$(DLLPOSTFIX)
 
 SHL2OBJS=		$(SLO)$/registertemp.obj			\
-                $(SLO)$/fwl_description.obj			\
                 $(SLO)$/mediatypedetectionhelper.obj\
                 $(SLO)$/frameloaderfactory.obj		\
                 $(SLO)$/filterfactory.obj			\
