@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.1.1.2 $
+ *  $Revision: 1.1.1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-17 09:03:16 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 20:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ italian ] = "Cartella sorgente";
         Text[ danish ] = "Source directory";
         Text[ swedish ] = "Källkatalog";
-        Text[ polish ] = "Katalog ?ród³owy";
+        Text[ polish ] = "Katalog Ÿród³owy";
         Text[ portuguese_brazilian ] = "Source directory";
         Text[ japanese ] = "¿°½ÃŞ¨Ú¸ÄØ";
         Text[ korean ] = "¼Ò½º¡¡µğ·ºÅä¸®";
@@ -239,7 +239,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ polish ] = "Czcionka\n%s\nnie zostanie zainstalowana, poniewa¿ nie znaleziono dla niej ¿adnego pliku formatu (z koñcówk¹ .afm ). Pliki formatu mo¿na utworzyæ n.p. za pomoc¹ programu ghostscript. Musz¹ siê one znajdowaæ w tym samym katalogu, co pliki czcionki lub w jego katalogu podrzêdnym afm.";
         Text[ portuguese_brazilian ] = "Noo format file ( with .afm extension ) for font\n%s\n was found, hence the font will not be installed. Format files can be made e.g. with ghostscript and have to reside in the same directory as the font file or in its afm subdir ectory.";
         Text[ japanese ] = "Ì«İÄÌ§²Ù\n%s\n‚Ì‘®Ì§²Ù(.afm Šg’£q)‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½‚Ì‚ÅA²İ½Ä°Ù‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B‘®Ì§²Ù‚ÍAghostscript ‚È‚Ç‚Åì¬‚Å‚«‚Ü‚·‚ªA‚»‚ÌÛ‚É‘®Ì§²Ù‚Æ“¯‚¶ÃŞ¨Ú¸ÄØ‚©A‚ ‚é‚¢‚Í‚»‚Ì»ÌŞÃŞ¨Ú¸ÄØ‚É afm ‚É‚ ‚é‚±‚Æ‚ª•K—v‚Å‚·B";
-        Text[ korean ] = "±Û²Ã\n%s\n ¿¡¡¡´ëÇÑ¡¡Æ÷¸ËÆÄÀÏ (È®ÀåÀÚ .afm  )À»¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù, µû¶ó¼­¡¡¼³Ä¡ÇÒ¡¡¼ö¡¡¾ø½À´Ï´Ù. Æ÷¸ËÆÄÀÏÀº¡¡¿¹¸¦¡¡µé¸é¡¡°í½ºÆ®½ºÅ©¸³Æ®·Î¡¡¸¸µé¼ö¡¡ÀÖÀ¸¸ç£¬±Û²ÃÆÄÀÏ°ú¡¡µ¿ÀÏÇÑ¡¡µğ";
+        Text[ korean ] = "±Û²Ã\n%s\n ¿¡¡¡´ëÇÑ¡¡Æ÷¸ËÆÄÀÏ (È®ÀåÀÚ .afm  )À»¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù, µû¶ó¼­¡¡¼³Ä¡ÇÒ¡¡¼ö¡¡¾ø½À´Ï´Ù. Æ÷¸ËÆÄÀÏÀº¡¡¿¹¸¦¡¡µé¸é¡¡°í½ºÆ®½ºÅ©¸³Æ®·Î¡¡¸¸µé¼ö¡¡ÀÖÀ¸¸ç£¬±Û²ÃÆÄÀÏ°ú¡¡µ¿ÀÏÇÑ¡¡µğ·ºÅä¸®¿¡¡¡¶Ç´Â¡¡ÀÌ°ÍÀÇ¡¡ÇÏÀ§µğ·ºÅä¸®¿¡¡¡ÀÖ¾î¾ßÇÕ´Ï´Ù.";
         Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½×ÖÌå\n%s\nµÄ¸ñÊ½ÎÄ¼ş(À©Õ¹Ãû .afm )£¬Òò´ËÎŞ·¨°²×°Õâ¸ö×ÖÌå¡£¸ñÊ½ÎÄ¼şÊÇÓÉ ghostscript Éú³ÉµÄ£¬²¢´æ·ÅÔÚÏàÍ¬µÄ×ÖÌåÄ¿Â¼»òÆä×ÓÄ¿Â¼ afm Ö®ÖĞ¡£";
         Text[ chinese_traditional ] = "¨S¦³§ä¨ì¦r«¬\n%s\nªº®æ¦¡ÀÉ®×(°ÆÀÉ¦W .afm )¡A¦]¦¹µLªk¦w¸Ë³o­Ó¦r«¬¡C®æ¦¡ÀÉ®×¬O¥Ñ ghostscript ¥Í¦¨¡A¦}¦s©ñ¦b¬Û¦Pªº¦r«¬¥Ø¿ı©Î¨ä¤l¥Ø¿ı afm ¤§¤¤¡C";
         Text[ turkish ] = "Noo format file ( with .afm extension ) for font\n%s\n was found, hence the font will not be installed. Format files can be made e.g. with ghostscript and have to reside in the same directory as the font file or in its afm subdir ectory.";
@@ -311,10 +311,10 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ italian ] = "Impossibile trovare in Fontpath una cartella con un file font.dir scrivibile. Non è possibile installare i font.";
         Text[ danish ] = "In the fontpath there is no directory containing a writeable fonts.dir file. Therefore no fonts can be installed.";
         Text[ swedish ] = "I Fontpath finns det ingen katalog som innehåller en skrivbar fonts.dir-fil. Det går inte att skapa några teckensnitt.";
-        Text[ polish ] = "Instalacja czionek nie jest mo¿liwa, poniewa¿ nie znaleziono na ?cie¿ce fontów (fontpath) ¿adnego katalogu z plikiem fonts.dir, który mo¿na by by³o zapisaæ.";
+        Text[ polish ] = "Instalacja czionek nie jest mo¿liwa, poniewa¿ nie znaleziono na œcie¿ce fontów (fontpath) ¿adnego katalogu z plikiem fonts.dir, który mo¿na by by³o zapisaæ.";
         Text[ portuguese_brazilian ] = "In the fontpath there is no directory containing a writeable fonts.dir file. Therefore no fonts can be installed.";
         Text[ japanese ] = "‘‚«‚İ‰Â”\\‚È fonts.dir Ì§²Ù‚ğŠÜ‚ŞÃŞ¨Ú¸ÄØ‚ÍAÌ«İÄÊß½‚ÉŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½BÌ«İÄ‚Í²İ½Ä°Ù‚Å‚«‚Ü‚¹‚ñB";
-        Text[ korean ] = " ±Û²Ã°æ·Î¿¡¼­¡¡¾µ¼öÀÖ´Â¡¡±Û²Ã .dir ÆÄÀÏÀ»¡¡Æ÷ÇÔÇÏ°í¡¡ÀÖ´Â¡¡µğ·ºÅä¸®¸¦¡¡Ã£Áö¸øÇß½À´Ï´Ù£®±Û²ÃÀº¡¡¼³Ä¡µÉ¼ö¡¡¾ø½À´Ï´Ù.";
+        Text[ korean ] = " ±Û²Ã°æ·Î¿¡¼­ ¾µ ¼ö ÀÖ´Â ±Û²Ã.dir ÆÄÀÏÀ»¡¡Æ÷ÇÔÇÏ°í¡¡ÀÖ´Â¡¡µğ·ºÅä¸®¸¦¡¡Ã£Áö ¸øÇß½À´Ï´Ù£®±Û²ÃÀº ¼³Ä¡µÉ ¼ö ¾ø½À´Ï´Ù.";
         Text[ chinese_simplified ] = "×ÖÌåÂ·¾¶Ö®ÖĞÃ»ÓĞÓĞĞ§µÄ¿É¶ÁĞ´µÄ fonts.dir ÎÄ¼ş¡£Òò´ËÎŞ·¨°²×°ÈÎºÎ×ÖÌå¡£";
         Text[ chinese_traditional ] = "¦r«¬¸ô®|¤§¤¤¨S¦³¦³®Äªº¥iÅª¼gªº fonts.dir ÀÉ®×¡C¦]¦¹µLªk¦w¸Ë¥ô¦ó¦r«¬¡C";
         Text[ turkish ] = "In the fontpath there is no directory containing a writeable fonts.dir file. Therefore no fonts can be installed.";
@@ -586,7 +586,7 @@ ModalDialog RID_PADIALOG
         Text[ italian ] = "~Proprietà...";
         Text[ danish ] = "Co~nfigure...";
         Text[ swedish ] = "~Egenskaper...";
-        Text[ polish ] = "~W³a?ciwo?ci...";
+        Text[ polish ] = "~W³aœciwoœci...";
         Text[ portuguese_brazilian ] = "Co~nfigure...";
         Text[ japanese ] = "ÌßÛÊßÃ¨...";
         Text[ korean ] = "µî·ÏÁ¤º¸(~N)...";
@@ -641,7 +641,7 @@ ModalDialog RID_PADIALOG
         Text[ italian ] = "Imposta come stampante standard";
         Text[ danish ] = "~Set as default Printer";
         Text[ swedish ] = "St~andard";
-        Text[ polish ] = "Drukarka domy?lna";
+        Text[ polish ] = "Drukarka domyœlna";
         Text[ portuguese_brazilian ] = "~Set as default Printer";
         Text[ japanese ] = "•W€";
         Text[ korean ] = "±âº»(~S)";
@@ -803,7 +803,7 @@ ModalDialog RID_PADIALOG
         Text[ italian ] = "Stampante predefinta";
         Text[ danish ] = "default printer";
         Text[ swedish ] = "Standardskrivare";
-        Text[ polish ] = "Drukarka domy?lna";
+        Text[ polish ] = "Drukarka domyœlna";
         Text[ portuguese_brazilian ] = "default printer";
         Text[ japanese ] = "•W€ÌßØİÀ";
         Text[ korean ] = "±âº» ÇÁ¸°ÅÍ";
@@ -933,7 +933,7 @@ String RID_PA_TXT_TESTPAGE_PRINTED
     Text[ italian ] = "La pagina di prova è stata stampata. Controllate il risultato.";
     Text[ danish ] = "The test page was printed succesfully. Please check the resulting output.";
     Text[ swedish ] = "Testsidan har skrivits ut. Kontrollera resultatet.";
-    Text[ polish ] = "Wydrukowano stronê próbn¹. Nale¿y sprawdziæ jej jako?æ.";
+    Text[ polish ] = "Wydrukowano stronê próbn¹. Nale¿y sprawdziæ jej jakoœæ.";
     Text[ portuguese_brazilian ] = "The test page was printed succesfully. Please check the resulting output.";
     Text[ japanese ] = "Ã½ÄÍß°¼Ş‚Í³í‚ÉI—¹‚µ‚Ü‚µ‚½BˆóüŒ‹‰Ê‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B";
     Text[ korean ] = "Å×½ºÆ®¡¡ÂÊÀº¡¡¼º°øÀûÀ¸·Î¡¡ÀÎ¼âµÇ¾ú½À´Ï´Ù. Ãâ·Â¡¡°á°ú¸¦¡¡°Ë»çÇÏ½Ê½Ã¿À.";
@@ -1248,7 +1248,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ italian ] = "Il nome Xwindow è determinato\ndalle caratteristiche";
         Text[ danish ] = "The Xwindow name of the font is constructed\nfrom the properties";
         Text[ swedish ] = "Xwindow-namnet på teckensnittet konstrueras\nutifrån egenskaperna";
-        Text[ polish ] = "Nazwa Xwindow czcionki utworzona\nzostanie z w³a?ciwo?ci.";
+        Text[ polish ] = "Nazwa Xwindow czcionki utworzona\nzostanie z w³aœciwoœci.";
         Text[ portuguese_brazilian ] = "The Xwindow name of the font is constructed\nfrom the properties";
         Text[ japanese ] = "Ì«İÄ‚Ì X ³¨İÄŞ³–¼‚Í‘®«‚©‚ç\\¬‚³‚ê‚Ü‚·B";
         Text[ korean ] = "µî·ÏÁ¤º¸·ÎºÎÅÍ¡¡±Û²ÃÀÇ XÀ©µµ¿ì¡¡ÀÌ¸§ÀÌ¡¡±¸¼ºµË´Ï´Ù";
@@ -1342,7 +1342,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ italian ] = "Peso :";
         Text[ danish ] = "~Weight :";
         Text[ swedish ] = "~Vikt :";
-        Text[ polish ] = "Grubo?æ :";
+        Text[ polish ] = "Gruboœæ :";
         Text[ portuguese_brazilian ] = "~Weight :";
         Text[ japanese ] = "‘¾‚³(~W):";
         Text[ korean ] = "¹«°Ô (~W):";
@@ -1417,7 +1417,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ italian ] = "Larghezza :";
         Text[ danish ] = "W~idth :";
         Text[ swedish ] = "~Bredd :";
-        Text[ polish ] = "Szeroko?æ :";
+        Text[ polish ] = "Szerokoœæ :";
         Text[ portuguese_brazilian ] = "W~idth :";
         Text[ japanese ] = "•(W~):";
         Text[ korean ] = "³Êºñ (~I):";
@@ -1605,7 +1605,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ polish ] = "Czcionki %s1 nie mo¿na zmieniæ, poniewa¿ pliku\n  %s2\nnie mo¿na zapisaæ.";
         Text[ portuguese_brazilian ] = "The font %s1 cannot be changed because the file\n  %s2\ncannot be written.";
         Text[ japanese ] = "Ì§²Ù\n  %s2\n‚ª‘‚«‚Ü‚ê‚Ä‚¢‚È‚¢‚Ì‚ÅAÌ«İÄ %s1 ‚Ì•ÏX‚Í‚Å‚«‚Ü‚¹‚ñB";
-        Text[ korean ] = "%s1 ±Û²ÃÀº¡¡¹Ù²Ü¼ö¡¡¾ø½À´Ï´Ù£¬\n  %s2\nÆÄÀÏÀ»¡¡¾µ¼ö¡¡¾ø±â¡¡¶§¹®ÀÔ´Ï´Ù.";
+        Text[ korean ] = "%s1 ±Û²ÃÀº¡¡¹Ù²Ü ¼ö¡¡¾ø½À´Ï´Ù£¬\n  %s2\nÆÄÀÏÀ»¡¡¾µ ¼ö¡¡¾ø±â¡¡¶§¹®ÀÔ´Ï´Ù.";
         Text[ chinese_simplified ] = "ÎŞ·¨¸ü¸Ä×ÖÌå %s1 £¬ÒòÎªÎÄ¼ş\n  %s2\nÎŞ·¨±»¸ÄĞ´¡£";
         Text[ chinese_traditional ] = "µLªkÅÜ§ó¦r«¬ %s1 ¡A¦]¬°µLªkÂĞ¼gÀÉ®×\n  %s2\n ¡C";
         Text[ turkish ] = "The font %s1 cannot be changed because the file\n  %s2\ncannot be written.";
@@ -1648,7 +1648,7 @@ String RID_FNTNM_FONTNAME_TXT
     Text[ italian ] = "Proprietà di %s";
     Text[ danish ] = "Properties of %s";
     Text[ swedish ] = "Egenskaper för %s";
-    Text[ polish ] = "W³a?ciwo?ci %s";
+    Text[ polish ] = "W³aœciwoœci %s";
     Text[ portuguese_brazilian ] = "Properties of %s";
     Text[ japanese ] = "%s ‚Ì‘®«";
     Text[ korean ] = "%sÀÇ¡¡µî·ÏÁ¤º¸";
@@ -1723,7 +1723,7 @@ String RID_BXT_ENVIRONMENT
     Text[ italian ] = "Ambiente non corretto";
     Text[ danish ] = "Wrong environment";
     Text[ swedish ] = "Fel miljö";
-    Text[ polish ] = "Nieprawid³owe ?rodowisko";
+    Text[ polish ] = "Nieprawid³owe œrodowisko";
     Text[ portuguese_brazilian ] = "Wrong environment";
     Text[ japanese ] = "³‚µ‚­‚È‚¢ŠÂ‹«";
     Text[ korean ] = "È¯°æ¡¡Æ²¸²";
@@ -2320,7 +2320,7 @@ String RID_QUERY_REMOVEDRIVER
     Text[ polish ] = "Na pewno usun¹æ sterownik \"%s\"?";
     Text[ portuguese_brazilian ] = "Do you really want to remove this driver ?";
     Text[ japanese ] = "–{“–‚ÉÄŞ×²ÊŞ \"%s\" ‚ğíœ‚µ‚Ä‚à‚¢‚¢‚Å‚·‚©B";
-    Text[ korean ] = "ÀÌ¡¡µå¶óÀÌ¹ö¸¦¡¡Á¤¸»¡¡Á¦°ÅÇÏ½Ã°Ú½À´Ï±î ?";
+    Text[ korean ] = "ÀÌ µå¶óÀÌ¹ö¸¦ Á¤¸» Á¦°ÅÇÏ½Ã°Ú½À´Ï±î ?";
     Text[ chinese_simplified ] = "ÕæµÄÒªÉ¾³ıÕâ¸ö \"%s\" Çı¶¯³ÌĞò£¿";
     Text[ chinese_traditional ] = "¯u­n²¾°£ÅX°Êµ{¦¡ \"%s\" ¡H";
     Text[ turkish ] = "Do you really want to remove this driver ?";
@@ -2387,7 +2387,7 @@ String RID_QUERY_DRIVERUSED
     Text [ English ] = "The driver \"%s\" is used by configured printers. Do you relly want to remove it ? The corresponding printers will be removed also.";
     Text[ english_us ] = "There are still printers using the driver \"%s\". Do you really want to remove it? The corresponding printers will also be removed.";
     Text[ portuguese ] = "Existem ainda impressoras a utilizar o controlador \"%s\". Ao removê-lo estará também a remover as respectivas impressoras. Continuar?";
-    Text[ russian ] = "Èìåşòñÿ ïğèíòåğû, êîòîğûå èñïîëüçóşò ıòîò äğàéâåğ. Âû äåéñòâèòåëüíî õîòèòå åãî óäàëèòü? Â ñëó÷àå èõ óäàëåíèÿ óäàëÿòñÿ è ñîîòâåòñòâóşùèå ïğ";
+    Text[ russian ] = "Èìåşòñÿ ïğèíòåğû, êîòîğûå èñïîëüçóşò äğàéâåğ \"%s\". Âû äåéñòâèòåëüíî õîòèòå åãî óäàëèòü? Â ñëó÷àå óäàëåíèÿ ıòîãî äğàéâåğà óäàëÿòñÿ è ñîîòâåòñòâóşùèå ïğèíòåğû.";
     Text[ greek ] = "ÕğÜñ÷ïõí áêüìç åêôõğùôİò, ïé ïğïßïé ÷ñçóéìïğïéïıí áõôü ôï ğñüãñáììá ïäŞãçóçò. Èİëåôå ğñáãìáôéêÜ íá êáôáñãçèåß; Óå áõôŞ ôç ğåñßğôùóç èá ãßí?";
     Text[ dutch ] = "Driver \"%s\" is nog in gebruik voor enkele printers. Wilt u hem werkelijk verwijderen? De desbetreffende printers worden dan eveneens verwijderd.";
     Text[ french ] = "D'autres imprimantes utilisent le pilote \"%s\". Voulez-vous vraiment le supprimer ? Ceci entraînera également la suppression des imprimantes correspondantes.";
@@ -2395,10 +2395,10 @@ String RID_QUERY_DRIVERUSED
     Text[ italian ] = "Ci sono ancora stampanti che utilizzano il driver \"%s\". Volete ugualmente rimuoverlo? Le stampanti corrispondenti verranno così rimosse.";
     Text[ danish ] = "This driver is used by configured printers. Do you relly want to remove it ? The corresponding printers will be removed also.";
     Text[ swedish ] = "Det finns fortfarande skrivare som använder drivrutinen \"%s\". Vill du verkligen ta bort den? Då tas även motsvarande skrivare bort.";
-    Text[ polish ] = "Ze sterownika \"%s\" korzystaj¹ jeszcze inne drukarki. Czy na pewno go usun¹æ? Je?li tak, to razem z nim usuniête zostan¹ równie¿ drukarki.";
+    Text[ polish ] = "Ze sterownika \"%s\" korzystaj¹ jeszcze inne drukarki. Czy na pewno go usun¹æ? Jeœli tak, to razem z nim usuniête zostan¹ równie¿ drukarki.";
     Text[ portuguese_brazilian ] = "This driver is used by configured printers. Do you relly want to remove it ? The corresponding printers will be removed also.";
     Text[ japanese ] = "‚Ü‚¾ÄŞ×²ÊŞ \"%s\" ‚ğg—p‚µ‚Ä‚¢‚éÌßØİÀ‚ª‚ ‚è‚Ü‚·B‚±‚ÌÄŞ×²ÌŞ‚ğíœ‚µ‚Ä‚©‚Ü‚¢‚Ü‚¹‚ñ‚©B“¯‚ÉÌßØİÀ‚àíœ‚³‚ê‚Ä‚µ‚Ü‚¢‚Ü‚·B";
-    Text[ korean ] = "ÀÌ¡¡µå¶óÀÌ¹ö¸¦¡¡»ç¿ëÇÏ´Â¡¡ÇÁ¸°ÅÍ°¡¡¡¾ÆÁ÷¡¡ÀÖ½À´Ï´Ù. ÀÌ¡¡µå¶óÀÌ¹ö¸¦¡¡Á¤¸»¡¡ Á¦°ÅÇÏ½Ã°Ú½À´Ï±î  ? ÇØ´ç¡¡ÇÁ¸°ÅÍµµ¡¡Á¦°ÅµË´Ï´Ù.";
+    Text[ korean ] = "ÀÌ µå¶óÀÌ¹ö¸¦ »ç¿ëÇÏ´Â ÇÁ¸°ÅÍ°¡ ¾ÆÁ÷ ÀÖ½À´Ï´Ù. ÀÌ µå¶óÀÌ¹ö¸¦ Á¤¸» Á¦°ÅÇÏ½Ã°Ú½À´Ï±î? ÇØ´ç ÇÁ¸°ÅÍµµ Á¦°ÅµË´Ï´Ù.";
     Text[ chinese_simplified ] = "»¹´æÔÚÒ»Ğ©Ê¹ÓÃÕâ¸ö \"%s\" Çı¶¯³ÌĞòµÄ´òÓ¡»ú¡£ÕæµÄÒªÉ¾³ıÕâ¸öÇı¶¯³ÌĞò£¿ÕâÑù»áÒ»ÆğÒÆ³ıÏà¹ØµÄ´òÓ¡»ú¡£";
     Text[ chinese_traditional ] = "ÁÙ¦s¦b¤@¨Ç¨Ï¥Î \"%s\" ÅX°Êµ{¦¡ªº¦Lªí¾÷¡C¯uªº­n§R°£³o­ÓÅX°Êµ{¦¡¡H³o¼Ë·|¤@°_²¾°£¬ÛÃöªº¦Lªí¾÷¡C";
     Text[ turkish ] = "This driver is used by configured printers. Do you relly want to remove it ? The corresponding printers will be removed also.";
@@ -2421,10 +2421,10 @@ String RID_ERR_REMOVEDEFAULTDRIVER
     Text[ italian ] = "Questo driver è utilizzato dalla vostra stampante standard, per questo non può essere eliminato.";
     Text[ danish ] = "This driver is used by your standard printer. Therefore it cannot be removed.";
     Text[ swedish ] = "Drivrutinen \"%s\" används av din standardskrivare. Därför går det inte att ta bort den.";
-    Text[ polish ] = "Sterownika \"%s\" nie mo¿na usun¹æ, poniewa¿ korzysta z niego drukarka domy?lna u¿ytkownika.";
+    Text[ polish ] = "Sterownika \"%s\" nie mo¿na usun¹æ, poniewa¿ korzysta z niego drukarka domyœlna u¿ytkownika.";
     Text[ portuguese_brazilian ] = "This driver is used by your standard printer. Therefore it cannot be removed.";
     Text[ japanese ] = "ÄŞ×²ÊŞ \"%s\" ‚Í•W€ÌßØİÀ‚Ég—p‚³‚ê‚Ä‚¢‚é‚½‚ßAíœ‚Í‚Å‚«‚Ü‚¹‚ñB";
-    Text[ korean ] = "ÀÌ¡¡µå¶óÀÌ¹ö´Â¡¡±ÍÇÏÀÇ¡¡±âº»ÇÁ¸°ÅÍ¿¡¡¡ÀÇÇØ¡¡»ç¿ëµË´Ï´Ù. µû¶ó¼­¡¡Á¦°ÅÇÒ¡¡¼ö¡¡¾ø½À´Ï´Ù£®";
+    Text[ korean ] = "ÀÌ µå¶óÀÌ¹ö´Â ±ÍÇÏÀÇ ±âº»ÇÁ¸°ÅÍ¿¡ ÀÇÇØ »ç¿ëµË´Ï´Ù. µû¶ó¼­ Á¦°ÅÇÒ ¼ö ¾ø½À´Ï´Ù£®";
     Text[ chinese_simplified ] = "ÄúÉè¶¨µÄÄ¬ÈÏ´òÓ¡»úÊ¹ÓÃ \"%s\" Õâ¸öÇı¶¯³ÌĞò¡£Òò´ËÎŞ·¨ÒÆ³ıÕâ¸öÇı¶¯³ÌĞò¡£";
     Text[ chinese_traditional ] = "±zªºÀq»{¦Lªí¾÷¨Ï¥Î³o­ÓÅX°Êµ{¦¡ \"%s\" ¡C¦]¦¹µLªk§R°£³o­ÓÅX°Êµ{¦¡¡C";
     Text[ turkish ] = "This driver is used by your standard printer. Therefore it cannot be removed.";
@@ -2806,7 +2806,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ italian ] = "Volete";
         Text[ danish ] = "Do you want to";
         Text[ swedish ] = "Vill du";
-        Text[ polish ] = "Czy";
+        Text[ polish ] = "Co chcesz zrobiæ?";
         Text[ portuguese_brazilian ] = "Do you want to";
         Text[ japanese ] = "ÃŞÊŞ²½‚Ì’Ç‰Á";
         Text[ korean ] = "»ç¿ëÀÚ ¿ä±¸";
@@ -2890,7 +2890,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ polish ] = "Dodaj konwerter PDF";
         Text[ portuguese_brazilian ] = "add a P~DF printer";
         Text[ japanese ] = "P~DF ºİÊŞ°À‚Ì’Ç‰Á";
-        Text[ korean ] = "P~DF ÇÁ¸°ÅÍ Ãß°¡";
+        Text[ korean ] = "PDF ÄÁ¹öÅÍ Ãß°¡";
         Text[ chinese_simplified ] = "ÅäÖÃÒ»¸ö PDF ×ª»»Æ÷";
         Text[ chinese_traditional ] = "·s¼W PDF Âà´«¾¹";
         Text[ turkish ] = "add a P~DF printer";
@@ -3004,7 +3004,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ polish ] = "Nadaj konwerterowi PDF dowoln¹ nazwê";
         Text[ portuguese_brazilian ] = "Please enter a name for the PDF printer";
         Text[ japanese ] = "PDF ºİÊŞ°À‚Ì–¼‘O‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
-        Text[ korean ] = "PDF ÇÁ¸°ÅÍÀÇ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À";
+        Text[ korean ] = "PDF ÄÁ¹öÅÍÀÇ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À";
         Text[ chinese_simplified ] = "ÇëÊäÈëÒ»¸ö PDF ×ª»»Æ÷µÄÃû³Æ¡£";
         Text[ chinese_traditional ] = "½Ğ±z¿é¤J¤@­Ó PDF Âà´«¾¹¦WºÙ¡C";
         Text[ turkish ] = "Please enter a name for the PDF printer";
@@ -3066,7 +3066,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ polish ] = "Konwerter PDF";
         Text[ portuguese_brazilian ] = "PDF printer";
         Text[ japanese ] = "PDF ºİÊŞ°À";
-        Text[ korean ] = "PDF ÇÁ¸°ÅÍ";
+        Text[ korean ] = "PDF ÄÁ¹öÅÍ";
         Text[ chinese_simplified ] = "PDF ×ª»»Æ÷";
         Text[ chinese_traditional ] = "PDF Âà´«¾¹";
         Text[ turkish ] = "PDF printer";
@@ -3090,10 +3090,10 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ italian ] = "Imposta come stampante standard";
         Text[ danish ] = "~Set as default printer";
         Text[ swedish ] = "Använd som ~standardskrivare";
-        Text[ polish ] = "U¿yj jako drukarkê domy?ln¹";
+        Text[ polish ] = "U¿yj jako drukarkê domyœln¹";
         Text[ portuguese_brazilian ] = "~Set as default printer";
         Text[ japanese ] = "•W€ÌßØİÀ‚Æ‚µ‚Äg—p";
-        Text[ korean ] = "~±âº» ÇÁ¸°ÅÍ·Î ¼³Á¤";
+        Text[ korean ] = "±âº» ÇÁ¸°ÅÍ·Î ¼³Á¤";
         Text[ chinese_simplified ] = "Éè¶¨³ÉÄ¬ÈÏµÄ´òÓ¡»ú";
         Text[ chinese_traditional ] = "³]©w¦¨Àq»{¦Lªí¾÷";
         Text[ turkish ] = "~Set as default printer";
@@ -3111,14 +3111,14 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ portuguese ] = "~Remover nº de fax da saída";
         Text[ russian ] = "~Óäàëèòü íîìåğ ôàêñà èç âûâîäà";
         Text[ greek ] = "~fax number will be removed from output";
-        Text[ dutch ] = "~fax number will be removed from output";
+        Text[ dutch ] = "~Faxnummer niet weergeven";
         Text[ french ] = "~Supprimer le numéro de la sortie de fax";
         Text[ spanish ] = "~Eliminar número de fax en la salida";
         Text[ finnish ] = "~Faxnummer aus der Ausgabe entfernen";
         Text[ italian ] = "~fax number will be removed from output";
         Text[ danish ] = "~fax number will be removed from output";
         Text[ swedish ] = "Ta bort ~faxnummer från utmatningen";
-        Text[ polish ] = "Usuñ z wyj?cia numer faksu";
+        Text[ polish ] = "Usuñ z wyjœcia numer faksu";
         Text[ portuguese_brazilian ] = "~fax number will be removed from output";
         Text[ japanese ] = "~Fax ”Ô†‚ğ±³ÄÌß¯Ä‚©‚çíœ";
         Text[ korean ] = "~fax number will be removed from output";
@@ -3232,7 +3232,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ polish ] = "~Pomoc";
         Text[ portuguese_brazilian ] = "~Help";
         Text[ japanese ] = "ÍÙÌß";
-        Text[ korean ] = "~µµ¿ò¸»";
+        Text[ korean ] = "µµ¿ò¸»";
         Text[ chinese_simplified ] = "°ïÖú";
         Text[ chinese_traditional ] = "»¡©ú";
         Text[ turkish ] = "~Help";
@@ -3254,12 +3254,12 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ italian ] = "La riga di comando nei convertitori PDF viene modificata come segue: per ogni documento stampato viene sostituito rispettivamente il file \"(TMP)\" da un file temporaneo e \"(OUTFILE)\" da un un file PDF. Se \"(TMP)\" appare nella riga comandi, il codice PostScript verrà trasmesso a un file, altrimenti verrà trasemsso come immissione standard (cioè come pipe).";
         Text[ danish ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
         Text[ swedish ] = "Kommandoraden för PDF-konverterare bearbetas på följande sätt: på varje utskrivet dokument ersätts \"(TMP)\" och \"(OUTFILE)\" i kommandoraden av en temporär fil resp. av PDF-filen som ska skapas. Om \"(TMP)\" förekommer i kommandoraden överförs PostScript-koden i en fil, i annat fall via standardinmatningen (d.v.s. som pipe).";
-        Text[ polish ] = "Wiersz poleceñ konwerterów PDF przetwarzany jest w nastêpuj¹cy sposób: Podczas drukowania dokumentu, \"(TMP)\" w wierszu poleceñ zamieniane jest na plik tymczasowy, a \"(OUTFILE)\" na plik PDF, który ma byæ utworzony. Je¿eli wiersz poleceñ zawiera \"(TMP)\", kod PostScript przekazany zostanie w pliku. W innym przypadku przekazany zostanie domy?lne (tzn jako potok (pipe)).";
+        Text[ polish ] = "Wiersz poleceñ konwerterów PDF przetwarzany jest w nastêpuj¹cy sposób: Podczas drukowania dokumentu, \"(TMP)\" w wierszu poleceñ zamieniane jest na plik tymczasowy, a \"(OUTFILE)\" na plik PDF, który ma byæ utworzony. Je¿eli wiersz poleceñ zawiera \"(TMP)\", kod PostScript przekazany zostanie w pliku. W innym przypadku przekazany zostanie domyœlne (tzn jako potok (pipe)).";
         Text[ portuguese_brazilian ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
         Text[ japanese ] = "PDF ºİÊŞ°À‚Å‚ÌºÏİÄŞs‚ÍŸ‚Ì‚æ‚¤‚ÉÀs‚³‚ê‚Ü‚·: ÄŞ·­ÒİÄ‚ğˆóü‚·‚é‚½‚Ñ‚ÉAºÏİÄŞs‚Å \"(TMP)\" ‚ÍˆêÌ§²Ù‚ÅA\"(OUTFILE)\" ‚Íì¬‚³‚ê‚é PDF Ì§²Ù‚Å’uŠ·‚³‚ê‚Ü‚·BºÏİÄŞs‚É \"(TMP)\" ‚ª‚ ‚é‚ÆAPostScript º°ÄŞ‚ÍÌ§²Ù‚É“Ç‚İ‚Ü‚ê‚Ü‚·B‚»‚¤‚Å‚È‚¢ê‡‚ÍA•W€‰ñ˜H‚Ì“ü—ÍA‚Â‚Ü‚èÊß²Ìß×²İˆ—‚ªs‚í‚ê‚Ü‚·B";
-        Text[ korean ] = "PDF ÇÊÅÍÀÇ ¸í·ÉÇàÀº ´ÙÀ½°ú °°ÀÌ ½ÇÇàµË´Ï´Ù: ¸Å¹ø ¹®¼­ ÀÎ¼â½Ã, ÀÓ½Ã ÆÄÀÏ¿¡ ÀÇÇØ¼­´Â \"(TMP)\", »ı¼ºµÇ¾î¾ß ÇÏ´Â PDF ÆÄÀÏ¿¡ ÀÇÇØ¼­´Â \"(OUTFILE)\"·Î ´ëÃ¼µË´Ï´Ù. ¸í·ÉÇà¿¡ \"(TMP)\"°¡ ³ªÅ¸³ª¸é PostScript ÄÚµå°¡ ÀÓ½Ã ÆÄÀÏÀ» ÅëÇØ Á¦°øµÇ°í, ±× ¿ÜÀÇ °æ¿ì¿¡´Â ±âº» ÀÔ·ÂÀ» ÅëÇØ Á¦°øµË´Ï´Ù (ÆÄÀÌÇÁ·Î¼­).";
-        Text[ chinese_simplified ] = "PDF ×ª»»Æ÷µÄÃüÁî´¦Àí·½Ê½ÈçÏÂ£ºÁĞÓ¡Ã¿¸öÎÄµµÊ±Ö¸ÁîĞĞÖ®ÖĞ·Ö±ğÓÃÒ»¸öÔİÊ±ÎÄ¼şÀ´Ìæ´ú \"(TMP)\" ºÍÓÃÒ»¸öÄ¿±ê PDF ÎÄ¼şÃû³ÆÀ´Ìæ´ú \"(OUTFILE)\" ¡£Èç¹û \"(TMP)\" ÒÑ¾­´æÔÚÓÚÃüÁîĞĞÖ®ÖĞ£¬PostScript ´úÂë¾Í»á";
-        Text[ chinese_traditional ] = "PDF Âà´«¾¹ªº«ü¥O³B²z¤è¦¡¦p¤U¡G¦C¦L¨C­Ó¤å¥ó®É«ü¥O¦æ¤§¤¤¤À§O¥Î¤@­Ó¼È®ÉÀÉ®×¨Ó´À¥N \"(TMP)\" ©M¥Î¤@­Ó¥Ø¼Ğ PDF ÀÉ®×¦WºÙ¨Ó´À¥N \"(OUTFILE)\" ¡C¦pªG \"(TMP)\" ¤w¸g¦s¦b©ó«ü¥O¦æ¤§¤¤¡APostScript ¥N½X´N·|";
+        Text[ korean ] = "PDF ÄÁ¹öÅÍÀÇ ¸í·ÉÇàÀº ´ÙÀ½°ú °°ÀÌ ½ÇÇàµË´Ï´Ù: ¸Å¹ø ¹®¼­ ÀÎ¼â½Ã, ÀÓ½Ã ÆÄÀÏ¿¡ ÀÇÇØ¼­´Â \"(TMP)\", »ı¼ºµÇ¾î¾ß ÇÏ´Â PDF ÆÄÀÏ¿¡ ÀÇÇØ¼­´Â \"(OUTFILE)\"·Î ´ëÃ¼µË´Ï´Ù. ¸í·ÉÇà¿¡ \"(TMP)\"°¡ ³ªÅ¸³ª¸é PostScript ÄÚµå°¡ ÀÓ½Ã ÆÄÀÏÀ» ÅëÇØ Á¦°øµÇ°í, ±× ¿ÜÀÇ °æ¿ì¿¡´Â ±âº» ÀÔ·ÂÀ» ÅëÇØ Á¦°øµË´Ï´Ù (ÆÄÀÌÇÁ·Î¼­).";
+        Text[ chinese_simplified ] = "PDF ×ª»»Æ÷µÄÃüÁî´¦Àí·½Ê½ÈçÏÂ£ºÁĞÓ¡Ã¿¸öÎÄµµÊ±Ö¸ÁîĞĞÖ®ÖĞ·Ö±ğÓÃÒ»¸öÔİÊ±ÎÄ¼şÀ´Ìæ´ú \"(TMP)\" ºÍÓÃÒ»¸öÄ¿±ê PDF ÎÄ¼şÃû³ÆÀ´Ìæ´ú \"(OUTFILE)\" ¡£Èç¹û \"(TMP)\" ÒÑ¾­´æÔÚÓÚÃüÁîĞĞÖ®ÖĞ£¬PostScript ´úÂë¾Í»áÊäÈë³ÉÒ»¸öÎÄ¼ş£¬·ñÔò¾Í»áµ±×÷±ê×¼ÊäÈë(µ±×÷pipe)¡£";
+        Text[ chinese_traditional ] = "PDF Âà´«¾¹ªº«ü¥O³B²z¤è¦¡¦p¤U¡G¦C¦L¨C­Ó¤å¥ó®É«ü¥O¦æ¤§¤¤¤À§O¥Î¤@­Ó¼È®ÉÀÉ®×¨Ó´À¥N \"(TMP)\" ©M¥Î¤@­Ó¥Ø¼Ğ PDF ÀÉ®×¦WºÙ¨Ó´À¥N \"(OUTFILE)\" ¡C¦pªG \"(TMP)\" ¤w¸g¦s¦b©ó«ü¥O¦æ¤§¤¤¡APostScript ¥N½X´N·|¿é¤J¦¨¤@­ÓÀÉ®×¡A§_«h·|·í§@¼Ğ·Ç¿é¤J(·í§@pipe)¡C";
         Text[ turkish ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
         Text[ arabic ] = "ÓíÊã ÊäİíĞ ÓØÑ ÇáÃãÑ İí ãÍæáÇÊ PDF ßÇáÂÊí: İí ßá ãÑÉ íÊã İíåÇ ØÈÇÚÉ ãÓÊäÏ¡ Óæİ íÊã ÇÓÊÈÏÇá \"(TMP)\" Èãáİ ãÄŞÊ æ \"(OUTFILE)\" Èãáİ PDF ÇáãÑÇÏ ÅäÔÇÄå. ÅĞÇ æÑÏÊ \"(TMP)\" İí ÓØÑ ÇáÃæÇãÑ¡ íÊã ÊãÑíÑ ÔíİÑÉ PostScript  İí ãáİ¡ İíãÇ ÚÏÇ Ğáß¡ íÊã ÊãÑíÑåÇ ßÅÏÎÇá ŞíÇÓí (åĞÇ íÚäí ßÜ Pipe).";
         Text[ finnish ] = "Die Kommandozeile bei PDF Konvertern wird wie folgt verarbeitet: bei jedem gedruckten Dokument wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporäre Datei und \"(OUTFILE)\" durch die zu erzeugende PDF Datei ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei übergeben, andernfalls über die Standardeingabe (d.h. als Pipe).";
@@ -3279,12 +3279,12 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ italian ] = "La riga comandi degli apparecchi fax verrà impostata come segue: per ogni fax inviato ogni \"(TMP)\" della riga comandi verrà sostituito da un file temporaneo e \"(PHONE)\" sarà sostituito dal numero di fax. Se \"(TMP)\" appare nella riga comandi, il codice PostScript verrà trasmesso a un file, altrimenti verrà trasemsso come immissione standard (cioè come pipe).";
         Text[ danish ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
         Text[ swedish ] = "Kommandoraden för faxar bearbetas på följande sätt: på varje fax som skickas ersätts \"(TMP)\" och \"(PHONE)\" i kommandoraden av en temporär fil resp. av faxnumret. Om \"(TMP)\" förekommer i kommandoraden överförs PostScript-koden i en fil, i annat fall via standardinmatningen (d.v.s som pipe).";
-        Text[ polish ] = "Wiersz poleceñ w faksach przetwarzany jest w nastêpuj¹cy sposób: Podczas wysy³ania faksu, \"(TMP)\" w wierszu poleceñ zamieniane jest na plik tymczasowy, a \"(PHON)\" na numer faksu. Je¿eli wiersz poleceñ zawiera \"(TMP)\", kod PostScript przekazany zostanie w pliku. W innym przypadku przekazany zostanie domy?lnie (tzn jako potok (pipe)).";
+        Text[ polish ] = "Wiersz poleceñ w faksach przetwarzany jest w nastêpuj¹cy sposób: Podczas wysy³ania faksu, \"(TMP)\" w wierszu poleceñ zamieniane jest na plik tymczasowy, a \"(PHON)\" na numer faksu. Je¿eli wiersz poleceñ zawiera \"(TMP)\", kod PostScript przekazany zostanie w pliku. W innym przypadku przekazany zostanie domyœlnie (tzn jako potok (pipe)).";
         Text[ portuguese_brazilian ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
         Text[ japanese ] = "Fax ‹@‚Å‚ÌºÏİÄŞs‚ÍŸ‚Ì‚æ‚¤‚ÉÀs‚³‚ê‚Ü‚·: Fax ‘—M‚·‚é‚½‚Ñ‚ÉAºÏİÄŞs‚Ì \"(TMP)\" ‚ÍˆêÌ§²Ù‚ÅA\"(PHONE)\" ‚ÍÌ§¯¸½”Ô†‚Å’uŠ·‚³‚ê‚Ü‚·BºÏİÄŞs‚É \"(TMP)\" ‚ª‚ ‚é‚ÆAPostScript º°ÄŞ‚ÍÌ§²Ù‚É“Ç‚İ‚Ü‚ê‚Ü‚·B‚»‚¤‚Å‚È‚¢ê‡‚ÍA•W€‰ñ˜H‚Ì“ü—ÍA‚Â‚Ü‚èÊß²Ìß×²İˆ—‚ªs‚í‚ê‚Ü‚·B";
         Text[ korean ] = "ÆÑ½º ±â±âÀÇ ¸í·ÉÇàÀº ´ÙÀ½°ú °°ÀÌ ½ÇÇàµË´Ï´Ù: ¸Å¹ø ÆÑ½º ¼Û½Å½Ã, ÀÓ½Ã ÆÄÀÏ¿¡ ÀÇÇØ¼­´Â \"(TMP)\", ÆÑ½º ¹øÈ£¿¡ ÀÇÇØ¼­´Â \"(PHONE)\"À¸·Î ´ëÃ¼µË´Ï´Ù. ¸í·ÉÇà¿¡ \"(TMP)\"°¡ ³ªÅ¸³ª¸é PostScript ÄÚµå°¡ ÀÓ½Ã ÆÄÀÏÀ» ÅëÇØ Á¦°øµÇ°í, ±× ¿ÜÀÇ °æ¿ì¿¡´Â ±âº» ÀÔ·ÂÀ» ÅëÇØ Á¦°øµË´Ï´Ù (ÆÄÀÌÇÁ·Î¼­).";
-        Text[ chinese_simplified ] = "´«Õæ»úµ¥ÏîÃüÁîµÄ´¦Àí·½Ê½ÈçÏÂ£º¼Ä·¢´«ÕæÊ±Í¨¹ıÃüÁîÊäÈëĞĞÓÃÒ»¸öÔİÊ±ÎÄ¼şÌæ´ú\"(TMP)\" £¬ÓÃ´«ÕæºÅÂëÌæ´ú \"(PHONE)\" ¡£Èç¹ûÃüÁîĞĞº¬ÓĞ \"(TMP)\" £¬PostScript Ô´´úÂë¾Í»á×ª»»³ÉÒ»¸öÎÄ¼ş£¬·ñÔò¾Í»áµ±×÷";
-        Text[ chinese_traditional ] = "¶Ç¯uÉó³æ¶µ«ü¥Oªº³B²z¤è¦¡¦p¤U¡G±Hµo¶Ç¯u®É³q¹L«ü¥O¦æ¥Î¤@­Ó¼È®ÉÀÉ®×´À¥N\"(TMP)\" ¡A¥Î¶Ç¯u¸¹½X´À¥N \"(PHONE)\" ¡C¦pªG«ü¥O¦æ§t¦³ \"(TMP)\" ¡APostScript ·½¥N½X´N·|Âà´«¦¨¤@­ÓÀÉ®×¡A§_«h´N·|·í§@¼Ğ­ã";
+        Text[ chinese_simplified ] = "´«Õæ»úµ¥ÏîÃüÁîµÄ´¦Àí·½Ê½ÈçÏÂ£º¼Ä·¢´«ÕæÊ±Í¨¹ıÃüÁîÊäÈëĞĞÓÃÒ»¸öÔİÊ±ÎÄ¼şÌæ´ú\"(TMP)\" £¬ÓÃ´«ÕæºÅÂëÌæ´ú \"(PHONE)\" ¡£Èç¹ûÃüÁîĞĞº¬ÓĞ \"(TMP)\" £¬PostScript Ô´´úÂë¾Í»á×ª»»³ÉÒ»¸öÎÄ¼ş£¬·ñÔò¾Í»áµ±×÷±ê×¼ÊäÈë(µ±×÷pipe)¡£";
+        Text[ chinese_traditional ] = "¶Ç¯uÉó³æ¶µ«ü¥Oªº³B²z¤è¦¡¦p¤U¡G±Hµo¶Ç¯u®É³q¹L«ü¥O¦æ¥Î¤@­Ó¼È®ÉÀÉ®×´À¥N\"(TMP)\" ¡A¥Î¶Ç¯u¸¹½X´À¥N \"(PHONE)\" ¡C¦pªG«ü¥O¦æ§t¦³ \"(TMP)\" ¡APostScript ·½¥N½X´N·|Âà´«¦¨¤@­ÓÀÉ®×¡A§_«h·|·í§@¼Ğ·Ç¿é¤J(·í§@pipe)¡C";
         Text[ turkish ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
         Text[ arabic ] = "ÓíÊã ÊäİíĞ ÓØÑ ÇáÃãÑ İí ÃÌåÒÉ ÇáİÇßÓ ßÇáÂÊí: İí ßá ãÑÉ íÊã İíåÇ ÅÑÓÇá ÑÓÇáÉ İÇßÓ¡ Óæİ íÊã ÇÓÊÈÏÇá \"(TMP)\" İí ÓØÑ ÇáÃãÑ Èãáİ ãÄŞÊ æ \"(PHONE)\" ÈÑŞã ÇáİÇßÓ. ÅĞÇ æÑÏÊ \"(TMP)\" İí ÓØÑ ÇáÃæÇãÑ¡ İÓíÊã ÊãÑíÑ ÔíİÑÉPostScript  İí ãáİ¡ İíãÇ ÚÏÇ Ğáß¡ íÊã ÊãÑíÑåÇ ßÅÏÎÇá ŞíÇÓí (åĞÇ íÚäí ßÜ Pipe).";
         Text[ finnish ] = "Die Kommandozeile bei Faxgeräten wird wie folgt verarbeitet: bei jedem gesendeten Fax wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporäre Datei und \"(PHONE)\" durch die Faxnummer ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei übergeben, andernfalls über die Standardeingabe (d.h. als Pipe).";
@@ -3349,7 +3349,7 @@ TabPage RID_ADDP_PAGE_OLDPRINTERS
         Text[ polish ] = "Usuñ";
         Text[ portuguese_brazilian ] = "~Remove";
         Text[ japanese ] = "íœ";
-        Text[ korean ] = "~Á¦°Å";
+        Text[ korean ] = "Á¦°Å";
         Text[ chinese_simplified ] = "ÒÆ³ı";
         Text[ chinese_traditional ] = "§R°£";
         Text[ turkish ] = "~Remove";
@@ -3376,7 +3376,7 @@ TabPage RID_ADDP_PAGE_OLDPRINTERS
         Text[ polish ] = "~Cofnij";
         Text[ portuguese_brazilian ] = "~Undo";
         Text[ japanese ] = "Œ³‚É–ß‚·";
-        Text[ korean ] = "~½ÇÇàÃë¼Ò";
+        Text[ korean ] = "½ÇÇàÃë¼Ò";
         Text[ chinese_simplified ] = "³·Ïû";
         Text[ chinese_traditional ] = "´_­ì";
         Text[ turkish ] = "~Undo";
@@ -3434,7 +3434,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Text[ italian ] = "Driver standard";
         Text[ danish ] = "the default driver";
         Text[ swedish ] = "Standarddrivrutinen";
-        Text[ polish ] = "Drukarka domy?lna";
+        Text[ polish ] = "Drukarka domyœlna";
         Text[ portuguese_brazilian ] = "the default driver";
         Text[ japanese ] = "•W€ÄŞ×²ÊŞ";
         Text[ korean ] = "±âº» µå¶óÀÌ¹ö";
@@ -3461,7 +3461,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Text[ italian ] = "un driver specifico per adattare la formattazione a un'altra stamapante";
         Text[ danish ] = "a specific driver to format identical to a certain printer";
         Text[ swedish ] = "En specifik drivrutin för att anpassa formateringen till en annan skrivare";
-        Text[ polish ] = "Specjalny sterownik do przejêcia formatów przez inn¹ drukarkê";
+        Text[ polish ] = "Specjalny sterownik, s³u¿¹cy do przejêcia formatów innej drukarki.";
         Text[ portuguese_brazilian ] = "a specific driver to format identical to a certain printer";
         Text[ japanese ] = "‚Ù‚©‚ÌÌßØİÀ‚É‘®İ’è‚ğ“¯Šú‚³‚¹‚é“ÁêÌßØİÀ";
         Text[ korean ] = "Æ¯Á¤ÇÑ ÇÁ¸°ÅÍ¿¡ ¸Âµµ·Ï Æ÷¸ËÇÏ±â À§ÇÑ Æ¯¼ö µå¶óÀÌ¹ö";
@@ -3498,7 +3498,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ polish ] = "Dany konwerter PDF ma korzystaæ z nastêpuj¹cego sterownika:";
         Text[ portuguese_brazilian ] = "Use the following driver for this PDF printer:";
         Text[ japanese ] = "‚±‚Ì PDF ºİÊŞ°À‚É‚ÍŸ‚ÌÄŞ×²ÊŞ‚ªg—p‚Å‚«‚Ü‚·:";
-        Text[ korean ] = "ÀÌ PDF ÇÁ¸°ÅÍ¸¦ À§ÇØ¼­´Â ´ÙÀ½°ú °°Àº µå¶óÀÌ¹ö¸¦ »ç¿ëÇØ¾ß ÇÕ´Ï´Ù:";
+        Text[ korean ] = "ÀÌ PDF ÄÁ¹öÅÍ¸¦ À§ÇØ¼­´Â ´ÙÀ½°ú °°Àº µå¶óÀÌ¹ö¸¦ »ç¿ëÇØ¾ß ÇÕ´Ï´Ù:";
         Text[ chinese_simplified ] = "Õâ¸ö PDF ×ª»»Æ÷Ê¹ÓÃÒÔÏÂµÄÇı¶¯³ÌĞò£º";
         Text[ chinese_traditional ] = "½Ğ¿ï¾Ü¥H¤UÓì¥Î©ó³o­Ó PDF Âà´«¾¹ªºÅX°Êµ{¦¡¡G";
         Text[ turkish ] = "Use the following driver for this PDF printer:";
@@ -3522,7 +3522,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ italian ] = "Driver standard";
         Text[ danish ] = "the default driver";
         Text[ swedish ] = "Standarddrivrutinen";
-        Text[ polish ] = "Drukarka domy?lna";
+        Text[ polish ] = "Drukarka domyœlna";
         Text[ portuguese_brazilian ] = "the default driver";
         Text[ japanese ] = "•W€ÄŞ×²ÊŞ";
         Text[ korean ] = "±âº» µå¶óÀÌ¹ö";
@@ -3576,7 +3576,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ italian ] = "un driver specifico per adattare la formattazione a un'altra stampante";
         Text[ danish ] = "a specific driver to format identical to a certain printer";
         Text[ swedish ] = "En specifik drivrutin för att anpassa formateringen till en annan skrivare";
-        Text[ polish ] = "Specjalny sterownik do przejêcia formatów przez inn¹ drukarkê.";
+        Text[ polish ] = "Specjalny sterownik, s³u¿¹cy do przejêcia formatów innej drukarki.";
         Text[ portuguese_brazilian ] = "a specific driver to format identical to a certain printer";
         Text[ japanese ] = "‚Ù‚©‚ÌÌßØİÀ‚É‘®İ’è‚ğ“¯Šú‚³‚¹‚é“ÁêÄŞ×²ÊŞ";
         Text[ korean ] = "Æ¯Á¤ÇÑ ÇÁ¸°ÅÍ¿¡ ¸Âµµ·Ï Æ÷¸ËÇÏ±â À§ÇÑ Æ¯¼ö µå¶óÀÌ¹ö";
