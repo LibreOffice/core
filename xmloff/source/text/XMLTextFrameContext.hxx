@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-23 14:39:03 $
+ *  last change: $Author: mtg $ $Date: 2001-03-09 16:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@ namespace com { namespace sun { namespace star {
 #define XML_TEXT_FRAME_PLUGIN 6
 #define XML_TEXT_FRAME_FLOATING_FRAME 7
 
+typedef ::std::map < const ::rtl::OUString, ::rtl::OUString, less_functor> ParamMap;
+
 class XMLTextFrameContext : public SvXMLImportContext
 {
     ::com::sun::star::uno::Reference <
@@ -112,6 +114,7 @@ class XMLTextFrameContext : public SvXMLImportContext
 
     ::rtl::OUString sDesc;
     sal_uInt16 nType;
+    ParamMap aParamMap;
 
 public:
 
