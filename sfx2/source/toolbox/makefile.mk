@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-02 15:04:43 $
+#   last change: $Author: obo $ $Date: 2004-11-19 11:37:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,8 +87,6 @@ SLOFILES =	\
         $(SLO)$/imgmgr.obj \
         $(SLO)$/tbxconf.obj \
         $(SLO)$/tbxitem.obj
-
-#        $(SLO)$/tbxcust.obj \
 
 # --- Tagets -------------------------------------------------------
 
