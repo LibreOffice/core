@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mtg $ $Date: 2001-01-10 11:36:01 $
+ *  last change: $Author: mtg $ $Date: 2001-01-11 16:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,6 +405,9 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
                         pMan->aEntry.nSize = pMan->aEntry.nCompressedSize = static_cast < sal_Int32 > (xSeek->getLength());
                         bTrackLength = sal_False;
                     }
+                    // Some implementations of XInputStream/XSeekable change the current position
+                    // in the stream! Evil evil bad bad!
+                    xSeek->seek(0);
                 }
 
                 try
