@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-19 19:19:50 $
+ *  last change: $Author: dvo $ $Date: 2001-01-23 16:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,10 @@
 #include "XMLChangeImportContext.hxx"
 #endif
 
+#ifndef _XMLOFF_FORMSIMP_HXX
+#include "formsimp.hxx"
+#endif
+
 using namespace ::rtl;
 using namespace ::std;
 using namespace ::com::sun::star::uno;
@@ -234,6 +238,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_change_start,    XML_TOK_TEXT_CHANGE_START },
     { XML_NAMESPACE_TEXT, sXML_change_end,      XML_TOK_TEXT_CHANGE_END },
     { XML_NAMESPACE_TEXT, sXML_change,          XML_TOK_TEXT_CHANGE },
+    { XML_NAMESPACE_OFFICE, sXML_forms,         XML_TOK_TEXT_FORMS },
 
     XML_TOKEN_MAP_END
 };
@@ -1208,6 +1213,10 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             (XML_TOK_TEXT_CHANGE_END != nToken),
             (XML_TOK_TEXT_CHANGE_START != nToken),
             sal_True);
+        break;
+
+    case XML_TOK_TEXT_FORMS:
+        pContext = new XMLFormsContext(rImport, nPrefix, rLocalName);
         break;
 
     default:
