@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:56 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:21:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModalDialog DLG_INSERT_BOOKMARK
     TEXT [ English ] = "Insert bookmark" ;
     TEXT [ norwegian ] = "Sett inn bokmerke" ;
     TEXT [ italian ] = "Inserisci segnalibro" ;
-    TEXT [ portuguese_brazilian ] = "Inserir marca" ;
+    TEXT [ portuguese_brazilian ] = "Inserir Marcador" ;
     TEXT [ portuguese ] = "Inserir marcador de texto" ;
     TEXT [ finnish ] = "Lis�� kirjanmerkki" ;
     TEXT [ danish ] = "Inds�t tekstmarkering" ;
@@ -115,7 +115,7 @@ ModalDialog DLG_INSERT_BOOKMARK
         TEXT [ English ] = "~Delete" ;
         TEXT [ norwegian ] = "~Slett" ;
         TEXT [ italian ] = "~Elimina" ;
-        TEXT [ portuguese_brazilian ] = "~Apagar" ;
+        TEXT [ portuguese_brazilian ] = "E~xcluir" ;
         TEXT [ portuguese ] = "E~liminar" ;
         TEXT [ finnish ] = "~Poista" ;
         TEXT [ danish ] = "Slet" ;
@@ -137,6 +137,9 @@ ModalDialog DLG_INSERT_BOOKMARK
         TEXT[ turkish ] = "~Sil";
         TEXT[ catalan ] = "~Suprimeix";
         TEXT[ thai ] = "~ลบ";
+        TEXT[ czech ] = "Smazat";
+        TEXT[ hebrew ] = "‮מחיקה‬";
+        TEXT[ hindi ] = "~मिटाओ";
     };
     FixedLine FL_BOOKMARK
     {
@@ -146,7 +149,7 @@ ModalDialog DLG_INSERT_BOOKMARK
         TEXT [ English ] = "Bookmarks" ;
         TEXT [ norwegian ] = "Bokmerker" ;
         TEXT [ italian ] = "Segnalibri" ;
-        TEXT [ portuguese_brazilian ] = "Marcas" ;
+        TEXT [ portuguese_brazilian ] = "Marcadores" ;
         TEXT [ portuguese ] = "Marcadores de texto" ;
         TEXT [ finnish ] = "Kirjanmerkit" ;
         TEXT [ danish ] = "Tekstmarkeringer" ;
@@ -163,9 +166,12 @@ ModalDialog DLG_INSERT_BOOKMARK
         TEXT[ greek ] = "������� ��������";
         TEXT[ korean ] = "책갈피";
         TEXT[ arabic ] = "������ ������";
-        TEXT[ turkish ] = "Metin i�areti";
+        TEXT[ turkish ] = "S�kkullan�lanlar";
         TEXT[ catalan ] = "Marques de text";
         TEXT[ thai ] = "ที่คั่น";
+        TEXT[ czech ] = "Záložky";
+        TEXT[ hebrew ] = "Textmarken";
+        TEXT[ hindi ] = "पृष्ठसंकेत";
     };
     TEXT[ chinese_simplified ] = "插入书签";
     TEXT[ russian ] = "������� ��������";
@@ -178,6 +184,9 @@ ModalDialog DLG_INSERT_BOOKMARK
     TEXT[ turkish ] = "Metin i�areti ekle";
     TEXT[ catalan ] = "Insereix marca";
     TEXT[ thai ] = "แทรกที่คั่น";
+    TEXT[ czech ] = "Vložit záložku";
+    TEXT[ hebrew ] = "‮הוספת סימניה‬";
+    TEXT[ hindi ] = "पृष्ठसंकेत जोड़ो";
 };
 String STR_REMOVE_WARNING
 {
@@ -193,8 +202,8 @@ String STR_REMOVE_WARNING
     Text[ italian ] = "I caratteri seguenti non sono ammessi e per questo eliminati. ";
     Text[ danish ] = "De f�lgende tegn er ikke tilladte og er derfor blevet fjernet: ";
     Text[ swedish ] = "F�ljande tecken �r inte till�tna och har d�rf�r tagits bort:  ";
-    Text[ polish ] = "Nast�puj�cy znak jest niedozwolony i zosta� dlatego usuni�ty: ";
-    Text[ portuguese_brazilian ] = "The following characters are not valid and have been removed: ";
+    Text[ polish ] = "Nast�puj�ce znaki s� niedozwolone i zosta�y usuni�te: ";
+    Text[ portuguese_brazilian ] = "Os seguintes caracteres foram removidos porque n�o s�o v�lidos: ";
     Text[ japanese ] = "次の文字は許可されていないため除去されました。 ";
     Text[ korean ] = "다음과 같은 문자는 허용되지 않기 때문에 제거되었습니다: ";
     Text[ chinese_simplified ] = "下列字符无效且已经被删除： ";
@@ -204,7 +213,19 @@ String STR_REMOVE_WARNING
     Text[ catalan ] = "Els seg�ents car�cters s'han eliminat perqu� no es permeten:  ";
     Text[ finnish ] = "Seuraavat merkit eiv�t ole kelvollisia ja ne poistettiin: ";
     Text[ thai ] = "ตัวอักขระตามนี้ไม่ถูกต้องและถูกเอาออกแล้ว: ";
+    Text[ czech ] = "Následující znaky jsou neplatné a byly odstraněny: ";
+    Text[ hebrew ] = "Die folgenden Zeichen sind nicht zulässig und wurden deshalb entfernt:";
+    Text[ hindi ] = "निम्नलिखित अक्षरें अमान्य है और उनको हटाया: ";
 };
+
+
+
+
+
+
+
+
+
 
 
 
