@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawController.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:35:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:55:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,17 @@
 
 #include "DrawController.hxx"
 
-#ifndef SD_DRAW_SUB_CONTROLLER_HXX
-#include "DrawSubController.hxx"
-#endif
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
 #ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
 #endif
+#include "View.hxx"
+#include "Window.hxx"
+#include "DrawDocShell.hxx"
+#include "unomodel.hxx"
+
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
@@ -102,25 +104,31 @@ using namespace ::vos;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+namespace {
+static const ::com::sun::star::uno::Type saComponentTypeIdentifier (
+    ::getCppuType( (Reference<lang::XEventListener > *)0 ));
+static const ::com::sun::star::uno::Type saSelectionTypeIdentifier (
+    ::getCppuType( (Reference<view::XSelectionChangeListener > *)0 ));
+
+} // end of anonymous namespace
+
 namespace sd {
 
-enum properties
-{
-    PROPERTY_WORKAREA = 0,
-    PROPERTY_PRIMARY_SUB_CONTROLLER,
-    PROPERTY_COUNT
-};
 
-
-DrawController::DrawController (ViewShellBase& rBase) throw()
+DrawController::DrawController (
+    ViewShellBase& rBase,
+    ViewShell& rViewShell,
+    View& rView) throw()
     : SfxBaseController (&rBase),
-      OBroadcastHelper(DrawControllerMutexOwner::maMutex),
+      OBroadcastHelper(SfxBaseController::m_aMutex),
       OPropertySetHelper( *static_cast<OBroadcastHelperVar<
           OMultiTypeInterfaceContainerHelper,
           OMultiTypeInterfaceContainerHelper::keyType> *>(this)),
+      mrView(rView),
+      mrViewShell(rViewShell),
+      maLastVisArea(),
       mrBase(rBase),
-      mbDisposing(false),
-      mpSubController(NULL)
+      mbDisposing(false)
 {
 }
 
@@ -129,34 +137,6 @@ DrawController::DrawController (ViewShellBase& rBase) throw()
 
 DrawController::~DrawController (void) throw()
 {
-}
-
-
-
-
-DrawSubController* DrawController::GetSubController (void)
-{
-    if (mpSubController == NULL)
-    {
-        ::osl::MutexGuard aGuard (maMutex);
-        if (mpSubController == NULL)
-        {
-            mpSubController = mrBase.GetSubShellManager().GetMainSubShell()
-                ->GetSubController();
-
-            // Register as listener at the sub-controller.
-            Reference<XComponent> xEventBroadcaster (
-                static_cast<XWeak*>(mpSubController), UNO_QUERY);
-            if (xEventBroadcaster.is())
-                xEventBroadcaster->addEventListener (this);
-
-            Reference<XSelectionSupplier> xSelectionBroadcaster (
-                static_cast<XWeak*>(mpSubController), UNO_QUERY);
-            if (xSelectionBroadcaster.is())
-                xSelectionBroadcaster->addSelectionChangeListener (this);
-        }
-    }
-    return mpSubController;
 }
 
 
@@ -176,6 +156,7 @@ IMPLEMENT_FORWARD_XINTERFACE3(
 Sequence<Type> SAL_CALL DrawController::getTypes (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed();
     // OPropertySetHelper does not provide getTypes, so we have to
     // implement this method manually and list its three interfaces.
     OTypeCollection aTypeCollection (
@@ -219,6 +200,7 @@ void SAL_CALL DrawController::addEventListener(
     const Reference<lang::XEventListener >& xListener)
     throw (RuntimeException)
 {
+    ThrowIfDisposed();
     SfxBaseController::addEventListener( xListener );
 }
 
@@ -229,6 +211,7 @@ void SAL_CALL DrawController::removeEventListener (
     const Reference<lang::XEventListener >& aListener)
     throw (RuntimeException)
 {
+    ThrowIfDisposed();
     SfxBaseController::removeEventListener( aListener );
 }
 
@@ -239,6 +222,7 @@ void SAL_CALL DrawController::removeEventListener (
 
 OUString SAL_CALL DrawController::getImplementationName(  ) throw(RuntimeException)
 {
+    ThrowIfDisposed();
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "DrawController" ) );
 }
 
@@ -251,6 +235,7 @@ sal_Bool SAL_CALL DrawController::supportsService (
     const OUString& rsServiceName)
     throw(RuntimeException)
 {
+    ThrowIfDisposed();
     return rsServiceName.equals(ssServiceName);
 }
 
@@ -260,6 +245,7 @@ sal_Bool SAL_CALL DrawController::supportsService (
 Sequence<OUString> SAL_CALL DrawController::getSupportedServiceNames (void)
     throw(RuntimeException)
 {
+    ThrowIfDisposed();
     Sequence<OUString> aSupportedServices (1);
     OUString* pServices = aSupportedServices.getArray();
     pServices[0] = ssServiceName;
@@ -274,17 +260,7 @@ Sequence<OUString> SAL_CALL DrawController::getSupportedServiceNames (void)
 sal_Bool SAL_CALL DrawController::select (const Any& aSelection)
     throw(lang::IllegalArgumentException, RuntimeException)
 {
-    if( mbDisposing )
-        throw lang::DisposedException();
-
-    sal_Bool bResult = sal_False;
-
-    // Forward call to sub-controller of currently active sub-shell.
-    DrawSubController* pSubController = GetSubController();
-    if (pSubController != NULL)
-        bResult = pSubController->select (aSelection);
-
-    return bResult;
+    return false;
 }
 
 
@@ -293,17 +269,8 @@ sal_Bool SAL_CALL DrawController::select (const Any& aSelection)
 Any SAL_CALL DrawController::getSelection()
     throw(RuntimeException)
 {
-    if( mbDisposing )
-        throw lang::DisposedException();
-
-    Any aSelection;
-
-    // Forward call to sub-controller of currently active sub-shell.
-    DrawSubController* pSubController = GetSubController();
-    if (pSubController != NULL)
-        aSelection = pSubController->getSelection();
-
-    return aSelection;
+    Any aAny;
+    return aAny;
 }
 
 
@@ -316,9 +283,7 @@ void SAL_CALL DrawController::addSelectionChangeListener(
     if( mbDisposing )
         throw lang::DisposedException();
 
-    addListener(
-        ::getCppuType((Reference<view::XSelectionChangeListener>*)0),
-        xListener);
+    addListener (saSelectionTypeIdentifier, xListener);
 }
 
 
@@ -331,174 +296,20 @@ void SAL_CALL DrawController::removeSelectionChangeListener(
     if( mbDisposing )
         throw lang::DisposedException();
 
-    removeListener(
-        ::getCppuType((Reference<view::XSelectionChangeListener>*)0),
-        xListener);
+    removeListener (saSelectionTypeIdentifier, xListener);
 }
-
-
-
-
-//----------------------------------------------------------------------
-//------ The Properties of this implementation -------------------------
-//----------------------------------------------------------------------
-
-
-/**
- * All Properties of this implementation. Must be sorted by name.
- */
-static beans::Property * getBasicProps()
-{
-    static beans::Property *pTable = 0;
-
-    if( ! pTable )
-    {
-        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
-        if( ! pTable )
-        {
-
-            static beans::Property aBasicProps[PROPERTY_COUNT] =
-            {
-                beans::Property(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("VisibleArea") ),
-                    PROPERTY_WORKAREA,
-                    ::getCppuType((const ::com::sun::star::awt::Rectangle*)0),
-                    beans::PropertyAttribute::BOUND
-                    | beans::PropertyAttribute::READONLY),
-                beans::Property(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "PrimarySubController") ),
-                    PROPERTY_PRIMARY_SUB_CONTROLLER,
-                    ::getCppuType((const Reference<XInterface>*)0),
-                    beans::PropertyAttribute::BOUND
-                    | beans::PropertyAttribute::READONLY)
-            };
-            pTable = aBasicProps;
-        }
-    }
-    return pTable;
-}
-
-
-
-
-// XPropertySet & OPropertySetHelper
-
-
-/**
- * Create a table that map names to index values.
- */
-IPropertyArrayHelper & DrawController::getInfoHelper()
-{
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    static OPropertyArrayHelper aInfo(
-        getBasicProps(), PROPERTY_COUNT, sal_False);
-    return aInfo;
-}
-
-
-
-
-Reference < beans::XPropertySetInfo >  DrawController::getPropertySetInfo()
-        throw ( ::com::sun::star::uno::RuntimeException)
-{
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    if( mbDisposing )
-        throw lang::DisposedException();
-
-    static Reference < beans::XPropertySetInfo >  xInfo(
-        createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-
-
-sal_Bool DrawController::convertFastPropertyValue (
-    Any & rConvertedValue,
-    Any & rOldValue,
-    sal_Int32 nHandle,
-    const Any& rValue)
-    throw (lang::IllegalArgumentException)
-{
-    return sal_False;
-}
-
-
-
-/**
- * only set the value.
- */
-void DrawController::setFastPropertyValue_NoBroadcast (
-    sal_Int32 nHandle,
-    const Any& rValue)
-    throw (com::sun::star::uno::Exception)
-{
-}
-
-
-
-
-void DrawController::getFastPropertyValue (Any & rRet, sal_Int32 nHandle) const
-{
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    switch (nHandle)
-    {
-        case PROPERTY_WORKAREA:
-        {
-            // We have to use a const_cast here because a) this method
-            // has to be const in order to be recognized by the
-            // property helper and b) because GetSubController() is
-            // not const because the sub-controller may be repaced by
-            // another one during run time.
-            DrawSubController* pSubController =
-                const_cast<DrawController*>(this)->GetSubController ();
-            if (pSubController != NULL)
-                rRet <<= pSubController->GetVisArea();
-        }
-        break;
-
-        case PROPERTY_PRIMARY_SUB_CONTROLLER:
-        {
-            ViewShell* pShell = mrBase.GetSubShellManager().GetMainSubShell();
-            if (pShell != NULL)
-                rRet <<= Reference<XInterface>(
-                    static_cast<XWeak*>(pShell->GetSubController()));
-        }
-        break;
-    }
-}
-
-
-
-
-void DrawController::FireVisAreaChanged (
-    const Any& rNewVisArea,
-    const Any& rOldVisArea) throw()
-{
-    sal_Int32 nHandles = PROPERTY_WORKAREA;
-    try
-    {
-        fire (&nHandles, &rNewVisArea, &rOldVisArea, 1, sal_False);
-    }
-    catch (RuntimeException aException)
-    {
-    }
-}
-
 
 
 
 // XWindow
 
-Reference<awt::XWindow> DrawController::getWindow (void)
+Reference<awt::XWindow> DrawController::GetWindow (void)
 {
-    if (GetSubController() != NULL)
-        return GetSubController()->getWindow();
-    else
-        return Reference<awt::XWindow>();
+    Reference< ::com::sun::star::awt::XWindow > xWindow;
+    Window* pWindow = mrViewShell.GetActiveWindow();
+    if (pWindow != NULL)
+        xWindow = VCLUnoHelper::GetInterface (pWindow);
+    return xWindow;
 }
 
 void SAL_CALL DrawController::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw (::com::sun::star::uno::RuntimeException)
@@ -506,7 +317,7 @@ void SAL_CALL DrawController::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Wi
     if( mbDisposing )
         throw lang::DisposedException();
 
-    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    Reference< ::com::sun::star::awt::XWindow > xWindow( GetWindow() );
     if( xWindow.is() )
         xWindow->setPosSize( X, Y, Width, Height, Flags );
 }
@@ -518,7 +329,7 @@ void SAL_CALL DrawController::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Wi
 
     ::com::sun::star::awt::Rectangle aRect;
 
-    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    Reference< ::com::sun::star::awt::XWindow > xWindow( GetWindow() );
     if( xWindow.is() )
         aRect = xWindow->getPosSize();
 
@@ -530,7 +341,7 @@ void SAL_CALL DrawController::setVisible( sal_Bool Visible ) throw (::com::sun::
     if( mbDisposing )
         throw lang::DisposedException();
 
-    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    Reference< ::com::sun::star::awt::XWindow > xWindow( GetWindow() );
     if( xWindow.is() )
         xWindow->setVisible( Visible );
 }
@@ -540,7 +351,7 @@ void SAL_CALL DrawController::setEnable( sal_Bool Enable ) throw (::com::sun::st
     if( mbDisposing )
         throw lang::DisposedException();
 
-    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    Reference< ::com::sun::star::awt::XWindow > xWindow( GetWindow() );
     if( xWindow.is() )
         xWindow->setEnable( Enable );
 }
@@ -550,7 +361,7 @@ void SAL_CALL DrawController::setFocus(  ) throw (::com::sun::star::uno::Runtime
     if( mbDisposing )
         throw lang::DisposedException();
 
-    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    Reference< ::com::sun::star::awt::XWindow > xWindow( GetWindow() );
     if( xWindow.is() )
         xWindow->setFocus();
 }
@@ -560,7 +371,7 @@ void SAL_CALL DrawController::addWindowListener( const ::com::sun::star::uno::Re
     if( mbDisposing )
         throw lang::DisposedException();
 
-    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    Reference< ::com::sun::star::awt::XWindow > xWindow( GetWindow() );
     if( xWindow.is() )
         xWindow->addWindowListener( xListener );
 }
@@ -570,7 +381,7 @@ void SAL_CALL DrawController::removeWindowListener( const ::com::sun::star::uno:
     if( mbDisposing )
         throw lang::DisposedException();
 
-    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    Reference< ::com::sun::star::awt::XWindow > xWindow( GetWindow() );
     if( xWindow.is() )
         xWindow->removeWindowListener( xListener );
 }
@@ -580,7 +391,7 @@ void SAL_CALL DrawController::addFocusListener( const ::com::sun::star::uno::Ref
     if( mbDisposing )
         throw lang::DisposedException();
 
-    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    Reference< ::com::sun::star::awt::XWindow > xWindow( GetWindow() );
     if( xWindow.is() )
         xWindow->addFocusListener( xListener );
 }
@@ -590,7 +401,7 @@ void SAL_CALL DrawController::removeFocusListener( const ::com::sun::star::uno::
     if( mbDisposing )
         throw lang::DisposedException();
 
-    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    Reference< ::com::sun::star::awt::XWindow > xWindow( GetWindow() );
     if( xWindow.is() )
         xWindow->removeFocusListener( xListener );
 }
@@ -600,7 +411,7 @@ void SAL_CALL DrawController::addKeyListener( const ::com::sun::star::uno::Refer
     if( mbDisposing )
         throw lang::DisposedException();
 
-    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    Reference< ::com::sun::star::awt::XWindow > xWindow( GetWindow() );
     if( xWindow.is() )
         xWindow->addKeyListener( xListener );
 }
@@ -610,7 +421,7 @@ void SAL_CALL DrawController::removeKeyListener( const ::com::sun::star::uno::Re
     if( mbDisposing )
         throw lang::DisposedException();
 
-    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    Reference< ::com::sun::star::awt::XWindow > xWindow( GetWindow() );
     if( xWindow.is() )
         xWindow->removeKeyListener( xListener );
 }
@@ -620,7 +431,7 @@ void SAL_CALL DrawController::addMouseListener( const ::com::sun::star::uno::Ref
     if( mbDisposing )
         throw lang::DisposedException();
 
-    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    Reference< ::com::sun::star::awt::XWindow > xWindow( GetWindow() );
     if( xWindow.is() )
         xWindow->addMouseListener( xListener );
 }
@@ -630,7 +441,7 @@ void SAL_CALL DrawController::removeMouseListener( const ::com::sun::star::uno::
     if( mbDisposing )
         throw lang::DisposedException();
 
-    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    Reference< ::com::sun::star::awt::XWindow > xWindow( GetWindow() );
     if( xWindow.is() )
         xWindow->removeMouseListener( xListener );
 }
@@ -640,7 +451,7 @@ void SAL_CALL DrawController::addMouseMotionListener( const ::com::sun::star::un
     if( mbDisposing )
         throw lang::DisposedException();
 
-    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    Reference< ::com::sun::star::awt::XWindow > xWindow( GetWindow() );
     if( xWindow.is() )
         xWindow->addMouseMotionListener( xListener );
 }
@@ -650,7 +461,7 @@ void SAL_CALL DrawController::removeMouseMotionListener( const ::com::sun::star:
     if( mbDisposing )
         throw lang::DisposedException();
 
-    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    Reference< ::com::sun::star::awt::XWindow > xWindow( GetWindow() );
     if( xWindow.is() )
         xWindow->removeMouseMotionListener( xListener );
 }
@@ -660,7 +471,7 @@ void SAL_CALL DrawController::addPaintListener( const ::com::sun::star::uno::Ref
     if( mbDisposing )
         throw lang::DisposedException();
 
-    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    Reference< ::com::sun::star::awt::XWindow > xWindow( GetWindow() );
     if( xWindow.is() )
         xWindow->addPaintListener( xListener );
 }
@@ -670,7 +481,7 @@ void SAL_CALL DrawController::removePaintListener( const ::com::sun::star::uno::
     if( mbDisposing )
         throw lang::DisposedException();
 
-    Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
+    Reference< ::com::sun::star::awt::XWindow > xWindow( GetWindow() );
     if( xWindow.is() )
         xWindow->removePaintListener( xListener );
 }
@@ -684,12 +495,6 @@ void SAL_CALL
     DrawController::disposing (const lang::EventObject& rEventObject)
     throw (uno::RuntimeException)
 {
-    // Use mpSubController directly instead of GetSubController() to
-    // avoid instancing a new sub controller.
-    if (rEventObject.Source.get() == static_cast<XWeak*>(mpSubController))
-        // Release the pointer to the sub-controller so that
-        // GetSubController will get a new one when called again.
-        mpSubController = NULL;
 }
 
 
@@ -701,6 +506,7 @@ void  SAL_CALL
     DrawController::selectionChanged (const lang::EventObject& rEvent)
         throw (uno::RuntimeException)
 {
+    ThrowIfDisposed();
     // Have to forward the event to our selection change listeners.
     OInterfaceContainerHelper* pListeners = getContainer(
         ::getCppuType((Reference<view::XSelectionChangeListener>*)0));
@@ -724,6 +530,257 @@ void  SAL_CALL
         }
     }
 }
+
+
+
+
+SdXImpressDocument* DrawController::GetModel (void) const throw()
+{
+    if (mrView.GetDocSh())
+    {
+        Reference< frame::XModel > xModel (mrView.GetDocSh()->GetModel());
+        return SdXImpressDocument::getImplementation(xModel);
+    }
+    else
+        return NULL;
+}
+
+
+
+::awt::Rectangle DrawController::GetVisArea (void) const
+{
+    return awt::Rectangle(
+        maLastVisArea.Left(),
+        maLastVisArea.Top(),
+        maLastVisArea.GetWidth(),
+        maLastVisArea.GetHeight());
+}
+
+
+
+
+// XDrawView
+
+void SAL_CALL DrawController::setCurrentPage( const Reference< drawing::XDrawPage >& xPage )
+    throw(RuntimeException)
+{
+    ThrowIfDisposed();
+}
+
+
+
+
+Reference< drawing::XDrawPage > SAL_CALL DrawController::getCurrentPage()
+    throw(RuntimeException)
+{
+    ThrowIfDisposed();
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    Reference< drawing::XDrawPage >  xPage;
+
+    return xPage;
+}
+
+
+
+
+void DrawController::FireVisAreaChanged (const Rectangle& rVisArea) throw()
+{
+    if( maLastVisArea != rVisArea )
+    {
+        Any aNewValue;
+        aNewValue <<= awt::Rectangle(
+            rVisArea.Left(),
+            rVisArea.Top(),
+            rVisArea.GetWidth(),
+            rVisArea.GetHeight() );
+
+        Any aOldValue;
+        aOldValue <<= awt::Rectangle(
+            maLastVisArea.Left(),
+            maLastVisArea.Top(),
+            maLastVisArea.GetWidth(),
+            maLastVisArea.GetHeight() );
+
+        FirePropertyChange (PROPERTY_WORKAREA, aNewValue, aOldValue);
+
+        maLastVisArea = rVisArea;
+    }
+}
+
+
+
+
+void DrawController::FireSelectionChangeListener() throw()
+{
+    OInterfaceContainerHelper * pLC = getContainer(
+        saSelectionTypeIdentifier);
+    if( pLC )
+    {
+        Reference< XInterface > xSource( (XWeak*)this );
+        const lang::EventObject aEvent( xSource );
+
+        // Ueber alle Listener iterieren und Events senden
+        OInterfaceIteratorHelper aIt( *pLC);
+        while( aIt.hasMoreElements() )
+        {
+            try
+            {
+                view::XSelectionChangeListener * pL =
+                    static_cast<view::XSelectionChangeListener*>(aIt.next());
+                if (pL != NULL)
+                    pL->selectionChanged( aEvent );
+            }
+            catch (RuntimeException aException)
+            {
+            }
+        }
+    }
+}
+
+
+
+
+void DrawController::FirePropertyChange (
+    sal_Int32 nHandle,
+    const Any& rNewValue,
+    const Any& rOldValue)
+{
+    try
+    {
+        fire (&nHandle, &rNewValue, &rOldValue, 1, sal_False);
+    }
+    catch (RuntimeException aException)
+    {
+        // Ignore this exception.  Exceptions should be handled in the
+        // fire() function so that all listeners are called.  This is
+        // not the case at the moment, so we simply ignore the
+        // exception.
+    }
+
+}
+
+
+
+
+//===== Properties ============================================================
+
+Sequence<beans::Property>&  DrawController::GetPropertyTable (void)
+{
+    if (mpProperties.get() == NULL)
+    {
+        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
+        if (mpProperties.get() == NULL)
+        {
+            ::std::vector<beans::Property> aProperties;
+            FillPropertyTable (aProperties);
+            mpProperties = ::std::auto_ptr<Sequence<beans::Property> > (
+                new Sequence<beans::Property> (aProperties.size()));
+            for (unsigned int i=0; i<aProperties.size(); i++)
+                (*mpProperties)[i] = aProperties[i];
+        }
+    }
+    return *mpProperties.get();
+}
+
+
+
+
+void DrawController::FillPropertyTable (
+    ::std::vector<beans::Property>& rProperties)
+{
+    rProperties.push_back (
+        beans::Property(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("VisibleArea") ),
+            PROPERTY_WORKAREA,
+            ::getCppuType((const ::com::sun::star::awt::Rectangle*)0),
+            beans::PropertyAttribute::BOUND
+            | beans::PropertyAttribute::READONLY));
+}
+
+
+
+
+IPropertyArrayHelper & DrawController::getInfoHelper()
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    static OPropertyArrayHelper aInfo(GetPropertyTable(), sal_False);
+    return aInfo;
+}
+
+
+
+
+Reference < beans::XPropertySetInfo >  DrawController::getPropertySetInfo()
+        throw ( ::com::sun::star::uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    static Reference < beans::XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+
+
+
+sal_Bool DrawController::convertFastPropertyValue (
+    Any & rConvertedValue,
+    Any & rOldValue,
+    sal_Int32 nHandle,
+    const Any& rValue)
+    throw ( com::sun::star::lang::IllegalArgumentException)
+{
+    return sal_False;
+}
+
+
+
+
+void DrawController::setFastPropertyValue_NoBroadcast (
+    sal_Int32 nHandle,
+    const Any& rValue)
+    throw ( com::sun::star::uno::Exception)
+{
+}
+
+
+
+
+void DrawController::getFastPropertyValue (
+    Any & rRet,
+    sal_Int32 nHandle ) const
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    switch( nHandle )
+    {
+        case PROPERTY_WORKAREA:
+            rRet <<= awt::Rectangle(
+                maLastVisArea.Left(),
+                maLastVisArea.Top(),
+                maLastVisArea.GetWidth(),
+                maLastVisArea.GetHeight());
+            break;
+    }
+}
+
+
+
+
+void DrawController::ThrowIfDisposed (void) const
+    throw (::com::sun::star::lang::DisposedException)
+{
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    {
+        OSL_TRACE ("Calling disposed DrawController object. Throwing exception:");
+        throw lang::DisposedException (
+            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "DrawController object has already been disposed")),
+            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
+    }
+}
+
+
 
 
 
