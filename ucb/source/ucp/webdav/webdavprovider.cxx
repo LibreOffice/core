@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavprovider.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-17 09:15:49 $
+ *  last change: $Author: kso $ $Date: 2001-05-17 10:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,19 +138,11 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //
 //=========================================================================
 
-#if SUPD>614
 XSERVICEINFO_IMPL_1( ContentProvider,
                      OUString::createFromAscii(
                          "com.sun.star.comp.WebDAVContentProvider" ),
                      OUString::createFromAscii(
                          WEBDAV_CONTENT_PROVIDER_SERVICE_NAME ) );
-#else
-XSERVICEINFO_IMPL_1( ContentProvider,
-                     OUString::createFromAscii(
-                         "webdav_ucp_ContentProvider" ),
-                     OUString::createFromAscii(
-                         WEBDAV_CONTENT_PROVIDER_SERVICE_NAME ) );
-#endif
 
 //=========================================================================
 //
@@ -176,7 +168,11 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent(
     // Check URL scheme...
 
     const OUString aScheme
+#if SUPD>631
         = Identifier->getContentProviderScheme().toAsciiLowerCase();
+#else
+        = Identifier->getContentProviderScheme().toLowerCase();
+#endif
     if ( !aScheme.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM( HTTP_URL_SCHEME ) ) &&
          !aScheme.equalsAsciiL(
