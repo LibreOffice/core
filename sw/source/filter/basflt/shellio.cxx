@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:14:52 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,12 +520,12 @@ SwReader::SwReader(SvStorage& rStg, const String& rFileName, SwDoc *pDoc)
 }
 
 SwReader::SwReader(const uno::Reference < embed::XStorage >& rStg, const String& rFileName, SwDoc *pDoc)
-    : SwDocFac(pDoc), pStrm(0), pStg(0), pMedium(0), pCrsr(0), xStg( rStg ), aFileName(rFileName)
+    : SwDocFac(pDoc), pStrm(0), pMedium(0), pCrsr(0), xStg( rStg ), aFileName(rFileName)
 {
 }
 
 SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwDoc *pDoc)
-    : SwDocFac(pDoc), pStrm(0), pStg(0), pMedium(&rMedium), pCrsr(0),
+    : SwDocFac(pDoc), pStrm(0), pMedium(&rMedium), pCrsr(0),
     aFileName(rFileName)
 {
 }
@@ -533,7 +533,7 @@ SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwDoc *pDoc)
 // In ein existierendes Dokument einlesen
 
 SwReader::SwReader(SvStream& rStrm, const String& rFileName, SwPaM& rPam)
-    : SwDocFac(rPam.GetDoc()), pStrm(&rStrm), pStg(0), pMedium(0), pCrsr(&rPam),
+    : SwDocFac(rPam.GetDoc()), pStrm(&rStrm), pMedium(0), pCrsr(&rPam),
     aFileName(rFileName)
 {
 }
@@ -545,13 +545,13 @@ SwReader::SwReader(SvStorage& rStg, const String& rFileName, SwPaM& rPam)
 }
 
 SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwPaM& rPam)
-    : SwDocFac(rPam.GetDoc()), pStrm(0), pStg(0), pMedium(&rMedium),
+    : SwDocFac(rPam.GetDoc()), pStrm(0), pMedium(&rMedium),
     pCrsr(&rPam), aFileName(rFileName)
 {
 }
 
 Reader::Reader()
-    : pTemplate(0), pStrm(0), pStg(0), pMedium(0), bInsertMode(0),
+    : pTemplate(0), pStrm(0), pMedium(0), bInsertMode(0),
     bTmplBrowseMode(0), bReadUTF8(0), bBlockMode(0), bOrganizerMode(0),
     bHasAskTemplateName(0), bIgnoreHTMLComments(0)
 {
@@ -894,19 +894,19 @@ int StgReader::GetReaderType()
  */
 
 SwWriter::SwWriter(SvStream& rStrm, SwCrsrShell &rShell, BOOL bInWriteAll)
-    : pStrm(&rStrm), pStg(0), pMedium(0), pOutPam(0), pShell(&rShell),
+    : pStrm(&rStrm), pMedium(0), pOutPam(0), pShell(&rShell),
     rDoc(*rShell.GetDoc()), bWriteAll(bInWriteAll)
 {
 }
 
 SwWriter::SwWriter(SvStream& rStrm,SwDoc &rDoc)
-    : pStrm(&rStrm), pStg(0), pMedium(0), pOutPam(0), pShell(0), rDoc(rDoc),
+    : pStrm(&rStrm), pMedium(0), pOutPam(0), pShell(0), rDoc(rDoc),
     bWriteAll(true)
 {
 }
 
 SwWriter::SwWriter(SvStream& rStrm, SwPaM& rPam, BOOL bInWriteAll)
-    : pStrm(&rStrm), pStg(0), pMedium(0), pOutPam(&rPam), pShell(0),
+    : pStrm(&rStrm), pMedium(0), pOutPam(&rPam), pShell(0),
     rDoc(*rPam.GetDoc()), bWriteAll(bInWriteAll)
 {
 }
@@ -918,18 +918,18 @@ SwWriter::SwWriter(SvStorage& rStg,SwDoc &rDoc)
 }
 
 SwWriter::SwWriter( const uno::Reference < embed::XStorage >& rStg,SwDoc &rDoc)
-    : pStrm(0), pStg(0), pMedium(0), pOutPam(0), pShell(0), rDoc(rDoc), xStg( rStg ), bWriteAll(true)
+    : pStrm(0), pMedium(0), pOutPam(0), pShell(0), rDoc(rDoc), xStg( rStg ), bWriteAll(true)
 {
 }
 
 SwWriter::SwWriter(SfxMedium& rMedium, SwCrsrShell &rShell, BOOL bInWriteAll)
-    : pStrm(0), pStg(0), pMedium(&rMedium), pOutPam(0), pShell(&rShell),
+    : pStrm(0), pMedium(&rMedium), pOutPam(0), pShell(&rShell),
     rDoc(*rShell.GetDoc()), bWriteAll(bInWriteAll)
 {
 }
 
 SwWriter::SwWriter(SfxMedium& rMedium, SwDoc &rDoc)
-    : pStrm(0), pStg(0), pMedium(&rMedium), pOutPam(0), pShell(0), rDoc(rDoc),
+    : pStrm(0), pMedium(&rMedium), pOutPam(0), pShell(0), rDoc(rDoc),
     bWriteAll(true)
 {
 }
