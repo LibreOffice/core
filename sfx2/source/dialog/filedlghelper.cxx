@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-18 10:56:17 $
+ *  last change: $Author: dv $ $Date: 2001-06-19 15:34:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,13 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
 
+#ifndef  _COM_SUN_STAR_CONTAINER_XCONTENTENUMERATIONACCESS_HPP_
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_CONTAINER_XSET_HPP_
+#include <com/sun/star/container/XSet.hpp>
+#endif
+
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_COMMONFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #endif
@@ -112,6 +119,8 @@
 #endif
 
 #include "filedlghelper.hxx"
+#include "filepicker.hxx"
+#include "folderpicker.hxx"
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -172,6 +181,7 @@
 
 //-----------------------------------------------------------------------------
 
+using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
@@ -499,6 +509,10 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
 FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
                                               sal_uInt32 nFlags )
 {
+    OUString aService( RTL_CONSTASCII_USTRINGPARAM( FILE_OPEN_SERVICE_NAME ) );
+
+    Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+
     // create the file open dialog
     // the flags can be SFXWB_INSERT or SFXWB_MULTISELECTION
 
@@ -513,9 +527,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
     mbInsert        = SFXWB_INSERT == ( nFlags & SFXWB_INSERT );
 
     mpMatcher = NULL;
-
-    OUString aService( RTL_CONSTASCII_USTRINGPARAM( FILE_OPEN_SERVICE_NAME ) );
-    Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
 
     mxFileDlg = Reference < XFilePicker > ( xFactory->createInstance( aService ), UNO_QUERY );
 
@@ -1186,6 +1197,39 @@ const short FileDialogHelper::getDialogType( sal_uInt32 nFlags ) const
         nDialogType = FILEOPEN_READONLY_VERSION;
 
     return nDialogType;
+}
+
+// ------------------------------------------------------------------------
+void FileDialogHelper::registerFactories( Reference <XMultiServiceFactory> xFactory )
+{
+    OUString aFileService( RTL_CONSTASCII_USTRINGPARAM( FILE_OPEN_SERVICE_NAME ) );
+    OUString aFolderService( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
+
+    Reference< XContentEnumerationAccess > xEnumAccess( xFactory, UNO_QUERY );
+    Reference< XSet > xSet( xFactory, UNO_QUERY );
+
+    if ( ! xEnumAccess.is() || ! xSet.is() )
+        return;
+
+    try
+    {
+        Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration( aFileService );
+        if ( ! xEnum.is() || ! xEnum->hasMoreElements() )
+        {
+            Reference< XInterface > xFac( SfxFilePicker::impl_createFactory(xFactory) );
+            xSet->insert( makeAny( xFac ) );
+        }
+
+        xEnum = xEnumAccess->createContentEnumeration( aFolderService );
+        if ( ! xEnum.is() || ! xEnum->hasMoreElements() )
+        {
+            Reference< XInterface > xFac( SfxFolderPicker::impl_createFactory(xFactory) );
+            xSet->insert( makeAny( xFac ) );
+        }
+    }
+
+    catch( IllegalArgumentException ) {}
+    catch( ElementExistException ) {}
 }
 
 // ------------------------------------------------------------------------
