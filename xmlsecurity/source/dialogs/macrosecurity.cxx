@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 12:13:29 $
+ *  last change: $Author: mt $ $Date: 2004-07-28 09:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,28 +252,10 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMTYARG )
 
 IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveCertPBHdl, void*, EMTYARG )
 {
-    SvLBoxEntry*    pSel = maTrustCertLB.FirstSelected();
-    if( pSel )
+    if( maTrustCertLB.FirstSelected() )
     {
-        USHORT nSel = USHORT( sal_Int32( pSel->GetUserData() ) );
-//      mpDlg->maCurrentSignatureInformations.erase( mpDlg->maCurrentSignatureInformations.begin()+nSelected );
-
-        // remove from sequence
-        sal_Int32   nSeqIndex = ( sal_Int32 ) maTrustCertLB.GetEntry( nSel )->GetUserData();
-
-        sal_Int32   nCnt = maTrustedAuthors.getLength();
-        DBG_ASSERT( nSeqIndex < nCnt, "MacroSecurityTrustedSourcesTP::RemoveLocPBHdl(): impossible state!?" );
-        cssu::Sequence< SvtSecurityOptions::Certificate >   aNewSeq( nCnt - 1 );
-        for( sal_Int32 nR = 0, nW = 0 ; nR < nCnt ; ++nR )
-        {
-            if( nR != nSeqIndex )
-            {
-                aNewSeq[ nW ] = maTrustedAuthors[ nR ];
-                ++nW;
-            }
-        }
-
-        maTrustedAuthors = aNewSeq;
+        USHORT nAuthor = USHORT( sal_Int32( maTrustCertLB.FirstSelected()->GetUserData() ) );
+        ::comphelper::removeElementAt( maTrustedAuthors, nAuthor );
 
         FillCertLB();
         ImplCheckButtons();

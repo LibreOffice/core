@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 12:13:28 $
+ *  last change: $Author: mt $ $Date: 2004-07-28 09:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,30 +70,13 @@
 #include <vcl/tabpage.hxx>
 #include <svtools/stdctrl.hxx>
 #include <svx/simptabl.hxx>
-#include <svtools/svmedit.hxx>
 #include <svtools/securityoptions.hxx>
 
-#include <xmlsecurity/documentsignaturehelper.hxx>
-#include <xmlsecurity/xmlsignaturehelper.hxx>
-
 namespace com {
 namespace sun {
 namespace star {
-namespace security {
-    class XCertificate; }
 namespace xml { namespace crypto {
     class XSecurityEnvironment; }}
-}}}
-
-namespace com {
-namespace sun {
-namespace star {
-namespace lang {
-    class XMultiServiceFactory; }
-namespace io {
-    class XStream; }
-namespace embed {
-    class XStorage; }
 }}}
 
 namespace css = com::sun::star;
