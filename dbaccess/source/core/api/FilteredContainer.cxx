@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilteredContainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 12:57:29 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,19 +150,23 @@ namespace dbaccess
     ,m_pWarningsContainer(_pWarningsContainer)
     ,m_pRefreshListener(_pRefreshListener)
     {
-        try
-        {
-            m_xMetaData = _xCon->getMetaData();
-        }
-        catch(SQLException&)
-        {
-        }
+
     }
     // -------------------------------------------------------------------------
     void OFilteredContainer::construct(const Reference< XNameAccess >& _rxMasterContainer,
                                     const Sequence< ::rtl::OUString >& _rTableFilter,
                                     const Sequence< ::rtl::OUString >& _rTableTypeFilter)
     {
+        try
+        {
+            Reference<XConnection> xCon = m_xConnection;
+            if ( xCon.is() )
+                m_xMetaData = xCon->getMetaData();
+        }
+        catch(SQLException&)
+        {
+        }
+
         m_xMasterContainer = _rxMasterContainer;
 
         if(m_xMasterContainer.is())
@@ -216,6 +220,15 @@ namespace dbaccess
     //------------------------------------------------------------------------------
     void OFilteredContainer::construct(const Sequence< ::rtl::OUString >& _rTableFilter, const Sequence< ::rtl::OUString >& _rTableTypeFilter)
     {
+        try
+        {
+            Reference<XConnection> xCon = m_xConnection;
+            if ( xCon.is() )
+                m_xMetaData = xCon->getMetaData();
+        }
+        catch(SQLException&)
+        {
+        }
         // build sorted versions of the filter sequences, so the visibility decision is faster
         Sequence< ::rtl::OUString > aTableFilter(_rTableFilter);
         sal_Int32   nTableFilterLen = aTableFilter.getLength();
@@ -309,7 +322,6 @@ namespace dbaccess
 
         m_xMasterContainer  = NULL;
         m_xMetaData         = NULL;
-        m_xConnection       = NULL;
         m_pWarningsContainer = NULL;
         m_pRefreshListener  = NULL;
         m_bConstructed      = sal_False;
@@ -336,7 +348,7 @@ namespace dbaccess
 
         sal_Bool bFilterMatch = (NULL != bsearch(&_rName, _rTableFilter.getConstArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare));
         // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
-        if (!bFilterMatch && _rWCSearch.size())
+        if (!bFilterMatch && !_rWCSearch.empty())
         {   // or if one of the wildcrad expression matches
             String sWCCompare = (const sal_Unicode*)_rName;
             for (   ::std::vector< WildCard >::const_iterator aLoop = _rWCSearch.begin();
