@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-31 20:09:14 $
+ *  last change: $Author: kz $ $Date: 2001-08-08 08:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,10 @@ String STR_SVT_FILEVIEW_COLUMN_TITLE
     Text[ swedish ] = "Namn";
     Text[ polish ] = "Tytu³";
     Text[ portuguese_brazilian ] = "Title";
-    Text[ japanese ] = "À²ÄÙ";
-    Text[ korean ] = "Á¦¸ñ";
-    Text[ chinese_simplified ] = "±êÌâ";
-    Text[ chinese_traditional ] = "¼ĞÃD";
+    Text[ japanese ] = "ï¾€ï½²ï¾„ï¾™";
+    Text[ korean ] = "ì œëª©";
+    Text[ chinese_simplified ] = "æ ‡é¢˜";
+    Text[ chinese_traditional ] = "æ¨™é¡Œ";
     Text[ turkish ] = "Title";
     Text[ arabic ] = "ÇáÚäæÇä";
     Text[ finnish ] = "Otsikot";
@@ -109,10 +109,10 @@ String STR_SVT_FILEVIEW_COLUMN_SIZE
     Text[ swedish ] = "Storlek";
     Text[ polish ] = "Wielkoœæ";
     Text[ portuguese_brazilian ] = "Size";
-    Text[ japanese ] = "»²½Ş";
-    Text[ korean ] = "Å©±â";
-    Text[ chinese_simplified ] = "´óĞ¡";
-    Text[ chinese_traditional ] = "¤j¤p";
+    Text[ japanese ] = "ï½»ï½²ï½½ï¾";
+    Text[ korean ] = "í¬ê¸°";
+    Text[ chinese_simplified ] = "å¤§å°";
+    Text[ chinese_traditional ] = "å¤§å°";
     Text[ turkish ] = "Size";
     Text[ arabic ] = "ÇáÍÌã";
     Text[ finnish ] = "Koko";
@@ -135,10 +135,10 @@ String STR_SVT_FILEVIEW_COLUMN_DATE
     Text[ swedish ] = "Ändringsdatum";
     Text[ polish ] = "Data modyfikacji";
     Text[ portuguese_brazilian ] = "Modified Date";
-    Text[ japanese ] = "•ÏX“ú";
-    Text[ korean ] = "º¯°æ³¯Â¥";
-    Text[ chinese_simplified ] = "ĞŞ¸ÄµÄÊ±¼ä";
-    Text[ chinese_traditional ] = "­×§ïªº¤é´Á";
+    Text[ japanese ] = "å¤‰æ›´æ—¥æ™‚";
+    Text[ korean ] = "ë³€ê²½ë‚ ì§œ";
+    Text[ chinese_simplified ] = "ä¿®æ”¹çš„æ—¶é—´";
+    Text[ chinese_traditional ] = "ä¿®æ”¹çš„æ—¥æœŸ";
     Text[ turkish ] = "Modified Date";
     Text[ arabic ] = "ÊÇÑíÎ ÇáÊÚÏíá";
     Text[ finnish ] = "Muokkauspäivämäärä";
@@ -150,22 +150,22 @@ String STR_SVT_FILEVIEW_COLUMN_TYPE
     Text = "Typ";
     Text[English] = "Type";
     Text[ english_us ] = "Type";
-    Text[ portuguese ] = "Type";
+    Text[ portuguese ] = "Tipo";
     Text[ russian ] = "Òèï";
     Text[ greek ] = "Type";
     Text[ dutch ] = "Type";
     Text[ french ] = "Type";
     Text[ spanish ] = "Tipo";
     Text[ finnish ] = "Type";
-    Text[ italian ] = "Type";
+    Text[ italian ] = "Tipo";
     Text[ danish ] = "Type";
     Text[ swedish ] = "Typ";
     Text[ polish ] = "Typ";
     Text[ portuguese_brazilian ] = "Type";
-    Text[ japanese ] = "í—Ş";
+    Text[ japanese ] = "ç¨®é¡";
     Text[ korean ] = "Type";
-    Text[ chinese_simplified ] = "Type";
-    Text[ chinese_traditional ] = "Type";
+    Text[ chinese_simplified ] = "ç±»å‹";
+    Text[ chinese_traditional ] = "é¡å‹";
     Text[ turkish ] = "Type";
     Text[ arabic ] = "Type";
     Text[ catalan ] = "Type";
@@ -187,10 +187,10 @@ String STR_SVT_FILEVIEW_ERR_MAKEFOLDER
     Text[ swedish ] = "Det gick inte att skapa mappen %1.";
     Text[ polish ] = "Utworzenie folderu %1 nie powiod³o siê.";
     Text[ portuguese_brazilian ] = "Could not create the folder %1.";
-    Text[ japanese ] = "Ì«ÙÀŞ %1 ‚ÍŠi”[‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B";
-    Text[ korean ] = "Æú´õ %1À»(¸¦) ¸¸µé ¼ö ¾ø½À´Ï´Ù";
-    Text[ chinese_simplified ] = "ÎŞ·¨´´½¨ÎÄ¼ş¼Ğ %1 ¡£";
-    Text[ chinese_traditional ] = "µLªk·s¼W¸ê®Æ§¨ %1 ¡C";
+    Text[ japanese ] = "ï¾Œï½«ï¾™ï¾€ï¾ %1 ã¯æ ¼ç´ã•ã‚Œã¾ã›ã‚“ã§ã—ãŸã€‚";
+    Text[ korean ] = "í´ë” %1ì„(ë¥¼) ë§Œë“¤ ìˆ˜ ì—†ìŠµë‹ˆë‹¤";
+    Text[ chinese_simplified ] = "æ— æ³•åˆ›å»ºæ–‡ä»¶å¤¹ %1 ã€‚";
+    Text[ chinese_traditional ] = "ç„¡æ³•æ–°å¢è³‡æ–™å¤¾ %1 ã€‚";
     Text[ turkish ] = "Could not create the folder %1.";
     Text[ arabic ] = "Could not create the folder %1.";
     Text[ catalan ] = "Could not create the folder %1.";
@@ -209,14 +209,14 @@ String STR_SVT_BYTES
     Text [ french ] = "Octets" ;
     Text [ dutch ] = "Bytes" ;
     Text [ portuguese ] = "Bytes" ;
-    Text[ chinese_simplified ] = "×Ö½Ú";
+    Text[ chinese_simplified ] = "å­—èŠ‚";
     Text[ russian ] = "áàéò";
     Text[ polish ] = "bajty/-ów";
-    Text[ japanese ] = "ÊŞ²Ä";
+    Text[ japanese ] = "ï¾Šï¾ï½²ï¾„";
     Text[ chinese_traditional ] = "bytes";
     Text[ arabic ] = "ÈÇíÊ";
     Text[ greek ] = "Bytes";
-    Text[ korean ] = "¹ÙÀÌÆ®";
+    Text[ korean ] = "ë°”ì´íŠ¸";
     Text[ turkish ] = "Byte";
     Text[ finnish ] = "Tavuja";
     Text[ catalan ] = "Bytes";
@@ -235,10 +235,10 @@ String STR_SVT_KB
     Text [ spanish ] = "KB" ;
     Text [ french ] = "Ko" ;
     Text [ dutch ] = "KB" ;
-    Text[ chinese_simplified ] = "Ç§×Ö½Ú";
+    Text[ chinese_simplified ] = "åƒå­—èŠ‚";
     Text[ russian ] = "ÊÁ";
     Text[ polish ] = "KB";
-    Text[ japanese ] = "·ÛÊŞ²Ä";
+    Text[ japanese ] = "ï½·ï¾›ï¾Šï¾ï½²ï¾„";
     Text[ chinese_traditional ] = "KB";
     Text[ arabic ] = "ßíáæÈÇíÊ";
     Text[ greek ] = "KB";
@@ -261,7 +261,7 @@ String STR_SVT_MB
     Text [ spanish ] = "MB" ;
     Text [ french ] = "Mo" ;
     Text [ dutch ] = "MB" ;
-    Text[ chinese_simplified ] = "Õ××Ö½Ú";
+    Text[ chinese_simplified ] = "å…†å­—èŠ‚";
     Text[ russian ] = "ÌÁ";
     Text[ polish ] = "MB";
     Text[ japanese ] = "MB";
@@ -288,7 +288,7 @@ String STR_SVT_GB
     Text [ spanish ] = "GB" ;
     Text [ french ] = "Go" ;
     Text [ dutch ] = "GB" ;
-    Text[ chinese_simplified ] = "Ç§Õ×";
+    Text[ chinese_simplified ] = "åƒå…†";
     Text[ russian ] = "ÃÁ";
     Text[ polish ] = "GB";
     Text[ japanese ] = "GB";
@@ -322,22 +322,22 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text = "~Löschen" ;
             Text[ English ] = "Delete" ;
             Text[ english_us ] = "Delete";
-            Text[ portuguese ] = "Delete";
+            Text[ portuguese ] = "~Eliminar";
             Text[ russian ] = "Óäàëèòü";
             Text[ greek ] = "Delete";
             Text[ dutch ] = "~Wissen";
-            Text[ french ] = "Delete";
+            Text[ french ] = "~Supprimer";
             Text[ spanish ] = "~Eliminar";
             Text[ finnish ] = "Delete";
-            Text[ italian ] = "Delete";
+            Text[ italian ] = "~Elimina";
             Text[ danish ] = "Delete";
             Text[ swedish ] = "~Radera";
             Text[ polish ] = "~Usuñ";
             Text[ portuguese_brazilian ] = "Delete";
-            Text[ japanese ] = "íœ";
+            Text[ japanese ] = "å‰Šé™¤";
             Text[ korean ] = "Delete";
-            Text[ chinese_simplified ] = "Delete";
-            Text[ chinese_traditional ] = "Delete";
+            Text[ chinese_simplified ] = "åˆ é™¤";
+            Text[ chinese_traditional ] = "åˆªé™¤";
             Text[ turkish ] = "Delete";
             Text[ arabic ] = "Delete";
             Text[ catalan ] = "Delete";
@@ -349,22 +349,22 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text = "~Umbenennen" ;
             Text[ English ] = "Rename" ;
             Text[ english_us ] = "Rename";
-            Text[ portuguese ] = "Rename";
+            Text[ portuguese ] = "~Mudar nome";
             Text[ russian ] = "Ïåğåèìåíîâàòü";
             Text[ greek ] = "Rename";
             Text[ dutch ] = "~Naam wijzigen";
-            Text[ french ] = "Rename";
+            Text[ french ] = "~Renommer";
             Text[ spanish ] = "~Cambiar nombre";
             Text[ finnish ] = "Rename";
-            Text[ italian ] = "Rename";
+            Text[ italian ] = "~Rinomina";
             Text[ danish ] = "Rename";
             Text[ swedish ] = "~Byt namn";
             Text[ polish ] = "~Zmieñ nazwê";
             Text[ portuguese_brazilian ] = "Rename";
-            Text[ japanese ] = "–¼‘O‚Ì•ÏX";
+            Text[ japanese ] = "åå‰ã®å¤‰æ›´";
             Text[ korean ] = "Rename";
-            Text[ chinese_simplified ] = "Rename";
-            Text[ chinese_traditional ] = "Rename";
+            Text[ chinese_simplified ] = "é‡å‘½å";
+            Text[ chinese_traditional ] = "é‡æ–°å‘½å";
             Text[ turkish ] = "Rename";
             Text[ arabic ] = "Rename";
             Text[ catalan ] = "Rename";
@@ -381,24 +381,24 @@ ModalDialog DLG_SVT_QUERYDELETE
     Text = "Löschbestätigung" ;
     Text [ English ] = "Confirm delete" ;
     Text [ english_us ] = "Confirm Delete" ;
-    Text [ italian ] = "Conferma eliminazione" ;
+    Text [ italian ] = "Conferma 'Elimina'" ;
     Text [ spanish ] = "Confirmar eliminación" ;
     Text [ french ] = "Confirmation de suppression" ;
     Text [ dutch ] = "Wisopdracht bevestigen" ;
     Text [ swedish ] = "Bekräfta radering" ;
     Text [ danish ] = "Bekræft sletning" ;
     Text [ portuguese_brazilian ] = "L?chbest?tigung" ;
-    Text [ portuguese ] = "Confirmação eliminar" ;
-    Text [ chinese_simplified ] = "È·ÈÏÉ¾³ı";
+    Text [ portuguese ] = "Confirmar Eliminar" ;
+    Text [ chinese_simplified ] = "ç¡®è®¤åˆ é™¤";
     Text [ russian ] = "Ïîäòâåğæäåíèå óäàëåíèÿ";
     Text [ polish ] = "Potwierdzenie usuniêcia";
-    Text [ japanese ] = "íœ‚ÌŠm”F";
-    Text [ chinese_traditional ] = "½T»{§R°£";
+    Text [ japanese ] = "å‰Šé™¤ã®ç¢ºèª";
+    Text [ chinese_traditional ] = "ç¢ºèªåˆªé™¤";
     Text [ arabic ] = "ÊÃßíÏ ÇáÍĞİ";
     Text[ dutch ] = "Wisopdracht bevestigen";
-    Text[ chinese_simplified ] = "È·ÈÏÉ¾³ı";
+    Text[ chinese_simplified ] = "ç¡®è®¤åˆ é™¤";
     Text[ greek ] = "Åğéâåâáßùóç äéáãñáöŞò";
-    Text[ korean ] = "»èÁ¦ È®ÀÎ";
+    Text[ korean ] = "ì‚­ì œ í™•ì¸";
     Text[ turkish ] = "Silmeyi onayla";
     Text[ finnish ] = "Vahvista poisto";
     Text[ catalan ] = "Confirmar eliminación";
@@ -417,17 +417,17 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text [ spanish ] = "Entrada:" ;
         Text [ french ] = "Entrée :" ;
         Text [ portuguese_brazilian ] = "Eintrag:" ;
-        Text [ portuguese ] = "Registo:" ;
-        Text [ chinese_simplified ] = "ÌõÄ¿£º";
+        Text [ portuguese ] = "Entrada:" ;
+        Text [ chinese_simplified ] = "æ¡ç›®ï¼š";
         Text [ russian ] = "Çàïèñü:";
         Text [ polish ] = "Wpis:";
-        Text [ japanese ] = "€–Ú:";
-        Text [ chinese_traditional ] = "¶µ¥Ø¡G";
+        Text [ japanese ] = "é …ç›®:";
+        Text [ chinese_traditional ] = "é …ç›®ï¼š";
         Text [ arabic ] = ":ÅÏÎÇá";
         Text[ dutch ] = "Item:";
-        Text[ chinese_simplified ] = "ÌõÄ¿£º";
+        Text[ chinese_simplified ] = "æ¡ç›®ï¼š";
         Text[ greek ] = "Êáôá÷şñéóç:";
-        Text[ korean ] = "Ç×¸ñ:";
+        Text[ korean ] = "í•­ëª©:";
         Text[ turkish ] = "Giriş:";
         Text[ finnish ] = "Merkintä:";
         Text[ catalan ] = "Entrada:";
@@ -456,16 +456,16 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text [ dutch ] = "Wilt u de geselecteerde gegevens werkelijk wissen?" ;
         Text [ portuguese_brazilian ] = "Sind Sie sicher, da? Sie die selektierten Daten l?chen wollen?" ;
         Text [ portuguese ] = "Deseja realmente eliminar os dados seleccionados?" ;
-        Text [ chinese_simplified ] = "ÄúÕæÒªÉ¾³ıÑ¡ÖĞµÄÊı¾İ£¿";
+        Text [ chinese_simplified ] = "çœŸè¦åˆ é™¤é€‰ä¸­çš„æ•°æ®ï¼Ÿ";
         Text [ russian ] = "Âû óâåğåíû â òîì, ÷òî õîòèòå óäàëèòü âûäåëåííûå äàííûå?";
         Text [ polish ] = "Czy na pewno usun¹æ zaznaczone dane?";
-        Text [ japanese ] = "‘I‘ğ‚µ‚½ÃŞ°À‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©B";
-        Text [ chinese_traditional ] = "±z¯u­n§R°£¿ï¨úªº¸ê®Æ¡H";
+        Text [ japanese ] = "é¸æŠã—ãŸï¾ƒï¾ï½°ï¾€ã‚’æœ¬å½“ã«å‰Šé™¤ã—ã¾ã™ã‹ã€‚";
+        Text [ chinese_traditional ] = "çœŸè¦åˆªé™¤é¸å–çš„è³‡æ–™ï¼Ÿ";
         Text [ arabic ] = "åá ÊÑíÏ ÈÇáÊÃßíÏ ÍĞİ ÇáÈíÇäÇÊ ÇáãÍÏÏÉ¿";
         Text[ dutch ] = "Wilt u de geselecteerde gegevens werkelijk wissen?";
-        Text[ chinese_simplified ] = "ÄúÕæÒªÉ¾³ıÑ¡ÖĞµÄÊı¾İ£¿";
+        Text[ chinese_simplified ] = "çœŸè¦åˆ é™¤é€‰ä¸­çš„æ•°æ®ï¼Ÿ";
         Text[ greek ] = "Èİëåôå ğñáãìáôéêÜ íá äéáãñáöïıí ôá åğéëåãìİíá äåäïìİíá;";
-        Text[ korean ] = "¼±ÅÃµÈ µ¥ÀÌÅÍ¸¦ Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+        Text[ korean ] = "ì„ íƒëœ ë°ì´í„°ë¥¼ ì •ë§ë¡œ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
         Text[ turkish ] = "Seçilen verileri gerçekten silmek istiyor musunuz?";
         Text[ finnish ] = "Haluatko varmasti poistaa valitut tiedot?";
         Text[ catalan ] = "¿Desea realmente eliminar los datos seleccionados?";
@@ -491,10 +491,10 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ danish ] = "Slet";
         Text[ polish ] = "Usuñ";
         Text[ portuguese_brazilian ] = "~Ja";
-        Text[ japanese ] = "íœ(~D)";
-        Text[ korean ] = "»èÁ¦(~D)";
-        Text[ chinese_simplified ] = "É¾³ı(~D)";
-        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ japanese ] = "å‰Šé™¤(~D)";
+        Text[ korean ] = "ì‚­ì œ(~D)";
+        Text[ chinese_simplified ] = "åˆ é™¤";
+        Text[ chinese_traditional ] = "åˆªé™¤";
         Text[ arabic ] = "ÍĞİ";
         Text[ turkish ] = "~Sil";
         Text[ finnish ] = "~Poista";
@@ -521,10 +521,10 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ danish ] = "Slet alle";
         Text[ polish ] = "Usuñ wszystkie";
         Text[ portuguese_brazilian ] = "~Alle";
-        Text[ japanese ] = "‚·‚×‚Äíœ(~A)";
-        Text[ korean ] = "¸ğµÎ »èÁ¦(~A)";
-        Text[ chinese_simplified ] = "É¾³ıÈ«²¿(~A)";
-        Text[ chinese_traditional ] = "¥ş³¡§R°£(~A)";
+        Text[ japanese ] = "ã™ã¹ã¦å‰Šé™¤(~A)";
+        Text[ korean ] = "ëª¨ë‘ ì‚­ì œ(~A)";
+        Text[ chinese_simplified ] = "åˆ é™¤å…¨éƒ¨";
+        Text[ chinese_traditional ] = "å…¨éƒ¨åˆªé™¤";
         Text[ arabic ] = "ÍĞİ Çáßá";
         Text[ turkish ] = "~Tümünü sil";
         Text[ finnish ] = "~Poista kaikki";
@@ -550,10 +550,10 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ danish ] = "Slet ikke";
         Text[ polish ] = "Nie usuwaj";
         Text[ portuguese_brazilian ] = "~Nein";
-        Text[ japanese ] = "íœ‚µ‚È‚¢(~N)";
-        Text[ korean ] = "»èÁ¦ ¾ÈÇÔ(~N)";
-        Text[ chinese_simplified ] = "²»É¾³ı(~N)";
-        Text[ chinese_traditional ] = "¤£­n§R°£(~N)";
+        Text[ japanese ] = "å‰Šé™¤ã—ãªã„(~N)";
+        Text[ korean ] = "ì‚­ì œ ì•ˆí•¨(~N)";
+        Text[ chinese_simplified ] = "ä¸åˆ é™¤";
+        Text[ chinese_traditional ] = "ä¸è¦åˆªé™¤";
         Text[ arabic ] = "ÚÏã ÇáÍĞİ";
         Text[ turkish ] = "S~ilme";
         Text[ finnish ] = "~Älä poista";
@@ -567,6 +567,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         TabStop = TRUE ;
     };
 };
+
 
 
 
