@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:23:37 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:35:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1314,7 +1314,7 @@ std::vector< application_info_impl* >& getApplicationInfos()
 
         ResId aResId3( STR_APPL_NAME_IMPRESS, getXSLTDialogResMgr() );
         aInfos.push_back( new application_info_impl(
-            "sun.star.presentation.PresentationDocument",
+            "com.sun.star.presentation.PresentationDocument",
             aResId3,
             "com.sun.star.comp.Impress.XMLImporter",
             "com.sun.star.comp.Impress.XMLExporter" ) );
