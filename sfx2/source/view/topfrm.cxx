@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-23 11:10:28 $
+ *  last change: $Author: as $ $Date: 2002-09-03 11:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,7 @@ long SfxTopWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 
 void SfxTopWindow_Impl::GetFocus()
 {
-    if ( !pFrame->IsClosing_Impl() && pFrame && pFrame->GetCurrentViewFrame() )
+    if ( pFrame && !pFrame->IsClosing_Impl() && pFrame->GetCurrentViewFrame() && pFrame->GetFrameInterface().is() )
         pFrame->GetCurrentViewFrame()->MakeActive_Impl( TRUE );
 }
 
