@@ -16,6 +16,7 @@ TYPEFLAGFILE= $(OUT_MISC)$(PS)documentloader_type_generation.flag
 TYPES = \
 	-Tcom.sun.star.lang.XMultiServiceFactory \
 	-Tcom.sun.star.lang.XComponent \
+	-Tcom.sun.star.beans.XPropertySet \
 	-Tcom.sun.star.bridge.XUnoUrlResolver \
 	-Tcom.sun.star.frame.XComponentLoader \
 	-Tcom.sun.star.lang.XMultiComponentFactory \
