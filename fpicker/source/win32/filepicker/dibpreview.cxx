@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dibpreview.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 11:13:15 $
+ *  last change: $Author: tra $ $Date: 2001-07-09 12:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,17 @@
 using ::com::sun::star::uno::Sequence;
 
 //------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+namespace /* private */
+{
+
+    const char* CURRENT_INSTANCE = "CurrInst";
+
+};
+
+//------------------------------------------------------------------------
 // defines
 //------------------------------------------------------------------------
 
@@ -95,7 +106,9 @@ using ::com::sun::star::uno::Sequence;
 // static member initialization
 //---------------------------------------------------
 
-CDIBPreview* CDIBPreview::s_DIBPreviewInst = NULL;
+osl::Mutex CDIBPreview::s_Mutex;
+ATOM CDIBPreview::s_ClassAtom = 0;
+sal_Int32 CDIBPreview::s_RegisterDibPreviewWndCount = 0;
 
 //---------------------------------------------------
 //
@@ -112,39 +125,25 @@ CDIBPreview::CDIBPreview(
     m_hwnd( NULL ),
     m_hInstance( hInstance )
 {
-    // register the preview window class
-    WNDCLASSEXW wndClsEx;
-    ZeroMemory( &wndClsEx, sizeof( WNDCLASSEXW ) );
-
-    wndClsEx.cbSize        = sizeof( WNDCLASSEXW );
-    wndClsEx.style         = CS_HREDRAW | CS_VREDRAW;
-    wndClsEx.lpfnWndProc   = CDIBPreview::WndProc;
-    wndClsEx.hInstance     = m_hInstance;
-    wndClsEx.hbrBackground = (HBRUSH)( COLOR_INACTIVEBORDER + 1 );
-    wndClsEx.lpszClassName = PREVIEWWND_CLASS_NAME;
-
-    // register the preview window class
-    // !!! Win95 -   the window class will be unregistered automaticly
-    //               if the dll is unloaded
-    //     Win2000 - the window class must be unregistered manually
-    //               if the dll is unloaded
-    m_ClassAtom = RegisterClassExW( &wndClsEx );
-    if ( m_ClassAtom )
+    if ( RegisterDibPreviewWindowClass( ) )
     {
         // create the preview window in invisible state
         sal_uInt32 dwStyle = bShow ? (WS_CHILD | WS_VISIBLE ) : (WS_CHILD );
         m_hwnd = CreateWindowExW(
-            WS_EX_CLIENTEDGE, PREVIEWWND_CLASS_NAME,
-            L"", dwStyle, x, y, cx, cy, aParent,
+            WS_EX_CLIENTEDGE,
+            PREVIEWWND_CLASS_NAME,
+            L"", dwStyle,
+            x, y, cx, cy,
+            aParent,
             (HMENU)0x0, // for child windows this will
-                         // be used as child window identifier
-            m_hInstance, 0 );
+                        // be used as child window identifier
+            m_hInstance,
+            (LPVOID)this // pass a pointer to the current
+                         // instance of this class
+        );
 
         OSL_ASSERT( IsWindow( m_hwnd ) );
     }
-
-    // set the static member
-    s_DIBPreviewInst = this;
 }
 
 //---------------------------------------------------
@@ -153,8 +152,12 @@ CDIBPreview::CDIBPreview(
 
 CDIBPreview::~CDIBPreview( )
 {
-    UnregisterClass(
-        (LPCTSTR)MAKELONG( m_ClassAtom, 0 ), m_hInstance );
+    // remember: we don't have to destroy the
+    // preview window because it will be destroyed
+    // by it's parent window (the FileOpen dialog)
+    // but we have to unregister the window class
+
+    UnregisterDibPreviewWindowClass( );
 }
 
 //---------------------------------------------------
@@ -316,35 +319,123 @@ LRESULT CALLBACK CDIBPreview::WndProc(
 
     switch( uMsg )
     {
+
+    // we connect a pointer to the current instance
+    // with a window instance via SetProp
+    case WM_CREATE:
+        {
+            LPCREATESTRUCT lpcs =
+                reinterpret_cast< LPCREATESTRUCT >( lParam );
+
+            OSL_ASSERT( lpcs->lpCreateParams );
+
+            // connect the instance handle to the window
+            SetPropA( hWnd, CURRENT_INSTANCE, lpcs->lpCreateParams );
+        }
+        break;
+
+    // we remove the window property which connects
+    // a class instance with a window class
+    case WM_NCDESTROY:
+        {
+            // RemoveProp returns the saved value on success
+            CDIBPreview* pImpl = reinterpret_cast< CDIBPreview* >(
+                RemovePropA( hWnd, CURRENT_INSTANCE ) );
+
+            OSL_ASSERT( pImpl );
+        }
+        break;
+
     case WM_PAINT:
     {
-        OSL_PRECOND( s_DIBPreviewInst, "Static member not initialized" );
+        CDIBPreview* pImpl = reinterpret_cast< CDIBPreview* >(
+            GetPropA( hWnd, CURRENT_INSTANCE ) );
+
+        OSL_ASSERT( pImpl );
 
         HDC         hDC;
         PAINTSTRUCT ps;
 
         hDC = BeginPaint( hWnd, &ps );
-        s_DIBPreviewInst->onPaint( hWnd, hDC );
+        pImpl->onPaint( hWnd, hDC );
         EndPaint( hWnd, &ps );
     }
     break;
 
-    // under windows 95/98 the creation of the
-    // hidden target request window fails if
-    // we don't handle this message ourself
-    // because the DefWindowProc returns 0 as
-    // a result of handling WM_NCCREATE what
-    // leads to a failure of CreateWindow[Ex]!!!
-    case WM_NCCREATE:
-        lResult = TRUE;
-        break;
-
     default:
-        return DefWindowProc( hWnd, uMsg, wParam, lParam );
+#pragma message( "####################################" )
+#pragma message( " fix this" )
+#pragma message( "####################################" )
+
+        return DefWindowProcA( hWnd, uMsg, wParam, lParam );
     }
 
     return lResult;
 }
 
+//---------------------------------------------------
+//
+//---------------------------------------------------
 
+ATOM SAL_CALL CDIBPreview::RegisterDibPreviewWindowClass( )
+{
+    osl::MutexGuard aGuard( s_Mutex );
 
+    if ( 0 == s_ClassAtom )
+    {
+        // register the preview window class
+        WNDCLASSEXW wndClsEx;
+        ZeroMemory( &wndClsEx, sizeof( WNDCLASSEXW ) );
+
+        wndClsEx.cbSize        = sizeof( WNDCLASSEXW );
+        wndClsEx.style         = CS_HREDRAW | CS_VREDRAW;
+        wndClsEx.lpfnWndProc   = CDIBPreview::WndProc;
+        wndClsEx.hInstance     = m_hInstance;
+        wndClsEx.hbrBackground = (HBRUSH)( COLOR_INACTIVEBORDER + 1 );
+        wndClsEx.lpszClassName = PREVIEWWND_CLASS_NAME;
+
+        // register the preview window class
+        // !!! Win95 -   the window class will be unregistered automaticly
+        //               if the dll is unloaded
+        //     Win2000 - the window class must be unregistered manually
+        //               if the dll is unloaded
+        s_ClassAtom = RegisterClassExW( &wndClsEx );
+        OSL_ASSERT( s_ClassAtom );
+    }
+
+    // increment the register class counter
+    // so that we keep track of the number
+    // of class registrations
+    if ( 0 != s_ClassAtom )
+        s_RegisterDibPreviewWndCount++;
+
+    return s_ClassAtom;
+}
+
+//---------------------------------------------------
+//
+//---------------------------------------------------
+
+void SAL_CALL CDIBPreview::UnregisterDibPreviewWindowClass( )
+{
+    osl::MutexGuard aGuard( s_Mutex );
+
+    OSL_ASSERT( 0 != s_ClassAtom );
+
+    // update the register class counter
+    // and unregister the window class if
+    // counter drops to zero
+    if ( 0 != s_ClassAtom )
+    {
+        s_RegisterDibPreviewWndCount--;
+        OSL_ASSERT( s_RegisterDibPreviewWndCount >= 0 );
+    }
+
+    if ( 0 == s_RegisterDibPreviewWndCount )
+    {
+        UnregisterClass(
+            (LPCTSTR)MAKELONG( s_ClassAtom, 0 ), m_hInstance );
+
+        s_ClassAtom = 0;
+    }
+}

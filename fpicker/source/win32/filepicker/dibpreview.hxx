@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dibpreview.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 11:13:03 $
+ *  last change: $Author: tra $ $Date: 2001-07-09 12:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+
 #include <windows.h>
 
 //---------------------------------------------
@@ -130,17 +134,25 @@ public:
 
 private:
     virtual void SAL_CALL onPaint( HWND hWnd, HDC hDC );
+
+    ATOM SAL_CALL RegisterDibPreviewWindowClass( );
+    void SAL_CALL UnregisterDibPreviewWindowClass( );
+
     static LRESULT CALLBACK WndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
 private:
     HWND                                        m_hwnd;
-    ATOM                                        m_ClassAtom;
     HINSTANCE                                   m_hInstance;
     ::com::sun::star::uno::Sequence< sal_Int8 > m_ImageData;
     sal_Int32                                   m_cx;
     sal_Int32                                   m_cy;
 
-    static CDIBPreview* s_DIBPreviewInst;
+    // the preview window class has to be registered only
+    // once per process, so multiple instance of this class
+    // share the registered window class
+    static ATOM       s_ClassAtom;
+    static osl::Mutex s_Mutex;
+    static sal_Int32  s_RegisterDibPreviewWndCount;
 
 // prevent copy and assignment
 private:
