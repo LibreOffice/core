@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-14 09:45:07 $
+ *  last change: $Author: oj $ $Date: 2001-05-28 06:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
         Reference<XPropertySet> xProp(m_xConnection,UNO_QUERY);
 
         aStmt += ::dbtools::quoteTableName(m_xConnection->getMetaData(),sTable);
-        aStmt += ::rtl::OUString::createFromAscii(".SERVERDBSTATISTICS");
+        aStmt += ::rtl::OUString::createFromAscii(".\"SERVERDBSTATISTICS\"");
 
         xStmt = m_xConnection->createStatement();
         xRes = xStmt->executeQuery(aStmt);
@@ -158,8 +158,8 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
         // first the db sizes
         if(xRes.is() && xRes->next())
         {
-            double nUsedPages = xRow->getDouble(1) / 256;
-            double nFreePages = xRow->getDouble(2) / 256;
+            double nUsedPages = xRow->getInt(1) / 256;
+            double nFreePages = xRow->getInt(2) / 256;
 
             m_ET_SIZE.SetText(::rtl::OUString::valueOf((INT32)nUsedPages));
             m_ET_FREESIZE.SetText(::rtl::OUString::valueOf((INT32)nFreePages));
@@ -172,7 +172,7 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
         // then the db files
         aStmt = ::rtl::OUString::createFromAscii("SELECT DEVSPACENAME FROM ");
         aStmt += ::dbtools::quoteTableName(m_xConnection->getMetaData(),sTable);
-        aStmt += ::rtl::OUString::createFromAscii(".DATADEVSPACES");
+        aStmt += ::rtl::OUString::createFromAscii(".\"DATADEVSPACES\"");
         xRes = xStmt->executeQuery(aStmt);
 
         xRow = Reference<XRow>(xRes,UNO_QUERY);
@@ -209,13 +209,13 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
         ::comphelper::disposeComponent(xRes);
         ::comphelper::disposeComponent(xStmt);
     }
-    catch(SQLException& e)
+    catch(const SQLException& e)
     {
         ::comphelper::disposeComponent(xRes);
         ::comphelper::disposeComponent(xStmt);
         showError(SQLExceptionInfo(e),pParent,_xFactory);
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         ::comphelper::disposeComponent(xRes);
         ::comphelper::disposeComponent(xStmt);
