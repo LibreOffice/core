@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedesc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:04:20 $
+ *  last change: $Author: rt $ $Date: 2004-05-26 08:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,7 @@ SwPageDescExt & SwPageDescExt::operator = (const SwPageDescExt & rSrc)
     return *this;
 }
 
-SwPageDesc SwPageDescExt::operator SwPageDesc() const
+SwPageDescExt::operator SwPageDesc() const
 {
     SwPageDesc aResult(aPageDesc);
 
