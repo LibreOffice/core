@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnmspe.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:11:22 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:12:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,9 @@ XML_NAMESPACE( OOOC,            22U )
 XML_NAMESPACE( DOM,             23U )
 XML_NAMESPACE( TCD,             24U )       // text conversion dictionary
 XML_NAMESPACE( DB,              25U )
+XML_NAMESPACE( DLG,             26U )
 
-#define _XML_OLD_NAMESPACE_BASE 26U
+#define _XML_OLD_NAMESPACE_BASE 27U
 
 // namespaces used in the technical preview (SO 5.2)
 XML_OLD_NAMESPACE( FO,      0U )
