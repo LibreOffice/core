@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 15:14:36 $
+#   last change: $Author: obo $ $Date: 2004-08-12 12:58:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,13 +77,11 @@ AUTOSEG=true
 
 CXXFILES = \
         actctrl.cxx \
-        linbox.cxx \
         popbox.cxx \
         swlbox.cxx
 
 SLOFILES =  \
         $(SLO)$/actctrl.obj \
-        $(SLO)$/linbox.obj \
         $(SLO)$/popbox.obj \
         $(SLO)$/swlbox.obj
 
