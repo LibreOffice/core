@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_op.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:09:39 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ public:
 
 
 
-class ExportBiff5 : private XclExpRootData, public ExportTyp, public XclExpRoot
+class ExportBiff5 : public ExportTyp, protected XclExpRoot
 {
 private:
     ExcDocument*        pExcDoc;
@@ -153,7 +153,7 @@ protected:
     RootData*           pExcRoot;
 
 public:
-                        ExportBiff5( SfxMedium& rMedium, SvStream&, XclBiff, ScDocument*, CharSet eDest, bool bRelUrl );
+                        ExportBiff5( XclExpRootData& rExpData );
     virtual             ~ExportBiff5();
     FltError            Write();
 };
@@ -164,7 +164,7 @@ public:
 class ExportBiff8 : public ExportBiff5
 {
 public:
-                        ExportBiff8( SfxMedium& rMedium, SvStream&, XclBiff, ScDocument*, CharSet eDest, bool bRelUrl );
+                        ExportBiff8( XclExpRootData& rExpData );
     virtual             ~ExportBiff8();
 };
 
