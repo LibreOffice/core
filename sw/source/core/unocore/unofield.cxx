@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: os $ $Date: 2001-11-21 13:28:48 $
+ *  last change: $Author: mtg $ $Date: 2001-11-28 20:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,7 +849,7 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
             }
             break;
         default:
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         }
     }
 }
@@ -1000,7 +1000,7 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
                 }
                 break;
             default:
-                throw UnknownPropertyException();
+                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             }
 
             if( pStr )
@@ -1925,10 +1925,11 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
     const SfxItemPropertyMap* _pMap = aSwMapProvider.GetPropertyMap(
                                 lcl_GetPropertyMapOfService( m_nServiceId));
     const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
-    if(!pMap)
-        throw UnknownPropertyException();
-    if(pMap->nFlags & PropertyAttribute::READONLY)
-        throw IllegalArgumentException();
+
+    if (!pMap)
+        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+    if ( pMap->nFlags & PropertyAttribute::READONLY)
+        throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     if(pField)
     {
@@ -2051,8 +2052,8 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
         _pMap = aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH_EXTENSIONS);
         pMap = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
     }
-    if(!pMap )
-        throw UnknownPropertyException();
+    if (!pMap)
+        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     switch( pMap->nWID )
     {
