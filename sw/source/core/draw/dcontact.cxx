@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-11 16:57:18 $
+ *  last change: $Author: ama $ $Date: 2001-06-12 13:16:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,6 +528,9 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         if( SFX_ITEM_SET == ((SwFrmFmt*)pRegisteredIn)->GetAttrSet().
             GetItemState( RES_ANCHOR, FALSE ) )
         {
+            if( !FLY_IN_CNTNT == pAnch->GetAnchorId() )
+                ((SwFrmFmt*)pRegisteredIn)->ResetAttr( RES_VERT_ORIENT );
+
             SwFrm *pOldAnch = GetAnchor();
             SwPageFrm *pPg = NULL;
             SwRect aOldRect;
