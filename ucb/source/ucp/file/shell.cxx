@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-01 13:57:27 $
+ *  last change: $Author: sb $ $Date: 2001-02-12 13:50:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2701,7 +2701,7 @@ shell::write( sal_Int32 CommandId,
     {
         sal_uInt64 nTotalNumberOfBytes = 0;
         sal_uInt64 nWrittenBytes;
-        sal_Int32 nReadBytes = 0, nRequestedBytes = 2048;
+        sal_Int32 nReadBytes = 0, nRequestedBytes = 32768;
         uno::Sequence< sal_Int8 > seq( nRequestedBytes );
         do
         {
