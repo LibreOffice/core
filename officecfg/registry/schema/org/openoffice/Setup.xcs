@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:50:01 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 18:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,36 +69,180 @@
 		<group oor:name="Factory">
 			<info>
 				<desc xml:lang="en-US">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="el">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="nl">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="fr">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="fi">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="cs">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="da">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="zh-CN">描述应用程序模块 (文档工厂，如 Writer)。</desc>
+				<desc xml:lang="zh-TW">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="ar">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="he">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="ca">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="pt">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="ru">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="es">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="it">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="sv">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="pl">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="pt-BR">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="ja">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="ko">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="tr">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="th">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="hi-IN">Describes an application module (a document factory, such as Writer).</desc>
+				<desc xml:lang="x-comment">; Describes an application module (a document factory, such as Writer).</desc>
 			</info>
 			<!--The default must be written by the setup.-->
 			<prop oor:name="ooSetupFactoryShortName" oor:type="xs:string">
 				<!-- UIHints: setup -->
 				<info>
 					<desc xml:lang="en-US">Specifies the short name of the factory.</desc>
+					<desc xml:lang="el">Specifies the short name of the factory.</desc>
+					<desc xml:lang="nl">Specifies the short name of the factory.</desc>
+					<desc xml:lang="fr">Specifies the short name of the factory.</desc>
+					<desc xml:lang="fi">Specifies the short name of the factory.</desc>
+					<desc xml:lang="cs">Specifies the short name of the factory.</desc>
+					<desc xml:lang="da">Specifies the short name of the factory.</desc>
+					<desc xml:lang="zh-CN">指定工厂的缩写。</desc>
+					<desc xml:lang="zh-TW">Specifies the short name of the factory.</desc>
+					<desc xml:lang="ar">Specifies the short name of the factory.</desc>
+					<desc xml:lang="he">Specifies the short name of the factory.</desc>
+					<desc xml:lang="ca">Specifies the short name of the factory.</desc>
+					<desc xml:lang="pt">Specifies the short name of the factory.</desc>
+					<desc xml:lang="ru">Specifies the short name of the factory.</desc>
+					<desc xml:lang="es">Specifies the short name of the factory.</desc>
+					<desc xml:lang="it">Specifies the short name of the factory.</desc>
+					<desc xml:lang="sv">Specifies the short name of the factory.</desc>
+					<desc xml:lang="pl">Specifies the short name of the factory.</desc>
+					<desc xml:lang="pt-BR">Specifies the short name of the factory.</desc>
+					<desc xml:lang="ja">Specifies the short name of the factory.</desc>
+					<desc xml:lang="ko">Specifies the short name of the factory.</desc>
+					<desc xml:lang="tr">Specifies the short name of the factory.</desc>
+					<desc xml:lang="th">Specifies the short name of the factory.</desc>
+					<desc xml:lang="hi-IN">Specifies the short name of the factory.</desc>
+					<desc xml:lang="x-comment">; Specifies the short name of the factory.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupFactoryTemplateFile" oor:type="xs:string">
 				<!-- UIHints: setup -->
 				<info>
 					<desc xml:lang="en-US">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="el">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="nl">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="fr">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="fi">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="cs">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="da">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="zh-CN">指定工厂的标准文档样式文件的名称。</desc>
+					<desc xml:lang="zh-TW">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="ar">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="he">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="ca">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="pt">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="ru">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="es">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="it">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="sv">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="pl">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="pt-BR">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="ja">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="ko">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="tr">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="th">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="hi-IN">Specifies the name of the standard template file for the factory.</desc>
+					<desc xml:lang="x-comment">; Specifies the name of the standard template file for the factory.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupFactoryWindowAttributes" oor:type="xs:string">
 				<!-- UIHints: setup -->
 				<info>
 					<desc xml:lang="en-US">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="el">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="nl">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="fr">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="fi">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="cs">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="da">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="zh-CN">指定工厂视窗的属性</desc>
+					<desc xml:lang="zh-TW">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="ar">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="he">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="ca">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="pt">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="ru">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="es">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="it">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="sv">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="pl">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="pt-BR">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="ja">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="ko">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="tr">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="th">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="hi-IN">Specifies the attributes of the factory window</desc>
+					<desc xml:lang="x-comment">; Specifies the attributes of the factory window</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:type="xs:string">
 				<!-- UIHints: setup -->
 				<info>
 					<desc xml:lang="en-US">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="el">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="nl">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="fr">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="fi">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="cs">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="da">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="zh-CN">指定在工厂中打开空文档的 URL。</desc>
+					<desc xml:lang="zh-TW">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="ar">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="he">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="ca">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="pt">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="ru">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="es">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="it">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="sv">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="pl">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="pt-BR">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="ja">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="ko">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="tr">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="th">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="hi-IN">Specifies the URL for opening an empty document in the factory.</desc>
+					<desc xml:lang="x-comment">; Specifies the URL for opening an empty document in the factory.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupFactoryIcon" oor:type="xs:int">
 				<!-- UIHints: setup -->
 				<info>
 					<desc xml:lang="en-US">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="el">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="nl">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="fr">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="fi">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="cs">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="da">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="zh-CN">指定工厂图标的 ID</desc>
+					<desc xml:lang="zh-TW">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="ar">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="he">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="ca">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="pt">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="ru">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="es">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="it">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="sv">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="pl">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="pt-BR">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="ja">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="ko">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="tr">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="th">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="hi-IN">Specifies the ID of the icon for the factory</desc>
+					<desc xml:lang="x-comment">; Specifies the ID of the icon for the factory</desc>
 				</info>
 			</prop>
 		</group>
@@ -108,11 +252,59 @@
 			<info>
 				<author>MBA</author>
 				<desc xml:lang="en-US">Contains common product and version information</desc>
+				<desc xml:lang="el">Contains common product and version information</desc>
+				<desc xml:lang="nl">Contains common product and version information</desc>
+				<desc xml:lang="fr">Contains common product and version information</desc>
+				<desc xml:lang="fi">Contains common product and version information</desc>
+				<desc xml:lang="cs">Contains common product and version information</desc>
+				<desc xml:lang="da">Contains common product and version information</desc>
+				<desc xml:lang="zh-CN">含有通用产品和版本信息</desc>
+				<desc xml:lang="zh-TW">Contains common product and version information</desc>
+				<desc xml:lang="ar">Contains common product and version information</desc>
+				<desc xml:lang="he">Contains common product and version information</desc>
+				<desc xml:lang="ca">Contains common product and version information</desc>
+				<desc xml:lang="pt">Contains common product and version information</desc>
+				<desc xml:lang="ru">Contains common product and version information</desc>
+				<desc xml:lang="es">Contains common product and version information</desc>
+				<desc xml:lang="it">Contains common product and version information</desc>
+				<desc xml:lang="sv">Contains common product and version information</desc>
+				<desc xml:lang="pl">Contains common product and version information</desc>
+				<desc xml:lang="pt-BR">Contains common product and version information</desc>
+				<desc xml:lang="ja">Contains common product and version information</desc>
+				<desc xml:lang="ko">Contains common product and version information</desc>
+				<desc xml:lang="tr">Contains common product and version information</desc>
+				<desc xml:lang="th">Contains common product and version information</desc>
+				<desc xml:lang="hi-IN">Contains common product and version information</desc>
+				<desc xml:lang="x-comment">; Contains common product and version information</desc>
 			</info>
 			<!--The default must be written by the setup.-->
 			<prop oor:name="ooName" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">Specifies the name of a product.</desc>
+					<desc xml:lang="el">Specifies the name of a product.</desc>
+					<desc xml:lang="nl">Specifies the name of a product.</desc>
+					<desc xml:lang="fr">Specifies the name of a product.</desc>
+					<desc xml:lang="fi">Specifies the name of a product.</desc>
+					<desc xml:lang="cs">Specifies the name of a product.</desc>
+					<desc xml:lang="da">Specifies the name of a product.</desc>
+					<desc xml:lang="zh-CN">指定产品的名称。</desc>
+					<desc xml:lang="zh-TW">Specifies the name of a product.</desc>
+					<desc xml:lang="ar">Specifies the name of a product.</desc>
+					<desc xml:lang="he">Specifies the name of a product.</desc>
+					<desc xml:lang="ca">Specifies the name of a product.</desc>
+					<desc xml:lang="pt">Specifies the name of a product.</desc>
+					<desc xml:lang="ru">Specifies the name of a product.</desc>
+					<desc xml:lang="es">Specifies the name of a product.</desc>
+					<desc xml:lang="it">Specifies the name of a product.</desc>
+					<desc xml:lang="sv">Specifies the name of a product.</desc>
+					<desc xml:lang="pl">Specifies the name of a product.</desc>
+					<desc xml:lang="pt-BR">Specifies the name of a product.</desc>
+					<desc xml:lang="ja">Specifies the name of a product.</desc>
+					<desc xml:lang="ko">Specifies the name of a product.</desc>
+					<desc xml:lang="tr">Specifies the name of a product.</desc>
+					<desc xml:lang="th">Specifies the name of a product.</desc>
+					<desc xml:lang="hi-IN">Specifies the name of a product.</desc>
+					<desc xml:lang="x-comment">; Specifies the name of a product.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -120,6 +312,30 @@
 			<prop oor:name="ooXMLFileFormatVersion" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="el">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="nl">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="fr">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="fi">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="cs">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="da">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="zh-CN">指定文档的 xml 文件格式的版本</desc>
+					<desc xml:lang="zh-TW">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="ar">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="he">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="ca">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="pt">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="ru">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="es">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="it">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="sv">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="pl">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="pt-BR">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="ja">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="ko">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="tr">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="th">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="hi-IN">Specifies the version of the xml file format of our documents</desc>
+					<desc xml:lang="x-comment">; Specifies the version of the xml file format of our documents</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -127,6 +343,30 @@
 			<prop oor:name="ooSetupVersion" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="el">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="nl">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="fr">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="fi">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="cs">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="da">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="zh-CN">指定使用者界面上显示的产品的版本号。</desc>
+					<desc xml:lang="zh-TW">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="ar">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="he">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="ca">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="pt">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="ru">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="es">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="it">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="sv">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="pl">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="pt-BR">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="ja">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="ko">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="tr">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="th">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="hi-IN">Specifies the version number of the product that appears on the user interface.</desc>
+					<desc xml:lang="x-comment">; Specifies the version number of the product that appears on the user interface.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -134,6 +374,30 @@
 			<prop oor:name="ooSetupExtension" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="el">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="nl">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="fr">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="fi">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="cs">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="da">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="zh-CN">指定使用者界面上显示的版本号。</desc>
+					<desc xml:lang="zh-TW">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="ar">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="he">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="ca">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="pt">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="ru">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="es">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="it">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="sv">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="pl">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="pt-BR">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="ja">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="ko">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="tr">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="th">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="hi-IN">Specifies the version number that appears on the user interface.</desc>
+					<desc xml:lang="x-comment">; Specifies the version number that appears on the user interface.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -144,6 +408,30 @@
 			<info>
 				<author>DG</author>
 				<desc xml:lang="en-US">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="el">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="nl">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="fr">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="fi">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="cs">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="da">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="zh-CN">指定建立文档的安装位置、语言环境和可用的工厂。</desc>
+				<desc xml:lang="zh-TW">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="ar">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="he">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="ca">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="pt">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="ru">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="es">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="it">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="sv">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="pl">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="pt-BR">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="ja">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="ko">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="tr">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="th">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="hi-IN">Specifies the installation location, locales and the available factories for creating documents.</desc>
+				<desc xml:lang="x-comment">; Specifies the installation location, locales and the available factories for creating documents.</desc>
 			</info>
 			<prop oor:name="ooSetupInstallPath" oor:type="xs:string">
 				<!-- OldPath: Service User/[username] -->
@@ -152,6 +440,30 @@
 					<deprecated/>
 					<author>AS/BEI</author>
 					<desc xml:lang="en-US">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="el">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="nl">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="fr">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="fi">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="cs">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="da">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="zh-CN">指定使用者数据安装位置的路径。使用者数据只能安装在有效的目录中。</desc>
+					<desc xml:lang="zh-TW">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="ar">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="he">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="ca">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="pt">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="ru">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="es">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="it">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="sv">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="pl">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="pt-BR">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="ja">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="ko">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="tr">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="th">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="hi-IN">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
+					<desc xml:lang="x-comment">; Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -163,6 +475,30 @@
 					<deprecated/>
 					<author>AS/BEI</author>
 					<desc xml:lang="en-US">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="el">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="nl">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="fr">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="fi">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="cs">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="da">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="zh-CN">以 URL 的形式指定使用者的安装路径。路径必须与 UCB 配置相匹配。</desc>
+					<desc xml:lang="zh-TW">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="ar">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="he">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="ca">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="pt">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="ru">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="es">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="it">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="sv">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="pl">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="pt-BR">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="ja">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="ko">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="tr">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="th">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="hi-IN">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
+					<desc xml:lang="x-comment">; Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -174,6 +510,30 @@
 					<deprecated/>
 					<author>IS/BEI</author>
 					<desc xml:lang="en-US">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="el">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="nl">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="fr">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="fi">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="cs">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="da">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="zh-CN">指示使用者数据是否复制成功。</desc>
+					<desc xml:lang="zh-TW">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="ar">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="he">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="ca">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="pt">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="ru">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="es">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="it">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="sv">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="pl">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="pt-BR">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="ja">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="ko">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="tr">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="th">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="hi-IN">Indicates if the user data is copied successfully.</desc>
+					<desc xml:lang="x-comment">; Indicates if the user data is copied successfully.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupLocales" oor:type="oor:string-list">
@@ -183,16 +543,88 @@
 				<info>
 					<author>PB / IS</author>
 					<desc xml:lang="en-US">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="el">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="nl">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="fr">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="fi">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="cs">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="da">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="zh-CN">指定设置程序提供的应用程序语言 (如果使用多语言的版本)。</desc>
+					<desc xml:lang="zh-TW">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="ar">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="he">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="ca">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="pt">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="ru">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="es">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="it">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="sv">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="pl">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="pt-BR">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="ja">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="ko">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="tr">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="th">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="hi-IN">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="x-comment">; Specifies the application language offered by the setup, if a multilingual version is used.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="en-US">
 						<info>
 							<desc xml:lang="en-US">US locale</desc>
+							<desc xml:lang="el">US locale</desc>
+							<desc xml:lang="nl">US locale</desc>
+							<desc xml:lang="fr">US locale</desc>
+							<desc xml:lang="fi">US locale</desc>
+							<desc xml:lang="cs">US locale</desc>
+							<desc xml:lang="da">US locale</desc>
+							<desc xml:lang="zh-CN">US locale</desc>
+							<desc xml:lang="zh-TW">US locale</desc>
+							<desc xml:lang="ar">US locale</desc>
+							<desc xml:lang="he">US locale</desc>
+							<desc xml:lang="ca">US locale</desc>
+							<desc xml:lang="pt">US locale</desc>
+							<desc xml:lang="ru">US locale</desc>
+							<desc xml:lang="es">US locale</desc>
+							<desc xml:lang="it">US locale</desc>
+							<desc xml:lang="sv">US locale</desc>
+							<desc xml:lang="pl">US locale</desc>
+							<desc xml:lang="pt-BR">US locale</desc>
+							<desc xml:lang="ja">US locale</desc>
+							<desc xml:lang="ko">US locale</desc>
+							<desc xml:lang="tr">US locale</desc>
+							<desc xml:lang="th">US locale</desc>
+							<desc xml:lang="hi-IN">US locale</desc>
+							<desc xml:lang="x-comment">; US locale</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="de-DE">
 						<info>
 							<desc xml:lang="en-US">German locale</desc>
+							<desc xml:lang="el">German locale</desc>
+							<desc xml:lang="nl">German locale</desc>
+							<desc xml:lang="fr">German locale</desc>
+							<desc xml:lang="fi">German locale</desc>
+							<desc xml:lang="cs">German locale</desc>
+							<desc xml:lang="da">German locale</desc>
+							<desc xml:lang="zh-CN">German locale</desc>
+							<desc xml:lang="zh-TW">German locale</desc>
+							<desc xml:lang="ar">German locale</desc>
+							<desc xml:lang="he">German locale</desc>
+							<desc xml:lang="ca">German locale</desc>
+							<desc xml:lang="pt">German locale</desc>
+							<desc xml:lang="ru">German locale</desc>
+							<desc xml:lang="es">German locale</desc>
+							<desc xml:lang="it">German locale</desc>
+							<desc xml:lang="sv">German locale</desc>
+							<desc xml:lang="pl">German locale</desc>
+							<desc xml:lang="pt-BR">German locale</desc>
+							<desc xml:lang="ja">German locale</desc>
+							<desc xml:lang="ko">German locale</desc>
+							<desc xml:lang="tr">German locale</desc>
+							<desc xml:lang="th">German locale</desc>
+							<desc xml:lang="hi-IN">German locale</desc>
+							<desc xml:lang="x-comment">; German locale</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -205,6 +637,30 @@
 					<deprecated>This feature is controlled by an entry in the soffice.ini or the -nologo command line parameter.</deprecated>
 					<author>CD</author>
 					<desc xml:lang="en-US">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="el">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="nl">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="fr">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="fi">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="cs">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="da">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="zh-CN">指定启动过程中是否显示启动屏幕。</desc>
+					<desc xml:lang="zh-TW">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="ar">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="he">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="ca">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="pt">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="ru">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="es">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="it">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="sv">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="pl">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="pt-BR">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="ja">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="ko">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="tr">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="th">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="hi-IN">Specifies whether the splash screen is displayed during startup.</desc>
+					<desc xml:lang="x-comment">; Specifies whether the splash screen is displayed during startup.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupConnectionURL" oor:type="xs:string">
@@ -213,6 +669,30 @@
 				<info>
 					<author>CD</author>
 					<desc xml:lang="en-US">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="el">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="nl">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="fr">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="fi">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="cs">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="da">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="zh-CN">指定可用于从外部编写 Office 脚本的 UNO 连接的 URL。</desc>
+					<desc xml:lang="zh-TW">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="ar">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="he">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="ca">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="pt">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="ru">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="es">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="it">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="sv">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="pl">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="pt-BR">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="ja">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="ko">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="tr">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="th">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="hi-IN">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
+					<desc xml:lang="x-comment">; Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -221,6 +701,30 @@
 				<info>
 					<author>MBA</author>
 					<desc xml:lang="en-US">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="el">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="nl">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="fr">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="fi">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="cs">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="da">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="zh-CN">含有设置过程中安装的所有文档工厂。</desc>
+					<desc xml:lang="zh-TW">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="ar">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="he">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="ca">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="pt">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="ru">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="es">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="it">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="sv">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="pl">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="pt-BR">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="ja">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="ko">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="tr">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="th">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="hi-IN">Contains all of the document factories that were installed during setup.</desc>
+					<desc xml:lang="x-comment">; Contains all of the document factories that were installed during setup.</desc>
 				</info>
 			</set>
 		</group>
@@ -228,6 +732,30 @@
 			<info>
 				<author>PB</author>
 				<desc xml:lang="en-US">Specifies the installation locales.</desc>
+				<desc xml:lang="el">Specifies the installation locales.</desc>
+				<desc xml:lang="nl">Specifies the installation locales.</desc>
+				<desc xml:lang="fr">Specifies the installation locales.</desc>
+				<desc xml:lang="fi">Specifies the installation locales.</desc>
+				<desc xml:lang="cs">Specifies the installation locales.</desc>
+				<desc xml:lang="da">Specifies the installation locales.</desc>
+				<desc xml:lang="zh-CN">指定安装语言环境。</desc>
+				<desc xml:lang="zh-TW">Specifies the installation locales.</desc>
+				<desc xml:lang="ar">Specifies the installation locales.</desc>
+				<desc xml:lang="he">Specifies the installation locales.</desc>
+				<desc xml:lang="ca">Specifies the installation locales.</desc>
+				<desc xml:lang="pt">Specifies the installation locales.</desc>
+				<desc xml:lang="ru">Specifies the installation locales.</desc>
+				<desc xml:lang="es">Specifies the installation locales.</desc>
+				<desc xml:lang="it">Specifies the installation locales.</desc>
+				<desc xml:lang="sv">Specifies the installation locales.</desc>
+				<desc xml:lang="pl">Specifies the installation locales.</desc>
+				<desc xml:lang="pt-BR">Specifies the installation locales.</desc>
+				<desc xml:lang="ja">Specifies the installation locales.</desc>
+				<desc xml:lang="ko">Specifies the installation locales.</desc>
+				<desc xml:lang="tr">Specifies the installation locales.</desc>
+				<desc xml:lang="th">Specifies the installation locales.</desc>
+				<desc xml:lang="hi-IN">Specifies the installation locales.</desc>
+				<desc xml:lang="x-comment">; Specifies the installation locales.</desc>
 			</info>
 			<!--The default must be written by the setup.-->
 			<prop oor:name="ooLocale" oor:type="xs:string">
@@ -238,7 +766,55 @@
 				<info>
 					<author>PB</author>
 					<desc xml:lang="en-US">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="el">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="nl">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="fr">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="fi">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="cs">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="da">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="zh-CN">指示使用者选定的 Office 语言。</desc>
+						<desc xml:lang="zh-TW">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="ar">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="he">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="ca">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="pt">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="ru">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="es">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="it">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="sv">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="pl">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="pt-BR">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="ja">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="ko">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="tr">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="th">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="hi-IN">Indicates the Office language selected by the user.</desc>
+						<desc xml:lang="x-comment">; Indicates the Office language selected by the user.</desc>
 					<label xml:lang="en-US">Locale</label>
+					<label xml:lang="el">Locale</label>
+					<label xml:lang="nl">Locale</label>
+					<label xml:lang="fr">Locale</label>
+					<label xml:lang="fi">Locale</label>
+					<label xml:lang="cs">Locale</label>
+					<label xml:lang="da">Locale</label>
+					<label xml:lang="zh-CN">语言环境</label>
+					<label xml:lang="zh-TW">Locale</label>
+					<label xml:lang="ar">Locale</label>
+					<label xml:lang="he">Locale</label>
+					<label xml:lang="ca">Locale</label>
+					<label xml:lang="pt">Locale</label>
+					<label xml:lang="ru">Locale</label>
+					<label xml:lang="es">Locale</label>
+					<label xml:lang="it">Locale</label>
+					<label xml:lang="sv">Locale</label>
+					<label xml:lang="pl">Locale</label>
+					<label xml:lang="pt-BR">Locale</label>
+					<label xml:lang="ja">Locale</label>
+					<label xml:lang="ko">Locale</label>
+					<label xml:lang="tr">Locale</label>
+					<label xml:lang="th">Locale</label>
+					<label xml:lang="hi-IN">Locale</label>
+					<label xml:lang="x-comment">; Locale</label>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -248,6 +824,30 @@
 				<info>
 					<author>ER</author>
 					<desc xml:lang="en-US">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="el">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="nl">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="fr">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="fi">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="cs">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="da">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="zh-CN">指示使用者自定的语言环境设定。默认情况下，如果此标签空缺，则使用系统的语言环境。</desc>
+					<desc xml:lang="zh-TW">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="ar">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="he">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="ca">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="pt">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="ru">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="es">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="it">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="sv">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="pl">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="pt-BR">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="ja">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="ko">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="tr">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="th">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="hi-IN">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
+					<desc xml:lang="x-comment">; Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -257,6 +857,30 @@
 				<info>
 					<author>ER</author>
 					<desc xml:lang="en-US">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="el">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="nl">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="fr">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="fi">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="cs">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="da">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="zh-CN">指示使用者自定的货币设定。默认情况下，此标签为空，使用在 ooSetupSystemLocale 中定义的货币。</desc>
+					<desc xml:lang="zh-TW">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="ar">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="he">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="ca">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="pt">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="ru">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="es">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="it">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="sv">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="pl">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="pt-BR">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="ja">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="ko">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="tr">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="th">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="hi-IN">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
+					<desc xml:lang="x-comment">; Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -266,6 +890,30 @@
 			<info>
 				<author>JB</author>
 				<desc xml:lang="en-US">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="el">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="nl">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="fr">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="fi">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="cs">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="da">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="zh-CN">含有有关控制配置数据访问的设定。</desc>
+				<desc xml:lang="zh-TW">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="ar">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="he">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="ca">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="pt">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="ru">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="es">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="it">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="sv">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="pl">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="pt-BR">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="ja">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="ko">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="tr">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="th">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="hi-IN">Contains settings that control configuration data access.</desc>
+				<desc xml:lang="x-comment">; Contains settings that control configuration data access.</desc>
 			</info>
 			<prop oor:name="TransferUserSettingsOnce" oor:type="xs:boolean" oor:nillable="false">
 				<info>
@@ -280,3 +928,9 @@
 		</group>
 	</component>
 </oor:component-schema>
+
+
+
+
+
+
