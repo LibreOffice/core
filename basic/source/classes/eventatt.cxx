@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-19 12:37:56 $
+ *  last change: $Author: ab $ $Date: 2001-03-27 17:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,6 +565,8 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     Any aElement = xNameAccess->getByName( aDialogName );
     Reference< XInputStreamProvider > xISP;
     aElement >>= xISP;
+    if( !xISP.is() )
+        return;
 
     // Create a DialogModel
     Reference< XInputStream > xInput( xISP->createInputStream() );
