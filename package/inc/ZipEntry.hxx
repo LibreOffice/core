@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipEntry.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-14 14:25:15 $
+ *  last change: $Author: mtg $ $Date: 2001-10-30 13:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 #ifndef _ZIP_ENTRY_HXX_
 #define _ZIP_ENTRY_HXX_
+
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
 
 struct ZipEntry
 {
