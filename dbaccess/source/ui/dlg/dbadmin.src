@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-20 11:54:18 $
+ *  last change: $Author: vg $ $Date: 2002-02-22 21:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1520,7 +1520,7 @@ TabPage PAGE_ODBC
         Text[ polish ] = "W przypadku baz danych bazuj�cych na plikach u�yj katalogu";
         Text[ portuguese_brazilian ] = "Use catalog on filebased databases";
         Text[ japanese ] = "ファイルがベースのデータベースでは Catalog を使用";
-        Text[ korean ] = "파일 기반 데이터베이스에서 카탈로그 사용";
+        Text[ korean ] = "파일 기반 데이터베이스에서 목록 사용";
         Text[ chinese_simplified ] = "如果是文件式数据库就采用分类";
         Text[ chinese_traditional ] = "若是檔案式資料庫就採用分類";
         Text[ turkish ] = "Use catalog on filebased databases";
@@ -3387,6 +3387,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.92  2002/02/20 11:54:18  kz
+ *  Merge SRC641: 02/20/02 - 12:53:54
+ *
  *  Revision 1.91  2002/02/19 21:06:45  kz
  *  Merge SRC641: 19.02.02 - 22:06:19
  *
