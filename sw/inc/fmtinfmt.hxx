@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtinfmt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:34:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 15:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,6 @@ public:
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nVer) const;
-    virtual SvStream&       Store(SvStream &, USHORT nIVer) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -116,7 +114,6 @@ public:
     virtual BOOL            PutValue( const com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId = 0 );
 
-    virtual USHORT           GetVersion( USHORT nFFVer ) const;
 
     const SwTxtINetFmt* GetTxtINetFmt() const   { return pTxtAttr; }
     SwTxtINetFmt* GetTxtINetFmt()               { return pTxtAttr; }
