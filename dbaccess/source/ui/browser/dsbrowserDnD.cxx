@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 12:48:33 $
+ *  last change: $Author: oj $ $Date: 2002-11-05 08:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
+#include <com/sun/star/sdbc/XDataSource.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
@@ -487,7 +490,8 @@ namespace dbaui
                 sal_Bool        bEscapeProcessing = sal_True;
                 _rPasteData[daDataSource]       >>= sDataSourceName;
                 _rPasteData[daCommand]          >>= sCommand;
-                _rPasteData[daEscapeProcessing] >>= bEscapeProcessing;
+                if ( _rPasteData.has(daEscapeProcessing) )
+                    _rPasteData[daEscapeProcessing] >>= bEscapeProcessing;
 
                 // plausibility check
                 sal_Bool bValidDescriptor = sal_False;
@@ -555,17 +559,18 @@ namespace dbaui
                 }
 
                 // get the queries container of the destination data source
-                if (!ensureEntryObject(_pApplyTo))
+                if ( !ensureEntryObject( isContainer(_pApplyTo) ? _pApplyTo : m_pTreeView->getListBox()->GetParent( _pApplyTo )) )
                     // this is a heavy error ... the name container for the queries could not ne obtained
                     return;
 
                 // check if the entry is a container else get the parent
                 DBTreeListModel::DBTreeListUserData* pQueriesData = NULL;
-                if(!isContainer(_pApplyTo))
+                if ( !isContainer(_pApplyTo) )
                     pQueriesData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pTreeView->getListBox()->GetParent(_pApplyTo)->GetUserData());
                 else
                     pQueriesData = static_cast<DBTreeListModel::DBTreeListUserData*>(_pApplyTo->GetUserData());
 
+                OSL_ENSURE(pQueriesData,"No query data!");
                 Reference< XNameContainer > xDestQueries(pQueriesData->xObject, UNO_QUERY);
                 Reference< XSingleServiceFactory > xQueryFactory(xDestQueries, UNO_QUERY);
                 if (!xQueryFactory.is())
@@ -655,7 +660,7 @@ namespace dbaui
 
                 // first get the dest connection
                 Reference<XConnection> xDestConnection;  // supports the service sdb::connection
-                if(!ensureConnection(_pApplyTo, xDestConnection))
+                if ( !ensureConnection(_pApplyTo, xDestConnection) )
                     return;
 
                 Reference<XConnection> xSrcConnection;
@@ -673,9 +678,9 @@ namespace dbaui
 
                 // get the source connection
                 sal_Bool bDispose = sal_False;
-                if(sSrcDataSourceName == aDSName)
+                if ( sSrcDataSourceName == aDSName )
                     xSrcConnection = xDestConnection;
-                else if(!xSrcConnection.is())
+                else if ( !xSrcConnection.is() )
                 {
                     Reference< XEventListener> xEvt(static_cast< ::cppu::OWeakObject*>(this), UNO_QUERY);
                     showError(::dbaui::createConnection(sSrcDataSourceName,m_xDatabaseContext,getORB(),xEvt,xSrcConnection));
@@ -870,15 +875,22 @@ namespace dbaui
         try
         {
             ::osl::MutexGuard aGuard(m_aEntryMutex);
-            Reference<XConnection> xConnection;  // supports the service sdb::connection
-            if (_bAllowConnection && !ensureConnection(_pApplyTo, xConnection))
-                return NULL;
 
             ::rtl::OUString aName = GetEntryText( _pApplyTo );
             ::rtl::OUString aDSName = GetEntryText( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
 
-            // the owner ship goes to ODataClipboard
-            ODataClipboard* pData = new ODataClipboard(aDSName, _nCommandType, aName, xConnection, getNumberFormatter(), getORB());
+            ODataClipboard* pData = NULL;
+            Reference<XConnection> xConnection;  // supports the service sdb::connection
+            if ( CommandType::QUERY != _nCommandType )
+            {
+                if (_bAllowConnection && !ensureConnection(_pApplyTo, xConnection))
+                    return NULL;
+                pData = new ODataClipboard(aDSName, _nCommandType, aName, xConnection, getNumberFormatter(), getORB());
+            }
+            else
+                pData = new ODataClipboard(aDSName, _nCommandType, aName, getNumberFormatter(), getORB());
+
+            // the owner ship goes to ODataClipboards
             return pData;
         }
         catch(SQLException& e)
@@ -1399,6 +1411,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.56  2002/10/31 12:48:33  oj
+ *  #104392# insert waitobject before inserting data
+ *
  *  Revision 1.55  2002/10/08 06:46:22  oj
  *  #104025# check if name is empty
  *
