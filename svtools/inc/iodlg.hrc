@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodlg.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-28 10:18:05 $
+ *  last change: $Author: pb $ $Date: 2001-08-10 08:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,9 +140,6 @@
 #define HID_FILEDLG_FOLDER_BTN          (HID_SFX_START + 225)
 #define HID_FILEDLG_FOLDER_FILENAME     (HID_SFX_START + 226)
 #define HID_FILEDLG_SRCHFOLDER_BTN      (HID_SFX_START + 227)
-
-#define HID_FILEDLG_LINK_CB             (HID_SFX_START + 276)
-#define HID_FILEDLG_PREVIEW_CB          (HID_SFX_START + 277)
 
 #endif
 
