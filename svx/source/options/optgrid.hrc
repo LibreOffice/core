@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 09:47:09 $
+ *  last change: $Author: os $ $Date: 2001-03-22 14:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,19 @@
 #define FT_RESOLUTION 6
 #define FT_DIVISION 7
 
-// #define CBX_CROSSHAIR        30
-// #define CB_RULER         31
+#define CBX_SNAP_HELPLINES      10
+#define CBX_SNAP_BORDER         11
+#define CBX_SNAP_FRAME          12
+#define CBX_SNAP_POINTS         13
+#define FT_SNAP_AREA            14
+#define MTR_FLD_SNAP_AREA       15
+#define GRP_SNAP                16
+#define CBX_ORTHO               17
+#define CBX_BIGORTHO            18
+#define CBX_ROTATE              19
+#define MTR_FLD_ANGLE           20
+#define FT_BEZ_ANGLE            21
+#define MTR_FLD_BEZ_ANGLE       22
+#define GRP_ORTHO               23
 
 #endif

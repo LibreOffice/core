@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 09:47:09 $
+ *  last change: $Author: os $ $Date: 2001-03-22 14:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,20 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
     aCbxUseGridsnap ( this, ResId( CBX_USE_GRIDSNAP ) ),
     aCbxSynchronize ( this, ResId( CBX_SYNCHRONIZE ) ),
     aCbxGridVisible ( this, ResId( CBX_GRID_VISIBLE ) ),
+    aCbxSnapHelplines   ( this, ResId( CBX_SNAP_HELPLINES ) ),
+    aCbxSnapBorder      ( this, ResId( CBX_SNAP_BORDER ) ),
+    aCbxSnapFrame       ( this, ResId( CBX_SNAP_FRAME ) ),
+    aCbxSnapPoints      ( this, ResId( CBX_SNAP_POINTS ) ),
+    aFtSnapArea         ( this, ResId( FT_SNAP_AREA ) ),
+    aMtrFldSnapArea     ( this, ResId( MTR_FLD_SNAP_AREA ) ),
+    aGrpSnap            ( this, ResId( GRP_SNAP ) ),
+    aCbxOrtho           ( this, ResId( CBX_ORTHO ) ),
+    aCbxBigOrtho        ( this, ResId( CBX_BIGORTHO ) ),
+    aCbxRotate          ( this, ResId( CBX_ROTATE ) ),
+    aMtrFldAngle        ( this, ResId( MTR_FLD_ANGLE ) ),
+    aFtBezAngle         ( this, ResId( FT_BEZ_ANGLE ) ),
+    aMtrFldBezAngle     ( this, ResId( MTR_FLD_BEZ_ANGLE ) ),
+    aGrpOrtho           ( this, ResId( GRP_ORTHO ) ),
     bAttrModified( FALSE )
 {
     // diese Page braucht ExchangeSupport
@@ -243,6 +257,7 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
     lcl_SetMinMax(aMtrFldDrawY, nFirst, nLast, nMin, nMax);
 
 
+    aCbxRotate.SetClickHdl( LINK( this, SvxGridTabPage, ClickRotateHdl_Impl ) );
     Link aLink = LINK( this, SvxGridTabPage, ChangeGridsnapHdl_Impl );
     aCbxUseGridsnap.SetClickHdl( aLink );
     aCbxSynchronize.SetClickHdl( aLink );
@@ -388,6 +403,17 @@ IMPL_LINK( SvxGridTabPage, ChangeDrawXHdl_Impl, void *, EMPTYARG )
         aMtrFldDrawY.SetValue( aMtrFldDrawX.GetValue() );
     }
     return 0;
+}
+//------------------------------------------------------------------------
+
+IMPL_LINK( SvxGridTabPage, ClickRotateHdl_Impl, void *, p )
+{
+    if( aCbxRotate.IsChecked() )
+        aMtrFldAngle.Enable();
+    else
+        aMtrFldAngle.Disable();
+
+    return( 0L );
 }
 
 //------------------------------------------------------------------------

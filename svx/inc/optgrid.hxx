@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 09:46:47 $
+ *  last change: $Author: os $ $Date: 2001-03-22 14:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,10 +174,30 @@ private:
     CheckBox            aCbxSynchronize;
     FixedLine           aGrpDrawGrid; // Neu
 
+protected:
+    //these controls are used in draw and impress
+    FixedLine       aGrpSnap;
+    CheckBox        aCbxSnapHelplines;
+    CheckBox        aCbxSnapBorder;
+    CheckBox        aCbxSnapFrame;
+    CheckBox        aCbxSnapPoints;
+    FixedText       aFtSnapArea;
+    MetricField     aMtrFldSnapArea;
+
+    FixedLine       aGrpOrtho;
+    CheckBox        aCbxOrtho;
+    CheckBox        aCbxBigOrtho;
+    CheckBox        aCbxRotate;
+    MetricField     aMtrFldAngle;
+    FixedText       aFtBezAngle;
+    MetricField     aMtrFldBezAngle;
+
+private:
     BOOL                bAttrModified;
     BOOL                bEqualGrid; // Neu
 
 #ifdef _SVX_OPTGRID_CXX
+    DECL_LINK( ClickRotateHdl_Impl, void * );
     DECL_LINK( ChangeDrawXHdl_Impl, void * );
     DECL_LINK( ChangeDrawYHdl_Impl, void * );
     DECL_LINK( ChangeSnapXHdl_Impl, void * );
