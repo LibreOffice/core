@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-24 11:19:49 $
+ *  last change: $Author: mba $ $Date: 2000-11-28 11:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,12 +98,6 @@
 #endif
 #ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
-#endif
-#ifndef _SFX_HELP_HXX //autogen
-#include <sfx2/sfxhelp.hxx>
-#endif
-#ifndef _SFX_HELP_HXX //autogen
-#include <sfx2/sfxhelp.hxx>
 #endif
 #ifndef _OUTLINER_HXX //autogen
 #include <svx/outliner.hxx>
@@ -1549,9 +1543,6 @@ void SdDrawViewShell::SetHelpIdBySelection()
             nHelpId = HID_FM_CTL_SELECTION;
         }
     }
-
-    if( nHelpId != 0 && SFX_APP()->GetHelpPI() )
-        SfxHelp::ShowHelp( nHelpId, TRUE, 0, TRUE );
 }
 
 
