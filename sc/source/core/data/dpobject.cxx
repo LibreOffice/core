@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:31:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1553,7 +1553,7 @@ BOOL ScDPObject::FillLabelData(ScPivotParam& rParam)
 
                 LabelData& rLabelData = *aLabelArr[nOutCount];
                 GetHierarchies( nDim, rLabelData.maHiers );
-                GetMembers( nDim, rLabelData.maMembers, &rLabelData.maVisible );
+                GetMembers( nDim, rLabelData.maMembers, &rLabelData.maVisible, &rLabelData.maShowDet );
                 lcl_FillLabelData( rLabelData, xDimProp );
 
                 ++nOutCount;
@@ -1615,9 +1615,12 @@ BOOL ScDPObject::GetMembersNA( sal_Int32 nDim, uno::Reference< container::XNameA
     return GetMembersNA( nDim, GetUsedHierarchy( nDim ), xMembers );
 }
 
-BOOL ScDPObject::GetMembers( sal_Int32 nDim, uno::Sequence< rtl::OUString >& rMembers, uno::Sequence< sal_Bool >* pVisible )
+BOOL ScDPObject::GetMembers( sal_Int32 nDim,
+        uno::Sequence< rtl::OUString >& rMembers,
+        uno::Sequence< sal_Bool >* pVisible,
+        uno::Sequence< sal_Bool >* pShowDet )
 {
-    return GetMembers( nDim, GetUsedHierarchy( nDim ), rMembers, pVisible );
+    return GetMembers( nDim, GetUsedHierarchy( nDim ), rMembers, pVisible, pShowDet );
 }
 
 BOOL ScDPObject::GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, uno::Reference< container::XNameAccess >& xMembers )
@@ -1655,7 +1658,10 @@ BOOL ScDPObject::GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, uno::Reference< 
     return bRet;
 }
 
-BOOL ScDPObject::GetMembers( sal_Int32 nDim, sal_Int32 nHier, uno::Sequence< rtl::OUString >& rMembers, uno::Sequence< sal_Bool >* pVisible )
+BOOL ScDPObject::GetMembers( sal_Int32 nDim, sal_Int32 nHier,
+        uno::Sequence< rtl::OUString >& rMembers,
+        uno::Sequence< sal_Bool >* pVisible,
+        uno::Sequence< sal_Bool >* pShowDet )
 {
     BOOL bRet = FALSE;
     uno::Reference< container::XNameAccess > xMembersNA;
@@ -1664,21 +1670,36 @@ BOOL ScDPObject::GetMembers( sal_Int32 nDim, sal_Int32 nHier, uno::Sequence< rtl
         uno::Reference< container::XIndexAccess > xMembersIA( new ScNameToIndexAccess( xMembersNA ) );
         sal_Int32 nCount = xMembersIA->getCount();
         rMembers.realloc( nCount );
-        if( pVisible ) pVisible->realloc( nCount );
+        if( pVisible )
+            pVisible->realloc( nCount );
+        if( pShowDet )
+            pShowDet->realloc( nCount );
+
         rtl::OUString* pAry = rMembers.getArray();
         for( sal_Int32 nItem = 0; nItem < nCount; ++nItem )
         {
             uno::Reference< container::XNamed > xMember( xMembersIA->getByIndex( nItem ), uno::UNO_QUERY );
             if( xMember.is() )
                 pAry[ nItem ] = xMember->getName();
-            if( pVisible )
+            if( pVisible || pShowDet )
             {
-                sal_Bool bVis = sal_False;
                 uno::Reference< beans::XPropertySet > xMemProp( xMember, uno::UNO_QUERY );
-                if( xMemProp.is() )
-                    bVis = ScUnoHelpFunctions::GetBoolProperty( xMemProp,
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_ISVISIBL ) ) );
-                (*pVisible)[ nItem ] = bVis;
+                if( pVisible )
+                {
+                    sal_Bool bVis = sal_True;
+                    if( xMemProp.is() )
+                        bVis = ScUnoHelpFunctions::GetBoolProperty( xMemProp,
+                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_ISVISIBL ) ) );
+                    (*pVisible)[ nItem ] = bVis;
+                }
+                if( pShowDet )
+                {
+                    sal_Bool bShow = sal_True;
+                    if( xMemProp.is() )
+                        bShow = ScUnoHelpFunctions::GetBoolProperty( xMemProp,
+                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_SHOWDETA ) ) );
+                    (*pShowDet)[ nItem ] = bShow;
+                }
             }
         }
         bRet = TRUE;
