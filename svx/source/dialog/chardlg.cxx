@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-21 13:42:28 $
+ *  last change: $Author: fs $ $Date: 2001-03-21 15:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4102,6 +4102,18 @@ IMPL_LINK( SvxCharEffectsPage, SelectHdl_Impl, ListBox*, pBox )
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( SvxCharEffectsPage, UpdatePreview_Impl, ListBox*, EMPTYARG )
+{
+    BOOL bEnable = ( ( m_aUnderlineLB.GetSelectEntryPos() > 0 ) |
+                    ( m_aStrikeoutLB.GetSelectEntryPos() > 0 ) );
+    m_aIndividualWordsBtn.Enable( bEnable );
+
+    UpdatePreview_Impl();
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 IMPL_LINK( SvxCharEffectsPage, ClickHdl_Impl, TriStateBox*, EMPTYARG )
 {
     UpdatePreview_Impl();
@@ -4659,6 +4671,16 @@ void SvxCharEffectsPage::DisableControls( USHORT nDisable )
 
     if ( ( DISABLE_BLINK & nDisable ) == DISABLE_BLINK )
         m_aBlinkingBtn.Disable();
+
+    if ( ( DISABLE_UNDERLINE_COLOR & nDisable ) == DISABLE_UNDERLINE_COLOR )
+    {
+        // disable the controls
+        m_aColorFT.Disable( );
+        m_aColorLB.Disable( );
+        // and reroute the selection handler of the controls which normally would affect the color box dis-/enabling
+        m_aUnderlineLB.SetSelectHdl(LINK(this, SvxCharEffectsPage, UpdatePreview_Impl));
+        m_aStrikeoutLB.SetSelectHdl(LINK(this, SvxCharEffectsPage, UpdatePreview_Impl));
+    }
 }
 
 void SvxCharEffectsPage::EnableFlash()
