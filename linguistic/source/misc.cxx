@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2001-11-06 13:40:45 $
+ *  last change: $Author: tl $ $Date: 2001-12-14 18:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,15 +168,31 @@ rtl_TextEncoding GetTextEncoding( INT16 nLanguage )
             case LANGUAGE_NORWEGIAN_BOKMAL :
             case LANGUAGE_NORWEGIAN_NYNORSK :
             case LANGUAGE_AFRIKAANS :
+#ifdef WNT
+                    nEncoding = RTL_TEXTENCODING_MS_1252;   break;
+#else
                     nEncoding = RTL_TEXTENCODING_ISO_8859_1;   break;
+#endif
             case LANGUAGE_CZECH :
             case LANGUAGE_HUNGARIAN :
             case LANGUAGE_POLISH :
+#ifdef WNT
+                    nEncoding = RTL_TEXTENCODING_MS_1250;   break;
+#else
                     nEncoding = RTL_TEXTENCODING_ISO_8859_2;   break;
+#endif
             case LANGUAGE_RUSSIAN :
+#ifdef WNT
+                    nEncoding = RTL_TEXTENCODING_MS_1251;   break;
+#else
                     nEncoding = RTL_TEXTENCODING_ISO_8859_5;   break;
+#endif
             case LANGUAGE_GREEK :
+#ifdef WNT
+                    nEncoding = RTL_TEXTENCODING_MS_1253;   break;
+#else
                     nEncoding = RTL_TEXTENCODING_ISO_8859_7;   break;
+#endif
             default:
                     DBG_ERROR( "unexpected language" );
         }
