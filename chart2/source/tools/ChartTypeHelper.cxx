@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-22 11:51:15 $
+ *  last change: $Author: iha $ $Date: 2003-12-09 12:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,8 @@ sal_Bool ChartTypeHelper::isSupportingAreaProperties( const uno::Reference< XCha
             rtl::OUString aChartTypeName = xChartType->getChartType();
             if( aChartTypeName.match(C2U("com.sun.star.chart2.LineChart")) )
                 return sal_False;
-            //@todo ? add the more complicated line charts
+            if( aChartTypeName.match(C2U("com.sun.star.chart2.ScatterChart")) )
+                return sal_False;
         }
     }
     return sal_True;
