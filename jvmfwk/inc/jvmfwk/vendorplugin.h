@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vendorplugin.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-10 14:34:19 $
+ *  last change: $Author: jl $ $Date: 2004-05-18 15:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+/** @HTML */
 #if !defined INCLUDED_JVMFWK_VENDORPLUGIN_H
 #define INCLUDED_JVMFWK_VENDORPLUGIN_H
 
@@ -72,8 +73,9 @@ extern "C" {
 
 
 /**
-   This library is dynamically loaded and unloaded. Therefore do not
-   keep global variables.
+   @file
+   Libraries which implement this interface will be dynamically loaded and
+   unloaded. Therefore do not keep global variables.
  */
 
 typedef enum
@@ -90,25 +92,50 @@ typedef enum
 
 
 
-/** obtains information about Java installations of which all have the same
-    vendor.
+/** obtains information about installations of Java Runtime Environments (JREs).
     <p>
+    The function has parameters which determines which versions of the respective
+    JREs are supported. A JRE which does not meet the version requirements will
+    be ignored.</p>
+    The JavaInfo structurs returned in <code>parJavaInfo</code> should be ordered
+    according to their version. The one, representing a JRE with the highest
+    version should be the first in the array. </p>
+    <p>
+    The function allocates memory for an array and all the the JavaInfo objects returned
+    in <code>parJavaInfo</code>. The caller must free each JavaInfo object by calling
+    <code>jfw_freeJavaInfo</code>. The array is to be freed by rtl_freeMemory.
     In case an error occurred parJavaInfo does not to be freed.
     </p>
-    The array parJavaInfo must be freed by the caller with rtl_freeMemory.
+
+    @param sMinVersion
+        [in] represents the minimum version of a JRE. It can be NULL.
+    @param sMaxVersion
+        [in] represents the maximum version of a JRE. It can be NULL.
+    @param arExcludeList
+        [in] contains a list of &quot;bad&quot; versions. JREs which have one of these
+        versions must not be returned by this function. It can be NULL.
+    @param nSizeExcludeList
+        [in] the number of version strings contained in <code>arExcludeList</code>.
+    @param parJavaInfo
+        [out] if the function runs successfully then <code>parJavaInfo</code> contains
+        on return an array of pointers to <code>JavaInfo</code> objects.
+    @param nSizeJavaInfo
+       [out] the number of <code>JavaInfo</code> pointers contained in
+       <code>parJavaInfo</code>.
+
     @return
-    JFW_PLUGIN_E_NONE,
-    JFW_PLUGIN_E_ERROR,
-    JFW_PLUGIN_E_INVALID_ARG,
+    JFW_PLUGIN_E_NONE </br>
+    JFW_PLUGIN_E_ERROR </br>
+    JFW_PLUGIN_E_INVALID_ARG </br>
     JFW_PLUGIN_E_WRONG_VERSION_FORMAT
  */
 javaPluginError jfw_plugin_getAllJavaInfos(
     rtl_uString *sMinVersion,
     rtl_uString *sMaxVersion,
     rtl_uString * * arExcludeList,
-    sal_Int32  nLenList,
+    sal_Int32  nSizeExcludeList,
     JavaInfo*** parJavaInfo,
-    sal_Int32 *nLenInfoList);
+    sal_Int32 *nSizeJavaInfo);
 
 /**
    @return

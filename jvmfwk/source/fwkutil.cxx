@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-18 12:50:10 $
+ *  last change: $Author: jl $ $Date: 2004-05-18 15:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -895,8 +895,33 @@ JFW_MODE getMode()
     rtl::OUString sOffice = buff.makeStringAndClear();
 
     sal_Int32 index = 0;
+    //are we in the soffice process?
     if ((index = ouExe.lastIndexOf(sOffice)) != 1
         && index + sOffice.getLength() == ouExe.getLength())
+        return JFW_MODE_OFFICE;
+    //we may have been started from javaldx etc.
+    //is there an soffice in the same directory?
+    rtl::OUString sOfficeURL = searchFileNextToThisLib(sOffice);
+
+    //is there <office>/share/config/javavendors.xml?
+    rtl::OUString sBaseDir = getBaseInstallation();
+    rtl::OUString sVendors;
+    if (sBaseDir.getLength() != 0)
+    {
+        //We are run within office installation
+        rtl::OUStringBuffer sSettings(256);
+        sSettings.append(sBaseDir);
+        sSettings.appendAscii("/share/config/");
+        sSettings.appendAscii(VENDORSETTINGS);
+        rtl::OUString sVend = sSettings.makeStringAndClear();
+
+        //check if the file exists
+        osl::DirectoryItem item;
+        osl::File::RC fileError = osl::DirectoryItem::get(sVend, item);
+        if (fileError == osl::FileBase::E_None)
+            sVendors = sVend;
+    }
+    if (sOfficeURL.getLength() > 0 && sVendors.getLength() > 0)
         return JFW_MODE_OFFICE;
 
 
