@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mfe $ $Date: 2000-12-01 17:13:47 $
+ *  last change: $Author: pluby $ $Date: 2000-12-14 07:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,9 @@
 #include <rtl/string.h>
 #include <rtl/tencinfo.h>
 #include <locale.h>
+#ifndef MACOSX
 #include <langinfo.h>
+#endif
 
 /*****************************************************************************/
 /*  Thread-data structure hidden behind oslThread:  */
@@ -1071,7 +1073,7 @@ static rtl_TextEncoding GetSystemCharSetFromLocale( const char* pLocaleString );
 static rtl_TextEncoding GetSystemCharSetFromEnvironment();
 #endif /* if def NETBSD || SCO */
 
-#if defined(LINUX) || defined(SOLARIS)
+#ifdef UNX
 
 typedef struct {
     const char              *key;
