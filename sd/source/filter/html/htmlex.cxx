@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:13:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1557,7 +1557,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                 if( pPage->GetPresChange() != PRESCHANGE_MANUAL )
                 {
                     nSecs = pPage->GetTime();
-                    bEndless = pDoc->GetPresEndless();
+                    bEndless = pDoc->getPresentationSettings().mbEndless;
                 }
             }
             else
