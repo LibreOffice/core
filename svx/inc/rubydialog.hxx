@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-07 14:12:50 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@
 #include <com/sun/star/uno/Reference.h>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 namespace com{namespace sun{namespace star{
     namespace view{
         class XSelectionChangeListener;
@@ -108,7 +112,7 @@ public:
     RubyPreview(SvxRubyDialog& rParent, const ResId& rResId);
 };
 
-class SvxRubyChildWindow : public SfxChildWindow
+class SVX_DLLPUBLIC SvxRubyChildWindow : public SfxChildWindow
 {
  public:
 
