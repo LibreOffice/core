@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 08:56:37 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 13:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,21 @@ typedef unsigned short (*fncUshort)();
 typedef const char* (*fncChar)();
 
 // class AboutDialog -----------------------------------------------------
+static void layoutText( FixedInfo &rText, long &nY, long nTextWidth, Size a6Size )
+{
+    Point aTextPos = rText.GetPosPixel();
+    aTextPos.X() = a6Size.Width() * 2;
+    aTextPos.Y() = nY;
+    rText.SetPosPixel( aTextPos );
+
+    Size aTxtSiz = rText.GetSizePixel();
+    aTxtSiz.Width() = nTextWidth;
+    Size aCalcSize = rText.CalcMinimumSize( nTextWidth );
+    aTxtSiz.Height() = aCalcSize.Height();
+    rText.SetSizePixel( aTxtSiz );
+
+    nY += aTxtSiz.Height();
+}
 
 AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerStr ) :
 
@@ -111,6 +126,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     aOKButton       ( this,     ResId( ABOUT_BTN_OK ) ),
     aVersionText    ( this,     ResId( ABOUT_FTXT_VERSION ) ),
     aCopyrightText  ( this,     ResId( ABOUT_FTXT_COPYRIGHT ) ),
+    aBuildData      ( this ),
     aDeveloperAry   (           ResId( ABOUT_STR_DEVELOPER_ARY ) ),
     aDevVersionStr  ( rVerStr ),
     aAccelStr       (           ResId( ABOUT_STR_ACCEL ) ),
@@ -211,6 +227,22 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     Color aTextColor( rSettings.GetWindowTextColor() );
     aVersionText.SetControlForeground( aTextColor );
     aCopyrightText.SetControlForeground( aTextColor );
+    aBuildData.SetBackground( aWall );
+
+    Font aSmallFont = rSettings.GetInfoFont();
+    Size aSmaller = aNewFont.GetSize();
+    aSmaller.Width() = (long) (aSmaller.Width() * 0.75);
+    aSmaller.Height() = (long) (aSmaller.Height() * 0.75);
+    aNewFont.SetSize( aSmaller );
+    aBuildData.SetFont( aNewFont );
+    aBuildData.SetBackground( aWall );
+#ifdef BUILD_VER_STRING
+    String aBuildString( DEFINE_CONST_UNICODE( BUILD_VER_STRING ) );
+#else
+    String aBuildString;
+#endif
+    aBuildData.SetText( aBuildString );
+    aBuildData.Show();
 
     // Gr"ossen und Positionen berechnen
     Size aAppLogoSiz = aAppLogo.GetSizePixel();
@@ -222,31 +254,18 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
 
     // Texte (Gr"osse und Position )
     Size a6Size = aVersionText.LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
-    long nY = 0;
-    Point aTextPos = aVersionText.GetPosPixel();
-    aTextPos.X() = a6Size.Width() * 2;
-    aTextPos.Y() = aAppLogoSiz.Height() + ( a6Size.Height() * 2 );
-    nY = aTextPos.Y();
-    aVersionText.SetPosPixel( aTextPos );
-    Size aTxtSiz = aVersionText.GetSizePixel();
-    aTxtSiz.Width() = aAppLogoSiz.Width() - ( a6Size.Width() * 4 );
-    long nTextWidth = aTxtSiz.Width();
-    Size aCalcSize = aVersionText.CalcMinimumSize( nTextWidth );
+    long nTextWidth = aAppLogoSiz.Width() - ( a6Size.Width() * 4 );
+    long nY = aAppLogoSiz.Height() + ( a6Size.Height() * 2 );
 
-    aTxtSiz.Height() = aCalcSize.Height();
-    aVersionText.SetSizePixel( aTxtSiz );
-    nY += aTxtSiz.Height() + ( a6Size.Height() / 3 );
-
-    aTextPos = aCopyrightText.GetPosPixel();
-    aTextPos.X() = a6Size.Width() * 2;
-    aTextPos.Y() = nY;
-    aCopyrightText.SetPosPixel( aTextPos );
-    aTxtSiz = aCopyrightText.GetSizePixel();
-    aTxtSiz.Width() = nTextWidth;
-    aCalcSize = aCopyrightText.CalcMinimumSize( nTextWidth );
-    aTxtSiz.Height() = aCalcSize.Height();
-    aCopyrightText.SetSizePixel( aTxtSiz );
-    nY += aTxtSiz.Height() + ( a6Size.Height() / 2 );
+    layoutText( aVersionText, nY, nTextWidth, a6Size );
+    nY += ( a6Size.Height() / 3 );
+    layoutText( aCopyrightText, nY, nTextWidth, a6Size );
+    nY += ( a6Size.Height() / 3 );
+    if( aBuildString.Len() > 0 )
+    {
+        layoutText( aBuildData, nY, nTextWidth, a6Size );
+        nY += ( a6Size.Height() / 2 );
+    }
 
     // OK-Button-Position (at the bottom and centered)
     Size aOKSiz = aOKButton.GetSizePixel();
@@ -271,6 +290,8 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
         sCopyright.SearchAndReplaceAll(sSO, sProduct);
         aCopyrightText.SetText(sCopyright);
     }
+
+
 }
 
 // -----------------------------------------------------------------------
