@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:08:02 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 11:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4260,10 +4260,7 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
 EscherEx::EscherEx( SvStream& rOutStrm, UINT32 nDrawings ) :
     EscherGraphicProvider   ( 0 ),
     mpOutStrm               ( &rOutStrm ),
-    mpOffsets               ( new sal_uInt32[ 32 ] ),
-    mpRecTypes              ( new sal_uInt16[ 32 ] ),
     mnDrawings              ( nDrawings ),
-    mnLevel                 ( 0 ),
     mbEscherSpgr            ( FALSE ),
     mbEscherDgg             ( FALSE ),                                      // TRUE, wenn jemals ein ESCHER_Dgg angelegt wurde, dieser wird dann im Dest. aktualisiert
     mbEscherDg              ( FALSE ),
@@ -4306,8 +4303,6 @@ void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )
 
 EscherEx::~EscherEx()
 {
-    delete[] mpRecTypes;
-    delete[] mpOffsets;
     delete mpImplEscherExSdr;
 }
 
@@ -4341,12 +4336,13 @@ void EscherEx::InsertAtCurrentPos( UINT32 nBytes, BOOL bContainer )
         else
             mpOutStrm->SeekRel( nSize );
     }
-
-    // Container Offsets verschieben
-    for ( i = 1; i <= (UINT32)mnLevel; i++ )
+    std::vector< sal_uInt32 >::iterator aIter( mOffsets.begin() );
+    std::vector< sal_uInt32 >::iterator aEnd( mOffsets.end() );
+    while( aIter != aEnd )
     {
-        if ( mpOffsets[ i ] > nCurPos )
-            mpOffsets[ i ] += nBytes;
+        if ( *aIter > nCurPos )
+            *aIter += nBytes;
+        aIter++;
     }
     mpOutStrm->Seek( STREAM_SEEK_TO_END );
     nSource = mpOutStrm->Tell();
@@ -4436,9 +4432,8 @@ BOOL EscherEx::InsertAtPersistOffset( UINT32 nKey, UINT32 nValue )
 void EscherEx::OpenContainer( UINT16 nEscherContainer, int nRecInstance )
 {
     *mpOutStrm << (UINT16)( ( nRecInstance << 4 ) | 0xf  ) << nEscherContainer << (UINT32)0;
-    mpOffsets[ ++mnLevel ] = mpOutStrm->Tell() - 4;
-    mpRecTypes[ mnLevel ] = nEscherContainer;
-
+    mOffsets.push_back( mpOutStrm->Tell() - 4 );
+    mRecTypes.push_back( nEscherContainer );
     switch( nEscherContainer )
     {
         case ESCHER_DggContainer :
@@ -4509,11 +4504,11 @@ void EscherEx::OpenContainer( UINT16 nEscherContainer, int nRecInstance )
 void EscherEx::CloseContainer()
 {
     sal_uInt32 nSize, nPos = mpOutStrm->Tell();
-    nSize = ( nPos - mpOffsets[ mnLevel ] ) - 4;
-    mpOutStrm->Seek( mpOffsets[ mnLevel ] );
+    nSize = ( nPos - mOffsets.back() ) - 4;
+    mpOutStrm->Seek( mOffsets.back() );
     *mpOutStrm << nSize;
 
-    switch( mpRecTypes[ mnLevel ] )
+    switch( mRecTypes.back() )
     {
         case ESCHER_DgContainer :
         {
@@ -4580,7 +4575,8 @@ void EscherEx::CloseContainer()
         default:
         break;
     }
-    mnLevel--;
+    mOffsets.pop_back();
+    mRecTypes.pop_back();
     mpOutStrm->Seek( nPos );
 }
 
