@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:51:30 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1707,6 +1707,18 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
 
         rManager.ScaleEmu( nLineWidth );
         rSet.Put( XLineWidthItem( nLineWidth ) );
+
+        // SJ: LineJoint (setting each time a line is set, because our internal joint type has another default)
+        MSO_LineJoin eLineJointDefault = mso_lineJoinMiter;
+        if ( eShapeType == mso_sptMin )
+            eLineJointDefault = mso_lineJoinRound;
+        MSO_LineJoin eLineJoint = (MSO_LineJoin)GetPropertyValue( DFF_Prop_lineJoinStyle, eLineJointDefault );
+        XLineJoint eXLineJoint( XLINEJOINT_MITER );
+        if ( eLineJoint == mso_lineJoinBevel )
+            eXLineJoint = XLINEJOINT_BEVEL;
+        else if ( eLineJoint == mso_lineJoinRound )
+            eXLineJoint = XLINEJOINT_ROUND;
+        rSet.Put( XLineJointItem( eXLineJoint ) );
 
         if ( nLineFlags & 0x10 )
         {
@@ -4866,7 +4878,6 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         }
         else if ( ( aObjData.eShapeType != mso_sptNil ) || IsProperty( DFF_Prop_pVertices ) || bGraphic )
         {
-            UINT32      nSpecialGroupSettings = 0;
             SfxItemSet  aSet( pSdrModel->GetItemPool() );
 
             sal_Bool    bIsConnector = ( ( aObjData.eShapeType >= mso_sptStraightConnector1 ) && ( aObjData.eShapeType <= mso_sptCurvedConnector5 ) );
@@ -4884,43 +4895,12 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     {                                                       // we are taking care of this here
                         sal_uInt32 nOpt = GetPropertyValue( DFF_Prop_fNoFillHitTest  );
                         SetPropertyValue( DFF_Prop_fNoFillHitTest, nOpt & ~16 );
-                        bFilled = sal_False;
                     }
                     BOOL bLine = ( GetPropertyValue( DFF_Prop_fNoLineDrawDash ) & 8 ) != 0;
                     if ( bLine && !IsHardAttribute( DFF_Prop_fLine ) )
                     {
                         sal_uInt32 nOpt = GetPropertyValue( DFF_Prop_fNoLineDrawDash );
                         SetPropertyValue( DFF_Prop_fNoFillHitTest, nOpt & ~8 );
-                        bLine = sal_False;
-                    }
-                    if ( GetSvxMSDffSettings() & ( SVXMSDFF_SETTINGS_IMPORT_PPT | SVXMSDFF_SETTINGS_IMPORT_EXCEL ) )
-                    {
-                        // impress does not support line propertys on graphic objects
-                        if ( bLine || bFilled )
-                        {
-                            SdrObject* pRect;
-                            SdrObject* pGroup = new SdrObjGroup;
-                            if ( pGroup )
-                            {
-                                if ( bFilled )
-                                {
-                                    pRect = new SdrRectObj( aBoundRect );
-                                    if ( pRect )
-                                    {
-                                        pGroup->GetSubList()->NbcInsertObject( pRect );
-                                        nSpecialGroupSettings = 2;
-                                    }
-                                }
-                                pGroup->GetSubList()->NbcInsertObject( pRet );
-                                if ( bLine )
-                                {
-                                    pRect = new SdrRectObj( aBoundRect );
-                                    if ( pRect )
-                                        pGroup->GetSubList()->NbcInsertObject( pRect );
-                                }
-                                pRet = pGroup;
-                            }
-                        }
                     }
                 }
                 nSpFlags &=~ ( SP_FFLIPH | SP_FFLIPV );         // #68396#
@@ -5119,7 +5099,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             aSet.Put( SdrEdgeNode2VertDistItem( n2VertDist ) );
                         }
                     }
-                    else if ( ( (int)aObjData.eShapeType > (int)mso_sptRectangle ) && ( (int)aObjData.eShapeType < (int)mso_sptTextBox ) )
+                    else if ( ( (int)aObjData.eShapeType > (int)mso_sptRectangle ) && ( (int)aObjData.eShapeType < (int)mso_sptHostControl ) )
                     {
                         pRet = GetAutoForm( aObjData.eShapeType );
                         if ( pRet )
@@ -5179,26 +5159,6 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                 {
                     double a = nObjectRotation * nPi180;
                     pRet->NbcRotate( aBoundRect.Center(), nObjectRotation, sin( a ), cos( a ) );
-                }
-                if ( nSpecialGroupSettings )
-                {
-                    SdrObjList* pObjectList = pObjectList = pRet->GetSubList();
-                    if ( pObjectList )
-                    {
-                        INT32   nCount = pObjectList->GetObjCount();
-                        if ( nSpecialGroupSettings == 2 )
-                        {
-                            // a graphic was imported into impress, the fill attribute has
-                            // to be set on the first object only
-                            aSet.Put( XFillStyleItem( XFILL_NONE ) );
-                            for ( INT32 i = nCount; --i > 0; )
-                            {
-                                SdrObject*  pObj = pObjectList->GetObj( i );
-                                if ( pObj )
-                                    pObj->SetMergedItemSet(aSet);
-                            }
-                        }
-                    }
                 }
                 // Horizontal gespiegelt?
                 if ( nSpFlags & SP_FFLIPH )
