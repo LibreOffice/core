@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FNoException.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:23 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,16 +116,16 @@ void OPredicateCompiler::Clean()
 // -----------------------------------------------------------------------------
 void OSQLAnalyzer::clean()
 {
-    m_aCompiler.Clean();
+    m_aCompiler->Clean();
 }
 // -----------------------------------------------------------------------------
-void OSQLAnalyzer::bindParameterRow(OValueRow _pRow)
+void OSQLAnalyzer::bindParameterRow(OValueRefRow& _pRow)
 {
-    OCodeList& rCodeList    = m_aCompiler.m_aCodeList;
+    OCodeList& rCodeList    = m_aCompiler->m_aCodeList;
     for(OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end();++aIter)
     {
         OOperandParam* pParam = PTR_CAST(OOperandParam,(*aIter));
-        if (pParam)
+        if ( pParam )
             pParam->bindValue(_pRow);
     }
 }
@@ -161,17 +161,17 @@ void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< 
         scanParameter(pParseNode->getChild(i),_rParaNodes);
 }
 // -----------------------------------------------------------------------------
-OKeyValue* OResultSet::GetOrderbyKeyValue(OValueRow _rRow)
+OKeyValue* OResultSet::GetOrderbyKeyValue(OValueRefRow& _rRow)
 {
-    UINT32 nBookmarkValue = Abs((sal_Int32)(*_rRow)[0]);
+    UINT32 nBookmarkValue = Abs((sal_Int32)(*_rRow)[0]->getValue());
 
     OKeyValue* pKeyValue = OKeyValue::createKeyValue((UINT32)nBookmarkValue);
 
     ::std::vector<sal_Int32>::iterator aIter = m_aOrderbyColumnNumber.begin();
     for (;aIter != m_aOrderbyColumnNumber.end(); ++aIter)
     {
-        OSL_ENSURE(*aIter < _rRow->size(),"Invalid index for orderkey values!");
-        pKeyValue->pushKey(new ORowSetValueDecorator((*_rRow)[*aIter]));
+        OSL_ENSURE(*aIter < static_cast<sal_Int32>(_rRow->size()),"Invalid index for orderkey values!");
+        pKeyValue->pushKey(new ORowSetValueDecorator((*_rRow)[*aIter]->getValue()));
     }
 
     return pKeyValue;
