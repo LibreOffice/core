@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OleObjectFactory.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:38:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 
     @deprecated
  */
-service OleObjectFactory
+published service OleObjectFactory
 {
     interface com::sun::star::lang::XMultiServiceFactory;
 };
