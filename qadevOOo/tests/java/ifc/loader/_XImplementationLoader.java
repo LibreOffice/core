@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XImplementationLoader.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:26:59 $
+ *  last change:$Date: 2003-09-08 10:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,12 @@
 
 package ifc.loader;
 
-import com.sun.star.lang.XServiceInfo;
+import lib.MultiMethodTest;
+import lib.StatusException;
+import util.RegistryTools;
+
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XServiceInfo;
 import com.sun.star.loader.CannotActivateFactoryException;
 import com.sun.star.loader.XImplementationLoader;
 import com.sun.star.registry.CannotRegisterImplementationException;
@@ -70,9 +74,6 @@ import com.sun.star.registry.XRegistryKey;
 import com.sun.star.registry.XSimpleRegistry;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import lib.MultiMethodTest;
-import lib.StatusException;
-import util.RegistryTools;
 
 /**
  * Testing <code>com.sun.star.loader.XImplementationLoader</code>
