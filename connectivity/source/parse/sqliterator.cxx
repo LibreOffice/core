@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:34:59 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:16:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,6 +737,13 @@ void OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                 sal_Int32 nType = DataType::VARCHAR;
                 sal_Bool bFkt(sal_False);
                 pColumnRef = pColumnRef->getChild(0);
+                if (
+                        pColumnRef->count() == 3 &&
+                        SQL_ISPUNCTUATION(pColumnRef->getChild(0),"(") &&
+                        SQL_ISPUNCTUATION(pColumnRef->getChild(2),")")
+                    )
+                    pColumnRef = pColumnRef->getChild(1);
+
                 if (SQL_ISRULE(pColumnRef,column_ref))
                 {
                     getColumnRange(pColumnRef,aColumnName,aTableRange);
@@ -1128,6 +1135,32 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
         traverseOnePredicate(pSearchCondition->getChild(0),ePredicateType,aValue,sal_False,pParam);
 //      if (! aIteratorStatus.IsSuccessful())
 //          return;
+    }
+    else if (SQL_ISRULE(pSearchCondition,in_predicate))
+    {
+        OSL_ENSURE(pSearchCondition->count() == 4,"OSQLParseTreeIterator: Fehler im Parse Tree");
+        setORCriteriaPre();
+        //  if (! aIteratorStatus.IsSuccessful()) return;
+
+        traverseORCriteria(pSearchCondition->getChild(0));
+        //  if (! aIteratorStatus.IsSuccessful()) return;
+
+        setORCriteriaPost();
+
+        OSQLParseNode* pChild = pSearchCondition->getChild(3);
+        if ( SQL_ISRULE(pChild->getChild(0),subquery) )
+        {
+            traverseSelectionCriteria(pChild->getChild(0)->getChild(1));
+        }
+        else
+        { // '(' value_exp_commalist ')'
+            pChild = pChild->getChild(1);
+            sal_Int32 nCount = pChild->count();
+            for (sal_Int32 i=0; i < nCount; ++i)
+            {
+                traverseANDCriteria(pChild->getChild(i));
+            }
+        }
     }
     else if (SQL_ISRULE(pSearchCondition,test_for_null) /*&& SQL_ISRULE(pSearchCondition->getChild(0),column_ref)*/)
     {
