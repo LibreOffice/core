@@ -1,4 +1,5 @@
-set WS_PATH=e:/mybuild/SRC680
+set WS_PATH=D:/My_work/SRC680
+set OUTPUTDIR=wntmsci10
 set SO_CLASSPATHPATH=d:/2000Soft/OOo1.1/program/classes
 
 @echo off

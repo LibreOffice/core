@@ -1,6 +1,7 @@
+set WS_PATH=D:/My_work/SRC680
+set OUTPUTDIR=wntmsci10
 set SO_DRIVE=D:
 set SO_PATH=2000Soft/OOo1.1
-set WS_PATH=e:/mybuild/SRC680
 set TEMP_DRIVE=C:
 set TEMP_FOLDER=temp-folder
 
