@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-06 13:38:55 $
+ *  last change: $Author: cmc $ $Date: 2001-09-10 15:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -862,11 +862,13 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                             pRecord->nDyTextBottom  );
 
                         MatchSdrItemsIntoFlySet( pObject, aAttrSet,
-                            pRecord->eLineStyle, aInnerDist,
-                            !pRecord->bLastBoxInChain );
+                            pRecord->eLineStyle, pRecord->eShapeType,
+                            aInnerDist, !pRecord->bLastBoxInChain );
 
-                        //Groesse aus der WinWord PIC-Struktur als Grafik-Groesse nehmen
-                        aAttrSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, aPD.nWidth, aPD.nHeight ) );
+                        //Groesse aus der WinWord PIC-Struktur als
+                        //Grafik-Groesse nehmen
+                        aAttrSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, aPD.nWidth,
+                            aPD.nHeight ) );
                     }
                 }
 
@@ -1098,11 +1100,14 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.12 2001-09-06 13:38:55 vg Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.13 2001-09-10 15:51:44 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2001/09/06 13:38:55  vg
+      #65293# corrected misspelling
+
       Revision 1.11  2001/09/05 10:16:19  cmc
       #91916# Improve size calculation of inline graphics to consider borders,shadows and spacing as word does
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-28 10:23:48 $
+ *  last change: $Author: cmc $ $Date: 2001-09-10 15:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,12 +250,17 @@
 #ifndef _SWSWERROR_H
 #include <swerror.h>            // ERR_WW8_...
 #endif
+#ifndef _SWUNODEF_HXX
+#include <swunodef.hxx>
+#endif
+#ifndef _UNODRAW_HXX
+#include <unodraw.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HPP_
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #endif
 using namespace ::com::sun::star;
-
 
 //-----------------------------------------
 //              diverses
@@ -317,8 +322,11 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId, const Graphic& rGrf,
         SvStorageRef xSrc = xSrcStg->OpenStorage( sStorageName,
             STREAM_READWRITE| STREAM_SHARE_DENYALL );
         ASSERT(rReader.pFormImpl, "No Form Implementation!");
-        if (rReader.pFormImpl->ReadOCXStream(xSrc,&xShape,TRUE))
+        if ( (!(rReader.bIsHeader || rReader.bIsFooter)) &&
+            rReader.pFormImpl->ReadOCXStream(xSrc,&xShape,TRUE))
+        {
             pRet = GetSdrObjectFromXShape(xShape);
+        }
         else
             pRet = CreateSdrOLEFromStorage( sStorageName, xSrcStg, xDstStg,
                 rGrf, rBoundRect, pStData, nSvxMSDffOLEConvFlags );
@@ -338,29 +346,22 @@ void SwMSDffManager::EnableFallbackStream(SvStream *pNew)
     pStData2 = pNew;
 }
 
+SwFrmFmt* SwMSDffManager::GetLastOCXShapeFrm() const
+{
+    STAR_REFERENCE( beans::XPropertySet ) xPropSet( xShape,
+        STAR_NMSPC::uno::UNO_QUERY );
+    STAR_REFERENCE( lang::XUnoTunnel ) xTunnel(xPropSet,
+        STAR_NMSPC::uno::UNO_QUERY);
 
-
+    SwXShape *pShape = 0;
+    if(xTunnel.is())
+        pShape = (SwXShape*)xTunnel->getSomething(SwXShape::getUnoTunnelId());
+    return pShape ? (SwFrmFmt*)(pShape->GetRegisteredIn()) : 0;
+}
 
 /***************************************************************************
 #  Spezial FastSave - Attribute
 #**************************************************************************/
-
-#if 0
-typedef BYTE Bit256[32];
-
-inline BOOL GetBit( Bit256& rBits, BYTE nBitNo )
-{
-    return ( rBits[nBitNo >> 3] >> ( nBitNo & 0x7 ) ) & 0x1;
-}
-
-inline void SetBit( Bit256& rBits, BYTE nBitNo, BOOL bInp )
-{
-    if( bInp )
-        rBits[nBitNo >> 3] |= 1 << ( nBitNo & 0x7 );
-    else
-        rBits[nBitNo >> 3] &= ~( 1 << ( nBitNo & 0x7 ) );
-}
-#endif
 
 void SwWW8ImplReader::Read_StyleCode( USHORT, const BYTE* pData, short nLen )
 {
@@ -3075,11 +3076,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.29 2001-08-28 10:23:48 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.30 2001-09-10 15:51:44 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.29  2001/08/28 10:23:48  cmc
+      #91214# Illustration index has less pattern possibilities than toc
+
       Revision 1.28  2001/08/08 11:05:29  cmc
       #90420# support for extended word 6 unicode documents
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-05 10:16:19 $
+ *  last change: $Author: cmc $ $Date: 2001-09-10 15:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2674,6 +2674,7 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
     if( !rReader.bNew )
         Reader::ResetFrmFmtAttrs( *this );  // Abstand/Umrandung raus
 
+    Put( SvxLRSpaceItem() ); //inline writer ole2 objects start with 0.2cm l/r
     SwFmtAnchor aAnchor( FLY_IN_CNTNT );
     aAnchor.SetAnchor( pPaM->GetPoint() );
     Put( aAnchor );
@@ -5236,12 +5237,15 @@ short SwWW8ImplReader::ImportSprm( const BYTE* pPos, short nSprmsLen, USHORT nId
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.35 2001-09-05 10:16:19 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.36 2001-09-10 15:51:44 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.35  2001/09/05 10:16:19  cmc
+      #91916# Improve size calculation of inline graphics to consider borders,shadows and spacing as word does
+
       Revision 1.34  2001/08/28 15:24:29  cmc
       #91622 Properties open at begin and end of tables and frames need to be cunningly duplicated outside and inside element
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-05 10:16:19 $
+ *  last change: $Author: cmc $ $Date: 2001-09-10 15:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,9 +492,10 @@ class SwMSDffManager : public SvxMSDffManager
 
 public:
     static UINT32 GetFilterFlags();
+    static USHORT GetEscherLineMatch(MSO_LineStyle eStyle, MSO_SPT eShapeType,
+        USHORT &rThick);
     SwMSDffManager( SwWW8ImplReader& rRdr );
-    const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
-        GetLastOCXShape() const {return xShape;}
+    SwFrmFmt *GetLastOCXShapeFrm() const;
     SvStream *DisableFallbackStream();
     void EnableFallbackStream(SvStream *pNew);
 
@@ -809,15 +810,12 @@ friend class WW8FormulaControl;
     BOOL SetFlyBordersShadow( SfxItemSet& rFlySet, const WW8_BRC pbrc[4],
         USHORT nInnerMgn, short *SizeArray=0 );
 
-    BOOL MatchSdrBoxIntoFlyBoxItem( const Color& rLineColor,
-                                    MSO_LineStyle eLineStyle,
-                                    USHORT      nLineWidth,
-                                    SvxBoxItem& rBox );
-    void MatchSdrItemsIntoFlySet( SdrObject*    pSdrObj,
-                                  SfxItemSet&   aFlySet,
-                                  MSO_LineStyle eLineStyle,
-                                  Rectangle&    rInnerDist,
-                                  BOOL          bFixSize );
+    USHORT MatchSdrBoxIntoFlyBoxItem( const Color& rLineColor,
+        MSO_LineStyle eLineStyle, MSO_SPT eShapeType, USHORT &rLineWidth,
+        SvxBoxItem& rBox );
+    void MatchSdrItemsIntoFlySet( SdrObject*    pSdrObj, SfxItemSet &aFlySet,
+        MSO_LineStyle eLineStyle, MSO_SPT eShapeType, Rectangle &rInnerDist,
+        BOOL bFixSize );
     void MatchWrapDistancesIntoFlyFmt( SvxMSDffImportRec* pRecord,
                                        SwFrmFmt*          pFlyFmt );
 
@@ -943,6 +941,15 @@ friend class WW8FormulaControl;
     void ProcessEscherAlign( SvxMSDffImportRec* pRecord, WW8_FSPA *pFSPA,
         SfxItemSet &rFlySet, BOOL bOrgObjectWasReplace );
     SwFrmFmt* Read_GrafLayer( long nGrafAnchorCp );
+    SwFrmFmt* ImportReplaceableDrawables( SdrObject* &rpObject,
+        SdrObject* &rpOurNewObject, SvxMSDffImportRec* pRecord, WW8_FSPA *pF,
+        SfxItemSet &rFlySet );
+    SwFrmFmt *ConvertDrawTextToFly( SdrObject* &rpObject,
+        SdrObject* &rpOurNewObject, SvxMSDffImportRec* pRecord,
+        RndStdIds eAnchor, WW8_FSPA *pF, SfxItemSet &rFlySet );
+    void MungeTextIntoDrawBox(SdrObject* pTrueObject,
+        SvxMSDffImportRec *pRecord, long nGrafAnchorCp, SwFrmFmt *pRetFrmFmt);
+
     void EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,SwFrmFmt *pFrmFmt);
     void GrafikCtor();
     void GrafikDtor();
@@ -1164,11 +1171,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.32 2001-09-05 10:16:19 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.33 2001-09-10 15:51:44 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.32  2001/09/05 10:16:19  cmc
+      #91916# Improve size calculation of inline graphics to consider borders,shadows and spacing as word does
+
       Revision 1.31  2001/08/28 15:24:29  cmc
       #91622 Properties open at begin and end of tables and frames need to be cunningly duplicated outside and inside element
 

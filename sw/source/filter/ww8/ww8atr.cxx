@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-05 10:16:19 $
+ *  last change: $Author: cmc $ $Date: 2001-09-10 15:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2983,8 +2983,9 @@ WW8_BRC SwWW8Writer::TranslateBorderLine( const SvxBorderLine& rLine,
 {
     WW8_BRC aBrc;
     aBrc.clear();
-    UINT16 nWidth = rLine.GetInWidth() + rLine.GetOutWidth(), brcType = 0;
-    UINT32 nColCode = 0;
+    UINT16 nWidth = rLine.GetInWidth() + rLine.GetOutWidth();
+    BYTE brcType = 0, nColCode = 0;
+
     if( nWidth )                                // Linie ?
     {
         // BRC.brcType
@@ -3024,17 +3025,17 @@ WW8_BRC SwWW8Writer::TranslateBorderLine( const SvxBorderLine& rLine,
     }
 
     // BRC.dxpSpace
-    long nLDist = nDist;
+    USHORT nLDist = nDist;
     nLDist /= 20;               // Masseinheit : pt
     if( nLDist > 0x1f )
         nLDist = 0x1f;
 
     if( bWrtWW8 )
     {
-        aBrc.aBits1[0] = nWidth;
+        aBrc.aBits1[0] = BYTE(nWidth);
         aBrc.aBits1[1] = brcType;
         aBrc.aBits2[0] = nColCode;
-        aBrc.aBits2[1] = nLDist;
+        aBrc.aBits2[1] = BYTE(nLDist);
 
         // fShadow, keine weiteren Einstellungen im WW moeglich
         if( bShadow )
@@ -3801,6 +3802,9 @@ SwAttrFnTab aWW8AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.17  2001/09/05 10:16:19  cmc
+      #91916# Improve size calculation of inline graphics to consider borders,shadows and spacing as word does
+
       Revision 1.16  2001/08/24 08:20:29  cmc
       #90804# Improve fly in fly export for ww6
 

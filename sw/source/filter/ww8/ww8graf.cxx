@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-31 13:54:13 $
+ *  last change: $Author: cmc $ $Date: 2001-09-10 15:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,15 +258,8 @@
 #ifndef _FMTCNCT_HXX
 #include <fmtcnct.hxx>
 #endif
-#ifndef _UNODRAW_HXX
-#include <unodraw.hxx>
-#endif
 #ifndef _SWUNODEF_HXX
 #include <swunodef.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
-#include <com/sun/star/drawing/XShape.hpp>
 #endif
 
 // Hilfsroutinen
@@ -1214,11 +1207,9 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                             }
                         }
                         break;
-                case 0x8:if( !pbTestTxbxContainsText )
-                        {
-                            if( !bObj )
-                                 pFlyFmt = Read_GrafLayer( nPosCp );
-                        }
+                case 0x8:
+                        if ( (!pbTestTxbxContainsText) && (!bObj) )
+                            pFlyFmt = Read_GrafLayer( nPosCp );
                         break;
                 default:bDone = FALSE;
                         break;
@@ -1238,6 +1229,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                         MatchSdrItemsIntoFlySet( pTextObj,
                                                  aFlySet,
                                                  pRecord->eLineStyle,
+                                                 pRecord->eShapeType,
                                                  aInnerDist,
                                                  !pRecord->bLastBoxInChain );
 
@@ -1359,8 +1351,8 @@ void SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, WW8_DO* pDo )
         //InnerDist is all 0 as word 6 doesn't store distance from borders and
         //neither does it store the border style so its always simple
         Rectangle aInnerDist(Point(0,0),Point(0,0));
-        MatchSdrItemsIntoFlySet( pObj, aFlySet, mso_lineSimple, aInnerDist,
-            TRUE);
+        MatchSdrItemsIntoFlySet( pObj, aFlySet, mso_lineSimple, mso_sptMin,
+            aInnerDist, TRUE);
 
         //undo the anchor setting for draw graphics, remove the setting in the
         //control stack, get the id from the drawpg and reuse it in the new
@@ -1551,70 +1543,158 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
     }
 }
 
-BOOL SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
-                                                MSO_LineStyle eLineStyle,
-                                                USHORT      nLineWidth,
-                                                SvxBoxItem& rBox )
-{   // Deklarationen gemaess BOXITEM.HXX
+USHORT SwMSDffManager::GetEscherLineMatch(MSO_LineStyle eStyle,
+    MSO_SPT eShapeType, USHORT &rThick)
+{
+    USHORT nOutsideThick = 0;
+    /*
+    Beachte: im Gegensatz zu den Winword-ueblichen Tabellen- und
+    Rahmen-Randbreiten-Angaben, bei denen jeweils aus der Staerke *einer*
+    Linie die Gesamt-Randbreite zu errechnen ist, liegen die aus dem ESCHER
+    stammenden Daten bereits als Gesamt-Breite [twips] vor!
+
+    Der Winword default ist 15 tw. Wir nehmen hierfuer unsere 20 tw Linie.  (
+    0.75 pt uns 1.0 pt sehen sich auf dem Ausdruck naemlich aehnlicher als
+    etwas 0.75 pt und unsere 0.05 pt Haarlinie. ) Die Haarlinie setzen wir nur
+    bei Winword-Staerken bis zu maximal 0.5 pt ein.
+    */
+    switch( eStyle )
+    {
+    case mso_lineTriple:
+    case mso_lineSimple:
+        nOutsideThick = eShapeType != mso_sptTextBox ? rThick : rThick/2;
+        break;
+    case mso_lineDouble:
+        if (eShapeType == mso_sptTextBox)
+        {
+            nOutsideThick = rThick/6;
+            rThick = rThick*2/3;
+        }
+        else
+            nOutsideThick = rThick*2/3;
+        break;
+    case mso_lineThickThin:
+        if (eShapeType == mso_sptTextBox)
+        {
+            nOutsideThick = rThick*3/10;
+            rThick = rThick*4/5;
+        }
+        else
+            nOutsideThick = rThick*4/5;
+        break;
+    case mso_lineThinThick:
+        {
+        if (eShapeType == mso_sptTextBox)
+        {
+            nOutsideThick = rThick/10;
+            rThick = rThick*3/5;
+        }
+        else
+            nOutsideThick = rThick*3/5;
+        }
+        break;
+    default:
+        break;
+    }
+    return nOutsideThick;
+}
+
+//Returns the thickness of the line outside the frame, the logic of
+//words positioning of borders around floating objects is that of a
+//disturbed mind.
+USHORT SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
+    MSO_LineStyle eLineStyle, MSO_SPT eShapeType, USHORT &rLineThick,
+    SvxBoxItem& rBox )
+{
+    USHORT nOutsideThick = 0;
+    if( !rLineThick )
+        return nOutsideThick;
+
+    // Deklarationen gemaess BOXITEM.HXX
     WW8_DECL_LINETAB_ARRAY
 
-    BOOL   bRet = FALSE;
     USHORT nIdx = USHRT_MAX;
 
-    if( nLineWidth )
-    {
-        /*
-            Beachte: im Gegensatz zu den Winword-ueblichen Tabellen- und
-            Rahmen-Randbreiten-Angaben, bei denen jeweils aus der Staerke
-            *einer* Linie die Gesamt-Randbreite zu errechnen ist,
-            liegen die aus dem ESCHER stammenden Daten bereits als
-            Gesamt-Breite [twips] vor!
+    USHORT nLineThick=rLineThick;
+    nOutsideThick = SwMSDffManager::GetEscherLineMatch(eLineStyle,
+        eShapeType, rLineThick);
 
-            Der Winword default ist 15 tw. Wir nehmen hierfuer unsere 20 tw Linie.
-            ( 0.75 pt uns 1.0 pt sehen sich auf dem Ausdruck naemlich
-              aehnlicher als etwas 0.75 pt und unsere 0.05 pt Haarlinie. )
-            Die Haarlinie setzen wir nur bei Winword-Staerken bis zu
-            maximal 0.5 pt ein.
-        */
-        switch( eLineStyle )
-        {
-        // zuerst die Einzel-Linien
-        case mso_lineSimple:     if( nLineWidth < 11) nIdx =            0;//   1 Twip bei uns
-                            else if( nLineWidth < 46) nIdx =            1;//  20 Twips
-                            else if( nLineWidth < 66) nIdx =            2;//  50
-                            else if( nLineWidth < 91) nIdx =            3;//  80
-                            else if( nLineWidth <126) nIdx =            4;// 100
-                            // Pfusch: fuer die ganz dicken Linien muessen
-                            //         wir doppelte Linien malen, weil unsere
-                            //               Einfach-Linie nicht dicker als 5 Punkt wird
-                            else if( nLineWidth <166) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+2;// 150
-                            else                      nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+5;// 180
-                            break;
-        // dann die Doppel-Linien, fuer die wir feine Entsprechungen haben :-)))
-        case mso_lineDouble:     if( nLineWidth <  46) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips bei uns
-                            else if( nLineWidth < 106) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60
-                            else                       nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 2;// 150
-                            break;
-        case mso_lineThickThin:  if( nLineWidth <  87) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 8;//  71 Twips bei uns
-                            else if( nLineWidth < 117) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 9;// 101
-                            else if( nLineWidth < 166) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+10;// 131
-                            else                       nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 5;// 180
-                            break;
-        case mso_lineThinThick:  if( nLineWidth < 137) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 4;//  90 Twips bei uns
-                            else                       nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 6;// 180
-                            break;
-        // zu guter Letzt die Dreifach-Linien, an deren Stelle wir eine Doppel-Linie setzen
-        case mso_lineTriple:     if( nLineWidth <  46) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips bei uns
-                            else if( nLineWidth < 106) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60
-                            else if( nLineWidth < 166) nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 2;// 150
-                            else                       nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 5;// 180
-                            break;
-        // no line style is set
-        case (MSO_LineStyle)USHRT_MAX:
-                            break;
-        // erroneously not implemented line style is set
-        default: ASSERT( !this, "eLineStyle is not (yet) implemented!" );
-        }
+    /*
+    Beachte: im Gegensatz zu den Winword-ueblichen Tabellen- und
+    Rahmen-Randbreiten-Angaben, bei denen jeweils aus der Staerke *einer*
+    Linie die Gesamt-Randbreite zu errechnen ist, liegen die aus dem ESCHER
+    stammenden Daten bereits als Gesamt-Breite [twips] vor!
+
+    Der Winword default ist 15 tw. Wir nehmen hierfuer unsere 20 tw Linie.  (
+    0.75 pt uns 1.0 pt sehen sich auf dem Ausdruck naemlich aehnlicher als
+    etwas 0.75 pt und unsere 0.05 pt Haarlinie. ) Die Haarlinie setzen wir nur
+    bei Winword-Staerken bis zu maximal 0.5 pt ein.
+    */
+    switch( eLineStyle )
+    {
+    // zuerst die Einzel-Linien
+    case mso_lineSimple:
+        if( nLineThick < 11)
+            nIdx =            0;//   1 Twip bei uns
+        else if( nLineThick < 46)
+            nIdx =            1;//  20 Twips
+        else if( nLineThick < 66)
+            nIdx =            2;//  50
+        else if( nLineThick < 91)
+            nIdx =            3;//  80
+        else if( nLineThick <126)
+            nIdx =            4;// 100
+        // Pfusch: fuer die ganz dicken Linien muessen wir doppelte Linien
+        // malen, weil unsere Einfach-Linie nicht dicker als 5 Punkt wird
+        else if( nLineThick <166)
+            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+2;// 150
+        else
+            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+5;// 180
+    break;
+    // dann die Doppel-Linien, fuer die wir feine Entsprechungen haben :-)))
+    case mso_lineDouble:
+        if( nLineThick <  46)
+            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips bei uns
+        else if( nLineThick < 106)
+            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60
+        else
+            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 2;// 150
+    break;
+    case mso_lineThickThin:
+        if( nLineThick <  87)
+            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 8;//  71 Twips bei uns
+        else if( nLineThick < 117)
+            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 9;// 101
+        else if( nLineThick < 166)
+            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+10;// 131
+        else
+            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 5;// 180
+    break;
+    case mso_lineThinThick:
+        if( nLineThick < 137)
+            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 4;//  90 Twips bei uns
+        else
+            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 6;// 180
+    break;
+    // zu guter Letzt die Dreifach-Linien, an deren Stelle wir eine
+    // Doppel-Linie setzen
+    case mso_lineTriple:
+        if( nLineThick <  46)
+            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 0;//  22 Twips bei uns
+        else if( nLineThick < 106)
+            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 1;//  60
+        else if( nLineThick < 166)
+            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 2;// 150
+        else
+            nIdx = WW8_DECL_LINETAB_OFS_DOUBLE+ 5;// 180
+    break;
+    // no line style is set
+    case (MSO_LineStyle)USHRT_MAX:
+        break;
+    // erroneously not implemented line style is set
+    default:
+        ASSERT( !this, "eLineStyle is not (yet) implemented!" );
+        break;
     }
 
     if( USHRT_MAX != nIdx )
@@ -1629,53 +1709,41 @@ BOOL SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
 
         for(USHORT nLine = 0; nLine < 4; ++nLine)
             rBox.SetLine(new SvxBorderLine( aLine ), nLine);
-
-        bRet = TRUE;
     }
-    return bRet;
+
+    return nOutsideThick;
 }
 
 
 #define WW8ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
 void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
-                                               SfxItemSet& rFlySet,
-                                               MSO_LineStyle eLineStyle,
-                                               Rectangle& rInnerDist,
-                                               BOOL bFixSize )
-{   /*
-        am Rahmen zu setzende Frame-Attribute
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        SwFmtFrmSize            falls noch nicht gesetzt, hier setzen
-        SvxLRSpaceItem          hier setzen
-        SvxULSpaceItem          hier setzen
-        SvxOpaqueItem           (Derzeit bei Rahmen nicht moeglich! khz 10.2.1999)
-        SwFmtSurround           bereits gesetzt
-        SwFmtVertOrient         bereits gesetzt
-        SwFmtHoriOrient         bereits gesetzt
-        SwFmtAnchor             bereits gesetzt
-        SvxBoxItem              hier setzen
-        SvxBrushItem            hier setzen
-        SvxShadowItem           hier setzen
-    */
+    SfxItemSet& rFlySet, MSO_LineStyle eLineStyle, MSO_SPT eShapeType,
+    Rectangle& rInnerDist, BOOL bFixSize )
+{
+/*
+    am Rahmen zu setzende Frame-Attribute
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    SwFmtFrmSize            falls noch nicht gesetzt, hier setzen
+    SvxLRSpaceItem          hier setzen
+    SvxULSpaceItem          hier setzen
+    SvxOpaqueItem           (Derzeit bei Rahmen nicht moeglich! khz 10.2.1999)
+    SwFmtSurround           bereits gesetzt
+    SwFmtVertOrient         bereits gesetzt
+    SwFmtHoriOrient         bereits gesetzt
+    SwFmtAnchor             bereits gesetzt
+    SvxBoxItem              hier setzen
+    SvxBrushItem            hier setzen
+    SvxShadowItem           hier setzen
+*/
 
     // 1. GrafikObjekt des Docs?
     if( !pDrawModel )
         GrafikCtor();
 
-
-    // im Sdr-Objekt eingestellten Attribute greifen
-//-/    SfxItemSet aOldSet(pDrawModel->GetItemPool());
-//-/    pSdrObj->TakeAttributes( aOldSet, FALSE, FALSE );
     const SfxItemSet& rOldSet = pSdrObj->GetItemSet();
 
     BOOL bIsAAttrObj = pSdrObj->ISA(SdrAttrObj);
-//-/    const XLineAttrSetItem* pLineAttrSetItem
-//-/        = bIsAAttrObj ? ((SdrAttrObj*)pSdrObj)->GetLineAttrSetItem() : 0;
-//-/    const XFillAttrSetItem* pFillAttrSetItem
-//-/        = bIsAAttrObj ? ((SdrAttrObj*)pSdrObj)->GetFillAttrSetItem() : 0;
-
-
 
     // einige Items koennen direkt so uebernommen werden
     const USHORT nDirectMatch = 2;
@@ -1686,58 +1754,67 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     };
     const SfxPoolItem* pPoolItem;
     for(USHORT nItem = 0; nItem < nDirectMatch; ++nItem)
-        if( SFX_ITEM_SET == rOldSet.GetItemState( aDirectMatch[ nItem ],
-                                                  FALSE,
-                                                  &pPoolItem) )
+        if( SFX_ITEM_SET == rOldSet.GetItemState( aDirectMatch[ nItem ], FALSE,
+            &pPoolItem) )
         {
             rFlySet.Put( *pPoolItem );
         }
 
 
-    // jetzt die Umrandung berechnen und die Box bauen:
-    //       Das Mass wird fuer die Rahmen-GROESSE benoetigt!
+    // jetzt die Umrandung berechnen und die Box bauen: Das Mass wird fuer die
+    // Rahmen-GROESSE benoetigt!
     SvxBoxItem aBox;
     // dashed oder solid wird zu solid
-    USHORT nLineWidth = 0;
+    USHORT nLineThick = 0, nOutside=0;
 
     // check if LineStyle is *really* set!
     const SfxPoolItem* pItem;
 
-//-/    if( pLineAttrSetItem )
+    SfxItemState eState = rOldSet.GetItemState(XATTR_LINESTYLE,TRUE,&pItem);
+    if( eState == SFX_ITEM_SET )
     {
-//-/        SfxItemState eState = pLineAttrSetItem->GetItemSet().GetItemState(
-//-/                                                              XATTR_LINESTYLE,
-//-/                                                              TRUE, &pItem );
-        SfxItemState eState = rOldSet.GetItemState(XATTR_LINESTYLE,TRUE, &pItem );
-        if( eState == SFX_ITEM_SET )
-        {
-            // Now, that we know there is a line style we will make use the
-            // parameter given to us when calling the method...  :-)
-            /*
-            const XLineStyle eLineStyle =
-                                ((const XLineStyleItem*)pItem)->GetValue();
-            if( XLINE_NONE != eLineStyle )
+        // Now, that we know there is a line style we will make use the
+        // parameter given to us when calling the method...  :-)
+        const Color aLineColor = WW8ITEMVALUE(rOldSet, XATTR_LINECOLOR,
+            XLineColorItem);
+        nLineThick = (USHORT)(WW8ITEMVALUE(rOldSet, XATTR_LINEWIDTH,
+            XLineWidthItem));
 
-            {
-            */
-//-/                const Color aLineColor
-//-/                                = WW8ITEMVALUE( pLineAttrSetItem->GetItemSet(),
-//-/                                                XATTR_LINECOLOR,
-//-/                                                XLineColorItem );
+        if( !nLineThick )
+            nLineThick = 15; // WW-default: 0.75 pt
 
-//-/                nLineWidth
-//-/                    = (USHORT)(WW8ITEMVALUE( pLineAttrSetItem->GetItemSet(),
-//-/                                             XATTR_LINEWIDTH, XLineWidthItem ));
+        nOutside = MatchSdrBoxIntoFlyBoxItem(aLineColor, eLineStyle,
+            eShapeType, nLineThick, aBox);
+    }
 
-                const Color aLineColor = WW8ITEMVALUE(rOldSet, XATTR_LINECOLOR, XLineColorItem);
-                nLineWidth = (USHORT)(WW8ITEMVALUE(rOldSet, XATTR_LINEWIDTH, XLineWidthItem));
+    rInnerDist.Left()+=nLineThick;
+    rInnerDist.Top()+=nLineThick;
+    rInnerDist.Right()+=nLineThick;
+    rInnerDist.Bottom()+=nLineThick;
 
-                if( !nLineWidth )
-                    nLineWidth = 15; // WW-default: 0.75 pt
+    const SvxBorderLine *pLine;
+    if (pLine = aBox.GetLine(BOX_LINE_LEFT))
+    {
+        rInnerDist.Left() -= (pLine->GetOutWidth() + pLine->GetInWidth() +
+            pLine->GetDistance());
+    }
 
-                MatchSdrBoxIntoFlyBoxItem( aLineColor, eLineStyle, nLineWidth, aBox);
-            //}
-        }
+    if (pLine = aBox.GetLine(BOX_LINE_TOP))
+    {
+        rInnerDist.Top() -= (pLine->GetOutWidth() + pLine->GetInWidth() +
+            pLine->GetDistance());
+    }
+
+    if (pLine = aBox.GetLine(BOX_LINE_RIGHT))
+    {
+        rInnerDist.Right() -= (pLine->GetOutWidth() + pLine->GetInWidth() +
+            pLine->GetDistance());
+    }
+
+    if (pLine = aBox.GetLine(BOX_LINE_BOTTOM))
+    {
+        rInnerDist.Bottom() -= (pLine->GetOutWidth() + pLine->GetInWidth() +
+            pLine->GetDistance());
     }
 
     // set distances from box's border to text contained within the box
@@ -1750,39 +1827,38 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     if( 0 < rInnerDist.Bottom() )
         aBox.SetDistance( (USHORT)rInnerDist.Bottom(), BOX_LINE_BOTTOM );
 
-    // Groesse: SwFmtFrmSize
+    // Size: SwFmtFrmSize
     if( SFX_ITEM_SET != rFlySet.GetItemState(RES_FRM_SIZE, FALSE) )
     {
         const Rectangle& rSnapRect = pSdrObj->GetSnapRect();
-        // ggfs. Breite und Position des Rahmens anpassen:
-        // Der beschreibbare Innenraum soll trotz breitem Rand
-        // gleich gross bleiben.
+        // if necessary adapt width and position of the framework: The
+        // recorded interior is to remain equally large despite thick edges.
         rFlySet.Put( SwFmtFrmSize(bFixSize ? ATT_FIX_SIZE : ATT_MIN_SIZE,
-            rSnapRect.GetWidth()  + 2*nLineWidth,
-            rSnapRect.GetHeight() + 2*nLineWidth) );
+            rSnapRect.GetWidth()  + 2*nOutside,
+            rSnapRect.GetHeight() + 2*nOutside) );
+    }
+    else //If a size is set, adjust it to consider border thickness
+    {
+        SwFmtFrmSize aSize = (const SwFmtFrmSize &)(rFlySet.Get(RES_FRM_SIZE));
+        aSize.SetWidth(aSize.GetWidth()+ 2*nOutside);
+        aSize.SetHeight(aSize.GetHeight() + 2*nOutside);
+        rFlySet.Put(aSize);
     }
 
-    /*
-        Traurig: das SvxOpaqueItem macht bei Rahmen etwas ganz anderes,
-        als in /svx/inc/opaqitem.hxx angegeben:
+    //Sadly word puts escher borders outside the graphic, but orients the
+    //graphic in relation to the top left inside the border. We don't
+    if (nOutside)
+    {
+        SwFmtHoriOrient aHori = (const SwFmtHoriOrient &)(rFlySet.Get(
+            RES_HORI_ORIENT));
+        aHori.SetPos(aHori.GetPos()-nOutside);
+        rFlySet.Put(aHori);
 
-        Statt den Rahmen (un)durchsichtig zu machen, bewirkt es, dass er
-        einfach bloss in einen anderen Layer (Hell/Heaven) gestellt wird.
-        Fuer unsere Zwecke ist es also nicht zu gebrauchen.
-
-        Da auch das Transparent-Flag am SvxBrushItem wirkungslos ist,
-        koennen wir das WinWord-Attribut "Halbtransparent" leider nicht
-        umsetzen.
-
-        :-((
-    */
-    // Durchsichtigkeit: SvxOpaqueItem
-
-    //  INT16 nFillTransparence
-    //      = WW8ITEMVALUE(aOldSet, XATTR_FILLTRANSPARENCE, XFillTransparenceItem);
-    //  if( 0x032 <= nFillTransparence )
-    //      rFlySet.Put( SvxOpaqueItem(RES_OPAQUE, FALSE) );
-    //
+        SwFmtVertOrient aVert = (const SwFmtVertOrient &)(rFlySet.Get(
+            RES_VERT_ORIENT));
+        aVert.SetPos(aVert.GetPos()-nOutside);
+        rFlySet.Put(aVert);
+    }
 
     // jetzt die Umrandung setzen
     rFlySet.Put( aBox );
@@ -1793,15 +1869,14 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
         SvxShadowItem aShadow;
 
         const Color aShdColor = WW8ITEMVALUE(rOldSet, SDRATTR_SHADOWCOLOR,
-                                                        SdrShadowColorItem);
-
+            SdrShadowColorItem);
         const INT32 nShdDistX = WW8ITEMVALUE(rOldSet, SDRATTR_SHADOWXDIST,
-                                                        SdrShadowXDistItem);
+            SdrShadowXDistItem);
         const INT32 nShdDistY = WW8ITEMVALUE(rOldSet, SDRATTR_SHADOWYDIST,
-                                                        SdrShadowYDistItem);
+            SdrShadowYDistItem);
+        const USHORT nShdTrans= WW8ITEMVALUE(rOldSet,
+            SDRATTR_SHADOWTRANSPARENCE, SdrShadowTransparenceItem);
 
-        const USHORT nShdTrans= WW8ITEMVALUE(rOldSet, SDRATTR_SHADOWTRANSPARENCE,
-                                                        SdrShadowTransparenceItem);
         // diese gibt es im Writer nicht  :-(
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         //
@@ -1833,71 +1908,54 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     }
 
     // Hintergrund: SvxBrushItem
-//-/    if( pFillAttrSetItem )
+    eState = rOldSet.GetItemState(XATTR_FILLSTYLE,TRUE,&pItem);
+    if( eState == SFX_ITEM_SET )
     {
-//-/        SfxItemState eState = pFillAttrSetItem->GetItemSet().GetItemState(
-//-/                                                              XATTR_FILLSTYLE,
-//-/                                                              TRUE, &pItem );
-        SfxItemState eState = rOldSet.GetItemState(XATTR_FILLSTYLE, TRUE, &pItem);
-        if( eState == SFX_ITEM_SET )
+        const XFillStyle eFill = ((const XFillStyleItem*)pItem)->GetValue();
+
+        if(eFill != XFILL_NONE)
         {
+            SvxBrushItem aBrushItem;
+            BOOL bBrushItemOk = FALSE;
 
-            const XFillStyle eFillStyle =
-                                ((const XFillStyleItem*)pItem)->GetValue();
-
-            if(eFillStyle != XFILL_NONE)
+            switch( eFill )
             {
-                SvxBrushItem aBrushItem;
-                BOOL bBrushItemOk = FALSE;
-
-                switch( eFillStyle )
-                {
-                case XFILL_NONE     :
+                case XFILL_NONE:
                     {
                         aBrushItem.SetColor( Color( COL_TRANSPARENT ) );
                         bBrushItemOk = TRUE;
-                    }break;
-                case XFILL_SOLID    :
+                    }
+                break;
+                case XFILL_SOLID:
                     {
-//-/                        const Color aColor =
-//-/                                WW8ITEMVALUE( pFillAttrSetItem->GetItemSet(),
-//-/                                              XATTR_FILLCOLOR,
-//-/                                              XFillColorItem );
-                        const Color aColor = WW8ITEMVALUE(rOldSet, XATTR_FILLCOLOR, XFillColorItem);
+                        const Color aColor =
+                            WW8ITEMVALUE(rOldSet, XATTR_FILLCOLOR,
+                            XFillColorItem);
                         aBrushItem.SetColor( aColor );
                         bBrushItemOk = TRUE;
-                    }break;
-                case XFILL_GRADIENT :
-                                    break;
-                case XFILL_HATCH    :
-                                    break;
-                case XFILL_BITMAP   :
+                    }
+                break;
+                case XFILL_GRADIENT:
+                break;
+                case XFILL_HATCH:
+                break;
+                case XFILL_BITMAP:
                     {
-//-/                        const Graphic aGraphic(
-//-/                                WW8ITEMVALUE( pFillAttrSetItem->GetItemSet(),
-//-/                                              XATTR_FILLBITMAP,
-//-/                                              XFillBitmapItem ).GetBitmap() );
-
-//-/                        BOOL bTile =
-//-/                                WW8ITEMVALUE( pFillAttrSetItem->GetItemSet(),
-//-/                                              XATTR_FILLBMP_TILE,
-//-/                                              SfxBoolItem );
-
-                        const Graphic aGraphic(WW8ITEMVALUE(rOldSet, XATTR_FILLBITMAP, XFillBitmapItem).GetBitmap());
-                        BOOL bTile = WW8ITEMVALUE(rOldSet, XATTR_FILLBMP_TILE, SfxBoolItem);
+                        const Graphic aGraphic(WW8ITEMVALUE(rOldSet,
+                            XATTR_FILLBITMAP, XFillBitmapItem).GetBitmap());
+                        BOOL bTile = WW8ITEMVALUE(rOldSet, XATTR_FILLBMP_TILE,
+                            SfxBoolItem);
                         aBrushItem.SetGraphic( aGraphic );
-                        aBrushItem.SetGraphicPos(  bTile
-                                                 ? GPOS_TILED
-                                                 : GPOS_AREA );
+                        aBrushItem.SetGraphicPos( bTile ? GPOS_TILED
+                            : GPOS_AREA );
                         bBrushItemOk = TRUE;
-                    }break;
-                }
-                if( bBrushItemOk )
-                    rFlySet.Put( aBrushItem, RES_BACKGROUND );
+                    }
+                break;
             }
+            if( bBrushItemOk )
+                rFlySet.Put( aBrushItem, RES_BACKGROUND );
         }
     }
-
 }
 
 
@@ -2114,8 +2172,11 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
         //this is going to be in the headerfooter and
         //cannot be replaced by a fly then anchor it
         //to the current page.
-        if ((bIsHeader || bIsFooter) && !bOrgObjectWasReplace && !pRecord->bReplaceByFly)
+        if ((bIsHeader || bIsFooter) && !bOrgObjectWasReplace &&
+            !pRecord->bReplaceByFly)
+        {
             eAnchor=FLY_PAGE;
+        }
 
         SwFmtAnchor aAnchor( eAnchor );
         aAnchor.SetAnchor( pPaM->GetPoint() );
@@ -2168,722 +2229,601 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
 #pragma optimize("",off)
 SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 {
-    SwFrmFmt* pRetFrmFmt = 0;
     if( nIniFlags & WW8FL_NO_GRAFLAYER )
-        return pRetFrmFmt;
+        return 0;
 
     ::SetProgressState( nProgress, rDoc.GetDocShell() );     // Update
 
     nDrawCpO =    pWwFib->ccpText + pWwFib->ccpFtn
                 + pWwFib->ccpHdr  + pWwFib->ccpMcr
                 + pWwFib->ccpAtn  + pWwFib->ccpEdn;
-    if( pPlcxMan->GetManType() == MAN_HDFT ) nDrawCpO += pWwFib->ccpTxbx;
+
+    if( pPlcxMan->GetManType() == MAN_HDFT )
+        nDrawCpO += pWwFib->ccpTxbx;
+
+    if( !pDrawModel )// 1. GrafikObjekt des Docs
+        GrafikCtor();
+
+    WW8PLCFspecial* pPF = pPlcxMan->GetFdoa();
+    if( !pPF )
+    {
+        ASSERT( !this, "Where is the grapic (1) ?" );
+        return 0;
+    }
 
     if( bVer67 )
     {
-        if( !pDrawModel )           // 1. GrafikObjekt des Docs
-            GrafikCtor();
-
-        WW8PLCFspecial* pPF = pPlcxMan->GetFdoa();
-        if( !pPF ){
-            ASSERT( !this, "+Wo ist die Grafik (1) ?" );
-            return pRetFrmFmt;
-        }
         long nOldPos = pStrm->Tell();
-        if( !pDrawHeight ){                             // 1. Aufruf
+        if( !pDrawHeight ) // 1. Aufruf
+        {
             pDrawHeight = new SvShorts;
             nDrawObjOfs = pDrawPg->GetObjCount();
         }
         nDrawXOfs = nDrawYOfs = 0;
         pDrawFmt = rDoc.MakeDrawFrmFmt( WW8_ASCII2STR( "DrawObject" ),
-                                        rDoc.GetDfltFrmFmt() );
+            rDoc.GetDfltFrmFmt() );
         ReadGrafLayer1( pPF, nGrafAnchorCp );
         pStrm->Seek( nOldPos );
+        return 0;
+    }
+
+    //Normal case of Word 8+ version stuff
+    pPF->SeekPos( nGrafAnchorCp );
+
+    long nStartFc;
+    void* pF0;
+    if( !pPF->Get( nStartFc, pF0 ) ){
+        ASSERT( !this, "+Wo ist die Grafik (2) ?" );
+        return 0;
+    }
+
+    WW8_FSPA_SHADOW* pFS = (WW8_FSPA_SHADOW*)pF0;
+    WW8_FSPA*        pF;
+#ifdef __WW8_NEEDS_COPY
+    WW8_FSPA aFSFA;
+    pF = &aFSFA;
+    WW8FSPAShadowToReal( pFS, pF );
+#else
+    pF = (WW8_FSPA*)pFS;
+#endif // defined __WW8_NEEDS_COPY
+    if( !pF->nSpId )
+    {
+        ASSERT( !this, "+Wo ist die Grafik (3) ?" );
+        return 0;
+    }
+
+    if( !pMSDffManager->GetModel() )
+         pMSDffManager->SetModel(pDrawModel, 1440);
+
+    SdrObject* pObject = 0;
+
+    Rectangle aRect(pF->nXaLeft,  pF->nYaTop, pF->nXaRight, pF->nYaBottom);
+    SvxMSDffImportData aData( aRect );
+
+    if (!(pMSDffManager->GetShape( pF->nSpId, pObject, aData ) && pObject))
+    {
+        ASSERT( !this, "Where is the Shape ?" );
+        return 0;
+    }
+
+    const SdrObject* pOrgShapeObject = pObject;
+    SvxMSDffImportRec* pRecord;
+    BOOL bDone = FALSE;
+    SdrObject* pOurNewObject = 0;
+    BOOL bReplaceable = FALSE;
+
+    switch (SdrObjKind(pObject->GetObjIdentifier()))
+    {
+        case OBJ_GRAF:
+            bReplaceable = TRUE;
+            bDone = TRUE;
+            break;
+        case OBJ_OLE2:
+            bReplaceable = TRUE;
+            break;
+        default:
+            break;
+
+    }
+
+    // Umfluss-Modus ermitteln
+    SfxItemSet aFlySet(rDoc.GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
+    SwSurround eSurround = SURROUND_PARALLEL;
+    BOOL bContour = FALSE;
+    switch( pF->nwr )
+    {
+        case 0: //0 like 2, but doesn't require absolute object
+        case 2: //2 wrap around absolute object
+            eSurround = SURROUND_PARALLEL;
+            break;
+        case 1: //1 no text next to shape
+            eSurround = SURROUND_NONE;
+            break;
+        case 3: //3 wrap as if no object present
+            eSurround = SURROUND_THROUGHT;
+            break;
+        case 4: //4 wrap tightly around object
+        case 5: //5 wrap tightly, but allow holes
+            eSurround = SURROUND_PARALLEL;
+            // ensure the object will be conterted into a Writer structure!
+            // the Writer doesn't support Contour on Sdr objects
+            if( bReplaceable )
+                bContour = TRUE;
+            break;
+    }
+
+    // bei Modus 2 oder 4 auch den Zusatzparameter beruecksichtigen
+    if( ( 2 == pF->nwr ) || ( 4 == pF->nwr ) )
+    {
+        switch( pF->nwrk )
+        {
+        //0 wrap both sides
+        case 0: eSurround = SURROUND_PARALLEL;  break;
+        //1 wrap only on left
+        case 1: eSurround = SURROUND_LEFT;      break;
+        //2 wrap only on right
+        case 2: eSurround = SURROUND_RIGHT;     break;
+        //3 wrap only on largest side
+        case 3: eSurround = SURROUND_IDEAL;     break;
+        }
+    }
+
+    SwFmtSurround aSur( eSurround );
+    aSur.SetContour( bContour );
+    aSur.SetOutside( TRUE ); // Winword kann nur Aussen-Konturen
+    aFlySet.Put( aSur );
+
+    //If we are to be "below text" then we are not to be opaque
+    if( pF->bBelowText )
+        aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,FALSE));
+
+    // eingelesenes Objekt (kann eine ganze Gruppe sein) jetzt korrekt
+    // positionieren usw.
+
+    SwFrmFmt* pRetFrmFmt = 0;
+    pRecord = ( aData.HasRecords() && (1 == aData.GetRecCount() ) )
+        ? aData.GetRecord( 0 ) : 0;
+
+    if( bReplaceable )
+    {
+        pRetFrmFmt = ImportReplaceableDrawables(pObject, pOurNewObject, pRecord,
+            pF, aFlySet);
     }
     else
     {
-        WW8PLCFspecial* pPF = pPlcxMan->GetFdoa();
-        if( !pPF ){
-            ASSERT( !this, "+Wo ist die Grafik (1) ?" );
-            return pRetFrmFmt;
-        }
-        pPF->SeekPos( nGrafAnchorCp );
-
-        long nStartFc;
-        void* pF0;
-        if( !pPF->Get( nStartFc, pF0 ) ){
-            ASSERT( !this, "+Wo ist die Grafik (2) ?" );
-            return pRetFrmFmt;
-        }
-
-        WW8_FSPA_SHADOW* pFS = (WW8_FSPA_SHADOW*)pF0;
-        WW8_FSPA*        pF;
-#ifdef __WW8_NEEDS_COPY
-        WW8_FSPA aFSFA;
-        pF = &aFSFA;
-        WW8FSPAShadowToReal( pFS, pF );
-#else
-        pF = (WW8_FSPA*)pFS;
-#endif // defined __WW8_NEEDS_COPY
-        if( !pF->nSpId )
+        // eingelesenes Objekt (kann eine ganze Gruppe sein) jetzt korrekt
+        // positionieren usw.
+        if( pF->bRcaSimple )
         {
-            ASSERT( !this, "+Wo ist die Grafik (3) ?" );
-            return pRetFrmFmt;
+            pF->nbx = nbxRelPageBorder;
+            pF->nby = nbyRelPageBorder;
         }
 
-        if( !pDrawModel )// 1. GrafikObjekt des Docs
-            GrafikCtor();
-
-        if( !pMSDffManager->GetModel() )
-             pMSDffManager->SetModel(pDrawModel, 1440);
-
-        SdrObject* pObject = 0;
-
-        Rectangle aRect(pF->nXaLeft,  pF->nYaTop,
-                        pF->nXaRight, pF->nYaBottom);
-        SvxMSDffImportData aData( aRect );
-
-        if( pMSDffManager->GetShape( pF->nSpId, pObject, aData ) && pObject )
+        RndStdIds eAnchor = FLY_AT_CNTNT;  //FLY_PAGE
+        if( (nbyRelText != pF->nby) )
         {
-            const SdrObject* pOrgShapeObject = pObject;
-            SvxMSDffImportRec* pRecord;
-            BOOL bDone = FALSE;
-            SdrObject* pOurNewObject = 0;
-            BOOL bSetAttributes     = FALSE;
-            BOOL bOrgObjectWasReplace =
-            (
-                (SdrInventor == pObject->GetObjInventor()) &&
-                (
-                    (UINT16( OBJ_GRAF ) == pObject->GetObjIdentifier())
-                    || (UINT16(OBJ_OLE2 ) == pObject->GetObjIdentifier())
-                )
-            );
-
-
-            // Umfluss-Modus ermitteln
-            SfxItemSet aFlySet( rDoc.GetAttrPool(),
-                RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
-            SwSurround eSurround = SURROUND_PARALLEL;
-            BOOL bContour = FALSE;
-            switch( pF->nwr )
+            if( bIsHeader || bIsFooter)
             {
-            //0 like 2, but doesn't require absolute object
-            case 0: ;
-            //2 wrap around absolute object
-            case 2: eSurround = SURROUND_PARALLEL;  break;
-            //1 no text next to shape
-            case 1: eSurround = SURROUND_NONE;      break;
-            //3 wrap as if no object present
-            case 3: eSurround = SURROUND_THROUGHT;  break;
-            //4 wrap tightly around object
-            case 4: ;       //Intentional fallthrough ?
-            //5 wrap tightly, but allow holes
-            case 5:
-                {
-                    eSurround = SURROUND_PARALLEL;
-
-                    // ensure the object will be conterted into a Writer
-                    // structure!  the Writer doesn't support Contour on Sdr
-                    // objects
-                    if( bOrgObjectWasReplace )
-                        bContour = TRUE;
-                }
-                break;
-            }
-            // bei Modus 2 oder 4 auch den Zusatzparameter beruecksichtigen
-            if( ( 2 == pF->nwr ) || ( 4 == pF->nwr ) )
-            {
-                switch( pF->nwrk )
-                {
-                //0 wrap both sides
-                case 0: eSurround = SURROUND_PARALLEL;  break;
-                //1 wrap only on left
-                case 1: eSurround = SURROUND_LEFT;      break;
-                //2 wrap only on right
-                case 2: eSurround = SURROUND_RIGHT;     break;
-                //3 wrap only on largest side
-                case 3: eSurround = SURROUND_IDEAL;     break;
-                }
-            }
-            SwFmtSurround aSur( eSurround );
-            aSur.SetContour( bContour );
-            aSur.SetOutside( TRUE ); // Winword kann nur Aussen-Konturen
-            aFlySet.Put( aSur );
-
-            //If we are to be "below text" then we are not to be opaque
-            if( pF->bBelowText )
-                aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,FALSE));
-
-            if( bOrgObjectWasReplace )
-            {
-                pRecord = (    aData.HasRecords()
-                            && (1 == aData.GetRecCount() ) )
-                        ? aData.GetRecord( 0 ) : 0;
-
-                long nWidthTw  = pF->nXaRight -pF->nXaLeft;
-                if( 0>nWidthTw ) nWidthTw =0;
-                long nHeightTw = pF->nYaBottom - pF->nYaTop;
-                if( 0>nHeightTw) nHeightTw=0;
-#if 0
-                if( nbxRelPageBorder == pF->nbx )
-                {
-                    pF->nXaLeft -= nPgLeft;
-#endif
-                /*
-                 Absolute positions in winword for graphics are broken when
-                 the graphic is in a table, all absolute positions now become
-                 relative to the top left corner of that cell.  We really
-                 cannot import that feature correctly as we have not the same
-                 functionality (yet). This normalizes the absolute position
-                 by the left of the table, which at least puts it close, theres
-                 nothing we can do about the vertical either.
-                 */
-                if( bTable )
-                    pF->nXaLeft -= GetTableLeft();
-#if 0
-                }
-#endif
-                ProcessEscherAlign( pRecord, pF, aFlySet, bOrgObjectWasReplace );
-
-                aFlySet.Put(SwFmtFrmSize( ATT_VAR_SIZE, nWidthTw, nHeightTw));
-
-                if( pRecord )
-                {
-#if 0
-                    Rectangle aInnerDist(   pRecord->nDxTextLeft,
-                        pRecord->nDyTextTop, pRecord->nDxTextRight,
-                        pRecord->nDyTextBottom  );
-#else
-                    //The inner distance only seems to be honoured in
-                    //word for textboxes, not for graphics and ole
-                    //objects.
-                    Rectangle aInnerDist(0,0,0,0);
-#endif
-
-                    MatchSdrItemsIntoFlySet( pObject, aFlySet,
-                        pRecord->eLineStyle, aInnerDist,
-                        !pRecord->bLastBoxInChain );
-                }
-
-                XubString aObjectName( pObject->GetName() );
-                SwFrmFmt *pControl=NULL;
-                if( UINT16( OBJ_OLE2 ) == pObject->GetObjIdentifier() )
-                {
-
-                    SvInPlaceObjectRef xIPRef(
-                        ((SdrOle2Obj*)pObject)->GetObjRef());
-
-                    // kein GrafSet uebergeben, da nur fuer Cropping sinnvoll,
-                    // was die UI derzeit (27.1.99) noch nicht kann khz.
-                    pRetFrmFmt = rDoc.Insert( *pPaM, &xIPRef, &aFlySet );
-                    //JP 10.4.2001: Bug 85614 - don't remove in DTOR the
-                    //              object from our persist
-                    SvInPlaceObjectRef xEmpty;
-                    ((SdrOle2Obj*)pObject)->SetObjRef( xEmpty );
-                }
+                if( bIsHeader && (nPgTop < pF->nYaTop))
+                    pF->nYaTop -= nPgTop;
                 else
-                {
-                    const Graphic& rGraph =
-                        ((SdrGrafObj*)pObject)->GetGraphic();
-                    bSetAttributes = TRUE;
-                    BOOL bDone2 = FALSE;
-
-                    if( ((SdrGrafObj*)pObject)->IsLinkedGraphic() )
-                    {
-                        String aGrfName( URIHelper::SmartRelToAbs(
-                                ((SdrGrafObj*)pObject)->GetFileName()) );
-
-                        if( GRAPHIC_NONE == rGraph.GetType() ||
-                            FStatHelper::IsDocument( aGrfName ) )
-                        {
-                            pRetFrmFmt = rDoc.Insert( *pPaM, aGrfName,
-                                aEmptyStr, 0 /*Graphic*/, &aFlySet,
-                                0 /*SwFrmFmt*/);
-                            bDone2 = TRUE;
-                        }
-                    }
-                    if( !bDone2 )
-                    {
-                        pRetFrmFmt = rDoc.Insert( *pPaM, aEmptyStr, aEmptyStr,
-                            &rGraph, &aFlySet, 0 /* SwFrmFmt*/ );
-                    }
-                    bDone = TRUE;
-                }
-
-
-                if( pRetFrmFmt )
-                {
-                    if( pRecord )
-                    {
-                        MatchWrapDistancesIntoFlyFmt( pRecord, pRetFrmFmt );
-                        if( bSetAttributes )
-                            SetAttributesAtGrfNode( pRecord, pRetFrmFmt, pF );
-                    }
-                    // mehrfaches Auftreten gleicher Grafik-Namen vermeiden
-                    if( aObjectName.Len() )
-                    {
-                        String aName;
-                        if( MakeUniqueGraphName( aName, aObjectName ))
-                            pRetFrmFmt->SetName( aName );
-                    }
-                }
-                //falls alles Ok, Zeiger auf neues Objekt ermitteln und
-                //Z-Order-Liste entsprechend korrigieren (oder Eintrag loeschen)
-                pOurNewObject = CreateContactObject( (SwFlyFrmFmt*)pRetFrmFmt );
-
-                // altes Objekt aus der Z-Order-Liste entfernen
-                pMSDffManager->RemoveFromShapeOrder( pObject );
-                // aus der Drawing-Page rausnehmen
-                if( pObject->GetPage() )
-                    pDrawPg->RemoveObject( pObject->GetOrdNum() );
-
-                // und das Objekt loeschen
-                DELETEZ( pObject );
-                /*
-                    Achtung: ab jetzt nur noch pOrgShapeObject abfragen!
-                */
-
-
-                // Kontakt-Objekt in die Z-Order-Liste und die Page aufnehmen
-                if( pOurNewObject )
-                {
-                    if( !bHdFtFtnEdn )
-                    {
-                        pMSDffManager->StoreShapeOrder(pF->nSpId, 0,
-                            pOurNewObject, 0 );
-                    }
-                    // Das Kontakt-Objekt MUSS in die Draw-Page gesetzt werden,
-                    // damit in SwWW8ImplReader::LoadDoc1() die Z-Order
-                    // festgelegt werden kann !!!
-                    pDrawPg->InsertObject( pOurNewObject );
-                }
+                    pF->nYaTop = 0;
+                pNode_FLY_AT_CNTNT = &pPaM->GetPoint()->nNode.GetNode();
             }
             else
+                eAnchor = FLY_PAGE;
+        }
+
+        ProcessEscherAlign( pRecord, pF, aFlySet, bReplaceable );
+
+        // Should we, and is it possible to make this into a writer textbox
+        if( (!(nIniFlags1 & WW8FL_NO_FLY_FOR_TXBX)) &&
+            (pRecord && pRecord->bReplaceByFly) )
+        {
+            pRetFrmFmt = ConvertDrawTextToFly(pObject, pOurNewObject, pRecord,
+                eAnchor, pF, aFlySet);
+            if (pRetFrmFmt)
+                bDone = TRUE;
+        }
+        else if ((pObject) && FmFormInventor == pObject->GetObjInventor())
+        {
+            /*
+            #79055#
+            This was a FormControl. This means that the msdffimp ole import
+            has already converted it to the SdrObject that we have in pObject
+            here, *and* has already inserted it as a StarWriter FlyFrm,
+            tragically though it does not have its position set correctly, and
+            the OCXConverter returns a uno XShape so we turn this back into a
+            FlyFrm through the uno api and then set its correct position
+            information.
+            */
+            if (pRetFrmFmt = pMSDffManager->GetLastOCXShapeFrm())
             {
-                // eingelesenes Objekt (kann eine ganze Gruppe sein)
-                // jetzt korrekt positionieren usw.
-                pRecord = ( aData.HasRecords() && (1 == aData.GetRecCount() ) )
-                    ? aData.GetRecord( 0 ) : 0;
+                pRetFrmFmt->SetAttr(aFlySet.Get(RES_VERT_ORIENT));
+                pRetFrmFmt->SetAttr(aFlySet.Get(RES_HORI_ORIENT));
+            }
+            bDone=TRUE;
+        }
 
+        if( !bDone )
+        {
+            if( pF->bBelowText )
+                pObject->SetLayer( nDrawHell );
+            else
+                pObject->SetLayer( nDrawHeaven );
 
-                if( pF->bRcaSimple )
-                {
-                    pF->nbx = nbxRelPageBorder;
-                    pF->nby = nbyRelPageBorder;
-                }
+            pDrawPg->InsertObject( pObject );
+            pRetFrmFmt = rDoc.Insert( *pPaM, *pObject, &aFlySet );
+        }
+    }
 
-                RndStdIds eAnchor = FLY_AT_CNTNT;  //FLY_PAGE
-                if( (nbyRelText != pF->nby) )
-                {
-                    if( bIsHeader || bIsFooter)
-                    {
-                        if( bIsHeader && (nPgTop < pF->nYaTop))
-                            pF->nYaTop -= nPgTop;
-                        else
-                            pF->nYaTop = 0;
-                        pNode_FLY_AT_CNTNT = &pPaM->GetPoint()->nNode.GetNode();
-                    }
-                    else
-                        eAnchor = FLY_PAGE;
-                }
+    /*
+        Adjust inner and outer edge distances, and insert text if necessary
+        into textboxes contained in groups that were not converted to
+        textframes.
+    */
+    if( !bDone && aData.HasRecords() )
+    {
+        USHORT nRecCount = aData.GetRecCount();
+        for(USHORT nTxbx=0; nTxbx < nRecCount; nTxbx++ )
+        {
+            pRecord = aData.GetRecord( nTxbx );
+            if( pRecord && pRecord->pObj )
+            {
+                SdrObject* pTrueObject =
+                    (bReplaceable && (pOrgShapeObject == pRecord->pObj))
+                    ? pOurNewObject : pRecord->pObj;
 
-
-/*
-                SwHoriOrient     eHori;
-                SwVertOrient     eVert;
-                SwRelationOrient eRel;
-                ProcessEscherAlign( pRecord, eAnchor, eHori, eVert, eRel );
-*/
-                ProcessEscherAlign( pRecord, pF, aFlySet, bOrgObjectWasReplace );
-/*
-
-
-                SwFmtAnchor aAnchor( eAnchor );
-                aAnchor.SetAnchor( pPaM->GetPoint() );
-
-                aFlySet.Put( aAnchor );
-
-
-                //  Hilfs-Attribute setzen, damit MA die Werte im Layout
-                //  umrechnen kann ( bugdoc:59640 )
-
-                static SwRelationOrient __READONLY_DATA aRelOrientTab[] = {
-                        REL_PG_PRTAREA,         // == nbxRelPgMargin
-                        REL_PG_FRAME,           // == nbxRelPageBorder
-                        FRAME                   // == nbxRelText
-                };
-
-                aFlySet.Put( SwFmtVertOrient( pF->nYaTop, eVert, eRel ));
-
-                SwFmtHoriOrient aHoriOri( pF->nXaLeft, eHori, eRel );
-                if( HORI_INSIDE <= eHori )
-                    aHoriOri.SetPosToggle( TRUE );
-                aFlySet.Put( aHoriOri );
-*/
-
-                // Wer nicht will, der hat gewollt!
-                if( !(nIniFlags1 & WW8FL_NO_FLY_FOR_TXBX) )
-                {
-                    BOOL bTextThere = FALSE;
-                    long nStartCpFly;
-                    long nEndCpFly;
-                    if( pRecord && pRecord->bReplaceByFly )
-                    {
-                        // Pruefen, ob in dieser Textbox-Kette denn Text
-                        // enthalten ist.  ( Umwandeln einer leeren Kette in
-                        // Rahmen waere Unsinn. )
-                        bTextThere = TxbxChainContainsRealText(
-                                pRecord->aTextId.nTxBxS, nStartCpFly,
-                                nEndCpFly );
-                        if( bTextThere )
-                        {
-                            // Der Text wird nicht in das SdrTextObj
-                            // eingelesen!  Stattdessen wird ein Rahmen
-                            // eingefuegt und der Text von nStartCpFly bis
-                            // nEndCpFy dort hinein gelesen.
-                            //
-                            // Vorteil: im Rahmen sind viel mehr Attribute
-                            // moeglich als in der Edit-Enging, und es koennen
-                            // auch Felder, OLEs oder Grafiken darin sein...
-
-                            Rectangle aInnerDist(   pRecord->nDxTextLeft,
-                                pRecord->nDyTextTop, pRecord->nDxTextRight,
-                                pRecord->nDyTextBottom  );
-                            MatchSdrItemsIntoFlySet( pObject, aFlySet,
-                                pRecord->eLineStyle, aInnerDist,
-                                !pRecord->bLastBoxInChain );
-
-                            pRetFrmFmt = rDoc.MakeFlySection( eAnchor,
-                                pPaM->GetPoint(), &aFlySet );
-
-                            MatchWrapDistancesIntoFlyFmt( pRecord, pRetFrmFmt );
-
-                            // falls alles Ok, Zeiger auf neues Objekt
-                            // ermitteln und Z-Order-Liste entsprechend
-                            // korrigieren (oder Eintrag loeschen)
-                            pOurNewObject = CreateContactObject(
-                                (SwFlyFrmFmt*)pRetFrmFmt );
-
-                            // altes Objekt aus der Z-Order-Liste entfernen
-                            pMSDffManager->RemoveFromShapeOrder( pObject );
-
-                            // und das Objekt loeschen
-                            DELETEZ( pObject );
-                            /*
-                                Achtung: ab jetzt nur noch pOrgShapeObject
-                                abfragen!
-                            */
-
-
-                            if( pOurNewObject )
-                            {
-                                pMSDffManager->StoreShapeOrder( pF->nSpId,
-                                    (((ULONG)pRecord->aTextId.nTxBxS) << 16) +
-                                    pRecord->aTextId.nSequence, pOurNewObject,
-                                    (SwFlyFrmFmt*)pRetFrmFmt, nActSectionNo +
-                                    bIsHeader ? 1 : 0 + bIsFooter ? 2 : 0 );
-
-                                // Das Kontakt-Objekt MUSS in die Draw-Page
-                                // gesetzt werden, damit in
-                                // SwWW8ImplReader::LoadDoc1() die Z-Order
-                                // festgelegt werden kann !!!
-                                pDrawPg->InsertObject( pOurNewObject );
-                            }
-
-                            // Damit die Frames bei Einfuegen in existierendes
-                            // Doc erzeugt werden, wird in fltshell.cxx beim
-                            // Setzen des FltAnchor-Attributes
-                            // pFlyFrm->MakeFrms() gerufen
-                            if( FLY_IN_CNTNT != eAnchor )
-                                pCtrlStck->NewAttr( *pPaM->GetPoint(),
-                                    SwFltAnchor( pRetFrmFmt ) );
-
-                            // Box-0 erhaelt den Text fuer die ganze Kette!
-                            if( !pRecord->aTextId.nSequence )
-                            {
-                                // rette Flags u.ae. und setze sie zurueck
-                                WW8ReaderSave aSave( this );
-                                // setze Pam in den FlyFrame
-                                const SwFmtCntnt& rCntnt =
-                                    pRetFrmFmt->GetCntnt();
-                                ASSERT( rCntnt.GetCntntIdx(),
-                                    "Kein Inhalt vorbereitet." );
-                                pPaM->GetPoint()->nNode =
-                                    rCntnt.GetCntntIdx()->GetIndex() + 1;
-                                pPaM->GetPoint()->nContent.Assign(
-                                    pPaM->GetCntntNode(), 0 );
-
-                                SwNodeIndex aStart(pPaM->GetPoint()->nNode);
-
-                                // lies den Text ein
-                                bTxbxFlySection = TRUE;
-                                ReadText( nStartCpFly, (nEndCpFly-nStartCpFly),
-                                    MAN_MAINTEXT == pPlcxMan->GetManType()
-                                    ? MAN_TXBX : MAN_TXBX_HDFT );
-
-                                /*
-                                ##505##
-                                Special test to see if we will be forced to
-                                disable allowing this box to grow. Only if
-                                contains only one flyframe which is bigger
-                                than the nominal size of this frame
-                                */
-                                if (pRecord->bLastBoxInChain)
-                                    EmbeddedFlyFrameSizeLock(aStart,pRetFrmFmt);
-
-                                aSave.Restore( this );
-                            }
-                            bDone = TRUE;
-                        }
-                    }
-                }
-
-                if ((pObject) && FmFormInventor == pObject->GetObjInventor())
-                {
-                    //#79055# This was a FormControl. This means that the
-                    //msdffimp ole import has already converted it to the
-                    //SdrObject that we have in pObject here, *and* has
-                    //already inserted it as a StarWriter FlyFrm, tragically
-                    //though it does not have its position set correctly, and
-                    //the OCXConverter returns a uno XShape so we turn this
-                    //back into a FlyFrm through the uno api and then set its
-                    //correct position information.
-                    //
-                    //cmc
-                    STAR_REFERENCE( drawing::XShape ) xRef(
-                        ((SwMSDffManager*)pMSDffManager)->GetLastOCXShape() );
-                    STAR_REFERENCE( beans::XPropertySet ) xPropSet(
-                                        xRef, STAR_NMSPC::uno::UNO_QUERY );
-                    STAR_REFERENCE( lang::XUnoTunnel ) xTunnel(
-                                        xPropSet, STAR_NMSPC::uno::UNO_QUERY);
-                    SwXShape *pSwShape = 0;
-                    if(xTunnel.is())
-                    {
-                        pSwShape = (SwXShape*)xTunnel->getSomething(
-                            SwXShape::getUnoTunnelId());
-                    }
-                    pRetFrmFmt = pSwShape ?
-                        (SwFrmFmt*)(pSwShape->GetRegisteredIn()) : 0;
-                    if (pRetFrmFmt)
-                    {
-                        pRetFrmFmt->SetAttr(aFlySet.Get(RES_VERT_ORIENT));
-                        pRetFrmFmt->SetAttr(aFlySet.Get(RES_HORI_ORIENT));
-                    }
-                    bDone=TRUE;
-                }
-
-
-                if( !bDone )
+                if( bReplaceable && pTrueObject )
                 {
                     if( pF->bBelowText )
-                        pObject->SetLayer( nDrawHell );
+                        pTrueObject->SetLayer( nDrawHell );
                     else
-                        pObject->SetLayer( nDrawHeaven );
-
-                    pDrawPg->InsertObject( pObject );
-                    pRetFrmFmt = rDoc.Insert( *pPaM, *pObject, &aFlySet );
+                        pTrueObject->SetLayer( nDrawHeaven );
                 }
-            }
 
+                if( pTrueObject == pRecord->pObj )
+                    MatchWrapDistancesIntoFlyFmt(pRecord, pRetFrmFmt);
 
-            /*
-                Innen- und Aussen-Rand-Abstaende einstellen
-                und ggfs. Text in enthaltene Textbox(en) einlesen
-            */
-            if( !bDone && aData.HasRecords() )
-            {
-                USHORT nRecCount = aData.GetRecCount();
-                for(USHORT nTxbx=0; nTxbx < nRecCount; nTxbx++ )
+                if( pRecord->aTextId.nTxBxS && !bReplaceable)
                 {
-                    pRecord = aData.GetRecord( nTxbx );
-                    if( pRecord && pRecord->pObj )
-                    {
-                        SdrObject* pTrueObject
-                            = (    bOrgObjectWasReplace
-                                && (pOrgShapeObject == pRecord->pObj) )
-                            ? pOurNewObject
-                            : pRecord->pObj;
-
-                        if( bOrgObjectWasReplace && pTrueObject )
-                        {
-                            if( pF->bBelowText )
-                                pTrueObject->SetLayer( nDrawHell );
-                            else
-                                pTrueObject->SetLayer( nDrawHeaven );
-                        }
-
-                        if( pTrueObject == pRecord->pObj )
-                        {
-                            MatchWrapDistancesIntoFlyFmt(pRecord, pRetFrmFmt);
-                            if( bSetAttributes )
-                                SetAttributesAtGrfNode( pRecord, pRetFrmFmt, pF );
-                        }
-
-                        if( pRecord->aTextId.nTxBxS && !bOrgObjectWasReplace )
-                        {
-                            SdrTextObj* pSdrTextObj;
-                            // Pruefen, ob Gruppenobjekt (z.B. zwei Klammern)
-                            // vorliegt
-                            SdrObjGroup* pThisGroup
-                                = PTR_CAST(SdrObjGroup, pRecord->pObj);
-                            //if(pRecord->pObj->ISA(SdrObjGroup))
-                            if( pThisGroup )
-                            {
-                                // Gruppenobjekte haben keinen Text. Fuege ein
-                                // Textobjekt in die Gruppe ein, um den Text
-                                // zu halten.
-                                pSdrTextObj = new SdrRectObj(
-                                    OBJ_TEXT, pThisGroup->GetBoundRect());
-
-                                SfxItemSet aSet(pDrawModel->GetItemPool());
-                                aSet.Put(XFillStyleItem(XFILL_NONE));
-                                aSet.Put(XLineStyleItem(XLINE_NONE));
-                                //SdrFitToSizeType eFTS =
-                                //  SDRTEXTFIT_PROPORTIONAL;
-                                /*
-                                aSet.Put(SdrTextVertAdjustItem(
-                                    SDRTEXTVERTADJUST_TOP ));
-                                aSet.Put(SdrTextHorzAdjustItem(
-                                    SDRTEXTHORZADJUST_LEFT ));
-                                */
-                                aSet.Put(SdrTextFitToSizeTypeItem(
-                                    SDRTEXTFIT_NONE ));
-                                aSet.Put(SdrTextAutoGrowHeightItem( FALSE ));
-                                aSet.Put(SdrTextAutoGrowWidthItem(  FALSE ));
-//-/                                pSdrTextObj->NbcSetAttributes(aSet, FALSE);
-                                pSdrTextObj->SetItemSet(aSet);
-
-                                long nAngle = pRecord->nTextRotationAngle;
-                                if(  nAngle )
-                                {
-                                    double a = nAngle*nPi180;
-                                    pSdrTextObj->NbcRotate(
-                                        pSdrTextObj->GetBoundRect().Center(),
-                                        nAngle, sin(a), cos(a) );
-                                }
-
-                                pSdrTextObj->NbcSetLayer(
-                                        pThisGroup->GetLayer() );
-                                pThisGroup->GetSubList()->NbcInsertObject(
-                                        pSdrTextObj );
-                            }
-                            else
-                            {
-                                pSdrTextObj =
-                                    PTR_CAST(SdrTextObj, pRecord->pObj);
-                                /*
-                                    Die Frage: was tun, wenn hier FALSE
-                                    hereuskommt, z.B. bei 3D-Objekten (nicht
-                                    von SdrTextObj abgeleitet)
-
-                                    Wunsch: neues SdrTextObj hinzufuegen, das
-                                    mit dem alten in einer neu zu schaffenden
-                                    Gruppe geklammert wird.
-
-                                    Implementierung: nicht zur 5.1 (jp und khz
-                                    am 11.02.1999)
-
-                                    if( !pSdrTextObj )
-                                    {
-                                        ...
-                                    }
-                                */
-                            }
-
-                            if( pSdrTextObj )
-                            {
-                                Size aObjSize(
-                                        pSdrTextObj->GetSnapRect().GetWidth(),
-                                        pSdrTextObj->GetSnapRect().GetHeight());
-
-                                // Objekt ist Bestandteil einer Gruppe?
-                                SdrObject* pGroupObject =
-                                    pSdrTextObj->GetUpGroup();
-
-                                UINT32 nOrdNum = pSdrTextObj->GetOrdNum();
-                                BOOL bEraseThisObject;
-                                InsertTxbxText( pSdrTextObj, &aObjSize,
-                                    pRecord->aTextId.nTxBxS,
-                                    pRecord->aTextId.nSequence, nGrafAnchorCp,
-                                    pRetFrmFmt, (pSdrTextObj != pTrueObject)
-                                    || (0 != pGroupObject), bEraseThisObject,
-                                    FALSE,0,0, pRecord);
-
-                                // wurde dieses Objekt ersetzt ??
-                                if( bEraseThisObject )
-                                {
-                                    if(    pGroupObject
-                                        || (pSdrTextObj != pTrueObject) )
-                                    {
-                                        // Objekt wurde bereits (in der Gruppe
-                                        // und)
-                                        // der Drawing-Page durch ein neues
-                                        // SdrGrafObj ersetzt.
-
-                                        SdrObject* pNewObj = pGroupObject ?
-                                            pGroupObject->GetSubList()->GetObj(
-                                                nOrdNum) : pTrueObject;
-                                        // Objekt in der Z-Order-Liste ersetzen
-                                        pMSDffManager->ExchangeInShapeOrder(
-                                            pSdrTextObj, 0,0, pNewObj );
-                                        // Objekt jetzt noch loeschen
-                                        delete pRecord->pObj;
-                                        // und das neue Objekt merken.
-                                        pRecord->pObj = pNewObj;
-                                    }
-                                    else
-                                    {
-                                        // Objekt aus der Z-Order-Liste loeschen
-                                        pMSDffManager->RemoveFromShapeOrder(
-                                            pSdrTextObj );
-                                        // Objekt aus der Drawing-Page
-                                        // rausnehmen
-                                        if( pSdrTextObj->GetPage() )
-                                            pDrawPg->RemoveObject(
-                                            pSdrTextObj->GetOrdNum() );
-                                        // und FrameFormat entfernen, da durch
-                                        // Grafik ersetzt (dies loescht auch
-                                        // das Objekt)
-                                        rDoc.DelFrmFmt( pRetFrmFmt );
-                                        // auch den Objektmerker loeschen
-                                        pRecord->pObj = 0;
-                                    }
-                                }
-                                else
-                                {
-                                    // ww8-default Randabstand einsetzen
-                                    SfxItemSet aItemSet(
-                                        pDrawModel->GetItemPool(),
-                                        SDRATTR_TEXT_LEFTDIST,
-                                        SDRATTR_TEXT_LOWERDIST );
-                                    aItemSet.Put( SdrTextLeftDistItem(
-                                        pRecord->nDxTextLeft ) );
-                                    aItemSet.Put( SdrTextRightDistItem(
-                                        pRecord->nDxTextRight  ) );
-                                    aItemSet.Put( SdrTextUpperDistItem(
-                                        pRecord->nDyTextTop    ) );
-                                    aItemSet.Put( SdrTextLowerDistItem(
-                                        pRecord->nDyTextBottom ) );
-//                                  pSdrTextObj->SetAttributes(aItemSet,FALSE);
-                                    pSdrTextObj->SetItemSetAndBroadcast(
-                                        aItemSet);
-                                }
-                            }
-                        }
-                    }
+                    MungeTextIntoDrawBox(pTrueObject,pRecord,nGrafAnchorCp,
+                        pRetFrmFmt);
                 }
             }
-        }
-        else
-        {
-            ASSERT( !this, "+Wo ist das Shape ?" );
-            return 0;
         }
     }
     return pRetFrmFmt;
 }
-#pragma optimize("",on)
 
+void SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
+    SvxMSDffImportRec *pRecord, long nGrafAnchorCp, SwFrmFmt* pRetFrmFmt)
+{
+    SdrTextObj* pSdrTextObj;
+
+    // Pruefen, ob Gruppenobjekt (z.B. zwei Klammern) vorliegt
+    SdrObjGroup* pThisGroup = PTR_CAST(SdrObjGroup, pRecord->pObj);
+    if( pThisGroup )
+    {
+        // Gruppenobjekte haben keinen Text. Fuege ein Textobjekt in die
+        // Gruppe ein, um den Text zu halten.
+        pSdrTextObj = new SdrRectObj( OBJ_TEXT, pThisGroup->GetBoundRect());
+
+        SfxItemSet aSet(pDrawModel->GetItemPool());
+        aSet.Put(XFillStyleItem(XFILL_NONE));
+        aSet.Put(XLineStyleItem(XLINE_NONE));
+        aSet.Put(SdrTextFitToSizeTypeItem( SDRTEXTFIT_NONE ));
+        aSet.Put(SdrTextAutoGrowHeightItem( FALSE ));
+        aSet.Put(SdrTextAutoGrowWidthItem( FALSE ));
+        pSdrTextObj->SetItemSet(aSet);
+
+        long nAngle = pRecord->nTextRotationAngle;
+        if ( nAngle )
+        {
+            double a = nAngle*nPi180;
+            pSdrTextObj->NbcRotate(pSdrTextObj->GetBoundRect().Center(), nAngle,
+                sin(a), cos(a) );
+        }
+
+        pSdrTextObj->NbcSetLayer( pThisGroup->GetLayer() );
+        pThisGroup->GetSubList()->NbcInsertObject(pSdrTextObj);
+    }
+    else
+    {
+        pSdrTextObj = PTR_CAST(SdrTextObj, pRecord->pObj);
+        /*
+            Die Frage: was tun, wenn hier FALSE hereuskommt, z.B. bei
+            3D-Objekten (nicht von SdrTextObj abgeleitet)
+
+            Wunsch: neues SdrTextObj hinzufuegen, das mit dem alten in einer
+            neu zu schaffenden Gruppe geklammert wird.
+
+            Implementierung: nicht zur 5.1 (jp und khz am 11.02.1999)
+
+            if( !pSdrTextObj )
+            {
+                ...
+            }
+        */
+    }
+
+    if( pSdrTextObj )
+    {
+        Size aObjSize(pSdrTextObj->GetSnapRect().GetWidth(),
+            pSdrTextObj->GetSnapRect().GetHeight());
+
+        // Objekt ist Bestandteil einer Gruppe?
+        SdrObject* pGroupObject = pSdrTextObj->GetUpGroup();
+
+        UINT32 nOrdNum = pSdrTextObj->GetOrdNum();
+        BOOL bEraseThisObject;
+        InsertTxbxText( pSdrTextObj, &aObjSize, pRecord->aTextId.nTxBxS,
+            pRecord->aTextId.nSequence, nGrafAnchorCp, pRetFrmFmt,
+            (pSdrTextObj != pTrueObject) || (0 != pGroupObject),
+            bEraseThisObject, FALSE, 0, 0, pRecord);
+
+        // wurde dieses Objekt ersetzt ??
+        if( bEraseThisObject )
+        {
+            if( pGroupObject || (pSdrTextObj != pTrueObject) )
+            {
+                // Objekt wurde bereits (in der Gruppe und) der Drawing-Page
+                // durch ein neues SdrGrafObj ersetzt.
+
+                SdrObject* pNewObj = pGroupObject ?
+                    pGroupObject->GetSubList()->GetObj(nOrdNum) : pTrueObject;
+                // Objekt in der Z-Order-Liste ersetzen
+                pMSDffManager->ExchangeInShapeOrder(pSdrTextObj, 0,0, pNewObj);
+                // Objekt jetzt noch loeschen
+                delete pRecord->pObj;
+                // und das neue Objekt merken.
+                pRecord->pObj = pNewObj;
+            }
+            else
+            {
+                // Objekt aus der Z-Order-Liste loeschen
+                pMSDffManager->RemoveFromShapeOrder( pSdrTextObj );
+                // Objekt aus der Drawing-Page rausnehmen
+                if( pSdrTextObj->GetPage() )
+                    pDrawPg->RemoveObject( pSdrTextObj->GetOrdNum() );
+                // und FrameFormat entfernen, da durch Grafik ersetzt (dies
+                // loescht auch das Objekt)
+                rDoc.DelFrmFmt( pRetFrmFmt );
+                // auch den Objektmerker loeschen
+                pRecord->pObj = 0;
+            }
+        }
+        else
+        {
+            // ww8-default Randabstand einsetzen
+            SfxItemSet aItemSet(pDrawModel->GetItemPool(),
+                SDRATTR_TEXT_LEFTDIST, SDRATTR_TEXT_LOWERDIST);
+            aItemSet.Put( SdrTextLeftDistItem( pRecord->nDxTextLeft ) );
+            aItemSet.Put( SdrTextRightDistItem( pRecord->nDxTextRight  ) );
+            aItemSet.Put( SdrTextUpperDistItem( pRecord->nDyTextTop    ) );
+            aItemSet.Put( SdrTextLowerDistItem( pRecord->nDyTextBottom ) );
+            pSdrTextObj->SetItemSetAndBroadcast(aItemSet);
+        }
+    }
+}
+
+SwFrmFmt * SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
+    SdrObject* &rpOurNewObject, SvxMSDffImportRec* pRecord, RndStdIds eAnchor,
+    WW8_FSPA *pF, SfxItemSet &rFlySet)
+{
+    SwFrmFmt* pRetFrmFmt = 0;
+    long nStartCp;
+    long nEndCp;
+
+    // Pruefen, ob in dieser Textbox-Kette denn Text enthalten ist.  (
+    // Umwandeln einer leeren Kette in Rahmen waere Unsinn. )
+    if ( TxbxChainContainsRealText(pRecord->aTextId.nTxBxS,nStartCp,nEndCp) )
+    {
+        // Der Text wird nicht in das SdrTextObj eingelesen!  Stattdessen wird
+        // ein Rahmen eingefuegt und der Text von nStartCp bis nEndCp dort
+        // hinein gelesen.
+        //
+        // Vorteil: im Rahmen sind viel mehr Attribute moeglich als in der
+        // Edit-Enging, und es koennen auch Felder, OLEs oder Grafiken darin
+        // sein...
+
+        Rectangle aInnerDist(pRecord->nDxTextLeft, pRecord->nDyTextTop,
+            pRecord->nDxTextRight, pRecord->nDyTextBottom);
+        MatchSdrItemsIntoFlySet( rpObject, rFlySet, pRecord->eLineStyle,
+            pRecord->eShapeType, aInnerDist, !pRecord->bLastBoxInChain);
+
+        pRetFrmFmt = rDoc.MakeFlySection(eAnchor, pPaM->GetPoint(), &rFlySet );
+
+        MatchWrapDistancesIntoFlyFmt( pRecord, pRetFrmFmt );
+
+        // falls alles Ok, Zeiger auf neues Objekt ermitteln und Z-Order-Liste
+        // entsprechend korrigieren (oder Eintrag loeschen)
+        rpOurNewObject = CreateContactObject((SwFlyFrmFmt*)pRetFrmFmt);
+
+        // altes Objekt aus der Z-Order-Liste entfernen
+        pMSDffManager->RemoveFromShapeOrder( rpObject );
+
+        // und das Objekt loeschen
+        DELETEZ( rpObject );
+        /*
+            Achtung: ab jetzt nur noch pOrgShapeObject
+            abfragen!
+        */
+
+        if( rpOurNewObject )
+        {
+            pMSDffManager->StoreShapeOrder( pF->nSpId,
+                (((ULONG)pRecord->aTextId.nTxBxS) << 16) +
+                pRecord->aTextId.nSequence, rpOurNewObject,
+                (SwFlyFrmFmt*)pRetFrmFmt, nActSectionNo +
+                bIsHeader ? 1 : 0 + bIsFooter ? 2 : 0 );
+
+            // Das Kontakt-Objekt MUSS in die Draw-Page gesetzt werden, damit
+            // in SwWW8ImplReader::LoadDoc1() die Z-Order festgelegt werden
+            // kann !!!
+            pDrawPg->InsertObject( rpOurNewObject );
+        }
+
+        // Damit die Frames bei Einfuegen in existierendes Doc erzeugt werden,
+        // wird in fltshell.cxx beim Setzen des FltAnchor-Attributes
+        // pFlyFrm->MakeFrms() gerufen
+        if( FLY_IN_CNTNT != eAnchor )
+            pCtrlStck->NewAttr( *pPaM->GetPoint(), SwFltAnchor( pRetFrmFmt ) );
+
+        // Box-0 erhaelt den Text fuer die ganze Kette!
+        if( !pRecord->aTextId.nSequence )
+        {
+            // rette Flags u.ae. und setze sie zurueck
+            WW8ReaderSave aSave( this );
+            // setze Pam in den FlyFrame
+            const SwFmtCntnt& rCntnt = pRetFrmFmt->GetCntnt();
+            ASSERT(rCntnt.GetCntntIdx(),"Kein Inhalt vorbereitet.");
+            pPaM->GetPoint()->nNode = rCntnt.GetCntntIdx()->GetIndex() + 1;
+            pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
+
+            SwNodeIndex aStart(pPaM->GetPoint()->nNode);
+
+            // lies den Text ein
+            bTxbxFlySection = TRUE;
+            ReadText( nStartCp, (nEndCp-nStartCp),
+                MAN_MAINTEXT == pPlcxMan->GetManType() ?
+                MAN_TXBX : MAN_TXBX_HDFT );
+
+            /*
+            ##505##
+            Special test to see if we will be forced to disable allowing this
+            box to grow. Only if contains only one flyframe which is bigger
+            than the nominal size of this frame
+            */
+            if (pRecord->bLastBoxInChain)
+                EmbeddedFlyFrameSizeLock(aStart,pRetFrmFmt);
+
+            aSave.Restore( this );
+        }
+    }
+    return pRetFrmFmt;
+}
+
+SwFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
+    SdrObject* &rpOurNewObject, SvxMSDffImportRec* pRecord, WW8_FSPA *pF,
+    SfxItemSet &rFlySet )
+{
+    SwFrmFmt* pRetFrmFmt = 0;
+    long nWidthTw  = pF->nXaRight - pF->nXaLeft;
+    if (0 > nWidthTw)
+        nWidthTw = 0;
+    long nHeightTw = pF->nYaBottom - pF->nYaTop;
+    if (0 > nHeightTw)
+        nHeightTw = 0;
+
+    /*
+     Absolute positions in winword for graphics are broken when the graphic is
+     in a table, all absolute positions now become relative to the top left
+     corner of that cell.  We really cannot import that feature correctly as
+     we have not the same functionality (yet). This normalizes the absolute
+     position by the left of the table, which at least puts it close, theres
+     nothing we can do about the vertical either.
+     */
+    if( bTable )
+        pF->nXaLeft -= GetTableLeft();
+
+    ProcessEscherAlign( pRecord, pF, rFlySet, TRUE );
+
+    rFlySet.Put(SwFmtFrmSize( ATT_VAR_SIZE, nWidthTw, nHeightTw));
+
+    if( pRecord )
+    {
+        //Note that the escher inner distance only seems to be honoured in
+        //word for textboxes, not for graphics and ole objects.
+        Rectangle aInnerDist(0,0,0,0);
+
+        MatchSdrItemsIntoFlySet( rpObject, rFlySet, pRecord->eLineStyle,
+            pRecord->eShapeType, aInnerDist, !pRecord->bLastBoxInChain );
+    }
+
+    XubString aObjectName( rpObject->GetName() );
+    if( OBJ_OLE2 == SdrObjKind(rpObject->GetObjIdentifier()) )
+    {
+        SvInPlaceObjectRef xIPRef(((SdrOle2Obj*)rpObject)->GetObjRef());
+
+        // kein GrafSet uebergeben, da nur fuer Cropping sinnvoll, was die UI
+        // derzeit (27.1.99) noch nicht kann khz.
+        pRetFrmFmt = rDoc.Insert( *pPaM, &xIPRef, &rFlySet );
+        //JP 10.4.2001: Bug 85614 - don't remove in DTOR the object from
+        //our persist
+        SvInPlaceObjectRef xEmpty;
+        ((SdrOle2Obj*)rpObject)->SetObjRef( xEmpty );
+    }
+    else
+    {
+        const Graphic& rGraph = ((SdrGrafObj*)rpObject)->GetGraphic();
+        BOOL bDone = FALSE;
+
+        if( ((SdrGrafObj*)rpObject)->IsLinkedGraphic() )
+        {
+            String aGrfName( URIHelper::SmartRelToAbs(
+                    ((SdrGrafObj*)rpObject)->GetFileName()) );
+
+            if ( GRAPHIC_NONE == rGraph.GetType() ||
+                FStatHelper::IsDocument( aGrfName ) )
+            {
+                pRetFrmFmt = rDoc.Insert( *pPaM, aGrfName, aEmptyStr,
+                    0 /*Graphic*/, &rFlySet, 0 /*SwFrmFmt*/);
+                bDone = TRUE;
+            }
+        }
+        if( !bDone )
+        {
+            pRetFrmFmt = rDoc.Insert( *pPaM, aEmptyStr, aEmptyStr, &rGraph,
+                &rFlySet, 0 /* SwFrmFmt*/ );
+        }
+    }
+
+    if( pRetFrmFmt )
+    {
+        if( pRecord )
+        {
+            MatchWrapDistancesIntoFlyFmt( pRecord, pRetFrmFmt );
+            if( OBJ_OLE2 != SdrObjKind(rpObject->GetObjIdentifier()) )
+                SetAttributesAtGrfNode( pRecord, pRetFrmFmt, pF );
+        }
+        // mehrfaches Auftreten gleicher Grafik-Namen vermeiden
+        if( aObjectName.Len() )
+        {
+            String aName;
+            if( MakeUniqueGraphName( aName, aObjectName ))
+                pRetFrmFmt->SetName( aName );
+        }
+    }
+    //falls alles Ok, Zeiger auf neues Objekt ermitteln und Z-Order-Liste
+    //entsprechend korrigieren (oder Eintrag loeschen)
+    rpOurNewObject = CreateContactObject( (SwFlyFrmFmt*)pRetFrmFmt );
+
+    // altes Objekt aus der Z-Order-Liste entfernen
+    pMSDffManager->RemoveFromShapeOrder( rpObject );
+    // aus der Drawing-Page rausnehmen
+    if( rpObject->GetPage() )
+        pDrawPg->RemoveObject( rpObject->GetOrdNum() );
+
+    // und das Objekt loeschen
+    DELETEZ( rpObject );
+    /*
+        Achtung: ab jetzt nur noch pOrgShapeObject abfragen!
+    */
+
+    // Kontakt-Objekt in die Z-Order-Liste und die Page aufnehmen
+    if( rpOurNewObject )
+    {
+        if( !bHdFtFtnEdn )
+            pMSDffManager->StoreShapeOrder(pF->nSpId, 0, rpOurNewObject, 0 );
+
+        // Das Kontakt-Objekt MUSS in die Draw-Page gesetzt werden, damit in
+        // SwWW8ImplReader::LoadDoc1() die Z-Order festgelegt werden kann !!!
+        pDrawPg->InsertObject( rpOurNewObject );
+    }
+    return pRetFrmFmt;
+}
+#pragma optimize("",on)
 
 void SwWW8ImplReader::GrafikCtor()  // Fuer SVDraw und VCControls und Escher
 {
@@ -2900,7 +2840,6 @@ void SwWW8ImplReader::GrafikDtor()
     DELETEZ( pDrawEditEngine ); // evtl. von Grafik angelegt
     DELETEZ( pDrawHeight );     // dito
 }
-
 
 void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
     SwFrmFmt *pFrmFmt)
@@ -2949,7 +2888,7 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.33 2001-08-31 13:54:13 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.34 2001-09-10 15:51:44 cmc Exp $
 
       Source Code Control System - Update
 

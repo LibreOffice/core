@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-05 10:16:19 $
+ *  last change: $Author: cmc $ $Date: 2001-09-10 15:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,6 +601,7 @@ class WW8_WrPlcDrawObj      // PC for DrawObjects and Text-/OLE-/GRF-Boxes
     SvULongs aShapeIds;             // VARARR of ShapeIds for the SwFrmFmts
     SvPtrarr aCntnt;                // PTRARR of SwFrmFmt
     SvPtrarr aParentPos;            // PTRARR of Points
+    SvUShorts aThick;               // VARARR of Border Thicknesses
     BYTE nTTyp;
 
 public:
@@ -611,8 +612,10 @@ public:
     BOOL Append( SwWW8Writer&, WW8_CP nCp, const SwFrmFmt& rFmt,
                 const Point& rNdTopLeft );
     const SvPtrarr& GetCntntArr() const { return aCntnt; }
-    void SetShapeId( const SwFrmFmt& rFmt, UINT32 nId );
+    void SetShapeDetails( const SwFrmFmt& rFmt, UINT32 nId, USHORT nThick );
     UINT32 GetShapeId( USHORT n ) const { return aShapeIds[ n ]; }
+    UINT32 GetShapeBorder( USHORT n ) const { return aThick[ n ]; }
+
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-09 15:05:40 $
+ *  last change: $Author: cmc $ $Date: 2001-09-10 15:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,8 @@ SwFrmFmt* SwWW8ImplReader::ImportOle( const Graphic* pGrf,
     if( !(nIniFlags & WW8FL_NO_OLE ))
     {
         Graphic aGraph;
-        SdrObject* pRet = ImportOleBase( aGraph, TRUE, pGrf, pFlySet );
+        SdrObject* pRet = ImportOleBase( aGraph, !(bIsHeader || bIsFooter),
+            pGrf, pFlySet );
 
         // create flyset
         SfxItemSet* pTempSet = 0;
@@ -701,11 +702,14 @@ void SwWW8ImplReader::Read_CPropRMark( USHORT nId, const BYTE* pData,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.13 2001-07-09 15:05:40 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.14 2001-09-10 15:51:44 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.13  2001/07/09 15:05:40  cmc
+      #89004# Use newer ole2 import fallback
+
       Revision 1.12  2001/06/06 12:46:32  cmc
       #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
 
