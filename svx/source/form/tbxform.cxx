@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:45 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,8 @@ void SvxFmTbxCtlConfig::StateChanged(USHORT nSID, SfxItemState eState, const Sfx
             case SID_FM_PATTERNFIELD:
             case SID_FM_DESIGN_MODE:
             case SID_FM_FORMATTEDFIELD:
+            case SID_FM_SCROLLBAR:
+            case SID_FM_SPINBUTTON:
             {   // set a new image, matching to this slot
                 SfxViewFrame* pFrame = GetBindings().GetDispatcher()->GetFrame();
                 GetToolBox().SetItemImage( SID_FM_CONFIG, pFrame->GetImageManager()->GetImage( nSlot, GetToolBox().GetDisplayBackground().GetColor().IsDark() ) );
