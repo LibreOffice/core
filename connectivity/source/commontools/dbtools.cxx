@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:03:38 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,14 +115,8 @@
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSER_HPP_
-#include <com/sun/star/sdb/XSQLQueryComposer.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYANALYZER_HPP_
-#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -180,9 +174,6 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_XPARAMETERSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
@@ -740,18 +731,15 @@ Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnect
 
                         if ( xComposerFac.is() )
                         {
-                            Reference< XSingleSelectQueryAnalyzer > xAnalyzer(xComposerFac->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.SingleSelectQueryComposer"))),UNO_QUERY);
-                            if ( xAnalyzer.is() )
+                            Reference< XSingleSelectQueryComposer > xComposer(xComposerFac->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.SingleSelectQueryComposer"))),UNO_QUERY);
+                            if ( xComposer.is() )
                             {
-                                xAnalyzer->setQuery( sStatementToExecute );
+                                xComposer->setQuery( sStatementToExecute );
 
                                 // Now set the filter to a dummy restriction which will result in an empty
                                 // result set.
-                                Reference<XSingleSelectQueryComposer> xComposer(xAnalyzer,UNO_QUERY);
-
-
                                 xComposer->setFilter( ::rtl::OUString::createFromAscii( "0=1" ) );
-                                sStatementToExecute = xAnalyzer->getQuery( );
+                                sStatementToExecute = xComposer->getQuery( );
                             }
                         }
                     }
@@ -1221,7 +1209,7 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
 }
 //------------------------------------------------------------------------------
 ::rtl::OUString getComposedRowSetStatement( const Reference< XPropertySet >& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory,
-                                   sal_Bool _bUseRowSetFilter, sal_Bool _bUseRowSetOrder, Reference< XSQLQueryComposer >* _pxComposer )
+                                   sal_Bool _bUseRowSetFilter, sal_Bool _bUseRowSetOrder, Reference< XSingleSelectQueryComposer >* _pxComposer )
     SAL_THROW( ( SQLException ) )
 {
     ::rtl::OUString sStatement;
@@ -1306,13 +1294,15 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
 
                         // the command used by the query
                         xQuery->getPropertyValue( sPropCommand ) >>= sStatement;
+                        if ( !sStatement.getLength() )
+                            break;
 
                         // use a composer to build a statement from the query filter/order props
-                        Reference< XSQLQueryComposerFactory> xFactory( xConn, UNO_QUERY );
-                        Reference< XSQLQueryComposer> xComposer;
-                        if (xFactory.is())
-                            xComposer = xFactory->createQueryComposer();
-                        if (!xComposer.is() || !sStatement.getLength())
+                        Reference< XMultiServiceFactory > xFactory( xConn, UNO_QUERY );
+                        Reference< XSingleSelectQueryComposer > xComposer;
+                        if ( xFactory.is() )
+                            xComposer.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ), UNO_QUERY );
+                        if ( !xComposer.is() )
                             break;
 
                         // the "basic" statement
@@ -1331,7 +1321,7 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
                             xComposer->setFilter( getString( xQuery->getPropertyValue( sPropFilter ) ) );
 
                         // the composed statement
-                        sStatement = xComposer->getComposedQuery();
+                        sStatement = xComposer->getQuery();
                     }
                     break;
 
@@ -1344,13 +1334,13 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
             if ( sStatement.getLength() && ( _bUseRowSetFilter || _bUseRowSetOrder ) )
             {
                 // create an composer
-                Reference< XSQLQueryComposerFactory > xFactory( xConn, UNO_QUERY );
-                Reference< XSQLQueryComposer > xComposer;
+                Reference< XMultiServiceFactory > xFactory( xConn, UNO_QUERY );
+                Reference< XSingleSelectQueryComposer > xComposer;
                 if ( xFactory.is() )
-                    xComposer = xFactory->createQueryComposer();
+                    xComposer.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ), UNO_QUERY );
                 if ( xComposer.is() )
                 {
-                    xComposer->setQuery( sStatement );
+                    xComposer->setElementaryQuery( sStatement );
 
                     // append sort
                     if ( _bUseRowSetOrder )
@@ -1365,7 +1355,7 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
                             xComposer->setFilter( getString( _rxRowSet->getPropertyValue( sPropFilter ) ) );
                     }
 
-                    sStatement = xComposer->getComposedQuery();
+                    sStatement = xComposer->getQuery();
                     if ( _pxComposer )
                         *_pxComposer = xComposer;
                 }
@@ -1393,11 +1383,11 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
 }
 
 //------------------------------------------------------------------------------
-Reference< XSQLQueryComposer> getCurrentSettingsComposer(
+Reference< XSingleSelectQueryComposer > getCurrentSettingsComposer(
                 const Reference< XPropertySet>& _rxRowSetProps,
                 const Reference< XMultiServiceFactory>& _rxFactory)
 {
-    Reference< XSQLQueryComposer > xReturn;
+    Reference< XSingleSelectQueryComposer > xReturn;
     try
     {
         getComposedRowSetStatement( _rxRowSetProps, _rxFactory, sal_True, sal_True, &xReturn );
@@ -1816,8 +1806,8 @@ void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyVal
 //..................................................................
 
 
-    // -----------------------------------------------------------------------------
-void askForParameters(const Reference<XSQLQueryComposer> & _xComposer,
+// -----------------------------------------------------------------------------
+void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
                       const Reference<XParameters>& _xParameters,
                       const Reference< XConnection>& _xConnection,
                       const Reference< XInteractionHandler >& _rxHandler)
