@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:12:36 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,9 @@
 #endif
 #ifndef _SVX_FLSTITEM_HXX //autogen
 #include <svx/flstitem.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include "svx/unolingu.hxx"
 #endif
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
@@ -819,7 +822,8 @@ USHORT SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
     }
 
     SearchOptions aSearchOpt( rSearchItem.GetSearchOptions() );
-    aSearchOpt.Locale = CreateLocale( static_cast< LanguageType >( GetAppLanguage() ) );
+    aSearchOpt.Locale = SvxCreateLocale(
+        static_cast< LanguageType >( GetAppLanguage() ) );
 
     USHORT nFound;
     BOOL bAll = FALSE;
