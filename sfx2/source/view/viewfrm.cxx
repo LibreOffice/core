@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-09 17:55:09 $
+ *  last change: $Author: mba $ $Date: 2001-04-12 13:23:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3177,7 +3177,9 @@ void SfxViewFrame::Resize()
             SfxViewFrame* pActFrame = this;
             while ( pActFrame->GetActiveChildFrame_Impl() )
                 pActFrame = pActFrame->GetActiveChildFrame_Impl();
-            SvInPlaceClient *pCli = pActFrame->GetViewShell()->GetIPClient();
+
+            // bugfix #86009#: release objectshell in internal frame causes resize, ViewShell already gone!
+            SvInPlaceClient *pCli = pActFrame->GetViewShell() ? pActFrame->GetViewShell()->GetIPClient() : NULL;
             if ( pCli && pCli->GetProtocol().IsUIActive() )
             {
                 if ( !GetParentViewFrame() )
