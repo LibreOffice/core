@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:21:06 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 // ------------------------------------------------------------------------
 //Sonderzeichen einfuegen fuer Edits
 
-String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
+extern "C" String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
 {
     String sRet;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -86,34 +86,3 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
     }
     return sRet;
 }
-
-// ------------------------------------------------------------------------
-
-class Initialize
-{
-    public:
-        Initialize();
-        ~Initialize();
-};
-
-// ------------------------------------------------------------------------
-
-Initialize::Initialize()
-{
-#if 0 // commented out since it does not work in nonoffice scenario
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
-    // Set special characters callback on vcl edit control
-    Edit::SetGetSpecialCharsFunction(&GetSpecialCharsForEdit);
-#endif
-}
-
-// ------------------------------------------------------------------------
-
-Initialize::~Initialize()
-{
-}
-
-// ------------------------------------------------------------------------
-
-Initialize aInit;
