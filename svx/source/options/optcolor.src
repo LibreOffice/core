@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:56:40 $
+ *  last change: $Author: kz $ $Date: 2002-09-13 08:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -683,7 +683,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ swedish ] = "Raster";
                 Text[ polish ] = "Grid";
                 Text[ portuguese_brazilian ] = "Grid";
-                Text[ japanese ] = "Grid";
+                Text[ japanese ] = "罫線";
                 Text[ korean ] = "그리드";
                 Text[ chinese_simplified ] = "格子线";
                 Text[ chinese_traditional ] = "格子線";
@@ -713,7 +713,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Field shadings";
                 Text[ portuguese_brazilian ] = "Field shadings";
                 Text[ japanese ] = "フィールドのシェーディング";
-                Text[ korean ] = "필드 음영";
+                Text[ korean ] = "필드 음영 효과";
                 Text[ chinese_simplified ] = "字段背景颜色";
                 Text[ chinese_traditional ] = "欄位背景顔色";
                 Text[ turkish ] = "Field shadings";
@@ -1551,7 +1551,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Reserved expression";
                 Text[ portuguese_brazilian ] = "Reserved expression";
                 Text[ japanese ] = "予約語";
-                Text[ korean ] = "공손한 표현";
+                Text[ korean ] = "예비 구문";
                 Text[ chinese_simplified ] = "保留的表达式";
                 Text[ chinese_traditional ] = "保留的表達式";
                 Text[ turkish ] = "Reserved expression";
