@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: pb $ $Date: 2002-12-02 07:30:29 $
+ *  last change: $Author: fs $ $Date: 2002-12-03 06:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2934,6 +2934,7 @@
 			<group oor:name="Registration">
 				<info>
 					<author>FS</author>
+					<desc xml:lang="en-US">Contains various settings regarding the product registrastion feature.</desc>
 				</info>
 				<prop oor:name="URL" oor:type="xs:string">
 					<info>

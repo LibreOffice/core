@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcs,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-11-22 09:38:51 $
+ *  last change: $Author: fs $ $Date: 2002-12-03 06:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,11 @@
 					<desc xml:lang="en-US">Localized name used when presenting the class to the user.</desc>
 				</info>
 			</prop>
-			<prop oor:name="Filters" oor:type="oor:string-list"/>
+			<prop oor:name="Filters" oor:type="oor:string-list">
+				<info>
+					<desc xml:lang="en-US">List of filters which belong to this filter class. All filters referred here (for a given class) will be collected at runtime and presented as one single entry.</desc>
+				</info>
+			</prop>
 		</group>
 		<group oor:name="ColorScheme">
 			<!-- UIHints: Tools / Options / Star|OpenOffice / Appearance -->
@@ -595,6 +599,9 @@
 		<group oor:name="FilterClassification">
 			<info>
 				<author>FS</author>
+				<desc xml:lang="en-US">Collection of settings relevant for filter classification.
+These settings are used in the file open / file save dialogs, where the user is presented with a list of file format filters to choose from.
+Filters are classified into so-called global and local classes, which control how filters are grouped together in the user interface.</desc>
 			</info>
 			<group oor:name="GlobalFilters">
 				<info>
@@ -613,7 +620,16 @@
 				</set>
 			</group>
 			<group oor:name="LocalFilters">
-				<set oor:name="Classes" oor:node-type="FilterClass"/>
+				<info>
+					<desc xml:lang="en-US">Like global classes, local classes combine several filters into one entry.
+The only difference to global filters is that all these are presented in an own group, while entries resulting from local classes are presented "in-place", at the position where the first of it's filters would normally appear.
+Additionally, filters in global classes can repeat elsewhere, while filters in local classes do not appear anywhere else than in the entry which is assembled from their class.</desc>
+				</info>
+				<set oor:name="Classes" oor:node-type="FilterClass">
+					<info>
+						<desc xml:lang="en-US">Lists local classes.</desc>
+					</info>
+				</set>
 			</group>
 		</group>
 		<group oor:name="ColorScheme">
