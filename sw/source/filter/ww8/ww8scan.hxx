@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-25 14:12:07 $
+ *  last change: $Author: cmc $ $Date: 2001-11-30 17:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,6 +393,7 @@ class WW8PLCFx_PCD : public WW8PLCFx            // Iterator fuer Piece Table
 {
     WW8PLCFpcd_Iter* pPcdI;
     BOOL bVer67;
+    WW8_CP nClipStart;
 
 public:
     WW8PLCFx_PCD( BYTE nVersion, WW8PLCFpcd* pPLCFpcd, WW8_CP nStartCp, BOOL bVer67P );
@@ -408,6 +409,8 @@ public:
     WW8_FC AktPieceStartCp2Fc( WW8_CP nCp );
     eCutT AktPieceFc2Cp(long& rStartPos, long& rEndPos, const WW8ScannerBase *pSBase);
     WW8PLCFpcd_Iter* GetPLCFIter() { return pPcdI; }
+    void SetClipStart(WW8_CP nIn) { nClipStart = nIn; }
+    WW8_CP GetClipStart() { return nClipStart; }
 
     static INT32 TransformPieceAddress(long nfc, BOOL& bIsUnicodeAddress)
     {

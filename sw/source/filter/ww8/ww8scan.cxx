@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-06 14:43:05 $
+ *  last change: $Author: cmc $ $Date: 2001-11-30 17:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ void WW8PLCFx_PCDAttrs::GetSprms( WW8PLCFxDesc* p )
 
 WW8PLCFx_PCD::WW8PLCFx_PCD( BYTE nVersion, WW8PLCFpcd* pPLCFpcd,
                             WW8_CP nStartCp, BOOL bVer67P )
-    : WW8PLCFx( nVersion, FALSE )
+    : WW8PLCFx( nVersion, FALSE ), nClipStart(-1)
 {
     pPcdI = new WW8PLCFpcd_Iter( *pPLCFpcd, nStartCp ); // eigenen Iterator konstruieren
     bVer67= bVer67P;
@@ -3712,15 +3712,19 @@ void WW8PLCFMan::AdvSprm( short nIdx, BOOL bStart )
             */
             if( p->pMemPos )
             {
-                // Laenge des letzten Sprm
-                short nSprmL = WW8GetSprmSizeBrutto( pWwFib->nVersion, p->pMemPos, &nLastId );
+                // Length of last sprm
+                short nSprmL = WW8GetSprmSizeBrutto( pWwFib->nVersion,
+                    p->pMemPos, &nLastId );
 
                 // Gesamtlaenge Sprms um SprmLaenge verringern
                 p->nSprmsLen -= nSprmL;
 
                 // Pos des evtl. naechsten Sprm
                 if( p->nSprmsLen <= 0 )
-                    p->pMemPos = 0;     // sicherheitshalber auf Null setzen, da Enden folgen!
+                {
+                    // sicherheitshalber auf Null setzen, da Enden folgen!
+                    p->pMemPos = 0;
+                }
                 else
                     p->pMemPos += nSprmL;
             }
@@ -3741,10 +3745,13 @@ void WW8PLCFMan::AdvSprm( short nIdx, BOOL bStart )
                 p->pMemPos = 0;
                 p->nStartPos = p->nOrigEndPos+p->nCpOfs;
 
-                //#93702# On failed seek we have run out of sprms, probably.
-                //But if its a fastsaved file (has pPcd) then we may be just
-                //in a sprm free gap between pieces that have them, so set
-                //dirty flag in sprm finder to consider than.
+                /*
+                #93702#
+                On failed seek we have run out of sprms, probably.  But if its
+                a fastsaved file (has pPcd) then we may be just in a sprm free
+                gap between pieces that have them, so set dirty flag in sprm
+                finder to consider than.
+                */
                 if (!(*p->pPLCFx).SeekPos(p->nStartPos))
                 {
                     p->nEndPos = LONG_MAX;
@@ -3753,6 +3760,39 @@ void WW8PLCFMan::AdvSprm( short nIdx, BOOL bStart )
                 if (!p->pPLCFx->GetDirty() || pPcd)
                     GetNewSprms( *p );
                 p->pPLCFx->SetDirty(FALSE);
+
+                /*
+                #i2325#
+                To get the character and paragraph properties you first get
+                the pap and chp and then apply the fastsaved pPcd properties
+                to the range. If a pap or chp starts inside the pPcd range
+                then we must bring the current pPcd range to a halt so as to
+                end those sprms, then the pap/chp will be processed, and then
+                we must force a restart of the pPcd on that pap/chp starting
+                boundary. Doing that effectively means that the pPcd sprms will
+                be applied to the new range. Not doing it means that the pPcd
+                sprms will only be applied to the first pap/chp set of
+                properties contained in the pap/chp range.
+
+                So we bring the pPcd to a halt on this location here, by
+                settings its end to the current start, then store the starting
+                position of the current range to clipstart. The pPcd sprms
+                will end as normal (albeit earlier than originally expected),
+                and the existance of a clipstart will force the pPcd iterater
+                to reread the current set of sprms instead of advancing to its
+                next set. Then the clipstart will be set as the starting
+                position which will force them to be applied directly after
+                the pap and chps.
+                */
+                if (pPcd && ((p->nStartPos > pPcd->nStartPos) ||
+                    (pPcd->nStartPos == LONG_MAX)) &&
+                    (pPcd->nEndPos != p->nStartPos))
+                {
+                    pPcd->nEndPos = p->nStartPos;
+                    ((WW8PLCFx_PCD *)(pPcd->pPLCFx))->SetClipStart(
+                        p->nStartPos);
+                }
+
             }
             else
             {
@@ -3784,10 +3824,30 @@ void WW8PLCFMan::AdvNoSprm( short nIdx, BOOL bStart )
         {
             if( !aD[nIdx+1].pIdStk->Count() )
             {
-                (*p->pPLCFx)++;
+                WW8PLCFx_PCD *pTemp = (WW8PLCFx_PCD*)(pPcd->pPLCFx);
+                /*
+                #i2325#
+                As per normal, go on to the next set of properties, i.e. we
+                have traversed over to the next piece.  With a clipstart set
+                we are being told to reread the current piece sprms so as to
+                reapply them to a new chp or pap range.
+                */
+                if (pTemp->GetClipStart() == -1)
+                    (*p->pPLCFx)++;
                 p->pMemPos = 0;
                 GetNewSprms( aD[nIdx+1] );
                 GetNewNoSprms( *p );
+                if (pTemp->GetClipStart() != -1)
+                {
+                    /*
+                    #i2325#, now we will force our starting position to the
+                    clipping start so as to force the application of these
+                    sprms after the current pap/chp sprms so as to apply the
+                    fastsave sprms to the current range.
+                    */
+                    p->nStartPos = pTemp->GetClipStart();
+                    pTemp->SetClipStart(-1);
+                }
             }
         }
     }
