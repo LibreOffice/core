@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docundo.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 16:09:05 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 13:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,15 +598,6 @@ String SwDoc::GetUndoIdsStr( String* pStr, SwUndoIds *pUndoIds) const
     }
     else
         GetUndoIds( &aTmpStr, pUndoIds);
-
-    // --> FME 2004-08-11 #i30716# Correct initializazion for nId
-    const USHORT nId = 0 < nUndoPos ?
-                       (*pUndos)[ nUndoPos - 1 ]->GetId() :
-                       UNDO_END;
-    // <--
-
-    if (nId <= UNDO_END)
-        return String();
 
     return aTmpStr;
 }
