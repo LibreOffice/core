@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:33:09 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,15 @@ namespace sd {
 
 BOOL DrawViewShell::GotoBookmark(const String& rBookmark)
 {
-    return (GetDocSh()->GotoBookmark(rBookmark));
+    BOOL bRet = FALSE;
+    ::sd::DrawDocShell* pDocSh = GetDocSh();
+    if( pDocSh )
+    {
+        if( !pDocSh->GetViewShell() ) //#i26016# this case occurs if the jump-target-document was opened already with file open dialog before triggering the jump via hyperlink
+            pDocSh->Connect(this);
+        bRet = (pDocSh->GotoBookmark(rBookmark));
+    }
+    return bRet;
 }
 
 /*************************************************************************
