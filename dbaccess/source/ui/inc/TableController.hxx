@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 10:31:49 $
+ *  last change: $Author: oj $ $Date: 2001-07-06 08:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getKeyColumns() const;
         ::rtl::OUString createUniqueName(const ::rtl::OUString& _rName);
         void setTitle(const ::rtl::OUString & _rTitle);
+        void reload();
 
     protected:
         virtual String          getMenu() const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-04 14:24:52 $
+ *  last change: $Author: oj $ $Date: 2001-07-06 08:16:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2161,7 +2161,11 @@ Menu RID_TABLE_DESIGN_MAIN_MENU
     };
 };
 
-
+String STR_TABLEDESIGN_ALTER_ERROR
+{
+    Text = "Die Spalte \"\$column\$\" konnte nicht geändert werden. Soll sie statt dessen gelöscht und das neue Format angehängt werden?" ;
+    Text [ english_us ] = "The column \"\$column\$\" could not be changed. Should instead the column definition be appended?" ;
+};
 
 
 

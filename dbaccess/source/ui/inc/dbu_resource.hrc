@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-04 13:09:13 $
+ *  last change: $Author: oj $ $Date: 2001-07-06 08:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,6 +439,7 @@
 #define STR_TABLE_PRIV_NAME                 RID_STRING_START + 178
 #define STR_DSBROWSER_TITLE                 RID_STRING_START + 179
 #define STR_ADABAS_ERROR_SYSTEMTABLES       RID_STRING_START + 180
+#define STR_TABLEDESIGN_ALTER_ERROR         RID_STRING_START + 181
 
 //========================================================================
 // untyped resources
@@ -453,6 +454,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.53  2001/07/04 13:09:13  oj
+ *  #85663# check if table is accessable and returns data
+ *
  *  Revision 1.52  2001/07/03 07:46:45  oj
  *  #80211# set title for datasource browser
  *

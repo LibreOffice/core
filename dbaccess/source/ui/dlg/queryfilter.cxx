@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
+ *  last change: $Author: oj $ $Date: 2001-07-06 08:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
-
-static const char   aAND[] = "AND";
-static const char   aOR[]  = "OR";
 
 //------------------------------------------------------------------------------
 void Replace_OS_PlaceHolder(String& aString)
