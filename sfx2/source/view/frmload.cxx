@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:23:24 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEAPPEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveAppException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
+#include <com/sun/star/document/XTypeDetection.hpp>
+#endif
 
 #ifndef __FRAMEWORK_DISPATCH_INTERACTION_HXX_
 #include <framework/interaction.hxx>
@@ -137,6 +140,7 @@
 #include <svtools/ehdl.hxx>
 #include <sot/storinfo.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/mediadescriptor.hxx>
 #include <svtools/moduleoptions.hxx>
 
 #ifndef css
@@ -164,6 +168,61 @@ SfxFrameLoader_Impl::SfxFrameLoader_Impl( const css::uno::Reference< css::lang::
 
 SfxFrameLoader_Impl::~SfxFrameLoader_Impl()
 {
+}
+
+const SfxFilter* impl_detectFilterForURL(const ::rtl::OUString&                                 sURL    ,
+                                         const css::uno::Sequence< css::beans::PropertyValue >& rArgs   ,
+                                         const SfxFilterMatcher&                                rMatcher)
+{
+    static ::rtl::OUString SERVICENAME_TYPEDETECTION = ::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection");
+
+    ::rtl::OUString sFilter;
+    try
+    {
+        if (!sURL.getLength())
+            return 0;
+
+        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+        if (!xSMGR.is())
+            return 0;
+
+        css::uno::Reference< css::document::XTypeDetection > xDetect(
+            xSMGR->createInstance(SERVICENAME_TYPEDETECTION),
+            css::uno::UNO_QUERY_THROW);
+
+        ::comphelper::MediaDescriptor lOrgArgs(rArgs);
+        css::uno::Reference< css::task::XInteractionHandler > xInteraction = lOrgArgs.getUnpackedValueOrDefault(
+            ::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER(),
+            css::uno::Reference< css::task::XInteractionHandler >());
+        css::uno::Reference< css::task::XStatusIndicator > xProgress = lOrgArgs.getUnpackedValueOrDefault(
+            ::comphelper::MediaDescriptor::PROP_STATUSINDICATOR(),
+            css::uno::Reference< css::task::XStatusIndicator >());
+
+        ::comphelper::SequenceAsHashMap lNewArgs;
+        lNewArgs[::comphelper::MediaDescriptor::PROP_URL()] <<= sURL;
+        if (xInteraction.is())
+            lNewArgs[::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= xInteraction;
+        if (xProgress.is())
+            lNewArgs[::comphelper::MediaDescriptor::PROP_STATUSINDICATOR()] <<= xProgress;
+
+        css::uno::Sequence< css::beans::PropertyValue > lDescr = lNewArgs.getAsConstPropertyValueList();
+        ::rtl::OUString sType = xDetect->queryTypeByDescriptor(lDescr, sal_True);
+        if (sType.getLength())
+        {
+            const SfxFilter* pFilter = rMatcher.GetFilter4EA(sType);
+            if (pFilter)
+                sFilter = pFilter->GetName();
+        }
+    }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
+    catch(const css::uno::Exception&)
+        { sFilter = ::rtl::OUString(); }
+
+    const SfxFilter* pFilter = 0;
+    if (sFilter.getLength())
+        pFilter = rMatcher.GetFilter4FilterName(sFilter);
+    return pFilter;
 }
 
 sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::beans::PropertyValue >& rArgs  ,
@@ -400,13 +459,32 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
             return bLoadState;
         }
 
-            if( SfxObjectFactory::GetStandardTemplate( aServiceName ).Len() )
+            String sStandardTemplate   = SfxObjectFactory::GetStandardTemplate( aServiceName );
+            BOOL   bUseDefaultTemplate = (sStandardTemplate.Len()>0);
+            if( bUseDefaultTemplate )
             {
-                // standard template set -> load it "AsTemplate"
-                aSet.Put( SfxStringItem ( SID_FILE_NAME, SfxObjectFactory::GetStandardTemplate( aServiceName ) ) );
-                aSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
+                // #i21583#
+                // Forget the filter, which was detected for the corresponding "private:factory/xxx" URL.
+                // We must use the right filter, matching to this document ... not to the private URL!
+                const SfxFilter* pTemplateFilter = impl_detectFilterForURL(sStandardTemplate, rArgs, rMatcher);
+                if (pTemplateFilter)
+                {
+                    pFilter     = pTemplateFilter;
+                    aFilterName = pTemplateFilter->GetName();
+                    // standard template set -> load it "AsTemplate"
+                    aSet.Put( SfxStringItem ( SID_FILE_NAME, sStandardTemplate ) );
+                    aSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
+                }
+
+                // #119268#
+                // something is wrong with the set default template (e.g. unknown format, missing file etcpp)
+                // The we have to jump into the following special code, where "private:factory/ URL's are handled.
+                // We cant "load" such private/factory URL's!
+                else
+                    bUseDefaultTemplate = FALSE;
             }
-            else
+
+            if ( !bUseDefaultTemplate )
             {
                 // execute "NewDocument" request
                 /* Attention!
