@@ -25,6 +25,7 @@ $StandDir = GetStandDir();
 $QuantityToBuild = GetQuantityToBuild();
 $BuildAllParents = HowToBuild();
 
+$dmake = GetDmakeCommando();
 BuildAll();
 @TotenEltern = keys %DeadParents;
 if (($BuildAllParents) && ($#TotenEltern != -1)) {
@@ -124,7 +125,7 @@ sub MakeDir {
     chdir ($BuildDir);
     print $BuildDir, "\n";
     cwd();
-    $error = system ("dmake");
+    $error = system ("$dmake");
     if (!$error) {
         RemoveFromDependencies($DirToBuild);
     } else {
@@ -228,6 +229,23 @@ sub CorrectPath {
         die "\nNo environment set\n";
     };
     return $_;
+};
+
+
+#
+# Get platform-dependent dmake commando
+#
+sub GetDmakeCommando {
+    my ($dmake, $arg);
+
+    # Setting alias for dmake
+    $dmake = "dmake";
+
+    $dmake .= " ".$ENV{PROFULLSWITCH};
+    while ($arg = pop(@ARGV)) {
+        $dmake .= " "."$arg";
+    };
+    return $dmake;
 };
 
 
