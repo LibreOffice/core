@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawingDemo.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:23:03 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:53:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -78,7 +78,7 @@ import java.util.Random;
 // document. ( example for a URL is: "file:///c:/test.sxi" )
 // The second parameter is the connection that is to use. If no parameter
 // is given a standard impress document is created by using following
-// connection: "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager";
+// connection: "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
 
 public class DrawingDemo
 {
@@ -91,7 +91,7 @@ public class DrawingDemo
             if ( args.length >= 2 )
                 sConnection = args[ 1 ];
             else
-                sConnection = "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager";
+                sConnection = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
             XMultiServiceFactory xServiceFactory =
                 Helper.connect( sConnection );
 
