@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 09:58:27 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,8 @@ enum ShellModes
     SEL_BEZIER,
     SEL_LIST_TEXT,
     SEL_TABLE_TEXT,
-    SEL_TABLE_LIST_TEXT
+    SEL_TABLE_LIST_TEXT,
+    SEL_MEDIA
 };
 
 /*--------------------------------------------------------------------
