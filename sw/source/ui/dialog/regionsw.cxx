@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:46:18 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,12 @@
 #ifndef _SFX_BINDINGS_HXX
 #include <sfx2/bindings.hxx>
 #endif
-
+#ifndef _SVX_HTMLMODE_HXX
+#include <svx/htmlmode.hxx>
+#endif
+#ifndef _SVX_DLGUTIL_HXX
+#include <svx/dlgutil.hxx>
+#endif
 #define FILE_NAME_LENGTH 17
 
 SV_IMPL_OP_PTRARR_SORT( SectReprArr, SectReprPtr )
@@ -222,6 +227,7 @@ SectRepr::SectRepr( USHORT nPos, SwSection& rSect ) :
         aEndNtAtEnd = pFmt->GetEndAtTxtEnd();
         aBalance.SetValue(pFmt->GetBalancedColumns().GetValue());
         aFrmDirItem = pFmt->GetFrmDir();
+        aLRSpaceItem = pFmt->GetLRSpace();
     }
 }
 
@@ -830,6 +836,9 @@ IMPL_LINK( SwEditRegionDlg, OkHdl, CheckBox *, EMPTYARG )
             if( pFmt->GetFrmDir() != pRepr->GetFrmDir() )
                 pSet->Put( pRepr->GetFrmDir() );
 
+            if( pFmt->GetLRSpace() != pRepr->GetLRSpace())
+                pSet->Put( pRepr->GetLRSpace());
+
             rSh.ChgSection( nNewPos, pRepr->GetSection(),
                             pSet->Count() ? pSet : 0 );
             delete pSet;
@@ -1118,7 +1127,7 @@ IMPL_LINK( SwEditRegionDlg, OptionsHdl, PushButton *, EMPTYARG )
         aSet.Put( pSectRepr->GetEndNtAtEnd() );
         aSet.Put( pSectRepr->GetBalance() );
         aSet.Put( pSectRepr->GetFrmDir() );
-
+        aSet.Put( pSectRepr->GetLRSpace() );
 
         const SwSectionFmts& rDocFmts = rSh.GetDoc()->GetSections();
         SwSectionFmts aOrigArray( 0, 5 );
@@ -1141,7 +1150,7 @@ IMPL_LINK( SwEditRegionDlg, OptionsHdl, PushButton *, EMPTYARG )
             {
                 const SfxPoolItem *pColItem, *pBrushItem,
                                   *pFtnItem, *pEndItem, *pBalanceItem,
-                                  *pFrmDirItem;
+                                  *pFrmDirItem, *pLRSpaceItem;
                 SfxItemState eColState = pOutSet->GetItemState(
                                         RES_COL, FALSE, &pColItem );
                 SfxItemState eBrushState = pOutSet->GetItemState(
@@ -1154,13 +1163,16 @@ IMPL_LINK( SwEditRegionDlg, OptionsHdl, PushButton *, EMPTYARG )
                                         RES_COLUMNBALANCE, FALSE, &pBalanceItem );
                 SfxItemState eFrmDirState = pOutSet->GetItemState(
                                         RES_FRAMEDIR, FALSE, &pFrmDirItem );
+                SfxItemState eLRState = pOutSet->GetItemState(
+                                        RES_LR_SPACE, FALSE, &pLRSpaceItem);
 
                 if( SFX_ITEM_SET == eColState ||
                     SFX_ITEM_SET == eBrushState ||
                     SFX_ITEM_SET == eFtnState ||
                     SFX_ITEM_SET == eEndState ||
                     SFX_ITEM_SET == eBalanceState||
-                    SFX_ITEM_SET == eFrmDirState)
+                    SFX_ITEM_SET == eFrmDirState||
+                    SFX_ITEM_SET == eLRState)
                 {
                     SvLBoxEntry* pEntry = aTree.FirstSelected();
                     while( pEntry )
@@ -1178,6 +1190,8 @@ IMPL_LINK( SwEditRegionDlg, OptionsHdl, PushButton *, EMPTYARG )
                             pRepr->GetBalance().SetValue(((SwFmtNoBalancedColumns*)pBalanceItem)->GetValue());
                         if( SFX_ITEM_SET == eFrmDirState )
                             pRepr->GetFrmDir().SetValue(((SvxFrameDirectionItem*)pFrmDirItem)->GetValue());
+                        if( SFX_ITEM_SET == eLRState )
+                            pRepr->GetLRSpace() = *(SvxLRSpaceItem*)pLRSpaceItem;
 
                         pEntry = aTree.NextSelected(pEntry);
                     }
@@ -1407,6 +1421,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
 
     SfxItemSet aSet(GetPool(),
             RES_COL, RES_COL,
+            RES_LR_SPACE, RES_LR_SPACE,
             RES_COLUMNBALANCE, RES_FRAMEDIR,
             RES_BACKGROUND, RES_BACKGROUND,
             RES_FRM_SIZE, RES_FRM_SIZE,
@@ -1635,6 +1650,7 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     AddTabPage(TP_COLUMN,   SwColumnPage::Create,    0);
     AddTabPage(TP_BACKGROUND,SvxBackgroundTabPage::Create,  0);
     AddTabPage(TP_SECTION_FTNENDNOTES, SwSectionFtnEndTabPage::Create, 0);
+    AddTabPage(TP_SECTION_INDENTS, SwSectionIndentTabPage::Create, 0);
 
     OfaHtmlOptions* pHtmlOpt = OFF_APP()->GetHtmlOptions();
     long nHtmlMode = pHtmlOpt->GetExportMode();
@@ -1643,6 +1659,7 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     if(bWeb)
     {
         RemoveTabPage(TP_SECTION_FTNENDNOTES);
+        RemoveTabPage(TP_SECTION_INDENTS);
         if( HTML_CFG_NS40 != nHtmlMode && HTML_CFG_WRITER != nHtmlMode)
             RemoveTabPage(TP_COLUMN);
     }
@@ -1671,6 +1688,8 @@ void SwInsertSectionTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
         ((SwColumnPage&)rPage).ShowBalance(TRUE);
         ((SwColumnPage&)rPage).SetInSection(TRUE);
     }
+    else if(TP_SECTION_INDENTS == nId)
+        ((SwSectionIndentTabPage&)rPage).SetWrtShell(rWrtSh);
 }
 /* -----------------21.05.99 13:08-------------------
  *
@@ -2366,13 +2385,15 @@ IMPL_LINK( SwSectionFtnEndTabPage, FootEndHdl, CheckBox *, pBox )
  * --------------------------------------------------*/
 SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
     Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh) :
-    SfxTabDialog(pParent, SW_RES(DLG_SECTION_PROPERTIES), &rSet)
+    SfxTabDialog(pParent, SW_RES(DLG_SECTION_PROPERTIES), &rSet),
+    rWrtSh(rSh)
 {
     FreeResource();
 
     AddTabPage(TP_COLUMN,   SwColumnPage::Create,    0);
     AddTabPage(TP_BACKGROUND,SvxBackgroundTabPage::Create,  0);
     AddTabPage(TP_SECTION_FTNENDNOTES, SwSectionFtnEndTabPage::Create, 0);
+    AddTabPage(TP_SECTION_INDENTS, SwSectionIndentTabPage::Create, 0);
 
     OfaHtmlOptions* pHtmlOpt = OFF_APP()->GetHtmlOptions();
     long nHtmlMode = pHtmlOpt->GetExportMode();
@@ -2380,6 +2401,7 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
     if(bWeb)
     {
         RemoveTabPage(TP_SECTION_FTNENDNOTES);
+        RemoveTabPage(TP_SECTION_INDENTS);
         if( HTML_CFG_NS40 != nHtmlMode && HTML_CFG_WRITER != nHtmlMode)
             RemoveTabPage(TP_COLUMN);
     }
@@ -2402,6 +2424,101 @@ void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
         ((SwColumnPage&)rPage).ShowBalance(TRUE);
         ((SwColumnPage&)rPage).SetInSection(TRUE);
     }
+    else if(TP_SECTION_INDENTS == nId)
+        ((SwSectionIndentTabPage&)rPage).SetWrtShell(rWrtSh);
 }
+/*-- 13.06.2003 09:59:08---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+SwSectionIndentTabPage::SwSectionIndentTabPage( Window *pParent, const SfxItemSet &rAttrSet ) :
+    SfxTabPage(pParent, SW_RES(TP_SECTION_INDENTS), rAttrSet),
+    aIndentFL(this,     ResId(FL_INDENT     )),
+    aBeforeFT(this,     ResId(FT_BEFORE     )),
+    aBeforeMF(this,     ResId(MF_BEFORE     )),
+    aAfterFT(this,      ResId(FT_AFTER      )),
+    aAfterMF(this,      ResId(MF_AFTER      )),
+    aPreviewWin(this,   ResId(WIN_PREVIEW   ))
+{
+    FreeResource();
+    Link aLk = LINK(this, SwSectionIndentTabPage, IndentModifyHdl);
+    aBeforeMF.SetModifyHdl(aLk);
+    aAfterMF.SetModifyHdl(aLk);
+}
+/*-- 13.06.2003 09:59:23---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwSectionIndentTabPage::~SwSectionIndentTabPage()
+{
+}
+/*-- 13.06.2003 09:59:23---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+BOOL SwSectionIndentTabPage::FillItemSet( SfxItemSet& rSet)
+{
+    if(aBeforeMF.IsValueModified() ||
+            aAfterMF.IsValueModified())
+    {
+        SvxLRSpaceItem aLRSpace(aBeforeMF.Denormalize(aBeforeMF.GetValue(FUNIT_TWIP)) ,
+                aAfterMF.Denormalize(aAfterMF.GetValue(FUNIT_TWIP)));
+        rSet.Put(aLRSpace);
+    }
+    return TRUE;
+}
+/*-- 13.06.2003 09:59:24---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwSectionIndentTabPage::Reset( const SfxItemSet& rSet)
+{
+    //this page doesn't show up in HTML mode
+    FieldUnit aMetric = ::GetDfltMetric(FALSE);
+    SetMetric(aBeforeMF, aMetric);
+    SetMetric(aAfterMF , aMetric);
+
+    SfxItemState eItemState = rSet.GetItemState( RES_LR_SPACE );
+    if ( eItemState >= SFX_ITEM_AVAILABLE )
+    {
+        const SvxLRSpaceItem& rSpace =
+            (const SvxLRSpaceItem&)rSet.Get( RES_LR_SPACE );
+
+        aBeforeMF.SetValue( aBeforeMF.Normalize(rSpace.GetLeft()), FUNIT_TWIP );
+        aAfterMF.SetValue( aAfterMF.Normalize(rSpace.GetRight()), FUNIT_TWIP );
+    }
+    else
+    {
+        aBeforeMF.SetEmptyFieldValue();
+        aAfterMF.SetEmptyFieldValue();
+    }
+    aBeforeMF.SaveValue();
+    aAfterMF.SaveValue();
+    IndentModifyHdl(0);
+}
+/*-- 13.06.2003 09:59:24---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SfxTabPage*  SwSectionIndentTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet)
+{
+    return new SwSectionIndentTabPage(pParent, rAttrSet);
+}
+/* -----------------13.06.2003 13:57-----------------
+
+ --------------------------------------------------*/
+void SwSectionIndentTabPage::SetWrtShell(SwWrtShell& rSh)
+{
+    //set sensible values at the preview
+    aPreviewWin.SetAdjust(SVX_ADJUST_BLOCK);
+    aPreviewWin.SetLastLine(SVX_ADJUST_BLOCK);
+    const SwRect& rPageRect = rSh.GetAnyCurRect( RECT_PAGE, 0 );
+    Size aPageSize(rPageRect.Width(), rPageRect.Height());
+    aPreviewWin.SetSize(aPageSize);
+}
+/* -----------------13.06.2003 14:02-----------------
+
+ --------------------------------------------------*/
+IMPL_LINK(SwSectionIndentTabPage, IndentModifyHdl, MetricField*, EMPTYARG)
+{
+    aPreviewWin.SetLeftMargin( aBeforeMF.Denormalize(aBeforeMF.GetValue(FUNIT_TWIP)) );
+    aPreviewWin.SetRightMargin( aAfterMF.Denormalize(aAfterMF.GetValue(FUNIT_TWIP))   );
+    aPreviewWin.Draw(TRUE);
+    return 0;
+}
 
