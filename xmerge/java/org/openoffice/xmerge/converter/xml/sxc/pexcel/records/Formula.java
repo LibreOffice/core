@@ -64,6 +64,7 @@ import java.util.Enumeration;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula.FormulaHelper;
 
 /**
  * Represents a BIFF Record describing a formula
@@ -75,6 +76,7 @@ public class Formula extends CellValue {
     private byte grbit;
     private byte[] cce      = new byte[2];
     private byte[] rgce;
+    private FormulaHelper fh = new FormulaHelper();
 
     /**
       * Constructs a <code>Formula</code> using specified attributes
@@ -86,99 +88,26 @@ public class Formula extends CellValue {
      * @param value the value of the cell
       */
     public Formula(int row, int column, String cellContents, int ixfe, String value)
-    throws IOException {
+    throws Exception {
 
         this.ixfe   = EndianConverter.writeShort((short)ixfe);
-        cce         = EndianConverter.writeShort((short)0);
-           setFormula(cellContents);
-           setRow(row);
-           setCol(column);
+        setRow(row);
+        setCol(column);
+        setFormula(cellContents);
         double cellLong = (double) Double.parseDouble(value);
         num     = EndianConverter.writeDouble(cellLong);
     }
 
     /**
-      * TRanslates a <code>String</code> written in RPN which represents a
+      * Translates a <code>String</code> written in infix which represents a
      * formula into a byte[] what can be written to pocket excel file.
       *
       * @param  formula string
       */
-    public void setFormula(String inFormula) throws IOException {
+    public void setFormula(String inFormula) throws Exception {
 
-        Debug.log(Debug.TRACE,"setFormula : " + inFormula);
-        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        Vector tempArray = new Vector();
-        int col = 0, row = 0;
-
-        try {
-            FormulaParser fp = new FormulaParser(inFormula);
-
-            Enumeration formula = fp.toReversePolishNotation();
-
-            while(formula.hasMoreElements()) {
-
-                String nextOp = (String) formula.nextElement();
-
-                char firstChar = nextOp.charAt(0);
-                if (Character.isLetter(firstChar))  {
-                    tempArray.add(new Byte((byte)0x44));
-                    char nextRef = nextOp.charAt(0);
-                    if(Character.isLetter(firstChar)) {
-                        for(int j = 0;j< alphabet.length();j++) {
-                            if(nextRef==alphabet.charAt(j)) {
-                                col=j;
-                                break;
-                            }
-                        }
-                    }
-                    nextRef = nextOp.charAt(1);
-                    if(Character.isLetter(nextRef)) {
-                        for(int j = 0;j< alphabet.length();j++) {
-                            if(nextRef==alphabet.charAt(j)) {
-                                col = (col*26)+j;
-                                break;
-                            }
-                        }
-                        row = Integer.parseInt(nextOp.substring(2)) - 1;
-                    } else {
-                        row = Integer.parseInt(nextOp.substring(1)) - 1;
-                    }
-                    row |= 0xC000;
-                    tempArray.add(new Byte((byte)row));
-                    tempArray.add(new Byte((byte)(row>>8)));
-                    tempArray.add(new Byte((byte)col));
-                } else if(nextOp.equals("+")){
-                    tempArray.add(new Byte((byte)0x03));
-                } else if(nextOp.equals("-")){
-                    tempArray.add(new Byte((byte)0x04));
-                } else if(nextOp.equals("*")){
-                    tempArray.add(new Byte((byte)0x05));
-                } else if(nextOp.equals("/")){
-                    tempArray.add(new Byte((byte)0x06));
-                } else {                                        // We will assume it's a number
-
-                    double cellLong = (double) Double.parseDouble(nextOp);
-                    tempArray.add(new Byte((byte)0x1F));
-                    byte[] tempByte = EndianConverter.writeDouble(cellLong);
-                    for(int byteIter=0;byteIter<tempByte.length;byteIter++) {
-                        tempArray.add(new Byte(tempByte[byteIter]));
-                    }
-                }
-            }
-            Enumeration e = tempArray.elements();
-            int i = 0;
-            rgce = new byte[tempArray.size()];
-            cce = EndianConverter.writeShort((short) tempArray.size());
-            while(e.hasMoreElements()) {
-                Byte myByte = (Byte)e.nextElement();
-                rgce[i] = myByte.byteValue();
-                i++;
-            }
-
-        } catch (UnsupportedFormulaException e) {
-            Debug.log(Debug.ERROR,"UnsupportFormulaException : " + e.getMessage());
-            rgce = new byte[0];
-        }
+        rgce = fh.convertCalcToPXL(inFormula);
+        cce = EndianConverter.writeShort((short) rgce.length);
     }
 
     /**
@@ -271,66 +200,7 @@ public class Formula extends CellValue {
      */
     public String getString() throws IOException {
 
-        Vector outputString = new Vector();
-        byte[] buffer = new byte[2];
-        byte[] numBuffer = new byte[8];
-        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        int i = 0;
-
-        while(i<EndianConverter.readShort(cce)) {
-            switch(rgce[i]) {
-                case 0x44 :
-                            buffer[0]=rgce[i+1];
-                            buffer[1]=rgce[i+2];
-                            int formulaRow = EndianConverter.readShort(buffer);
-                            formulaRow &= 0x3FFF;
-                            int formulaCol = rgce[i+3];
-                            int firstChar = formulaCol / 26;
-                            if(firstChar>0) {
-                                int secondChar = formulaCol - (firstChar*25);
-                                outputString.add(alphabet.charAt(firstChar) + alphabet.charAt(secondChar) + Integer.toString(formulaRow+1));
-                            } else {
-                                outputString.add(alphabet.charAt(formulaCol) + Integer.toString(formulaRow+1));
-                            }
-                            // outputString.append(".");
-                            i += 4;
-                            break;
-
-                case 0x03 :
-                            outputString.add("+");
-                            i++;
-                            break;
-                case 0x04 :
-                            outputString.add("-");
-                            i++;
-                            break;
-                case 0x05 :
-                            outputString.add("*");
-                            i++;
-                            break;
-                case 0x06 :
-                            outputString.add("/");
-                            i++;
-                            break;
-                case 0x1F :
-                            for(int j=0;j<8;j++) {
-                                numBuffer[j]=rgce[i+1+j];
-                            }
-                            long longBits = Double.doubleToLongBits(EndianConverter.readDouble(numBuffer));
-                            Long longHelper = new Long(longBits);
-
-                            outputString.add(longHelper.toString());
-                            i+=9;
-                            break;
-                default :
-                            return "";  // we dont't support functions for now
-                                        // we only support cell references
-
-            }
-        }
-        FormulaParser fp = new FormulaParser(outputString);
-        return fp.toInfixNotation();
-        // return outputString.toString();
+        return fh.convertPXLToCalc(rgce);
     }
 
 }
