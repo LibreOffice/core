@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: os $ $Date: 2002-04-02 07:16:04 $
+#   last change: $Author: iha $ $Date: 2002-04-15 19:34:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,6 +98,7 @@ CXXFILES = \
         optdict.cxx		\
         optitems.cxx	\
         optgenrl.cxx	\
+        optaccessibility.cxx \
         optsave.cxx		\
         adritem.cxx		\
         optlingu.cxx    \
@@ -115,6 +116,7 @@ SRCFILES =  \
         optjsearch.src  \
         optgenrl.src	\
         optdict.src		\
+        optaccessibility.src \
         optsave.src		\
         optpath.src		\
         optlingu.src	\
@@ -133,6 +135,7 @@ SLOFILES=	\
         $(SLO)$/optdict.obj	\
         $(SLO)$/optitems.obj	\
         $(SLO)$/optgenrl.obj	\
+        $(SLO)$/optaccessibility.obj \
         $(SLO)$/optsave.obj	\
         $(SLO)$/adritem.obj	\
         $(SLO)$/optlingu.obj \
@@ -156,6 +159,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/optasian.obj \
         $(SLO)$/optdict.obj \
         $(SLO)$/optlingu.obj \
+        $(SLO)$/optaccessibility.obj \
         $(SLO)$/optsave.obj \
         $(SLO)$/optpath.obj
 
