@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-06 15:03:48 $
+ *  last change: $Author: mba $ $Date: 2001-08-15 15:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,6 +520,8 @@ SotStorage::SotStorage( const ::ucb::Content& rContent, const String & rName, St
 {
     aName = rName; // Namen merken
     pOwnStg = new UCBStorage( rContent, aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+    if ( IsOLEStorage() )
+        nVersion = SOFFICE_FILEFORMAT_50;
 }
 
 SotStorage::SotStorage( const String & rName, StreamMode nMode, StorageMode nStorageMode )
@@ -527,6 +529,8 @@ SotStorage::SotStorage( const String & rName, StreamMode nMode, StorageMode nSto
 {
     aName = rName; // Namen merken
     CreateStorage( TRUE, nMode, nStorageMode );
+    if ( IsOLEStorage() )
+        nVersion = SOFFICE_FILEFORMAT_50;
 }
 
 void SotStorage::CreateStorage( BOOL bForceUCBStorage, StreamMode nMode, StorageMode nStorageMode  )
@@ -631,6 +635,8 @@ SotStorage::SotStorage( BOOL bUCBStorage, const String & rName, StreamMode nMode
 {
     aName = rName;
     CreateStorage( bUCBStorage, nMode, nStorageMode );
+    if ( IsOLEStorage() )
+        nVersion = SOFFICE_FILEFORMAT_50;
 }
 
 SotStorage::SotStorage( BaseStorage * pStor )
@@ -646,6 +652,8 @@ SotStorage::SotStorage( BaseStorage * pStor )
     pOwnStg = pStor;
     ULONG nErr = pOwnStg ? pOwnStg->GetError() : SVSTREAM_CANNOT_MAKE;
     SetError( nErr );
+    if ( IsOLEStorage() )
+        nVersion = SOFFICE_FILEFORMAT_50;
 }
 
 SotStorage::SotStorage( BOOL bUCBStorage, SvStream & rStm )
@@ -658,6 +666,8 @@ SotStorage::SotStorage( BOOL bUCBStorage, SvStream & rStm )
         pOwnStg = new UCBStorage( rStm, FALSE );
     else
         pOwnStg = new Storage( rStm, FALSE );
+    if ( IsOLEStorage() )
+        nVersion = SOFFICE_FILEFORMAT_50;
 }
 
 SotStorage::SotStorage( SvStream & rStm )
@@ -670,6 +680,8 @@ SotStorage::SotStorage( SvStream & rStm )
         pOwnStg = new UCBStorage( rStm, FALSE );
     else
         pOwnStg = new Storage( rStm, FALSE );
+    if ( IsOLEStorage() )
+        nVersion = SOFFICE_FILEFORMAT_50;
 }
 
 SotStorage::SotStorage( SvStream * pStm, BOOL bDelete )
@@ -689,6 +701,8 @@ SotStorage::SotStorage( SvStream * pStm, BOOL bDelete )
 
     pStorStm = pStm;
     bDelStm = bDelete;
+    if ( IsOLEStorage() )
+        nVersion = SOFFICE_FILEFORMAT_50;
 }
 
 /*************************************************************************
