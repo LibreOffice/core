@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:32:28 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:53:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,7 +506,7 @@ SvxConfigPage::CanConfig( const OUString& aModuleId )
          aModuleId.equals( OUString::createFromAscii(
             "com.sun.star.frame.Bibliography" ) ) ||
          aModuleId.equals( OUString::createFromAscii(
-            "com.sun.star.sdb.DatabaseDocument" ) ) )
+            "com.sun.star.sdb.OfficeDatabaseDocument" ) ) )
     {
         return FALSE;
     }
