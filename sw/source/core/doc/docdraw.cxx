@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 11:53:21 $
+ *  last change: $Author: os $ $Date: 2001-02-09 14:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,10 @@
 #endif
 #ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>
+#endif
+
+#ifndef _SVDETC_HXX
+#include <svx/svdetc.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -469,7 +473,8 @@ void SwDoc::InitDrawModel()
     //zerstoert.
     // 17.2.99: for Bug 73110 - for loading the drawing items. This must
     //                          be loaded without RefCounts!
-    SfxItemPool *pSdrPool = new SdrItemPool( &aAttrPool, SDRATTR_START,
+     SdrEngineDefaults::SetFontHeight(240);
+     SfxItemPool *pSdrPool = new SdrItemPool( &aAttrPool, SDRATTR_START,
                                             SDRATTR_END, FALSE );
     SfxItemPool *pEEgPool = EditEngine::CreatePool( FALSE );
     pSdrPool->SetSecondaryPool( pEEgPool );

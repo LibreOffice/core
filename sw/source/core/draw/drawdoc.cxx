@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-09 11:54:30 $
+ *  last change: $Author: os $ $Date: 2001-02-09 14:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,6 @@
 #endif
 
 
-
 /*************************************************************************
 |*
 |* Konstruktor
@@ -138,7 +137,6 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
     pDoc( pD )
 {
     SetScaleUnit( MAP_TWIP );
-    SetDefaultFontHeight( 240 );
     SetSwapGraphics( TRUE );
 
     SwDocShell* pDocSh = pDoc->GetDocShell();
