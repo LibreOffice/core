@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drformsh.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-27 07:53:21 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,13 +121,13 @@
                     Text [ dutch ] = "Naar ~voren" ; \
                     Text [ spanish ] = "Traer más a~delante" ; \
                     Text [ english_us ] = "Bring ~Forward" ; \
-                    Text[ chinese_simplified ] = "ÔÙÇ°ÖÃ(~F)";\
+                    Text[ chinese_simplified ] = "ÉÏÒÆÒ»²ã(~F)";\
                     Text[ russian ] = "Ïåğåìåñòèòü ~âïåğåä";\
                     Text[ polish ] = "Przesuñ do przodu";\
                     Text[ japanese ] = "‘O–Ê‚ÖˆÚ“®(~F)";\
                     Text[ greek ] = "Ì~åôáöïñÜ İíá åğßğåäï åìğñüò";\
                     Text[ korean ] = "¾ÕÀ¸·Î °¡Á®¿À±â(~ F)";\
-                    Text[ chinese_traditional ] = "¦A«e¸m(~F)";\
+                    Text[ chinese_traditional ] = "¤W²¾¤@¼h(~F)";\
                     Text[ arabic ] = "ÅÍÖÇÑ ÃãÇãÇğ";\
                     Text[ turkish ] = "~Bir öne getir";\
                 };\
@@ -149,13 +149,13 @@
                     Text [ dutch ] = "Naar ~achteren" ; \
                     Text [ spanish ] = "Enviar hacia a~trás" ; \
                     Text [ english_us ] = "Send Back~ward" ; \
-                    Text[ chinese_simplified ] = "ÔÙºóÖÃ(~W)";\
+                    Text[ chinese_simplified ] = "ÏÂÒÆÒ»²ã(~W)";\
                     Text[ russian ] = "Ïåğåìåñòèòü ~íàçàä";\
                     Text[ polish ] = "Przesuñ do ty³u";\
                     Text[ japanese ] = "”w–Ê‚ÉˆÚ“®(~W)";\
                     Text[ greek ] = "~ÌåôáöïñÜ ğßóù";\
                     Text[ korean ] = "µÚ·Î º¸³»±â(~W)";\
-                    Text[ chinese_traditional ] = "¦A«á¸m(~W)";\
+                    Text[ chinese_traditional ] = "¤U²¾¤@¼h(~W)";\
                     Text[ arabic ] = "ÅÑÓÇá ÎáİÇğ";\
                     Text[ turkish ] = "Bir alta gönder";\
                 };\
