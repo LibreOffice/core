@@ -1,6 +1,8 @@
 
 set platform = `uname`
 
+if ( ! -f $SRC_ROOT/dmake/dmake ) then
+
 cd dmake
 
 if ($platform == "SunOS") then
@@ -18,4 +20,6 @@ endif
 if "$?" != "0" exit
 
 cd ..
+
+endif
 
