@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:44:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,17 +356,6 @@ void lcl_ProcessBoxSize( SvPtrarr &rFmtCmp, SwTableBox *pBox, const SwFmtFrmSize
 void lcl_ProcessRowSize( SvPtrarr &rFmtCmp, SwTableLine *pLine, const SwFmtFrmSize &rNew )
 {
     lcl_ProcessRowAttr( rFmtCmp, pLine, rNew );
-/*
-    SwFrmFmt *pNewFmt;
-    if ( 0 != (pNewFmt = SwTblFmtCmp::FindNewFmt( rFmtCmp, pLine->GetFrmFmt(), 0 )))
-        pLine->ChgFrmFmt( (SwTableLineFmt*)pNewFmt );
-    else
-    {
-        SwFrmFmt *pOld = pLine->GetFrmFmt();
-        SwFrmFmt *pNew = pLine->ClaimFrmFmt();
-        pNew->SetAttr( rNew );
-        rFmtCmp.Insert( new SwTblFmtCmp( pOld, pNew, 0 ), rFmtCmp.Count());
-    }                                           */
     SwTableBoxes &rBoxes = pLine->GetTabBoxes();
     for ( USHORT i = 0; i < rBoxes.Count(); ++i )
         ::lcl_ProcessBoxSize( rFmtCmp, rBoxes[i], rNew );
@@ -577,23 +566,7 @@ void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew 
             SvPtrarr aFmtCmp( Max( BYTE(255), BYTE(aRowArr.Count()) ), 255 );
 
             for( USHORT i = 0; i < aRowArr.Count(); ++i )
-            {
                 ::lcl_ProcessRowAttr( aFmtCmp, (SwTableLine*)aRowArr[i], rNew );
-/*
-                SwTableLine *pLine = (SwTableLine*)aRowArr[i];
-
-                SwFrmFmt *pNewFmt;
-                if( 0 != (pNewFmt = SwTblFmtCmp::FindNewFmt( aFmtCmp,
-                                                pLine->GetFrmFmt(), 0 )))
-                    pLine->ChgFrmFmt( (SwTableLineFmt*)pNewFmt );
-                else
-                {
-                    SwFrmFmt *pOld = pLine->GetFrmFmt();
-                    SwFrmFmt *pNew = pLine->ClaimFrmFmt();
-                    pNew->SetAttr( rNew );
-                    aFmtCmp.Insert( new SwTblFmtCmp( pOld, pNew, 0 ), aFmtCmp.Count());
-                }*/
-            }
 
             SwTblFmtCmp::Delete( aFmtCmp );
             SetModified();
