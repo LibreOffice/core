@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-05 21:55:11 $
+ *  last change: $Author: obo $ $Date: 2001-12-08 22:23:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1659,6 +1659,26 @@ String SCSTR_RENAMEOBJECT
 {
     Text = "Objekt benennen" ;
     Text [ ENGLISH ] = "Name Object" ;
+    Text[ english_us ] = "Name Object";
+    Text[ portuguese ] = "Name Object";
+    Text[ russian ] = "Name Object";
+    Text[ greek ] = "Name Object";
+    Text[ dutch ] = "Name Object";
+    Text[ french ] = "Nommer l'objet";
+    Text[ spanish ] = "Name Object";
+    Text[ finnish ] = "Name Object";
+    Text[ italian ] = "Nome oggetto";
+    Text[ danish ] = "Name Object";
+    Text[ swedish ] = "Namnge objekt";
+    Text[ polish ] = "Name Object";
+    Text[ portuguese_brazilian ] = "Name Object";
+    Text[ japanese ] = "ｵﾌﾞｼﾞｪｸﾄに名前を付ける";
+    Text[ korean ] = "Name Object";
+    Text[ chinese_simplified ] = "命名对象";
+    Text[ chinese_traditional ] = "命名物件";
+    Text[ turkish ] = "Name Object";
+    Text[ arabic ] = "Name Object";
+    Text[ catalan ] = "Name Object";
 };
 String STR_INSERTGRAPHIC
 {
@@ -3014,6 +3034,7 @@ String SCSTR_UNDO_GRAFFILTER
     Text[ catalan ] = "Filtre d'imatge";
     Text[ finnish ] = "Grafiikkasuodatin";
 };
+
 
 
 
