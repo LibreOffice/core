@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:20:45 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,7 +620,10 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
 
                     // write document storage
                     pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT );
-                    bRet = pEmbObj->DoSaveAs( xWorkStore );
+
+                    // mba: no relative ULRs for clipboard!
+                    SfxMedium aMedium( xWorkStore, String() );
+                    bRet = pEmbObj->DoSaveObjectAs( aMedium, FALSE );
                     pEmbObj->DoSaveCompleted();
 
                     uno::Reference< embed::XTransactedObject > xTransact( xWorkStore, uno::UNO_QUERY );
