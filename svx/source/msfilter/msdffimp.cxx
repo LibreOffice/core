@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-07 12:55:54 $
+ *  last change: $Author: ka $ $Date: 2000-11-09 16:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,6 @@
 #define ITEMID_ADJUST      EE_PARA_JUST
 #define ITEMID_FIELD       EE_FEATURE_FIELD
 
-
-
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
@@ -106,6 +104,12 @@
 #endif
 #ifndef _TOOLS_ZCODEC_HXX
 #include <tools/zcodec.hxx>
+#endif
+#ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
 #endif
 #ifndef _FILTER_HXX //autogen
 #include <svtools/filter.hxx>
@@ -626,94 +630,105 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
 
 #ifdef DBG_AUTOSHAPE
 
-    SvFileStream aOut( String( RTL_CONSTASCII_STRINGPARAM( "d:\\ashape.dbg" ) ), STREAM_WRITE );
-    aOut.Seek( STREAM_SEEK_TO_END );
+    String aURLStr;
 
-    if ( IsProperty( DFF_Prop_adjustValue ) || IsProperty( DFF_Prop_pVertices ) )
+    if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( String( RTL_CONSTASCII_STRINGPARAM( "d:\\ashape.dbg" ) ), aURLStr ) )
     {
-        aOut.WriteLine( "" );
-        ByteString aString( "ShapeId: " );
-        aString.Append( ByteString::CreateFromInt32( nShapeId ) );
-        aOut.WriteLine( aString );
-    }
-    for ( sal_uInt32 i = DFF_Prop_adjustValue; i <= DFF_Prop_adjust10Value; i++ )
-    {
-        if ( IsProperty( i ) )
+        SvStream* pOut = ::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_WRITE );
+
+        if( pOut )
         {
-            ByteString aString( "Prop_adjustValue" );
-            aString.Append( ByteString::CreateFromInt32( ( i - DFF_Prop_adjustValue ) + 1 ) );
-            aString.Append( ":" );
-            aString.Append( ByteString::CreateFromInt32( GetPropertyValue( i ) ) );
-            aOut.WriteLine( aString );
-        }
-    }
-    for ( i = 320; i < 383; i++ )
-    {
-        if ( ( i >= DFF_Prop_adjustValue ) && ( i <= DFF_Prop_adjust10Value ) )
-            continue;
-        if ( IsProperty( i ) )
-        {
-            if ( SeekToContent( i, rIn ) )
+            pOut->Seek( STREAM_SEEK_TO_END );
+
+            if ( IsProperty( DFF_Prop_adjustValue ) || IsProperty( DFF_Prop_pVertices ) )
             {
-                INT32 nLen = (INT32)GetPropertyValue( i );
-                if ( nLen )
+                pOut->WriteLine( "" );
+                ByteString aString( "ShapeId: " );
+                aString.Append( ByteString::CreateFromInt32( nShapeId ) );
+                pOut->WriteLine( aString );
+            }
+            for ( sal_uInt32 i = DFF_Prop_adjustValue; i <= DFF_Prop_adjust10Value; i++ )
+            {
+                if ( IsProperty( i ) )
                 {
-                    aOut.WriteLine( "" );
-                    ByteString aDesc( "Property:" );
-                    aDesc.Append( ByteString::CreateFromInt32( i ) );
-                    aDesc.Append( ByteString( "  Size:" ) );
-                    aDesc.Append( ByteString::CreateFromInt32( nLen ) );
-                    aOut.WriteLine( aDesc );
-                    INT16   nNumElem, nNumElemMem, nNumSize;
-                    rIn >> nNumElem >> nNumElemMem >> nNumSize;
-                    aDesc = ByteString( "Entries: " );
-                    aDesc.Append( ByteString::CreateFromInt32( nNumElem ) );
-                    aDesc.Append( ByteString(  "  Size:" ) );
-                    aDesc.Append( ByteString::CreateFromInt32( nNumSize ) );
-                    aOut.WriteLine( aDesc );
-                    if ( nNumSize < 0 )
-                        nNumSize = ( ( -nNumSize ) >> 2 );
-                    if ( !nNumSize )
-                        nNumSize = 16;
-                    nLen -= 6;
-                    while ( nLen > 0 )
+                    ByteString aString( "Prop_adjustValue" );
+                    aString.Append( ByteString::CreateFromInt32( ( i - DFF_Prop_adjustValue ) + 1 ) );
+                    aString.Append( ":" );
+                    aString.Append( ByteString::CreateFromInt32( GetPropertyValue( i ) ) );
+                    pOut->WriteLine( aString );
+                }
+            }
+            for ( i = 320; i < 383; i++ )
+            {
+                if ( ( i >= DFF_Prop_adjustValue ) && ( i <= DFF_Prop_adjust10Value ) )
+                    continue;
+                if ( IsProperty( i ) )
+                {
+                    if ( SeekToContent( i, rIn ) )
                     {
-                        ByteString aString;
-                        for ( UINT32 j = 0; nLen && ( j < ( nNumSize >> 1 ) ); j++ )
+                        INT32 nLen = (INT32)GetPropertyValue( i );
+                        if ( nLen )
                         {
-                            for ( UINT32 k = 0; k < 2; k++ )
+                            pOut->WriteLine( "" );
+                            ByteString aDesc( "Property:" );
+                            aDesc.Append( ByteString::CreateFromInt32( i ) );
+                            aDesc.Append( ByteString( "  Size:" ) );
+                            aDesc.Append( ByteString::CreateFromInt32( nLen ) );
+                            pOut->WriteLine( aDesc );
+                            INT16   nNumElem, nNumElemMem, nNumSize;
+                            rIn >> nNumElem >> nNumElemMem >> nNumSize;
+                            aDesc = ByteString( "Entries: " );
+                            aDesc.Append( ByteString::CreateFromInt32( nNumElem ) );
+                            aDesc.Append( ByteString(  "  Size:" ) );
+                            aDesc.Append( ByteString::CreateFromInt32( nNumSize ) );
+                            pOut->WriteLine( aDesc );
+                            if ( nNumSize < 0 )
+                                nNumSize = ( ( -nNumSize ) >> 2 );
+                            if ( !nNumSize )
+                                nNumSize = 16;
+                            nLen -= 6;
+                            while ( nLen > 0 )
                             {
-                                if ( nLen )
+                                ByteString aString;
+                                for ( UINT32 j = 0; nLen && ( j < ( nNumSize >> 1 ) ); j++ )
                                 {
-                                    BYTE nVal;
-                                    rIn >> nVal;
-                                    if ( ( nVal >> 4 ) > 9 )
-                                        aOut << (BYTE)( ( nVal >> 4 ) + 'A' - 10 );
-                                    else
-                                        aOut << (BYTE)( ( nVal >> 4 ) + '0' );
+                                    for ( UINT32 k = 0; k < 2; k++ )
+                                    {
+                                        if ( nLen )
+                                        {
+                                            BYTE nVal;
+                                            rIn >> nVal;
+                                            if ( ( nVal >> 4 ) > 9 )
+                                                *pOut << (BYTE)( ( nVal >> 4 ) + 'A' - 10 );
+                                            else
+                                                *pOut << (BYTE)( ( nVal >> 4 ) + '0' );
 
-                                    if ( ( nVal & 0xf ) > 9 )
-                                        aOut << (BYTE)( ( nVal & 0xf ) + 'A' - 10 );
-                                    else
-                                        aOut << (BYTE)( ( nVal & 0xf ) + '0' );
+                                            if ( ( nVal & 0xf ) > 9 )
+                                                *pOut << (BYTE)( ( nVal & 0xf ) + 'A' - 10 );
+                                            else
+                                                *pOut << (BYTE)( ( nVal & 0xf ) + '0' );
 
-                                    nLen--;
+                                            nLen--;
+                                        }
+                                    }
+                                    *pOut << (char)( ' ' );
                                 }
+                                pOut->WriteLine( aString );
                             }
-                            aOut << (char)( ' ' );
                         }
-                        aOut.WriteLine( aString );
+                    }
+                    else
+                    {
+                        ByteString aString( "Property" );
+                        aString.Append( ByteString::CreateFromInt32( i ) );
+                        aString.Append( ":" );
+                        aString.Append( ByteString::CreateFromInt32( GetPropertyValue( i ) ) );
+                        pOut->WriteLine( aString );
                     }
                 }
             }
-            else
-            {
-                ByteString aString( "Property" );
-                aString.Append( ByteString::CreateFromInt32( i ) );
-                aString.Append( ":" );
-                aString.Append( ByteString::CreateFromInt32( GetPropertyValue( i ) ) );
-                aOut.WriteLine( aString );
-            }
+
+            delete pOut;
         }
     }
 
@@ -4612,26 +4627,41 @@ BOOL SvxMSDffManager::GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData) const
                 case 0x6e0 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".png" ) ) ); break;
                 case 0x7a8 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".bmp" ) ) ); break;
             }
-            INetURLObject aURL;
-            aURL.SetSmartURL( Application::GetAppFileName() );
-            aURL.SetName( aFileName );
-            SvFileStream aDbgOut( aURL.PathToFileName(), STREAM_TRUNC | STREAM_WRITE );
-            if ( bZCodecCompression )
+
+            String aURLStr;
+
+            if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( Application::GetAppFileName(), aURLStr ) )
             {
-                pOut->Seek( STREAM_SEEK_TO_END );
-                aDbgOut.Write( pOut->GetData(), pOut->Tell() );
-                pOut->Seek( STREAM_SEEK_TO_BEGIN );
-            }
-            else
-            {
-                sal_Int32 nDbgLen = nLength - nSkip;
-                if ( nDbgLen )
+                INetURLObject aURL( aURLStr );
+
+                aURL.removeSegment();
+                aURL.removeFinalSlash();
+                aURL.Append( aFileName );
+
+                SvStream* pDbgOut = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_TRUNC | STREAM_WRITE );
+
+                if( pDbgOut )
                 {
-                    sal_Char* pDat = new sal_Char[ nDbgLen ];
-                    pGrStream->Read( pDat, nDbgLen );
-                    aDbgOut.Write( pDat, nDbgLen );
-                    pGrStream->SeekRel( -nDbgLen );
-                    delete pDat;
+                    if ( bZCodecCompression )
+                    {
+                        pOut->Seek( STREAM_SEEK_TO_END );
+                        pDbgOut->Write( pOut->GetData(), pOut->Tell() );
+                        pOut->Seek( STREAM_SEEK_TO_BEGIN );
+                    }
+                    else
+                    {
+                        sal_Int32 nDbgLen = nLength - nSkip;
+                        if ( nDbgLen )
+                        {
+                            sal_Char* pDat = new sal_Char[ nDbgLen ];
+                            pGrStream->Read( pDat, nDbgLen );
+                            pDbgOut->Write( pDat, nDbgLen );
+                            pGrStream->SeekRel( -nDbgLen );
+                            delete pDat;
+                        }
+                    }
+
+                    delete pDbgOut;
                 }
             }
 #endif
