@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdmailsuppl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-08-23 14:57:47 $
+ *  last change: $Author: obr $ $Date: 2001-10-12 12:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
                     oslProcess aProcess;
                     rtl_uString **pArgumentArray = (rtl_uString **) aArgumentList.getArray();
 
-                    osl_executeProcess( aProgram.pData,
+                    if( osl_Process_E_None == osl_executeProcess( aProgram.pData,
                         pArgumentArray,
                         nArguments,
                         osl_Process_DETACHED | osl_Process_SEARCHPATH,
@@ -405,7 +405,11 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 #if SUPD < 634
                         NULL,
 #endif
-                        &aProcess);
+                        &aProcess)
+                    )
+                    {
+                        return;
+                    }
                 }
             }
         }
@@ -436,6 +440,8 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
             OSL_TRACE( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
         }
     }
+
+    throw ::com::sun::star::uno::Exception( OUString(), static_cast < XSimpleMailClient * > (this) );
 }
 
 //------------------------------------------------
