@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dg $ $Date: 2002-05-06 18:50:32 $
+#   last change: $Author: rt $ $Date: 2002-05-15 14:27:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,7 @@ XCSFILES= \
     org$/openoffice$/Office$/Writer.xcs \
     org$/openoffice$/Office$/WriterWeb.xcs \
     org$/openoffice$/Office$/Commands.xcs \
+    org$/openoffice$/Office$/ProtocolHandler.xcs \
     org$/openoffice$/ucb$/Configuration.xcs \
     org$/openoffice$/ucb$/Hierarchy.xcs \
     org$/openoffice$/ucb$/Store.xcs \
