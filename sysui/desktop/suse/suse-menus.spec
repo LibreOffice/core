@@ -5,6 +5,7 @@ Release: 1
 Group: Office
 Copyright: commercial
 AutoReqProv: no
+%define _unpackaged_files_terminate_build 0
 %description 
 OpenOffice.org desktop integration
 
