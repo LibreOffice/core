@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-27 09:01:49 $
+ *  last change: $Author: cl $ $Date: 2002-04-09 10:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1279,6 +1279,7 @@ int SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* pSet )
 IMPL_LINK_INLINE_START( SvxPositionSizeTabPage, ChangePosProtectHdl, void *, EMPTYARG )
 {
     maTsbSizeProtect.Enable( !mbProtectDisabled & (maTsbPosProtect.GetState() != STATE_CHECK) );
+    maTsbSizeProtect.SetState( maTsbPosProtect.GetState() );
     return( 0L );
 }
 IMPL_LINK_INLINE_END( SvxPositionSizeTabPage, ChangePosProtectHdl, void *, EMPTYARG )
