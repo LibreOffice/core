@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 12:45:03 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1256,7 +1256,7 @@ ScXMLDataPilotLayoutInfoContext::ScXMLDataPilotLayoutInfoContext( ScXMLImport& r
 
         if ( nPrefix == XML_NAMESPACE_TABLE )
         {
-            if (IsXMLToken(aLocalName, XML_ADD_EMPTY_LINE))
+            if (IsXMLToken(aLocalName, XML_ADD_EMPTY_LINES))
             {
                 if (IsXMLToken(sValue, XML_TRUE))
                     aInfo.AddEmptyLines = sal_True;
