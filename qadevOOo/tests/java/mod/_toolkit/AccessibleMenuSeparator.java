@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleMenuSeparator.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Date: 2004-01-05 20:37:15 $
+ *  last change: $Date: 2004-11-02 12:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ public class AccessibleMenuSeparator extends TestCase {
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        //        at.printAccessibleTree(log, xRoot);
+        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         XAccessibleContext MenuBar = at.getAccessibleObjectForRole(xRoot,
                                                                    AccessibleRole.MENU_BAR);
         XAccessibleAction act = null;
