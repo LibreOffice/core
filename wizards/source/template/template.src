@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:06:31 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,7 @@ String AgendaDlgButton2
     Text[ italian ] = "Protocollo dello svolgimento";
     Text[ swedish ] = "Redogφrande protokoll";
     Text[ russian ] = "Οπξςξκξλ υξδΰ";
-    Text[ greek ] = "Πρωτόκολλο διαδικασίας";
+    Text[ greek ] = "Πρωτόκολλο εξέλιξης";
     Text[ danish ] = "Forhandlingsreferat";
     Text[ polish ] = "Protokσl procesu";
     Text[ portuguese_brazilian ] = "Agenda Evaluation Minutes";
@@ -341,7 +341,7 @@ String CorrespondenceNoTextmark
     Text[ italian ] = "Manca il segnalibro 'Recipient'.";
     Text[ swedish ] = "Bokmδrket 'Recipient' saknas.";
     Text[ russian ] = "Νες ηΰκλΰδκθ 'Recipient'.";
-    Text[ greek ] = "Λείπει η σήμανση κειμένου 'Recipient'.";
+    Text[ greek ] = "Λείπει το σημάδι του κειμένου 'Recipient' (Παραλήπτης).";
     Text[ danish ] = "Tekstmarkeringen 'Recipient' mangler.";
     Text[ polish ] = "Brak zak³adki 'Recipient'.";
     Text[ portuguese_brazilian ] = "The Bookmark 'Recipient' is lacking.";
@@ -365,7 +365,7 @@ String CorrespondenceNoTextmark+1
     Text[ italian ] = "Impossibile inserire i campi della stampa in serie.";
     Text[ swedish ] = "Omφjligt att infoga fδlt fφr standardbrev.";
     Text[ russian ] = "Βρςΰβθςό οξλÿ ρλθÿνθÿ νεβξημξζνξ.";
-    Text[ greek ] = "Δεν είναι δυνατόν να γίνει εισαγωγή των πεδίων των ομαδικών επιστολών..";
+    Text[ greek ] = "Δεν είναι δυνατόν να γίνει εισαγωγή των πεδίων των εγκυκλίων επιστολών.";
     Text[ danish ] = "Det er ikke muligt at indsζtte brevfeltningsfelter.";
     Text[ polish ] = "Nie moΏna by³o wstawiζ pσl listu seryjnego.";
     Text[ portuguese_brazilian ] = "Mail Merge fields can not be included.";
@@ -460,8 +460,8 @@ String CorrespondenceDialog+2
     Text[ spanish ] = "Carta en serie";
     Text[ italian ] = "Stampa in serie";
     Text[ swedish ] = "Standardbrev";
-    Text[ russian ] = "Νερκξλόκξ οθρεμ";
-    Text[ greek ] = "Ομαδική επιστολή";
+    Text[ russian ] = "Ρλθÿνθε";
+    Text[ greek ] = "Εγκύκλιος επιστολή";
     Text[ danish ] = "Brevfletningsbrev";
     Text[ polish ] = "List seryjny";
     Text[ portuguese_brazilian ] = "Multiple letter";
