@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:00:04 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ TabPage TP_COLUMN
         Text[ dutch ] = "~Aantal";
         Text[ chinese_simplified ] = "ÊýÄ¿(~A)";
         Text[ greek ] = "~Áñéèìüò";
-        Text[ korean ] = "¾ç(~A)";
+        Text[ korean ] = "°³¼ö(~A)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "S~ayý";
     };
