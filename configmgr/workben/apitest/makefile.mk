@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: lla $ $Date: 2001-04-05 12:40:27 $
+#   last change: $Author: lla $ $Date: 2001-06-14 07:29:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,8 @@ APP1TARGET= $(TARGET)
 APP1OBJS=	\
     $(SLO)$/cfgapi.obj	\
     $(SLO)$/strimpl.obj \
-    $(SLO)$/typeconverter.obj
+    $(SLO)$/typeconverter.obj \
+    $(SLO)$/simpletypehelper.obj \
 
 # ... cfgapi_timetest ..............................
 APP6STDLIBS = $(APPSTDLIBS)

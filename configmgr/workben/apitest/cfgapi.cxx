@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgapi.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: lla $ $Date: 2001-04-12 06:09:12 $
+ *  last change: $Author: lla $ $Date: 2001-06-14 07:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,8 @@ static void loadDefaults()
         sExecutable += ::rtl::OUString::createFromAscii("cfgapi.ini");
 #endif
         ::rtl::OUString sNormalized;
-        if (osl_File_E_None == osl_normalizePath(sExecutable.pData, &sNormalized.pData))
+        sNormalized = sExecutable;
+        if (1)
         {
             ::osl::Profile aProfile(sNormalized);
 
@@ -439,7 +440,7 @@ int _cdecl main( int argc, char * argv[] )
 
         rtl::OUString sUser;
 
-        bool bLocal = sServerType.equalsIgnoreCase(ASCII("local")) || sServerType.equalsIgnoreCase(ASCII("setup"));
+        bool bLocal = sServerType.equalsIgnoreAsciiCase(ASCII("local")) || sServerType.equalsIgnoreAsciiCase(ASCII("setup"));
         if (!bLocal)
         {
             rtl::OUString sServer;
@@ -833,7 +834,7 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                                     cin.getline(buf,sizeof buf);
                                     OUString aInput = OUString::createFromAscii(buf);
                                     sal_Bool bValue = false;
-                                    if (aInput.equalsIgnoreCase(ASCII("true")))
+                                    if (aInput.equalsIgnoreAsciiCase(ASCII("true")))
                                         bValue = true;
 
                                     OUString aStr = ASCII("false");
