@@ -7335,3 +7335,15 @@ FreeSpaceStr
 ?__query@?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
 ?__query@?$Reference@VXDispatchProvider@frame@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
 ?__query@?$Reference@VXURLTransformer@util@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?GetTransliterationFlags@SvtSearchOptions@@QBEJXZ
+?IsIgnoreMiddleDot@SvtSearchOptions@@QBEEXZ
+?IsIgnoreProlongedSoundMark@SvtSearchOptions@@QBEEXZ
+?IsIgnoreWhitespace@SvtSearchOptions@@QBEEXZ
+?IsMatchFullHalfWidthForms@SvtSearchOptions@@QBEEXZ
+?IsUseAsianOptions@SvtSearchOptions@@QBEEXZ
+?SetIgnoreMiddleDot@SvtSearchOptions@@QAEXE@Z
+?SetIgnoreProlongedSoundMark@SvtSearchOptions@@QAEXE@Z
+?SetIgnoreWhitespace@SvtSearchOptions@@QAEXE@Z
+?SetMatchFullHalfWidthForms@SvtSearchOptions@@QAEXE@Z
+?SetUseAsianOptions@SvtSearchOptions@@QAEXE@Z
+?GetHashPassword@SvPasswordHelper@@SAXAAV?$Sequence@C@uno@star@sun@com@@ABVString@@@Z
