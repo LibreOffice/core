@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
+ *  last change: $Author: aw $ $Date: 2000-11-13 14:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2062,72 +2062,6 @@ void SdrPageView::RedrawOneLayer(SdrLayerID nId, const Rectangle& rRect, OutputD
     // #72567# removed: rView.PostPaint();
     rView.RestartAfterPaintTimer(); // #36496#: fuer SolidHandles im Writer und Calc
 }
-
-#ifdef alter_kram
-inline void alt() { // Func draus machen, damit joeseg nicht meckert
-                SdrObjListIter aIter(SdrObjListIter(*pPage,IM_FLAT/*IM_DEEPNOGROUPS*/));
-                while (aIter.IsMore()) {
-                    SdrObject* pObj=aIter.Next();
-                    FASTBOOL bPaint=FALSE;
-                    if (!bPrinter || pObj->IsPrintable()) {
-                        bPaint=pObj->GetSubList()!=NULL; // Gruppenobjekte berueksichtigen den Layer selbst
-                        if (!bPaint) {
-                            SdrLayerID nLay=pObj->GetLayer();
-                            bPaint=nLay==nID;
-                        }
-                    }
-                    if (bPaint && (rRect.IsEmpty() || pObj->GetBoundRect().IsOver(rRect))) {
-                        // Farben und Clipping erst sichern, wenn noetig.
-                        if (!aHDCMerk.IsSaved()) {
-                            aHDCMerk.Save(*pO);
-                            //pHDCMerk=new ImpMyHDCMerk(*pO,rView.bRestoreColors);
-                            if (!rRect.IsEmpty()) {
-                                // Kein Clipping in die Metafileaufzeichnung
-                                GDIMetaFile* pMtf=pO->GetConnectMetaFile();
-                                if (pMtf!=NULL && (!pMtf->IsRecord() || pMtf->IsPause())) pMtf=NULL;
-                                if (pMtf!=NULL) pMtf->Pause(TRUE);
-                                pO->IntersectClipRegion(rRect);
-                                if (pMtf!=NULL) pMtf->Pause(FALSE);
-                            }
-                        }
-                        if (rView.pTextEditObj==pObj && rView.pTextEditPV==this) { // TextEdit
-                            aInfoRec.nPaintMode|=SDRPAINTMODE_TEXTEDIT;
-                            if (pPaintProc!=NULL) {
-                                SdrPaintProcRec aRec(pObj,*pXOut,aInfoRec);
-                                Link aLink(*pPaintProc);
-                                aLink.Call(&aRec);
-                            } else {
-                                pObj->Paint(*pXOut,aInfoRec);
-                            }
-                            aInfoRec.nPaintMode&=~SDRPAINTMODE_TEXTEDIT;
-
-                            ImpPaintOutlinerView(pOut,rRect);
-                        } else {
-                            if (pObj->IsNeedColorRestore()/*HAS_BASE(SdrVirtObj,pObj)*/) {
-                                if (bColorsDirty && rView.bRestoreColors) {
-                                    aHDCMerk.Restore(*pO);
-                                    //ImpRecoverColors(*pOut,pHDCMerk->pFarbMerk);
-                                }
-                                bColorsDirty=FALSE;
-                            } else bColorsDirty=TRUE; // andere aendern die Farben
-                            /*if (rView.pObjEdit!=NULL && pObj==rView.pObjEdit->pObj &&
-                                       this==rView.pObjEdit->pPV &&
-                                       (pO==rView.pObjEdit->pWin || rView.pObjEdit->pWin==NULL)) {
-                                pObj->PaintEdit(*rView.pObjEdit,*pXOut,rRect,0);
-                            } else*/ {
-                                if (pPaintProc!=NULL) {
-                                    SdrPaintProcRec aRec(pObj,*pXOut,aInfoRec);
-                                    Link aLink(*pPaintProc);
-                                    aLink.Call(&aRec);
-                                } else {
-                                    pObj->Paint(*pXOut,aInfoRec);
-                                }
-                            }
-                        }
-                    }
-                }
-}
-#endif alter_kram
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
