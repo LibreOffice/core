@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jpeg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-07-03 16:00:31 $
+ *  last change: $Author: sj $ $Date: 2001-08-20 11:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@ extern "C"
 #include <vcl/bmpacc.hxx>
 #include "jpeg.hxx"
 #include "FilterConfigItem.hxx"
+#include "Filter.hxx"
 
 // -----------
 // - Defines -
@@ -165,13 +166,14 @@ extern "C" long JPEGCallback( void* pCallbackData, long nPercent )
 // - JPEGReader -
 // --------------
 
-JPEGReader::JPEGReader( SvStream& rStm, void* pCallData ) :
+JPEGReader::JPEGReader( SvStream& rStm, void* pCallData, sal_Bool bSetLS ) :
         rIStm           ( rStm ),
         pAcc            ( NULL ),
         pAcc1           ( NULL ),
         pBuffer         ( NULL ),
         nLastPos        ( rStm.Tell() ),
-        nLastLines      ( 0 )
+        nLastLines      ( 0 ),
+        bSetLogSize     ( bSetLS )
 {
     maUpperName = String::CreateFromAscii( "SVIJPEG", 7 );
     nFormerPos = nLastPos;
@@ -219,17 +221,20 @@ void* JPEGReader::CreateBitmap( void* pParam )
     else
         aBmp = Bitmap( aSize, 24 );
 
-    unsigned long nUnit = ((JPEGCreateBitmapParam*)pParam)->density_unit;
-    if ( ( nUnit == 1 ) || ( nUnit == 2 ) )
+    if ( bSetLogSize )
     {
-        Point       aEmptyPoint;
-        Fraction    aFractX( 1, ((JPEGCreateBitmapParam*)pParam)->X_density );
-        Fraction    aFractY( 1, ((JPEGCreateBitmapParam*)pParam)->Y_density );
-        MapMode     aMapMode( nUnit == 1 ? MAP_INCH : MAP_CM, aEmptyPoint, aFractX, aFractY );
-        Size        aPrefSize = OutputDevice::LogicToLogic( aSize, aMapMode, MAP_100TH_MM );
+        unsigned long nUnit = ((JPEGCreateBitmapParam*)pParam)->density_unit;
+        if ( ( nUnit == 1 ) || ( nUnit == 2 ) )
+        {
+            Point       aEmptyPoint;
+            Fraction    aFractX( 1, ((JPEGCreateBitmapParam*)pParam)->X_density );
+            Fraction    aFractY( 1, ((JPEGCreateBitmapParam*)pParam)->Y_density );
+            MapMode     aMapMode( nUnit == 1 ? MAP_INCH : MAP_CM, aEmptyPoint, aFractX, aFractY );
+            Size        aPrefSize = OutputDevice::LogicToLogic( aSize, aMapMode, MAP_100TH_MM );
 
-        aBmp.SetPrefSize( aPrefSize );
-        aBmp.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
+            aBmp.SetPrefSize( aPrefSize );
+            aBmp.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
+        }
     }
     pAcc = aBmp.AcquireWriteAccess();
 
@@ -535,14 +540,14 @@ BOOL JPEGWriter::Write( const Graphic& rGraphic, sal_Bool bIgnoreOptions )
 // - ImportJPEG -
 // --------------
 
-BOOL ImportJPEG( SvStream& rStm, Graphic& rGraphic, void* pCallerData )
+BOOL ImportJPEG( SvStream& rStm, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags )
 {
     JPEGReader* pJPEGReader = (JPEGReader*) rGraphic.GetContext();
     ReadState   eReadState;
     BOOL        bRet = TRUE;
 
     if( !pJPEGReader )
-        pJPEGReader = new JPEGReader( rStm, pCallerData );
+        pJPEGReader = new JPEGReader( rStm, pCallerData, ( nImportFlags & GRFILTER_I_FLAGS_SET_LOGSIZE_FOR_JPEG ) != 0 );
 
     rGraphic.SetContext( NULL );
     eReadState = pJPEGReader->Read( rGraphic );

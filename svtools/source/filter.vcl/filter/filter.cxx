@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-13 13:45:21 $
+ *  last change: $Author: sj $ $Date: 2001-08-20 11:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1432,7 +1432,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
             if( rGraphic.GetContext() == (GraphicReader*) 1 )
                 rGraphic.SetContext( NULL );
 
-            if( !ImportJPEG( rIStream, rGraphic, NULL ) )
+            if( !ImportJPEG( rIStream, rGraphic, NULL, nImportFlags ) )
                 nStatus = GRFILTER_FILTERERROR;
             else
                 eLinkType = GFX_LINK_TYPE_NATIVE_JPG;

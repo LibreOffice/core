@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jpeg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-14 13:49:40 $
+ *  last change: $Author: sj $ $Date: 2001-08-20 11:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ class JPEGReader : public GraphicReader
     long                nLastPos;
     long                nFormerPos;
     long                nLastLines;
+    sal_Bool            bSetLogSize;
 
     Graphic             CreateIntermediateGraphic( const Bitmap& rBitmap, long nLines );
     void                FillBitmap();
@@ -109,7 +110,7 @@ public:
 
 
 
-                        JPEGReader( SvStream& rStm, void* pCallData );
+                        JPEGReader( SvStream& rStm, void* pCallData, sal_Bool bSetLogSize );
     virtual             ~JPEGReader();
 
 
@@ -148,7 +149,7 @@ public:
 // - Import/ExportJPEG -
 // ---------------------
 
-BOOL ImportJPEG( SvStream& rStream, Graphic& rGraphic, void* pCallerData );
+BOOL ImportJPEG( SvStream& rStream, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags );
 
 BOOL ExportJPEG( SvStream& rStream, const Graphic& rGraphic,
                  PFilterCallback pCallback, void* pCallerData, sal_Bool bIgnoreOptions );
