@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-11-03 08:38:50 $
+#   last change: $Author: rt $ $Date: 2004-11-26 18:39:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,17 +75,19 @@ TARGET=polygon
 # --- Files -------------------------------------
 
 SLOFILES= \
-        $(SLO)$/b2dpolygon.obj				\
-        $(SLO)$/b2dpolygontools.obj			\
-        $(SLO)$/b2dpolypolygon.obj			\
-        $(SLO)$/b2dpolypolygontools.obj		\
-        $(SLO)$/b2dpolypolygoncutter.obj	\
-        $(SLO)$/b2dlinegeometry.obj			\
-        $(SLO)$/b3dpolygon.obj				\
-        $(SLO)$/b3dpolygontools.obj			\
-        $(SLO)$/b3dpolypolygon.obj			\
+        $(SLO)$/b2dpolygon.obj						\
+        $(SLO)$/b2dpolygontools.obj					\
+        $(SLO)$/b2dpolypolygon.obj					\
+        $(SLO)$/b2dpolypolygontools.obj				\
+        $(SLO)$/b2dsvgpolypolygon.obj				\
+        $(SLO)$/b2dlinegeometry.obj					\
+        $(SLO)$/b2dpolypolygoncutter.obj			\
+        $(SLO)$/b2dpolypolygonrasterconverter.obj	\
+        $(SLO)$/b3dpolygon.obj						\
+        $(SLO)$/b3dpolygontools.obj					\
+        $(SLO)$/b3dpolypolygon.obj					\
         $(SLO)$/b3dpolypolygontools.obj
-            
+
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
