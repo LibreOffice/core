@@ -2,8 +2,8 @@
  *
  *  $RCSfile: backendaccess.cxx,v $
  *
- *  $Revision: 1.16 $
- *  last change: $Author: obo $ $Date: 2004-01-20 16:24:31 $
+ *  $Revision: 1.17 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,10 @@
 #include <com/sun/star/configuration/backend/XBackendEntities.hpp>
 #endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKEND_HPP_
 
+#ifndef CONFIGMGR_BACKEND_BACKENDNOTIFIER_HXX
+#include "backendnotifier.hxx"
+#endif
+
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -113,7 +117,7 @@
 #ifndef INCLUDED_VECTOR
 #include <vector>
 #define INCLUDED_VECTOR
-#endif // INCLUDED_VECTOR
+#endif //INCLUDED_VECTOR
 
 #ifndef _CONFIGMGR_FILEHELPER_HXX_
 #include "filehelper.hxx"
@@ -128,7 +132,7 @@ BackendAccess::BackendAccess(
     : mFactory(xContext->getServiceManager(), uno::UNO_QUERY)
     , mBackend(xBackend)
     , mBinaryCache(xContext)
-{
+ {
     OSL_ENSURE(mFactory.is(), "BackendAccess: Context has no ServiceManager (or it is missing an interface)");
     if (!mFactory.is())
         throw lang::NullPointerException(OUString::createFromAscii("BackendAccess: Context has no ServiceManager (or it is missing an interface)"), NULL);
@@ -137,7 +141,12 @@ BackendAccess::BackendAccess(
     if (!uno::Reference<backenduno::XSchemaSupplier>::query(xBackend).is())
         throw lang::NullPointerException(OUSTR("Configuration: No backend for schemas available"),NULL);
 
-    //Create Binary Cache
+
+     mNotifier = new BackendChangeNotifier(xBackend);
+     //Stored as uno::reference to facilitate sharing with MultiStratumBackend
+     mXNotifier = mNotifier;
+
+     //Create Binary Cache
     uno::Reference<backenduno::XBackendEntities> xBackendEntities = uno::Reference<backenduno::XBackendEntities>( mBackend, uno::UNO_QUERY) ;
     OSL_ENSURE(xBackendEntities.is(),"Backend does not provide entity information");
 
@@ -315,6 +324,11 @@ ComponentResult BackendAccess::getNodeData(const ComponentRequest& aRequest,
                               aComponentData.extractTemplatesTree(),
                               aRequest.getComponentName()) ;
 
+    //Register listener with notifier
+    if(aListener)
+    {
+        mNotifier->addListener(aListener, aRequest);
+    }
     return ComponentResult(retCode) ;
 }
 //------------------------------------------------------------------------------
@@ -478,5 +492,13 @@ uno::Sequence< uno::Reference<backenduno::XLayer> > BackendAccess::getLayers(con
     }
 }
 //------------------------------------------------------------------------------
+void BackendAccess::removeRequestListener(INodeDataListener *aListener,
+                                          const ComponentRequest& aRequest)
+   CFG_NOTHROW()
+{
 
+    OSL_PRECOND(aListener, "ERROR: trying to remove a NULL listener");
+    mNotifier->removeListener(aListener, aRequest);
+}
+//------------------------------------------------------------------------------
 } } // configmgr.backend
