@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:56:10 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 18:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1251,15 +1251,15 @@ Text = "Fortschritt:";
 Text[ English ] = "Progress:";
 Text[ English_us ] = "Progress:";
     Text[ portuguese ] = "Progress„o:";
-    Text[ russian ] = "Progress";
+    Text[ russian ] = "œÓ„ÂÒÒ:";
     Text[ greek ] = "–Ò¸Ô‰ÔÚ:";
     Text[ dutch ] = "Vooruitgang:";
     Text[ french ] = "Progression :";
     Text[ spanish ] = "Progreso:";
     Text[ italian ] = "Progress";
     Text[ danish ] = "Fremgang:";
-    Text[ swedish ] = "Progress";
-    Text[ polish ] = "Progress";
+    Text[ swedish ] = "Framsteg:";
+    Text[ polish ] = "PostÍp:";
     Text[ portuguese_brazilian ] = "Progress";
     Text[ japanese ] = "êiíªèÛãµ:";
     Text[ korean ] = "Progress";
