@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2002-02-26 08:16:22 $
+ *  last change: $Author: ghiggins $ $Date: 2002-06-18 09:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ class CommandLineArgs
         void            ParseCommandLine_String( const ::rtl::OUString& );
         void            ResetParamValues();
 
+        sal_Bool            m_bMaster;
         sal_Bool            m_bMinimized;
         sal_Bool            m_bInvisible;
         sal_Bool            m_bNoRestore;
@@ -118,6 +119,7 @@ class CommandLineArgs
         CommandLineArgs( const ::vos::OExtCommandLine& aExtCmdLine );
         CommandLineArgs( const ::rtl::OUString& aIPCThreadCmdLine );
 
+        sal_Bool        IsMaster(){ return m_bMaster; }
         sal_Bool        IsMinimized(){ return m_bMinimized; }
         sal_Bool        IsInvisible(){ return m_bInvisible; }
         sal_Bool        IsNoRestore(){ return m_bNoRestore; }

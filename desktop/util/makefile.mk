@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: ghiggins $ $Date: 2002-06-10 22:15:48 $
+#   last change: $Author: ghiggins $ $Date: 2002-06-18 09:12:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,6 +111,10 @@ APP1STDLIBS=			\
     $(SALHELPERLIB)		\
     $(SVTOOLLIB)
 
+.IF "$(OS)" == "SOLARIS"
+APP1STDLIBS+= -ldoor
+.ENDIF
+
 .IF "$(GUI)" == "UNX"
 .IF "$(OS)" == "LINUX"
 
@@ -136,7 +140,8 @@ APP1OBJS= \
             $(OBJ)$/appsys.obj				\
             $(OBJ)$/desktopresid.obj	\
             $(OBJ)$/dispatchwatcher.obj		\
-            $(OBJ)$/ssoinit.obj
+            $(OBJ)$/ssoinit.obj				\
+            $(OBJ)$/officeipcmanager.obj
 
 APP1DEF=    $(MISCX)$/$(TARGET).def
 
@@ -230,7 +235,8 @@ SLOFILES =	\
     $(SLO)$/appsys.obj		\
     $(SLO)$/desktopresid.obj	\
     $(SLO)$/dispatchwatcher.obj	\
-    $(SLO)$/ssoinit.obj
+    $(SLO)$/ssoinit.obj			\
+    $(SLO)$/officeipcmanager.obj
 
 SHL1OBJS=	$(SLOFILES)
 SHL1TARGET=	dsk$(UPD)$(DLLPOSTFIX)
@@ -250,6 +256,7 @@ SHL1STDLIBS=    \
     $(SALHELPERLIB)		\
     $(SVTOOLLIB)
 
+SHL1STDLIBS+=	-ldoor
 SHL1DEPN=       makefile.mk
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 

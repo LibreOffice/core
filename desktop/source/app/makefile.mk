@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: ghiggins $ $Date: 2002-06-10 22:14:44 $
+#   last change: $Author: ghiggins $ $Date: 2002-06-18 09:12:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,8 @@ OBJFILES = \
         $(OBJ)$/appsys.obj				\
         $(OBJ)$/desktopresid.obj		\
         $(OBJ)$/dispatchwatcher.obj		\
-        $(OBJ)$/ssoinit.obj
+        $(OBJ)$/ssoinit.obj				\
+        $(OBJ)$/officeipcmanager.obj
 
 .IF "$(OS)" == "SOLARIS"
 
@@ -112,7 +113,8 @@ SLOFILES = \
         $(SLO)$/appsys.obj				\
         $(SLO)$/desktopresid.obj		\
         $(SLO)$/dispatchwatcher.obj		\
-        $(SLO)$/ssoinit.obj
+        $(SLO)$/ssoinit.obj				\
+        $(SLO)$/officeipcmanager.obj
 
 .ENDIF
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cd $ $Date: 2002-02-26 16:39:22 $
+ *  last change: $Author: ghiggins $ $Date: 2002-06-18 09:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,12 +321,18 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         m_bVersionString = sal_True;
         return sal_True;
     }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-master" )) == sal_True )
+    {
+        m_bMaster = sal_True;
+        return sal_True;
+    }
 
     return sal_False;
 }
 
 void CommandLineArgs::ResetParamValues()
 {
+    m_bMaster               = sal_False;
     m_bMinimized            = sal_False;
     m_bInvisible            = sal_False;
     m_bNoRestore            = sal_False;

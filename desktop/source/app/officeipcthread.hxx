@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2002-02-26 08:16:22 $
+ *  last change: $Author: ghiggins $ $Date: 2002-06-18 09:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,6 @@
 #ifndef _VOS_PIPE_HXX_
 #include <vos/pipe.hxx>
 #endif
-#ifndef _VOS_SECURITY_HXX_
-#include <vos/security.hxx>
-#endif
 #ifndef _VOS_THREAD_HXX_
 #include <vos/thread.hxx>
 #endif
@@ -117,7 +114,6 @@ class OfficeIPCThread : public vos::OThread
 
     vos::OPipe                  maPipe;
     vos::OStreamPipe            maStreamPipe;
-    static vos::OSecurity       maSecurity;
     rtl::OUString               maPipeIdent;
     sal_Bool                    mbBlockRequests;
     int                         mnPendingRequests;
@@ -150,7 +146,8 @@ class OfficeIPCThread : public vos::OThread
     static void                 ExecuteCmdLineRequests( const ProcessDocumentsRequest& );
 
     // return FALSE if second office
-    static Status               EnableOfficeIPCThread();
+    static Status               EnableOfficeIPCThread(
+                                    sal_Bool useParent = sal_True );
     static void                 DisableOfficeIPCThread();
 };
 

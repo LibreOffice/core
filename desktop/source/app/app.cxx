@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: ghiggins $ $Date: 2002-06-10 22:14:44 $
+ *  last change: $Author: ghiggins $ $Date: 2002-06-18 09:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #include "desktop.hrc"
 #include "appinit.hxx"
 #include "intro.hxx"
-#include "officeipcthread.hxx"
+#include "officeipcmanager.hxx"
 #include "cmdlineargs.hxx"
 #include "officeacceptthread.hxx"
 #include "pluginacceptthread.hxx"
@@ -291,7 +291,8 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::task;
 
-static SalMainPipeExchangeSignalHandler* pSignalHandler = 0;
+static SalMainPipeExchangeSignalHandler*    pSignalHandler = 0;
+static CommandLineArgs *                    pArgs = 0;
 
 OOfficeAcceptorThread*      pOfficeAcceptThread = 0;
 ResMgr*                     Desktop::pResMgr    = 0;
@@ -475,7 +476,6 @@ OUString Desktop::GetMsgString( USHORT nId, const OUString& aFaultBackMsg )
 
 CommandLineArgs* GetCommandLineArgs()
 {
-    static CommandLineArgs* pArgs = 0;
     if ( !pArgs )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -484,6 +484,16 @@ CommandLineArgs* GetCommandLineArgs()
     }
 
     return pArgs;
+}
+
+void SetCommandLineArgs( const OUString & inIPCThreadCommandLine )
+{
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if ( pArgs != 0 )
+    {
+        delete pArgs;
+    }
+    pArgs = new CommandLineArgs( inIPCThreadCommandLine );
 }
 
 BOOL InitializeInstallation( const UniString& rAppFilename )
@@ -591,20 +601,20 @@ void ReplaceStringHookProc( UniString& rStr )
     }
 }
 
-/*
 BOOL SVMain()
 {
-    BOOL bInit = InitVCL( Reference < XMultiServiceFactory >() );
-
-    if( bInit )
+    BOOL bInit = sal_False;
+    ProcessInfo theProcessInfo =
+                    OfficeIPCManager().InitIPC( (Desktop *)GetpApp() );
+    if( theProcessInfo.GetProcessType() != ProcessInfo::PARENT )
     {
+        SetCommandLineArgs( theProcessInfo.GetArguments() );
+        bInit = InitVCL( Reference < XMultiServiceFactory >() );
         GetpApp()->Main();
+        DeInitVCL();
     }
-
-    DeInitVCL();
     return bInit;
 }
-*/
 
 Desktop::Desktop() : m_pIntro( 0 ), m_aBootstrapError( BE_OK )
 {
@@ -625,20 +635,6 @@ void Desktop::Init()
 
     if ( !Application::IsRemoteServer() )
     {
-        // start ipc thread only for non-remote offices
-        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::OfficeIPCThread::EnableOfficeIPCThread" );
-
-        OfficeIPCThread::Status aStatus = OfficeIPCThread::EnableOfficeIPCThread();
-        if ( aStatus == OfficeIPCThread::IPC_STATUS_BOOTSTRAP_ERROR )
-        {
-            SetBootstrapError( BE_PATHINFO_MISSING );
-        }
-        else if ( aStatus == OfficeIPCThread::IPC_STATUS_2ND_OFFICE )
-        {
-            // 2nd office startup should terminate after sending cmdlineargs through pipe
-            _exit( 0 );
-        }
-
         pSignalHandler = new SalMainPipeExchangeSignalHandler;
     }
 }
