@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfonte.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-04 11:41:46 $
+ *  last change: $Author: sab $ $Date: 2001-01-17 10:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,12 +161,24 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(
                 {
                     if (0 != (pPageItem = static_cast<const ScPageHFItem*>(rPagePool.GetItem(nPageWhichId, k))))
                     {
-                        aEditEngine.SetText(*pPageItem->GetLeftArea());
-                        AddFontItems(aEditWhichIds, 3, pPageEditPool);
-                        aEditEngine.SetText(*pPageItem->GetCenterArea());
-                        AddFontItems(aEditWhichIds, 3, pPageEditPool);
-                        aEditEngine.SetText(*pPageItem->GetRightArea());
-                        AddFontItems(aEditWhichIds, 3, pPageEditPool);
+                        const EditTextObject* pLeftArea = pPageItem->GetLeftArea();
+                        if (pLeftArea)
+                        {
+                            aEditEngine.SetText(*pLeftArea);
+                            AddFontItems(aEditWhichIds, 3, pPageEditPool);
+                        }
+                        const EditTextObject* pCenterArea = pPageItem->GetCenterArea();
+                        if (pCenterArea)
+                        {
+                            aEditEngine.SetText(*pCenterArea);
+                            AddFontItems(aEditWhichIds, 3, pPageEditPool);
+                        }
+                        const EditTextObject* pRightArea = pPageItem->GetRightArea();
+                        if (pRightArea)
+                        {
+                            aEditEngine.SetText(*pRightArea);
+                            AddFontItems(aEditWhichIds, 3, pPageEditPool);
+                        }
                     }
                 }
             }
