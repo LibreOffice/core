@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:15:41 $
+ *  last change: $Author: os $ $Date: 2001-01-17 16:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,11 +170,20 @@
 #ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_REDLINEDISPLAYTYPE_HPP_
+#include <com/sun/star/document/RedlineDisplayType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_XFORBIDDENCHARACTERS_HPP_
+#include <com/sun/star/i18n/XForbiddenCharacters.hpp>
+#endif
 #ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 
 #ifndef _SVX_UNOMID_HXX
@@ -203,8 +212,28 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::i18n;
 using namespace ::rtl;
 
+/* -----------------------------17.01.01 15:43--------------------------------
+
+ ---------------------------------------------------------------------------*/
+class SwXDocumentPropertyHelper : public cppu::WeakImplHelper1
+<com::sun::star::i18n::XForbiddenCharacters>
+{
+    SwDoc*  m_pDoc;
+public:
+    SwXDocumentPropertyHelper(SwDoc& rDoc);
+    ~SwXDocumentPropertyHelper();
+
+    virtual ForbiddenCharacters SAL_CALL getForbiddenCharacters( const Locale& rLocale ) throw(NoSuchElementException, RuntimeException);
+    virtual sal_Bool SAL_CALL hasForbiddenCharacters( const Locale& rLocale ) throw(RuntimeException);
+    virtual void SAL_CALL setForbiddenCharacters( const Locale& rLocale, const ForbiddenCharacters& rForbiddenCharacters ) throw(RuntimeException);
+    virtual void SAL_CALL removeForbiddenCharacters( const Locale& rLocale ) throw(RuntimeException);
+
+    void Invalidate() {m_pDoc = 0;}
+};
 /******************************************************************************
  *
  ******************************************************************************/
@@ -1636,18 +1665,6 @@ void    SwXTextDocument::InitNewDoc()
         delete pxXLineNumberingProperties;
         pxXLineNumberingProperties = 0;
     }
-/*
-    delete pxXTextOutlines;
-    pxXTextOutlines = 0;
-    sal_uInt16 nArrCount = aActionArr.Count();
-    while( nArrCount )
-    {
-        UnoActionContext* pContext = aActionArr.GetObject(--nArrCount);
-        pContext->InvalidateDocument();
-        aActionArr.Remove(nArrCount);
-        delete pContext;
-    }
-*/
     if(pxXReferenceMarks)
     {
          XNameAccess* pMarks = pxXReferenceMarks->get();
@@ -1667,6 +1684,12 @@ void    SwXTextDocument::InitNewDoc()
         ((SwXRedlines*)pMarks)->Invalidate();
         delete pxXRedlines;
         pxXRedlines = 0;
+    }
+    if(!xPropertyHelper.is())
+    {
+        pPropertyHelper->Invalidate();
+        xPropertyHelper = 0;
+        pPropertyHelper = 0;
     }
 }
 
@@ -1813,6 +1836,8 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
 
     if(!pMap)
         throw UnknownPropertyException();
+    if(pMap->nFlags & PropertyAttribute::READONLY)
+        throw IllegalArgumentException();
     switch(pMap->nWID)
     {
         case  WID_DOC_CHAR_COUNT     :
@@ -1855,6 +1880,25 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
         break;
         case WID_DOC_HIDE_TIPS :
             SW_MOD()->GetModuleConfig()->SetHideFieldTips(*(sal_Bool*)aValue.getValue());
+        break;
+        case WID_DOC_REDLINE_DISPLAY:
+        {
+            sal_Int16 eRedMode = pDocShell->GetDoc()->GetRedlineMode();
+            eRedMode = eRedMode & (~REDLINE_SHOW_MASK);
+            sal_Int16 nSet;
+            aValue >>= nSet;
+            switch(nSet)
+            {
+                case RedlineDisplayType::NONE: break;
+                case RedlineDisplayType::INSERTED: nSet |= REDLINE_SHOW_INSERT; break;
+                case RedlineDisplayType::REMOVED: nSet |= REDLINE_SHOW_DELETE;  break;
+                case RedlineDisplayType::
+                        INSERTED_AND_REMOVED: nSet |= REDLINE_SHOW_INSERT|REDLINE_SHOW_DELETE;
+                break;
+                default: throw IllegalArgumentException();
+            }
+            pDocShell->GetDoc()->SetRedlineMode(nSet);
+        }
         break;
         default:
         {
@@ -1931,12 +1975,36 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
             aAny.setValue(&bTemp, ::getBooleanCppuType());
         }
         break;
+        case WID_DOC_REDLINE_DISPLAY:
+        {
+            sal_Int16 eRedMode = pDocShell->GetDoc()->GetRedlineMode();
+            eRedMode = eRedMode & REDLINE_SHOW_MASK;
+            sal_Int16 nRet = RedlineDisplayType::NONE;
+            if(REDLINE_SHOW_INSERT == eRedMode)
+                nRet = RedlineDisplayType::INSERTED;
+            else if(REDLINE_SHOW_DELETE == eRedMode)
+                nRet = RedlineDisplayType::REMOVED;
+            else if(REDLINE_SHOW_MASK == eRedMode)
+                nRet = RedlineDisplayType::INSERTED_AND_REMOVED;
+            aAny <<= nRet;
+        }
+        break;
+        case WID_DOC_FORBIDDEN_CHARS:
+        {
+            if(!xPropertyHelper.is())
+            {
+                pPropertyHelper = new SwXDocumentPropertyHelper(*pDocShell->GetDoc());
+                xPropertyHelper = (cppu::OWeakObject*)pPropertyHelper;
+            }
+            Reference<XForbiddenCharacters> xRet(xPropertyHelper, UNO_QUERY);
+            aAny <<= xRet;
+        }
+        break;
         default:
         {
             const SfxPoolItem& rItem = pDocShell->GetDoc()->GetDefault(pMap->nWID);
             rItem.QueryValue(aAny, pMap->nMemberId);
         }
-
     }
     return aAny;
 }
@@ -2655,5 +2723,53 @@ Sequence< OUString > SwXOutlineTarget::getSupportedServiceNames(void) throw( Run
 
     return aRet;
 }
+/* -----------------------------17.01.01 16:06--------------------------------
 
+ ---------------------------------------------------------------------------*/
+SwXDocumentPropertyHelper::SwXDocumentPropertyHelper(SwDoc& rDoc) :
+        m_pDoc(&rDoc)
+{
+}
+/* -----------------------------17.01.01 16:06--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwXDocumentPropertyHelper::~SwXDocumentPropertyHelper()
+{
+}
+/* -----------------------------17.01.01 16:06--------------------------------
+
+ ---------------------------------------------------------------------------*/
+ForbiddenCharacters SwXDocumentPropertyHelper::getForbiddenCharacters( const Locale& rLocale )
+    throw(NoSuchElementException, RuntimeException)
+{
+    throw NoSuchElementException();
+    DBG_ERROR("not implemented")
+    return ForbiddenCharacters();
+}
+/* -----------------------------17.01.01 16:06--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool SwXDocumentPropertyHelper::hasForbiddenCharacters( const Locale& rLocale )
+    throw(RuntimeException)
+{
+    DBG_ERROR("not implemented")
+    return sal_False;
+}
+/* -----------------------------17.01.01 16:06--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXDocumentPropertyHelper::setForbiddenCharacters(
+    const Locale& rLocale, const ForbiddenCharacters& rForbiddenCharacters )
+        throw(RuntimeException)
+{
+    DBG_ERROR("not implemented")
+}
+/* -----------------------------17.01.01 16:06--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXDocumentPropertyHelper::removeForbiddenCharacters( const Locale& rLocale )
+    throw(RuntimeException)
+{
+    DBG_ERROR("not implemented")
+}
 
