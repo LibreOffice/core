@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-07 15:26:09 $
+ *  last change: $Author: hr $ $Date: 2001-12-10 18:33:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -729,6 +729,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::getTypes()
 //----------------------------------------------------------------------
 
 uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
+    throw (uno::RuntimeException)
 {
     switch( mpImpl->mnObjId )
     {
