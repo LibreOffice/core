@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextDefaults.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-14 10:10:46 $
+ *  last change: $Author: tl $ $Date: 2002-08-15 14:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,20 +93,29 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 
+#define C2U(cChar) OUString::createFromAscii(cChar)
+
+
 SwXTextDefaults::SwXTextDefaults ( SwDoc * pNewDoc )
 : pDoc (pNewDoc)
 , aPropSet (aSwMapProvider.GetPropertyMap ( PROPERTY_MAP_TEXT_DEFAULT ) )
 {
 }
+
+
 SwXTextDefaults::~SwXTextDefaults ()
 {
 }
+
+
 Reference< XPropertySetInfo > SAL_CALL SwXTextDefaults::getPropertySetInfo(  )
         throw(RuntimeException)
 {
     static uno::Reference < XPropertySetInfo > xRef = aPropSet.getPropertySetInfo();
     return xRef;
 }
+
+
 void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, const Any& aValue )
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
@@ -124,6 +133,8 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
     pDoc->SetDefault(*pNewItem);
     delete pNewItem;
 }
+
+
 Any SAL_CALL SwXTextDefaults::getPropertyValue( const OUString& rPropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
@@ -138,27 +149,37 @@ Any SAL_CALL SwXTextDefaults::getPropertyValue( const OUString& rPropertyName )
     rItem.QueryValue( aRet, pMap->nMemberId );
     return aRet;
 }
+
+
 void SAL_CALL SwXTextDefaults::addPropertyChangeListener( const OUString& rPropertyName, const Reference< XPropertyChangeListener >& xListener )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_WARNING ( "not implemented" );
 }
+
+
 void SAL_CALL SwXTextDefaults::removePropertyChangeListener( const OUString& rPropertyName, const Reference< XPropertyChangeListener >& aListener )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_WARNING ( "not implemented" );
 }
+
+
 void SAL_CALL SwXTextDefaults::addVetoableChangeListener( const OUString& rPropertyName, const Reference< XVetoableChangeListener >& aListener )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_WARNING ( "not implemented" );
 }
+
+
 void SAL_CALL SwXTextDefaults::removeVetoableChangeListener( const OUString& rPropertyName, const Reference< XVetoableChangeListener >& aListener )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_WARNING ( "not implemented" );
 }
-    // XPropertyState
+
+
+// XPropertyState
 PropertyState SAL_CALL SwXTextDefaults::getPropertyState( const OUString& rPropertyName )
         throw(UnknownPropertyException, RuntimeException)
 {
@@ -177,6 +198,8 @@ PropertyState SAL_CALL SwXTextDefaults::getPropertyState( const OUString& rPrope
         eRet = PropertyState_DEFAULT_VALUE;
     return eRet;
 }
+
+
 Sequence< PropertyState > SAL_CALL SwXTextDefaults::getPropertyStates( const Sequence< OUString >& rPropertyNames )
         throw(UnknownPropertyException, RuntimeException)
 {
@@ -190,6 +213,8 @@ Sequence< PropertyState > SAL_CALL SwXTextDefaults::getPropertyStates( const Seq
 
     return aRet;
 }
+
+
 void SAL_CALL SwXTextDefaults::setPropertyToDefault( const OUString& rPropertyName )
         throw(UnknownPropertyException, RuntimeException)
 {
@@ -203,6 +228,8 @@ void SAL_CALL SwXTextDefaults::setPropertyToDefault( const OUString& rPropertyNa
    SfxItemPool rSet (pDoc->GetAttrPool());
    rSet.ResetPoolDefaultItem ( pMap->nWID );
 }
+
+
 Any SAL_CALL SwXTextDefaults::getPropertyDefault( const OUString& rPropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
@@ -219,3 +246,40 @@ Any SAL_CALL SwXTextDefaults::getPropertyDefault( const OUString& rPropertyName 
     pItem->QueryValue( aRet, pMap->nMemberId );
     return aRet;
 }
+
+
+rtl::OUString SAL_CALL SwXTextDefaults::getImplementationName(  )
+    throw (RuntimeException)
+{
+    return C2U("SwXTextDefaults");
+}
+
+
+sal_Bool SAL_CALL SwXTextDefaults::supportsService( const ::rtl::OUString& rServiceName )
+    throw (RuntimeException)
+{
+    return  rServiceName == C2U("com.sun.star.text.Defaults") ||
+            rServiceName == C2U("com.sun.star.style.CharacterProperties") ||
+            rServiceName == C2U("com.sun.star.style.CharacterPropertiesAsian") ||
+            rServiceName == C2U("com.sun.star.style.CharacterPropertiesComplex") ||
+            rServiceName == C2U("com.sun.star.style.ParagraphProperties") ||
+            rServiceName == C2U("com.sun.star.style.ParagraphPropertiesComplex");
+}
+
+
+uno::Sequence< ::rtl::OUString > SAL_CALL SwXTextDefaults::getSupportedServiceNames(  )
+    throw (RuntimeException)
+{
+    uno::Sequence< OUString > aRet(6);
+    OUString* pArr = aRet.getArray();
+    *pArr++ = C2U("com.sun.star.text.Defaults");
+    *pArr++ = C2U("com.sun.star.style.CharacterProperties");
+    *pArr++ = C2U("com.sun.star.style.CharacterPropertiesAsian");
+    *pArr++ = C2U("com.sun.star.style.CharacterPropertiesComplex");
+    *pArr++ = C2U("com.sun.star.style.ParagraphProperties");
+    *pArr++ = C2U("com.sun.star.style.ParagraphComplex");
+    return aRet;
+}
+
+
+
