@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppuoptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2000-11-06 15:42:14 $
+ *  last change: $Author: jsc $ $Date: 2001-04-11 08:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                 case 'L':
                     if (av[i][2] != '\0')
                     {
-                        OString tmp("'-C', please check");
+                        OString tmp("'-L', please check");
                         if (i <= ac - 1)
                         {
                             tmp += " your input '" + OString(av[i]) + "'";
