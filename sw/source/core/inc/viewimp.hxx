@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:16:42 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 11:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,9 +203,6 @@ class SwViewImp
     void LockPaint();           //dito, gerufen von ViewShell::ImplLockPaint
     void UnlockPaint();
 
-public:
-    void PaintFlyChilds( SwFlyFrm *pFly, ExtOutputDevice& rOut,
-                         const SdrPaintInfoRec& rInfoRec );
 private:
 
 #ifdef ACCESSIBLE_LAYOUT
