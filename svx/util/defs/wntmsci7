@@ -23432,3 +23432,15 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?SetPosAndSize@?%O:\SRX642\src\svx\source\fmcomp\gridctrl.cxx248845598@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
 ?setCheckBoxState@?%O:\SRX642\src\svx\source\fmcomp\gridcell.cxx70586185@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
 ?getColumnPropertyFromPeer@?%O:\SRX642\src\svx\source\fmcomp\fmgridcl.cxx401722354@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
+?deallocate@?$_STL_alloc_proxy@PAV?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@V12345@V?$allocator@V?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@@_STL@@@_STL@@QAEXPAV?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@I@Z
+?deallocate@?$_STL_alloc_proxy@PAVChildDescriptor@accessibility@@V12@V?$allocator@VChildDescriptor@accessibility@@@_STL@@@_STL@@QAEXPAVChildDescriptor@accessibility@@I@Z
+?transform@_STL@@YAPAU?$pair@V?$WeakCppRef@VXAccessible@accessibility@star@sun@com@drafts@@VAccessibleEditableTextPara@2@@accessibility@@URectangle@awt@star@sun@com@@@1@PAU21@00VAccessibleTextHelper_UpdateChildBounds@accessibility@@@Z
+?CreateChild@AccessibleParaManager@accessibility@@QAE?AU?$pair@V?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@URectangle@awt@345@@_STL@@JABV?$Reference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@AAVSvxEditSourceAdapter@@K@Z
+?FireEvent@AccessibleParaManager@accessibility@@QBEXKFABVAny@uno@star@sun@com@@0@Z
+?FireEvent@AccessibleParaManager@accessibility@@QBEXKKFABVAny@uno@star@sun@com@@0@Z
+?GetChild@AccessibleParaManager@accessibility@@QAE?AU?$pair@V?$WeakCppRef@VXAccessible@accessibility@star@sun@com@drafts@@VAccessibleEditableTextPara@2@@accessibility@@URectangle@awt@star@sun@com@@@_STL@@K@Z
+?GetNum@AccessibleParaManager@accessibility@@QBEKXZ
+?IsReferencable@AccessibleParaManager@accessibility@@QBEEK@Z
+?Release@AccessibleParaManager@accessibility@@QAEXK@Z
+?Release@AccessibleParaManager@accessibility@@QAEXKK@Z
+?SetNum@AccessibleParaManager@accessibility@@QAEXK@Z
