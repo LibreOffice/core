@@ -2571,7 +2571,7 @@ SfxVoidItem ExpandPage SID_EXPAND_PAGE
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem FillColor SID_SETFILLCOLOR
+SfxVoidItem SetFillColor SID_SETFILLCOLOR
 (SfxUInt32Item Red ID_VAL_RED,SfxUInt32Item Green ID_VAL_GREEN,SfxUInt32Item Blue ID_VAL_BLUE)
 [
     /* flags: */
