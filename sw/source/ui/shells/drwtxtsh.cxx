@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 16:18:36 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,15 @@
  *
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
 
+#ifndef _LANG_HXX
+#include <tools/lang.hxx>
+#endif
 #ifndef _SFXSLSTITM_HXX
 #include <svtools/slstitm.hxx>
 #endif
@@ -512,6 +514,10 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
 
         case FN_SPELLING_DLG:
             pOLV->StartSpeller();
+            break;
+
+        case SID_HANGUL_HANJA_CONVERSION:
+            pOLV->StartTextConversion( LANGUAGE_KOREAN );
             break;
 
         default:
