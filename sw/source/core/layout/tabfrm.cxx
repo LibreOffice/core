@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:22 $
+ *  last change: $Author: jp $ $Date: 2001-01-17 11:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,7 +543,7 @@ void SwTabFrm::MakeAll()
                                 //fliessen (solange, bis er einmal
                                 //vorwaerts ge'moved wurde).
     BOOL bSplit     = FALSE;    //Wird TRUE wenn der Frm gesplittet wurde.
-    BOOL bFtnsInDoc = GetFmt()->GetDoc()->GetFtnIdxs().Count();
+    BOOL bFtnsInDoc = 0 != GetFmt()->GetDoc()->GetFtnIdxs().Count();
     BOOL bMoveable;
     const BOOL bRepeat  = GetTable()->IsHeadlineRepeat();
     const BOOL bFly     = IsInFly();
