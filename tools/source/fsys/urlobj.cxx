@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-08 15:24:54 $
+ *  last change: $Author: sb $ $Date: 2000-11-09 09:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,11 @@ namespace unnamed_tools_urlobj {} using namespace unnamed_tools_urlobj;
    name = *(escaped / ALPHA / DIGIT / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "?" / "@" / "_" / "~"
 
 
+   ; prvate (see RFC 1738, RFC 2396)
+   vnd-sun-star-wfs-url = "VND.SUN.STAR.WFS://" [host / "LOCALHOST"] ["/" segment *("/" segment)]
+   segment = *pchar
+
+
    ; private
    vim-url = "VIM://" +vimc [":" *vimc] ["/" [("INBOX" message) / ("NEWSGROUPS" ["/" [+vimc message]])]]
    message = ["/" [+vimc [":" +DIGIT "." +DIGIT "." +DIGIT]]]
@@ -344,7 +349,7 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
         { "private", "private:", 0, false, false, false, false, false,
           false, false, true },
         { "vnd.sun.star.help", "vnd.sun.star.help://", 0, true, false, false,
-          false, false, false, true, true },
+          false, false, false, false, true },
         { "https", "https://", 443, true, false, false, false, true, true,
           true, true },
         { "slot", "slot:", 0, false, false, false, false, false, false,
@@ -363,8 +368,8 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false, false },
         { "out", "out://", 0, true, false, false, false, false, false,
           false, false },
-        { 0, 0, 0, false, false, false, false, false, false, false,
-          false },
+        { "vnd.sun.star.wfs", "vnd.sun.star.wfs://", 0, true, false, false,
+          false, true, false, true, false },
         { 0, 0, 0, false, false, false, false, false, false, false,
           false },
         { "vim", "vim://", 0, true, true, false, true, false, false, true,
@@ -796,6 +801,16 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
 
         switch (m_eScheme)
         {
+            case INET_PROT_VND_SUN_STAR_HELP:
+                if (pEnd - pPos < 3
+                    || *pPos++ != '/' || *pPos++ != '/' || *pPos++ != '.')
+                {
+                    setInvalid();
+                    return false;
+                }
+                aSynAbsURIRef += '.';
+                break;
+
             case INET_PROT_FILE:
                 if (bSmart)
                 {
@@ -987,25 +1002,11 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                     pHostPortBegin = pAuthority;
                     pHostPortEnd = pPos;
                 }
-                else
-                    switch (m_eScheme)
-                    {
-                        case INET_PROT_VND_SUN_STAR_HELP:
-                            if (pPos - pAuthority != 1 || *pAuthority != '.')
-                            {
-                                setInvalid();
-                                return false;
-                            }
-                            break;
-
-                        default:
-                            if (pPos != pAuthority)
-                            {
-                                setInvalid();
-                                return false;
-                            }
-                            break;
-                    }
+                else if (pPos != pAuthority)
+                {
+                    setInvalid();
+                    return false;
+                }
                 break;
             }
         }
@@ -1108,6 +1109,7 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
             switch (m_eScheme)
             {
                 case INET_PROT_FILE:
+                case INET_PROT_VND_SUN_STAR_WFS:
                     // If the host equals "LOCALHOST" (unencoded and ignoring
                     // case), turn it into an empty host:
                     if (INetMIME::equalIgnoreCase(pHostPortBegin, pPort,
@@ -1854,6 +1856,8 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
             { "vnd.sun.star.help:", 0, INET_PROT_VND_SUN_STAR_HELP,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.webdav:", 0, INET_PROT_VND_SUN_STAR_WEBDAV,
+              PrefixInfo::OFFICIAL },
+            { "vnd.sun.star.wfs:", 0, INET_PROT_VND_SUN_STAR_WFS,
               PrefixInfo::OFFICIAL } };
     PrefixInfo const * pFirst = aMap + 1;
     PrefixInfo const * pLast = aMap + sizeof aMap / sizeof (PrefixInfo) - 1;
@@ -2054,6 +2058,7 @@ bool INetURLObject::setHost(UniString const & rTheHost, bool bOctets,
     switch (m_eScheme)
     {
         case INET_PROT_FILE:
+        case INET_PROT_VND_SUN_STAR_WFS:
             if (aSynHost.EqualsIgnoreCaseAscii("localhost"))
                 aSynHost.Erase();
             break;
@@ -2153,6 +2158,7 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
             break;
 
         case INET_PROT_FILE:
+        case INET_PROT_VND_SUN_STAR_WFS:
         {
             if (bSkippedInitialSlash)
                 aTheSynPath = '/';
@@ -2815,34 +2821,39 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
         return false;
     UniString aPath1(GetURLPath(NO_DECODE));
     UniString aPath2(rObject.GetURLPath(NO_DECODE));
-    if (m_eScheme == INET_PROT_FILE)
+    switch (m_eScheme)
     {
-        // If the URL paths of two file URLs only differ in that one has a
-        // final '/' and the other has not, take the two paths as equivalent
-        // (this could be usefull for other schemes, too):
-        xub_StrLen nLength = aPath1.Len();
-        switch (sal_Int32(nLength) - sal_Int32(aPath2.Len()))
+        case INET_PROT_FILE:
+        case INET_PROT_VND_SUN_STAR_WFS:
         {
-            case -1:
-                if (aPath2.GetChar(nLength) != '/')
+            // If the URL paths of two file URLs only differ in that one has a
+            // final '/' and the other has not, take the two paths as
+            // equivalent (this could be usefull for other schemes, too):
+            xub_StrLen nLength = aPath1.Len();
+            switch (sal_Int32(nLength) - sal_Int32(aPath2.Len()))
+            {
+                case -1:
+                    if (aPath2.GetChar(nLength) != '/')
+                        return false;
+                    break;
+
+                case 0:
+                    break;
+
+                case 1:
+                    if (aPath1.GetChar(--nLength) != '/')
+                        return false;
+                    break;
+
+                default:
                     return false;
-                break;
-
-            case 0:
-                break;
-
-            case 1:
-                if (aPath1.GetChar(--nLength) != '/')
-                    return false;
-                break;
-
-            default:
-                return false;
+            }
+            return aPath1.CompareTo(aPath2, nLength) == COMPARE_EQUAL;
         }
-        return aPath1.CompareTo(aPath2, nLength) == COMPARE_EQUAL;
+
+        default:
+            return (aPath1 == aPath2) != false;
     }
-    else
-        return (aPath1 == aPath2) != false;
 }
 
 //============================================================================
@@ -2981,6 +2992,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
             switch (m_eScheme)
             {
                 case INET_PROT_FILE:
+                case INET_PROT_VND_SUN_STAR_WFS:
                     if (aSynHost.EqualsIgnoreCaseAscii("localhost"))
                         aSynHost.Erase();
                     break;
@@ -3040,7 +3052,8 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
     aSynPath += rThePath;
     m_aPath.set(m_aAbsURIRef,
                 encodeText(aSynPath, false,
-                           m_eScheme == INET_PROT_FILE ?
+                           m_eScheme == INET_PROT_FILE
+                           || m_eScheme == INET_PROT_VND_SUN_STAR_WFS ?
                                PART_PATH_SEGMENTS_EXTRA :
                            m_eScheme == INET_PROT_NEWS
                            || m_eScheme == INET_PROT_POP3 ?
