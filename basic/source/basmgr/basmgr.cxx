@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2001-07-09 15:16:20 $
+ *  last change: $Author: ab $ $Date: 2001-07-10 11:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2178,6 +2178,7 @@ void BasicManager::ImplGetPassword( USHORT nLib ) const
 
 BOOL BasicManager::HasPassword( USHORT nLib ) const
 {
+    /* AB, 10.7. Avoid access to old soffice.sbl
     DBG_CHKTHIS( BasicManager, 0 );
     BasicLibInfo* pInf = pLibs->GetObject( nLib );
     if ( pInf )
@@ -2185,6 +2186,7 @@ BOOL BasicManager::HasPassword( USHORT nLib ) const
         ImplGetPassword( nLib );
         return pInf->HasPassword();
     }
+    */
     return FALSE;
 }
 
