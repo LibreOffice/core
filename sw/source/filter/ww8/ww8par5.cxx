@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-29 10:22:37 $
+ *  last change: $Author: cmc $ $Date: 2002-12-02 17:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2240,6 +2240,9 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
 
     bTxbxFlySection = true;
     ReadText(pF->nSRes, pF->nLRes, pPlcxMan->GetManType());
+
+    //SwWW8ImplReader::MustCloseSection(long nTxtPos) ??
+    delete pAfterSection, pAfterSection=0;
 
     aSave.Restore( this );
 
