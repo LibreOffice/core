@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:37 $
+ *  last change: $Author: ka $ $Date: 2001-11-23 14:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     NULL, (SvPersist*)pDrDocSh ),
     eDocType(eType),
     pDocSh( (SdDrawDocShell*) pDrDocSh ),
+    pCreatingTransferable( NULL ),
     bPresAll(TRUE),
     bPresEndless(FALSE),
     bPresManual(FALSE),
@@ -252,7 +253,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     bPresFullScreen(TRUE),
     nPresPause(10),
     bPresShowLogo(FALSE),
-    bSdDataObj(FALSE),
     bCustomShow(TRUE),
     nPresFirstPage(1),
     pOutliner(NULL),
@@ -632,33 +632,18 @@ SdrModel* SdDrawDocument::AllocModel() const
     SdDrawDocument* pNewModel = NULL;
 
 #ifndef SVX_LIGHT
-    if( bSdDataObj )
+    if( pCreatingTransferable )
     {
         // Dokument wird fuer Drag&Drop/Clipboard erzeugt, dafuer muss dem Dokument eine DocShell (SvPersist) bekannt sein
         SvEmbeddedObject*   pObj = NULL;
         SdDrawDocShell*     pNewDocSh = NULL;
-        SdTransferable*     pTransferDrag = SD_MOD()->pTransferDrag;
-        SdTransferable*     pTransferClip = SD_MOD()->pTransferClip;
 
-        if( pTransferDrag )
-        {
-            if( eDocType == DOCUMENT_TYPE_IMPRESS )
-                pTransferDrag->SetDocShell( new SdDrawDocShell( SFX_CREATE_MODE_EMBEDDED, TRUE, eDocType ) );
-            else
-                pTransferDrag->SetDocShell( new SdGraphicDocShell( SFX_CREATE_MODE_EMBEDDED, TRUE, eDocType ) );
+        if( eDocType == DOCUMENT_TYPE_IMPRESS )
+            pCreatingTransferable->SetDocShell( new SdDrawDocShell( SFX_CREATE_MODE_EMBEDDED, TRUE, eDocType ) );
+        else
+            pCreatingTransferable->SetDocShell( new SdGraphicDocShell( SFX_CREATE_MODE_EMBEDDED, TRUE, eDocType ) );
 
-            pNewDocSh = (SdDrawDocShell*) ( pObj = pTransferDrag->GetDocShell() );
-        }
-        else if( pTransferClip )
-        {
-            if( eDocType == DOCUMENT_TYPE_IMPRESS )
-                pTransferClip->SetDocShell( new SdDrawDocShell( SFX_CREATE_MODE_EMBEDDED, TRUE, eDocType ) );
-            else
-                pTransferClip->SetDocShell( new SdGraphicDocShell( SFX_CREATE_MODE_EMBEDDED, TRUE, eDocType ) );
-
-            pNewDocSh = (SdDrawDocShell*) ( pObj = pTransferClip->GetDocShell() );
-        }
-
+        pNewDocSh = (SdDrawDocShell*) ( pObj = pCreatingTransferable->GetDocShell() );
         pNewDocSh->DoInitNew( NULL );
         pNewModel = pNewDocSh->GetDoc();
 

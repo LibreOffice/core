@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-13 13:31:33 $
+ *  last change: $Author: ka $ $Date: 2001-11-23 14:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,7 +506,7 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                 {
                     // model is owned by from AllocModel() created DocShell
                     SdDrawDocument* pSourceDoc = (SdDrawDocument*) pSourceView->GetModel();
-                    pSourceDoc->CreatingDataObj( TRUE );
+                    pSourceDoc->CreatingDataObj( pOwnData );
                     SdDrawDocument* pModel = (SdDrawDocument*) pSourceView->GetAllMarkedModel();
                     bReturn = Paste( *pModel, aDropPos, pPage, nPasteOptions );
 
@@ -542,7 +542,7 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                     String aLayout( pPage->GetLayoutName() );
                     aLayout.Erase( aLayout.SearchAscii( SD_LT_SEPARATOR ) );
                     pPage->SetPresentationLayout( aLayout, FALSE, FALSE );
-                    pSourceDoc->CreatingDataObj( FALSE );
+                    pSourceDoc->CreatingDataObj( NULL );
                 }
                 else
                 {

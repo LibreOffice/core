@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-23 11:54:28 $
+ *  last change: $Author: ka $ $Date: 2001-11-23 14:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,9 +179,9 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 
     SD_MOD()->pTransferClip = pTransferable;
 
-    pDoc->CreatingDataObj( TRUE );
+    pDoc->CreatingDataObj( pTransferable );
     pTransferable->SetWorkDocument( (SdDrawDocument*) GetAllMarkedModel() );
-    pDoc->CreatingDataObj( FALSE );
+    pDoc->CreatingDataObj( NULL );
 
     const Rectangle                 aMarkRect( GetAllMarkedRect() );
     TransferableObjectDescriptor    aObjDesc;
