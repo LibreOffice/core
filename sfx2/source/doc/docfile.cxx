@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-25 09:22:28 $
+ *  last change: $Author: mba $ $Date: 2002-10-31 09:36:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,7 +400,8 @@ void SfxPoolCancelManager::Cancel()
 class SfxMedium_Impl : public SvCompatWeakBase
 {
 public:
-    ::ucb::Content  aContent;
+    ::ucb::Content aContent;
+    String aBaseURL;
     sal_Bool bUpdatePickList : 1;
     sal_Bool bIsTemp        : 1;
     sal_Bool bUsesCache     : 1;
@@ -605,21 +606,56 @@ Reference < XContent > SfxMedium::GetContent() const
 {
     if ( !pImp->aContent.get().is() )
     {
+        Reference < ::com::sun::star::ucb::XContent > xContent;
         Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
-        if ( aName.Len() )
+        SFX_ITEMSET_ARG( pSet, pItem, SfxUnoAnyItem, SID_CONTENT, sal_False);
+        if ( pItem )
+            pItem->GetValue() >>= xContent;
+
+        if ( xContent.is() )
         {
-            String aTemp;
-            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aTemp );
-            ::ucb::Content::create( aTemp, xEnv, pImp->aContent );
+            try
+            {
+                pImp->aContent = ::ucb::Content( xContent, xEnv );
+            }
+            catch ( Exception& )
+            {
+            }
         }
-        else if ( aLogicName.Len() )
+        else
         {
-            String aURL = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-            ::ucb::Content::create( aURL, xEnv, pImp->aContent );
+            String aURL;
+            if ( aName.Len() )
+                ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );
+            else if ( aLogicName.Len() )
+                aURL = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+            if ( aURL.Len() )
+                ::ucb::Content::create( aURL, xEnv, pImp->aContent );
         }
     }
 
     return pImp->aContent.get();
+}
+
+const String& SfxMedium::GetBaseURL()
+{
+    if ( !pImp->aBaseURL.Len() && GetContent().is() )
+    {
+        try
+        {
+            Any aAny = pImp->aContent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI" )) );
+            ::rtl::OUString aStr;
+            if ( ( aAny >>= aStr ) && aStr.getLength() )
+                pImp->aBaseURL = aStr;
+        }
+        catch ( ::com::sun::star::uno::Exception& )
+        {
+        }
+    }
+
+    if ( !pImp->aBaseURL.Len() )
+        pImp->aBaseURL = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+    return pImp->aBaseURL;
 }
 
 //------------------------------------------------------------------

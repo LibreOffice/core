@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-11 18:06:06 $
+ *  last change: $Author: mba $ $Date: 2002-10-31 09:36:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,10 +190,14 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
 #include <com/sun/star/document/MacroExecMode.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
+#include <com/sun/star/ucb/XContent.hpp>
+#endif
 
 #include <tools/cachestr.hxx>
 #include <osl/mutex.hxx>
 
+using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::frame;
@@ -265,6 +269,7 @@ static const String sUpdateDocMode  = String::CreateFromAscii( "UpdateDocMode" )
 static const String sMinimized      = String::CreateFromAscii( "Minimized" );
 static const String sInteractionHdl = String::CreateFromAscii( "InteractionHandler" );
 static const String sWindowState    = String::CreateFromAscii( "WindowState" );
+static const String sUCBContent     = String::CreateFromAscii( "UCBContent" );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -561,6 +566,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         DBG_ASSERT( bOK, "invalid type for InputStream" )
                         if (bOK)
                             rSet.Put( SfxUnoAnyItem( SID_INPUTSTREAM, rProp.Value ) );
+                     }
+                else if ( aName == sUCBContent )
+                     {
+                        Reference< XContent > xVal;
+                        sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
+                        DBG_ASSERT( bOK, "invalid type for UCBContent" )
+                        if (bOK)
+                            rSet.Put( SfxUnoAnyItem( SID_CONTENT, rProp.Value ) );
                      }
                 else if ( aName == sOutputStream )
                      {
@@ -874,6 +887,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_DOC_SALVAGE ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_CONTENT ) == SFX_ITEM_SET )
+                nAdditional++;
             if ( rSet.GetItemState( SID_INPUTSTREAM ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_OUTPUTSTREAM ) == SFX_ITEM_SET )
@@ -984,6 +999,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_FILTER_DATA )
                         continue;
                     if ( nId == SID_DOCUMENT )
+                        continue;
+                    if ( nId == SID_CONTENT )
                         continue;
                     if ( nId == SID_INPUTSTREAM )
                         continue;
@@ -1178,6 +1195,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_DOCUMENT, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nProps].Name = sModel;
+                pValue[nProps++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_CONTENT, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sUCBContent;
                 pValue[nProps++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_INPUTSTREAM, sal_False, &pItem ) == SFX_ITEM_SET )

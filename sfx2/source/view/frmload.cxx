@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2002-10-09 11:07:12 $
+ *  last change: $Author: mba $ $Date: 2002-10-31 09:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,6 +444,7 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxFrameLoader::detect" );
 
     REFERENCE< XInputStream > xStream;
+    REFERENCE< XContent > xContent;
     REFERENCE< XInteractionHandler > xInteraction;
     String aURL;
     ::rtl::OUString sTemp;
@@ -462,6 +463,7 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
     sal_Int32 nPropertyCount = lDescriptor.getLength();
     sal_Int32 nIndexOfFilterName = -1;
     sal_Int32 nIndexOfInputStream = -1;
+    sal_Int32 nIndexOfContent = -1;
     sal_Int32 nIndexOfReadOnlyFlag = -1;
     sal_Int32 nIndexOfTemplateFlag = -1;
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
@@ -495,6 +497,8 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
             nIndexOfInputStream = nProperty;
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly")) )
             nIndexOfReadOnlyFlag = nProperty;
+        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("UCBContent")) )
+            nIndexOfContent = nProperty;
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate")) )
         {
             lDescriptor[nProperty].Value >>= bOpenAsTemplate;
@@ -628,8 +632,9 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
             if ( aMedium.GetFilter() )
                 pFilter = aMedium.GetFilter();
 
-            // remember input stream and put it into the descriptor later
+            // remember input stream and content and put them into the descriptor later
             xStream = aMedium.GetInputStream();
+            xContent = aMedium.GetContent();
             bReadOnly = aMedium.IsReadOnly();
         }
 
@@ -774,7 +779,7 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
             throw exPacked;
         }
 
-        // may be - w4w filter dont close the stream
+        // may be - w4w filter doesn't close the stream
         // so we should do that here.
         if( !aMedium.IsOpen() )
             xStream = NULL;
@@ -816,6 +821,15 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
         lDescriptor.realloc( nPropertyCount + 1 );
         lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("InputStream");
         lDescriptor[nPropertyCount].Value <<= xStream;
+        nPropertyCount++;
+    }
+
+    if ( nIndexOfContent == -1 && xContent.is() )
+    {
+        // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
+        lDescriptor.realloc( nPropertyCount + 1 );
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("UCBContent");
+        lDescriptor[nPropertyCount].Value <<= xContent;
         nPropertyCount++;
     }
 
