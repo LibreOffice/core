@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CannotLoadConfigurationException.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 /** is thrown when an application tries to create a configuration provider
     but the configuration can't be loaded
  */
-exception CannotLoadConfigurationException: com::sun::star::uno::Exception
+published exception CannotLoadConfigurationException: com::sun::star::uno::Exception
 {
 };
 
