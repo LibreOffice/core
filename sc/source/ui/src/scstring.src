@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:58:39 $
+ *  last change: $Author: kz $ $Date: 2002-09-12 10:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3283,7 +3283,7 @@ String STR_ACC_CSVGRID_NAME
     Text[ greek ] = "Preview table";
     Text[ dutch ] = "Preview table";
     Text[ french ] = "Feuille d'aperçu";
-    Text[ spanish ] = "Preview table";
+    Text[ spanish ] = "Previsualización";
     Text[ finnish ] = "Preview table";
     Text[ italian ] = "Anteprima tabella";
     Text[ danish ] = "Preview table";
@@ -3379,7 +3379,7 @@ String STR_ACC_CELL_NAME
     Text[ greek ] = "Table Cell %1";
     Text[ dutch ] = "Table Cell %1";
     Text[ french ] = "Cellule de feuille %1";
-    Text[ spanish ] = "Table Cell %1";
+    Text[ spanish ] = "Celda %1";
     Text[ finnish ] = "Table Cell %1";
     Text[ italian ] = "Cella della tabella %1";
     Text[ danish ] = "Table Cell %1";
@@ -3689,7 +3689,7 @@ String STR_ACC_EDITCELL_NAME
     Text[ greek ] = "Table Cell %1";
     Text[ dutch ] = "Table Cell %1";
     Text[ french ] = "Cellule de feuille %1";
-    Text[ spanish ] = "Table Cell %1";
+    Text[ spanish ] = "Celda %1";
     Text[ finnish ] = "Table Cell %1";
     Text[ italian ] = "Cella della tabella %1";
     Text[ danish ] = "Table Cell %1";
