@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XValidatableFormComponent.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2004-04-02 10:27:46 $
+ *  last change:$Date: 2004-11-16 12:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,28 +68,33 @@ import com.sun.star.form.validation.XFormComponentValidityListener;
 import com.sun.star.form.validation.XValidatableFormComponent;
 import com.sun.star.uno.UnoRuntime;
 
-import java.util.StringTokenizer;
-
 import lib.MultiMethodTest;
 
 import util.ValueChanger;
 
+import java.util.StringTokenizer;
 
-public class _XValidatableFormComponent extends MultiMethodTest {
+
+public class _XValidatableFormComponent extends MultiMethodTest
+{
     public XValidatableFormComponent oObj;
     protected XFormComponentValidityListener listener = null;
     public boolean listenerCalled = false;
     private String[] testPropsNames = null;
     private int testPropsAmount = 0;
 
-    public void _addFormComponentValidityListener() {
+    public void _addFormComponentValidityListener()
+    {
         listener = new MyListener();
 
         boolean res = true;
 
-        try {
+        try
+        {
             oObj.addFormComponentValidityListener(listener);
-        } catch (com.sun.star.lang.NullPointerException e) {
+        }
+        catch (com.sun.star.lang.NullPointerException e)
+        {
             res = false;
             e.printStackTrace();
         }
@@ -99,24 +104,30 @@ public class _XValidatableFormComponent extends MultiMethodTest {
         tRes.tested("addFormComponentValidityListener()", res);
     }
 
-    public void _getCurrentValue() {
+    public void _getCurrentValue()
+    {
         Object cValue = oObj.getCurrentValue();
         tRes.tested("getCurrentValue()", true);
     }
 
-    public void _isValid() {
+    public void _isValid()
+    {
         boolean res = oObj.isValid();
         tRes.tested("isValid()", res);
     }
 
-    public void _removeFormComponentValidityListener() {
+    public void _removeFormComponentValidityListener()
+    {
         requiredMethod("isValid()");
 
         boolean res = true;
 
-        try {
+        try
+        {
             oObj.removeFormComponentValidityListener(listener);
-        } catch (com.sun.star.lang.NullPointerException e) {
+        }
+        catch (com.sun.star.lang.NullPointerException e)
+        {
             res = false;
             e.printStackTrace();
         }
@@ -127,10 +138,12 @@ public class _XValidatableFormComponent extends MultiMethodTest {
         tRes.tested("removeFormComponentValidityListener()", true);
     }
 
-    protected void changeAllProperties() {
-        XMultiPropertySet mProps = (XMultiPropertySet) UnoRuntime.queryInterface(
-                                           XMultiPropertySet.class,
-                                           tEnv.getTestObject());
+    protected void changeAllProperties()
+    {
+        XMultiPropertySet mProps =
+            (XMultiPropertySet) UnoRuntime.queryInterface(
+                XMultiPropertySet.class, tEnv.getTestObject()
+            );
         XPropertySetInfo propertySetInfo = mProps.getPropertySetInfo();
         Property[] properties = propertySetInfo.getProperties();
         getPropsToTest(properties);
@@ -138,61 +151,103 @@ public class _XValidatableFormComponent extends MultiMethodTest {
 
         Object[] gValues = mProps.getPropertyValues(testPropsNames);
 
-        for (int i = 0; i < testPropsAmount; i++) {
+        for (int i = 0; i < testPropsAmount; i++)
+        {
             Object oldValue = gValues[i];
 
-            if (testPropsNames[i].equals("Value") ||
-                    testPropsNames[i].equals("Time") ||
-                    testPropsNames[i].equals("EffectiveValue")) {
+            if (
+                testPropsNames[i].equals("Value")
+                    || testPropsNames[i].equals("Time")
+                    || testPropsNames[i].equals("EffectiveValue")
+            )
+            {
                 oldValue = new Integer(10);
             }
 
             Object newValue = ValueChanger.changePValue(oldValue);
             gValues[i] = newValue;
+
+            //            System.out.println("#############################################");
+            //            System.out.println("Name: "+testPropsNames[i]);
+            //            System.out.println("OldValue: "+oldValue);
+            //            System.out.println("NewValue: "+newValue);
+            //            System.out.println("#############################################");
         }
 
-        try {
+        try
+        {
             mProps.setPropertyValues(testPropsNames, gValues);
-        } catch (com.sun.star.beans.PropertyVetoException e) {
+        }
+        catch (com.sun.star.beans.PropertyVetoException e)
+        {
             log.println("Exception occured while setting properties");
             e.printStackTrace(log);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
+        {
             log.println("Exception occured while setting properties");
             e.printStackTrace(log);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
+        }
+        catch (com.sun.star.lang.WrappedTargetException e)
+        {
             log.println("Exception occured while setting properties");
             e.printStackTrace(log);
-        } // end of try-catch
+        }
+         // end of try-catch
     }
 
     //Get the properties being tested
-    private void getPropsToTest(Property[] properties) {
+    private void getPropsToTest(Property[] properties)
+    {
         String bound = "";
 
-        for (int i = 0; i < properties.length; i++) {
+        for (int i = 0; i < properties.length; i++)
+        {
             Property property = properties[i];
             String name = property.Name;
-            boolean isWritable = ((property.Attributes & PropertyAttribute.READONLY) == 0);
-            boolean isNotNull = ((property.Attributes & PropertyAttribute.MAYBEVOID) == 0);
-            boolean isBound = ((property.Attributes & PropertyAttribute.BOUND) != 0);
+            boolean isWritable =
+                ((property.Attributes & PropertyAttribute.READONLY) == 0);
+            boolean isNotNull =
+                ((property.Attributes & PropertyAttribute.MAYBEVOID) == 0);
+            boolean isBound =
+                ((property.Attributes & PropertyAttribute.BOUND) != 0);
 
-            if (name.equals("Value") || name.equals("Time") ||
-                    name.equals("Date")) {
+            //these have values that are interfaces we can't change
+            if (
+                name.equals("TextUserDefinedAttributes")
+                    || name.equals("ReferenceDevice")
+                    || name.equals("ParaUserDefinedAttributes")
+            )
+            {
+                isWritable = false;
+            }
+
+            if (
+                name.equals("Value") || name.equals("Time")
+                    || name.equals("Date")
+            )
+            {
                 bound = (name + ";");
             }
 
-            if (isWritable && isNotNull && (name.indexOf("Format") < 0) &&
-                    !name.equals("Enabled")) {
+            if (
+                isWritable && isNotNull && (name.indexOf("Format") < 0)
+                    && !name.equals("Enabled")
+            )
+            {
                 bound += (name + ";");
             }
-        } // endfor
+        }
+         // endfor
 
         //get a array of bound properties
-        if (bound.equals("")) {
+        if (bound.equals(""))
+        {
             bound = "none";
         }
 
-        if (tEnv.getTestCase().getObjectName().indexOf("Formatted") > 0) {
+        if (tEnv.getTestCase().getObjectName().indexOf("Formatted") > 0)
+        {
             bound = "EffectiveValue;";
         }
 
@@ -208,13 +263,18 @@ public class _XValidatableFormComponent extends MultiMethodTest {
         return;
     }
 
-    protected class MyListener implements XFormComponentValidityListener {
-        public void componentValidityChanged(com.sun.star.lang.EventObject eventObject) {
+    protected class MyListener implements XFormComponentValidityListener
+    {
+        public void componentValidityChanged(
+            com.sun.star.lang.EventObject eventObject
+        )
+        {
             System.out.println("componentValidityChanged called");
             listenerCalled = true;
         }
 
-        public void disposing(com.sun.star.lang.EventObject eventObject) {
+        public void disposing(com.sun.star.lang.EventObject eventObject)
+        {
             System.out.println("Listener Disposed");
         }
     }
