@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventThread.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-22 13:57:07 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 10:25:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ public:
                    sal_Bool bFlag = sal_False );
 
     // ::com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource );
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException);
 
 /* resolve ambiguity : both OWeakObject and OObject have these memory operators */
     void * SAL_CALL operator new( size_t size ) throw() { return OThread::operator new(size); }
