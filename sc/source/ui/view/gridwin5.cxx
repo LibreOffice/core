@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin5.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-10 10:30:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,8 @@
 #ifndef _SC_ACCESSIBLEDOCUMENT_HXX
 #include "AccessibleDocument.hxx"
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
 
@@ -440,14 +440,14 @@ void ScGridWindow::HideNoteMarker()
     DELETEZ(pNoteMarker);
 }
 
-com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
+com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
     ScGridWindow::CreateAccessible()
 {
     ScAccessibleDocument* pAccessibleDocument =
         new ScAccessibleDocument(GetAccessibleParentWindow()->GetAccessible(),
             pViewData->GetViewShell(), eWhich);
 
-    com::sun::star::uno::Reference < ::drafts::com::sun::star::accessibility::XAccessible > xAccessible = pAccessibleDocument;
+    com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xAccessible = pAccessibleDocument;
 
     pAccessibleDocument->Init();
 
