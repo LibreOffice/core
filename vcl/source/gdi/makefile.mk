@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2002-08-22 12:33:53 $
+#   last change: $Author: vg $ $Date: 2002-08-22 12:47:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -154,6 +154,7 @@ EXCEPTIONSFILES=	$(SLO)$/bitmap.obj		\
                     $(SLO)$/outdev.obj		\
                     $(SLO)$/outdev3.obj 	\
                     $(SLO)$/outdev6.obj		\
+                    $(SLO)$/poly.obj		\
                     $(SLO)$/print.obj		\
                     $(SLO)$/print2.obj		\
                     $(SLO)$/virdev.obj		
