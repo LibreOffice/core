@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:44:51 $
+ *  last change: $Author: kz $ $Date: 2001-06-21 21:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ russian ] = "Σαπΰςό τθλόςπ";
             Text[ greek ] = "Διαγραφή φίλτρου";
             Text[ dutch ] = "Filter verwijderen";
-            Text[ french ] = "Supprimer le filtre";
+            Text[ french ] = "Supprimer les filtres";
             Text[ spanish ] = "Eliminar filtro";
             Text[ italian ] = "Rimuovi filtro";
             Text[ danish ] = "Fjern filter";
@@ -489,6 +489,7 @@ ToolBox RID_BIB_TOOLBAR
     };
     Scroll = TRUE ;
 };
+
 
 
 
