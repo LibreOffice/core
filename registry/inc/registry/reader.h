@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reader.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:42:23 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ extern "C" {
    @return false iff an out-of-memory condition occured, in which case
    <code>result</code> is left unchanged, and no type reader is created
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 sal_Bool SAL_CALL typereg_reader_create(
     void const * buffer, sal_uInt32 length, sal_Bool copy,
@@ -113,7 +113,7 @@ sal_Bool SAL_CALL typereg_reader_create(
 
    @param handle a handle on a type reader; may be null
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void SAL_CALL typereg_reader_acquire(void * handle) SAL_THROW_EXTERN_C();
 
@@ -124,7 +124,7 @@ void SAL_CALL typereg_reader_acquire(void * handle) SAL_THROW_EXTERN_C();
 
    @param handle a handle on a type reader; may be null
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void SAL_CALL typereg_reader_release(void * handle) SAL_THROW_EXTERN_C();
 
@@ -137,7 +137,7 @@ void SAL_CALL typereg_reader_release(void * handle) SAL_THROW_EXTERN_C();
    constructed; if <code>handle</code> is null, <code>TYPEREG_VERSION_0</code>
    is returned
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 enum typereg_Version SAL_CALL typereg_reader_getVersion(void * handle)
     SAL_THROW_EXTERN_C();
@@ -151,7 +151,7 @@ enum typereg_Version SAL_CALL typereg_reader_getVersion(void * handle)
    be null; if <code>handle</code> is null, an empty string is returned; if an
    out-of-memory condition occurs, a pointer to a null pointer is returned
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void SAL_CALL typereg_reader_getDocumentation(
     void * handle, rtl_uString ** result) SAL_THROW_EXTERN_C();
@@ -165,7 +165,7 @@ void SAL_CALL typereg_reader_getDocumentation(
    null; if <code>handle</code> is null, an empty string is returned; if an
    out-of-memory condition occurs, a pointer to a null pointer is returned
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void SAL_CALL typereg_reader_getFileName(void * handle, rtl_uString ** result)
     SAL_THROW_EXTERN_C();
@@ -183,7 +183,7 @@ void SAL_CALL typereg_reader_getFileName(void * handle, rtl_uString ** result)
    @return the type class of the type reader; if <code>handle</code> is null,
    <code>RT_TYPE_INVALID</code> is returned
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 enum RTTypeClass SAL_CALL typereg_reader_getTypeClass(void * handle)
     SAL_THROW_EXTERN_C();
@@ -196,7 +196,7 @@ enum RTTypeClass SAL_CALL typereg_reader_getTypeClass(void * handle)
    @return whether the type reader is published; if <code>handle</code> is null,
    <code>sal_False</code> is returned
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 sal_Bool SAL_CALL typereg_reader_isPublished(void * handle)
     SAL_THROW_EXTERN_C();
@@ -210,7 +210,7 @@ sal_Bool SAL_CALL typereg_reader_isPublished(void * handle)
    null; if <code>handle</code> is null, an empty string is returned; if an
    out-of-memory condition occurs, a pointer to a null pointer is returned
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void SAL_CALL typereg_reader_getTypeName(void * handle, rtl_uString ** result)
     SAL_THROW_EXTERN_C();
@@ -223,7 +223,7 @@ void SAL_CALL typereg_reader_getTypeName(void * handle, rtl_uString ** result)
    @return the number of super types of the type reader; if <code>handle</code>
    is null, zero is returned
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 sal_uInt16 SAL_CALL typereg_reader_getSuperTypeCount(void * handle)
     SAL_THROW_EXTERN_C();
@@ -240,7 +240,7 @@ sal_uInt16 SAL_CALL typereg_reader_getSuperTypeCount(void * handle)
    @param index a valid index into the range of super types of the given type
    reader
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void SAL_CALL typereg_reader_getSuperTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 index)
@@ -254,7 +254,7 @@ void SAL_CALL typereg_reader_getSuperTypeName(
    @return the number of fields of the type reader; if <code>handle</code> is
    null, zero is returned
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 sal_uInt16 SAL_CALL typereg_reader_getFieldCount(void * handle)
     SAL_THROW_EXTERN_C();
@@ -270,7 +270,7 @@ sal_uInt16 SAL_CALL typereg_reader_getFieldCount(void * handle)
 
    @param index a valid index into the range of fields of the given type reader
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void SAL_CALL typereg_reader_getFieldDocumentation(
     void * handle, rtl_uString ** result, sal_uInt16 index)
@@ -287,7 +287,7 @@ void SAL_CALL typereg_reader_getFieldDocumentation(
 
    @param index a valid index into the range of fields of the given type reader
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void SAL_CALL typereg_reader_getFieldFileName(
     void * handle, rtl_uString ** result, sal_uInt16 index)
@@ -302,7 +302,7 @@ void SAL_CALL typereg_reader_getFieldFileName(
 
    @return the flags of the given field of the type reader
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 RTFieldAccess SAL_CALL typereg_reader_getFieldFlags(
     void * handle, sal_uInt16 index) SAL_THROW_EXTERN_C();
@@ -318,7 +318,7 @@ RTFieldAccess SAL_CALL typereg_reader_getFieldFlags(
 
    @param index a valid index into the range of fields of the given type reader
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void SAL_CALL typereg_reader_getFieldName(
     void * handle, rtl_uString ** result, sal_uInt16 index)
@@ -335,7 +335,7 @@ void SAL_CALL typereg_reader_getFieldName(
 
    @param index a valid index into the range of fields of the given type reader
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void SAL_CALL typereg_reader_getFieldTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 index)
@@ -357,7 +357,7 @@ void SAL_CALL typereg_reader_getFieldTypeName(
    @return false iff an out-of-memory condition occured, in which case
    <code>type</code> and <code>value</code> are left unchanged
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 sal_Bool SAL_CALL typereg_reader_getFieldValue(
     void * handle, sal_uInt16 index, enum RTValueType * type,
@@ -372,7 +372,7 @@ sal_Bool SAL_CALL typereg_reader_getFieldValue(
    @return the number of methods of the type reader; if <code>handle</code> is
    null, zero is returned
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 sal_uInt16 SAL_CALL typereg_reader_getMethodCount(void * handle)
     SAL_THROW_EXTERN_C();
@@ -388,7 +388,7 @@ sal_uInt16 SAL_CALL typereg_reader_getMethodCount(void * handle)
 
    @param index a valid index into the range of methods of the given type reader
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void SAL_CALL typereg_reader_getMethodDocumentation(
     void * handle, rtl_uString ** result, sal_uInt16 index)
@@ -403,7 +403,7 @@ void SAL_CALL typereg_reader_getMethodDocumentation(
 
    @return the flags of the given method of the type reader
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 enum RTMethodMode SAL_CALL typereg_reader_getMethodFlags(
     void * handle, sal_uInt16 index) SAL_THROW_EXTERN_C();
@@ -419,7 +419,7 @@ enum RTMethodMode SAL_CALL typereg_reader_getMethodFlags(
 
    @param index a valid index into the range of methods of the given type reader
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void SAL_CALL typereg_reader_getMethodName(
     void * handle, rtl_uString ** result, sal_uInt16 index)
@@ -436,7 +436,7 @@ void SAL_CALL typereg_reader_getMethodName(
 
    @param index a valid index into the range of methods of the given type reader
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void SAL_CALL typereg_reader_getMethodReturnTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 index)
@@ -451,7 +451,7 @@ void SAL_CALL typereg_reader_getMethodReturnTypeName(
 
    @return the number of parameters of the given method of the type reader
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 sal_uInt16 SAL_CALL typereg_reader_getMethodParameterCount(
     void * handle, sal_uInt16 index) SAL_THROW_EXTERN_C();
@@ -470,7 +470,7 @@ sal_uInt16 SAL_CALL typereg_reader_getMethodParameterCount(
    @return the flags of the given parameter of the given method of the type
    reader
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 enum RTParamMode SAL_CALL typereg_reader_getMethodParameterFlags(
     void * handle, sal_uInt16 methodIndex, sal_uInt16 parameterIndex)
@@ -491,7 +491,7 @@ enum RTParamMode SAL_CALL typereg_reader_getMethodParameterFlags(
    @param parameterIndex a valid index into the range of parameters of the given
    method
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void SAL_CALL typereg_reader_getMethodParameterName(
     void * handle, rtl_uString ** result, sal_uInt16 methodIndex,
@@ -513,7 +513,7 @@ void SAL_CALL typereg_reader_getMethodParameterName(
    @param parameterIndex a valid index into the range of parameters of the given
    method
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void SAL_CALL typereg_reader_getMethodParameterTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 methodIndex,
@@ -529,7 +529,7 @@ void SAL_CALL typereg_reader_getMethodParameterTypeName(
 
    @return the number of exceptions of the given method of the type reader
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 sal_uInt16 SAL_CALL typereg_reader_getMethodExceptionCount(
     void * handle, sal_uInt16 index) SAL_THROW_EXTERN_C();
@@ -549,7 +549,7 @@ sal_uInt16 SAL_CALL typereg_reader_getMethodExceptionCount(
    @param exceptionIndex a valid index into the range of exceptions of the given
    method
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void SAL_CALL typereg_reader_getMethodExceptionTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 methodIndex,
@@ -564,7 +564,7 @@ void SAL_CALL typereg_reader_getMethodExceptionTypeName(
    @return the number of references of the type reader; if <code>handle</code>
    is null, zero is returned
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 sal_uInt16 SAL_CALL typereg_reader_getReferenceCount(void * handle)
     SAL_THROW_EXTERN_C();
@@ -581,7 +581,7 @@ sal_uInt16 SAL_CALL typereg_reader_getReferenceCount(void * handle)
    @param index a valid index into the range of references of the given type
    reader
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void SAL_CALL typereg_reader_getReferenceDocumentation(
     void * handle, rtl_uString ** result, sal_uInt16 index)
@@ -597,7 +597,7 @@ void SAL_CALL typereg_reader_getReferenceDocumentation(
 
    @return the flags of the given reference of the type reader
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 RTFieldAccess SAL_CALL typereg_reader_getReferenceFlags(
     void * handle, sal_uInt16 index) SAL_THROW_EXTERN_C();
@@ -612,7 +612,7 @@ RTFieldAccess SAL_CALL typereg_reader_getReferenceFlags(
 
    @return the sort of the given reference of the type reader
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 enum RTReferenceType SAL_CALL typereg_reader_getReferenceSort(
     void * handle, sal_uInt16 index) SAL_THROW_EXTERN_C();
@@ -629,7 +629,7 @@ enum RTReferenceType SAL_CALL typereg_reader_getReferenceSort(
    @param index a valid index into the range of references of the given type
    reader
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 void SAL_CALL typereg_reader_getReferenceTypeName(
     void * handle, rtl_uString ** result, sal_uInt16 index)
