@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:33:48 $
+ *  last change: $Author: vg $ $Date: 2003-05-13 12:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3366,7 +3366,7 @@ ExcArray::ExcArray( UINT8 nCol, UINT16 nRow, UINT32 nId )
 ExcArray::~ExcArray()
 {
     if( pData )
-        delete pData;
+        delete [] pData;
 }
 
 
