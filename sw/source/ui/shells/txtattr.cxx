@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-05 09:31:15 $
+ *  last change: $Author: tl $ $Date: 2002-09-30 13:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,10 +513,14 @@ SET_LINESPACE:
             int eState = pArgs->GetItemState(nSlot);
             if (pArgs && SFX_ITEM_SET == eState)
                 bSet = ((const SfxBoolItem&)pArgs->Get(nSlot)).GetValue();
-            if(!bSet)
+/*
+// toggling of the slots not used anymore
+
+           if(!bSet)
                 nSlot = SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot ?
                     SID_ATTR_PARA_RIGHT_TO_LEFT :
                     SID_ATTR_PARA_LEFT_TO_RIGHT;
+*/
             SfxItemSet aAdjustSet( GetPool(),
                     RES_PARATR_ADJUST, RES_PARATR_ADJUST );
             GetShell().GetAttr(aAdjustSet);
@@ -874,6 +878,9 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2002/08/05 09:31:15  tl
+    #100584# made SID_ATTR_PARA_RIGHT/LEFT_TO_... toggle slots
+
     Revision 1.7  2002/07/04 14:55:54  os
     #101159# DropCap recording completed
 
