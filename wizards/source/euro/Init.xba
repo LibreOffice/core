@@ -20,6 +20,7 @@ Public UnprotectList() as String
 Public FilterNames(2,1) as String
 Public bDoUnProtect as Boolean
 Public bCancelTask as Boolean
+Public bDisposable as Boolean
 
 Public sREADY as String
 Public sPROTECT as String

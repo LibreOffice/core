@@ -251,8 +251,7 @@ Dim OldCurExtension(2) as String
 		CreateStyleEnumeration()
 	End If
 	EnableStep1DialogControls(True, bPreSelected, True)
-&apos; Todo: auf Integer umstellen
-	DialogModel.chkComplete.State = Not(Abs(bPreSelected))
+	DialogModel.chkComplete.State = Abs(Not(bPreSelected))
 	DialogModel.optSelRange.Enabled = bPreSelected
 End Sub
 

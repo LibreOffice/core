@@ -237,6 +237,4 @@ Dim AssignString as String
 		End If
 	End If
 	GetAssignedRanges() = StyleRangeList()
-End Function
-
-</script:module>
+End Function</script:module>

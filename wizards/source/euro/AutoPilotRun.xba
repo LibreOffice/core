@@ -21,6 +21,8 @@ Public oDocInfo as Object
 Public oUcb as Object
 Public TotDocCount as Integer
 Public sTotDocCount as String
+Public OpenProperties(1) as New com.sun.star.beans.PropertyValue
+
 
 Sub StartAutoPilot()
 Dim i As Integer
@@ -28,7 +30,6 @@ Dim i As Integer
 	If InitResources(&quot;Euro Converter&quot;, &quot;eur&quot;) Then
 		oDocInfo = CreateUnoService(&quot;com.sun.star.document.DocumentProperties&quot;)
 		oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
-&apos;		DocDisposed = True
 		oLocale = GetStarOfficeLocale()
 		InitializeConverter(oLocale, 2)
 		ToggleGoOnButton()
@@ -50,27 +51,31 @@ Dim FilesList()
 			FilterList(0) = &quot;application/x-starcalc&quot;
 			FilterList(1) = &quot;application/vnd.stardivision.calc&quot;
 			FilterList(2) = &quot;application/vnd.sun.xml.calc&quot;
-
 			If DialogModel.chkTextDocuments.State = 1 Then
 				ReDim Preserve FilterList(6) as String
 				FilterList(3) = &quot;application/x-starwriter&quot;
 				FilterList(4) = &quot;application/vnd.stardivision.writer&quot;
 				FilterList(5) = &quot;application/vnd.stardivision.writer/web&quot;
 				FilterList(6) = &quot;application/vnd.sun.xml.writer&quot;
-			End If			
+			End If
 			FilesList() = ReadDirectories(SourceDir, bRecursive, True, False, FilterList())
 			TotDocCount = Ubound(FilesList(),1) + 1
 		End If
 		InitializeProgressPage(DialogModel)
 &apos;		ChangeToNextProgressStep()
 		sTotDocCount = CStr(TotDocCount)
+		OpenProperties(0).Name = &quot;Hidden&quot;
+		OpenProperties(0).Value = True
+		OpenProperties(1).Name = &quot;AsTemplate&quot;
 		For DocIndex = 0 To TotDocCount - 1
 			If InitializeDocument(FilesList()) Then
 				If StoreDocument() Then
 					ConvertDocument()
 					oDocument.Store
 				End If
-				oDocument.Dispose()
+				If bDisposable Then
+					oDocument.Dispose()
+				End If
 			End If
 		Next DocIndex
 		DialogModel.cmdGoOn.Enabled = True
@@ -84,6 +89,7 @@ Function InitializeDocument(FilesList()) as Boolean
 &apos; The Autopilot is started from step No. 2
 Dim sViewPath as String
 Dim bIsReadOnly as Boolean
+Dim sExtension as String
 	On Local Error Goto NEXTFILE
 	If Not bCancelTask Then
 		If DialogModel.optWholeDir.State = 1 Then
@@ -98,26 +104,34 @@ Dim bIsReadOnly as Boolean
 		If Not oUcb.Exists(TargetDir) Then
 			oUcb.CreateFolder(TargetDir)
 		End If
- 		oDocument = OpenDocument(SourceFile, NoArgs(), StarDesktop)
+		sExtension = GetFileNameExtension(SourceFile, &quot;/&quot;)
+		OpenProperties(1).Value = False
+		Select Case sExtension
+			Case &quot;vor&quot;, &quot;stc&quot;, &quot;stw&quot;, &quot;sti&quot;, &quot;std&quot;
+				OpenProperties(1).Value = False
+			Case Else
+				OpenProperties(1).Value = True
+		End Select
+ 		oDocument = OpenDocument(SourceFile, OpenProperties(), bDisposable)
 		If (oDocument.IsReadOnly) AND (UCase(SourceFile) = UCase(TargetFile)) Then
 			bIsReadOnly = True
 			Msgbox(sMsgDOCISREADONLY, 16, GetProductName())
 		Else
 			bIsReadOnly = False
-			RetrieveDocumentObjects()	
+			RetrieveDocumentObjects()
 			sViewPath = CutPathView(SourceFile, 60)
 			DialogModel.lblCurDocument.Label = Str(DocIndex+1) &amp; &quot;/&quot; &amp; sTotDocCount &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
 		End If
 		InitializeDocument() = Not bIsReadOnly
 	Else
-		InitializeDocument() = False	
+		InitializeDocument() = False
 	End If
 NEXTFILE:
 	If Err &lt;&gt; 0 Then
 		InitializeDocument() = False
 		Resume LETSGO
-LETSGO:		
-	End If	
+LETSGO:
+	End If
 End Function
 
 
@@ -213,6 +227,7 @@ Dim TextBoxText as String
 		End If
 		DialogModel.txtConfig.Text = TextBoxText
 	 	ToggleProgressStep()
+		DialogModel.cmdGoOn.Enabled = False 	
 	 End If
 End Sub
 
@@ -223,7 +238,7 @@ Dim LocStep as Integer
 	&apos; If the Sub is call by the &apos;cmdBack&apos; Button then set the &apos;bMakeVisible&apos; variable accordingly
 	bMakeVisible = IsMissing(aEvent)
 	If bMakeVisible Then
-		DialogModel.Step =  3
+		DialogModel.Step = 3
 	Else
 		DialogModel.Step = 2
 	End If
@@ -268,7 +283,6 @@ Sub InitializeProgressPage()
 	DialogModel.lblCurProgress.FontWeight = com.sun.star.awt.FontWeight.BOLD
 	DialogConvert.GetControl(&quot;lblRetrieval&quot;).Visible = True
 	DialogConvert.GetControl(&quot;lblCurProgress&quot;).Visible = True
-	DialogModel.cmdGoOn.Enabled = False
 End Sub
 
 

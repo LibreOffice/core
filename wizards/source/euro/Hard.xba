@@ -64,12 +64,13 @@ Dim sStatustext as String
 	End If
 	If MaxIndex &gt; -1 Then
 		ReDim Preserve RangeList(MaxIndex,1)
+&apos;	Else
+&apos;		ReDim RangeList(,1)
 	End If
 	Rangeindex = MaxIndex
 End Sub
 	
 	
-			
 Function AddSheetRanges(oRanges as Object, r as Integer, oSheet as Object, bAutopilot)
 Dim RangeName as String
 Dim AddtoList as Boolean
@@ -230,5 +231,4 @@ Dim LocCellCount as Long
 	oRangeAddress = oRange.RangeAddress
 	LocCellCount = (oRangeAddress.EndColumn - oRangeAddress.StartColumn + 1) * (oRangeAddress.EndRow - oRangeAddress.StartRow + 1)
 	CountRangeCells = LocCellCount
-End Function
-</script:module>
+End Function</script:module>
