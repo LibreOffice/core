@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:08:27 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,19 +69,8 @@ ModalDialog DLG_INSERT_BOOKMARK
     OUTPUTSIZE = TRUE ;
     Size = MAP_APPFONT ( 179 , 96 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Textmarke einfügen : Textmarke einf³gen */
-    TEXT = "Textmarke einfügen" ;
-    TEXT [ English ] = "Insert bookmark" ;
-    TEXT [ norwegian ] = "Sett inn bokmerke" ;
-    TEXT [ italian ] = "Inserisci segnalibro" ;
-    TEXT [ portuguese_brazilian ] = "Inserir Marcador" ;
-    TEXT [ portuguese ] = "Inserir marcador de texto" ;
-    TEXT [ finnish ] = "Lisää kirjanmerkki" ;
-    TEXT [ danish ] = "Indsæt bogmærke" ;
-    TEXT [ french ] = "Insertion d'un repère de texte" ;
-    TEXT [ swedish ] = "Infoga bokmärke" ;
-    TEXT [ dutch ] = "Tekstmarkering invoegen" ;
-    TEXT [ spanish ] = "Insertar marca" ;
-    TEXT [ english_us ] = "Insert Bookmark" ;
+    Text [ de ] = "Textmarke einfügen" ;
+    Text [ en-US ] = "Insert Bookmark" ;
     MOVEABLE = TRUE ;
     SVLOOK = TRUE ;
     OkButton BT_OK
@@ -111,123 +100,23 @@ ModalDialog DLG_INSERT_BOOKMARK
         Pos = MAP_APPFONT ( 123 , 40 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-        TEXT = "~Löschen" ;
-        TEXT [ English ] = "~Delete" ;
-        TEXT [ norwegian ] = "~Slett" ;
-        TEXT [ italian ] = "~Elimina" ;
-        TEXT [ portuguese_brazilian ] = "E~xcluir" ;
-        TEXT [ portuguese ] = "E~liminar" ;
-        TEXT [ finnish ] = "~Poista" ;
-        TEXT [ danish ] = "~Slet" ;
-        TEXT [ french ] = "Supprimer" ;
-        TEXT [ swedish ] = "~Radera" ;
-        TEXT [ dutch ] = "~Wissen" ;
-        TEXT [ spanish ] = "~Borrar" ;
-        TEXT [ english_us ] = "~Delete" ;
+        Text [ de ] = "~Löschen" ;
+        Text [ en-US ] = "~Delete" ;
         TABSTOP = TRUE ;
         DISABLE = TRUE ;
-        TEXT[ chinese_simplified ] = "åˆ é™¤(~D)";
-        TEXT[ russian ] = "Óäàëèòü";
-        TEXT[ polish ] = "~Usuñ";
-        TEXT[ japanese ] = "å‰Šé™¤(~D)";
-        TEXT[ chinese_traditional ] = "åˆªé™¤(~D)";
-        TEXT[ greek ] = "ÄéáãñáöŞ";
-        TEXT[ korean ] = "ì‚­ì œ(~D)";
-        TEXT[ arabic ] = "ÍĞİ";
-        TEXT[ turkish ] = "~Sil";
-        TEXT[ catalan ] = "~Suprimeix";
-        TEXT[ thai ] = "~à¸¥à¸š";
-        TEXT[ czech ] = "Smazat";
-        TEXT[ hebrew ] = "â€®××—×™×§×”â€¬";
-        TEXT[ hindi ] = "~à¤®à¤¿à¤Ÿà¤¾à¤“";
-        TEXT[ slovak ] = "Z~mazaÅ¥";
-        TEXT[ hungarian ] = "~TÃ¶rlÃ©s";
-        TEXT[ slovenian ] = "~IzbriÅ¡i";
     };
     FixedLine FL_BOOKMARK
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 111 , 8 ) ;
-        TEXT = "Textmarken" ;
-        TEXT [ English ] = "Bookmarks" ;
-        TEXT [ norwegian ] = "Bokmerker" ;
-        TEXT [ italian ] = "Segnalibri" ;
-        TEXT [ portuguese_brazilian ] = "Marcadores" ;
-        TEXT [ portuguese ] = "Marcadores de texto" ;
-        TEXT [ finnish ] = "Kirjanmerkit" ;
-        TEXT [ danish ] = "Bogmærker" ;
-        TEXT [ french ] = "Repères de texte" ;
-        TEXT [ swedish ] = "Bokmärken" ;
-        TEXT [ dutch ] = "Tekstmarkeringen" ;
-        TEXT [ spanish ] = "Marcas de texto" ;
-        TEXT [ english_us ] = "Bookmarks" ;
-        TEXT[ chinese_simplified ] = "ä¹¦ç­¾";
-        TEXT[ russian ] = "Çàêëàäêè";
-        TEXT[ polish ] = "Zak³adki";
-        TEXT[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆãƒãƒ¼ã‚¯";
-        TEXT[ chinese_traditional ] = "å…§æ–‡æ¨™ç±¤";
-        TEXT[ greek ] = "ÓçìÜäéá êåéìİíïõ";
-        TEXT[ korean ] = "ì±…ê°ˆí”¼";
-        TEXT[ arabic ] = "ÅÔÇÑÇÊ ãÑÌÚíÉ";
-        TEXT[ turkish ] = "Sıkkullanılanlar";
-        TEXT[ catalan ] = "Marques de text";
-        TEXT[ thai ] = "à¸—à¸µà¹ˆà¸„à¸±à¹ˆà¸™";
-        TEXT[ czech ] = "ZÃ¡loÅ¾ky";
-        TEXT[ hebrew ] = "Textmarken";
-        TEXT[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¤¸à¤‚à¤•à¥‡à¤¤";
-        TEXT[ slovak ] = "ZÃ¡loÅ¾ky";
-        TEXT[ hungarian ] = "KÃ¶nyvjelzÅ‘k";
-        TEXT[ slovenian ] = "Zaznamki";
+        Text [ de ] = "Textmarken" ;
+        Text [ en-US ] = "Bookmarks" ;
     };
-    TEXT[ chinese_simplified ] = "æ’å…¥ä¹¦ç­¾";
-    TEXT[ russian ] = "Âñòàâêà çàêëàäêè";
-    TEXT[ polish ] = "Wstaw zak³adkê";
-    TEXT[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆãƒãƒ¼ã‚¯ã®æŒ¿å…¥";
-    TEXT[ chinese_traditional ] = "æ’å…¥å…§æ–‡æ¨™ç±¤";
-    TEXT[ greek ] = "ÅéóáãùãŞ óçìáäéïı êåéìİíïõ";
-    TEXT[ korean ] = "ì±…ê°ˆí”¼ ì‚½ì…";
-    TEXT[ arabic ] = "ÅÏÑÇÌ ÅÔÇÑÉ ãÑÌÚíÉ";
-    TEXT[ turkish ] = "Metin işareti ekle";
-    TEXT[ catalan ] = "Insereix marca";
-    TEXT[ thai ] = "à¹à¸—à¸£à¸à¸—à¸µà¹ˆà¸„à¸±à¹ˆà¸™";
-    TEXT[ czech ] = "VloÅ¾it zÃ¡loÅ¾ku";
-    TEXT[ hebrew ] = "â€®×”×•×¡×¤×ª ×¡×™×× ×™×”â€¬";
-    TEXT[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¤¸à¤‚à¤•à¥‡à¤¤ à¤œà¥‹à¤¡à¤¼à¥‹";
-    TEXT[ slovak ] = "VloÅ¾iÅ¥ zÃ¡loÅ¾ku";
-    TEXT[ hungarian ] = "KÃ¶nyvjelzÅ‘ beszÃºrÃ¡sa";
-    TEXT[ slovenian ] = "Vstavi zaznamek";
 };
 String STR_REMOVE_WARNING
 {
-    Text = "Die folgenden Zeichen sind nicht zulässig und wurden deshalb entfernt: ";
-    Text [English] = "The following characters are not valid and have been removed: ";
-    Text[ english_us ] = "The following characters are not valid and have been removed: ";
-    Text[ portuguese ] = "Os seguintes caracteres foram eliminados porque não são válidos: ";
-    Text[ russian ] = "Ñëåäóşùèå  ñèìâîëû íåäîïóñòèìû è áóäóò óäàëåíû: ";
-    Text[ greek ] = "Ïé áêüëïõèïé ÷áñáêôŞñåò İ÷ïõí äéáãñáöåß åğåéäŞ äåí åßíáé İãêõñïé. ";
-    Text[ dutch ] = "De volgende tekens zijn niet toegestaan en zijn daarom verwijderd. ";
-    Text[ french ] = "Les caractères suivants ont été supprimés car ils ne sont pas permis :  ";
-    Text[ spanish ] = "Los siguientes caracteres se han borrado por no ser válidos:  ";
-    Text[ italian ] = "I caratteri seguenti non sono ammessi e per questo eliminati. ";
-    Text[ danish ] = "De følgende tegn er ikke tilladte og er derfor blevet fjernet: ";
-    Text[ swedish ] = "Följande tecken är inte tillåtna och har därför tagits bort:  ";
-    Text[ polish ] = "Nastêpuj¹ce znaki s¹ niedozwolone i zosta³y usuniête: ";
-    Text[ portuguese_brazilian ] = "Os seguintes caracteres foram removidos porque não são válidos: ";
-    Text[ japanese ] = "æ¬¡ã®æ–‡å­—ã¯è¨±å¯ã•ã‚Œã¦ã„ãªã„ãŸã‚é™¤å»ã•ã‚Œã¾ã—ãŸã€‚ ";
-    Text[ korean ] = "ë‹¤ìŒê³¼ ê°™ì€ ë¬¸ìëŠ” í—ˆìš©ë˜ì§€ ì•Šê¸° ë•Œë¬¸ì— ì œê±°ë˜ì—ˆìŠµë‹ˆë‹¤: ";
-    Text[ chinese_simplified ] = "ä¸‹åˆ—å­—ç¬¦æ— æ•ˆä¸”å·²ç»è¢«åˆ é™¤ï¼š ";
-    Text[ chinese_traditional ] = "ä¸‹åˆ—çš„å­—å‹ç„¡æ•ˆè€Œè¢«åˆªé™¤ï¼š ";
-    Text[ arabic ] = "ÇáÃÍÑİ ÇáÊÇáíÉ ÛíÑ ÕÇáÍÉ¡ áåĞÇ Êã ÍĞİåÇ: ";
-    Text[ turkish ] = "Aşağıdaki karakterler geçerli değiller ve bu nedenle çıkartıldılar: ";
-    Text[ catalan ] = "Els següents caràcters s'han eliminat perquè no es permeten:  ";
-    Text[ finnish ] = "Seuraavat merkit eivät ole kelvollisia ja ne poistettiin: ";
-    Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°à¸•à¸²à¸¡à¸™à¸µà¹‰à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡à¹à¸¥à¸°à¸–à¸¹à¸à¹€à¸­à¸²à¸­à¸­à¸à¹à¸¥à¹‰à¸§: ";
-    Text[ czech ] = "NÃ¡sledujÃ­cÃ­ znaky jsou neplatnÃ© a byly odstranÄ›ny: ";
-    Text[ hebrew ] = "Die folgenden Zeichen sind nicht zulÃ¤ssig und wurden deshalb entfernt:";
-    Text[ hindi ] = "à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤…à¤•à¥à¤·à¤°à¥‡à¤‚ à¤…à¤®à¤¾à¤¨à¥à¤¯ à¤¹à¥ˆ à¤”à¤° à¤‰à¤¨à¤•à¥‹ à¤¹à¤Ÿà¤¾à¤¯à¤¾: ";
-    Text[ slovak ] = "NasledujÃºce znaky sÃº neplatnÃ© a budÃº odstrÃ¡nenÃ©: ";
-    Text[ hungarian ] = "A kÃ¶vetkezÅ‘ karakterek Ã©rvÃ©nytelenek, Ã©s eltÃ¡volÃ­tÃ¡sra kerÃ¼ltek:";
-    Text[ slovenian ] = "Naslednji znaki so neveljavni in so bili odstranjeni:";
+    Text [ de ] = "Die folgenden Zeichen sind nicht zulässig und wurden deshalb entfernt: ";
+    Text [ en-US ] = "The following characters are not valid and have been removed: ";
 };
 
 
