@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: yl146652 $ $Date: 2004-01-30 09:06:49 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1244,12 +1244,12 @@ namespace dbaui
 
         FILL_STRING_ITEM(m_aETHostname,_rSet,DSID_CONN_LDAP_HOSTNAME,bChangedSomething)
         FILL_STRING_ITEM(m_aETBaseDN,_rSet,DSID_CONN_LDAP_BASEDN,bChangedSomething)
-        if ( m_aNFPortNumber.GetValue() != m_aNFPortNumber.GetSavedValue() )
+        if ( m_aNFPortNumber.GetValue() != m_aNFPortNumber.GetSavedValue().ToInt32() )
         {
             _rSet.Put(SfxInt32Item(DSID_CONN_LDAP_PORTNUMBER, m_aNFPortNumber.GetValue()));
             bChangedSomething = sal_True;
         }
-        if ( m_aNFRowCount.GetValue() != m_aNFRowCount.GetSavedValue() )
+        if ( m_aNFRowCount.GetValue() != m_aNFRowCount.GetSavedValue().ToInt32() )
         {
             _rSet.Put(SfxInt32Item(DSID_CONN_LDAP_ROWCOUNT, m_aNFRowCount.GetValue()));
             bChangedSomething = sal_True;
@@ -1573,7 +1573,9 @@ namespace dbaui
             return rBox.GetText().Copy(0);
 
         if ( !( &m_aTextSeparator == &rBox && nPos == (rBox.GetEntryCount()-1) ) )
-            return String(rList.GetToken(((nPos*2)+1), nTok ).ToInt32());
+            return String(
+                static_cast< sal_Unicode >(
+                    rList.GetToken(((nPos*2)+1), nTok ).ToInt32()));
         // somewhat strange ... translates for instance an "32" into " "
         return String();
     }
@@ -1587,7 +1589,9 @@ namespace dbaui
 
         for( i=0 ; i<nCnt ; i+=2 )
         {
-            String  sTVal(rList.GetToken( (i+1), nTok ).ToInt32());
+            String  sTVal(
+                static_cast< sal_Unicode >(
+                    rList.GetToken( (i+1), nTok ).ToInt32()));
 
             if( sTVal == rVal )
             {
