@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SVersionRCFile.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-30 16:22:16 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-20 12:04:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,15 @@
 
 package org.openoffice.idesupport;
 
-import java.io.*;
-import java.util.*;
-import java.net.URLDecoder;
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.util.Vector;
+import java.util.HashMap;
+import java.util.Enumeration;
+import java.util.StringTokenizer;
 
 public class SVersionRCFile {
     
@@ -74,11 +80,11 @@ public class SVersionRCFile {
             System.getProperty("user.home") + File.separator +
             ".sversionrc";
     
-    private static final String FILE_URL_PREFIX =
+    public static final String FILE_URL_PREFIX =
         System.getProperty("os.name").startsWith("Windows") == true ?
             "file:///" : "file://";
 
-    private static final String PKGCHK =
+    public static final String PKGCHK =
         System.getProperty("os.name").startsWith("Windows") == true ?
             "pkgchk.exe" : "pkgchk";
 
@@ -96,8 +102,9 @@ public class SVersionRCFile {
 
     private static final HashMap files = new HashMap(3);
 
-    private File sverionrc = null;
-    private String defaultversion = null;
+    private File sversionrc = null;
+    private OfficeInstallation defaultversion = null;
+    private Vector versions = null;
     private long lastModified = 0;
 
     public SVersionRCFile() {
@@ -105,7 +112,8 @@ public class SVersionRCFile {
     }
 
     public SVersionRCFile(String name) {
-        sverionrc = new File(name);
+        sversionrc = new File(name);
+        versions = new Vector(5);
     }
 
     public static SVersionRCFile createInstance() {
@@ -124,6 +132,59 @@ public class SVersionRCFile {
             }
         }
         return result;
+    }
+
+    public OfficeInstallation getDefaultVersion() throws IOException {
+        if (defaultversion == null) {
+            getVersions();
+        }
+
+        return defaultversion;
+    }
+
+    public Enumeration getVersions() throws IOException {
+
+        long l = sversionrc.lastModified();
+
+        if (l > lastModified) {
+            BufferedReader br;
+
+            try {
+                br = new BufferedReader(new FileReader(sversionrc));
+            }
+            catch (FileNotFoundException fnfe) {
+                throw new IOException(fnfe.getMessage());
+            }
+
+            load(br);
+            br.close();
+            lastModified = l;
+        }
+        return versions.elements();
+    }
+
+    private void load(BufferedReader br) throws IOException {
+        String s;
+        
+        while ((s = br.readLine()) != null &&
+              (s.equals(VERSIONS_LINE)) != true);
+
+        while ((s = br.readLine()) != null &&
+              (s.equals("")) != true) {
+            StringTokenizer tokens = new StringTokenizer(s, "=");
+            int count = tokens.countTokens();
+
+            if (count != 2)
+                continue;
+
+            String name = tokens.nextToken();
+            String path = tokens.nextToken();
+            OfficeInstallation oi = new OfficeInstallation(name, path);
+            if (oi.supportsFramework()) {
+                versions.add(oi);
+                defaultversion = oi;
+            }
+        }
     }
 
     public static String toFileURL(String path) {
@@ -149,56 +210,6 @@ public class SVersionRCFile {
             buf.append("/");
 
         return buf.toString();
-    }
-
-    public String getDefaultVersion() throws IOException {
-        if (defaultversion == null) {
-            getVersions();
-        }
-
-        return defaultversion;
-    }
-
-    public Hashtable getVersions() throws IOException {
-        BufferedReader br;
-
-        try {
-            br = new BufferedReader(new FileReader(sverionrc));
-        }
-        catch (FileNotFoundException fnfe) {
-            throw new IOException(fnfe.getMessage());
-        }
-
-        Hashtable versions = load(br);
-        br.close();
-        return versions;
-    }
-
-    private Hashtable load(BufferedReader br) throws IOException {
-        Hashtable versions = new Hashtable();
-        String s;
-        
-        while ((s = br.readLine()) != null &&
-              (s.equals(VERSIONS_LINE)) != true);
-
-        while ((s = br.readLine()) != null &&
-              (s.equals("")) != true) {
-            StringTokenizer tokens = new StringTokenizer(s, "=");
-            int count = tokens.countTokens();
-
-            if (count != 2)
-                continue;
-
-            String name = tokens.nextToken();
-            String path = tokens.nextToken();
-            OfficeInstallation oi = new OfficeInstallation(name, path);
-            if (oi.supportsFramework()) {
-                versions.put(name, oi.getPath());
-                if (defaultversion == null)
-                    defaultversion = oi.getPath();
-            }
-        }
-        return versions;
     }
 
     public static String getPathForUnoil(String officeInstall)
@@ -231,105 +242,27 @@ public class SVersionRCFile {
         return null;
     }
     
-    public static class OfficeInstallation {
-
-        private String name;
-        private String path;
-        private String url;
-        private boolean hasFW = false;
-        private boolean supportsFW = false;
-
-        public OfficeInstallation(String path) {
-            this("Office", path);
-        }
-
-        public OfficeInstallation(String name, String path) {
-
-            this.name = name;
-
-            if (path.startsWith(FILE_URL_PREFIX)) {
-                this.url = path;
-                path = URLDecoder.decode(path);
-                path = path.substring(FILE_URL_PREFIX.length());
-
-                if (System.getProperty("os.name").startsWith("Windows"))
-                    path = path.replace('/', File.separatorChar);
-
-                this.path = path;
-            }
-            else {
-                this.path = path;
-
-                if (System.getProperty("os.name").startsWith("Windows"))
-                    path = path.replace(File.separatorChar, '/');
-
-                this.url = FILE_URL_PREFIX + path;
-            }
-
-            File f = new File(this.path + File.separator + "program" +
-                                          File.separator + PKGCHK);
-
-            if (f.exists())
-                supportsFW = true;
-        }
-
-        public String getPath() {
-            return path;
-        }
-
-        public String getPath(String name) {
-            if (!name.startsWith(File.separator))
-                name = File.separator + name;
-
-            return path + name;
-        }
-
-        public String getURL() {
-            return url;
-        }
-
-        public String getURL(String name) {
-            if (System.getProperty("os.name").startsWith("Windows"))
-                name = name.replace(File.separatorChar, '/');
-
-            if (!name.startsWith("/"))
-                name = "/" + name;
-
-            return url + name;
-        }
-
-        public boolean hasFramework() {
-            return hasFW;
-        }
-
-        public boolean supportsFramework() {
-            return supportsFW;
-        }
-    }
-
     public static void main(String[] args) {
         SVersionRCFile ov;
-        Hashtable versions;
 
         if (args.length == 0)
             ov = new SVersionRCFile();
         else
             ov = new SVersionRCFile(args[0]);
 
+        Enumeration enum;
+
         try {
-            versions = ov.getVersions();
+            enum = ov.getVersions();
         }
         catch (IOException ioe) {
             System.err.println("Error getting versions: " + ioe.getMessage());
             return;
         }
 
-        Enumeration enum = versions.keys();
-
         while (enum.hasMoreElements()) {
-            String name = (String)enum.nextElement();
-            OfficeInstallation oi = (OfficeInstallation)versions.get(name);
-            System.out.println("Name: " + name + ", Path: " + oi.getPath() +
+            OfficeInstallation oi = (OfficeInstallation)enum.nextElement();
+            System.out.println("Name: " + oi.getName() + ", Path: " + oi.getPath() +
                 ", URL: " + oi.getURL());
         }
     }
