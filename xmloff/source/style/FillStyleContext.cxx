@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FillStyleContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-09 14:03:06 $
+ *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ XMLGradientStyleContext::XMLGradientStyleContext( SvXMLImport& rImport, sal_uInt
 //  SetFamily( XML_STYLE_FAMILY_FILLSTYLE_GRADIENT_ID );
 
     // start import
-    XMLGradientStyle aGradientStyle( NULL, GetImport().GetNamespaceMap(), GetImport().GetMM100UnitConverter() );
+    XMLGradientStyleImport aGradientStyle( GetImport() );
     aGradientStyle.importXML( xAttrList, maAny, maStrName );
 }
 
@@ -164,7 +164,7 @@ XMLHatchStyleContext::XMLHatchStyleContext( SvXMLImport& rImport, sal_uInt16 nPr
 :   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
     // start import
-    XMLHatchStyle aHatchStyle( NULL, GetImport().GetNamespaceMap(), GetImport().GetMM100UnitConverter() );
+    XMLHatchStyleImport aHatchStyle( GetImport() );
     aHatchStyle.importXML( xAttrList, maAny, maStrName );
 }
 
@@ -280,7 +280,7 @@ XMLTransGradientStyleContext::XMLTransGradientStyleContext( SvXMLImport& rImport
 :   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
     // start import
-    XMLTransGradientStyle aTransGradientStyle( NULL, GetImport().GetNamespaceMap(), GetImport().GetMM100UnitConverter() );
+    XMLTransGradientStyleImport aTransGradientStyle( GetImport() );
     aTransGradientStyle.importXML( xAttrList, maAny, maStrName );
 }
 
@@ -321,7 +321,7 @@ XMLMarkerStyleContext::XMLMarkerStyleContext( SvXMLImport& rImport, sal_uInt16 n
 :   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
     // start import
-    XMLMarkerStyle aMarkerStyle( NULL, GetImport().GetNamespaceMap(), GetImport().GetMM100UnitConverter() );
+    XMLMarkerStyleImport aMarkerStyle( GetImport() );
     aMarkerStyle.importXML( xAttrList, maAny, maStrName );
 }
 
@@ -362,7 +362,7 @@ XMLDashStyleContext::XMLDashStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx
 :   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
     // start import
-    XMLDashStyle aDashStyle( NULL, GetImport().GetNamespaceMap(), GetImport().GetMM100UnitConverter() );
+    XMLDashStyleImport aDashStyle( GetImport() );
     aDashStyle.importXML( xAttrList, maAny, maStrName );
 }
 

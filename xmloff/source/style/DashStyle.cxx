@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DashStyle.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:16 $
+ *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,23 +80,31 @@
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include"xmluconv.hxx"
+#include "xmluconv.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
-#include"xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLEXP_HXX
+#include "xmlexp.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLIMP_HXX
+#include "xmlimp.hxx"
+#endif
+
 #ifndef _RTL_USTRBUF_HXX_
-#include<rtl/ustrbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #endif
 
 #ifndef _RTL_USTRING_
-#include<rtl/ustring>
+#include <rtl/ustring>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -144,42 +152,31 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_DashStyle_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-XMLDashStyle::XMLDashStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > * _pHandler,
-                                        const SvXMLNamespaceMap& _rNamespaceMap, const SvXMLUnitConverter& _rUnitConverter )
-: mpHandler      ( _pHandler ),
-  mrNamespaceMap ( _rNamespaceMap ),
-  mrUnitConverter( _rUnitConverter ),
-  mpAttrList     ( NULL )
+XMLDashStyleExport::XMLDashStyleExport( SvXMLExport& rExp )
+    : rExport(rExp)
 {
 }
 
-XMLDashStyle::~XMLDashStyle()
+XMLDashStyleImport::XMLDashStyleImport( SvXMLImport& rImp )
+    : rImport(rImp)
 {
 }
 
-void XMLDashStyle::AddAttribute( sal_uInt16 nPrefix, enum XMLTokenEnum eName, const OUString& rStrValue )
+XMLDashStyleExport::~XMLDashStyleExport()
 {
-    const OUString aStrName( GetXMLToken( eName ) );
-    const OUString aStrCDATA( GetXMLToken( XML_CDATA ) );
-
-    mpAttrList->AddAttribute( mrNamespaceMap.GetQNameByKey( nPrefix, aStrName ), aStrCDATA, rStrValue );
 }
 
-sal_Bool XMLDashStyle::exportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue )
+XMLDashStyleImport::~XMLDashStyleImport()
 {
-    return ImpExportXML( *mpHandler, mrNamespaceMap, mrUnitConverter, rStrName, rValue );
 }
 
-sal_Bool XMLDashStyle::importXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList, uno::Any& rValue, OUString& rStrName )
-{
-    return ImpImportXML( mrUnitConverter, xAttrList, rValue, rStrName );
-}
-
-sal_Bool XMLDashStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-                                           const SvXMLNamespaceMap& rNamespaceMap, const SvXMLUnitConverter& rUnitConverter,
-                                           const OUString& rStrName, const uno::Any& rValue )
+sal_Bool XMLDashStyleExport::exportXML(
+    const OUString& rStrName,
+    const uno::Any& rValue )
 {
     sal_Bool bRet = sal_False;
+
+    SvXMLUnitConverter rUnitConverter = rExport.GetMM100UnitConverter();
 
     drawing::LineDash aLineDash;
 
@@ -189,25 +186,22 @@ sal_Bool XMLDashStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::c
         {
             sal_Bool bIsRel = aLineDash.Style == drawing::DashStyle_RECTRELATIVE || aLineDash.Style == drawing::DashStyle_ROUNDRELATIVE;
 
-            mpAttrList = new SvXMLAttributeList();
-            uno::Reference< xml::sax::XAttributeList > xAttrList( mpAttrList );
-
             OUString aStrValue;
             OUStringBuffer aOut;
 
             // Name
-            AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
 
             // Style
             rUnitConverter.convertEnum( aOut, aLineDash.Style, pXML_DashStyle_Enum );
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
 
 
             // dots
             if( aLineDash.Dots )
             {
-                AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS1, OUString::valueOf( (sal_Int32)aLineDash.Dots ) );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS1, OUString::valueOf( (sal_Int32)aLineDash.Dots ) );
 
                 if( aLineDash.DotLen )
                 {
@@ -221,14 +215,14 @@ sal_Bool XMLDashStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::c
                         rUnitConverter.convertMeasure( aOut, aLineDash.DotLen );
                     }
                     aStrValue = aOut.makeStringAndClear();
-                    AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS1_LENGTH, aStrValue );
+                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS1_LENGTH, aStrValue );
                 }
             }
 
             // dashes
             if( aLineDash.Dashes )
             {
-                AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS2, OUString::valueOf( (sal_Int32)aLineDash.Dashes ) );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS2, OUString::valueOf( (sal_Int32)aLineDash.Dashes ) );
 
                 if( aLineDash.DashLen )
                 {
@@ -242,7 +236,7 @@ sal_Bool XMLDashStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::c
                         rUnitConverter.convertMeasure( aOut, aLineDash.DashLen );
                     }
                     aStrValue = aOut.makeStringAndClear();
-                    AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS2_LENGTH, aStrValue );
+                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS2_LENGTH, aStrValue );
                 }
             }
 
@@ -256,26 +250,22 @@ sal_Bool XMLDashStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::c
                 rUnitConverter.convertMeasure( aOut, aLineDash.Distance );
             }
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, XML_DISTANCE, aStrValue );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISTANCE, aStrValue );
 
 
-            // Do Write
-            OUString sWS( GetXMLToken( XML_WS ) );
-            rHandler->ignorableWhitespace( sWS );
-            OUString sElem = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_DRAW,
-                                           GetXMLToken(XML_STROKE_DASH) );
-
-            rHandler->startElement( sElem, xAttrList );
-            rHandler->endElement( sElem );
-            rHandler->ignorableWhitespace( sWS );
+            // do Write
+            SvXMLElementExport rElem( rExport,
+                                      XML_NAMESPACE_DRAW, XML_STROKE_DASH,
+                                      sal_True, sal_False );
         }
     }
     return bRet;
 }
 
-sal_Bool XMLDashStyle::ImpImportXML( const SvXMLUnitConverter& rUnitConverter,
-                                           const uno::Reference< xml::sax::XAttributeList >& xAttrList,
-                                           uno::Any& rValue, OUString& rStrName )
+sal_Bool XMLDashStyleImport::importXML(
+    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+    uno::Any& rValue,
+    OUString& rStrName )
 {
     drawing::LineDash aLineDash;
     aLineDash.Style = drawing::DashStyle_RECT;
@@ -287,6 +277,9 @@ sal_Bool XMLDashStyle::ImpImportXML( const SvXMLUnitConverter& rUnitConverter,
 
     sal_Bool bIsRel = sal_False;
 
+    SvXMLNamespaceMap& rNamespaceMap = rImport.GetNamespaceMap();
+    SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
+
     SvXMLTokenMap aTokenMap( aDashStyleAttrTokenMap );
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -294,10 +287,8 @@ sal_Bool XMLDashStyle::ImpImportXML( const SvXMLUnitConverter& rUnitConverter,
     {
         const OUString& rFullAttrName = xAttrList->getNameByIndex( i );
         OUString aStrAttrName;
-        sal_uInt16 nPrefix = mrNamespaceMap.GetKeyByAttrName( rFullAttrName, &aStrAttrName );
+        sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName( rFullAttrName, &aStrAttrName );
         const OUString& rStrValue = xAttrList->getValueByIndex( i );
-
-        sal_Int32 nTmpValue;
 
         switch( aTokenMap.Get( nPrefix, aStrAttrName ) )
         {

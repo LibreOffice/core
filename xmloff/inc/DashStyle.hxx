@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DashStyle.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:26 $
+ *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,44 +62,46 @@
 #ifndef _XMLOFF_DASHSTYLE_HXX
 #define _XMLOFF_DASHSTYLE_HXX
 
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
 #endif
 
-#ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
-#endif
+class SvXMLImport;
+class SvXMLExport;
+namespace com { namespace sun { namespace star {
+    namespace uno { template<class A> class Reference; }
+    namespace xml { namespace sax { class XAttributeList; } }
+    namespace uno { class Any; }
+} } }
+namespace rtl { class OUString; }
 
-class SvXMLNamespaceMap;
-class SvXMLAttributeList;
-class SvXMLUnitConverter;
 
-class XMLDashStyle
+class XMLDashStyleImport
 {
+    SvXMLImport& rImport;
+
 public:
-    XMLDashStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > * _pHandler,
-                        const SvXMLNamespaceMap& _rNamespaceMap, const SvXMLUnitConverter& _rUnitConverter );
-    ~XMLDashStyle();
+    XMLDashStyleImport( SvXMLImport& rImport );
+    ~XMLDashStyleImport();
 
-    sal_Bool exportXML( const ::rtl::OUString& rStrName, const ::com::sun::star::uno::Any& rValue );
-    sal_Bool importXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList, ::com::sun::star::uno::Any& rValue, ::rtl::OUString& rStrName );
+    sal_Bool importXML(
+        const ::com::sun::star::uno::Reference<
+                ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+        ::com::sun::star::uno::Any& rValue,
+        ::rtl::OUString& rStrName );
+};
 
-private:
-    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > * mpHandler;
-    const SvXMLNamespaceMap&  mrNamespaceMap;
-    const SvXMLUnitConverter& mrUnitConverter;
 
-    SvXMLAttributeList *mpAttrList;
+class XMLDashStyleExport
+{
+    SvXMLExport& rExport;
 
-    sal_Bool ImpExportXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-                           const SvXMLNamespaceMap& rNamespaceMap, const SvXMLUnitConverter& rUnitConverter,
-                           const ::rtl::OUString& rStrName, const ::com::sun::star::uno::Any& rValue );
-    sal_Bool ImpImportXML( const SvXMLUnitConverter& rUnitConverter,
-                           const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
-                           ::com::sun::star::uno::Any& rValue, ::rtl::OUString& rStrName );
+public:
+    XMLDashStyleExport( SvXMLExport& rExport );
+    ~XMLDashStyleExport();
 
-    void AddAttribute( sal_uInt16 nPrefix, enum ::xmloff::token::XMLTokenEnum eName, const ::rtl::OUString& rStrValue );
-
+    sal_Bool exportXML( const ::rtl::OUString& rStrName,
+                        const ::com::sun::star::uno::Any& rValue );
 };
 
 #endif // _XMLOFF_DASHSTYLE_HXX

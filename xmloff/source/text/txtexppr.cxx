@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-07 08:52:14 $
+ *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,13 +122,13 @@ void XMLTextExportPropertySetMapper::handleElementItem(
     {
     case CTF_DROPCAPFORMAT:
         pThis->maDropCapExport.exportXML( rProperty.maValue, bDropWholeWord,
-                                          sDropCharStyle, rNamespaceMap );
+                                          sDropCharStyle );
         pThis->bDropWholeWord = sal_False;
         pThis->sDropCharStyle = OUString();
         break;
 
     case CTF_TABSTOP:
-        pThis->maTabStopExport.Export( rProperty.maValue, rNamespaceMap );
+        pThis->maTabStopExport.Export( rProperty.maValue );
         break;
 
     case CTF_TEXTCOLUMNS:
@@ -237,8 +237,8 @@ XMLTextExportPropertySetMapper::XMLTextExportPropertySetMapper(
     SvXMLExportPropertyMapper( rMapper ),
     rExport( rExp ),
     bDropWholeWord( sal_False ),
-    maTabStopExport( rExp.GetDocHandler(), rExp.GetMM100UnitConverter() ),
-    maDropCapExport( rExp.GetDocHandler(), rExp.GetMM100UnitConverter() ),
+    maTabStopExport( rExp ),
+    maDropCapExport( rExp ),
     maTextColumnsExport( rExp ),
     maBackgroundImageExport( rExp )
 {

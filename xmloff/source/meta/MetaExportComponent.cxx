@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaExportComponent.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 17:08:28 $
+ *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,8 +151,8 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum eClass )
 
             SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_META,
                             sal_True, sal_True );
-            SfxXMLMetaExport aMeta( GetDocHandler(), GetModel() );
-            aMeta.Export( GetNamespaceMap() );
+            SfxXMLMetaExport aMeta( *this, GetModel() );
+            aMeta.Export();
         }
     }
     GetDocHandler()->endDocument();

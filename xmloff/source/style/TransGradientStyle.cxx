@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransGradientStyle.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,11 @@
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_GRADIENT_HPP_
-#include<com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient.hpp>
 #endif
 
 #ifndef _XMLOFF_ATTRLIST_HXX
-#include"attrlist.hxx"
+#include "attrlist.hxx"
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
@@ -76,11 +76,11 @@
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include"xmluconv.hxx"
+#include "xmluconv.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
-#include"xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -88,7 +88,7 @@
 #endif
 
 #ifndef _RTL_USTRING_
-#include<rtl/ustring>
+#include <rtl/ustring>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -98,6 +98,15 @@
 #ifndef _XMLOFF_XMLTKMAP_HXX
 #include "xmltkmap.hxx"
 #endif
+
+#ifndef _XMLOFF_XMLEXP_HXX
+#include "xmlexp.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLIMP_HXX
+#include "xmlimp.hxx"
+#endif
+
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -140,40 +149,28 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_GradientStyle_Enum[] =
     { XML_TOKEN_INVALID,                0 }
 };
 
-XMLTransGradientStyle::XMLTransGradientStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & _rHandler,
-                                        const SvXMLNamespaceMap& _rNamespaceMap, const SvXMLUnitConverter& _rUnitConverter )
-: rHandler      ( _rHandler ),
-  mrNamespaceMap ( _rNamespaceMap ),
-  rUnitConverter( _rUnitConverter ),
-  pAttrList     ( NULL )
+XMLTransGradientStyleImport::XMLTransGradientStyleImport( SvXMLImport& rImp )
+    : rImport(rImp)
 {
 }
 
-XMLTransGradientStyle::~XMLTransGradientStyle()
+XMLTransGradientStyleImport::~XMLTransGradientStyleImport()
 {
 }
 
-void XMLTransGradientStyle::AddAttribute( sal_uInt16 nPrefix, enum ::xmloff::token::XMLTokenEnum eName, const ::rtl::OUString& rStrValue )
+XMLTransGradientStyleExport::XMLTransGradientStyleExport( SvXMLExport& rExp )
+    : rExport(rExp)
 {
-    const ::rtl::OUString aStrName( GetXMLToken( eName ) );
-    const ::rtl::OUString aStrCDATA( GetXMLToken( XML_CDATA ) );
-
-    pAttrList->AddAttribute( mrNamespaceMap.GetQNameByKey( nPrefix, aStrName ), aStrCDATA, rStrValue );
 }
 
-sal_Bool XMLTransGradientStyle::exportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue )
+XMLTransGradientStyleExport::~XMLTransGradientStyleExport()
 {
-    return ImpExportXML( rHandler, mrNamespaceMap, rUnitConverter, rStrName, rValue );
 }
 
-sal_Bool XMLTransGradientStyle::importXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList, uno::Any& rValue, OUString& rStrName )
-{
-    return ImpImportXML( rUnitConverter, xAttrList, rValue, rStrName );
-}
 
-sal_Bool XMLTransGradientStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-                                              const SvXMLNamespaceMap& rNamespaceMap, const SvXMLUnitConverter& rUnitConverter,
-                                              const OUString& rStrName, const uno::Any& rValue )
+sal_Bool XMLTransGradientStyleExport::exportXML(
+    const OUString& rStrName,
+    const uno::Any& rValue )
 {
     sal_Bool bRet = sal_False;
     awt::Gradient aGradient;
@@ -182,20 +179,20 @@ sal_Bool XMLTransGradientStyle::ImpExportXML( const ::com::sun::star::uno::Refer
     {
         if( rValue >>= aGradient )
         {
-            pAttrList = new SvXMLAttributeList();
-            ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > xAttrList( pAttrList );
-
             OUString aStrValue;
             OUStringBuffer aOut;
 
+            SvXMLUnitConverter& rUnitConverter =
+                rExport.GetMM100UnitConverter();
+
             // Name
-            AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
 
             // Style
             if( !rUnitConverter.convertEnum( aOut, aGradient.Style, pXML_GradientStyle_Enum ) )
                 return sal_False;
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
 
             // Center x/y
             if( aGradient.Style != awt::GradientStyle_LINEAR &&
@@ -203,11 +200,11 @@ sal_Bool XMLTransGradientStyle::ImpExportXML( const ::com::sun::star::uno::Refer
             {
                 rUnitConverter.convertPercent( aOut, aGradient.XOffset );
                 aStrValue = aOut.makeStringAndClear();
-                AddAttribute( XML_NAMESPACE_DRAW, XML_CX, aStrValue );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CX, aStrValue );
 
                 rUnitConverter.convertPercent( aOut, aGradient.YOffset );
                 aStrValue = aOut.makeStringAndClear();
-                AddAttribute( XML_NAMESPACE_DRAW, XML_CY, aStrValue );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CY, aStrValue );
             }
 
 
@@ -218,44 +215,42 @@ sal_Bool XMLTransGradientStyle::ImpExportXML( const ::com::sun::star::uno::Refer
             sal_Int32 aStartValue = (sal_Int32)(((aColor.GetRed() + 1) * 100) / 255);
             rUnitConverter.convertPercent( aOut, aStartValue );
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, XML_START, aStrValue );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_START, aStrValue );
 
             // Transparency end
             aColor.SetColor( aGradient.EndColor );
             sal_Int32 aEndValue = (sal_Int32)(((aColor.GetRed() + 1) * 100) / 255);
             rUnitConverter.convertPercent( aOut, aEndValue );
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, XML_END, aStrValue );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_END, aStrValue );
 
             // Angle
             if( aGradient.Style != awt::GradientStyle_RADIAL )
             {
                 rUnitConverter.convertNumber( aOut, sal_Int32( aGradient.Angle ) );
                 aStrValue = aOut.makeStringAndClear();
-                AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, aStrValue );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, aStrValue );
             }
 
             // Border
             rUnitConverter.convertPercent( aOut, aGradient.Border );
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_BORDER, aStrValue );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_BORDER, aStrValue );
 
             // Do Write
-            OUString sWS( GetXMLToken( XML_WS ) );
-            rHandler->ignorableWhitespace( sWS );
-            rHandler->startElement( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_TRANSPARENCY) ),
-                                    xAttrList );
-            rHandler->endElement( GetXMLToken(XML_GRADIENT) );
-            rHandler->ignorableWhitespace( sWS );
+            SvXMLElementExport rElem( rExport,
+                                      XML_NAMESPACE_DRAW, XML_TRANSPARENCY,
+                                      sal_True, sal_False );
         }
     }
 
     return bRet;
 }
 
-sal_Bool XMLTransGradientStyle::ImpImportXML( const SvXMLUnitConverter& rUnitConverter,
-                                           const uno::Reference< xml::sax::XAttributeList >& xAttrList,
-                                           uno::Any& rValue, OUString& rStrName )
+sal_Bool XMLTransGradientStyleImport::importXML(
+    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+    uno::Any& rValue,
+    OUString& rStrName )
 {
     sal_Bool bRet           = sal_False;
     sal_Bool bHasName       = sal_False;
@@ -270,13 +265,15 @@ sal_Bool XMLTransGradientStyle::ImpImportXML( const SvXMLUnitConverter& rUnitCon
     aGradient.Border = 0;
 
     SvXMLTokenMap aTokenMap( aTrGradientAttrTokenMap );
+    SvXMLNamespaceMap& rNamespaceMap = rImport.GetNamespaceMap();
+    SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         const OUString& rFullAttrName = xAttrList->getNameByIndex( i );
         OUString aStrAttrName;
-        sal_uInt16 nPrefix = mrNamespaceMap.GetKeyByAttrName( rFullAttrName, &aStrAttrName );
+        sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName( rFullAttrName, &aStrAttrName );
         const OUString& rStrValue = xAttrList->getValueByIndex( i );
 
         sal_Int32 nTmpValue;

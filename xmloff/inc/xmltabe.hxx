@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabe.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:26 $
+ *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,66 +62,28 @@
 #ifndef _XMLOFF_XMLTABE_HXX
 #define _XMLOFF_XMLTABE_HXX
 
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-#ifndef _VCL_MAPUNIT_HXX
-#include <vcl/mapunit.hxx>
-#endif
+class SvXMLExport;
+namespace com { namespace sun { namespace star {
+    namespace style { struct TabStop; }
+    namespace uno { class Any; }
+} } }
 
-#ifndef _XMLOFF_ATTRLIST_HXX
-#include "attrlist.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
-#endif
-
-class SvXMLNamespaceMap;
-class SvXMLUnitConverter;
-
-#ifndef _COM_SUN_STAR_STYLE_TABSTOP_HPP_
-#include <com/sun/star/style/TabStop.hpp>
-#endif
 
 class SvxXMLTabStopExport
 {
-    const ::rtl::OUString msCDATA;
-    const ::rtl::OUString msWS;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >            mxHandler;      // the handlers
-
-    SvXMLAttributeList          *mpAttrList;        // a common attribute list
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >          mxAttrList;     // and an interface of it
-
-    const SvXMLNamespaceMap     *mpNamespaceMap;    // the namepspace map
-    const SvXMLUnitConverter&   mrUnitConv;
+    SvXMLExport& rExport;   // for access to document handler
 
 protected:
-
-    // Check if common attribute list is empty.
-#ifdef PRODUCT
-    void CheckAttrList() {}
-#else
-    void CheckAttrList();
-#endif
-    void ClearAttrList();
-    void AddAttribute( sal_uInt16 nPrefixKey,
-                       enum ::xmloff::token::XMLTokenEnum eName,
-                       const ::rtl::OUString& rValue );
-    ::rtl::OUString GetQNameByKey( sal_uInt16 nKey,
-                            const ::rtl::OUString& rLocalName ) const;
 
     void exportTabStop( const ::com::sun::star::style::TabStop* pTabStop );
 
 public:
 
-    SvxXMLTabStopExport(  const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-                          const SvXMLUnitConverter& rUnitConverter );
+    SvxXMLTabStopExport(  SvXMLExport& rExport );
     virtual ~SvxXMLTabStopExport();
 
     // core API
-    void Export( const ::com::sun::star::uno::Any& rAny, const SvXMLNamespaceMap& rNamespMap );
+    void Export( const ::com::sun::star::uno::Any& rAny );
 };
 
 

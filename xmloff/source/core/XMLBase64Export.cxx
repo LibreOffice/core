@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBase64Export.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-19 14:51:24 $
+ *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,11 +107,9 @@ sal_Bool XMLBase64Export::exportXML( const Reference < XInputStream> & rIn )
             {
                 GetExport().GetMM100UnitConverter().encodeBase64( aOutBuff,
                                                                   aInBuff );
-                GetExport().GetDocHandler()->characters(
-                                            aOutBuff.makeStringAndClear() );
+                GetExport().Characters( aOutBuff.makeStringAndClear() );
                 if( nRead == INPUT_BUFFER_SIZE )
-                    GetExport().GetDocHandler()->ignorableWhitespace(
-                                            GetExport().sWS );
+                    GetExport().IgnorableWhitespace();
             }
         }
         while( nRead == INPUT_BUFFER_SIZE );

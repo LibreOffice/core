@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrope.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,14 +74,17 @@
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
 #endif
-#ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+
+#ifndef _XMLOFF_XMLEXP_HXX
+#include "xmlexp.hxx"
 #endif
-#ifndef _XMLOFF_XMLNMSPE_HXX
-#include "xmlnmspe.hxx"
-#endif
+
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include "xmlnmspe.hxx"
 #endif
 
 #ifndef _XMLOFF_TXTDROPE_HXX
@@ -94,46 +97,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 using namespace ::xmloff::token;
 
-OUString XMLTextDropCapExport::GetQNameByKey( sal_uInt16 nKey,
-                                               const OUString& rLocalName ) const
-{
-    if( pNamespaceMap )
-        return pNamespaceMap->GetQNameByKey( nKey, rLocalName );
-    else
-        return rLocalName;
-}
 
-void XMLTextDropCapExport::ClearAttrList()
+XMLTextDropCapExport::XMLTextDropCapExport( SvXMLExport& rExp ) :
+    rExport(rExp)
 {
-    pAttrList->Clear();
-}
-
-#ifndef PRODUCT
-void XMLTextDropCapExport::CheckAttrList()
-{
-    DBG_ASSERT( !pAttrList->getLength(),
-                "XMLTextDropCapExport::CheckAttrList: list is not empty" );
-}
-#endif
-
-void XMLTextDropCapExport::AddAttribute( sal_uInt16 nPrefixKey,
-                                         enum XMLTokenEnum eName,
-                                         const OUString& rValue )
-{
-    pAttrList->AddAttribute( GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
-                             sCDATA, rValue );
-}
-
-XMLTextDropCapExport::XMLTextDropCapExport(
-        const Reference< xml::sax::XDocumentHandler > & rHandler,
-        const SvXMLUnitConverter& rUnitConverter ) :
-    sCDATA( GetXMLToken( XML_CDATA ) ),
-    pNamespaceMap( 0 ),
-    rUnitConv( rUnitConverter ),
-    pAttrList( new SvXMLAttributeList )
-{
-    xHandler = rHandler;
-    xAttrList = pAttrList;
 }
 
 XMLTextDropCapExport::~XMLTextDropCapExport()
@@ -142,23 +109,20 @@ XMLTextDropCapExport::~XMLTextDropCapExport()
 
 void XMLTextDropCapExport::exportXML( const Any& rAny,
                                       sal_Bool bWholeWord,
-                                      const OUString& rStyleName,
-                                     const SvXMLNamespaceMap& rNamespaceMap )
+                                      const OUString& rStyleName )
 {
-    pNamespaceMap = &rNamespaceMap;
-
-    CheckAttrList();
-
     DropCapFormat aFormat;
     rAny >>= aFormat;
     OUString sValue;
     OUStringBuffer sBuffer;
     if( aFormat.Lines > 1 )
     {
+        SvXMLUnitConverter& rUnitConv = rExport.GetMM100UnitConverter();
+
         // style:lines
         rUnitConv.convertNumber( sBuffer, (sal_Int32)aFormat.Lines );
-        AddAttribute( XML_NAMESPACE_STYLE, XML_LINES,
-                      sBuffer.makeStringAndClear() );
+        rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LINES,
+                              sBuffer.makeStringAndClear() );
 
         // style:length
         if( bWholeWord )
@@ -171,29 +135,24 @@ void XMLTextDropCapExport::exportXML( const Any& rAny,
             sValue = sBuffer.makeStringAndClear();
         }
         if( sValue.getLength() )
-            AddAttribute( XML_NAMESPACE_STYLE, XML_LENGTH, sValue );
+            rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LENGTH, sValue );
 
         // style:distance
         if( aFormat.Distance > 0 )
         {
             rUnitConv.convertMeasure( sBuffer, aFormat.Distance );
-            AddAttribute( XML_NAMESPACE_STYLE, XML_DISTANCE,
-                          sBuffer.makeStringAndClear() );
+            rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_DISTANCE,
+                                  sBuffer.makeStringAndClear() );
         }
 
         // style:style-name
         if( rStyleName.getLength() )
-            AddAttribute( XML_NAMESPACE_STYLE, XML_STYLE_NAME,
-                          rStyleName );
+            rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_STYLE_NAME,
+                                  rStyleName );
     }
 
-    OUString sElem = GetQNameByKey( XML_NAMESPACE_STYLE,
-                                    GetXMLToken(XML_DROP_CAP) );
-    xHandler->startElement( sElem, xAttrList );
-    ClearAttrList();
-    xHandler->endElement( sElem );
-
-    pNamespaceMap = 0;
+    SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, XML_DROP_CAP,
+                              sal_False, sal_False );
 }
 
 

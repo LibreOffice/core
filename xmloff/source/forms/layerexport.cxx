@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-11 06:34:30 $
+ *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,14 +318,14 @@ namespace xmloff
     void OFormLayerXMLExport_Impl::exportControlNumberStyles()
     {
         if (m_pControlNumberStyles)
-            m_pControlNumberStyles->Export(m_rContext.GetNamespaceMap(), sal_False);
+            m_pControlNumberStyles->Export(sal_False);
     }
 
     //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::exportAutoControlNumberStyles()
     {
         if (m_pControlNumberStyles)
-            m_pControlNumberStyles->Export(m_rContext.GetNamespaceMap(), sal_True);
+            m_pControlNumberStyles->Export(sal_True);
     }
 
     //---------------------------------------------------------------------
@@ -645,7 +645,7 @@ namespace xmloff
             OSL_ENSURE(m_xControlNumberFormats.is(), "OFormLayerXMLExport_Impl::getControlNumberStyleExport: could not obtain my default number formats!");
 
             // create the exporter
-            m_pControlNumberStyles = new SvXMLNumFmtExport(m_rContext.GetDocHandler(), xFormatsSupplier, getControlNumberStyleNamePrefix());
+            m_pControlNumberStyles = new SvXMLNumFmtExport(m_rContext, xFormatsSupplier, getControlNumberStyleNamePrefix());
         }
     }
 
@@ -663,6 +663,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/06/11 06:34:30  fs
+ *  #87978# corrected popping states in examineForms
+ *
  *  Revision 1.14  2001/05/28 15:04:18  fs
  *  #86712# no releaseContext anymore
  *

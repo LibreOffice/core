@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrope.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,68 +62,23 @@
 #define _XMLOFF_TXTDROPE_HXX
 
 
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-
-#ifndef _XMLOFF_ATTRLIST_HXX
-#include "attrlist.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
-#endif
-
-class SvXMLNamespaceMap;
-class SvXMLUnitConverter;
+class SvXMLExport;
 namespace com { namespace sun { namespace star { namespace uno {
     class Any; } } } }
 namespace rtl { class OUString; }
 
 class XMLTextDropCapExport
 {
-    const ::rtl::OUString                               sCDATA;
+    SvXMLExport& rExport;
 
-    // the handlers
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XDocumentHandler >  xHandler;
-
-    // a common attribute list
-    SvXMLAttributeList                                  *pAttrList;
-
-    // and an interface of it
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::sax::XAttributeList >    xAttrList;
-
-    // the namepspace map
-    const SvXMLNamespaceMap                             *pNamespaceMap;
-    const SvXMLUnitConverter&                           rUnitConv;
-
-protected:
-
-    // Check if common attribute list is empty.
-#ifdef PRODUCT
-    void CheckAttrList() {}
-#else
-    void CheckAttrList();
-#endif
-    void ClearAttrList();
-    void AddAttribute( sal_uInt16 nPrefixKey,
-                       enum ::xmloff::token::XMLTokenEnum eName,
-                       const ::rtl::OUString& rValue );
-    ::rtl::OUString GetQNameByKey( sal_uInt16 nKey,
-                                   const ::rtl::OUString& rLocalName ) const;
 public:
 
-    XMLTextDropCapExport(
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-        const SvXMLUnitConverter& rUnitConverter );
+    XMLTextDropCapExport( SvXMLExport& rExport );
     ~XMLTextDropCapExport();
 
     void exportXML( const ::com::sun::star::uno::Any& rAny,
-                    sal_Bool bWholeWord, const ::rtl::OUString& rStyleName,
-                    const SvXMLNamespaceMap& rNamespMap );
+                    sal_Bool bWholeWord,
+                    const ::rtl::OUString& rStyleName );
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabe.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-11 09:52:41 $
+ *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
 #endif
+#ifndef _XMLOFF_XMLEXP_HXX
+#include "xmlexp.hxx"
+#endif
 
 #ifndef _XMLOFF_XMLTABE_HXX
 #include "xmltabe.hxx"
@@ -105,23 +108,23 @@ SvXMLEnumMapEntry pXML_tabstop_style[] =
 
 void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop* pTabStop )
 {
-    CheckAttrList();
+    SvXMLUnitConverter& rUnitConv = rExport.GetMM100UnitConverter();
 
     // text:level
     OUStringBuffer sBuffer;
 
     // position attribute
-    mrUnitConv.convertMeasure( sBuffer, pTabStop->Position );
-    AddAttribute( XML_NAMESPACE_STYLE, XML_POSITION,
-                  sBuffer.makeStringAndClear() );
+    rUnitConv.convertMeasure( sBuffer, pTabStop->Position );
+    rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_POSITION,
+                           sBuffer.makeStringAndClear() );
 
     // type attribute
     if( style::TabAlign_LEFT != pTabStop->Alignment )
     {
-        mrUnitConv.convertEnum( sBuffer, pTabStop->Alignment,
+        rUnitConv.convertEnum( sBuffer, pTabStop->Alignment,
                                    pXML_tabstop_style );
-        AddAttribute( XML_NAMESPACE_STYLE, XML_TYPE,
-                      sBuffer.makeStringAndClear() );
+        rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_TYPE,
+                               sBuffer.makeStringAndClear() );
     }
 
     // char
@@ -129,83 +132,35 @@ void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop*
         pTabStop->DecimalChar != 0 )
     {
         sBuffer.append( pTabStop->DecimalChar );
-        AddAttribute( XML_NAMESPACE_STYLE, XML_CHAR,
-                      sBuffer.makeStringAndClear() );
+        rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_CHAR,
+                               sBuffer.makeStringAndClear() );
     }
 
     // leader-char
     if( ' ' != pTabStop->FillChar && 0 != pTabStop->FillChar )
     {
         sBuffer.append( pTabStop->FillChar );
-        AddAttribute( XML_NAMESPACE_STYLE, XML_LEADER_CHAR,
-                      sBuffer.makeStringAndClear() );
+        rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LEADER_CHAR,
+                               sBuffer.makeStringAndClear() );
     }
 
-    OUString sElem = GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken(XML_TAB_STOP) );
-    mxHandler->ignorableWhitespace( msWS );
-    mxHandler->startElement( sElem, mxAttrList );
-    ClearAttrList();
-    mxHandler->ignorableWhitespace( msWS );
-    mxHandler->endElement( sElem );
+    SvXMLElementExport rElem( rExport, XML_NAMESPACE_STYLE, XML_TAB_STOP,
+                              sal_True, sal_True );
 }
 
-OUString SvxXMLTabStopExport::GetQNameByKey( sal_uInt16 nKey,
-                                               const OUString& rLocalName ) const
-{
-    DBG_ASSERT( mpNamespaceMap,
-                "SvxXMLTabStopExport::GetQNameByKey: namespace map is missing" );
-    if( mpNamespaceMap )
-        return mpNamespaceMap->GetQNameByKey( nKey, rLocalName );
-    else
-        return rLocalName;
-}
 
-void SvxXMLTabStopExport::ClearAttrList()
+SvxXMLTabStopExport::SvxXMLTabStopExport(
+    SvXMLExport& rExp)
+    : rExport( rExp )
 {
-    mpAttrList->Clear();
-}
-
-#ifndef PRODUCT
-void SvxXMLTabStopExport::CheckAttrList()
-{
-    DBG_ASSERT( !mpAttrList->getLength(),
-                "SvxXMLTabStopExport::CheckAttrList: list is not empty" );
-}
-#endif
-
-void SvxXMLTabStopExport::AddAttribute( sal_uInt16 nPrefixKey, enum XMLTokenEnum eName,
-                                       const OUString& rValue )
-{
-    OUString sName( GetXMLToken( eName ) );
-
-    mpAttrList->AddAttribute( GetQNameByKey( nPrefixKey, sName ),
-                             msCDATA, rValue );
-}
-
-SvxXMLTabStopExport::SvxXMLTabStopExport( const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-                                      const SvXMLUnitConverter& rUnitConverter )
-:   msCDATA( GetXMLToken( XML_CDATA ) ),
-    msWS( GetXMLToken( XML_WS ) ),
-    mpNamespaceMap( 0 ),
-    mrUnitConv( rUnitConverter ),
-    mpAttrList( new SvXMLAttributeList )
-{
-    mxHandler = rHandler;
-    mxAttrList = mpAttrList;
 }
 
 SvxXMLTabStopExport::~SvxXMLTabStopExport()
 {
 }
 
-void SvxXMLTabStopExport::Export( const uno::Any& rAny,
-                                  const SvXMLNamespaceMap& rNamespaceMap )
+void SvxXMLTabStopExport::Export( const uno::Any& rAny )
 {
-    mpNamespaceMap = &rNamespaceMap;
-
-    CheckAttrList();
-
-
     uno::Sequence< ::com::sun::star::style::TabStop> aSeq;
     if(!(rAny >>= aSeq))
     {
@@ -214,29 +169,21 @@ void SvxXMLTabStopExport::Export( const uno::Any& rAny,
     else
     {
         const ::com::sun::star::style::TabStop* pTabs = aSeq.getConstArray();
-        const sal_uInt16 nTabs   = aSeq.getLength();
+        const sal_Int32 nTabs   = aSeq.getLength();
 
         // ignore default tab stop here
         //if( 1 == nTabs && style::TabAlign_DEFAULT == pTabs[0].Alignment )
         //  return;
 
-        OUString sElem = GetQNameByKey( XML_NAMESPACE_STYLE,
-                                        GetXMLToken(XML_TAB_STOPS) );
-        mxHandler->ignorableWhitespace( msWS );
-        mxHandler->startElement( sElem, mxAttrList );
-        ClearAttrList();
+        SvXMLElementExport rElem( rExport, XML_NAMESPACE_STYLE, XML_TAB_STOPS,
+                                  sal_True, sal_True );
 
-        for( sal_uInt16 nIndex = 0; nIndex < nTabs; nIndex++ )
+        for( sal_Int32 nIndex = 0; nIndex < nTabs; nIndex++ )
         {
             if( style::TabAlign_DEFAULT != pTabs[nIndex].Alignment )
                 exportTabStop( &(pTabs[nIndex]) );
         }
-
-        mxHandler->ignorableWhitespace( msWS );
-        mxHandler->endElement( sElem );
     }
-
-    mpNamespaceMap = 0;
 }
 
 

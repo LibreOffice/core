@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:15 $
+ *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLEXP_HXX
+#include "xmlexp.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
@@ -189,12 +193,9 @@ rtl::OUString SfxXMLMetaExport::GetISODurationString( const Time& rTime )
 //-------------------------------------------------------------------------
 
 SfxXMLMetaExport::SfxXMLMetaExport(
-        const uno::Reference<xml::sax::XDocumentHandler>& rHdl,
+        SvXMLExport& rExp,
         const uno::Reference<frame::XModel>& rDocModel ) :
-    xHandler( rHdl ),
-    pNamespaceMap( NULL ),
-    sCDATA( GetXMLToken(XML_CDATA) ),
-    sWS( GetXMLToken(XML_WS) )
+    rExport( rExp )
 {
     uno::Reference<document::XDocumentInfoSupplier> xSupp( rDocModel, uno::UNO_QUERY );
     if ( xSupp.is() )
@@ -223,9 +224,6 @@ SfxXMLMetaExport::SfxXMLMetaExport(
 
     // for Image etc. there is no XModel and no document info
 //  DBG_ASSERT( xInfoProp.is(), "no document info properties" );
-
-    pAttrList = new SvXMLAttributeList;
-    xAttrList = pAttrList;
 }
 
 SfxXMLMetaExport::~SfxXMLMetaExport()
@@ -242,12 +240,10 @@ void SfxXMLMetaExport::SimpleStringElement( const rtl::OUString& rPropertyName,
     {
         if ( sValue.getLength() )
         {
-            rtl::OUString sElem = pNamespaceMap->GetQNameByKey( nNamespace,
-                                                   GetXMLToken(eElementName) );
-            xHandler->ignorableWhitespace( sWS );
-            xHandler->startElement( sElem, xAttrList );
-            xHandler->characters( sValue );
-            xHandler->endElement( sElem );
+            SvXMLElementExport aElem( rExport, nNamespace, eElementName,
+                                      sal_True, sal_False );
+            rExport.Characters( sValue );
+
         }
     }
 }
@@ -262,12 +258,9 @@ void SfxXMLMetaExport::SimpleDateTimeElement(
     {
         rtl::OUString sValue = GetISODateTimeString( aDateTime );
 
-        rtl::OUString sElem = pNamespaceMap->GetQNameByKey( nNamespace,
-                                                  GetXMLToken(eElementName) );
-        xHandler->ignorableWhitespace( sWS );
-        xHandler->startElement( sElem, xAttrList );
-        xHandler->characters( sValue );
-        xHandler->endElement( sElem );
+        SvXMLElementExport aElem( rExport, nNamespace, eElementName,
+                                  sal_True, sal_False );
+        rExport.Characters( sValue );
     }
 }
 
@@ -299,9 +292,8 @@ rtl::OUString lcl_GetProductName()
     return aName.makeStringAndClear();
 }
 
-void SfxXMLMetaExport::Export( const SvXMLNamespaceMap& rNamespaceMap )
+void SfxXMLMetaExport::Export()
 {
-    pNamespaceMap = &rNamespaceMap;
     if ( !xInfoProp.is() ) return;
 
     rtl::OUString sElem, sSubElem, sAttrName, sValue;
@@ -309,20 +301,17 @@ void SfxXMLMetaExport::Export( const SvXMLNamespaceMap& rNamespaceMap )
 
     //  generator (exported only)
     sValue = lcl_GetProductName();
-    sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_META,
-                                          GetXMLToken(XML_GENERATOR) );
-    xHandler->ignorableWhitespace( sWS );
-    xHandler->startElement( sElem, xAttrList );
-    xHandler->characters( sValue );
-    xHandler->endElement( sElem );
+    {
+        SvXMLElementExport aElem( rExport, XML_NAMESPACE_META, XML_GENERATOR,
+                                  sal_True, sal_True );
+        rExport.Characters( sValue );
+    }
 
     //  build-id as comment
-    uno::Reference<xml::sax::XExtendedDocumentHandler> xExt( xHandler,
-                                uno::UNO_QUERY );   //! pass in ctor?
-    if (xExt.is())
+    if (rExport.GetExtDocHandler().is())
     {
         sValue = String::CreateFromAscii( RSCUPDVER );
-        xExt->comment( sValue );
+        rExport.GetExtDocHandler()->comment( sValue );
     }
 
     //  document title
@@ -363,25 +352,19 @@ void SfxXMLMetaExport::Export( const SvXMLNamespaceMap& rNamespaceMap )
     aPropVal >>= sKeywords;
     if ( sKeywords.getLength() )
     {
-        sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_META,
-                            GetXMLToken(XML_KEYWORDS) );
-        xHandler->ignorableWhitespace( sWS );
-        xHandler->startElement( sElem, xAttrList );
+        SvXMLElementExport aElem( rExport, XML_NAMESPACE_META, XML_KEYWORDS,
+                                  sal_True, sal_True );
         sal_Int32 nTokenIndex = 0;
         do
         {
             rtl::OUString sKeyword = sKeywords.getToken( 0, ',', nTokenIndex ).trim();
 
-            sSubElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_META,
-                                                   GetXMLToken(XML_KEYWORD) );
-            xHandler->ignorableWhitespace( sWS );
-            xHandler->startElement( sSubElem, xAttrList );
-            xHandler->characters( sKeyword );
-            xHandler->endElement( sSubElem );
+            SvXMLElementExport aKeywElem( rExport,
+                                          XML_NAMESPACE_META, XML_KEYWORD,
+                                          sal_True, sal_False );
+            rExport.Characters( sKeyword );
         }
         while ( nTokenIndex >= 0 );
-        xHandler->ignorableWhitespace( sWS );
-        xHandler->endElement( sElem );
     }
 
     //  document language
@@ -391,12 +374,9 @@ void SfxXMLMetaExport::Export( const SvXMLNamespaceMap& rNamespaceMap )
         sValue = ConvertLanguageToIsoString( eLanguage, '-' );
         if ( sValue.getLength() )
         {
-            sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_DC,
-                                                  GetXMLToken(XML_LANGUAGE) );
-            xHandler->ignorableWhitespace( sWS );
-            xHandler->startElement( sElem, xAttrList );
-            xHandler->characters( sValue );
-            xHandler->endElement( sElem );
+            SvXMLElementExport aElem( rExport, XML_NAMESPACE_DC, XML_LANGUAGE,
+                                      sal_True, sal_False );
+            aElem->Characters( sValue );
         }
     }
 #endif
@@ -408,12 +388,9 @@ void SfxXMLMetaExport::Export( const SvXMLNamespaceMap& rNamespaceMap )
             sValue += rtl::OUString::valueOf((sal_Unicode)'-');
             sValue += aLocale.Country;
         }
-        sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_DC,
-                                              GetXMLToken(XML_LANGUAGE) );
-        xHandler->ignorableWhitespace( sWS );
-        xHandler->startElement( sElem, xAttrList );
-        xHandler->characters( sValue );
-        xHandler->endElement( sElem );
+        SvXMLElementExport aElem( rExport, XML_NAMESPACE_DC, XML_LANGUAGE,
+                                  sal_True, sal_False );
+        rExport.Characters( sValue );
     }
 
     //  editing cycles
@@ -424,12 +401,10 @@ void SfxXMLMetaExport::Export( const SvXMLNamespaceMap& rNamespaceMap )
     {
         sValue = rtl::OUString::valueOf( nCycles );
 
-        sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_META,
-                                              GetXMLToken(XML_EDITING_CYCLES) );
-        xHandler->ignorableWhitespace( sWS );
-        xHandler->startElement( sElem, xAttrList );
-        xHandler->characters( sValue );
-        xHandler->endElement( sElem );
+        SvXMLElementExport aElem( rExport,
+                                  XML_NAMESPACE_META, XML_EDITING_CYCLES,
+                                  sal_True, sal_False );
+        rExport.Characters( sValue );
     }
 
     //  editing duration
@@ -442,12 +417,10 @@ void SfxXMLMetaExport::Export( const SvXMLNamespaceMap& rNamespaceMap )
         Time aDurTime( nDurVal );
         sValue = GetISODurationString( aDurTime );
 
-        sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_META,
-                                           GetXMLToken(XML_EDITING_DURATION) );
-        xHandler->ignorableWhitespace( sWS );
-        xHandler->startElement( sElem, xAttrList );
-        xHandler->characters( sValue );
-        xHandler->endElement( sElem );
+        SvXMLElementExport aElem( rExport,
+                                  XML_NAMESPACE_META, XML_EDITING_DURATION,
+                                  sal_True, sal_False );
+        rExport.Characters( sValue );
     }
 
     //  default target
@@ -457,27 +430,18 @@ void SfxXMLMetaExport::Export( const SvXMLNamespaceMap& rNamespaceMap )
     aPropVal >>= sDefTarget;
     if ( sDefTarget.getLength() )
     {
-        sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_OFFICE,
-                                          GetXMLToken(XML_TARGET_FRAME_NAME) );
-        pAttrList->AddAttribute( sAttrName, sCDATA, sDefTarget );
+        rExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME,
+                              sDefTarget );
 
         //! define strings for xlink:show values
-        rtl::OUString sShow = GetXMLToken(
-            sDefTarget.compareToAscii( "_blank" ) == 0 ? XML_NEW
-                                                       : XML_REPLACE );
+        XMLTokenEnum eShow =
+            sDefTarget.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_blank"))
+                ? XML_NEW : XML_REPLACE;
+        rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, eShow );
 
-        sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_XLINK,
-                                                  GetXMLToken(XML_SHOW) );
-        pAttrList->AddAttribute( sAttrName, sCDATA, sShow );
-
-        sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_META,
-                                        GetXMLToken(XML_HYPERLINK_BEHAVIOUR) );
-
-        xHandler->ignorableWhitespace( sWS );
-        xHandler->startElement( sElem, xAttrList );
-        xHandler->endElement( sElem );
-
-        pAttrList->Clear();
+        SvXMLElementExport aElem( rExport,
+                                  XML_NAMESPACE_META,XML_HYPERLINK_BEHAVIOUR,
+                                  sal_True, sal_False );
     }
 
     //  auto-reload
@@ -494,9 +458,8 @@ void SfxXMLMetaExport::Export( const SvXMLNamespaceMap& rNamespaceMap )
         aPropVal >>= sReloadURL;
         if ( sReloadURL.getLength() )
         {
-            sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_XLINK,
-                                                      GetXMLToken(XML_HREF) );
-            pAttrList->AddAttribute( sAttrName, sCDATA, INetURLObject::AbsToRel( sReloadURL) );
+            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF,
+                                  INetURLObject::AbsToRel( sReloadURL) );
         }
 
         aPropVal = xInfoProp->getPropertyValue(
@@ -508,19 +471,12 @@ void SfxXMLMetaExport::Export( const SvXMLNamespaceMap& rNamespaceMap )
             aTime.MakeTimeFromMS( nSecs * 1000 );
             rtl::OUString sReloadTime = GetISODurationString( aTime );
 
-            sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_META,
-                                                      GetXMLToken(XML_DELAY) );
-            pAttrList->AddAttribute( sAttrName, sCDATA, sReloadTime );
+            rExport.AddAttribute( XML_NAMESPACE_META, XML_DELAY, sReloadTime );
         }
 
-        sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_META,
-                                              GetXMLToken(XML_AUTO_RELOAD) );
 
-        xHandler->ignorableWhitespace( sWS );
-        xHandler->startElement( sElem, xAttrList );
-        xHandler->endElement( sElem );
-
-        pAttrList->Clear();
+        SvXMLElementExport aElem( rExport, XML_NAMESPACE_META, XML_AUTO_RELOAD,
+                                  sal_True, sal_False );
     }
 
     //  template
@@ -530,25 +486,13 @@ void SfxXMLMetaExport::Export( const SvXMLNamespaceMap& rNamespaceMap )
     aPropVal >>= sTplPath;
     if ( sTplPath.getLength() )
     {
-        sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_XLINK,
-                                                  GetXMLToken(XML_TYPE) );
-        pAttrList->AddAttribute( sAttrName, sCDATA,
-                                 GetXMLToken(XML_SIMPLE) );
-        sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_XLINK,
-                                                  GetXMLToken(XML_ACTUATE) );
-        pAttrList->AddAttribute( sAttrName, sCDATA,
-                                 GetXMLToken(XML_ONREQUEST) );
-
-        sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_XLINK,
-                                                  GetXMLToken(XML_ROLE) );
-        pAttrList->AddAttribute( sAttrName, sCDATA,
-                      pNamespaceMap->GetQNameByKey( XML_NAMESPACE_OFFICE,
-                                                 GetXMLToken(XML_TEMPLATE) ) );
+        rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+        rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );
+        rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ROLE, XML_TEMPLATE );
 
         //  template URL
-        sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_XLINK,
-                                                  GetXMLToken(XML_HREF) );
-        pAttrList->AddAttribute( sAttrName, sCDATA, INetURLObject::AbsToRel(sTplPath) );
+        rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF,
+                              INetURLObject::AbsToRel(sTplPath) );
 
         //  template name
         aPropVal = xInfoProp->getPropertyValue(
@@ -557,9 +501,7 @@ void SfxXMLMetaExport::Export( const SvXMLNamespaceMap& rNamespaceMap )
         aPropVal >>= sTplName;
         if ( sTplName.getLength() )
         {
-            sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_XLINK,
-                                                      GetXMLToken(XML_TITLE) );
-            pAttrList->AddAttribute( sAttrName, sCDATA, sTplName );
+            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TITLE, sTplName );
         }
 
         //  template date
@@ -570,47 +512,29 @@ void SfxXMLMetaExport::Export( const SvXMLNamespaceMap& rNamespaceMap )
         {
             rtl::OUString sTplDate = GetISODateTimeString( aDateTime );
 
-            sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_META,
-                                                      GetXMLToken(XML_DATE) );
-            pAttrList->AddAttribute( sAttrName, sCDATA, sTplDate );
+            rExport.AddAttribute( XML_NAMESPACE_META, XML_DATE, sTplDate );
         }
 
-        sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_META,
-                                              GetXMLToken(XML_TEMPLATE) );
-
-        xHandler->ignorableWhitespace( sWS );
-        xHandler->startElement( sElem, xAttrList );
-        xHandler->endElement( sElem );
-
-        pAttrList->Clear();
+        SvXMLElementExport aElem( rExport, XML_NAMESPACE_META, XML_TEMPLATE,
+                                  sal_True, sal_False );
     }
 
     //  user defined fields
     sal_Int16 nUFCount = xDocInfo->getUserFieldCount();
     if ( nUFCount )
     {
-        sSubElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_META,
-                                               GetXMLToken(XML_USER_DEFINED) );
-        sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_META,
-                                                  GetXMLToken(XML_NAME) );
-
         for (sal_Int16 nUF=0; nUF<nUFCount; nUF++)
         {
             rtl::OUString aUFName = xDocInfo->getUserFieldName( nUF );
             rtl::OUString aUFValue = xDocInfo->getUserFieldValue( nUF );
 
-            pAttrList->AddAttribute( sAttrName, sCDATA, aUFName );
+            rExport.AddAttribute( XML_NAMESPACE_META, XML_NAME, aUFName );
 
-            xHandler->ignorableWhitespace( sWS );
-            xHandler->startElement( sSubElem, xAttrList );
-            xHandler->characters( aUFValue );
-            xHandler->endElement( sSubElem );
-
-            pAttrList->Clear();
+            SvXMLElementExport aElem( rExport, XML_NAMESPACE_META,
+                                      XML_USER_DEFINED, sal_True, sal_False );
+            rExport.Characters( aUFValue );
         }
     }
-
-    pNamespaceMap = NULL;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HatchStyle.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:26 $
+ *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,46 +62,44 @@
 #ifndef _XMLOFF_HATCHSTYLE_HXX
 #define _XMLOFF_HATCHSTYLE_HXX
 
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
 #endif
 
-#ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
-#endif
+class SvXMLImport;
+class SvXMLExport;
+namespace com { namespace sun { namespace star {
+    namespace uno { template<class A> class Reference; }
+    namespace xml { namespace sax { class XAttributeList; } }
+    namespace uno { class Any; }
+} } }
+namespace rtl { class OUString; }
 
-class SvXMLNamespaceMap;
-class SvXMLAttributeList;
-class SvXMLUnitConverter;
 
-namespace com { namespace sun { namespace star { namespace rtl { class OUString; } } } }
-
-class XMLHatchStyle
+class XMLHatchStyleImport
 {
+    SvXMLImport& rImport;
+
 public:
-    XMLHatchStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & _rHandler,
-                        const SvXMLNamespaceMap& _rNamespaceMap, const SvXMLUnitConverter& _rUnitConverter );
-    ~XMLHatchStyle();
+    XMLHatchStyleImport( SvXMLImport& rImport );
+    ~XMLHatchStyleImport();
+
+    sal_Bool importXML(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        ::com::sun::star::uno::Any& rValue,
+        ::rtl::OUString& rStrName );
+};
+
+class XMLHatchStyleExport
+{
+    SvXMLExport& rExport;
+
+public:
+    XMLHatchStyleExport( SvXMLExport& rExport );
+    ~XMLHatchStyleExport();
 
     sal_Bool exportXML( const ::rtl::OUString& rStrName, const ::com::sun::star::uno::Any& rValue );
-    sal_Bool importXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList, ::com::sun::star::uno::Any& rValue, ::rtl::OUString& rStrName );
-
-private:
-    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler;
-    const SvXMLNamespaceMap&  mrNamespaceMap;
-    const SvXMLUnitConverter& rUnitConverter;
-
-    SvXMLAttributeList *pAttrList;
-
-    sal_Bool ImpExportXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-                           const SvXMLNamespaceMap& rNamespaceMap, const SvXMLUnitConverter& rUnitConverter,
-                           const ::rtl::OUString& rStrName, const ::com::sun::star::uno::Any& rValue );
-    sal_Bool ImpImportXML( const SvXMLUnitConverter& rUnitConverter,
-                           const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
-                           ::com::sun::star::uno::Any& rValue, ::rtl::OUString& rStrName );
-
-    void AddAttribute( sal_uInt16 nPrefix, enum ::xmloff::token::XMLTokenEnum eName, const ::rtl::OUString& rStrValue );
-
 };
 
 #endif // _XMLOFF_HATCHELEMENT_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-19 11:46:32 $
+ *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,7 +402,7 @@ SvXMLExport::SvXMLExport(
     _InitCtor();
 
     if (xNumberFormatsSupplier.is())
-        pNumExport = new SvXMLNumFmtExport(rHandler, xNumberFormatsSupplier);
+        pNumExport = new SvXMLNumFmtExport(*this, xNumberFormatsSupplier);
 }
 
 SvXMLExport::SvXMLExport(
@@ -435,7 +435,7 @@ SvXMLExport::SvXMLExport(
     _InitCtor();
 
     if (xNumberFormatsSupplier.is())
-        pNumExport = new SvXMLNumFmtExport(rHandler, xNumberFormatsSupplier);
+        pNumExport = new SvXMLNumFmtExport(*this, xNumberFormatsSupplier);
 }
 
 SvXMLExport::SvXMLExport(
@@ -470,7 +470,7 @@ SvXMLExport::SvXMLExport(
     _InitCtor();
 
     if (xNumberFormatsSupplier.is())
-        pNumExport = new SvXMLNumFmtExport(rHandler, xNumberFormatsSupplier);
+        pNumExport = new SvXMLNumFmtExport(*this, xNumberFormatsSupplier);
 }
 
 SvXMLExport::~SvXMLExport()
@@ -545,7 +545,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
     {
         xNumberFormatsSupplier = xNumberFormatsSupplier.query( xModel );
         if(xNumberFormatsSupplier.is() && xHandler.is())
-            pNumExport = new SvXMLNumFmtExport(xHandler, xNumberFormatsSupplier);
+            pNumExport = new SvXMLNumFmtExport(*this, xNumberFormatsSupplier);
     }
     if (xExportInfo.is())
     {
@@ -650,7 +650,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             *pAny >>= xExtHandler;
 
             if (xNumberFormatsSupplier.is() && pNumExport == NULL)
-                pNumExport = new SvXMLNumFmtExport(xHandler, xNumberFormatsSupplier);
+                pNumExport = new SvXMLNumFmtExport(*this, xNumberFormatsSupplier);
         }
 
         // property set to transport data across
@@ -1049,8 +1049,8 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 
 void SvXMLExport::_ExportMeta()
 {
-    SfxXMLMetaExport aMeta( GetDocHandler(), xModel );
-    aMeta.Export( GetNamespaceMap() );
+    SfxXMLMetaExport aMeta( *this, xModel );
+    aMeta.Export();
 }
 
 void SvXMLExport::_ExportViewSettings(const XMLSettingsExportHelper& rSettingsExportHelper)
@@ -1116,7 +1116,7 @@ void SvXMLExport::_ExportStyles( sal_Bool bUsed )
             uno::Reference< container::XNameAccess > xGradient( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GradientTable") ) ), uno::UNO_QUERY );
             if( xGradient.is() )
             {
-                XMLGradientStyle aGradientStyle( &xHandler, *pNamespaceMap, *pUnitConv );
+                XMLGradientStyleExport aGradientStyle( *this );
 
                 if( xGradient->hasElements() )
                 {
@@ -1147,7 +1147,7 @@ void SvXMLExport::_ExportStyles( sal_Bool bUsed )
             uno::Reference< container::XNameAccess > xHatch( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.HatchTable") ) ), uno::UNO_QUERY );
             if( xHatch.is() )
             {
-                XMLHatchStyle aHatchStyle( xHandler, *pNamespaceMap, *pUnitConv );
+                XMLHatchStyleExport aHatchStyle( *this );
 
                 if( xHatch->hasElements() )
                 {
@@ -1209,7 +1209,7 @@ void SvXMLExport::_ExportStyles( sal_Bool bUsed )
             uno::Reference< container::XNameAccess > xTransGradient( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TransparencyGradientTable") ) ), uno::UNO_QUERY );
             if( xTransGradient.is() )
             {
-                XMLTransGradientStyle aTransGradientstyle( xHandler, *pNamespaceMap, *pUnitConv );
+                XMLTransGradientStyleExport aTransGradientstyle( *this );
 
                 if( xTransGradient->hasElements() )
                 {
@@ -1240,7 +1240,7 @@ void SvXMLExport::_ExportStyles( sal_Bool bUsed )
             uno::Reference< container::XNameAccess > xMarker( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.MarkerTable") ) ), uno::UNO_QUERY );
             if( xMarker.is() )
             {
-                XMLMarkerStyle aMarkerStyle( xHandler, *pNamespaceMap, *pUnitConv );
+                XMLMarkerStyleExport aMarkerStyle( *this );
 
                 if( xMarker->hasElements() )
                 {
@@ -1271,7 +1271,7 @@ void SvXMLExport::_ExportStyles( sal_Bool bUsed )
             uno::Reference< container::XNameAccess > xDashes( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DashTable") ) ), uno::UNO_QUERY );
             if( xDashes.is() )
             {
-                XMLDashStyle aDashStyle( &xHandler, *pNamespaceMap, *pUnitConv );
+                XMLDashStyleExport aDashStyle( *this );
 
                 if( xDashes->hasElements() )
                 {
@@ -1350,13 +1350,13 @@ void SvXMLExport::addDataStyle(const sal_Int32 nNumberFormat, sal_Bool bTimeForm
 void SvXMLExport::exportDataStyles()
 {
     if(pNumExport)
-        pNumExport->Export(*pNamespaceMap, sal_False);
+        pNumExport->Export(sal_False);
 }
 
 void SvXMLExport::exportAutoDataStyles()
 {
     if(pNumExport)
-        pNumExport->Export(*pNamespaceMap, sal_True);
+        pNumExport->Export(sal_True);
 
     if (mxFormExport.is())
         mxFormExport->exportAutoControlNumberStyles();

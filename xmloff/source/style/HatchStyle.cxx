@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HatchStyle.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,32 +67,36 @@
 #include <com/sun/star/drawing/Hatch.hpp>
 #endif
 
-#ifndef _XMLOFF_ATTRLIST_HXX
-#include"attrlist.hxx"
-#endif
-
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include "nmspmap.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include"xmluconv.hxx"
+#include "xmluconv.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
-#include"xmlnmspe.hxx"
+#include "xmlnmspe.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include "xmltoken.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLEXP_HXX
+#include "xmlexp.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLIMP_HXX
+#include "xmlimp.hxx"
+#endif
+
 #ifndef _RTL_USTRBUF_HXX_
-#include<rtl/ustrbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #endif
 
 #ifndef _RTL_USTRING_
-#include<rtl/ustring>
+#include <rtl/ustring>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -135,41 +139,27 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_HatchStyle_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-XMLHatchStyle::XMLHatchStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & _rHandler,
-                                        const SvXMLNamespaceMap& _rNamespaceMap, const SvXMLUnitConverter& _rUnitConverter )
-: rHandler      ( _rHandler ),
-  mrNamespaceMap ( _rNamespaceMap ),
-  rUnitConverter( _rUnitConverter ),
-  pAttrList     ( NULL )
+XMLHatchStyleImport::XMLHatchStyleImport( SvXMLImport& rImp )
+    : rImport(rImp)
 {
 }
 
-XMLHatchStyle::~XMLHatchStyle()
+XMLHatchStyleExport::XMLHatchStyleExport( SvXMLExport& rExp )
+    : rExport(rExp)
 {
 }
 
-void XMLHatchStyle::AddAttribute( sal_uInt16 nPrefix, enum ::xmloff::token::XMLTokenEnum eName, const ::rtl::OUString& rStrValue )
+XMLHatchStyleImport::~XMLHatchStyleImport()
 {
-    const ::rtl::OUString aStrName( GetXMLToken( eName ) );
-    const ::rtl::OUString aStrCDATA( GetXMLToken( XML_CDATA ) );
-
-    pAttrList->AddAttribute( mrNamespaceMap.GetQNameByKey( nPrefix, aStrName ), aStrCDATA, rStrValue );
 }
 
-sal_Bool XMLHatchStyle::exportXML( const ::rtl::OUString& rStrName, const ::com::sun::star::uno::Any& rValue )
+XMLHatchStyleExport::~XMLHatchStyleExport()
 {
-    return ImpExportXML( rHandler, mrNamespaceMap, rUnitConverter, rStrName, rValue );
 }
 
-sal_Bool XMLHatchStyle::importXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList, uno::Any& rValue, OUString& rStrName )
-{
-    return ImpImportXML( rUnitConverter, xAttrList, rValue, rStrName );
-}
-
-
-sal_Bool XMLHatchStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-                                           const SvXMLNamespaceMap& rNamespaceMap, const SvXMLUnitConverter& rUnitConverter,
-                                           const ::rtl::OUString& rStrName, const uno::Any& rValue )
+sal_Bool XMLHatchStyleExport::exportXML(
+    const OUString& rStrName,
+    const uno::Any& rValue )
 {
     sal_Bool bRet = sal_False;
     drawing::Hatch aHatch;
@@ -178,52 +168,49 @@ sal_Bool XMLHatchStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::
     {
         if( rValue >>= aHatch )
         {
-            pAttrList = new SvXMLAttributeList();   // Do NOT delete me !!
-            ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > xAttrList( pAttrList );
+            OUString aStrValue;
+            OUStringBuffer aOut;
 
-            ::rtl::OUString aStrValue;
-            ::rtl::OUStringBuffer aOut;
+            SvXMLUnitConverter& rUnitConverter =
+                rExport.GetMM100UnitConverter();
 
             // Name
-            AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
 
             // Style
             if( !rUnitConverter.convertEnum( aOut, aHatch.Style, pXML_HatchStyle_Enum ) )
                 return sal_False;
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
 
             // Color
             rUnitConverter.convertColor( aOut, Color( aHatch.Color ) );
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, XML_COLOR, aStrValue );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_COLOR, aStrValue );
 
             // Distance
             rUnitConverter.convertMeasure( aOut, aHatch.Distance );
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, aStrValue );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, aStrValue );
 
             // Angle
             rUnitConverter.convertNumber( aOut, sal_Int32( aHatch.Angle ) );
             aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_DRAW, XML_ROTATION, aStrValue );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ROTATION, aStrValue );
 
             // Do Write
-            OUString sWS( GetXMLToken( XML_WS ) );
-            rHandler->ignorableWhitespace( sWS );
-            rHandler->startElement( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_HATCH) ),
-                                    xAttrList );
-            rHandler->endElement( GetXMLToken( XML_GRADIENT ) );
-            rHandler->ignorableWhitespace( sWS );
+            SvXMLElementExport rElem( rExport, XML_NAMESPACE_DRAW, XML_GRADIENT,
+                                      sal_True, sal_False );
         }
     }
 
     return bRet;
 }
 
-sal_Bool XMLHatchStyle::ImpImportXML( const SvXMLUnitConverter& rUnitConverter,
-                                        const uno::Reference< xml::sax::XAttributeList >& xAttrList,
-                                        uno::Any& rValue, OUString& rStrName )
+sal_Bool XMLHatchStyleImport::importXML(
+    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+    uno::Any& rValue,
+    OUString& rStrName )
 {
     sal_Bool bRet = sal_False;
 
@@ -239,13 +226,15 @@ sal_Bool XMLHatchStyle::ImpImportXML( const SvXMLUnitConverter& rUnitConverter,
     aHatch.Angle = 0;
 
     SvXMLTokenMap aTokenMap( aHatchAttrTokenMap );
+    SvXMLNamespaceMap rNamespaceMap = rImport.GetNamespaceMap();
+    SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         const OUString& rFullAttrName = xAttrList->getNameByIndex( i );
         OUString aStrAttrName;
-        sal_uInt16 nPrefix = mrNamespaceMap.GetKeyByAttrName( rFullAttrName, &aStrAttrName );
+        sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName( rFullAttrName, &aStrAttrName );
         const OUString& rStrValue = xAttrList->getValueByIndex( i );
 
         switch( aTokenMap.Get( nPrefix, aStrAttrName ) )
