@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Application.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:33 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
