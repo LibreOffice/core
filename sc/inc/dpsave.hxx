@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsave.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 12:51:46 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 12:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ namespace com { namespace sun { namespace star { namespace sheet {
 } } } }
 
 class SvStream;
+class ScDPDimensionSaveData;
 
 // --------------------------------------------------------------------
 //
@@ -111,6 +112,8 @@ public:
     BOOL                    HasShowDetails() const;
     void                    SetShowDetails(BOOL bSet);
     BOOL                    GetShowDetails() const { return BOOL(nShowDetailsMode); }
+
+    void                    SetName( const String& rNew );  // used if the source member was renamed (groups)
 
     void                    WriteToSource( const com::sun::star::uno::Reference<
                                             com::sun::star::uno::XInterface>& xMember );
@@ -156,6 +159,8 @@ public:
 
     const String&           GetName() const         { return aName; }
     BOOL                    IsDataLayout() const    { return bIsDataLayout; }
+
+    void                    SetName( const String& rNew );  // used if the source dim was renamed (groups)
 
     void                    SetOrientation(USHORT nNew);
     void                    SetSubTotals(BOOL bSet);        // to be removed!
@@ -203,6 +208,7 @@ class ScDPSaveData
 {
 private:
     List        aDimList;
+    ScDPDimensionSaveData* pDimensionData;      // settings that create new dimensions
     USHORT      nColumnGrandMode;
     USHORT      nRowGrandMode;
     USHORT      nIgnoreEmptyMode;
@@ -231,8 +237,11 @@ public:
     ScDPSaveDimension*      GetExistingDimensionByName(const String& rName);
     ScDPSaveDimension*      GetNewDimensionByName(const String& rName);
 
+    void                    RemoveDimensionByName(const String& rName);
+
     ScDPSaveDimension*      GetInnermostDimension(USHORT nOrientation);
     long                    GetDataDimensionCount() const;
+
 
     void                    SetPosition( ScDPSaveDimension* pDim, long nNew );
     void                    SetColumnGrand( BOOL bSet );
@@ -256,6 +265,10 @@ public:
     void                    Load( SvStream& rStream );
 
     BOOL                    IsEmpty() const;
+
+    const ScDPDimensionSaveData* GetExistingDimensionData() const   { return pDimensionData; }
+    ScDPDimensionSaveData*  GetDimensionData();     // create if not there
+    void                    SetDimensionData( const ScDPDimensionSaveData* pNew );      // copied
 };
 
 
