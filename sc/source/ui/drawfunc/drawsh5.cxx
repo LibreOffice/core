@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:20:48 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -640,7 +640,6 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
         case SID_FONTWORK_SHAPE:
         case SID_FONTWORK_SHAPE_TYPE:
-        case SID_FONTWORK_SHAPE_TYPES:
         case SID_FONTWORK_ALIGNMENT:
         case SID_FONTWORK_SAME_LETTER_HEIGHTS:
         case SID_FONTWORK_CHARACTER_SPACING:
