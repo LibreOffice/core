@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:01:49 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 08:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,8 @@ namespace connectivity
 
     DECLARE_STL_VECTOR(ORowSetValue,ORow);
     DECLARE_STL_VECTOR(ORow, ORows);
+    //  typedef ORefVector<ORowSetValue>    ORow;
+    //  typedef ORefVector<ORow>            ORows;
 
     class ODatabaseMetaDataResultSet :  public comphelper::OBaseMutex,
                                         public  ODatabaseMetaDataResultSet_BASE,
@@ -130,7 +132,7 @@ namespace connectivity
 
 
         ORows                           m_aRows;
-        ORowsIterator                   m_aRowsIter;
+        ORows::iterator                 m_aRowsIter;
         ::com::sun::star::uno::WeakReferenceHelper    m_aStatement;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
         sal_Int32                       m_nRowPos;
@@ -159,7 +161,7 @@ namespace connectivity
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         ODatabaseMetaDataResultSet();
 
-        void setRows(const ORows& _rRows) { m_aRows = _rRows; }
+        void setRows(const ORows& _rRows);
 
         // ::cppu::OComponentHelper
         virtual void SAL_CALL disposing(void);
