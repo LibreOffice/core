@@ -2,9 +2,9 @@
  *
  *  $RCSfile: marktree.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:00:43 $
+ *  last change: $Author: fs $ $Date: 2000-10-09 12:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 //.........................................................................
 namespace dbaui
@@ -93,6 +96,24 @@ OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const ResId& rResId
 OMarkableTreeListBox::~OMarkableTreeListBox()
 {
     delete m_pCheckButton;
+}
+//------------------------------------------------------------------------
+void OMarkableTreeListBox::Paint(const Rectangle& _rRect)
+{
+    if (!IsEnabled())
+    {
+        Font aOldFont = GetFont();
+        Font aNewFont(aOldFont);
+
+        StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
+        aNewFont.SetColor(aSystemStyle.GetDisableColor());
+
+        SetFont(aNewFont);
+        SvTreeListBox::Paint(_rRect);
+        SetFont(aOldFont);
+    }
+    else
+        SvTreeListBox::Paint(_rRect);
 }
 //------------------------------------------------------------------------
 void OMarkableTreeListBox::InitButtonData()
@@ -234,6 +255,9 @@ void OMarkableTreeListBox::CheckButtonHdl()
         pEntry = NextSelected(pEntry);
     }
     CheckButtons();
+
+    if (m_aCheckButtonHandler.IsSet())
+        m_aCheckButtonHandler.Call(this);
 }
 //------------------------------------------------------------------------
 SvLBoxEntry* OMarkableTreeListBox::GetEntryPosByName(const String& aName,SvLBoxEntry* pStart) const
@@ -252,6 +276,9 @@ SvLBoxEntry* OMarkableTreeListBox::GetEntryPosByName(const String& aName,SvLBoxE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:00:43  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 28.09.00 13:22:30  fs
  ************************************************************************/
