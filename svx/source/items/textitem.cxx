@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-10 07:35:47 $
+ *  last change: $Author: mib $ $Date: 2001-07-13 12:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,12 +451,22 @@ SfxPoolItem* SvxFontItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxFontItem::Store( SvStream& rStrm , USHORT nItemVersion ) const
 {
+    BOOL bToBats =
+        GetFamilyName().EqualsAscii( "StarSymbol", 0, sizeof("StarSymbol")-1 ) ||
+        GetFamilyName().EqualsAscii( "OpenSymbol", 0, sizeof("OpenSymbol")-1 );
     rStrm << (BYTE) GetFamily()
           << (BYTE) GetPitch()
-          << (BYTE) GetStoreCharSet( GetCharSet(), (USHORT)rStrm.GetVersion() );
+          << (BYTE)(bToBats ? RTL_TEXTENCODING_SYMBOL : GetStoreCharSet( GetCharSet(), (USHORT)rStrm.GetVersion() ) );
+
+    if( bToBats )
+    {
+        String sStarBats( RTL_CONSTASCII_STRINGPARAM("StarBats") );
+        rStrm.WriteByteString( sStarBats );
+    }
+    else
+        rStrm.WriteByteString(GetFamilyName());
 
     // UNICODE: rStrm << GetFamilyName();
-    rStrm.WriteByteString(GetFamilyName());
 
     // UNICODE: rStrm << GetStyleName();
     rStrm.WriteByteString(GetStyleName());
