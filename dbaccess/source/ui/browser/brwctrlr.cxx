@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-23 07:23:16 $
+ *  last change: $Author: fs $ $Date: 2002-05-22 13:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,12 +222,8 @@
 #ifndef DBAUI_QUERYORDER_HXX
 #include "queryorder.hxx"
 #endif
-
-#ifdef FS_PRIV_DEBUG
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#endif
-using namespace ::com::sun::star::view;
+#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
+#include <com/sun/star/frame/XTask.hpp>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -591,6 +587,18 @@ void SAL_CALL SbaXDataBrowserController::attachFrame(const Reference< ::com::sun
     // and log on to the new frame
     if (m_xCurrentFrame.is() && xAggListener.is())
         m_xCurrentFrame->addFrameActionListener(xAggListener);
+
+    // for task frames, we have our own cut/copy/paste functionality
+    // 22.05.2002 - 99030 - fs@openoffice.org
+    if ( m_xCurrentFrame.is() && getView() && getView()->getToolBox() )
+    {
+        Reference< XTask > xTask( m_xCurrentFrame, UNO_QUERY );
+        sal_Bool bToplevelFrame = xTask.is();
+
+        getView()->getToolBox()->ShowItem( SID_CUT, bToplevelFrame );
+        getView()->getToolBox()->ShowItem( SID_COPY, bToplevelFrame );
+        getView()->getToolBox()->ShowItem( SID_PASTE, bToplevelFrame );
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -632,7 +640,7 @@ void SbaXDataBrowserController::AddSupportedFeatures()
 {
     OGenericUnoController::AddSupportedFeatures();
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:FormSlots/undoRecord")] = ID_BROWSER_UNDORECORD;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:FormSlots/saveRecord")] = ID_BROWSER_SAVEDOC;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:FormSlots/saveRecord")] = ID_BROWSER_SAVERECORD;
 }
 //------------------------------------------------------------------------------
 sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
@@ -1445,16 +1453,20 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                         case ID_BROWSER_CUT:    aReturn.bEnabled = m_bFrameUiActive && bHasLen && !bIsReadOnly; break;
                         case SID_COPY   :       aReturn.bEnabled = m_bFrameUiActive && bHasLen; break;
                         case ID_BROWSER_PASTE:
+                            aReturn.bEnabled = m_bFrameUiActive && !bIsReadOnly;
+                            if(aReturn.bEnabled)
                             {
-                                aReturn.bEnabled = m_bFrameUiActive && !bIsReadOnly;
-                                if(aReturn.bEnabled)
-                                {
-                                    TransferableDataHelper aTrans = TransferableDataHelper::CreateFromSystemClipboard(getBrowserView());
-                                    aReturn.bEnabled = aReturn.bEnabled &&
-                                                    IsFormatSupported(aTrans.GetDataFlavorExVector(),FORMAT_STRING);
-                                }
-                                break;
+                                TransferableDataHelper aTrans = TransferableDataHelper::CreateFromSystemClipboard(getBrowserView());
+                                aReturn.bEnabled = aReturn.bEnabled &&
+                                                IsFormatSupported(aTrans.GetDataFlavorExVector(),FORMAT_STRING);
                             }
+                            aReturn.aState = makeAny( (sal_Bool)sal_True );
+                                // This is weird. Unfortunately, since we do not use our own toolbox items anymore,
+                                // but the ones of the application we're plugged into (at least for cut/copy/paste),
+                                // we depend on some SFX code, which, for some odd, not really fixable reason
+                                // asks for a boolean state for the PASTE slot. Okay, here it goes.
+                                // 22.05.2002 - 99030 - fs@openoffice.org
+                            break;
                     }
                 }
             }
@@ -1515,8 +1527,8 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 aReturn.bEnabled = sal_False;   // simply forget it ;). no redo possible.
                 break;
 
-            case ID_BROWSER_UNDO:
-            case ID_BROWSER_SAVEDOC:
+            case ID_BROWSER_UNDORECORD:
+            case ID_BROWSER_SAVERECORD:
             {
                 if (!m_bCurrentlyModified)
                 {
@@ -1527,7 +1539,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 else
                     aReturn.bEnabled = sal_True;
 
-                aReturn.aState <<= ::rtl::OUString((ID_BROWSER_UNDO == nId) ? m_sStateUndoRecord : m_sStateSaveRecord);
+                aReturn.aState <<= ::rtl::OUString((ID_BROWSER_UNDORECORD == nId) ? m_sStateUndoRecord : m_sStateSaveRecord);
             }
             break;
             case ID_BROWSER_EDITDOC:
@@ -1825,8 +1837,8 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
                     break;
 
                 // maybe the user wanted to reject the modified record ?
-                if (GetState(ID_BROWSER_UNDO).bEnabled)
-                    Execute(ID_BROWSER_UNDO);
+                if (GetState(ID_BROWSER_UNDORECORD).bEnabled)
+                    Execute(ID_BROWSER_UNDORECORD);
 
                 getBrowserView()->getVclControl()->SetOptions(DbGridControl::OPT_READONLY);
             }
@@ -1977,12 +1989,12 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
             }
             break;
 
-        case ID_BROWSER_SAVEDOC:
+        case ID_BROWSER_SAVERECORD:
             if ( SaveModified( sal_True ) )
                 setCurrentModified( sal_False );
             break;
 
-        case ID_BROWSER_UNDO:
+        case ID_BROWSER_UNDORECORD:
         {
             try
             {
@@ -2077,7 +2089,7 @@ sal_Bool SbaXDataBrowserController::CommitCurrent()
 void SbaXDataBrowserController::setCurrentModified( sal_Bool _bSet )
 {
     m_bCurrentlyModified = _bSet;
-    InvalidateFeature( ID_BROWSER_SAVEDOC );
+    InvalidateFeature( ID_BROWSER_SAVERECORD );
     InvalidateFeature( ID_BROWSER_UNDORECORD );
 }
 
