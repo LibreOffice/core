@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewCell.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-26 11:13:41 $
+ *  last change: $Author: sab $ $Date: 2002-08-01 12:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,8 @@ ScAccessiblePreviewCell::ScAccessiblePreviewCell( const ::com::sun::star::uno::R
                             ScPreviewShell* pViewShell, /* const */ ScAddress& rCellAddress,
                             sal_Int32 nIndex ) :
     ScAccessibleCellBase( rxParent, ( pViewShell ? pViewShell->GetDocument() : NULL ), rCellAddress, nIndex ),
-    mpViewShell( pViewShell )
+    mpViewShell( pViewShell ),
+    mpTextHelper(NULL)
 {
     if (mpViewShell)
         mpViewShell->AddAccessibilityObject(*this);
