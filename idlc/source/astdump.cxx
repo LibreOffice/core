@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astdump.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-11-09 10:50:11 $
+ *  last change: $Author: jsc $ $Date: 2002-11-13 18:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,11 +235,13 @@ sal_Bool AstService::dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader)
     if ( getNodeType() == NT_singleton )
     {
         DeclList::iterator iter = getIteratorBegin();
-        OString tmp((*iter)->getRelativName());
+        AstServiceMember* pServMember = (AstServiceMember*)*iter;
+        OString tmp(((AstServiceMember*)(*iter))->getRealService()->getRelativName());
 
         RegistryTypeWriter aBlob(pLoader->getApi(), RT_TYPE_SINGLETON,
                                  OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
-                                 OStringToOUString((*iter)->getRelativName(), RTL_TEXTENCODING_UTF8),
+                                 OStringToOUString(pServMember->getRealService()->getRelativName(),
+                                                RTL_TEXTENCODING_UTF8),
                                  0, 0, 0);
 
         aBlob.setDoku( getDocumentation() );
