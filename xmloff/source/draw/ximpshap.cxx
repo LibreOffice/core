@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:26:37 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 08:50:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 
 #ifndef _COM_SUN_STAR_DRAWING_ESCAPEDIRECTION_HPP_
 #include <com/sun/star/drawing/EscapeDirection.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_MEDIA_ZOOMLEVEL_HPP_
+#include <com/sun/star/media/ZoomLevel.hpp>
 #endif
 
 #ifndef _COMPHELPER_EXTRACT_HXX_
@@ -955,7 +959,7 @@ void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////3////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( SdXMLLineShapeContext, SdXMLShapeContext );
 
@@ -2776,8 +2780,9 @@ TYPEINIT1( SdXMLPluginShapeContext, SdXMLShapeContext );
 SdXMLPluginShapeContext::SdXMLPluginShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
-        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes)
-: SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+        com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes) :
+SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
+mbMedia( false )
 {
 }
 
@@ -2785,9 +2790,31 @@ SdXMLPluginShapeContext::~SdXMLPluginShapeContext()
 {
 }
 
-void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& )
+void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList)
 {
-    char* pService = "com.sun.star.drawing.PluginShape";
+    // watch for MimeType attribute to see if we have a media object
+    for( sal_Int16 n = 0, nAttrCount = ( xAttrList.is() ? xAttrList->getLength() : 0 ); n < nAttrCount; ++n )
+    {
+        OUString    aLocalName;
+        sal_uInt16  nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( n ), &aLocalName );
+
+        if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( aLocalName, XML_MIME_TYPE ) )
+        {
+            if( 0 == xAttrList->getValueByIndex( n ).compareToAscii( "application/vnd.sun.star.media" ) )
+                mbMedia = true;
+
+            // leave this loop
+            n = nAttrCount - 1;
+        }
+    }
+
+    char* pService;
+
+    if( mbMedia )
+        pService = "com.sun.star.drawing.MediaShape";
+    else
+        pService = "com.sun.star.drawing.PluginShape";
+
     AddShape( pService );
 
     if( mxShape.is() )
@@ -2827,26 +2854,91 @@ void SdXMLPluginShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl:
 void SdXMLPluginShapeContext::EndElement()
 {
     uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+
     if( xProps.is() )
     {
         uno::Any aAny;
 
-        if( maParams.getLength() )
+        if( !mbMedia )
         {
-            aAny <<= maParams;
-            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PluginCommands" ) ), aAny );
-        }
+            // in case we have a plugin object
+            if( maParams.getLength() )
+            {
+                aAny <<= maParams;
+                xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PluginCommands" ) ), aAny );
+            }
 
-        if( maMimeType.getLength() )
-        {
-            aAny <<= maMimeType;
-            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PluginMimeType" ) ), aAny );
-        }
+            if( maMimeType.getLength() )
+            {
+                aAny <<= maMimeType;
+                xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PluginMimeType" ) ), aAny );
+            }
 
-        if( maHref.getLength() )
+            if( maHref.getLength() )
+            {
+                aAny <<= maHref;
+                xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PluginURL" ) ), aAny );
+            }
+        }
+        else
         {
-            aAny <<= maHref;
-            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PluginURL" ) ), aAny );
+            // in case we have a media object
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaURL" ) ), uno::makeAny( maHref ) );
+
+            for( sal_Int32 nParam = 0; nParam < maParams.getLength(); ++nParam )
+            {
+                const OUString& rName = maParams[ nParam ].Name;
+
+                if( 0 == rName.compareToAscii( "Loop" ) )
+                {
+                    OUString aValueStr;
+                    maParams[ nParam ].Value >>= aValueStr;
+                    xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Loop" ) ),
+                        uno::makeAny( static_cast< sal_Bool >( 0 == aValueStr.compareToAscii( "true" ) ) ) );
+                }
+                else if( 0 == rName.compareToAscii( "Mute" ) )
+                {
+                    OUString aValueStr;
+                    maParams[ nParam ].Value >>= aValueStr;
+                    xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Mute" ) ),
+                        uno::makeAny( static_cast< sal_Bool >( 0 == aValueStr.compareToAscii( "true" ) ) ) );
+                }
+                else if( 0 == rName.compareToAscii( "VolumeDB" ) )
+                {
+                    OUString aValueStr;
+                    maParams[ nParam ].Value >>= aValueStr;
+                    xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VolumeDB" ) ),
+                                                uno::makeAny( static_cast< sal_Int16 >( aValueStr.toInt32() ) ) );
+                }
+                else if( 0 == rName.compareToAscii( "Zoom" ) )
+                {
+                    OUString            aZoomStr;
+                    media::ZoomLevel    eZoomLevel;
+
+                    maParams[ nParam ].Value >>= aZoomStr;
+
+                    if( 0 == aZoomStr.compareToAscii( "25%" ) )
+                        eZoomLevel = media::ZoomLevel_ZOOM_1_TO_4;
+                    else if( 0 == aZoomStr.compareToAscii( "50%" ) )
+                        eZoomLevel = media::ZoomLevel_ZOOM_1_TO_2;
+                    else if( 0 == aZoomStr.compareToAscii( "100%" ) )
+                        eZoomLevel = media::ZoomLevel_ORIGINAL;
+                    else if( 0 == aZoomStr.compareToAscii( "200%" ) )
+                        eZoomLevel = media::ZoomLevel_ZOOM_2_TO_1;
+                    else if( 0 == aZoomStr.compareToAscii( "400%" ) )
+                        eZoomLevel = media::ZoomLevel_ZOOM_4_TO_1;
+                    else if( 0 == aZoomStr.compareToAscii( "fit" ) )
+                        eZoomLevel = media::ZoomLevel_FIT_TO_WINDOW;
+                    else if( 0 == aZoomStr.compareToAscii( "fixedfit" ) )
+                        eZoomLevel = media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT;
+                    else if( 0 == aZoomStr.compareToAscii( "fullscreen" ) )
+                        eZoomLevel = media::ZoomLevel_FULLSCREEN;
+                    else
+                        eZoomLevel = media::ZoomLevel_NOT_AVAILABLE;
+
+                    xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Zoom" ) ), uno::makeAny( eZoomLevel ) );
+                }
+            }
         }
 
         SetThumbnail();
