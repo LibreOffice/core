@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mh $ $Date: 2002-08-12 14:58:34 $
+ *  last change: $Author: obr $ $Date: 2002-10-11 08:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ static int nArgCount = -1;
  *****************************************************************************/
 
 #if defined(MACOSX)
-// Can't access environ and __progname directly when linking two-level.
+/* Can't access environ and __progname directly when linking two-level. */
 static sal_Char *getCmdLine()
 {
     int i;
@@ -425,66 +425,182 @@ static sal_Char *getCmdLine()
 }
 #endif
 
-
 oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString** pustrFile )
 {
-    char executablePath[PATH_MAX] = "";
-    oslProcessError eRet;
+    const char * pszCmdLine = getCmdLine();
+    const char * pszRealPathSrc = pszCmdLine;
+    char szAbsolutePath[PATH_MAX] = "";
+    char szRealPathBuf[PATH_MAX] = "";
 
-    eRet = osl_psz_getExecutableFile( executablePath, PATH_MAX );
+    /* if the command line argument #0 starts with a '/', this program has been */
+    /* invoked using a full qualified path */
+    if( '/' != pszCmdLine[0] )
+    {
+        oslProcessError ret = osl_Process_E_None;
 
-    if ( eRet == osl_Process_E_None)
+        /* if the command line argument #0 contains a '/' somewhere else, it has */
+        /* been probably invoked relatively to the current working directory */
+        if( strchr(pszCmdLine, '/') )
+        {
+            if( NULL != getcwd(szAbsolutePath, sizeof(szAbsolutePath)) )
+            {
+                size_t n = PATH_MAX - strlen(szAbsolutePath);
+                size_t n2 = strlen(pszCmdLine);
+
+                /* check remaining size and append '/' and argument #0 is possible */
+                if( n + n2 + 1 < PATH_MAX )
+                {
+                    szAbsolutePath[n] = '/';
+                    strncpy(szAbsolutePath+n+1, pszCmdLine, n2+1);
+
+                    /* replace the original pszRealPathSrc pointer */
+                    pszRealPathSrc = szAbsolutePath;
+                }
+            }
+        }
+        /* this program must be in the PATH variable */
+        else
+        {
+            ret = osl_searchPath(pszCmdLine, NULL, '\0', szAbsolutePath, sizeof(szAbsolutePath));
+            if( osl_Process_E_None == ret )
+            {
+                /* replace the original pszRealPathSrc pointer */
+                pszRealPathSrc = szAbsolutePath;
+            }
+        }
+
+        /* if szAbsolutePath has not been filled, return with an error */
+        if( '\0' == szAbsolutePath[0] )
+        {
+            ret = osl_Process_E_Unknown;
+        }
+
+        if( osl_Process_E_None != ret )
+        {
+            free((void *) pszCmdLine);
+            return ret;
+        }
+    }
+
+    /* get the realpath of the resulting file and convert it to a file URL */
+    if( NULL != realpath(pszRealPathSrc, szRealPathBuf) )
     {
         rtl_uString *ustrTmp = NULL;
 
-        rtl_string2UString( &ustrTmp, executablePath, strlen( executablePath ),
-            osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
+        rtl_string2UString(&ustrTmp, szRealPathBuf, strlen(szRealPathBuf),
+            osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS);
 
-        osl_getFileURLFromSystemPath( ustrTmp, pustrFile );
-        rtl_uString_release( ustrTmp );
+        osl_getFileURLFromSystemPath(ustrTmp, pustrFile);
+        rtl_uString_release(ustrTmp);
+
+        free((void *) pszCmdLine);
+        return osl_Process_E_None;
     }
-
-    return eRet;
+    else
+    {
+        free((void *)pszCmdLine);
+        return osl_Process_E_Unknown;
+    }
 }
 
 
+/* a copy of the above, hopefully no longer used by referenced in profile.c, which is deprecated .. */
 oslProcessError SAL_CALL osl_psz_getExecutableFile(sal_Char* pszBuffer, sal_uInt32 Max)
 {
-    static int  PrgLen = -1;
-    static sal_Char PrgName[PATH_MAX + 1] = "";
+    const char * pszCmdLine = getCmdLine();
+    const char * pszRealPathSrc = pszCmdLine;
+    char szAbsolutePath[PATH_MAX] = "";
+    char szRealPathBuf[PATH_MAX] = "";
 
-    oslProcessError ret = osl_Process_E_None;
-
-    if (PrgLen < 1)
+    /* if the command line argument #0 starts with a '/', this program has been */
+    /* invoked using a full qualified path */
+    if( '/' != pszCmdLine[0] )
     {
-        sal_Char *pszCmdLine = getCmdLine();
+        oslProcessError ret = osl_Process_E_None;
 
-        if (strchr(pszCmdLine, '/'))
+        /* if the command line argument #0 contains a '/' somewhere else, it has */
+        /* been probably invoked relatively to the current working directory */
+        if( strchr(pszCmdLine, '/') )
         {
-            if (! osl_getFullPath(pszCmdLine, PrgName, sizeof(PrgName)))
-                ret = osl_Process_E_Unknown;
-            else
-                PrgLen = strlen(PrgName) + 1;
+            if( NULL != getcwd(szAbsolutePath, sizeof(szAbsolutePath)) )
+            {
+                size_t n = PATH_MAX - strlen(szAbsolutePath);
+                size_t n2 = strlen(pszCmdLine);
+
+                /* check remaining size and append '/' and argument #0 is possible */
+                if( n + n2 + 1 < PATH_MAX )
+                {
+                    szAbsolutePath[n] = '/';
+                    strncpy(szAbsolutePath+n+1, pszCmdLine, n2+1);
+
+                    /* replace the original pszRealPathSrc pointer */
+                    pszRealPathSrc = szAbsolutePath;
+                }
+            }
         }
+        /* this program must be in the PATH variable */
         else
         {
-            if ((ret = osl_searchPath(pszCmdLine, NULL, '\0', PrgName, sizeof(PrgName)))
-                == osl_Process_E_None)
-                PrgLen = strlen(PrgName) + 1;
-
+            ret = osl_searchPath(pszCmdLine, NULL, '\0', szAbsolutePath, sizeof(szAbsolutePath));
+            if( osl_Process_E_None == ret )
+            {
+                /* replace the original pszRealPathSrc pointer */
+                pszRealPathSrc = szAbsolutePath;
+            }
         }
 
-        free(pszCmdLine);
+        /* if szAbsolutePath has not been filled, return with an error */
+        if( '\0' == szAbsolutePath[0] )
+        {
+            ret = osl_Process_E_Unknown;
+        }
+
+        if( osl_Process_E_None != ret )
+        {
+            free((void *) pszCmdLine);
+            return ret;
+        }
     }
 
-    if (Max >= (sal_uInt32)PrgLen)
-        memcpy(pszBuffer, PrgName, PrgLen);
+    /* get the realpath of the resulting file and convert it to a file URL */
+    if( NULL != realpath(pszRealPathSrc, szRealPathBuf) && strlen(szRealPathBuf) < Max )
+    {
+        strcpy(pszBuffer, szRealPathBuf);
+    }
     else
-        ret = osl_Process_E_Unknown;
+    {
+        free((void *)pszCmdLine);
+        return osl_Process_E_Unknown;
+    }
 
-    return (ret);
+    free((void *) pszCmdLine);
+    return osl_Process_E_None;
 }
 
+
+/* return the executable name without path - used in signal.c */
+char * osl_impl_getExecutableName(char * buffer, size_t n)
+{
+    const char * pszCmdLine = getCmdLine();
+    const char * pc = strrchr(pszCmdLine, '/');
+    size_t len;
+
+    /* cut of the path */
+    if( NULL != pc )
+        ++pc;
+    else
+        pc = pszCmdLine;
+
+    if( n > strlen(pc) )
+    {
+        strcpy(buffer, pc);
+        free((void *) pszCmdLine);
+        return buffer;
+    }
+
+    free((void *) pszCmdLine);
+    return NULL;
+}
 
 sal_uInt32  SAL_CALL osl_getCommandArgCount()
 {
@@ -1975,8 +2091,9 @@ oslProcessError SAL_CALL osl_searchPath(const sal_Char* pszName, const sal_Char*
 
             if (access(path, 0) == 0)
             {
-                if (! osl_getFullPath(path, path, sizeof(path)) ||
-                    (strlen(path) >= (sal_uInt32)Max))
+                char szRealPathBuf[PATH_MAX] = "";
+
+                if( NULL == realpath(path, szRealPathBuf) || (strlen(szRealPathBuf) >= (sal_uInt32)Max))
                     return osl_Process_E_Unknown;
 
                 strcpy(pszBuffer, path);
@@ -1991,176 +2108,6 @@ oslProcessError SAL_CALL osl_searchPath(const sal_Char* pszName, const sal_Char*
 
     return osl_Process_E_NotFound;
 }
-
-
-sal_Bool osl_getFullPath(const sal_Char* pszFilename, sal_Char* pszPath, sal_uInt32 MaxLen)
-{
-    int   n;
-    sal_Char* pBuffer;
-    sal_Char* pDir;
-    struct stat status;
-    struct stat root;
-    struct stat parent;
-    sal_Char  Path[PATH_MAX + 1];
-
-    Path[0] = '\0';
-
-    pDir = strdup(pszFilename);
-
-    /* check if path has a trailing '/', so it should specify a directory, */
-    /* or if last component doesn't exist or is not a directory. So in any case */
-    /* of this the last component should be remove before checking the path */
-    if ((pDir[strlen(pDir) - 1] == '/') ||
-        (stat(pDir, &status) < 0) || (! S_ISDIR(status.st_mode)))
-    {
-        sal_Char* pFile;
-
-        if ((pFile = strrchr(pDir, '/')) != NULL)
-        {
-            *pFile++ = '\0';
-            strcpy(Path, pFile);
-            strcat(Path, "/");
-        }
-        else
-        {
-            strcpy(Path, pDir);
-            strcat(Path, "/");
-            free(pDir); /* @@@ rtl_freeMemory(pDir); @@@ */
-            pDir = strdup(".");
-        }
-
-        if ((strlen(pDir) > 0) &&
-            ((stat(pDir, &status) < 0) || (! S_ISDIR(status.st_mode))))
-        {
-            free(pDir); /* @@@ rtl_freeMemory(pDir); @@@ */
-            return sal_False;
-        }
-    }
-    else
-    {
-        Path[0] = '\0';
-    }
-
-    if ((n = pathconf(pDir, _PC_PATH_MAX)) < 0)
-        n = PATH_MAX + 1;
-
-    pBuffer = (sal_Char*) rtl_allocateMemory((n + 1) * sizeof(sal_Char));
-    strcpy(pBuffer, pDir);
-
-    stat("/", &root);
-
-    strcat(pBuffer, "/.");
-    STAT_PARENT(pBuffer, &status);
-    strcat(pBuffer, ".");
-
-    while ((status.st_dev != root.st_dev) || (status.st_ino != root.st_ino))
-    {
-        DIR*           dir;
-        struct dirent* entry;
-
-        if (((dir = opendir(pBuffer)) == NULL) ||
-            (STAT_PARENT(pBuffer, &parent) < 0))
-        {
-            free(pDir); /* @@@ rtl_freeMemory(pDir); @@@ */
-            rtl_freeMemory(pBuffer);
-
-            return sal_False;
-        }
-
-        if (status.st_dev == parent.st_dev)
-        {
-            do
-            {
-                if ((entry = readdir(dir)) == NULL)
-                {
-                    free(pDir); /* @@@ rtl_freeMemory(pDir); @@@ */
-                    rtl_freeMemory(pBuffer);
-
-                    return sal_False;
-                }
-            }
-            while (entry->d_ino != status.st_ino);
-        }
-        else
-        {
-            /*
-             * if this point is a mount point we have to check
-             * each entry, because the inode number in the directory
-             * is for the parent directory, not for the mounted file
-             */
-            sal_Char* full = (sal_Char*) rtl_allocateMemory((strlen(pBuffer) + PATH_MAX + 1) * sizeof(sal_Char));
-            sal_Char* name;
-
-            strcpy(full, pBuffer);
-            strcat(full, "/");
-            name = full + strlen(full);
-
-            do
-            {
-                if ((entry = readdir(dir)) == NULL)
-                {
-                    rtl_freeMemory(full);
-
-                    free(pDir); /* @@@ rtl_freeMemory(pDir); @@@ */
-                    rtl_freeMemory(pBuffer);
-
-                    return sal_False;
-                }
-
-                if ((entry->d_name[0] == '.') && ((entry->d_name[1] == '\0') ||
-                                                  ((entry->d_name[1] == '.') && (entry->d_name[2] == '\0'))))
-                    continue;
-
-                strcpy(name, entry->d_name);
-
-                if (STAT_PARENT(full, &parent) < 0)
-                    continue;
-            }
-            while ((parent.st_ino != status.st_ino) || (parent.st_dev != status.st_dev));
-
-            rtl_freeMemory(full);
-        }
-
-        strcat(Path, entry->d_name);
-        strcat(Path, "/");
-
-        closedir(dir);
-
-        STAT_PARENT(pBuffer, &status);
-        strcat(pBuffer, "/..");
-    }
-
-    free(pDir); /* @@@ rtl_freeMemory(pDir); @@@ */
-    rtl_freeMemory(pBuffer);
-
-    if (strlen(Path) < MaxLen)
-    {
-        int  n;
-        sal_Char *p, *l;
-
-        for (p = Path + strlen(Path), l = p; p >= Path; p--)
-        {
-            if (*p == '/')
-            {
-                n = l - (p + 1);
-                memcpy(pszPath, p + 1, n);
-                pszPath += n;
-                *pszPath++ = '/';
-                l = p;
-            }
-        }
-
-        n = l - (p + 1);
-        memcpy(pszPath, p + 1, n);
-        pszPath += n;
-        *pszPath = '\0';
-
-        return sal_True;
-    }
-
-    return sal_False;
-}
-
 
 /******************************************************************************
  *
