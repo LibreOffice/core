@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.141 $
+#   $Revision: 1.142 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:46:43 $
+#   last change: $Author: hjs $ $Date: 2004-03-15 14:50:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2108,7 +2108,7 @@ $(IMGLSTTARGET): $(IMGLST_SRS)
     @-+$(MKDIR) $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
     @-+$(MKDIR) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
     +$(BMP) $(SRS)$/$(@:b:s/_img/ /:1).srs $(BMP_OUT)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(lang_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) -I $(BMP_IN) -I $(SOLARSRC)$/res -f $@
-    -+$(GNUCOPY) -pu $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))})/* $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
+    -+$(GNUCOPY) -pu $(subst,\,/ $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}))/* $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
     +-$(RM) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))})$/*.*~
 .ELSE			# "$(common_build_reslib)"!=""
     @-+$(MKDIR) $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
