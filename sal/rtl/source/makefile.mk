@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kr $ $Date: 2001-06-15 13:53:53 $
+#   last change: $Author: rt $ $Date: 2001-06-18 15:12:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,6 +123,10 @@ OBJFILES=   $(OBJ)$/alloc.obj       \
             $(OBJ)$/macro.obj		\
             $(OBJ)$/unload.obj
 #.ENDIF
+
+EXCEPTIONSFILES=	$(SLO)$/macro.obj	\
+            $(OBJ)$/macro.obj
+
 
 .ENDIF
 
