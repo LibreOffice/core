@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: mtg $ $Date: 2000-11-27 16:55:07 $
+#   last change: $Author: mtg $ $Date: 2000-11-28 09:32:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,8 @@ SLOFILES= \
         $(SLO)$/ZipPackageFolder.obj	\
         $(SLO)$/ManifestExport.obj				\
         $(SLO)$/ManifestWriter.obj				\
+        $(SLO)$/ManifestReader.obj				\
+        $(SLO)$/ManifestImport.obj				\
         $(SLO)$/AttributeList.obj				\
         $(SLO)$/ZipPackageFolderEnumeration.obj	\
         $(SLO)$/ZipPackageSink.obj	\
