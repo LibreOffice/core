@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstore.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-21 09:23:35 $
+ *  last change: $Author: kso $ $Date: 2001-03-21 09:04:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,11 @@ using namespace rtl;
 //=========================================================================
 
 #define STORE_CONTENTPROPERTIES_KEY "/org.openoffice.ucb.Store/ContentProperties"
+
+// describe path of cfg entry
+#define CFGPROPERTY_NODEPATH        "nodepath"
+// true->async. update; false->sync. update
+#define CFGPROPERTY_LAZYWRITE       "lazywrite"
 
 //=========================================================================
 
@@ -1371,9 +1376,22 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
 
             if ( m_pImpl->m_xConfigProvider.is() )
             {
-                Sequence< Any > aArguments( 1 );
-                aArguments[ 0 ] <<= OUString::createFromAscii(
-                                                 STORE_CONTENTPROPERTIES_KEY );
+                Sequence< Any > aArguments( 2 );
+                PropertyValue   aProperty;
+
+                aProperty.Name
+                    = OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                            CFGPROPERTY_NODEPATH ) );
+                aProperty.Value
+                    <<= OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                            STORE_CONTENTPROPERTIES_KEY ) );
+                aArguments[ 0 ] <<= aProperty;
+
+                aProperty.Name
+                    = OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                            CFGPROPERTY_LAZYWRITE ) );
+                aProperty.Value <<= sal_True;
+                aArguments[ 1 ] <<= aProperty;
 
                 m_pImpl->m_bTriedToGetRootWriteAccess = sal_True;
 
