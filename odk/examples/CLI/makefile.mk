@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 13:16:30 $
+#   last change: $Author: rt $ $Date: 2005-03-29 12:05:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,11 +75,11 @@ TARGET=cli
 #----------------------------------------------------
 
 CSHARP=\
-    $(DESTDIRCLIEXAMPLES)$/C\#$/Spreadsheet$/GeneralTableSample.cs \
-    $(DESTDIRCLIEXAMPLES)$/C\#$/Spreadsheet$/SpreadsheetDocHelper.cs \
-    $(DESTDIRCLIEXAMPLES)$/C\#$/Spreadsheet$/SpreadsheetSample.cs \
-    $(DESTDIRCLIEXAMPLES)$/C\#$/Spreadsheet$/ViewSample.cs \
-    $(DESTDIRCLIEXAMPLES)$/C\#$/Spreadsheet$/Makefile
+    $(DESTDIRCLIEXAMPLES)$/CSharp$/Spreadsheet$/GeneralTableSample.cs \
+    $(DESTDIRCLIEXAMPLES)$/CSharp$/Spreadsheet$/SpreadsheetDocHelper.cs \
+    $(DESTDIRCLIEXAMPLES)$/CSharp$/Spreadsheet$/SpreadsheetSample.cs \
+    $(DESTDIRCLIEXAMPLES)$/CSharp$/Spreadsheet$/ViewSample.cs \
+    $(DESTDIRCLIEXAMPLES)$/CSharp$/Spreadsheet$/Makefile
 
 VBDOTNET=\
     $(DESTDIRCLIEXAMPLES)$/VB.NET$/WriterDemo$/WriterDemo.vb \
