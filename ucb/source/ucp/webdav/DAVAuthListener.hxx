@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVAuthListener.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-18 12:46:13 $
+ *  last change: $Author: kso $ $Date: 2002-09-24 13:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef _DAVAUTHLISTENER_HXX_
 #define _DAVAUTHLISTENER_HXX_
 
+#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#include <salhelper/simplereferenceobject.hxx>
+#endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -76,7 +79,7 @@
 namespace webdav_ucp
 {
 
-class DAVAuthListener
+class DAVAuthListener : public salhelper::SimpleReferenceObject
 {
     public:
         virtual int authenticate(
