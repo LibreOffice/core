@@ -2,9 +2,9 @@
  *
  *  $RCSfile: matchlocale.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 19:25:44 $
+ *  last change: $Author: jb $ $Date: 2001-11-05 10:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,21 +82,19 @@ namespace configmgr
         String aCountry;
     };
 
-    StaticLocale::String c_sDefaultLanguage = "";   // exported !
-    StaticLocale::String c_sAnyLanguage = "*";      // exported !
+    StaticLocale::String const c_sAnyLanguage = "*";    // exported !
 
-    StaticLocale::String c_sNoCountry = "";
+    StaticLocale::String const c_sNoCountry = "";
 
-    StaticLocale::String c_sLanguageEnglish = "en";
-    StaticLocale::String c_sCountryUS = "US";
+    StaticLocale::String const c_sLanguageEnglish = "en";
+    StaticLocale::String const c_sCountryUS = "US";
 
-    StaticLocale c_aFallbackLocales[] =
+    StaticLocale const c_aFallbackLocales[] =
     {
-        { c_sDefaultLanguage,   c_sNoCountry }, // the default language
         { c_sLanguageEnglish,   c_sCountryUS }, // english [cannot make 'en' better than 'en-US' :-(]
         { c_sAnyLanguage,       c_sNoCountry }  // just take the first you find
     };
-    const SequencePos c_nFallbackLocales = ARRAYSIZE(c_aFallbackLocales);
+    SequencePos const c_nFallbackLocales = ARRAYSIZE(c_aFallbackLocales);
 
 // -----------------------------------------------------------------------------
     void getAnyLocale(OUString& _rsString)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: matchlocale.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-10 14:04:37 $
+ *  last change: $Author: jb $ $Date: 2001-11-05 10:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,7 @@ namespace configmgr
         namespace lang      = ::com::sun::star::lang;
 
     // -------------------------------------------------------------------------
-        extern char const * c_sDefaultLanguage;
-        extern char const * c_sAnyLanguage;
+        extern char const * const c_sAnyLanguage;
 
         extern void getAnyLocale(OUString& _rsString); // also declared in options.hxx
 
