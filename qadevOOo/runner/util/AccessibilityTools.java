@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibilityTools.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2004-03-19 15:56:28 $
+ *  last change:$Date: 2004-07-23 10:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,18 @@ public class AccessibilityTools {
         return xAccessible;
     }
 
+    public static XWindow getCurrentContainerWindow(XMultiServiceFactory msf,
+                                           XModel xModel) {
+        return getWindow(msf, xModel, true);
+    }
+
     public static XWindow getCurrentWindow(XMultiServiceFactory msf,
                                            XModel xModel) {
+        return getWindow(msf, xModel, false);
+    }
+
+    private static XWindow getWindow(XMultiServiceFactory msf, XModel xModel,
+                                                        boolean containerWindow) {
         XWindow xWindow = null;
 
         try {
@@ -122,7 +132,10 @@ public class AccessibilityTools {
                 System.out.println("can't get frame from controller");
             }
 
-            xWindow = xFrame.getComponentWindow();
+            if (containerWindow)
+                xWindow = xFrame.getContainerWindow();
+            else
+                xWindow = xFrame.getComponentWindow();
 
             if (xWindow == null) {
                 System.out.println("can't get window from frame");
@@ -240,7 +253,6 @@ public class AccessibilityTools {
                                                                              String name,
                                                                              String implName) {
         XAccessibleContext ac = xacc.getAccessibleContext();
-
         if ((ac.getAccessibleRole() == role) &&
                 (ac.getAccessibleName().indexOf(name) > -1) &&
                 (utils.getImplName(ac).indexOf(implName) > -1)) {
@@ -280,7 +292,6 @@ public class AccessibilityTools {
         XAccessibleContext ac = xacc.getAccessibleContext();
         boolean isShowing = ac.getAccessibleStateSet()
                               .contains(com.sun.star.accessibility.AccessibleStateType.SHOWING);
-
         if ((ac.getAccessibleRole() == role) &&
                 (ac.getAccessibleName().indexOf(name) > -1) &&
                 (utils.getImplName(ac).indexOf(implName) > -1) &&
