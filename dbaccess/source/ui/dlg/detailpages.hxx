@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-14 15:14:36 $
+ *  last change: $Author: oj $ $Date: 2002-03-22 09:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,6 @@ namespace dbaui
         Edit                m_aDriver;
         FixedText           m_aJdbcUrlLabel;
         OConnectionURLEdit  m_aJdbcUrl;
-        FixedLine           m_aSeparator1;
 
         OJdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
         ~OJdbcDetailsPage();
@@ -318,6 +317,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2002/03/14 15:14:36  fs
+ *  #97788# Big5-HKSCS only when asian languages are enabled
+ *
  *  Revision 1.7  2001/06/25 08:28:43  oj
  *  #88699# new control for ldap rowcount
  *

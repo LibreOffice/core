@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-14 15:14:36 $
+ *  last change: $Author: oj $ $Date: 2002-03-22 09:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,20 +491,18 @@ namespace dbaui
     //= OJdbcDetailsPage
     //========================================================================
     OJdbcDetailsPage::OJdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_JDBC, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_CHARSET)
+        :OCommonBehaviourTabPage(pParent, PAGE_JDBC, _rCoreAttrs, CBTP_USE_UIDPWD)
 
         ,m_aDriverLabel     (this, ResId(FT_JDBCDRIVERCLASS))
         ,m_aDriver          (this, ResId(ET_JDBCDRIVERCLASS))
         ,m_aJdbcUrlLabel    (this, ResId(FT_CONNECTURL))
         ,m_aJdbcUrl         (this, ResId(ET_CONNECTURL))
-        ,m_aSeparator1      (this, ResId(FL_SEPARATOR1))
     {
         m_aDriver.SetModifyHdl(getControlModifiedLink());
         m_aJdbcUrl.SetModifyHdl(getControlModifiedLink());
 
         m_pUserName->SetZOrder(&m_aJdbcUrl, WINDOW_ZORDER_BEHIND);
         m_pPasswordRequired->SetZOrder(m_pUserName, WINDOW_ZORDER_BEHIND);
-        m_pCharset->SetZOrder(m_pPasswordRequired, WINDOW_ZORDER_BEHIND);
 
         FreeResource();
     }
@@ -523,7 +521,6 @@ namespace dbaui
             static sal_Int32 nRelevantIds[] =
             {
                 DSID_JDBCDRIVERCLASS,
-                DSID_CHARSET,
                 0
             };
             pRelevantIds = nRelevantIds;
@@ -1191,6 +1188,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2002/03/14 15:14:36  fs
+ *  #97788# Big5-HKSCS only when asian languages are enabled
+ *
  *  Revision 1.10  2002/03/14 10:22:18  fs
  *  #97788# allow Big5-HKSCS only if asian functionallity is enabled
  *
