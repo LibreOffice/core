@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:32:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1514,21 +1514,25 @@ static Writer& OutWW8_Relief( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutWW8_CharRotate( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
-    // #i36867 In word the text in a table is rotated via the TC or 0x7629
-    // This means you can only rotate all or none of the text adding 0xCA78
-    // here corrupts the table, hence !rWrtWW8.bIsInTable
-    if( rWrtWW8.bWrtWW8 && !rWrtWW8.bIsInTable )
+    // #i28331# - check that a Value is set
+    if((static_cast<const SvxCharRotateItem&>(rHt)).GetValue())
     {
-        const SvxCharRotateItem& rAttr = (const SvxCharRotateItem&)rHt;
+        SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+        if( rWrtWW8.bWrtWW8 && !rWrtWW8.bIsInTable )
+        {
+            // #i36867 In word the text in a table is rotated via the TC or 0x7629
+            // This means you can only rotate all or none of the text adding 0xCA78
+            // here corrupts the table, hence !rWrtWW8.bIsInTable
+            const SvxCharRotateItem& rAttr = (const SvxCharRotateItem&)rHt;
 
-        rWrtWW8.InsUInt16( 0xCA78 );
-        rWrtWW8.pO->Insert( (BYTE)0x06, rWrtWW8.pO->Count() ); //len 6
-        rWrtWW8.pO->Insert( (BYTE)0x01, rWrtWW8.pO->Count() );
+            rWrtWW8.InsUInt16( 0xCA78 );
+            rWrtWW8.pO->Insert( (BYTE)0x06, rWrtWW8.pO->Count() ); //len 6
+            rWrtWW8.pO->Insert( (BYTE)0x01, rWrtWW8.pO->Count() );
 
-        rWrtWW8.InsUInt16( rAttr.IsFitToLine() ? 1 : 0 );
-        static const BYTE aZeroArr[ 3 ] = { 0, 0, 0 };
-        rWrtWW8.pO->Insert( aZeroArr, 3, rWrtWW8.pO->Count() );
+            rWrtWW8.InsUInt16( rAttr.IsFitToLine() ? 1 : 0 );
+            static const BYTE aZeroArr[ 3 ] = { 0, 0, 0 };
+            rWrtWW8.pO->Insert( aZeroArr, 3, rWrtWW8.pO->Count() );
+        }
     }
     return rWrt;
 }
@@ -3051,47 +3055,51 @@ static Writer& OutWW8_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
  */
 static Writer& OutWW8_SvxTwoLinesItem( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
-    //97+ only
-    if( !rWrtWW8.bWrtWW8 )
-        return rWrt;
+    // #i28331# - check that bOn is set
+    if((static_cast<const SvxTwoLinesItem&>(rHt)).GetValue())
+    {
+        SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+        //97+ only
+        if( !rWrtWW8.bWrtWW8 )
+            return rWrt;
 
-    const SvxTwoLinesItem& rAttr = (const SvxTwoLinesItem&)rHt;
-    rWrtWW8.InsUInt16( 0xCA78 );
-    rWrtWW8.pO->Insert( (BYTE)0x06, rWrtWW8.pO->Count() ); //len 6
-    rWrtWW8.pO->Insert( (BYTE)0x02, rWrtWW8.pO->Count() );
+        const SvxTwoLinesItem& rAttr = (const SvxTwoLinesItem&)rHt;
+        rWrtWW8.InsUInt16( 0xCA78 );
+        rWrtWW8.pO->Insert( (BYTE)0x06, rWrtWW8.pO->Count() ); //len 6
+        rWrtWW8.pO->Insert( (BYTE)0x02, rWrtWW8.pO->Count() );
 
-    sal_Unicode cStart = rAttr.GetStartBracket();
-    sal_Unicode cEnd = rAttr.GetStartBracket();
+        sal_Unicode cStart = rAttr.GetStartBracket();
+        sal_Unicode cEnd = rAttr.GetStartBracket();
 
-    /*
-    As per usual we have problems. We can have seperate left and right brackets
-    in OOo, it doesn't appear that you can in word. Also in word there appear
-    to only be a limited number of possibilities, we can use pretty much
-    anything.
+        /*
+        As per usual we have problems. We can have seperate left and right brackets
+        in OOo, it doesn't appear that you can in word. Also in word there appear
+        to only be a limited number of possibilities, we can use pretty much
+        anything.
 
-    So if we have none, we export none, if either bracket is set to a known
-    word type we export both as that type (with the bracket winning out in
-    the case of a conflict simply being the order of test here.
+        So if we have none, we export none, if either bracket is set to a known
+        word type we export both as that type (with the bracket winning out in
+        the case of a conflict simply being the order of test here.
 
-    Upshot being a documented created in word will be reexported with no
-    ill effects.
-    */
+        Upshot being a documented created in word will be reexported with no
+        ill effects.
+        */
 
-    USHORT nType;
-    if (!cStart && !cEnd)
-        nType = 0;
-    else if ((cStart == '{') || (cEnd == '}'))
-        nType = 4;
-    else if ((cStart == '<') || (cEnd == '>'))
-        nType = 3;
-    else if ((cStart == '[') || (cEnd == ']'))
-        nType = 2;
-    else
-        nType = 1;
-    rWrtWW8.InsUInt16( nType );
-    static const BYTE aZeroArr[ 3 ] = { 0, 0, 0 };
-    rWrtWW8.pO->Insert( aZeroArr, 3, rWrtWW8.pO->Count() );
+        USHORT nType;
+        if (!cStart && !cEnd)
+            nType = 0;
+        else if ((cStart == '{') || (cEnd == '}'))
+            nType = 4;
+        else if ((cStart == '<') || (cEnd == '>'))
+            nType = 3;
+        else if ((cStart == '[') || (cEnd == ']'))
+            nType = 2;
+        else
+            nType = 1;
+        rWrtWW8.InsUInt16( nType );
+        static const BYTE aZeroArr[ 3 ] = { 0, 0, 0 };
+        rWrtWW8.pO->Insert( aZeroArr, 3, rWrtWW8.pO->Count() );
+    }
     return rWrt;
 }
 
