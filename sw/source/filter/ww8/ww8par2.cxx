@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 13:16:58 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,6 @@
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
-
-#pragma hdrstop
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>
@@ -249,9 +247,9 @@ struct WW8TabBandDesc
     bool bExist[MAX_COL];           // Existiert diese Zelle ?
     UINT8 nTransCell[MAX_COL + 2];  // UEbersetzung WW-Index -> SW-Index
 
-    WW8TabBandDesc() {  memset( this, 0, sizeof( *this ) ); };
-    WW8TabBandDesc( WW8TabBandDesc& rBand );    // tief kopieren
-    ~WW8TabBandDesc() { delete[] pTCs; delete[] pSHDs; delete[] pNewSHDs;};
+    WW8TabBandDesc();
+    WW8TabBandDesc(WW8TabBandDesc& rBand);    // tief kopieren
+    ~WW8TabBandDesc();
     static void setcelldefaults(WW8_TCell *pCells, short nCells);
     void ReadDef(bool bVer67, const BYTE* pS);
     void ProcessSprmTSetBRC(bool bVer67, const BYTE* pParamsTSetBRC);
@@ -265,6 +263,18 @@ struct WW8TabBandDesc
 
     enum wwDIR {wwTOP = 0, wwLEFT = 1, wwBOTTOM = 2, wwRIGHT = 3};
 };
+
+WW8TabBandDesc::WW8TabBandDesc()
+{
+    memset(this, 0, sizeof(*this));
+}
+
+WW8TabBandDesc::~WW8TabBandDesc()
+{
+    delete[] pTCs;
+    delete[] pSHDs;
+    delete[] pNewSHDs;
+}
 
 class WW8TabDesc
 {
@@ -344,6 +354,7 @@ public:
     void SetSizePosition(SwFrmFmt* pFrmFmt);
     void TableCellEnd();
     void MoveOutsideTable();
+    void ParkPaM();
     void FinishSwTable();
     void MergeCells();
     short GetMinLeft() const { return nConvertedLeft; }
@@ -519,8 +530,7 @@ long SwWW8ImplReader::Read_Ftn(WW8PLCFManResult* pRes)
     }
 
     FtnDescriptor aDesc;
-    bool bAutoNum = true;
-    if( eEDN == pRes->nSprmId )
+    if (eEDN == pRes->nSprmId)
     {
         aDesc.meType = MAN_EDN;
         if (pPlcxMan->GetEdn())
@@ -2183,7 +2193,7 @@ void WW8TabDesc::CalcDefaults()
                 if ((nLowerLeft < nUpperLeft) || (nLowerRight > nUpperRight))
                     continue;
 
-                WW8_BRC &rBelow = pNext->pTCs[k].rgbrc[WW8_TOP];
+                WW8_BRC &rBelow = pNext->pTCs[l].rgbrc[WW8_TOP];
                 short nBelowThick = rBelow.IsEmpty(pIo->bVer67) ?
                     0 : rBelow.DetermineBorderProperties(pIo->bVer67);
                 if (nAboveThick > nBelowThick)
@@ -2233,7 +2243,7 @@ void wwSectionManager::PrependedInlineNode(const SwPosition &rPos,
 
 void WW8TabDesc::CreateSwTable()
 {
-    ::SetProgressState( pIo->nProgress, pIo->rDoc.GetDocShell() );   // Update
+    ::SetProgressState(pIo->nProgress, pIo->mpDocShell);   // Update
 
     // if there is already some content on the Node append new node to ensure
     // that this content remains ABOVE the table
@@ -2414,6 +2424,8 @@ void WW8TabDesc::MergeCells()
                     pTabBoxes = &pTabLine->GetTabBoxes();
 
                     USHORT nCol = pActBand->nTransCell[ i ];
+                    if (!pActBand->bExist[nCol])    //#113434#
+                        continue;
                     ASSERT(nCol < pTabBoxes->Count(),
                         "Too few columns, table ended early");
                     if (nCol >= pTabBoxes->Count())
@@ -2454,6 +2466,7 @@ void WW8TabDesc::MergeCells()
                                     break;
                         }
                     }
+
 
                     if (bMerge)
                     {
@@ -2526,7 +2539,38 @@ void WW8TabDesc::MergeCells()
                     // sein)
                     UpdateTableMergeGroup( rCell, pActMGroup, pTabBox, i );
                 }
+            }
+    }
+}
+
+//There is a limbo area in word at the end of the row marker
+//where properties can live in word, there is no location in
+//writer equivalent, so try and park the cursor in the best
+//match, see #i23022#/#i18644#
+void WW8TabDesc::ParkPaM()
+{
+    SwTableBox *pTabBox = 0;
+    short nRow = nAktRow + 1;
+    if (nRow < pTabLines->Count())
+    {
+        if (SwTableLine *pLine = (*pTabLines)[nRow])
+        {
+            SwTableBoxes &rBoxes = pLine->GetTabBoxes();
+            pTabBox = rBoxes.Count() ? rBoxes[0] : 0;
         }
+    }
+
+    if (!pTabBox || !pTabBox->GetSttNd())
+    {
+        MoveOutsideTable();
+        return;
+    }
+
+    if (pIo->pPaM->GetPoint()->nNode != pTabBox->GetSttIdx() + 1)
+    {
+        pIo->pPaM->GetPoint()->nNode = pTabBox->GetSttIdx() + 1;
+        pIo->pPaM->GetPoint()->nContent.Assign(pIo->pPaM->GetCntntNode(), 0);
+        pIo->rDoc.SetTxtFmtColl(*pIo->pPaM, (SwTxtFmtColl*)pIo->pDfltTxtFmtColl);
     }
 }
 
@@ -2565,7 +2609,7 @@ void WW8TabDesc::FinishSwTable()
         SwTableBox*    pTargetBox;
         WW8SelBoxInfo* pActMGroup;
         USHORT         nActBoxCount;
-        for( USHORT iGr = 0; iGr < pMergeGroups->Count(); iGr++ )
+        for (USHORT iGr = 0; iGr < pMergeGroups->Count(); ++iGr)
         {
             pActMGroup   = (*pMergeGroups)[ iGr ];
             // Anzahl der zu mergenden Boxen PLUS Eins (fuer die TargetBox)
@@ -2835,7 +2879,7 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
     if (nCol >= pTabBoxes->Count())
     {
         if (bPam)
-            MoveOutsideTable();
+            ParkPaM();
         return false;
     }
     pTabBox = (*pTabBoxes)[nCol];
@@ -2846,7 +2890,7 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
             MoveOutsideTable();
         return false;
     }
-    if( bPam )
+    if (bPam)
     {
         pAktWWCell = &pActBand->pTCs[ nWwCol ];
         //We need to set the pPaM on the first cell, invalid
@@ -2856,11 +2900,11 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
         if (pIo->pPaM->GetPoint()->nNode != pTabBox->GetSttIdx() + 1)
         {
             pIo->pPaM->GetPoint()->nNode = pTabBox->GetSttIdx() + 1;
-            pIo->pPaM->GetPoint()->nContent.Assign( pIo->pPaM->GetCntntNode(), 0 );
+            pIo->pPaM->GetPoint()->nContent.Assign(pIo->pPaM->GetCntntNode(), 0);
             // Zur Sicherheit schon jetzt setzen, da bei den Zellen, die
             // zum Randausgleich eingefuegt werden, sonst der Style
             // nicht gesetzt wird.
-            pIo->rDoc.SetTxtFmtColl( *pIo->pPaM, (SwTxtFmtColl*)pIo->pDfltTxtFmtColl );
+            pIo->rDoc.SetTxtFmtColl(*pIo->pPaM, (SwTxtFmtColl*)pIo->pDfltTxtFmtColl);
             // uebrigens: da diese Zellen unsichtbare Hilfskonstruktionen sind,
             //            und nur dazu dienen, zerfranste Aussehen der WW-Tabelle
             //            nachzuahmen, braucht NICHT SetTxtFmtCollAndListLevel()
@@ -3076,7 +3120,7 @@ void WW8TabDesc::AdjustNewBand()
 
 void WW8TabDesc::TableCellEnd()
 {
-    ::SetProgressState( pIo->nProgress, pIo->rDoc.GetDocShell() );   // Update
+    ::SetProgressState(pIo->nProgress, pIo->mpDocShell);   // Update
 
     // neue Zeile
     if( pIo->bWasTabRowEnd )
@@ -3291,6 +3335,9 @@ void SwWW8ImplReader::PopTableDesc()
 void SwWW8ImplReader::StopTable()
 {
     maTracer.LeaveEnvironment(sw::log::eTable);
+    ASSERT(pTableDesc, "Panic, stop table with no table!");
+    if (!pTableDesc)
+        return;
 
     pTableDesc->FinishSwTable();
     PopTableDesc();
@@ -3658,6 +3705,7 @@ void WW8RStyle::Import1Style( USHORT nNr )
             pSI->eCJKFontSrcCharSet = pj->eCJKFontSrcCharSet;
             pSI->n81Flags = pj->n81Flags;
             pSI->n81BiDiFlags = pj->n81BiDiFlags;
+            pSI->nOutlineLevel = pj->nOutlineLevel;
             pSI->bInvisFlag = pj->bInvisFlag;
             pSI->bParaAutoBefore = pj->bParaAutoBefore;
             pSI->bParaAutoAfter = pj->bParaAutoAfter;
