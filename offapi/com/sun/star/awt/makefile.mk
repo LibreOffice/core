@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: obo $ $Date: 2004-09-09 15:49:32 $
+#   last change: $Author: vg $ $Date: 2005-03-08 15:56:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -286,6 +286,7 @@ IDLFILES=\
     XProgressMonitor.idl\
     XRadioButton.idl\
     XRegion.idl\
+    XReschedule.idl\
     XScrollBar.idl\
     XSpinField.idl\
     XSpinListener.idl\
