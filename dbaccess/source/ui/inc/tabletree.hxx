@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 08:20:14 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,11 +103,15 @@ protected:
     sal_Bool        m_bVirtualRoot; // should the first entry be visible
 
 public:
-    OTableTreeListBox( Window* pParent, WinBits nWinStyle = NULL,sal_Bool _bVirtualRoot=sal_True );
-    OTableTreeListBox( Window* pParent, const ResId& rResId,sal_Bool _bVirtualRoot=sal_True );
+    OTableTreeListBox( Window* pParent, sal_Bool _bHiContrast,WinBits nWinStyle = NULL,sal_Bool _bVirtualRoot=sal_True );
+    OTableTreeListBox( Window* pParent, const ResId& rResId,sal_Bool _bHiContrast,sal_Bool _bVirtualRoot=sal_True );
 
     void setServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
         { m_xORB = _rxORB; }
+
+    /** call when HiContrast change.
+    */
+    virtual void notifyHiContrastChanged();
 
     /** fill the table list with the tables belonging to the connection described by the parameters
         <BR>
@@ -186,7 +190,8 @@ protected:
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConnMetaData,
             const ::rtl::OUString& _rTableName,
             const Image& _rImage,
-            SvLBoxEntry* _pParentEntry
+            SvLBoxEntry* _pParentEntry,
+            sal_Int32 _nType
         );
 
     sal_Bool haveVirtualRoot() const { return m_bVirtualRoot; }
@@ -201,6 +206,9 @@ protected:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/08/28 08:20:14  fs
+ *  #91573# UpdateTableList returns the driver used for connecting
+ *
  *  Revision 1.7  2001/08/14 14:10:59  fs
  *  #86945# removed the tables container parameter from UpdateTableList
  *
