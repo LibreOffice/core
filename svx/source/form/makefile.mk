@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 11:26:27 $
+#   last change: $Author: obo $ $Date: 2005-01-05 12:22:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,7 @@ SLOFILES = \
     $(SLO)$/formtoolbars.obj \
     $(SLO)$/fmdocumentclassification.obj \
     $(SLO)$/fmcontrolbordermanager.obj \
+    $(SLO)$/fmcontrollayout.obj \
     $(SLO)$/fmtextcontroldialogs.obj \
     $(SLO)$/fmtextcontrolfeature.obj \
     $(SLO)$/fmtextcontrolshell.obj \
