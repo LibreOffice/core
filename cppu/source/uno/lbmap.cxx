@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dbo $ $Date: 2001-07-02 11:43:51 $
+ *  last change: $Author: mh $ $Date: 2002-08-13 15:09:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,7 @@ static inline oslModule loadModule( const OUString & rBridgeName )
         aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM("lib") );
         aLibName.append( rBridgeName );
 #ifdef MACOSX
-        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(".dylib.framework") );
+        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(".dylib") );
 #else
         aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(".so") );
 #endif
