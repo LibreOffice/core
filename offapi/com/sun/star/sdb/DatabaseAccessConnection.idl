@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseAccessConnection.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,10 @@
 
  module com {  module sun {  module star {  module sdb {
 
-interface XQueriesSupplier;
-interface XFormDocumentsSupplier;
-interface XReportDocumentsSupplier;
-interface XSQLQueryComposerFactory;
+ published interface XQueriesSupplier;
+ published interface XFormDocumentsSupplier;
+ published interface XReportDocumentsSupplier;
+ published interface XSQLQueryComposerFactory;
 
 
 // DocMerge from xml: service com::sun::star::sdb::DatabaseAccessConnection
@@ -96,7 +96,7 @@ interface XSQLQueryComposerFactory;
     to close the connection to the database.
     </p>
 */
-service DatabaseAccessConnection
+published service DatabaseAccessConnection
 {
 
     // DocMerge from xml: service com::sun::star::sdb::DatabaseAccessConnection: service com::sun::star::sdbc::Connection
