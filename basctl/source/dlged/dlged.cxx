@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: tbe $ $Date: 2002-02-04 15:42:53 $
+ *  last change: $Author: tbe $ $Date: 2002-04-24 15:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,10 +271,11 @@ void DlgEditor::SetWindow( Window* pWindow )
     pWindow->SetMapMode( MapMode( MAP_100TH_MM ) );
     pSdrPage->SetSize( pWindow->PixelToLogic( Size( 1280, 1024 ) ) );
 
-    pSdrView = new DlgEdView( pSdrModel, pWindow );
+    pSdrView = new DlgEdView( pSdrModel, pWindow, this );
     pSdrView->ShowPagePgNum( 0, Point() );
     pSdrView->SetLayerVisible( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ), FALSE );
     pSdrView->SetMoveSnapOnlyTopLeft( TRUE );
+    pSdrView->SetWorkArea( Rectangle( Point( 0, 0 ), pSdrPage->GetSize() ) );
 
     pSdrView->SetGridCoarse( aGridSize );
     pSdrView->SetSnapGrid( aGridSize );
@@ -340,6 +341,20 @@ void DlgEditor::DoScroll( ScrollBar* pActScroll )
     pWindow->Update();
 
     pWindow->SetBackgroundBrush( aOldBrush );
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEditor::UpdateScrollBars()
+{
+    MapMode aMap = pWindow->GetMapMode();
+    Point aOrg = aMap.GetOrigin();
+
+    if ( pHScroll )
+        pHScroll->SetThumbPos( -aOrg.X() );
+
+    if ( pVScroll )
+        pVScroll->SetThumbPos( -aOrg.Y() );
 }
 
 //----------------------------------------------------------------------------
@@ -574,6 +589,32 @@ void DlgEditor::SetInsertObj( USHORT eObj )
 USHORT DlgEditor::GetInsertObj() const
 {
     return eActObj;
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEditor::CreateDefaultObject()
+{
+    // create object by factory
+    SdrObject* pObj = SdrObjFactory::MakeNewObject( pSdrView->GetCurrentObjInventor(), pSdrView->GetCurrentObjIdentifier(), pSdrPage );
+
+    DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, pObj );
+    if ( pDlgEdObj )
+    {
+        // set position and size
+        Size aSize = pWindow->PixelToLogic( Size( 96, 24 ) );
+        Point aPoint = (pDlgEdForm->GetSnapRect()).Center();
+        aPoint.X() -= aSize.Width() / 2;
+        aPoint.Y() -= aSize.Height() / 2;
+        pDlgEdObj->SetSnapRect( Rectangle( aPoint, aSize ) );
+
+        // set default property values
+        pDlgEdObj->SetDefaults();
+
+        // insert object into drawing page
+        SdrPageView* pPageView = pSdrView->GetPageViewPvNum(0);
+        pSdrView->InsertObject( pDlgEdObj, *pPageView, 0 );
+    }
 }
 
 //----------------------------------------------------------------------------
