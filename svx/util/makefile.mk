@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: er $ $Date: 2001-07-25 19:01:34 $
+#   last change: $Author: er $ $Date: 2001-08-13 14:53:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -191,8 +191,7 @@ SHL2STDLIBS= \
             $(RTLLIB) \
             $(UNOTOOLSLIB) \
             $(UCBHELPERLIB) \
-            $(COMPHELPERLIB) \
-            $(DBTOOLSLIB)
+            $(COMPHELPERLIB)
 
 .IF "$(TF_UCB)" == ""
 SHL2STDLIBS+=\
