@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2000-10-18 08:54:19 $
+ *  last change: $Author: ka $ $Date: 2000-12-14 15:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,8 @@ SdViewShell::SdViewShell(SfxViewFrame* pFrame, Window *pParent,
     bStartShowWithDialog( FALSE ),
     pScrlBox(NULL),
     pView(NULL),
-    nPrintedHandoutPageNum(1)
+    nPrintedHandoutPageNum(1),
+    bPrintDirectSelected( FALSE )
 {
     pScrlBox = new ScrollBarBox(&pFrame->GetWindow(), WB_3DLOOK | WB_SIZEABLE );
     Construct();
@@ -306,7 +307,8 @@ SdViewShell::SdViewShell(SfxViewFrame* pFrame, const SdViewShell& rShell) :
     bCenterAllowed(rShell.bCenterAllowed),
     pScrlBox(NULL),
     pView(NULL),
-    nPrintedHandoutPageNum(1)
+    nPrintedHandoutPageNum(1),
+    bPrintDirectSelected( FALSE )
 {
     pScrlBox = new ScrollBarBox(&pFrame->GetWindow(), WB_3DLOOK | WB_SIZEABLE );
     Construct();

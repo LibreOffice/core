@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-25 13:35:29 $
+ *  last change: $Author: ka $ $Date: 2000-12-14 15:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,6 +648,8 @@ ErrCode SdViewShell::DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog, B
     // retrieve range of marked pages if we are in the outlineview
     if( ISA( SdOutlineViewShell ) )
         sNewPageRange = ((SdOutlineViewShell*)this)->GetPageRangeString();
+
+    bPrintDirectSelected = FALSE;
 
     if ( !pPrintDialog && !bSilent && rMarkList.GetMarkCount() || sNewPageRange.Len() )
     {
