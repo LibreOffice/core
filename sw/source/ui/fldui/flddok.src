@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddok.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:34:08 $
+ *  last change: $Author: rt $ $Date: 2001-05-17 08:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ TabPage TP_FLD_DOK
         Text [ ENGLISH ] = "Selection" ;
         Text [ norwegian ] = "Selection" ;
         Text [ italian ] = "Selezione" ;
-        Text [ portuguese_brazilian ] = "Seleção" ;
+        Text [ portuguese_brazilian ] = "Sele??o" ;
         Text [ portuguese ] = "~Selecção" ;
         Text [ finnish ] = "~Valitse" ;
         Text [ danish ] = "Udvalg" ;
@@ -281,7 +281,7 @@ TabPage TP_FLD_DOK
         Text [ portuguese ] = "Conteúdo ~fixo" ;
         Text[ chinese_simplified ] = "¹Ì¶¨ÄÚÈİ(~F)";
         Text[ russian ] = "Ôèêñ. ñîäåğæèìîå";
-        Text[ polish ] = "Sta³a treœæ";
+        Text[ polish ] = "Sta³a tre?æ";
         Text[ japanese ] = "“à—e‚ÌŒÅ’è(~F)";
         Text[ chinese_traditional ] = "©T©w¤º®e(~F)";
         Text[ arabic ] = "ÊËÈíÊ ÇáãÍÊæíÇÊ";
