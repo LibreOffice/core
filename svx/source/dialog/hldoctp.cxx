@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldoctp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:46:22 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ String SvxHyperlinkDocTp::GetCurrentURL ()
 
     if( aStrMark != aEmptyStr )
     {
-        aStrURL.AssignAscii( sHash );
+        aStrURL.AppendAscii( sHash );
         aStrURL += aStrMark;
     }
 
