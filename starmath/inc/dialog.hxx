@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-10-05 09:04:58 $
+ *  last change: $Author: tl $ $Date: 2002-04-24 10:09:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,10 @@ class SmFontDialog : public ModalDialog
     DECL_LINK(FontSelectHdl, ComboBox *);
     DECL_LINK(FontModifyHdl, ComboBox *);
     DECL_LINK(AttrChangeHdl, CheckBox *);
+
+    void            InitColor_Impl();
+
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
     SmFontDialog(Window * pParent, BOOL bFreeRes = TRUE);
@@ -441,6 +445,9 @@ class SmSymbolDialog : public ModalDialog
     void            FillSymbolSets(BOOL bDeleteText = TRUE);
     void            SetSymbolSetManager(SmSymSetManager &rMgr);
     const SmSym    *GetSymbol() const;
+    void            InitColor_Impl();
+
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
     SmSymbolDialog(Window * pParent, SmSymSetManager &rSymSetMgr, BOOL bFreeRes = TRUE);
@@ -535,10 +542,14 @@ class SmSymDefineDialog : public ModalDialog
     BOOL    SelectStyle(const XubString &rStyleName, BOOL bApplyFont);
 
 
-        SmSymSet              *GetSymbolSet(const ComboBox &rComboBox);
+    SmSymSet              *GetSymbolSet(const ComboBox &rComboBox);
     inline const SmSymSet *GetSymbolSet(const ComboBox &rComboBox) const;
-    SmSym             *GetSymbol(const ComboBox &rComboBox);
+    SmSym                 *GetSymbol(const ComboBox &rComboBox);
     inline const SmSym    *GetSymbol(const ComboBox &rComboBox) const;
+
+    void            InitColor_Impl();
+
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
     SmSymDefineDialog(Window *pParent, SmSymSetManager &rMgr, BOOL bFreeRes = TRUE);
