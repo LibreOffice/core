@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXModule.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:35 $
+ *  last change:$Date: 2003-05-27 13:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sw;
 
 import com.sun.star.uno.XInterface;
+import com.sun.star.lang.XMultiServiceFactory;
 import java.io.PrintWriter;
 import lib.StatusException;
 import lib.TestCase;
@@ -96,7 +97,7 @@ public class SwXModule extends TestCase {
         Object oInterface = null;
 
         try {
-            oInterface = Param.getMSF().createInstance(
+            oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance(
                 "com.sun.star.text.GlobalSettings" );
         } catch ( com.sun.star.uno.Exception e ) {
             log.println("Service not available" );
