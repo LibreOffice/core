@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-20 08:12:13 $
+ *  last change: $Author: oj $ $Date: 2001-03-20 10:56:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1512,7 +1512,7 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDesc& rInfo )
             else
             {
                 pEntry->SetGroupBy(rInfo.IsGroupBy());
-                if(!m_bOrderByUnRelated && pEntry->IsGroupBy())
+                if(!m_bGroupByUnRelated && pEntry->IsGroupBy())
                     pEntry->SetVisible(sal_True);
             }
             break;
@@ -1553,7 +1553,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDesc& rInfo, const Stri
             else
             {
                 pEntry->SetGroupBy(rInfo.IsGroupBy());
-                if(!m_bOrderByUnRelated && pEntry->IsGroupBy())
+                if(!m_bGroupByUnRelated && pEntry->IsGroupBy())
                     pEntry->SetVisible(sal_True);
             }
             if (!pEntry->GetCriteria(nLevel).getLength())
@@ -1625,7 +1625,7 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDesc& rInfo, const EOrderDi
         if(pTmp)
         {
             if(!m_bOrderByUnRelated)
-                pEntry->SetVisible(sal_True);
+                pTmp->SetVisible(sal_True);
             pTmp->SetOrderDir( eDir );
         }
 
@@ -1659,7 +1659,10 @@ void OSelectionBrowseBox::CellModified()
             {
                 OTableFieldDesc*    pEntry = (*static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc())[GetCurColumnId() - 1];
                 sal_uInt16 nIdx = m_pOrderCell->GetSelectEntryPos();
-                if(!m_bOrderByUnRelated && nIdx > 0 && nIdx != sal_uInt16(-1) && !pEntry->IsEmpty())
+                if(!m_bOrderByUnRelated && nIdx > 0 &&
+                    nIdx != sal_uInt16(-1)          &&
+                    !pEntry->IsEmpty()              &&
+                    pEntry->GetOrderDir() != ORDER_NONE)
                 {
                     m_pVisibleCell->GetBox().Check();
                     pEntry->SetVisible(sal_True);
