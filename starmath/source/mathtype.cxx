@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-14 09:46:26 $
+ *  last change: $Author: cmc $ $Date: 2002-05-17 12:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,8 @@ String aSizes[7] =
 
 static sal_Unicode Convert(sal_Unicode nIn)
 {
-    static sal_Unicode aMathTypeTable[] =
+    //Find the best match in accepted unicode for our private area symbols
+    static sal_Unicode aStarMathPrivateToUnicode[] =
     {
 0x2030, 0xF613, 0xF612, 0x002B, 0x003C, 0x003E, 0xE425, 0xE421, 0xE088, 0x2208,
 0x0192, 0x2026, 0x2192, 0x221A, 0x221A, 0x221A, 0xE090, 0x005E, 0x02C7, 0x02D8,
@@ -205,7 +206,19 @@ static sal_Unicode Convert(sal_Unicode nIn)
 0xE0DA, 0x2190, 0x2191, 0x2193
     };
     if ((nIn >= 0xE080) && (nIn <= 0xE0DD))
-        nIn = aMathTypeTable[nIn-0xE080];
+        nIn = aStarMathPrivateToUnicode[nIn-0xE080];
+
+    //For whatever unicode glyph that equation editor doesn't ship with that
+    //we have a possible match we can munge it to.
+    switch (nIn)
+    {
+        case 0x2223:
+            nIn = '|';
+        break;
+        default:
+            break;
+    }
+
     return nIn;
 }
 
@@ -400,7 +413,7 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
             pC = " lbrace ";
             break;
         case 0x007c:
-            pC = " divides ";
+            pC = " \\lline ";
             break;
         case 0x007d:
             pC = " rbrace ";
