@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:51:29 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,11 +252,64 @@ void CheckSelection( struct ESelection& rSel, SvxTextForwarder* pForwarder ) thr
 // class SvxUnoTextRangeBase
 // ====================================================================
 
+#ifdef DEBUG
+class check_me
+{
+public:
+    check_me() : mnAllocNum(0) {};
+    ~check_me();
+
+    void add( SvxUnoTextRangeBase* pRange );
+    void remove( SvxUnoTextRangeBase* pRange );
+
+    std::list< std::pair< sal_uInt32, SvxUnoTextRangeBase* > > maRanges;
+    sal_uInt32 mnAllocNum;
+};
+
+void check_me::add( SvxUnoTextRangeBase* pRange )
+{
+    maRanges.push_back( std::pair< sal_uInt32, SvxUnoTextRangeBase* >( mnAllocNum++, pRange ) );
+}
+
+void check_me::remove( SvxUnoTextRangeBase* pRange )
+{
+    std::list< std::pair< sal_uInt32, SvxUnoTextRangeBase* > >::iterator aIter;
+    for( aIter = maRanges.begin(); aIter != maRanges.end(); aIter++ )
+    {
+        if( pRange == (*aIter).second )
+        {
+            maRanges.erase( aIter );
+            break;
+        }
+    }
+}
+
+check_me::~check_me()
+{
+    if( !maRanges.empty() )
+    {
+        DBG_ERROR("living text range detected!");
+        std::list< std::pair< sal_uInt32, SvxUnoTextRangeBase* > >::iterator aIter;
+        for( aIter = maRanges.begin(); aIter != maRanges.end(); aIter++ )
+        {
+            sal_Int32 nAllocNum = (*aIter).first;
+            SvxUnoTextRangeBase* pRange = (*aIter).second;
+            int nop = 0;
+        }
+    }
+}
+
+static check_me gNumRanges;
+#endif
+
 UNO3_GETIMPLEMENTATION_IMPL( SvxUnoTextRangeBase );
 
 SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SfxItemPropertyMap* _pMap ) throw()
 : pEditSource(NULL) , aPropSet(_pMap)
 {
+#ifdef DEBUG
+    gNumRanges.add(this);
+#endif
 }
 
 SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxEditSource* pSource, const SfxItemPropertyMap* _pMap ) throw()
@@ -270,6 +323,12 @@ SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxEditSource* pSource, const Sf
     ESelection aSelection;
     ::GetSelection( aSelection, pEditSource->GetTextForwarder() );
     SetSelection( aSelection );
+
+    if( pEditSource )
+        pEditSource->addRange( this );
+#ifdef DEBUG
+    gNumRanges.add(this);
+#endif
 }
 
 SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxUnoTextRangeBase& rRange ) throw()
@@ -285,10 +344,24 @@ SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxUnoTextRangeBase& rRange ) th
         aSelection  = rRange.aSelection;
         CheckSelection( aSelection, pForwarder );
     }
+
+    if( pEditSource )
+        pEditSource->addRange( this );
+
+#ifdef DEBUG
+    gNumRanges.add(this);
+#endif
 }
 
 SvxUnoTextRangeBase::~SvxUnoTextRangeBase() throw()
 {
+#ifdef DEBUG
+    gNumRanges.remove(this);
+#endif
+
+    if( pEditSource )
+        pEditSource->removeRange( this );
+
     delete pEditSource;
 }
 
@@ -300,6 +373,9 @@ void SvxUnoTextRangeBase::SetEditSource( SvxEditSource* pSource ) throw()
     pEditSource = pSource;
 
     aSelection.nStartPara = 0xffff;
+
+    if( pEditSource )
+        pEditSource->addRange( this );
 }
 
 /** puts a field item with a copy of the given FieldData into the itemset
@@ -1421,6 +1497,55 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextRangeBase::getSupportedServiceNames
     return aSeq;
 }
 
+// XTextRangeCompare
+sal_Int16 SAL_CALL SvxUnoTextRangeBase::compareRegionStarts( const uno::Reference< text::XTextRange >& xR1, const uno::Reference< text::XTextRange >& xR2 ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    SvxUnoTextRangeBase* pR1 = SvxUnoTextRangeBase::getImplementation( xR1 );
+    SvxUnoTextRangeBase* pR2 = SvxUnoTextRangeBase::getImplementation( xR2 );
+
+    if( (pR1 == 0) || (pR2 == 0) || (pR1->pEditSource != pEditSource) || (pR2->pEditSource != pEditSource) )
+        throw lang::IllegalArgumentException();
+
+    const ESelection& r1 = pR1->aSelection;
+    const ESelection& r2 = pR2->aSelection;
+
+    if( r1.nStartPara == r2.nStartPara )
+    {
+        if( r1.nStartPos == r2.nStartPos )
+            return 0;
+        else
+            return r1.nStartPos < r2.nStartPos ? 1 : -1;
+    }
+    else
+    {
+        return r1.nStartPara < r2.nStartPara ? 1 : -1;
+    }
+}
+
+sal_Int16 SAL_CALL SvxUnoTextRangeBase::compareRegionEnds( const uno::Reference< text::XTextRange >& xR1, const uno::Reference< text::XTextRange >& xR2 ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    SvxUnoTextRangeBase* pR1 = SvxUnoTextRangeBase::getImplementation( xR1 );
+    SvxUnoTextRangeBase* pR2 = SvxUnoTextRangeBase::getImplementation( xR2 );
+
+    if( (pR1 == 0) || (pR2 == 0) || (pR1->pEditSource->GetTextForwarder() != pEditSource->GetTextForwarder()) || (pR2->pEditSource->GetTextForwarder() != pEditSource->GetTextForwarder()) )
+        throw lang::IllegalArgumentException();
+
+    const ESelection& r1 = pR1->aSelection;
+    const ESelection& r2 = pR2->aSelection;
+
+    if( r1.nEndPara == r2.nEndPara )
+    {
+        if( r1.nEndPos == r2.nEndPos )
+            return 0;
+        else
+            return r1.nEndPos < r2.nEndPos ? 1 : -1;
+    }
+    else
+    {
+        return r1.nEndPara < r2.nEndPara ? 1 : -1;
+    }
+}
+
 // ====================================================================
 // class SvxUnoTextRange
 // ====================================================================
@@ -1458,6 +1583,7 @@ uno::Any SAL_CALL SvxUnoTextRange::queryAggregation( const uno::Type & rType )
     else if( rType == ::getCppuType((const uno::Reference< beans::XPropertySet >*)0) )
         aAny <<= uno::Reference< beans::XPropertySet >(this);
     else QUERYINT( beans::XPropertyState );
+    else QUERYINT( text::XTextRangeCompare );
     else if( rType == ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0) )
         aAny <<= uno::Reference< beans::XMultiPropertySet >(this);
     else QUERYINT( lang::XServiceInfo );
@@ -1494,7 +1620,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextRange::getTypes()
 {
     if( maTypeSequence.getLength() == 0 )
     {
-        maTypeSequence.realloc( 7 ); // !DANGER! keep this updated
+        maTypeSequence.realloc( 8 ); // !DANGER! keep this updated
         uno::Type* pTypes = maTypeSequence.getArray();
 
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRange >*)0);
@@ -1504,6 +1630,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextRange::getTypes()
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XTypeProvider >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XUnoTunnel >*)0);
+        *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeCompare >*)0);
     }
     return maTypeSequence;
 }
@@ -1611,6 +1738,7 @@ sal_Bool SvxUnoTextBase::queryAggregation( const uno::Type & rType, uno::Any& aA
     else QUERYINT( beans::XPropertySet );
     else QUERYINT( beans::XMultiPropertySet );
     else QUERYINT( beans::XPropertyState );
+    else QUERYINT( text::XTextRangeCompare );
     else QUERYINT( lang::XServiceInfo );
     else QUERYINT( text::XTextRangeMover );
     else QUERYINT( lang::XTypeProvider );
@@ -1636,7 +1764,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextBase::getStaticTypes() throw()
 {
     if( maTypeSequence.getLength() == 0 )
     {
-        maTypeSequence.realloc( 9 ); // !DANGER! keep this updated
+        maTypeSequence.realloc( 10 ); // !DANGER! keep this updated
         uno::Type* pTypes = maTypeSequence.getArray();
 
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XText >*)0);
@@ -1648,6 +1776,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextBase::getStaticTypes() throw()
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XTypeProvider >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XUnoTunnel >*)0);
+        *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeCompare >*)0);
     }
     return maTypeSequence;
 }
@@ -1670,6 +1799,14 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextBase::getImplementationId()
     return aId;
 }
 
+uno::Reference< text::XTextCursor > SvxUnoTextBase::createTextCursorBySelection( const ESelection& rSel )
+{
+    SvxUnoTextCursor* pCursor = new SvxUnoTextCursor( *this );
+    uno::Reference< text::XTextCursor >  xCursor( pCursor );
+    pCursor->SetSelection( rSel );
+    return xCursor;
+}
+
 // XSimpleText
 
 uno::Reference< text::XTextCursor > SAL_CALL SvxUnoTextBase::createTextCursor()
@@ -1684,14 +1821,13 @@ uno::Reference< text::XTextCursor > SAL_CALL SvxUnoTextBase::createTextCursorByR
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SvxUnoTextCursor* pCursor = new SvxUnoTextCursor( *this );
-    uno::Reference< text::XTextCursor >  xCursor( pCursor );
+    uno::Reference< text::XTextCursor >  xCursor;
 
     if( aTextPosition.is() )
     {
         SvxUnoTextRangeBase* pRange = SvxUnoTextRangeBase::getImplementation( aTextPosition );
         if(pRange)
-            pCursor->SetSelection( pRange->GetSelection() );
+            xCursor = createTextCursorBySelection( pRange->GetSelection() );
     }
 
     return xCursor;
