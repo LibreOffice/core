@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription_Test.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:37:53 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ public final class TypeDescription_Test extends ComplexTestCase {
 
     public String[] getTestMethodNames() {
         return new String[] { "test", "testUnsigned",
-                              "testGetMethodDescription" };
+                              "testGetMethodDescription", "testSequence" };
     }
 
     public void test() throws Exception {
@@ -150,7 +150,7 @@ public final class TypeDescription_Test extends ComplexTestCase {
         Object[] exceptionData = new Object [] {
             "com.sun.star.uno.Exception", "[Lcom.sun.star.uno.Exception;",
             com.sun.star.uno.Exception.class, TypeClass.EXCEPTION,
-            new Object[] { interfaceData }, null };
+            new Object[] { interfaceData } };
         Object[] namingServiceData = new Object[] {
             "com.sun.star.uno.XNamingService",
             "[Lcom.sun.star.uno.XNamingService;", XNamingService.class,
@@ -187,7 +187,13 @@ public final class TypeDescription_Test extends ComplexTestCase {
         td.getMethodDescription("fn");
     }
 
-    public interface XBase {
+    public void testSequence() throws ClassNotFoundException {
+        assure(
+            TypeDescription.getTypeDescription("[]unsigned short").
+            getComponentType().getTypeName().equals("unsigned short"));
+    }
+
+    public interface XBase extends XInterface {
         void fn();
 
         TypeInfo[] UNOTYPEINFO = { new MethodTypeInfo("fn", 0, 0) };
