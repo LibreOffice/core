@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-11 11:33:52 $
+ *  last change: $Author: mba $ $Date: 2000-10-12 16:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::lang;
+
+namespace utl
+{
 
 class ProgressHandler_Impl: public cppu::OWeakObject, public XProgressHandler
 {
@@ -685,4 +688,4 @@ void UCB_Link_Helper::Clear()
     }
 }
 
-
+};
