@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-11 13:40:50 $
+ *  last change: $Author: pb $ $Date: 2001-09-12 07:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,8 @@ OUString CreateExactSizeText_Impl( sal_Int64 nSize )
 ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
                                           SvtFileView_Impl* pParent,
                                           sal_Int16 nFlags ) :
-    SvHeaderTabListBox( pParentWin, 0 ),
+
+    SvHeaderTabListBox( pParentWin, WB_TABSTOP ),
 
     mpHeaderBar     ( NULL ),
     mpParent        ( pParent ),
@@ -923,17 +924,24 @@ void SvtFileView::CreateNewFolder( const String& rNewFolder )
 sal_Bool SvtFileView::HasPreviousLevel( String& rParentURL ) const
 {
     sal_Bool bRet = sal_False;
-    Content aCnt( mpImp->maViewURL, Reference< XCommandEnvironment > () );
-    Reference< XContent > xContent( aCnt.get() );
-    Reference< com::sun::star::container::XChild > xChild( xContent, UNO_QUERY );
-    if ( xChild.is() )
+    try
     {
-        Reference< XContent > xParent( xChild->getParent(), UNO_QUERY );
-        if ( xParent.is() )
+        Content aCnt( mpImp->maViewURL, Reference< XCommandEnvironment > () );
+        Reference< XContent > xContent( aCnt.get() );
+        Reference< com::sun::star::container::XChild > xChild( xContent, UNO_QUERY );
+        if ( xChild.is() )
         {
-            rParentURL = String( xParent->getIdentifier()->getContentIdentifier() );
-            bRet = ( rParentURL.Len() > 0 && rParentURL != mpImp->maViewURL );
+            Reference< XContent > xParent( xChild->getParent(), UNO_QUERY );
+            if ( xParent.is() )
+            {
+                rParentURL = String( xParent->getIdentifier()->getContentIdentifier() );
+                bRet = ( rParentURL.Len() > 0 && rParentURL != mpImp->maViewURL );
+            }
         }
+    }
+    catch( ::com::sun::star::uno::Exception )
+    {
+        // perhaps an unkown url protocol (e.g. "private:newdoc")
     }
 
     return bRet;
