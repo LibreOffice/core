@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-24 10:29:54 $
+ *  last change: $Author: thb $ $Date: 2002-11-15 13:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,7 +602,14 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        return getTextRange( getSelectionStart(), getSelectionEnd() );
+        sal_Int32 nStart( getSelectionStart() );
+        sal_Int32 nEnd( getSelectionEnd() );
+
+        // #104481# Return the empty string for 'no selection'
+        if( nStart < 0 || nEnd < 0 )
+            return ::rtl::OUString();
+        else
+            return getTextRange( nStart, nEnd );
     }
 
     sal_Int32 SAL_CALL AccessibleStaticTextBase::getSelectionStart() throw (uno::RuntimeException)
