@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:08:35 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,11 +372,25 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
     if ( !xLoadable.is() )
         throw uno::RuntimeException();
 
-    uno::Sequence< beans::PropertyValue > aArgs( 2 );
+    sal_Int32 nLen = 2;
+    uno::Sequence< beans::PropertyValue > aArgs( nLen );
     aArgs[0].Name = ::rtl::OUString::createFromAscii( "URL" );
     aArgs[0].Value <<= m_aLinkURL;
     aArgs[1].Name = ::rtl::OUString::createFromAscii( "FilterName" );
     aArgs[1].Value <<= m_aLinkFilterName;
+    if ( m_bLinkHasPassword )
+    {
+        aArgs.realloc( ++nLen );
+        aArgs[nLen-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Password" ) );
+        aArgs[nLen-1].Value <<= m_aLinkPassword;
+    }
+
+    aArgs.realloc( m_aDocMediaDescriptor.getLength() + nLen );
+    for ( sal_Int32 nInd = 0; nInd < m_aDocMediaDescriptor.getLength(); nInd++ )
+    {
+        aArgs[nInd+nLen].Name = m_aDocMediaDescriptor[nInd].Name;
+        aArgs[nInd+nLen].Value = m_aDocMediaDescriptor[nInd].Value;
+    }
 
     try
     {
@@ -385,6 +399,20 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 
         // load the document
         xLoadable->load( aArgs );
+
+        if ( !m_bLinkHasPassword )
+        {
+            // check if there is a password to cache
+            uno::Reference< frame::XModel > xModel( xLoadable, uno::UNO_QUERY_THROW );
+            uno::Sequence< beans::PropertyValue > aProps = xModel->getArgs();
+            for ( sal_Int32 nInd = 0; nInd < aProps.getLength(); nInd++ )
+                if ( aProps[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Password" ) ) )
+                  && ( aProps[nInd].Value >>= m_aLinkPassword ) )
+                {
+                    m_bLinkHasPassword = sal_True;
+                    break;
+                }
+        }
     }
     catch( uno::Exception& )
     {
@@ -477,11 +505,11 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
     // aArgs[4].Name = ::rtl::OUString::createFromAscii( "AsTemplate" );
     // aArgs[4].Value <<= sal_True;
 
+    aArgs.realloc( m_aDocMediaDescriptor.getLength() + nLen );
     for ( sal_Int32 nInd = 0; nInd < m_aDocMediaDescriptor.getLength(); nInd++ )
     {
-        aArgs.realloc( nInd + nLen );
-        aArgs[nInd+nLen-1].Name = m_aDocMediaDescriptor[nInd].Name;
-        aArgs[nInd+nLen-1].Value = m_aDocMediaDescriptor[nInd].Value;
+        aArgs[nInd+nLen].Name = m_aDocMediaDescriptor[nInd].Name;
+        aArgs[nInd+nLen].Value = m_aDocMediaDescriptor[nInd].Value;
     }
 
     try
