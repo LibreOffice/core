@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-23 15:48:23 $
+ *  last change: $Author: mtg $ $Date: 2001-02-28 11:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,6 +314,8 @@ SvXMLExport::SvXMLExport(
 
 SvXMLExport::~SvXMLExport()
 {
+    delete pEventExport;
+    delete pNumExport;
     delete pNamespaceMap;
     delete pUnitConv;
     if (pProgressBarHelper)
