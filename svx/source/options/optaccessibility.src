@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:44:28 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 10:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,14 +98,6 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
     {
         TabStop = TRUE ;
         Pos = MAP_APPFONT( COL1, ROWA_3 );
-        Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ de ] = "~Systemschriftart für die Benutzeroberfläche verwenden" ;
-        Text [ en-US ] = "Use system ~font for user interface";
-    };
-    CheckBox CB_ANIMATED_GRAPHICS
-    {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT( COL1, ROWA_4 );
         Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
         Text [ de ] = "Animierte ~Grafiken zulassen" ;
         Text [ en-US ] = "Allow animated ~graphics";
