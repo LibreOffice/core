@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-27 14:23:50 $
+ *  last change: $Author: dvo $ $Date: 2002-07-03 10:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3030,7 +3030,13 @@ void SwRedline::CopyToSection()
         BOOL bSaveCopyFlag = pDoc->IsCopyIsMove(),
              bSaveRdlMoveFlg = pDoc->IsRedlineMove();
         pDoc->SetCopyIsMove( TRUE );
-        pDoc->SetRedlineMove( TRUE );
+
+        // #100619# The IsRedlineMove() flag causes the behaviour of the
+        // SwDoc::_CopyFlyInFly method to change, which will eventually be
+        // called by the pDoc->Copy line below (through SwDoc::_Copy,
+        // SwDoc::CopyWithFlyInFly). This rather obscure bugfix was introduced
+        // for #63198# and #64896#, and apparently never really worked.
+        pDoc->SetRedlineMove( pStt->nContent == 0 );
 
         if( pCSttNd )
         {
