@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConstantsTypeDescription.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:58:32 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
     <p>The type class of this type is
     <member scope="com::sun::star::uno">TypeClass::CONSTANTS</member>.
 
-    @since OOo1.1.2
+    @since OOo 1.1.2
   */
 published interface XConstantsTypeDescription : com::sun::star::reflection::XTypeDescription
 {
