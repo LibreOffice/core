@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: sb $ $Date: 2002-12-06 10:48:58 $
+ *  last change: $Author: sb $ $Date: 2002-12-06 15:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1451,8 +1451,8 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
     }
     else if (aAccessor.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Security")))
     {
-        aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
-                                       "stardiv.security.disableSecurity"));
+        aPropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                          "stardiv.security.disableSecurity"));
         sal_Bool b;
         if (rEvent.Element >>= b)
             if (b)
