@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2002-10-22 10:51:53 $
+#   last change: $Author: hr $ $Date: 2003-03-18 12:47:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,9 @@ NO_DEFAULT_STL=TRUE
 
 # --- Files --------------------------------------------------------
 
+
 .IF "$(GUI)"=="UNX"
+LIBSALCPPRT=$(0)
 APP1TARGET	= 	checkdll
 APP1OBJS	=	$(OBJ)$/checkdll.obj
 DEPOBJFILES	=	$(APP1OBJS) 

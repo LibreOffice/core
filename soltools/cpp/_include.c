@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
-#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__)) && !(defined S390)
+#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
 #   include <io.h>
 #else
 #   include <unistd.h>
@@ -13,9 +13,6 @@
 #endif
 #ifdef _MSC_VER
 #   define _POSIX_
-#endif
-#ifdef S390
-#   define PATH_MAX _POSIX_PATH_MAX
 #endif
 #ifdef __IBMC__
 #   include <fcntl.h>

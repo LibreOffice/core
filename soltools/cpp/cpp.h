@@ -1,4 +1,4 @@
-/* $Id: cpp.h,v 1.2 2002-01-08 12:07:30 hjs Exp $ */
+/* $Id: cpp.h,v 1.3 2003-03-18 12:47:34 hr Exp $ */
 
 #define INS         32768   /* input buffer                             */
 #define OBS         8092    /* outbut buffer                            */
@@ -47,14 +47,8 @@ enum kwtype
 #define ISARCHITECTURE  0x10            /* architecture */
 #define ISACTIVE        0x80            /* is macro currently expanded */
 
-#ifdef S390
-/* 0xfe und 0xfd fallen auf der S/390 auf Control-Chars */
-#define EOB     0x07
-#define EOFC    0x08
-#else
 #define EOB     0xFE                    /* sentinel for end of input buffer */
 #define EOFC    0xFD                    /* sentinel for end of input file */
-#endif
 #define XPWS    1                       /* token flag: white space to assure token sep. */
 #define XTWS    2
 

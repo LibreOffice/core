@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__)) && !(defined S390)
+#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
 #include <io.h>
 #else
 #include <unistd.h>
@@ -37,11 +37,7 @@
 #define C_ALPH  2
 #define C_NUM   3
 #define C_EOF   4
-#ifdef S390
-#define C_XX    6
-#else
 #define C_XX    5
-#endif
 
 enum state
 {
@@ -268,12 +264,8 @@ void
                     continue;
                 case C_ALPH:
                     for (j = 0; j <= 256; j++)
-#ifdef S390
-                        if( isalpha( j ) || (j == '_') )
-#else
                         if ('a' <= j && j <= 'z' || 'A' <= j && j <= 'Z'
                             || j == '_')
-#endif
                             bigfsm[j][fp->state] = nstate;
                     continue;
                 case C_NUM:
@@ -351,7 +343,7 @@ int
             }
     }
     maxp = &trp->bp[trp->max];
-    runelen = 1;  /* S390: XDBX stürzt ab! */
+    runelen = 1;
     for (;;)
     {
 continue2:
@@ -370,7 +362,7 @@ continue2:
         {
             oldstate = state;
 
-            c = *ip;  /* S390: XDBX stürzt (gelegentlich) ab! */
+            c = *ip;
 
             if ((state = bigfsm[c][state]) >= 0)
             {
@@ -416,7 +408,7 @@ continue2:
 
                     if (c == '\n')
                     {
-                        while (s->inp + 1 >= s->inl && fillbuf(s) != EOF); /* S390: XDBX stürzt (manchmal) ab! */
+                        while (s->inp + 1 >= s->inl && fillbuf(s) != EOF);
 
                         if (s->inp[1] == '\r')
                         {

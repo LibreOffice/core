@@ -17,7 +17,7 @@ int ifdepth;
 int ifsatisfied[NIF];
 int skipping;
 
-char rcsid[] = "$Version 1.2 $ $Revision: 1.2 $ $Date: 2001-07-10 08:57:52 $";
+char rcsid[] = "$Version 1.2 $ $Revision: 1.3 $ $Date: 2003-03-18 12:47:33 $";
 
 int
 #ifdef _WIN32
@@ -51,7 +51,7 @@ __cdecl
 void
     process(Tokenrow * trp)
 {
-    int anymacros = 0;  /* S390: XDBX stürzt ab! */
+    int anymacros = 0;
 
     for (;;)
     {

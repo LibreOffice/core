@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ldump.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2002-06-20 12:40:46 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 12:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,7 +470,7 @@ bool LibDump::PrintDataBase()
     FILE *pFp;
     pFp = fopen (cBName,"w+");
     if (!pFp)
-            DumpError( 600 );
+        fprintf( stderr, "Error opening DataBase File\n" );
 
     LibExport *pData;
     for ( unsigned long i=0; i < nBaseLines+10; i++ )
@@ -618,7 +618,7 @@ bool LibDump::DumpError( unsigned long n )
         case 610: p = "Overflow in base database table\n"; break;
         default: p = "Unspecified error";
     }
-    fprintf( stderr, "Error\n\n%s\n", p );
+    fprintf( stdout, "%s\n", p );
     exit (1);
     return false;
 }
@@ -628,7 +628,7 @@ bool LibDump::DumpError( unsigned long n )
 *********************************************************************/
 
 
-int usage()
+usage()
 {
     LibDump::DumpError(99);
     exit(0);

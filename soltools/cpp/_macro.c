@@ -8,9 +8,6 @@
 #ifdef _MSC_VER
 #   define _POSIX_
 #endif
-#ifdef S390
-#   define PATH_MAX _POSIX_PATH_MAX
-#endif
 #ifdef __IBMC__
 #   define PATH_MAX _MAX_PATH
 #endif

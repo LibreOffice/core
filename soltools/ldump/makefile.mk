@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2002-02-22 10:20:06 $
+#   last change: $Author: hr $ $Date: 2003-03-18 12:47:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,12 +65,14 @@ PRJ=..
 PRJNAME=ldump
 TARGET=ldump
 TARGETTYPE=CUI
-NO_DEFAULT_STL=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 .INCLUDE :  settings.mk
+
+UWINAPILIB=$(0)
+LIBSALCPPRT=$(0)
 
 # --- Files --------------------------------------------------------
 
