@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-06 16:02:32 $
+ *  last change: $Author: dr $ $Date: 2000-12-18 14:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,9 +115,6 @@
 using namespace com::sun::star;
 
 extern double ReadLongDouble( SvStream& rStr );
-static const char*          pStrErr = "STRINGERROR IN: ";
-
-#define CHECK_OVERRUN(n,s)  {if(n<0){String t(s);s.AssignAscii(pStrErr);s+=t;}}
 
 // - ALLGEMEINE ----------------------------------------------------------
 
@@ -297,6 +294,8 @@ RootData::RootData( void )
 
     pRootStorage = NULL;
     pTabBuffer = NULL;
+    pTabId = NULL;
+    pUserBViewList = NULL;
     pNameList = NULL;
     pPalette2 = NULL;
     pFontRecs = NULL;
@@ -932,15 +931,6 @@ CharSet GetSystemCharSet( void )
 }
 
 
-static String ReadString( SvStream& aIn, INT32& nBytesLeft, const UINT16 nLen, const BOOL b8Bit, CharSet eSrc );
-
-static void SkipString( SvStream& aIn, INT32& nBytesLeft, const UINT16 nLen, const BOOL b8Bit );
-
-static String ReadString( SvStream& aIn, INT32& nBytesLeft, const UINT16 nLen,
-                            const BOOL b8BitStart, UINT32List& rCutPosList, CharSet eSrc );
-
-
-
 
 ShStrTabEntry* CreateUnicodeEntry( SvStream& rIn, INT32& nLeft, CharSet eSrc, const UINT16 nPreLen,
                                     UINT32List* pCutPosList )
@@ -1112,201 +1102,6 @@ void SkipUnicodeString( SvStream& rIn, INT32& nLeft, const UINT16 nPreLen )
         rIn.SeekRel( nSeek );
         nLeft -= nSeek;
     }
-}
-
-
-static void ReadStringDirect( SvStream& rIn, String& rString, const UINT16 nLen, CharSet eSrc );
-
-
-
-
-String ReadString( SvStream& aIn, INT32& nBytesLeft, const UINT16 nLen, const BOOL b8Bit, CharSet eSrc )
-{
-    String          aStr;
-    if( nLen && nBytesLeft >= 0 )
-    {
-        if( b8Bit )
-        {
-            ReadStringDirect( aIn, aStr, nLen, eSrc );
-            nBytesLeft -= nLen;
-        }
-        else
-        {
-            // normales Unicode-Dingen!
-            INT16       c;
-            String      aTmpString;
-            UINT16      n = nLen;
-
-            while( n )
-            {
-                aIn >> c;
-                aStr += ( sal_Unicode ) c;
-                n--;
-            }
-            nBytesLeft -= nLen * sizeof( c );
-        }
-
-        CHECK_OVERRUN( nBytesLeft, aStr );
-    }
-
-    return aStr;
-}
-
-
-
-
-void SkipString( SvStream& aIn, INT32& nBytesLeft, const UINT16 nLen, const BOOL b8Bit )
-{
-    if( nLen )
-    {
-        ULONG       n = nLen;
-        if( !b8Bit )
-            n *= 2;
-
-        aIn.SeekRel( n );
-        nBytesLeft -= n;
-    }
-}
-
-
-
-
-String ReadString( SvStream& aIn, INT32& nBytesLeft, const UINT16 nLen, const BOOL b8BitStart,
-                    UINT32List& rCutPosList, CharSet eSrc )
-{
-    String                  aEndStr;
-
-    if( nLen && nBytesLeft >= 0 )
-    {
-        UINT32              nActPos = aIn.Tell();
-        UINT32              nNextCut = rCutPosList.First();
-
-
-        // search for first cut after string start
-        while( nNextCut && nNextCut < nActPos )
-            nNextCut = rCutPosList.Next();
-
-        UINT32              nMaxPos = nActPos + nLen * 2 + rCutPosList.Count();
-        if( !nNextCut || nNextCut > nMaxPos )
-            return ReadString( aIn, nBytesLeft, nLen, b8BitStart, eSrc );   // no cut in string
-
-        if( nNextCut == nActPos )
-        {
-            UINT8   nF;
-            aIn >> nF;
-            nBytesLeft--;
-            nActPos++;
-            aEndStr = ReadString( aIn, nBytesLeft, nLen, nF == 0, rCutPosList, eSrc );
-        }
-        else
-        {
-            UINT16              nCharsLeft = nLen;
-            BOOL                b8Bit = b8BitStart;
-
-            while( nCharsLeft && nBytesLeft >= 0 )
-            {
-                if( b8Bit )
-                {
-                    ByteString  aTmpCStr;
-                    sal_Char    c;
-                    while( nCharsLeft && b8Bit && nBytesLeft >= 0 )
-                    {
-                        aIn >> c;
-                        nCharsLeft--;
-                        nBytesLeft--;
-                        aTmpCStr += c;
-                        nActPos++;
-                        if( nActPos == nNextCut && nCharsLeft )
-                        {
-                            UINT8   nF;
-                            aIn >> nF;
-                            nBytesLeft--;
-                            nActPos++;
-                            b8Bit = !nF;
-                            nNextCut = rCutPosList.Next();
-                            if( !nNextCut )
-                            {
-                                if( aTmpCStr.Len() )
-                                {
-                                    aEndStr += String( aTmpCStr, eSrc );
-                                    aTmpCStr.Erase();
-                                }
-                                aEndStr += ReadString( aIn, nBytesLeft, nCharsLeft, b8Bit, eSrc );
-                                nCharsLeft = 0;
-                            }
-                        }
-                    }
-                    if( aTmpCStr.Len() )
-                        aEndStr += String( aTmpCStr, eSrc );
-                        // no need to erase aTmpWStr, cause it's deleted here
-                }
-                else
-                {
-                    INT16           c;
-                    String          aTmpWStr;
-
-                    while( nCharsLeft && !b8Bit && nBytesLeft >= 0 )
-                    {
-                        aIn >> c;
-                        nCharsLeft--;
-                        nBytesLeft -= 2;
-                        aTmpWStr += ( sal_Unicode ) c;
-                        nActPos += 2;
-
-                        if( nNextCut )
-                        {// makes only sense if a next cut exists
-                            if( nActPos > nNextCut )
-                            {
-                                // emergency break when missfit data alignment
-                                aIn.Seek( nNextCut );
-                                nCharsLeft++;   // one sal_Char read to much!?
-                            }
-
-                            if( nActPos == nNextCut && nCharsLeft )
-                            {
-                                UINT8   nF;
-                                aIn >> nF;
-                                nBytesLeft--;
-                                nActPos++;
-                                b8Bit = !nF;
-                                nNextCut = rCutPosList.Next();
-                                if( !nNextCut )
-                                {// rest of string is not split any more
-                                    if( aTmpWStr.Len() )
-                                    {
-                                        aEndStr += aTmpWStr;
-                                        aTmpWStr.Erase();
-                                    }
-                                    aEndStr += ReadString( aIn, nBytesLeft, nCharsLeft, b8Bit, eSrc );
-                                    nCharsLeft = 0;
-                                }
-                            }
-                        }
-                    }
-                    if( aTmpWStr.Len() )
-                        aEndStr += aTmpWStr;
-                        // no need to erase aTmpWStr, cause it's deleted here
-                }
-            }
-        }
-    }
-
-    return aEndStr;
-}
-
-
-
-
-void ReadStringDirect( SvStream& rIn, String& r, const UINT16 n, CharSet e )
-{
-    sal_Char*   pBuffer = new sal_Char[ n + 1 ];
-    rIn.Read( pBuffer, n );
-
-    pBuffer[ n ] = 0x00;
-
-    r += String( pBuffer, e );
-
-    delete[] pBuffer;
 }
 
 
