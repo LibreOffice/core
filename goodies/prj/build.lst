@@ -9,7 +9,6 @@ go	goodies\source\filter.vcl\eos2met		nmake	-	all	g_vfeom NULL
 go	goodies\source\filter.vcl\ios2met		nmake	-	all	g_vfiom NULL
 go	goodies\source\filter.vcl\epict			nmake	-	all	g_vfept NULL
 go	goodies\source\filter.vcl\egif			nmake	-	all	g_vfegf NULL
-go	goodies\source\filter.vcl\epng			nmake	-	all	g_vfepn NULL
 go	goodies\source\filter.vcl\ipcd			nmake	-	all	g_vfipc NULL
 go	goodies\source\filter.vcl\ipcx			nmake	-	all	g_vfipx NULL
 go	goodies\source\filter.vcl\ipict			nmake	-	all	g_vfipt NULL
@@ -29,4 +28,4 @@ go	goodies\source\filter.vcl\ipsd			nmake	-	all	g_ipsd NULL
 go	goodies\source\filter.vcl\ieps			nmake	-	all	g_ieps NULL
 go	goodies\source\filter.vcl\icgm			nmake	-	all	g_icgm NULL
 go	goodies\source\unographic				nmake	-	all	g_unographic NULL
-go	goodies\util							nmake	-	all	g_util g_base2d g_base3d g_eras g_etiff g_expm g_graph g_ieps g_ipsd g_iras g_itga g_vfpbm g_vfeom g_vfiom g_vfept g_vfegf g_vfepn g_vfipc g_vfipx g_vfipt g_vfidx g_vfitf g_epbm g_epgm g_eppm g_eps g_icgm g_unographic NULL
+go	goodies\util							nmake	-	all	g_util g_base2d g_base3d g_eras g_etiff g_expm g_graph g_ieps g_ipsd g_iras g_itga g_vfpbm g_vfeom g_vfiom g_vfept g_vfegf g_vfipc g_vfipx g_vfipt g_vfidx g_vfitf g_epbm g_epgm g_eppm g_eps g_icgm g_unographic NULL
