@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-01 14:43:36 $
+ *  last change: $Author: pl $ $Date: 2002-07-24 18:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,14 +245,15 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
         for( int i = 0; i < m_aDriverBox.GetSelectEntryCount(); i++ )
         {
             int nSelect = m_aDriverBox.GetSelectEntryPos(i);
-            String aDriver( m_aDriverBox.GetEntry( nSelect ) );
+            String aDriver( *(String*)m_aDriverBox.GetEntryData( nSelect ) );
             // never delete the default driver
             if( aDriver.EqualsIgnoreCaseAscii( "SGENPRT" ) )
                 continue;
             if( aDriver.Len() )
             {
                 PrinterInfo aDefInfo( rPIManager.getPrinterInfo( rPIManager.getDefaultPrinter() ) );
-                OUString aPPD( *(String*)m_aDriverBox.GetEntryData( nSelect ) );
+                // for comparisons convert to a OUString
+                OUString aPPD( aDriver );
                 if( aDefInfo.m_aDriverName == aPPD )
                 {
                     String aText( PaResId( RID_ERR_REMOVEDEFAULTDRIVER ) );
