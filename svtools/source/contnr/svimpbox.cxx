@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: gt $ $Date: 2002-12-05 11:05:53 $
+ *  last change: $Author: gt $ $Date: 2002-12-06 13:04:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2534,14 +2534,16 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             break;
 
         case KEY_ESCAPE:
-            // #105907# must not be handled because this quits dialogs etc...
+        case KEY_TAB:
+            // #105907# must not be handled because this quits dialogs and does other magic things...
+            // if there are other single keys which should not be handled, they can be added here
             bKeyUsed = FALSE;
             break;
 
         default:
-            if( bMod1 )
-                // #105907# CTRL is pressed, assume user don't want to use quicksearch...
-                // ... except the earlier handled ESC key!
+            if( bMod1 || rKeyCode.GetGroup() == KEYGROUP_FKEYS )
+                // #105907# CTRL or Function key is pressed, assume user don't want to use quicksearch...
+                // if there are groups of keys which should not be handled, they can be added here
                 bKeyUsed = FALSE;
     }
     return bKeyUsed;
