@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2000-11-17 13:48:08 $
+ *  last change: $Author: hr $ $Date: 2000-11-21 17:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 #endif
 
 #ifndef _SVSTOR_HXX
-#include <so3\svstor.hxx>
+#include <so3/svstor.hxx>
 #endif
 
 class SvStorage;
