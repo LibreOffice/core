@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProviderForBeanShell.java,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: hr $ $Date: 2004-10-11 13:30:39 $
+*  last change: $Author: rt $ $Date: 2004-10-22 14:49:31 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -96,13 +96,13 @@ import java.net.URLDecoder;
 import bsh.BshClassManager;
 import bsh.Interpreter;
 
-import drafts.com.sun.star.script.provider.XScriptContext;
-import drafts.com.sun.star.script.provider.XScriptProvider;
-import drafts.com.sun.star.script.provider.XScript;
-import drafts.com.sun.star.script.provider.ScriptErrorRaisedException;
-import drafts.com.sun.star.script.provider.ScriptExceptionRaisedException;
-import drafts.com.sun.star.script.provider.ScriptFrameworkErrorException;
-import drafts.com.sun.star.script.provider.ScriptFrameworkErrorType;
+import com.sun.star.script.provider.XScriptContext;
+import com.sun.star.script.provider.XScriptProvider;
+import com.sun.star.script.provider.XScript;
+import com.sun.star.script.provider.ScriptErrorRaisedException;
+import com.sun.star.script.provider.ScriptExceptionRaisedException;
+import com.sun.star.script.provider.ScriptFrameworkErrorException;
+import com.sun.star.script.provider.ScriptFrameworkErrorType;
 
 
 import com.sun.star.script.framework.provider.*;
@@ -171,7 +171,7 @@ public class ScriptProviderForBeanShell
         {
             xSingleServiceFactory = FactoryHelper.getServiceFactory(
                 ScriptProviderForBeanShell._ScriptProviderForBeanShell.class,
-                "drafts.com.sun.star.script.ScriptProviderForBeanShell",
+                "com.sun.star.script.ScriptProviderForBeanShell",
                 multiFactory,
                 regKey );
         }
@@ -194,16 +194,19 @@ public class ScriptProviderForBeanShell
         String impl = "com.sun.star.script.framework.provider.beanshell." +
             "ScriptProviderForBeanShell$_ScriptProviderForBeanShell";
 
-        String service1 = "drafts.com.sun.star.script.provider." +
+        String service1 = "com.sun.star.script.provider." +
             "ScriptProvider";
-        String service2 = "drafts.com.sun.star.script.provider." +
+        String service2 = "com.sun.star.script.provider." +
             "LanguageScriptProvider";
-        String service3 = "drafts.com.sun.star.script.provider." +
+        String service3 = "com.sun.star.script.provider." +
             "ScriptProviderForBeanShell";
+        String service4 = "com.sun.star.script.browse." +
+            "BrowseNode";
 
         if ( FactoryHelper.writeRegistryServiceInfo(impl, service1, regKey) &&
             FactoryHelper.writeRegistryServiceInfo(impl, service2, regKey) &&
-            FactoryHelper.writeRegistryServiceInfo(impl, service3, regKey) )
+            FactoryHelper.writeRegistryServiceInfo(impl, service3, regKey) &&
+            FactoryHelper.writeRegistryServiceInfo(impl, service4, regKey) )
         {
                 return true;
         }
@@ -311,7 +314,7 @@ class ScriptImpl implements XScript
             // for source file ( bla.java ) on import or reference
             interpreter.setClassLoader(cl);
             try {
-                interpreter.set("context",
+                interpreter.set("XSCRIPTCONTEXT",
                     ScriptContext.createContext(m_xModel,
                         m_xContext, m_xMultiComponentFactory));
 
