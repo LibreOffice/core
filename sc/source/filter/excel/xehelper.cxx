@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:36:06 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,12 @@
 #ifndef _SVX_FLDITEM_HXX
 #include <svx/flditem.hxx>
 #endif
+#ifndef _SVX_ESCPITEM_HXX
+#include <svx/escpitem.hxx>
+#endif
+#ifndef _SVX_SVXFONT_HXX
+#include <svx/svxfont.hxx>
+#endif
 
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
@@ -133,6 +139,9 @@
 #endif
 #ifndef SC_XECONTENT_HXX
 #include "xecontent.hxx"
+#endif
+#ifndef SC_FTOOLS_HXX
+#include "ftools.hxx"
 #endif
 
 
@@ -307,6 +316,23 @@ void XclExpString::LimitFormatCount( sal_uInt16 nMaxCount )
 {
     if( maFormats.size() > nMaxCount )
         maFormats.erase( maFormats.begin() + nMaxCount, maFormats.end() );
+}
+
+sal_uInt16 XclExpString::RemoveFontOfChar(sal_uInt16 nCharIx)
+{
+    XclFormatRunVec::iterator aStart = maFormats.begin();
+    XclFormatRunVec::const_iterator aEnd   = maFormats.end();
+    sal_uInt16 nFontIx = EXC_FONT_NOTFOUND;
+    for( aStart; aStart != aEnd; ++aStart)
+    {
+        if( aStart->mnChar == nCharIx )
+        {
+            nFontIx = aStart->mnFontIx ;
+            maFormats.erase(aStart);
+            break;
+        }
+    }
+    return nFontIx;
 }
 
 
@@ -655,7 +681,7 @@ XclExpString* lcl_xehelper_CreateString(
                 String aXclPortionText( aParaText, aSel.nStartPos, aSel.nEndPos - aSel.nStartPos );
 
                 // construct font from current edit engine text portion
-                Font aFont;
+                SvxFont aFont;
                 aItemSet.ClearItem();
                 SfxItemSet aEditSet( rEE.GetAttribs( aSel ) );
                 ScPatternAttr::GetFromEditItemSet( aItemSet, aEditSet );
@@ -683,6 +709,10 @@ XclExpString* lcl_xehelper_CreateString(
                         }
                     }
                 }
+
+                // test if this contains a super/sub script
+                const SvxEscapementItem& rEscapeItem = GETITEM( aEditSet, SvxEscapementItem, EE_CHAR_ESCAPEMENT );
+                aFont.SetEscapement( rEscapeItem.GetEsc() );
 
                 // Excel start position of this portion
                 xub_StrLen nXclPortionStart = nXclParaStart + aXclParaText.Len();
@@ -772,7 +802,6 @@ XclExpString* XclExpStringHelper::CreateString(
     }
     return pString;
 }
-
 
 // Header/footer conversion ===================================================
 
@@ -878,25 +907,40 @@ void XclExpHFConverter::AppendPortion( String& rHFString, const EditTextObject* 
                     aParaText.Append( '&' ).Append( String::CreateFromInt32( aNewData.mnHeight ) );
 
                 // underline
-                aNewData.meUnderline = xlUnderlNone;
+                aNewData.mnUnderline = EXC_FONTUNDERL_NONE;
                 switch( aFont.GetUnderline() )
                 {
-                    case UNDERLINE_NONE:    aNewData.meUnderline = xlUnderlNone;    break;
-                    case UNDERLINE_SINGLE:  aNewData.meUnderline = xlUnderlSingle;  break;
-                    case UNDERLINE_DOUBLE:  aNewData.meUnderline = xlUnderlDouble;  break;
-                    default:                aNewData.meUnderline = xlUnderlSingle;
+                    case UNDERLINE_NONE:    aNewData.mnUnderline = EXC_FONTUNDERL_NONE;    break;
+                    case UNDERLINE_SINGLE:  aNewData.mnUnderline = EXC_FONTUNDERL_SINGLE;  break;
+                    case UNDERLINE_DOUBLE:  aNewData.mnUnderline = EXC_FONTUNDERL_DOUBLE;  break;
+                    default:                aNewData.mnUnderline = EXC_FONTUNDERL_SINGLE;
                 }
-                if( aFontData.meUnderline != aNewData.meUnderline )
+                if( aFontData.mnUnderline != aNewData.mnUnderline )
                 {
-                    XclUnderline eTmpUnderl = (aNewData.meUnderline == xlUnderlNone) ?
-                        aFontData.meUnderline : aNewData.meUnderline;
-                    aParaText.AppendAscii( (eTmpUnderl == xlUnderlSingle) ? "&U" : "&E" );
+                    sal_uInt8 nTmpUnderl = (aNewData.mnUnderline == EXC_FONTUNDERL_NONE) ?
+                        aFontData.mnUnderline : aNewData.mnUnderline;
+                    aParaText.AppendAscii( (nTmpUnderl == EXC_FONTUNDERL_SINGLE) ? "&U" : "&E" );
                 }
 
                 // strikeout
                 aNewData.mbStrikeout = (aFont.GetStrikeout() != STRIKEOUT_NONE);
                 if( aFontData.mbStrikeout != aNewData.mbStrikeout )
                     aParaText.AppendAscii( "&S" );
+
+                // super/sub script
+                const SvxEscapementItem& rEscapeItem = GETITEM( aEditSet, SvxEscapementItem, EE_CHAR_ESCAPEMENT );
+                aNewData.SetScEscapement( rEscapeItem.GetEsc() );
+                if( aFontData.mnEscapem != aNewData.mnEscapem )
+                {
+                    switch(aNewData.mnEscapem)
+                    {
+                        // close the previous super/sub script.
+                        case EXC_FONTESC_NONE:  aParaText.AppendAscii( (aFontData.mnEscapem == EXC_FONTESC_SUPER) ? "&X" : "&Y" ); break;
+                        case EXC_FONTESC_SUPER: aParaText.AppendAscii( "&X" );  break;
+                        case EXC_FONTESC_SUB:   aParaText.AppendAscii( "&Y" );  break;
+                        default: break;
+                    }
+                }
 
                 aFontData = aNewData;
 
