@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-20 14:22:54 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ TabPage RID_TP_MODULS
         Text[ french ] = "Édi~ter";
         Text[ swedish ] = "~Redigera";
         Text[ dutch ] = "~Bewerken";
-        Text[ spanish ] = "~Editar";
+        Text[ spanish ] = "Editar";
         Text[ english_us ] = "~Edit";
     Text[ chinese_simplified ] = "ç¼–è¾‘(~E)";
         Pos = MAP_APPFONT ( 144 , 6 ) ;
@@ -242,7 +242,7 @@ TabPage RID_TP_MODULS
         Text [ french ] = "Édi~ter" ;
         Text [ swedish ] = "~Redigera" ;
         Text [ dutch ] = "~Bewerken" ;
-        Text [ spanish ] = "~Editar" ;
+        Text [ spanish ] = "Editar" ;
         Text [ english_us ] = "~Edit" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
@@ -470,7 +470,7 @@ TabPage RID_TP_LIBS
         Text[ french ] = "Édi~ter";
         Text[ swedish ] = "~Redigera";
         Text[ dutch ] = "~Bewerken";
-        Text[ spanish ] = "~Editar";
+        Text[ spanish ] = "Editar";
         Text[ english_us ] = "~Edit";
     Text[ chinese_simplified ] = "ç¼–è¾‘(~E)";
         Pos = MAP_APPFONT ( 144 , 6 ) ;
@@ -487,7 +487,7 @@ TabPage RID_TP_LIBS
         Text [ french ] = "Édi~ter" ;
         Text [ swedish ] = "~Redigera" ;
         Text [ dutch ] = "~Bewerken" ;
-        Text [ spanish ] = "~Editar" ;
+        Text [ spanish ] = "Editar" ;
         Text [ english_us ] = "~Edit" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
