@@ -2,9 +2,9 @@
  *
  *  $RCSfile: context.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:42:24 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,7 +503,7 @@ using namespace remote_context;
 // C-Interface
 //
 //-----------------------
-extern "C" SAL_DLLEXPORT remote_Context * SAL_CALL
+extern "C" remote_Context * SAL_CALL
 remote_getContext( rtl_uString *pIdString )
 {
     return (remote_Context *) ContextAdmin::getInstance()->get(  pIdString );
@@ -511,7 +511,7 @@ remote_getContext( rtl_uString *pIdString )
 
 
 
-extern "C" SAL_DLLEXPORT remote_Context * SAL_CALL
+extern "C" remote_Context * SAL_CALL
 remote_createContext( remote_Connection *pConnection,
                       rtl_uString *pIdStr,
                       rtl_uString *pDescription,
@@ -530,19 +530,19 @@ remote_createContext( remote_Connection *pConnection,
 }
 
 
-extern "C" SAL_DLLEXPORT void SAL_CALL
+extern "C" void SAL_CALL
 remote_addContextListener( remote_contextListenerFunc listener,  void *pObject )
 {
     ContextAdmin::getInstance()->addContextListener( listener , pObject );
 }
 
-extern "C" SAL_DLLEXPORT void SAL_CALL
+extern "C" void SAL_CALL
 remote_removeContextListener( remote_contextListenerFunc listener , void *pObject )
 {
     ContextAdmin::getInstance()->removeContextListener( listener , pObject );
 }
 
-extern "C" SAL_DLLEXPORT rtl_uString ** SAL_CALL
+extern "C" rtl_uString ** SAL_CALL
 remote_getContextList(
     sal_Int32 *pnStringCount,
     void * ( SAL_CALL * memAlloc ) ( sal_uInt32 nBytesToAlloc ) )
