@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salatsuifontutils.cxx,v $
  *
- *  $Revision: 1.2 $
- *  last change: $Author: bmahbod $ $Date: 2001-03-26 21:53:17 $
+ *  $Revision: 1.3 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 12:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,6 @@
 // =======================================================================
 
 // =======================================================================
-
-#define _SV_SALATSUIFONTUTILS_CXX
 
 #ifndef _SV_SALATSUIFONTUTILS_HXX
     #include <salatsuifontutils.hxx>
