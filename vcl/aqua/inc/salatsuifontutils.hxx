@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salatsuifontutils.hxx,v $
  *
- *  $Revision: 1.2 $
- *  last change: $Author: pluby $ $Date: 2001-03-13 09:44:40 $
+ *  $Revision: 1.3 $
+ *  last change: $Author: bmahbod $ $Date: 2001-03-26 21:53:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,54 +86,35 @@
 #endif
 
 #include <premac.h>
-#include <Carbon/Carbon.h>
-#include <ApplicationServices/ApplicationServices.h>
+    #include <Carbon/Carbon.h>
+    #include <ApplicationServices/ApplicationServices.h>
 #include <postmac.h>
 
 #ifdef __cplusplus
-    extern "C" {
+extern "C" {
 #endif
 
 // =======================================================================
 
 // =======================================================================
 
-const short kMacOSCharSize = sizeof(char);
-
-// -----------------------------------------------------------------------
-
-const short kFontFamilyNameLength = 32;
-const short kFontStyleNameLength  = 32;
-
-const long  kFontFamilyNameMemSize  = kFontFamilyNameLength * kMacOSCharSize;
-
-const long  kFontStyleNameMemSize   = kFontStyleNameLength  * kMacOSCharSize;
-
-
-// -----------------------------------------------------------------------
-
-// To have fonts show up in a different style than the actual menu fonts
-// one must change this value.
-
-const short kATSUIFontInstanceMenuItemStyle = 0;
+static const short kMacOSCharSize = sizeof(char);
+static const short kFontFamilyNameLength = 32;static const short kFontStyleNameLength  = 32;
+static const long  kFontFamilyNameMemSize  = kFontFamilyNameLength * kMacOSCharSize;
+static const long  kFontStyleNameMemSize   = kFontStyleNameLength  * kMacOSCharSize;
 
 // -----------------------------------------------------------------------
 
 // For simplicity, only this number of font axis variations are considered.
 
-const short kATSUIMaxVariations = 32;
+static const short kATSUIMaxVariations  = 32;
 
 // -----------------------------------------------------------------------
 
 // To filter out invisible fonts
 
-const char kInvalidFontNamePrefixPeriodSign  = '.';
-const char kInvalidFontNamePrefixPercentSign = '%';
-
-// -----------------------------------------------------------------------
-
-const SInt16         kMenuBufferMaxLength = 255;
-const MacOSStringPtr kMenuItemGenericName = "\pGeneric text";
+static const char kInvalidFontNamePrefixPeriodSign  = '.';
+static const char kInvalidFontNamePrefixPercentSign = '%';
 
 // =======================================================================
 
@@ -149,53 +130,7 @@ enum
 
 // =======================================================================
 
-typedef short ATSUIInstanceIndex;
-
-// -----------------------------------------------------------------------
-
-struct FontNameEncodingRecord
-{
-    FontPlatformCode  mnFontPlatformCode;
-    FontScriptCode    mnFontScriptCode;
-    FontLanguageCode  mnFontLanguageCode;
-    ItemCount         mnFontItemCount;
-};
-
-typedef struct FontNameEncodingRecord   FontNameEncodingRecord;
-typedef FontNameEncodingRecord         *FontNameEncodingPtr;
-typedef FontNameEncodingPtr            *FontNameEncodingMatrix;
-
-// -----------------------------------------------------------------------
-
-struct FontNamesRecord
-{
-    ATSUFontID              mnFontID;
-    FontNameEncodingRecord  maFontFamilyNameEncoding;
-    FontNameEncodingRecord  maFontStyleNameEncoding;
-    ATSUIInstanceIndex      mnFontInstanceIndex;
-    ByteOffset              mnFontStyleByteOffset;
-    char                    mpFontName[ 1 ];
-};
-
-typedef struct FontNamesRecord   FontNamesRecord;
-typedef FontNamesRecord         *FontNamesPtr;
-typedef FontNamesPtr            *FontNamesMatrix;
-
-// -----------------------------------------------------------------------
-
-struct FontMenuItemRecord
-{
-    short               mnFontMenuID;
-    short               mnFontItemNum;
-    ATSUFontID          mnFontID;
-    ATSUIInstanceIndex  mnFontInstanceIndex;
-};
-
-typedef struct FontMenuItemRecord   FontMenuItemRecord;
-typedef FontMenuItemRecord         *FontMenuItemPtr;
-typedef FontMenuItemPtr            *FontMenuItemsHandle;
-
-// =======================================================================
+typedef short ATSUIInstanceIndex;// -----------------------------------------------------------------------struct FontNameEncodingRecord{ FontPlatformCode  mnFontPlatformCode;  FontScriptCode    mnFontScriptCode;    FontLanguageCode  mnFontLanguageCode;  ItemCount         mnFontItemCount;};typedef struct FontNameEncodingRecord   FontNameEncodingRecord;typedef FontNameEncodingRecord         *FontNameEncodingPtr;typedef FontNameEncodingPtr            *FontNameEncodingMatrix;// -----------------------------------------------------------------------struct FontNamesRecord { ATSUFontID              mnFontID;  FontNameEncodingRecord  maFontFamilyNameEncoding;  FontNameEncodingRecord  maFontStyleNameEncoding;   ATSUIInstanceIndex      mnFontInstanceIndex;   ByteOffset              mnFontStyleByteOffset; char                    mpFontName[ 1 ];};typedef struct FontNamesRecord   FontNamesRecord;typedef FontNamesRecord         *FontNamesPtr;typedef FontNamesPtr            *FontNamesMatrix;// =======================================================================
 
 // =======================================================================
 
@@ -225,17 +160,9 @@ typedef FontMenuItemPtr            *FontMenuItemsHandle;
 
 // =======================================================================
 
-OSStatus ATSUIAppendFontMenu( MenuHandle    hFontMenu,
-                              short         nHierarchiaFontMenuID,
-                              short        *rSubmenuCount,
-                              void        **hFontMenuLookupCookie
-                            );
-
 OSStatus ATSUIDisposeFontNames( const ItemCount  nFontListLength,
                                 FontNamesMatrix  hFontNames
                               );
-
-OSStatus ATSUIDisposeFontMenuLookupCookie( void *pMenuLookupCookie );
 
 OSStatus ATSUIFindBestFontName( ATSUFontID         nFontID,
                                 FontNameCode       nFontNameCode,
@@ -253,12 +180,6 @@ OSStatus ATSUIFONDtoFontID( short            nFONDNumber,
                             ATSUFontID      *rFontID,
                             StyleParameter  *rIntrinsicStyleParameter
                           );
-
-ATSUFontID ATSUIGetFontForFontMenuItem( short                nMenuID,
-                                        short                nMenuItemNum,
-                                        void                *pMenuLookupCookie,
-                                        ATSUIInstanceIndex  *pFontInstance
-                                      );
 
 void ATSUIFPrintFontList( const char       *pFileName,
                           const char       *pFilePermission,

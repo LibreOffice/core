@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salfontutils.hxx,v $
  *
- *  $Revision: 1.2 $
- *  last change: $Author: pluby $ $Date: 2001-03-13 09:44:40 $
+ *  $Revision: 1.3 $
+ *  last change: $Author: bmahbod $ $Date: 2001-03-26 21:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,40 @@
 #ifndef _SV_OUTFONT_HXX
     #include <outfont.hxx>
 #endif
+
+// =======================================================================
+
+// =======================================================================
+
+static const char *kFontWeightThin1 = "Thin";
+static const char *kFontWeightThin2 = "thin";
+
+static const char *kFontWeightLight1 = "Light";
+static const char *kFontWeightLight2 = "light";
+
+static const char *kFontWeightBold1 = "Bold";
+static const char *kFontWeightBold2 = "bold";
+
+static const char *kFontWeightUltra1 = "Ultra";
+static const char *kFontWeightUltra2 = "ultra";
+
+static const char *kFontWeightSemi1 = "Semi";
+static const char *kFontWeightSemi2 = "semi";
+
+static const char *kFontWeightNormal1 = "Normal";
+static const char *kFontWeightNormal2 = "normal";
+
+static const char *kFontWeightMedium1 = "Medium";
+static const char *kFontWeightMedium2 = "medium";
+
+static const char *kFontWeightBlack1 = "Black";
+static const char *kFontWeightBlack2 = "black";
+
+static const char *kFontWeightRoman1 = "Roman";
+static const char *kFontWeightRoman2 = "roman";
+
+static const char *kFontWeightRegular1 = "Regular";
+static const char *kFontWeightRegular2 = "regular";
 
 // =======================================================================
 

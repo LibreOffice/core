@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salmathutils.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-13 09:44:40 $
+ *  last change: $Author: bmahbod $ $Date: 2001-03-26 21:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _SV_SALMATHUTILS_HXX
 
 #ifdef __cplusplus
-    extern "C" {
+extern "C" {
 #endif
 
 // ------------------------------------------------------------------

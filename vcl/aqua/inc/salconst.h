@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salconst.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:47 $
+ *  last change: $Author: bmahbod $ $Date: 2001-03-26 21:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,37 +66,37 @@
 // - Constants -
 // -------------------
 
-const unsigned short kByteMask = 0xFF;
+static const unsigned short kByteMask = 0xFF;
 
-const unsigned short kOneByte  =  8;
-const unsigned short kTwoBytes = 16;
+static const unsigned short kOneByte  =  8;
+static const unsigned short kTwoBytes = 16;
 
-const unsigned short kOneBit     =  1;
-const unsigned short kFiveBits   =  5;
-const unsigned short kEightBits  =  8;
-const unsigned short kTenBits    = 10;
-const unsigned short kElevenBits = 11;
+static const unsigned short kOneBit     =  1;
+static const unsigned short kFiveBits   =  5;
+static const unsigned short kEightBits  =  8;
+static const unsigned short kTenBits    = 10;
+static const unsigned short kElevenBits = 11;
 
-const unsigned short kBlackAndWhite  =  1;
-const unsigned short kFourBitColor   =  4;
-const unsigned short kEightBitColor  =  8;
-const unsigned short kThousandsColor = 16;
-const unsigned short kTrueColor      = 32;
+static const unsigned short kBlackAndWhite  =  1;
+static const unsigned short kFourBitColor   =  4;
+static const unsigned short kEightBitColor  =  8;
+static const unsigned short kThousandsColor = 16;
+static const unsigned short kTrueColor      = 32;
 
-const unsigned long k16BitRedColorMask   = 0x00007c00;
-const unsigned long k16BitGreenColorMask = 0x000003e0;
-const unsigned long k16BitBlueColorMask  = 0x0000001f;
+static const unsigned long k16BitRedColorMask   = 0x00007c00;
+static const unsigned long k16BitGreenColorMask = 0x000003e0;
+static const unsigned long k16BitBlueColorMask  = 0x0000001f;
 
-const unsigned long k32BitRedColorMask   = 0x00ff0000;
-const unsigned long k32BitGreenColorMask = 0x0000ff00;
-const unsigned long k32BitBlueColorMask  = 0x000000ff;
+static const unsigned long k32BitRedColorMask   = 0x00ff0000;
+static const unsigned long k32BitGreenColorMask = 0x0000ff00;
+static const unsigned long k32BitBlueColorMask  = 0x000000ff;
 
-const unsigned short kPixMapCmpSizeOneBit    =  1;
-const unsigned short kPixMapCmpSizeFourBits  =  4;
-const unsigned short kPixMapCmpSizeFiveBits  =  5;
-const unsigned short kPixMapCmpSizeEightBits =  8;
+static const unsigned short kPixMapCmpSizeOneBit    =  1;
+static const unsigned short kPixMapCmpSizeFourBits  =  4;
+static const unsigned short kPixMapCmpSizeFiveBits  =  5;
+static const unsigned short kPixMapCmpSizeEightBits =  8;
 
-const long kPixMapHRes = 72;
-const long kPixMapVRes = 72;
+static const long kPixMapHRes = 72;
+static const long kPixMapVRes = 72;
 
 #endif // _SV_SALCONST_H
