@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:35 $
+ *  last change: $Author: cp $ $Date: 2000-10-19 16:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 
 #ifndef _COM_SUN_STAR_LANG_XCHARACTERCLASSIFICATION_HPP_
 #include <com/sun/star/lang/XCharacterClassification.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XCOLLATOR_HPP_
+#include <com/sun/star/util/XCollator.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -271,5 +275,35 @@ uno::Reference < lang::XCharacterClassification > vcl::unohelper::CreateCharacte
     return xB;
 }
 
+
+
+uno::Reference < util::XCollator > vcl::unohelper::CreateCollator()
+{
+    uno::Reference < util::XCollator > xB;
+    uno::Reference< lang::XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
+    if ( xMSF.is() )
+    {
+        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.util.Collator" ) );
+        if ( xI.is() )
+        {
+            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< util::XCollator >*)0) );
+            x >>= xB;
+        }
+    }
+    if( !xB.is() )
+    {
+        uno::Reference< lang::XSingleServiceFactory > xSSF = ImplLoadLibComponentFactory(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( LIBNAME( int ) ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.Collator" ) ),
+            Reference< XMultiServiceFactory >(), Reference< XRegistryKey >() );
+
+        uno::Reference < uno::XInterface > xI = xSSF->createInstance();
+        if ( xI.is() )
+        {
+            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< util::XCollator >*)0) );
+            x >>= xB;
+        }
+    }
+    return xB;
+}
 
 
