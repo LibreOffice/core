@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XJobExecutor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:04 $
+ *  last change:$Date: 2003-09-08 11:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.task;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.container.XNamed;
 import com.sun.star.task.XJobExecutor;
-import lib.MultiMethodTest;
 
 /**
  * Testing <code>com.sun.star.frame._XJobExecutor</code>

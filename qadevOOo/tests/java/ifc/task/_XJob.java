@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XJob.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-02-26 13:30:31 $
+ *  last change:$Date: 2003-09-08 11:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,9 @@
 package ifc.task;
 
 import lib.MultiMethodTest;
-import lib.StatusException;
 import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.beans.NamedValue;
 import com.sun.star.task.XJob;
 
