@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fapihelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:04:43 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_FAPIHELPER_HXX
 #define SC_FAPIHELPER_HXX
 
@@ -80,6 +78,9 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #endif
 
+#ifndef _COLOR_HXX
+#include <tools/color.hxx>
+#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -87,49 +88,6 @@
 #ifndef SC_FTOOLS_HXX
 #include "ftools.hxx"
 #endif
-
-class SfxMedium;
-
-// ============================================================================
-
-#define CSS                     ::com::sun::star
-#define PROPNAME( constascii )  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( constascii ) )
-
-// Set properties =============================================================
-
-/** Sets the value of an Any to an XPropertySet. The XPropertySet must be valid. */
-void setPropAny(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProp,
-        const ::rtl::OUString& rName,
-        const ::com::sun::star::uno::Any& rAny );
-
-/** Template for setting values to an XPropertySet. The XPropertySet must be valid. */
-template< typename Type >
-inline void setPropValue(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProp,
-        const ::rtl::OUString& rName,
-        const Type& rValue )
-{
-    ::setPropAny( xProp, rName, ::com::sun::star::uno::makeAny( rValue ) );
-}
-
-/** Sets a Boolean value to an XPropertySet. The XPropertySet must be valid. */
-inline void setPropBool(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProp,
-        const ::rtl::OUString& rName,
-        sal_Bool bValue )
-{
-    ::setPropAny( xProp, rName, ::comphelper::makeBoolAny( bValue ) );
-}
-
-/** Sets a string to an XPropertySet. The XPropertySet must be valid. */
-inline void setPropString(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProp,
-        const ::rtl::OUString& rName,
-        const String& rText )
-{
-    ::setPropValue( xProp, rName, ::rtl::OUString( rText ) );
-}
 
 // Get properties =============================================================
 
@@ -180,8 +138,10 @@ inline bool getPropBool(
 
 // Static helper functions ====================================================
 
+class SfxMedium;
+
 /** Static API helper functions. */
-class ScfApiHelper : ScfNoInstance
+class ScfApiHelper
 {
 public:
     /** Opens a password dialog and returns the entered password.
@@ -189,63 +149,170 @@ public:
     static String       QueryPasswordForMedium( SfxMedium& rMedium );
 };
 
-// MultiPropertySets ==========================================================
+// Property sets ==============================================================
 
-/** Generic helper class for reading from and writing to XMultiPropertySets.
-    @descr  Derived classes have to call the constructor with an array of ASCII
-    strings ordered alphabetically. Note: The correct order is required by the
-    XMultiPropertySet. It will not be checked here!
-*/
-class ScfMultiPSHelper
+/** A wrapper for an UNO property set.
+
+    This class provides functions to silently get and set properties (without
+    exceptions, without checking for validity of the UNO property set).
+
+    An instance is constructed with the reference to an UNO property set or any
+    other interface (the constructor will query for the XPropertySet interface
+    then). The reference to the property set will be kept as long as the
+    instance of this class is alive.
+
+    The functions GetProperties() and SetProperties() try to handle all passed
+    values at once, using the XMultiPropertySet interface. If the
+    implementation does not support the XMultiPropertySet interface, all
+    properties are handled separately in a loop.
+ */
+class ScfPropertySet
 {
-private:
-    typedef ::com::sun::star::uno::Sequence< ::rtl::OUString > OUStringVec;
-    typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > AnyVec;
-    typedef ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet > XPropertySetRef;
-    typedef ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XMultiPropertySet > XMultiPropertySetRef;
-
-    OUStringVec                 maNameSeq;      /// Sequence of property names.
-    AnyVec                      maValueSeq;     /// Sequence of property values.
+public:
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       XPropertySetRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet >  XMultiPropSetRef;
+    typedef ::com::sun::star::uno::Any                                                      UnoAny;
+    typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >                   UnoAnySequence;
+    typedef ::com::sun::star::uno::Sequence< ::rtl::OUString >                              UnoStringSequence;
 
 public:
-    /** @param ppPropNames  An array of ASCII property names.
-        @param nPropCount  Count of property names contained in ppPropNames. */
-                                ScfMultiPSHelper( const sal_Char** ppPropNames, sal_Int32 nPropCount );
+    inline explicit     ScfPropertySet() {}
+    /** Constructs a property set wrapper with the passed UNO property set. */
+    inline explicit     ScfPropertySet( XPropertySetRef xPropSet ) { Set( xPropSet ); }
+    /** Constructs a property set wrapper after querying the XPropertySet interface. */
+    template< typename InterfaceType >
+    inline explicit     ScfPropertySet( ::com::sun::star::uno::Reference< InterfaceType > xInterface ) { Set( xInterface ); }
 
-    /** Returns the property name. */
-    inline const ::rtl::OUString& getName( sal_Int32 nIndex ) const;
-    /** Returns a reference to the Any containing a property value. */
-    inline ::com::sun::star::uno::Any& getAny( sal_Int32 nIndex );
+    /** Sets the passed UNO property set and releases the old UNO property set. */
+    void                Set( XPropertySetRef xPropSet );
+    /** Queries the passed interface for an XPropertySet and releases the old UNO property set. */
+    template< typename InterfaceType >
+    inline void         Set( ::com::sun::star::uno::Reference< InterfaceType > xInterface )
+                            { Set( XPropertySetRef( xInterface, ::com::sun::star::uno::UNO_QUERY ) ); }
 
-    /** Reads all values from the XMultiPropertySet.
-        @descr  Tries to read all properties from the XPropertySet, if the XMultiPropertySet is not valid.
-        @return  true on success. */
-    bool                        getPropertyValues(
-                                    const XMultiPropertySetRef& xMultiPS,
-                                    const XPropertySetRef& xPropSet );
+    /** Returns true, if the contained XPropertySet interface is valid. */
+    inline bool         Is() const { return mxPropSet.is(); }
 
-    /** Applies all values to the XMultiPropertySet.
-        @descr  Tries to set all properties to the XPropertySet, if the XMultiPropertySet is not valid.
-        @return  true on success. */
-    bool                        setPropertyValues(
-                                    const XMultiPropertySetRef& xMultiPS,
-                                    const XPropertySetRef& xPropSet );
+    // Get properties ---------------------------------------------------------
+
+    /** Gets the specified property from the property set.
+        @return  true, if the Any could be filled with the property value. */
+    bool                GetAnyProperty( UnoAny& rValue, const ::rtl::OUString& rPropName ) const;
+
+    /** Gets the specified property from the property set.
+        @return  true, if the passed variable could be filled with the property value. */
+    template< typename Type >
+    inline bool         GetProperty( Type& rValue, const ::rtl::OUString& rPropName ) const
+                            { UnoAny aAny; return GetAnyProperty( aAny, rPropName ) && (aAny >>= rValue); }
+
+    /** Gets the specified Boolean property from the property set.
+        @return  true, if the passed Boolean variable could be filled with the property value. */
+    bool                GetBoolProperty( bool& rbValue, const ::rtl::OUString& rPropName ) const;
+
+    /** Gets the specified Boolean property from the property set.
+        @descr  This is the short version, returning false for a false value and on error.
+        @return  true = property contains true; false = property contains false or error occured. */
+    inline bool         GetBoolProperty( const ::rtl::OUString& rPropName ) const
+                            { bool bValue; return GetBoolProperty( bValue, rPropName ) && bValue; }
+
+    /** Gets the specified Boolean property from the property set.
+        @return  true, if the passed Boolean variable could be filled with the property value. */
+    bool                GetStringProperty( String& rValue, const ::rtl::OUString& rPropName ) const;
+
+    /** Gets the specified color property from the property set.
+        @return  true, if the passed color variable could be filled with the property value. */
+    bool                GetColorProperty( Color& rColor, const ::rtl::OUString& rPropName ) const;
+
+    /** Gets the specified properties from the property set. Tries to use the XMultiPropertySet interface.
+        @param rPropNames  The property names. MUST be ordered alphabetically.
+        @param rValues  The related property values. */
+    void                GetProperties( UnoAnySequence& rValues, const UnoStringSequence& rPropNames ) const;
+
+    // Set properties ---------------------------------------------------------
+
+    /** Puts the passed Any into the property set. */
+    void                SetAnyProperty( const ::rtl::OUString& rPropName, const UnoAny& rValue );
+
+    /** Puts the passed value into the property set. */
+    template< typename Type >
+    inline void         SetProperty( const ::rtl::OUString& rPropName, const Type& rValue )
+                            { SetAnyProperty( rPropName, ::com::sun::star::uno::makeAny( rValue ) ); }
+
+    /** Puts the passed Boolean value into the property set. */
+    inline void         SetBoolProperty( const ::rtl::OUString& rPropName, bool bValue )
+                            { SetAnyProperty( rPropName, ::comphelper::makeBoolAny( bValue ) ); }
+
+    /** Puts the passed string into the property set. */
+    inline void         SetStringProperty( const ::rtl::OUString& rPropName, const String& rValue )
+                            { SetProperty( rPropName, ::rtl::OUString( rValue ) ); }
+
+    /** Puts the passed color into the property set. */
+    inline void         SetColorProperty( const ::rtl::OUString& rPropName, const Color& rColor )
+                            { SetProperty( rPropName, static_cast< sal_Int32 >( rColor.GetColor() ) ); }
+
+    /** Puts the passed properties into the property set. Tries to use the XMultiPropertySet interface.
+        @param rPropNames  The property names. MUST be ordered alphabetically.
+        @param rValues  The related property values. */
+    void                SetProperties( const UnoStringSequence& rPropNames, const UnoAnySequence& rValues );
+
+    // ------------------------------------------------------------------------
+private:
+    XPropertySetRef     mxPropSet;          /// The mandatory property set interface.
+    XMultiPropSetRef    mxMultiPropSet;     /// The optional multi property set interface.
 };
 
 // ----------------------------------------------------------------------------
 
-inline const ::rtl::OUString& ScfMultiPSHelper::getName( sal_Int32 nIndex ) const
+/** Generic helper class for reading from and writing to property sets.
+
+    Usage:
+    1)  Call the constructor with an array of ASCII strings ordered
+        alphabetically (required by the XMultiPropertySet interface).
+    2a) Get properties from a property set: Call the ReadFromPropertySet()
+        function, then get the read properties with the GetAny() function. The
+        indexes are the same as used for the property names passed to the
+        constructor.
+    2b) Set properties to a property set: Set the values with the GetAny()
+        function. The index is the same as used for the property names passed
+        to the constructor. All values must be set properly. Finally, call the
+        WriteToPropertySet() function.
+ */
+class ScfPropSetHelper
 {
-    DBG_ASSERT( (0 <= nIndex) && (nIndex < maNameSeq.getLength()), "ScfMultiPSHelper::getName - invalid index" );
-    return maNameSeq[ nIndex ];
+public:
+    /** @param ppPropNames  An array of ASCII property names.
+        @param nPropCount  Count of property names contained in ppPropNames. */
+    explicit            ScfPropSetHelper( const sal_Char** ppcPropNames, sal_Int32 nPropCount );
+
+    /** Returns the property name. */
+    inline const ::rtl::OUString& GetName( sal_Int32 nIdx ) const;
+    /** Returns a reference to the Any containing a property value. */
+    inline ::com::sun::star::uno::Any& GetAny( sal_Int32 nIdx );
+
+    /** Reads all values from the passed property set. */
+    void                ReadFromPropertySet( const ScfPropertySet& rPropSet );
+    /** Writes all values to the passed property set. */
+    void                WriteToPropertySet( ScfPropertySet& rPropSet ) const;
+
+private:
+    typedef ::com::sun::star::uno::Sequence< ::rtl::OUString >              UnoStringSequence;
+    typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >   UnoAnySequence;
+
+    UnoStringSequence   maNameSeq;          /// Sequence of property names.
+    UnoAnySequence      maValueSeq;         /// Sequence of property values.
+
+};
+
+inline const ::rtl::OUString& ScfPropSetHelper::GetName( sal_Int32 nIdx ) const
+{
+    DBG_ASSERT( (0 <= nIdx) && (nIdx < maNameSeq.getLength()), "ScfPropSetHelper::GetName - invalid index" );
+    return maNameSeq[ nIdx ];
 }
 
-inline ::com::sun::star::uno::Any& ScfMultiPSHelper::getAny( sal_Int32 nIndex )
+inline ::com::sun::star::uno::Any& ScfPropSetHelper::GetAny( sal_Int32 nIdx )
 {
-    DBG_ASSERT( (0 <= nIndex) && (nIndex < maValueSeq.getLength()), "ScfMultiPSHelper::getValue - invalid index" );
-    return maValueSeq[ nIndex ];
+    DBG_ASSERT( (0 <= nIdx) && (nIdx < maValueSeq.getLength()), "ScfPropSetHelper::GetAny - invalid index" );
+    return maValueSeq[ nIdx ];
 }
 
 // ============================================================================
