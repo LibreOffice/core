@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: er $ $Date: 2001-08-06 10:17:27 $
+ *  last change: $Author: er $ $Date: 2001-09-05 09:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2876,77 +2876,71 @@ void ScInterpreter::ScMatch()
             if ( rEntry.bQueryByString )
                 rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
             USHORT nDelta, nR, nC;
-            if (nCol1 == nCol2)                         // spaltenweise
-            {
+            if (nCol1 == nCol2)
+            {                                           // search row in column
                 rParam.nRow2 = nRow2;
                 rEntry.nField = nCol1;
                 ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
-                if (fTyp == 0.0)                        // exakte Suche
-                {
+                if (fTyp == 0.0)
+                {                                       // EQUAL
                     if (aCellIter.GetFirst())
-                    {
                         nR = aCellIter.GetRow();
-                        if (aCellIter.GetNext())
-                        {
-                            SetNV();
-                            return;
-                        }
-                    }
                     else
                     {
                         SetNV();
                         return;
                     }
                 }
-                else if (aCellIter.GetFirst())          // <= bzw. >= Suche
-                {
-                    do
-                    {
-                        nR = aCellIter.GetRow();
-                    } while ( aCellIter.GetNext() );
-                }
                 else
-                {
-                    SetNV();
-                    return;
+                {                                       // <= or >=
+                    aCellIter.SetStopOnMismatch( TRUE );
+                    if ( aCellIter.GetFirst() )
+                    {
+                        do
+                        {
+                            nR = aCellIter.GetRow();
+                        } while ( aCellIter.GetNext() );
+                    }
+                    else
+                    {
+                        SetNV();
+                        return;
+                    }
                 }
                 nDelta = nR - nRow1;
             }
-            else                                        // zeilenweise
-            {
+            else
+            {                                           // search column in row
                 rParam.nRow2 = nRow1;
                 rEntry.nField = nCol1;
                 ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
-                // Entry.nField im Iterator bei Spaltenwechsel weiterschalten
+                // Advance Entry.nField in Iterator if column changed
                 aCellIter.SetAdvanceQueryParamEntryField( TRUE );
-                if (fTyp == 0.0)                        // exakte Suche
-                {
+                if (fTyp == 0.0)
+                {                                       // EQUAL
                     if ( aCellIter.GetFirst() )
-                    {
                         nC = aCellIter.GetCol();
-                        if ( aCellIter.GetNext() )
-                        {   // doppelt gefunden
-                            SetNV();
-                            return;
-                        }
-                    }
                     else
-                    {   // gar nicht gefunden
+                    {
                         SetNV();
                         return;
                     }
                 }
-                else if ( aCellIter.GetFirst() )        // <= bzw. >= Suche
-                {
-                    do
-                    {
-                        nC = aCellIter.GetCol();
-                    } while ( aCellIter.GetNext() );
-                }
                 else
-                {
-                    SetNV();
-                    return;
+                {                                       // <= or >=
+                    aCellIter.SetStopOnMismatch( TRUE );
+                    if ( aCellIter.GetFirst() )
+                    {
+                        do
+                        {
+                            nC = aCellIter.GetCol();
+                        } while ( aCellIter.GetNext() );
+                    }
+                    else
+                    {
+                        SetNV();
+                        return;
+                    }
                 }
                 nDelta = nC - nCol1;
             }
@@ -3597,72 +3591,30 @@ void ScInterpreter::ScLookup()
         }
         else if (bSpMatrix)             // lookup in column
         {
-//!!!!!!!
-//! TODO: Can the Iterator and ScTable::ValidQuery() be modified to return a
-//!       special flag if an SC_EQUAL entry is found during a SC_LESS_EQUAL or
-//!       SC_GREATER_EQUAL query? Would make the first iteration unnecessary.
-//!!!!!!!
-            // try equality first, also works with regex
-            rEntry.eOp = SC_EQUAL;
-            ScQueryCellIterator aEqualIter(pDok, nTab1, rParam, FALSE);
-            if ( aEqualIter.GetFirst() )
-                nDelta = aEqualIter.GetRow() - nRow1;
+            rEntry.eOp = SC_LESS_EQUAL;
+            ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
+            USHORT nC, nR;
+            if ( aCellIter.FindEqualOrSortedLastInRange( nC, nR ) )
+                nDelta = nR - nRow1;
             else
             {
-                rEntry.eOp = SC_LESS_EQUAL;
-                ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
-                aCellIter.SetStopOnMismatch( TRUE );    // assume sorted keys
-                if ( aCellIter.GetFirst() )
-                {
-                    USHORT nR;
-                    do
-                    {
-                        nR = aCellIter.GetRow();
-                    } while ( aCellIter.GetNext() );
-                    nDelta = nR - nRow1;
-                }
-                else
-                {
-                    SetNV();
-                    return;
-                }
+                SetNV();
+                return;
             }
         }
         else                            // lookup in row
         {
-//!!!!!!!
-//! TODO: Can the Iterator and ScTable::ValidQuery() be modified to return a
-//!       special flag if an SC_EQUAL entry is found during a SC_LESS_EQUAL or
-//!       SC_GREATER_EQUAL query? Would make the first iteration unnecessary.
-//!!!!!!!
-            // try equality first, also works with regex
-            rEntry.eOp = SC_EQUAL;
-            ScQueryCellIterator aEqualIter(pDok, nTab1, rParam, FALSE);
+            rEntry.eOp = SC_LESS_EQUAL;
+            ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
             // advance Entry.nField in Iterator upon switching columns
-            aEqualIter.SetAdvanceQueryParamEntryField( TRUE );
-            if ( aEqualIter.GetFirst() )
-                nDelta = aEqualIter.GetCol() - nCol1;
+            aCellIter.SetAdvanceQueryParamEntryField( TRUE );
+            USHORT nC, nR;
+            if ( aCellIter.FindEqualOrSortedLastInRange( nC, nR ) )
+                nDelta = nC - nCol1;
             else
             {
-                rEntry.eOp = SC_LESS_EQUAL;
-                ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
-                // advance Entry.nField in Iterator upon switching columns
-                aCellIter.SetAdvanceQueryParamEntryField( TRUE );
-                aCellIter.SetStopOnMismatch( TRUE );    // assume sorted keys
-                if ( aCellIter.GetFirst() )
-                {
-                    USHORT nC;
-                    do
-                    {
-                        nC = aCellIter.GetCol();
-                    } while ( aCellIter.GetNext() );
-                    nDelta = nC - nCol1;
-                }
-                else
-                {
-                    SetNV();
-                    return;
-                }
+                SetNV();
+                return;
             }
         }
     }
@@ -3934,39 +3886,23 @@ void ScInterpreter::ScHLookup()
                 BOOL bFound = FALSE;
                 USHORT nC;
                 if ( bSorted )
+                    rEntry.eOp = SC_LESS_EQUAL;
+                ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
+                // advance Entry.nField in Iterator upon switching columns
+                aCellIter.SetAdvanceQueryParamEntryField( TRUE );
+                if ( bSorted )
                 {
-//!!!!!!!
-//! TODO: Can the Iterator and ScTable::ValidQuery() be modified to return a
-//!       special flag if an SC_EQUAL entry is found during a SC_LESS_EQUAL or
-//!       SC_GREATER_EQUAL query? Would make the first iteration unnecessary.
-//!!!!!!!
-                    // try equality first, also works with regex
-                    rEntry.eOp = SC_EQUAL;
-                    ScQueryCellIterator aEqualIter(pDok, nTab1, rParam, FALSE);
-                    if ( aEqualIter.GetFirst() )
-                    {
-                        bFound = TRUE;
-                        nC = aEqualIter.GetCol();
-                    }
-                    else
-                        rEntry.eOp = SC_LESS_EQUAL;
+                    USHORT nR;
+                    bFound = aCellIter.FindEqualOrSortedLastInRange( nC, nR );
                 }
-                if ( !bFound )
+                else if ( aCellIter.GetFirst() )
                 {
-                    ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
-                    // advance Entry.nField in Iterator upon switching columns
-                    aCellIter.SetAdvanceQueryParamEntryField( TRUE );
+                    bFound = TRUE;
+                    nC = aCellIter.GetCol();
                     if ( bSorted )
-                        aCellIter.SetStopOnMismatch( TRUE );
-                    if ( aCellIter.GetFirst() )
                     {
-                        bFound = TRUE;
-                        nC = aCellIter.GetCol();
-                        if ( bSorted )
-                        {
-                            while ( aCellIter.GetNext() )
-                                nC = aCellIter.GetCol();
-                        }
+                        while ( aCellIter.GetNext() )
+                            nC = aCellIter.GetCol();
                     }
                 }
                 if ( bFound )
@@ -4204,37 +4140,21 @@ void ScInterpreter::ScVLookup()
                 BOOL bFound = FALSE;
                 USHORT nR;
                 if ( bSorted )
+                    rEntry.eOp = SC_LESS_EQUAL;
+                ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
+                if ( bSorted )
                 {
-//!!!!!!!
-//! TODO: Can the Iterator and ScTable::ValidQuery() be modified to return a
-//!       special flag if an SC_EQUAL entry is found during a SC_LESS_EQUAL or
-//!       SC_GREATER_EQUAL query? Would make the first iteration unnecessary.
-//!!!!!!!
-                    // try equality first, also works with regex
-                    rEntry.eOp = SC_EQUAL;
-                    ScQueryCellIterator aEqualIter(pDok, nTab1, rParam, FALSE);
-                    if ( aEqualIter.GetFirst() )
-                    {
-                        bFound = TRUE;
-                        nR = aEqualIter.GetRow();
-                    }
-                    else
-                        rEntry.eOp = SC_LESS_EQUAL;
+                    USHORT nC;
+                    bFound = aCellIter.FindEqualOrSortedLastInRange( nC, nR );
                 }
-                if ( !bFound )
+                else if ( aCellIter.GetFirst() )
                 {
-                    ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
+                    bFound = TRUE;
+                    nR = aCellIter.GetRow();
                     if ( bSorted )
-                        aCellIter.SetStopOnMismatch( TRUE );
-                    if (aCellIter.GetFirst())
                     {
-                        bFound = TRUE;
-                        nR = aCellIter.GetRow();
-                        if ( bSorted )
-                        {
-                            while (aCellIter.GetNext())
-                                nR = aCellIter.GetRow();
-                        }
+                        while (aCellIter.GetNext())
+                            nR = aCellIter.GetRow();
                     }
                 }
                 if ( bFound )
