@@ -2,9 +2,9 @@
 *
 *  $RCSfile: hidother.src,v $
 *
-*  $Revision: 1.55 $
+*  $Revision: 1.56 $
 *
-*  last change: $Author: obo $ $Date: 2004-11-17 14:55:23 $
+*  last change: $Author: obo $ $Date: 2004-11-24 07:08:05 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -435,7 +435,6 @@ hidspecial SID_QUERY_VIEW_ALIASES { HelpId = SID_QUERY_VIEW_ALIASES; };
 hidspecial SID_QUERY_DISTINCT_VALUES { HelpId = SID_QUERY_DISTINCT_VALUES; };
 hidspecial SID_FORM_CREATE_REPWIZ_PRE_SEL { HelpId = SID_FORM_CREATE_REPWIZ_PRE_SEL; };
 hidspecial SID_REPORT_CREATE_REPWIZ_PRE_SEL { HelpId = SID_REPORT_CREATE_REPWIZ_PRE_SEL; };
-hidspecial SID_FORM_NEW_PILOT_PRE_SEL { HelpId = SID_FORM_NEW_PILOT_PRE_SEL; };
 hidspecial SID_APP_NEW_FOLDER { HelpId = SID_APP_NEW_FOLDER; };
 hidspecial SID_APP_NEW_FORM { HelpId = SID_APP_NEW_FORM; };
 hidspecial SID_DB_APP_PASTE_SPECIAL { HelpId = SID_DB_APP_PASTE_SPECIAL; };
