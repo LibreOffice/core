@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tool.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:57:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,9 @@
 const BYTE  nDezStd = 0;        // Dezimalstellen fuer Standard-Zellen
 const BYTE  nDezFloat = 2;  //        "         "  Float-Zellen
 
-void        PutFormString( UINT16 nCol, UINT16 nRow, UINT16 nTab, sal_Char *pString );
+void        PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char *pString );
 
-void        SetFormat( UINT16 nCol, UINT16 nRow, UINT16 nTab, BYTE nFormat, BYTE nSt );
+void        SetFormat( SCCOL nCol, SCROW nRow, SCTAB nTab, BYTE nFormat, BYTE nSt );
 
 sal_Char*   ReplaceWith( sal_Char* pString, sal_Char cVon, sal_Char cNach );
 
