@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2002-03-20 09:00:35 $
+ *  last change: $Author: gt $ $Date: 2002-04-02 11:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,8 @@ Reference< XAccessibleContext > SAL_CALL SvxRectCtlAccessibleContext::getAccessi
 sal_Bool SAL_CALL SvxRectCtlAccessibleContext::contains( const awt::Point& rPoint ) throw( RuntimeException )
 {
     // no guard -> done in getBounds()
-    return GetBoundingBox().IsInside( VCLPoint( rPoint ) );
+//  return GetBoundingBox().IsInside( VCLPoint( rPoint ) );
+    return Rectangle( Point( 0, 0 ), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
 }
 
 Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleAt( const awt::Point& rPoint ) throw( RuntimeException )
@@ -925,7 +926,8 @@ Reference< XAccessibleContext> SAL_CALL SvxRectCtlChildAccessibleContext::getAcc
 sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::contains( const awt::Point& rPoint ) throw( RuntimeException )
 {
     // no guard -> done in getBounds()
-    return GetBoundingBox().IsInside( VCLPoint( rPoint ) );
+//  return GetBoundingBox().IsInside( VCLPoint( rPoint ) );
+    return Rectangle( Point( 0, 0 ), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
 }
 
 Reference< XAccessible > SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleAt( const awt::Point& rPoint ) throw( RuntimeException )
