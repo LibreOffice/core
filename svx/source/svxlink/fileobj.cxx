@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-15 14:05:43 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@
 #include <sot/exchange.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <sfx2/docfac.hxx>
 
 #include "fileobj.hxx"
 #include "linkmgr.hxx"
@@ -568,17 +569,15 @@ String SvFileObject::Edit( Window* pParent, so3::SvBaseLink* pLink )
             Window* pOld = Application::GetDefModalDialogParent();
             Application::SetDefModalDialogParent( pParent );
 
-            const SfxObjectFactory* pFactory;
+            const SfxObjectFactory* pFactory=0;
             SvInPlaceObjectRef aRef( pLink->GetLinkManager()->GetPersist() );
             if( aRef.Is() )
             {
                 SfxObjectShell* pShell = ((SfxInPlaceObject*)&aRef)->GetObjectShell();
                 pFactory = &pShell->GetFactory();
             }
-            else
-                pFactory = &SFX_APP()->GetDefaultFactory();
-            SfxMediumRef xMed = SFX_APP()->InsertDocumentDialog( 0, *pFactory );
 
+            SfxMediumRef xMed = SFX_APP()->InsertDocumentDialog( 0, pFactory ? pFactory->GetFactoryName() : String() );
             if( xMed.Is() )
             {
                 sFile = xMed->GetName();
@@ -589,6 +588,7 @@ String SvFileObject::Edit( Window* pParent, so3::SvBaseLink* pLink )
             }
             else
                 sFile.Erase();
+
             Application::SetDefModalDialogParent( pOld );
         }
         break;
