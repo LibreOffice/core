@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:04:56 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_EMBED_EMBEDMISC_HPP_
+#include <com/sun/star/embed/EmbedMisc.hpp>
+#endif
+
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
@@ -75,7 +79,7 @@
 #include <svx/rotmodit.hxx>
 #include <svx/shaditem.hxx>
 #include <svx/svxfont.hxx>
-#include <so3/ipobj.hxx>
+#include <svx/svdoole2.hxx>
 #include <tools/poly.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
@@ -105,6 +109,8 @@
 
 #include "scmod.hxx"
 #include "appoptio.hxx"
+
+using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -2432,12 +2438,11 @@ void ScOutputData::PrintNoteMarks( const List& rPosList )
     }
 }
 
-void ScOutputData::ConnectObject( const SvInPlaceObjectRef& rRef, SdrOle2Obj* pOleObj )
+void ScOutputData::ConnectObject( const uno::Reference < embed::XEmbeddedObject >& rRef, SdrOle2Obj* pOleObj )
 {
-    if (rRef.Is())
+    if (rRef.is())
     {
-        ULONG nMisc = rRef->GetMiscStatus();
-        if ( nMisc & SVOBJ_MISCSTATUS_ACTIVATEWHENVISIBLE )
+        if ( rRef->getStatus( pOleObj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
             pViewShell->ConnectObject( pOleObj );
     }
 }
