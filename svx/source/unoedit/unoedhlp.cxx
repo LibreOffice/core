@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedhlp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-02 11:35:05 $
+ *  last change: $Author: thb $ $Date: 2002-09-13 14:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ sal_Bool SvxEditSourceHelper::GetAttributeRun( USHORT& nStartIndex, USHORT& nEnd
 
     // find closest index behind of nIndex
     sal_Int32 nClosestEndIndex;
-    for( nAttr=0, nClosestEndIndex=rEE.GetTextLen(); nAttr<aCharAttribs.Count(); ++nAttr )
+    for( nAttr=0, nClosestEndIndex=rEE.GetTextLen(nPara); nAttr<aCharAttribs.Count(); ++nAttr )
     {
         nCurrIndex = aCharAttribs[nAttr].nEnd;
 
@@ -194,4 +194,26 @@ sal_Bool SvxEditSourceHelper::GetAttributeRun( USHORT& nStartIndex, USHORT& nEnd
     nEndIndex = static_cast<USHORT>( nClosestEndIndex );
 
     return sal_True;
+}
+
+Point SvxEditSourceHelper::EEToUserSpace( const Point& rPoint, const Size& rEESize, bool bIsVertical )
+{
+    return bIsVertical ? Point( -rPoint.Y() + rEESize.Height(), rPoint.X() ) : rPoint;
+}
+
+Point SvxEditSourceHelper::UserSpaceToEE( const Point& rPoint, const Size& rEESize, bool bIsVertical )
+{
+    return bIsVertical ? Point( rPoint.Y(), -rPoint.X() + rEESize.Height() ) : rPoint;
+}
+
+Rectangle SvxEditSourceHelper::EEToUserSpace( const Rectangle& rRect, const Size& rEESize, bool bIsVertical )
+{
+    return Rectangle( EEToUserSpace(rRect.BottomLeft(), rEESize, bIsVertical),
+                      EEToUserSpace(rRect.TopRight(), rEESize, bIsVertical) );
+}
+
+Rectangle SvxEditSourceHelper::UserSpaceToEE( const Rectangle& rRect, const Size& rEESize, bool bIsVertical )
+{
+    return Rectangle( UserSpaceToEE(rRect.TopRight(), rEESize, bIsVertical),
+                      UserSpaceToEE(rRect.BottomLeft(), rEESize, bIsVertical) );
 }

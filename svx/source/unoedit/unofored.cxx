@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-02 11:35:08 $
+ *  last change: $Author: thb $ $Date: 2002-09-13 14:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,16 +367,40 @@ EBulletInfo SvxEditEngineForwarder::GetBulletInfo( USHORT nPara ) const
 
 Rectangle SvxEditEngineForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) const
 {
-    return rEditEngine.GetCharacterBounds( EPosition(nPara, nIndex) );
+    // #101701#
+    // EditEngine's 'internal' methods like GetCharacterBounds()
+    // don't rotate for vertical text.
+    return SvxEditSourceHelper::EEToUserSpace( rEditEngine.GetCharacterBounds( EPosition(nPara, nIndex) ),
+                                               Size( rEditEngine.CalcTextWidth(), rEditEngine.GetTextHeight() ),
+                                               rEditEngine.IsVertical() == TRUE );
 }
 
 Rectangle SvxEditEngineForwarder::GetParaBounds( USHORT nPara ) const
 {
     const Point aPnt = rEditEngine.GetDocPosTopLeft( nPara );
-    const ULONG nWidth = rEditEngine.CalcTextWidth();
-    const ULONG nHeight = rEditEngine.GetTextHeight( nPara );
+    ULONG nWidth;
+    ULONG nHeight;
+    ULONG nTextWidth;
 
-    return Rectangle( aPnt.X(), aPnt.Y(), aPnt.X() + nWidth, aPnt.Y() + nHeight );
+    if( rEditEngine.IsVertical() )
+    {
+        // #101701#
+        // Hargl. EditEngine's 'external' methods return the rotated
+        // dimensions, 'internal' methods like GetTextHeight( n )
+        // don't rotate.
+        nWidth = rEditEngine.GetTextHeight( nPara );
+        nHeight = rEditEngine.GetTextHeight();
+        nTextWidth = rEditEngine.GetTextHeight();
+
+        return Rectangle( nTextWidth - aPnt.Y() - nWidth, 0, nTextWidth - aPnt.Y(), nHeight );
+    }
+    else
+    {
+        nWidth = rEditEngine.CalcTextWidth();
+        nHeight = rEditEngine.GetTextHeight( nPara );
+
+        return Rectangle( 0, aPnt.Y(), nWidth, aPnt.Y() + nHeight );
+    }
 }
 
 MapMode SvxEditEngineForwarder::GetMapMode() const
@@ -391,7 +415,12 @@ OutputDevice* SvxEditEngineForwarder::GetRefDevice() const
 
 sal_Bool SvxEditEngineForwarder::GetIndexAtPoint( const Point& rPos, USHORT& nPara, USHORT& nIndex ) const
 {
-    EPosition aDocPos = rEditEngine.FindDocPosition( rPos );
+    // #101701#
+    Point aEEPos( SvxEditSourceHelper::UserSpaceToEE( rPos,
+                                                      Size( rEditEngine.CalcTextWidth(), rEditEngine.GetTextHeight() ),
+                                                      rEditEngine.IsVertical() == TRUE ));
+
+    EPosition aDocPos = rEditEngine.FindDocPosition( aEEPos );
 
     nPara = aDocPos.nPara;
     nIndex = aDocPos.nIndex;

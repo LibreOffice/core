@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedprx.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-02 11:35:07 $
+ *  last change: $Author: thb $ $Date: 2002-09-13 14:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,15 +422,20 @@ sal_Bool SvxAccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, Rectangl
     DBG_ASSERT(nIndex >= 0 && nIndex <= USHRT_MAX,
                "SvxAccessibleStringWrap::GetCharacterBounds: index value overflow");
 
-    rRect.Left()   = 0;
-    rRect.Top()    = 0;
-    rRect.SetSize( mrFont.GetPhysTxtSize( &mrDev, maText.Copy(static_cast< USHORT >(nIndex), 1) ) );
+    mrFont.SetPhysFont( &mrDev );
 
-    if( nIndex > 0 )
+    long aXArray[2];
+    mrDev.GetCaretPositions( maText, aXArray, static_cast< USHORT >(nIndex), 1 );
+    rRect.Left() = 0;
+    rRect.Right() = 0;
+    rRect.SetSize( Size(mrDev.GetTextHeight(), labs(aXArray[0] - aXArray[1])) );
+    rRect.Move( ::std::min(aXArray[0], aXArray[1]), 0 );
+
+    if( mrFont.IsVertical() )
     {
-        // TODO: CTL, BiDi
-        Size aOffset = mrFont.GetPhysTxtSize( &mrDev, maText.Copy(0, static_cast< USHORT >(nIndex) ) );
-        rRect.Move( aOffset.Width(), 0 );
+        // #101701# Rotate to vertical
+        rRect = Rectangle( Point(-rRect.Top(), rRect.Left()),
+                           Point(-rRect.Bottom(), rRect.Right()));
     }
 
     return sal_True;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-02 11:35:09 $
+ *  last change: $Author: thb $ $Date: 2002-09-13 14:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,16 +339,37 @@ EBulletInfo SvxOutlinerForwarder::GetBulletInfo( USHORT nPara ) const
 
 Rectangle SvxOutlinerForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) const
 {
-    return rOutliner.GetEditEngine().GetCharacterBounds( EPosition(nPara, nIndex) );
+    // #101701#
+    // EditEngine's 'internal' methods like GetCharacterBounds()
+    // don't rotate for vertical text.
+    Size aSize( rOutliner.CalcTextSize() );
+    ::std::swap( aSize.Width(), aSize.Height() );
+    return SvxEditSourceHelper::EEToUserSpace( rOutliner.GetEditEngine().GetCharacterBounds( EPosition(nPara, nIndex) ),
+                                               aSize,
+                                               rOutliner.IsVertical() == TRUE );
 }
 
 Rectangle SvxOutlinerForwarder::GetParaBounds( USHORT nPara ) const
 {
     Point aPnt = rOutliner.GetDocPosTopLeft( nPara );
-    ULONG nHeight = rOutliner.GetTextHeight( nPara );
     Size aSize = rOutliner.CalcTextSize();
 
-    return Rectangle( aPnt.X(), aPnt.Y(), aPnt.X() + aSize.Width(), aPnt.Y() + nHeight );
+    if( rOutliner.IsVertical() )
+    {
+        // #101701#
+        // Hargl. Outliner's 'external' methods return the rotated
+        // dimensions, 'internal' methods like GetTextHeight( n )
+        // don't rotate.
+        ULONG nWidth = rOutliner.GetTextHeight( nPara );
+
+        return Rectangle( aSize.Width() - aPnt.Y() - nWidth, 0, aSize.Width() - aPnt.Y(), aSize.Height() );
+    }
+    else
+    {
+        ULONG nHeight = rOutliner.GetTextHeight( nPara );
+
+        return Rectangle( 0, aPnt.Y(), aSize.Width(), aPnt.Y() + nHeight );
+    }
 }
 
 MapMode SvxOutlinerForwarder::GetMapMode() const
@@ -363,7 +384,14 @@ OutputDevice* SvxOutlinerForwarder::GetRefDevice() const
 
 sal_Bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, USHORT& nPara, USHORT& nIndex ) const
 {
-    EPosition aDocPos = rOutliner.GetEditEngine().FindDocPosition( rPos );
+    // #101701#
+    Size aSize( rOutliner.CalcTextSize() );
+    ::std::swap( aSize.Width(), aSize.Height() );
+    Point aEEPos( SvxEditSourceHelper::UserSpaceToEE( rPos,
+                                                      aSize,
+                                                      rOutliner.IsVertical() == TRUE ));
+
+    EPosition aDocPos = rOutliner.GetEditEngine().FindDocPosition( aEEPos );
 
     nPara = aDocPos.nPara;
     nIndex = aDocPos.nIndex;
