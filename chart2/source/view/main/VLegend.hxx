@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-20 09:59:32 $
+ *  last change: $Author: bm $ $Date: 2003-10-28 16:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,13 @@ public:
         @param rOutAvailableSpace
             is modified by the method, if the legend is in a standard position,
             such that the space allocated by the legend is removed from it.
+
+        @param rReferenceSize
+            is used to calculate the offset (default 2%) from the edge.
      */
-    void changePosition( ::com::sun::star::awt::Rectangle & rOutAvailableSpace );
+    void changePosition(
+        ::com::sun::star::awt::Rectangle & rOutAvailableSpace,
+        const ::com::sun::star::awt::Size & rReferenceSize );
 
     static bool isVisible(
         const ::com::sun::star::uno::Reference<
