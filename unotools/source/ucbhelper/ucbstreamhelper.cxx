@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstreamhelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-02 10:24:49 $
+ *  last change: $Author: mba $ $Date: 2000-11-15 11:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,15 +98,18 @@ SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOp
         try
         {
             UcbLockBytesRef xLockBytes;
-            ::ucb::Content aContent( rFileName, Reference < XCommandEnvironment >() );
             if ( eOpenMode & STREAM_WRITE )
             {
                 sal_Bool bTruncate = ( eOpenMode & STREAM_TRUNC );
                 if ( bTruncate )
+                {
                     // truncate is implemented with deleting the original file
-                    aContent.executeCommand( ::rtl::OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
+                    ::ucb::Content aCnt( rFileName, Reference < XCommandEnvironment >() );
+                    aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
+                }
 
                 // make sure that the desired file exists before trying to open
+                ::ucb::Content aContent( rFileName, Reference < XCommandEnvironment >() );
                 InsertCommandArgument aInsertArg;
                 aInsertArg.Data = Reference< XInputStream >();
                 aInsertArg.ReplaceExisting = sal_False;
@@ -116,6 +119,7 @@ SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOp
             }
 
             // create LockBytes using UCB
+            ::ucb::Content aContent( rFileName, Reference < XCommandEnvironment >() );
             xLockBytes = UcbLockBytes::CreateLockBytes( aContent.get(), eOpenMode, pHandler );
             if ( xLockBytes.Is() )
                 pStream = new SvStream( xLockBytes );
