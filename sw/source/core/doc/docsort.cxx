@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsort.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:43:29 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,9 +295,8 @@ double SwSortElement::GetValue( USHORT nKey ) const
  --------------------------------------------------------------------*/
 
 
-SwSortTxtElement::SwSortTxtElement( const SwNodeIndex& rPos )
-    : aPos( rPos ),
-    nOrg( rPos.GetIndex() )
+SwSortTxtElement::SwSortTxtElement(const SwNodeIndex& rPos)
+    : nOrg(rPos.GetIndex()), aPos(rPos)
 {
 }
 
@@ -512,7 +511,7 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     // Und jetzt der Akt: Verschieben von Nodes und immer schoen auf UNDO
     // achten
     //
-    ULONG nBeg = pStart->nNode.GetIndex(), nEnd = aStart.GetIndex();
+    ULONG nBeg = pStart->nNode.GetIndex();
     SwNodeRange aRg( aStart, aStart );
 
     if( bUndo && !pRedlUndo )
@@ -863,9 +862,9 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
 
 FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const _FndBox& rBox) :
     pDoc(pDocPtr),
-    pArr(0),
-    ppItemSets( 0 ),
     rBoxRef(rBox),
+    pArr(0),
+    ppItemSets(0),
     nRow(0),
     nCol(0)
 { // Ist das Array symmetrisch
@@ -902,8 +901,8 @@ FlatFndBox::~FlatFndBox()
 
 BOOL FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
 {
-    const _FndLines&    rLines = rBox.GetLines();
-    USHORT              nBoxes;
+    const _FndLines &rLines = rBox.GetLines();
+    USHORT nBoxes(0);
 
     // UeberLines iterieren
     for(USHORT i=0; i < rLines.Count(); ++i)
@@ -930,8 +929,8 @@ BOOL FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
 
 BOOL FlatFndBox::CheckBoxSymmetry(const _FndLine& rLn)
 {
-    const _FndBoxes&    rBoxes = rLn.GetBoxes();
-    USHORT              nLines;
+    const _FndBoxes &rBoxes = rLn.GetBoxes();
+    USHORT nLines(0);
 
     // Ueber Boxes iterieren
     for(USHORT i=0; i < rBoxes.Count(); ++i)
