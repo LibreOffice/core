@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-05 08:40:42 $
+ *  last change: $Author: tl $ $Date: 2002-07-10 11:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ class SwXFieldMaster : public cppu::WeakImplHelper4
     double                      fParam1;    // Value / -
     sal_Int8                    nParam1;    // ChapterNumberingLevel
     sal_Bool                    bParam1;    // IsExpression
-    sal_Int16                   nParam2;
+    sal_Int32                   nParam2;
 
 public:
 
