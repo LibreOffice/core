@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddelink.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-22 20:01:06 $
+ *  last change: $Author: er $ $Date: 2002-01-16 15:04:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,9 @@ void ScDdeLink::TryUpdate()
     {
         bIsInUpdate = TRUE;
         //Application::Reschedule();    //! OS/2-Simulation
+        pDoc->IncInDdeLinkUpdate();
         Update();
+        pDoc->DecInDdeLinkUpdate();
         bIsInUpdate = FALSE;
         bNeedUpdate = FALSE;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-20 19:49:59 $
+ *  last change: $Author: er $ $Date: 2002-01-16 15:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -988,8 +988,7 @@ void ScDocument::SetInLinkUpdate(BOOL bSet)
 
 BOOL ScDocument::IsInLinkUpdate() const
 {
-    //! set flag in document from dde link update
-    return bInLinkUpdate || ScDdeLink::IsInUpdate();
+    return bInLinkUpdate || IsInDdeLinkUpdate();
 }
 
 void ScDocument::UpdateDdeLinks()

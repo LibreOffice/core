@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-26 09:20:12 $
+ *  last change: $Author: er $ $Date: 2002-01-16 15:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,6 +475,8 @@ private:
 
     BOOL                bPastingDrawFromOtherDoc;
 
+    BYTE                nInDdeLinkUpdate;   // originating DDE links (stacked bool)
+
     inline BOOL         RowHidden( USHORT nRow, USHORT nTab );      // FillInfo
 
 public:
@@ -666,6 +668,11 @@ public:
     BOOL            HasAreaLinks() const;
     void            UpdateDdeLinks();
     void            UpdateAreaLinks();
+
+                    // originating DDE links
+    void            IncInDdeLinkUpdate() { if ( nInDdeLinkUpdate < 255 ) ++nInDdeLinkUpdate; }
+    void            DecInDdeLinkUpdate() { if ( nInDdeLinkUpdate ) --nInDdeLinkUpdate; }
+    BOOL            IsInDdeLinkUpdate() const   { return nInDdeLinkUpdate != 0; }
 
     void            CopyDdeLinks( ScDocument* pDestDoc ) const;
     void            DisconnectDdeLinks();

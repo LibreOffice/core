@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-12 21:03:04 $
+ *  last change: $Author: er $ $Date: 2002-01-16 15:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1230,7 +1230,7 @@ void ScFormulaCell::Interpret()
     //  Wenn der Aufruf aus einem Reschedule im DdeLink-Update kommt, dirty stehenlassen
     //  Besser: Dde-Link Update ohne Reschedule oder ganz asynchron !!!
 
-    if ( ScDdeLink::IsInUpdate() )
+    if ( pDocument->IsInDdeLinkUpdate() )
         return;
 
     if (bRunning)

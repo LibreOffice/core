@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-28 09:48:27 $
+ *  last change: $Author: er $ $Date: 2002-01-16 15:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,8 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         nAsianKerning(SC_ASIANKERNING_INVALID),
         pLoadedSymbolStringCellList( NULL ),
         bPastingDrawFromOtherDoc( FALSE ),
-        pCacheFieldEditEngine( NULL )
+        pCacheFieldEditEngine( NULL ),
+        nInDdeLinkUpdate( 0 )
 {
     eSrcSet = gsl_getSystemTextEncoding();
     nSrcVer = SC_CURRENT_VERSION;
