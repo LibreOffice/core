@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComponentDefinition.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:05:39 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ OComponentDefinition::OComponentDefinition(const Reference< XMultiServiceFactory
                                            ,const Reference< XInterface >&  _xParentContainer
                                            ,const TContentPtr& _pImpl
                                            ,sal_Bool _bTable)
-    :ODataSettings(m_aBHelper)
+    :ODataSettings(m_aBHelper,!_bTable)
     ,OContentHelper(_xORB,_xParentContainer,_pImpl)
     ,m_bTable(_bTable)
 {
@@ -299,6 +299,10 @@ void OComponentDefinition::columnCloned(const Reference< XPropertySet >& _xClone
     Reference<XPropertySet> xProp = new OTableColumnDescriptor();
     ::comphelper::copyProperties(_xClone,xProp);
     pItem->m_aColumns.push_back(pItem->m_aColumnNames.insert(OComponentDefinition_Impl::TColumns::value_type(sName,xProp)).first);
+
+    Reference<XChild> xChild(xProp,UNO_QUERY);
+    if ( xChild.is() )
+        xChild->setParent(static_cast<XChild*>(static_cast<TXChild*>((m_pColumns.get()))));
 
     // helptext etc. may be modified
     notifyDataSourceModified();
