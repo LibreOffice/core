@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xdictionary.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2002-12-06 18:50:38 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:05:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <tools/string.hxx>
 #include <xdictionary.hxx>
-#include <unicode.hxx>
+#include <i18nutil/unicode.hxx>
 #include <string.h>
 
 //////////////////////////////////////////////////////////////////////
