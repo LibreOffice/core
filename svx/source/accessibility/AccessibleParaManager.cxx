@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleParaManager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,12 @@
 #include <cppuhelper/weakref.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
 //------------------------------------------------------------------------
@@ -101,7 +101,7 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 
 
@@ -258,7 +258,7 @@ namespace accessibility
     {
         maEEOffset = rOffset;
 
-        MemFunAdapter< const Point& > aAdapter( &accessibility::AccessibleEditableTextPara::SetEEOffset, rOffset );
+        MemFunAdapter< const Point& > aAdapter( &::accessibility::AccessibleEditableTextPara::SetEEOffset, rOffset );
         ::std::for_each( begin(), end(), aAdapter );
     }
 
@@ -340,16 +340,16 @@ namespace accessibility
 
     void AccessibleParaManager::SetEditSource( SvxEditSourceAdapter* pEditSource )
     {
-        MemFunAdapter< SvxEditSourceAdapter* > aAdapter( &accessibility::AccessibleEditableTextPara::SetEditSource, pEditSource );
+        MemFunAdapter< SvxEditSourceAdapter* > aAdapter( &::accessibility::AccessibleEditableTextPara::SetEditSource, pEditSource );
         ::std::for_each( begin(), end(), aAdapter );
     }
 
     // not generic yet, no arguments...
-    class AccessibleParaManager_DisposeChildren : public ::std::unary_function< accessibility::AccessibleEditableTextPara&, void >
+    class AccessibleParaManager_DisposeChildren : public ::std::unary_function< ::accessibility::AccessibleEditableTextPara&, void >
     {
     public:
         AccessibleParaManager_DisposeChildren() {}
-        void operator()( accessibility::AccessibleEditableTextPara& rPara )
+        void operator()( ::accessibility::AccessibleEditableTextPara& rPara )
         {
             rPara.Dispose();
         }
@@ -364,7 +364,7 @@ namespace accessibility
     }
 
     // not generic yet, too many method arguments...
-    class StateChangeEvent : public ::std::unary_function< accessibility::AccessibleEditableTextPara&, void >
+    class StateChangeEvent : public ::std::unary_function< ::accessibility::AccessibleEditableTextPara&, void >
     {
     public:
         typedef void return_type;
@@ -374,7 +374,7 @@ namespace accessibility
             mnEventId( nEventId ),
             mrNewValue( rNewValue ),
             mrOldValue( rOldValue ) {}
-        void operator()( accessibility::AccessibleEditableTextPara& rPara )
+        void operator()( ::accessibility::AccessibleEditableTextPara& rPara )
         {
             rPara.FireEvent( mnEventId, mrNewValue, mrOldValue );
         }
