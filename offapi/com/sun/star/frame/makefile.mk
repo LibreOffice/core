@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-06 11:20:46 $
+#   last change: $Author: obo $ $Date: 2004-09-09 16:13:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,12 +105,13 @@ IDLFILES=\
     SessionManager.idl\
     Settings.idl\
     SynchronousFrameLoader.idl\
+    StatusbarController.idl\
     Task.idl\
     TemplateAccess.idl\
     TerminationVetoException.idl\
     ToolbarController.idl\
-   TransientDocumentsDocumentContentFactory.idl \
-   WindowArrange.idl\
+    TransientDocumentsDocumentContentFactory.idl \
+    WindowArrange.idl\
     XBrowseHistoryRegistry.idl\
     XComponentLoader.idl\
     XComponentRegistry.idl\
@@ -145,6 +146,7 @@ IDLFILES=\
     XSessionManagerClient.idl\
     XSessionManagerListener.idl\
     XStatusListener.idl\
+    XStatusbarController.idl\
     XStorable.idl\
     XSynchronousDispatch.idl\
     XSynchronousFrameLoader.idl\
@@ -152,7 +154,7 @@ IDLFILES=\
     XTasksSupplier.idl\
     XTerminateListener.idl\
     XToolbarController.idl\
-   XTransientDocumentsDocumentContentFactory.idl\
+    XTransientDocumentsDocumentContentFactory.idl\
     XUrlList.idl\
     XWindowArranger.idl
 
