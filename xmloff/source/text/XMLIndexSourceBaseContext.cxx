@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexSourceBaseContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:32 $
+ *  last change: $Author: dvo $ $Date: 2001-06-20 14:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,8 +132,6 @@ using ::com::sun::star::xml::sax::XAttributeList;
 
 const sal_Char sAPI_CreateFromChapter[] = "CreateFromChapter";
 const sal_Char sAPI_IsRelativeTabstops[] = "IsRelativeTabstops";
-const sal_Char sAPI_SortAlgorithm[] = "SortAlgorithm";
-const sal_Char sAPI_Locale[] = "Locale";
 
 static __FAR_DATA SvXMLTokenMapEntry aIndexSourceTokenMap[] =
 {
@@ -243,8 +241,6 @@ XMLIndexSourceBaseContext::XMLIndexSourceBaseContext(
         bChapterIndex(sal_False),
         bRelativeTabs(sal_True),
         bUseLevelFormats(bLevelFormats),
-        sSortAlgorithm(RTL_CONSTASCII_USTRINGPARAM(sAPI_SortAlgorithm)),
-        sLocale(RTL_CONSTASCII_USTRINGPARAM(sAPI_Locale)),
        sCreateFromChapter(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromChapter)),
       sIsRelativeTabstops(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsRelativeTabstops))
 {
@@ -297,15 +293,6 @@ void XMLIndexSourceBaseContext::ProcessAttribute(
             }
             break;
         }
-        case XML_TOK_INDEXSOURCE_SORT_ALGORITHM:
-            sAlgorithm = rValue;
-            break;
-        case XML_TOK_INDEXSOURCE_LANGUAGE:
-            aLocale.Language = rValue;
-            break;
-        case XML_TOK_INDEXSOURCE_COUNTRY:
-            aLocale.Country = rValue;
-            break;
 
         default:
             // unknown attribute -> ignore
@@ -322,19 +309,6 @@ void XMLIndexSourceBaseContext::EndElement()
 
     aAny.setValue(&bChapterIndex, ::getBooleanCppuType());
     rIndexPropertySet->setPropertyValue(sCreateFromChapter, aAny);
-
-    if (sAlgorithm.getLength() > 0)
-    {
-        aAny <<= sAlgorithm;
-        rIndexPropertySet->setPropertyValue(sSortAlgorithm, aAny);
-    }
-
-    if ( (aLocale.Language.getLength() > 0) &&
-         (aLocale.Country.getLength() > 0)      )
-    {
-        aAny <<= aLocale;
-        rIndexPropertySet->setPropertyValue(sLocale, aAny);
-    }
 }
 
 SvXMLImportContext* XMLIndexSourceBaseContext::CreateChildContext(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:08 $
+ *  last change: $Author: dvo $ $Date: 2001-06-20 14:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,6 +848,25 @@ void XMLSectionExport::ExportAlphabeticalIndexStart(
         ExportBoolean(rPropertySet, sIsCommaSeparated, sXML_comma_separated,
                       sal_False);
 
+        // sort algorithm
+        aAny = rPropertySet->getPropertyValue(sSortAlgorithm);
+        OUString sAlgorithm;
+        aAny >>= sAlgorithm;
+        if (sAlgorithm.getLength() > 0)
+        {
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_SORT_ALGORITHM,
+                                      sAlgorithm );
+        }
+
+        // locale
+        aAny = rPropertySet->getPropertyValue(sLocale);
+        Locale aLocale;
+        aAny >>= aLocale;
+        GetExport().AddAttribute(XML_NAMESPACE_FO, XML_LANGUAGE,
+                                 aLocale.Language);
+        GetExport().AddAttribute(XML_NAMESPACE_FO, XML_COUNTRY,
+                                 aLocale.Country);
+
         ExportBaseIndexSource(TEXT_SECTION_TYPE_ALPHABETICAL, rPropertySet);
     }
 
@@ -963,25 +982,6 @@ void XMLSectionExport::ExportBaseIndexSource(
                                           sXML_relative_tab_stop_position,
                                           sXML_false);
         }
-
-        // sort algorithm
-        aAny = rPropertySet->getPropertyValue(sSortAlgorithm);
-        OUString sAlgorithm;
-        aAny >>= sAlgorithm;
-        if (sAlgorithm.getLength() > 0)
-        {
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_SORT_ALGORITHM,
-                                      sAlgorithm );
-        }
-
-        // locale
-        aAny = rPropertySet->getPropertyValue(sLocale);
-        Locale aLocale;
-        aAny >>= aLocale;
-        GetExport().AddAttribute(XML_NAMESPACE_FO, XML_LANGUAGE,
-                                 aLocale.Language);
-        GetExport().AddAttribute(XML_NAMESPACE_FO, XML_COUNTRY,
-                                 aLocale.Country);
     }
 
     // the index source element (all indices)

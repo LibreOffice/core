@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexAlphabeticalSourceContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-20 19:56:50 $
+ *  last change: $Author: dvo $ $Date: 2001-06-20 14:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,8 @@ const sal_Char sAPI_UseKeyAsEntry[] = "UseKeyAsEntry";
 const sal_Char sAPI_UseUpperCase[] = "UseUpperCase";
 const sal_Char sAPI_UseDash[] = "UseDash";
 const sal_Char sAPI_UsePP[] = "UsePP";
+const sal_Char sAPI_SortAlgorithm[] = "SortAlgorithm";
+const sal_Char sAPI_Locale[] = "Locale";
 
 
 TYPEINIT1( XMLIndexAlphabeticalSourceContext, XMLIndexSourceBaseContext );
@@ -169,6 +171,8 @@ XMLIndexAlphabeticalSourceContext::XMLIndexAlphabeticalSourceContext(
         sUseUpperCase(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseUpperCase)),
         sUseDash(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseDash)),
         sUsePP(RTL_CONSTASCII_USTRINGPARAM(sAPI_UsePP)),
+        sSortAlgorithm(RTL_CONSTASCII_USTRINGPARAM(sAPI_SortAlgorithm)),
+        sLocale(RTL_CONSTASCII_USTRINGPARAM(sAPI_Locale)),
         sIsCommaSeparated(RTL_CONSTASCII_USTRINGPARAM("IsCommaSeparated"))
 {
 }
@@ -245,6 +249,16 @@ void XMLIndexAlphabeticalSourceContext::ProcessAttribute(
             }
             break;
 
+        case XML_TOK_INDEXSOURCE_SORT_ALGORITHM:
+            sAlgorithm = rValue;
+            break;
+        case XML_TOK_INDEXSOURCE_LANGUAGE:
+            aLocale.Language = rValue;
+            break;
+        case XML_TOK_INDEXSOURCE_COUNTRY:
+            aLocale.Country = rValue;
+            break;
+
         default:
             XMLIndexSourceBaseContext::ProcessAttribute(eParam, rValue);
             break;
@@ -285,6 +299,20 @@ void XMLIndexAlphabeticalSourceContext::EndElement()
 
     aAny.setValue(&bCommaSeparated, ::getBooleanCppuType());
     rIndexPropertySet->setPropertyValue(sIsCommaSeparated, aAny);
+
+
+    if (sAlgorithm.getLength() > 0)
+    {
+        aAny <<= sAlgorithm;
+        rIndexPropertySet->setPropertyValue(sSortAlgorithm, aAny);
+    }
+
+    if ( (aLocale.Language.getLength() > 0) &&
+         (aLocale.Country.getLength() > 0)      )
+    {
+        aAny <<= aLocale;
+        rIndexPropertySet->setPropertyValue(sLocale, aAny);
+    }
 
     XMLIndexSourceBaseContext::EndElement();
 }

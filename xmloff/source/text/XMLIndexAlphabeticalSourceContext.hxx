@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexAlphabeticalSourceContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-20 19:56:50 $
+ *  last change: $Author: dvo $ $Date: 2001-06-20 14:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include <com/sun/star/uno/Reference.h>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
@@ -92,6 +96,11 @@ class XMLIndexAlphabeticalSourceContext : public XMLIndexSourceBaseContext
     const ::rtl::OUString sUseDash;
     const ::rtl::OUString sUsePP;
     const ::rtl::OUString sIsCommaSeparated;
+    const ::rtl::OUString sSortAlgorithm;
+    const ::rtl::OUString sLocale;
+
+    ::com::sun::star::lang::Locale aLocale;
+    ::rtl::OUString sAlgorithm;
 
     ::rtl::OUString sMainEntryStyleName;
     sal_Bool bMainEntryStyleNameOK;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexSourceBaseContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-12 17:46:20 $
+ *  last change: $Author: dvo $ $Date: 2001-06-20 14:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,6 @@
 #include <rtl/ustring.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
-#endif
-
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
@@ -127,11 +123,6 @@ class XMLIndexSourceBaseContext : public SvXMLImportContext
 {
     const ::rtl::OUString sCreateFromChapter;
     const ::rtl::OUString sIsRelativeTabstops;
-    const ::rtl::OUString sSortAlgorithm;
-    const ::rtl::OUString sLocale;
-
-    ::com::sun::star::lang::Locale aLocale;
-    ::rtl::OUString sAlgorithm;
 
     sal_Bool bUseLevelFormats;
 
