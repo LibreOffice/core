@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:54:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:15:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,9 +265,9 @@ void ScXMLTableContext::EndElement()
                 }
             }
         }
-        else if (bAutomaticPrintRange) pDoc->SetPrintEntireSheet(GetScImport().GetTables().GetCurrentSheet());
+        else if (bAutomaticPrintRange) pDoc->SetPrintEntireSheet(static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()));
 
-        ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(GetScImport().GetTables().GetCurrentSheet(), sal_False);
+        ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()), sal_False);
         if (pOutlineTable)
         {
             ScOutlineArray* pColArray = pOutlineTable->GetColArray();
