@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-20 12:29:15 $
+ *  last change: $Author: ping.liao $ $Date: 2000-09-21 19:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,34 +291,74 @@ void SvtSaveOptions_Impl::Commit()
                 pValues[nProp] <<= nSaveGraphics;
                 break;
             case USEUSERDATA :
+#ifdef MACOSX
+                pValues[nProp] <<= (sal_uInt8)bUseUserData;
+#else
                 pValues[nProp] <<= bUseUserData;
+#endif
                 break;
             case CREATEBACKUP :
+#ifdef MACOSX
+                pValues[nProp] <<= (sal_uInt8)bUseUserData;
+#else
                 pValues[nProp] <<= bUseUserData;
+#endif
                 break;
             case AUTOSAVE :
+#ifdef MACOSX
+                pValues[nProp] <<= (sal_uInt8)bAutoSave;
+#else
                 pValues[nProp] <<= bAutoSave;
+#endif
                 break;
             case PROMPT :
+#ifdef MACOSX
+                pValues[nProp] <<= (sal_uInt8)bAutoSavePrompt;
+#else
                 pValues[nProp] <<= bAutoSavePrompt;
+#endif
                 break;
             case EDITPROPERTY :
+#ifdef MACOSX
+                pValues[nProp] <<= (sal_uInt8)bDocInfSave;
+#else
                 pValues[nProp] <<= bDocInfSave;
+#endif
                 break;
             case SAVEWORKINGSET :
+#ifdef MACOSX
+                pValues[nProp] <<= (sal_uInt8)bSaveWorkingSet;
+#else
                 pValues[nProp] <<= bSaveWorkingSet;
+#endif
                 break;
             case SAVEDOCWINS :
+#ifdef MACOSX
+                pValues[nProp] <<= (sal_uInt8)bSaveDocWins;
+#else
                 pValues[nProp] <<= bSaveDocWins;
+#endif
                 break;
             case SAVEDOCVIEW :
+#ifdef MACOSX
+                pValues[nProp] <<= (sal_uInt8)bSaveDocView;
+#else
                 pValues[nProp] <<= bSaveDocView;
+#endif
                 break;
             case FILESYSTEM :
+#ifdef MACOSX
+                pValues[nProp] <<= (sal_uInt8)bSaveRelFSys;
+#else
                 pValues[nProp] <<= bSaveRelFSys;
+#endif
                 break;
             case INTERNET :
+#ifdef MACOSX
+                pValues[nProp] <<= (sal_uInt8)bSaveRelINet;
+#else
                 pValues[nProp] <<= bSaveRelINet;
+#endif
                 break;
             default:
                 DBG_ERRORFILE( "invalid index to save a path" );
