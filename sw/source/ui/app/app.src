@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:56:55 $
+ *  last change: $Author: obo $ $Date: 2001-03-21 20:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1623,14 +1623,14 @@ String STR_WRITER_DOCUMENT_FULLTYPE_50
     Text [ french ] = "%PRODUCTNAME 5.0 Texte" ;
     Text [ dutch ] = "%PRODUCTNAME 5.0 Tekst" ;
     Text [ portuguese ] = "Texto (%PRODUCTNAME 5.0)" ;
-    Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 Œƒ±æ";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 Œƒ◊÷";
     Text[ russian ] = "“ÂÍÒÚ ‚ %PRODUCTNAME 5.0";
     Text[ polish ] = "%PRODUCTNAME 5.0 - Tekst";
-    Text[ japanese ] = "%PRODUCTNAME 5.0 √∑Ωƒ";
+    Text[ japanese ] = "%PRODUCTNAME 5.0 ï∂èë";
     Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 §Â¶r";
     Text[ arabic ] = "‰’ „‰ %PRODUCTNAME 5.0";
     Text[ dutch ] = "%PRODUCTNAME 5.0 Tekst";
-    Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 Œƒ±æ";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 Œƒ◊÷";
     Text[ greek ] = " ÂﬂÏÂÌÔ %PRODUCTNAME 5.0";
     Text[ korean ] = "≈ÿΩ∫∆Æ (%PRODUCTNAME 5.0)";
     Text[ turkish ] = "%PRODUCTNAME 5.0 metni";
@@ -1640,24 +1640,24 @@ String STR_WRITER_DOCUMENT_FULLTYPE
 {
     Text = "%PRODUCTNAME 6.0 Text" ;
     Text [ English ] = "StarOffice 6.0 Text" ;
-    Text[ english_us ] = "Text (%PRODUCTNAME 5.0)";
+    Text[ english_us ] = "Text (%PRODUCTNAME 6.0)";
     Text[ portuguese ] = "Texto (%PRODUCTNAME 5.0)";
-    Text[ russian ] = "“ÂÍÒÚ ‚ %PRODUCTNAME 5.0";
-    Text[ greek ] = " ÂﬂÏÂÌÔ (%PRODUCTNAME 5.0)";
+    Text[ russian ] = "“ÂÍÒÚ ‚ %PRODUCTNAME 6.0";
+    Text[ greek ] = " ÂﬂÏÂÌÔ %PRODUCTNAME 6.0";
     Text[ dutch ] = "%PRODUCTNAME 5.0 Tekst";
-    Text[ french ] = "%PRODUCTNAME 5.0 Texte";
-    Text[ spanish ] = "%PRODUCTNAME 5.0 Texto";
+    Text[ french ] = "%PRODUCTNAME 6.0 Texte";
+    Text[ spanish ] = "%PRODUCTNAME 6.0 Texto";
     Text[ italian ] = "Testo %PRODUCTNAME 5.0";
     Text[ danish ] = "%PRODUCTNAME 4.0 tekst";
-    Text[ swedish ] = "%PRODUCTNAME 5.0 text";
-    Text[ polish ] = "Tekst %PRODUCTNAME 5.0";
+    Text[ swedish ] = "%PRODUCTNAME 6.0 text";
+    Text[ polish ] = "Tekst %PRODUCTNAME 6.0";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Text";
-    Text[ japanese ] = "%PRODUCTNAME 5.0 √∑Ωƒ";
+    Text[ japanese ] = "%PRODUCTNAME 6.0 ï∂èë";
     Text[ korean ] = "%PRODUCTNAME 5.0°°Text ";
-    Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 Œƒ±æ";
-    Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 §Â¶r§Â•Û";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Œƒ◊÷";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 §Â¶r";
     Text[ turkish ] = "%PRODUCTNAME 5.0 metni";
-    Text[ arabic ] = "‰’ „‰ %PRODUCTNAME 5.0";
+    Text[ arabic ] = "‰’ „‰ %PRODUCTNAME 6.0";
 };
 
 
@@ -2202,7 +2202,7 @@ String STR_STATSTR_AUTOFORMAT
     TEXT[ chinese_simplified ] = "Œƒµµ◊‘∂Ø∏Ò ΩªØ...";
     TEXT[ language_user1 ] = " ";
     TEXT[ russian ] = "¿‚ÚÓÙÓÏ‡ÚËÓ‚‡ÌËÂ ‰ÓÍÛÏÂÌÚ‡...";
-    TEXT[ polish ] = "Autoformatowanie dokumentu";
+    TEXT[ polish ] = "Automatycze formatowanie dokumentu...";
     TEXT[ japanese ] = "ƒﬁ∑≠“›ƒÇÃµ∞ƒÃ´∞œØƒ...";
     TEXT[ chinese_traditional ] = "™´•Û¶€∞ ÆÊ¶°§∆...";
     TEXT[ arabic ] = " ‰”Ìﬁ  ·ﬁ«∆Ì ··„” ‰œ...";
@@ -2694,7 +2694,7 @@ String STR_FRAME_DEFNAME
     Text[ chinese_simplified ] = "øÚ";
     Text[ russian ] = "–‡ÏÍ‡";
     Text[ polish ] = "Ramka";
-    Text[ japanese ] = "√∑ΩƒŒﬁØ∏Ω";
+    Text[ japanese ] = "òg";
     Text[ chinese_traditional ] = "§Â¶r§Ë∂Ù";
     Text[ arabic ] = "ﬂ«œ—";
     Text[ dutch ] = "Kader";
