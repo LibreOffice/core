@@ -62,7 +62,7 @@ UDK_2_0_0 {
         osl_getExecutableFile;
         osl_getFamilyOfSocketAddr;
         osl_getFileStatus;
-        osl_getFileURLFromNormalizedPath;
+        osl_getFileURLFromSystemPath;
         osl_getGlobalMutex;
         osl_getHomeDir;
         osl_getHostnameOfHostAddr;
@@ -74,7 +74,6 @@ UDK_2_0_0 {
         osl_getLocalAddrOfSocket;
         osl_getLocalHostname;
         osl_getNextDirectoryItem;
-        osl_getNormalizedPathFromFileURL;
         osl_getPeerAddrOfSocket;
         osl_getProcess;
         osl_getProcessInfo;
@@ -86,7 +85,7 @@ UDK_2_0_0 {
         osl_getSocketOption;
         osl_getSocketType;
         osl_getSymbol;
-        osl_getSystemPathFromNormalizedPath;
+        osl_getSystemPathFromFileURL;
         osl_getSystemTime;
         osl_getThreadIdentifier;
         osl_getThreadKeyData;
@@ -111,7 +110,6 @@ UDK_2_0_0 {
         osl_loadModule;
         osl_loginUser;
         osl_loginUserOnFileServer;
-        osl_normalizePath;
         osl_openDirectory;
         osl_openProfile;
         osl_raiseSignal;
@@ -136,7 +134,7 @@ UDK_2_0_0 {
         osl_resolveHostname;
         osl_resumeThread;
         osl_scheduleThread;
-        osl_searchNormalizedPath;
+        osl_searchFileURL;
         osl_sendPipe;
         osl_sendSocket;
         osl_sendToSocket;
@@ -456,7 +454,7 @@ UDK_2_0_0 {
         osl_getTimeValueFromDateTime;
         osl_getLocalTimeFromSystemTime;
         osl_getSystemTimeFromLocalTime;
-        osl_getAbsolutePath;
+        osl_getAbsoluteFileURL;
 
         osl_unmountVolumeDevice;
         osl_automountVolumeDevice;
