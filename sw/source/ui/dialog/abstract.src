@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abstract.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:51:18 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,8 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ hebrew ] = "â€®×××¤×™× ×™×â€¬";
         Text[ hindi ] = "à¤µà¤¿à¤¶à¥‡à¤·à¤¤à¤¾à¤¯à¥‡à¤‚";
         Text[ slovak ] = "Vlastnosti";
+        Text[ hungarian ] = "TulajdonsÃ¡gok";
+        Text[ slovenian ] = "Lastnosti";
     };
     FixedText FT_LEVEL
     {
@@ -142,6 +144,8 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ hebrew ] = "Einbezogene Kapitelebenen";
         Text[ hindi ] = "à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤¸à¥à¤¤à¤°à¥‹à¤‚ à¤•à¥‹ à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤•à¤¿à¤¯à¤¾";
         Text[ slovak ] = "Ãšrovne ponorenia kapitol";
+        Text[ hungarian ] = "Alkalmazott vÃ¡zlatszintek";
+        Text[ slovenian ] = "VkljuÄene ravni orisa";
     };
     NumericField NF_LEVEL
     {
@@ -192,6 +196,8 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ hebrew ] = "AbsÃ¤tze je Kapitel";
         Text[ hindi ] = "à¤à¤• à¤¸à¥à¤¤à¤° à¤®à¥‡à¤‚ à¤…à¤§à¥€à¤¨à¤µà¤¿à¤·à¤¯à¥‡à¤‚";
         Text[ slovak ] = "Podbody v jednotlivÃ½ch Ãºrovniach";
+        Text[ hungarian ] = "SzintenkÃ©nti alpontok";
+        Text[ slovenian ] = "PodtoÄk na raven";
     };
     NumericField NF_PARA
     {
@@ -219,7 +225,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text [ english_us ] = "The abstract contains the selected number of paragraphs from the included outline levels." ;
         Text [ portuguese_brazilian ] = "O resumo contém o número de parágrafos selecionados a partir dos níveis da estrutura de tópicos incluídos" ;
         Text [ swedish ] = "Utdraget innehåller det utvalda antalet stycken från de inkluderade kapitelnivåerna." ;
-        Text [ danish ] = "Abstractet indeholder det valgte antal afsnit fra de inkluderede kapitelniveauer." ;
+        Text [ danish ] = "Resumeet indeholder det valgte antal afsnit fra de inkluderede kapitelniveauer." ;
         Text [ italian ] = "Il sunto contiene il numero di paragrafi scelto dai livelli di capitolo inclusi." ;
         Text [ spanish ] = "En el resumen aparece el número de los párrafos seleccionados de los niveles de los capítulos incluidos." ;
         Text [ french ] = "La synthèse reprendra, pour chaque niveau de plan inclus, le nombre de paragraphes indiqué." ;
@@ -233,7 +239,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ arabic ] = "Óæİ íÙåÑ İí ÇáÊáÎíÕ ÚÏÏ ÇáİŞÑÇÊ ÇáÊí Êã ÊÍÏíÏåÇ ãä Èíä ãÓÊæíÇÊ ÇáİÕæá ÇáãÖãäÉ.";
         Text[ dutch ] = "In het overzicht verschijnt het geselecteerde aantal alinea's van de erbij betrokken overzichtsniveaus.";
         Text[ chinese_simplified ] = "ä»åŒ…æ‹¬çš„ç« èŠ‚çº§ä¸­é€‰å‡ºçš„ä¸€å®šæ•°ç›®çš„æ®µè½æ˜¾ç¤ºåœ¨æ‘˜è¦ä¸­ã€‚";
-        Text[ greek ] = "Óôï Abstract åìöáíßæåôáé ôï åğéëåãìİíï ğëŞèïò ğáñáãñÜöùí áğü ôá óõìğåñéëáìâáíüìåíá åğßğåäá êåöáëáßùí.";
+        Text[ greek ] = "Óôçí ğåñßëçøç åìöáíßæåôáé ôï åğéëåãìİíï ğëŞèïò ğáñáãñÜöùí áğü ôá óõìğåñéëáìâáíüìåíá åğßğåäá êåöáëáßùí.";
         Text[ korean ] = "ìš”ì•½ì—ì„œëŠ” í¬í•¨ëœ ê°œìš” ìˆ˜ì¤€ìœ¼ë¡œë¶€í„° ì„ íƒí•œ ë‹¨ë½ì˜ ìˆ˜ê°€ ë‚˜íƒ€ë‚©ë‹ˆë‹¤.";
         Text[ turkish ] = "Özet içinde, dahil edilen bölüm düzeylerinden seçilen paragraflar bulunuyor.";
         Text[ catalan ] = "En l'estracte apareix la quantitat desitjada de paràgrafs dels nivells dels capítols inclosos.";
@@ -243,6 +249,8 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ hebrew ] = "Im Abstrakt erscheint die ausgewÃ¤hlte Anzahl von AbsÃ¤tzen aus den einbezogenen Kapitelebenen.";
         Text[ hindi ] = "à¤¸à¤¾à¤°à¤¾à¤‚à¤¶ à¤®à¥‡à¤‚ à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤¸à¥à¤¤à¤° à¤¸à¥‡ à¤šà¥à¤¨à¥‡ à¤¹à¥à¤ à¤ªà¤°à¤¿à¤šà¥à¤›à¥‡à¤¦ à¤¹à¥ˆ à¥¤";
         Text[ slovak ] = "Abstrakt obsahuje zvolenÃ½ poÄet odstavcov z vybranÃ½ch ÃºrovnÃ­ kapitol.";
+        Text[ hungarian ] = "Az Ã¶sszefoglalÃ³ a beszÃ¡mÃ­tott vÃ¡zlatszintekbÅ‘l a kivÃ¡lasztott szÃ¡mÃº bekezdÃ©snyit tartalmaz.";
+        Text[ slovenian ] = "Povzetek vsebuje izbrano Å¡tevilo odstavkov iz vkljuÄenih ravni orisa.";
     };
     OKButton PB_OK
     {
@@ -266,7 +274,7 @@ ModalDialog DLG_INSERT_ABSTRACT
     Text [ english_us ] = "Create AutoAbstract" ;
     Text [ portuguese_brazilian ] = "Criar AutoResumo" ;
     Text [ swedish ] = "Skapa AutoUtdrag" ;
-    Text [ danish ] = "Opret AutoAbstract" ;
+    Text [ danish ] = "Opret AutoResumé" ;
     Text [ italian ] = "Crea un sommario automatico" ;
     Text [ spanish ] = "Crear Resumen automático" ;
     Text [ french ] = "Création d'une AutoSynthèse" ;
@@ -280,7 +288,7 @@ ModalDialog DLG_INSERT_ABSTRACT
     Text[ arabic ] = "ÅäÔÇÁ ÊáÎíÕ ÊáŞÇÆí";
     Text[ dutch ] = "AutoExtract maken";
     Text[ chinese_simplified ] = "ç”Ÿæˆè‡ªåŠ¨æ‘˜è¦";
-    Text[ greek ] = "Äçìéïõñãßá AutoAbstract";
+    Text[ greek ] = "Äçìéïõñãßá Áõôüìáôçò Ğåñßëçøçò";
     Text[ korean ] = "ìë™ ìš”ì•½ ë§Œë“¤ê¸°";
     Text[ turkish ] = "Otomatik özet oluştur";
     Text[ catalan ] = "Crea AutoAbstracte";
@@ -290,7 +298,10 @@ ModalDialog DLG_INSERT_ABSTRACT
     Text[ hebrew ] = "AutoAbstract erzeugen";
     Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤¢à¤‚à¤— à¤¸à¥‡ à¤¸à¤¾à¤°à¤¾à¤‚à¤¶ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¥‹";
     Text[ slovak ] = "VytvoriÅ¥ automatickÃ½ konspekt";
+    Text[ hungarian ] = "Automatikus Ã¶sszefoglalÃ³ lÃ©trehozÃ¡sa";
+    Text[ slovenian ] = "Ustvari samopovzetek";
 };
+
 
 
 
