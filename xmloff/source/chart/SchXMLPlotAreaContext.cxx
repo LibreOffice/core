@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:03:32 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
         mrChartAddress( rChartAddress ),
         mrTableNumberList( rTableNumberList ),
         mnDomainOffset( 0 ),
+        mnNumOfLines( 0 ),
         mnSeries( 0 ),
         mnMaxSeriesLength( 0 ),
         maSceneImportHelper( rImport )
@@ -260,7 +261,7 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
                 pContext = new SchXMLSeriesContext( mrImportHelper, GetImport(), rLocalName,
                                                     mxDiagram, maAxes, mrSeriesAddresses[ mnSeries ],
                                                     maSeriesStyleList,
-                                                    mnSeries, mnMaxSeriesLength, mnDomainOffset );
+                                                    mnSeries, mnMaxSeriesLength, mnDomainOffset, mnNumOfLines );
                 mnSeries++;
             }
             break;
@@ -431,6 +432,24 @@ void SchXMLPlotAreaContext::EndElement()
         {
             // set scene attributes at diagram
             maSceneImportHelper.setSceneAttributes( xProp );
+        }
+
+        // #i32368# number of lines is determined by class-attribute of series
+        if( mnNumOfLines > 0 &&
+            0 == mxDiagram->getDiagramType().reverseCompareToAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.BarDiagram" )))
+        {
+            try
+            {
+                xProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NumberOfLines" )),
+                                         uno::makeAny( mnNumOfLines ));
+            }
+            catch( uno::Exception & aEx )
+            {
+                String aStr( aEx.Message );
+                ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
+                DBG_ERROR1( "Exception caught for property NumberOfLines: %s", aBStr.GetBuffer());
+            }
         }
     }
 
@@ -1078,7 +1097,8 @@ SchXMLSeriesContext::SchXMLSeriesContext(
     ::std::list< ::chartxml::DataRowPointStyle >& rStyleList,
     sal_Int32 nSeriesIndex,
     sal_Int32& rMaxSeriesLength,
-    sal_Int32& rDomainOffset ) :
+    sal_Int32& rDomainOffset,
+    sal_Int32& rNumOfLines ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mxDiagram( xDiagram ),
         mrAxes( rAxes ),
@@ -1088,6 +1108,7 @@ SchXMLSeriesContext::SchXMLSeriesContext(
         mnSeriesIndex( nSeriesIndex ),
         mnDataPointIndex( 0 ),
         mrDomainOffset( rDomainOffset ),
+        mrNumOfLines( rNumOfLines ),
         mrMaxSeriesLength( rMaxSeriesLength ),
         mpAttachedAxis( NULL )
 {
@@ -1137,7 +1158,18 @@ void SchXMLSeriesContext::StartElement( const uno::Reference< xml::sax::XAttribu
                 msAutoStyleName = aValue;
                 break;
             case XML_TOK_SERIES_CHART_CLASS:
-                // not supported yet
+                {
+                    rtl::OUString sClassName;
+                    sal_uInt16 nClassPrefix =
+                        GetImport().GetNamespaceMap().GetKeyByAttrName(
+                            aValue, &sClassName );
+                    if( XML_NAMESPACE_CHART == nClassPrefix )
+                    {
+                        // used for bar-line combi chart
+                        if( IsXMLToken( sClassName, XML_LINE ))
+                            ++mrNumOfLines;
+                    }
+                }
                 break;
         }
     }
