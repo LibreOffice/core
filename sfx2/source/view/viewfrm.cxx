@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2001-04-27 10:43:34 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 10:10:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1213,6 +1213,7 @@ void SfxViewFrame::SetObjectShell_Impl
 
     // was so in Activate passiert w"are
     SfxObjectShell *pDocSh = GetObjectShell();
+/*
     if ( SfxViewFrame::Current() == this )
     {
         // ggf. Config-Manager aktivieren
@@ -1220,7 +1221,7 @@ void SfxViewFrame::SetObjectShell_Impl
         if ( pCfgMgr )
             pCfgMgr->Activate( SFX_CFGMANAGER() );
     }
-
+*/
     if ( !rObjSh.IsLoading() )
         rObjSh.PostActivateEvent_Impl();
 
@@ -3208,7 +3209,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_TOGGLESTATUSBAR:
         {
-            SfxToolBoxConfig *pTbxCfg = SfxToolBoxConfig::GetOrCreate();
+            SfxToolBoxConfig* pTbxCfg = GetObjectShell()->GetToolBoxConfig_Impl();
 
             // Parameter auswerten
             SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, rReq.GetSlot(), FALSE);
@@ -3264,7 +3265,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
             {
                 case SID_TOGGLESTATUSBAR:
                 {
-                    rSet.Put( SfxBoolItem( nWhich, SfxToolBoxConfig::GetOrCreate()->IsStatusBarVisible() ) );
+                    rSet.Put( SfxBoolItem( nWhich, GetObjectShell()->GetToolBoxConfig_Impl()->IsStatusBarVisible() ) );
                     break;
                 }
 
@@ -3400,7 +3401,7 @@ void SfxViewFrame::ToolboxExec_Impl( SfxRequest &rReq )
     }
 
     // Parameter auswerten
-    SfxToolBoxConfig *pTbxConfig = SfxToolBoxConfig::GetOrCreate();
+    SfxToolBoxConfig *pTbxConfig = GetObjectShell()->GetToolBoxConfig_Impl();
     SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSID, sal_False);
     sal_Bool bShow = pShowItem ? pShowItem->GetValue() : !pTbxConfig->IsToolBoxPositionVisible(nTbxID);
 
@@ -3431,7 +3432,7 @@ void SfxViewFrame::ToolboxState_Impl( SfxItemSet &rSet )
     SfxWhichIter aIter(rSet);
     for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
     {
-        SfxToolBoxConfig *pTbxConfig = SfxToolBoxConfig::GetOrCreate();
+        SfxToolBoxConfig *pTbxConfig = GetObjectShell()->GetToolBoxConfig_Impl();
         switch ( nSID )
         {
             case SID_TOGGLEFUNCTIONBAR:
@@ -3544,3 +3545,7 @@ SfxChildWindow* SfxViewFrame::GetChildWindow(USHORT nId)
     return pWork ? pWork->GetChildWindow_Impl(nId) : NULL;
 }
 
+SfxImageManager* SfxViewFrame::GetImageManager()
+{
+    return GetObjectShell()->GetImageManager_Impl();
+}
