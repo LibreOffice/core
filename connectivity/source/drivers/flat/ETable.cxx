@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:16:38 $
+ *  last change: $Author: oj $ $Date: 2000-11-07 13:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,7 +488,11 @@ OFlatTable::OFlatTable(OFlatConnection* _pConnection,
 {
 
     Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
+#if SUPD > 612
+    LanguageType eLanguage = ConvertIsoStringToLanguage(comphelper::getString(aValue),'-');
+#else
     LanguageType eLanguage = ConvertIsoStringToLanguage(comphelper::getString(aValue),'_');
+#endif
     String sLanguage, sCountry;
     ConvertLanguageToIsoNames(eLanguage, sLanguage, sCountry);
     ::com::sun::star::lang::Locale aAppLocale(sLanguage,sCountry,rtl::OUString());
