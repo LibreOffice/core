@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-18 13:46:50 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 15:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,7 +990,7 @@ void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
     GetTextImport()->SetAutoStyles( pAutoStyles );
     GetShapeImport()->SetAutoStylesContext( pAutoStyles );
     GetChartImport()->SetAutoStylesContext( pAutoStyles );
-//  GetFormImport()->setAutoStyleContext( pAutoStyles );
+    GetFormImport()->setAutoStyleContext( pAutoStyles );
 }
 
 void SvXMLImport::SetMasterStyles( SvXMLStylesContext *pMasterStyles )
