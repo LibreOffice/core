@@ -2,9 +2,9 @@
 #
 #   $RCSfile: fullcpp.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-18 13:48:51 $
+#   last change: $Author: vg $ $Date: 2003-04-15 16:00:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ CFLAGS+= -GR
 
 # Precompiled Headers
 PCH_NAME=  cosv
-.IF "$(DEBUG)"==""
+.IF "$(DBG_LEVEL)"<"2"
 CFLAGS+= -YX"precomp.h" /Fp$(PRJ)$/$(INPATH)$/misc$/$(PCH_NAME).pch
 .ELSE
 CFLAGS+= -YX"precomp.h" /Fp$(PRJ)$/$(INPATH)$/misc$/$(PCH_NAME).pcd -DNP_LOCALBUILD
