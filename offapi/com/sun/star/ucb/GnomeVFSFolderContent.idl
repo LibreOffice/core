@@ -1,0 +1,109 @@
+#ifndef __com_sun_star_ucb_GnomeVFSFolderContent_idl__
+#define __com_sun_star_ucb_GnomeVFSFolderContent_idl__
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_ucb_XContent_idl__
+#include <com/sun/star/ucb/XContent.idl>
+#endif
+
+#ifndef __com_sun_star_ucb_XCommandProcessor_idl__
+#include <com/sun/star/ucb/XCommandProcessor.idl>
+#endif
+
+#ifndef __com_sun_star_ucb_XCommandProcessor2_idl__
+#include <com/sun/star/ucb/XCommandProcessor2.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertiesChangeNotifier_idl__
+#include <com/sun/star/beans/XPropertiesChangeNotifier.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertyContainer_idl__
+#include <com/sun/star/beans/XPropertyContainer.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySetInfoChangeNotifier_idl__
+#include <com/sun/star/beans/XPropertySetInfoChangeNotifier.idl>
+#endif
+
+#ifndef __com_sun_star_ucb_XCommandInfoChangeNotifier_idl__
+#include <com/sun/star/ucb/XCommandInfoChangeNotifier.idl>
+#endif
+
+#ifndef __com_sun_star_container_XChild_idl__
+#include <com/sun/star/container/XChild.idl>
+#endif
+
+#ifndef __com_sun_star_ucb_XContentCreator_idl__
+#include <com/sun/star/ucb/XContentCreator.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** A DCP Folder is a container for other DCP Folders or Documents.
+
+    @see com::sun::star::ucb::GnomeVFSContentProvider
+    @see com::sun::star::ucb::GnomeVFSDocumentContent
+*/
+service GnomeVFSFolderContent
+{
+    //-------------------------------------------------------------------------
+    /** This interface is implemented according to the specification of
+        service <type>Content</type>.
+     */
+    interface com::sun::star::lang::XComponent;
+
+    //-------------------------------------------------------------------------
+    /** This interface is implemented according to the specification of
+        service <type>Content</type>.
+     */
+    interface com::sun::star::ucb::XContent;
+
+    interface com::sun::star::ucb::XCommandProcessor;
+
+    [optional] interface com::sun::star::ucb::XCommandProcessor2;
+
+    //-------------------------------------------------------------------------
+    /** This interface is implemented according to the specification of
+        service <type>Content</type>.
+     */
+    interface com::sun::star::beans::XPropertiesChangeNotifier;
+
+    //-------------------------------------------------------------------------
+    /** This interface is implemented according to the specification of
+        service <type>Content</type>.
+     */
+    interface com::sun::star::beans::XPropertyContainer;
+
+    //-------------------------------------------------------------------------
+    /** This interface is implemented according to the specification of
+        service <type>Content</type>.
+     */
+    interface com::sun::star::beans::XPropertySetInfoChangeNotifier;
+
+    //-------------------------------------------------------------------------
+    /** This interface is implemented according to the specification of
+        service <type>Content</type>.
+     */
+    interface com::sun::star::ucb::XCommandInfoChangeNotifier;
+
+    //-------------------------------------------------------------------------
+    /** This interface is implemented according to the specification of
+        service <type>Content</type>.
+     */
+    interface com::sun::star::container::XChild;
+
+    interface com::sun::star::ucb::XContentCreator;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
