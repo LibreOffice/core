@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-07-10 12:09:10 $
+ *  last change: $Author: er $ $Date: 2001-07-10 17:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,21 +188,26 @@ void TransliterationWrapper::loadModuleIfNeeded( sal_uInt16 nLang )
             bLoad = needLanguageForTheMode();
     }
     if( bLoad )
+        loadModuleImpl();
+}
+
+
+void TransliterationWrapper::loadModuleImpl() const
+{
+    try
     {
-        try
-        {
-            if ( xTrans.is() )
-                xTrans->loadModule( (TransliterationModules)nType, aLocale );
-        }
-        catch ( Exception& e )
-        {
-#ifndef PRODUCT
-            ByteString aMsg( "loadModuleIfNeeded: Exception caught\n" );
-            aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-            DBG_ERRORFILE( aMsg.GetBuffer() );
-#endif
-        }
+        if ( xTrans.is() )
+            xTrans->loadModule( (TransliterationModules)nType, aLocale );
     }
+    catch ( Exception& e )
+    {
+#ifndef PRODUCT
+        ByteString aMsg( "loadModuleImpl: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+    }
+    bFirstCall = sal_False;
 }
 
 
@@ -212,6 +217,8 @@ sal_Bool TransliterationWrapper::equals(
 {
     try
     {
+        if( bFirstCall )
+            loadModuleImpl();
         if ( xTrans.is() )
             return xTrans->equals( rStr1, nPos1, nCount1, nMatch1, rStr2, nPos2, nCount2, nMatch2 );
     }
@@ -233,6 +240,8 @@ sal_Int32 TransliterationWrapper::compareSubstring(
 {
     try
     {
+        if( bFirstCall )
+            loadModuleImpl();
         if ( xTrans.is() )
             return xTrans->compareSubstring( rStr1, nOff1, nLen1, rStr2, nOff2, nLen2 );
     }
@@ -252,6 +261,8 @@ sal_Int32 TransliterationWrapper::compareString( const String& rStr1, const Stri
 {
     try
     {
+        if( bFirstCall )
+            loadModuleImpl();
         if ( xTrans.is() )
             return xTrans->compareString( rStr1, rStr2 );
     }
