@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptURI.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: npower $ $Date: 2003-03-05 18:24:11 $
+ *  last change: $Author: npower $ $Date: 2003-10-15 08:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,16 @@ void ScriptURI::set_values( scripting_impl::Uri values )
     m_valid = values.valid;
     m_location = values.location;
     m_language = values.language;
-    m_functionName = values.functionName;
+// format is script:://[function_name]?language=[languge]&location=[location]
+// LogicalName is now not used anymore, further more the ScriptURI class
+// will be retired also and a new UNO service will be used. Additionally the
+// parcel-description will also need to be modified to remove logical name
+// In order to temporarly support the existing code functionname is
+// set to the logica name parsed by this class. So getLogicalName() and
+// getFunctionName() return identical string.
+//
+
+    m_functionName = values.logicalName;
     m_logicalName = values.logicalName;
 
 }
