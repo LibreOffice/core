@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 16:23:49 $
+ *  last change: $Author: hr $ $Date: 2002-11-14 12:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2505,6 +2505,13 @@ String RID_SVXSTR_SECURITY_ADDPATH
     Text[ arabic ] = "Add this directory  to the list of secure paths: ";
     Text[ catalan ] = "Add this directory  to the list of secure paths: ";
     Text[ thai ] = "Add this directory  to the list of secure paths: ";
+};
+
+String STR_LABEL_FILEFORMAT
+{
+    Text = "Dateiformat:" ;
+    Text[ english ] = "File format:" ;
+    Text[ english_us ] = "File format:" ;
 };
 
 // ******************************************************************* EOF
