@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofmasterpagedescriptor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:30:42 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,15 @@
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
+class SfxItemSet;
+
+namespace sdr
+{
+    namespace contact
+    {
+        class OwnMasterPagePainter;
+    } // end of namespace contact
+} // end of namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -90,24 +99,18 @@ namespace sdr
             // to be changed in any way.
             sdr::MasterPageDescriptor&                      mrMasterPageDescriptor;
 
-            // internal access to SdrObject
-            sdr::MasterPageDescriptor& GetMasterPageDescriptor() const
-            {
-                return mrMasterPageDescriptor;
-            }
+            // the painter for the MasterPage content
+            ::sdr::contact::OwnMasterPagePainter*           mpMasterPagePainter;
 
-            // internal access to SdrObject
-            SdrPage& GetSdrPage() const
-            {
-                return GetMasterPageDescriptor().GetUsedPage();
-            }
+            // Get the correct BackgroundObject
+            SdrObject* GetBackgroundObject() const;
 
-            // method to create a AnimationInfo. Needs to give a result if
-            // SupportsAnimation() is overloaded and returns sal_True.
-            virtual sdr::animation::AnimationInfo* CreateAnimationInfo();
+            // Get the LayerId of the BackgroundObject
+            sal_uInt8 GetBackgroundObjectLayerId() const;
 
             // Create a Object-Specific ViewObjectContact, set ViewContact and
-            // ObjectContact. Always needs to return something.
+            // ObjectContact. Always needs to return something. Default is to create
+            // a standard ViewObjectContact containing the given ObjectContact and *this
             virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
 
             // method to recalculate the PaintRectangle if the validity flag shows that
@@ -122,6 +125,12 @@ namespace sdr
             // The destructor.
             virtual ~ViewContactOfMasterPageDescriptor();
 
+            // access to MasterPageDescriptor
+            sdr::MasterPageDescriptor& GetMasterPageDescriptor() const
+            {
+                return mrMasterPageDescriptor;
+            }
+
             // When ShouldPaintObject() returns sal_True, the object itself is painted and
             // PaintObject() is called.
             virtual sal_Bool ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
@@ -129,20 +138,7 @@ namespace sdr
             // #115593# Paint this object. This is before evtl. SubObjects get painted. It needs to return
             // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
             virtual sal_Bool PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC);
-
-            // Access to possible sub-hierarchy
-            virtual sal_uInt32 GetObjectCount() const;
-            virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const;
-
-            // Since MasterPages are part of the hierarchy of a DrawPage, the
-            // link to ParentContacts may be 1:n
-            virtual sal_Bool GetParentContacts(ViewContactVector& rVContacts) const;
-
-            // Does this ViewContact support animation?
-            virtual sal_Bool SupportsAnimation() const;
-
-            // overload for acessing the SdrPage
-            virtual SdrPage* TryToGetSdrPage() const;
+            virtual ViewContact* GetParentContact() const;
         };
     } // end of namespace contact
 } // end of namespace sdr
