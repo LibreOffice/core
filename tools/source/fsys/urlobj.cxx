@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-05 12:24:40 $
+ *  last change: $Author: sb $ $Date: 2000-12-07 09:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ namespace unnamed_tools_urlobj {} using namespace unnamed_tools_urlobj;
 
 
    ; private
-   vnd-sun-star-help-url = "VND.SUN.STAR.HELP://" name ["/" *DIGIT] ["?" *uric]
+   vnd-sun-star-help-url = "VND.SUN.STAR.HELP://" name ["/" *(ALPHA / DIGIT)] ["?" *uric]
    name = *(escaped / ALPHA / DIGIT / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / ":" / ";" / "=" / "@" / "_" / "~")
 
 
@@ -2336,7 +2336,7 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
                 }
                 while (pPos < pEnd && *pPos != nQueryDelimiter
                        && *pPos != nFragmentDelimiter)
-                    if (!INetMIME::isDigit(*pPos++))
+                    if (!INetMIME::isAlphanumeric(*pPos++))
                     {
                         setInvalid();
                         return false;
