@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:33:08 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,7 @@ namespace dbaui
             SetText(::rtl::OUString::createFromAscii(""));
             m_aDatasourceTypeLabel.Enable(bValid && m_aRB_GetExistingDatabase.IsChecked());
             m_aDatasourceType.Enable(bValid && m_aRB_GetExistingDatabase.IsChecked());
+            m_aFTDataSourceAppendix.Enable(bValid && m_aRB_GetExistingDatabase.IsChecked());
             m_bEntryCreationMode = IsDatabaseToBeCreated();
         }
         else
@@ -435,7 +436,7 @@ namespace dbaui
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aDatasourceTypeLabel));
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aTypePostLabel));
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aSpecialMessage));
-
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDataSourceAppendix));
     }
     // -----------------------------------------------------------------------
     void OGeneralPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
