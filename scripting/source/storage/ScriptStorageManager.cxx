@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.21 $
+*  $Revision: 1.22 $
 *
-*  last change: $Author: npower $ $Date: 2003-02-13 13:52:06 $
+*  last change: $Author: dfoster $ $Date: 2003-02-28 13:43:04 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -253,20 +253,27 @@ throw ( RuntimeException )
 //*************************************************************************
 sal_Int32 SAL_CALL
 ScriptStorageManager::createScriptStorageWithURI(
-    const Reference< ucb::XSimpleFileAccess >& xSFA, const OUString & stringURI )
+    const Reference< ucb::XSimpleFileAccess >& xSFA, const OUString & cStringURI )
 throw ( RuntimeException )
 {
     OSL_TRACE( "** ==> ScriptStorageManager in createScriptingStorageWithURI\n" );
     validateXRef( xSFA, "ScriptStorageManager::createScriptStorage: XSimpleFileAccess is not valid" );
-   sal_Int32 returnedID = getScriptStorageID(stringURI);
 
-   if (returnedID != -1)
-   {
-       OSL_TRACE("Using existing storage for %s",
-           ::rtl::OUStringToOString( stringURI,
-               RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-       return returnedID;
-   }
+    // related to issue 11866
+    // warning dialog gets launched when adding binding to script in doc
+    // workaround issue: no functionProvider created on doc open
+    // if NODIALOG tag, strip from stringURI, set boolean=true
+    bool displayDialog = true;
+    ::rtl::OUString dialogTag = ::rtl::OUString::createFromAscii( "NoDialog::" );
+    ::rtl::OUString stringURI = cStringURI;
+    if( stringURI.indexOf( dialogTag ) == 0 )
+    {
+        OSL_TRACE( "ScriptStorageManager::createScriptStorage: will not display security dialogs" );
+        stringURI = stringURI.copy( dialogTag.getLength() );
+        displayDialog = false;
+    }
+    sal_Int32 returnedID = getScriptStorageID(stringURI);
+
 
     // convert file:///... url to vnd... syntax
     ::rtl::OUString canonicalURI(
@@ -275,8 +282,24 @@ throw ( RuntimeException )
                                         rtl_UriCharClassUricNoSlash, rtl_UriEncodeCheckEscapes,
                                         RTL_TEXTENCODING_ASCII_US ) );
 
-    returnedID = setupAnyStorage( xSFA, canonicalURI, stringURI );
-    m_securityMgr.addScriptStorage( stringURI, returnedID );
+    if (returnedID == -1)
+    {
+        OSL_TRACE("Creating new storage for %s",
+            ::rtl::OUStringToOString( stringURI,
+                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        returnedID = setupAnyStorage( xSFA, canonicalURI, stringURI );
+    }
+    else
+    {
+       OSL_TRACE("Using existing storage for %s",
+           ::rtl::OUStringToOString( stringURI,
+               RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+    }
+
+    if( displayDialog )
+    {
+        m_securityMgr.addScriptStorage( stringURI, returnedID );
+    }
     return returnedID;
 }
 
@@ -480,6 +503,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
 
     // erase the entry from the hash
     m_ScriptStorageMap.erase( scriptStorageID );
+    m_securityMgr.removePermissionSettings ( docURI );
 
     removeScriptDocURIHashEntry( docURI );
 }

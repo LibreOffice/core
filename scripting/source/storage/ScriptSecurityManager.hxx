@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptSecurityManager.hxx,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-02-13 17:29:39 $
+*  last change: $Author: dfoster $ $Date: 2003-02-28 13:43:04 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -63,7 +63,7 @@
 #ifndef _FRAMEWORK_SCRIPT_SCRIPTSECURITYMANAGER_HXX_
 #define _FRAMEWORK_SCRIPT_SCRIPTSECURITYMANAGER_HXX_
 
-#include <vector>
+#include <hash_map>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -76,11 +76,13 @@ namespace scripting_securitymgr
 #define dcsssf ::drafts::com::sun::star::script::framework
 
 struct StoragePerm {
-    rtl::OUString url;
+    rtl::OUString scriptStorageURL;
     sal_Int32 storageID;
     sal_Bool execPermission;
 };
 
+typedef ::std::hash_map< ::rtl::OUString, StoragePerm, ::rtl::OUStringHash,
+    ::std::equal_to< ::rtl::OUString > > Permission_Hash;
 /**
  * Class responsible for managing the ScriptSecurity.
  */
@@ -91,7 +93,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > & xContext )
         throw ( css::uno::RuntimeException );
     ~ScriptSecurityManager();
-    void addScriptStorage( rtl::OUString url, sal_Int32 storageID);
+    void addScriptStorage( rtl::OUString scriptStorageURL, sal_Int32 storageID);
 /**
  * checks to see if the requested permission can be granted
  * checks to see whether the requested ScriptPeremission is allowed.
@@ -102,6 +104,7 @@ public:
     sal_Bool checkPermission( const rtl::OUString & scriptStorageURL,
         const rtl::OUString & permissionRequest )
         throw (css::uno::RuntimeException);
+    void removePermissionSettings ( ::rtl::OUString & scriptStorageURL );
 private:
     void readConfiguration() throw (css::uno::RuntimeException);
     short executeDialog ( const rtl::OUString & path );
@@ -111,7 +114,7 @@ private:
     sal_Bool m_warning;
     sal_Int32 m_officeBasic;
     css::uno::Sequence< rtl::OUString > m_secureURL;
-    ::std::vector< StoragePerm > m_permissionSettings;
+    Permission_Hash m_permissionSettings;
 
 };
 } // scripting_securitymgr

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptSecurityManager.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-02-25 16:08:37 $
+ *  last change: $Author: dfoster $ $Date: 2003-02-28 13:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,12 +113,20 @@ ScriptSecurityManager::ScriptSecurityManager(
     readConfiguration();
 }
 
-void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
+void ScriptSecurityManager::addScriptStorage( rtl::OUString scriptStorageURL,
     sal_Int32 storageID)
 {
+    Permission_Hash::const_iterator ph_it = m_permissionSettings.find( scriptStorageURL );
+    if ( ph_it != m_permissionSettings.end() )
+    {
+        OSL_TRACE( "ScriptSecurityManager::addScriptStorage: already called for %s",
+            ::rtl::OUStringToOString( scriptStorageURL,
+                RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+        return;
+    }
     readConfiguration();
     StoragePerm newPerm;
-    newPerm.url=url;
+    newPerm.scriptStorageURL=scriptStorageURL;
     newPerm.storageID=storageID;
 
     // we err on the side of caution!!
@@ -163,7 +171,7 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
                 {
                     OSL_TRACE("according to path");
                     // check path
-                    rtl::OUString path = url.copy( 0, url.lastIndexOf( '/' ) );
+                    rtl::OUString path = scriptStorageURL.copy( 0, scriptStorageURL.lastIndexOf( '/' ) );
                     OSL_TRACE( "no of elts in path list = %d",
                         (int)m_secureURL.getLength() );
                     bool match = false;
@@ -251,28 +259,17 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
     if ( newPerm.execPermission == sal_True )
     {
         OSL_TRACE("setting exec permission to true for %s",
-            ::rtl::OUStringToOString( url,
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+            ::rtl::OUStringToOString( scriptStorageURL,
+                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     }
     else
     {
         OSL_TRACE("setting exec permission to false for %s",
-            ::rtl::OUStringToOString( url,
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+            ::rtl::OUStringToOString( scriptStorageURL,
+                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     }
 
-    /* need to clear out vector in case we've seen this doc before */
-    ::std::vector< StoragePerm >::iterator iter;
-    ::std::vector< StoragePerm >::iterator iterEnd =
-        m_permissionSettings.end();
-    for ( iter = m_permissionSettings.begin() ; iter != iterEnd; ++iter )
-    {
-        if ( iter->url.equals( url ) )
-        {
-            m_permissionSettings.erase(iter);
-        }
-    }
-    m_permissionSettings.push_back(newPerm);
+    m_permissionSettings[ scriptStorageURL ] = newPerm;
 }
 
 short ScriptSecurityManager::executeDialog( const OUString & path )
@@ -296,7 +293,7 @@ short ScriptSecurityManager::executeDialog( const OUString & path )
 }
 
 /**
- * checks to see whether the requested ScriptPeremission is allowed.
+ * checks to see whether the requested ScriptPermission is allowed.
  * This was modelled after the Java AccessController, but at this time
  * we can't see a good reason not to return a bool, rather than throw
  * an exception if the request is not granted (as is the case in Java).
@@ -311,22 +308,35 @@ sal_Bool ScriptSecurityManager::checkPermission( const OUString & scriptStorageU
             "ScriptSecurityManager::checkPermission: execute permission request for %s",
             ::rtl::OUStringToOString( scriptStorageURL,
                 RTL_TEXTENCODING_ASCII_US ).pData->buffer);
-        ::std::vector< StoragePerm >::const_iterator iter;
-        ::std::vector< StoragePerm >::const_iterator iterEnd =
+        Permission_Hash::const_iterator ph_it = m_permissionSettings.find( scriptStorageURL );
+        Permission_Hash::const_iterator ph_itend =
             m_permissionSettings.end();
-        for ( iter = m_permissionSettings.begin() ; iter != iterEnd; ++iter )
+        if ( ph_it != ph_itend )
         {
-            if ( iter->url.equals( scriptStorageURL ) )
-            {
-                // warning dialog if necessary
-                return iter->execPermission;
-            }
+            return ph_it->second.execPermission;
         }
         // we should never get here!!
         throw RuntimeException( OUString::createFromAscii( "ScriptSecurityManager::checkPermission: storageURL not found" ), Reference< XInterface > () );
     }
-    else
-        return sal_True;
+    return sal_True;
+}
+
+void ScriptSecurityManager::removePermissionSettings ( ::rtl::OUString & scriptStorageURL )
+{
+    Permission_Hash::const_iterator ph_it =
+        m_permissionSettings.find( scriptStorageURL );
+
+    if ( ph_it == m_permissionSettings.end() )
+    {
+        OSL_TRACE( "Entry for storage url %s doesn't exist in map",
+            ::rtl::OUStringToOString( scriptStorageURL,
+                RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+        return;
+    }
+
+    // erase the entry from the hash
+    m_permissionSettings.erase( scriptStorageURL );
+
 }
 
 void ScriptSecurityManager::readConfiguration()
