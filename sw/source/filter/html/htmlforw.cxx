@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlforw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
+ *  last change: $Author: mib $ $Date: 2001-07-03 09:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1276,9 +1276,9 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
                 ((OUString*)aTmp.getValue())->getLength() )
             {
-                Font aFixedFont; /*( OutputDevice::GetDefaultFont(
+                Font aFixedFont( OutputDevice::GetDefaultFont(
                                     DEFAULTFONT_FIXED, LANGUAGE_ENGLISH_US,
-                                    DEFAULTFONT_FLAGS_ONLYONE ) );*/
+                                    DEFAULTFONT_FLAGS_ONLYONE ) );
                 String aFName( *(OUString*)aTmp.getValue() );
                 if( !bEdit || aFName != aFixedFont.GetName() )
                 {
@@ -1586,11 +1586,14 @@ HTMLControl::~HTMLControl()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlforw.cxx,v 1.6 2001-07-03 07:49:47 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlforw.cxx,v 1.7 2001-07-03 09:42:50 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/07/03 07:49:47  mib
+      #88156#: warning for unconvertable chars
+
       Revision 1.5  2001/06/28 13:26:36  jp
       Bug #81329#: use OutputDevice::GetDefaultFont
 
