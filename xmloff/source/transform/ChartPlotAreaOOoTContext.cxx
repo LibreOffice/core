@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartPlotAreaOOoTContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 18:29:55 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 12:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,11 +78,109 @@
 #ifndef _XMLOFF_ACTIONMAPTYPESOOO_HXX
 #include "ActionMapTypesOOo.hxx"
 #endif
+#ifndef _XMLOFF_MUTABLEATTRLIST_HXX
+#include "MutableAttrList.hxx"
+#endif
 
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 
 using ::com::sun::star::uno::Reference;
 using ::rtl::OUString;
+
+class XMLAxisOOoContext : public XMLPersElemContentTContext
+{
+public:
+    TYPEINFO();
+
+    XMLAxisOOoContext( XMLTransformerBase& rTransformer,
+                       const ::rtl::OUString& rQName );
+    ~XMLAxisOOoContext();
+
+    virtual void StartElement( const Reference< xml::sax::XAttributeList >& rAttrList );
+
+    bool IsCategoryAxis() const;
+
+private:
+    bool m_bIsCategoryAxis;
+};
+
+TYPEINIT1( XMLAxisOOoContext, XMLPersElemContentTContext );
+
+XMLAxisOOoContext::XMLAxisOOoContext(
+    XMLTransformerBase& rTransformer,
+    const ::rtl::OUString& rQName ) :
+        XMLPersElemContentTContext( rTransformer, rQName ),
+        m_bIsCategoryAxis( false )
+{}
+
+XMLAxisOOoContext::~XMLAxisOOoContext()
+{}
+
+void XMLAxisOOoContext::StartElement(
+    const Reference< xml::sax::XAttributeList >& rAttrList )
+{
+    OUString aLocation, aMacroName;
+    Reference< xml::sax::XAttributeList > xAttrList( rAttrList );
+    XMLMutableAttributeList *pMutableAttrList = 0;
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        sal_uInt16 nPrefix =
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
+
+        if( nPrefix == XML_NAMESPACE_CHART &&
+            IsXMLToken( aLocalName, XML_CLASS ) )
+        {
+            if( !pMutableAttrList )
+            {
+                pMutableAttrList = new XMLMutableAttributeList( xAttrList );
+                xAttrList = pMutableAttrList;
+            }
+
+            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            XMLTokenEnum eToken = XML_TOKEN_INVALID;
+            if( IsXMLToken( rAttrValue, XML_DOMAIN ) ||
+                IsXMLToken( rAttrValue, XML_CATEGORY ))
+            {
+                eToken = XML_X;
+                if( IsXMLToken( rAttrValue, XML_CATEGORY ) )
+                    m_bIsCategoryAxis = true;
+            }
+            else if( IsXMLToken( rAttrValue, XML_VALUE ))
+            {
+                eToken = XML_Y;
+            }
+            else if( IsXMLToken( rAttrValue, XML_SERIES ))
+            {
+                eToken = XML_Z;
+            }
+            else
+            {
+                OSL_ENSURE( false, "ChartAxis: Invalid attribute value" );
+            }
+
+            if( eToken != XML_TOKEN_INVALID )
+            {
+                OUString aNewAttrQName(
+                    GetTransformer().GetNamespaceMap().GetQNameByKey(
+                        XML_NAMESPACE_CHART, GetXMLToken( XML_DIMENSION )));
+                pMutableAttrList->RenameAttributeByIndex( i, aNewAttrQName );
+                pMutableAttrList->SetValueByIndex( i, GetXMLToken( eToken ));
+            }
+        }
+    }
+
+    XMLPersElemContentTContext::StartElement( xAttrList );
+}
+
+bool XMLAxisOOoContext::IsCategoryAxis() const
+{
+    return m_bIsCategoryAxis;
+}
+
 
 TYPEINIT1( XMLChartPlotAreaOOoTContext, XMLProcAttrTransformerContext )
 
@@ -104,31 +202,31 @@ XMLTransformerContext * XMLChartPlotAreaOOoTContext::CreateChildContext(
     XMLTransformerContext *pContext = 0;
 
     if( XML_NAMESPACE_CHART == nPrefix &&
-        ::xmloff::token::IsXMLToken( rLocalName, ::xmloff::token::XML_AXIS ) )
+        IsXMLToken( rLocalName, XML_AXIS ) )
     {
-        pContext = new XMLPersElemContentTContext(
-            GetTransformer(), rQName );
-        AddContent( pContext );
+        XMLAxisOOoContext * pAxisContext( new XMLAxisOOoContext( GetTransformer(), rQName ));
+        AddContent( pAxisContext );
+        pContext = pAxisContext;
     }
     else if( XML_NAMESPACE_CHART == nPrefix &&
-             ::xmloff::token::IsXMLToken( rLocalName, ::xmloff::token::XML_CATEGORIES ) )
+             IsXMLToken( rLocalName, XML_CATEGORIES ) )
     {
         pContext = new XMLPersAttrListTContext( GetTransformer(), rQName );
 
         // put categories at correct axis
-        XMLTransformerContextVector::iterator aIter = m_aChildContexts.begin();
+        XMLAxisContextVector::iterator aIter = m_aChildContexts.begin();
         bool bFound =false;
 
         // iterate over axis elements
         for( ; ! bFound && aIter != m_aChildContexts.end(); ++aIter )
         {
-            XMLPersElemContentTContext* pPersContext =
-                PTR_CAST( XMLPersElemContentTContext, (*aIter).get() );
-            if( pPersContext != 0 )
+            XMLAxisOOoContext * pAxisContext = (*aIter).get();
+            if( pAxisContext != 0 )
             {
                 // iterate over attributes to find category axis
-                Reference< xml::sax::XAttributeList > xNewAttrList( pPersContext->GetAttrList());
+                Reference< xml::sax::XAttributeList > xNewAttrList( pAxisContext->GetAttrList());
                 sal_Int16 nAttrCount = xNewAttrList.is() ? xNewAttrList->getLength() : 0;
+
                 for( sal_Int16 i=0; i < nAttrCount; i++ )
                 {
                     const OUString & rAttrName = xNewAttrList->getNameByIndex( i );
@@ -137,11 +235,11 @@ XMLTransformerContext * XMLChartPlotAreaOOoTContext::CreateChildContext(
                         GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                                              &aLocalName );
                     if( nNewPrefix == XML_NAMESPACE_CHART &&
-                        ::xmloff::token::IsXMLToken( aLocalName, ::xmloff::token::XML_CLASS ) &&
-                        ::xmloff::token::IsXMLToken( xNewAttrList->getValueByIndex( i ), ::xmloff::token::XML_CATEGORY ))
+                        pAxisContext->IsCategoryAxis() &&
+                        IsXMLToken( aLocalName, XML_DIMENSION ) )
                     {
                         // category axis found
-                        pPersContext->AddContent( pContext );
+                        pAxisContext->AddContent( pContext );
                         bFound = true;
                         break;
                     }
@@ -166,18 +264,18 @@ void XMLChartPlotAreaOOoTContext::EndElement()
     XMLProcAttrTransformerContext::EndElement();
 }
 
-void XMLChartPlotAreaOOoTContext::AddContent( XMLTransformerContext *pContext )
+void XMLChartPlotAreaOOoTContext::AddContent( XMLAxisOOoContext *pContext )
 {
     OSL_ENSURE( pContext && pContext->IsPersistent(),
                 "non-persistent context" );
-    XMLTransformerContextVector::value_type aVal( pContext );
+    XMLAxisContextVector::value_type aVal( pContext );
     m_aChildContexts.push_back( aVal );
 }
 
 
 void XMLChartPlotAreaOOoTContext::ExportContent()
 {
-    XMLTransformerContextVector::iterator aIter = m_aChildContexts.begin();
+    XMLAxisContextVector::iterator aIter = m_aChildContexts.begin();
 
     for( ; aIter != m_aChildContexts.end(); ++aIter )
     {
