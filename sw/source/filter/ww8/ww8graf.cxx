@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:17:33 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1218,7 +1218,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                                 GrafikCtor();
 
                                 pNew->SetModel( pDrawModel );
-                                pNew->SetLogicRect( pTextObj->GetBoundRect() );
+                                pNew->SetLogicRect( pTextObj->GetCurrentBoundRect() );
                                 pNew->SetLayer( pTextObj->GetLayer() );
 
                                 pTextObj->GetUpGroup()->GetSubList()->
@@ -1439,7 +1439,7 @@ SdrObject *SwWW8ImplReader::ReadGroup( WW8_DPHEAD* pHd, const WW8_DO* pDo,
         SfxAllItemSet aSet(pDrawModel->GetItemPool());
         if (SdrObject *pObject = ReadGrafPrimitive( nLeft, pDo, aSet ))
         {
-            pObject->SetItemSetAndBroadcast(aSet);
+            pObject->SetMergedItemSetAndBroadcast(aSet);
             pObj->GetSubList()->InsertObject(pObject, 0);
         }
     }
@@ -1529,7 +1529,7 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
         {
             pWWZOrder->InsertDrawingObject(pObject, SVBT16ToShort(aDo.dhgt));
             SwFrmFmt *pFrm = rDoc.Insert( *pPaM, *pObject, &aSet );
-            pObject->SetItemSet(aSet);
+            pObject->SetMergedItemSet(aSet);
             pAnchorStck->AddAnchor(*pPaM->GetPoint(), pFrm);
         }
     }
@@ -1815,7 +1815,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     // 1. GrafikObjekt des Docs?
     GrafikCtor();
 
-    const SfxItemSet& rOldSet = pSdrObj->GetItemSet();
+    const SfxItemSet& rOldSet = pSdrObj->GetMergedItemSet();
 
     // einige Items koennen direkt so uebernommen werden
     const USHORT nDirectMatch = 2;
@@ -2270,7 +2270,7 @@ void SwWW8ImplReader::SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord,
 
         if (pRecord && pRecord->pObj)
         {
-            const SfxItemSet& rOldSet = pRecord->pObj->GetItemSet();
+            const SfxItemSet& rOldSet = pRecord->pObj->GetMergedItemSet();
             //contrast
             if (WW8ITEMVALUE(rOldSet, SDRATTR_GRAFCONTRAST,
                 SdrGrafContrastItem))
@@ -2900,7 +2900,7 @@ SwFrmFmt* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
     {
         // Gruppenobjekte haben keinen Text. Fuege ein Textobjekt in die
         // Gruppe ein, um den Text zu halten.
-        pSdrTextObj = new SdrRectObj( OBJ_TEXT, pThisGroup->GetBoundRect());
+        pSdrTextObj = new SdrRectObj( OBJ_TEXT, pThisGroup->GetCurrentBoundRect());
 
         SfxItemSet aSet(pDrawModel->GetItemPool());
         aSet.Put(XFillStyleItem(XFILL_NONE));
@@ -2908,13 +2908,13 @@ SwFrmFmt* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
         aSet.Put(SdrTextFitToSizeTypeItem( SDRTEXTFIT_NONE ));
         aSet.Put(SdrTextAutoGrowHeightItem(false));
         aSet.Put(SdrTextAutoGrowWidthItem(false));
-        pSdrTextObj->SetItemSet(aSet);
+        pSdrTextObj->SetMergedItemSet(aSet);
 
         long nAngle = pRecord->nTextRotationAngle;
         if ( nAngle )
         {
             double a = nAngle*nPi180;
-            pSdrTextObj->NbcRotate(pSdrTextObj->GetBoundRect().Center(), nAngle,
+            pSdrTextObj->NbcRotate(pSdrTextObj->GetCurrentBoundRect().Center(), nAngle,
                 sin(a), cos(a) );
         }
 
@@ -2983,7 +2983,7 @@ SwFrmFmt* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
             aItemSet.Put( SdrTextRightDistItem( pRecord->nDxTextRight  ) );
             aItemSet.Put( SdrTextUpperDistItem( pRecord->nDyTextTop    ) );
             aItemSet.Put( SdrTextLowerDistItem( pRecord->nDyTextBottom ) );
-            pSdrTextObj->SetItemSetAndBroadcast(aItemSet);
+            pSdrTextObj->SetMergedItemSetAndBroadcast(aItemSet);
         }
     }
     return pRetFrmFmt;
