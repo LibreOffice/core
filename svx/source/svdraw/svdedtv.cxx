@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-15 16:11:33 $
+ *  last change: $Author: sj $ $Date: 2001-05-22 10:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,7 +772,7 @@ void SdrEditView::CopyMarkedObj()
         else
         {
             aStr += "von ";
-            aStr += nCloneErrCnt;
+            aStr += ByteString::CreateFromInt32( nCloneErrCnt );
             aStr += " Zeichenobjekten.";
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-30 10:12:44 $
+ *  last change: $Author: sj $ $Date: 2001-05-22 10:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2366,7 +2366,7 @@ XubString SdrPageView::GetActualPathName(sal_Unicode cSep) const
     {
         aStr = String();
         aStr += sal_Unicode('(');
-        aStr += GetEnteredLevel();
+        aStr += String::CreateFromInt32( GetEnteredLevel() );
         aStr += sal_Unicode(')');
     }
 
