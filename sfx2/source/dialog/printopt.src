@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:55:52 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Redukovat data k tisku";
         Text[ hebrew ] = "‮צימצום נתוני הדפסה‬";
         Text[ hindi ] = "छपाई ड़ॉटा को घटाओ";
+        Text[ slovak ] = "Redukovať dáta k tlači";
     };
     FixedText FT_OUTPUTTYPE
     {
@@ -141,6 +142,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Nastavení pro";
         Text[ hebrew ] = "‮קביעות עבור‬";
         Text[ hindi ] = "केलिए निर्धारण";
+        Text[ slovak ] = "Nastavenie pre";
     };
     RadioButton RB_PRINTEROUTPUT
     {
@@ -173,6 +175,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Tiskárna";
         Text[ hebrew ] = "‮מדפסת‬";
         Text[ hindi ] = "~मुद्रक";
+        Text[ slovak ] = "~Tlačiareň";
     };
     RadioButton RB_PRINTFILEOUTPUT
     {
@@ -205,6 +208,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Tisk do souboru";
         Text[ hebrew ] = "‮הדפסה לקובץ‬";
         Text[ hindi ] = "~फाइल में छपाई";
+        Text[ slovak ] = "Tlač do sú~boru";
     };
 
     // -----------
@@ -246,6 +250,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Redukovat průhlednost";
         Text[ hebrew ] = "‮צמצום שקיפות‬";
         Text[ hindi ] = "पारदर्शकता ~घटाओ";
+        Text[ slovak ] = "~Redukovať priehľadnosť";
     };
     RadioButton RB_REDUCETRANSPARENCY_AUTO
     {
@@ -278,6 +283,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Automaticky";
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "स्व~चालित प्रकार से";
+        Text[ slovak ] = "Auto~maticky";
     };
     RadioButton RB_REDUCETRANSPARENCY_NONE
     {
@@ -310,6 +316,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Žádná průhlednost";
         Text[ hebrew ] = "‮ללא שקיפות‬";
         Text[ hindi ] = "~कोई पारदर्शकता नहीं";
+        Text[ slovak ] = "Žiad~na priehľadnosť";
     };
 
     // -----------
@@ -345,6 +352,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Redukovat přechody";
         Text[ hebrew ] = "‮צמצום שיפוע צבע‬";
         Text[ hindi ] = "~ग्रेडिऐन्ट्स घटाओ";
+        Text[ slovak ] = "Redukovať pr~echody";
     };
     RadioButton RB_REDUCEGRADIENTS_STRIPES
     {
@@ -377,6 +385,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Pruhy přechodů";
         Text[ hebrew ] = "‮פסי שופוע צבע‬";
         Text[ hindi ] = "ग्रेडिऐन्ट्स ~स्ट्रइप्स";
+        Text[ slovak ] = "P~ruhy prechodov";
     };
     NumericField NF_REDUCEGRADIENTS_STEPCOUNT
     {
@@ -420,6 +429,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Přechodná barva";
         Text[ hebrew ] = "‮צבע ביניים‬";
         Text[ hindi ] = "बीच का ~रंग";
+        Text[ slovak ] = "Pre~chodná farba";
     };
 
     // -----------
@@ -437,7 +447,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ greek ] = "Reduce ~bitmaps";
         Text[ dutch ] = "Bitmaps redu~ceren";
         Text[ french ] = "R�duire les ~bitmaps";
-        Text[ spanish ] = "Reducir ~bitmaps";
+        Text[ spanish ] = "Reducir los ~mapas de bits";
         Text[ italian ] = "Riduci bitmap";
         Text[ danish ] = "Reducer ~bitmaps";
         Text[ swedish ] = "Reducera ~bitmaps";
@@ -455,6 +465,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Redukovat bitové mapy";
         Text[ hebrew ] = "‮צמצום מפות סיביות‬";
         Text[ hindi ] = "~बिटमॉप्स घटाओ";
+        Text[ slovak ] = "Redukovať ~bitové mapy";
     };
     RadioButton RB_REDUCEBITMAPS_OPTIMAL
     {
@@ -487,6 +498,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Vysoká kvalita tisku";
         Text[ hebrew ] = "‮איכות הדפסה גבוהה‬";
         Text[ hindi ] = "~उच्च छपाई गुण";
+        Text[ slovak ] = "Vysoká ~kvalita tlače";
     };
     RadioButton RB_REDUCEBITMAPS_NORMAL
     {
@@ -519,6 +531,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Normální kvalita tisku";
         Text[ hebrew ] = "‮איכות הדפסה רגילה‬";
         Text[ hindi ] = "सा~मान्य छपाई गुण";
+        Text[ slovak ] = "N~ormálna kvalita tlače";
     };
     RadioButton RB_REDUCEBITMAPS_RESOLUTION
     {
@@ -551,6 +564,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Rozlišení";
         Text[ hebrew ] = "‮רזולוציה‬";
         Text[ hindi ] = "विश्ले~षण";
+        Text[ slovak ] = "Roz~líšenie";
     };
     ListBox LB_REDUCEBITMAPS_RESOLUTION
     {
@@ -803,6 +817,15 @@ TabPage TP_COMMONPRINTOPTIONS
         < "300 DPI"; 0; > ;
         < "600 DPI"; 0; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "72 DPI"; 0; > ;
+        < "96 DPI"; 0;  > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (východzie)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
     };
     CheckBox CB_REDUCEBITMAPS_TRANSPARENCY
     {
@@ -835,6 +858,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Zahrnout průhledné objekty";
         Text[ hebrew ] = "‮הכללת עצמים שקופים‬";
         Text[ hindi ] = "पारदर्शक वस्तु~ओं को सम्मिलित करो";
+        Text[ slovak ] = "Zahrnúť priehľadné ob~jekty";
     };
 
     // -----------
@@ -870,6 +894,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Převést barvy na odstíny šedi";
         Text[ hebrew ] = "‮המרת צבעים לסולם האפור‬";
         Text[ hindi ] = "रंगों को ग्रेस्केल में बद~लो";
+        Text[ slovak ] = "Pre~viesť farby na odtiene šedi";
     };
 
     // -----------
@@ -905,6 +930,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Upozornění tiskárny";
         Text[ hebrew ] = "‮אזהרות מדפסת‬";
         Text[ hindi ] = "मुद्रक चेतावनी";
+        Text[ slovak ] = "Hlásenia tlačiarne";
     };
     CheckBox CB_PAPERSIZE
     {
@@ -937,6 +963,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Velikost papíru";
         Text[ hebrew ] = "‮גודל דף‬";
         Text[ hindi ] = "का~गज परिमाण";
+        Text[ slovak ] = "Veľkosť p~apiera";
     };
     CheckBox CB_PAPERORIENTATION
     {
@@ -969,6 +996,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Orientace papíru";
         Text[ hebrew ] = "‮כיוונון נייר‬";
         Text[ hindi ] = "काग~ज अनुस्थापन";
+        Text[ slovak ] = "Orientácia papi~era";
     };
     CheckBox CB_TRANSPARENCY
     {
@@ -1001,6 +1029,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ czech ] = "Průhlednost";
         Text[ hebrew ] = "‮שקף‬";
         Text[ hindi ] = "~पारदर्शकता";
+        Text[ slovak ] = "Priehľadno~sť";
     };
 };
 
@@ -1070,6 +1099,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ czech ] = "Váš dokument obsahuje průsvitné objekty.\nTo může na určitých tiskárnách způsobit prodloužení doby tisku.\nMá být omezeno použití průhlednosti?";
         Text[ hebrew ] = "‮המסמך מכיל עצמים שקופים.\nעובדה זו יכולה להאט את ההדפסה במדפסות מסוימות.\nהאם לצמצם את מידת השקיפות כדי לזרז את ההדפסה?‬";
         Text[ hindi ] = "आपका लेखपत्र में पारदर्शक वस्तुओं सम्मिलित है ।\nइसके कारण कुछ मुद्रकें में छपाई करने केलिए अधिक समय ले सकता है ।\nपारदर्शकता अवस्था को घटाना चाहते है ?";
+        Text[ slovak ] = "Váš dokument obsahuje priesvitné objekty.\nTo môže na určitých tlačiarňach spôsobiť predĺženie doby tlače.\nMá byť obmedzené použitie priehľadnosti?";
     };
     OKButton BTN_PRINTTRANS_YES
     {
@@ -1103,6 +1133,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ czech ] = "Ano";
         Text[ hebrew ] = "‮כן‬";
         Text[ hindi ] = "~हाँ";
+        Text[ slovak ] = "Án~o";
     };
     PushButton BTN_PRINTTRANS_NO
     {
@@ -1135,6 +1166,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ czech ] = "Ne";
         Text[ hebrew ] = "‮לא‬";
         Text[ hindi ] = "~नहीं";
+        Text[ slovak ] = "~Nie";
     };
     CancelButton BTN_PRINTTRANS_CANCEL
     {
@@ -1166,6 +1198,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ czech ] = "Zrušit";
         Text[ hebrew ] = "‮ביטול‬";
         Text[ hindi ] = "~रद्द करो";
+        Text[ slovak ] = "~Zrušiť";
     };
     CheckBox CBX_NOPRINTTRANSWARN
     {
@@ -1198,6 +1231,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ czech ] = "Upozornění znovu nezobrazovat";
         Text[ hebrew ] = "‮לא להציג אזהרה זו שנית‬";
         Text[ hindi ] = "चेतावनी को फ़िर से ~मत दिखाओ";
+        Text[ slovak ] = "Upozornenie znovu nezo~brazovať";
     };
     Text[ catalan ] = "Av�s";
     Text[ finnish ] = "Varoitus";
@@ -1205,7 +1239,10 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
     Text[ czech ] = "Upozornění";
     Text[ hebrew ] = "‮אזהרה‬";
     Text[ hindi ] = "चेतावनी";
+    Text[ slovak ] = "Upozornenie";
 };
+
+
 
 
 
