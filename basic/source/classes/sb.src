@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 18:30:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1099,7 +1099,7 @@ Resource RID_BASIC_START
         Text [ french ] = "Erreur d'accès au chemin/fichier" ;
         Text [ dutch ] = "Fout bij toegang op pad/bestand" ;
         Text [ spanish ] = "Error de acceso a la ruta o al archivo" ;
-        Text [ danish ] = "Sti/fil adgangsfejl" ;
+        Text [ danish ] = "Sti/Fil adgangsfejl" ;
         Text [ swedish ] = "Sökväg/fil åtkomstfel" ;
         Text [ finnish ] = "Path/File access error" ;
         Text [ english_us ] = "Path/File access error" ;
