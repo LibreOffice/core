@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:20:15 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
         Text[ japanese ] = "“K—p";
         Text[ korean ] = "Àû¿ë";
         Text[ chinese_simplified ] = "Ì×ÓÃ";
-        Text[ chinese_traditional ] = "®M¥Î";
+        Text[ chinese_traditional ] = "±Ä¥Î";
         Text[ arabic ] = "ÊØÈíŞ";
         Text[ turkish ] = "Uygula";
         Text[ language_user1 ] = " ";
@@ -157,7 +157,7 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
     Text[ polish ] = "Cel w dokumencie";
     Text[ portuguese_brazilian ] = "Target in document";
     Text[ japanese ] = "ÄŞ·­ÒİÄ‚É‚ ‚éÀ°¹Ş¯Ä";
-    Text[ korean ] = "¹®¼­³» ´ë»ó";
+    Text[ korean ] = "¹®¼­ ³» ´ë»ó";
     Text[ chinese_simplified ] = "ÎÄµµÖ®ÖĞÌøÔ¾µÄÄ¿±ê";
     Text[ chinese_traditional ] = "¤å¥ó¤ºªº¸õÅDªº¥Ø¼Ğ";
     Text[ arabic ] = "ÇáåÏİ İí ÇáãÓÊäÏ";
@@ -192,7 +192,7 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES
     Text[ polish ] = "Brak celów w dokumencie.";
     Text[ portuguese_brazilian ] = "There are no targets available in the document.";
     Text[ japanese ] = "ÄŞ·­ÒİÄ‚ÉÀ°¹Ş¯Ä‚ª‚ ‚è‚Ü‚¹‚ñB";
-    Text[ korean ] = "¹®¼­¿¡ ´ë»óÀÌ ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "¹®¼­ ³» ´ë»óÀÌ ¾ø½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÎÄµµÖ®ÖĞ²»´æÔÚÌøÔ¾µÄÄ¿±ê¡£";
     Text[ chinese_traditional ] = "¤å¥ó¤º¨S¦³¸õÅDªº¥Ø¼Ğ¡C";
     Text[ arabic ] = "ÇáãÓÊäÏ ÎÇáí ãä ÇáÃåÏÇİ.";
@@ -226,6 +226,7 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
     Text[ catalan ] = "No se pudo abrir el documento.";
     Text[ finnish ] = "Asiakirjan avaaminen ei onnistunut.";
 };
+
 
 
 
