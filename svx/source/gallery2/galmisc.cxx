@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:03:06 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ USHORT GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
 BOOL GallerySvDrawImport( SvStream& rIStm, FmFormModel& rModel )
 {
     UINT32  nVersion;
-    BOOL    bRet;
+    BOOL    bRet = FALSE;
 
     if( GalleryCodec::IsCoded( rIStm, nVersion ) )
     {
@@ -189,16 +189,8 @@ BOOL GallerySvDrawImport( SvStream& rIStm, FmFormModel& rModel )
 
         if( 1 == nVersion )
         {
-            // read as binary
-               SgaUserDataFactory   aFactory;
-
-            aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
-            rModel.SetStreamingSdrModel( TRUE );
-            rModel.GetItemPool().Load( aMemStm );
-            aMemStm >> rModel;
-            rModel.SetStreamingSdrModel( FALSE );
-            rModel.GetItemPool().LoadCompleted();
-            bRet = ( rIStm.GetError() == 0 );
+            DBG_ERROR( "staroffice binary file formats are no longer supported inside the gallery!" );
+            bRet = false;
         }
         else if( 2 == nVersion )
         {
@@ -213,7 +205,16 @@ BOOL GallerySvDrawImport( SvStream& rIStm, FmFormModel& rModel )
 
         rModel.GetItemPool().SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
         rModel.SetStreamingSdrModel( TRUE );
-        bRet = SvxDrawingLayerImport( &rModel, xInputStream );
+        uno::Reference< lang::XComponent > xComponent;
+
+        bRet = SvxDrawingLayerImport( &rModel, xInputStream, xComponent, "com.sun.star.comp.Draw.XMLOasisImporter" );
+        if( !bRet || (rModel.GetPageCount() == 0) )
+        {
+            rIStm.Seek(0);
+            bRet = SvxDrawingLayerImport( &rModel, xInputStream, xComponent, "com.sun.star.comp.Draw.XMLImporter" );
+        }
+
+//        bRet = SvxDrawingLayerImport( &rModel, xInputStream );
         rModel.SetStreamingSdrModel( FALSE );
     }
 
