@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:43:39 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2429,12 +2429,15 @@ sal_uInt32 PortionObj::ImplCalculateTextPositions( sal_uInt32 nCurrentTextPositi
 
 //  -----------------------------------------------------------------------
 // Rueckgabe:                           0 = kein TextField
-//  bit28->31   art des TextFields :
+//  bit28->31   text field type :
 //                                      1 = Date
 //                                      2 = Time
 //                                      3 = SlideNumber
 //                                      4 = Url
-//  bit24->27   PPT Textfield type
+//                                      5 = DateTime
+//                                      6 = header
+//                                      7 = footer
+//  bit24->27   text field sub type (optional)
 //     23->     PPT Textfield needs a placeholder
 
 sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXCursorText,
@@ -2561,6 +2564,18 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             else if ( aFieldKind ==  String( RTL_CONSTASCII_USTRINGPARAM( "Author" ) ) )
                             {
 
+                            }
+                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "DateTime" ) ) )
+                            {
+                                nRetValue = 5 << 28 | 0x800000;
+                            }
+                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Header" ) ) )
+                            {
+                                nRetValue = 6 << 28 | 0x800000;
+                            }
+                            else if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Footer" ) ) )
+                            {
+                                nRetValue = 7 << 28 | 0x800000;
                             }
                         }
                     }
@@ -3281,9 +3296,9 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                         case 2 :
                         {
                             rOut << (sal_uInt32)( EPP_DateTimeMCAtom << 16 ) << (sal_uInt32)8
-                                 << (sal_uInt32)( pFieldEntry->nFieldStartPos )          // TxtOffset auf TxtField;
-                                 << (sal_uInt8)( ( pFieldEntry->nFieldType >> 24 ) & 0xf )// Type
-                                 << (sal_uInt8)0 << (sal_uInt16)0;                            // PadBytes
+                                 << (sal_uInt32)( pFieldEntry->nFieldStartPos )         // TxtOffset auf TxtField;
+                                 << (sal_uInt8)( pFieldEntry->nFieldType & 0xff )       // Type
+                                 << (sal_uInt8)0 << (sal_uInt16)0;                      // PadBytes
                         }
                         break;
                         case 3 :
@@ -3338,6 +3353,24 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                                  << (sal_uInt32)( pFieldEntry->nFieldStartPos )
                                  << (sal_uInt32)( pFieldEntry->nFieldEndPos );
                         }
+                        case 5 :
+                        {
+                            rOut << (sal_uInt32)( EPP_GenericDateMCAtom << 16 ) << (sal_uInt32)4
+                                 << (sal_uInt32)( pFieldEntry->nFieldStartPos );
+                        }
+                        break;
+                        case 6 :
+                        {
+                            rOut << (sal_uInt32)( EPP_HeaderMCAtom << 16 ) << (sal_uInt32 ) 4
+                                 << (sal_uInt32)( pFieldEntry->nFieldStartPos );
+                        }
+                        break;
+                        case 7 :
+                        {
+                            rOut << (sal_uInt32)( EPP_FooterMCAtom << 16 ) << (sal_uInt32 ) 4
+                                 << (sal_uInt32)( pFieldEntry->nFieldStartPos );
+                        }
+                        break;
                         default:
                         break;
                     }
@@ -4388,6 +4421,64 @@ sal_Bool PPTWriter::ImplGetEffect( const ::com::sun::star::uno::Reference< ::com
 
 //  -----------------------------------------------------------------------
 
+sal_Bool PPTWriter::ImplCreatePresentationPlaceholder( const sal_Bool bMasterPage, const PageType ePageType,
+                                                        const sal_uInt32 nStyleInstance, const sal_uInt8 nPlaceHolderId )
+{
+    sal_Bool bRet = ImplGetText();
+    if ( bRet && bMasterPage )
+    {
+        mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
+        sal_uInt32 nPresShapeID = mpPptEscherEx->GetShapeID();
+        mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xa00, nPresShapeID );// Flags: HaveAnchor | HasSpt
+        EscherPropertyContainer aPropOpt;
+        aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x50001 );
+        aPropOpt.AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
+        aPropOpt.AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
+        aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x110001 );
+        aPropOpt.AddOpt( ESCHER_Prop_lineColor, 0x8000001 );
+        aPropOpt.AddOpt( ESCHER_Prop_shadowColor, 0x8000002 );
+        aPropOpt.CreateFillProperties( mXPropSet, sal_True );
+        sal_uInt32 nLineFlags = 0x90001;
+        if ( aPropOpt.GetOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags ) )
+            nLineFlags |= 0x10001;  // draw dashed line if no line
+        aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags );
+        ImplWriteTextBundle( aPropOpt );
+        aPropOpt.Commit( *mpStrm );
+        mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
+        *mpStrm << (sal_Int16)maRect.Top() << (sal_Int16)maRect.Left() << (sal_Int16)maRect.Right() << (sal_Int16)maRect.Bottom();      // oben, links, rechts, unten ????
+        mpPptEscherEx->OpenContainer( ESCHER_ClientData );
+        mpPptEscherEx->AddAtom( 8, EPP_OEPlaceholderAtom );
+        *mpStrm << (sal_uInt32)0                // PlacementID
+                << (sal_uInt8)nPlaceHolderId    // PlaceHolderID
+                << (sal_uInt8)0                 // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
+                << (sal_uInt16)0;               // padword
+        mpPptEscherEx->CloseContainer();        // ESCHER_ClientData
+
+        SvMemoryStream  aExtBu( 0x200, 0x200 );
+        SvMemoryStream  aClientTextBox( 0x200, 0x200 );
+        ImplWriteTextStyleAtom( aClientTextBox, nStyleInstance, 0, NULL, aExtBu );
+/*
+        if ( aExtBu.Tell() )
+        {
+            if ( !pClientData )
+                pClientData = new SvMemoryStream( 0x200, 0x200 );
+            ImplProgTagContainer( pClientData, &aExtBu );
+        }
+*/
+        if ( aClientTextBox.Tell() )
+        {
+            *mpStrm << (sal_uInt32)( ( ESCHER_ClientTextbox << 16 ) | 0xf )
+                    << (sal_uInt32)aClientTextBox.Tell();
+
+            mpStrm->Write( aClientTextBox.GetData(), aClientTextBox.Tell() );
+        }
+        mpPptEscherEx->CloseContainer();    // ESCHER_SpContainer
+    }
+    return bRet;
+}
+
+//  -----------------------------------------------------------------------
+
 #define ADD_SHAPE( nType, nFlags )                              \
 {                                                               \
     sal_uInt32 nId = mpPptEscherEx->GetShapeID();                     \
@@ -5007,9 +5098,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 if ( ( ePageType == NOTICE ) && mbPresObj )
                 {
-                    if ( bMasterPage )
-                        nPlaceHolderAtom = EPP_PLACEHOLDER_MASTERDATE;  // be sure to correct all defines, they are not in the right order,
-                    else                                                // cause this is not a masterdate,´it is realy a masternotesbodyimage
+                    if ( ImplCreatePresentationPlaceholder( bMasterPage, ePageType, EPP_TEXTTYPE_Notes, EPP_PLACEHOLDER_MASTERNOTESBODYIMAGE ) )
+                        continue;
+                    else
                         nPlaceHolderAtom = EPP_PLACEHOLDER_NOTESBODY;
                 }
                 SHAPE_TEXT( TRUE );
@@ -5031,21 +5122,77 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         bIsTitlePossible = FALSE;
 
                         if ( ePageType == MASTER )
-                            continue;
-
-                        mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                        mnTextStyle = EPP_TEXTSTYLE_TITLE;
-                        nPlaceHolderAtom = rLayout.nTypeOfTitle;
-                        ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );          // Flags: HaveAnchor | HaveMaster
-                        aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterTitle );
-                        aPropOpt.CreateFillProperties( mXPropSet, sal_True );
-                        ImplWriteTextBundle( aPropOpt, sal_True, sal_True );
-                        if ( mbEmptyPresObj )
                         {
-                            sal_uInt32 nNoLineDrawDash = 0;
-                            aPropOpt.GetOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
-                            nNoLineDrawDash |= 0x10001;
-                            aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
+                            if ( ImplGetText() )
+                            {
+                                ::rtl::OUString aUString( mXText->getString() );
+                                sal_uInt16 nChar;
+
+                                mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
+                                mnShapeMasterTitle = mpPptEscherEx->GetShapeID();
+                                mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xa00, mnShapeMasterTitle );// Flags: HaveAnchor | HasSpt
+                                EscherPropertyContainer aPropOpt;
+                                aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x50001 );
+                                aPropOpt.AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
+                                aPropOpt.AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
+//                              aPropOpt.AddOpt( ESCHER_Prop_fillColor, nFillColor );
+//                              aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, nFillBackColor );
+                                aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x110001 );
+                                aPropOpt.AddOpt( ESCHER_Prop_lineColor, 0x8000001 );
+                                aPropOpt.AddOpt( ESCHER_Prop_shadowColor, 0x8000002 );
+                                aPropOpt.CreateFillProperties( mXPropSet, sal_True );
+                                sal_uInt32 nLineFlags = 0x90001;
+                                if ( aPropOpt.GetOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags ) )
+                                    nLineFlags |= 0x10001;  // draw dashed line if no line
+                                aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags );
+                                ImplWriteTextBundle( aPropOpt );
+                                aPropOpt.Commit( *mpStrm );
+                                mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
+                                *mpStrm << (sal_Int16)maRect.Top() << (sal_Int16)maRect.Left() << (sal_Int16)maRect.Right() << (sal_Int16)maRect.Bottom();      // oben, links, rechts, unten ????
+                                mpPptEscherEx->OpenContainer( ESCHER_ClientData );
+                                mpPptEscherEx->AddAtom( 8, EPP_OEPlaceholderAtom );
+                                *mpStrm << (sal_uInt32)0                                                        // PlacementID
+                                        << (sal_uInt8)EPP_PLACEHOLDER_MASTERTITLE                               // PlaceHolderID
+                                        << (sal_uInt8)0                                                         // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
+                                        << (sal_uInt16)0;                                                       // padword
+                                mpPptEscherEx->CloseContainer();    // ESCHER_ClientData
+                                mpPptEscherEx->OpenContainer( ESCHER_ClientTextbox );
+                                mpPptEscherEx->AddAtom( 4, EPP_TextHeaderAtom );
+                                *mpStrm << (sal_uInt32)EPP_TEXTTYPE_Title;
+                                mpPptEscherEx->AddAtom( mnTextSize << 1, EPP_TextCharsAtom );
+                                const sal_Unicode* pString = aUString;
+                                for ( sal_uInt32 i = 0; i < mnTextSize; i++ )
+                                {
+                                    nChar = pString[ i ];       // 0xa -> 0xb weicher Zeilenumbruch
+                                    if ( nChar == 0xa )
+                                        nChar++;                // 0xd -> 0xd harter Zeilenumbruch
+                                    *mpStrm << nChar;
+                                }
+                                mpPptEscherEx->AddAtom( 6, EPP_BaseTextPropAtom );
+                                *mpStrm << (sal_uInt32)( mnTextSize + 1 ) << (sal_uInt16)0;
+                                mpPptEscherEx->AddAtom( 10, EPP_TextSpecInfoAtom );
+                                *mpStrm << (sal_uInt32)( mnTextSize + 1 ) << (sal_uInt32)1 << (sal_uInt16)0;
+                                mpPptEscherEx->CloseContainer();    // ESCHER_ClientTextBox
+                                mpPptEscherEx->CloseContainer();    // ESCHER_SpContainer
+                                continue;
+                            }
+                        }
+                        else
+                        {
+                            mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
+                            mnTextStyle = EPP_TEXTSTYLE_TITLE;
+                            nPlaceHolderAtom = rLayout.nTypeOfTitle;
+                            ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );          // Flags: HaveAnchor | HaveMaster
+                            aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterTitle );
+                            aPropOpt.CreateFillProperties( mXPropSet, sal_True );
+                            ImplWriteTextBundle( aPropOpt, sal_True, sal_True );
+                            if ( mbEmptyPresObj )
+                            {
+                                sal_uInt32 nNoLineDrawDash = 0;
+                                aPropOpt.GetOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
+                                nNoLineDrawDash |= 0x10001;
+                                aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
+                            }
                         }
                     }
                     else
@@ -5069,21 +5216,79 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         if ( ePageType == MASTER )
                         {
                             nPrevTextStyle = EPP_TEXTSTYLE_TITLE;
+                            if ( ImplGetText() )
+                            {
+                                mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
+                                mnShapeMasterBody = mpPptEscherEx->GetShapeID();
+                                mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xa00, mnShapeMasterBody );  // Flags: HaveAnchor | HasSpt
+                                EscherPropertyContainer aPropOpt;
+                                aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x50001 );
+                                aPropOpt.AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
+//                              aPropOpt.AddOpt( ESCHER_Prop_fillColor, nFillColor );
+//                              aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, nFillBackColor );
+                                aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x110001 );
+                                aPropOpt.AddOpt( ESCHER_Prop_lineColor, 0x8000001 );
+                                aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90001 );
+                                aPropOpt.AddOpt( ESCHER_Prop_shadowColor, 0x8000002 );
+                                aPropOpt.CreateFillProperties( mXPropSet, sal_True );
+                                sal_uInt32 nLineFlags = 0x90001;
+                                if ( aPropOpt.GetOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags ) )
+                                    nLineFlags |= 0x10001;  // draw dashed line if no line
+                                aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags );
+                                ImplWriteTextBundle( aPropOpt );
+                                aPropOpt.Commit( *mpStrm );
+                                mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
+                                *mpStrm << (sal_Int16)maRect.Top() << (sal_Int16)maRect.Left() << (sal_Int16)maRect.Right() << (sal_Int16)maRect.Bottom();  // oben, links, rechts, unten ????
+                                mpPptEscherEx->OpenContainer( ESCHER_ClientData );
+                                mpPptEscherEx->AddAtom( 8, EPP_OEPlaceholderAtom );
+                                *mpStrm << (sal_uInt32)1                                                        // PlacementID
+                                        << (sal_uInt8)EPP_PLACEHOLDER_MASTERBODY                                    // PlaceHolderID
+                                        << (sal_uInt8)0                                                         // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
+                                        << (sal_uInt16)0;                                                       // padword
+                                mpPptEscherEx->CloseContainer();    // ESCHER_ClientData
+                                mpPptEscherEx->OpenContainer( ESCHER_ClientTextbox );       // printf
+                                mpPptEscherEx->AddAtom( 4, EPP_TextHeaderAtom );
+                                *mpStrm << (sal_uInt32)EPP_TEXTTYPE_Body;
+
+                                TextObj aTextObj( mXText, EPP_TEXTTYPE_Body, maFontCollection, (PPTExBulletProvider&)*this );
+                                mnTextSize = aTextObj.Count();
+                                aTextObj.Write( mpStrm );
+                                mpPptEscherEx->BeginAtom();
+                                for ( ParagraphObj* pPara = aTextObj.First() ; pPara; pPara = aTextObj.Next() )
+                                {
+                                    sal_uInt32 nCharCount = pPara->Count();
+                                    sal_uInt16 nDepth = pPara->nDepth;
+                                    if ( nDepth > 4)
+                                        nDepth = 4;
+
+                                    *mpStrm << nCharCount
+                                            << nDepth;
+                                }
+                                mpPptEscherEx->EndAtom( EPP_BaseTextPropAtom );
+                                mpPptEscherEx->AddAtom( 10, EPP_TextSpecInfoAtom );
+                                *mpStrm << (sal_uInt32)( mnTextSize ) << (sal_uInt32)1 << (sal_uInt16)0;
+
+                                mpPptEscherEx->CloseContainer();    // ESCHER_ClientTextBox
+                                mpPptEscherEx->CloseContainer();    // ESCHER_SpContainer
+                            }
                             continue;
                         }
-                        mnTextStyle = EPP_TEXTSTYLE_BODY;
-                        nPlaceHolderAtom = rLayout.nTypeOfOutliner;
-                        mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                        ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );          // Flags: HaveAnchor | HaveMaster
-                        aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
-                        aPropOpt.CreateFillProperties( mXPropSet, sal_True );
-                        ImplWriteTextBundle( aPropOpt, sal_True, sal_True );
-                        if ( mbEmptyPresObj )
+                        else
                         {
-                            sal_uInt32 nNoLineDrawDash = 0;
-                            aPropOpt.GetOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
-                            nNoLineDrawDash |= 0x10001;
-                            aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
+                            mnTextStyle = EPP_TEXTSTYLE_BODY;
+                            nPlaceHolderAtom = rLayout.nTypeOfOutliner;
+                            mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
+                            ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );          // Flags: HaveAnchor | HaveMaster
+                            aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
+                            aPropOpt.CreateFillProperties( mXPropSet, sal_True );
+                            ImplWriteTextBundle( aPropOpt, sal_True, sal_True );
+                            if ( mbEmptyPresObj )
+                            {
+                                sal_uInt32 nNoLineDrawDash = 0;
+                                aPropOpt.GetOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
+                                nNoLineDrawDash |= 0x10001;
+                                aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
+                            }
                         }
                     }
                     else
@@ -5097,14 +5302,14 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             }
             else if ( ( mType == "drawing.Page" ) || ( mType == "presentation.Page" ) )
             {
-                nPlaceHolderAtom = EPP_PLACEHOLDER_GENERICTEXTOBJECT;
-                mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0xa00 );
-                aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x40004 );
-                aPropOpt.AddOpt( ESCHER_Prop_fFillOK, 0x100001 );
-                aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x110011 );
-                aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90008 );
-                aPropOpt.AddOpt( ESCHER_Prop_fshadowObscured, 0x10001 );
+                if ( ( ePageType == NOTICE ) && mbPresObj )
+                {
+                    if ( ImplCreatePresentationPlaceholder( bMasterPage, ePageType, EPP_TEXTTYPE_Notes, EPP_PLACEHOLDER_MASTERNOTESSLIDEIMAGE ) )
+                        continue;
+                    else
+                        nPlaceHolderAtom = EPP_PLACEHOLDER_NOTESSLIDEIMAGE;
+                }
+                SHAPE_TEXT( TRUE );
             }
             else if ( mType == "drawing.Frame" )
             {
@@ -5176,6 +5381,50 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         aPropOpt.AddOpt( ESCHER_Prop_pictureId, nOlePictureId );
                 }
             }
+            else if ( mType == "presentation.Header" )
+            {
+                if ( ImplCreatePresentationPlaceholder( bMasterPage, ePageType, EPP_TEXTTYPE_Other, EPP_PLACEHOLDER_MASTERHEADER ) )
+                    continue;
+                else
+                {
+                    mbPresObj = sal_False;
+                    mType = "drawing.Text";
+                    SHAPE_TEXT( TRUE );
+                }
+            }
+            else if ( mType == "presentation.Footer" )
+            {
+                if ( ImplCreatePresentationPlaceholder( bMasterPage, ePageType, EPP_TEXTTYPE_Other, EPP_PLACEHOLDER_MASTERFOOTER ) )
+                    continue;
+                else
+                {
+                    mbPresObj = sal_False;
+                    mType = "drawing.Text";
+                    SHAPE_TEXT( TRUE );
+                }
+            }
+            else if ( mType == "presentation.DateTime" )
+            {
+                if ( ImplCreatePresentationPlaceholder( bMasterPage, ePageType, EPP_TEXTTYPE_Other, EPP_PLACEHOLDER_MASTERDATE ) )
+                    continue;
+                else
+                {
+                    mbPresObj = sal_False;
+                    mType = "drawing.Text";
+                    SHAPE_TEXT( TRUE );
+                }
+            }
+            else if ( mType == "presentation.SlideNumber" )
+            {
+                if ( ImplCreatePresentationPlaceholder( bMasterPage, ePageType, EPP_TEXTTYPE_Other, EPP_PLACEHOLDER_MASTERSLIDENUMBER ) )
+                    continue;
+                else
+                {
+                    mbPresObj = sal_False;
+                    mType = "drawing.Text";
+                    SHAPE_TEXT( TRUE );
+                }
+            }
             else if ( ( (sal_Char)'3' == mType.GetChar( 8 ) ) && ( (char)'D' == mType.GetChar( 9 ) ) )  // drawing.3D
             {
                 // SceneObject, CubeObject, SphereObject, LatheObject, ExtrudeObject, PolygonObject
@@ -5230,7 +5479,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             }
                             case EPP_PLACEHOLDER_NOTESBODY :
                             case EPP_PLACEHOLDER_MASTERDATE :
-                            case EPP_PLACEHOLDER_GENERICTEXTOBJECT :
+                            case EPP_PLACEHOLDER_NOTESSLIDEIMAGE :
                             case EPP_PLACEHOLDER_MASTERNOTESBODYIMAGE :
                                 nPlacementID = nIndices++;
                         }
