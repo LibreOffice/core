@@ -3366,7 +3366,7 @@ SfxVoidItem InputLineEnter FID_INPUTLINE_ENTER
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    NoRecord;
     Synchron;
 
     /* config: */
