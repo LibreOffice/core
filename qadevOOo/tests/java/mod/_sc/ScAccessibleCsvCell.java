@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleCsvCell.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Date: 2004-03-19 15:59:09 $
+ *  last change: $Date: 2004-11-02 12:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ public class ScAccessibleCsvCell extends TestCase {
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        //at.printAccessibleTree(log,xRoot);
+        AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         oObj = AccessibilityTools.getAccessibleObjectForRole
             (xRoot, AccessibleRole.PUSH_BUTTON, "Cancel");
 
