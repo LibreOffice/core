@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.201 $
+ *  $Revision: 1.202 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:12:42 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,7 +435,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     //   dialogs were designed to fit 800x600 with an 8pt font, so scale accordingly
     int maxFontheight = 9; // #107886#: 9 is default for some asian systems, so always allow if requested
     if( GetDesktopRectPixel().getHeight() > 600 )
-        maxFontheight = (int) ((( 8 * (double) GetDesktopRectPixel().getHeight()) / 600.) + 0.5);
+        maxFontheight = (int) ((( 8.0 * (double) GetDesktopRectPixel().getHeight()) / 600.0) + 1.5);
 
     Font aFont = aStyleSettings.GetMenuFont();
     int defFontheight = aFont.GetHeight();
@@ -5732,6 +5732,9 @@ void Window::UpdateSettings( const AllSettings& rSettings, BOOL bChild )
 
     AllSettings aOldSettings = maSettings;
     ULONG nChangeFlags = maSettings.Update( maSettings.GetWindowUpdate(), rSettings );
+    nChangeFlags |= SETTINGS_IN_UPDATE_SETTINGS; // Set this flag so the receiver of the data changed
+                                                 // event can distinguish between the changing of global
+                                                 // setting and a local change ( with SetSettings )
 
     // AppFont-Aufloesung und DPI-Aufloesung neu berechnen
     ImplInitResolutionSettings();
