@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-12 09:53:47 $
+ *  last change: $Author: kz $ $Date: 2002-09-18 19:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1065,6 +1065,26 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text = "Te~xtfluss";
         Text [ english ] = "Te~xt flow";
         Text [ english_us ] = "Te~xt flow";
+        Text[ portuguese ] = "Te~xt flow";
+        Text[ russian ] = "Te~xt flow";
+        Text[ greek ] = "Te~xt flow";
+        Text[ dutch ] = "Te~xt flow";
+        Text[ french ] = "Te~xt flow";
+        Text[ spanish ] = "Te~xt flow";
+        Text[ finnish ] = "Te~xt flow";
+        Text[ italian ] = "Te~xt flow";
+        Text[ danish ] = "Te~xt flow";
+        Text[ swedish ] = "Te~xt flow";
+        Text[ polish ] = "Te~xt flow";
+        Text[ portuguese_brazilian ] = "Te~xt flow";
+        Text[ japanese ] = "Te~xt flow";
+        Text[ korean ] = "Te~xt flow";
+        Text[ chinese_simplified ] = "Te~xt flow";
+        Text[ chinese_traditional ] = "Te~xt flow";
+        Text[ turkish ] = "Te~xt flow";
+        Text[ arabic ] = "Te~xt flow";
+        Text[ catalan ] = "Te~xt flow";
+        Text[ thai ] = "Te~xt flow";
     };
     ListBox LB_FRAMEDIR
     {
