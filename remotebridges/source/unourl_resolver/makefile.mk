@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 15:41:33 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:43:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,16 +62,16 @@
 PRJ=..$/..
 
 PRJNAME=remotebridges
-TARGET=uuresolver
-USE_DEFFILE=TRUE
+TARGET = uuresolver.uno
 NO_BSYMBOLIC=TRUE
 ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST=$(TARGET)
+COMP1TYPELIST = uuresolver
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
+DLLPRE =
 .INCLUDE :  sv.mk
 
 # ------------------------------------------------------------------
@@ -99,7 +99,7 @@ SLOFILES= \
         $(SLO)$/unourl_resolver.obj
 
 SHL1TARGET=	$(TARGET)
-SHL1VERSIONMAP=	$(TARGET).map
+SHL1VERSIONMAP = uuresolver.map
 
 SHL1STDLIBS= \
         $(SALLIB)		\
