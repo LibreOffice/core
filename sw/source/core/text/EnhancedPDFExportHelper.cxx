@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 10:16:18 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1285,6 +1285,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport( bool bEditEngineOnly )
                     if ( bIntern )
                     {
                         aURL.Erase( 0, 1 );
+                        mrSh.SwCrsrShell::ClearMark();
                         JumpToSwMark( &mrSh, aURL );
 
                         // Destination Rectangle
