@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:58:27 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1006,7 +1006,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 if (pNumRule)   // Cursor in Numerierung
                 {
                     BYTE nNumLevel = rShell.GetNumLevel();
-                    if( NO_NUM > nNumLevel && MAXLEVEL >
+                    if( IsShowNum(nNumLevel) && MAXLEVEL >
                         ( nNumLevel = GetRealLevel( nNumLevel )) )
                     {
                         if( sStr.Len() )
