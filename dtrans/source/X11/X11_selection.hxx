@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 14:05:28 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,11 @@ namespace x11 {
                                     m_xDropTransferable;
         int                         m_nLastX, m_nLastY;
         Time                        m_nDropTimestamp;
+        // set to true when calling drop()
+        // if another XdndEnter is received this shows that
+        // someone forgot to call dropComplete - we should reset
+        // and react to the new drop
+        bool                        m_bDropWaitingForCompletion;
 
         // drag only
 
@@ -347,6 +352,7 @@ namespace x11 {
         Window                      m_aDropWindow;
         // either m_aDropWindow or its XdndProxy
         Window                      m_aDropProxy;
+        Window                      m_aDragSourceWindow;
         // XTransferable for Xdnd when we are drag source
         Reference< ::com::sun::star::datatransfer::XTransferable >
                                     m_xDragSourceTransferable;
