@@ -2,9 +2,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 08:29:14 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:55:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,7 @@ The following parameter are needed:
 -u: Path, in which zipfiles are unpacked (optional)
 -msitemplate: Source of the msi file templates (Windows compiler only)
 -msilanguage: Source of the msi file templates (Windows compiler only)
--msifiles: Source of the msifiles instmsia.exe, instmsiw.exe (Windows only)
+-msichild: Source of the child products (Windows only)
 -javafiles: Source of the Java installer files  (opt., non-Windows only)
 -javalanguage: Source of the Java language files (opt., non-Windows only)
 -buildid: Current BuildID (optional)
@@ -112,7 +112,6 @@ perl make_epmlist.pl -f zip.lst -s setup.inf -p OfficeFAT -l 01
                      -u /export/unpack -buildid 8712
                      -msitemplate /export/msi_files
                      -msilanguage /export/msi_languages
-                     -msifiles /export/msi_files
 
 Examples for Non-Windows:
 
@@ -177,7 +176,7 @@ sub getparameter
         elsif ($param eq "-dontcallepm") { $installer::globals::call_epm = 0; }
         elsif ($param eq "-msitemplate") { $installer::globals::idttemplatepath = shift(@ARGV); }
         elsif ($param eq "-msilanguage") { $installer::globals::idtlanguagepath = shift(@ARGV); }
-        elsif ($param eq "-msifiles") { $installer::globals::msifilespath = shift(@ARGV); }
+        elsif ($param eq "-msichild") { $installer::globals::msichildpath = shift(@ARGV); }
         elsif ($param eq "-javafiles") { $installer::globals::javafilespath = shift(@ARGV); }
         elsif ($param eq "-javalanguage") { $installer::globals::javalanguagepath = shift(@ARGV); }
         elsif ($param eq "-buildid") { $installer::globals::buildid = shift(@ARGV); }
@@ -451,10 +450,10 @@ sub control_required_parameter
         # for the creation of the msi installation set.
         ##############################################################################################
 
-        if (($installer::globals::msifilespath eq "") && ($installer::globals::iswindowsbuild))
+        if (($installer::globals::msichildpath eq "") && ( $installer::globals::addchildprojects ) && ($installer::globals::iswindowsbuild))
         {
             print "\n**************************************************\n";
-            print "ERROR: msi files path not set (-msifiles)!";
+            print "ERROR: msi child path not set (-msichild)!";
             print "\n**************************************************\n";
             usage();
             exit(-1);
@@ -478,14 +477,14 @@ sub control_required_parameter
 
         installer::remover::remove_ending_pathseparator(\$installer::globals::idtlanguagepath);
 
-        # Analyzing the msi files path
+        # Analyzing the msi child path
 
-        if (!($installer::globals::msifilespath eq "")) # msifilespath set, relative or absolute?
+        if (!($installer::globals::msichildpath eq "")) # msichildpath set, relative or absolute?
         {
-            make_path_absolute(\$installer::globals::msifilespath);
+            make_path_absolute(\$installer::globals::msichildpath);
         }
 
-        installer::remover::remove_ending_pathseparator(\$installer::globals::msifilespath);
+        installer::remover::remove_ending_pathseparator(\$installer::globals::msichildpath);
 
         # In the msi template directory a files "codes.txt" has to exist, in which the ProductCode
         # and the UpgradeCode for the product are defined.
@@ -558,8 +557,8 @@ sub outputparameter
     if ((!($installer::globals::idttemplatepath eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "msi template path will be ignored for non Windows builds!\n"); }
     if (!($installer::globals::idtlanguagepath eq ""))  { push(@output, "msi languagepath: $installer::globals::idtlanguagepath\n"); }
     if ((!($installer::globals::idtlanguagepath eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "msi langugage path will be ignored for non Windows builds!\n"); }
-    if (!($installer::globals::msifilespath eq "")) { push(@output, "msi files path: $installer::globals::msifilespath\n"); }
-    if ((!($installer::globals::msifilespath eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "msi files path will be ignored for non Windows builds!\n"); }
+    if (!($installer::globals::msichildpath eq "")) { push(@output, "msi child path: $installer::globals::msichildpath\n"); }
+    if ((!($installer::globals::msichildpath eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "msi child path will be ignored for non Windows builds!\n"); }
     if ((!($installer::globals::iswindowsbuild)) && ( $installer::globals::call_epm )) { push(@output, "Calling epm\n"); }
     if ((!($installer::globals::iswindowsbuild)) && (!($installer::globals::call_epm))) { push(@output, "Not calling epm\n"); }
     if (!($installer::globals::javafilespath eq "")) { push(@output, "Java installer files path: $installer::globals::javafilespath\n"); }
