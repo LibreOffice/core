@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:46:56 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,9 @@
 #endif
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
+#endif
+#ifndef _SVX_CHARHIDDENITEM_HXX
+#include <svx/charhiddenitem.hxx>
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
@@ -2822,6 +2825,15 @@ static Writer& OutRTF_SwColor( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
+static Writer& OutRTF_SvxCharHiddenItem(Writer& rWrt, const SfxPoolItem& rHt)
+{
+    SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
+    rRTFWrt.bOutFmtAttr = true;
+    rWrt.Strm() << sRTF_V;
+    if (!((const SvxCharHiddenItem&)rHt).GetValue())
+        rWrt.OutULong(0);
+    return rWrt;
+}
 
 extern void sw3io_ConvertToOldField( const SwField* pFld, USHORT& rWhich,
                               ULONG& rFmt, ULONG nFFVersion );
@@ -2834,7 +2846,7 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
     const SwField* pFld = rFld.GetFld();
 
     ByteString aFldStt( '{' );
-    ((((aFldStt += sRTF_FIELD) += '{' ) += sRTF_IGNORE ) += sRTF_FLDINST) += ' ';
+    ((((aFldStt += sRTF_FIELD) += '{' ) += sRTF_IGNORE) += sRTF_FLDINST) += ' ';
     switch( pFld->GetTyp()->Which() )
     {
     case RES_COMBINED_CHARS:
@@ -4377,7 +4389,7 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_CHRATR_TWO_LINES */          OutRTF_SwTwoInOne,
 /* RES_CHRATR_SCALEW */             OutRTF_SwCharScaleW,
 /* RES_CHRATR_RELIEF */             OutRTF_SwCharRelief,
-/* RES_CHRATR_DUMMY1 */             0, // Dummy:
+/* RES_CHRATR_HIDDEN */             OutRTF_SvxCharHiddenItem,
 
 /* RES_TXTATR_INETFMT   */          OutRTF_SwTxtINetFmt, // Dummy
 /* RES_TXTATR_NOHYPHEN  */          0, // Dummy
