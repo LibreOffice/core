@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:30:21 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #endif
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
+#endif
+#ifndef _SFXVISIBILITYITEM_HXX
+#include <svtools/visitem.hxx>
 #endif
 #ifndef _SFX_OBJITEM_HXX //autogen
 #include <sfx2/objitem.hxx>
@@ -1911,7 +1914,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     rSet.Put( SfxBoolItem( nWhich, bValue ) );
                 }
                 else
-                    rSet.DisableItem( nWhich );
+                    rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
                 break;
         }
         nWhich = aIter.NextWhich();
