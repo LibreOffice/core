@@ -7,11 +7,11 @@ mkdir: %_DEST%\inc%_EXT%\external\unicode
 ..\%__SRC%\misc\build\icu\source\common\unicode\*.h %_DEST%\inc%_EXT%\external\unicode\*.h
 ..\%__SRC%\misc\build\icu\source\i18n\unicode\*.h %_DEST%\inc%_EXT%\external\unicode\*.h
 
-hedabu: ..\%__SRC%\misc\build\icu\source\common\cmemory.h %_DEST%\inc%_EXT%\external\icu\cmemory.h
-hedabu: ..\%__SRC%\misc\build\icu\source\common\rbbidata.h %_DEST%\inc%_EXT%\external\icu\rbbidata.h
-hedabu: ..\%__SRC%\misc\build\icu\source\common\utrie.h %_DEST%\inc%_EXT%\external\icu\utrie.h
-hedabu: ..\%__SRC%\misc\build\icu\source\common\ucmndata.h %_DEST%\inc%_EXT%\external\icu\ucmndata.h
-hedabu: ..\%__SRC%\misc\build\icu\source\common\umapfile.h %_DEST%\inc%_EXT%\external\icu\umapfile.h
+..\%__SRC%\misc\build\icu\source\common\cmemory.h %_DEST%\inc%_EXT%\external\icu\cmemory.h
+..\%__SRC%\misc\build\icu\source\common\rbbidata.h %_DEST%\inc%_EXT%\external\icu\rbbidata.h
+..\%__SRC%\misc\build\icu\source\common\utrie.h %_DEST%\inc%_EXT%\external\icu\utrie.h
+..\%__SRC%\misc\build\icu\source\common\ucmndata.h %_DEST%\inc%_EXT%\external\icu\ucmndata.h
+..\%__SRC%\misc\build\icu\source\common\umapfile.h %_DEST%\inc%_EXT%\external\icu\umapfile.h
 
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
