@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ab $ $Date: 2002-04-12 11:49:40 $
+ *  last change: $Author: ab $ $Date: 2002-04-23 14:52:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2414,7 +2414,13 @@ void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet 
                 {
                     SbxVariable* pVar = xSbxArray->Get( 0 );
                     if( pVar )
+                    {
+                        // #95792 Avoid a second call
+                        USHORT nFlags = pVar->GetFlags();
+                        pVar->SetFlag( SBX_NO_BROADCAST );
                         *pRet = sbxToUnoValue( pVar );
+                        pVar->SetFlags( nFlags );
+                    }
                 }
                 break;
             }
