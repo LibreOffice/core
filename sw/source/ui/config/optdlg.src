@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-27 20:42:45 $
+ *  last change: $Author: kz $ $Date: 2001-10-02 21:10:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ TabPage TP_CONTENT_OPT
         Text[ portuguese ] = "G~uias ao mover";
         Text[ russian ] = "Νΰοπΰβλÿώωθε λθνθθ οπθ οεπεμεωενθθ";
         Text[ greek ] = "Βοηθητικές γραμμές κατά την μετακίνη~ση";
-        Text[ dutch ] = "~Hulplijnen bij ~verplaatsen";
+        Text[ dutch ] = "~Hulplijnen bij verplaatsen";
         Text[ french ] = "Repθres lors du dιplacement";
         Text[ spanish ] = "Guνas al despla~zar";
         Text[ italian ] = "Linee guida durante lo spostamento";
@@ -818,7 +818,7 @@ TabPage TP_CONTENT_OPT
         Text [ danish ] = "Mεleenhed";
         Text [ french ] = "Unitι de mesure";
         Text [ swedish ] = "~Mεttenhet";
-        Text [ dutch ] = "Maateenheid";
+        Text [ dutch ] = "~Maateenheid";
         Text [ spanish ] = "Unidad de medida";
         Text [ english_us ] = "Measurement unit";
         Text[ chinese_simplified ] = "ε®ι‡ε•δ½";
@@ -1535,7 +1535,7 @@ TabPage TP_STD_FONT
         Text[ portuguese ] = "Tipos de letra padrγo (%1)";
         Text[ russian ] = "Ξρνξβνϋε ψπθτςϋ (%1)";
         Text[ greek ] = "Βασικές γραμματοσειρές";
-        Text[ dutch ] = "Standaardlettertypen";
+        Text[ dutch ] = "Standaardlettertypen (%1)";
         Text[ french ] = "Polices standard (%1)";
         Text[ spanish ] = "Fuentes predeterminadas (%1)";
         Text[ finnish ] = "Oletusfontit";
@@ -1805,7 +1805,7 @@ TabPage TP_STD_FONT
         Text[ portuguese ] = "Asiαtico";
         Text[ russian ] = "ΐηθΰςρκθε";
         Text[ greek ] = "Ασιάτικο";
-        Text[ dutch ] = "Asian";
+        Text[ dutch ] = "Asiatisch";
         Text[ french ] = "Asiatique";
         Text[ spanish ] = "Asiαtico";
         Text[ finnish ] = "Asian";
@@ -1830,7 +1830,7 @@ TabPage TP_STD_FONT
         Text[ portuguese ] = "Ocidental";
         Text[ russian ] = "Ηΰοΰδνϋε";
         Text[ greek ] = "Δυτική";
-        Text[ dutch ] = "Western";
+        Text[ dutch ] = "Westelijk";
         Text[ french ] = "Occidental";
         Text[ spanish ] = "Occidental";
         Text[ finnish ] = "Western";
@@ -2159,7 +2159,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ portuguese ] = "Mover cιlulas";
         Text[ russian ] = "Οεπεμερςθςό ÿχεικθ";
         Text[ greek ] = "Μετακίνηση κελιών";
-        Text[ dutch ] = "Shift- en pijltoets ingedrukt";
+        Text[ dutch ] = "Cellen verplaatsen";
         Text[ french ] = "Dιplacement des cellules";
         Text[ spanish ] = "Desplazar celdas";
         Text[ finnish ] = "Umschalt- und Pfeiltaste gedrόckt";
@@ -2274,7 +2274,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ portuguese ] = "Inserir cιlula";
         Text[ russian ] = "Βρςΰβθςό ÿχεικσ";
         Text[ greek ] = "Εισαγωγή κελιού";
-        Text[ dutch ] = "Invoegen";
+        Text[ dutch ] = "Cel invoegen";
         Text[ french ] = "Insertion de cellules";
         Text[ spanish ] = "Insertar celda";
         Text[ finnish ] = "Lisδδ";
@@ -2446,7 +2446,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ portuguese ] = "As modificaηυes afectam apenas a αrea adjacente";
         Text[ russian ] = "Θημενενθÿ οξβλθÿώς ςξλόκξ νΰ νεοξρπεδρςβεννϋυ ρξρεδει";
         Text[ greek ] = "Οι αλλαγές επηρεάζουν μόνο την άμεσα γειτονική περιοχή";
-        Text[ dutch ] = "Veranderingen in een rij of kolom beοnvloeden alleen de aangrenzende rij-/kolom";
+        Text[ dutch ] = "Veranderingen hebben alleen uitwerkingen op het aangrenzende bereik";
         Text[ french ] = "Modifications n'affectent que la plage adjacente";
         Text[ spanish ] = "Las modificaciones afectan solo a la fila o columna contigua";
         Text[ finnish ] = "Muutokset vaikuttavat vain vierekk?iseen alueeseen";
@@ -2503,7 +2503,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ portuguese ] = "As modificaηυes afectam a tabela inteira";
         Text[ russian ] = "Θημενενθÿ οξβλθÿώς νΰ βρώ ςΰαλθφσ";
         Text[ greek ] = "Οι αλλαγές επηρεάζουν ολόκληρο τον πίνακα";
-        Text[ dutch ] = "Veranderingen in een rij of kolom beοnvloeden de hele tabel";
+        Text[ dutch ] = "Veranderingen hebben alleen uitwerkingen op de hele tabel";
         Text[ french ] = "Modifications affectent la totalitι du tableau";
         Text[ spanish ] = "Las modificaciones afectan a toda la tabla";
         Text[ finnish ] = "Muutokset vaikuttavat koko taulukkoon";
@@ -2560,7 +2560,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ portuguese ] = "As modificaηυes afectam o tamanho da tabela";
         Text[ russian ] = "Θημενενθÿ οξβλθÿώς νΰ πΰημεπ ςΰαλθφϋ";
         Text[ greek ] = "Οι αλλαγές επηρεάζουν το μέγεθος του πίνακα";
-        Text[ dutch ] = "Veranderingen in een rij of kolom beοnvloeden de tabelgrootte";
+        Text[ dutch ] = "Veranderingen hebben uitwerkingen op de tabelgrootte";
         Text[ french ] = "Modifications affectent la taille du tableau";
         Text[ spanish ] = "Las modificaciones afectan el tamaρo de la tabla";
         Text[ finnish ] = "Muutokset vaikuttavat taulukon kokoon";
@@ -2781,7 +2781,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ portuguese ] = "Mostrar";
         Text[ russian ] = "Ξςξαπΰζενθε";
         Text[ greek ] = "Μη εκτυπώσιμοι χαρακτήρες";
-        Text[ dutch ] = "Niet-afdrukbare tekens";
+        Text[ dutch ] = "Weergeven van";
         Text[ french ] = "Affichage";
         Text[ spanish ] = "Mostrar";
         Text[ finnish ] = "Nicht druckbare Zeichen";
@@ -3167,7 +3167,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ italian ] = "Margine paragrafo ~sinistro" ;
         Text [ spanish ] = "~Margen izquierdo del pαrrafo" ;
         Text [ french ] = "Marge gauche du paragraphe" ;
-        Text [ dutch ] = "Linker alinea~rand" ;
+        Text [ dutch ] = "linker alinea~rand" ;
         Text [ portuguese ] = "Margem e~squerda do parαgrafo" ;
         Text[ chinese_simplified ] = "ζ®µθ½ε·¦ι—΄ι”(~L)";
         Text[ russian ] = "λεβϋι κπΰι ΰαηΰφΰ";
@@ -3283,7 +3283,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ portuguese ] = "~Cursor em zonas protegidas";
         Text[ russian ] = "Κσπρξπ β ηΰωθωεννϋυ ξαλΰρςÿυ";
         Text[ greek ] = "Να επιτραπεί η εισαγωγή του δείκτη σε προστατευόμενες περιοχές";
-        Text[ dutch ] = "~Cursor in beveiligde zones";
+        Text[ dutch ] = "Cursor in beveiligde zones";
         Text[ french ] = "Curseur dans les zones protιgιes";
         Text[ spanish ] = "Cursor en ~zonas protegidas";
         Text[ italian ] = "Cursore in aree protette";
@@ -3312,7 +3312,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ portuguese ] = "~Permitir";
         Text[ russian ] = "Πΰηπεψθςό";
         Text[ greek ] = "Να επιτραπεί";
-        Text[ dutch ] = "Toestaan";
+        Text[ dutch ] = "~Toestaan";
         Text[ french ] = "Autoriser";
         Text[ spanish ] = "Permitir";
         Text[ italian ] = "Permetti";
@@ -3331,6 +3331,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
     };
 };
+
 
 
 
