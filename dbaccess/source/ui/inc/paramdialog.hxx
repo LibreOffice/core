@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-07 15:09:31 $
+ *  last change: $Author: fs $ $Date: 2002-04-09 14:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,11 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
-#ifndef _CONNECTIVITY_SQLPARSE_HXX
-#include <connectivity/sqlparse.hxx>
+#ifndef CONNECTIVITY_PREDICATEINPUT_HXX
+#include <connectivity/predicateinput.hxx>
+#endif
+#ifndef DBAUI_QUERYDESIGNCONTEXT_HXX
+#include "ParseContext.hxx"
 #endif
 
 namespace connectivity
@@ -113,7 +116,9 @@ namespace dbaui
     //==================================================================
     //= OParameterDialog
     //==================================================================
-    class OParameterDialog : public ModalDialog
+    class OParameterDialog
+            :public ModalDialog
+            ,public OParseContextClient
     {
     protected:
         // the controls
@@ -133,8 +138,8 @@ namespace dbaui
                         m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >
                         m_xFormatter;
-        ::connectivity::OSQLParser
-                        m_aParser;
+        ::dbtools::OPredicateInputController
+                        m_aPredicateInput;
 
         void*       m_pVisitedParams;
             // this is a vector of BOOLs, but as this file is exported we don't want to include the stl here ...
@@ -150,7 +155,7 @@ namespace dbaui
     public:
         OParameterDialog(Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & _rParamContainer,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > & _rConnNFormats,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > & _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
         ~OParameterDialog();
 
@@ -180,6 +185,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/06/07 15:09:31  fs
+ *  #87912# redesigned the dialog
+ *
  *  Revision 1.2  2000/10/27 08:07:40  fs
  *  OSQLParser interface was changed - adjustments
  *

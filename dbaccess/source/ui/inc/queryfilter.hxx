@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:21:14 $
+ *  last change: $Author: fs $ $Date: 2002-04-09 14:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,13 @@
 #include <connectivity/sqliterator.hxx>
 #endif
 
+#ifndef CONNECTIVITY_PREDICATEINPUT_HXX
+#include <connectivity/predicateinput.hxx>
+#endif
+#ifndef DBAUI_QUERYDESIGNCONTEXT_HXX
+#include "ParseContext.hxx"
+#endif
+
 namespace rtl
 {
     class OUString;
@@ -120,7 +127,8 @@ namespace com
 //==================================================================
 namespace dbaui
 {
-    class DlgFilterCrit : public ModalDialog
+    class DlgFilterCrit :public ModalDialog
+                        ,public OParseContextClient
     {
     private:
         ListBox         aLB_WHEREFIELD1;
@@ -150,6 +158,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>    m_xMetaData;
 
+        ::dbtools::OPredicateInputController    m_aPredicateInput;
 
         void            SelectField( ListBox& rBox, const String& rField );
         DECL_LINK( ListSelectHdl, ListBox * );
@@ -162,18 +171,25 @@ namespace dbaui
         void            correctCondition(const ::rtl::OUString& _rColumnName,String& _rCondition);
         void            addQuoting(const ::rtl::OUString& _rColumnName,String& _rCondition)  const;
 
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getMatchingColumn( const Edit& _rValueInput ) const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getColumn( const ::rtl::OUString& _rFieldName ) const;
+
     public:
         DlgFilterCrit(  Window * pParent,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer>& _rxQueryComposer,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxCols,
-                        const String& rFieldName = String());
+                        const String& rFieldName = String()
+                    );
         ~DlgFilterCrit();
 
         String          BuildWherePart();
 
         void            GetFilterList( ) const;
-        //  void            SetFilterList( const SbaPredicateItemList* pItemList );
+
+    protected:
+        DECL_LINK( PredicateLoseFocus, Edit* );
     };
 
 }
