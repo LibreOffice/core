@@ -2,3 +2,4 @@ cli_basetypes.dll
 cli_cppuhelper.dll
 cli_types.dll
 cli_ure.dll
+unicows.dll
