@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insfnote.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:09:35 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,19 +69,8 @@ ModalDialog DLG_INS_FOOTNOTE
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 160 , 100 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Fußnote einfügen : Fu˜note einf³gen */
-    Text = "Fußnote einfügen" ;
-    Text [ ENGLISH ] = "Insert footnote" ;
-    Text [ norwegian ] = "Sette inn fotnote" ;
-    Text [ italian ] = "Inserisci nota a piè pagina" ;
-    Text [ portuguese_brazilian ] = "Inserir Nota de Rodapé" ;
-    Text [ portuguese ] = "Inserir nota de rodapé" ;
-    Text [ finnish ] = "Lisää alaviite" ;
-    Text [ danish ] = "Indsæt fodnote" ;
-    Text [ french ] = "Insertion d'une note de bas de page" ;
-    Text [ swedish ] = "Infoga fotnot" ;
-    Text [ dutch ] = "Voetnoot invoegen" ;
-    Text [ spanish ] = "Insertar nota al pie" ;
-    Text [ english_us ] = "Insert Footnote" ;
+    Text [ de ] = "Fußnote einfügen" ;
+    Text [ en-US ] = "Insert Footnote" ;
     Moveable = TRUE ;
     Edit ED_NUMBER_CHAR
     {
@@ -135,112 +124,28 @@ ModalDialog DLG_INS_FOOTNOTE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
-        Text = "~Automatisch" ;
-        Text [ ENGLISH ] = "~Auto" ;
-        Text [ norwegian ] = "~Auto" ;
-        Text [ italian ] = "Automatico" ;
-        Text [ portuguese_brazilian ] = "~Automático" ;
-        Text [ portuguese ] = "~Automático" ;
-        Text [ finnish ] = "~Automaattinen" ;
-        Text [ danish ] = "~Automatisk" ;
-        Text [ french ] = "Automatique" ;
-        Text [ swedish ] = "~Automatisk" ;
-        Text [ dutch ] = "~Automatisch" ;
-        Text [ spanish ] = "~Automático" ;
-        Text [ english_us ] = "~Automatic" ;
+        Text [ de ] = "~Automatisch" ;
+        Text [ en-US ] = "~Automatic" ;
         TabStop = TRUE ;
         Group = TRUE ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "è‡ªåŠ¨(~A)";
-        Text[ russian ] = "Àâòîìàòè÷åñêè";
-        Text[ polish ] = "~Automatycznie";
-        Text[ japanese ] = "è‡ªå‹•(~A)";
-        Text[ chinese_traditional ] = "è‡ªå‹•(~A)";
-        Text[ arabic ] = "ÊáŞÇÆí";
-        Text[ greek ] = "Áõôüìáôá";
-        Text[ korean ] = "ìë™ìœ¼ë¡œ(~A)";
-        Text[ turkish ] = "~Otomatik";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Automàtic";
-        Text[ thai ] = "~à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-        Text[ czech ] = "Automaticky";
-        Text[ hebrew ] = "â€®××•×˜×•××˜×™â€¬";
-        Text[ hindi ] = "~à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤";
-        Text[ slovak ] = "~Automaticky";
-        Text[ hungarian ] = "~Automatikus";
-        Text[ slovenian ] = "S~amodejno";
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_NUMBER_CHAR
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 54 , 10 ) ;
-        Text = "~Zeichen" ;
-        Text [ ENGLISH ] = "~Char" ;
-        Text [ norwegian ] = "~Tegn" ;
-        Text [ italian ] = "~Carattere" ;
-        Text [ portuguese_brazilian ] = "~Caracter" ;
-        Text [ portuguese ] = "~Caracteres" ;
-        Text [ finnish ] = "~Merkki" ;
-        Text [ danish ] = "Te~gn" ;
-        Text [ french ] = "Caractères" ;
-        Text [ swedish ] = "~Tecken" ;
-        Text [ dutch ] = "~Teken" ;
-        Text [ spanish ] = "~Caracteres" ;
-        Text [ english_us ] = "~Character" ;
-        Text[ chinese_simplified ] = "å­—ç¬¦(~C)";
-        Text[ russian ] = "Ñè~ìâîë";
-        Text[ polish ] = "~Znak";
-        Text[ japanese ] = "æ–‡å­—(~C)";
-        Text[ chinese_traditional ] = "å­—å…ƒ(~C)";
-        Text[ arabic ] = "ÃÍÑİ";
-        Text[ greek ] = "×áñáêôŞñåò";
-        Text[ korean ] = "ì‚¬ìš©ì ì •ì˜(~C)";
-        Text[ turkish ] = "~Karakter";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Caràcters";
-        Text[ thai ] = "~à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
-        Text[ czech ] = "Znak";
-        Text[ hebrew ] = "~Zeichen";
-        Text[ hindi ] = "~à¤…à¤•à¥à¤·à¤°";
-        Text[ slovak ] = "~Znak";
-        Text[ hungarian ] = "~Egyedi";
-        Text[ slovenian ] = "~Znak";
+        Text [ de ] = "~Zeichen" ;
+        Text [ en-US ] = "~Character" ;
+        Text [ x-comment ] = " ";
     };
     FixedLine FL_NUMBER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
-        Text = "Nummerierung" ;
-        Text [ ENGLISH ] = "Numbering" ;
-        Text [ norwegian ] = "Nummering" ;
-        Text [ italian ] = "Numerazione" ;
-        Text [ portuguese_brazilian ] = "Numeração" ;
-        Text [ portuguese ] = "Numeração" ;
-        Text [ finnish ] = "Numerointi" ;
-        Text [ danish ] = "Nummerering" ;
-        Text [ french ] = "Numérotation" ;
-        Text [ swedish ] = "Numrering" ;
-        Text [ dutch ] = "Nummering" ;
-        Text [ spanish ] = "Numeración" ;
-        Text [ english_us ] = "Numbering" ;
-        Text[ chinese_simplified ] = "ç¼–å·";
-        Text[ russian ] = "Íóìåğàöèÿ";
-        Text[ polish ] = "Numeracja";
-        Text[ japanese ] = "ç•ªå·ä»˜ã‘";
-        Text[ chinese_traditional ] = "ç·¨è™Ÿ";
-        Text[ arabic ] = "ÇáÊÑŞíã";
-        Text[ greek ] = "Áñßèìçóç";
-        Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸°";
-        Text[ turkish ] = "Numaralama";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Numeració";
-        Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
-        Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­";
-        Text[ hebrew ] = "â€®××™×¡×¤×•×¨â€¬";
-        Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾";
-        Text[ slovak ] = "ÄŒÃ­slovanie";
-        Text[ hungarian ] = "SzÃ¡mozÃ¡s";
-        Text[ slovenian ] = "OÅ¡tevilÄevanje";
+        Text [ de ] = "Nummerierung" ;
+        Text [ en-US ] = "Numbering" ;
+        Text [ x-comment ] = " ";
     };
     PushButton BT_NUMBER_CHAR
     {
@@ -252,128 +157,30 @@ ModalDialog DLG_INS_FOOTNOTE
     {
         Pos = MAP_APPFONT ( 12 , 70 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
-        Text = "~Fußnote" ;
-        Text [ ENGLISH ] = "~Footnote" ;
+        Text [ de ] = "~Fußnote" ;
         TabStop = TRUE ;
         Group = TRUE ;
         Check = TRUE ;
-        Text [ portuguese ] = "~Nota de rodapé" ;
-        Text [ english_us ] = "~Footnote" ;
-        Text [ portuguese_brazilian ] = "~Nota de Rodapé" ;
-        Text [ swedish ] = "~Fotnot" ;
-        Text [ danish ] = "~Fodnote" ;
-        Text [ italian ] = "Nota a piè pagina" ;
-        Text [ spanish ] = "N~ota al pie" ;
-        Text [ french ] = "Note de bas de page" ;
-        Text [ dutch ] = "~Voetnoot" ;
-        Text[ chinese_simplified ] = "æ³¨è„š(~F)";
-        Text[ russian ] = "Cíîñêà";
-        Text[ polish ] = "Przypis ~dolny";
-        Text[ japanese ] = "è„šæ³¨(~F)";
-        Text[ chinese_traditional ] = "è¨»è…³(~F)";
-        Text[ arabic ] = "ÍÇÔíÉ ÓİáíÉ";
-        Text[ greek ] = "Õğïóçìåßùóç";
-        Text[ korean ] = "ê°ì£¼(~F)";
-        Text[ turkish ] = "~Dipnot";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nota al peu";
-        Text[ finnish ] = "Alaviite";
-        Text[ thai ] = "à¹€~à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–";
-        Text[ czech ] = "PoznÃ¡mka pod Äarou";
-        Text[ hebrew ] = "â€®×”×¢×¨×ª ×©×•×œ×™×™×â€¬";
-        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ ~à¤¨à¥€à¤šà¥‡ à¤•à¥€ à¤Ÿà¥€à¤•à¤¾";
-        Text[ slovak ] = "~PoznÃ¡mka pod Äiarou";
-        Text[ hungarian ] = "~LÃ¡bjegyzet";
-        Text[ slovenian ] = "~Sprotna opomba";
+        Text [ en-US ] = "~Footnote" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_TYPE_ENDNOTE
     {
         Pos = MAP_APPFONT ( 12 , 83 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
-        Text = "~Endnote" ;
-        Text [ ENGLISH ] = "~Endnote" ;
-        Text [ portuguese ] = "~Nota final" ;
-        Text [ english_us ] = "~Endnote" ;
-        Text [ portuguese_brazilian ] = "~Nota de Fim" ;
-        Text [ swedish ] = "~Slutnot" ;
-        Text [ danish ] = "~Slutnote" ;
-        Text [ italian ] = "Nota di chiusura" ;
-        Text [ spanish ] = "Nota ~final" ;
-        Text [ french ] = "~Note de fin" ;
-        Text [ dutch ] = "~Eindnoot" ;
-        Text[ chinese_simplified ] = "å°¾æ³¨(~E)";
-        Text[ russian ] = "Êîíöåâàÿ ñíîñêà";
-        Text[ polish ] = "Przypis ~koñcowy";
-        Text[ japanese ] = "æ–‡æœ«è„šæ³¨(~E)";
-        Text[ chinese_traditional ] = "å°¾è¨»(~E)";
-        Text[ arabic ] = "ÊÚáíŞ ÎÊÇãí";
-        Text[ greek ] = "Óçìåßùóç ôİëïõò";
-        Text[ korean ] = "ë¯¸ì£¼(~E)";
-        Text[ turkish ] = "~Sonnot";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nota ~final";
-        Text[ finnish ] = "~Loppuviite";
-        Text[ thai ] = "~à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡à¸—à¹‰à¸²à¸¢à¹€à¸£à¸·à¹ˆà¸­à¸‡";
-        Text[ czech ] = "VysvÄ›tlivka";
-        Text[ hebrew ] = "~Endnote";
-        Text[ hindi ] = "à¤…à¤‚à¤¤à¤¿à¤® à¤Ÿà¥€à¤•à¤¾";
-        Text[ slovak ] = "~Vysvetlivka";
-        Text[ hungarian ] = "~VÃ©gjegyzet";
-        Text[ slovenian ] = "~KonÄna opomba";
+        Text [ de ] = "~Endnote" ;
+        Text [ en-US ] = "~Endnote" ;
+        Text [ x-comment ] = " ";
     };
     FixedLine FL_TYPE
     {
         Pos = MAP_APPFONT ( 6 , 60 ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
-        Text = "Art" ;
-        Text [ ENGLISH ] = "Type" ;
-        Text [ english_us ] = "Type" ;
-        Text [ portuguese_brazilian ] = "Tipo" ;
-        Text [ swedish ] = "Typ" ;
-        Text [ danish ] = "Type" ;
-        Text [ italian ] = "Tipo" ;
-        Text [ spanish ] = "Tipo" ;
-        Text [ french ] = "Type" ;
-        Text [ dutch ] = "Type" ;
-        Text [ portuguese ] = "Tipo" ;
-        Text[ chinese_simplified ] = "ç±»å‹";
-        Text[ russian ] = "Òèï";
-        Text[ polish ] = "Typ";
-        Text[ japanese ] = "ç¨®é¡";
-        Text[ chinese_traditional ] = "é¡å‹";
-        Text[ arabic ] = "ÇáäæÚ";
-        Text[ greek ] = "Ôığïò";
-        Text[ korean ] = "ì¢…ë¥˜";
-        Text[ turkish ] = "Tip";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipus";
-        Text[ finnish ] = "Tyyppi";
-        Text[ thai ] = "à¸Šà¸™à¸´à¸”";
-        Text[ czech ] = "Typ";
-        Text[ hebrew ] = "â€®×¡×•×’â€¬";
-        Text[ hindi ] = "à¤µà¤°à¥à¤—";
-        Text[ slovak ] = "Typ";
-        Text[ hungarian ] = "TÃ­pus";
-        Text[ slovenian ] = "Vrsta";
+        Text [ de ] = "Art" ;
+        Text [ en-US ] = "Type" ;
+        Text [ x-comment ] = " ";
     };
-    Text[ chinese_simplified ] = "æ’å…¥æ³¨è„š";
-    Text[ russian ] = "Âñòàâèòü ñíîñêó";
-    Text[ polish ] = "Wstaw przypis dolny";
-    Text[ japanese ] = "è„šæ³¨ã®æŒ¿å…¥";
-    Text[ chinese_traditional ] = "æ’å…¥è¨»è…³";
-    Text[ arabic ] = "ÅÏÑÇÌ ÍÇÔíÉ ÓİáíÉ";
-    Text[ greek ] = "ÅéóáãùãŞ õğïóçìåßùóçò";
-    Text[ korean ] = "ê°ì£¼ ì‚½ì…";
-    Text[ turkish ] = "Dipnot ekle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insereix una nota al peu";
-    Text[ thai ] = "à¹à¸—à¸£à¸à¹€à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–";
-    Text[ czech ] = "VloÅ¾it poznÃ¡mku pod Äarou";
-    Text[ hebrew ] = "â€®×”×•×¡×¤×ª ×”×¢×¨×ª ×©×•×œ×™×™×â€¬";
-    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤¨à¥€à¤šà¥‡ à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤œà¥‹à¤¡à¤¼à¥‹";
-    Text[ slovak ] = "VloÅ¾iÅ¥ poznÃ¡mku pod Äiarou";
-    Text[ hungarian ] = "LÃ¡bjegyzet beszÃºrÃ¡sa";
-    Text[ slovenian ] = "Vstavi sprotno opombo";
+    Text [ x-comment ] = " ";
 };
 
 
