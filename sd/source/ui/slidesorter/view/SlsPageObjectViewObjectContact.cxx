@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:28:17 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include "model/SlsPageDescriptor.hxx"
 #include "cache/SlsPageCache.hxx"
 #include "res_bmp.hrc"
+#include "tools/IconCache.hxx"
 
 #include "sdpage.hxx"
 #include "sdresid.hxx"
@@ -95,9 +96,6 @@ const sal_Int32 PageObjectViewObjectContact::mnFocusIndicatorOffset = 2;
 const sal_Int32 PageObjectViewObjectContact::mnFadeEffectIndicatorOffset = 9;
 const sal_Int32 PageObjectViewObjectContact::mnFadeEffectIndicatorSize = 14;
 const sal_Int32 PageObjectViewObjectContact::mnPageNumberOffset = 9;
-Image PageObjectViewObjectContact::saFadeEffectIndicator;
-Image PageObjectViewObjectContact::saFadeEffectIndicatorHC;
-bool PageObjectViewObjectContact::sbImagesInitialized = false;
 
 PageObjectViewObjectContact::PageObjectViewObjectContact (
     ObjectContact& rObjectContact,
@@ -108,7 +106,6 @@ PageObjectViewObjectContact::PageObjectViewObjectContact (
       mpCache(pCache)
 {
     GetPageDescriptor().SetViewObjectContact (this);
-    InitializeImages();
 }
 
 
@@ -489,9 +486,10 @@ void PageObjectViewObjectContact::PaintFadeEffectIndicator (
         != ::com::sun::star::presentation::FadeEffect_NONE)
     {
         pDevice->DrawImage (aIndicatorBox.TopLeft(),
-            bHighContrastMode
-            ? saFadeEffectIndicatorHC
-            : saFadeEffectIndicator);
+            IconCache::Instance().GetIcon (
+                bHighContrastMode
+                ? BMP_FADE_EFFECT_INDICATOR_H
+                : BMP_FADE_EFFECT_INDICATOR));
     }
 }
 
@@ -604,7 +602,9 @@ Rectangle PageObjectViewObjectContact::GetFadeEffectIndicatorArea (
             aPageModelBox.Left(),
             aPageModelBox.Bottom() + aModelOffset.Height()
             ),
-        pDevice->PixelToLogic (saFadeEffectIndicator.GetSizePixel())
+        pDevice->PixelToLogic (
+            IconCache::Instance().GetIcon(BMP_FADE_EFFECT_INDICATOR)
+            .GetSizePixel())
         );
 
     return aIndicatorArea;
@@ -736,20 +736,6 @@ model::PageDescriptor&
     return rPageObject.GetDescriptor();
 }
 
-
-
-// static
-void PageObjectViewObjectContact::InitializeImages (void)
-{
-    if ( ! sbImagesInitialized)
-    {
-        saFadeEffectIndicator
-            = Image (BitmapEx (SdResId (BMP_FADE_EFFECT_INDICATOR)));
-        saFadeEffectIndicatorHC
-            = Image (BitmapEx (SdResId (BMP_FADE_EFFECT_INDICATOR_H)));
-        sbImagesInitialized = true;
-    }
-}
 
 
 } } } // end of namespace ::sd::slidesorter::view
