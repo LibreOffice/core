@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-09 21:11:47 $
+ *  last change: $Author: kz $ $Date: 2002-01-14 21:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,7 +413,7 @@ String RID_STR_LIBISREADONLY
     Text[ polish ] = "This library is readonly.";
     Text[ portuguese_brazilian ] = "This library is readonly.";
     Text[ japanese ] = "このライブラリは書き込み保護されています。";
-    Text[ korean ] = "This library is readonly.";
+    Text[ korean ] = "이 라이브러리는 읽기 전용입니다.";
     Text[ chinese_simplified ] = "这个程序类是防改写的。";
     Text[ chinese_traditional ] = "程式類是唯讀的。";
     Text[ turkish ] = "This library is readonly.";
@@ -438,7 +438,7 @@ String RID_STR_REPLACELIB
     Text[ polish ] = "'XX' can't be replaced.";
     Text[ portuguese_brazilian ] = "'XX' can't be replaced.";
     Text[ japanese ] = "'XX' は置換できません。";
-    Text[ korean ] = "'XX' can't be replaced.";
+    Text[ korean ] = "'XX'을(를) 교체할 수 없습니다.";
     Text[ chinese_simplified ] = "无法更替 'XX'。";
     Text[ chinese_traditional ] = "無法代替 XX 。";
     Text[ turkish ] = "'XX' can't be replaced.";
@@ -463,7 +463,7 @@ String RID_STR_IMPORTNOTPOSSIBLE
     Text[ polish ] = "Import of 'XX' not possible.";
     Text[ portuguese_brazilian ] = "Import of 'XX' not possible.";
     Text[ japanese ] = "'XX' の追加はできません。";
-    Text[ korean ] = "Import of 'XX' not possible.";
+    Text[ korean ] = "'XX'을(를) 가져올 수 없습니다.";
     Text[ chinese_simplified ] = "无法增加 'XX' 。";
     Text[ chinese_traditional ] = "無法新增 XX 。";
     Text[ turkish ] = "Import of 'XX' not possible.";
@@ -488,7 +488,7 @@ String RID_STR_NOIMPORT
     Text[ polish ] = "'XX' was not imported.";
     Text[ portuguese_brazilian ] = "'XX' was not imported.";
     Text[ japanese ] = "'XX' はインポートされませんでした。";
-    Text[ korean ] = "'XX' was not imported.";
+    Text[ korean ] = "'XX'을(를) 가져오지 않았습니다.";
     Text[ chinese_simplified ] = "没有增加 'XX' 。";
     Text[ chinese_traditional ] = "沒有增加 'XX' 。";
     Text[ turkish ] = "'XX' was not imported.";
@@ -513,7 +513,7 @@ String RID_STR_ENTERPASSWORD
     Text[ polish ] = "Enter password for 'XX'";
     Text[ portuguese_brazilian ] = "Enter password for 'XX'";
     Text[ japanese ] = "'XX' のパスワードを入力します";
-    Text[ korean ] = "Enter password for 'XX'";
+    Text[ korean ] = "'XX'의 암호를 입력하십시오";
     Text[ chinese_simplified ] = "为 'XX' 键入密码。";
     Text[ chinese_traditional ] = "為 'XX' 鍵入密碼";
     Text[ turkish ] = "Enter password for 'XX'";
@@ -2934,7 +2934,7 @@ Menu RID_POPUP_DLGED
             Text[ polish ] = "W�a�ciwo�ci...";
             Text[ portuguese_brazilian ] = "Properties...";
             Text[ japanese ] = "プロパティ...";
-            Text[ korean ] = "Properties...";
+            Text[ korean ] = "등록 정보...";
             Text[ chinese_simplified ] = "属性...";
             Text[ chinese_traditional ] = "屬性...";
             Text[ turkish ] = "Properties...";
@@ -2982,6 +2982,7 @@ Image RID_IMG_LOCKED
     ImageBitmap = Bitmap { File = "locked.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
