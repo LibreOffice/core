@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:04:16 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1340,7 +1340,7 @@ void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uInt16 nWh
 }
 
 
-SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt,
+SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
             const sal_Bool bBefore, const sal_uInt16 nId, const sal_uInt32 nNdIdx,
             const String& rCharacterStyle,
             const sal_Bool bCpyBrd )
@@ -1350,7 +1350,8 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt,
     if( bWasUndo )
     {
         ClearRedo();
-        pUndo = new SwUndoInsertLabel( eType, rTxt, bBefore, nId, rCharacterStyle, bCpyBrd );
+        pUndo = new SwUndoInsertLabel( eType, rTxt, rSeparator,
+                                       bBefore, nId, rCharacterStyle, bCpyBrd );
         DoUndo( sal_False );
     }
 
@@ -1359,11 +1360,12 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt,
     //Erstmal das Feld bauen, weil ueber den Namen die TxtColl besorgt werden
     //muss
     ASSERT( nId == USHRT_MAX  || nId < GetFldTypes()->Count(), "FldType ueberindiziert." );
-    SwFieldType *pType = nId != USHRT_MAX ? (*GetFldTypes())[nId] : 0;
+    SwFieldType *pType = nId != USHRT_MAX ? (*GetFldTypes())[nId] : NULL;
     ASSERT( !pType || pType->Which() == RES_SETEXPFLD, "Falsche Id fuer Label" );
 
-    SwTxtFmtColl *pColl = 0;
+    SwTxtFmtColl *pColl = NULL;
     if( pType )
+    {
         for( sal_uInt16 i = pTxtFmtCollTbl->Count(); i; )
         {
             if( (*pTxtFmtCollTbl)[ --i ]->GetName() == pType->GetName() )
@@ -1372,14 +1374,14 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt,
                 break;
             }
         }
-    if( !pColl )
-    {
-        ASSERT( !this, "TxtCollection fuer Label nicht gefunden." );
-        pColl = GetTxtCollFromPool( RES_POOLCOLL_TEXT );
+        DBG_ASSERT( pColl, "no text collection found" );
     }
 
-    SwTxtNode *pNew = 0;
-    SwFlyFrmFmt* pNewFmt = 0;
+    if( !pColl )
+        pColl = GetTxtCollFromPool( RES_POOLCOLL_LABEL );
+
+    SwTxtNode *pNew = NULL;
+    SwFlyFrmFmt* pNewFmt = NULL;
 
     switch ( eType )
     {
@@ -1579,6 +1581,8 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt,
             aTxt += ' ';
         }
         xub_StrLen nIdx = aTxt.Len();
+        aTxt += rSeparator;
+        xub_StrLen nSepIdx = aTxt.Len();
         aTxt += rTxt;
 
         //String einfuegen
@@ -1601,7 +1605,7 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt,
                 }
                 if(pCharFmt)
                     pNew->Insert( SwFmtCharFmt( pCharFmt ), 0,
-                                        nIdx + 1, SETATTR_DONTEXPAND );
+                                        nSepIdx + 1, SETATTR_DONTEXPAND );
             }
         }
 
@@ -1643,7 +1647,9 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt,
 |*************************************************************************/
 
 SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
+                                     const String& rSeparator,
                                      const sal_uInt16 nId,
+                                     const String& rCharacterStyle,
                                      SdrObject& rSdrObj )
 {
 
@@ -1663,28 +1669,37 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     if( bWasUndo )
     {
         ClearRedo();
-        pUndo = new SwUndoInsertLabel( LTYPE_DRAW, rTxt, sal_False, nId, aEmptyStr, sal_False );
+        pUndo = new SwUndoInsertLabel(
+            LTYPE_DRAW, rTxt, rSeparator, sal_False, nId, rCharacterStyle, sal_False );
         DoUndo( sal_False );
         SetNoDrawUndoObj( sal_True );
     }
 
     // Erstmal das Feld bauen, weil ueber den Namen die TxtColl besorgt
     // werden muss
-    ASSERT( nId < GetFldTypes()->Count(), "FldType ueberindiziert." );
-    SwFieldType *pType = (*GetFldTypes())[nId];
-    ASSERT( pType->Which() == RES_SETEXPFLD, "Falsche Id fuer Label" );
-    SwSetExpField aFld( (SwSetExpFieldType*)pType, aEmptyStr,
-                        SVX_NUM_ARABIC);
+    ASSERT( nId == USHRT_MAX  || nId < GetFldTypes()->Count(), "FldType overflow" );
+    SwFieldType *pType = nId != USHRT_MAX ? (*GetFldTypes())[nId] : 0;
+    ASSERT( !pType || pType->Which() == RES_SETEXPFLD, "Wrong label id" );
 
-    SwTxtFmtColl *pColl = FindTxtFmtCollByName( pType->GetName() );
-    if( !pColl )
+    SwTxtFmtColl *pColl = NULL;
+    if( pType )
     {
-        ASSERT( !this, "TxtCollection fuer Label nicht gefunden." );
-        pColl = GetTxtCollFromPool( RES_POOLCOLL_TEXT );
+        for( sal_uInt16 i = pTxtFmtCollTbl->Count(); i; )
+        {
+            if( (*pTxtFmtCollTbl)[ --i ]->GetName() == pType->GetName() )
+            {
+                pColl = (*pTxtFmtCollTbl)[i];
+                break;
+            }
+        }
+        DBG_ASSERT( pColl, "no text collection found" );
     }
 
-    SwTxtNode* pNew = 0;
-    SwFlyFrmFmt* pNewFmt = 0;
+    if( !pColl )
+        pColl = GetTxtCollFromPool( RES_POOLCOLL_LABEL );
+
+    SwTxtNode* pNew = NULL;
+    SwFlyFrmFmt* pNewFmt = NULL;
 
     // Rahmen zerstoeren, neuen Rahmen einfuegen, entsprechenden
     // Node mit Feld in den neuen Rahmen, den alten Rahmen mit
@@ -1831,18 +1846,39 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
 
     if( pNew )
     {
-        //String aufbereiten
-        String aTxt( aFld.GetTyp()->GetName() );
-        aTxt += ' ';
+        // prepare string
+        String aTxt;
+        if ( pType )
+        {
+            aTxt += pType->GetName();
+            aTxt += ' ';
+        }
         xub_StrLen nIdx = aTxt.Len();
+        aTxt += rSeparator;
+        xub_StrLen nSepIdx = aTxt.Len();
         aTxt += rTxt;
 
-        //String einfuegen
+        // insert text
         SwIndex aIdx( pNew, 0 );
         pNew->Insert( aTxt, aIdx );
 
-        //Feld einfuegen
-        pNew->Insert( SwFmtFld( aFld ), nIdx, nIdx );
+        // insert field
+        if ( pType )
+        {
+            SwSetExpField aFld( (SwSetExpFieldType*)pType, aEmptyStr, SVX_NUM_ARABIC );
+            pNew->Insert( SwFmtFld( aFld ), nIdx, nIdx );
+            if ( rCharacterStyle.Len() )
+            {
+                SwCharFmt* pCharFmt = FindCharFmtByName( rCharacterStyle );
+                if ( !pCharFmt )
+                {
+                    const USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( rCharacterStyle, GET_POOLID_CHRFMT );
+                    pCharFmt = GetCharFmtFromPool( nId );
+                }
+                if ( pCharFmt )
+                    pNew->Insert( SwFmtCharFmt( pCharFmt ), 0, nSepIdx + 1, SETATTR_DONTEXPAND );
+            }
+        }
     }
 
     if( pUndo )
@@ -1961,7 +1997,7 @@ static String lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
             pFlyFmt->GetName().Match( aName ) == nNmLen )
         {
             // Nummer bestimmen und das Flag setzen
-            nNum = pFlyFmt->GetName().Copy( nNmLen ).ToInt32();
+            nNum = static_cast< sal_uInt16 >( pFlyFmt->GetName().Copy( nNmLen ).ToInt32() );
             if( nNum-- && nNum < rFmts.Count() )
                 pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
         }
@@ -2076,7 +2112,7 @@ void SwDoc::SetAllUniqueFlyNames()
                 else if( rNm.Match( sOLENm ) == ( nLen = sOLENm.Len() ))
                     pNum = &nOLENum;
 
-                if( pNum && *pNum < ( nLen = rNm.Copy( nLen ).ToInt32() ))
+                if ( pNum && *pNum < ( nLen = static_cast< xub_StrLen >( rNm.Copy( nLen ).ToInt32() ) ) )
                     *pNum = nLen;
             }
             else
