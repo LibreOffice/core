@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:27:30 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
-using namespace ::drafts::com::sun::star::form;
+using namespace ::com::sun::star::form::binding;
 
 //.........................................................................
 namespace frm
@@ -397,7 +397,7 @@ void OFormattedModel::implConstruct()
 
 //------------------------------------------------------------------
 OFormattedModel::OFormattedModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_FORMATTEDFIELD, FRM_CONTROL_FORMATTEDFIELD, sal_True )
+    :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_FORMATTEDFIELD, FRM_CONTROL_FORMATTEDFIELD, sal_True, sal_True )
                             // use the old control name for compytibility reasons
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
 {
@@ -441,12 +441,22 @@ void SAL_CALL OFormattedModel::disposing()
 StringSequence OFormattedModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OEditBaseModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 3);
 
-    ::rtl::OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-3] = FRM_SUN_COMPONENT_BINDDB_FORMATTEDFIELD;
-    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_DATABASE_FORMATTEDFIELD;
-    pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_FORMATTEDFIELD;
+    sal_Int32 nOldLen = aSupported.getLength();
+    aSupported.realloc( nOldLen + 8 );
+    ::rtl::OUString* pStoreTo = aSupported.getArray() + nOldLen;
+
+    *pStoreTo++ = BINDABLE_CONTROL_MODEL;
+    *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
+    *pStoreTo++ = VALIDATABLE_CONTROL_MODEL;
+
+    *pStoreTo++ = BINDABLE_DATA_AWARE_CONTROL_MODEL;
+    *pStoreTo++ = VALIDATABLE_BINDABLE_CONTROL_MODEL;
+
+    *pStoreTo++ = FRM_SUN_COMPONENT_FORMATTEDFIELD;
+    *pStoreTo++ = FRM_SUN_COMPONENT_DATABASE_FORMATTEDFIELD;
+    *pStoreTo++ = BINDABLE_DATABASE_FORMATTED_FIELD;
+
     return aSupported;
 }
 
@@ -495,32 +505,10 @@ void OFormattedModel::fillProperties(
                 Sequence< com::sun::star::beans::Property >& _rProps,
                 Sequence< com::sun::star::beans::Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(10)
-        DECL_PROP1(NAME,                ::rtl::OUString,        BOUND);
-        DECL_PROP2(CLASSID,             sal_Int16,              READONLY, TRANSIENT);
+    BEGIN_DESCRIBE_PROPERTIES( 3, OEditBaseModel )
         DECL_BOOL_PROP1(EMPTY_IS_NULL,                          BOUND);
-        DECL_PROP1(TAG,                 ::rtl::OUString,        BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,              BOUND);
-        DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,        BOUND);
-        DECL_IFACE_PROP3(BOUNDFIELD,    com::sun::star::beans::XPropertySet,BOUND,READONLY, TRANSIENT);
         DECL_BOOL_PROP2(FILTERPROPOSAL,                         BOUND, MAYBEDEFAULT);
-        DECL_IFACE_PROP2(CONTROLLABEL,  com::sun::star::beans::XPropertySet,BOUND, MAYBEVOID);
-        DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
-
-        // the supplier is readonly for us
-//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_FORMATSSUPPLIER, PropertyAttribute::READONLY, 0);
-            // remove this. The property does not need to be readonly anymore.
-            //
-            // The original idea why we made this readonly is that we change the supplier ourself when
-            // the form which we belong to is loaded, and then we use the supplier from the data source
-            // the for is bound to.
-            // But this does not contradict (like I originally thought) the possibility to change the
-            // formatter from outside as well. If it is changed when the form is not yet loaded,
-            // then we will overwrite this upon loading, anyway. If it is changed while the form
-            // is loaded, then this does no harm, too: The format is preserved (the aggregate cares for this),
-            // and upon unloading, we restore the old formatter.
-            //
-            // 84794 - 2002-10-09 - fs@openoffice.org
 
         // TreatAsNumeric nicht transient : wir wollen es an der UI anbinden (ist noetig, um dem EffectiveDefault
         // - der kann Text oder Zahl sein - einen Sinn zu geben)
@@ -536,7 +524,7 @@ void OFormattedModel::fillProperties(
             // there is no general way to decide which characters/sub strings are allowed during the input of an
             // arbitraryly formatted control
             // 81441 - 12/07/00 - FS
-    FRM_END_PROP_HELPER();
+    END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
