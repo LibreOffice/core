@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: cl $ $Date: 2001-03-19 10:19:40 $
+#   last change: $Author: cl $ $Date: 2001-03-26 15:53:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,8 +127,8 @@ SHL1STDLIBS=        \
     $(OFALIB) \
     $(SCLIB) \
     $(TOOLSLIB) \
+    $(COMPHELPERLIB) \
     $(ONELIB) \
-    $(CPPULIB) \
     $(PAPLIB) \
     $(GOLIB) \
     $(VOSLIB) \
@@ -167,7 +167,6 @@ SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 .IF "$(GUI)" == "WNT" || "$(GUI)" == "WIN"
 SHL1RES=    $(RCTARGET)
 .ENDIF
-
 
 # --- Linken der Applikation ---------------------------------------
 
@@ -267,6 +266,9 @@ $(MISC)$/$(SHL1TARGET).def:  makefile.mk
     @echo _CreateObjSdGraphicDocShellDll @5                        >>$@
     @echo _InitSdDll @6                                            >>$@
     @echo _DeInitSdDll @7                                          >>$@
+    @echo component_getImplementationEnvironment 				   >>$@
+    @echo component_writeInfo									   >>$@
+    @echo component_getFactory									   >>$@
 .ENDIF
 
 .IF "$(GUI)" == "WNT"
@@ -284,6 +286,9 @@ $(MISC)$/$(SHL1TARGET).def:
     @echo   CreateObjSdGraphicDocShellDll @23                      >>$@
     @echo   InitSdDll @24                                          >>$@
     @echo   DeInitSdDll @25                                        >>$@
+    @echo component_getImplementationEnvironment 				   >>$@
+    @echo component_writeInfo									   >>$@
+    @echo component_getFactory									   >>$@
 .ENDIF
 
 # -------------------------------------------------------------------------
