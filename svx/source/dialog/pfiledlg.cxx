@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pfiledlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-05 12:52:31 $
+ *  last change: $Author: pb $ $Date: 2000-10-12 12:48:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,12 +187,12 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *pParent, sal_uInt16 nKind )
         }
     }
 
-    // Wildcat-Filter
-    AddFilter( SVX_RESSTR(STR_EXTFILTER_ALL),
-        UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.*" ) ) );
+    // add the All-Filter
+    String aAllFilter( SVX_RESSTR(STR_EXTFILTER_ALL) );
+    AddFilter( aAllFilter, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.*" ) ) );
 
-    // activate 1. filter
-    SetCurFilter (GetFilterName(GetFilterCount()-1));
+    // and activate him
+    SetCurFilter( aAllFilter );
 }
 
 /*************************************************************************
