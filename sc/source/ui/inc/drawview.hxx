@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 18:00:39 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@ public:
     virtual void    MarkListHasChanged();
     virtual void    SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                          const SfxHint& rHint, const TypeId& rHintType );
+
+    virtual void    DoConnect(SdrOle2Obj* pOleObj);
 
     void            DrawMarks( OutputDevice* pOut ) const;
 
