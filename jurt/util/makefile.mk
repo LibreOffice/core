@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:27:56 $
+#   last change: $Author: jl $ $Date: 2002-10-25 06:45:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,8 @@ PRJNAME	= jurt
 TARGET	= jurt
 
 # --- Settings -----------------------------------------------------
+USE_UDK_EXTENDED_MANIFESTFILE=TRUE
+USE_EXTENDED_MANIFESTFILE=TRUE
 
 .INCLUDE :  settings.mk
 

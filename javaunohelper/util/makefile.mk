@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jl $ $Date: 2002-04-11 14:45:20 $
+#   last change: $Author: jl $ $Date: 2002-10-25 06:42:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,8 @@ PRJNAME = juhelper
 TARGET  = juh
 
 # --- Settings -----------------------------------------------------
+USE_EXTENDED_MANIFESTFILE=TRUE
+USE_UDK_EXTENDED_MANIFESTFILE=TRUE
 
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/version.mk
@@ -76,6 +78,7 @@ JARCLASSDIRS	= \
 
 JARTARGET		= $(TARGET).jar
 JARCOMPRESS		= TRUE
+
 
 # --- Targets ------------------------------------------------------
     
