@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: bc $ $Date: 2001-06-25 09:30:00 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:26:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,8 +176,8 @@ Text = "Hinweis: Wδhrungsbetrδge aus externen Verknόpfungen, sowie Wδhrungsumrec
 Text[English] = "Hint: Currency amounts that refer to external Links as well as currency -converting factors in Cell formulas cannot be converted.";
 Text[ english_us ] = "Note: Currency amounts from external links and currency conversion factors in formulas cannot be converted.";
     Text[ portuguese ] = "Observaηγo: ι impossνvel converter montantes em moeda ligados a referκncias externas bem como factores de conversγo monetαria em fσrmulas de cιlulas.";
-    Text[ russian ] = "Κ Βΰψεμσ ρβεδενθώ: ρσμμϋ βΰλώς, κξςξπϋε ρβÿηΰνϋ ρ βνεψνθμθ ρρϋλκΰμθ, ΰ ςΰκζε κξύττθφθενςϋ οεπεβξδΰ βΰλώςϋ β τξπμσλΰυ ÿχεεκ νε οπεξαπΰησώςρÿ.";
-    Text[ greek ] = "Συμβουλή: Η μετατροπή ενός ποσού νομίσματος το οποίο είναι συνδεδεμένο με εξωτερικές αναφορές δεν είναι δυνατή. Επίσης δεν είναι δυνατή η μετατροπή παραγόντων μετατροπής νομισμάτων σε τύπους.";
+    Text[ russian ] = "Κ Βΰψεμσ ρβεδενθώ: ρσμμϋ βΰλώς, κξςξπϋε ρβÿηΰνϋ ρ βνεψνθμθ ρρϋλκΰμθ, ΰ ςΰκζε κξύττθφθενςϋ οεπεβξδΰ βΰλώςϋ β τξπμσλΰυ ÿχεεκ νε οπεξαπΰησώς";
+    Text[ greek ] = "Συμβουλή: Η μετατροπή ενός ποσού νομίσματος το οποίο είναι συνδεδεμένο με εξωτερικές αναφορές δεν είναι δυνατή. Επίσης δεν είναι δυνατή η ";
     Text[ dutch ] = "Tip: Bedragen in valuta die verbonden zijn met externe links en valuta omrekeningsfactoren in celformules kunnen niet worden geconverteerd.";
     Text[ french ] = "Avertissement : Il est impossible de convertir les montants provenant de liens externes, de mκme que les facteurs de conversion inclus dans les formules.";
     Text[ spanish ] = "Advertencia: No se pueden convertir los importes monetarios de referencias externas ni los factores de conversiσn de moneda en fσrmulas.";
@@ -567,7 +567,7 @@ String STEP_AUTOPILOT + 1
 {
 Text = "~Einzelnes %PRODUCTNAME -Dokument";
 Text[English] = "~Single File";
-Text[ english_us ] = "~Single %PRODUCTNAME Document";
+Text[ english_us ] = "~Single %PRODUCTNAME Calc Document";
     Text[ portuguese ] = "~Documento ϊnico do %PRODUCTNAME Calc";
     Text[ russian ] = "~Ξδθν δξκσμενς %PRODUCTNAME Calc";
     Text[ greek ] = "Μ~εμονωμένο έγγραφο του %PRODUCTNAME Calc";
@@ -654,7 +654,7 @@ Text[ english_us ] = "Source Directory:";
     Text[ spanish ] = "Directorio fuente:";
     Text[ italian ] = "Cartella di origine (root):";
     Text[ danish ] = "Kildebibliotek:";
-    Text[ swedish ] = "Kδllmapp:";
+    Text[ swedish ] = "Kδllkatalog:";
     Text[ polish ] = "Katalog rσd³owy:";
     Text[ portuguese_brazilian ] = "Source Directory:";
     Text[ japanese ] = "Ώ°½ Γή¨ΪΈΔΨ:";
@@ -1276,7 +1276,7 @@ Text[English] = "The AutoPilot cannot convert this document, because in document
 Text[ english_us ] = "The AutoPilot cannot edit this document as cell formats cannot be modified in documents containing protected spreadsheets.";
     Text[ portuguese ] = "O AutoPiloto nγo pode editar este documento, jα que ι impossνvel modificar estilos de cιlulas em documentos com tabelas protegidas.";
     Text[ russian ] = "ΐβςξοθλξς νε μξζες θημενθςό ύςξς δξκσμενς, οξρκξλόκσ θημενÿςό ρςθλθ ÿχεεκ β δξκσμενςΰυ ρ ηΰωθωεννϋμθ λθρςΰμθ νεβξημξζνξ.";
-    Text[ greek ] = "Η επεξεργασία αυτού του εγγράφου με τον ΑυτοΠιλότο δεν είναι δυνατή επειδή δεν μπορεί να εκτελεστεί η τροποποίηση προτύπων κελιών σε έγγραφα με προστατευόμενους πίνακες.";
+    Text[ greek ] = "Η επεξεργασία αυτού του εγγράφου με τον ΑυτοΠιλότο δεν είναι δυνατή επειδή δεν μπορεί να εκτελεστεί η τροποποίηση προτύπων κελιών σε έγγρ";
     Text[ dutch ] = "Celopmaakprofielen in documenten met beveiligde werkbladen kunnen niet worden gewijzigd. De AutoPiloot kan dit document daarom niet bewerken.";
     Text[ french ] = "L'AutoPilote ne peut pas ιditer ce document : la modification des styles de cellule est impossible dans un document contenant des feuilles de calcul protιgιes.";
     Text[ spanish ] = "El AutoPiloto no puede editar este documento porque no se pueden modificar estilos de celda en documentos con hojas protegidas.";
@@ -1855,7 +1855,7 @@ Text = "Die fόr Ihr Betriebssystem eingestellte Sprache ist keine Sprache der Eu
 Text[English] = "The language set for the operation system is not a language of the European Currency Union!";
 Text[ english_us ] = "The language set for your operating system is not a language of the European Monetary Union.";
     Text[ portuguese ] = "A lνngua que definiu para o seu sistema operativo nγo faz parte das lνnguas da uniγo monetαria europeia!";
-    Text[ russian ] = "ίηϋκ, σρςΰνξβλεννϋι δλÿ Βΰψει ξοεπΰφθξννξι ρθρςεμϋ ÿβλÿεςρÿ ÿηϋκξμ ρςπΰνϋ, νε βυξδÿωει β Εβπξοειρκθι ύκξνξμθχερκθι θ βΰλώςνϋι ρξώη (ΕέΒΡ).";
+    Text[ russian ] = "ίηϋκ, σρςΰνξβλεννϋι δλÿ Βΰψει ξοεπΰφθξννξι ρθρςεμϋ ÿβλÿεςρÿ ÿηϋκξμ ρςπΰνϋ, νε βυξδÿωει β Εβπξοειρκθι ύκξνξμθχερκθι θ βΰλώςνϋι ρξώη (ΕέΒΡ)";
     Text[ greek ] = "Η γλώσσα την οποία επιλέξατε για το λειτουργικό σας σύστημα δεν είναι γλώσσα της ευρωπαϊκής νομισματικής ένωσης!";
     Text[ dutch ] = "De voor uw besturingssysteem ingestelde taal is geen taal van de Europese Monetaire Unie!";
     Text[ french ] = "La langue dιfinie pour le systθme d'exploitation ne correspond ΰ aucun pays de l'Union Monιtaire Europιenne !";
@@ -2006,6 +2006,7 @@ Text[ english_us ] = "Sheet is always unprotected";
     Text[ finnish ] = "Lomake on aina suojaamaton";
     Text[ catalan ] = "Anular siempre la protecciσn de hoja";
 };
+
 
 
 
