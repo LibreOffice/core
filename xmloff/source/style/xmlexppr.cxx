@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-18 08:53:19 $
+ *  last change: $Author: mib $ $Date: 2001-04-19 13:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@
 #ifndef __SGI_STL_LIST
 #include <list>
 #endif
-#ifndef _CNTRSRT_HXX
-#include <svtools/cntnrsrt.hxx>
+#ifndef __SGI_STL_HASH_MAP
+#include <hash_map>
 #endif
 
 #include "xmlexppr.hxx"
@@ -241,9 +241,70 @@ FilterPropertyInfo_Impl::FilterPropertyInfo_Impl(
 
 typedef std::list<FilterPropertyInfo_Impl> FilterPropertyInfoList_Impl;
 
+// ----------------------------------------------------------------------------
+
+struct FilterPropertiesInfoKey_Impl
+{
+    Reference < XPropertySetInfo >          xPropInfo;
+    Sequence < sal_Int8 >                   aImplementationId;
+
+    inline FilterPropertiesInfoKey_Impl();
+    FilterPropertiesInfoKey_Impl( const Reference < XPropertySetInfo >& rPropInfo,
+                                  const Sequence < sal_Int8 >& rImplId );
+};
+
+FilterPropertiesInfoKey_Impl::FilterPropertiesInfoKey_Impl()
+{
+    OSL_ENSURE( aImplementationId.getLength()==16, "illegal constructor call" );
+}
+
+FilterPropertiesInfoKey_Impl::FilterPropertiesInfoKey_Impl(
+        const Reference < XPropertySetInfo >& rPropInfo,
+        const Sequence < sal_Int8 >& rImplId ) :
+    xPropInfo( rPropInfo ),
+    aImplementationId( rImplId )
+{
+    OSL_ENSURE( rPropInfo.is(), "prop info missing" );
+    OSL_ENSURE( aImplementationId.getLength()==16, "invalid implementation id" );
+}
+
+// ----------------------------------------------------------------------------
+
+struct FilterPropertiesHash_Impl
+{
+    size_t operator()( const FilterPropertiesInfoKey_Impl& r ) const;
+    inline bool operator()( const FilterPropertiesInfoKey_Impl& r1,
+                               const FilterPropertiesInfoKey_Impl& r2 ) const;
+};
+
+size_t FilterPropertiesHash_Impl::operator()(
+        const FilterPropertiesInfoKey_Impl& r ) const
+{
+    const sal_Int32* pBytesAsInt32Array =
+        (const sal_Int32*)r.aImplementationId.getConstArray();
+    sal_Int32 nId32 =   pBytesAsInt32Array[0] ^
+                        pBytesAsInt32Array[1] ^
+                        pBytesAsInt32Array[2] ^
+                        pBytesAsInt32Array[3];
+    return (size_t)nId32 ^ (size_t)r.xPropInfo.get();
+}
+
+inline bool FilterPropertiesHash_Impl::operator()(
+        const FilterPropertiesInfoKey_Impl& r1,
+        const FilterPropertiesInfoKey_Impl& r2 ) const
+{
+    if( r1.xPropInfo != r2.xPropInfo )
+        return sal_False;
+
+    const sal_Int8* pId1 = r1.aImplementationId.getConstArray();
+    const sal_Int8* pId2 = r2.aImplementationId.getConstArray();
+    return memcmp( pId1, pId2, 16 * sizeof( sal_Int8 ) ) == 0;
+}
+
+// ----------------------------------------------------------------------------
+
 class FilterPropertiesInfo_Impl
 {
-    Sequence < sal_Int8 >                   aImplementationId;
     sal_uInt32                              nCount;
     FilterPropertyInfoList_Impl             aPropInfos;
     FilterPropertyInfoList_Impl::iterator   aLastItr;
@@ -252,17 +313,7 @@ class FilterPropertiesInfo_Impl
 
 public:
     FilterPropertiesInfo_Impl();
-    FilterPropertiesInfo_Impl( const Sequence < sal_Int8 >& rImplId );
     ~FilterPropertiesInfo_Impl();
-    void setImplementationId( const Sequence < sal_Int8 >& rImplId )
-    {
-        aImplementationId = rImplId;
-        OSL_ENSURE( aImplementationId.getLength()==16, "invalid implementation id" );
-    }
-    const Sequence < sal_Int8 >& getImplementationId() const
-    {
-        return aImplementationId;
-    }
 
     void AddProperty(const rtl::OUString& rApiName, const sal_uInt32 nIndex);
     const uno::Sequence<OUString>& GetApiNames();
@@ -274,18 +325,36 @@ public:
     sal_uInt32 GetPropertyCount() const { return nCount; }
 };
 
-int FilterPropertiesInfoCmp_Impl( const FilterPropertiesInfo_Impl& r1,
-                                  const FilterPropertiesInfo_Impl& r2 )
+// ----------------------------------------------------------------------------
+
+typedef std::hash_map
+<
+    FilterPropertiesInfoKey_Impl,
+    FilterPropertiesInfo_Impl *,
+    FilterPropertiesHash_Impl,
+    FilterPropertiesHash_Impl
+>
+FilterOropertiesHashMap_Impl;
+
+class FilterPropertiesInfos_Impl : public FilterOropertiesHashMap_Impl
 {
-    return memcmp( r1.getImplementationId().getConstArray(),
-                   r2.getImplementationId().getConstArray(), 16 );
+public:
+    ~FilterPropertiesInfos_Impl ();
+};
+
+FilterPropertiesInfos_Impl::~FilterPropertiesInfos_Impl ()
+{
+    FilterOropertiesHashMap_Impl::iterator aIter = begin();
+    FilterOropertiesHashMap_Impl::iterator aEnd = end();
+    while( aIter != aEnd )
+    {
+        delete (*aIter).second;
+        (*aIter).second = 0;
+        aIter++;
+    }
 }
 
-DECLARE_CONTAINER_SORT_DEL( FilterPropertiesInfos_Impl,
-                             FilterPropertiesInfo_Impl );
-IMPL_CONTAINER_SORT( FilterPropertiesInfos_Impl,
-                     FilterPropertiesInfo_Impl,
-                     FilterPropertiesInfoCmp_Impl )
+// ----------------------------------------------------------------------------
 
 FilterPropertiesInfo_Impl::FilterPropertiesInfo_Impl() :
     aPropInfos(),
@@ -293,17 +362,6 @@ FilterPropertiesInfo_Impl::FilterPropertiesInfo_Impl() :
     pApiNames( 0 )
 {
     aLastItr = aPropInfos.begin();
-}
-
-FilterPropertiesInfo_Impl::FilterPropertiesInfo_Impl(
-        const Sequence < sal_Int8 >& rImplId ) :
-    aPropInfos(),
-    aImplementationId( rImplId ),
-    nCount(0),
-    pApiNames( 0 )
-{
-    aLastItr = aPropInfos.begin();
-    OSL_ENSURE( aImplementationId.getLength()==16, "invalid implementation id" );
 }
 
 FilterPropertiesInfo_Impl::~FilterPropertiesInfo_Impl()
@@ -592,42 +650,32 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
 
     sal_Int32 nProps = maPropMapper->GetEntryCount();
 
-    FilterPropertiesInfo_Impl aFilterInfo;
-    sal_Bool bInfoValid = sal_False;
-
     FilterPropertiesInfo_Impl *pFilterInfo = 0;
 
     Reference < XTypeProvider > xTypeProv( xPropSet, UNO_QUERY );
+    Sequence< sal_Int8 > aImplId;
     if( xTypeProv.is() )
     {
-        Sequence< sal_Int8  > aImplId( xTypeProv->getImplementationId() );
+        aImplId = xTypeProv->getImplementationId();
         if( aImplId.getLength() == 16 )
         {
             if( pCache )
             {
-                aFilterInfo.setImplementationId( aImplId );
-                sal_uInt32 nPos = 0;
-                if( pCache->Seek_Entry( &aFilterInfo, &nPos ) )
-                {
-                    pFilterInfo = pCache->GetObject( nPos );
-                    bInfoValid = sal_True;
-                }
-            }
-            if( !pFilterInfo )
-            {
-                pFilterInfo = new FilterPropertiesInfo_Impl( aImplId );
-                if( !pCache )
-                    ((SvXMLExportPropertyMapper *)this)->pCache =
-                        new FilterPropertiesInfos_Impl( 10, 5 );
-                pCache->Insert( pFilterInfo );
+                // The key must not be created outside this block, because it
+                // keeps a reference to the property set info.
+                FilterPropertiesInfoKey_Impl aKey( xInfo, aImplId );
+                FilterPropertiesInfos_Impl::iterator aIter =
+                    pCache->find( aKey );
+                if( aIter != pCache->end() )
+                    pFilterInfo = (*aIter).second;
             }
         }
     }
-    if( !pFilterInfo )
-        pFilterInfo = &aFilterInfo;
 
-    if( !bInfoValid )
+    sal_Bool bDelInfo = sal_False;
+    if( !pFilterInfo )
     {
+        pFilterInfo = new FilterPropertiesInfo_Impl;
         for( sal_Int32 i=0; i < nProps; i++ )
         {
             // Are we allowed to ask for the property? (MID_FLAG_NO_PROP..)
@@ -638,6 +686,29 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
                 ( (0 != (nFlags & MID_FLAG_MUST_EXIST)) ||
                   xInfo->hasPropertyByName( rAPIName ) ) )
                 pFilterInfo->AddProperty(rAPIName, i);
+        }
+
+        if( xTypeProv.is() && aImplId.getLength() == 16 )
+        {
+            // Check whether the property set info is destroyed if it is
+            // assigned to a weak reference only. If it is destroyed, then
+            // every instance of getPropertySetInfo returns a new object.
+            // Such property set infos must not be cached.
+            WeakReference < XPropertySetInfo > xWeakInfo( xInfo );
+            xInfo = 0;
+            xInfo = xWeakInfo;
+            if( xInfo.is() )
+            {
+                if( !pCache )
+                    ((SvXMLExportPropertyMapper *)this)->pCache =
+                        new FilterPropertiesInfos_Impl;
+                FilterPropertiesInfoKey_Impl aKey( xInfo, aImplId );
+                (*pCache)[aKey] = pFilterInfo;
+            }
+            else
+            {
+                bDelInfo = sal_True;
+            }
         }
     }
 
@@ -668,6 +739,9 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
         else
             aItr++;
     }*/
+
+    if( bDelInfo )
+        delete pFilterInfo;
 
     return aPropStateArray;
 }
