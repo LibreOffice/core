@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:30:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,10 @@
 #include "sc.hrc"
 #endif
 
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
 #include <vcl/window.hxx>
@@ -93,12 +93,12 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
 ScAccessiblePreviewTable::ScAccessiblePreviewTable( const ::com::sun::star::uno::Reference<
-                                ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+                                ::com::sun::star::accessibility::XAccessible>& rxParent,
                             ScPreviewShell* pViewShell, sal_Int32 nIndex ) :
     ScAccessibleContextBase( rxParent, AccessibleRole::TABLE ),
     mpViewShell( pViewShell ),
@@ -151,7 +151,7 @@ void ScAccessiblePreviewTable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
         else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
         {
             AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT;
+            aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
             aEvent.Source = uno::Reference< XAccessible >(this);
             CommitChange(aEvent);
         }
@@ -530,11 +530,11 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumn( sal_Int32 nChi
 
 //=====  XAccessibleComponent  ============================================
 
-uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleAt( const awt::Point& aPoint )
+uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleAtPoint( const awt::Point& aPoint )
                                 throw (uno::RuntimeException)
 {
     uno::Reference<XAccessible> xRet;
-    if (contains(aPoint))
+    if (containsPoint(aPoint))
     {
         ScUnoGuard aGuard;
         IsObjectValid();
@@ -654,7 +654,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL ScAccessiblePreviewTable::getAcce
         pStateSet->AddState(AccessibleStateType::DEFUNC);
     else
     {
-        pStateSet->AddState(AccessibleStateType::MANAGES_DESCENDANT);
+        pStateSet->AddState(AccessibleStateType::MANAGES_DESCENDANTS);
         pStateSet->AddState(AccessibleStateType::ENABLED);
         pStateSet->AddState(AccessibleStateType::OPAQUE);
         if (isShowing())
@@ -680,7 +680,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePreviewTable::getSupportedServ
     aSequence.realloc(nOldSize + 1);
     ::rtl::OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.table.AccessibleTableView"));
+    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.table.AccessibleTableView"));
 
     return aSequence;
 }
