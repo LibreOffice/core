@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-19 10:56:49 $
+ *  last change: $Author: mav $ $Date: 2003-03-25 08:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@ using namespace com::sun::star;
 
 const GUID* guidList[ SUPPORTED_FACTORIES_NUM ] = {
     &OID_WriterTextServer,
-    &OID_WriterWebServer,
-    &OID_WriterGlobalServer,
+//  &OID_WriterWebServer,
+//  &OID_WriterGlobalServer,
     &OID_CalcServer,
     &OID_DrawingServer,
     &OID_PresentationServer,

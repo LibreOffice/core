@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guid.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-17 11:02:34 $
+ *  last change: $Author: mav $ $Date: 2003-03-25 08:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,13 +73,13 @@
 {
     if ( *guid == OID_WriterTextServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.TextDocument" ) );
-
+/*
     if ( *guid == OID_WriterWebServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.WebDocument" ) );
 
     if ( *guid == OID_WriterGlobalServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.GlobalDocument" ) );
-
+*/
     if ( *guid == OID_CalcServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Calc.SpreadsheetDocument" ) );
 
@@ -99,13 +99,13 @@
 {
     if ( *guid == OID_WriterTextServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Writer)" ) );
-
+/*
     if ( *guid == OID_WriterWebServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "HTML" ) );
 
     if ( *guid == OID_WriterGlobalServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "writer_globaldocument_StarOffice_XML_Writer_GlobalDocument" ) );
-
+*/
     if ( *guid == OID_CalcServer )
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Calc)" ) );
 

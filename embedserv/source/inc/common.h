@@ -2,9 +2,9 @@
  *
  *  $RCSfile: common.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-05 15:49:19 $
+ *  last change: $Author: mav $ $Date: 2003-03-25 08:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,6 @@
 #include <osl/interlck.h>
 #endif
 
-#define SUPPORTED_FACTORIES_NUM 7
-
 namespace com { namespace sun { namespace star {
     namespace lang {
         class XMultiServiceFactory;
@@ -93,15 +91,16 @@ namespace com { namespace sun { namespace star {
 
 const sal_Int32 nConstBufferSize = 32000;
 
+#define SUPPORTED_FACTORIES_NUM 5
 
 // {30A2652A-DDF7-45e7-ACA6-3EAB26FC8A4E}
 DEFINE_GUID(OID_WriterTextServer,   0x30a2652a, 0xddf7, 0x45e7, 0xac, 0xa6, 0x3e, 0xab, 0x26, 0xfc, 0x8a, 0x4e );
 
 // {43FEEA23-228B-4726-AFFE-214598F47289}
-DEFINE_GUID(OID_WriterWebServer,    0x43feea23, 0x228b, 0x4726, 0xaf, 0xfe, 0x21, 0x45, 0x98, 0xf4, 0x72, 0x89 );
+// DEFINE_GUID(OID_WriterWebServer, 0x43feea23, 0x228b, 0x4726, 0xaf, 0xfe, 0x21, 0x45, 0x98, 0xf4, 0x72, 0x89 );
 
 // {1386E9B2-8706-438b-BF51-5CA7864770C5}
-DEFINE_GUID(OID_WriterGlobalServer, 0x1386e9b2, 0x8706, 0x438b, 0xbf, 0x51, 0x5c, 0xa7, 0x86, 0x47, 0x70, 0xc5 );
+// DEFINE_GUID(OID_WriterGlobalServer,  0x1386e9b2, 0x8706, 0x438b, 0xbf, 0x51, 0x5c, 0xa7, 0x86, 0x47, 0x70, 0xc5 );
 
 // {7B342DC4-139A-4a46-8A93-DB0827CCEE9C}
 DEFINE_GUID(OID_CalcServer,         0x7b342dc4, 0x139a, 0x4a46, 0x8a, 0x93, 0xdb, 0x8, 0x27, 0xcc, 0xee, 0x9c );
