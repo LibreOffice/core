@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:48:51 $
+ *  last change: $Author: vg $ $Date: 2003-05-13 12:27:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,27 +587,27 @@ oslFileError SAL_CALL osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle Handle
 
 /* Volume attributes */
 
-#define osl_Volume_Attribute_Removeable        0x00000001L
-#define osl_Volume_Attribute_Remote            0x00000002L
-#define osl_Volume_Attribute_CompactDisc       0x00000004L
-#define osl_Volume_Attribute_FixedDisk         0x00000008L
-#define osl_Volume_Attribute_RAMDisk           0x00000010L
-#define osl_Volume_Attribute_FloppyDisk        0x00000020L
+#define osl_Volume_Attribute_Removeable            0x00000001L
+#define osl_Volume_Attribute_Remote                0x00000002L
+#define osl_Volume_Attribute_CompactDisc           0x00000004L
+#define osl_Volume_Attribute_FixedDisk             0x00000008L
+#define osl_Volume_Attribute_RAMDisk               0x00000010L
+#define osl_Volume_Attribute_FloppyDisk            0x00000020L
 
-#define osl_Volume_Attribute_Case_Is_Preserved 0x00000040L
-#define osl_Volume_Attribute_Case_Sensitive    0x00000080L
+#define osl_Volume_Attribute_Case_Is_Preserved     0x00000040L
+#define osl_Volume_Attribute_Case_Sensitive        0x00000080L
 
 /* Flags specifying which fields to retreive by osl_getVolumeInfo */
 
-#define osl_VolumeInfo_Mask_Attributes      0x00000001L
-#define osl_VolumeInfo_Mask_TotalSpace      0x00000002L
-#define osl_VolumeInfo_Mask_UsedSpace       0x00000004L
-#define osl_VolumeInfo_Mask_FreeSpace       0x00000008L
-#define osl_VolumeInfo_Mask_MaxNameLength   0x00000010L
-#define osl_VolumeInfo_Mask_MaxPathLength   0x00000020L
-#define osl_VolumeInfo_Mask_FileSystemName  0x00000040L
-#define osl_VolumeInfo_Mask_DeviceHandle    0x00000080L
-
+#define osl_VolumeInfo_Mask_Attributes             0x00000001L
+#define osl_VolumeInfo_Mask_TotalSpace             0x00000002L
+#define osl_VolumeInfo_Mask_UsedSpace              0x00000004L
+#define osl_VolumeInfo_Mask_FreeSpace              0x00000008L
+#define osl_VolumeInfo_Mask_MaxNameLength          0x00000010L
+#define osl_VolumeInfo_Mask_MaxPathLength          0x00000020L
+#define osl_VolumeInfo_Mask_FileSystemName         0x00000040L
+#define osl_VolumeInfo_Mask_DeviceHandle           0x00000080L
+#define osl_VolumeInfo_Mask_FileSystemCaseHandling 0x00000100L
 
 typedef
 
