@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numehelp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:34 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ using namespace xmloff::token;
 XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xTempNumberFormatsSupplier)
     : pExport(NULL),
-    xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : NULL),
+    xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > ()),
     aNumberFormats(),
     sStandardFormat(RTL_CONSTASCII_USTRINGPARAM(XML_STANDARDFORMAT)),
     sType(RTL_CONSTASCII_USTRINGPARAM(XML_TYPE))
@@ -118,7 +118,7 @@ XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xTempNumberFormatsSupplier,
             SvXMLExport& rTempExport, sal_uInt16 nTempNamespace)
       : pExport(&rTempExport),
-    xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : NULL),
+    xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > ()),
     aNumberFormats(),
     nNamespace(nTempNamespace),
     sAttrValueType(rTempExport.GetNamespaceMap().GetQNameByKey( nTempNamespace, GetXMLToken(XML_VALUE_TYPE))),
