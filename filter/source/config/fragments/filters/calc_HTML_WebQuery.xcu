@@ -1,15 +1,10 @@
     <node oor:name="calc_HTML_WebQuery" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="Flags"><value>IMPORT ALIEN</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value></value></prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_web_HTML</value></prop>
-        <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
-        <prop oor:name="UIComponent"/>
-        <prop oor:name="UserData"/>
-        <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
-        <prop oor:name="UIName">
-            <value xml:lang="de">Webseiten-Abfrage (%productname% Calc)</value>
-            <value xml:lang="en-US">Web Page Query (%productname% Calc)</value>
-            <value xml:lang="x-translate">Web Page Query (%productname% Calc)</value>
-        </prop>
-        <prop oor:name="Flags"><value>IMPORT ALIEN</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
     </node>
