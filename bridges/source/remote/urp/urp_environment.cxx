@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_environment.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-15 11:10:30 $
+ *  last change: $Author: jbu $ $Date: 2000-12-17 19:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,9 +232,26 @@ void SAL_CALL allThreadsAreGone( uno_Environment * pEnvRemote )
     remote_Context *pContext = (remote_Context *) pEnvRemote->pContext;
     urp_BridgeImpl *pImpl = ( urp_BridgeImpl *) pContext->m_pBridgeImpl;
 
-    ::osl::MutexGuard guard( pImpl->m_disposingMutex );
+    // if the current thread is not the writer thread, the writer thread
+    // object is not destroyed up to now, though it may already have run out.
+    // In both cases, it must be safe to cal pImpl->m_pWriter->getIdentifier()
+    OSL_ASSERT( pImpl->m_pWriter );
+    if( pImpl->m_pWriter->getIdentifier() == osl_getThreadIdentifier(0) )
+    {
+        // This is the writer thread. It has done some release calls,
+        // and is now the last one, that was active. Because the writer
+        // thread holds the environment weakly, there may also be a thread within
+        // the dispose of the bridge ( because the enviroment may have a refcount == 0 ).
+        // However, this thread MUST wait for the writer thread, so it is perfectly ok,
+        // not to set m_cndWaitForThreads. ( The check for m_nRemoteThreads is done
+        // after the join of the writer thread ).
+    }
+    else
+    {
+        ::osl::MutexGuard guard( pImpl->m_disposingMutex );
 
-    pImpl->m_cndWaitForThreads.set();
+        pImpl->m_cndWaitForThreads.set();
+    }
 
 }
 
