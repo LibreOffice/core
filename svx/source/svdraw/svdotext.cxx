@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-07 10:31:51 $
+ *  last change: $Author: aw $ $Date: 2001-03-13 12:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,12 @@
 #ifndef _SVX_XFLGRIT_HXX
 #include "xflgrit.hxx"
 #endif
+
+/***********************************************************************
+* Macros fuer Umrechnung Twips<->100tel mm                             *
+***********************************************************************/
+#define TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
+#define MM_TO_TWIPS(val) ((val * 72 + 63) / 127)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -2141,6 +2147,35 @@ BOOL SdrTextObj::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& rPolyPolygon) c
     Vector2D aScale((double)aRectangle.GetWidth(), (double)aRectangle.GetHeight());
     Vector2D aTranslate((double)aRectangle.Left(), (double)aRectangle.Top());
 
+    // position maybe relative to anchorpos, convert
+    if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
+        aTranslate -= Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+
+    // force MapUnit to 100th mm
+    SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
+    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+    {
+        switch(eMapUnit)
+        {
+            case SFX_MAPUNIT_TWIP :
+            {
+                // position
+                aTranslate.X() = TWIPS_TO_MM(aTranslate.X());
+                aTranslate.Y() = TWIPS_TO_MM(aTranslate.Y());
+
+                // size
+                aScale.X() = TWIPS_TO_MM(aScale.X());
+                aScale.Y() = TWIPS_TO_MM(aScale.Y());
+
+                break;
+            }
+            default:
+            {
+                DBG_ERROR("TRGetBaseGeometry: Missing unit translation to 100th mm!");
+            }
+        }
+    }
+
     // build matrix
     rMat.Identity();
     if(aScale.X() != 1.0 || aScale.Y() != 1.0)
@@ -2170,6 +2205,35 @@ void SdrTextObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPo
     aGeo.RecalcSinCos();
     aGeo.nShearWink = 0;
     aGeo.RecalcTan();
+
+    // force metric to pool metric
+    SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
+    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+    {
+        switch(eMapUnit)
+        {
+            case SFX_MAPUNIT_TWIP :
+            {
+                // position
+                aTranslate.X() = MM_TO_TWIPS(aTranslate.X());
+                aTranslate.Y() = MM_TO_TWIPS(aTranslate.Y());
+
+                // size
+                aScale.X() = MM_TO_TWIPS(aScale.X());
+                aScale.Y() = MM_TO_TWIPS(aScale.Y());
+
+                break;
+            }
+            default:
+            {
+                DBG_ERROR("TRSetBaseGeometry: Missing unit translation to PoolMetric!");
+            }
+        }
+    }
+
+    // if anchor is used, make position relative to it
+    if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
+        aTranslate -= Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
 
     // build and set BaseRect (use scale)
     Point aPoint = Point();

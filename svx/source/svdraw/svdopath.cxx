@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-22 12:22:52 $
+ *  last change: $Author: aw $ $Date: 2001-03-13 12:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,12 @@
 #ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>     // FRound
 #endif
+
+/***********************************************************************
+* Macros fuer Umrechnung Twips<->100tel mm                             *
+***********************************************************************/
+#define TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
+#define MM_TO_TWIPS(val) ((val * 72 + 63) / 127)
 
 /*************************************************************************/
 
@@ -2418,13 +2424,6 @@ FASTBOOL SdrPathObj::NbcDelPoint(USHORT nHdlNum)
                 }
             } else if (!bPrevIsBez && bNextIsBez) {
                 nDelAnz=3;  // Uebergang Kurve nach Linie
-#ifdef DBG_UTIL
-            } else {
-                ByteString aStr("SdrPathObj::NbcDelPoint(USHORT(");
-                aStr += nHdlNum;
-                aStr += ")): Unerlaubt im else-Zweig";
-                DBG_ERROR(aStr.GetBuffer());
-#endif
             }
             if (nDelAnz!=0) rXPoly.Remove(nDelOfs,nDelAnz);
             if (bClosed) { // letzten Punkt auf den Ersten setzen
@@ -3062,6 +3061,46 @@ BOOL SdrPathObj::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& rPolyPolygon) c
     // polygon to (0,0)
     rPolyPolygon.Move(-aRectangle.Left(), -aRectangle.Top());
 
+    // position maybe relative to anchorpos, convert
+    if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
+        aTranslate -= Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+
+    // force MapUnit to 100th mm
+    SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
+    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+    {
+        switch(eMapUnit)
+        {
+            case SFX_MAPUNIT_TWIP :
+            {
+                // position
+                aTranslate.X() = TWIPS_TO_MM(aTranslate.X());
+                aTranslate.Y() = TWIPS_TO_MM(aTranslate.Y());
+
+                // size
+                aScale.X() = TWIPS_TO_MM(aScale.X());
+                aScale.Y() = TWIPS_TO_MM(aScale.Y());
+
+                // polygon
+                for(sal_uInt16 a(0); a < rPolyPolygon.Count(); a++)
+                {
+                    XPolygon& rPoly = rPolyPolygon[a];
+                    for(sal_uInt16 b(0); b < rPoly.GetPointCount(); b++)
+                    {
+                        rPoly[b].X() = TWIPS_TO_MM(rPoly[b].X());
+                        rPoly[b].Y() = TWIPS_TO_MM(rPoly[b].Y());
+                    }
+                }
+
+                break;
+            }
+            default:
+            {
+                DBG_ERROR("TRGetBaseGeometry: Missing unit translation to 100th mm!");
+            }
+        }
+    }
+
     // build matrix
     rMat.Identity();
     if(aScale.X() != 1.0 || aScale.Y() != 1.0)
@@ -3086,14 +3125,57 @@ void SdrPathObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPo
     double fShear, fRotate;
     rMat.DecomposeAndCorrect(aScale, fShear, fRotate, aTranslate);
 
+    // copy poly
+    XPolyPolygon aNewPolyPolygon(rPolyPolygon);
+
     // reset object shear and rotations
     aGeo.nDrehWink = 0;
     aGeo.RecalcSinCos();
     aGeo.nShearWink = 0;
     aGeo.RecalcTan();
 
+    // force metric to pool metric
+    SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
+    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+    {
+        switch(eMapUnit)
+        {
+            case SFX_MAPUNIT_TWIP :
+            {
+                // position
+                aTranslate.X() = MM_TO_TWIPS(aTranslate.X());
+                aTranslate.Y() = MM_TO_TWIPS(aTranslate.Y());
+
+                // size
+                aScale.X() = MM_TO_TWIPS(aScale.X());
+                aScale.Y() = MM_TO_TWIPS(aScale.Y());
+
+                // polygon
+                for(sal_uInt16 a(0); a < aNewPolyPolygon.Count(); a++)
+                {
+                    XPolygon& rPoly = aNewPolyPolygon[a];
+                    for(sal_uInt16 b(0); b < rPoly.GetPointCount(); b++)
+                    {
+                        rPoly[b].X() = MM_TO_TWIPS(rPoly[b].X());
+                        rPoly[b].Y() = MM_TO_TWIPS(rPoly[b].Y());
+                    }
+                }
+
+                break;
+            }
+            default:
+            {
+                DBG_ERROR("TRSetBaseGeometry: Missing unit translation to PoolMetric!");
+            }
+        }
+    }
+
+    // if anchor is used, make position relative to it
+    if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
+        aTranslate -= Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+
     // set PathPoly
-    SetPathPoly(rPolyPolygon);
+    SetPathPoly(aNewPolyPolygon);
 
     // shear?
     if(fShear != 0.0)
