@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:42:32 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,8 +230,8 @@ void SwListShell::GetState(SfxItemSet &rSet)
     SwWrtShell& rSh = GetShell();
     BYTE nCurrentNumLevel = rSh.GetNumLevel( &bHasChildren );
     BOOL bNoNumbering = nCurrentNumLevel == NO_NUMBERING;
-    BOOL bNoNumLevel = 0 != (nCurrentNumLevel&NO_NUMLEVEL);
-    nCurrentNumLevel &= ~NO_NUMLEVEL;
+    BOOL bNoNumLevel = ! IsNum(nCurrentNumLevel);
+    nCurrentNumLevel = GetRealLevel(nCurrentNumLevel);
     while ( nWhich )
     {
         switch( nWhich )
