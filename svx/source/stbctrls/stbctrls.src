@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 19:33:16 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ String RID_SVXSTR_INSERT_TEXT
     Text [ italian ] = "INS" ;
     Text [ portuguese_brazilian ] = "INSERIR" ;
     Text [ portuguese ] = "INSER" ;
-    Text [ finnish ] = "LIS" ;
+    Text [ finnish ] = "INSRT" ;
     Text [ danish ] = "IND" ;
     Text [ french ] = "INS" ;
     Text [ swedish ] = "INFGA" ;
@@ -104,7 +104,7 @@ String RID_SVXSTR_OVERWRITE_TEXT
     Text [ italian ] = "SSC" ;
     Text [ portuguese_brazilian ] = "SOBRE" ;
     Text [ portuguese ] = "SUB" ;
-    Text [ finnish ] = "KORV" ;
+    Text [ finnish ] = "OVER" ;
     Text [ danish ] = "OVR" ;
     Text [ french ] = "RFP" ;
     Text [ swedish ] = "ÖVER" ;
@@ -152,6 +152,7 @@ String RID_SVXSTR_SELMODE_STD
     Text[ turkish ] = "STD";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "STD";
+    Text[ finnish ] = "STD";
 };
 String RID_SVXSTR_SELMODE_ER
 {
@@ -162,7 +163,7 @@ String RID_SVXSTR_SELMODE_ER
     TEXT [ italian ] = "EXT" ;
     TEXT [ portuguese_brazilian ] = "EXT" ;
     TEXT [ portuguese ] = "EXT" ;
-    TEXT [ finnish ] = "LAAJ" ;
+    TEXT [ finnish ] = "EXT" ;
     TEXT [ danish ] = "UDV" ;
     TEXT [ french ] = "EXT" ;
     TEXT [ swedish ] = "UTV" ;
@@ -192,7 +193,7 @@ String RID_SVXSTR_SELMODE_ERG
     TEXT [ italian ] = "RIS" ;
     TEXT [ portuguese_brazilian ] = "ACR" ;
     TEXT [ portuguese ] = "ADI" ;
-    TEXT [ finnish ] = "LIS" ;
+    TEXT [ finnish ] = "ADD" ;
     TEXT [ danish ] = "TLF" ;
     TEXT [ french ] = "AJT" ;
     TEXT [ swedish ] = "TLF" ;
@@ -276,6 +277,7 @@ Menu RID_SVXMNU_ZOOM
             Text[ turkish ] = "Optimum";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Óptimo";
+            Text[ finnish ] = "Optimaalinen";
         };
         MenuItem
         {
@@ -374,6 +376,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ turkish ] = "Ortalama";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Promedio";
+            Text[ finnish ] = "Keskiarvo";
         };
         MenuItem
         {
@@ -403,6 +406,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ turkish ] = "Sayý2";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Cantidad2";
+            Text[ finnish ] = "LaskeA";
         };
         MenuItem
         {
@@ -432,6 +436,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ turkish ] = "Sayý";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Cantidad";
+            Text[ finnish ] = "Laske";
         };
         MenuItem
         {
@@ -461,6 +466,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ turkish ] = "Azami";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Máximo";
+            Text[ finnish ] = "Maksimi";
         };
         MenuItem
         {
@@ -490,6 +496,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ turkish ] = "Asgari";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Mínimo";
+            Text[ finnish ] = "Minimi";
         };
         MenuItem
         {
@@ -519,6 +526,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ turkish ] = "Toplam";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Suma";
+            Text[ finnish ] = "Summa";
         };
         MenuItem
         {
@@ -548,6 +556,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ turkish ] = "Yok";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Ninguno";
+            Text[ finnish ] = "Ei mitään";
         };
     };
 };
