@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langselect.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:24:58 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,6 @@
 namespace desktop
 {
 
-//typedef std::list<LanguageType> LangList;
 typedef std::list<rtl::OUString> IsoList;
 typedef std::list<String> StrList;
 
@@ -83,7 +82,6 @@ class LanguageSelectionDialog : public  ModalDialog
 {
 friend class LanguageSelection;
 private:
-//    LanguageType m_aLanguage;
     FixedText m_aText;
     ListBox m_aListBox;
     OKButton m_aButton;
@@ -99,17 +97,12 @@ class LanguageSelection
 {
 private:
 
-    static IsoList m_lLanguages;
-
-//    static LangList getInstalledLanguages();
     static IsoList getInstalledIsoLanguages();
-//    static StrList getLanguageStrings(const LangList&);
     static StrList getLanguageStrings(const IsoList&);
     static rtl::OUString getUserLanguage();
 
 public:
     static com::sun::star::lang::Locale IsoStringToLocale(const rtl::OUString& str);
-//    static LanguageType getLanguageType();
     static rtl::OUString getLanguageString();
     static void prepareLanguage();
 };
