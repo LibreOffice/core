@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: obo $ $Date: 2003-12-02 15:39:13 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_SALGDI3_CXX
-
-// -=-= #includes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -107,8 +103,8 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
-#ifndef _SV_POLY_HXX
-#include <poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
@@ -275,11 +271,10 @@ class FontLookup
 
     private:
 
+        rtl::OString        maName;
         FontWeight          mnWeight;
         FontItalic          mnItalic;
         sal_Bool            mbDisplay;
-
-        rtl::OString        maName;
 
     public:
 
@@ -287,9 +282,9 @@ class FontLookup
                                           const psp::PrintFontManager& rMgr );
                             FontLookup (const Xlfd& rFont);
                             FontLookup (const FontLookup &rRef) :
+                                    maName   (rRef.maName),
                                     mnWeight (rRef.mnWeight),
                                     mnItalic (rRef.mnItalic),
-                                    maName   (rRef.maName),
                                     mbDisplay(rRef.mbDisplay)
                             {}
                             ~FontLookup ()
@@ -1470,7 +1465,6 @@ USHORT X11SalGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
 #ifndef _USE_PRINT_EXTENSION_
     if( (m_pPrinterGfx != NULL) )
     {
-        sal_Bool bVertical = pEntry->mbVertical;
         sal_Int32 nID = pEntry->mpFontData ? (sal_Int32)pEntry->mpFontData->mpSysData : 0;
 
         bool bArtItalic = false;
@@ -1904,19 +1898,6 @@ X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
         if ( bFontVertical_ )
             pMetric->mnOrientation = 0;
     }
-}
-
-// ---------------------------------------------------------------------------
-
-static long
-InitializeWidthArray( long *pWidthArray, sal_Size nItems, int nValue = 0  )
-{
-    const long nPrecision = 1;
-
-    for ( int i = 0; i < nItems; i++, pWidthArray++ )
-        *pWidthArray = nValue;
-
-    return nPrecision;
 }
 
 // ---------------------------------------------------------------------------
