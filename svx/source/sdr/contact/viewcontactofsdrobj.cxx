@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:41:49 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,8 @@ static sal_Bool bTestTheBitmapBufferedObjects(sal_False);
                 else
                 {
 #endif // DBG_UTIL
-                    pRetval = new ViewObjectContact(rObjectContact, *this);
+                    // standard
+                    pRetval = &ViewContact::CreateObjectSpecificViewObjectContact(rObjectContact);
 #ifdef DBG_UTIL
                 }
 #endif // DBG_UTIL
@@ -644,13 +645,13 @@ static sal_Bool bTestTheBitmapBufferedObjects(sal_False);
             DBG_ASSERT(GetSdrObject().GetSubList(),
                 "ViewContactOfSdrObj::GetViewContact: Access to non-existent Sub-List (!)");
             SdrObject* pObj = GetSdrObject().GetSubList()->GetObj(nIndex);
-            DBG_ASSERT(pObj, "ViewContactOfMasterPage::GetViewContact: Corrupt SdrObjList (!)");
+            DBG_ASSERT(pObj, "ViewContactOfSdrObj::GetViewContact: Corrupt SdrObjList (!)");
             return pObj->GetViewContact();
         }
 
-        sal_Bool ViewContactOfSdrObj::GetParentContacts(ViewContactVector& rVContacts) const
+        ViewContact* ViewContactOfSdrObj::GetParentContact() const
         {
-            rVContacts.clear();
+            ViewContact* pRetval = 0L;
             SdrObjList* pObjList = GetSdrObject().GetObjList();
 
             if(pObjList)
@@ -658,21 +659,19 @@ static sal_Bool bTestTheBitmapBufferedObjects(sal_False);
                 if(pObjList->ISA(SdrPage))
                 {
                     // Is a page
-                    ViewContact* pParent = &(((SdrPage*)pObjList)->GetViewContact());
-                    rVContacts.push_back(pParent);
+                    pRetval = &(((SdrPage*)pObjList)->GetViewContact());
                 }
                 else
                 {
                     // Is a group?
                     if(pObjList->GetOwnerObj())
                     {
-                        ViewContact* pParent = &(pObjList->GetOwnerObj()->GetViewContact());
-                        rVContacts.push_back(pParent);
+                        pRetval = &(pObjList->GetOwnerObj()->GetViewContact());
                     }
                 }
             }
 
-            return (0L != rVContacts.size());
+            return pRetval;
         }
 
         // React on changes of the object of this ViewContact
