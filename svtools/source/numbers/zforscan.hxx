@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-10-14 20:04:39 $
+ *  last change: $Author: er $ $Date: 2000-10-16 18:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ public:
                                                 // tauscht Referenzdatum aus
     void ChangeStandardPrec(short nPrec);       // tauscht Standardprecision aus
 
-    xub_StrLen ScanFormat( XubString& rString, XubString& rComment );   // Aufruf der Scan-Analyse
+    xub_StrLen ScanFormat( String& rString, String& rComment ); // Aufruf der Scan-Analyse
 
     void CopyInfo(ImpSvNumberformatInfo* pInfo,
                      USHORT nAnz);              // Kopiert die FormatInfo
@@ -129,20 +129,20 @@ public:
     const International& GetIntl() const        { return *pFormatter->GetInternational(); }
     const CharClass& GetChrCls() const          { return *pFormatter->GetCharClass(); }
 
-    const XubString& GetQuartalString() const   { return sKeyword[NF_KEY_QUARTER]; }
-    const XubString& GetTrueString() const      { return sKeyword[NF_KEY_TRUE]; }
-    const XubString& GetFalseString() const     { return sKeyword[NF_KEY_FALSE]; }
-    const XubString& GetColorString() const     { return sKeyword[NF_KEY_COLOR]; }
-    const XubString& GetRedString() const       { return sKeyword[NF_KEY_RED]; }
-    const XubString& GetBooleanString() const   { return sKeyword[NF_KEY_BOOLEAN]; }
-    const XubString& GetErrorString() const     { return sErrStr; }
-    const XubString* GetKeyword() const         { return sKeyword; }
+    const String& GetQuartalString() const  { return sKeyword[NF_KEY_QUARTER]; }
+    const String& GetTrueString() const     { return sKeyword[NF_KEY_TRUE]; }
+    const String& GetFalseString() const    { return sKeyword[NF_KEY_FALSE]; }
+    const String& GetColorString() const    { return sKeyword[NF_KEY_COLOR]; }
+    const String& GetRedString() const      { return sKeyword[NF_KEY_RED]; }
+    const String& GetBooleanString() const  { return sKeyword[NF_KEY_BOOLEAN]; }
+    const String& GetErrorString() const    { return sErrStr; }
+    const String* GetKeyword() const        { return sKeyword; }
 
     Date* GetNullDate() const                   { return pNullDate; }
-    const XubString& GetStandardName() const    { return sNameStandardFormat; }
+    const String& GetStandardName() const   { return sNameStandardFormat; }
     short GetStandardPrec() const               { return nStandardPrec; }
     const Color& GetRedColor() const            { return StandardColor[4]; }
-    Color* GetColor(XubString& sStr);           // Setzt Hauptfarben oder
+    Color* GetColor(String& sStr);          // Setzt Hauptfarben oder
                                                 // definierte Farben
 
     void SetConvertMode(LanguageType eTmpLge, LanguageType eNewLge)
@@ -172,11 +172,11 @@ private:                            // ---- privater Teil
     Color StandardColor[SC_MAX_ANZ_STANDARD_FARBEN];
                                                 // Array der Standardfarben
     Date* pNullDate;                            // "1.1.1900"
-    XubString sNameStandardFormat;              // "Standard"
+    String sNameStandardFormat;             // "Standard"
     short nStandardPrec;                        // default Precision fuer Standardformat (2)
     SvNumberFormatter* pFormatter;              // Pointer auf die Formatliste
 
-    XubString sStrArray[SC_MAX_ANZ_FORMAT_STRINGS];// Array der Symbole
+    String sStrArray[SC_MAX_ANZ_FORMAT_STRINGS];// Array der Symbole
     short nTypeArray[SC_MAX_ANZ_FORMAT_STRINGS];// Array der Infos
                                                 // externe Infos:
     USHORT nAnzResStrings;                      // Anzahl der Ergebnissymbole
@@ -200,8 +200,8 @@ private:                            // ---- privater Teil
     BOOL bFrac;                                 // wird bei Lesen des / gesetzt
     BOOL bBlank;                                // wird bei ' '(Fraction) ges.
     BOOL bDecSep;                               // Wird beim ersten , gesetzt
-    XubString sCurString;                       // Das Waehrungssymbol in Upper
-    XubString sErrStr;                          // String fuer Fehlerausgaben
+    String sCurString;                      // Das Waehrungssymbol in Upper
+    String sErrStr;                         // String fuer Fehlerausgaben
 
     BOOL bConvertMode;                          // Wird im Convert-Mode gesetzt
                                                 // Land/Sprache, in die der
@@ -210,10 +210,10 @@ private:                            // ---- privater Teil
                                                 // Land/Sprache, aus der der
     LanguageType eTmpLnge;                      // gescannte String konvertiert
                                                 // wird (fuer Excel Filter)
-    xub_Unicode cOldDecSep;                     // Dezimalsymbol der Ausgangs-
-    xub_Unicode cOldThousandSep;                // spr., analog Tausenderpunkt
-    xub_Unicode cOldDateSep;                    // Datums- und Zeitsymbol
-    xub_Unicode cOldTimeSep;
+    sal_Unicode cOldDecSep;                     // Dezimalsymbol der Ausgangs-
+    sal_Unicode cOldThousandSep;                // spr., analog Tausenderpunkt
+    sal_Unicode cOldDateSep;                    // Datums- und Zeitsymbol
+    sal_Unicode cOldTimeSep;
     xub_StrLen nCurrPos;                        // Position des Waehrungssymbols
 
 #ifdef _ZFORSCAN_CXX                // ----- private Methoden -----
@@ -224,24 +224,24 @@ private:                            // ---- privater Teil
                                                 // Schluesselworts oder 0
     USHORT NextKeyword(USHORT i);               // Gibt Index des naechsten
                                                 // Schluesselworts oder 0
-    xub_Unicode PreviousChar(USHORT i);             // Gibt letzten Buchstaben
+    sal_Unicode PreviousChar(USHORT i);             // Gibt letzten Buchstaben
                                                 // vor der Position,
                                                 // skipt EMPTY, STRING, STAR, BLANK
-    xub_Unicode NextChar(USHORT i);                 // Gibt ersten Buchst. danach
+    sal_Unicode NextChar(USHORT i);                 // Gibt ersten Buchst. danach
     short PreviousType( USHORT i );             // Gibt Typ vor Position,
                                                 // skipt EMPTY
     BOOL IsLastBlankBeforeFrac(USHORT i);       // True <=> es kommt kein ' '
                                                 // mehr bis zum '/'
     void Reset();                               // Reset aller Variablen
                                                 // vor Analysestart
-    USHORT GetKeyWord(const XubString& sSymbol); // Vergleicht mit den Keywords
+    USHORT GetKeyWord(const String& sSymbol); // Vergleicht mit den Keywords
                                                 // return 0 <=> nicht gefunden
-    short Next_Symbol(const XubString& rStr,
+    short Next_Symbol(const String& rStr,
                         xub_StrLen& nPos,
-                      XubString& sSymbol);       // Naechstes Symbol
-    xub_StrLen Symbol_Division(const XubString& rString);// lexikalische Voranalyse
-    xub_StrLen ScanType(const XubString& rString);  // Analyse des Formattyps
-    xub_StrLen FinalScan( XubString& rString, XubString& rComment );    // Endanalyse mit Vorgabe
+                      String& sSymbol);       // Naechstes Symbol
+    xub_StrLen Symbol_Division(const String& rString);// lexikalische Voranalyse
+    xub_StrLen ScanType(const String& rString); // Analyse des Formattyps
+    xub_StrLen FinalScan( String& rString, String& rComment );  // Endanalyse mit Vorgabe
                                                 // des Typs
 
 #endif //_ZFORSCAN_CXX

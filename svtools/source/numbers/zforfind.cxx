@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-10-14 20:04:39 $
+ *  last change: $Author: er $ $Date: 2000-10-16 18:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@
 //#define MyIsdigit(c)  (pFormatter->GetCharClass()->isDigit(c))
 #define MyIsdigit(c)    ((c) < 256 && isdigit((unsigned char)(c)))
 #else
-#define MyIsdigit(c)    (isdigit((unsigned xub_Unicode)(c)))
+#define MyIsdigit(c)    (isdigit((unsigned sal_Unicode)(c)))
 #endif
 
 //---------------------------------------------------------------------------
@@ -161,7 +161,7 @@ void ImpSvNumberInputScan::Reset()
 //
 // nur Vorzeichenlose Dezimalzahlen
 
-double ImpSvNumberInputScan::StringToDouble( const XubString& rStr )
+double ImpSvNumberInputScan::StringToDouble( const String& rStr )
 {
     double fNum = 0.0;
     xub_StrLen nPos = 0;
@@ -221,13 +221,13 @@ enum ScanState              // States der Turing-Maschine
 };
 
 BOOL ImpSvNumberInputScan::NextNumberStringSymbol(
-        const xub_Unicode*& pStr,
-        XubString& rSymbol )
+        const sal_Unicode*& pStr,
+        String& rSymbol )
 {
     BOOL isNumber = FALSE;
-    xub_Unicode cToken;
+    sal_Unicode cToken;
     ScanState eState = SsStart;
-    register const xub_Unicode* pHere = pStr;
+    register const sal_Unicode* pHere = pStr;
     register xub_StrLen nChars = 0;
 
     while ( ((cToken = *pHere) != 0) && eState != SsStop)
@@ -283,12 +283,12 @@ BOOL ImpSvNumberInputScan::NextNumberStringSymbol(
 //      SkipThousands
 
 BOOL ImpSvNumberInputScan::SkipThousands(
-        const xub_Unicode*& pStr,
-        XubString& rSymbol )
+        const sal_Unicode*& pStr,
+        String& rSymbol )
 {
     BOOL res = FALSE;
-    xub_Unicode cToken;
-    register const xub_Unicode* pHere = pStr;
+    sal_Unicode cToken;
+    register const sal_Unicode* pHere = pStr;
     ScanState eState = SsStart;
     xub_StrLen nCounter;                                // zaehlt 3er Paare
 
@@ -346,10 +346,10 @@ BOOL ImpSvNumberInputScan::SkipThousands(
 //---------------------------------------------------------------------------
 //      NumberStringDivision
 
-void ImpSvNumberInputScan::NumberStringDivision( const XubString& rString )
+void ImpSvNumberInputScan::NumberStringDivision( const String& rString )
 {
-    register const xub_Unicode* pStr = rString.GetBuffer();
-    register const xub_Unicode* const pEnd = pStr + rString.Len();
+    register const sal_Unicode* pStr = rString.GetBuffer();
+    register const sal_Unicode* const pEnd = pStr + rString.Len();
     while ( pStr < pEnd && nAnzStrings < SV_MAX_ANZ_INPUT_STRINGS )
     {
         if ( NextNumberStringSymbol( pStr, sStrArray[nAnzStrings] ) )
@@ -374,14 +374,14 @@ void ImpSvNumberInputScan::NumberStringDivision( const XubString& rString )
 //---------------------------------------------------------------------------
 // if rString contains rWhat at nPos
 
-BOOL ImpSvNumberInputScan::StringContains( const XubString& rWhat,
-            const XubString& rString, xub_StrLen nPos )
+BOOL ImpSvNumberInputScan::StringContains( const String& rWhat,
+            const String& rString, xub_StrLen nPos )
 {
     if ( nPos + rWhat.Len() <= rString.Len() )
     {
-        register const xub_Unicode* pWhat = rWhat.GetBuffer();
-        register const xub_Unicode* const pEnd = pWhat + rWhat.Len();
-        register const xub_Unicode* pStr = rString.GetBuffer() + nPos;
+        register const sal_Unicode* pWhat = rWhat.GetBuffer();
+        register const sal_Unicode* const pEnd = pWhat + rWhat.Len();
+        register const sal_Unicode* pStr = rString.GetBuffer() + nPos;
         while ( pWhat < pEnd )
         {
             if ( *pWhat != *pStr )
@@ -400,7 +400,7 @@ BOOL ImpSvNumberInputScan::StringContains( const XubString& rWhat,
 //
 // ueberspringt genau das angegebene Zeichen
 
-inline BOOL ImpSvNumberInputScan::SkipChar( xub_Unicode c, const XubString& rString,
+inline BOOL ImpSvNumberInputScan::SkipChar( sal_Unicode c, const String& rString,
         xub_StrLen& nPos )
 {
     if ((nPos < rString.Len()) && (rString.GetChar(nPos) == c))
@@ -417,12 +417,12 @@ inline BOOL ImpSvNumberInputScan::SkipChar( xub_Unicode c, const XubString& rStr
 //
 // Ueberspringt Leerzeichen
 
-inline void ImpSvNumberInputScan::SkipBlanks( const XubString& rString,
+inline void ImpSvNumberInputScan::SkipBlanks( const String& rString,
         xub_StrLen& nPos )
 {
     if ( nPos < rString.Len() )
     {
-        register const xub_Unicode* p = rString.GetBuffer() + nPos;
+        register const sal_Unicode* p = rString.GetBuffer() + nPos;
         while ( *p == ' ' )
         {
             nPos++;
@@ -437,8 +437,8 @@ inline void ImpSvNumberInputScan::SkipBlanks( const XubString& rString,
 //
 // jump over rWhat in rString at nPos
 
-inline BOOL ImpSvNumberInputScan::SkipString( const XubString& rWhat,
-        const XubString& rString, xub_StrLen& nPos )
+inline BOOL ImpSvNumberInputScan::SkipString( const String& rWhat,
+        const String& rString, xub_StrLen& nPos )
 {
     if ( StringContains( rWhat, rString, nPos ) )
     {
@@ -455,7 +455,7 @@ inline BOOL ImpSvNumberInputScan::SkipString( const XubString& rWhat,
 // erkennt genau .111 als Tausenderpunkt
 
 inline BOOL ImpSvNumberInputScan::GetThousandSep(
-        const XubString& rString,
+        const String& rString,
         xub_StrLen& nPos,
         USHORT nStringPos )
 {
@@ -482,7 +482,7 @@ inline BOOL ImpSvNumberInputScan::GetThousandSep(
 // "FALSE"=> -1:
 // sonst  =>  0:
 
-short ImpSvNumberInputScan::GetLogical( const XubString& rString )
+short ImpSvNumberInputScan::GetLogical( const String& rString )
 {
     short res;
 
@@ -509,7 +509,7 @@ short ImpSvNumberInputScan::GetLogical( const XubString& rString )
 // Wandelt String mit Monatsbezeichnung (JAN, Januar) in Zahl des Monats um
 // gibt 0 zurueck, wenn nix gefunden wird.
 
-short ImpSvNumberInputScan::GetMonth( const XubString& rString, xub_StrLen& nPos )
+short ImpSvNumberInputScan::GetMonth( const String& rString, xub_StrLen& nPos )
 {
     short res = 0;
 
@@ -517,7 +517,7 @@ short ImpSvNumberInputScan::GetMonth( const XubString& rString, xub_StrLen& nPos
     {
         if ( !bTextInitialized )
             InitText();
-//      XubString sString( pFormatter->GetCharClass()->upper(rString) );        // NoMoreUpperNeeded
+//      String sString( pFormatter->GetCharClass()->upper(rString) );       // NoMoreUpperNeeded
         for (int i = 0; i < 12; i++)                    // 12 Monate
         {
             if ( StringContains( aUpperMonthText[i], rString, nPos ) )
@@ -545,7 +545,7 @@ short ImpSvNumberInputScan::GetMonth( const XubString& rString, xub_StrLen& nPos
 // Wandelt String mit Wochentagname (Mo, Montag) in Zahl des Wochentags um
 // (enum DayOfWeek + 1 !), gibt 0 zurueck, wenn nix gefunden wird.
 
-short ImpSvNumberInputScan::GetDayOfWeek( const XubString& rString, xub_StrLen& nPos )
+short ImpSvNumberInputScan::GetDayOfWeek( const String& rString, xub_StrLen& nPos )
 {
     short res = 0;
 
@@ -553,7 +553,7 @@ short ImpSvNumberInputScan::GetDayOfWeek( const XubString& rString, xub_StrLen& 
     {
         if ( !bTextInitialized )
             InitText();
-//      XubString sString( pFormatter->GetCharClass()->upper(rString) );        // NoMoreUpperNeeded
+//      String sString( pFormatter->GetCharClass()->upper(rString) );       // NoMoreUpperNeeded
         for (short i = 0; i < 7; i++)                   // 7 Wochentage
         {
             if ( StringContains( aUpperDayText[i], rString, nPos ) )
@@ -582,14 +582,14 @@ short ImpSvNumberInputScan::GetDayOfWeek( const XubString& rString, xub_StrLen& 
 // '$'   => TRUE
 // sonst => FALSE
 
-BOOL ImpSvNumberInputScan::GetCurrency( const XubString& rString, xub_StrLen& nPos,
+BOOL ImpSvNumberInputScan::GetCurrency( const String& rString, xub_StrLen& nPos,
             const SvNumberformat* pFormat )
 {
     if ( rString.Len() > nPos )
     {
         if ( !bTextInitialized )
             InitText();
-//      XubString sString( pFormatter->GetCharClass()->upper(rString) );        // NoMoreUpperNeeded
+//      String sString( pFormatter->GetCharClass()->upper(rString) );       // NoMoreUpperNeeded
         if ( StringContains( aUpperCurrSymbol, rString, nPos ) )
         {
             nPos += aUpperCurrSymbol.Len();
@@ -597,7 +597,7 @@ BOOL ImpSvNumberInputScan::GetCurrency( const XubString& rString, xub_StrLen& nP
         }
         if ( pFormat )
         {
-            XubString aSymbol, aExtension;
+            String aSymbol, aExtension;
             if ( pFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
             {
                 if ( aSymbol.Len() <= rString.Len() - nPos )
@@ -631,13 +631,13 @@ BOOL ImpSvNumberInputScan::GetCurrency( const XubString& rString, xub_StrLen& nP
 //  "PM"  => -1
 //  sonst =>  0
 
-BOOL ImpSvNumberInputScan::GetTimeAmPm( const XubString& rString, xub_StrLen& nPos )
+BOOL ImpSvNumberInputScan::GetTimeAmPm( const String& rString, xub_StrLen& nPos )
 {
-//  XubString sString( pFormatter->GetCharClass()->upper(rString) );        // NoMoreUpperNeeded
+//  String sString( pFormatter->GetCharClass()->upper(rString) );       // NoMoreUpperNeeded
 
     //! Internationalisierung?
-    static const XubString aUpperAM( RTL_CONSTASCII_USTRINGPARAM( "AM" ) );
-    static const XubString aUpperPM( RTL_CONSTASCII_USTRINGPARAM( "PM" ) );
+    static const String aUpperAM( RTL_CONSTASCII_USTRINGPARAM( "AM" ) );
+    static const String aUpperPM( RTL_CONSTASCII_USTRINGPARAM( "PM" ) );
 
     if ( rString.Len() > nPos )
     {
@@ -666,7 +666,7 @@ BOOL ImpSvNumberInputScan::GetTimeAmPm( const XubString& rString, xub_StrLen& nP
 // ','   => TRUE
 // sonst => FALSE
 
-inline BOOL ImpSvNumberInputScan::GetDecSep( const XubString& rString, xub_StrLen& nPos )
+inline BOOL ImpSvNumberInputScan::GetDecSep( const String& rString, xub_StrLen& nPos )
 {
     if ( rString.Len() > nPos
             && rString.GetChar(nPos) == pFormatter->GetInternational()->GetNumDecimalSep() )
@@ -687,7 +687,7 @@ inline BOOL ImpSvNumberInputScan::GetDecSep( const XubString& rString, xub_StrLe
 // '('   => -1, nNegCheck = 1
 // sonst =>  0
 
-short ImpSvNumberInputScan::GetSign( const XubString& rString, xub_StrLen& nPos )
+short ImpSvNumberInputScan::GetSign( const String& rString, xub_StrLen& nPos )
 {
     if (rString.Len() > nPos)
         switch (rString.GetChar(nPos))
@@ -719,7 +719,7 @@ short ImpSvNumberInputScan::GetSign( const XubString& rString, xub_StrLen& nPos 
 // '-'   => -1
 // sonst =>  0
 
-short ImpSvNumberInputScan::GetESign( const XubString& rString, xub_StrLen& nPos )
+short ImpSvNumberInputScan::GetESign( const String& rString, xub_StrLen& nPos )
 {
     if (rString.Len() > nPos)
         switch (rString.GetChar(nPos))
@@ -765,7 +765,7 @@ void ImpSvNumberInputScan::GetTimeRef(
         USHORT nIndex,          // j-Wert fuer den ersten Zeitstring der Eingabe (default 0)
         USHORT nAnz )           // Anzahl der Zeitstrings
 {
-    xub_Unicode* pChar = NULL;
+    sal_Unicode* pChar = NULL;
     USHORT nHour;
     USHORT nMinute = 0;
     USHORT nSecond = 0;
@@ -782,7 +782,7 @@ void ImpSvNumberInputScan::GetTimeRef(
         nSecond = (USHORT) sStrArray[nNums[nIndex++]].ToInt32();
     if (nIndex - nStartIndex < nAnz)
     {
-        XubString s100Sec( '.' );
+        String s100Sec( '.' );
         s100Sec += sStrArray[nNums[nIndex]];
         fSecond100 = StringToDouble( s100Sec );
     }
@@ -1143,7 +1143,7 @@ BOOL ImpSvNumberInputScan::GetDateRef( Date& aDt, USHORT& nCounter,
 // Alles weg => TRUE
 // sonst     => FALSE
 
-BOOL ImpSvNumberInputScan::ScanStartString( const XubString& rString,
+BOOL ImpSvNumberInputScan::ScanStartString( const String& rString,
         const SvNumberformat* pFormat )
 {
     xub_StrLen nPos = 0;
@@ -1219,7 +1219,7 @@ BOOL ImpSvNumberInputScan::ScanStartString( const XubString& rString,
 // sonst     => FALSE
 
 BOOL ImpSvNumberInputScan::ScanMidString(
-        const XubString& rString,
+        const String& rString,
         USHORT nStringPos )
 {
     const International* pIntl = pFormatter->GetInternational();
@@ -1276,8 +1276,8 @@ BOOL ImpSvNumberInputScan::ScanMidString(
     }
 
     SkipBlanks(rString, nPos);
-    xub_Unicode cDate = pIntl->GetDateSep();
-    xub_Unicode cTime = pIntl->GetTimeSep();
+    sal_Unicode cDate = pIntl->GetDateSep();
+    sal_Unicode cTime = pIntl->GetTimeSep();
     if (                      SkipChar(cDate, rString, nPos)    // 10., 10-, 10/
         || ((cTime != '.') && SkipChar('.',   rString, nPos))   // TRICKY:
         || ((cTime != '/') && SkipChar('/',   rString, nPos))   // short boolean
@@ -1381,7 +1381,7 @@ BOOL ImpSvNumberInputScan::ScanMidString(
 // Alles weg => TRUE
 // sonst     => FALSE
 
-BOOL ImpSvNumberInputScan::ScanEndString( const XubString& rString,
+BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
         const SvNumberformat* pFormat )
 {
     const International* pIntl = pFormatter->GetInternational();
@@ -1460,7 +1460,7 @@ BOOL ImpSvNumberInputScan::ScanEndString( const XubString& rString,
         eScannedType = NUMBERFORMAT_PERCENT;
     }
 
-    xub_Unicode cTime = pIntl->GetTimeSep();
+    sal_Unicode cTime = pIntl->GetTimeSep();
     if ( SkipChar(cTime, rString, nPos) )           // 10:
     {
         if (nDecPos)                                // schon , => Fehler
@@ -1480,7 +1480,7 @@ BOOL ImpSvNumberInputScan::ScanEndString( const XubString& rString,
         }
     }
 
-    xub_Unicode cDate = pIntl->GetDateSep();
+    sal_Unicode cDate = pIntl->GetDateSep();
     if (                      SkipChar(cDate, rString, nPos)    // 10., 10-, 10/
         || ((cTime != '.') && SkipChar('.',   rString, nPos))   // TRICKY:
         || ((cTime != '/') && SkipChar('/',   rString, nPos))   // short boolean
@@ -1553,7 +1553,7 @@ BOOL ImpSvNumberInputScan::ScanEndString( const XubString& rString,
             || eScannedType == NUMBERFORMAT_DATETIME) )
     {   // Wochentag wird nur weggeparst
         xub_StrLen nOldPos = nPos;
-        const XubString& rSep = pIntl->GetLongDateDayOfWeekSep();
+        const String& rSep = pIntl->GetLongDateDayOfWeekSep();
         if ( StringContains( rSep, rString, nPos ) )
         {
             nPos += rSep.Len();
@@ -1588,7 +1588,7 @@ BOOL ImpSvNumberInputScan::ScanEndString( const XubString& rString,
 
 
 BOOL ImpSvNumberInputScan::ScanStringNumFor(
-        const XubString& rString,           // zu scannender String
+        const String& rString,          // zu scannender String
         xub_StrLen nPos,                    // Position bis zu der abgearbeitet war
         const SvNumberformat* pFormat,      // das zu matchende Format
         USHORT nString )                    // TeilString des TeilFormats
@@ -1597,8 +1597,8 @@ BOOL ImpSvNumberInputScan::ScanStringNumFor(
     const International* pIntl = pFormatter->GetInternational();
     if ( !pFormat )
         return FALSE;
-    const XubString* pStr;
-    XubString aString( rString );
+    const String* pStr;
+    String aString( rString );
     BOOL bFound = FALSE;
     BOOL bFirst = TRUE;
     BOOL bContinue = TRUE;
@@ -1683,13 +1683,13 @@ BOOL ImpSvNumberInputScan::ScanStringNumFor(
 //                         sonst Text T <=> return FALSE; )
 
 BOOL ImpSvNumberInputScan::IsNumberFormatMain(
-        const XubString& rString,               // zu analysierender String
+        const String& rString,              // zu analysierender String
         double& fOutNumber,                     // OUT: Ergebnis als Zahl, wenn moeglich
         const SvNumberformat* pFormat )         // evtl. gesetztes Zahlenformat
 {
     Reset();                                    // Anfangszustand
     // NoMoreUpperNeeded, alle Vergleiche auf UpperCase
-    XubString aString( pFormatter->GetCharClass()->upper( rString ) );
+    String aString( pFormatter->GetCharClass()->upper( rString ) );
     NumberStringDivision(aString);              // Zerlegung in Zahlen/Strings
     if (nAnzStrings >= SV_MAX_ANZ_INPUT_STRINGS)    // zuviele Einzelteile
         return FALSE;                           // Njet, Nope, ...
@@ -1701,7 +1701,7 @@ BOOL ImpSvNumberInputScan::IsNumberFormatMain(
             // hier kann das Original geaendert werden, wird nicht mehr
             // gebraucht, das erspart Kopiererei und ToUpper in GetLogical
             // und ist im Zusammenspiel schneller
-            XubString& rStrArray = sStrArray[0];
+            String& rStrArray = sStrArray[0];
             rStrArray.EraseTrailingChars( ' ' );
             rStrArray.EraseLeadingChars( ' ' );
             if ( nLogical = GetLogical( rStrArray ) )
@@ -1925,7 +1925,7 @@ void ImpSvNumberInputScan::InitText()
 
 void ImpSvNumberInputScan::ChangeIntl()
 {
-    xub_Unicode cDecSep = pFormatter->GetInternational()->GetNumDecimalSep();
+    sal_Unicode cDecSep = pFormatter->GetInternational()->GetNumDecimalSep();
     bDecSepInDateSeps = ( cDecSep == '-' ||
                           cDecSep == '/' ||
                           cDecSep == '.' ||
@@ -1953,14 +1953,14 @@ void ImpSvNumberInputScan::ChangeNullDate(
 // => String als Zahl darstellbar
 
 BOOL ImpSvNumberInputScan::IsNumberFormat(
-        const XubString& rString,               // zu analysierender String
+        const String& rString,              // zu analysierender String
         short& F_Type,                          // IN: alter Typ, OUT: neuer Typ
         double& fOutNumber,                     // OUT: Zahl, wenn Umwandlung moeglich
         const SvNumberformat* pFormat )         // evtl. gesetztes Zahlenformat
 {
     // in den zerlegten Strings gibt es keine Null-Laengen Strings mehr!
 
-    XubString sResString;                       // die Eingabe fuer atof
+    String sResString;                      // die Eingabe fuer atof
     BOOL res;                                   // Rueckgabewert
     eSetType = F_Type;                          // Typ der Zelle
 

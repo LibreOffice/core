@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-10-14 20:04:39 $
+ *  last change: $Author: er $ $Date: 2000-10-16 18:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ NfCurrencyTable SvNumberFormatter::theCurrencyTable;
 USHORT SvNumberFormatter::nSystemCurrencyPosition = 0;
 SV_IMPL_PTRARR( NfCurrencyTable, NfCurrencyEntry* );
 const USHORT nCurrencyTableEuroPosition = 1;
-SV_IMPL_PTRARR( NfWSStringsDtor, XubString* );
+SV_IMPL_PTRARR( NfWSStringsDtor, String* );
 
 // ob das BankSymbol immer am Ende ist (1 $;-1 $) oder sprachabhaengig
 #define NF_BANKSYMBOL_FIX_POSITION 1
@@ -302,7 +302,7 @@ BOOL SvNumberFormatter::HasTextFormat(ULONG F_Index) const
         return pFormat->HasTextFormat();
 }
 
-BOOL SvNumberFormatter::PutEntry(XubString& rString,
+BOOL SvNumberFormatter::PutEntry(String& rString,
                                  xub_StrLen& nCheckPos,
                                  short& nType,
                                  ULONG& nKey,           // Formatnummer
@@ -372,7 +372,7 @@ BOOL SvNumberFormatter::PutEntry(XubString& rString,
     return bCheck;
 }
 
-BOOL SvNumberFormatter::PutandConvertEntry(XubString& rString,
+BOOL SvNumberFormatter::PutandConvertEntry(String& rString,
                                            xub_StrLen& nCheckPos,
                                            short& nType,
                                            ULONG& nKey,
@@ -659,7 +659,7 @@ void SvNumberFormatter::GetUsedLanguages( SvUShorts& rList )
     }
 }
 
-XubString SvNumberFormatter::GetKeyword( LanguageType eLnge, USHORT nIndex )
+String SvNumberFormatter::GetKeyword( LanguageType eLnge, USHORT nIndex )
 {
     ChangeIntl(eLnge);
     const String* pTable = pFormatScanner->GetKeyword();
@@ -667,7 +667,7 @@ XubString SvNumberFormatter::GetKeyword( LanguageType eLnge, USHORT nIndex )
         return pTable[nIndex];
 
     DBG_ERROR("GetKeyword: invalid index");
-    return XubString();
+    return String();
 }
 
 ULONG SvNumberFormatter::ImpGetCLOffset(LanguageType eLnge) const
@@ -684,7 +684,7 @@ ULONG SvNumberFormatter::ImpGetCLOffset(LanguageType eLnge) const
     return nOffset;
 }
 
-ULONG SvNumberFormatter::ImpIsEntry(const XubString& rString,
+ULONG SvNumberFormatter::ImpIsEntry(const String& rString,
                                        ULONG nCLOffset,
                                        LanguageType eLnge)
 {
@@ -692,7 +692,7 @@ ULONG SvNumberFormatter::ImpIsEntry(const XubString& rString,
 #error NF_COMMENT_IN_FORMATSTRING not defined (zformat.hxx)
 #endif
 #if NF_COMMENT_IN_FORMATSTRING
-    XubString aStr( rString );
+    String aStr( rString );
     SvNumberformat::EraseComment( aStr );
 #endif
     ULONG res = NUMBERFORMAT_ENTRY_NOT_FOUND;
@@ -704,7 +704,7 @@ ULONG SvNumberFormatter::ImpIsEntry(const XubString& rString,
 #if NF_COMMENT_IN_FORMATSTRING
         if ( pEntry->GetComment().Len() )
         {
-            XubString aFormat( pEntry->GetFormatstring() );
+            String aFormat( pEntry->GetFormatstring() );
             SvNumberformat::EraseComment( aFormat );
             if ( aStr == aFormat )
                 res = aFTable.GetCurKey();
@@ -845,7 +845,7 @@ SvNumberFormatTable& SvNumberFormatter::GetEntryTable(
     return *pFormatTable;
 }
 
-BOOL SvNumberFormatter::IsNumberFormat(const XubString& sString,
+BOOL SvNumberFormatter::IsNumberFormat(const String& sString,
                                        ULONG& F_Index,
                                        double& fOutNumber)
 {
@@ -1056,7 +1056,7 @@ ULONG SvNumberFormatter::GetStandardFormat( double fNumber, ULONG nFIndex,
 
 void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
                                            ULONG nFIndex,
-                                           XubString& sOutString)
+                                           String& sOutString)
 {
     SvNumberformat* pFormat;
     short nOldPrec;
@@ -1109,7 +1109,7 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
 
 void SvNumberFormatter::GetOutputString(const double& fOutNumber,
                                         ULONG nFIndex,
-                                        XubString& sOutString,
+                                        String& sOutString,
                                         Color** ppColor)
 {
     if (bNoZero && fOutNumber == 0.0)
@@ -1124,9 +1124,9 @@ void SvNumberFormatter::GetOutputString(const double& fOutNumber,
     pFormat->GetOutputString(fOutNumber, sOutString, ppColor);
 }
 
-void SvNumberFormatter::GetOutputString(XubString& sString,
+void SvNumberFormatter::GetOutputString(String& sString,
                                         ULONG nFIndex,
-                                        XubString& sOutString,
+                                        String& sOutString,
                                         Color** ppColor)
 {
     SvNumberformat* pFormat = (SvNumberformat*) aFTable.Get(nFIndex);
@@ -1144,9 +1144,9 @@ void SvNumberFormatter::GetOutputString(XubString& sString,
     }
 }
 
-BOOL SvNumberFormatter::GetPreviewString(const XubString& sFormatString,
+BOOL SvNumberFormatter::GetPreviewString(const String& sFormatString,
                                          double fPreviewNumber,
-                                         XubString& sOutString,
+                                         String& sOutString,
                                          Color** ppColor,
                                          LanguageType eLnge)
 {
@@ -1159,7 +1159,7 @@ BOOL SvNumberFormatter::GetPreviewString(const XubString& sFormatString,
         eLnge = SysLnge;
     ChangeIntl(eLnge);                          // ggfs. austauschen
     eLnge = ActLnge;
-    XubString sTmpString = sFormatString;
+    String sTmpString = sFormatString;
     SvNumberformat* p_Entry = new SvNumberformat(sTmpString,
                                                  pFormatScanner,
                                                  pStringScanner,
@@ -1184,9 +1184,9 @@ BOOL SvNumberFormatter::GetPreviewString(const XubString& sFormatString,
     }
 }
 
-BOOL SvNumberFormatter::GetPreviewStringGuess( const XubString& sFormatString,
+BOOL SvNumberFormatter::GetPreviewStringGuess( const String& sFormatString,
                                          double fPreviewNumber,
-                                         XubString& sOutString,
+                                         String& sOutString,
                                          Color** ppColor,
                                          LanguageType eLnge )
 {
@@ -1211,7 +1211,7 @@ BOOL SvNumberFormatter::GetPreviewStringGuess( const XubString& sFormatString,
 
     SvNumberformat *pEntry = NULL;
     xub_StrLen nCheckPos;
-    XubString sTmpString;
+    String sTmpString;
 
     if ( bEnglish )
     {
@@ -1279,7 +1279,7 @@ BOOL SvNumberFormatter::GetPreviewStringGuess( const XubString& sFormatString,
     return FALSE;
 }
 
-ULONG SvNumberFormatter::TestNewString(const XubString& sFormatString,
+ULONG SvNumberFormatter::TestNewString(const String& sFormatString,
                                       LanguageType eLnge)
 {
     if (sFormatString.Len() == 0)                       // keinen Leerstring
@@ -1292,7 +1292,7 @@ ULONG SvNumberFormatter::TestNewString(const XubString& sFormatString,
     eLnge = ActLnge;
     ULONG nRes;
     BOOL bCheck = FALSE;
-    XubString sTmpString = sFormatString;
+    String sTmpString = sFormatString;
     SvNumberformat* pEntry = new SvNumberformat(sTmpString,
                                                 pFormatScanner,
                                                 pStringScanner,
@@ -1315,7 +1315,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
             const ::com::sun::star::lang::NumberFormatCode& rCode,
             ULONG nPos )
 {
-    XubString aTmp( rCode.Code );
+    String aTmp( rCode.Code );
     xub_StrLen nCheckPos = 0;
     SvNumberformat* pFormat = new SvNumberformat(aTmp,
                                                  pFormatScanner,
@@ -1389,7 +1389,7 @@ USHORT SvNumberFormatter::GetFormatPrecision( ULONG nFormat ) const
 }
 
 
-ULONG SvNumberFormatter::GetFormatSpecialInfo( const XubString& rFormatString,
+ULONG SvNumberFormatter::GetFormatSpecialInfo( const String& rFormatString,
             BOOL& bThousand, BOOL& IsRed, USHORT& nPrecision,
             USHORT& nAnzLeading, LanguageType eLnge )
 
@@ -1399,7 +1399,7 @@ ULONG SvNumberFormatter::GetFormatSpecialInfo( const XubString& rFormatString,
         eLnge = SysLnge;
     ChangeIntl(eLnge);                                  // ggfs. austauschen
     eLnge = ActLnge;
-    XubString aTmpStr( rFormatString );
+    String aTmpStr( rFormatString );
     SvNumberformat* pFormat = new SvNumberformat( aTmpStr,
         pFormatScanner, pStringScanner, nCheckPos, eLnge );
     if ( nCheckPos == 0 )
@@ -1463,10 +1463,10 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
 
     xub_StrLen nCheckPos = 0;
     SvNumberformat* pNewFormat = NULL;
-    XubString aFormatCode;
+    String aFormatCode;
     sal_Int32 nIdx;
-    XubString aSystem( RTL_CONSTASCII_USTRINGPARAM( "System" ) );           // comment field
-    XubString aDefSystem( RTL_CONSTASCII_USTRINGPARAM( "def/System" ) );    // comment field
+    String aSystem( RTL_CONSTASCII_USTRINGPARAM( "System" ) );          // comment field
+    String aDefSystem( RTL_CONSTASCII_USTRINGPARAM( "def/System" ) );   // comment field
 
     // Counter for additional builtin formats not fitting into the first 10
     // of a category (TLOT:=The Legacy Of Templin), altogether about 20 formats.
@@ -1509,8 +1509,8 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
             pNewFormat))
         delete pNewFormat;
 
-    xub_Unicode cDecSep = pIntl->GetNumDecimalSep();
-    xub_Unicode cThousandSep = pIntl->GetNumThousandSep();
+    sal_Unicode cDecSep = pIntl->GetNumDecimalSep();
+    sal_Unicode cThousandSep = pIntl->GetNumThousandSep();
 
 
 
@@ -1835,7 +1835,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
 
      // # ?/?
     aSingleFormatCode.Code = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "# ?/?" ) );
-    XubString s25( RTL_CONSTASCII_USTRINGPARAM( "# ?/?" ) );            // # ?/?
+    String s25( RTL_CONSTASCII_USTRINGPARAM( "# ?/?" ) );           // # ?/?
     ImpInsertFormat( aSingleFormatCode,
         CLOffset + SetIndexTable( NF_FRACTION_1, ZF_STANDARD_FRACTION ));
 
@@ -1846,7 +1846,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
         CLOffset + SetIndexTable( NF_FRACTION_2, ZF_STANDARD_FRACTION+1 ));
 
     // Week of year   must be appended here because of nNewExtended
-    const XubString* pKeyword = pFormatScanner->GetKeyword();
+    const String* pKeyword = pFormatScanner->GetKeyword();
     aSingleFormatCode.Code = pKeyword[NF_KEY_WW];
     ImpInsertNewStandardFormat( aSingleFormatCode,
         CLOffset + SetIndexTable( NF_DATE_WW, nNewExtended++ ),
@@ -1862,19 +1862,19 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
 }
 
 
-void SvNumberFormatter::ImpGetPosCurrFormat(XubString& sPosStr)
+void SvNumberFormatter::ImpGetPosCurrFormat(String& sPosStr)
 {
     NfCurrencyEntry::CompletePositiveFormatString( sPosStr,
         pIntl->GetCurrSymbol(), pIntl->GetCurrPositiveFormat() );
 }
 
-void SvNumberFormatter::ImpGetNegCurrFormat(XubString& sNegStr)
+void SvNumberFormatter::ImpGetNegCurrFormat(String& sNegStr)
 {
     NfCurrencyEntry::CompleteNegativeFormatString( sNegStr,
         pIntl->GetCurrSymbol(), pIntl->GetCurrNegativeFormat() );
 }
 
-void SvNumberFormatter::GenerateFormat(XubString& sString,
+void SvNumberFormatter::GenerateFormat(String& sString,
                                        ULONG nIndex,
                                        LanguageType eLnge,
                                        BOOL bThousand,
@@ -1931,8 +1931,8 @@ void SvNumberFormatter::GenerateFormat(XubString& sString,
         sString += '%';
     else if (eType == NUMBERFORMAT_CURRENCY)
     {
-        XubString sNegStr = sString;
-        XubString aCurr;
+        String sNegStr = sString;
+        String aCurr;
         const NfCurrencyEntry* pEntry;
         BOOL bBank;
         if ( GetNewCurrencySymbolString( nIndex, aCurr, &pEntry, &bBank ) )
@@ -1982,7 +1982,7 @@ void SvNumberFormatter::GenerateFormat(XubString& sString,
     }
     if (IsRed && eType != NUMBERFORMAT_CURRENCY)
     {
-        XubString sTmpStr = sString;
+        String sTmpStr = sString;
         sTmpStr += ';';
         sTmpStr += '[';
         sTmpStr += pFormatScanner->GetRedString();
@@ -1993,7 +1993,7 @@ void SvNumberFormatter::GenerateFormat(XubString& sString,
     }
 }
 
-BOOL SvNumberFormatter::IsUserDefined(const XubString& sStr,
+BOOL SvNumberFormatter::IsUserDefined(const String& sStr,
                                       LanguageType eLnge)
 {
     if (eLnge == LANGUAGE_DONTKNOW)
@@ -2010,7 +2010,7 @@ BOOL SvNumberFormatter::IsUserDefined(const XubString& sStr,
     return FALSE;
 }
 
-ULONG SvNumberFormatter::GetEntryKey(const XubString& sStr,
+ULONG SvNumberFormatter::GetEntryKey(const String& sStr,
                                      LanguageType eLnge)
 {
     if (eLnge == LANGUAGE_DONTKNOW)
@@ -2258,7 +2258,7 @@ ULONG SvNumberFormatter::ImpGetDefaultSystemCurrencyFormat()
 
 
 BOOL SvNumberFormatter::GetNewCurrencySymbolString( ULONG nFormat,
-            XubString& rStr, const NfCurrencyEntry** ppEntry /* = NULL */,
+            String& rStr, const NfCurrencyEntry** ppEntry /* = NULL */,
             BOOL* pBank /* = NULL */ ) const
 {
     rStr.Erase();
@@ -2269,7 +2269,7 @@ BOOL SvNumberFormatter::GetNewCurrencySymbolString( ULONG nFormat,
     SvNumberformat* pFormat = (SvNumberformat*) aFTable.Get( nFormat );
     if ( pFormat )
     {
-        XubString aSymbol, aExtension;
+        String aSymbol, aExtension;
         if ( pFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
         {
             xub_StrLen nExtLen = aExtension.Len();
@@ -2533,7 +2533,7 @@ USHORT SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr,
     USHORT nDefault = 0;
     if ( bBank )
     {   // nur Bankensymbole
-        XubString aPositiveBank, aNegativeBank;
+        String aPositiveBank, aNegativeBank;
         rCurr.BuildPositiveFormatString( aPositiveBank, TRUE, *pIntl, 1 );
         rCurr.BuildNegativeFormatString( aNegativeBank, TRUE, *pIntl, 1 );
 
@@ -2541,7 +2541,7 @@ USHORT SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr,
         *pFormat1 += ';';
         WSStringPtr pFormat2 = new String( *pFormat1 );
 
-        XubString aRed( '[' );
+        String aRed( '[' );
         aRed += pFormatScanner->GetRedString();
         aRed += ']';
 
@@ -2557,11 +2557,11 @@ USHORT SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr,
     else
     {   // gemischte Formate wie in SvNumberFormatter::ImpGenerateFormats
         // aber keine doppelten, wenn keine Nachkommastellen in Waehrung
-        XubString aPositive, aNegative, aPositiveNoDec, aNegativeNoDec,
+        String aPositive, aNegative, aPositiveNoDec, aNegativeNoDec,
             aPositiveDashed, aNegativeDashed;
         WSStringPtr pFormat1, pFormat2, pFormat3, pFormat4, pFormat5;
 
-        XubString aRed( '[' );
+        String aRed( '[' );
         aRed += pFormatScanner->GetRedString();
         aRed += ']';
 
@@ -2658,7 +2658,7 @@ BOOL NfCurrencyEntry::IsEuro() const
 {
     if ( aBankSymbol.EqualsAscii( "EUR" ) )
         return TRUE;
-    XubString aEuro( NfCurrencyEntry::GetEuroSymbol() );
+    String aEuro( NfCurrencyEntry::GetEuroSymbol() );
     return aSymbol == aEuro;
 }
 
@@ -2672,7 +2672,7 @@ void NfCurrencyEntry::ApplyVariableInformation( const NfCurrencyEntry& r )
 }
 
 
-void NfCurrencyEntry::BuildSymbolString( XubString& rStr, BOOL bBank,
+void NfCurrencyEntry::BuildSymbolString( String& rStr, BOOL bBank,
             BOOL bWithoutExtension ) const
 {
     rStr  = '[';
@@ -2699,7 +2699,7 @@ void NfCurrencyEntry::BuildSymbolString( XubString& rStr, BOOL bBank,
 }
 
 
-void NfCurrencyEntry::Impl_BuildFormatStringNumChars( XubString& rStr,
+void NfCurrencyEntry::Impl_BuildFormatStringNumChars( String& rStr,
             const International& rIntl, USHORT nDecimalFormat ) const
 {
     rStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "###0" ) );
@@ -2712,7 +2712,7 @@ void NfCurrencyEntry::Impl_BuildFormatStringNumChars( XubString& rStr,
 }
 
 
-void NfCurrencyEntry::BuildPositiveFormatString( XubString& rStr, BOOL bBank,
+void NfCurrencyEntry::BuildPositiveFormatString( String& rStr, BOOL bBank,
             const International& rIntl, USHORT nDecimalFormat ) const
 {
     Impl_BuildFormatStringNumChars( rStr, rIntl, nDecimalFormat );
@@ -2722,7 +2722,7 @@ void NfCurrencyEntry::BuildPositiveFormatString( XubString& rStr, BOOL bBank,
 }
 
 
-void NfCurrencyEntry::BuildNegativeFormatString( XubString& rStr, BOOL bBank,
+void NfCurrencyEntry::BuildNegativeFormatString( String& rStr, BOOL bBank,
             const International& rIntl, USHORT nDecimalFormat ) const
 {
     Impl_BuildFormatStringNumChars( rStr, rIntl, nDecimalFormat );
@@ -2732,27 +2732,27 @@ void NfCurrencyEntry::BuildNegativeFormatString( XubString& rStr, BOOL bBank,
 }
 
 
-void NfCurrencyEntry::CompletePositiveFormatString( XubString& rStr, BOOL bBank,
+void NfCurrencyEntry::CompletePositiveFormatString( String& rStr, BOOL bBank,
             USHORT nPosiForm ) const
 {
-    XubString aSymStr;
+    String aSymStr;
     BuildSymbolString( aSymStr, bBank );
     NfCurrencyEntry::CompletePositiveFormatString( rStr, aSymStr, nPosiForm );
 }
 
 
-void NfCurrencyEntry::CompleteNegativeFormatString( XubString& rStr, BOOL bBank,
+void NfCurrencyEntry::CompleteNegativeFormatString( String& rStr, BOOL bBank,
             USHORT nNegaForm ) const
 {
-    XubString aSymStr;
+    String aSymStr;
     BuildSymbolString( aSymStr, bBank );
     NfCurrencyEntry::CompleteNegativeFormatString( rStr, aSymStr, nNegaForm );
 }
 
 
 // static
-void NfCurrencyEntry::CompletePositiveFormatString( XubString& rStr,
-        const XubString& rSymStr, USHORT nPositiveFormat )
+void NfCurrencyEntry::CompletePositiveFormatString( String& rStr,
+        const String& rSymStr, USHORT nPositiveFormat )
 {
     switch( nPositiveFormat )
     {
@@ -2782,8 +2782,8 @@ void NfCurrencyEntry::CompletePositiveFormatString( XubString& rStr,
 
 
 // static
-void NfCurrencyEntry::CompleteNegativeFormatString( XubString& rStr,
-        const XubString& rSymStr, USHORT nNegativeFormat )
+void NfCurrencyEntry::CompleteNegativeFormatString( String& rStr,
+        const String& rSymStr, USHORT nNegativeFormat )
 {
     switch( nNegativeFormat )
     {
@@ -2860,7 +2860,7 @@ void NfCurrencyEntry::CompleteNegativeFormatString( XubString& rStr,
         break;
         case 11:                                        // $ -1
         {
-            XubString aTmp( rSymStr );
+            String aTmp( rSymStr );
             aTmp += ' ';
             aTmp += '-';
             rStr.Insert( aTmp, 0 );
