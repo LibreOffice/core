@@ -83,8 +83,15 @@ sub check_system_path
     my $onefile;
     my $error = 0;
     my $pathvariable = $ENV{'PATH'};
+    my $local_pathseparator = $installer::globals::pathseparator;
 
-    my $patharrayref = installer::converter::convert_stringlist_into_array(\$pathvariable, $installer::globals::pathseparator);
+    if( $^O =~ /cygwin/i )
+    {   # When using cygwin's perl the PATH variable is POSIX style and ...
+        $pathvariable = qx{guw.pl echo "$pathvariable"} ;
+        # has to be converted to DOS style for further use.
+        $local_pathseparator = ';';
+    }
+    my $patharrayref = installer::converter::convert_stringlist_into_array(\$pathvariable, $local_pathseparator);
 
     my @needed_files_in_path = ();
 
@@ -389,6 +396,9 @@ sub determine_ship_directory
                 $productstring . $installer::globals::separator .
                 $installer::globals::build . "_" . $installer::globals::lastminor . "_" .
                 "native_inprogress-number_" . $languagestring . "\." . $installer::globals::buildid;
+
+    my $infoline = "\nSetting ship directory: $destdir\n";
+    push(@installer::globals::globallogfileinfo, $infoline);
 
     return $destdir;
 }
