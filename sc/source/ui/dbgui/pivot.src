@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:33:42 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 15:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ chinese_simplified ] = "Ηλ½θΦϊΚσ±κ½«ΣÒÒ³ΦΠµΔΧΦ¶ΞΝΟΐ­µ½Ο£ΝϋµΔΗψΣς΅£";
         Text[ russian ] = "Ρ οξμξωόώ μϋψθ οεπεςÿνθςε οξλε ρ οπΰβξι ρςξπξνϋ β ζελΰεμσώ ξαλΰρςό.";
         Text[ polish ] = "Przesuρ pola z prawej strony za pomocΉ myszy do ΏΉdanego obszaru.";
-        Text[ japanese ] = "‰E‘¤‚Ι‚ ‚ιΜ¨°ΩΔήΞήΐέ‚πσ–]‚Μ—Μζ‚ΙΔήΧ―Έή‚µ‚ά‚·B";
+        Text[ japanese ] = "‰E‘¤‚Ι‚ ‚ιΜ¨°ΩΔήΞήΐέ‚πΪ“®‚³‚Ή‚½‚Ά—Μζ‚ΙΔήΧ―Έή‚µ‚ά‚·B";
         Text[ chinese_traditional ] = "½Π±z¨Ο¥Ξ·ΖΉ«Αδ±NΔζ¦μ©μ©Τ¨μ¥k­¶ªΊ¥τ·N¤@­Σ°Ο°μ΅C";
         Text[ arabic ] = "ΗΣΝΘ ΗαΝήζα γδ ΗαΥέΝΙ Ηανγδμ ΘζΗΣΨΙ ΗαγΗζΣ Εαμ ΗαγδΗΨή ΗαΚν ΚΡΫΘ ένεΗ.";
         Text[ greek ] = "Σύρετε με το ποντίκι τα πεδία της δεξιάς σελίδας στις περιοχές που επιθυμείτε.";
