@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:25:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 09:27:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,13 @@ void SAL_CALL ODatabaseSource::storeAsURL( const ::rtl::OUString& sURL, const Se
             Sequence<Any> aParam(2);
             aParam[0] <<= sURL;
             aParam[1] <<= ElementModes::READWRITE  | ElementModes::TRUNCATE;
-            Reference<XStorage> xStorage(xStorageFactory->createInstanceWithArguments( aParam ),UNO_QUERY);
+            Reference<XStorage> xStorage;
+            try
+            {
+                xStorage.set(xStorageFactory->createInstanceWithArguments( aParam ),UNO_QUERY);
+            }catch(Exception    &)
+            {
+            }
             if ( !xStorage.is() )
                 throw IOException();
 
