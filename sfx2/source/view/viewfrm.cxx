@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:41:17 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3765,21 +3765,6 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
     // ausf"uhren
     if ( !pShowItem || bShow != bHasChild )
         ToggleChildWindow( nSID );
-
-    if ( nSID == SID_CUSTOMIZETOOLBOX )
-    {
-        // Provide toolbox type to customize window to preselect it in the modeless dialog
-        SfxToolboxCustomWindow* pTbxCustomWin = (SfxToolboxCustomWindow*)GetChildWindow( nSID );
-        if ( pTbxCustomWin && bShow )
-        {
-            SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, SID_CONFIGITEMID, FALSE );
-            if ( pItem )
-            {
-                USHORT nId = pItem->GetValue();
-                pTbxCustomWin->SelectToolbar( nId );
-            }
-        }
-    }
 
     GetBindings().Invalidate( nSID );
     GetDispatcher()->Update_Impl( TRUE );
