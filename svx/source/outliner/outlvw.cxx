@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-20 13:01:43 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:35:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,6 +532,7 @@ void OutlinerView::SetOutliner( Outliner* pOutliner )
     pOwner = pOutliner;
     pEditView->SetEditEngine( pOutliner->pEditEngine );
 }
+
 
 
 ULONG OutlinerView::Select( Paragraph* pParagraph, BOOL bSelect,
@@ -1373,25 +1374,11 @@ EESpellState OutlinerView::StartSpeller( BOOL bMultiDoc )
     return pEditView->StartSpeller( bMultiDoc );
 }
 
-EESpellState OutlinerView::StartSpeller( LanguageType eLang, BOOL bMultiDoc )
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    return pEditView->StartSpeller( eLang, bMultiDoc );
-}
-
-
 EESpellState OutlinerView::StartThesaurus()
 {
     DBG_CHKTHIS(OutlinerView,0);
     return pEditView->StartThesaurus();
 }
-
-EESpellState OutlinerView::StartThesaurus( LanguageType eLang )
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    return pEditView->StartThesaurus( eLang );
-}
-
 
 USHORT OutlinerView::StartSearchAndReplace( const SvxSearchItem& rSearchItem )
 {
