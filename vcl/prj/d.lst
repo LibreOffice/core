@@ -48,6 +48,7 @@ hedabu: ..\inc\cvtgrf.hxx %_DEST%\inc%_EXT%\vcl\cvtgrf.hxx
 hedabu: ..\inc\cvtsvm.hxx %_DEST%\inc%_EXT%\vcl\cvtsvm.hxx
 hedabu: ..\inc\decoview.hxx %_DEST%\inc%_EXT%\vcl\decoview.hxx
 hedabu: ..\inc\dialog.hxx %_DEST%\inc%_EXT%\vcl\dialog.hxx
+hedabu: ..\inc\dockingarea.hxx %_DEST%\inc%_EXT%\vcl\dockingarea.hxx
 hedabu: ..\inc\dockwin.hxx %_DEST%\inc%_EXT%\vcl\dockwin.hxx
 hedabu: ..\inc\edit.hxx %_DEST%\inc%_EXT%\vcl\edit.hxx
 hedabu: ..\inc\event.hxx %_DEST%\inc%_EXT%\vcl\event.hxx
