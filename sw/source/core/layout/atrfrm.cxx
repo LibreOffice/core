@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-12 13:00:03 $
+ *  last change: $Author: os $ $Date: 2001-05-10 08:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1215,6 +1215,7 @@ BOOL SwFmtCol::PutValue( const uno::Any& rVal, BYTE nMemberId )
             }
             if(pSwColums)
             {
+                bOrtho = pSwColums->IsAutomaticWidth();
                 nLineWidth = pSwColums->GetSepLineWidth();
                 aLineColor.SetColor(pSwColums->GetSepLineColor());
                 nLineHeight = pSwColums->GetSepLineHeightRelative();
