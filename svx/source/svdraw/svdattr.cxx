@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:26 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@
 #include "svdstr.hrc"
 #include "sdgcpitm.hxx"
 #include "adjitem.hxx"
+#include "sdtfchim.hxx"
 #include "writingmodeitem.hxx"
 
 #ifndef _BIGINT_HXX //autogen
@@ -245,7 +246,8 @@ void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
     // no need to have alien attributes persistent in the player
     ppPoolDefaults[SDRATTR_XMLATTRIBUTES -SDRATTR_START]=new SfxVoidItem( SDRATTR_XMLATTRIBUTES );
 #endif // #ifndef SVX_LIGHT
-    for (i=SDRATTR_RESERVE15; i<=SDRATTR_RESERVE19; i++) {
+    ppPoolDefaults[SDRATTR_TEXT_USEFIXEDCELLHEIGHT -SDRATTR_START]=new SdrTextFixedCellHeightItem;
+    for (i=SDRATTR_RESERVE16; i<=SDRATTR_RESERVE19; i++) {
         ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
     }
     ppPoolDefaults[SDRATTRSET_MISC-SDRATTR_START]=new SdrMiscSetItem(pMaster);
@@ -674,7 +676,7 @@ FASTBOOL SdrItemPool::TakeItemName(USHORT nWhich, String& rItemName)
         case SDRATTR_TEXT_CONTOURFRAME      : nResId = SIP_SA_TEXT_CONTOURFRAME;break;
         case SDRATTR_AUTOSHAPE_ADJUSTMENT   : nResId = SIP_SA_AUTOSHAPE_ADJUSTMENT;break;
         case SDRATTR_XMLATTRIBUTES          : nResId = SIP_SA_XMLATTRIBUTES;break;
-        case SDRATTR_RESERVE15              : nResId = SIP_SA_RESERVE15;break;
+        case SDRATTR_TEXT_USEFIXEDCELLHEIGHT: nResId = SIP_SA_TEXT_USEFIXEDCELLHEIGHT;break;
         case SDRATTR_RESERVE16              : nResId = SIP_SA_RESERVE16;break;
         case SDRATTR_RESERVE17              : nResId = SIP_SA_RESERVE17;break;
         case SDRATTR_RESERVE18              : nResId = SIP_SA_RESERVE18;break;
@@ -961,7 +963,7 @@ BOOL SdrItemPool::TakeWhichName(USHORT nWhich, ByteString& rWhichName)
         case SDRATTR_TEXT_CONTOURFRAME       : aStr="SDRATTR_TEXT_CONTOURFRAME       "; break;
         case SDRATTR_AUTOSHAPE_ADJUSTMENT    : aStr="SDRATTR_AUTOSHAPE_ADJUSTMENT    "; break;
         case SDRATTR_XMLATTRIBUTES           : aStr="SDRATTR_XMLATTRIBUTES           "; break;
-        case SDRATTR_RESERVE15               : aStr="SDRATTR_RESERVE15               "; break;
+        case SDRATTR_TEXT_USEFIXEDCELLHEIGHT : aStr="SDRATTR_TEXT_USEFIXEDCELLHEIGHT "; break;
         case SDRATTR_RESERVE16               : aStr="SDRATTR_RESERVE16               "; break;
         case SDRATTR_RESERVE17               : aStr="SDRATTR_RESERVE17               "; break;
         case SDRATTR_RESERVE18               : aStr="SDRATTR_RESERVE18               "; break;
@@ -2001,6 +2003,78 @@ SfxItemPresentation __EXPORT SdrTextAniAmountItem::GetPresentation(
 
     return ePres;
 }
+
+TYPEINIT1_AUTOFACTORY( SdrTextFixedCellHeightItem, SfxBoolItem );
+SdrTextFixedCellHeightItem::SdrTextFixedCellHeightItem( BOOL bUseFixedCellHeight )
+    : SfxBoolItem( SDRATTR_TEXT_USEFIXEDCELLHEIGHT, bUseFixedCellHeight )
+{
+}
+SdrTextFixedCellHeightItem::SdrTextFixedCellHeightItem( SvStream & rStream, sal_uInt16 nVersion )
+    : SfxBoolItem( SDRATTR_TEXT_USEFIXEDCELLHEIGHT, FALSE )
+{
+    if ( nVersion )
+    {
+        sal_Bool bValue;
+        rStream >> bValue;
+        SetValue( bValue );
+    }
+}
+SfxItemPresentation __EXPORT SdrTextFixedCellHeightItem::GetPresentation( SfxItemPresentation ePres,
+                                    SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric,
+                                        String &rText, const IntlWrapper * ) const
+{
+    rText = GetValueTextByVal( GetValue() );
+    if (ePres==SFX_ITEM_PRESENTATION_COMPLETE)
+    {
+        String aStr;
+        SdrItemPool::TakeItemName(Which(), aStr);
+        aStr += sal_Unicode(' ');
+        rText.Insert(aStr, 0);
+    }
+    return ePres;
+}
+SfxPoolItem* __EXPORT SdrTextFixedCellHeightItem::Create( SvStream& rIn, sal_uInt16 nItemVersion ) const
+{
+    return new SdrTextFixedCellHeightItem( rIn, nItemVersion );
+}
+SvStream& __EXPORT SdrTextFixedCellHeightItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+{
+    if ( nItemVersion )
+    {
+        sal_Bool bValue = (sal_Bool)GetValue();
+        rOut << bValue;
+    }
+    return rOut;
+}
+SfxPoolItem* __EXPORT SdrTextFixedCellHeightItem::Clone( SfxItemPool *pPool ) const
+{
+    return new SdrTextFixedCellHeightItem( GetValue() );
+}
+sal_uInt16 SdrTextFixedCellHeightItem::GetVersion( sal_uInt16 nFileFormatVersion ) const
+{
+    return 1;
+}
+sal_Bool SdrTextFixedCellHeightItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+{
+    sal_Bool bValue = (sal_Bool)GetValue();
+    rVal <<= bValue;
+    return sal_True;
+}
+sal_Bool SdrTextFixedCellHeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+{
+    sal_Bool bValue;
+    if( !( rVal >>= bValue ) )
+        return sal_False;
+    SetValue( bValue );
+    return sal_True;
+}
+#ifdef SDR_ISPOOLABLE
+int __EXPORT SdrTextFixedCellHeightItem::IsPoolable() const
+{
+    USHORT nId=Which();
+    return nId < SDRATTR_NOTPERSIST_FIRST || nId > SDRATTR_NOTPERSIST_LAST;
+}
+#endif
 
 TYPEINIT1_AUTOFACTORY( SdrAutoShapeAdjustmentItem, SfxPoolItem );
 
