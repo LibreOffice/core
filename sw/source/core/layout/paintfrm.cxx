@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:22:46 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1391,7 +1391,7 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
     for ( USHORT j = 0; (j < rObjs.Count()) && rRegion.Count(); ++j )
     {
         SdrObject *pO = rObjs[j];
-        if ( !pO->IsWriterFlyFrame() )
+        if ( !pO->ISA(SwVirtFlyDrawObj) )
             continue;
 
         const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
@@ -2288,6 +2288,13 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
             *pSh->GetOut(), rRect.SVRect(), SwViewOption::GetTextGridColor() );
     }
 
+    // call RefreshAllIAOManagers only once in paint, so do it here
+    // and not in DrawOneLayer()
+    if(pSh->GetWin() && pSh->Imp()->HasDrawView())
+    {
+        pSh->Imp()->GetDrawView()->RefreshAllIAOManagers();
+    }
+
     if ( bResetRootPaint )
         SwRootFrm::bInPaint = FALSE;
     if ( pStatics )
@@ -2298,8 +2305,8 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
         pGlobalShell = 0;
     }
 
-    if ( ViewShell::IsLstEndAction() && pSh->GetWin() && pSh->Imp()->HasDrawView() )
-        pSh->Imp()->GetDrawView()->PostPaint();
+    //if ( ViewShell::IsLstEndAction() && pSh->GetWin() && pSh->Imp()->HasDrawView() )
+    //  pSh->Imp()->GetDrawView()->PostPaint();
 
     ((SwRootFrm*)this)->SetCallbackActionEnabled( bOldAction );
 }
@@ -2613,7 +2620,7 @@ BOOL SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
     {
         //Das Paint kann evtl. von von uebergeordneten Flys verhindert werden.
         SwFrm *pAnch = 0;
-        if ( pObj->IsWriterFlyFrame() )
+        if ( pObj->ISA(SwVirtFlyDrawObj) )
         {
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
             if ( pFlyOnlyDraw && pFlyOnlyDraw == pFly )
@@ -2657,7 +2664,7 @@ BOOL SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
                     //Position her gerade schweben.
                     SwPageFrm *pPage = pAnch->FindPageFrm();
                     if ( !bTableHack &&
-                         !pPage->Frm().IsOver( pObj->GetBoundRect() ) )
+                         !pPage->Frm().IsOver( pObj->GetCurrentBoundRect() ) )
                         pAnch = 0;
                 }
             }
@@ -4894,7 +4901,7 @@ void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
                 for ( USHORT i = 0; i < rObjs.Count(); ++i )
                 {
                     SdrObject *pO = rObjs[i];
-                    if ( pO->IsWriterFlyFrame() )
+                    if ( pO->ISA(SwVirtFlyDrawObj) )
                     {
                         const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                         if ( pFly->IsFlyInCntFrm() && pFly->Frm().IsOver( rRect ) )
@@ -4994,7 +5001,7 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
             }
 
             //Sitzt das Obj auf der Linie
-            const Rectangle &rBound = pObj->GetBoundRect();
+            const Rectangle &rBound = pObj->GetCurrentBoundRect();
             const Point aDrPt( rBound.TopLeft() );
             const Size  aDrSz( rBound.GetSize() );
             if ( rP1.*pOthPt >= aDrPt.*pOthPt &&
@@ -5186,7 +5193,7 @@ void SwPageFrm::RefreshExtraData( const SwRect &rRect ) const
             for ( USHORT i = 0; i < GetSortedObjs()->Count(); ++i )
             {
                 SdrObject *pO = (*GetSortedObjs())[i];
-                if ( pO->IsWriterFlyFrame() )
+                if ( pO->ISA(SwVirtFlyDrawObj) )
                 {
                     const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                     if ( pFly->Frm().Top() <= aRect.Bottom() &&
@@ -5221,7 +5228,7 @@ void SwLayoutFrm::RefreshExtraData( const SwRect &rRect ) const
             for ( USHORT i = 0; i < pCnt->GetDrawObjs()->Count(); ++i )
             {
                 SdrObject *pO = (*pCnt->GetDrawObjs())[i];
-                if ( pO->IsWriterFlyFrame() )
+                if ( pO->ISA(SwVirtFlyDrawObj) )
                 {
                     const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                     if ( pFly->IsFlyInCntFrm() &&
