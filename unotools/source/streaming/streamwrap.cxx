@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamwrap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:44:08 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,35 +219,14 @@ void OInputStreamWrapper::checkError() const
 //==================================================================
 //------------------------------------------------------------------------------
 OSeekableInputStreamWrapper::OSeekableInputStreamWrapper(SvStream& _rStream)
-    :OInputStreamWrapper(_rStream)
 {
+    SetStream( &_rStream, FALSE );
 }
 
 //------------------------------------------------------------------------------
 OSeekableInputStreamWrapper::OSeekableInputStreamWrapper(SvStream* _pStream, sal_Bool _bOwner)
-    :OInputStreamWrapper(_pStream, _bOwner)
 {
-}
-
-//------------------------------------------------------------------------------
-Any SAL_CALL OSeekableInputStreamWrapper::queryInterface( const Type& _rType ) throw (RuntimeException)
-{
-    Any aReturn = OInputStreamWrapper::queryInterface(_rType);
-    if (!aReturn.hasValue())
-        aReturn = OSeekableInputStreamWrapper_Base::queryInterface(_rType);
-    return aReturn;
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL OSeekableInputStreamWrapper::acquire(  ) throw ()
-{
-    OInputStreamWrapper::acquire();
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL OSeekableInputStreamWrapper::release(  ) throw ()
-{
-    OInputStreamWrapper::release();
+    SetStream( _pStream, _bOwner );
 }
 
 //------------------------------------------------------------------------------
@@ -385,6 +364,55 @@ sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getLength(  ) throw (IOExceptio
     return (sal_Int64)nEndPos;
 }
 
-} // namespace utl
+//------------------------------------------------------------------------------
+OStreamWrapper::OStreamWrapper(SvStream& _rStream)
+{
+    SetStream( &_rStream, FALSE );
+}
 
+//------------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL OStreamWrapper::getInputStream(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return this;
+}
+
+//------------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > SAL_CALL OStreamWrapper::getOutputStream(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return this;
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OStreamWrapper::writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException)
+{
+    sal_uInt32 nWritten = m_pSvStream->Write(aData.getConstArray(),aData.getLength());
+    ErrCode err = m_pSvStream->GetError();
+    if  (   (ERRCODE_NONE != err)
+        ||  (nWritten != (sal_uInt32)aData.getLength())
+        )
+    {
+        throw stario::BufferSizeExceededException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
+    }
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OStreamWrapper::flush() throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException)
+{
+    m_pSvStream->Flush();
+    if (m_pSvStream->GetError() != ERRCODE_NONE)
+        throw stario::NotConnectedException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OStreamWrapper::closeOutput() throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException)
+{
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OStreamWrapper::truncate() throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+{
+    m_pSvStream->SetStreamSize(0);
+}
+
+} // namespace utl
 
