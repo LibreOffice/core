@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salcvt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:43 $
+ *  last change: $Author: cp $ $Date: 2000-12-12 14:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,17 @@ SalConverterCache::EncodingHasChar( rtl_TextEncoding nEncoding,
         case RTL_TEXTENCODING_UNICODE:
             bMatch = True;
             break;
+
+        case RTL_TEXTENCODING_EUC_KR:
+        case RTL_TEXTENCODING_BIG5:
+
+            // XXX Big5 and Korean EUC contain Ascii chars, but Solaris
+            // *-big5-1 and *-ksc5601.1992-3 fonts dont
+            if (nChar <= 0xFF)
+            {
+                bMatch = False;
+                break;
+            }
 
         default:
             // XXX really convert the unicode char into the encoding

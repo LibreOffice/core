@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-10 20:14:58 $
+ *  last change: $Author: cp $ $Date: 2000-12-12 14:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,17 +556,28 @@ BitmapXlfd::ToString( ByteString &rString,
 
     rString += '-';
     rString += ByteString::CreateFromInt32( mnPixelSize );
-    rString += "-";
-    rString += ByteString::CreateFromInt32( mnPointSize );
-    rString += "-";
-    rString += ByteString::CreateFromInt32( rInfo.mnResolutionX );
-    rString += '-';
-    rString += ByteString::CreateFromInt32( rInfo.mnResolutionY );
-    rString += '-';
+    #ifdef __notdef__
+        // since mnPointSize is not asked when comparing two bitmap font xlfd
+        // it may differ (and it does) for two fonts with same pixelsize
+        rString += "-";
+        rString += ByteString::CreateFromInt32( mnPointSize );
+        rString += "-";
+        rString += ByteString::CreateFromInt32( rInfo.mnResolutionX );
+        rString += '-';
+        rString += ByteString::CreateFromInt32( rInfo.mnResolutionY );
+        rString += '-';
+    #else
+        rString += "-*-*-*-";
+    #endif /* __notdef__ */
+
     rString += rInfo.mcSpacing;
-    rString += '-';
-    // rString += ByteString::CreateFromInt32( mnAverageWidth );
-    rString += '*';
+
+    #ifdef __notdef__
+        rString += '-';
+        rString += ByteString::CreateFromInt32( mnAverageWidth );
+    #else
+        rString += "-*";
+    #endif
 
     AppendAttribute( mpFactory->RetrieveCharset(rInfo.mnCharset), rString );
 }
