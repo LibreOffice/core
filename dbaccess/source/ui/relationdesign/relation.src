@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-19 21:25:59 $
+ *  last change: $Author: fs $ $Date: 2001-12-11 08:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,7 +577,6 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                     ITEM_TOOLS_BASICCHOOSER
                 };
                 ITEM_MN_OPTIONS
-                ITEM_TOOLS_SYNCHRONIZE
                 MenuItem
                 {
                     Separator = TRUE ;
