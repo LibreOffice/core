@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-05 09:45:29 $
+ *  last change: $Author: gt $ $Date: 2001-10-19 13:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,9 @@ public:
 
     void                    EnableContextMenu( sal_Bool bEnable );
     void                    EnableDelete( sal_Bool bEnable );
+    void                    EnableNameReplacing( sal_Bool bEnable = sal_True );
+                                // translate folder names or display doc-title instead of file name
+                                // EnableContextMenu( TRUE )/EnableDelete(TRUE) disable name replacing!
 };
 
 // struct SvtContentEntry ------------------------------------------------

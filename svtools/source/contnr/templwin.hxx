@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-28 11:13:55 $
+ *  last change: $Author: gt $ $Date: 2001-10-19 13:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@ public:
     void                SetCursorPos( ULONG nPos );
     ULONG               GetCursorPos();
     void                SetFocus();
+
+    static String       GetSamplesFolderURL();
 };
 
 // class SvtFileViewWindow_Impl ------------------------------------------
@@ -131,6 +133,7 @@ private:
     Link                aNewFolderLink;
     String              aCurrentRootURL;
     String              aFolderURL;
+    String              aSamplesFolderURL;
 
     sal_Bool            bIsTemplateFolder;
 
@@ -138,7 +141,7 @@ private:
                         GetNewDocContents() const;
 
 public:
-    SvtFileViewWindow_Impl( Window* pParent );
+    SvtFileViewWindow_Impl( Window* pParent, const String& rSamplesFolderURL );
     ~SvtFileViewWindow_Impl();
 
     virtual void        Resize();
@@ -158,6 +161,7 @@ public:
     String              GetFolderTitle() const;
     String              GetFolderURL() const { return aFolderURL; }
     void                SetFocus();
+//  void                SetSamplesFolder( const String* pSamplesFolder );
 };
 
 // class SvtFrameWindow_Impl ---------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-19 15:37:41 $
+ *  last change: $Author: gt $ $Date: 2001-10-19 13:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,12 @@
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
 #endif
+#ifndef _COM_SUN_STAR_IO_XPERSIST_HPP_
+#include <com/sun/star/io/XPersist.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 
 #ifndef _VECTOR_
 #include <vector>
@@ -147,6 +153,9 @@
 #ifndef _WLDCRD_HXX
 #include <tools/wldcrd.hxx>
 #endif
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
+#endif
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -171,6 +180,8 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::beans;
 using namespace ::comphelper;
 using namespace ::rtl;
 using namespace ::ucb;
@@ -253,10 +264,286 @@ public:
     void            EnableAutoResize() { mbAutoResize = sal_True; }
     void            EnableContextMenu( sal_Bool bEnable ) { mbContextMenuEnabled = bEnable; }
     void            EnableDelete( sal_Bool bEnable ) { mbEnableDelete = bEnable; }
+    sal_Bool        IsDeleteOrContextMenuEnabled() { return mbContextMenuEnabled || mbEnableDelete; }
 
     Reference< XCommandEnvironment >    GetCommandEnvironment() const { return mxCmdEnv; }
 
     DECL_LINK( ResetQuickSearch_Impl, Timer * );
+};
+
+// class HashedEntry --------------------------------------------------
+
+class HashedEntry
+{   // just a special String which can be compared on equality much faster
+protected:
+    OUString                maName;
+    sal_Int32               mnHashCode;
+public:
+    inline                  HashedEntry( const OUString& rName );
+    inline                  HashedEntry( const INetURLObject& rURL );
+    inline                  HashedEntry( const HashedEntry& rCopy );
+    virtual                 ~HashedEntry();
+
+    inline sal_Bool operator    ==( const HashedEntry& rRef ) const;
+    inline sal_Bool operator    !=( const HashedEntry& rRef ) const;
+
+    inline const OUString&  GetName() const;
+};
+
+inline HashedEntry::HashedEntry( const OUString& rName ): maName( rName ), mnHashCode( rName.hashCode() )
+{
+}
+
+inline HashedEntry::HashedEntry( const INetURLObject& rURL ):
+    maName( rURL.GetMainURL( INetURLObject::NO_DECODE ) ),
+    mnHashCode( maName.hashCode() )
+{
+}
+
+inline HashedEntry::HashedEntry( const HashedEntry& r ): maName( r.maName ), mnHashCode( r.mnHashCode )
+{
+}
+
+HashedEntry::~HashedEntry()
+{
+}
+
+inline sal_Bool HashedEntry::operator ==( const HashedEntry& rRef ) const
+{
+    return mnHashCode == rRef.mnHashCode && maName.reverseCompareTo( rRef.maName ) == 0;
+}
+
+inline sal_Bool HashedEntry::operator !=( const HashedEntry& rRef ) const
+{
+    return mnHashCode != rRef.mnHashCode || maName.reverseCompareTo( rRef.maName ) != 0;
+}
+
+inline const OUString& HashedEntry::GetName() const
+{
+    return maName;
+}
+
+// class HashedEntryList ----------------------------------------------
+
+class HashedEntryList : protected List
+{// provides a list of _unique_ Entries
+protected:
+    inline HashedEntry*     First();
+    inline HashedEntry*     Next();
+    inline void             Append( HashedEntry* pNewEntry );
+public:
+    virtual                 ~HashedEntryList();
+
+    const HashedEntry*      Find( const OUString& rNameToSearchFor );
+    const HashedEntry*      Find( const HashedEntry& rToSearchFor );
+                                // not const, because First()/Next() is used
+    const HashedEntry&      Insert( HashedEntry* pInsertOrDelete );
+                                // don't care about pInsertOrDelete after this any more and handle it as invalid!
+                                // returns the Entry, which is effectively inserted
+
+    void                    Clear();
+};
+
+inline HashedEntry* HashedEntryList::First()
+{
+    return ( HashedEntry* ) List::First();
+}
+
+inline HashedEntry* HashedEntryList::Next()
+{
+    return ( HashedEntry* ) List::Next();
+}
+
+inline void HashedEntryList::Append( HashedEntry* pNew )
+{
+    List::Insert( pNew, LIST_APPEND );
+}
+
+HashedEntryList::~HashedEntryList()
+{
+    Clear();
+}
+
+const HashedEntry* HashedEntryList::Find( const OUString& rRefName )
+{   // simple linear search, which should be fast enough for this purpose
+    HashedEntry aRef( rRefName );
+    HashedEntry* pIter = First();
+    while( pIter && *pIter != aRef )
+        pIter = Next();
+
+    return pIter;
+}
+
+const HashedEntry* HashedEntryList::Find( const HashedEntry& rRef )
+{   // simple linear search, which should be fast enough for this purpose
+    HashedEntry* pIter = First();
+    while( pIter && *pIter != rRef )
+        pIter = Next();
+
+    return pIter;
+}
+
+const HashedEntry& HashedEntryList::Insert( HashedEntry* pNew )
+{   // inserts (appends) only, if entry doesn't already exists
+    // if it already exists, pNew is deleted, because the caller must not worry about pNew any more
+
+    DBG_ASSERT( pNew, "HashedEntryList::Insert(): NULL-pointer can't be inserted" );
+
+    const HashedEntry* pSearch = Find( *pNew );
+    if( pSearch )
+    {
+        delete pNew;
+        return *pSearch;
+    }
+
+    Append( pNew );
+
+    return *pNew;
+}
+
+void HashedEntryList::Clear()
+{
+    HashedEntry* p = First();
+    while( p )
+    {
+        delete p;
+        p = Next();
+    }
+}
+
+// class NameTranslationEntry -----------------------------------------
+
+class NameTranslationEntry : public HashedEntry
+{// a fast compareble String and another String, which is used to get a substitution for a given String
+protected:
+    OUString                maTranslatedName;
+public:
+    inline                  NameTranslationEntry( const OUString& rOriginalName, const OUString& rTranslatedName );
+    inline                  NameTranslationEntry( const ByteString& rOriginalName, const ByteString& rTranslatedName );
+
+    inline const OUString&  GetTranslation() const;
+};
+
+inline NameTranslationEntry::NameTranslationEntry( const OUString& rOrg, const OUString& rTrans ):
+    HashedEntry( rOrg ),
+    maTranslatedName( rTrans )
+{
+}
+
+inline NameTranslationEntry::NameTranslationEntry( const ByteString& rOrg, const ByteString& rTrans ):
+    HashedEntry( OUString( rOrg.GetBuffer(), rOrg.Len(), RTL_TEXTENCODING_ASCII_US ) ),
+    maTranslatedName( OUString( rTrans.GetBuffer(), rTrans.Len(), RTL_TEXTENCODING_UTF8 ) )
+{
+}
+
+inline const OUString& NameTranslationEntry::GetTranslation() const
+{
+    return maTranslatedName;
+}
+
+// class NameTranslationList -----------------------------------------
+
+class NameTranslationList : protected HashedEntryList
+{   // contains a list of substitutes of strings for a given folder (as URL)
+    // explanation of the circumstances see in remarks for Init();
+protected:
+    INetURLObject           maTransFile;    // URL of file with translation entries
+    HashedEntry             maHashedURL;    // for future purposes when dealing with a set of cached
+                                            //  NameTranslationLists
+private:
+    void                    Init();         // reads the translation file and fills the (internal) list
+
+public:
+                            NameTranslationList( const INetURLObject& rBaseURL );
+                                            // rBaseURL: path to folder for which the translation of the entries
+                                            //  should be done
+
+    inline sal_Bool operator    ==( const HashedEntry& rRef ) const;
+    inline sal_Bool operator    !=( const HashedEntry& rRef ) const;
+
+    const OUString*         Translate( const OUString& rName ) const;
+                                            // returns NULL, if rName can't be found
+
+    inline void             Update();       // clears list and init
+};
+
+void NameTranslationList::Init()
+{
+// Tries to read the file ".nametranslation.table" in the base folder. Complete path/name is in maTransFile.
+// Further on, the found entries in the section "TRANSLATIONNAMES" are used to replace names in the
+// base folder by translated ones. The translation must be given in UTF8
+// See examples of such a files in the samples-folder of an Office installation
+
+    try
+    {
+        Content aTestContent( maTransFile.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >() );
+
+        if( aTestContent.isDocument() )
+        {// ... also tests the existence of maTransFile by throwing an Exception
+            const sal_Char* pSection = "TRANSLATIONNAMES";
+            String          aFsysName( maTransFile.getFSysPath( INetURLObject::FSYS_DETECT ) );
+            Config          aConfig( aFsysName );
+
+            aConfig.SetGroup( ByteString( pSection ) );
+
+            USHORT          nKeyCnt = aConfig.GetKeyCount();
+
+            for( USHORT nCnt = 0 ; nCnt < nKeyCnt ; ++nCnt )
+                Insert( new NameTranslationEntry( aConfig.GetKeyName( nCnt ), aConfig.ReadKey( nCnt ) ) );
+        }
+    }
+    catch( Exception& ) {}
+}
+
+NameTranslationList::NameTranslationList( const INetURLObject& rBaseURL ):
+    maTransFile( rBaseURL ),
+    maHashedURL( rBaseURL )
+{
+    maTransFile.insertName( OUString::createFromAscii( ".nametranslation.table" ) );
+    Init();
+}
+
+inline sal_Bool NameTranslationList::operator ==( const HashedEntry& rRef ) const
+{
+    return maHashedURL == rRef;
+}
+
+inline sal_Bool NameTranslationList::operator !=( const HashedEntry& rRef ) const
+{
+    return maHashedURL != rRef;
+}
+
+const OUString* NameTranslationList::Translate( const OUString& rName ) const
+{
+    const NameTranslationEntry* pSearch = static_cast< const NameTranslationEntry* >(
+                                        ( const_cast< NameTranslationList* >( this ) )->Find( rName ) );
+
+    return pSearch? &pSearch->GetTranslation() : NULL;
+}
+
+inline void NameTranslationList::Update()
+{
+    Clear();
+    Init();
+}
+
+// class NameTranslator_Impl ------------------------------------------
+
+class NameTranslator_Impl
+{   // enables the user to get string substitutions (translations for the content) for a given folder
+    // see more explanations above in the description for NameTranslationList
+private:
+    NameTranslationList*    mpActFolder;
+public:
+                            NameTranslator_Impl( void );
+                            NameTranslator_Impl( const INetURLObject& rActualFolder );
+                            ~NameTranslator_Impl();
+
+    void                    UpdateTranslationTable();   // reads the translation file again
+
+    void                    SetActualFolder( const INetURLObject& rActualFolder );
+    sal_Bool                GetTranslation( const OUString& rOriginalName, OUString& rTranslatedName ) const;
+                                // does nothing with rTranslatedName, when translation is not possible
 };
 
 // class SvtFileView_Impl ---------------------------------------------
@@ -269,9 +556,12 @@ public:
     ::osl::Mutex                        maMutex;
 
     ViewTabListBox_Impl*    mpView;
+    NameTranslator_Impl*    mpNameTrans;
+    Reference< XPersist >   xDocInfo;
     sal_uInt16              mnSortColumn;
     sal_Bool                mbAscending     : 1;
     sal_Bool                mbOnlyFolder    : 1;
+    sal_Bool                mbReplaceNames  : 1;    // translate folder names or display doc-title instead of file name
     String                  maViewURL;
     String                  maAllFilter;
     String                  maCurrentFilter;
@@ -301,16 +591,51 @@ public:
 
     ULONG                   GetEntryPos( const OUString& rURL );
 
-    void                    EnableContextMenu( sal_Bool bEnable ) { mpView->EnableContextMenu( bEnable ); }
-    void                    EnableDelete( sal_Bool bEnable ) { mpView->EnableDelete( bEnable ); }
+    inline void             EnableContextMenu( sal_Bool bEnable );
+    inline void             EnableDelete( sal_Bool bEnable );
 
     void                    Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending );
     sal_Bool                SearchNextEntry( sal_uInt32 &nIndex,
                                              const OUString& rTitle,
                                              sal_Bool bWrapAround );
+
+    inline sal_Bool         EnableNameReplacing( sal_Bool bEnable = sal_True ); // returns false, if action wasn't possible
+    void                    SetActualFolder( const INetURLObject& rActualFolder );
+    sal_Bool                GetTranslatedName( const OUString& rName, OUString& rTranslatedName ) const;
+
+    sal_Bool                GetDocTitle( const OUString& rTargetURL, OUString& rDocTitle ) const;
 };
 
+inline void SvtFileView_Impl::EnableContextMenu( sal_Bool bEnable )
+{
+    mpView->EnableContextMenu( bEnable );
+    if( bEnable )
+        mbReplaceNames = sal_False;
+}
 
+inline void SvtFileView_Impl::EnableDelete( sal_Bool bEnable )
+{
+    mpView->EnableDelete( bEnable );
+    if( bEnable )
+        mbReplaceNames = sal_False;
+}
+
+inline sal_Bool SvtFileView_Impl::EnableNameReplacing( sal_Bool bEnable )
+{
+    sal_Bool bRet;
+    if( mpView->IsDeleteOrContextMenuEnabled() )
+    {
+        DBG_ASSERT( !mbReplaceNames, "SvtFileView_Impl::EnableNameReplacing(): state should be not possible!" );
+        bRet = !bEnable;    // only for enabling this is an unsuccessful result
+    }
+    else
+    {
+        mbReplaceNames = bEnable;
+        bRet = sal_True;
+    }
+
+    return bRet;
+}
 // functions -------------------------------------------------------------
 
 #define CONVERT_DATETIME( aUnoDT, aToolsDT ) \
@@ -1131,6 +1456,11 @@ void SvtFileView::EnableDelete( sal_Bool bEnable )
     mpImp->EnableDelete( bEnable );
 }
 
+void SvtFileView::EnableNameReplacing( sal_Bool bEnable )
+{
+    mpImp->EnableNameReplacing( bEnable );
+}
+
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 IMPL_LINK( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar )
@@ -1172,17 +1502,79 @@ IMPL_LINK( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar )
     return 1;
 }
 
+
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
+
+// class SvtFileView_Impl ---------------------------------------------
+
+NameTranslator_Impl::NameTranslator_Impl( void ) :
+    mpActFolder( NULL )
+{
+}
+
+NameTranslator_Impl::NameTranslator_Impl( const INetURLObject& rActualFolder )
+{
+    mpActFolder = new NameTranslationList( rActualFolder );
+}
+
+NameTranslator_Impl::~NameTranslator_Impl()
+{
+    if( mpActFolder )
+        delete mpActFolder;
+}
+
+void NameTranslator_Impl::UpdateTranslationTable()
+{
+    if( mpActFolder )
+        mpActFolder->Update();
+}
+
+void NameTranslator_Impl::SetActualFolder( const INetURLObject& rActualFolder )
+{
+    HashedEntry aActFolder( rActualFolder );
+
+    if( mpActFolder )
+    {
+        if( *mpActFolder != aActFolder )
+        {
+            delete mpActFolder;
+            mpActFolder = new NameTranslationList( rActualFolder );
+        }
+    }
+    else
+        mpActFolder = new NameTranslationList( rActualFolder );
+}
+
+sal_Bool NameTranslator_Impl::GetTranslation( const OUString& rOrg, OUString& rTrans ) const
+{
+    sal_Bool bRet = sal_False;
+
+    if( mpActFolder )
+    {
+        const OUString* pTrans = mpActFolder->Translate( rOrg );
+        if( pTrans )
+        {
+            rTrans = *pTrans;
+            bRet = sal_True;
+        }
+    }
+
+    return bRet;
+}
+
+// class SvtFileView_Impl ---------------------------------------------
 SvtFileView_Impl::SvtFileView_Impl( Window* pParent,
                                     sal_Int16 nFlags,
                                     sal_Bool bOnlyFolder ) :
     mnSortColumn    ( COLUMN_TITLE ),
     mbAscending     ( sal_True ),
     mbOnlyFolder    ( bOnlyFolder ),
-    maFolderImage   ( SvtResId( IMG_SVT_FOLDER ) )
+    mbReplaceNames  ( sal_False ),
+    maFolderImage   ( SvtResId( IMG_SVT_FOLDER ) ),
+    mpNameTrans     ( NULL )
 {
     maAllFilter = String::CreateFromAscii( "*.*" );
 
@@ -1208,6 +1600,9 @@ void SvtFileView_Impl::Clear()
         delete (*aIt);
 
     maContent.clear();
+
+    if( mpNameTrans )
+        DELETEZ( mpNameTrans );
 }
 
 // -----------------------------------------------------------------------
@@ -1222,6 +1617,9 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
 
     try
     {
+        // prepare name translation
+        SetActualFolder( aFolderObj );
+
         Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), mpView->GetCommandEnvironment() );
         Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps(6);
@@ -1270,10 +1668,10 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
                     OUString aTargetURL = xRow->getString( ROW_TARGET_URL );
                     sal_Bool bTarget = aTargetURL.getLength() > 0;
 
-                    pData->maTitle    = xRow->getString( ROW_TITLE );
-                    pData->maLowerTitle = pData->maTitle.toAsciiLowerCase();
-                    pData->maSize     = xRow->getLong( ROW_SIZE );
                     pData->mbIsFolder = xRow->getBoolean( ROW_IS_FOLDER );
+                    pData->maTitle    = xRow->getString( ROW_TITLE );
+
+                    pData->maSize     = xRow->getLong( ROW_SIZE );
 
                     if ( bTarget &&
                          INetURLObject( aContentURL ).GetProtocol() == INET_PROT_VND_SUN_STAR_HIER )
@@ -1293,6 +1691,16 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
                     INetURLObject aURLObj( pData->maTargetURL );
 
                     pData->maType = SvFileInformationManager::GetDescription( aURLObj );
+
+                    // replace names on demand
+                    if( mbReplaceNames )
+                    {
+                        if( pData->mbIsFolder )
+                            GetTranslatedName( pData->maTitle, pData->maTitle );
+                        else
+                            GetDocTitle( pData->maTargetURL, pData->maTitle );
+                    }
+                    pData->maLowerTitle = pData->maTitle.toAsciiLowerCase();
 
                     maContent.push_back( pData );
                 }
@@ -1851,6 +2259,61 @@ sal_Bool SvtFileView_Impl::SearchNextEntry( sal_uInt32 &nIndex,
     return sal_False;
 }
 
+// -----------------------------------------------------------------------
+void SvtFileView_Impl::SetActualFolder( const INetURLObject& rActualFolder )
+{
+    if( mpNameTrans )
+        mpNameTrans->SetActualFolder( rActualFolder );
+    else
+        mpNameTrans = new NameTranslator_Impl( rActualFolder );
+}
+
+// -----------------------------------------------------------------------
+sal_Bool SvtFileView_Impl::GetTranslatedName( const OUString& rName, OUString& rRet ) const
+{
+    sal_Bool bRet;
+
+    if( mbReplaceNames && mpNameTrans )
+        bRet = mpNameTrans->GetTranslation( rName, rRet );
+    else
+        bRet = sal_False;
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
+sal_Bool SvtFileView_Impl::GetDocTitle( const OUString& rTargetURL, OUString& rRet ) const
+{
+    SvtFileView_Impl* p = const_cast< SvtFileView_Impl* >( this );
+    sal_Bool bRet = sal_False;
+
+    if( !xDocInfo.is() )
+        p->xDocInfo = Reference< XPersist > (
+               ::comphelper::getProcessServiceFactory()->createInstance(
+               String( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.DocumentProperties") ) ), UNO_QUERY );
+
+    DBG_ASSERT( xDocInfo.is(), "SvtFileView_Impl::GetDocTitle(): I don't understand the world any more!" );
+
+    try
+    {
+        p->xDocInfo->read( rTargetURL );
+        Reference< XPropertySet > xPropSet( xDocInfo, UNO_QUERY );
+
+        Any aAny = xPropSet->getPropertyValue( OUString::createFromAscii( "Title" ) );
+
+        OUString aTitle;
+        if( aAny >>= aTitle )
+        {
+            rRet = aTitle;
+            bRet = sal_True;
+        }
+    }
+    catch ( IOException& ) {}
+    catch ( UnknownPropertyException& ) {}
+    catch ( Exception& ) {}
+
+    return bRet;
+}
 
 
 namespace svtools {
@@ -1917,3 +2380,4 @@ IMPL_STATIC_LINK( QueryDeleteDlg_Impl, ClickLink, PushButton*, pBtn )
 }
 
 }
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: gt $ $Date: 2001-10-12 12:51:26 $
+ *  last change: $Author: gt $ $Date: 2001-10-19 13:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,14 +284,14 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     Window( pParent, WB_DIALOGCONTROL | WB_BORDER | WB_3DLOOK ),
 
     aDummyHeaderBar( this ),
-    aIconCtrl( this, /*WB_3DLOOK | */WB_ICON | WB_NOCOLUMNHEADER |
+    aIconCtrl( this, WB_ICON | WB_NOCOLUMNHEADER |
                      WB_HIGHLIGHTFRAME | WB_NOSELECTION | WB_NODRAGSELECTION | WB_TABSTOP ),
     nMaxTextLength( 0 )
 
 {
     aDummyHeaderBar.Show();
 
-    aIconCtrl.SetStyle( /*WB_3DLOOK | */WB_ICON | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
+    aIconCtrl.SetStyle( WB_ICON | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
                         WB_NOSELECTION | WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN );
       aIconCtrl.SetHelpId( HID_TEMPLATEDLG_ICONCTRL );
     aIconCtrl.SetChoiceWithCursor( TRUE );
@@ -467,14 +467,21 @@ void SvtIconWindow_Impl::SetFocus()
     aIconCtrl.GrabFocus();
 }
 
+String SvtIconWindow_Impl::GetSamplesFolderURL()
+{
+    return SvtPathOptions().SubstituteVariable(
+        String( RTL_CONSTASCII_USTRINGPARAM("$(insturl)/share/samples/$(vlang)") ) );
+}
+
 // class SvtFileViewWindow_Impl -----------------------------------------_
 
-SvtFileViewWindow_Impl::SvtFileViewWindow_Impl( Window* pParent ) :
+SvtFileViewWindow_Impl::SvtFileViewWindow_Impl( Window* pParent, const String& rSamplesFolderURL ) :
 
     Window( pParent, WB_DIALOGCONTROL | WB_TABSTOP | WB_BORDER | WB_3DLOOK ),
 
     aFileView           ( this, SvtResId( CTRL_FILEVIEW ), FILEVIEW_SHOW_TITLE ),
-    bIsTemplateFolder   ( sal_False )
+    bIsTemplateFolder   ( sal_False ),
+    aSamplesFolderURL   ( rSamplesFolderURL )
 
 {
     aFileView.SetStyle( aFileView.GetStyle() | WB_DIALOGCONTROL | WB_TABSTOP );
@@ -594,9 +601,17 @@ void SvtFileViewWindow_Impl::OpenFolder( const String& rURL )
     INetProtocol eProt = INetURLObject( rURL ).GetProtocol();
     bIsTemplateFolder = ( eProt == INET_PROT_VND_SUN_STAR_HIER );
     if ( eProt == INET_PROT_PRIVATE )
+    {
+        aFileView.EnableNameReplacing( sal_False );
         aFileView.Initialize( rURL, GetNewDocContents() );
+    }
     else
+    {
+        xub_StrLen nSampFoldLen = aSamplesFolderURL.Len();
+        aFileView.EnableNameReplacing(
+                    nSampFoldLen? rURL.CompareTo( aSamplesFolderURL, nSampFoldLen ) == COMPARE_EQUAL : sal_False );
         aFileView.Initialize( rURL, String() );
+    }
     aNewFolderLink.Call( this );
 }
 
@@ -950,17 +965,17 @@ void SvtFrameWindow_Impl::ToggleView( sal_Bool bDI )
 
 SvtTemplateWindow::SvtTemplateWindow( Window* pParent ) :
 
-    Window( pParent, /*WB_3DLOOK | */WB_DIALOGCONTROL ),
+    Window( pParent, WB_DIALOGCONTROL ),
 
     aFileViewTB             ( this, SvtResId( TB_SVT_FILEVIEW ) ),
     aFrameWinTB             ( this, SvtResId( TB_SVT_FRAMEWIN ) ),
-    aSplitWin               ( this, /*WB_DOCKBORDER | WB_FLATSPLITDRAW | */WB_DIALOGCONTROL | WB_NOSPLITDRAW ),
+    aSplitWin               ( this, WB_DIALOGCONTROL | WB_NOSPLITDRAW ),
     pHistoryList            ( NULL )
 
 {
     // create windows
     pIconWin = new SvtIconWindow_Impl( this );
-    pFileWin = new SvtFileViewWindow_Impl( this );
+    pFileWin = new SvtFileViewWindow_Impl( this, pIconWin->GetSamplesFolderURL() );
     pFrameWin = new SvtFrameWindow_Impl( this );
 
     // set handlers
