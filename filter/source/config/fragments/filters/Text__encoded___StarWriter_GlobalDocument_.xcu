@@ -1,0 +1,42 @@
+    <node oor:name="Text (encoded) (StarWriter/GlobalDocument)" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>writer_Text</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.GlobalDocument</value></prop>
+        <prop oor:name="UIComponent"><value>com.sun.star.comp.Writer.FilterOptionsDialog</value></prop>
+        <prop oor:name="UserData"><value>TEXT_DLG</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="pl">Tekst zakodowany (%productname% - Dokument główny)</value>
+            <value xml:lang="hu">Kódolt szöveg (%productname%-fődokumentum)</value>
+            <value xml:lang="ja">エンコードされたテキスト (%productname% マスタードキュメント)</value>
+            <value xml:lang="es">Texto codificado (%productname% Documento maestro)</value>
+            <value xml:lang="tr">Kodlanmış Metin (%productname% Ana Belgesi)</value>
+            <value xml:lang="ru">Текст кодированный (%productname% Главный документ)</value>
+            <value xml:lang="th">Text Encoded (%productname% Master Document)</value>
+            <value xml:lang="x-comment">Text Kodiert (%productname% Globaldokument)</value>
+            <value xml:lang="ca">Text Encoded (%productname% Master Document)</value>
+            <value xml:lang="el">Κείμενο Κωδικοποιημένο (Κύριο έγγραφο %productname%)</value>
+            <value xml:lang="zh-CN">文字 使用编码的 (%productname% 主控文档)</value>
+            <value xml:lang="pt">Texto codificado (%productname% Documento-mestre)</value>
+            <value xml:lang="cs">Kódovaný text (Hlavní dokument %productname%)</value>
+            <value xml:lang="fr">Texte codé (%productname% Document maître)</value>
+            <value xml:lang="ar">Text (encoded)</value>
+            <value xml:lang="zh-TW">文字 使用編碼的(%productname% 主控文件)</value>
+            <value xml:lang="sl">Besedilo Encoded (%productname% Glavni dokument)</value>
+            <value xml:lang="fi">Text (encoded)</value>
+            <value xml:lang="hi-IN">Text Encoded (%productname% Master Document)</value>
+            <value xml:lang="en-US">Text Encoded (%productname% Master Document)</value>
+            <value xml:lang="sk">Kódovaný text (Hlavní dokument %productname%)</value>
+            <value xml:lang="he">‮טקסט מקודד (מסמכי אב %productname%)‬</value>
+            <value xml:lang="sv">Text - kodad (%productname% samlingsdokument)</value>
+            <value xml:lang="da">Tekst encoded (%productname% hoveddokument)</value>
+            <value xml:lang="de">Text Kodiert (%productname% Globaldokument)</value>
+            <value xml:lang="ko">인코드된 텍스트 (%productname% 마스터 문서)</value>
+            <value xml:lang="nl">Tekst gecodeerd (%productname% Masterdocument)</value>
+            <value xml:lang="pt-BR">Text (encoded)</value>
+            <value xml:lang="it">Testo codificato (%productname% Documento master)</value>
+            <value xml:lang="x-translate">Text Kodiert (%productname% Globaldokument)</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN</value></prop>
+    </node>
