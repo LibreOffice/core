@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:08:30 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,10 +499,12 @@ sal_Bool ImplSdPPTImport::Import()
 
                                 if ( ! ( nPropCount % 6 ) )
                                 {
+                                    UINT32 i;
+
                                     nPropCount /= 6;    // 6 propertys a hyperlink
 
                                     SdHyperlinkEntry* pHyperlink;
-                                    for ( UINT32 i = 0; i < nPropCount; i++ )
+                                    for ( i = 0; i < nPropCount; i++ )
                                     {
                                         pHyperlink = new SdHyperlinkEntry;
                                         pHyperlink->nIndex = 0;
@@ -1383,10 +1385,11 @@ sal_Bool ImplSdPPTImport::Import()
         // set the current custom show
         if ( aCustomShow.Len() )
         {
+            void* pPtr;
             List* pList = pDoc->GetCustomShowList( FALSE );
             if ( pList )
             {
-                for ( void* pPtr = pList->First(); pPtr; pPtr = pList->Next() )
+                for ( pPtr = pList->First(); pPtr; pPtr = pList->Next() )
                 {
                     if ( ((SdCustomShow*)pPtr)->GetName() == aCustomShow )
                         break;
