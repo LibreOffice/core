@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2000-11-06 09:03:08 $
+ *  last change: $Author: cd $ $Date: 2000-11-17 13:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,19 @@ static ::vcl::InterfacePairCache< ::com::sun::star::portal::client::XRmVirtualDe
 
 typedef ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::portal::client::XRmVirtualDevice >, ::com::sun::star::uno::Reference< ::com::sun::star::portal::client::XRmOutputDevice > > virdevInterfacePair;
 
+
+void createRemoteVirdevCache( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aInterfaceSeq )
+{
+    if( ! pRemoteVirdevCache )
+    {
+        ImplSVData* pSVData = ImplGetSVData();
+        pRemoteVirdevCache = new ::vcl::InterfacePairCache< ::com::sun::star::portal::client::XRmVirtualDevice, ::com::sun::star::portal::client::XRmOutputDevice >(
+            pSVData->mxMultiFactory,
+            aInterfaceSeq,
+            ::rtl::OUString::createFromAscii( "OfficeVirtualDevice.stardiv.de" ), 10, 40 );
+    }
+}
+
 void eraseRemoteVirdevCache()
 {
     if( pRemoteVirdevCache )
@@ -168,14 +181,6 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     if ( !mpVirDev )
         GetpApp()->Exception( EXC_SYSOBJNOTCREATED );
 #else
-    if( ! pRemoteVirdevCache )
-    {
-        ImplSVData* pSVData = ImplGetSVData();
-        pRemoteVirdevCache = new ::vcl::InterfacePairCache< ::com::sun::star::portal::client::XRmVirtualDevice, ::com::sun::star::portal::client::XRmOutputDevice >(
-            pSVData->mxMultiFactory,
-            ::rtl::OUString::createFromAscii( "OfficeVirtualDevice.stardiv.de" ),
-            20, 10, 40 );
-    }
 
     if( pOutDev->GetOutDevType() == OUTDEV_PRINTER || ! mpVirDev )
     {
