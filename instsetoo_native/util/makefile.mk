@@ -86,24 +86,15 @@ INSTALLDIR=$(OUT)
 
 .INCLUDE: target.mk
 
-.IF "$(OS)" == "LINUX"
-FORMAT*=-format rpm
-.ENDIF
-
-.IF "$(OS)" == "SOLARIS"
-FORMAT*=-format pkg
-.ENDIF
-
-.IF "$(OS)"=="MACOSX"
-FORMAT*=-format osx
-.ENDIF
-
 LOCALPYFILES= \
     $(BIN)$/uno.py \
     $(BIN)$/unohelper.py \
     $(BIN)$/pythonloader.py \
     $(BIN)$/pythonscript.py
 
+# PKGFORMAT taken from environment. See possible
+# values below.
+#
 # epm supports the following formats:
 # aix - AIX software distribution
 # bsd - FreeBSD, NetBSD, or OpenBSD software distribution
@@ -117,7 +108,7 @@ LOCALPYFILES= \
 # native - "Native" software distribution for the platform
 # portable - Portable software distribution
 
-.IF "$(FORMAT)"!="" && "$(EPM)"=="" && "$(USE_PACKAGER)"==""
+.IF "$(PKGFORMAT)"!="" && "$(EPM)"=="" && "$(USE_PACKAGER)"==""
 ALLTAR : $(LOCALPYFILES)
     @echo "No EPM: do no packaging at this stage"
 .ELIF "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
@@ -144,10 +135,10 @@ openoffice: $(foreach,i,$(alllangiso) openoffice_$i)
 ooolanguagepack : $(foreach,i,$(alllangiso) ooolanguagepack_$i)
 
 openoffice_%:
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(@:s/openoffice_//) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(PRJ)$/inc_openoffice$/windows$/msi_templates -msilanguage $(COMMONMISC)$/win_ulffiles $(FORMAT)
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(@:s/openoffice_//) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(PRJ)$/inc_openoffice$/windows$/msi_templates -msilanguage $(COMMONMISC)$/win_ulffiles -format $(PKGFORMAT)
 
 ooolanguagepack_%:
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(@:s/ooolanguagepack_//) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist_language.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(PRJ)$/inc_ooolangpack$/windows$/msi_templates -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack $(FORMAT)
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(@:s/ooolanguagepack_//) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist_language.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(PRJ)$/inc_ooolangpack$/windows$/msi_templates -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack -format $(PKGFORMAT)
 
 .ELSE			# "$(alllangiso)"!=""
 openoffice:
