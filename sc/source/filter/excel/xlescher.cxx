@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlescher.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:47:56 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:12:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,13 +139,21 @@ void lclGetRowFromY(
     // rnStartH in conjunction with nXclStartRow is used as buffer for previously calculated height
     long nTwipsY = static_cast< long >( nY / fScale + 0.5 );
     long nRowH = 0;
-    for( rnXclRow = nXclStartRow; rnXclRow <= MAXROW; ++rnXclRow )
+    ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
+            rDoc.GetRowFlagsArray( nScTab), static_cast<SCROW>(nXclStartRow),
+            MAXROW, CR_HIDDEN, 0, rDoc.GetRowHeightArray( nScTab));
+    for ( ; aIter; ++aIter )
     {
-        nRowH = rDoc.GetRowHeight( static_cast<SCROW>(rnXclRow), nScTab );
+        nRowH = *aIter;
         if( rnStartH + nRowH > nTwipsY )
+        {
+            rnXclRow = aIter.GetPos();
             break;
+        }
         rnStartH += nRowH;
     }
+    if (!aIter)
+        rnXclRow = aIter.GetIterEnd();  // down to the bottom..
     rnOffset = nRowH ? static_cast< sal_uInt16 >( (nTwipsY - rnStartH) * 256.0 / nRowH + 0.5 ) : 0;
 }
 
