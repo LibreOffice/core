@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpath.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 06:39:20 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ TabPage RID_SFXPAGE_PATH
     Text [ english_us ] = "Paths" ;
     Text[ chinese_simplified ] = "Â·¾¶";
     Text[ russian ] = "Ïóòè";
-    Text[ polish ] = "Œcie¿ki";
+    Text[ polish ] = "?cie¿ki";
     Text[ japanese ] = "Êß½";
     FixedText FT_TYPE
     {
@@ -141,7 +141,7 @@ TabPage RID_SFXPAGE_PATH
         Text [ english_us ] = "Path" ;
         Text[ chinese_simplified ] = "Â·¾¶";
         Text[ russian ] = "Ïóòü";
-        Text[ polish ] = "Œcie¿ka";
+        Text[ polish ] = "?cie¿ka";
         Text[ japanese ] = "Êß½";
         Text[ chinese_traditional ] = "¸ô®|";
         Text[ arabic ] = "ÇáãÓÇÑ";
@@ -204,7 +204,7 @@ TabPage RID_SFXPAGE_PATH
         Text [ portuguese ] = "~Padrão" ;
         Text[ chinese_simplified ] = "±ê×¼(~D)";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domyœlnie";
+        Text[ polish ] = "Domy?lnie";
         Text[ japanese ] = "•W€(~D)";
         Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
         Text[ arabic ] = "ÇİÊÑÇÖí";
@@ -223,7 +223,7 @@ TabPage RID_SFXPAGE_PATH
         Text [ English ] = "Standard" ;
         Text [ norwegian ] = "Standard" ;
         Text [ italian ] = "Standard" ;
-        Text [ portuguese_brazilian ] = "Padrão" ;
+        Text [ portuguese_brazilian ] = "Padr?o" ;
         Text [ portuguese ] = "Padrão" ;
         Text [ finnish ] = "Säännöllinen" ;
         Text [ danish ] = "Normal" ;
@@ -234,7 +234,7 @@ TabPage RID_SFXPAGE_PATH
         Text [ english_us ] = "Default" ;
         Text[ chinese_simplified ] = "±ê×¼";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domyœlnie";
+        Text[ polish ] = "Domy?lnie";
         Text[ japanese ] = "•W€";
         Text[ chinese_traditional ] = "¼Ğ·Ç";
         Text[ arabic ] = "ÇİÊÑÇÖí";
@@ -259,7 +259,7 @@ ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
     Message = "Die Verzeichnisse für die Konfiguration und des Nachrichtenspeichers\nmüssen verschieden sein.\nBitte wählen Sie einen neuen Pfad aus." ;
     Message [ English ] = "The paths of configuration and mail storages have to be different.\nPlease choose a new path." ;
     Message [ english_us ] = "The configuration and mail directories must be specified as separate directories.\nPlease choose a new path." ;
-    Message [ portuguese_brazilian ] = "Die Verzeichnisse für die Konfiguration und des Nachrichtenspeichers\nmüssen verschieden sein.\nBitte wählen Sie einen neuen Pfad aus." ;
+    Message [ portuguese_brazilian ] = "Die Verzeichnisse f? die Konfiguration und des Nachrichtenspeichers\nm?sen verschieden sein.\nBitte w?hlen Sie einen neuen Pfad aus." ;
     Message [ swedish ] = "Katalogerna för konfigurationen och meddelandelagret\nmåste vara olika.\nVälj en ny sökväg." ;
     Message [ danish ] = "Konfiguratationens og meddelelseslagerets biblioteker må ikke være ens.\nVælg venligst en ny sti." ;
     Message [ italian ] = "La cartella della configurazione deve essere diversa da quella per il salvataggio \ndei messaggi.\nScegliere un nuovo percorso." ;
@@ -269,7 +269,7 @@ ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
     Message [ portuguese ] = "Especifique os directórios de configuração e de correio como directórios separados.\nSeleccione um novo atalho." ;
     Message[ chinese_simplified ] = "ÅäÖÃºÍ±£´æÓÊ¼şµÄÄ¿Â¼²»ÄÜÏàÍ¬¡£\nÇëÄúÑ¡ÔñÒ»¸öĞÂµÄÄ¿Â¼¡£";
     Message[ russian ] = "Êîíôèãóğàöèè è ñîõğàíåíèå ñîîáùåíèé äîëæíû íàõîäèòüñÿ\nâ ğàçíûõ êàòàëîãàõ.\nÂûáåğèòå, ïîæàëóéñòà, íîâûé ïóòü.";
-    Message[ polish ] = "Katalogi dla konfiguracji i dla zapisu wiadomoœci \nmusz¹ byæ ró¿ne.\nProszê wybraæ now¹ œcie¿kê.";
+    Message[ polish ] = "Katalogi dla konfiguracji i dla zapisu wiadomo?ci \nmusz¹ byæ ró¿ne.\nProszê wybraæ now¹ ?cie¿kê.";
     Message[ japanese ] = "İ’è—p‚ÆÒ°Ù•Û‘¶—p‚ÌÃŞ¨Ú¸ÄØ‚Í\n•ÊX‚Å‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB\nV‚µ‚¢Êß½‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B";
     Message[ chinese_traditional ] = "°t¸m©MÀx¦s¶l¥óªº¥Ø¿ı¤£¯à¬Û¦P¡C\n½Ğ±z¿ï¾Ü¤@­Ó·sªº¥Ø¿ı¡C";
     Message[ arabic ] = "íÌÈ Ãä Êßæä ÏáÇÆá ÇáÊßæíä æÇáÈÑíÏ ãÎÊáİÉ.\nÇáÑÌÇÁ ÇÎÊíÇÑ ãÓÇÑ ÌÏíÏ.";
