@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-08 15:25:05 $
+ *  last change: $Author: cp $ $Date: 2002-02-11 10:45:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7248,7 +7248,7 @@ Window* Window::GetAccessibleChildWindow( USHORT n )
 
 void Window::SetAccessibleRole( USHORT nRole )
 {
-    if ( mpDummy2_AccessibleInfos )
+    if ( ! mpDummy2_AccessibleInfos )
         mpDummy2_AccessibleInfos = new ImplAccessibleInfos;
 
     DBG_ASSERT( mpDummy2_AccessibleInfos->nAccessibleRole == 0xFFFF, "AccessibleRole already set!" );
@@ -7363,7 +7363,7 @@ USHORT Window::GetAccessibleRole() const
 
 void Window::SetAccessibleName( const String& rName )
 {
-   if ( mpDummy2_AccessibleInfos )
+   if ( ! mpDummy2_AccessibleInfos )
         mpDummy2_AccessibleInfos = new ImplAccessibleInfos;
 
     DBG_ASSERT( !mpDummy2_AccessibleInfos->pAccessibleName, "AccessibleName already set!" );
@@ -7387,7 +7387,7 @@ String Window::GetAccessibleName() const
 
 void Window::SetAccessibleDescription( const String& rDescription )
 {
-   if ( mpDummy2_AccessibleInfos )
+   if ( ! mpDummy2_AccessibleInfos )
         mpDummy2_AccessibleInfos = new ImplAccessibleInfos;
 
     DBG_ASSERT( !mpDummy2_AccessibleInfos->pAccessibleDescription, "AccessibleDescription already set!" );
