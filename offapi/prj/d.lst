@@ -73,6 +73,10 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\view
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\input
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\sax
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\dom
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\dom\views
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\dom\events
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\xpath
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\ui
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\ui
@@ -140,6 +144,10 @@ mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\ui
 ..\com\sun\star\xml\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml
 ..\com\sun\star\xml\input*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\input
 ..\com\sun\star\xml\sax\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\sax
+..\com\sun\star\xml\dom\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\dom
+..\com\sun\star\xml\dom\views\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\dom\views
+..\com\sun\star\xml\dom\events\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\dom\events
+..\com\sun\star\xml\xpath\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\xpath
 ..\com\sun\star\ui\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\ui
 ..\com\sun\star\ui\dialogs\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 
