@@ -8,7 +8,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.Forms</supported-service>
         <supported-service>com.sun.star.form.FormComponents</supported-service>
     </component-description>
@@ -18,7 +18,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.FormComponent</supported-service>
         <supported-service>com.sun.star.form.FormComponents</supported-service>
         <supported-service>com.sun.star.form.component.Form</supported-service>
@@ -37,7 +37,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.component.FixedText</supported-service>
         <supported-service>com.sun.star.form.FormComponent</supported-service>
         <supported-service>com.sun.star.form.FormControlModel</supported-service>
@@ -50,7 +50,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.component.HiddenControl</supported-service>
         <supported-service>com.sun.star.form.FormComponent</supported-service>
         <supported-service>com.sun.star.form.FormControlModel</supported-service>
@@ -62,7 +62,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.component.FileControl</supported-service>
         <supported-service>com.sun.star.form.FormComponent</supported-service>
         <supported-service>com.sun.star.form.FormControlModel</supported-service>
@@ -75,7 +75,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.component.GroupBox</supported-service>
         <supported-service>com.sun.star.form.FormComponent</supported-service>
         <supported-service>com.sun.star.form.FormControlModel</supported-service>
@@ -88,7 +88,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.component.ImageButton</supported-service>
         <supported-service>com.sun.star.form.FormComponent</supported-service>
         <supported-service>com.sun.star.form.FormControlModel</supported-service>
@@ -101,7 +101,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.component.CommandButton</supported-service>
         <supported-service>com.sun.star.form.FormComponent</supported-service>
         <supported-service>com.sun.star.form.FormControlModel</supported-service>
@@ -114,7 +114,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.component.GridControl</supported-service>
         <supported-service>com.sun.star.form.FormComponent</supported-service>
         <supported-service>com.sun.star.form.FormControlModel</supported-service>
@@ -126,7 +126,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.component.DatabaseRadioButton</supported-service>
         <supported-service>com.sun.star.form.component.RadioButton</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -141,7 +141,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.component.DatabaseCheckBox</supported-service>
         <supported-service>com.sun.star.form.component.CheckBox</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -156,7 +156,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.component.DatabaseComboBox</supported-service>
         <supported-service>com.sun.star.form.component.ComboBox</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -172,7 +172,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.component.DatabaseListBox</supported-service>
         <supported-service>com.sun.star.form.component.ListBox</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -188,7 +188,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.component.DatabaseTextField</supported-service>
         <supported-service>com.sun.star.form.component.TextField</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -204,7 +204,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.component.DatabaseDateField</supported-service>
         <supported-service>com.sun.star.form.component.DateField</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -219,7 +219,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.component.DatabaseTimeField</supported-service>
         <supported-service>com.sun.star.form.component.TimeField</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -234,7 +234,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.component.DatabaseNumericField</supported-service>
         <supported-service>com.sun.star.form.component.NumericField</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -249,7 +249,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.component.DatabaseCurrencyField</supported-service>
         <supported-service>com.sun.star.form.component.CurrencyField</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -264,7 +264,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.component.DatabasePatternField</supported-service>
         <supported-service>com.sun.star.form.component.PatternField</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -279,7 +279,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.component.DatabaseImageControl</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
         <supported-service>com.sun.star.form.FormComponent</supported-service>
@@ -293,7 +293,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.component.DatabaseFormattedField</supported-service>
         <supported-service>com.sun.star.form.component.FormattedField</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -308,7 +308,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.control.RadioButton</supported-service>
         <supported-service>com.sun.star.awt.UnoControlRadioButton</supported-service>
     </component-description>
@@ -318,7 +318,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.control.CheckBox</supported-service>
         <supported-service>com.sun.star.awt.UnoControlCheckBox</supported-service>
     </component-description>
@@ -328,7 +328,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.control.GroupBox</supported-service>
         <supported-service>com.sun.star.awt.UnoControlGroupBox</supported-service>
     </component-description>
@@ -338,7 +338,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.control.ListBox</supported-service>
         <supported-service>com.sun.star.awt.UnoControlListBox</supported-service>
     </component-description>
@@ -348,7 +348,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.control.ComboBox</supported-service>
         <supported-service>com.sun.star.awt.UnoControlComboBox</supported-service>
     </component-description>
@@ -358,7 +358,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.control.TextField</supported-service>
         <supported-service>com.sun.star.awt.UnoControlEdit</supported-service>
     </component-description>
@@ -368,7 +368,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.control.DateField</supported-service>
         <supported-service>com.sun.star.awt.UnoControlDateField</supported-service>
     </component-description>
@@ -378,7 +378,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.control.TimeField</supported-service>
         <supported-service>com.sun.star.awt.UnoControlTimeField</supported-service>
     </component-description>
@@ -388,7 +388,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.control.NumericField</supported-service>
         <supported-service>com.sun.star.awt.UnoControlNumericField</supported-service>
     </component-description>
@@ -398,7 +398,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.control.CurrencyField</supported-service>
         <supported-service>com.sun.star.awt.UnoControlCurrencyField</supported-service>
     </component-description>
@@ -408,7 +408,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.control.PatternField</supported-service>
         <supported-service>com.sun.star.awt.UnoControlPatternField</supported-service>
     </component-description>
@@ -418,7 +418,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.control.FormattedField</supported-service>
         <supported-service>com.sun.star.awt.UnoControlFormattedField</supported-service>
     </component-description>
@@ -428,7 +428,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.control.CommandButton</supported-service>
         <supported-service>com.sun.star.awt.UnoControlButton</supported-service>
         <service-dependency>com.sun.star.util.URLTransformer</service-dependency>
@@ -440,7 +440,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.control.ImageButton</supported-service>
         <supported-service>com.sun.star.awt.UnoControlImageControl</supported-service>
         <service-dependency>com.sun.star.util.URLTransformer</service-dependency>
@@ -452,7 +452,7 @@
         <description></description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="final"></status>
+        <status value="final"/>
         <supported-service>com.sun.star.form.control.ImageControl</supported-service>
         <supported-service>com.sun.star.awt.UnoControlImageControl</supported-service>
     </component-description>
