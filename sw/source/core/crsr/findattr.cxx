@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findattr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-12 08:15:35 $
+ *  last change: $Author: jp $ $Date: 2001-11-02 15:55:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1300,13 +1300,14 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
     {
         SwPaM aRegion( *pRegion->GetMark(), *pRegion->GetPoint() );
         SwPaM* pTextRegion = &aRegion;
+        SwPaM aSrchPam( *pCrsr->GetPoint() );
 
         while( TRUE )
         {
             if( pSet->Count() )         // gibts ueberhaupt Attributierung?
             {
                 // zuerst die Attributierung
-                if( !pCrsr->Find( *pSet, bValue, fnMove, &aRegion, bInReadOnly ) )
+                if( !aSrchPam.Find( *pSet, bValue, fnMove, &aRegion, bInReadOnly ) )
 //JP 17.11.95: was ist mit Attributen in leeren Absaetzen !!
 //                  || *pCrsr->GetMark() == *pCrsr->GetPoint() )    // kein Bereich ??
                     return FIND_NOT_FOUND;
@@ -1314,7 +1315,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
                 if( !pSearchOpt )
                     break;      // ok, nur Attribute, also gefunden
 
-                pTextRegion = pCrsr;
+                pTextRegion = &aSrchPam;
             }
             else if( !pSearchOpt )
                 return FIND_NOT_FOUND;
@@ -1335,8 +1336,8 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
                 pSTxt = new utl::TextSearch( aTmp );
             }
             // Bug 24665: suche im richtigen Bereich weiter (pTextRegion!)
-            if( pCrsr->Find( *pSearchOpt, *pSTxt, fnMove, pTextRegion, bInReadOnly ) &&
-                *pCrsr->GetMark() != *pCrsr->GetPoint() )   // gefunden ?
+            if( aSrchPam.Find( *pSearchOpt, *pSTxt, fnMove, pTextRegion, bInReadOnly ) &&
+                *aSrchPam.GetMark() != *aSrchPam.GetPoint() )   // gefunden ?
                 break;                                      // also raus
             else if( !pSet->Count() )
                 return FIND_NOT_FOUND;      // nur Text und nicht gefunden
@@ -1346,7 +1347,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
             //              weiterbewegt werden kann!
             {
                 BOOL bCheckRegion = TRUE;
-                SwPosition* pPos = pCrsr->GetPoint();
+                SwPosition* pPos = aSrchPam.GetPoint();
                 if( !(*fnMove->fnNd)( &pPos->nNode.GetNode(), &pPos->nContent ))
                 {
                     if( (*fnMove->fnNds)( &pPos->nNode, FALSE ))
@@ -1365,8 +1366,12 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
                 if( !bCheckRegion || *aRegion.GetPoint() <= *pPos )
                     return FIND_NOT_FOUND;      // nicht gefunden
             }
-            *aRegion.GetMark() = *pCrsr->GetPoint();
+            *aRegion.GetMark() = *aSrchPam.GetPoint();
         }
+
+        *pCrsr->GetPoint() = *aSrchPam.GetPoint();
+        pCrsr->SetMark();
+        *pCrsr->GetMark() = *aSrchPam.GetMark();
     }
 
     if( bReplaceTxt )
