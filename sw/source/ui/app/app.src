@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:11:35 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2960,5 +2960,11 @@ String STR_PAGEBREAK
     Text[ korean ] = "»õ ÆäÀÌÁö ¾Õ¿¡¼­ Áß´Ü";
     Text[ turkish ] = "Yeni sayfa öncesi kesme";
     Text[ language_user1 ] = " ";
+};
+
+String STR_REDLINE_UNKNOWN_AUTHOR
+{
+    Text = "unbekannt" ;
+    Text [ ENGLISH ] = "unknown" ;
 };
 

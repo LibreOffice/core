@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-09 10:49:36 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -729,11 +729,11 @@ sal_uInt16 SwModule::GetRedlineAuthor()
     if (!bAuthorInitialised)
     {
         SvtUserOptions aOpt;
-        sActAuthor = aOpt.GetFullName();
+        if( !(sActAuthor = aOpt.GetFullName()).Len() )
+            sActAuthor = String( SW_RES( STR_REDLINE_UNKNOWN_AUTHOR ));
         bAuthorInitialised = sal_True;
     }
-
-    return InsertRedlineAuthor(sActAuthor);
+    return InsertRedlineAuthor( sActAuthor );
 }
 
 /*--------------------------------------------------------------------

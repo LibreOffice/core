@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-10-19 08:29:12 $
+ *  last change: $Author: jp $ $Date: 2000-10-20 13:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1000,14 +1000,9 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 pList->Update();
         }
 
-        const SfxPoolItem* pItem = 0;
-
-        if( SFX_ITEM_SET == ((SfxItemSetHint&)rHint).GetItemSet().GetItemState(SID_ATTR_ADDRESS, sal_False, &pItem))
-        {
-            sActAuthor = ((const SvxAddressItem*)pItem)->GetFirstName();
-            sActAuthor += ' ';
-            sActAuthor += ((const SvxAddressItem*)pItem)->GetName();
-        }
+        if( SFX_ITEM_SET == ((SfxItemSetHint&)rHint).GetItemSet().
+                    GetItemState( SID_ATTR_ADDRESS, sal_False ))
+            bAuthorInitialised = FALSE;
     }
     else if(rHint.ISA(SfxSimpleHint) &&
         ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DEINITIALIZING)
