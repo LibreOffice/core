@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh9.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-23 09:58:46 $
+ *  last change: $Author: nn $ $Date: 2002-08-12 18:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #include "tabview.hxx"
 #include "drwlayer.hxx"
 #include "userdat.hxx"
+#include "docsh.hxx"
 
 // forwards -> galwrap.cxx (wg. CLOOKs)
 
@@ -244,6 +245,8 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
                         pSdrObj->InsertUserData( new ScIMapInfo( rImageMap ) );
                     else
                         pIMapInfo->SetImageMap( rImageMap );
+
+                    GetViewData()->GetDocShell()->SetDrawModified();
                 }
             }
         }
