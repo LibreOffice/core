@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2002-07-12 13:11:27 $
+ *  last change: $Author: fs $ $Date: 2002-08-20 14:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,8 +134,18 @@ service FilePicker
     [optional] interface XFilePreview;
 
     //-------------------------------------------------------------------------
-    /** provides the ability manage additional controls offered by an extended
-        FilePicker like checkboxes, comboboxes etc.
+    /** Provides the ability manage additional controls (checkboxes, listboxes etc.)
+        offered by an extended FilePicker, these controls extend the subset of
+        common controls that a FilePicker usually supports.
+
+        <p>This interface is deprecated, newer implementations should support resp. use
+        the <type>XControlAccess</type> interface instead, which provides a more general API.</p>
+
+
+        @see com::sun::star::ui::dialogs::CommonFilePickerElementIds
+        @see com::sun::star::ui::dialogs::ExtendedFilePickerElementIds
+
+        @deprecated
     */
     [optional] interface XFilePickerControlAccess;
 
@@ -168,6 +178,7 @@ service FilePicker
     //-------------------------------------------------------------------------
     /** Use this interface to query for the controls and control
             properties supported.
+        @see XControlAccess
     */
     [optional] interface com::sun::star::ui::dialogs::XControlInformation;
 
@@ -175,14 +186,178 @@ service FilePicker
     /** Use this interface to query for or modify the properties of the
             supported controls.
 
-            The following controls and control properties are currently supported:
+            <p>The concrete controls and properties supported depend on the implementation of the
+            service, but <em>if</em> an implementation supports these interfaces, the following
+            control and property names are mandatory.<br/>
+            This does not mean that all these controls and properties <em>have</em> to be supported,
+            but if they can be accessed using <type>XControlAccess</type>, then they must be named
+            as follows:</p>
 
-            Control name    Control
-                                  property    Value type      Description
-            ---------------------------------------------------------------------------------
-            "HelpButton"   "State"      boolean           Enable the button with a value
-                                                                       of true, disable the button
-                                                                       with a value of false
+            <table border="1" cellspacing="0">
+            <tr valign="top"><td><b>Control name</b></td><td><b>Description</b></td></tr>
+
+            <tr valign="top"><td>AutoExtensionBox</td>
+                <td>a check box control which is used to allow for automatic file name extensions.
+                    @see TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION
+            </td></tr>
+
+            <tr valign="top"><td>CancelButton</td>
+                <td>a button which is used to close the dialog without any action.
+            </td></tr>
+
+            <tr valign="top"><td>CurrentFolderText</td>
+                <td>a fixed text control which is used to display the current location.
+            </td></tr>
+
+            <tr valign="top"><td>DefaultLocationButton</td>
+                <td>a button which is used to go to some default directory.
+            </td></tr>
+
+            <tr valign="top"><td>FileURLEdit</td>
+                <td>the edit field which is used to enter a file name.
+            </td></tr>
+
+            <tr valign="top"><td>FileURLEditLabel</td>
+                <td>the label of the <em>FileURLEdit</em> control.
+            </td></tr>
+
+            <tr valign="top"><td>FileView</td>
+                <td>the file view control.
+            </td></tr>
+
+            <tr valign="top"><td>FilterList</td>
+                <td>the list box which contains the possible filters.
+                    @see XFilterManager
+            </td></tr>
+
+            <tr valign="top"><td>FilterListLabel</td>
+                <td>the label of the <em>FilterList</em> control
+            </td></tr>
+
+            <tr valign="top"><td>FilterOptionsBox</td>
+                <td>a check box control which is used to allow for additional filter settings
+                    @see TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS
+            </td></tr>
+
+            <tr valign="top"><td>HelpButton</td>
+                <td>a button which is used to request help for the dialog.
+            </td></tr>
+
+            <tr valign="top"><td>ImageTemplateList</td>
+                <td>a list box control which is used to select an image template.
+                    @see TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE
+            </td></tr>
+
+            <tr valign="top"><td>ImageTemplateListLabel</td>
+                <td>the label of the ImageTemplateList control
+            </td></tr>
+
+            <tr valign="top"><td>LevelUpButton</td>
+                <td>a button which is used to travel to the parent directory
+            </td></tr>
+
+            <tr valign="top"><td>LinkBox</td>
+                <td>a check box control which is used to determine if a graphics should be linked.
+                    @see TemplateDescription::FILEOPEN_LINK_PREVIEW
+            </td></tr>
+
+            <tr valign="top"><td>NewFolderButton</td>
+                <td>a button which is used to create a new folder in the current location
+            </td></tr>
+
+            <tr valign="top"><td>OkButton</td>
+                <td>a button which is used to close the dialog, doing the action it was opened for. Depending
+                    on the type of the dialog, this may be for instance a Save or a Open button.
+                    @see TemplateDescription
+            </td></tr>
+
+            <tr valign="top"><td>PasswordBox</td>
+                <td>a check box control which is used to allow for password encryption of saved files
+                    @see TemplateDescription
+            </td></tr>
+
+            <tr valign="top"><td>PlayButton</td>
+                <td>a button which is used to play a sound
+                    @see TemplateDescription::FILEOPEN_PLAY
+            </td></tr>
+
+            <tr valign="top"><td>ReadOnlyBox</td>
+                <td>a check box control which is used to determine if a file should be opened readonly
+                    @see TemplateDescription::FILEOPEN_READONLY_VERSION
+            </td></tr>
+
+            <tr valign="top"><td>SelectionBox</td>
+                <td>a check box control which is used to allow for saving a selection only
+                    @see TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION
+            </td></tr>
+
+            <tr valign="top"><td>TemplateList</td>
+                <td>a list box control which contains a list of templates or styles.
+                    @see TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE
+            </td></tr>
+
+            <tr valign="top"><td>TemplateListLabel</td>
+                <td>the label for the <em>TemplateList</em> control
+            </td></tr>
+
+            <tr valign="top"><td>VersionList</td>
+                <td>a list box control which contains a list of versions supported by the selected filter.
+                    @see TemplateDescription::FILEOPEN_READONLY_VERSION
+            </td></tr>
+
+            <tr valign="top"><td>VersionListLabel</td>
+                <td>the label for the <em>VersionList</em> control
+            </td></tr>
+
+            </table>
+
+            <br/>
+
+            <table border="1" cellspacing="0">
+            <tr valign="top"><td><b>Property name</b></td><td><b>Description</b></td><td><b>Type</b></td></tr>
+
+            <tr valign="top"><td>Text</td>
+                <td>the currently displayed text of a control</td>
+                <td>String</td>
+            </tr>
+
+            <tr valign="top"><td>Enabled</td>
+                <td>a flag indicating if the control is enabled</td>
+                <td>Boolean</td>
+            </tr>
+
+            <tr valign="top"><td>ListItems</td>
+                <td>a sequence of strings, making up the content of a list box control.</td>
+                <td>String()</td>
+            </tr>
+
+            <tr valign="top"><td>Visible</td>
+                <td>a flag indicating if the control is visible</td>
+                <td>Boolean</td>
+            </tr>
+
+            <tr valign="top"><td>HelpURL</td>
+                <td>a string indicating the help URL associated with the control</td>
+                <td>String</td>
+            </tr>
+
+            <tr valign="top"><td>SelectedItem</td>
+                <td>a string indicating the currently selected item</td>
+                <td>String</td>
+            </tr>
+
+            <tr valign="top"><td>SelectedItemIndex</td>
+                <td>the index of the currently selected item</td>
+                <td>Long</td>
+            </tr>
+
+            <tr valign="top"><td>Checked</td>
+                <td>a flag indicating if a check box control is currently checked</td>
+                <td>Boolean</td>
+            </tr>
+
+            </table>
+
     */
     [optional] interface com::sun::star::ui::dialogs::XControlAccess;
 
