@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:25 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,6 @@ namespace dbaui
         OConnectionURLEdit  m_aConnection;
         PushButton          m_aBrowseConnection;
         PushButton          m_aCreateDatabase;
-    //  FixedText           m_aTimeoutLabel;
-    //  Edit                m_aTimeoutNumber;
-    //  ListBox             m_aTimeoutUnit;
 
         FixedText           m_aSpecialMessage;
 
