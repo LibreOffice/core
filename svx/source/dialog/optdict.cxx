@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdict.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:40:14 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,14 +599,13 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
     for (sal_Int32 i = 0;  i < nCount;  i++)
     {
         aStr = String(pEntry[i]->getDictionaryWord());
-        INT16 nPos = GetLBInsertPos( aStr );
+        USHORT nPos = GetLBInsertPos( aStr );
         if(pEntry[i]->isNegative())
         {
             aStr += '\t';
             aStr += String(pEntry[i]->getReplacementText());
         }
-        aWordsLB.InsertEntry(aStr, nPos == USHRT_MAX ?
-                                        LIST_APPEND : (sal_uInt32) nPos);
+        aWordsLB.InsertEntry(aStr, nPos == USHRT_MAX ?  LIST_APPEND : nPos);
     }
 
     if (aWordsLB.GetEntryCount())
