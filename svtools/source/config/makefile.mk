@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:19:21 $
+#   last change: $Author: os $ $Date: 2001-04-10 11:43:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,8 @@ TARGET=config
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
-    $(SLO)$/pathoptions.obj				\
+    $(SLO)$/cjkoptions.obj             \
+    $(SLO)$/pathoptions.obj             \
     $(SLO)$/saveopt.obj					\
     $(SLO)$/undoopt.obj             	\
     $(SLO)$/helpopt.obj             	\
