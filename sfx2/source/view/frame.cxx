@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:19:18 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,9 @@
 #endif
 #include <vcl/msgbox.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "event.hxx"
 #include "unoctitm.hxx"
@@ -539,8 +541,8 @@ SfxFrame* SfxFrame::SearchFrame( const String& rName, SfxMedium* pMedium )
                     return pCurFrame;
                 else
                 {
-                    if( pFrame =
-                        pCurFrame->SearchChildrenForName_Impl( aName ) )
+                    pFrame = pCurFrame->SearchChildrenForName_Impl( aName );
+                    if( pFrame )
                         return pFrame;
                 }
             }
@@ -746,7 +748,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
     // durch GetViewData geholt ( spart Zeit ).
     DBG_ASSERT( pDoc, "NULL-Document inserted ?!" );
 
-    SfxFrame *pParent = GetParentFrame();
+    GetParentFrame();
     const SfxMedium *pMed = pDoc->GetMedium();
     GetDescriptor()->SetActualURL( pMed->GetOrigURL() );
 
@@ -1014,7 +1016,9 @@ sal_Bool SfxFrame::CheckContentForLoad_Impl()
     if ( GetCurrentDocument() )
     {
         SfxMedium* pMedium = GetCurrentDocument()->GetMedium();
+#ifdef DEBUG
         SfxItemSet* pSet = pMedium->GetItemSet();
+#endif
         SfxItemSet* pNew = GetDescriptor()->GetArgs();
 
         // Falls URLs nicht uebereinstimmen
@@ -1318,8 +1322,8 @@ SfxFrame* SfxFrame::findFrame(const ::rtl::OUString& aTargetframename, sal_Int32
                     return pCurFrame;
                 else
                 {
-                    if( pFrame =
-                        pCurFrame->SearchChildrenForName_Impl( aName ) )
+                    pFrame = pCurFrame->SearchChildrenForName_Impl( aName );
+                    if( pFrame )
                         return pFrame;
                 }
             }
