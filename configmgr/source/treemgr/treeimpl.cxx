@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:19:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 14:01:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,6 +428,7 @@ TreeImpl::~TreeImpl()
 void TreeImpl::disposeData()
 {
     m_aNodes.clear();
+    if (m_xStrategy.is()) m_xStrategy->releaseDataSegment();
 }
 //-----------------------------------------------------------------------------
 
