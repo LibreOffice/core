@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconfig.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 14:46:04 $
+ *  last change: $Author: os $ $Date: 2002-11-29 12:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,15 @@ struct SwDBData;
 class SwDBConfig : public utl::ConfigItem
 {
     const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
-    SwDBData*       pImpl;
+    SwDBData*       pAdrImpl;
+    SwDBData*       pBibImpl;
 public:
     SwDBConfig();
     virtual ~SwDBConfig();
 
     void                    Load();
     const SwDBData&         GetAddressSource();
+    const SwDBData&         GetBibliographySource();
 };
 
 #endif

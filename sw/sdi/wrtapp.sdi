@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtapp.sdi,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-29 14:06:52 $
+ *  last change: $Author: os $ $Date: 2002-11-29 12:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,6 @@ interface StarWriter : Module
     FN_QRY_MERGE  // status()
     [
         ExecMethod = ExecDB ;
-        StateMethod = StateOther ;
         DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
     ]
 

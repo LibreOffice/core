@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 11:12:15 $
+ *  last change: $Author: os $ $Date: 2002-11-29 12:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,5 +468,10 @@ void SwFldDlg::InsertHdl()
 {
     GetOKButton().Click();
 }
-
-
+/* -----------------27.11.2002 15:24-----------------
+ *
+ * --------------------------------------------------*/
+void SwFldDlg::ActivateDatabasePage()
+{
+    ShowPage( TP_FLD_DB );
+}

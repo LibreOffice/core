@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 12:23:41 $
+ *  last change: $Author: os $ $Date: 2002-11-29 12:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,23 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const;
 
 };
+/* -----------------27.11.2002 12:05-----------------
+ *
+ * --------------------------------------------------*/
+class SwMailMergeCreateFromDlg : public ModalDialog
+{
+    FixedLine       aCreateFromFL;
+    RadioButton     aThisDocRB;
+    RadioButton     aUseTemplateRB;
 
+    OKButton        aOK;
+    CancelButton    aCancel;
+    HelpButton      aHelp;
+public:
+    SwMailMergeCreateFromDlg(Window* pParent);
+    ~SwMailMergeCreateFromDlg();
+
+    BOOL    IsThisDocument() const {return aThisDocRB.IsChecked();}
+};
 #endif
 

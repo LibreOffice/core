@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-09-20 12:18:13 $
+ *  last change: $Author: os $ $Date: 2002-11-29 12:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,12 @@
 #ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
 #endif
+#ifndef _SFX_HELP_HXX
+#include <sfx2/sfxhelp.hxx>
+#endif
+#ifndef _SFX_CHILDWIN_HXX
+#include <sfx2/childwin.hxx>
+#endif
 #ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
 #include <svtools/useroptions.hxx>
 #endif
@@ -109,6 +115,15 @@
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 
 #ifndef _SBASLTID_HRC //autogen
 #include <offmgr/sbasltid.hrc>
@@ -139,6 +154,12 @@
 #endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
+#endif
+#ifndef _SVTOOLS_TEMPLDLG_HXX
+#include <svtools/templdlg.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
 #endif
 
 #ifndef _SWMODULE_HXX
@@ -183,13 +204,22 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
-
+#ifndef _MAILMRGE_HXX
+#include "mailmrge.hxx"
+#endif
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
 #ifndef _APP_HRC
 #include <app.hrc>
 #endif
+#ifndef _FLDTDLG_HXX
+#include <fldtdlg.hxx>
+#endif
+#ifndef _DBCONFIG_HXX
+#include <dbconfig.hxx>
+#endif
+#include "helpid.h"
 
 using namespace ::rtl;
 using namespace ::svx;
@@ -198,6 +228,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::view;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
 #define C2U(char) rtl::OUString::createFromAscii(char)
 
 /* -----------------------------05.01.00 15:14--------------------------------
@@ -554,10 +586,6 @@ SwChapterNumRules*  SwModule::GetChapterNumRules()
 void SwModule::ExecDB(SfxRequest &rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
-    SwNewDBMgr* pNewDBMgr = NULL;
-
-    if (GetView())
-        pNewDBMgr = GetView()->GetWrtShell().GetNewDBMgr();
 
     sal_uInt16 nSlot(rReq.GetSlot());
 
@@ -565,31 +593,21 @@ void SwModule::ExecDB(SfxRequest &rReq)
     {
         case FN_QRY_MERGE:
         {
-            SwDBData aData;
             SwView* pView = GetView();
-            if(pView)
+            BOOL bUseCurrentDocument = 0!= pView;
+            BOOL bQuery = !pArgs||SFX_ITEM_SET != pArgs->GetItemState(nSlot);
+            if(pView && bQuery)
             {
-                SwWrtShell &rSh = GetView()->GetWrtShell();
-                aData = rSh.GetDBData();
-                rSh.EnterStdMode(); // Wechsel in Textshell erzwingen; ist fuer
-                                    // das Mischen von DB-Feldern notwendig.
-                GetView()->AttrChangedNotify( &rSh );
-                pNewDBMgr->SetMergeType( DBMGR_MERGE );
+                SfxViewFrame* pFrame = pView->GetViewFrame();
+                SfxHelp::OpenHelpAgent( pFrame->GetFrame(), HID_MAIL_MERGE_SELECT );
+                SwMailMergeCreateFromDlg* pDlg = new SwMailMergeCreateFromDlg(
+                        &pFrame->GetWindow());
+                if(RET_OK == pDlg->Execute())
+                    bUseCurrentDocument = pDlg->IsThisDocument();
+                else
+                    break;
             }
-
-            if (pNewDBMgr)
-            {
-                Sequence<PropertyValue> aProperties(3);
-                PropertyValue* pValues = aProperties.getArray();
-                pValues[0].Name = C2U("DataSourceName");
-                pValues[1].Name = C2U("Command");
-                pValues[2].Name = C2U("CommandType");
-                pValues[0].Value <<= aData.sDataSource;
-                pValues[1].Value <<= aData.sCommand;
-                pValues[2].Value <<= aData.nCommandType;
-                pNewDBMgr->ExecuteFormLetter(GetView()->GetWrtShell(),
-                                            aProperties, TRUE);
-            }
+            GenerateFormLetter(bUseCurrentDocument);
         }
         break;
         default:
@@ -896,7 +914,7 @@ sal_uInt16 SwModule::GetLinkUpdMode( sal_Bool ) const
 {
     if(!pUsrPref)
         GetUsrPref(sal_False);
-    return pUsrPref->GetUpdateLinkMode();
+    return (sal_uInt16)pUsrPref->GetUpdateLinkMode();
 }
 /* ---------------------------------------------------------------------------
 
@@ -948,5 +966,132 @@ void SwModule::CheckSpellChanges( sal_Bool bOnlineSpelling,
 //      pSpell->SetSpellAllAgain( sal_False );
     }
 }
+/* -----------------27.11.2002 12:12-----------------
+ *
+ * --------------------------------------------------*/
+void SwModule::GenerateFormLetter(BOOL bUseCurrentDocument)
+{
+    if(bUseCurrentDocument)
+    {
+        SwView* pView = GetView();
+        if(!pView)
+        {
+            DBG_ERROR("no SwView available?")
+            return;
+        }
+        if(!pView->GetWrtShell().IsAnyDatabaseFieldInDoc())
+        {
+            //check availability of data sources (except biblio source)
+            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+            Reference<XNameAccess>  xDBContext;
+            if( xMgr.is() )
+            {
+                Reference<XInterface> xInstance = xMgr->createInstance(
+                    OUString::createFromAscii( "com.sun.star.sdb.DatabaseContext" ));
+                xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
+            }
+            if(!xDBContext.is())
+                return ;
+            Sequence < OUString > aNames = xDBContext->getElementNames();
+            if(!aNames.getLength() ||
+                (1 == aNames.getLength() &&
+                    aNames.getConstArray()[0] == GetDBConfig()->GetBibliographySource().sDataSource))
+            {
+                QueryBox aQuery(
+                            &pView->GetViewFrame()->GetWindow(),
+                            SW_RES(MSG_DATA_SOURCES_UNAVAILABLE));
+                if(RET_OK == aQuery.Execute())
+                {
+                    pView->GetViewFrame()->GetDispatcher()->Execute(
+                                SID_ADDRESS_DATA_SOURCE, SFX_CALLMODE_SYNCHRON);
+                }
+                else
+                    return;
+            }
 
+
+            QueryBox aQuery(
+                        &pView->GetViewFrame()->GetWindow(),
+                        SW_RES(MSG_INS_MERGE_FIELDS));
+            if(RET_OK == aQuery.Execute())
+            {
+                //call insert fields with active database field page
+                SfxViewFrame* pVFrame = pView->GetViewFrame();
+                if(!pVFrame->GetChildWindow( FN_INSERT_FIELD ))
+                    pVFrame->ToggleChildWindow(FN_INSERT_FIELD);
+                SfxChildWindow* pChild = pVFrame->GetChildWindow( FN_INSERT_FIELD );
+                SwFldDlg* pFldDlg = (SwFldDlg*)pChild->GetWindow();
+                pFldDlg->ActivateDatabasePage();
+            }
+            return;
+        }
+        else
+        {
+            // check whether the
+            String sSource;
+            if(!pView->GetWrtShell().IsFieldDataSourceAvailable(sSource))
+            {
+                WarningBox aWarning( &pView->GetViewFrame()->GetWindow(),
+                            SW_RES(MSG_MERGE_SOURCE_UNAVAILABLE));
+                String sTmp(aWarning.GetMessText());
+                sTmp.SearchAndReplaceAscii("%1", sSource);
+                aWarning.SetMessText(sTmp);
+                aWarning.Execute();
+                return ;
+            }
+        }
+        SwNewDBMgr* pNewDBMgr = NULL;
+        pNewDBMgr = pView->GetWrtShell().GetNewDBMgr();
+
+        SwDBData aData;
+        SwWrtShell &rSh = pView->GetWrtShell();
+        aData = rSh.GetDBData();
+        rSh.EnterStdMode(); // Wechsel in Textshell erzwingen; ist fuer
+                            // das Mischen von DB-Feldern notwendig.
+        GetView()->AttrChangedNotify( &rSh );
+        pNewDBMgr->SetMergeType( DBMGR_MERGE );
+
+        if (pNewDBMgr)
+        {
+            Sequence<PropertyValue> aProperties(3);
+            PropertyValue* pValues = aProperties.getArray();
+            pValues[0].Name = C2U("DataSourceName");
+            pValues[1].Name = C2U("Command");
+            pValues[2].Name = C2U("CommandType");
+            pValues[0].Value <<= aData.sDataSource;
+            pValues[1].Value <<= aData.sCommand;
+            pValues[2].Value <<= aData.nCommandType;
+            pNewDBMgr->ExecuteFormLetter(GetView()->GetWrtShell(),
+                                        aProperties, TRUE);
+        }
+    }
+    else
+    {
+        //call documents and template dialog
+        SfxApplication* pSfxApp = SFX_APP();
+        Window* pTopWin = pSfxApp->GetTopWindow();
+        SvtDocumentTemplateDialog* pDocTemplDlg = new SvtDocumentTemplateDialog( pTopWin );
+        pDocTemplDlg->SelectTemplateFolder();
+
+        int nRet = pDocTemplDlg->Execute();
+        sal_Bool bNewWin = sal_False;
+        if ( nRet == RET_OK )
+        {
+            if ( pTopWin != pSfxApp->GetTopWindow() )
+            {
+                // the dialogue opens a document -> a new TopWindow appears
+                pTopWin = pSfxApp->GetTopWindow();
+                bNewWin = sal_True;
+            }
+        }
+
+        delete pDocTemplDlg;
+        if ( bNewWin )
+            // after the destruction of the dialogue its parent comes to top,
+            // but we want that the new document is on top
+            pTopWin->ToTop();
+
+//        return;
+    }
+}
 

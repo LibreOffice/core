@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-08-23 10:26:12 $
+ *  last change: $Author: os $ $Date: 2002-11-29 12:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 //Fuer das Interface, weil der RID_APP_BEGIN jetzt Desktop ist.
 #define RID_SW_NAME                 ( RC_APP_BEGIN + 8)
 #define MSG_SAVEAS_HTML_QUERY       ( RC_APP_BEGIN + 9)
-#define MSG_INDEX_OVERFLOW          ( RC_APP_BEGIN + 10)
+
 
 #define STR_UNBENANNT               (RC_APP_BEGIN + 13)
 #define STR_VERSION                 (RC_APP_BEGIN + 14)
@@ -118,7 +118,10 @@
 #define STR_REDLINE_UNKNOWN_AUTHOR  (RC_APP_BEGIN + 76)
 #define STR_WESTERN_FONT            (RC_APP_BEGIN + 77)
 #define STR_CJK_FONT                (RC_APP_BEGIN + 78)
-
+#define MSG_INS_MERGE_FIELDS        (RC_APP_BEGIN + 79)
+#define MSG_PRINT_AS_MERGE          (RC_APP_BEGIN + 80)
+#define MSG_MERGE_SOURCE_UNAVAILABLE (RC_APP_BEGIN + 81)
+#define MSG_DATA_SOURCES_UNAVAILABLE (RC_APP_BEGIN + 82)
 #define SID_TOGGLETOOLBOX           (RC_APP_BEGIN + 89)
 
 #define STR_ENV_TITLE               (RC_APP_BEGIN + 91)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconfig.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 14:46:03 $
+ *  last change: $Author: os $ $Date: 2002-11-29 12:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,11 +97,14 @@ const Sequence<OUString>& SwDBConfig::GetPropertyNames()
     {
         static const char* aPropNames[] =
         {
-            "DataSourceName",       //  0
-            "Command",              //  1
-            "CommandType",          //  2
+            "AddressBook/DataSourceName",        //  0
+            "AddressBook/Command",              //  1
+            "AddressBook/CommandType",          //  2
+            "Bibliography/CurrentDataSource/DataSourceName",        //  4
+            "Bibliography/CurrentDataSource/Command",              //  5
+            "Bibliography/CurrentDataSource/CommandType"          //  6
         };
-        const int nCount = 3;
+        const int nCount = sizeof(aPropNames)/sizeof(const char*);
         aNames.realloc(nCount);
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
@@ -113,9 +116,10 @@ const Sequence<OUString>& SwDBConfig::GetPropertyNames()
 
  ---------------------------------------------------------------------------*/
 SwDBConfig::SwDBConfig() :
-    ConfigItem(C2U("Office.DataAccess/AddressBook"),
+    ConfigItem(C2U("Office.DataAccess"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
-    pImpl(0)
+    pAdrImpl(0),
+    pBibImpl(0)
 {
 };
 /* -----------------------------06.09.00 16:50--------------------------------
@@ -123,7 +127,8 @@ SwDBConfig::SwDBConfig() :
  ---------------------------------------------------------------------------*/
 SwDBConfig::~SwDBConfig()
 {
-    delete pImpl;
+    delete pAdrImpl;
+    delete pBibImpl;
 }
 /* -----------------------------20.02.01 12:32--------------------------------
 
@@ -131,11 +136,13 @@ SwDBConfig::~SwDBConfig()
 void SwDBConfig::Load()
 {
     const Sequence<OUString>& rNames = GetPropertyNames();
-    if(!pImpl)
+    if(!pAdrImpl)
     {
 
-        pImpl = new SwDBData;
-        pImpl->nCommandType = 0;
+        pAdrImpl = new SwDBData;
+        pAdrImpl->nCommandType = 0;
+        pBibImpl = new SwDBData;
+        pBibImpl->nCommandType = 0;
     }
     Sequence<Any> aValues = GetProperties(rNames);
     const Any* pValues = aValues.getConstArray();
@@ -146,9 +153,12 @@ void SwDBConfig::Load()
         {
             switch(nProp)
             {
-                case  0: pValues[nProp] >>= pImpl->sDataSource;  break;
-                case  1: pValues[nProp] >>= pImpl->sCommand;     break;
-                case  3: pValues[nProp] >>= pImpl->nCommandType; break;
+                case  0: pValues[nProp] >>= pAdrImpl->sDataSource;  break;
+                case  1: pValues[nProp] >>= pAdrImpl->sCommand;     break;
+                case  2: pValues[nProp] >>= pAdrImpl->nCommandType; break;
+                case  3: pValues[nProp] >>= pBibImpl->sDataSource;  break;
+                case  4: pValues[nProp] >>= pBibImpl->sCommand;     break;
+                case  5: pValues[nProp] >>= pBibImpl->nCommandType; break;
             }
         }
     }
@@ -158,11 +168,19 @@ void SwDBConfig::Load()
  ---------------------------------------------------------------------------*/
 const SwDBData& SwDBConfig::GetAddressSource()
 {
-    if(!pImpl)
+    if(!pAdrImpl)
         Load();
-    return *pImpl;
+    return *pAdrImpl;
 }
-
+/* -----------------29.11.2002 11:43-----------------
+ *
+ * --------------------------------------------------*/
+const SwDBData& SwDBConfig::GetBibliographySource()
+{
+    if(!pBibImpl)
+        Load();
+    return *pBibImpl;
+}
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: os $ $Date: 2002-10-24 13:48:08 $
+ *  last change: $Author: os $ $Date: 2002-11-29 12:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@
 #ifndef _MAILENUM_HXX //autogen
 #include <goodies/mailenum.hxx>
 #endif
-
+#include <cmdid.h>
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
@@ -383,8 +383,7 @@ BOOL lcl_GetColumnCnt(SwDSParam* pParam,
     Beschreibung: Daten importieren
  --------------------------------------------------------------------*/
 BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
-                        const ODataAccessDescriptor& _rDescriptor,
-                        const String *pPrinter)
+                        const ODataAccessDescriptor& _rDescriptor)
 {
 
     DBG_ASSERT(!bInMerge && !pImpl->pMergeData, "merge already activated!")
@@ -507,27 +506,13 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
             break;
 
         case DBMGR_MERGE_MAILMERGE: // Serienbrief
-            {
+        {
             SfxDispatcher *pDis = rSh.GetView().GetViewFrame()->GetDispatcher();
-            if (pPrinter)   // Aufruf kommt aus dem Basic
-            {
-                SfxBoolItem aSilent( SID_SILENT, TRUE );
-                if (pPrinter)
-                {
-                    SfxStringItem aPrinterName(SID_PRINTER_NAME, *pPrinter);
-                    pDis->Execute( SID_PRINTDOC, SFX_CALLMODE_SYNCHRON,
-                                   &aPrinterName, &aSilent, 0L );
-                }
-                else
-                {
-                    pDis->Execute( SID_PRINTDOC, SFX_CALLMODE_SYNCHRON,
-                                   &aSilent, 0L );
-                }
-            }
-            else
-                pDis->Execute(SID_PRINTDOC, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD);
-            }
-            break;
+            SfxBoolItem aMerge(FN_QRY_MERGE, TRUE);
+            pDis->Execute(SID_PRINTDOC,
+                    SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aMerge, 0L);
+        }
+        break;
 
         case DBMGR_MERGE_MAILING:
             bRet = MergeMailing(&rSh);  // Mailing

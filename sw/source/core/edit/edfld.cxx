@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edfld.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-23 12:14:23 $
+ *  last change: $Author: os $ $Date: 2002-11-29 12:09:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,20 @@
 #ifndef _SWDDETBL_HXX
 #include <swddetbl.hxx>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+using namespace com::sun::star::uno;
+using namespace com::sun::star::container;
+using namespace com::sun::star::lang;
+using namespace ::rtl;
 
 
 // wenn Selektion groesser Max Nodes oder mehr als Max Selektionen
@@ -775,5 +789,53 @@ BOOL SwEditShell::IsAnyDatabaseFieldInDoc()const
     }
     return FALSE;
 }
-
+/* -----------------28.11.2002 17:53-----------------
+ *
+ * --------------------------------------------------*/
+BOOL SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
+{
+    const SwFldTypes * pFldTypes = GetDoc()->GetFldTypes();
+    const USHORT nSize = pFldTypes->Count();
+    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+    if( !xMgr.is() )
+        return FALSE;
+    Reference<XInterface> xInstance = xMgr->createInstance( OUString::createFromAscii( "com.sun.star.sdb.DatabaseContext" ));
+    Reference<XNameAccess>  xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
+    if(!xDBContext.is())
+        return FALSE;
+    for(USHORT i = 0; i < nSize; ++i)
+    {
+        SwFieldType& rFldType = *((*pFldTypes)[i]);
+        USHORT nWhich = rFldType.Which();
+        if(IsUsed(rFldType))
+        {
+            switch(nWhich)
+            {
+                case RES_DBFLD:
+                {
+                    SwClientIter aIter( rFldType );
+                    SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+                    while(pFld)
+                    {
+                        if(pFld->IsFldInDoc())
+                        {
+                            const SwDBData& rData =
+                                    ((SwDBFieldType*)pFld->GetFld()->GetTyp())->GetDBData();
+                            if(xDBContext->hasByName(rData.sDataSource))
+                                return TRUE;
+                            else
+                            {
+                                rUsedDataSource = rData.sDataSource;
+                                return FALSE;
+                            }
+                        }
+                        pFld = (SwFmtFld*)aIter.Next();
+                    }
+                }
+                break;
+            }
+        }
+    }
+    return TRUE;
+}
 

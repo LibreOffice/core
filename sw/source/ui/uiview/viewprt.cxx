@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-13 14:32:24 $
+ *  last change: $Author: os $ $Date: 2002-11-29 12:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,9 @@
 #endif
 #ifndef _VIEW_HRC
 #include <view.hrc>
+#endif
+#ifndef _APP_HRC
+#include <app.hrc>
 #endif
 
 
@@ -480,7 +483,23 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
         {
             SwWrtShell* pSh = &GetWrtShell();
             SwViewOption* pOrgViewOption = 0;
-            if (pSh->GetViewOptions()->IsFldName() && pSh->IsAnyFieldInDoc())
+            SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, FALSE);
+            BOOL bSilent = pSilentItem ? pSilentItem->GetValue() : FALSE;
+            SFX_REQUEST_ARG(rReq, pPrintFromMergeItem, SfxBoolItem, FN_QRY_MERGE, FALSE);
+            BOOL bFromMerge = pPrintFromMergeItem ? pPrintFromMergeItem->GetValue() : FALSE;
+            if(!bSilent && !bFromMerge && pSh->IsAnyDatabaseFieldInDoc())
+            {
+                QueryBox aBox( &GetEditWin(), SW_RES( MSG_PRINT_AS_MERGE ));
+                if(RET_YES == aBox.Execute())
+                {
+                    SfxBoolItem aBool(FN_QRY_MERGE, TRUE);
+                    GetViewFrame()->GetDispatcher()->Execute(
+                                FN_QRY_MERGE, SFX_CALLMODE_ASYNCHRON, &aBool, 0L);
+                    rReq.Ignore();
+                    return;
+                }
+            }
+            if(!bSilent && pSh->GetViewOptions()->IsFldName() && pSh->IsAnyFieldInDoc())
             {
                 QueryBox aBox( &GetEditWin(), SW_RES( DLG_PRT_FIELDNAME ) );
                 USHORT nRet = aBox.Execute();
