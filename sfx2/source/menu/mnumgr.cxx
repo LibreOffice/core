@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-21 15:42:36 $
+ *  last change: $Author: mba $ $Date: 2001-06-26 08:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,14 +288,6 @@ void SfxMenuManager::Construct( SfxVirtualMenu& rMenu )
     Menu *pSvMenu = pMenu->GetSVMenu();
     pSvMenu->SetSelectHdl( LINK(this, SfxMenuManager, Select) );
     TryToHideDisabledEntries_Impl( pSvMenu );
-}
-
-//--------------------------------------------------------------------
-
-BOOL SfxMenuManager::Initialize( BOOL bOLEServer )
-{
-    bOLE = bOLEServer;
-    return SfxConfigItem::Initialize();
 }
 
 //--------------------------------------------------------------------
