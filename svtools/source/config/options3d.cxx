@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 14:12:52 $
+ *  last change: $Author: ka $ $Date: 2001-01-24 14:52:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,129 +119,55 @@ using namespace ::com::sun::star::uno   ;
 
 #define PROPERTYCOUNT                   4
 
-//_________________________________________________________________________________________________________________
-//  private declarations!
-//_________________________________________________________________________________________________________________
-
 class SvtOptions3D_Impl : public ConfigItem
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+public:
 
-    public:
+//---------------------------------------------------------------------------------------------------------
+//  constructor / destructor
+//---------------------------------------------------------------------------------------------------------
 
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
+     SvtOptions3D_Impl();
+    ~SvtOptions3D_Impl();
 
-         SvtOptions3D_Impl();
-        ~SvtOptions3D_Impl();
+//---------------------------------------------------------------------------------------------------------
+//  overloaded methods of baseclass
+//---------------------------------------------------------------------------------------------------------
 
-        //---------------------------------------------------------------------------------------------------------
-        //  overloaded methods of baseclass
-        //---------------------------------------------------------------------------------------------------------
+    virtual void Commit();
 
-        /*-****************************************************************************************************//**
-            @short      called for notify of configmanager
-            @descr      These method is called from the ConfigManager before application ends or from the
-                         PropertyChangeListener if the sub tree broadcasts changes. You must update your
-                        internal values.
+//---------------------------------------------------------------------------------------------------------
+//  public interface
+//---------------------------------------------------------------------------------------------------------
 
-            @ATTENTION  We don't implement these method - because we support readonly values at runtime only!
+    sal_Bool    IsDithering() const;
+    sal_Bool    IsOpenGL() const;
+    sal_Bool    IsOpenGL_Faster() const;
+    sal_Bool    IsShowFull() const;
 
-            @seealso    baseclass ConfigItem
+    void        SetDithering( sal_Bool bState );
+    void        SetOpenGL( sal_Bool bState );
+    void        SetOpenGL_Faster( sal_Bool bState );
+    void        SetShowFull( sal_Bool bState );
 
-            @param      "seqPropertyNames" is the list of properties which should be updated.
-            @return     -
+//-------------------------------------------------------------------------------------------------------------
+//  private methods
+//-------------------------------------------------------------------------------------------------------------
 
-            @onerror    -
-        *//*-*****************************************************************************************************/
+private:
 
-        virtual void Notify( const Sequence< OUString >& seqPropertyNames )
-        {
-            DBG_ASSERT( sal_False, "SvtStartOptions_Impl::Notify()\nNot implemented yet - we support readonly values only!\n" );
-        }
+    static Sequence< OUString > impl_GetPropertyNames();
 
-        /*-****************************************************************************************************//**
-            @short      write changes to configuration
-            @descr      These method writes the changed values into the sub tree
-                        and should always called in our destructor to guarantee consistency of config data.
+//-------------------------------------------------------------------------------------------------------------
+//  private member
+//-------------------------------------------------------------------------------------------------------------
 
-            @ATTENTION  We don't implement these method - because we support readonly values at runtime only!
+private:
 
-            @seealso    baseclass ConfigItem
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        virtual void Commit()
-        {
-            DBG_ASSERT( sal_False, "SvtStartOptions_Impl::Commit()\nNot implemented yet - we support readonly values only!\n" );
-        }
-
-        //---------------------------------------------------------------------------------------------------------
-        //  public interface
-        //---------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      access method to get internal values
-            @descr      These method give us a chance to regulate acces to ouer internal values.
-                        It's not used in the moment - but it's possible for the feature!
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        sal_Bool    IsDithering() const;
-        sal_Bool    IsOpenGL() const;
-        sal_Bool    IsOpenGL_Faster() const;
-        sal_Bool    IsShowFull() const;
-
-        void        SetDithering( sal_Bool bState );
-        void        SetOpenGL( sal_Bool bState );
-        void        SetOpenGL_Faster( sal_Bool bState );
-        void        SetShowFull( sal_Bool bState );
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
-
-    private:
-
-        /*-****************************************************************************************************//**
-            @short      return list of fix key names of ouer configuration management which represent oue module tree
-            @descr      These methods return a static const list of key names. We need it to get needed values from our
-                        configuration management. We return well known key names only - because the "UserData" node
-                        is handled in a special way!
-
-            @seealso    -
-
-            @param      -
-            @return     A list of needed configuration keys is returned.
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        static Sequence< OUString > impl_GetPropertyNames();
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private member
-    //-------------------------------------------------------------------------------------------------------------
-
-    private:
-
-        sal_Bool    m_bDithering    ;
-        sal_Bool    m_bOpenGL       ;
+        sal_Bool    m_bDithering;
+        sal_Bool    m_bOpenGL;
         sal_Bool    m_bOpenGL_Faster;
-        sal_Bool    m_bShowFull     ;
+        sal_Bool    m_bShowFull;
 };
 
 //_________________________________________________________________________________________________________________
@@ -251,62 +177,57 @@ class SvtOptions3D_Impl : public ConfigItem
 //*****************************************************************************************************************
 //  constructor
 //*****************************************************************************************************************
-SvtOptions3D_Impl::SvtOptions3D_Impl()
-    // Init baseclasses first
-    :   ConfigItem          ( ROOTNODE_START    )
-    // Init member then.
-    ,   m_bDithering        ( DEFAULT_DITHERING )
-    ,   m_bOpenGL           ( DEFAULT_OPENGL )
-    ,   m_bOpenGL_Faster    ( DEFAULT_OPENGL_FASTER )
-    ,   m_bShowFull         ( DEFAULT_SHOWFULL )
+SvtOptions3D_Impl::SvtOptions3D_Impl() :
+    ConfigItem( ROOTNODE_START  ),
+    m_bDithering( DEFAULT_DITHERING ),
+    m_bOpenGL( DEFAULT_OPENGL ),
+    m_bOpenGL_Faster( DEFAULT_OPENGL_FASTER ),
+    m_bShowFull( DEFAULT_SHOWFULL )
 {
-    // Use our static list of configuration keys to get his values.
-    Sequence< OUString >    seqNames    = impl_GetPropertyNames();
+    Sequence< OUString >    seqNames( impl_GetPropertyNames() );
     Sequence< Any >         seqValues   = GetProperties( seqNames ) ;
 
-    // Safe impossible cases.
-    // We need values from ALL configuration keys.
-    // Follow assignment use order of values in relation to our list of key names!
     DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtOptions3D_Impl::SvtOptions3D_Impl()\nI miss some values of configuration keys!\n" );
 
     // Copy values from list in right order to ouer internal member.
-    sal_Int32 nPropertyCount    =   seqValues.getLength()   ;
-    sal_Int32 nProperty         =   0                       ;
+    sal_Int32 nPropertyCount = seqValues.getLength();
+    sal_Int32 nProperty = 0;
+
     for( nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        // Safe impossible cases.
-        // Check any for valid value.
         DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtOptions3D_Impl::SvtOptions3D_Impl()\nInvalid property value for property detected!\n" );
+
         switch( nProperty )
         {
-            case PROPERTYHANDLE_DITHERING       :   {
-                                                            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtStartOptions_Impl::SvtOptions3D_Impl()\nWho has changed the value type of \"Office.Common\\_3D_Engine\\Dithering\"?" );
-                                                        seqValues[nProperty] >>= m_bDithering;
-                                                    }
-                                                    break;
+            case PROPERTYHANDLE_DITHERING:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptions3D_Impl::SvtOptions3D_Impl()\nWho has changed the value type of \"Office.Common\\_3D_Engine\\Dithering\"?" );
+                seqValues[nProperty] >>= m_bDithering;
+            }
+            break;
 
-            case PROPERTYHANDLE_OPENGL          :   {
-                                                            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtStartOptions_Impl::SvtOptions3D_Impl()\nWho has changed the value type of \"Office.Common\\_3D_Engine\\OpenGL\"?" );
-                                                        seqValues[nProperty] >>= m_bOpenGL;
-                                                    }
-                                                    break;
+            case PROPERTYHANDLE_OPENGL:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptions3D_Impl::SvtOptions3D_Impl()\nWho has changed the value type of \"Office.Common\\_3D_Engine\\OpenGL\"?" );
+                seqValues[nProperty] >>= m_bOpenGL;
+            }
+            break;
 
-            case PROPERTYHANDLE_OPENGL_FASTER   :   {
-                                                            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtStartOptions_Impl::SvtOptions3D_Impl()\nWho has changed the value type of \"Office.Common\\_3D_Engine\\OpenGL_Faster\"?" );
-                                                        seqValues[nProperty] >>= m_bOpenGL_Faster;
-                                                    }
-                                                    break;
+            case PROPERTYHANDLE_OPENGL_FASTER:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptions3D_Impl::SvtOptions3D_Impl()\nWho has changed the value type of \"Office.Common\\_3D_Engine\\OpenGL_Faster\"?" );
+                seqValues[nProperty] >>= m_bOpenGL_Faster;
+            }
+            break;
 
-            case PROPERTYHANDLE_SHOWFULL        :   {
-                                                            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtStartOptions_Impl::SvtOptions3D_Impl()\nWho has changed the value type of \"Office.Common\\_3D_Engine\\ShowFull\"?" );
-                                                        seqValues[nProperty] >>= m_bShowFull;
-                                                    }
-                                                    break;
+            case PROPERTYHANDLE_SHOWFULL:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptions3D_Impl::SvtOptions3D_Impl()\nWho has changed the value type of \"Office.Common\\_3D_Engine\\ShowFull\"?" );
+                seqValues[nProperty] >>= m_bShowFull;
+            }
+            break;
         }
     }
-
-    // Don't enable notification mechanism of ouer baseclass!
-    // We support readonly variables in the moment.
 }
 
 //*****************************************************************************************************************
@@ -314,6 +235,41 @@ SvtOptions3D_Impl::SvtOptions3D_Impl()
 //*****************************************************************************************************************
 SvtOptions3D_Impl::~SvtOptions3D_Impl()
 {
+    if( IsModified() )
+        Commit();
+}
+
+//*****************************************************************************************************************
+//  Commit
+//*****************************************************************************************************************
+void SvtOptions3D_Impl::Commit()
+{
+    Sequence< OUString >    aSeqNames( impl_GetPropertyNames() );
+    Sequence< Any >         aSeqValues( aSeqNames.getLength() );
+
+    for( sal_Int32 nProperty = 0, nCount = aSeqNames.getLength(); nProperty < nCount; ++nProperty )
+    {
+        switch( nProperty )
+        {
+            case PROPERTYHANDLE_DITHERING:
+                aSeqValues[nProperty] <<= m_bDithering;
+            break;
+
+            case PROPERTYHANDLE_OPENGL:
+                aSeqValues[nProperty] <<= m_bOpenGL;
+            break;
+
+            case PROPERTYHANDLE_OPENGL_FASTER:
+                aSeqValues[nProperty] <<= m_bOpenGL_Faster;
+            break;
+
+            case PROPERTYHANDLE_SHOWFULL:
+                aSeqValues[nProperty] <<= m_bShowFull;
+            break;
+        }
+    }
+
+    PutProperties( aSeqNames, aSeqValues );
 }
 
 //*****************************************************************************************************************
@@ -354,6 +310,7 @@ sal_Bool SvtOptions3D_Impl::IsShowFull() const
 void SvtOptions3D_Impl::SetDithering( sal_Bool bState )
 {
     m_bDithering = bState;
+    SetModified();
 }
 
 //*****************************************************************************************************************
@@ -362,6 +319,7 @@ void SvtOptions3D_Impl::SetDithering( sal_Bool bState )
 void SvtOptions3D_Impl::SetOpenGL( sal_Bool bState )
 {
     m_bOpenGL = bState;
+    SetModified();
 }
 
 //*****************************************************************************************************************
@@ -370,6 +328,7 @@ void SvtOptions3D_Impl::SetOpenGL( sal_Bool bState )
 void SvtOptions3D_Impl::SetOpenGL_Faster( sal_Bool bState )
 {
     m_bOpenGL_Faster = bState;
+    SetModified();
 }
 
 //*****************************************************************************************************************
@@ -378,6 +337,7 @@ void SvtOptions3D_Impl::SetOpenGL_Faster( sal_Bool bState )
 void SvtOptions3D_Impl::SetShowFull( sal_Bool bState )
 {
     m_bShowFull = bState;
+    SetModified();
 }
 
 //*****************************************************************************************************************
