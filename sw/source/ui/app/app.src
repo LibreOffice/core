@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:23:34 $
+ *  last change: $Author: os $ $Date: 2001-08-03 14:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3166,7 +3166,16 @@ String STR_PAGEBREAK
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Salto antes de página nueva";
 };
-
+String STR_WESTERN_FONT
+{
+    Text = "Westlicher Text: " ;
+    Text [ ENGLISH ] = "Western text:" ;
+};
+String STR_CJK_FONT
+{
+    Text = "Asiatischer Text: " ;
+    Text [ ENGLISH ] = "Asian text: " ;
+};
 String STR_REDLINE_UNKNOWN_AUTHOR
 {
     Text = "unbekannt" ;

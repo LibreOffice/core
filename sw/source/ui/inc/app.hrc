@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-06-29 10:09:00 $
+ *  last change: $Author: os $ $Date: 2001-08-03 14:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,8 @@
 #define STR_PAGEOFFSET              (RC_APP_BEGIN + 74)
 #define STR_PAGEBREAK               (RC_APP_BEGIN + 75)
 #define STR_REDLINE_UNKNOWN_AUTHOR  (RC_APP_BEGIN + 76)
-
+#define STR_WESTERN_FONT            (RC_APP_BEGIN + 77)
+#define STR_CJK_FONT                (RC_APP_BEGIN + 78)
 
 #define SID_TOGGLETOOLBOX           (RC_APP_BEGIN + 89)
 
