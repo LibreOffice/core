@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfout.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:05 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,16 @@ public:
 #endif
 
     static SvStream& Out_Char( SvStream&, sal_Unicode cChar,
+                    int *pUCMode,
                     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                     BOOL bWriteHelpFile = FALSE );
     static SvStream& Out_String( SvStream&, const String&,
                     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                     BOOL bWriteHelpFile = FALSE );
+    static SvStream& Out_Fontname( SvStream&, const String&,
+                    rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
+                    BOOL bWriteHelpFile = FALSE );
+
     static SvStream& Out_Hex( SvStream&, ULONG nHex, BYTE nLen );
 };
 
