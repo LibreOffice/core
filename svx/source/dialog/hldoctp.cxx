@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldoctp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-12 17:13:08 $
+ *  last change: $Author: pb $ $Date: 2001-12-18 14:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,8 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemS
     FreeResource();
 
     // Init URL-Box (pos&size, Open-Handler)
-    maCbbPath.SetPosSizePixel ( LogicToPixel( Point( 54, 15 ), MAP_APPFONT ),
-                                LogicToPixel( Size ( 176, 60), MAP_APPFONT ) );
+    maCbbPath.SetPosSizePixel ( LogicToPixel( Point( COL_2, 15 ), MAP_APPFONT ),
+                                LogicToPixel( Size ( 176 - COL_DIFF, 60), MAP_APPFONT ) );
     maCbbPath.Show();
     String aFileScheme( INET_FILE_SCHEME, RTL_TEXTENCODING_ASCII_US );
     maCbbPath.SetBaseURL(aFileScheme);

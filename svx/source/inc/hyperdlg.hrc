@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:20 $
+ *  last change: $Author: pb $ $Date: 2001-12-18 14:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,4 +121,8 @@
 #define FT_TEXT                     37
 #define ED_TEXT                     38
 #define BTN_SCRIPT                  39
+
+#define COL_OLD     54
+#define COL_2       63
+#define COL_DIFF    (COL_2 - COL_OLD)
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-26 11:25:53 $
+ *  last change: $Author: pb $ $Date: 2001-12-18 14:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,8 +206,8 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& 
 
     SetExchangeSupport ();
 
-    maCbbPath.SetPosSizePixel ( LogicToPixel( Point( 54 , 25 ), MAP_APPFONT ),
-                                LogicToPixel( Size ( 176, 60), MAP_APPFONT ) );
+    maCbbPath.SetPosSizePixel ( LogicToPixel( Point( COL_2 , 25 ), MAP_APPFONT ),
+                                LogicToPixel( Size ( 176 - COL_DIFF, 60), MAP_APPFONT ) );
     maCbbPath.Show();
     maCbbPath.SetBaseURL(SvtPathOptions().GetWorkPath());
 //  maCbbPath.SetHelpId( HID_HYPERDLG_DOC_PATH );

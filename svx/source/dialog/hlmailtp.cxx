@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmailtp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-15 15:46:19 $
+ *  last change: $Author: pb $ $Date: 2001-12-18 14:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,8 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rIte
     FreeResource();
 
     // Init URL-Box (pos&size, Open-Handler)
-    maCbbReceiver.SetPosSizePixel ( LogicToPixel( Point( 54, 25 ), MAP_APPFONT ),
-                                    LogicToPixel( Size ( 176, 60), MAP_APPFONT ) );
+    maCbbReceiver.SetPosSizePixel ( LogicToPixel( Point( COL_2, 25 ), MAP_APPFONT ),
+                                    LogicToPixel( Size ( 176 - COL_DIFF, 60), MAP_APPFONT ) );
 
     maCbbReceiver.Show();
     maCbbReceiver.SetHelpId( HID_HYPERDLG_MAIL_PATH );

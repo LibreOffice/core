@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-01 14:47:00 $
+ *  last change: $Author: pb $ $Date: 2001-12-18 14:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,8 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     FreeResource();
 
     // Init URL-Box (pos&size, Open-Handler)
-    maCbbTarget.SetPosSizePixel ( LogicToPixel( Point( 54, 25 ), MAP_APPFONT ),
-                                  LogicToPixel( Size ( 176, 60), MAP_APPFONT ) );
+    maCbbTarget.SetPosSizePixel ( LogicToPixel( Point( COL_2, 25 ), MAP_APPFONT ),
+                                  LogicToPixel( Size ( 176 - COL_DIFF, 60), MAP_APPFONT ) );
     maCbbTarget.Show();
     maCbbTarget.SetHelpId( HID_HYPERDLG_INET_PATH );
 
