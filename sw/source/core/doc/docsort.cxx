@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsort.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:07:12 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,15 +598,15 @@ BOOL SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
         DeleteRedline( *pTblNd );
 
     USHORT nStart = 0;
-    if(pTblNd->GetTable().IsHeadlineRepeat() && rOpt.eDirection == SRT_ROWS)
+    if( pTblNd->GetTable().GetRowsToRepeat() > 0 && rOpt.eDirection == SRT_ROWS )
     {
         // Das ist die Kopfzeile
-        SwTableLine * pHeadLine = pTblNd->GetTable().GetTabLines()[0];
+        SwTableLine* pHeadLine = pTblNd->GetTable().GetTabLines()[0];
 
         // Oberste seleketierte Zeile
         _FndLines& rLines = aFndBox.GetLines();
 
-        while(nStart < rLines.Count() )
+        while( nStart < rLines.Count() )
         {
             // Verschachtelung durch Split Merge beachten,
             // die oberste rausholen
@@ -614,13 +614,13 @@ BOOL SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
             while ( pLine->GetUpper() )
                 pLine = pLine->GetUpper()->GetUpper();
 
-            if( pLine == pHeadLine)
+            if( pTblNd->GetTable().IsHeadline( *pLine ) )
                 nStart++;
             else
                 break;
         }
         // Alle selektierten in der HeaderLine ?  -> kein Offset
-        if(nStart == rLines.Count())
+        if( nStart == rLines.Count() )
             nStart = 0;
     }
 
