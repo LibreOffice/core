@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-04 16:00:49 $
+ *  last change: $Author: dl $ $Date: 2001-04-26 09:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #include "svdotext.hxx"  // fuer ReformatAllTextObjects und CalcFieldValue
 #include "svdetc.hxx"
 #include "svdoutl.hxx"
+#include "svdoole2.hxx"
 #include "svdglob.hxx"  // Stringcache
 #include "svdstr.hrc"   // Objektname
 
@@ -130,6 +131,11 @@
 #ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #include "forbiddencharacterstable.hxx"
 #endif
+
+#ifndef _PERSIST_HXX
+#include <so3/persist.hxx>
+#endif
+
 
 using namespace ::com::sun::star;
 
@@ -1243,7 +1249,7 @@ void SdrModel::TakeMetricStr(long nVal, XubString& rStr, FASTBOOL bNoUnitChars) 
     {
         sal_Unicode cDec(aInter.GetNumDecimalSep());
 
-        rStr.Insert(cDec, nVorKomma);
+        rStr.Insert(cDec, (USHORT) nVorKomma);
     }
 
     if(!aInter.IsNumTrailingZeros())
@@ -2030,20 +2036,73 @@ void SdrModel::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
 void SdrModel::AfterRead()
 {
     // alle MasterPages und alle Pages durchlaufen
-    UINT16 nAnz(GetMasterPageCount());
+    UINT16 nCnt(GetMasterPageCount());
     UINT16 i;
 
-    for(i=0; i < nAnz; i++)
+    for(i=0; i < nCnt; i++)
     {
         GetMasterPage(i)->AfterRead();
     }
 
-    nAnz = GetPageCount();
+    nCnt = GetPageCount();
 
-    for(i=0; i < nAnz; i++)
+    for(i=0; i < nCnt; i++)
     {
         GetPage(i)->AfterRead();
     }
+
+    if( pPersist )
+    {
+        SvInfoObjectMemberList* pList = (SvInfoObjectMemberList*) pPersist->GetObjectList();
+
+        if( pList )
+        {
+            SvInfoObjectRef pInfo = pList->First();
+            while( pInfo.Is() )
+            {
+                BOOL bFound = FALSE;
+                String aName = pInfo->GetObjName();
+
+                nCnt = GetPageCount();
+                for( UINT16 a = 0; a < nCnt && !bFound; a++ )
+                {
+                    // Pages
+                    SdrObjListIter aIter( *GetPage(a) );
+                    while( !bFound && aIter.IsMore() )
+                    {
+                        SdrObject* pObj = aIter.Next();
+                        if( pObj->ISA(SdrOle2Obj) )
+                        {
+                            if ( aName == ( (SdrOle2Obj*) pObj )->GetName() )
+                                bFound = TRUE;
+                        }
+                    }
+                }
+
+                nCnt = GetMasterPageCount();
+                for( a = 0; a < nCnt && !bFound; a++ )
+                {
+                    // MasterPages
+                    SdrObjListIter aIter( *GetMasterPage(a) );
+                    while( !bFound && aIter.IsMore() )
+                    {
+                        SdrObject* pObj = aIter.Next();
+                        if( pObj->ISA(SdrOle2Obj) )
+                        {
+                            if ( aName == ( (SdrOle2Obj*) pObj )->GetName() )
+                                bFound = TRUE;
+                        }
+                    }
+                }
+
+                if( !bFound )
+                    pInfo->SetDeleted(TRUE);
+
+                pInfo = pList->Next();
+            }
+        }
+    }
+
 }
 
 ULONG SdrModel::ImpCountAllSteamComponents() const
