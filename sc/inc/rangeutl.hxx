@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangeutl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:14:16 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include <tools/string.hxx>
 #endif
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
+
 //------------------------------------------------------------------------
 
 class SvStream;
@@ -84,7 +88,7 @@ enum RutlNameScope { RUTL_NONE=0, RUTL_NAMES, RUTL_DBASE };
 
 //------------------------------------------------------------------------
 
-class ScRangeUtil
+class SC_DLLPUBLIC ScRangeUtil
 {
 public:
                 ScRangeUtil()  {}
@@ -169,7 +173,7 @@ SvStream& operator>> ( SvStream& rStream, ScArea& rArea );
 //  gibt Bereiche mit Referenz und alle DB-Bereiche zurueck
 //
 
-class ScAreaNameIterator
+class SC_DLLPUBLIC ScAreaNameIterator
 {
 private:
     ScRangeName*    pRangeName;
