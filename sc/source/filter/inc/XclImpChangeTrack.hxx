@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-28 11:01:03 $
+ *  last change: $Author: dr $ $Date: 2000-11-29 09:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XCLIMPORTCHANGETR_HXX
-#define _SC_XCLIMPORTCHANGETR_HXX
+#ifndef _SC_XCLIMPCHANGETRACK_HXX
+#define _SC_XCLIMPCHANGETRACK_HXX
 
 #ifndef _DATETIME_HXX
 #include <tools/datetime.hxx>
@@ -246,5 +246,5 @@ inline sal_uInt16 XclImpChangeTrack::ReadTabNum()
 }
 
 
-#endif // _SC_XCLIMPORTCHANGETR_HXX
+#endif // _SC_XCLIMPCHANGETRACK_HXX
 
