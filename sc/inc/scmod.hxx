@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-09 19:51:41 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 13:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,8 @@ public:
     void                    InsertEntryToLRUList(USHORT nFIndex);
     void                    RecentFunctionsChanged();
 
-    static void         GetSpellSettings( USHORT& rDefLang, BOOL& rAutoSpell, BOOL& rHideAuto );
+    static void         GetSpellSettings( USHORT& rDefLang, USHORT& rCjkLang, USHORT& rCtlLang,
+                                        BOOL& rAutoSpell, BOOL& rHideAuto );
     static void         SetAutoSpellProperty( BOOL bSet );
     static void         SetHideAutoProperty( BOOL bSet );
     static BOOL         HasThesaurusLanguage( USHORT nLang );

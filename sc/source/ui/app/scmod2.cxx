@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-27 10:45:42 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 13:38:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,18 +85,21 @@ using namespace com::sun::star;
 #define SERVICE_LINGUPROP   "com.sun.star.linguistic2.LinguProperties"
 #define SERVICE_THESAURUS   "com.sun.star.linguistic2.Thesaurus"
 
-#define LINGUPROP_DEFAULTLANG       "DefaultLanguage"
+#define LINGUPROP_DEFLOCALE         "DefaultLocale"
+#define LINGUPROP_CJKLOCALE         "DefaultLocale_CJK"
+#define LINGUPROP_CTLLOCALE         "DefaultLocale_CTL"
 #define LINGUPROP_AUTOSPELL         "IsSpellAuto"
 #define LINGUPROP_HIDEAUTO          "IsSpellHide"
 
 //------------------------------------------------------------------
 
 // static
-void ScModule::GetSpellSettings( USHORT& rDefLang, BOOL& rAutoSpell, BOOL& rHideAuto )
+void ScModule::GetSpellSettings( USHORT& rDefLang, USHORT& rCjkLang, USHORT& rCtlLang,
+                                    BOOL& rAutoSpell, BOOL& rHideAuto )
 {
     // GetLinguConfig is no longer needed, LinguProperties load themselves
 
-    rDefLang = LANGUAGE_SYSTEM;
+    rDefLang = rCjkLang = rCtlLang = LANGUAGE_SYSTEM;
     rAutoSpell = rHideAuto = FALSE;
 
     TRY
@@ -107,9 +110,24 @@ void ScModule::GetSpellSettings( USHORT& rDefLang, BOOL& rAutoSpell, BOOL& rHide
                         uno::UNO_QUERY );
         if ( xProp.is() )
         {
-            uno::Any aAny = xProp->getPropertyValue(
-                rtl::OUString::createFromAscii( LINGUPROP_DEFAULTLANG ) );
-            aAny >>= rDefLang;
+            uno::Any aAny;
+            lang::Locale aLocale;
+
+            aAny = xProp->getPropertyValue(
+                rtl::OUString::createFromAscii( LINGUPROP_DEFLOCALE ) );
+            aAny >>= aLocale;
+            rDefLang = ScUnoConversion::GetLanguage( aLocale );
+
+            aAny = xProp->getPropertyValue(
+                rtl::OUString::createFromAscii( LINGUPROP_CJKLOCALE ) );
+            aAny >>= aLocale;
+            rCjkLang = ScUnoConversion::GetLanguage( aLocale );
+
+            aAny = xProp->getPropertyValue(
+                rtl::OUString::createFromAscii( LINGUPROP_CTLLOCALE ) );
+            aAny >>= aLocale;
+            rCtlLang = ScUnoConversion::GetLanguage( aLocale );
+
             aAny = xProp->getPropertyValue(
                 rtl::OUString::createFromAscii( LINGUPROP_AUTOSPELL ) );
             aAny >>= rAutoSpell;
