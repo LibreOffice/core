@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 13:11:07 $
+ *  last change: $Author: oj $ $Date: 2001-02-01 13:10:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ namespace connectivity
 
       protected:
         void setSelectColumnName(const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt=sal_False);
-        void appendColumns(const OSQLTable& _rTable);
+        void appendColumns(const ::rtl::OUString& _rTableAlias,const OSQLTable& _rTable);
         // Weitere Member-Variable, die in den "set"-Funktionen zur
         // Verfuegung stehen sollen, koennen in der abgeleiteten Klasse
         // definiert werden und z. B. in deren Konstruktor initialisiert

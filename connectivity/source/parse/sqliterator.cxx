@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 13:07:48 $
+ *  last change: $Author: oj $ $Date: 2001-02-01 13:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,10 +88,14 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include "connectivity/dbtools.hxx"
+#endif
 
-using namespace connectivity;
+using namespace ::connectivity;
+using namespace ::connectivity::dbtools;
 using namespace ::dbtools;
-using namespace connectivity::parse;
+using namespace ::connectivity::parse;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbcx;
@@ -1086,7 +1090,7 @@ void OSQLParseTreeIterator::setTableName(const ::rtl::OUString & rTableName, con
 #endif
 }
 //-----------------------------------------------------------------------------
-void OSQLParseTreeIterator::appendColumns(const OSQLTable& _rTable)
+void OSQLParseTreeIterator::appendColumns(const ::rtl::OUString& _rTableAlias,const OSQLTable& _rTable)
 {
 
     if (!_rTable.is())
@@ -1100,20 +1104,24 @@ void OSQLParseTreeIterator::appendColumns(const OSQLTable& _rTable)
 
     for(;pBegin != pEnd;++pBegin)
     {
-        OSQLColumns::const_iterator aIter = find(m_aSelectColumns->begin(),m_aSelectColumns->end(),*pBegin,m_aCaseEqual);
-        ::rtl::OUString aName(*pBegin);
-        sal_Int32 i=1;
-        while(aIter != m_aSelectColumns->end())
-        {
-            aName = *pBegin + ::rtl::OUString::valueOf(i++);
-            aIter = find(m_aSelectColumns->begin(),m_aSelectColumns->end(),aName,m_aCaseEqual);
-        }
+
+        ::rtl::OUString aName(getUniqueColumnName(*pBegin));
         Reference< XPropertySet > xColumn;
         if(xColumns->hasByName(*pBegin) && (xColumns->getByName(*pBegin) >>= xColumn) && xColumn.is())
         {
-            OParseColumn* pColumn = new OParseColumn(xColumn,m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
-            //  pColumn->setTableName(aIter->first);
-            pColumn->setRealName(aName);
+            OParseColumn* pColumn = new OParseColumn(aName
+                                                ,   getString(xColumn->getPropertyValue(PROPERTY_TYPENAME))
+                                                ,   getString(xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE))
+                                                ,   getINT32(xColumn->getPropertyValue(PROPERTY_ISNULLABLE))
+                                                ,   getINT32(xColumn->getPropertyValue(PROPERTY_PRECISION))
+                                                ,   getINT32(xColumn->getPropertyValue(PROPERTY_SCALE))
+                                                ,   getINT32(xColumn->getPropertyValue(PROPERTY_TYPE))
+                                                ,   getBOOL(xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT))
+                                                ,   getBOOL(xColumn->getPropertyValue(PROPERTY_ISCURRENCY))
+                                                ,   m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
+
+            pColumn->setTableName(_rTableAlias);
+            pColumn->setRealName(*pBegin);
             Reference< XPropertySet> xCol = pColumn;
             m_aSelectColumns->push_back(xCol);
         }
@@ -1126,7 +1134,7 @@ void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnN
     if(rColumnName.toChar() == '*' && !rTableRange.getLength())
     {   // Suche "uber alle vorkommenden Tabellen
         for(ConstOSQLTablesIterator aIter = m_aTables.begin(); aIter != m_aTables.end();++aIter)
-            appendColumns(aIter->second);
+            appendColumns(aIter->first,aIter->second);
     }
     else if(rColumnName.toChar() == '*' && rTableRange.getLength())  // alle Columns aus dieser Tabelle
     {
@@ -1139,7 +1147,7 @@ void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnN
             strExpression += rColumnName;
         }
         else
-            appendColumns(aFind->second);
+            appendColumns(rTableRange,aFind->second);
     }
     else if(!rTableRange.getLength())// ein Columnname existiert
     {
@@ -1196,7 +1204,7 @@ void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnN
         ConstOSQLTablesIterator aFind = m_aTables.find(rTableRange);
 
         sal_Bool bError = sal_False;
-        if (aFind->second.is())
+        if (aFind != m_aTables.end() && aFind->second.is())
         {
 
             if (bFkt)
