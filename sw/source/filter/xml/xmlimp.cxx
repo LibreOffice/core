@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
+ *  last change: $Author: mib $ $Date: 2000-11-13 08:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef _XMLOFF_XMLTEXTSHAPEIMPORTHELPER_HXX_
 #include <xmloff/XMLTextShapeImportHelper.hxx>
 #endif
+#ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX_
+#include <xmloff/XMLFontStylesContext.hxx>
+#endif
 
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -127,6 +130,7 @@ sal_Char __READONLY_DATA sXML_np__table[] = "table";
 
 enum SwXMLDocTokens
 {
+    XML_TOK_DOC_FONTDECLS,
     XML_TOK_DOC_STYLES,
     XML_TOK_DOC_AUTOSTYLES,
     XML_TOK_DOC_MASTERSTYLES,
@@ -137,6 +141,7 @@ enum SwXMLDocTokens
 
 static __FAR_DATA SvXMLTokenMapEntry aDocTokenMap[] =
 {
+    { XML_NAMESPACE_OFFICE, sXML_font_decls, XML_TOK_DOC_FONTDECLS  },
     { XML_NAMESPACE_OFFICE, sXML_styles,     XML_TOK_DOC_STYLES     },
     { XML_NAMESPACE_OFFICE, sXML_automatic_styles, XML_TOK_DOC_AUTOSTYLES   },
     { XML_NAMESPACE_OFFICE, sXML_master_styles,  XML_TOK_DOC_MASTERSTYLES   },
@@ -184,6 +189,16 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
     const SvXMLTokenMap& rTokenMap = GetSwImport().GetDocElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
+    case XML_TOK_DOC_FONTDECLS:
+        {
+            XMLFontStylesContext *pFSContext =
+                new XMLFontStylesContext( GetImport(), nPrefix,
+                                          rLocalName, xAttrList,
+                                          gsl_getSystemTextEncoding() );
+            GetImport().GetTextImport()->SetFontDecls( pFSContext );
+            pContext = pFSContext;
+        }
+        break;
     case XML_TOK_DOC_STYLES:
         pContext = GetSwImport().CreateStylesContext( rLocalName, xAttrList,
                                                       sal_False );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:59 $
+ *  last change: $Author: mib $ $Date: 2000-11-13 08:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,10 @@ sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
     if( !xModel.is() )
         return ERR_SWG_WRITE_ERROR;
 
+    pDoc = rPaM.GetDoc();
+    PutNumFmtFontsInAttrPool();
+    PutEditEngFontsInAttrPool();
+
     Reference< io::XOutputStream > xOut = rMed.GetDataSink();
     Reference< io::XActiveDataSource > xSrc( xWriter, UNO_QUERY );
     xSrc->setOutputStream( xOut );
@@ -174,11 +178,14 @@ void GetXMLWriter( const String&, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.1.1.1 2000-09-18 17:14:59 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.2 2000-11-13 08:44:24 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:59  hr
+      initial import
+
       Revision 1.17  2000/09/18 16:05:04  willem.vandorp
       OpenOffice header added.
 

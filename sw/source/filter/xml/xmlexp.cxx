@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
+ *  last change: $Author: mib $ $Date: 2000-11-13 08:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,7 @@ XMLTextParagraphExport* SwXMLExport::CreateTextParagraphExport()
 {
     return new SwXMLTextParagraphExport( *this, *GetAutoStylePool().get() );
 }
+
 XMLShapeExport* SwXMLExport::CreateShapeExport()
 {
     return new XMLShapeExport( *this, XMLTextParagraphExport::CreateShapeExtPropMapper( *this ) );
@@ -254,6 +255,12 @@ __EXPORT SwXMLExport::~SwXMLExport()
     ASSERT( !pTableLines, "there are table columns infos left" );
 }
 
+
+void SwXMLExport::_ExportFontDecls()
+{
+    GetFontAutoStylePool(); // make sure the pool is created
+    SvXMLExport::_ExportFontDecls();
+}
 
 void SwXMLExport::_ExportContent()
 {
