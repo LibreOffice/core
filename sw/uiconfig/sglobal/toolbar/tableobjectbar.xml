@@ -12,7 +12,7 @@
  <toolbar:toolbaritem xlink:href=".uno:MergeCells" toolbar:helpid="helpid:20506" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:SplitCell" toolbar:helpid="helpid:20505" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:OptimizeTable" toolbar:helpid="helpid:20510" toolbar:text="" toolbar:style="dropdown" />
- <toolbar:toolbarseparator/>
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertTop" toolbar:helpid="helpid:20585" toolbar:text="" toolbar:style="radio" />
  <toolbar:toolbaritem xlink:href=".uno:CellVertCenter" toolbar:helpid="helpid:20586" toolbar:text="" toolbar:style="radio" />
  <toolbar:toolbaritem xlink:href=".uno:CellVertBottom" toolbar:helpid="helpid:20587" toolbar:text="" toolbar:style="radio" />
