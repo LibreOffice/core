@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdict.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:40:39 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text[ korean ] = "ÀÌ¸§(~N)";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Nombre";
     };
     Edit ED_DICTNAME
     {
@@ -162,6 +163,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text[ korean ] = "¾ð¾î(~L)";
         Text[ turkish ] = "Dil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "I~dioma";
     };
     ListBox LB_DICTLANG
     {
@@ -197,6 +199,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text[ korean ] = "¿¹¿Ü (-)(~E)";
         Text[ turkish ] = "Ýstisna (-)";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Excepción (-)";
     };
     FixedLine GB_NEWDICT
     {
@@ -227,6 +230,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text[ korean ] = "»çÀü";
         Text[ turkish ] = "Sözlük";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Diccionario";
     };
     OKButton BTN_NEWDICT_OK
     {
@@ -245,6 +249,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Pos = MAP_APPFONT ( 157 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
+    Text[ catalan ] = "Crear diccionario de usuario";
 };
 
  // RID_SFXDLG_EDITDICT ---------------------------------------------------
@@ -298,6 +303,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ korean ] = "Ã¥(~B)";
         Text[ turkish ] = "Kitap";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Libro";
     };
     ListBox LB_ALLDICTS
     {
@@ -331,6 +337,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ korean ] = "¾ð¾î(~L)";
         Text[ turkish ] = "Dil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "I~dioma";
     };
     ListBox LB_DICTLANG
     {
@@ -372,6 +379,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ korean ] = "´Ü¾î(~W)";
         Text[ turkish ] = "Sözcük";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Palabra";
     };
     Edit ED_WORD
     {
@@ -405,6 +413,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ greek ] = "Ðñïôåéíüìåíá:";
         Text[ korean ] = "Á¦¾È(~B):";
         Text[ turkish ] = "Öneri";
+        Text[ catalan ] = "~Sugerencia";
     };
 
     Edit ED_REPLACE
@@ -441,6 +450,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ korean ] = "»õ·Î(~N)";
         Text[ turkish ] = "Yeni";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Nuevo";
     };
     PushButton PB_DELETE_REPLACE
     {
@@ -468,6 +478,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ korean ] = "»èÁ¦(~D)";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminar";
     };
     Control TLB_REPLACE
     {
@@ -502,6 +513,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ korean ] = "´ëÃ¼(~R)";
         Text[ turkish ] = "Deðiþtir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Reemplazar";
     };
 
 
@@ -542,6 +554,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ korean ] = "´Ý±â(~C)";
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Cerrar";
     };
     Text[ russian ] = "Ïðàâêà ñëîâàðÿ ïîëüçîâàòåëÿ";
     Text[ polish ] = "Edytuj s³ownik u¿ytkownika";
@@ -552,6 +565,7 @@ ModalDialog RID_SFXDLG_EDITDICT
     Text[ korean ] = "»ç¿ëÀÚ»çÀü ÆíÁý";
     Text[ turkish ] = "Kullanýcý sözlüðünü düzenle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Editar diccionario de usuario";
 };
 
  // Strings ---------------------------------------------------------------
@@ -578,6 +592,7 @@ String RID_SVXSTR_OPT_DOUBLE_DICTS
     Text[ korean ] = "ÁöÁ¤µÈ ÀÌ¸§Àº ÀÌ¹Ì ÀÖ½À´Ï´Ù.\n»õ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "Girilen ad mevcut durumda.\nLütfen baþka bir ad girin.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Este nombre ya existe.\nPor favor escriba otro nombre.";
 };
  // RID_SFXQB_SET_LANGUAGE ------------------------------------------------
 QueryBox RID_SFXQB_SET_LANGUAGE
@@ -609,5 +624,6 @@ QueryBox RID_SFXQB_SET_LANGUAGE
     Message[ korean ] = "»çÀü'%1'ÀÇ ¾ð¾î¸¦ º¯°æÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "'%1' sözlüðünün dilini deðiþtirmek isityor musunuz?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "¿Desea cambiar el idioma del diccionario '%1' ?";
 };
  // ********************************************************************** EOF
