@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-22 08:08:10 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 08:42:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,14 @@
 #include <cppuhelper/weak.hxx>
 #endif
 
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
-#ifndef _VOS_REFERNCE_HXX_
-#include <vos/refernce.hxx>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#include <salhelper/simplereferenceobject.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UCB_CONTENTCREATIONERROR_HPP_
@@ -145,6 +148,12 @@
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_UNKNOWNPROPERTYEXCEPTION_HPP_
+#include <com/sun/star/beans/UnknownPropertyException.hpp>
+#endif
 
 #ifndef _UCBHELPER_MACROS_HXX
 #include <ucbhelper/macros.hxx>
@@ -158,15 +167,21 @@
 #ifndef _UCBHELPER_ACTIVEDATASINK_HXX
 #include <ucbhelper/activedatasink.hxx>
 #endif
+#ifndef _UCBHELPER_INTERACTIONREQUEST_HXX
+#include <ucbhelper/interactionrequest.hxx>
+#endif
+#ifndef _UCBHELPER_CANCELCOMMANDEXECUTION_HXX_
+#include <ucbhelper/cancelcommandexecution.hxx>
+#endif
 
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
+using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
-using namespace rtl;
 
 namespace ucb
 {
@@ -208,17 +223,17 @@ public:
 //=========================================================================
 //=========================================================================
 
-class Content_Impl : public vos::OReference
+class Content_Impl : public salhelper::SimpleReferenceObject
 {
 friend class ContentEventListener_Impl;
 
-    mutable OUString                    m_aURL;
+    mutable rtl::OUString               m_aURL;
     Reference< XMultiServiceFactory >   m_xSMgr;
     Reference< XContent >               m_xContent;
     Reference< XCommandProcessor >      m_xCommandProcessor;
       Reference< XCommandEnvironment >      m_xEnv;
     Reference< XContentEventListener >  m_xContentEventListener;
-    mutable vos::OMutex                 m_aMutex;
+    mutable osl::Mutex                  m_aMutex;
     sal_Int32                           m_nCommandId;
 
 private:
@@ -232,7 +247,7 @@ public:
 
     virtual ~Content_Impl();
 
-    const OUString&                getURL() const;
+    const rtl::OUString&           getURL() const;
     Reference< XContent >          getContent() const { return m_xContent; }
     Reference< XCommandProcessor > getCommandProcessor();
     sal_Int32 getCommandId();
@@ -258,18 +273,18 @@ Content::Content()
 }
 
 //=========================================================================
-Content::Content( const OUString& rURL,
+Content::Content( const rtl::OUString& rURL,
                   const Reference< XCommandEnvironment >& rEnv )
     throw ( ContentCreationException, RuntimeException )
 {
     ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
     if ( !pBroker )
         throw ContentCreationException(
-                    OUString::createFromAscii( "No Content Broker!" ),
+                    rtl::OUString::createFromAscii( "No Content Broker!" ),
                     Reference< XInterface >(),
                     ContentCreationError_NO_CONTENT_BROKER );
 
-    VOS_ENSURE( pBroker->getContentProviderManagerInterface()
+    OSL_ENSURE( pBroker->getContentProviderManagerInterface()
                                     ->queryContentProviders().getLength(),
                 "Content Broker not configured (no providers)!" );
 
@@ -277,7 +292,8 @@ Content::Content( const OUString& rURL,
                         = pBroker->getContentIdentifierFactoryInterface();
     if ( !xIdFac.is() )
         throw ContentCreationException(
-                    OUString::createFromAscii( "No Content Identifier factory!" ),
+                    rtl::OUString::createFromAscii(
+                        "No Content Identifier factory!" ),
                     Reference< XInterface >(),
                     ContentCreationError_NO_IDENTIFIER_FACTORY );
 
@@ -285,7 +301,7 @@ Content::Content( const OUString& rURL,
                         = xIdFac->createContentIdentifier( rURL );
     if ( !xId.is() )
         throw ContentCreationException(
-                    OUString::createFromAscii( "No Content Identifier!" ),
+                    rtl::OUString::createFromAscii( "No Content Identifier!" ),
                     Reference< XInterface >(),
                     ContentCreationError_IDENTIFIER_CREATION_FAILED );
 
@@ -293,7 +309,7 @@ Content::Content( const OUString& rURL,
         = pBroker->getContentProviderInterface();
     if ( !xProvider.is() )
         throw ContentCreationException(
-                    OUString::createFromAscii( "No Content Provider!" ),
+                    rtl::OUString::createFromAscii( "No Content Provider!" ),
                     Reference< XInterface >(),
                     ContentCreationError_NO_CONTENT_PROVIDER );
 
@@ -302,17 +318,17 @@ Content::Content( const OUString& rURL,
     {
         xContent = xProvider->queryContent( xId );
     }
-    catch ( IllegalIdentifierException& )
+    catch ( IllegalIdentifierException const & )
     {
         throw ContentCreationException(
-                    OUString::createFromAscii( "No Content!" ),
+                    rtl::OUString::createFromAscii( "No Content!" ),
                     Reference< XInterface >(),
                     ContentCreationError_CONTENT_CREATION_FAILED );
     }
 
     if ( !xContent.is() )
         throw ContentCreationException(
-                    OUString::createFromAscii( "No Content!" ),
+                    rtl::OUString::createFromAscii( "No Content!" ),
                     Reference< XInterface >(),
                     ContentCreationError_CONTENT_CREATION_FAILED );
 
@@ -327,11 +343,11 @@ Content::Content( const Reference< XContentIdentifier >& rId,
     ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
     if ( !pBroker )
         throw ContentCreationException(
-                    OUString::createFromAscii( "No Content Broker!" ),
+                    rtl::OUString::createFromAscii( "No Content Broker!" ),
                     Reference< XInterface >(),
                     ContentCreationError_NO_CONTENT_BROKER );
 
-    VOS_ENSURE( pBroker->getContentProviderManagerInterface()
+    OSL_ENSURE( pBroker->getContentProviderManagerInterface()
                                     ->queryContentProviders().getLength(),
                 "Content Broker not configured (no providers)!" );
 
@@ -339,7 +355,7 @@ Content::Content( const Reference< XContentIdentifier >& rId,
         = pBroker->getContentProviderInterface();
     if ( !xProvider.is() )
         throw ContentCreationException(
-                    OUString::createFromAscii( "No Content Provider!" ),
+                    rtl::OUString::createFromAscii( "No Content Provider!" ),
                     Reference< XInterface >(),
                     ContentCreationError_NO_CONTENT_PROVIDER );
 
@@ -348,17 +364,17 @@ Content::Content( const Reference< XContentIdentifier >& rId,
     {
         xContent = xProvider->queryContent( rId );
     }
-    catch ( IllegalIdentifierException& )
+    catch ( IllegalIdentifierException const & )
     {
         throw ContentCreationException(
-                    OUString::createFromAscii( "No Content!" ),
+                    rtl::OUString::createFromAscii( "No Content!" ),
                     Reference< XInterface >(),
                     ContentCreationError_CONTENT_CREATION_FAILED );
     }
 
     if ( !xContent.is() )
         throw ContentCreationException(
-                    OUString::createFromAscii( "No Content!" ),
+                    rtl::OUString::createFromAscii( "No Content!" ),
                     Reference< XInterface >(),
                     ContentCreationError_CONTENT_CREATION_FAILED );
 
@@ -373,11 +389,11 @@ Content::Content( const Reference< XContent >& rContent,
     ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
     if ( !pBroker )
         throw ContentCreationException(
-                    OUString::createFromAscii( "No Content Broker!" ),
+                    rtl::OUString::createFromAscii( "No Content Broker!" ),
                     Reference< XInterface >(),
                     ContentCreationError_NO_CONTENT_BROKER );
 
-    VOS_ENSURE( pBroker->getContentProviderManagerInterface()
+    OSL_ENSURE( pBroker->getContentProviderManagerInterface()
                                     ->queryContentProviders().getLength(),
                 "Content Broker not configured (no providers)!" );
 
@@ -392,7 +408,7 @@ Content::Content( const Content& rOther )
 
 //=========================================================================
 // static
-sal_Bool Content::create( const OUString& rURL,
+sal_Bool Content::create( const rtl::OUString& rURL,
                           const Reference< XCommandEnvironment >& rEnv,
                           Content& rContent )
 {
@@ -400,7 +416,7 @@ sal_Bool Content::create( const OUString& rURL,
     if ( !pBroker )
         return sal_False;
 
-    VOS_ENSURE( pBroker->getContentProviderManagerInterface()
+    OSL_ENSURE( pBroker->getContentProviderManagerInterface()
                                     ->queryContentProviders().getLength(),
                 "Content Broker not configured (no providers)!" );
 
@@ -424,8 +440,8 @@ sal_Bool Content::create( const OUString& rURL,
     {
         xContent = xProvider->queryContent( xId );
     }
-//  catch ( IllegalIdentifierException& )
-    catch ( Exception& )
+//  catch ( IllegalIdentifierException const & )
+    catch ( Exception const & )
     {
         return sal_False;
     }
@@ -448,7 +464,7 @@ sal_Bool Content::create( const Reference< XContentIdentifier >& rId,
     if ( !pBroker )
         return sal_False;
 
-    VOS_ENSURE( pBroker->getContentProviderManagerInterface()
+    OSL_ENSURE( pBroker->getContentProviderManagerInterface()
                                     ->queryContentProviders().getLength(),
                 "Content Broker not configured (no providers)!" );
 
@@ -462,8 +478,8 @@ sal_Bool Content::create( const Reference< XContentIdentifier >& rId,
     {
         xContent = xProvider->queryContent( rId );
     }
-//  catch ( IllegalIdentifierException& )
-    catch ( Exception& )
+//  catch ( IllegalIdentifierException const & )
+    catch ( Exception const & )
     {
         return sal_False;
     }
@@ -486,7 +502,7 @@ sal_Bool Content::create( const Reference< XContent >& xContent,
     if ( !pBroker )
         return sal_False;
 
-    VOS_ENSURE( pBroker->getContentProviderManagerInterface()
+    OSL_ENSURE( pBroker->getContentProviderManagerInterface()
                                     ->queryContentProviders().getLength(),
                 "Content Broker not configured (no providers)!" );
 
@@ -514,7 +530,7 @@ Reference< XContent > Content::get() const
 }
 
 //=========================================================================
-const OUString& Content::getURL() const
+const rtl::OUString& Content::getURL() const
 {
     return m_xImpl->getURL();
 }
@@ -537,7 +553,7 @@ Reference< XCommandInfo > Content::getCommands()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     Command aCommand;
-    aCommand.Name     = OUString::createFromAscii( "getCommandInfo" );
+    aCommand.Name     = rtl::OUString::createFromAscii( "getCommandInfo" );
     aCommand.Handle   = -1; // n/a
     aCommand.Argument = Any();
 
@@ -553,7 +569,7 @@ Reference< XPropertySetInfo > Content::getProperties()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     Command aCommand;
-    aCommand.Name     = OUString::createFromAscii( "getPropertySetInfo" );
+    aCommand.Name     = rtl::OUString::createFromAscii( "getPropertySetInfo" );
     aCommand.Handle   = -1; // n/a
     aCommand.Argument = Any();
 
@@ -565,10 +581,10 @@ Reference< XPropertySetInfo > Content::getProperties()
 }
 
 //=========================================================================
-Any Content::getPropertyValue( const OUString& rPropertyName )
+Any Content::getPropertyValue( const rtl::OUString& rPropertyName )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
-    Sequence< OUString > aNames( 1 );
+    Sequence< rtl::OUString > aNames( 1 );
     aNames.getArray()[ 0 ] = rPropertyName;
 
     Sequence< Any > aRet = getPropertyValues( aNames );
@@ -587,11 +603,11 @@ Any Content::getPropertyValue( sal_Int32 nPropertyHandle )
 }
 
 //=========================================================================
-void Content::setPropertyValue( const OUString& rName,
+void Content::setPropertyValue( const rtl::OUString& rName,
                                   const Any& rValue )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
-    Sequence< OUString > aNames( 1 );
+    Sequence< rtl::OUString > aNames( 1 );
     aNames.getArray()[ 0 ] = rName;
 
     Sequence< Any > aValues( 1 );
@@ -616,7 +632,7 @@ void Content::setPropertyValue( const sal_Int32 nPropertyHandle,
 
 //=========================================================================
 Sequence< Any > Content::getPropertyValues(
-                            const Sequence< OUString >& rPropertyNames )
+                            const Sequence< rtl::OUString >& rPropertyNames )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     Reference< XRow > xRow = getPropertyValuesInterface( rPropertyNames );
@@ -658,14 +674,14 @@ Sequence< Any > Content::getPropertyValues(
 
 //=========================================================================
 Reference< XRow > Content::getPropertyValuesInterface(
-                            const Sequence< OUString >& rPropertyNames )
+                            const Sequence< rtl::OUString >& rPropertyNames )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     sal_Int32 nCount = rPropertyNames.getLength();
     Sequence< Property > aProps( nCount );
     Property* pProps = aProps.getArray();
 
-    const OUString* pNames  = rPropertyNames.getConstArray();
+    const rtl::OUString* pNames  = rPropertyNames.getConstArray();
 
     for ( sal_Int32 n = 0; n< nCount; ++n )
     {
@@ -678,7 +694,7 @@ Reference< XRow > Content::getPropertyValuesInterface(
     }
 
     Command aCommand;
-    aCommand.Name     = OUString::createFromAscii( "getPropertyValues" );
+    aCommand.Name     = rtl::OUString::createFromAscii( "getPropertyValues" );
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aProps;
 
@@ -704,14 +720,14 @@ Reference< XRow > Content::getPropertyValuesInterface(
     {
         Property& rProp = pProps[ n ];
 
-        rProp.Name       = OUString(); // n/a
+        rProp.Name       = rtl::OUString(); // n/a
         rProp.Handle     = pHandles[ n ];
 //      rProp.Type       =
 //      rProp.Attributes = ;
     }
 
     Command aCommand;
-    aCommand.Name     = OUString::createFromAscii( "getPropertyValues" );
+    aCommand.Name     = rtl::OUString::createFromAscii( "getPropertyValues" );
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aProps;
 
@@ -724,19 +740,29 @@ Reference< XRow > Content::getPropertyValuesInterface(
 
 //=========================================================================
 void Content::setPropertyValues(
-                            const Sequence< OUString >& rPropertyNames,
+                            const Sequence< rtl::OUString >& rPropertyNames,
                                const Sequence< Any >& rValues )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     if ( rPropertyNames.getLength() != rValues.getLength() )
-        throw CommandAbortedException();
+    {
+        ucbhelper::cancelCommandExecution(
+            makeAny( IllegalArgumentException(
+                        rtl::OUString::createFromAscii(
+                            "Length of property names sequence and value "
+                            "sequence are unequal!" ),
+                        get(),
+                        -1 ) ),
+            m_xImpl->getEnvironment() );
+        // Unreachable
+    }
 
     sal_Int32 nCount = rValues.getLength();
     Sequence< PropertyValue > aProps( nCount );
     PropertyValue* pProps = aProps.getArray();
 
-    const OUString* pNames  = rPropertyNames.getConstArray();
-    const Any*      pValues = rValues.getConstArray();
+    const rtl::OUString* pNames  = rPropertyNames.getConstArray();
+    const Any* pValues = rValues.getConstArray();
 
     for ( sal_Int32 n = 0; n< nCount; ++n )
     {
@@ -749,7 +775,7 @@ void Content::setPropertyValues(
     }
 
     Command aCommand;
-    aCommand.Name     = OUString::createFromAscii( "setPropertyValues" );
+    aCommand.Name     = rtl::OUString::createFromAscii( "setPropertyValues" );
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aProps;
 
@@ -763,7 +789,17 @@ void Content::setPropertyValues(
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     if ( nPropertyHandles.getLength() != rValues.getLength() )
-        throw CommandAbortedException();
+    {
+        ucbhelper::cancelCommandExecution(
+            makeAny( IllegalArgumentException(
+                        rtl::OUString::createFromAscii(
+                            "Length of property handles sequence and value "
+                            "sequence are unequal!" ),
+                        get(),
+                        -1 ) ),
+            m_xImpl->getEnvironment() );
+        // Unreachable
+    }
 
     sal_Int32 nCount = rValues.getLength();
     Sequence< PropertyValue > aProps( nCount );
@@ -776,14 +812,14 @@ void Content::setPropertyValues(
     {
         PropertyValue& rProp = pProps[ n ];
 
-        rProp.Name   = OUString(); // n/a
+        rProp.Name   = rtl::OUString(); // n/a
         rProp.Handle = pHandles[ n ];
         rProp.Value  = pValues[ n ];
 //      rProp.State  = ;
     }
 
     Command aCommand;
-    aCommand.Name     = OUString::createFromAscii( "setPropertyValues" );
+    aCommand.Name     = rtl::OUString::createFromAscii( "setPropertyValues" );
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aProps;
 
@@ -791,7 +827,7 @@ void Content::setPropertyValues(
 }
 
 //=========================================================================
-Any Content::executeCommand( const OUString& rCommandName,
+Any Content::executeCommand( const rtl::OUString& rCommandName,
                              const Any& rCommandArgument )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
@@ -809,7 +845,7 @@ Any Content::executeCommand( sal_Int32 nCommandHandle,
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     Command aCommand;
-    aCommand.Name     = OUString(); // n/a
+    aCommand.Name     = rtl::OUString(); // n/a
     aCommand.Handle   = nCommandHandle;
     aCommand.Argument = rCommandArgument;
 
@@ -822,17 +858,9 @@ void Content::abortCommand()
     m_xImpl->abortCommand();
 }
 
-#if SUPD<615
-//=========================================================================
-Reference< XCommandEnvironment > Content::getCommandEnvironment()
-{
-    return m_xImpl->getEnvironment();
-}
-#endif
-
 //=========================================================================
 Reference< XResultSet > Content::createCursor(
-                            const Sequence< OUString >& rPropertyNames,
+                            const Sequence< rtl::OUString >& rPropertyNames,
                             ResultSetInclude eMode )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
@@ -842,7 +870,7 @@ Reference< XResultSet > Content::createCursor(
     sal_Int32 nCount = rPropertyNames.getLength();
     Sequence< Property > aProps( nCount );
     Property* pProps = aProps.getArray();
-    const OUString* pNames = rPropertyNames.getConstArray();
+    const rtl::OUString* pNames = rPropertyNames.getConstArray();
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
         Property& rProp = pProps[ n ];
@@ -860,7 +888,7 @@ Reference< XResultSet > Content::createCursor(
     aArg.Properties = aProps;
 
     Command aCommand;
-    aCommand.Name     = OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -873,14 +901,14 @@ Reference< XResultSet > Content::createCursor(
     if ( xDynSet.is() )
         xStaticSet = xDynSet->getStaticResultSet();
 
-    VOS_ENSURE( xStaticSet.is(), "Content::createCursor - no cursor!" );
+    OSL_ENSURE( xStaticSet.is(), "Content::createCursor - no cursor!" );
 
      if ( !xStaticSet.is() )
     {
         // Former, the open command directly returned a XResultSet.
         aResult >>= xStaticSet;
 
-        VOS_ENSURE( !xStaticSet.is(),
+        OSL_ENSURE( !xStaticSet.is(),
                     "Content::createCursor - open-Command must "
                     "return a Reference< XDynnamicResultSet >!" );
     }
@@ -904,7 +932,7 @@ Reference< XResultSet > Content::createCursor(
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
         Property& rProp = pProps[ n ];
-        rProp.Name   = OUString(); // n/a
+        rProp.Name   = rtl::OUString(); // n/a
         rProp.Handle = pHandles[ n ];
     }
 
@@ -918,7 +946,7 @@ Reference< XResultSet > Content::createCursor(
     aArg.Properties = aProps;
 
     Command aCommand;
-    aCommand.Name     = OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -931,14 +959,14 @@ Reference< XResultSet > Content::createCursor(
     if ( xDynSet.is() )
         xStaticSet = xDynSet->getStaticResultSet();
 
-    VOS_ENSURE( xStaticSet.is(), "Content::createCursor - no cursor!" );
+    OSL_ENSURE( xStaticSet.is(), "Content::createCursor - no cursor!" );
 
     if ( !xStaticSet.is() )
     {
         // Former, the open command directly returned a XResultSet.
         aResult >>= xStaticSet;
 
-        VOS_ENSURE( !xStaticSet.is(),
+        OSL_ENSURE( !xStaticSet.is(),
                     "Content::createCursor - open-Command must "
                     "return a Reference< XDynnamicResultSet >!" );
     }
@@ -948,7 +976,7 @@ Reference< XResultSet > Content::createCursor(
 
 //=========================================================================
 Reference< XDynamicResultSet > Content::createDynamicCursor(
-                            const Sequence< OUString >& rPropertyNames,
+                            const Sequence< rtl::OUString >& rPropertyNames,
                             ResultSetInclude eMode )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
@@ -958,7 +986,7 @@ Reference< XDynamicResultSet > Content::createDynamicCursor(
     sal_Int32 nCount = rPropertyNames.getLength();
     Sequence< Property > aProps( nCount );
     Property* pProps = aProps.getArray();
-    const OUString* pNames = rPropertyNames.getConstArray();
+    const rtl::OUString* pNames = rPropertyNames.getConstArray();
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
         Property& rProp = pProps[ n ];
@@ -976,14 +1004,14 @@ Reference< XDynamicResultSet > Content::createDynamicCursor(
     aArg.Properties = aProps;
 
     Command aCommand;
-    aCommand.Name     = OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
     Reference< XDynamicResultSet > xSet;
     m_xImpl->executeCommand( aCommand ) >>= xSet;
 
-    VOS_ENSURE( xSet.is(), "Content::createDynamicCursor - no cursor!" );
+    OSL_ENSURE( xSet.is(), "Content::createDynamicCursor - no cursor!" );
 
     return xSet;
 }
@@ -1004,7 +1032,7 @@ Reference< XDynamicResultSet > Content::createDynamicCursor(
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
         Property& rProp = pProps[ n ];
-        rProp.Name   = OUString(); // n/a
+        rProp.Name   = rtl::OUString(); // n/a
         rProp.Handle = pHandles[ n ];
     }
 
@@ -1018,14 +1046,14 @@ Reference< XDynamicResultSet > Content::createDynamicCursor(
     aArg.Properties = aProps;
 
     Command aCommand;
-    aCommand.Name     = OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
     Reference< XDynamicResultSet > xSet;
     m_xImpl->executeCommand( aCommand ) >>= xSet;
 
-    VOS_ENSURE( xSet.is(), "Content::createDynamicCursor - no cursor!" );
+    OSL_ENSURE( xSet.is(), "Content::createDynamicCursor - no cursor!" );
 
     return xSet;
 }
@@ -1046,7 +1074,7 @@ Reference< XInputStream > Content::openStream()
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1069,7 +1097,7 @@ sal_Bool Content::openStream( const Reference< XActiveDataSink >& rSink )
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1092,7 +1120,7 @@ sal_Bool Content::openStream( const Reference< XOutputStream >& rStream )
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1116,7 +1144,7 @@ void Content::writeStream( const Reference< XInputStream >& rStream,
         if ( !isDocument() )
             return;
     }
-    catch ( Exception& )
+    catch ( Exception const & )
     {
     }
 
@@ -1125,7 +1153,7 @@ void Content::writeStream( const Reference< XInputStream >& rStream,
     aArg.ReplaceExisting = bReplaceExisting;
 
     Command aCommand;
-    aCommand.Name     = OUString::createFromAscii( "insert" );
+    aCommand.Name     = rtl::OUString::createFromAscii( "insert" );
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1133,8 +1161,9 @@ void Content::writeStream( const Reference< XInputStream >& rStream,
 }
 
 //=========================================================================
-sal_Bool Content::insertNewContent( const OUString& rContentType,
-                                      const Sequence<   OUString >& rPropertyNames,
+sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
+                                    const Sequence< rtl::OUString >&
+                                        rPropertyNames,
                                       const Sequence< Any >& rPropertyValues,
                                       Content& rNewContent )
     throw( CommandAbortedException, RuntimeException, Exception )
@@ -1147,8 +1176,9 @@ sal_Bool Content::insertNewContent( const OUString& rContentType,
 }
 
 //=========================================================================
-sal_Bool Content::insertNewContent( const OUString& rContentType,
-                                      const Sequence< sal_Int32 >& nPropertyHandles,
+sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
+                                    const Sequence< sal_Int32 >&
+                                        nPropertyHandles,
                                       const Sequence< Any >& rPropertyValues,
                                       Content& rNewContent )
     throw( CommandAbortedException, RuntimeException, Exception )
@@ -1161,8 +1191,9 @@ sal_Bool Content::insertNewContent( const OUString& rContentType,
 }
 
 //=========================================================================
-sal_Bool Content::insertNewContent( const OUString& rContentType,
-                                      const Sequence<   OUString >& rPropertyNames,
+sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
+                                    const Sequence< rtl::OUString >&
+                                        rPropertyNames,
                                       const Sequence< Any >& rPropertyValues,
                                     const Reference< XInputStream >& rData,
                                       Content& rNewContent )
@@ -1173,7 +1204,7 @@ sal_Bool Content::insertNewContent( const OUString& rContentType,
 
     Reference< XContentCreator > xCreator( m_xImpl->getContent(), UNO_QUERY );
 
-    VOS_ENSURE( xCreator.is(),
+    OSL_ENSURE( xCreator.is(),
                 "Content::insertNewContent - Not a XContentCreator!" );
 
     if ( !xCreator.is() )
@@ -1189,7 +1220,7 @@ sal_Bool Content::insertNewContent( const OUString& rContentType,
 
     Content aNewContent( xNew, m_xImpl->getEnvironment() );
     aNewContent.setPropertyValues( rPropertyNames, rPropertyValues );
-    aNewContent.executeCommand( OUString::createFromAscii( "insert" ),
+    aNewContent.executeCommand( rtl::OUString::createFromAscii( "insert" ),
                                 makeAny(
                                     InsertCommandArgument(
                                         rData,
@@ -1199,8 +1230,9 @@ sal_Bool Content::insertNewContent( const OUString& rContentType,
 }
 
 //=========================================================================
-sal_Bool Content::insertNewContent( const OUString& rContentType,
-                                      const Sequence< sal_Int32 >& nPropertyHandles,
+sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
+                                    const Sequence< sal_Int32 >&
+                                        nPropertyHandles,
                                       const Sequence< Any >& rPropertyValues,
                                     const Reference< XInputStream >& rData,
                                       Content& rNewContent )
@@ -1211,7 +1243,7 @@ sal_Bool Content::insertNewContent( const OUString& rContentType,
 
     Reference< XContentCreator > xCreator( m_xImpl->getContent(), UNO_QUERY );
 
-    VOS_ENSURE( xCreator.is(),
+    OSL_ENSURE( xCreator.is(),
                 "Content::insertNewContent - Not a XContentCreator!" );
 
     if ( !xCreator.is() )
@@ -1227,7 +1259,7 @@ sal_Bool Content::insertNewContent( const OUString& rContentType,
 
     Content aNewContent( xNew, m_xImpl->getEnvironment() );
     aNewContent.setPropertyValues( nPropertyHandles, rPropertyValues );
-    aNewContent.executeCommand( OUString::createFromAscii( "insert" ),
+    aNewContent.executeCommand( rtl::OUString::createFromAscii( "insert" ),
                                 makeAny(
                                     InsertCommandArgument(
                                         rData,
@@ -1239,18 +1271,26 @@ sal_Bool Content::insertNewContent( const OUString& rContentType,
 //=========================================================================
 sal_Bool Content::transferContent( const Content& rSourceContent,
                                    InsertOperation eOperation,
-                                     const OUString & rTitle,
+                                   const rtl::OUString & rTitle,
                                      const sal_Int32 nNameClashAction )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
     if ( !pBroker )
-        throw CommandAbortedException();
+    {
+        OSL_ENSURE( sal_False,
+                    "Content::transferContent - No Content Broker!" );
+        return sal_False;
+    }
 
     Reference< XCommandProcessor > xCmdProc(
                                     pBroker->getCommandProcessorInterface() );
     if ( !xCmdProc.is() )
-        throw CommandAbortedException();
+    {
+        OSL_ENSURE( sal_False,
+                    "Content::transferContent - No XCommandProcessor!" );
+        return sal_False;
+    }
 
     // Execute command "globalTransfer" at UCB.
 
@@ -1270,9 +1310,14 @@ sal_Bool Content::transferContent( const Content& rSourceContent,
             break;
 
         default:
-            VOS_ENSURE( sal_False,
-                        "Content::insertNewContent - Unknown operation!" );
-            throw CommandAbortedException();
+            ucbhelper::cancelCommandExecution(
+                makeAny( IllegalArgumentException(
+                            rtl::OUString::createFromAscii(
+                                "Unknown transfer operation!" ),
+                            get(),
+                            -1 ) ),
+                         m_xImpl->getEnvironment() );
+            // Unreachable
     }
 
     GlobalTransferCommandArgument aTransferArg(
@@ -1282,7 +1327,7 @@ sal_Bool Content::transferContent( const Content& rSourceContent,
                                         rTitle,
                                         nNameClashAction );
     Command aCommand;
-    aCommand.Name     = OUString::createFromAscii( "globalTransfer" );
+    aCommand.Name     = rtl::OUString::createFromAscii( "globalTransfer" );
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aTransferArg;
 
@@ -1295,11 +1340,20 @@ sal_Bool Content::isFolder()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     sal_Bool bFolder = sal_False;
-    if ( getPropertyValue( OUString::createFromAscii( "IsFolder" ) )
+    if ( getPropertyValue( rtl::OUString::createFromAscii( "IsFolder" ) )
         >>= bFolder )
         return bFolder;
 
-    throw CommandAbortedException();
+     ucbhelper::cancelCommandExecution(
+         makeAny( UnknownPropertyException(
+                    rtl::OUString::createFromAscii(
+                        "Unable to retreive value of property 'IsFolder'!" ),
+                    get() ) ),
+         m_xImpl->getEnvironment() );
+
+    // Unreachable - cancelCommandExecution always throws an exception.
+    // But some compilers complain...
+    return sal_False;
 }
 
 //=========================================================================
@@ -1307,11 +1361,20 @@ sal_Bool Content::isDocument()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     sal_Bool bDoc = sal_False;
-    if ( getPropertyValue( OUString::createFromAscii( "IsDocument" ) )
+    if ( getPropertyValue( rtl::OUString::createFromAscii( "IsDocument" ) )
         >>= bDoc )
         return bDoc;
 
-    throw CommandAbortedException();
+     ucbhelper::cancelCommandExecution(
+         makeAny( UnknownPropertyException(
+                    rtl::OUString::createFromAscii(
+                        "Unable to retreive value of property 'IsDocument'!" ),
+                    get() ) ),
+         m_xImpl->getEnvironment() );
+
+    // Unreachable - cancelCommandExecution always throws an exception,
+    // But some compilers complain...
+    return sal_False;
 }
 
 //=========================================================================
@@ -1345,11 +1408,11 @@ Content_Impl::Content_Impl( const Reference< XMultiServiceFactory >& rSMgr,
 //=========================================================================
 void Content_Impl::reinit( const Reference< XContent >& xContent )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     m_xCommandProcessor = 0;
     m_nCommandId = 0;
-       m_aURL = OUString();
+    m_aURL = rtl::OUString();
 
     if ( xContent.is() )
     {
@@ -1378,9 +1441,9 @@ Content_Impl::~Content_Impl()
 }
 
 //=========================================================================
-const OUString& Content_Impl::getURL() const
+const rtl::OUString& Content_Impl::getURL() const
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if ( !m_aURL.getLength() && m_xContent.is() )
     {
@@ -1395,7 +1458,7 @@ const OUString& Content_Impl::getURL() const
 //=========================================================================
 Reference< XCommandProcessor > Content_Impl::getCommandProcessor()
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if ( !m_xCommandProcessor.is() )
         m_xCommandProcessor
@@ -1407,7 +1470,7 @@ Reference< XCommandProcessor > Content_Impl::getCommandProcessor()
 //=========================================================================
 sal_Int32 Content_Impl::getCommandId()
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     if ( m_nCommandId == 0 )
     {
@@ -1448,7 +1511,7 @@ inline const Reference< XCommandEnvironment >&
 inline void Content_Impl::setEnvironment(
                         const Reference< XCommandEnvironment >& xNewEnv )
 {
-    vos::OGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     m_xEnv = xNewEnv;
 }
 
