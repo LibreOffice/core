@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_srs.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-08 15:10:07 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:13:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -153,18 +153,54 @@ $(MISC)$/$(PWD:f).$(SRS$(TNR)NAME).dprr: $(SRC$(TNR)FILES) $(HIDSRS$(TNR)PARTICL
     @echo ------------------------------
     @echo Making: $@
     +-$(RM) $(MISC)$/$(PWD:f).$(SRS$(TNR)NAME).dprr >& $(NULLDEV)
-    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp$(SRS)$/$(SRS$(TNR)NAME).srs -fo$@ $(SRC$(TNR)FILES)
+    +$(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp{$(SRS)$/$(SRS$(TNR)NAME).srs} -fo$@ $(SRC$(TNR)FILES)
 
-$(SRS)$/$(SRS$(TNR)NAME).srs: $(SRC$(TNR)FILES)
+.IF "$(common_build_srs)"!=""
+$(foreach,i,$(SRC$(TNR)FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(foreach,i,$(SRC$(TNR)FILES) $(MISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+# dirty hack
+#     if (! -e $@.$(INPATH) ) cp $(@:f) $@.$(INPATH)
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ENDIF          # "$(common_build_srs)"!=""
+
+.IF "$(common_build_srs)"!=""
+# SRS already pointing to common!?
+#$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))$/$(SRS$(TNR)NAME).srs: $(foreach,i,$(SRC$(TNR)FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
+$(SRS)$/$(SRS$(TNR)NAME).srs: $(foreach,i,$(SRC$(TNR)FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i)
     @echo ------------------------------
     @echo Making: $@
-    echo $(SRC$(TNR)FILES)
+    +$(RSC) -presponse @$(mktmp \
+        $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
+        $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
+        -fp$@.$(INPATH) \
+        $(foreach,i,$(SRC$(TNR)FILES) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$i) \
+    )
+    +-$(RM) $@
+    +$(RENAME) $@.$(INPATH) $@
+    +-$(RM) $@.$(INPATH)
+.ELSE          # "$(common_build_srs)"!=""
+$(SRS)$/$(SRS$(TNR)NAME).srs: $(foreach,i,$(SRC$(TNR)FILES) $(MISC)$/$(TARGET)$/$i)
+    @echo ------------------------------
+    @echo Making: $@
     +$(RSC) -presponse @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp$@ \
-        $(SRC$(TNR)FILES) \
+        $(foreach,i,$(SRC$(TNR)FILES) $(MISC)$/$(TARGET)$/$i) \
     )
+.ENDIF          # "$(common_build_srs)"!=""
 
 .ENDIF          # "$(SRS$(TNR)NAME)"!=""
 
