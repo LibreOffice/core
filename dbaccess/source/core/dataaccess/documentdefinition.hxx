@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:40 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_ARRAY_HELPER_HXX_
-#include <unotools/proparrhlp.hxx>
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
 #endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -113,7 +113,7 @@ class ODocumentDefinition
         ,public OContainerElement
         ,public OMutexAndBroadcastHelper
         ,public ::cppu::OPropertySetHelper
-        ,public ::utl::OPropertyArrayUsageHelper< ODocumentDefinition >
+        ,public ::comphelper::OPropertyArrayUsageHelper< ODocumentDefinition >
 {
 protected:
     ::cppu::OInterfaceContainerHelper   m_aFlushListeners;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_ARRAY_HELPER_HXX_
-#include <unotools/proparrhlp.hxx>
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
 #endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -100,7 +100,7 @@
 //==========================================================================
 class ODescriptorColumn :public OColumn
                         ,public OColumnSettings
-                        ,public ::utl::OPropertyArrayUsageHelper< ODescriptorColumn >
+                        ,public ::comphelper::OPropertyArrayUsageHelper< ODescriptorColumn >
 {
 public:
     ODescriptorColumn(const ::rtl::OUString& _rName);
@@ -145,7 +145,7 @@ class OQueryDescriptor
         ,public OMutexAndBroadcastHelper
         ,public ODataSettings
         ,public OCommandBase
-        ,public ::utl::OPropertyArrayUsageHelper< OQueryDescriptor >
+        ,public ::comphelper::OPropertyArrayUsageHelper< OQueryDescriptor >
         ,public IColumnFactory
 {
 protected:

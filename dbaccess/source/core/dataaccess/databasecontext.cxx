@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:40 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,14 +97,17 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
 
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
-#ifndef _UNOTOOLS_ENUMHELPER_HXX_
-#include <unotools/enumhelper.hxx>
+#ifndef _COMPHELPER_ENUMHELPER_HXX_
+#include <comphelper/enumhelper.hxx>
 #endif
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
@@ -115,8 +118,8 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 
 using namespace ::com::sun::star::sdbc;
@@ -201,7 +204,7 @@ rtl::OUString ODatabaseContext::getImplementationName(  ) throw(RuntimeException
 //------------------------------------------------------------------------------
 sal_Bool ODatabaseContext::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
 {
-    return ::utl::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
 //------------------------------------------------------------------------------
@@ -212,9 +215,28 @@ Sequence< ::rtl::OUString > ODatabaseContext::getSupportedServiceNames(  ) throw
 
 // ::com::sun::star::lang::XUnoTunnel
 //--------------------------------------------------------------------------
+Sequence< sal_Int8 > ODatabaseContext::getUnoTunnelImplementationId() throw (RuntimeException)
+{
+    static OImplementationId * pId = 0;
+    if (! pId)
+    {
+        MutexGuard aGuard( Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
+}
+
+//--------------------------------------------------------------------------
 sal_Int64 SAL_CALL ODatabaseContext::getSomething(const Sequence<sal_Int8>& _rIdentifier) throw( RuntimeException )
 {
-    return ODatabaseContext_TunnelBase::getSomething(_rIdentifier);
+    if (_rIdentifier.getLength() == 16 && 0 == rtl_compareMemory(getImplementationId().getConstArray(),  _rIdentifier.getConstArray(), 16 ) )
+        return (sal_Int64)this;
+
+    return 0;
 }
 
 // DatabaseAccessContext_Base
@@ -344,7 +366,7 @@ void ODatabaseContext::implGetRegistry()
             }
         }
     }
-    catch (...)
+    catch (Exception&)
     {
         // something went heavyly wrong (e.g. the instantiation of the SpecialConfigManager)
         bSuccess = sal_False;
@@ -385,7 +407,7 @@ Reference< XRegistryKey > ODatabaseContext::getObjectDescriptionKey(const ::rtl:
                         if (sCurrentTitle.equals(_rTitle))
                             return xDescriptionKey;
                     }
-                    catch(...)
+                    catch(Exception&)
                     {
                     }
                 }
@@ -409,10 +431,10 @@ Reference< XRegistryKey > ODatabaseContext::getObjectDescriptionKey(const ::rtl:
                         // no exceptions 'til here -> we can return the new key
                         xDescriptionKey = xNewKey;
                     }
-                    catch(...)
+                    catch(Exception&)
                     {
                         // we were not successfull in creating a new tree -> delete the incomplete parts
-                        try { m_xRoot->deleteKey(sNewKeyName); } catch(...) { }
+                        try { m_xRoot->deleteKey(sNewKeyName); } catch(Exception&) { }
                     }
                 }
             }
@@ -451,7 +473,7 @@ Reference< XRegistryKey > ODatabaseContext::getDatabaseObjectKey(const ::rtl::OU
             xObjectKey = xDescriptionKey->createKey(CONFIGKEY_CONTAINERLEMENT_OBJECT);
         }
     }
-    catch(...)
+    catch(Exception&)
     {
     }
 
@@ -470,7 +492,7 @@ void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Referen
     if (DatabaseAccessContext_Base::rBHelper.bDisposed)
         throw DisposedException();
 
-    // solaris compiler needs a construct like this and can work with utl::getImplementation ...
+    // solaris compiler needs a construct like this and can work with comphelper::getImplementation ...
     Reference< XUnoTunnel > xTunnel(_rxObject, UNO_QUERY);
     ODatabaseSource* pObjectImpl = NULL;
     if (xTunnel.is())
@@ -512,7 +534,7 @@ void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Referen
             bSuccess = sal_True;
         }
     }
-    catch(...)
+    catch(Exception&)
     {
     }
 
@@ -543,7 +565,7 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
             if (xComp.is())
                 xComp->dispose();
 
-            // solaris compiler needs a construct like this and can work with utl::getImplementation ...
+            // solaris compiler needs a construct like this and can work with comphelper::getImplementation ...
             Reference< XUnoTunnel > xTunnel(xExistent, UNO_QUERY);
             ODatabaseSource* pObjectImpl = NULL;
             if (xTunnel.is())
@@ -559,7 +581,7 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
     {
         m_xRoot->deleteKey(getShortKeyName(xObjectKey));
     }
-    catch(...)
+    catch(Exception&)
     {
         DBG_ERROR("ODatabaseContext::revokeObject : could not delete the registry key !");
         throw InvalidRegistryException();
@@ -613,7 +635,7 @@ sal_Bool ODatabaseContext::hasElements(void) throw( RuntimeException )
 Reference< ::com::sun::star::container::XEnumeration >  ODatabaseContext::createEnumeration(void) throw( RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    return new ::utl::OEnumerationByName(static_cast<XNameAccess*>(this));
+    return new ::comphelper::OEnumerationByName(static_cast<XNameAccess*>(this));
 }
 
 // ::com::sun::star::container::XNameAccess
@@ -679,7 +701,7 @@ Sequence< rtl::OUString > ODatabaseContext::getElementNames(void) throw( Runtime
                         ++pNames;
                     }
                 }
-                catch(...)
+                catch(Exception&)
                 {
                 }
             }
@@ -711,121 +733,4 @@ sal_Bool ODatabaseContext::hasByName(const rtl::OUString& _rName) throw( Runtime
     }
     return sal_False;
 }
-
-#if 0
-
-//--------------------------------------------------------------------------
-Reference< XSimpleRegistry >  ODatabaseContext::getSubRegistry(const rtl::OUString& _rURL)
-{
-    rtl::OUString sDatabaseInformations = rtl::OUString::createFromAscii("/StarOffice Database Informations 1.0/");
-    return new OKeyRegistry(m_xRegistry, sDatabaseInformations + _rURL);
-}
-
-//--------------------------------------------------------------------------
-void ODatabaseContext::implCopyKeys(const Reference< XRegistryKey > & _rxSource, const Reference< XRegistryKey > & _rxDest)
-{
-    try
-    {
-        Sequence<Reference< XRegistryKey > > aSourceKeys = _rxSource->openKeys();
-        const Reference< XRegistryKey > * pSourceKeys = aSourceKeys.getConstArray();
-        for (sal_Int32 i=0; i<aSourceKeys.getLength(); ++i, ++pSourceKeys)
-        {
-            // create an equivalent key within the destination key
-            rtl::OUString sKeyName = getShortKeyName(*pSourceKeys);
-            Reference< XRegistryKey >  xCurrentDest = _rxDest->openKey(sKeyName);
-            if (!xCurrentDest.is())
-                // not existent yet
-                xCurrentDest = _rxDest->createKey(sKeyName);
-
-            // copy all child keys
-            implCopyKeys(*pSourceKeys, xCurrentDest);
-            // copy the key value
-            switch ((*pSourceKeys)->getValueType())
-            {
-                case RegistryValueType_LONG:
-                    xCurrentDest->setLongValue((*pSourceKeys)->getLongValue());
-                    break;
-                case RegistryValueType_ASCII:
-                    xCurrentDest->setAsciiValue((*pSourceKeys)->getAsciiValue());
-                    break;
-                case RegistryValueType_STRING:
-                    xCurrentDest->setStringValue((*pSourceKeys)->getStringValue());
-                    break;
-                case RegistryValueType_BINARY:
-                    xCurrentDest->setBinaryValue((*pSourceKeys)->getBinaryValue());
-                    break;
-                case RegistryValueType_LONGLIST:
-                    xCurrentDest->setLongListValue((*pSourceKeys)->getLongListValue());
-                    break;
-                case RegistryValueType_ASCIILIST:
-                    xCurrentDest->setAsciiListValue((*pSourceKeys)->getAsciiListValue());
-                    break;
-                case RegistryValueType_STRINGLIST:
-                    xCurrentDest->setStringListValue((*pSourceKeys)->getStringListValue());
-                    break;
-            }
-        }
-    }
-    catch (...)
-    {
-    }
-}
-
-//--------------------------------------------------------------------------
-void ODatabaseContext::renameSubRegistry(const rtl::OUString& _rOldURL, const rtl::OUString& _rNewURL)
-{
-    if (!m_xRegistry.is())
-        return;
-    Reference< XRegistryKey >  xRoot = m_xRegistry->getRootKey();
-    if (!xRoot.is())
-        return;
-
-    static rtl::OUString sDatabaseInformations = ::rtl::OUString::createFromAscii("/StarOffice Database Informations 1.0/");
-    // open the key for the old URL
-    Reference< XRegistryKey >  xOldKey;
-    rtl::OUString sOldKeyName = sDatabaseInformations + _rOldURL;
-    try
-    {
-        xOldKey = xRoot->openKey(sOldKeyName);
-    }
-    catch (...)
-    {
-    }
-    if (!xOldKey.is())
-        // nothing to do
-        return;
-
-    // the key for the new URL
-    Reference< XRegistryKey >  xNewKey;
-    rtl::OUString sNewKeyName = sDatabaseInformations + _rNewURL;
-    try
-    {
-        xNewKey = xRoot->openKey(sNewKeyName);
-        if (!xNewKey.is())
-            xNewKey = xRoot->createKey(sNewKeyName);
-    }
-    catch (...)
-    {
-    }
-
-    if (!xNewKey.is())
-    {
-        DBG_ERROR("ODatabaseContext::renameSubRegistry : could not create the new key !");
-        return;
-    }
-
-    // transfer all sub keys
-    implCopyKeys(xOldKey, xNewKey);
-
-    // delete the old key
-    try
-    {
-        xRoot->deleteKey(sOldKeyName);
-    }
-    catch (...)
-    {
-    }
-}
-
-#endif
 

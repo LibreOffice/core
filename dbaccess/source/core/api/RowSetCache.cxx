@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-05 14:52:16 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "RowSetCache.hxx"
 #endif
-#ifndef _UTL_SEQSTREAM_HXX
-#include <unotools/seqstream.hxx>
+#ifndef _COMPHELPER_SEQSTREAM_HXX
+#include <comphelper/seqstream.hxx>
 #endif
 #ifndef DBACCESS_CORE_API_BOOKMARKSET_HXX
 #include "BookmarkSet.hxx"
@@ -165,7 +165,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
                 ::vos::ORef<OSQLColumns> rColumns = _pIterator->getSelectColumns();
 
-                ::utl::UStringMixEqual aCase(_pIterator->isCaseSensitive());
+                ::comphelper::UStringMixEqual aCase(_pIterator->isCaseSensitive());
                 for(;pBegin != pEnd ;++pBegin)
                 {
                     OSQLColumns::const_iterator aFind = findRealName(rColumns->begin(),rColumns->end(),*pBegin,aCase);
@@ -432,7 +432,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetCache::getBinary
     OSL_ENSHURE(m_aMatrixIter != m_pMatrix->end(),"Iterator is equal end()");
 
     m_nLastColumnIndex = columnIndex;
-    return new ::utl::SequenceInputStream((*(*m_aMatrixIter))[m_nLastColumnIndex].getSequence());
+    return new ::comphelper::SequenceInputStream((*(*m_aMatrixIter))[m_nLastColumnIndex].getSequence());
 }
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetCache::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
@@ -443,7 +443,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetCache::getCharac
     OSL_ENSHURE(m_aMatrixIter != m_pMatrix->end(),"Iterator is equal end()");
 
     m_nLastColumnIndex = columnIndex;
-    return new ::utl::SequenceInputStream((*(*m_aMatrixIter))[m_nLastColumnIndex].getSequence());
+    return new ::comphelper::SequenceInputStream((*(*m_aMatrixIter))[m_nLastColumnIndex].getSequence());
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL ORowSetCache::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
@@ -1427,6 +1427,9 @@ void SAL_CALL ORowSetCache::clearWarnings(  ) throw(SQLException, RuntimeExcepti
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/10/05 14:52:16  oj
+    last changed
+
     Revision 1.3  2000/10/04 13:34:40  oj
     some changes for deleteRow and updateRow
 

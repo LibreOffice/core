@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:20:51 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ namespace dbaccess
 
     class ORowSet : public ORowSet_BASE1
                     , public ORowSetBase
-                    , public ::utl::OPropertyArrayUsageHelper<ORowSet>
+                    , public ::comphelper::OPropertyArrayUsageHelper<ORowSet>
     {
         friend class ORowSetClone;
 
@@ -251,7 +251,7 @@ namespace dbaccess
     // ::com::sun::star::sdbc::XCloseable
         virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-    // utl::OPropertyArrayUsageHelper
+    // comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
     // cppu::OPropertySetHelper
@@ -360,7 +360,7 @@ namespace dbaccess
     //************************************************************
     class ORowSetClone : public ORowSetBase
                          ,public OSubComponent
-                         ,public ::utl::OPropertyArrayUsageHelper < ORowSetClone >
+                         ,public ::comphelper::OPropertyArrayUsageHelper < ORowSetClone >
     {
     protected:
         sal_Int32                   m_nFetchDirection;
@@ -410,7 +410,7 @@ namespace dbaccess
             return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
         }
 
-    // utl::OPropertyArrayUsageHelper
+    // comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
     // cppu::OPropertySetHelper
@@ -422,6 +422,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/09/29 15:20:51  oj
+    rowset impl
+
     Revision 1.1.1.1  2000/09/19 00:15:38  hr
     initial import
 

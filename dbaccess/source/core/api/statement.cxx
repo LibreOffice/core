@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statement.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,14 +73,17 @@
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_HXX_
-#include <unotools/property.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
+#endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
 #endif
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
@@ -213,7 +216,7 @@ Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo() throw (Runtim
     return createPropertySetInfo( getInfoHelper() ) ;
 }
 
-// utl::OPropertyArrayUsageHelper
+// comphelper::OPropertyArrayUsageHelper
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OStatementBase::createArrayHelper( ) const
 {
@@ -245,7 +248,7 @@ sal_Bool OStatementBase::convertFastPropertyValue( Any & rConvertedValue, Any & 
     switch (nHandle)
     {
         case PROPERTY_ID_USEBOOKMARKS:
-            bModified = ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bUseBookmarks);
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bUseBookmarks);
             if (bModified && m_xAggregateAsSet->getPropertySetInfo()->hasPropertyByName(PROPERTY_USEBOOKMARKS))
                 m_xAggregateAsSet->setPropertyValue(PROPERTY_USEBOOKMARKS, rConvertedValue);
             break;
@@ -272,7 +275,7 @@ void OStatementBase::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const 
         // the other properties are set in convertFast...
         case PROPERTY_ID_USEBOOKMARKS:
         {
-            m_bUseBookmarks = ::utl::getBOOL(rValue);
+            m_bUseBookmarks = ::comphelper::getBOOL(rValue);
         }   break;
     }
 }
@@ -488,7 +491,7 @@ rtl::OUString OStatement::getImplementationName(  ) throw(RuntimeException)
 //------------------------------------------------------------------------------
 sal_Bool OStatement::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
 {
-    return ::utl::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
 //------------------------------------------------------------------------------

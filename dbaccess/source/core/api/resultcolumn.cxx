@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultcolumn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::osl;
-using namespace ::utl;
+using namespace ::comphelper;
 using namespace ::cppu;
 using namespace dbaccess;
 
@@ -148,7 +148,7 @@ void OResultColumn::disposing()
     m_xMetaData = NULL;
 }
 
-// utl::OPropertyArrayUsageHelper
+// comphelper::OPropertyArrayUsageHelper
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OResultColumn::createArrayHelper( ) const
 {
@@ -180,7 +180,7 @@ void OResultColumn::disposing()
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OResultColumn::getInfoHelper()
 {
-    return *static_cast< ::utl::OPropertyArrayUsageHelper< OResultColumn >* >(this)->getArrayHelper();
+    return *static_cast< ::comphelper::OPropertyArrayUsageHelper< OResultColumn >* >(this)->getArrayHelper();
 }
 
 //------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncolumn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:38 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,11 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
-#ifndef _UTL_PROPERTY_HXX_
-#include <unotools/property.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
+#endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
 #endif
 #ifndef _DBASHARED_STRINGCONSTANTS_HRC_
 #include "stringconstants.hrc"
@@ -126,7 +129,7 @@ Sequence< ::rtl::OUString > OTableColumnDescriptor::getSupportedServiceNames(  )
     return aSNS;
 }
 
-// utl::OPropertyArrayUsageHelper
+// comphelper::OPropertyArrayUsageHelper
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableColumnDescriptor::createArrayHelper( ) const
 {
@@ -155,7 +158,7 @@ Sequence< ::rtl::OUString > OTableColumnDescriptor::getSupportedServiceNames(  )
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OTableColumnDescriptor::getInfoHelper()
 {
-    return *static_cast< ::utl::OPropertyArrayUsageHelper< OTableColumnDescriptor >* >(this)->getArrayHelper();
+    return *static_cast< ::comphelper::OPropertyArrayUsageHelper< OTableColumnDescriptor >* >(this)->getArrayHelper();
 }
 
 //------------------------------------------------------------------------------
@@ -219,34 +222,34 @@ sal_Bool OTableColumnDescriptor::convertFastPropertyValue(
     switch (nHandle)
     {
         case PROPERTY_ID_TYPE:
-            bModified = ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_nType);
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_nType);
             break;
         case PROPERTY_ID_PRECISION:
-            bModified = ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_nPrecision);
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_nPrecision);
             break;
         case PROPERTY_ID_SCALE:
-            bModified = ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_nScale);
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_nScale);
             break;
         case PROPERTY_ID_ISNULLABLE:
-            bModified = ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_nIsNullable);
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_nIsNullable);
             break;
         case PROPERTY_ID_TYPENAME:
-            bModified = ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aTypeName);
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aTypeName);
             break;
         case PROPERTY_ID_DESCRIPTION:
-            bModified = ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDescription);
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDescription);
             break;
         case PROPERTY_ID_DEFAULTVALUE:
-            bModified = ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDefaultValue);
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDefaultValue);
             break;
         case PROPERTY_ID_ISAUTOINCREMENT:
-            bModified = ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAutoIncrement);
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAutoIncrement);
             break;
         case PROPERTY_ID_ISCURRENCY:
-            bModified = ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bCurrency);
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bCurrency);
             break;
         case PROPERTY_ID_ISROWVERSION:
-            bModified = ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bRowVersion);
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bRowVersion);
             break;
         case PROPERTY_ID_NAME:
             bModified = OColumn::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
@@ -304,17 +307,17 @@ void OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(
         case PROPERTY_ID_ISAUTOINCREMENT:
             OSL_ENSHURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Bool* >(NULL))),
                 "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(DEFAULTVALUE) : invalid value !");
-            m_bAutoIncrement = ::utl::getBOOL(rValue);
+            m_bAutoIncrement = ::comphelper::getBOOL(rValue);
             break;
         case PROPERTY_ID_ISCURRENCY:
             OSL_ENSHURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Bool* >(NULL))),
                 "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(DEFAULTVALUE) : invalid value !");
-            m_bCurrency = ::utl::getBOOL(rValue);
+            m_bCurrency = ::comphelper::getBOOL(rValue);
             break;
         case PROPERTY_ID_ISROWVERSION:
             OSL_ENSHURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Bool* >(NULL))),
                 "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(ISROWVERSION) : invalid value !");
-            m_bRowVersion = ::utl::getBOOL(rValue);
+            m_bRowVersion = ::comphelper::getBOOL(rValue);
             break;
         case PROPERTY_ID_NAME:
             OColumn::setFastPropertyValue_NoBroadcast( nHandle, rValue );
@@ -360,7 +363,7 @@ Sequence< ::rtl::OUString > OTableColumn::getSupportedServiceNames(  ) throw (Ru
     return aSNS;
 }
 
-// utl::OPropertyArrayUsageHelper
+// comphelper::OPropertyArrayUsageHelper
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableColumn::createArrayHelper( ) const
 {
@@ -499,7 +502,7 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
     return aSNS;
 }
 
-// utl::OPropertyArrayUsageHelper
+// comphelper::OPropertyArrayUsageHelper
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableColumnDescriptorWrapper::createArrayHelper( sal_Int32 nId ) const
 {
@@ -669,7 +672,7 @@ Sequence< ::rtl::OUString > OTableColumnWrapper::getSupportedServiceNames(  ) th
     return aSNS;
 }
 
-// utl::OPropertyArrayUsageHelper
+// comphelper::OPropertyArrayUsageHelper
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableColumnWrapper::createArrayHelper( sal_Int32 nId ) const
 {
@@ -757,7 +760,7 @@ Sequence< ::rtl::OUString > OIndexColumnWrapper::getSupportedServiceNames(  ) th
     return aSNS;
 }
 
-// utl::OPropertyArrayUsageHelper
+// comphelper::OPropertyArrayUsageHelper
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OIndexColumnWrapper::createArrayHelper( sal_Int32 nId ) const
 {
@@ -824,7 +827,7 @@ Sequence< ::rtl::OUString > OKeyColumnWrapper::getSupportedServiceNames(  ) thro
     return aSNS;
 }
 
-// utl::OPropertyArrayUsageHelper
+// comphelper::OPropertyArrayUsageHelper
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OKeyColumnWrapper::createArrayHelper( sal_Int32 nId ) const
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultcolumn.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 //  OResultColumn
 //************************************************************
 class OResultColumn : public OColumn,
-                      public ::utl::OPropertyArrayUsageHelper < OResultColumn >
+                      public ::comphelper::OPropertyArrayUsageHelper < OResultColumn >
 {
 protected:
     ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData > m_xMetaData;
@@ -93,7 +93,7 @@ public:
 // cppu::OComponentHelper
     virtual void SAL_CALL disposing(void);
 
-// utl::OPropertyArrayUsageHelper
+// comphelper::OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
 // cppu::OPropertySetHelper

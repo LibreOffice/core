@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 09:33:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,11 @@
 #include "registryhelper.hxx"
 #endif
 
-#ifndef _UTL_PROPERTY_HXX_
-#include <unotools/property.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -88,7 +88,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::container;
-using namespace ::utl;
+using namespace ::comphelper;
 using namespace ::osl;
 using namespace ::cppu;
 using namespace dbaccess;
@@ -183,7 +183,7 @@ OQueryDescriptor::~OQueryDescriptor()
 //--------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OQueryDescriptor::getTypes() throw (RuntimeException)
 {
-    return ::utl::concatSequences(OQueryDescriptor_Base::getTypes(), ODataSettings::getTypes());
+    return ::comphelper::concatSequences(OQueryDescriptor_Base::getTypes(), ODataSettings::getTypes());
 }
 
 //--------------------------------------------------------------------------
@@ -246,7 +246,7 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor::getColumns( ) throw (Runtime
 //--------------------------------------------------------------------------
 sal_Bool SAL_CALL OQueryDescriptor::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
 {
-    return ::utl::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
 //--------------------------------------------------------------------------

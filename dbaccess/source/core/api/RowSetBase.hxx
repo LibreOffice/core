@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 09:33:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@
 #ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
 #include <comphelper/propertycontainer.hxx>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_ARRAY_HELPER_HXX_
-#include <unotools/proparrhlp.hxx>
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
@@ -128,7 +128,7 @@ namespace dbaccess
     class ORowSetBase : public connectivity::OBaseMutex,
                         public ORowSetBase_BASE,
                         public ::comphelper::OPropertyContainer,
-                        public ::utl::OPropertyArrayUsageHelper<ORowSetBase> // this class hold the static property info
+                        public ::comphelper::OPropertyArrayUsageHelper<ORowSetBase> // this class hold the static property info
     {
     protected:
         ::osl::Mutex                            m_aRowCountMutex, // mutex for rowcount changes
@@ -190,7 +190,7 @@ namespace dbaccess
             return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
         }
 
-    // utl::OPropertyArrayUsageHelper
+    // comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
     // cppu::OPropertySetHelper

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commanddefinition.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 09:35:12 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_ARRAY_HELPER_HXX_
-#include <unotools/proparrhlp.hxx>
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
 #endif
 
 //==========================================================================
@@ -110,7 +110,7 @@ class OCommandDefinition    :public OCommandDefinition_Base
                             ,public OMutexAndBroadcastHelper
                             ,public ::comphelper::OPropertyContainer
                             ,public OConfigurationFlushable
-                            ,public ::utl::OPropertyArrayUsageHelper< OCommandDefinition >
+                            ,public ::comphelper::OPropertyArrayUsageHelper< OCommandDefinition >
 {
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xContainer;

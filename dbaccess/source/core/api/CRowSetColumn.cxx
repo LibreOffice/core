@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetColumn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:38 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
-#ifndef _UTL_TYPES_HXX_
-#include <unotools/types.hxx>
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -111,7 +111,7 @@ Any SAL_CALL ORowSetColumn::queryInterface( const Type & _rType ) throw (Runtime
     return aReturn;
 }
 // -------------------------------------------------------------------------
-// utl::OPropertyArrayUsageHelper
+// comphelper::OPropertyArrayUsageHelper
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* ORowSetColumn::createArrayHelper( ) const
 {
@@ -150,7 +150,7 @@ Any SAL_CALL ORowSetColumn::queryInterface( const Type & _rType ) throw (Runtime
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& ORowSetColumn::getInfoHelper()
 {
-    return *static_cast< ::utl::OPropertyArrayUsageHelper< ORowSetColumn >* >(this)->getArrayHelper();
+    return *static_cast< ::comphelper::OPropertyArrayUsageHelper< ORowSetColumn >* >(this)->getArrayHelper();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
@@ -211,7 +211,7 @@ sal_Bool SAL_CALL ORowSetColumn::convertFastPropertyValue( Any & rConvertedValue
             break;
         case PROPERTY_ID_VALUE:
             rConvertedValue = rValue;
-            bModified = !::utl::compare(rConvertedValue, rOldValue);
+            bModified = !::comphelper::compare(rConvertedValue, rOldValue);
             break;
         default:
             bModified = ORowSetDataColumn::convertFastPropertyValue(rConvertedValue, rOldValue, nHandle, rValue);
@@ -249,7 +249,7 @@ void ORowSetColumn::fireValueChange(const ::com::sun::star::uno::Any& _rOldValue
     Any aVal;
 
     getFastPropertyValue(aVal,PROPERTY_ID_VALUE);
-    if(!::utl::compare(aVal,_rOldValue))
+    if(!::comphelper::compare(aVal,_rOldValue))
     {
         m_aOldValue = _rOldValue;
 

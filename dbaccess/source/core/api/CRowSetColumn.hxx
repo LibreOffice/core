@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetColumn.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:38 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_ARRAY_HELPER_HXX_
-#include <unotools/proparrhlp.hxx>
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
 #endif
 #ifndef DBACCESS_CORE_API_CROWSETDATACOLUMN_HXX
 #include "CRowSetDataColumn.hxx"
@@ -77,7 +77,7 @@
 namespace dbaccess
 {
     class ORowSetColumn;
-    typedef ::utl::OPropertyArrayUsageHelper<ORowSetColumn> ORowSetColumn_PROP;
+    typedef ::comphelper::OPropertyArrayUsageHelper<ORowSetColumn> ORowSetColumn_PROP;
 
     // -------------------------------------------------------------------------
     class ORowSetColumn :   public ORowSetColumn_PROP,
@@ -99,7 +99,7 @@ namespace dbaccess
     // com::sun::star::uno::XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException);
 
-    // utl::OPropertyArrayUsageHelper
+    // comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
     // cppu::OPropertySetHelper

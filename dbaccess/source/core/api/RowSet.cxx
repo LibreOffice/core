@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-05 14:52:16 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SDB_ROWSETVETOEXCEPTION_HPP_
 #include <com/sun/star/sdb/RowSetVetoException.hpp>
@@ -112,8 +112,8 @@
 #ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
 #include <com/sun/star/uno/XNamingService.hpp>
 #endif
-#ifndef _UTL_UNO3_DB_TOOLS_HXX_
-#include <unotools/dbtools.hxx>
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
@@ -141,8 +141,8 @@
 #ifndef DBACCESS_CORE_API_CROWSETCOLUMN_HXX
 #include "CRowSetColumn.hxx"
 #endif
-#ifndef _UTL_SEQSTREAM_HXX
-#include <unotools/seqstream.hxx>
+#ifndef _COMPHELPER_SEQSTREAM_HXX
+#include <comphelper/seqstream.hxx>
 #endif
 
 using namespace dbaccess;
@@ -253,7 +253,7 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     registerProperty(PROPERTY_ISINSERTONLY,         PROPERTY_ID_ISINSERTONLY,           PropertyAttribute::BOUND,       &m_bIgnoreResult,       ::getBooleanCppuType());
 }
 // -------------------------------------------------------------------------
-//  typedef ::utl::OPropertyArrayUsageHelper<ORowSet> ORowSet_Prop;
+//  typedef ::comphelper::OPropertyArrayUsageHelper<ORowSet> ORowSet_Prop;
 
 void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
 {
@@ -332,7 +332,7 @@ Sequence< Type > SAL_CALL ORowSet::getTypes() throw (RuntimeException)
     OTypeCollection aTypes(::getCppuType( (const Reference< XPropertySet > *)0 ),
                             ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
                             ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
-                           ::utl::concatSequences(ORowSet_BASE1::getTypes(),ORowSetBase::getTypes()));
+                           ::comphelper::concatSequences(ORowSet_BASE1::getTypes(),ORowSetBase::getTypes()));
     return aTypes.getTypes();
 }
 // -------------------------------------------------------------------------
@@ -409,7 +409,7 @@ rtl::OUString ORowSet::getImplementationName_Static(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSet::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
 {
-    return ::utl::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > ORowSet::getSupportedServiceNames_Static(  ) throw (RuntimeException)
@@ -513,7 +513,7 @@ void SAL_CALL ORowSet::close(  ) throw(SQLException, RuntimeException)
     m_xComposer = NULL;
 }
 // -------------------------------------------------------------------------
-// utl::OPropertyArrayUsageHelper
+// comphelper::OPropertyArrayUsageHelper
 ::cppu::IPropertyArrayHelper* ORowSet::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
@@ -524,7 +524,7 @@ void SAL_CALL ORowSet::close(  ) throw(SQLException, RuntimeException)
 // cppu::OPropertySetHelper
 ::cppu::IPropertyArrayHelper& SAL_CALL ORowSet::getInfoHelper()
 {
-    typedef ::utl::OPropertyArrayUsageHelper<ORowSet> ORowSet_PROP;
+    typedef ::comphelper::OPropertyArrayUsageHelper<ORowSet> ORowSet_PROP;
     return *ORowSet_PROP::getArrayHelper();
 }
 // -------------------------------------------------------------------------
@@ -1268,7 +1268,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSet::getBinaryStrea
             throw DisposedException();
         if(!m_pCache)
             throw FunctionSequenceException(*m_pMySelf);
-        return new ::utl::SequenceInputStream((*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex = columnIndex].getSequence());
+        return new ::comphelper::SequenceInputStream((*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex = columnIndex].getSequence());
     }
 
     return ORowSetBase::getBinaryStream(columnIndex);
@@ -1283,7 +1283,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSet::getCharacterSt
             throw DisposedException();
         if(!m_pCache)
             throw FunctionSequenceException(*m_pMySelf);
-        return new ::utl::SequenceInputStream((*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex = columnIndex].getSequence());
+        return new ::comphelper::SequenceInputStream((*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex = columnIndex].getSequence());
     }
 
     return ORowSetBase::getCharacterStream(columnIndex);
@@ -1604,7 +1604,7 @@ Sequence< sal_Int32 > SAL_CALL ORowSet::deleteRows( const Sequence< Any >& rows 
     const Any* pEnd   = pBegin + rows.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if(::utl::compare(*pBegin,m_aBookmark))
+        if(::comphelper::compare(*pBegin,m_aBookmark))
             m_aBookmark = Any();
     }
 
@@ -1721,7 +1721,7 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing)
                     }
                 }
                 aQuery = rtl::OUString::createFromAscii("SELECT * FROM ");
-                aQuery += ::utl::quoteTableName(m_xActiveConnection->getMetaData(), m_aCommand);
+                aQuery += ::dbtools::quoteTableName(m_xActiveConnection->getMetaData(), m_aCommand);
             }
                 break;
             case CommandType::QUERY:
@@ -2248,7 +2248,7 @@ ORowSetClone::~ORowSetClone()
 //--------------------------------------------------------------------------
 Sequence< Type > ORowSetClone::getTypes() throw (RuntimeException)
 {
-    return ::utl::concatSequences(OSubComponent::getTypes(),ORowSetBase::getTypes());
+    return ::comphelper::concatSequences(OSubComponent::getTypes(),ORowSetBase::getTypes());
 }
 // com::sun::star::uno::XInterface
 //--------------------------------------------------------------------------
@@ -2281,7 +2281,7 @@ rtl::OUString ORowSetClone::getImplementationName(  ) throw(RuntimeException)
 //------------------------------------------------------------------------------
 sal_Bool ORowSetClone::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
 {
-    return ::utl::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
 //------------------------------------------------------------------------------
@@ -2314,7 +2314,7 @@ void ORowSetClone::close(void) throw( SQLException, RuntimeException )
 }
 // -------------------------------------------------------------------------
 
-// utl::OPropertyArrayUsageHelper
+// comphelper::OPropertyArrayUsageHelper
 ::cppu::IPropertyArrayHelper* ORowSetClone::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
@@ -2326,7 +2326,7 @@ void ORowSetClone::close(void) throw( SQLException, RuntimeException )
 // cppu::OPropertySetHelper
 ::cppu::IPropertyArrayHelper& SAL_CALL ORowSetClone::getInfoHelper()
 {
-    typedef ::utl::OPropertyArrayUsageHelper<ORowSetClone> ORowSetClone_PROP;
+    typedef ::comphelper::OPropertyArrayUsageHelper<ORowSetClone> ORowSetClone_PROP;
     return *ORowSetClone_PROP::getArrayHelper();
 }
 // -------------------------------------------------------------------------
@@ -2357,6 +2357,9 @@ sal_Int64 SAL_CALL ORowSetClone::getSomething( const Sequence< sal_Int8 >& rId )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/10/05 14:52:16  oj
+    last changed
+
     Revision 1.4  2000/10/05 09:33:39  fs
     using comphelper::OPropertyContainer instead of connectivity::OSimplePropertyContainer
 

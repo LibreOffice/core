@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-09 12:34:52 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,11 +81,11 @@
 #ifndef _DBASHARED_STRINGCONSTANTS_HRC_
 #include "stringconstants.hrc"
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
-#ifndef _UTL_PROPERTY_HXX_
-#include <unotools/property.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
@@ -165,6 +165,8 @@ ODatabaseSource::ODatabaseSource(const Reference< XMultiServiceFactory >& _rxFac
             ,m_aReports(*this, m_aMutex)
             ,m_aCommandDefinitions(*this, m_aMutex)
 {
+    // some kind of default
+    m_sConnectURL = ::rtl::OUString::createFromAscii("jdbc:");
 }
 
 //--------------------------------------------------------------------------
@@ -309,7 +311,7 @@ Sequence< ::rtl::OUString > ODatabaseSource::getSupportedServiceNames_Static(  )
 //------------------------------------------------------------------------------
 sal_Bool ODatabaseSource::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
 {
-    return ::utl::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
 // com::sun::star::lang::XUnoTunnel
@@ -337,8 +339,8 @@ void ODatabaseSource::disposing()
 
     MutexGuard aGuard(m_aMutex);
 
-    if (m_xConfigurationNode.is())
-        flush();
+//  if (m_xConfigurationNode.is())
+//      flush();
         // TODO : we need a mechanism for determining wheter we're modified and need that call or not
 
     Reference< XConnection > xConn;
@@ -466,16 +468,8 @@ String ODatabaseSource::toConnectionStr(const rtl::OUString& rUrl, const String&
             aConnectStr.AppendAscii("TYP=ODBC;");
         else if (aType.EqualsIgnoreCaseAscii("dBase"))
             aConnectStr.AppendAscii("TYP=DBF;");
-        else if (aType.EqualsIgnoreCaseAscii("Orcl7"))
-            aConnectStr.AppendAscii("TYP=Orcl7;");
-        else if (aType.EqualsIgnoreCaseAscii("DB2"))
-            aConnectStr.AppendAscii("TYP=DB2;");
-        else if (aType.EqualsIgnoreCaseAscii("DAO"))
-            aConnectStr.AppendAscii("TYP=DAO;");
         else if (aType.EqualsIgnoreCaseAscii("ADO"))
             aConnectStr.AppendAscii("TYP=ADO;");
-        else if (aType.EqualsIgnoreCaseAscii("StarBase"))
-            aConnectStr.AppendAscii("TYP=StarBase;");
         else if (aType.EqualsIgnoreCaseAscii("Text"))
             aConnectStr.AppendAscii("TYP=TXT;");
         else
@@ -577,12 +571,12 @@ Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo() throw (Runt
     return createPropertySetInfo( getInfoHelper() ) ;
 }
 
-// utl::OPropertyArrayUsageHelper
+// comphelper::OPropertyArrayUsageHelper
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* ODatabaseSource::createArrayHelper( ) const
 {
     BEGIN_PROPERTY_HELPER(10)
-        DECL_PROP0(INFO,                    Sequence< PropertyValue >);
+        DECL_PROP0(INFO,                        Sequence< PropertyValue >);
         DECL_PROP1_BOOL(ISPASSWORDREQUIRED,                                 BOUND);
         DECL_PROP1_BOOL(ISREADONLY,                                         READONLY);
         DECL_PROP1(NAME,                        ::rtl::OUString,            READONLY);
@@ -590,7 +584,7 @@ Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo() throw (Runt
         DECL_PROP2(PASSWORD,                    ::rtl::OUString,            BOUND, TRANSIENT);
         DECL_PROP1(TABLEFILTER,                 Sequence< ::rtl::OUString >,BOUND);
         DECL_PROP1(TABLETYPEFILTER,             Sequence< ::rtl::OUString >,BOUND);
-        DECL_PROP0(URL,                     ::rtl::OUString);
+        DECL_PROP0(URL,                         ::rtl::OUString);
         DECL_PROP1(USER,                        ::rtl::OUString,            BOUND);
     END_PROPERTY_HELPER();
 }
@@ -612,23 +606,23 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
     switch (nHandle)
     {
         case PROPERTY_ID_TABLEFILTER:
-            bModified = ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aTableFilter);
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aTableFilter);
             break;
         case PROPERTY_ID_TABLETYPEFILTER:
-            bModified = ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aTableTypeFilter);
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aTableTypeFilter);
             break;
         case PROPERTY_ID_USER:
-            bModified = ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_sUser);
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_sUser);
             break;
         case PROPERTY_ID_PASSWORD:
-            bModified = ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aPassword);
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aPassword);
             break;
         case PROPERTY_ID_ISPASSWORDREQUIRED:
-            bModified = ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bPasswordRequired);
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bPasswordRequired);
             break;
         case PROPERTY_ID_URL:
         {
-            bModified = ::utl::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_sConnectURL);
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_sConnectURL);
         }   break;
         case PROPERTY_ID_INFO:
         {
@@ -924,7 +918,7 @@ void ODatabaseSource::readUIAspects(const ::vos::ORef< ::store::OStream >& _rStr
         {   // can't load the formatter without that service
 
             // an uno wrapper for the SvStream
-            Reference< XInputStream > xUnoStream = new ::utl::OInputStreamWrapper(aSvStreamWrapper);
+            Reference< XInputStream > xUnoStream = new ::comphelper::OInputStreamWrapper(aSvStreamWrapper);
             xInDataSink->setInputStream(xUnoStream);
 
             try
@@ -975,7 +969,7 @@ void ODatabaseSource::writeUIAspects(const ::vos::ORef< ::store::OStream >& _rSt
         {   // can't store the formatter without that service
 
             // an uno wrapper for the SvStream
-            xUnoStream = new ::utl::OOutputStreamWrapper(aSvStreamWrapper);
+            xUnoStream = new ::comphelper::OOutputStreamWrapper(aSvStreamWrapper);
             xOutDataSource->setOutputStream(xUnoStream);
 
             nTokensUsed |= PT_SVFORMATTER;

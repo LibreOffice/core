@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:40 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,11 +86,8 @@
 #ifndef _CPPUHELPER_COMPBASE5_HXX_
 #include <cppuhelper/compbase5.hxx>
 #endif
-#ifndef _UNOTOOLS_UNOTUNNELHLP_HXX
-#include <unotools/unotunnelhelper.hxx>
-#endif
-#ifndef _UTL_STLTYPES_HXX_
-#include <unotools/stl_types.hxx>
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_ELEMENTEXISTEXCEPTION_HPP_
 #include <com/sun/star/container/ElementExistException.hpp>
@@ -120,12 +117,8 @@ typedef ::cppu::WeakComponentImplHelper5< ::com::sun::star::lang::XServiceInfo,
                                           ::com::sun::star::uno::XNamingService,
                                           ::com::sun::star::lang::XUnoTunnel > DatabaseAccessContext_Base;
 
-class ODatabaseContext;
-typedef ::utl::UnoTunnelHelper< ODatabaseContext >  ODatabaseContext_TunnelBase;
-
 class ODatabaseContext
             :public DatabaseAccessContext_Base
-            ,public ODatabaseContext_TunnelBase
 {
 
 protected:
@@ -147,6 +140,7 @@ public:
 
 // ::com::sun::star::lang::XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething(const ::com::sun::star::uno::Sequence<sal_Int8>& _rIdentifier) throw( ::com::sun::star::uno::RuntimeException );
+    static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId() throw (::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::lang::XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);

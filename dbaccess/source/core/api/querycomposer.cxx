@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:20:52 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,17 +74,20 @@
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
-//#ifndef _COM_SUN_STAR_REGISTRY_XSIMPLEREGISTRY_HPP_
-//#include <com/sun/star/registry/XSimpleRegistry.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
-//#include <com/sun/star/registry/XRegistryKey.hpp>
-//#endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COM_SUN_STAR_REGISTRY_XSIMPLEREGISTRY_HPP_
+#include <com/sun/star/registry/XSimpleRegistry.hpp>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
+#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#endif
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 #ifndef _DBASHARED_STRINGCONSTANTS_HRC_
 #include "stringconstants.hrc"
@@ -169,7 +172,7 @@ void SAL_CALL OQueryComposer::disposing(void)
 // ::com::sun::star::lang::XTypeProvider
 Sequence< Type > SAL_CALL OQueryComposer::getTypes() throw (RuntimeException)
 {
-    return ::utl::concatSequences(OSubComponent::getTypes(),OQueryComposer_BASE::getTypes());
+    return ::comphelper::concatSequences(OSubComponent::getTypes(),OQueryComposer_BASE::getTypes());
 }
 // -------------------------------------------------------------------------
 Sequence< sal_Int8 > SAL_CALL OQueryComposer::getImplementationId() throw (RuntimeException)
@@ -213,7 +216,7 @@ rtl::OUString OQueryComposer::getImplementationName(  ) throw(RuntimeException)
 //------------------------------------------------------------------------------
 sal_Bool OQueryComposer::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
 {
-    return ::utl::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > OQueryComposer::getSupportedServiceNames(  ) throw (RuntimeException)
@@ -330,7 +333,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL OQueryComposer::getStructuredFilt
             if (pCondition)
             {
                 ::std::vector< ::std::vector < PropertyValue > > aFilters;
-                Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter(utl::getProcessServiceFactory()
+                Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter(comphelper::getProcessServiceFactory()
                                 ->createInstance(rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
                 xFormatter->attachNumberFormatsSupplier(m_xNumberFormatsSupplier);
 
