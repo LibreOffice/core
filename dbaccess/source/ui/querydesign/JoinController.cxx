@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-24 17:43:35 $
+ *  last change: $Author: fs $ $Date: 2002-01-24 18:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ FeatureState OJoinController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = isConnected() && m_bModified;
             break;
         case ID_BROWSER_ADDTABLE:
-            if(aReturn.bEnabled = getJoinView()->getTableView()->IsAddAllowed())
+            if (aReturn.bEnabled = const_cast< OJoinController* >( this )->getJoinView()->getTableView()->IsAddAllowed())
                 aReturn.aState = ::cppu::bool2any(m_pAddTabDlg && m_pAddTabDlg->IsVisible());
             else
                 aReturn.aState = ::cppu::bool2any(sal_False);
