@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:55:26 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:57:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,11 +202,8 @@ using namespace ::drafts::com::sun::star::ui;
 
 SFX_IMPL_TOOLBOX_CONTROL_ARG(SfxToolBoxControl, SfxStringItem, TRUE);
 SFX_IMPL_TOOLBOX_CONTROL(SfxAppToolBoxControl_Impl, SfxStringItem);
-//SFX_IMPL_TOOLBOX_CONTROL(SfxDragToolBoxControl_Impl, SfxStringItem);
-//SFX_IMPL_TOOLBOX_CONTROL(SfxHistoryToolBoxControl_Impl, SfxStringItem);
 SFX_IMPL_TOOLBOX_CONTROL(SfxReloadToolBoxControl_Impl, SfxBoolItem);
 SFX_IMPL_TOOLBOX_CONTROL(SfxAddonsToolBoxControl_Impl, SfxVoidItem);
-SFX_IMPL_TOOLBOX_CONTROL(SfxRotatedToolboxControl, SfxStringItem );
 
 svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const ::rtl::OUString& aCommandURL )
 {
@@ -733,7 +730,7 @@ throw (::com::sun::star::uno::RuntimeException)
                     pToolBar = (ToolBox *)pTbxWindow;
 
                 ::Size aSize = pToolBar->CalcPopupWindowSizePixel();    // use the same size as for popup mode
-                pToolBar->SetSizePixel( aSize );
+                pToolBar->SetOutputSizePixel( aSize );
 
                 xLayoutManager->setElementPos( aSubToolBarResName, e.FloatingPosition );
                 xLayoutManager->showElement( aSubToolBarResName );
@@ -812,16 +809,8 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSub
                 ::Size aSize = pToolBar->CalcPopupWindowSizePixel();
                 pToolBar->SetSizePixel( aSize );
 
-                ::Point aPos = pImpl->pBox->GetItemPopupPosition( nItemId, aSize );
-                aPos = pParent->OutputToScreenPixel( pParent->AbsoluteScreenToOutputPixel( pImpl->pBox->OutputToAbsoluteScreenPixel( aPos ) ) );
-
-                ::com::sun::star::awt::Point aPoint;
-                aPoint.X = aPos.X();
-                aPoint.Y = aPos.Y();
-
-                ::Rectangle aRect( aPos, aSize );
-
-                Window::GetDockingManager()->StartPopupMode( pToolBar, aRect );
+                // open subtoolbox in popup mode
+                Window::GetDockingManager()->StartPopupMode( pImpl->pBox, pToolBar );
             }
         }
     }
@@ -1362,41 +1351,6 @@ IMPL_LINK( SfxPopupWindow, Delete, void *, pvoid )
         m_aDeleteLink.Call( this );
     delete this;
     return 0;
-}
-
-//--------------------------------------------------------------------
-
-SfxRotatedToolboxControl::SfxRotatedToolboxControl( USHORT nSlotID, USHORT nId, ToolBox& rBox ) :
-    SfxToolBoxControl( nSlotID, nId, rBox )
-{
-    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ImageOrientation" )));
-}
-
-//--------------------------------------------------------------------
-
-SfxRotatedToolboxControl::~SfxRotatedToolboxControl()
-{
-}
-
-//--------------------------------------------------------------------
-
-void SfxRotatedToolboxControl::StateChanged( USHORT nSlotId, SfxItemState eState, const SfxPoolItem* pState )
-{
-    USHORT   nId    = GetId();
-    ToolBox& rTbx   = GetToolBox();
-
-    if ( SID_IMAGE_ORIENTATION == nSlotId )
-    {
-        const SfxImageItem* pItem = PTR_CAST( SfxImageItem, pState );
-        if ( pItem )
-        {
-            sal_Int32 lRotation( pItem->GetRotation() );
-            rTbx.SetItemImageMirrorMode( nId, FALSE );
-            rTbx.SetItemImageAngle( nId, lRotation );
-        }
-    }
-    else
-        SfxToolBoxControl::StateChanged( nSlotId, eState, pState );
 }
 
 //--------------------------------------------------------------------
