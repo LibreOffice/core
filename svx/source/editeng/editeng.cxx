@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 09:05:45 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:50:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1924,7 +1924,8 @@ void EditEngine::QuickFormatDoc( sal_Bool bFull )
         pImpEditEngine->FormatFullDoc();
     else
         pImpEditEngine->FormatDoc();
-    pImpEditEngine->UpdateViews( pImpEditEngine->GetActiveView() );
+    // #111072# Don't pass active view, maybe selection is not updated yet...
+    pImpEditEngine->UpdateViews( NULL );
 }
 
 void EditEngine::QuickRemoveCharAttribs( sal_uInt16 nPara, sal_uInt16 nWhich )
