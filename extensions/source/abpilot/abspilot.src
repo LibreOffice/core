@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-21 21:06:42 $
+ *  last change: $Author: kz $ $Date: 2002-02-22 21:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -983,7 +983,7 @@ String RID_STR_NOFIELDSASSIGNED
     Text[ polish ] = "Brak przyporz�dkowanych p�l.\nPola mo�na przyporz�dkowa� r�wnie� p�niej,\nwybieraj�c sekwencj� \"Plik - Szablon dokumentu - �r�d�o danych adresowych...\"";
     Text[ portuguese_brazilian ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
     Text[ japanese ] = "現在、フィールドの割り当てはされていません。\n今すぐに割り当てが決められなければ、あとからでも割り当てできます。\nそのときはメニューの ファイル → ドキュメントテンプレート → アドレス帳ソース... コマンドで実行します。";
-    Text[ korean ] = "현재는 할당된 필드가 없습니다.\n지금 할당하지 않을 경우 나중에 언제라도\n메뉴 \"파일 - 서직파일 - 주소록 소스 ...\" 메뉴를 사용하여 할당할 수 있습니다.";
+    Text[ korean ] = "현재는 할당된 필드가 없습니다.\n지금 할당하지 않을 경우 나중에 언제라도\n메뉴 \"파일 - 서직파일 - 주소록 ...\" 메뉴를 사용하여 할당할 수 있습니다.";
     Text[ chinese_simplified ] = "至今还未指定任何的字段。\n如果现在不指定字段，也可以以后再做这个设定：\n点击菜单\"文件 - 文档样式 - 通讯簿数据源...\"";
     Text[ chinese_traditional ] = "至今還未指定任何欄位。\n如果現在不指定欄位，也可以以後再做這個設定：\n按功能表<檔案>-<文件樣式>-<通訊錄資料源...>。";
     Text[ turkish ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
@@ -1029,6 +1029,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.29  2002/02/21 21:06:42  vg
+ *  Merge SRC641: 21.02.02 - 22:06:20
+ *
  *  Revision 1.28  2002/02/08 21:06:38  kz
  *  Merge SRC641: 08.02.02 - 22:06:25
  *
