@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscrsc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 13:58:58 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,17 +110,12 @@ public:
 
     struct OutputFile
     {
-        LanguageType                 nLangTypeId;       // language type
         ByteString                   aLangName;         // language name
-        CharSet                      nSourceCharSet;    // source text encoding
         ByteString                   aOutputRc;         // target file
         ByteString                   aLangSearchPath;   // language specific search path
         ::std::list< ByteString >    aSysSearchDirs;    // pathes to search for images
 
-        OutputFile() :
-                nLangTypeId( LANGUAGE_DONTKNOW ),
-                nSourceCharSet( RTL_TEXTENCODING_ASCII_US )
-        {}
+        OutputFile() {}
     };
 
     std::list<OutputFile>                                   m_aOutputFiles;
