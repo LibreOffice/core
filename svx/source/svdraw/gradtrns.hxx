@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gradtrns.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-16 13:48:17 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,5 +100,5 @@ public:
         GradTransGradient& rGOld, const SdrObject* pObj, BOOL bMoveSingle, BOOL bMoveFirst);
 };
 
-#endif  _GRADTRANS_HXX
+#endif // _GRADTRANS_HXX
 
