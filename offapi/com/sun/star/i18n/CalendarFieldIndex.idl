@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CalendarFieldIndex.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2000-11-08 17:41:20 $
+ *  last change: $Author: er $ $Date: 2000-11-15 21:15:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,13 +78,13 @@ constants CalendarFieldIndex
 {
     /// Get     <type>AmPmValue</type>
     const short AM_PM           = 0;
-    /// Get/Set [0-31]
+    /// Get/Set [1-31]
     const short DAY_OF_MONTH    = 1;
     /// Get     [0-6]
     const short DAY_OF_WEEK     = 2;
     /// Get
     const short DAY_OF_YEAR     = 3;
-    /// Get/Set Timezone offset in minutes
+    /// Get/Set daylight saving time offset in minutes
     const short DST_OFFSET      = 4;
     /// Get/Set [0-23]
     const short HOUR            = 5;
@@ -92,7 +92,7 @@ constants CalendarFieldIndex
     const short MINUTE          = 6;
     /// Get/Set [0-59]
     const short SECOND          = 7;
-    /// Get/Set
+    /// Get/Set [0-999]
     const short MILLISECOND     = 8;
     /// Get
     const short WEEK_OF_MONTH   = 9;
@@ -100,7 +100,7 @@ constants CalendarFieldIndex
     const short WEEK_OF_YEAR    = 10;
     /// Get/Set
     const short YEAR            = 11;
-    /// Get/Set
+    /// Get/Set [0-...]
     const short MONTH           = 12;
     /// Get/Set
     const short ERA             = 13;
