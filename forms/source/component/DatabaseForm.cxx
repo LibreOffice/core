@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:56:24 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 11:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,6 @@
 #ifndef _COM_SUN_STAR_SDB_XCOLUMNUPDATE_HPP_
 #include <com/sun/star/sdb/XColumnUpdate.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UTIL_XCANCELLABLE_HPP_
 #include <com/sun/star/util/XCancellable.hpp>
 #endif
@@ -128,9 +125,6 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XPARAMETERSSUPPLIER_HPP_
-#include <com/sun/star/sdb/XParametersSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
 #include <com/sun/star/sdbcx/Privilege.hpp>
@@ -266,16 +260,6 @@ enum DatabaseCursorType
 
 } } } }
 
-#ifndef _COMPHELPER_INTERACTION_HXX_
-#include <comphelper/interaction.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XINTERACTIONSUPPLYPARAMETERS_HPP_
-#include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_PARAMETERSREQUEST_HPP_
-#include <com/sun/star/sdb/ParametersRequest.hpp>
-#endif
-
 #define DATABASEFORM_IMPLEMENTATION_NAME    ::rtl::OUString::createFromAscii("com.sun.star.comp.forms.ODatabaseForm")
 
 using namespace ::dbtools;
@@ -325,337 +309,6 @@ Reference< XModel> getXModel(const Reference< XInterface>& xIface)
             return NULL;
     }
 }
-
-//==================================================================
-// OParameterContinuation
-//==================================================================
-class OParameterContinuation : public OInteraction< XInteractionSupplyParameters >
-{
-    Sequence< PropertyValue >       m_aValues;
-
-public:
-    OParameterContinuation() { }
-
-    Sequence< PropertyValue >   getValues() const { return m_aValues; }
-
-// XInteractionSupplyParameters
-    virtual void SAL_CALL setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException);
-};
-
-//------------------------------------------------------------------
-void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException)
-{
-    m_aValues = _rValues;
-}
-
-//==================================================================
-//= OParameterWrapper
-//=-----------------------------------------------------------------
-//= wraps a parameter property set got from an SQLQueryComposer
-//= so it has an additional property "Value", which is forwarded to
-//= an XParameters interface
-//==================================================================
-
-class OParameterWrapper
-        :public ::cppu::OWeakObject
-        ,public ::cppu::OPropertySetHelper
-        ,public ::comphelper::OAggregationArrayUsageHelper<OParameterWrapper>
-{
-    Any                         m_aValue;
-    ::osl::Mutex                m_aMutex;
-    ::cppu::OBroadcastHelper    m_aBroadcastHelper;
-    OImplementationIdsRef       m_aHoldIdHelper;
-
-    Reference<XPropertySet>     m_xPseudoAggregate;
-    Reference<XParameters>      m_xValueDestination;
-    ::std::vector<sal_Int32>    m_aIndexes;
-
-
-protected:
-    virtual ~OParameterWrapper();
-public:
-    OParameterWrapper(  const Reference<XPropertySet>& _rxColumn,
-                        const Reference<XParameters>& _rxAllParameters,
-                        const ::std::vector<sal_Int32>& _aIndexes);
-
-    // UNO
-    DECLARE_UNO3_DEFAULTS(OParameterWrapper, OWeakObject);
-    virtual Any SAL_CALL queryInterface(const Type& _rType) throw (RuntimeException);
-    virtual Sequence<sal_Int8>          SAL_CALL getImplementationId() throw(RuntimeException);
-    virtual Sequence<Type>  SAL_CALL getTypes() throw(RuntimeException);
-
-    // XPropertySet
-    virtual Reference<XPropertySetInfo> SAL_CALL getPropertySetInfo() throw( RuntimeException );
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-
-    // OPropertySetHelper
-    virtual sal_Bool SAL_CALL convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue) throw( IllegalArgumentException );
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw( Exception );
-    virtual void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const;
-
-    // OAggregationArrayUsageHelper
-    virtual void fillProperties(
-        Sequence< Property >& /* [out] */ _rProps,
-        Sequence< Property >& /* [out] */ _rAggregateProps
-        ) const;
-
-protected:
-    ::rtl::OUString getPseudoAggregatePropertyName(sal_Int32 _nHandle) const;
-};
-
-DBG_NAME(OParameterWrapper)
-//------------------------------------------------------------------------------
-OParameterWrapper::OParameterWrapper(const Reference<XPropertySet>& _rxColumn, const Reference<XParameters>& _rxAllParameters, const ::std::vector<sal_Int32>&  _aIndexes)
-    :OPropertySetHelper(m_aBroadcastHelper)
-    ,m_aBroadcastHelper(m_aMutex)
-    ,m_xPseudoAggregate(_rxColumn)
-    ,m_xValueDestination(_rxAllParameters)
-    ,m_aIndexes(_aIndexes)
-{
-    DBG_CTOR(OParameterWrapper, NULL);
-}
-
-//------------------------------------------------------------------------------
-OParameterWrapper::~OParameterWrapper()
-{
-    DBG_DTOR(OParameterWrapper, NULL);
-}
-
-//------------------------------------------------------------------------------
-Any SAL_CALL OParameterWrapper::queryInterface(const Type& _rType) throw (RuntimeException)
-{
-    Any aReturn;
-    aReturn = OWeakObject::queryInterface(_rType);
-
-    if (!aReturn.hasValue())
-        aReturn = OPropertySetHelper::queryInterface(_rType);
-
-    return aReturn;
-}
-
-//------------------------------------------------------------------------------
-Sequence< Type > SAL_CALL OParameterWrapper::getTypes(  ) throw(RuntimeException)
-{
-    Sequence< Type > aWeakTypes(1);
-    aWeakTypes.getArray()[0] = ::getCppuType(static_cast<Reference<XWeak>*>(NULL));
-
-    Sequence< Type > aPropertyTypes(3);
-    aPropertyTypes.getArray()[0] = ::getCppuType(static_cast<Reference<XPropertySet>*>(NULL));
-    aPropertyTypes.getArray()[1] = ::getCppuType(static_cast<Reference<XFastPropertySet>*>(NULL));
-    aPropertyTypes.getArray()[2] = ::getCppuType(static_cast<Reference<XMultiPropertySet>*>(NULL));
-
-    return concatSequences(aWeakTypes, aPropertyTypes);
-}
-
-//------------------------------------------------------------------------------
-Sequence<sal_Int8> SAL_CALL OParameterWrapper::getImplementationId() throw(RuntimeException)
-{
-    Reference<XTypeProvider> xMyTpes;
-    query_interface(static_cast<XWeak*>(this), xMyTpes);
-    return OImplementationIds::getImplementationId(xMyTpes);
-}
-
-//------------------------------------------------------------------------------
-::rtl::OUString OParameterWrapper::getPseudoAggregatePropertyName(sal_Int32 _nHandle) const
-{
-    Reference<XPropertySetInfo>  xInfo = const_cast<OParameterWrapper*>(this)->getPropertySetInfo();
-    Sequence<Property> aProperties = xInfo->getProperties();
-    const Property* pProperties = aProperties.getConstArray();
-    for (sal_Int32 i=0; i<aProperties.getLength(); ++i, ++pProperties)
-    {
-        if (pProperties->Handle == _nHandle)
-            return pProperties->Name;
-    }
-
-    DBG_ERROR("OParameterWrapper::getPseudoAggregatePropertyName : invalid argument !");
-    return ::rtl::OUString();
-}
-
-//------------------------------------------------------------------------------
-Reference<XPropertySetInfo>  OParameterWrapper::getPropertySetInfo() throw( RuntimeException )
-{
-    return createPropertySetInfo( getInfoHelper() );
-}
-
-//------------------------------------------------------------------------------
-void OParameterWrapper::fillProperties(
-        Sequence< Property >& _rProps,
-        Sequence< Property >& _rAggregateProps ) const
-{
-    BEGIN_AGGREGATION_PROPERTY_HELPER(1, m_xPseudoAggregate)
-        DECL_PROP2(VALUE,       ::rtl::OUString, TRANSIENT, MAYBEVOID);
-    END_AGGREGATION_PROPERTY_HELPER();
-}
-
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper& OParameterWrapper::getInfoHelper()
-{
-    return *const_cast<OParameterWrapper*>(this)->getArrayHelper();
-}
-
-//------------------------------------------------------------------------------
-sal_Bool OParameterWrapper::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue) throw( IllegalArgumentException )
-{
-    DBG_ASSERT(PROPERTY_ID_VALUE == nHandle, "OParameterWrapper::convertFastPropertyValue : the only non-readonly prop should be our PROPERTY_VALUE");
-    // we're lazy here ...
-    rOldValue = m_aValue;
-    rConvertedValue = rValue;
-    return sal_True;    // assume "modified" ...
-}
-
-//------------------------------------------------------------------------------
-void OParameterWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw( Exception )
-{
-    if (nHandle == PROPERTY_ID_VALUE)
-    {
-        // get the type of the param
-        Any aParamType = m_xPseudoAggregate->getPropertyValue(PROPERTY_FIELDTYPE);
-        DBG_ASSERT(aParamType.getValueType().getTypeClass() == TypeClass_LONG, "ODatabaseForm::setPropertyValue : invalid parameter field !");
-        sal_Int32 nScale = 0;
-        if (hasProperty(PROPERTY_SCALE, m_xPseudoAggregate))
-        {
-            Any aScale = m_xPseudoAggregate->getPropertyValue(PROPERTY_SCALE);
-            DBG_ASSERT(aScale.getValueType().getTypeClass() == TypeClass_LONG, "ODatabaseForm::setPropertyValue : invalid parameter field !");
-            nScale = getINT32(aScale);
-        }
-        // TODO : aParamType & nScale can be obtained within the constructor ....
-
-
-        try
-        {
-            sal_Int32 nParamType = DataType::VARCHAR;
-            aParamType >>= nParamType;
-            for(::std::vector<sal_Int32>::iterator aIter = m_aIndexes.begin();aIter != m_aIndexes.end();++aIter )
-            {
-                m_xValueDestination->setObjectWithInfo(*aIter + 1, rValue, nParamType, nScale);
-            }
-                // the index of the parameters is one-based
-            m_aValue = rValue;
-        }
-        catch(SQLException& e)
-        {
-            WrappedTargetException aExceptionWrapper;
-            aExceptionWrapper.Context = e.Context;
-            aExceptionWrapper.Message = e.Message;
-            aExceptionWrapper.TargetException <<= e;
-            throw WrappedTargetException(aExceptionWrapper);
-        }
-    }
-    else
-    {
-        ::rtl::OUString aName = getPseudoAggregatePropertyName(nHandle);
-        m_xPseudoAggregate->setPropertyValue(aName, rValue);
-    }
-}
-
-//------------------------------------------------------------------------------
-void OParameterWrapper::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
-{
-    if (nHandle == PROPERTY_ID_VALUE)
-    {
-        rValue = m_aValue;
-    }
-    else
-    {
-        ::rtl::OUString aName = getPseudoAggregatePropertyName(nHandle);
-        rValue = m_xPseudoAggregate->getPropertyValue(aName);
-    }
-}
-
-//==================================================================
-//= OParametersImpl
-//=-----------------------------------------------------------------
-//= class for the parameter event see approveParameter
-//==================================================================
-
-typedef ::cppu::WeakImplHelper2<XIndexAccess, XEnumerationAccess> OParametersImplBase;
-class OParametersImpl : public OParametersImplBase
-{
-public:
-    typedef ::std::vector<Reference<XPropertySet> > Parameters;
-    typedef Parameters::iterator                    ParametersIterator;
-
-private:
-    Parameters      m_aParameters;
-
-protected:
-    virtual ~OParametersImpl(){}
-public:
-    // UNO
-    DECLARE_UNO3_AGG_DEFAULTS(OParametersImpl, OParametersImplBase);
-
-    // XElementAccess
-    virtual Type SAL_CALL getElementType() throw( RuntimeException );
-    virtual sal_Bool SAL_CALL hasElements() throw( RuntimeException );
-
-    // XEnumerationAccess
-    virtual Reference<XEnumeration> SAL_CALL createEnumeration() throw( RuntimeException );
-
-    // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw( RuntimeException );
-    virtual Any SAL_CALL getByIndex(sal_Int32 _rIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException );
-
-    Parameters& getParameters() { return m_aParameters; }
-};
-
-// XElementAccess
-//------------------------------------------------------------------------------
-Type SAL_CALL OParametersImpl::getElementType() throw( RuntimeException )
-{
-    return ::getCppuType(static_cast<Reference<XPropertySet>*>(NULL));
-}
-
-//------------------------------------------------------------------------------
-sal_Bool SAL_CALL OParametersImpl::hasElements() throw( RuntimeException )
-{
-    return !m_aParameters.empty();
-}
-
-// XIndexAccess
-//------------------------------------------------------------------------------
-sal_Int32 SAL_CALL OParametersImpl::getCount() throw( RuntimeException )
-{
-    return m_aParameters.size();
-}
-
-//------------------------------------------------------------------------------
-Any SAL_CALL OParametersImpl::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
-{
-    if ((_nIndex < 0) || (_nIndex >= (sal_Int32)m_aParameters.size()))
-        throw IndexOutOfBoundsException();
-
-    return makeAny(m_aParameters[_nIndex]);
-}
-
-// XEnumerationAccess
-//------------------------------------------------------------------------------
-Reference<XEnumeration>  OParametersImpl::createEnumeration() throw( RuntimeException )
-{
-    return new OEnumerationByIndex(reinterpret_cast<XIndexAccess*>(this));
-}
-
-//==================================================================
-//= OParameterInfoImpl
-//=-----------------------------------------------------------------
-//= class which collects all information for parameter filling
-//==================================================================
-typedef ::std::multimap< ::rtl::OUString,sal_Int32,::comphelper::UStringLess > MapUString2INT32;
-
-struct OParameterInfoImpl
-{
-    sal_Int32                   nCount;                 //  Number of Parameters
-    Reference<XSQLQueryComposer>    xComposer;
-    Reference<XIndexAccess>         xParamsAsIndex;
-    OParametersImpl*        pParameters;
-    MapUString2INT32        aParamMapping;
-
-    OParameterInfoImpl():nCount(0),pParameters(NULL){}
-    ~OParameterInfoImpl()
-    {
-        if (pParameters)
-            pParameters->release();
-    }
-};
 
 //==================================================================
 //= OFormSubmitResetThread
@@ -776,7 +429,6 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
         ,m_aLoadListeners(m_aMutex)
         ,m_aRowSetApproveListeners(m_aMutex)
         ,m_aRowSetListeners(m_aMutex)
-        ,m_aParameterListeners(m_aMutex)
         ,m_aResetListeners(m_aMutex)
         ,m_aSubmitListeners(m_aMutex)
         ,m_aErrorListeners(m_aMutex)
@@ -784,7 +436,8 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
         ,m_bSubForm(sal_False)
         ,m_eNavigation(NavigationBarMode_CURRENT)
         ,m_nPrivileges(0)
-        ,m_pParameterInfo(NULL)
+        ,m_aParameterManager( m_aMutex, _rxFactory )
+        ,m_aFilterManager( _rxFactory )
         ,m_pThread(NULL)
         ,m_eSubmitMethod(FormSubmitMethod_GET)
         ,m_eSubmitEncoding(FormSubmitEncoding_URL)
@@ -796,6 +449,7 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
         ,m_bForwardingConnection(sal_False)
         ,m_pAggregatePropertyMultiplexer(NULL)
         ,m_bSharingConnection( sal_False )
+        ,m_bInsertOnly( sal_False )
 {
     DBG_CTOR(ODatabaseForm,NULL);
 
@@ -816,14 +470,17 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
         m_pAggregatePropertyMultiplexer = new OPropertyChangeMultiplexer(this, m_xAggregateSet, sal_False);
         m_pAggregatePropertyMultiplexer->acquire();
         m_pAggregatePropertyMultiplexer->addProperty(PROPERTY_COMMAND);
-        m_pAggregatePropertyMultiplexer->addProperty(PROPERTY_FILTER_CRITERIA);
-        m_pAggregatePropertyMultiplexer->addProperty(PROPERTY_APPLYFILTER);
         m_pAggregatePropertyMultiplexer->addProperty(PROPERTY_ACTIVE_CONNECTION);
     }
 
     if (m_xAggregate.is())
     {
         m_xAggregate->setDelegator(static_cast<XWeak*>(this));
+    }
+
+    {
+        m_aFilterManager.initialize( this, m_xAggregateSet );
+        m_aParameterManager.initialize( this, m_xAggregate );
     }
 
     decrement(m_refCount);
@@ -1526,146 +1183,9 @@ void ODatabaseForm::onError(SQLException& _rException, const ::rtl::OUString& _r
 }
 
 //------------------------------------------------------------------------------
-void ODatabaseForm::createParameterInfo()
+void ODatabaseForm::updateParameterInfo()
 {
-    DELETEZ( m_pParameterInfo );
-    m_pParameterInfo = new OParameterInfoImpl;
-
-    // create and fill a composer
-    Reference<XSQLQueryComposer>  xComposer;
-    try
-    {
-        xComposer = getCurrentSettingsComposer(m_xAggregateSet, m_xServiceFactory);
-    }
-    catch(SQLException&)
-    {
-    }
-    Reference<XParametersSupplier>  xSetParameters = Reference<XParametersSupplier> (xComposer, UNO_QUERY);
-
-    // if there is no parsable statement return
-    if (!xSetParameters.is())
-        return;
-
-    Reference<XIndexAccess>  xParamsAsIndicies = xSetParameters->getParameters();
-    sal_Int32 nParamCount = xParamsAsIndicies.is() ? xParamsAsIndicies->getCount() : 0;
-    // without parameters return
-    if ( nParamCount == 0 )
-        return;
-
-    // now evaluate the parameters
-    m_pParameterInfo->nCount = nParamCount;
-    m_pParameterInfo->xParamsAsIndex = xParamsAsIndicies;
-    m_pParameterInfo->pParameters = new OParametersImpl();
-    m_pParameterInfo->pParameters->acquire();
-    OParametersImpl::Parameters& rParams = m_pParameterInfo->pParameters->getParameters();
-
-    // we need to map the parameter names (which is all we can get from our parent) to indicies (which are
-    // needed by the XParameters interface of the row set)
-    MapUString2INT32& rParamMapping = m_pParameterInfo->aParamMapping;
-    Reference<XPropertySet> xParam;
-    for (sal_Int32 i = 0; i<nParamCount; ++i)
-    {
-        ::cppu::extractInterface(xParam, xParamsAsIndicies->getByIndex(i));
-
-        // remember the param fields
-        ::rtl::OUString sName;
-        xParam->getPropertyValue(PROPERTY_NAME) >>= sName;
-        // only append additonal paramters when they are not already in the list
-        if ( rParamMapping.end() == rParamMapping.find(sName) )
-            rParams.push_back(xParam);
-        rParamMapping.insert(MapUString2INT32::value_type(sName, i));
-    }
-
-    // check for a matching of my param master fields with the parent's columns
-    Reference<XColumnsSupplier>  xParentColsSuppl(m_xParent, UNO_QUERY);
-    if (xParentColsSuppl.is())
-    {
-        Reference<XNameAccess>  xParentCols = xParentColsSuppl->getColumns();
-        if (xParentCols.is())
-        {
-            sal_Int32 nMasterLen = m_aMasterFields.getLength();
-            sal_Int32 nSlaveLen = m_aDetailFields.getLength();
-            if (xParentCols->hasElements() && (nMasterLen == nSlaveLen) && (nMasterLen > 0))
-            {
-                const ::rtl::OUString* pMasterFields = m_aMasterFields.getConstArray();
-                const ::rtl::OUString* pDetailFields = m_aDetailFields.getConstArray();
-
-                OParametersImpl::ParametersIterator iter;
-                for (sal_Int32 i = 0; i < nMasterLen; ++i, ++pMasterFields, ++pDetailFields)
-                {
-                    Reference<XPropertySet>  xMasterField, xDetailField;
-
-                    MapUString2INT32::const_iterator aFind;
-                    if (xParentCols->hasByName(*pMasterFields) &&
-                        (aFind = rParamMapping.find(*pDetailFields)) != rParamMapping.end())
-                    {
-                        // parameter defined by master slave definition
-                        ::cppu::extractInterface(xDetailField, xParamsAsIndicies->getByIndex(aFind->second));
-
-                        DBG_ASSERT(rParamMapping.find(*pDetailFields) != rParamMapping.end(), "ODatabaseForm::createParameterInfo: invalid XParametersSupplier !");
-                            // the mapping was build from the XParametersSupplier interface of the composer, and the
-                            // XNameAccess interface of the composer said hasByName(...)==sal_True ... so what ?
-
-                        // delete the wrapper as the parameter is set
-                        iter = find(rParams.begin(), rParams.end(), xDetailField);
-                        DBG_ASSERT(iter != rParams.end(), "ODatabaseForm::createParameterInfo: Parameter not found");
-                        if (iter != rParams.end())
-                            rParams.erase(iter);
-                    }
-                }
-            }
-        }
-    }
-
-    // now set the remaining params
-    sal_Int32 nParamsLeft = rParams.size();
-    if (nParamsLeft)
-    {
-        Reference<XParameters>  xExecutionParams(m_xAggregate, UNO_QUERY);
-
-        ::rtl::OUString sName;
-        Reference<XPropertySet>  xParam;
-        Reference<XPropertySet>  xWrapper;
-        for (sal_Int32 j = nParamsLeft; j; )
-        {
-            --j;
-            xParam = rParams[j];
-            xParam->getPropertyValue(PROPERTY_NAME) >>= sName;
-            // need a wrapper for this .... the params supplied by xMyParamsAsIndicies don't have a "Value"
-            // property, but the parameter listeners expect such a property. So we need an object "aggregating"
-            // xParam and supplying an additional property ("Value")
-            // (it's no real aggregation of course ...)
-
-            // get the position of the parameter
-            MapUString2INT32::const_iterator aFind = m_pParameterInfo->aParamMapping.find(sName);
-            if ( aFind != m_pParameterInfo->aParamMapping.end() )
-            {
-                ::std::vector<sal_Int32> aPositions;
-                do
-                {
-                    sal_Int32 nPos = aFind->second;
-                    if ((sal_Int32)m_aParameterVisited.size() > nPos && m_aParameterVisited[nPos] == true)
-                    {
-                        // parameter already set from outside
-                        OParametersImpl::ParametersIterator aPos = rParams.begin() + j;
-                        if (aPos != rParams.end())
-                            rParams.erase(aPos);
-                    }
-                    else
-                    {
-                        aPositions.push_back(nPos);
-                    }
-                    ++aFind;
-                }
-                while ( aFind != m_pParameterInfo->aParamMapping.end() );
-                if ( !aPositions.empty() )
-                {
-                    xWrapper = new OParameterWrapper(xParam, xExecutionParams, aPositions);
-                    rParams[j] = xWrapper;
-                }
-            }
-        }
-    }
+    m_aParameterManager.updateParameterInfo( m_aFilterManager );
 }
 
 //------------------------------------------------------------------------------
@@ -1703,160 +1223,24 @@ bool ODatabaseForm::hasValidParent() const
 }
 
 //------------------------------------------------------------------------------
-bool ODatabaseForm::fillParameters(ReusableMutexGuard& _rClearForNotifies, const Reference< XInteractionHandler >& _rxCompletionHandler)
+bool ODatabaseForm::fillParameters( ReusableMutexGuard& _rClearForNotifies, const Reference< XInteractionHandler >& _rxCompletionHandler )
 {
-    Reference<XParameters>  xExecutionParams;
-    if (!query_aggregation( m_xAggregate, xExecutionParams))
-    {
-        DBG_ERROR("ODatabaseForm::fillParameters : invalid row set (doesn't support parameters) !");
-        // normally the row set should support parameters ...
-        return true;
-    }
-
     // do we have to fill the parameters again?
-    if ( !m_pParameterInfo )
-        createParameterInfo();
-
-    if (!m_pParameterInfo || m_pParameterInfo->nCount == 0)
-        return true;
+    if ( !m_aParameterManager.isUpToDate() )
+        updateParameterInfo();
 
     // is there a valid parent?
-    if (m_bSubForm && !hasValidParent())
+    if ( m_bSubForm && !hasValidParent() )
         return true;
 
-    // do we have to fill the parent parameters?
-    OParametersImpl::Parameters& rParams = m_pParameterInfo->pParameters->getParameters();
+    // ensure we're connected
+    if ( !implEnsureConnection() )
+        return false;
 
-    // do we have to fill the parent parameters?
-    if (m_pParameterInfo->nCount > (sal_Int32)rParams.size())
-    {
-        Reference<XColumnsSupplier>  xParentColsSuppl(m_xParent, UNO_QUERY);
-        if (xParentColsSuppl.is())
-        {
-            Reference<XNameAccess>  xParentCols = xParentColsSuppl->getColumns();
-            sal_Int32 nMasterLen = m_aMasterFields.getLength();
-            if (xParentCols->hasElements() && (nMasterLen > 0))
-            {
-                const ::rtl::OUString* pMasterFields = m_aMasterFields.getConstArray();
-                const ::rtl::OUString* pDetailFields = m_aDetailFields.getConstArray();
+    if ( m_aParameterManager.isUpToDate() )
+        return m_aParameterManager.fillParameterValues( _rxCompletionHandler, _rClearForNotifies );
 
-                Any aParamType,aScale,aValue;
-                for (sal_Int32 i = 0; i < nMasterLen; ++i, ++pMasterFields, ++pDetailFields)
-                {
-                    Reference<XPropertySet>  xMasterField, xDetailField;
-                    MapUString2INT32::const_iterator aFind;
-                    if ( xParentCols->hasByName(*pMasterFields) &&
-                        ( aFind = m_pParameterInfo->aParamMapping.find(*pDetailFields)) != m_pParameterInfo->aParamMapping.end() )
-                    {
-                        // parameter defined by master slave definition
-                        ::cppu::extractInterface(xMasterField, xParentCols->getByName(*pMasterFields));
-                        do
-                        {
-                            m_pParameterInfo->xParamsAsIndex->getByIndex(aFind->second) >>= xDetailField;
-                            OSL_ENSURE(xDetailField.is(),"ParameterField is not valid!");
-
-                            // get the type of the param
-                            aParamType = xDetailField->getPropertyValue(PROPERTY_FIELDTYPE);
-                            DBG_ASSERT(aParamType.getValueType().getTypeClass() == TypeClass_LONG, "ODatabaseForm::fillParameters : invalid parameter field !");
-                            sal_Int32 nScale = 0;
-                            if (hasProperty(PROPERTY_SCALE, xDetailField))
-                            {
-                                aScale = xDetailField->getPropertyValue(PROPERTY_SCALE);
-                                DBG_ASSERT(aScale.getValueType().getTypeClass() == TypeClass_LONG, "ODatabaseForm::fillParameters : invalid parameter field !");
-                                nScale = getINT32(aScale);
-                            }
-                            // and fill the param value
-                            aValue = xMasterField->getPropertyValue(PROPERTY_VALUE);
-                            // parameters are based at 1
-                            try
-                            {
-                                xExecutionParams->setObjectWithInfo(aFind->second + 1, aValue, getINT32(aParamType), nScale);
-                            }
-                            catch( const Exception& )
-                            {
-                                OSL_ENSURE( sal_False,
-                                        ::rtl::OString( "ODatabaseForm::fillParameters: master-detail parameter number " )
-                                        +=  ::rtl::OString::valueOf( sal_Int32(aFind->second + 1) ));
-                            }
-                            ++aFind;
-                        }
-                        while ( aFind != m_pParameterInfo->aParamMapping.end() );
-                    }
-                    else
-                        // no column matching so leave the parameter setting
-                        return true;
-                }
-            }
-        }
-    }
-
-    // now fill the remaining params
-    bool bCanceled = false;
-    if (_rxCompletionHandler.is())
-    {
-        // ask the handler for the missing parameters
-
-        // ensure we're connected
-        if (!implEnsureConnection())
-            return sal_False;
-
-        // two continuations (Ok and Cancel)
-        OInteractionAbort* pAbort = new OInteractionAbort;
-        OParameterContinuation* pParams = new OParameterContinuation;
-
-        // the request
-        ParametersRequest aRequest;
-        aRequest.Parameters = m_pParameterInfo->pParameters;
-        aRequest.Connection = getConnection();
-        OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
-        Reference< XInteractionRequest > xRequest(pRequest);
-
-        // some knittings
-        pRequest->addContinuation(pAbort);
-        pRequest->addContinuation(pParams);
-
-        // execute the request
-        _rxCompletionHandler->handle(xRequest);
-
-        if (!pParams->wasSelected())
-            // canceled by the user (i.e. (s)he canceled the dialog)
-            return sal_False;
-
-        // transfer the values from the continuation object to the parameter columns
-        Sequence< PropertyValue > aFinalValues = pParams->getValues();
-        const PropertyValue* pFinalValues = aFinalValues.getConstArray();
-        for (sal_Int32 i=0; i<aFinalValues.getLength(); ++i, ++pFinalValues)
-        {
-            Reference< XPropertySet > xParamColumn;
-            ::cppu::extractInterface(xParamColumn, aRequest.Parameters->getByIndex(i));
-            if (xParamColumn.is())
-            {
-#ifdef DBG_UTIL
-                ::rtl::OUString sName;
-                xParamColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
-                DBG_ASSERT(sName.equals(pFinalValues->Name), "ODatabaseForm::fillParameters: inconsistent parameter names!");
-#endif
-                xParamColumn->setPropertyValue(PROPERTY_VALUE, pFinalValues->Value);
-                    // the property sets are wrapper classes, translating the Value property into a call to
-                    // the appropriate XParameters interface
-            }
-        }
-    }
-    else
-    {
-        sal_Int32 nParamsLeft = rParams.size();
-        if (nParamsLeft)
-        {
-            ::cppu::OInterfaceIteratorHelper aIter(m_aParameterListeners);
-            DatabaseParameterEvent aEvt(static_cast<XWeak*>(this), m_pParameterInfo->pParameters);
-
-            _rClearForNotifies.clear();
-            while (aIter.hasMoreElements() && !bCanceled)
-                bCanceled = !((XDatabaseParameterListener*)aIter.next())->approveParameter(aEvt);
-            _rClearForNotifies.attach(m_aMutex);
-        }
-    }
-    return !bCanceled;
+    return true;
 }
 
 //------------------------------------------------------------------------------
@@ -1895,21 +1279,11 @@ sal_Bool ODatabaseForm::executeRowSet(ReusableMutexGuard& _rClearForNotifies, sa
     {
         // don't use any parameters if we don't have a valid parent
         nConcurrency = ResultSetConcurrency::READ_ONLY;
-        //  clearParameters();
-        if(m_pParameterInfo && m_pParameterInfo->nCount > 0)
-        {
-            // reset all parameter values
-            // (fs@openoffice.org: what is the difference to the "clearParameter" call which was removed
-            // in revision 1.39, and replaced with the lines below??)
-            Reference<XParameters>  xExecutionParams;
-            query_aggregation( m_xAggregate, xExecutionParams);
-            for (sal_Int32 nPos=1;nPos <= m_pParameterInfo->nCount; ++nPos)
-                xExecutionParams->setNull(nPos,DataType::VARCHAR);
+        m_aParameterManager.setAllParametersNull();
 
-            // switch to "insert only" mode
-            saveInsertOnlyState( );
-            m_xAggregateSet->setPropertyValue( PROPERTY_INSERTONLY, makeAny( sal_True ) );
-        }
+        // switch to "insert only" mode
+        saveInsertOnlyState( );
+        m_xAggregateSet->setPropertyValue( PROPERTY_INSERTONLY, makeAny( sal_True ) );
     }
     else if (m_bAllowInsert || m_bAllowUpdate || m_bAllowDelete)
         nConcurrency = ResultSetConcurrency::UPDATABLE;
@@ -1939,6 +1313,8 @@ sal_Bool ODatabaseForm::executeRowSet(ReusableMutexGuard& _rClearForNotifies, sa
         else
             onError(eDb, FRM_RES_STRING(RID_STR_READERROR));
         _rClearForNotifies.attach(m_aMutex);
+
+        restoreInsertOnlyState( );
     }
 
     if (bSuccess)
@@ -2008,10 +1384,13 @@ void ODatabaseForm::disposing()
     EventObject aEvt(static_cast<XWeak*>(this));
     m_aLoadListeners.disposeAndClear(aEvt);
     m_aRowSetApproveListeners.disposeAndClear(aEvt);
-    m_aParameterListeners.disposeAndClear(aEvt);
+    m_aParameterManager.disposing( aEvt );
     m_aResetListeners.disposeAndClear(aEvt);
     m_aSubmitListeners.disposeAndClear(aEvt);
     m_aErrorListeners.disposeAndClear(aEvt);
+
+    m_aParameterManager.dispose();   // (to free any references it may have to me)
+    m_aFilterManager.dispose();      // (dito)
 
     OFormComponents::disposing();
     OPropertySetAggregationHelper::disposing();
@@ -2041,29 +1420,44 @@ void ODatabaseForm::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    BEGIN_AGGREGATION_PROPERTY_HELPER(15, m_xAggregateSet)
-        // this property is overwritten by the form
-        RemoveProperty(_rAggregateProps, PROPERTY_PRIVILEGES);
-        RemoveProperty(_rAggregateProps, PROPERTY_DATASOURCE);
-        RemoveProperty(_rAggregateProps, PROPERTY_ACTIVE_CONNECTION);
-            // we remove and re-declare the DataSourceName property, 'cause we want it to be constrained, and the
-            // original property of our aggregate isn't
+    BEGIN_AGGREGATION_PROPERTY_HELPER(18, m_xAggregateSet)
+        // we want to "override" the privileges, since we have additional "AllowInsert" etc. properties
+        RemoveProperty( _rAggregateProps, PROPERTY_PRIVILEGES );
 
-        DECL_IFACE_PROP3(ACTIVE_CONNECTION,         XConnection,    BOUND, TRANSIENT, MAYBEVOID);
-        DECL_PROP1(NAME,            ::rtl::OUString,                BOUND);
-        DECL_PROP1(MASTERFIELDS,    Sequence< ::rtl::OUString >,                    BOUND);
-        DECL_PROP1(DETAILFIELDS,    Sequence< ::rtl::OUString >,                    BOUND);
-        DECL_PROP2(DATASOURCE,      ::rtl::OUString,                BOUND, CONSTRAINED);
-        DECL_PROP3(CYCLE,           TabulatorCycle,                 BOUND, MAYBEVOID, MAYBEDEFAULT);
-        DECL_PROP1(NAVIGATION,      NavigationBarMode,              BOUND);
-        DECL_BOOL_PROP1(ALLOWADDITIONS,                             BOUND);
-        DECL_BOOL_PROP1(ALLOWEDITS,                                 BOUND);
-        DECL_BOOL_PROP1(ALLOWDELETIONS,                             BOUND);
-        DECL_PROP2(PRIVILEGES,      sal_Int32,                      TRANSIENT, READONLY);
-        DECL_PROP1(TARGET_URL,      ::rtl::OUString,                BOUND);
-        DECL_PROP1(TARGET_FRAME,    ::rtl::OUString,                BOUND);
-        DECL_PROP1(SUBMIT_METHOD,   FormSubmitMethod,       BOUND);
-        DECL_PROP1(SUBMIT_ENCODING, FormSubmitEncoding, BOUND);
+        // InsertOnly is also to be overridden, since we sometimes change it ourself
+        RemoveProperty( _rAggregateProps, PROPERTY_INSERTONLY );
+
+        // we remove and re-declare the DataSourceName property, 'cause we want it to be constrained, and the
+        // original property of our aggregate isn't
+        RemoveProperty( _rAggregateProps, PROPERTY_DATASOURCE );
+
+        // for connection sharing, we need to override the ActiveConnection property, too
+        RemoveProperty( _rAggregateProps, PROPERTY_ACTIVE_CONNECTION );
+
+        // the Filter property is also overwritten, since we have some implicit filters
+        // (e.g. the ones which result from linking master fields to detail fields
+        // via column names instead of parameters)
+        RemoveProperty( _rAggregateProps, PROPERTY_FILTER );
+        RemoveProperty( _rAggregateProps, PROPERTY_APPLYFILTER );
+
+        DECL_IFACE_PROP3( ACTIVE_CONNECTION,XConnection,                    BOUND, TRANSIENT, MAYBEVOID    );
+        DECL_BOOL_PROP2 ( APPLYFILTER,                                      BOUND, MAYBEDEFAULT            );
+        DECL_PROP1      ( NAME,             ::rtl::OUString,                BOUND                          );
+        DECL_PROP1      ( MASTERFIELDS,     Sequence< ::rtl::OUString >,    BOUND                          );
+        DECL_PROP1      ( DETAILFIELDS,     Sequence< ::rtl::OUString >,    BOUND                          );
+        DECL_PROP2      ( DATASOURCE,       ::rtl::OUString,                BOUND, CONSTRAINED             );
+        DECL_PROP3      ( CYCLE,            TabulatorCycle,                 BOUND, MAYBEVOID, MAYBEDEFAULT );
+        DECL_PROP2      ( FILTER,           ::rtl::OUString,                BOUND, MAYBEDEFAULT            );
+        DECL_BOOL_PROP2 ( INSERTONLY,                                       BOUND, MAYBEDEFAULT            );
+        DECL_PROP1      ( NAVIGATION,       NavigationBarMode,              BOUND                          );
+        DECL_BOOL_PROP1 ( ALLOWADDITIONS,                                   BOUND                          );
+        DECL_BOOL_PROP1 ( ALLOWEDITS,                                       BOUND                          );
+        DECL_BOOL_PROP1 ( ALLOWDELETIONS,                                   BOUND                          );
+        DECL_PROP2      ( PRIVILEGES,       sal_Int32,                      TRANSIENT, READONLY            );
+        DECL_PROP1      ( TARGET_URL,       ::rtl::OUString,                BOUND                          );
+        DECL_PROP1      ( TARGET_FRAME,     ::rtl::OUString,                BOUND                          );
+        DECL_PROP1      ( SUBMIT_METHOD,    FormSubmitMethod,               BOUND                          );
+        DECL_PROP1      ( SUBMIT_ENCODING,  FormSubmitEncoding,             BOUND                          );
     END_AGGREGATION_PROPERTY_HELPER();
 }
 
@@ -2124,7 +1518,7 @@ Any SAL_CALL ODatabaseForm::getFastPropertyValue( sal_Int32 nHandle )
 {
     if ((nHandle == PROPERTY_ID_ISMODIFIED) && (m_nResetsPending > 0))
         return ::cppu::bool2any((sal_False));
-        // don't allow the aggregate which is currently reset to return a (temporary) "yes"
+        // don't allow the aggregate which is currently being reset to return a (temporary) "yes"
     else
         return OPropertySetAggregationHelper::getFastPropertyValue(nHandle);
 }
@@ -2134,25 +1528,25 @@ void ODatabaseForm::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
     switch (nHandle)
     {
+        case PROPERTY_ID_INSERTONLY:
+            rValue <<= m_bInsertOnly;
+            break;
+
+        case PROPERTY_ID_FILTER:
+            rValue <<= m_aFilterManager.getFilterComponent( FormFilterManager::fcPublicFilter );
+            break;
+
+        case PROPERTY_ID_APPLYFILTER:
+            rValue <<= m_aFilterManager.isApplyPublicFilter();
+            break;
+
         case PROPERTY_ID_DATASOURCE:
-        {
-            rValue = makeAny(::rtl::OUString());
-            try
-            {
-                rValue = m_xAggregateSet->getPropertyValue(PROPERTY_DATASOURCE);
-            }
-            catch(Exception&) { }
-        }
-        break;
+            rValue = m_xAggregateSet->getPropertyValue( PROPERTY_DATASOURCE );
+            break;
         case PROPERTY_ID_ACTIVE_CONNECTION:
-        {
-            try
-            {
-                rValue = m_xAggregateSet->getPropertyValue(PROPERTY_ACTIVE_CONNECTION);
-            }
-            catch(Exception&) { }
-        }
-        break;
+            rValue = m_xAggregateSet->getPropertyValue( PROPERTY_ACTIVE_CONNECTION );
+            break;
+
         case PROPERTY_ID_TARGET_URL:
             rValue <<= m_aTargetURL;
             break;
@@ -2202,6 +1596,18 @@ sal_Bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOl
     sal_Bool bModified(sal_False);
     switch (nHandle)
     {
+        case PROPERTY_ID_INSERTONLY:
+            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_bInsertOnly );
+            break;
+
+        case PROPERTY_ID_FILTER:
+            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aFilterManager.getFilterComponent( FormFilterManager::fcPublicFilter ) );
+            break;
+
+        case PROPERTY_ID_APPLYFILTER:
+            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aFilterManager.isApplyPublicFilter() );
+            break;
+
         case PROPERTY_ID_DATASOURCE:
         {
             Any aAggregateProperty;
@@ -2263,13 +1669,34 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
 {
     switch (nHandle)
     {
-        case PROPERTY_ID_DATASOURCE:
-            try
-            {
-                m_xAggregateSet->setPropertyValue(PROPERTY_DATASOURCE, rValue);
-            }
-            catch(Exception&) { }
+        case PROPERTY_ID_INSERTONLY:
+            rValue >>= m_bInsertOnly;
+            if ( m_aIgnoreResult.hasValue() )
+                m_aIgnoreResult <<= m_bInsertOnly;
+            else
+                m_xAggregateSet->setPropertyValue( PROPERTY_INSERTONLY, makeAny( m_bInsertOnly ) );
             break;
+
+        case PROPERTY_ID_FILTER:
+        {
+            ::rtl::OUString sNewFilter;
+            rValue >>= sNewFilter;
+            m_aFilterManager.setFilterComponent( FormFilterManager::fcPublicFilter, sNewFilter );
+        }
+        break;
+
+        case PROPERTY_ID_APPLYFILTER:
+        {
+            sal_Bool bApply = sal_True;
+            rValue >>= bApply;
+            m_aFilterManager.setApplyPublicFilter( bApply );
+        }
+        break;
+
+        case PROPERTY_ID_DATASOURCE:
+            m_xAggregateSet->setPropertyValue(PROPERTY_DATASOURCE, rValue);
+            break;
+
         case PROPERTY_ID_ACTIVE_CONNECTION:
             try
             {
@@ -2335,13 +1762,35 @@ PropertyState ODatabaseForm::getPropertyStateByHandle(sal_Int32 nHandle)
     {
         case PROPERTY_ID_NAVIGATION:
             return (NavigationBarMode_CURRENT == m_eNavigation) ? PropertyState_DEFAULT_VALUE : PropertyState_DIRECT_VALUE;
-            break;
+
         case PROPERTY_ID_CYCLE:
             if (!m_aCycle.hasValue())
                 eState = PropertyState_DEFAULT_VALUE;
             else
                 eState = PropertyState_DIRECT_VALUE;
             break;
+
+        case PROPERTY_ID_INSERTONLY:
+            if ( !m_bInsertOnly )
+                eState = PropertyState_DEFAULT_VALUE;
+            else
+                eState = PropertyState_DIRECT_VALUE;
+            break;
+
+        case PROPERTY_ID_FILTER:
+            if ( !m_aFilterManager.getFilterComponent( FormFilterManager::fcPublicFilter ).getLength() )
+                eState = PropertyState_DEFAULT_VALUE;
+            else
+                eState = PropertyState_DIRECT_VALUE;
+            break;
+
+        case PROPERTY_ID_APPLYFILTER:
+            if ( m_aFilterManager.isApplyPublicFilter() )
+                eState = PropertyState_DEFAULT_VALUE;
+            else
+                eState = PropertyState_DIRECT_VALUE;
+            break;
+
         default:
             eState = OPropertySetAggregationHelper::getPropertyStateByHandle(nHandle);
     }
@@ -2353,12 +1802,14 @@ void ODatabaseForm::setPropertyToDefaultByHandle(sal_Int32 nHandle)
 {
     switch (nHandle)
     {
+        case PROPERTY_ID_INSERTONLY:
+        case PROPERTY_ID_FILTER:
+        case PROPERTY_ID_APPLYFILTER:
         case PROPERTY_ID_NAVIGATION:
-            setFastPropertyValue(nHandle, makeAny(NavigationBarMode_CURRENT));
-            break;
         case PROPERTY_ID_CYCLE:
-            setFastPropertyValue(nHandle, Any());
+            setFastPropertyValue( nHandle, getPropertyDefaultByHandle( nHandle ) );
             break;
+
         default:
             OPropertySetAggregationHelper::setPropertyToDefaultByHandle(nHandle);
     }
@@ -2369,11 +1820,21 @@ Any ODatabaseForm::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 {
     switch (nHandle)
     {
+        case PROPERTY_ID_INSERTONLY:
+            return makeAny( (sal_Bool)(sal_False ) );
+
+        case PROPERTY_ID_FILTER:
+            return makeAny( ::rtl::OUString() );
+
+        case PROPERTY_ID_APPLYFILTER:
+            return makeAny( (sal_Bool)(sal_True ) );
+
         case PROPERTY_ID_NAVIGATION:
             return makeAny(NavigationBarMode_CURRENT);
-            break;
+
         case PROPERTY_ID_CYCLE:
             return Any();
+
         default:
             return OPropertySetAggregationHelper::getPropertyDefaultByHandle(nHandle);
     }
@@ -2490,61 +1951,20 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
 
         if (m_bSubForm)
         {
-            // Iterate through all columns and set the default value
-            Reference<XColumnsSupplier>  xColsSuppl(m_xAggregateSet, UNO_QUERY);
+            Reference< XColumnsSupplier > xParentColSupp( m_xParent, UNO_QUERY );
+            Reference< XNameAccess >      xParentCols;
+            if ( xParentColSupp.is() )
+                xParentCols = xParentColSupp->getColumns();
 
-            // now set the values on which a subform depends
-            Reference<XColumnsSupplier>  xParentColsSuppl(m_xParent, UNO_QUERY);
-            Reference<XNameAccess>  xParentCols = xParentColsSuppl->getColumns();
-            sal_Int32 nMasterLen = m_aMasterFields.getLength();
-            if (xParentCols->hasElements() && (nMasterLen > 0))
+            if ( xParentCols.is() && xParentCols->hasElements() && m_aMasterFields.getLength() )
             {
                 try
                 {
                     // analyze our parameters
-                    if ( !m_pParameterInfo )
-                        createParameterInfo();
+                    if ( !m_aParameterManager.isUpToDate() )
+                        updateParameterInfo();
 
-                    if ( m_pParameterInfo && m_pParameterInfo->nCount )
-                    {
-                        Reference<XNameAccess>  xCols(xColsSuppl->getColumns(), UNO_QUERY);
-
-                        const ::rtl::OUString* pMasterFields = m_aMasterFields.getConstArray();
-                        const ::rtl::OUString* pDetailFields = m_aDetailFields.getConstArray();
-                        const ::rtl::OUString* pDetailFieldsEnd = pDetailFields + m_aDetailFields.getLength();
-                        for (pDetailFields; pDetailFields < pDetailFieldsEnd; ++pDetailFields, ++pMasterFields)
-                        {
-                            Reference<XPropertySet>  xMasterField, xField;
-                            MapUString2INT32::const_iterator aFind;
-                            if ( (aFind = m_pParameterInfo->aParamMapping.find(*pDetailFields)) != m_pParameterInfo->aParamMapping.end() )
-                            {   // we really have a parameter column with this name
-                                Reference< XPropertySet > xParamColumn;
-                                do
-                                {
-                                    m_pParameterInfo->xParamsAsIndex->getByIndex(aFind->second) >>= xParamColumn;
-                                    if (xParamColumn.is())
-                                    {   // we really really have it :)
-                                        ::rtl::OUString sParamColumnRealName;
-                                        xParamColumn->getPropertyValue(PROPERTY_REALNAME) >>= sParamColumnRealName;
-                                        if (xCols->hasByName(sParamColumnRealName))
-                                        {   // our own columns have a column which's name equals the real name of the param column
-                                            if (xParentCols->hasByName(*pMasterFields))
-                                            {   // and our parent's cols know the master field which is connected to the current detail field
-
-                                                // -> transfer the value property
-                                                xParentCols->getByName(*pMasterFields) >>= xMasterField;
-                                                xCols->getByName(sParamColumnRealName) >>= xField;
-                                                if (xField.is() && xMasterField.is())
-                                                    xField->setPropertyValue(PROPERTY_VALUE, xMasterField->getPropertyValue(PROPERTY_VALUE));
-                                            }
-                                        }
-                                    }
-                                    ++aFind;
-                                }
-                                while ( aFind != m_pParameterInfo->aParamMapping.end() );
-                            }
-                        }
-                    }
+                    m_aParameterManager.resetParameterValues( );
                 }
                 catch(const Exception&)
                 {
@@ -2869,8 +2289,7 @@ void SAL_CALL ODatabaseForm::removeSQLErrorListener(const Reference<XSQLErrorLis
 void ODatabaseForm::invlidateParameters()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    DELETEZ(m_pParameterInfo);
-    clearParameters();
+    m_aParameterManager.clearAllParameterInformation();
 }
 
 //==============================================================================
@@ -3659,12 +3078,12 @@ void SAL_CALL ODatabaseForm::removeRowSetApproveListener(const Reference<XRowSet
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::addParameterListener(const Reference<XDatabaseParameterListener>& _rListener) throw( RuntimeException )
 {
-    m_aParameterListeners.addInterface(_rListener);
+    m_aParameterManager.addParameterListener( _rListener );
 }
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::removeParameterListener(const Reference<XDatabaseParameterListener>& _rListener) throw( RuntimeException )
 {
-    m_aParameterListeners.removeInterface(_rListener);
+    m_aParameterManager.removeParameterListener( _rListener );
 }
 
 //==============================================================================
@@ -4005,168 +3424,142 @@ Sequence<sal_Int32> SAL_CALL ODatabaseForm::deleteRows(const Sequence<Any>& rows
 }
 
 // com::sun::star::sdbc::XParameters
-namespace
-{
-    void checkParameters(::std::vector<bool>& _rBoolVector,sal_Int32 _nParameterIndex)
-    {
-        if ((sal_Int32)_rBoolVector.size() < _nParameterIndex)
-        {
-            _rBoolVector.reserve(_rBoolVector.capacity() + _nParameterIndex);
-            for (sal_Int32 i = 0; i < _nParameterIndex; i++)
-                _rBoolVector.push_back(false);
-        }
-        _rBoolVector[_nParameterIndex - 1] = true;
-    }
-}
-//------------------------------------------------------------------------------
-#define PARAMETER_VISITED(method)                                       \
-    ::osl::MutexGuard aGuard(m_aMutex);                                 \
-    Reference<XParameters>  xParameters;                                \
-    if (query_aggregation( m_xAggregate, xParameters))                  \
-        xParameters->method;                                            \
-                                                                        \
-    checkParameters(m_aParameterVisited,parameterIndex)
-
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setNull(sal_Int32 parameterIndex, sal_Int32 sqlType) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setNull(parameterIndex, sqlType));
+    m_aParameterManager.setNull(parameterIndex, sqlType);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setObjectNull(sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setObjectNull(parameterIndex, sqlType, typeName));
+    m_aParameterManager.setObjectNull(parameterIndex, sqlType, typeName);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setBoolean(sal_Int32 parameterIndex, sal_Bool x) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setBoolean(parameterIndex, x));
+    m_aParameterManager.setBoolean(parameterIndex, x);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setByte(sal_Int32 parameterIndex, sal_Int8 x) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setByte(parameterIndex, x));
+    m_aParameterManager.setByte(parameterIndex, x);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setShort(sal_Int32 parameterIndex, sal_Int16 x) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setShort(parameterIndex, x));
+    m_aParameterManager.setShort(parameterIndex, x);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setInt(sal_Int32 parameterIndex, sal_Int32 x) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setInt(parameterIndex, x));
+    m_aParameterManager.setInt(parameterIndex, x);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setLong(sal_Int32 parameterIndex, sal_Int64 x) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setLong(parameterIndex, x));
+    m_aParameterManager.setLong(parameterIndex, x);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setFloat(sal_Int32 parameterIndex, float x) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setFloat(parameterIndex, x));
+    m_aParameterManager.setFloat(parameterIndex, x);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setDouble(sal_Int32 parameterIndex, double x) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setDouble(parameterIndex, x));
+    m_aParameterManager.setDouble(parameterIndex, x);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setString(sal_Int32 parameterIndex, const ::rtl::OUString& x) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setString(parameterIndex, x));
+    m_aParameterManager.setString(parameterIndex, x);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setBytes(sal_Int32 parameterIndex, const Sequence< sal_Int8 >& x) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setBytes(parameterIndex, x));
+    m_aParameterManager.setBytes(parameterIndex, x);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setDate(sal_Int32 parameterIndex, const ::com::sun::star::util::Date& x) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setDate(parameterIndex, x));
+    m_aParameterManager.setDate(parameterIndex, x);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setTime(sal_Int32 parameterIndex, const ::com::sun::star::util::Time& x) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setTime(parameterIndex, x));
+    m_aParameterManager.setTime(parameterIndex, x);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setTimestamp(sal_Int32 parameterIndex, const ::com::sun::star::util::DateTime& x) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setTimestamp(parameterIndex, x));
+    m_aParameterManager.setTimestamp(parameterIndex, x);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setBinaryStream(sal_Int32 parameterIndex, const Reference<XInputStream>& x, sal_Int32 length) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setBinaryStream(parameterIndex, x, length));
+    m_aParameterManager.setBinaryStream(parameterIndex, x, length);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setCharacterStream(sal_Int32 parameterIndex, const Reference<XInputStream>& x, sal_Int32 length) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setCharacterStream(parameterIndex, x, length));
+    m_aParameterManager.setCharacterStream(parameterIndex, x, length);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setObjectWithInfo(sal_Int32 parameterIndex, const Any& x, sal_Int32 targetSqlType, sal_Int32 scale) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setObjectWithInfo(parameterIndex, x, targetSqlType, scale));
+    m_aParameterManager.setObjectWithInfo(parameterIndex, x, targetSqlType, scale);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setObject(sal_Int32 parameterIndex, const Any& x) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setObject(parameterIndex, x));
+    m_aParameterManager.setObject(parameterIndex, x);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setRef(sal_Int32 parameterIndex, const Reference<XRef>& x) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setRef(parameterIndex, x));
+    m_aParameterManager.setRef(parameterIndex, x);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setBlob(sal_Int32 parameterIndex, const Reference<XBlob>& x) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setBlob(parameterIndex, x));
+    m_aParameterManager.setBlob(parameterIndex, x);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setClob(sal_Int32 parameterIndex, const Reference<XClob>& x) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setClob(parameterIndex, x));
+    m_aParameterManager.setClob(parameterIndex, x);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::setArray(sal_Int32 parameterIndex, const Reference<XArray>& x) throw( SQLException, RuntimeException )
 {
-    PARAMETER_VISITED(setArray(parameterIndex, x));
+    m_aParameterManager.setArray(parameterIndex, x);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::clearParameters() throw( SQLException, RuntimeException )
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
-    Reference<XParameters>  xParameters;
-    if (query_aggregation(m_xAggregate, xParameters))
-        xParameters->clearParameters();
-    m_aParameterVisited.clear();
+    m_aParameterManager.clearParameters();
 }
 
 // com::sun::star::lang::XServiceInfo
@@ -4352,7 +3745,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
     ::rtl::OUString sOrder;
     if (m_xAggregateSet.is())
     {
-        m_xAggregateSet->getPropertyValue(PROPERTY_FILTER_CRITERIA) >>= sFilter;
+        m_xAggregateSet->getPropertyValue(PROPERTY_FILTER) >>= sFilter;
         m_xAggregateSet->getPropertyValue(PROPERTY_SORT) >>= sOrder;
     }
     _rxOutStream << sFilter;
@@ -4451,8 +3844,8 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
         m_eNavigation = (NavigationBarMode)_rxInStream->readShort();
 
         _rxInStream >> sAggregateProp;
-        if (m_xAggregateSet.is())
-            m_xAggregateSet->setPropertyValue(PROPERTY_FILTER_CRITERIA, makeAny(sAggregateProp));
+        setPropertyValue(PROPERTY_FILTER, makeAny(sAggregateProp));
+
         _rxInStream >> sAggregateProp;
         if (m_xAggregateSet.is())
             m_xAggregateSet->setPropertyValue(PROPERTY_SORT, makeAny(sAggregateProp));
