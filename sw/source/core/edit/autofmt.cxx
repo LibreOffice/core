@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:17 $
+ *  last change: $Author: jp $ $Date: 2001-02-28 10:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,6 +371,9 @@ class SwAutoFormat
 public:
     SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 SwNodeIndex* pSttNd = 0, SwNodeIndex* pEndNd = 0 );
+    ~SwAutoFormat() {
+        delete pCharClass;
+    }
 };
 
 
