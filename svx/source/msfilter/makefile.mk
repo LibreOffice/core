@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2000-11-17 12:05:29 $
+#   last change: $Author: sj $ $Date: 2000-12-07 16:56:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,7 @@ SLOFILES=\
 
 EXCEPTIONSFILES= \
     $(SLO)$/eschesdo.obj	\
+    $(SLO)$/escherex.obj	\
     $(SLO)$/msdffimp.obj	\
     $(SLO)$/msocximex.obj	\
     $(OBJ)$/sxl_msdffimp.obj
