@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowTitle.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:26:47 $
+ *  last change: $Author: rt $ $Date: 2001-02-06 13:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 #include "moduledbu.hxx"
 #endif
 #ifndef _CNTIDS_HRC
-#include <sfx2/cntidS.hrc>
+#include <sfx2/cntids.hrc>
 #endif
 #ifndef DBAUI_TABLEWINDOWLISTBOX_HXX
 #include "TableWindowListBox.hxx"
