@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-14 15:25:48 $
+ *  last change: $Author: iha $ $Date: 2003-11-17 18:48:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,6 +489,9 @@ void lcl_createLegend(
             ceil( static_cast< double >( nNumberOfEntries ) /
                   static_cast< double >( nNumberOfRows ) ));
     }
+
+    if(nNumberOfRows<=0)
+        return;
 
     // calculate maximum height for current row
     std::vector< sal_Int32 > nMaxHeights( nNumberOfRows );
