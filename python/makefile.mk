@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2005-01-25 12:59:50 $
+#   last change: $Author: rt $ $Date: 2005-01-28 16:06:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,9 +132,9 @@ CXX:=$(COMPATH)$/bin$/CC
 .ENDIF          # "$(COMNAME)"=="sunpro5"
 
 .IF "$(OS)" == "IRIX"
-BUILD_ACTION=$(ENV_BUILD) gmake ; gmake install
+BUILD_ACTION=$(ENV_BUILD) gmake -j$(EXTMAXPROCESS) ; gmake install
 .ELSE
-BUILD_ACTION=$(ENV_BUILD) make ; make install
+BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) ; $(GNUMAKE) install
 .ENDIF
 .ELSE
 # ----------------------------------
