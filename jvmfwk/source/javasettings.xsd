@@ -16,12 +16,12 @@
 <element name="java">
  <complexType> 
   <sequence>
-   <element name="enabled" nillable="true" default="true" type="boolean"/>
    <element name="classesDirectory" type="string"/>
+   <element name="enabled" nillable="true" default="true" type="boolean"/>
    <element name="userClassPath" nillable="true" type="string"/>
-   <element name="javaInfo" nillable="true" type="jf:javaInfoType"/>
    <element name="vmParameters" nillable="true" type="jf:vmParametersType"/>
    <element name="jreLocations" nillable="true" type="jf:jreLocationsType"/>
+   <element name="javaInfo" nillable="true" type="jf:javaInfoType"/>
   </sequence>
  </complexType>
 
