@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarsmenucontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:13:09 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #ifndef __FRAMEWORK_UIELEMENT_TOOLBARSMENUCONTROLLER_HXX_
 #include <uielement/toolbarsmenucontroller.hxx>
 #endif
+
+#include <algorithm>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -144,6 +146,7 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+
 //#include <tools/solar.hrc>
 
 //_________________________________________________________________________________________________________________
@@ -168,11 +171,34 @@ static const char CMD_FORMULABAR[]              = ".uno:InsertFormula";
 static const char CMD_INPUTLINEBAR[]            = ".uno:InputLineVisible";
 static const char ITEM_DESCRIPTOR_RESOURCEURL[] = "ResourceURL";
 static const char ITEM_DESCRIPTOR_UINAME[]      = "UIName";
+static const char STATIC_PRIVATE_TB_RESOURCE[]  = "private:resource/toolbar/";
+
+static const char STATIC_CMD_PART[]             = ".uno:AvailableToolbars?Toolbar:string=";
 
 namespace framework
 {
 
 typedef std::hash_map< rtl::OUString, rtl::OUString, OUStringHashCode, ::std::equal_to< ::rtl::OUString > > ToolbarHashMap;
+
+struct ToolBarEntry
+{
+    rtl::OUString           aUIName;
+    rtl::OUString           aCommand;
+    sal_Bool                bVisible;
+    const CollatorWrapper*  pCollatorWrapper;
+};
+
+sal_Bool CompareToolBarEntry( const ToolBarEntry& aOne, const ToolBarEntry& aTwo )
+{
+    sal_Int32 nComp = aOne.pCollatorWrapper->compareString( aOne.aUIName, aTwo.aUIName );
+
+    if ( nComp < 0 )
+        return sal_True;
+    else if ( nComp > 0 )
+        return sal_False;
+    else
+        return sal_False;
+}
 
 DEFINE_XSERVICEINFO_MULTISERVICE        (   ToolbarsMenuController                  ,
                                             OWeakObject                             ,
@@ -184,7 +210,8 @@ DEFINE_INIT_SERVICE                     (   ToolbarsMenuController, {} )
 
 ToolbarsMenuController::ToolbarsMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
     PopupMenuControllerBase( xServiceManager ),
-    m_bModuleIdentified( sal_False )
+    m_bModuleIdentified( sal_False ),
+    m_aIntlWrapper( xServiceManager, Application::GetSettings().GetLocale() )
 {
 }
 
@@ -322,7 +349,6 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
     m_aCommandVector.clear();
 
     // Retrieve layout manager for additional information
-    sal_Int16                       nIndex( 1 );
     Reference< XPropertySet >       xPropSet( m_xFrame, UNO_QUERY );
     Reference< XLayoutManager >     xLayoutManager;
     Reference< awt::XMenuExtended > xMenuExtended( rPopupMenu, UNO_QUERY );
@@ -332,6 +358,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
     if ( xLayoutManager.is() )
     {
         ToolbarHashMap aToolbarHashMap;
+
         if ( m_xDocCfgMgr.is() )
         {
             Sequence< Sequence< com::sun::star::beans::PropertyValue > > aSeqDocToolBars =
@@ -346,10 +373,14 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             fillHashMap( aSeqToolBars, aToolbarHashMap );
         }
 
+        std::vector< ToolBarEntry > aSortedTbs;
+        rtl::OUString               aStaticCmdPart( RTL_CONSTASCII_USTRINGPARAM( STATIC_CMD_PART ));
+
         ToolbarHashMap::const_iterator pIter = aToolbarHashMap.begin();
         while ( pIter != aToolbarHashMap.end() )
         {
             rtl::OUString aUIName = pIter->second;
+            sal_Bool      bHideFromMenu( sal_False );
             if ( aUIName.getLength() == 0 &&
                  m_xPersistentWindowState.is() )
             {
@@ -364,6 +395,8 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                         {
                             if ( aWindowState[i].Name.equalsAscii( WINDOWSTATE_PROPERTY_UINAME ))
                                 aWindowState[i].Value >>= aUIName;
+                            else if ( aWindowState[i].Name.equalsAscii( WINDOWSTATE_PROPERTY_HIDEFROMENU ))
+                                aWindowState[i].Value >>= bHideFromMenu;
                         }
                     }
                 }
@@ -372,19 +405,42 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                 }
             }
 
-            if ( aUIName.getLength() > 0 )
+            if (( aUIName.getLength() > 0 ) && ( !bHideFromMenu ))
             {
-                sal_Bool bVisible = xLayoutManager->isElementVisible( pIter->first );
-                USHORT nItemCount = m_xPopupMenu->getItemCount();
-                m_xPopupMenu->insertItem( nIndex, aUIName, css::awt::MenuItemStyle::CHECKABLE, nItemCount );
-                if ( bVisible )
-                    m_xPopupMenu->checkItem( nIndex, sal_True );
-
-                // use VCL popup menu pointer to set vital information that are not part of the awt implementation
-                xMenuExtended->setCommand( nIndex, pIter->first ); // Store toolbar resource name
-                ++nIndex;
+                ToolBarEntry aTbEntry;
+                aTbEntry.aUIName = aUIName;
+                aTbEntry.aCommand = pIter->first;
+                aTbEntry.bVisible = xLayoutManager->isElementVisible( pIter->first );
+                aTbEntry.pCollatorWrapper = m_aIntlWrapper.getCaseCollator();
+                aSortedTbs.push_back( aTbEntry );
             }
             pIter++;
+        }
+
+        // sort toolbars
+        std::sort( aSortedTbs.begin(), aSortedTbs.end(), CompareToolBarEntry );
+
+        sal_Int16 nIndex( 1 );
+        for ( sal_uInt32 i = 0; i < aSortedTbs.size(); i++ )
+        {
+            USHORT nItemCount = m_xPopupMenu->getItemCount();
+            m_xPopupMenu->insertItem( nIndex, aSortedTbs[i].aUIName, css::awt::MenuItemStyle::CHECKABLE, nItemCount );
+            if ( aSortedTbs[i].bVisible )
+                m_xPopupMenu->checkItem( nIndex, sal_True );
+
+            // use VCL popup menu pointer to set vital information that are not part of the awt implementation
+            rtl::OUStringBuffer aStrBuf( aStaticCmdPart );
+
+            sal_Int32 n = aSortedTbs[i].aCommand.lastIndexOf( '/' );
+            if (( n > 0 ) && (( n+1 ) < aSortedTbs[i].aCommand.getLength() ))
+                aStrBuf.append( aSortedTbs[i].aCommand.copy( n+1 ));
+
+            rtl::OUString aCmd( aStrBuf.makeStringAndClear() );
+
+            // Store complete uno-command so it can also be dispatched. This is necessary to support
+            // the test tool!
+            xMenuExtended->setCommand( nIndex, aCmd );
+            ++nIndex;
         }
 
         // Create commands for non-toolbars
@@ -513,8 +569,9 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                 vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
                 PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
 
-                rtl::OUString aCmd = pVCLPopupMenu->GetItemCommand( rEvent.MenuId );
-                if ( aCmd.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( UNO_CMD ))) == 0 )
+                rtl::OUString aCmd( pVCLPopupMenu->GetItemCommand( rEvent.MenuId ));
+                sal_Int32 nIndex = aCmd.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STATIC_CMD_PART )));
+                if ( nIndex < 0 )
                 {
                     URL                     aTargetURL;
                     Sequence<PropertyValue> aArgs;
@@ -545,16 +602,23 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                             Any a = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
                             if ( a >>= xLayoutManager )
                             {
-                                rtl::OUString aToolBarName( aCmd );
-                                sal_Bool      bShow( !pVCLPopupMenu->IsItemChecked( rEvent.MenuId ));
-
-                                if ( bShow )
+                                // Extract toolbar name from the combined uno-command.
+                                sal_Int32 nIndex = aCmd.indexOf( '=' );
+                                if (( nIndex > 0 ) && (( nIndex+1 ) < aCmd.getLength() ))
                                 {
-                                    xLayoutManager->createElement( aToolBarName );
-                                    xLayoutManager->showElement( aToolBarName );
+                                    rtl::OUStringBuffer aBuf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STATIC_PRIVATE_TB_RESOURCE )));
+                                    aBuf.append( aCmd.copy( nIndex+1 ));
+
+                                    sal_Bool      bShow( !pVCLPopupMenu->IsItemChecked( rEvent.MenuId ));
+                                    rtl::OUString aToolBarResName( aBuf.makeStringAndClear() );
+                                    if ( bShow )
+                                    {
+                                        xLayoutManager->createElement( aToolBarResName );
+                                        xLayoutManager->showElement( aToolBarResName );
+                                    }
+                                    else
+                                        xLayoutManager->hideElement( aToolBarResName );
                                 }
-                                else
-                                    xLayoutManager->hideElement( aToolBarName );
                             }
                         }
                         catch ( Exception& )
