@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmoutputpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:59:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -793,7 +793,9 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         String sPath = SwMailMergeHelper::CallSaveAsDialog(sFilter);
         if(!sPath.Len())
             return 0;
-        String sTargetTempURL = URIHelper::SmartRelToAbs(utl::TempFile::CreateTempName());
+        String sTargetTempURL = URIHelper::SmartRel2Abs(
+            INetURLObject(), utl::TempFile::CreateTempName(),
+            URIHelper::GetMaybeFileHdl());
         SfxStringItem aURL( SID_FILE_NAME, sTargetTempURL );
         const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
                 String::CreateFromAscii( GetFILTER_XML() ),
@@ -1164,7 +1166,9 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         aOpt.SetParaFlags( LINEEND_CR );
         aOpt.WriteUserData( sFilterOptions );
     }
-    String sTargetTempURL = URIHelper::SmartRelToAbs(utl::TempFile::CreateTempName());
+    String sTargetTempURL = URIHelper::SmartRel2Abs(
+        INetURLObject(), utl::TempFile::CreateTempName(),
+        URIHelper::GetMaybeFileHdl());
     SfxStringItem aURL( SID_FILE_NAME, sTargetTempURL );
     const SfxFilter *pTargetSfxFlt = SwIoSystem::GetFilterOfFormat(
             String::CreateFromAscii( GetFILTER_XML() ),
@@ -1200,7 +1204,10 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
 
         //then save it
         SfxDispatcher* pSfxDispatcher = pTempView->GetViewFrame()->GetDispatcher();
-        SfxStringItem aName(SID_FILE_NAME, URIHelper::SmartRelToAbs(utl::TempFile::CreateTempName(0)) );
+        SfxStringItem aName(SID_FILE_NAME,
+                URIHelper::SmartRel2Abs(
+                    INetURLObject(), utl::TempFile::CreateTempName(0),
+                    URIHelper::GetMaybeFileHdl()) );
         SfxStringItem aFilterOptions(SID_FILE_FILTEROPTIONS, sFilterOptions);
         const SfxStringItem* pFilterOptions = 0;
         if(MM_DOCTYPE_TEXT == nDocType)
