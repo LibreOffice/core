@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-12 15:04:11 $
+ *  last change: $Author: jb $ $Date: 2001-03-20 17:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,8 +389,7 @@ namespace configmgr
     // WARNING this could be a big tree, because a change can contain subtreechanges!
     void OMergeTreeChangeList::handleChange(TreeChangeList &_rList)
     {
-        rtl::OUString aPath = _rList.pathToRoot;
-        ConfigurationName aName(aPath, ConfigurationName::Absolute());
+        ConfigurationName aName = _rList.pathToRoot;
         init(aName);                     // our Name start with pathToRoot
         m_pCurrentParent = check(aName); // pathToRoot must exist or will be created
 
