@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-16 14:42:27 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,12 @@ uno::Reference< beans::XPropertySet > getObjectPropertySet( const rtl::OUString&
         switch(eObjectType)
         {
             case OBJECTTYPE_PAGE:
-                    break;
+                {
+                    uno::Reference< XChartDocument > xChartDocument( xModel, uno::UNO_QUERY );
+                    if( xChartDocument.is())
+                        xObjectProperties.set( xChartDocument->getPageBackground() );
+                }
+                break;
             case OBJECTTYPE_TITLE:
                 {
                     if( TitleHelper::getIdentifierForTitle(TitleHelper::MAIN_TITLE).equals( aParticleID ) )
@@ -262,6 +267,10 @@ uno::Reference< beans::XPropertySet > getObjectPropertySet( const rtl::OUString&
         switch(eObjectType)
         {
             case OBJECTTYPE_PAGE:
+                pItemConverter =  new wrapper::GraphicPropertyItemConverter(
+                                        xObjectProperties, rDrawModel.GetItemPool(),
+                                        rDrawModel,
+                                        wrapper::GraphicPropertyItemConverter::FILL_PROPERTIES );
                     break;
             case OBJECTTYPE_TITLE:
                 pItemConverter = new wrapper::TitleItemConverter( xObjectProperties,
