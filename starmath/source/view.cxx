@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-08 17:19:35 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 12:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1105,6 +1105,7 @@ void SmViewShell::Impl_Print(
         aFont.SetAlign(ALIGN_TOP);
         aFont.SetWeight(WEIGHT_BOLD);
         aFont.SetSize(aSize650);
+        aFont.SetColor( Color(COL_BLACK) );
         rOutDev.SetFont(aFont);
 
         Size aTitleSize (GetTextSize(rOutDev, GetDoc()->GetTitle(), aOutRect.GetWidth() - 200));
@@ -1147,6 +1148,7 @@ void SmViewShell::Impl_Print(
         Font aFont;
 
         aFont.SetAlign(ALIGN_TOP);
+        aFont.SetColor( Color(COL_BLACK) );
 
         // get size
         rOutDev.SetFont(aFont);
