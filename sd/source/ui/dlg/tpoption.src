@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-04-04 06:56:19 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:23:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,12 +120,12 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ SWEDISH ] = "Ersättningsvisning" ;
         Text [ PORTUGUESE ] = "Visualização de substituição" ;
         Text[ chinese_simplified ] = "Ìæ»»ÏÔÊ¾ÄÚÈİ";
-        Text[ russian ] = "Çàìåíÿşùèé ïîêàç";
+        Text[ russian ] = "Àëüòåğíàòèâíûé ïîêàç";
         Text[ polish ] = "Wyœwietlanie zastêpcze";
         Text[ japanese ] = "‰¼•\\¦";
         Text[ chinese_traditional ] = "´À¥NÅã¥Ü¤º®e";
         Text[ arabic ] = "ÇáÚÑÖ ÇáÈÏíá";
-        Text[ greek ] = "ÅíáëëáêôéêŞ åìöÜíéóç";
+        Text[ greek ] = "ÅíáëëáêôéêŞ ğñïâïëŞ";
         Text[ korean ] = "´ëÃ¼ µğ½ºÇÃ·¹ÀÌ";
         Text[ turkish ] = "Alternatif görüntü";
         Text[ language_user1 ] = " ";
@@ -139,7 +139,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ ENGLISH ] = "Fremdgrafiken andeuten" ;
         Text [ NORWEGIAN ] = "Fremdgrafiken andeuten" ;
         Text [ DANISH ] = "Antyd ekstern grafik" ;
-        Text [ ENGLISH_US ] = "~Picture placeholders" ;
+        Text [ ENGLISH_US ] = "~Image placeholders" ;
         Text [ SPANISH ] = "~Indicar imágenes externas" ;
         Text [ FINNISH ] = "Fremdgrafiken andeuten" ;
         Text [ FRENCH ] = "Ébaucher les images externes" ;
@@ -263,7 +263,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ japanese ] = "•\\¦";
         Text[ chinese_traditional ] = "Åã¥Ü";
         Text[ arabic ] = "ÅÙåÇÑ";
-        Text[ greek ] = "ÅìöÜíéóç";
+        Text[ greek ] = "ĞñïâïëŞ";
         Text[ korean ] = "Ç¥½Ã";
         Text[ turkish ] = "Görüntüle";
         Text[ language_user1 ] = " ";
@@ -286,8 +286,8 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ PORTUGUESE_BRAZILIAN ] = "Lineale" ;
         Text [ SWEDISH ] = "~Linjaler synliga" ;
         Text [ PORTUGUESE ] = "Réguas visíveis" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾±ê³ß(~V)";
-        Text[ russian ] = "~Ïîêàçàòü ëèíåéêó";
+        Text[ chinese_simplified ] = "ÏÔÊ¾±ê³ß";
+        Text[ russian ] = "~Ïîêàçàòü ëèíåéêè";
         Text[ polish ] = "Widoczne linijki";
         Text[ japanese ] = "Ù°×‚Ì•\\¦(~V)";
         Text[ chinese_traditional ] = "Åã¥Ü¼Ğ¤Ø";
@@ -308,12 +308,12 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ english_us ] = "~Guides when moving" ;
         Text [ italian ] = "Linee guida durante lo spostamento" ;
         Text [ spanish ] = "~Guías al desplazar" ;
-        Text [ french ] = "Repères lors du déplacement" ;
+        Text [ french ] = "~Repères lors du déplacement" ;
         Text [ swedish ] = "Hjälplinjer vid ~förflyttning" ;
         Text [ danish ] = "Hjælpelinjer ved flytning" ;
         Text [ portuguese ] = "Guias ao ~mover objectos" ;
         Text [ portuguese_brazilian ] = "Hilfslinien beim ~Verschieben" ;
-        Text[ chinese_simplified ] = "ÔÚÒÆ¶¯¶ÔÏóÊ±ÏÔÊ¾¸¨ÖúÏß(~G)";
+        Text[ chinese_simplified ] = "ÔÚÒÆ¶¯¶ÔÏóÊ±ÏÔÊ¾¸¨ÖúÏß";
         Text[ russian ] = "Íàïğàâ. ëèíèè ïğè ïåğåìåùåíèè îáúåêòà";
         Text[ polish ] = "Linie pomocnicze przy przesuwaniu obiektu";
         Text[ japanese ] = "ˆÚ“®‚Ì•â•ü‚ğ•\\¦(~G)";
@@ -340,8 +340,8 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ danish ] = "Alle kontrolpunkter i bezier-redigeringen" ;
         Text [ portuguese_brazilian ] = "~Alle Handles im Bezier-Editor" ;
         Text [ portuguese ] = "~Todas as guias do editor Bézier" ;
-        Text[ chinese_simplified ] = "ÇúÏß±à¼­Æ÷ÄÚµÄÈ«²¿¿Øµã(~A)";
-        Text[ russian ] = "~Âñå òî÷êè â Ğåäàêòîğå Áåçüå";
+        Text[ chinese_simplified ] = "ÇúÏß±à¼­Æ÷Ö®ÄÚµÄÈ«²¿¿Øµã";
+        Text[ russian ] = "~Âñå òî÷êè â ğåäàêòîğå Áåçüå";
         Text[ polish ] = "~Wszystkie punkty sterown. w edytorze Beziera";
         Text[ japanese ] = "ÍŞ¼Şª‹Èü•ÒW‚Å§Œä“_‚ğ‚·‚×‚Ä•\\¦(~A)";
         Text[ chinese_traditional ] = "¦±½u½s¿èµ{¦¡¤ºªº¥ş³¡±±ÂI";
@@ -367,13 +367,13 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ danish ] = "Hvert enkelt objekts kontur" ;
         Text [ portuguese ] = "~Contorno de cada um dos objectos" ;
         Text [ portuguese_brazilian ] = "~Umriß jedes einzelnen Objektes" ;
-        Text[ chinese_simplified ] = "µ¥¸ö¶ÔÏóµÄÂÖÀª(~C)";
+        Text[ chinese_simplified ] = "µ¥¸ö¶ÔÏóµÄÂÖÀª";
         Text[ russian ] = "Êîíòóğ êàæäîãî îáúåêòà îòäåëüíî";
-        Text[ polish ] = "Kontur ka¿dego oddzielnego obiektu";
+        Text[ polish ] = "Obrys pojedynczych obiektów";
         Text[ japanese ] = "ŠeµÌŞ¼Şª¸Ä‚É“K‚µ‚½—ÖŠs‚Ì•\\¦(~C)";
         Text[ chinese_traditional ] = "¨C­Óª«¥óªº½ü¹ø";
         Text[ arabic ] = "ÇáÎØ ÇáßİÇİí áßá ßÇÆä İÑÏí";
-        Text[ greek ] = "Ğåñßãñáììá êÜèå ìåìïíùìİí. áíôéêåéìİíï~õ";
+        Text[ greek ] = "Ğåñßãñáììá êÜèå ìåìïíùìİíïõ áíôéêåéìİíï~õ";
         Text[ korean ] = "°¢ °³º° °³Ã¼ÀÇ À±°û(~C)";
         Text[ turkish ] = "Her bir nesnenin konturu";
         Text[ language_user1 ] = " ";
@@ -545,6 +545,24 @@ TabPage TP_OPTIONS_MISC
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Einstellungen" ;
         Text [ ENGLISH ] = "Settings" ;
+        Text[ english_us ] = "Settings";
+        Text[ portuguese ] = "Settings";
+        Text[ russian ] = "Íàñòğîéêè";
+        Text[ greek ] = "Ñõèìßóåéò";
+        Text[ dutch ] = "Settings";
+        Text[ french ] = "Paramètres";
+        Text[ spanish ] = "Settings";
+        Text[ italian ] = "Settings";
+        Text[ danish ] = "Settings";
+        Text[ swedish ] = "Inställningar";
+        Text[ polish ] = "Ustawienia";
+        Text[ portuguese_brazilian ] = "Settings";
+        Text[ japanese ] = "İ’è";
+        Text[ korean ] = "Settings";
+        Text[ chinese_simplified ] = "Éè¶¨";
+        Text[ chinese_traditional ] = "³]©w";
+        Text[ turkish ] = "Settings";
+        Text[ arabic ] = "ÇáÅÚÏÇÏÇÊ";
     };
     CheckBox CBX_MASTERPAGE_CACHE
     {
@@ -581,7 +599,7 @@ TabPage TP_OPTIONS_MISC
         Text = "~Kopie beim Verschieben" ;
         Text [ ENGLISH ] = "Drag with copy" ;
         Text [ dutch ] = "~Kopie bij verplaatsen" ;
-        Text [ english_us ] = "Copy while moving" ;
+        Text [ english_us ] = "Copy when moving" ;
         Text [ italian ] = "Copia nello spostare" ;
         Text [ spanish ] = "~Copia al desplazar" ;
         Text [ french ] = "Copie lors du ~déplacement" ;
@@ -676,7 +694,7 @@ TabPage TP_OPTIONS_MISC
         Text [ dutch ] = "Maateenheid" ;
         Text [ spanish ] = "Unidad de medida" ;
         Text [ english_us ] = "Meas. units" ;
-        Text[ chinese_simplified ] = "¶ÈÁ¿µ¥Î»";
+        Text[ chinese_simplified ] = "¼ÆÁ¿µ¥Î»";
         Text[ russian ] = "Åäèíèöà èçìåğåíèÿ";
         Text[ polish ] = "Jednostka miary";
         Text[ japanese ] = "g‚¤’PˆÊ";
@@ -710,7 +728,7 @@ TabPage TP_OPTIONS_MISC
         Text [ portuguese ] = "Intervalo entre tabulações" ;
         Text [ portuguese_brazilian ] = "Tabulatorabstand" ;
         Text[ chinese_simplified ] = "ÖÆ±í·ûµÄ¼ä¸ô";
-        Text[ russian ] = "Ïîçèöèÿ òàáóëÿöèè";
+        Text[ russian ] = "Ïîçèöèÿ òàáóëÿòîğà";
         Text[ polish ] = "Odstêp tabulatorów";
         Text[ japanese ] = "ÀÌŞŠÔŠu";
         Text[ chinese_traditional ] = "»sªí²Åªº¶¡¹j";
