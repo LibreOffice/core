@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:39:33 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ dutch ] = "Sleep de velden aan de rechterzijde met de muis naar het gewenste bereik." ;
         Text [ spanish ] = "Arrastre los campos de la página derecha hacia el área deseada." ;
         Text [ english_us ] = "Drag the fields from the right into the desired position." ;
-        Text[ chinese_simplified ] = "Çë½èÖúÊó±ê½«ÓÒÒ³ÖĞµÄ×Ö¶ÎÍÏÀ­µ½Ï£ÍûµÄÇøÓò¡£";
+        Text[ chinese_simplified ] = "ÓÃÊó±ê½«ÓÒÒ³ÖĞµÄ×Ö¶ÎÒÆµ½Ö¸¶¨µÄÇøÓò¡£";
         Text[ russian ] = "Ñ ïîìîùüş ìûøè ïåğåòÿíèòå ïîëå ñ ïğàâîé ñòîğîíû â æåëàåìóş îáëàñòü.";
         Text[ polish ] = "Przesuñ pola z prawej strony za pomoc¹ myszy do ¿¹danego obszaru.";
         Text[ japanese ] = "‰E‘¤‚É‚ ‚éÌ¨°ÙÄŞÎŞÀİ‚ğ”CˆÓ‚Ì—Ìˆæ‚ÉÄŞ×¯¸Ş‚µ‚Ü‚·B";
