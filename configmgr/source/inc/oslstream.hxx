@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oslstream.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-25 06:50:58 $
+ *  last change: $Author: lla $ $Date: 2001-05-31 14:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #include <osl/file.hxx>
 #endif
 
+#include <trivialbufferedfile.hxx>
 
 namespace configmgr
 {
@@ -110,6 +111,29 @@ public:
 
 // UNO Anbindung
     DECLARE_UNO3_AGG_DEFAULTS(OSLInputStreamWrapper, InputStreamWrapper_Base);
+
+// stario::XInputStream
+    virtual sal_Int32   SAL_CALL    readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
+    virtual sal_Int32   SAL_CALL    readSomeBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
+    virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
+    virtual sal_Int32   SAL_CALL    available() throw(stario::NotConnectedException, staruno::RuntimeException);
+    virtual void        SAL_CALL    closeInput() throw(stario::NotConnectedException, staruno::RuntimeException);
+};
+
+// -----------------------------------------------------------------------------
+class OSLInputBufferedStreamWrapper : public InputStreamWrapper_Base
+{
+    ::osl::Mutex    m_aMutex;
+    OTrivialBufferedFile*   m_pFile;
+    sal_Bool        m_bFileOwner : 1;
+
+public:
+    // OSLInputStreamWrapper(OTrivialBufferedFile& _rStream);
+    OSLInputBufferedStreamWrapper(OTrivialBufferedFile* pStream, sal_Bool bOwner=sal_False);
+    virtual ~OSLInputBufferedStreamWrapper();
+
+// UNO Anbindung
+    DECLARE_UNO3_AGG_DEFAULTS(OSLInputBufferedStreamWrapper, InputStreamWrapper_Base);
 
 // stario::XInputStream
     virtual sal_Int32   SAL_CALL    readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
