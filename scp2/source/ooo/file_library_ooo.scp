@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.71 $
+*  $Revision: 1.72 $
 *
-*  last change: $Author: hr $ $Date: 2004-11-26 21:52:02 $
+*  last change: $Author: rt $ $Date: 2004-12-15 09:41:47 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1397,12 +1397,6 @@ File gid_File_Lib_Reg
     Dir = gid_Dir_Program;
     Styles = (PACKED, SETUPZIP);
 End
-
-#ifdef WNT
-
-STD_SETUPZIP_LIB_FILE( gid_File_Lib_Reg4msdoc, reg4msdoc )
-
-#endif
 
 #ifdef WNT
 
