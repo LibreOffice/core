@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-28 12:04:56 $
+ *  last change: $Author: sj $ $Date: 2000-11-30 18:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1525,7 +1525,8 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
             {
                 SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
 //-/                pObj->TakeAttributes( aSet, sal_False, sal_False );
-                aSet.Put(pObj->GetItemSet());
+//-/                aSet.Put(pObj->GetItemSet());
+                aSet.Put(pObj->GetItem(pMap->nWID));
 
                 if(SvxUnoTextRangeBase::GetPropertyValueHelper(  aSet, pMap, aAny ))
                     return aAny;
@@ -1541,8 +1542,6 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
 
                 if(!aSet.Count())
                 {
-                    if(pMap->nWID >= SID_ATTR_3D_START && pMap->nWID <= SID_ATTR_3D_END)
-                    {
 //-/                    if(pMap->nWID >= SID_ATTR_3D_START && pMap->nWID <= SID_ATTR_3D_END)
 //-/                    {
 //-/                        // 3D-Attribut, eigenen Default
@@ -1552,13 +1551,10 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
 //-/                    }
 //-/                    else
 //-/                    {
-                        // Default aus ItemPool holen
-                        if(pModel->GetItemPool().IsWhich(pMap->nWID))
-                            aSet.Put(pModel->GetItemPool().GetDefaultItem(pMap->nWID));
+                    // Default aus ItemPool holen
+                    if(pModel->GetItemPool().IsWhich(pMap->nWID))
+                        aSet.Put(pModel->GetItemPool().GetDefaultItem(pMap->nWID));
 //-/                    }
-
-                    }
-
                 }
 
                 if(aSet.Count())
