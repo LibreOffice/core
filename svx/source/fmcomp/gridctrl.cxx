@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 14:18:40 $
+ *  last change: $Author: fs $ $Date: 2001-09-10 12:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,7 +518,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     sal_uInt16      nX = 0;
     sal_uInt16      nY = 0;
     Rectangle   aRect(((DbGridControl*)GetParent())->GetControlArea());
-    const long  nH      = aRect.GetSize().Height() - 1;
+    const long  nH      = aRect.GetSize().Height();
     Size        aBorder = LogicToPixel(Size(3, 3),MAP_APPFONT);
                 aBorder = Size(CalcZoom(aBorder.Width()), CalcZoom(aBorder.Height()));
 
@@ -526,7 +526,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     //
     XubString aText    = m_aRecordText.GetText();
     long nTextWidth = m_aRecordText.GetTextWidth(aText);
-    m_aRecordText.SetPosPixel(Point(nX,nY+1) );
+    m_aRecordText.SetPosPixel(Point(nX,nY) );
     m_aRecordText.SetSizePixel(Size(nTextWidth,nH));
     nX += (sal_uInt16)(nTextWidth + aBorder.Width());
 
@@ -536,12 +536,12 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
 
     aText      = m_aRecordOf.GetText();
     nTextWidth = m_aRecordOf.GetTextWidth(aText);
-    m_aRecordOf.SetPosPixel(Point(nX,nY+1) );
+    m_aRecordOf.SetPosPixel(Point(nX,nY) );
     m_aRecordOf.SetSizePixel(Size(nTextWidth,nH));
     nX += (sal_uInt16)(nTextWidth + aBorder.Width());
 
     nTextWidth = m_aRecordCount.GetTextWidth( String::CreateFromAscii("0000000 (00000)") );
-    m_aRecordCount.SetPosPixel(Point(nX,nY+1) );
+    m_aRecordCount.SetPosPixel(Point(nX,nY) );
     m_aRecordCount.SetSizePixel(Size(nTextWidth,nH));
     nX += (sal_uInt16)(nTextWidth + aBorder.Width());
 
@@ -575,7 +575,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
             DEFAULTFONT_FLAGS_ONLYONE,
             this
         );
-        aApplFont.SetSize(Size(0, nH-6));
+        aApplFont.SetSize( Size( 0, nH - 2 ) );
         m_aAbsolute.SetFont(aApplFont);
 
         aApplFont.SetTransparent( sal_True );
