@@ -2,7 +2,7 @@
  *
  *  $RCSfile: ScAccessibleCell.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
  *  last change: $Author: sw $
  *
@@ -84,6 +84,9 @@ import util.SOfficeFactory;
 import util.utils;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.table.XColumnRowRange;
+import com.sun.star.table.XTableColumns;
+import com.sun.star.beans.XPropertySet;
 
 /**
  * Test for object which is represented by accessible component of
@@ -173,10 +176,27 @@ public class ScAccessibleCell extends TestCase {
             }
             xCell = oSheet.getCellByPosition(1, 0) ;
             xCell.setFormula(text);
+            XColumnRowRange oColumnRowRange = (XColumnRowRange)
+                UnoRuntime.queryInterface(XColumnRowRange.class, oSheet);
+            XTableColumns oColumns = (XTableColumns) oColumnRowRange.getColumns();
+            XIndexAccess oIndexAccess = (XIndexAccess)
+                UnoRuntime.queryInterface(XIndexAccess.class, oColumns);
+            XPropertySet column = (XPropertySet) UnoRuntime.queryInterface(
+                                XPropertySet.class,oIndexAccess.getByIndex(1));
+            column.setPropertyValue("OptimalWidth", new Boolean(true));
         } catch(com.sun.star.lang.WrappedTargetException e) {
             log.println("Exception ceating relation :");
             e.printStackTrace(log);
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+            log.println("Exception ceating relation :");
+            e.printStackTrace(log);
+        } catch(com.sun.star.beans.UnknownPropertyException e) {
+            log.println("Exception ceating relation :");
+            e.printStackTrace(log);
+        } catch(com.sun.star.beans.PropertyVetoException e) {
+            log.println("Exception ceating relation :");
+            e.printStackTrace(log);
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
             log.println("Exception ceating relation :");
             e.printStackTrace(log);
         }
