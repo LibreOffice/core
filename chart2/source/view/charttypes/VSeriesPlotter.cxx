@@ -17,6 +17,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_ERRORBARSTYLE_HPP_
 #include <drafts/com/sun/star/chart2/ErrorBarStyle.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XREGRESSIONCURVECONTAINER_HPP_
+#include <drafts/com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#endif
 
 #ifndef _SVX_UNOPRNMS_HXX
 #include <svx/unoprnms.hxx>
@@ -127,11 +130,12 @@ bool VDataSeriesGroup::getSums( double& rfPositiveSum, double& rfNegativeSum ) c
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeModel )
+VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeModel, bool bCategoryXAxis )
         : PlotterBase(2)
         , m_xChartTypeModel(xChartTypeModel)
         , m_xChartTypeModelProps( uno::Reference< beans::XPropertySet >::query( xChartTypeModel ))
         , m_aXSlots()
+        , m_bCategoryXAxis(bCategoryXAxis)
 {
     DBG_ASSERT(m_xChartTypeModel.is(),"no XChartType available in view, fallback to default values may be wrong");
     if(m_xChartTypeModelProps.is() )
@@ -175,6 +179,9 @@ void VSeriesPlotter::addSeries( VDataSeries* pSeries, sal_Int32 xSlot,sal_Int32 
     DBG_ASSERT( pSeries, "series to add is NULL" );
     if(!pSeries)
         return;
+
+    if(m_bCategoryXAxis)
+        pSeries->setCategoryXAxis();
 
     if(xSlot<0 || xSlot>=static_cast<sal_Int32>(m_aXSlots.size()))
     {
@@ -599,6 +606,66 @@ void VSeriesPlotter::createErrorBar(
 
 }
 
+void VSeriesPlotter::createRegressionCurvesShapes( const VDataSeries& rVDataSeries
+                            , const uno::Reference< drawing::XShapes >& xTarget )
+{
+    uno::Reference< XRegressionCurveContainer > xRegressionContainer(
+                rVDataSeries.getModel(), uno::UNO_QUERY );
+    if(!xRegressionContainer.is())
+        return;
+    double fMinX = m_pPosHelper->getLogicMinX();
+    double fMaxX = m_pPosHelper->getLogicMaxX();
+
+    uno::Sequence< uno::Reference< XRegressionCurve > > aCurveList =
+        xRegressionContainer->getRegressionCurves();
+    for(sal_Int32 nN=0; nN<aCurveList.getLength(); nN++)
+    {
+        uno::Reference< XRegressionCurve > xRegressionCurve( aCurveList[nN] );
+        xRegressionCurve->recalculateRegression( rVDataSeries.getAllX(), rVDataSeries.getAllY() );
+
+        sal_Int32 nRegressionPointCount = 20;//@todo find a more optimal solution if more complicated curve types are introduced
+        drawing::PolyPolygonShape3D aRegressionPoly;
+        aRegressionPoly.SequenceX.realloc(1);
+        aRegressionPoly.SequenceY.realloc(1);
+        aRegressionPoly.SequenceZ.realloc(1);
+        aRegressionPoly.SequenceX[0].realloc(nRegressionPointCount);
+        aRegressionPoly.SequenceY[0].realloc(nRegressionPointCount);
+        aRegressionPoly.SequenceZ[0].realloc(nRegressionPointCount);
+        for(sal_Int32 nP=0; nP<nRegressionPointCount; nP++ )
+        {
+            double fLogicX = fMinX + nP*(fMaxX-fMinX)/double(nRegressionPointCount-1);
+            double fLogicY = xRegressionCurve->getCurveValue( fLogicX );
+            double fLogicZ = 0.0;//dummy
+
+            m_pPosHelper->doLogicScaling( &fLogicX, &fLogicY, &fLogicZ );
+
+            if(    !::rtl::math::isNan(fLogicX) && !::rtl::math::isInf(fLogicX)
+                    && !::rtl::math::isNan(fLogicY) && !::rtl::math::isInf(fLogicY)
+                    && !::rtl::math::isNan(fLogicZ) && !::rtl::math::isInf(fLogicZ) )
+            {
+                drawing::Position3D aScaledLogicPosition( fLogicX, fLogicY,fLogicZ);
+                drawing::Position3D aTransformedPosition(
+                        SequenceToPosition3D(
+                            m_pPosHelper->getTransformationLogicToScene()->transform(
+                                Position3DToSequence(aScaledLogicPosition) ) ) );
+                aRegressionPoly.SequenceX[0][nP] = aTransformedPosition.PositionX;
+                aRegressionPoly.SequenceY[0][nP] = aTransformedPosition.PositionY;
+            }
+        }
+        drawing::PolyPolygonShape3D aClippedPoly;
+        Clipping::clipPolygonAtRectangle( aRegressionPoly, m_pPosHelper->getTransformedClipDoubleRect(), aClippedPoly );
+        aRegressionPoly = aClippedPoly;
+
+        uno::Reference< beans::XPropertySet > xCurveModelProp( xRegressionCurve, uno::UNO_QUERY );
+        VLineProperties aVLineProperties;
+        aVLineProperties.initFromPropertySet( xCurveModelProp );
+
+        uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
+            xTarget, PolyToPointSequence( aRegressionPoly ), aVLineProperties );
+        m_pShapeFactory->setShapeName( xShape, rVDataSeries.getDataCurveCID( xCurveModelProp ) );
+    }
+}
+
 void VSeriesPlotter::setMappedProperties(
           const uno::Reference< drawing::XShape >& xTargetShape
         , const uno::Reference< beans::XPropertySet >& xSource
@@ -614,22 +681,36 @@ void VSeriesPlotter::setMappedProperties(
 
 double VSeriesPlotter::getMinimumX()
 {
-    //this is the default for all category charts
-    //@todo for other types
-    return -0.5;
+    if( m_bCategoryXAxis )
+        return -0.5;
+
+    double fMinimum, fMaximum;
+    this->getMinimumAndMaximiumX( fMinimum, fMaximum );
+    return fMinimum;
 }
 double VSeriesPlotter::getMaximumX()
 {
-    //this is the default for all category charts
-    //@todo for other types
+    if( m_bCategoryXAxis )
+    {
+        //return category count
+        sal_Int32 nPointCount = getPointCount( m_aXSlots );
+        return nPointCount-0.5;
+    }
 
-    //return category count
-    sal_Int32 nPointCount = getPointCount( m_aXSlots );
-    return nPointCount-0.5;
+    double fMinimum, fMaximum;
+    this->getMinimumAndMaximiumX( fMinimum, fMaximum );
+    return fMaximum;
 }
 
 double VSeriesPlotter::getMinimumYInRange( double fMinimumX, double fMaximumX )
 {
+    if( !m_bCategoryXAxis )
+    {
+        double fMinY, fMaxY;
+        this->getMinimumAndMaximiumYInContinuousXRange( fMinY, fMaxY, fMinimumX, fMaximumX );
+        return fMinY;
+    }
+
     double fMinimum, fMaximum;
     ::rtl::math::setInf(&fMinimum, false);
     ::rtl::math::setInf(&fMaximum, true);
@@ -654,6 +735,13 @@ double VSeriesPlotter::getMinimumYInRange( double fMinimumX, double fMaximumX )
 
 double VSeriesPlotter::getMaximumYInRange( double fMinimumX, double fMaximumX )
 {
+    if( !m_bCategoryXAxis )
+    {
+        double fMinY, fMaxY;
+        this->getMinimumAndMaximiumYInContinuousXRange( fMinY, fMaxY, fMinimumX, fMaximumX );
+        return fMaxY;
+    }
+
     double fMinimum, fMaximum;
     ::rtl::math::setInf(&fMinimum, false);
     ::rtl::math::setInf(&fMaximum, true);
