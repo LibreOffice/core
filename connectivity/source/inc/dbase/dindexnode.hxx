@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:39:45 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,9 +230,9 @@ namespace connectivity
             BOOL Find(const ONDXKey&);  // rek. Abstieg
             USHORT FindPos(const ONDXKey& rKey) const;
 
-        #if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 1
             void PrintPage();
-        #endif
+#endif
         };
 
         SV_IMPL_REF(ONDXPage);
