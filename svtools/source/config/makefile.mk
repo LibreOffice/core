@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:41:16 $
+#   last change: $Author: kz $ $Date: 2003-10-15 10:08:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,12 +105,13 @@ SLOFILES = \
     $(SLO)$/accessibilityoptions.obj	\
     $(SLO)$/cmdoptions.obj				\
     $(SLO)$/extendedsecurityoptions.obj \
-    $(SLO)$/sourceviewconfig.obj
+    $(SLO)$/sourceviewconfig.obj		\
+    $(SLO)$/compatibility.obj
 
 EXCEPTIONSFILES = \
     $(SLO)$/accelcfg.obj				\
     $(SLO)$/inetoptions.obj				\
-    $(SLO)$/xmlaccelcfg.obj			\
+    $(SLO)$/xmlaccelcfg.obj				\
     $(SLO)$/pathoptions.obj
 
 # --- heavyconfig.lib Files --------------------------------------------------------
