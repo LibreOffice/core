@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizard.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:49:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:50:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 #include "wizard.hxx"
 #include "wizard.hrc"
 #include "pages.hxx"
-#include "../app/desktopresid.hxx"
 #include "app.hxx"
 
 #include <rtl/ustring.hxx>
@@ -108,15 +107,32 @@ const FirstStartWizard::WizardState FirstStartWizard::STATE_MIGRATION = 2;
 const FirstStartWizard::WizardState FirstStartWizard::STATE_USER = 3;
 const FirstStartWizard::WizardState FirstStartWizard::STATE_REGISTRATION = 4;
 
-// WZB_NEXT|WZB_PREVIOUS|WZB_FINISH|WZB_CANCEL|WZB_HELP
+WizardResId::WizardResId( USHORT nId ) :
+    ResId( nId, FirstStartWizard::GetResManager() )
+{
+}
+
+ResMgr *FirstStartWizard::pResMgr = 0;
+
+ResMgr *FirstStartWizard::GetResManager()
+{
+    if ( !FirstStartWizard::pResMgr )
+    {
+        String aMgrName = String::CreateFromAscii( "dkt" );
+        aMgrName += String::CreateFromInt32(SUPD); // current version number
+        FirstStartWizard::pResMgr = ResMgr::CreateResMgr( OUStringToOString( aMgrName, RTL_TEXTENCODING_UTF8 ));
+    }
+    return FirstStartWizard::pResMgr;
+}
 
 FirstStartWizard::FirstStartWizard(Window* pParent)
-    :RoadmapWizard( pParent, DesktopResId(DLG_FIRSTSTART_WIZARD),
-        WZB_NEXT|WZB_PREVIOUS|WZB_FINISH|WZB_CANCEL|WZB_HELP, DesktopResId(STR_FIRSTSTART_TITLE))
+    :RoadmapWizard( pParent, WizardResId(DLG_FIRSTSTART_WIZARD),
+        WZB_NEXT|WZB_PREVIOUS|WZB_FINISH|WZB_CANCEL|WZB_HELP, WizardResId(STR_FIRSTSTART_TITLE))
     ,m_aDefaultPath(0)
     ,m_aMigrationPath(0)
     ,m_bDone(sal_False)
     ,m_bAccepted(sal_False)
+    ,m_bOverride(sal_False)
 {
     // ---
     // FreeResource();
@@ -177,9 +193,10 @@ FirstStartWizard::FirstStartWizard(Window* pParent)
     ActivatePage();
 
     // set text of finish putton:
-    m_pFinish->SetText(String(DesktopResId(STR_FINISH)));
+    m_pFinish->SetText(String(WizardResId(STR_FINISH)));
     // disable "finish button"
     enableButtons(WZB_FINISH, sal_False);
+    defaultButton(WZB_NEXT);
 
 }
 
@@ -196,6 +213,9 @@ void FirstStartWizard::enterState(WizardState _nState)
     m_pCancel->SetClickHdl(m_lnkCancel);
     m_pNextPage->SetText(m_sNext);
 
+    // default
+    defaultButton(WZB_NEXT);
+
     // specialized state
     switch (_nState)
     {
@@ -203,8 +223,8 @@ void FirstStartWizard::enterState(WizardState _nState)
         enableButtons(WZB_PREVIOUS, sal_False);
         break;
     case STATE_LICENSE:
-        m_pCancel->SetText(String(DesktopResId(STR_LICENSE_DECLINE)));
-        m_pNextPage->SetText(String(DesktopResId(STR_LICENSE_ACCEPT)));
+        m_pCancel->SetText(String(WizardResId(STR_LICENSE_DECLINE)));
+        m_pNextPage->SetText(String(WizardResId(STR_LICENSE_ACCEPT)));
         enableButtons(WZB_NEXT, sal_False);
         // attach warning dialog to cancel/decline button
         m_pCancel->SetClickHdl( LINK(this, FirstStartWizard, DeclineHdl) );
@@ -212,14 +232,17 @@ void FirstStartWizard::enterState(WizardState _nState)
     case STATE_REGISTRATION:
         enableButtons(WZB_NEXT, sal_False);
         enableButtons(WZB_FINISH, sal_True);
+        defaultButton(WZB_FINISH);
         break;
     }
+
+    // focus
 
 }
 
 IMPL_LINK( FirstStartWizard, DeclineHdl, PushButton *, arg )
 {
-    QueryBox aBox(this, DesktopResId(QB_ASK_DECLINE));
+    QueryBox aBox(this, WizardResId(QB_ASK_DECLINE));
     sal_Int32 ret = aBox.Execute();
     if ( ret == BUTTON_OK || ret == BUTTON_YES)
     {
@@ -237,19 +260,19 @@ TabPage* FirstStartWizard::createPage(WizardState _nState)
     switch (_nState)
     {
     case STATE_WELCOME:
-        pTabPage = new WelcomePage(this, DesktopResId(TP_WELCOME));
+        pTabPage = new WelcomePage(this, WizardResId(TP_WELCOME));
         break;
     case STATE_LICENSE:
-        pTabPage = new LicensePage(this, DesktopResId(TP_LICENSE));
+        pTabPage = new LicensePage(this, WizardResId(TP_LICENSE));
         break;
     case STATE_MIGRATION:
-        pTabPage = new MigrationPage(this, DesktopResId(TP_MIGRATION));
+        pTabPage = new MigrationPage(this, WizardResId(TP_MIGRATION));
         break;
     case STATE_USER:
-        pTabPage = new UserPage(this, DesktopResId(TP_USER));
+        pTabPage = new UserPage(this, WizardResId(TP_USER));
         break;
     case STATE_REGISTRATION:
-        pTabPage = new RegistrationPage(this, DesktopResId(TP_REGISTRATION));
+        pTabPage = new RegistrationPage(this, WizardResId(TP_REGISTRATION));
         break;
     }
     pTabPage->Show();
@@ -263,19 +286,19 @@ String FirstStartWizard::getStateDisplayName(WizardState _nState)
     switch(_nState)
     {
     case STATE_WELCOME:
-        sName = String(DesktopResId(STR_STATE_WELCOME));
+        sName = String(WizardResId(STR_STATE_WELCOME));
         break;
     case STATE_LICENSE:
-        sName = String(DesktopResId(STR_STATE_LICENSE));
+        sName = String(WizardResId(STR_STATE_LICENSE));
         break;
     case STATE_MIGRATION:
-        sName = String(DesktopResId(STR_STATE_MIGRATION));
+        sName = String(WizardResId(STR_STATE_MIGRATION));
         break;
     case STATE_USER:
-        sName = String(DesktopResId(STR_STATE_USER));
+        sName = String(WizardResId(STR_STATE_USER));
         break;
     case STATE_REGISTRATION:
-        sName = String(DesktopResId(STR_STATE_REGISTRATION));
+        sName = String(WizardResId(STR_STATE_REGISTRATION));
         break;
     }
     return sName;
@@ -316,12 +339,14 @@ sal_Bool FirstStartWizard::onFinish(sal_Int32 _nResult)
         return sal_False;
 }
 
+void FirstStartWizard::overrideCheck(sal_Bool bOverride)
+{
+    m_bOverride = bOverride;
+}
+
 short FirstStartWizard::Execute()
 {
-    if (isFirstStart() || !isLicenseAccepted())
-        return svt::RoadmapWizard::Execute();
-    else
-        return sal_True;
+    return svt::RoadmapWizard::Execute();
 }
 
 
