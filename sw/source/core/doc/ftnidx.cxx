@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnidx.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:52:35 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,9 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
         if( rOutlNds.Count() )
         {
             // suche den Start des Kapitels, in den rStt steht.
-            for( USHORT n = 0; n < rOutlNds.Count(); ++n )
+            USHORT n;
+
+            for( n = 0; n < rOutlNds.Count(); ++n )
                 if( rOutlNds[ n ]->GetIndex() > rStt.GetIndex() )
                     break;      // gefunden
                 else if( !rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->GetOutlineLevel() )
