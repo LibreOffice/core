@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wtratree.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:26 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,8 +105,8 @@ WordTransTree::WordTransTree(CharSet  i_nWorkingCharSet)
         dpParsingTreeTop(0),
         pUnknownAlpha(0),
         // cChar2Branch
-        c_AE(u_char('Ä')), c_OE(u_char('Ö')), c_UE(u_char('Ü')),
-        c_ae(u_char('ä')),  c_oe(u_char('ö')), c_ue(u_char('ü')),
+        c_AE(u_char('\xC4')), c_OE(u_char('\xD6')), c_UE(u_char('\xDC')),
+        c_ae(u_char('\xE4')), c_oe(u_char('\xF6')), c_ue(u_char('\xFC')),
         pInputCurTokenStart(0),
         pInputPosition(0),
         pOutputPosition(0),
@@ -149,7 +149,7 @@ WordTransTree::WordTransTree(CharSet  i_nWorkingCharSet)
 void
 WordTransTree::SetCharSet(CharSet i_nWorkingCharSet)
 {
-    ByteString sConvert("ÄÖÜäöüß");
+    ByteString sConvert("\xC4\xD6\xDC\xE4\xF6\xFC\xDF");
     const u_char * pConvert = (const u_char * ) ( sConvert.Convert(RTL_TEXTENCODING_MS_1252, i_nWorkingCharSet).GetBuffer() );
 
     INT16 i = 0;
