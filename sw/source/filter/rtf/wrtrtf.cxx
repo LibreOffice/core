@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 11:45:20 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,10 +58,6 @@
  *
  *
  ************************************************************************/
-
-
-#pragma hdrstop
-
 #include <stdlib.h>
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
@@ -897,7 +893,7 @@ static void _OutFont( SwRTFWriter& rWrt, const SvxFontItem& rFont, USHORT nNo )
     rWrt.Strm() << '{' << sRTF_F;
 
     const char* pStr = sRTF_FNIL;
-    switch( rFont.GetFamily() )
+    switch (rFont.GetFamily())
     {
         case FAMILY_ROMAN:
             pStr = sRTF_FROMAN;
@@ -914,20 +910,25 @@ static void _OutFont( SwRTFWriter& rWrt, const SvxFontItem& rFont, USHORT nNo )
         case FAMILY_DECORATIVE:
             pStr = sRTF_FDECOR;
             break;
+        default:
+            break;
     }
-    rWrt.OutULong( nNo ) << pStr << sRTF_FPRQ;
+    rWrt.OutULong(nNo) << pStr << sRTF_FPRQ;
 
     USHORT nVal = 0;
-    switch( rFont.GetPitch() )
+    switch (rFont.GetPitch())
     {
         case PITCH_FIXED:
             nVal = 1;
             break;
         case PITCH_VARIABLE:
             nVal = 2;
-break;
+            break;
+        default:
+            nVal = 0;
+            break;
     }
-    rWrt.OutULong( nVal );
+    rWrt.OutULong(nVal);
 
     String sFntNm(GetFontToken( rFont.GetFamilyName(), 0));
     String sAltNm(GetSubsFontName( sFntNm, SUBSFONT_ONLYONE | SUBSFONT_MS));
@@ -1117,52 +1118,45 @@ void SwRTFWriter::OutRTFFlyFrms( const SwFlyFrmFmt& rFlyFrmFmt )
 
 void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
 {
+    if (USHRT_MAX == nBkmkTabPos)
+        return;
+
+    const SwBookmark* pBookmark = pDoc->GetBookmarks()[nBkmkTabPos];
+    if (!pBookmark)
+        return;
+
     // hole das aktuelle Bookmark
-    const SwBookmark* pBookmark;
-    const SwPosition* pStartPos;
-    const SwPosition* pEndPos;
+    const SwPosition* pStartPos = 0;
+    const SwPosition* pEndPos = 0;
 
-    if(USHRT_MAX != nBkmkTabPos)
+    if (pBookmark->GetOtherPos())   // this bookmark spans text
     {
-        pBookmark = pDoc->GetBookmarks()[ nBkmkTabPos ];
-
-        if(pBookmark)
-        {
-            if(pBookmark->GetOtherPos())    // this bookmark spans text
-            {
-                // the start and endpoints are different
-                SwPaM mPam(pBookmark->GetPos(), *pBookmark->GetOtherPos());
-                pStartPos = mPam.Start();
-                pEndPos = mPam.End();
-            }
-            else                            // this bookmark is a point
-            {
-                // so the start and endpoints are the same
-                pStartPos = pEndPos = &pBookmark->GetPos();
-            }
-        }
-        else
-        {
-            nBkmkTabPos = USHRT_MAX;
-        }
+        // the start and endpoints are different
+        SwPaM mPam(pBookmark->GetPos(), *pBookmark->GetOtherPos());
+        pStartPos = mPam.Start();
+        pEndPos = mPam.End();
     }
-    else    // no bookmark
+    else                            // this bookmark is a point
     {
-        pBookmark = 0;
-        pStartPos = pEndPos = 0;
+        // so the start and endpoints are the same
+        pStartPos = pEndPos = &pBookmark->GetPos();
     }
 
-    if( USHRT_MAX != nBkmkTabPos &&
-        pStartPos->nNode.GetIndex() ==
-            pCurPam->GetPoint()->nNode.GetIndex() &&
-        pStartPos->nContent.GetIndex() == nCntntPos )
+    ASSERT(pStartPos && pEndPos, "Impossible");
+    if (!(pStartPos && pEndPos))
+        return;
+
+    if (pStartPos->nNode.GetIndex() == pCurPam->GetPoint()->nNode.GetIndex() &&
+        pStartPos->nContent.GetIndex() == nCntntPos)
     {
         // zur Zeit umspannt das SwBookmark keinen Bereich also kann
         // es hier vollstaendig ausgegeben werden.
 
         // erst die SWG spezifischen Daten:
-        if( pBookmark->GetShortName().Len() ||
-            pBookmark->GetKeyCode().GetCode() )
+        if (
+             pBookmark->GetShortName().Len() ||
+             pBookmark->GetKeyCode().GetCode()
+           )
         {
             OutComment( *this, sRTF_BKMKKEY );
             OutULong( ( pBookmark->GetKeyCode().GetCode() |
@@ -1180,17 +1174,18 @@ void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
         RTFOutFuncs::Out_String( Strm(), pBookmark->GetName(),
                                 DEF_ENCODING, bWriteHelpFmt ) << '}';
     }
-    if( USHRT_MAX != nBkmkTabPos &&
-        pEndPos->nNode.GetIndex() ==
-            pCurPam->GetPoint()->nNode.GetIndex() &&
-        pEndPos->nContent.GetIndex() == nCntntPos )
+
+    if (pEndPos->nNode.GetIndex() == pCurPam->GetPoint()->nNode.GetIndex() &&
+        pEndPos->nContent.GetIndex() == nCntntPos)
     {
         // zur Zeit umspannt das SwBookmark keinen Bereich also kann
         // es hier vollstaendig ausgegeben werden.
 
         // erst die SWG spezifischen Daten:
-        if( pBookmark->GetShortName().Len() ||
-            pBookmark->GetKeyCode().GetCode() )
+        if (
+             pBookmark->GetShortName().Len() ||
+             pBookmark->GetKeyCode().GetCode()
+           )
         {
             OutComment( *this, sRTF_BKMKKEY );
             OutULong( ( pBookmark->GetKeyCode().GetCode() |
@@ -1213,9 +1208,7 @@ void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
         else
             pBookmark = pDoc->GetBookmarks()[ nBkmkTabPos ];
     }
-
 }
-
 
 void SwRTFWriter::OutFlyFrm()
 {
@@ -1516,34 +1509,35 @@ BOOL SwRTFWriter::OutBreaks( const SfxItemSet& rSet )
                     SVX_BREAK_PAGE_AFTER == rBreak.GetBreak() ||
                     SVX_BREAK_PAGE_BOTH == rBreak.GetBreak() )
                 {
-                    bOutFmtAttr = TRUE;
+                    bOutFmtAttr = true;
                     Strm() << sRTF_PAGE;
                 }
             }
             else
+            {
                 switch( rBreak.GetBreak() )
                 {
-                case SVX_BREAK_COLUMN_BEFORE:
-                case SVX_BREAK_COLUMN_AFTER:
-                case SVX_BREAK_COLUMN_BOTH:
-                    break;
-
-                case SVX_BREAK_PAGE_BEFORE:
-                    bOutFmtAttr = TRUE;
-                    Strm() << sRTF_PAGE;
-                    break;
-
-                case SVX_BREAK_PAGE_AFTER:
-                    OutComment( *this, sRTF_PGBRK, FALSE ) << "0}";
-                    break;
-
-                case SVX_BREAK_PAGE_BOTH:
-                    OutComment( *this, sRTF_PGBRK, FALSE ) << "1}";
-                    break;
+                    case SVX_BREAK_COLUMN_BEFORE:
+                    case SVX_BREAK_COLUMN_AFTER:
+                    case SVX_BREAK_COLUMN_BOTH:
+                        break;
+                    case SVX_BREAK_PAGE_BEFORE:
+                        bOutFmtAttr = true;
+                        Strm() << sRTF_PAGE;
+                        break;
+                    case SVX_BREAK_PAGE_AFTER:
+                        OutComment(*this, sRTF_PGBRK, false) << "0}";
+                        break;
+                    case SVX_BREAK_PAGE_BOTH:
+                        OutComment(*this, sRTF_PGBRK, false) << "1}";
+                        break;
+                    default:
+                        break;
                 }
+            }
         }
     }
-    bIgnoreNextPgBreak = FALSE;
+    bIgnoreNextPgBreak = false;
     return bPgDscWrite;
 }
 
@@ -1688,3 +1682,5 @@ short SwRTFWriter::TrueFrameDirection(const SwFrmFmt &rFlyFmt) const
     ASSERT(nRet != FRMDIR_ENVIRONMENT, "leaving with environment direction");
     return nRet;
 }
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
