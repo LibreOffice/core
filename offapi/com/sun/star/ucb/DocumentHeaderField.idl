@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentHeaderField.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-12 13:41:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ module com { module sun { module star { module ucb {
 /** This struct contains a name-value pair of a document header (i.e.
     the "subject" field and the appropriate value of a MIME message).
 */
-struct DocumentHeaderField
+published struct DocumentHeaderField
 {
     //-------------------------------------------------------------------------
     /** The name of the header field.
