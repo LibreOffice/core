@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapaction.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:23:37 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,12 @@
 #ifndef _COM_SUN_STAR_RENDERING_XBITMAP_HPP__
 #include <com/sun/star/rendering/XBitmap.hpp>
 #endif
+#ifndef _COM_SUN_STAR_RENDERING_REPAINTRESULT_HPP_
+#include <com/sun/star/rendering/RepaintResult.hpp>
+#endif
+#ifndef _COM_SUN_STAR_RENDERING_XCACHEDPRIMITIVE_HPP_
+#include <com/sun/star/rendering/XCachedPrimitive.hpp>
+#endif
 
 #ifndef _SV_BITMAPEX_HXX
 #include <vcl/bitmapex.hxx>
@@ -86,9 +92,14 @@
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
+#ifndef _BGFX_VECTOR_B2DSIZE_HXX
+#include <basegfx/vector/b2dsize.hxx>
+#endif
 #ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
 #endif
+
+#include <boost/utility.hpp>
 
 #include <mtftools.hxx>
 
@@ -99,127 +110,165 @@ namespace cppcanvas
 {
     namespace internal
     {
-        // free support functions
-        // ======================
         namespace
         {
-            /** Setup transformation such that the next render call is
-                moved rPoint away.
-            */
-            void implSetupTransform( rendering::RenderState&    rRenderState,
-                                     const Point&               rPoint          )
-            {
-                ::basegfx::B2DHomMatrix aLocalTransformation;
 
-                aLocalTransformation.translate( rPoint.X(),
-                                                rPoint.Y() );
-                ::canvas::tools::appendToRenderState( rRenderState,
+            class BitmapAction : public Action, private ::boost::noncopyable
+            {
+            public:
+                BitmapAction( const ::BitmapEx&,
+                              const ::Point&    rDstPoint,
+                              const CanvasSharedPtr&,
+                              const OutDevState& );
+                BitmapAction( const ::BitmapEx&,
+                              const ::Point&    rDstPoint,
+                              const ::Size&     rDstSize,
+                              const CanvasSharedPtr&,
+                              const OutDevState& );
+
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
+                                     const Subset&                  rSubset ) const;
+
+                virtual sal_Int32 getActionCount() const;
+
+            private:
+                uno::Reference< rendering::XBitmap >                    mxBitmap;
+                mutable uno::Reference< rendering::XCachedPrimitive >   mxCachedBitmap;
+                mutable ::basegfx::B2DHomMatrix                         maLastTransformation;
+                CanvasSharedPtr                                         mpCanvas;
+                rendering::RenderState                                  maState;
+            };
+
+
+            BitmapAction::BitmapAction( const ::BitmapEx&       rBmpEx,
+                                        const ::Point&          rDstPoint,
+                                        const CanvasSharedPtr&  rCanvas,
+                                        const OutDevState&      rState ) :
+                mxBitmap( ::vcl::unotools::xBitmapFromBitmapEx( rCanvas->getUNOCanvas()->getDevice(),
+                                                                rBmpEx ) ),
+                mxCachedBitmap(),
+                maLastTransformation(),
+                mpCanvas( rCanvas ),
+                maState()
+            {
+                tools::initRenderState(maState,rState);
+
+                // Setup transformation such that the next render call is
+                // moved rPoint away.
+                ::basegfx::B2DHomMatrix aLocalTransformation;
+                aLocalTransformation.translate( rDstPoint.X(),
+                                                rDstPoint.Y() );
+                ::canvas::tools::appendToRenderState( maState,
                                                       aLocalTransformation );
+
+                // correct clip (which is relative to original transform)
+                tools::modifyClip( maState, rState, rCanvas, rDstPoint, NULL );
             }
 
-            /** Setup transformation such that the next render call is
-                moved rPoint away, and scaled according to the ratio
-                given by src and dst size.
-            */
-            void implSetupTransform( rendering::RenderState&    rRenderState,
-                                     const Point&               rPoint,
-                                     const Size&                rSrcSize,
-                                     const Size&                rDstSize        )
+            BitmapAction::BitmapAction( const ::BitmapEx&       rBmpEx,
+                                        const ::Point&          rDstPoint,
+                                        const ::Size&           rDstSize,
+                                        const CanvasSharedPtr&  rCanvas,
+                                        const OutDevState&      rState      ) :
+                mxBitmap( ::vcl::unotools::xBitmapFromBitmapEx( rCanvas->getUNOCanvas()->getDevice(),
+                                                                rBmpEx ) ),
+                mxCachedBitmap(),
+                maLastTransformation(),
+                mpCanvas( rCanvas ),
+                maState()
             {
+                tools::initRenderState(maState,rState);
+
+                // Setup transformation such that the next render call is
+                // moved rPoint away, and scaled according to the ratio
+                // given by src and dst size.
+                const ::Size aBmpSize( rBmpEx.GetSizePixel() );
                 ::basegfx::B2DHomMatrix aLocalTransformation;
 
-                aLocalTransformation.scale( static_cast<double>(rDstSize.Width()) / rSrcSize.Width(),
-                                            static_cast<double>(rDstSize.Height()) / rSrcSize.Height() );
-                aLocalTransformation.translate( rPoint.X(),
-                                                rPoint.Y() );
-                ::canvas::tools::appendToRenderState( rRenderState,
+                const ::basegfx::B2DSize aScale( static_cast<double>(rDstSize.Width()) / aBmpSize.Width(),
+                                                 static_cast<double>(rDstSize.Height()) / aBmpSize.Height() );
+                aLocalTransformation.scale( aScale.getX(), aScale.getY() );
+                aLocalTransformation.translate( rDstPoint.X(),
+                                                rDstPoint.Y() );
+                ::canvas::tools::appendToRenderState( maState,
                                                       aLocalTransformation );
+
+                // correct clip (which is relative to original transform)
+                tools::modifyClip( maState, rState, rCanvas, rDstPoint, &aScale );
             }
 
-            /** Setup transformation such that the next render call
-                paints the content given by the src area into the dst
-                area. No clipping is set whatsoever.
-            */
-            void implSetupTransform( rendering::RenderState&    rRenderState,
-                                     const Point&               rSrcPoint,
-                                     const Size&                rSrcSize,
-                                     const Point&               rDstPoint,
-                                     const Size&                rDstSize        )
+            bool BitmapAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
-                ::basegfx::B2DHomMatrix aLocalTransformation;
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::BitmapAction::render()" );
+                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::BitmapAction: 0x%X", this );
 
-                aLocalTransformation.scale( static_cast<double>(rDstSize.Width()) / rSrcSize.Width(),
-                                            static_cast<double>(rDstSize.Height()) / rSrcSize.Height() );
-                aLocalTransformation.translate( rDstPoint.X() - rSrcPoint.X(),
-                                                rDstPoint.Y() - rSrcPoint.Y() );
-                ::canvas::tools::appendToRenderState( rRenderState,
-                                                      aLocalTransformation );
+                rendering::RenderState aLocalState( maState );
+                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+
+                const rendering::ViewState& rViewState( mpCanvas->getViewState() );
+
+                // can we use the cached bitmap?
+                if( mxCachedBitmap.is() &&
+                    maLastTransformation == rTransformation )
+                {
+                    if( mxCachedBitmap->redraw( rViewState ) ==
+                        rendering::RepaintResult::REDRAWN )
+                    {
+                        // cached repaint succeeded, done.
+                        return true;
+                    }
+                }
+
+                maLastTransformation = rTransformation;
+
+                mxCachedBitmap = mpCanvas->getUNOCanvas()->drawBitmap( mxBitmap,
+                                                                       rViewState,
+                                                                       aLocalState );
+
+                return true;
+            }
+
+            bool BitmapAction::render( const ::basegfx::B2DHomMatrix&   rTransformation,
+                                       const Subset&                    rSubset ) const
+            {
+                // bitmap only contains a single action, fail if subset
+                // requests different range
+                if( rSubset.mnSubsetBegin != 0 ||
+                    rSubset.mnSubsetEnd != 1 )
+                    return false;
+
+                return render( rTransformation );
+            }
+
+            sal_Int32 BitmapAction::getActionCount() const
+            {
+                return 1;
             }
         }
 
-        BitmapAction::BitmapAction( const ::BitmapEx&       rBmpEx,
-                                    const ::Point&          rDstPoint,
-                                    const CanvasSharedPtr&  rCanvas,
-                                    const OutDevState&      rState ) :
-            mxBitmap( ::vcl::unotools::xBitmapFromBitmapEx( rCanvas->getUNOCanvas()->getDevice(),
-                                                            rBmpEx ) ),
-            mpCanvas( rCanvas ),
-            maState()
+        ActionSharedPtr BitmapActionFactory::createBitmapAction( const ::BitmapEx&      rBmpEx,
+                                                                 const ::Point&         rDstPoint,
+                                                                 const CanvasSharedPtr& rCanvas,
+                                                                 const OutDevState&     rState )
         {
-            tools::initRenderState(maState,rState);
-            implSetupTransform( maState, rDstPoint );
+            return ActionSharedPtr( new BitmapAction(rBmpEx,
+                                                     rDstPoint,
+                                                     rCanvas,
+                                                     rState ) );
         }
 
-        BitmapAction::BitmapAction( const ::BitmapEx&       rBmpEx,
-                                    const ::Point&          rDstPoint,
-                                    const ::Size&           rDstSize,
-                                    const CanvasSharedPtr&  rCanvas,
-                                    const OutDevState&      rState      ) :
-            mxBitmap( ::vcl::unotools::xBitmapFromBitmapEx( rCanvas->getUNOCanvas()->getDevice(),
-                                                            rBmpEx ) ),
-            mpCanvas( rCanvas ),
-            maState()
+        ActionSharedPtr BitmapActionFactory::createBitmapAction( const ::BitmapEx&      rBmpEx,
+                                                                 const ::Point&         rDstPoint,
+                                                                 const ::Size&          rDstSize,
+                                                                 const CanvasSharedPtr& rCanvas,
+                                                                 const OutDevState&     rState )
         {
-            tools::initRenderState(maState,rState);
-            implSetupTransform( maState, rDstPoint, rBmpEx.GetSizePixel(), rDstSize );
+            return ActionSharedPtr( new BitmapAction(rBmpEx,
+                                                     rDstPoint,
+                                                     rDstSize,
+                                                     rCanvas,
+                                                     rState ) );
         }
-
-        BitmapAction::BitmapAction( const ::BitmapEx&       rBmpEx,
-                                    const ::Point&          rSrcPoint,
-                                    const ::Size&           rSrcSize,
-                                    const ::Point&          rDstPoint,
-                                    const ::Size&           rDstSize,
-                                    const CanvasSharedPtr&  rCanvas,
-                                    const OutDevState&      rState      ) :
-            mxBitmap( ::vcl::unotools::xBitmapFromBitmapEx( rCanvas->getUNOCanvas()->getDevice(),
-                                                            rBmpEx ) ),
-            mpCanvas( rCanvas ),
-            maState()
-        {
-            tools::initRenderState(maState,rState);
-
-            // TODO(F2): setup clipping/extract only part of the bitmap
-            implSetupTransform( maState, rSrcPoint, rSrcSize, rDstPoint, rDstSize );
-        }
-
-        BitmapAction::~BitmapAction()
-        {
-        }
-
-        bool BitmapAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
-        {
-            RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::BitmapAction::render()" );
-            RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::BitmapAction: 0x%X", this );
-
-            rendering::RenderState aLocalState( maState );
-            ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
-
-            mpCanvas->getUNOCanvas()->drawBitmap( mxBitmap,
-                                                  mpCanvas->getViewState(),
-                                                  aLocalState );
-
-            return true;
-        }
-
     }
 }

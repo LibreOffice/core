@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapaction.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:23:58 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,28 +62,14 @@
 #ifndef _CPPCANVAS_BITMAPACTION_HXX
 #define _CPPCANVAS_BITMAPACTION_HXX
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
-#include <com/sun/star/rendering/RenderState.hpp>
-#endif
-
 #include <cppcanvas/canvas.hxx>
 #include <action.hxx>
 
 class Point;
 class Size;
 class BitmapEx;
-class Color;
 
-namespace com { namespace sun { namespace star { namespace rendering
-{
-    class   XBitmap;
-} } } }
-
-/* Definition of internal::BitmapAction class */
+/* Definition of internal::BitmapActionFactory class */
 
 namespace cppcanvas
 {
@@ -91,45 +77,35 @@ namespace cppcanvas
     {
         struct OutDevState;
 
-        /** Encapsulated converter between GDIMetaFile and
+        /** Creates encapsulated converters between GDIMetaFile and
             XCanvas. The Canvas argument is deliberately placed at the
             constructor, to force reconstruction of this object for a
             new canvas. This considerably eases internal state
-            handling, since a lot of the internal state
-            (e.g. deviceColor) is Canvas-dependent.
+            handling, since a lot of the internal state (e.g. fonts,
+            text layout) is Canvas-dependent.
          */
-        class BitmapAction : public Action
+        class BitmapActionFactory
         {
         public:
-            BitmapAction( const ::BitmapEx&,
-                          const ::Point&    rDstPoint,
-                          const CanvasSharedPtr&,
-                          const OutDevState& );
-            BitmapAction( const ::BitmapEx&,
-                          const ::Point&    rDstPoint,
-                          const ::Size&     rDstSize,
-                          const CanvasSharedPtr&,
-                          const OutDevState& );
-            BitmapAction( const ::BitmapEx&,
-                          const ::Point&    rSrcPoint,
-                          const ::Size&     rSrcSize,
-                          const ::Point&    rDstPoint,
-                          const ::Size&     rDstSize,
-                          const CanvasSharedPtr&,
-                          const OutDevState& );
-            virtual ~BitmapAction();
+            /// Unscaled bitmap action, only references destination point
+            static ActionSharedPtr createBitmapAction( const ::BitmapEx&,
+                                                       const ::Point&   rDstPoint,
+                                                       const CanvasSharedPtr&,
+                                                       const OutDevState& );
 
-            virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+            /// Scaled bitmap action, dest point and dest size
+            static ActionSharedPtr createBitmapAction( const ::BitmapEx&,
+                                                       const ::Point&   rDstPoint,
+                                                       const ::Size&    rDstSize,
+                                                       const CanvasSharedPtr&,
+                                                       const OutDevState& );
 
         private:
-            // default: disabled copy/assignment
-            BitmapAction(const BitmapAction&);
-            BitmapAction& operator = ( const BitmapAction& );
-
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XBitmap >  mxBitmap;
-            CanvasSharedPtr                                     mpCanvas;
-            ::com::sun::star::rendering::RenderState    maState;
+            // static factory, disable big four
+            BitmapActionFactory();
+            ~BitmapActionFactory();
+            BitmapActionFactory(const BitmapActionFactory&);
+            BitmapActionFactory& operator=( const BitmapActionFactory& );
         };
     }
 }
