@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionWrapper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:53:16 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,11 @@ void OConnectionWrapper::setDelegation(Reference< XAggregation >& _rxProxyConnec
 
     }
     osl_decrementInterlockedCount( &_rRefCount );
+}
+// -----------------------------------------------------------------------------
+void OConnectionWrapper::disposing()
+{
+    m_xConnection = NULL;
 }
 //-----------------------------------------------------------------------------
 OConnectionWrapper::~OConnectionWrapper()
