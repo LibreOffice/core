@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:09:36 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 17:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ using namespace com::sun::star::lang;
 
 
 Databases::Databases( const rtl::OUString& instPath,
+                      const rtl::OUString& imageZip,
                       const rtl::OUString& productName,
                       const rtl::OUString& productVersion,
                       const rtl::OUString& vendorName,
@@ -113,6 +114,14 @@ Databases::Databases( const rtl::OUString& instPath,
       m_nCustomCSSDocLength( 0 ),
       m_pCustomCSSDoc( 0 ),
       m_aCSS(styleSheet.toAsciiLowerCase()),
+      m_aImagesZipFileURL(rtl::OUStringToOString(
+                              rtl::Uri::encode(
+                                  imageZip,
+                                  rtl_UriCharClassPchar,
+                                  rtl_UriEncodeIgnoreEscapes,
+                                  RTL_TEXTENCODING_UTF8 ),RTL_TEXTENCODING_UTF8)),
+      newProdName(rtl::OUString::createFromAscii( "$[officename]" ) ),
+      newProdVersion(rtl::OUString::createFromAscii( "$[officeversion]" ) ),
       prodName( rtl::OUString::createFromAscii( "%PRODUCTNAME" ) ),
       prodVersion( rtl::OUString::createFromAscii( "%PRODUCTVERSION" ) ),
       vendName( rtl::OUString::createFromAscii( "%VENDORNAME" ) ),
@@ -124,12 +133,16 @@ Databases::Databases( const rtl::OUString& instPath,
     m_vAdd[2] = 11;
     m_vAdd[3] = 14;
     m_vAdd[4] = 12;
+    m_vAdd[5] = 13;
+    m_vAdd[6] = 16;
 
     m_vReplacement[0] = productName;
     m_vReplacement[1] = productVersion;
     m_vReplacement[2] = vendorName;
     m_vReplacement[3] = vendorVersion;
     m_vReplacement[4] = vendorShort;
+    m_vReplacement[5] = productName;
+    m_vReplacement[6] = productVersion;
 
     setInstallPath( instPath );
 }
@@ -184,15 +197,39 @@ Databases::~Databases()
 }
 
 
+rtl::OString Databases::getImagesZipFileURL()
+{
+    return m_aImagesZipFileURL;
+}
+
 
 void Databases::replaceName( rtl::OUString& oustring ) const
 {
-    sal_Int32 idx = -1,k = 0,off;
+    sal_Int32 idx = -1,idx1 = -1,idx2 = -1,k = 0,off;
     bool cap = false;
     rtl::OUStringBuffer aStrBuf( 0 );
 
-    while( ( idx = oustring.indexOf( sal_Unicode('%'),++idx ) ) != -1 )
+    while( true )
     {
+        ++idx;
+        idx1 = oustring.indexOf( sal_Unicode('%'),idx);
+        idx2 = oustring.indexOf( sal_Unicode('$'),idx);
+
+        if(idx1 == -1 && idx2 == -1)
+            break;
+
+        if(idx1 == -1)
+            idx = idx2;
+        else if(idx2 == -1)
+            idx = idx1;
+        else {
+            // no index is zero
+            if(idx1 < idx2)
+                idx = idx1;
+            else if(idx2 < idx1 )
+                idx = idx2;
+        }
+
         if( oustring.indexOf( prodName,idx ) == idx )
             off = PRODUCTNAME;
         else if( oustring.indexOf( prodVersion,idx ) == idx )
@@ -203,6 +240,10 @@ void Databases::replaceName( rtl::OUString& oustring ) const
             off = VENDORVERSION;
         else if( oustring.indexOf( vendShort,idx ) == idx )
             off = VENDORSHORT;
+        else if( oustring.indexOf( newProdName,idx ) == idx )
+            off = NEWPRODUCTNAME;
+        else if( oustring.indexOf( newProdVersion,idx ) == idx )
+            off = NEWPRODUCTVERSION;
         else
             off = -1;
 
@@ -302,11 +343,12 @@ std::vector< rtl::OUString > Databases::getModuleList( const rtl::OUString& Lang
 
         const sal_Unicode* str = fileName.getStr();
 
-        if( fileName.getLength() == idx + 3                   &&
-            ( str[idx + 1] == 'd' || str[idx + 1] == 'D' )    &&
-            ( str[idx + 2] == 'b' || str[idx + 2] == 'B' )    &&
+        if( fileName.getLength() == idx + 4                   &&
+            ( str[idx + 1] == 'c' || str[idx + 1] == 'C' )    &&
+            ( str[idx + 2] == 'f' || str[idx + 2] == 'F' )    &&
+            ( str[idx + 3] == 'g' || str[idx + 3] == 'G' )    &&
             ( fileName = fileName.copy(0,idx).toAsciiLowerCase() ).compareToAscii( "picture" ) != 0 )
-            ret.push_back( fileName );
+          ret.push_back( fileName );
     }
 
     return ret;
@@ -759,9 +801,6 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
     return it->second;
 }
 
-
-
-
 Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& jar,
                                                          const rtl::OUString& Language )
 {
@@ -1047,3 +1086,41 @@ void Databases::setInstallPath( const rtl::OUString& aInstDir )
                                                            rtl_UriDecodeWithCharset,
                                                            RTL_TEXTENCODING_UTF8 );
 }
+
+
+// const ::rtl::OUString& implGetZipFileURL() const
+// {
+//  uno::Reference<beans::XPropertySet >  mxPathSettings;
+//  static ::rtl::OUString aRet;
+
+//  if( !aRet.getLength() && mxPathSettings.is() && mxFileAccess.is() )
+//  {
+//      const ::rtl::OUString   aZipFileName( ::rtl::OUString::createFromAscii( IMAGES_ZIPFILENAME ) );
+//      uno::Any                aAny( mxPathSettings->getPropertyValue( ::rtl::OUString::createFromAscii( "UserConfig" ) ) );
+//      INetURLObject           aZipURL;
+
+//      if( ( aAny >>= aRet ) && aRet.getLength() )
+//      {
+//          aZipURL = INetURLObject( aRet );
+//          aZipURL.Append( aZipFileName );
+
+//          if( !mxFileAccess->exists( aRet = aZipURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+//          {
+//              uno::Any aAny( mxPathSettings->getPropertyValue( ::rtl::OUString::createFromAscii( "Config" ) ) );
+
+//              if( ( aAny >>= aRet ) && aRet.getLength() )
+//              {
+//                  aZipURL = INetURLObject( aRet );
+//                  aZipURL.Append( aZipFileName );
+
+//                  if( !mxFileAccess->exists( aRet = aZipURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+//                  {
+//                      aRet = ::rtl::OUString();
+//                  }
+//              }
+//          }
+//      }
+//  }
+
+//  return aRet;
+// }
