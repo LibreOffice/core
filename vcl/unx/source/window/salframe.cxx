@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-23 17:48:05 $
+ *  last change: $Author: pl $ $Date: 2001-07-27 10:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2803,6 +2803,21 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                     if ( mpInputContext != NULL )
                         mpInputContext->Map( pFrame_ );
                     Call( SALEVENT_RESIZE, NULL );
+                    if( pDisplay_->GetServerVendor() == vendor_hummingbird )
+                    {
+                        /*
+                         *  With Exceed sometimes there does not seem to be
+                         *  an Expose after the MapNotify.
+                         *  so start a paint via the timer here
+                         *  to avoid duplicate paints
+                         */
+                        maPaintRegion.Union( Rectangle( Point( 0, 0 ), aPosSize_.GetSize() ) );
+                        if( ! maResizeTimer.IsActive() )
+                        {
+                            maResizeBuffer = aPosSize_;
+                            maResizeTimer.Start();
+                        }
+                    }
                 }
                 break;
 
@@ -2827,7 +2842,7 @@ long SalFrameData::Dispatch( XEvent *pEvent )
             case VisibilityNotify:
                 nVisibility_ = pEvent->xvisibility.state;
                 nRet = TRUE;
-                break;
+            break;
 
             case ReparentNotify:
                 nRet = HandleReparentEvent( &pEvent->xreparent );
