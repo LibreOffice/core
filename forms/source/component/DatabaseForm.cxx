@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:01:14 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 14:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1686,11 +1686,15 @@ bool ODatabaseForm::hasValidParent() const
         }
         try
         {
-            Reference<XPropertySet>  xSet(m_xParent, UNO_QUERY);
-            // only if the parent has a command we have to check if the parent is positioned on a valid row
-            if (getString(xSet->getPropertyValue(PROPERTY_COMMAND)).getLength() &&
-                (xResultSet->isBeforeFirst() || xResultSet->isAfterLast() ||
-                 getBOOL(xSet->getPropertyValue(PROPERTY_ISNEW))))
+            Reference< XPropertySet >  xSet( m_xParent, UNO_QUERY );
+            Reference< XLoadable > xLoad( m_xParent, UNO_QUERY );
+            if  (   xLoad->isLoaded()
+                &&  (   xResultSet->isBeforeFirst()
+                    ||  xResultSet->isAfterLast()
+                    ||  getBOOL( xSet->getPropertyValue( PROPERTY_ISNEW ) )
+                    )
+                )
+                // the parent form is loaded and on a "virtual" row -> not valid
                 return false;
         }
         catch(Exception&)
@@ -1860,6 +1864,23 @@ bool ODatabaseForm::fillParameters(ReusableMutexGuard& _rClearForNotifies, const
 }
 
 //------------------------------------------------------------------------------
+void ODatabaseForm::saveInsertOnlyState( )
+{
+    OSL_ENSURE( !m_aIgnoreResult.hasValue(), "ODatabaseForm::saveInsertOnlyState: overriding old value!" );
+    m_aIgnoreResult = m_xAggregateSet->getPropertyValue( PROPERTY_INSERTONLY );
+}
+
+//------------------------------------------------------------------------------
+void ODatabaseForm::restoreInsertOnlyState( )
+{
+    if ( m_aIgnoreResult.hasValue() )
+    {
+        m_xAggregateSet->setPropertyValue( PROPERTY_INSERTONLY, m_aIgnoreResult );
+        m_aIgnoreResult = Any();
+    }
+}
+
+//------------------------------------------------------------------------------
 sal_Bool ODatabaseForm::executeRowSet(ReusableMutexGuard& _rClearForNotifies, sal_Bool bMoveToFirst, const Reference< XInteractionHandler >& _rxCompletionHandler)
 {
     if (!m_xAggregateAsRowSet.is())
@@ -1867,7 +1888,8 @@ sal_Bool ODatabaseForm::executeRowSet(ReusableMutexGuard& _rClearForNotifies, sa
 
     if (!fillParameters(_rClearForNotifies, _rxCompletionHandler))
         return sal_False;
-    sal_Bool bInsertOnly = sal_False;
+
+    restoreInsertOnlyState( );
 
     // ensure the aggregated row set has the correct properties
     sal_Int32 nConcurrency;
@@ -1880,25 +1902,23 @@ sal_Bool ODatabaseForm::executeRowSet(ReusableMutexGuard& _rClearForNotifies, sa
         //  clearParameters();
         if(m_pParameterInfo && m_pParameterInfo->nCount > 0)
         {
+            // reset all parameter values
+            // (fs@openoffice.org: what is the difference to the "clearParameter" call which was removed
+            // in revision 1.39, and replaced with the lines below??)
             Reference<XParameters>  xExecutionParams;
-            query_aggregation( m_xAggregate, xExecutionParams); // we don't have to look if this work otherwise previous calls don't work
+            query_aggregation( m_xAggregate, xExecutionParams);
             for (sal_Int32 nPos=1;nPos <= m_pParameterInfo->nCount; ++nPos)
                 xExecutionParams->setNull(nPos,DataType::VARCHAR);
 
-            m_aIgnoreResult = m_xAggregateSet->getPropertyValue(PROPERTY_INSERTONLY);
-            m_xAggregateSet->setPropertyValue(PROPERTY_INSERTONLY,makeAny(sal_True));
+            // switch to "insert only" mode
+            saveInsertOnlyState( );
+            m_xAggregateSet->setPropertyValue( PROPERTY_INSERTONLY, makeAny( sal_True ) );
         }
     }
     else if (m_bAllowInsert || m_bAllowUpdate || m_bAllowDelete)
         nConcurrency = ResultSetConcurrency::UPDATABLE;
     else
         nConcurrency = ResultSetConcurrency::READ_ONLY;
-
-    if (m_bSubForm && hasValidParent() && m_aIgnoreResult.hasValue() && m_pParameterInfo && m_pParameterInfo->nCount > 0)
-    {
-        m_xAggregateSet->setPropertyValue(PROPERTY_INSERTONLY,m_aIgnoreResult);
-        m_aIgnoreResult = Any();
-    }
 
     m_xAggregateSet->setPropertyValue(PROPERTY_RESULTSET_CONCURRENCY, makeAny(nConcurrency));
 
@@ -3378,6 +3398,9 @@ void SAL_CALL ODatabaseForm::unload() throw( RuntimeException )
 
     if (m_xAggregateAsRowSet.is())
     {
+        // we may have reset the InsertOnly property on the aggregate - restore it
+        restoreInsertOnlyState( );
+
         // clear the parameters if there are any
         invlidateParameters();
 
