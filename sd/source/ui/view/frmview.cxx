@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2002-11-28 17:30:40 $
+ *  last change: $Author: iha $ $Date: 2002-12-03 17:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,8 +265,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         SetEliminatePolyPoints(FALSE);
 
         {
-            SvtAccessibilityOptions aAccOptions;
-            bool bUseContrast = aAccOptions.GetIsForDrawings() && Application::GetSettings().GetStyleSettings().GetHighContrastMode();
+            bool bUseContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
             nDrawMode = bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR;
         }
         nPreviewDrawMode = nDrawMode;
@@ -1010,8 +1009,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                 if( pValue->Value >>= nInt32 )
                 {
                     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-                    SvtAccessibilityOptions aAccOptions;
-                    if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForDrawings() )
+                    if( rStyleSettings.GetHighContrastMode() )
                         continue;
                     SetDrawMode( (ULONG)nInt32 );
                 }

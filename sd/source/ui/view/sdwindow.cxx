@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: af $ $Date: 2002-11-22 11:43:48 $
+ *  last change: $Author: iha $ $Date: 2002-12-03 17:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,7 @@ SdWindow::SdWindow(Window* pParent) :
     SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetWindowColor() ) );
 
     // adjust contrast mode initially
-    SvtAccessibilityOptions aAccOptions;
-    bool bUseContrast = aAccOptions.GetIsForDrawings() && GetSettings().GetStyleSettings().GetHighContrastMode();
+    bool bUseContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
     SetDrawMode( bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 
     // Hilfe-ID setzen
@@ -822,7 +821,7 @@ void SdWindow::DataChanged( const DataChangedEvent& rDCEvt )
                 ULONG                   nOutputMode;
                 USHORT                  nPreviewSlot;
 
-                if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForDrawings() )
+                if( rStyleSettings.GetHighContrastMode() )
                     nOutputMode = OUTPUT_DRAWMODE_CONTRAST;
                 else
                     nOutputMode = OUTPUT_DRAWMODE_COLOR;

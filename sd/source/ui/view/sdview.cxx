@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-13 15:26:59 $
+ *  last change: $Author: iha $ $Date: 2002-12-03 17:24:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,7 +844,7 @@ void SdView::onAccessibilityOptionsChanged()
 
             if( pViewSh->GetViewFrame() && pViewSh->GetViewFrame()->GetDispatcher() )
             {
-                if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForDrawings() )
+                if( rStyleSettings.GetHighContrastMode() )
                 {
                     nOutputSlot = SID_OUTPUT_QUALITY_CONTRAST;
                 }
