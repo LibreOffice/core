@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-16 16:23:18 $
+ *  last change: $Author: fs $ $Date: 2001-03-19 06:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,9 +351,20 @@ QueryBox QUERY_SAVE_CURRENT_INDEX
     DefButton = WB_DEF_YES;
 };
 
+String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
+{
+    Text = "In einer Index-Definition darf jede Tabellen-Spalte höchstens einmal vorkommen, Sie jedoch haben die Spalte \"$name$\""
+        "zweimal benutzt.";
+    Text [ english ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
+    Text [ english_us ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
+};
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/03/16 16:23:18  fs
+ *  initial checkin - index design dialog and friends
+ *
  *
  *  Revision 1.0 07.03.01 12:17:10  fs
  ************************************************************************/
