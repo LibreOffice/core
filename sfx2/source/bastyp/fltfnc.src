@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-09 12:12:00 $
+ *  last change: $Author: rt $ $Date: 2000-12-01 11:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,25 +65,25 @@
 #include "helpid.hrc"
 String STR_FILTER_CHANNELON_OFFLINE
 {
-    Text = "Dieses Abonnement soll gemäß Einstellung im Offline Modus gelesen werden.\n\nDas StarOffice befindet sich aber im Online Modus. Möchten Sie StarOffice jetzt in den Offline Modus umschalten?" ;
-    Text [ english_us ] = "This subscription is set to be read in the offline mode.\n\nStarOffice is presently in the online mode. Switch to offline mode now?" ;
-    Text [ portuguese_brazilian ] = "Dieses Abonnement soll gemäß Einstellung im Offline Modus gelesen werden.\n\nDas StarOffice befindet sich aber im Online Modus. Möchten Sie StarOffice jetzt in den Offline Modus umschalten?" ;
-    Text [ swedish ] = "Denna prenumeration skall enligt inställningarna läsas i offlineläget.\n\nMen StarOffice är i onlineläge. Vill Du växla till offlineläget nu?" ;
-    Text [ danish ] = "Dette abonnement skal ifølge indstillingerne læses i offlinetilstand.\n\nDit StarOffice befinder sig for tiden i onlinetilstand. Vil du skifte til offlinetilstand nu?" ;
-    Text [ italian ] = "Questa sottoscrizione deve essere letta nel modo offline conformemente all'impostazione. \n\nStarOffice attualmente si trova nel modo online. Volete passare al modo offline?" ;
-    Text [ spanish ] = "Esta suscripción se debe poder leer en modo desconectado (Offline).\n\nStarOffice se encuentra sin embargo en modo en línea. ¿Desea cambiar StarOffice al modo desconectado?" ;
-    Text [ french ] = "Cet abonnement ne peut être lu que hors connexion.\n\nStarOffice est cependant en ligne. Souhaitez-vous déconnecter  StarOffice maintenant?" ;
-    Text [ dutch ] = "Dit abonnement moet in offline modus worden gelezen.\n\nStarOffice bevindt zich echter in de online-modus. Wilt u omschakelen naar offline-modus?" ;
-    Text [ portuguese ] = "Esta subscrição foi definida para ser lida em offline.\n\nDe momento o StarOffice encontra-se no modo online. Deseja passar ao modo offline? " ;
-    Text[ chinese_simplified ] = "°´ÕÕÉè¶¨ÓÃ»§Ê¹ÓÃÍÑ»úÔÄ¶ÁÄ£Ê½¡£\n\nStarOffice ÏÖÔÚ´¦ÓÚÁª»ú×´Ì¬¡£ÄúÒªÈÃ StarOffice ×ªµ½ÍÑ»úÄ£Ê½£¿";
-    Text[ russian ] = "İòà ïîäïèñêà äîëæíà ÷èòàòüñÿ, ñîãëàñíî óñòàíîâêå, â ğåæèìå Offline.\n\nStarOffice íàõîäèòñÿ â ğåæèìå Online. Âû õîòèòå ïåğåêëş÷èòü ñåé÷àñ StarOffice â ğåæèì Offline?";
-    Text[ polish ] = "Wed³ug ustawieñ ta subskrypcja ma zostaæ odczytana w trybie offline.\n\n StarOffice znajduje siê w trybie online. Czy prze³¹czyæ na tryb offline?";
-    Text[ japanese ] = "‚±‚Ìw“Ç‚ÍµÌ×²İ Ó°ÄŞ‚Å‚Ìİ’è‚É]‚Á‚Ä“Ç‚İæ‚ç‚ê‚Ü‚·B\n\nStarOffice‚Í Œ»İµİ×²İ Ó°ÄŞ‚É‚È‚Á‚Ä‚¢‚Ü‚·BStarOffice‚ğ¡ µÌ×²İ Ó°ÄŞ‚ÉØ‚èŠ·‚¦‚Ü‚·‚©?";
-    Text[ chinese_traditional ] = "«ö·Ó³]©w¨Ï¥ÎªÌ¨Ï¥Î³s½u¾\\Åª¼Ò¦¡¡C\n\nStarOffice ²{¦b³B©ó½u¤Wª¬ºA¡C±z­nÅı StarOffice Âà¨ì³s½u¼Ò¦¡¡H";
-    Text[ arabic ] = "íÌÈ Ãä íŞÑÃ åĞÇ ÇáÇÔÊÑÇß¡ ÍÓÈ ÇáÅÚÏÇÏÇÊ¡ İí æÖÚ ÇáÇäİÕÇá.\n\nStarOfficeÍÇáíÇğ İí æÖÚ ÇáÇÊÕÇá. åá ÊÑíÏ ÊÛííÑ StarOffice ÇáÂä Åáì æÖÚ ÇáÇäİÕÇá¿";
-    Text[ greek ] = "Ç áíÜãíùóç áõôŞò ôçò óõíäñïìŞò èá ğñİğåé íá ãßíåé, âÜóåé ôùí ñõèìßóåùí, óå êáôÜóôáóç '×ùñßò óıíäåóç'.\n\nÔï StarOffice âñßóêåôáé üìùò óå êáôÜóôáóç 'Óıíäåóç'. Èİëåôå íá áëëÜîåé óå êáôÜóôáóç '×ùñßò óıíäåóç' ôşñá;";
-    Text[ korean ] = "¾Ë¸²½ÅÃ»Àº ¿ÀÇÁ¶óÀÎ ¸ğµå¿¡¼­¸¸ ÀĞ±â ¼³Á¤ÀÌ µË´Ï´Ù.\n\nStarOffice ÇöÀç ¿Â¶óÀÎ¸ğµåÀÔ´Ï´Ù.Áö±İ ¿ÀÇÁ¶óÀÎ ¸ğµå·Î ÀüÈ¯ÇÏ½Ã°Ú½À´Ï±î?";
-    Text[ turkish ] = "Bu üyelik, çevrimdışı kipte okunmak üzere ayarlanmıştır.\n\nStarOffice şu an çevrimiçi kipinde. StarOffice, çevrimdışı kipe geçsin mi?";
+    Text = "Dieses Abonnement soll gemäß Einstellung im Offline Modus gelesen werden.\n\nDas %PRODUCTNAME befindet sich aber im Online Modus. Möchten Sie %PRODUCTNAME jetzt in den Offline Modus umschalten?" ;
+    Text [ english_us ] = "This subscription is set to be read in the offline mode.\n\n%PRODUCTNAME is presently in the online mode. Switch to offline mode now?" ;
+    Text [ portuguese_brazilian ] = "Dieses Abonnement soll gemäß Einstellung im Offline Modus gelesen werden.\n\nDas %PRODUCTNAME befindet sich aber im Online Modus. Möchten Sie %PRODUCTNAME jetzt in den Offline Modus umschalten?" ;
+    Text [ swedish ] = "Denna prenumeration skall enligt inställningarna läsas i offlineläget.\n\nMen %PRODUCTNAME är i onlineläge. Vill Du växla till offlineläget nu?" ;
+    Text [ danish ] = "Dette abonnement skal ifølge indstillingerne læses i offlinetilstand.\n\nDit %PRODUCTNAME befinder sig for tiden i onlinetilstand. Vil du skifte til offlinetilstand nu?" ;
+    Text [ italian ] = "Questa sottoscrizione deve essere letta nel modo offline conformemente all'impostazione. \n\n%PRODUCTNAME attualmente si trova nel modo online. Volete passare al modo offline?" ;
+    Text [ spanish ] = "Esta suscripción se debe poder leer en modo desconectado (Offline).\n\n%PRODUCTNAME se encuentra sin embargo en modo en línea. ¿Desea cambiar %PRODUCTNAME al modo desconectado?" ;
+    Text [ french ] = "Cet abonnement ne peut être lu que hors connexion.\n\n%PRODUCTNAME est cependant en ligne. Souhaitez-vous déconnecter  %PRODUCTNAME maintenant?" ;
+    Text [ dutch ] = "Dit abonnement moet in offline modus worden gelezen.\n\n%PRODUCTNAME bevindt zich echter in de online-modus. Wilt u omschakelen naar offline-modus?" ;
+    Text [ portuguese ] = "Esta subscrição foi definida para ser lida em offline.\n\nDe momento o %PRODUCTNAME encontra-se no modo online. Deseja passar ao modo offline? " ;
+    Text[ chinese_simplified ] = "°´ÕÕÉè¶¨ÓÃ»§Ê¹ÓÃÍÑ»úÔÄ¶ÁÄ£Ê½¡£\n\n%PRODUCTNAME ÏÖÔÚ´¦ÓÚÁª»ú×´Ì¬¡£ÄúÒªÈÃ %PRODUCTNAME ×ªµ½ÍÑ»úÄ£Ê½£¿";
+    Text[ russian ] = "İòà ïîäïèñêà äîëæíà ÷èòàòüñÿ, ñîãëàñíî óñòàíîâêå, â ğåæèìå Offline.\n\n%PRODUCTNAME íàõîäèòñÿ â ğåæèìå Online. Âû õîòèòå ïåğåêëş÷èòü ñåé÷àñ %PRODUCTNAME â ğåæèì Offline?";
+    Text[ polish ] = "Wed³ug ustawieñ ta subskrypcja ma zostaæ odczytana w trybie offline.\n\n %PRODUCTNAME znajduje siê w trybie online. Czy prze³¹czyæ na tryb offline?";
+    Text[ japanese ] = "‚±‚Ìw“Ç‚ÍµÌ×²İ Ó°ÄŞ‚Å‚Ìİ’è‚É]‚Á‚Ä“Ç‚İæ‚ç‚ê‚Ü‚·B\n\n%PRODUCTNAME‚Í Œ»İµİ×²İ Ó°ÄŞ‚É‚È‚Á‚Ä‚¢‚Ü‚·B%PRODUCTNAME‚ğ¡ µÌ×²İ Ó°ÄŞ‚ÉØ‚èŠ·‚¦‚Ü‚·‚©?";
+    Text[ chinese_traditional ] = "«ö·Ó³]©w¨Ï¥ÎªÌ¨Ï¥Î³s½u¾\\Åª¼Ò¦¡¡C\n\n%PRODUCTNAME ²{¦b³B©ó½u¤Wª¬ºA¡C±z­nÅı %PRODUCTNAME Âà¨ì³s½u¼Ò¦¡¡H";
+    Text[ arabic ] = "íÌÈ Ãä íŞÑÃ åĞÇ ÇáÇÔÊÑÇß¡ ÍÓÈ ÇáÅÚÏÇÏÇÊ¡ İí æÖÚ ÇáÇäİÕÇá.\n\n%PRODUCTNAMEÍÇáíÇğ İí æÖÚ ÇáÇÊÕÇá. åá ÊÑíÏ ÊÛííÑ %PRODUCTNAME ÇáÂä Åáì æÖÚ ÇáÇäİÕÇá¿";
+    Text[ greek ] = "Ç áíÜãíùóç áõôŞò ôçò óõíäñïìŞò èá ğñİğåé íá ãßíåé, âÜóåé ôùí ñõèìßóåùí, óå êáôÜóôáóç '×ùñßò óıíäåóç'.\n\nÔï %PRODUCTNAME âñßóêåôáé üìùò óå êáôÜóôáóç 'Óıíäåóç'. Èİëåôå íá áëëÜîåé óå êáôÜóôáóç '×ùñßò óıíäåóç' ôşñá;";
+    Text[ korean ] = "¾Ë¸²½ÅÃ»Àº ¿ÀÇÁ¶óÀÎ ¸ğµå¿¡¼­¸¸ ÀĞ±â ¼³Á¤ÀÌ µË´Ï´Ù.\n\n%PRODUCTNAME ÇöÀç ¿Â¶óÀÎ¸ğµåÀÔ´Ï´Ù.Áö±İ ¿ÀÇÁ¶óÀÎ ¸ğµå·Î ÀüÈ¯ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Bu üyelik, çevrimdışı kipte okunmak üzere ayarlanmıştır.\n\n%PRODUCTNAME şu an çevrimiçi kipinde. %PRODUCTNAME, çevrimdışı kipe geçsin mi?";
     Text[ language_user1 ] = " ";
 };
 String STR_FILTER_EXTERNAL
@@ -113,26 +113,26 @@ String STR_FILTER_EXTERNAL
 
 String STR_FILTER_COMPONENT
 {
-    Text = "StarOffice Komponente" ;
+    Text = "%PRODUCTNAME Komponente" ;
     Text [ english ] = "StarOffice Component" ;
-    Text [ english_us ] = "StarOffice Component" ;
-    Text[ portuguese ] = "Componentes StarOffice";
-    Text[ russian ] = "StarOffice - Êîìïîíåíòû";
-    Text[ greek ] = "StarOffice - Óôïé÷åßï";
-    Text[ dutch ] = "StarOffice component";
-    Text[ french ] = "Composants de StarOffice";
-    Text[ spanish ] = "StarOffice Componentes";
-    Text[ italian ] = "Componenti StarOffice";
-    Text[ danish ] = "StarOffice komponent";
-    Text[ swedish ] = "StarOffice-komponent";
-    Text[ polish ] = "Sk³adnik StarOffice ";
-    Text[ portuguese_brazilian ] = "StarOffice Component";
-    Text[ japanese ] = "StarOffice ºİÎß°ÈİÄ";
-    Text[ korean ] = "StarOffice ÄŞÆ÷³ÍÆ®";
-    Text[ chinese_simplified ] = "StarOffice ²¿¼ş";
-    Text[ chinese_traditional ] = "StarOffice ³¡¥ó";
-    Text[ arabic ] = "ÅÍÏì ãßæäÇÊ  StarOffice";
-    Text[ turkish ] = "StarOffice bileşeni";
+    Text [ english_us ] = "%PRODUCTNAME Component" ;
+    Text[ portuguese ] = "Componentes %PRODUCTNAME";
+    Text[ russian ] = "%PRODUCTNAME - Êîìïîíåíòû";
+    Text[ greek ] = "%PRODUCTNAME - Óôïé÷åßï";
+    Text[ dutch ] = "%PRODUCTNAME component";
+    Text[ french ] = "Composants de %PRODUCTNAME";
+    Text[ spanish ] = "%PRODUCTNAME Componentes";
+    Text[ italian ] = "Componenti %PRODUCTNAME";
+    Text[ danish ] = "%PRODUCTNAME komponent";
+    Text[ swedish ] = "%PRODUCTNAME-komponent";
+    Text[ polish ] = "Sk³adnik %PRODUCTNAME ";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME Component";
+    Text[ japanese ] = "%PRODUCTNAME ºİÎß°ÈİÄ";
+    Text[ korean ] = "%PRODUCTNAME ÄŞÆ÷³ÍÆ®";
+    Text[ chinese_simplified ] = "%PRODUCTNAME ²¿¼ş";
+    Text[ chinese_traditional ] = "%PRODUCTNAME ³¡¥ó";
+    Text[ arabic ] = "ÅÍÏì ãßæäÇÊ  %PRODUCTNAME";
+    Text[ turkish ] = "%PRODUCTNAME bileşeni";
 };
 
 String STR_FILTER_NOT_INSTALLED
