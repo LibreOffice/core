@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-03 12:05:51 $
+ *  last change: $Author: nn $ $Date: 2002-05-08 14:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <svx/colorcfg.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/sdshitm.hxx>
@@ -102,6 +103,7 @@
 #include "docpool.hxx"
 #include "patattr.hxx"
 #include "attrib.hxx"
+#include "scmod.hxx"
 
 //------------------------------------------------------------------------
 
@@ -167,6 +169,13 @@ public:
 
 //------------------------------------------------------------------------
 
+ColorData ScDetectiveFunc::nArrowColor = 0;
+ColorData ScDetectiveFunc::nErrorColor = 0;
+ColorData ScDetectiveFunc::nCommentColor = 0;
+BOOL ScDetectiveFunc::bColorsInitialized = FALSE;
+
+//------------------------------------------------------------------------
+
 BOOL lcl_HasThickLine( SdrObject& rObj )
 {
     // thin lines get width 0 -> everything greater 0 is a thick line
@@ -185,7 +194,7 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
 {
     nMaxLevel = 0;
 
-    aBoxSet.Put( XLineColorItem( EMPTY_STRING, Color( COL_LIGHTBLUE ) ) );
+    aBoxSet.Put( XLineColorItem( EMPTY_STRING, Color( ScDetectiveFunc::GetArrowColor() ) ) );
     aBoxSet.Put( XFillStyleItem( XFILL_NONE ) );
 
     //  #66479# Standard-Linienenden (wie aus XLineEndList::Create) selber zusammenbasteln,
@@ -227,7 +236,7 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     aFromTabSet.Put( XLineEndWidthItem( 200 ) );
     aFromTabSet.Put( XLineEndCenterItem( FALSE ) );
 
-    aCircleSet.Put( XLineColorItem( String(), Color( COL_LIGHTRED ) ) );
+    aCircleSet.Put( XLineColorItem( String(), Color( ScDetectiveFunc::GetErrorColor() ) ) );
     aCircleSet.Put( XFillStyleItem( XFILL_NONE ) );
     USHORT nWidth = 55;     // 54 = 1 Pixel
     aCircleSet.Put( XLineWidthItem( nWidth ) );
@@ -248,7 +257,7 @@ ScCommentData::ScCommentData( ScDocument* pDoc, SdrModel* pModel ) :
     aCaptionSet.Put( XLineStartWidthItem( 200 ) );
     aCaptionSet.Put( XLineStartCenterItem( FALSE ) );
     aCaptionSet.Put( XFillStyleItem( XFILL_SOLID ) );
-    Color aYellow( 255,255,192 );           // hellgelb
+    Color aYellow( ScDetectiveFunc::GetCommentColor() );
     aCaptionSet.Put( XFillColorItem( String(), aYellow ) );
 
     //  shadow
@@ -503,7 +512,7 @@ BOOL ScDetectiveFunc::InsertArrow( USHORT nCol, USHORT nRow,
     else
         rAttrSet.Put( XLineWidthItem( 0 ) );                // einzelne Referenz
 
-    ColorData nColorData = ( bRed ? COL_LIGHTRED : COL_LIGHTBLUE );
+    ColorData nColorData = ( bRed ? GetErrorColor() : GetArrowColor() );
     rAttrSet.Put( XLineColorItem( String(), Color( nColorData ) ) );
     Point aPointArr[2] = {aStartPos, aEndPos};
     SdrPathObj* pArrow = new SdrPathObj(OBJ_LINE,
@@ -583,7 +592,7 @@ BOOL ScDetectiveFunc::InsertToOtherTab( USHORT nStartCol, USHORT nStartRow,
     else
         rAttrSet.Put( XLineWidthItem( 0 ) );                // einzelne Referenz
 
-    ColorData nColorData = ( bRed ? COL_LIGHTRED : COL_LIGHTBLUE );
+    ColorData nColorData = ( bRed ? GetErrorColor() : GetArrowColor() );
     rAttrSet.Put( XLineColorItem( String(), Color( nColorData ) ) );
     Point aPointArr[2] = {aStartPos, aEndPos};
     SdrPathObj* pArrow = new SdrPathObj(OBJ_LINE,
@@ -1670,6 +1679,88 @@ void ScDetectiveFunc::UpdateAllComments()
     }
 }
 
+void ScDetectiveFunc::UpdateAllArrowColors()
+{
+    //  no undo actions necessary
+
+    ScDrawLayer* pModel = pDoc->GetDrawLayer();
+    if (!pModel)
+        return;
+
+    USHORT nTabCount = pDoc->GetTableCount();
+    for (USHORT nObjTab=0; nObjTab<nTabCount; nObjTab++)
+    {
+        SdrPage* pPage = pModel->GetPage(nObjTab);
+        DBG_ASSERT(pPage,"Page ?");
+        if (pPage)
+        {
+            SdrObjListIter aIter( *pPage, IM_FLAT );
+            SdrObject* pObject = aIter.Next();
+            while (pObject)
+            {
+                if ( pObject->GetLayer() == SC_LAYER_INTERN )
+                {
+                    BOOL bArrow = FALSE;
+                    BOOL bError = FALSE;
+
+                    ScAddress aPos;
+                    ScRange aSource;
+                    BOOL bDummy;
+                    ScDetectiveObjType eType = GetDetectiveObjectType( pObject, aPos, aSource, bDummy );
+                    if ( eType == SC_DETOBJ_ARROW || eType == SC_DETOBJ_TOOTHERTAB )
+                    {
+                        //  source is valid, determine error flag from source range
+
+                        ScTripel aStart( aSource.aStart.Col(), aSource.aStart.Row(), aSource.aStart.Tab() );
+                        ScTripel aEnd( aSource.aEnd.Col(), aSource.aEnd.Row(), aSource.aEnd.Tab() );
+                        ScTripel aErrPos;
+                        if ( HasError( aStart, aEnd, aErrPos ) )
+                            bError = TRUE;
+                        else
+                            bArrow = TRUE;
+                    }
+                    else if ( eType == SC_DETOBJ_FROMOTHERTAB )
+                    {
+                        //  source range is no longer known, take error flag from formula itself
+                        //  (this means, if the formula has an error, all references to other tables
+                        //  are marked red)
+
+                        ScTripel aFormulaPos( aPos.Col(), aPos.Row(), aPos.Tab() );
+                        ScTripel aErrPos;
+                        if ( HasError( aFormulaPos, aFormulaPos, aErrPos ) )
+                            bError = TRUE;
+                        else
+                            bArrow = TRUE;
+                    }
+                    else if ( eType == SC_DETOBJ_CIRCLE )
+                    {
+                        //  circles (error marks) are always red
+
+                        bError = TRUE;
+                    }
+                    else if ( eType == SC_DETOBJ_NONE )
+                    {
+                        //  frame for area reference has no ObjType, always gets arrow color
+
+                        if ( pObject->ISA( SdrRectObj ) && !pObject->ISA( SdrCaptionObj ) )
+                        {
+                            bArrow = TRUE;
+                        }
+                    }
+
+                    if ( bArrow || bError )
+                    {
+                        ColorData nColorData = ( bError ? GetErrorColor() : GetArrowColor() );
+                        pObject->SetItemAndBroadcast( XLineColorItem( String(), Color( nColorData ) ) );
+                    }
+                }
+
+                pObject = aIter.Next();
+            }
+        }
+    }
+}
+
 BOOL ScDetectiveFunc::FindFrameForObject( SdrObject* pObject, ScRange& rRange )
 {
     //  find the rectangle for an arrow (always the object directly before the arrow)
@@ -1736,8 +1827,8 @@ ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject,
                 FindFrameForObject( pObject, rSource );     // modifies rSource
             }
 
-            if ( ((const XLineColorItem&)pObject->GetItem(XATTR_LINECOLOR)).
-                                            GetValue().GetColor() == COL_LIGHTRED )
+            ColorData nObjColor = ((const XLineColorItem&)pObject->GetItem(XATTR_LINECOLOR)).GetValue().GetColor();
+            if ( nObjColor == GetErrorColor() && nObjColor != GetArrowColor() )
                 rRedLine = TRUE;
         }
         else if ( pObject->ISA(SdrCircObj) )
@@ -1781,5 +1872,48 @@ void ScDetectiveFunc::InsertObject( ScDetectiveObjType eType,
             DrawCircle( rPosition.Col(), rPosition.Row(), aData );
             break;
     }
+}
+
+// static
+ColorData ScDetectiveFunc::GetArrowColor()
+{
+    if (!bColorsInitialized)
+        InitializeColors();
+    return nArrowColor;
+}
+
+// static
+ColorData ScDetectiveFunc::GetErrorColor()
+{
+    if (!bColorsInitialized)
+        InitializeColors();
+    return nErrorColor;
+}
+
+// static
+ColorData ScDetectiveFunc::GetCommentColor()
+{
+    if (!bColorsInitialized)
+        InitializeColors();
+    return nCommentColor;
+}
+
+// static
+void ScDetectiveFunc::InitializeColors()
+{
+    // may be called several times to update colors from configuration
+
+    const svx::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+    nArrowColor   = rColorCfg.GetColorValue(svx::CALCDETECTIVE).nColor;
+    nErrorColor   = rColorCfg.GetColorValue(svx::CALCDETECTIVEERROR).nColor;
+    nCommentColor = rColorCfg.GetColorValue(svx::CALCNOTESBACKGROUND).nColor;
+
+    bColorsInitialized = TRUE;
+}
+
+// static
+BOOL ScDetectiveFunc::IsColorsInitialized()
+{
+    return bColorsInitialized;
 }
 

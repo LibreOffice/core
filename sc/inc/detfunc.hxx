@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-03 12:01:15 $
+ *  last change: $Author: nn $ $Date: 2002-05-08 14:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <tools/gen.hxx>
 #endif
 
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
+#endif
+
 class SdrObject;
 class SdrPage;
 class String;
@@ -92,6 +96,11 @@ enum ScDetectiveObjType
 
 class ScDetectiveFunc
 {
+    static ColorData nArrowColor;
+    static ColorData nErrorColor;
+    static ColorData nCommentColor;
+    static BOOL      bColorsInitialized;
+
     ScDocument*     pDoc;
     USHORT          nTab;
 
@@ -166,6 +175,7 @@ public:
     BOOL        HideComment( USHORT nCol, USHORT nRow );
 
     void        UpdateAllComments();        // on all tables
+    void        UpdateAllArrowColors();     // on all tables
 
     static BOOL IsNonAlienArrow( SdrObject* pObject );
 
@@ -173,6 +183,12 @@ public:
                                 ScAddress& rPosition, ScRange& rSource, BOOL& rRedLine );
     void        InsertObject( ScDetectiveObjType eType, const ScAddress& rPosition,
                                 const ScRange& rSource, BOOL bRedLine );
+
+    static ColorData GetArrowColor();
+    static ColorData GetErrorColor();
+    static ColorData GetCommentColor();
+    static void InitializeColors();
+    static BOOL IsColorsInitialized();
 };
 
 
