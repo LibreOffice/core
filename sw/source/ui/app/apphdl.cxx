@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:30 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,11 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #endif
 
+// #107253#
+#ifndef _SWLINGUCONFIG_HXX
+#include <swlinguconfig.hxx>
+#endif
+
 using namespace ::com::sun::star;
 
 #define C2S(cChar) String::CreateFromAscii(cChar)
@@ -561,7 +566,6 @@ void SwModule::ExecWizzard(SfxRequest & rReq)
  --------------------------------------------------------------------*/
 
 
-
 void SwModule::ExecViewOptions(SfxRequest &rReq)
 {
     SwViewOption* pOpt = 0;
@@ -721,7 +725,10 @@ void SwModule::ExecViewOptions(SfxRequest &rReq)
             {
                 uno::Any aVal( &bSet, ::getCppuBooleanType() );
                 String aPropName( C2S(UPN_IS_SPELL_AUTO) );
-                SvtLinguConfig().SetProperty( aPropName, aVal );
+
+                // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
+                SwLinguConfig().SetProperty( aPropName, aVal );
+
                 if (xLngProp.is())
                     xLngProp->setPropertyValue( aPropName, aVal );
             }
@@ -736,7 +743,10 @@ void SwModule::ExecViewOptions(SfxRequest &rReq)
             {
                 uno::Any aVal( &bSet, ::getCppuBooleanType() );
                 String aPropName( C2S(UPN_IS_SPELL_HIDE) );
-                SvtLinguConfig().SetProperty( aPropName, aVal );
+
+                // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
+                SwLinguConfig().SetProperty( aPropName, aVal );
+
                 if (xLngProp.is())
                     xLngProp->setPropertyValue( aPropName, aVal );
             }
