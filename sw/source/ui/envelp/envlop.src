@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:19:23 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 20:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ TabDialog DLG_ENV
                 Text[ polish ] = "Format";
                 Text[ portuguese_brazilian ] = "Format";
                 Text[ japanese ] = "èëéÆ";
-                Text[ korean ] = "Format";
+                Text[ korean ] = "º≠Ωƒ";
                 Text[ chinese_simplified ] = "∏Ò Ω";
                 Text[ chinese_traditional ] = "ÆÊ¶°";
                 Text[ turkish ] = "Format";
