@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:56 $
+ *  last change: $Author: mib $ $Date: 2000-10-31 09:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1041,7 +1041,7 @@ void SwHTMLParser::DocumentDetected()
 
         SetSaveBaseURL();
 
-#ifndef PRODUCT
+#if 0
         ViewShell *pTmpVSh = 0;
         pDoc->GetEditShell( &pTmpVSh );
         ASSERT( pTmpVSh==0,
@@ -5239,6 +5239,9 @@ void _HTMLAttr::InsertPrev( _HTMLAttr *pPrv )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:56  hr
+      initial import
+
       Revision 1.494  2000/09/18 16:04:47  willem.vandorp
       OpenOffice header added.
 
