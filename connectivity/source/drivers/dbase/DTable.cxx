@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:04:51 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1640,7 +1640,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
 
                     ByteString aStr;
                     ByteString aBlock(ByteString::CreateFromInt32(nBlockNo));
-                    aStr.Expand(static_cast<sal_uInt16>(nLen - aBlock.Len(), '0') );
+                    aStr.Expand(static_cast<sal_uInt16>(nLen - aBlock.Len()), '0' );
                     aStr += aBlock;
                     aStr.Convert(gsl_getSystemTextEncoding(),getConnection()->getTextEncoding());
                     // Zeichen kopieren:
