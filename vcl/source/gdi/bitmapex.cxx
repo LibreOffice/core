@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-22 08:51:50 $
+ *  last change: $Author: thb $ $Date: 2002-10-22 16:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,8 +599,17 @@ BOOL BitmapEx::Erase( const Color& rFillColor )
 
         if( bRet && ( eTransparent == TRANSPARENT_BITMAP ) && !!aMask )
         {
-            const Color aBlack( COL_BLACK );
-            aMask.Erase( aBlack );
+            // #104416# Respect transparency on fill color
+            if( rFillColor.GetTransparency() )
+            {
+                const Color aFill( rFillColor.GetTransparency(), rFillColor.GetTransparency(), rFillColor.GetTransparency() );
+                aMask.Erase( aFill );
+            }
+            else
+            {
+                const Color aBlack( COL_BLACK );
+                aMask.Erase( aBlack );
+            }
         }
     }
 
