@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:02:23 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ ModalDialog DLG_ASS
         Text[ french ] = "Type";
         Text[ spanish ] = "Tipo";
         Text[ italian ] = "Tipo";
-        Text[ danish ] = "Type";
+        Text[ danish ] = "F";
         Text[ swedish ] = "Typ";
         Text[ polish ] = "Typ";
         Text[ portuguese_brazilian ] = "Tipo";
@@ -361,7 +361,7 @@ ModalDialog DLG_ASS
         Text[ japanese ] = "γƒγƒΌγ‚Έγ‚Ήγ‚Ώγ‚¤γƒ«γ‚’ιΈζγ—γΎγ™(~S)";
         Text[ chinese_traditional ] = "θ«‹ζ‚¨ιΈζ“‡δΈ€ε€‹ι ιΆζ¨£εΌ(~S)";
         Text[ arabic ] = "ΗαΡΜΗΑ ΗΞΚνΗΡ ΚΞΨνΨ ΗαΥέΝΙ";
-        Text[ greek ] = "Επιλέξτε ένα πρότυπο ~σελίδας";
+        Text[ greek ] = "Επιλέξτε ένα πρότυπο διαφ~άνειας";
         Text[ korean ] = "μ¬λΌμ΄λ“ λ””μμΈμ„ μ„ νƒν•μ‹­μ‹μ¤(~S)";
         Text[ turkish ] = "Saydam bir disayn ~seη";
         Text[ language_user1 ] = " ";
@@ -413,7 +413,7 @@ ModalDialog DLG_ASS
         Text[ japanese ] = "γƒ—γƒ¬γ‚Όγƒ³γƒ†γƒΌγ‚·γƒ§γƒ³γ®η™Ίθ΅¨ζ–Ήζ³•γ‚’ιΈζγ—γΎγ™";
         Text[ chinese_traditional ] = "θ«‹ιΈζ“‡δΈ€ε€‹ε—ε°η°΅ε ±η„εª’ι«”";
         Text[ arabic ] = "ΗΞΚΡ ΓΟΗΙ ΗαΪΡΦ ΗαΚήΟνγν";
-        Text[ greek ] = "Επιλέξτε μια συσκευή έκδοσης";
+        Text[ greek ] = "Επιλέξτε μια συσκευή εξόδου";
         Text[ korean ] = "ν”„λ μ  ν…μ΄μ… μ¶λ ¥ λ§¤μ²΄λ¥Ό μ„ νƒν•μ‹­μ‹μ¤.";
         Text[ turkish ] = "Bir ηύktύ medyasύ seηin";
         Text[ language_user1 ] = " ";
@@ -547,7 +547,7 @@ ModalDialog DLG_ASS
         Text [ french ] = "~Transparent" ;
         Text [ swedish ] = "~Overhead" ;
         Text [ danish ] = "Overhead" ;
-        Text [ portuguese_brazilian ] = "~Transparκncia de retro-projetor" ;
+        Text [ portuguese_brazilian ] = "~Lβmina de retro-projetor" ;
         Text [ portuguese ] = "~Transparente" ;
         Text[ chinese_simplified ] = "ι€ζη®”(~V)";
         Text[ russian ] = "Ολενκΰ";
@@ -672,7 +672,7 @@ ModalDialog DLG_ASS
         Text[ chinese_simplified ] = "ζ•ζ(~E)";
         Text[ chinese_traditional ] = "ζ•ζ(~E)";
         Text[ arabic ] = "ΗαΚΓΛνΡ:";
-        Text[ greek ] = "Εφέ:";
+        Text[ greek ] = "~Εφέ";
         Text[ korean ] = "ν¨κ³Ό(~E)";
         Text[ turkish ] = "~Efekt";
         Text[ language_user1 ] = " ";
@@ -717,7 +717,7 @@ ModalDialog DLG_ASS
         Text[ chinese_simplified ] = "ι€εΊ¦(~S)";
         Text[ chinese_traditional ] = "ι€εΊ¦(~S)";
         Text[ arabic ] = "ΗαΣΡΪΙ:";
-        Text[ greek ] = "Ταχύτητα:";
+        Text[ greek ] = "~Ταχύτητα";
         Text[ korean ] = "μ†λ„(~S)";
         Text[ turkish ] = "~Hύz";
         Text[ language_user1 ] = " ";
@@ -1147,7 +1147,7 @@ ModalDialog DLG_ASS
         Text [ swedish ] = "Fler idιer som borde nδmnas?" ;
         Text [ danish ] = "Yderligere ideer som skal prζsenteres?" ;
         Text [ portuguese ] = "Outras ideias a apresentar?" ;
-        Text [ portuguese_brazilian ] = "Outras ideias a apresentar?" ;
+        Text [ portuguese_brazilian ] = "Outras idιias a apresentar?" ;
         Text[ chinese_simplified ] = "θΏι€θ¦ε ε…¥ε…¶δ»–η„θ®Ύζƒ³οΌ";
         Text[ russian ] = "Ρτξπμσλθπσιςε βΰψθ δξλγξρπξχνϋε φελθ";
         Text[ polish ] = "Dodatkowe pomys³y do zaprezentowania?";
@@ -1343,7 +1343,7 @@ ModalDialog DLG_ASS
         Text[ russian ] = "~Δΰλεε >>";
         Text[ polish ] = "~Dalej >>";
         Text[ japanese ] = "ζ¬΅γΈ(~N) >>";
-        Text[ chinese_traditional ] = "ηΉΌηΊ(~N) >>";
+        Text[ chinese_traditional ] = "δΈ‹δΈ€ζ­¥(~N) >>";
         Text[ arabic ] = "ΗαΚΗαν <<";
         Text[ greek ] = "Επόμενο >>";
         Text[ korean ] = "λ‹¤μ(~N) >>";
@@ -1408,7 +1408,7 @@ ModalDialog DLG_ASS
     Text[ chinese_simplified ] = "θ‡ªε¨ζ–‡δ»¶ε©η† ζΌ”η¤Ίζ–‡η¨Ώ";
     Text[ chinese_traditional ] = "θ‡ªε‹•ζª”ζ΅ε©η† η°΅ε ±";
     Text[ arabic ] = "ΗαγΡΤΟ ΗαΒαν ααΪΡΦ ΗαΚήΟνγν";
-    Text[ greek ] = "Παρουσίαση AutoPilot";
+    Text[ greek ] = "Αυτόματος Πιλότος παρουσίασης";
     Text[ korean ] = "μλ™ νμΌλΏ ν”„λ μ  ν…μ΄μ…";
     Text[ turkish ] = "Sunu OtoPilotu";
     Text[ language_user1 ] = " ";
@@ -1420,6 +1420,7 @@ ModalDialog DLG_ASS
     Text[ hindi ] = "ΰ¤“ΰ¤ΰ¥‹ΰ¤ªΰ¥ΰ¤²ΰ¤ΰ¥ ΰ¤ªΰ¥ΰ¤°ΰ¤Έΰ¥ΰ¤¤ΰ¥ΰ¤¤ΰ¤Ώ";
     Text[ slovak ] = "Sprievodca prezentΓ΅ciou";
 };
+
 
 
 
