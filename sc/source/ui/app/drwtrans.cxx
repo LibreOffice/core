@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-26 19:19:35 $
+ *  last change: $Author: cl $ $Date: 2001-10-04 11:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,12 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
+
+#ifndef _UTL_STREAM_WRAPPER_HXX_
+#include <unotools/streamwrap.hxx>
+#endif
+
+#include <svx/unomodel.hxx>
 
 #include <sot/storage.hxx>
 #include <so3/svstor.hxx>
@@ -440,18 +446,12 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                 SdrModel* pDrawModel = (SdrModel*)pUserObject;
 
                 pDrawModel->SetStreamingSdrModel(TRUE);
-
-                //  SdrModel stream operator doesn't support XML
-                //! call XML export here!
-                rxOStm->SetVersion(SOFFICE_FILEFORMAT_50);
-
                 rxOStm->SetBufferSize( 0xff00 );
-                pDrawModel->PreSave();
-                pDrawModel->GetItemPool().SetFileFormatVersion( (USHORT)rxOStm->GetVersion() );
-                pDrawModel->GetItemPool().Store( *rxOStm );
-                *rxOStm << *pDrawModel;
-                pDrawModel->PostSave();
-                rxOStm->Commit();
+                {
+                    com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
+                    if( SvxDrawingLayerExport( pDrawModel, xDocOut ) )
+                        rxOStm->Commit();
+                }
                 pDrawModel->SetStreamingSdrModel(FALSE);
                 bRet = ( rxOStm->GetError() == ERRCODE_NONE );
             }
