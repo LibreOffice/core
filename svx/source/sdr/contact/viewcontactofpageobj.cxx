@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofpageobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:37:47 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,9 +301,16 @@ namespace sdr
             }
         }
 
+        Rectangle ViewContactOfPageObj::GetPageRectangle (void)
+        {
+            CalcPaintRectangle();
+            return maPaintRectangle;
+        }
+
         // Paint support methods for page content painting
         sal_Bool ViewContactOfPageObj::PaintPageContents(
-            DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle,
+            DisplayInfo& rDisplayInfo,
+            const Rectangle& rPaintRectangle,
             const ViewObjectContact& rAssociatedVOC)
         {
             // Prepare page painter
@@ -313,7 +320,6 @@ namespace sdr
 
             if(mpPagePainter)
             {
-                rPaintRectangle = GetPaintRectangle();
                 bRetval = mpPagePainter->PaintIt(rDisplayInfo, rPaintRectangle);
             }
 
@@ -321,12 +327,12 @@ namespace sdr
         }
 
         sal_Bool ViewContactOfPageObj::PaintPageReplacement(
-            DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle,
+            DisplayInfo& rDisplayInfo,
+            const Rectangle& rPaintRectangle,
             const ViewObjectContact& rAssociatedVOC)
         {
             // If painting recursive, paint a replacement visualization
             OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
-            rPaintRectangle = GetPaintRectangle();
 
             svtools::ColorConfigValue aDocColor(
                 rDisplayInfo.GetColorConfig().GetColorValue(svtools::DOCCOLOR));
@@ -342,7 +348,8 @@ namespace sdr
         }
 
         sal_Bool ViewContactOfPageObj::PaintPageBorder(
-            DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle,
+            DisplayInfo& rDisplayInfo,
+            const Rectangle& rPaintRectangle,
             const ViewObjectContact& rAssociatedVOC)
         {
             OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
@@ -352,8 +359,6 @@ namespace sdr
 
             if( aFrameColor.bIsVisible )
             {
-                rPaintRectangle = GetPaintRectangle();
-
                 pOut->SetFillColor();
                 pOut->SetLineColor(aFrameColor.nColor);
                 pOut->DrawRect(rPaintRectangle);
@@ -399,7 +404,7 @@ namespace sdr
             if(mbIsPainting)
             {
                 // Paint a replacement object
-                Rectangle aNewRectangle;
+                Rectangle aNewRectangle = GetPageRectangle();
                 bRetval |= PaintPageReplacement(rDisplayInfo, aNewRectangle, rAssociatedVOC);
                 rPaintRectangle.Union(aNewRectangle);
             }
@@ -412,7 +417,7 @@ namespace sdr
                     mbIsPainting = sal_True;
 
                     // Paint a replacement object.
-                    Rectangle aNewRectangle;
+                    Rectangle aNewRectangle (GetPageRectangle());
                     bRetval |= PaintPageContents(rDisplayInfo, aNewRectangle, rAssociatedVOC);
                     rPaintRectangle.Union(aNewRectangle);
 
