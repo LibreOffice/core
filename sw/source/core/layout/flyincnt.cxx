@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyincnt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:39:27 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,11 +112,14 @@ SwFlyInCntFrm::~SwFlyInCntFrm()
     //und Tschuess.
     if ( !GetFmt()->GetDoc()->IsInDtor() && GetAnchorFrm() )
     {
-        SwRect aTmp( AddSpacesToFrm() );
+        SwRect aTmp( GetObjRectWithSpaces() );
         SwFlyInCntFrm::NotifyBackground( FindPageFrm(), aTmp, PREP_FLY_LEAVE );
     }
 }
 
+// --> OD 2004-06-29 #i28701#
+TYPEINIT1(SwFlyInCntFrm,SwFlyFrm);
+// <--
 /*************************************************************************
 |*
 |*  SwFlyInCntFrm::SetRefPoint(),
