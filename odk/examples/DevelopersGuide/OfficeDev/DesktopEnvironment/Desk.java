@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Desk.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:33:45 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -85,7 +85,7 @@ public class Desk
      *                  host        describe host on which remote office runs
      *                              default=localhost
      *                  port        describe port which is used by remote office
-     *                              default=8100
+     *                              default=2083
      *                  mode        describe using mode of document view {inplace/outplace}
      *                              default=inplace
      *                  file        name of first file which should be open
@@ -95,7 +95,7 @@ public class Desk
     {
         // Analyze command line parameters.
         String  sHost  = new String("localhost");
-        String  sPort  = new String("8100");
+        String  sPort  = new String("2083");
         String  sMode  = new String("inplace");
         String  sFile  = new String("private:factory/swriter");
 
