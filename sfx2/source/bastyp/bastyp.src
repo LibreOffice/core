@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:39:56 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 16:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ String ERR_INET_NAME_RESOLVE
     Text [ italian ] = "Non è stato possibile risolvere il nome dell'host\n" ;
     Text [ spanish ] = "El nombre del ordenador no se pudo resolver.\n" ;
     Text [ french ] = "Impossible de résoudre le nom de l'ordinateur\n" ;
-    Text [ swedish ] = "Datornamnet kunde inte lösas upp\n" ;
+    Text [ swedish ] = "Det gick inte att lösa upp datornamnet\n" ;
     Text [ danish ] = "Det var ikke muligt at fortolke computernavnet\n" ;
     Text [ portuguese ] = "Impossível resolver o nome do computador.\n" ;
     Text [ portuguese_brazilian ] = "Der Rechnername konnte nicht aufgelöst werden\n" ;
