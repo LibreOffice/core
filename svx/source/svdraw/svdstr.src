@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:36:58 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2276,7 +2276,7 @@ String STR_ObjNameSingulGRAF
     Text[ chinese_simplified ] = "Í¼ĞÎ";
     Text[ russian ] = "Ãğàôèêà";
     Text[ polish ] = "Grafika";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸";
+    Text[ japanese ] = "}";
     Text[ chinese_traditional ] = "¹Ï§Î";
     Text[ arabic ] = "ÕæÑÉ";
     Text[ language_user1 ] = "Check in the program to see if small letter correct, this is a STRING: TSM 08.09.99";
@@ -2304,7 +2304,7 @@ String STR_ObjNamePluralGRAF
     Text[ chinese_simplified ] = "Í¼ĞÎ";
     Text[ russian ] = "Ãğàôèêè";
     Text[ polish ] = "Grafiki";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸";
+    Text[ japanese ] = "}";
     Text[ chinese_traditional ] = "¹Ï§Î";
     Text[ arabic ] = "ÕæÑ";
     Text[ language_user1 ] = "check in the program and see if small letter correct, this is a STRING entry: TSM 08.09.99";
@@ -2330,7 +2330,7 @@ String STR_ObjNameSingulGRAFLNK
     Text[ chinese_simplified ] = "Á´½ÓµÄÍ¼ĞÎ";
     Text[ russian ] = "ñâÿçàííàÿ ãğàôèêà";
     Text[ polish ] = "Po³¹czona grafika";
-    Text[ japanese ] = "Øİ¸‚³‚ê‚½¸Ş×Ì¨¯¸";
+    Text[ japanese ] = "Øİ¸‚³‚ê‚½}";
     Text[ chinese_traditional ] = "³sµ²ªº¹Ï§Î";
     Text[ arabic ] = "ÑÓãÉ ãÑÊÈØÉ";
     Text[ dutch ] = "Gekoppelde afbeelding";
@@ -2356,7 +2356,7 @@ String STR_ObjNamePluralGRAFLNK
     Text[ chinese_simplified ] = "Á´½ÓµÄÍ¼ĞÎ";
     Text[ russian ] = "Ñâÿçàííûå ãğàôèêè";
     Text[ polish ] = "Po³¹czone grafiki";
-    Text[ japanese ] = "Øİ¸‚³‚ê‚½¸Ş×Ì¨¯¸½";
+    Text[ japanese ] = "Øİ¸‚³‚ê‚½}";
     Text[ chinese_traditional ] = "³sµ²ªº¹Ï§Î";
     Text[ arabic ] = "ÑÓæãÇÊ ãÑÊÈØÉ";
     Text[ dutch ] = "Gekoppelde afbeeldingen";
@@ -2708,7 +2708,7 @@ String STR_ObjNameSingulGRAFMAC
     Text[ chinese_simplified ] = "Mac-Í¼ĞÎ";
     Text[ russian ] = "Ãğàôèêà Mac";
     Text[ polish ] = "Grafika Mac";
-    Text[ japanese ] = "Mac ¸Ş×Ì¨¯¸";
+    Text[ japanese ] = "Mac }";
     Text[ chinese_traditional ] = "Mac ¹Ï§Î";
     Text[ arabic ] = "ÑÓãÉ Mac";
     Text[ dutch ] = "Mac-afbeelding";
@@ -2736,7 +2736,7 @@ String STR_ObjNamePluralGRAFMAC
     Text[ chinese_simplified ] = "Mac-Í¼ĞÎ";
     Text[ russian ] = "Ãğàôèêè Mac";
     Text[ polish ] = "Grafiki Mac";
-    Text[ japanese ] = "Mac¸Ş×Ì¨¯¸";
+    Text[ japanese ] = "Mac ‚Ì}";
     Text[ chinese_traditional ] = "Mac ¹Ï§Î";
     Text[ arabic ] = "ÑÓæãÇÊ Mac";
     Text[ dutch ] = "Mac-afbeeldingen";
@@ -2762,7 +2762,7 @@ String STR_ObjNameSingulGRAFMACLNK
     Text[ chinese_simplified ] = "Á´½ÓµÄ Mac-Í¼ĞÎ";
     Text[ russian ] = "ñâÿçàííàÿ ãğàôèêà Mac";
     Text[ polish ] = "Po³¹czona grafika Mac";
-    Text[ japanese ] = "Øİ¸‚³‚ê‚½Mac¸Ş×Ì¨¯¸";
+    Text[ japanese ] = "Øİ¸‚³‚ê‚½ Mac ‚Ì}";
     Text[ chinese_traditional ] = "³sµ²ªº Mac ¹Ï§Î";
     Text[ arabic ] = "ÕæÑÉ Mac ãÑÊÈØÉ";
     Text[ dutch ] = "Gekoppelde Mac-afbeeldingen";
@@ -2788,7 +2788,7 @@ String STR_ObjNamePluralGRAFMACLNK
     Text[ chinese_simplified ] = "Á´½ÓµÄ Mac-Í¼ĞÎ";
     Text[ russian ] = "Ñâÿçàííûå ãğàôèêè Mac";
     Text[ polish ] = "Po³¹czone grafiki Mac";
-    Text[ japanese ] = "Øİ¸‚³‚ê‚½Mac‚Ì¸Ş×Ì¨¯¸";
+    Text[ japanese ] = "Øİ¸‚³‚ê‚½ Mac ‚Ì}";
     Text[ chinese_traditional ] = "³sµ²ªº Mac ¹Ï§Î";
     Text[ arabic ] = "ÑÓæãÇÊ Mac ãÑÊÈØÉ";
     Text[ dutch ] = "Gekoppelde Mac-afbeelding";
@@ -3335,7 +3335,7 @@ String STR_ObjNameNoObj
     Text [ english_us ] = "No draw object" ;
     Text[ chinese_simplified ] = "²»ÊÇ»æÍ¼¶ÔÏó";
     Text[ russian ] = "Áåç ãğàôè÷åñêîãî îáúåêòà";
-    Text[ polish ] = "brak obiektu rysunkowego";
+    Text[ polish ] = "brak obiektu graficznego";
     Text[ japanese ] = "•`‰æµÌŞ¼Şª¸Ä‚È‚µ";
     Text[ chinese_traditional ] = "¤£¬OÃ¸¹Ïª«¥ó";
     Text[ arabic ] = "ÈÏæä ßÇÆä ÑÓæãí";
@@ -3391,7 +3391,7 @@ String STR_ObjNameSingulPlural
     Text [ english_us ] = "draw object(s)" ;
     Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
     Text[ russian ] = "Îáúåêò(û) ãğàôèêè";
-    Text[ polish ] = "Obiekt (y) graficzny (e)";
+    Text[ polish ] = "Obiekt(y) graficzny(e)";
     Text[ japanese ] = "•`‰æµÌŞ¼Şª¸Ä";
     Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó";
     Text[ arabic ] = "ßÇÆä (ßÇÆäÇÊ) ÑÓæãí (É)";
@@ -9482,7 +9482,7 @@ String STR_ItemNam_GRAFMODE
     Text[ danish ] = "Grafikmodus";
     Text[ polish ] = "Tryb grafiki";
     Text[ portuguese_brazilian ] = "Graphics mode";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸Ó°ÄŞ";
+    Text[ japanese ] = "}Ó°ÄŞ";
     Text[ korean ] = "±×·¡ÇÈ ¸ğµå";
     Text[ chinese_simplified ] = "Í¼ĞÎ·½Ê½";
     Text[ chinese_traditional ] = "¹Ï§Î¼Ò¦¡";
@@ -10540,7 +10540,7 @@ String SIP_XA_FILLTRANSPARENCE
     Text[ spanish ] = "Transparencia";
     Text[ italian ] = "Trasparenza";
     Text[ danish ] = "Fladetransparens";
-    Text[ swedish ] = "Ytans genomskinlighet";
+    Text[ swedish ] = "Yttransparens";
     Text[ polish ] = "Przezroczystoœæ powierzchni";
     Text[ portuguese_brazilian ] = "Transparence";
     Text[ japanese ] = "•\\–Ê‚Ì“§‰»«";
@@ -16475,7 +16475,7 @@ String SIP_SA_GRAFMODE
     Text[ danish ] = "Grafikmodus";
     Text[ polish ] = "Tryb grafiki";
     Text[ portuguese_brazilian ] = "Graphics mode";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸Ó°ÄŞ";
+    Text[ japanese ] = "}Ó°ÄŞ";
     Text[ korean ] = "±×·¡ÇÈ ¸ğµå";
     Text[ chinese_simplified ] = "Í¼ĞÎ·½Ê½";
     Text[ chinese_traditional ] = "¹Ï§Î¼Ò¦¡";
@@ -16526,7 +16526,7 @@ String SIP_SDRATTRSET_GRAF
     Text[ danish ] = "Grafikattributter";
     Text[ polish ] = "Atrybuty grafiki";
     Text[ portuguese_brazilian ] = "Graphics attributes";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì‘®«";
+    Text[ japanese ] = "}‚Ì‘®«";
     Text[ korean ] = "±×·¡ÇÈ ¼Ó¼º";
     Text[ chinese_simplified ] = "Í¼ĞÎÊôĞÔ";
     Text[ chinese_traditional ] = "¹Ï§ÎÄİ©Ê";
