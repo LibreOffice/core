@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mba $ $Date: 2002-03-28 16:07:18 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:40:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,16 +62,14 @@
 
 PRJ=..
 
-PRJNAME=smath3
+PRJNAME=starmath
 TARGET=smslots
 SDIEXPORT=smath
 SVSDIINC=$(PRJ)$/inc
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -84,24 +82,11 @@ SVSDIDEPEND= \
     smslots.sdi \
     $(SVSDIINC)$/starmath.hrc
 
-SRCFILES= \
+SRS1NAME=$(TARGET)
+SRC1FILES= \
     smslots.src
 
 # --- Targets -------------------------------------------------------
 
-.IF "$(depend)" == ""
-
-TLBLIST+=\
-    $(BIN)$/$(SDINAME).tlb
-
-ALL: \
-    ALLTAR \
-    $(TLBLIST)
-
-.ENDIF
-
 .INCLUDE :  target.mk
-
-$(BIN)$/$(SDINAME).tlb:
-    @echo nix
 
