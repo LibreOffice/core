@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_contentcaps.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 13:41:06 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:33:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,14 @@
     getPropertySetInfo  x       x       x       x       x       x
     getPropertyValues   x       x       x       x       x       x
     setPropertyValues   x       x       x       x       x       x
-    insert              -       -       x       x       x       x
+    insert              -       -       x       x       x(*)    x(*)
     delete              -       -       x       -       x       -
     open                x       x       x       -       x       -
     transfer            -       x       x       -       -       -
+
+#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
+ (*) not supported by streams that are direct children of document
+#endif
 
  *************************************************************************/
 
@@ -359,6 +363,72 @@ uno::Sequence< star::ucb::CommandInfo > Content::getCommands(
 
     if ( m_aProps.getType() == STREAM )
     {
+#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
+        Uri aUri( m_xIdentifier->getContentIdentifier() );
+        Uri aParentUri( aUri.getParentUri() );
+
+        if ( aParentUri.isDocument() )
+        {
+            //=================================================================
+            //
+            // Stream, that is a child of a document: Supported commands
+            //
+            //=================================================================
+
+            static star::ucb::CommandInfo aStreamCommandInfoTable1[] =
+            {
+                ///////////////////////////////////////////////////////////
+                // Mandatory commands
+                ///////////////////////////////////////////////////////////
+                star::ucb::CommandInfo(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+                    -1,
+                    getCppuVoidType()
+                ),
+                star::ucb::CommandInfo(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+                    -1,
+                    getCppuVoidType()
+                ),
+                star::ucb::CommandInfo(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+                    -1,
+                    getCppuType(
+                        static_cast< uno::Sequence< beans::Property > * >( 0 ) )
+                ),
+                star::ucb::CommandInfo(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+                    -1,
+                    getCppuType(
+                        static_cast<
+                            uno::Sequence< beans::PropertyValue > * >( 0 ) )
+                ),
+                ///////////////////////////////////////////////////////////
+                // Optional standard commands
+                ///////////////////////////////////////////////////////////
+                star::ucb::CommandInfo(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
+                    -1,
+                    getCppuBooleanType()
+                ),
+                star::ucb::CommandInfo(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+                    -1,
+                    getCppuType(
+                        static_cast< star::ucb::OpenCommandArgument2 * >( 0 ) )
+                )
+                ///////////////////////////////////////////////////////////
+                // New commands
+                ///////////////////////////////////////////////////////////
+            };
+            return uno::Sequence<
+                    star::ucb::CommandInfo >( aStreamCommandInfoTable1, 6 );
+        }
+#endif
         //=================================================================
         //
         // Stream: Supported commands
