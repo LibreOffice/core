@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: hr $ $Date: 2000-11-14 17:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <sch/schdll0.hxx>
 #include <so3/svstor.hxx>
 #include <sfx2/app.hxx>
+#include <svtools/moduleoptions.hxx>
 
 #include "chartuno.hxx"
 #include "miscuno.hxx"
@@ -250,7 +251,7 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
 
     SvStorageRef aStor = new SvStorage( String() );
     SvInPlaceObjectRef aIPObj;
-    if ( SFX_APP()->HasFeature(SFX_FEATURE_SCHART) )
+    if ( SvtModuleOptions().IsChart() )
         aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
                                         *SCH_MOD()->pSchChartDocShellFactory,
                                         aStor );

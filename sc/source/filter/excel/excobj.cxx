@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:20:51 $
+ *  last change: $Author: hr $ $Date: 2000-11-14 17:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@
 #include <sch/schdll0.hxx>
 #endif
 #include <svtools/itemset.hxx>
+#include <svtools/moduleoptions.hxx>
 #include <sfx2/app.hxx>
 #include <svx/editdata.hxx>
 #include <svx/editeng.hxx>
@@ -484,7 +485,7 @@ void ImportExcel::EndAllChartObjects( void )
             SvInPlaceObjectRef  aIPObj;
             //  wenn Chart nicht installiert ist, darf nicht auf SCH_MOD zugegriffen werden!
             //! Warnung am Storage setzen?
-            if ( SFX_APP()->HasFeature(SFX_FEATURE_SCHART) )
+            if ( SvtModuleOptions().IsChart() )
             {
 #ifndef SO3
                 aIPObj = &SvInPlaceObject::ClassFactory()->CreateAndInit
@@ -754,7 +755,7 @@ void ExcEscherChart::Apply( void )
 
         //  wenn Chart nicht installiert ist, darf nicht auf SCH_MOD zugegriffen werden!
         //! Warnung am Storage setzen?
-        if ( SFX_APP()->HasFeature(SFX_FEATURE_SCHART) )
+        if ( SvtModuleOptions().IsChart() )
     {
 #ifndef SO3
             aIPObj = &SvInPlaceObject::ClassFactory()->CreateAndInit
