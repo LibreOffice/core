@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-14 14:50:28 $
+ *  last change: $Author: mtg $ $Date: 2001-10-02 22:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _ZIP_PACKAGE_HXX
 #define _ZIP_PACKAGE_HXX
 
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
+#ifndef _CPPUHELPER_IMPLBASE6_HXX_
+#include <cppuhelper/implbase6.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -75,6 +75,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
+#include <com/sun/star/io/XStream.hpp>
 #endif
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
@@ -119,14 +122,24 @@ enum SegmentEnum
     e_Finished,
     e_Success = 0
 };
-class ZipPackage :
-                   public cppu::OWeakObject,
-                   public com::sun::star::lang::XInitialization,
-                   public com::sun::star::lang::XSingleServiceFactory,
-                   public com::sun::star::lang::XUnoTunnel,
-                   public com::sun::star::container::XHierarchicalNameAccess,
-                   public com::sun::star::util::XChangesBatch,
-                   public com::sun::star::beans::XPropertySet
+
+enum InitialisationMode
+{
+    e_IMode_None,
+    e_IMode_URL,
+    e_IMode_XInputStream,
+    e_IMode_XStream
+};
+
+class ZipPackage : public cppu::WeakImplHelper6
+                    <
+                       com::sun::star::lang::XInitialization,
+                       com::sun::star::lang::XSingleServiceFactory,
+                       com::sun::star::lang::XUnoTunnel,
+                       com::sun::star::container::XHierarchicalNameAccess,
+                       com::sun::star::util::XChangesBatch,
+                       com::sun::star::beans::XPropertySet
+                    >
 {
 protected:
     ::com::sun::star::uno::Sequence < sal_Int8 > aEncryptionKey;
@@ -134,8 +147,10 @@ protected:
     ::rtl::OUString  sURL;
     sal_Int32        nSegmentSize;
     sal_Bool         bHasEncryptedEntries;
+    InitialisationMode eMode;
 
     ::com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xRootFolder;
+    ::com::sun::star::uno::Reference < com::sun::star::io::XStream > xStream;
     ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xContentStream;
     ::com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xContentSeek;
     ::com::sun::star::uno::Reference < com::sun::star::task::XInteractionHandler > xInteractionHandler;
@@ -173,14 +188,6 @@ public:
     virtual ~ZipPackage( void );
     ZipFile& getZipFile() { return *pZipFile;}
     const com::sun::star::uno::Sequence < sal_Int8 > & getEncryptionKey ( ) {return aEncryptionKey;}
-
-    // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
-        throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  )
-        throw();
-    virtual void SAL_CALL release(  )
-        throw();
 
     // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
