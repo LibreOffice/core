@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: dv $ $Date: 2001-07-27 11:26:41 $
+#   last change: $Author: sb $ $Date: 2001-08-20 15:33:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -233,6 +233,7 @@ IDLFILES=\
     XCommandInfoChangeListener.idl\
     XCommandInfoChangeNotifier.idl\
     XCommandProcessor.idl\
+    XCommandProcessor2.idl\
     XContent.idl\
     XContentAccess.idl\
     XContentCreator.idl\
