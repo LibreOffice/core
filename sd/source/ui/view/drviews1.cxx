@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:43:02 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,12 @@
  *
  ************************************************************************/
 
+#include "DrawViewShell.hxx"
+#include "ViewShellImplementation.hxx"
+
 #ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
 #include <com/sun/star/embed/EmbedStates.hpp>
 #endif
-
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -144,9 +146,6 @@
 #endif
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
-#ifndef SD_DRAW_VIEW_SHELL_HXX
-#include "DrawViewShell.hxx"
-#endif
 #include "Ruler.hxx"
 #ifndef SD_CLIENT_HXX
 #include "Client.hxx"
@@ -184,10 +183,16 @@
 #include "LayerDialogChildWindow.hxx"
 #endif
 #include "LayerTabBar.hxx"
+#include "ViewShellManager.hxx"
 
 #ifdef WNT
 #pragma optimize ( "", off )
 #endif
+
+namespace {
+static const ::rtl::OUString MASTER_VIEW_TOOL_BAR_NAME(
+    ::rtl::OUString::createFromAscii("masterviewtoolbar"));
+}
 
 using namespace com::sun::star;
 
@@ -480,6 +485,9 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
     if (eEditMode != eEMode
         || mbIsLayerModeActive != bIsLayerModeActive)
     {
+        ViewShellManager::UpdateLocker aLock (
+            GetViewShellBase().GetViewShellManager());
+
         USHORT nActualPageNum = 0;
 
         SdUnoDrawView* pController =
@@ -511,6 +519,9 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
         if (eEditMode == EM_PAGE)
         {
+            if (mpImpl->mbIsInitialized)
+                GetObjectBarManager().HideToolBar (MASTER_VIEW_TOOL_BAR_NAME);
+
             /******************************************************************
             * PAGEMODE
             ******************************************************************/
@@ -581,6 +592,9 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             SfxBoolItem aItem(SID_PREVIEW_WIN, pFrameView->IsShowPreviewInMasterPageMode() != 0 );
             GetViewFrame()->GetDispatcher()->Execute(
                 SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+
+            if (mpImpl->mbIsInitialized)
+                GetObjectBarManager().ShowToolBar (MASTER_VIEW_TOOL_BAR_NAME);
         }
 
         if ( ! mbIsLayerModeActive)
@@ -999,7 +1013,12 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
 
         if (pActualPage)
         {
-            SdPage* pNewPage = GetDoc()->GetSdPage(nSelectedPage, ePageKind);
+            // When in master page mode then the given index defines a
+            // master page and may be larger then the number of slides.
+            // Probably we should jump over this whole block.
+            SdPage* pNewPage = NULL;
+            if (GetDoc()->GetSdPageCount(ePageKind) > nSelectedPage)
+                pNewPage = GetDoc()->GetSdPage(nSelectedPage, ePageKind);
 
             if (pActualPage == pNewPage)
             {
