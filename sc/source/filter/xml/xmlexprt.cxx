@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-18 13:36:52 $
+ *  last change: $Author: sab $ $Date: 2001-10-19 09:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,9 @@
 #endif
 #ifndef _EMBOBJ_HXX
 #include <so3/embobj.hxx>
+#endif
+#ifndef _EEITEM_HXX
+#include <svx/eeitem.hxx>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -3243,38 +3246,54 @@ XMLNumberFormatAttributesExportHelper* ScXMLExport::GetNumberFormatAttributesExp
     return pNumberFormatAttributesExportHelper;
 }
 
+void ScXMLExport::CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uInt16 nAttrib)
+{
+    const SfxPoolItem* pItem;
+    sal_uInt16 nItems = pPool->GetItemCount( nAttrib );
+    for( sal_uInt16 i = 0; i < nItems; ++i )
+    {
+        if( 0 != (pItem = pPool->GetItem( nAttrib, i ) ) )
+        {
+            const SvXMLAttrContainerItem *pUnknown =
+                        (const SvXMLAttrContainerItem *)pItem;
+            if( (pUnknown->GetAttrCount() > 0) )
+            {
+                sal_uInt16 nIdx = pUnknown->GetFirstNamespaceIndex();
+                while( USHRT_MAX != nIdx )
+                {
+                    if( (XML_NAMESPACE_UNKNOWN_FLAG & nIdx) != 0 )
+                    {
+                        const OUString& rPrefix = pUnknown->GetPrefix( nIdx );
+                        // Add namespace declaration for unknown attributes if
+                        // there aren't existing ones for the prefix used by the
+                        // attibutes
+                        _GetNamespaceMap().Add( rPrefix,
+                                                pUnknown->GetNamespace( nIdx ),
+                                                XML_NAMESPACE_UNKNOWN );
+                    }
+                    nIdx = pUnknown->GetNextNamespaceIndex( nIdx );
+                }
+            }
+        }
+    }
+}
+
 sal_uInt32 ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
 {
     if( (getExportFlags() & (EXPORT_FONTDECLS|EXPORT_STYLES|
                              EXPORT_MASTERSTYLES|EXPORT_CONTENT)) != 0 )
     {
-        const SfxPoolItem* pItem;
-        const SfxItemPool* pPool = GetDocument()->GetPool();
-        sal_uInt16 i=0, nItems = pPool->GetItemCount( ATTR_USERDEF );
-        for( i = 0; i < nItems; ++i )
+        if (GetDocument())
         {
-            if( 0 != (pItem = pPool->GetItem( ATTR_USERDEF, i ) ) )
+            CollectUserDefinedNamespaces(GetDocument()->GetPool(), ATTR_USERDEF);
+            CollectUserDefinedNamespaces(GetDocument()->GetEditPool(), EE_PARA_XMLATTRIBS);
+            CollectUserDefinedNamespaces(GetDocument()->GetEditPool(), EE_CHAR_XMLATTRIBS);
+            ScDrawLayer* pDrawLayer = GetDocument()->GetDrawLayer();
+            if (pDrawLayer)
             {
-                const SvXMLAttrContainerItem *pUnknown =
-                            (const SvXMLAttrContainerItem *)pItem;
-                if( (pUnknown->GetAttrCount() > 0) )
-                {
-                    sal_uInt16 nIdx = pUnknown->GetFirstNamespaceIndex();
-                    while( USHRT_MAX != nIdx )
-                    {
-                        if( (XML_NAMESPACE_UNKNOWN_FLAG & nIdx) != 0 )
-                        {
-                            const OUString& rPrefix = pUnknown->GetPrefix( nIdx );
-                            // Add namespace declaration for unknown attributes if
-                            // there aren't existing ones for the prefix used by the
-                            // attibutes
-                            _GetNamespaceMap().Add( rPrefix,
-                                                    pUnknown->GetNamespace( nIdx ),
-                                                    XML_NAMESPACE_UNKNOWN );
-                        }
-                        nIdx = pUnknown->GetNextNamespaceIndex( nIdx );
-                    }
-                }
+                CollectUserDefinedNamespaces(&pDrawLayer->GetItemPool(), EE_PARA_XMLATTRIBS);
+                CollectUserDefinedNamespaces(&pDrawLayer->GetItemPool(), EE_CHAR_XMLATTRIBS);
+                CollectUserDefinedNamespaces(&pDrawLayer->GetItemPool(), SDRATTR_XMLATTRIBUTES);
             }
         }
     }
