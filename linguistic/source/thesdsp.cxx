@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdsp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-17 12:37:43 $
+ *  last change: $Author: tl $ $Date: 2000-12-21 09:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,11 @@ Sequence< Reference< XMeaning > > SAL_CALL
     }
     else
     {
+        OUString aChkWord( rTerm );
+        RemoveHyphens( aChkWord );
+        if (IsIgnoreControlChars( rProperties, GetPropSet() ))
+            RemoveControlChars( aChkWord );
+
         INT32 nLen = pEntry->aSvcRefs.getLength();
         DBG_ASSERT( nLen = pEntry->aSvcImplNames.getLength(),
                 "lng : sequence length mismatch");
@@ -201,7 +206,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
                    &&  aMeanings.getLength() == 0)
             {
                 if (pRef[i].is())
-                    aMeanings = pRef[i]->queryMeanings( rTerm, rLocale, rProperties );
+                    aMeanings = pRef[i]->queryMeanings( aChkWord, rLocale, rProperties );
                 ++i;
             }
         }
@@ -230,7 +235,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
                     pRef[i] = xThes;
 
                     if (xThes.is())
-                        aMeanings = xThes->queryMeanings( rTerm, rLocale, rProperties );
+                        aMeanings = xThes->queryMeanings( aChkWord, rLocale, rProperties );
 
                     pEntry->aFlags.nLastTriedSvcIndex = i;
                     ++i;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphdsp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-17 12:37:35 $
+ *  last change: $Author: tl $ $Date: 2000-12-21 09:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,7 @@ Reference< XHyphenatedWord > SAL_CALL
     // search for entry with that language
     LangSvcEntry_Hyph *pEntry = aSvcList.Seek( nLanguage );
 
+    BOOL bWordModified = FALSE;
     if (!pEntry)
     {
 #ifdef LINGU_EXCEPTIONS
@@ -313,12 +314,17 @@ Reference< XHyphenatedWord > SAL_CALL
     }
     else
     {
+        OUString aChkWord( rWord );
+        bWordModified |= RemoveHyphens( aChkWord );
+        if (IsIgnoreControlChars( rProperties, GetPropSet() ))
+            bWordModified |= RemoveControlChars( aChkWord );
+
         // check for results from (positive) dictionaries which have precedence!
         Reference< XDictionaryEntry > xEntry;
 
         if (GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
         {
-            xEntry = GetDicList()->queryDictionaryEntry( rWord, rLocale,
+            xEntry = GetDicList()->queryDictionaryEntry( aChkWord, rLocale,
                         TRUE, FALSE );
         }
 
@@ -339,7 +345,7 @@ Reference< XHyphenatedWord > SAL_CALL
             if (i <= pEntry->aFlags.nLastTriedSvcIndex)
             {
                 if (rHyph.is())
-                    xRes = rHyph->hyphenate( rWord, rLocale, nMaxLeading,
+                    xRes = rHyph->hyphenate( aChkWord, rLocale, nMaxLeading,
                                             rProperties );
                 ++i;
             }
@@ -369,7 +375,7 @@ Reference< XHyphenatedWord > SAL_CALL
                         rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
 
                     if (rHyph.is())
-                        xRes = rHyph->hyphenate( rWord, rLocale, nMaxLeading,
+                        xRes = rHyph->hyphenate( aChkWord, rLocale, nMaxLeading,
                                                 rProperties );
 
                     pEntry->aFlags.nLastTriedSvcIndex = i;
@@ -400,6 +406,7 @@ Reference< XHyphenatedWord > SAL_CALL
     // search for entry with that language
     LangSvcEntry_Hyph *pEntry = aSvcList.Seek( nLanguage );
 
+    BOOL bWordModified = FALSE;
     if (!pEntry)
     {
 #ifdef LINGU_EXCEPTIONS
@@ -408,12 +415,17 @@ Reference< XHyphenatedWord > SAL_CALL
     }
     else
     {
+        OUString aChkWord( rWord );
+        bWordModified |= RemoveHyphens( aChkWord );
+        if (IsIgnoreControlChars( rProperties, GetPropSet() ))
+            bWordModified |= RemoveControlChars( aChkWord );
+
         // check for results from (positive) dictionaries which have precedence!
         Reference< XDictionaryEntry > xEntry;
 
         if (GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
         {
-            xEntry = GetDicList()->queryDictionaryEntry( rWord, rLocale,
+            xEntry = GetDicList()->queryDictionaryEntry( aChkWord, rLocale,
                         TRUE, FALSE );
         }
 
@@ -434,7 +446,7 @@ Reference< XHyphenatedWord > SAL_CALL
             if (i <= pEntry->aFlags.nLastTriedSvcIndex)
             {
                 if (rHyph.is())
-                    xRes = rHyph->queryAlternativeSpelling( rWord, rLocale,
+                    xRes = rHyph->queryAlternativeSpelling( aChkWord, rLocale,
                                 nIndex, rProperties );
                 ++i;
             }
@@ -464,7 +476,7 @@ Reference< XHyphenatedWord > SAL_CALL
                         rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
 
                     if (rHyph.is())
-                        xRes = rHyph->queryAlternativeSpelling( rWord, rLocale,
+                        xRes = rHyph->queryAlternativeSpelling( aChkWord, rLocale,
                                     nIndex, rProperties );
 
                     pEntry->aFlags.nLastTriedSvcIndex = i;
@@ -503,12 +515,17 @@ Reference< XPossibleHyphens > SAL_CALL
     }
     else
     {
+        OUString aChkWord( rWord );
+        RemoveHyphens( aChkWord );
+        if (IsIgnoreControlChars( rProperties, GetPropSet() ))
+            RemoveControlChars( aChkWord );
+
         // check for results from (positive) dictionaries which have precedence!
         Reference< XDictionaryEntry > xEntry;
 
         if (GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
         {
-            xEntry = GetDicList()->queryDictionaryEntry( rWord, rLocale,
+            xEntry = GetDicList()->queryDictionaryEntry( aChkWord, rLocale,
                         TRUE, FALSE );
         }
 
@@ -529,7 +546,7 @@ Reference< XPossibleHyphens > SAL_CALL
             if (i <= pEntry->aFlags.nLastTriedSvcIndex)
             {
                 if (rHyph.is())
-                    xRes = rHyph->createPossibleHyphens( rWord, rLocale,
+                    xRes = rHyph->createPossibleHyphens( aChkWord, rLocale,
                                 rProperties );
                 ++i;
             }
@@ -559,7 +576,7 @@ Reference< XPossibleHyphens > SAL_CALL
                         rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
 
                     if (rHyph.is())
-                    xRes = rHyph->createPossibleHyphens( rWord, rLocale,
+                    xRes = rHyph->createPossibleHyphens( aChkWord, rLocale,
                                 rProperties );
 
                     pEntry->aFlags.nLastTriedSvcIndex = i;

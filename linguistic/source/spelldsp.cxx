@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldsp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-17 12:37:42 $
+ *  last change: $Author: tl $ $Date: 2000-12-21 09:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,11 @@ BOOL SpellCheckerDispatcher::isValid_Impl(
     }
     else
     {
+        OUString aChkWord( rWord );
+        RemoveHyphens( aChkWord );
+        if (IsIgnoreControlChars( rProperties, GetPropSet() ))
+            RemoveControlChars( aChkWord );
+
         INT32 nLen = pEntry->aSvcRefs.getLength();
         DBG_ASSERT( nLen = pEntry->aSvcImplNames.getLength(),
                 "lng : sequence length mismatch");
@@ -305,20 +310,20 @@ BOOL SpellCheckerDispatcher::isValid_Impl(
             {
                 bTmpResValid = TRUE;
                 if (pRef1[i].is())
-                    bTmpRes = pRef1[i]->isValid( rWord, nLanguage, rProperties );
+                    bTmpRes = pRef1[i]->isValid( aChkWord, nLanguage, rProperties );
                 else if (pRef[i].is())
                 {
-                    bTmpRes = GetExtCache().CheckWord( rWord, nLanguage, FALSE );
+                    bTmpRes = GetExtCache().CheckWord( aChkWord, nLanguage, FALSE );
                     if (!bTmpRes)
                     {
-                        bTmpRes = pRef[i]->isValid( rWord,
+                        bTmpRes = pRef[i]->isValid( aChkWord,
                                 CreateLocale( nLanguage ), rProperties );
 
                         // Add correct words to the cache.
                         // But not those that are correct only because of
                         // the temporary supplied settings.
                         if (bTmpRes  &&  0 == rProperties.getLength())
-                            GetExtCache().AddWord( rWord, nLanguage );
+                            GetExtCache().AddWord( aChkWord, nLanguage );
                     }
                 }
                 else
@@ -367,20 +372,20 @@ BOOL SpellCheckerDispatcher::isValid_Impl(
 
                     bTmpResValid = TRUE;
                     if (xSpell1.is())
-                        bTmpRes = xSpell1->isValid( rWord, nLanguage, rProperties );
+                        bTmpRes = xSpell1->isValid( aChkWord, nLanguage, rProperties );
                     else if (xSpell.is())
                     {
-                        bTmpRes = GetExtCache().CheckWord( rWord, nLanguage, FALSE );
+                        bTmpRes = GetExtCache().CheckWord( aChkWord, nLanguage, FALSE );
                         if (!bTmpRes)
                         {
-                            bTmpRes = xSpell->isValid( rWord,
+                            bTmpRes = xSpell->isValid( aChkWord,
                                     CreateLocale( nLanguage ), rProperties );
 
                             // Add correct words to the cache.
                             // But not those that are correct only because of
                             // the temporary supplied settings.
                             if (bTmpRes  &&  0 == rProperties.getLength())
-                                GetExtCache().AddWord( rWord, nLanguage );
+                                GetExtCache().AddWord( aChkWord, nLanguage );
                         }
                     }
                     else
@@ -394,19 +399,19 @@ BOOL SpellCheckerDispatcher::isValid_Impl(
                 }
             }
         }
-    }
 
-    // countercheck against results from dictionary which have precedence!
-    if (bCheckDics  &&
-        GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
-    {
-        BOOL bIsWordOk = bRes;
+        // countercheck against results from dictionary which have precedence!
+        if (bCheckDics  &&
+            GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
+        {
+            BOOL bIsWordOk = bRes;
 
-        Reference< XDictionaryList > xDicList( GetDicList(), UNO_QUERY );
-        Reference< XDictionaryEntry > xEntry( SearchDicList( xDicList,
-                rWord, nLanguage, !bIsWordOk, TRUE ) );
-        if (xEntry.is())
-            bRes = !bIsWordOk;
+            Reference< XDictionaryList > xDicList( GetDicList(), UNO_QUERY );
+            Reference< XDictionaryEntry > xEntry( SearchDicList( xDicList,
+                    aChkWord, nLanguage, !bIsWordOk, TRUE ) );
+            if (xEntry.is())
+                bRes = !bIsWordOk;
+        }
     }
 
     return bRes;
@@ -511,6 +516,11 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
     }
     else
     {
+        OUString aChkWord( rWord );
+        RemoveHyphens( aChkWord );
+        if (IsIgnoreControlChars( rProperties, GetPropSet() ))
+            RemoveControlChars( aChkWord );
+
         INT32 nLen = pEntry->aSvcRefs.getLength();
         DBG_ASSERT( nLen = pEntry->aSvcImplNames.getLength(),
                 "lng : sequence length mismatch");
@@ -532,22 +542,22 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             {
                 bTmpResValid = TRUE;
                 if (pRef1[i].is())
-                    xTmpRes = pRef1[i]->spell( rWord, nLanguage, rProperties );
+                    xTmpRes = pRef1[i]->spell( aChkWord, nLanguage, rProperties );
                 else if (pRef[i].is())
                 {
-                    BOOL bOK = GetExtCache().CheckWord( rWord, nLanguage, FALSE );
+                    BOOL bOK = GetExtCache().CheckWord( aChkWord, nLanguage, FALSE );
                     if (bOK)
                         xTmpRes = NULL;
                     else
                     {
-                        xTmpRes = pRef[i]->spell( rWord,
+                        xTmpRes = pRef[i]->spell( aChkWord,
                                 CreateLocale( nLanguage ), rProperties );
 
                         // Add correct words to the cache.
                         // But not those that are correct only because of
                         // the temporary supplied settings.
                         if (!xTmpRes.is()  &&  0 == rProperties.getLength())
-                            GetExtCache().AddWord( rWord, nLanguage );
+                            GetExtCache().AddWord( aChkWord, nLanguage );
                     }
                 }
                 else
@@ -597,22 +607,22 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
 
                     bTmpResValid = TRUE;
                     if (xSpell1.is())
-                        xTmpRes = xSpell1->spell( rWord, nLanguage, rProperties );
+                        xTmpRes = xSpell1->spell( aChkWord, nLanguage, rProperties );
                     else if (xSpell.is())
                     {
-                        BOOL bOK = GetExtCache().CheckWord( rWord, nLanguage, FALSE );
+                        BOOL bOK = GetExtCache().CheckWord( aChkWord, nLanguage, FALSE );
                         if (bOK)
                             xTmpRes = NULL;
                         else
                         {
-                            xTmpRes = xSpell->spell( rWord,
+                            xTmpRes = xSpell->spell( aChkWord,
                                     CreateLocale( nLanguage ), rProperties );
 
                             // Add correct words to the cache.
                             // But not those that are correct only because of
                             // the temporary supplied settings.
                             if (!xTmpRes.is()  &&  0 == rProperties.getLength())
-                                GetExtCache().AddWord( rWord, nLanguage );
+                                GetExtCache().AddWord( aChkWord, nLanguage );
                         }
                     }
                     else
@@ -632,50 +642,50 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
         // clear previously remembered alternatives
         if (bTmpResValid  &&  !xTmpRes.is())
             xRes = NULL;
-    }
 
-    // countercheck against results from dictionary which have precedence!
-    if (bCheckDics  &&
-        GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
-    {
-        BOOL bIsWordOk = !xRes.is();
-
-        Reference< XDictionaryList > xDicList( GetDicList(), UNO_QUERY );
-        Reference< XDictionaryEntry > xEntry( SearchDicList( xDicList,
-                rWord, nLanguage, !bIsWordOk, TRUE ) );
-
-        OUString aRplcTxt;
-        BOOL     bAddAlternative = FALSE;
-
-        if (bIsWordOk && xEntry.is())   // negative entry found
+        // countercheck against results from dictionary which have precedence!
+        if (bCheckDics  &&
+            GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
         {
-            aRplcTxt = xEntry->getReplacementText();
-            bAddAlternative = TRUE;
-        }
-        else if (!bIsWordOk)
-        {
-            if (xEntry.is())    // positive entry found
-                xRes = NULL;
-            else
+            BOOL bIsWordOk = !xRes.is();
+
+            Reference< XDictionaryList > xDicList( GetDicList(), UNO_QUERY );
+            Reference< XDictionaryEntry > xEntry( SearchDicList( xDicList,
+                    aChkWord, nLanguage, !bIsWordOk, TRUE ) );
+
+            OUString aRplcTxt;
+            BOOL     bAddAlternative = FALSE;
+
+            if (bIsWordOk && xEntry.is())   // negative entry found
             {
-                // search for negative entry to provide additional alternative
-                xEntry = SearchDicList( xDicList,
-                                          rWord, nLanguage, FALSE, TRUE );
-                if (xEntry.is())
+                aRplcTxt = xEntry->getReplacementText();
+                bAddAlternative = TRUE;
+            }
+            else if (!bIsWordOk)
+            {
+                if (xEntry.is())    // positive entry found
+                    xRes = NULL;
+                else
                 {
-                    aRplcTxt = xEntry->getReplacementText();
-                    bAddAlternative = TRUE;
+                    // search for negative entry to provide additional alternative
+                    xEntry = SearchDicList( xDicList,
+                                              aChkWord, nLanguage, FALSE, TRUE );
+                    if (xEntry.is())
+                    {
+                        aRplcTxt = xEntry->getReplacementText();
+                        bAddAlternative = TRUE;
+                    }
                 }
             }
-        }
 
-        // (additional) alternative found?
-        if (bAddAlternative)
-        {
-            Reference< XSpellAlternatives > xAlt(
-                       new SpellAlternatives( rWord, nLanguage,
-                        SpellFailure::IS_NEGATIVE_WORD, aRplcTxt ) );
-            xRes = MergeProposals( xAlt, xRes );
+            // (additional) alternative found?
+            if (bAddAlternative)
+            {
+                Reference< XSpellAlternatives > xAlt(
+                           new SpellAlternatives( aChkWord, nLanguage,
+                            SpellFailure::IS_NEGATIVE_WORD, aRplcTxt ) );
+                xRes = MergeProposals( xAlt, xRes );
+            }
         }
     }
 
