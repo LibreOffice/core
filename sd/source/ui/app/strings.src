@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:08:10 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -14390,10 +14390,10 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_60
     Text[ catalan ] = "%PRODUCTNAME 6.0 Presentaci�";
     Text[ finnish ] = "%PRODUCTNAME 6.0 -esitys";
     Text[ thai ] = "การนำเสนอ %PRODUCTNAME 6.0 ";
-    Text[ czech ] = "%PRODUCTNAME 6.0 prezentace";
+    Text[ czech ] = "Prezentace %PRODUCTNAME %PRODUCTVERSION";
     Text[ hebrew ] = "%PRODUCTNAME 6.0 Präsentation";
     Text[ hindi ] = "%PRODUCTNAME 6.0 प्रस्तुति";
-    Text[ slovak ] = "%PRODUCTNAME 6.0 prezentácia";
+    Text[ slovak ] = "Prezentácia %PRODUCTNAME %PRODUCTVERSION";
 };
 String STR_IMPRESS_DOCUMENT_FULLTYPE_50
 {
@@ -14572,10 +14572,10 @@ String STR_GRAPHIC_DOCUMENT_FULLTYPE_60
     Text[ catalan ] = "PRODUCTNAME 6.0 Dibuix";
     Text[ finnish ] = "%PRODUCTNAME 6.0 -piirros";
     Text[ thai ] = "วาดรูป %PRODUCTNAME 6.0 ";
-    Text[ czech ] = "%PRODUCTNAME 6.0 kresba";
+    Text[ czech ] = "Kresba %PRODUCTNAME %PRODUCTVERSION";
     Text[ hebrew ] = "%PRODUCTNAME 6.0 Zeichnung";
     Text[ hindi ] = "%PRODUCTNAME 6.0 रेखाचित्र";
-    Text[ slovak ] = "%PRODUCTNAME 6.0 kresba";
+    Text[ slovak ] = "Kresba %PRODUCTNAME %PRODUCTVERSION";
 };
 String STR_VIEWTYPE_VIEW
 {
@@ -16422,6 +16422,12 @@ String STR_DESC_RENAMESLIDE
     Text[ hindi ] = "अंतिम नाम";
     Text[ slovak ] = "Názov";
 };
+
+
+
+
+
+
 
 
 
