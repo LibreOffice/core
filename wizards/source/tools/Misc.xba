@@ -410,18 +410,6 @@ Dim CellValue
 	oCell.Value = CellValue
 End Sub
 
-Sub Main
-&apos;	oDocument = StarDesktop.ActiveFrame.Controller.Model
-	oComponents = StarDesktop.Components.CreateEnumeration
-	Do
-		oComponent = oComponents.NextElement
-		ShowSupportedServicenames(oComponent)
-	Loop Until Not oComponents.HasMoreElements
-	For i = 0 To Ubound(StarDesktop.Components())
-		PrintdbgInfo StarDesktop.Components(i)
-	Next i
-End Sub
-
 
 Function GetDocumentType(oDocument)
 	On Local Error GoTo NODOCUMENTTYPE
