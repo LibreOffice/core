@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-09 15:31:35 $
+ *  last change: $Author: mba $ $Date: 2001-11-15 15:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@
 #include "sfxhelp.hxx"
 #include "fcontnr.hxx"
 #include "docfac.hxx"
+#include "statcach.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -193,6 +194,9 @@ long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )
         return sal_False;
 
     SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
+    if ( !pView || pView->GetObjectShell()->IsHandsOff() )
+        return Window::Notify( rNEvt );
+
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
     {
         SfxViewFrame* pCurrent = SfxViewFrame::Current();
@@ -220,14 +224,14 @@ long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )
     else if ( rNEvt.GetType() == EVENT_EXECUTEDIALOG )
     {
         pModalDialog = (Dialog*) rNEvt.GetWindow();
-        pFrame->GetCurrentViewFrame()->SetModalMode( sal_True );
+        pView->SetModalMode( sal_True );
         return sal_True;
     }
     else if ( rNEvt.GetType() == EVENT_ENDEXECUTEDIALOG )
     {
         pModalDialog = NULL;
         EnableInput( sal_True, sal_True );
-        pFrame->GetCurrentViewFrame()->SetModalMode( sal_False );
+        pView->SetModalMode( sal_False );
         return sal_True;
     }
 
@@ -278,6 +282,42 @@ void SfxTopWindow_Impl::DoResize()
         pFrame->Resize();
 }
 
+class StopButtonTimer_Impl : public Timer
+{
+    BOOL bState;
+    SfxViewFrame* pFrame;
+protected:
+    virtual void Timeout();
+public:
+    StopButtonTimer_Impl( SfxViewFrame*);
+    void SetButtonState( BOOL bStateP );
+    BOOL GetButtonState() const { return bState; }
+};
+
+StopButtonTimer_Impl::StopButtonTimer_Impl( SfxViewFrame*p)
+    : bState( FALSE )
+    , pFrame( p )
+{
+    SetTimeout( 200 );
+}
+
+void StopButtonTimer_Impl::SetButtonState( BOOL bStateP )
+{
+    if( bStateP )
+    {
+        bState = TRUE;
+        Stop();
+    }
+    else if( bState )
+        Start();
+}
+
+void StopButtonTimer_Impl::Timeout()
+{
+    bState = FALSE;
+    pFrame->GetBindings().Invalidate( SID_BROWSE_STOP );
+}
+
 class SfxTopViewWin_Impl : public Window
 {
 friend class SfxInternalFrame;
@@ -320,11 +360,13 @@ public:
     sal_Bool            bActive;
     Window*             pWindow;
     const char*         pFactoryName;
+    StopButtonTimer_Impl* pStopButtonTimer;
 
                         SfxTopViewFrame_Impl()
                             : bActive( sal_False )
                             , pWindow( 0 )
                             , pFactoryName( 0 )
+                            , pStopButtonTimer( 0 )
                         {}
 };
 
@@ -845,6 +887,7 @@ SfxTopViewFrame::SfxTopViewFrame
 
     pCloser = 0;
     pImp = new SfxTopViewFrame_Impl;
+    pImp->pStopButtonTimer = new StopButtonTimer_Impl(this);
 
 //(mba)/task    if ( !pFrame->GetTask() )
     {
@@ -910,6 +953,7 @@ SfxTopViewFrame::~SfxTopViewFrame()
         KillDispatcher_Impl();
 
     delete pImp->pWindow;
+    delete pImp->pStopButtonTimer;
     delete pImp;
 }
 
@@ -1160,14 +1204,8 @@ void SfxTopViewFrame::GetState_Impl( SfxItemSet &rSet )
 void SfxTopViewFrame::INetExecute_Impl( SfxRequest &rRequest )
 {
     sal_uInt16 nSlotId = rRequest.GetSlot();
-#if SUPD<613//MUSTINI
-    SfxApplication* pApp = SFX_APP();
-    SfxIniManager*  pIniMgr  = pApp->GetIniManager();
-#endif
-
     switch( nSlotId )
     {
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_BROWSE_FORWARD:
         case SID_BROWSE_BACKWARD:
         {
@@ -1177,13 +1215,40 @@ void SfxTopViewFrame::INetExecute_Impl( SfxRequest &rRequest )
                 (rRequest.GetModifier() & KEY_MOD1) != 0 );
             break;
         }
-
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_CREATELINK:
         {
 /*! (pb) we need new implementation to create a link
 */
             break;
+        }
+        case SID_BROWSE_STOP:
+        {
+            if ( GetCancelManager() )
+                GetCancelManager()->Cancel( TRUE );
+
+            // cancel jobs in hidden tasks
+            SfxFrameArr_Impl& rArr = *SFX_APP()->Get_Impl()->pTopFrames;
+            for( USHORT nPos = rArr.Count(); nPos--; )
+            {
+                SfxFrame *pFrame = rArr[ nPos ];
+                if ( !pFrame->GetCurrentViewFrame() )
+                    pFrame->GetCancelManager()->Cancel( TRUE );
+            }
+
+            break;
+        }
+        case SID_FOCUSURLBOX:
+        {
+            SfxStateCache *pCache = GetBindings().GetAnyStateCache_Impl( SID_OPENURL );
+            if( pCache )
+            {
+                SfxControllerItem* pCtrl = pCache->GetItemLink();
+                while( pCtrl )
+                {
+                    pCtrl->StateChanged( SID_FOCUSURLBOX, SFX_ITEM_UNKNOWN, 0 );
+                    pCtrl = pCtrl->GetItemLink();
+                }
+            }
         }
     }
 
@@ -1199,14 +1264,16 @@ void SfxTopViewFrame::INetState_Impl( SfxItemSet &rItemSet )
     if ( !GetFrame()->CanBrowseBackward() )
         rItemSet.DisableItem( SID_BROWSE_BACKWARD );
 
-    // Add/SaveTo-::com::sun::star::text::Bookmark bei BASIC-IDE, QUERY-EDITOR etc. disablen
+    // Add/SaveToBookmark bei BASIC-IDE, QUERY-EDITOR etc. disablen
     SfxObjectShell *pDocSh = GetObjectShell();
-    sal_Bool bPseudo = pDocSh &&
-                !( pDocSh->GetFactory().GetFlags() & SFXOBJECTSHELL_HASOPENDOC );
-    sal_Bool bEmbedded = pDocSh &&
-                pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED;
+    sal_Bool bPseudo = pDocSh && !( pDocSh->GetFactory().GetFlags() & SFXOBJECTSHELL_HASOPENDOC );
+    sal_Bool bEmbedded = pDocSh && pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED;
     if ( !pDocSh || bPseudo || bEmbedded || !pDocSh->HasName() )
         rItemSet.DisableItem( SID_CREATELINK );
+
+    pImp->pStopButtonTimer->SetButtonState( GetCancelManager()->CanCancel() );
+    if ( !pImp->pStopButtonTimer->GetButtonState() )
+        rItemSet.DisableItem( SID_BROWSE_STOP );
 }
 
 void SfxTopViewFrame::SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY )
