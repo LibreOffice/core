@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:19:59 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ namespace connectivity
         sal_Bool            m_bNull     : 1;    // value is null
         sal_Bool            m_bBound    : 1;    // is bound
         sal_Bool            m_bModified : 1;    // value was changed
+        sal_Bool            m_bSigned   : 1;    // value is signed
 
         void free();
 
@@ -123,6 +124,7 @@ namespace connectivity
              m_eTypeKind(::com::sun::star::sdbc::DataType::VARCHAR)
             ,m_bBound(sal_True)
             ,m_bNull(sal_True)
+            ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
         }
@@ -131,6 +133,7 @@ namespace connectivity
             m_eTypeKind(::com::sun::star::sdbc::DataType::VARCHAR)
             ,m_bBound(sal_True)
             ,m_bNull(sal_True)
+            ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
@@ -140,6 +143,7 @@ namespace connectivity
             m_eTypeKind(::com::sun::star::sdbc::DataType::VARCHAR)
             ,m_bBound(sal_True)
             ,m_bNull(sal_True)
+            ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
@@ -149,6 +153,7 @@ namespace connectivity
             m_eTypeKind(::com::sun::star::sdbc::DataType::DOUBLE)
             ,m_bBound(sal_True)
             ,m_bNull(sal_True)
+            ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
@@ -158,6 +163,7 @@ namespace connectivity
             m_eTypeKind(::com::sun::star::sdbc::DataType::FLOAT)
             ,m_bBound(sal_True)
             ,m_bNull(sal_True)
+            ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
@@ -167,6 +173,7 @@ namespace connectivity
             m_eTypeKind(::com::sun::star::sdbc::DataType::TINYINT)
             ,m_bBound(sal_True)
             ,m_bNull(sal_True)
+            ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
@@ -175,6 +182,7 @@ namespace connectivity
             m_eTypeKind(::com::sun::star::sdbc::DataType::SMALLINT)
             ,m_bBound(sal_True)
             ,m_bNull(sal_True)
+            ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
@@ -183,6 +191,7 @@ namespace connectivity
             m_eTypeKind(::com::sun::star::sdbc::DataType::INTEGER)
             ,m_bBound(sal_True)
             ,m_bNull(sal_True)
+            ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
@@ -191,6 +200,7 @@ namespace connectivity
             m_eTypeKind(::com::sun::star::sdbc::DataType::BIGINT)
             ,m_bBound(sal_True)
             ,m_bNull(sal_True)
+            ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
@@ -200,6 +210,7 @@ namespace connectivity
              m_eTypeKind(::com::sun::star::sdbc::DataType::BIT)
             ,m_bBound(sal_True)
             ,m_bNull(sal_True)
+            ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
@@ -209,6 +220,7 @@ namespace connectivity
             m_eTypeKind(::com::sun::star::sdbc::DataType::DATE)
             ,m_bBound(sal_True)
             ,m_bNull(sal_True)
+            ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
@@ -218,6 +230,7 @@ namespace connectivity
             m_eTypeKind(::com::sun::star::sdbc::DataType::TIME)
             ,m_bBound(sal_True)
             ,m_bNull(sal_True)
+            ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
@@ -227,6 +240,7 @@ namespace connectivity
             m_eTypeKind(::com::sun::star::sdbc::DataType::TIMESTAMP)
             ,m_bBound(sal_True)
             ,m_bNull(sal_True)
+            ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
@@ -236,6 +250,7 @@ namespace connectivity
             m_eTypeKind(::com::sun::star::sdbc::DataType::LONGVARBINARY)
             ,m_bBound(sal_True)
             ,m_bNull(sal_True)
+            ,m_bSigned(sal_True)
         {
             m_aValue.m_pString = NULL;
             operator=(_rRH);
@@ -328,6 +343,9 @@ namespace connectivity
 
         sal_Bool    isModified() const                  { return m_bModified;   }
         void        setModified(sal_Bool _bMod=sal_True){ m_bModified = _bMod;  }
+
+        sal_Bool    isSigned() const                    { return m_bSigned; }
+        void        setSigned(sal_Bool _bMod=sal_True);
 
         sal_Int32   getTypeKind() const                 { return m_eTypeKind;   }
         void        setTypeKind(sal_Int32 _eType);
