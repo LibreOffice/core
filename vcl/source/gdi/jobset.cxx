@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobset.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: pl $ $Date: 2000-09-22 12:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ DBG_NAME( JobSetup );
 
 #define JOBSET_FILEFORMAT2      3780
 #define JOBSET_FILE364_SYSTEM   ((USHORT)0xFFFF)
+#define JOBSET_FILE605_SYSTEM   ((USHORT)0xFFFE)
 
 struct ImplOldJobSetupData
 {
@@ -138,6 +139,7 @@ ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
     }
     else
         mpDriverData = NULL;
+    maValueMap          = rJobSetup.maValueMap;
 }
 
 // -----------------------------------------------------------------------
@@ -245,6 +247,29 @@ XubString JobSetup::GetDriverName() const
 
 // -----------------------------------------------------------------------
 
+String JobSetup::GetValue( const String& rKey ) const
+{
+    if( mpData )
+    {
+        ::std::hash_map< ::rtl::OUString, ::rtl::OUString >::const_iterator it;
+        it = mpData->maValueMap.find( rKey );
+        return it != mpData->maValueMap.end() ? String( it->second ) : String();
+    }
+    return String();
+}
+
+// -----------------------------------------------------------------------
+
+void JobSetup::SetValue( const String& rKey, const String& rValue )
+{
+    if( ! mpData )
+        mpData = new ImplJobSetup();
+
+    mpData->maValueMap[ rKey ] = rValue;
+}
+
+// -----------------------------------------------------------------------
+
 JobSetup& JobSetup::operator=( const JobSetup& rJobSetup )
 {
     DBG_CHKTHIS( JobSetup, NULL );
@@ -294,7 +319,9 @@ BOOL JobSetup::operator==( const JobSetup& rJobSetup ) const
          (pData1->mnPaperWidth      == pData2->mnPaperWidth)            &&
          (pData1->mnPaperHeight     == pData2->mnPaperHeight)           &&
          (pData1->mnDriverDataLen   == pData2->mnDriverDataLen)         &&
-         (memcmp( pData1->mpDriverData, pData2->mpDriverData, pData1->mnDriverDataLen ) == 0) )
+         (memcmp( pData1->mpDriverData, pData2->mpDriverData, pData1->mnDriverDataLen ) == 0)                                                           &&
+         (pData1->maValueMap        == pData2->maValueMap)
+         )
         return TRUE;
 
     return FALSE;
@@ -311,6 +338,7 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
     {
         USHORT nLen;
         USHORT nSystem;
+        int nFirstPos = rIStream.Tell();
         rIStream >> nLen;
         if ( !nLen )
             return rIStream;
@@ -333,7 +361,8 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
             pJobData->maDriver      = UniString( pData->cDriverName, RTL_TEXTENCODING_UTF8 );
 
             // Sind es unsere neuen JobSetup-Daten?
-            if ( nSystem == JOBSET_FILE364_SYSTEM )
+            if ( nSystem == JOBSET_FILE364_SYSTEM ||
+                 nSystem == JOBSET_FILE605_SYSTEM )
             {
                 Impl364JobSetupData* pOldJobData    = (Impl364JobSetupData*)(pTempBuf + sizeof( ImplOldJobSetupData ));
                 USHORT nOldJobDataSize              = SVBT16ToShort( pOldJobData->nSize );
@@ -349,6 +378,20 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
                     BYTE* pDriverData = ((BYTE*)pOldJobData) + nOldJobDataSize;
                     pJobData->mpDriverData = new BYTE[pJobData->mnDriverDataLen];
                     memcpy( pJobData->mpDriverData, pDriverData, pJobData->mnDriverDataLen );
+                }
+                if( nSystem == JOBSET_FILE605_SYSTEM )
+                {
+                    rIStream.Seek( nFirstPos + sizeof( ImplOldJobSetupData ) + 4 + sizeof( Impl364JobSetupData ) + pJobData->mnDriverDataLen );
+                    while( rIStream.Tell() < nFirstPos + nLen )
+                    {
+                        String aKey, aValue;
+                        rIStream.ReadByteString( aKey, RTL_TEXTENCODING_UTF8 );
+                        rIStream.ReadByteString( aValue, RTL_TEXTENCODING_UTF8 );
+                        pJobData->maValueMap[ aKey ] = aValue;
+                    }
+                    DBG_ASSERT( rIStream.Tell() == nFirstPos+nLen, "corrupted job setup" );
+                    // ensure correct stream position
+                    rIStream.Seek( nFirstPos + nLen );
                 }
             }
         }
@@ -377,7 +420,7 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
             rOStream << nLen;
         else
         {
-            USHORT nSystem = JOBSET_FILE364_SYSTEM;
+            USHORT nSystem = JOBSET_FILE605_SYSTEM;
 
             const ImplJobSetup* pJobData = rJobSetup.ImplGetConstData();
             Impl364JobSetupData aOldJobData;
@@ -397,12 +440,23 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
             strncpy( aOldData.cPrinterName, aPrnByteName.GetBuffer(), 63 );
             ByteString aDriverByteName( rJobSetup.GetDriverName(), RTL_TEXTENCODING_UTF8 );
             strncpy( aOldData.cDriverName, aDriverByteName.GetBuffer(), 31 );
-            nLen = sizeof( aOldData ) + 4 + nOldJobDataSize + pJobData->mnDriverDataLen;
+//          nLen = sizeof( aOldData ) + 4 + nOldJobDataSize + pJobData->mnDriverDataLen;
+            int nPos = rOStream.Tell();
             rOStream << nLen;
             rOStream << nSystem;
             rOStream.Write( (char*)&aOldData, sizeof( aOldData ) );
             rOStream.Write( (char*)&aOldJobData, nOldJobDataSize );
             rOStream.Write( (char*)pJobData->mpDriverData, pJobData->mnDriverDataLen );
+            ::std::hash_map< ::rtl::OUString, ::rtl::OUString >::const_iterator it;
+            for( it = pJobData->maValueMap.begin(); it != pJobData->maValueMap.end(); ++it )
+            {
+                rOStream.WriteByteString( it->first, RTL_TEXTENCODING_UTF8 );
+                rOStream.WriteByteString( it->second, RTL_TEXTENCODING_UTF8 );
+            }
+            nLen = rOStream.Tell() - nPos;
+            rOStream.Seek( nPos );
+            rOStream << nLen;
+            rOStream.Seek( nPos + nLen );
         }
     }
 /*
