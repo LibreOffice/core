@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-30 15:52:46 $
+ *  last change: $Author: mba $ $Date: 2001-04-02 08:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -876,7 +876,7 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL )
 }
 
 SFX_IMPL_XSERVICEINFO( SfxAppDispatchProvider, "com.sun.star.frame.DispatchProvider", "com.sun.star.comp.sfx2.AppDispatchProvider" )                                                                \
-SFX_IMPL_SINGLEFACTORY( SfxAppDispatchProvider );
+SFX_IMPL_ONEINSTANCEFACTORY( SfxAppDispatchProvider );
 
 Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch( const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& sTargetFrameName,
                     FrameSearchFlags eSearchFlags ) throw( RuntimeException )
