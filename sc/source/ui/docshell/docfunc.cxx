@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-18 20:28:07 $
+ *  last change: $Author: nn $ $Date: 2001-10-31 15:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2168,23 +2168,16 @@ USHORT lcl_GetOptimalColWidth( ScDocShell& rDocShell, USHORT nCol, USHORT nTab, 
 {
     USHORT nTwips = 0;
 
-//! OutputDevice* pDev = rDocShell.GetPrinter();
-    VirtualDevice aVDev;
-    OutputDevice* pDev = &aVDev;        // aus Kompatibilitaetsgruenden...
+    ScSizeDeviceProvider aProv(&rDocShell);
+    OutputDevice* pDev = aProv.GetDevice();         // has pixel MapMode
+    double nPPTX = aProv.GetPPTX();
+    double nPPTY = aProv.GetPPTY();
 
-    if (pDev)
-    {
-        ScDocument* pDoc = rDocShell.GetDocument();
-        Fraction aOne(1,1);
-        MapMode aOldMap = pDev->GetMapMode();
-        pDev->SetMapMode( MAP_PIXEL );              // wichtig fuer GetNeededSize
-        Point aPix1000 = pDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
-        double nPPTX = aPix1000.X() / 1000.0;
-        double nPPTY = aPix1000.Y() / 1000.0;
-        nTwips = pDoc->GetOptimalColWidth( nCol, nTab, pDev, nPPTX, nPPTY, aOne, aOne,
-                                            bFormula, NULL );
-        pDev->SetMapMode( aOldMap );        //! noetig ???
-    }
+    ScDocument* pDoc = rDocShell.GetDocument();
+    Fraction aOne(1,1);
+    nTwips = pDoc->GetOptimalColWidth( nCol, nTab, pDev, nPPTX, nPPTY, aOne, aOne,
+                                        bFormula, NULL );
+
     return nTwips;
 }
 

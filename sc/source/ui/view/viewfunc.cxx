@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 17:11:52 $
+ *  last change: $Author: nn $ $Date: 2001-10-31 15:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,16 +297,25 @@ void ScViewFunc::DoAutoAttributes( USHORT nCol, USHORT nRow, USHORT nTab,
 
 USHORT ScViewFunc::GetOptimalColWidth( USHORT nCol, USHORT nTab, BOOL bFormula )
 {
-    ScDocument* pDoc = GetViewData()->GetDocument();
+    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScDocument* pDoc = pDocSh->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
-    VirtualDevice aVirtDev;
-    aVirtDev.SetMapMode(MAP_PIXEL);
-    USHORT nTwips = pDoc->GetOptimalColWidth( nCol, nTab, &aVirtDev,
-                                        GetViewData()->GetPPTX(),
-                                        GetViewData()->GetPPTY(),
-                                        GetViewData()->GetZoomX(),
-                                        GetViewData()->GetZoomY(),
-                                        bFormula, &rMark );
+
+    double nPPTX = GetViewData()->GetPPTX();
+    double nPPTY = GetViewData()->GetPPTY();
+    Fraction aZoomX = GetViewData()->GetZoomX();
+    Fraction aZoomY = GetViewData()->GetZoomY();
+
+    ScSizeDeviceProvider aProv(pDocSh);
+    if (aProv.IsPrinter())
+    {
+        nPPTX = aProv.GetPPTX();
+        nPPTY = aProv.GetPPTY();
+        aZoomX = aZoomY = Fraction( 1, 1 );
+    }
+
+    USHORT nTwips = pDoc->GetOptimalColWidth( nCol, nTab, aProv.GetDevice(),
+                                nPPTX, nPPTY, aZoomX, aZoomY, bFormula, &rMark );
     return nTwips;
 }
 
@@ -2112,7 +2121,8 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, BOOL bOptimal )
     USHORT nCol = GetViewData()->GetCurX();
     USHORT nRow = GetViewData()->GetCurY();
     USHORT nTab = GetViewData()->GetTabNo();
-    ScDocument* pDoc = GetViewData()->GetDocument();
+    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScDocument* pDoc = pDocSh->GetDocument();
 
     BOOL bAllowed, bOnlyMatrix;
     if ( eDir == DIR_LEFT || eDir == DIR_RIGHT )
@@ -2157,13 +2167,22 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, BOOL bOptimal )
             }
             else
             {
-                VirtualDevice aVirtDev;
-                aVirtDev.SetMapMode(MAP_PIXEL);
-                long nPixel = pDoc->GetNeededSize( nCol, nRow, nTab, &aVirtDev,
-                                GetViewData()->GetPPTX(), GetViewData()->GetPPTY(),
-                                GetViewData()->GetZoomX(), GetViewData()->GetZoomY(),
-                                TRUE );
-                USHORT nTwips = (USHORT)( nPixel / GetViewData()->GetPPTX() );
+                double nPPTX = GetViewData()->GetPPTX();
+                double nPPTY = GetViewData()->GetPPTY();
+                Fraction aZoomX = GetViewData()->GetZoomX();
+                Fraction aZoomY = GetViewData()->GetZoomY();
+
+                ScSizeDeviceProvider aProv(pDocSh);
+                if (aProv.IsPrinter())
+                {
+                    nPPTX = aProv.GetPPTX();
+                    nPPTY = aProv.GetPPTY();
+                    aZoomX = aZoomY = Fraction( 1, 1 );
+                }
+
+                long nPixel = pDoc->GetNeededSize( nCol, nRow, nTab, aProv.GetDevice(),
+                                            nPPTX, nPPTY, aZoomX, aZoomY, TRUE );
+                USHORT nTwips = (USHORT)( nPixel / nPPTX );
                 if (nTwips != 0)
                     nWidth = nTwips + STD_EXTRA_WIDTH;
                 else
