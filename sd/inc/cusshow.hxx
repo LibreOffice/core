@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cusshow.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:11:09 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,8 +116,8 @@ public:
 
     SdDrawDocument* GetDoc() const { return pDoc; }
 
-    friend SvStream& operator << (SvStream& rOut, const SdCustomShow& rCustomShow);
-    friend SvStream& operator >> (SvStream& rIn, SdCustomShow& rCustomShow);
+//BFS02 friend SvStream& operator << (SvStream& rOut, const SdCustomShow& rCustomShow);
+//BFS02 friend SvStream& operator >> (SvStream& rIn, SdCustomShow& rCustomShow);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoCustomShow();
 };
