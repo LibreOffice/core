@@ -171,6 +171,7 @@ $loggingdir = $loggingdir . $installer::globals::separator;
 $installer::globals::exitlog = $loggingdir;
 
 my $installdir = "";
+my $currentdir = "";
 my $shipinstalldir = "";
 my $current_install_number = "";
 
@@ -471,7 +472,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         else    # switching from office installation to language pack
         {
             my $infoline = "... creating language pack: $$languagestringref !\n";
-            installer::logger::include_header_into_logfile("$infoline");    # <- Wo wird das geloggt?
+            installer::logger::include_header_into_logfile("$infoline");
             print "$infoline";
 
             $packages = installer::control::read_packagelist($installer::globals::addpackagelist); # reading the addon packagelist (which should be the languagepack package list)
@@ -479,13 +480,32 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             if ( $n == 1 )  # packing the language packs, after the office is created
             {
-                $installer::globals::languagepack = 1; # !!! Setting languagepack variable after finishing the first language
-                $installer::globals::addjavainstaller = 0;  # no java installer for language packs
-                $installer::globals::addchildprojects = 0;  # no child projects for language packs
+                $installer::globals::languagepack = 1;      # !!! Setting languagepack variable after finishing the first language
+                $installer::globals::islanguagepackinunixmulti = 1;
             }
         }
 
-        if ( $n == $#installer::globals::languageproducts ) { $islastrun = 1; }
+        if ( $n == $#installer::globals::languageproducts )
+        {
+            $islastrun = 1;
+        }
+    }
+
+    if ( ! $installer::globals::is_unix_multi ) { $islastrun = 1; }
+
+    if ( $installer::globals::patch )
+    {
+        $installer::globals::addchildprojects = 0;  # no child projects for patches
+        $installer::globals::addlicensefile = 0;    # no license files for patches
+        $installer::globals::makedownload = 0;
+    }
+
+    if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) )
+    {
+        $installer::globals::addchildprojects = 0;
+        $installer::globals::addsystemintegration = 0;
+        $installer::globals::makedownload = 0;
+        $installer::globals::addlicensefile = 0;
     }
 
     ############################################################
@@ -533,7 +553,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     {
         if ( $installer::globals::iswindowsbuild )
         {
-            installer::windows::msiglobal::set_global_code_variables($languagesarrayref);
+            installer::windows::msiglobal::set_global_code_variables($languagesarrayref, $languagestringref, $allvariableshashref);
         }
     }
 
@@ -605,8 +625,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles10c.log", $filesinproductlanguageresolvedarrayref); }
     }
 
-    $filesinproductlanguageresolvedarrayref = installer::scriptitems::add_License_Files_into_Installdir($filesinproductlanguageresolvedarrayref, $languagesarrayref);
-    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles10b.log", $filesinproductlanguageresolvedarrayref); }
+    if ( ! $installer::globals::islanguagepackinunixmulti )
+    {
+        $filesinproductlanguageresolvedarrayref = installer::scriptitems::add_License_Files_into_Installdir($filesinproductlanguageresolvedarrayref, $languagesarrayref);
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles10b.log", $filesinproductlanguageresolvedarrayref); }
+    }
 
     # print "... calculating checksums ...\n";
     # my $checksumfile = installer::worker::make_checksum_file($filesinproductlanguageresolvedarrayref, $includepatharrayref);
@@ -871,6 +894,29 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         @{$folderitemsinproductlanguageresolvedarrayref} = (); # no folderitems in languagepacks
     }
 
+    # Patch projects can now start to select the required information
+    if (( $installer::globals::patch ) && ( $installer::globals::issolarispkgbuild ))
+    {
+        $filesinproductlanguageresolvedarrayref = installer::worker::select_patch_items($filesinproductlanguageresolvedarrayref, "File");
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles16patch.log", $filesinproductlanguageresolvedarrayref); }
+        $scpactionsinproductlanguageresolvedarrayref = installer::worker::select_patch_items($scpactionsinproductlanguageresolvedarrayref, "ScpAction");
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions6patch.log", $scpactionsinproductlanguageresolvedarrayref); }
+        $linksinproductlanguageresolvedarrayref = installer::worker::select_patch_items($linksinproductlanguageresolvedarrayref, "Shortcut");
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productlinks8patch.log", $linksinproductlanguageresolvedarrayref); }
+        @{$folderitemsinproductlanguageresolvedarrayref} = (); # no folderitems in languagepacks
+    }
+
+    #########################################################
+    # creating inf files for user system integration
+    #########################################################
+
+    if ( $installer::globals::iswindowsbuild )  # Windows specific items: Folder, FolderItem, RegistryItem
+    {
+        print "... creating inf files ...\n";
+        installer::worker::create_inf_file($filesinproductlanguageresolvedarrayref, $registryitemsinproductlanguageresolvedarrayref, $folderinproductlanguageresolvedarrayref, $folderitemsinproductlanguageresolvedarrayref, $modulesinproductlanguageresolvedarrayref, $languagesarrayref, $languagestringref, $allvariableshashref);
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles16c.log", $filesinproductlanguageresolvedarrayref); }
+    }
+
     if ( $installer::globals::debug ) { installer::logger::debuginfo("\nEnd of part 1b: The language dependent part\n"); }
 
     # saving debug info, before starting part 2
@@ -944,6 +990,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             my $onepackagename = $onepackage->{'module'};           # name of the top module (required)
             my $shellscriptsfilename = "";
             if ( $onepackage->{'script'} ) { $shellscriptsfilename = $onepackage->{'script'}; }
+            # no scripts for Solaris patches!
+            if ( $installer::globals::patch ) { $shellscriptsfilename = ""; }
 
             ###########################
             # package name
@@ -966,6 +1014,17 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 installer::packagelist::adapt_packagename(\$packagename);
             }
 
+            my $linkaddon = "";
+
+            if ( $installer::globals::makelinuxlinkrpm )
+            {
+                my $oldpackagename = $packagename;
+                $packagename = $packagename . "-links";
+                my $savestring = $oldpackagename . "\t" . $packagename;
+                push(@installer::globals::linkrpms, $savestring);
+                $linkaddon = "_links";
+            }
+
             ###########################################
             # Root path, can be defined as parameter
             ###########################################
@@ -976,7 +1035,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             {
                 $packagerootpath = $onepackage->{'destpath'};
                 installer::packagelist::resolve_packagevariables(\$packagerootpath, $allvariableshashref, 1);
-                installer::packagelist::adapt_name(\$packagerootpath);
+                if ( $^O =~ /darwin/i ) { $packagerootpath =~ s/\/opt\//\/Applications\//; }
             }
             else
             {
@@ -1023,11 +1082,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if ( ! ( $#{$filesinpackage} > -1 ))
             {
                 push(@installer::globals::emptypackages, $packagename);
-                $infoline = "No file in package: $packagename\n";
+                $infoline = "\nNo file in package: $packagename \-\> Skipping\n";
                 push(@installer::globals::logfileinfo, $infoline);
-                # Attention: No next allowed for the last package
-                if ( $k == $#{$packages} ) { installer::exiter::exit_program("ERROR: Empty package $packagename. The last package in packagelist must not be empty, please reorder!", "Main"); }
-                next;
+                next;   # next package, end of loop !
             }
 
             ###########################################
@@ -1040,6 +1097,40 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             installer::strip::strip_libraries($filesinpackage, $languagestringref);
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . $packagename ."_files.log", $filesinpackage); }
+
+            ###############################################################
+            # Searching for files in $filesinpackage with flag LINUXLINK
+            ###############################################################
+
+            if (( $installer::globals::islinuxrpmbuild ) && ( ! $installer::globals::simple ))
+            {
+                # Searching for files with flag LINUXLINK
+
+                my $linuxlinkfiles = installer::worker::collect_all_items_with_special_flag($filesinpackage ,"LINUXLINK");
+
+                if ( $#{$linuxlinkfiles} > -1 )
+                {
+                    if ( $installer::globals::makelinuxlinkrpm )
+                    {
+                        @{$filesinpackage} = ();
+                        $linksinpackage = \@installer::globals::linuxlinks;
+                        $installer::globals::makelinuxlinkrpm = 0;
+
+                        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "files3b_" . $packagename . ".log", $filesinpackage); }
+                        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "links3b_" . $packagename . ".log", $linksinpackage); }
+                        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "dirs3b_" . $packagename . ".log", $dirsinpackage); }
+                    }
+                    else
+                    {
+                        installer::worker::prepare_linuxlinkfiles($filesinpackage);
+                        $installer::globals::makelinuxlinkrpm = 1;
+
+                        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "files3a_" . $packagename . ".log", $filesinpackage); }
+                        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "links3a_" . $packagename . ".log", $linksinpackage); }
+                        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "dirs3a_" . $packagename . ".log", $dirsinpackage); }
+                    }
+                }
+            }
 
             ###########################################
             # Simple installation mechanism
@@ -1060,7 +1151,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 # Example for a link: l 000 root sys /usr/bin/linkname filename
                 # The source field specifies the file to link to
 
-                my $epmfilename = "epm_" . $installer::globals::product . "_" . $onepackagename . "_" . $installer::globals::compiler . "_" . $installer::globals::build . "_" . $installer::globals::minor . "_" . $$languagestringref . ".lst";
+                my $epmfilename = "epm_" . $installer::globals::product . "_" . $onepackagename . $linkaddon . "_" . $installer::globals::compiler . "_" . $installer::globals::build . "_" . $installer::globals::minor . "_" . $$languagestringref . ".lst";
 
                 print "... creating epm list file $epmfilename ... \n";
 
@@ -1070,6 +1161,20 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
                 my $epmheaderref = installer::epmfile::create_epm_header($allvariableshashref, $filesinproductlanguageresolvedarrayref, $languagesarrayref, $onepackage);
                 installer::epmfile::adding_header_to_epm_file(\@epmfile, $epmheaderref);
+
+                if ( $installer::globals::patch )
+                {
+                    $filesinpackage = installer::worker::analyze_patch_files($filesinpackage);
+                    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "files4_" . $packagename . ".log", $filesinpackage); }
+
+                    if ( ! ( $#{$filesinpackage} > -1 ))
+                    {
+                        push(@installer::globals::emptypackages, $packagename);
+                        $infoline = "\nNo file in package: $packagename \-\> Skipping\n";
+                        push(@installer::globals::logfileinfo, $infoline);
+                        next;   # next package, end of loop !
+                    }
+                }
 
                 # adding directories, files and links into epm file
 
@@ -1094,9 +1199,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
                 # changing into the "install" directory to create installation sets
 
-                my $currentdir = cwd();
+                $currentdir = cwd();    # $currentdir is global in this file
 
-                chdir($installdir); # changing into install directory
+                chdir($installdir);     # changing into install directory ($installdir is global in this file)
 
                 ###########################################
                 # Starting epm
@@ -1139,31 +1244,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                         # Install: pkgadd -a myAdminfile -d ./SUNWso8m34.pkg
                         # Install: rpm -i --prefix=/opt/special --nodeps so8m35.rpm
 
-                        if ( $k == $#{$packages} )   # after the last package is packed
-                        {
-                            my $newdir = installer::epmfile::create_new_directory_structure($newepmdir);
-
-                            # $newdir is only "RPMS" or "packages"
-
-                            if ( ! $installer::globals::languagepack )   # the following not for language packs
-                            {
-                                if (($installer::globals::product =~ /office/i ) || ($installer::globals::product =~ /suite/i ))
-                                {
-                                    # Copying the cde, kde and gnome packages into the installation set
-                                    installer::epmfile::put_systemintegration_into_installset($newdir, $includepatharrayref, $allvariableshashref);
-                                }
-                            }
-
-                            # Adding child projects to installation dynamically
-                            if ($installer::globals::addchildprojects) { installer::epmfile::put_childprojects_into_installset($newdir, $allvariableshashref); }
-
-                            # Creating installation set for Unix language packs, that are not part of multi lingual installation sets
-                            if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) ) { installer::languagepack::build_installer_for_languagepack($newdir, $allvariableshashref, $includepatharrayref, $languagesarrayref); }
-
-                            # Copying the java installer into the installation set
-                            chdir($currentdir); # changing back into start directory
-                            if ( $installer::globals::addjavainstaller ) { installer::javainstaller::create_java_installer($installdir, $newdir, $languagestringref, $languagesarrayref, $filesinproductlanguageresolvedarrayref, $allvariableshashref, $includepatharrayref, $modulesinproductarrayref); }
-                        }
+                        # $installer::globals::subdir is only "RPMS" or "packages"
+                        $installer::globals::subdir = installer::epmfile::create_new_directory_structure($newepmdir);
+                        $installer::globals::postprocess_specialepm = 1;
                     }
                 }
                 else    # this is the standard epm (not relocatable) or ( nonlinux and nonsolaris )
@@ -1181,23 +1264,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
                         if (($installer::globals::islinuxrpmbuild) || ($installer::globals::issolarispkgbuild))
                         {
-                            if ( $k == $#{$packages} )   # after the last package is packed
-                            {
-                                # determine the destination directory
-                                my $newepmdir = installer::epmfile::determine_installdir_ooo();
-
-                                if ( ! $installer::globals::languagepack )   # the following not for language packs
-                                {
-                                    if (($installer::globals::product =~ /office/i ) || ($installer::globals::product =~ /suite/i ))
-                                    {
-                                        # Copying the cde, kde and gnome packages into the installation set
-                                        installer::epmfile::put_systemintegration_into_installset($newepmdir, $includepatharrayref, $allvariableshashref);
-                                    }
-                                }
-
-                                # Creating installation set for Unix language packs, that are not part of multi lingual installation sets
-                                if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) ) { installer::languagepack::build_installer_for_languagepack($newepmdir, $allvariableshashref, $includepatharrayref, $languagesarrayref); }
-                            }
+                            $installer::globals::postprocess_standardepm = 1;
                         }
                     }
                 }
@@ -1206,7 +1273,60 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             }  # end of "if (! $installer::globals::simple)"
 
+            if ( $installer::globals::makelinuxlinkrpm ) { $k--; }  # decreasing the counter to create the link rpm!
+
         }   # end of "for ( my $k = 0; $k <= $#{$allpackages}; $k++ )"
+
+        ##############################################################
+        # Post epm functionality, after the last package is packed
+        ##############################################################
+
+        if (( $installer::globals::postprocess_specialepm ) && ( $islastrun ))
+        {
+            installer::logger::include_header_into_logfile("Post EPM processes (Patched EPM):");
+
+            chdir($installdir);
+
+            # Copying the cde, kde and gnome packages into the installation set
+            if ( $installer::globals::addsystemintegration ) { installer::epmfile::put_systemintegration_into_installset($installer::globals::subdir, $includepatharrayref, $allvariableshashref); }
+
+            # Adding license and readme into installation set
+            if ($installer::globals::addlicensefile) { installer::epmfile::put_installsetfiles_into_installset($installer::globals::subdir); }
+
+            # Adding child projects to installation dynamically
+            if ($installer::globals::addchildprojects) { installer::epmfile::put_childprojects_into_installset($installer::globals::subdir, $allvariableshashref); }
+
+            # Creating installation set for Unix language packs, that are not part of multi lingual installation sets
+            if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) ) { installer::languagepack::build_installer_for_languagepack($installer::globals::subdir, $allvariableshashref, $includepatharrayref, $languagesarrayref); }
+
+            # Finalizing patch installation sets
+            if ( $installer::globals::patch ) { installer::epmfile::finalize_patch($installer::globals::subdir, $allvariableshashref); }
+
+            # Copying the java installer into the installation set
+            chdir($currentdir); # changing back into start directory
+            if ( $installer::globals::addjavainstaller ) { installer::javainstaller::create_java_installer($installdir, $installer::globals::subdir, $languagestringref, $languagesarrayref, $allvariableshashref, $includepatharrayref, $modulesinproductarrayref); }
+        }
+
+        if (( $installer::globals::postprocess_standardepm ) && ( $islastrun ))
+        {
+            installer::logger::include_header_into_logfile("Post EPM processes (Standard EPM):");
+
+            chdir($installdir);
+
+            # determine the destination directory
+            my $newepmdir = installer::epmfile::determine_installdir_ooo();
+
+            # Copying the cde, kde and gnome packages into the installation set
+            if ( $installer::globals::addsystemintegration ) { installer::epmfile::put_systemintegration_into_installset($newepmdir, $includepatharrayref, $allvariableshashref); }
+
+            # Adding license and readme into installation set
+            if ($installer::globals::addlicensefile) { installer::epmfile::put_installsetfiles_into_installset($newepmdir); }
+
+            # Creating installation set for Unix language packs, that are not part of multi lingual installation sets
+            if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) ) { installer::languagepack::build_installer_for_languagepack($newepmdir, $allvariableshashref, $includepatharrayref, $languagesarrayref); }
+
+            chdir($currentdir); # changing back into start directory
+        }
 
         #######################################################
         # Analyzing the log file
@@ -1215,7 +1335,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         my $is_success = 0;
         my $finalinstalldir = "";
 
-        if (( ! $installer::globals::is_unix_multi ) || ( $islastrun ))
+        if ( $islastrun )
         {
             installer::worker::clean_output_tree(); # removing directories created in the output tree
             ($is_success, $finalinstalldir) = installer::worker::analyze_and_save_logfile($loggingdir, $installdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
@@ -1225,14 +1345,16 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # Creating download installation set
         #######################################################
 
-        my $create_download = 0;
-        my $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "downloadname");
-        if ( $$downloadname ne "" ) { $create_download = 1; }
-        if (( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi )) { $create_download = 0; } # no download sets for Unix language packs
-        if (( $is_success ) && ( $create_download ))
+        if (( $islastrun ) && ( $installer::globals::makedownload ))
         {
-            $downloaddir = installer::download::create_download_sets($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref);
-            installer::worker::analyze_and_save_logfile($loggingdir, $downloaddir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
+            my $create_download = 0;
+            my $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "downloadname");
+            if ( $$downloadname ne "" ) { $create_download = 1; }
+            if (( $is_success ) && ( $create_download ))
+            {
+                $downloaddir = installer::download::create_download_sets($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref);
+                installer::worker::analyze_and_save_logfile($loggingdir, $downloaddir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
+            }
         }
 
     }   # end of "if (!( $installer::globals::iswindowsbuild ))"
@@ -1255,6 +1377,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         $installdir = installer::worker::create_installation_directory($shipinstalldir, $languagestringref, \$current_install_number);
 
          my $idtdirbase = installer::systemactions::create_directories("idt_files", $languagestringref);
+         $installer::globals::infodirectory = installer::systemactions::create_directories("info_files", $languagestringref);
         my $installlogdir = installer::systemactions::create_directory_next_to_directory($installdir, "log");
         # my $installchecksumdir = installer::systemactions::create_directory_next_to_directory($installdir, "checksum");
 
@@ -1303,6 +1426,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         # Creating the important dynamic idt files
 
+        installer::windows::msiglobal::set_msiproductversion($allvariableshashref);
+
         installer::windows::file::create_files_table($filesinproductlanguageresolvedarrayref, \@allfilecomponents, $newidtdir);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles17.log", $filesinproductlanguageresolvedarrayref); }
 
@@ -1338,7 +1463,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # Attention: Shortcuts (Folderitems) have icon files, that have to be copied into the Icon directory (last parameter)
         my @iconfilecollector = ();
 
-        installer::windows::shortcut::create_shortcut_table($filesinproductlanguageresolvedarrayref, $linksinproductlanguageresolvedarrayref, $folderinproductlanguageresolvedarrayref, $folderitemsinproductlanguageresolvedarrayref, $directoriesforepmarrayref, $newidtdir, $languagesarrayref, \@iconfilecollector);
+        installer::windows::shortcut::create_shortcut_table($filesinproductlanguageresolvedarrayref, $linksinproductlanguageresolvedarrayref, $folderinproductlanguageresolvedarrayref, $folderitemsinproductlanguageresolvedarrayref, $directoriesforepmarrayref, $newidtdir, $languagesarrayref, $includepatharrayref, \@iconfilecollector);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "folderitems4.log", $folderitemsinproductlanguageresolvedarrayref); }
 
         installer::windows::icon::create_icon_table(\@iconfilecollector, $newidtdir);    # creating the icon table with all iconfiles used as shortcuts (FolderItems)
@@ -1351,7 +1476,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             installer::windows::selfreg::create_selfreg_table($filesinproductlanguageresolvedarrayref, $newidtdir);
 
-            installer::windows::upgrade::create_upgrade_table($newidtdir);
+            installer::windows::upgrade::create_upgrade_table($newidtdir, $allvariableshashref);
 
             # Adding Assemblies into the tables MsiAssembly and MsiAssemblyName dynamically
             installer::windows::assembly::create_msiassembly_table($filesinproductlanguageresolvedarrayref, $newidtdir);
@@ -1476,7 +1601,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             # adding the custom action for the quickstarter into the product (CustomAc.idt and InstallE.idt)
             # $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "ExecuteQuickstart", "82", "install_quickstart.exe", "", 0, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            # if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "install_quickstart.exe", "ExecuteQuickstart", "\&FEATURETEMPLATE=3", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            # if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "install_quickstart.exe", "ExecuteQuickstart", "\&FEATURETEMPLATE=3 And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             # adding the custom action for the reg4msdoc in uisequence table into the product (CustomAc.idt and InstallU.idt)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Regmsdocmsidll1", "65", "reg4msdocmsi.dll", "InstallUiSequenceEntry", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
@@ -1492,79 +1617,84 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             # adding the custom action for the reg4msdoc in executesequence table into the product (CustomAc.idt and InstallE.idt)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Regmsdocmsidll2", "65", "reg4msdocmsi.dll", "InstallExecSequenceEntry", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "reg4msdocmsi.dll", "Regmsdocmsidll2", "Not REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "reg4msdocmsi.dll", "Regmsdocmsidll2", "Not REMOVE=\"ALL\" And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             # adding the custom action for the reg4msdoc in executesequence table into the product (CustomAc.idt and InstallE.idt)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Regmsdocmsidll3", "65", "reg4msdocmsi.dll", "DeinstallExecSequenceEntry", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "reg4msdocmsi.dll",  "Regmsdocmsidll3", "REMOVE\<\>\"\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "reg4msdocmsi.dll",  "Regmsdocmsidll3", "REMOVE\<\>\"\" And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             # adding the custom action for the pythonmsi in executesequence table into the product (CustomAc.idt and InstallE.idt)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Pythonmsidll1", "65", "pythonmsi.dll", "InstallExecSequenceEntry", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "pythonmsi.dll",  "Pythonmsidll1", "\&FEATURETEMPLATE=3", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "pythonmsi.dll",  "Pythonmsidll1", "\&FEATURETEMPLATE=3 And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             # adding the custom action for the pythonmsi in executesequence table into the product (CustomAc.idt and InstallE.idt)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Pythonmsidll2", "65", "pythonmsi.dll", "DeinstallExecSequenceEntry", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "pythonmsi.dll",  "Pythonmsidll2", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "pythonmsi.dll",  "Pythonmsidll2", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3 And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             # adding the custom action for the regactivex in executesequence table into the product (CustomAc.idt and InstallE.idt)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Regactivexdll1", "65", "regactivex.dll", "InstallActiveXControl", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "regactivex.dll", "Regactivexdll1", "\&FEATURETEMPLATE=3", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "regactivex.dll", "Regactivexdll1", "\&FEATURETEMPLATE=3 And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             # adding the custom action for the regactivex in executesequence table into the product (CustomAc.idt and InstallE.idt)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Regactivexdll2", "65", "regactivex.dll", "DeinstallActiveXControl", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "regactivex.dll",  "Regactivexdll2", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "regactivex.dll",  "Regactivexdll2", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3 And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             # adding the custom action for the javafilter in executesequence table into the product (CustomAc.idt and InstallE.idt)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Jfregcadll1", "65", "jfregca.dll", "install_jf", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "jfregca.dll", "Jfregcadll1", "\&FEATURETEMPLATE=3", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "jfregca.dll", "Jfregcadll1", "\&FEATURETEMPLATE=3 And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             # adding the custom action for the javafilter in executesequence table into the product (CustomAc.idt and InstallE.idt)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Jfregcadll2", "65", "jfregca.dll", "uninstall_jf", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "jfregca.dll",  "Jfregcadll2", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "jfregca.dll",  "Jfregcadll2", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3 And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             # adding the custom action for shutting down the quickstarter in executesequence table into the product (CustomAc.idt and InstallE.idt)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "sdqsmsidll", "65", "sdqsmsi.dll", "ShutDownQuickstarter", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "sdqsmsi.dll", "sdqsmsidll", "REMOVE=\"ALL\"", "InstallInitialize", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "sdqsmsi.dll", "sdqsmsidll", "REMOVE=\"ALL\" And Not PATCH", "InstallInitialize", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             # adding the custom action for the removal of the startup folder link in executesequence table into the product (CustomAc.idt and InstallE.idt)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "qslnkmsidll", "65", "qslnkmsi.dll", "RemoveQuickstarterLink", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "qslnkmsi.dll",  "qslnkmsidll", "REMOVE=\"ALL\"", "sdqsmsidll", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "qslnkmsi.dll",  "qslnkmsidll", "REMOVE=\"ALL\" And Not PATCH", "sdqsmsidll", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             # adding the custom action for the winexplorerext in executesequence table into the product (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll1", "1", "shlxtmsi.dll", "InstallExecSequenceEntry", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll", "Shellextensionsdll1", "\&FEATURETEMPLATE=3", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll1", "65", "shlxtmsi.dll", "InstallExecSequenceEntry", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll", "Shellextensionsdll1", "\&FEATURETEMPLATE=3 And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             # adding the custom action for the winexplorerext in executesequence table into the product (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll2", "1", "shlxtmsi.dll", "DeinstallExecSequenceEntry", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll",  "Shellextensionsdll2", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll2", "65", "shlxtmsi.dll", "DeinstallExecSequenceEntry", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll",  "Shellextensionsdll2", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3 And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             # adding the custom action for restarting the indexing service, necessary for the installation of ooofilt.dll in executesequence table into the product (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Instooofiltmsidll", "1", "instooofiltmsi.dll", "RestartIndexingService", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "instooofiltmsi.dll",  "Instooofiltmsidll", "Not REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Instooofiltmsidll", "65", "instooofiltmsi.dll", "RestartIndexingService", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "instooofiltmsi.dll",  "Instooofiltmsidll", "Not REMOVE=\"ALL\" And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             # adding the custom action for adding the icon to the office folder in start menu (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll3", "1", "shlxtmsi.dll", "InstallStartmenuFolderIcon", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll", "Shellextensionsdll3", "Not REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll3", "65", "shlxtmsi.dll", "InstallStartmenuFolderIcon", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll", "Shellextensionsdll3", "Not REMOVE=\"ALL\" And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             # adding the custom action for removing the icon from the office folder in start menu (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll4", "1", "shlxtmsi.dll", "DeinstallStartmenuFolderIcon", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll",  "Shellextensionsdll4", "REMOVE=\"ALL\"", "qslnkmsidll", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll4", "65", "shlxtmsi.dll", "DeinstallStartmenuFolderIcon", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll",  "Shellextensionsdll4", "REMOVE=\"ALL\" And Not PATCH", "qslnkmsidll", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+
+            # adding the custom action for setting the correct ALLUSERS value (CustomAc.idt and InstallE.idt and InstallE.idt )
+            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll5", "321", "shlxtmsi.dll", "SetProductInstallMode", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll",  "Shellextensionsdll5", "Not REMOVE=\"ALL\" And Not PATCH", "FindRelatedProducts", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installuitable, "shlxtmsi.dll", "Shellextensionsdll5", "Not REMOVE=\"ALL\" And Not PATCH", "FindRelatedProducts", $filesinproductlanguageresolvedarrayref, $installuitablename); }
 
             if ( $installer::globals::tab )
             {
                 # adding the tab custom action (CustomAc.idt and InstallE.idt)
                 $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "InstallTab", "65", "tabaction.dll", "TabSetup", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-                if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "tabaction.dll", "InstallTab", "Not REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+                if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "tabaction.dll", "InstallTab", "Not REMOVE=\"ALL\"  And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
             }
 
             # custom actions for language packs
 
             # finding the installed Office (at installation)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "FindingOffice", "65", "lngpckinsthlp.dll", "SetProductInstallationPath", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installuitable, "lngpckinsthlp.dll", "FindingOffice", "", "CostFinalize", $filesinproductlanguageresolvedarrayref, $installuitablename); }
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installuitable, "lngpckinsthlp.dll", "FindingOffice", "Not PATCH", "CostFinalize", $filesinproductlanguageresolvedarrayref, $installuitablename); }
             # finding the installed Office (at deinstallation)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "FindingOfficeUninstall", "65", "lngpckinsthlp.dll", "SetProductInstallationPath", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "lngpckinsthlp.dll", "FindingOfficeUninstall", "REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "lngpckinsthlp.dll", "FindingOfficeUninstall", "REMOVE=\"ALL\" And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
             installer::files::save_file($customactionidttablename, $customactionidttable);
             installer::files::save_file($installexecutetablename, $installexecutetable);
             installer::files::save_file($installuitablename, $installuitable);
@@ -1666,6 +1796,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         my $ddfdir = installer::systemactions::create_directories("ddf", $languagestringref);
 
         $installer::globals::packjobref = installer::windows::msiglobal::generate_cab_file_list($filesinproductlanguageresolvedarrayref, $installdir, $ddfdir);
+
+        # Update and patch reasons the pack order needs to be saved
+        installer::windows::msiglobal::save_packorder($filesinproductlanguageresolvedarrayref);
 
         $infoline = "\n";
         push(@installer::globals::logfileinfo, $infoline);
