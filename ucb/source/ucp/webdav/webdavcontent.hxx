@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:27:21 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 10:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@ namespace com { namespace sun { namespace star { namespace sdbc {
 } } } }
 
 namespace com { namespace sun { namespace star { namespace ucb {
+    struct OpenCommandArgument2;
+    struct PostCommandArgument2;
     struct TransferInfo;
 } } } }
 
@@ -182,6 +184,19 @@ private:
                     const ::com::sun::star::uno::Reference<
                         ::com::sun::star::ucb::XCommandEnvironment >& xEnv )
         throw ( ::com::sun::star::uno::Exception );
+
+    // Command "open"
+    com::sun::star::uno::Any open(
+                const com::sun::star::ucb::OpenCommandArgument2 & rArg,
+                const com::sun::star::uno::Reference<
+                        com::sun::star::ucb::XCommandEnvironment > & xEnv )
+        throw( ::com::sun::star::uno::Exception );
+
+    // Command "post"
+    void post( const com::sun::star::ucb::PostCommandArgument2 & rArg,
+               const com::sun::star::uno::Reference<
+                        com::sun::star::ucb::XCommandEnvironment > & xEnv )
+        throw( ::com::sun::star::uno::Exception );
 
       // Command "insert"
       void insert( const ::com::sun::star::uno::Reference<
