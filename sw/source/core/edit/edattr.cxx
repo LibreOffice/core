@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:14:15 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,21 +261,6 @@ BOOL SwEditShell::GetAttr( SfxItemSet& rSet ) const
 
     return TRUE;
 }
-
-
-BOOL lcl_GetFmtColl( const SwNodePtr& rpNd, void* pArgs )
-{
-    if( rpNd->IsTxtNode() )
-    {
-        SwFmtColl** ppColl = (SwFmtColl**)pArgs;
-        if( !*ppColl )
-            *ppColl = ((SwTxtNode*)rpNd)->GetTxtColl();
-        else if( *ppColl == ((SwTxtNode*)rpNd)->GetTxtColl() )
-            return FALSE;
-    }
-    return TRUE;
-}
-
 
 SwTxtFmtColl* SwEditShell::GetCurTxtFmtColl() const
 {
