@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: cl $ $Date: 2001-05-15 12:18:47 $
+#   last change: $Author: cl $ $Date: 2002-01-29 13:13:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,12 @@ PACKAGE=com$/sun$/star$/presentation
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    PresentationView.idl\
+    PreviewView.idl\
+    OutlineView.idl\
+    SlidesView.idl\
+    NotesView.idl\
+    HandoutView.idl\
     XHandoutMasterSupplier.idl\
     AnimationEffect.idl\
     AnimationSpeed.idl\
