@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlnum.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:56:20 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
         pNumRule = (SwNumRule *)rTxtNd.GetNumRule();
         const SwNodeNum& rNum = *rTxtNd.GetNum();
         nDeep = pNumRule ? GetRealLevel( rNum.GetLevel() )+1 : 0;
-        bNumbered = (rNum.GetLevel() & NO_NUMLEVEL) == 0;
+        bNumbered = rNum.IsNum();
         bRestart = rTxtNd.GetNum()->IsStart();
     }
     else
@@ -349,7 +349,11 @@ void SwHTMLParser::NewNumBulList( int nToken )
         aBulletGrfs[nLevel].Erase();
 
     // den aktuellen Absatz erst einmal nicht numerieren
-    SetNodeNum( nLevel | NO_NUMLEVEL );
+    {
+        BYTE nLvl = nLevel;
+        SetNoNum(nLevel, TRUE);
+        SetNodeNum( nLvl );
+    }
 
     // einen neuen Kontext anlegen
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken );
@@ -435,8 +439,8 @@ void SwHTMLParser::EndNumBulList( int nToken )
     {
         SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
         bAppend = (pTxtNode && pTxtNode->GetNum() &&
-                    !(NO_NUMLEVEL & pTxtNode->GetNum()->GetLevel())) ||
-                  HasCurrentParaFlys();
+                   pTxtNode->GetNum()->IsNum()) ||
+            HasCurrentParaFlys();
     }
 
     sal_Bool bSpace = (rInfo.GetDepth() + nDefListDeep) == 1;
@@ -568,7 +572,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     bNoParSpace = sal_False;    // In <LI> wird kein Abstand eingefuegt!
 
     if( HTML_LISTHEADER_ON==nToken )
-        nLevel = nLevel | NO_NUMLEVEL;
+        SetNoNum(&nLevel, TRUE);
 
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken );
 
