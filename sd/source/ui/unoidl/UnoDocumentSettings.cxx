@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:40:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,9 @@
 
 #include "drawdoc.hxx"
 #ifndef SVX_LIGHT
-#include "docshell.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
 #endif
 #include "unomodel.hxx"
 
@@ -133,15 +135,15 @@
 #include "sdattr.hxx"
 #endif
 #endif
-#ifndef _SD_VIEWSHEL_HXX
-#include "../inc/viewshel.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "../inc/ViewShell.hxx"
 #endif
-#ifndef _SD_FRMVIEW_HXX
-#include "../inc/frmview.hxx"
+#ifndef SD_FRAME_VIEW_HXX
+#include "../inc/FrameView.hxx"
 #endif
 #ifndef SVX_LIGHT
-#ifndef _SD_SPOUTLINER_HXX
-#include <sdoutl.hxx>
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
 #endif
 #else
 #ifndef _SVDOUTL_HXX
@@ -322,7 +324,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
     OGuard aGuard( Application::GetSolarMutex() );
 
     SdDrawDocument* pDoc = mpModel->GetDoc();
-    SdDrawDocShell* pDocSh = mpModel->GetDocShell();
+    ::sd::DrawDocShell* pDocSh = mpModel->GetDocShell();
     if( NULL == pDoc || NULL == pDocSh )
         throw UnknownPropertyException();
 
@@ -743,7 +745,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         SdrOutliner& rOutl = pDocument->GetDrawOutliner( FALSE );
                         nCntrl = rOutl.GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
                         rOutl.SetControlWord( nCntrl | nSum );
-                        SdOutliner* pOutl = pDocument->GetOutliner( FALSE );
+                        ::sd::Outliner* pOutl = pDocument->GetOutliner( FALSE );
                         if( pOutl )
                         {
                             nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
@@ -771,7 +773,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     SdDrawDocument* pDocument = pDocSh->GetDoc();
                     SdrOutliner& rOutl = pDocument->GetDrawOutliner( FALSE );
                     rOutl.SetAsianCompressionMode( (UINT16)nCharCompressType );
-                    SdOutliner* pOutl = pDocument->GetOutliner( FALSE );
+                    ::sd::Outliner* pOutl = pDocument->GetOutliner( FALSE );
                     if( pOutl )
                     {
                         pOutl->SetAsianCompressionMode( (UINT16)nCharCompressType );
@@ -796,7 +798,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     SdDrawDocument* pDocument = pDocSh->GetDoc();
                     SdrOutliner& rOutl = pDocument->GetDrawOutliner( FALSE );
                     rOutl.SetKernAsianPunctuation( bAsianPunct );
-                    SdOutliner* pOutl = pDocument->GetOutliner( FALSE );
+                    ::sd::Outliner* pOutl = pDocument->GetOutliner( FALSE );
                     if( pOutl )
                     {
                         pOutl->SetKernAsianPunctuation( bAsianPunct );
@@ -827,7 +829,8 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                 // Just propagate the new printer independent layout mode to
                 // the document and determine it really differs from the old
                 // one.
-                sal_Int16 nOldValue = pDoc->GetPrinterIndependentLayout ();
+                sal_Int16 nOldValue =
+                    (sal_Int16)pDoc->GetPrinterIndependentLayout ();
                 sal_Int16 nValue;
                 if (*pValues >>= nValue)
                 {
@@ -869,7 +872,7 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
     OGuard aGuard( Application::GetSolarMutex() );
 
     SdDrawDocument* pDoc = mpModel->GetDoc();
-    SdDrawDocShell* pDocSh = mpModel->GetDocShell();
+    ::sd::DrawDocShell* pDocSh = mpModel->GetDocShell();
     if( NULL == pDoc || NULL == pDocSh )
         throw UnknownPropertyException();
 
@@ -1087,7 +1090,8 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
 
             case HANDLE_PRINTER_INDEPENDENT_LAYOUT:
             {
-                sal_Int16 nPrinterIndependentLayout = pDoc->GetPrinterIndependentLayout();
+                sal_Int16 nPrinterIndependentLayout =
+                    (sal_Int16)pDoc->GetPrinterIndependentLayout();
                 *pValue <<= nPrinterIndependentLayout;
             }
             break;
