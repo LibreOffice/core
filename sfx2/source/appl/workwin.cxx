@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 17:15:21 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 11:15:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #pragma hdrstop
 #endif
 
+#include "docfile.hxx"
 #include "objsh.hxx"
 #include "app.hxx"
 #include "appdata.hxx"
@@ -79,8 +80,24 @@
 #include "msgpool.hxx"
 #include "sfxresid.hxx"
 #include "objsh.hxx"
+#include "request.hxx"      // SFX_ITEMSET_SET
 #include <vcl/taskpanelist.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#ifndef _SFXITEMPOOL_HXX //autogen
+#include <svtools/itempool.hxx>
+#endif
+#ifndef _SFXITEMITER_HXX //autogen
+#include <svtools/itemiter.hxx>
+#endif
+#ifndef _SFX_WHITER_HXX //autogen
+#include <svtools/whiter.hxx>
+#endif
+#ifndef _SFXINTITEM_HXX //autogen
+#include <svtools/intitem.hxx>
+#endif
+#ifndef _SFXEITEM_HXX //autogen
+#include <svtools/eitem.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_UI_XUIELEMENT_HPP_
 #include <com/sun/star/ui/XUIElement.hpp>
@@ -625,8 +642,7 @@ void SfxWorkWindow::DeleteControllers_Impl()
 
     pChildWins->Remove((USHORT)0, nCount);
 
-    SfxBindings& rBindings = GetBindings();
-    Reference< com::sun::star::frame::XFrame > xFrame = rBindings.GetActiveFrame();
+    Reference< com::sun::star::frame::XFrame > xFrame = GetFrameInterface();
     Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
     Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
     if ( xPropSet.is() )
@@ -1265,7 +1281,7 @@ void SfxIPWorkWin_Impl::UpdateObjectBars_Impl()
 
 Reference< ::com::sun::star::task::XStatusIndicator > SfxWorkWindow::GetStatusIndicator()
 {
-    Reference< com::sun::star::beans::XPropertySet > xPropSet( GetBindings().GetActiveFrame(), UNO_QUERY );
+    Reference< com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
     Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
     Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
@@ -1293,6 +1309,37 @@ Reference< ::com::sun::star::task::XStatusIndicator > SfxWorkWindow::GetStatusIn
 
 //------------------------------------------------------------------------
 
+sal_Bool SfxWorkWindow::IsPluginMode( SfxObjectShell* pObjShell )
+{
+    if ( pObjShell && pObjShell->GetMedium() )
+    {
+        SFX_ITEMSET_ARG( pObjShell->GetMedium()->GetItemSet(), pViewOnlyItem, SfxBoolItem, SID_VIEWONLY, sal_False );
+        if ( pViewOnlyItem && pViewOnlyItem->GetValue() )
+            return sal_True;
+    }
+
+    return sal_False;
+}
+
+//------------------------------------------------------------------------
+
+::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SfxWorkWindow::GetFrameInterface()
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame;
+
+    SfxDispatcher* pDispatcher( GetBindings().GetDispatcher() );
+    if ( pDispatcher )
+    {
+        SfxViewFrame* pFrame = pDispatcher->GetFrame();
+        if ( pFrame && pFrame->GetFrame() )
+           xFrame = pFrame->GetFrame()->GetFrameInterface();
+    }
+
+    return xFrame;
+}
+
+//------------------------------------------------------------------------
+
 void SfxWorkWindow::UpdateObjectBars_Impl()
 {
     // SplitWindows locken (d.h. Resize-Reaktion an den
@@ -1308,7 +1355,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
     // was man so "ofters braucht, merkt man sich (spart Code und Laufzeit)
     SFX_APP();
 
-    Reference< com::sun::star::beans::XPropertySet > xPropSet( GetBindings().GetActiveFrame(), UNO_QUERY );
+    Reference< com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
     Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
 
     if ( xPropSet.is() )
@@ -1319,6 +1366,16 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
 
     if ( !xLayoutManager.is() )
         return;
+
+    sal_Bool       bPluginMode( sal_False );
+    SfxDispatcher* pDispatcher( GetBindings().GetDispatcher() );
+
+    if ( pDispatcher )
+    {
+        SfxViewFrame* pFrame = pDispatcher->GetFrame();
+        if ( pFrame )
+           bPluginMode = IsPluginMode( pFrame->GetObjectShell() );
+    }
 
     // "uber alle Toolboxen iterieren
     xLayoutManager->lock();
@@ -1350,7 +1407,11 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
             if ( !IsDockingAllowed() && !xLayoutManager->isElementFloating( aTbxId ))
                 xLayoutManager->destroyElement( aTbxId );
             else
+            {
                 xLayoutManager->requestElement( aTbxId );
+                if ( bPluginMode )
+                    xLayoutManager->lockWindow( aTbxId );
+            }
         }
         else if ( nId != 0 )
         {
@@ -1637,8 +1698,9 @@ void SfxWorkWindow::SetTempStatusBar_Impl( BOOL bSet )
 
 void SfxWorkWindow::UpdateStatusBar_Impl()
 {
-    Reference< com::sun::star::beans::XPropertySet > xPropSet( GetBindings().GetActiveFrame(), UNO_QUERY );
+    Reference< ::com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
     Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+
     Any aValue = xPropSet->getPropertyValue( m_aLayoutManagerPropName );
     aValue >>= xLayoutManager;
 
@@ -1652,7 +1714,7 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
         if ( xLayoutManager.is() )
         {
             xLayoutManager->createElement( m_aStatusBarResName );
-            xLayoutManager->requestElement( m_aStatusBarResName );
+            xLayoutManager->showElement( m_aStatusBarResName );
         }
     }
     else
