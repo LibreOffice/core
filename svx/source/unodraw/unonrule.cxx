@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2001-07-03 16:55:53 $
+ *  last change: $Author: cl $ $Date: 2001-08-01 08:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,13 +614,25 @@ sal_Int16 SAL_CALL SvxUnoNumberingRulesCompare::compare( const uno::Any& Any1, c
                 const SvxNumRule& rRule1 = pRule1->getNumRule();
                 const SvxNumRule& rRule2 = pRule2->getNumRule();
 
-                const USHORT nLevelCount = rRule1.GetLevelCount();
-                if( nLevelCount != rRule2.GetLevelCount() )
+
+                const USHORT nLevelCount1 = rRule1.GetLevelCount();
+                const USHORT nLevelCount2 = rRule2.GetLevelCount();
+
+                if( nLevelCount1 == 0 || nLevelCount2 == 0 )
                     return -1;
 
-                for(USHORT i = 0; i < nLevelCount; i++)
+                USHORT i1 = 0;
+                USHORT i2 = 0;
+
+                if( rRule1.GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING )
+                    i1 = 1;
+
+                if( rRule2.GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING )
+                    i2 = 1;
+
+                for(; (i1 < nLevelCount1) && (i2 < nLevelCount2); i1++, i2++ )
                 {
-                    if( rRule1.GetLevel(i) != rRule2.GetLevel(i) )
+                    if( rRule1.GetLevel(i1) != rRule2.GetLevel(i2) )
                         return -1;
                 }
                 return  0;
