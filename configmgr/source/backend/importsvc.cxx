@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importsvc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:47 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:15:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,8 @@ namespace configmgr
 // -----------------------------------------------------------------------------
         namespace uno   = ::com::sun::star::uno;
         namespace lang  = ::com::sun::star::lang;
-        namespace backenduno = drafts::com::sun::star::configuration::backend;
+        namespace beans = ::com::sun::star::beans;
+        namespace backenduno = ::com::sun::star::configuration::backend;
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
@@ -257,7 +258,7 @@ void SAL_CALL
 
 // -----------------------------------------------------------------------------
 
-// XImportLayer
+// XLayerImporter
 
 uno::Reference< backenduno::XBackend > SAL_CALL
     ImportService::getTargetBackend(  )
@@ -298,7 +299,8 @@ void SAL_CALL
 
 void SAL_CALL
     ImportService::importLayer( const uno::Reference< backenduno::XLayer >& aLayer )
-        throw ( lang::WrappedTargetException, lang::IllegalArgumentException,
+        throw ( MalformedDataException,
+                lang::WrappedTargetException, lang::IllegalArgumentException,
                 lang::NullPointerException, uno::RuntimeException)
 {
     if (!aLayer.is())
@@ -315,7 +317,8 @@ void SAL_CALL
 
 void SAL_CALL
     ImportService::importLayerForEntity( const uno::Reference< backenduno::XLayer >& aLayer, const OUString& aEntity )
-        throw ( lang::WrappedTargetException, lang::IllegalArgumentException,
+        throw ( MalformedDataException,
+                lang::WrappedTargetException, lang::IllegalArgumentException,
                 lang::NullPointerException, uno::RuntimeException)
 {
     if (!aLayer.is())
