@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:18:17 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:45:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _CUI_DLGFACT_HXX
 #define _CUI_DLGFACT_HXX
-
 // include ---------------------------------------------------------------
 #include "svxdlg.hxx" //CHINA001 #include <svx/svxdlg.hxx>
 
@@ -164,6 +163,7 @@ class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConver
 {
     DECL_ABSTDLG_BASE(AbstractHangulHanjaConversionDialog_Impl,HangulHanjaConversionDialog);
     virtual void    EndDialog(long nResult = 0);
+    virtual void    EnableRubySupport( sal_Bool _bVal );
     virtual void    SetByCharacter( sal_Bool _bByCharacter ) ;
     virtual void    SetConversionFormat( HangulHanjaConversion::ConversionFormat _eType );
     virtual void    SetIgnoreHdl( const Link& _rHdl );
