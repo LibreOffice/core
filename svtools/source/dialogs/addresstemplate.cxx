@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-16 16:19:28 $
+ *  last change: $Author: fs $ $Date: 2001-07-19 07:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,37 +380,37 @@ namespace svt
         // should be adjustable with a rather small effort.)
 
         // initialize the strings for the field labels
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_COMPANY)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_DEPARTMENT )) );
         m_aFieldLabels.push_back( String(ResId( STR_FIELD_FIRSTNAME )) );
         m_aFieldLabels.push_back( String(ResId( STR_FIELD_LASTNAME )) );
+        m_aFieldLabels.push_back( String(ResId( STR_FIELD_COMPANY)) );
+        m_aFieldLabels.push_back( String(ResId( STR_FIELD_DEPARTMENT )) );
         m_aFieldLabels.push_back( String(ResId( STR_FIELD_STREET )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_COUNTRY )) );
         m_aFieldLabels.push_back( String(ResId( STR_FIELD_ZIPCODE )) );
         m_aFieldLabels.push_back( String(ResId( STR_FIELD_CITY )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_TITLE )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_POSITION )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_ADDRFORM )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_INITIALS )) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_SALUTATION )) );
+        m_aFieldLabels.push_back( String(ResId( STR_FIELD_STATE)) );
+        m_aFieldLabels.push_back( String(ResId( STR_FIELD_COUNTRY )) );
         m_aFieldLabels.push_back( String(ResId( STR_FIELD_HOMETEL )) );
         m_aFieldLabels.push_back( String(ResId( STR_FIELD_WORKTEL )) );
+        m_aFieldLabels.push_back( String(ResId( STR_FIELD_OFFICETEL)) );
+        m_aFieldLabels.push_back( String(ResId( STR_FIELD_MOBILE)) );
+        m_aFieldLabels.push_back( String(ResId( STR_FIELD_TELOTHER)) );
+        m_aFieldLabels.push_back( String(ResId( STR_FIELD_PAGER)) );
         m_aFieldLabels.push_back( String(ResId( STR_FIELD_FAX )) );
         m_aFieldLabels.push_back( String(ResId( STR_FIELD_EMAIL )) );
         m_aFieldLabels.push_back( String(ResId( STR_FIELD_URL )) );
+        m_aFieldLabels.push_back( String(ResId( STR_FIELD_TITLE )) );
+        m_aFieldLabels.push_back( String(ResId( STR_FIELD_POSITION )) );
+        m_aFieldLabels.push_back( String(ResId( STR_FIELD_INITIALS )) );
+        m_aFieldLabels.push_back( String(ResId( STR_FIELD_ADDRFORM )) );
+        m_aFieldLabels.push_back( String(ResId( STR_FIELD_SALUTATION )) );
+        m_aFieldLabels.push_back( String(ResId( STR_FIELD_ID)) );
+        m_aFieldLabels.push_back( String(ResId( STR_FIELD_CALENDAR)) );
+        m_aFieldLabels.push_back( String(ResId( STR_FIELD_INVITE)) );
         m_aFieldLabels.push_back( String(ResId( STR_FIELD_NOTE)) );
         m_aFieldLabels.push_back( String(ResId( STR_FIELD_USER1)) );
         m_aFieldLabels.push_back( String(ResId( STR_FIELD_USER2)) );
         m_aFieldLabels.push_back( String(ResId( STR_FIELD_USER3)) );
         m_aFieldLabels.push_back( String(ResId( STR_FIELD_USER4)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_ID)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_STATE)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_OFFICETEL)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_PAGER)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_MOBILE)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_TELOTHER)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_CALENDAR)) );
-        m_aFieldLabels.push_back( String(ResId( STR_FIELD_INVITE)) );
 
         // force a even number of known fields
         m_bOddFieldNumber = (m_aFieldLabels.size() % 2) != 0;
@@ -449,11 +449,11 @@ namespace svt
         // the logical names
         String sLogicalFieldNames(ResId(STR_LOCAGICAL_FIELD_NAMES));
         sal_Int32 nAdjustedTokenCount = sLogicalFieldNames.GetTokenCount(';') + (m_bOddFieldNumber ? 1 : 0);
-        DBG_ASSERT(nAdjustedTokenCount == m_aFieldLabels.size(),
+        DBG_ASSERT(nAdjustedTokenCount == (sal_Int32)m_aFieldLabels.size(),
             "AddressBookSourceDialog::AddressBookSourceDialog: inconsistence between logical and UI field names!");
         m_aLogicalFieldNames.reserve(nAdjustedTokenCount);
         for (sal_Int32 i = 0; i<nAdjustedTokenCount; ++i)
-            m_aLogicalFieldNames.push_back(sLogicalFieldNames.GetToken(i, ';'));
+            m_aLogicalFieldNames.push_back(sLogicalFieldNames.GetToken((sal_uInt16)i, ';'));
 
         PostUserEvent(LINK(this, AddressBookSourceDialog, OnDelayedInitialize));
             // so the dialog will at least show up before we do the loading of the
