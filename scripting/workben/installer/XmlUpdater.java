@@ -106,6 +106,7 @@ public class XmlUpdater extends Thread {
         String configPath=installPath;
         configPath= configPath.concat(File.separator+"user"+File.separator+"config"+File.separator+"soffice.cfg"+File.separator);
         //System.out.println( "Office configuration path: " + configPath );
+        String manifestPath=configPath + File.separator + "META-INF" + File.separator;
 
         String starBasicPath=installPath;
         starBasicPath= starBasicPath.concat(File.separator+"user"+File.separator+"basic"+File.separator+"ScriptBindingLibrary"+File.separator);
@@ -145,6 +146,18 @@ public class XmlUpdater extends Thread {
         }
         else
             System.out.println( "soffice.cfg exists" );
+
+        File manifestDir = new File( manifestPath );
+        if( !manifestDir.isDirectory() ) {
+            if( !manifestDir.mkdir() ) {
+                System.out.println( "creating " + manifestPath + "directory failed");
+            }
+            else {
+                System.out.println( manifestPath + " directory created");
+            }
+        }
+        else
+            System.out.println( manifestPath + " exists" );
 
 //--------------------------------
     // Adding Scripting Framework and tools
@@ -308,6 +321,12 @@ public class XmlUpdater extends Thread {
             onInstallComplete();
             return;
     }
+        if (!zd.extractEntry("bindingdialog/manifest.xml",manifestPath, statusLabel))
+        {
+            onInstallComplete();
+            return;
+    }
+
 
 //--------------------------------
 
