@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2000-11-23 14:52:10 $
+ *  last change: $Author: mba $ $Date: 2000-12-07 11:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,10 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_XWINDOWPEER_HPP_
+#include <com/sun/star/awt/XWindowPeer.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
@@ -135,25 +139,27 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-/*HACK for vcl and toolkit! ---------------------------------------------------------------------------------------*/
+#ifndef _SV_WINDOW_HXX
+#include <vcl/window.hxx>
+#endif
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
 
-#ifndef _SV_WINDOW_HXX
-#include <vcl/window.hxx>
-#endif
-
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/helper/vclunohelper.hxx>
+#include <toolkit/unohlp.hxx>
 #endif
 
 #ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
 #endif
 
-/*HACK for vcl and toolkit! ---------------------------------------------------------------------------------------*/
+#ifdef DEBUG
+    #ifndef _RTL_STRBUF_HXX_
+    #include <rtl/strbuf.hxx>
+    #endif
+#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -269,9 +275,9 @@ DEFINE_XINTERFACE_13                (   Frame                                   
                                         DIRECT_INTERFACE(XDispatchProvider                  ),
                                         DIRECT_INTERFACE(XDispatchProviderInterception      ),
                                         DIRECT_INTERFACE(XBrowseHistoryRegistry             ),
-                                        DIRECT_INTERFACE(awt::XWindowListener               ),
-                                        DIRECT_INTERFACE(awt::XTopWindowListener            ),
-                                        DIRECT_INTERFACE(awt::XFocusListener                ),
+                                        DIRECT_INTERFACE(awt::XWindowListener                   ),
+                                        DIRECT_INTERFACE(awt::XTopWindowListener                ),
+                                        DIRECT_INTERFACE(awt::XFocusListener                    ),
                                         DERIVED_INTERFACE(XEventListener, awt::XWindowListener  )
                                     )
 
@@ -344,6 +350,24 @@ void SAL_CALL Frame::setActiveFrame( const Reference< XFrame >& xFrame ) throw( 
         m_aChildFrameContainer.setActive( xFrame );
         if( isActive() && xActiveChild.is() )
             xActiveChild->deactivate();
+    }
+
+    if ( xFrame.is() )
+    {
+        if( m_eActiveState == FOCUS )
+        {
+            m_eActiveState = ACTIVE;
+            impl_sendFrameActionEvent( FrameAction_FRAME_UI_DEACTIVATING );
+        }
+
+        if ( m_eActiveState == ACTIVE && !xFrame->isActive() )
+            xFrame->activate();
+    }
+    else if ( m_eActiveState == ACTIVE )
+    {
+        // If this frame is active and has no active subframe anymore it is UI active too
+        m_eActiveState = FOCUS;
+        impl_sendFrameActionEvent( FrameAction_FRAME_UI_ACTIVATED );
     }
 }
 
@@ -422,7 +446,7 @@ void SAL_CALL Frame::createNewEntry(    const   OUString&                   sURL
 }
 
 //*****************************************************************************************************************
-//   XWindowListener
+//   awt::XWindowListener
 //*****************************************************************************************************************
 void SAL_CALL Frame::windowResized( const awt::WindowEvent& aEvent ) throw( RuntimeException )
 {
@@ -436,21 +460,21 @@ void SAL_CALL Frame::windowResized( const awt::WindowEvent& aEvent ) throw( Runt
 }
 
 //*****************************************************************************************************************
-//   XWindowListener
+//   awt::XWindowListener
 //*****************************************************************************************************************
 void SAL_CALL Frame::windowMoved( const awt::WindowEvent& aEvent ) throw( RuntimeException )
 {
 }
 
 //*****************************************************************************************************************
-//   XWindowListener
+//   awt::XWindowListener
 //*****************************************************************************************************************
 void SAL_CALL Frame::windowShown( const EventObject& aEvent ) throw( RuntimeException )
 {
 }
 
 //*****************************************************************************************************************
-//   XWindowListener
+//   awt::XWindowListener
 //*****************************************************************************************************************
 void SAL_CALL Frame::windowHidden( const EventObject& aEvent ) throw( RuntimeException )
 {
@@ -514,9 +538,7 @@ void SAL_CALL Frame::windowActivated( const EventObject& aEvent ) throw( Runtime
 //*****************************************************************************************************************
 void SAL_CALL Frame::windowDeactivated( const EventObject& aEvent ) throw( RuntimeException )
 {
-/*HACK for vcl and toolkit! ---------------------------------------------------------------------------------------*/
-
-    if  ( m_eActiveState == ACTIVE )
+    if( m_eActiveState != INACTIVE )
     {
         LOCK_MUTEX( aGuard, m_aMutex, "Frame::windowDeactivated()" )
         // Safe impossible cases
@@ -525,49 +547,24 @@ void SAL_CALL Frame::windowDeactivated( const EventObject& aEvent ) throw( Runti
         // Deactivation is always done implicitely by activation of another frame.
         // Only if no activation is done, deactivations have to be processed if the activated window
         // is a parent window of the last active Window!
-        Reference< awt::XWindowPeer >   xOwnWindow      ( m_xContainerWindow, UNO_QUERY );
-        Window*                         pFocusWindow    = Application::GetFocusWindow();
+        Reference< awt::XWindowPeer >   xOwnWindow  ( m_xContainerWindow, UNO_QUERY );
+        Window*                         pFocusWindow= Application::GetFocusWindow();
         if  (
-                ( xOwnWindow.is()   ==  sal_True    )   &&
-                ( pFocusWindow      !=  NULL        )   &&
-                ( m_xParent.is()    ==  sal_True    )
+                ( xOwnWindow.is()                                       ==  sal_True    )   &&
+                ( pFocusWindow                                          !=  NULL        )   &&
+                ( m_xParent.is()                                        ==  sal_True    )   &&
+                ( (Reference< XDesktop >( m_xParent, UNO_QUERY )).is()  ==  sal_False   )
             )
         {
-            Reference< awt::XWindow >   xParentWindow   = m_xParent->getContainerWindow()                       ;
-            VCLXWindow*                 pOwnWindow      = (VCLXWindow*)VCLUnoHelper::GetWindow( xOwnWindow  )   ;
-            VCLXWindow*                 pParentWindow   = (VCLXWindow*)VCLUnoHelper::GetWindow( xParentWindow)  ;
-
-            if  (
-                    ( pFocusWindow->IsChild( pOwnWindow->GetWindow() ) == sal_True )    &&              // new focus window is one of my parents AND
-                    (
-                        ( pParentWindow                                         ==  NULL        )   ||  // my parent window not exist OR
-                        ( pFocusWindow->IsChild( pParentWindow->GetWindow() )   ==  sal_False   )       // if it exist, it's a child of focus window too.
-                    )
-                )
+            Reference< awt::XWindow >   xParentWindow   = m_xParent->getContainerWindow()                           ;
+            Window*                 pOwnWindow      = VCLUnoHelper::GetWindow( xOwnWindow      )   ;
+            Window*                 pParentWindow   = VCLUnoHelper::GetWindow( xParentWindow   )   ;
+            if( pParentWindow->IsChild( pFocusWindow ) )
             {
                 m_xParent->setActiveFrame( Reference< XFrame >() );
             }
         }
     }
-
-/*HACK for vcl and toolkit! ---------------------------------------------------------------------------------------*/
-/*
-    if ( bActive )
-    {
-        // deactivation is always done implicitely by activation of another frame
-        // only if no activation is done, deactivations have to be processed if the activated window
-        // is a parent window of the last active Window
-        XWindowPeerRef aWindow( xWindow, USR_QUERY );
-        Window *pNewWindow = Application::GetFocusWindow();
-        if ( aWindow.is() && pNewWindow && xCreator.is() )
-        {
-            VCLXWindow* pComp = (VCLXWindow*) aWindow->getImplementation( VCLXWindow_getReflection() );
-            VCLXWindow* pParentComp = xCreator->getContainerWindow().is() ? (VCLXWindow*) xCreator->getContainerWindow()->getImplementation( VCLXWindow_getReflection() ) : NULL;
-            if ( pNewWindow->IsChild( pComp->GetWindow() ) && (!pParentComp || !pNewWindow->IsChild( pParentComp->GetWindow() ) ) )
-                xCreator->setActiveFrame( XFrameRef() );
-        }
-    }
-*/
 }
 
 //*****************************************************************************************************************
@@ -1182,7 +1179,7 @@ sal_Bool SAL_CALL Frame::isActive() throw( RuntimeException )
 //*****************************************************************************************************************
 //   XFrame
 //*****************************************************************************************************************
-sal_Bool SAL_CALL Frame::setComponent(  const   Reference< awt::XWindow >&  xComponentWindow    ,
+sal_Bool SAL_CALL Frame::setComponent(  const   Reference< awt::XWindow >&      xComponentWindow    ,
                                           const Reference< XController >&   xController         ) throw( RuntimeException )
 {
     /* HACK for sfx2! */
@@ -1647,7 +1644,7 @@ void Frame::impl_resizeComponentWindow()
         awt::Rectangle  aRectangle  = m_xContainerWindow->getPosSize();
         awt::DeviceInfo aInfo       = xDevice->getInfo();
         awt::Size       aSize       (   aRectangle.Width    - aInfo.LeftInset   - aInfo.RightInset  ,
-                                        aRectangle.Height   - aInfo.TopInset    - aInfo.BottomInset );
+                                    aRectangle.Height   - aInfo.TopInset    - aInfo.BottomInset );
          // Resize ouer component window.
         m_xComponentWindow->setPosSize( 0, 0, aSize.Width, aSize.Height, awt::PosSize::SIZE );
     }
@@ -1954,8 +1951,8 @@ sal_Bool Frame::impldbg_checkParameter_findFrame(   const   OUString&   sTargetF
 }
 
 //*****************************************************************************************************************
-sal_Bool Frame::impldbg_checkParameter_setComponent(    const   Reference< awt::XWindow >&  xComponentWindow    ,
-                                                          const Reference< XController >&   xController         )
+sal_Bool Frame::impldbg_checkParameter_setComponent(    const   Reference< awt::XWindow >&      xComponentWindow    ,
+                                                              const Reference< XController >&   xController         )
 {
     // Set default return value.
     sal_Bool bOK = sal_True;
