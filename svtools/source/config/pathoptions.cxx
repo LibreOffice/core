@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:24:59 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 20:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ class SvtPathOptions_Impl
         rtl::OUString   SubstituteAndConvert( const rtl::OUString& rPath );
         rtl::OUString   UsePathVariables( const rtl::OUString& rPath );
 
-        const ::com::sun::star::lang::Locale    GetLocale() const { return m_aLocale; }
+        ::com::sun::star::lang::Locale  GetLocale() const { return m_aLocale; }
 
         BOOL            IsPathReadonly(SvtPathOptions::Pathes ePath)const;
 };
