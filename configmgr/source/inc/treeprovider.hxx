@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeprovider.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 12:16:55 $
+ *  last change: $Author: lla $ $Date: 2001-03-23 09:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,9 @@ namespace configmgr
     class ITemplateProvider
     {
     public:
-        virtual ::std::auto_ptr<INode> createInstance(const ::rtl::OUString& _rTemplateName) throw (uno::Exception) = 0;
+        virtual ::std::auto_ptr<INode> requestTemplateInstance(::rtl::OUString const& aName, ::rtl::OUString const& aModule,
+                                           const vos::ORef < OOptions >& _xOptions) throw (uno::Exception) = 0;
+
     };
 
 ////////////////////////////////////////////////////////////////////////////////

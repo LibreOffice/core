@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-20 08:01:46 $
+ *  last change: $Author: lla $ $Date: 2001-03-23 09:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

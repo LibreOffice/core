@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:41 $
+ *  last change: $Author: lla $ $Date: 2001-03-23 09:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,17 +68,17 @@
 
 namespace configmgr
 {
-    class FileHelper
+    namespace FileHelper
     {
-    public:
-
-        static sal_Int32 createBackupRemoveAndRename(
+        sal_Int32 createBackupRemoveAndRename(
             const rtl::OUString& _aFromURL, const rtl::OUString &_aToURL);
 
-        static sal_Int32 tryToRemoveFile(const rtl::OUString& _aURL);
+        sal_Int32 tryToRemoveFile(const rtl::OUString& _aURL);
 
-        static rtl::OUString createOSLErrorString(osl::FileBase::RC eError);
-    };
+        rtl::OUString createOSLErrorString(osl::FileBase::RC eError);
+
+        inline const sal_Unicode getFileDelimiter() { return sal_Unicode('/'); }
+    }
 } // namespace configmgr
 
 #endif

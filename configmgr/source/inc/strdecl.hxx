@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strdecl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-16 17:28:49 $
+ *  last change: $Author: lla $ $Date: 2001-03-23 09:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@ namespace configmgr
     // <name>...</name>
     DECLARE_CONSTASCII_USTRING(TAG_VALUE);
 
-    // Attributes name="..."
     DECLARE_CONSTASCII_USTRING(ATTR_NAME);
+    DECLARE_CONSTASCII_USTRING(ATTR_PACKAGE);
     DECLARE_CONSTASCII_USTRING(ATTR_TYPE);
     DECLARE_CONSTASCII_USTRING(ATTR_TYPE_MODIFIER);
     DECLARE_CONSTASCII_USTRING(ATTR_INSTANCE);

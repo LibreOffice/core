@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-16 17:35:23 $
+ *  last change: $Author: lla $ $Date: 2001-03-23 09:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ std::auto_ptr<INode> TemplateProvider_Impl::instantiate(TemplateHolder const& aT
     std::auto_ptr<INode> pRet;
     if (m_pProvider && aTemplate.isValid())
     {
-        pRet = m_pProvider->createInstance(aTemplate->getPath().toString());
+        pRet = m_pProvider->requestTemplateInstance(aTemplate->getName().toString(), aTemplate->getModule().toString(), NULL);
     }
     return pRet;
 }
@@ -381,7 +381,7 @@ TemplateHolder TemplateProvider_Impl::makeElementTemplateWithType(TemplateName c
 
                 OUString sPath = aNames.makePath().toString(); // could also be extracted from aSet
 
-                pTemplateInstance = m_pProvider->createInstance(sPath);
+                pTemplateInstance = m_pProvider->requestTemplateInstance(aNames.aName.toString(), aNames.aModule.toString(), NULL);
             }
 
             aType = detectNodeType(pTemplateInstance.get()); // throws if necessary

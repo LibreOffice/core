@@ -2,9 +2,9 @@
  *
  *  $RCSfile: matchlocale.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-16 17:41:38 $
+ *  last change: $Author: lla $ $Date: 2001-03-23 09:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,17 @@ Locale makeLocale(StaticLocale const& aConstLocale_)
 // -----------------------------------------------------------------------------
 template <class T>
 inline
+void addLocaleSeq_impl(T const* first, T const* last, LocaleSequence& rSeq)
+{
+    typedef Locale (* const XlateFunc)(T const&);
+    XlateFunc xlate = &makeLocale;
+
+    std::transform(first, last, std::back_inserter(rSeq), xlate);
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+template <class T>
+inline
 LocaleSequence makeLocaleSeq_impl(uno::Sequence< T > const& aLocales_)
 {
     sal_Int32 const nLocaleCount = aLocales_.getLength();
@@ -182,9 +193,7 @@ LocaleSequence makeLocaleSeq_impl(uno::Sequence< T > const& aLocales_)
     LocaleSequence aResult;
     aResult.reserve( nLocaleCount + c_nFallbackLocales ); // make room for fallback stuff as well
 
-    Locale (* const xlate)(T const&) = &makeLocale;
-
-    std::transform(pLocaleBegin, pLocaleBegin + nLocaleCount, std::back_inserter(aResult), xlate);
+    addLocaleSeq_impl(pLocaleBegin, pLocaleBegin + nLocaleCount, aResult);
 
     return aResult;
 }
@@ -192,9 +201,7 @@ LocaleSequence makeLocaleSeq_impl(uno::Sequence< T > const& aLocales_)
 
 void addFallbackLocales(LocaleSequence& aTargetList_)
 {
-    Locale (* const xlate)(StaticLocale const&) = &makeLocale;
-
-    std::transform(c_aFallbackLocales, c_aFallbackLocales + c_nFallbackLocales, std::back_inserter(aTargetList_), xlate);
+    addLocaleSeq_impl(c_aFallbackLocales, c_aFallbackLocales + c_nFallbackLocales, aTargetList_);
 }
 // -----------------------------------------------------------------------------
 
@@ -238,7 +245,7 @@ MatchQuality match(Locale const& aLocale_, Locale const& aTarget_)
     else if (aLocale_.aCountry.getLength() == 0)
         return MATCH_LANGUAGE_PLAIN;
 
-    // so we are left with the wrong language
+    // so we are left with the wrong country
     else
         return MATCH_LANGUAGE;
 }

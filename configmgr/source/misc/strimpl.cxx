@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strimpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-16 17:28:49 $
+ *  last change: $Author: lla $ $Date: 2001-03-23 09:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ namespace configmgr
     IMPLEMENT_CONSTASCII_USTRING(ATTR_NULLABLE,     "cfg:nullable");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_WRITABLE,     "cfg:writable");
     IMPLEMENT_CONSTASCII_USTRING(ATTR_STATE,        "state");
+    IMPLEMENT_CONSTASCII_USTRING(ATTR_PACKAGE,      "cfg:package");
 
     // boolean constants
     IMPLEMENT_CONSTASCII_USTRING(ATTR_VALUE_TRUE,   "true");
