@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemanager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2002-07-31 12:46:29 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,17 +59,18 @@
  *
  ************************************************************************/
 
-#include <hash_map>
-
 #ifndef _CODEMAKER_TYPEMANAGER_HXX_
 #define _CODEMAKER_TYPEMANAGER_HXX_
 
-#ifndef _CODEMAKER_REGISTRY_HXX_
-#include <codemaker/registry.hxx>
-#endif
+#include "codemaker/global.hxx"
 
-RegistryTypeReaderLoader & getRegistryTypeReaderLoader();
+#include "registry/registry.hxx"
+#include "registry/types.h"
 
+#include <hash_map>
+#include <list>
+
+namespace typereg { class Reader; }
 
 typedef ::std::list< Registry* >    RegistryList;
 
@@ -127,9 +128,8 @@ public:
     virtual RegistryKey getTypeKey(
         const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 )
         { return RegistryKey(); }
-    virtual TypeReader getTypeReader(
-        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 )
-        { return TypeReader(); }
+    virtual typereg::Reader getTypeReader(
+        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 ) = 0;
     virtual RTTypeClass getTypeClass(const ::rtl::OString& name)
         { return RT_TYPE_INVALID; }
 
@@ -171,15 +171,7 @@ public:
     {
         acquire();
     }
-/*
-    RegistryTypeManager& operator = ( const RegistryTypeManager& value )
-    {
-        release();
-        m_pImpl = value.m_pImpl;
-        acquire();
-        return *this;
-    }
-*/
+
     sal_Bool init(const StringVector& regFiles, const StringVector& extraFiles = StringVector() );
 
     sal_Bool    isValidType(const ::rtl::OString& name)
@@ -187,7 +179,7 @@ public:
     RegistryKey getTypeKey(
         const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 )
         { return searchTypeKey(name, pIsExtraType); }
-    TypeReader  getTypeReader(
+    typereg::Reader getTypeReader(
         const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 );
     RTTypeClass getTypeClass(const ::rtl::OString& name);
 
