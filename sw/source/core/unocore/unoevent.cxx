@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-04 17:39:20 $
+ *  last change: $Author: dvo $ $Date: 2001-01-29 16:56:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,10 @@
 #include <sfx2/sfx.hrc>
 #endif
 
+#ifndef _SVX_SVXIDS_HRC
+#include <svx/svxids.hrc>
+#endif
+
 #ifndef _FMTINFMT_HXX
 #include "fmtinfmt.hxx"
 #endif
@@ -171,47 +175,48 @@ const USHORT aKnownEventIDs[] =
      SFX_EVENT_TOGGLEFULLSCREENMODE,
      SFX_EVENT_SAVEDOCDONE,
      SFX_EVENT_SAVEASDOCDONE,
-
-// ??? graphics load faulty, terminated, success
+    SVX_EVENT_IMAGE_LOAD,
+    SVX_EVENT_IMAGE_ABORT,
+    SVX_EVENT_IMAGE_ERROR,
     0
 };
 
 const sal_Char* aKnownEventNames[] =
 {
-    "OnSelect",
-    "OnInsertStart",
-    "OnInsertDone",
-    "OnMailMerge",
-    "OnAlphaCharInput",
-    "OnNonAlphaCharInput",
-    "OnResize",
-    "OnMove",
-    "PageCountChange",
-    "OnMouseOver",
-    "OnClick",
-    "OnMouseOut",
-    "OnLoadError",
-    "OnLoadCancel",
-    "OnLoadDone",
-    "OnLoad",
-    "OnUnload",
-    "OnStartApp",
-    "OnCloseApp",
-    "OnNew",
-    "OnSave",
-    "OnSaveAs",
-    "OnFocus",
-    "OnUnfocus",
-    "OnPrint",
-    "OnError",
-    "OnLoadFinished",
-    "OnSaveFinished",
-    "OnModifyChanged",
-    "OnPrepareUnload",
-    "OnNewMail",
-    "OnToggleFullscreen",
-    "OnSaveDone",
-    "OnSaveAsDone",
+    "OnSelect",                 // SW_EVENT_OBJECT_SELECT
+    "OnInsertStart",            // SW_EVENT_START_INS_GLOSSARY
+    "OnInsertDone",             // SW_EVENT_END_INS_GLOSSARY
+    "OnMailMerge",              // SW_EVENT_MAIL_MERGE
+    "OnAlphaCharInput",         // SW_EVENT_FRM_KEYINPUT_ALPHA
+    "OnNonAlphaCharInput",      // SW_EVENT_FRM_KEYINPUT_NOALPHA
+    "OnResize",                 // SW_EVENT_FRM_RESIZE
+    "OnMove",                   // SW_EVENT_FRM_MOVE
+    "PageCountChange",          // SW_EVENT_PAGE_COUNT
+    "OnMouseOver",              // SFX_EVENT_MOUSEOVER_OBJECT
+    "OnClick",                  // SFX_EVENT_MOUSECLICK_OBJECT
+    "OnMouseOut",               // SFX_EVENT_MOUSEOUT_OBJECT
+    "OnLoad",                   // SFX_EVENT_OPENDOC,
+    "OnUnload",                 // SFX_EVENT_CLOSEDOC,
+    "OnStartApp",               // SFX_EVENT_STARTAPP,
+    "OnCloseApp",               // SFX_EVENT_CLOSEAPP,
+    "OnNew",                    // SFX_EVENT_CREATEDOC,
+    "OnSave",                   // SFX_EVENT_SAVEDOC,
+    "OnSaveAs",                 // SFX_EVENT_SAVEASDOC,
+    "OnFocus",                  // SFX_EVENT_ACTIVATEDOC,
+    "OnUnfocus",                // SFX_EVENT_DEACTIVATEDOC,
+    "OnPrint",                  // SFX_EVENT_PRINTDOC,
+    "OnError",                  // SFX_EVENT_ONERROR,
+    "OnLoadFinished",           // SFX_EVENT_LOADFINISHED,
+    "OnSaveFinished",           // SFX_EVENT_SAVEFINISHED,
+    "OnModifyChanged",          // SFX_EVENT_MODIFYCHANGED,
+    "OnPrepareUnload",          // SFX_EVENT_PREPARECLOSEDOC,
+    "OnNewMail",                // SFX_EVENT_NEWMESSAGE,
+    "OnToggleFullscreen",       // SFX_EVENT_TOGGLEFULLSCREENMODE,
+    "OnSaveDone",               // SFX_EVENT_SAVEDOCDONE,
+    "OnSaveAsDone",             // SFX_EVENT_SAVEASDOCDONE,
+    "OnLoadError",              // SVX_EVENT_IMAGE_LOAD,
+    "OnLoadCancel",             // SVX_EVENT_IMAGE_ABORT,
+    "OnLoadDone",               // SVX_EVENT_IMAGE_ERROR,
 
     NULL
 };
@@ -227,7 +232,9 @@ const USHORT aGraphicEvents[] =
     SFX_EVENT_MOUSEOVER_OBJECT,
     SFX_EVENT_MOUSECLICK_OBJECT,
     SFX_EVENT_MOUSEOUT_OBJECT,
-// graphics load (faulty|terminated|successful)
+    SVX_EVENT_IMAGE_LOAD,
+    SVX_EVENT_IMAGE_ABORT,
+    SVX_EVENT_IMAGE_ERROR,
     0
 };
 
@@ -278,7 +285,9 @@ const USHORT aFrameStyleEvents[] =
     SFX_EVENT_MOUSEOVER_OBJECT,
     SFX_EVENT_MOUSECLICK_OBJECT,
     SFX_EVENT_MOUSEOUT_OBJECT,
-// graphics load (faulty|terminated|successful)
+    SVX_EVENT_IMAGE_LOAD,
+    SVX_EVENT_IMAGE_ABORT,
+    SVX_EVENT_IMAGE_ERROR,
     0
 };
 
