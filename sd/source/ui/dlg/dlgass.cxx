@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 15:40:54 $
+ *  last change: $Author: thb $ $Date: 2001-12-14 16:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,11 +178,6 @@
 #include "TemplateThread.hxx"
 
 using namespace ::com::sun::star;
-
-
-//  This prefix is used to find impress files in the file history.
-//  Should probably be determined dynamically.
-const rtl::OUString IMPRESS_PREFIX  = rtl::OUString::createFromAscii ("simpress:");
 
 
 void InterpolateFixedBitmap( FixedBitmap * pBitmap )
@@ -741,6 +736,9 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
     uno::Sequence<uno::Sequence<beans::PropertyValue> > aHistory =
         SvtHistoryOptions().GetList (ePICKLIST);
 
+    uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+    uno::Reference< container::XNameAccess > xFilterFactory( xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" ) ) ), uno::UNO_QUERY );
+
     sal_uInt32 nCount = aHistory.getLength();
     for (sal_uInt32 nItem=0; nItem<nCount; ++nItem)
     {
@@ -763,13 +761,26 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
 
         //  If the entry is an impress file then insert it into the
         //  history list and the list box.
-        if (sFilter.indexOf (IMPRESS_PREFIX) == 0)
+        uno::Any aFilterPropSet = xFilterFactory->getByName( sFilter );
+        uno::Sequence< beans::PropertyValue > lProps;
+        aFilterPropSet >>= lProps;
+
+        sal_Int32 nCount = lProps.getLength();
+        rtl::OUString sFactoryName;
+        for( sal_Int32 i=0; i<nCount; ++i )
         {
-            INetURLObject aURL;
-            aURL.SetSmartURL (sURL);
-            aURL.SetPass (sPassword);
-            m_aOpenFilesList.push_back (new String (aURL.GetMainURL( INetURLObject::NO_DECODE )));
-            m_pPage1OpenLB->InsertEntry (sTitle);
+            if( lProps[i].Name.compareToAscii( "DocumentService" ) == 0 &&
+                (lProps[i].Value >>= sFactoryName) &&
+                sFactoryName.compareToAscii( "com.sun.star.presentation.PresentationDocument" ) == 0 )
+            {
+                // yes, it's an impress document
+                INetURLObject aURL;
+                aURL.SetSmartURL (sURL);
+                aURL.SetPass (sPassword);
+                m_aOpenFilesList.push_back (new String (aURL.GetMainURL( INetURLObject::NO_DECODE )));
+                m_pPage1OpenLB->InsertEntry (sTitle);
+                break;
+            }
         }
     }
 }
