@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-06 10:03:19 $
+ *  last change: $Author: ssa $ $Date: 2002-02-01 08:40:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,6 +554,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnSelectionOptions          = rData.mnSelectionOptions;
     mnDisplayOptions            = rData.mnDisplayOptions;
     mnOptions                   = rData.mnOptions;
+    mnHighContrast              = rData.mnHighContrast;
 }
 
 // -----------------------------------------------------------------------
@@ -631,6 +632,7 @@ void ImplStyleData::SetStandardStyles()
     mnFloatTitleHeight          = 13;
     mnTearOffTitleHeight        = 8;
     mnMenuBarHeight             = 14;
+    mnHighContrast              = 0;
 }
 
 // -----------------------------------------------------------------------
@@ -728,6 +730,7 @@ void ImplStyleData::SetStandardOS2Styles()
     mnFloatTitleHeight          = 13;
     mnTearOffTitleHeight        = 8;
     mnMenuBarHeight             = 14;
+    mnHighContrast              = 0;
 }
 
 // -----------------------------------------------------------------------
@@ -809,6 +812,7 @@ void ImplStyleData::SetStandardMacStyles()
     mnFloatTitleHeight          = 12;
     mnTearOffTitleHeight        = 7;
     mnMenuBarHeight             = 14;
+    mnHighContrast              = 0;
 }
 
 // -----------------------------------------------------------------------
@@ -1003,6 +1007,7 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnCheckBoxStyle           == rSet.mpData->mnCheckBoxStyle)            &&
          (mpData->mnPushButtonStyle         == rSet.mpData->mnPushButtonStyle)          &&
          (mpData->mnTabControlStyle         == rSet.mpData->mnTabControlStyle)          &&
+         (mpData->mnHighContrast            == rSet.mpData->mnHighContrast)             &&
          (mpData->maFaceColor               == rSet.mpData->maFaceColor)                &&
          (mpData->maCheckedColor            == rSet.mpData->maCheckedColor)             &&
          (mpData->maLightColor              == rSet.mpData->maLightColor)               &&
