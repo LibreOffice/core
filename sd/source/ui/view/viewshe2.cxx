@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:46:51 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1245,7 +1245,6 @@ void ViewShell::CancelSearching()
     GetDispatcher()->Execute(
     SID_SIZE_VISAREA,
     SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
->>>>>>> 1.25.72.1
 }
 
 /*************************************************************************
