@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: os $ $Date: 2001-05-07 11:55:22 $
+ *  last change: $Author: mtg $ $Date: 2001-05-11 12:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -691,23 +691,7 @@ const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_RELIEF                         (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_IS_HIDDEN                           (MAP_CHAR_LEN("IsHidden"));
 const SwPropNameLen __FAR_DATA UNO_NAME_IS_CONDITION_TRUE                   (MAP_CHAR_LEN("IsConditionTrue"));
 
-const SwPropNameLen __FAR_DATA UNO_NAME_LINK_UPDATE_MODE                    (MAP_CHAR_LEN("LinkUpdateMode"));
-const SwPropNameLen __FAR_DATA UNO_NAME_FIELD_AUTO_UPDATE                   (MAP_CHAR_LEN("FieldAutoUpdate"));
-const SwPropNameLen __FAR_DATA UNO_NAME_CHART_AUTO_UPDATE                   (MAP_CHAR_LEN("ChartAutoUpdate"));
-const SwPropNameLen __FAR_DATA UNO_NAME_ADD_PARA_TABLE_SPACING              (MAP_CHAR_LEN("AddParaTableSpacing"));
-const SwPropNameLen __FAR_DATA UNO_NAME_ADD_PARA_TABLE_SPACING_AT_START     (MAP_CHAR_LEN("AddParaTableSpacingAtStart"));
-const SwPropNameLen __FAR_DATA UNO_NAME_PRINTER_NAME                        (MAP_CHAR_LEN("PrinterName"));
-const SwPropNameLen __FAR_DATA UNO_NAME_IS_KERN_ASIAN_PUNCTUATION           (MAP_CHAR_LEN("IsKernAsianPunctuation"));
-const SwPropNameLen __FAR_DATA UNO_NAME_CHARACTER_COMPRESSION_TYPE          (MAP_CHAR_LEN("CharacterCompressionType"));
 const SwPropNameLen __FAR_DATA UNO_NAME_TWO_DIGIT_YEAR                      (MAP_CHAR_LEN("TwoDigitYear"));
-const SwPropNameLen __FAR_DATA UNO_NAME_AUTOMATIC_CONTROL_FOCUS             (MAP_CHAR_LEN("AutomaticControlFocus"));
-const SwPropNameLen __FAR_DATA UNO_NAME_APPLY_FORM_DESIGN_MODE              (MAP_CHAR_LEN("ApplyFormDesignMode"));
-const SwPropNameLen __FAR_DATA UNO_NAME_APPLY_USER_DATA                     (MAP_CHAR_LEN("ApplyUserData"));
-const SwPropNameLen __FAR_DATA UNO_NAME_SAVE_GLOBAL_DOCUMENT_LINKS          (MAP_CHAR_LEN("SaveGlobalDocumentLinks"));
-const SwPropNameLen __FAR_DATA UNO_NAME_CURRENT_DATABASE_DATA_SOURCE        (MAP_CHAR_LEN("CurrentDatabaseDataSource"));
-const SwPropNameLen __FAR_DATA UNO_NAME_CURRENT_DATABASE_COMMAND            (MAP_CHAR_LEN("CurrentDatabaseCommand"));
-const SwPropNameLen __FAR_DATA UNO_NAME_CURRENT_DATABASE_COMMAND_TYPE       (MAP_CHAR_LEN("CurrentDatabaseCommandType"));
-const SwPropNameLen __FAR_DATA UNO_NAME_PRINTER_SETUP                       (MAP_CHAR_LEN("PrinterSetup"));
 const SwPropNameLen __FAR_DATA UNO_NAME_PROTECTION_KEY                      (MAP_CHAR_LEN("ProtectionKey"));
 const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_PROTECTION_KEY              (MAP_CHAR_LEN("RedlineProtectionKey"));
 const SwPropNameLen __FAR_DATA UNO_NAME_AUTOMATIC_DISTANCE                  (MAP_CHAR_LEN("AutomaticDistance"));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: os $ $Date: 2001-05-07 11:55:22 $
+ *  last change: $Author: mtg $ $Date: 2001-05-11 12:52:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1820,23 +1820,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_REDLINE_PROTECTION_KEY),        WID_DOC_CHANGES_PASSWORD,      &::getCppuType((Sequence<sal_Int8>*)0), PROPERTY_NONE, 0 },
 #endif
                     { SW_PROP_NAME(UNO_NAME_FORBIDDEN_CHARACTERS),          WID_DOC_FORBIDDEN_CHARS,    &::getCppuType((Reference<XForbiddenCharacters>*)0), PropertyAttribute::READONLY,   0},
-                    { SW_PROP_NAME(UNO_NAME_LINK_UPDATE_MODE),              WID_DOC_LINK_UPDATE_MODE,   &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,   0},
-                    { SW_PROP_NAME(UNO_NAME_FIELD_AUTO_UPDATE),             WID_DOC_FIELD_AUTO_UPDATE,  &::getBooleanCppuType(),    PROPERTY_NONE,   0},
-                    { SW_PROP_NAME(UNO_NAME_CHART_AUTO_UPDATE),             WID_DOC_CHART_AUTO_UPDATE,  &::getBooleanCppuType(),    PROPERTY_NONE,   0},
-                    { SW_PROP_NAME(UNO_NAME_ADD_PARA_TABLE_SPACING),        WID_DOC_ADD_PARA_TABLE_SPACING,     &::getBooleanCppuType(),    PROPERTY_NONE,   0},
-                    { SW_PROP_NAME(UNO_NAME_ADD_PARA_TABLE_SPACING_AT_START),WID_DOC_ADD_PARA_TABLE_SPACING_AT_START,   &::getBooleanCppuType(),    PROPERTY_NONE,   0},
-                    { SW_PROP_NAME(UNO_NAME_PRINTER_NAME),                  WID_DOC_PRINTER_NAME,       &::getCppuType((const OUString*)0), PROPERTY_NONE,   0},
-                    { SW_PROP_NAME(UNO_NAME_IS_KERN_ASIAN_PUNCTUATION),     WID_DOC_IS_KERN_ASIAN_PUNCTUATION,      &::getBooleanCppuType(),    PROPERTY_NONE,   0},
-                    { SW_PROP_NAME(UNO_NAME_CHARACTER_COMPRESSION_TYPE),    WID_DOC_CHARACTER_COMPRESSION_TYPE, &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,   0},
                     { SW_PROP_NAME(UNO_NAME_TWO_DIGIT_YEAR),                WID_DOC_TWO_DIGIT_YEAR, &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,   0},
-                    { SW_PROP_NAME(UNO_NAME_AUTOMATIC_CONTROL_FOCUS),       WID_DOC_AUTOMATIC_CONTROL_FOCUS,    &::getBooleanCppuType(),    PROPERTY_NONE,   0},
-                    { SW_PROP_NAME(UNO_NAME_APPLY_FORM_DESIGN_MODE),        WID_DOC_APPLY_FORM_DESIGN_MODE,     &::getBooleanCppuType(),    PROPERTY_NONE,   0},
-                    { SW_PROP_NAME(UNO_NAME_APPLY_USER_DATA),               WID_DOC_APPLY_USER_DATA,    &::getBooleanCppuType(),    PROPERTY_NONE,   0},
-                    { SW_PROP_NAME(UNO_NAME_SAVE_GLOBAL_DOCUMENT_LINKS),    WID_DOC_SAVE_GLOBAL_DOCUMENT_LINKS,     &::getBooleanCppuType(),    PROPERTY_NONE,   0},
-                    { SW_PROP_NAME(UNO_NAME_CURRENT_DATABASE_DATA_SOURCE),  WID_DOC_CURRENT_DATABASE_DATA_SOURCE, &::getCppuType((const OUString*)0),   PROPERTY_NONE,   0},
-                    { SW_PROP_NAME(UNO_NAME_CURRENT_DATABASE_COMMAND),      WID_DOC_CURRENT_DATABASE_COMMAND, &::getCppuType((const OUString*)0),   PROPERTY_NONE,   0},
-                    { SW_PROP_NAME(UNO_NAME_CURRENT_DATABASE_COMMAND_TYPE), WID_DOC_CURRENT_DATABASE_COMMAND_TYPE, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE,   0},
-                    { SW_PROP_NAME(UNO_NAME_PRINTER_SETUP),                 WID_DOC_PRINTER_SETUP, &::getCppuType((const uno::Sequence < sal_Int8 > *)0),   PROPERTY_NONE,   0},
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aDocMap_Impl;

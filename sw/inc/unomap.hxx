@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2001-05-07 11:52:47 $
+ *  last change: $Author: mtg $ $Date: 2001-05-11 12:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,24 +213,8 @@
 #define WID_DOC_HIDE_TIPS                       1007
 #define WID_DOC_REDLINE_DISPLAY                 1008
 #define WID_DOC_FORBIDDEN_CHARS                 1009
-#define WID_DOC_LINK_UPDATE_MODE                1010
-#define WID_DOC_FIELD_AUTO_UPDATE               1011
-#define WID_DOC_CHART_AUTO_UPDATE               1012
-#define WID_DOC_ADD_PARA_TABLE_SPACING          1013
-#define WID_DOC_ADD_PARA_TABLE_SPACING_AT_START 1014
-#define WID_DOC_PRINTER_NAME                    1015
-#define WID_DOC_IS_KERN_ASIAN_PUNCTUATION       1016
-#define WID_DOC_CHARACTER_COMPRESSION_TYPE      1017
-#define WID_DOC_TWO_DIGIT_YEAR                  1018
-#define WID_DOC_AUTOMATIC_CONTROL_FOCUS         1019
-#define WID_DOC_APPLY_FORM_DESIGN_MODE          1020
-#define WID_DOC_APPLY_USER_DATA                 1021
-#define WID_DOC_SAVE_GLOBAL_DOCUMENT_LINKS      1022
-#define WID_DOC_CURRENT_DATABASE_DATA_SOURCE    1023
-#define WID_DOC_CURRENT_DATABASE_COMMAND        1024
-#define WID_DOC_CURRENT_DATABASE_COMMAND_TYPE   1025
-#define WID_DOC_CHANGES_PASSWORD                1026
-#define WID_DOC_PRINTER_SETUP                   1027
+#define WID_DOC_CHANGES_PASSWORD                1010
+#define WID_DOC_TWO_DIGIT_YEAR                  1011
 
 //AutoText
 #define WID_GROUP_PATH                          0
