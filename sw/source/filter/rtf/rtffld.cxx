@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 16:09:29 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,7 +515,9 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     aSaveStr = aSaveStr.GetToken( 0, c );
                 }
 
-                rFieldStr = URIHelper::SmartRelToAbs( aSaveStr );
+                rFieldStr = URIHelper::SmartRel2Abs(
+                    INetURLObject(GetBaseURL()), aSaveStr,
+                    URIHelper::GetMaybeFileHdl() );
             }
 //          SkipGroup();        // ueberlese den Rest
         }
@@ -747,7 +749,9 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     {
                     case 0:
                         if( !rFieldStr.Len() )
-                            rFieldStr = URIHelper::SmartRelToAbs( sParam );
+                            rFieldStr = URIHelper::SmartRel2Abs(
+                                INetURLObject(GetBaseURL()), sParam,
+                                URIHelper::GetMaybeFileHdl() );
                         break;
 
                     case 'l':   case 'L':   sMark = sParam;     break;
