@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 19:35:56 $
+ *  last change: $Author: nf $ $Date: 2001-06-05 05:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,171 +168,171 @@ TabPage RID_SVXPAGE_ALIGNMENT
         };
     StringList [ language_user1 ] =
     {
-             < "Standard" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "Links" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "Zentriert" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "Rechts" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "Standard" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "Links" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "Zentriert" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "Rechts" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ english_us ] =
     {
-             < "Default" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "Left" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "Center" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "Right" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "Justified" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "Default" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "Left" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "Center" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "Right" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Justified" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ portuguese ] =
     {
-             < "Padrão" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "ESQUERDA" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "Centrado" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "DIREITA" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "Padrão" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "ESQUERDA" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "Centrado" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "DIREITA" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ russian ] =
     {
-             < "Ñòàíäàðò" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "Ñëåâà" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "Ïî öåíòðó" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "Ñïðàâà" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "Ïî øèðèíå" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "Ñòàíäàðò" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "Ñëåâà" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "Ïî öåíòðó" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "Ñïðàâà" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Ïî øèðèíå" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ greek ] =
     {
-             < "ÐñïåðéëïãÞ" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "ÁñéóôåñÜ" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "ÊåíôñáñéóìÝíá" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "ÄÅÎÉÁ" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "ÐñïåðéëïãÞ" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "ÁñéóôåñÜ" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "ÊåíôñáñéóìÝíá" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "ÄÅÎÉÁ" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ dutch ] =
     {
-             < "Standaard" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "Links" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "Gecentreerd" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "Rechts" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "Standaard" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "Links" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "Gecentreerd" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "Rechts" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ french ] =
     {
-             < "Standard" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "À gauche" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "Centré" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "À droite" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "Bloc" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "Standard" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "À gauche" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "Centré" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "À droite" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Bloc" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ spanish ] =
     {
-             < "Predeterminado" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "Izquierda" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "Centrado" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "Derecha" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "Justificado" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "Predeterminado" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "Izquierda" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "Centrado" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "Derecha" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Justificado" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ finnish ] =
     {
-             < "Koti" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "vasen" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "Keskitetty" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "oikea" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "Koti" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "vasen" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "Keskitetty" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "oikea" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ italian ] =
     {
-             < "Configurazione standard" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "SINISTRA" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "Centro" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "DESTRA" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "Configurazione standard" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "SINISTRA" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "Centro" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "DESTRA" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ danish ] =
     {
-             < "Normal" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "VENSTRE" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "Centreret" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "Til højre" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "Normal" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "VENSTRE" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "Centreret" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "Til højre" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ swedish ] =
     {
-             < "Standard" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "Vänster" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "Centrerat" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "Höger" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "Standard" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "Vänster" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "Centrerat" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "Höger" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ polish ] =
     {
-             < "Domyœlnie" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "Z lewej" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "Wyœrodkuj" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "Z prawej" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "Do lewej i prawej" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "Domyœlnie" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "Z lewej" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "Wyœrodkuj" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "Z prawej" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Do lewej i prawej" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ portuguese_brazilian ] =
     {
-             < "Padr?o" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "Links" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "Zentriert" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "Rechts" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "Padr?o" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "Links" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "Zentriert" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "Rechts" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ japanese ] =
     {
-             < "•W€" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "¶‘µ‚¦" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "’†‰›‘µ‚¦" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "‰E‘µ‚¦" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "‹Ï“™Š„•t" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "•W€" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "¶‘µ‚¦" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "’†‰›‘µ‚¦" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "‰E‘µ‚¦" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "‹Ï“™Š„•t" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ korean ] =
     {
-             < "Ç¥ÁØ" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "LEFT" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "°¡¿îµ¥" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "RIGHT" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "Ç¥ÁØ" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "LEFT" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "°¡¿îµ¥" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "RIGHT" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ chinese_simplified ] =
     {
-             < "±ê×¼" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "Ïò×ó" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "¾ÓÖÐ" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "ÏòÓÒ" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "Á½¶Ë¶ÔÆë" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "±ê×¼" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "Ïò×ó" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "¾ÓÖÐ" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "ÏòÓÒ" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Á½¶Ë¶ÔÆë" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-             < "¼Ð·Ç" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "¦V¥ª" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "¸m¤¤" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "¦V¥k" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "?ºÝ??" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "¼Ð·Ç" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "¦V¥ª" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "¸m¤¤" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "¦V¥k" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "?ºÝ??" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ turkish ] =
     {
-             < "Standart" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "LEFT" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "Orta" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "RIGHT" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "Standart" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "LEFT" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "Orta" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "RIGHT" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ arabic ] =
     {
-             < "ÇÝÊÑÇÖí" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "LEFT" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "ÊæÓíØ" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "RIGHT" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "ÇÝÊÑÇÖí" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "LEFT" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "ÊæÓíØ" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "RIGHT" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     StringList [ catalan ] =
     {
-             < "Standard" ; ALIGNDLG_HORALIGN_STD ; > ; ;
-        < "Links" ; ALIGNDLG_HORALIGN_LEFT ; > ; ;
-        < "Zentriert" ; ALIGNDLG_HORALIGN_CENTER ; > ; ;
-        < "Rechts" ; ALIGNDLG_HORALIGN_RIGHT ; > ; ;
-        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ; ;
+             < "Standard" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "Links" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "Zentriert" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "Rechts" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
     };
     FixedText FT_INDENT
@@ -427,150 +427,150 @@ TabPage RID_SVXPAGE_ALIGNMENT
         };
     StringList [ language_user1 ] =
     {
-             < "Standard" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "Oben" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "Mitte" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "Unten" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "Standard" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "Oben" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "Mitte" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "Unten" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ english_us ] =
     {
-             < "Default" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "Top" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "Middle" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "Bottom" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "Default" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "Top" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "Middle" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "Bottom" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ portuguese ] =
     {
-             < "Padrão" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "Topo" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "Centro" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "Em baixo" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "Padrão" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "Topo" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "Centro" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "Em baixo" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ russian ] =
     {
-             < "Ñòàíäàðò" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "Ñâåðõó" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "Ïî ñåðåäèíå" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "Ñíèçó" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "Ñòàíäàðò" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "Ñâåðõó" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "Ïî ñåðåäèíå" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "Ñíèçó" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ greek ] =
     {
-             < "ÐñïåðéëïãÞ" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "ðÜíù" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "ÊÝíôñï" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "êÜôù" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "ÐñïåðéëïãÞ" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "ðÜíù" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "ÊÝíôñï" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "êÜôù" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ dutch ] =
     {
-             < "Standaard" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "Boven" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "Minnden" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "beneden" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "Standaard" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "Boven" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "Minnden" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "beneden" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ french ] =
     {
-             < "Standard" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "En haut" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "Milieu" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "En bas" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "Standard" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "En haut" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "Milieu" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "En bas" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ spanish ] =
     {
-             < "Predeterminado" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "Arriba" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "Centro" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "Abajo" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "Predeterminado" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "Arriba" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "Centro" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "Abajo" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ finnish ] =
     {
-             < "Koti" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "Ylhäällä" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "Keskitetty" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "Alaosa" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "Koti" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "Ylhäällä" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "Keskitetty" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "Alaosa" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ italian ] =
     {
-             < "Configurazione standard" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "Alto" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "Centra" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "Basso" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "Configurazione standard" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "Alto" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "Centra" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "Basso" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ danish ] =
     {
-             < "Normal" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "Øverst" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "Midte" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "Nederst" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "Normal" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "Øverst" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "Midte" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "Nederst" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ swedish ] =
     {
-             < "Standard" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "Uppe" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "Mitten" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "Nere" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "Standard" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "Uppe" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "Mitten" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "Nere" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ polish ] =
     {
-             < "Domyœlnie" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "Na górze" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "Poœrodku" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "Na dole" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "Domyœlnie" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "Na górze" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "Poœrodku" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "Na dole" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ portuguese_brazilian ] =
     {
-             < "Padr?o" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "Oben" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "Mitte" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "Unten" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "Padr?o" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "Oben" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "Mitte" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "Unten" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ japanese ] =
     {
-             < "•W€" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "ã‘µ‚¦" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "’†‰›‘µ‚¦" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "‰º‘µ‚¦" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "•W€" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "ã‘µ‚¦" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "’†‰›‘µ‚¦" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "‰º‘µ‚¦" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ korean ] =
     {
-             < "±âº»" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "À§" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "°¡¿îµ¥" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "¾Æ·¡" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "±âº»" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "À§" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "°¡¿îµ¥" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "¾Æ·¡" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ chinese_simplified ] =
     {
-             < "±ê×¼" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "ÏòÉÏ" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "¾ÓÖÐ" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "ÏòÏÂ" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "±ê×¼" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "ÏòÉÏ" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "¾ÓÖÐ" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "ÏòÏÂ" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-             < "¼Ð·Ç" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "¦V¤W" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "©~¤¤" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "¦V¤U" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "¼Ð·Ç" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "¦V¤W" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "©~¤¤" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "¦V¤U" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ turkish ] =
     {
-             < "Normal" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "Yukarý" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "Ortala" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "Alt" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "Normal" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "Yukarý" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "Ortala" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "Alt" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ arabic ] =
     {
-             < "ÇÝÊÑÇÖí" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "ÃÚáì" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "ÇáæÓØ" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "ÃÓÝá" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "ÇÝÊÑÇÖí" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "ÃÚáì" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "ÇáæÓØ" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "ÃÓÝá" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     StringList [ catalan ] =
     {
-             < "Standard" ; ALIGNDLG_VERALIGN_STD ; > ; ;
-        < "Oben" ; ALIGNDLG_VERALIGN_TOP ; > ; ;
-        < "Mitte" ; ALIGNDLG_VERALIGN_MID ; > ; ;
-        < "Unten" ; ALIGNDLG_VERALIGN_BOTTOM ; > ; ;
+             < "Standard" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "Oben" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "Mitte" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "Unten" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
     };
     FixedLine FL_ORIENTATION
