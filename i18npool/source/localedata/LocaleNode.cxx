@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: khong $ $Date: 2002-11-07 02:59:52 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:08:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -936,6 +936,9 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of)
 #endif // SUPD > 618
 }
 
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
 #include <assert.h>
 
 void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of)
