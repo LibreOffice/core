@@ -1,11 +1,9 @@
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
-..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
-..\%__SRC%\lib\libconnectivity*.* %_DEST%\lib%_EXT%\connectivity*.*
 ..\%__SRC%\slb\connectivity*.* %_DEST%\lib%_EXT%\connectivity*.*
 ..\%__SRC%\lib\idbt* %_DEST%\lib%_EXT%\idbt*
 ..\source\cpool\*.xml %_DEST%\xml%_EXT%\*.xml
-..\source\manager\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\adabas\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\ado\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\file\*.xml %_DEST%\xml%_EXT%\*.xml
