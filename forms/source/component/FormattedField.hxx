@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:52:52 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,6 @@ namespace frm
         sal_Int16                           m_nKeyType;
         sal_Bool                            m_bOriginalNumeric      : 1,
                                             m_bNumeric              : 1;    // analog fuer TreatAsNumeric-Property
-
-        static ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >   s_xDefaultFormatter;
-            // falls ich wirklich mal einen selber benutzen muss, wird der zwischen allen Instanzen geteilt
 
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>  calcDefaultFormatsSupplier() const;
