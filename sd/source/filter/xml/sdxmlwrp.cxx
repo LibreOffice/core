@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-17 11:13:31 $
+ *  last change: $Author: ka $ $Date: 2000-12-02 10:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,25 +64,20 @@
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
-
-#ifndef _SDXMLWRP_HXX
-#include "sdxmlwrp.hxx"
-#endif
-
 #ifndef _SDXMLIMP_HXX
 #include <xmloff/sdxmlimp.hxx>
 #endif
-
 #ifndef _SDXMLEXP_HXX
 #include <xmloff/sdxmlexp.hxx>
 #endif
-
 #ifndef _DRAWDOC_HXX
 #include "drawdoc.hxx"
 #endif
-
-#ifndef _UNO_MAPPING_HXX_
-#include <uno/mapping.hxx>  //! only necessary until SfxMedium has a uno3 DataSource / DataSink
+#ifndef _UTL_STREAM_WRAPPER_HXX_
+#include <unotools/streamwrap.hxx>
+#endif
+#ifndef _XMLGRHLP_HXX
+#include <svx/xmlgrhlp.hxx>
 #endif
 
 #include <com/sun/star/xml/sax/XErrorHandler.hpp>
@@ -96,10 +91,11 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+
+#include "sdxmlwrp.hxx"
 #include "pkgurl.hxx"
 
 using namespace com::sun::star;
@@ -109,98 +105,57 @@ using namespace rtl;
 
 char __READONLY_DATA sXML_drawing[] = "drawing";
 char __READONLY_DATA sXML_impress[] = "presentation";
+char __READONLY_DATA sXML_content[] = "Content";
 
-//////////////////////////////////////////////////////////////////////////////
+// ----------------
+// - SdXMLWrapper -
+// ----------------
 
-SdXMLWrapper::SdXMLWrapper(
-    uno::Reference<frame::XModel>& xRef,
-    SfxMedium& rMedium,
-    BOOL bIsDraw, BOOL bShowProg)
-:   mxLocalModel(xRef),
-    mrMedium(rMedium),
-    mbIsDraw(bIsDraw),
-    mbShowProgress(bShowProg)
+SdXMLWrapper::SdXMLWrapper( uno::Reference<frame::XModel>& xRef,
+                            SfxMedium& rMedium, BOOL bIsDraw, BOOL bShowProg ) :
+    mxLocalModel    ( xRef ),
+    mrMedium        ( rMedium ),
+    mbIsDraw        ( bIsDraw ),
+    mbShowProgress  ( bShowProg )
 {
 }
 
+// -----------------------------------------------------------------------------
+
 BOOL SdXMLWrapper::Import()
 {
-    if(!mxLocalModel.is())
+    if( !mxLocalModel.is() )
     {
         DBG_ERROR("Got NO Model in XMLImport");
         return FALSE;
     }
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(mxLocalModel, uno::UNO_QUERY);
-    if(!xServiceInfo.is() || !xServiceInfo->supportsService(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"))))
+
+    if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ) )
     {
-        DBG_ERROR("Model is no DrawingDocument in XMLImport");
+        DBG_ERROR( "Model is no DrawingDocument in XMLImport" );
         return FALSE;
     }
 
-    uno::Reference<lang::XMultiServiceFactory> xServiceFactory(::comphelper::getProcessServiceFactory());
-    if(!xServiceFactory.is())
+    uno::Reference<lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
+
+    if( !xServiceFactory.is() )
     {
-        DBG_ERROR("XMLReader::Read: got no service manager");
+        DBG_ERROR( "XMLReader::Read: got no service manager" );
         return FALSE;
     }
 
-    // Get data source ...
-    uno::Reference<io::XActiveDataSource> xSource = mrMedium.GetDataSource();
+    uno::Reference< uno::XInterface> xXMLParser( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" ) ) ) );
 
-    if(!xSource.is())
+    if( !xXMLParser.is() )
     {
-//      // If we didn't get a data source from a medium, we have to create one
-//      XInterfaceRef xFactory = xServiceFactory->createInstance(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DataSourceFactory"));
-//      if(xFactory.is())
-//      {
-//          XMultiServiceFactoryRef xMFactory(xFactory, USR_QUERY);
-//
-//          if(xMFactory.is())
-//          {
-//              UString sURL(S2WS(mrMedium.GetName()));
-//              Sequence<Any> aArgs(1);
-//              Any* pArgs = aArgs.getArray();
-//
-//              pArgs->setString(sURL);
-//
-//              XInterfaceRef xSrc = xMFactory->createInstanceWithArguments(sURL, aArgs);
-//
-//              if(xSrc.is())
-//              {
-//                  xSrc->queryInterface(XActiveDataSource::getSmartUik(), xSource);
-//              }
-//          }
-//      }
-    }
-
-    // get data source
-    if(!xSource.is())
-    {
-        DBG_ERROR("XMLReader::Read: data source missing");
+        DBG_ERROR( "com.sun.star.xml.sax.Parser service missing" );
         return FALSE;
     }
 
-    // get parser
-    uno::Reference<uno::XInterface> xXMLParser(xServiceFactory->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))));
-    if(!xXMLParser.is())
-    {
-        DBG_ERROR("com.sun.star.xml.sax.Parser service missing");
-        return FALSE;
-    }
-
-    // get a pipe for connecting the data source to the parser
-    uno::Reference<uno::XInterface> xPipe(xServiceFactory->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe"))));
-    if(!xPipe.is())
-    {
-        DBG_ERROR("com.sun.star.io.Pipe service missing");
-        return FALSE;
-    }
-
-    UINT16 nStyleFamilyMask(0);
-    BOOL bLoadDoc(TRUE);
+    UINT16  nStyleFamilyMask = 0;
+    BOOL    bLoadDoc = TRUE, bRet = FALSE;
 
 // this is stuff for loading only styles or add-load documents, needed later
 //  USHORT nStyleFamilyMask = SFX_STYLE_FAMILY_ALL;
@@ -227,105 +182,168 @@ BOOL SdXMLWrapper::Import()
 //  }
 //  aOpt.ResetAllFmtsOnly();
 
-    // get filter
-    uno::Reference<xml::sax::XDocumentHandler> xFilter =
-        new SdXMLImport(mxLocalModel, bLoadDoc, nStyleFamilyMask, mbShowProgress, IsDraw());
-
-    // connect pipe's output stream to the data source
-    uno::Reference<io::XOutputStream> xPipeOutput(xPipe, uno::UNO_QUERY);
-    xSource->setOutputStream(xPipeOutput);
-
-    // connect pipe's input stream to the parser
-    xml::sax::InputSource aParserInput;
-    uno::Reference<io::XInputStream> xPipeInput(xPipe, uno::UNO_QUERY);
-    aParserInput.aInputStream = xPipeInput;
-    aParserInput.sSystemId = mrMedium.GetName();
-    OUString sFileName = mrMedium.GetName();
-
-    // connect parser and filter
-    uno::Reference<xml::sax::XParser> xParser(xXMLParser, uno::UNO_QUERY);
-
-//      uno::Reference<xml::sax::XDocumentHandler> xPacker =
-//    new URLPacker(sFileName, xFilter, sal_True, sal_False);
-//  xParser->setDocumentHandler(xPacker);
-    xParser->setDocumentHandler(xFilter);
-
-    // parse
-    uno::Reference<io::XActiveDataControl> xSourceControl(xSource, uno::UNO_QUERY);
-    xSourceControl->start();
-    BOOL bRetval(TRUE);
-
     try
     {
-        xParser->parseStream(aParserInput);
+        xml::sax::InputSource                   aParserInput;
+        SvStorageStreamRef                      xIStm;
+        SvStorage*                              pStorage = mrMedium.GetStorage();
+        uno::Reference< io::XActiveDataSource > xSource;
+
+        aParserInput.sSystemId = mrMedium.GetName();
+
+        if( pStorage )
+        {
+
+            static const String aContentStmName( RTL_CONSTASCII_USTRINGPARAM( sXML_content ) );
+
+            xIStm = pStorage->OpenStream( aContentStmName, STREAM_READ | STREAM_NOCREATE );
+
+            if( xIStm.Is() )
+            {
+                xIStm->SetBufferSize( 16 * 1024 );
+                aParserInput.aInputStream = new utl::OInputStreamWrapper( *xIStm );
+            }
+            else
+            {
+                DBG_ERROR( "could not open Content stream" );
+                return FALSE;
+            }
+        }
+        else
+        {
+            uno::Reference< uno::XInterface > xPipe;
+
+            mrMedium.GetInStream()->Seek( 0 );
+
+            xSource = mrMedium.GetDataSource();
+            DBG_ASSERT( xSource.is(), "got no data source from medium" );
+
+            if( !xSource.is() )
+                return sal_False;
+
+            xPipe = xServiceFactory->createInstance( OUString::createFromAscii( "com.sun.star.io.Pipe" ) );
+            DBG_ASSERT( xPipe.is(), "com.sun.star.io.Pipe service missing" );
+
+            if( !xPipe.is() )
+                return sal_False;
+
+            xSource->setOutputStream( uno::Reference< io::XOutputStream >( xPipe, uno::UNO_QUERY ) );
+            aParserInput.aInputStream = uno::Reference< io::XInputStream >( xPipe, uno::UNO_QUERY );
+        }
+
+        if( aParserInput.aInputStream.is() )
+        {
+            SvXMLGraphicHelper*                             pGraphicHelper;
+            uno::Reference< container::XIndexContainer >    xGrfContainer;
+            uno::Reference< xml::sax::XParser >             xParser( xXMLParser, uno::UNO_QUERY );
+
+            if( pStorage )
+            {
+                pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_READ );
+                xGrfContainer = pGraphicHelper;
+            }
+
+            xParser->setDocumentHandler( new SdXMLImport( mxLocalModel, xGrfContainer,
+                                                          bLoadDoc, nStyleFamilyMask,
+                                                          mbShowProgress, IsDraw() ) );
+
+            if( !pStorage )
+                uno::Reference< io::XActiveDataControl >( xSource, uno::UNO_QUERY )->start();
+
+            xParser->parseStream( aParserInput );
+
+            if( pStorage )
+                SvXMLGraphicHelper::Destroy( pGraphicHelper );
+
+            bRet = TRUE;
+        }
     }
-    catch(xml::sax::SAXParseException)
+    catch( xml::sax::SAXParseException )
     {
-        bRetval = FALSE;
     }
-    catch(xml::sax::SAXException)
+    catch( xml::sax::SAXException )
     {
-        bRetval = FALSE;
     }
-    catch(io::IOException)
+    catch( io::IOException )
     {
-        bRetval = FALSE;
     }
 
-    return bRetval;
+    return bRet;
 }
+
+// -----------------------------------------------------------------------------
 
 BOOL SdXMLWrapper::Export()
 {
-    if(!mxLocalModel.is())
+    BOOL bRet = FALSE;
+
+    if( !mxLocalModel.is() )
     {
         DBG_ERROR("Got NO Model in XMLExport");
         return FALSE;
     }
 
-    uno::Reference<lang::XServiceInfo> xServiceInfo(mxLocalModel, uno::UNO_QUERY);
-    if(!xServiceInfo.is() || !xServiceInfo->supportsService(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"))))
+    uno::Reference< lang::XServiceInfo > xServiceInfo( mxLocalModel, uno::UNO_QUERY );
+
+    if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ) )
     {
-        DBG_ERROR("Model is no DrawingDocument in XMLExport");
+        DBG_ERROR( "Model is no DrawingDocument in XMLExport" );
         return FALSE;
     }
 
-    uno::Reference<lang::XMultiServiceFactory> xServiceFactory(::comphelper::getProcessServiceFactory());
-    if(!xServiceFactory.is())
+    uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
+
+    if( !xServiceFactory.is() )
     {
-        DBG_ERROR("got no service manager");
+        DBG_ERROR( "got no service manager" );
         return FALSE;
     }
 
-    uno::Reference<uno::XInterface> xWriter(xServiceFactory->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))));
-    if(!xWriter.is())
+    uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ) );
+
+    if( !xWriter.is() )
     {
-        DBG_ERROR("com.sun.star.xml.sax.Writer service missing");
+        DBG_ERROR( "com.sun.star.xml.sax.Writer service missing" );
         return FALSE;
     }
 
-    // smart -> uno3 conversion only until SfxMedium has a uno3 DataSink
-    uno::Reference<io::XOutputStream> xOut = mrMedium.GetDataSink();
-    uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
-    xSrc->setOutputStream(xOut);
+    SvStorage* pStorage = mrMedium.GetOutputStorage();
 
-    uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
-    OUString sFileName = mrMedium.GetName();
+    if( pStorage )
+    {
+        SvStorageStreamRef  xOStm( pStorage->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( "Content" ) ),
+                                                         STREAM_READ | STREAM_WRITE | STREAM_TRUNC ) );
 
-#ifdef XMLTESTBIN
-    uno::Reference<xml::sax::XDocumentHandler> xPacker =
-      new URLPacker(sFileName, xHandler, sal_False, sal_True);
-    SdXMLExport aExp(mxLocalModel, sFileName, xPacker, mbShowProgress, IsDraw());
-#else
-    SdXMLExport aExp(mxLocalModel, sFileName, xHandler, mbShowProgress, IsDraw());
-#endif
+        if( !xOStm.Is() || xOStm->GetError() )
+        {
+            DBG_ERROR( "Could not create output stream" );
+            return FALSE;
+        }
 
-    // give string descriptor as parameter for doc type
-    BOOL bRet = (0 == aExp.exportDoc( IsDraw() ? sXML_drawing : sXML_impress ));
+        uno::Reference< io::XActiveDataSource >     xSrc( xWriter, uno::UNO_QUERY );
+        uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
+
+        xSrc->setOutputStream( new ::utl::OOutputStreamWrapper( *xOStm ) );
+
+        try
+        {
+            SvXMLGraphicHelper* pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_WRITE, FALSE );
+            SdXMLExport         aExp( mxLocalModel, mrMedium.GetName(), xHandler, pGraphicHelper, mbShowProgress, IsDraw() );
+
+            bRet = ( 0 == aExp.exportDoc( IsDraw() ? sXML_drawing : sXML_impress ) );
+
+            SvXMLGraphicHelper::Destroy( pGraphicHelper );
+        }
+        catch( xml::sax::SAXParseException )
+        {
+        }
+        catch( xml::sax::SAXException )
+        {
+        }
+        catch( io::IOException )
+        {
+        }
+    }
 
     return bRet;
 }
-
-
