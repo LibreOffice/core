@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 09:17:36 $
+#   last change: $Author: rt $ $Date: 2004-09-08 14:52:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -226,7 +226,7 @@ $(OBJ)$/%.obj : $(MISC)$/%.c
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
     @+-$(RM) $@ >& $(NULLDEV)
-    @+$(TYPE) $(mktmp $(CXX) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $(MISC)$/$*.c )
+    @+$(TYPE) $(mktmp $(CXX) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $(MISCX)$/$*.c )
     @+$(ECHONL)
     $(CXX) @$(mktmp $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)\$*.obj $(MISC)$/$*.c )
 .ENDIF
@@ -243,7 +243,7 @@ $(SLO)$/%.obj : $(MISC)$/%.c
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
     @+-$(RM) $@ >& $(NULLDEV)
-    @+$(TYPE) $(mktmp $(CXX) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)\$*.obj $(MISC)$/$*.c )
+    @+$(TYPE) $(mktmp $(CXX) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)\$*.obj $(MISCX)$/$*.c )
     @+$(ECHONL)
 .IF "$(COM)"=="GCC"
     $(CXX) $(CFLAGS:s/stl/dont_use_stl/) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)\$*.obj $(MISC)$/$*.c 
