@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Impress.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2002-07-03 10:49:49 $
+ *  last change: $Author: af $ $Date: 2002-07-11 09:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,61 +62,71 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema oor:name="Impress" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
   <import oor:component="org.openoffice.Office.Common"/>
+  <!-- Responsible: AF -->
+    <info>
+      <desc xml:lang="en-US">Configuration items related to the Impress application.</desc>
+    </info>
   <component>
     <group oor:name="Layout">
+      <info>
+        <desc xml:lang="en-US">General properties of the graphical object representation.</desc> 
+      </info>
       <group oor:name="Display">
+        <info>
+          <desc xml:lang="en-US">General properties of the graphical object representation on screen
+          displays.</desc>
+        </info>
         <prop oor:name="Ruler" oor:type="xs:boolean">
           <!-- OldPath: Impress/Layout/Display -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation - Layout - [Section] Display -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Show ruler at the left and at the top of the workingarea</desc>
+            <desc xml:lang="en-US">Indicates whether to show the rulers at the left and at the top
+            of the working area.</desc> 
             <label xml:lang="en-US">Rulers visible</label>
           </info>
         </prop>
         <prop oor:name="Helpline" oor:type="xs:boolean">
           <!-- OldPath: Impress/Layout/Display -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation - Layout - [Section] Display -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Show helplines</desc>
+            <desc xml:lang="en-US">Indicates whether to show help-lines that can be created by
+            dragging them from the rulers.</desc> 
             <label xml:lang="en-US">Helplines visible</label>
           </info>
         </prop>
         <prop oor:name="Guide" oor:type="xs:boolean">
           <!-- OldPath: Impress/Layout/Display -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation - Layout - [Section] Display -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Show helplines when moving objects</desc>
+            <desc xml:lang="en-US">Indicates whether to show help-lines when moving an object.</desc>
             <label xml:lang="en-US">Guides when moving</label>
           </info>
         </prop>
         <prop oor:name="Bezier" oor:type="xs:boolean">
           <!-- OldPath: Impress/Layout/Display -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation - Layout - [Section] Display -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Show all controlpoints in Bezier editor</desc>
+            <desc xml:lang="en-US">Indicates whether to show all control points in the Bezier
+            curve editor.</desc> 
             <label xml:lang="en-US">All control points in Bezier editor</label>
           </info>
         </prop>
         <prop oor:name="Contour" oor:type="xs:boolean">
           <!-- OldPath: Impress/Layout/Display -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation - Layout - [Section] Display -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Show outline of each object when moving multiple objects</desc>
+            <desc xml:lang="en-US">Indicates whether to show the outline of all moved objects when moving
+            more then one object at the same time.</desc> 
             <label xml:lang="en-US">Contour of each individual object</label>
           </info>
         </prop>
@@ -173,34 +183,46 @@
         <group oor:name="TabStop">
           <!-- OldPath: Impress/Layout -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation - Layout - [Section] Tab stops -->
           <!-- Notice: Default-Nonmetric Value: 1270 1/100 mm-->
           <prop oor:name="Metric" oor:type="xs:int">
             <value>1250</value>
             <info>
-              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+              <desc xml:lang="en-US">Distance between adjacent tab stops in 1/100 mm when the metric
+              system is selected.</desc> 
               <label xml:lang="en-US"/>
             </info>
           </prop>
           <prop oor:name="NonMetric" oor:type="xs:int">
             <value>1270</value>
             <info>
-              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+              <desc xml:lang="en-US">Distance between adjacent tab stops in 1/100 mm when the non-metric
+              system is selected.</desc> 
               <label xml:lang="en-US"/>
             </info>
           </prop>
           <info>
-            <desc xml:lang="en-US">Specifies the tab stops distance</desc>
+            <desc xml:lang="en-US">Specifies the distance between adjacent tab stops with regard to
+            whether the metric or the non-metric system is currently selected.</desc> 
             <label xml:lang="en-US">Tab stops</label>
           </info>
         </group>
         <group oor:name="MeasureUnit">
           <!-- OldPath: Impress/Layout -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation- Layout - [Section] Meas. units -->
+          <info>
+            <desc xml:lang="en-US">Specifies the measurement unit to be used with respect to whether
+            the metric or the non-metric system is selected.</desc> 
+            <label
+            xml:lang="en-US">Measurement unit</label>
+          </info>
           <prop oor:name="Metric" oor:type="xs:int">
+              <info>
+                <desc xml:lang="en-US">Specifies the measurement unit to be used when the metric
+                system is selected.</desc> 
+                <label xml:lang="en-US">Measurement unit</label>
+              </info>
             <value>2</value>
             <constraints>
               <enumeration oor:value="1">
@@ -231,6 +253,11 @@
             </constraints>
           </prop>
           <prop oor:name="NonMetric" oor:type="xs:int">
+              <info>
+                <desc xml:lang="en-US">Specifies the measurement unit to be used when the non-metric
+                system is selected.</desc> 
+                <label xml:lang="en-US">Measurement unit</label>
+              </info>
             <value>8</value>
             <constraints>
               <enumeration oor:value="1">
@@ -260,152 +287,158 @@
               </enumeration>
             </constraints>
           </prop>
-          <info>
-            <desc xml:lang="en-US">Specifies the measurement unit to be used</desc>
-            <label xml:lang="en-US">Measurement unit</label>
-          </info>
         </group>
       </group>
     </group>
     <group oor:name="Content">
+        <info>
+          <desc xml:lang="en-US">Content related configuration items.</desc>
+        </info>
       <group oor:name="Display">
+        <info>
+          <desc xml:lang="en-US">Configuration items related to the display of Impress documents.</desc>
+        </info>
         <prop oor:name="PicturePlaceholder" oor:type="xs:boolean">
           <!-- OldPath: Impress/Contents/Display -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation - Contents - [Section] Alternative display -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Show only outlines of graphic-objects</desc>
+            <desc xml:lang="en-US">Indicates whether to show only the bounding box of
+            graphic-objects like bitmaps and drawings.</desc> 
             <label xml:lang="en-US">Picture placeholders</label>
           </info>
         </prop>
         <prop oor:name="ContourMode" oor:type="xs:boolean">
           <!-- OldPath: Impress/Contents/Display -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation - Contents - [Section] Alternative display -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Show only outlines of draw-objects</desc>
+            <desc xml:lang="en-US">Indicates whether to show only outlines of objects like filled
+            rectangles and filled ellipses.</desc> 
             <label xml:lang="en-US">Contour mode</label>
           </info>
         </prop>
         <prop oor:name="TextPlaceholder" oor:type="xs:boolean">
           <!-- OldPath: Impress/Contents/Display -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation - Contents - [Section] Alternative display -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Don&amp;apos;t show the text of text-objects</desc>
+            <desc xml:lang="en-US">Indicates whether to show only a placeholder for text in
+            graphical objects.</desc> 
             <label xml:lang="en-US">Text placeholders</label>
           </info>
         </prop>
         <prop oor:name="LineContour" oor:type="xs:boolean">
           <!-- OldPath: Impress/Contents/Display -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation - Contents - [Section] Alternative display -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Show only hairlines instead of the choosed linestyle</desc>
+            <desc xml:lang="en-US">Indicates whether to show only hairlines instead of the true
+            line style and width of objects like lines and freeform curves.</desc> 
             <label xml:lang="en-US">Line contour only</label>
           </info>
         </prop>
       </group>
     </group>
     <group oor:name="Misc">
+      <info>
+        <desc xml:lang="en-US">Collection of configuration items of the Impress application that don't
+        fit into another category.</desc>
+      </info>
       <prop oor:name="BackgroundCache" oor:type="xs:boolean">
         <!-- OldPath: Impress/Other -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: PW -->
         <!-- UIHints: Tools - Options - Presentation  Other  [Section] Other -->
         <value>true</value>
         <info>
-          <desc xml:lang="en-US">Store masterpages in the cache</desc>
+          <desc xml:lang="en-US">Indicates whether to store master pages in a cache to speed up
+          drawing.</desc> 
           <label xml:lang="en-US">Use background cache</label>
         </info>
       </prop>
       <prop oor:name="CopyWhileMoving" oor:type="xs:boolean">
         <!-- OldPath: Impress/Other -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: PW -->
         <!-- UIHints: Tools - Options - Presentation  Other  [Section] Other -->
         <value>false</value>
         <info>
-          <desc xml:lang="en-US">Make a copy of an object if it&amp;apos;s modified</desc>
+          <desc xml:lang="en-US">Indicates whether moving while holding the Control key makes a copy
+          of the moved object.</desc> 
           <label xml:lang="en-US">Copy while moving</label>
         </info>
       </prop>
       <prop oor:name="ObjectMoveable" oor:type="xs:boolean">
         <!-- OldPath: Impress/Other -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: PW -->
         <!-- UIHints: Tools - Options - Presentation  Other  [Section] Other -->
         <value>true</value>
         <info>
-          <desc xml:lang="en-US">Don&amp;apos;t allow to move an object if it&amp;apos;s in rotating-mode</desc>
+          <desc xml:lang="en-US">Indicates whether objects can still be moved while in rotating mode.</desc>
           <label xml:lang="en-US">Objects always moveable</label>
         </info>
       </prop>
       <prop oor:name="NoDistort" oor:type="xs:boolean">
         <!-- OldPath: Impress/Other -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: PW -->
         <!-- UIHints: Tools - Options - Presentation  Other  [Section] Other -->
         <value>false</value>
         <info>
-          <desc xml:lang="en-US">The point alignment of 2D drawing objects and Bezier curves remains constant even if the perspective of the graphics has been distorted.</desc>
+          <desc xml:lang="en-US">Indicates whether objects that are placed on a circle keep their
+          original form, i.e. may be moved and rotated but not resized or otherwise
+          distorted.</desc> 
           <label xml:lang="en-US">Don&amp;apos;t distort objects in curve</label>
         </info>
       </prop>
       <prop oor:name="DclickTextedit" oor:type="xs:boolean">
         <!-- OldPath: Impress/Other -->
         <!-- OldLocation: soffice.cfg -->
-        <!-- Responsible: PW -->
         <!-- UIHints: Option Bar -->
         <value>true</value>
         <info>
-          <desc xml:lang="en-US">A double-click on a textobject changes its mode to editmode</desc>
+          <desc xml:lang="en-US">Indicates whether a double-click on a text object changes activates the
+          edit mode.</desc> 
           <label xml:lang="en-US">Double-Click Text to Edit</label>
         </info>
       </prop>
       <prop oor:name="RotateClick" oor:type="xs:boolean">
         <!-- OldPath: Impress/Other -->
         <!-- OldLocation: soffice.cfg -->
-        <!-- Responsible: PW -->
         <!-- UIHints: Option Bar -->
         <value>false</value>
         <info>
-          <desc xml:lang="en-US">A double click on an object changes its mode to rotation-mode</desc>
+          <desc xml:lang="en-US">Indicates whether a double-click on an object activates the
+          rotation mode.</desc> 
           <label xml:lang="en-US">Rotation Mode after clicking object</label>
         </info>
       </prop>
       <prop oor:name="Preview" oor:type="xs:double">
         <!-- OldPath: Impress/Other -->
         <!-- OldLocation: soffice.cfg -->
-        <!-- Responsible: PW -->
         <!-- UIHints: Menu: view - preview mode -->
         <value>0</value>
         <info>
-          <desc xml:lang="en-US">Quality of colors in the preview</desc>
+          <desc xml:lang="en-US">Specifies the color quality of the preview: 0 - Color, 868 -
+          Grayscale, 5381 - Black/White.</desc> 
           <label xml:lang="en-US">Preview-Mode</label>
         </info>
         <constraints>
           <enumeration oor:value="0">
             <info>
-              <desc xml:lang="en-US">color</desc>
+              <desc xml:lang="en-US">Color</desc>
             </info>
           </enumeration>
           <enumeration oor:value="868">
             <info>
-              <desc xml:lang="en-US">grayscale</desc>
+              <desc xml:lang="en-US">Grayscale</desc>
             </info>
           </enumeration>
           <enumeration oor:value="5381">
             <info>
-              <desc xml:lang="en-US">black/white</desc>
+              <desc xml:lang="en-US">Black/White</desc>
             </info>
           </enumeration>
         </constraints>
@@ -413,33 +446,31 @@
       <prop oor:name="SimpleHandles" oor:type="xs:boolean">
         <!-- OldPath: Impress/Other -->
         <!-- OldLocation: soffice.cfg -->
-        <!-- Responsible: PW -->
         <!-- UIHints: Optionbar -->
         <value>false</value>
         <info>
-          <desc xml:lang="en-US">Switch between simple and 3D-handles</desc>
+          <desc xml:lang="en-US">Indicates whether to show simple (true) or 3D-handles (false).</desc>
           <label xml:lang="en-US">Simple Handles</label>
         </info>
       </prop>
       <prop oor:name="BigHandles" oor:type="xs:boolean">
         <!-- OldPath: Impress/Other -->
         <!-- OldLocation: soffice.cfg -->
-        <!-- Responsible: PW -->
         <!-- UIHints: Optionbar -->
         <value>false</value>
         <info>
-          <desc xml:lang="en-US">Switch between small and big handles</desc>
+          <desc xml:lang="en-US">Indicates whether to show big (true) or small (false) handles.</desc>
           <label xml:lang="en-US">Big Handles</label>
         </info>
       </prop>
       <prop oor:name="CreateWithAttributes" oor:type="xs:boolean">
         <!-- OldPath: Impress/Other -->
         <!-- OldLocation: soffice.cfg -->
-        <!-- Responsible: PW -->
         <!-- UIHints: Optionbar -->
         <value>false</value>
         <info>
-          <desc xml:lang="en-US">Switch between create objects current attributes.</desc>
+          <desc xml:lang="en-US">Indicates whether the current attributes will be assigned to newly
+          created objects.</desc>
           <label xml:lang="en-US">Create with attributes</label>
         </info>
       </prop>
@@ -455,62 +486,74 @@
         </info>
       </prop>
       <group oor:name="TextObject">
+        <info>
+          <desc xml:lang="en-US">Text editing related configuration items.</desc>
+        </info>
         <prop oor:name="QuickEditing" oor:type="xs:boolean">
           <!-- OldPath: Impress/Other/Text_Objects -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Other  [Section] Text objects -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">A simple click on a text object changes the mode to editmode</desc>
+            <desc xml:lang="en-US">Indicates whether a simple click on a text object changes it to
+            edit mode.</desc> 
             <label xml:lang="en-US">Allow quick editing</label>
           </info>
         </prop>
         <prop oor:name="Selectable" oor:type="xs:boolean">
           <!-- OldPath: Impress/Other/Text_Objects -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Other  [Section] Text objects -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">A textframe only can be selected by clicking on the text, not by clicking in the frame.</desc>
+            <desc xml:lang="en-US">Indicates whether a text frame can only be selected by clicking
+            on the text or by clicking somewhere in the frame.</desc> 
             <label xml:lang="en-US">Only text area selectable</label>
           </info>
         </prop>
       </group>
       <group oor:name="NewDoc">
+          <info>
+            <desc xml:lang="en-US">Configuration items governing the behaviour when creating a new
+            document or a new page.</desc> 
+            <label xml:lang="en-US">Start with AutoPilots</label>
+          </info>
         <prop oor:name="AutoPilot" oor:type="xs:boolean">
           <!-- OldPath: Impress/Other/New_Doc -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Other  [Section] New document -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Autopilot when creating a new presentation</desc>
+            <desc xml:lang="en-US">Indicates whether to show the autopilot when creating a new
+            presentation.</desc> 
             <label xml:lang="en-US">Start with AutoPilots</label>
           </info>
         </prop>
         <prop oor:name="Layout" oor:type="xs:boolean">
           <!-- OldPath: Impress/Other/New_Doc -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Other  [Section] New document -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Layout-dialog when creating a new page</desc>
+            <desc xml:lang="en-US">Indicates whether to show the layout dialog when creating a new
+            page.</desc> 
             <label xml:lang="en-US">Start with AutoPilots</label>
           </info>
         </prop>
       </group>
       <group oor:name="Start">
+          <info>
+            <desc xml:lang="en-US">Configuration items governing the behaviour when starting a
+            presentation.</desc>
+          </info>
         <prop oor:name="CurrentPage" oor:type="xs:boolean">
           <!-- OldPath: Impress/Other/Start -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Other  [Section] Start presentation -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Start the presentation with the first or with the current page.</desc>
+            <desc xml:lang="en-US">Indicates whether to start the presentation with the current
+            (true) or the first (false) page.</desc> 
             <label xml:lang="en-US">Always with current page</label>
           </info>
         </prop>
@@ -553,70 +596,75 @@
       </group>
     </group>
     <group oor:name="Snap">
+      <info>
+        <desc xml:lang="en-US">Specification of how to force object positions and sizes to the snap
+        grid or to align with other objects.</desc>
+      </info>
       <group oor:name="Object">
+        <info>
+          <desc xml:lang="en-US">Specification of how to force object positions and sizes to
+          predefined locations in relation to other objects.</desc>
+        </info>
         <prop oor:name="Grid" oor:type="xs:boolean">
           <!-- OldPath: Impress/Snap/Objects -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap to -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Directs to the next grid point when moving an object</desc>
+            <desc xml:lang="en-US">Indicates whether to snap an object when moved to the next grid
+            point.</desc> 
             <label xml:lang="en-US">Grid lines</label>
           </info>
         </prop>
         <prop oor:name="SnapLine" oor:type="xs:boolean">
           <!-- OldPath: Impress/Snap/Objects -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap to -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">The outline of an object is justified to the next snap line</desc>
+            <desc xml:lang="en-US">Indicates whether to snap at snap lines.</desc>
             <label xml:lang="en-US">Snap lines</label>
           </info>
         </prop>
         <prop oor:name="PageMargin" oor:type="xs:boolean">
           <!-- OldPath: Impress/Snap/Objects -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap to -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">The outline of an object is justified to the next page margin</desc>
+            <desc xml:lang="en-US">The outline of an object is justified with adjacent page margins.</desc>
             <label xml:lang="en-US">Page margins</label>
           </info>
         </prop>
         <prop oor:name="ObjectFrame" oor:type="xs:boolean">
           <!-- OldPath: Impress/Snap/Objects -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap to -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">The outline of an object is justified to the next graphic object</desc>
+            <desc xml:lang="en-US">Indicates whether to justify the outline of an object to that of
+            an adjacent object.</desc> 
             <label xml:lang="en-US">Object frame</label>
           </info>
         </prop>
         <prop oor:name="ObjectPoint" oor:type="xs:boolean">
           <!-- OldPath: Impress/Snap/Objects -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap to -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">The outline of an object is justified to the next graphic object&amp;apos;s points.</desc>
+            <desc xml:lang="en-US">Indicates whether to snap corner points of adjacent objects.</desc>
             <label xml:lang="en-US">Object points</label>
           </info>
         </prop>
         <prop oor:name="Range" oor:type="xs:int">
           <!-- OldPath: Impress/Snap/Objects -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap to -->
           <value>5</value>
           <info>
-            <desc xml:lang="en-US">The area where to snap  [UNIT=Pixel]</desc>
+            <desc xml:lang="en-US">The maximal range in pixel along the coordinate axes at which
+            snapping becomes active.</desc> 
             <label xml:lang="en-US">Snap range</label>
           </info>
           <constraints>
@@ -626,47 +674,51 @@
         </prop>
       </group>
       <group oor:name="Position">
+        <info>
+          <desc xml:lang="en-US">Constraints regarding the creation and modification of graphical
+          objects.</desc>
+        </info>
         <prop oor:name="CreatingMoving" oor:type="xs:boolean">
           <!-- OldPath: Impress/Snap/Position -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap position -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Creates only symmetric objects, e.g. squares instead of rectangles or circles instead of ellipses.</desc>
+            <desc xml:lang="en-US">Indicates whether to restrict the creation of objects to squares,
+            circles, etc. and to retain the x/y ratio when resizing.</desc> 
             <label xml:lang="en-US">When creating or moving objects</label>
           </info>
         </prop>
         <prop oor:name="ExtendEdges" oor:type="xs:boolean">
           <!-- OldPath: Impress/Snap/Position -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap position -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Creating an object and pressing the shift-key would result in symmetric objects, e.g. squares instead of rectangles or circles instead of ellipses.</desc>
+            <desc xml:lang="en-US">Indicates whether to use the longer (true) or the shorter (false)
+            of the two distances along the coordinates axes from the initial to the current position
+            to determine a new square's edge length or a new circle's diameter.</desc> 
             <label xml:lang="en-US">Extend edges</label>
           </info>
         </prop>
         <prop oor:name="Rotating" oor:type="xs:boolean">
           <!-- OldPath: Impress/Snap/Position -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap position -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Switch on/off Rotating value</desc>
+            <desc xml:lang="en-US">Indicates whether to use snapping while rotating an object.</desc>
             <label xml:lang="en-US">When rotating</label>
           </info>
         </prop>
         <prop oor:name="RotatingValue" oor:type="xs:int">
           <!-- OldPath: Impress/Snap/Position -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap position -->
           <value>1500</value>
           <info>
-            <desc xml:lang="en-US">The max angle an object can be rotated  [UNIT=Degree/100]</desc>
+            <desc xml:lang="en-US">When snapping for ration is enabled the
+            rotation angle will be a multiple of this angle. [UNIT=Degree/100]</desc> 
             <label xml:lang="en-US">When rotating</label>
           </info>
           <constraints>
@@ -677,11 +729,13 @@
         <prop oor:name="PointReduction" oor:type="xs:int">
           <!-- OldPath: Impress/Snap/Position -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap position -->
           <value>1500</value>
           <info>
-            <desc xml:lang="en-US">Angle for pointreduction  [UNIT=Degree/100]</desc>
+            <desc xml:lang="en-US">When moving a point in the point editor this is the maximal angle
+            at the two adjacent points between the lines connecting those two points with each other
+            and with the moved point at which snapping to the connection line and removal of the
+            moved point takes place.  [UNIT=Degree/100]</desc> 
             <label xml:lang="en-US">Point reduction</label>
           </info>
           <constraints>
@@ -692,355 +746,376 @@
       </group>
     </group>
     <group oor:name="Grid">
+      <info>
+        <desc xml:lang="en-US">Handling and display of the (snap) grid.</desc> 
+      </info>
       <group oor:name="Option">
+        <info>
+          <desc xml:lang="en-US">Switches regarding use and display of the (snap) grid.</desc>
+        </info>
         <prop oor:name="SnapToGrid" oor:type="xs:boolean">
           <!-- OldPath: Impress/Grid/Options -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation Grid - [Section] Options -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Option to move frames and presentation elements only between the grid points</desc>
+            <desc xml:lang="en-US">Indicates whether to force frames and
+            drawing elements on grid points.</desc> 
             <label xml:lang="en-US">Snap to grid</label>
           </info>
         </prop>
         <prop oor:name="VisibleGrid" oor:type="xs:boolean">
           <!-- OldPath: Impress/Grid/Options -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation Grid - [Section] Options -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Shows the grid</desc>
+            <desc xml:lang="en-US">Indicates whether to show the grid.</desc>
             <label xml:lang="en-US">Visible grid</label>
           </info>
         </prop>
         <prop oor:name="Synchronize" oor:type="xs:boolean">
           <!-- OldPath: Impress/Grid/Options -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation Grid - [Section] Options -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Synchronize the grid-resulution of x- and y-axis</desc>
+            <desc xml:lang="en-US">Indicates whether to synchronize the
+            resolutions of x- and y-grids.</desc> 
             <label xml:lang="en-US">Synchronize axes</label>
           </info>
         </prop>
       </group>
       <group oor:name="Resolution">
+        <info>
+          <desc xml:lang="en-US">Specification of the grid resolution.</desc>
+        </info>
         <group oor:name="XAxis">
           <!-- OldPath: Impress/Grid/Resolution -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Grid - [Section] Grid -->
           <!-- Notice: Default-nonmetrical value: 1270 1/100 mm. -->
           <prop oor:name="Metric" oor:type="xs:int">
             <value>1000</value>
             <info>
-              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
-              <label xml:lang="en-US"/>
+                <desc xml:lang="en-US">Horizontal distance between adjacent grid points in 1/100 mm
+                used when the metric system is active.</desc> 
+                <label xml:lang="en-US"/>
             </info>
           </prop>
           <prop oor:name="NonMetric" oor:type="xs:int">
             <value>1270</value>
             <info>
-              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+                <desc xml:lang="en-US">Horizontal distance between adjacent grid points in 1/100 mm
+                used when the non-metric system is active.</desc> 
               <label xml:lang="en-US"/>
             </info>
           </prop>
           <info>
-            <desc xml:lang="en-US">Defines the distance between grid points on the X axis</desc>
+            <desc xml:lang="en-US">Defines the horizontal distance between adjacent grid points.</desc>
             <label xml:lang="en-US">X Axis Resolution</label>
           </info>
         </group>
         <group oor:name="YAxis">
           <!-- OldPath: Impress/Grid/Resolution -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Grid - [Section] Grid -->
           <!-- Notice: Default- nonmerical value: 1270 1/100 mm. -->
           <prop oor:name="Metric" oor:type="xs:int">
             <value>1000</value>
             <info>
-              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
-              <label xml:lang="en-US"/>
+                <desc xml:lang="en-US">Vertical distance between adjacent grid points in 1/100 mm
+                used when the metric system is active.</desc> 
+                <label xml:lang="en-US"/>
             </info>
           </prop>
           <prop oor:name="NonMetric" oor:type="xs:int">
             <value>1270</value>
             <info>
-              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
-              <label xml:lang="en-US"/>
+                <desc xml:lang="en-US">Vertical distance between adjacent grid points in 1/100 mm
+                used when the non-metric system is active.</desc> 
+                <label xml:lang="en-US"/>
             </info>
           </prop>
           <info>
-            <desc xml:lang="en-US">Defines the distance between grid points on the Y axis</desc>
+            <desc xml:lang="en-US">Defines the vertical distance between adjacent grid points.</desc>
             <label xml:lang="en-US">Y Axis Resolution</label>
           </info>
         </group>
       </group>
       <group oor:name="Subdivision">
+        <info>
+          <desc xml:lang="en-US">Subdivision of the grid.</desc>
+        </info>
         <prop oor:name="XAxis" oor:type="xs:double">
           <!-- OldPath: Impress/Grid/Subdivision -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Grid - [Section] Grid -->
           <!-- Notice: Default value for English Version only: 254 Points) -->
           <value>1</value>
           <info>
-            <desc xml:lang="en-US">Specifies the number of intervals between two grid points on the X axis</desc>
+            <desc xml:lang="en-US">Specifies the number of points between two adjacent grid points
+            on the X axis.</desc> 
             <label xml:lang="en-US">X Axis Subdivision</label>
           </info>
         </prop>
         <prop oor:name="YAxis" oor:type="xs:double">
           <!-- OldPath: Impress/Grid/Subdivision -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Grid - [Section] Grid -->
           <!-- Notice: Default value for English Version only: 254 Points) -->
           <value>1</value>
           <info>
-            <desc xml:lang="en-US">Specifies the number of intervals between two grid points on the Y axis</desc>
+            <desc xml:lang="en-US">Specifies the number of intervals between two adjacent grid
+            points on the Y axis</desc> 
             <label xml:lang="en-US">Y Axis Subdivision</label>
           </info>
         </prop>
       </group>
       <group oor:name="SnapGrid">
+        <info>
+          <desc xml:lang="en-US">Specification of the snap grid.</desc>
+        </info>
         <prop oor:name="Size" oor:type="xs:boolean">
           <!-- OldPath: Impress/Grid/Snap_Grid -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Grid - [Section] Snap grid -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Synchronize snap-grid and grid</desc>
+            <desc xml:lang="en-US">Indicates whether to synchronize grid and snap-grid.</desc>
             <label xml:lang="en-US">Size to grid</label>
           </info>
         </prop>
         <group oor:name="XAxis">
           <!-- OldPath: Impress/Grid/Snap_Grid -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Grid - [Section] Snap grid -->
           <!-- Notice: Default-nonmetrical value: 1270 1/100 mm. -->
           <prop oor:name="Metric" oor:type="xs:int">
             <value>1000</value>
             <info>
-              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+              <desc xml:lang="en-US">Horizontal distance between adjacent points of the snap grid in
+              1/100 mm used when the metric system is selected.</desc> 
               <label xml:lang="en-US"/>
             </info>
           </prop>
           <prop oor:name="NonMetric" oor:type="xs:int">
             <value>1270</value>
             <info>
-              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+              <desc xml:lang="en-US">Horizontal distance between adjacent points of the snap grid in
+              1/100 mm used when the non-metric system is selected.</desc> 
               <label xml:lang="en-US"/>
             </info>
           </prop>
           <info>
-            <desc xml:lang="en-US">Defines the horizontal distance between the single grid points</desc>
+            <desc xml:lang="en-US">Defines the horizontal distance between adjacent points of the
+            snap grid.</desc> 
             <label xml:lang="en-US">X axis</label>
           </info>
         </group>
         <group oor:name="YAxis">
           <!-- OldPath: Impress/Grid/Snap_Grid -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Grid - [Section] Snap grid -->
           <!-- Notice: Default-Default-nonmetrical value: 1270 1/100 mm. -->
           <prop oor:name="Metric" oor:type="xs:int">
             <value>1000</value>
             <info>
-              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+              <desc xml:lang="en-US">Vertical distance between adjacent points of the snap grid in
+              1/100 mm used when the metric system is selected.</desc> 
               <label xml:lang="en-US"/>
             </info>
           </prop>
           <prop oor:name="NonMetric" oor:type="xs:int">
             <value>1270</value>
             <info>
-              <desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+              <desc xml:lang="en-US">Vertical distance between adjacent points of the snap grid in
+              1/100 mm used when the non-metric system is selected.</desc> 
               <label xml:lang="en-US"/>
             </info>
           </prop>
           <info>
-            <desc xml:lang="en-US">Defines the vertical distance between the single grid points</desc>
+            <desc xml:lang="en-US">Defines the vertical distance between adjacent points of the snap
+            grid.</desc> 
             <label xml:lang="en-US">Y axis</label>
           </info>
         </group>
       </group>
     </group>
     <group oor:name="Print">
+      <info>
+        <desc xml:lang="en-US">Options regarding the printing of Impress documents.</desc>
+      </info>
       <group oor:name="Content">
+        <info>
+          <desc xml:lang="en-US">Options regarding the printing of document content.</desc>
+        </info>
         <prop oor:name="Presentation" oor:type="xs:boolean">
           <!-- OldPath: Impress/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Contents -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if graphical contents should be printed</desc>
+            <desc xml:lang="en-US">Indicates whether the presentation will be printed.</desc> 
             <label xml:lang="en-US">Presentation</label>
           </info>
         </prop>
         <prop oor:name="Note" oor:type="xs:boolean">
           <!-- OldPath: Impress/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Contents -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if notes should be printed</desc>
+            <desc xml:lang="en-US">Indicates whether the notes will be printed.</desc>
             <label xml:lang="en-US">Notes</label>
           </info>
         </prop>
         <prop oor:name="Handout" oor:type="xs:boolean">
           <!-- OldPath: Impress/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Contents -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if handouts should be printed</desc>
+            <desc xml:lang="en-US">Indicates whether the handouts will be printed.</desc>
             <label xml:lang="en-US">Handouts</label>
           </info>
         </prop>
         <prop oor:name="Outline" oor:type="xs:boolean">
           <!-- OldPath: Impress/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Contents -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if outlines should be printed</desc>
+            <desc xml:lang="en-US">Indicates whether the outlines will be printed.</desc>
             <label xml:lang="en-US">Outline</label>
           </info>
         </prop>
       </group>
       <group oor:name="Page">
+        <info>
+          <desc xml:lang="en-US">Specification of how and what pages will be printed.</desc>
+        </info>
         <prop oor:name="PageSize" oor:type="xs:boolean">
           <!-- OldPath: Impress/Print/Page -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Page options -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Trimm all elements to the page size</desc>
+            <desc xml:lang="en-US">Indicates whether to enlarge or shrink a document's page size
+            while printing to fit the physical paper size.</desc> 
             <label xml:lang="en-US">Fit to page</label>
           </info>
         </prop>
         <prop oor:name="PageTile" oor:type="xs:boolean">
           <!-- OldPath: Impress/Print/Page -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Page options -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Option to print tiled pages</desc>
+            <desc xml:lang="en-US">Indicates whether to print the pages' titles at the top of every
+            page.</desc> 
             <label xml:lang="en-US">Tile pages</label>
           </info>
         </prop>
         <prop oor:name="Booklet" oor:type="xs:boolean">
           <!-- OldPath: Impress/Print/Page -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Page options -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Print brochure</desc>
+            <desc xml:lang="en-US">Indicates whether to print a document in the form of a brochure.</desc>
             <label xml:lang="en-US">Brochure</label>
           </info>
         </prop>
         <prop oor:name="BookletFront" oor:type="xs:boolean">
           <!-- OldPath: Impress/Print/Page -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Page options -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Print frontside of the brochure</desc>
+            <desc xml:lang="en-US">Indicates whether to print the front side pages of a brochure.</desc>
             <label xml:lang="en-US">Front side</label>
           </info>
         </prop>
         <prop oor:name="BookletBack" oor:type="xs:boolean">
           <!-- OldPath: Impress/Print/Page -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Page options -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Print backside of the brochure</desc>
+            <desc xml:lang="en-US">Indicates whether to print the back side pages of a brochure.</desc>
             <label xml:lang="en-US">Back side</label>
           </info>
         </prop>
       </group>
       <group oor:name="Other">
+        <info>
+          <desc xml:lang="en-US">Specification of general printing related issues.</desc>
+        </info>
         <prop oor:name="PageName" oor:type="xs:boolean">
           <!-- OldPath: Impress/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Print -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Print pagename</desc>
+            <desc xml:lang="en-US">Indicates whether to print page names.</desc>
             <label xml:lang="en-US">Page name</label>
           </info>
         </prop>
         <prop oor:name="Date" oor:type="xs:boolean">
           <!-- OldPath: Impress/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Print -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Print date</desc>
+            <desc xml:lang="en-US">Indicates whether to print the current date at the top of every
+            page.</desc> 
             <label xml:lang="en-US">Date</label>
           </info>
         </prop>
         <prop oor:name="Time" oor:type="xs:boolean">
           <!-- OldPath: Impress/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Print -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Print time</desc>
+            <desc xml:lang="en-US">Indicates whether to print the current time at the top of every
+            page.</desc>
             <label xml:lang="en-US">Time</label>
           </info>
         </prop>
         <prop oor:name="HiddenPage" oor:type="xs:boolean">
           <!-- OldPath: Impress/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Print -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Print hidden pages</desc>
+            <desc xml:lang="en-US">Indicates whether to print hidden pages.</desc>
             <label xml:lang="en-US">Hidden pages</label>
           </info>
         </prop>
         <prop oor:name="Quality" oor:type="xs:int">
           <!-- OldPath: Impress/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Print - [Section] Quality -->
           <value>0</value>
           <info>
-            <desc xml:lang="en-US">Quality of the printed colors.</desc>
+            <desc xml:lang="en-US">Specifies the quality of the printed colors.</desc>
           </info>
           <constraints>
             <enumeration oor:value="0">
               <info>
-                <desc xml:lang="en-US">color</desc>
+                <desc xml:lang="en-US">Color</desc>
               </info>
             </enumeration>
             <enumeration oor:value="1">
               <info>
-                <desc xml:lang="en-US">grayscale</desc>
+                <desc xml:lang="en-US">Grayscale</desc>
               </info>
             </enumeration>
             <enumeration oor:value="2">
               <info>
-                <desc xml:lang="en-US">black/white</desc>
+                <desc xml:lang="en-US">Black/White</desc>
               </info>
             </enumeration>
           </constraints>
@@ -1048,11 +1123,11 @@
         <prop oor:name="FromPrinterSetup" oor:type="xs:boolean">
           <!-- OldPath: Impress/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: PW -->
           <!-- UIHints: Tools - Options - Presentation  Print  [Check box] From printer setup -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Use systemsettings of printer to choose paper tray</desc>
+            <desc xml:lang="en-US">Indicates whether to use the system settings of the printer to
+            choose the paper tray.</desc> 
             <label xml:lang="en-US">From printer setup</label>
           </info>
         </prop>
@@ -1086,13 +1161,15 @@
         </group>
       </group>
       <group oor:name="Export">
-        <prop oor:name="LastUsed" oor:type="xs:string">
+          <info>
+            <desc xml:lang="en-US">Export related configuration items.</desc>
+          </info>
+          <prop oor:name="LastUsed" oor:type="xs:string">
           <!-- OldPath: STARIMPRESS -->
           <!-- OldLocation: soffice.ini -->
-          <!-- Responsible: KA -->
           <!-- UIHints: Set after export -->
           <info>
-            <desc xml:lang="en-US">Last used export filter for Impress</desc>
+            <desc xml:lang="en-US">Specifies the filter last used to export an Impress document.</desc>
           </info>
           <constraints>
             <enumeration oor:value="HTML"/>
