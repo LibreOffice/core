@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-13 11:35:26 $
+ *  last change: $Author: cl $ $Date: 2001-02-19 16:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,21 +286,27 @@ void SAL_CALL SvxShapeGroup::add( const uno::Reference< drawing::XShape >& xShap
 
     SvxShape* pShape = SvxShape::getImplementation( xShape );
 
-    if(pObj == NULL || pPage == NULL || pShape == NULL || NULL != pShape->GetSdrObject())
-        throw uno::RuntimeException();
+    if( pObj != NULL && pPage != NULL || pShape != NULL )
+    {
+        SdrObject* pSdrShape = pShape->GetSdrObject();
+        if( pSdrShape == NULL )
+            pSdrShape = pPage->_CreateSdrObject( xShape );
 
-    SdrObject* pSdrShape = pPage->_CreateSdrObject( xShape );
+        if( pSdrShape->IsInserted() )
+            pSdrShape->GetObjList()->RemoveObject( pSdrShape->GetOrdNum() );
 
-    if( pSdrShape->IsInserted() )
-        pSdrShape->GetObjList()->RemoveObject( pSdrShape->GetOrdNum() );
+        pObj->GetSubList()->NbcInsertObject( pSdrShape );
 
-    pObj->GetSubList()->NbcInsertObject( pSdrShape );
+        if(pShape)
+            pShape->Create( pSdrShape, pPage );
 
-    if(pShape)
-        pShape->Create( pSdrShape, pPage );
-
-    if( pModel )
-        pModel->SetChanged();
+        if( pModel )
+            pModel->SetChanged();
+    }
+    else
+    {
+        DBG_ERROR("could not add XShape to group shape!");
+    }
 }
 
 //----------------------------------------------------------------------
