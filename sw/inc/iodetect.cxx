@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:36:29 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,8 +197,21 @@ const sal_Char __FAR_DATA FILTER_XMLV[]     = "CXMLV";
 const sal_Char __FAR_DATA FILTER_XMLVW[]    = "CXMLVWEB";
 const sal_Char __FAR_DATA sSwDos[]      = "SW6";
 
-const sal_Char * SwGetFILTER_WW8() { return &(FILTER_WW8[0]); }
+#ifdef _DLL_
+const sal_Char* GetFILTER_XML()
+{
+    return FILTER_XML;
+}
+const sal_Char* GetFILTER_WW8()
+{
+    return FILTER_WW8;
+}
+const sal_Char* GetFILTER_TEXT()
+{
+    return FILTER_TEXT;
+}
 
+#endif
 SwIoDetect aReaderWriter[ MAXFILTER ] =
 {
 /*  0*/ SwIoEntry(FILTER_SW5,       4,          &::GetSw3Writer,    TRUE),
