@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:53:21 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ portuguese ] = "Copiar tabela inteira" ;
         Text[ chinese_simplified ] = "¸´ÖÆÕû¸ö¹¤×÷±í";
         Text[ russian ] = "Êîïèğîâàòü âñş òàáëèöó";
-        Text[ polish ] = "Kopiuj ca³¹ tabelê";
+        Text[ polish ] = "Kopiuj ca³y arkusz";
         Text[ japanese ] = "•\\‘S‘Ì‚ğºËß°";
         Text[ chinese_traditional ] = "½Æ»s¾ã­Ó¤u§@ªí";
         Text[ arabic ] = "äÓÎ ßá ÇáÌÏæá";
