@@ -1,8 +1,22 @@
 /*************************************************************************
  *
+ *  $RCSfile: chartonum.hxx,v $
+ *
+ *  $Revision: 1.3 $
+ *
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:43:11 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
  *  GNU Lesser General Public License Version 2.1
  *  =============================================
- *  Copyright 2002 by Sun Microsystems, Inc.
+ *  Copyright 2000 by Sun Microsystems, Inc.
  *  901 San Antonio Road, Palo Alto, CA 94303, USA
  *
  *  This library is free software; you can redistribute it and/or
@@ -36,7 +50,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2002 by Sun Microsystems, Inc.
+ *  Copyright: 2000 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -44,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _L10N_TRANSLITERATION_CHARTONUM_HXX_
 #define _L10N_TRANSLITERATION_CHARTONUM_HXX_
 
@@ -52,20 +65,11 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-class CharToNum : public transliteration_Numeric {
-public:
-    CharToNum();
-
-    virtual rtl::OUString SAL_CALL transliterate( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  ) throw(com::sun::star::uno::RuntimeException);
-protected:
-    sal_Int16 number;
-};
-
 #define TRANSLITERATION_CHARTONUM( name ) \
-class CharToNum##name : public CharToNum \
+class CharToNum##name : public transliteration_Numeric \
 { \
 public: \
-    CharToNum##name (); \
+        CharToNum##name (); \
 };
 
 #ifdef TRANSLITERATION_ALL
