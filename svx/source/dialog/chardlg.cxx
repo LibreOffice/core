@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-01 15:13:12 $
+ *  last change: $Author: pb $ $Date: 2000-12-01 18:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3328,13 +3328,13 @@ void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
         case SFX_ITEM_SET:
         {
             const SvxLanguageItem& rItem = (SvxLanguageItem&)rSet.Get( nWhich );
-            DBG_ASSERT( (LanguageType)rItem.GetValue() != LANGUAGE_SYSTEM, "LANGUAGE_SYSTEM not allowed" );
-            if ( (LanguageType)rItem.GetValue() != LANGUAGE_DONTKNOW )
+            LanguageType eLangType = (LanguageType)rItem.GetValue();
+            DBG_ASSERT( eLangType != LANGUAGE_SYSTEM, "LANGUAGE_SYSTEM not allowed" );
+            if ( eLangType != LANGUAGE_DONTKNOW )
             {
-                sal_Int32 nLang = SvxGetLanguagePos( SvxGetSelectableLanguages(), rItem.GetValue() );
                 for ( USHORT i = 0; i < pLangBox->GetEntryCount(); ++i )
                 {
-                    if ( (sal_Int32)pLangBox->GetEntryData(i) == nLang )
+                    if ( (LanguageType)(ULONG)pLangBox->GetEntryData(i) == eLangType )
                     {
                         pLangBox->SelectEntryPos(i);
                         break;
@@ -3348,6 +3348,12 @@ void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
     if ( bWest )
         m_aFontTypeFT.SetText( pFontList->GetFontMapText(
             pFontList->Get( pNameBox->GetText(), pStyleBox->GetText() ) ) );
+
+    // save these settings
+    pNameBox->SaveValue();
+    pStyleBox->SaveValue();
+    pSizeBox->SaveValue();
+    pLangBox->SaveValue();
 }
 
 // -----------------------------------------------------------------------
@@ -3543,17 +3549,17 @@ BOOL SvxCharNamePage::FillItemSetWestOrEast_Impl( SfxItemSet& rSet, BOOL bWest )
     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
         rSet.ClearItem( nWhich );
 
+    bChanged = TRUE;
     nWhich = GetWhich( bWest ? SID_ATTR_CHAR_LANGUAGE : SID_ATTR_CHAR_CJK_LANGUAGE );
     pOld = GetOldItem( rSet, bWest ? SID_ATTR_CHAR_LANGUAGE : SID_ATTR_CHAR_CJK_LANGUAGE );
     USHORT nLangPos = pLangBox->GetSelectEntryPos();
-    USHORT nLang = (USHORT)(ULONG)pLangBox->GetEntryData( nLangPos );
-    util::Language nLanguage = SvxGetSelectableLanguages().getConstArray()[ nLang ];
+    LanguageType eLangType = (LanguageType)(ULONG)pLangBox->GetEntryData( nLangPos );
 
     if ( pOld )
     {
         const SvxLanguageItem& rItem = *( (const SvxLanguageItem*)pOld );
 
-        if ( nLangPos == LISTBOX_ENTRY_NOTFOUND || rItem.GetValue() == nLanguage )
+        if ( nLangPos == LISTBOX_ENTRY_NOTFOUND || eLangType == (LanguageType)rItem.GetValue() )
             bChanged = FALSE;
     }
 
@@ -3562,7 +3568,7 @@ BOOL SvxCharNamePage::FillItemSetWestOrEast_Impl( SfxItemSet& rSet, BOOL bWest )
 
     if ( bChanged && nLangPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        rSet.Put( SvxLanguageItem( (LanguageType)nLanguage, nWhich ) );
+        rSet.Put( SvxLanguageItem( eLangType, nWhich ) );
         bModified |= TRUE;
     }
     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
@@ -3801,6 +3807,7 @@ void SvxCharNamePage::Reset( const SfxItemSet& rSet )
     ResetWestOrEast_Impl( rSet, TRUE );
     ResetWestOrEast_Impl( rSet, FALSE );
     ResetColor_Impl( rSet );
+    m_aColorLB.SaveValue();
 }
 
 // -----------------------------------------------------------------------
