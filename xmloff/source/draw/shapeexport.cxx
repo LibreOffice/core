@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-27 10:16:23 $
+ *  last change: $Author: sab $ $Date: 2001-07-31 10:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,14 @@
 
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
+#endif
+
+#ifndef _SOT_CLSIDS_HXX
+#include <sot/clsids.hxx>
+#endif
+
+#ifndef _GLOBNAME_HXX
+#include <tools/globname.hxx>
 #endif
 
 #include "xmlnmspe.hxx"
@@ -284,7 +292,9 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         std::vector< XMLPropertyState > xPropStates;
 
         sal_Int32 nCount = 0;
-        if( !bIsEmptyPresObj )
+        if( !bIsEmptyPresObj &&
+            (aShapeInfo.meShapeType != XmlShapeTypeDrawChartShape) &&
+            (aShapeInfo.meShapeType != XmlShapeTypeDrawTableShape))
         {
             xPropStates = GetPropertySetMapper()->Filter( xPropSet );
 
@@ -859,8 +869,24 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                     if(xPropSet.is())
                     {
                         uno::Any aAny;
-                        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Model")));
-                        uno::Reference <lang::XServiceInfo> xObjectInfo;
+                        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID")));
+                        rtl::OUString sCLSID;
+                        if (aAny >>= sCLSID)
+                        {
+                            if (sCLSID.equals(rExport.GetChartExport()->getChartCLSID()))
+                            {
+                                eShapeType = XmlShapeTypeDrawChartShape;
+                            }
+                            else if (sCLSID.equals(rtl::OUString( SvGlobalName( SO3_SC_CLASSID ).GetHexName())))
+                            {
+                                eShapeType = XmlShapeTypeDrawTableShape;
+                            }
+                            else
+                            {
+                                // general OLE2 Object
+                            }
+                        }
+/*                      uno::Reference <lang::XServiceInfo> xObjectInfo;
 
                         if(aAny >>= xObjectInfo)
                         {
@@ -878,7 +904,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                             {
                                 // general OLE2 Object
                             }
-                        }
+                        }*/
                     }
                 }
                 else if(aType.EqualsAscii("Page", 21, 4)) { eShapeType = XmlShapeTypeDrawPageShape; }
