@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:22:33 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,6 +579,9 @@ SwSectionFmt* SwDoc::MakeSectionFmt( SwSectionFmt *pDerivedFrom )
 void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
 {
     USHORT nPos = pSectionFmtTbl->GetPos( pFmt );
+
+    StartUndo(UNDO_DELSECTION);
+
     if( USHRT_MAX != nPos )
     {
         const SwNodeIndex* pIdx = pFmt->GetCntnt( FALSE ).GetCntntIdx();
@@ -654,6 +657,9 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
                 pCNd->ChkCondColl();
 //FEATURE::CONDCOLL
     }
+
+    EndUndo(UNDO_DELSECTION);
+
     SetModified();
 }
 
