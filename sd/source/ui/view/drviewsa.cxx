@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-14 08:56:32 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:21:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -887,19 +887,27 @@ void SdDrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     }
     else
     {
-        rSet.Put( SfxPointItem(SID_ATTR_POSITION, aPos) );
-
         if ( pDrView->HasMarkedObj() )
         {
             Rectangle aRect = pDrView->GetAllMarkedRect();
             pDrView->GetPageViewPvNum(0)->LogicToPagePos(aRect);
+
+            // Show the position of the selected shape(s)
+            Point aShapePosition (aRect.TopLeft());
+            aShapePosition.X() = Fraction(aShapePosition.X()) / aUIScale;
+            aShapePosition.Y() = Fraction(aShapePosition.Y()) / aUIScale;
+            rSet.Put (SfxPointItem(SID_ATTR_POSITION, aShapePosition));
+
             Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
             aSize.Height() = Fraction(aSize.Height()) / aUIScale;
             aSize.Width()  = Fraction(aSize.Width())  / aUIScale;
             rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize) );
         }
         else
+        {
+            rSet.Put( SfxPointItem(SID_ATTR_POSITION, aPos) );
             rSet.Put( SvxSizeItem( SID_ATTR_SIZE, Size( 0, 0 ) ) );
+        }
     }
 
     // Display of current page and layer.
