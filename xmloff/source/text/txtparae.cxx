@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-23 14:41:41 $
+ *  last change: $Author: mtg $ $Date: 2001-02-28 11:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,8 +770,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     aAny.setValue(&bTmp, ::getBooleanCppuType());
     sal_Int32 nIndex = xTextPropMapper->getPropertySetMapper()->FindEntryIndex(
                                 "", XML_NAMESPACE_STYLE, sXML_text_combine);
-    pFieldExport = new XMLTextFieldExport(
-        rExp, new XMLPropertyState( nIndex, aAny )  );
+    pFieldExport = new XMLTextFieldExport( rExp, new XMLPropertyState( nIndex, aAny ) );
 }
 
 XMLTextParagraphExport::~XMLTextParagraphExport()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-21 20:29:41 $
+ *  last change: $Author: mtg $ $Date: 2001-02-28 11:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,6 +463,7 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
 
 XMLTextFieldExport::~XMLTextFieldExport()
 {
+    delete pCombinedCharactersPropertyState;
 }
 
 /// get the field ID (as in FieldIDEnum) from XTextField

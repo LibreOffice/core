@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteConfigurationImportContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 22:19:14 $
+ *  last change: $Author: mtg $ $Date: 2001-02-28 11:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,10 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
         sPropertyEndNotice(RTL_CONSTASCII_USTRINGPARAM("EndNotice")),
         sPropertyBeginNotice(RTL_CONSTASCII_USTRINGPARAM("BeginNotice"))
 {
+}
+XMLFootnoteConfigurationImportContext::~XMLFootnoteConfigurationImportContext()
+{
+    delete pAttrTokenMap;
 }
 
 enum XMLFtnConfigToken
