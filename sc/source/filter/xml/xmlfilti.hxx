@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilti.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-18 08:45:06 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef SC_XMLFILTI_HXX
 #define SC_XMLFILTI_HXX
-
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
 #endif
@@ -96,14 +95,14 @@ class ScXMLFilterContext : public SvXMLImportContext
     com::sun::star::table::CellAddress aOutputPosition;
     com::sun::star::table::CellRangeAddress aConditionSourceRangeAddress;
     sal_Int16   nUserListIndex;
-    sal_Bool    bSkipDuplicates : 1;
-    sal_Bool    bCopyOutputData : 1;
-    sal_Bool    bUseRegularExpressions : 1;
-    sal_Bool    bIsCaseSensitive : 1;
-    sal_Bool    bEnabledUserList : 1;
-    sal_Bool    bConnectionOr : 1;
-    sal_Bool    bNextConnectionOr : 1;
-    sal_Bool    bConditionSourceRange : 1;
+    sal_Bool    bSkipDuplicates;
+    sal_Bool    bCopyOutputData;
+    sal_Bool    bUseRegularExpressions;
+    sal_Bool    bIsCaseSensitive;
+    sal_Bool    bEnabledUserList;
+    sal_Bool    bConnectionOr;
+    sal_Bool    bNextConnectionOr;
+    sal_Bool    bConditionSourceRange;
     Stack       aConnectionOrStack;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
@@ -195,7 +194,7 @@ class ScXMLConditionContext : public SvXMLImportContext
     rtl::OUString sConditionValue;
     rtl::OUString sOperator;
     sal_Int32   nField;
-    sal_Bool    bIsCaseSensitive : 1;
+    sal_Bool    bIsCaseSensitive;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -230,14 +229,14 @@ class ScXMLDPFilterContext : public SvXMLImportContext
     ScRange         aConditionSourceRangeAddress;
     sal_uInt8   nFilterFieldCount;
     sal_Int16   nUserListIndex;
-    sal_Bool    bSkipDuplicates : 1;
-    sal_Bool    bCopyOutputData : 1;
-    sal_Bool    bUseRegularExpressions : 1;
-    sal_Bool    bIsCaseSensitive : 1;
-    sal_Bool    bEnabledUserList : 1;
-    sal_Bool    bConnectionOr : 1;
-    sal_Bool    bNextConnectionOr : 1;
-    sal_Bool    bConditionSourceRange : 1;
+    sal_Bool    bSkipDuplicates;
+    sal_Bool    bCopyOutputData;
+    sal_Bool    bUseRegularExpressions;
+    sal_Bool    bIsCaseSensitive;
+    sal_Bool    bEnabledUserList;
+    sal_Bool    bConnectionOr;
+    sal_Bool    bNextConnectionOr;
+    sal_Bool    bConditionSourceRange;
     Stack       aConnectionOrStack;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
@@ -328,7 +327,7 @@ class ScXMLDPConditionContext : public SvXMLImportContext
     rtl::OUString sConditionValue;
     rtl::OUString sOperator;
     sal_Int32   nField;
-    sal_Bool    bIsCaseSensitive : 1;
+    sal_Bool    bIsCaseSensitive;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
