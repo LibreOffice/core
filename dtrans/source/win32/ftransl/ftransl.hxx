@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftransl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 14:05:38 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,37 +104,15 @@
 
 struct FormatEntry
 {
-   FormatEntry(){};
+   FormatEntry();
 
-#if (defined(_MSC_VER) && (_MSC_VER < 1300))
-    FormatEntry(
+   FormatEntry(
         const char* mime_content_type,
         const char* human_presentable_name,
-        const char* native_format_name = NULL,
-        CLIPFORMAT std_clipboard_format_id = CF_INVALID,
-        com::sun::star::uno::Type const & cppu_type = getCppuType((const com::sun::star::uno::Sequence<sal_Int8> *) 0 )
-    )
-#else
-    FormatEntry(
-        const char* mime_content_type,
-        const char* human_presentable_name,
-        const char* native_format_name = NULL,
-        CLIPFORMAT std_clipboard_format_id = CF_INVALID,
-        ::com::sun::star::uno::Type const & cppu_type = ::getCppuType((const ::com::sun::star::uno::Sequence<sal_Int8> *) 0 )
-    )
-#endif
-    {
-        aDataFlavor.MimeType             = rtl::OUString::createFromAscii(mime_content_type);
-        aDataFlavor.HumanPresentableName = rtl::OUString::createFromAscii(human_presentable_name);
-        aDataFlavor.DataType             = cppu_type;
-
-        if (native_format_name)
-            aNativeFormatName = rtl::OUString::createFromAscii(native_format_name);
-        else
-            aNativeFormatName = rtl::OUString::createFromAscii(human_presentable_name);
-
-        aStandardFormatId = std_clipboard_format_id;
-    }
+        const char* native_format_name,
+        CLIPFORMAT std_clipboard_format_id,
+        com::sun::star::uno::Type const & cppu_type
+    );
 
     com::sun::star::datatransfer::DataFlavor aDataFlavor;
     rtl::OUString                            aNativeFormatName;
