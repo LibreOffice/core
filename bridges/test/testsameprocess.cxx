@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testsameprocess.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:29:58 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:45:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,24 +171,24 @@ int main( int argc, char *argv[] )
 
         Reference < XConnector > rConnector(
             createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Connector")),
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("connectr")),
+                             OUString( RTL_CONSTASCII_USTRINGPARAM("connector.uno" SAL_DLLEXTENSION)),
                              rSMgr ),
             UNO_QUERY );
 
         Reference < XAcceptor > rAcceptor(
             createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Acceptor")),
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("acceptor")),
+                             OUString( RTL_CONSTASCII_USTRINGPARAM("acceptor.uno" SAL_DLLEXTENSION)),
                              rSMgr ),
             UNO_QUERY );
 
         // just ensure that it is registered
-        createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.Bridge.iiop")),
-                         OUString( RTL_CONSTASCII_USTRINGPARAM("iiopbrdg")),
-                         rSMgr );
+//      createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.Bridge.iiop")),
+//                       OUString( RTL_CONSTASCII_USTRINGPARAM("iiopbrdg" SAL_DLLEXTENSION)),
+//                       rSMgr );
 
         Reference < XBridgeFactory > rFactory(
             createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.BridgeFactory")),
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("brdgfctr")),
+                             OUString( RTL_CONSTASCII_USTRINGPARAM("bridgefac.uno" SAL_DLLEXTENSION)),
                              rSMgr ),
             UNO_QUERY );
 
