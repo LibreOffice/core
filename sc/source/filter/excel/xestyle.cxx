@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:29:33 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #ifndef _ZFORMAT_HXX
 #include <svtools/zformat.hxx>
 #endif
-#ifndef _RTL_TENCINFO_H
-#include <rtl/tencinfo.h>
+#ifndef _SFX_PRINTER_HXX
+#include <sfx2/printer.hxx>
 #endif
 
 #ifndef SC_ITEMS_HXX
@@ -613,19 +613,14 @@ inline XclExpStream& operator<<( XclExpStream& rStrm, XclEscapement eEscapem )
 
 // ----------------------------------------------------------------------------
 
-XclExpFont::XclExpFont( const XclExpRoot& rRoot ) :
-    XclExpRecord( EXC_ID_FONT, 14 ),
+XclExpFont::XclExpFont( const XclExpRoot& rRoot, const Font& rFont ) :
+    XclExpRecord( EXC_ID_FONT ),
     XclExpRoot( rRoot ),
-    mnColorId( XclExpPalette::GetColorIdFromIndex( EXC_FONT_AUTOCOLOR ) ),
-    mnHash( 0 ),
-    mbHasColor( false )
+    maData( rFont )
 {
-}
+    SetColorId( GetPalette().InsertColor( rFont.GetColor(), xlColorCellText, EXC_FONT_AUTOCOLOR ) );
+    CalcHash();
 
-void XclExpFont::SetName( const String& rName )
-{
-    // #106246# substitute with MS fonts
-    maData.maName = XclTools::GetXclFontName( rName );
     sal_uInt32 nRecSize = maData.maName.Len();
     if( GetBiff() >= xlBiff8 )
         (nRecSize *= 2) += 1;
@@ -633,9 +628,14 @@ void XclExpFont::SetName( const String& rName )
     SetRecSize( nRecSize );
 }
 
-void XclExpFont::SetColor( const Color& rColor )
+XclExpFont::XclExpFont( const XclExpRoot& rRoot, const XclFontData& rFontData ) :
+    XclExpRecord( EXC_ID_FONT, 14 ),
+    XclExpRoot( rRoot ),
+    maData( rFontData ),
+    mnColorId( XclExpPalette::GetColorIdFromIndex( EXC_FONT_AUTOCOLOR ) ),
+    mbHasColor( false )
 {
-    SetColorId( GetPalette().InsertColor( rColor, xlColorCellText, EXC_FONT_AUTOCOLOR ) );
+    CalcHash();
 }
 
 void XclExpFont::SetColorId( sal_uInt32 nColorId )
@@ -644,25 +644,12 @@ void XclExpFont::SetColorId( sal_uInt32 nColorId )
     mbHasColor = true;
 }
 
-void XclExpFont::SetHeight( sal_Int32 nTwips )
+bool XclExpFont::Equals( const XclExpFont& rCmpFont ) const
 {
-    maData.mnHeight = static_cast< sal_uInt16 >( ::std::min( nTwips, 0x7FFFL ) );
-}
-
-void XclExpFont::SetFont( const Font& rFont )
-{
-    SetName( rFont.GetName() );
-    SetFamily( rFont.GetFamily() );
-    SetCharSet( rFont.GetCharSet() );
-    SetColor( rFont.GetColor() );
-    SetHeight( rFont.GetSize().Height() );
-    SetWeight( rFont.GetWeight() );
-    SetUnderline( rFont.GetUnderline() );
-    SetItalic( rFont.GetItalic() != ITALIC_NONE );
-    SetStrikeout( rFont.GetStrikeout() != STRIKEOUT_NONE );
-    SetOutline( !!rFont.IsOutline() );  // BOOL->bool
-    SetShadow( !!rFont.IsShadow() );    // BOOL->bool
-    CalcHash();
+    return
+        (mnHash == rCmpFont.mnHash) &&
+        (!mbHasColor || !rCmpFont.mbHasColor || (mnColorId == rCmpFont.mnColorId)) &&
+        (maData == rCmpFont.maData);
 }
 
 void XclExpFont::CalcHash()
@@ -680,85 +667,6 @@ void XclExpFont::CalcHash()
     if( maData.mbShadow ) mnHash += 31;
 }
 
-bool XclExpFont::operator==( const XclExpFont& rCmp ) const
-{
-    return
-        (mnHash == rCmp.mnHash) &&
-        (!mbHasColor || !rCmp.mbHasColor || (mnColorId == rCmp.mnColorId)) &&
-        (maData.mnHeight == rCmp.maData.mnHeight) &&
-        (maData.mnWeight == rCmp.maData.mnWeight) &&
-        (maData.meUnderline == rCmp.maData.meUnderline) &&
-        (maData.meEscapem == rCmp.maData.meEscapem) &&
-        (maData.mnFamily == rCmp.maData.mnFamily) &&
-        (maData.mnCharSet == rCmp.maData.mnCharSet) &&
-        (maData.mbItalic == rCmp.maData.mbItalic) &&
-        (maData.mbStrikeout == rCmp.maData.mbStrikeout) &&
-        (maData.mbOutline == rCmp.maData.mbOutline) &&
-        (maData.mbShadow == rCmp.maData.mbShadow) &&
-        (maData.maName == rCmp.maData.maName);
-}
-
-sal_uInt8 XclExpFont::GetXclFamily( FontFamily eFamily )
-{
-    switch( eFamily )
-    {
-        case FAMILY_DONTKNOW:   return EXC_FONTFAM_DONTKNOW;
-        case FAMILY_DECORATIVE: return EXC_FONTFAM_DECORATIVE;
-        case FAMILY_MODERN:     return EXC_FONTFAM_MODERN;
-        case FAMILY_ROMAN:      return EXC_FONTFAM_ROMAN;
-        case FAMILY_SCRIPT:     return EXC_FONTFAM_SCRIPT;
-        case FAMILY_SWISS:      return EXC_FONTFAM_SWISS;
-        case FAMILY_SYSTEM:     return EXC_FONTFAM_SYSTEM;
-    }
-    DBG_ERRORFILE( "XclExpFont::GetXclFamily - unknown font family" );
-    return EXC_FONTFAM_DONTKNOW;
-}
-
-sal_uInt8 XclExpFont::GetXclCharSet( rtl_TextEncoding eCharSet )
-{
-    return rtl_getBestWindowsCharsetFromTextEncoding(eCharSet);
-}
-
-sal_uInt16 XclExpFont::GetXclWeight( FontWeight eWeight )
-{
-    switch( eWeight )
-    {
-        case WEIGHT_DONTKNOW:   return EXC_FONTWGHT_DONTKNOW;
-        case WEIGHT_THIN:       return EXC_FONTWGHT_THIN;
-        case WEIGHT_ULTRALIGHT: return EXC_FONTWGHT_ULTRALIGHT;
-        case WEIGHT_LIGHT:      return EXC_FONTWGHT_LIGHT;
-        case WEIGHT_SEMILIGHT:  return EXC_FONTWGHT_SEMILIGHT;
-        case WEIGHT_NORMAL:     return EXC_FONTWGHT_NORMAL;
-        case WEIGHT_MEDIUM:     return EXC_FONTWGHT_MEDIUM;
-        case WEIGHT_SEMIBOLD:   return EXC_FONTWGHT_SEMIBOLD;
-        case WEIGHT_BOLD:       return EXC_FONTWGHT_BOLD;
-        case WEIGHT_ULTRABOLD:  return EXC_FONTWGHT_ULTRABOLD;
-        case WEIGHT_BLACK:      return EXC_FONTWGHT_BLACK;
-    }
-    return EXC_FONTWGHT_NORMAL;
-}
-
-XclUnderline XclExpFont::GetXclUnderline( FontUnderline eUnderl )
-{
-    switch( eUnderl )
-    {
-        case UNDERLINE_SINGLE:  return xlUnderlSingle;
-        case UNDERLINE_DOUBLE:  return xlUnderlDouble;
-        case UNDERLINE_DOTTED:  return xlUnderlSingleAcc;
-    }
-    return xlUnderlNone;
-}
-
-XclEscapement XclExpFont::GetXclEscapement( SvxEscapement eEscapem )
-{
-    switch( eEscapem )
-    {
-        case SVX_ESCAPEMENT_SUPERSCRIPT:    return xlEscSuper;
-        case SVX_ESCAPEMENT_SUBSCRIPT:      return xlEscSub;
-    }
-    return xlEscNone;
-}
-
 void XclExpFont::WriteBody( XclExpStream& rStrm )
 {
     sal_uInt16 nAttr = EXC_FONTATTR_NONE;
@@ -767,7 +675,7 @@ void XclExpFont::WriteBody( XclExpStream& rStrm )
     ::set_flag( nAttr, EXC_FONTATTR_OUTLINE, maData.mbOutline );
     ::set_flag( nAttr, EXC_FONTATTR_SHADOW, maData.mbShadow );
 
-    DBG_ASSERT( maData.maName < 256, "XclExpFont::WriteBody - font name too long" );
+    DBG_ASSERT( maData.maName.Len() < 256, "XclExpFont::WriteBody - font name too long" );
     XclExpString aFontName;
     if( GetBiff() < xlBiff8 )
         aFontName.AssignByte( maData.maName, GetCharSet(), EXC_STR_8BITLENGTH );
@@ -793,9 +701,6 @@ XclExpFontBuffer::XclExpFontBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     mnXclMaxCount( 0 )
 {
-    // currently always using Arial/10
-    SetCharWidth( 110 );
-
     switch( GetBiff() )
     {
         case xlBiff4:   mnXclMaxCount = EXC_FONT_MAXCOUNT4; break;
@@ -823,6 +728,8 @@ sal_uInt16 XclExpFontBuffer::Insert( XclExpFont*& rpFont, bool bAppFont )
         {
             maFontList.Replace( rpFont, EXC_FONT_APP );
             nIndex = EXC_FONT_APP;
+            // #108487# set width of '0' character for column width export
+            SetCharWidth( rpFont->GetFontData() );
         }
         else
         {
@@ -858,8 +765,7 @@ sal_uInt16 XclExpFontBuffer::Insert( XclExpFont*& rpFont, bool bAppFont )
 
 sal_uInt16 XclExpFontBuffer::Insert( const Font& rFont, bool bAppFont )
 {
-    XclExpFont* pNewFont = new XclExpFont( GetRoot() );
-    pNewFont->SetFont( rFont );
+    XclExpFont* pNewFont = new XclExpFont( GetRoot(), rFont );
     return Insert( pNewFont, bAppFont );
 }
 
@@ -884,35 +790,34 @@ void XclExpFontBuffer::Save( XclExpStream& rStrm )
 
 void XclExpFontBuffer::InitDefaultFonts()
 {
-    XclExpFont aFont( GetRoot() );
-    aFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Arial" ) ) );
-    aFont.SetFamily( FAMILY_DONTKNOW );
-    aFont.SetCharSet( RTL_TEXTENCODING_DONTKNOW );
-    aFont.SetColor( Color( COL_AUTO ) );
-    aFont.SetHeight( 200 );
-    aFont.SetWeight( WEIGHT_NORMAL );
+    XclFontData aFontData;
+    aFontData.maName.AssignAscii( "Arial" );
+    aFontData.SetScFamily( FAMILY_DONTKNOW );
+    aFontData.SetScCharSet( RTL_TEXTENCODING_DONTKNOW );
+    aFontData.SetScHeight( 200 );   // 200 twips = 10 pt
+    aFontData.SetScWeight( WEIGHT_NORMAL );
 
     switch( GetBiff() )
     {
         case xlBiff5:
         case xlBiff7:
-            maFontList.Append( new XclExpFont( aFont ) );
-            aFont.SetWeight( WEIGHT_BOLD );
-            maFontList.Append( new XclExpFont( aFont ) );
-            aFont.SetWeight( WEIGHT_NORMAL );
-            aFont.SetItalic( true );
-            maFontList.Append( new XclExpFont( aFont ) );
-            aFont.SetWeight( WEIGHT_BOLD );
-            maFontList.Append( new XclExpFont( aFont ) );
-            aFont.SetWeight( WEIGHT_NORMAL );
-            aFont.SetItalic( false );
-            maFontList.Append( new XclExpFont( aFont ) );
+            maFontList.Append( new XclExpFont( GetRoot(), aFontData ) );
+            aFontData.SetScWeight( WEIGHT_BOLD );
+            maFontList.Append( new XclExpFont( GetRoot(), aFontData ) );
+            aFontData.SetScWeight( WEIGHT_NORMAL );
+            aFontData.SetScPosture( ITALIC_NORMAL );
+            maFontList.Append( new XclExpFont( GetRoot(), aFontData ) );
+            aFontData.SetScWeight( WEIGHT_BOLD );
+            maFontList.Append( new XclExpFont( GetRoot(), aFontData ) );
+            aFontData.SetScWeight( WEIGHT_NORMAL );
+            aFontData.SetScPosture( ITALIC_NONE );
+            maFontList.Append( new XclExpFont( GetRoot(), aFontData ) );
         break;
         case xlBiff8:
-            maFontList.Append( new XclExpFont( aFont ) );
-            maFontList.Append( new XclExpFont( aFont ) );
-            maFontList.Append( new XclExpFont( aFont ) );
-            maFontList.Append( new XclExpFont( aFont ) );
+            maFontList.Append( new XclExpFont( GetRoot(), aFontData ) );
+            maFontList.Append( new XclExpFont( GetRoot(), aFontData ) );
+            maFontList.Append( new XclExpFont( GetRoot(), aFontData ) );
+            maFontList.Append( new XclExpFont( GetRoot(), aFontData ) );
         break;
         default:
             DBG_ERROR_BIFF();
@@ -930,7 +835,7 @@ sal_uInt32 XclExpFontBuffer::Find( const XclExpFont& rFont )
 {
     sal_uInt32 nCount = maFontList.Count();
     for( sal_uInt32 nFontIx = 1; nFontIx < nCount; ++nFontIx )
-        if( *maFontList.GetObject( nFontIx ) == rFont )
+        if( maFontList.GetObject( nFontIx )->Equals( rFont ) )
             return nFontIx;
     return LIST_ENTRY_NOTFOUND;
 }
@@ -2017,9 +1922,18 @@ void XclExpXFBuffer::InsertDefaultRecords()
     maPredefined.clear();
     maPredefined.resize( EXC_XF_USEROFFSET, true );
 
-    XclExpDefaultXF* pDefStyle = new XclExpDefaultXF( GetRoot(), false );
-    pDefStyle->SetAllUsedFlags( true );
-    InsertDefaultStyle( pDefStyle, EXC_STYLE_NORMAL );          // Normal
+    if( SfxStyleSheetBase* pDefStyleSheet = GetStyleSheetPool().Find( ScGlobal::GetRscString( STR_STYLENAME_STANDARD ), SFX_STYLE_FAMILY_PARA ) )
+    {
+        maXFList.Append( new XclExpXF( GetRoot(), *pDefStyleSheet ) );
+        maPredefined[ EXC_STYLE_NORMAL ] = false;
+    }
+    else
+    {
+        DBG_ERRORFILE( "XclExpXFBuffer::InsertDefaultRecords - Default style not found" );
+        XclExpDefaultXF* pDefStyle = new XclExpDefaultXF( GetRoot(), false );
+        pDefStyle->SetAllUsedFlags( true );
+        InsertDefaultStyle( pDefStyle, EXC_STYLE_NORMAL );
+    }
 
     XclExpDefaultXF aLevelStyle( GetRoot(), false );
     aLevelStyle.SetFont( 1 );
