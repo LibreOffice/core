@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdevstate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:05 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,25 +72,31 @@
 #ifndef _DRAFTS_COM_SUN_STAR_RENDERING_STRINGCONTEXT_HPP__
 #include <drafts/com/sun/star/rendering/StringContext.hpp>
 #endif
-
 #ifndef _DRAFTS_COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
 #include <drafts/com/sun/star/rendering/RenderState.hpp>
 #endif
-
 #ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP__
 #include <drafts/com/sun/star/rendering/XPolyPolygon2D.hpp>
 #endif
-
 #ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCANVASFONT_HPP__
 #include <drafts/com/sun/star/rendering/XCanvasFont.hpp>
 #endif
-
 #ifndef _DRAFTS_COM_SUN_STAR_RENDERING_TEXTDIRECTION_HPP__
 #include <drafts/com/sun/star/rendering/TextDirection.hpp>
 #endif
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+#ifndef _BGFX_POLYGON_B2DPOLYPOLGON_HXX
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#endif
+
+#ifndef _VCL_FNTSTYLE_HXX
+#include <vcl/fntstyle.hxx>
+#endif
+#ifndef _VCL_VCLENUM_HXX
+#include <vcl/vclenum.hxx>
 #endif
 
 
@@ -101,7 +107,31 @@ namespace cppcanvas
         struct OutDevState
         {
             OutDevState() :
-                textDirection( ::drafts::com::sun::star::rendering::TextDirection::LEFT_TO_RIGHT ),
+                clip(),
+                xClipPoly(),
+
+                lineColor(),
+                fillColor(),
+                textColor(),
+                textFillColor(),
+                textLineColor(),
+
+                xFont(),
+                transform(),
+                fontTransform(),
+
+                textEmphasisMarkStyle(EMPHASISMARK_NONE),
+                textDirection(::drafts::com::sun::star::rendering::TextDirection::WEAK_LEFT_TO_RIGHT),
+                textAlignment(0), // TODO(Q2): Synchronize with implrenderer
+                                  // and possibly new rendering::TextAlignment
+                textReliefStyle(RELIEF_NONE),
+                textUnderlineStyle(UNDERLINE_NONE),
+                textStrikeoutStyle(STRIKEOUT_NONE),
+
+                isTextOutlineModeSet( false ),
+                isTextEffectShadowSet( false ),
+                isTextWordUnderlineSet( false ),
+
                 isLineColorSet( false ),
                 isFillColorSet( false ),
                 isTextFillColorSet( false ),
@@ -111,16 +141,34 @@ namespace cppcanvas
                 fontTransform.identity();
             }
 
+            ::basegfx::B2DPolyPolygon                                                               clip;
             ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XPolyPolygon2D > xClipPoly;
+
             ::com::sun::star::uno::Sequence< double >                                               lineColor;
             ::com::sun::star::uno::Sequence< double >                                               fillColor;
             ::com::sun::star::uno::Sequence< double >                                               textColor;
             ::com::sun::star::uno::Sequence< double >                                               textFillColor;
             ::com::sun::star::uno::Sequence< double >                                               textLineColor;
+
+            /** Current font.
+
+                @attention Beware, this member can be NULL, and
+                nevertheless text output is generated.
+             */
             ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCanvasFont >    xFont;
-            sal_Int8                                                                                textDirection;
             ::basegfx::B2DHomMatrix                                                                 transform;
             ::basegfx::B2DHomMatrix                                                                 fontTransform;
+
+            sal_uInt16                                                                              textEmphasisMarkStyle;
+            sal_Int8                                                                                textDirection;
+            sal_Int8                                                                                textAlignment;
+            sal_Int8                                                                                textReliefStyle;
+            sal_Int8                                                                                textUnderlineStyle;
+            sal_Int8                                                                                textStrikeoutStyle;
+
+            bool                                                                                    isTextOutlineModeSet;
+            bool                                                                                    isTextEffectShadowSet;
+            bool                                                                                    isTextWordUnderlineSet;
 
             bool                                                                                    isLineColorSet;
             bool                                                                                    isFillColorSet;
