@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slotadd.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:43:09 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,6 +307,7 @@
 #include <svx/charrotateitem.hxx>
 #include <svx/charscaleitem.hxx>
 #include <svx/postattr.hxx>
+#include <sfx2/frame.hxx>
 
 #ifndef PROFILE
 // Code zum Initialisieren von Statics im eigenen Code-Segment
