@@ -6,9 +6,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: localize.pl,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-30 17:30:01 $
+#   last change: $Author: pjunck $ $Date: 2004-11-02 16:03:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,19 @@ use File::Temp;
 # ver 1.1
 #
 #### module lookup
-use lib ("$ENV{SOLARENV}/bin/modules", "$ENV{COMMON_ENV_TOOLS}/modules");
+#use lib ("$ENV{SOLARENV}/bin/modules", "$ENV{COMMON_ENV_TOOLS}/modules");
+
+#### module lookup
+# OOo conform
+my @lib_dirs;
+BEGIN {
+    if ( !defined($ENV{SOLARENV}) ) {
+        die "No environment found (environment variable SOLARENV is undefined)";
+    }
+    push(@lib_dirs, "$ENV{SOLARENV}/bin/modules");
+    push(@lib_dirs, "$ENV{COMMON_ENV_TOOLS}/modules") if defined($ENV{COMMON_ENV_TOOLS});
+}
+use lib (@lib_dirs);
 
 #### globals ####
 my $sdffile = '';
@@ -111,6 +123,8 @@ sub splitfile{
 
     my $lastFile        = '';
     my $currentFile     = '';
+    my $cur_sdffile     = '';
+    my $last_sdffile    = '';
     my $delim;
     my $badDelim;
     my $start           = 'TRUE';
@@ -134,24 +148,34 @@ sub splitfile{
             my $lang           = defined $12 ? $12 : '';
             my $text           = defined $14 ? $14 : '';
             my $plattform      = defined $10 ? $10 : '';
+            my $helpid         = defined $9 ? $9 : '';
 
             chomp( $line );
             $currentFile  = $srcpath . '\\' . $prj . '\\' . $file;
             if ( $WIN ) { $currentFile  =~ s/\//\\/g; }
             else        { $currentFile  =~ s/\\/\//g; }
 
+            $cur_sdffile = $currentFile;
+            #if( $cur_sdffile =~ /\.$file_types[\s]*$/ ){
+                if( $WIN ) { $cur_sdffile =~ s/\\[^\\]*\.$file_types[\s]*$/\\localize.sdf/; }
+                else       { $cur_sdffile =~ s/\/[^\/]*\.$file_types[\s]*$/\/localize.sdf/; }
+            #}
+
             if( $start ){
                 $start='';
-                $lastFile = $currentFile;
+                $lastFile = $currentFile; # ?
+                $last_sdffile = $cur_sdffile;
             }
             if( ( $lang eq "en-US" || $lang eq "de") ){}
-            elsif( $currentFile eq $lastFile ){
-                $block{ $prj.$lang.$gid.$lid.$file.$type } =  $line ;
+#            elsif( $currentFile eq $lastFile ){
+            elsif( $cur_sdffile eq $last_sdffile ){
+                $block{ $prj.$lang.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
             }else{
                 writesdf( $lastFile , \%block );
-                $lastFile = $currentFile;
+                $lastFile = $currentFile; #?
+                $last_sdffile = $cur_sdffile;
                 %block = ();
-                if( !( $lang eq "en-US" || $lang eq "de") ){  $block{ $prj.$lang.$gid.$lid.$file.$type.$plattform } =  $line ; }
+                if( !( $lang eq "en-US" || $lang eq "de") ){  $block{ $prj.$lang.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ; }
             }
         } #else { print STDOUT "splitfile REGEX kaputt\n";}
 
@@ -159,6 +183,7 @@ sub splitfile{
     writesdf( $lastFile , \%block );
     %block = ();
     close( MYFILE );
+
 }
 #########################################################
 
@@ -192,15 +217,16 @@ sub writesdf{
             my $lid            = defined $8 ? $8 : '';
             my $lang           = defined $12 ? $12 : '';
             my $plattform      = defined $10 ? $10 : '';
-                 chomp( $line );
-                 $index{ $prj.$lang.$gid.$lid.$file.$type.$plattform } =  $line ;
+            my $helpid         = defined $9 ? $9 : '';
+
+            chomp( $line );
+                 $index{ $prj.$lang.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
          } #else { print STDOUT "writesdf REGEX kaputt $_\n";}
 
         }
         close( DESTFILE );
     }
     #### Copy new strings
-
     my @mykeys = keys( %{ $blockhash_ref } );
     my $isDirty = "FALSE";
     foreach my $key( @mykeys ){
@@ -230,6 +256,8 @@ sub writesdf{
             print STDERR "Can't open/create '$localizeFile'";
         }
     }
+
+    sort_outfile( $localizeFile );
 }
 
 #########################################################
@@ -237,7 +265,7 @@ sub collectfiles{
     print STDOUT "### Localize\n";
     my @sdfparticles;
     my $localizehash_ref;
-    my ( $bAll , $bUseLocalize, $langhash_ref ) = parseLanguages();
+    my ( $bAll , $bUseLocalize, $langhash_ref , $bHasSourceLanguage ) = parseLanguages();
     # Enable autoflush on STDOUT
     # $| = 1;
     STDOUT->autoflush( 1 );
@@ -266,15 +294,18 @@ sub collectfiles{
         my $command = "";
         my $args    = "";
         if( $WIN eq "TRUE" ){
-            if( $ENV{SOLARVER} ){
-                $command = "$ENV{SOLARVERSION}\\$ENV{INPATH}\\bin.$ENV{UPDMINOR}\\localize_sl.exe";
-            }else{ # Not set -> OOo environment . Very optimistic!
-                $command = "guw.pl $ENV{SOLARVERSION}\\$ENV{INPATH}\\bin.$ENV{UPDMINOR}\\localize_sl.exe";
-            }
+            if ( $ENV{UPDMINOR} ){
+                $command = "$ENV{WRAPCMD} $ENV{SOLARVERSION}\\$ENV{INPATH}\\bin.$ENV{UPDMINOR}\\localize_sl.exe";
+                } else {
+               $command = "$ENV{WRAPCMD} $ENV{SOLARVERSION}\\$ENV{INPATH}\\bin\\localize_sl.exe";
+           }
         }
         else{
-            $command = "$ENV{SOLARVERSION}/$ENV{INPATH}/bin.$ENV{UPDMINOR}/localize_sl";
-            # Test $ENV{UPDMINOR} before concat
+            if ( $ENV{UPDMINOR} ) {
+                $command = "$ENV{SOLARVERSION}/$ENV{INPATH}/bin.$ENV{UPDMINOR}/localize_sl";
+            } else {
+                $command = "$ENV{SOLARVERSION}/$ENV{INPATH}/bin/localize_sl";
+            }
         }
       # -e
         if ( -x $command ){
@@ -352,13 +383,14 @@ sub collectfiles{
                             my $lid            = defined $8 ? $8 : '';
                             my $lang           = defined $12 ? $12 : '';
                             my $plattform      = defined $10 ? $10 : '';
+                            my $helpid         = defined $9 ? $9 : '';
 
                             chomp( $line );
 
                             if ( $lang eq $cur_lang ){
                                 # Overwrite fallback strings with collected strings
                                 if( $cur_lang ne "de" || $cur_lang ne "en-US" ){
-                                     $fallbackhashhash_ref->{ $cur_lang }{ $prj.$gid.$lid.$file.$type.$plattform } =  $line ;
+                                     $fallbackhashhash_ref->{ $cur_lang }{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
                                }
 
                             }
@@ -435,56 +467,144 @@ sub collectfiles{
     close DESTFILE;
     close LOCALIZEPARTICLE;
     close ALLPARTICLES_MERGED;
-#    unlink $localizeSDF , $particleSDF_merged ,  $my_localize_log;
+
+    #print STDOUT "DBG: \$localizeSDF $localizeSDF \$particleSDF_merged $particleSDF_merged\n";
+    unlink $localizeSDF , $particleSDF_merged ,  $my_localize_log;
 
     sort_outfile( $outputfile );
+    remove_obsolete( $outputfile ) , if $bHasSourceLanguage ne "";
     }
+
 #########################################################
-   sub sort_outfile{
+sub remove_obsolete{
+    my $outfile = shift;
+    my @lines;
+    my $enusleftpart;
+    my @good_lines;
+
+    print STDOUT "### Removing obsolete strings\n";
+
+    # Kick out all strings without en-US reference
+    if ( open ( SORTEDFILE , "< $outfile" ) ){
+        while( <SORTEDFILE> ){
+            if( /$sdf_regex/ ){
+                my $line           = defined $_ ? $_ : '';
+                my $language       = defined $12 ? $12 : '';
+                my $prj            = defined $3 ? $3 : '';
+                my $file           = defined $4 ? $4 : '';
+                my $type           = defined $6 ? $6 : '';
+                my $gid            = defined $7 ? $7 : '';
+                my $lid            = defined $8 ? $8 : '';
+                my $plattform      = defined $10 ? $10 : '';
+                my $helpid         = defined $9 ? $9 : '';
+
+                my $leftpart = $prj.$gid.$lid.$file.$type.$plattform.$helpid;
+
+                if( $language eq "en-US" ){                 # source string found, 1. entry
+                    $enusleftpart = $leftpart;
+                    push @good_lines , $line;
+                }else{
+                    if( !defined $enusleftpart or !defined $leftpart ){
+                        print STDERR "BADLINE: $line\n";
+                        print STDERR "\$enusleftpart = $enusleftpart\n";
+                        print STDERR "\$leftpart = $leftpart\n";
+                    }
+                    if( $enusleftpart eq $leftpart ){   # matching language
+                        push @good_lines , $line;
+                    }
+                    #else{
+                    #    print STDERR "OUT:  \$enusleftpart=$enusleftpart \$leftpart=$leftpart \$line=$line\n";
+                    #}
+                }
+            }
+        }
+        close SORTEDFILE;
+    }
+
+    # Write file
+    if ( open ( SORTEDFILE , "> $outfile" ) ){
+        foreach my $newline ( @good_lines ) {
+            print SORTEDFILE $newline;
+        }
+        close SORTEDFILE;
+    }
+}
+#########################################################
+sub sort_outfile{
         my $outfile = shift;
         print STDOUT "### Sorting ... $outfile\n";
         my @lines;
         my @sorted_lines;
-        if ( open ( SORTEDFILE , "< $outputfile" ) ){
+
+
+        #if ( open ( SORTEDFILE , "< $outputfile" ) ){
+        if ( open ( SORTEDFILE , "< $outfile" ) ){
+
             while ( <SORTEDFILE> ){
-                push @lines , $_;
+                push @lines , $_ ;
             }
             close SORTEDFILE;
-
             @sorted_lines = sort {
-                my $xa_left_part     = "";
                 my $xa_lang          = "";
+                my $xa_left_part    = "";
                 my $xa_right_part    = "";
                 my $xa_timestamp     = "";
-                my $xb_left_part     = "";
                 my $xb_lang          = "";
+                my $xb_left_part    = "";
                 my $xb_right_part    = "";
                 my $xb_timestamp     = "";
                 my $xa               = "";
                 my $xb               = "";
+                my @alist;
+                my @blist;
 
                 if( $a=~ /$sdf_regex/ ){
                     $xa_left_part       = defined $2 ? $2 : '';
                     $xa_lang           = defined $12 ? $12 : '';
-                    $xa_right_part      = defined $13 ? $13 : '';
+                    $xa_right_part     = defined $13 ? $13 : '';
+                    $xa_left_part = remove_last_column( $xa_left_part );
+
                 }
                 if( $b=~ /$sdf_regex/ ){
                     $xb_left_part       = defined $2 ? $2 : '';
                     $xb_lang           = defined $12 ? $12 : '';
-                    $xb_right_part      = defined $13 ? $13 : '';
+                    $xb_right_part     = defined $13 ? $13 : '';
+                    $xb_left_part = remove_last_column( $xb_left_part );
+
+
                 }
-                $xa_left_part cmp $xb_left_part ||
-                $xa_lang cmp $xb_lang           ||
-                $xa_right_part cmp $xb_right_part
+                if( (  $xa_left_part cmp $xb_left_part ) == 0 ){         # Left part equal
+                     if( ( $xa_lang cmp $xb_lang ) == 0 ){               # Lang equal
+                         return ( $xa_right_part cmp $xb_right_part );   # Right part compare
+                    }
+                    elsif( $xa_lang eq "en-US" ) { return -1; }        # en-US wins
+                    elsif( $xb_lang eq "en-US" ) { return 1;  }        # en-US wins
+                    else { return $xa_lang cmp $xb_lang; }             # lang compare
+                }
+                else {
+                    return $xa_left_part cmp $xb_left_part;        # Left part compare
+                }
+                #$xa_left_part cmp $xb_left_part ||
+                #$xa_lang cmp $xb_lang           ||
+                #$xa_right_part cmp $xb_right_part
 
             } @lines;
-            if ( open ( SORTEDFILE , "> $outputfile" ) ){
+#            if ( open ( SORTEDFILE , "> $outputfile" ) ){
+            if ( open ( SORTEDFILE , "> $outfile" ) ){
                 foreach my $newline ( @sorted_lines ) {
                     print SORTEDFILE $newline;
+                    #print STDOUT $newline;
+                }
             }
             close SORTEDFILE;
         }
-    }
+}
+#########################################################
+sub remove_last_column{
+    my $string                  = shift;
+    my @alist = split ( "\t" , $string );
+    pop @alist;
+    return join( "\t" , @alist );
 }
 
 #########################################################
@@ -532,7 +652,6 @@ sub fetch_fallback{
     remove_duplicates( \@langlist );
     foreach  $cur_lang ( @langlist ){
         if( $cur_lang eq "de" || $cur_lang eq "en-US" ){
-            #print STDOUT "DBG: Loading $cur_lang into Fallbackhash\n";
             read_file_fallback( $localizeSDF , $cur_lang , \%fallbackhashhash );
         }
     }
@@ -587,9 +706,10 @@ sub read_file{
             my $lid            = defined $8 ? $8 : '';
             my $plattform      = defined $10 ? $10 : '';
             my $lang           = defined $12 ? $12 : '';
+            my $helpid         = defined $9 ? $9 : '';
 
             foreach my $isolang ( keys ( %{ $langhash_ref } ) ){
-                if( $isolang=~ /$lang/i || $isolang=~ /all/i ) { $block{$prj.$gid.$lid.$file.$type.$plattform } =  $line ; }
+                if( $isolang=~ /$lang/i || $isolang=~ /all/i ) { $block{$prj.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ; }
             }
         }
     }
@@ -617,12 +737,11 @@ sub read_file_fallbacks{
             my $lid            = defined $8 ? $8 : '';
             my $lang           = defined $12 ? $12 : '';
             my $plattform      = defined $10 ? $10 : '';
+            my $helpid         = defined $9 ? $9 : '';
 
             chomp( $line );
             foreach my $isolang ( @{$isolanglist_ref}  ){
-                if( $isolang=~ /$lang/i ) { $fallbackhashhash_ref->{ $isolang }{ $prj.$gid.$lid.$file.$type.$plattform } =  $line ;
-                    # aaaaa
-                    #print STDOUT "$line\n";
+                if( $isolang=~ /$lang/i ) { $fallbackhashhash_ref->{ $isolang }{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
                 }
             }
         }
@@ -653,9 +772,7 @@ sub read_file_fallback{
             my $plattform      = defined $10 ? $10 : '';
 
             chomp( $line );
-            if( $isolang=~ /$lang/i ) { $fallbackhashhash_ref->{ $isolang }{ $prj.$gid.$lid.$file.$type.$plattform } =  $line ;
-                    # aaaaaa
-                    #print STDOUT "{ $isolang }{ $prj.$gid.$lid.$file.$type.$plattform->$plattform<- }='$line'\n";
+            if( $isolang=~ /$lang/i ) { $fallbackhashhash_ref->{ $isolang }{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
             }
         }
     }
@@ -666,6 +783,7 @@ sub parseLanguages{
 
     my $bAll;
     my $bUseLocalize;
+    my $bHasSourceLanguage="";
     my %langhash;
     my $iso="";
     my $fallback="";
@@ -673,6 +791,7 @@ sub parseLanguages{
     #### -l all
     if(   $languages=~ /all/ ){
         $bAll = "TRUE";
+        $bHasSourceLanguage = "TRUE";
     }
     ### -l fr=de,de
     elsif( $languages=~ /.*,.*/ ){
@@ -684,6 +803,9 @@ sub parseLanguages{
 
                 if( ( $iso && $iso=~ /(de|en-US)/i )  || ( $fallback && $fallback=~ /(de|en-US)/i ) ) {
                     $bUseLocalize = "TRUE";
+                }
+                if( ( $iso && $iso=~ /(en-US)/i ) ) {
+                    $bHasSourceLanguage = "TRUE";
                 }
              if( $fallback ) { $langhash{ $iso } = $fallback;   }
              else            { $langhash{ $iso } = "";          }
@@ -698,12 +820,17 @@ sub parseLanguages{
 
             if( ( $iso && $iso=~ /(de|en-US)/i )  || ( $fallback && $fallback=~ /(de|en-US)/i ) ) {
                 $bUseLocalize = "TRUE";
+
             }
+            if( ( $iso && $iso=~ /(en-US)/i )  ) {
+                $bHasSourceLanguage = "TRUE";
+            }
+
              if( $fallback ) { $langhash{ $iso } = $fallback;   }
              else            { $langhash{ $iso } = "";          }
         }
     }
-    return ( $bAll ,  $bUseLocalize , \%langhash );
+    return ( $bAll ,  $bUseLocalize , \%langhash , $bHasSourceLanguage );
 }
 
 #########################################################
