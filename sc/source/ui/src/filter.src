@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 15:02:41 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:06:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1482,7 +1482,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ russian ] = "Áåç ïîâòîğåíèé";
         Text[ polish ] = "Bez duplikatów";
         Text[ japanese ] = "d•¡‚È‚µ(~N)";
-        Text[ chinese_traditional ] = "¤£¥Í¦¨´_¥ó(~N)";
+        Text[ chinese_traditional ] = "¤£²£¥Í³Æ¥÷(~N)";
         Text[ arabic ] = "ÈÏæä äõÓÎ ØÈŞ ÇáÃÕá";
         Text[ greek ] = "¼÷é äéğëÜ óôïé÷åßá";
         Text[ korean ] = "Áßº¹ Çã¿ë ¾ÈµÊ(~N)";
@@ -1928,7 +1928,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ russian ] = "Áåç ïîâòîğåíèé";
         Text[ polish ] = "Bez duplikatów";
         Text[ japanese ] = "d•¡‚È‚µ(~N)";
-        Text[ chinese_traditional ] = "¤£¥Í¦¨´_¥ó(~N)";
+        Text[ chinese_traditional ] = "¤£²£¥Í³Æ¥÷(~N)";
         Text[ arabic ] = "ÈÏæä äõÓÎ ØÈŞ ÇáÃÕá";
         Text[ greek ] = "¼÷é äéğëÜ óôïé÷åßá";
         Text[ korean ] = "Áßº¹ Çã¿ë ¾ÈµÊ(~N)";
@@ -3352,7 +3352,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ russian ] = "Áåç ïîâòîğåíèé";
         Text[ polish ] = "Bez duplikatów";
         Text[ japanese ] = "d•¡‚È‚µ(~N)";
-        Text[ chinese_traditional ] = "¤£¥Í¦¨´_¥ó(~N)";
+        Text[ chinese_traditional ] = "¤£²£¥Í³Æ¥÷(~N)";
         Text[ arabic ] = "ÈÏæä äõÓÎ ØÈŞ ÇáÃÕá";
         Text[ greek ] = "¼÷é äéğëÜ óôïé÷åßá";
         Text[ korean ] = "Áßº¹ Çã¿ë ¾ÈµÊ(~N)";
