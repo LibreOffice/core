@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:50:38 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4340,6 +4340,9 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     GetView().GetViewFrame()->GetDispatcher()->Execute(nSlot);
             }
         }
+        break;
+        case COMMAND_HANGUL_HANJA_CONVERSION :
+            GetView().GetViewFrame()->GetDispatcher()->Execute(SID_HANGUL_HANJA_CONVERSION);
         break;
 
 #ifdef DBG_UTIL
