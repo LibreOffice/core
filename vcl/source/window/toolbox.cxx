@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: oj $ $Date: 2001-03-14 13:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3128,7 +3128,11 @@ BOOL ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, BOOL bCancel )
                     bHighlight = 2;
                 else
                     bHighlight = FALSE;
-                ImplDrawItem( mnCurPos, bHighlight );
+                // Get current pos for the case that items are inserted/removed
+                // in the toolBox
+                mnCurPos = GetItemPos( mnCurItemId );
+                if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
+                    ImplDrawItem( mnCurPos, bHighlight );
             }
         }
 
