@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: mtg $ $Date: 2001-03-21 14:57:21 $
+#   last change: $Author: jp $ $Date: 2001-06-13 11:48:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,7 @@ PDBTARGET=core_pch
 PROJECTPCHSOURCE=..$/core_1st$/core_pch
 
 # --- Settings -----------------------------------------------------
-ENABLE_EXCEPTIONS=TRUE
+#ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :	$(PRJ)$/inc$/swpre.mk
 .INCLUDE :	settings.mk
@@ -116,7 +116,36 @@ SLOFILES =	\
         $(SLO)$/unotbl.obj \
         $(SLO)$/unotext.obj
 
+EXCEPTIONSFILES=	\
+        $(SLO)$/SwXTextDefaults.obj\
+    $(SLO)$/unobkm.obj\
+    $(SLO)$/unoclbck.obj\
+    $(SLO)$/unoevent.obj\
+    $(SLO)$/unocrsrhelper.obj\
+    $(SLO)$/unoevtlstnr.obj\
+    $(SLO)$/unoftn.obj\
+    $(SLO)$/unorefmk.obj\
+    $(SLO)$/unosect.obj\
+    $(SLO)$/unosett.obj\
+    $(SLO)$/unocoll.obj\
+    $(SLO)$/unodraw.obj\
+    $(SLO)$/unofield.obj\
+    $(SLO)$/unoframe.obj\
+    $(SLO)$/unoidx.obj\
+    $(SLO)$/unoobj.obj\
+    $(SLO)$/unoobj2.obj\
+    $(SLO)$/unoparagraph.obj\
+    $(SLO)$/unoport.obj\
+    $(SLO)$/unoportenum.obj\
+    $(SLO)$/unoredline.obj\
+    $(SLO)$/unoredlines.obj\
+    $(SLO)$/unosrch.obj\
+    $(SLO)$/unostyle.obj\
+    $(SLO)$/unotbl.obj \
+    $(SLO)$/unotext.obj
+
 # --- Targets -------------------------------------------------------
+
 
 .INCLUDE :	target.mk
 

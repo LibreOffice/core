@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2001-05-29 08:26:41 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1454,7 +1454,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
         {
             SwNumFmt aFmt(aNumRule.Get( i ));
             if(sNewCharStyleNames[i].Len() &&
-                COMPARE_EQUAL != sNewCharStyleNames[i].CompareToAscii(UNO_NAME_CHARACTER_FORMAT_NONE) &&
+                !sNewCharStyleNames[i].EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_CHARACTER_FORMAT_NONE)) &&
                    (!aFmt.GetCharFmt() ||
                     aFmt.GetCharFmt()->GetName()!= sNewCharStyleNames[i] ))
             {
@@ -1606,17 +1606,17 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::getNumberingRuleByIndex(
 
     //leftmargin
     sal_Int32 nINT32 = TWIP_TO_MM100(rFmt.GetAbsLSpace());
-    pData = new PropValData((void*)&nINT32, UNO_NAME_LEFT_MARGIN, ::getCppuType((const sal_Int32*)0));
+    pData = new PropValData((void*)&nINT32, SW_PROP_NAME_STR(UNO_NAME_LEFT_MARGIN), ::getCppuType((const sal_Int32*)0));
     aPropertyValues.Insert(pData, aPropertyValues.Count());
 
     //chartextoffset
     nINT32 = TWIP_TO_MM100(rFmt.GetCharTextDistance());
-    pData = new PropValData((void*)&nINT32, UNO_NAME_SYMBOL_TEXT_DISTANCE, ::getCppuType((const sal_Int32*)0));
+    pData = new PropValData((void*)&nINT32, SW_PROP_NAME_STR(UNO_NAME_SYMBOL_TEXT_DISTANCE), ::getCppuType((const sal_Int32*)0));
     aPropertyValues.Insert(pData, aPropertyValues.Count());
 
     //firstlineoffset
     nINT32 = TWIP_TO_MM100(rFmt.GetFirstLineOffset());
-    pData = new PropValData((void*)&nINT32, UNO_NAME_FIRST_LINE_OFFSET, ::getCppuType((const sal_Int32*)0));
+    pData = new PropValData((void*)&nINT32, SW_PROP_NAME_STR(UNO_NAME_FIRST_LINE_OFFSET), ::getCppuType((const sal_Int32*)0));
     aPropertyValues.Insert(pData, aPropertyValues.Count());
 
     //
@@ -1653,7 +1653,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::getNumberingRuleByIndex(
             {
                  awt::FontDescriptor aDesc;
                 SvxUnoFontDescriptor::ConvertFromFont( *pFont, aDesc );
-                pData = new PropValData((void*)&aDesc, UNO_NAME_BULLET_FONT, ::getCppuType((const awt::FontDescriptor*)0));
+                pData = new PropValData((void*)&aDesc, SW_PROP_NAME_STR(UNO_NAME_BULLET_FONT), ::getCppuType((const awt::FontDescriptor*)0));
                 aPropertyValues.Insert(pData, aPropertyValues.Count());
             }
         }
@@ -1669,7 +1669,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::getNumberingRuleByIndex(
             }
             else
                 aUString = aEmptyStr;
-            pData = new PropValData((void*)&aUString, UNO_NAME_GRAPHIC_URL, ::getCppuType((const OUString*)0));
+            pData = new PropValData((void*)&aUString, SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_URL), ::getCppuType((const OUString*)0));
             aPropertyValues.Insert(pData, aPropertyValues.Count());
 
             //graphicbitmap
@@ -1679,20 +1679,20 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::getNumberingRuleByIndex(
             if(pGraphic)
             {
                 uno::Reference<awt::XBitmap> xBmp = VCLUnoHelper::CreateBitmap( pGraphic->GetBitmapEx() );
-                pData = new PropValData((void*)&xBmp, UNO_NAME_GRAPHIC_BITMAP,
+                pData = new PropValData((void*)&xBmp, SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_BITMAP),
                                 ::getCppuType((const uno::Reference<awt::XBitmap>*)0));
                 aPropertyValues.Insert(pData, aPropertyValues.Count());
             }
              Size aSize = rFmt.GetGraphicSize();
             aSize.Width() = TWIP_TO_MM100( aSize.Width() );
             aSize.Height() = TWIP_TO_MM100( aSize.Height() );
-            pData = new PropValData((void*)&aSize, UNO_NAME_GRAPHIC_SIZE, ::getCppuType((const awt::Size*)0));
+            pData = new PropValData((void*)&aSize, SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE), ::getCppuType((const awt::Size*)0));
             aPropertyValues.Insert(pData, aPropertyValues.Count());
 
             const SwFmtVertOrient* pOrient = rFmt.GetGraphicOrientation();
             if(pOrient)
             {
-                pData = new PropValData((void*)0, UNO_NAME_VERT_ORIENT, ::getCppuType((const sal_Int16*)0));
+                pData = new PropValData((void*)0, SW_PROP_NAME_STR(UNO_NAME_VERT_ORIENT), ::getCppuType((const sal_Int16*)0));
                 ((const SfxPoolItem*)pOrient)->QueryValue(pData->aVal, MID_VERTORIENT_ORIENT);
                 aPropertyValues.Insert(pData, aPropertyValues.Count());
             }
@@ -1718,7 +1718,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::getNumberingRuleByIndex(
             }
         }
         aUString = SwXStyleFamilies::GetProgrammaticName(sValue, SFX_STYLE_FAMILY_PARA);
-        pData = new PropValData((void*)&aUString, UNO_NAME_HEADING_STYLE_NAME, ::getCppuType((const OUString*)0));
+        pData = new PropValData((void*)&aUString, SW_PROP_NAME_STR(UNO_NAME_HEADING_STYLE_NAME), ::getCppuType((const OUString*)0));
         aPropertyValues.Insert(pData, aPropertyValues.Count());
     }
 
@@ -1758,7 +1758,7 @@ void SwXNumberingRules::setNumberingRuleByIndex(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     // the order of the names is important!
-    const char* aNumPropertyNames[] =
+    static const char* aNumPropertyNames[] =
     {
         "Adjust",                               //0
         "ParentNumbering",                      //1
@@ -1766,19 +1766,19 @@ void SwXNumberingRules::setNumberingRuleByIndex(
         "Suffix",                               //3
         "CharStyleName",                        //4
         "StartWith",                            //5
-        UNO_NAME_LEFT_MARGIN,                   //6
-        UNO_NAME_SYMBOL_TEXT_DISTANCE,          //7
-        UNO_NAME_FIRST_LINE_OFFSET,             //8
+        SW_PROP_NAME_STR(UNO_NAME_LEFT_MARGIN),                   //6
+        SW_PROP_NAME_STR(UNO_NAME_SYMBOL_TEXT_DISTANCE),          //7
+        SW_PROP_NAME_STR(UNO_NAME_FIRST_LINE_OFFSET),             //8
         "NumberingType",                        //9
         "BulletId",                             //10
-        UNO_NAME_BULLET_FONT,                   //11
+        SW_PROP_NAME_STR(UNO_NAME_BULLET_FONT),                   //11
         "BulletFontName",                       //12
         "BulletChar",                           //13
-        UNO_NAME_GRAPHIC_URL,                   //14
-        UNO_NAME_GRAPHIC_BITMAP,                //15
-        UNO_NAME_GRAPHIC_SIZE,                  //16
-        UNO_NAME_VERT_ORIENT,                   //17
-        UNO_NAME_HEADING_STYLE_NAME             //18
+        SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_URL),                   //14
+        SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_BITMAP),                //15
+        SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE),                  //16
+        SW_PROP_NAME_STR(UNO_NAME_VERT_ORIENT),                 //17
+        SW_PROP_NAME_STR(UNO_NAME_HEADING_STYLE_NAME)             //18
     };
     const sal_uInt16 nPropNameCount = 19;
     const sal_uInt16 nNotInChapter = 10;
@@ -1869,7 +1869,7 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                         SwXStyleFamilies::GetUIName( uTmp,
                                                     SFX_STYLE_FAMILY_CHAR ) );
                     SwCharFmt* pCharFmt = 0;
-                    if(sCharFmtName.EqualsAscii(UNO_NAME_CHARACTER_FORMAT_NONE))
+                    if(sCharFmtName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_CHARACTER_FORMAT_NONE)))
                     {
                         sNewCharStyleNames[(sal_uInt16)nIndex] = SwXNumberingRules::GetInvalidStyle();
                         aFmt.SetCharFmt(0);
@@ -2170,24 +2170,24 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
         throw RuntimeException();
 
 
-    if(0 == rPropertyName.compareToAscii(UNO_NAME_IS_AUTOMATIC))
+    if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC)))
     {
         BOOL bVal = *(sal_Bool*)rValue.getValue();
         if(!pCreatedRule)
             pDocRule ? pDocRule->SetAutoRule(bVal) : pNumRule->SetAutoRule(bVal);
     }
-    else if(0 == rPropertyName.compareToAscii(UNO_NAME_IS_CONTINUOUS_NUMBERING))
+    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_CONTINUOUS_NUMBERING)))
     {
         BOOL bVal = *(sal_Bool*)rValue.getValue();
         pDocRule ? pDocRule->SetContinusNum(bVal) :
             pCreatedRule ? pCreatedRule->SetContinusNum(bVal) : pNumRule->SetContinusNum(bVal);
     }
-    else if(0 == rPropertyName.compareToAscii(UNO_NAME_NAME))
+    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NAME)))
     {
         delete pDocRule;
         throw IllegalArgumentException();
     }
-    else if(0 == rPropertyName.compareToAscii(UNO_NAME_IS_ABSOLUTE_MARGINS))
+    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_ABSOLUTE_MARGINS)))
     {
         BOOL bVal = *(sal_Bool*)rValue.getValue();
         pDocRule ? pDocRule->SetAbsSpaces(bVal) :
@@ -2222,19 +2222,19 @@ Any SwXNumberingRules::getPropertyValue( const OUString& rPropertyName )
     if(!pRule)
         throw RuntimeException();
 
-    if(0 == rPropertyName.compareToAscii(UNO_NAME_IS_AUTOMATIC))
+    if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC)))
     {
         BOOL bVal = pRule->IsAutoRule();
         aRet.setValue(&bVal, ::getBooleanCppuType());
     }
-    else if(0 == rPropertyName.compareToAscii(UNO_NAME_IS_CONTINUOUS_NUMBERING))
+    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_CONTINUOUS_NUMBERING)))
     {
         BOOL bVal = pRule->IsContinusNum();
         aRet.setValue(&bVal, ::getBooleanCppuType());
     }
-    else if(0 == rPropertyName.compareToAscii(UNO_NAME_NAME))
+    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NAME)))
         aRet <<= OUString(pRule->GetName());
-    else if(0 == rPropertyName.compareToAscii(UNO_NAME_IS_ABSOLUTE_MARGINS))
+    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_ABSOLUTE_MARGINS)))
     {
         BOOL bVal = pRule->IsAbsSpaces();
         aRet.setValue(&bVal, ::getBooleanCppuType());

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-08 14:14:56 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,15 +330,15 @@ Sequence<PropertyValue> lcl_GetSuccessorProperties(const SwRedline& rRedline)
     if(pNext)
     {
         PropertyValue* pValues = aValues.getArray();
-        pValues[0].Name = C2U(UNO_NAME_REDLINE_AUTHOR);
+        pValues[0].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_AUTHOR));
         // GetAuthorString(n) walks the SwRedlineData* chain;
         // here we always need element 1
         pValues[0].Value <<= OUString(rRedline.GetAuthorString(1));
-        pValues[1].Name = C2U(UNO_NAME_REDLINE_DATE_TIME);
+        pValues[1].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_DATE_TIME));
         pValues[1].Value <<= lcl_DateTimeToUno(pNext->GetTimeStamp());
-        pValues[2].Name = C2U(UNO_NAME_REDLINE_COMMENT);
+        pValues[2].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_COMMENT));
         pValues[2].Value <<= OUString(pNext->GetComment());
-        pValues[3].Name = C2U(UNO_NAME_REDLINE_TYPE);
+        pValues[3].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_TYPE));
         pValues[3].Value <<= lcl_RedlineTypeToOUString(pNext->GetType());
     }
     return aValues;
@@ -350,7 +350,7 @@ Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
     vos::OGuard aGuard(Application::GetSolarMutex());
     Validate();
     Any aRet;
-    if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_TEXT.pName, UNO_NAME_REDLINE_TEXT.nNameLen))
+    if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_TEXT)))
     {
         SwNodeIndex* pNodeIdx = pRedline->GetContentIdx();
         if(pNodeIdx)
@@ -364,8 +364,7 @@ Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
     {
         aRet = GetPropertyValue( rPropertyName, *pRedline);
         if(!aRet.hasValue() &&
-           ! rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_SUCCESSOR_DATA.pName,
-                                     UNO_NAME_REDLINE_SUCCESSOR_DATA.nNameLen))
+           ! rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_SUCCESSOR_DATA)))
             aRet = SwXTextPortion::getPropertyValue(rPropertyName);
     }
     return aRet;
@@ -404,32 +403,30 @@ uno::Sequence< sal_Int8 > SAL_CALL SwXRedlinePortion::getImplementationId(  ) th
 Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, const SwRedline& rRedline ) throw()
 {
     Any aRet;
-    if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_AUTHOR       .pName, UNO_NAME_REDLINE_AUTHOR.nNameLen))
+    if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_AUTHOR)))
         aRet <<= OUString(rRedline.GetAuthorString());
-    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_DATE_TIME.pName, UNO_NAME_REDLINE_DATE_TIME.nNameLen))
+    else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_DATE_TIME)))
     {
         aRet <<= lcl_DateTimeToUno(rRedline.GetTimeStamp());
     }
-    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_COMMENT  .pName, UNO_NAME_REDLINE_COMMENT  .nNameLen))
+    else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_COMMENT)))
         aRet <<= OUString(rRedline.GetComment());
-    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_TYPE        .pName, UNO_NAME_REDLINE_TYPE     .nNameLen))
+    else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_TYPE)))
     {
         aRet <<= lcl_RedlineTypeToOUString(rRedline.GetType());
     }
-    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_SUCCESSOR_DATA.pName, UNO_NAME_REDLINE_SUCCESSOR_DATA.nNameLen))
+    else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_SUCCESSOR_DATA)))
     {
         if(rRedline.GetRedlineData().Next())
             aRet <<= lcl_GetSuccessorProperties(rRedline);
     }
-    else if (rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_IDENTIFIER.pName,
-                                        UNO_NAME_REDLINE_IDENTIFIER.nNameLen))
+    else if (rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_IDENTIFIER)))
     {
         OUStringBuffer sBuf;
         sBuf.append((sal_Int64)&rRedline);
         aRet <<= sBuf.makeStringAndClear();
     }
-    else if (rPropertyName.equalsAsciiL(UNO_NAME_IS_IN_HEADER_FOOTER.pName,
-                                        UNO_NAME_IS_IN_HEADER_FOOTER.nNameLen))
+    else if (rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_IS_IN_HEADER_FOOTER)))
     {
         sal_Bool bRet =
             rRedline.GetDoc()->IsInHeaderFooter( rRedline.GetPoint()->nNode );
@@ -450,19 +447,19 @@ Sequence< PropertyValue > SwXRedlinePortion::CreateRedlineProperties( const SwRe
     OUStringBuffer sRedlineIdBuf;
     sRedlineIdBuf.append((sal_Int64)&rRedline);
 
-    pRet[0].Name = C2U(UNO_NAME_REDLINE_AUTHOR.pName);
+    pRet[0].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_AUTHOR));
     pRet[0].Value <<= OUString(rRedline.GetAuthorString());
-    pRet[1].Name = C2U(UNO_NAME_REDLINE_DATE_TIME.pName);
+    pRet[1].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_DATE_TIME));
     pRet[1].Value <<= lcl_DateTimeToUno(rRedline.GetTimeStamp());
-    pRet[2].Name = C2U(UNO_NAME_REDLINE_COMMENT  .pName);
+    pRet[2].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_COMMENT));
     pRet[2].Value <<= OUString(rRedline.GetComment());
-    pRet[3].Name = C2U(UNO_NAME_REDLINE_TYPE        .pName);
+    pRet[3].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_TYPE));
     pRet[3].Value <<= lcl_RedlineTypeToOUString(rRedline.GetType());
-    pRet[4].Name = C2U(UNO_NAME_REDLINE_IDENTIFIER.pName);
+    pRet[4].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_IDENTIFIER));
     pRet[4].Value <<= sRedlineIdBuf.makeStringAndClear();
     if(pNext)
     {
-        pRet[5].Name = C2U(UNO_NAME_REDLINE_SUCCESSOR_DATA.pName);
+        pRet[5].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_SUCCESSOR_DATA));
         pRet[5].Value <<= lcl_GetSuccessorProperties(rRedline);
     }
     return aRet;
@@ -503,23 +500,23 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const Any& aVa
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!pDoc)
         throw RuntimeException();
-    if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_AUTHOR       .pName, UNO_NAME_REDLINE_AUTHOR.nNameLen))
+    if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_AUTHOR)))
     {
         DBG_ERROR("currently not available")
     }
-    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_DATE_TIME.pName, UNO_NAME_REDLINE_DATE_TIME.nNameLen))
+    else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_DATE_TIME)))
     {
         DBG_ERROR("currently not available")
 //      util::DateTime aDT;
 //      if(aValue >>= aDT)
 //              pRedline->SetTimeStamp(lcl_DateTimeFromUno(aDT));
     }
-    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_COMMENT  .pName, UNO_NAME_REDLINE_COMMENT  .nNameLen))
+    else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_COMMENT)))
     {
         OUString sTmp; aValue >>= sTmp;
         pRedline->SetComment(sTmp);
     }
-    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_TYPE        .pName, UNO_NAME_REDLINE_TYPE     .nNameLen))
+    else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_TYPE)))
     {
         DBG_ERROR("currently not available")
         OUString sTmp; aValue >>= sTmp;
@@ -527,7 +524,7 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const Any& aVa
             throw IllegalArgumentException();
 //      pRedline->SetType(lcl_OUStringToRedlineType(sTmp));
     }
-    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_SUCCESSOR_DATA.pName, UNO_NAME_REDLINE_SUCCESSOR_DATA.nNameLen))
+    else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_SUCCESSOR_DATA)))
     {
         DBG_ERROR("currently not available")
 /*      SwRedlineData* pNext = pRedline->GetRedlineData().Next();
@@ -575,9 +572,9 @@ Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
     if(!pDoc)
         throw RuntimeException();
     Any aRet;
-    BOOL bStart = rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_START     .pName, UNO_NAME_REDLINE_START.nNameLen);
+    BOOL bStart = rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_START));
     if(bStart ||
-        rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_END     .pName, UNO_NAME_REDLINE_END.nNameLen))
+        rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_END)))
     {
         Reference<XInterface> xRet;
         SwNode* pNode = pRedline->GetNode();
@@ -621,7 +618,7 @@ Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
         }
         aRet <<= xRet;
     }
-    else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_TEXT.pName, UNO_NAME_REDLINE_TEXT.nNameLen))
+    else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_TEXT)))
     {
         SwNodeIndex* pNodeIdx = pRedline->GetContentIdx();
         if(pNodeIdx)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unobkm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:12:44 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,7 +378,7 @@ uno::Any SwXBookmark::getPropertyValue(const OUString& rPropertyName) throw( bea
     uno::Any aRet;
     if(!SwXParagraph::getDefaultTextContentValue(aRet, rPropertyName))
     {
-        if(0 == rPropertyName.compareToAscii(UNO_LINK_DISPLAY_NAME))
+        if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_LINK_DISPLAY_NAME)))
             aRet <<= getName();
     }
     return aRet;
@@ -417,6 +417,9 @@ void SwXBookmark::removeVetoableChangeListener(const OUString& PropertyName, con
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/01/12 16:12:44  os
+    new: Redline container
+
     Revision 1.1.1.1  2000/09/19 00:08:28  hr
     initial import
 

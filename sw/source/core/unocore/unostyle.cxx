@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 09:52:43 $
+ *  last change: $Author: jp $ $Date: 2001-06-13 11:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,15 +652,15 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
             {
                 String sName = pArray[i].Name;
                 sal_Bool bVal = *(sal_Bool*)pVal->getValue();
-                if( sName.EqualsAscii(UNO_NAME_OVERWRITE_STYLES     ))
+                if( sName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_OVERWRITE_STYLES     )))
                     bLoadStyleOverwrite = bVal;
-                else if( sName.EqualsAscii(UNO_NAME_LOAD_NUMBERING_STYLES ))
+                else if( sName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_NUMBERING_STYLES )))
                     bLoadStyleNumbering = bVal;
-                else if( sName.EqualsAscii(UNO_NAME_LOAD_PAGE_STYLES   ))
+                else if( sName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_PAGE_STYLES   )))
                     bLoadStylePage = bVal;
-                else if( sName.EqualsAscii(UNO_NAME_LOAD_FRAME_STYLES     ))
+                else if( sName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_FRAME_STYLES     )))
                     bLoadStyleFrame = bVal;
-                else if( sName.EqualsAscii(UNO_NAME_LOAD_TEXT_STYLES      ))
+                else if( sName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_TEXT_STYLES      )))
                     bLoadStyleText = bVal;
             }
 
@@ -690,15 +690,15 @@ Sequence< PropertyValue > SwXStyleFamilies::getStyleLoaderOptions(void)
     Any aVal;
     sal_Bool bTemp = sal_True;
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[0] = PropertyValue(C2U(UNO_NAME_LOAD_TEXT_STYLES), -1, aVal, PropertyState_DIRECT_VALUE);
+    pArray[0] = PropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_LOAD_TEXT_STYLES)), -1, aVal, PropertyState_DIRECT_VALUE);
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[1] = PropertyValue(C2U(UNO_NAME_LOAD_FRAME_STYLES), -1, aVal, PropertyState_DIRECT_VALUE);
+    pArray[1] = PropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_LOAD_FRAME_STYLES)), -1, aVal, PropertyState_DIRECT_VALUE);
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[2] = PropertyValue(C2U(UNO_NAME_LOAD_PAGE_STYLES), -1, aVal, PropertyState_DIRECT_VALUE);
+    pArray[2] = PropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_LOAD_PAGE_STYLES)), -1, aVal, PropertyState_DIRECT_VALUE);
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[3] = PropertyValue(C2U(UNO_NAME_LOAD_NUMBERING_STYLES), -1, aVal, PropertyState_DIRECT_VALUE);
+    pArray[3] = PropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_LOAD_NUMBERING_STYLES)), -1, aVal, PropertyState_DIRECT_VALUE);
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[4] = PropertyValue(C2U(UNO_NAME_OVERWRITE_STYLES), -1, aVal, PropertyState_DIRECT_VALUE);
+    pArray[4] = PropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_OVERWRITE_STYLES)), -1, aVal, PropertyState_DIRECT_VALUE);
     return aSeq;
 }
 
@@ -2259,8 +2259,8 @@ Sequence< PropertyState > SwXStyle::getPropertyStates(
             for(sal_Int32 i = 0; i < rPropertyNames.getLength(); i++)
             {
                 String sPropName(pNames[i]);
-                if(sPropName.EqualsAscii(UNO_NAME_NUMBERING_RULES)||
-                    sPropName.EqualsAscii(UNO_NAME_FOLLOW_STYLE))
+                if(sPropName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_NUMBERING_RULES))||
+                    sPropName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_FOLLOW_STYLE)))
                 {
                     pStates[i] = PropertyState_DIRECT_VALUE;
                 }
@@ -2320,11 +2320,11 @@ void SwXStyle::setPropertyToDefault(const OUString& rPropertyName)
             SwDocStyleSheet aStyle( *(SwDocStyleSheet*)pBase );
             String sPropName(rPropertyName);
             //Sonderbehandlung fuer das SvxNumRuleItem:
-            if(sPropName.EqualsAscii(UNO_NAME_NUMBERING_RULES))
+            if(sPropName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_NUMBERING_RULES)))
             {
                 throw RuntimeException();
             }
-            else if(sPropName.EqualsAscii(UNO_NAME_FOLLOW_STYLE))
+            else if(sPropName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_FOLLOW_STYLE)))
             {
                 throw RuntimeException();
             }
@@ -2373,8 +2373,8 @@ Any SwXStyle::getPropertyDefault(const OUString& rPropertyName)
             SwDocStyleSheet aStyle( *(SwDocStyleSheet*)pBase );
             String sPropName(rPropertyName);
             //Sonderbehandlung fuer das SvxNumRuleItem:
-            if(!sPropName.EqualsAscii(UNO_NAME_NUMBERING_RULES) &&
-                !sPropName.EqualsAscii(UNO_NAME_FOLLOW_STYLE))
+            if(!sPropName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_NUMBERING_RULES)) &&
+                !sPropName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_FOLLOW_STYLE)))
             {
                 sal_Int8 nPropSetId = PROPERTY_SET_CHAR_STYLE;
                 switch(eFamily)
