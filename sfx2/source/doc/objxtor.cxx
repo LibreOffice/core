@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:30:05 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1032,6 +1032,10 @@ String SfxObjectShell::GetServiceNameFromFactory( const String& rFact )
     else if ( aFact.EqualsAscii("smath") )
     {
         aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.formula.FormulaProperties");
+    }
+    else if ( aFact.EqualsAscii("sbasic") )
+    {
+        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.comp.basic.BasicIDE");
     }
 
     return aServiceName;
