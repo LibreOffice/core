@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:52:50 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:06:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,11 @@
 #ifndef _EXCFORM_HXX
 #define _EXCFORM_HXX
 
-#ifndef SC_XLTOOLS_HXX
-#include "xltools.hxx"
+#ifndef SC_XLFORMULA_HXX
+#include "xlformula.hxx"
+#endif
+#ifndef SC_XIROOT_HXX
+#include "xiroot.hxx"
 #endif
 
 #ifndef _FORMEL_HXX
@@ -76,30 +79,23 @@ class ScRangeList;
 class ScfUInt16List;
 
 
-#ifdef MWERKS
-class ExcelToSc : public ExcelConverterBase, public ExcRoot
-#else
-class ExcelToSc : public ExcelConverterBase, protected ExcRoot
-#endif
+class ExcelToSc : public ExcelConverterBase, protected XclImpRoot
 {
 protected:
     BOOL                bExternName;    // wenn External Name gefunden wurde
     static const UINT16 nRowMask;
     static const UINT16 nLastInd;       // letzter Index fuer Excel->SC-
                                         // Token Umsetzung
+    XclFunctionProvider maFuncProv;
+    const XclBiff       meBiff;
+
     // ---------------------------------------------------------------
-    inline void         DoDefArgs( UINT16 );
-
     void                DoMulArgs( DefTokenId, BYTE );
-
-    static DefTokenId   IndexToToken( UINT16 );
-
-    static BYTE         IndexToAnzahl( UINT16 );
 
     void                ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData&, const BOOL bName );
 
 public:
-                        ExcelToSc( RootData* pRD, XclImpStream& aStr );
+                        ExcelToSc( XclImpStream& rStrm );
     virtual             ~ExcelToSc();
     virtual ConvErr     Convert( const ScTokenArray*&, UINT32 nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
 
@@ -120,12 +116,6 @@ public:
     void                SetComplCol( ComplRefData& );
     void                SetComplRow( ComplRefData& );
 };
-
-
-inline void ExcelToSc::DoDefArgs( UINT16 nIndex )
-{
-    DoMulArgs( IndexToToken( nIndex ), IndexToAnzahl( nIndex ) );
-}
 
 
 inline BOOL ExcelToSc::IsComplColRange( const UINT16 nCol1, const UINT16 nCol2 )
@@ -154,7 +144,7 @@ private:
     virtual BOOL        Read3DTabReference( SCTAB& rFirstTab, SCTAB& rLastTab );
 
 public:
-                        ExcelToSc8( RootData* pRD, XclImpStream& aStr );
+                        ExcelToSc8( XclImpStream& rStrm );
     virtual             ~ExcelToSc8();
 
     virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
