@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:19:24 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,9 @@ TabPage RID_SVXPAGE_CAPTION
     Text [ italian ] = "Legenda" ;
     Text [ spanish ] = "Leyenda" ;
     Text [ french ] = "L�gende" ;
-    Text [ dutch ] = "Legenda" ;
+    Text [ dutch ] = "Tekstballon" ;
     Text [ swedish ] = "F�rklaring" ;
-    Text [ danish ] = "Forklaring" ;
+    Text [ danish ] = "Forklaringer" ;
     Text [ portuguese ] = "Legenda" ;
     Text [ portuguese_brazilian ] = "Textos Explicativos" ;
     Control CT_CAPTTYPE
@@ -101,7 +101,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ french ] = "�cart" ;
         Text [ dutch ] = "~Afstand" ;
         Text [ swedish ] = "~Avst�nd" ;
-        Text [ danish ] = "Afstand" ;
+        Text [ danish ] = "~Afstand" ;
         Text [ portuguese_brazilian ] = "~Afastamento" ;
         Text [ portuguese ] = "~Espa�amento" ;
         Text[ chinese_simplified ] = "间隔(~S)";
@@ -121,6 +121,8 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ hebrew ] = "‮ריווח‬";
         Text[ hindi ] = "~बीच में अंतर देना";
         Text[ slovak ] = "~Rozostup";
+        Text[ hungarian ] = "~Térköz";
+        Text[ slovenian ] = "~Razmik";
     };
     MetricField MF_ABSTAND
     {
@@ -148,7 +150,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ french ] = "Angle" ;
         Text [ dutch ] = "~Hoek" ;
         Text [ swedish ] = "~Vinkel" ;
-        Text [ danish ] = "Vinkel" ;
+        Text [ danish ] = "~Vinkel" ;
         Text [ portuguese_brazilian ] = "~�ngulo" ;
         Text [ portuguese ] = "~�ngulo" ;
         Text[ chinese_simplified ] = "角度(~A)";
@@ -168,6 +170,8 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ hebrew ] = "~Winkel";
         Text[ hindi ] = "~कोण";
         Text[ slovak ] = "~Uhol";
+        Text[ hungarian ] = "~Szög";
+        Text[ slovenian ] = "~Kot";
     };
     ListBox LB_WINKEL
     {
@@ -401,6 +405,22 @@ TabPage RID_SVXPAGE_CAPTION
         < "60 stupňov" ; 6000 ; > ;
         < "90 stupňov" ; 9000 ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Szabad" ; 1 ; > ;
+        < "30 fok" ; 3000 ; > ;
+        < "45 fok" ; 4500 ; > ;
+        < "60 fok" ; 6000 ; > ;
+        < "90 fok" ; 9000 ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Poljubno" ; 1 ; > ;
+        < "30 stopinj" ; 3000 ; > ;
+        < "45 stopinj" ; 4500 ; > ;
+        < "60 stopinj" ; 6000 ; > ;
+        < "90 stopinj" ; 9000 ; > ;
+    };
     };
     FixedText FT_ANSATZ
     {
@@ -414,7 +434,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ spanish ] = "~Extensi�n" ;
         Text [ french ] = "~Extension" ;
         Text [ swedish ] = "F�ste" ;
-        Text [ danish ] = "Tilh�ftning" ;
+        Text [ danish ] = "~Tilh�ftning" ;
         Text [ portuguese_brazilian ] = "~Extens�o" ;
         Text [ portuguese ] = "E~xtens�o" ;
         Text[ chinese_simplified ] = "扩展(~E)";
@@ -434,6 +454,8 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ hebrew ] = "A~nsatz";
         Text[ hindi ] = "~विस्तार";
         Text[ slovak ] = "Rozšír~enie";
+        Text[ hungarian ] = "~Kiterjesztés";
+        Text[ slovenian ] = "~Podaljšek";
     };
     ListBox LB_ANSATZ
     {
@@ -518,7 +540,7 @@ TabPage RID_SVXPAGE_CAPTION
         stringlist [ danish ] =
         {
             < "Optimal" ; 4 ; > ;
-            < "Fra oven" ; 3 ; > ;
+            < "Fra toppen" ; 3 ; > ;
             < "Fra venstre" ; 3 ; > ;
             < "Vandret" ; 1 ; > ;
             < "Lodret" ; 2 ; > ;
@@ -667,6 +689,22 @@ TabPage RID_SVXPAGE_CAPTION
         < "Vodorovne" ; 1 ; > ;
         < "Zvislé" ; 2 ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Optimális" ; 4 ; > ;
+        < "Felülről" ; 3 ; > ;
+        < "Balról" ; 3 ; > ;
+        < "Vízszintes" ; 1 ; > ;
+        < "Függőleges" ; 2 ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Optimalno" ; 4 ; > ;
+        < "Od zgoraj" ; 3 ; > ;
+        < "Z leve" ; 3 ; > ;
+        < "Vodoravno" ; 1 ; > ;
+        < "Navpično" ; 2 ; > ;
+    };
     };
     FixedText FT_UM
     {
@@ -680,7 +718,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ spanish ] = "~De" ;
         Text [ french ] = "De" ;
         Text [ swedish ] = "~Om" ;
-        Text [ danish ] = "Ved" ;
+        Text [ danish ] = "~Ved" ;
         Text [ portuguese_brazilian ] = "~Por" ;
         Text [ portuguese ] = "~De" ;
         Text[ chinese_simplified ] = "数值(~B)";
@@ -700,6 +738,8 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ hebrew ] = "~Um";
         Text[ hindi ] = "~से";
         Text[ slovak ] = "~O";
+        Text[ hungarian ] = "á~ltal";
+        Text[ slovenian ] = "~Za";
     };
     MetricField MF_ANSATZ
     {
@@ -727,7 +767,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ spanish ] = "Posici�n" ;
         Text [ french ] = "Position" ;
         Text [ swedish ] = "~Position" ;
-        Text [ danish ] = "Placering" ;
+        Text [ danish ] = "~Placering" ;
         Text [ portuguese_brazilian ] = "~Posi��o" ;
         Text [ portuguese ] = "~Posi��o" ;
         Text[ chinese_simplified ] = "位置(~P)";
@@ -747,6 +787,8 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "~स्थान";
         Text[ slovak ] = "~Umiestnenie";
+        Text[ hungarian ] = "~Pozíció";
+        Text[ slovenian ] = "~Položaj";
     };
     ListBox LB_ANSATZ_REL
     {
@@ -770,7 +812,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ french ] = "~Longueur" ;
         Text [ dutch ] = "~Lengte" ;
         Text [ swedish ] = "~L�ngd" ;
-        Text [ danish ] = "L�ngde" ;
+        Text [ danish ] = "~L�ngde" ;
         Text [ portuguese_brazilian ] = "~Comprimento" ;
         Text [ portuguese ] = "~Comprimento" ;
         Text[ chinese_simplified ] = "长度(~L)";
@@ -790,6 +832,8 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ hebrew ] = "~Länge";
         Text[ hindi ] = "~लम्बाई";
         Text[ slovak ] = "~Dĺžka";
+        Text[ hungarian ] = "~Hosszúság";
+        Text[ slovenian ] = "Do~lžina";
     };
     MetricField MF_LAENGE
     {
@@ -818,7 +862,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ french ] = "~Optimal" ;
         Text [ dutch ] = "~Optimaal" ;
         Text [ swedish ] = "~Optimal" ;
-        Text [ danish ] = "Optimal" ;
+        Text [ danish ] = "~Optimal" ;
         Text [ portuguese_brazilian ] = "~Otimizado" ;
         Text [ portuguese ] = "~Optimizar" ;
         Text[ chinese_simplified ] = "最佳(~O)";
@@ -838,6 +882,8 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ hebrew ] = "~Optimal";
         Text[ hindi ] = "~योग्य";
         Text[ slovak ] = "~Optimálny";
+        Text[ hungarian ] = "~Optimális";
+        Text[ slovenian ] = "~Optimalno";
     };
     String STR_CAPTTYPE_1
     {
@@ -869,6 +915,8 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ hebrew ] = "Gerade Linie";
         Text[ hindi ] = "सीधा रेखा";
         Text[ slovak ] = "Priamka";
+        Text[ hungarian ] = "Egyenes vonal";
+        Text[ slovenian ] = "Ravna črta";
     };
     String STR_CAPTTYPE_2
     {
@@ -900,6 +948,8 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ hebrew ] = "Abgewinkelte Linie";
         Text[ hindi ] = "कोणयुक्त रेखा";
         Text[ slovak ] = "Krivka";
+        Text[ hungarian ] = "Töröttvonal";
+        Text[ slovenian ] = "Lomljena črta";
     };
     String STR_CAPTTYPE_3
     {
@@ -911,7 +961,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ french ] = "Ligne en angle fl�chie" ;
         Text [ dutch ] = "Lijn met enkele hoek" ;
         Text [ swedish ] = "Vinklad linje med en knick" ;
-        Text [ danish ] = "Vinklet linje med et kn�k" ;
+        Text [ danish ] = "Vinklet forbindelseslinje" ;
         Text [ portuguese_brazilian ] = "Linha Conectora Angular" ;
         Text [ portuguese ] = "Linha angular com um s� �ngulo" ;
         Text[ chinese_simplified ] = "单连角形线";
@@ -931,6 +981,8 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ hebrew ] = "Abgewinkelte Linie einfach geknickt";
         Text[ hindi ] = "कोणयुक्त जोड़नेवाला रेखा";
         Text[ slovak ] = "Ohnutá spojnica";
+        Text[ hungarian ] = "Összekötő töröttvonal";
+        Text[ slovenian ] = "Lomljena povezovalna črta";
     };
     String STR_CAPTTYPE_4
     {
@@ -962,6 +1014,8 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ hebrew ] = "Abgewinkelte Linie doppelt geknickt";
         Text[ hindi ] = "द्विगुणित-कोणयुक्त रेखा";
         Text[ slovak ] = "Dvakrát lomená krivka";
+        Text[ hungarian ] = "Kétszeresen törött vonal";
+        Text[ slovenian ] = "Dvojno lomljena črta";
     };
     String STR_HORZ_LIST
     {
@@ -973,7 +1027,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ french ] = "Haut;Milieu;Bas" ;
         Text [ dutch ] = "Boven;Midden;Beneden" ;
         Text [ swedish ] = "Uppe;Mitten;Nere" ;
-        Text [ danish ] = "�verst;Centreret;Nederst" ;
+        Text [ danish ] = "Top;Midte;Bund" ;
         Text [ portuguese_brazilian ] = "Superior; Meio; Inferior" ;
         Text [ portuguese ] = "Superior; centro; inferior" ;
         Text[ chinese_simplified ] = "上;中;下";
@@ -993,6 +1047,8 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ hebrew ] = "Oben;Mitte;Unten";
         Text[ hindi ] = "ऊपर;मध्य;नीचे";
         Text[ slovak ] = "Nahor;Uprostred;Naspodok";
+        Text[ hungarian ] = "Teteje;Közepe;Alja";
+        Text[ slovenian ] = "Zgoraj;Sredina;Spodaj";
     };
     String STR_VERT_LIST
     {
@@ -1024,6 +1080,8 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ hebrew ] = "Links;Mitte;Rechts";
         Text[ hindi ] = "बायाँ;मध्य;दाहिना";
         Text[ slovak ] = "Vľavo;Uprostred;Vpravo";
+        Text[ hungarian ] = "Balra;Középre;Jobbra";
+        Text[ slovenian ] = "Levo;Sredina;Desno";
     };
     Bitmap BMP_CAPTTYPE_1
     {
@@ -1074,6 +1132,8 @@ TabPage RID_SVXPAGE_CAPTION
     Text[ hebrew ] = "‮דיבורים‬";
     Text[ hindi ] = "कालौट्स्";
     Text[ slovak ] = "Bubliny";
+    Text[ hungarian ] = "Ábrafelirat";
+    Text[ slovenian ] = "Oblački";
 };
  // RID_SVXDLG_CAPTION ----------------------------------------------------
 TabDialog RID_SVXDLG_CAPTION
@@ -1087,9 +1147,9 @@ TabDialog RID_SVXDLG_CAPTION
     Text [ italian ] = "Legenda" ;
     Text [ spanish ] = "Leyenda" ;
     Text [ french ] = "L�gende" ;
-    Text [ dutch ] = "Legenda" ;
+    Text [ dutch ] = "Tekstballonnen" ;
     Text [ swedish ] = "F�rklaring" ;
-    Text [ danish ] = "Forklaring" ;
+    Text [ danish ] = "Forklaringer" ;
     Text [ portuguese_brazilian ] = "Textos Explicativos" ;
     Text [ portuguese ] = "Legenda" ;
     Moveable = TRUE ;
@@ -1133,6 +1193,8 @@ TabDialog RID_SVXDLG_CAPTION
                 Text[ hebrew ] = "Position und Größe";
                 Text[ hindi ] = "Position and Size";
                 Text[ slovak ] = "Umiestnenie a veľkosť";
+                Text[ hungarian ] = "Pozíció és méret";
+                Text[ slovenian ] = "Položaj in velikost";
             };
             PageItem
             {
@@ -1140,7 +1202,7 @@ TabDialog RID_SVXDLG_CAPTION
                 Text = "Legende" ;
                 Text [ English ] = "Caption" ;
                 PageResID = RID_SVXPAGE_CAPTION ;
-                Text [ dutch ] = "Legenda" ;
+                Text [ dutch ] = "Tekstballon" ;
                 Text [ english_us ] = "Callout" ;
                 Text [ italian ] = "Legenda" ;
                 Text [ spanish ] = "Leyenda" ;
@@ -1166,6 +1228,8 @@ TabDialog RID_SVXDLG_CAPTION
                 Text[ hebrew ] = "Legende";
                 Text[ hindi ] = "कालौट्";
                 Text[ slovak ] = "Bublina";
+                Text[ hungarian ] = "Ábrafelirat";
+                Text[ slovenian ] = "Oblaček";
             };
         };
     };
@@ -1186,8 +1250,12 @@ TabDialog RID_SVXDLG_CAPTION
     Text[ hebrew ] = "‮דיבורים‬";
     Text[ hindi ] = "कालौट्स्";
     Text[ slovak ] = "Bubliny";
+    Text[ hungarian ] = "Ábrafelirat";
+    Text[ slovenian ] = "Oblački";
 };
  // ********************************************************************** EOF
+
+
 
 
 
