@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgegif.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:09:49 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 17:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ ModalDialog DLG_EXPORT_GIF
     Text[ polish ] = "Obiekty graficzne";
     Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä";
     Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
-    Text[ chinese_traditional ] = "¦r«¬ª«¥ó";
+    Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó";
         Text[ arabic ] = "ßÇÆäÇÊ ÑÓæãíÉ";
         Text[ dutch ] = "Tekenobjecten";
         Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
