@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:05:43 $
+ *  last change: $Author: rt $ $Date: 2001-03-06 09:01:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3314,7 +3314,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ japanese ] = "‰E’[—ρ(~R)";
         Text[ chinese_traditional ] = "¥kΔζ(~R)";
         Text[ arabic ] = "ΗαΪγζΟ ΗαΓνγδ";
-        Text[ greek ] = "Περιοχής δεξιά";
+        Text[ greek ] = "Δεξιά στήλη";
         Text[ korean ] = "ΏΐΈ¥ΒΚ Ώ­(~R)";
         Text[ turkish ] = "~Saπ sόtun";
         Text[ language_user1 ] = " ";
@@ -3356,7 +3356,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ chinese_simplified ] = "΄΄½¨Γϋ³ΖΜΧΣΓ";
         Text[ russian ] = "Ρξηδΰςό θμÿ θη";
         Text[ polish ] = "Utwσrz nazwκ z";
-        Text[ japanese ] = "–Ό‘O‚Μμ¬³";
+        Text[ japanese ] = "“K—p‚·‚ι–Ό‘O‚ΜΚ’u";
         Text[ chinese_traditional ] = "²£¥Ν¦WΊΩ±q";
         Text[ arabic ] = "ΕδΤΗΑ ΓΣγΗΑ γδ";
         Text[ greek ] = "Δημιουργία ονόματος από";
@@ -3378,7 +3378,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
     Text[ chinese_simplified ] = "΄΄½¨Γϋ³Ζ";
     Text[ russian ] = "Ρξηδΰςό θμενΰ";
     Text[ polish ] = "Utwσrz nazwy";
-    Text[ japanese ] = "–Ό‘O‚Μμ¬";
+    Text[ japanese ] = "–Ό‘O‚Μ“K—p";
     Text[ chinese_traditional ] = "²£¥Ν¦WΊΩ";
     Text[ arabic ] = "ΕδΤΗΑ ΓΣγΗΑ";
     Text[ greek ] = "Δημιουργία ονόματος";
