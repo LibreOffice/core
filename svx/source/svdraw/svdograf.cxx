@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 11:34:29 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,13 @@ SdrGrafObj::SdrGrafObj():
 
     // #111096#
     mbGrafAnimationAllowed = sal_True;
+
+    // #i25616#
+    mbLineIsOutsideGeometry = sal_True;
+    mbInsidePaint = sal_False;
+
+    // #i25616#
+    mbSupportTextIndentingOnLineWidthChange = sal_False;
 }
 
 // -----------------------------------------------------------------------------
@@ -262,6 +269,13 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect):
 
     // #111096#
     mbGrafAnimationAllowed = sal_True;
+
+    // #i25616#
+    mbLineIsOutsideGeometry = sal_True;
+    mbInsidePaint = sal_False;
+
+    // #i25616#
+    mbSupportTextIndentingOnLineWidthChange = sal_False;
 }
 
 // -----------------------------------------------------------------------------
@@ -278,6 +292,13 @@ SdrGrafObj::SdrGrafObj( const Graphic& rGrf ):
 
     // #111096#
     mbGrafAnimationAllowed = sal_True;
+
+    // #i25616#
+    mbLineIsOutsideGeometry = sal_True;
+    mbInsidePaint = sal_False;
+
+    // #i25616#
+    mbSupportTextIndentingOnLineWidthChange = sal_False;
 }
 
 // -----------------------------------------------------------------------------
@@ -879,6 +900,128 @@ sal_Bool SdrGrafObj::ImpUpdateGraphicLink() const
 
 // -----------------------------------------------------------------------------
 
+//////////////////////////////////////////////////////////////////////////////
+// #i25616#
+
+void SdrGrafObj::ImpDoPaintGrafObjShadow( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec ) const
+{
+    const sal_Bool bShadOn(((SdrShadowItem&)(GetObjectItem(SDRATTR_SHADOW))).GetValue());
+
+    if(bShadOn)
+    {
+        const sal_Bool bDoPaintFilling(IsObjectTransparent());
+        const sal_Bool bDoPaintLine(0L != ImpGetLineWdt());
+
+        if(bDoPaintFilling || bDoPaintLine)
+        {
+            ((SdrGrafObj*)this)->mbInsidePaint = sal_True;
+            SdrRectObj::ImpDoPaintRectObjShadow(rOut, rInfoRec, bDoPaintFilling, bDoPaintLine);
+            ((SdrGrafObj*)this)->mbInsidePaint = sal_False;
+        }
+
+        const sal_Bool bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
+
+        if(!bIsFillDraft)
+        {
+            OutputDevice* pOutDev = rOut.GetOutDev();
+            const sal_uInt32 nXDist(((SdrShadowXDistItem&)GetObjectItem(SDRATTR_SHADOWXDIST)).GetValue());
+            const sal_uInt32 nYDist(((SdrShadowYDistItem&)GetObjectItem(SDRATTR_SHADOWYDIST)).GetValue());
+            const Color aShadowColor(((SdrShadowColorItem&)GetObjectItem(SDRATTR_SHADOWCOLOR)).GetValue());
+            const sal_uInt16 nShadowTransparence(((SdrShadowTransparenceItem&)GetObjectItem(SDRATTR_SHADOWTRANSPARENCE)).GetValue());
+
+            if(IsObjectTransparent())
+            {
+                // object which casts the shadow is somehow transparent, create a transparent
+                // shadow
+                Rectangle aSnapRect(GetSnapRect());
+                aSnapRect.Move(nXDist, nYDist);
+                const Rectangle aSnapRectPixel(pOutDev->LogicToPixel(aSnapRect));
+
+                // get BitmapEx
+                Graphic aTempGraphic = GetTransformedGraphic();
+                Size aPixelSize(aSnapRectPixel.GetSize());
+                BitmapEx aTempBitmapEx = aTempGraphic.GetBitmapEx(&aPixelSize);
+
+                // paint
+                if(aTempBitmapEx.IsTransparent())
+                {
+                    if(aTempBitmapEx.IsAlpha())
+                    {
+                        BitmapPalette aTempBitmapPalette(2);
+                        aTempBitmapPalette[0] = aShadowColor;
+                        aTempBitmapPalette[1] = Color(COL_BLACK);
+                        Bitmap aSingleColorBitmap(aPixelSize, 1, &aTempBitmapPalette);
+                        AlphaMask aTempAlphaMask(aTempBitmapEx.GetAlpha());
+                        BitmapEx aTempMaskedBitmap(aSingleColorBitmap, aTempAlphaMask);
+                        pOutDev->DrawBitmapEx(aSnapRect.TopLeft(), aTempMaskedBitmap);
+                    }
+                    else
+                    {
+                        if(0 != nShadowTransparence && 100 > nShadowTransparence)
+                        {
+                            Bitmap aTempBitmapMask(aTempBitmapEx.GetMask());
+                            aTempBitmapMask.Invert();
+                            BYTE bEraseValue(0xff);
+                            AlphaMask aTempAlphaMask(aPixelSize, &bEraseValue);
+                            BYTE aReplaceTransparency((nShadowTransparence * 0x00ff) / 100);
+                            aTempAlphaMask.Replace(aTempBitmapMask, aReplaceTransparency);
+
+                            BitmapPalette aTempBitmapPalette(2);
+                            aTempBitmapPalette[0] = aShadowColor;
+                            aTempBitmapPalette[1] = Color(COL_BLACK);
+                            Bitmap aSingleColorBitmap(aPixelSize, 1, &aTempBitmapPalette);
+
+                            BitmapEx aTempMaskedBitmap(aSingleColorBitmap, aTempAlphaMask);
+                            pOutDev->DrawBitmapEx(aSnapRect.TopLeft(), aTempMaskedBitmap);
+                        }
+                        else
+                        {
+                            Bitmap aTempBitmapMask(aTempBitmapEx.GetMask());
+                            pOutDev->DrawMask(aSnapRect.TopLeft(), aTempBitmapMask, aShadowColor);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // shadow for the whole rectangle
+                pOutDev->SetFillColor(aShadowColor);
+                pOutDev->SetLineColor();
+                Polygon aOutputPoly(XOutCreatePolygon(GetXPoly(), pOutDev));
+                aOutputPoly.Move(nXDist, nYDist);
+
+                if(0 != nShadowTransparence && 100 > nShadowTransparence)
+                {
+                    PolyPolygon aPolyPoly(aOutputPoly);
+                    pOutDev->DrawTransparent(aPolyPoly, nShadowTransparence);
+                }
+                else
+                {
+                    pOutDev->DrawPolygon(aOutputPoly);
+                }
+            }
+        }
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// #i25616#
+
+void SdrGrafObj::ImpDoPaintGrafObj( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec ) const
+{
+    const sal_Bool bDoPaintFilling(IsObjectTransparent());
+    const sal_Bool bDoPaintLine(XLINE_NONE != ((XLineStyleItem&)(GetObjectItem(XATTR_LINESTYLE))).GetValue());
+
+    if(bDoPaintFilling || bDoPaintLine)
+    {
+        ((SdrGrafObj*)this)->mbInsidePaint = sal_True;
+        SdrRectObj::ImpDoPaintRectObj(rOut, rInfoRec, bDoPaintFilling, bDoPaintLine);
+        ((SdrGrafObj*)this)->mbInsidePaint = sal_False;
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 sal_Bool SdrGrafObj::DoPaintObject( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec ) const
 {
     sal_Bool bRetval(sal_False);
@@ -913,6 +1056,12 @@ sal_Bool SdrGrafObj::DoPaintObject( ExtOutputDevice& rOut, const SdrPaintInfoRec
         sal_uInt16 nMirrorCase(bRota180 ? (bMirrored ? 3 : 4) : (bMirrored ? 2 : 1));
         sal_Bool bHMirr((2 == nMirrorCase ) || (4 == nMirrorCase));
         sal_Bool bVMirr((3 == nMirrorCase ) || (4 == nMirrorCase));
+
+        // #i25616#
+        ImpDoPaintGrafObjShadow( rOut, rInfoRec );
+
+        // #i25616#
+        ImpDoPaintGrafObj( rOut, rInfoRec );
 
         aAttr.SetMirrorFlags((bHMirr ? BMP_MIRROR_HORZ : 0)|(bVMirr ? BMP_MIRROR_VERT : 0));
 
@@ -970,174 +1119,7 @@ sal_Bool SdrGrafObj::DoPaintObject( ExtOutputDevice& rOut, const SdrPaintInfoRec
         }
 
         bRetval = sal_True;
-        // #110290# Remove the SdrGraphObj from the list of objects to be removed on
-        // page switch. This is permissible, as the Draw above reenabled the swapout
-        // timer.
-        // #110573# Occasionally, the view is NULL (e.g. previews in impress and calc)
-        //if( bDidPaint && pView )
-        //    ( (SdrView*) pView )->ImpAsyncPaintDone( this );
     }
-    // #110094#-16 Moved to ViewContactOfSdrObj::ShouldPaintObject(..)
-    //// Hidden objects on masterpages, draw nothing
-    //if( ( ( rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE ) && bNotVisibleAsMaster ) ||
-    //  ( ( OUTDEV_PRINTER == rOut.GetOutDev()->GetOutDevType() ) && bEmptyPresObj ) )
-    //{
-    //  return TRUE;
-    //}
-
-    // moved to ViewContactOfGraphic::ShouldPaintObject(..)
-    //if( ( OUTDEV_PRINTER == rOut.GetOutDev()->GetOutDevType() ) && bEmptyPresObj )
-    //{
-    //  return TRUE;
-    //}
-
-//  FASTBOOL        bDraft = ( 0 != ( rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTGRAF ) );
-//  FASTBOOL        bSwappedOut = pGraphic->IsSwappedOut() || ( pGraphic->GetType() == GRAPHIC_NONE );
-//  FASTBOOL        bLoading = FALSE;
-//  OutputDevice*   pOutDev = rOut.GetOutDev();
-//  GDIMetaFile*    pRecMetaFile = pOutDev->GetConnectMetaFile();
-//  FASTBOOL        bMtfRecording = ( pRecMetaFile && pRecMetaFile->IsRecord() && !pRecMetaFile->IsPause() );
-//  const SdrView*  pView = ( rInfoRec.pPV ? &rInfoRec.pPV->GetView() : NULL );
-
-//  if( bSwappedOut && !bDraft )
-//  {
-//      if( !pGraphicLink /*ImpUpdateGraphicLink()*/ )
-//      {
-//          if( ( OUTDEV_WINDOW == pOutDev->GetOutDevType() ) && !bMtfRecording && pView && pView->IsSwapAsynchron() )
-//          {
-//              ( (SdrView*) pView )->ImpAddAsyncObj( this, pOutDev );
-//              bLoading = TRUE;
-//          }
-//          else
-//              ForceSwapIn();
-//      }
-//  }
-
-//  if( pGraphic->IsSwappedOut() || ( pGraphic->GetType() == GRAPHIC_NONE ) || ( pGraphic->GetType() == GRAPHIC_DEFAULT ) )
-//      bDraft=TRUE;
-
-//  long          nDrehWink = aGeo.nDrehWink, nShearWink = aGeo.nShearWink;
-//  FASTBOOL      bRotate = ( nDrehWink != 0 && nDrehWink != 18000 );
-//  FASTBOOL      bShear = ( nShearWink != 0 );
-//  FASTBOOL      bRota180 = nDrehWink == 18000;
-//  USHORT        nMirrorCase = ( bRota180 ? ( bMirrored ? 3 : 4 ) : ( bMirrored ? 2 : 1 ) );   //  4 | 3   H&V gespiegelt | nur Vertikal
-//  FASTBOOL      bHMirr = ( ( 2 == nMirrorCase ) || ( 4 == nMirrorCase ) );                    // ---+---  ---------------+-----------------
-//  FASTBOOL      bVMirr = ( ( 3 == nMirrorCase ) || ( 4 == nMirrorCase ) );                    //  2 | 1   nur Horizontal | nicht gespiegelt
-
-//  if( !bEmptyPresObj && !bDraft )
-//  {
-//      Point       aLogPos( aRect.TopLeft() );
-//      Size        aLogSize( pOutDev->PixelToLogic( pOutDev->LogicToPixel( aRect ).GetSize() ) );
-//      GraphicAttr aAttr( aGrafInfo );
-//      const ULONG nGraphicManagerDrawMode = ( pView ? pView->GetGraphicManagerDrawMode() : GRFMGR_DRAW_STANDARD );
-//
-//      aAttr.SetMirrorFlags( ( bHMirr ? BMP_MIRROR_HORZ : 0 ) | ( bVMirr ? BMP_MIRROR_VERT : 0 ) );
-//
-//      if( bRota180 )
-//      {
-//          aLogPos.X() -= ( aLogSize.Width() - 1L );
-//          aLogPos.Y() -= ( aLogSize.Height() - 1L );
-//      }
-//
-//        bool bDidPaint( false );
-//
-//      if( pGraphic->GetType() == GRAPHIC_BITMAP )
-//      {
-//          // #111096#
-//          // paint animated graphic?
-//          if(rInfoRec.mbUseBitmapEx)
-//          {
-//              Point aDestPos = pOutDev->LogicToPixel(aLogPos);
-//              Size aDestSize = pOutDev->LogicToPixel(aLogSize);
-//              sal_Bool bMapModeWasEnabled(pOutDev->IsMapModeEnabled());
-//
-//              pOutDev->EnableMapMode(sal_False);
-//              pOutDev->DrawBitmapEx(aDestPos, aDestSize, rInfoRec.maBitmapEx);
-//              pOutDev->EnableMapMode(bMapModeWasEnabled);
-//                bDidPaint = true;
-//          }
-//          else
-//          {
-//              if( bRotate && !bRota180 )
-//                  aAttr.SetRotation( (sal_uInt16)(nDrehWink / 10) );
-//
-//              DrawGraphic( pOutDev, aLogPos, aLogSize, &aAttr, nGraphicManagerDrawMode );
-//                bDidPaint = true;
-//          }
-//      }
-//      else
-//      {
-//          // MetaFiles
-//          const ULONG nOldDrawMode = pOutDev->GetDrawMode();
-//
-//          // Falls Modus GRAYBITMAP, wollen wir auch Mtf's als Graustufen darstellen
-//          if( nOldDrawMode & DRAWMODE_GRAYBITMAP )
-//          {
-//              ULONG nNewDrawMode = nOldDrawMode;
-//              nNewDrawMode &= ~( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_WHITEFILL | DRAWMODE_NOFILL );
-//              pOutDev->SetDrawMode( nNewDrawMode |= DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL  );
-//          }
-//
-//          if( bRotate && !bRota180 )
-//              aAttr.SetRotation( (sal_uInt16)(nDrehWink / 10) );
-//
-//          DrawGraphic( pOutDev, aLogPos, aLogSize, &aAttr, nGraphicManagerDrawMode );
-//          pOutDev->SetDrawMode( nOldDrawMode );
-//
-//            bDidPaint = true;
-//      }
-
-        // #110290# Remove the SdrGraphObj from the list of objects to be removed on
-        // page switch. This is permissible, as the Draw above reenabled the swapout
-        // timer.
-        // #110573# Occasionally, the view is NULL (e.g. previews in impress and calc)
-//        if( bDidPaint && pView )
-//            ( (SdrView*) pView )->ImpAsyncPaintDone( this );
-//  }
-
-    // auch GRAPHIC_NONE oder SwappedOut( AsyncSwap )
-//  if( ( bEmptyPresObj || bDraft ) && ( !bDraft || !( rInfoRec.nPaintMode & SDRPAINTMODE_HIDEDRAFTGRAF ) ) )
-//  {
-        // for test, draw a simple replacement
-        // SdrObject::DoPaintObject(rOut, rInfoRec);
-
-        /*
-        XubString   aText;
-        Bitmap*     pBmp = NULL;
-        FASTBOOL    bFill = FALSE;
-
-        if( bEmptyPresObj )
-            bFill = !ImpPaintEmptyPres( pOutDev );
-
-        // und nun noch einen grauen Rahmen drum herum, Text rein, ...
-        if( !bEmptyPresObj )
-        {
-            aText = aFileName;
-
-            if(!aText.Len())
-            {
-                aText = aName;
-
-                if( bLoading )
-                {
-                    aText.AppendAscii(" ...");
-                    //FASTBOOL bNoName=aText.Len()==0;
-                    //if (!bNoName) aText.Insert(' ',0);
-                    //else aText.Insert("...",0);
-                    //aText.Insert("Loading",0);
-                }
-            }
-
-            pBmp = new Bitmap( ResId ( BMAP_GrafikEi, ImpGetResMgr() ) );
-        }
-
-        ImpPaintReplacement( pOutDev, aText, pBmp, bFill );
-        delete pBmp;
-        */
-    // }
-
-    //if( OUTDEV_PRINTER == pOutDev->GetOutDevType() )
-    //  ForceSwapOut();
 
     if(HasText())
     {
@@ -1249,6 +1231,30 @@ void SdrGrafObj::operator=( const SdrObject& rObj )
     }
 
     ImpSetAttrToGrafInfo();
+}
+
+// -----------------------------------------------------------------------------
+// #i25616#
+
+void SdrGrafObj::TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const
+{
+    if(mbInsidePaint)
+    {
+        // take grown rectangle
+        const sal_Int32 nHalfLineWidth(ImpGetLineWdt() / 2);
+        const Rectangle aGrownRect(
+            aRect.Left() - nHalfLineWidth,
+            aRect.Top() - nHalfLineWidth,
+            aRect.Right() + nHalfLineWidth,
+            aRect.Bottom() + nHalfLineWidth);
+
+        rPoly = XPolyPolygon(ImpCalcXPoly(aGrownRect, GetEckenradius()));
+    }
+    else
+    {
+        // call parent
+        SdrRectObj::TakeXorPoly(rPoly, bDetail);
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -2068,6 +2074,18 @@ void SdrGrafObj::SetGrafAnimationAllowed(sal_Bool bNew)
         mbGrafAnimationAllowed = bNew;
         ActionChanged();
     }
+}
+
+// #i25616#
+sal_Bool SdrGrafObj::IsObjectTransparent() const
+{
+    if(((const SdrGrafTransparenceItem&)GetObjectItem(SDRATTR_GRAFTRANSPARENCE)).GetValue()
+        || IsTransparent())
+    {
+        return sal_True;
+    }
+
+    return sal_False;
 }
 
 // eof
