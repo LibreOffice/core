@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:57:41 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,22 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
 
     if ( !GetView()->GetTextEditOutliner() )
     {
+        SvtCJKOptions aCJKOptions;
+        if( !aCJKOptions.IsChangeCaseMapEnabled() )
+        {
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, sal_False );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, sal_False );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, sal_False );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, sal_False );
+        }
+        else
+        {
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, sal_True );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, sal_True );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, sal_True );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, sal_True );
+        }
+
         rSet.DisableItem( SID_TRANSLITERATE_UPPER );
         rSet.DisableItem( SID_TRANSLITERATE_LOWER );
         rSet.DisableItem( SID_TRANSLITERATE_HALFWIDTH );
@@ -362,10 +378,21 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
         SvtCJKOptions aCJKOptions;
         if( !aCJKOptions.IsChangeCaseMapEnabled() )
         {
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, sal_False );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, sal_False );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, sal_False );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, sal_False );
             rSet.DisableItem( SID_TRANSLITERATE_HALFWIDTH );
             rSet.DisableItem( SID_TRANSLITERATE_FULLWIDTH );
             rSet.DisableItem( SID_TRANSLITERATE_HIRAGANA );
             rSet.DisableItem( SID_TRANSLITERATE_KATAGANA );
+        }
+        else
+        {
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, sal_True );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, sal_True );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, sal_True );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, sal_True );
         }
     }
 }
