@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:37:40 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ public:
 };
 
 //========================================================================
-class FmXUndoEnvironment
+class SVX_DLLPRIVATE FmXUndoEnvironment
     : public ::cppu::WeakImplHelper4<   ::com::sun::star::beans::XPropertyChangeListener
                                     ,   ::com::sun::star::container::XContainerListener
                                     ,   ::com::sun::star::script::XScriptListener
