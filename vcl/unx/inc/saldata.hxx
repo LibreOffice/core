@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:53:52 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _SV_SALINST_H
 #include <salinst.h>
 #endif
+#ifndef _OSL_MODULE_H
+#include <osl/module.h>
+#endif
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalXLib;
@@ -105,8 +108,10 @@ protected:
             SalDisplay         *m_pSalDisplay;
 
             pthread_t           hMainThread_;
+
 public:
             SalInstance*        pInstance_;         // pointer to instance
+            oslModule           m_pPlugin; // plugin library handle
 public:
     SalData();
     virtual ~SalData();
