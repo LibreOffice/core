@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlccompile.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2001-05-14 12:48:24 $
+ *  last change: $Author: bei $ $Date: 2001-06-03 10:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ void copyFile(const OString& sourceFile, const OString& targetFile)
     fclose(pTarget);
 }
 
-sal_Int32 compileFile(const OString& fileName)
+sal_Int32 SAL_CALL compileFile(const OString& fileName)
 {
     // preporcess input file
     OString tmpFile = makeTempName(OString("idli_"), OString(".idl"));
