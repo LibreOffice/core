@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-09 14:13:18 $
+ *  last change: $Author: mtg $ $Date: 2001-03-09 16:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,7 +473,6 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFrameAttrTokenMap[] =
     { XML_NAMESPACE_DRAW,   sXML_code,          XML_TOK_TEXT_FRAME_CODE },
     { XML_NAMESPACE_DRAW,   sXML_object,        XML_TOK_TEXT_FRAME_OBJECT },
     { XML_NAMESPACE_DRAW,   sXML_archive,       XML_TOK_TEXT_FRAME_ARCHIVE },
-    { XML_NAMESPACE_OFFICE, sXML_name,          XML_TOK_TEXT_FRAME_OFFICE_NAME },
     { XML_NAMESPACE_DRAW,   sXML_may_script,    XML_TOK_TEXT_FRAME_MAY_SCRIPT },
     { XML_NAMESPACE_DRAW,   sXML_mime_type,     XML_TOK_TEXT_FRAME_MIME_TYPE },
     XML_TOKEN_MAP_END
@@ -1789,16 +1788,9 @@ Reference< XPropertySet> XMLTextImportHelper::createFloatingFrame(
     return xPropSet;
 }
 
-void XMLTextImportHelper::addParam( const OUString &rName, const OUString &rValue, sal_Bool bApplet)
-{
-}
-void XMLTextImportHelper::setAlternateText( const OUString &rAlt, sal_Bool bApplet )
-{
-}
-void XMLTextImportHelper::endApplet( )
-{
-}
-void XMLTextImportHelper::endPlugin( )
+void XMLTextImportHelper::endAppletOrPlugin(
+        Reference < XPropertySet> & rPropSet,
+        std::map < const rtl::OUString, rtl::OUString, less_functor > &rParamMap)
 {
 }
 // redline helper: dummy implementation to be overridden in sw/filter/xml
