@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:48:49 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:53:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ danish ] = "Bevar målestok" ;
         Text [ portuguese_brazilian ] = "Maßstab beibehalten" ;
         Text [ portuguese ] = "Manter ~escala" ;
-        Text[ chinese_simplified ] = "±£³Ö¿Ì¶È(~S)";
+        Text[ chinese_simplified ] = "±£³ÖÏÔÊ¾±ÈÁĞ(~S)";
         Text[ russian ] = "Ñîõğàíèòü ìàñøòàá";
         Text[ polish ] = "Zachowaj s~kalê";
         Text[ japanese ] = "½¹°Ù•Û(~S)";
@@ -372,7 +372,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ danish ] = "Målestok" ;
         Text [ portuguese_brazilian ] = "Maßstab" ;
         Text [ portuguese ] = "Escala" ;
-        Text[ chinese_simplified ] = "¿Ì¶È";
+        Text[ chinese_simplified ] = "ÏÔÊ¾±ÈÁĞ";
         Text[ russian ] = "Ìàñøòàá";
         Text[ polish ] = "Skala";
         Text[ japanese ] = "½¹°Ù";
