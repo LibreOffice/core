@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestShl2Runner.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-21 13:17:35 $
+ *  last change: $Author: lla $ $Date: 2003-01-21 13:21:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,25 @@ class CurrentEntry
     public String getState()
         {
             // build the right State
-            return "FAILED#HARDCODED#";
+            String sAllIsRight = "PASSED#OK#";
+            ArrayList sFailedStates = new ArrayList();
+            boolean bFailed = false;
+            for (int i=0; i<m_sStates.size();i++)
+            {
+                String sStatus = (String) m_sStates.get(i);
+                if (!sStatus.equals(sAllIsRight))
+                {
+                    bFailed = true;
+                    sFailedStates.add(sStatus);
+                }
+            }
+            if (bFailed == false)
+            {
+                return "PASSED#OK#";
+            }
+
+            // interpret the failures
+            return "PASSED#FAILED#";
         }
 
     public void add(String _sDate, String _sClassName, String _sMethodName, String _sMethodTestName, String _sState, String _sComment)
