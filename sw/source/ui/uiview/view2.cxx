@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 11:56:39 $
+ *  last change: $Author: os $ $Date: 2001-05-29 13:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,15 +388,16 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
             if (aPasswdDlg.Execute())
             {
-                USHORT nOn;
+                USHORT nOn = REDLINE_ON;;
+                String sNewPasswd( aPasswdDlg.GetPassword() );
+                Sequence <sal_Int8> aNewPasswd =
+                        pWrtShell->GetDoc()->GetRedlinePasswd();
+                SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
                 if(!aPasswd.getLength())
                 {
-                    String sNewPasswd( aPasswdDlg.GetPassword() );
-                    SvPasswordHelper::GetHashPassword( aPasswd, sNewPasswd );
-                    pWrtShell->GetDoc()->SetRedlinePasswd(aPasswd);
-                    nOn = REDLINE_ON;
+                    pWrtShell->GetDoc()->SetRedlinePasswd(aNewPasswd);
                 }
-                else
+                else if(aNewPasswd == aPasswd)
                 {
                     pWrtShell->GetDoc()->SetRedlinePasswd(Sequence <sal_Int8> ());
                     nOn = 0;
