@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-12 13:07:02 $
+#   last change: $Author: kz $ $Date: 2004-12-16 11:43:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,7 @@ CSFILES = \
     dynload.cs				
 
 $(OUT)$/bin$/dynload.exe : $(CSFILES) 
-        csc $(CSCFLAGS) \
+        +$(CSC) $(CSCFLAGS) \
         -target:exe \
         -out:$@ \
         -reference:$(OUT)$/bin$/cli_ure.dll \
