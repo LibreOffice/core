@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:53:22 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1010,7 +1010,7 @@ void SAL_CALL SwXTextView::setRubyList(
 /*-- 29.12.02 15:45:29---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SfxObjectShellRef SwXTextView::BuildTmpSelectionDoc( SvEmbeddedObjectRef &rRef )
+SfxObjectShellRef SwXTextView::BuildTmpSelectionDoc( SfxObjectShellRef& rRef )
 {
     SwWrtShell* pOldSh = &pView->GetWrtShell();
     SfxPrinter *pPrt = pOldSh->GetPrt();
