@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:23:36 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
 
 // include ---------------------------------------------------------------
 
