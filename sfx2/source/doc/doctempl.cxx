@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-11 10:22:00 $
+ *  last change: $Author: dv $ $Date: 2000-12-11 14:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1822,7 +1822,7 @@ BOOL SfxDocumentTemplates::GetFull
             aName = GetFullRegionName( i );
         else
             aName = GetRegionName( i );
-        if( aName == rRegion )
+        if( !rRegion.Len() || ( aName == rRegion ) )
         {
             RegionData_Impl *pRegion = pImp->GetRegion( i );
             if ( pRegion )
