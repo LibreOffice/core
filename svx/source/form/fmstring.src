@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:12:27 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3733,7 +3733,7 @@ String RID_STR_DATEFORMAT_LIST
     Text[ polish ] = "Standardowy (krσtki);Standardowy (krσtki JJ);Standardowy (krσtki JJJJ);Standardowy (d³ugi);TT.MM.JJ;MM.TT.JJ;JJ.MM.TT;TT.MM.JJJJ;MM.TT.JJJJ;JJJJ.MM.TT;JJ-MM-TT (DIN5008);JJJJ-MM-TT (DIN5008)";
     Text[ japanese ] = "•W€(’Z‚Ά`®);•W€(’Z‚Ά`® YY);•W€(’Z‚Ά`® YYYY);•W€(’·‚Ά`®j;DD.MM.YY;MM.DD.YY;YY.MM.DD;DD.MM.YYYY;MM.DD.YYYY;YYYY.MM.DD;YY-MM-DD (DIN5008);YYYY-MM-DD (DIN5008)";
     Text[ chinese_traditional ] = "ΌΠ·Η(ΑYΌg);ΌΠ·Η(ΑYΌg JJ);ΌΠ·Η(ΑYΌg JJJJ);ΌΠ·Η(§ΉΎγ);DD.MM.YY;MM.DD.YY;YY.MM.DD;DD.MM.YYYY;MM.DD.YYYY;YYYY.MM.DD;YY-MM-DD (DIN5008);YYYY-MM-DD (DIN5008)";
-    Text[ greek ] = "Προεπιλογή (σύντομο);Προεπιλογή (σύντομο YY);Προεπιλογή (σύντομο YYYY);Προεπιλογή (μακρύ);DD.MM.YY;MM.DD.YY;YY.MM.DD;DD.MM.YYYY;MM.DD.YYYY;YYYY.MM.DD;YY-MM-DD (DIN5008);YYYY-MM-DD (DIN5008)";
+    Text[ greek ] = "Προεπιλογή (σύντομο);Προεπιλογή (σύντομο YY);Προεπιλογή (σύντομο YYYY);Προεπιλογή (μακρύ);DD.MM.YY;MM.DD.YY;YY.MM.DD;DD.MM.YYYY;MM.DD.YYYY;YYYY.MM.DD;YY-MM-DD (DIN5008);YYYY-MM-DD (DIN5008) ";
     Text[ korean ] = "Η¥ΑΨ(Βª°Τ);Η¥ΑΨ(Βª°ΤYY);Η¥ΑΨ(Βª°ΤYYYY);Η¥ΑΨ(±ζ°Τ);DD.MM.YY;MM.DD.YY;YY.MM.DD;DD.MM.YYYY;MM.DD.YYYY;YYYY.MM.DD;YY-MM-DD (DIN5008);YYYY-MM-DD (DIN5008)";
     Text[ arabic ] = "ήνΗΣν (ήΥνΡ)ΊήνΗΣν (ήΥνΡ YY)ΊήνΗΣν (ήΥνΡ YYY)ΊήνΗΣν (Ψζνα)ΊDD.MM.YYΊMM.DD.YYΊYY.MM.DDΊDD.MM.YYYYΊMM.DD.YYYYΊYYYY.MM.DDΊYY-MM-DD (DIN5008)ΊYYYY-MM-DD (DIN5008)";
     Text[ turkish ] = "Standart (kύsa);Standart (kύsa YY);Standart (kύsa YYYY);Standart (uzun);GG.AA.YY;AA.GG.YY;YY.AA.GG;GG.AA.YYYY;AA.GG.YYYY;YYYY.AA.GG;YY-AA-GG (DIN5008);YYYY-AA-GG (DIN5008)";
@@ -7206,5 +7206,6 @@ Resource RID_RES_CONTROL_WIZARDS_ERROR_CONTEXTS
         Text[ finnish ] = "Automaattista ryhmδruudun ohjausta ei voitu kδynnistδδ.";
     };
 };
+
 
 
