@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:21 $
+ *  last change: $Author: mib $ $Date: 2000-10-12 17:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3086,7 +3086,7 @@ sal_Bool SvxEscapementItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_ESC_HEIGHT:
         {
-            BYTE nVal;
+            sal_Int8 nVal;
             if( (rVal >>= nVal) && (nVal <= 100))
                 nProp = nVal;
             else
