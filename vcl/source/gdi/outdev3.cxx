@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.188 $
+ *  $Revision: 1.189 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:21:08 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,11 +337,11 @@ void OutputDevice::ImplUpdateFontData( bool bNewFontLists )
     // also update child windows if needed
     if ( GetOutDevType() == OUTDEV_WINDOW )
     {
-        Window* pChild = ((Window*)this)->mpFirstChild;
+        Window* pChild = ((Window*)this)->mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
             pChild->ImplUpdateFontData( true );
-            pChild = pChild->mpNext;
+            pChild = pChild->mpWindowImpl->mpNext;
         }
     }
 }
@@ -358,14 +358,14 @@ void OutputDevice::ImplUpdateAllFontData( bool bNewFontLists )
     {
         pFrame->ImplUpdateFontData( bNewFontLists );
 
-        Window* pSysWin = pFrame->mpFrameData->mpFirstOverlap;
+        Window* pSysWin = pFrame->mpWindowImpl->mpFrameData->mpFirstOverlap;
         while ( pSysWin )
         {
             pSysWin->ImplUpdateFontData( bNewFontLists );
-            pSysWin = pSysWin->mpNextOverlap;
+            pSysWin = pSysWin->mpWindowImpl->mpNextOverlap;
         }
 
-        pFrame = pFrame->mpFrameData->mpNextFrame;
+        pFrame = pFrame->mpWindowImpl->mpFrameData->mpNextFrame;
     }
 
     // update all virtual devices
@@ -394,7 +394,7 @@ void OutputDevice::ImplUpdateAllFontData( bool bNewFontLists )
         {
             if ( pFrame->ImplGetGraphics() )
                 // MT: Stupid typecast here and somewhere ((OutputDevice*)&aVDev)->, because bug in .NET2002 compiler.
-                ((OutputDevice*)pFrame)->mpGraphics->GetDevFontList( pFrame->mpFrameData->mpFontList );
+                ((OutputDevice*)pFrame)->mpGraphics->GetDevFontList( pFrame->mpWindowImpl->mpFrameData->mpFontList );
         }
     }
 }
