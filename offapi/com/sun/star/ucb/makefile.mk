@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: kso $ $Date: 2001-06-18 11:01:59 $
+#   last change: $Author: kso $ $Date: 2001-06-26 14:24:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -173,6 +173,7 @@ IDLFILES=\
     PackageStreamContent.idl\
     PersistentPropertySet.idl\
     PostCommandArgument.idl\
+        PostCommandArgument2.idl\
     Priority.idl\
     PropertiesManager.idl\
     PropertyMatcherFactory.idl\
