@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:32:04 $
+ *  last change: $Author: nn $ $Date: 2001-08-17 19:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,8 @@ const SfxItemPropertyMap* lcl_GetColumnsPropertyMap()
 {
     static SfxItemPropertyMap aColumnsPropertyMap_Impl[] =
     {
+        {MAP_CHAR_LEN(SC_UNONAME_MANPAGE),  0,  &getBooleanCppuType(),          0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_NEWPAGE),  0,  &getBooleanCppuType(),          0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVIS),  0,  &getBooleanCppuType(),          0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_OWIDTH),   0,  &getBooleanCppuType(),          0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLWID),  0,  &getCppuType((sal_Int32*)0),    0, 0 },
@@ -171,6 +173,8 @@ const SfxItemPropertyMap* lcl_GetRowsPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_CELLHGT),  0,  &getCppuType((sal_Int32*)0),    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLFILT), 0,  &getBooleanCppuType(),          0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_OHEIGHT),  0,  &getBooleanCppuType(),          0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_MANPAGE),  0,  &getBooleanCppuType(),          0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_NEWPAGE),  0,  &getBooleanCppuType(),          0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVIS),  0,  &getBooleanCppuType(),          0, 0 },
         {0,0,0,0}
     };
