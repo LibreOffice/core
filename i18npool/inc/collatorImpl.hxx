@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collatorImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 10:54:28 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 13:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #if !defined( WIN32 ) && !defined( MACOSX ) && !defined( FREEBSD)
 #include <alloca.h>
 #endif
-#include <tools/list.hxx>
+#include <vector>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 //      ----------------------------------------------------
@@ -136,7 +136,7 @@ private :
             algorithm == _algorithm;
         }
     };
-    List lookupTable;
+    std::vector<lookupTableItem*> lookupTable;
     lookupTableItem *cachedItem;
 
     // Service Factory
