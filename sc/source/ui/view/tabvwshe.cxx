@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshe.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-21 18:38:03 $
+ *  last change: $Author: nn $ $Date: 2001-11-14 20:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,9 @@ String __EXPORT ScTabViewShell::GetSelectionText( BOOL bWholeWord )
 
             ScImportExport aObj( pDoc, aRange );
             aObj.SetFormulas( GetViewData()->GetOptions().GetOption( VOPT_FORMULAS ) );
-            aObj.ExportString( aStrSelection );
+            rtl::OUString aExportOUString;
+            aObj.ExportString( aExportOUString );
+            aStrSelection = aExportOUString;
 
             aStrSelection.ConvertLineEnd( LINEEND_CR );
 

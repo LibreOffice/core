@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-19 12:10:56 $
+ *  last change: $Author: nn $ $Date: 2001-11-14 20:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
 
             if ( rFlavor.DataType.equals( ::getCppuType( (const ::rtl::OUString*) 0 ) ) )
             {
-                String aString;
+                rtl::OUString aString;
                 if ( aObj.ExportString( aString, nFormat ) )
                     bOK = SetString( aString, rFlavor );
             }

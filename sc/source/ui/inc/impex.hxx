@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-19 12:09:33 $
+ *  last change: $Author: nn $ $Date: 2001-11-14 20:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ public:
     const String&   GetStreamPath() const { return aStreamPath; }
 
     BOOL ImportString( const ::rtl::OUString&, ULONG=FORMAT_STRING );
-    BOOL ExportString( String&, ULONG=FORMAT_STRING );
+    BOOL ExportString( ::rtl::OUString&, ULONG=FORMAT_STRING );
     BOOL ExportByteString( ByteString&, rtl_TextEncoding, ULONG=FORMAT_STRING );
 
     BOOL ImportStream( SvStream&, ULONG=FORMAT_STRING );

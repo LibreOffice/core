@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-11 14:37:35 $
+ *  last change: $Author: nn $ $Date: 2001-11-14 20:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,10 +197,9 @@ BOOL __EXPORT ScServerObject::GetData(
         if( aDdeTextFmt.EqualsAscii( "SYLK" ) ||
             aDdeTextFmt.EqualsAscii( "FSYLK" ) )
         {
-            String aData;
-            if( aObj.ExportString( aData, SOT_FORMATSTR_ID_SYLK ) )
+            ByteString aByteData;
+            if( aObj.ExportByteString( aByteData, gsl_getSystemTextEncoding(), SOT_FORMATSTR_ID_SYLK ) )
             {
-                ByteString aByteData( aData, gsl_getSystemTextEncoding() );
                 rData <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
                                         (sal_Int8*)aByteData.GetBuffer(),
                                         aByteData.Len() + 1 );

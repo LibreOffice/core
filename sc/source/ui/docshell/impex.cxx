@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-19 12:11:22 $
+ *  last change: $Author: nn $ $Date: 2001-11-14 20:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,7 @@ BOOL ScImportExport::ImportString( const ::rtl::OUString& rText, ULONG nFmt )
 }
 
 
-BOOL ScImportExport::ExportString( String& rText, ULONG nFmt )
+BOOL ScImportExport::ExportString( ::rtl::OUString& rText, ULONG nFmt )
 {
     DBG_ASSERT( nFmt == FORMAT_STRING, "ScImportExport::ExportString: Unicode not supported for other formats than FORMAT_STRING" );
     if ( nFmt != FORMAT_STRING )
@@ -425,8 +425,7 @@ BOOL ScImportExport::ExportString( String& rText, ULONG nFmt )
         rText = UniString( aTmp, eEnc );
         return bOk;
     }
-    if (!nSizeLimit)
-        nSizeLimit = STRING_MAXLEN;
+    //  nSizeLimit not needed for OUString
 
     SvMemoryStream aStrm;
     aStrm.SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
@@ -435,14 +434,11 @@ BOOL ScImportExport::ExportString( String& rText, ULONG nFmt )
     {
         aStrm << (sal_Unicode) 0;
         aStrm.Seek( STREAM_SEEK_TO_END );
-        // Sicherheits-Check:
-        if( aStrm.Tell() <= (ULONG) STRING_MAXLEN )
-        {
-            rText = (const sal_Unicode*) aStrm.GetData();
-            return TRUE;
-        }
+
+        rText = rtl::OUString( (const sal_Unicode*) aStrm.GetData() );
+        return TRUE;
     }
-    rText.Erase();
+    rText = rtl::OUString();
     return FALSE;
 
     // ExportStream must handle RTL_TEXTENCODING_UNICODE
