@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlgrin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:28:02 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 11:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,9 +569,10 @@ IMAGE_SETEVENT:
         aBulletGrfs[GetNumInfo().GetDepth()-1]==sGrfNm )
     {
         SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
-        if( pTxtNode && pTxtNode->GetNum() && ! pTxtNode->GetNum()->IsNum())
+        if( pTxtNode && pTxtNode->GetNumNoOutline() &&
+            ! pTxtNode->GetNumNoOutline()->IsNum())
         {
-            SwNodeNum aNum( *pTxtNode->GetNum() );
+            SwNodeNum aNum( *pTxtNode->GetNumNoOutline() );
             aNum.SetLevel( aNum.GetLevel() & ~NO_NUMLEVEL );
             ASSERT( aNum.GetLevel() == GetNumInfo().GetLevel(),
                     "Numerierungs-Ebene stimmt nicht" );
