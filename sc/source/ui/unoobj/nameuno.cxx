@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nameuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-11 10:55:52 $
+ *  last change: $Author: nn $ $Date: 2001-06-15 13:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,10 @@ ScRangeData* ScNamedRangeObj::GetRangeData_Impl()
         {
             sal_uInt16 nPos = 0;
             if (pNames->SearchName( aName, nPos ))
+            {
                 pRet = (*pNames)[nPos];
+                pRet->ValidateTabRefs();        // adjust relative tab refs to valid tables
+            }
         }
     }
     return pRet;
@@ -258,6 +261,17 @@ table::CellAddress SAL_CALL ScNamedRangeObj::getReferencePosition()
     aAddress.Column = aPos.Col();
     aAddress.Row    = aPos.Row();
     aAddress.Sheet  = aPos.Tab();
+    if (pDocShell)
+    {
+        USHORT nDocTabs = pDocShell->GetDocument()->GetTableCount();
+        if ( aAddress.Sheet >= nDocTabs && nDocTabs > 0 )
+        {
+            //  Even after ValidateTabRefs, the position can be invalid if
+            //  the content points to preceding tables. The resulting string
+            //  is invalid in any case, so the position is just shifted.
+            aAddress.Sheet = nDocTabs - 1;
+        }
+    }
     return aAddress;
 }
 
