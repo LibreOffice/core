@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 09:19:36 $
+ *  last change: $Author: dl $ $Date: 2001-05-29 12:35:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,7 +472,7 @@ void SdViewShell::AssignFromSlideChangeWindow()
 |* aktuellen Drucker des Dokuments zurueckgeben
 |*
 \************************************************************************/
-SfxPrinter* __EXPORT SdViewShell::GetPrinter(BOOL bCreate)
+SfxPrinter* SdViewShell::GetPrinter(BOOL bCreate)
 {
     return ( pDocSh->GetPrinter(bCreate) );
 }
@@ -482,7 +482,7 @@ SfxPrinter* __EXPORT SdViewShell::GetPrinter(BOOL bCreate)
 |* neuen Drucker fuer die Applikation setzen
 |*
 \************************************************************************/
-USHORT __EXPORT SdViewShell::SetPrinter(SfxPrinter* pNewPrinter,
+USHORT  SdViewShell::SetPrinter(SfxPrinter* pNewPrinter,
                                             USHORT nDiffFlags)
 {
     pDocSh->SetPrinter(pNewPrinter);
@@ -518,7 +518,7 @@ USHORT __EXPORT SdViewShell::SetPrinter(SfxPrinter* pNewPrinter,
 |* Druckdialog erzeugen; virtuell, wird vom SFX aufgerufen
 |*
 \************************************************************************/
-PrintDialog* __EXPORT SdViewShell::CreatePrintDialog(Window *pParent)
+PrintDialog*  SdViewShell::CreatePrintDialog(Window *pParent)
 {
     PrintDialog* pDlg;
 
@@ -571,7 +571,7 @@ PrintDialog* __EXPORT SdViewShell::CreatePrintDialog(Window *pParent)
 |* Factory Methode Tabpage Zusaetze (vom Druckdialog)
 |*
 \************************************************************************/
-SfxTabPage* __EXPORT SdViewShell::CreatePrintOptionsPage( Window *pParent,
+SfxTabPage*  SdViewShell::CreatePrintOptionsPage( Window *pParent,
                                                  const SfxItemSet &rOptions )
 {
     DocumentType eDocType = pDoc->GetDocumentType();
@@ -706,7 +706,7 @@ ErrCode SdViewShell::DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog, B
     return nRet;
 }
 
-USHORT __EXPORT SdViewShell::Print(SfxProgress& rProgress, PrintDialog* pDlg)
+USHORT  SdViewShell::Print(SfxProgress& rProgress, PrintDialog* pDlg)
 {
     SfxPrinter* pPrinter = GetPrinter(TRUE);
 
@@ -814,12 +814,12 @@ USHORT __EXPORT SdViewShell::Print(SfxProgress& rProgress, PrintDialog* pDlg)
 
             if( pPrintOpts->IsDate() )
             {
-                aTimeDateStr += SdrGlobalData::pLocaleData->getDate( Date() );
+                aTimeDateStr += GetSdrGlobalData().pLocaleData->getDate( Date() );
                 aTimeDateStr += (sal_Unicode)' ';
             }
 
             if( pPrintOpts->IsTime() )
-                aTimeDateStr += SdrGlobalData::pLocaleData->getTime( Time(), FALSE, FALSE );
+                aTimeDateStr += GetSdrGlobalData().pLocaleData->getTime( Time(), FALSE, FALSE );
 
             if( pPrintOpts->IsOutline() )
                 bPrintOutline = TRUE;
@@ -1782,7 +1782,7 @@ void SdViewShell::PrintPage( SfxPrinter& rPrinter, SdView* pPrintView,
 |*
 \************************************************************************/
 
-void __EXPORT SdViewShell::GetMenuState( SfxItemSet &rSet )
+void  SdViewShell::GetMenuState( SfxItemSet &rSet )
 {
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STYLE_FAMILY ) )
     {
