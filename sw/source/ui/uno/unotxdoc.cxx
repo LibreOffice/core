@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 17:05:37 $
+ *  last change: $Author: mtg $ $Date: 2001-07-27 13:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,9 @@
 #endif
 #ifndef _SW_XDOCUMENT_SETTINGS_HXX
 #include <SwXDocumentSettings.hxx>
+#endif
+#ifndef _SW_XPRINTPREVIEWSETTINGS_HXX_
+#include <SwXPrintPreviewSettings.hxx>
 #endif
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
@@ -1761,7 +1764,13 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
             }
             else if (sCategory == C2U ("document") )
             {
-                xRet = Reference < XInterface > ( *new SwXDocumentSettings ( this ) );
+                if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.Settings") ) )
+                    xRet = Reference < XInterface > ( *new SwXDocumentSettings ( this ) );
+            }
+            else if (sCategory == C2U ("text") )
+            {
+                if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.PrintPreviewSettings") ) )
+                    xRet = Reference < XInterface > ( *new SwXPrintPreviewSettings ( pDocShell->GetDoc() ) );
             }
             if(!xRet.is())
             {
