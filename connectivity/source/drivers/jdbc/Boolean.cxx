@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Boolean.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:19:18 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,9 +102,11 @@ java_lang_Boolean::java_lang_Boolean( sal_Bool _par0 ): java_lang_Object( NULL, 
         args[0].z = _par0;
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
-    char * cSignature = "(Z)V";
+    static char * cSignature = "(Z)V";
     jobject tempObj;
-    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
+    static jmethodID mID = NULL;
+    if ( !mID  )
+        mID  = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->NewObjectA( getMyClass(), mID, args );
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
