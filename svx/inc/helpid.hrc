@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-04-12 10:20:30 $
+ *  last change: $Author: iha $ $Date: 2002-04-15 19:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,6 +494,7 @@
 #define HID_TRANS_POSITION_SIZE                 (HID_SVX_START + 428)
 #define HID_OPTIONS_COLORCONFIG                 (HID_SVX_START + 429)
 #define HID_OPTIONS_COLORCONFIG_SAVE_SCHEME     (HID_SVX_START + 430)
+#define HID_OPTIONS_ACCESSIBILITYCONFIG         (HID_SVX_START + 431)
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
 // -----------------------------------------------------------------------
