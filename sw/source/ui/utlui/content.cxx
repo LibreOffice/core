@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-07-03 14:55:09 $
+ *  last change: $Author: os $ $Date: 2001-07-04 13:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,10 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXTFRAMESSUPPLIER_HPP_
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
+#endif
+
+#ifndef _SV_SCRBAR_HXX
+#include <vcl/scrbar.hxx>
 #endif
 
 
@@ -1321,8 +1325,14 @@ void SwContentTree::Display( sal_Bool bActive )
     SvLBoxEntry* pOldSelEntry = FirstSelected();
     String sEntryName;  // Name des Eintrags
     sal_uInt16 nEntryRelPos = 0; // rel. Pos zu seinem Parent
+    sal_uInt16 nOldEntryCount = GetEntryCount();
+    sal_uInt16 nOldScrollPos = 0;
     if(pOldSelEntry)
     {
+        ScrollBar* pVScroll = GetVScroll();
+        if(pVScroll && pVScroll->IsVisible())
+            nOldScrollPos = pVScroll->GetThumbPos();
+
         sEntryName = GetEntryText(pOldSelEntry);
         if(GetParent(pOldSelEntry))
         {
@@ -1405,6 +1415,8 @@ void SwContentTree::Display( sal_Bool bActive )
                 MakeVisible(pSelEntry);
                 Select(pSelEntry);
             }
+            else
+                nOldScrollPos = 0;
         }
         else
         {
@@ -1476,6 +1488,14 @@ void SwContentTree::Display( sal_Bool bActive )
         }
     }
     SetUpdateMode( sal_True );
+    ScrollBar* pVScroll = GetVScroll();
+    if(GetEntryCount() == nOldEntryCount &&
+        nOldScrollPos && pVScroll && pVScroll->IsVisible()
+        && pVScroll->GetThumbPos() != nOldScrollPos)
+    {
+        short nDelta = pVScroll->GetThumbPos() - nOldScrollPos;
+        ScrollOutputArea( nDelta );
+    }
 
 }
 
@@ -3116,6 +3136,9 @@ void SwContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFl
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2001/07/03 14:55:09  os
+    #89174# don't use GetActiveView anymore
+
     Revision 1.8  2001/06/26 13:34:16  os
     #84088# index edit: not allowed in protected sections
 
