@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XGraphics.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:37:35 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:36:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,16 +89,16 @@
 
  module com {  module sun {  module star {  module awt {
 
-interface XRegion;
-interface XDisplayBitmap;
-interface XFont;
-interface XDevice;
+ published interface XRegion;
+ published interface XDisplayBitmap;
+ published interface XFont;
+ published interface XDevice;
 
 //=============================================================================
 
 /** provides the basic output operation of a device.
  */
-interface XGraphics: com::sun::star::uno::XInterface
+published interface XGraphics: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFont.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:01:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 
     <p>All values are in pixels within this device.</p>
  */
-interface XFont: com::sun::star::uno::XInterface
+published interface XFont: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 

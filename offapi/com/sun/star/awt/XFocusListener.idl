@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFocusListener.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:01:10 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
     <p>The window which has the keyboard focus is the window which gets
     the keyboard events.</p>
  */
-interface XFocusListener: com::sun::star::lang::XEventListener
+published interface XFocusListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
