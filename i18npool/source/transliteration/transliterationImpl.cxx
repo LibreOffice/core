@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:13:19 $
+ *  last change: $Author: khong $ $Date: 2002-05-10 18:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ TransliterationImpl::transliterate( const OUString& inStr, sal_Int32 startPos, s
 
     nCount = tmpStr.getLength();
 
-    tmp = from; to = from; from = tmp;
+    tmp = from; from = to; to = tmp;
     for (sal_Int32 j = 0; j < nCount; j++)
         off[to][j] = off[from][off[to][j]];
     }
@@ -366,7 +366,7 @@ TransliterationImpl::folding( const OUString& inStr, sal_Int32 startPos, sal_Int
 
     nCount = tmpStr.getLength();
 
-    tmp = from; to = from; from = tmp;
+    tmp = from; from = to; to = tmp;
     for (sal_Int32 j = 0; j < nCount; j++)
         off[to][j] = off[from][off[to][j]];
     }
