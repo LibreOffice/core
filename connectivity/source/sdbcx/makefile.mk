@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: oj $ $Date: 2000-11-03 13:36:27 $
+#   last change: $Author: ganaya $ $Date: 2001-01-30 16:58:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -151,7 +151,8 @@ SLOFILES=\
         $(SLO)$/VKey.obj						\
         $(SLO)$/VIndex.obj						\
         $(SLO)$/VCatalog.obj					\
-        $(SLO)$/VView.obj
+        $(SLO)$/VView.obj \
+        $(SLO)$/staticmbsdbcx.obj
         
 
 # --- Targets ----------------------------------
