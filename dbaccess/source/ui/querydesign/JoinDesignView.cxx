@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinDesignView.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-07 07:19:29 $
+ *  last change: $Author: oj $ $Date: 2002-05-08 13:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,12 +146,12 @@ OJoinDesignView::OJoinDesignView(Window* _pParent, OJoinController* _pController
 // -----------------------------------------------------------------------------
 OJoinDesignView::~OJoinDesignView()
 {
-    ::std::auto_ptr<Window> aT1(m_pAddTabDlg);
-    m_pAddTabDlg = NULL;
-    ::std::auto_ptr<Window> aT2(m_pTableView);
-    m_pTableView = NULL;
     ::std::auto_ptr<Window> aT3(m_pScrollWindow);
     m_pScrollWindow = NULL;
+    ::std::auto_ptr<Window> aT2(m_pTableView);
+    m_pTableView = NULL;
+    ::std::auto_ptr<Window> aT1(m_pAddTabDlg);
+    m_pAddTabDlg = NULL;
 }
 // -------------------------------------------------------------------------
 void OJoinDesignView::Construct()
