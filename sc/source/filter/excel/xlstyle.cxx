@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:38 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,115 @@ void XclFontData::Clear()
     mnFamily = EXC_FONTFAM_SYSTEM;
     mnCharSet = EXC_FONTCSET_DONTKNOW;
     mbItalic = mbStrikeout = mbOutline = mbShadow = false;
+}
+
+
+// Cell formatting data (XF) ==================================================
+
+XclCellProt::XclCellProt() :
+    mbLocked( true ),       // default in Excel and Calc
+    mbHidden( false )
+{
+}
+
+bool operator==( const XclCellProt& rLeft, const XclCellProt& rRight )
+{
+    return (rLeft.mbLocked == rRight.mbLocked) && (rLeft.mbHidden == rRight.mbHidden);
+}
+
+
+// ----------------------------------------------------------------------------
+
+XclCellAlign::XclCellAlign() :
+    meHorAlign( xlHAlign_Default ),
+    meVerAlign( xlVAlign_Default ),
+    meTextDir( xlTextDir_Default ),
+    meOrient( xlTextOrient_Default ),
+    mnRotation( 0 ),
+    mnIndent( 0 ),
+    mbWrapped( false )
+{
+}
+
+bool operator==( const XclCellAlign& rLeft, const XclCellAlign& rRight )
+{
+    return
+        (rLeft.meHorAlign == rRight.meHorAlign) && (rLeft.meVerAlign == rRight.meVerAlign) &&
+        (rLeft.meTextDir  == rRight.meTextDir)  &&
+        (rLeft.meOrient   == rRight.meOrient)   && (rLeft.mnRotation == rRight.mnRotation) &&
+        (rLeft.mnIndent   == rRight.mnIndent)   && (rLeft.mbWrapped  == rRight.mbWrapped);
+}
+
+
+// ----------------------------------------------------------------------------
+
+XclCellBorder::XclCellBorder() :
+    mnLeftColor( EXC_XF_NOCOLOR ),
+    mnRightColor( EXC_XF_NOCOLOR ),
+    mnTopColor( EXC_XF_NOCOLOR ),
+    mnBottomColor( EXC_XF_NOCOLOR ),
+    mnLeftLine( EXC_LINE_NONE ),
+    mnRightLine( EXC_LINE_NONE ),
+    mnTopLine( EXC_LINE_NONE ),
+    mnBottomLine( EXC_LINE_NONE )
+{
+}
+
+bool operator==( const XclCellBorder& rLeft, const XclCellBorder& rRight )
+{
+    return
+        (rLeft.mnLeftColor == rRight.mnLeftColor) && (rLeft.mnRightColor  == rRight.mnRightColor)  &&
+        (rLeft.mnTopColor  == rRight.mnTopColor)  && (rLeft.mnBottomColor == rRight.mnBottomColor) &&
+        (rLeft.mnLeftLine  == rRight.mnLeftLine)  && (rLeft.mnRightLine   == rRight.mnRightLine)   &&
+        (rLeft.mnTopLine   == rRight.mnTopLine)   && (rLeft.mnBottomLine  == rRight.mnBottomLine);
+}
+
+
+// ----------------------------------------------------------------------------
+
+XclCellArea::XclCellArea() :
+    mnForeColor( EXC_XF_AUTOCOLOR ),
+    mnBackColor( EXC_XF_TRANSPCOLOR ),
+    mnPattern( EXC_PATT_NONE )
+{
+}
+
+bool XclCellArea::IsTransparent() const
+{
+    return (mnPattern == EXC_PATT_NONE) &&
+        (((mnForeColor == EXC_XF_AUTOCOLOR) && (mnBackColor == EXC_XF_TRANSPCOLOR)) ||
+        (mnForeColor == EXC_XF_NOCOLOR));
+}
+
+bool operator==( const XclCellArea& rLeft, const XclCellArea& rRight )
+{
+    return
+        (rLeft.mnForeColor == rRight.mnForeColor) && (rLeft.mnBackColor == rRight.mnBackColor) &&
+        (rLeft.mnPattern == rRight.mnPattern);
+}
+
+
+// ----------------------------------------------------------------------------
+
+XclXFBase::XclXFBase( bool bCellXF ) :
+    mnParent( bCellXF ? EXC_XF_DEFAULTSTYLE : EXC_XF_STYLEPARENT ),
+    mbCellXF( bCellXF )
+{
+    SetAllUsedFlags( false );
+}
+
+void XclXFBase::SetAllUsedFlags( bool bUsed )
+{
+    mbProtUsed = mbFontUsed = mbFmtUsed = mbAlignUsed = mbBorderUsed = mbAreaUsed = bUsed;
+}
+
+bool XclXFBase::Equals( const XclXFBase& rCmp ) const
+{
+    return
+        (mbCellXF     == rCmp.mbCellXF)     && (mnParent    == rCmp.mnParent)    &&
+        (mbProtUsed   == rCmp.mbProtUsed)   && (mbFontUsed  == rCmp.mbFontUsed)  &&
+        (mbFmtUsed    == rCmp.mbFmtUsed)    && (mbAlignUsed == rCmp.mbAlignUsed) &&
+        (mbBorderUsed == rCmp.mbBorderUsed) && (mbAreaUsed  == rCmp.mbAreaUsed);
 }
 
 
