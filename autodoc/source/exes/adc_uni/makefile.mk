@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 15:12:07 $
+#   last change: $Author: rt $ $Date: 2004-07-12 15:36:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,8 @@ OBJFILES= \
     $(OBJ)$/adc_cl.obj	        \
     $(OBJ)$/adc_cmd_parse.obj	\
     $(OBJ)$/adc_cmds.obj        \
-    $(OBJ)$/cmd_run.obj
+    $(OBJ)$/cmd_run.obj         \
+    $(OBJ)$/cmd_sincedata.obj
 
 
 # --- Targets ------------------------------------------------------
@@ -110,7 +111,7 @@ APP1OBJS=   $(OBJ)$/main.obj
 APP1STDLIBS= $(LIBSTLPORT) cosv.lib udm.lib
 .ELSE
 .IF "$(OS)"=="MACOSX"
-APP1STDLIBS= $(LIBSTLPORT) -ludm -lcosv 
+APP1STDLIBS= $(LIBSTLPORT) -ludm -lcosv
 .ELSE
 APP1STDLIBS= -lcosv -ludm
 .ENDIF
@@ -132,5 +133,3 @@ APP1DEPN=   $(LB)$/$(TARGET).lib $(LB)$/autodoc_tools.lib \
 
 
 .INCLUDE :  target.mk
-
-
