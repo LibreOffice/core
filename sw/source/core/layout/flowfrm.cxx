@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:29:32 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1353,8 +1353,9 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
     const SwFrm *pPre = pPr ? pPr : rThis.GetPrev();
     BOOL bInFtn = rThis.IsInFtn();
     do {
-        while( pPre && ( (pPre->IsTxtFrm() && ((SwTxtFrm*)pPre)->IsHiddenNow())
-               || ( pPre->IsSctFrm() && !((SwSectionFrm*)pPre)->GetSection() ) ) )
+        while( pPre &&
+               ( ( pPre->IsTxtFrm() && ((SwTxtFrm*)pPre)->IsHiddenNow() ) ||
+                 ( pPre->IsSctFrm() && !((SwSectionFrm*)pPre)->GetSection() ) ) )
             pPre = pPre->GetPrev();
         if( !pPre && bInFtn )
         {
@@ -1406,31 +1407,80 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
         pOwn = &rThis;
     }
     SwTwips nUpper = 0;
-    if( pPre )
+    // OD 06.01.2004 #i11859#
     {
-        const SvxULSpaceItem &rPrevUL = pPre->GetAttrSet()->GetULSpace();
-        if( rThis.GetAttrSet()->GetDoc()->IsParaSpaceMax() )
+        const SwAttrSet* pSet = rThis.GetAttrSet();
+        const SvxLineSpacingItem &rSpace = pSet->GetLineSpacing();
+        const SwDoc* pDoc = pSet->GetDoc();
+        const bool bUseFormerLineSpacing = pDoc->IsFormerLineSpacing();
+        if( pPre )
         {
-            nUpper = rPrevUL.GetLower() + pAttrs->GetULSpace().GetUpper();
-            SwTwips nAdd = 0;
-            if ( pOwn->IsTxtFrm() )
-                nAdd = Max( nAdd, long(((SwTxtFrm&)rThis).GetLineSpace()) );
-            if ( pPre->IsTxtFrm() )
-                nAdd = Max( nAdd, long(((SwTxtFrm*)pPre)->GetLineSpace()) );
-            nUpper += nAdd;
+            const SvxULSpaceItem &rPrevUL = pPre->GetAttrSet()->GetULSpace();
+            if( pDoc->IsParaSpaceMax() )
+            {
+                nUpper = rPrevUL.GetLower() + pAttrs->GetULSpace().GetUpper();
+                SwTwips nAdd = 0;
+                // OD 07.01.2004 #i11859# - consideration of the line spacing
+                //      for the upper spacing of a text frame
+                if ( bUseFormerLineSpacing )
+                {
+                    // former consideration
+                    if ( pOwn->IsTxtFrm() )
+                        nAdd = Max( nAdd, static_cast<SwTxtFrm&>(rThis).GetLineSpace() );
+                    if ( pPre->IsTxtFrm() )
+                        nAdd = Max( nAdd, static_cast<const SwTxtFrm*>(pPre)->GetLineSpace() );
+                    nUpper += nAdd;
+                }
+                else
+                {
+                    // new consideration:
+                    //      Only the proportional line spacing of the previous
+                    //      text frame is considered for the upper spacing and
+                    //      the line spacing values are add up instead of
+                    //      building its maximum.
+                    if ( pOwn->IsTxtFrm() )
+                        nAdd += static_cast<SwTxtFrm&>(rThis).GetLineSpace( true );
+                    if ( pPre->IsTxtFrm() )
+                        nAdd += static_cast<const SwTxtFrm*>(pPre)->GetLineSpace();
+                    nUpper += nAdd;
+                }
+            }
+            else
+            {
+                nUpper = Max( rPrevUL.GetLower(), pAttrs->GetULSpace().GetUpper() );
+                // OD 07.01.2004 #i11859# - consideration of the line spacing
+                //      for the upper spacing of a text frame
+                if ( bUseFormerLineSpacing )
+                {
+                    // former consideration
+                    if ( pOwn->IsTxtFrm() )
+                        nUpper = Max( nUpper, ((SwTxtFrm*)pOwn)->GetLineSpace() );
+                    if ( pPre->IsTxtFrm() )
+                        nUpper = Max( nUpper, ((SwTxtFrm*)pPre)->GetLineSpace() );
+                }
+                else
+                {
+                    // new consideration:
+                    //      Only the proportional line spacing of the previous
+                    //      text frame is considered for the upper spacing and
+                    //      the line spacing values are add up and added to
+                    //      the paragraph spacing instead of building the
+                    //      maximum of the line spacings and the paragraph spacing.
+                    SwTwips nAdd = 0;
+                    if ( pOwn->IsTxtFrm() )
+                        nAdd += static_cast<SwTxtFrm&>(rThis).GetLineSpace( true );
+                    if ( pPre->IsTxtFrm() )
+                        nAdd += static_cast<const SwTxtFrm*>(pPre)->GetLineSpace();
+                    nUpper += nAdd;
+                }
+            }
         }
-        else
+        else if ( pDoc->IsParaSpaceMaxAtPages() &&
+                  CastFlowFrm( pOwn )->HasParaSpaceAtPages( rThis.IsSctFrm() ) )
         {
-            nUpper = Max( rPrevUL.GetLower(), pAttrs->GetULSpace().GetUpper() );
-            if ( pOwn->IsTxtFrm() )
-                nUpper = Max( nUpper, long(((SwTxtFrm*)pOwn)->GetLineSpace()) );
-            if ( pPre->IsTxtFrm() )
-                nUpper = Max( nUpper, long(((SwTxtFrm*)pPre)->GetLineSpace()) );
+            nUpper = pAttrs->GetULSpace().GetUpper();
         }
     }
-    else if( rThis.GetAttrSet()->GetDoc()->IsParaSpaceMaxAtPages() &&
-             CastFlowFrm( pOwn )->HasParaSpaceAtPages( rThis.IsSctFrm() ) )
-        nUpper = pAttrs->GetULSpace().GetUpper();
 
     nUpper += pAttrs->GetTopLine( &rThis );
 
