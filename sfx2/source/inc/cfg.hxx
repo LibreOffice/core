@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:22:13 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,8 @@ class SfxConfigManager;
 #define SFX_CFGGROUP_BASICMOD 5
 #define SFX_CFGFUNCTION_MACRO 6
 #define SFX_CFGFUNCTION_SLOT  7
+#define SFX_CFGGROUP_SCRIPTCONTAINER  8
+#define SFX_CFGFUNCTION_SCRIPT 9
 
 struct SfxGroupInfo_Impl
 {
@@ -147,6 +149,8 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
     ULONG                           nMode;
     String                          aScriptType;
     SfxSlotPool*                    pSlotPool;
+    BOOL                            bShowSF; // show Scripting Framework scripts
+    BOOL                            bShowBasic; // show Basic scripts
 
 protected:
     virtual void                    RequestingChilds( SvLBoxEntry *pEntry);
