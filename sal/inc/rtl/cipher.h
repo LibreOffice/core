@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cipher.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mhu $ $Date: 2001-11-29 19:12:42 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _RTL_CIPHER_H_
-#define _RTL_CIPHER_H_ "$Revision: 1.4 $"
+#define _RTL_CIPHER_H_ "$Revision: 1.5 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -86,6 +86,7 @@ typedef void* rtlCipher;
 enum __rtl_CipherAlgorithm
 {
     rtl_Cipher_AlgorithmBF,
+    rtl_Cipher_AlgorithmARCFOUR,
     rtl_Cipher_AlgorithmInvalid,
     rtl_Cipher_Algorithm_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 };
@@ -177,8 +178,8 @@ rtlCipher SAL_CALL rtl_cipher_create (
 rtlCipherError SAL_CALL rtl_cipher_init (
     rtlCipher           Cipher,
     rtlCipherDirection  Direction,
-    const sal_uInt8    *pKeyData, sal_uInt32 nKeyLen,
-    const sal_uInt8    *pArgData, sal_uInt32 nArgLen
+    const sal_uInt8    *pKeyData, sal_Size nKeyLen,
+    const sal_uInt8    *pArgData, sal_Size nArgLen
 ) SAL_THROW_EXTERN_C();
 
 
@@ -195,8 +196,8 @@ rtlCipherError SAL_CALL rtl_cipher_init (
  */
 rtlCipherError SAL_CALL rtl_cipher_encode (
     rtlCipher   Cipher,
-    const void *pData,   sal_uInt32 nDatLen,
-    sal_uInt8  *pBuffer, sal_uInt32 nBufLen
+    const void *pData,   sal_Size nDatLen,
+    sal_uInt8  *pBuffer, sal_Size nBufLen
 ) SAL_THROW_EXTERN_C();
 
 
@@ -213,8 +214,8 @@ rtlCipherError SAL_CALL rtl_cipher_encode (
  */
 rtlCipherError SAL_CALL rtl_cipher_decode (
     rtlCipher   Cipher,
-    const void *pData,   sal_uInt32 nDatLen,
-    sal_uInt8  *pBuffer, sal_uInt32 nBufLen
+    const void *pData,   sal_Size nDatLen,
+    sal_uInt8  *pBuffer, sal_Size nBufLen
 ) SAL_THROW_EXTERN_C();
 
 
@@ -249,8 +250,8 @@ rtlCipher SAL_CALL rtl_cipher_createBF (
 rtlCipherError SAL_CALL rtl_cipher_initBF (
     rtlCipher          Cipher,
     rtlCipherDirection Direction,
-    const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen,
-    const sal_uInt8 *pArgData, sal_uInt32 nArgLen
+    const sal_uInt8 *pKeyData, sal_Size nKeyLen,
+    const sal_uInt8 *pArgData, sal_Size nArgLen
 ) SAL_THROW_EXTERN_C();
 
 
@@ -259,8 +260,8 @@ rtlCipherError SAL_CALL rtl_cipher_initBF (
  */
 rtlCipherError SAL_CALL rtl_cipher_encodeBF (
     rtlCipher   Cipher,
-    const void *pData,   sal_uInt32 nDatLen,
-    sal_uInt8  *pBuffer, sal_uInt32 nBufLen
+    const void *pData,   sal_Size nDatLen,
+    sal_uInt8  *pBuffer, sal_Size nBufLen
 ) SAL_THROW_EXTERN_C();
 
 
@@ -269,8 +270,8 @@ rtlCipherError SAL_CALL rtl_cipher_encodeBF (
  */
 rtlCipherError SAL_CALL rtl_cipher_decodeBF (
     rtlCipher   Cipher,
-    const void *pData,   sal_uInt32 nDatLen,
-    sal_uInt8  *pBuffer, sal_uInt32 nBufLen
+    const void *pData,   sal_Size nDatLen,
+    sal_uInt8  *pBuffer, sal_Size nBufLen
 ) SAL_THROW_EXTERN_C();
 
 
@@ -278,6 +279,64 @@ rtlCipherError SAL_CALL rtl_cipher_decodeBF (
     @see rtl_cipher_destroy()
  */
 void SAL_CALL rtl_cipher_destroyBF (
+    rtlCipher Cipher
+) SAL_THROW_EXTERN_C();
+
+
+/*========================================================================
+ *
+ * rtl_cipherARCFOUR (RC4) interface.
+ *
+ *======================================================================*/
+/** Create a RC4 cipher handle for the given mode.
+    @descr The RC4 symmetric stream cipher algorithm is specified in
+    Bruce Schneier: Applied Cryptography, 2nd edition, ch. 17.1
+
+    @see rtl_cipher_create()
+
+    @param  Mode [in] cipher mode. Must be rtl_Cipher_ModeStream.
+    @return Cipher handle, or 0 upon failure.
+ */
+rtlCipher SAL_CALL rtl_cipher_createARCFOUR (
+    rtlCipherMode Mode
+) SAL_THROW_EXTERN_C();
+
+
+/** Inititialize a RC4 cipher for the given direction.
+    @see rtl_cipher_init()
+ */
+rtlCipherError SAL_CALL rtl_cipher_initARCFOUR (
+    rtlCipher          Cipher,
+    rtlCipherDirection Direction,
+    const sal_uInt8 *pKeyData, sal_Size nKeyLen,
+    const sal_uInt8 *pArgData, sal_Size nArgLen
+) SAL_THROW_EXTERN_C();
+
+
+/** Encode a buffer under the RC4 cipher algorithm.
+    @see rtl_cipher_encode()
+ */
+rtlCipherError SAL_CALL rtl_cipher_encodeARCFOUR (
+    rtlCipher   Cipher,
+    const void *pData,   sal_Size nDatLen,
+    sal_uInt8  *pBuffer, sal_Size nBufLen
+) SAL_THROW_EXTERN_C();
+
+
+/** Decode a buffer under the RC4 cipher algorithm.
+    @see rtl_cipher_decode()
+ */
+rtlCipherError SAL_CALL rtl_cipher_decodeARCFOUR (
+    rtlCipher   Cipher,
+    const void *pData,   sal_Size nDatLen,
+    sal_uInt8  *pBuffer, sal_Size nBufLen
+) SAL_THROW_EXTERN_C();
+
+
+/** Destroy a RC4 cipher handle.
+    @see rtl_cipher_destroy()
+ */
+void SAL_CALL rtl_cipher_destroyARCFOUR (
     rtlCipher Cipher
 ) SAL_THROW_EXTERN_C();
 
