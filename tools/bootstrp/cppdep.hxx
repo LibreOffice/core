@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppdep.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:59 $
+ *  last change: $Author: mh $ $Date: 2001-02-16 14:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,12 @@ DECLARE_LIST( ByteStringList, ByteString * );
 class CppDep
 {
     ByteString          aSourceFile;
-    ByteStringList      *pSources;
     ByteStringList      *pSearchPath;
-    ByteStringList      *pFileList;
 
 protected:
+    ByteStringList      *pFileList;
+    ByteStringList      *pSources;
+
     BOOL            Search( ByteString aFileName );
     ByteString      Exists( ByteString aFileName );
 
