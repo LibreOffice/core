@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBridgeTest.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:43 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,70 @@ interface XBridgeTest : XBridgeTestBase
     [attribute] long                     RuntimeException;
 };
 
+/** Extended tests with sequences.
+ */
+interface XBridgeTest2 : XBridgeTest
+{
+    sequence< boolean > setSequenceBool( [in] sequence< boolean > aSeq);
+    sequence< char > setSequenceChar( [in] sequence< char > aSeq);
+    sequence< byte> setSequenceByte( [in] sequence< byte > aSeq);
+    sequence< short> setSequenceShort( [in] sequence< short > aSeq);
+    sequence< unsigned short > setSequenceUShort( [in] sequence< unsigned short > aSeq);
+    sequence< long > setSequenceLong( [in] sequence< long > aSeq);
+    sequence< unsigned long > setSequenceULong( [in] sequence< unsigned long > aSeq);
+    sequence< hyper > setSequenceHyper( [in] sequence< hyper > aSeq);
+    sequence< unsigned hyper > setSequenceUHyper( [in] sequence< unsigned hyper > aSeq);
+    sequence< float > setSequenceFloat( [in] sequence< float > aSeq);
+    sequence< double > setSequenceDouble( [in] sequence< double > aSeq);
+    sequence< TestEnum > setSequenceEnum( [in] sequence< TestEnum > aSeq);
+    sequence< string > setSequenceString( [in] sequence< string > aString);
+    sequence< com::sun::star::uno::XInterface > setSequenceXInterface(
+        [in] sequence< com::sun::star::uno::XInterface > aSeq);
+    sequence< any > setSequenceAny( [in] sequence< any > aSeq);
+    sequence< TestElement > setSequenceStruct( [in] sequence< TestElement > aSeq);
+
+    sequence< sequence< long > > setDim2( [in] sequence< sequence< long > > aSeq);
+    sequence< sequence < sequence < long > > > setDim3(
+        [in] sequence< sequence < sequence < long > > > aSeq);
+
+    void setSequencesInOut( [inout] sequence< boolean > aSeqBoolean,
+                       [inout] sequence< char > aSeqChar,
+                       [inout] sequence< byte > aSeqByte,
+                       [inout] sequence< short > aSeqShort,
+                       [inout] sequence< unsigned short> aSeqUShort,
+                       [inout] sequence< long > aSeqLong,
+                       [inout] sequence< unsigned long > aSeqULong,
+                       [inout] sequence< hyper > aSeqHyper,
+                       [inout] sequence< unsigned hyper > aSeqUHyper,
+                       [inout] sequence< float > aSeqFloat,
+                       [inout] sequence< double > aSeqDouble,
+                       [inout] sequence< TestEnum > aSeqEnum,
+                       [inout] sequence< string > aSeqString,
+                       [inout] sequence< com::sun::star::uno::XInterface > aSeqXInterface,
+                       [inout] sequence< any > aSeqAny,
+                       [inout] sequence< sequence< long > > aSeqDim2,
+                       [inout] sequence< sequence < sequence < long > > > aSeqDim3);
+
+    void setSequencesOut( [out] sequence< boolean > aSeqBoolean,
+                       [out] sequence< char > aSeqChar,
+                       [out] sequence< byte > aSeqByte,
+                       [out] sequence< short > aSeqShort,
+                       [out] sequence< unsigned short> aSeqUShort,
+                       [out] sequence< long > aSeqLong,
+                       [out] sequence< unsigned long > aSeqULong,
+                       [out] sequence< hyper > aSeqHyper,
+                       [out] sequence< unsigned hyper > aSeqUHyper,
+                       [out] sequence< float > aSeqFloat,
+                       [out] sequence< double > aSeqDouble,
+                       [out] sequence< TestEnum > aSeqEnum,
+                       [out] sequence< string > aSeqString,
+                       [out] sequence< com::sun::star::uno::XInterface > aSeqXInterface,
+                       [out] sequence< any > aSeqAny,
+                       [out] sequence< sequence< long > > aSeqDim2,
+                       [out] sequence< sequence < sequence < long > > > aSeqDim3);
+
+
+};
 //=============================================================================
 
 };
