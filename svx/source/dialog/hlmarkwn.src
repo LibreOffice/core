@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 22:33:23 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ FloatingWindow RID_SVXFLOAT_HYPERLINK_MARKWND
         Text[ arabic ] = " ÿ»Ìﬁ";
         Text[ turkish ] = "Uygula";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Aplicar";
     };
     PushButton BT_CLOSE
     {
@@ -133,6 +134,7 @@ FloatingWindow RID_SVXFLOAT_HYPERLINK_MARKWND
         Text[ arabic ] = "≈€·«ﬁ";
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cerrar";
     };
     Control TLB_MARK
     {
@@ -159,6 +161,7 @@ FloatingWindow RID_SVXFLOAT_HYPERLINK_MARKWND
     Text[ chinese_traditional ] = "§Â•Û§∫™∫•ÿº–";
     Text[ arabic ] = "«·Âœ› ›Ì «·„” ‰œ";
     Text[ turkish ] = "Belge iÁindeki hedef";
+    Text[ catalan ] = "Destino en documento";
 };
 
 Bitmap RID_SVXBMP_HYPDLG_EXPAND
@@ -192,6 +195,7 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES
     Text[ chinese_traditional ] = "§Â•Û§∫®S¶≥•ÿº–°C";
     Text[ arabic ] = "«·„” ‰œ Œ«·Ì „‰ «·√Âœ«›.";
     Text[ turkish ] = "Belge hedef iÁermiyor.";
+    Text[ catalan ] = "No existen destinos en el documento.";
 };
 
 String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
@@ -216,5 +220,6 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
     Text[ chinese_traditional ] = "µL™k∂}±“§Â•Û°C";
     Text[ arabic ] = " ⁄–— › Õ «·„” ‰œ.";
     Text[ turkish ] = "Belge aÁ˝lamad˝.";
+    Text[ catalan ] = "No se pudo abrir el documento.";
 };
 
