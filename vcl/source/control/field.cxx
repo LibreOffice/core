@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:36 $
+ *  last change: $Author: th $ $Date: 2001-03-09 14:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,7 +535,7 @@ void NumericFormatter::SetValue( long nNewValue )
 {
     SetUserValue( nNewValue );
     mnFieldValue = mnLastValue;
-    ImplGetEmptyFieldValue() = FALSE;
+    SetEmptyFieldValueData( FALSE );
 }
 
 // -----------------------------------------------------------------------
@@ -991,6 +991,14 @@ long NumericBox::GetValue( USHORT nPos ) const
 USHORT NumericBox::GetValuePos( long nValue ) const
 {
     return ComboBox::GetEntryPos( CreateFieldText( nValue ) );
+}
+
+// -----------------------------------------------------------------------
+
+long NumericBox::GetValue() const
+{
+    // Implementation not inline, because it is a virtual Function
+    return NumericFormatter::GetValue();
 }
 
 // -----------------------------------------------------------------------
@@ -1522,6 +1530,22 @@ long MetricFormatter::GetValue( FieldUnit eOutUnit ) const
 
 // -----------------------------------------------------------------------
 
+void MetricFormatter::SetValue( long nValue )
+{
+    // Implementation not inline, because it is a virtual Function
+    SetValue( nValue, FUNIT_NONE );
+}
+
+// -----------------------------------------------------------------------
+
+long MetricFormatter::GetValue() const
+{
+    // Implementation not inline, because it is a virtual Function
+    return GetValue( FUNIT_NONE );
+}
+
+// -----------------------------------------------------------------------
+
 void MetricFormatter::SetMin( long nNewMin, FieldUnit eInUnit )
 {
     // Umrechnen auf gewuenschte Einheiten
@@ -1609,7 +1633,7 @@ long MetricFormatter::GetCorrectedValue( FieldUnit eOutUnit ) const
 {
     // Umrechnen auf gewuenschte Einheiten
     return MetricField::ConvertValue( mnCorrectedValue, mnBaseValue, GetDecimalDigits(),
-                                    meUnit, eOutUnit );
+                                      meUnit, eOutUnit );
 }
 
 // -----------------------------------------------------------------------
@@ -1923,7 +1947,7 @@ long MetricBox::GetValue( USHORT nPos, FieldUnit eOutUnit ) const
 
     // Umrechnen auf eingestellte Einheiten
     long nRetValue = MetricField::ConvertValue( (long)nValue, mnBaseValue, GetDecimalDigits(),
-                                    meUnit, eOutUnit );
+                                                meUnit, eOutUnit );
 
     return nRetValue;
 }
@@ -1936,6 +1960,22 @@ USHORT MetricBox::GetValuePos( long nValue, FieldUnit eInUnit ) const
     nValue = MetricField::ConvertValue( nValue, mnBaseValue, GetDecimalDigits(),
                                         eInUnit, meUnit );
     return ComboBox::GetEntryPos( CreateFieldText( nValue ) );
+}
+
+// -----------------------------------------------------------------------
+
+long MetricBox::GetValue( FieldUnit eOutUnit ) const
+{
+    // Implementation not inline, because it is a virtual Function
+    return MetricFormatter::GetValue( eOutUnit );
+}
+
+// -----------------------------------------------------------------------
+
+long MetricBox::GetValue() const
+{
+    // Implementation not inline, because it is a virtual Function
+    return GetValue( FUNIT_NONE );
 }
 
 // -----------------------------------------------------------------------
@@ -2016,7 +2056,7 @@ void CurrencyFormatter::SetValue( long nNewValue )
 {
     SetUserValue( nNewValue );
     mnFieldValue = mnLastValue;
-    ImplGetEmptyFieldValue() = FALSE;
+    SetEmptyFieldValueData( FALSE );
 }
 
 // -----------------------------------------------------------------------
@@ -2327,4 +2367,12 @@ long CurrencyBox::GetValue( USHORT nPos ) const
 USHORT CurrencyBox::GetValuePos( long nValue ) const
 {
     return ComboBox::GetEntryPos( CreateFieldText( nValue ) );
+}
+
+// -----------------------------------------------------------------------
+
+long CurrencyBox::GetValue() const
+{
+    // Implementation not inline, because it is a virtual Function
+    return CurrencyFormatter::GetValue();
 }
