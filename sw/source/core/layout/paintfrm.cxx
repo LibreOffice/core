@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-06 09:12:17 $
+ *  last change: $Author: ama $ $Date: 2002-02-06 11:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,14 +747,16 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                         {
                             SwRect aRect( rSubs );
                             aRect.Bottom( nTmp );
-                            Ins( aRect, rSubs.GetSubColor() );
+                            Insert( SwLineRect( aRect, 0, 0,
+                                                rSubs.GetSubColor() ), Count());
                         }
                         nTmp = rLine.Bottom()+nPixelSzH+1;
                         if ( rSubs.Bottom() > nTmp )
                         {
                             SwRect aRect( rSubs );
                             aRect.Top( nTmp );
-                            Ins( aRect, rSubs.GetSubColor() );
+                            Insert( SwLineRect( aRect, 0, 0,
+                                                rSubs.GetSubColor() ), Count());
                         }
                         Remove( i, 1 );
                         --i;
@@ -771,14 +773,16 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                         {
                             SwRect aRect( rSubs );
                             aRect.Right( nTmp );
-                            Ins( aRect, rSubs.GetSubColor() );
+                            Insert( SwLineRect( aRect, 0, 0,
+                                                rSubs.GetSubColor() ), Count());
                         }
                         nTmp = rLine.Right()+nPixelSzW+1;
                         if ( rSubs.Right() > nTmp )
                         {
                             SwRect aRect( rSubs );
                             aRect.Left( nTmp );
-                            Ins( aRect, rSubs.GetSubColor() );
+                            Insert( SwLineRect( aRect, 0, 0,
+                                                rSubs.GetSubColor() ), Count());
                         }
                         Remove( i, 1 );
                         --i;
@@ -3046,7 +3050,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                     SwTwips nGridBottom = aGrid.Top() + aGrid.Height();
                     BOOL bLeft = aGrid.Top() >= aInter.Top();
                     BOOL bRight = nGridBottom <= nBottom;
-                    BOOL bBorder = bCell && ( bLeft || bRight );
+                    BOOL bBorder = bLeft || bRight;
                     while( nY > nRight )
                     {
                         aTmp.Pos().X() = nY;
@@ -3055,14 +3059,29 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                             nY -= nGrid;
                             SwTwips nPosY = Max( aInter.Left(), nY );
                             SwTwips nHeight = Min(nRight, aTmp.Pos().X())-nPosY;
-                            if( bCell && nHeight > 0 )
+                            if( nHeight > 0 )
                             {
-                                SwRect aVert( Point( nPosY, nX ),
-                                            Size( nHeight, 1 ) );
-                                while( aVert.Top() <= nBottom )
+                                if( bCell )
                                 {
-                                    PaintBorderLine( rRect, aVert, this, pCol);
-                                    aVert.Pos().Y() += nGrid;
+                                    SwRect aVert( Point( nPosY, nX ),
+                                                Size( nHeight, 1 ) );
+                                    while( aVert.Top() <= nBottom )
+                                    {
+                                        PaintBorderLine(rRect,aVert,this,pCol);
+                                        aVert.Pos().Y() += nGrid;
+                                    }
+                                }
+                                else if( bBorder )
+                                {
+                                    SwRect aVert( Point( nPosY, aGrid.Top() ),
+                                                  Size( nHeight, 1 ) );
+                                    if( bLeft )
+                                        PaintBorderLine(rRect,aVert,this,pCol);
+                                    if( bRight )
+                                    {
+                                        aVert.Pos().Y() = nGridBottom;
+                                        PaintBorderLine(rRect,aVert,this,pCol);
+                                    }
                                 }
                             }
                         }
@@ -3098,14 +3117,29 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                             nY -= nGrid;
                             SwTwips nHeight = aTmp.Pos().X()
                                               - Max(aInter.Left(), nY );
-                            if( bCell && nHeight > 0 )
+                            if( nHeight > 0 )
                             {
-                                SwRect aVert( Point( aTmp.Pos().X() - nHeight,
-                                                     nX ), Size( nHeight, 1 ) );
-                                while( aVert.Top() <= nBottom )
+                                if( bCell )
                                 {
-                                    PaintBorderLine( rRect, aVert, this, pCol);
-                                    aVert.Pos().Y() += nGrid;
+                                    SwRect aVert( Point(aTmp.Pos().X()-nHeight,
+                                                  nX ), Size( nHeight, 1 ) );
+                                    while( aVert.Top() <= nBottom )
+                                    {
+                                        PaintBorderLine(rRect,aVert,this,pCol);
+                                        aVert.Pos().Y() += nGrid;
+                                    }
+                                }
+                                else if( bBorder )
+                                {
+                                    SwRect aVert( Point(aTmp.Pos().X()-nHeight,
+                                            aGrid.Top() ), Size( nHeight, 1 ) );
+                                    if( bLeft )
+                                        PaintBorderLine(rRect,aVert,this,pCol);
+                                    if( bRight )
+                                    {
+                                        aVert.Pos().Y() = nGridBottom;
+                                        PaintBorderLine(rRect,aVert,this,pCol);
+                                    }
                                 }
                             }
                         }
@@ -3155,14 +3189,29 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                             nY += nGrid;
                             SwTwips nPosY = Max( aInter.Top(), aTmp.Pos().Y() );
                             SwTwips nHeight = Min(nBottom, nY ) - nPosY;
-                            if( bCell && nHeight )
+                            if( nHeight )
                             {
-                                SwRect aVert( Point( nX, nPosY ),
-                                            Size( 1, nHeight ) );
-                                while( aVert.Left() <= nRight )
+                                if( bCell )
                                 {
-                                    PaintBorderLine( rRect, aVert, this, pCol);
-                                    aVert.Pos().X() += nGrid;
+                                    SwRect aVert( Point( nX, nPosY ),
+                                                Size( 1, nHeight ) );
+                                    while( aVert.Left() <= nRight )
+                                    {
+                                        PaintBorderLine(rRect,aVert,this,pCol);
+                                        aVert.Pos().X() += nGrid;
+                                    }
+                                }
+                                else if ( bBorder )
+                                {
+                                    SwRect aVert( Point( aGrid.Left(), nPosY ),
+                                                Size( 1, nHeight ) );
+                                    if( bLeft )
+                                        PaintBorderLine(rRect,aVert,this,pCol);
+                                    if( bRight )
+                                    {
+                                        aVert.Pos().X() = nGridRight;
+                                        PaintBorderLine(rRect,aVert,this,pCol);
+                                    }
                                 }
                             }
                         }
@@ -3197,14 +3246,29 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                         {
                             nY += nGrid;
                             SwTwips nHeight = Min(nBottom, nY) - aTmp.Pos().Y();
-                            if( bCell && nHeight )
+                            if( nHeight )
                             {
-                                SwRect aVert( Point( nX, aTmp.Pos().Y() ),
-                                            Size( 1, nHeight ) );
-                                while( aVert.Left() <= nRight )
+                                if( bCell )
                                 {
-                                    PaintBorderLine( rRect, aVert, this, pCol);
-                                    aVert.Pos().X() += nGrid;
+                                    SwRect aVert( Point( nX, aTmp.Pos().Y() ),
+                                                Size( 1, nHeight ) );
+                                    while( aVert.Left() <= nRight )
+                                    {
+                                        PaintBorderLine( rRect, aVert, this, pCol);
+                                        aVert.Pos().X() += nGrid;
+                                    }
+                                }
+                                else if( bBorder )
+                                {
+                                    SwRect aVert( Point( aGrid.Left(),
+                                        aTmp.Pos().Y() ), Size( 1, nHeight ) );
+                                    if( bLeft )
+                                        PaintBorderLine(rRect,aVert,this,pCol);
+                                    if( bRight )
+                                    {
+                                        aVert.Pos().X() = nGridRight;
+                                        PaintBorderLine(rRect,aVert,this,pCol);
+                                    }
                                 }
                             }
                         }
