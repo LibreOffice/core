@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-02 16:31:50 $
+ *  last change: $Author: mt $ $Date: 2001-03-05 16:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,12 +635,6 @@ sal_uInt32 EditEngine::GetLineHeight( sal_uInt16 nParagraph, sal_uInt16 nLine )
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
     return pImpEditEngine->GetLineHeight( nParagraph, nLine );
-}
-
-sal_uInt32 EditEngine::GetMaxFontHeight( sal_uInt16 nParagraph, sal_uInt16 nLine )
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->GetMaxFontHeight( nParagraph, nLine );
 }
 
 sal_uInt16 EditEngine::GetFirstLineOffset( sal_uInt16 nParagraph )
