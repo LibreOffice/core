@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-04-10 11:44:10 $
+ *  last change: $Author: mav $ $Date: 2001-06-26 13:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,10 @@ void Desktop::Main()
         delete pPathOptions;
     }
 
-    utl::ConfigManager::RemoveConfigManager();
+    // instead of removing of the configManager jast let it commit all the changes
+    utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+
+    //utl::ConfigManager::RemoveConfigManager();
 }
 
 void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* pFrame )
