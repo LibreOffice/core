@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.88 2005-01-27 11:06:13 rt Exp $
+	$Id: drawing.mod,v 1.89 2005-03-08 14:53:46 vg Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -447,7 +447,7 @@
 <!ATTLIST style:properties draw:textarea-horizontal-align ( left | center | right | justify ) #IMPLIED>
 <!ATTLIST style:properties draw:textarea-vertical-align ( top | middle | bottom | justify ) #IMPLIED>
 <!ATTLIST style:properties draw:writing-mode (lr-tb|tb-rl) "lr-tb">
-<!ATTLIST style:properties draw:font-independent-line-spacing %boolean; #IMPLIED>
+<!ATTLIST style:properties style:font-independent-line-spacing %boolean; #IMPLIED>
 
 
 <!-- fill attributes -->
