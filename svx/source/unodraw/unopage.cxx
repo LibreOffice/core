@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:05:10 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,7 +513,7 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
                 pObj->SetExtrudePolygon(aNewPP);
 
                 // #107245# pObj->SetExtrudeCharacterMode(TRUE);
-                pObj->SetItem(Svx3DCharacterModeItem(sal_True));
+                pObj->SetMergedItem(Svx3DCharacterModeItem(sal_True));
             }
             else if(pNewObj->ISA(E3dLatheObj))
             {
@@ -532,7 +532,7 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
                 pObj->SetPolyPoly3D(aNewPP);
 
                 // #107245# pObj->SetLatheCharacterMode(TRUE);
-                pObj->SetItem(Svx3DCharacterModeItem(sal_True));
+                pObj->SetMergedItem(Svx3DCharacterModeItem(sal_True));
             }
         }
     }
