@@ -1,4 +1,4 @@
-/* $Id: cpp.h,v 1.1 2001-04-19 08:20:22 nf Exp $ */
+/* $Id: cpp.h,v 1.2 2002-01-08 12:07:30 hjs Exp $ */
 
 #define INS         32768   /* input buffer                             */
 #define OBS         8092    /* outbut buffer                            */
@@ -126,7 +126,6 @@ enum errtype
 };
 
 
-// NP
 typedef struct macroValidator
 {
     Nlist *             pMacro;

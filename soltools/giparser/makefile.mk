@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: armin $ $Date: 2001-10-26 14:40:55 $
+#   last change: $Author: hjs $ $Date: 2002-01-08 12:07:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,10 +66,10 @@ PRJNAME=soltools
 TARGET=soltools_giparser
 TARGETTYPE=CUI
 NO_SHL_DESCRIPTION=TRUE
-nodep=true
 
 # --- Settings -----------------------------------------------------
 
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 .INCLUDE :  settings.mk
 .INCLUDE :  use_perl.mk
 

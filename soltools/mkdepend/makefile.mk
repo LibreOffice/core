@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2001-07-02 14:21:00 $
+#   last change: $Author: hjs $ $Date: 2002-01-08 12:07:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,7 @@ LIBTARGET=NO
 NO_DEFAULT_STL=TRUE
 nodep=true
 
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 .INCLUDE : settings.mk
 
 dot=.

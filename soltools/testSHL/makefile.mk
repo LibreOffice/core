@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pluby $ $Date: 2001-04-18 14:48:35 $
+#   last change: $Author: hjs $ $Date: 2002-01-08 12:07:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,13 +65,10 @@ PRJNAME=soltools
 TARGET=testshl
 TARGETTYPE=CUI
 
-#USE_LDUMP2=TRUE
-#LDUMP2=LDUMP3
-
 # --- Settings -----------------------------------------------------
-.INCLUDE :  svpre.mk
+
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # ------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: armin $ $Date: 2001-06-12 07:55:01 $
+#   last change: $Author: hjs $ $Date: 2002-01-08 12:07:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,13 +67,11 @@ TARGET=javadep
 TARGETTYPE=CUI
 TARGETTHREAD=MT
 NO_DEFAULT_STL=TRUE
-nodep=true
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2001-07-02 14:05:46 $
+#   last change: $Author: hjs $ $Date: 2002-01-08 12:07:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,10 +67,10 @@ TARGET=cpp
 TARGETTYPE=CUI
 TARGETTHREAD=ST
 NO_DEFAULT_STL=TRUE
-nodep=true
 
 # --- Settings -----------------------------------------------------
 
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
