@@ -2,9 +2,9 @@
  *
  *  $RCSfile: displayinfo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:36:30 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,8 +206,8 @@ namespace sdr
             // access to ProcessedPage, write is for internal use only.
             // read is used from SdrPageView eventually, to identify the
             // currently painting page. This is needed for things like
-            // PageNumber fields. For that purpose all page painting parts
-            // should use SetProcessedPage to se the currently rendered page,
+            // PageNumber fields (outliner callback). For that purpose all page painting parts
+            // should use SetProcessedPage to set the currently rendered page,
             // and also to reset that pointer again.
             void SetProcessedPage(SdrPage* pNew);
             const SdrPage* GetProcessedPage() const;
