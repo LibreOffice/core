@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-08 15:52:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ namespace cppu_threadpool {
 // ----------------------------------------------------------------------------------
     ThreadAdmin::~ThreadAdmin()
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if( m_lst.size() )
         {
             fprintf( stderr, "%d Threads left\n" , m_lst.size() );
