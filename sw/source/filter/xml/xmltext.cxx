@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-25 16:15:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "filt_pch.hxx"
-#endif
 
 #pragma hdrstop
 
