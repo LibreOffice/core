@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-29 09:45:16 $
+ *  last change: $Author: fs $ $Date: 2001-04-20 16:51:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1103,10 +1103,10 @@ namespace xmloff
             implTranslateStringListProperty(PROPERTY_MASTERFIELDS, _rValue);
         else if (s_sDetailFieldsAttributeName == _rLocalName)
             implTranslateStringListProperty(PROPERTY_DETAILFIELDS, _rValue);
-#if SUPD<628
+#if SUPD<632
         // for compatibility (had a typo in the attribute name)
-        else if (0 == _rLocalName.compareToAscii("detail-fiels"))
-            implTranslateStringListProperty(PROPERTY_DETAILFIELDS, _rValue);
+        else if (0 == _rLocalName.compareToAscii("tabbing-cycle"))
+            OFormImport_Base::handleAttribute(_nNamespaceKey, ::rtl::OUString::createFromAscii("tab-cycle"), _rValue);
 #endif
         else
             OFormImport_Base::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
@@ -1184,6 +1184,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2001/03/29 09:45:16  fs
+ *  #85386# +OTextLikeImport / handle attributes which's defaults differ from the property defaults
+ *
  *  Revision 1.17  2001/03/28 14:00:56  fs
  *  #85371# +OButtonImport / for buttons and forms, correctly handle the target frame attribute
  *
