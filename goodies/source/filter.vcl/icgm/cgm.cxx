@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cgm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:51:25 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:31:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,11 +102,11 @@ void CGM::ImplCGMInit()
 // ---------------------------------------------------------------
 
 CGM::CGM( sal_uInt32 nMode ) :
-    mnMode          ( nMode ),
     mpGraphic       ( NULL ),       //
     mpCommentOut    ( NULL ),       //
     mbStatus        ( sal_True ),
-    mpOutAct        ( new CGMOutAct( *this ) )
+    mpOutAct        ( new CGMOutAct( *this ) ),
+    mnMode          ( nMode )
 {
     ImplCGMInit();
 };
@@ -116,11 +116,11 @@ CGM::CGM( sal_uInt32 nMode ) :
 #ifdef CGM_EXPORT_IMPRESS
 
 CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > & rModel )  :
-    mnMode                  ( nMode ),
     mpGraphic               ( NULL ),
     mpCommentOut            ( NULL ),
     mbStatus                ( sal_True ),
-    mpOutAct                ( new CGMImpressOutAct( *this, rModel ) )
+    mpOutAct                ( new CGMImpressOutAct( *this, rModel ) ),
+    mnMode                  ( nMode )
 {
     mnMode |= CGM_EXPORT_IMPRESS;
     ImplCGMInit();
@@ -131,12 +131,12 @@ CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > & rModel )  :
 
 #ifdef CGM_EXPORT_META
 CGM::CGM( sal_uInt32 nMode, Graphic& rGraphic ) :
-    mnMode          ( nMode ),
     mpGraphic       ( &rGraphic ),
     mpCommentOut    ( NULL ),
     mbStatus        ( sal_True ),
-    mpGDIMetaFile   ( new GDIMetaFile ),
-    mpOutAct        ( new CGMMetaOutAct( *this ) )
+    mpOutAct        ( new CGMMetaOutAct( *this ) ),
+    mnMode          ( nMode ),
+    mpGDIMetaFile   ( new GDIMetaFile )
 {
     ImplCGMInit();
     mpVirDev = new VirtualDevice();
