@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-20 20:04:05 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 12:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,7 +445,7 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
 #endif
     }
 
-    return False;
+    return sal_False;
 }
 
 void SAL_CALL SvXMLExport::cancel() throw(uno::RuntimeException)
