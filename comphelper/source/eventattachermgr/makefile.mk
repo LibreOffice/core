@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:13:10 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 06:47:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,31 +73,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
-
-# --- Types -------------------------------------
-
-#UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-#UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
-
-#UNOUCROUT=$(OUT)$/inc
-#INCPRE+=$(UNOUCROUT)
-
-#UNOTYPES+=	\
-#		com.sun.star.io.XObjectInputStream	\
-#		com.sun.star.io.XPersistObject	\
-#		com.sun.star.io.XObjectOutputStream	\
-#		com.sun.star.io.XMarkableStream	\
-#		com.sun.star.lang.XMultiServiceFactory	\
-#		com.sun.star.lang.XSingleServiceFactory	\
-#		com.sun.star.lang.XTypeProvider	\
-#		com.sun.star.lang.XInitialization	\
-#		com.sun.star.reflection.XIdlReflection	\
-#		com.sun.star.beans.XIntrospection	\
-#		com.sun.star.script.XTypeConverter	\
-#		com.sun.star.script.XEventAttacher	\
-#		com.sun.star.script.XEventAttacherManager	\
-#		com.sun.star.script.XScriptListener	\
-#		com.sun.star.script.XEngineListener
 
 # --- Files -------------------------------------
 

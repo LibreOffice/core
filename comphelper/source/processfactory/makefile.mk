@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 06:46:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,16 +74,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE : settings.mk
 
 # --- Types -------------------------------------
-
-#UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-#UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
-
-#UNOUCROUT=$(OUT)$/inc
-#INCPRE+=$(UNOUCROUT)
-
-#UNOTYPES+=	\
-#		com.sun.star.uno.TypeClass	\
-#		com.sun.star.lang.XMultiServiceFactory
 
 # --- Files -------------------------------------
 
