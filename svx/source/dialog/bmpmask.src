@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-09 09:25:01 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ french ] = "Transparence" ;
         Text [ dutch ] = "~Transparantie" ;
         Text [ swedish ] = "~Transparens" ;
-        Text [ danish ] = "Transparens" ;
+        Text [ danish ] = "Tra~nsparens" ;
         Text [ portuguese_brazilian ] = "Transparenz" ;
         Text [ portuguese ] = "~Transpar�ncia" ;
         Text[ chinese_simplified ] = "透明(~A)";
@@ -402,7 +402,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ spanish ] = "Reemplazar" ;
         Text [ french ] = "Remplacer" ;
         Text [ swedish ] = "~Ers�tt" ;
-        Text [ danish ] = "Erstat" ;
+        Text [ danish ] = "~Erstat" ;
         Text [ portuguese ] = "~Substituir" ;
         Text [ portuguese_brazilian ] = "Ersetzen" ;
         Text[ chinese_simplified ] = "替换(~R)";
