@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.154 $
+ *  $Revision: 1.155 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-10 10:05:16 $
+ *  last change: $Author: bm $ $Date: 2001-05-11 13:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1379,7 +1379,6 @@ XML_CONSTASCII_ACTION( sXML_region_right, "region-right" );
 XML_CONSTASCII_ACTION( sXML_register_true, "register-true" );
 XML_CONSTASCII_ACTION( sXML_register_truth_ref_style_name, "register-truth-ref-style-name" );
 XML_CONSTASCII_ACTION( sXML_regression_type, "regression-type" );
-XML_CONSTASCII_ACTION( sXML_reinterpret_data_in_rows, "reinterpret-data-in-rows");
 XML_CONSTASCII_ACTION( sXML_rejected, "rejected" );
 XML_CONSTASCII_ACTION( sXML_rejecting_change_id, "rejecting-change-id" );
 XML_CONSTASCII_ACTION( sXML_rejection, "rejection" );
@@ -1416,6 +1415,7 @@ XML_CONSTASCII_ACTION( sXML_rotation_align, "rotation-align" );
 XML_CONSTASCII_ACTION( sXML_rotation_angle, "rotation-angle" );
 XML_CONSTASCII_ACTION( sXML_round , "round" );
 XML_CONSTASCII_ACTION( sXML_row, "row");
+XML_CONSTASCII_ACTION( sXML_rows, "rows");
 XML_CONSTASCII_ACTION( sXML_row_height, "row-height" );
 XML_CONSTASCII_ACTION( sXML_row_number, "row-number" );
 XML_CONSTASCII_ACTION( sXML_ruby, "ruby" );
@@ -1478,6 +1478,7 @@ XML_CONSTASCII_ACTION( sXML_sequence_decl, "sequence-decl" );
 XML_CONSTASCII_ACTION( sXML_sequence_decls, "sequence-decls" );
 XML_CONSTASCII_ACTION( sXML_sequence_ref, "sequence-ref" );
 XML_CONSTASCII_ACTION( sXML_series, "series" );
+XML_CONSTASCII_ACTION( sXML_series_source, "series-source" );
 XML_CONSTASCII_ACTION( sXML_server_map, "server-map" );
 XML_CONSTASCII_ACTION( sXML_set, "set" );
 XML_CONSTASCII_ACTION( sXML_setdiff, "setdiff" );
@@ -1612,6 +1613,7 @@ XML_CONSTASCII_ACTION( sXML_sum, "sum" );
 XML_CONSTASCII_ACTION( sXML_swiss, "swiss" );
 XML_CONSTASCII_ACTION( sXML_symbol, "symbol" );
 XML_CONSTASCII_ACTION( sXML_symbol_height, "symbol-height" );
+XML_CONSTASCII_ACTION( sXML_symbol_image_name, "symbol-image-name" );
 XML_CONSTASCII_ACTION( sXML_symbol_width, "symbol-width" );
 XML_CONSTASCII_ACTION( sXML_system, "system" );
 XML_CONSTASCII_ACTION( sXML_tab_stop, "tab-stop" );
