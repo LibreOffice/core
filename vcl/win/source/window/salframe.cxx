@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ssa $ $Date: 2001-09-10 08:25:45 $
+ *  last change: $Author: th $ $Date: 2001-09-10 11:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -866,9 +866,13 @@ void SalFrame::SetTitle( const XubString& rTitle )
 
 void SalFrame::SetIcon( USHORT nIcon )
 {
-    HICON hIcon = NULL, hSmIcon = NULL;
+    // If we have a window without an Icon (for example a dialog), ignore this call
+    if ( maFrameData.mbNoIcon )
+        return;
 
-    if( nIcon ) // 0 means default (class) icon
+    // 0 means default (class) icon
+    HICON hIcon = NULL, hSmIcon = NULL;
+    if ( nIcon )
     {
         ImplLoadSalIcon( nIcon, hIcon, hSmIcon );
 
@@ -876,8 +880,8 @@ void SalFrame::SetIcon( USHORT nIcon )
         DBG_ASSERT( hSmIcon , "SalFrame::SetIcon(): Could not load small icon !" );
     }
 
-    ImplSendMessage( maFrameData.mhWnd, WM_SETICON, ICON_BIG, (long) hIcon );
-    ImplSendMessage( maFrameData.mhWnd, WM_SETICON, ICON_SMALL, (long) hSmIcon );
+    ImplSendMessage( maFrameData.mhWnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon );
+    ImplSendMessage( maFrameData.mhWnd, WM_SETICON, ICON_SMALL, (LPARAM)hSmIcon );
 }
 
 // -----------------------------------------------------------------------
@@ -914,8 +918,10 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible )
     }
     else
     {
+        // See also Bug #91813# and #68467#
         if ( pFrame->maFrameData.mbFullScreen &&
              pFrame->maFrameData.mbPresentation &&
+             (aSalShlData.mnVersion < 500) &&
              !::GetParent( hWnd ) )
         {
             // Damit im Impress-Player in der Taskleiste nicht durch
