@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtotext_cjk.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-07 00:21:22 $
+ *  last change: $Author: khong $ $Date: 2002-09-06 07:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,15 @@ OUString SAL_CALL NumToText_CJK::transliterate( const OUString& inStr, sal_Int32
                 else
                     throw RuntimeException();   // overfollow, number is too big
                 }
+                if (! recycleBullet && value > bulletCount) {
+                for (sal_Int32 j = 0; j < len; j++) {
+                    newStr->buffer[count] =  str[j];
+                    offset[count++] = i - len + startPos + j;
+                }
+                } else {
                 newStr->buffer[count] =  value ? numberChar[(value-1) % bulletCount] : NUMBER_ZERO;
                 offset[count++] = i - len + startPos;
+                }
             }
             else {
                 sal_Bool notZero = sal_False;
@@ -262,23 +269,26 @@ TRANSLITERATION_NUMTOTEXT( KanjiShortTraditional_ja_JP, Traditional_ja, Traditio
 TRANSLITERATION_NUMTOTEXT( KanjiShortModern_ja_JP, Modern_ja, Modern_ja,short_CJK, NUMBER_OMIT_ALL )
 #undef TRANSLITERATION_NUMTOTEXT
 
-#define TRANSLITERATION_NUMTOTEXT( name ) \
+#define TRANSLITERATION_NUMTOTEXT( name, recycle ) \
 NumToText##name::NumToText##name() \
 { \
     numberChar = table_##name; \
     bulletCount = sizeof(table_##name) / sizeof(sal_Unicode); \
     transliterationName = "NumToText"#name; \
     implementationName = "com.sun.star.i18n.Transliteration.NumToText"#name; \
+    recycleBullet = recycle; \
 }
-TRANSLITERATION_NUMTOTEXT( AIUFullWidth_ja_JP )
-TRANSLITERATION_NUMTOTEXT( AIUHalfWidth_ja_JP )
-TRANSLITERATION_NUMTOTEXT( IROHAFullWidth_ja_JP )
-TRANSLITERATION_NUMTOTEXT( IROHAHalfWidth_ja_JP )
-TRANSLITERATION_NUMTOTEXT( CircledNumber )
-TRANSLITERATION_NUMTOTEXT( HangulJamo_ko )
-TRANSLITERATION_NUMTOTEXT( HangulSyllable_ko )
-TRANSLITERATION_NUMTOTEXT( HangulCircledJamo_ko )
-TRANSLITERATION_NUMTOTEXT( HangulCircledSyllable_ko )
+TRANSLITERATION_NUMTOTEXT( AIUFullWidth_ja_JP, sal_False )
+TRANSLITERATION_NUMTOTEXT( AIUHalfWidth_ja_JP, sal_False )
+TRANSLITERATION_NUMTOTEXT( IROHAFullWidth_ja_JP, sal_False )
+TRANSLITERATION_NUMTOTEXT( IROHAHalfWidth_ja_JP, sal_False )
+TRANSLITERATION_NUMTOTEXT( CircledNumber, sal_False )
+TRANSLITERATION_NUMTOTEXT( HangulJamo_ko, sal_False )
+TRANSLITERATION_NUMTOTEXT( HangulSyllable_ko, sal_False )
+TRANSLITERATION_NUMTOTEXT( HangulCircledJamo_ko, sal_False )
+TRANSLITERATION_NUMTOTEXT( HangulCircledSyllable_ko, sal_False )
+TRANSLITERATION_NUMTOTEXT( TianGan_zh, sal_False )
+TRANSLITERATION_NUMTOTEXT( DiZi_zh, sal_False )
 #undef TRANSLITERATION_NUMTOTEXT
 
 } } } }
