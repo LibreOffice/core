@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _BaseIndex.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:12:48 $
+ *  last change:$Date: 2004-03-19 14:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,15 +58,16 @@
  *
  *
  ************************************************************************/
-
 package ifc.text;
-
-import lib.MultiPropertyTest;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XIndexReplace;
 import com.sun.star.text.XTextColumns;
+import com.sun.star.uno.UnoRuntime;
+
+import lib.MultiPropertyTest;
+
 
 /**
 * Testing <code>com.sun.star.text.BaseIndex</code>
@@ -98,14 +99,15 @@ import com.sun.star.text.XTextColumns;
 * @see com.sun.star.text.BaseIndex
 */
 public class _BaseIndex extends MultiPropertyTest {
-
     /**
     * Redefined method returns object, that contains changed property value.
     */
     protected PropertyTester CustomTester = new PropertyTester() {
         protected Object getNewValue(String propName, Object oldValue) {
-            XTextColumns TC = (XTextColumns) oldValue;
-            TC.setColumnCount((short)(TC.getColumnCount() + (short) 1));
+            XTextColumns TC = (XTextColumns) UnoRuntime.queryInterface(
+                                      XTextColumns.class, oldValue);
+            TC.setColumnCount((short) (TC.getColumnCount() + (short) 1));
+
             return TC;
         }
     };
@@ -114,8 +116,9 @@ public class _BaseIndex extends MultiPropertyTest {
     * New value must be defined for this property.
     */
     public void _TextColumns() {
-        log.println("Testing property 'TextColumns' with custom property tester") ;
-        testProperty("TextColumns", CustomTester) ;
+        log.println(
+                "Testing property 'TextColumns' with custom property tester");
+        testProperty("TextColumns", CustomTester);
     }
 
     /**
@@ -135,60 +138,65 @@ public class _BaseIndex extends MultiPropertyTest {
      * get are different or their contents differ).
      */
     public void _LevelFormat() {
-        log.println("Testing property 'LevelFormat' with custom property tester") ;
-        testProperty("LevelFormat", new PropertyTester() {
-
+        log.println(
+                "Testing property 'LevelFormat' with custom property tester");
+        testProperty("LevelFormat",
+                     new PropertyTester() {
             PropertyValue[][] newVal = null;
-            PropertyValue[][] oldVal = null ;
+            PropertyValue[][] oldVal = null;
 
             protected Object getNewValue(String propName, Object oldValue) {
-                XIndexReplace indProp = (XIndexReplace) oldValue;
-                try {
-                    oldVal = (PropertyValue[][]) indProp.getByIndex(0) ;
+                XIndexReplace indProp = (XIndexReplace) UnoRuntime.queryInterface(
+                                                XIndexReplace.class, oldValue);
 
-                    log.println("Get:") ;
-                    printLevelFormatProperty(oldValue) ;
+                try {
+                    oldVal = (PropertyValue[][]) indProp.getByIndex(0);
+
+                    log.println("Get:");
+                    printLevelFormatProperty(oldValue);
 
                     newVal = new PropertyValue[1][2];
 
-                    for (int i=0; i < newVal[0].length; i++) {
+                    for (int i = 0; i < newVal[0].length; i++) {
                         newVal[0][i] = new PropertyValue();
                     }
+
                     newVal[0][1].Name = "TokenType";
                     newVal[0][1].Value = "TokenEntryText";
                     newVal[0][0].Name = "Text";
                     newVal[0][0].Value = "BaseIndex";
 
                     indProp.replaceByIndex(0, newVal);
-                } catch ( com.sun.star.lang.WrappedTargetException e ) {
+                } catch (com.sun.star.lang.WrappedTargetException e) {
                     log.println("Exception occured while testing LevelFormat");
                     e.printStackTrace(log);
-                } catch ( com.sun.star.lang.IndexOutOfBoundsException e ) {
+                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
                     log.println("Exception occured while testing LevelFormat");
                     e.printStackTrace(log);
-                } catch ( com.sun.star.lang.IllegalArgumentException e ) {
+                } catch (com.sun.star.lang.IllegalArgumentException e) {
                     log.println("Exception occured while testing LevelFormat");
                     e.printStackTrace(log);
                 }
+
                 return indProp;
             }
 
             protected void checkResult(String propName, Object oldValue,
-                Object newValue, Object resValue, Exception exception)
-                throws Exception {
-
-                PropertyValue[][] res = (PropertyValue[][])
-                    ((XIndexAccess) resValue ).getByIndex(0);
+                                       Object newValue, Object resValue,
+                                       Exception exception)
+                                throws Exception {
+                PropertyValue[][] res = (PropertyValue[][]) ((XIndexAccess) UnoRuntime.queryInterface(
+                                                                     XIndexAccess.class,
+                                                                     resValue)).getByIndex(0);
 
                 log.println("Result:");
-                printLevelFormatProperty(resValue) ;
+                printLevelFormatProperty(resValue);
 
-                boolean result = res.length != oldVal.length ||
-                    !util.ValueComparer.equalValue(res, oldVal);
+                boolean result = (res.length != oldVal.length) ||
+                                 !util.ValueComparer.equalValue(res, oldVal);
 
-                tRes.tested(propName, result) ;
+                tRes.tested(propName, result);
             }
-
         });
     }
 
@@ -197,35 +205,34 @@ public class _BaseIndex extends MultiPropertyTest {
      * value into <code>log</code>.
      */
     private void printLevelFormatProperty(Object value) {
-        XIndexReplace indProp = (XIndexReplace) value;
-        PropertyValue[][] val = null ;
+        XIndexReplace indProp = (XIndexReplace) UnoRuntime.queryInterface(
+                                        XIndexReplace.class, value);
+        PropertyValue[][] val = null;
+
         try {
             log.println(" \u0421ollection has " + indProp.getCount() +
-                " elements : ") ;
+                        " elements : ");
 
-            for (int i =0 ; i < indProp.getCount(); i++) {
-                val = (PropertyValue[][]) indProp.getByIndex(i) ;
+            for (int i = 0; i < indProp.getCount(); i++) {
+                val = (PropertyValue[][]) indProp.getByIndex(i);
 
-                log.println("  " + i + ": has " + val.length + " levels :") ;
+                log.println("  " + i + ": has " + val.length + " levels :");
 
                 for (int j = 0; j < val.length; j++) {
-                    log.println("    " + j + " level :") ;
+                    log.println("    " + j + " level :");
 
                     for (int k = 0; k < val[j].length; k++) {
                         log.println("      " + val[j][k].Name + "=" +
-                            val[j][k].Value) ;
+                                    val[j][k].Value);
                     }
                 }
             }
-        } catch ( com.sun.star.lang.WrappedTargetException e ) {
+        } catch (com.sun.star.lang.WrappedTargetException e) {
             log.println("Exception occured while printing LevelFormat");
             e.printStackTrace(log);
-        } catch ( com.sun.star.lang.IndexOutOfBoundsException e ) {
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Exception occured while printing LevelFormat");
             e.printStackTrace(log);
         }
     }
-
-}  // finish class _NumberingRules
-
-
+} // finish class _NumberingRules
