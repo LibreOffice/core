@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_module.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:46:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,6 +494,10 @@ static PyObject *getClass( PyObject *self, PyObject *args )
     }
     catch( RuntimeException & e)
     {
+        // NOOPT !!!
+        // gcc 3.2.3 crashes here in the regcomp test scenario
+        // only since migration to python 2.3.4 ???? strange thing
+        // optimization switched off for this module !
         raisePyExceptionWithAny( makeAny(e) );
     }
     return NULL;
