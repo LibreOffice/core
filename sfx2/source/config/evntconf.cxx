@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:48:45 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,6 @@
 #include "dispatch.hxx"
 #include "config.hrc"
 #include "sfxresid.hxx"
-#include "cfgmgr.hxx"
 #include "macropg.hxx"
 #include "docinf.hxx"
 #include "eventsupplier.hxx"
@@ -148,6 +147,8 @@ static const USHORT nOldVersion = 4;
 static const USHORT nVersion = 5;
 
 TYPEINIT1(SfxEventHint, SfxHint);
+
+using namespace com::sun::star;
 
 // class SfxMacroQueryDlg_Impl -------------------------------------------
 
@@ -276,8 +277,8 @@ SfxEventList_Impl   *gp_Name_SortList = NULL;
 //==========================================================================
 
 SfxEventConfiguration::SfxEventConfiguration()
- : pAppEventConfig( NULL )
- , pDocEventConfig( NULL )
+ : pAppTable( NULL )
+ , pDocTable( NULL )
 {
     bIgnoreConfigure = sal_False;
 
@@ -288,7 +289,7 @@ SfxEventConfiguration::SfxEventConfiguration()
     const SfxEvent_Impl *pEvent = new SfxEvent_Impl(String(), 0);
     pEventArr->Insert(pEvent, 0);
 }
-
+/*
 SfxEventConfigItem_Impl* SfxEventConfiguration::GetAppEventConfig_Impl()
 {
     if ( !pAppEventConfig )
@@ -299,7 +300,7 @@ SfxEventConfigItem_Impl* SfxEventConfiguration::GetAppEventConfig_Impl()
 
     return pAppEventConfig;
 }
-
+*/
 //==========================================================================
 
 SfxEventConfiguration::~SfxEventConfiguration()
@@ -307,7 +308,7 @@ SfxEventConfiguration::~SfxEventConfiguration()
     for (USHORT n=0; n<pEventArr->Count(); n++)
         delete (*pEventArr)[n];
     delete pEventArr;
-    delete pAppEventConfig;
+    delete pDocTable;
 
     if ( gp_Id_SortList )
     {
@@ -380,20 +381,16 @@ void SfxEventConfiguration::ConfigureEvent( USHORT nId, const SvxMacro& rMacro, 
         pMacro = new SvxMacro( rMacro.GetMacName(), rMacro.GetLibName(), rMacro.GetScriptType() );
     if ( pDoc )
     {
-        //pDocEventConfig = pDoc->GetEventConfig_Impl( TRUE );
-        //pDocEventConfig->ConfigureEvent( nId, pMacro );
         PropagateEvent_Impl( pDoc, nId, pMacro );
     }
     else
     {
-        // globale Bindung
-        //GetAppEventConfig_Impl()->ConfigureEvent( nId, pMacro );
         PropagateEvent_Impl( NULL, nId, pMacro );
     }
 }
 
 //==========================================================================
-
+/*
 const SvxMacro* SfxEventConfiguration::GetMacroForEventId
 (
     USHORT          nId,
@@ -407,8 +404,9 @@ const SvxMacro* SfxEventConfiguration::GetMacroForEventId
     if ( !pMacro )
         pMacro = GetAppEventConfig_Impl()->aMacroTable.Seek( nId );
     return pMacro;
-}
+} */
 
+/*
 const SfxMacroInfo* SfxEventConfiguration::GetMacroInfo
 (
     USHORT          nId,
@@ -425,10 +423,10 @@ const SfxMacroInfo* SfxEventConfiguration::GetMacroInfo
         pMacro = const_cast< SfxEventConfiguration* >(this)->GetAppEventConfig_Impl()->aMacroTable.Seek( nId );
 
     return SFX_APP()->GetMacroConfig()->GetMacroInfo_Impl( pMacro );
-}
+} */
 
 //==========================================================================
-
+/*
 SfxEventConfigItem_Impl::SfxEventConfigItem_Impl( USHORT nConfigId,
     SfxEventConfiguration *pCfg,
     SfxObjectShell *pObjSh)
@@ -441,16 +439,6 @@ SfxEventConfigItem_Impl::SfxEventConfigItem_Impl( USHORT nConfigId,
 {
     bInitialized = TRUE;
 }
-
-/*
-void SfxEventConfigItem_Impl::Init( SfxConfigManager *pMgr )
-{
-    if ( GetConfigManager() == pMgr )
-        Initialize();
-    else
-        ReInitialize( pMgr );
-}
-*/
 
 //==========================================================================
 
@@ -687,6 +675,7 @@ void SfxEventConfigItem_Impl::ConfigureEvent( USHORT nId, SvxMacro *pMacro )
     SetDefault(FALSE);
 }
 
+
 void SfxEventConfiguration::AddEvents( SfxMacroTabPage* pPage ) const
 {
     DBG_ASSERT(pEventArr,"Keine Events angemeldet!");
@@ -696,19 +685,12 @@ void SfxEventConfiguration::AddEvents( SfxMacroTabPage* pPage ) const
             pPage->AddEvent( (*pEventArr)[n]->aEventName, (*pEventArr)[n]->nEventId );
 }
 
+
 SvxMacroTableDtor* SfxEventConfiguration::GetAppEventTable()
 {
     return &GetAppEventConfig_Impl()->aMacroTable;
 }
-
-SvxMacroTableDtor* SfxEventConfiguration::GetDocEventTable( SfxObjectShell*pDoc )
-{
-    pDocEventConfig = pDoc ? pDoc->GetEventConfig_Impl() : NULL;
-    if ( pDocEventConfig )
-        return &pDocEventConfig->aMacroTable;
-    return NULL;
-}
-
+ *
 void SfxEventConfiguration::SetAppEventTable( const SvxMacroTableDtor& rTable )
 {
     //GetAppEventConfig_Impl()->aMacroTable = rTable;
@@ -716,21 +698,47 @@ void SfxEventConfiguration::SetAppEventTable( const SvxMacroTableDtor& rTable )
     PropagateEvents_Impl( NULL, rTable );
 }
 
+*/
+
+SvxMacroTableDtor* SfxEventConfiguration::GetDocEventTable( SfxObjectShell*pDoc )
+{
+    if ( pDocTable )
+        delete pDocTable;
+
+    pDocTable = new SvxMacroTableDtor;
+
+    if ( pDoc )
+    {
+        REFERENCE< XEVENTSSUPPLIER > xSup( pDoc->GetModel(), UNO_QUERY );
+        uno::Reference < container::XNameReplace > xEvents = xSup->getEvents();
+
+        uno::Sequence < ::rtl::OUString > aNames = xEvents->getElementNames();
+        for ( sal_Int32 i=0; i<aNames.getLength(); i++ )
+        {
+            SvxMacro* pMacro = SfxEvents_Impl::ConvertToMacro( xEvents->getByName( aNames[i] ), pDoc, TRUE );
+            USHORT nID = (USHORT) GetEventId_Impl( aNames[i] );
+            if ( nID && pMacro )
+                pDocTable->Insert( nID, pMacro );
+            else
+                DBG_ERROR("Suspicious event binding!");
+        }
+
+    }
+
+    return pDocTable;
+}
+
+/*
 void SfxEventConfiguration::SetDocEventTable( SfxObjectShell *pDoc,
     const SvxMacroTableDtor& rTable )
 {
     if ( pDoc )
     {
-        // if CfgMgr does not exist, create it, otherwise ConfigItem will not have a ConfigManager!
-//REMOVE            pDoc->GetConfigManager(TRUE);
-        pDocEventConfig = pDoc->GetEventConfig_Impl( TRUE );
-        //pDocEventConfig->aMacroTable = rTable;
-        //pDocEventConfig->SetDefault(FALSE);
         pDoc->SetModified(TRUE);
         PropagateEvents_Impl( pDoc, rTable );
     }
     else
-        DBG_ERROR( "Kein Dokument!" );
+        DBG_ERROR( "No Document!" );
 }
 
 //--------------------------------------------------------------------------
@@ -811,7 +819,7 @@ void SfxEventConfiguration::PropagateEvents_Impl( SfxObjectShell *pDoc,
         bIgnoreConfigure = sal_False;
     }
 }
-
+*/
 //--------------------------------------------------------------------------
 void SfxEventConfiguration::PropagateEvent_Impl( SfxObjectShell *pDoc,
                                                  USHORT nId,
@@ -1104,6 +1112,7 @@ void SfxEventConfiguration::RegisterEvent( USHORT nId,
     SFX_APP()->GetEventConfig()->RegisterEvent( nId, rUIName );
 }
 
+/*
 BOOL SfxEventConfiguration::Import( SvStream& rInStream, SvStream* pOutStream, SfxObjectShell* pDoc )
 {
     if ( pDoc )
@@ -1150,5 +1159,5 @@ BOOL SfxEventConfiguration::Export( SvStream* pInStream, SvStream& rOutStream, S
     DBG_ERROR( "No InStream!" );
     return FALSE;
 }
-
+*/
 
