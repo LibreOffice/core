@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swbreak.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:21:16 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 12:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ ModalDialog DLG_BREAK
     FixedText FT_COLL
     {
         Pos = MAP_APPFONT ( 12 , 51 ) ;
-        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Size = MAP_APPFONT ( 69 , 8 ) ;
         Text [ de ] = "~Vorlage" ;
         Text [ en-US ] = "~Style" ;
         Group = TRUE ;
