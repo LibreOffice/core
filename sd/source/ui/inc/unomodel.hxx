@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:35:01 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,6 +290,14 @@ public:
     virtual void SAL_CALL render( sal_Int32 nRenderer, const ::com::sun::star::uno::Any& aSelection, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xOptions ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     // XComponent
+
+    /** This dispose implementation releases the resources held by the
+        called object and forwards the call to its base class.
+        When close() has not yet been called then this is done first.  As a
+        consequence the implementation has to cope with being called twice
+        and still has to forward the second call to the base class.
+        See also comments of issue 27847.
+    */
     virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
 
     // XPrintable
