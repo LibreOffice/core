@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:17:00 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,19 +207,19 @@ DockingWindow FID_FUNCTION_BOX
         };
         StringList [ finnish ] =
         {
-            < "Zuletzt verwendet" ; Default ; > ;
-            < "Alle" ; Default ; > ;
-            < "Datenbank" ; Default ; > ;
-            < "Datum&Zeit" ; Default ; > ;
-            < "Finanz" ; Default ; > ;
-            < "Information" ; Default ; > ;
-            < "Logisch" ; Default ; > ;
-            < "Mathematik" ; Default ; > ;
-            < "Matrix" ; Default ; > ;
-            < "Statistik" ; Default ; > ;
-            < "Tabelle" ; Default ; > ;
-            < "Text" ; Default ; > ;
-            < "Add In" ; Default ; > ;
+            < "Viimeksi käytetty" ; Default ; > ;
+            < "Kaikki" ; Default ; > ;
+            < "Tietokanta" ; Default ; > ;
+            < "Päivämäärä&Aika" ; Default ; > ;
+            < "Rahoitus" ; Default ; > ;
+            < "Tiedot" ; Default ; > ;
+            < "Looginen" ; Default ; > ;
+            < "Matemaattinen" ; Default ; > ;
+            < "Matriisitaulukko" ; Default ; > ;
+            < "Tilastolliset" ; Default ; > ;
+            < "Laskentataulukko" ; Default ; > ;
+            < "Teksti" ; Default ; > ;
+            < "Lisäosa" ; Default ; > ;
              //         < "Käyttäjän"; Default; >;
         };
         StringList [ danish ] =
@@ -592,6 +592,7 @@ DockingWindow FID_FUNCTION_BOX
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Funktion in Rechenblatt einfügen";
         QuickHelpText[ catalan ] = "Insertar la función en la hoja de cálculo";
+        QuickHelpText[ finnish ] = "Lisää funktio laskentalomakkeeseen!";
     };
     Text [ english_us ] = "Functions" ;
     Text [ portuguese_brazilian ] = "Funktionen" ;
@@ -615,5 +616,6 @@ DockingWindow FID_FUNCTION_BOX
     Text[ turkish ] = "Fonksiyon";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Funciones";
+    Text[ finnish ] = "Toiminnot";
 };
  // ********************************************************************** EOF
