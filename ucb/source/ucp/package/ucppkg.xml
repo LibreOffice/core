@@ -30,7 +30,7 @@
         <status value="final"/>
 
         <service-dependency>
-            com.sun.star.packages.Package
+            com.sun.star.packages.comp.ZipPackage
         </service-dependency>
     </component-description>
 
