@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expbase.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include "global.hxx"
 #endif
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 
 class SvStream;
 class ScFieldEditEngine;
@@ -99,17 +103,17 @@ public:
                         // Hidden Cols/Rows an den Raendern trimmen,
                         // return: TRUE wenn Bereich vorhanden
                         // Start/End/Col/Row muessen gueltige Ausgangswerte sein
-    BOOL                TrimDataArea( USHORT nTab, USHORT& nStartCol,
-                            USHORT& nStartRow, USHORT& nEndCol, USHORT& nEndRow ) const;
+    BOOL                TrimDataArea( SCTAB nTab, SCCOL& nStartCol,
+                            SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const;
 
                         // Ausgabebereich einer Tabelle ermitteln,
                         // Hidden Cols/Rows an den Raendern beruecksichtigt,
                         // return: TRUE wenn Bereich vorhanden
-    BOOL                GetDataArea( USHORT nTab, USHORT& nStartCol,
-                            USHORT& nStartRow, USHORT& nEndCol, USHORT& nEndRow ) const;
+    BOOL                GetDataArea( SCTAB nTab, SCCOL& nStartCol,
+                            SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const;
 
                         // Tabelle nicht vorhanden oder leer
-    BOOL                IsEmptyTable( USHORT nTab ) const;
+    BOOL                IsEmptyTable( SCTAB nTab ) const;
 
     ScFieldEditEngine&  GetEditEngine() const;
 
