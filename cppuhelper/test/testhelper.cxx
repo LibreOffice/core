@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-08 15:55:51 $
+ *  last change: $Author: dbo $ $Date: 2001-06-01 11:47:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
+#include <cppuhelper/component_context.hxx>
 #include <cppuhelper/servicefactory.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -74,6 +76,7 @@
 using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
+using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
@@ -83,14 +86,26 @@ int main( int argc, char * argv[] )
 int __cdecl main( int argc, char * argv[] )
 #endif
 {
-    Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("cpputest.rdb") ) ) );
+    Reference< XMultiComponentFactory > xMgr( createRegistryServiceFactory(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("cpputest.rdb") ) ), UNO_QUERY );
+    Reference< XComponentContext > xInitialContext;
+    OSL_VERIFY( Reference< beans::XPropertySet >( xMgr, UNO_QUERY )->getPropertyValue(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xInitialContext );
+
+    ContextEntry_Init aEntry;
+    aEntry.bLateInitService = false;
+    aEntry.name = OUString( RTL_CONSTASCII_USTRINGPARAM("bla, bla") );
+    aEntry.value = makeAny( (sal_Int32)5 );
+    Reference< XComponentContext > xContext( createComponentContext( &aEntry, 1, xInitialContext ) );
+    OSL_ASSERT( xContext->getServiceManager() == xMgr );
 
     sal_Bool bSucc = sal_False;
     try
     {
         Reference< XImplementationRegistration > xImplReg(
-            xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration") ) ),
+            xMgr->createInstanceWithContext(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration") ),
+                xContext ),
             UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
@@ -115,10 +130,11 @@ int __cdecl main( int argc, char * argv[] )
             OUString::createFromAscii( aLibName.getStr() ),
             Reference< XSimpleRegistry >() );
 
+        Reference< XMultiServiceFactory > x( xMgr, UNO_QUERY );
         testPropertyTypeHelper();
-        testidlclass( xMgr );
+        testidlclass( x );
         test_PropertySetHelper();
-        test_ImplHelper( xMgr );
+        test_ImplHelper( x );
         test_interfacecontainer();
     }
     catch (Exception & rExc)
@@ -130,7 +146,9 @@ int __cdecl main( int argc, char * argv[] )
         OSL_TRACE( "\n" );
     }
 
-    Reference< XComponent >( xMgr, UNO_QUERY )->dispose();
+    OSL_VERIFY( xContext->getValueByName(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("bla, bla") ) ) == (sal_Int32)5 );
+    Reference< XComponent >( xInitialContext, UNO_QUERY )->dispose();
 
     printf( "Test finished\n" );
     return 0;
