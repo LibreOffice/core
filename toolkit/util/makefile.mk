@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-05 16:23:39 $
+#   last change: $Author: sb $ $Date: 2002-07-12 08:18:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -146,7 +146,5 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo VCLXVirtualDevice>> $@
     @echo VCLXPopupMenu>> $@
     @echo VCLXMenuBar>> $@
+    @echo VCLXToolkit>> $@
     @echo __CT>> $@
-
-
-
