@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:15:00 $
+#   last change: $Author: vg $ $Date: 2003-07-09 10:15:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 PRJ=..
 
-PRJNAME=GOODIES
+PRJNAME=goodies
 TARGET=go
 
 #goodies.hid generieren
@@ -70,9 +70,7 @@ GEN_HID=TRUE
 
 # --- Settings ---------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Allgemein ---------------------------------------------------
 
@@ -92,10 +90,6 @@ SHL1STDLIBS=\
         $(TOOLSLIB)		\
         $(VOSLIB)		\
         $(SALLIB)
-
-.IF "$(GUI)"=="MAC"
-SHL1DEPN=	$(SHL1STDLIBS)
-.ENDIF
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=	$(SLB)$/go.lib
