@@ -2,9 +2,9 @@
 #
 #   $RCSfile: odk_rules.pmk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-20 13:15:03 $
+#   last change: $Author: rt $ $Date: 2004-02-27 11:56:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -320,7 +320,7 @@ $(DIR_CREATE_FLAG) :
 .IF "$(USE_SHELL)" != "4nt"
     +$(TYPE) $(mktmp $(DIR_DIRECTORY_LIST)) | xargs -n 10 $(MKDIRHIER) && echo "dirs created" > $@ && touch $@
 .ELSE
-    +$(TYPE) $(mktmp $(DIR_DIRECTORY_LIST:s/\/\\/)) | xargs -n 10 $(COMSPEC) -c $(PERL) $(SOLARENV)$/bin/mkdir.pl -p && echo "dirs created" > $@ && touch $@
+    +$(TYPE) $(mktmp $(DIR_DIRECTORY_LIST:s/\/\\/)) | xargs -n 10 $(COMSPEC) -c $(PERL) $(SOLARENV)$/bin/mkdir.pl && echo "dirs created" > $@ && touch $@
 .ENDIF
     
 $(DIR_FILE_LIST) : $(DIR_CREATE_FLAG)
