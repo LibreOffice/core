@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-18 09:00:15 $
+#   last change: $Author: hr $ $Date: 2004-11-26 22:25:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,7 +131,6 @@ SCP_PRODUCT_TYPE=osl
 PARFILES=                          \
         installation_ooo.par       \
         scpaction_ooo.par          \
-        helptext_ooo.par           \
         directory_ooo.par          \
         datacarrier_ooo.par        \
         file_ooo.par               \
@@ -140,12 +139,9 @@ PARFILES=                          \
         file_library_ooo.par       \
         file_resource_ooo.par      \
         shortcut_ooo.par           \
-        custom_ooo.par             \
-        procedure_ooo.par          \
         module_ooo.par             \
         profile_ooo.par            \
-        profileitem_ooo.par        \
-        starregistryitem_ooo.par 
+        profileitem_ooo.par
 
 .IF "$(GUI)"=="WNT"
 PARFILES +=                        \
@@ -157,7 +153,6 @@ PARFILES +=                        \
 ULFFILES=                          \
         directory_ooo.ulf          \
         folderitem_ooo.ulf         \
-        helptext_ooo.ulf           \
         module_ooo.ulf             \
         registryitem_ooo.ulf
 
