@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:04:48 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:29:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         QuickHelpText[ chinese_traditional ] = "ΑY¤p";
         QuickHelpText[ arabic ] = "ΚΥΫνΡ";
         QuickHelpText[ greek ] = "Σμίκρυνση";
-        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ korean ] = "ΓΰΌÒ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
     };
@@ -234,7 +234,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_traditional ] = "¥]§tΔζΌΠΓD(~H)";
         Text[ arabic ] = "νΚΦγδ ΡΔζΣ ΓΪγΟΙ";
         Text[ greek ] = "περιέχει κεφαλίδες στηλών";
-        Text[ korean ] = "Ώ­ ΈΣΈ®±Ϋ ΖχΗΤ(~H)";
+        Text[ korean ] = "Ώ­ ΈΣΈ®±Ϋ ΖχΗΤ";
         Text[ turkish ] = "Sόtun baώlύklarύ ~iηeriyor";
         Text[ language_user1 ] = " ";
     };
@@ -263,7 +263,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_traditional ] = "΄΅¤J/§R°£ΐx¦s®ζ(~C)";
         Text[ arabic ] = "ΕΟΡΗΜ/ΝΠέ ΞαΗνΗ";
         Text[ greek ] = "Προσθήκη/Διαγραφή κελιών";
-        Text[ korean ] = "ΌΏ »θΑ¦ ¶Η΄Β »πΐΤ(~C)";
+        Text[ korean ] = "ΌΏ »πΐΤ£―»θΑ¦";
         Text[ turkish ] = "Hόcre ~ekle/sil";
         Text[ language_user1 ] = " ";
     };
@@ -291,7 +291,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_traditional ] = "«O―d®ζ¦΅(~F)";
         Text[ arabic ] = "ΗαΕΘήΗΑ Ϊαμ ΗαΚδΣνή";
         Text[ greek ] = "Διατήρηση μορφοποίησης";
-        Text[ korean ] = "Ό­½Δ ΐ―Αφ(~F)";
+        Text[ korean ] = "ΖχΈΛΖΓ ΐ―Αφ";
         Text[ turkish ] = "Formatlamayύ ~koru";
         Text[ language_user1 ] = " ";
     };
@@ -319,7 +319,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_traditional ] = "¤£ΐx¦s¶Χ¤JªΊΈκ®Ζ(~I)";
         Text[ arabic ] = "ΪΟγ ΝέΩ ΗαΘνΗδΗΚ ΗαγΣΚζΡΟΙ";
         Text[ greek ] = "Να μην αποθηκευτούν ε~ισαγόμενα δεδομένα";
-        Text[ korean ] = "°΅Α®ΏΒ µ¥ΐΜΕΝ ΐϊΐεΗΟΑφ ΎΚ±β(~I)";
+        Text[ korean ] = "°΅Α®ΏΒ µ¥ΐΜΕΝ ΐϊΐεΗΟΑφ ΎΚ±β";
         Text[ turkish ] = "~έηe aktarύlan verileri kaydetme";
         Text[ language_user1 ] = " ";
     };
@@ -416,7 +416,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_traditional ] = "·sΌW(~A)";
         Text[ arabic ] = "ΕΦΗέΙ";
         Text[ greek ] = "Προσθήκη";
-        Text[ korean ] = "Γί°΅(~A)";
+        Text[ korean ] = "Γί°΅";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
     };
@@ -446,7 +446,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_traditional ] = "§R°£(~D)";
         Text[ arabic ] = "ΝΠέ";
         Text[ greek ] = "Διαγραφή";
-        Text[ korean ] = "»θΑ¦(~D)";
+        Text[ korean ] = "»θΑ¦";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
     };
@@ -487,7 +487,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_traditional ] = "·sΌW(~A)";
         Text[ arabic ] = "ΕΦΗέΙ";
         Text[ greek ] = "Προσθήκη";
-        Text[ korean ] = "Γί°΅(~A)";
+        Text[ korean ] = "Γί°΅";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
     };
@@ -514,7 +514,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ chinese_traditional ] = "Εά§σ(~M)";
         Text[ arabic ] = "ΚΪΟνα";
         Text[ greek ] = "Τροποποίηση";
-        Text[ korean ] = "ΌφΑ¤(~M)";
+        Text[ korean ] = "Ί―°ζ";
         Text[ turkish ] = "~Deπiώtir";
         Text[ language_user1 ] = " ";
     };
