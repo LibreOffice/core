@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numehelp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:56:29 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,14 @@
 #ifndef XMLOFF_NUMEHELP_HXX
 #define XMLOFF_NUMEHELP_HXX
 
+#ifndef _SAL_CONFIG_H_
+#include "sal/config.h"
+#endif
+
+#ifndef INCLUDED_XMLOFF_DLLAPI_H
+#include "xmloff/dllapi.h"
+#endif
+
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
@@ -104,7 +112,7 @@ struct LessNumberFormat
 
 typedef std::set<XMLNumberFormat, LessNumberFormat> XMLNumberFormatSet;
 
-class XMLNumberFormatAttributesExportHelper
+class XMLOFF_DLLPUBLIC XMLNumberFormatAttributesExportHelper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > xNumberFormats;
     SvXMLExport*        pExport;
