@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:22:59 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,8 +341,8 @@ void OCollection::clear_NoDispose()
 // -------------------------------------------------------------------------
 void OCollection::disposing(void)
 {
-    m_aContainerListeners.disposeAndClear(EventObject(static_cast<XWeak*>(this)));
-    m_aRefreshListeners.disposeAndClear(EventObject(static_cast<XWeak*>(this)));
+    m_aContainerListeners.disposeAndClear(EventObject(static_cast<XTypeProvider*>(this)));
+    m_aRefreshListeners.disposeAndClear(EventObject(static_cast<XTypeProvider*>(this)));
 
     ::osl::MutexGuard aGuard(m_rMutex);
 
@@ -355,7 +355,7 @@ Any SAL_CALL OCollection::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsEx
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     if (Index < 0 || Index >= m_pElements->size() )
-        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(Index),*this);
+        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(Index),static_cast<XTypeProvider*>(this));
 
     return makeAny(getObject(Index));
 }
@@ -365,7 +365,7 @@ Any SAL_CALL OCollection::getByName( const ::rtl::OUString& aName ) throw(NoSuch
     ::osl::MutexGuard aGuard(m_rMutex);
 
     if ( !m_pElements->exists(aName) )
-        throw NoSuchElementException(aName,*this);
+        throw NoSuchElementException(aName,static_cast<XTypeProvider*>(this));
 
     return makeAny(getObject(m_pElements->findColumn(aName)));
 }
@@ -383,7 +383,7 @@ void SAL_CALL OCollection::refresh(  ) throw(RuntimeException)
     disposeElements();
 
     impl_refresh();
-    EventObject aEvt(static_cast<XWeak*>(this));
+    EventObject aEvt(static_cast<XTypeProvider*>(this));
     NOTIFY_LISTENERS(m_aRefreshListeners, XRefreshListener, refreshed, aEvt);
 }
 // -----------------------------------------------------------------------------
@@ -410,7 +410,7 @@ void SAL_CALL OCollection::appendByDescriptor( const Reference< XPropertySet >& 
     {
         ::rtl::OUString sName = xName->getName();
         if ( m_pElements->exists(sName) )
-            throw ElementExistException(sName,*this);
+            throw ElementExistException(sName,static_cast<XTypeProvider*>(this));
 
         appendObject(descriptor);
         Reference< XNamed > xNewName = cloneObject(descriptor);
@@ -444,7 +444,7 @@ void SAL_CALL OCollection::dropByName( const ::rtl::OUString& elementName ) thro
     ::osl::MutexGuard aGuard(m_rMutex);
 
     if ( !m_pElements->exists(elementName) )
-        throw NoSuchElementException(elementName,*this);
+        throw NoSuchElementException(elementName,static_cast<XTypeProvider*>(this));
 
     dropImpl(m_pElements->findColumn(elementName));
 }
@@ -453,7 +453,7 @@ void SAL_CALL OCollection::dropByIndex( sal_Int32 index ) throw(SQLException, In
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     if(index <0 || index >= getCount())
-        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
+        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),static_cast<XTypeProvider*>(this));
 
     dropImpl(index);
 }
@@ -483,7 +483,7 @@ void OCollection::notifyElementRemoved(const ::rtl::OUString& _sName)
 sal_Int32 SAL_CALL OCollection::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
 {
     if ( !m_pElements->exists(columnName) )
-        throw SQLException(::rtl::OUString::createFromAscii("Unknown column name!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,makeAny(NoSuchElementException(columnName,*this)) );
+        throw SQLException(::rtl::OUString::createFromAscii("Unknown column name!"),static_cast<XTypeProvider*>(this),OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,makeAny(NoSuchElementException(columnName,static_cast<XTypeProvider*>(this))) );
 
     return m_pElements->findColumn(columnName) + 1; // because columns start at one
 }
@@ -590,7 +590,7 @@ Reference< XNamed > OCollection::getObject(sal_Int32 _nIndex)
             catch(const Exception& )
             {
             }
-            throw WrappedTargetException(e.Message,*this,makeAny(e));
+            throw WrappedTargetException(e.Message,static_cast<XTypeProvider*>(this),makeAny(e));
         }
         m_pElements->setObject(_nIndex,xName);
     }
