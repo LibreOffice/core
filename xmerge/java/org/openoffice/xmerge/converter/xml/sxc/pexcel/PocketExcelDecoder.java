@@ -259,10 +259,10 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
     }
 
     /**
-     * Parses a Pexlcel Formula in Reverse Polish Notation into an sxc formula
+     * Parses a Pexcel Formula in Reverse Polish Notation into an sxc formula
      * that uses infix notation
      *
-     *  @return  The number of columns in the current sheet.
+     *  @return the parsed formula using infix notation
      */
     protected String parseFormula(String inputString) {
 
