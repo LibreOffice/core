@@ -2,9 +2,9 @@
  *
  *  $RCSfile: aeitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:00 $
+ *  last change: $Author: mba $ $Date: 2002-11-22 18:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 
 #include <tools/string.hxx>
 
+#define _SVSTDARR_USHORTS
+#include <svstdarr.hxx>
 #include <svarray.hxx>
 #include "aeitem.hxx"
 
@@ -85,7 +87,8 @@ SV_IMPL_PTRARR(SfxAllEnumValueArr, SfxAllEnumValue_Impl*);
 
 SfxAllEnumItem::SfxAllEnumItem( USHORT nWhich, USHORT nVal, const XubString &rText ):
     SfxEnumItem(nWhich, nVal),
-    pValues( 0 )
+    pValues( 0 ),
+    pDisabledValues( 0 )
 {
     DBG_CTOR(SfxAllEnumItem, 0);
     InsertValue( nVal, rText );
@@ -149,6 +152,7 @@ SfxAllEnumItem::~SfxAllEnumItem()
 {
     DBG_DTOR(SfxAllEnumItem, 0);
     delete pValues;
+    delete pDisabledValues;
 }
 
 // -----------------------------------------------------------------------
@@ -270,6 +274,27 @@ void SfxAllEnumItem::InsertValue( USHORT nValue )
         pValues = new SfxAllEnumValueArr;
 
     pValues->Insert( pTemp, _GetPosByValue(nValue) ); //! doppelte?!
+}
+
+void SfxAllEnumItem::DisableValue( USHORT nValue )
+{
+    DBG_CHKTHIS(SfxAllEnumItem, 0);
+    if ( !pDisabledValues )
+        pDisabledValues = new SvUShorts;
+
+    pDisabledValues->Insert( nValue, pDisabledValues->Count() );
+}
+
+BOOL SfxAllEnumItem::IsEnabled( USHORT nValue )
+{
+    if ( pDisabledValues )
+    {
+        for ( USHORT i=0; i<pDisabledValues->Count(); i++ )
+            if ( (*pDisabledValues)[i] == nValue )
+                return FALSE;
+    }
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
