@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxShapeConnector.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-10 09:18:40 $
+ *  last change:$Date: 2003-05-27 13:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ public class SvxShapeConnector extends TestCase {
 
         try {
             log.println( "creating a drawdoc" );
-            xDrawDoc = DrawTools.createDrawDoc(tParam.getMSF());
+            xDrawDoc = DrawTools.createDrawDoc((XMultiServiceFactory)tParam.getMSF());
         } catch ( Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
@@ -188,7 +188,7 @@ public class SvxShapeConnector extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
         oShape = SOF.createShape(xDrawDoc,3000,4500,15000,1000,"Ellipse");
         DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
 

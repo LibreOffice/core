@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxShapeCircle.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-10 09:08:56 $
+ *  last change:$Date: 2003-05-27 13:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@ package mod._svx;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.drawing.XShape;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.style.XStyle;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -156,7 +157,7 @@ public class SvxShapeCircle extends TestCase {
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a drawdoc" );
@@ -207,7 +208,7 @@ public class SvxShapeCircle extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF()) ;
+        SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)tParam.getMSF()) ;
         oShape = SOF.createShape(xDrawDoc,5000,5000,3000,3000,"Ellipse");
 
         XPropertySet props = (XPropertySet) UnoRuntime.queryInterface
