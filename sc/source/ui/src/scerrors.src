@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:20:06 $
+ *  last change: $Author: vg $ $Date: 2001-05-30 20:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_traditional ] = "¤£¨ό¤δ΄©ªΊ©Ξ¤£©ϊªΊ Excel ΐΙ®Χ®ζ¦΅΅C";
         Text[ arabic ] = "ΚδΣνή γαέ Excel ΫνΡ γΟΪζγ΅ Γζ ΫνΡ γΪΡζέ.";
         Text[ greek ] = "Άγνωστη ή μη υποστηριζόμενη μορφή αρχείου Excel.";
-        Text[ korean ] = "ΎΛΌφΎψ΄Β΅΅¶Η΄Β ΑφΏψµΗΑφ ΎΚ΄ΒExcel ΖΔΐΟ Ό­½Δ.";
+        Text[ korean ] = "ΎΛ Όφ Ύψ΄Β ¶Η΄Β ΑφΏψµΗΑφ ΎΚ΄Β Excel ΖΔΐΟ Ό­½Δ.";
         Text[ turkish ] = "Desteklenmeyen ya da bilinmeyen Excel dosya formatύ.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Formato del archivo Excel no soportado o desconocido.";
@@ -408,7 +408,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_traditional ] = "³o­ΣΐΙ®Χ§t¦³¦CΌΖ8192¤§¤UªΊΌΖΎΪ΅A¦]¦ΉµLªkΕª¥X΅C";
         Text[ arabic ] = "νΝΚζν Ηαγαέ Ϊαμ ΘνΗδΗΚ ΓΣέα ΗαΥέ 8192΅ αεΠΗ αΗ νγίδ ήΡΗΑΚε.";
         Text[ greek ] = "Δεν είναι δυνατόν να γίνει ανάγνωση του αρχείου επειδή περιέχει δεδομένα πλέον των 8192 γραμμών.";
-        Text[ korean ] = "ΖΔΐΟΐΜ Ηΰ 8192 ΉΜΈΈΐΗ µ¥ΐΜΕΝΈ¦ ΖχΗΤΗΟ°ν ΐΦΎξΌ­ ΐΠΐ»΅΅Όφ΅΅Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΖΔΐΟΐΜ 8192 Ηΰ ΉΜΈΈΐΗ µ¥ΐΜΕΝΈ¦ ΖχΗΤΗΟ°ν ΐΦΎξΌ­ ΐΠΐ» Όφ Ύψ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Dosya, 8192 satύrύ altύnda veri bulunduπu okununamύyor.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El archivo contiene datos por debajo de la fila 8192, por lo que no puede ser leνdo.";
@@ -646,12 +646,12 @@ Resource RID_ERRHDLSC
         Text [ dutch ] = "Het document bevat teveel regels voor dit formaat.\nDit teveel werd niet opgeslagen." ;
         Text[ chinese_simplified ] = "ΥϋΈφΞΔµµΊ¬ΣΠµΔΠΠΚύ³¬Ήύ΄ςΣ΅ΈρΚ½Φ§³ΦµΔ·¶Ξ§΅£\n³¬ΉύµΔΠΠ²»»α±»΄ζΕΜ΅£";
         Text[ russian ] = "Δξκσμενς ρξδεπζθς αξλόψε ρςπξκ, χεμ οξδδεπζθβΰεςρÿ τξπμΰςξμ βϋβξδΰ.\nΡςπξκθ, οπεβϋψΰώωθε ηΰδΰννξε χθρλξ, ρξυπΰνενϋ νε ασδσς.";
-        Text[ polish ] = "Dokument zawiera wiκcej wierszy niΏ jest obs³ugiwane przez format wyj?ciowy. \nDodatkowe wiersze nie bκdΉ obs³ugiwane.";
+        Text[ polish ] = "Dokument zawiera wiκcej wierszy niΏ jest obs³ugiwane przez format wyjciowy. \nDodatkowe wiersze nie bκdΉ obs³ugiwane.";
         Text[ japanese ] = "Δή·­ÒέΔ‚ΝA±³ΔΜί―Δ‚·‚ισό‘®‚Εx‰‡‚Ε‚«‚ιs”‚π‰z‚¦‚Δ‚Ά‚ά‚·B\n‰ίθ‚Μs‚Ν•Ϋ‘¶‚³‚κ‚ά‚Ή‚ρ‚Ε‚µ‚½B";
         Text[ chinese_traditional ] = "³o­Σ¤ε¥σ§t¦³ªΊ¦CΌΖ¶WΉL¦C¦L®ζ¦΅¤δ«ωªΊ½d³ς΅C\n¶WΉLªΊ¦C¤£·|³Qΐx¦s΅C";
         Text[ arabic ] = "νΝΚζν ΗαγΣΚδΟ Ϊαμ ΪΟΟ γδ ΗαΥέζέ νέζή ΗαΪΟΟ ΗαΠν νγίδ ααΚδΣνή ΗαγΝΟΟ ΟΪγε.\nαγ νΚγ ΝέΩ ΗαΥέζέ ΗαÒΗΖΟΙ.";
         Text[ greek ] = "Το έγγραφο περιέχει περισσότερες γραμμές από ότι υποστηρίζει η μορφή \nεξαγωγής. Οι πλεονάζουσες γραμμές δεν αποθηκεύτηκαν.";
-        Text[ korean ] = "Γβ·ΒΖχΈΛΐΜ΅΅ΑφΏψΗÒΌφΐΦ΄Β°ΝΊΈ΄Ω ΄υ ΈΉΐΊ ΗΰΐΜ΅΅Ή®Ό­Ώ΅΅΅ΖχΗΤµΗΎξ΅΅ΐΦ½ΐ΄Ο΄Ω.\nΓΚ°ϊµΗ΄Β ΗΰΐΊ ΐϊΐεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "Γβ·ΒΖχΈΛΐΜ ΑφΏψΗÒ Όφ ΐΦ΄Β°ΝΊΈ΄Ω ΄υ ΈΉΐΊ ΗΰΐΜ Ή®Ό­Ώ΅ ΖχΗΤµΗΎξ ΐΦ½ΐ΄Ο΄Ω.\nΓΚ°ϊµΗ΄Β ΗΰΐΊ ΐϊΐεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Belge, ηύktύ formatύnύn desteklediπinden ηok satύr iηeriyor.\nFazla gelen satύrlar kaydedilmedi.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El documento contiene mas filas de las que soporta el formato seleccionado.\nLas filas adicionales no se guardaron.";
@@ -699,7 +699,7 @@ Resource RID_ERRHDLSC
         Text [ dutch ] = "Niet van elke cel kon de inhoud in het aangegeven formaat worden opgeslagen." ;
         Text[ chinese_simplified ] = "Ξή·¨ΣΓΦΈ¶¨µΔΈρΚ½΄ζΕΜΘ«²ΏµΔµ¥ΤªΈρΔΪΘέ΅£";
         Text[ russian ] = "Ρξυπΰνθςό βρε ρξδεπζθμξε ÿχεικθ β ηΰδΰννξμ τξπμΰςε νεβξημξζνξ.";
-        Text[ polish ] = "Nie wszystkie zawarto?ci komσrek mog³y zostaζ zapisane w wybranym formacie.";
+        Text[ polish ] = "Nie wszystkie zawartoci komσrek mog³y zostaζ zapisane w wybranym formacie.";
         Text[ japanese ] = "w’θ‚µ‚½‘®‚ΕA‚·‚Χ‚Δ‚ΜΎΩ‚Μ“ΰ—e‚Ν•Ϋ‘¶‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½B";
         Text[ chinese_traditional ] = "µLªk¥Ξ«ό©wªΊ®ζ¦΅ΐx¦s¥ώ³΅ªΊΐx¦s®ζ¤Ί®e΅C";
         Text[ arabic ] = "ΚΪΠΡ ΝέΩ ία γΝΚζνΗΚ ΗαΞαΗνΗ έν ΗαΚδΣνή ΗαγΝΟΟ.";
