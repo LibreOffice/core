@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:13:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@
 #endif
 #ifndef _CONNECTIVITY_CONNCLEANUP_HXX_
 #include <connectivity/conncleanup.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
+#include <com/sun/star/sdbc/DataType.hpp>
 #endif
 
 //.........................................................................
@@ -594,7 +597,7 @@ namespace dbp
         m_aContext.aFieldNames.realloc(0);
 
         m_aContext.xObjectContainer.clear();
-        m_aContext.xFields.clear();
+        m_aContext.aTypes.clear();
 
         Any aSQLException;
         Reference< XPreparedStatement >  xStatement;
@@ -676,7 +679,24 @@ namespace dbp
             if (xColumns.is())
             {
                 m_aContext.aFieldNames = xColumns->getElementNames();
-                m_aContext.xFields = xColumns;
+                static const ::rtl::OUString s_sFieldTypeProperty   = ::rtl::OUString::createFromAscii("Type");
+                const ::rtl::OUString* pBegin = m_aContext.aFieldNames.getConstArray();
+                const ::rtl::OUString* pEnd   = pBegin + m_aContext.aFieldNames.getLength();
+                for(;pBegin != pEnd;++pBegin)
+                {
+                    sal_Int32 nFieldType = DataType::OTHER;
+                    try
+                    {
+                        Reference< XPropertySet > xColumn;
+                        xColumns->getByName(*pBegin) >>= xColumn;
+                        xColumn->getPropertyValue(s_sFieldTypeProperty) >>= nFieldType;
+                    }
+                    catch(Exception&)
+                    {
+                        DBG_ERROR("OControlWizard::initContext: unexpected exception while gathering column information!");
+                    }
+                    m_aContext.aTypes.insert(OControlWizardContext::TNameTypeMap::value_type(*pBegin,nFieldType));
+                }
             }
         }
         catch(SQLContext& e) { aSQLException <<= e; }
