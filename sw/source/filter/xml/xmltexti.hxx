@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-02 16:26:26 $
+ *  last change: $Author: jp $ $Date: 2001-05-22 15:47:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef _XMLOFF_TXTIMP_HXX
 #include <xmloff/txtimp.hxx>
+#endif
+#ifndef _XMLOFF_FUNCTIONAL_HXX
+#include <xmloff/functional.hxx>
 #endif
 
 #ifndef _PLUGIN_HXX //autogen
