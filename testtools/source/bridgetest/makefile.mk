@@ -20,6 +20,7 @@ MY_DLLPREFIX=
 DESTDIR=$(BIN)
 BATCH_SUFFIX=.bat
 GIVE_EXEC_RIGHTS=@echo
+WINTARGETS=$(DESTDIR)$/regcomp.exe $(DESTDIR)$/uno.exe
 .ELSE
 MY_DLLPOSTFIX=.so
 MY_DLLPREFIX=lib
@@ -92,6 +93,10 @@ SHL2VERSIONMAP=$(SOLARENV)$/src$/component.map
 
 
 
+.IF "$(SOLAR_JAVA)" != ""
+JAVATARGETS=$(DESTDIR)$/bridgetest_javaserver$(BATCH_SUFFIX)
+.ENDIF
+
 # --- Targets ------------------------------------------------------
 ALL : \
         ALLTAR \
@@ -100,8 +105,8 @@ ALL : \
         $(DESTDIR)$/bridgetest_inprocess$(BATCH_SUFFIX) \
         $(DESTDIR)$/bridgetest_server$(BATCH_SUFFIX) \
         $(DESTDIR)$/bridgetest_client$(BATCH_SUFFIX) \
-        $(DESTDIR)$/bridgetest_javaserver$(BATCH_SUFFIX)
-
+        $(JAVATARGETS) \
+        $(WINTARGETS)
 .INCLUDE :	target.mk
 
 $(DESTDIR)$/uno_types.rdb : $(SOLARBINDIR)$/udkapi.rdb
@@ -128,9 +133,9 @@ MY_JARS=unoil.jar java_uno.jar ridl.jar sandbox.jar jurt.jar juh.jar
 MY_CLASSPATH_TMP=$(foreach,i,$(MY_JARS) $(SOLARBINDIR)$/$i)$(PATH_SEPERATOR)$(XCLASSPATH)
 MY_CLASSPATH=$(strip $(subst,!,$(PATH_SEPERATOR) $(MY_CLASSPATH_TMP:s/ /!/)))
 
-$(DESTDIR)$/bridgetest_javaserver : makefile.mk
+$(DESTDIR)$/bridgetest_javaserver$(BATCH_SUFFIX) : makefile.mk
     -rm -f $@
-    +echo java -classpath $(MY_CLASSPATH)$(PATH_SEPERATOR):..$/class$/testComponent.jar \
+    +echo java -classpath $(MY_CLASSPATH)$(PATH_SEPERATOR)..$/class$/testComponent.jar \
         com.sun.star.comp.bridge.TestComponentMain \
         \""uno:socket,host=localhost,port=2002;urp;test"\" \
         > $@
@@ -139,7 +144,7 @@ $(DESTDIR)$/bridgetest_javaserver : makefile.mk
 
 # I can't make a dependency on shared libraries, because dependent targets
 # get the .setdir current directory. AAARGGGGGG !
-$(DESTDIR)$/uno_services.rdb .SETDIR=$(DESTDIR) : 
+$(DESTDIR)$/uno_services.rdb .SETDIR=$(DESTDIR) : $(WINTARGETS)
     regcomp -register -r uno_services.rdb \
         -c $(MY_DLLPREFIX)bridgetest$(MY_DLLPOSTFIX)	\
         -c $(MY_DLLPREFIX)cppobj$(MY_DLLPOSTFIX)		\
@@ -148,3 +153,11 @@ $(DESTDIR)$/uno_services.rdb .SETDIR=$(DESTDIR) :
         -c $(MY_DLLPREFIX)brdgfctr$(MY_DLLPOSTFIX)		\
         -c $(MY_DLLPREFIX)remotebridge$(MY_DLLPOSTFIX)	\
         -c $(MY_DLLPREFIX)uuresolver$(MY_DLLPOSTFIX)	
+
+$(DESTDIR)$/regcomp.exe : $(SOLARBINDIR)$/regcomp.exe
+    -rm -f $@
+    cp $? $@
+
+$(DESTDIR)$/uno.exe : $(SOLARBINDIR)$/uno.exe
+    -rm -f $@
+    cp $? $@
